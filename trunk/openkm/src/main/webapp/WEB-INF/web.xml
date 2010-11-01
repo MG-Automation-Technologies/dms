@@ -160,6 +160,10 @@
     <servlet-class>com.openkm.servlet.MimeIconServlet</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>ImageLogoServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.ImageLogoServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>TextToSpeechServlet</servlet-name>
     <servlet-class>com.openkm.servlet.TextToSpeechServlet</servlet-class>
   </servlet>
@@ -446,6 +450,10 @@
   <servlet-mapping>
     <servlet-name>MimeIconServlet</servlet-name>
     <url-pattern>/mime/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ImageLogoServlet</servlet-name>
+    <url-pattern>/logo/*</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>TextToSpeechServlet</servlet-name>
