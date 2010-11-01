@@ -5,6 +5,8 @@
 <%@ page import="com.openkm.core.Config"%>
 <%@ page import="com.openkm.util.FormatUtil"%>
 <%@ page import="com.openkm.frontend.client.lang.Lang"%>
+<%@ page import="com.openkm.dao.LanguageDAO"%>
+<%@ page import="com.openkm.dao.bean.Language"%>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -18,7 +20,7 @@
   <link rel="stylesheet" href="<%=request.getContextPath() %>/css/desktop.css" type="text/css" />
   <% } %>
   <% 
-  	LinkedHashMap<String, String> langs = new LinkedHashMap<String, String>();
+  /*LinkedHashMap<String, String> langs = new LinkedHashMap<String, String>();
   	langs.put("Arabic", Lang.LANG_ar_PS);
     langs.put("Bosnian", Lang.LANG_bs_BA);
     langs.put("Català", Lang.LANG_ca_ES);
@@ -52,7 +54,7 @@
     langs.put("Swedish", Lang.LANG_sv_SE);
     langs.put("Thai", Lang.LANG_th_TH);
     langs.put("Turkish", Lang.LANG_tr_TR);
-    langs.put("Vietnamese", Lang.LANG_zh_VN);
+    langs.put("Vietnamese", Lang.LANG_zh_VN); */
     Locale locale = request.getLocale();
     Cookie[] cookies = request.getCookies();
     String preset = null;
@@ -97,14 +99,14 @@
           <label for="j_language">Language</label><br/>
           <select name="j_language" id="j_language">
 			<%
-				for (Iterator<String> it = langs.keySet().iterator(); it.hasNext(); ) {
-					String key = it.next();
-					String value = langs.get(key);
+			 	for (Language language : LanguageDAO.findAll()) {
+					String description = language.getDescription();
+					String lang = language.getLanguage();
 					String selected = "";
-					if (preset.equalsIgnoreCase(value) || preset.substring(0, 2).equalsIgnoreCase(value.substring(0, 2))) {
+					if (preset.equalsIgnoreCase(lang) || preset.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 						selected = "selected";
 					}
-					out.print("<option "+selected+" value=\""+value+"\">"+key+"</option>");
+					out.print("<option "+selected+" value=\""+lang+"\">"+description+"</option>");
 				}
 			%>
           </select>

@@ -23,14 +23,22 @@ package com.openkm.frontend.server;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.core.DatabaseException;
+import com.openkm.dao.LanguageDAO;
+import com.openkm.dao.bean.Language;
 import com.openkm.dao.bean.MailAccount;
+import com.openkm.dao.bean.Translation;
+import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
 import com.openkm.frontend.client.bean.GWTTestImap;
+import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.service.OKMGeneralService;
 import com.openkm.util.MailUtils;
 
@@ -71,7 +79,7 @@ public class OKMGeneralServlet extends OKMRemoteServiceServlet implements OKMGen
 	}
 	
 	@Override
-	public GWTTestImap testImapConnection(String host, String user, String password, String imapFolder) {
+	public GWTTestImap testImapConnection(String host, String user, String password, String imapFolder)  {
 		log.debug("testImapConnection({}, {}, {}, {})", new Object[] { host, user, password, imapFolder });
 		GWTTestImap test = new GWTTestImap();
 		updateSessionManager();
@@ -104,7 +112,29 @@ public class OKMGeneralServlet extends OKMRemoteServiceServlet implements OKMGen
 		//extensions.add("44f94470-d097-11df-bd3b-0800200c9a66"); // TabWorkspaceExample		
 		//extensions.add("d95e01a0-d097-11df-bd3b-0800200c9a66"); // TabFolderExample
 		//extensions.add("d9dab640-d098-11df-bd3b-0800200c9a66"); // HelloWorld
+		extensions.add("25af39c0-580f-431c-8852-0b6430b4dc1d");
 		
 		return extensions;
+	}
+
+	@Override
+	public Map<String, String> getFrontEndTranslations(String lang) throws OKMException {
+		log.debug("getTranslations("+lang+")");
+		Map<String,String> translations = new HashMap<String,String>();
+		try {
+			Language language = LanguageDAO.findByPk(lang);
+			if (language!=null) {
+				for (Translation translation : language.getTranslations()) {
+					if (translation.getModule().equals(Translation.MODULE_FRONTEND)) {
+						translations.put(translation.getKey(), translation.getText());
+					}
+				}
+			}
+		} catch (DatabaseException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMGeneralService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+		}
+		log.debug("getTranslations: {}", translations);
+		return translations;
 	}
 }
