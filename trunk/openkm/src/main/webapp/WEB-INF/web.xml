@@ -268,8 +268,8 @@
     <servlet-class>com.openkm.frontend.server.extension.OKMStaplingServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>StapleDownloadServlet</servlet-name>
-    <servlet-class>com.openkm.servlet.extension.StapleDownloadServlet</servlet-class>
+    <servlet-name>StaplingDownloadServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.extension.StaplingDownloadServlet</servlet-class>
   </servlet>
     
   <!-- WebServices -->
@@ -442,8 +442,8 @@
     <url-pattern>/OKMStaplingServlet</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>StapleDownloadServlet</servlet-name>
-    <url-pattern>/extension/StapleDownload</url-pattern>
+    <servlet-name>StaplingDownloadServlet</servlet-name>
+    <url-pattern>/extension/StaplingDownload</url-pattern>
   </servlet-mapping>
   
   <!-- Misc servlets mappings -->
