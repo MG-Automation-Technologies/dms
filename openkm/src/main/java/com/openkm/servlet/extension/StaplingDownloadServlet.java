@@ -51,8 +51,8 @@ import com.openkm.util.WebUtil;
 /**
  * Staple Download Servlet
  */
-public class StapleDownloadServlet extends BaseServlet {
-	private static Logger log = LoggerFactory.getLogger(StapleDownloadServlet.class);
+public class StaplingDownloadServlet extends BaseServlet {
+	private static Logger log = LoggerFactory.getLogger(StaplingDownloadServlet.class);
 	private static final long serialVersionUID = 1L;
 	
 	/**
