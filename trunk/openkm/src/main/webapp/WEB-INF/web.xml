@@ -62,84 +62,84 @@
 
   <!-- Frontend Servlets -->
   <servlet>
-    <servlet-name>OKMWorkspaceServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.OKMWorkspaceServlet</servlet-class>
+    <servlet-name>WorkspaceServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.WorkspaceServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>OKMDocumentServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.OKMDocumentServlet</servlet-class>
+    <servlet-name>DocumentServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.DocumentServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>OKMAuthServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.OKMAuthServlet</servlet-class>
+    <servlet-name>FrontendAuthServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.AuthServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>OKMRepositoryServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.OKMRepositoryServlet</servlet-class>
+    <servlet-name>RepositoryServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.RepositoryServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>OKMFolderServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.OKMFolderServlet</servlet-class>
+    <servlet-name>FolderServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.FolderServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>OKMPropertyGroupServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.OKMPropertyGroupServlet</servlet-class>
+    <servlet-name>PropertyGroupServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.PropertyGroupServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>OKMDownloadServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.OKMDownloadServlet</servlet-class>
+    <servlet-name>FrontendDownloadServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.DownloadServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>OKMDashboardServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.OKMDashboardServlet</servlet-class>
+    <servlet-name>DashboardServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.DashboardServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>OKMGeneralService</servlet-name>
-    <servlet-class>com.openkm.frontend.server.OKMGeneralServlet</servlet-class>
+    <servlet-name>GeneralServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.GeneralServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>OKMNotifyServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.OKMNotifyServlet</servlet-class>
+    <servlet-name>NotifyServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.NotifyServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>OKMWorkflowServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.OKMWorkflowServlet</servlet-class>
+    <servlet-name>FrontendWorkflowServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.WorkflowServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>OKMSearchServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.OKMSearchServlet</servlet-class>
+    <servlet-name>SearchServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.SearchServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>OKMFileUploadServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.OKMFileUploadServlet</servlet-class>
+    <servlet-name>FileUploadServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.FileUploadServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>OKMBookmarkServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.OKMBookmarkServlet</servlet-class>
+    <servlet-name>BookmarkServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.BookmarkServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>OKMMailServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.OKMMailServlet</servlet-class>
+    <servlet-name>MailServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.MailServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>OKMThesaurusServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.OKMThesaurusServlet</servlet-class>
+    <servlet-name>ThesaurusServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.ThesaurusServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>OKMPropertyServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.OKMPropertyServlet</servlet-class>
+    <servlet-name>PropertyServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.PropertyServlet</servlet-class>
   </servlet>
   <servlet>
-  	<servlet-name>OKMChatServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.OKMChatServlet</servlet-class>
+  	<servlet-name>ChatServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.ChatServlet</servlet-class>
   </servlet>
   <servlet>
-  	<servlet-name>OKMUserConfigServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.OKMUserConfigServlet</servlet-class>
+  	<servlet-name>FrontendUserConfigServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.UserConfigServlet</servlet-class>
   </servlet>
   <servlet>
-  	<servlet-name>OKMNoteServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.OKMNoteServlet</servlet-class>
+  	<servlet-name>NoteServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.NoteServlet</servlet-class>
   </servlet>
   
   <!-- Misc servlets -->
@@ -264,8 +264,8 @@
   
   <!-- Extensions -->
   <servlet>
-    <servlet-name>OKMStaplingServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.extension.OKMStaplingServlet</servlet-class>
+    <servlet-name>StaplingServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.extension.StaplingServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>StaplingDownloadServlet</servlet-name>
@@ -356,90 +356,90 @@
     <url-pattern>/upload/*</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMWorkspaceServlet</servlet-name>
-    <url-pattern>/OKMWorkspaceServlet</url-pattern>
+    <servlet-name>WorkspaceServlet</servlet-name>
+    <url-pattern>/frontend/Workspace</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMDocumentServlet</servlet-name>
-    <url-pattern>/OKMDocumentServlet</url-pattern>
+    <servlet-name>DocumentServlet</servlet-name>
+    <url-pattern>/frontend/Document</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMAuthServlet</servlet-name>
-    <url-pattern>/OKMAuthServlet</url-pattern>
+    <servlet-name>FrontendAuthServlet</servlet-name>
+    <url-pattern>/frontend/Auth</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMRepositoryServlet</servlet-name>
-    <url-pattern>/OKMRepositoryServlet</url-pattern>
+    <servlet-name>RepositoryServlet</servlet-name>
+    <url-pattern>/frontend/Repository</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMFolderServlet</servlet-name>
-    <url-pattern>/OKMFolderServlet</url-pattern>
+    <servlet-name>FolderServlet</servlet-name>
+    <url-pattern>/frontend/Folder</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMPropertyGroupServlet</servlet-name>
-    <url-pattern>/OKMPropertyGroupServlet</url-pattern>
+    <servlet-name>PropertyGroupServlet</servlet-name>
+    <url-pattern>/frontend/PropertyGroup</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMMailServlet</servlet-name>
-    <url-pattern>/OKMMailServlet</url-pattern>
+    <servlet-name>MailServlet</servlet-name>
+    <url-pattern>/frontend/Mail</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMDownloadServlet</servlet-name>
-    <url-pattern>/OKMDownloadServlet</url-pattern>
+    <servlet-name>FrontendDownloadServlet</servlet-name>
+    <url-pattern>/frontend/Download</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMDashboardServlet</servlet-name>
-    <url-pattern>/OKMDashboardServlet</url-pattern>
+    <servlet-name>DashboardServlet</servlet-name>
+    <url-pattern>/frontend/Dashboard</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMGeneralService</servlet-name>
-    <url-pattern>/OKMGeneralServlet</url-pattern>
+    <servlet-name>GeneralServlet</servlet-name>
+    <url-pattern>/frontend/General</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMNotifyServlet</servlet-name>
-    <url-pattern>/OKMNotifyServlet</url-pattern>
+    <servlet-name>NotifyServlet</servlet-name>
+    <url-pattern>/frontend/Notify</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMWorkflowServlet</servlet-name>
-    <url-pattern>/OKMWorkflowServlet</url-pattern>
+    <servlet-name>FrontendWorkflowServlet</servlet-name>
+    <url-pattern>/frontend/Workflow</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMSearchServlet</servlet-name>
-    <url-pattern>/OKMSearchServlet</url-pattern>
+    <servlet-name>SearchServlet</servlet-name>
+    <url-pattern>/frontend/Search</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMFileUploadServlet</servlet-name>
-    <url-pattern>/OKMFileUploadServlet</url-pattern>
+    <servlet-name>FileUploadServlet</servlet-name>
+    <url-pattern>/frontend/FileUpload</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMBookmarkServlet</servlet-name>
-    <url-pattern>/OKMBookmarkServlet</url-pattern>
+    <servlet-name>BookmarkServlet</servlet-name>
+    <url-pattern>/frontend/Bookmark</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMThesaurusServlet</servlet-name>
-    <url-pattern>/OKMThesaurusServlet</url-pattern>
+    <servlet-name>ThesaurusServlet</servlet-name>
+    <url-pattern>/frontend/Thesaurus</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMPropertyServlet</servlet-name>
-    <url-pattern>/OKMPropertyServlet</url-pattern>
+    <servlet-name>PropertyServlet</servlet-name>
+    <url-pattern>/frontend/Property</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMChatServlet</servlet-name>
-    <url-pattern>/OKMChatServlet</url-pattern>
+    <servlet-name>ChatServlet</servlet-name>
+    <url-pattern>/frontend/Chat</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMUserConfigServlet</servlet-name>
-    <url-pattern>/OKMUserConfigServlet</url-pattern>
+    <servlet-name>FrontendUserConfigServlet</servlet-name>
+    <url-pattern>/frontend/UserConfig</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMNoteServlet</servlet-name>
-    <url-pattern>/OKMNoteServlet</url-pattern>
+    <servlet-name>NoteServlet</servlet-name>
+    <url-pattern>/frontend/Note</url-pattern>
   </servlet-mapping>
   
   <!-- Extensions Servlet Mappings -->
   <servlet-mapping>
-    <servlet-name>OKMStaplingServlet</servlet-name>
-    <url-pattern>/OKMStaplingServlet</url-pattern>
+    <servlet-name>StaplingServlet</servlet-name>
+    <url-pattern>/extension/Stapling</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>StaplingDownloadServlet</servlet-name>
@@ -656,7 +656,7 @@
 	  <url-pattern>/RepositoryStartup</url-pattern>
 	  <url-pattern>/TextToSpeech</url-pattern>
 	  <url-pattern>/Test</url-pattern>
-	  <url-pattern>/OKM*</url-pattern>
+	  <url-pattern>/frontend/*</url-pattern>
 	  <url-pattern>/extension/*</url-pattern>
     </web-resource-collection>
     <auth-constraint>

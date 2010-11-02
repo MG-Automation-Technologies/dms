@@ -20,7 +20,7 @@
   <entry-point class='com.openkm.frontend.client.Main'/>
 
   <!-- Compile for Firefox only 
-  <set-property name="user.agent" value="gecko1_8"/> -->
+  <set-property name="user.agent" value="gecko1_8"/> --> 
 
   <!-- Compile debug levels gwt-log -->
   <extend-property name="log_level" values="DEBUG" />
@@ -30,30 +30,5 @@
 
   <!-- Supress compilation warnings -->
   <set-property name="gwt.suppressNonStaticFinalFieldWarnings" value="true"/>
-	
-  <!-- Frontend servlets -->
-  <servlet path="/OpenKM/OKMFolderServlet" class="com.openkm.frontend.server.OKMFolderServlet"/>
-  <servlet path="/OpenKM/OKMDocumentServlet" class="com.openkm.frontend.server.OKMDocumentServlet"/>
-  <servlet path="/OpenKM/OKMDownloadServlet" class="com.openkm.frontend.server.OKMDownloadServlet"/>
-  <servlet path="/OpenKM/OKMUploadServlet" class="com.openkm.frontend.server.OKMUploadServlet"/>
-  <servlet path="/OpenKM/OKMAuthServlet" class="com.openkm.frontend.server.OKMAuthServlet"/>
-  <servlet path="/OpenKM/OKMSearchServlet" class="com.openkm.frontend.server.OKMSearchServlet"/>
-  <servlet path="/OpenKM/OKMFileUploadServlet" class="com.openkm.frontend.server.OKMFileUploadServlet"/>
-  <servlet path="/OpenKM/OKMPropertyGroupServlet" class="com.openkm.frontend.server.OKMPropertyGroupServlet"/>
-  <servlet path="/OpenKM/OKMNotifyServlet" class="com.openkm.frontend.server.OKMNotifyServlet"/>
-  <servlet path="/OpenKM/OKMBookmarkServlet" class="com.openkm.frontend.server.OKMBookmarkServlet"/>
-  <servlet path="/OpenKM/OKMRepositoryServlet" class="com.openkm.frontend.server.OKMRepositoryServlet"/>
-  <servlet path="/OpenKM/OKMDashboardServlet" class="com.openkm.frontend.server.OKMDashboardServlet"/>
-  <servlet path="/OpenKM/OKMRepositoryServlet" class="com.openkm.frontend.server.OKMWorkspaceServlet"/>
-  <servlet path="/OpenKM/OKMWorkflowServlet" class="com.openkm.frontend.server.OKMWorkflowServlet"/>
-  <servlet path="/OpenKM/OKMMailServlet" class="com.openkm.frontend.server.OKMMailServlet"/>
-  <servlet path="/OpenKM/OKMGeneralServlet" class="com.openkm.frontend.server.OKMGeneralServlet"/>
-  <servlet path="/OpenKM/OKMPropertyServlet" class="com.openkm.frontend.server.OKMPropertyServlet"/>
-  <servlet path="/OpenKM/OKMChatServlet" class="com.openkm.frontend.server.OKMChatServlet"/>
-  <servlet path="/OpenKM/OKMUserConfigServlet" class="com.openkm.frontend.server.OKMUserConfigServlet"/>
-  <servlet path="/OpenKM/OKMNoteServlet" class="com.openkm.frontend.server.OKMNoteServlet"/>
-  
-  <!-- Frontend servlets extensions 
-  <servlet path="/OpenKM/extension/Stapling" class="com.openkm.extension.frontend.servlet.StaplingServlet"/> -->
 
 </module>
