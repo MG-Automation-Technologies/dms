@@ -3,9 +3,9 @@
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
   <class name="com.openkm.dao.bean.Translation" table="OKM_TRANSLATION">
-  		<id name="id" column="TR_ID"><generator class="native"/></id>
-    	<property name="module" column="TR_MODULE" not-null="true" type="text"/>
-    	<property name="key" column="TR_KEY" not-null="true" type="text"/>
-    	<property name="text" column="TR_TEXT" not-null="true" type="text"/>
+    <id name="id" column="TR_ID"><generator class="native"/></id>
+    <property name="module" column="TR_MODULE" not-null="true"/>
+    <property name="key" column="TR_KEY" not-null="true"/>
+    <property name="text" column="TR_TEXT" not-null="true"/>
   </class>
 </hibernate-mapping>

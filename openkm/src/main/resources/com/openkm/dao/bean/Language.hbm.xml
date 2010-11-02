@@ -3,11 +3,11 @@
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
   <class name="com.openkm.dao.bean.Language" table="OKM_LANGUAGE">
-    	<id name="language" column="LG_LANGUAGE" type="text"/>
-    	<property name="description" column="LG_DESCRIPTION" not-null="true" type="text"/>
-    	<set name="translations" table="OKM_TRANSLATION" order-by="TR_KEY asc" cascade="all-delete-orphan" lazy="false">
-      		<key column="TR_LANGUAGE" not-null="true"/>
-      		<one-to-many class="com.openkm.dao.bean.Translation"/>
-    	</set>
+    <id name="language" column="LG_LANGUAGE" length="127"><generator class="assigned"/></id>
+    <property name="description" column="LG_DESCRIPTION" not-null="true" type="text"/>
+    <set name="translations" table="OKM_TRANSLATION" order-by="TR_KEY asc" cascade="all-delete-orphan" lazy="false">
+      <key column="TR_LANGUAGE"/>
+      <one-to-many class="com.openkm.dao.bean.Translation"/>
+    </set>
   </class>
 </hibernate-mapping>
