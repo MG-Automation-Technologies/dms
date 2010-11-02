@@ -34,6 +34,12 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.Language;
 
+/**
+ * LanguageDAO
+ * 
+ * @author jllort
+ *
+ */
 public class LanguageDAO {
 	private static Logger log = LoggerFactory.getLogger(LanguageDAO.class);
 
