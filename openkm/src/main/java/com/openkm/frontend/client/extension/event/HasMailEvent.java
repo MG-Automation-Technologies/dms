@@ -44,6 +44,7 @@ public interface HasMailEvent {
 		static final int EVENT_TAB_CHANGED    		= 3;
 		static final int EVENT_SECURITY_CHANGED 	= 4;
 		static final int EVENT_SET_VISIBLE_BUTTONS	= 5;
+		static final int EVENT_MAIL_DELETED			= 6;
 		
 		private int type = 0;
 		
@@ -66,6 +67,7 @@ public interface HasMailEvent {
 	MailEventConstant TAB_CHANGED = new MailEventConstant(MailEventConstant.EVENT_TAB_CHANGED);
 	MailEventConstant SECURITY_CHANGED = new MailEventConstant(MailEventConstant.EVENT_SECURITY_CHANGED);
 	MailEventConstant SET_VISIBLE_BUTTONS = new MailEventConstant(MailEventConstant.EVENT_SET_VISIBLE_BUTTONS);
+	MailEventConstant MAIL_DELETED = new MailEventConstant(MailEventConstant.EVENT_MAIL_DELETED);
 	
 	/**
 	 * @param event
