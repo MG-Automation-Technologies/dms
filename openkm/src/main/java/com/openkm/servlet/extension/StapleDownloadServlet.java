@@ -61,7 +61,7 @@ public class StapleDownloadServlet extends BaseServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		request.setCharacterEncoding("UTF-8");
-		int sgId = WebUtil.getInt(request, "sgId");
+		int sgId = WebUtil.getInt(request, "id");
 		File tmpZip = File.createTempFile("okm", ".zip");
 		
 		try {
