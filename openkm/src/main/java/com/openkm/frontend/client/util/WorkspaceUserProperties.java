@@ -236,7 +236,7 @@ public class WorkspaceUserProperties {
 			if (workspace.isTabFolderPropertiesVisible()) {
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.showProperties();
 			}
-			if (workspace.isTabDocumentNotesVisible()) {
+			if (workspace.isTabFolderNotesVisible()) {
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.showNotes();
 			}
 			if (workspace.isTabFolderSecurityVisible()) {

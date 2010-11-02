@@ -193,6 +193,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		// Tab folder visibility
 		workspace.setTabFolderPropertiesVisible(up.getTab().getFolder().isPropertiesVisible());
 		workspace.setTabFolderSecurityVisible(up.getTab().getFolder().isSecurityVisible());
+		workspace.setTabFolderNotesVisible(up.getTab().getFolder().isNotesVisible());
 		
 		// Tab mail visibility
 		workspace.setTabMailPropertiesVisible(up.getTab().getMail().isPropertiesVisible());
