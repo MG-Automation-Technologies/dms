@@ -56,46 +56,79 @@ public class ImageLogoServlet extends HttpServlet {
 		
 		try {
 			if (img != null && img.length() > 1) {
-				InputStream is = getImage(img.substring(1));
+				URL logo = getImage(img.substring(1));
 				
-				if (is != null) {
-					if (img.endsWith(".gif")) {
+				if (logo != null) {
+					if (logo.toString().endsWith(".gif")) {
 						response.setContentType("image/gif");
-					} else if (img.endsWith(".jpg")) {
+					} else if (logo.toString().endsWith(".jpg")) {
 						response.setContentType("image/jpg");
-					} else if (img.endsWith(".png")) {
+					} else if (logo.toString().endsWith(".png")) {
 						response.setContentType("image/png");
-					}		
+					}
+					
+					InputStream is = logo.openStream();
+					IOUtils.copy(is, os);
+					os.flush();		
 				} else {
-					response.setContentType("image/png");
-					is = getServletContext().getResource("/img/error.png").openStream();
+					sendError(response, os);
 				}
-				
-				IOUtils.copy(is, os);
-				os.flush();
 			}
+		} catch (MalformedURLException e) {
+			sendError(response, os);
+			log.warn(e.getMessage(), e);
 		} catch (IOException e) {
+			sendError(response, os);
 			log.error(e.getMessage(), e);
 		} finally {
 			IOUtils.closeQuietly(os);
 		}
 	}
+	
+	/**
+	 * Send error image
+	 */
+	private void sendError(HttpServletResponse response, OutputStream os) throws IOException {
+		response.setContentType("image/png");
+		InputStream is = getServletContext().getResource("/img/error.png").openStream();
+		IOUtils.copy(is, os);
+		os.flush();
+	}
 
 	/**
 	 * Get requested image input stream.
 	 */
-	private InputStream getImage(String img) throws MalformedURLException, IOException {
+	private URL getImage(String img) throws MalformedURLException, IOException {
 		log.debug("getImage({})", img);
-		File logoLogin = new File(Config.HOME_DIR + "/logo_" + img);
-		URL urlLogoLogin = null;
+		URL urlLogo = null;
 		
-		if (logoLogin.exists()) {
-			urlLogoLogin = logoLogin.toURI().toURL();
-		} else {
-			urlLogoLogin = getServletContext().getResource("/img/logo_" + img);
+		if ("login".equals(img)) {
+			File logo = new File(Config.HOME_DIR + File.separator + Config.LOGO_LOGIN);
+			
+			if (logo.exists()) {
+				urlLogo = logo.toURI().toURL();
+			} else {
+				urlLogo = new URL(Config.LOGO_LOGIN);
+			}
+		} else if ("mobi".equals(img)) {
+			File logo = new File(Config.HOME_DIR + File.separator + Config.LOGO_MOBI);
+			
+			if (logo.exists()) {
+				urlLogo = logo.toURI().toURL();
+			} else {
+				urlLogo = new URL(Config.LOGO_MOBI);
+			}
+		} else if ("report".equals(img)) {
+			File logo = new File(Config.HOME_DIR + File.separator + Config.LOGO_REPORT);
+			
+			if (logo.exists()) {
+				urlLogo = logo.toURI().toURL();
+			} else {
+				urlLogo = new URL(Config.LOGO_REPORT);
+			}
 		}
 		
-		log.debug("getImage: {}", urlLogoLogin);
-		return urlLogoLogin != null ? urlLogoLogin.openStream() : null;
+		log.debug("getImage: {}", urlLogo);
+		return urlLogo;
 	}
 }
