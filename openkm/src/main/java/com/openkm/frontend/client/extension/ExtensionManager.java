@@ -168,6 +168,7 @@ public class ExtensionManager {
 	 */
 	private static void addDocumentHandlerExtension(DocumentHandlerExtension handlerExtension) {
 		Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.addDocumentHandlerExtension(handlerExtension);
+		Main.get().mainPanel.desktop.browser.fileBrowser.addDocumentHandlerExtension(handlerExtension);
 	}
 	
 	/**
@@ -177,6 +178,7 @@ public class ExtensionManager {
 	 */
 	private static void addFolderHandlerExtension(FolderHandlerExtension handlerExtension) {
 		Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.addFolderHandlerExtension(handlerExtension);
+		Main.get().mainPanel.desktop.browser.fileBrowser.addFolderHandlerExtension(handlerExtension);
 	}
 	
 	/**
@@ -186,6 +188,7 @@ public class ExtensionManager {
 	 */
 	private static void addMailHandlerExtension(MailHandlerExtension handlerExtension) {
 		Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.addMailHandlerExtension(handlerExtension);
+		Main.get().mainPanel.desktop.browser.fileBrowser.addMailHandlerExtension(handlerExtension);
 	}
 	
 	/**
