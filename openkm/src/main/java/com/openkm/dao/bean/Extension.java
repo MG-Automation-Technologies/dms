@@ -19,23 +19,45 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.service;
+package com.openkm.dao.bean;
 
-import java.util.List;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
-import com.openkm.frontend.client.bean.GWTTestImap;
-
+import java.io.Serializable;
 
 /**
+ * Language
+ * 
  * @author jllort
  *
  */
-public interface OKMGeneralServiceAsync {
+public class Extension implements Serializable {
 	
-	public void getFileUploadStatus(AsyncCallback<GWTFileUploadingStatus> callback);
-	public void testImapConnection(String host, String user, String password, String imapFolder, AsyncCallback<GWTTestImap> callback);
-	public void getEnabledExtensions(AsyncCallback<List<String>> callback);
+	private static final long serialVersionUID = 1L;
+
+	private String uuid = "";
+	private String description = "";
+	
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append(", uuid="); sb.append(uuid);
+		sb.append(", description="); sb.append(description);
+		sb.append("}");
+		return sb.toString();
+	}	
 }
