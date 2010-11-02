@@ -22,7 +22,6 @@
 package com.openkm.servlet.extension;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,13 +65,13 @@ public class StapleDownloadServlet extends BaseServlet {
 		File tmpZip = File.createTempFile("okm", ".zip");
 		
 		try {
-			FileOutputStream os = new FileOutputStream(tmpZip);
-			exportZip(sgId, os);
-			os.flush();
-			os.close();
-			FileInputStream is = new FileInputStream(tmpZip);
-			WebUtil.sendFile(request, response, "staple.zip", "application/zip", true, is);
-			is.close();
+			String archive = "staple.zip";
+			response.setHeader("Content-disposition", "attachment; filename=\""+archive+"\"");
+			response.setContentType("application/zip");
+			OutputStream out = response.getOutputStream();
+			exportZip(sgId, out);
+			out.flush();
+			out.close();
 		} catch (RepositoryException e) {
 			log.warn(e.getMessage(), e);
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "RepositoryException: "+e.getMessage());
@@ -119,7 +118,7 @@ public class StapleDownloadServlet extends BaseServlet {
 			}
 			
 			// Zip files
-			ArchiveUtils.createZip(tmpDir, os);
+			ArchiveUtils.createZip(tmpDir, "staple", os);
 		} catch (IOException e) {
 			log.error("Error exporting zip", e);
 			throw e;
