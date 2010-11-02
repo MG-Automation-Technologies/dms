@@ -155,7 +155,6 @@ public class OKMStaplingServlet extends OKMRemoteServiceServlet implements OKMSt
 		} 
 	}
 	
-	
 	@Override
 	public void remove(String id) throws OKMException {
 		try {
@@ -168,7 +167,7 @@ public class OKMStaplingServlet extends OKMRemoteServiceServlet implements OKMSt
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 	}
-
+	
 	@Override
 	public void removeStaple(String id) throws OKMException {
 		try {
