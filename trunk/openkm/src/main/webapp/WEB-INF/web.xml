@@ -261,9 +261,15 @@
     <servlet-name>CheckEmailServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.CheckEmailServlet</servlet-class>
   </servlet>
+  
+  <!-- Extensions -->
   <servlet>
     <servlet-name>OKMStaplingServlet</servlet-name>
     <servlet-class>com.openkm.frontend.server.extension.OKMStaplingServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>StapleDownloadServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.extension.StapleDownloadServlet</servlet-class>
   </servlet>
     
   <!-- WebServices -->
@@ -429,10 +435,16 @@
     <servlet-name>OKMNoteServlet</servlet-name>
     <url-pattern>/OKMNoteServlet</url-pattern>
   </servlet-mapping>
+  
+  <!-- Extensions Servlet Mappings -->
   <servlet-mapping>
     <servlet-name>OKMStaplingServlet</servlet-name>
     <url-pattern>/OKMStaplingServlet</url-pattern>
-  </servlet-mapping> 
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>StapleDownloadServlet</servlet-name>
+    <url-pattern>/extension/StapleDownload</url-pattern>
+  </servlet-mapping>
   
   <!-- Misc servlets mappings -->
   <servlet-mapping>
@@ -639,12 +651,13 @@
       <!-- JSPs -->
       <url-pattern>/admin/*</url-pattern>
       <url-pattern>/mobi/*</url-pattern>
-      
+            
       <!-- Servlets -->
 	  <url-pattern>/RepositoryStartup</url-pattern>
 	  <url-pattern>/TextToSpeech</url-pattern>
 	  <url-pattern>/Test</url-pattern>
 	  <url-pattern>/OKM*</url-pattern>
+	  <url-pattern>/extension/*</url-pattern>
     </web-resource-collection>
     <auth-constraint>
 	  <role-name>AdminRole</role-name>
