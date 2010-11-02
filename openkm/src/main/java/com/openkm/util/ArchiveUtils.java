@@ -39,8 +39,8 @@ public class ArchiveUtils {
 	/**
 	 * Recursively create ZIP archive from directory 
 	 */
-	public static void createZip(File path, OutputStream os) throws IOException {
-		log.debug("createZip({}, {})", path, os);
+	public static void createZip(File path, String root, OutputStream os) throws IOException {
+		log.debug("createZip({}, {}, {})", new Object[] { path, root, os });
 		
 		if (path.exists() && path.canRead()) {
 			ZipArchiveOutputStream zos =  new ZipArchiveOutputStream(os);
@@ -51,11 +51,11 @@ public class ArchiveUtils {
 			zos.setEncoding("UTF-8");
 			
 			// Prevents java.util.zip.ZipException: ZIP file must have at least one entry
-			ZipArchiveEntry ze = new ZipArchiveEntry(path.getName()+"/");
+			ZipArchiveEntry ze = new ZipArchiveEntry(root+"/");
 			zos.putArchiveEntry(ze);
 			zos.closeArchiveEntry();
 			
-			createZipHelper(path, zos, path.getName());
+			createZipHelper(path, zos, root);
 			
 			zos.flush();
 			zos.finish();
