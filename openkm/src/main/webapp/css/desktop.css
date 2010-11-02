@@ -28,11 +28,11 @@ div#box {
   border: 1px solid #CCCCCC;
   width: 405px;
   height: 275px;
-  margin: 60px auto 30px auto;
+  margin: 40px auto 30px auto;
 }
 
 div#logo {
-  background-image: url('../logo/login.gif');
+  background-image: url('../logo/login');
   background-repeat: no-repeat;
   width: 316px;
   margin: 15px auto 5px auto;
