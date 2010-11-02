@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.allen_sauer.gwt.log.client.DivLogger;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -156,6 +157,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	 * @see com.google.gwt.core.client.EntryPoint#onModuleLoad()
 	 */
 	public void onModuleLoad() {
+		Log.getLogger(DivLogger.class).getWidget().setVisible(false);
 		Log.setUncaughtExceptionHandler();
 		Log.setCurrentLogLevel(Log.LOG_LEVEL_OFF);
 
