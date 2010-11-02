@@ -52,4 +52,5 @@ public class Config {
 	public static final String OKMNoteService = "/OpenKM"+INSTALL+"/OKMNoteServlet";
 	public static final String OKMFeedService = "/OpenKM"+INSTALL+"/feed/";
 	public static final String OKMStaplingService = "/OpenKM"+INSTALL+"/OKMStaplingServlet";
+	public static final String OKMDownloadStaplingService = "/OpenKM"+INSTALL+"/extension/StapleDownload";
 }
