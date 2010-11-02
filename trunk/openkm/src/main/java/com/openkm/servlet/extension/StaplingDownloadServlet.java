@@ -67,7 +67,7 @@ public class StaplingDownloadServlet extends BaseServlet {
 		File tmpZip = File.createTempFile("okm", ".zip");
 		
 		try {
-			String archive = "staple.zip";
+			String archive = "stapling.zip";
 			response.setHeader("Content-disposition", "attachment; filename=\""+archive+"\"");
 			response.setContentType("application/zip");
 			OutputStream out = response.getOutputStream();
@@ -135,7 +135,7 @@ public class StaplingDownloadServlet extends BaseServlet {
 			
 			// Zip files
 			IOUtils.closeQuietly(bw);
-			ArchiveUtils.createZip(tmpDir, "staple", os);
+			ArchiveUtils.createZip(tmpDir, "stapling", os);
 		} catch (IOException e) {
 			log.error("Error exporting zip", e);
 			throw e;
