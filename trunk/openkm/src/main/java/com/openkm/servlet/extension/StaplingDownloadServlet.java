@@ -21,8 +21,10 @@
 
 package com.openkm.servlet.extension;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -90,34 +92,49 @@ public class StaplingDownloadServlet extends BaseServlet {
 			DatabaseException {
 		log.debug("exportZip({}, {})", sgId, os);
 		File tmpDir = null;
+		BufferedWriter bw = null;
 		OKMDocument okmDoc = OKMDocument.getInstance();
 		OKMRepository okmRepo = OKMRepository.getInstance();
 		
 		try {
 			tmpDir = FileUtils.createTempDir();
+			bw = new BufferedWriter(new FileWriter(new File(tmpDir, "summary.txt")));
 			StapleGroup sg = StapleGroupDAO.findByPk(sgId);
 			
 			for (Staple s : sg.getStaples()) {
 				String uuid = s.getUuid();
+				String path = null;
 				
 				try {
-					String path = okmRepo.getNodePath(null, uuid);
-					File expFile = new File(tmpDir, path);
-					FileOutputStream fos = new FileOutputStream(expFile);
+					path = okmRepo.getNodePath(null, uuid);
+					int idx = path.indexOf('/', 1);
 					
-					if (okmDoc.isValid(null, path)) {
-						InputStream is = okmDoc.getContent(null, path, false);
-						IOUtils.copy(is, fos);
-						is.close();
+					if (idx > 0) {
+						String relPath = path.substring(idx);
+						File expFile = new File(tmpDir, relPath);
+						expFile.getParentFile().mkdirs();
+						FileOutputStream fos = new FileOutputStream(expFile);
+						
+						if (okmDoc.isValid(null, path)) {
+							InputStream is = okmDoc.getContent(null, path, false);
+							IOUtils.copy(is, fos);
+							is.close();
+						}
+						
+						bw.write(path + " - OK\n");
+						bw.flush();
 					}
 				} catch (PathNotFoundException e) {
-					// Ignore
+					bw.write(path != null ? path : uuid + " - " + e.getMessage() + "\n");
+					bw.flush();
 				} catch (AccessDeniedException e) {
-					// Ignore
-				}				
+					bw.write(path != null ? path : uuid + " - " + e.getMessage() + "\n");
+					bw.flush();
+				}
 			}
 			
 			// Zip files
+			IOUtils.closeQuietly(bw);
 			ArchiveUtils.createZip(tmpDir, "staple", os);
 		} catch (IOException e) {
 			log.error("Error exporting zip", e);
