@@ -41,16 +41,16 @@ import com.openkm.principal.PrincipalAdapterException;
 /**
  * Servlet Class
  * 
- * @web.servlet              name="OKMNotifyServlet"
+ * @web.servlet              name="NotifyServlet"
  *                           display-name="Directory tree service"
  *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/OKMNotifyServlet"
+ * @web.servlet-mapping      url-pattern="/NotifyServlet"
  * @web.servlet-init-param   name="A parameter"
  *                           value="A value"
  */
-public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNotifyService {
+public class NotifyServlet extends OKMRemoteServiceServlet implements OKMNotifyService {
 	private static final long serialVersionUID = 1L;
-	private static Logger log = LoggerFactory.getLogger(OKMFolderServlet.class);
+	private static Logger log = LoggerFactory.getLogger(FolderServlet.class);
 	
 	@Override
 	public void subscribe(String nodePath) throws OKMException  {

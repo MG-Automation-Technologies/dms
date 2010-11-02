@@ -38,14 +38,14 @@ import com.openkm.util.UUIDGenerator;
 /**
  * Servlet Class
  * 
- * @web.servlet              name="OKMChatServlet"
+ * @web.servlet              name="ChatServlet"
  *                           display-name="Directory tree service"
  *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/OKMChatServlet"
+ * @web.servlet-mapping      url-pattern="/ChatServlet"
  * @web.servlet-init-param   name="A parameter"
  *                           value="A value"
  */
-public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatService {
+public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatService {
 	private static final long serialVersionUID = 3780857624687394918L;
 	private static final int DELAY = 100; // mseg
 	

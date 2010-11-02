@@ -58,15 +58,15 @@ import com.openkm.util.impexp.TextInfoDecorator;
 /**
  * Servlet Class
  * 
- * @web.servlet              name="OKMDownloadServlet"
+ * @web.servlet              name="DownloadServlet"
  *                           display-name="Name for DownloadDocument"
  *                           description="Description for Download Servlet"
- * @web.servlet-mapping      url-pattern="/OKMDownloadServlet"
+ * @web.servlet-mapping      url-pattern="/DownloadServlet"
  * @web.servlet-init-param   name="A parameter"
  *                           value="A value"
  */
-public class OKMDownloadServlet extends OKMHttpServlet {
-	private static Logger log = LoggerFactory.getLogger(OKMDownloadServlet.class);
+public class DownloadServlet extends OKMHttpServlet {
+	private static Logger log = LoggerFactory.getLogger(DownloadServlet.class);
 	private static final long serialVersionUID = -1575303169358903617L;
 
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException,
@@ -167,7 +167,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 							is = new FileInputStream(swfCache);
 						} catch (Exception e) {
 							log.error(e.getMessage(), e);
-							is = OKMDownloadServlet.class.getResourceAsStream("preview_problem.swf");
+							is = DownloadServlet.class.getResourceAsStream("preview_problem.swf");
 						}
 					}
 					

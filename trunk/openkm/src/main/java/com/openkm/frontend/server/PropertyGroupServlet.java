@@ -49,15 +49,15 @@ import com.openkm.frontend.client.service.OKMPropertyGroupService;
 /**
  * Servlet Class
  * 
- * @web.servlet              name="OKMPropertyGroupServlet"
+ * @web.servlet              name="PropertyGroupServlet"
  *                           display-name="Directory tree service"
  *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/OKMPropertyGroupServlet"
+ * @web.servlet-mapping      url-pattern="/PropertyGroupServlet"
  * @web.servlet-init-param   name="A parameter"
  *                           value="A value"
  */
-public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements OKMPropertyGroupService {
-	private static Logger log = LoggerFactory.getLogger(OKMPropertyGroupServlet.class);
+public class PropertyGroupServlet extends OKMRemoteServiceServlet implements OKMPropertyGroupService {
+	private static Logger log = LoggerFactory.getLogger(PropertyGroupServlet.class);
 	private static final long serialVersionUID = 2638205115826644606L;
 	
 	@Override

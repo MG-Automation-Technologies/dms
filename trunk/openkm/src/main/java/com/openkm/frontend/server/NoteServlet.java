@@ -37,15 +37,15 @@ import com.openkm.frontend.client.service.OKMNoteService;
 /**
  * Servlet Class
  * 
- * @web.servlet              name="OKMNoteServlet"
+ * @web.servlet              name="NoteServlet"
  *                           display-name="Directory tree service"
  *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/OKMNoteServlet"
+ * @web.servlet-mapping      url-pattern="/NoteServlet"
  * @web.servlet-init-param   name="A parameter"
  *                           value="A value"
  */
-public class OKMNoteServlet extends OKMRemoteServiceServlet implements OKMNoteService {
-	private static Logger log = LoggerFactory.getLogger(OKMDocumentServlet.class);
+public class NoteServlet extends OKMRemoteServiceServlet implements OKMNoteService {
+	private static Logger log = LoggerFactory.getLogger(DocumentServlet.class);
 	private static final long serialVersionUID = 5746571509174291745L;
 	
 	@Override

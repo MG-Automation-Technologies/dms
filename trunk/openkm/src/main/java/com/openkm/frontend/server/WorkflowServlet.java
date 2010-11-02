@@ -48,15 +48,15 @@ import com.openkm.frontend.client.service.OKMWorkflowService;
 /**
  * Servlet Class
  * 
- * @web.servlet              name="OKMWorkflowServlet"
+ * @web.servlet              name="WorkflowServlet"
  *                           display-name="Directory tree service"
  *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/OKMWorkflowServlet"
+ * @web.servlet-mapping      url-pattern="/WorkflowServlet"
  * @web.servlet-init-param   name="A parameter"
  *                           value="A value"
  */
-public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWorkflowService {
-	private static Logger log = LoggerFactory.getLogger(OKMWorkflowServlet.class);
+public class WorkflowServlet extends OKMRemoteServiceServlet implements OKMWorkflowService {
+	private static Logger log = LoggerFactory.getLogger(WorkflowServlet.class);
 	private static final long serialVersionUID = 1L;
 	
 	@Override

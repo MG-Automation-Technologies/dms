@@ -36,15 +36,15 @@ import com.openkm.kea.RDFREpository;
 /**
  * Servlet Class
  * 
- * @web.servlet              name="OKMThesaurusServlet"
+ * @web.servlet              name="ThesaurusServlet"
  *                           display-name="Directory tree service"
  *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/OKMThesaurusServlet"
+ * @web.servlet-mapping      url-pattern="/ThesaurusServlet"
  * @web.servlet-init-param   name="A parameter"
  *                           value="A value"
  */
-public class OKMThesaurusServlet extends OKMRemoteServiceServlet implements OKMThesaurusService {
-	private static Logger log = LoggerFactory.getLogger(OKMThesaurusServlet.class);
+public class ThesaurusServlet extends OKMRemoteServiceServlet implements OKMThesaurusService {
+	private static Logger log = LoggerFactory.getLogger(ThesaurusServlet.class);
 	private static final long serialVersionUID = -4436438730167948558L;
 	
 	@Override

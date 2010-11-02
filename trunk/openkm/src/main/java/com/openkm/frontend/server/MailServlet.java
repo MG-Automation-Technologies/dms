@@ -47,15 +47,15 @@ import com.openkm.frontend.client.service.OKMMailService;
 /**
  * Servlet Class
  * 
- * @web.servlet              name="OKMMailServlet"
+ * @web.servlet              name="MailServlet"
  *                           display-name="Directory mail service"
  *                           description="Directory mail service"
- * @web.servlet-mapping      url-pattern="/OKMMailServlet"
+ * @web.servlet-mapping      url-pattern="/MailServlet"
  * @web.servlet-init-param   name="A parameter"
  *                           value="A value"
  */
-public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailService {
-	private static Logger log = LoggerFactory.getLogger(OKMMailServlet.class);
+public class MailServlet extends OKMRemoteServiceServlet implements OKMMailService {
+	private static Logger log = LoggerFactory.getLogger(MailServlet.class);
 	private static final long serialVersionUID = 6444705787188086209L;
 	
 	@Override

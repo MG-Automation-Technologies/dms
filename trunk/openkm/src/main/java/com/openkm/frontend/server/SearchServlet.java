@@ -52,15 +52,15 @@ import com.openkm.frontend.client.util.KeywordComparator;
 /**
  * Servlet Class
  * 
- * @web.servlet              name="OKMSearchServlet"
+ * @web.servlet              name="SearchServlet"
  *                           display-name="Directory tree service"
  *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/OKMSearchServlet"
+ * @web.servlet-mapping      url-pattern="/SearchServlet"
  * @web.servlet-init-param   name="A parameter"
  *                           value="A value"
  */
-public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSearchService {
-	private static Logger log = LoggerFactory.getLogger(OKMSearchServlet.class);
+public class SearchServlet extends OKMRemoteServiceServlet implements OKMSearchService {
+	private static Logger log = LoggerFactory.getLogger(SearchServlet.class);
 	private static final long serialVersionUID = 8673521252684830906L;
 	
 	@Override

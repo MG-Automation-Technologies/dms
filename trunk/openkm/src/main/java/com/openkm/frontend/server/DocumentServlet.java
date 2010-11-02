@@ -57,15 +57,15 @@ import com.openkm.frontend.client.util.DocumentComparator;
 /**
  * Servlet Class
  * 
- * @web.servlet              name="OKMDocumentServlet"
+ * @web.servlet              name="DocumentServlet"
  *                           display-name="Directory tree service"
  *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/OKMDocumentServlet"
+ * @web.servlet-mapping      url-pattern="/DocumentServlet"
  * @web.servlet-init-param   name="A parameter"
  *                           value="A value"
  */
-public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDocumentService {
-	private static Logger log = LoggerFactory.getLogger(OKMDocumentServlet.class);
+public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocumentService {
+	private static Logger log = LoggerFactory.getLogger(DocumentServlet.class);
 	private static final long serialVersionUID = 5746570509074299745L;
 	
 	@Override

@@ -52,15 +52,15 @@ import com.openkm.frontend.client.service.OKMDashboardService;
 /**
  * Servlet Class
  * 
- * @web.servlet              name="OKMDashboardServlet"
+ * @web.servlet              name="DashboardServlet"
  *                           display-name="Directory tree service"
  *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/OKMDashboardServlet"
+ * @web.servlet-mapping      url-pattern="/DashboardServlet"
  * @web.servlet-init-param   name="A parameter"
  *                           value="A value"
  */
-public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMDashboardService {
-	private static Logger log = LoggerFactory.getLogger(OKMDashboardServlet.class);
+public class DashboardServlet extends OKMRemoteServiceServlet implements OKMDashboardService {
+	private static Logger log = LoggerFactory.getLogger(DashboardServlet.class);
 	private static final long serialVersionUID = 1L;
 	
 	@Override
