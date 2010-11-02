@@ -31,7 +31,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
+import com.openkm.core.RepositoryException;
+import com.openkm.dao.ExtensionDAO;
 import com.openkm.dao.LanguageDAO;
+import com.openkm.dao.bean.Extension;
 import com.openkm.dao.bean.Language;
 import com.openkm.dao.bean.MailAccount;
 import com.openkm.dao.bean.Translation;
@@ -105,14 +108,20 @@ public class OKMGeneralServlet extends OKMRemoteServiceServlet implements OKMGen
 	}
 	
 	@Override
-	public List<String> getEnabledExtensions() {
+	public List<String> getEnabledExtensions() throws OKMException {
 		List<String> extensions = new ArrayList<String>();
 		
-		//extensions.add("9f84b330-d096-11df-bd3b-0800200c9a66"); // ToolBarButtonExample
-		//extensions.add("44f94470-d097-11df-bd3b-0800200c9a66"); // TabWorkspaceExample		
-		//extensions.add("d95e01a0-d097-11df-bd3b-0800200c9a66"); // TabFolderExample
-		//extensions.add("d9dab640-d098-11df-bd3b-0800200c9a66"); // HelloWorld
-		
+		try {
+			for (Extension extension :ExtensionDAO.findAll()) {
+				extensions.add(extension.getUuid());
+			}
+		} catch (DatabaseException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMGeneralService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+		} catch (RepositoryException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMGeneralService, ErrorCode.CAUSE_Repository), e.getMessage());
+		}
 		
 		return extensions;
 	}

@@ -19,25 +19,45 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.service;
+package com.openkm.dao.bean;
 
-import java.util.List;
-import java.util.Map;
-
-import com.google.gwt.user.client.rpc.RemoteService;
-
-import com.openkm.frontend.client.OKMException;
-import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
-import com.openkm.frontend.client.bean.GWTTestImap;
+import java.io.Serializable;
 
 /**
+ * Language
+ * 
  * @author jllort
  *
  */
-public interface OKMGeneralService extends RemoteService {
+public class Extension implements Serializable {
 	
-	public GWTFileUploadingStatus getFileUploadStatus();
-	public GWTTestImap testImapConnection(String host, String user, String password, String imapFolder);
-	public List<String> getEnabledExtensions() throws OKMException;
-	public Map<String,String> getFrontEndTranslations(String lang) throws OKMException;
+	private static final long serialVersionUID = 1L;
+
+	private String uuid = "";
+	private String description = "";
+	
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append(", uuid="); sb.append(uuid);
+		sb.append(", description="); sb.append(description);
+		sb.append("}");
+		return sb.toString();
+	}	
 }
