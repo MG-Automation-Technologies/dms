@@ -35,15 +35,15 @@ import com.openkm.frontend.client.service.OKMUserConfigService;
 /**
  * Servlet Class
  * 
- * @web.servlet              name="OKMUserConfigServlet"
+ * @web.servlet              name="UserConfigServlet"
  *                           display-name="Directory tree service"
  *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/OKMUserConfigServlet"
+ * @web.servlet-mapping      url-pattern="/UserConfigServlet"
  * @web.servlet-init-param   name="A parameter"
  *                           value="A value"
  */
-public class OKMUserConfigServlet extends OKMRemoteServiceServlet implements OKMUserConfigService {
-	private static Logger log = LoggerFactory.getLogger(OKMUserConfigServlet.class);
+public class UserConfigServlet extends OKMRemoteServiceServlet implements OKMUserConfigService {
+	private static Logger log = LoggerFactory.getLogger(UserConfigServlet.class);
 	private static final long serialVersionUID = 1L;
 	
 	@Override

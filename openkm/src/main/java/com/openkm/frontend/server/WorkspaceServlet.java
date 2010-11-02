@@ -63,15 +63,15 @@ import com.openkm.validator.password.PasswordValidator;
 /**
  * Servlet Class
  * 
- * @web.servlet              name="OKMWorkspaceServlet"
+ * @web.servlet              name="WorkspaceServlet"
  *                           display-name="Directory tree service"
  *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/OKMWorkspaceServlet"
+ * @web.servlet-mapping      url-pattern="/WorkspaceServlet"
  * @web.servlet-init-param   name="A parameter"
  *                           value="A value"
  */
-public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMWorkspaceService {
-	private static Logger log = LoggerFactory.getLogger(OKMWorkspaceServlet.class);
+public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWorkspaceService {
+	private static Logger log = LoggerFactory.getLogger(WorkspaceServlet.class);
 	private static final long serialVersionUID = 8673521252684830906L;
 	
 	@Override

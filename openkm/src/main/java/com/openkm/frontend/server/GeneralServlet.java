@@ -52,12 +52,12 @@ import com.openkm.util.MailUtils;
  * @web.servlet              name="OKMGeneralService"
  *                           display-name="Directory tree service"
  *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/OKMGeneralServlet"
+ * @web.servlet-mapping      url-pattern="/GeneralServlet"
  * @web.servlet-init-param   name="A parameter"
  *                           value="A value"
  */
-public class OKMGeneralServlet extends OKMRemoteServiceServlet implements OKMGeneralService {
-	private static Logger log = LoggerFactory.getLogger(OKMGeneralServlet.class);
+public class GeneralServlet extends OKMRemoteServiceServlet implements OKMGeneralService {
+	private static Logger log = LoggerFactory.getLogger(GeneralServlet.class);
 	private static final long serialVersionUID = -879908904295685769L;
 	
 	@Override
@@ -66,14 +66,14 @@ public class OKMGeneralServlet extends OKMRemoteServiceServlet implements OKMGen
 		GWTFileUploadingStatus fus = new GWTFileUploadingStatus();
 		updateSessionManager();
 		
-		if (getThreadLocalRequest().getSession().getAttribute(OKMFileUploadServlet.FILE_UPLOAD_STATUS)!=null) {
-			FileUploadListener listener = (FileUploadListener)getThreadLocalRequest().getSession().getAttribute(OKMFileUploadServlet.FILE_UPLOAD_STATUS);
+		if (getThreadLocalRequest().getSession().getAttribute(FileUploadServlet.FILE_UPLOAD_STATUS)!=null) {
+			FileUploadListener listener = (FileUploadListener)getThreadLocalRequest().getSession().getAttribute(FileUploadServlet.FILE_UPLOAD_STATUS);
 			fus.setStarted(true);
 			fus.setBytesRead(listener.getBytesRead());
             fus.setContentLength(listener.getContentLength());
             fus.setUploadFinish(listener.isUploadFinish());
             if (listener.getBytesRead()==listener.getContentLength() || listener.isUploadFinish()) {
-            	getThreadLocalRequest().getSession().removeAttribute(OKMFileUploadServlet.FILE_UPLOAD_STATUS);
+            	getThreadLocalRequest().getSession().removeAttribute(FileUploadServlet.FILE_UPLOAD_STATUS);
             }
 		}
 		

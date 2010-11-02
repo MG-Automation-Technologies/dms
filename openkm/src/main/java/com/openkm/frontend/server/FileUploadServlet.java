@@ -52,16 +52,16 @@ import de.schlichtherle.io.FileOutputStream;
 /**
  * Servlet Class
  * 
- * @web.servlet name="OKMFileUploadServlet" display-name="Name for OKMFileUploadServlet"
- *              description="Description for OKMFileUploadServlet"
- * @web.servlet-mapping url-pattern="/OKMFileUploadServlet"
+ * @web.servlet name="FileUploadServlet" display-name="Name for FileUploadServlet"
+ *              description="Description for FileUploadServlet"
+ * @web.servlet-mapping url-pattern="/FileUploadServlet"
  * @web.servlet-init-param name="A parameter" value="A value"
  * 
  * @author pavila
  *
  */
-public class OKMFileUploadServlet extends OKMHttpServlet {
-	private static Logger log = LoggerFactory.getLogger(OKMFileUploadServlet.class);
+public class FileUploadServlet extends OKMHttpServlet {
+	private static Logger log = LoggerFactory.getLogger(FileUploadServlet.class);
 	private static final long serialVersionUID = 1L;
 	public static final int INSERT = 0;
 	public static final int UPDATE = 1;

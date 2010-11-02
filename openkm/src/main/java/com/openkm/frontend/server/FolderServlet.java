@@ -47,15 +47,15 @@ import com.openkm.frontend.client.util.FolderComparator;
 /**
  * Servlet Class
  * 
- * @web.servlet              name="OKMFolderServlet"
+ * @web.servlet              name="FolderServlet"
  *                           display-name="Directory tree service"
  *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/OKMFolderServlet"
+ * @web.servlet-mapping      url-pattern="/FolderServlet"
  * @web.servlet-init-param   name="A parameter"
  *                           value="A value"
  */
-public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFolderService {
-	private static Logger log = LoggerFactory.getLogger(OKMFolderServlet.class);
+public class FolderServlet extends OKMRemoteServiceServlet implements OKMFolderService {
+	private static Logger log = LoggerFactory.getLogger(FolderServlet.class);
 	private static final long serialVersionUID = -4436438730167948558L;
 	
 	@Override

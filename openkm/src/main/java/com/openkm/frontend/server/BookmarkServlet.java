@@ -44,15 +44,15 @@ import com.openkm.frontend.client.util.BookmarkComparator;
 /**
  * Servlet Class
  * 
- * @web.servlet              name="OKMBookmarkServlet"
+ * @web.servlet              name="BookmarkServlet"
  *                           display-name="Directory tree service"
  *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/OKMBookmarkServlet"
+ * @web.servlet-mapping      url-pattern="/BookmarkServlet"
  * @web.servlet-init-param   name="A parameter"
  *                           value="A value"
  */
-public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBookmarkService {
-	private static Logger log = LoggerFactory.getLogger(OKMBookmarkServlet.class);
+public class BookmarkServlet extends OKMRemoteServiceServlet implements OKMBookmarkService {
+	private static Logger log = LoggerFactory.getLogger(BookmarkServlet.class);
 	private static final long serialVersionUID = 1L;
 
 	@Override

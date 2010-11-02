@@ -54,15 +54,15 @@ import com.openkm.util.UserActivity;
 /**
  * Servlet Class
  * 
- * @web.servlet              name="OKMAuthServlet"
+ * @web.servlet              name="AuthServlet"
  *                           display-name="Directory tree service"
  *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/OKMAuthServlet"
+ * @web.servlet-mapping      url-pattern="/AuthServlet"
  * @web.servlet-init-param   name="A parameter"
  *                           value="A value"
  */
-public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthService {
-	private static Logger log = LoggerFactory.getLogger(OKMAuthServlet.class);
+public class AuthServlet extends OKMRemoteServiceServlet implements OKMAuthService {
+	private static Logger log = LoggerFactory.getLogger(AuthServlet.class);
 	private static final long serialVersionUID = 2638205115826644606L;
 	
 	@Override

@@ -39,16 +39,16 @@ import com.openkm.frontend.client.service.OKMRepositoryService;
 /**
  * Servlet Class
  * 
- * @web.servlet              name="OKMRepositoryServlet"
+ * @web.servlet              name="RepositoryServlet"
  *                           display-name="Directory tree service"
  *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/OKMRepositoryServlet"
+ * @web.servlet-mapping      url-pattern="/RepositoryServlet"
  * @web.servlet-init-param   name="A parameter"
  *                           value="A value"
  */
-public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKMRepositoryService {
+public class RepositoryServlet extends OKMRemoteServiceServlet implements OKMRepositoryService {
 	private static final long serialVersionUID = 1L;
-	private static Logger log = LoggerFactory.getLogger(OKMRepositoryServlet.class);
+	private static Logger log = LoggerFactory.getLogger(RepositoryServlet.class);
 
 	@Override
 	public String getUpdateMessage() throws OKMException {

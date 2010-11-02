@@ -38,15 +38,15 @@ import com.openkm.frontend.client.service.OKMPropertyService;
 /**
  * Servlet Class
  * 
- * @web.servlet              name="OKMPropertyServlet"
+ * @web.servlet              name="PropertyServlet"
  *                           display-name="Directory tree service"
  *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/OKMPropertyServlet"
+ * @web.servlet-mapping      url-pattern="/PropertyServlet"
  * @web.servlet-init-param   name="A parameter"
  *                           value="A value"
  */
-public class OKMPropertyServlet extends OKMRemoteServiceServlet implements OKMPropertyService {
-	private static Logger log = LoggerFactory.getLogger(OKMPropertyServlet.class);
+public class PropertyServlet extends OKMRemoteServiceServlet implements OKMPropertyService {
+	private static Logger log = LoggerFactory.getLogger(PropertyServlet.class);
 	private static final long serialVersionUID = 1138063389446959876L;
 	
 	@Override
