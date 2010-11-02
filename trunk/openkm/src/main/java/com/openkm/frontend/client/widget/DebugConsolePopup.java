@@ -68,6 +68,7 @@ public class DebugConsolePopup extends DialogBox implements ClickHandler {
 		button.setStyleName("okm-Button");
 
 		super.hide();
+		Log.getLogger(DivLogger.class).getWidget().setVisible(true);
 		setWidget(vPanel);
 	}
 	
