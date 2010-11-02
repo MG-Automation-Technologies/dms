@@ -21,8 +21,11 @@
 
 package com.openkm.frontend.client.service;
 
+import java.util.List;
+
 import com.google.gwt.user.client.rpc.RemoteService;
 
+import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
 import com.openkm.frontend.client.bean.GWTTestImap;
 
@@ -34,4 +37,5 @@ public interface OKMGeneralService extends RemoteService {
 	
 	public GWTFileUploadingStatus getFileUploadStatus();
 	public GWTTestImap testImapConnection(String host, String user, String password, String imapFolder);
+	public List<String> getEnabledExtensions() throws OKMException;
 }

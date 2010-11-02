@@ -22,13 +22,21 @@
 package com.openkm.frontend.server;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.core.DatabaseException;
+import com.openkm.core.RepositoryException;
+import com.openkm.dao.ExtensionDAO;
+import com.openkm.dao.bean.Extension;
 import com.openkm.dao.bean.MailAccount;
+import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
 import com.openkm.frontend.client.bean.GWTTestImap;
+import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.service.OKMGeneralService;
 import com.openkm.util.MailUtils;
 
@@ -92,5 +100,24 @@ public class OKMGeneralServlet extends OKMRemoteServiceServlet implements OKMGen
 		
 		log.debug("testImapConnection: {}", test);
 		return test;
+	}
+	
+	@Override
+	public List<String> getEnabledExtensions() throws OKMException {
+		List<String> extensions = new ArrayList<String>();
+		
+		try {
+			for (Extension extension :ExtensionDAO.findAll()) {
+				extensions.add(extension.getUuid());
+			}
+		} catch (DatabaseException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMGeneralService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+		} catch (RepositoryException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMGeneralService, ErrorCode.CAUSE_Repository), e.getMessage());
+		}
+		
+		return extensions;
 	}
 }
