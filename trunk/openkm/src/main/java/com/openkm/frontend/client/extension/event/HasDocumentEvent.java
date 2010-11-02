@@ -49,6 +49,7 @@ public interface HasDocumentEvent {
 		static final int EVENT_SECURITY_CHANGED 	= 8;
 		static final int EVENT_NOTE_ADDED 			= 9;
 		static final int EVENT_SET_VISIBLE_BUTTONS	= 10;
+		static final int EVENT_DOCUMENT_DELETED		= 11;
 		
 		private int type = 0;
 		
@@ -76,6 +77,7 @@ public interface HasDocumentEvent {
 	DocumentEventConstant SECURITY_CHANGED = new DocumentEventConstant(DocumentEventConstant.EVENT_SECURITY_CHANGED);
 	DocumentEventConstant NOTE_ADDED = new DocumentEventConstant(DocumentEventConstant.EVENT_NOTE_ADDED);
 	DocumentEventConstant SET_VISIBLE_BUTTONS = new DocumentEventConstant(DocumentEventConstant.EVENT_SET_VISIBLE_BUTTONS);
+	DocumentEventConstant DOCUMENT_DELETED = new DocumentEventConstant(DocumentEventConstant.EVENT_DOCUMENT_DELETED);
 	
 	/**
 	 * @param event

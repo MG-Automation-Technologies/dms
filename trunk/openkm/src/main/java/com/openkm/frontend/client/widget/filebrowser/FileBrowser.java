@@ -21,6 +21,7 @@
 
 package com.openkm.frontend.client.widget.filebrowser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -30,7 +31,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
 import com.google.gwt.gen2.table.client.FixedWidthGrid;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
@@ -43,6 +43,15 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.event.HasDocumentEvent;
+import com.openkm.frontend.client.extension.event.HasFolderEvent;
+import com.openkm.frontend.client.extension.event.HasMailEvent;
+import com.openkm.frontend.client.extension.event.handler.DocumentHandlerExtension;
+import com.openkm.frontend.client.extension.event.handler.FolderHandlerExtension;
+import com.openkm.frontend.client.extension.event.handler.MailHandlerExtension;
+import com.openkm.frontend.client.extension.event.hashandler.HasDocumentHandlerExtension;
+import com.openkm.frontend.client.extension.event.hashandler.HasFolderHandlerExtension;
+import com.openkm.frontend.client.extension.event.hashandler.HasMailHandlerExtension;
 import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
@@ -72,7 +81,9 @@ import com.openkm.frontend.client.widget.startup.StartUp;
  * @author jllort
  *
  */
-public class FileBrowser extends Composite implements OriginPanel {
+public class FileBrowser extends Composite implements OriginPanel, HasDocumentEvent, HasFolderEvent, HasMailEvent, 
+                                                      HasDocumentHandlerExtension, HasFolderHandlerExtension, 
+                                                      HasMailHandlerExtension {
 	public static final int STATUS_SIZE = 26;
 	
 	// Definitions of fileBrowser actions
@@ -117,11 +128,17 @@ public class FileBrowser extends Composite implements OriginPanel {
 	private int numberOfFolders = 0;
 	private int numberOfDocuments = 0;
 	private int numberOfMails = 0;
+	private List<DocumentHandlerExtension> docHandlerExtensionList;
+	private List<FolderHandlerExtension> folderHandlerExtensionList;
+	private List<MailHandlerExtension> mailHandlerExtensionList;
 	
 	public FileBrowser() {
 		// Sets the actual view and view values hashMap object
 		actualView = PanelDefinition.NAVIGATOR_TAXONOMY; 
 		viewValues = new HashMap<String, String>();
+		docHandlerExtensionList = new ArrayList<DocumentHandlerExtension>();
+		folderHandlerExtensionList = new ArrayList<FolderHandlerExtension>();
+		mailHandlerExtensionList = new ArrayList<MailHandlerExtension>();
 		
 		panel = new VerticalPanel();
 		filePath = new FilePath();
@@ -489,6 +506,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 	final AsyncCallback<Object> callbackDeleteDocument = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
 			Log.debug("FileBroser callbackDeleteDocument:");
+			fireEvent(HasDocumentEvent.DOCUMENT_DELETED);
 			//int row = table.getSelectedRow();
 			table.delete();
 			//table.decrementHiddenIndexValues(row);
@@ -509,6 +527,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 	final AsyncCallback<Object> callbackDeleteMail = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
 			Log.debug("FileBroser callbackDeleteMail:");
+			fireEvent(HasMailEvent.MAIL_DELETED);
 			//int row = table.getSelectedRow();
 			table.delete();
 			//table.decrementHiddenIndexValues(row);
@@ -568,6 +587,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 	 */
 	final AsyncCallback<Object> callbackDeleteFolder = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {	
+			fireEvent(HasFolderEvent.FOLDER_DELETED);
 			// Deletes folder from tree for consistence view
 			Main.get().activeFolderTree.removeDeleted(((GWTFolder)table.getFolder()).getPath());
 			//int row = table.getSelectedRow();
@@ -1654,5 +1674,46 @@ public class FileBrowser extends Composite implements OriginPanel {
 	 */
 	public boolean hasRows() {
 		return table.hasRows();
+	}
+	
+	/**
+	 * addDocumentHandlerExtension
+	 * 
+	 * @param handlerExtension
+	 */
+	public void addDocumentHandlerExtension(DocumentHandlerExtension handlerExtension) {
+		docHandlerExtensionList.add(handlerExtension);
+	}
+	
+
+	@Override
+	public void addFolderHandlerExtension(FolderHandlerExtension handlerExtension) {
+		folderHandlerExtensionList.add(handlerExtension);
+	}
+	
+	@Override
+	public void addMailHandlerExtension(MailHandlerExtension handlerExtension) {
+		mailHandlerExtensionList.add(handlerExtension);		
+	}
+	
+	@Override
+	public void fireEvent(DocumentEventConstant event) {
+		for ( DocumentHandlerExtension handlerExtension : docHandlerExtensionList) {
+			handlerExtension.onChange(event);
+		}
+	}
+
+	@Override
+	public void fireEvent(FolderEventConstant event) {
+		for ( FolderHandlerExtension handlerExtension : folderHandlerExtensionList) {
+			handlerExtension.onChange(event);
+		}
+	}
+
+	@Override
+	public void fireEvent(MailEventConstant event) {
+		for ( MailHandlerExtension handlerExtension : mailHandlerExtensionList) {
+			handlerExtension.onChange(event);
+		}
 	}
 }

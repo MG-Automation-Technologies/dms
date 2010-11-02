@@ -36,4 +36,5 @@ public interface OKMStaplingServiceAsync {
 	public void remove(String id, AsyncCallback<?> callback);
 	public void removeStaple(String id, AsyncCallback<?> callback);
 	public void getAll(String uuid, AsyncCallback<List<GWTStapleGroup>> callback);
+	public void removeAllStapleByUuid(String uuid, AsyncCallback<?> callback);
 }

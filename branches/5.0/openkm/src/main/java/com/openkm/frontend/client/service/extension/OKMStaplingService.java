@@ -37,4 +37,5 @@ public interface OKMStaplingService extends RemoteService {
 	public void remove(String id) throws OKMException;
 	public void removeStaple(String id) throws OKMException;
 	public List<GWTStapleGroup> getAll(String uuid) throws OKMException;
+	public void removeAllStapleByUuid(String uuid) throws OKMException;
 }

@@ -132,6 +132,29 @@ public class OKMStaplingServlet extends OKMRemoteServiceServlet implements OKMSt
 		return stapList;
 	}
 	
+	@Override
+	public void removeAllStapleByUuid(String uuid) throws OKMException {
+		try {
+			List<String> idToDelete = new ArrayList<String>();
+			for (StapleGroup sg : StapleGroupDAO.findAll(uuid)) {
+				for (Staple staple : sg.getStaples()) {
+					if (staple.getUuid().equals(uuid)) {
+						idToDelete.add(String.valueOf(staple.getId()));
+					}
+				}
+			}
+			for (String id : idToDelete) {
+				StapleGroupDAO.deleteStaple(Integer.parseInt(id));
+			}
+		} catch (DatabaseException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+		} catch (RepositoryException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} 
+	}
+	
 	
 	@Override
 	public void remove(String id) throws OKMException {

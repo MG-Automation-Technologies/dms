@@ -533,11 +533,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		widgetExtensionList.add(extension);
 	}
 	
-	/**
-	 * addDocumentHandlerExtension
-	 * 
-	 * @param handlerExtension
-	 */
+	@Override
 	public void addDocumentHandlerExtension(DocumentHandlerExtension handlerExtension) {
 		docHandlerExtensionList.add(handlerExtension);
 	}
