@@ -97,6 +97,7 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean tabDocumentPropertyGroupsVisible;
 	private boolean tabFolderPropertiesVisible;
 	private boolean tabFolderSecurityVisible;
+	private boolean tabFolderNotesVisible;
 	private boolean tabMailPropertiesVisible;
 	private boolean tabMailSecurityVisible;
 	private GWTAvailableOption availableOption = new GWTAvailableOption();
@@ -575,6 +576,14 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setTabFolderSecurityVisible(boolean tabFolderSecurityVisible) {
 		this.tabFolderSecurityVisible = tabFolderSecurityVisible;
+	}
+	
+	public boolean isTabFolderNotesVisible() {
+		return tabFolderNotesVisible;
+	}
+
+	public void setTabFolderNotesVisible(boolean tabFolderNotesVisible) {
+		this.tabFolderNotesVisible = tabFolderNotesVisible;
 	}
 	
 	public boolean isTabMailPropertiesVisible() {
