@@ -241,6 +241,7 @@
     <mapping resource="com/openkm/dao/bean/extension/StapleGroup.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Language.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Translation.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/Extension.hbm.xml"/>
 
     <!-- ################################### -->
     <!-- # cache settings                  # -->
