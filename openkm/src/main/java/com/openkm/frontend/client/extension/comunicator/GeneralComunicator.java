@@ -23,6 +23,9 @@ package com.openkm.frontend.client.extension.comunicator;
 
 import java.util.List;
 
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.ToolBarOption;
 import com.openkm.frontend.client.util.Util;
@@ -89,6 +92,16 @@ public class GeneralComunicator {
 	 */
 	public static void downloadFile(String path, String params) {
 		Util.downloadFile(path, params);
+	}
+	
+	/**
+	 * extensionCallOwnDownload
+	 * 
+	 * @param params
+	 */
+	public static void extensionCallOwnDownload(String url) {
+		final Element downloadIframe = RootPanel.get("__download").getElement(); 
+		DOM.setElementAttribute(downloadIframe, "src", url); 
 	}
 	
 	/**
