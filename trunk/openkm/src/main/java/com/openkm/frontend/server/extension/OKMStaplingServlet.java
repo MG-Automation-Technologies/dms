@@ -76,7 +76,7 @@ public class OKMStaplingServlet extends OKMRemoteServiceServlet implements OKMSt
 			StapleGroupDAO.update(stapleGroup); 	// Updating
 			return String.valueOf(id);
 		} catch (DatabaseException e) {
-			log.warn(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 	}
@@ -101,10 +101,10 @@ public class OKMStaplingServlet extends OKMRemoteServiceServlet implements OKMSt
 				StapleGroupDAO.update(stapleGroup); 	// Updating
 			}
 		} catch (NumberFormatException e) {
-			log.warn(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_NumberFormatException), e.getMessage());
 		} catch (DatabaseException e) {
-			log.warn(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 	}
@@ -117,16 +117,16 @@ public class OKMStaplingServlet extends OKMRemoteServiceServlet implements OKMSt
 				stapList.add(Util.copy(sg));
 			}
 		} catch (DatabaseException e) {
-			log.warn(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		} catch (RepositoryException e) {
-			log.warn(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (AccessDeniedException e) {
-			log.warn(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_AccessDenied), e.getMessage());
 		} catch (PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
 		}
 		return stapList;
@@ -147,10 +147,10 @@ public class OKMStaplingServlet extends OKMRemoteServiceServlet implements OKMSt
 				StapleGroupDAO.deleteStaple(Integer.parseInt(id));
 			}
 		} catch (DatabaseException e) {
-			log.warn(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		} catch (RepositoryException e) {
-			log.warn(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_Repository), e.getMessage());
 		} 
 	}
@@ -161,10 +161,10 @@ public class OKMStaplingServlet extends OKMRemoteServiceServlet implements OKMSt
 		try {
 			StapleGroupDAO.delete(Integer.parseInt(id));
 		} catch (NumberFormatException e) {
-			log.warn(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_NumberFormatException), e.getMessage());
 		} catch (DatabaseException e) {
-			log.warn(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 	}
@@ -174,10 +174,10 @@ public class OKMStaplingServlet extends OKMRemoteServiceServlet implements OKMSt
 		try {
 			StapleGroupDAO.deleteStaple(Integer.parseInt(id));
 		} catch (NumberFormatException e) {
-			log.warn(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_NumberFormatException), e.getMessage());
 		} catch (DatabaseException e) {
-			log.warn(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 	}
