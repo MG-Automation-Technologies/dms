@@ -189,6 +189,12 @@ public class Config {
 	public static final String PROPERTY_HIBERNATE_HBM2DDL = "hibernate.hbm2ddl";
 	public static final String PROPERTY_HIBERNATE_SHOW_SQL = "hibernate.show_sql";
 	
+	// Logo icons
+	public static final String PROPERTY_LOGO_LOGIN = "logo.login";
+	public static final String PROPERTY_LOGO_TEXT = "logo.text";
+	public static final String PROPERTY_LOGO_MOBI = "logo.mobi";
+	public static final String PROPERTY_LOGO_REPORT = "logo.report";
+	
 	/**
 	 *  Default values
 	 */
@@ -335,6 +341,12 @@ public class Config {
 	public static String HIBERNATE_DATASOURCE = "java:/OpenKMDS";
 	public static String HIBERNATE_HBM2DDL = "create";
 	public static String HIBERNATE_SHOW_SQL = "false";
+	
+	// Logo icons
+	public static String LOGO_LOGIN = Config.class.getResource("/img/logo_login.gif").toString();
+	public static String LOGO_TEXT = "&nbsp;";
+	public static String LOGO_MOBI = Config.class.getResource("/img/logo_mobi.gif").toString();
+	public static String LOGO_REPORT = Config.class.getResource("/img/logo_report.gif").toString();
 	
 	// Chat
 	private static String CHAT_ENABLED_STR = "on";
@@ -654,6 +666,16 @@ public class Config {
 			values.put(PROPERTY_HIBERNATE_HBM2DDL, HIBERNATE_HBM2DDL);
 			HIBERNATE_SHOW_SQL = config.getProperty(PROPERTY_HIBERNATE_SHOW_SQL, HIBERNATE_SHOW_SQL);
 			values.put(PROPERTY_HIBERNATE_SHOW_SQL, HIBERNATE_SHOW_SQL);
+			
+			// Logo icons
+			LOGO_LOGIN = config.getProperty(PROPERTY_LOGO_LOGIN, LOGO_LOGIN);
+			values.put(PROPERTY_LOGO_LOGIN, LOGO_LOGIN);
+			LOGO_TEXT = config.getProperty(PROPERTY_LOGO_TEXT, LOGO_TEXT);
+			values.put(PROPERTY_LOGO_TEXT, LOGO_TEXT);
+			LOGO_MOBI = config.getProperty(PROPERTY_LOGO_MOBI, LOGO_MOBI);
+			values.put(PROPERTY_LOGO_MOBI, LOGO_MOBI);
+			LOGO_REPORT = config.getProperty(PROPERTY_LOGO_REPORT, LOGO_REPORT);
+			values.put(PROPERTY_LOGO_REPORT, LOGO_REPORT);
 			
 			fis.close();
 		} catch (FileNotFoundException e) {
