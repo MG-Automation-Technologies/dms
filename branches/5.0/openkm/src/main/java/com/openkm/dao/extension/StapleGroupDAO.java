@@ -166,7 +166,7 @@ public class StapleGroupDAO {
 	 */
 	public static void update(StapleGroup sg) throws DatabaseException {
 		log.debug("update({})", sg);
-		String qs = "select sg.username from StapleGroup sg where sg.id=:id";
+		String qs = "select sg.user from StapleGroup sg where sg.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -175,8 +175,8 @@ public class StapleGroupDAO {
 			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setParameter("id", sg.getId());
-			String username = (String) q.setMaxResults(1).uniqueResult();
-			sg.setUsername(username);
+			String user = (String) q.setMaxResults(1).uniqueResult();
+			sg.setUser(user);
 			session.update(sg);
 			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
