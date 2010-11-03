@@ -21,18 +21,24 @@
 
 package com.openkm.frontend.client.widget.startup;
 
+import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
+import com.openkm.extension.frontend.client.Customization;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTUserConfig;
 import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.ExtensionManager;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
+import com.openkm.frontend.client.service.OKMGeneralService;
+import com.openkm.frontend.client.service.OKMGeneralServiceAsync;
 import com.openkm.frontend.client.service.OKMRepositoryService;
 import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
 import com.openkm.frontend.client.service.OKMUserConfigService;
@@ -73,6 +79,7 @@ public class StartUp {
 	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
 	private final OKMAuthServiceAsync authService = (OKMAuthServiceAsync) GWT.create(OKMAuthService.class);
 	private final OKMUserConfigServiceAsync userConfigService = (OKMUserConfigServiceAsync) GWT.create(OKMUserConfigService.class);
+	private final OKMGeneralServiceAsync generalService = (OKMGeneralServiceAsync) GWT.create(OKMGeneralService.class);
 	
 	private boolean enabled = true;
 	private boolean error = false;
@@ -83,7 +90,22 @@ public class StartUp {
 	 * Inits on first load
 	 */
 	public void init(){
-		nextStatus(STARTUP_STARTING);
+		ServiceDefTarget endPoint = (ServiceDefTarget) generalService;
+		endPoint.setServiceEntryPoint(Config.OKMGeneralService);
+		generalService.getEnabledExtensions(new AsyncCallback<List<String>>() {
+			@Override
+			public void onSuccess(List<String> result) {
+				// Only show registered extensions
+				ExtensionManager.start(Customization.getExtensionWidgets(result));
+				nextStatus(STARTUP_STARTING);
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Error on getting extensions UUID");
+				nextStatus(STARTUP_STARTING);
+			}
+		});
 	}
 	
 	/**

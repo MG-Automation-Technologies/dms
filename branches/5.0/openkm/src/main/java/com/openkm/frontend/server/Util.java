@@ -1058,8 +1058,7 @@ public class Util {
 	 * @throws AccessDeniedException 
 	 * @throws PathNotFoundException 
 	 */
-	public static GWTStapleGroup copy (StapleGroup sg) throws AccessDeniedException, RepositoryException, 
-																  DatabaseException, PathNotFoundException {
+	public static GWTStapleGroup copy (StapleGroup sg) throws RepositoryException, DatabaseException, PathNotFoundException {
 		GWTStapleGroup gsg = new GWTStapleGroup();
 		gsg.setId(sg.getId());
 		gsg.setUser(sg.getUser());
@@ -1068,6 +1067,7 @@ public class Util {
 			gst.setId(st.getId());
 			gst.setType(st.getType());
 			
+			try {
 			// Getting document / folder / mail properties 
 			if (st.getType().equals(Staple.STAPLE_DOCUMENT)) {
 				String path = OKMDocument.getInstance().getPath(null, st.getUuid());
@@ -1080,6 +1080,9 @@ public class Util {
 				gst.setMail(Util.copy(OKMMail.getInstance().getProperties(null, path)));
 			}
 			gsg.getStaples().add(gst);
+			} catch (AccessDeniedException e) {
+				// Silent exception, some users have not accessing to some documents, folders or mails
+			}
 		}
 		return gsg;
 	}
