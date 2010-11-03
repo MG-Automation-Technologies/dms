@@ -33,8 +33,8 @@
     </tr>
     <tr class="even"><td><b>Categories</b></td>
       <td>
-        <c:forEach var="category" items="${doc.categories}">
-          ${category}
+        <c:forEach var="category" items="${categories}">
+          ${category}<br/>
         </c:forEach>
       </td>
     </tr>
