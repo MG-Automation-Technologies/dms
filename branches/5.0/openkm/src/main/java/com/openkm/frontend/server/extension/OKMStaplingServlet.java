@@ -56,9 +56,9 @@ public class OKMStaplingServlet extends OKMRemoteServiceServlet implements OKMSt
 	private static final long serialVersionUID = 395857404418870245L;
 	
 	@Override
-	public String create(String username, String uuid, String type, String uuid2, String type2) throws OKMException {
+	public String create(String user, String uuid, String type, String uuid2, String type2) throws OKMException {
 		StapleGroup stapleGroup = new StapleGroup();
-		stapleGroup.setUsername(username);
+		stapleGroup.setUser(user);
 		try {
 			// Creating stapling group
 			int id = StapleGroupDAO.create(stapleGroup);
