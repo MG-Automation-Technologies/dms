@@ -1062,7 +1062,7 @@ public class Util {
 																  DatabaseException, PathNotFoundException {
 		GWTStapleGroup gsg = new GWTStapleGroup();
 		gsg.setId(sg.getId());
-		gsg.setUsername(sg.getUsername());
+		gsg.setUser(sg.getUser());
 		for (Staple st: sg.getStaples()) {
 			GWTStaple gst = new GWTStaple();
 			gst.setId(st.getId());
