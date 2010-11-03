@@ -47,18 +47,18 @@ public class Customization {
 		List<Object> extensions = new ArrayList<Object>();
 		
 		// add here your widget extensions
-//		if (uuidList.contains("d9dab640-d098-11df-bd3b-0800200c9a66")) {
-//			extensions.add(new HelloWorld());
-//		} 
-//		if (uuidList.contains("9f84b330-d096-11df-bd3b-0800200c9a66")) {
-//			extensions.add(new ToolBarButtonExample().getButton());
-//		} 
-//		if (uuidList.contains("d95e01a0-d097-11df-bd3b-0800200c9a66")) {
-//			extensions.add(new TabFolderExample());
-//		} 
-//		if (uuidList.contains("44f94470-d097-11df-bd3b-0800200c9a66")) {
-//			extensions.add(new TabWorkspaceExample());
-//		}
+		if (uuidList.contains("d9dab640-d098-11df-bd3b-0800200c9a66")) {
+			extensions.add(new HelloWorld());
+		} 
+		if (uuidList.contains("9f84b330-d096-11df-bd3b-0800200c9a66")) {
+			extensions.add(new ToolBarButtonExample().getButton());
+		} 
+		if (uuidList.contains("d95e01a0-d097-11df-bd3b-0800200c9a66")) {
+			extensions.add(new TabFolderExample());
+		} 
+		if (uuidList.contains("44f94470-d097-11df-bd3b-0800200c9a66")) {
+			extensions.add(new TabWorkspaceExample());
+		}
 		
 //		extensions.add(new MainMenuExample().getNewMenu());
 //		extensions.add(new HandlersTest());
