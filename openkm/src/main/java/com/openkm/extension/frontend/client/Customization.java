@@ -25,6 +25,11 @@ package com.openkm.extension.frontend.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.openkm.extension.frontend.client.widget.client.metromusa.MetromUsa;
+import com.openkm.extension.frontend.client.widget.stapling.Stapling;
+import com.openkm.extension.frontend.client.widget.toolbar.downloadButton.DownloadButton;
+import com.openkm.extension.frontend.client.widget.toolbar.downloadPdfButton.DownloadPdfButton;
+
 /**
  * Customization
  * 
@@ -38,29 +43,29 @@ public class Customization {
 	 * 
 	 * @return
 	 */
-	public static List<Object> getExtensionWidgets() {
+	public static List<Object> getExtensionWidgets(List<String> uuidList) {
 		List<Object> extensions = new ArrayList<Object>();
 		
 		// add here your widget extensions
-//		if (uuidList.contains("d9dab640-d098-11df-bd3b-0800200c9a66")) {
-//			extensions.add(new HelloWorld());
-//		} 
-//		if (uuidList.contains("9f84b330-d096-11df-bd3b-0800200c9a66")) {
-//			extensions.add(new ToolBarButtonExample().getButton());
-//		} 
-//		if (uuidList.contains("d95e01a0-d097-11df-bd3b-0800200c9a66")) {
-//			extensions.add(new TabFolderExample());
-//		} 
-//		if (uuidList.contains("44f94470-d097-11df-bd3b-0800200c9a66")) {
-//			extensions.add(new TabWorkspaceExample());
-//		}
+		if (uuidList.contains("d9dab640-d098-11df-bd3b-0800200c9a66")) {
+			extensions.add(new HelloWorld());
+		} 
+		if (uuidList.contains("9f84b330-d096-11df-bd3b-0800200c9a66")) {
+			extensions.add(new ToolBarButtonExample().getButton());
+		} 
+		if (uuidList.contains("d95e01a0-d097-11df-bd3b-0800200c9a66")) {
+			extensions.add(new TabFolderExample());
+		} 
+		if (uuidList.contains("44f94470-d097-11df-bd3b-0800200c9a66")) {
+			extensions.add(new TabWorkspaceExample());
+		}
 		
 //		extensions.add(new MainMenuExample().getNewMenu());
 //		extensions.add(new HandlersTest());
 //		extensions.add(new ToolBarBoxExample().getToolBarBox());
 		
 		// OPENKM PROPIETARY EXTENSIONS		
-/*		if (DownloadButton.isRegistered(uuidList)) {
+		if (DownloadButton.isRegistered(uuidList)) {
 			extensions.add(new DownloadButton(uuidList).getButton());
 		}
 		if (DownloadPdfButton.isRegistered(uuidList)) { 
@@ -71,7 +76,7 @@ public class Customization {
 		}
 		if (MetromUsa.isRegistered(uuidList)) {
 			extensions.addAll(new MetromUsa(uuidList).getExtensions());
-		} */
+		} 
 		
 		return extensions;
 	}
