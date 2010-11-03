@@ -36,15 +36,15 @@ public class StapleGroup implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private int id = -1;
-	private String username = "";
+	private String user = "";
 	private Set<Staple> staples = new HashSet<Staple>();
 	
-	public String getUsername() {
-		return username;
+	public String getUser() {
+		return user;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUser(String user) {
+		this.user = user;
 	}
 
 	public Set<Staple> getStaples() {
@@ -62,20 +62,12 @@ public class StapleGroup implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public String getUUID() {
-		return username;
-	}
-
-	public void setUUID(String uUID) {
-		username = uUID;
-	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("id="); sb.append(id);
-		sb.append(", username="); sb.append(username);
+		sb.append(", user="); sb.append(user);
 		sb.append(", staples="); sb.append(staples);
 		sb.append("}");
 		return sb.toString();
