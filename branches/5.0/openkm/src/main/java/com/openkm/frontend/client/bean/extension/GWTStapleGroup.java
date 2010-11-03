@@ -35,7 +35,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class GWTStapleGroup implements IsSerializable {
 	
 	private int id;
-	private String username;
+	private String user;
 	private List<GWTStaple> staples = new ArrayList<GWTStaple>();
 
 	public int getId() {
@@ -46,12 +46,12 @@ public class GWTStapleGroup implements IsSerializable {
 		this.id = id;
 	}
 	
-	public String getUsername() {
-		return username;
+	public String getUser() {
+		return user;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUser(String user) {
+		this.user = user;
 	}
 	
 	public List<GWTStaple> getStaples() {
