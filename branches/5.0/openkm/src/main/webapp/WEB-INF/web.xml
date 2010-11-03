@@ -253,12 +253,16 @@
     <servlet-name>CheckEmailServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.CheckEmailServlet</servlet-class>
   </servlet>
-        
-  <!-- Extension Servlets 
+  
+  <!-- Extensions -->
   <servlet>
     <servlet-name>StaplingServlet</servlet-name>
-    <servlet-class>com.openkm.extension.frontend.server.StaplingServlet</servlet-class>
-  </servlet> -->
+    <servlet-class>com.openkm.frontend.server.extension.StaplingServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>StaplingDownloadServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.extension.StaplingDownloadServlet</servlet-class>
+  </servlet>
     
   <!-- WebServices -->
   <servlet>
@@ -424,6 +428,16 @@
     <url-pattern>/OKMNoteServlet</url-pattern>
   </servlet-mapping>
   
+  <!-- Extensions Servlet Mappings -->
+  <servlet-mapping>
+    <servlet-name>StaplingServlet</servlet-name>
+    <url-pattern>/extension/Stapling</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>StaplingDownloadServlet</servlet-name>
+    <url-pattern>/extension/StaplingDownload</url-pattern>
+  </servlet-mapping>
+  
   <!-- Misc servlets mappings -->
   <servlet-mapping>
   	<servlet-name>HandlerServlet</servlet-name>
@@ -535,13 +549,7 @@
     <servlet-name>CheckEmailServlet</servlet-name>
     <url-pattern>/admin/CheckEmail</url-pattern>
   </servlet-mapping>
-
-  <!-- Extension Servlet Mappings 
-  <servlet-mapping>
-    <servlet-name>StaplingServlet</servlet-name>
-    <url-pattern>/extension/Stapling</url-pattern>
-  </servlet-mapping> -->
-
+  
   <!-- WebServices Servlet Mappings -->
   <servlet-mapping>
     <servlet-name>OKMAuth</servlet-name>
@@ -633,6 +641,7 @@
 	  <url-pattern>/TextToSpeech</url-pattern>
 	  <url-pattern>/Test</url-pattern>
 	  <url-pattern>/OKM*</url-pattern>
+	  <url-pattern>/extension/*</url-pattern>
     </web-resource-collection>
     <auth-constraint>
 	  <role-name>AdminRole</role-name>
