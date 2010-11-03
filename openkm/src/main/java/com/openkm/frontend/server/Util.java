@@ -1065,8 +1065,8 @@ public class Util {
 	 * @throws AccessDeniedException 
 	 * @throws PathNotFoundException 
 	 */
-	public static GWTStapleGroup copy (StapleGroup sg) throws AccessDeniedException, RepositoryException, 
-																  DatabaseException, PathNotFoundException {
+	public static GWTStapleGroup copy (StapleGroup sg) throws RepositoryException, DatabaseException, 
+															  PathNotFoundException {
 		GWTStapleGroup gsg = new GWTStapleGroup();
 		gsg.setId(sg.getId());
 		gsg.setUser(sg.getUser());
@@ -1075,18 +1075,22 @@ public class Util {
 			gst.setId(st.getId());
 			gst.setType(st.getType());
 			
-			// Getting document / folder / mail properties 
-			if (st.getType().equals(Staple.STAPLE_DOCUMENT)) {
-				String path = OKMDocument.getInstance().getPath(null, st.getUuid());
-				gst.setDoc(copy(OKMDocument.getInstance().getProperties(null, path)));
-			} else if (st.getType().equals(Staple.STAPLE_FOLDER)) {
-				String path = OKMFolder.getInstance().getPath(null, st.getUuid());
-				gst.setFolder(copy(OKMFolder.getInstance().getProperties(null, path)));
-			} else if (st.getType().equals(Staple.STAPLE_MAIL)) {
-				String path = OKMMail.getInstance().getPath(null, st.getUuid());
-				gst.setMail(Util.copy(OKMMail.getInstance().getProperties(null, path)));
+			try {
+				// Getting document / folder / mail properties 
+				if (st.getType().equals(Staple.STAPLE_DOCUMENT)) {
+					String path = OKMDocument.getInstance().getPath(null, st.getUuid());
+					gst.setDoc(copy(OKMDocument.getInstance().getProperties(null, path)));
+				} else if (st.getType().equals(Staple.STAPLE_FOLDER)) {
+					String path = OKMFolder.getInstance().getPath(null, st.getUuid());
+					gst.setFolder(copy(OKMFolder.getInstance().getProperties(null, path)));
+				} else if (st.getType().equals(Staple.STAPLE_MAIL)) {
+					String path = OKMMail.getInstance().getPath(null, st.getUuid());
+					gst.setMail(Util.copy(OKMMail.getInstance().getProperties(null, path)));
+				}
+				gsg.getStaples().add(gst);
+			} catch (AccessDeniedException e){
+				// Silent exception, some users have not accessing to some documents, folders or mails
 			}
-			gsg.getStaples().add(gst);
 		}
 		return gsg;
 	}
