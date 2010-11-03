@@ -1,6 +1,8 @@
 package com.openkm.servlet.mobi;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -15,6 +17,9 @@ import com.openkm.api.OKMAuth;
 import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
 import com.openkm.api.OKMSearch;
+import com.openkm.bean.Document;
+import com.openkm.bean.Folder;
+import com.openkm.bean.Repository;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
@@ -122,14 +127,22 @@ public class HandlerServlet extends HttpServlet {
 		log.debug("docProperties({}, {})", request, response);
 		ServletContext sc = getServletContext();
 		String path = request.getParameter("path");
-		
+				
 		if (path == null || path.equals("")) {
 			path = "/okm:root";
 		}
 		
 		path = new String(path.getBytes("ISO-8859-1"), "UTF-8");
-		sc.setAttribute("doc", OKMDocument.getInstance().getProperties(null, path));
+		Document doc = OKMDocument.getInstance().getProperties(null, path);
+		List<String> categories = new ArrayList<String>();
+		
+		for (Folder cat : doc.getCategories()) {
+			categories.add(cat.getPath().substring(Repository.CATEGORIES.length() + 2)); 
+		}
+		
+		sc.setAttribute("doc", doc);
 		sc.setAttribute("path", path);
+		sc.setAttribute("categories", categories);
 		sc.getRequestDispatcher("/mobi/doc-properties.jsp").forward(request, response);
 	}
 	
