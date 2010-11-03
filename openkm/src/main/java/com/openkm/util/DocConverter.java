@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.jackrabbit.extractor.PdfTextExtractor;
@@ -274,14 +275,14 @@ public class DocConverter {
 	 */
 	public void pdf2swf(File input, File output) throws IOException {
 		log.debug("** Convert from PDF to SWF **");
-		String cmd = Config.SYSTEM_PDF2SWF+" -f -T 9 -t -G -s storeallcharacters "+input.getPath()+" -o "+output.getPath();
-		log.debug("Command: {}", cmd);
+		String cmd[] = { Config.SYSTEM_PDF2SWF, input.getPath(), "-o", output.getPath() };
+		log.debug("Command: {}", Arrays.toString(cmd));
 		BufferedReader stdout = null;
 	    String line;
 	    
 		try {
 			long start = System.currentTimeMillis();
-			ProcessBuilder pb = new ProcessBuilder(cmd.split(" "));
+			ProcessBuilder pb = new ProcessBuilder(cmd);
 			Process process = pb.start();
 			stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
 			
@@ -302,7 +303,7 @@ public class DocConverter {
 			process.destroy();
 			log.debug("Elapse pdf2swf time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
 		} catch (Exception e) {
-			log.error(cmd);
+			log.error(Arrays.toString(cmd));
 			log.error("Error in PDF to SWF conversion", e);
 			output.delete();
 			throw new IOException("Error in PDF to SWF conversion", e);
