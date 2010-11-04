@@ -32,27 +32,25 @@ import java.util.Set;
  *
  */
 public class Language implements Serializable {
-	
 	private static final long serialVersionUID = 1L;
-
-	private String language = "";
-	private String description = "";
+	private String id = "";
+	private String name = "";
 	private Set<Translation> translations = new HashSet<Translation>();
-
-	public String getLanguage() {
-		return language;
-	}
-
-	public void setLanguage(String language) {
-		this.language = language;
-	}
 	
-	public String getDescription() {
-		return description;
+	public String getId() {
+		return id;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	public Set<Translation> getTranslations() {
@@ -66,8 +64,8 @@ public class Language implements Serializable {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append(", language="); sb.append(language);
-		sb.append(", description="); sb.append(description);
+		sb.append(", id="); sb.append(id);
+		sb.append(", name="); sb.append(name);
 		sb.append("}");
 		return sb.toString();
 	}	
