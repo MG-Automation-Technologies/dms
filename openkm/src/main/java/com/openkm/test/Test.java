@@ -11,9 +11,9 @@ public class Test {
 	 */
 	public static void main(String[] args) throws Exception {
 		Configuration cfg = new Configuration();
-		cfg.configure(new File("/home/pavila/Desarrollo/workspaces/openkm/openkm/hibernate.cfg.xml"));
+		cfg.configure(new File("/path/to/hibernate.cfg.xml"));
 		SchemaExport se = new SchemaExport(cfg);
-		se.setOutputFile("/home/pavila/Desarrollo/workspaces/openkm/openkm/salida.sql");
+		se.setOutputFile("/path/to/schema.sql");
 		se.setFormat(true);
 		se.create(false, false);		
 	}
