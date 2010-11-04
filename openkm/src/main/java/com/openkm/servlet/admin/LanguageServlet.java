@@ -81,9 +81,7 @@ public class LanguageServlet extends BaseServlet {
 	}
 	
 	/**
-	 * List language 
-	 * @throws com.openkm.core.RepositoryException 
-	 * @throws DatabaseException 
+	 * List languages
 	 */
 	private void list(Session session, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DatabaseException, com.openkm.core.RepositoryException {
@@ -134,7 +132,7 @@ public class LanguageServlet extends BaseServlet {
 			String lgId = WebUtil.getString(request, "lg_id");
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
-			sc.setAttribute("id", LanguageDAO.findByPk(lgId));
+			sc.setAttribute("lang", LanguageDAO.findByPk(lgId));
 			sc.getRequestDispatcher("/admin/language_edit.jsp").forward(request, response);
 		}
 		
