@@ -28,6 +28,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.List;
 import java.util.Properties;
 import java.util.TreeMap;
@@ -138,6 +139,7 @@ public class Config {
 	public static final String PROPERTY_SYSTEM_OPENOFFICE_PORT = "system.openoffice.port";
 	public static final String PROPERTY_SYSTEM_IMG2PDF = "system.img2pdf";
 	public static final String PROPERTY_SYSTEM_PDF2SWF = "system.pdf2swf";
+	public static final String PROPERTY_SYSTEM_DWG2DXF = "system.dwg2dxf";
 	public static final String PROPERTY_SYSTEM_ANTIVIR = "system.antivir";
 	public static final String PROPERTY_SYSTEM_LOGIN_LOWERCASE = "system.login.lowercase";
 	public static final String PROPERTY_SYSTEM_PREVIEWER = "system.previewer";
@@ -274,6 +276,7 @@ public class Config {
 	public static int SYSTEM_OPENOFFICE_PORT = Integer.parseInt(SYSTEM_OPENOFFICE_PORT_STR);
 	public static String SYSTEM_IMG2PDF = "";
 	public static String SYSTEM_PDF2SWF = "";
+	public static String SYSTEM_DWG2DXF = "";
 	public static String SYSTEM_ANTIVIR = "";
 	private static String SYSTEM_LOGIN_LOWERCASE_STR = "off";
 	public static boolean SYSTEM_LOGIN_LOWERCASE = "on".equalsIgnoreCase(SYSTEM_LOGIN_LOWERCASE_STR);
@@ -343,10 +346,10 @@ public class Config {
 	public static String HIBERNATE_SHOW_SQL = "false";
 	
 	// Logo icons
-	public static String LOGO_LOGIN = Config.class.getResource("/img/logo_login.gif").toString();
+	public static String LOGO_LOGIN = getResource("/img/logo_login.gif");
 	public static String LOGO_TEXT = "&nbsp;";
-	public static String LOGO_MOBI = Config.class.getResource("/img/logo_mobi.gif").toString();
-	public static String LOGO_REPORT = Config.class.getResource("/img/logo_report.gif").toString();
+	public static String LOGO_MOBI = getResource("/img/logo_mobi.gif");
+	public static String LOGO_REPORT = getResource("/img/logo_report.gif");
 	
 	// Chat
 	private static String CHAT_ENABLED_STR = "on";
@@ -434,6 +437,14 @@ public class Config {
 		if (idx2 > 0) ret = ret.substring(0, idx2);
 		
 		return ret;
+	}
+	
+	/**
+	 * Get resource
+	 */
+	private static String getResource(String file) {
+		URL url = Config.class.getResource(file);
+		return url != null ? url.toString() : null;
 	}
 	
 	public static void load() {
@@ -557,6 +568,8 @@ public class Config {
 			values.put(PROPERTY_SYSTEM_IMG2PDF, SYSTEM_IMG2PDF);
 			SYSTEM_PDF2SWF = config.getProperty(PROPERTY_SYSTEM_PDF2SWF, SYSTEM_PDF2SWF);
 			values.put(PROPERTY_SYSTEM_PDF2SWF, SYSTEM_PDF2SWF);
+			SYSTEM_DWG2DXF = config.getProperty(PROPERTY_SYSTEM_DWG2DXF, SYSTEM_DWG2DXF);
+			values.put(PROPERTY_SYSTEM_DWG2DXF, SYSTEM_DWG2DXF);
 			SYSTEM_ANTIVIR = config.getProperty(PROPERTY_SYSTEM_ANTIVIR, SYSTEM_ANTIVIR);
 			values.put(PROPERTY_SYSTEM_ANTIVIR, SYSTEM_ANTIVIR);
 			SYSTEM_LOGIN_LOWERCASE_STR = config.getProperty(PROPERTY_SYSTEM_LOGIN_LOWERCASE, SYSTEM_LOGIN_LOWERCASE_STR);
