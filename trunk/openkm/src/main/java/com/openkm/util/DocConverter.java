@@ -311,4 +311,46 @@ public class DocConverter {
 			IOUtils.closeQuietly(stdout);
 		}
 	}
+	
+	/**
+	 * 
+	 */
+	public void dwg2dxf(File input, File output) throws IOException {
+		log.debug("** Convert from DWG to DXF **");
+		String cmd[] = { "wine", Config.SYSTEM_DWG2DXF, "/r", "/ad", "/x14", input.getPath(), output.getPath() };
+		log.info("Command: {}", Arrays.toString(cmd));
+		BufferedReader stdout = null;
+	    String line;
+	    
+		try {
+			long start = System.currentTimeMillis();
+			ProcessBuilder pb = new ProcessBuilder(cmd);
+			Process process = pb.start();
+			stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			
+			while ((line = stdout.readLine()) != null) {
+				log.debug("STDOUT: {}", line);
+			}
+			
+			process.waitFor();	
+			
+			// Check return code
+			if (process.exitValue() != 0) {
+				log.warn("Abnormal program termination: {}" + process.exitValue());
+				log.warn("STDERR: {}", IOUtils.toString(process.getErrorStream()));
+			} else {
+				log.debug("Normal program termination");
+			}
+			
+			process.destroy();
+			log.debug("Elapse dwg2dxf time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
+		} catch (Exception e) {
+			log.error(Arrays.toString(cmd));
+			log.error("Error in DWG to DXF conversion", e);
+			output.delete();
+			throw new IOException("Error in DWG to DXF conversion", e);
+		} finally {
+			IOUtils.closeQuietly(stdout);
+		}
+	}
 }
