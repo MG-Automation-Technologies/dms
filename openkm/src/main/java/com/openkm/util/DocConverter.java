@@ -313,7 +313,8 @@ public class DocConverter {
 	}
 	
 	/**
-	 * 
+	 * Convert DWG to DXF (for document preview feature).
+	 * Actually only works with Acme CAD Converter 2010 v8.1.4
 	 */
 	public void dwg2dxf(File input, File output) throws IOException {
 		log.debug("** Convert from DWG to DXF **");
