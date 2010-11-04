@@ -16,46 +16,45 @@
 <body>
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
-      <c:when test="${isAdmin}">
+    <c:when test="${isAdmin}">
       <c:choose>
-        <c:when test="${action == 'langCreate'}"><h1>Create language</h1></c:when>
-        <c:when test="${action == 'langEdit'}"><h1>Edit language</h1></c:when>
-        <c:when test="${action == 'langDelete'}"><h1>Delete language</h1></c:when>
+        <c:when test="${action == 'create'}"><h1>Create language</h1></c:when>
+        <c:when test="${action == 'edit'}"><h1>Edit language</h1></c:when>
+        <c:when test="${action == 'delete'}"><h1>Delete language</h1></c:when>
       </c:choose>
       <form action="Language">
         <input type="hidden" name="action" value="${action}"/>
         <input type="hidden" name="persist" value="${persist}"/>
         <table class="form" width="372px">
-        <tr>
-            <td>Language</td>
+          <tr>
+            <td>Id</td>
             <td width="100%">
               <c:choose>
-                <c:when test="${action != 'langCreate'}">
-                  <input size="5" class=":required :only_on_blur" name="lg_language" value="${lang.language}" readonly="readonly"/>
+                <c:when test="${action != 'create'}">
+                  <input size="5" class=":required :only_on_blur" name="lg_id" value="${lang.id}" readonly="readonly"/>
                 </c:when>
                 <c:otherwise>
-                  <input class=":required :only_on_blur" name="lg_language" value=""/>
+                  <input class=":required :only_on_blur" name="lg_id" value=""/>
                 </c:otherwise>
               </c:choose>
             </td>
-        </tr>
-        <tr>
-            <td>Description</td>
-            <td><input class="" name="lg_description" value="${lang.description}"/></td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
+            <td>Name</td>
+            <td><input class="" name="lg_name" value="${lang.name}"/></td>
+          </tr>
+          <tr>
             <td colspan="2" align="right">
               <input type="button" onclick="javascript:window.history.back()" value="Cancel"/>
               <input type="submit" value="Send"/>
             </td>
-        </tr>  
-       	</table>
+          </tr>
+        </table>
       </form>
-      
-  	  </c:when>
-	  <c:otherwise>
-	  	<div class="error"><h3>Only admin users allowed</h3></div>
-	  </c:otherwise>
+  	</c:when>
+	<c:otherwise>
+	  <div class="error"><h3>Only admin users allowed</h3></div>
+	</c:otherwise>
   </c:choose>
 </body>
 </html>
