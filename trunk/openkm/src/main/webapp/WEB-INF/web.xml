@@ -261,6 +261,10 @@
     <servlet-name>CheckEmailServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.CheckEmailServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>LanguageServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.LanguageServlet</servlet-class>
+  </servlet>
   
   <!-- Extensions -->
   <servlet>
@@ -564,6 +568,10 @@
   <servlet-mapping>
     <servlet-name>CheckEmailServlet</servlet-name>
     <url-pattern>/admin/CheckEmail</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>LanguageServlet</servlet-name>
+    <url-pattern>/admin/Language</url-pattern>
   </servlet-mapping>
 
   <!-- WebServices Servlet Mappings -->
