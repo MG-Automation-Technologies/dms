@@ -30,9 +30,7 @@ import java.io.Serializable;
  *
  */
 public class Translation implements Serializable {
-	
 	private static final long serialVersionUID = 1L;
-	
 	public static final String MODULE_FRONTEND			= "frontend";
 	public static final String MODULE_EXTENSION  		= "extension";
 	public static final String MODULE_ADMINISTRATION 	= "administration";
