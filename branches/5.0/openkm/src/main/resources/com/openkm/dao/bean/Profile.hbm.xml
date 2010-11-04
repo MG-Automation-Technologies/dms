@@ -10,121 +10,124 @@
     <!-- MISC -->
     <component name="misc" class="com.openkm.dao.bean.ProfileMisc">
       <property name="advancedFilters" not-null="true">
-        <column name="PRF_MISC_ADVANCED_FILTERS" default="false"/>
+        <column name="PRF_MSC_ADVANCED_FILTERS" default="false"/>
       </property>
       <property name="userQuota" not-null="true">
-        <column name="PRF_MISC_USER_QUOTA" default="0"/>
+        <column name="PRF_MSC_USER_QUOTA" default="0"/>
       </property>
       <property name="webSkin" not-null="true">
-        <column name="PRF_MISC_WEB_SKIN" default="'default'"/>
+        <column name="PRF_MSC_WEB_SKIN" default="'default'"/>
       </property>
     </component>
     
     <!-- CHAT -->
     <component name="chat" class="com.openkm.dao.bean.ProfileChat">
       <property name="chatEnabled" not-null="true">
-        <column name="PRF_CHAT_CHAT_ENABLED" default="false"/>
+        <column name="PRF_CHT_CHAT_EN" default="false"/>
       </property>
       <property name="autoLoginEnabled" not-null="true">
-        <column name="PRF_CHAT_AUTO_LOGIN_ENABLED" default="false"/>
+        <column name="PRF_CHT_AUTO_LOGIN_EN" default="false"/>
       </property>
     </component>
     
     <!-- WIZARD -->
     <component name="wizard" class="com.openkm.dao.bean.ProfileWizard">
       <property name="propertyGroups" not-null="true">
-        <column name="PRF_WIZARD_PROPERTY_GROUPS" default="''"/>
+        <column name="PRF_WZRD_PROPERTY_GROUPS" default="''"/>
       </property>
       <property name="workflows" not-null="true">
-        <column name="PRF_WIZARD_WORKFLOWS" default="''"/>
+        <column name="PRF_WZRD_WORKFLOWS" default="''"/>
       </property>
       <property name="keywordsEnabled" not-null="true">
-        <column name="PRF_WIZARD_KEYWORDS_ENABLED" default="false"/>
+        <column name="PRF_WZRD_KEYWORDS_EN" default="false"/>
       </property>
       <property name="categoriesEnabled" not-null="true">
-        <column name="PRF_WIZARD_CATEGORIES_ENABLED" default="false"/>
+        <column name="PRF_WZRD_CATEGORIES_EN" default="false"/>
       </property>
     </component>
     
     <!-- STACK -->
     <component name="stack" class="com.openkm.dao.bean.ProfileStack">
       <property name="taxonomyVisible" not-null="true">
-        <column name="PRF_STACK_TAXONOMY_VISIBLE" default="true"/>
+        <column name="PRF_STCK_TAXONOMY_VIS" default="true"/>
       </property>
       <property name="categoriesVisible" not-null="true">
-        <column name="PRF_STACK_CATEGORIES_VISIBLE" default="true"/>
+        <column name="PRF_STCK_CATEGORIES_VIS" default="true"/>
       </property>
       <property name="thesaurusVisible" not-null="true">
-        <column name="PRF_STACK_THESAURUS_VISIBLE" default="true"/>
+        <column name="PRF_STCK_THESAURUS_VIS" default="true"/>
       </property>
       <property name="templatesVisible" not-null="true">
-        <column name="PRF_STACK_TEMPLATES_VISIBLE" default="true"/>
+        <column name="PRF_STCK_TEMPLATES_VIS" default="true"/>
       </property>
       <property name="personalVisible" not-null="true">
-        <column name="PRF_STACK_PERSONAL_VISIBLE" default="true"/>
+        <column name="PRF_STCK_PERSONAL_VIS" default="true"/>
       </property>
       <property name="mailVisible" not-null="true">
-        <column name="PRF_STACK_MAIL_VISIBLE" default="true"/>
+        <column name="PRF_STCK_MAIL_VIS" default="true"/>
       </property>
       <property name="trashVisible" not-null="true">
-        <column name="PRF_STACK_TRASH_VISIBLE" default="true"/>
+        <column name="PRF_STCK_TRASH_VIS" default="true"/>
       </property>
     </component>
     
     <!-- TAB -->
     <component name="tab" class="com.openkm.dao.bean.ProfileTab">
       <property name="desktopVisible" not-null="true">
-        <column name="PRF_TAB_DESKTOP_VISIBLE" default="true"/>
+        <column name="PRF_TB_DESKTOP_VIS" default="true"/>
       </property>
       <property name="searchVisible" not-null="true">
-        <column name="PRF_TAB_SEARCH_VISIBLE" default="true"/>
+        <column name="PRF_TB_SEARCH_VIS" default="true"/>
       </property>
       <property name="dashboardVisible" not-null="true">
-        <column name="PRF_TAB_DASHBOARD_VISIBLE" default="true"/>
+        <column name="PRF_TB_DASHBOARD_VIS" default="true"/>
       </property>
       <property name="administrationVisible" not-null="true">
-        <column name="PRF_TAB_ADMINISTRATION_VISIBLE" default="true"/>
+        <column name="PRF_TB_ADMIN_VIS" default="true"/>
       </property>
       
       <!-- TAB DOCUMENT -->
       <component name="document" class="com.openkm.dao.bean.ProfileTabDocument">
         <property name="propertiesVisible" not-null="true">
-          <column name="PRF_TAB_DOCUMENT_PROPERTIES_VISIBLE" default="true"/>
+          <column name="PRF_TB_DOC_PROPS_VIS" default="true"/>
         </property>
         <property name="securityVisible" not-null="true">
-          <column name="PRF_TAB_DOCUMENT_SECURITY_VISIBLE" default="true"/>
+          <column name="PRF_TB_DOC_SECURITY_VIS" default="true"/>
         </property>
         <property name="notesVisible" not-null="true">
-          <column name="PRF_TAB_DOCUMENT_NOTES_VISIBLE" default="true"/>
+          <column name="PRF_TB_DOC_NOTES_VIS" default="true"/>
         </property>
         <property name="versionsVisible" not-null="true">
-          <column name="PRF_TAB_DOCUMENT_VERSIONS_VISIBLE" default="true"/>
+          <column name="PRF_TB_DOC_VERSIONS_VIS" default="true"/>
         </property>
         <property name="previewVisible" not-null="true">
-          <column name="PRF_TAB_DOCUMENT_PREVIEW_VISIBLE" default="true"/>
+          <column name="PRF_TB_DOC_PREVIEW_VIS" default="true"/>
         </property>
         <property name="propertyGroupsVisible" not-null="true">
-          <column name="PRF_TAB_DOCUMENT_PROPERTY_GROUPS_VISIBLE" default="true"/>
+          <column name="PRF_TB_DOC_PROP_GRPS_VIS" default="true"/>
         </property>
       </component> 
 
       <!-- TAB FOLDER -->
       <component name="folder" class="com.openkm.dao.bean.ProfileTabFolder">
         <property name="propertiesVisible" not-null="true">
-          <column name="PRF_TAB_FOLDER_PROPERTIES_VISIBLE" default="true"/>
+          <column name="PRF_TB_FLD_PROPS_VIS" default="true"/>
         </property>
         <property name="securityVisible" not-null="true">
-          <column name="PRF_TAB_FOLDER_SECURITY_VISIBLE" default="true"/>
+          <column name="PRF_TB_FLD_SECURITY_VIS" default="true"/>
+        </property>
+        <property name="notesVisible" not-null="true">
+          <column name="PRF_TB_FLD_NOTES_VIS" default="true"/>
         </property>
       </component> 
 
       <!-- TAB MAIL -->
       <component name="mail" class="com.openkm.dao.bean.ProfileTabMail">
         <property name="propertiesVisible" not-null="true">
-          <column name="PRF_TAB_MAIL_PROPERTIES_VISIBLE" default="true"/>
+          <column name="PRF_TB_ML_PROPS_VIS" default="true"/>
         </property>
         <property name="securityVisible" not-null="true">
-          <column name="PRF_TAB_MAIL_SECURITY_VISIBLE" default="true"/>
+          <column name="PRF_TB_ML_SECURITY_VIS" default="true"/>
         </property>
       </component>
     </component>
@@ -132,198 +135,198 @@
     <!-- DASHBOARD -->
 	<component name="dashboard" class="com.openkm.dao.bean.ProfileDashboard">
       <property name="userVisible" not-null="true">
-	    <column name="PRF_DASHBOARD_USER_VISIBLE" default="true"/>
+	    <column name="PRF_DB_USER_VIS" default="true"/>
 	  </property>
 	  <property name="mailVisible" not-null="true">
-	    <column name="PRF_DASHBOARD_MAIL_VISIBLE" default="true"/>
+	    <column name="PRF_DB_MAIL_VIS" default="true"/>
 	  </property>
 	  <property name="newsVisible" not-null="true">
-	    <column name="PRF_DASHBOARD_NEWS_VISIBLE" default="true"/>
+	    <column name="PRF_DB_NEWS_VIS" default="true"/>
 	  </property>
 	  <property name="generalVisible" not-null="true">
-	    <column name="PRF_DASHBOARD_GENERAL_VISIBLE" default="true"/>
+	    <column name="PRF_DB_GENERAL_VIS" default="true"/>
 	  </property>
 	  <property name="workflowVisible" not-null="true">
-	    <column name="PRF_DASHBOARD_WORKFLOW_VISIBLE" default="true"/>
+	    <column name="PRF_DB_WORKFLOW_VIS" default="true"/>
 	  </property>
 	  <property name="keywordsVisible" not-null="true">
-	    <column name="PRF_DASHBOARD_KEYWORDS_VISIBLE" default="true"/>
+	    <column name="PRF_DB_KEYWORDS_VIS" default="true"/>
 	  </property>
 	</component>
 	
 	<!-- MENU -->
 	<component name="menu" class="com.openkm.dao.bean.ProfileMenu">
       <property name="fileVisible" not-null="true">
-        <column name="PRF_MENU_FILE_VISIBLE" default="true"/>
+        <column name="PRF_MN_FILE_VIS" default="true"/>
       </property>
       <property name="editVisible" not-null="true">
-        <column name="PRF_MENU_EDIT_VISIBLE" default="true"/>
+        <column name="PRF_MN_EDIT_VIS" default="true"/>
       </property>
       <property name="toolsVisible" not-null="true">
-        <column name="PRF_MENU_TOOLS_VISIBLE" default="true"/>
+        <column name="PRF_MN_TOOLS_VIS" default="true"/>
       </property>
       <property name="bookmarksVisible" not-null="true">
-        <column name="PRF_MENU_BOOKMARKS_VISIBLE" default="true"/>
+        <column name="PRF_MN_BOOKMARKS_VIS" default="true"/>
       </property>
       <property name="helpVisible" not-null="true">
-        <column name="PRF_MENU_HELP_VISIBLE" default="true"/>
+        <column name="PRF_MN_HELP_VIS" default="true"/>
       </property>
 
       <!-- MENU FILE -->
 	  <component name="file" class="com.openkm.dao.bean.ProfileMenuFile">
 	    <property name="createFolderVisible" not-null="true">
-	      <column name="PRF_MENU_FILE_CREATE_FOLDER_VISIBLE" default="true"/>
+	      <column name="PRF_MN_FI_CREATE_FLD_VIS" default="true"/>
 	    </property>
 	    <property name="findFolderVisible" not-null="true">
-	      <column name="PRF_MENU_FILE_FIND_FOLDER_VISIBLE" default="true"/>
+	      <column name="PRF_MN_FI_FIND_FLD_VIS" default="true"/>
 	    </property>
 	    <property name="goFolderVisible" not-null="true">
-	      <column name="PRF_MENU_FILE_GO_FOLDER_VISIBLE" default="true"/>
+	      <column name="PRF_MN_FI_GO_FLD_VIS" default="true"/>
 	    </property>
 	    <property name="downloadVisible" not-null="true">
-	      <column name="PRF_MENU_FILE_DOWNLOAD_VISIBLE" default="true"/>
+	      <column name="PRF_MN_FI_DOWNLOAD_VIS" default="true"/>
 	    </property>
 	    <property name="downloadPdfVisible" not-null="true">
-	      <column name="PRF_MENU_FILE_DOWNLOAD_PDF_VISIBLE" default="true"/>
+	      <column name="PRF_MN_FI_DOWNLOAD_PDF_VIS" default="true"/>
 	    </property>
 	    <property name="addDocumentVisible" not-null="true">
-	      <column name="PRF_MENU_FILE_ADD_DOCUMENT_VISIBLE" default="true"/>
+	      <column name="PRF_MN_FI_ADD_DOC_VIS" default="true"/>
 	    </property>
 	    <property name="startWorkflowVisible" not-null="true">
-	      <column name="PRF_MENU_FILE_START_WORKFLOW_VISIBLE" default="true"/>
+	      <column name="PRF_MN_FI_START_WORKFLOW_VIS" default="true"/>
 	    </property>
 	    <property name="refreshVisible" not-null="true">
-	      <column name="PRF_MENU_FILE_REFRESH_VISIBLE" default="true"/>
+	      <column name="PRF_MN_FI_REFRESH_VIS" default="true"/>
 	    </property>
 	    <property name="scannerVisible" not-null="true">
-	      <column name="PRF_MENU_FILE_SCANNER_VISIBLE" default="true"/>
+	      <column name="PRF_MN_FI_SCANNER_VIS" default="true"/>
 	    </property>
 	    <property name="uploaderVisible" not-null="true">
-	      <column name="PRF_MENU_FILE_UPLOADER_VISIBLE" default="true"/>
+	      <column name="PRF_MN_FI_UPLOADER_VIS" default="true"/>
 	    </property>
 	    <property name="purgeVisible" not-null="true">
-	      <column name="PRF_MENU_FILE_PURGE_VISIBLE" default="true"/>
+	      <column name="PRF_MN_FI_PURGE_VIS" default="true"/>
 	    </property>
 	    <property name="purgeTrashVisible" not-null="true">
-	      <column name="PRF_MENU_FILE_PURGE_TRASH_VISIBLE" default="true"/>
+	      <column name="PRF_MN_FI_PURGE_TRASH_VIS" default="true"/>
 	    </property>
 	    <property name="restoreVisible" not-null="true">
-	      <column name="PRF_MENU_FILE_RESTORE_VISIBLE" default="true"/>
+	      <column name="PRF_MN_FI_RESTORE_VIS" default="true"/>
 	    </property>
 	    <property name="exportVisible" not-null="true">
-	      <column name="PRF_MENU_FILE_EXPORT_VISIBLE" default="true"/>
+	      <column name="PRF_MN_FI_EXPORT_VIS" default="true"/>
 	    </property>
 	    <property name="createFromTemplateVisible" not-null="true">
-	      <column name="PRF_MENU_FILE_CREATE_FROM_TEMPLATE_VISIBLE" default="true"/>
+	      <column name="PRF_MN_FI_CREATE_FROM_TPL_VIS" default="true"/>
 	    </property>
 	    <property name="sendDocumentLinkVisible" not-null="true">
-	      <column name="PRF_MENU_FILE_SEND_DOCUMENT_LINK_VISIBLE" default="true"/>
+	      <column name="PRF_MN_FI_SEND_DOC_LINK_VIS" default="true"/>
 	    </property>
 	    <property name="sendDocumentAttachmentVisible" not-null="true">
-	      <column name="PRF_MENU_FILE_SEND_DOCUMENT_ATTACHMENT_VISIBLE" default="true"/>
+	      <column name="PRF_MN_FI_SEND_DOC_ATTACH_VIS" default="true"/>
 	    </property>
       </component>
 
       <!-- MENU EDIT -->
       <component name="edit" class="com.openkm.dao.bean.ProfileMenuEdit">
 	    <property name="lockVisible" not-null="true">
-	      <column name="PRF_MENU_EDIT_LOCK_VISIBLE" default="true"/>
+	      <column name="PRF_MN_ED_LOCK_VIS" default="true"/>
 	    </property>
 	    <property name="unlockVisible" not-null="true">
-	      <column name="PRF_MENU_EDIT_UNLOCK_VISIBLE" default="true"/>
+	      <column name="PRF_MN_ED_UNLOCK_VIS" default="true"/>
 	    </property>
 	    <property name="checkInVisible" not-null="true">
-	      <column name="PRF_MENU_EDIT_CHECK_IN_VISIBLE" default="true"/>
+	      <column name="PRF_MN_ED_CIN_VIS" default="true"/>
 	    </property>
 	    <property name="checkOutVisible" not-null="true">
-	      <column name="PRF_MENU_EDIT_CHECK_OUT_VISIBLE" default="true"/>
+	      <column name="PRF_MN_ED_COUT_VIS" default="true"/>
 	    </property>
 	    <property name="cancelCheckOutVisible" not-null="true">
-	      <column name="PRF_MENU_EDIT_CANCEL_CHECK_OUT_VISIBLE" default="true"/>
+	      <column name="PRF_MN_ED_CANCEL_COUT_VIS" default="true"/>
 	    </property>
 	    <property name="deleteVisible" not-null="true">
-	      <column name="PRF_MENU_EDIT_DELETE_VISIBLE" default="true"/>
+	      <column name="PRF_MN_ED_DELETE_VIS" default="true"/>
 	    </property>
 	    <property name="renameVisible" not-null="true">
-	      <column name="PRF_MENU_EDIT_RENAME_VISIBLE" default="true"/>
+	      <column name="PRF_MN_ED_RENAME_VIS" default="true"/>
 	    </property>
 	    <property name="copyVisible" not-null="true">
-	      <column name="PRF_MENU_EDIT_COPY_VISIBLE" default="true"/>
+	      <column name="PRF_MN_ED_COPY_VIS" default="true"/>
 	    </property>
 	    <property name="moveVisible" not-null="true">
-	      <column name="PRF_MENU_EDIT_MOVE_VISIBLE" default="true"/>
+	      <column name="PRF_MN_ED_MOVE_VIS" default="true"/>
 	    </property>
 	    <property name="addPropertyGroupVisible" not-null="true">
-	      <column name="PRF_MENU_EDIT_ADD_PROPERTY_GROUP_VISIBLE" default="true"/>
+	      <column name="PRF_MN_ED_ADD_PROP_GRP_VIS" default="true"/>
 	    </property>
 	    <property name="removePropertyGroupVisible" not-null="true">
-	      <column name="PRF_MENU_EDIT_REMOVE_PROPERTY_GROUP_VISIBLE" default="true"/>
+	      <column name="PRF_MN_ED_REM_PROP_GRP_VIS" default="true"/>
 	    </property>
 	    <property name="addSubscriptionVisible" not-null="true">
-	      <column name="PRF_MENU_EDIT_ADD_SUBSCRIPTION_VISIBLE" default="true"/>
+	      <column name="PRF_MN_ED_ADD_SUBS_VIS" default="true"/>
 	    </property>
 	    <property name="removeSubscriptionVisible" not-null="true">
-	      <column name="PRF_MENU_EDIT_REMOVE_SUBSCRIPTION_VISIBLE" default="true"/>
+	      <column name="PRF_MN_ED_REM_SUBS_VIS" default="true"/>
 	    </property>
       </component>
       
       <!-- MENU BOOKMARK -->
       <component name="bookmark" class="com.openkm.dao.bean.ProfileMenuBookmark">
       	<property name="manageBookmarksVisible" not-null="true">
-          <column name="PRF_MENU_BOOKMARK_MANAGE_BOOKMARKS_VISIBLE" default="true"/>
+          <column name="PRF_MN_BM_MNG_BOOKMARKS_VIS" default="true"/>
 	    </property>
       	<property name="addBookmarkVisible" not-null="true">
-	      <column name="PRF_MENU_BOOKMARK_ADD_BOOKMARK_VISIBLE" default="true"/>
+	      <column name="PRF_MN_BM_ADD_BOOKMARK_VIS" default="true"/>
 	    </property>
 	    <property name="setHomeVisible" not-null="true">
-	      <column name="PRF_MENU_BOOKMARK_SET_HOME_VISIBLE" default="true"/>
+	      <column name="PRF_MN_BM_SET_HOME_VIS" default="true"/>
 	    </property>
       	<property name="goHomeVisible" not-null="true">
-	      <column name="PRF_MENU_BOOKMARK_GO_HOME_VISIBLE" default="true"/>
+	      <column name="PRF_MN_BM_GO_HOME_VIS" default="true"/>
 	    </property>
       </component>
       
       <!-- MENU TOOL -->
       <component name="tool" class="com.openkm.dao.bean.ProfileMenuTool">
         <property name="languagesVisible" not-null="true">
-          <column name="PRF_MENU_TOOL_LANGUAGES_VISIBLE" default="true"/>
+          <column name="PRF_MN_TL_LANGS_VIS" default="true"/>
 	    </property>
         <property name="skinVisible" not-null="true">
-          <column name="PRF_MENU_TOOL_SKIN_VISIBLE" default="true"/>
+          <column name="PRF_MN_TL_SKIN_VIS" default="true"/>
 	    </property>
 	    <property name="debugVisible" not-null="true">
-          <column name="PRF_MENU_TOOL_DEBUG_VISIBLE" default="true"/>
+          <column name="PRF_MN_TL_DEBUG_VIS" default="true"/>
 	    </property>
 	    <property name="administrationVisible" not-null="true">
-	      <column name="PRF_MENU_TOOL_ADMINISTRATION_VISIBLE" default="true"/>
+	      <column name="PRF_MN_TL_ADMIN_VIS" default="true"/>
 	    </property>
 	    <property name="preferencesVisible" not-null="true">
-	      <column name="PRF_MENU_TOOL_PREFERENCES_VISIBLE" default="true"/>
+	      <column name="PRF_MN_TL_PREFS_VIS" default="true"/>
 	    </property>
       </component>
       
       <!-- MENU HELP -->
       <component name="help" class="com.openkm.dao.bean.ProfileMenuHelp">
 	    <property name="documentationVisible" not-null="true">
-	      <column name="PRF_MENU_HELP_DOCUMENTATION_VISIBLE" default="true"/>
+	      <column name="PRF_MN_HLP_DOC_VIS" default="true"/>
 	    </property>
 	    <property name="bugTrackingVisible" not-null="true">
-	      <column name="PRF_MENU_HELP_BUG_TRACKING_VISIBLE" default="true"/>
+	      <column name="PRF_MN_HLP_BUG_TRACKING_VIS" default="true"/>
 	    </property>
 	    <property name="supportVisible" not-null="true">
-	      <column name="PRF_MENU_HELP_SUPPORT_VISIBLE" default="true"/>
+	      <column name="PRF_MN_HLP_SUPPORT_VIS" default="true"/>
 	    </property>
 	    <property name="forumVisible" not-null="true">
-	      <column name="PRF_MENU_HELP_FORUM_VISIBLE" default="true"/>
+	      <column name="PRF_MN_HLP_FORUM_VIS" default="true"/>
 	    </property>
 	    <property name="changelogVisible" not-null="true">
-	      <column name="PRF_MENU_HELP_CHANGELOG_VISIBLE" default="true"/>
+	      <column name="PRF_MN_HLP_CHANGELOG_VIS" default="true"/>
 	    </property>
 	    <property name="webSiteVisible" not-null="true">
-	      <column name="PRF_MENU_HELP_WEB_SITE_VISIBLE" default="true"/>
+	      <column name="PRF_MN_HLP_WEB_SITE_VIS" default="true"/>
 	    </property>
 	    <property name="aboutVisible" not-null="true">
-	      <column name="PRF_MENU_HELP_ABOUT_VISIBLE" default="true"/>
+	      <column name="PRF_MNU_HLP_ABOUT_VIS" default="true"/>
 	    </property>
       </component>
     </component>
