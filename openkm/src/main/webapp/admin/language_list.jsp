@@ -12,41 +12,38 @@
   <title>Language List</title>
 </head>
 <body>
-	<c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
-  	<c:choose>
-  		<c:when test="${isAdmin}">
-  			
-  			<h1>Language list <span style="font-size: 10px;"></h1>
-  		
-	  		<table class="results" width="80%">
-	        <tr>
-	          <th>Language</th><th>Description</th><th>Translations</th><th></th>
-	        </tr>
-	        
-	        <c:forEach var="langs" items="${langs}" varStatus="row">
-	         	<c:url value="Language" var="langEdit">
-	            	<c:param name="action" value="langEdit"/>
-	            	<c:param name="lg_language" value="${langs.language}"/>
-	          	</c:url>
-	          	<c:url value="Language" var="langDelete">
-	            	<c:param name="action" value="langDelete"/>
-	            	<c:param name="lg_language" value="${langs.language}"/>
-	          	</c:url>
-	        	<tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-	        		<td>${langs.language}</td><td>${langs.description}</td><td>${fn:length(langs.translations)}</td>
-	        		<td align="center">
-	        			<a href="${langEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
-                		&nbsp;
-                		<a href="${langDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
-                		&nbsp;
-	        		</td>
-	        	</tr>
-	  		</c:forEach>
-	  		</table>
-  		</c:when>
-    	<c:otherwise>
-      		<div class="error"><h3>Only admin users allowed</h3></div>
-    	</c:otherwise>
+  <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
+  <c:choose>
+    <c:when test="${isAdmin}">
+      <h1>Language list</h1>
+        <table class="results" width="60%">
+          <tr>
+            <th>Id</th><th>Name</th><th>Translations</th><th></th>
+          </tr>
+          <c:forEach var="lang" items="${langs}" varStatus="row">
+            <c:url value="Language" var="urlEdit">
+              <c:param name="action" value="edit"/>
+              <c:param name="lg_id" value="${lang.id}"/>
+            </c:url>
+            <c:url value="Language" var="urlDelete">
+              <c:param name="action" value="delete"/>
+              <c:param name="lg_id" value="${lang.id}"/>
+            </c:url>
+            <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
+              <td>${lang.id}</td><td>${lang.name}</td><td>${fn:length(lang.translations)}</td>
+              <td align="center">
+                <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
+                &nbsp;
+                <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+                &nbsp;
+              </td>
+            </tr>
+          </c:forEach>
+        </table>
+      </c:when>
+    <c:otherwise>
+      <div class="error"><h3>Only admin users allowed</h3></div>
+    </c:otherwise>
   </c:choose>
 </body>
 </html>
