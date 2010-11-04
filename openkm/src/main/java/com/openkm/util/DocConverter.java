@@ -273,7 +273,7 @@ public class DocConverter {
 	 */
 	public void pdf2swf(File input, File output) throws IOException {
 		log.debug("** Convert from PDF to SWF **");
-		String cmd[] = { Config.SYSTEM_PDF2SWF, input.getPath(), "-o", output.getPath() };
+		String cmd[] = { Config.SYSTEM_PDF2SWF, "-T 9", input.getPath(), "-o", output.getPath() };
 		log.debug("Command: {}", Arrays.toString(cmd));
 		BufferedReader stdout = null;
 	    String line;
