@@ -3,7 +3,7 @@ insert into OKM_ROLE (ROL_ID, ROL_ACTIVE) values ('AdminRole', true);
 insert into OKM_ROLE (ROL_ID, ROL_ACTIVE) values ('UserRole', true);
 insert into OKM_USER_ROLE (UR_USER, UR_ROLE) values ('okmAdmin', 'AdminRole');
 insert into OKM_PROFILE (PRF_ID, PRF_NAME, PRF_ACTIVE) values (1, 'Default', true);
-insert into OKM_LANGUAGE (LG_LANGUAGE, LG_DESCRIPTION) values ('en-GB', 'English');
+insert into OKM_LANGUAGE (LG_ID, LG_NAME) values ('en-GB', 'English');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.date.pattern', 'dd-MM-yyyy hh:mm:ss', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.day.pattern', 'dd-MM-yyyy', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.hour.pattern', 'HH:mm:ss', 'en-GB');
@@ -591,7 +591,7 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('f
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019001', 'Repository internal error', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019006', 'Application internal error', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019024', 'Database error', 'en-GB');
-insert into OKM_LANGUAGE (LG_LANGUAGE, LG_DESCRIPTION) values ('es-ES', 'Español');
+insert into OKM_LANGUAGE (LG_ID, LG_NAME) values ('es-ES', 'Español');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.date.pattern', 'dd/MM/yyyy HH:mm:ss', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.day.pattern', 'dd/MM/yyyy', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.hour.pattern', 'HH:mm:ss', 'es-ES');
@@ -1179,7 +1179,7 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('f
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019001', 'Error interno del repositorio', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019006', 'Error interno de la aplicación', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019024', 'Error en la base de datos', 'es-ES');
-insert into OKM_LANGUAGE (LG_LANGUAGE, LG_DESCRIPTION) values ('ar-PS', 'Arabic');
+insert into OKM_LANGUAGE (LG_ID, LG_NAME) values ('ar-PS', 'Arabic');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.date.pattern', 'dd-MM-yyyy hh:mm:ss', 'ar-PS');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.day.pattern', 'dd-MM-yyyy', 'ar-PS');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.hour.pattern', 'HH:mm:ss', 'ar-PS');
@@ -1767,7 +1767,7 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('f
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019001', 'Repository internal error', 'ar-PS');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019006', 'Application internal error', 'ar-PS');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019024', 'Database error', 'ar-PS');
-insert into OKM_LANGUAGE (LG_LANGUAGE, LG_DESCRIPTION) values ('bs-BS', 'Bosnian');
+insert into OKM_LANGUAGE (LG_ID, LG_NAME) values ('bs-BS', 'Bosnian');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.date.pattern', 'dd.MM.yyyy. hh:mm:ss', 'bs-BS');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.day.pattern', 'dd.MM.yyyy.', 'bs-BS');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.hour.pattern', 'HH:mm:ss', 'bs-BS');
@@ -2354,7 +2354,7 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('f
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019001', 'Repository internal error', 'bs-BS');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019006', 'Application internal error', 'bs-BS');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019024', 'Database error', 'bs-BS');
-insert into OKM_LANGUAGE (LG_LANGUAGE, LG_DESCRIPTION) values ('ca-ES', 'Català');
+insert into OKM_LANGUAGE (LG_ID, LG_NAME) values ('ca-ES', 'Català');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.date.pattern', 'dd/MM/yyyy HH:mm:ss', 'ca-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.day.pattern', 'dd/MM/yyyy', 'ca-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.hour.pattern', 'HH:mm:ss', 'ca-ES');
@@ -2942,7 +2942,7 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('f
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019001', 'Error intern del repositori', 'ca-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019006', 'Error intern de l''aplicació', 'ca-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019024', 'Error en la base de dades', 'ca-ES');
-insert into OKM_LANGUAGE (LG_LANGUAGE, LG_DESCRIPTION) values ('cs_CZ', 'Czech');
+insert into OKM_LANGUAGE (LG_ID, LG_NAME) values ('cs_CZ', 'Czech');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.date.pattern', 'dd-MM-yyyy hh:mm:ss', 'cs_CZ');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.day.pattern', 'dd-MM-yyyy', 'cs_CZ');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.hour.pattern', 'HH:mm:ss', 'cs_CZ');
@@ -3530,7 +3530,7 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('f
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019001', 'Repository internal error', 'cs_CZ');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019006', 'Application internal error', 'cs_CZ');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019024', 'Database error', 'cs_CZ');
-insert into OKM_LANGUAGE (LG_LANGUAGE, LG_DESCRIPTION) values ('de-DE', 'Deutsch');
+insert into OKM_LANGUAGE (LG_ID, LG_NAME) values ('de-DE', 'Deutsch');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.date.pattern', 'dd.MM.yyyy hh:mm:ss', 'de-DE');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.day.pattern', 'dd.MM.yyyy', 'de-DE');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.hour.pattern', 'HH:mm:ss', 'de-DE');
@@ -4118,7 +4118,7 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('f
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019001', 'Repository internal error', 'de-DE');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019006', 'Application internal error', 'de-DE');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019024', 'Database error', 'de-DE');
-insert into OKM_LANGUAGE (LG_LANGUAGE, LG_DESCRIPTION) values ('nl-BE', 'Dutch');
+insert into OKM_LANGUAGE (LG_ID, LG_NAME) values ('nl-BE', 'Dutch');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.date.pattern', 'dd/MM/yyyy hh:mm:ss', 'nl-BE');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.day.pattern', 'dd/MM/yyyy', 'nl-BE');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.hour.pattern', 'HH:mm:ss', 'nl-BE');
@@ -4710,7 +4710,7 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('f
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019001', 'Repository internal error', 'nl-BE');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019006', 'Application internal error', 'nl-BE');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-019024', 'Database error', 'nl-BE');
-insert into OKM_LANGUAGE (LG_LANGUAGE, LG_DESCRIPTION) values ('zh-CN', 'Chinese simple');
+insert into OKM_LANGUAGE (LG_ID, LG_NAME) values ('zh-CN', 'Chinese simple');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.date.pattern', 'yyyy-MM-dd HH:mm:ss', 'zh-CN');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.day.pattern', 'yyyy-MM-dd', 'zh-CN');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.hour.pattern', 'HH:mm:ss', 'zh-CN');
@@ -5279,7 +5279,7 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('f
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-010009', '存储库内部错误', 'zh-CN');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-010001', '数据库错误', 'zh-CN');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-010024', '应用内部错误 ', 'zh-CN');
-insert into OKM_LANGUAGE (LG_LANGUAGE, LG_DESCRIPTION) values ('zh-TW', 'Chinese traditional');
+insert into OKM_LANGUAGE (LG_ID, LG_NAME) values ('zh-TW', 'Chinese traditional');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.date.pattern', 'yyyy-MM-dd hh:mm:ss', 'zh-TW');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.day.pattern', 'yyyy-MM-dd', 'zh-TW');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.hour.pattern', 'HH:mm:ss', 'zh-TW');
