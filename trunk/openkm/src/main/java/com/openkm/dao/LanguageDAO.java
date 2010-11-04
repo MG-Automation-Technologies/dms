@@ -52,15 +52,15 @@ public class LanguageDAO {
 	 * @return
 	 * @throws DatabaseException
 	 */
-	public static Language findByPk(String lang) throws DatabaseException {
-		log.debug("findByPk({})", lang);
-		String qs = "from Language lg where lg.language=:lang";
+	public static Language findByPk(String id) throws DatabaseException {
+		log.debug("findByPk({})", id);
+		String qs = "from Language lg where lg.id=:id";
 		Session session = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
-			q.setString("lang", lang);
+			q.setString("id", id);
 			Language ret = (Language) q.setMaxResults(1).uniqueResult();
 			log.debug("findByPk: {}", ret);
 			return ret;
@@ -82,7 +82,7 @@ public class LanguageDAO {
 	@SuppressWarnings("unchecked")
 	public static List<Language> findAll() throws DatabaseException, RepositoryException {
 		log.debug("findAll({})");
-		String qs = "select lg from Language lg order by lg.description asc";		
+		String qs = "from Language lg order by lg.name asc";		
 		Session session = null;
 		Transaction tx = null;
 		
@@ -104,15 +104,15 @@ public class LanguageDAO {
 	/**
 	 * Delete
 	 */
-	public static void delete(String language) throws DatabaseException {
-		log.debug("delete({})", language);
+	public static void delete(String id) throws DatabaseException {
+		log.debug("delete({})", id);
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			Language lg = (Language) session.load(Language.class, language);
+			Language lg = (Language) session.load(Language.class, id);
 			session.delete(lg);
 			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
@@ -129,8 +129,7 @@ public class LanguageDAO {
 	 * Update language in database
 	 */
 	public static void update(Language language) throws DatabaseException {
-		log.debug("updateUser({})", language);
-		String qs = "select lg.description from Language lg where lg.language=:language";
+		log.debug("update({})", language);
 		Session session = null;
 		Transaction tx = null;
 		
@@ -146,6 +145,6 @@ public class LanguageDAO {
 			HibernateUtil.close(session);
 		}
 		
-		log.debug("updateUser: void");
+		log.debug("update: void");
 	}
 }
