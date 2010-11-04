@@ -47,7 +47,7 @@ public class LanguageServlet extends BaseServlet {
 	private static Logger log = LoggerFactory.getLogger(LanguageServlet.class);
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
-																					   ServletException {
+			ServletException {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
 		String action = WebUtil.getString(request, "action");
@@ -57,14 +57,14 @@ public class LanguageServlet extends BaseServlet {
 		try {
 			session = JCRUtils.getSession();
 			
-			if (action.equals("langEdit")) {
-				languageEdit(session, request, response);
-			} else if (action.equals("langDelete")) {
-				langDelete(session, request, response);
+			if (action.equals("edit")) {
+				edit(session, request, response);
+			} else if (action.equals("delete")) {
+				delete(session, request, response);
 			} 
 			
-			if (action.equals("") || (action.startsWith("lang") && WebUtil.getBoolean(request, "persist"))) {
-				langList(session, request, response);
+			if (action.equals("") || WebUtil.getBoolean(request, "persist")) {
+				list(session, request, response);
 			}
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
@@ -81,64 +81,63 @@ public class LanguageServlet extends BaseServlet {
 	}
 	
 	/**
-	 *
 	 * List language 
 	 * @throws com.openkm.core.RepositoryException 
 	 * @throws DatabaseException 
 	 */
-	private void langList(Session session, HttpServletRequest request, HttpServletResponse response)
+	private void list(Session session, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DatabaseException, com.openkm.core.RepositoryException {
-		log.debug("languageList({}, {}, {})", new Object[] { session, request, response });
+		log.debug("list({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
 		sc.setAttribute("langs", LanguageDAO.findAll());		
 		sc.getRequestDispatcher("/admin/language_list.jsp").forward(request, response);
-		log.debug("languageList: void");
+		log.debug("list: void");
 	}
 	
 	/**
 	 * Delete language
 	 */
-	private void langDelete(Session session, HttpServletRequest request, HttpServletResponse response) 
+	private void delete(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException {
-		log.debug("languageDelete({}, {}, {})", new Object[] { session, request, response });
+		log.debug("delete({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtil.getBoolean(request, "persist")) {
-			String lg_language = WebUtil.getString(request, "lg_language");
-			LanguageDAO.delete(lg_language);
+			String lgId = WebUtil.getString(request, "lg_id");
+			LanguageDAO.delete(lgId);
 		} else {
 			ServletContext sc = getServletContext();
-			String lg_language = WebUtil.getString(request, "lg_language");
+			String lgId = WebUtil.getString(request, "lg_id");
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
-			sc.setAttribute("lang", LanguageDAO.findByPk(lg_language));
+			sc.setAttribute("lang", LanguageDAO.findByPk(lgId));
 			sc.getRequestDispatcher("/admin/language_edit.jsp").forward(request, response);
 		}
 		
-		log.debug("languageDelete: void");
+		log.debug("delete: void");
 	}
 	
 	/**
 	 * Edit language
 	 */
-	private void languageEdit(Session session, HttpServletRequest request, HttpServletResponse response) 
+	private void edit(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException {
-		log.debug("languageEdit({}, {}, {})", new Object[] { session, request, response });
+		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtil.getBoolean(request, "persist")) {
-			String lg_language = WebUtil.getString(request, "lg_language");
-			String lg_description = WebUtil.getString(request, "lg_description");
-			Language language = LanguageDAO.findByPk(lg_language);
-			language.setDescription(lg_description);
+			String lgId = WebUtil.getString(request, "lg_id");
+			String lgName = WebUtil.getString(request, "lg_name");
+			Language language = LanguageDAO.findByPk(lgId);
+			language.setName(lgName);
 			LanguageDAO.update(language);
 		} else {
 			ServletContext sc = getServletContext();
-			String lg_language = WebUtil.getString(request, "lg_language");
+			String lgId = WebUtil.getString(request, "lg_id");
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
-			sc.setAttribute("lang", LanguageDAO.findByPk(lg_language));
+			sc.setAttribute("id", LanguageDAO.findByPk(lgId));
 			sc.getRequestDispatcher("/admin/language_edit.jsp").forward(request, response);
 		}
 		
-		log.debug("languageDelete: void");
+		log.debug("edit: void");
 	}
 }
