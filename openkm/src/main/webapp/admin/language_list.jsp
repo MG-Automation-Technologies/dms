@@ -18,7 +18,13 @@
       <h1>Language list</h1>
         <table class="results" width="60%">
           <tr>
-            <th>Id</th><th>Name</th><th>Translations</th><th></th>
+            <th>Id</th><th>Name</th><th>Translations</th>
+            <th>
+	          <c:url value="Language" var="urlCreate">
+              	<c:param name="action" value="create"/>
+              </c:url>
+              <a href="${urlCreate}"><img src="img/action/new.png" alt="New language" title="New language"/></a>
+	      	</th>
           </tr>
           <c:forEach var="lang" items="${langs}" varStatus="row">
             <c:url value="Language" var="urlEdit">
@@ -34,8 +40,10 @@
               <td align="center">
                 <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
                 &nbsp;
-                <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
-                &nbsp;
+                <c:if test="${lang.id!='en-GB'}">
+                	<a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+                	&nbsp;
+                </c:if>
               </td>
             </tr>
           </c:forEach>

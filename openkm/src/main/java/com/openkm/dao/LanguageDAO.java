@@ -144,7 +144,28 @@ public class LanguageDAO {
 		} finally {
 			HibernateUtil.close(session);
 		}
-		
 		log.debug("update: void");
+	}
+	
+	/**
+	 * Create language in database
+	 */
+	public static void create(Language language) throws DatabaseException {
+		log.debug("create({})", language);
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			session.save(language);
+			HibernateUtil.commit(tx);
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		log.debug("create: void");
 	}
 }

@@ -61,6 +61,8 @@ public class LanguageServlet extends BaseServlet {
 				edit(session, request, response);
 			} else if (action.equals("delete")) {
 				delete(session, request, response);
+			} else if (action.equals("create")) {
+				create(session, request, response);
 			} 
 			
 			if (action.equals("") || WebUtil.getBoolean(request, "persist")) {
@@ -133,6 +135,29 @@ public class LanguageServlet extends BaseServlet {
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("lang", LanguageDAO.findByPk(lgId));
+			sc.getRequestDispatcher("/admin/language_edit.jsp").forward(request, response);
+		}
+		
+		log.debug("edit: void");
+	}
+	
+	/**
+	 * Create language
+	 */
+	private void create(Session session, HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException, DatabaseException {
+		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
+		
+		if (WebUtil.getBoolean(request, "persist")) {
+			Language language = new Language();
+			language.setId(WebUtil.getString(request, "lg_id"));
+			language.setName(WebUtil.getString(request, "lg_name"));
+			LanguageDAO.create(language);
+		} else {
+			ServletContext sc = getServletContext();
+			sc.setAttribute("action", WebUtil.getString(request, "action"));
+			sc.setAttribute("persist", true);
+			sc.setAttribute("lang", null);
 			sc.getRequestDispatcher("/admin/language_edit.jsp").forward(request, response);
 		}
 		
