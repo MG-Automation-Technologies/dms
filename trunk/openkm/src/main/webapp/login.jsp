@@ -66,13 +66,13 @@
           <select name="j_language" id="j_language">
 			<%
 			 	for (Language language : LanguageDAO.findAll()) {
-					String description = language.getDescription();
-					String lang = language.getLanguage();
+					String name = language.getName();
+					String id = language.getId();
 					String selected = "";
-					if (preset.equalsIgnoreCase(lang) || preset.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
+					if (preset.equalsIgnoreCase(id) || preset.substring(0, 2).equalsIgnoreCase(id.substring(0, 2))) {
 						selected = "selected";
 					}
-					out.print("<option "+selected+" value=\""+lang+"\">"+description+"</option>");
+					out.print("<option "+selected+" value=\""+id+"\">"+name+"</option>");
 				}
 			%>
           </select>
