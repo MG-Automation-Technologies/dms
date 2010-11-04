@@ -80,8 +80,7 @@ public class LanguageDAO {
 	 * @throws RepositoryException
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<Language> findAll() throws DatabaseException,
-			RepositoryException {
+	public static List<Language> findAll() throws DatabaseException, RepositoryException {
 		log.debug("findAll({})");
 		String qs = "select lg from Language lg order by lg.description asc";		
 		Session session = null;
@@ -101,4 +100,52 @@ public class LanguageDAO {
 			HibernateUtil.close(session);
 		}
 	}	
+	
+	/**
+	 * Delete
+	 */
+	public static void delete(String language) throws DatabaseException {
+		log.debug("delete({})", language);
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			Language lg = (Language) session.load(Language.class, language);
+			session.delete(lg);
+			HibernateUtil.commit(tx);
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("delete: void");
+	}
+	
+	/**
+	 * Update language in database
+	 */
+	public static void update(Language language) throws DatabaseException {
+		log.debug("updateUser({})", language);
+		String qs = "select lg.description from Language lg where lg.language=:language";
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			session.update(language);
+			HibernateUtil.commit(tx);
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("updateUser: void");
+	}
 }
