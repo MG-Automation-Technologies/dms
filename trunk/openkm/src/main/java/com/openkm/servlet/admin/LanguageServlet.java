@@ -22,6 +22,10 @@
 package com.openkm.servlet.admin;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -36,6 +40,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.LanguageDAO;
 import com.openkm.dao.bean.Language;
+import com.openkm.dao.bean.Translation;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.WebUtil;
 
@@ -45,6 +50,7 @@ import com.openkm.util.WebUtil;
 public class LanguageServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(LanguageServlet.class);
+	private final String LANG_BASE_CODE = "en-GB";
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
@@ -63,6 +69,8 @@ public class LanguageServlet extends BaseServlet {
 				delete(session, request, response);
 			} else if (action.equals("create")) {
 				create(session, request, response);
+			} else if (action.equals("translate")) {
+				translate(session, request, response);
 			} 
 			
 			if (action.equals("") || WebUtil.getBoolean(request, "persist")) {
@@ -162,5 +170,49 @@ public class LanguageServlet extends BaseServlet {
 		}
 		
 		log.debug("edit: void");
+	}
+	
+	/**
+	 * Translate language
+	 */
+	private void translate(Session session, HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException, DatabaseException {
+		log.debug("translate({}, {}, {})", new Object[] { session, request, response });
+		
+		if (WebUtil.getBoolean(request, "persist")) {
+			Set<Translation> newTranslations = new HashSet<Translation>();
+			Language langBase = LanguageDAO.findByPk(LANG_BASE_CODE);
+			for (Translation translation : langBase.getTranslations()) {
+				String text = WebUtil.getString(request, String.valueOf(translation.getId()));
+				if (!text.equals("")) {
+					Translation newTranslation = new Translation();
+					newTranslation.setModule(translation.getModule());
+					newTranslation.setKey(translation.getKey());
+					newTranslation.setText(text);
+					newTranslations.add(newTranslation);
+				}
+			}
+			String lgId = WebUtil.getString(request, "lg_id");
+			Language language = LanguageDAO.findByPk(lgId);
+			language.setTranslations(newTranslations);
+			LanguageDAO.update(language);
+		} else {
+			ServletContext sc = getServletContext();
+			String lgId = WebUtil.getString(request, "lg_id");
+			Language langToTranslate = LanguageDAO.findByPk(lgId);
+			Map<String, String> translations = new HashMap<String, String>();
+			for (Translation translation : langToTranslate.getTranslations()) {
+				translations.put(translation.getKey(), translation.getText());
+			}
+			sc.setAttribute("action", WebUtil.getString(request, "action"));
+			sc.setAttribute("persist", true);
+			sc.setAttribute("lg_id", lgId);
+			sc.setAttribute("langToTranslateName", langToTranslate.getName());
+			sc.setAttribute("translations",translations);
+			sc.setAttribute("langBase", LanguageDAO.findByPk(LANG_BASE_CODE)); // English always it'll be used as a translations base
+			sc.getRequestDispatcher("/admin/translation_edit.jsp").forward(request, response);
+		}
+		
+		log.debug("translate: void");
 	}
 }
