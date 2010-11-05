@@ -198,7 +198,8 @@ public class LanguageServlet extends BaseServlet {
 				addTranslation(session, request, response);
 			} 
 			
-			if (action.equals("") || action.equals("import") || WebUtil.getBoolean(request, "persist") || persist ) {
+			if (!action.equals("addTranslation") && (action.equals("") || action.equals("import") 
+				|| WebUtil.getBoolean(request, "persist") || persist )) {
 				list(session, request, response);
 			}
 		} catch (FileUploadException e) {
