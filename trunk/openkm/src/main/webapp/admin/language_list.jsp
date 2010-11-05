@@ -43,8 +43,12 @@
               <c:param name="action" value="translate"/>
               <c:param name="lg_id" value="${lang.id}"/>
             </c:url>
+            <c:url value="Language" var="urlExport">
+              <c:param name="action" value="export"/>
+              <c:param name="lg_id" value="${lang.id}"/>
+            </c:url>
             <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-              <td>${lang.id}</td>
+              <td align="center">${lang.id}</td>
               <td align="center"><img src="${urlFlag}"/></td>
               <td>${lang.name}</td>
               <td>
@@ -61,6 +65,8 @@
                 	&nbsp;
                 </c:if>
                 <a href="${urlTranslate}"><img src="img/action/edit.png" alt="Edit translations" title="Edit translations"/></a>
+                &nbsp;
+                <a href="${urlExport}"><img src="img/action/edit.png" alt="Export translations" title="Export translations"/></a>
                 &nbsp;
               </td>
             </tr>

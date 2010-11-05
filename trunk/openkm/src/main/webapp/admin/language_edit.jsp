@@ -41,7 +41,7 @@
           </tr>
           <tr>
             <td>Name</td>
-            <td><input class="" name="lg_name" value="${lang.name}"/></td>
+            <td><input class=":required :only_on_blur" name="lg_name" value="${lang.name}"/></td>
           </tr>
           <tr>
             <td>Flag</td>
@@ -51,7 +51,11 @@
                   <input class=":required :only_on_blur" type="file" name="image"/>
                 </c:when>
                 <c:otherwise>
-                  <input type="file" name="image"/>
+                 	<c:url value="Language" var="urlFlag">
+            			<c:param name="action" value="flag"/>
+              			<c:param name="lg_id" value="${lang.id}"/>
+          			</c:url>
+                  	<table><tr><td><img src="${urlFlag}"/> &nbsp;</td><td><input type="file" name="image"/></td></tr></table>
                 </c:otherwise>
               </c:choose>
             </td>

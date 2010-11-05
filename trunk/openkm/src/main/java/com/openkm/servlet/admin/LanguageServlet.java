@@ -23,6 +23,9 @@ package com.openkm.servlet.admin;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -32,6 +35,7 @@ import java.util.Set;
 
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.mail.internet.MimeUtility;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -83,7 +87,9 @@ public class LanguageServlet extends BaseServlet {
 				translate(session, request, response);
 			} else if (action.equals("flag")) {
 				flag(session, request, response);
-			}
+			} else if (action.equals("export")) {
+				export(session, request, response);
+			} 
 			
 			if (action.equals("") || WebUtil.getBoolean(request, "persist")) {
 				list(session, request, response);
@@ -107,6 +113,7 @@ public class LanguageServlet extends BaseServlet {
 		log.debug("doPost({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
 		String action = WebUtil.getString(request, "action");
+		boolean persist = false;
 		Session session = null;
 		updateSessionManager(request);
 		
@@ -119,7 +126,9 @@ public class LanguageServlet extends BaseServlet {
 				FileItemFactory factory = new DiskFileItemFactory(); 
 				ServletFileUpload upload = new ServletFileUpload(factory);
 				List<FileItem> items = upload.parseRequest(request);
-				Language language = new Language();
+				String lgId = "";
+				String name = "";
+				byte data[] = null;
 				
 				for (Iterator<FileItem> it = items.iterator(); it.hasNext();) {
 					FileItem item = it.next();
@@ -128,28 +137,42 @@ public class LanguageServlet extends BaseServlet {
 						if (item.getFieldName().equals("action")) {
 							action = item.getString("UTF-8");
 						} else if (item.getFieldName().equals("lg_id")) {
-							language.setId(item.getString("UTF-8"));
+							lgId = item.getString("UTF-8");
 						} else if (item.getFieldName().equals("lg_name")) {
-							language.setName(item.getString("UTF-8"));
+							name = item.getString("UTF-8");
+						} else if (item.getFieldName().equals("persist")) {
+							persist = true;
 						} 
 					} else {
-						is = item.getInputStream();
-						language.setImageContent(IOUtils.toByteArray(is));
-						is.close();
+						if (item.getSize()>0) {
+							is = item.getInputStream();
+							data = IOUtils.toByteArray(is);
+							is.close();
+						}
 					}
 				}
-				
+
 				if (action.equals("create")) {
+					Language language = new Language();
+					language.setName(name);
+					if (data != null && data.length>0) {
+						language.setImageContent(data);
+					}
 					LanguageDAO.create(language);
 				} else if (action.equals("edit")) {
-					
+					Language language = LanguageDAO.findByPk(lgId);
+					language.setName(name);
+					if (data != null && data.length>0) {
+						language.setImageContent(data);
+					}
+					LanguageDAO.update(language);
 				}
 				
 			} else  if (action.equals("translate")) {
 				translate(session, request, response);
 			}
 			
-			if (action.equals("") || WebUtil.getBoolean(request, "persist")) {
+			if (action.equals("") || WebUtil.getBoolean(request, "persist") || persist) {
 				list(session, request, response);
 			}
 		} catch (FileUploadException e) {
@@ -291,7 +314,7 @@ public class LanguageServlet extends BaseServlet {
 		log.debug("translate: void");
 	}
 	
-	private void flag (Session session, HttpServletRequest request, HttpServletResponse response) throws DatabaseException, IOException {
+	private void flag(Session session, HttpServletRequest request, HttpServletResponse response) throws DatabaseException, IOException {
 		log.debug("flag({}, {}, {})", new Object[] { session, request, response });
 		String lgId = WebUtil.getString(request, "lg_id");
 		Language language = LanguageDAO.findByPk(lgId);
@@ -299,6 +322,57 @@ public class LanguageServlet extends BaseServlet {
 		ServletOutputStream out = response.getOutputStream();
 		out.write(language.getImageContent());
 		out.flush();
-		log.debug("translate: flag");
+		log.debug("falg: flag");
 	}
+	
+	private void export(Session session, HttpServletRequest request, HttpServletResponse response) throws DatabaseException, IOException {
+		log.debug("export({}, {}, {})", new Object[] { session, request, response });
+		String lgId = WebUtil.getString(request, "lg_id");
+		Language language = LanguageDAO.findByPk(lgId);
+		String agent = request.getHeader("USER-AGENT");
+		
+		// Disable browser cache
+		response.setHeader("Expires", "Sat, 6 May 1971 12:00:00 GMT");
+		response.setHeader("Cache-Control", "max-age=0, must-revalidate");
+		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+		String fileName = "OpenKM_lang_" + language.getId() + ".sql";
+		
+		if (null != agent && -1 != agent.indexOf("MSIE")) {
+			log.debug("Agent: Explorer");
+			fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", " ");
+		} else if (null != agent && -1 != agent.indexOf("Mozilla"))	{
+			log.debug("Agent: Mozilla");
+			fileName = MimeUtility.encodeText(fileName, "UTF-8", "B");
+		} else {
+			log.debug("Agent: Unknown");
+		}
+		
+		response.setHeader("Content-disposition", "inline; filename=\""+fileName+"\"");		
+		response.setContentType("text/x-sql; charset=UTF-8");
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(response.getOutputStream(), "UTF8"), true);
+		StringBuffer insertLang = new StringBuffer("insert into OKM_LANGUAGE (LG_ID, LG_NAME, LG_IMAGE_CONTENT ) values ('");
+		insertLang.append(language.getId() + "', '" + language.getName() + "', '" + asHex(language.getImageContent()) + "');");
+		out.println(insertLang);
+		for (Translation translation : language.getTranslations()) {
+			StringBuffer insertTranslation = new StringBuffer("INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('");
+			insertTranslation.append(translation.getModule() + "', '" +translation.getKey() + "', '");
+			insertTranslation.append(translation.getText() + "', '" +language.getId() + "');");
+			out.println(insertTranslation);
+		}
+		out.flush();
+		log.debug("export: flag");
+	}
+	
+	private String asHex(byte buf[])
+    {
+            StringBuffer strbuf = new StringBuffer(buf.length * 2);
+
+            for(int i=0; i< buf.length; i++)
+            {
+                    if(((int) buf[i] & 0xff) < 0x10)
+                            strbuf.append("0");
+                    strbuf.append(Long.toString((int) buf[i] & 0xff, 16));
+            }
+            return strbuf.toString();
+    }
 }
