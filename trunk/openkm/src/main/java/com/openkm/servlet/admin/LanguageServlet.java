@@ -51,11 +51,14 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.LanguageDAO;
 import com.openkm.dao.bean.Language;
 import com.openkm.dao.bean.Translation;
 import com.openkm.util.JCRUtils;
+import com.openkm.util.SecureStore;
+import com.openkm.util.WarUtils;
 import com.openkm.util.WebUtil;
 
 /**
@@ -128,6 +131,7 @@ public class LanguageServlet extends BaseServlet {
 				List<FileItem> items = upload.parseRequest(request);
 				String lgId = "";
 				String name = "";
+				String mimeType = "";
 				byte data[] = null;
 				
 				for (Iterator<FileItem> it = items.iterator(); it.hasNext();) {
@@ -145,6 +149,7 @@ public class LanguageServlet extends BaseServlet {
 						} 
 					} else {
 						if (item.getSize()>0) {
+							mimeType = Config.mimeTypes.getContentType(item.getName());
 							is = item.getInputStream();
 							data = IOUtils.toByteArray(is);
 							is.close();
@@ -155,15 +160,17 @@ public class LanguageServlet extends BaseServlet {
 				if (action.equals("create")) {
 					Language language = new Language();
 					language.setName(name);
+					language.setImageMime(mimeType);
 					if (data != null && data.length>0) {
-						language.setImageContent(data);
+						language.setImageContent(SecureStore.b64Encode(data));
 					}
 					LanguageDAO.create(language);
 				} else if (action.equals("edit")) {
 					Language language = LanguageDAO.findByPk(lgId);
 					language.setName(name);
+					language.setImageMime(mimeType);
 					if (data != null && data.length>0) {
-						language.setImageContent(data);
+						language.setImageContent(SecureStore.b64Encode(data));
 					}
 					LanguageDAO.update(language);
 				}
@@ -319,8 +326,9 @@ public class LanguageServlet extends BaseServlet {
 		String lgId = WebUtil.getString(request, "lg_id");
 		Language language = LanguageDAO.findByPk(lgId);
 		
+		response.setContentType(language.getImageMime());
 		ServletOutputStream out = response.getOutputStream();
-		out.write(language.getImageContent());
+		out.write(SecureStore.b64Decode(new String(language.getImageContent())));
 		out.flush();
 		log.debug("falg: flag");
 	}
@@ -335,7 +343,7 @@ public class LanguageServlet extends BaseServlet {
 		response.setHeader("Expires", "Sat, 6 May 1971 12:00:00 GMT");
 		response.setHeader("Cache-Control", "max-age=0, must-revalidate");
 		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-		String fileName = "OpenKM_lang_" + language.getId() + ".sql";
+		String fileName = "OpenKM_" + WarUtils.getAppVersion() + "_" +language.getId() + "_" + language.getTranslations().size() + ".sql";
 		
 		if (null != agent && -1 != agent.indexOf("MSIE")) {
 			log.debug("Agent: Explorer");
@@ -350,8 +358,9 @@ public class LanguageServlet extends BaseServlet {
 		response.setHeader("Content-disposition", "inline; filename=\""+fileName+"\"");		
 		response.setContentType("text/x-sql; charset=UTF-8");
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(response.getOutputStream(), "UTF8"), true);
-		StringBuffer insertLang = new StringBuffer("insert into OKM_LANGUAGE (LG_ID, LG_NAME, LG_IMAGE_CONTENT ) values ('");
-		insertLang.append(language.getId() + "', '" + language.getName() + "', '" + asHex(language.getImageContent()) + "');");
+		StringBuffer insertLang = new StringBuffer("insert into OKM_LANGUAGE (LG_ID, LG_NAME, LG_IMAGE_CONTENT, LG_IMAGE_MIME ) values ('");
+		insertLang.append(language.getId() + "', '" + language.getName() + "', '" + language.getImageContent() + "', '");
+		insertLang.append(language.getImageMime()+"');");
 		out.println(insertLang);
 		for (Translation translation : language.getTranslations()) {
 			StringBuffer insertTranslation = new StringBuffer("INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('");
@@ -362,17 +371,4 @@ public class LanguageServlet extends BaseServlet {
 		out.flush();
 		log.debug("export: flag");
 	}
-	
-	private String asHex(byte buf[])
-    {
-            StringBuffer strbuf = new StringBuffer(buf.length * 2);
-
-            for(int i=0; i< buf.length; i++)
-            {
-                    if(((int) buf[i] & 0xff) < 0x10)
-                            strbuf.append("0");
-                    strbuf.append(Long.toString((int) buf[i] & 0xff, 16));
-            }
-            return strbuf.toString();
-    }
 }
