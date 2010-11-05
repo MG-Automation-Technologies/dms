@@ -35,6 +35,10 @@
               <c:param name="action" value="delete"/>
               <c:param name="lg_id" value="${lang.id}"/>
             </c:url>
+            <c:url value="Language" var="urlTranslate">
+              <c:param name="action" value="translate"/>
+              <c:param name="lg_id" value="${lang.id}"/>
+            </c:url>
             <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
               <td>${lang.id}</td><td>${lang.name}</td><td>${fn:length(lang.translations)}</td>
               <td align="center">
@@ -44,6 +48,8 @@
                 	<a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
                 	&nbsp;
                 </c:if>
+                <a href="${urlTranslate}"><img src="img/action/edit.png" alt="Edit translations" title="Edit translations"/></a>
+                &nbsp;
               </td>
             </tr>
           </c:forEach>
