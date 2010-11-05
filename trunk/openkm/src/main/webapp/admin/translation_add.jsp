@@ -18,7 +18,7 @@
   <c:choose>
     <c:when test="${isAdmin}">
     	<h1>Add translation term</h1>
-    	<form action="Language" method="post" enctype="multipart/form-data">
+    	<form action="Language" method="post">
         	<input type="hidden" name="action" value="${action}"/>
         	<input type="hidden" name="persist" value="${persist}"/>
         	<table class="form" width="372px">
