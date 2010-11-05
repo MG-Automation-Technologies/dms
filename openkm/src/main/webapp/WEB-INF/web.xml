@@ -257,7 +257,7 @@
   <!-- Extensions -->
   <servlet>
     <servlet-name>StaplingServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.extension.StaplingServlet</servlet-class>
+    <servlet-class>com.openkm.frontend.server.extension.OKMStaplingServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>StaplingDownloadServlet</servlet-name>
