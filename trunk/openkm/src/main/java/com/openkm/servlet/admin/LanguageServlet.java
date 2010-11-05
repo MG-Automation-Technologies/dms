@@ -22,8 +22,11 @@
 package com.openkm.servlet.admin;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,9 +34,16 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +81,9 @@ public class LanguageServlet extends BaseServlet {
 				create(session, request, response);
 			} else if (action.equals("translate")) {
 				translate(session, request, response);
-			} 
+			} else if (action.equals("flag")) {
+				flag(session, request, response);
+			}
 			
 			if (action.equals("") || WebUtil.getBoolean(request, "persist")) {
 				list(session, request, response);
@@ -90,6 +102,7 @@ public class LanguageServlet extends BaseServlet {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		log.debug("doPost({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
@@ -100,13 +113,48 @@ public class LanguageServlet extends BaseServlet {
 		try {
 			session = JCRUtils.getSession();
 			
-			if (action.equals("translate")) {
+			if (ServletFileUpload.isMultipartContent(request)) {
+				session = JCRUtils.getSession();
+				InputStream is = null;
+				FileItemFactory factory = new DiskFileItemFactory(); 
+				ServletFileUpload upload = new ServletFileUpload(factory);
+				List<FileItem> items = upload.parseRequest(request);
+				Language language = new Language();
+				
+				for (Iterator<FileItem> it = items.iterator(); it.hasNext();) {
+					FileItem item = it.next();
+					
+					if (item.isFormField()) {
+						if (item.getFieldName().equals("action")) {
+							action = item.getString("UTF-8");
+						} else if (item.getFieldName().equals("lg_id")) {
+							language.setId(item.getString("UTF-8"));
+						} else if (item.getFieldName().equals("lg_name")) {
+							language.setName(item.getString("UTF-8"));
+						} 
+					} else {
+						is = item.getInputStream();
+						language.setImageContent(IOUtils.toByteArray(is));
+						is.close();
+					}
+				}
+				
+				if (action.equals("create")) {
+					LanguageDAO.create(language);
+				} else if (action.equals("edit")) {
+					
+				}
+				
+			} else  if (action.equals("translate")) {
 				translate(session, request, response);
-			} 
+			}
 			
 			if (action.equals("") || WebUtil.getBoolean(request, "persist")) {
 				list(session, request, response);
 			}
+		} catch (FileUploadException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
@@ -188,12 +236,7 @@ public class LanguageServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException {
 		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
 		
-		if (WebUtil.getBoolean(request, "persist")) {
-			Language language = new Language();
-			language.setId(WebUtil.getString(request, "lg_id"));
-			language.setName(WebUtil.getString(request, "lg_name"));
-			LanguageDAO.create(language);
-		} else {
+		if (!WebUtil.getBoolean(request, "persist")) {
 			ServletContext sc = getServletContext();
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
@@ -246,5 +289,16 @@ public class LanguageServlet extends BaseServlet {
 		}
 		
 		log.debug("translate: void");
+	}
+	
+	private void flag (Session session, HttpServletRequest request, HttpServletResponse response) throws DatabaseException, IOException {
+		log.debug("flag({}, {}, {})", new Object[] { session, request, response });
+		String lgId = WebUtil.getString(request, "lg_id");
+		Language language = LanguageDAO.findByPk(lgId);
+		
+		ServletOutputStream out = response.getOutputStream();
+		out.write(language.getImageContent());
+		out.flush();
+		log.debug("translate: flag");
 	}
 }

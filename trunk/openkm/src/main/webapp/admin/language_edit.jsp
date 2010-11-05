@@ -22,7 +22,7 @@
         <c:when test="${action == 'edit'}"><h1>Edit language</h1></c:when>
         <c:when test="${action == 'delete'}"><h1>Delete language</h1></c:when>
       </c:choose>
-      <form action="Language">
+      <form action="Language" method="post" enctype="multipart/form-data">
         <input type="hidden" name="action" value="${action}"/>
         <input type="hidden" name="persist" value="${persist}"/>
         <table class="form" width="372px">
@@ -43,6 +43,18 @@
             <td>Name</td>
             <td><input class="" name="lg_name" value="${lang.name}"/></td>
           </tr>
+          <tr>
+            <td>Flag</td>
+            <td>
+              <c:choose>
+                <c:when test="${action == 'create'}">
+                  <input class=":required :only_on_blur" type="file" name="image"/>
+                </c:when>
+                <c:otherwise>
+                  <input type="file" name="image"/>
+                </c:otherwise>
+              </c:choose>
+            </td>
           <tr>
             <td colspan="2" align="right">
               <input type="button" onclick="javascript:window.history.back()" value="Cancel"/>
