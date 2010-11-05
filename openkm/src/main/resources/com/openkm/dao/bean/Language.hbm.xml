@@ -5,6 +5,7 @@
   <class name="com.openkm.dao.bean.Language" table="OKM_LANGUAGE">
     <id name="id" column="LG_ID" length="127"><generator class="assigned"/></id>
     <property name="name" column="LG_NAME" not-null="true"/>
+    <property name="imageContentBlob" column="LG_IMAGE_CONTENT" not-null="true" type="blob"/>
     <set name="translations" table="OKM_TRANSLATION" order-by="TR_KEY asc" cascade="all-delete-orphan" lazy="false">
       <key column="TR_LANGUAGE"/>
       <one-to-many class="com.openkm.dao.bean.Translation"/>

@@ -18,7 +18,7 @@
       <h1>Language list</h1>
         <table class="results" width="60%">
           <tr>
-            <th>Id</th><th>Name</th><th>Translations</th>
+            <th>Id</th><th>Flag<th>Name</th><th>Translations</th>
             <th>
 	          <c:url value="Language" var="urlCreate">
               	<c:param name="action" value="create"/>
@@ -27,6 +27,10 @@
 	      	</th>
           </tr>
           <c:forEach var="lang" items="${langs}" varStatus="row">
+            <c:url value="Language" var="urlFlag">
+            	<c:param name="action" value="flag"/>
+              	<c:param name="lg_id" value="${lang.id}"/>
+          	</c:url>
             <c:url value="Language" var="urlEdit">
               <c:param name="action" value="edit"/>
               <c:param name="lg_id" value="${lang.id}"/>
@@ -40,7 +44,9 @@
               <c:param name="lg_id" value="${lang.id}"/>
             </c:url>
             <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-              <td>${lang.id}</td><td>${lang.name}</td>
+              <td>${lang.id}</td>
+              <td align="center"><img src="${urlFlag}"/></td>
+              <td>${lang.name}</td>
               <td>
               	${fn:length(lang.translations)}
               	<c:if test="${max>fn:length(lang.translations)}">
