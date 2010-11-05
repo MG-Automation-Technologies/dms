@@ -18,8 +18,8 @@
       <h1>Language list</h1>
         <table class="results" width="60%">
           <tr>
-            <th>Id</th><th>Flag<th>Name</th><th>Translations</th>
-            <th>
+            <th>Id</th><th>Flag</th><th>Name</th><th>Translations</th>
+            <th width="100px">
 	          <c:url value="Language" var="urlCreate">
               	<c:param name="action" value="create"/>
               </c:url>
@@ -69,10 +69,10 @@
         	        	</c:if>
                 	</td>
                 	<td width="25" align="center">
-                		<a href="${urlTranslate}"><img src="img/action/database_translations.png" alt="Edit translations" title="Edit translations"/></a>
+                		<a href="${urlTranslate}"><img src="img/action/translate.png" alt="Edit translations" title="Edit translations"/></a>
                 	</td>
                 	<td width="25" align="center">
-                		<a href="${urlExport}"><img src="img/action/export_sql.png" alt="Export translations" title="Export translations"/></a>
+                		<a href="${urlExport}"><img src="img/action/export.png" alt="Export translations" title="Export translations"/></a>
                 	</td>
                 </tr>
                 </table>
