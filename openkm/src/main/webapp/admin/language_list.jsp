@@ -79,6 +79,16 @@
               </td>
             </tr>
           </c:forEach>
+          <tr>
+          	<td colspan="5" align="right">
+          		</br>
+        		<form action="Language" method="post" enctype="multipart/form-data">
+        			<input type="hidden" name="action" value="import"/>
+        			<input class=":required :only_on_blur" type="file" name="sql-file"/>
+        			<input type="submit" value="Add new translation"/>
+        		</form>
+          	</td>
+          </tr>
         </table>
       </c:when>
     <c:otherwise>

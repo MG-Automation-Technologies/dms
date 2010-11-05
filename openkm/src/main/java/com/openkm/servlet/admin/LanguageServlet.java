@@ -21,11 +21,17 @@
 
 package com.openkm.servlet.admin;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -53,7 +59,9 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.dao.HibernateUtil;
 import com.openkm.dao.LanguageDAO;
+import com.openkm.dao.LegacyDAO;
 import com.openkm.dao.bean.Language;
 import com.openkm.dao.bean.Translation;
 import com.openkm.util.JCRUtils;
@@ -118,6 +126,7 @@ public class LanguageServlet extends BaseServlet {
 		String action = WebUtil.getString(request, "action");
 		boolean persist = false;
 		Session session = null;
+		org.hibernate.classic.Session hibernateSession = null;
 		updateSessionManager(request);
 		
 		try {
@@ -173,13 +182,16 @@ public class LanguageServlet extends BaseServlet {
 						language.setImageContent(SecureStore.b64Encode(data));
 					}
 					LanguageDAO.update(language);
+				} else if (action.equals("import")) {
+					hibernateSession = HibernateUtil.getSessionFactory().openSession();
+					importLanguage(session, request, response, data, hibernateSession);
 				}
 				
 			} else  if (action.equals("translate")) {
 				translate(session, request, response);
 			}
 			
-			if (action.equals("") || WebUtil.getBoolean(request, "persist") || persist) {
+			if (action.equals("") || action.equals("import") || WebUtil.getBoolean(request, "persist") || persist ) {
 				list(session, request, response);
 			}
 		} catch (FileUploadException e) {
@@ -194,8 +206,15 @@ public class LanguageServlet extends BaseServlet {
 		} catch (com.openkm.core.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
+		} catch (SQLException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
 		} finally {
+			if (hibernateSession!=null) {
+				HibernateUtil.close(hibernateSession);
+			}
 			JCRUtils.logout(session);
+			
 		}
 	}
 	
@@ -358,7 +377,9 @@ public class LanguageServlet extends BaseServlet {
 		response.setHeader("Content-disposition", "inline; filename=\""+fileName+"\"");		
 		response.setContentType("text/x-sql; charset=UTF-8");
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(response.getOutputStream(), "UTF8"), true);
-		StringBuffer insertLang = new StringBuffer("insert into OKM_LANGUAGE (LG_ID, LG_NAME, LG_IMAGE_CONTENT, LG_IMAGE_MIME ) values ('");
+		out.println("DELETE FROM OKM_TRANSLATION WHERE TR_LANGUAGE='" + language.getId() +"';" );
+		out.println("DELETE FROM OKM_LANGUAGE WHERE LG_ID='" + language.getId() +"';" );
+		StringBuffer insertLang = new StringBuffer("INSERT INTO OKM_LANGUAGE (LG_ID, LG_NAME, LG_IMAGE_CONTENT, LG_IMAGE_MIME ) VALUES ('");
 		insertLang.append(language.getId() + "', '" + language.getName() + "', '" + language.getImageContent() + "', '");
 		insertLang.append(language.getImageMime()+"');");
 		out.println(insertLang);
@@ -369,6 +390,27 @@ public class LanguageServlet extends BaseServlet {
 			out.println(insertTranslation);
 		}
 		out.flush();
-		log.debug("export: flag");
+		log.debug("export: sql-file");
+	}
+	
+	private void importLanguage(Session session, HttpServletRequest request, HttpServletResponse response, byte[] data,
+								org.hibernate.classic.Session hibernateSession) throws DatabaseException, IOException, SQLException {
+		log.debug("import({}, {}, {})", new Object[] { session, request, response });
+		Connection con = hibernateSession.connection();
+		Statement stmt = con.createStatement();
+		InputStreamReader is = new InputStreamReader(new ByteArrayInputStream(data));
+		BufferedReader br = new BufferedReader(is);
+		String query;
+		
+		while ((query = br.readLine())!=null) {
+			stmt.executeUpdate(query);
+		}
+		
+		LegacyDAO.close(stmt);
+		LegacyDAO.close(con);
+		
+		HibernateUtil.close(hibernateSession);
+
+		log.debug("import: void");
 	}
 }
