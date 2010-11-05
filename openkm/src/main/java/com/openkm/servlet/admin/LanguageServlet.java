@@ -182,14 +182,16 @@ public class LanguageServlet extends BaseServlet {
 						language.setImageContent(SecureStore.b64Encode(data));
 					}
 					LanguageDAO.update(language);
+				} else  if (action.equals("delete")) {
+					LanguageDAO.delete(lgId);
 				} else if (action.equals("import")) {
 					hibernateSession = HibernateUtil.getSessionFactory().openSession();
 					importLanguage(session, request, response, data, hibernateSession);
-				}
+				} 
 				
 			} else  if (action.equals("translate")) {
 				translate(session, request, response);
-			}
+			} 
 			
 			if (action.equals("") || action.equals("import") || WebUtil.getBoolean(request, "persist") || persist ) {
 				list(session, request, response);
@@ -238,17 +240,12 @@ public class LanguageServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException {
 		log.debug("delete({}, {}, {})", new Object[] { session, request, response });
 		
-		if (WebUtil.getBoolean(request, "persist")) {
-			String lgId = WebUtil.getString(request, "lg_id");
-			LanguageDAO.delete(lgId);
-		} else {
-			ServletContext sc = getServletContext();
-			String lgId = WebUtil.getString(request, "lg_id");
-			sc.setAttribute("action", WebUtil.getString(request, "action"));
-			sc.setAttribute("persist", true);
-			sc.setAttribute("lang", LanguageDAO.findByPk(lgId));
-			sc.getRequestDispatcher("/admin/language_edit.jsp").forward(request, response);
-		}
+		ServletContext sc = getServletContext();
+		String lgId = WebUtil.getString(request, "lg_id");
+		sc.setAttribute("action", WebUtil.getString(request, "action"));
+		sc.setAttribute("persist", true);
+		sc.setAttribute("lang", LanguageDAO.findByPk(lgId));
+		sc.getRequestDispatcher("/admin/language_edit.jsp").forward(request, response);
 		
 		log.debug("delete: void");
 	}
@@ -260,20 +257,12 @@ public class LanguageServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException {
 		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
 		
-		if (WebUtil.getBoolean(request, "persist")) {
-			String lgId = WebUtil.getString(request, "lg_id");
-			String lgName = WebUtil.getString(request, "lg_name");
-			Language language = LanguageDAO.findByPk(lgId);
-			language.setName(lgName);
-			LanguageDAO.update(language);
-		} else {
-			ServletContext sc = getServletContext();
-			String lgId = WebUtil.getString(request, "lg_id");
-			sc.setAttribute("action", WebUtil.getString(request, "action"));
-			sc.setAttribute("persist", true);
-			sc.setAttribute("lang", LanguageDAO.findByPk(lgId));
-			sc.getRequestDispatcher("/admin/language_edit.jsp").forward(request, response);
-		}
+		ServletContext sc = getServletContext();
+		String lgId = WebUtil.getString(request, "lg_id");
+		sc.setAttribute("action", WebUtil.getString(request, "action"));
+		sc.setAttribute("persist", true);
+		sc.setAttribute("lang", LanguageDAO.findByPk(lgId));
+		sc.getRequestDispatcher("/admin/language_edit.jsp").forward(request, response);
 		
 		log.debug("edit: void");
 	}
