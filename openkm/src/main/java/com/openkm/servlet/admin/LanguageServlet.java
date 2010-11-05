@@ -32,6 +32,7 @@ import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -100,6 +101,8 @@ public class LanguageServlet extends BaseServlet {
 				flag(session, request, response);
 			} else if (action.equals("export")) {
 				export(session, request, response);
+			} else if (action.equals("addTranslation")) {
+				addTranslation(session, request, response);
 			} 
 			
 			if (action.equals("") || WebUtil.getBoolean(request, "persist")) {
@@ -189,8 +192,10 @@ public class LanguageServlet extends BaseServlet {
 					importLanguage(session, request, response, data, hibernateSession);
 				} 
 				
-			} else  if (action.equals("translate")) {
+			} else if (action.equals("translate")) {
 				translate(session, request, response);
+			} else if (action.equals("addTranslation")) {
+				addTranslation(session, request, response);
 			} 
 			
 			if (action.equals("") || action.equals("import") || WebUtil.getBoolean(request, "persist") || persist ) {
@@ -274,15 +279,46 @@ public class LanguageServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException {
 		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
 		
-		if (!WebUtil.getBoolean(request, "persist")) {
-			ServletContext sc = getServletContext();
-			sc.setAttribute("action", WebUtil.getString(request, "action"));
-			sc.setAttribute("persist", true);
-			sc.setAttribute("lang", null);
-			sc.getRequestDispatcher("/admin/language_edit.jsp").forward(request, response);
-		}
+		ServletContext sc = getServletContext();
+		sc.setAttribute("action", WebUtil.getString(request, "action"));
+		sc.setAttribute("persist", true);
+		sc.setAttribute("lang", null);
+		sc.getRequestDispatcher("/admin/language_edit.jsp").forward(request, response);
 		
 		log.debug("edit: void");
+	}
+	
+	/**
+	 * Create language
+	 */
+	private void addTranslation(Session session, HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException, DatabaseException {
+		log.debug("addTranslation({}, {}, {})", new Object[] { session, request, response });
+		
+		if (WebUtil.getBoolean(request, "persist")) {
+			Language language = LanguageDAO.findByPk(LANG_BASE_CODE);
+			Translation translation = new Translation();
+			translation.setModule(WebUtil.getString(request, "tr_module"));
+			translation.setKey(WebUtil.getString(request, "tr_key"));
+			translation.setText(WebUtil.getString(request, "tr_text"));
+			language.getTranslations().add(translation);
+			LanguageDAO.update(language);
+		}
+		
+		List<String> modules = new ArrayList<String>();
+		modules.add(Translation.MODULE_FRONTEND);
+		modules.add(Translation.MODULE_EXTENSION);
+		modules.add(Translation.MODULE_ADMINISTRATION);
+		ServletContext sc = getServletContext();
+		sc.setAttribute("action", WebUtil.getString(request, "action"));
+		sc.setAttribute("persist", true);
+		sc.setAttribute("tr_module", modules);
+		sc.setAttribute("tr_key", "");
+		sc.setAttribute("tr_text", "");
+		sc.setAttribute("lang", LanguageDAO.findByPk(LANG_BASE_CODE));
+		sc.getRequestDispatcher("/admin/translation_add.jsp").forward(request, response);
+		
+		log.debug("addTranslation: void");
 	}
 	
 	/**

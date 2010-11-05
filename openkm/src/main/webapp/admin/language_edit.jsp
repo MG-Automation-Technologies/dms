@@ -23,7 +23,7 @@
         <c:when test="${action == 'delete'}"><h1>Delete language</h1></c:when>
       </c:choose>
       <form action="Language" method="post" enctype="multipart/form-data">
-        <input type="text" name="action" value="${action}"/>
+        <input type="hidden" name="action" value="${action}"/>
         <input type="hidden" name="persist" value="${persist}"/>
         <table class="form" width="372px">
           <tr>
