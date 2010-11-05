@@ -90,6 +90,37 @@ public class LanguageServlet extends BaseServlet {
 		}
 	}
 	
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		log.debug("doPost({}, {})", request, response);
+		request.setCharacterEncoding("UTF-8");
+		String action = WebUtil.getString(request, "action");
+		Session session = null;
+		updateSessionManager(request);
+		
+		try {
+			session = JCRUtils.getSession();
+			
+			if (action.equals("translate")) {
+				translate(session, request, response);
+			} 
+			
+			if (action.equals("") || WebUtil.getBoolean(request, "persist")) {
+				list(session, request, response);
+			}
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} catch (com.openkm.core.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} finally {
+			JCRUtils.logout(session);
+		}
+	}
+	
 	/**
 	 * List languages
 	 */
@@ -97,7 +128,8 @@ public class LanguageServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException, com.openkm.core.RepositoryException {
 		log.debug("list({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
-		sc.setAttribute("langs", LanguageDAO.findAll());		
+		sc.setAttribute("langs", LanguageDAO.findAll());	
+		sc.setAttribute("max", LanguageDAO.findByPk(LANG_BASE_CODE).getTranslations().size()); // Translations reference is english
 		sc.getRequestDispatcher("/admin/language_list.jsp").forward(request, response);
 		log.debug("list: void");
 	}
@@ -183,7 +215,7 @@ public class LanguageServlet extends BaseServlet {
 			Set<Translation> newTranslations = new HashSet<Translation>();
 			Language langBase = LanguageDAO.findByPk(LANG_BASE_CODE);
 			for (Translation translation : langBase.getTranslations()) {
-				String text = WebUtil.getString(request, String.valueOf(translation.getId()));
+				String text = WebUtil.getString(request, String.valueOf(translation.getKey()));
 				if (!text.equals("")) {
 					Translation newTranslation = new Translation();
 					newTranslation.setModule(translation.getModule());

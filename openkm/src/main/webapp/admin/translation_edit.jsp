@@ -16,7 +16,7 @@
   <c:choose>
     <c:when test="${isAdmin}">
     	<h1>Translation list</h1>
-    	<form action="Language">
+    	<form action="Language" method="post">
     		<input type="hidden" name="action" value="${action}"/>
         	<input type="hidden" name="persist" value="${persist}"/>
         	<input type="hidden" name="lg_id" value="${lg_id}"/>
@@ -30,7 +30,7 @@
           		<td width="30%">${translation.key}</td>
           		<td width="35%">${translation.text}</td>
           		<td width="35%">
-       				<input size="60" class="" name="${translation.id}" value="${translations[translation.key]}"/>
+       				<input size="60" class="" name="${translation.key}" value="${translations[translation.key]}"/>
           		</td>
           	</tr>
           	</c:forEach>

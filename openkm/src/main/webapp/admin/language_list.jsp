@@ -40,7 +40,13 @@
               <c:param name="lg_id" value="${lang.id}"/>
             </c:url>
             <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-              <td>${lang.id}</td><td>${lang.name}</td><td>${fn:length(lang.translations)}</td>
+              <td>${lang.id}</td><td>${lang.name}</td>
+              <td>
+              	${fn:length(lang.translations)}
+              	<c:if test="${max>fn:length(lang.translations)}">
+              	&nbsp;( Warning, translations needed )
+              	</c:if>
+              </td>
               <td align="center">
                 <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
                 &nbsp;
