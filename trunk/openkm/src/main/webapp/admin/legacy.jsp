@@ -15,6 +15,9 @@
   <c:choose>
     <c:when test="${isAdmin}">
       <h1>Legacy</h1>
+      <c:url value="Language" var="urlAddTranslation">
+      	<c:param name="action" value="addTranslation"/>
+      </c:url>
       <center>
         <a href="LogCat">LogCat</a><br/>
         <a href="CheckEmail">Check email</a><br/>
@@ -23,6 +26,7 @@
         <a href="ActiveSessions">Active sessions</a><br/>
         <a href="repository_backup.jsp">Repository backup</a><br/>
         <a href="repository_checker.jsp">Repository checker</a><br/>
+        <a href="${urlAddTranslation}">Add translation term</a><br/>
       </center>
     </c:when>
     <c:otherwise>
