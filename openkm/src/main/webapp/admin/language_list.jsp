@@ -58,16 +58,24 @@
               	</c:if>
               </td>
               <td align="center">
-                <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
-                &nbsp;
-                <c:if test="${lang.id!='en-GB'}">
-                	<a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
-                	&nbsp;
-                </c:if>
-                <a href="${urlTranslate}"><img src="img/action/edit.png" alt="Edit translations" title="Edit translations"/></a>
-                &nbsp;
-                <a href="${urlExport}"><img src="img/action/edit.png" alt="Export translations" title="Export translations"/></a>
-                &nbsp;
+                <table>
+                <tr>
+                	<td width="25" align="center">
+                		<a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
+                	</td>
+                	<td width="25" align="center">
+                		<c:if test="${lang.id!='en-GB'}">
+        	        		<a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+        	        	</c:if>
+                	</td>
+                	<td width="25" align="center">
+                		<a href="${urlTranslate}"><img src="img/action/database_translations.png" alt="Edit translations" title="Edit translations"/></a>
+                	</td>
+                	<td width="25" align="center">
+                		<a href="${urlExport}"><img src="img/action/export_sql.png" alt="Export translations" title="Export translations"/></a>
+                	</td>
+                </tr>
+                </table>
               </td>
             </tr>
           </c:forEach>
