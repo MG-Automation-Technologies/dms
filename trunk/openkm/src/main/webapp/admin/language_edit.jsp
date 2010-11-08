@@ -51,14 +51,15 @@
                   <input class=":required :only_on_blur" type="file" name="image"/>
                 </c:when>
                 <c:otherwise>
-                 	<c:url value="Language" var="urlFlag">
-            			<c:param name="action" value="flag"/>
-              			<c:param name="lg_id" value="${lang.id}"/>
-          			</c:url>
-                  	<table><tr><td><img src="${urlFlag}"/> &nbsp;</td><td><input type="file" name="image"/></td></tr></table>
+                  <c:url value="Language" var="urlFlag">
+                    <c:param name="action" value="flag"/>
+                    <c:param name="lg_id" value="${lang.id}"/>
+                  </c:url>
+                  <table><tr><td><img src="${urlFlag}"/>&nbsp;</td><td><input type="file" name="image"/></td></tr></table>
                 </c:otherwise>
               </c:choose>
             </td>
+          </tr>
           <tr>
             <td colspan="2" align="right">
               <input type="button" onclick="javascript:window.history.back()" value="Cancel"/>
