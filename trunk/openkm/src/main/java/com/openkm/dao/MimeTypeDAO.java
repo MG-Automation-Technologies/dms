@@ -80,7 +80,7 @@ public class MimeTypeDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 
-			if (mt.getImageContent().length() == 0) {
+			if (mt.getImageContent() == null || mt.getImageContent().length() == 0) {
 				Query q = session.createQuery(qs);
 				q.setParameter("id", mt.getId());
 				Object[] data = (Object[]) q.setMaxResults(1).uniqueResult();
