@@ -45,15 +45,19 @@
             </td>
           </tr>
         </c:forEach>
+        <tr class="fuzzy">
+          <td colspan="5" align="right">
+            <form action="RegisterWorkflow" method="post" enctype="multipart/form-data">
+              <table>
+                <tr>
+                  <td><input class=":required :only_on_blur" type="file" name="definition"/></td>
+                  <td><input type="submit" value="Register process definition"/></td>
+                </tr>
+              </table>
+            </form>
+          </td>
+        </tr>
       </table>
-      <br/>
-      <h2 style="text-align: center">Upload process definition</h2>
-      <form action="RegisterWorkflow" method="post" enctype="multipart/form-data">
-        <table class="form">
-          <tr><td><input type="file" name="definition"/></td></tr>
-          <tr><td align="right"><input type="submit" value="Upload"/></td></tr>
-        </table>
-      </form>
     </c:when>
     <c:otherwise>
       <div class="error"><h3>Only admin users allowed</h3></div>
