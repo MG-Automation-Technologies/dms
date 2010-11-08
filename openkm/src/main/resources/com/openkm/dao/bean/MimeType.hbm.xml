@@ -5,7 +5,7 @@
   <class name="com.openkm.dao.bean.MimeType" table="OKM_MIME_TYPE">
     <id name="id" column="MT_ID"><generator class="native"/></id>
     <property name="name" column="MT_NAME" not-null="true" unique="true"/>
-    <property name="imageContentBlob" column="MT_IMAGE_CONTENT" not-null="true" type="blob"/>
+    <property name="imageContent" column="MT_IMAGE_CONTENT" type="text" not-null="true"/>
     <property name="imageMime" column="MT_IMAGE_MIME" not-null="true"/>
     <property name="active" column="MT_ACTIVE" not-null="true"/>
     <set name="extensions" table="OKM_MIME_TYPE_EXTENSION" lazy="false">
