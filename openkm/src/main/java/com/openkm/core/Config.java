@@ -21,23 +21,19 @@
 
 package com.openkm.core;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.ServletContext;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -711,11 +707,6 @@ public class Config {
 			List<MimeType> mimeTypeList = MimeTypeDAO.findAll();
 			Config.mimeTypes = new MimetypesFileTypeMap();
 			
-			if (mimeTypeList.isEmpty()) {
-				resetMimeTypes(sc);
-				mimeTypeList = MimeTypeDAO.findAll();
-			}
-			
 			for (MimeType mt : mimeTypeList) {
 				if (mt.isActive()) {
 					String entry = mt.getName();
@@ -728,65 +719,6 @@ public class Config {
 			}
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
-		}
-	}
-	
-	/**
-	 * Load default mime type definitions
-	 */
-	public static void resetMimeTypes(ServletContext sc) {
-		final String MIME_FILE = "/META-INF/mime.types";
-		
-		try {
-			log.info("** Reading MIME file **");
-			InputStream is = sc.getResourceAsStream(MIME_FILE);
-			
-			if (is != null) {
-				BufferedReader br = new BufferedReader(new InputStreamReader(is));		
-				String line;
-			
-				while ((line = br.readLine()) != null) {
-					line = line.trim();
-					
-					if (!line.startsWith("#") && line.length() > 0) {
-						String[] data = line.split("\\s");
-						MimeType mt = new MimeType();
-						mt.setName(data[0]);
-						InputStream iis = sc.getResourceAsStream("/META-INF/mime/" + mt.getName() + ".gif");
-						mt.setImageContent(IOUtils.toByteArray(iis));
-						iis.close();
-						mt.setImageMime("image/gif");
-						mt.setActive(true);
-						
-						for (int i=1; i<data.length; i++) {
-							mt.getExtensions().add(data[i]);
-						}
-						
-						log.debug("*** Creating MIME type {} for {}", mt.getName(), mt.getExtensions());
-						MimeTypeDAO.create(mt);
-					}
-				}
-			
-				br.close();
-				is.close();
-			} else {
-				throw new FileNotFoundException(MIME_FILE);
-			}
-		} catch (FileNotFoundException e) {
-			log.warn("** No MIME file found **");
-			if (RESTRICT_FILE_MIME) {
-				log.warn("** File upload disabled **");
-			}
-		} catch (IOException e) {
-			log.warn("** IO Error reading MIME file **");
-			if (RESTRICT_FILE_MIME) {
-				log.warn("** File upload disabled **");
-			}
-		} catch (DatabaseException e) {
-			log.warn(e.getMessage(), e);
-			if (RESTRICT_FILE_MIME) {
-				log.warn("** File upload disabled **");
-			}
 		}
 	}
 }
