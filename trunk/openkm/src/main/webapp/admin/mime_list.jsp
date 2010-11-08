@@ -68,7 +68,7 @@
               <table>
                 <tr>
                   <td><input class=":required :only_on_blur" type="file" name="sql-file"/></td>
-                  <td><input type="submit" value="Import Mime Types"/></td>
+                  <td><input type="submit" value="Import mime types"/></td>
                 </tr>
               </table>
             </form>
