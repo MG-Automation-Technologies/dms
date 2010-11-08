@@ -54,7 +54,9 @@
                   <input class=":required :only_on_blur" type="file" name="image"/>
                 </c:when>
                 <c:otherwise>
-                  <input type="file" name="image"/>
+                  <c:url value="/mime/${mt.name}" var="urlIcon">
+                  </c:url>
+                  <table><tr><td><img src="${urlIcon}"/>&nbsp;</td><td><input type="file" name="image"/></td></tr></table>
                 </c:otherwise>
               </c:choose>
             </td>
