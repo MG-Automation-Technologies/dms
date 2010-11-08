@@ -31,7 +31,6 @@ public class MimeType implements Serializable {
 	private String name;
 	private String imageContent;
 	private String imageMime;
-	private boolean active;
 	private Set<String> extensions = new HashSet<String>();
 	
 	public int getId() {
@@ -66,14 +65,6 @@ public class MimeType implements Serializable {
 		this.imageMime = imageMime;
 	}
 	
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-	
 	public Set<String> getExtensions() {
 		return extensions;
 	}
@@ -89,7 +80,6 @@ public class MimeType implements Serializable {
 		sb.append(", name="); sb.append(name);
 		sb.append(", imageMime="); sb.append(imageMime);
 		sb.append(", imageContent="); sb.append(imageContent);
-		sb.append(", active="); sb.append(active);
 		sb.append(", extensions="); sb.append(extensions);
 		sb.append("}");
 		return sb.toString();
