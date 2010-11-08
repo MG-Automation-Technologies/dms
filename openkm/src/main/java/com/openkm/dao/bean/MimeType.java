@@ -22,19 +22,14 @@
 package com.openkm.dao.bean;
 
 import java.io.Serializable;
-import java.sql.Blob;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.hibernate.Hibernate;
-
-import com.openkm.dao.HibernateUtil;
 
 public class MimeType implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private String name;
-	private byte[] imageContent;
+	private String imageContent;
 	private String imageMime;
 	private boolean active;
 	private Set<String> extensions = new HashSet<String>();
@@ -55,24 +50,12 @@ public class MimeType implements Serializable {
 		this.name = name;
 	}
 
-	public byte[] getImageContent() {
+	public String getImageContent() {
 		return imageContent;
 	}
 
-	public void setImageContent(byte[] imageContent) {
+	public void setImageContent(String imageContent) {
 		this.imageContent = imageContent;
-	}
-	
-	/** Don't invoke this. Used by Hibernate only. */
-	@SuppressWarnings("unused")
-	private void setImageContentBlob(Blob data) {
-		this.imageContent = HibernateUtil.toByteArray(data);
-	}
-
-	/** Don't invoke this. Used by Hibernate only. */
-	@SuppressWarnings("unused")
-	private Blob getImageContentBlob() {
-		return Hibernate.createBlob(imageContent);
 	}
 
 	public String getImageMime() {
