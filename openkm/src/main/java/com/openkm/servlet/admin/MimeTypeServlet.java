@@ -21,10 +21,16 @@
 
 package com.openkm.servlet.admin;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Iterator;
 import java.util.List;
 
@@ -47,6 +53,8 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.dao.HibernateUtil;
+import com.openkm.dao.LegacyDAO;
 import com.openkm.dao.MimeTypeDAO;
 import com.openkm.dao.bean.MimeType;
 import com.openkm.util.JCRUtils;
@@ -104,7 +112,6 @@ public class MimeTypeServlet extends BaseServlet {
 		log.debug("doPost({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
 		String action = WebUtil.getString(request, "action");
-		boolean persist = false;
 		Session session = null;
 		org.hibernate.classic.Session hibernateSession = null;
 		updateSessionManager(request);
@@ -117,6 +124,7 @@ public class MimeTypeServlet extends BaseServlet {
 				ServletFileUpload upload = new ServletFileUpload(factory);
 				List<FileItem> items = upload.parseRequest(request);
 				MimeType mt = new MimeType();
+				byte data[] = null;
 				
 				for (Iterator<FileItem> it = items.iterator(); it.hasNext();) {
 					FileItem item = it.next();
@@ -130,8 +138,6 @@ public class MimeTypeServlet extends BaseServlet {
 							mt.setName(item.getString("UTF-8"));
 						} else if (item.getFieldName().equals("mt_active")) {
 							mt.setActive(true);
-						} else if (item.getFieldName().equals("persist")) {
-							persist = true;
 						} else if (item.getFieldName().equals("mt_extensions")) {
 							String[] extensions = item.getString("UTF-8").split(" ");
 							for (int i=0; i<extensions.length; i++) {
@@ -141,12 +147,16 @@ public class MimeTypeServlet extends BaseServlet {
 					} else {
 						is = item.getInputStream();
 						mt.setImageMime(Config.mimeTypes.getContentType(item.getName()));
-						mt.setImageContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
+						data = IOUtils.toByteArray(is);
 						is.close();
 					}
 				}
 			
 				if (action.equals("create")) {
+					if (data != null && data.length > 0) {
+						mt.setImageContent(SecureStore.b64Encode(data));
+					}
+					
 					MimeTypeDAO.create(mt);
 					Config.loadMimeTypes(getServletContext());
 					
@@ -154,6 +164,10 @@ public class MimeTypeServlet extends BaseServlet {
 					UserActivity.log(session.getUserID(), "ADMIN_MIME_TYPE_CREATE", null, mt.toString());
 					list(session, request, response);
 				} else if (action.equals("edit")) {
+					if (data != null && data.length > 0) {
+						mt.setImageContent(SecureStore.b64Encode(data));
+					}
+					
 					MimeTypeDAO.update(mt);
 					Config.loadMimeTypes(getServletContext());
 					
@@ -167,6 +181,9 @@ public class MimeTypeServlet extends BaseServlet {
 					// Activity log
 					UserActivity.log(session.getUserID(), "ADMIN_MIME_TYPE_DELETE", Integer.toString(mt.getId()), null);
 					list(session, request, response);
+				} else if (action.equals("import")) {
+					hibernateSession = HibernateUtil.getSessionFactory().openSession();
+					importMimeTypes(session, request, response, data, hibernateSession);
 				}
 			}
 		} catch (LoginException e) {
@@ -181,7 +198,13 @@ public class MimeTypeServlet extends BaseServlet {
 		} catch (FileUploadException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
+		} catch (SQLException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
 		} finally {
+			if (hibernateSession != null) {
+				HibernateUtil.close(hibernateSession);
+			}
 			JCRUtils.logout(session);
 		}
 	}
@@ -293,5 +316,28 @@ public class MimeTypeServlet extends BaseServlet {
 		}
 		out.flush();
 		log.debug("export: sql-file");
+	}
+	
+	/**
+	 * Import mime types into database
+	 */
+	private void importMimeTypes(Session session, HttpServletRequest request, HttpServletResponse response,
+			byte[] data, org.hibernate.classic.Session hibernateSession) throws DatabaseException,
+			IOException, SQLException {
+		log.debug("import({}, {}, {})", new Object[] { session, request, response });
+		Connection con = hibernateSession.connection();
+		Statement stmt = con.createStatement();
+		InputStreamReader is = new InputStreamReader(new ByteArrayInputStream(data));
+		BufferedReader br = new BufferedReader(is);
+		String query;
+		
+		while ((query = br.readLine()) != null) {
+			stmt.executeUpdate(query);
+		}
+		
+		LegacyDAO.close(stmt);
+		LegacyDAO.close(con);
+		HibernateUtil.close(hibernateSession);
+		log.debug("import: void");
 	}
 }
