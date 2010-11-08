@@ -54,7 +54,7 @@
                 </c:otherwise>
               </c:choose>
             </td>
-            <td>
+            <td align="center">
               <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
               &nbsp;
               <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
@@ -65,7 +65,7 @@
           <td colspan="5" align="right">
             <form action="MimeType" method="post" enctype="multipart/form-data">
               <input type="hidden" name="action" value="import"/>
-              <table>
+              <table class="form">
                 <tr>
                   <td><input class=":required :only_on_blur" type="file" name="sql-file"/></td>
                   <td><input type="submit" value="Import Mime Types"/></td>
