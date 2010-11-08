@@ -86,6 +86,10 @@ table.results tr.fuzzy {
 	background-color: #C3D9FF;
 }
 
+table.results tr.form {
+	background-color: #789DB3;
+}
+
 legend {
 	font-weight: bold;
 }
