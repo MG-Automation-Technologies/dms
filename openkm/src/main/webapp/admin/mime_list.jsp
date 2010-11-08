@@ -44,7 +44,7 @@
             <td>${mt.name}</td>
             <td align="center"><img src="${urlIcon}"/></td>
             <td>${mt.extensions}</td>
-            <td align="center">
+            <td>
               <c:choose>
                 <c:when test="${mt.active}">
                   <img src="img/true.png" alt="Active" title="Active"/>
@@ -65,7 +65,7 @@
           <td colspan="5" align="right">
             <form action="MimeType" method="post" enctype="multipart/form-data">
               <input type="hidden" name="action" value="import"/>
-              <table class="form">
+              <table bgcolor="#789DB3">
                 <tr>
                   <td><input class=":required :only_on_blur" type="file" name="sql-file"/></td>
                   <td><input type="submit" value="Import Mime Types"/></td>
