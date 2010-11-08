@@ -70,11 +70,11 @@
               </td>
             </tr>
           </c:forEach>
-          <tr>
+          <tr class="fuzzy">
             <td colspan="5" align="right">
               <form action="Language" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="import"/>
-                <table bgcolor="#789DB3">
+                <table>
                   <tr>
                     <td><input class=":required :only_on_blur" type="file" name="sql-file"/></td>
                     <td><input type="submit" value="Add new translation"/></td>
