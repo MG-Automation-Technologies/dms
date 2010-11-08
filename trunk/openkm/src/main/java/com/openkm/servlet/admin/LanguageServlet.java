@@ -28,7 +28,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -42,7 +41,6 @@ import java.util.Set;
 
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.mail.internet.MimeUtility;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -173,7 +171,7 @@ public class LanguageServlet extends BaseServlet {
 					Language language = new Language();
 					language.setName(name);
 					language.setImageMime(mimeType);
-					if (data != null && data.length>0) {
+					if (data != null && data.length > 0) {
 						language.setImageContent(SecureStore.b64Encode(data));
 					}
 					LanguageDAO.create(language);
@@ -181,7 +179,7 @@ public class LanguageServlet extends BaseServlet {
 					Language language = LanguageDAO.findByPk(lgId);
 					language.setName(name);
 					language.setImageMime(mimeType);
-					if (data != null && data.length>0) {
+					if (data != null && data.length > 0) {
 						language.setImageContent(SecureStore.b64Encode(data));
 					}
 					LanguageDAO.update(language);
@@ -190,8 +188,7 @@ public class LanguageServlet extends BaseServlet {
 				} else if (action.equals("import")) {
 					hibernateSession = HibernateUtil.getSessionFactory().openSession();
 					importLanguage(session, request, response, data, hibernateSession);
-				} 
-				
+				}
 			} else if (action.equals("translate")) {
 				translate(session, request, response);
 			} else if (action.equals("addTranslation")) {
@@ -369,36 +366,27 @@ public class LanguageServlet extends BaseServlet {
 	private void flag(Session session, HttpServletRequest request, HttpServletResponse response) throws DatabaseException, IOException {
 		log.debug("flag({}, {}, {})", new Object[] { session, request, response });
 		String lgId = WebUtil.getString(request, "lg_id");
+		ServletOutputStream out = response.getOutputStream();
 		Language language = LanguageDAO.findByPk(lgId);
+		byte[] img = SecureStore.b64Decode(new String(language.getImageContent()));
 		
 		response.setContentType(language.getImageMime());
-		ServletOutputStream out = response.getOutputStream();
-		out.write(SecureStore.b64Decode(new String(language.getImageContent())));
+		response.setContentLength(img.length);
+		out.write(img);
 		out.flush();
-		log.debug("falg: flag");
+		log.debug("flag: void");
 	}
 	
 	private void export(Session session, HttpServletRequest request, HttpServletResponse response) throws DatabaseException, IOException {
 		log.debug("export({}, {}, {})", new Object[] { session, request, response });
 		String lgId = WebUtil.getString(request, "lg_id");
 		Language language = LanguageDAO.findByPk(lgId);
-		String agent = request.getHeader("USER-AGENT");
 		
 		// Disable browser cache
 		response.setHeader("Expires", "Sat, 6 May 1971 12:00:00 GMT");
 		response.setHeader("Cache-Control", "max-age=0, must-revalidate");
 		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
 		String fileName = "OpenKM_" + WarUtils.getAppVersion() + "_" +language.getId() + "_" + language.getTranslations().size() + ".sql";
-		
-		if (null != agent && -1 != agent.indexOf("MSIE")) {
-			log.debug("Agent: Explorer");
-			fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", " ");
-		} else if (null != agent && -1 != agent.indexOf("Mozilla"))	{
-			log.debug("Agent: Mozilla");
-			fileName = MimeUtility.encodeText(fileName, "UTF-8", "B");
-		} else {
-			log.debug("Agent: Unknown");
-		}
 		
 		response.setHeader("Content-disposition", "inline; filename=\""+fileName+"\"");		
 		response.setContentType("text/x-sql; charset=UTF-8");
@@ -416,7 +404,7 @@ public class LanguageServlet extends BaseServlet {
 			out.println(insertTranslation);
 		}
 		out.flush();
-		log.debug("export: sql-file");
+		log.debug("export: void");
 	}
 	
 	private void importLanguage(Session session, HttpServletRequest request, HttpServletResponse response, byte[] data,
