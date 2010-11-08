@@ -708,14 +708,12 @@ public class Config {
 			Config.mimeTypes = new MimetypesFileTypeMap();
 			
 			for (MimeType mt : mimeTypeList) {
-				if (mt.isActive()) {
-					String entry = mt.getName();
-					for (String ext : mt.getExtensions()) {
-						entry += " " + ext;
-					}
-					log.debug("loadMimeTypes => Add Entry: {}", entry);
-					Config.mimeTypes.addMimeTypes(entry);
+				String entry = mt.getName();
+				for (String ext : mt.getExtensions()) {
+					entry += " " + ext;
 				}
+				log.debug("loadMimeTypes => Add Entry: {}", entry);
+				Config.mimeTypes.addMimeTypes(entry);
 			}
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
