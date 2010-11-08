@@ -168,17 +168,21 @@ public class LanguageServlet extends BaseServlet {
 					Language language = new Language();
 					language.setName(name);
 					language.setImageMime(mimeType);
+					
 					if (data != null && data.length > 0) {
 						language.setImageContent(SecureStore.b64Encode(data));
 					}
+					
 					LanguageDAO.create(language);
 				} else if (action.equals("edit")) {
 					Language language = LanguageDAO.findByPk(lgId);
 					language.setName(name);
 					language.setImageMime(mimeType);
+					
 					if (data != null && data.length > 0) {
 						language.setImageContent(SecureStore.b64Encode(data));
 					}
+					
 					LanguageDAO.update(language);
 				} else  if (action.equals("delete")) {
 					LanguageDAO.delete(lgId);
