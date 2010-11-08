@@ -14,10 +14,7 @@
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
-      <c:url value="MimeType" var="urlReset">
-        <c:param name="action" value="reset"/>
-      </c:url>
-      <h1>Mime Types <span style="font-size: 10px;">(<a href="${urlReset}">Reset</a>)</span></h1>
+      <h1>Mime Types</h1>
       <table class="results" width="70%">
         <tr>
           <th>Name</th><th>Image</th><th>Extensions</th><th>Active</th>
@@ -64,6 +61,19 @@
             </td>
           </tr>
         </c:forEach>
+        <tr>
+          <td colspan="5" align="right">
+            <form action="MimeType" method="post" enctype="multipart/form-data">
+              <input type="hidden" name="action" value="import"/>
+              <table>
+                <tr>
+                  <td><input class=":required :only_on_blur" type="file" name="sql-file"/></td>
+                  <td><input type="submit" value="Import Mime Types"/></td>
+                </tr>
+              </table>
+            </form>
+          </td>
+        </tr>
       </table>
     </c:when>
     <c:otherwise>
