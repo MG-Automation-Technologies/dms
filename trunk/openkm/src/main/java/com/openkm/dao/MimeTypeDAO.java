@@ -209,10 +209,9 @@ public class MimeTypeDAO {
 	/**
 	 * Find by name
 	 */
-	public static MimeType findByName(String name, boolean filterByActive) throws DatabaseException {
+	public static MimeType findByName(String name) throws DatabaseException {
 		log.debug("findByName({})", name);
-		String qs = "from MimeType mt where mt.name=:name " +
-			(filterByActive?"and mt.active=:active":"");
+		String qs = "from MimeType mt where mt.name=:name";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -221,11 +220,6 @@ public class MimeTypeDAO {
 			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setString("name", name);
-			
-			if (filterByActive) {
-				q.setBoolean("active", true);
-			}
-			
 			MimeType ret = (MimeType) q.setMaxResults(1).uniqueResult();
 			HibernateUtil.commit(tx);
 			log.debug("findByName: {}", ret);
