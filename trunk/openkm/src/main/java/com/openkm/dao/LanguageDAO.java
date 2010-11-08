@@ -112,8 +112,8 @@ public class LanguageDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			Language lg = (Language) session.load(Language.class, id);
-			session.delete(lg);
+			Language lang = (Language) session.load(Language.class, id);
+			session.delete(lang);
 			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
@@ -128,15 +128,15 @@ public class LanguageDAO {
 	/**
 	 * Update language in database
 	 */
-	public static void update(Language language) throws DatabaseException {
-		log.debug("update({})", language);
+	public static void update(Language lang) throws DatabaseException {
+		log.debug("update({})", lang);
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			session.update(language);
+			session.update(lang);
 			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
@@ -150,15 +150,15 @@ public class LanguageDAO {
 	/**
 	 * Create language in database
 	 */
-	public static void create(Language language) throws DatabaseException {
-		log.debug("create({})", language);
+	public static void create(Language lang) throws DatabaseException {
+		log.debug("create({})", lang);
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			session.save(language);
+			session.save(lang);
 			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
