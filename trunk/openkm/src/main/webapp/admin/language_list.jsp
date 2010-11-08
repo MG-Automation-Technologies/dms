@@ -52,30 +52,21 @@
               <td align="center"><img src="${urlFlag}"/></td>
               <td>${lang.name}</td>
               <td>
-              	${fn:length(lang.translations)}
-              	<c:if test="${max>fn:length(lang.translations)}">
-              	&nbsp;( Warning, translations needed )
-              	</c:if>
+                ${fn:length(lang.translations)}
+                <c:if test="${max>fn:length(lang.translations)}">
+                  &nbsp;( Warning, translations needed )
+                </c:if>
               </td>
               <td align="center">
-                <table width="100">
-                <tr>
-                	<td width="25" align="center">
-                		<a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
-                	</td>
-                	<td width="25" align="center">
-                		<c:if test="${lang.id!='en-GB'}">
-        	        		<a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
-        	        	</c:if>
-                	</td>
-                	<td width="25" align="center">
-                		<a href="${urlTranslate}"><img src="img/action/translate.png" alt="Edit translations" title="Edit translations"/></a>
-                	</td>
-                	<td width="25" align="center">
-                		<a href="${urlExport}"><img src="img/action/export.png" alt="Export translations" title="Export translations"/></a>
-                	</td>
-                </tr>
-                </table>
+                <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
+                &nbsp;
+                <c:if test="${lang.id!='en-GB'}">
+                  <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+                  &nbsp;
+                </c:if>
+                <a href="${urlTranslate}"><img src="img/action/translate.png" alt="Edit translations" title="Edit translations"/></a>
+                &nbsp;
+                <a href="${urlExport}"><img src="img/action/export.png" alt="Export translations" title="Export translations"/></a>
               </td>
             </tr>
           </c:forEach>
@@ -83,7 +74,7 @@
             <td colspan="5" align="right">
               <form action="Language" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="import"/>
-                <table>
+                <table class="form">
                   <tr>
                     <td><input class=":required :only_on_blur" type="file" name="sql-file"/></td>
                     <td><input type="submit" value="Add new translation"/></td>
