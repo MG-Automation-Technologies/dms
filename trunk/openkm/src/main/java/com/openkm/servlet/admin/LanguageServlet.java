@@ -125,7 +125,6 @@ public class LanguageServlet extends BaseServlet {
 		log.debug("doPost({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
 		String action = WebUtil.getString(request, "action");
-		boolean persist = false;
 		Session session = null;
 		org.hibernate.classic.Session hibernateSession = null;
 		updateSessionManager(request);
@@ -154,11 +153,9 @@ public class LanguageServlet extends BaseServlet {
 							lgId = item.getString("UTF-8");
 						} else if (item.getFieldName().equals("lg_name")) {
 							name = item.getString("UTF-8");
-						} else if (item.getFieldName().equals("persist")) {
-							persist = true;
 						} 
 					} else {
-						if (item.getSize()>0) {
+						if (item.getSize() > 0) {
 							mimeType = Config.mimeTypes.getContentType(item.getName());
 							is = item.getInputStream();
 							data = IOUtils.toByteArray(is);
@@ -196,7 +193,7 @@ public class LanguageServlet extends BaseServlet {
 			} 
 			
 			if (!action.equals("addTranslation") && (action.equals("") || action.equals("import") 
-				|| WebUtil.getBoolean(request, "persist") || persist )) {
+				|| WebUtil.getBoolean(request, "persist"))) {
 				list(session, request, response);
 			}
 		} catch (FileUploadException e) {
@@ -215,7 +212,7 @@ public class LanguageServlet extends BaseServlet {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} finally {
-			if (hibernateSession!=null) {
+			if (hibernateSession != null) {
 				HibernateUtil.close(hibernateSession);
 			}
 			JCRUtils.logout(session);
@@ -329,6 +326,7 @@ public class LanguageServlet extends BaseServlet {
 		if (WebUtil.getBoolean(request, "persist")) {
 			Set<Translation> newTranslations = new HashSet<Translation>();
 			Language langBase = LanguageDAO.findByPk(LANG_BASE_CODE);
+			
 			for (Translation translation : langBase.getTranslations()) {
 				String text = WebUtil.getString(request, String.valueOf(translation.getKey()));
 				if (!text.equals("")) {
@@ -339,6 +337,7 @@ public class LanguageServlet extends BaseServlet {
 					newTranslations.add(newTranslation);
 				}
 			}
+			
 			String lgId = WebUtil.getString(request, "lg_id");
 			Language language = LanguageDAO.findByPk(lgId);
 			language.setTranslations(newTranslations);
@@ -348,9 +347,11 @@ public class LanguageServlet extends BaseServlet {
 			String lgId = WebUtil.getString(request, "lg_id");
 			Language langToTranslate = LanguageDAO.findByPk(lgId);
 			Map<String, String> translations = new HashMap<String, String>();
+			
 			for (Translation translation : langToTranslate.getTranslations()) {
 				translations.put(translation.getKey(), translation.getText());
 			}
+			
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("lg_id", lgId);
@@ -363,6 +364,9 @@ public class LanguageServlet extends BaseServlet {
 		log.debug("translate: void");
 	}
 	
+	/**
+	 * Show language flag icon
+	 */
 	private void flag(Session session, HttpServletRequest request, HttpServletResponse response) throws DatabaseException, IOException {
 		log.debug("flag({}, {}, {})", new Object[] { session, request, response });
 		String lgId = WebUtil.getString(request, "lg_id");
@@ -407,8 +411,12 @@ public class LanguageServlet extends BaseServlet {
 		log.debug("export: void");
 	}
 	
-	private void importLanguage(Session session, HttpServletRequest request, HttpServletResponse response, byte[] data,
-								org.hibernate.classic.Session hibernateSession) throws DatabaseException, IOException, SQLException {
+	/**
+	 * Import a new language into database
+	 */
+	private void importLanguage(Session session, HttpServletRequest request, HttpServletResponse response,
+			byte[] data, org.hibernate.classic.Session hibernateSession) throws DatabaseException,
+			IOException, SQLException {
 		log.debug("import({}, {}, {})", new Object[] { session, request, response });
 		Connection con = hibernateSession.connection();
 		Statement stmt = con.createStatement();
@@ -422,9 +430,7 @@ public class LanguageServlet extends BaseServlet {
 		
 		LegacyDAO.close(stmt);
 		LegacyDAO.close(con);
-		
 		HibernateUtil.close(hibernateSession);
-
 		log.debug("import: void");
 	}
 }
