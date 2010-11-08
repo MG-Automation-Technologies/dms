@@ -136,8 +136,6 @@ public class MimeTypeServlet extends BaseServlet {
 							mt.setId(Integer.parseInt(item.getString("UTF-8")));
 						} else if (item.getFieldName().equals("mt_name")) {
 							mt.setName(item.getString("UTF-8"));
-						} else if (item.getFieldName().equals("mt_active")) {
-							mt.setActive(true);
 						} else if (item.getFieldName().equals("mt_extensions")) {
 							String[] extensions = item.getString("UTF-8").split(" ");
 							for (int i=0; i<extensions.length; i++) {
@@ -300,12 +298,11 @@ public class MimeTypeServlet extends BaseServlet {
 		out.println("DELETE FROM OKM_MIME_TYPE_EXTENSION;");
 		
 		for (MimeType mimeType: MimeTypeDAO.findAll()) {
-			StringBuffer insertMime = new StringBuffer("INSERT INTO OKM_MIME_TYPE (MT_ID, MT_NAME, MT_IMAGE_CONTENT, MT_IMAGE_MIME, MT_ACTIVE) VALUES ('");
+			StringBuffer insertMime = new StringBuffer("INSERT INTO OKM_MIME_TYPE (MT_ID, MT_NAME, MT_IMAGE_CONTENT, MT_IMAGE_MIME) VALUES ('");
 			insertMime.append(mimeType.getId() + "', '");
 			insertMime.append(mimeType.getName() + "', '");
 			insertMime.append(mimeType.getImageContent() + "', '");
-			insertMime.append(mimeType.getImageMime() + "', ");
-			insertMime.append(mimeType.isActive() + ");");
+			insertMime.append(mimeType.getImageMime() + ");");
 			out.println(insertMime);
 			
 			for (String ext : mimeType.getExtensions()) {
