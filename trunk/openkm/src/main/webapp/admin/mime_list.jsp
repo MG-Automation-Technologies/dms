@@ -25,7 +25,11 @@
             <c:url value="MimeType" var="urlCreate">
               <c:param name="action" value="create"/>
             </c:url>
+            <c:url value="MimeType" var="urlExport">
+              <c:param name="action" value="export"/>
+            </c:url>
             <a href="${urlCreate}"><img src="img/action/new.png" alt="New mime type" title="New mime type"/></a>
+            <a href="${urlExport}"><img src="img/action/export.png" alt="Export mime types" title="Export mime types"/></a>
           </th>
         </tr>
         <c:forEach var="mt" items="${mimeTypes}" varStatus="row">
