@@ -47,6 +47,7 @@ import com.openkm.frontend.client.extension.event.handler.DocumentHandlerExtensi
 import com.openkm.frontend.client.extension.event.handler.PropertyGroupHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasDocumentHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasPropertyGroupHandlerExtension;
+import com.openkm.frontend.client.extension.widget.PreviewExtension;
 import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
@@ -87,6 +88,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	private boolean previewVisible = false;
 	private boolean propertyGroupsVisible = false;
 	private List<PropertyGroupHandlerExtension> propertyGroupHandlerExtensionList;
+	private List<PreviewExtension> widgetPreviewExtensionList;
 	
 	/**
 	 * The Document tab
@@ -103,6 +105,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		propertyGroup = new ArrayList<PropertyGroup>();
 		widgetExtensionList = new ArrayList<TabDocumentExtension>();
 		docHandlerExtensionList = new ArrayList<DocumentHandlerExtension>();
+		widgetPreviewExtensionList = new ArrayList<PreviewExtension>();
 
 		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 			@Override
@@ -494,8 +497,27 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 				doc.getMimeType().equals("application/x-shockwave-flash") ||  
 				doc.getMimeType().equals("audio/mpeg")) {
 			if (!refreshing) {
-				preview.setMediaFile(Config.OKMDownloadServlet +"?uuid=" + URL.encodeComponent(getDocument().getUuid()), getDocument().getMimeType());
+				preview.showMediaFile(Config.OKMDownloadServlet +"?uuid=" + URL.encodeComponent(getDocument().getUuid()), getDocument().getMimeType());
 			}
+		} else if (doc.getMimeType().equals("application/dxf") || doc.getMimeType().equals("application/x-autocad") ||  
+			  doc.getMimeType().equals("application/x-dxf") || doc.getMimeType().equals("drawing/x-dxf") || 
+			  doc.getMimeType().equals("image/vnd.dxf") || doc.getMimeType().equals("") || 
+			  doc.getMimeType().equals("image/x-autocad") || doc.getMimeType().equals("image/x-dxf") || 
+			  doc.getMimeType().equals("zz-application/zz-winassoc-dxf")) {
+			PreviewExtension previewExtension = null;
+			for (PreviewExtension preview : widgetPreviewExtensionList) {
+				if (preview.hasMimeTypePreviewer(doc.getMimeType())) {
+					previewExtension = preview;
+					break;
+				}
+			}
+			if (previewExtension!=null) {
+				preview.showPreviewExtension(previewExtension, Config.OKMDownloadServlet +"?uuid=" + URL.encodeComponent(getDocument().getUuid()));
+			} else {
+				// There's no preview
+				preview.showEmbedSWF(doc.getUuid());
+			}
+			
 		} else {
 			preview.showEmbedSWF(doc.getUuid());
 		}
@@ -548,5 +570,14 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	@Override
 	public void addPropertyGroupHandlerExtension(PropertyGroupHandlerExtension handlerExtension) {
 		propertyGroupHandlerExtensionList.add(handlerExtension);
+	}
+	
+	/**
+	 * addPreviewExtension
+	 * 
+	 * @param extension
+	 */
+	public void addPreviewExtension(PreviewExtension extension) {
+		widgetPreviewExtensionList.add(extension);
 	}
 }
