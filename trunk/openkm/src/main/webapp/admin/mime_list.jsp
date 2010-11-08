@@ -44,7 +44,7 @@
             <td>${mt.name}</td>
             <td align="center"><img src="${urlIcon}"/></td>
             <td>${mt.extensions}</td>
-            <td>
+            <td align="center">
               <c:choose>
                 <c:when test="${mt.active}">
                   <img src="img/true.png" alt="Active" title="Active"/>
