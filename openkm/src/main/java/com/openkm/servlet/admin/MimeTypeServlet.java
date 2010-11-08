@@ -23,6 +23,8 @@ package com.openkm.servlet.admin;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
 
@@ -48,7 +50,9 @@ import com.openkm.core.DatabaseException;
 import com.openkm.dao.MimeTypeDAO;
 import com.openkm.dao.bean.MimeType;
 import com.openkm.util.JCRUtils;
+import com.openkm.util.SecureStore;
 import com.openkm.util.UserActivity;
+import com.openkm.util.WarUtils;
 import com.openkm.util.WebUtil;
 
 /**
@@ -70,44 +74,13 @@ public class MimeTypeServlet extends BaseServlet {
 			session = JCRUtils.getSession();
 			
 			if (action.equals("create")) {
-				ServletContext sc = getServletContext();
-				MimeType mt = new MimeType();
-				sc.setAttribute("action", action);
-				sc.setAttribute("extensions", null);
-				sc.setAttribute("mt", mt);
-				sc.getRequestDispatcher("/admin/mime_edit.jsp").forward(request, response);
+				create(session, request, response);
 			} else if (action.equals("edit")) {
-				ServletContext sc = getServletContext();
-				int mtId = WebUtil.getInt(request, "mt_id");
-				MimeType mt = MimeTypeDAO.findByPk(mtId);
-				String extensions = "";
-				
-				for (String ext : mt.getExtensions()) {
-					extensions += ext + " ";
-				}
-				
-				sc.setAttribute("action", action);
-				sc.setAttribute("extensions", extensions.trim());
-				sc.setAttribute("mt", mt);
-				sc.getRequestDispatcher("/admin/mime_edit.jsp").forward(request, response);
+				edit(session, request, response);
 			} else if (action.equals("delete")) {
-				ServletContext sc = getServletContext();
-				int mtId = WebUtil.getInt(request, "mt_id");
-				MimeType mt = MimeTypeDAO.findByPk(mtId);
-				String extensions = "";
-				
-				for (String ext : mt.getExtensions()) {
-					extensions += ext + " ";
-				}
-				
-				sc.setAttribute("action", action);
-				sc.setAttribute("extensions", extensions.trim());
-				sc.setAttribute("mt", mt);
-				sc.getRequestDispatcher("/admin/mime_edit.jsp").forward(request, response);
-			} else if (action.equals("reset")) {
-				MimeTypeDAO.deleteAll();
-				Config.resetMimeTypes(getServletContext());
-				list(session, request, response);
+				delete(session, request, response);
+			} else if (action.equals("export")) {
+				export(session, request, response);
 			} else {
 				list(session, request, response);
 			}
@@ -130,8 +103,10 @@ public class MimeTypeServlet extends BaseServlet {
 			ServletException {
 		log.debug("doPost({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		String action = "";
+		String action = WebUtil.getString(request, "action");
+		boolean persist = false;
 		Session session = null;
+		org.hibernate.classic.Session hibernateSession = null;
 		updateSessionManager(request);
 		
 		try {
@@ -155,6 +130,8 @@ public class MimeTypeServlet extends BaseServlet {
 							mt.setName(item.getString("UTF-8"));
 						} else if (item.getFieldName().equals("mt_active")) {
 							mt.setActive(true);
+						} else if (item.getFieldName().equals("persist")) {
+							persist = true;
 						} else if (item.getFieldName().equals("mt_extensions")) {
 							String[] extensions = item.getString("UTF-8").split(" ");
 							for (int i=0; i<extensions.length; i++) {
@@ -164,7 +141,7 @@ public class MimeTypeServlet extends BaseServlet {
 					} else {
 						is = item.getInputStream();
 						mt.setImageMime(Config.mimeTypes.getContentType(item.getName()));
-						mt.setImageContent(IOUtils.toByteArray(is));
+						mt.setImageContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
 						is.close();
 					}
 				}
@@ -219,5 +196,102 @@ public class MimeTypeServlet extends BaseServlet {
 		sc.setAttribute("mimeTypes", MimeTypeDAO.findAll());
 		sc.getRequestDispatcher("/admin/mime_list.jsp").forward(request, response);
 		log.debug("list: void");
+	}
+	
+	/**
+	 * Delete mime type
+	 */
+	private void delete(Session session, HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, DatabaseException {
+		log.debug("delete({}, {}, {})", new Object[] { session, request, response });
+		ServletContext sc = getServletContext();
+		int mtId = WebUtil.getInt(request, "mt_id");
+		MimeType mt = MimeTypeDAO.findByPk(mtId);
+		String extensions = "";
+		
+		for (String ext : mt.getExtensions()) {
+			extensions += ext + " ";
+		}
+		
+		sc.setAttribute("action", WebUtil.getString(request, "action"));
+		sc.setAttribute("extensions", extensions.trim());
+		sc.setAttribute("mt", mt);
+		sc.getRequestDispatcher("/admin/mime_edit.jsp").forward(request, response);
+		log.debug("delete: void");
+	}
+	
+	/**
+	 * Create mime type
+	 */
+	private void create(Session session, HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, DatabaseException {
+		log.debug("create({}, {}, {})", new Object[] { session, request, response });
+		ServletContext sc = getServletContext();
+		MimeType mt = new MimeType();
+		sc.setAttribute("action", WebUtil.getString(request, "action"));
+		sc.setAttribute("extensions", null);
+		sc.setAttribute("mt", mt);
+		sc.getRequestDispatcher("/admin/mime_edit.jsp").forward(request, response);
+		log.debug("create: void");
+	}
+	
+	/**
+	 * Edit mime type
+	 */
+	private void edit(Session session, HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, DatabaseException {
+		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
+		ServletContext sc = getServletContext();
+		int mtId = WebUtil.getInt(request, "mt_id");
+		MimeType mt = MimeTypeDAO.findByPk(mtId);
+		String extensions = "";
+		
+		for (String ext : mt.getExtensions()) {
+			extensions += ext + " ";
+		}
+		
+		sc.setAttribute("action", WebUtil.getString(request, "action"));
+		sc.setAttribute("extensions", extensions.trim());
+		sc.setAttribute("mt", mt);
+		sc.getRequestDispatcher("/admin/mime_edit.jsp").forward(request, response);
+		log.debug("edit: void");
+	}
+	
+	/**
+	 * Export mime types
+	 */
+	private void export(Session session, HttpServletRequest request, HttpServletResponse response) throws DatabaseException, IOException {
+		log.debug("export({}, {}, {})", new Object[] { session, request, response });
+		
+		// Disable browser cache
+		response.setHeader("Expires", "Sat, 6 May 1971 12:00:00 GMT");
+		response.setHeader("Cache-Control", "max-age=0, must-revalidate");
+		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+		String fileName = "OpenKM_" + WarUtils.getAppVersion() + "_MimeTypes.sql";
+		
+		response.setHeader("Content-disposition", "inline; filename=\""+fileName+"\"");
+		response.setContentType("text/x-sql; charset=UTF-8");
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(response.getOutputStream(), "UTF8"), true);
+		out.println("DELETE FROM OKM_MIME_TYPE;" );
+		out.println("DELETE FROM OKM_MIME_TYPE_EXTENSION;");
+		
+		for (MimeType mimeType: MimeTypeDAO.findAll()) {
+			StringBuffer insertMime = new StringBuffer("INSERT INTO OKM_MIME_TYPE (MT_ID, MT_NAME, MT_IMAGE_CONTENT, MT_IMAGE_MIME, MT_ACTIVE) VALUES ('");
+			insertMime.append(mimeType.getId() + "', '");
+			insertMime.append(mimeType.getName() + "', '");
+			insertMime.append(mimeType.getImageContent() + "', '");
+			insertMime.append(mimeType.getImageMime() + "', ");
+			insertMime.append(mimeType.isActive() + ");");
+			out.println(insertMime);
+			
+			for (String ext : mimeType.getExtensions()) {
+				StringBuffer insertExtension = new StringBuffer("INSERT INTO OKM_MIME_TYPE_EXTENSION (MTE_ID, MTE_NAME) VALUES ('");
+				insertExtension.append(mimeType.getId() + "', '");
+				insertExtension.append(ext + "');");
+				out.println(insertExtension);
+			}
+		}
+		out.flush();
+		log.debug("export: sql-file");
 	}
 }
