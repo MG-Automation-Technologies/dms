@@ -46,6 +46,7 @@ public class DocConverter {
 	private static Logger log = LoggerFactory.getLogger(DocConverter.class);
 	private static ArrayList<String> validOpenOffice = new ArrayList<String>();
 	private static ArrayList<String> validImageMagick = new ArrayList<String>();
+	private static ArrayList<String> validAutoCad = new ArrayList<String>();
 	private static DocConverter instance = null;
 	private static OfficeManager officeManager = null;
 	public static final String PDF = "application/pdf";
@@ -83,6 +84,10 @@ public class DocConverter {
 		validImageMagick.add("image/bmp");
 		validImageMagick.add("image/svg+xml");
 		validImageMagick.add("image/x-psd");
+		
+		// AutoCad
+		validAutoCad.add("image/vnd.dxf");
+		validAutoCad.add("image/vnd.dwg");
 	}
 	
 	/**
@@ -131,9 +136,11 @@ public class DocConverter {
 			return true;
 		} else if (!Config.SYSTEM_IMG2PDF.equals("") && validImageMagick.contains(from)) {
 			return true;
+		} else if (!Config.SYSTEM_DWG2DXF.equals("") && validAutoCad.contains(from)) {
+			return true;
+		} else {
+			return false;
 		}
-		
-		return false;
 	}
 	
 	/**
@@ -271,6 +278,45 @@ public class DocConverter {
 	}
 	
 	/**
+	 * Convert CAD files to PDF
+	 */
+	public void cad2pdf(InputStream is, String mimeType, File output) throws IOException {
+		log.debug("** Convert from {} to PDF **", mimeType);
+		File tmp = File.createTempFile("okm", ".cad");
+		String cmd[] = { "wine", Config.SYSTEM_DWG2DXF, "/r", "/ad", "/lw 1", "/f 104", tmp.getPath(), output.getPath() };
+		FileOutputStream fos = null;
+		log.info("Command: {}", Arrays.toString(cmd));
+		
+	    try {
+			long start = System.currentTimeMillis();
+			fos = new FileOutputStream(tmp);
+			IOUtils.copy(is, fos);
+			fos.flush();
+			fos.close();
+			
+			ProcessBuilder pb = new ProcessBuilder(cmd);
+			Process process = pb.start();
+			process.waitFor();
+			String info = IOUtils.toString(process.getInputStream());
+			process.destroy();
+		
+			// Check return code
+			if (process.exitValue() == 1) {
+				log.warn(info);
+			}
+			
+			log.debug("Elapse cad2pdf time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
+		} catch (Exception e) {
+			log.error("Error in CAD to PDF conversion", e);
+			output.delete();
+			throw new IOException("Error in CAD to PDF conversion", e);
+		} finally {
+			IOUtils.closeQuietly(fos);
+			tmp.delete();
+		}
+	}
+	
+	/**
 	 * Convert PDF to SWF (for document preview feature).
 	 */
 	public void pdf2swf(File input, File output) throws IOException {
@@ -333,7 +379,7 @@ public class DocConverter {
 				log.debug("STDOUT: {}", line);
 			}
 			
-			process.waitFor();	
+			process.waitFor();
 			
 			// Check return code
 			if (process.exitValue() != 0) {
