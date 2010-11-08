@@ -165,25 +165,25 @@ public class LanguageServlet extends BaseServlet {
 				}
 
 				if (action.equals("create")) {
-					Language language = new Language();
-					language.setName(name);
-					language.setImageMime(mimeType);
+					Language lang = new Language();
+					lang.setName(name);
+					lang.setImageMime(mimeType);
 					
 					if (data != null && data.length > 0) {
-						language.setImageContent(SecureStore.b64Encode(data));
+						lang.setImageContent(SecureStore.b64Encode(data));
 					}
 					
-					LanguageDAO.create(language);
+					LanguageDAO.create(lang);
 				} else if (action.equals("edit")) {
-					Language language = LanguageDAO.findByPk(lgId);
-					language.setName(name);
-					language.setImageMime(mimeType);
+					Language lang = LanguageDAO.findByPk(lgId);
+					lang.setName(name);
+					lang.setImageMime(mimeType);
 					
 					if (data != null && data.length > 0) {
-						language.setImageContent(SecureStore.b64Encode(data));
+						lang.setImageContent(SecureStore.b64Encode(data));
 					}
 					
-					LanguageDAO.update(language);
+					LanguageDAO.update(lang);
 				} else  if (action.equals("delete")) {
 					LanguageDAO.delete(lgId);
 				} else if (action.equals("import")) {
