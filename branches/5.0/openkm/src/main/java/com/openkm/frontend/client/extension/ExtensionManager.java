@@ -34,6 +34,7 @@ import com.openkm.frontend.client.extension.event.handler.PropertyGroupHandlerEx
 import com.openkm.frontend.client.extension.event.handler.ToolBarHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.WorkspaceHandlerExtension;
 import com.openkm.frontend.client.extension.widget.MenuItemExtension;
+import com.openkm.frontend.client.extension.widget.PreviewExtension;
 import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
 import com.openkm.frontend.client.extension.widget.TabFolderExtension;
 import com.openkm.frontend.client.extension.widget.TabMailExtension;
@@ -68,6 +69,8 @@ public class ExtensionManager {
 				addWorkspaceExtension((TabWorkspaceExtension) obj);
 			} else if (obj instanceof ToolBarBoxExtension) {
 				addToolBarBoxExtension((ToolBarBoxExtension) obj);
+			} else if (obj instanceof PreviewExtension) {
+				addPreviewExtension((PreviewExtension) obj);
 			}
 			
 			// Registering handlers
@@ -159,6 +162,15 @@ public class ExtensionManager {
 	 */
 	private static void addToolBarBoxExtension(ToolBarBoxExtension extension) {
 		Main.get().mainPanel.dashboard.addToolBarBoxExtension(extension);
+	}
+	
+	/**
+	 * addPreviewExtension
+	 * 
+	 * @param extension
+	 */
+	private static void addPreviewExtension(PreviewExtension extension) {
+		Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.addPreviewExtension(extension);
 	}
 	
 	/**
