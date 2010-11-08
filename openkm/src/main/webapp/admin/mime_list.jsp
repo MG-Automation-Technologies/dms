@@ -17,7 +17,7 @@
       <h1>Mime Types</h1>
       <table class="results" width="70%">
         <tr>
-          <th>Name</th><th>Image</th><th>Extensions</th><th>Active</th>
+          <th>Name</th><th>Image</th><th>Extensions</th>
           <th width="50px">
             <c:url value="MimeType" var="urlCreate">
               <c:param name="action" value="create"/>
@@ -45,16 +45,6 @@
             <td align="center"><img src="${urlIcon}"/></td>
             <td>${mt.extensions}</td>
             <td align="center">
-              <c:choose>
-                <c:when test="${mt.active}">
-                  <img src="img/true.png" alt="Active" title="Active"/>
-                </c:when>
-                <c:otherwise>
-                  <img src="img/false.png" alt="Inactive" title="Inactive"/>
-                </c:otherwise>
-              </c:choose>
-            </td>
-            <td align="center">
               <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
               &nbsp;
               <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
@@ -62,7 +52,7 @@
           </tr>
         </c:forEach>
         <tr class="fuzzy">
-          <td colspan="5" align="right">
+          <td colspan="4" align="right">
             <form action="MimeType" method="post" enctype="multipart/form-data">
               <input type="hidden" name="action" value="import"/>
               <table>

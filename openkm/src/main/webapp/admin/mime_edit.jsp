@@ -34,19 +34,6 @@
             <td><input class=":required :only_on_blur" name="mt_extensions" value="${extensions}"/></td>
           </tr>
           <tr>
-            <td>Active</td>
-            <td>
-              <c:choose>
-                <c:when test="${mt.active}">
-                  <input name="mt_active" type="checkbox" checked="checked"/>
-                </c:when>
-                <c:otherwise>
-                  <input name="mt_active" type="checkbox"/>
-                </c:otherwise>
-              </c:choose>
-            </td>
-          </tr>
-          <tr>
             <td>Image</td>
             <td>
               <c:choose>
