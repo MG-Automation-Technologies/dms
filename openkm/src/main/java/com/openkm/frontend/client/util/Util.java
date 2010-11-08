@@ -283,7 +283,7 @@ public class Util {
   	  	  	  	  	id:"FlexPaperViewer",
   	  	  	  	    name:"FlexPaperViewer"
   	  	  	  	  });
-}-*/;
+	}-*/;
     
     public static native String[] getJREs() /*-{
 		return $wnd.deployJava.getJREs();
