@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.openkm.extension.frontend.client.widget.client.metromusa.MetromUsa;
+import com.openkm.extension.frontend.client.widget.preview.AutocadPreview;
 import com.openkm.extension.frontend.client.widget.stapling.Stapling;
 import com.openkm.extension.frontend.client.widget.toolbar.downloadButton.DownloadButton;
 import com.openkm.extension.frontend.client.widget.toolbar.downloadPdfButton.DownloadPdfButton;
@@ -76,6 +77,9 @@ public class Customization {
 		}
 		if (MetromUsa.isRegistered(uuidList)) {
 			extensions.addAll(new MetromUsa(uuidList).getExtensions());
+		}
+		if (AutocadPreview.isRegistered(uuidList)) {
+			extensions.add(new AutocadPreview(uuidList));
 		}
 		
 		return extensions;
