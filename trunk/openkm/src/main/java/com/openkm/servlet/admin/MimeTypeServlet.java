@@ -184,6 +184,7 @@ public class MimeTypeServlet extends BaseServlet {
 				} else if (action.equals("import")) {
 					hibernateSession = HibernateUtil.getSessionFactory().openSession();
 					importMimeTypes(session, request, response, data, hibernateSession);
+					list(session, request, response);
 				}
 			}
 		} catch (LoginException e) {
