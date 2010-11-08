@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.widget.PreviewExtension;
 import com.openkm.frontend.client.util.Util;
 
 /**
@@ -78,6 +79,7 @@ public class Preview extends Composite {
 	}
 	
 	public void showEmbedSWF(String Uuid) {
+		hideWidgetExtension();
 		text.setVisible(true);
 		space.setVisible(false);
 		video.setVisible(false);
@@ -99,7 +101,8 @@ public class Preview extends Composite {
 	 * 
 	 * @param mediaUrl The media file url
 	 */
-	public void setMediaFile(String mediaUrl, String mimeType) {
+	public void showMediaFile(String mediaUrl, String mimeType) {
+		hideWidgetExtension();
 		text.setVisible(false);
 		space.setVisible(true);
 		video.setVisible(true);
@@ -129,6 +132,38 @@ public class Preview extends Composite {
 		}
 		
 		Util.createMediaPlayer(mediaUrl, mediaProvider, ""+(width-10), ""+(height-10));
+	}
+	
+	/**
+	 * setPreviewExtension
+	 * 
+	 * @param preview
+	 * @param url
+	 */
+	public void showPreviewExtension(PreviewExtension preview, String url) {
+		hideWidgetExtension();
+		text.setVisible(false);
+		space.setVisible(false);
+		video.setVisible(false);
+		if (previewAvailable) {
+			if (hPanel.getWidgetIndex(preview.getWidget())<0) {
+				hPanel.add(preview.getWidget());
+			} else {
+				preview.setVisible(true);
+			}
+			preview.createViewer(url, width, height);
+		}
+	}
+	
+	/**
+	 * hideWidgetExtension
+	 */
+	private void hideWidgetExtension() {
+		if (hPanel.getWidgetCount()>3) {
+			for (int i=2; i<hPanel.getWidgetCount(); i++){
+				hPanel.getWidget(i).setVisible(false);
+			}
+		}
 	}
 	
 	/**
