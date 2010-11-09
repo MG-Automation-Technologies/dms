@@ -63,83 +63,83 @@
   <!-- Frontend Servlets -->
   <servlet>
     <servlet-name>WorkspaceServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.WorkspaceServlet</servlet-class>
+    <servlet-class>com.openkm.servlet.frontend.WorkspaceServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>DocumentServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.DocumentServlet</servlet-class>
+    <servlet-class>com.openkm.servlet.frontend.DocumentServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>FrontendAuthServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.AuthServlet</servlet-class>
+    <servlet-class>com.openkm.servlet.frontend.AuthServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>RepositoryServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.RepositoryServlet</servlet-class>
+    <servlet-class>com.openkm.servlet.frontend.RepositoryServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>FolderServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.FolderServlet</servlet-class>
+    <servlet-class>com.openkm.servlet.frontend.FolderServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>PropertyGroupServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.PropertyGroupServlet</servlet-class>
+    <servlet-class>com.openkm.servlet.frontend.PropertyGroupServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>FrontendDownloadServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.DownloadServlet</servlet-class>
+    <servlet-class>com.openkm.servlet.frontend.DownloadServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>DashboardServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.DashboardServlet</servlet-class>
+    <servlet-class>com.openkm.servlet.frontend.DashboardServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>GeneralServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.GeneralServlet</servlet-class>
+    <servlet-class>com.openkm.servlet.frontend.GeneralServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>NotifyServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.NotifyServlet</servlet-class>
+    <servlet-class>com.openkm.servlet.frontend.NotifyServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>FrontendWorkflowServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.WorkflowServlet</servlet-class>
+    <servlet-class>com.openkm.servlet.frontend.WorkflowServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>SearchServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.SearchServlet</servlet-class>
+    <servlet-class>com.openkm.servlet.frontend.SearchServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>FileUploadServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.FileUploadServlet</servlet-class>
+    <servlet-class>com.openkm.servlet.frontend.FileUploadServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>BookmarkServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.BookmarkServlet</servlet-class>
+    <servlet-class>com.openkm.servlet.frontend.BookmarkServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>MailServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.MailServlet</servlet-class>
+    <servlet-class>com.openkm.servlet.frontend.MailServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>ThesaurusServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.ThesaurusServlet</servlet-class>
+    <servlet-class>com.openkm.servlet.frontend.ThesaurusServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>PropertyServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.PropertyServlet</servlet-class>
+    <servlet-class>com.openkm.servlet.frontend.PropertyServlet</servlet-class>
   </servlet>
   <servlet>
   	<servlet-name>ChatServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.ChatServlet</servlet-class>
+    <servlet-class>com.openkm.servlet.frontend.ChatServlet</servlet-class>
   </servlet>
   <servlet>
   	<servlet-name>FrontendUserConfigServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.UserConfigServlet</servlet-class>
+    <servlet-class>com.openkm.servlet.frontend.UserConfigServlet</servlet-class>
   </servlet>
   <servlet>
   	<servlet-name>NoteServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.NoteServlet</servlet-class>
+    <servlet-class>com.openkm.servlet.frontend.NoteServlet</servlet-class>
   </servlet>
   
   <!-- Misc servlets -->
@@ -269,7 +269,7 @@
   <!-- Extensions -->
   <servlet>
     <servlet-name>StaplingServlet</servlet-name>
-    <servlet-class>com.openkm.frontend.server.extension.StaplingServlet</servlet-class>
+    <servlet-class>com.openkm.servlet.extension.StaplingServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>StaplingDownloadServlet</servlet-name>
