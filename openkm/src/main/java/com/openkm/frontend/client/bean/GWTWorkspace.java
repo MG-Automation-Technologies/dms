@@ -101,6 +101,7 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean tabMailPropertiesVisible;
 	private boolean tabMailSecurityVisible;
 	private GWTAvailableOption availableOption = new GWTAvailableOption();
+	private List<GWTLanguage> langs = new ArrayList<GWTLanguage>();
 
 	/**
 	 * GWTWorkspace
@@ -624,5 +625,13 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setPreviewer(String previewer) {
 		this.previewer = previewer;
+	}
+	
+	public List<GWTLanguage> getLangs() {
+		return langs;
+	}
+
+	public void setLangs(List<GWTLanguage> langs) {
+		this.langs = langs;
 	}
 }

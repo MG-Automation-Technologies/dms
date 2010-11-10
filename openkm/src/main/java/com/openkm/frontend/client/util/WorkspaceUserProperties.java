@@ -119,6 +119,9 @@ public class WorkspaceUserProperties {
 			Main.get().mainPanel.topPanel.mainMenu.setBookmarkMenuVisible(workspace.isMenuBookmarksVisible());
 			Main.get().mainPanel.topPanel.mainMenu.setHelpMenuVisible(workspace.isMenuHelpVisible());
 			
+			// Init available languages
+			Main.get().mainPanel.topPanel.mainMenu.initAvailableLanguage(workspace.getLangs());
+			
 			// Enabling / disabling some actions
 			Main.get().mainPanel.topPanel.toolBar.setAvailableOption(workspace.getAvailableOption());
 			

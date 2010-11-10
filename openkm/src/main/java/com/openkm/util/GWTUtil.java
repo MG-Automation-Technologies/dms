@@ -73,6 +73,7 @@ import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.Bookmark;
+import com.openkm.dao.bean.Language;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.UserConfig;
 import com.openkm.dao.bean.extension.Staple;
@@ -88,6 +89,7 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTInput;
+import com.openkm.frontend.client.bean.GWTLanguage;
 import com.openkm.frontend.client.bean.GWTLock;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTNote;
@@ -1065,7 +1067,7 @@ public class GWTUtil {
 	 * @throws AccessDeniedException 
 	 * @throws PathNotFoundException 
 	 */
-	public static GWTStapleGroup copy (StapleGroup sg) throws RepositoryException, DatabaseException, 
+	public static GWTStapleGroup copy(StapleGroup sg) throws RepositoryException, DatabaseException, 
 															  PathNotFoundException {
 		GWTStapleGroup gsg = new GWTStapleGroup();
 		gsg.setId(sg.getId());
@@ -1093,5 +1095,18 @@ public class GWTUtil {
 			}
 		}
 		return gsg;
+	}
+	
+	/**
+	 * Copy Language to GWTLanguage
+	 * 
+	 * @param language
+	 * @return
+	 */
+	public static GWTLanguage copy(Language language) {
+		GWTLanguage gWTlang = new GWTLanguage();
+		gWTlang.setId(language.getId());
+		gWTlang.setName(language.getName());
+		return gWTlang;
 	}
 }
