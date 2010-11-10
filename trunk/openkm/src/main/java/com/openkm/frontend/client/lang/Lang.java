@@ -77,7 +77,7 @@ public class Lang {
 		} else if (LANG_gl_ES.equalsIgnoreCase(lang) || LANG_gl_ES.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 			hLang = Lang_gl_ES.lang;
 		} else if (LANG_eu_ES.equalsIgnoreCase(lang) || LANG_eu_ES.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			hLang = Lang_eu_ES.lang;
+			//hLang = Lang_eu_ES.lang;
 		} else if (LANG_en_GB.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 			if (LANG_en_GB.equalsIgnoreCase(lang)) {
 //				hLang = Lang_en_GB.lang;
@@ -99,7 +99,7 @@ public class Lang {
 		} else if (LANG_nl_BE.equalsIgnoreCase(lang) || LANG_nl_BE.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 //			hLang = Lang_nl_BE.lang;
 		} else if (LANG_fa_FA.equalsIgnoreCase(lang) || LANG_fa_FA.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			hLang = Lang_fa_FA.lang;
+		//	hLang = Lang_fa_FA.lang;
 		} else if (LANG_de_DE.equalsIgnoreCase(lang) || LANG_de_DE.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 //			hLang = Lang_de_DE.lang;
 		} else if (LANG_id_ID.equalsIgnoreCase(lang) || LANG_id_ID.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
