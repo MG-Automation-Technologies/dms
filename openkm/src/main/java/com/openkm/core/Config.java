@@ -280,7 +280,7 @@ public class Config {
 	
 	private static String UPDATE_INFO_STR = "on";
 	public static boolean UPDATE_INFO = "on".equalsIgnoreCase(UPDATE_INFO_STR);
-	public static String APPLICATION_URL = "http://localhost:8080/OpenKM"+INSTALL+"/com.openkm.frontend.Main/index.jsp";
+	public static String APPLICATION_URL = "http://localhost:8080/OpenKM"+INSTALL+"/index.jsp";
 	public static String APPLICATION_BASE = getBase(APPLICATION_URL);
 	public static String DEFAULT_LANG = "";
 	private static String USER_KEYWORDS_CACHE_STR = "off";
