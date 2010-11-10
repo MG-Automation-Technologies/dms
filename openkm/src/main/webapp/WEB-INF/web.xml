@@ -141,6 +141,10 @@
   	<servlet-name>NoteServlet</servlet-name>
     <servlet-class>com.openkm.servlet.frontend.NoteServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>FrontendLanguageServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.frontend.LanguageServlet</servlet-class>
+  </servlet>
   
   <!-- Misc servlets -->
   <servlet>
@@ -438,6 +442,10 @@
   <servlet-mapping>
     <servlet-name>NoteServlet</servlet-name>
     <url-pattern>/frontend/Note</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FrontendLanguageServlet</servlet-name>
+    <url-pattern>/frontend/Language</url-pattern>
   </servlet-mapping>
   
   <!-- Extensions Servlet Mappings -->

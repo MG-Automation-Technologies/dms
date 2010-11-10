@@ -50,6 +50,7 @@ public class Config {
 	public static final String OKMChatService = "/OpenKM"+INSTALL+"/frontend/Chat";
 	public static final String OKMUserConfigService = "/OpenKM"+INSTALL+"/frontend/UserConfig";
 	public static final String OKMNoteService = "/OpenKM"+INSTALL+"/frontend/Note";
+	public static final String OKMLanguageService = "/OpenKM"+INSTALL+"/frontend/Language";
 	public static final String OKMFeedService = "/OpenKM"+INSTALL+"/feed/";
 	public static final String OKMStaplingService = "/OpenKM"+INSTALL+"/extension/Stapling";
 	public static final String OKMStaplingDownloadService = "/OpenKM"+INSTALL+"/extension/StaplingDownload";
