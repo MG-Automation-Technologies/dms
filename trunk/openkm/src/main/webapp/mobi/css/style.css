@@ -16,6 +16,10 @@ textarea, input, select {
 	font-family: verdana, arial, sans-serif
 }
 
+a {
+	text-decoration: none;
+}
+
 img {
 	border: 0;
 }
