@@ -53,7 +53,7 @@ public class FormatUtil {
 	 */
 	public static final boolean isMobile(HttpServletRequest request) {
 		String userAgent = request.getHeader("user-agent").toLowerCase();
-		return userAgent.contains("android") || userAgent.contains("iphone");
+		return userAgent.contains("android") || userAgent.contains("iphone") || userAgent.contains("blackberry");
 	}
 	
 	/**
