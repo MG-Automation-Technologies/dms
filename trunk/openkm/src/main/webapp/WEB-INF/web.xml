@@ -171,6 +171,10 @@
     <servlet-name>TextToSpeechServlet</servlet-name>
     <servlet-class>com.openkm.servlet.TextToSpeechServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>FlagIconServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.FlagIconServlet</servlet-class>
+  </servlet>
   
   <!-- Admin servlets -->
   <servlet>
@@ -474,6 +478,10 @@
   <servlet-mapping>
     <servlet-name>MimeIconServlet</servlet-name>
     <url-pattern>/mime/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FlagIconServlet</servlet-name>
+    <url-pattern>/flag/*</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>ImageLogoServlet</servlet-name>

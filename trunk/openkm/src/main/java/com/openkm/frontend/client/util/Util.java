@@ -115,6 +115,18 @@ public class Util {
 	 * @param text The text value
 	 * @return
 	 */
+	public static String flagMenuHTML(String flag, String text) {
+		return "<img style='margin-right:8px; margin-left:2px; vertical-align:middle;' "+
+		        "src=\"/OpenKM"+Config.INSTALL+"/flag/"+flag+"\"'>" + text;
+	}
+	
+	/**
+	 * Return the menu html value
+	 * 
+	 * @param imageUrl The image url
+	 * @param text The text value
+	 * @return
+	 */
 	public static String menuHTML(String imageUrl, String text) {
 		return "<img style='margin-right:8px; margin-left:2px; vertical-align:middle;' src='" 
 			   + imageUrl.toLowerCase() + "'>" + text;

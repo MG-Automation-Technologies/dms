@@ -41,14 +41,17 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.AuthDAO;
+import com.openkm.dao.LanguageDAO;
 import com.openkm.dao.MailAccountDAO;
 import com.openkm.dao.UserConfigDAO;
+import com.openkm.dao.bean.Language;
 import com.openkm.dao.bean.MailAccount;
 import com.openkm.dao.bean.User;
 import com.openkm.dao.bean.UserConfig;
 import com.openkm.dao.bean.Profile;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTAvailableOption;
+import com.openkm.frontend.client.bean.GWTLanguage;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.GWTWorkspace;
 import com.openkm.frontend.client.config.ErrorCode;
@@ -62,14 +65,10 @@ import com.openkm.validator.ValidatorFactory;
 import com.openkm.validator.password.PasswordValidator;
 
 /**
- * Servlet Class
+ * WorkspaceServlet
  * 
- * @web.servlet              name="WorkspaceServlet"
- *                           display-name="Directory tree service"
- *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/WorkspaceServlet"
- * @web.servlet-init-param   name="A parameter"
- *                           value="A value"
+ * @author jllort
+ *
  */
 public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWorkspaceService {
 	private static Logger log = LoggerFactory.getLogger(WorkspaceServlet.class);
@@ -274,6 +273,13 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 		workspace.setAvailableOption(availableOption);
 		
 		try {
+			// Setting available UI languages
+			List<GWTLanguage> langs = new ArrayList<GWTLanguage>();
+			for (Language lang : LanguageDAO.findAll()) {
+				langs.add(GWTUtil.copy(lang));
+			}
+			workspace.setLangs(langs);
+			
 			User user = new User();
 			
 			if (Config.PRINCIPAL_ADAPTER.equals(com.openkm.principal.DatabasePrincipalAdapter.class.getName())) {
@@ -302,7 +308,10 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 		} catch (PrincipalAdapterException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_PrincipalAdapterException), e.getMessage());
-		}
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Repository), e.getMessage());
+		}	
 		
 		if (Config.PRINCIPAL_ADAPTER.equals("com.openkm.principal.DatabasePrincipalAdapter")) {
 			workspace.setChangePassword(true);
