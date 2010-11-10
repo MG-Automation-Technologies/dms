@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.api.OKMUserConfig;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
+import com.openkm.dao.bean.UserConfig;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTUserConfig;
 import com.openkm.frontend.client.config.ErrorCode;
@@ -73,7 +74,13 @@ public class OKMUserConfigServlet extends OKMRemoteServiceServlet implements OKM
 		updateSessionManager();
 		
 		try {
-			return Util.copy(OKMUserConfig.getInstance().getConfig(null));
+			UserConfig config = OKMUserConfig.getInstance().getConfig(null);
+			// Any home that will not have okm:root parent needs reseting ( normally because node is deleted to /okm:trash )
+			if (!config.getHomePath().startsWith("/okm:root")) {
+				OKMUserConfig.getInstance().setHome(null, "/okm:root");
+				config = OKMUserConfig.getInstance().getConfig(null);
+			}
+			return Util.copy(config);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMUserCopyService, ErrorCode.CAUSE_Repository), e.getMessage());
