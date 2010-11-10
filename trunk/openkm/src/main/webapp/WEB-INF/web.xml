@@ -145,6 +145,10 @@
     <servlet-name>FrontendLanguageServlet</servlet-name>
     <servlet-class>com.openkm.servlet.frontend.LanguageServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>ProposeSubscriptionServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.frontend.ProposeSubscriptionServlet</servlet-class>
+  </servlet>
   
   <!-- Misc servlets -->
   <servlet>
@@ -450,6 +454,10 @@
   <servlet-mapping>
     <servlet-name>FrontendLanguageServlet</servlet-name>
     <url-pattern>/frontend/Language</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ProposeSubscriptionServlet</servlet-name>
+    <url-pattern>/frontend/ProposeSubscription</url-pattern>
   </servlet-mapping>
   
   <!-- Extensions Servlet Mappings -->
