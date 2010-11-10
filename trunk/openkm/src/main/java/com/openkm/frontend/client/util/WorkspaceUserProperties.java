@@ -110,6 +110,7 @@ public class WorkspaceUserProperties {
 				Main.get().securityPopup.enableAdvancedFilter();
 				Main.get().fileUpload.enableAdvancedFilter();
 				Main.get().notifyPopup.enableAdvancedFilter();
+				Main.get().proposeSubscriptionPopup.enableAdvancedFilter();
 			}
 			
 			// Show / hide menus
