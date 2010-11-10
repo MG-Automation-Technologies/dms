@@ -14,12 +14,38 @@
   <title>OpenKM Mobile</title>
 </head>
 <body>
+  <c:url value="/frontend/Download" var="urlDownload">
+    <c:param name="id" value="${doc.path}"/>
+  </c:url>
+  <c:url value="/frontend/Download" var="urlDownloadPdf">
+    <c:param name="toPdf"/>
+    <c:param name="id" value="${doc.path}"/>
+  </c:url>
+  <c:url value="Handler" var="urlBrowse">
+    <c:set var="parent"><u:getParent path="${doc.path}"/></c:set>
+    <c:param name="action" value="browse"/>
+    <c:param name="path" value="${parent}"/>
+  </c:url>
   <table class="results">
     <tr><th colspan="2">Document <span style="font-weight: normal">${path}</span></th></tr>
     <tr><th>Property</th><th>Value</th></tr>
     <tr class="even"><td><b>UUID</b></td><td>${doc.uuid}</td></tr>
-    <tr class="odd"><td><b>Name</b></td><td><u:getName path="${doc.path}"/></td></tr>
-    <tr class="even"><td><b>Folder</b></td><td><u:getParent path="${doc.path}"/></td></tr>
+    <tr class="odd">
+      <td><b>Name</b></td>
+      <td>
+        <u:getName path="${doc.path}"/>
+        &nbsp;
+        <img align="bottom" src="img/download.png" onclick="if (confirm('Download ${size} document?')) { document.location='${urlDownload}'; }"/>
+        &nbsp;
+        <c:if test="${doc.convertibleToPdf}">
+          <img src="img/download_pdf.png" onclick="if (confirm('Download ${size} document as PDF?')) { document.location='${urlDownloadPdf}'; }"/>
+        </c:if>
+      </td>
+    </tr>
+    <tr class="even">
+      <td><b>Folder</b></td>
+      <td><a href="${urlBrowse}"><u:getParent path="${doc.path}"/></a></td>
+    </tr>
     <tr class="odd"><td><b>Size</b></td><td><u:formatSize size="${doc.actualVersion.size}"/></td></tr>
     <tr class="even"><td><b>Created</b></td><td><f:formatDate value="${doc.actualVersion.created.time}" type="both"/> by ${doc.actualVersion.author}</td></tr>
     <tr class="odd"><td><b>Modified</b></td><td><f:formatDate value="${doc.lastModified.time}" type="both"/> by ${doc.author}</td></tr>
