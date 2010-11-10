@@ -23,9 +23,7 @@ package com.openkm.servlet.frontend;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,11 +31,8 @@ import org.slf4j.LoggerFactory;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.ExtensionDAO;
-import com.openkm.dao.LanguageDAO;
 import com.openkm.dao.bean.Extension;
-import com.openkm.dao.bean.Language;
 import com.openkm.dao.bean.MailAccount;
-import com.openkm.dao.bean.Translation;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
 import com.openkm.frontend.client.bean.GWTTestImap;
@@ -45,16 +40,11 @@ import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.service.OKMGeneralService;
 import com.openkm.util.MailUtils;
 
-
 /**
- * Servlet Class
+ * GeneralServlet
  * 
- * @web.servlet              name="OKMGeneralService"
- *                           display-name="Directory tree service"
- *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/GeneralServlet"
- * @web.servlet-init-param   name="A parameter"
- *                           value="A value"
+ * @author jllort
+ *
  */
 public class GeneralServlet extends OKMRemoteServiceServlet implements OKMGeneralService {
 	private static Logger log = LoggerFactory.getLogger(GeneralServlet.class);
@@ -124,26 +114,5 @@ public class GeneralServlet extends OKMRemoteServiceServlet implements OKMGenera
 		}
 		
 		return extensions;
-	}
-
-	@Override
-	public Map<String, String> getFrontEndTranslations(String lang) throws OKMException {
-		log.debug("getTranslations("+lang+")");
-		Map<String,String> translations = new HashMap<String,String>();
-		try {
-			Language language = LanguageDAO.findByPk(lang);
-			if (language!=null) {
-				for (Translation translation : language.getTranslations()) {
-					if (translation.getModule().equals(Translation.MODULE_FRONTEND) || translation.getModule().equals(Translation.MODULE_EXTENSION)) {
-						translations.put(translation.getKey(), translation.getText());
-					}
-				}
-			}
-		} catch (DatabaseException e) {
-			log.warn(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMGeneralService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
-		}
-		log.debug("getTranslations: {}", translations);
-		return translations;
 	}
 }
