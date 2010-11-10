@@ -30,7 +30,7 @@
         		<td>Module</td>
         		<td>
         			<select name="module">
-        			<c:forEach var="module" items="${tr_module}" varStatus="row">
+        			<c:forEach var="tr_module" items="${tr_module}" varStatus="row">
         				<option value="${module}">${module}</option>
         			</c:forEach>
         			</select>
