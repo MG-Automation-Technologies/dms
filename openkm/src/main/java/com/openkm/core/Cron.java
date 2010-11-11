@@ -40,18 +40,20 @@ public class Cron extends TimerTask {
 		
 		try {
 			for (CronTab ct : CronTabDAO.findAll()) {
-				try {
-					CronTabExpression cte = CronTabExpression.parse(ct.getExpression());
-					
-					if (cte.matches(cal)) {
-						if (CronTab.BSH.equals(ct.getType())) {
-							ExecutionUtils.runScript(new String(ct.getFileContent()));
-						} else if (CronTab.JAR.equals(ct.getType())) {
-							ExecutionUtils.runJar(ct.getFileContent());
+				if (ct.isActive()) {
+					try {
+						CronTabExpression cte = CronTabExpression.parse(ct.getExpression());
+						
+						if (cte.matches(cal)) {
+							if (CronTab.BSH.equals(ct.getType())) {
+								ExecutionUtils.runScript(new String(ct.getFileContent()));
+							} else if (CronTab.JAR.equals(ct.getType())) {
+								ExecutionUtils.runJar(ct.getFileContent());
+							}
 						}
+					} catch (ParseException e) {
+						log.warn(e.getMessage() + " : " + ct.getExpression());
 					}
-				} catch (ParseException e) {
-					log.warn(e.getMessage() + " : " + ct.getExpression());
 				}
 			}
 		} catch (DatabaseException e) {
