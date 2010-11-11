@@ -45,7 +45,7 @@ public class Cron extends TimerTask {
 					
 					if (cte.matches(cal)) {
 						if (CronTab.BSH.equals(ct.getType())) {
-							ExecutionUtils.runScript(ct.getFileContent().toString());
+							ExecutionUtils.runScript(new String(ct.getFileContent()));
 						} else if (CronTab.JAR.equals(ct.getType())) {
 							ExecutionUtils.runJar(ct.getFileContent());
 						}
