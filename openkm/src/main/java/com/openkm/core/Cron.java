@@ -45,10 +45,15 @@ public class Cron extends TimerTask {
 						CronTabExpression cte = CronTabExpression.parse(ct.getExpression());
 						
 						if (cte.matches(cal)) {
+							log.info("Id: {}, Name: {}, Type: {}", new Object[] {ct.getId(), ct.getName(),
+									ct.getType()});
+							
 							if (CronTab.BSH.equals(ct.getType())) {
-								ExecutionUtils.runScript(new String(ct.getFileContent()));
+								RunnerBsh run = new RunnerBsh(new String(ct.getFileContent()));
+								new Thread(run).start();
 							} else if (CronTab.JAR.equals(ct.getType())) {
-								ExecutionUtils.runJar(ct.getFileContent());
+								RunnerJar run = new RunnerJar(ct.getFileContent());
+								new Thread(run).start();
 							}
 						}
 					} catch (ParseException e) {
@@ -59,5 +64,39 @@ public class Cron extends TimerTask {
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 		}
+	}
+	
+	/**
+	 * Inner helper class
+	 */
+	public class RunnerBsh implements Runnable {
+		private String script;
+		
+		public RunnerBsh(String script) {
+			this.script = script;
+		}
+		
+	    public void run() {
+	    	if (script != null) {
+	    		ExecutionUtils.runScript(script);
+	    	}
+	    }
+	}
+	
+	/**
+	 * Inner helper class
+	 */
+	public class RunnerJar implements Runnable {
+		private byte[] content;
+		
+		public RunnerJar(byte[] content) {
+			this.content = content;
+		}
+		
+	    public void run() {
+	    	if (content != null) {
+	    		ExecutionUtils.runJar(content);
+	    	}
+	    }
 	}
 }
