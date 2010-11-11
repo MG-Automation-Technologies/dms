@@ -21,6 +21,7 @@
 
 package com.openkm.frontend.client.service;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 
 /**
@@ -28,4 +29,5 @@ import com.google.gwt.user.client.rpc.RemoteService;
  *
  */
 public interface OKMProposedSubscriptionServiceAsync extends RemoteService {
+	public void create(String uuid, String path, String type, String users, String roles, AsyncCallback<?> callback);
 }

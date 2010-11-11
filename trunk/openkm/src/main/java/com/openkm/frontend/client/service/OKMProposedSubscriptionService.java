@@ -22,10 +22,12 @@
 package com.openkm.frontend.client.service;
 
 import com.google.gwt.user.client.rpc.RemoteService;
+import com.openkm.frontend.client.OKMException;
 
 /**
  * @author jllort
  *
  */
 public interface OKMProposedSubscriptionService extends RemoteService {
+	public void create(String uuid, String path, String type, String users, String roles) throws OKMException;
 }

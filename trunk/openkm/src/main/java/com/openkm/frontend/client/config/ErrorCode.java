@@ -31,28 +31,29 @@ package com.openkm.frontend.client.config;
 public class ErrorCode {
 	
 	// Origin code error is XXX digits
-	public static final String ORIGIN_OKMFolderService 				= "001";
-	public static final String ORIGIN_OKMDocumentService 			= "002";
-	public static final String ORIGIN_OKMRemoteService				= "003";
-	public static final String ORIGIN_OKMDownloadService			= "004";
-	public static final String ORIGIN_OKMUploadService				= "005";
-	public static final String ORIGIN_OKMHttpServlet				= "006";
-	public static final String ORIGIN_OKMAuthService				= "007";
-	public static final String ORIGIN_OKMSearchService				= "008";
-	public static final String ORIGIN_OKMPropertyGroupService		= "009";
-	public static final String ORIGIN_OKMNotifyService 				= "010";
-	public static final String ORIGIN_OKMBookmarkService 			= "011";
-	public static final String ORIGIN_OKMRepositoryService			= "012";
-	public static final String ORIGIN_OKMDashboardService 			= "013";
-	public static final String ORIGIN_OKMWorkspaceService 			= "014";
-	public static final String ORIGIN_OKMWorkflowService 			= "015";
-	public static final String ORIGIN_OKMMailService	 			= "016";
-	public static final String ORIGIN_OKMPropertyService	 		= "017";
-	public static final String ORIGIN_OKMBrowser 					= "018";
-	public static final String ORIGIN_OKMUserCopyService 			= "019";
-	public static final String ORIGIN_OKMNoteService				= "020";
-	public static final String ORIGIN_OKMStaplingService			= "021";
-	public static final String ORIGIN_OKMGeneralService				= "022";
+	public static final String ORIGIN_OKMFolderService 					= "001";
+	public static final String ORIGIN_OKMDocumentService 				= "002";
+	public static final String ORIGIN_OKMRemoteService					= "003";
+	public static final String ORIGIN_OKMDownloadService				= "004";
+	public static final String ORIGIN_OKMUploadService					= "005";
+	public static final String ORIGIN_OKMHttpServlet					= "006";
+	public static final String ORIGIN_OKMAuthService					= "007";
+	public static final String ORIGIN_OKMSearchService					= "008";
+	public static final String ORIGIN_OKMPropertyGroupService			= "009";
+	public static final String ORIGIN_OKMNotifyService 					= "010";
+	public static final String ORIGIN_OKMBookmarkService 				= "011";
+	public static final String ORIGIN_OKMRepositoryService				= "012";
+	public static final String ORIGIN_OKMDashboardService 				= "013";
+	public static final String ORIGIN_OKMWorkspaceService 				= "014";
+	public static final String ORIGIN_OKMWorkflowService 				= "015";
+	public static final String ORIGIN_OKMMailService	 				= "016";
+	public static final String ORIGIN_OKMPropertyService	 			= "017";
+	public static final String ORIGIN_OKMBrowser 						= "018";
+	public static final String ORIGIN_OKMUserCopyService 				= "019";
+	public static final String ORIGIN_OKMNoteService					= "020";
+	public static final String ORIGIN_OKMStaplingService				= "021";
+	public static final String ORIGIN_OKMGeneralService					= "022";
+	public static final String ORIGIN_OKMProposedSubscriptionService 	= "023";
 	
 	// Cause code error is XXX digits
 	public static final String CAUSE_Repository 				= "001";
