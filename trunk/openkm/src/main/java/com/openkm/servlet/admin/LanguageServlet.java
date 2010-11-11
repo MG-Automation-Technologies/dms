@@ -125,6 +125,7 @@ public class LanguageServlet extends BaseServlet {
 		log.debug("doPost({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
 		String action = WebUtil.getString(request, "action");
+		boolean persist = WebUtil.getBoolean(request, "persist");
 		Session session = null;
 		org.hibernate.classic.Session hibernateSession = null;
 		updateSessionManager(request);
@@ -153,6 +154,8 @@ public class LanguageServlet extends BaseServlet {
 							lgId = item.getString("UTF-8");
 						} else if (item.getFieldName().equals("lg_name")) {
 							name = item.getString("UTF-8");
+						} else if (item.getFieldName().equals("persist")) {
+							persist = true;
 						} 
 					} else {
 						if (item.getSize() > 0) {
@@ -196,8 +199,7 @@ public class LanguageServlet extends BaseServlet {
 				addTranslation(session, request, response);
 			} 
 			
-			if (!action.equals("addTranslation") && (action.equals("") || action.equals("import") 
-				|| WebUtil.getBoolean(request, "persist"))) {
+			if (!action.equals("addTranslation") && (action.equals("") || action.equals("import") || persist)) {
 				list(session, request, response);
 			}
 		} catch (FileUploadException e) {
