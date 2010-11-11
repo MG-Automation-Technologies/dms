@@ -156,7 +156,7 @@ public class MimeTypeServlet extends BaseServlet {
 					}
 					
 					MimeTypeDAO.create(mt);
-					Config.loadMimeTypes(getServletContext());
+					Config.loadMimeTypes();
 					
 					// Activity log
 					UserActivity.log(session.getUserID(), "ADMIN_MIME_TYPE_CREATE", null, mt.toString());
@@ -167,14 +167,14 @@ public class MimeTypeServlet extends BaseServlet {
 					}
 					
 					MimeTypeDAO.update(mt);
-					Config.loadMimeTypes(getServletContext());
+					Config.loadMimeTypes();
 					
 					// Activity log
 					UserActivity.log(session.getUserID(), "ADMIN_MIME_TYPE_EDIT", Integer.toString(mt.getId()), mt.toString());
 					list(session, request, response);
 				} else if (action.equals("delete")) {
 					MimeTypeDAO.delete(mt.getId());
-					Config.loadMimeTypes(getServletContext());
+					Config.loadMimeTypes();
 					
 					// Activity log
 					UserActivity.log(session.getUserID(), "ADMIN_MIME_TYPE_DELETE", Integer.toString(mt.getId()), null);
