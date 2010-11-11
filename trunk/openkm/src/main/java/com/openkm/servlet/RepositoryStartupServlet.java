@@ -46,6 +46,7 @@ import bsh.Interpreter;
 import com.openkm.cache.UserDocumentKeywordsManager;
 import com.openkm.cache.UserItemsManager;
 import com.openkm.core.Config;
+import com.openkm.core.Cron;
 import com.openkm.core.DataStoreGarbageCollector;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryInfo;
@@ -74,6 +75,7 @@ public class RepositoryStartupServlet extends HttpServlet {
 	private static final long serialVersionUID = 207151527252937549L;
 	private Timer timer;
 	private Watchdog wd;
+	private Cron cron;
 	private UpdateInfo ui;
 	private RepositoryInfo ri;
 	private UserMailImporter umi;
@@ -149,7 +151,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         // Mime types
         log.info("*** Initializing MIME types... ***");
-        Config.loadMimeTypes(getServletContext());
+        Config.loadMimeTypes();
                 
         if (Config.UPDATE_INFO) {
         	 log.info("*** Activating update info ***");
@@ -160,6 +162,10 @@ public class RepositoryStartupServlet extends HttpServlet {
         log.info("*** Activating watchdog ***");
         wd = new Watchdog();
         timer.schedule(wd, 60*1000, 5*60*1000); // First in 1 min, next each 5 mins
+        
+        log.info("*** Activating cron ***");
+        cron = new Cron();
+        timer.schedule(cron, 60*1000, 60*1000); // First in 1 min, next each 1 min
         
         log.info("*** Activating repository info ***");
         ri = new RepositoryInfo();
@@ -238,6 +244,10 @@ public class RepositoryStartupServlet extends HttpServlet {
         if (log == null) log("*** Shutting down repository info... ***");
         else log.info("*** Shutting down repository info... ***");
         ri.cancel();
+        
+        if (log == null) log("*** Shutting down cron... ***");
+        else log.info("*** Shutting down cron... ***");
+        cron.cancel();
         
         if (log == null) log("*** Shutting down watchdog... ***");
         else log.info("*** Shutting down watchdog... ***");
