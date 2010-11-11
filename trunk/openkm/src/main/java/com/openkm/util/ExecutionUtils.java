@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import bsh.EvalError;
 import bsh.Interpreter;
 
-import com.openkm.core.Config;
+import com.openkm.util.cl.BinaryClassLoader;
 import com.openkm.util.cl.ClassLoaderUtils;
 import com.openkm.util.cl.JarClassLoader;
 
@@ -18,11 +18,10 @@ public class ExecutionUtils {
 	private static Logger log = LoggerFactory.getLogger(ExecutionUtils.class);
 	
 	/**
-     * Execute script
+     * Execute script from file
      */
-	public static void runScript(String name) {
+	public static void runScript(File script) {
     	try {
-    		File script = new File(Config.HOME_DIR + File.separatorChar + name); 
         	FileReader fr = null;
         	
         	if (script.exists() && script.canRead()) {
@@ -44,14 +43,30 @@ public class ExecutionUtils {
         	log.warn(e.getMessage(), e);
         }
     }
+	
+	/**
+     * Execute script
+     */
+	public static void runScript(String script) {
+    	try {
+       		Interpreter i = new Interpreter();
+				
+			try {
+				Object result = i.eval(script);
+				log.info("Script output: "+(result!=null?result.toString():"null"));
+			} catch (EvalError e) {
+				log.warn(e.getMessage(), e);
+			}
+        } catch (Exception e) {
+        	log.warn(e.getMessage(), e);
+        }
+    }
     
     /**
-     * Execute jar
+     * Execute jar from file
      */
-    public static void runJar(String name) {
+    public static void runJar(File jar) {
     	try {
-    		File jar = new File(Config.HOME_DIR + File.separatorChar + name); 
-    		
     		if (jar.exists() && jar.canRead()) {
     			ClassLoader cl = ExecutionUtils.class.getClass().getClassLoader(); 
     			JarClassLoader jcl = new JarClassLoader(jar.toURI().toURL(), cl);
@@ -66,6 +81,26 @@ public class ExecutionUtils {
     		} else {
     			log.warn("Unable to read jar: {}", jar.getPath());
     		}
+    	} catch (Exception e) {
+    		log.warn(e.getMessage(), e);
+    	}
+	}
+    
+    /**
+     * Execute jar
+     */
+    public static void runJar(byte[] jar) {
+    	try {
+   			ClassLoader cl = ExecutionUtils.class.getClass().getClassLoader(); 
+   			BinaryClassLoader jcl = new BinaryClassLoader(jar, cl);
+   			String mainClass = jcl.getMainClassName();
+   			
+   			if (mainClass != null) {
+   				Class<?> c = jcl.loadClass(jcl.getMainClassName());
+   				ClassLoaderUtils.invokeClass(c, new String[] {});
+   			} else {
+   				log.error("Main class not defined at jar");
+   			}
     	} catch (Exception e) {
     		log.warn(e.getMessage(), e);
     	}
