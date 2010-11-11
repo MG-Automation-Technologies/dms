@@ -19,7 +19,7 @@
       <table class="results" width="70%">
         <tr>
           <th>Name</th><th>Expression</th><th>Type</th><th>File Name</th><th>Active</th>
-          <th width="130px">
+          <th width="75px">
             <c:url value="CronTab" var="urlCreate">
               <c:param name="action" value="create"/>
             </c:url>
