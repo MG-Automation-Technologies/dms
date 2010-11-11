@@ -32,7 +32,6 @@ import java.util.Properties;
 import java.util.TreeMap;
 
 import javax.activation.MimetypesFileTypeMap;
-import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -702,7 +701,7 @@ public class Config {
 	/**
 	 * load mime types
 	 */
-	public static void loadMimeTypes(ServletContext sc) {
+	public static void loadMimeTypes() {
 		try {
 			List<MimeType> mimeTypeList = MimeTypeDAO.findAll();
 			Config.mimeTypes = new MimetypesFileTypeMap();
