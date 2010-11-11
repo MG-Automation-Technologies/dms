@@ -35,6 +35,8 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 public class GWTDocument implements IsSerializable {
 	
+	public static final String type = "okm:document";
+	
 	private String parentId;
 	private String name;
 	private String path;

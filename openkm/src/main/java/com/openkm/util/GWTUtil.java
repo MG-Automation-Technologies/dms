@@ -74,6 +74,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.Bookmark;
 import com.openkm.dao.bean.Language;
+import com.openkm.dao.bean.ProposedSubscription;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.UserConfig;
 import com.openkm.dao.bean.extension.Staple;
@@ -98,6 +99,7 @@ import com.openkm.frontend.client.bean.GWTProcessDefinition;
 import com.openkm.frontend.client.bean.GWTProcessInstance;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.GWTPropertyParams;
+import com.openkm.frontend.client.bean.GWTProposedSubscription;
 import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.bean.GWTQueryResult;
 import com.openkm.frontend.client.bean.GWTSelect;
@@ -1108,5 +1110,23 @@ public class GWTUtil {
 		gWTlang.setId(language.getId());
 		gWTlang.setName(language.getName());
 		return gWTlang;
+	}
+	
+	/**
+	 * Copy ProposedSubscription to GWTProposedSubscription
+	 * 
+	 * @param ps
+	 * @return
+	 */
+	public static GWTProposedSubscription copy(ProposedSubscription ps) {
+		GWTProposedSubscription gWTProposedSubscription = new GWTProposedSubscription();
+		gWTProposedSubscription.setId(ps.getId());
+		gWTProposedSubscription.setFrom(ps.getFrom());
+		gWTProposedSubscription.setTo(ps.getTo());
+		gWTProposedSubscription.setUuid(ps.getUuid());
+		gWTProposedSubscription.setPath(ps.getPath());
+		gWTProposedSubscription.setType(ps.getType());
+		
+		return gWTProposedSubscription;
 	}
 }

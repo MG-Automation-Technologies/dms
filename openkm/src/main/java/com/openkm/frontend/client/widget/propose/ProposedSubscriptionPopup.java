@@ -34,9 +34,10 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.config.Config;
-import com.openkm.frontend.client.service.OKMNotifyService;
-import com.openkm.frontend.client.service.OKMNotifyServiceAsync;
+import com.openkm.frontend.client.service.OKMProposedSubscriptionService;
+import com.openkm.frontend.client.service.OKMProposedSubscriptionServiceAsync;
 import com.openkm.frontend.client.widget.notify.NotifyPanel;
 
 /**
@@ -47,7 +48,7 @@ import com.openkm.frontend.client.widget.notify.NotifyPanel;
  */
 public class ProposedSubscriptionPopup extends DialogBox  {
 	
-	private final OKMNotifyServiceAsync notifyService = (OKMNotifyServiceAsync) GWT.create(OKMNotifyService.class);
+	private final OKMProposedSubscriptionServiceAsync proposedSubscriptionService = (OKMProposedSubscriptionServiceAsync) GWT.create(OKMProposedSubscriptionService.class);
 	
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
@@ -60,6 +61,9 @@ public class ProposedSubscriptionPopup extends DialogBox  {
 	private HTML errorNotify;
 	private String users;
 	private String roles;
+	private String path;
+	private String uuid;
+	private String type;
 	
 	public ProposedSubscriptionPopup() {
 		// Establishes auto-close when click outside
@@ -167,6 +171,10 @@ public class ProposedSubscriptionPopup extends DialogBox  {
 	public void executeProposeSubscription() {
 		if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
 			reset();
+			GWTDocument doc = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
+			uuid = doc.getUuid();
+			path = doc.getPath();
+			type = GWTDocument.type;
 			super.center();
 		} 
 	}
@@ -187,8 +195,19 @@ public class ProposedSubscriptionPopup extends DialogBox  {
 	 * Sens the link notification
 	 */
 	private void sendLinkNotification() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) notifyService;
-		endPoint.setServiceEntryPoint(Config.OKMNotifyService);	
+		ServiceDefTarget endPoint = (ServiceDefTarget) proposedSubscriptionService;
+		endPoint.setServiceEntryPoint(Config.OKMProposeSubscriptionService);
+		proposedSubscriptionService.create(uuid, path, type, users, roles, new AsyncCallback<Object>() {
+			@Override
+			public void onSuccess(Object result) {
+				hide();
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				Main.get().showError("create", caught);
+			}
+		});
 	}
 	
 	/**
@@ -197,6 +216,9 @@ public class ProposedSubscriptionPopup extends DialogBox  {
 	private void reset() {
 		users = "";
 		roles = "";
+		path = "";
+		uuid = "";
+		type = "";
 		message.setText("");
 		notifyPanel.reset();
 		notifyPanel.getAll();
