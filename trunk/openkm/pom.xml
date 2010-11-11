@@ -102,6 +102,13 @@
       <url>http://google-gson.googlecode.com/svn/mavenrepo</url>
     </repository>
     
+    <!-- Needed for Java CronTab Syntax Parser -->
+    <repository>
+      <id>java-crontab-syntax-parser-repo</id>
+      <name>Java CronTab Syntax Parser</name>
+      <url>http://kenai.com/projects/crontab-parser/sources/maven-repo/content/</url>
+    </repository>
+    
     <!-- OpenKM repository -->
     <repository>
       <id>openkm.com</id>
@@ -460,6 +467,13 @@
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
       <version>1.5</version>
+    </dependency>
+    
+    <!-- Java CronTab Syntax Parser -->
+    <dependency>
+      <groupId>com.kenai.crontab-parser</groupId>
+      <artifactId>crontab-parser</artifactId>
+      <version>1.0.1</version>
     </dependency>
     
     <!-- OpenKM extensions -->
