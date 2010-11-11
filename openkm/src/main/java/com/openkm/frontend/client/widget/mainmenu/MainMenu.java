@@ -274,7 +274,7 @@ public class MainMenu extends Composite {
 						catalan = new MenuItem(Util.menuHTML("img/icon/menu/ca.gif", "Català"), true, setLangCatalan);
 						chineseSimple = new MenuItem(Util.menuHTML("img/icon/menu/cn.gif", "Chinese simple"), true, setLangChinese);
 						chineseTraditional = new MenuItem(Util.menuHTML("img/icon/menu/cn.gif", "Chinese traditional"), true, setLangChineseTraditional);
-						czech = new MenuItem(Util.menuHTML("img/icon/menu/cs.gif", "Czech"), true, setLangCzech);
+						czech = new MenuItem(Util.menuHTML("img/icon/menu/cz.gif", "Czech"), true, setLangCzech);
 						german = new MenuItem(Util.menuHTML("img/icon/menu/de.gif", "Deutsch"), true, setLangDeutsch);
 						english = new MenuItem(Util.menuHTML("img/icon/menu/en.gif", "English"), true, setLangEnglish);
 						usa = new MenuItem(Util.menuHTML("img/icon/menu/us.gif", "English - Usa"), true, setLangEnglishUSA);
