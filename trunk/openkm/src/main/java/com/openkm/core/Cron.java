@@ -29,12 +29,13 @@ import org.slf4j.LoggerFactory;
 import com.kenai.crontabparser.CronTabExpression;
 import com.openkm.dao.CronTabDAO;
 import com.openkm.dao.bean.CronTab;
+import com.openkm.util.ExecutionUtils;
 
 public class Cron extends TimerTask {
 	private static Logger log = LoggerFactory.getLogger(Cron.class);
 
 	public void run() {
-		log.debug("*** Cron activated ***");
+		log.info("*** Cron activated ***");
 		Calendar cal = Calendar.getInstance();
 		
 		try {
@@ -43,7 +44,11 @@ public class Cron extends TimerTask {
 					CronTabExpression cte = CronTabExpression.parse(ct.getExpression());
 					
 					if (cte.matches(cal)) {
-						
+						if (CronTab.BSH.equals(ct.getType())) {
+							ExecutionUtils.runScript(ct.getFileContent().toString());
+						} else if (CronTab.JAR.equals(ct.getType())) {
+							ExecutionUtils.runJar(ct.getFileContent());
+						}
 					}
 				} catch (ParseException e) {
 					log.warn(e.getMessage() + " : " + ct.getExpression());
