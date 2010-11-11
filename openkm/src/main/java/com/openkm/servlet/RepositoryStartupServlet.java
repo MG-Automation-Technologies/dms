@@ -159,7 +159,12 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         log.info("*** Activating cron ***");
         cron = new Cron();
-        timer.scheduleAtFixedRate(cron, 60*1000, 60*1000); // First in 1 min, next each 1 min
+        Calendar calCron = Calendar.getInstance();
+        calCron.add(Calendar.MINUTE, 1);
+        calCron.set(Calendar.SECOND, 0);
+        calCron.set(Calendar.MILLISECOND, 0);
+        // Round begin to next minute, 0 seconds, 0 miliseconds
+        timer.scheduleAtFixedRate(cron, calCron.getTime(), 60*1000); // First in 1 min, next each 1 min
         
         log.info("*** Activating repository info ***");
         ri = new RepositoryInfo();
@@ -176,13 +181,13 @@ public class RepositoryStartupServlet extends HttpServlet {
         if (hasConfiguredDataStore) {
         	log.info("*** Activating datastore garbage collection ***");
         	dsgc = new DataStoreGarbageCollector();
-        	Calendar now = Calendar.getInstance();
-        	now.add(Calendar.DAY_OF_YEAR, 1);
-        	now.set(Calendar.HOUR_OF_DAY, 0);
-        	now.set(Calendar.MINUTE, 0);
-        	now.set(Calendar.SECOND, 0);
-        	now.set(Calendar.MILLISECOND, 0);
-        	timer.scheduleAtFixedRate(dsgc, now.getTime(), 24*60*60*1000); // First tomorrow at 00:00, next each 24 hours
+        	Calendar calGc = Calendar.getInstance();
+        	calGc.add(Calendar.DAY_OF_YEAR, 1);
+        	calGc.set(Calendar.HOUR_OF_DAY, 0);
+        	calGc.set(Calendar.MINUTE, 0);
+        	calGc.set(Calendar.SECOND, 0);
+        	calGc.set(Calendar.MILLISECOND, 0);
+        	timer.scheduleAtFixedRate(dsgc, calGc.getTime(), 24*60*60*1000); // First tomorrow at 00:00, next each 24 hours
         }
         
         try {
