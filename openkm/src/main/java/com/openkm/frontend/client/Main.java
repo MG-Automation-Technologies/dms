@@ -47,8 +47,8 @@ import com.openkm.frontend.client.extension.event.HasLanguageEvent;
 import com.openkm.frontend.client.extension.event.handler.LanguageHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasLanguageHandlerExtension;
 import com.openkm.frontend.client.panel.ExtendedDockPanel;
-import com.openkm.frontend.client.service.OKMGeneralService;
-import com.openkm.frontend.client.service.OKMGeneralServiceAsync;
+import com.openkm.frontend.client.service.OKMLanguageService;
+import com.openkm.frontend.client.service.OKMLanguageServiceAsync;
 import com.openkm.frontend.client.util.Location;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.util.WindowUtils;
@@ -68,6 +68,7 @@ import com.openkm.frontend.client.widget.chat.OnlineUsersPopup;
 import com.openkm.frontend.client.widget.findfolder.FindFolderSelectPopup;
 import com.openkm.frontend.client.widget.foldertree.FolderTree;
 import com.openkm.frontend.client.widget.notify.NotifyPopup;
+import com.openkm.frontend.client.widget.propose.ProposeSubscriptionPopup;
 import com.openkm.frontend.client.widget.security.SecurityPopup;
 import com.openkm.frontend.client.widget.startup.StartUp;
 import com.openkm.frontend.client.widget.startup.StartUpPopup;
@@ -83,7 +84,7 @@ import com.openkm.frontend.client.widget.wizard.WizardPopup;
 public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasLanguageEvent {
 	
 	private static Main singleton;
-	private final OKMGeneralServiceAsync generalService = (OKMGeneralServiceAsync) GWT.create(OKMGeneralService.class);
+	private final OKMLanguageServiceAsync languageService = (OKMLanguageServiceAsync) GWT.create(OKMLanguageService.class);
 	
 	/**
 	 * @return singleton Main instance 
@@ -115,6 +116,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	public FindFolderSelectPopup findFolderSelectPopup;
 	public WizardPopup wizardPopup;
 	public OnlineUsersPopup onlineUsersPopup;
+	public ProposeSubscriptionPopup proposeSubscriptionPopup;
 	
 	// User workspace properties
 	public WorkspaceUserProperties workspaceUserProperties;
@@ -189,9 +191,9 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		}
 		
 		// Getting language
-		ServiceDefTarget endPoint = (ServiceDefTarget) generalService;
-		endPoint.setServiceEntryPoint(Config.OKMGeneralService);
-		generalService.getFrontEndTranslations(Main.get().getLang(), new AsyncCallback<Map<String,String>>() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) languageService;
+		endPoint.setServiceEntryPoint(Config.OKMLanguageService);
+		languageService.getFrontEndTranslations(Main.get().getLang(), new AsyncCallback<Map<String,String>>() {
 			@Override
 			public void onSuccess(Map<String, String> result) {
 				hI18n = result;
@@ -302,6 +304,10 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		onlineUsersPopup.setHeight("350px");
 		onlineUsersPopup.setStyleName("okm-Popup");
 		onlineUsersPopup.addStyleName("okm-DisableSelect");
+		proposeSubscriptionPopup = new ProposeSubscriptionPopup();
+		proposeSubscriptionPopup.setWidth("300px");
+		proposeSubscriptionPopup.setHeight("100px");
+		proposeSubscriptionPopup.setStyleName("okm-Popup");
 
 		// Get grid of scrollbars, and clear out the window's built-in margin,
 	    // because we want to take advantage of the entire client area.
@@ -342,9 +348,9 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	 */
 	public void refreshLang(String lang) {
 		this.lang = lang;
-		ServiceDefTarget endPoint = (ServiceDefTarget) generalService;
+		ServiceDefTarget endPoint = (ServiceDefTarget) languageService;
 		endPoint.setServiceEntryPoint(Config.OKMGeneralService);
-		generalService.getFrontEndTranslations(lang, new AsyncCallback<Map<String,String>>() {
+		languageService.getFrontEndTranslations(lang, new AsyncCallback<Map<String,String>>() {
 			@Override
 			public void onSuccess(Map<String, String> result) {
 				hI18n = result;
