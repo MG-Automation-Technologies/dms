@@ -165,7 +165,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         log.info("*** Activating cron ***");
         cron = new Cron();
-        timer.schedule(cron, 60*1000, 60*1000); // First in 1 min, next each 1 min
+        timer.scheduleAtFixedRate(cron, 60*1000, 60*1000); // First in 1 min, next each 1 min
         
         log.info("*** Activating repository info ***");
         ri = new RepositoryInfo();
