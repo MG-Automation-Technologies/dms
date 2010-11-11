@@ -28,7 +28,7 @@ import org.hibernate.Hibernate;
 
 import com.openkm.dao.HibernateUtil;
 
-public class Crontab implements Serializable {
+public class CronTab implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public static final String BSH = "bsh";
 	public static final String JAR = "jar";
