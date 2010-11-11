@@ -201,8 +201,10 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         try {
         	log.info("*** Ejecute start script ***");
-        	ExecutionUtils.runScript(Config.START_SCRIPT);
-        	ExecutionUtils.runJar(Config.START_JAR);
+        	File script = new File(Config.HOME_DIR + File.separatorChar + Config.START_SCRIPT);
+        	ExecutionUtils.runScript(script);
+        	File jar = new File(Config.HOME_DIR + File.separatorChar + Config.START_JAR);
+        	ExecutionUtils.runJar(jar);
         } catch (Throwable e) {
         	log.warn(e.getMessage(), e);
         }
@@ -284,8 +286,10 @@ public class RepositoryStartupServlet extends HttpServlet {
         try {
         	if (log == null) log("*** Ejecute stop script ***");
         	else log.info("*** Ejecute stop script ***");
-        	ExecutionUtils.runScript(Config.STOP_SCRIPT);
-        	ExecutionUtils.runJar(Config.STOP_JAR);
+        	File script = new File(Config.HOME_DIR + File.separatorChar + Config.STOP_SCRIPT);
+        	ExecutionUtils.runScript(script);
+        	File jar = new File(Config.HOME_DIR + File.separatorChar + Config.STOP_JAR);
+        	ExecutionUtils.runJar(jar);
         } catch (Throwable e) {
         	log.warn(e.getMessage(), e);
         }
