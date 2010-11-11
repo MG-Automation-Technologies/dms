@@ -40,12 +40,12 @@ import com.openkm.frontend.client.service.OKMNotifyServiceAsync;
 import com.openkm.frontend.client.widget.notify.NotifyPanel;
 
 /**
- * ProposeSubscriptionPopup
+ * ProposedSubscriptionPopup
  * 
  * @author jllort
  *
  */
-public class ProposeSubscriptionPopup extends DialogBox  {
+public class ProposedSubscriptionPopup extends DialogBox  {
 	
 	private final OKMNotifyServiceAsync notifyService = (OKMNotifyServiceAsync) GWT.create(OKMNotifyService.class);
 	
@@ -61,7 +61,7 @@ public class ProposeSubscriptionPopup extends DialogBox  {
 	private String users;
 	private String roles;
 	
-	public ProposeSubscriptionPopup() {
+	public ProposedSubscriptionPopup() {
 		// Establishes auto-close when click outside
 		super(false,true);
 		
