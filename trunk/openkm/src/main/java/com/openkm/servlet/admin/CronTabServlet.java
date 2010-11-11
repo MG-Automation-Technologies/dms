@@ -103,6 +103,7 @@ public class CronTabServlet extends BaseServlet {
 				sc.getRequestDispatcher("/admin/crontab_edit.jsp").forward(request, response);
 			} else if (action.equals("execute")) {
 				execute(session, request, response);
+				list(session, request, response);
 			} else {
 				list(session, request, response);
 			}
@@ -235,7 +236,7 @@ public class CronTabServlet extends BaseServlet {
 		CronTab ct = CronTabDAO.findByPk(ctId);
 		
 		if (CronTab.BSH.equals(ct.getType())) {
-			ExecutionUtils.runScript(ct.getFileContent().toString());
+			ExecutionUtils.runScript(new String(ct.getFileContent()));
 		} else if (CronTab.JAR.equals(ct.getType())) {
 			ExecutionUtils.runJar(ct.getFileContent());
 		}
