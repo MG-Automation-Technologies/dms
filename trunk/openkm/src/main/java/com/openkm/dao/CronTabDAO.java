@@ -32,17 +32,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
-import com.openkm.dao.bean.Crontab;
+import com.openkm.dao.bean.CronTab;
 
-public class CrontabDAO {
-	private static Logger log = LoggerFactory.getLogger(CrontabDAO.class);
+public class CronTabDAO {
+	private static Logger log = LoggerFactory.getLogger(CronTabDAO.class);
 
-	private CrontabDAO() {}
+	private CronTabDAO() {}
 	
 	/**
 	 * Create
 	 */
-	public static int create(Crontab ct) throws DatabaseException {
+	public static int create(CronTab ct) throws DatabaseException {
 		log.debug("create({})", ct);
 		Session session = null;
 		Transaction tx = null;
@@ -65,9 +65,9 @@ public class CrontabDAO {
 	/**
 	 * Update
 	 */
-	public static void update(Crontab ct) throws DatabaseException {
+	public static void update(CronTab ct) throws DatabaseException {
 		log.debug("update({})", ct);
-		String qs = "select ct.fileContentBlob, ct.fileName from Crontab ct where ct.id=:id";
+		String qs = "select ct.fileContentBlob, ct.fileName from CronTab ct where ct.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -106,7 +106,7 @@ public class CrontabDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			Crontab ct = (Crontab) session.load(Crontab.class, ctId);
+			CronTab ct = (CronTab) session.load(CronTab.class, ctId);
 			session.delete(ct);
 			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
@@ -122,16 +122,16 @@ public class CrontabDAO {
 	/**
 	 * Find by pk
 	 */
-	public static Crontab findByPk(int ctId) throws DatabaseException {
+	public static CronTab findByPk(int ctId) throws DatabaseException {
 		log.debug("findByPk({})", ctId);
-		String qs = "from Crontab ct where ct.id=:id";
+		String qs = "from CronTab ct where ct.id=:id";
 		Session session = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
 			q.setInteger("id", ctId);
-			Crontab ret = (Crontab) q.setMaxResults(1).uniqueResult();
+			CronTab ret = (CronTab) q.setMaxResults(1).uniqueResult();
 			log.debug("findByPk: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
@@ -145,15 +145,15 @@ public class CrontabDAO {
 	 * Find by pk
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<Crontab> findAll() throws DatabaseException {
+	public static List<CronTab> findAll() throws DatabaseException {
 		log.debug("findAll()");
-		String qs = "from Crontab ct order by ct.id";
+		String qs = "from CronTab ct order by ct.id";
 		Session session = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
-			List<Crontab> ret = q.list();
+			List<CronTab> ret = q.list();
 			log.debug("findAll: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
