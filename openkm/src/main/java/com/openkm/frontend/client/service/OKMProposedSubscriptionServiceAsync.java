@@ -27,5 +27,5 @@ import com.google.gwt.user.client.rpc.RemoteService;
  * @author jllort
  *
  */
-public interface OKMProposeSubscriptionServiceAsync extends RemoteService {
+public interface OKMProposedSubscriptionServiceAsync extends RemoteService {
 }

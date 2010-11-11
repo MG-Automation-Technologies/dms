@@ -19,22 +19,13 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.servlet.frontend;
+package com.openkm.frontend.client.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.openkm.frontend.client.service.OKMProposeSubscriptionService;
+import com.google.gwt.user.client.rpc.RemoteService;
 
 /**
- * ProposedSubscriptionServlet
- * 
  * @author jllort
  *
  */
-public class ProposeSubscriptionServlet extends OKMRemoteServiceServlet implements OKMProposeSubscriptionService {
-	private static final long serialVersionUID = 1L;
-	private static Logger log = LoggerFactory.getLogger(ProposeSubscriptionServlet.class);
-
-
+public interface OKMProposedSubscriptionService extends RemoteService {
 }

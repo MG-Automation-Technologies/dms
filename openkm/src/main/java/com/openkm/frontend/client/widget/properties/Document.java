@@ -215,7 +215,7 @@ public class Document extends Composite {
 		proposeSubscribeImage.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				Main.get().proposeSubscriptionPopup.executeProposeSubscription();
+				Main.get().proposedSubscriptionPopup.executeProposeSubscription();
 			}
 		});
 		hPanelSubscribedUsers.add(subcribedUsersText);
