@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-  <class name="com.openkm.dao.bean.Crontab" table="OKM_CRONTAB">
+  <class name="com.openkm.dao.bean.CronTab" table="OKM_CRON_TAB">
     <id name="id" column="CT_ID"><generator class="native"/></id>
     <property name="name" column="CT_NAME" not-null="true"/>
     <property name="expression" column="CT_EXPRESSION" not-null="true"/>
