@@ -22,11 +22,6 @@
 package com.openkm.dao.bean;
 
 import java.io.Serializable;
-import java.sql.Blob;
-
-import org.hibernate.Hibernate;
-
-import com.openkm.dao.HibernateUtil;
 
 public class CronTab implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -36,7 +31,7 @@ public class CronTab implements Serializable {
 	private String name;
 	private String expression;
 	private String type;
-	private byte[] fileContent;
+	private String fileContent;
 	private String fileName;
 	private boolean active;
 	
@@ -72,11 +67,11 @@ public class CronTab implements Serializable {
 		this.type = type;
 	}
 	
-	public byte[] getFileContent() {
+	public String getFileContent() {
 		return fileContent;
 	}
 
-	public void setFileContent(byte[] fileContent) {
+	public void setFileContent(String fileContent) {
 		this.fileContent = fileContent;
 	}
 
@@ -86,18 +81,6 @@ public class CronTab implements Serializable {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
-	}
-	
-	/** Don't invoke this. Used by Hibernate only. */
-	@SuppressWarnings("unused")
-	private void setFileContentBlob(Blob data) {
-		this.fileContent = HibernateUtil.toByteArray(data);
-	}
-
-	/** Don't invoke this. Used by Hibernate only. */
-	@SuppressWarnings("unused")
-	private Blob getFileContentBlob() {
-		return Hibernate.createBlob(fileContent);
 	}
 	
 	public boolean isActive() {
@@ -115,7 +98,7 @@ public class CronTab implements Serializable {
 		sb.append(", name="); sb.append(name);
 		sb.append(", type="); sb.append(type);
 		sb.append(", fileName="); sb.append(fileName);
-		sb.append(", fileContent="); sb.append(fileContent);
+		sb.append(", fileContent="); sb.append("[BIG]");
 		sb.append(", active="); sb.append(active);
 		sb.append("}");
 		return sb.toString();

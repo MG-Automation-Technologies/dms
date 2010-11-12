@@ -84,8 +84,8 @@ public class Language implements Serializable {
 		sb.append("{");
 		sb.append(", id="); sb.append(id);
 		sb.append(", name="); sb.append(name);
-		sb.append(", imageContent="); sb.append(imageContent);
 		sb.append(", imageMime="); sb.append(imageMime);
+		sb.append(", imageContent="); sb.append("[BIG]");
 		sb.append("}");
 		return sb.toString();
 	}	
