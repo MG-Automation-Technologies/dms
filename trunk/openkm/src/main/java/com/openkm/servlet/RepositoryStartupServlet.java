@@ -53,6 +53,7 @@ import com.openkm.kea.RDFREpository;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.DocConverter;
 import com.openkm.util.ExecutionUtils;
+import com.openkm.util.JBPMUtil;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WarUtils;
 
@@ -137,7 +138,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         // Workflow
         log.info("*** Initializing workflow engine... ***");
-        JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
+        JbpmContext jbpmContext = JBPMUtil.getConfig().createJbpmContext();
         jbpmContext.setSessionFactory(HibernateUtil.getSessionFactory());
         jbpmContext.getGraphSession();
         jbpmContext.getJbpmConfiguration().getJobExecutor().start();//startJobExecutor();
