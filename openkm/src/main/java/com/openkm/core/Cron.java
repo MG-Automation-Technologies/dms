@@ -19,6 +19,7 @@
 
 package com.openkm.core;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.TimerTask;
@@ -30,6 +31,7 @@ import com.kenai.crontabparser.CronTabExpression;
 import com.openkm.dao.CronTabDAO;
 import com.openkm.dao.bean.CronTab;
 import com.openkm.util.ExecutionUtils;
+import com.openkm.util.SecureStore;
 
 public class Cron extends TimerTask {
 	private static Logger log = LoggerFactory.getLogger(Cron.class);
@@ -49,15 +51,17 @@ public class Cron extends TimerTask {
 									ct.getType()});
 							
 							if (CronTab.BSH.equals(ct.getType())) {
-								RunnerBsh run = new RunnerBsh(new String(ct.getFileContent()));
+								RunnerBsh run = new RunnerBsh(new String(SecureStore.b64Decode(ct.getFileContent())));
 								new Thread(run).start();
 							} else if (CronTab.JAR.equals(ct.getType())) {
-								RunnerJar run = new RunnerJar(ct.getFileContent());
+								RunnerJar run = new RunnerJar(SecureStore.b64Decode(ct.getFileContent()));
 								new Thread(run).start();
 							}
 						}
 					} catch (ParseException e) {
 						log.warn(e.getMessage() + " : " + ct.getExpression());
+					} catch (IOException e) {
+						log.warn(e.getMessage());
 					}
 				}
 			}
