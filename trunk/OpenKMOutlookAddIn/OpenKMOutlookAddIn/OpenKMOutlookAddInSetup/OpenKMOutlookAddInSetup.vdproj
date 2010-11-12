@@ -292,7 +292,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_461B6592_B6A4_4D1E_BE56_FC9948C16A6D"
+        "OwnerKey" = "8:_EB6A82C864A64916BBA55E7AEA887168"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -304,7 +304,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_EB6A82C864A64916BBA55E7AEA887168"
+        "OwnerKey" = "8:_461B6592_B6A4_4D1E_BE56_FC9948C16A6D"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -963,14 +963,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:OpenKM Outlook AddIn"
-        "ProductCode" = "8:{7BD44E15-F6BA-4BEB-A5E6-34C2012E23FE}"
-        "PackageCode" = "8:{BFB77F34-FB2A-4C4D-A25E-5D230C6CA2C7}"
+        "ProductCode" = "8:{7253E7B3-6B5E-4145-B016-496E71E51D56}"
+        "PackageCode" = "8:{8039BC21-4554-46D0-B1D3-996AA9817799}"
         "UpgradeCode" = "8:{5D5E4DF9-F758-43E0-8CB9-A9BB8D83C970}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:5.0.0"
         "Manufacturer" = "8:OpenKM"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://wiki.openkm.com/index.php/Outlook_2003_addin"
@@ -1484,7 +1484,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_E84DCE2B6311428290B58ED14B5869FF"
             {
-            "SourcePath" = "8:..\\obj\\Debug\\OpenKMOutlookAddIn.dll"
+            "SourcePath" = "8:..\\obj\\Release\\OpenKMOutlookAddIn.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_6D727FF337FE4FE5BA3A0C9E0F3DC8E8"
