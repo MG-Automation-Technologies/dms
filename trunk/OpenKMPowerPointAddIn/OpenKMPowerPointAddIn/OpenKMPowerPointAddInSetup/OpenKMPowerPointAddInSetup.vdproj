@@ -298,7 +298,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7742E779_51AD_489D_BF01_0445380DB50D"
+        "OwnerKey" = "8:_7A8965D8C90D4233A5B32CD7F2B2EF45"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -310,7 +310,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7A8965D8C90D4233A5B32CD7F2B2EF45"
+        "OwnerKey" = "8:_7742E779_51AD_489D_BF01_0445380DB50D"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -969,14 +969,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:OpenKM PowerPoin tAddIn"
-        "ProductCode" = "8:{07E94555-3DA8-4D3C-BECF-506421F75E36}"
-        "PackageCode" = "8:{D5CB4D90-561E-4F85-9BD4-3A304EE85570}"
+        "ProductCode" = "8:{F16F0951-6AC2-4E2A-964D-5300B7BF979F}"
+        "PackageCode" = "8:{1839C5E3-DB47-4A0A-AB98-2E594733A0FB}"
         "UpgradeCode" = "8:{C22814ED-17E0-41F7-B71F-EB9864EFA55B}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:5.0.0"
         "Manufacturer" = "8:OpenKM"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://www.openkm.com"
@@ -1490,7 +1490,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_8A41516740B145CE9411DAE35E53AE65"
             {
-            "SourcePath" = "8:..\\obj\\Debug\\OpenKMPowerPointAddIn.dll"
+            "SourcePath" = "8:..\\obj\\Release\\OpenKMPowerPointAddIn.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_638A3FAB531B473695AB2F24FBAC706A"
