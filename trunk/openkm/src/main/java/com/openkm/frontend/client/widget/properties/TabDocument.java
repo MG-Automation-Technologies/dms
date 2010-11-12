@@ -178,6 +178,15 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	}
 	
 	/**
+	 * refreshNotesSize
+	 */
+	public void refreshNotesSize() {
+		// Solve some UI defect on firefox
+		notes.setPixelSize(width-1,height-21); // Substract tab height
+		notes.setPixelSize(width,height-20); // Substract tab height
+	}
+	
+	/**
 	 * Sets document values
 	 * 
 	 * @param doc The document object

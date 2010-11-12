@@ -130,6 +130,15 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	}
 	
 	/**
+	 * refreshNotesSize
+	 */
+	public void refreshNotesSize() {
+		// Solve some UI defect on firefox
+		notes.setPixelSize(width-1,height-21); // Substract tab height
+		notes.setPixelSize(width,height-20); // Substract tab height
+	}
+	
+	/**
 	 * Sets the folder values
 	 * 
 	 * @param folder The folder object
