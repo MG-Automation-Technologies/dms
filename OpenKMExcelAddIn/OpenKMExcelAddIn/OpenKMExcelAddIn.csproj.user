@@ -19,4 +19,8 @@
     <StartAction>Program</StartAction>
     <StartProgram>C:\Archivos de programa\Microsoft Office\OFFICE11\EXCEL.EXE</StartProgram>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <StartAction>Program</StartAction>
+    <StartProgram>C:\Archivos de programa\Microsoft Office\OFFICE11\EXCEL.EXE</StartProgram>
+  </PropertyGroup>
 </Project>

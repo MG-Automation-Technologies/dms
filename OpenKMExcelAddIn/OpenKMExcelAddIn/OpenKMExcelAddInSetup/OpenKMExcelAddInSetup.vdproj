@@ -298,7 +298,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_0169259CACA94BABA4196C3FE9874CF0"
+        "OwnerKey" = "8:_8FC3F967_1709_47AF_B59D_EF1003355DC9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -310,7 +310,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_8FC3F967_1709_47AF_B59D_EF1003355DC9"
+        "OwnerKey" = "8:_0169259CACA94BABA4196C3FE9874CF0"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -969,14 +969,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:OpenKM Excel AddIn"
-        "ProductCode" = "8:{397CC90E-FC39-44A6-990D-F33809C0488F}"
-        "PackageCode" = "8:{D28F8132-D6A6-428A-A447-2AF57DC6FD14}"
+        "ProductCode" = "8:{823EB6F9-7B10-4D7E-9E2A-08F66D3ED140}"
+        "PackageCode" = "8:{73B5260A-4E5D-4F02-8C4B-C2EE3FEE7DC0}"
         "UpgradeCode" = "8:{15A23DF0-59F2-43C1-9504-9588376D8796}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:5.0.0"
         "Manufacturer" = "8:OpenKM"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://www.openkm.com"
