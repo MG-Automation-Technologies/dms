@@ -421,7 +421,7 @@ public class Config {
 	
 	public static void load() {
 		Properties config = new Properties();
-		String configFile = HOME_DIR+"/"+CONFIG_FILE;
+		String configFile = HOME_DIR+"/"+OPENKM_CONFIG;
 			
 		// Read config
 		try {
@@ -647,9 +647,9 @@ public class Config {
 			
 			fis.close();
 		} catch (FileNotFoundException e) {
-			log.warn("** No "+CONFIG_FILE+" file found, set default config **");
+			log.warn("** No "+OPENKM_CONFIG+" file found, set default config **");
 		} catch (IOException e) {
-			log.warn("** IOError reading "+CONFIG_FILE+", set default config **");
+			log.warn("** IOError reading "+OPENKM_CONFIG+", set default config **");
 		} finally {
 			log.info("** Configuration **");
 			for (Entry<String, String> entry : values.entrySet()) {
