@@ -183,6 +183,7 @@ public class Notes extends Composite {
 		}
 		
 		writeAddNote();
+		Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.refreshNotesSize();
 	}
 	
 	/**
@@ -204,6 +205,7 @@ public class Notes extends Composite {
 		}
 		
 		writeAddNote();
+		Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.refreshNotesSize();
 	}
 	
 	/**
@@ -346,14 +348,16 @@ public class Notes extends Composite {
 					Main.get().mainPanel.desktop.browser.fileBrowser.addNoteIconToSelectedRow();
 					document.setHasNotes(true);
 				}
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.refreshNotesSize();
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.NOTE_ADDED);
 			} else if (folder!=null) {
 				folder.getNotes().add(result);
 				// If is added first note must adding some icon on filebrowser
-				if (!folder.isHasNotes()) {
+				if (!folder.isHasNotes() && !Main.get().activeFolderTree.isPanelSelected()) {
 					Main.get().mainPanel.desktop.browser.fileBrowser.addNoteIconToSelectedRow();
 					folder.setHasNotes(true);
 				}
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.refreshNotesSize();
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.fireEvent(HasFolderEvent.NOTE_ADDED);
 			}
 		}
