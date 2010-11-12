@@ -21,6 +21,7 @@
 
 package com.openkm.servlet.frontend;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,12 +30,15 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMAuth;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.RepositoryException;
 import com.openkm.dao.ProposedSubscriptionDAO;
 import com.openkm.dao.bean.ProposedSubscription;
 import com.openkm.frontend.client.OKMException;
+import com.openkm.frontend.client.bean.GWTProposedSubscription;
 import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.service.OKMProposedSubscriptionService;
 import com.openkm.principal.PrincipalAdapterException;
+import com.openkm.util.GWTUtil;
 
 /**
  * ProposedSubscriptionServlet
@@ -82,5 +86,22 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_PrincipalAdapterException), e.getMessage());
 		}
 		
+	}
+
+	@Override
+	public List<GWTProposedSubscription> findAll() throws OKMException {
+		List<GWTProposedSubscription> psList = new ArrayList<GWTProposedSubscription>();
+		try {
+			for (ProposedSubscription ps : ProposedSubscriptionDAO.findByUser(null, getThreadLocalRequest().getRemoteUser())) {
+				psList.add(GWTUtil.copy(ps));
+			}
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return psList;
 	}
 }

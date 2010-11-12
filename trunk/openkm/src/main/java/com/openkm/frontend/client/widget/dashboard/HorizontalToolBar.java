@@ -56,6 +56,7 @@ public class HorizontalToolBar extends Composite {
 	private ToolBarBox general;
 	private ToolBarBox workflow;
 	private ToolBarBox keywordMap;
+	private ToolBarBox messaging;
 	private Widget enabledWidget;
 	private List<ToolBarBoxExtension> widgetExtensionList;
 
@@ -86,6 +87,7 @@ public class HorizontalToolBar extends Composite {
 		general = new ToolBarBox(new Image(OKMBundleResources.INSTANCE.generalIcon()), Main.i18n("dashboard.tab.general"));
 		workflow = new ToolBarBox(new Image(OKMBundleResources.INSTANCE.workflowIcon()), Main.i18n("dashboard.tab.workflow"));
 		keywordMap = new ToolBarBox(new Image(OKMBundleResources.INSTANCE.keywordMapIcon()), Main.i18n("dashboard.tab.keymap"));
+		messaging = new ToolBarBox(new Image(OKMBundleResources.INSTANCE.keywordMapIcon()), Main.i18n("dashboard.tab.messaging"));
 		
 		enabledWidget = user; // Setting the enabled widget
 
@@ -101,6 +103,8 @@ public class HorizontalToolBar extends Composite {
 		workflow.addMouseOutHandler(mouseOutHandler);
 		keywordMap.addMouseOverHandler(mouseOverHandler);
 		keywordMap.addMouseOutHandler(mouseOutHandler);
+		messaging.addMouseOverHandler(mouseOverHandler);
+		messaging.addMouseOutHandler(mouseOutHandler);
 		
 		user.addClickHandler(new ClickHandler(){
 			@Override
@@ -164,7 +168,29 @@ public class HorizontalToolBar extends Composite {
 				enabledWidget.removeStyleName("okm-ToolBar-Big-selected");
 				sender.setStyleName("okm-ToolBar-Big-selected");
 				enabledWidget = sender;
-				Main.get().mainPanel.dashboard.changeView(Dashboard.DASHBOARD_KEYMAP);
+				Main.get().mainPanel.dashboard.changeView(Dashboard.DASHBOARD_MESSAGING);
+			}
+		});
+		
+		messaging.addClickHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event) {
+				Widget sender = (Widget) event.getSource();
+				enabledWidget.removeStyleName("okm-ToolBar-Big-selected");
+				sender.setStyleName("okm-ToolBar-Big-selected");
+				enabledWidget = sender;
+				Main.get().mainPanel.dashboard.changeView(Dashboard.DASHBOARD_WORKFLOW);
+			}
+		});
+		
+		messaging.addClickHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event) {
+				Widget sender = (Widget) event.getSource();
+				enabledWidget.removeStyleName("okm-ToolBar-Big-selected");
+				sender.setStyleName("okm-ToolBar-Big-selected");
+				enabledWidget = sender;
+				Main.get().mainPanel.dashboard.changeView(Dashboard.DASHBOARD_MESSAGING);
 			}
 		});
 		
@@ -186,6 +212,7 @@ public class HorizontalToolBar extends Composite {
 		general.setLabelText(Main.i18n("dashboard.tab.general"));
 		workflow.setLabelText(Main.i18n("dashboard.tab.workflow"));
 		keywordMap.setLabelText(Main.i18n("dashboard.tab.keymap"));
+		messaging.setLabelText(Main.i18n("dashboard.tab.messaging"));
 	}
 	
 	/**
@@ -264,6 +291,14 @@ public class HorizontalToolBar extends Composite {
 	public void showKeywords() {
 		hPanel.add(keywordMap);
 		hPanel.setCellWidth(keywordMap, "80");
+	}
+	
+	/**
+	 * showMessaging
+	 */
+	public void showMessaging() {
+		hPanel.add(messaging);
+		hPanel.setCellWidth(messaging, "80");
 	}
 	
 	/**
