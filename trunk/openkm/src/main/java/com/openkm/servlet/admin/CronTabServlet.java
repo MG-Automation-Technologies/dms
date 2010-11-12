@@ -53,6 +53,7 @@ import com.openkm.dao.CronTabDAO;
 import com.openkm.dao.bean.CronTab;
 import com.openkm.util.ExecutionUtils;
 import com.openkm.util.JCRUtils;
+import com.openkm.util.SecureStore;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtil;
 
@@ -162,7 +163,7 @@ public class CronTabServlet extends BaseServlet {
 					} else {
 						is = item.getInputStream();
 						ct.setFileName(FilenameUtils.getName(item.getName()));
-						ct.setFileContent(IOUtils.toByteArray(is));
+						ct.setFileContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
 						is.close();
 					}
 				}
@@ -236,9 +237,9 @@ public class CronTabServlet extends BaseServlet {
 		CronTab ct = CronTabDAO.findByPk(ctId);
 		
 		if (CronTab.BSH.equals(ct.getType())) {
-			ExecutionUtils.runScript(new String(ct.getFileContent()));
+			ExecutionUtils.runScript(new String(SecureStore.b64Decode(ct.getFileContent())));
 		} else if (CronTab.JAR.equals(ct.getType())) {
-			ExecutionUtils.runJar(ct.getFileContent());
+			ExecutionUtils.runJar(SecureStore.b64Decode(ct.getFileContent()));
 		}
 		
 		// Activity log
