@@ -33,7 +33,6 @@ import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.SessionImpl;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.runtime.RuntimeConstants;
-import org.jbpm.JbpmConfiguration;
 import org.jbpm.JbpmContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -263,7 +262,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         if (log == null) log("*** Shutting down workflow engine... ***");
         else log.info("*** Shutting down workflow engine... ***");
-        JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
+        JbpmContext jbpmContext = JBPMUtil.getConfig().createJbpmContext();
         jbpmContext.getJbpmConfiguration().getJobExecutor().stop();
         jbpmContext.close();
         
