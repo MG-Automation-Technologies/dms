@@ -206,6 +206,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 		workspace.setDashboardGeneralVisible(up.getDashboard().isGeneralVisible());
 		workspace.setDashboardWorkflowVisible(up.getDashboard().isWorkflowVisible());
 		workspace.setDashboardKeywordsVisible(up.getDashboard().isKeywordsVisible());
+		workspace.setDashboardMessagingVisible(true);
 		
 		// Available options
 		GWTAvailableOption availableOption = new GWTAvailableOption();

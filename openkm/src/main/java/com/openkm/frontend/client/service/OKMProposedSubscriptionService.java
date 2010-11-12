@@ -21,8 +21,11 @@
 
 package com.openkm.frontend.client.service;
 
+import java.util.List;
+
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.openkm.frontend.client.OKMException;
+import com.openkm.frontend.client.bean.GWTProposedSubscription;
 
 /**
  * @author jllort
@@ -30,4 +33,5 @@ import com.openkm.frontend.client.OKMException;
  */
 public interface OKMProposedSubscriptionService extends RemoteService {
 	public void create(String uuid, String path, String type, String users, String roles) throws OKMException;
+	public List<GWTProposedSubscription> findAll() throws OKMException;
 }

@@ -36,6 +36,7 @@ import com.openkm.frontend.client.widget.dashboard.GeneralDashboard;
 import com.openkm.frontend.client.widget.dashboard.HorizontalToolBar;
 import com.openkm.frontend.client.widget.dashboard.KeyMapDashboard;
 import com.openkm.frontend.client.widget.dashboard.MailDashboard;
+import com.openkm.frontend.client.widget.dashboard.MessagingDashboard;
 import com.openkm.frontend.client.widget.dashboard.NewsDashboard;
 import com.openkm.frontend.client.widget.dashboard.UserDashboard;
 import com.openkm.frontend.client.widget.dashboard.WorkflowDashboard;
@@ -54,6 +55,7 @@ public class Dashboard extends Composite {
 	private boolean generalVisible = false;
 	private boolean workflowVisible = false;
 	private boolean keywordsVisible = false;
+	private boolean messagingVisible = false;
 	
 	public static final int DASHBOARD_NONE 		= -1;
 	public static final int DASHBOARD_USER 		= 1;
@@ -62,7 +64,8 @@ public class Dashboard extends Composite {
 	public static final int DASHBOARD_GENERAL	= 4;
 	public static final int DASHBOARD_WORKFLOW	= 5;
 	public static final int DASHBOARD_KEYMAP	= 6;
-	public static final int DASHBOARD_EXTENSION	= 7;
+	public static final int DASHBOARD_MESSAGING	= 7;
+	public static final int DASHBOARD_EXTENSION	= 8;
 	
 	private VerticalPanel panel;
 	private SimplePanel sp;
@@ -74,6 +77,7 @@ public class Dashboard extends Composite {
 	public GeneralDashboard generalDashboard;
 	public WorkflowDashboard workflowDashboard;
 	public KeyMapDashboard keyMapDashboard;
+	public MessagingDashboard messagingDashboard;
 	private Widget actualWidgetExtension;
 	private int actualView = 0; 
 	Timer dashboardRefreshing;
@@ -94,6 +98,7 @@ public class Dashboard extends Composite {
 		generalDashboard = new GeneralDashboard();
 		workflowDashboard = new WorkflowDashboard();
 		keyMapDashboard = new KeyMapDashboard();
+		messagingDashboard = new MessagingDashboard();
 		
 		actualView = DASHBOARD_NONE;
 		
@@ -125,6 +130,7 @@ public class Dashboard extends Composite {
 		generalDashboard.setWidth(width-2);
 		workflowDashboard.setWidth(width-2);
 		keyMapDashboard.setSize(""+(width-2), ""+(height-60-2));
+		messagingDashboard.setWidth(width-2);
 		horizontalToolBar.setHeight("60");
 		horizontalToolBar.setWidth("100%");
 		
@@ -146,6 +152,7 @@ public class Dashboard extends Composite {
 		newsDashboard.langRefresh();
 		workflowDashboard.langRefresh();
 		keyMapDashboard.langRefresh();
+		messagingDashboard.langRefresh();
 	}
 	
 	/**
@@ -180,6 +187,10 @@ public class Dashboard extends Composite {
 				scrollPanel.remove(keyMapDashboard);
 				break;
 			
+			case DASHBOARD_MESSAGING:
+				scrollPanel.remove(messagingDashboard);
+				break;
+			
 			case DASHBOARD_EXTENSION:
 				scrollPanel.remove(actualWidgetExtension);
 				break;
@@ -210,6 +221,10 @@ public class Dashboard extends Composite {
 				scrollPanel.add(keyMapDashboard);
 				break;
 				
+			case DASHBOARD_MESSAGING:
+				scrollPanel.add(messagingDashboard);
+				break;
+				
 			case DASHBOARD_EXTENSION:
 				actualWidgetExtension = widgetExtensionList.get(horizontalToolBar.getSelectedExtension());
 				scrollPanel.add(actualWidgetExtension);
@@ -229,6 +244,7 @@ public class Dashboard extends Composite {
 		generalDashboard.refreshAll();
 		workflowDashboard.findUserTaskInstances();
 		keyMapDashboard.refreshAll();
+		messagingDashboard.refreshAll();
 	}
 	
 	/**
@@ -295,6 +311,14 @@ public class Dashboard extends Composite {
 	}
 	
 	/**
+	 * showKeywords
+	 */
+	public void showMessaging() {
+		messagingVisible = true;
+		horizontalToolBar.showMessaging();
+	}
+	
+	/**
 	 * init
 	 */
 	public void init() {
@@ -310,6 +334,8 @@ public class Dashboard extends Composite {
 			changeView(DASHBOARD_WORKFLOW);
 		} else if (keywordsVisible) {
 			changeView(DASHBOARD_KEYMAP);
+		} else if (messagingVisible) {
+			changeView(DASHBOARD_MESSAGING);
 		} else if (!widgetExtensionList.isEmpty()){
 			changeView(DASHBOARD_EXTENSION);
 		}
