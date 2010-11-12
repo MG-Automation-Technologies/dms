@@ -67,7 +67,7 @@ public class Config {
 	public static final String STOP_JAR = "stop.jar";
 	
 	// Configuration files
-	public static final String CONFIG_FILE = "OpenKM"+INSTALL+".cfg";
+	public static final String OPENKM_CONFIG = "OpenKM"+INSTALL+".cfg";
 	public static final String JBPM_CONFIG = "jbpm"+INSTALL+".xml";
 	public static final String MIME_FILE = "mime.types";
 	public static final String NODE_DEFINITIONS = "CustomNodes.cnd";
