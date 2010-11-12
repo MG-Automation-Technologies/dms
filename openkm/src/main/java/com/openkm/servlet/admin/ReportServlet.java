@@ -62,6 +62,7 @@ import com.openkm.dao.ReportDAO;
 import com.openkm.dao.bean.Report;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.ReportUtil;
+import com.openkm.util.SecureStore;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtil;
 
@@ -175,7 +176,7 @@ public class ReportServlet extends BaseServlet {
 					} else {
 						is = item.getInputStream();
 						rp.setFileName(FilenameUtils.getName(item.getName()));
-						rp.setFileContent(IOUtils.toByteArray(is));
+						rp.setFileContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
 						is.close();
 					}
 				}
@@ -292,7 +293,7 @@ public class ReportServlet extends BaseServlet {
 		
 		try {
 			baos = new ByteArrayOutputStream();
-			bais = new ByteArrayInputStream(rp.getFileContent());
+			bais = new ByteArrayInputStream(SecureStore.b64Decode(rp.getFileContent()));
 			
 			if (Report.SQL.equals(rp.getType())) {
 				dbSession = HibernateUtil.getSessionFactory().openSession();
