@@ -21,7 +21,6 @@
 
 package com.openkm.dao;
 
-import java.sql.Blob;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -67,7 +66,7 @@ public class CronTabDAO {
 	 */
 	public static void update(CronTab ct) throws DatabaseException {
 		log.debug("update({})", ct);
-		String qs = "select ct.fileContentBlob, ct.fileName from CronTab ct where ct.id=:id";
+		String qs = "select ct.fileContent, ct.fileName from CronTab ct where ct.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -75,11 +74,11 @@ public class CronTabDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			
-			if (ct.getFileContent().length == 0) {
+			if (ct.getFileContent() == null || ct.getFileContent().length() == 0) {
 				Query q = session.createQuery(qs);
 				q.setParameter("id", ct.getId());
 				Object[] data = (Object[]) q.setMaxResults(1).uniqueResult();
-				ct.setFileContent(HibernateUtil.toByteArray((Blob) data[0]));
+				ct.setFileContent((String) data[0]);
 				ct.setFileName((String) data[1]);
 			}
 			
