@@ -298,7 +298,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6232345F_F9E3_4D41_AFB9_EF8C8D1F37BA"
+        "OwnerKey" = "8:_E5E2689B95294B0FBF84C2758B9E8FEB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -310,7 +310,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E5E2689B95294B0FBF84C2758B9E8FEB"
+        "OwnerKey" = "8:_6232345F_F9E3_4D41_AFB9_EF8C8D1F37BA"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -969,14 +969,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:OpenKM Word AddIn"
-        "ProductCode" = "8:{FD07A8B8-A501-4C99-9A86-4527CDE3C963}"
-        "PackageCode" = "8:{C6F4B95E-C530-451D-BD20-4A6F877947AA}"
+        "ProductCode" = "8:{2A3048E6-1FEB-41B9-BC19-31EAF5DAC2D2}"
+        "PackageCode" = "8:{1E28288B-48F8-4509-8BFC-CF1F0D8D156B}"
         "UpgradeCode" = "8:{0EE47DEA-27AA-4529-96D9-AD4D48ABE8A9}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:5.0.0"
         "Manufacturer" = "8:OpenKM"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://www.openkm.com"
