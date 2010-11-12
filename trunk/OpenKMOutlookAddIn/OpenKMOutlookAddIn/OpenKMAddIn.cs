@@ -51,7 +51,7 @@ namespace OpenKMOutlookAddIn
                             Outlook.MailItem mailItem = (selObject as Outlook.MailItem);
                             DateTime receivedTime = mailItem.ReceivedTime;
                             String user = configXML.getUser();
-                            String basePath = "/okm:home/" + user + "/okm:mail/";
+                            String basePath = "/okm:mail/" + user + "/";
                             String year = "" + receivedTime.Year;
                             String month = "" + receivedTime.Month;
                             String day = "" + receivedTime.Day;
