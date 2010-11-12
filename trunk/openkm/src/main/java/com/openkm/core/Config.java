@@ -63,8 +63,8 @@ public class Config {
 	public static final String STOP_JAR = "stop.jar";
 	
 	// Configuration files
-	public static final String CONFIG_FILE = "OpenKM"+INSTALL+".cfg";
-	public static final String MIME_FILE = "mime.types";
+	public static final String OPENKM_CONFIG = "OpenKM"+INSTALL+".cfg";
+	public static final String JBPM_CONFIG = "jbpm"+INSTALL+".xml";
 	public static final String NODE_DEFINITIONS = "CustomNodes.cnd";
 	public static final String DATASOURCE = "java:/OpenKM"+INSTALL+"DS";
 	
@@ -444,7 +444,7 @@ public class Config {
 	
 	public static void load() {
 		Properties config = new Properties();
-		String configFile = HOME_DIR+"/"+CONFIG_FILE;
+		String configFile = HOME_DIR+"/"+OPENKM_CONFIG;
 			
 		// Read config
 		try {
@@ -687,9 +687,9 @@ public class Config {
 			
 			fis.close();
 		} catch (FileNotFoundException e) {
-			log.warn("** No "+CONFIG_FILE+" file found, set default config **");
+			log.warn("** No "+OPENKM_CONFIG+" file found, set default config **");
 		} catch (IOException e) {
-			log.warn("** IOError reading "+CONFIG_FILE+", set default config **");
+			log.warn("** IOError reading "+OPENKM_CONFIG+", set default config **");
 		} finally {
 			log.info("** Configuration **");
 			for (Entry<String, String> entry : values.entrySet()) {
