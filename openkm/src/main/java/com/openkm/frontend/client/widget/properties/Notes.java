@@ -179,6 +179,7 @@ public class Notes extends Composite {
 		}
 		
 		writeAddNote();
+		Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.refreshNotesSize();
 	}
 	
 	/**
@@ -320,6 +321,7 @@ public class Notes extends Composite {
 				Main.get().mainPanel.desktop.browser.fileBrowser.addNoteIconToSelectedRow();
 				document.setHasNotes(true);
 			}
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.refreshNotesSize();
 			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.NOTE_ADDED);
 		}
 
