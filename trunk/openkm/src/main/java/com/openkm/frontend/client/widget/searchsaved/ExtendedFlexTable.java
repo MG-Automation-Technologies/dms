@@ -187,9 +187,9 @@ public class ExtendedFlexTable extends FlexTable {
 		// Resets selected Rows and Col values
 		selectedRow = -1;
 		
-		// Purge all rows except first
-		while (getRowCount() > 1) {
-			removeRow(1);
+		// Purge all rows
+		while (getRowCount() > 0) {
+			removeRow(0);
 		}
 	}
 	
