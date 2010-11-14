@@ -89,7 +89,6 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean dashboardGeneralVisible;
 	private boolean dashboardWorkflowVisible;
 	private boolean dashboardKeywordsVisible;
-	private boolean dashboardMessagingVisible;
 	private boolean tabDocumentPropertiesVisible;
 	private boolean tabDocumentNotesVisible;
 	private boolean tabDocumentSecurityVisible;
@@ -498,14 +497,6 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setDashboardKeywordsVisible(boolean dashboardKeywordsVisible) {
 		this.dashboardKeywordsVisible = dashboardKeywordsVisible;
-	}
-	
-	public boolean isDashboardMessagingVisible() {
-		return dashboardMessagingVisible;
-	}
-
-	public void setDashboardMessagingVisible(boolean dashboardMessagingVisible) {
-		this.dashboardMessagingVisible = dashboardMessagingVisible;
 	}
 
 	public GWTAvailableOption getAvailableOption() {
