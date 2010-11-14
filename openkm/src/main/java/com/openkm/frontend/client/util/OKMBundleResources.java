@@ -292,4 +292,7 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/icon/search/folder_explore.gif")
 	public ImageResource folderExplorer();
+	
+	@Source("com/openkm/frontend/public/img/indicator.gif")
+	public ImageResource indicator();
 }
