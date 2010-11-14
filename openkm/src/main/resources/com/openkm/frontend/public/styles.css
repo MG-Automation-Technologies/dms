@@ -523,6 +523,23 @@ iframe {
 	background-repeat: repeat;
 }
 
+/* Stack Panel */
+.okm-DashboardStackPanel {
+	border-right: 1px solid #A5A596;
+}
+
+.okm-DashboardStackPanel .gwt-StackPanelItem {
+	height: 19px;
+	background-image: url(img/stackpanel_back.gif);
+	background-repeat: repeat;
+}
+
+.okm-DashboardStackPanel .gwt-StackPanelItem-selected {
+	height: 19px;
+	background-image: url(img/stackpanel_back.gif);
+	background-repeat: repeat;
+}
+
 /* Status Popup */
 .okm-StatusPopup {
 	font-size: 12px;
