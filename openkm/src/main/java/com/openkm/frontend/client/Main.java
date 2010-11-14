@@ -451,7 +451,25 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	 * @return The translated value
 	 */
 	public static String i18n(String property) {
-		String ret = (String) Main.get().hI18n.get(property);
+		// All frontend properties starts with frontend.
+		String ret = (String) Main.get().hI18n.get("frontend."+property);
+		
+		if (ret == null) {
+			ret = property;
+		}
+		
+		return ret;
+	}
+	
+	/**
+	 * Gets the i18n extension param translation
+	 * 
+	 * @param properties The propetier code locator
+	 * @return The translated value
+	 */
+	public String i18nExtension(String property) {
+		// All extension properties starts with extension.
+		String ret = (String) Main.get().hI18n.get("extension."+property);
 		
 		if (ret == null) {
 			ret = property;
