@@ -203,38 +203,13 @@ public class ExtendedFlexTable extends FlexTable {
 	}
 	
 	/**
-	 * Sets the selected row
-	 * 
-	 * @param row The row number
-	 */
-	public void setSelectedRow(int row) {
-		if (row>0 && row<getRowCount()) {
-			if (selectedRow > 0) {
-				styleRow(selectedRow, false);
-			}
-			styleRow(row, true);
-			selectedRow = row;
-		}
-	}
-	
-	/**
-	 * Removes the selected row
-	 */
-	public void removeSelectedRow() {
-		if (selectedRow>0) {
-			styleRow(selectedRow, false);
-		}
-		selectedRow = -1;
-	}
-	
-	/**
 	 * After deletes document or folder selects a row 
 	 */
 	public void selectPrevRow() {
 		// After deletes document or folder selects a previos row if not 0 or the next if exists ( next row is actual after delete )
 		// RowCount minor value is 1 for header titles
 		if (getRowCount() > 1) {
-			if (selectedRow > 1) {
+			if (selectedRow > 0) {
 				selectedRow--;
 			}
 			styleRow(selectedRow, true);
