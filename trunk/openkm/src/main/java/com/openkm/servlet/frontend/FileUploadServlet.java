@@ -225,10 +225,10 @@ public class FileUploadServlet extends OKMHttpServlet {
 			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_Repository));
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
-			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_DatabaseException));
+			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_Database));
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
-			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_IOException));
+			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_IO));
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			out.print(e.toString());

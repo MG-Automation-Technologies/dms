@@ -76,7 +76,7 @@ public class StaplingServlet extends OKMRemoteServiceServlet implements OKMStapl
 			return String.valueOf(id);
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_Database), e.getMessage());
 		}
 	}
 	
@@ -101,10 +101,10 @@ public class StaplingServlet extends OKMRemoteServiceServlet implements OKMStapl
 			}
 		} catch (NumberFormatException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_NumberFormatException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_NumberFormat), e.getMessage());
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_Database), e.getMessage());
 		}
 	}
 	
@@ -117,7 +117,7 @@ public class StaplingServlet extends OKMRemoteServiceServlet implements OKMStapl
 			}
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_Database), e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_Repository), e.getMessage());
@@ -144,7 +144,7 @@ public class StaplingServlet extends OKMRemoteServiceServlet implements OKMStapl
 			}
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_Database), e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_Repository), e.getMessage());
@@ -157,10 +157,10 @@ public class StaplingServlet extends OKMRemoteServiceServlet implements OKMStapl
 			StapleGroupDAO.delete(Integer.parseInt(id));
 		} catch (NumberFormatException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_NumberFormatException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_NumberFormat), e.getMessage());
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_Database), e.getMessage());
 		}
 	}
 	
@@ -170,10 +170,10 @@ public class StaplingServlet extends OKMRemoteServiceServlet implements OKMStapl
 			StapleGroupDAO.deleteStaple(Integer.parseInt(id));
 		} catch (NumberFormatException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_NumberFormatException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_NumberFormat), e.getMessage());
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_Database), e.getMessage());
 		}
 	}
 }

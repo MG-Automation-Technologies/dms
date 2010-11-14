@@ -120,13 +120,13 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Database), e.getMessage());
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_IOException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_IO), e.getMessage());
 		} catch (ParseException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_ParseException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Parse), e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Repository), e.getMessage());
@@ -206,7 +206,6 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 		workspace.setDashboardGeneralVisible(up.getDashboard().isGeneralVisible());
 		workspace.setDashboardWorkflowVisible(up.getDashboard().isWorkflowVisible());
 		workspace.setDashboardKeywordsVisible(up.getDashboard().isKeywordsVisible());
-		workspace.setDashboardMessagingVisible(true);
 		
 		// Available options
 		GWTAvailableOption availableOption = new GWTAvailableOption();
@@ -305,10 +304,10 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 			workspace.setRoleList(OKMAuth.getInstance().getRolesByUser(null, user.getId()));
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQLException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQL), e.getMessage());
 		} catch (PrincipalAdapterException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_PrincipalAdapterException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_PrincipalAdapter), e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Repository), e.getMessage());
@@ -335,7 +334,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Database), e.getMessage());
 		}
 		
 		return docSize;
@@ -385,7 +384,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 				}
 			} catch (DatabaseException e) {
 				log.error(e.getMessage(), e);
-				throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQLException), e.getMessage());
+				throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQL), e.getMessage());
 			}
 		}
 	}
@@ -399,7 +398,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 			try {
 				MailAccountDAO.delete(id);
 			} catch (DatabaseException e) {
-				throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQLException), e.getMessage());
+				throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQL), e.getMessage());
 			}
 		}
 	}

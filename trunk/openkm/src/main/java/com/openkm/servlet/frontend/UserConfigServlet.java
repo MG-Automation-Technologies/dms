@@ -60,7 +60,7 @@ public class UserConfigServlet extends OKMRemoteServiceServlet implements OKMUse
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMUserCopyService, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMUserCopyService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMUserCopyService, ErrorCode.CAUSE_Database), e.getMessage());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMUserCopyService, ErrorCode.CAUSE_General), e.getMessage());
@@ -87,7 +87,7 @@ public class UserConfigServlet extends OKMRemoteServiceServlet implements OKMUse
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMUserCopyService, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMUserCopyService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMUserCopyService, ErrorCode.CAUSE_Database), e.getMessage());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMUserCopyService, ErrorCode.CAUSE_General), e.getMessage());

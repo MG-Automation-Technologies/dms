@@ -107,7 +107,7 @@ public class GeneralServlet extends OKMRemoteServiceServlet implements OKMGenera
 			}
 		} catch (DatabaseException e) {
 			log.warn(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMGeneralService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMGeneralService, ErrorCode.CAUSE_Database), e.getMessage());
 		} catch (RepositoryException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMGeneralService, ErrorCode.CAUSE_Repository), e.getMessage());
