@@ -1,5 +1,5 @@
 /**
- *  OpenKM, Open Document Management System (http://www.openkm.com)
+*  OpenKM, Open Document Management System (http://www.openkm.com)
  *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
@@ -31,15 +31,18 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.openkm.extension.frontend.client.messaging.MessageDashboard;
+import com.openkm.frontend.client.extension.event.HasDashboardEvent;
+import com.openkm.frontend.client.extension.event.handler.DashboardHandlerExtension;
+import com.openkm.frontend.client.extension.event.hashandler.HasDashboardHandlerExtension;
 import com.openkm.frontend.client.extension.widget.ToolBarBoxExtension;
 import com.openkm.frontend.client.widget.dashboard.GeneralDashboard;
 import com.openkm.frontend.client.widget.dashboard.HorizontalToolBar;
-import com.openkm.frontend.client.widget.dashboard.KeyMapDashboard;
 import com.openkm.frontend.client.widget.dashboard.MailDashboard;
-import com.openkm.frontend.client.widget.dashboard.MessagingDashboard;
 import com.openkm.frontend.client.widget.dashboard.NewsDashboard;
 import com.openkm.frontend.client.widget.dashboard.UserDashboard;
-import com.openkm.frontend.client.widget.dashboard.WorkflowDashboard;
+import com.openkm.frontend.client.widget.dashboard.keymap.KeyMapDashboard;
+import com.openkm.frontend.client.widget.dashboard.workflow.WorkflowDashboard;
 
 /**
  * Dashboard
@@ -47,7 +50,7 @@ import com.openkm.frontend.client.widget.dashboard.WorkflowDashboard;
  * @author jllort
  *
  */
-public class Dashboard extends Composite {
+public class Dashboard extends Composite implements HasDashboardHandlerExtension, HasDashboardEvent {
 	
 	private boolean userVisible = false;
 	private boolean mailVisible = false;
@@ -55,7 +58,6 @@ public class Dashboard extends Composite {
 	private boolean generalVisible = false;
 	private boolean workflowVisible = false;
 	private boolean keywordsVisible = false;
-	private boolean messagingVisible = false;
 	
 	public static final int DASHBOARD_NONE 		= -1;
 	public static final int DASHBOARD_USER 		= 1;
@@ -64,8 +66,7 @@ public class Dashboard extends Composite {
 	public static final int DASHBOARD_GENERAL	= 4;
 	public static final int DASHBOARD_WORKFLOW	= 5;
 	public static final int DASHBOARD_KEYMAP	= 6;
-	public static final int DASHBOARD_MESSAGING	= 7;
-	public static final int DASHBOARD_EXTENSION	= 8;
+	public static final int DASHBOARD_EXTENSION	= 7;
 	
 	private VerticalPanel panel;
 	private SimplePanel sp;
@@ -77,17 +78,21 @@ public class Dashboard extends Composite {
 	public GeneralDashboard generalDashboard;
 	public WorkflowDashboard workflowDashboard;
 	public KeyMapDashboard keyMapDashboard;
-	public MessagingDashboard messagingDashboard;
+	public MessageDashboard messageDashboard;
 	private Widget actualWidgetExtension;
 	private int actualView = 0; 
 	Timer dashboardRefreshing;
-	List<Widget> widgetExtensionList;
+	List<ToolBarBoxExtension> toolBarBoxExtensionList;
+	List<DashboardHandlerExtension> dashboardHandlerExtensionList;
+	private int width = 0;
+	private int height = 0;
 	
 	/**
 	 * Dashboard
 	 */
 	public Dashboard() {
-		widgetExtensionList = new ArrayList<Widget>();
+		toolBarBoxExtensionList = new ArrayList<ToolBarBoxExtension>();
+		dashboardHandlerExtensionList = new ArrayList<DashboardHandlerExtension>();
 		panel = new VerticalPanel();
 		sp = new SimplePanel();
 		userDashboard = new UserDashboard();
@@ -98,7 +103,7 @@ public class Dashboard extends Composite {
 		generalDashboard = new GeneralDashboard();
 		workflowDashboard = new WorkflowDashboard();
 		keyMapDashboard = new KeyMapDashboard();
-		messagingDashboard = new MessagingDashboard();
+		messageDashboard = new MessageDashboard();
 		
 		actualView = DASHBOARD_NONE;
 		
@@ -119,6 +124,8 @@ public class Dashboard extends Composite {
 	 * @param height The max height of the widget
 	 */
 	public void setSize(int width, int height) {
+		this.width = width;
+		this.height = height;
 		panel.setPixelSize(width-2, height-2);
 		panel.setCellHeight(sp, ""+(height-60-2));
 		panel.setCellHeight(horizontalToolBar, ""+60);
@@ -130,12 +137,11 @@ public class Dashboard extends Composite {
 		generalDashboard.setWidth(width-2);
 		workflowDashboard.setWidth(width-2);
 		keyMapDashboard.setSize(""+(width-2), ""+(height-60-2));
-		messagingDashboard.setWidth(width-2);
 		horizontalToolBar.setHeight("60");
 		horizontalToolBar.setWidth("100%");
 		
-		for (Iterator<Widget> it = widgetExtensionList.iterator(); it.hasNext();) {
-			it.next().setWidth(""+(width-2));
+		for (Iterator<ToolBarBoxExtension> it = toolBarBoxExtensionList.iterator(); it.hasNext();) {
+			it.next().getWidget().setSize(""+(width-2), (""+(height-60-2)));
 		}
 		
 		newsDashboard.getUserSearchs(true); // Here must get all searchs to set correct width size
@@ -152,7 +158,7 @@ public class Dashboard extends Composite {
 		newsDashboard.langRefresh();
 		workflowDashboard.langRefresh();
 		keyMapDashboard.langRefresh();
-		messagingDashboard.langRefresh();
+		messageDashboard.langRefresh();
 	}
 	
 	/**
@@ -187,10 +193,6 @@ public class Dashboard extends Composite {
 				scrollPanel.remove(keyMapDashboard);
 				break;
 			
-			case DASHBOARD_MESSAGING:
-				scrollPanel.remove(messagingDashboard);
-				break;
-			
 			case DASHBOARD_EXTENSION:
 				scrollPanel.remove(actualWidgetExtension);
 				break;
@@ -221,17 +223,14 @@ public class Dashboard extends Composite {
 				scrollPanel.add(keyMapDashboard);
 				break;
 				
-			case DASHBOARD_MESSAGING:
-				scrollPanel.add(messagingDashboard);
-				break;
-				
 			case DASHBOARD_EXTENSION:
-				actualWidgetExtension = widgetExtensionList.get(horizontalToolBar.getSelectedExtension());
+				actualWidgetExtension = toolBarBoxExtensionList.get(horizontalToolBar.getSelectedExtension()).getWidget();
 				scrollPanel.add(actualWidgetExtension);
 				break;
 		}
 		
 		actualView = view;
+		fireEvent(HasDashboardEvent.TOOLBOX_CHANGED);
 	}
 	
 	/**
@@ -244,7 +243,7 @@ public class Dashboard extends Composite {
 		generalDashboard.refreshAll();
 		workflowDashboard.findUserTaskInstances();
 		keyMapDashboard.refreshAll();
-		messagingDashboard.refreshAll();
+		messageDashboard.refreshAll();
 	}
 	
 	/**
@@ -256,6 +255,7 @@ public class Dashboard extends Composite {
 		dashboardRefreshing = new Timer() {
 			public void run() {
 				refreshAll();
+				fireEvent(HasDashboardEvent.DASHBOARD_REFRESH);
 			}
 		};
 		
@@ -311,14 +311,6 @@ public class Dashboard extends Composite {
 	}
 	
 	/**
-	 * showKeywords
-	 */
-	public void showMessaging() {
-		messagingVisible = true;
-		horizontalToolBar.showMessaging();
-	}
-	
-	/**
 	 * init
 	 */
 	public void init() {
@@ -334,9 +326,7 @@ public class Dashboard extends Composite {
 			changeView(DASHBOARD_WORKFLOW);
 		} else if (keywordsVisible) {
 			changeView(DASHBOARD_KEYMAP);
-		} else if (messagingVisible) {
-			changeView(DASHBOARD_MESSAGING);
-		} else if (!widgetExtensionList.isEmpty()){
+		} else if (!toolBarBoxExtensionList.isEmpty()){
 			changeView(DASHBOARD_EXTENSION);
 		}
 		horizontalToolBar.init();
@@ -348,7 +338,20 @@ public class Dashboard extends Composite {
 	 * @param extension
 	 */
 	public void addToolBarBoxExtension(ToolBarBoxExtension extension) {
-		widgetExtensionList.add(extension.getWidget());
+		toolBarBoxExtensionList.add(extension);
 		horizontalToolBar.addToolBarBoxExtension(extension);
+		extension.getWidget().setSize(""+(width-2), (""+(height-60-2)));
+	}
+
+	@Override
+	public void addDashboardHandlerExtension(DashboardHandlerExtension handlerExtension) {
+		dashboardHandlerExtensionList.add(handlerExtension);
+	}
+
+	@Override
+	public void fireEvent(DashboardEventConstant event) {
+		for (DashboardHandlerExtension handlerExtension : dashboardHandlerExtensionList) {
+			handlerExtension.onChange(event);
+		}
 	}
 }
