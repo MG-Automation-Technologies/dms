@@ -19,37 +19,50 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.extension.comunicator;
-
-import com.openkm.frontend.client.util.Util;
-
+package com.openkm.frontend.client.extension.event;
 
 /**
- * UtilComunicator
+ * HasDashboardEvent
+ * 
  * 
  * @author jllort
  *
  */
-public class UtilComunicator {
 
-	/**
-	 * formatSize
-	 * 
-	 * @param size
-	 * @return
-	 */
-	public static String formatSize(double size) {
-		return Util.formatSize(size);
-	}
+public interface HasDashboardEvent {
 	
 	/**
-	 * createHeaderHTML
+	 * DashboardEventConstant
 	 * 
-	 * @param imageURL
-	 * @param caption
-	 * @return
+	 * @author jllort
+	 *
 	 */
-	public static String createHeaderHTML(String imageURL, String caption) {
-		return Util.createHeaderHTML(imageURL, caption);
+	public static class DashboardEventConstant {
+		
+		static final int EVENT_TOOLBOX_CHANGED		= 1;
+		static final int EVENT_DASHBOARD_REFRESH	= 2;
+		
+		private int type = 0;
+		
+		/**
+		 * DocumentEventConstant
+		 * 
+		 * @param type
+		 */
+		private DashboardEventConstant(int type) {
+			this.type = type;
+		}
+		
+		public int getType(){
+			return type;
+		}
 	}
+	
+	DashboardEventConstant TOOLBOX_CHANGED = new DashboardEventConstant(DashboardEventConstant.EVENT_TOOLBOX_CHANGED);
+	DashboardEventConstant DASHBOARD_REFRESH = new DashboardEventConstant(DashboardEventConstant.EVENT_DASHBOARD_REFRESH);
+	
+	/**
+	 * @param event
+	 */
+	void fireEvent(DashboardEventConstant event);
 }
