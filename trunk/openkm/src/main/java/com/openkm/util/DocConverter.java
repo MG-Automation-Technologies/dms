@@ -93,7 +93,7 @@ public class DocConverter {
 	/**
 	 * Retrieve class instance
 	 */
-	public static DocConverter getInstance() {
+	public static synchronized DocConverter getInstance() {
 		if (instance == null) {
 			instance = new DocConverter();
 			
