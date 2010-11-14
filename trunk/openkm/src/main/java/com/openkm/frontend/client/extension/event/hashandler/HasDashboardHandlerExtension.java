@@ -19,37 +19,19 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.extension.comunicator;
+package com.openkm.frontend.client.extension.event.hashandler;
 
-import com.openkm.frontend.client.util.Util;
+import com.openkm.frontend.client.extension.event.handler.DashboardHandlerExtension;
 
 
 /**
- * UtilComunicator
+ * HasDashboardHandlerExtension
  * 
  * @author jllort
  *
  */
-public class UtilComunicator {
-
-	/**
-	 * formatSize
-	 * 
-	 * @param size
-	 * @return
-	 */
-	public static String formatSize(double size) {
-		return Util.formatSize(size);
-	}
+public interface HasDashboardHandlerExtension {
 	
-	/**
-	 * createHeaderHTML
-	 * 
-	 * @param imageURL
-	 * @param caption
-	 * @return
-	 */
-	public static String createHeaderHTML(String imageURL, String caption) {
-		return Util.createHeaderHTML(imageURL, caption);
-	}
+	void addDashboardHandlerExtension(DashboardHandlerExtension handlerExtension);
+	
 }
