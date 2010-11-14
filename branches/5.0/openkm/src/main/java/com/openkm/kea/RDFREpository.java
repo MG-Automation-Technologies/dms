@@ -106,7 +106,7 @@ public class RDFREpository {
      * 
      * @return
      */
-    public static RDFREpository getInstance() {
+    public static synchronized RDFREpository getInstance() {
         if (instance == null) {
             instance = new RDFREpository();
         }
