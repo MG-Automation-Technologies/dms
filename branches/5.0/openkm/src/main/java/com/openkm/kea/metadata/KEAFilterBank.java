@@ -55,8 +55,8 @@ public class KEAFilterBank {
      * @return
      * @throws MetadataExtractionException
      */
-    public static KEAFilterBank getInstance() throws MetadataExtractionException {
-        if (instance==null) {
+    public static synchronized KEAFilterBank getInstance() throws MetadataExtractionException {
+        if (instance == null) {
             instance = new KEAFilterBank();
         }
         return instance;
