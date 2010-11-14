@@ -278,9 +278,6 @@ public class WorkspaceUserProperties {
 			if (workspace.isDashboardKeywordsVisible()) {
 				Main.get().mainPanel.dashboard.showKeywords();
 			}
-			if (workspace.isDashboardMessagingVisible()) {
-				Main.get().mainPanel.dashboard.showMessaging();
-			}
 			Main.get().mainPanel.dashboard.init();
 			
 			Main.get().startUp.nextStatus(StartUp.STARTUP_GET_TAXONOMY_ROOT);
