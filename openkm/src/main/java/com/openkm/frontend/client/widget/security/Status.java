@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.util.OKMBundleResources;
 
 /**
  * Status
@@ -49,7 +50,7 @@ public class Status extends PopupPanel {
 	public Status() {
 		super(false,true);
 		hPanel = new HorizontalPanel();
-		image = new Image("img/indicator.gif");
+		image = new Image(OKMBundleResources.INSTANCE.indicator());
 		msg = new HTML("");
 		space = new HTML("");
 		
