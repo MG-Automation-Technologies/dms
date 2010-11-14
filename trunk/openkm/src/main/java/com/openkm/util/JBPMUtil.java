@@ -36,7 +36,7 @@ public class JBPMUtil {
 	private static Logger log = LoggerFactory.getLogger(JBPMUtil.class);
 	private static JbpmConfiguration jbpmConfig = null;
 	
-	public static JbpmConfiguration getConfig() {
+	public static synchronized JbpmConfiguration getConfig() {
 		if (jbpmConfig == null) {
 			File jbpmCfg = new File(Config.HOME_DIR+"/"+Config.JBPM_CONFIG);
 			FileInputStream fisJbpmCfg = null;
