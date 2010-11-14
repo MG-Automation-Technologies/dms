@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.extension.event.handler.DashboardHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.DocumentHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.FolderHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.LanguageHandlerExtension;
@@ -97,6 +98,9 @@ public class ExtensionManager {
 			}
 			if (obj instanceof PropertyGroupHandlerExtension) {
 				addPropertyGroupHandlerExtension((PropertyGroupHandlerExtension) obj);
+			}
+			if (obj instanceof DashboardHandlerExtension) {
+				addDashboardHandlerExtension((DashboardHandlerExtension) obj);
 			}
 		}
 	}
@@ -246,5 +250,14 @@ public class ExtensionManager {
 	 */
 	private static void addPropertyGroupHandlerExtension(PropertyGroupHandlerExtension handlerExtension) {
 		Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.addPropertyGroupHandlerExtension(handlerExtension);
+	}
+	
+	/**
+	 * addDashboardHandlerExtension
+	 * 
+	 * @param handlerExtension
+	 */
+	private static void addDashboardHandlerExtension(DashboardHandlerExtension handlerExtension) {
+		Main.get().mainPanel.dashboard.addDashboardHandlerExtension(handlerExtension);
 	}
 }
