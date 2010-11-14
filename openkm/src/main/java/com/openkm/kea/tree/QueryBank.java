@@ -53,8 +53,8 @@ public class QueryBank {
      * 
      * @return
      */
-    public static QueryBank getInstance() {
-        if (instance==null) {
+    public static synchronized QueryBank getInstance() {
+        if (instance == null) {
             instance = new QueryBank();
         }
         return instance;
