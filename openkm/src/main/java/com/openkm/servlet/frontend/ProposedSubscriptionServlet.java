@@ -25,6 +25,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.jcr.LoginException;
+import javax.jcr.Session;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +42,7 @@ import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.service.OKMProposedSubscriptionService;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.util.GWTUtil;
+import com.openkm.util.JCRUtils;
 
 /**
  * ProposedSubscriptionServlet
@@ -80,28 +84,41 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 			
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Database), e.getMessage());
 		} catch (PrincipalAdapterException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_PrincipalAdapterException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_PrincipalAdapter), e.getMessage());
 		}
 		
 	}
 
 	@Override
 	public List<GWTProposedSubscription> findAll() throws OKMException {
+		log.debug("findAll({}, {})");
+		updateSessionManager();
 		List<GWTProposedSubscription> psList = new ArrayList<GWTProposedSubscription>();
+		Session session = null;
 		try {
-			for (ProposedSubscription ps : ProposedSubscriptionDAO.findByUser(null, getThreadLocalRequest().getRemoteUser())) {
+			session = JCRUtils.getSession();			
+			for (ProposedSubscription ps : ProposedSubscriptionDAO.findByUser(session, getThreadLocalRequest().getRemoteUser())) {
 				psList.add(GWTUtil.copy(ps));
 			}
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Database), e.getMessage());
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (LoginException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Login), e.getMessage());
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Repository), e.getMessage());
+		}finally {
+			JCRUtils.logout(session);
 		}
+		log.debug("findAll: List"+psList);
 		return psList;
 	}
 }

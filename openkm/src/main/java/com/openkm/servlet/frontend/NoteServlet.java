@@ -68,7 +68,7 @@ public class NoteServlet extends OKMRemoteServiceServlet implements OKMNoteServi
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_Database), e.getMessage());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_General), e.getMessage());
@@ -92,7 +92,7 @@ public class NoteServlet extends OKMRemoteServiceServlet implements OKMNoteServi
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_Database), e.getMessage());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_General), e.getMessage());
@@ -118,7 +118,7 @@ public class NoteServlet extends OKMRemoteServiceServlet implements OKMNoteServi
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_Database), e.getMessage());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_General), e.getMessage());
