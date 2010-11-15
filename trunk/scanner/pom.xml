@@ -69,6 +69,7 @@
           <archive>
             <manifest>
               <addClasspath>true</addClasspath>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
             </manifest>
             <addMavenDescriptor>false</addMavenDescriptor>
           </archive>
@@ -89,6 +90,11 @@
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+            </manifest>
+          </archive>
         </configuration>
         <executions>
           <execution>
@@ -108,6 +114,7 @@
         <configuration>
           <source>${java.compiler}</source>
           <target>${java.compiler}</target>
+          <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
     </plugins>
@@ -130,7 +137,7 @@
         <version>2.3</version>
         <configuration>
           <targetJdk>${java.compiler}</targetJdk>
-          <sourceEncoding>utf-8</sourceEncoding>
+          <sourceEncoding>UTF-8</sourceEncoding>
           <minimumTokens>100</minimumTokens>
         </configuration>
       </plugin>
