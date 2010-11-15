@@ -5,7 +5,7 @@
   <artifactId>scanner</artifactId>
   <packaging>jar</packaging>
   <name>OpenKM Scanner Applet</name>
-  <version>1.2</version>
+  <version>5.1-SNAPSHOT</version>
   <url>http://www.openkm.com</url>
   <description>Java applet used to scan document directly from OpenKM web interface.</description>
 
