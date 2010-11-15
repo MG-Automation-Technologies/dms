@@ -27,7 +27,7 @@ package com.openkm.frontend.client.config;
  * @author jllort
  */
 public class Config {
-	public static String INSTALL = "";
+	public static final String INSTALL = "";
 	
 	// Service entrypoint 
 	public static final String OKMFolderService = "/OpenKM"+INSTALL+"/frontend/Folder";
