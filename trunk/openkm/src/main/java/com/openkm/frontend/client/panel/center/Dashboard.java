@@ -31,7 +31,6 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.openkm.extension.frontend.client.messaging.MessageDashboard;
 import com.openkm.frontend.client.extension.event.HasDashboardEvent;
 import com.openkm.frontend.client.extension.event.handler.DashboardHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasDashboardHandlerExtension;
@@ -78,7 +77,6 @@ public class Dashboard extends Composite implements HasDashboardHandlerExtension
 	public GeneralDashboard generalDashboard;
 	public WorkflowDashboard workflowDashboard;
 	public KeyMapDashboard keyMapDashboard;
-	public MessageDashboard messageDashboard;
 	private Widget actualWidgetExtension;
 	private int actualView = 0; 
 	Timer dashboardRefreshing;
@@ -103,7 +101,6 @@ public class Dashboard extends Composite implements HasDashboardHandlerExtension
 		generalDashboard = new GeneralDashboard();
 		workflowDashboard = new WorkflowDashboard();
 		keyMapDashboard = new KeyMapDashboard();
-		messageDashboard = new MessageDashboard();
 		
 		actualView = DASHBOARD_NONE;
 		
@@ -158,7 +155,6 @@ public class Dashboard extends Composite implements HasDashboardHandlerExtension
 		newsDashboard.langRefresh();
 		workflowDashboard.langRefresh();
 		keyMapDashboard.langRefresh();
-		messageDashboard.langRefresh();
 	}
 	
 	/**
@@ -243,7 +239,6 @@ public class Dashboard extends Composite implements HasDashboardHandlerExtension
 		generalDashboard.refreshAll();
 		workflowDashboard.findUserTaskInstances();
 		keyMapDashboard.refreshAll();
-		messageDashboard.refreshAll();
 	}
 	
 	/**
