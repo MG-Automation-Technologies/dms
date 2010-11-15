@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -51,7 +52,7 @@ public class Util {
 		HttpClient client = new DefaultHttpClient();
 		MultipartEntity form = new MultipartEntity();
 		form.addPart("file", new FileBody(file));
-		form.addPart("path", new StringBody(path));
+		form.addPart("path", new StringBody(path, Charset.forName("UTF-8")));
 		form.addPart("action", new StringBody("0")); // FancyFileUpload.ACTION_INSERT
 		HttpPost post = new HttpPost(url+"/OKMFileUploadServlet;jsessionid="+token);
 		post.setHeader("Cookie", "jsessionid="+token);
