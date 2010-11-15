@@ -21,6 +21,7 @@
 
 package com.openkm.dao;
 
+import java.util.Calendar;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -55,6 +56,7 @@ public class ProposedSubscriptionDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
+			if (ps.getSentDate() == null) ps.setSentDate(Calendar.getInstance());
 			session.save(ps);
 			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
@@ -186,6 +188,28 @@ public class ProposedSubscriptionDAO {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Mark proposed as seen
+	 */
+	public static void markSeen(int msgId) throws DatabaseException {
+		log.debug("markSeen({})", msgId);
+		String qs = "update ProposedSubscription ps set ps.seenDate=:seenDate where ps.id=:id";
+		Session session = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setInteger("id", msgId);
+			q.setCalendar("seenDate", Calendar.getInstance());
+			q.executeUpdate();
+			log.debug("markSeen: void");
+		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
