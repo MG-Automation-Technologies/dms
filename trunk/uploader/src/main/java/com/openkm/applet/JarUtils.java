@@ -60,11 +60,9 @@ public class JarUtils {
 			Attributes atts = mf.getMainAttributes();
 			String impVersion = atts.getValue("Implementation-Version");
 			String impBuild = atts.getValue("Implementation-Build");
-			//log.info("Implementation-Version: "+impVersion);
-			//log.info("Implementation-Build: "+impBuild);
 			
 			if (impVersion != null)	ret = impVersion;
-			if (impBuild != null) ret += " " + impBuild;
+			if (impBuild != null) ret += " (build: " + impBuild + ")";
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
