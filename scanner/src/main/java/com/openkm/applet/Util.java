@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.charset.Charset;
 import java.util.Locale;
 import java.util.logging.Logger;
 
@@ -65,7 +66,7 @@ public class Util {
 				HttpClient client = new DefaultHttpClient();
 				MultipartEntity form = new MultipartEntity();
 				form.addPart("file", new FileBody(tmpFile));
-				form.addPart("path", new StringBody(path));
+				form.addPart("path", new StringBody(path, Charset.forName("UTF-8")));
 				form.addPart("action", new StringBody("0")); // FancyFileUpload.ACTION_INSERT
 				HttpPost post = new HttpPost(url+"/OKMFileUploadServlet;jsessionid="+token);
 				post.setHeader("Cookie", "jsessionid="+token);
