@@ -50,6 +50,7 @@ public class MessageDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
+			if (msg.getSentDate() == null) msg.setSentDate(Calendar.getInstance());
 			session.save(msg);
 			HibernateUtil.commit(tx);
 		} catch(HibernateException e) {
@@ -133,7 +134,7 @@ public class MessageDAO {
 	}
 
 	/**
-	 * Find all twitter accounts
+	 * Find all messages
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<Message> findAll() throws DatabaseException {
