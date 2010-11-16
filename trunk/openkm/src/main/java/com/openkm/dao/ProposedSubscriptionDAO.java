@@ -117,6 +117,7 @@ public class ProposedSubscriptionDAO {
 					String nType = JCRUtils.getNodeType(node);
 					ps.setPath(node.getPath());
 					
+					// TODO Se supone que el tipo no cambia
 					if (!nType.equals(ps.getType())) {
 						ps.setType(JCRUtils.getNodeType(node));
 						session.update(ps);
@@ -167,6 +168,7 @@ public class ProposedSubscriptionDAO {
 				String nType = JCRUtils.getNodeType(node);
 				ret.setPath(node.getPath());
 				
+				// TODO Se supone que el tipo no cambia
 				if (!nType.equals(ret.getType())) {
 					ret.setType(JCRUtils.getNodeType(node));
 					session.update(ret);

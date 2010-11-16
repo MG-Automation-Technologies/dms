@@ -135,11 +135,13 @@ public class BookmarkDAO {
 			for (Bookmark bm : ret) {
 				try {
 					Node node = jcrSession.getNodeByUUID(bm.getUuid());
+					String nType = JCRUtils.getNodeType(node);
+					bm.setPath(node.getPath());
 					
-					if (!node.getPath().equals(bm.getPath())) {
-						bm.setPath(node.getPath());
+					// TODO Se supone que el tipo no cambia
+					if (!nType.equals(bm.getType())) {
 						bm.setType(JCRUtils.getNodeType(node));
-						session.update(bm);
+						session.update(ret);
 					}
 				} catch (javax.jcr.ItemNotFoundException e) {
 					// If user bookmark is missing, set a default
@@ -185,9 +187,11 @@ public class BookmarkDAO {
 			
 			try {
 				Node node = jcrSession.getNodeByUUID(ret.getUuid());
+				String nType = JCRUtils.getNodeType(node);
+				ret.setPath(node.getPath());
 				
-				if (!node.getPath().equals(ret.getPath())) {
-					ret.setPath(node.getPath());
+				// TODO Se supone que el tipo no cambia
+				if (!nType.equals(ret.getType())) {
 					ret.setType(JCRUtils.getNodeType(node));
 					session.update(ret);
 				}
