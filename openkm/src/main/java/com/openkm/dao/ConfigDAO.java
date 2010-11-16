@@ -134,9 +134,9 @@ public class ConfigDAO  {
 	/**
 	 * Find by pk with a default value
 	 */
-	public static Config findDefault(String key, String type, String value) throws DatabaseException {
-		log.debug("findDefault({})", key);
-		String qs = "from Configuration cfg where cfg.key=:key";
+	private static String getProperty(String key, String value, String type) throws DatabaseException {
+		log.debug("getProperty({}, {}, {})", new Object[] { key, value, type });
+		String qs = "from Config cfg where cfg.key=:key";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -148,22 +148,57 @@ public class ConfigDAO  {
 			Config ret = (Config) q.setMaxResults(1).uniqueResult();
 			
 			if (ret == null) {
-				Config def = new Config();
-				def.setKey(key);
-				def.setType(type);
-				def.setValue(value);
-				session.save(def);
+				ret = new Config();
+				ret.setKey(key);
+				ret.setType(type);
+				ret.setValue(value);
+				session.save(ret);
 			}
 			
 			HibernateUtil.commit(tx);
-			log.debug("findDefault: {}", ret);
-			return ret;
+			log.debug("getProperty: {}", ret);
+			return ret.getValue();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
 		}
+	}
+	
+	/**
+	 * Find by pk with a default value
+	 */
+	public static String getString(String key, String value) throws DatabaseException {
+		return getProperty(key, value, Config.STRING);
+	}
+	
+	/**
+	 * Find by pk with a default value
+	 */
+	public static String getText(String key, String value) throws DatabaseException {
+		return getProperty(key, value, Config.TEXT);
+	}
+	
+	/**
+	 * Find by pk with a default value
+	 */
+	public static boolean getBoolean(String key, boolean value) throws DatabaseException {
+		return "true".equalsIgnoreCase(getProperty(key, Boolean.toString(value), Config.BOOLEAN));
+	}
+	
+	/**
+	 * Find by pk with a default value
+	 */
+	public static int getInteger(String key, int value) throws DatabaseException {
+		return Integer.parseInt(getProperty(key, Integer.toString(value), Config.INTEGER));
+	}
+	
+	/**
+	 * Find by pk with a default value
+	 */
+	public static int getLong(String key, long value) throws DatabaseException {
+		return Integer.parseInt(getProperty(key, Long.toString(value), Config.LONG));
 	}
 	
 	/**
