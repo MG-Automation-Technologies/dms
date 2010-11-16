@@ -281,6 +281,10 @@
     <servlet-name>LanguageServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.LanguageServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>ConfigServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.ConfigServlet</servlet-class>
+  </servlet>
   
   <!-- Extensions -->
   <servlet>
@@ -604,6 +608,10 @@
   <servlet-mapping>
     <servlet-name>LanguageServlet</servlet-name>
     <url-pattern>/admin/Language</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ConfigServlet</servlet-name>
+    <url-pattern>/admin/Config</url-pattern>
   </servlet-mapping>
 
   <!-- WebServices Servlet Mappings -->
