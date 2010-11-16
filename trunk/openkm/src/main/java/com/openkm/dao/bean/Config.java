@@ -25,6 +25,9 @@ import java.io.Serializable;
 
 public class Config implements Serializable {
 	private static final long serialVersionUID = 1L;
+	public static final String INPUT = "input";
+	public static final String TEXTAREA = "textarea";
+	public static final String CHECKBOX = "checkbox";
 	private String key;
 	private String type;
 	private String value;
