@@ -15,7 +15,7 @@
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
-      <h1>Configuration</h1>
+      <h1>Configuration <span style="font-size: 10px;">(<a href="config.jsp">active</a>)</span></h1>
       <table class="results" width="70%">
         <tr>
           <th>Key</th><th>Type</th><th>Value</th>
@@ -36,10 +36,10 @@
             <c:param name="cfg_key" value="${cfg.key}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td>${cfg.key}</td><td>${cfg.type}</td>
-            <td align="center">
+            <td><b>${cfg.key}</b></td><td>${cfg.type}</td>
+            <td>
               <c:choose>
-                <c:when test="${cfg.type == 'CheckBox'}">
+                <c:when test="${cfg.type == 'Boolean'}">
                   <c:choose>
                     <c:when test="${cfg.value == 'true'}">
                       <img src="img/true.png" alt="Active" title="Active"/>
@@ -49,6 +49,7 @@
                     </c:otherwise>
                   </c:choose>
                 </c:when>
+                <c:when test="${cfg.type == 'Text'}">${cfg.value}</c:when>
                 <c:otherwise>${cfg.value}</c:otherwise>
               </c:choose>
             </td>

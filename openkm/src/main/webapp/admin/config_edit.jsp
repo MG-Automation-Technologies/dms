@@ -27,7 +27,16 @@
         <table class="form" width="425px">
           <tr>
             <td nowrap="nowrap">Key</td>
-            <td><input size="50" class=":required :only_on_blur" name="cfg_key" value="${cfg.key}"/></td>
+            <td>
+              <c:choose>
+                <c:when test="${action != 'create'}">
+                  <input size="30" class=":required :only_on_blur" name="cfg_key" value="${cfg.key}" readonly="readonly"/>
+                </c:when>
+                <c:otherwise>
+                  <input size="30" class=":required :only_on_blur" name="cfg_key" value=""/>
+                </c:otherwise>
+              </c:choose>
+            </td>
           </tr>
           <tr>
             <td>Type</td>
@@ -49,17 +58,24 @@
           <tr>
             <td>Value</td>
             <td>
-              <textarea rows="5" cols="50" name="cfg_value">${cfg.value}</textarea>
-              <!--
               <c:choose>
-                <c:when test="${cfg.value == 'true'}">
-                  <input name="cfg_value" type="checkbox" checked="checked"/>
+                <c:when test="${cfg.type == 'string' || cfg.type == 'integer'}">
+                  <input size="30" name="cfg_value" value="${cfg.value}"/>
+                </c:when>
+                <c:when test="${cfg.type == 'boolean'}">
+                  <c:choose>
+                    <c:when test="${cfg.value == 'true'}">
+                      <input name="cfg_value" type="checkbox" checked="checked"/>
+                    </c:when>
+                    <c:otherwise>
+                      <input name="cfg_value" type="checkbox"/>
+                    </c:otherwise>
+                  </c:choose>
                 </c:when>
                 <c:otherwise>
-                  <input name="cfg_value" type="checkbox"/>
+                  <textarea rows="5" cols="50" name="cfg_value">${cfg.value}</textarea>
                 </c:otherwise>
               </c:choose>
-              -->
             </td>
           </tr>
           <tr>
