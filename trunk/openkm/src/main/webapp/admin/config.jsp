@@ -20,7 +20,6 @@
   <c:choose>
     <c:when test="${isAdmin}">
       <h1>Configuration</h1>
-      <h2><%=Config.OPENKM_CONFIG %></h2>
       <table class="results" width="100%">
         <tr><th>Parameter</th><th>Value</th></tr>
         <c:forEach var="value" items="${configValues}" varStatus="row">
