@@ -37,7 +37,7 @@ public class Cron extends TimerTask {
 	private static Logger log = LoggerFactory.getLogger(Cron.class);
 
 	public void run() {
-		log.info("*** Cron activated ***");
+		log.debug("*** Cron activated ***");
 		Calendar cal = Calendar.getInstance();
 		
 		try {
