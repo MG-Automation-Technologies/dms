@@ -140,7 +140,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         JbpmContext jbpmContext = JBPMUtil.getConfig().createJbpmContext();
         jbpmContext.setSessionFactory(HibernateUtil.getSessionFactory());
         jbpmContext.getGraphSession();
-        jbpmContext.getJbpmConfiguration().getJobExecutor().start();//startJobExecutor();
+        jbpmContext.getJbpmConfiguration().getJobExecutor().start(); // startJobExecutor();
         jbpmContext.close();
         
         // Mime types
