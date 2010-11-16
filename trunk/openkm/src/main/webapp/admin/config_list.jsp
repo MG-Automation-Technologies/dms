@@ -19,7 +19,7 @@
       <table class="results" width="70%">
         <tr>
           <th>Key</th><th>Type</th><th>Value</th>
-          <th width="30px">
+          <th width="50px">
             <c:url value="Config" var="urlCreate">
               <c:param name="action" value="create"/>
             </c:url>

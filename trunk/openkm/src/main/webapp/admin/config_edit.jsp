@@ -23,6 +23,7 @@
       </c:choose>
       <form action="Config">
         <input type="hidden" name="action" value="${action}"/>
+        <input type="hidden" name="persist" value="${persist}"/>
         <table class="form" width="425px">
           <tr>
             <td nowrap="nowrap">Key</td>
@@ -48,6 +49,8 @@
           <tr>
             <td>Value</td>
             <td>
+              <textarea rows="5" cols="50" name="cfg_value">${cfg.value}</textarea>
+              <!--
               <c:choose>
                 <c:when test="${cfg.value == 'true'}">
                   <input name="cfg_value" type="checkbox" checked="checked"/>
@@ -56,6 +59,7 @@
                   <input name="cfg_value" type="checkbox"/>
                 </c:otherwise>
               </c:choose>
+              -->
             </td>
           </tr>
           <tr>
