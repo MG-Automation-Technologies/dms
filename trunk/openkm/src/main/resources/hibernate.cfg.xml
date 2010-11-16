@@ -221,6 +221,7 @@
     <mapping resource="com/openkm/dao/bean/User.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Role.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Report.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/Config.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Profile.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Message.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/CronTab.hbm.xml"/>
