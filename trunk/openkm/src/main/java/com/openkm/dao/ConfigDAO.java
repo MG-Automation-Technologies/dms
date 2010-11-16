@@ -132,6 +132,41 @@ public class ConfigDAO  {
 	}
 	
 	/**
+	 * Find by pk with a default value
+	 */
+	public static Config findDefault(String key, String type, String value) throws DatabaseException {
+		log.debug("findDefault({})", key);
+		String qs = "from Configuration cfg where cfg.key=:key";
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			Query q = session.createQuery(qs);
+			q.setString("key", key);
+			Config ret = (Config) q.setMaxResults(1).uniqueResult();
+			
+			if (ret == null) {
+				Config def = new Config();
+				def.setKey(key);
+				def.setType(type);
+				def.setValue(value);
+				session.save(def);
+			}
+			
+			HibernateUtil.commit(tx);
+			log.debug("findDefault: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
 	 * Find by pk
 	 */
 	@SuppressWarnings("unchecked")
