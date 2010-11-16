@@ -62,10 +62,12 @@ public class ConfigServlet extends BaseServlet {
 		try {
 			session = JCRUtils.getSession();
 			Map<String, String> types = new LinkedHashMap<String, String>();
-			types.put(Config.INPUT, "Input");
-			types.put(Config.TEXTAREA, "TextArea");
-			types.put(Config.CHECKBOX, "CheckBox");
-						
+			types.put(Config.STRING, "String");
+			types.put(Config.TEXT, "Text");
+			types.put(Config.BOOLEAN, "Boolean");
+			types.put(Config.INTEGER, "Integer");
+			types.put(Config.LONG, "Long");
+			
 			if (action.equals("create")) {
 				create(session, types, request, response);
 			} else if (action.equals("edit")) {
@@ -103,6 +105,7 @@ public class ConfigServlet extends BaseServlet {
 			cfg.setType(WebUtil.getString(request, "cfg_type"));
 			cfg.setValue(WebUtil.getString(request, "cfg_value"));
 			ConfigDAO.create(cfg);
+			com.openkm.core.Config.reload();
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "ADMIN_CONFIG_CREATE", cfgKey, cfg.toString());
@@ -124,10 +127,18 @@ public class ConfigServlet extends BaseServlet {
 			HttpServletResponse response) throws ServletException, IOException, DatabaseException {
 		if (WebUtil.getBoolean(request, "persist")) {
 			String cfgKey = WebUtil.getString(request, "cfg_key");
+			String cfgType = WebUtil.getString(request, "cfg_type");
 			Config cfg = ConfigDAO.findByPk(cfgKey);
-			cfg.setType(WebUtil.getString(request, "cfg_type"));
-			cfg.setValue(WebUtil.getString(request, "cfg_value"));
+			cfg.setType(cfgType);
+			
+			if (Config.BOOLEAN.equals(cfgType)) {
+				cfg.setValue(Boolean.toString(WebUtil.getBoolean(request, "cfg_value")));
+			} else {
+				cfg.setValue(WebUtil.getString(request, "cfg_value"));
+			}
+			
 			ConfigDAO.update(cfg);
+			com.openkm.core.Config.reload();
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "ADMIN_CONFIG_EDIT", cfgKey, cfg.toString());
@@ -151,6 +162,7 @@ public class ConfigServlet extends BaseServlet {
 		if (WebUtil.getBoolean(request, "persist")) {
 			String cfgKey = WebUtil.getString(request, "cfg_key");
 			ConfigDAO.delete(cfgKey);
+			com.openkm.core.Config.reload();
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "ADMIN_CONFIG_DELETE", cfgKey, null);
@@ -176,12 +188,16 @@ public class ConfigServlet extends BaseServlet {
 		List<Config> list = ConfigDAO.findAll();
 		
 		for (Config cfg : list) {
-			if (Config.INPUT.equals(cfg.getType())) {
-				cfg.setType("Input");
-			} else if (Config.TEXTAREA.equals(cfg.getType())) {
-				cfg.setType("TextArea");
-			} else if (Config.CHECKBOX.equals(cfg.getType())) {
-				cfg.setType("CheckBox");
+			if (Config.STRING.equals(cfg.getType())) {
+				cfg.setType("String");
+			} else if (Config.TEXT.equals(cfg.getType())) {
+				cfg.setType("Text");
+			} else if (Config.BOOLEAN.equals(cfg.getType())) {
+				cfg.setType("Boolean");
+			} else if (Config.INTEGER.equals(cfg.getType())) {
+				cfg.setType("Integer");
+			} else if (Config.LONG.equals(cfg.getType())) {
+				cfg.setType("Long");
 			}
 		}
 		
