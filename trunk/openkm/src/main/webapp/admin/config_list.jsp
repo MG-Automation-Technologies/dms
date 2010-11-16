@@ -36,7 +36,22 @@
             <c:param name="cfg_key" value="${cfg.key}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td>${cfg.key}</td><td>${cfg.type}</td><td>${cfg.value}</td>
+            <td>${cfg.key}</td><td>${cfg.type}</td>
+            <td align="center">
+              <c:choose>
+                <c:when test="${cfg.type == 'CheckBox'}">
+                  <c:choose>
+                    <c:when test="${cfg.value == 'true'}">
+                      <img src="img/true.png" alt="Active" title="Active"/>
+                    </c:when>
+                    <c:otherwise>
+                      <img src="img/false.png" alt="Inactive" title="Inactive"/>
+                    </c:otherwise>
+                  </c:choose>
+                </c:when>
+                <c:otherwise>${cfg.value}</c:otherwise>
+              </c:choose>
+            </td>
             <td>
               <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
               &nbsp;
