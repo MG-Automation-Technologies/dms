@@ -3,7 +3,7 @@
   <tr><td align="center" width="100%">
   <a target="frame" href="home.jsp"><img src="img/toolbar/home.png" title="Home"></a>
   &nbsp;
-  <a target="frame" href="config.jsp"><img src="img/toolbar/config.png" title="Configuration"></a>
+  <a target="frame" href="Config"><img src="img/toolbar/config.png" title="Configuration"></a>
   &nbsp;
   <a target="frame" href="MimeType"><img src="img/toolbar/mime.png" title="Mime types"></a>
   &nbsp;
