@@ -31,7 +31,6 @@ import java.io.Writer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.core.AccessDeniedException;
@@ -135,12 +134,12 @@ public class RepositoryImporter {
 					dm.create(null, doc, fisContent);
 					
 					// Metadata
-					Gson gson = new Gson();
+					//Gson gson = new Gson();
 					File jsFile = new File(files[i].getPath() + ".json");
 					
 					if (jsFile.exists() && jsFile.canRead()) {
 						FileReader fr = new FileReader(jsFile);
-						Document jsDoc = gson.fromJson(fr, Document.class);
+						//Document jsDoc = gson.fromJson(fr, Document.class);
 						
 						fr.close();
 					}
