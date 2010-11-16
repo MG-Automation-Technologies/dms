@@ -23,6 +23,7 @@ package com.openkm.servlet.admin;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.jcr.LoginException;
@@ -172,7 +173,19 @@ public class ConfigServlet extends BaseServlet {
 			ServletException, IOException, DatabaseException {
 		log.debug("list({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
-		sc.setAttribute("configs", ConfigDAO.findAll());
+		List<Config> list = ConfigDAO.findAll();
+		
+		for (Config cfg : list) {
+			if (Config.INPUT.equals(cfg.getType())) {
+				cfg.setType("Input");
+			} else if (Config.TEXTAREA.equals(cfg.getType())) {
+				cfg.setType("TextArea");
+			} else if (Config.CHECKBOX.equals(cfg.getType())) {
+				cfg.setType("CheckBox");
+			}
+		}
+		
+		sc.setAttribute("configs", list);
 		sc.getRequestDispatcher("/admin/config_list.jsp").forward(request, response);
 		log.debug("list: void");
 	}	
