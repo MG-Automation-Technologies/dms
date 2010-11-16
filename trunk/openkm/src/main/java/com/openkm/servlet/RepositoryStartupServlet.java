@@ -254,9 +254,11 @@ public class RepositoryStartupServlet extends HttpServlet {
         else log.info("*** Shutting down watchdog... ***");
         wd.cancel();
         
-        if (log == null) log("*** Shutting down update info... ***");
-        else log.info("*** Shutting down update info... ***");
-        ui.cancel();
+        if (Config.UPDATE_INFO) {
+        	if (log == null) log("*** Shutting down update info... ***");
+        	else log.info("*** Shutting down update info... ***");
+        	ui.cancel();
+        }
         
         timer.cancel();
         
