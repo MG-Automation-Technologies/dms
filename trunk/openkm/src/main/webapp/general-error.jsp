@@ -27,11 +27,7 @@
       </tr>
       <tr>
         <td colspan="2" align="center" style="padding-top: 25px;">
-        <% if (exception != null) { %>
-        	<h2><%=exception.getMessage()%></h2>
-        <% } else { %>
-        	<h2>Unknown error</h2>
-        <% } %>
+        <h2><%=exception.getMessage()%></h2>
         <% session.invalidate(); %>
         </td>
       </tr>
