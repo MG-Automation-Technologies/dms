@@ -34,92 +34,72 @@ public class EJBAuthModule implements com.openkm.module.AuthModule {
 
 	@Override
 	public void login() throws RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public String login(String user, String password) throws AccessDeniedException, RepositoryException,
 			DatabaseException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void logout(String token) throws RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void grantUser(String token, String nodePath, String user, int permissions, boolean recursive)
 			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void revokeUser(String token, String nodePath, String user, int permissions, boolean recursive)
 			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public Map<String, Byte> getGrantedUsers(String token, String nodePath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void grantRole(String token, String nodePath, String role, int permissions, boolean recursive)
 			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void revokeRole(String token, String nodePath, String role, int permissions, boolean recursive)
 			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public Map<String, Byte> getGrantedRoles(String token, String nodePath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<String> getUsers(String token) throws PrincipalAdapterException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<String> getRoles(String token) throws PrincipalAdapterException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<String> getUsersByRole(String token, String role) throws PrincipalAdapterException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<String> getRolesByUser(String token, String user) throws PrincipalAdapterException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<String> getMails(String token, List<String> users) throws PrincipalAdapterException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }
