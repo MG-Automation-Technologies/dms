@@ -25,7 +25,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
-import com.openkm.frontend.client.bean.GWTProposedSubscription;
+import com.openkm.frontend.client.bean.extension.GWTProposedSubscription;
 
 /**
  * @author jllort
