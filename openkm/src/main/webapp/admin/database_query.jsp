@@ -56,7 +56,7 @@
               <table>
                 <tr>
                   <td><input class=":required :only_on_blur" type="file" name="sql-file"/></td>
-                  <td><input type="submit" value="Execute update"/></td>
+                  <td><input type="submit" value="Execute SQL script"/></td>
                 </tr>
               </table>
             </form>
