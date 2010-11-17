@@ -287,7 +287,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 						HashMap<String, String> error = new HashMap<String, String>();
 						error.put("ln", Integer.toString(ln));
 						error.put("sql", sql);
-						error.put("msg", e.toString());
+						error.put("msg", e.getMessage());
 						errors.add(error);
 					}
 				}
