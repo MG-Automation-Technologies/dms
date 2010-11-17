@@ -21,7 +21,8 @@
 
 package com.openkm.frontend.client.bean;
 
-import java.io.Serializable;
+import java.util.Date;
+import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * GWTProposedSubscription
@@ -29,7 +30,7 @@ import java.io.Serializable;
  * @author jllort
  *
  */
-public class GWTProposedSubscription implements Serializable {
+public class GWTProposedSubscription implements IsSerializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private String from;
@@ -37,7 +38,10 @@ public class GWTProposedSubscription implements Serializable {
 	private String path;
 	private String uuid;
 	private String type;
-	
+	private boolean accepted;
+	private Date seenDate;
+	private Date sentDate;
+
 	public int getId() {
 		return id;
 	}
@@ -85,6 +89,30 @@ public class GWTProposedSubscription implements Serializable {
 	public void setType(String type) {
 		this.type = type;
 	}
+	
+	public Date getSeenDate() {
+		return seenDate;
+	}
+
+	public void setSeenDate(Date seenDate) {
+		this.seenDate = seenDate;
+	}
+
+	public Date getSentDate() {
+		return sentDate;
+	}
+
+	public void setSentDate(Date sentDate) {
+		this.sentDate = sentDate;
+	}
+	
+	public boolean isAccepted() {
+		return accepted;
+	}
+
+	public void setAccepted(boolean accepted) {
+		this.accepted = accepted;
+	}
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -95,6 +123,9 @@ public class GWTProposedSubscription implements Serializable {
 		sb.append(", path="); sb.append(path);
 		sb.append(", uuid="); sb.append(uuid);
 		sb.append(", type="); sb.append(type);
+		sb.append(", accepted="); sb.append(accepted);
+		sb.append(", seenDate="); sb.append(seenDate);
+		sb.append(", sentDate="); sb.append(sentDate);
 		sb.append("}");
 		return sb.toString();
 	}

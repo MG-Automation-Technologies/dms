@@ -32,6 +32,8 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  *
  */
 public class GWTFolder implements IsSerializable {
+	
+	public static final String TYPE = "okm:folder";
 
 	private String parentPath;
 	private String path;
