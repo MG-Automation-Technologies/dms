@@ -18,7 +18,8 @@ public class Location {
     private String port;
     private String protocol;
     private String queryString;
-    private HashMap<String, String> paramMap;
+
+	private HashMap<String, String> paramMap;
 
 
     public String getHash() {
@@ -52,7 +53,7 @@ public class Location {
     public String getQueryString() {
         return queryString;
     }
-
+  
     protected void setHash(String hash) {
         this.hash = hash;
     }

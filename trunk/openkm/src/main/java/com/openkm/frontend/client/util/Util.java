@@ -25,6 +25,7 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.config.Config;
 
 public class Util {
@@ -105,7 +106,7 @@ public class Util {
 	 * @return the html image of mime-type file
 	 */
 	public static String mimeImageHTML(String mime) {
-		return "<img align=\"absmidle\" style=\"margin-right:4px\" src=\"/OpenKM"+Config.INSTALL+"/mime/"+mime+"\"'>";
+		return "<img align=\"absmidle\" style=\"margin-right:4px\" src=\""+Main.CONTEXT+"/mime/"+mime+"\"'>";
 	}
 	
 	/**
@@ -117,7 +118,7 @@ public class Util {
 	 */
 	public static String flagMenuHTML(String flag, String text) {
 		return "<img style='margin-right:8px; margin-left:2px; vertical-align:middle;' "+
-		        "src=\"/OpenKM"+Config.INSTALL+"/flag/"+flag+"\"'>" + text;
+		        "src=\""+Main.CONTEXT+"/flag/"+flag+"\"'>" + text;
 	}
 	
 	/**

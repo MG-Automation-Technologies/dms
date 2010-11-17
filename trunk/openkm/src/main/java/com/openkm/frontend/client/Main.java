@@ -83,6 +83,7 @@ import com.openkm.frontend.client.widget.wizard.WizardPopup;
  */
 public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasLanguageEvent {
 	
+	public static String CONTEXT = "/OpenKM";
 	private static Main singleton;
 	private final OKMLanguageServiceAsync languageService = (OKMLanguageServiceAsync) GWT.create(OKMLanguageService.class);
 	
@@ -173,6 +174,14 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		
 		// Request parameter
 		loc = WindowUtils.getLocation();
+		
+		String context = WindowUtils.getLocation().getPath();
+		// Remove any localhost:8080/
+    	context = context.substring(context.indexOf("/")+1);
+    	// Substrint to next /
+    	context = context.substring(0, context.indexOf("/"));
+    	CONTEXT = "/"+context;
+		
 		if (loc.getParameter("docPath")!=null && !loc.getParameter("docPath").equals("")) {
 			fldPath = loc.getParameter("docPath").substring(0, loc.getParameter("docPath").lastIndexOf("/")); 
 			docPath = loc.getParameter("docPath"); 
