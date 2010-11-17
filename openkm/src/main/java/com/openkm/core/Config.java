@@ -171,13 +171,6 @@ public class Config {
 	public static final String PROPERTY_VALIDATOR_PASSWORD_MIN_UPPERCASE = "validator.password.min.uppercase";
 	public static final String PROPERTY_VALIDATOR_PASSWORD_MIN_DIGITS = "validator.password.min.digits";
 	public static final String PROPERTY_VALIDATOR_PASSWORD_MIN_SPECIAL = "validator.password.mini.special";
-	
-	//public static final String PROPERTY_VALIDATOR_PASSWORD_ERROR_MIN_LENGTH = "validator.password.error.min.length";
-	//public static final String PROPERTY_VALIDATOR_PASSWORD_ERROR_MAX_LENGTH = "validator.password.error.max.length";	
-	//public static final String PROPERTY_VALIDATOR_PASSWORD_ERROR_MIN_LOWERCASE = "validator.password.error.min.lowercase";
-	//public static final String PROPERTY_VALIDATOR_PASSWORD_ERROR_MIN_UPPERCASE = "validator.password.error.max.uppercase";
-	//public static final String PROPERTY_VALIDATOR_PASSWORD_ERROR_MIN_DIGITS = "validator.password.error.min.digits";
-	//public static final String PROPERTY_VALIDATOR_PASSWORD_ERROR_MIN_SPECIAL = "validator.password.error.min.special";
 
 	// Hibernate
 	public static final String PROPERTY_HIBERNATE_DIALECT = "hibernate.dialect";
