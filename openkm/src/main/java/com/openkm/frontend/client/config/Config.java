@@ -27,32 +27,32 @@ package com.openkm.frontend.client.config;
  * @author jllort
  */
 public class Config {
-	public static final String INSTALL = "";
+	public static final String INSTALL = "/OpenKM";
 	
 	// Service entry point 
-	public static final String OKMFolderService = "/OpenKM"+INSTALL+"/frontend/Folder";
-	public static final String OKMDocumentService = "/OpenKM"+INSTALL+"/frontend/Document";
-	public static final String OKMDownloadServlet = "/OpenKM"+INSTALL+"/frontend/Download";
-	public static final String OKMFileUploadService = "/OpenKM"+INSTALL+"/frontend/FileUpload";
-	public static final String OKMAuthService = "/OpenKM"+INSTALL+"/frontend/Auth";
-	public static final String OKMSearchService = "/OpenKM"+INSTALL+"/frontend/Search";
-	public static final String OKMPropertyGroupService = "/OpenKM"+INSTALL+"/frontend/PropertyGroup";
-	public static final String OKMNotifyService = "/OpenKM"+INSTALL+"/frontend/Notify";
-	public static final String OKMBookmarkService = "/OpenKM"+INSTALL+"/frontend/Bookmark";
-	public static final String OKMRepositoryService = "/OpenKM"+INSTALL+"/frontend/Repository";
-	public static final String OKMDashboardService = "/OpenKM"+INSTALL+"/frontend/Dashboard";
-	public static final String OKMWorkspaceService = "/OpenKM"+INSTALL+"/frontend/Workspace";
-	public static final String OKMWorkflowService = "/OpenKM"+INSTALL+"/frontend/Workflow";
-	public static final String OKMMailService = "/OpenKM"+INSTALL+"/frontend/Mail";
-	public static final String OKMGeneralService = "/OpenKM"+INSTALL+"/frontend/General";
-	public static final String OKMThesaurusService = "/OpenKM"+INSTALL+"/frontend/Thesaurus";
-	public static final String OKMPropertyService = "/OpenKM"+INSTALL+"/frontend/Property";
-	public static final String OKMChatService = "/OpenKM"+INSTALL+"/frontend/Chat";
-	public static final String OKMUserConfigService = "/OpenKM"+INSTALL+"/frontend/UserConfig";
-	public static final String OKMNoteService = "/OpenKM"+INSTALL+"/frontend/Note";
-	public static final String OKMLanguageService = "/OpenKM"+INSTALL+"/frontend/Language";
-	public static final String OKMProposeSubscriptionService = "/OpenKM"+INSTALL+"/frontend/ProposedSubscription";
-	public static final String OKMFeedService = "/OpenKM"+INSTALL+"/feed/";
-	public static final String OKMStaplingService = "/OpenKM"+INSTALL+"/extension/Stapling";
-	public static final String OKMStaplingDownloadService = "/OpenKM"+INSTALL+"/extension/StaplingDownload";
+	public static final String OKMFolderService = INSTALL+"/frontend/Folder";
+	public static final String OKMDocumentService = INSTALL+"/frontend/Document";
+	public static final String OKMDownloadServlet = INSTALL+"/frontend/Download";
+	public static final String OKMFileUploadService = INSTALL+"/frontend/FileUpload";
+	public static final String OKMAuthService = INSTALL+"/frontend/Auth";
+	public static final String OKMSearchService = INSTALL+"/frontend/Search";
+	public static final String OKMPropertyGroupService = INSTALL+"/frontend/PropertyGroup";
+	public static final String OKMNotifyService = INSTALL+"/frontend/Notify";
+	public static final String OKMBookmarkService = INSTALL+"/frontend/Bookmark";
+	public static final String OKMRepositoryService = INSTALL+"/frontend/Repository";
+	public static final String OKMDashboardService = INSTALL+"/frontend/Dashboard";
+	public static final String OKMWorkspaceService = INSTALL+"/frontend/Workspace";
+	public static final String OKMWorkflowService = INSTALL+"/frontend/Workflow";
+	public static final String OKMMailService = INSTALL+"/frontend/Mail";
+	public static final String OKMGeneralService = INSTALL+"/frontend/General";
+	public static final String OKMThesaurusService = INSTALL+"/frontend/Thesaurus";
+	public static final String OKMPropertyService = INSTALL+"/frontend/Property";
+	public static final String OKMChatService = INSTALL+"/frontend/Chat";
+	public static final String OKMUserConfigService = INSTALL+"/frontend/UserConfig";
+	public static final String OKMNoteService = INSTALL+"/frontend/Note";
+	public static final String OKMLanguageService = INSTALL+"/frontend/Language";
+	public static final String OKMProposeSubscriptionService = INSTALL+"/frontend/ProposedSubscription";
+	public static final String OKMFeedService = INSTALL+"/feed/";
+	public static final String OKMStaplingService = INSTALL+"/extension/Stapling";
+	public static final String OKMStaplingDownloadService = INSTALL+"/extension/StaplingDownload";
 }
