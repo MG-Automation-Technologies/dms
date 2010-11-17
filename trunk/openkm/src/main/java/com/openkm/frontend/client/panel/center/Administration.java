@@ -25,7 +25,6 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Frame;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.config.Config;
 
 /**
  * Administration
