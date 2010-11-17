@@ -48,9 +48,6 @@ public class Config {
 	public static final String TMP_DIR = getTempDir();
 	public static final String NULL_DEVICE = getNullDevice();
 	public static final boolean IN_SERVER = inServer();
-	
-	// Multihost
-	public static final String INSTALL = "";
 		
 	// Scripting
 	public static final String START_SCRIPT = "start.bsh";
@@ -61,7 +58,11 @@ public class Config {
 	// Configuration files
 	public static final String OPENKM_CONFIG = "OpenKM.cfg";
 	public static final String NODE_DEFINITIONS = "CustomNodes.cnd";
+	public static String CONTEXT;
+	public static String INSTANCE;
 	public static String JBPM_CONFIG;
+	public static String PROPERTY_GROUPS_XML;
+	public static String PROPERTY_GROUPS_CND;
 	
 	// Default script
 	public static final String PROPERTY_DEFAULT_SCRIPT = "default.script";
@@ -407,7 +408,8 @@ public class Config {
 	public static void load(String ctx) {
 		Properties config = new Properties();
 		String configFile = HOME_DIR+"/"+OPENKM_CONFIG;
-			
+		CONTEXT = ctx;
+		
 		// Read config
 		try {
 			log.info("** Reading config file " + configFile + " **");
@@ -417,7 +419,7 @@ public class Config {
 			// Hibernate
 			HIBERNATE_DIALECT = config.getProperty(PROPERTY_HIBERNATE_DIALECT, HIBERNATE_DIALECT);
 			values.put(PROPERTY_HIBERNATE_DIALECT, HIBERNATE_DIALECT);
-			HIBERNATE_DATASOURCE = config.getProperty(PROPERTY_HIBERNATE_DATASOURCE, "java:/"+ctx+"DS");
+			HIBERNATE_DATASOURCE = config.getProperty(PROPERTY_HIBERNATE_DATASOURCE, "java:/" + CONTEXT + "DS");
 			values.put(PROPERTY_HIBERNATE_DATASOURCE, HIBERNATE_DATASOURCE);
 			HIBERNATE_HBM2DDL = config.getProperty(PROPERTY_HIBERNATE_HBM2DDL, HIBERNATE_HBM2DDL);
 			values.put(PROPERTY_HIBERNATE_HBM2DDL, HIBERNATE_HBM2DDL);
@@ -427,9 +429,9 @@ public class Config {
 			fis.close();
 			
 			// Calculated values
-			String INSTANCE = HOME_DIR + File.separator + "instances" + File.separator + ctx;
+			INSTANCE = HOME_DIR + File.separator + "instances" + File.separator + CONTEXT;
 			
-			if ("OpenKM".equals(ctx)) {
+			if ("OpenKM".equals(CONTEXT)) {
 				INSTANCE = HOME_DIR;
 			}
 			
@@ -443,9 +445,13 @@ public class Config {
 			values.put("cache.swf", CACHE_SWF);
 			JBPM_CONFIG = INSTANCE + File.separator + "jbpm.xml";
 			values.put("jbpm.config", JBPM_CONFIG);
+			PROPERTY_GROUPS_XML = INSTANCE + File.separator + "PropertyGroups.xml";
+			values.put("property.groups.xml", PROPERTY_GROUPS_XML);
+			PROPERTY_GROUPS_CND = INSTANCE + File.separator + "PropertyGroups.cnd";
+			values.put("property.groups.cnd", PROPERTY_GROUPS_CND);
 			
 			// Load or reload database configuration
-			reload(ctx);
+			reload(CONTEXT);
 		} catch (FileNotFoundException e) {
 			log.warn("** No "+OPENKM_CONFIG+" file found, set default config **");
 		} catch (IOException e) {
@@ -586,7 +592,7 @@ public class Config {
 			
 			UPDATE_INFO = ConfigDAO.getBoolean(PROPERTY_UPDATE_INFO, true);
 			values.put(PROPERTY_UPDATE_INFO, Boolean.toString(UPDATE_INFO));
-			APPLICATION_URL = ConfigDAO.getString(PROPERTY_APPLICATION_URL, "http://localhost:8080/"+ctx+INSTALL+"/index.jsp");
+			APPLICATION_URL = ConfigDAO.getString(PROPERTY_APPLICATION_URL, "http://localhost:8080/"+ctx+"/index.jsp");
 			APPLICATION_BASE = getBase(APPLICATION_URL); 
 			values.put(PROPERTY_APPLICATION_URL, APPLICATION_URL);
 			DEFAULT_LANG = ConfigDAO.getString(PROPERTY_DEFAULT_LANG, "");
