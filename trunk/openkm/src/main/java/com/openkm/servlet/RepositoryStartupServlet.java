@@ -26,6 +26,7 @@ import java.util.Calendar;
 import java.util.Properties;
 import java.util.Timer;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
@@ -79,12 +80,13 @@ public class RepositoryStartupServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
+        ServletContext sc = getServletContext();
         
         // Read config file
-        Config.load();
+        Config.load(sc.getContextPath().substring(1));
         
         // Get OpenKM version
-        WarUtils.readAppVersion(getServletContext());
+        WarUtils.readAppVersion(sc);
         log.info("*** Application version: "+WarUtils.getAppVersion()+" ***");
 
         // Initialize folder pdf cache
