@@ -239,6 +239,7 @@ public class Dashboard extends Composite implements HasDashboardHandlerExtension
 		generalDashboard.refreshAll();
 		workflowDashboard.findUserTaskInstances();
 		keyMapDashboard.refreshAll();
+		fireEvent(HasDashboardEvent.DASHBOARD_REFRESH);
 	}
 	
 	/**
@@ -250,7 +251,6 @@ public class Dashboard extends Composite implements HasDashboardHandlerExtension
 		dashboardRefreshing = new Timer() {
 			public void run() {
 				refreshAll();
-				fireEvent(HasDashboardEvent.DASHBOARD_REFRESH);
 			}
 		};
 		
