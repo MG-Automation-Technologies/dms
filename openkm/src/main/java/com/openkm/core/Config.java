@@ -406,7 +406,7 @@ public class Config {
 	/**
 	 * Load OpenKM configuration from OpenKM.cfg 
 	 */
-	public static void load() {
+	public static void load(String ctx) {
 		Properties config = new Properties();
 		String configFile = HOME_DIR+"/"+OPENKM_CONFIG;
 			
@@ -419,7 +419,7 @@ public class Config {
 			// Hibernate
 			HIBERNATE_DIALECT = config.getProperty(PROPERTY_HIBERNATE_DIALECT, HIBERNATE_DIALECT);
 			values.put(PROPERTY_HIBERNATE_DIALECT, HIBERNATE_DIALECT);
-			HIBERNATE_DATASOURCE = config.getProperty(PROPERTY_HIBERNATE_DATASOURCE, HIBERNATE_DATASOURCE);
+			HIBERNATE_DATASOURCE = config.getProperty(PROPERTY_HIBERNATE_DATASOURCE, "java:/"+ctx+"DS");
 			values.put(PROPERTY_HIBERNATE_DATASOURCE, HIBERNATE_DATASOURCE);
 			HIBERNATE_HBM2DDL = config.getProperty(PROPERTY_HIBERNATE_HBM2DDL, HIBERNATE_HBM2DDL);
 			values.put(PROPERTY_HIBERNATE_HBM2DDL, HIBERNATE_HBM2DDL);
@@ -429,7 +429,7 @@ public class Config {
 			fis.close();
 			
 			// Load or reload database configuration
-			reload();
+			reload(ctx);
 		} catch (FileNotFoundException e) {
 			log.warn("** No "+OPENKM_CONFIG+" file found, set default config **");
 		} catch (IOException e) {
@@ -440,7 +440,7 @@ public class Config {
 	/**
 	 * Reload OpenKM configuration from database
 	 */
-	public static void reload() {
+	public static void reload(String ctx) {
 		try {
 			REPOSITORY_CONFIG = ConfigDAO.getString(PROPERTY_REPOSITORY_CONFIG, REPOSITORY_CONFIG);
 			values.put(PROPERTY_REPOSITORY_CONFIG, REPOSITORY_CONFIG);
@@ -570,7 +570,7 @@ public class Config {
 			
 			UPDATE_INFO = ConfigDAO.getBoolean(PROPERTY_UPDATE_INFO, true);
 			values.put(PROPERTY_UPDATE_INFO, Boolean.toString(UPDATE_INFO));
-			APPLICATION_URL = ConfigDAO.getString(PROPERTY_APPLICATION_URL, "http://localhost:8080/OpenKM"+INSTALL+"/index.jsp");
+			APPLICATION_URL = ConfigDAO.getString(PROPERTY_APPLICATION_URL, "http://localhost:8080/"+ctx+INSTALL+"/index.jsp");
 			APPLICATION_BASE = getBase(APPLICATION_URL); 
 			values.put(PROPERTY_APPLICATION_URL, APPLICATION_URL);
 			DEFAULT_LANG = ConfigDAO.getString(PROPERTY_DEFAULT_LANG, "");
