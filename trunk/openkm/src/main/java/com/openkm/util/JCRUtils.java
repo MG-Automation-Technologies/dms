@@ -271,7 +271,7 @@ public class JCRUtils {
 	public static File hotBackup() throws RepositoryException, IOException {
 		log.debug("hotBackup()");
 		String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-		String backDirName = "OpenKM" + Config.INSTALL + "_" + date; 
+		String backDirName = Config.CONTEXT + "_" + date; 
 		File backDir = new File(System.getProperty("java.io.tmpdir") + File.separator + backDirName);
 		FileUtils.deleteQuietly(backDir);
 		backDir.mkdir();
