@@ -1126,6 +1126,11 @@ public class GWTUtil {
 		gWTProposedSubscription.setUuid(ps.getUuid());
 		gWTProposedSubscription.setPath(ps.getPath());
 		gWTProposedSubscription.setType(ps.getType());
+		gWTProposedSubscription.setAccepted(ps.isAccepted());
+		gWTProposedSubscription.setSentDate(ps.getSentDate().getTime());
+		if (ps.getSeenDate()!=null) {
+			gWTProposedSubscription.setSeenDate(ps.getSeenDate().getTime());
+		}
 		
 		return gWTProposedSubscription;
 	}
