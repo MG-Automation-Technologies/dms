@@ -32,6 +32,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -77,6 +78,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 			sc.setAttribute("columns", null);
 			sc.setAttribute("results", null);
 			sc.setAttribute("rows", null);
+			sc.setAttribute("errors", null);
 			sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 		} catch (Exception e) {
 			sendErrorRedirect(request,response, e);
@@ -197,6 +199,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 		
 		sc.setAttribute("qs", qs);
 		sc.setAttribute("method", "hibernate");
+		sc.setAttribute("errors", null);
 		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 	}
 	
@@ -249,6 +252,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 		
 		sc.setAttribute("qs", qs);
 		sc.setAttribute("method", "jdbc");
+		sc.setAttribute("errors", null);
 		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 	}
 	
@@ -262,6 +266,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 		Connection con = null;
 		Statement stmt = null;
 		ResultSet rs = null;
+		List<HashMap<String, String>> errors = new ArrayList<HashMap<String, String>>();
 		int rows = 0;
 		
 		try {
@@ -269,11 +274,22 @@ public class DatabaseQueryServlet extends BaseServlet {
 			stmt = con.createStatement();
 			InputStreamReader is = new InputStreamReader(new ByteArrayInputStream(data));
 			BufferedReader br = new BufferedReader(is);
-			String query;
+			String sql;
+			int ln = 0;
 			
-			while ((query = br.readLine()) != null) {
-				if (query.length() > 0) {
-					rows += stmt.executeUpdate(query);
+			while ((sql = br.readLine()) != null) {
+				ln++;
+				
+				if (sql.length() > 0) {
+					try {
+						rows += stmt.executeUpdate(sql);
+					} catch (SQLException e) {
+						HashMap<String, String> error = new HashMap<String, String>();
+						error.put("ln", Integer.toString(ln));
+						error.put("sql", sql);
+						error.put("msg", e.toString());
+						errors.add(error);
+					}
 				}
 			}
 		} finally {
@@ -287,6 +303,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 		sc.setAttribute("columns", null);
 		sc.setAttribute("results", null);
 		sc.setAttribute("rows", rows);
+		sc.setAttribute("errors", errors);
 		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 		
 		log.debug("executeUpdate: void");
