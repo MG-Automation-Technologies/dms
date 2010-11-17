@@ -32,6 +32,7 @@ public class ProposedSubscription implements Serializable {
 	private String path;
 	private String uuid;
 	private String type;
+	private boolean accepted;
 	private Calendar seenDate;
 	private Calendar sentDate;
 	
@@ -83,6 +84,14 @@ public class ProposedSubscription implements Serializable {
 		this.type = type;
 	}
 	
+	public boolean isAccepted() {
+		return accepted;
+	}
+
+	public void setAccepted(boolean accepted) {
+		this.accepted = accepted;
+	}
+	
 	public Calendar getSeenDate() {
 		return seenDate;
 	}
@@ -108,6 +117,7 @@ public class ProposedSubscription implements Serializable {
 		sb.append(", path="); sb.append(path);
 		sb.append(", uuid="); sb.append(uuid);
 		sb.append(", type="); sb.append(type);
+		sb.append(", accepted="); sb.append(accepted);
 		sb.append(", seenDate="); sb.append(seenDate==null?null:seenDate.getTime());
 		sb.append(", sentDate="); sb.append(sentDate==null?null:sentDate.getTime());
 		sb.append("}");
