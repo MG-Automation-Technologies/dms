@@ -99,7 +99,6 @@ import com.openkm.frontend.client.bean.GWTProcessDefinition;
 import com.openkm.frontend.client.bean.GWTProcessInstance;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.GWTPropertyParams;
-import com.openkm.frontend.client.bean.GWTProposedSubscription;
 import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.bean.GWTQueryResult;
 import com.openkm.frontend.client.bean.GWTSelect;
@@ -111,6 +110,7 @@ import com.openkm.frontend.client.bean.GWTUserConfig;
 import com.openkm.frontend.client.bean.GWTValidator;
 import com.openkm.frontend.client.bean.GWTVersion;
 import com.openkm.frontend.client.bean.GWTWorkflowComment;
+import com.openkm.frontend.client.bean.extension.GWTProposedSubscription;
 import com.openkm.frontend.client.bean.extension.GWTStaple;
 import com.openkm.frontend.client.bean.extension.GWTStapleGroup;
 

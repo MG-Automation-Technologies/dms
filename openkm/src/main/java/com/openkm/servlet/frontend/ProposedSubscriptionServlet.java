@@ -37,7 +37,7 @@ import com.openkm.core.RepositoryException;
 import com.openkm.dao.ProposedSubscriptionDAO;
 import com.openkm.dao.bean.ProposedSubscription;
 import com.openkm.frontend.client.OKMException;
-import com.openkm.frontend.client.bean.GWTProposedSubscription;
+import com.openkm.frontend.client.bean.extension.GWTProposedSubscription;
 import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.service.OKMProposedSubscriptionService;
 import com.openkm.principal.PrincipalAdapterException;

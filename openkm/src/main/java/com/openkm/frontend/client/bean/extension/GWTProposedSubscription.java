@@ -19,7 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.bean;
+package com.openkm.frontend.client.bean.extension;
 
 import java.util.Date;
 import com.google.gwt.user.client.rpc.IsSerializable;
