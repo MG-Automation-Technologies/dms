@@ -66,7 +66,6 @@ public class Config {
 	public static final String OPENKM_CONFIG = "OpenKM"+INSTALL+".cfg";
 	public static final String JBPM_CONFIG = "jbpm"+INSTALL+".xml";
 	public static final String NODE_DEFINITIONS = "CustomNodes.cnd";
-	public static final String DATASOURCE = "java:/OpenKM"+INSTALL+"DS";
 	
 	// Default script
 	public static final String PROPERTY_DEFAULT_SCRIPT = "default.script";
