@@ -56,6 +56,9 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 	
 	@Override
 	public void create(String uuid, String path, String type, String users, String roles) throws OKMException {
+		Object obj[] = {(Object)uuid, (Object)path, (Object)type, (Object)users, (Object)roles};
+		log.debug("create({}, {}, {}, {}, {})", obj);
+		
 		try {
 			String remoteUser = getThreadLocalRequest().getRemoteUser();
 			List<String> userNames = Arrays.asList(users.split(","));
@@ -94,7 +97,7 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 
 	@Override
 	public List<GWTProposedSubscription> findAll() throws OKMException {
-		log.debug("findAll({}, {})");
+		log.debug("findAll()");
 		updateSessionManager();
 		List<GWTProposedSubscription> psList = new ArrayList<GWTProposedSubscription>();
 		Session session = null;
@@ -120,5 +123,78 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 		}
 		log.debug("findAll: List"+psList);
 		return psList;
+	}
+
+	@Override
+	public void markSeen(int msgId) throws OKMException {
+		log.debug("markSeen({})", msgId);
+		updateSessionManager();
+		try {
+			ProposedSubscriptionDAO.markSeen(msgId);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+		log.debug("markSeen() : void");
+	}
+
+	@Override
+	public void markAccepted(int msgId) throws OKMException {
+		log.debug("markAccepted({})", msgId);
+		updateSessionManager();
+		try {
+			ProposedSubscriptionDAO.markAccepted(msgId);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+		log.debug("markAccepted() : void");
+	}
+
+	@Override
+	public void delete(int msgId) throws OKMException {
+		log.debug("delete({})", msgId);
+		updateSessionManager();
+		try {
+			ProposedSubscriptionDAO.delete(msgId);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+		log.debug("delete() : void");
+	}
+
+	@Override
+	public void deleteAllBySender(String sender) throws OKMException {
+		log.debug("deleteAllBySender()");
+		updateSessionManager();
+		List<String> IdToDelete = new ArrayList<String>();
+		Session session = null;
+		try {
+			session = JCRUtils.getSession();			
+			for (ProposedSubscription ps : ProposedSubscriptionDAO.findByUser(session, getThreadLocalRequest().getRemoteUser())) {
+				if (ps.getFrom().equals("sender" )) {
+					IdToDelete.add(String.valueOf(ps.getId()));
+				}
+			}
+			for (String id : IdToDelete) {
+				ProposedSubscriptionDAO.delete(Integer.valueOf(id));
+			}
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Database), e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (LoginException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Login), e.getMessage());
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} finally {
+			JCRUtils.logout(session);
+		}
+		log.debug("deleteAllBySender: void");
 	}
 }
