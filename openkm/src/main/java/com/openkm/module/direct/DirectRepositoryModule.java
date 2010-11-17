@@ -95,10 +95,10 @@ public class DirectRepositoryModule implements RepositoryModule {
 	 */
 	public synchronized static javax.jcr.Repository getRepository() throws javax.jcr.RepositoryException {
 		log.debug("getRepository()");
-		String repConfig = Config.HOME_DIR + File.separator + Config.REPOSITORY_CONFIG;
+		String repConfig = Config.REPOSITORY_CONFIG;
 		String repHome = null;
 		WorkspaceConfig wc = null;
-				
+		
 		if (repository == null) {
 			// Allow absolute repository path
 			if ((new File(Config.REPOSITORY_HOME)).isAbsolute()) {

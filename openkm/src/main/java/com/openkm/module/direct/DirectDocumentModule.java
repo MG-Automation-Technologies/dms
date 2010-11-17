@@ -1239,8 +1239,8 @@ public class DirectDocumentModule implements DocumentModule {
 			UserItemsManager.incSize(session.getUserID(), size);
 			
 			// Remove pdf & preview from cache
-			new File(Config.PDF_CACHE+File.separator+documentNode.getUUID()+".pdf").delete();
-			new File(Config.SWF_CACHE+File.separator+documentNode.getUUID()+".swf").delete();
+			new File(Config.CACHE_PDF + File.separator + documentNode.getUUID() + ".pdf").delete();
+			new File(Config.CACHE_SWF + File.separator + documentNode.getUUID() + ".swf").delete();
 
 			// Check subscriptions
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CHECKIN", comment);
@@ -1666,8 +1666,8 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("VersionHistory UUID: {}", vh.getUUID());
 
 		// Remove pdf & preview from cache
-		new File(Config.PDF_CACHE + File.separator + docNode.getUUID()).delete();
-		new File(Config.SWF_CACHE + File.separator + docNode.getUUID()).delete();
+		new File(Config.CACHE_PDF + File.separator + docNode.getUUID() + ".pdf").delete();
+		new File(Config.CACHE_SWF + File.separator + docNode.getUUID() + ".swf").delete();
 		
 		// Remove node itself
 		docNode.remove();
