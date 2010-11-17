@@ -217,4 +217,26 @@ public class ProposedSubscriptionDAO {
 			HibernateUtil.close(session);
 		}
 	}
+	
+	/**
+	 * Mark proposed as accepted
+	 */
+	public static void markAccepted(int msgId) throws DatabaseException {
+		log.debug("markAccepted({})", msgId);
+		String qs = "update ProposedSubscription ps set ps.accepted=:accepted where ps.id=:id";
+		Session session = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setInteger("id", msgId);
+			q.setBoolean("accepted", true);
+			q.executeUpdate();
+			log.debug("markAccepted: void");
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
 }
