@@ -188,6 +188,20 @@ public class Util {
 	}
 	
 	/**
+	 * markHTMLTextAsBold
+	 * 
+	 * @param text
+	 * @param mark
+	 */
+	public static String getTextAsBoldHTML(String text, boolean mark) {
+		if (mark) {
+			return "<b>" + text + "</b>"; 
+		} else {
+			return text;
+		}
+	}
+	
+	/**
 	 * Change on fly the actual css
 	 * 
 	 * @param title The css name

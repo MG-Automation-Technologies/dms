@@ -34,4 +34,8 @@ import com.openkm.frontend.client.bean.GWTProposedSubscription;
 public interface OKMProposedSubscriptionServiceAsync extends RemoteService {
 	public void create(String uuid, String path, String type, String users, String roles, AsyncCallback<?> callback);
 	public void findAll(AsyncCallback<List<GWTProposedSubscription>> callback);
+	public void markSeen(int msgId, AsyncCallback<?> callback);
+	public void markAccepted(int msgId, AsyncCallback<?> callback);
+	public void delete(int msgId, AsyncCallback<?> callback);
+	public void deleteAllBySender(String sender, AsyncCallback<?> callback);
 }
