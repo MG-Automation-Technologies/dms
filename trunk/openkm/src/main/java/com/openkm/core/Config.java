@@ -49,13 +49,9 @@ public class Config {
 	public static final String NULL_DEVICE = getNullDevice();
 	public static final boolean IN_SERVER = inServer();
 	
-	// Preview cache
-	public static final String PDF_CACHE = HOME_DIR+File.separator+"cache"+File.separator+"pdf";
-	public static final String SWF_CACHE = HOME_DIR+File.separator+"cache"+File.separator+"swf";
-	
 	// Multihost
 	public static final String INSTALL = "";
-	
+		
 	// Scripting
 	public static final String START_SCRIPT = "start.bsh";
 	public static final String STOP_SCRIPT = "stop.bsh";
@@ -63,12 +59,16 @@ public class Config {
 	public static final String STOP_JAR = "stop.jar";
 	
 	// Configuration files
-	public static final String OPENKM_CONFIG = "OpenKM"+INSTALL+".cfg";
-	public static final String JBPM_CONFIG = "jbpm"+INSTALL+".xml";
+	public static final String OPENKM_CONFIG = "OpenKM.cfg";
 	public static final String NODE_DEFINITIONS = "CustomNodes.cnd";
+	public static String JBPM_CONFIG;
 	
 	// Default script
 	public static final String PROPERTY_DEFAULT_SCRIPT = "default.script";
+	
+	// Preview cache
+	public static String CACHE_PDF;
+	public static String CACHE_SWF;
 	
 	// Configuration properties
 	public static final String PROPERTY_REPOSITORY_CONFIG = "repository.config";
@@ -186,9 +186,8 @@ public class Config {
 	/**
 	 *  Default values
 	 */
-	public static String REPOSITORY_CONFIG = "repository"+INSTALL+".xml";
-	public static String REPOSITORY_HOME = "repository"+INSTALL;
-	
+	public static String REPOSITORY_CONFIG;
+	public static String REPOSITORY_HOME;
 	public static String DEFAULT_SCRIPT;
 	
 	public static String SYSTEM_USER = "system";
@@ -426,6 +425,24 @@ public class Config {
 			values.put(PROPERTY_HIBERNATE_SHOW_SQL, HIBERNATE_SHOW_SQL);
 			
 			fis.close();
+			
+			// Calculated values
+			String INSTANCE = HOME_DIR + File.separator + "instances" + File.separator + ctx;
+			
+			if ("OpenKM".equals(ctx)) {
+				INSTANCE = HOME_DIR;
+			}
+			
+			REPOSITORY_CONFIG = INSTANCE + File.separator + "repository.xml";
+			values.put("repository.config", REPOSITORY_CONFIG);
+			REPOSITORY_HOME = INSTANCE + File.separator + "repository";
+			values.put("repository.home", REPOSITORY_HOME);
+			CACHE_PDF = INSTANCE + File.separator + "cache" + File.separator + "pdf";
+			values.put("cache.pdf", CACHE_PDF);
+			CACHE_SWF = INSTANCE + File.separator + "cache" + File.separator + "swf";
+			values.put("cache.swf", CACHE_SWF);
+			JBPM_CONFIG = INSTANCE + File.separator + "jbpm.xml";
+			values.put("jbpm.config", JBPM_CONFIG);
 			
 			// Load or reload database configuration
 			reload(ctx);
