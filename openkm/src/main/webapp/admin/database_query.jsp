@@ -15,35 +15,54 @@
    <c:choose>
     <c:when test="${isAdmin}">
       <h1>Database query</h1>
-      <form action="DatabaseQuery">
-        <table class="form">
-          <tr><td><textarea cols="75" rows="5" name="qs">${qs}</textarea></td></tr>
-          <tr>
-            <td align="right">
-              <select name="method">
-                <option></option>
-                <c:choose>
-                  <c:when test="${method == 'jdbc'}">
-                    <option value="jdbc" selected="selected">JDBC</option>
-                  </c:when>
-                  <c:otherwise>
-                    <option value="jdbc">JDBC</option>
-                  </c:otherwise>
-                </c:choose>
-                <c:choose>
-                  <c:when test="${method == 'hibernate'}">
-                    <option value="hibernate" selected="selected">Hibernate</option>
-                  </c:when>
-                  <c:otherwise>
-                    <option value="hibernate">Hibernate</option>
-                  </c:otherwise>
-                </c:choose>
-              </select>
-              <input type="submit" value="Send"/>
-            </td>
-          </tr>
-        </table>
-      </form>
+      <table class="form">
+        <tr>
+          <td>
+            <form action="DatabaseQuery" method="post" enctype="multipart/form-data">
+              <table>
+                <tr><td><textarea cols="75" rows="5" name="qs">${qs}</textarea></td></tr>
+                <tr>
+                  <td align="right">
+                    <select name="method">
+                      <option></option>
+                      <c:choose>
+                        <c:when test="${method == 'jdbc'}">
+                          <option value="jdbc" selected="selected">JDBC</option>
+                        </c:when>
+                        <c:otherwise>
+                          <option value="jdbc">JDBC</option>
+                        </c:otherwise>
+                      </c:choose>
+                      <c:choose>
+                        <c:when test="${method == 'hibernate'}">
+                          <option value="hibernate" selected="selected">Hibernate</option>
+                        </c:when>
+                        <c:otherwise>
+                          <option value="hibernate">Hibernate</option>
+                        </c:otherwise>
+                      </c:choose>
+                    </select>
+                    <input type="submit" value="Send"/>
+                  </td>
+                </tr>
+              </table>
+            </form>
+          </td>
+        </tr>
+        <tr class="fuzzy">
+          <td colspan="4" align="right">
+            <form action="DatabaseQuery" method="post" enctype="multipart/form-data">
+              <input type="hidden" name="action" value="import"/>
+              <table>
+                <tr>
+                  <td><input class=":required :only_on_blur" type="file" name="sql-file"/></td>
+                  <td><input type="submit" value="Execute update"/></td>
+                </tr>
+              </table>
+            </form>
+          </td>
+        </tr>
+      </table>
       <br/>
       <c:choose>
         <c:when test="${rows != null}">
