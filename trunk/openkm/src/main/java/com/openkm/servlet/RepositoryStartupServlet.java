@@ -88,11 +88,11 @@ public class RepositoryStartupServlet extends HttpServlet {
         // Get OpenKM version
         WarUtils.readAppVersion(sc);
         log.info("*** Application version: "+WarUtils.getAppVersion()+" ***");
-
+        
         // Initialize folder pdf cache
         File pdfCacheFolder = new File(Config.CACHE_PDF);
         if (!pdfCacheFolder.exists()) pdfCacheFolder.mkdirs();
-
+        
         // Initialize folder preview cache
         File previewCacheFolder = new File(Config.CACHE_SWF);
         if (!previewCacheFolder.exists()) previewCacheFolder.mkdirs();
