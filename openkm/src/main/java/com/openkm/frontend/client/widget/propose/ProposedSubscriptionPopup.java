@@ -166,7 +166,7 @@ public class ProposedSubscriptionPopup extends DialogBox  {
 	/**
 	 * executeProposeSubscription
 	 * 
-	 * @param type
+	 * @param TYPE
 	 */
 	public void executeProposeSubscription() {
 		if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
@@ -174,7 +174,7 @@ public class ProposedSubscriptionPopup extends DialogBox  {
 			GWTDocument doc = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 			uuid = doc.getUuid();
 			path = doc.getPath();
-			type = GWTDocument.type;
+			type = GWTDocument.TYPE;
 			super.center();
 		} 
 	}
