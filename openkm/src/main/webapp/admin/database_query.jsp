@@ -67,6 +67,18 @@
       <c:choose>
         <c:when test="${rows != null}">
           <center>Row Count: ${rows}</center>
+          <c:if test="${not empty errors}">
+            <table class="results" width="100%">
+              <tr><th>Line</th><th>SQL</th><th>Error</th></tr>
+              <c:forEach var="error" items="${errors}" varStatus="row">
+              <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
+                <td>${error.ln}</td>
+                <td>${error.sql}</td>
+                <td>${error.msg}</td>
+              </tr>
+            </c:forEach>
+            </table>
+          </c:if>
         </c:when>
         <c:otherwise>
           <table class="results" width="100%">
