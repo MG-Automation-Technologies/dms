@@ -61,6 +61,10 @@ table.form {
 	background-color: #eeeeee;
 }
 
+table.form tr.fuzzy {
+	background-color: #C3D9FF;
+}
+
 table.results {
 	margin-left:auto; margin-right:auto;
 	border: 1px solid #789DB3;
