@@ -98,6 +98,8 @@ public class ConfigServlet extends BaseServlet {
 	 */
 	private void create(Session session, Map<String, String> types, HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException, DatabaseException {
+		ServletContext sc = getServletContext();
+		
 		if (WebUtil.getBoolean(request, "persist")) {
 			String cfgKey = WebUtil.getString(request, "cfg_key");
 			Config cfg = new Config();
@@ -105,12 +107,11 @@ public class ConfigServlet extends BaseServlet {
 			cfg.setType(WebUtil.getString(request, "cfg_type"));
 			cfg.setValue(WebUtil.getString(request, "cfg_value"));
 			ConfigDAO.create(cfg);
-			com.openkm.core.Config.reload();
+			com.openkm.core.Config.reload(sc.getContextPath().substring(1));
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "ADMIN_CONFIG_CREATE", cfgKey, cfg.toString());
 		} else {
-			ServletContext sc = getServletContext();
 			Config cfg = new Config();
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
@@ -125,6 +126,8 @@ public class ConfigServlet extends BaseServlet {
 	 */
 	private void edit(Session session, Map<String, String> types, HttpServletRequest request, 
 			HttpServletResponse response) throws ServletException, IOException, DatabaseException {
+		ServletContext sc = getServletContext();
+		
 		if (WebUtil.getBoolean(request, "persist")) {
 			String cfgKey = WebUtil.getString(request, "cfg_key");
 			String cfgType = WebUtil.getString(request, "cfg_type");
@@ -138,12 +141,11 @@ public class ConfigServlet extends BaseServlet {
 			}
 			
 			ConfigDAO.update(cfg);
-			com.openkm.core.Config.reload();
+			com.openkm.core.Config.reload(sc.getContextPath().substring(1));
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "ADMIN_CONFIG_EDIT", cfgKey, cfg.toString());
 		} else {
-			ServletContext sc = getServletContext();
 			String cfgKey = WebUtil.getString(request, "cfg_key");
 			Config cfg = ConfigDAO.findByPk(cfgKey);
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
@@ -159,15 +161,16 @@ public class ConfigServlet extends BaseServlet {
 	 */
 	private void delete(Session session, Map<String, String> types, HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException, DatabaseException {
+		ServletContext sc = getServletContext();
+		
 		if (WebUtil.getBoolean(request, "persist")) {
 			String cfgKey = WebUtil.getString(request, "cfg_key");
 			ConfigDAO.delete(cfgKey);
-			com.openkm.core.Config.reload();
+			com.openkm.core.Config.reload(sc.getContextPath().substring(1));
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "ADMIN_CONFIG_DELETE", cfgKey, null);
 		} else {
-			ServletContext sc = getServletContext();
 			String cfgKey = WebUtil.getString(request, "cfg_key");
 			Config cfg = ConfigDAO.findByPk(cfgKey);
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
