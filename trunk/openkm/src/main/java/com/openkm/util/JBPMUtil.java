@@ -38,7 +38,7 @@ public class JBPMUtil {
 	
 	public static synchronized JbpmConfiguration getConfig() {
 		if (jbpmConfig == null) {
-			File jbpmCfg = new File(Config.HOME_DIR+"/"+Config.JBPM_CONFIG);
+			File jbpmCfg = new File(Config.JBPM_CONFIG);
 			FileInputStream fisJbpmCfg = null;
 			
 			try {
