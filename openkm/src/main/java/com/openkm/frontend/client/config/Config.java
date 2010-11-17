@@ -21,38 +21,39 @@
 
 package com.openkm.frontend.client.config;
 
+import com.openkm.frontend.client.Main;
+
 /**
  * General configuration
  * 
  * @author jllort
  */
 public class Config {
-	public static final String INSTALL = "/OpenKM";
 	
 	// Service entry point 
-	public static final String OKMFolderService = INSTALL+"/frontend/Folder";
-	public static final String OKMDocumentService = INSTALL+"/frontend/Document";
-	public static final String OKMDownloadServlet = INSTALL+"/frontend/Download";
-	public static final String OKMFileUploadService = INSTALL+"/frontend/FileUpload";
-	public static final String OKMAuthService = INSTALL+"/frontend/Auth";
-	public static final String OKMSearchService = INSTALL+"/frontend/Search";
-	public static final String OKMPropertyGroupService = INSTALL+"/frontend/PropertyGroup";
-	public static final String OKMNotifyService = INSTALL+"/frontend/Notify";
-	public static final String OKMBookmarkService = INSTALL+"/frontend/Bookmark";
-	public static final String OKMRepositoryService = INSTALL+"/frontend/Repository";
-	public static final String OKMDashboardService = INSTALL+"/frontend/Dashboard";
-	public static final String OKMWorkspaceService = INSTALL+"/frontend/Workspace";
-	public static final String OKMWorkflowService = INSTALL+"/frontend/Workflow";
-	public static final String OKMMailService = INSTALL+"/frontend/Mail";
-	public static final String OKMGeneralService = INSTALL+"/frontend/General";
-	public static final String OKMThesaurusService = INSTALL+"/frontend/Thesaurus";
-	public static final String OKMPropertyService = INSTALL+"/frontend/Property";
-	public static final String OKMChatService = INSTALL+"/frontend/Chat";
-	public static final String OKMUserConfigService = INSTALL+"/frontend/UserConfig";
-	public static final String OKMNoteService = INSTALL+"/frontend/Note";
-	public static final String OKMLanguageService = INSTALL+"/frontend/Language";
-	public static final String OKMProposeSubscriptionService = INSTALL+"/frontend/ProposedSubscription";
-	public static final String OKMFeedService = INSTALL+"/feed/";
-	public static final String OKMStaplingService = INSTALL+"/extension/Stapling";
-	public static final String OKMStaplingDownloadService = INSTALL+"/extension/StaplingDownload";
+	public static String OKMFolderService = Main.CONTEXT+"/frontend/Folder";
+	public static String OKMDocumentService = Main.CONTEXT+"/frontend/Document";
+	public static String OKMDownloadServlet = Main.CONTEXT+"/frontend/Download";
+	public static String OKMFileUploadService = Main.CONTEXT+"/frontend/FileUpload";
+	public static String OKMAuthService = Main.CONTEXT+"/frontend/Auth";
+	public static String OKMSearchService = Main.CONTEXT+"/frontend/Search";
+	public static String OKMPropertyGroupService = Main.CONTEXT+"/frontend/PropertyGroup";
+	public static String OKMNotifyService = Main.CONTEXT+"/frontend/Notify";
+	public static String OKMBookmarkService = Main.CONTEXT+"/frontend/Bookmark";
+	public static String OKMRepositoryService = Main.CONTEXT+"/frontend/Repository";
+	public static String OKMDashboardService = Main.CONTEXT+"/frontend/Dashboard";
+	public static String OKMWorkspaceService = Main.CONTEXT+"/frontend/Workspace";
+	public static String OKMWorkflowService = Main.CONTEXT+"/frontend/Workflow";
+	public static String OKMMailService = Main.CONTEXT+"/frontend/Mail";
+	public static String OKMGeneralService = Main.CONTEXT+"/frontend/General";
+	public static String OKMThesaurusService = Main.CONTEXT+"/frontend/Thesaurus";
+	public static String OKMPropertyService = Main.CONTEXT+"/frontend/Property";
+	public static String OKMChatService = Main.CONTEXT+"/frontend/Chat";
+	public static String OKMUserConfigService = Main.CONTEXT+"/frontend/UserConfig";
+	public static String OKMNoteService = Main.CONTEXT+"/frontend/Note";
+	public static String OKMLanguageService = Main.CONTEXT+"/frontend/Language";
+	public static String OKMProposeSubscriptionService = Main.CONTEXT+"/frontend/ProposedSubscription";
+	public static String OKMFeedService = Main.CONTEXT+"/feed/";
+	public static String OKMStaplingService = Main.CONTEXT+"/extension/Stapling";
+	public static String OKMStaplingDownloadService = Main.CONTEXT+"/extension/StaplingDownload";
 }
