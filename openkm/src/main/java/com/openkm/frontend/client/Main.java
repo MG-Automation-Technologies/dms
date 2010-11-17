@@ -175,12 +175,11 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		// Request parameter
 		loc = WindowUtils.getLocation();
 		
-		String context = WindowUtils.getLocation().getPath();
-		// Remove any localhost:8080/
-    	context = context.substring(context.indexOf("/")+1);
-    	// Substrint to next /
-    	context = context.substring(0, context.indexOf("/"));
-    	CONTEXT = "/"+context;
+		// Capturing context
+		CONTEXT = loc.getPath();
+		CONTEXT = CONTEXT.substring(CONTEXT.indexOf("/")+1);
+		CONTEXT = CONTEXT.substring(0, CONTEXT.indexOf("/"));
+    	CONTEXT = "/"+CONTEXT;
 		
 		if (loc.getParameter("docPath")!=null && !loc.getParameter("docPath").equals("")) {
 			fldPath = loc.getParameter("docPath").substring(0, loc.getParameter("docPath").lastIndexOf("/")); 
