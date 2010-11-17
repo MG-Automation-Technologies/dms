@@ -23,7 +23,7 @@
             <c:url value="Config" var="urlCreate">
               <c:param name="action" value="create"/>
             </c:url>
-            <a href="${urlCreate}"><img src="img/action/new.png" alt="New configuration property" title="New configuration property"/></a>
+            <!-- <a href="${urlCreate}"><img src="img/action/new.png" alt="New configuration property" title="New configuration property"/></a> -->
           </th>
         </tr>
         <c:forEach var="cfg" items="${configs}" varStatus="row">
