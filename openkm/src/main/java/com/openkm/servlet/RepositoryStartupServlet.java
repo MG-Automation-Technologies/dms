@@ -90,11 +90,11 @@ public class RepositoryStartupServlet extends HttpServlet {
         log.info("*** Application version: "+WarUtils.getAppVersion()+" ***");
 
         // Initialize folder pdf cache
-        File pdfCacheFolder = new File(Config.PDF_CACHE);
+        File pdfCacheFolder = new File(Config.CACHE_PDF);
         if (!pdfCacheFolder.exists()) pdfCacheFolder.mkdirs();
 
         // Initialize folder preview cache
-        File previewCacheFolder = new File(Config.SWF_CACHE);
+        File previewCacheFolder = new File(Config.CACHE_SWF);
         if (!previewCacheFolder.exists()) previewCacheFolder.mkdirs();
         
         // Initialize Velocity engine
