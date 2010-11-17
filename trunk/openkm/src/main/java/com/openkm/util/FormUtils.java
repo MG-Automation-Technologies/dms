@@ -21,7 +21,6 @@
 
 package com.openkm.util;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -121,7 +120,7 @@ public class FormUtils {
 		log.debug("parseMetadataForms()");
 		// long begin = Calendar.getInstance().getTimeInMillis();
 		if (pGroups == null) {
-			String pgFile = Config.HOME_DIR + File.separator +"PropertyGroups" + Config.INSTALL + ".xml";
+			String pgFile = Config.PROPERTY_GROUPS_XML;
 			log.debug("PropertyGroupForms: {}", pgFile);
 			pGroups = new HashMap<PropertyGroup, List<FormElement>>();
 			FileInputStream fis = null;
