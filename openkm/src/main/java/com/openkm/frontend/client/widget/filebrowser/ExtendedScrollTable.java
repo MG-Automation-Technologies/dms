@@ -870,7 +870,7 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 		Log.debug("downloadDocumentPdf()");
 		if (isDocumentSelected()) {
 			Log.debug("jump to download");
-			Util.downloadFile(getDocument().getPath(), "toPdf");
+			Util.downloadFilePdf(getDocument().getUuid());
 		}
 		Log.debug("downloadDocumentPdf: void");
 	}
