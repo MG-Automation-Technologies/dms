@@ -8,6 +8,7 @@
     <property name="to" column="PS_TO" not-null="true" length="127"/>
     <property name="uuid" column="PS_UUID" not-null="true"/>
     <property name="type" column="PS_TYPE" not-null="true"/>
+    <property name="comment" column="PS_COMMENT" type="text"/>
     <property name="accepted" column="PS_ACCEPTED" not-null="true"/>
     <property name="sentDate" column="PS_SENT_DATE" not-null="true"/>
     <property name="seenDate" column="PS_SEEN_DATE"/>
