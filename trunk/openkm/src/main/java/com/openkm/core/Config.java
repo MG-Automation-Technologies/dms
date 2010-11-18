@@ -60,6 +60,7 @@ public class Config {
 	public static final String NODE_DEFINITIONS = "CustomNodes.cnd";
 	public static String CONTEXT;
 	public static String INSTANCE;
+	public static boolean MULTIPLE_INSTANCES;
 	public static String JBPM_CONFIG;
 	public static String PROPERTY_GROUPS_XML;
 	public static String PROPERTY_GROUPS_CND;
@@ -428,11 +429,16 @@ public class Config {
 			
 			fis.close();
 			
-			// Calculated values
-			INSTANCE = HOME_DIR + File.separator + "instances" + File.separator + CONTEXT;
-			
 			if ("OpenKM".equals(CONTEXT)) {
 				INSTANCE = HOME_DIR;
+				values.put("instance", INSTANCE);
+				MULTIPLE_INSTANCES = false;
+				values.put("mutiple.instances", Boolean.toString(MULTIPLE_INSTANCES));
+			} else {
+				INSTANCE = HOME_DIR + File.separator + "instances" + File.separator + CONTEXT;
+				values.put("instance", INSTANCE);
+				MULTIPLE_INSTANCES = true;
+				values.put("mutiple.instances", Boolean.toString(MULTIPLE_INSTANCES));
 			}
 			
 			REPOSITORY_CONFIG = INSTANCE + File.separator + "repository.xml";
