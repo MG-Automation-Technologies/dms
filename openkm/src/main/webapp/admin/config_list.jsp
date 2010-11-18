@@ -36,7 +36,7 @@
             <c:param name="cfg_key" value="${cfg.key}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td><b>${cfg.key}</b></td><td>${cfg.type}</td>
+            <td><b>${cfg.key}</b></td><td><i>${cfg.type}</i></td>
             <td>
               <c:choose>
                 <c:when test="${cfg.type == 'Boolean'}">
