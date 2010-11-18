@@ -90,7 +90,7 @@ public class GeneralComunicator {
 	 */
 	public static void downloadDocumentPdf() {
 		if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
-			Util.downloadFile(Main.get().mainPanel.desktop.browser.fileBrowser.getDocument().getPath(), "toPdf");
+			Util.downloadFilePdf(Main.get().mainPanel.desktop.browser.fileBrowser.getDocument().getUuid());
 		}
 	}
 	
