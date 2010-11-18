@@ -26,7 +26,7 @@
         <a href="ActiveSessions">Active sessions</a><br/>
         <a href="repository_backup.jsp">Repository backup</a><br/>
         <a href="repository_checker.jsp">Repository checker</a><br/>
-        <a href="config.jsp">Configuration</a>
+        <a href="config.jsp">Configuration</a><br/>
         <a href="${urlAddTranslation}">Add translation term</a><br/>
       </center>
     </c:when>
