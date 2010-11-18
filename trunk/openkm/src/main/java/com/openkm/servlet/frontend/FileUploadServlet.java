@@ -71,7 +71,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 	@SuppressWarnings("unchecked")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws 
 			ServletException, IOException {
-		log.info("doPost({}, {})", request, response);
+		log.debug("doPost({}, {})", request, response);
 		String fileName = null;
 		InputStream is = null;
 		String path = null;
@@ -91,7 +91,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 			boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 			response.setContentType("text/plain");
 			out = response.getWriter();	
-			log.info("isMultipart: {}", isMultipart);
+			log.debug("isMultipart: {}", isMultipart);
 			
 			// Create a factory for disk-based file items
 			if (isMultipart) {
