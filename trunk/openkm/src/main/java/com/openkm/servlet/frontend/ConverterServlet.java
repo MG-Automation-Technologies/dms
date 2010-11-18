@@ -75,35 +75,36 @@ public class ConverterServlet extends OKMHttpServlet {
 				String path = OKMRepository.getInstance().getNodePath(null, uuid);
 				Document doc = OKMDocument.getInstance().getProperties(null, path);
 				String fileName = FileUtils.getName(doc.getPath());
+				String mimeType = null;
 				DocConverter converter = DocConverter.getInstance();
-				
-				if (!toSwf || toSwf && !Config.SYSTEM_PDF2SWF.equals("") && !swfCache.exists() || !toPdf || toPdf && !pdfCache.exists()) {
-					is = OKMDocument.getInstance().getContent(null, path, false);
-				}
+				is = OKMDocument.getInstance().getContent(null, path, false);
 				
 				// Convert to PDF
 				if (toPdf || toSwf && !Config.SYSTEM_PDF2SWF.equals("")) {
-					if (pdfCache.exists()) {
-						is.close();
-						is = new FileInputStream(pdfCache);
-					} else {
-						if (doc.getMimeType().startsWith("image/")) {
-							converter.img2pdf(is, doc.getMimeType(), pdfCache);
+					if (!doc.getMimeType().equals(DocConverter.PDF)) {
+						if (pdfCache.exists()) {
+							is.close();
+							is = new FileInputStream(pdfCache);
 						} else {
-							converter.doc2pdf(is, doc.getMimeType(), pdfCache);
+							if (doc.getMimeType().startsWith("image/")) {
+								converter.img2pdf(is, doc.getMimeType(), pdfCache);
+							} else {
+								converter.doc2pdf(is, doc.getMimeType(), pdfCache);
+							}
+							
+							is.close();
+							is = new FileInputStream(pdfCache);
 						}
-						
-						is.close();
-						is = new FileInputStream(pdfCache);
 					}
 					
-					doc.setMimeType(DocConverter.PDF);
+					mimeType = DocConverter.PDF;
 					fileName = FileUtils.getFileName(fileName)+".pdf";
 				}
 				
 				// Convert to SWF
 				if (toSwf && !Config.SYSTEM_PDF2SWF.equals("")) {
 					if (swfCache.exists()) {
+						is.close();
 						is = new FileInputStream(swfCache);
 					} else {
 						try {
@@ -123,11 +124,11 @@ public class ConverterServlet extends OKMHttpServlet {
 						}
 					}
 					
-					doc.setMimeType(DocConverter.SWF);
+					mimeType = DocConverter.SWF;
 					fileName = FileUtils.getFileName(fileName)+".swf";
 				}
 				
-				WebUtil.sendFile(request, response, fileName, doc.getMimeType(), true, is);
+				WebUtil.sendFile(request, response, fileName, mimeType, true, is);
 				is.close();
 			}
 		} catch (PathNotFoundException e) {
