@@ -34,6 +34,7 @@ public class Config {
 	public static String OKMFolderService = Main.CONTEXT+"/frontend/Folder";
 	public static String OKMDocumentService = Main.CONTEXT+"/frontend/Document";
 	public static String OKMDownloadServlet = Main.CONTEXT+"/frontend/Download";
+	public static String OKMConverterServlet = Main.CONTEXT+"/frontend/Converter";
 	public static String OKMFileUploadService = Main.CONTEXT+"/frontend/FileUpload";
 	public static String OKMAuthService = Main.CONTEXT+"/frontend/Auth";
 	public static String OKMSearchService = Main.CONTEXT+"/frontend/Search";
