@@ -67,7 +67,6 @@ import com.openkm.frontend.client.util.Util;
  *
  */
 public class DashboardWidget extends Composite {
-	
 	private final OKMDashboardServiceAsync dashboardService = (OKMDashboardServiceAsync) GWT.create(OKMDashboardService.class);
 
 	private static int HEADER_SQUARE = 24;
