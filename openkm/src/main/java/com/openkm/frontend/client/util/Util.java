@@ -154,7 +154,7 @@ public class Util {
 	 * @param uri The url to open
 	 * @return
 	 */
-	public static String windowOpen(String text, String uri){
+	public static String windowOpen(String text, String uri) {
 		return "<span onclick=\"javascript:window.open('"+ uri +"')\">" + text + "</span>";
 	}
 	
@@ -165,7 +165,7 @@ public class Util {
 	 */
 	public static boolean isJREInstalled() {
 		String[] jreList = getJREs();
-		if (jreList!=null && jreList.length>0) {
+		if (jreList != null && jreList.length > 0) {
 			return true;
 		} else {
 			return false;
@@ -179,12 +179,24 @@ public class Util {
 	 * @param params
 	 */
 	public static void downloadFile(String path, String params) {
-
 		if (!params.equals("") && !params.endsWith("&")) {
 			params += "&";
 		}
+		
 		final Element downloadIframe = RootPanel.get("__download").getElement(); 
 		String url = Config.OKMDownloadServlet + "?" + params + "id=" + URL.encodeComponent(path);
+		DOM.setElementAttribute(downloadIframe, "src", url); 
+	}
+	
+	/**
+	 * Download file
+	 * 
+	 * @param path
+	 * @param params
+	 */
+	public static void downloadFilePdf(String uuid) {
+		final Element downloadIframe = RootPanel.get("__download").getElement(); 
+		String url = Config.OKMConverterServlet + "?toPdf=1&uuid=" + URL.encodeComponent(uuid);
 		DOM.setElementAttribute(downloadIframe, "src", url); 
 	}
 	
