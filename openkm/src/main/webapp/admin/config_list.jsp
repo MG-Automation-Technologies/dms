@@ -15,7 +15,7 @@
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
-      <h1>Configuration <span style="font-size: 10px;">(<a href="config.jsp">active</a>)</span></h1>
+      <h1>Configuration</h1>
       <table class="results" width="70%">
         <tr>
           <th>Key</th><th>Type</th><th>Value</th>
