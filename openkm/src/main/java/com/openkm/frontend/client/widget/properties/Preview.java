@@ -84,7 +84,7 @@ public class Preview extends Composite {
 		space.setVisible(false);
 		video.setVisible(false);
 		if (previewAvailable) {
-			String url = Config.OKMDownloadServlet +"?toSwf&inline&uuid=" + URL.encodeComponent(Uuid);
+			String url = Config.OKMConverterServlet +"?toSwf=1&uuid=" + URL.encodeComponent(Uuid);
 			text.setHTML("<div id=\"pdfviewercontainer\"></div>\n"); // needed for rewriting purpose
 			if (Main.get().workspaceUserProperties.getWorkspace().getPreviewer().equals("flexpaper")) {
 				Util.createPDFViewerFlexPaper(url, ""+width, ""+height);
