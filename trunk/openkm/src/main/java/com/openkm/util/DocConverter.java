@@ -104,6 +104,8 @@ public class DocConverter {
 					.setMaxTasksPerProcess(Config.SYSTEM_OPENOFFICE_TASKS)
 					.setPortNumber(Config.SYSTEM_OPENOFFICE_PORT)
 					.buildOfficeManager();
+			} else {
+				log.warn("system.openoffice not configured");
 			}
 		}
 		
