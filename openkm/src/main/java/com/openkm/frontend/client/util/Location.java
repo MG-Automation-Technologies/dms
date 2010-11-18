@@ -41,6 +41,12 @@ public class Location {
     public String getPath() {
         return path;
     }
+    
+    public String getContext() {
+    	String context = path.substring(path.indexOf("/")+1);
+    	context = context.substring(0, context.indexOf("/"));
+    	return "/"+context;
+    }
 
     public String getPort() {
         return port;
