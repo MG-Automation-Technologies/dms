@@ -90,6 +90,10 @@
     <servlet-class>com.openkm.servlet.frontend.DownloadServlet</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>ConverterServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.frontend.ConverterServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>DashboardServlet</servlet-name>
     <servlet-class>com.openkm.servlet.frontend.DashboardServlet</servlet-class>
   </servlet>
@@ -410,6 +414,10 @@
   <servlet-mapping>
     <servlet-name>FrontendDownloadServlet</servlet-name>
     <url-pattern>/frontend/Download</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ConverterServlet</servlet-name>
+    <url-pattern>/frontend/Converter</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>DashboardServlet</servlet-name>
