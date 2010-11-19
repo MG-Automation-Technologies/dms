@@ -37,6 +37,7 @@ public class QueryParams implements Serializable {
 	private String operator = AND;
 	private Map<String, String> properties = new HashMap<String, String>();
 	private Set<String> shared = new HashSet<String>();
+	private Set<ProposedQuery> proposed = new HashSet<ProposedQuery>();
 	
 	public int getId() {
 		return id;
@@ -198,6 +199,14 @@ public class QueryParams implements Serializable {
 		this.shared = shared;
 	}
 	
+	public Set<ProposedQuery> getProposed() {
+		return proposed;
+	}
+
+	public void setProposed(Set<ProposedQuery> proposed) {
+		this.proposed = proposed;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -215,6 +224,7 @@ public class QueryParams implements Serializable {
 		sb.append(", domain="); sb.append(domain);
 		sb.append(", operator="); sb.append(operator);
 		sb.append(", shared="); sb.append(shared);
+		sb.append(", proposed="); sb.append(proposed);
 		sb.append(", lastModifiedFrom="); sb.append(lastModifiedFrom==null?null:lastModifiedFrom.getTime());
 		sb.append(", lastModifiedTo="); sb.append(lastModifiedTo==null?null:lastModifiedTo.getTime());
 		sb.append("}");
