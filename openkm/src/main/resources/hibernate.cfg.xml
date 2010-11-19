@@ -234,6 +234,7 @@
     <mapping resource="com/openkm/dao/bean/FilterRule.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/MailAccount.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/QueryParams.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/ProposedQuery.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/TwitterAccount.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/DashboardStats.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/ProposedSubscription.hbm.xml"/>
