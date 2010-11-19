@@ -31,5 +31,9 @@
       <key column="QPS_ID" not-null="true"/>
       <element column="QPS_USER" type="string"/>
     </set>
+    <set name="proposed" table="OKM_PROPOSED_QUERY" order-by="PQ_ID asc" cascade="all-delete-orphan" lazy="false">
+      <key column="PQ_QUERY"/>
+      <one-to-many class="com.openkm.dao.bean.ProposedQuery"/>
+    </set>
   </class>
 </hibernate-mapping>
