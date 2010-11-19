@@ -199,15 +199,15 @@ public class ProposedSubscriptionDAO {
 	/**
 	 * Mark proposed as seen
 	 */
-	public static void markSeen(int msgId) throws DatabaseException {
-		log.debug("markSeen({})", msgId);
+	public static void markSeen(int psId) throws DatabaseException {
+		log.debug("markSeen({})", psId);
 		String qs = "update ProposedSubscription ps set ps.seenDate=:seenDate where ps.id=:id";
 		Session session = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
-			q.setInteger("id", msgId);
+			q.setInteger("id", psId);
 			q.setCalendar("seenDate", Calendar.getInstance());
 			q.executeUpdate();
 			log.debug("markSeen: void");
@@ -221,15 +221,15 @@ public class ProposedSubscriptionDAO {
 	/**
 	 * Mark proposed as accepted
 	 */
-	public static void markAccepted(int msgId) throws DatabaseException {
-		log.debug("markAccepted({})", msgId);
+	public static void markAccepted(int psId) throws DatabaseException {
+		log.debug("markAccepted({})", psId);
 		String qs = "update ProposedSubscription ps set ps.accepted=:accepted where ps.id=:id";
 		Session session = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
-			q.setInteger("id", msgId);
+			q.setInteger("id", psId);
 			q.setBoolean("accepted", true);
 			q.executeUpdate();
 			log.debug("markAccepted: void");
