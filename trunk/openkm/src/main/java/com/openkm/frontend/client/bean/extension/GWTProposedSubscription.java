@@ -38,6 +38,7 @@ public class GWTProposedSubscription implements IsSerializable {
 	private String path;
 	private String uuid;
 	private String type;
+	private String comment;
 	private boolean accepted;
 	private Date seenDate;
 	private Date sentDate;
@@ -112,6 +113,14 @@ public class GWTProposedSubscription implements IsSerializable {
 
 	public void setAccepted(boolean accepted) {
 		this.accepted = accepted;
+	}
+	
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	public String toString() {
