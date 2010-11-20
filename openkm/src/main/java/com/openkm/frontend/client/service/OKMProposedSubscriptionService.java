@@ -32,7 +32,7 @@ import com.openkm.frontend.client.bean.extension.GWTProposedSubscription;
  *
  */
 public interface OKMProposedSubscriptionService extends RemoteService {
-	public void create(String uuid, String path, String type, String users, String roles) throws OKMException;
+	public void create(String uuid, String path, String type, String users, String roles, String comment) throws OKMException;
 	public List<GWTProposedSubscription> findAll() throws OKMException;
 	public void markSeen(int msgId) throws OKMException;
 	public void markAccepted(int msgId) throws OKMException;
