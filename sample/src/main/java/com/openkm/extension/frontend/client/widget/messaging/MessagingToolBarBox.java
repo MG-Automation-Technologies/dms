@@ -19,21 +19,11 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.extension.frontend.client.messaging;
+package com.openkm.extension.frontend.client.widget.messaging;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Widget;
-import com.openkm.extension.frontend.client.util.OKMBundleResources;
-import com.openkm.frontend.client.extension.comunicator.GeneralComunicator;
-import com.openkm.frontend.client.extension.event.HasDashboardEvent;
-import com.openkm.frontend.client.extension.event.HasLanguageEvent;
-import com.openkm.frontend.client.extension.event.HasDashboardEvent.DashboardEventConstant;
-import com.openkm.frontend.client.extension.event.HasLanguageEvent.LanguageEventConstant;
-import com.openkm.frontend.client.extension.event.handler.DashboardHandlerExtension;
-import com.openkm.frontend.client.extension.event.handler.LanguageHandlerExtension;
 import com.openkm.frontend.client.extension.widget.ToolBarBoxExtension;
 
 /**
