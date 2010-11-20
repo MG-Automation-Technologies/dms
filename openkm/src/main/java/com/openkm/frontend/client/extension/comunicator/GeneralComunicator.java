@@ -28,6 +28,7 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.ToolBarOption;
+import com.openkm.frontend.client.util.CommonUI;
 import com.openkm.frontend.client.util.Util;
 
 
@@ -171,6 +172,16 @@ public class GeneralComunicator {
 	 */
 	public static String getUser() {
 		return Main.get().workspaceUserProperties.getUser();
+	}
+	
+	/**
+	 * openAllFolderPath
+	 * 
+	 * @param path
+	 * @param docPath
+	 */
+	public static void openAllFolderPath(String path, String docPath) {
+		CommonUI.openAllFolderPath(path, docPath);
 	}
 
 }

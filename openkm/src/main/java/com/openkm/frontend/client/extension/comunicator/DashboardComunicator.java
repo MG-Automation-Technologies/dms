@@ -21,57 +21,29 @@
 
 package com.openkm.frontend.client.extension.comunicator;
 
-import com.openkm.frontend.client.util.Util;
+import com.openkm.frontend.client.Main;
+
 
 
 /**
- * UtilComunicator
+ * DashboardComunicator
  * 
  * @author jllort
  *
  */
-public class UtilComunicator {
-
+public class DashboardComunicator {
+	
 	/**
-	 * formatSize
-	 * 
-	 * @param size
-	 * @return
+	 * getUserSubscribedDocuments
 	 */
-	public static String formatSize(double size) {
-		return Util.formatSize(size);
+	public static void getUserSubscribedDocuments() {
+		Main.get().mainPanel.dashboard.userDashboard.getUserSubscribedDocuments();
 	}
 	
 	/**
-	 * createHeaderHTML
-	 * 
-	 * @param imageURL
-	 * @param caption
-	 * @return
+	 * getUserSubscribedFolders
 	 */
-	public static String createHeaderHTML(String imageURL, String caption) {
-		return Util.createHeaderHTML(imageURL, caption);
-	}
-	
-	/**
-	 * menuHTML
-	 * 
-	 * @param imageUrl
-	 * @param text
-	 * @return
-	 */
-	public static String menuHTML(String imageUrl, String text) {
-		return Util.menuHTML(imageUrl, text);
-	}
-	
-	/**
-	 * getTextAsBoldHTML
-	 * 
-	 * @param text
-	 * @param mark
-	 * @return
-	 */
-	public static String getTextAsBoldHTML(String text, boolean mark) {
-		return Util.getTextAsBoldHTML(text, mark);
+	public static void getUserSubscribedFolders() {
+		Main.get().mainPanel.dashboard.userDashboard.getUserSubscribedFolders();
 	}
 }
