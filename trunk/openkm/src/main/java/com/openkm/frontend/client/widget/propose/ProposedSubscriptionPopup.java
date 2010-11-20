@@ -101,7 +101,7 @@ public class ProposedSubscriptionPopup extends DialogBox  {
 				roles = notifyPanel.getRolesToNotify();
 				if (!users.equals("") || !roles.equals("")) {
 					errorNotify.setVisible(false);
-					sendLinkNotification();
+					sendProposal();
 					hide();
 					reset();
 				} else {
@@ -177,27 +177,15 @@ public class ProposedSubscriptionPopup extends DialogBox  {
 			type = GWTDocument.TYPE;
 			super.center();
 		} 
-	}
-	
-	/**
-	 * Call back send link notification
-	 */
-	final AsyncCallback<Object> callbackNotify = new AsyncCallback<Object>() {
-		public void onSuccess(Object result) {
-		}
-
-		public void onFailure(Throwable caught) {
-			Main.get().showError("notify", caught);
-		}
-	};	
+	}	
 
 	/**
-	 * Sens the link notification
+	 * Sends proposal
 	 */
-	private void sendLinkNotification() {
+	private void sendProposal() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) proposedSubscriptionService;
 		endPoint.setServiceEntryPoint(Config.OKMProposeSubscriptionService);
-		proposedSubscriptionService.create(uuid, path, type, users, roles, new AsyncCallback<Object>() {
+		proposedSubscriptionService.create(uuid, path, type, users, roles, message.getText(), new AsyncCallback<Object>() {
 			@Override
 			public void onSuccess(Object result) {
 				hide();
