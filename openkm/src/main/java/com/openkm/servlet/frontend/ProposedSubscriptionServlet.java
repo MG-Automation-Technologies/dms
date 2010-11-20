@@ -55,9 +55,9 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 	private static Logger log = LoggerFactory.getLogger(ProposedSubscriptionServlet.class);
 	
 	@Override
-	public void create(String uuid, String path, String type, String users, String roles) throws OKMException {
-		Object obj[] = {(Object)uuid, (Object)path, (Object)type, (Object)users, (Object)roles};
-		log.debug("create({}, {}, {}, {}, {})", obj);
+	public void create(String uuid, String path, String type, String users, String roles, String comment) throws OKMException {
+		Object obj[] = {(Object)uuid, (Object)path, (Object)type, (Object)users, (Object)roles, (Object)comment};
+		log.debug("create({}, {}, {}, {}, {}, {})", obj);
 		
 		try {
 			String remoteUser = getThreadLocalRequest().getRemoteUser();
@@ -82,6 +82,7 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 				ps.setUuid(uuid);
 				ps.setPath(path);
 				ps.setType(type);
+				ps.setComment(comment);
 				ProposedSubscriptionDAO.create(ps);
 			}
 			
@@ -173,7 +174,7 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 		try {
 			session = JCRUtils.getSession();			
 			for (ProposedSubscription ps : ProposedSubscriptionDAO.findByUser(session, getThreadLocalRequest().getRemoteUser())) {
-				if (ps.getFrom().equals("sender" )) {
+				if (ps.getFrom().equals(sender)) {
 					IdToDelete.add(String.valueOf(ps.getId()));
 				}
 			}
