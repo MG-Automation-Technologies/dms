@@ -130,7 +130,7 @@ public class Util {
 	 */
 	public static String menuHTML(String imageUrl, String text) {
 		return "<img style='margin-right:8px; margin-left:2px; vertical-align:middle;' src='" 
-			   + imageUrl.toLowerCase() + "'>" + text;
+			   + imageUrl + "'>" + text;
 	}
 	
 	/**
