@@ -28,6 +28,7 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.ToolBarOption;
+import com.openkm.frontend.client.util.CommonUI;
 import com.openkm.frontend.client.util.Util;
 
 
@@ -65,6 +66,16 @@ public class GeneralComunicator {
 	}
 	
 	/**
+	 * i18nExtension
+	 * 
+	 * @param property
+	 * @return
+	 */
+	public static String i18nExtension(String property) {
+		return null;
+	}
+	
+	/**
 	 * Download Document
 	 * 
 	 * @param checkout
@@ -80,18 +91,8 @@ public class GeneralComunicator {
 	 */
 	public static void downloadDocumentPdf() {
 		if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
-			Util.downloadFile(Main.get().mainPanel.desktop.browser.fileBrowser.getDocument().getPath(), "toPdf");
+			
 		}
-	}
-	
-	/**
-	 * downloadFile
-	 * 
-	 * @param path
-	 * @param params
-	 */
-	public static void downloadFile(String path, String params) {
-		Util.downloadFile(path, params);
 	}
 	
 	/**
@@ -102,6 +103,16 @@ public class GeneralComunicator {
 	public static void extensionCallOwnDownload(String url) {
 		final Element downloadIframe = RootPanel.get("__download").getElement(); 
 		DOM.setElementAttribute(downloadIframe, "src", url); 
+	}
+	
+	/**
+	 * downloadFile
+	 * 
+	 * @param path
+	 * @param params
+	 */
+	public static void downloadFile(String path, String params) {
+		Util.downloadFile(path, params);
 	}
 	
 	/**
@@ -161,6 +172,16 @@ public class GeneralComunicator {
 	 */
 	public static String getUser() {
 		return Main.get().workspaceUserProperties.getUser();
+	}
+	
+	/**
+	 * openAllFolderPath
+	 * 
+	 * @param path
+	 * @param docPath
+	 */
+	public static void openAllFolderPath(String path, String docPath) {
+		CommonUI.openAllFolderPath(path, docPath);
 	}
 
 }
