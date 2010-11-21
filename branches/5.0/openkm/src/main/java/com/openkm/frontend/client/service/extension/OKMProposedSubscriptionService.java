@@ -19,59 +19,23 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.extension.comunicator;
+package com.openkm.frontend.client.service.extension;
 
-import com.openkm.frontend.client.util.Util;
+import java.util.List;
 
+import com.google.gwt.user.client.rpc.RemoteService;
+import com.openkm.frontend.client.OKMException;
+import com.openkm.frontend.client.bean.extension.GWTProposedSubscription;
 
 /**
- * UtilComunicator
- * 
  * @author jllort
  *
  */
-public class UtilComunicator {
-
-	/**
-	 * formatSize
-	 * 
-	 * @param size
-	 * @return
-	 */
-	public static String formatSize(double size) {
-		return Util.formatSize(size);
-	}
-	
-	/**
-	 * createHeaderHTML
-	 * 
-	 * @param imageURL
-	 * @param caption
-	 * @return
-	 */
-	public static String createHeaderHTML(String imageURL, String caption) {
-		return Util.createHeaderHTML(imageURL, caption);
-	}
-	
-	/**
-	 * menuHTML
-	 * 
-	 * @param imageUrl
-	 * @param text
-	 * @return
-	 */
-	public static String menuHTML(String imageUrl, String text) {
-		return Util.menuHTML(imageUrl, text);
-	}
-	
-	/**
-	 * getTextAsBoldHTML
-	 * 
-	 * @param text
-	 * @param mark
-	 * @return
-	 */
-	public static String getTextAsBoldHTML(String text, boolean mark) {
-		return "";
-	}
+public interface OKMProposedSubscriptionService extends RemoteService {
+	public void create(String uuid, String path, String type, String users, String roles, String comment) throws OKMException;
+	public List<GWTProposedSubscription> findAll() throws OKMException;
+	public void markSeen(int msgId) throws OKMException;
+	public void markAccepted(int msgId) throws OKMException;
+	public void delete(int msgId) throws OKMException;
+	public void deleteAllBySender(String sender) throws OKMException;
 }
