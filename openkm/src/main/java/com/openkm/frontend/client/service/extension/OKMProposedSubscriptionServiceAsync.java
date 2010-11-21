@@ -19,23 +19,23 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.service;
+package com.openkm.frontend.client.service.extension;
 
 import java.util.List;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
-import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.extension.GWTProposedSubscription;
 
 /**
  * @author jllort
  *
  */
-public interface OKMProposedSubscriptionService extends RemoteService {
-	public void create(String uuid, String path, String type, String users, String roles, String comment) throws OKMException;
-	public List<GWTProposedSubscription> findAll() throws OKMException;
-	public void markSeen(int msgId) throws OKMException;
-	public void markAccepted(int msgId) throws OKMException;
-	public void delete(int msgId) throws OKMException;
-	public void deleteAllBySender(String sender) throws OKMException;
+public interface OKMProposedSubscriptionServiceAsync extends RemoteService {
+	public void create(String uuid, String path, String type, String users, String roles, String comment, AsyncCallback<?> callback);
+	public void findAll(AsyncCallback<List<GWTProposedSubscription>> callback);
+	public void markSeen(int msgId, AsyncCallback<?> callback);
+	public void markAccepted(int msgId, AsyncCallback<?> callback);
+	public void delete(int msgId, AsyncCallback<?> callback);
+	public void deleteAllBySender(String sender, AsyncCallback<?> callback);
 }

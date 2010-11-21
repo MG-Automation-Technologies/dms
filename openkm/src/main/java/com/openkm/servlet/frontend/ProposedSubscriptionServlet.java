@@ -39,7 +39,7 @@ import com.openkm.dao.bean.ProposedSubscription;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.extension.GWTProposedSubscription;
 import com.openkm.frontend.client.config.ErrorCode;
-import com.openkm.frontend.client.service.OKMProposedSubscriptionService;
+import com.openkm.frontend.client.service.extension.OKMProposedSubscriptionService;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.util.GWTUtil;
 import com.openkm.util.JCRUtils;
