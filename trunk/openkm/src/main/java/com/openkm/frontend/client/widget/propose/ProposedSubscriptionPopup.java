@@ -36,8 +36,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.config.Config;
-import com.openkm.frontend.client.service.OKMProposedSubscriptionService;
-import com.openkm.frontend.client.service.OKMProposedSubscriptionServiceAsync;
+import com.openkm.frontend.client.service.extension.OKMProposedSubscriptionService;
+import com.openkm.frontend.client.service.extension.OKMProposedSubscriptionServiceAsync;
 import com.openkm.frontend.client.widget.notify.NotifyPanel;
 
 /**
