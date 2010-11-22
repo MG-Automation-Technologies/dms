@@ -237,11 +237,6 @@ public class WorkspaceUserProperties {
 			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.showExtensions();
 			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.init();
 			
-			// Document properties
-			if (MessagingToolBarBox.isRegistered(Main.get().getExtensionUuidList())) {
-				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.document.showProposedSusbcription();
-			}
-			
 			// Folder tabs
 			if (workspace.isTabFolderPropertiesVisible()) {
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.showProperties();
@@ -285,6 +280,13 @@ public class WorkspaceUserProperties {
 				Main.get().mainPanel.dashboard.showKeywords();
 			}
 			Main.get().mainPanel.dashboard.init();
+			
+			// Estensions
+			// Document properties
+			if (MessagingToolBarBox.isRegistered(Main.get().getExtensionUuidList())) {
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.document.showProposedSusbcription();
+				Main.get().mainPanel.search.historySearch.searchSaved.menuPopup.showShareSearch();
+			}
 			
 			Main.get().startUp.nextStatus(StartUp.STARTUP_GET_TAXONOMY_ROOT);
 			

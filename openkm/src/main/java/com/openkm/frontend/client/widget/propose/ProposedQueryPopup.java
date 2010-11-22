@@ -34,21 +34,21 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.bean.GWTDocument;
+import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.config.Config;
-import com.openkm.frontend.client.service.extension.OKMProposedSubscriptionService;
-import com.openkm.frontend.client.service.extension.OKMProposedSubscriptionServiceAsync;
+import com.openkm.frontend.client.service.extension.OKMProposedQueryService;
+import com.openkm.frontend.client.service.extension.OKMProposedQueryServiceAsync;
 import com.openkm.frontend.client.widget.notify.NotifyPanel;
 
 /**
- * ProposedSubscriptionPopup
+ * ProposedQueryPopup
  * 
  * @author jllort
  *
  */
-public class ProposedSubscriptionPopup extends DialogBox  {
+public class ProposedQueryPopup extends DialogBox  {
 	
-	private final OKMProposedSubscriptionServiceAsync proposedSubscriptionService = (OKMProposedSubscriptionServiceAsync) GWT.create(OKMProposedSubscriptionService.class);
+	private final OKMProposedQueryServiceAsync proposedQueryService = (OKMProposedQueryServiceAsync) GWT.create(OKMProposedQueryService.class);
 	
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
@@ -61,15 +61,12 @@ public class ProposedSubscriptionPopup extends DialogBox  {
 	private HTML errorNotify;
 	private String users;
 	private String roles;
-	private String path;
-	private String uuid;
-	private String type;
 	
-	public ProposedSubscriptionPopup() {
+	public ProposedQueryPopup() {
 		// Establishes auto-close when click outside
 		super(false,true);
 		
-		setText(Main.i18n("propose.subscription.title"));
+		setText(Main.i18n("propose.query.title"));
 		users = "";
 		roles = "";
 		
@@ -156,7 +153,7 @@ public class ProposedSubscriptionPopup extends DialogBox  {
 	 * Refreshing lang
 	 */
 	public void langRefresh(){
-		setText(Main.i18n("propose.subscription.title"));
+		setText(Main.i18n("propose.query.title"));
 		closeButton.setHTML(Main.i18n("button.close")); 
 		sendButton.setHTML(Main.i18n("fileupload.send"));
 		commentTXT = new HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + Main.i18n("fileupload.label.notify.comment"));
@@ -165,17 +162,13 @@ public class ProposedSubscriptionPopup extends DialogBox  {
 	}
 	
 	/**
-	 * executeProposeSubscription
+	 * executeProposeQuery
 	 * 
 	 * @param TYPE
 	 */
-	public void executeProposeSubscription() {
-		if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
+	public void executeProposeQuery() {
+		if (Main.get().mainPanel.search.historySearch.searchSaved.getSelectedRow()>=0) {
 			reset();
-			GWTDocument doc = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
-			uuid = doc.getUuid();
-			path = doc.getPath();
-			type = GWTDocument.TYPE;
 			super.center();
 		} 
 	}	
@@ -184,9 +177,10 @@ public class ProposedSubscriptionPopup extends DialogBox  {
 	 * Sends proposal
 	 */
 	private void sendProposal() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) proposedSubscriptionService;
-		endPoint.setServiceEntryPoint(Config.OKMProposeSubscriptionService);
-		proposedSubscriptionService.create(uuid, path, type, users, roles, message.getText(), new AsyncCallback<Object>() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) proposedQueryService;
+		endPoint.setServiceEntryPoint(Config.OKMProposeQueryService);
+		GWTQueryParams params = Main.get().mainPanel.search.historySearch.searchSaved.getSavedSearch();
+		proposedQueryService.create(params.getId(), users, roles, message.getText(), new AsyncCallback<Object>() {
 			@Override
 			public void onSuccess(Object result) {
 				hide();
@@ -205,9 +199,6 @@ public class ProposedSubscriptionPopup extends DialogBox  {
 	private void reset() {
 		users = "";
 		roles = "";
-		path = "";
-		uuid = "";
-		type = "";
 		message.setText("");
 		notifyPanel.reset();
 		notifyPanel.getAll();
