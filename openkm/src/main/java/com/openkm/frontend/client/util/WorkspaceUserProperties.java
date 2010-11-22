@@ -24,6 +24,7 @@ package com.openkm.frontend.client.util;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
+import com.openkm.extension.frontend.client.widget.messaging.MessagingToolBarBox;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTWorkspace;
 import com.openkm.frontend.client.config.Config;
@@ -235,6 +236,11 @@ public class WorkspaceUserProperties {
 			}
 			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.showExtensions();
 			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.init();
+			
+			// Document properties
+			if (MessagingToolBarBox.isRegistered(Main.get().getExtensionUuidList())) {
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.document.showProposedSusbcription();
+			}
 			
 			// Folder tabs
 			if (workspace.isTabFolderPropertiesVisible()) {

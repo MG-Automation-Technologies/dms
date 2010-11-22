@@ -26,7 +26,6 @@ import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.openkm.extension.frontend.client.Customization;
@@ -95,6 +94,7 @@ public class StartUp {
 		generalService.getEnabledExtensions(new AsyncCallback<List<String>>() {
 			@Override
 			public void onSuccess(List<String> result) {
+				Main.get().setExtensionUuidList(result);
 				// Only show registered extensions
 				ExtensionManager.start(Customization.getExtensionWidgets(result));
 				nextStatus(STARTUP_STARTING);
@@ -102,7 +102,7 @@ public class StartUp {
 			
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert("Error on getting extensions UUID");
+				Main.get().showError("getEnabledExtensions",caught);
 				nextStatus(STARTUP_STARTING);
 			}
 		});

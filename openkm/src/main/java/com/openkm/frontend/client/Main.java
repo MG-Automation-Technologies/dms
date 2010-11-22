@@ -86,7 +86,8 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	public static String CONTEXT = "/OpenKM";
 	private static Main singleton;
 	private final OKMLanguageServiceAsync languageService = (OKMLanguageServiceAsync) GWT.create(OKMLanguageService.class);
-	
+	private List<String> extensionUuidList = new ArrayList<String>();
+
 	/**
 	 * @return singleton Main instance 
 	 */
@@ -482,6 +483,24 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		}
 		
 		return ret;
+	}
+	
+	/**
+	 * getExtensionUuidList
+	 * 
+	 * @return
+	 */
+	public List<String> getExtensionUuidList() {
+		return extensionUuidList;
+	}
+
+	/**
+	 * setExtensionUuidList
+	 * 
+	 * @param extensionUuidList
+	 */
+	public void setExtensionUuidList(List<String> extensionUuidList) {
+		this.extensionUuidList = extensionUuidList;
 	}
 	
 	@Override
