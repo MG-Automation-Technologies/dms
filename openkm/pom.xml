@@ -380,13 +380,13 @@
       <version>${gwt.version}</version>
       <scope>provided</scope>
     </dependency>
-    <!-- Only for development --> 
+    <!-- Only for development  
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-dev</artifactId>
       <version>${gwt.version}</version>
       <scope>provided</scope>
-    </dependency> 
+    </dependency> -->
 
     <!-- GWT Maven plugin -->
     <dependency>
@@ -475,7 +475,7 @@
     <dependency>
       <groupId>com.openkm.extension</groupId>
       <artifactId>sample-full</artifactId>
-      <version>1.0</version>
+      <version>5.1</version>
     </dependency>
   </dependencies>
 
