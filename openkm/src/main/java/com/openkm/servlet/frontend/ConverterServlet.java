@@ -93,7 +93,7 @@ public class ConverterServlet extends OKMHttpServlet {
 								IOUtils.copy(is, os);
 								os.flush();
 								os.close();
-								converter.pdf2swf(tmp, dxfCache);
+								converter.dwg2dxf(tmp, dxfCache);
 							}
 							
 							is.close();
