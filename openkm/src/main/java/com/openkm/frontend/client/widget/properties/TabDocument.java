@@ -227,7 +227,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 			}
 		}
 		if (previewVisible) {
-			preview.setPreviewAvailable(doc.isConvertibleToSwf());
+			preview.setPreviewAvailable(doc.isConvertibleToSwf() || doc.isConvertibleToDxf());
 		}
 		
 		if (!propertyGroup.isEmpty()) {

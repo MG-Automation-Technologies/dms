@@ -54,6 +54,7 @@ public class GWTDocument implements IsSerializable {
 	private boolean subscribed;
 	private boolean convertibleToPdf;
 	private boolean convertibleToSwf;
+	private boolean convertibleToDxf;
 	private String uuid;
 	private boolean isAttachment = false;
 	private boolean hasNotes = false;
@@ -265,5 +266,13 @@ public class GWTDocument implements IsSerializable {
 
 	public void setCategories(Set<GWTFolder> categories) {
 		this.categories = categories;
+	}
+	
+	public boolean isConvertibleToDxf() {
+		return convertibleToDxf;
+	}
+
+	public void setConvertibleToDxf(boolean convertibleToDxf) {
+		this.convertibleToDxf = convertibleToDxf;
 	}
 }
