@@ -106,6 +106,7 @@ public class Document extends Composite {
 	private HTML categoriesText;
 	private boolean remove = true;
 	private List<String> keyWordsListPending; // Keyword list pending to be added ( each one is added sequentially )
+	HorizontalPanel hPanelSubscribedUsers;
 	
 	public Document() {
 		keywordMap = new HashMap<String,Widget>();
@@ -209,7 +210,7 @@ public class Document extends Composite {
 		
 		VerticalPanel vPanel2 = new VerticalPanel();
 		
-		HorizontalPanel hPanelSubscribedUsers = new HorizontalPanel();
+		hPanelSubscribedUsers = new HorizontalPanel();
 		subcribedUsersText = new HTML("<b>"+Main.i18n("document.subscribed.users")+"<b>");
 		proposeSubscribeImage = new Image(OKMBundleResources.INSTANCE.proposeSubscription());
 		proposeSubscribeImage.addClickHandler(new ClickHandler() {
@@ -220,7 +221,6 @@ public class Document extends Composite {
 		});
 		hPanelSubscribedUsers.add(subcribedUsersText);
 		hPanelSubscribedUsers.add(new HTML("&nbsp;"));
-		hPanelSubscribedUsers.add(proposeSubscribeImage);
 		hPanelSubscribedUsers.setCellVerticalAlignment(subcribedUsersText, HasAlignment.ALIGN_MIDDLE);
 
 		keywordsCloudText = new HTML("<b>"+Main.i18n("document.keywords.cloud")+"</b>");
@@ -646,6 +646,14 @@ public class Document extends Composite {
 		suggestKey.setVisible(visible);
 		categoriesImage.setVisible(visible);
 		thesaurusImage.setVisible(visible);
+	}
+	
+	/**
+	 * showProposedSusbcription
+	 */
+	public void showProposedSusbcription() {
+		// Adds to panel
+		hPanelSubscribedUsers.add(proposeSubscribeImage);
 	}
 	
 	/**
