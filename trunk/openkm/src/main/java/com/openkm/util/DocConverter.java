@@ -155,6 +155,17 @@ public class DocConverter {
 	
 		return false;
 	}
+	
+	/**
+	 * Test if a MIME document can be converted to DXF
+	 */
+	public boolean convertibleToDxf(String from) {
+		if (!Config.SYSTEM_DWG2DXF.equals("") && validAutoCad.contains(from)) {
+			return true;
+		}
+	
+		return false;
+	}
 
 	/**
 	 * Convert a document format to another one.

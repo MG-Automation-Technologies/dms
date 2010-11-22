@@ -222,6 +222,7 @@ public class DirectDocumentModule implements DocumentModule {
 		DocConverter convert = DocConverter.getInstance();
 		doc.setConvertibleToPdf(convert.convertibleToPdf(doc.getMimeType()));
 		doc.setConvertibleToSwf(convert.convertibleToSwf(doc.getMimeType()));
+		doc.setConvertibleToDxf(convert.convertibleToDxf(doc.getMimeType()));
 		
 		// Get notes
 		if (documentNode.isNodeType(Note.MIX_TYPE)) {
@@ -240,7 +241,7 @@ public class DirectDocumentModule implements DocumentModule {
 			
 			doc.setNotes(notes);
 		}
-				
+		
 		log.debug("Permisos: {} => {}", docPath, doc.getPermissions());
 		log.debug("getProperties[session]: {}", doc);
 		return doc;
