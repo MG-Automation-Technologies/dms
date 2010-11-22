@@ -1240,6 +1240,7 @@ public class DirectDocumentModule implements DocumentModule {
 			UserItemsManager.incSize(session.getUserID(), size);
 			
 			// Remove pdf & preview from cache
+			new File(Config.CACHE_DXF + File.separator + documentNode.getUUID() + ".dxf").delete();
 			new File(Config.CACHE_PDF + File.separator + documentNode.getUUID() + ".pdf").delete();
 			new File(Config.CACHE_SWF + File.separator + documentNode.getUUID() + ".swf").delete();
 
@@ -1667,6 +1668,7 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("VersionHistory UUID: {}", vh.getUUID());
 
 		// Remove pdf & preview from cache
+		new File(Config.CACHE_DXF + File.separator + docNode.getUUID() + ".dxf").delete();
 		new File(Config.CACHE_PDF + File.separator + docNode.getUUID() + ".pdf").delete();
 		new File(Config.CACHE_SWF + File.separator + docNode.getUUID() + ".swf").delete();
 		
