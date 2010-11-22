@@ -41,6 +41,7 @@
     langs.put("Italian", Lang.LANG_it_IT);
     langs.put("Japanese", Lang.LANG_ja_JP);
     langs.put("Latvian", Lang.LANG_lv_LV);
+    langs.put("Lithuanian", Lang.LANG_lt_LT);
     langs.put("Macedonian", Lang.LANG_mk_MK);
     langs.put("Polish", Lang.LANG_pl_PL);
     langs.put("Português", Lang.LANG_pt_PT);

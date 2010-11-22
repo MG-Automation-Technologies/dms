@@ -123,6 +123,7 @@ public class MainMenu extends Composite {
 					private MenuItem euskera;
 					private MenuItem slovack;
 					private MenuItem vietnamese;
+					private MenuItem lithuanian;
 				private MenuBar subMenuSkin;
 					private MenuItem skinDefault;
 					private MenuItem skinTest;
@@ -290,6 +291,7 @@ public class MainMenu extends Composite {
 						italian = new MenuItem(Util.menuHTML("img/icon/menu/it.gif", "Italian"), true, setLangItalian);
 						japanese = new MenuItem(Util.menuHTML("img/icon/menu/jp.gif", "Japanese"), true, setLangJapanese);
 						latvian = new MenuItem(Util.menuHTML("img/icon/menu/lv.gif", "Latvian"), true, setLangLativian);
+						lithuanian = new MenuItem(Util.menuHTML("img/icon/menu/lt.gif", "Lithuanian"), true, setLangLithuanian);
 						macedonian  = new MenuItem(Util.menuHTML("img/icon/menu/mk.gif", "Macedonian"), true, setLangMacedonian);
 						dutch = new MenuItem(Util.menuHTML("img/icon/menu/nl.gif", "Nederlands"), true, setLangNlBe);
 						polish = new MenuItem(Util.menuHTML("img/icon/menu/pl.gif", "Polish"), true, setLangPolish);
@@ -324,6 +326,7 @@ public class MainMenu extends Composite {
 						italian.addStyleName("okm-MainMenuItem");
 						japanese.addStyleName("okm-MainMenuItem");
 						latvian.addStyleName("okm-MainMenuItem");
+						lithuanian.addStyleName("okm-MainMenuItem");
 						macedonian.addStyleName("okm-MainMenuItem");
 						dutch.addStyleName("okm-MainMenuItem");
 						polish.addStyleName("okm-MainMenuItem");
@@ -358,6 +361,7 @@ public class MainMenu extends Composite {
 					subMenuLanguage.addItem(italian);
 					subMenuLanguage.addItem(japanese);
 					subMenuLanguage.addItem(latvian);
+					subMenuLanguage.addItem(lithuanian);
 					subMenuLanguage.addItem(macedonian);
 					subMenuLanguage.addItem(dutch);
 					subMenuLanguage.addItem(polish);
@@ -763,6 +767,13 @@ public class MainMenu extends Composite {
 	Command setLangLativian = new Command() {
 		public void execute() {
 			Main.get().refreshLang(Lang.LANG_lv_LV);
+		}
+	};
+	
+	// Command menu to set Lithuanina lang
+	Command setLangLithuanian = new Command() {
+		public void execute() {
+			Main.get().refreshLang(Lang.LANG_lt_LT);
 		}
 	};
 	
