@@ -32,13 +32,6 @@ import javax.swing.SwingUtilities;
 import netscape.javascript.JSException;
 import netscape.javascript.JSObject;
 
-/**
- * JSObject documentation:
- * 
- * http://download.oracle.com/javase/6/docs/technotes/guides/plugin/developer_guide/java_js.html
- * http://www.apl.jhu.edu/~hall/java/JavaScript-from-Java.html
- * http://www.rgagnon.com/javadetails/java-0172.html
- */
 @SuppressWarnings("serial")
 public class Uploader extends JApplet {
 	private static Logger log = Logger.getLogger(Uploader.class.getName());
@@ -64,8 +57,7 @@ public class Uploader extends JApplet {
 		} catch (JSException e) {
 			log.warning("Can't access JSObject object");
 		}
-		
-		log.info("AppVersion: " + JarUtils.getAppVersion());
+
 		log.info("openkm.token => " + token);
 		log.info("openkm.path => " + path);
 		log.info("openkm.lang => " + lang);

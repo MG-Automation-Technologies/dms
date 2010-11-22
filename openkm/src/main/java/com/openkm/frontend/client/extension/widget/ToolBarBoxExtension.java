@@ -22,7 +22,6 @@
 package com.openkm.frontend.client.extension.widget;
 
 import com.google.gwt.user.client.ui.Image;
-import com.openkm.frontend.client.extension.HasToolBarBoxExtension;
 import com.openkm.frontend.client.extension.HasWidget;
 import com.openkm.frontend.client.widget.dashboard.ToolBarBox;
 
@@ -32,7 +31,7 @@ import com.openkm.frontend.client.widget.dashboard.ToolBarBox;
  * @author jllort
  *
  */
-public abstract class ToolBarBoxExtension extends ToolBarBox implements HasWidget, HasToolBarBoxExtension {
+public abstract class ToolBarBoxExtension extends ToolBarBox implements HasWidget {
 
 	/**
 	 * ToolBarBoxExtension

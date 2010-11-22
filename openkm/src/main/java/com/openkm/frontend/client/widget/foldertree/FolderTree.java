@@ -967,7 +967,7 @@ public class FolderTree extends Composite implements OriginPanel {
 		// rename or folder creation
 		// and root item is not dragable
 		// On trash drag and drop is always disabled
-		if (tree.isDragged() && folderAction == ACTION_NONE && !actualItem.equals(rootItem) && 
+		if (tree.isDragged() && folderAction == ACTION_NONE && !actualItem.equals(rootItem) &&
 			Main.get().mainPanel.desktop.navigator.getStackIndex() != PanelDefinition.NAVIGATOR_CATEGORIES &&
 			Main.get().mainPanel.desktop.navigator.getStackIndex() != PanelDefinition.NAVIGATOR_THESAURUS &&
 			Main.get().mainPanel.desktop.navigator.getStackIndex() != PanelDefinition.NAVIGATOR_TRASH) {
@@ -986,7 +986,7 @@ public class FolderTree extends Composite implements OriginPanel {
 		String path = ((GWTFolder) actualItem.getUserObject()).getPath();
 		getChilds(path);
 
-		// Case not resets always must show tabfolder properties
+		// Case not resets always musy show tabfolder properties
 		if (!reset) {
 			// Case exists a selected row must mantain other case mus show
 			// folder properties on tab
@@ -1303,14 +1303,6 @@ public class FolderTree extends Composite implements OriginPanel {
 		} else {
 			removeStyleName("okm-PanelSelected");
 		}
-	}
-	
-	/**
-	 * Used only on changing stack
-	 */
-	public void forceSetSelectedPanel() {
-		panelSelected = false;
-		setSelectedPanel(true);
 	}
 
 	/**

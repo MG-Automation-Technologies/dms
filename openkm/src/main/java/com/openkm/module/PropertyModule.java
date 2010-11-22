@@ -33,9 +33,7 @@ public interface PropertyModule {
 	/**
 	 * Add a category to a node.
 	 * 
-	 * @param token The session authorization token.
 	 * @param nodePath The complete path to the node.
-	 * @param catId Category id (the UUID of the category node).
 	 * @throws VersionException A document checked in can't be modified.
 	 * @throws LockException A locked document can't be modified.
 	 * @throws PathNotFoundException If there is no node in this
@@ -51,9 +49,7 @@ public interface PropertyModule {
 	/**
 	 * Remove a category from a node.
 	 * 
-	 * @param token The session authorization token.
 	 * @param nodePath The complete path to the node.
-	 * @param catId Category id (the UUID of the category node).
 	 * @throws VersionException A document checked in can't be modified.
 	 * @throws LockException A locked document can't be modified.
 	 * @throws PathNotFoundException If there is no node in this
@@ -69,9 +65,7 @@ public interface PropertyModule {
 	/**
 	 * Add a keyword to a node.
 	 * 
-	 * @param token The session authorization token.
 	 * @param nodePath The complete path to the node.
-	 * @param keyword The keyword to be added.
 	 * @throws VersionException A document checked in can't be modified.
 	 * @throws LockException A locked document can't be modified.
 	 * @throws PathNotFoundException If there is no node in this
@@ -87,9 +81,7 @@ public interface PropertyModule {
 	/**
 	 * Remove a keyword from a node.
 	 * 
-	 * @param token The session authorization token.
 	 * @param nodePath The complete path to the node.
-	 * @param keyword The keyword to be removed.
 	 * @throws VersionException A document checked in can't be modified.
 	 * @throws LockException A locked document can't be modified.
 	 * @throws PathNotFoundException If there is no node in this

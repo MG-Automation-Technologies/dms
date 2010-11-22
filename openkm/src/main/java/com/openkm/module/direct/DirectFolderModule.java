@@ -24,10 +24,8 @@ package com.openkm.module.direct;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.Map.Entry;
 
 import javax.jcr.Node;
@@ -51,7 +49,6 @@ import com.openkm.bean.ContentInfo;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Mail;
-import com.openkm.bean.Note;
 import com.openkm.bean.Notification;
 import com.openkm.bean.Permission;
 import com.openkm.bean.Repository;
@@ -123,13 +120,13 @@ public class DirectFolderModule implements FolderModule {
 		}
 		
 		// Get user subscription
-		Set<String> subscriptorSet = new HashSet<String>();
+		ArrayList<String> subscriptorList = new ArrayList<String>();
 		
 		if (folderNode.isNodeType(Notification.TYPE)) {
 			Value[] subscriptors = folderNode.getProperty(Notification.SUBSCRIPTORS).getValues();
 
 			for (int i=0; i<subscriptors.length; i++) {
-				subscriptorSet.add(subscriptors[i].getString());
+				subscriptorList.add(subscriptors[i].getString());
 				
 				if (session.getUserID().equals(subscriptors[i].getString())) {
 					fld.setSubscribed(true);
@@ -137,25 +134,7 @@ public class DirectFolderModule implements FolderModule {
 			}
 		}
 		
-		fld.setSubscriptors(subscriptorSet);
-		
-		// Get notes
-		if (folderNode.isNodeType(Note.MIX_TYPE)) {
-			List<Note> notes = new ArrayList<Note>();
-			Node notesNode = folderNode.getNode(Note.LIST);
-			
-			for (NodeIterator nit = notesNode.getNodes(); nit.hasNext(); ) {
-				Node noteNode = nit.nextNode();
-				Note note = new Note();
-				note.setDate(noteNode.getProperty(Note.DATE).getDate());
-				note.setUser(noteNode.getProperty(Note.USER).getString());
-				note.setText(noteNode.getProperty(Note.TEXT).getString());
-				note.setPath(noteNode.getPath());
-				notes.add(note);
-			}
-			
-			fld.setNotes(notes);
-		}
+		fld.setSubscriptors(subscriptorList);
 		
 		log.debug("Permisos: {} => {}", fldPath, fld.getPermissions());
 		log.debug("getProperties[session]: {}", fld);

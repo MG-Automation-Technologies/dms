@@ -64,7 +64,7 @@ public class SimpleTest extends TestCase {
 		log.info("testSimple()");
 		RepositoryConfig config = RepositoryConfig.create(Config.REPOSITORY_CONFIG, Config.REPOSITORY_HOME);
 		Repository repository = RepositoryImpl.create(config);
-		Session session = repository.login(new SimpleCredentials("admin", "admin".toCharArray())); 
+		Session session = repository.login(new SimpleCredentials("admin", "admin".toCharArray()));
 		Node rootNode = session.getRootNode();
 		Node newNode = rootNode.addNode("new node");
 		log.info("Restricted node: " + newNode.getPath());

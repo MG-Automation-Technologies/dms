@@ -18,8 +18,7 @@ public class Location {
     private String port;
     private String protocol;
     private String queryString;
-
-	private HashMap<String, String> paramMap;
+    private HashMap<String, String> paramMap;
 
 
     public String getHash() {
@@ -41,12 +40,6 @@ public class Location {
     public String getPath() {
         return path;
     }
-    
-    public String getContext() {
-    	String context = path.substring(path.indexOf("/")+1);
-    	context = context.substring(0, context.indexOf("/"));
-    	return "/"+context;
-    }
 
     public String getPort() {
         return port;
@@ -59,7 +52,7 @@ public class Location {
     public String getQueryString() {
         return queryString;
     }
-  
+
     protected void setHash(String hash) {
         this.hash = hash;
     }

@@ -24,7 +24,6 @@ package com.openkm.frontend.client.util;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
-import com.openkm.extension.frontend.client.widget.messaging.MessagingToolBarBox;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTWorkspace;
 import com.openkm.frontend.client.config.Config;
@@ -111,7 +110,6 @@ public class WorkspaceUserProperties {
 				Main.get().securityPopup.enableAdvancedFilter();
 				Main.get().fileUpload.enableAdvancedFilter();
 				Main.get().notifyPopup.enableAdvancedFilter();
-				Main.get().proposedSubscriptionPopup.enableAdvancedFilter();
 			}
 			
 			// Show / hide menus
@@ -120,9 +118,6 @@ public class WorkspaceUserProperties {
 			Main.get().mainPanel.topPanel.mainMenu.setToolsMenuVisible(workspace.isMenuToolsVisible());
 			Main.get().mainPanel.topPanel.mainMenu.setBookmarkMenuVisible(workspace.isMenuBookmarksVisible());
 			Main.get().mainPanel.topPanel.mainMenu.setHelpMenuVisible(workspace.isMenuHelpVisible());
-			
-			// Init available languages
-			Main.get().mainPanel.topPanel.mainMenu.initAvailableLanguage(workspace.getLangs());
 			
 			// Enabling / disabling some actions
 			Main.get().mainPanel.topPanel.toolBar.setAvailableOption(workspace.getAvailableOption());
@@ -237,17 +232,9 @@ public class WorkspaceUserProperties {
 			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.showExtensions();
 			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.init();
 			
-			// Document properties
-			if (MessagingToolBarBox.isRegistered(Main.get().getExtensionUuidList())) {
-				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.document.showProposedSusbcription();
-			}
-			
 			// Folder tabs
 			if (workspace.isTabFolderPropertiesVisible()) {
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.showProperties();
-			}
-			if (workspace.isTabFolderNotesVisible()) {
-				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.showNotes();
 			}
 			if (workspace.isTabFolderSecurityVisible()) {
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.showSecurity();

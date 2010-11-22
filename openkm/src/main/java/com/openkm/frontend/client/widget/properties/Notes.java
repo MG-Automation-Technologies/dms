@@ -21,10 +21,8 @@
 
 package com.openkm.frontend.client.widget.properties;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -46,11 +44,9 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
-import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTNote;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.extension.event.HasDocumentEvent;
-import com.openkm.frontend.client.extension.event.HasFolderEvent;
 import com.openkm.frontend.client.service.OKMNoteService;
 import com.openkm.frontend.client.service.OKMNoteServiceAsync;
 import com.openkm.frontend.client.util.OKMBundleResources;
@@ -68,7 +64,6 @@ public class Notes extends Composite {
 	
 	private FlexTable tableNotes;
 	private GWTDocument document;
-	private GWTFolder folder;
 	private Button add;
 	private Button update;
 	private Button cancel;
@@ -86,6 +81,7 @@ public class Notes extends Composite {
 	int editedNoteRow = 0;
 	
 	public Notes () {
+		document = new GWTDocument();
 		tableNotes = new FlexTable();
 		scrollPanel = new ScrollPanel(tableNotes);
 		newNotePanel = new VerticalPanel(); 
@@ -184,28 +180,6 @@ public class Notes extends Composite {
 		
 		writeAddNote();
 		Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.refreshNotesSize();
-	}
-	
-	/**
-	 * Sets the folder values
-	 * 
-	 * @param doc The folder object
-	 */
-	public void set(GWTFolder folder) {
-		reset();
-		this.folder = folder;
-		richTextArea.setText("");
-		
-		while (tableNotes.getRowCount()>0) {
-			tableNotes.removeRow(0);
-		}
-		
-		for (Iterator<GWTNote> it = folder.getNotes().iterator(); it.hasNext();) {
-			writeNote(it.next());
-		}
-		
-		writeAddNote();
-		Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.refreshNotesSize();
 	}
 	
 	/**
@@ -333,7 +307,7 @@ public class Notes extends Composite {
 	}
 	
 	/**
-	 * Callback addNote 
+	 * Callback addNote document
 	 */
 	final AsyncCallback<GWTNote> callbackAddNote = new AsyncCallback<GWTNote>() {
 		public void onSuccess(GWTNote result) {	
@@ -341,25 +315,14 @@ public class Notes extends Composite {
 			writeNote(result);
 			writeAddNote();
 			reset();
-			if (document!=null) {
-				document.getNotes().add(result);
-				// If is added first note must adding some icon on filebrowser
-				if (!document.isHasNotes()) {
-					Main.get().mainPanel.desktop.browser.fileBrowser.addNoteIconToSelectedRow();
-					document.setHasNotes(true);
-				}
-				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.refreshNotesSize();
-				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.NOTE_ADDED);
-			} else if (folder!=null) {
-				folder.getNotes().add(result);
-				// If is added first note must adding some icon on filebrowser
-				if (!folder.isHasNotes() && !Main.get().activeFolderTree.isPanelSelected()) {
-					Main.get().mainPanel.desktop.browser.fileBrowser.addNoteIconToSelectedRow();
-					folder.setHasNotes(true);
-				}
-				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.refreshNotesSize();
-				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.fireEvent(HasFolderEvent.NOTE_ADDED);
+			document.getNotes().add(result);
+			// If is added first note must adding some icon on filebrowser
+			if (!document.isHasNotes()) {
+				Main.get().mainPanel.desktop.browser.fileBrowser.addNoteIconToSelectedRow();
+				document.setHasNotes(true);
 			}
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.refreshNotesSize();
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.NOTE_ADDED);
 		}
 
 		public void onFailure(Throwable caught) {
@@ -368,18 +331,12 @@ public class Notes extends Composite {
 	};
 	
 	/**
-	 * addNote
+	 * addNote document
 	 */
 	private void addNote() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) noteService;
 		endPoint.setServiceEntryPoint(Config.OKMNoteService);
-		String path = "";
-		if (document!=null) {
-			path = document.getPath();
-		} else if (folder!=null) {
-			path = folder.getPath();
-		}
-		noteService.add(path, getTextNote(), callbackAddNote);
+		noteService.add(document.getPath(), getTextNote(), callbackAddNote);
 	}
 	
 	/**
@@ -420,7 +377,7 @@ public class Notes extends Composite {
 		richTextArea.setText("");
 		textArea.setText("");
 		add.setHTML(Main.i18n("button.add"));
-		if (visibleButtons) {
+		if (visibleButtons || addNoteOption) {
 			add.setVisible(true);
 		}
 		update.setVisible(false);
@@ -442,31 +399,17 @@ public class Notes extends Composite {
 				tableNotes.removeRow(row); // row + 1;
 				tableNotes.removeRow(row); // row + 2
 				
-				List<GWTNote> notes = new ArrayList<GWTNote>();
-				if (document!=null) {
-					notes = document.getNotes();
-				} else if (folder!=null) {
-					notes = folder.getNotes();
-				}
-				
-				for (Iterator<GWTNote> it = notes.iterator(); it.hasNext(); ) {
+				for (Iterator<GWTNote> it = document.getNotes().iterator(); it.hasNext(); ) {
 					GWTNote note = it.next();
 					if (note.getPath().equals(notePath)) {
-						notes.remove(note);
+						document.getNotes().remove(note);
 						break;
 					}
 				}
 				
-				if (document!=null) {
-					if (notes.isEmpty()) {
-						Main.get().mainPanel.desktop.browser.fileBrowser.deleteNoteIconToSelectedRow();
-						document.setHasNotes(false);
-					}
-				} else if (folder!=null) {
-					if (notes.isEmpty()) {
-						Main.get().mainPanel.desktop.browser.fileBrowser.deleteNoteIconToSelectedRow();
-						folder.setHasNotes(false);
-					}
+				if (document.getNotes().isEmpty()) {
+					Main.get().mainPanel.desktop.browser.fileBrowser.deleteNoteIconToSelectedRow();
+					document.setHasNotes(false);
 				}
 			}
 			
@@ -491,14 +434,7 @@ public class Notes extends Composite {
 			@Override
 			public void onSuccess(Object result) {
 				tableNotes.setHTML(row, 0, text);
-				
-				List<GWTNote> notes = new ArrayList<GWTNote>();
-				if (document!=null) {
-					notes = document.getNotes();
-				} else if (folder!=null) {
-					notes = folder.getNotes();
-				}
-				for (Iterator<GWTNote> it = notes.iterator(); it.hasNext(); ) {
+				for (Iterator<GWTNote> it = document.getNotes().iterator(); it.hasNext(); ) {
 					GWTNote note = it.next();
 					if (note.getPath().equals(editedNotePath)) {
 						note.setText(text);
@@ -520,12 +456,6 @@ public class Notes extends Composite {
 	 * @return
 	 */
 	public Collection<GWTNote> getNotes() {
-		if (document!=null) {
-			return document.getNotes();
-		} else if (folder!=null) {
-			return folder.getNotes();
-		} else {
-			return null;
-		}
+		return document.getNotes();
 	}
 }

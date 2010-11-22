@@ -97,11 +97,9 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean tabDocumentPropertyGroupsVisible;
 	private boolean tabFolderPropertiesVisible;
 	private boolean tabFolderSecurityVisible;
-	private boolean tabFolderNotesVisible;
 	private boolean tabMailPropertiesVisible;
 	private boolean tabMailSecurityVisible;
 	private GWTAvailableOption availableOption = new GWTAvailableOption();
-	private List<GWTLanguage> langs = new ArrayList<GWTLanguage>();
 
 	/**
 	 * GWTWorkspace
@@ -579,14 +577,6 @@ public class GWTWorkspace implements IsSerializable {
 		this.tabFolderSecurityVisible = tabFolderSecurityVisible;
 	}
 	
-	public boolean isTabFolderNotesVisible() {
-		return tabFolderNotesVisible;
-	}
-
-	public void setTabFolderNotesVisible(boolean tabFolderNotesVisible) {
-		this.tabFolderNotesVisible = tabFolderNotesVisible;
-	}
-	
 	public boolean isTabMailPropertiesVisible() {
 		return tabMailPropertiesVisible;
 	}
@@ -625,13 +615,5 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setPreviewer(String previewer) {
 		this.previewer = previewer;
-	}
-	
-	public List<GWTLanguage> getLangs() {
-		return langs;
-	}
-
-	public void setLangs(List<GWTLanguage> langs) {
-		this.langs = langs;
 	}
 }

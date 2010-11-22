@@ -23,12 +23,6 @@ package com.openkm.dao.bean.extension;
 
 import java.io.Serializable;
 
-/**
- * Staple
- * 
- * @author jllort
- *
- */
 public class Staple implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

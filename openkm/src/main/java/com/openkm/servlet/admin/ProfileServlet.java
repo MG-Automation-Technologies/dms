@@ -290,7 +290,6 @@ public class ProfileServlet extends BaseServlet {
 		// Tab Folder
 		prf.getTab().getFolder().setPropertiesVisible(WebUtil.getBoolean(request, "prf_tab_folder_properties_visible"));
 		prf.getTab().getFolder().setSecurityVisible(WebUtil.getBoolean(request, "prf_tab_folder_security_visible"));
-		prf.getTab().getFolder().setNotesVisible(WebUtil.getBoolean(request, "prf_tab_folder_notes_visible"));
 
 		// Tab Mail
 		prf.getTab().getMail().setPropertiesVisible(WebUtil.getBoolean(request, "prf_tab_mail_properties_visible"));

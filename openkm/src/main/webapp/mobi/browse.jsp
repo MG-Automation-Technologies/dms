@@ -51,7 +51,7 @@
         <c:when test="${fld.hasChilds}"><c:set var="fldImg" value="menuitem_childs.gif"/></c:when>
         <c:otherwise><c:set var="fldImg" value="menuitem_empty.gif"/></c:otherwise>
       </c:choose>
-      <c:url value="Handler" var="urlBrowse">
+      <c:url value="Handler" var="urlDownload">
         <c:param name="path" value="${fld.path}"/>
       </c:url>
       <c:url value="Handler" var="urlProperties">
@@ -60,7 +60,7 @@
       </c:url>
       <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
         <td width="18px"><img src="../com.openkm.frontend.Main/img/${fldImg}"/></td>
-        <td width="100%" onclick="document.location='${urlBrowse}'">
+        <td width="100%" onclick="document.location='${urlDownload}'">
           <u:getName path="${fld.path}"/>
         </td>
         <td><a href="${urlProperties}"><img src="img/properties.png"/></a></td>

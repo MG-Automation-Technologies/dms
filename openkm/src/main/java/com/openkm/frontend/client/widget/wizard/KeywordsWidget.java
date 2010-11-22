@@ -57,7 +57,7 @@ import com.openkm.frontend.client.service.OKMPropertyService;
 import com.openkm.frontend.client.service.OKMPropertyServiceAsync;
 import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.widget.dashboard.ImageHover;
-import com.openkm.frontend.client.widget.dashboard.keymap.TagCloud;
+import com.openkm.frontend.client.widget.dashboard.TagCloud;
 import com.openkm.frontend.client.widget.thesaurus.ThesaurusSelectPopup;
 
 /**

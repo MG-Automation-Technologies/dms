@@ -22,26 +22,30 @@
 package com.openkm.servlet;
 
 import java.io.File;
+import java.io.FileReader;
 import java.util.Calendar;
 import java.util.Properties;
 import java.util.Timer;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.SessionImpl;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.runtime.RuntimeConstants;
+import org.jbpm.JbpmConfiguration;
 import org.jbpm.JbpmContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import bsh.EvalError;
+import bsh.Interpreter;
+
 import com.openkm.cache.UserDocumentKeywordsManager;
 import com.openkm.cache.UserItemsManager;
 import com.openkm.core.Config;
-import com.openkm.core.Cron;
 import com.openkm.core.DataStoreGarbageCollector;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryInfo;
@@ -52,10 +56,10 @@ import com.openkm.dao.HibernateUtil;
 import com.openkm.kea.RDFREpository;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.DocConverter;
-import com.openkm.util.ExecutionUtils;
-import com.openkm.util.JBPMUtil;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WarUtils;
+import com.openkm.util.cl.ClassLoaderUtils;
+import com.openkm.util.cl.JarClassLoader;
 
 /**
  * Servlet Class
@@ -70,7 +74,6 @@ public class RepositoryStartupServlet extends HttpServlet {
 	private static final long serialVersionUID = 207151527252937549L;
 	private Timer timer;
 	private Watchdog wd;
-	private Cron cron;
 	private UpdateInfo ui;
 	private RepositoryInfo ri;
 	private UserMailImporter umi;
@@ -80,21 +83,20 @@ public class RepositoryStartupServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        ServletContext sc = getServletContext();
         
         // Read config file
-        Config.load(sc.getContextPath().substring(1));
+        Config.load();
         
         // Get OpenKM version
-        WarUtils.readAppVersion(sc);
+        WarUtils.readAppVersion(getServletContext());
         log.info("*** Application version: "+WarUtils.getAppVersion()+" ***");
-        
+
         // Initialize folder pdf cache
-        File pdfCacheFolder = new File(Config.CACHE_PDF);
+        File pdfCacheFolder = new File(Config.PDF_CACHE);
         if (!pdfCacheFolder.exists()) pdfCacheFolder.mkdirs();
-        
+
         // Initialize folder preview cache
-        File previewCacheFolder = new File(Config.CACHE_SWF);
+        File previewCacheFolder = new File(Config.SWF_CACHE);
         if (!previewCacheFolder.exists()) previewCacheFolder.mkdirs();
         
         // Initialize Velocity engine
@@ -139,15 +141,15 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         // Workflow
         log.info("*** Initializing workflow engine... ***");
-        JbpmContext jbpmContext = JBPMUtil.getConfig().createJbpmContext();
+        JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
         jbpmContext.setSessionFactory(HibernateUtil.getSessionFactory());
         jbpmContext.getGraphSession();
-        jbpmContext.getJbpmConfiguration().getJobExecutor().start(); // startJobExecutor();
+        jbpmContext.getJbpmConfiguration().getJobExecutor().start();//startJobExecutor();
         jbpmContext.close();
         
         // Mime types
         log.info("*** Initializing MIME types... ***");
-        Config.loadMimeTypes();
+        Config.loadMimeTypes(getServletContext());
                 
         if (Config.UPDATE_INFO) {
         	 log.info("*** Activating update info ***");
@@ -158,15 +160,6 @@ public class RepositoryStartupServlet extends HttpServlet {
         log.info("*** Activating watchdog ***");
         wd = new Watchdog();
         timer.schedule(wd, 60*1000, 5*60*1000); // First in 1 min, next each 5 mins
-        
-        log.info("*** Activating cron ***");
-        cron = new Cron();
-        Calendar calCron = Calendar.getInstance();
-        calCron.add(Calendar.MINUTE, 1);
-        calCron.set(Calendar.SECOND, 0);
-        calCron.set(Calendar.MILLISECOND, 0);
-        // Round begin to next minute, 0 seconds, 0 miliseconds
-        timer.scheduleAtFixedRate(cron, calCron.getTime(), 60*1000); // First in 1 min, next each 1 min
         
         log.info("*** Activating repository info ***");
         ri = new RepositoryInfo();
@@ -183,13 +176,13 @@ public class RepositoryStartupServlet extends HttpServlet {
         if (hasConfiguredDataStore) {
         	log.info("*** Activating datastore garbage collection ***");
         	dsgc = new DataStoreGarbageCollector();
-        	Calendar calGc = Calendar.getInstance();
-        	calGc.add(Calendar.DAY_OF_YEAR, 1);
-        	calGc.set(Calendar.HOUR_OF_DAY, 0);
-        	calGc.set(Calendar.MINUTE, 0);
-        	calGc.set(Calendar.SECOND, 0);
-        	calGc.set(Calendar.MILLISECOND, 0);
-        	timer.scheduleAtFixedRate(dsgc, calGc.getTime(), 24*60*60*1000); // First tomorrow at 00:00, next each 24 hours
+        	Calendar now = Calendar.getInstance();
+        	now.add(Calendar.DAY_OF_YEAR, 1);
+        	now.set(Calendar.HOUR_OF_DAY, 0);
+        	now.set(Calendar.MINUTE, 0);
+        	now.set(Calendar.SECOND, 0);
+        	now.set(Calendar.MILLISECOND, 0);
+        	timer.scheduleAtFixedRate(dsgc, now.getTime(), 24*60*60*1000); // First tomorrow at 00:00, next each 24 hours
         }
         
         try {
@@ -208,22 +201,20 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         try {
         	log.info("*** Ejecute start script ***");
-        	File script = new File(Config.HOME_DIR + File.separatorChar + Config.START_SCRIPT);
-        	ExecutionUtils.runScript(script);
-        	File jar = new File(Config.HOME_DIR + File.separatorChar + Config.START_JAR);
-        	ExecutionUtils.runJar(jar);
+        	runScript(Config.START_SCRIPT);
+        	runJar(Config.START_JAR);
         } catch (Throwable e) {
         	log.warn(e.getMessage(), e);
         }
         
-        // Activity log
+     // Activity log
 		UserActivity.log(Config.SYSTEM_USER, "OPENKM_START", null, null);
     }
 
 	@Override
     public void destroy() {
         super.destroy();
-
+        
         try {
         	if (log == null) log("*** Shutting down OpenOffice manager ***");
         	else log.info("*** Shutting down OpenOffice manager ***");
@@ -248,25 +239,19 @@ public class RepositoryStartupServlet extends HttpServlet {
         else log.info("*** Shutting down repository info... ***");
         ri.cancel();
         
-        if (log == null) log("*** Shutting down cron... ***");
-        else log.info("*** Shutting down cron... ***");
-        cron.cancel();
-        
         if (log == null) log("*** Shutting down watchdog... ***");
         else log.info("*** Shutting down watchdog... ***");
         wd.cancel();
         
-        if (Config.UPDATE_INFO) {
-        	if (log == null) log("*** Shutting down update info... ***");
-        	else log.info("*** Shutting down update info... ***");
-        	ui.cancel();
-        }
+        if (log == null) log("*** Shutting down update info... ***");
+        else log.info("*** Shutting down update info... ***");
+        ui.cancel();
         
         timer.cancel();
         
         if (log == null) log("*** Shutting down workflow engine... ***");
         else log.info("*** Shutting down workflow engine... ***");
-        JbpmContext jbpmContext = JBPMUtil.getConfig().createJbpmContext();
+        JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
         jbpmContext.getJbpmConfiguration().getJobExecutor().stop();
         jbpmContext.close();
         
@@ -295,10 +280,8 @@ public class RepositoryStartupServlet extends HttpServlet {
         try {
         	if (log == null) log("*** Ejecute stop script ***");
         	else log.info("*** Ejecute stop script ***");
-        	File script = new File(Config.HOME_DIR + File.separatorChar + Config.STOP_SCRIPT);
-        	ExecutionUtils.runScript(script);
-        	File jar = new File(Config.HOME_DIR + File.separatorChar + Config.STOP_JAR);
-        	ExecutionUtils.runJar(jar);
+        	runScript(Config.STOP_SCRIPT);
+        	runJar(Config.STOP_JAR);
         } catch (Throwable e) {
         	log.warn(e.getMessage(), e);
         }
@@ -306,4 +289,57 @@ public class RepositoryStartupServlet extends HttpServlet {
         // Activity log
 		UserActivity.log(Config.SYSTEM_USER, "OPENKM_STOP", null, null);
     }
+    
+    /**
+     * Ejecute script
+     */
+    private void runScript(String name) {
+    	try {
+    		File script = new File(Config.HOME_DIR + File.separatorChar + name); 
+        	FileReader fr = null;
+        	
+        	if (script.exists() && script.canRead()) {
+        		Interpreter i = new Interpreter();
+        		fr = new FileReader(script);
+				
+				try {
+					Object result = i.eval(fr);
+					log.info("Script output: "+(result!=null?result.toString():"null"));
+				} catch (EvalError e) {
+					log.warn(e.getMessage(), e);
+				} finally {
+					IOUtils.closeQuietly(fr);
+				}
+        	} else {
+        		log.warn("Unable to read script: {}", script.getPath());
+        	}
+        } catch (Exception e) {
+        	log.warn(e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Ejecute jar
+     */
+    private void runJar(String name) {
+    	try {
+    		File jar = new File(Config.HOME_DIR + File.separatorChar + name); 
+    		
+    		if (jar.exists() && jar.canRead()) {
+    			JarClassLoader jcl = new JarClassLoader(jar.toURI().toURL(), getClass().getClassLoader());
+    			String mainClass = jcl.getMainClassName();
+    			
+    			if (mainClass != null) {
+    				Class<?> c = jcl.loadClass(jcl.getMainClassName());
+    				ClassLoaderUtils.invokeClass(c, new String[] {});
+    			} else {
+    				log.error("Main class not defined at: {}", jar.getPath());
+    			}
+    		} else {
+    			log.warn("Unable to read jar: {}", jar.getPath());
+    		}
+    	} catch (Exception e) {
+    		log.warn(e.getMessage(), e);
+    	}
+	}
 }

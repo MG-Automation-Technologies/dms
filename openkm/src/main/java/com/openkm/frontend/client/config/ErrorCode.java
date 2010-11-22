@@ -31,29 +31,28 @@ package com.openkm.frontend.client.config;
 public class ErrorCode {
 	
 	// Origin code error is XXX digits
-	public static final String ORIGIN_OKMFolderService 					= "001";
-	public static final String ORIGIN_OKMDocumentService 				= "002";
-	public static final String ORIGIN_OKMRemoteService					= "003";
-	public static final String ORIGIN_OKMDownloadService				= "004";
-	public static final String ORIGIN_OKMUploadService					= "005";
-	public static final String ORIGIN_OKMHttpServlet					= "006";
-	public static final String ORIGIN_OKMAuthService					= "007";
-	public static final String ORIGIN_OKMSearchService					= "008";
-	public static final String ORIGIN_OKMPropertyGroupService			= "009";
-	public static final String ORIGIN_OKMNotifyService 					= "010";
-	public static final String ORIGIN_OKMBookmarkService 				= "011";
-	public static final String ORIGIN_OKMRepositoryService				= "012";
-	public static final String ORIGIN_OKMDashboardService 				= "013";
-	public static final String ORIGIN_OKMWorkspaceService 				= "014";
-	public static final String ORIGIN_OKMWorkflowService 				= "015";
-	public static final String ORIGIN_OKMMailService	 				= "016";
-	public static final String ORIGIN_OKMPropertyService	 			= "017";
-	public static final String ORIGIN_OKMBrowser 						= "018";
-	public static final String ORIGIN_OKMUserCopyService 				= "019";
-	public static final String ORIGIN_OKMNoteService					= "020";
-	public static final String ORIGIN_OKMStaplingService				= "021";
-	public static final String ORIGIN_OKMGeneralService					= "022";
-	public static final String ORIGIN_OKMProposedSubscriptionService 	= "023";
+	public static final String ORIGIN_OKMFolderService 				= "001";
+	public static final String ORIGIN_OKMDocumentService 			= "002";
+	public static final String ORIGIN_OKMRemoteService				= "003";
+	public static final String ORIGIN_OKMDownloadService			= "004";
+	public static final String ORIGIN_OKMUploadService				= "005";
+	public static final String ORIGIN_OKMHttpServlet				= "006";
+	public static final String ORIGIN_OKMAuthService				= "007";
+	public static final String ORIGIN_OKMSearchService				= "008";
+	public static final String ORIGIN_OKMPropertyGroupService		= "009";
+	public static final String ORIGIN_OKMNotifyService 				= "010";
+	public static final String ORIGIN_OKMBookmarkService 			= "011";
+	public static final String ORIGIN_OKMRepositoryService			= "012";
+	public static final String ORIGIN_OKMDashboardService 			= "013";
+	public static final String ORIGIN_OKMWorkspaceService 			= "014";
+	public static final String ORIGIN_OKMWorkflowService 			= "015";
+	public static final String ORIGIN_OKMMailService	 			= "016";
+	public static final String ORIGIN_OKMPropertyService	 		= "017";
+	public static final String ORIGIN_OKMBrowser 					= "018";
+	public static final String ORIGIN_OKMUserCopyService 			= "019";
+	public static final String ORIGIN_OKMNoteService				= "020";
+	public static final String ORIGIN_OKMStaplingService			= "021";
+	public static final String ORIGIN_OKMGeneralService				= "022";
 	
 	// Cause code error is XXX digits
 	public static final String CAUSE_Repository 				= "001";
@@ -68,23 +67,22 @@ public class ErrorCode {
 	public static final String CAUSE_UnsupportedMimeType		= "010";
 	public static final String CAUSE_FileSizeExceeded			= "011";
 	public static final String CAUSE_NoSuchGroup				= "012";
-	public static final String CAUSE_IO							= "013";
+	public static final String CAUSE_IOException				= "013";
 	public static final String CAUSE_NoSuchProperty				= "014";
 	public static final String CAUSE_PathNotFound				= "015";
 	public static final String CAUSE_Version					= "016";
 	public static final String CAUSE_SessionLost				= "017";
-	public static final String CAUSE_FileNotFound				= "018";
-	public static final String CAUSE_Parse						= "019";
-	public static final String CAUSE_InvalidNodeTypeDef			= "020";
-	public static final String CAUSE_SQL		 				= "021";
+	public static final String CAUSE_FileNotFoundException		= "018";
+	public static final String CAUSE_ParseException				= "019";
+	public static final String CAUSE_InvalidNodeTypeDefException= "020";
+	public static final String CAUSE_SQLException 				= "021";
 	public static final String CAUSE_Configuration 				= "022";
 	public static final String CAUSE_QuotaExceed 				= "023";
-	public static final String CAUSE_Database					= "024";
-	public static final String CAUSE_PrincipalAdapter			= "025";
-	public static final String CAUSE_Workflow					= "026";
+	public static final String CAUSE_DatabaseException			= "024";
+	public static final String CAUSE_PrincipalAdapterException	= "025";
+	public static final String CAUSE_WorkflowException			= "026";
 	public static final String CAUSE_DocumentNameMismatch		= "027";
-	public static final String CAUSE_NumberFormat				= "028";
-	public static final String CAUSE_Login						= "029";
+	public static final String CAUSE_NumberFormatException		= "028";
 
 	/**
 	 * Gets the error

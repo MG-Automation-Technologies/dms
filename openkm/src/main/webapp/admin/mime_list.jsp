@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.openkm.core.Config" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -14,19 +15,18 @@
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
-      <h1>Mime Types</h1>
+      <c:url value="MimeType" var="urlReset">
+        <c:param name="action" value="reset"/>
+      </c:url>
+      <h1>Mime Types <span style="font-size: 10px;">(<a href="${urlReset}">Reset</a>)</span></h1>
       <table class="results" width="70%">
         <tr>
-          <th>Name</th><th>Image</th><th>Extensions</th>
+          <th>Name</th><th>Image</th><th>Extensions</th><th>Active</th>
           <th width="50px">
             <c:url value="MimeType" var="urlCreate">
               <c:param name="action" value="create"/>
             </c:url>
-            <c:url value="MimeType" var="urlExport">
-              <c:param name="action" value="export"/>
-            </c:url>
             <a href="${urlCreate}"><img src="img/action/new.png" alt="New mime type" title="New mime type"/></a>
-            <a href="${urlExport}"><img src="img/action/export.png" alt="Export mime types" title="Export mime types"/></a>
           </th>
         </tr>
         <c:forEach var="mt" items="${mimeTypes}" varStatus="row">
@@ -45,25 +45,22 @@
             <td align="center"><img src="${urlIcon}"/></td>
             <td>${mt.extensions}</td>
             <td align="center">
+              <c:choose>
+                <c:when test="${mt.active}">
+                  <img src="img/true.png" alt="Active" title="Active"/>
+                </c:when>
+                <c:otherwise>
+                  <img src="img/false.png" alt="Inactive" title="Inactive"/>
+                </c:otherwise>
+              </c:choose>
+            </td>
+            <td>
               <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
               &nbsp;
               <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
             </td>
           </tr>
         </c:forEach>
-        <tr class="fuzzy">
-          <td colspan="4" align="right">
-            <form action="MimeType" method="post" enctype="multipart/form-data">
-              <input type="hidden" name="action" value="import"/>
-              <table>
-                <tr>
-                  <td><input class=":required :only_on_blur" type="file" name="sql-file"/></td>
-                  <td><input type="submit" value="Import mime types"/></td>
-                </tr>
-              </table>
-            </form>
-          </td>
-        </tr>
       </table>
     </c:when>
     <c:otherwise>

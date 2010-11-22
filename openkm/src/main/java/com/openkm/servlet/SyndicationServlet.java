@@ -28,13 +28,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jcr.Credentials;
 import javax.jcr.LoginException;
+import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.jackrabbit.server.BasicCredentialsProvider;
+import org.apache.jackrabbit.server.CredentialsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +50,7 @@ import com.openkm.core.Config;
 import com.openkm.dao.QueryParamsDAO;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.module.direct.DirectDashboardModule;
+import com.openkm.module.direct.DirectRepositoryModule;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndEntryImpl;
 import com.sun.syndication.feed.synd.SyndFeed;
@@ -57,10 +63,11 @@ import com.sun.syndication.io.SyndFeedOutput;
 /**
  * Syndication Servlet
  */
-public class SyndicationServlet extends BasicSecuredServlet {
+public class SyndicationServlet extends HttpServlet {
 	private static Logger log = LoggerFactory.getLogger(SyndicationServlet.class);
 	private static final long serialVersionUID = 1L;
 	private static final String FEED_TYPE = "rss_2.0"; // atom_0.3
+	private CredentialsProvider cp = new BasicCredentialsProvider(null);
 
 	/**
 	 * 
@@ -160,6 +167,21 @@ public class SyndicationServlet extends BasicSecuredServlet {
 			if (session != null) {
 				session.logout();
 			}
+		}
+	}
+
+	/**
+	 * Get JCR session
+	 */
+	private synchronized Session getSession(HttpServletRequest request)	throws LoginException,
+			javax.jcr.RepositoryException, ServletException {
+		Credentials creds = cp.getCredentials(request);
+		Repository rep = DirectRepositoryModule.getRepository();
+
+		if (creds == null) {
+			return rep.login();
+		} else {
+			return rep.login(creds);
 		}
 	}
 	 

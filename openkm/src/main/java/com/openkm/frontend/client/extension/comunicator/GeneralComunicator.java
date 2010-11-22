@@ -72,7 +72,7 @@ public class GeneralComunicator {
 	 * @return
 	 */
 	public static String i18nExtension(String property) {
-		return Main.get().i18nExtension(property);
+		return null;
 	}
 	
 	/**
@@ -91,7 +91,7 @@ public class GeneralComunicator {
 	 */
 	public static void downloadDocumentPdf() {
 		if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
-			Util.downloadFilePdf(Main.get().mainPanel.desktop.browser.fileBrowser.getDocument().getUuid());
+			
 		}
 	}
 	

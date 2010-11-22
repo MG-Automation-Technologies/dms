@@ -25,7 +25,6 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.config.Config;
 
 public class Util {
@@ -106,19 +105,7 @@ public class Util {
 	 * @return the html image of mime-type file
 	 */
 	public static String mimeImageHTML(String mime) {
-		return "<img align=\"absmidle\" style=\"margin-right:4px\" src=\""+Main.CONTEXT+"/mime/"+mime+"\"'>";
-	}
-	
-	/**
-	 * Return the menu html value
-	 * 
-	 * @param imageUrl The image url
-	 * @param text The text value
-	 * @return
-	 */
-	public static String flagMenuHTML(String flag, String text) {
-		return "<img style='margin-right:8px; margin-left:2px; vertical-align:middle;' "+
-		        "src=\""+Main.CONTEXT+"/flag/"+flag+"\"'>" + text;
+		return "<img align=\"absmidle\" style=\"margin-right:4px\" src=\"/OpenKM"+Config.INSTALL+"/mime/"+mime+"\"'>";
 	}
 	
 	/**
@@ -130,7 +117,7 @@ public class Util {
 	 */
 	public static String menuHTML(String imageUrl, String text) {
 		return "<img style='margin-right:8px; margin-left:2px; vertical-align:middle;' src='" 
-			   + imageUrl + "'>" + text;
+			   + imageUrl.toLowerCase() + "'>" + text;
 	}
 	
 	/**
@@ -154,7 +141,7 @@ public class Util {
 	 * @param uri The url to open
 	 * @return
 	 */
-	public static String windowOpen(String text, String uri) {
+	public static String windowOpen(String text, String uri){
 		return "<span onclick=\"javascript:window.open('"+ uri +"')\">" + text + "</span>";
 	}
 	
@@ -165,7 +152,7 @@ public class Util {
 	 */
 	public static boolean isJREInstalled() {
 		String[] jreList = getJREs();
-		if (jreList != null && jreList.length > 0) {
+		if (jreList!=null && jreList.length>0) {
 			return true;
 		} else {
 			return false;
@@ -179,39 +166,13 @@ public class Util {
 	 * @param params
 	 */
 	public static void downloadFile(String path, String params) {
+
 		if (!params.equals("") && !params.endsWith("&")) {
 			params += "&";
 		}
-		
 		final Element downloadIframe = RootPanel.get("__download").getElement(); 
 		String url = Config.OKMDownloadServlet + "?" + params + "id=" + URL.encodeComponent(path);
 		DOM.setElementAttribute(downloadIframe, "src", url); 
-	}
-	
-	/**
-	 * Download file
-	 * 
-	 * @param path
-	 * @param params
-	 */
-	public static void downloadFilePdf(String uuid) {
-		final Element downloadIframe = RootPanel.get("__download").getElement(); 
-		String url = Config.OKMConverterServlet + "?toPdf=1&uuid=" + URL.encodeComponent(uuid);
-		DOM.setElementAttribute(downloadIframe, "src", url); 
-	}
-	
-	/**
-	 * markHTMLTextAsBold
-	 * 
-	 * @param text
-	 * @param mark
-	 */
-	public static String getTextAsBoldHTML(String text, boolean mark) {
-		if (mark) {
-			return "<b>" + text + "</b>"; 
-		} else {
-			return text;
-		}
 	}
 	
 	/**
@@ -322,7 +283,7 @@ public class Util {
   	  	  	  	  	id:"FlexPaperViewer",
   	  	  	  	    name:"FlexPaperViewer"
   	  	  	  	  });
-	}-*/;
+}-*/;
     
     public static native String[] getJREs() /*-{
 		return $wnd.deployJava.getJREs();

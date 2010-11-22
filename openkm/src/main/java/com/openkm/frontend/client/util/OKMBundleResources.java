@@ -158,9 +158,6 @@ public interface OKMBundleResources extends ClientBundle {
 	@Source("com/openkm/frontend/public/img/icon/actions/remove_subscription_disabled.gif")
 	public ImageResource removeSubscriptionDisabled();
 	
-	@Source("com/openkm/frontend/public/img/icon/actions/propose_subscription.png")
-	public ImageResource proposeSubscription();
-	
 	@Source("com/openkm/frontend/public/img/icon/actions/bookmark_go.gif")
 	public ImageResource home();
 	
@@ -292,7 +289,4 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/icon/search/folder_explore.gif")
 	public ImageResource folderExplorer();
-	
-	@Source("com/openkm/frontend/public/img/indicator.gif")
-	public ImageResource indicator();
 }

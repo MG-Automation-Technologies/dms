@@ -60,9 +60,9 @@ import com.openkm.core.DatabaseException;
 import com.openkm.dao.HibernateUtil;
 import com.openkm.dao.ReportDAO;
 import com.openkm.dao.bean.Report;
+import com.openkm.util.DocConverter;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.ReportUtil;
-import com.openkm.util.SecureStore;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtil;
 
@@ -176,7 +176,7 @@ public class ReportServlet extends BaseServlet {
 					} else {
 						is = item.getInputStream();
 						rp.setFileName(FilenameUtils.getName(item.getName()));
-						rp.setFileContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
+						rp.setFileContent(IOUtils.toByteArray(is));
 						is.close();
 					}
 				}
@@ -242,7 +242,6 @@ public class ReportServlet extends BaseServlet {
 		}
 		
 		sc.setAttribute("reports", list);
-		sc.setAttribute("ReportUtil", new ReportUtil());
 		sc.getRequestDispatcher("/admin/report_list.jsp").forward(request, response);
 		log.debug("list: void");
 	}
@@ -254,7 +253,6 @@ public class ReportServlet extends BaseServlet {
 			IOException, DatabaseException, JRException, EvalError {
 		log.debug("execute({}, {}, {})", new Object[] { session, request, response });
 		int rpId = WebUtil.getInt(request, "rp_id");
-		int out = WebUtil.getInt(request, "out",  ReportUtil.PDF_OUTPUT);
 		Report rp = ReportDAO.findByPk(rpId);
 		String agent = request.getHeader("USER-AGENT");
 		
@@ -265,8 +263,8 @@ public class ReportServlet extends BaseServlet {
 		response.setHeader("Pragma", "no-cache");
 		
 		// Set MIME type
-		response.setContentType(ReportUtil.FILE_MIME[out]);
-		String fileName = rp.getFileName().substring(0, rp.getFileName().indexOf('.')) + ReportUtil.FILE_EXTENSION[out]; 
+		response.setContentType(DocConverter.PDF);
+		String fileName = rp.getFileName().substring(0, rp.getFileName().indexOf('.')) + ".pdf"; 
 		
 		if (null != agent && -1 != agent.indexOf("MSIE")) {
 			log.debug("Agent: Explorer");
@@ -293,13 +291,13 @@ public class ReportServlet extends BaseServlet {
 		
 		try {
 			baos = new ByteArrayOutputStream();
-			bais = new ByteArrayInputStream(SecureStore.b64Decode(rp.getFileContent()));
+			bais = new ByteArrayInputStream(rp.getFileContent());
 			
 			if (Report.SQL.equals(rp.getType())) {
 				dbSession = HibernateUtil.getSessionFactory().openSession();
-				ReportUtil.generateReport(baos, bais, parameters, out, dbSession.connection());
+				ReportUtil.generateReport(baos, bais, parameters, ReportUtil.PDF_OUTPUT, dbSession.connection());
 			} else if (Report.SCRIPT.equals(rp.getType())) {
-				ReportUtil.generateReport(baos, bais, parameters, out);
+				ReportUtil.generateReport(baos, bais, parameters, ReportUtil.PDF_OUTPUT);
 			}
 			
 			// Send back to browser

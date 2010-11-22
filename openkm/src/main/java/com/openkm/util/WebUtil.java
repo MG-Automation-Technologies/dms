@@ -21,28 +21,17 @@
 
 package com.openkm.util;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.mail.internet.MimeUtility;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author jllort
  *
  */
 public class WebUtil {
-	private static Logger log = LoggerFactory.getLogger(WebUtil.class);
 	public static final String EMPTY_STRING = "";
 	
 	/**
@@ -193,48 +182,5 @@ public class WebUtil {
 	public static final boolean getBoolean(HttpServletRequest request, String name, String trueValue) {
 		String strValue = request.getParameter(name);
 		return (strValue != null && strValue.equals(trueValue));
-	}
-	
-	/**
-	 * Send file to client browser
-	 * @throws IOException If there is a communication error.
-	 */
-	public static void sendFile(HttpServletRequest req, HttpServletResponse resp, 
-			String fileName, String mimeType, boolean inline, InputStream is) throws IOException {
-		log.debug("sendFile({}, {}, {}, {}, {}, {})", new Object[] {req, resp, fileName, mimeType, inline, is});
-		String agent = req.getHeader("USER-AGENT");
-		
-		// Disable browser cache
-		resp.setHeader("Expires", "Sat, 6 May 1971 12:00:00 GMT");
-		resp.setHeader("Cache-Control", "max-age=0, must-revalidate");
-		resp.addHeader("Cache-Control", "post-check=0, pre-check=0");
-		
-		// Set MIME type
-		resp.setContentType(mimeType);
-		
-		if (null != agent && -1 != agent.indexOf("MSIE")) {
-			log.debug("Agent: Explorer");
-			fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", " ");
-		} else if (null != agent && -1 != agent.indexOf("Mozilla"))	{
-			log.debug("Agent: Mozilla");
-			fileName = MimeUtility.encodeText(fileName, "UTF-8", "B");
-		} else {
-			log.debug("Agent: Unknown");
-		}
-		
-		if (inline) {
-			resp.setHeader("Content-disposition", "inline; filename=\""+fileName+"\"");
-		} else {
-			resp.setHeader("Content-disposition", "attachment; filename=\""+fileName+"\"");
-		}
-
-		// Set length
-		resp.setContentLength(is.available());
-		log.debug("File: {}, Length: {}", fileName, is.available());
-		
-		ServletOutputStream sos = resp.getOutputStream();
-		IOUtils.copy(is, sos);
-		sos.flush();
-		sos.close();
 	}
 }

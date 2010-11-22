@@ -81,19 +81,15 @@ public class DirectAuthModule implements AuthModule {
 		String token = null;
 		
 		try {
-			if (Config.SYSTEM_MAINTENANCE) {
-				throw new AccessDeniedException("System under maintenance");
-			} else {
-				javax.jcr.Repository r = DirectRepositoryModule.getRepository();
-				Session session = r.login(new SimpleCredentials(user, password.toCharArray()), null);
-				token = UUIDGenerator.generate(this);
-				JcrSessionManager.getInstance().add(token, session);
-				
-				// Activity log
-				UserActivity.log(session.getUserID(), "LOGIN", null, token);
-								
-				return token;
-			}
+			javax.jcr.Repository r = DirectRepositoryModule.getRepository();
+			Session session = r.login(new SimpleCredentials(user, password.toCharArray()), null);
+			token = UUIDGenerator.generate(this);
+			JcrSessionManager.getInstance().add(token, session);
+			
+			// Activity log
+			UserActivity.log(session.getUserID(), "LOGIN", null, token);
+			
+			return token;
 		} catch (LoginException e) {
 			log.error(e.getMessage(), e);
 			throw new AccessDeniedException(e.getMessage(), e);
@@ -116,7 +112,7 @@ public class DirectAuthModule implements AuthModule {
 			
 			if (session != null) {
 				// Activity log
-				UserActivity.log(session.getUserID(), "LOGOUT", token, null);
+				UserActivity.log(session.getUserID(), "LOGOUT", null, null);
 				
 				JcrSessionManager.getInstance().remove(token);
 				session.logout();

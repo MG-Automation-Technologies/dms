@@ -70,7 +70,7 @@ import com.openkm.frontend.client.util.CommonUI;
 import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.dashboard.ImageHover;
-import com.openkm.frontend.client.widget.dashboard.keymap.TagCloud;
+import com.openkm.frontend.client.widget.dashboard.TagCloud;
 import com.openkm.frontend.client.widget.thesaurus.ThesaurusSelectPopup;
 
 /**
@@ -100,13 +100,11 @@ public class Document extends Composite {
 	private boolean visible = true;
 	private HTML subcribedUsersText;
 	private HTML keywordsCloudText;
-	private Image proposeSubscribeImage;
 	private Image categoriesImage;
 	private Image thesaurusImage;
 	private HTML categoriesText;
 	private boolean remove = true;
 	private List<String> keyWordsListPending; // Keyword list pending to be added ( each one is added sequentially )
-	HorizontalPanel hPanelSubscribedUsers;
 	
 	public Document() {
 		keywordMap = new HashMap<String,Widget>();
@@ -209,24 +207,11 @@ public class Document extends Composite {
 		keywordsCloud.setWidth("350");
 		
 		VerticalPanel vPanel2 = new VerticalPanel();
-		
-		hPanelSubscribedUsers = new HorizontalPanel();
 		subcribedUsersText = new HTML("<b>"+Main.i18n("document.subscribed.users")+"<b>");
-		proposeSubscribeImage = new Image(OKMBundleResources.INSTANCE.proposeSubscription());
-		proposeSubscribeImage.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				Main.get().proposedSubscriptionPopup.executeProposeSubscription();
-			}
-		});
-		hPanelSubscribedUsers.add(subcribedUsersText);
-		hPanelSubscribedUsers.add(new HTML("&nbsp;"));
-		hPanelSubscribedUsers.setCellVerticalAlignment(subcribedUsersText, HasAlignment.ALIGN_MIDDLE);
-
 		keywordsCloudText = new HTML("<b>"+Main.i18n("document.keywords.cloud")+"</b>");
-		
 		HorizontalPanel hPanelCategories = new HorizontalPanel();
 		categoriesText = new HTML("<b>"+Main.i18n("document.categories")+"</b>");
+	
 		categoriesImage = new Image(OKMBundleResources.INSTANCE.tableKeyIcon());
 		categoriesImage.addClickHandler(new ClickHandler() {
 			@Override
@@ -238,9 +223,8 @@ public class Document extends Composite {
 		hPanelCategories.add(categoriesText);
 		hPanelCategories.add(new HTML("&nbsp;"));
 		hPanelCategories.add(categoriesImage);
-		hPanelCategories.setCellVerticalAlignment(categoriesText, HasAlignment.ALIGN_MIDDLE);
 		
-		vPanel2.add(hPanelSubscribedUsers);
+		vPanel2.add(subcribedUsersText);
 		vPanel2.add(tableSubscribedUsers);
 		HTML space2 = new HTML("");
 		vPanel2.add(space2);
@@ -279,7 +263,6 @@ public class Document extends Composite {
 		suggestKey.addStyleName("okm-Input");
 		hKeyPanel.setStylePrimaryName("okm-cloudWrap");
 		keywordsCloud.setStylePrimaryName("okm-cloudWrap");
-		proposeSubscribeImage.addStyleName("okm-Hyperlink");
 		categoriesImage.addStyleName("okm-Hyperlink");
 		thesaurusImage.addStyleName("okm-Hyperlink");
 		
@@ -378,16 +361,6 @@ public class Document extends Composite {
 			suggestKey.setVisible(false);
 			categoriesImage.setVisible(false);
 			thesaurusImage.setVisible(false);
-		}
-		
-		// Propose subscription only must be enabled in taxonomy, categories, thesaurus and templates with
-		if (Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TAXONOMY || 
-			Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_CATEGORIES ||
-			Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_THESAURUS ||
-			Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TEMPLATES) {
-			proposeSubscribeImage.setVisible(true);
-		} else {
-			proposeSubscribeImage.setVisible(false);
 		}
 		
 		getVersionHistorySize();
@@ -646,14 +619,6 @@ public class Document extends Composite {
 		suggestKey.setVisible(visible);
 		categoriesImage.setVisible(visible);
 		thesaurusImage.setVisible(visible);
-	}
-	
-	/**
-	 * showProposedSusbcription
-	 */
-	public void showProposedSusbcription() {
-		// Adds to panel
-		hPanelSubscribedUsers.add(proposeSubscribeImage);
 	}
 	
 	/**

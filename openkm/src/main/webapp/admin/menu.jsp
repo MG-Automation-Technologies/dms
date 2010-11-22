@@ -3,7 +3,7 @@
   <tr><td align="center" width="100%">
   <a target="frame" href="home.jsp"><img src="img/toolbar/home.png" title="Home"></a>
   &nbsp;
-  <a target="frame" href="Config"><img src="img/toolbar/config.png" title="Configuration"></a>
+  <a target="frame" href="config.jsp"><img src="img/toolbar/config.png" title="Configuration"></a>
   &nbsp;
   <a target="frame" href="MimeType"><img src="img/toolbar/mime.png" title="Mime types"></a>
   &nbsp;
@@ -31,11 +31,7 @@
   &nbsp;
   <a target="frame" href="Workflow"><img src="img/toolbar/workflow.png" title="Workflow"></a>
   &nbsp;
-  <a target="frame" href="CronTab"><img src="img/toolbar/crontab.png" title="Crontab"></a>
-  &nbsp;
   <a target="frame" href="generate_thesaurus.jsp"><img src="img/toolbar/thesaurus.png" title="Generate thesaurus"></a>
-  &nbsp;
-  <a target="frame" href="Language"><img src="img/toolbar/language.png" title="Language"></a>
   &nbsp;
   <a target="frame" href="repository_import.jsp"><img src="img/toolbar/import.png" title="Repository import"></a>
   &nbsp;

@@ -1,5 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<configuration>
-  <assemblyIdentity name="OpenKMOutlookAddIn, PublicKeyToken=a94f0ddfa3cf2ef1" />
-  <loaderSettings generateLogFile="true" shadowCopyEnabled="true" privileges="user" configFileName="app.config" />
-</configuration>

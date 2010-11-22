@@ -20,8 +20,6 @@
 
 package com.openkm.frontend.client.widget.mainmenu;
 
-import java.util.List;
-
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
@@ -29,9 +27,10 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTAvailableOption;
-import com.openkm.frontend.client.bean.GWTLanguage;
 import com.openkm.frontend.client.bean.ToolBarOption;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.extension.widget.MenuItemExtension;
+import com.openkm.frontend.client.lang.Lang;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.ConfirmPopup;
 import com.openkm.frontend.client.widget.notify.NotifyPopup;
@@ -90,6 +89,40 @@ public class MainMenu extends Composite {
 		private MenuBar subMenuTools;
 			private MenuItem language;
 				private MenuBar subMenuLanguage;
+					private MenuItem catalan;
+					private MenuItem english;
+					private MenuItem spanish;
+					private MenuItem farsi;
+					private MenuItem french;
+					private MenuItem brazilian;
+					private MenuItem dutch;
+					private MenuItem german;
+					private MenuItem gallego;
+					private MenuItem italian;
+					private MenuItem chineseSimple;
+					private MenuItem swedish;
+					private MenuItem serbian;
+					private MenuItem turkish;
+					private MenuItem japanese;
+					private MenuItem romanian;
+					private MenuItem polish;
+					private MenuItem hungarian;
+					private MenuItem greece;
+					private MenuItem chineseTraditional;
+					private MenuItem latvian;
+					private MenuItem macedonian;
+					private MenuItem colombian;
+					private MenuItem russian;
+					private MenuItem bosnian;
+					private MenuItem czech;
+					private MenuItem usa;
+					private MenuItem indonesian;
+					private MenuItem portuguese;
+					private MenuItem arabic;
+					private MenuItem thai;
+					private MenuItem euskera;
+					private MenuItem slovack;
+					private MenuItem vietnamese;
 				private MenuBar subMenuSkin;
 					private MenuItem skinDefault;
 					private MenuItem skinTest;
@@ -236,40 +269,107 @@ public class MainMenu extends Composite {
 					// Submenu Language options
 					subMenuLanguage = new MenuBar(true);
 					subMenuLanguage.setStyleName("okm-SubMenuBar");
-//						arabic = new MenuItem(Util.menuHTML("img/icon/menu/ps.gif", "Arabic"), true, setLangArabic);
-//						bosnian = new MenuItem(Util.menuHTML("img/icon/menu/bs.gif", "Bosnian"), true, setLangBosnian);
-//						catalan = new MenuItem(Util.menuHTML("img/icon/menu/ca.gif", "Català"), true, setLangCatalan);
-//						chineseSimple = new MenuItem(Util.menuHTML("img/icon/menu/cn.gif", "Chinese simple"), true, setLangChinese);
-//						chineseTraditional = new MenuItem(Util.menuHTML("img/icon/menu/cn.gif", "Chinese traditional"), true, setLangChineseTraditional);
-//						czech = new MenuItem(Util.menuHTML("img/icon/menu/cs.gif", "Czech"), true, setLangCzech);
-//						german = new MenuItem(Util.menuHTML("img/icon/menu/de.gif", "Deutsch"), true, setLangDeutsch);
-//						english = new MenuItem(Util.menuHTML("img/icon/menu/en.gif", "English"), true, setLangEnglish);
-//						usa = new MenuItem(Util.menuHTML("img/icon/menu/us.gif", "English - Usa"), true, setLangEnglishUSA);
-//						spanish = new MenuItem(Util.menuHTML("img/icon/menu/es.gif", "Español"), true, setLangSpanish);
-//						colombian = new MenuItem(Util.menuHTML("img/icon/menu/co.gif", "Español Colombia"), true, setLangColombian);
-//						euskera = new MenuItem(Util.menuHTML("img/icon/menu/eu.gif", "Euskera"), true, setLangEuskera);
-//						farsi = new MenuItem(Util.menuHTML("img/icon/menu/ir.gif", "Farsi"), true, setLangFarsi);
-//						french = new MenuItem(Util.menuHTML("img/icon/menu/fr.gif", "Français"), true, setLangFrench);
-//						gallego = new MenuItem(Util.menuHTML("img/icon/menu/gl.gif", "Gallego"), true, setLangGallego);
-//						greece = new MenuItem(Util.menuHTML("img/icon/menu/gr.gif", "Greece"), true, setLangGreece);
-//						hungarian  = new MenuItem(Util.menuHTML("img/icon/menu/hu.gif", "Hungarian"), true, setHungarian);
-//						indonesian = new MenuItem(Util.menuHTML("img/icon/menu/id.gif", "Indonesian"), true, setLangIndoneisan);
-//						italian = new MenuItem(Util.menuHTML("img/icon/menu/it.gif", "Italian"), true, setLangItalian);
-//						japanese = new MenuItem(Util.menuHTML("img/icon/menu/jp.gif", "Japanese"), true, setLangJapanese);
-//						latvian = new MenuItem(Util.menuHTML("img/icon/menu/lv.gif", "Latvian"), true, setLangLativian);
-//						macedonian  = new MenuItem(Util.menuHTML("img/icon/menu/mk.gif", "Macedonian"), true, setLangMacedonian);
-//						dutch = new MenuItem(Util.menuHTML("img/icon/menu/nl.gif", "Nederlands"), true, setLangNlBe);
-//						polish = new MenuItem(Util.menuHTML("img/icon/menu/pl.gif", "Polish"), true, setLangPolish);
-//						portuguese = new MenuItem(Util.menuHTML("img/icon/menu/pt.gif", "Português"), true, setLangPortuguese);
-//						brazilian = new MenuItem(Util.menuHTML("img/icon/menu/br.gif", "Português do Brasil"), true, setLangPtBr);
-//						romanian = new MenuItem(Util.menuHTML("img/icon/menu/ro.gif", "Romanian"), true, setRomanian);
-//						russian = new MenuItem(Util.menuHTML("img/icon/menu/ru.gif", "Russian"), true, setRussian);
-//						serbian = new MenuItem(Util.menuHTML("img/icon/menu/rs.gif", "Serbian"), true, setLangSerbian);
-//						slovack = new MenuItem(Util.menuHTML("img/icon/menu/sk.gif", "Slovack"), true, setLangSlovack);
-//						swedish = new MenuItem(Util.menuHTML("img/icon/menu/se.gif", "Swedish"), true, setLangSwedish);
-//						thai = new MenuItem(Util.menuHTML("img/icon/menu/th.gif", "Thai"), true, setLangThai);
-//						turkish = new MenuItem(Util.menuHTML("img/icon/menu/tr.gif", "Turkish"), true, setLangTurkish);
-//						vietnamese  = new MenuItem(Util.menuHTML("img/icon/menu/vn.gif", "Vietnamese"), true, setLangVietnamese);
+						arabic = new MenuItem(Util.menuHTML("img/icon/menu/ps.gif", "Arabic"), true, setLangArabic);
+						bosnian = new MenuItem(Util.menuHTML("img/icon/menu/bs.gif", "Bosnian"), true, setLangBosnian);
+						catalan = new MenuItem(Util.menuHTML("img/icon/menu/ca.gif", "Català"), true, setLangCatalan);
+						chineseSimple = new MenuItem(Util.menuHTML("img/icon/menu/cn.gif", "Chinese simple"), true, setLangChinese);
+						chineseTraditional = new MenuItem(Util.menuHTML("img/icon/menu/cn.gif", "Chinese traditional"), true, setLangChineseTraditional);
+						czech = new MenuItem(Util.menuHTML("img/icon/menu/cz.gif", "Czech"), true, setLangCzech);
+						german = new MenuItem(Util.menuHTML("img/icon/menu/de.gif", "Deutsch"), true, setLangDeutsch);
+						english = new MenuItem(Util.menuHTML("img/icon/menu/en.gif", "English"), true, setLangEnglish);
+						usa = new MenuItem(Util.menuHTML("img/icon/menu/us.gif", "English - Usa"), true, setLangEnglishUSA);
+						spanish = new MenuItem(Util.menuHTML("img/icon/menu/es.gif", "Español"), true, setLangSpanish);
+						colombian = new MenuItem(Util.menuHTML("img/icon/menu/co.gif", "Español Colombia"), true, setLangColombian);
+						euskera = new MenuItem(Util.menuHTML("img/icon/menu/eu.gif", "Euskera"), true, setLangEuskera);
+						farsi = new MenuItem(Util.menuHTML("img/icon/menu/ir.gif", "Farsi"), true, setLangFarsi);
+						french = new MenuItem(Util.menuHTML("img/icon/menu/fr.gif", "Français"), true, setLangFrench);
+						gallego = new MenuItem(Util.menuHTML("img/icon/menu/gl.gif", "Gallego"), true, setLangGallego);
+						greece = new MenuItem(Util.menuHTML("img/icon/menu/gr.gif", "Greece"), true, setLangGreece);
+						hungarian  = new MenuItem(Util.menuHTML("img/icon/menu/hu.gif", "Hungarian"), true, setHungarian);
+						indonesian = new MenuItem(Util.menuHTML("img/icon/menu/id.gif", "Indonesian"), true, setLangIndoneisan);
+						italian = new MenuItem(Util.menuHTML("img/icon/menu/it.gif", "Italian"), true, setLangItalian);
+						japanese = new MenuItem(Util.menuHTML("img/icon/menu/jp.gif", "Japanese"), true, setLangJapanese);
+						latvian = new MenuItem(Util.menuHTML("img/icon/menu/lv.gif", "Latvian"), true, setLangLativian);
+						macedonian  = new MenuItem(Util.menuHTML("img/icon/menu/mk.gif", "Macedonian"), true, setLangMacedonian);
+						dutch = new MenuItem(Util.menuHTML("img/icon/menu/nl.gif", "Nederlands"), true, setLangNlBe);
+						polish = new MenuItem(Util.menuHTML("img/icon/menu/pl.gif", "Polish"), true, setLangPolish);
+						portuguese = new MenuItem(Util.menuHTML("img/icon/menu/pt.gif", "Português"), true, setLangPortuguese);
+						brazilian = new MenuItem(Util.menuHTML("img/icon/menu/br.gif", "Português do Brasil"), true, setLangPtBr);
+						romanian = new MenuItem(Util.menuHTML("img/icon/menu/ro.gif", "Romanian"), true, setRomanian);
+						russian = new MenuItem(Util.menuHTML("img/icon/menu/ru.gif", "Russian"), true, setRussian);
+						serbian = new MenuItem(Util.menuHTML("img/icon/menu/rs.gif", "Serbian"), true, setLangSerbian);
+						slovack = new MenuItem(Util.menuHTML("img/icon/menu/sk.gif", "Slovack"), true, setLangSlovack);
+						swedish = new MenuItem(Util.menuHTML("img/icon/menu/se.gif", "Swedish"), true, setLangSwedish);
+						thai = new MenuItem(Util.menuHTML("img/icon/menu/th.gif", "Thai"), true, setLangThai);
+						turkish = new MenuItem(Util.menuHTML("img/icon/menu/tr.gif", "Turkish"), true, setLangTurkish);
+						vietnamese  = new MenuItem(Util.menuHTML("img/icon/menu/vn.gif", "Vietnamese"), true, setLangVietnamese);
+						arabic.addStyleName("okm-MainMenuItem");
+						bosnian.addStyleName("okm-MainMenuItem");
+						catalan.addStyleName("okm-MainMenuItem");
+						chineseSimple.addStyleName("okm-MainMenuItem");
+						chineseTraditional.addStyleName("okm-MainMenuItem");
+						czech.addStyleName("okm-MainMenuItem");
+						german.addStyleName("okm-MainMenuItem");
+						english.addStyleName("okm-MainMenuItem");
+						usa.addStyleName("okm-MainMenuItem");
+						spanish.addStyleName("okm-MainMenuItem");
+						colombian.addStyleName("okm-MainMenuItem");
+						euskera.addStyleName("okm-MainMenuItem");
+						farsi.addStyleName("okm-MainMenuItem");
+						french.addStyleName("okm-MainMenuItem");
+						gallego.addStyleName("okm-MainMenuItem");
+						greece.addStyleName("okm-MainMenuItem");
+						hungarian.addStyleName("okm-MainMenuItem");
+						indonesian.addStyleName("okm-MainMenuItem");
+						italian.addStyleName("okm-MainMenuItem");
+						japanese.addStyleName("okm-MainMenuItem");
+						latvian.addStyleName("okm-MainMenuItem");
+						macedonian.addStyleName("okm-MainMenuItem");
+						dutch.addStyleName("okm-MainMenuItem");
+						polish.addStyleName("okm-MainMenuItem");
+						portuguese.addStyleName("okm-MainMenuItem");
+						brazilian.addStyleName("okm-MainMenuItem");
+						romanian.addStyleName("okm-MainMenuItem");
+						russian.addStyleName("okm-MainMenuItem");
+						serbian.addStyleName("okm-MainMenuItem");
+						slovack.addStyleName("okm-MainMenuItem");
+						swedish.addStyleName("okm-MainMenuItem");
+						thai.addStyleName("okm-MainMenuItem");
+						turkish.addStyleName("okm-MainMenuItem");
+						vietnamese.addStyleName("okm-MainMenuItem");
+					subMenuLanguage.addItem(arabic);
+					subMenuLanguage.addItem(bosnian);
+					subMenuLanguage.addItem(catalan);
+					subMenuLanguage.addItem(chineseSimple);
+					subMenuLanguage.addItem(chineseTraditional);
+					subMenuLanguage.addItem(czech);
+					subMenuLanguage.addItem(german);
+					subMenuLanguage.addItem(english);
+					subMenuLanguage.addItem(usa);
+					subMenuLanguage.addItem(spanish);
+					subMenuLanguage.addItem(colombian);
+					subMenuLanguage.addItem(euskera);
+					subMenuLanguage.addItem(farsi);
+					subMenuLanguage.addItem(french);
+					subMenuLanguage.addItem(gallego);
+					subMenuLanguage.addItem(greece);
+					subMenuLanguage.addItem(hungarian);
+					subMenuLanguage.addItem(indonesian);
+					subMenuLanguage.addItem(italian);
+					subMenuLanguage.addItem(japanese);
+					subMenuLanguage.addItem(latvian);
+					subMenuLanguage.addItem(macedonian);
+					subMenuLanguage.addItem(dutch);
+					subMenuLanguage.addItem(polish);
+					subMenuLanguage.addItem(portuguese);
+					subMenuLanguage.addItem(brazilian);
+					subMenuLanguage.addItem(romanian);
+					subMenuLanguage.addItem(russian);
+					subMenuLanguage.addItem(serbian);
+					subMenuLanguage.addItem(slovack);
+					subMenuLanguage.addItem(swedish);
+					subMenuLanguage.addItem(turkish);
+					subMenuLanguage.addItem(vietnamese);
 				// Submenu language
 				language = new MenuItem(Util.menuHTML("img/icon/menu/language.gif", Main.i18n("general.menu.tools.languages")), true, subMenuLanguage);
 				language.addStyleName("okm-MainMenuItem");
@@ -519,7 +619,6 @@ public class MainMenu extends Composite {
 		evaluateMenuOptions();
 	}
 	
-	/*
 	// Command menu to set Spanish lang
 	Command setLangSpanish = new Command() {
 		public void execute() {
@@ -758,7 +857,6 @@ public class MainMenu extends Composite {
 			Main.get().refreshLang(Lang.LANG_zh_VN);
 		}
 	};
-	*/
 	
 	// Command menu to purge trash 
 	Command purgeTrashOKM = new Command() {
@@ -990,7 +1088,7 @@ public class MainMenu extends Composite {
 	// Command menu to show administration
 	Command showAdministration = new Command() {
 		public void execute() {
-			Window.open(Main.CONTEXT+"/admin/index.jsp", "Administration", "");
+			Window.open("/OpenKM"+Config.INSTALL+"/admin/index.jsp", "Administration", "");
 		}
 	};
 	
@@ -1164,22 +1262,5 @@ public class MainMenu extends Composite {
 	 */
 	public void addMenuExtension(MenuItemExtension extension) {
 		MainMenu.addItem(extension);
-	}
-	
-	/**
-	 * initAvailableLanguage
-	 * 
-	 * @param langs
-	 */
-	public void initAvailableLanguage(List<GWTLanguage> langs) {
-		for (final GWTLanguage lang : langs) {
-			MenuItem menuItem = new MenuItem(Util.flagMenuHTML(lang.getId(), lang.getName()), true, new Command() {
-				public void execute() {
-					Main.get().refreshLang(lang.getId());
-				}
-			});
-			menuItem.addStyleName("okm-MainMenuItem");
-			subMenuLanguage.addItem(menuItem);
-		}
 	}
 }

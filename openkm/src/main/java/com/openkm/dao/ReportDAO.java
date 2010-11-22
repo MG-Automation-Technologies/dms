@@ -21,6 +21,7 @@
 
 package com.openkm.dao;
 
+import java.sql.Blob;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -66,7 +67,7 @@ public class ReportDAO {
 	 */
 	public static void update(Report rp) throws DatabaseException {
 		log.debug("update({})", rp);
-		String qs = "select rp.fileContent, rp.fileName from Report rp where rp.id=:id";
+		String qs = "select rp.fileContentBlob, rp.fileName from Report rp where rp.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -74,11 +75,11 @@ public class ReportDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			
-			if (rp.getFileContent() == null || rp.getFileContent().length() == 0) {
+			if (rp.getFileContent().length == 0) {
 				Query q = session.createQuery(qs);
 				q.setParameter("id", rp.getId());
 				Object[] data = (Object[]) q.setMaxResults(1).uniqueResult();
-				rp.setFileContent((String) data[0]);
+				rp.setFileContent(HibernateUtil.toByteArray((Blob) data[0]));
 				rp.setFileName((String) data[1]);
 			}
 			

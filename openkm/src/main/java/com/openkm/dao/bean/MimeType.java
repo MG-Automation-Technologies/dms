@@ -22,15 +22,21 @@
 package com.openkm.dao.bean;
 
 import java.io.Serializable;
+import java.sql.Blob;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.hibernate.Hibernate;
+
+import com.openkm.dao.HibernateUtil;
 
 public class MimeType implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private String name;
-	private String imageContent;
+	private byte[] imageContent;
 	private String imageMime;
+	private boolean active;
 	private Set<String> extensions = new HashSet<String>();
 	
 	public int getId() {
@@ -49,12 +55,24 @@ public class MimeType implements Serializable {
 		this.name = name;
 	}
 
-	public String getImageContent() {
+	public byte[] getImageContent() {
 		return imageContent;
 	}
 
-	public void setImageContent(String imageContent) {
+	public void setImageContent(byte[] imageContent) {
 		this.imageContent = imageContent;
+	}
+	
+	/** Don't invoke this. Used by Hibernate only. */
+	@SuppressWarnings("unused")
+	private void setImageContentBlob(Blob data) {
+		this.imageContent = HibernateUtil.toByteArray(data);
+	}
+
+	/** Don't invoke this. Used by Hibernate only. */
+	@SuppressWarnings("unused")
+	private Blob getImageContentBlob() {
+		return Hibernate.createBlob(imageContent);
 	}
 
 	public String getImageMime() {
@@ -63,6 +81,14 @@ public class MimeType implements Serializable {
 
 	public void setImageMime(String imageMime) {
 		this.imageMime = imageMime;
+	}
+	
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	
 	public Set<String> getExtensions() {
@@ -79,7 +105,8 @@ public class MimeType implements Serializable {
 		sb.append("id="); sb.append(id);
 		sb.append(", name="); sb.append(name);
 		sb.append(", imageMime="); sb.append(imageMime);
-		sb.append(", imageContent="); sb.append("[BIG]");
+		sb.append(", imageContent="); sb.append(imageContent);
+		sb.append(", active="); sb.append(active);
 		sb.append(", extensions="); sb.append(extensions);
 		sb.append("}");
 		return sb.toString();
