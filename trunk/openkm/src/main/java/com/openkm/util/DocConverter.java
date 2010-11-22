@@ -154,7 +154,7 @@ public class DocConverter {
 		if (!Config.SYSTEM_PDF2SWF.equals("") && (convertibleToPdf(from) || PDF.equals(from))) {
 			return true;
 		}
-	
+		
 		return false;
 	}
 	
@@ -165,7 +165,7 @@ public class DocConverter {
 		if (!Config.SYSTEM_DWG2DXF.equals("") && validAutoCad.contains(from)) {
 			return true;
 		}
-	
+		
 		return false;
 	}
 
