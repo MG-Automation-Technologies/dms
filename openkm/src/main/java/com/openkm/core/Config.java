@@ -69,6 +69,7 @@ public class Config {
 	public static final String PROPERTY_DEFAULT_SCRIPT = "default.script";
 	
 	// Preview cache
+	public static String CACHE_DXF;
 	public static String CACHE_PDF;
 	public static String CACHE_SWF;
 	
@@ -445,6 +446,8 @@ public class Config {
 			values.put("repository.config", REPOSITORY_CONFIG);
 			REPOSITORY_HOME = INSTANCE + File.separator + "repository";
 			values.put("repository.home", REPOSITORY_HOME);
+			CACHE_DXF = INSTANCE + File.separator + "cache" + File.separator + "dxf";
+			values.put("cache.dxf", CACHE_DXF);
 			CACHE_PDF = INSTANCE + File.separator + "cache" + File.separator + "pdf";
 			values.put("cache.pdf", CACHE_PDF);
 			CACHE_SWF = INSTANCE + File.separator + "cache" + File.separator + "swf";
