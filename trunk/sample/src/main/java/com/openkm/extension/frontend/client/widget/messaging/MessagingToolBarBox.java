@@ -21,7 +21,6 @@
 
 package com.openkm.extension.frontend.client.widget.messaging;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.openkm.frontend.client.extension.widget.ToolBarBoxExtension;

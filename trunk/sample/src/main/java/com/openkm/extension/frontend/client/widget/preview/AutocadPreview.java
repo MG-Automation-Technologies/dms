@@ -24,9 +24,6 @@ package com.openkm.extension.frontend.client.widget.preview;
 
 import java.util.List;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.extension.widget.PreviewExtension;
 
