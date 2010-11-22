@@ -74,6 +74,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.Bookmark;
 import com.openkm.dao.bean.Language;
+import com.openkm.dao.bean.ProposedQuery;
 import com.openkm.dao.bean.ProposedSubscription;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.UserConfig;
@@ -110,6 +111,7 @@ import com.openkm.frontend.client.bean.GWTUserConfig;
 import com.openkm.frontend.client.bean.GWTValidator;
 import com.openkm.frontend.client.bean.GWTVersion;
 import com.openkm.frontend.client.bean.GWTWorkflowComment;
+import com.openkm.frontend.client.bean.extension.GWTProposedQuery;
 import com.openkm.frontend.client.bean.extension.GWTProposedSubscription;
 import com.openkm.frontend.client.bean.extension.GWTStaple;
 import com.openkm.frontend.client.bean.extension.GWTStapleGroup;
@@ -1134,5 +1136,26 @@ public class GWTUtil {
 		}
 		
 		return gWTProposedSubscription;
+	}
+	
+	/**
+	 * Copy ProposedQuery to GWTProposedQuery
+	 * 
+	 * @param pq
+	 * @return
+	 */
+	public static GWTProposedQuery copy(ProposedQuery pq) {
+		GWTProposedQuery gWTProposedQuery = new GWTProposedQuery();
+		gWTProposedQuery.setAccepted(pq.isAccepted());
+		gWTProposedQuery.setComment(pq.getComment());
+		gWTProposedQuery.setFrom(pq.getFrom());
+		gWTProposedQuery.setTo(pq.getTo());
+		gWTProposedQuery.setId(pq.getId());
+		gWTProposedQuery.setSentDate(pq.getSentDate().getTime());
+		if (pq.getSeenDate()!=null) {
+			gWTProposedQuery.setSeenDate(pq.getSeenDate().getTime());
+		}
+		
+		return gWTProposedQuery;
 	}
 }

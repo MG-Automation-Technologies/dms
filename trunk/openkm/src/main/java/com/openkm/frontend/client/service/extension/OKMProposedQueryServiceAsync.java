@@ -19,42 +19,15 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.widget.searchsaved;
+package com.openkm.frontend.client.service.extension;
 
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.RemoteService;
 
 /**
- * Search results menu popup
- * 
  * @author jllort
  *
  */
-public class MenuPopup extends PopupPanel {
-	
-	private VerticalPanel panel;
-	private Menu menu;
-	
-	public MenuPopup() {
-		// Establishes auto-close when click outside
-		super(true,true);
-		panel = new VerticalPanel();
-		menu = new Menu();
-		panel.add(menu);	
-		setWidget(panel);
-	}
-	
-	/**
-	 * Refresh language values
-	 */
-	public void langRefresh() {
-		menu.langRefresh();
-	}
-	
-	/**
-	 * show share search
-	 */
-	public void showShareSearch() {
-		menu.showShareSearch();
-	}
+public interface OKMProposedQueryServiceAsync extends RemoteService {
+	public void create(int qpId, String users, String roles, String comment, AsyncCallback<?> callback);
 }

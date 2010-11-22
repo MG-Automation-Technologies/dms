@@ -151,7 +151,11 @@
   </servlet>
   <servlet>
     <servlet-name>ProposedSubscriptionServlet</servlet-name>
-    <servlet-class>com.openkm.servlet.frontend.ProposedSubscriptionServlet</servlet-class>
+    <servlet-class>com.openkm.servlet.extension.ProposedSubscriptionServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ProposedQueryServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.extension.ProposedQueryServlet</servlet-class>
   </servlet>
   
   <!-- Misc servlets -->
@@ -473,7 +477,11 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>ProposedSubscriptionServlet</servlet-name>
-    <url-pattern>/frontend/ProposedSubscription</url-pattern>
+    <url-pattern>/extension/ProposedSubscription</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ProposedQueryServlet</servlet-name>
+    <url-pattern>/extension/ProposedQuery</url-pattern>
   </servlet-mapping>
   
   <!-- Extensions Servlet Mappings -->

@@ -53,8 +53,9 @@ public class Config {
 	public static String OKMUserConfigService = Main.CONTEXT+"/frontend/UserConfig";
 	public static String OKMNoteService = Main.CONTEXT+"/frontend/Note";
 	public static String OKMLanguageService = Main.CONTEXT+"/frontend/Language";
-	public static String OKMProposeSubscriptionService = Main.CONTEXT+"/frontend/ProposedSubscription";
 	public static String OKMFeedService = Main.CONTEXT+"/feed/";
 	public static String OKMStaplingService = Main.CONTEXT+"/extension/Stapling";
 	public static String OKMStaplingDownloadService = Main.CONTEXT+"/extension/StaplingDownload";
+	public static String OKMProposeSubscriptionService = Main.CONTEXT+"/extension/ProposedSubscription";
+	public static String OKMProposeQueryService = Main.CONTEXT+"/extension/ProposedQuery";
 }

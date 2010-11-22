@@ -232,6 +232,27 @@ public class SearchSaved extends Composite {
 	}
 	
 	/**
+	 * getSavedSearch
+	 * 
+	 * @return
+	 */
+	public GWTQueryParams getSavedSearch() {
+		if (getSelectedRow() >= 0) {
+			int id = Integer.parseInt(table.getText(getSelectedRow(), 1));
+			GWTQueryParams params = null;
+			for (Iterator<GWTQueryParams> it = savedSearches.iterator(); it.hasNext();) {
+				params = it.next();
+				if (params.getId()==id) {
+					break;
+				}
+			}
+			return params;
+		} else { 
+			return null;
+		}
+	}
+	
+	/**
 	 * Deletes a Search
 	 */
 	public void deleteSearch() {
