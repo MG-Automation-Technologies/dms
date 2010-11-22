@@ -4,7 +4,7 @@
 	<groupId>com.openkm.extension</groupId>
 	<artifactId>sample</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0</version>
+	<version>5.1</version>
 	<name>OpenKM sample extension</name>
 	<url>http://www.openkm.com</url>
 	<description>OpenKM sample extension</description>
