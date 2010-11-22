@@ -380,13 +380,13 @@
       <version>${gwt.version}</version>
       <scope>provided</scope>
     </dependency>
-    <!-- Only for development 
+    <!-- Only for development --> 
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-dev</artifactId>
       <version>${gwt.version}</version>
       <scope>provided</scope>
-    </dependency> --> 
+    </dependency> 
 
     <!-- GWT Maven plugin -->
     <dependency>
