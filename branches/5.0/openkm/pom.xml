@@ -452,7 +452,7 @@
     <dependency>
       <groupId>com.openkm.extension</groupId>
       <artifactId>sample-full</artifactId>
-      <version>1.0</version>
+      <version>5.0</version>
     </dependency>
   </dependencies>
 
