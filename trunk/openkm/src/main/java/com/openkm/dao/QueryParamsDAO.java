@@ -33,7 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
-import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.QueryParams;
 
 public class QueryParamsDAO {
@@ -246,8 +245,7 @@ public class QueryParamsDAO {
 	 * Find all proposed
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<QueryParams> findProposed(String to) throws DatabaseException,
-			RepositoryException {
+	public static List<QueryParams> findProposed(String to) throws DatabaseException {
 		log.debug("findAll({}, {})", to);
 		String qs = "select qp from QueryParams qp, ProposedQuery pq where pq.to=:to and pq in elements(qp.proposed)";		
 		Session session = null;
