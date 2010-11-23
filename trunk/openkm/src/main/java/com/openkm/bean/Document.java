@@ -257,6 +257,7 @@ public class Document implements Serializable {
 		sb.append(", uuid="); sb.append(uuid);
 		sb.append(", convertibleToPdf="); sb.append(convertibleToPdf);
 		sb.append(", convertibleToSwf="); sb.append(convertibleToSwf);
+		sb.append(", convertibleToDxf="); sb.append(convertibleToDxf);
 		sb.append(", notes="); sb.append(notes);
 		sb.append("}");
 		return sb.toString();
