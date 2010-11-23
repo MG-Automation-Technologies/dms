@@ -197,7 +197,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getChilds(String path) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-		endPoint.setServiceEntryPoint(Config.OKMFolderService);	
+		endPoint.setServiceEntryPoint(Config.FolderService);	
 		Main.get().mainPanel.desktop.navigator.categoriesTree.categoriesSelectPopup.status.setFlagChilds();
 		folderService.getChilds(path, callbackGetChilds);
 	}	
@@ -207,7 +207,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getCategories() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
+		endPoint.setServiceEntryPoint(Config.RepositoryService);	
 		Main.get().mainPanel.desktop.navigator.categoriesTree.categoriesSelectPopup.status.setFlagRoot();
 		repositoryService.getCategoriesFolder(callbackGetCategoriesFolder);
 	}

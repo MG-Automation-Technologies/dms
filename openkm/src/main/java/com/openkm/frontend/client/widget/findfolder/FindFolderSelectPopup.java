@@ -338,7 +338,7 @@ public class FindFolderSelectPopup extends DialogBox  {
 	private void find(GWTQueryParams params) {
 		status.setFlagChilds();
 		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
-		endPoint.setServiceEntryPoint(Config.OKMSearchService);
+		endPoint.setServiceEntryPoint(Config.SearchService);
 		searchService.find(params, callbackFind);
 	}
 }

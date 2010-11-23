@@ -201,7 +201,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		
 		// Getting language
 		ServiceDefTarget endPoint = (ServiceDefTarget) languageService;
-		endPoint.setServiceEntryPoint(Config.OKMLanguageService);
+		endPoint.setServiceEntryPoint(Config.LanguageService);
 		languageService.getFrontEndTranslations(Main.get().getLang(), new AsyncCallback<Map<String,String>>() {
 			@Override
 			public void onSuccess(Map<String, String> result) {
@@ -362,7 +362,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	public void refreshLang(String lang) {
 		this.lang = lang;
 		ServiceDefTarget endPoint = (ServiceDefTarget) languageService;
-		endPoint.setServiceEntryPoint(Config.OKMGeneralService);
+		endPoint.setServiceEntryPoint(Config.GeneralService);
 		languageService.getFrontEndTranslations(lang, new AsyncCallback<Map<String,String>>() {
 			@Override
 			public void onSuccess(Map<String, String> result) {

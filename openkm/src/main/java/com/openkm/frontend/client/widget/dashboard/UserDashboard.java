@@ -268,7 +268,7 @@ public class UserDashboard extends Composite {
 			lockedDocuments.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
+		endPoint.setServiceEntryPoint(Config.DashboardService);		
 		dashboardService.getUserLockedDocuments(callbackGetUserLockedDocuments);
 	}
 	
@@ -293,7 +293,7 @@ public class UserDashboard extends Composite {
 			chechoutDocuments.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
+		endPoint.setServiceEntryPoint(Config.DashboardService);		
 		dashboardService.getUserCheckedOutDocuments(callbackGetUserCheckOutDocuments);
 	}
 	
@@ -305,7 +305,7 @@ public class UserDashboard extends Composite {
 			lastModifiedDocuments.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
+		endPoint.setServiceEntryPoint(Config.DashboardService);		
 		dashboardService.getUserLastModifiedDocuments(callbackGetUserLastModifiedDocuments);
 	}
 	
@@ -317,7 +317,7 @@ public class UserDashboard extends Composite {
 			subscribedDocuments.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
+		endPoint.setServiceEntryPoint(Config.DashboardService);		
 		dashboardService.getUserSubscribedDocuments(callbackGetUserSubscribedDocuments);
 	}
 	
@@ -329,7 +329,7 @@ public class UserDashboard extends Composite {
 			subscribedFolder.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
+		endPoint.setServiceEntryPoint(Config.DashboardService);		
 		dashboardService.getUserSubscribedFolders(callbackGetUserSubscribedFolders);
 	}
 	
@@ -341,7 +341,7 @@ public class UserDashboard extends Composite {
 			lastDownloadedDocuments.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
+		endPoint.setServiceEntryPoint(Config.DashboardService);		
 		dashboardService.getUserLastDownloadedDocuments(callbackGetUserLastDownloadedDocuments);
 	}
 	
@@ -353,7 +353,7 @@ public class UserDashboard extends Composite {
 			lastUploadedDocuments.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
+		endPoint.setServiceEntryPoint(Config.DashboardService);		
 		dashboardService.getUserLastUploadedDocuments(callbackGetUserLastUploadedDocuments);	
 	}
 	

@@ -181,7 +181,7 @@ public class WorkflowDashboard extends Composite {
 			pendingTasks.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);		
+		endPoint.setServiceEntryPoint(Config.WorkflowService);		
 		workflowService.findUserTaskInstances(callbackFindUserTaskInstancess);
 	}
 	
@@ -193,7 +193,7 @@ public class WorkflowDashboard extends Composite {
 			pendingPooledTasks.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);		
+		endPoint.setServiceEntryPoint(Config.WorkflowService);		
 		workflowService.findPooledTaskInstances(callbackPooledTaskInstances);
 	}
 	
@@ -204,7 +204,7 @@ public class WorkflowDashboard extends Composite {
 		if (pendingPooledTasks.getPooledTaskInstance() != null) {
 			GWTTaskInstance taskInstance = pendingPooledTasks.getPooledTaskInstance();
 			ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-			endPoint.setServiceEntryPoint(Config.OKMWorkflowService);		
+			endPoint.setServiceEntryPoint(Config.WorkflowService);		
 			workflowService.setTaskInstanceActorId(taskInstance.getId(), callbackSetTaskInstanceActorId);
 		}
 	}

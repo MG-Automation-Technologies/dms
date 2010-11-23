@@ -348,7 +348,7 @@ public class KeywordsWidget extends Composite {
 	 */
 	public void addKeyword(String keyword) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
-		endPoint.setServiceEntryPoint(Config.OKMPropertyService);
+		endPoint.setServiceEntryPoint(Config.PropertyService);
 		propertyService.addKeyword(docPath, keyword, callbackAddKeywords);
 	}
 	
@@ -357,7 +357,7 @@ public class KeywordsWidget extends Composite {
 	 */
 	public void removeKeyword(String keyword) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
-		endPoint.setServiceEntryPoint(Config.OKMPropertyService);
+		endPoint.setServiceEntryPoint(Config.PropertyService);
 		propertyService.removeKeyword(docPath, keyword, callbackRemoveKeywords);
 	}
 }

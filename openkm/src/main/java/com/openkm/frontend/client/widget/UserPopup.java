@@ -178,7 +178,7 @@ public class UserPopup extends DialogBox implements ClickHandler {
 					workspace.setPassword(userPasswordText.getText());
 					workspace.setImapID(Main.get().workspaceUserProperties.getWorkspace().getImapID());
 					ServiceDefTarget endPoint = (ServiceDefTarget) workspaceService;
-					endPoint.setServiceEntryPoint(Config.OKMWorkspaceService);
+					endPoint.setServiceEntryPoint(Config.WorkspaceService);
 					// First must validate password
 					workspaceService.isValidPassword(userPasswordText.getText(), new AsyncCallback<String>() {
 						@Override
@@ -216,7 +216,7 @@ public class UserPopup extends DialogBox implements ClickHandler {
 				imapTestOK.setVisible(false);
 				test.setEnabled(false);
 				ServiceDefTarget endPoint = (ServiceDefTarget) generalService;
-				endPoint.setServiceEntryPoint(Config.OKMGeneralService);
+				endPoint.setServiceEntryPoint(Config.GeneralService);
 				generalService.testImapConnection(hostText.getText(), imapUserText.getText(), imapUserPasswordText.getText(), imapFolderText.getText(), new AsyncCallback<GWTTestImap>() {					
 					@Override
 					public void onSuccess(GWTTestImap result) {
@@ -248,7 +248,7 @@ public class UserPopup extends DialogBox implements ClickHandler {
 				int Id = Main.get().workspaceUserProperties.getWorkspace().getImapID();
 				if (Id>=0) {
 					ServiceDefTarget endPoint = (ServiceDefTarget) workspaceService;
-					endPoint.setServiceEntryPoint(Config.OKMWorkspaceService);
+					endPoint.setServiceEntryPoint(Config.WorkspaceService);
 					workspaceService.deleteMailAccount(Id, callbackDeleteMailAccount);
 				}
 			}			

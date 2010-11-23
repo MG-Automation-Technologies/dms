@@ -460,7 +460,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		
 		// Set Form details
 		// Set the action to call on submit
-		uploadForm.setAction(Config.OKMFileUploadService);
+		uploadForm.setAction(Config.FileUploadService);
 		// Set the form encoding to multipart to indicate a file upload
 		uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
 		// Set the method to Post
@@ -807,7 +807,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	
 	private void getFileUploadStatus() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) generalService;
-		endPoint.setServiceEntryPoint(Config.OKMGeneralService);	
+		endPoint.setServiceEntryPoint(Config.GeneralService);	
 		generalService.getFileUploadStatus(callbackGetFileUploadStatus);
 	}
 	

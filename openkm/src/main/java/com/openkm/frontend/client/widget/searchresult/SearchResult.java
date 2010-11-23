@@ -335,7 +335,7 @@ public class SearchResult extends Composite {
 	public void findPaginated(GWTQueryParams params, int offset, int limit) {
 		status.setFlag_findPaginated();
 		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
-		endPoint.setServiceEntryPoint(Config.OKMSearchService);
+		endPoint.setServiceEntryPoint(Config.SearchService);
 		searchService.findPaginated(params, offset, limit, callbackFindPaginated);
 	}
 	

@@ -236,7 +236,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	 */
 	public void getRoot() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
+		endPoint.setServiceEntryPoint(Config.RepositoryService);	
 		repositoryService.getRootFolder(callbackGetRootFolder);
 	}
 	

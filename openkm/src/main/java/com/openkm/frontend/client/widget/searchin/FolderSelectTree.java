@@ -230,7 +230,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getChilds(String path) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-		endPoint.setServiceEntryPoint(Config.OKMFolderService);	
+		endPoint.setServiceEntryPoint(Config.FolderService);	
 		folderService.getChilds(path, callbackGetChilds);
 	}	
 	
@@ -239,7 +239,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getRoot() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
+		endPoint.setServiceEntryPoint(Config.RepositoryService);	
 		repositoryService.getRootFolder(callbackGetRootFolder);
 	}
 	
@@ -268,7 +268,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getTemplate() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
+		endPoint.setServiceEntryPoint(Config.RepositoryService);
 		repositoryService.getTemplatesFolder(callbackGetTemplatesFolder);
 	}
 	
@@ -297,7 +297,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getCategories() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
+		endPoint.setServiceEntryPoint(Config.RepositoryService);
 		repositoryService.getCategoriesFolder(callbackGetCategoriesFolder);
 	}
 	
@@ -326,7 +326,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getMail() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
+		endPoint.setServiceEntryPoint(Config.RepositoryService);
 		repositoryService.getMailFolder(callbackGetMailFolder);
 	}
 	
@@ -355,7 +355,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getPersonal() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
+		endPoint.setServiceEntryPoint(Config.RepositoryService);
 		repositoryService.getPersonalFolder(callbackGetPersonalFolder);
 	}
 	
@@ -384,7 +384,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getTrash() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
+		endPoint.setServiceEntryPoint(Config.RepositoryService);	
 		repositoryService.getTrashFolder(callbackGetTrashFolder);
 	}
 	

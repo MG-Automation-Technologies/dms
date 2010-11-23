@@ -248,7 +248,7 @@ public class SecurityUser extends Composite implements HasWidgets {
 	public void getGrantedUsers() {
 		if (path != null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+			endPoint.setServiceEntryPoint(Config.AuthService);	
 			authService.getGrantedUsers(path, callbackGetGrantedUsers);
 		}
 	}
@@ -259,7 +259,7 @@ public class SecurityUser extends Composite implements HasWidgets {
 	public void getUngrantedUsers() {
 		if (path != null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+			endPoint.setServiceEntryPoint(Config.AuthService);	
 			authService.getUngrantedUsers(path, callbackGetUngrantedUsers);
 		}
 	}
@@ -271,7 +271,7 @@ public class SecurityUser extends Composite implements HasWidgets {
 		if (path != null) {
 			resetUnassigned();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+			endPoint.setServiceEntryPoint(Config.AuthService);	
 			authService.getFilteredUngrantedUsers(path, filter, callbackGetUngrantedUsers);
 		}
 	}
@@ -286,7 +286,7 @@ public class SecurityUser extends Composite implements HasWidgets {
 		if (path != null) {
 			Main.get().securityPopup.status.setFlag_update();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+			endPoint.setServiceEntryPoint(Config.AuthService);	
 			authService.grantUser(path, user, permissions, recursive, callbackAddUser);
 		}
 	}
@@ -300,7 +300,7 @@ public class SecurityUser extends Composite implements HasWidgets {
 		if (path != null) {
 			Main.get().securityPopup.status.setFlag_update();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+			endPoint.setServiceEntryPoint(Config.AuthService);	
 			authService.revokeUser(path, user, recursive, callbackRevokeUser);
 		}
 	}

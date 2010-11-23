@@ -185,7 +185,7 @@ public class ProposedSubscriptionPopup extends DialogBox  {
 	 */
 	private void sendProposal() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) proposedSubscriptionService;
-		endPoint.setServiceEntryPoint(Config.OKMProposeSubscriptionService);
+		endPoint.setServiceEntryPoint(Config.ProposeSubscriptionService);
 		proposedSubscriptionService.create(uuid, path, type, users, roles, message.getText(), new AsyncCallback<Object>() {
 			@Override
 			public void onSuccess(Object result) {

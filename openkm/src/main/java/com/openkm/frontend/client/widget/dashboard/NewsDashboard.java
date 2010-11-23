@@ -176,7 +176,7 @@ public class NewsDashboard extends WidgetToFire {
 	public void getUserSearchs(boolean refreshFind) {
 		this.refreshFind = refreshFind;
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
+		endPoint.setServiceEntryPoint(Config.DashboardService);		
 		dashboardService.getUserSearchs(callbackGetUserSearchs);
 	}
 
@@ -191,7 +191,7 @@ public class NewsDashboard extends WidgetToFire {
 				hWidgetSearch.get(actualRefreshingKey).setRefreshing();
 			}
 			ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-			endPoint.setServiceEntryPoint(Config.OKMDashboardService);	
+			endPoint.setServiceEntryPoint(Config.DashboardService);	
 			dashboardService.find(Integer.parseInt(actualRefreshingKey), callbackFind);
 		} else {
 			Main.get().mainPanel.bottomPanel.userInfo.setNewsDocuments(newsDocuments);

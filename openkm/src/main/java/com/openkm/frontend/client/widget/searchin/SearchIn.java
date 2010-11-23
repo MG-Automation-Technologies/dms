@@ -1310,7 +1310,7 @@ public class SearchIn extends Composite {
 	 */
 	public void getAllUsers() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-		endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+		endPoint.setServiceEntryPoint(Config.AuthService);	
 		authService.getAllUsers(callbackGetAllUsers);
 	}
 	
@@ -1354,7 +1354,7 @@ public class SearchIn extends Composite {
 	public void saveSearch(GWTQueryParams params, String type) {
 		status.setFlag_saveSearch();
 		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
-		endPoint.setServiceEntryPoint(Config.OKMSearchService);
+		endPoint.setServiceEntryPoint(Config.SearchService);
 		searchService.saveSearch(params, type, callbackSaveSearch);
 	}	
 	

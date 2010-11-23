@@ -534,7 +534,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	 */
 	public void getChilds(String path) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-		endPoint.setServiceEntryPoint(Config.OKMFolderService);
+		endPoint.setServiceEntryPoint(Config.FolderService);
 		folderService.getChilds(path, callbackGetChilds);
 		Main.get().mainPanel.desktop.navigator.status.setFlagChilds();
 	}
@@ -549,7 +549,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	 */
 	public void getOnlyChilds(String path) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-		endPoint.setServiceEntryPoint(Config.OKMFolderService);
+		endPoint.setServiceEntryPoint(Config.FolderService);
 		folderService.getChilds(path, callbackGetOnlyChilds);
 	}
 
@@ -561,7 +561,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	 */
 	public void create(String path) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-		endPoint.setServiceEntryPoint(Config.OKMFolderService);
+		endPoint.setServiceEntryPoint(Config.FolderService);
 		// On creation the actualItem is tmpFolder and must create from the
 		// parent of tmpFolder ( the real actualItem )
 		folderService.create(path, ((GWTFolder) actualItem.getParentItem().getUserObject()).getPath(),
@@ -578,7 +578,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	 */
 	public void rename(String path) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-		endPoint.setServiceEntryPoint(Config.OKMFolderService);
+		endPoint.setServiceEntryPoint(Config.FolderService);
 		folderService.rename(((GWTFolder) actualItem.getUserObject()).getPath(), path, callbackRename);
 		Main.get().mainPanel.desktop.navigator.status.setFlagRename();
 		hideMenuPopup();
@@ -608,7 +608,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	 */
 	public void delete() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-		endPoint.setServiceEntryPoint(Config.OKMFolderService);
+		endPoint.setServiceEntryPoint(Config.FolderService);
 		String path = ((GWTFolder) actualItem.getUserObject()).getPath();
 		folderService.delete(path, callbackDelete);
 		Main.get().mainPanel.desktop.navigator.status.setFlagDelete();
@@ -685,7 +685,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	 */
 	public void addSubscription() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) notifyService;
-		endPoint.setServiceEntryPoint(Config.OKMNotifyService);
+		endPoint.setServiceEntryPoint(Config.NotifyService);
 		Main.get().mainPanel.desktop.navigator.status.setFlagAddSubscription();
 		notifyService.subscribe(((GWTFolder) actualItem.getUserObject()).getPath(), callbackAddSubscription);
 	}
@@ -695,7 +695,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	 */
 	public void removeSubscription() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) notifyService;
-		endPoint.setServiceEntryPoint(Config.OKMNotifyService);
+		endPoint.setServiceEntryPoint(Config.NotifyService);
 		Main.get().mainPanel.desktop.navigator.status.setFlagRemoveSubscription();
 		notifyService.unsubscribe(((GWTFolder) actualItem.getUserObject()).getPath(),
 				callbackRemoveSubscription);
@@ -711,11 +711,11 @@ public class FolderTree extends Composite implements OriginPanel {
 				&& !Main.get().docPath.equals("")) {
 			// Evalues if document passed by parameter is valid
 			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
-			endPoint.setServiceEntryPoint(Config.OKMDocumentService);
+			endPoint.setServiceEntryPoint(Config.DocumentService);
 			documentService.isValid(Main.get().docPath, callbackIsValidDocument);
 		} else if (Main.get().fldPath != null && !Main.get().fldPath.equals("")) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-			endPoint.setServiceEntryPoint(Config.OKMFolderService);
+			endPoint.setServiceEntryPoint(Config.FolderService);
 			folderService.isValid(Main.get().fldPath, callbackIsValidFolder);
 		}
 	}
@@ -790,7 +790,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	 */
 	private void get() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-		endPoint.setServiceEntryPoint(Config.OKMFolderService);
+		endPoint.setServiceEntryPoint(Config.FolderService);
 		Main.get().mainPanel.desktop.navigator.status.setFlagGet();
 		folderService.getProperties(((GWTFolder) actualItem.getUserObject()).getPath(), callbackGet);
 	}
@@ -1532,7 +1532,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	 */
 	public void purge() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-		endPoint.setServiceEntryPoint(Config.OKMFolderService);
+		endPoint.setServiceEntryPoint(Config.FolderService);
 		String path = ((GWTFolder) actualItem.getUserObject()).getPath();
 		folderService.purge(path, callbackPurge);
 		Main.get().mainPanel.desktop.navigator.status.setFlagPurge();
@@ -1543,7 +1543,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	 */
 	public void purgeTrash() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
+		endPoint.setServiceEntryPoint(Config.RepositoryService);
 		repositoryService.purgeTrash(callbackPurgeTrash);
 		Main.get().mainPanel.desktop.navigator.status.setFlagPurgeTrash();
 	}

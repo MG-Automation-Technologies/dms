@@ -205,7 +205,7 @@ public class GroupPopup extends DialogBox {
 		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 		if (gwtDocument!= null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-			endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
+			endPoint.setServiceEntryPoint(Config.PropertyGroupService);	
 			propertyGroupService.getAllGroups(gwtDocument.getPath(), callbackGetAllGroups);
 		}
 	}
@@ -219,7 +219,7 @@ public class GroupPopup extends DialogBox {
 			if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
 				GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 				ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-				endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
+				endPoint.setServiceEntryPoint(Config.PropertyGroupService);	
 				propertyGroupService.addGroup(gwtDocument.getPath(), grpName, callbackAddGroup);
 			}
 		}

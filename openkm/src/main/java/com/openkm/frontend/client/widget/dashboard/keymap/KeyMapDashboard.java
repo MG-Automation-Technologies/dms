@@ -578,7 +578,7 @@ public class KeyMapDashboard extends Composite {
 			keyTopTable.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
-		endPoint.setServiceEntryPoint(Config.OKMSearchService);		
+		endPoint.setServiceEntryPoint(Config.SearchService);		
 		searchService.getKeywordMap(new ArrayList<String>(), callbackGetKeywordMap);
 	}
 	
@@ -594,7 +594,7 @@ public class KeyMapDashboard extends Composite {
 			}
 			
 			ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
-			endPoint.setServiceEntryPoint(Config.OKMSearchService);		
+			endPoint.setServiceEntryPoint(Config.SearchService);		
 			searchService.getKeywordMap(filter, callbackGetKeywordMapFiltered);
 		} else {
 			keyRelatedTable.reset();
@@ -618,7 +618,7 @@ public class KeyMapDashboard extends Composite {
 		}
 		
 		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
-		endPoint.setServiceEntryPoint(Config.OKMSearchService);		
+		endPoint.setServiceEntryPoint(Config.SearchService);		
 		GWTQueryParams params = new GWTQueryParams();
 		params.setKeywords(getWordsToFilter());
 		params.setDomain(GWTQueryParams.DOCUMENT); // Only make searches for documents

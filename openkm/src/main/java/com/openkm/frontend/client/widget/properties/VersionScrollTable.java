@@ -361,7 +361,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 		if (doc != null) {
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.setVersionHistory();
 			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
-			endPoint.setServiceEntryPoint(Config.OKMDocumentService);	
+			endPoint.setServiceEntryPoint(Config.DocumentService);	
 			documentService.getVersionHistory(doc.getPath(), callbackGetVersionHistory);
 		}
 	}
@@ -373,7 +373,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 		if (doc != null) {
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.setRestoreVersion();
 			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
-			endPoint.setServiceEntryPoint(Config.OKMDocumentService);	
+			endPoint.setServiceEntryPoint(Config.DocumentService);	
 			documentService.restoreVersion(doc.getPath(), versionId, callbackRestoreVersion);
 		}
 	}
@@ -385,7 +385,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 		if (doc != null) {
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.setPurgeVersionHistory();
 			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
-			endPoint.setServiceEntryPoint(Config.OKMDocumentService);	
+			endPoint.setServiceEntryPoint(Config.DocumentService);	
 			documentService.purgeVersionHistory(doc.getPath(), callbackPurgeVersionHistory);
 		}
 	}

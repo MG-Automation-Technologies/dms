@@ -146,7 +146,7 @@ public class MailDashboard extends Composite {
 			userLastImportedMails.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
+		endPoint.setServiceEntryPoint(Config.DashboardService);		
 		dashboardService.getUserLastImportedMails(callbackGetUserLastImportedMails);
 	}
 	
@@ -158,7 +158,7 @@ public class MailDashboard extends Composite {
 			userLastImportedAttachments.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
+		endPoint.setServiceEntryPoint(Config.DashboardService);		
 		dashboardService.getUserLastImportedMailAttachments(callbackGetUserLastImportedMailAttachments);
 	}
 	

@@ -135,7 +135,7 @@ public class WizardPopup extends DialogBox {
 		if (groupsList!=null && groupsList.size()>groupIndex) {
 			status = STATUS_PROPERTY_GROUPS;
 			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-			endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
+			endPoint.setServiceEntryPoint(Config.PropertyGroupService);	
 			propertyGroupService.addGroup(docPath, groupsList.get(groupIndex).getName(), callbackAddGroup);
 			
 		} else if(groupsList==null || (groupsList!=null && groupsList.isEmpty() )) {

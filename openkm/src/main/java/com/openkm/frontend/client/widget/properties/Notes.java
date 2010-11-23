@@ -372,7 +372,7 @@ public class Notes extends Composite {
 	 */
 	private void addNote() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) noteService;
-		endPoint.setServiceEntryPoint(Config.OKMNoteService);
+		endPoint.setServiceEntryPoint(Config.NoteService);
 		String path = "";
 		if (document!=null) {
 			path = document.getPath();
@@ -434,7 +434,7 @@ public class Notes extends Composite {
 	 */
 	private void removeNote(final String notePath, final int row) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) noteService;
-		endPoint.setServiceEntryPoint(Config.OKMNoteService);
+		endPoint.setServiceEntryPoint(Config.NoteService);
 		noteService.remove(notePath, new AsyncCallback<Object>() {
 			@Override
 			public void onSuccess(Object result) {
@@ -486,7 +486,7 @@ public class Notes extends Composite {
 	 */
 	private void setNote(String notePath, final String text, final int row) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) noteService;
-		endPoint.setServiceEntryPoint(Config.OKMNoteService);
+		endPoint.setServiceEntryPoint(Config.NoteService);
 		noteService.set(notePath, text, new AsyncCallback<Object>() {
 			@Override
 			public void onSuccess(Object result) {

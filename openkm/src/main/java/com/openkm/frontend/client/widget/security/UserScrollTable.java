@@ -450,7 +450,7 @@ public class UserScrollTable extends Composite {
 		if (path != null) {
 			Main.get().securityPopup.status.setFlag_update();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+			endPoint.setServiceEntryPoint(Config.AuthService);	
 			authService.grantUser(path, user, permissions, recursive, callbackGrantUser);
 		}
 	}
@@ -465,7 +465,7 @@ public class UserScrollTable extends Composite {
 		if (path != null) {
 			Main.get().securityPopup.status.setFlag_update();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+			endPoint.setServiceEntryPoint(Config.AuthService);	
 			authService.revokeUser(path, user, permissions, recursive, callbackRevokeUser);
 		}
 	}

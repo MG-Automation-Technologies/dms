@@ -357,7 +357,7 @@ public class ManageBookmarkPopup extends DialogBox {
 	 */
 	public void getAll() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
-		endPoint.setServiceEntryPoint(Config.OKMBookmarkService);			
+		endPoint.setServiceEntryPoint(Config.BookmarkService);			
 		bookmarkService.getAll(callbackGetAll);
 	}
 	
@@ -368,7 +368,7 @@ public class ManageBookmarkPopup extends DialogBox {
 	 */
 	private void remove(int id) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
-		endPoint.setServiceEntryPoint(Config.OKMBookmarkService);			
+		endPoint.setServiceEntryPoint(Config.BookmarkService);			
 		bookmarkService.remove(id, callbackRemove);
 	}
 	
@@ -380,7 +380,7 @@ public class ManageBookmarkPopup extends DialogBox {
 	 */
 	private void rename(int id, String newName) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
-		endPoint.setServiceEntryPoint(Config.OKMBookmarkService);
+		endPoint.setServiceEntryPoint(Config.BookmarkService);
 		bookmarkService.rename(id, newName, callbackRename);
 	}
 	

@@ -168,7 +168,7 @@ public class NotifyUser extends Composite {
 	 */
 	public void getAllUsers() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-		endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+		endPoint.setServiceEntryPoint(Config.AuthService);	
 		authService.getAllUsers(callbackAllUsers);
 	}
 	
@@ -177,7 +177,7 @@ public class NotifyUser extends Composite {
 	 */
 	public void getFilteredAllUsers(String filter) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-		endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+		endPoint.setServiceEntryPoint(Config.AuthService);	
 		authService.getFilteredAllUsers(filter, notifyUsersTable.getUsersToNotifyList(), callbackAllUsers);
 	}
 	

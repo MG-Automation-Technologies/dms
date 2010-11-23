@@ -298,7 +298,7 @@ public class ThesaurusSelectPopup extends DialogBox  {
 	 */
 	public void getKeywords(String filter) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) thesaurusService;
-		endPoint.setServiceEntryPoint(Config.OKMThesaurusService);	
+		endPoint.setServiceEntryPoint(Config.ThesaurusService);	
 		status.setFlagKeywords();
 		thesaurusService.getKeywords(filter, callbackGetKeywords);
 	}

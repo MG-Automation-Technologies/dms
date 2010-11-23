@@ -131,7 +131,7 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 			disconnectChat();
 		} else {
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+			endPoint.setServiceEntryPoint(Config.AuthService);	
 			authService.logout(callbackLogout);
 			Log.debug("Logout: void");
 		}
@@ -149,7 +149,7 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 			final ChatRoomDialogBox chatRoom = Main.get().mainPanel.bottomPanel.userInfo.getChatRoomList().get(0);
 			chatRoom.setChatRoomActive(false);
 			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-			endPoint.setServiceEntryPoint(Config.OKMChatService);
+			endPoint.setServiceEntryPoint(Config.ChatService);
 			chatService.closeRoom(chatRoom.getRoom(),new AsyncCallback<Object>() {
 				@Override
 				public void onSuccess(Object arg0) {
@@ -169,13 +169,13 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 			// Disconnect chat
 			Main.get().mainPanel.bottomPanel.userInfo.disconnectChat(); // Only used to change view and disabling some RPC
 			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-			endPoint.setServiceEntryPoint(Config.OKMChatService);
+			endPoint.setServiceEntryPoint(Config.ChatService);
 			chatService.logout(new AsyncCallback<Object>() {
 				@Override
 				public void onSuccess(Object result) {
 					// Logout
 					ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-					endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+					endPoint.setServiceEntryPoint(Config.AuthService);	
 					authService.logout(callbackLogout);
 					Log.debug("Logout: void");
 				}
@@ -184,7 +184,7 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 					Main.get().showError("GetLogoutChat", caught);
 					// If happens some problem always we try logout
 					ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-					endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+					endPoint.setServiceEntryPoint(Config.AuthService);	
 					authService.logout(callbackLogout);
 					Log.debug("Logout: void");
 				}

@@ -316,7 +316,7 @@ public class WorkspaceUserProperties {
 	 */
 	private void getUpdateMessage() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
+		endPoint.setServiceEntryPoint(Config.RepositoryService);	
 		repositoryService.getUpdateMessage(callbackGetUpdateMessage);
 	}
 	
@@ -325,7 +325,7 @@ public class WorkspaceUserProperties {
 	 */
 	public void getUserWorkspace() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) workspaceService;
-		endPoint.setServiceEntryPoint(Config.OKMWorkspaceService);	
+		endPoint.setServiceEntryPoint(Config.WorkspaceService);	
 		workspaceService.getUserWorkspace(callbackGetUserWorkspace);
 	}
 	
@@ -334,7 +334,7 @@ public class WorkspaceUserProperties {
 	 */
 	public void getUserDocumentsSize() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) workspaceService;
-		endPoint.setServiceEntryPoint(Config.OKMWorkspaceService);	
+		endPoint.setServiceEntryPoint(Config.WorkspaceService);	
 		workspaceService.getUserDocumentsSize(callbackGetUserDocumentsSize);
 	}
 	
