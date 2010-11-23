@@ -101,8 +101,8 @@ public class ConverterServlet extends OKMHttpServlet {
 						}
 					}
 					
-					mimeType = DocConverter.PDF;
-					fileName = FileUtils.getFileName(fileName)+".pdf";
+					mimeType = DocConverter.DXF;
+					fileName = FileUtils.getFileName(fileName)+".dxf";
 				}
 				
 				// Convert to PDF
