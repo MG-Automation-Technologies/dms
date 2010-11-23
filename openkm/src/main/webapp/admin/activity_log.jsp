@@ -71,7 +71,7 @@
         <tr><th>Date</th><th>User</th><th>Action</th><th>Item</th><th>Params</th></tr>
         <c:forEach var="act" items="${results}" varStatus="row">
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td><fmt:formatDate value="${act.date.time}" type="both"/></td>
+            <td nowrap="nowrap"><fmt:formatDate value="${act.date.time}" type="both"/></td>
             <td>${act.user}</td><td>${act.action}</td><td>${act.item}</td><td>${act.params}</td>
           </tr>
         </c:forEach>
