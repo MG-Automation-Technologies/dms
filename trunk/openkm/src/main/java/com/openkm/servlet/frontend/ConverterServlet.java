@@ -63,7 +63,7 @@ public class ConverterServlet extends OKMHttpServlet {
 		boolean toPdf = WebUtil.getBoolean(request, "toPdf");
 		boolean toSwf = WebUtil.getBoolean(request, "toSwf");
 		boolean toDxf = WebUtil.getBoolean(request, "toDxf");
-		File tmp = File.createTempFile("okm", ".tmp");
+		File tmp = null;
 		InputStream is = null;
 		updateSessionManager(request);
 		
@@ -79,14 +79,15 @@ public class ConverterServlet extends OKMHttpServlet {
 				String fileName = FileUtils.getName(doc.getPath());
 				String mimeType = null;
 				DocConverter converter = DocConverter.getInstance();
+				tmp = File.createTempFile("okm", "."+FileUtils.getFileExtension(fileName));
 				is = OKMDocument.getInstance().getContent(null, path, false);
 				
 				// Convert to DXF
 				if (toPdf || toDxf && !Config.SYSTEM_DWG2DXF.equals("")) {
 					if (!doc.getMimeType().equals(DocConverter.DXF)) {
-						if (pdfCache.exists()) {
+						if (dxfCache.exists()) {
 							is.close();
-							is = new FileInputStream(pdfCache);
+							is = new FileInputStream(dxfCache);
 						} else {
 							if (doc.getMimeType().equals(DocConverter.DWG)) {
 								FileOutputStream os = new FileOutputStream(tmp);
@@ -97,7 +98,7 @@ public class ConverterServlet extends OKMHttpServlet {
 							}
 							
 							is.close();
-							is = new FileInputStream(pdfCache);
+							is = new FileInputStream(dxfCache);
 						}
 					}
 					
