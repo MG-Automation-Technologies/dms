@@ -21,6 +21,7 @@
 
 package com.openkm.dao;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -66,7 +67,7 @@ public class CronTabDAO {
 	 */
 	public static void update(CronTab ct) throws DatabaseException {
 		log.debug("update({})", ct);
-		String qs = "select ct.fileContent, ct.fileName from CronTab ct where ct.id=:id";
+		String qs = "select ct.fileContent, ct.fileName, ct.lastBegin, ct.lastEnd from CronTab ct where ct.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -80,6 +81,8 @@ public class CronTabDAO {
 				Object[] data = (Object[]) q.setMaxResults(1).uniqueResult();
 				ct.setFileContent((String) data[0]);
 				ct.setFileName((String) data[1]);
+				ct.setLastBegin((Calendar) data[2]);
+				ct.setLastEnd((Calendar) data[3]);
 			}
 			
 			session.update(ct);
@@ -160,5 +163,55 @@ public class CronTabDAO {
 		} finally {
 			HibernateUtil.close(session);
 		}
+	}
+	
+	/**
+	 * Set begin time
+	 */
+	public static void setLastBegin(int ctId) throws DatabaseException {
+		log.debug("setLastBegin({})", ctId);
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			CronTab ct = (CronTab) session.load(CronTab.class, ctId);
+			ct.setLastBegin(Calendar.getInstance());
+			session.update(ct);
+			HibernateUtil.commit(tx);
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("setLastBegin: void");
+	}
+	
+	/**
+	 * Set end time
+	 */
+	public static void setLastEnd(int ctId) throws DatabaseException {
+		log.debug("setLastEnd({})", ctId);
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			CronTab ct = (CronTab) session.load(CronTab.class, ctId);
+			ct.setLastEnd(Calendar.getInstance());
+			session.update(ct);
+			HibernateUtil.commit(tx);
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("setLastEnd: void");
 	}
 }
