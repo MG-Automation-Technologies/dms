@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
+import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.QueryParams;
 
 public class QueryParamsDAO {
@@ -240,4 +241,31 @@ public class QueryParamsDAO {
 			HibernateUtil.close(session);
 		}
 	}
+	
+	/**
+	 * Find all proposed
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<QueryParams> findProposed(String to) throws DatabaseException,
+			RepositoryException {
+		log.debug("findAll({}, {})", to);
+		String qs = "select qp from QueryParams qp, ProposedQuery pq where pq.to=:to and pq in elements(qp.proposed)";		
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setString("to", to);
+			List<QueryParams> ret = q.list();
+
+			log.debug("findAll: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}	
 }
