@@ -153,6 +153,8 @@ public class CronTabServlet extends BaseServlet {
 							ct.setId(Integer.parseInt(item.getString("UTF-8")));
 						} else if (item.getFieldName().equals("ct_name")) {
 							ct.setName(item.getString("UTF-8"));
+						} else if (item.getFieldName().equals("ct_mail")) {
+							ct.setMail(item.getString("UTF-8"));
 						} else if (item.getFieldName().equals("ct_expression")) {
 							ct.setExpression(item.getString("UTF-8"));
 						} else if (item.getFieldName().equals("ct_type")) {
