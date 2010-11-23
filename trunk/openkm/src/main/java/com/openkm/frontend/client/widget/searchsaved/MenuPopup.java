@@ -57,4 +57,11 @@ public class MenuPopup extends PopupPanel {
 	public void showShareSearch() {
 		menu.showShareSearch();
 	}
+	
+	/**
+	 * evaluateMenuOptions
+	 */
+	public void evaluateMenuOptions() {
+		menu.evaluateMenuOptions();
+	}
 }

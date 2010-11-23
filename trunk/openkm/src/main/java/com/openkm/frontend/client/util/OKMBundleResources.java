@@ -295,4 +295,7 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/indicator.gif")
 	public ImageResource indicator();
+	
+	@Source("com/openkm/frontend/public/img/icon/actions/share_query.gif")
+	public ImageResource sharedQuery();
 }

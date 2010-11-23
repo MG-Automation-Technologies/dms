@@ -58,6 +58,7 @@ public class GWTQueryParams implements IsSerializable {
 	private String subject = "";
 	private String categoryUuid = "";
 	private String categoryPath = "";
+	private boolean isShared = false;
 
 	private String operator = OPERATOR_AND;
 	
@@ -225,6 +226,14 @@ public class GWTQueryParams implements IsSerializable {
 		this.queryName = queryName;
 	}
 	
+	public boolean isShared() {
+		return isShared;
+	}
+
+	public void setShared(boolean isShared) {
+		this.isShared = isShared;
+	}
+	
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[");
@@ -235,6 +244,7 @@ public class GWTQueryParams implements IsSerializable {
 		sb.append(", mimeType="); sb.append(mimeType);
 		sb.append(", author="); sb.append(author);
 		sb.append(", isDashboard="+isDashboard);
+		sb.append(", isShared="+isShared);
 		sb.append(", lastModifiedFrom="); sb.append(lastModifiedFrom==null?null:lastModifiedFrom.getTime());
 		sb.append(", lastModifiedTo="); sb.append(lastModifiedTo==null?null:lastModifiedTo.getTime());
 		sb.append(", properties="); sb.append(properties);
