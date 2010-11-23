@@ -49,6 +49,7 @@ import com.openkm.frontend.client.bean.GWTResultSet;
 import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.util.KeywordComparator;
+import com.openkm.frontend.client.util.QueryParamsComparator;
 import com.openkm.util.GWTUtil;
 
 /**
@@ -86,6 +87,8 @@ public class SearchServlet extends OKMRemoteServiceServlet implements OKMSearchS
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
 		}
+		
+		Collections.sort(resultList, QueryParamsComparator.getInstance());
 		
 		log.debug("getAllSearchs: {}", resultList);
 		return resultList;
