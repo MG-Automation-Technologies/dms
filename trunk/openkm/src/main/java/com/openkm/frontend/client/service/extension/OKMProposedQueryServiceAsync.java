@@ -21,8 +21,11 @@
 
 package com.openkm.frontend.client.service.extension;
 
+import java.util.List;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
+import com.openkm.frontend.client.bean.extension.GWTProposedQuery;
 
 /**
  * @author jllort
@@ -30,4 +33,9 @@ import com.google.gwt.user.client.rpc.RemoteService;
  */
 public interface OKMProposedQueryServiceAsync extends RemoteService {
 	public void create(int qpId, String users, String roles, String comment, AsyncCallback<?> callback);
+	public void findAll(AsyncCallback<List<GWTProposedQuery>> callback);
+	public void markSeen(int msgId, AsyncCallback<?> callback);
+	public void markAccepted(int msgId, AsyncCallback<?> callback);
+	public void delete(int msgId, AsyncCallback<?> callback);
+	public void deleteAllBySender(String sender, AsyncCallback<?> callback);
 }
