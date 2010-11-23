@@ -48,7 +48,7 @@ public class Config {
 	public static final String TMP_DIR = getTempDir();
 	public static final String NULL_DEVICE = getNullDevice();
 	public static final boolean IN_SERVER = inServer();
-		
+	
 	// Scripting
 	public static final String START_SCRIPT = "start.bsh";
 	public static final String STOP_SCRIPT = "stop.bsh";
