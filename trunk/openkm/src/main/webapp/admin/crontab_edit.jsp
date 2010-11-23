@@ -30,6 +30,10 @@
             <td><input class=":required :only_on_blur" name="ct_name" value="${ct.name}"/></td>
           </tr>
           <tr>
+            <td nowrap="nowrap">Mail</td>
+            <td><input class=":required :only_on_blur" name="ct_mail" value="${ct.mail}"/></td>
+          </tr>
+          <tr>
             <td nowrap="nowrap">Expression</td>
             <td><input class=":required :only_on_blur" name="ct_expression" value="${ct.expression}"/></td>
           </tr>
