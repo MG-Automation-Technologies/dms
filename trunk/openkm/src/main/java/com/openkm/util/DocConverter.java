@@ -153,9 +153,9 @@ public class DocConverter {
 	public boolean convertibleToSwf(String from) {
 		if (!Config.SYSTEM_PDF2SWF.equals("") && (convertibleToPdf(from) || PDF.equals(from))) {
 			return true;
+		} else {
+			return false;
 		}
-		
-		return false;
 	}
 	
 	/**
@@ -164,9 +164,9 @@ public class DocConverter {
 	public boolean convertibleToDxf(String from) {
 		if (!Config.SYSTEM_DWG2DXF.equals("") && validAutoCad.contains(from)) {
 			return true;
+		} else {
+			return false;
 		}
-		
-		return false;
 	}
 
 	/**
