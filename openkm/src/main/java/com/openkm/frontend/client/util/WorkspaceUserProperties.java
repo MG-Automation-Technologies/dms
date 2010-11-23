@@ -281,8 +281,7 @@ public class WorkspaceUserProperties {
 			}
 			Main.get().mainPanel.dashboard.init();
 			
-			// Estensions
-			// Document properties
+			// Extensions enhancements
 			if (MessagingToolBarBox.isRegistered(Main.get().getExtensionUuidList())) {
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.document.showProposedSusbcription();
 				Main.get().mainPanel.search.historySearch.searchSaved.menuPopup.showShareSearch();

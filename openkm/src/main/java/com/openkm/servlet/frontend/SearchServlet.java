@@ -39,6 +39,7 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.dao.QueryParamsDAO;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTKeyword;
@@ -51,14 +52,10 @@ import com.openkm.frontend.client.util.KeywordComparator;
 import com.openkm.util.GWTUtil;
 
 /**
- * Servlet Class
+ * SearchServlet
  * 
- * @web.servlet              name="SearchServlet"
- *                           display-name="Directory tree service"
- *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/SearchServlet"
- * @web.servlet-init-param   name="A parameter"
- *                           value="A value"
+ * @author jllort
+ *
  */
 public class SearchServlet extends OKMRemoteServiceServlet implements OKMSearchService {
 	private static Logger log = LoggerFactory.getLogger(SearchServlet.class);
@@ -273,5 +270,31 @@ public class SearchServlet extends OKMRemoteServiceServlet implements OKMSearchS
 		
 		log.debug("getKeywordMap: {}", keyList);
 		return keyList;
+	}
+
+	@Override
+	public void share(int qpId) throws OKMException {
+		log.debug("share({})", qpId);
+		updateSessionManager();
+		try {
+			QueryParamsDAO.share(qpId, getThreadLocalRequest().getRemoteUser());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+		log.debug("share: void");
+	}
+
+	@Override
+	public void unshare(int qpId) throws OKMException {
+		log.debug("share({})", qpId);
+		updateSessionManager();
+		try {
+			QueryParamsDAO.unshare(qpId, getThreadLocalRequest().getRemoteUser());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+		log.debug("share: void");
 	}
 }
