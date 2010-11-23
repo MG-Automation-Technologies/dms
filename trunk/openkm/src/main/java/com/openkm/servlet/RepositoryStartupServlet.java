@@ -68,7 +68,12 @@ import com.openkm.util.WarUtils;
 public class RepositoryStartupServlet extends HttpServlet {
 	private static Logger log = LoggerFactory.getLogger(RepositoryStartupServlet.class);
 	private static final long serialVersionUID = 207151527252937549L;
-	private Timer timer;
+	private Timer dsgcTimer;
+	private Timer wdTimer;
+	private Timer riTimer;
+	private Timer uiTimer;
+	private Timer umiTimer;
+	private Timer cronTimer;
 	private Watchdog wd;
 	private Cron cron;
 	private UpdateInfo ui;
@@ -138,8 +143,13 @@ public class RepositoryStartupServlet extends HttpServlet {
         	hasConfiguredDataStore = true;
         }
         
-        // Scheduler
-        timer = new Timer();
+        // Create timers
+		uiTimer = new Timer();
+		wdTimer = new Timer();
+		cronTimer = new Timer();
+		riTimer = new Timer();
+		umiTimer = new Timer();
+		dsgcTimer = new Timer();
         
         // Workflow
         log.info("*** Initializing workflow engine... ***");
@@ -156,12 +166,12 @@ public class RepositoryStartupServlet extends HttpServlet {
         if (Config.UPDATE_INFO) {
         	 log.info("*** Activating update info ***");
         	 ui = new UpdateInfo();
-        	 timer.schedule(ui, 1000, 24*60*60*1000); // First in 1 seg, next each 24 hours
+        	 uiTimer.schedule(ui, 1000, 24*60*60*1000); // First in 1 seg, next each 24 hours
         }
 		
         log.info("*** Activating watchdog ***");
         wd = new Watchdog();
-        timer.schedule(wd, 60*1000, 5*60*1000); // First in 1 min, next each 5 mins
+        wdTimer.schedule(wd, 60*1000, 5*60*1000); // First in 1 min, next each 5 mins
         
         log.info("*** Activating cron ***");
         cron = new Cron();
@@ -170,16 +180,16 @@ public class RepositoryStartupServlet extends HttpServlet {
         calCron.set(Calendar.SECOND, 0);
         calCron.set(Calendar.MILLISECOND, 0);
         // Round begin to next minute, 0 seconds, 0 miliseconds
-        timer.scheduleAtFixedRate(cron, calCron.getTime(), 60*1000); // First in 1 min, next each 1 min
+        cronTimer.scheduleAtFixedRate(cron, calCron.getTime(), 60*1000); // First in 1 min, next each 1 min
         
         log.info("*** Activating repository info ***");
         ri = new RepositoryInfo();
-        timer.schedule(ri, 60*1000, Config.SCHEDULE_REPOSITORY_INFO); // First in 1 min, next each X minutes
+        riTimer.schedule(ri, 60*1000, Config.SCHEDULE_REPOSITORY_INFO); // First in 1 min, next each X minutes
         
         if (Config.SCHEDULE_MAIL_IMPORTER > 0) {
         	log.info("*** Activating user mail importer ***");
         	umi = new UserMailImporter();
-        	timer.schedule(umi, 5*60*1000, Config.SCHEDULE_MAIL_IMPORTER); // First in 5 mins, next each X minutes
+        	umiTimer.schedule(umi, 5*60*1000, Config.SCHEDULE_MAIL_IMPORTER); // First in 5 mins, next each X minutes
         } else {
         	log.info("*** User mail importer disabled ***");
         }
@@ -193,7 +203,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         	calGc.set(Calendar.MINUTE, 0);
         	calGc.set(Calendar.SECOND, 0);
         	calGc.set(Calendar.MILLISECOND, 0);
-        	timer.scheduleAtFixedRate(dsgc, calGc.getTime(), 24*60*60*1000); // First tomorrow at 00:00, next each 24 hours
+        	dsgcTimer.scheduleAtFixedRate(dsgc, calGc.getTime(), 24*60*60*1000); // First tomorrow at 00:00, next each 24 hours
         }
         
         try {
@@ -266,8 +276,14 @@ public class RepositoryStartupServlet extends HttpServlet {
         	ui.cancel();
         }
         
-        timer.cancel();
-        
+        // Cancel timers
+        dsgcTimer.cancel();
+        umiTimer.cancel();
+        riTimer.cancel();
+        cronTimer.cancel();
+        wdTimer.cancel();
+        uiTimer.cancel();
+		
         if (log == null) log("*** Shutting down workflow engine... ***");
         else log.info("*** Shutting down workflow engine... ***");
         JbpmContext jbpmContext = JBPMUtil.getConfig().createJbpmContext();
