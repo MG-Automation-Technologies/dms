@@ -30,10 +30,10 @@
             <td>
               <c:choose>
                 <c:when test="${action != 'create'}">
-                  <input size="30" class=":required :only_on_blur" name="cfg_key" value="${cfg.key}" readonly="readonly"/>
+                  <input size="50" class=":required :only_on_blur" name="cfg_key" value="${cfg.key}" readonly="readonly"/>
                 </c:when>
                 <c:otherwise>
-                  <input size="30" class=":required :only_on_blur" name="cfg_key" value=""/>
+                  <input size="50" class=":required :only_on_blur" name="cfg_key" value=""/>
                 </c:otherwise>
               </c:choose>
             </td>
@@ -60,7 +60,7 @@
             <td>
               <c:choose>
                 <c:when test="${cfg.type == 'string' || cfg.type == 'integer'}">
-                  <input size="30" name="cfg_value" value="${cfg.value}"/>
+                  <input size="50" name="cfg_value" value="${cfg.value}"/>
                 </c:when>
                 <c:when test="${cfg.type == 'boolean'}">
                   <c:choose>
