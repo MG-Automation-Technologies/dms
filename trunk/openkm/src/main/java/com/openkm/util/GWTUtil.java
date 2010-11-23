@@ -1144,8 +1144,15 @@ public class GWTUtil {
 	 * 
 	 * @param pq
 	 * @return
+	 * @throws DatabaseException 
+	 * @throws ParseException 
+	 * @throws PathNotFoundException 
+	 * @throws IOException 
+	 * @throws RepositoryException 
 	 */
-	public static GWTProposedQuery copy(ProposedQuery pq) {
+	public static GWTProposedQuery copy(ProposedQuery pq, QueryParams params) throws RepositoryException, IOException, 
+																					 PathNotFoundException, ParseException, 
+																					 DatabaseException {
 		GWTProposedQuery gWTProposedQuery = new GWTProposedQuery();
 		gWTProposedQuery.setAccepted(pq.isAccepted());
 		gWTProposedQuery.setComment(pq.getComment());
@@ -1156,7 +1163,7 @@ public class GWTUtil {
 		if (pq.getSeenDate()!=null) {
 			gWTProposedQuery.setSeenDate(pq.getSeenDate().getTime());
 		}
-		
+		gWTProposedQuery.setParams(copy(params));
 		return gWTProposedQuery;
 	}
 }
