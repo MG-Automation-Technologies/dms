@@ -510,19 +510,20 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 			}
 		} else if (doc.isConvertibleToDxf()) {
 			PreviewExtension previewExtension = null;
+			
 			for (PreviewExtension preview : widgetPreviewExtensionList) {
 				if (preview.hasMimeTypePreviewer(doc.getMimeType())) {
 					previewExtension = preview;
 					break;
 				}
 			}
+			
 			if (previewExtension!=null) {
 				preview.showPreviewExtension(previewExtension, Config.OKMDownloadServlet +"?uuid=" + URL.encodeComponent(getDocument().getUuid()));
 			} else {
 				// There's no preview
 				preview.showEmbedSWF(doc.getUuid());
 			}
-			
 		} else {
 			preview.showEmbedSWF(doc.getUuid());
 		}
