@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.extension.comunicator.GeneralComunicator;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.ConfirmPopup;
@@ -41,6 +42,8 @@ public class Menu extends Composite {
 	private MenuItem run;
 	private MenuItem delete;
 	private MenuItem share;
+	
+	private boolean shareOption = false;
 	
 	/**
 	 * Browser menu
@@ -82,8 +85,10 @@ public class Menu extends Composite {
 	// Command menu to go directory file
 	Command shareSearch = new Command() {
 		public void execute() {
-			Main.get().proposedQueryPopup.executeProposeQuery();
-			hide();
+			if (shareOption) {
+				Main.get().proposedQueryPopup.executeProposeQuery();
+				hide();
+			}
 		}
 	};
 
@@ -107,5 +112,39 @@ public class Menu extends Composite {
 	 */
 	public void showShareSearch() {
 		searchSavedMenu.addItem(share);
+	}
+	
+	/**
+	 * evaluateMenuOptions
+	 */
+	public void evaluateMenuOptions() {
+		GWTQueryParams search = Main.get().mainPanel.search.historySearch.searchSaved.getSavedSearch();
+		if (search!=null && !search.isShared()) {
+			shareOption = true;
+			enable(share);
+		} else {
+			shareOption = false;
+			disable(share);
+		}
+	}
+	
+	/**
+	 * Enables menu item
+	 * 
+	 * @param menuItem The menu item
+	 */
+	public void enable(MenuItem menuItem) {
+		menuItem.addStyleName("okm-MenuItem");
+		menuItem.removeStyleName("okm-MenuItem-strike");
+	}
+	
+	/**
+	 * Disable the menu item
+	 * 
+	 * @param menuItem The menu item
+	 */
+	public void disable(MenuItem menuItem) {
+		menuItem.removeStyleName("okm-MenuItem");
+		menuItem.addStyleName("okm-MenuItem-strike");
 	}
 }

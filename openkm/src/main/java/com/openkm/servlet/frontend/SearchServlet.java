@@ -71,6 +71,11 @@ public class SearchServlet extends OKMRemoteServiceServlet implements OKMSearchS
 			for (Iterator<QueryParams> it = OKMSearch.getInstance().getAllSearchs(null).iterator(); it.hasNext();) {		
 				resultList.add(GWTUtil.copy(it.next()));
 			}
+			for (QueryParams params : QueryParamsDAO.findShared(getThreadLocalRequest().getRemoteUser())) {
+				GWTQueryParams gWTQueryParams = GWTUtil.copy(params);
+				gWTQueryParams.setShared(true);
+				resultList.add(gWTQueryParams);
+			}
 		}  catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
