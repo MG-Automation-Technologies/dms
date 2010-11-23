@@ -21,6 +21,8 @@
 
 package com.openkm.servlet.extension;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,13 +31,20 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMAuth;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.ParseException;
+import com.openkm.core.PathNotFoundException;
+import com.openkm.core.RepositoryException;
 import com.openkm.dao.ProposedQueryDAO;
+import com.openkm.dao.QueryParamsDAO;
 import com.openkm.dao.bean.ProposedQuery;
+import com.openkm.dao.bean.QueryParams;
 import com.openkm.frontend.client.OKMException;
+import com.openkm.frontend.client.bean.extension.GWTProposedQuery;
 import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.service.extension.OKMProposedQueryService;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.servlet.frontend.OKMRemoteServiceServlet;
+import com.openkm.util.GWTUtil;
 
 /**
  * ProposedQueryServlet
@@ -82,6 +91,100 @@ public class ProposedQueryServlet extends OKMRemoteServiceServlet implements OKM
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedQueryService, ErrorCode.CAUSE_PrincipalAdapter), e.getMessage());
 		}
+	}
+
+	@Override
+	public List<GWTProposedQuery> findAll() throws OKMException {
+		log.debug("findAll()");
+		updateSessionManager();
+		List<GWTProposedQuery> pqList = new ArrayList<GWTProposedQuery>();
+		try {
+			String user = getThreadLocalRequest().getRemoteUser();
+			for (QueryParams params : QueryParamsDAO.findProposed(user)) {
+				for (ProposedQuery proposed : params.getProposed()) {
+					if (proposed.getTo().equals(user)) {
+						pqList.add(GWTUtil.copy(proposed, params));
+					}
+				}
+			} 
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedQueryService, ErrorCode.CAUSE_Database), e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedQueryService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (IOException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedQueryService, ErrorCode.CAUSE_IO), e.getMessage());
+		} catch (PathNotFoundException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedQueryService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+		} catch (ParseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedQueryService, ErrorCode.CAUSE_Parse), e.getMessage());
+		}
+		log.debug("findAll: List"+pqList);
+		return pqList;
+	}
+
+	@Override
+	public void delete(int msgId) throws OKMException {
+		log.debug("delete({})", msgId);
+		updateSessionManager();
+		try {
+			ProposedQueryDAO.delete(msgId);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedQueryService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+		log.debug("delete() : void");
+	}
+
+	@Override
+	public void deleteAllBySender(String sender) throws OKMException {
+		log.debug("deleteAllBySender()");
+		updateSessionManager();
+		List<String> IdToDelete = new ArrayList<String>();
+		try {			
+			for (ProposedQuery pq : ProposedQueryDAO.findByUser(getThreadLocalRequest().getRemoteUser())) {
+				if (pq.getFrom().equals(sender)) {
+					IdToDelete.add(String.valueOf(pq.getId()));
+				}
+			}
+			for (String id : IdToDelete) {
+				ProposedQueryDAO.delete(Integer.valueOf(id));
+			}
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedQueryService, ErrorCode.CAUSE_Database), e.getMessage());
+		} 
+		log.debug("deleteAllBySender: void");
+	}
+
+	@Override
+	public void markAccepted(int msgId) throws OKMException {
+		log.debug("markAccepted({})", msgId);
+		updateSessionManager();
+		try {
+			ProposedQueryDAO.markAccepted(msgId);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedQueryService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+		log.debug("markAccepted() : void");
+	}
+
+	@Override
+	public void markSeen(int msgId) throws OKMException {
+		log.debug("markSeen({})", msgId);
+		updateSessionManager();
+		try {
+			ProposedQueryDAO.markSeen(msgId);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedQueryService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+		log.debug("markSeen() : void");
 	}
 }
 	
