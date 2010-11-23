@@ -106,6 +106,7 @@ public class ConfigServlet extends BaseServlet {
 			cfg.setKey(cfgKey);
 			cfg.setType(WebUtil.getString(request, "cfg_type"));
 			cfg.setValue(WebUtil.getString(request, "cfg_value"));
+			prependPath(cfg);
 			ConfigDAO.create(cfg);
 			com.openkm.core.Config.reload(sc.getContextPath().substring(1));
 			
@@ -140,6 +141,7 @@ public class ConfigServlet extends BaseServlet {
 				cfg.setValue(WebUtil.getString(request, "cfg_value"));
 			}
 			
+			prependPath(cfg);
 			ConfigDAO.update(cfg);
 			com.openkm.core.Config.reload(sc.getContextPath().substring(1));
 			
@@ -148,6 +150,7 @@ public class ConfigServlet extends BaseServlet {
 		} else {
 			String cfgKey = WebUtil.getString(request, "cfg_key");
 			Config cfg = ConfigDAO.findByPk(cfgKey);
+			cleanPath(cfg);
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("types", types);
@@ -173,6 +176,7 @@ public class ConfigServlet extends BaseServlet {
 		} else {
 			String cfgKey = WebUtil.getString(request, "cfg_key");
 			Config cfg = ConfigDAO.findByPk(cfgKey);
+			cleanPath(cfg);
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("types", types);
@@ -202,10 +206,44 @@ public class ConfigServlet extends BaseServlet {
 			} else if (Config.LONG.equals(cfg.getType())) {
 				cfg.setType("Long");
 			}
+			
+			cleanPath(cfg);
 		}
 		
 		sc.setAttribute("configs", list);
 		sc.getRequestDispatcher("/admin/config_list.jsp").forward(request, response);
 		log.debug("list: void");
-	}	
+	}
+	
+	/**
+	 * Remove dangerous path when multiple instances configuration
+	 */
+	private void cleanPath(Config cfg) {
+		if (com.openkm.core.Config.MULTIPLE_INSTANCES) {
+			if (cfg.getValue().startsWith(com.openkm.core.Config.HOME_DIR)) {
+				cfg.setValue(com.openkm.core.Config.OPENKM_HOME + 
+						cfg.getValue().substring(com.openkm.core.Config.HOME_DIR.length()));
+			} else if (cfg.getValue().startsWith("file:" + com.openkm.core.Config.HOME_DIR)) {
+				cfg.setValue(com.openkm.core.Config.OPENKM_WAR +
+						cfg.getValue().substring(("file:" + com.openkm.core.Config.HOME_DIR + 
+								"/server/default/deploy/" + com.openkm.core.Config.CONTEXT + ".war").length()));
+			}
+		}
+	}
+	
+	/**
+	 * Add real path when multiple instances configuration
+	 */
+	private void prependPath(Config cfg) {
+		if (com.openkm.core.Config.MULTIPLE_INSTANCES) {
+			if (cfg.getValue().startsWith(com.openkm.core.Config.OPENKM_HOME)) {
+				cfg.setValue(com.openkm.core.Config.HOME_DIR + 
+						cfg.getValue().substring(com.openkm.core.Config.OPENKM_HOME.length()));
+			} else if (cfg.getValue().startsWith(com.openkm.core.Config.OPENKM_WAR)) {
+				cfg.setValue("file:" + com.openkm.core.Config.HOME_DIR + "/server/default/deploy/" +
+						com.openkm.core.Config.CONTEXT + ".war" + 
+						cfg.getValue().substring(com.openkm.core.Config.OPENKM_WAR.length()));
+			}
+		}
+	}
 }
