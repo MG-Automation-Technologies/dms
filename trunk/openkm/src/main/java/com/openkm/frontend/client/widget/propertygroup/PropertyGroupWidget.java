@@ -344,7 +344,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 		}
 
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
+		endPoint.setServiceEntryPoint(Config.PropertyGroupService);	
 		propertyGroupService.setProperties(docPath, grpName, formElementList, callbackSetProperties);
 	}
 	
@@ -683,7 +683,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	 */
 	public void getProperties() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
+		endPoint.setServiceEntryPoint(Config.PropertyGroupService);	
 		propertyGroupService.getProperties(docPath, grpName, callbackGetProperties);
 	}
 
@@ -692,7 +692,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	 */
 	public void removeGroup() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
+		endPoint.setServiceEntryPoint(Config.PropertyGroupService);	
 		propertyGroupService.removeGroup(docPath, grpName, callbackRemoveGroup);
 	}
 	

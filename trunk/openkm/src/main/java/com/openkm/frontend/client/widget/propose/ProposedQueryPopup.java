@@ -178,7 +178,7 @@ public class ProposedQueryPopup extends DialogBox  {
 	 */
 	private void sendProposal() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) proposedQueryService;
-		endPoint.setServiceEntryPoint(Config.OKMProposeQueryService);
+		endPoint.setServiceEntryPoint(Config.ProposeQueryService);
 		GWTQueryParams params = Main.get().mainPanel.search.historySearch.searchSaved.getSavedSearch();
 		proposedQueryService.create(params.getId(), users, roles, message.getText(), new AsyncCallback<Object>() {
 			@Override

@@ -300,7 +300,7 @@ public class GroupPopup extends DialogBox {
 	 */
 	private void getAllGroups() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
+		endPoint.setServiceEntryPoint(Config.PropertyGroupService);	
 		propertyGroupService.getAllGroups(callbackGetAllGroups);
 	}
 	
@@ -309,7 +309,7 @@ public class GroupPopup extends DialogBox {
 	 */
 	private void getMetaData() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
+		endPoint.setServiceEntryPoint(Config.PropertyGroupService);	
 		propertyGroupService.getPropertyGroupForm(groupListBox.getValue(groupListBox.getSelectedIndex()), callbackGetPropertyGroupForm);
 	}
 	
@@ -329,7 +329,7 @@ public class GroupPopup extends DialogBox {
 		if (groupListBox.getItemCount()>validate) {
 			String value = groupListBox.getValue(validate);
 			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-			endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
+			endPoint.setServiceEntryPoint(Config.PropertyGroupService);	
 			propertyGroupService.getPropertyGroupForm(value, callbackGetPropertyGroupFormDataToValidate);
 		} else {
 			// Validate button 

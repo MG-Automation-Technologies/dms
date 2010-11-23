@@ -370,7 +370,7 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 		if (path != null) {
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.setUserSecurity();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+			endPoint.setServiceEntryPoint(Config.AuthService);	
 			authService.getGrantedUsers(path, callbackGetGrantedUsers);
 		}
 	}
@@ -383,7 +383,7 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 		if (path != null) {
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.setRoleSecurity();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+			endPoint.setServiceEntryPoint(Config.AuthService);	
 			authService.getGrantedRoles(path, callbackGetGrantedRoles);
 		}
 	}

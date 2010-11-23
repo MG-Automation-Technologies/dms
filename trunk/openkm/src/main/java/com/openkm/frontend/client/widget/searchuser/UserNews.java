@@ -214,7 +214,7 @@ public class UserNews extends Composite {
 			status.setFlag_getUserNews();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(Config.OKMDashboardService);
+		endPoint.setServiceEntryPoint(Config.DashboardService);
 		dashboardService.getUserSearchs(callbackGetUserSearchs);
 	}
 	
@@ -242,7 +242,7 @@ public class UserNews extends Composite {
 			status.setFlag_deleteSearch();
 			searchIdToDelete = Integer.parseInt(table.getText(getSelectedRow(),1));
 			ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
-			endPoint.setServiceEntryPoint(Config.OKMSearchService);
+			endPoint.setServiceEntryPoint(Config.SearchService);
 			searchService.deleteSearch(searchIdToDelete, callbackDeleteSearch);
 		}
 	}

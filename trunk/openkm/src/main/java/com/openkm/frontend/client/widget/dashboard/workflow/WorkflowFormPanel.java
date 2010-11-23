@@ -344,7 +344,7 @@ public class WorkflowFormPanel extends Composite {
 							               "</b>");
 					
 					ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-					endPoint.setServiceEntryPoint(Config.OKMRepositoryService);		
+					endPoint.setServiceEntryPoint(Config.RepositoryService);		
 					repositoryService.getPathByUUID(value, new AsyncCallback<String>() {
 						@Override
 						public void onSuccess(final String docPath) {
@@ -456,7 +456,7 @@ public class WorkflowFormPanel extends Composite {
 	 */
 	public void getProcessDefinitionForms(double id) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);		
+		endPoint.setServiceEntryPoint(Config.WorkflowService);		
 		workflowService.getProcessDefinitionForms(id, callbackGetProcessDefinitionForms);
 	}
 	
@@ -898,7 +898,7 @@ public class WorkflowFormPanel extends Composite {
 		}
 		
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);		
+		endPoint.setServiceEntryPoint(Config.WorkflowService);		
 		workflowService.setTaskInstanceValues(id, transitionName, formElementList, callbackSetTaskInstanceValues);
 	}
 	
@@ -994,7 +994,7 @@ public class WorkflowFormPanel extends Composite {
 	private void addComment() {
 		if (!textArea.getText().equals("")) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-			endPoint.setServiceEntryPoint(Config.OKMWorkflowService);
+			endPoint.setServiceEntryPoint(Config.WorkflowService);
 			workflowService.addComment(taskInstance.getProcessInstance().getRootToken().getId(), textArea.getText(), callbackAddComment);
 		}
 	}

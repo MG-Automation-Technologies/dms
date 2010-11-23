@@ -234,7 +234,7 @@ public class WorkflowPopup extends DialogBox {
 	 */
 	private void findLatestProcessDefinitions() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);	
+		endPoint.setServiceEntryPoint(Config.WorkflowService);	
 		workflowService.findLatestProcessDefinitions(callbackFindLatestProcessDefinitions);
 	}	
 	
@@ -312,7 +312,7 @@ public class WorkflowPopup extends DialogBox {
 		
 		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);
+		endPoint.setServiceEntryPoint(Config.WorkflowService);
 		workflowService.runProcessDefinition(gwtDocument.getUuid(), 
 				new Double(listBox.getValue(listBox.getSelectedIndex())).doubleValue(),
 				formFieldList, callbackRunProcessDefinition);
@@ -350,7 +350,7 @@ public class WorkflowPopup extends DialogBox {
 	 */
 	public void getProcessDefinitionForms(double id) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);		
+		endPoint.setServiceEntryPoint(Config.WorkflowService);		
 		workflowService.getProcessDefinitionForms(id, callbackGetProcessDefinitionForms);
 	}
 	

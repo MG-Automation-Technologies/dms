@@ -624,11 +624,11 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		if (Main.get().userHome!=null && !Main.get().userHome.getHomePath().equals("")) {
 			if (Main.get().userHome.getHomeType().equals(Bookmark.BOOKMARK_DOCUMENT)) {
 				ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
-				endPoint.setServiceEntryPoint(Config.OKMDocumentService);
+				endPoint.setServiceEntryPoint(Config.DocumentService);
 				documentService.isValid( Main.get().userHome.getHomePath() ,callbackIsValidDocument);
 			} else if (Main.get().userHome.getHomeType().equals(Bookmark.BOOKMARK_FOLDER)) {
 				ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-				endPoint.setServiceEntryPoint(Config.OKMFolderService);	
+				endPoint.setServiceEntryPoint(Config.FolderService);	
 				folderService.isValid(Main.get().userHome.getHomePath(), callbackIsValidFolder);
 			}
 		}
@@ -2488,7 +2488,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 		if (gwtDocument!= null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-			endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
+			endPoint.setServiceEntryPoint(Config.PropertyGroupService);	
 			propertyGroupService.getAllGroups(gwtDocument.getPath(), callbackGetAllGroups);
 		}
 	}

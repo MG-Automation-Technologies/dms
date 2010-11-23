@@ -589,7 +589,7 @@ public class Document extends Composite {
 	public void getVersionHistorySize() {
 		Main.get().mainPanel.desktop.browser.tabMultiple.status.setGetVersionHistorySize();
 		ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
-		endPoint.setServiceEntryPoint(Config.OKMDocumentService);
+		endPoint.setServiceEntryPoint(Config.DocumentService);
 		documentService.getVersionHistorySize(document.getPath(), callbackGetVersionHistorySize);
 	}
 	
@@ -598,7 +598,7 @@ public class Document extends Composite {
 	 */
 	public void addKeyword(String keyword) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
-		endPoint.setServiceEntryPoint(Config.OKMPropertyService);
+		endPoint.setServiceEntryPoint(Config.PropertyService);
 		propertyService.addKeyword(document.getPath(), keyword, callbackAddKeywords);
 	}
 	
@@ -608,7 +608,7 @@ public class Document extends Composite {
 	public void removeKeyword(String keyword) {
 		Main.get().mainPanel.desktop.browser.tabMultiple.status.setKeywords();
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
-		endPoint.setServiceEntryPoint(Config.OKMPropertyService);
+		endPoint.setServiceEntryPoint(Config.PropertyService);
 		propertyService.removeKeyword(document.getPath(), keyword, callbackRemoveKeywords);
 	}
 	
@@ -621,7 +621,7 @@ public class Document extends Composite {
 			drawCategory(category,remove);
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.setCategories();
 			ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
-			endPoint.setServiceEntryPoint(Config.OKMPropertyService);
+			endPoint.setServiceEntryPoint(Config.PropertyService);
 			propertyService.addCategory(document.getPath(), category.getUuid(), callbackAddCategory);
 		}
 	}
@@ -632,7 +632,7 @@ public class Document extends Composite {
 	public void removeCategory(String UUID) {
 		Main.get().mainPanel.desktop.browser.tabMultiple.status.setCategories();
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
-		endPoint.setServiceEntryPoint(Config.OKMPropertyService);
+		endPoint.setServiceEntryPoint(Config.PropertyService);
 		propertyService.removeCategory(document.getPath(), UUID, callbackRemoveCategory);
 	}
 	

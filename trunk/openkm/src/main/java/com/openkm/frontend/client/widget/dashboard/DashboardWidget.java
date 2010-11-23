@@ -458,7 +458,7 @@ public class DashboardWidget extends Composite {
 	 */
 	public void visiteNode(String source, String node, Date date) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
+		endPoint.setServiceEntryPoint(Config.DashboardService);		
 		dashboardService.visiteNode(source, node, date, callbackVisiteNode);
 	}
 	
@@ -535,7 +535,7 @@ public class DashboardWidget extends Composite {
 			feedImage.addClickHandler(new ClickHandler() { 
 				@Override
 				public void onClick(ClickEvent event) {
-					Window.open(Config.OKMFeedService+feedUrl, "_blank", null);
+					Window.open(Config.FeedService+feedUrl, "_blank", null);
 				}
 			});
 			

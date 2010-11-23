@@ -211,7 +211,7 @@ public class SearchSaved extends Composite {
 			status.setFlag_getSearchs();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
-		endPoint.setServiceEntryPoint(Config.OKMSearchService);
+		endPoint.setServiceEntryPoint(Config.SearchService);
 		searchService.getAllSearchs(callbackGetSearchs);
 	}
 	
@@ -260,7 +260,7 @@ public class SearchSaved extends Composite {
 			status.setFlag_deleteSearch();
 			searchIdToDelete = Integer.parseInt(table.getText(getSelectedRow(),1));
 			ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
-			endPoint.setServiceEntryPoint(Config.OKMSearchService);
+			endPoint.setServiceEntryPoint(Config.SearchService);
 			searchService.deleteSearch(searchIdToDelete, callbackDeleteSearch);
 		}
 	}

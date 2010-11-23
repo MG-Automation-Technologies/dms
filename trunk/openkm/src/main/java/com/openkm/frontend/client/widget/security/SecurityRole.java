@@ -247,7 +247,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 	public void getGrantedRoles() {
 		if (path != null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+			endPoint.setServiceEntryPoint(Config.AuthService);	
 			authService.getGrantedRoles(path, callbackGetGrantedRoles);
 		}
 	}
@@ -258,7 +258,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 	public void getUngrantedRoles() {
 		if (path != null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+			endPoint.setServiceEntryPoint(Config.AuthService);	
 			authService.getUngrantedRoles(path, callbackGetUngrantedRoles);
 		}
 	}
@@ -270,7 +270,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 		if (path != null) {
 			resetUnassigned();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+			endPoint.setServiceEntryPoint(Config.AuthService);	
 			authService.getFilteredUngrantedRoles(path, filter, callbackGetUngrantedRoles);
 		}
 	}
@@ -285,7 +285,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 		if (path != null) {
 			Main.get().securityPopup.status.setFlag_update();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+			endPoint.setServiceEntryPoint(Config.AuthService);	
 			authService.grantRole(path, role, permissions, recursive, callbackAddRole);
 		}
 	}
@@ -299,7 +299,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 		if (path != null) {
 			Main.get().securityPopup.status.setFlag_update();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+			endPoint.setServiceEntryPoint(Config.AuthService);	
 			authService.revokeRole(path, role, recursive, callbackRevokeRole);
 		}
 	}

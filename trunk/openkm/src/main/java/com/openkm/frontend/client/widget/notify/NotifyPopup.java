@@ -204,7 +204,7 @@ public class NotifyPopup extends DialogBox  {
 	 */
 	private void sendLinkNotification() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) notifyService;
-		endPoint.setServiceEntryPoint(Config.OKMNotifyService);	
+		endPoint.setServiceEntryPoint(Config.NotifyService);	
 		switch(type) {
 			case NOTIFY_WITH_LINK:
 				notifyService.notify(doc.getPath(), users, roles, message.getText(), false, callbackNotify);

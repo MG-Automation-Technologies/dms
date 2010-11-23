@@ -100,7 +100,7 @@ public class FilePath  extends Composite {
 	 */
 	public void getRootPath() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
+		endPoint.setServiceEntryPoint(Config.RepositoryService);	
 		repositoryService.getRootFolder(callbackGetRootFolder);
 	}	
 }

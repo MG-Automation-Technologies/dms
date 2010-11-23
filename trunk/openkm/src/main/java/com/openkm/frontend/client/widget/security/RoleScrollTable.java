@@ -448,7 +448,7 @@ public class RoleScrollTable extends Composite {
 		if (path != null) {
 			Main.get().securityPopup.status.setFlag_update();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(Config.OKMAuthService);
+			endPoint.setServiceEntryPoint(Config.AuthService);
 			authService.grantRole(path, role, permissions, recursive, callbackGrantRole);
 		}
 	}
@@ -463,7 +463,7 @@ public class RoleScrollTable extends Composite {
 		if (path != null) {
 			Main.get().securityPopup.status.setFlag_update();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+			endPoint.setServiceEntryPoint(Config.AuthService);	
 			authService.revokeRole(path, role, permissions, recursive, callbackRevokeRole);
 		}
 	}

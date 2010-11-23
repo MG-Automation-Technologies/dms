@@ -370,7 +370,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	private void getGroups(String docPath) {
 		Main.get().mainPanel.desktop.browser.tabMultiple.status.setGroupProperties();
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
+		endPoint.setServiceEntryPoint(Config.PropertyGroupService);	
 		propertyGroupService.getGroups(docPath, callbackGetGroups);
 	}
 	
@@ -507,7 +507,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 				doc.getMimeType().equals("application/x-shockwave-flash") ||  
 				doc.getMimeType().equals("audio/mpeg")) {
 			if (!refreshing) {
-				preview.showMediaFile(Config.OKMDownloadServlet +"?uuid=" + URL.encodeComponent(getDocument().getUuid()), getDocument().getMimeType());
+				preview.showMediaFile(Config.DownloadServlet +"?uuid=" + URL.encodeComponent(getDocument().getUuid()), getDocument().getMimeType());
 			}
 		} else if (doc.isConvertibleToDxf()) {
 			PreviewExtension previewExtension = null;
@@ -518,7 +518,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 				}
 			}
 			if (previewExtension!=null) {
-				preview.showPreviewExtension(previewExtension, Config.OKMDownloadServlet +"?uuid=" + URL.encodeComponent(getDocument().getUuid()));
+				preview.showPreviewExtension(previewExtension, Config.DownloadServlet +"?uuid=" + URL.encodeComponent(getDocument().getUuid()));
 			} else {
 				// There's no preview
 				preview.showEmbedSWF(doc.getUuid());

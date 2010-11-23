@@ -194,7 +194,7 @@ public class OnlineUsersPopup extends DialogBox {
 		if (table.getSelectedRow()>=0) {
 			final String user = table.getHTML(table.getSelectedRow(), 0);
 			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-			endPoint.setServiceEntryPoint(Config.OKMChatService);
+			endPoint.setServiceEntryPoint(Config.ChatService);
 			chatService.createNewChatRoom(user, new AsyncCallback<String>() {
 				@Override
 				public void onSuccess(String result) {
@@ -219,7 +219,7 @@ public class OnlineUsersPopup extends DialogBox {
 		if (table.getSelectedRow()>=0) {
 			String user = table.getHTML(table.getSelectedRow(), 0);
 			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-			endPoint.setServiceEntryPoint(Config.OKMChatService);
+			endPoint.setServiceEntryPoint(Config.ChatService);
 			chatService.addUserToChatRoom(room, user, new AsyncCallback<Object>() {
 				@Override
 				public void onSuccess(Object result) {

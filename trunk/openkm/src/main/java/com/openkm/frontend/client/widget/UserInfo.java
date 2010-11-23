@@ -398,7 +398,7 @@ public class UserInfo extends Composite {
 	private void refreshConnectedUsers() {
 		if (chatConnected) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-			endPoint.setServiceEntryPoint(Config.OKMChatService);
+			endPoint.setServiceEntryPoint(Config.ChatService);
 			chatService.getLoggedUsers(new AsyncCallback<List<String>>() {
 				@Override
 				public void onSuccess(List<String> result) {
@@ -427,7 +427,7 @@ public class UserInfo extends Composite {
 	private void getPendingChatRoomUser() {
 		if (chatConnected) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-			endPoint.setServiceEntryPoint(Config.OKMChatService);
+			endPoint.setServiceEntryPoint(Config.ChatService);
 			chatService.getPendingChatRoomUser(new AsyncCallback<List<String>>() {
 				
 				@Override
@@ -531,7 +531,7 @@ public class UserInfo extends Composite {
 			final ChatRoomDialogBox chatRoom = getChatRoomList().get(0);
 			chatRoom.setChatRoomActive(false);
 			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-			endPoint.setServiceEntryPoint(Config.OKMChatService);
+			endPoint.setServiceEntryPoint(Config.ChatService);
 			chatService.closeRoom(chatRoom.getRoom(),new AsyncCallback<Object>() {
 				@Override
 				public void onSuccess(Object arg0) {
@@ -551,7 +551,7 @@ public class UserInfo extends Composite {
 			// Disconnect chat
 			disconnectChat(); // Only used to change view and disabling some RPC
 			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-			endPoint.setServiceEntryPoint(Config.OKMChatService);
+			endPoint.setServiceEntryPoint(Config.ChatService);
 			chatService.logout(new AsyncCallback<Object>() {
 				@Override
 				public void onSuccess(Object result) {
@@ -587,7 +587,7 @@ public class UserInfo extends Composite {
 	 */
 	public void loginChat() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-		endPoint.setServiceEntryPoint(Config.OKMChatService);
+		endPoint.setServiceEntryPoint(Config.ChatService);
 		chatService.login(new AsyncCallback<Object>() {
 			@Override
 			public void onSuccess(Object result) {

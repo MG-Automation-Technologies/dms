@@ -191,7 +191,7 @@ public class CategoriesWidget extends Composite {
 			docCategories.add(category);
 			drawCategory(category,remove);
 			ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
-			endPoint.setServiceEntryPoint(Config.OKMPropertyService);
+			endPoint.setServiceEntryPoint(Config.PropertyService);
 			propertyService.addCategory(docPath, category.getUuid(), callbackAddCategory);
 		}
 	}
@@ -201,7 +201,7 @@ public class CategoriesWidget extends Composite {
 	 */
 	public void removeCategory(String UUID) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
-		endPoint.setServiceEntryPoint(Config.OKMPropertyService);
+		endPoint.setServiceEntryPoint(Config.PropertyService);
 		propertyService.removeCategory(docPath, UUID, callbackRemoveCategory);
 	}
 	

@@ -184,7 +184,7 @@ public class Util {
 		}
 		
 		final Element downloadIframe = RootPanel.get("__download").getElement(); 
-		String url = Config.OKMDownloadServlet + "?" + params + "id=" + URL.encodeComponent(path);
+		String url = Config.DownloadServlet + "?" + params + "id=" + URL.encodeComponent(path);
 		DOM.setElementAttribute(downloadIframe, "src", url); 
 	}
 	
@@ -196,7 +196,7 @@ public class Util {
 	 */
 	public static void downloadFilePdf(String uuid) {
 		final Element downloadIframe = RootPanel.get("__download").getElement(); 
-		String url = Config.OKMConverterServlet + "?toPdf=1&uuid=" + URL.encodeComponent(uuid);
+		String url = Config.ConverterServlet + "?toPdf=1&uuid=" + URL.encodeComponent(uuid);
 		DOM.setElementAttribute(downloadIframe, "src", url); 
 	}
 	

@@ -101,7 +101,7 @@ public class Bookmark {
 						public void execute() {
 							if (bookmarkEnabled) {
 								ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
-								endPoint.setServiceEntryPoint(Config.OKMBookmarkService);
+								endPoint.setServiceEntryPoint(Config.BookmarkService);
 								bookmarkService.get(bookmark.getId(), new AsyncCallback<GWTBookmark>() {
 									@Override
 									public void onSuccess(GWTBookmark result) {
@@ -162,7 +162,7 @@ public class Bookmark {
 				public void execute() {
 					if (bookmarkEnabled) {
 						ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
-						endPoint.setServiceEntryPoint(Config.OKMBookmarkService);
+						endPoint.setServiceEntryPoint(Config.BookmarkService);
 						bookmarkService.get(bookmark.getId(), new AsyncCallback<GWTBookmark>() {
 							@Override
 							public void onSuccess(GWTBookmark result) {
@@ -237,7 +237,7 @@ public class Bookmark {
 	 */
 	public void getAll() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
-		endPoint.setServiceEntryPoint(Config.OKMBookmarkService);			
+		endPoint.setServiceEntryPoint(Config.BookmarkService);			
 		bookmarkService.getAll(callbackGetAll);
 	}
 	
@@ -250,7 +250,7 @@ public class Bookmark {
 	 */
 	public void add(String nodePath, String name) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
-		endPoint.setServiceEntryPoint(Config.OKMBookmarkService);			
+		endPoint.setServiceEntryPoint(Config.BookmarkService);			
 		bookmarkService.add(nodePath, name, callbackAdd);
 	}
 	
@@ -261,7 +261,7 @@ public class Bookmark {
 	public void setUserHome() {
 		if (nodePath!=null && !nodePath.equals("")) { 
 			ServiceDefTarget endPoint = (ServiceDefTarget) userConfigService;
-			endPoint.setServiceEntryPoint(Config.OKMUserConfigService);			
+			endPoint.setServiceEntryPoint(Config.UserConfigService);			
 			userConfigService.setUserHome(nodePath, callbackSetUserHome);
 		}
 	}
