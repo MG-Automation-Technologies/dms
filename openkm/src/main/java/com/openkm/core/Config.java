@@ -45,6 +45,8 @@ public class Config {
 	
 	// Default directories
 	public static final String HOME_DIR = getHomeDir();
+	public static final String OPENKM_HOME = "$OPENKM_HOME";
+	public static final String OPENKM_WAR = "$OPENKM_WAR";
 	public static final String TMP_DIR = getTempDir();
 	public static final String NULL_DEVICE = getNullDevice();
 	public static final boolean IN_SERVER = inServer();
