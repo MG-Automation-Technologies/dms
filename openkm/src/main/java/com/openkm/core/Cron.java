@@ -24,6 +24,8 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.TimerTask;
 
+import javax.mail.MessagingException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +33,7 @@ import com.kenai.crontabparser.CronTabExpression;
 import com.openkm.dao.CronTabDAO;
 import com.openkm.dao.bean.CronTab;
 import com.openkm.util.ExecutionUtils;
+import com.openkm.util.MailUtils;
 import com.openkm.util.SecureStore;
 
 public class Cron extends TimerTask {
@@ -51,10 +54,12 @@ public class Cron extends TimerTask {
 									ct.getType()});
 							
 							if (CronTab.BSH.equals(ct.getType())) {
-								RunnerBsh run = new RunnerBsh(new String(SecureStore.b64Decode(ct.getFileContent())));
+								RunnerBsh run = new RunnerBsh(ct.getId(), ct.getMail(),  
+										new String(SecureStore.b64Decode(ct.getFileContent())));
 								new Thread(run).start();
 							} else if (CronTab.JAR.equals(ct.getType())) {
-								RunnerJar run = new RunnerJar(SecureStore.b64Decode(ct.getFileContent()));
+								RunnerJar run = new RunnerJar(ct.getId(), ct.getMail(), 
+										SecureStore.b64Decode(ct.getFileContent()));
 								new Thread(run).start();
 							}
 						}
@@ -75,14 +80,38 @@ public class Cron extends TimerTask {
 	 */
 	public class RunnerBsh implements Runnable {
 		private String script;
+		private String mail;
+		private int ctId;
 		
-		public RunnerBsh(String script) {
+		public RunnerBsh(int ctId, String mail, String script) {
 			this.script = script;
+			this.mail = mail;
+			this.ctId = ctId;
 		}
 		
 	    public void run() {
 	    	if (script != null) {
-	    		ExecutionUtils.runScript(script);
+	    		try {
+					CronTabDAO.setLastBegin(ctId);
+				} catch (DatabaseException e) {
+					log.warn("Error setting last begin in crontab {}: {}", ctId, e.getMessage());
+				}
+	    		
+				Object ret = ExecutionUtils.runScript(script);
+				
+				if (ret != null) {
+					try {
+						MailUtils.sendMessage(mail, "Cron task executed", ret.toString());
+					} catch (MessagingException e) {
+						log.warn("Error sending mail: {}", e.getMessage());
+					}
+				}
+	    		
+	    		try {
+					CronTabDAO.setLastEnd(ctId);
+				} catch (DatabaseException e) {
+					log.warn("Error setting last end in crontab {}: {}", ctId, e.getMessage());
+				}
 	    	}
 	    }
 	}
@@ -92,14 +121,38 @@ public class Cron extends TimerTask {
 	 */
 	public class RunnerJar implements Runnable {
 		private byte[] content;
+		private String mail;
+		private int ctId;
 		
-		public RunnerJar(byte[] content) {
+		public RunnerJar(int ctId, String mail, byte[] content) {
 			this.content = content;
+			this.mail = mail;
+			this.ctId = ctId;
 		}
 		
 	    public void run() {
 	    	if (content != null) {
-	    		ExecutionUtils.runJar(content);
+	    		try {
+					CronTabDAO.setLastBegin(ctId);
+				} catch (DatabaseException e) {
+					log.warn("Error setting last begin in crontab {}: {}", ctId, e.getMessage());
+				}
+				
+	    		Object ret = ExecutionUtils.runJar(content);
+				
+				if (ret != null) {
+					try {
+						MailUtils.sendMessage(mail, "Cron task executed", ret.toString());
+					} catch (MessagingException e) {
+						log.warn("Error sending mail: {}", e.getMessage());
+					}
+				}
+				
+				try {
+					CronTabDAO.setLastEnd(ctId);
+				} catch (DatabaseException e) {
+					log.warn("Error setting last end in crontab {}: {}", ctId, e.getMessage());
+				}
 	    	}
 	    }
 	}
