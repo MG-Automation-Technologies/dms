@@ -88,11 +88,11 @@ public class RepositoryStartupServlet extends HttpServlet {
         // Get OpenKM version
         WarUtils.readAppVersion(sc);
         log.info("*** Application version: "+WarUtils.getAppVersion()+" ***");
-
+        
         // Initialize folder DXF cache
         File dxfCacheFolder = new File(Config.CACHE_DXF);
         if (!dxfCacheFolder.exists()) dxfCacheFolder.mkdirs();
-
+        
         // Initialize folder PDF cache
         File pdfCacheFolder = new File(Config.CACHE_PDF);
         if (!pdfCacheFolder.exists()) pdfCacheFolder.mkdirs();
