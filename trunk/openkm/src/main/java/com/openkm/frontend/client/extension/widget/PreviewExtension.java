@@ -34,7 +34,6 @@ import com.openkm.frontend.client.extension.HasPreviewExtension;
  
  public abstract class PreviewExtension extends Composite implements HasPreviewExtension {
 	 
-	 public abstract boolean hasMimeTypePreviewer(String mime);
 	 public abstract void createViewer(String url, int width, int height);
 	 public abstract Widget getWidget();
 	 public abstract void setVisible(boolean visible);
