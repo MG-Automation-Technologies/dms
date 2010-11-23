@@ -52,7 +52,6 @@ public class AutocadPreview extends PreviewExtension {
 	public void createViewer(String url, int width, int height) {
 	}
 	
-	@Override
 	public boolean hasMimeTypePreviewer(String mime) {
 		return false;
 	}
