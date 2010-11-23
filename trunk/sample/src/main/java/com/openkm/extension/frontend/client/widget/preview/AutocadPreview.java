@@ -52,10 +52,6 @@ public class AutocadPreview extends PreviewExtension {
 	public void createViewer(String url, int width, int height) {
 	}
 	
-	public boolean hasMimeTypePreviewer(String mime) {
-		return false;
-	}
-	
 	public String getExtensionUUID() {
 		return null;
 	}
