@@ -36,6 +36,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TabBar;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.openkm.extension.frontend.client.widget.preview.AutocadPreview;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
@@ -510,20 +511,19 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 			}
 		} else if (doc.isConvertibleToDxf()) {
 			PreviewExtension previewExtension = null;
-			
 			for (PreviewExtension preview : widgetPreviewExtensionList) {
-				if (preview.hasMimeTypePreviewer(doc.getMimeType())) {
+				if (preview instanceof AutocadPreview) {
 					previewExtension = preview;
 					break;
 				}
 			}
-			
 			if (previewExtension!=null) {
 				preview.showPreviewExtension(previewExtension, Config.OKMDownloadServlet +"?uuid=" + URL.encodeComponent(getDocument().getUuid()));
 			} else {
 				// There's no preview
 				preview.showEmbedSWF(doc.getUuid());
 			}
+			
 		} else {
 			preview.showEmbedSWF(doc.getUuid());
 		}
