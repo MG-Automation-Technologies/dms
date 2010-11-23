@@ -24,6 +24,7 @@ package com.openkm.frontend.client.bean.extension;
 import java.util.Date;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
+import com.openkm.frontend.client.bean.GWTQueryParams;
 
 public class GWTProposedQuery implements IsSerializable {
 	private int id;
@@ -33,7 +34,8 @@ public class GWTProposedQuery implements IsSerializable {
 	private boolean accepted;
 	private Date seenDate;
 	private Date sentDate;
-	
+	private GWTQueryParams params;
+
 	public int getId() {
 		return id;
 	}
@@ -89,6 +91,14 @@ public class GWTProposedQuery implements IsSerializable {
 	public void setSentDate(Date sentDate) {
 		this.sentDate = sentDate;
 	}
+	
+	public GWTQueryParams getParams() {
+		return params;
+	}
+
+	public void setParams(GWTQueryParams params) {
+		this.params = params;
+	}
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -99,6 +109,7 @@ public class GWTProposedQuery implements IsSerializable {
 		sb.append(", accepted="); sb.append(accepted);
 		sb.append(", seenDate="); sb.append(seenDate==null?null:seenDate.getTime());
 		sb.append(", sentDate="); sb.append(sentDate==null?null:sentDate.getTime());
+		sb.append(", params="); sb.append(params);
 		sb.append("}");
 		return sb.toString();
 	}

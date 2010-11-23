@@ -22,29 +22,34 @@
 package com.openkm.frontend.client.extension.comunicator;
 
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.panel.ExtendedDockPanel;
+import com.openkm.frontend.client.bean.GWTQueryParams;
 
 /**
- * WorkspaceComunicator
+ * SearchComunicator
  * 
  * @author jllort
  *
  */
-public class WorkspaceComunicator {
+public class SearchComunicator {
 	
 	/**
-	 * getSelectedTab
-	 * 
-	 * @return
+	 * setSavedSearch
 	 */
-	public static int getSelectedTab() {
-		return Main.get().mainPanel.topPanel.tabWorkspace.getSelectedTab();
+	public static void setSavedSearch(GWTQueryParams params) {
+		Main.get().mainPanel.search.searchBrowser.searchIn.setSavedSearch(params);
 	}
 	
 	/**
-	 * setSearchView
+	 * getAllSearchs
 	 */
-	public static void setSearchView() {
-		Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(ExtendedDockPanel.SEARCH);
+	public static void getAllSearchs() {
+		Main.get().mainPanel.search.historySearch.searchSaved.getAllSearchs();
+	}
+	
+	/**
+	 * getUserSearchs
+	 */
+	public static void getUserSearchs() {
+		Main.get().mainPanel.search.historySearch.userNews.getUserSearchs();
 	}
 }
