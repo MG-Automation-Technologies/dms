@@ -46,4 +46,12 @@ public class DashboardComunicator {
 	public static void getUserSubscribedFolders() {
 		Main.get().mainPanel.dashboard.userDashboard.getUserSubscribedFolders();
 	}
+	
+	/**
+	 * refreshAllSearchs
+	 */
+	public static void refreshAllSearchs() {
+		Main.get().mainPanel.dashboard.newsDashboard.refreshAllSearchs();
+	}
+	
 }
