@@ -22,6 +22,7 @@
 package com.openkm.dao.bean;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 public class CronTab implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -33,6 +34,9 @@ public class CronTab implements Serializable {
 	private String type;
 	private String fileContent;
 	private String fileName;
+	private String mail;
+	private Calendar lastBegin;
+	private Calendar lastEnd;
 	private boolean active;
 	
 	public int getId() {
@@ -83,6 +87,30 @@ public class CronTab implements Serializable {
 		this.fileName = fileName;
 	}
 	
+	public String getMail() {
+		return mail;
+	}
+
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+	
+	public Calendar getLastBegin() {
+		return lastBegin;
+	}
+
+	public void setLastBegin(Calendar lastBegin) {
+		this.lastBegin = lastBegin;
+	}
+
+	public Calendar getLastEnd() {
+		return lastEnd;
+	}
+
+	public void setLastEnd(Calendar lastEnd) {
+		this.lastEnd = lastEnd;
+	}
+	
 	public boolean isActive() {
 		return active;
 	}
@@ -99,6 +127,9 @@ public class CronTab implements Serializable {
 		sb.append(", type="); sb.append(type);
 		sb.append(", fileName="); sb.append(fileName);
 		sb.append(", fileContent="); sb.append("[BIG]");
+		sb.append(", mail="); sb.append(mail);
+		sb.append(", lastBegin="); sb.append(lastBegin==null?null:lastBegin.getTime());
+		sb.append(", lastEnd="); sb.append(lastEnd==null?null:lastEnd.getTime());
 		sb.append(", active="); sb.append(active);
 		sb.append("}");
 		return sb.toString();
