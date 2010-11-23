@@ -508,11 +508,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 			if (!refreshing) {
 				preview.showMediaFile(Config.OKMDownloadServlet +"?uuid=" + URL.encodeComponent(getDocument().getUuid()), getDocument().getMimeType());
 			}
-		} else if (doc.getMimeType().equals("application/dxf") || doc.getMimeType().equals("application/x-autocad") ||  
-			  doc.getMimeType().equals("application/x-dxf") || doc.getMimeType().equals("drawing/x-dxf") || 
-			  doc.getMimeType().equals("image/vnd.dxf") || doc.getMimeType().equals("") || 
-			  doc.getMimeType().equals("image/x-autocad") || doc.getMimeType().equals("image/x-dxf") || 
-			  doc.getMimeType().equals("zz-application/zz-winassoc-dxf")) {
+		} else if (doc.isConvertibleToDxf()) {
 			PreviewExtension previewExtension = null;
 			for (PreviewExtension preview : widgetPreviewExtensionList) {
 				if (preview.hasMimeTypePreviewer(doc.getMimeType())) {
