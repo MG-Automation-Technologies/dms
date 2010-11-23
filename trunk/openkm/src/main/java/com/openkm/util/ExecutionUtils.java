@@ -41,8 +41,10 @@ public class ExecutionUtils {
 	/**
      * Execute script from file
      */
-	public static void runScript(File script) {
-    	try {
+	public static Object runScript(File script) {
+		Object ret = null;
+		
+		try {
         	FileReader fr = null;
         	
         	if (script.exists() && script.canRead()) {
@@ -50,8 +52,7 @@ public class ExecutionUtils {
         		fr = new FileReader(script);
 				
 				try {
-					Object result = i.eval(fr);
-					log.info("Script output: "+(result!=null?result.toString():"null"));
+					ret = i.eval(fr);
 				} catch (EvalError e) {
 					log.warn(e.getMessage(), e);
 				} finally {
@@ -63,30 +64,39 @@ public class ExecutionUtils {
         } catch (Exception e) {
         	log.warn(e.getMessage(), e);
         }
+        
+        log.info("Script output: {}", ret!=null?ret.toString():"null");
+        return ret;
     }
 	
 	/**
      * Execute script
      */
-	public static void runScript(String script) {
+	public static Object runScript(String script) {
+		Object ret = null;
+		
     	try {
        		Interpreter i = new Interpreter();
 				
 			try {
-				Object result = i.eval(script);
-				log.info("Script output: "+(result!=null?result.toString():"null"));
+				ret = i.eval(script);
 			} catch (EvalError e) {
 				log.warn(e.getMessage(), e);
 			}
         } catch (Exception e) {
         	log.warn(e.getMessage(), e);
         }
+        
+        log.info("Script output: {}", ret!=null?ret.toString():"null");
+        return ret;
     }
     
     /**
      * Execute jar from file
      */
-    public static void runJar(File jar) {
+    public static Object runJar(File jar) {
+    	Object ret = null;
+    	
     	try {
     		if (jar.exists() && jar.canRead()) {
     			ClassLoader cl = ExecutionUtils.class.getClass().getClassLoader(); 
@@ -95,7 +105,7 @@ public class ExecutionUtils {
     			
     			if (mainClass != null) {
     				Class<?> c = jcl.loadClass(jcl.getMainClassName());
-    				ClassLoaderUtils.invokeClass(c, new String[] {});
+    				ret = ClassLoaderUtils.invokeClass(c, new String[] {});
     			} else {
     				log.error("Main class not defined at: {}", jar.getPath());
     			}
@@ -105,12 +115,17 @@ public class ExecutionUtils {
     	} catch (Exception e) {
     		log.warn(e.getMessage(), e);
     	}
+    	
+    	log.info("JAR output: {}", ret!=null?ret.toString():"null");
+        return ret;
 	}
     
     /**
      * Execute jar
      */
-    public static void runJar(byte[] jar) {
+    public static Object runJar(byte[] jar) {
+    	Object ret = null;
+    	
     	try {
    			ClassLoader cl = ExecutionUtils.class.getClass().getClassLoader(); 
    			BinaryClassLoader jcl = new BinaryClassLoader(jar, cl);
@@ -118,12 +133,15 @@ public class ExecutionUtils {
    			
    			if (mainClass != null) {
    				Class<?> c = jcl.loadClass(jcl.getMainClassName());
-   				ClassLoaderUtils.invokeClass(c, new String[] {});
+   				ret = ClassLoaderUtils.invokeClass(c, new String[] {});
    			} else {
    				log.error("Main class not defined at jar");
    			}
     	} catch (Exception e) {
     		log.warn(e.getMessage(), e);
     	}
+    	
+    	log.info("JAR output: {}", ret!=null?ret.toString():"null");
+        return ret;
 	}
 }
