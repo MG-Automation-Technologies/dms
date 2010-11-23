@@ -140,8 +140,8 @@ public class DocConverter {
 			return true;
 		} else if (!Config.SYSTEM_IMG2PDF.equals("") && validImageMagick.contains(from)) {
 			return true;
-		} else if (!Config.SYSTEM_DWG2DXF.equals("") && validAutoCad.contains(from)) {
-			return true;
+		//} else if (!Config.SYSTEM_DWG2DXF.equals("") && validAutoCad.contains(from)) {
+		//	return true;
 		} else {
 			return false;
 		}
