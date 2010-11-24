@@ -40,7 +40,7 @@
 			pout.flush();
 			scriptOutput.append(baos.toString());
 		} else {
-			script = "print(\"Hola, mundo!\")";		
+			script = "print(\"Hola, mundo!\");";		
 		}
 		
 		out.println("<h1>Scripting</h1>");
