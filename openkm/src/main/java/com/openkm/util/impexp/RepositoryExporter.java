@@ -56,7 +56,7 @@ public class RepositoryExporter {
 	 */
 	public static ImpExpStats exportDocuments(String fldPath, File fs, boolean metadata, Writer out,
 			InfoDecorator deco) throws PathNotFoundException, AccessDeniedException, RepositoryException,
-			IOException, DatabaseException {
+			FileNotFoundException, IOException, DatabaseException {
 		log.debug("exportDocuments({}, {}, {}, {}, {})", new Object[] { fldPath, fs, metadata, out, deco });
 		ImpExpStats stats;
 		
