@@ -52,10 +52,12 @@ import com.openkm.bean.form.Option;
 import com.openkm.bean.form.Select;
 import com.openkm.bean.form.TextArea;
 import com.openkm.bean.form.Validator;
+import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.direct.DirectRepositoryModule;
+import com.openkm.util.FileUtils;
 import com.openkm.util.FormUtils;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
@@ -72,15 +74,15 @@ public class PropertyGroupsServlet extends BaseServlet {
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		String pgPath = WebUtil.getString(request, "pgPath");
+		String action = WebUtil.getString(request, "action");
 		Session session = null;
 		updateSessionManager(request);
 		
 		try {
 			session = JCRUtils.getSession();
 			
-			if (!pgPath.equals("")) {
-				register(session, pgPath, request, response);
+			if (action.equals("register")) {
+				register(session, request, response);
 			}
 			
 			list(request, response);
@@ -113,11 +115,11 @@ public class PropertyGroupsServlet extends BaseServlet {
 	/**
 	 * Register property group
 	 */
-	private void register(Session session, String pgPath, HttpServletRequest request, HttpServletResponse response)
+	private void register(Session session, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, ParseException, 
 			org.apache.jackrabbit.core.nodetype.compact.ParseException, 
 			javax.jcr.RepositoryException, InvalidNodeTypeDefException {
-		log.debug("register({}, {}, {}, {})", new Object[] { session, pgPath, request, response });
+		log.debug("register({}, {}, {})", new Object[] { session, request, response });
 		
 		// Check xml property groups definition
 		FormUtils.resetPropertyGroupsForms();
@@ -127,14 +129,14 @@ public class PropertyGroupsServlet extends BaseServlet {
 		FileInputStream fis = null;
 		
 		try {
-			fis = new FileInputStream(pgPath);
+			fis = new FileInputStream(Config.PROPERTY_GROUPS_CND);
 			DirectRepositoryModule.registerCustomNodeTypes(session, fis);
 		} finally {
 			IOUtils.closeQuietly(fis);
 		}
 		
 		// Activity log
-		UserActivity.log(request.getRemoteUser(), "ADMIN_PROPERTY_GROUP_REGISTER", pgPath, null);
+		UserActivity.log(request.getRemoteUser(), "ADMIN_PROPERTY_GROUP_REGISTER", Config.PROPERTY_GROUPS_CND, null);
 		log.debug("register: void");
 	}
 
@@ -161,7 +163,8 @@ public class PropertyGroupsServlet extends BaseServlet {
 			
 			pGroups.put(group, fMaps);
 		}
-				
+		
+		sc.setAttribute("pgCnd", FileUtils.getName(Config.PROPERTY_GROUPS_CND));
 		sc.setAttribute("pGroups", pGroups);
 		sc.getRequestDispatcher("/admin/property_groups.jsp").forward(request, response);
 		
