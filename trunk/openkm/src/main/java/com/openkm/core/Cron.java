@@ -104,14 +104,24 @@ public class Cron extends TimerTask {
 					
 					try {
 						String msg = "Return: "+ret[0]+"\n\nStdOut: "+ret[1]+"\n\nStdErr: "+ret[2];
-						MailUtils.sendMessage(mail, "Cron task executed - Ok", msg);
+						
+						if (mail.equals("")) {
+							log.info(msg);
+						} else {
+							MailUtils.sendMessage(mail, "Cron task executed - Ok", msg);
+						}
 					} catch (MessagingException e) {
 						log.warn("Error sending mail: {}", e.getMessage());
 					}
 				} catch (EvalError e) {
 					try {
 						String msg = e.toString();
-						MailUtils.sendMessage(mail, "Cron task executed - Error", msg);
+						
+						if (mail.equals("")) {
+							log.info(msg);
+						} else {
+							MailUtils.sendMessage(mail, "Cron task executed - Error", msg);
+						}
 					} catch (MessagingException e1) {
 						log.warn("Error sending mail: {}", e.getMessage());
 					}
