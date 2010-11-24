@@ -94,17 +94,23 @@ public class RepositoryStartupServlet extends HttpServlet {
         WarUtils.readAppVersion(sc);
         log.info("*** Application version: "+WarUtils.getAppVersion()+" ***");
         
-        // Initialize folder DXF cache
+        // Initialize DXF cache folder
         File dxfCacheFolder = new File(Config.CACHE_DXF);
         if (!dxfCacheFolder.exists()) dxfCacheFolder.mkdirs();
         
-        // Initialize folder PDF cache
+        // Initialize PDF cache folder
         File pdfCacheFolder = new File(Config.CACHE_PDF);
         if (!pdfCacheFolder.exists()) pdfCacheFolder.mkdirs();
         
-        // Initialize folder SWF cache
+        // Initialize SWF cache folder
         File previewCacheFolder = new File(Config.CACHE_SWF);
         if (!previewCacheFolder.exists()) previewCacheFolder.mkdirs();
+        
+        // Initialize chroot folder
+        if (!Config.CHROOT.equals("")) {
+        	File chrootFolder = new File(Config.CHROOT);
+        	if (!chrootFolder.exists()) chrootFolder.mkdirs();
+        }
         
         // Initialize Velocity engine
 	    try {
