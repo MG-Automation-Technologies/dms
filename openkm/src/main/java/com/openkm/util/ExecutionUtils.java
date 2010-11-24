@@ -115,7 +115,7 @@ public class ExecutionUtils {
     	
     	try {
     		if (jar.exists() && jar.canRead()) {
-    			ClassLoader cl = ExecutionUtils.class.getClass().getClassLoader(); 
+    			ClassLoader cl = ExecutionUtils.class.getClass().getClassLoader();
     			JarClassLoader jcl = new JarClassLoader(jar.toURI().toURL(), cl);
     			String mainClass = jcl.getMainClassName();
     			
@@ -143,7 +143,7 @@ public class ExecutionUtils {
     	Object ret = null;
     	
     	try {
-   			ClassLoader cl = ExecutionUtils.class.getClass().getClassLoader(); 
+   			ClassLoader cl = ExecutionUtils.class.getClass().getClassLoader();
    			BinaryClassLoader jcl = new BinaryClassLoader(jar, cl);
    			String mainClass = jcl.getMainClassName();
    			
