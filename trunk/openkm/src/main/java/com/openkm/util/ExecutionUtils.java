@@ -77,7 +77,7 @@ public class ExecutionUtils {
         	IOUtils.closeQuietly(fr);
         }
         
-        log.info("Script output: {}", Arrays.toString(ret));
+        log.debug("runScript: {}", Arrays.toString(ret));
         return ret;
     }
 	
@@ -103,7 +103,7 @@ public class ExecutionUtils {
 		err.flush();
 		ret[2] = baosErr.toString();
 		
-		log.info("Script output: {}", Arrays.toString(ret));
+		log.debug("runScript: {}", Arrays.toString(ret));
         return ret;
     }
     
@@ -132,7 +132,7 @@ public class ExecutionUtils {
     		log.warn(e.getMessage(), e);
     	}
     	
-    	log.info("JAR output: {}", ret!=null?ret.toString():"null");
+    	log.debug("runJar: {}", ret!=null?ret.toString():"null");
         return ret;
 	}
     
@@ -157,7 +157,7 @@ public class ExecutionUtils {
     		log.warn(e.getMessage(), e);
     	}
     	
-    	log.info("JAR output: {}", ret!=null?ret.toString():"null");
+    	log.debug("runJar: {}", ret!=null?ret.toString():"null");
         return ret;
 	}
 }
