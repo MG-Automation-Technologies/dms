@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Arrays;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -76,7 +77,7 @@ public class ExecutionUtils {
         	IOUtils.closeQuietly(fr);
         }
         
-        log.info("Script output: {}", ret!=null?ret.toString():"null");
+        log.info("Script output: {}", Arrays.toString(ret));
         return ret;
     }
 	
@@ -101,8 +102,8 @@ public class ExecutionUtils {
 		ret[1] = baosOut.toString();
 		err.flush();
 		ret[2] = baosErr.toString();
-                
-        log.info("Script output: {}", ret!=null?ret.toString():"null");
+		
+		log.info("Script output: {}", Arrays.toString(ret));
         return ret;
     }
     
