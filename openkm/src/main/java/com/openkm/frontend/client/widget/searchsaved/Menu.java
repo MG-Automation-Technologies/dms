@@ -30,6 +30,7 @@ import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.extension.comunicator.GeneralComunicator;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.ConfirmPopup;
+import com.openkm.frontend.client.widget.propose.ProposedQueryPopup;
 
 /**
  * Search saved menu
@@ -86,7 +87,7 @@ public class Menu extends Composite {
 	Command shareSearch = new Command() {
 		public void execute() {
 			if (shareOption) {
-				Main.get().proposedQueryPopup.executeProposeQuery();
+				Main.get().proposedQueryPopup.executeProposeQuery(ProposedQueryPopup.SAVE_SEARCH);
 				hide();
 			}
 		}
@@ -98,6 +99,7 @@ public class Menu extends Composite {
 	public void langRefresh() {
 		run.setHTML(Util.menuHTML("img/icon/actions/run.gif", Main.i18n("search.saved.run")));
 		delete.setHTML(Util.menuHTML("img/icon/actions/delete.gif", Main.i18n("search.saved.delete")));
+		share.setHTML(Util.menuHTML("img/icon/actions/share_query.gif", GeneralComunicator.i18nExtension("messaging.share.query")));
 	}
 	
 	/**

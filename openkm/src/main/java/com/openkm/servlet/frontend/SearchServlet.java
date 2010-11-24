@@ -73,9 +73,12 @@ public class SearchServlet extends OKMRemoteServiceServlet implements OKMSearchS
 				resultList.add(GWTUtil.copy(it.next()));
 			}
 			for (QueryParams params : QueryParamsDAO.findShared(getThreadLocalRequest().getRemoteUser())) {
-				GWTQueryParams gWTQueryParams = GWTUtil.copy(params);
-				gWTQueryParams.setShared(true);
-				resultList.add(gWTQueryParams);
+				// Not include dashboard queries ( user news )
+				if (!params.isDashboard()) {
+					GWTQueryParams gWTQueryParams = GWTUtil.copy(params);
+					gWTQueryParams.setShared(true);
+					resultList.add(gWTQueryParams);
+				}
 			}
 		}  catch (RepositoryException e) {
 			log.error(e.getMessage(), e);

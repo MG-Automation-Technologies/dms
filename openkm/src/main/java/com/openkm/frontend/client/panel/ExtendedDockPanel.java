@@ -242,7 +242,7 @@ public class ExtendedDockPanel extends Composite {
 	 * enableKeyShorcuts
 	 */
 	public void enableKeyShorcuts() {
-		Log.debug("ExtendedDockPanel enableKeyShorcuts");
+		Log.debug("ExtendedDockPanel enableKeyShortcuts");
 		dockPanel.sinkEvents(Event.KEYEVENTS);
 		handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
 			@Override
