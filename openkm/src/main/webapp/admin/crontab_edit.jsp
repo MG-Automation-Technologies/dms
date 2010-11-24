@@ -31,7 +31,7 @@
           </tr>
           <tr>
             <td nowrap="nowrap">Mail</td>
-            <td><input size="30" class=":email :required :only_on_blur" name="ct_mail" value="${ct.mail}"/></td>
+            <td><input size="30" class=":email :only_on_blur" name="ct_mail" value="${ct.mail}"/></td>
           </tr>
           <tr>
             <td nowrap="nowrap">Expression</td>
