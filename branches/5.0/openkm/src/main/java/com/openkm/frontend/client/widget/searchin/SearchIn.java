@@ -1239,7 +1239,7 @@ public class SearchIn extends Composite {
 		 	case PanelDefinition.NAVIGATOR_TEMPLATES:
 		 		templatesContextValue = contextValue;
 		 		if (templatesVisible) {
-		 			posTemplates = context.getItemCount()+1; 
+		 			posTemplates = context.getItemCount(); 
 		 			context.addItem(Main.i18n("leftpanel.label.templates"), templatesContextValue);
 		 		}
 		 		break;
@@ -1247,7 +1247,7 @@ public class SearchIn extends Composite {
 		 	case PanelDefinition.NAVIGATOR_PERSONAL:
 		 		personalContextValue = contextValue;
 		 		if (personalVisible) {
-		 			posPersonal = context.getItemCount()+1; 
+		 			posPersonal = context.getItemCount(); 
 		 			context.addItem(Main.i18n("leftpanel.label.my.documents"), personalContextValue);
 		 		}
 		 		break;
@@ -1255,7 +1255,7 @@ public class SearchIn extends Composite {
 		 	case PanelDefinition.NAVIGATOR_MAIL:
 		 		mailContextValue = contextValue;
 		 		if (mailVisible) {
-		 			posMail = context.getItemCount()+1; 
+		 			posMail = context.getItemCount(); 
 		 			context.addItem(Main.i18n("leftpanel.label.mail"), mailContextValue);
 		 		}
 		 		break;
@@ -1263,7 +1263,7 @@ public class SearchIn extends Composite {
 		 	case PanelDefinition.NAVIGATOR_TRASH:
 		 		trashContextValue = contextValue;
 		 		if (trashVisible) {
-		 			posTrash = context.getItemCount()+1; 
+		 			posTrash = context.getItemCount(); 
 		 			context.addItem(Main.i18n("leftpanel.label.trash"), trashContextValue);
 		 		}
 		 		break;
