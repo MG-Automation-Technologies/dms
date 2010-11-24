@@ -29,6 +29,8 @@ import javax.mail.MessagingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import bsh.EvalError;
+
 import com.kenai.crontabparser.CronTabExpression;
 import com.openkm.dao.CronTabDAO;
 import com.openkm.dao.bean.CronTab;
@@ -97,16 +99,24 @@ public class Cron extends TimerTask {
 					log.warn("Error setting last begin in crontab {}: {}", ctId, e.getMessage());
 				}
 	    		
-				Object ret = ExecutionUtils.runScript(script);
-				
-				if (ret != null) {
+				try {
+					Object[] ret = ExecutionUtils.runScript(script);
+					
 					try {
-						MailUtils.sendMessage(mail, "Cron task executed", ret.toString());
+						String msg = "Return: "+ret[0]+"\n\nStdOut: "+ret[1]+"\n\nStdErr: "+ret[2];
+						MailUtils.sendMessage(mail, "Cron task executed - Ok", msg);
 					} catch (MessagingException e) {
 						log.warn("Error sending mail: {}", e.getMessage());
 					}
+				} catch (EvalError e) {
+					try {
+						String msg = e.toString();
+						MailUtils.sendMessage(mail, "Cron task executed - Error", msg);
+					} catch (MessagingException e1) {
+						log.warn("Error sending mail: {}", e.getMessage());
+					}
 				}
-	    		
+				
 	    		try {
 					CronTabDAO.setLastEnd(ctId);
 				} catch (DatabaseException e) {
