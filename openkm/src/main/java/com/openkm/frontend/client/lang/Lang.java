@@ -75,7 +75,7 @@ public class Lang {
 		} else if (LANG_ca_ES.equalsIgnoreCase(lang) || LANG_ca_ES.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 //			hLang = Lang_ca_ES.lang;
 		} else if (LANG_gl_ES.equalsIgnoreCase(lang) || LANG_gl_ES.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			hLang = Lang_gl_ES.lang;
+			//hLang = Lang_gl_ES.lang;
 		} else if (LANG_eu_ES.equalsIgnoreCase(lang) || LANG_eu_ES.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 			//hLang = Lang_eu_ES.lang;
 		} else if (LANG_en_GB.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
@@ -129,7 +129,7 @@ public class Lang {
 		} else if (LANG_pl_PL.equalsIgnoreCase(lang) || LANG_pl_PL.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 			hLang = Lang_pl_PL.lang;
 		} else if (LANG_hu_HU.equalsIgnoreCase(lang) || LANG_hu_HU.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			hLang = Lang_hu_HU.lang;
+//			hLang = Lang_hu_HU.lang;
 		} else if (LANG_el_GR.equalsIgnoreCase(lang) || LANG_el_GR.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 //			hLang = Lang_el_GR.lang;
 		} else if (LANG_lv_LV.equalsIgnoreCase(lang) || LANG_lv_LV.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
