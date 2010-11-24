@@ -62,7 +62,7 @@ public class Config {
 	public static final String NODE_DEFINITIONS = "CustomNodes.cnd";
 	public static String CONTEXT;
 	public static String INSTANCE;
-	public static boolean MULTIPLE_INSTANCES;
+	public static boolean SAAS;
 	public static String JBPM_CONFIG;
 	public static String PROPERTY_GROUPS_XML;
 	public static String PROPERTY_GROUPS_CND;
@@ -435,13 +435,13 @@ public class Config {
 			if ("OpenKM".equals(CONTEXT)) {
 				INSTANCE = HOME_DIR;
 				values.put("instance", INSTANCE);
-				MULTIPLE_INSTANCES = false;
-				values.put("mutiple.instances", Boolean.toString(MULTIPLE_INSTANCES));
+				SAAS = false;
+				values.put("saas", Boolean.toString(SAAS));
 			} else {
 				INSTANCE = HOME_DIR + File.separator + "instances" + File.separator + CONTEXT;
 				values.put("instance", INSTANCE);
-				MULTIPLE_INSTANCES = true;
-				values.put("mutiple.instances", Boolean.toString(MULTIPLE_INSTANCES));
+				SAAS = true;
+				values.put("saas", Boolean.toString(SAAS));
 			}
 			
 			REPOSITORY_CONFIG = INSTANCE + File.separator + "repository.xml";
