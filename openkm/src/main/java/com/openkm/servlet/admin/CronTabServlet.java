@@ -48,10 +48,10 @@ import org.slf4j.LoggerFactory;
 
 import bsh.EvalError;
 
+import com.openkm.core.Cron;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.CronTabDAO;
 import com.openkm.dao.bean.CronTab;
-import com.openkm.util.ExecutionUtils;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.SecureStore;
 import com.openkm.util.UserActivity;
@@ -239,9 +239,13 @@ public class CronTabServlet extends BaseServlet {
 		CronTab ct = CronTabDAO.findByPk(ctId);
 		
 		if (CronTab.BSH.equals(ct.getType())) {
-			ExecutionUtils.runScript(new String(SecureStore.b64Decode(ct.getFileContent())));
+			Cron.RunnerBsh runner = new Cron.RunnerBsh(ct.getId(), ct.getMail(),  
+					new String(SecureStore.b64Decode(ct.getFileContent())));
+			runner.run();
 		} else if (CronTab.JAR.equals(ct.getType())) {
-			ExecutionUtils.runJar(SecureStore.b64Decode(ct.getFileContent()));
+			Cron.RunnerJar runner = new Cron.RunnerJar(ct.getId(), ct.getMail(), 
+					SecureStore.b64Decode(ct.getFileContent()));
+			runner.run();
 		}
 		
 		// Activity log
