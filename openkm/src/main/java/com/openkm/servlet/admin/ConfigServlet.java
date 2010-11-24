@@ -219,7 +219,7 @@ public class ConfigServlet extends BaseServlet {
 	 * Remove dangerous path when multiple instances configuration
 	 */
 	private void cleanPath(Config cfg) {
-		if (com.openkm.core.Config.MULTIPLE_INSTANCES) {
+		if (com.openkm.core.Config.SAAS) {
 			if (cfg.getValue().startsWith(com.openkm.core.Config.HOME_DIR)) {
 				cfg.setValue(com.openkm.core.Config.OPENKM_HOME + 
 						cfg.getValue().substring(com.openkm.core.Config.HOME_DIR.length()));
@@ -235,7 +235,7 @@ public class ConfigServlet extends BaseServlet {
 	 * Add real path when multiple instances configuration
 	 */
 	private void prependPath(Config cfg) {
-		if (com.openkm.core.Config.MULTIPLE_INSTANCES) {
+		if (com.openkm.core.Config.SAAS) {
 			if (cfg.getValue().startsWith(com.openkm.core.Config.OPENKM_HOME)) {
 				cfg.setValue(com.openkm.core.Config.HOME_DIR + 
 						cfg.getValue().substring(com.openkm.core.Config.OPENKM_HOME.length()));
