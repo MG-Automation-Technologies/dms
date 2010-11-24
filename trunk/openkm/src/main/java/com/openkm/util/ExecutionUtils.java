@@ -21,8 +21,11 @@
 
 package com.openkm.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintStream;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -40,29 +43,37 @@ public class ExecutionUtils {
 	
 	/**
      * Execute script from file
+     * 
+     * @return 0 - Return
+     *         1 - StdOut
+     *         2 - StdErr
      */
-	public static Object runScript(File script) {
-		Object ret = null;
+	public static Object[] runScript(File script) throws EvalError {
+		Object[] ret = new Object[3];
+		FileReader fr = null;
 		
 		try {
-        	FileReader fr = null;
-        	
         	if (script.exists() && script.canRead()) {
-        		Interpreter i = new Interpreter();
+        		ByteArrayOutputStream baosOut = new ByteArrayOutputStream();
+    			PrintStream out = new PrintStream(baosOut);
+    			ByteArrayOutputStream baosErr = new ByteArrayOutputStream();
+    			PrintStream err = new PrintStream(baosErr);
+           		Interpreter i = new Interpreter(null, out, err, false);
         		fr = new FileReader(script);
 				
-				try {
-					ret = i.eval(fr);
-				} catch (EvalError e) {
-					log.warn(e.getMessage(), e);
-				} finally {
-					IOUtils.closeQuietly(fr);
-				}
+				ret[0] = i.eval(fr);
+				
+				out.flush();
+				ret[1] = baosOut.toString();
+				err.flush();
+				ret[2] = baosErr.toString();
         	} else {
         		log.warn("Unable to read script: {}", script.getPath());
         	}
-        } catch (Exception e) {
+        } catch (IOException e) {
         	log.warn(e.getMessage(), e);
+        } finally {
+        	IOUtils.closeQuietly(fr);
         }
         
         log.info("Script output: {}", ret!=null?ret.toString():"null");
@@ -71,22 +82,26 @@ public class ExecutionUtils {
 	
 	/**
      * Execute script
+     * 
+     * @return 0 - Return
+     *         1 - StdOut
+     *         2 - StdErr
      */
-	public static Object runScript(String script) {
-		Object ret = null;
+	public static Object[] runScript(String script) throws EvalError {
+		Object[] ret = new Object[3];
+		ByteArrayOutputStream baosOut = new ByteArrayOutputStream();
+		PrintStream out = new PrintStream(baosOut);
+		ByteArrayOutputStream baosErr = new ByteArrayOutputStream();
+		PrintStream err = new PrintStream(baosErr);
+       	Interpreter i = new Interpreter(null, out, err, false);
 		
-    	try {
-       		Interpreter i = new Interpreter();
-				
-			try {
-				ret = i.eval(script);
-			} catch (EvalError e) {
-				log.warn(e.getMessage(), e);
-			}
-        } catch (Exception e) {
-        	log.warn(e.getMessage(), e);
-        }
-        
+		ret[0] = i.eval(script);
+		
+		out.flush();
+		ret[1] = baosOut.toString();
+		err.flush();
+		ret[2] = baosErr.toString();
+                
         log.info("Script output: {}", ret!=null?ret.toString():"null");
         return ret;
     }
