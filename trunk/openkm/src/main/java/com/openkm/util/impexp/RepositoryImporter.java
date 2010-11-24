@@ -55,7 +55,7 @@ public class RepositoryImporter {
 	 */
 	public static ImpExpStats importDocuments(File fs, String fldPath, boolean metadata, Writer out,
 			InfoDecorator deco) throws PathNotFoundException, ItemExistsException, AccessDeniedException,
-			RepositoryException, IOException, DatabaseException {
+			RepositoryException, FileNotFoundException, IOException, DatabaseException {
 		log.debug("importDocuments({}, {}, {}, {}, {})", new Object[] { fs, fldPath, metadata, out, deco });
 		ImpExpStats stats;
 		
