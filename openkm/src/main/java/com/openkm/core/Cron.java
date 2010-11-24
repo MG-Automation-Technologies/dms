@@ -54,13 +54,13 @@ public class Cron extends TimerTask {
 									ct.getType()});
 							
 							if (CronTab.BSH.equals(ct.getType())) {
-								RunnerBsh run = new RunnerBsh(ct.getId(), ct.getMail(),  
+								RunnerBsh runner = new RunnerBsh(ct.getId(), ct.getMail(),  
 										new String(SecureStore.b64Decode(ct.getFileContent())));
-								new Thread(run).start();
+								new Thread(runner).start();
 							} else if (CronTab.JAR.equals(ct.getType())) {
-								RunnerJar run = new RunnerJar(ct.getId(), ct.getMail(), 
+								RunnerJar runner = new RunnerJar(ct.getId(), ct.getMail(), 
 										SecureStore.b64Decode(ct.getFileContent()));
-								new Thread(run).start();
+								new Thread(runner).start();
 							}
 						}
 					} catch (ParseException e) {
@@ -78,7 +78,7 @@ public class Cron extends TimerTask {
 	/**
 	 * Inner helper class
 	 */
-	public class RunnerBsh implements Runnable {
+	public static class RunnerBsh implements Runnable {
 		private String script;
 		private String mail;
 		private int ctId;
@@ -119,7 +119,7 @@ public class Cron extends TimerTask {
 	/**
 	 * Inner helper class
 	 */
-	public class RunnerJar implements Runnable {
+	public static class RunnerJar implements Runnable {
 		private byte[] content;
 		private String mail;
 		private int ctId;
