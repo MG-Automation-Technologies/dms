@@ -158,12 +158,30 @@ public class Cron extends TimerTask {
 					log.warn("Error setting last begin in crontab {}: {}", ctId, e.getMessage());
 				}
 				
-	    		Object ret = ExecutionUtils.runJar(content);
-				
-				if (ret != null) {
+				try {
+					Object ret = ExecutionUtils.runJar(content);
+					
 					try {
-						MailUtils.sendMessage(mail, "Cron task executed", ret.toString());
+						String msg = (ret == null ? "" : ret.toString());
+						
+						if (mail.equals("")) {
+							log.info(msg);
+						} else {
+							MailUtils.sendMessage(mail, "Cron task executed - Ok", msg);
+						}
 					} catch (MessagingException e) {
+						log.warn("Error sending mail: {}", e.getMessage());
+					}
+				} catch (Exception e) {
+					try {
+						String msg = e.toString();
+						
+						if (mail.equals("")) {
+							log.info(msg);
+						} else {
+							MailUtils.sendMessage(mail, "Cron task executed - Error", msg);
+						}
+					} catch (MessagingException e1) {
 						log.warn("Error sending mail: {}", e.getMessage());
 					}
 				}
