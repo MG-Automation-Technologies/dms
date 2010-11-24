@@ -51,9 +51,13 @@
       <br/>
       <h2 style="text-align: center;">Register property group</h2>
       <form action="PropertyGroups">
+        <input type="hidden" name="action" value="register"/>
         <table class="form" align="center">
-          <tr><td>Property Group definition path <input type="text" size="50" name="pgPath" value=""/></td></tr>
-          <tr><td align="right"><input type="submit" value="Send"/></td></tr>
+          <tr>
+            <td>Property Group definition</td>
+            <td><input type="text" name="pgCnd" value="${pgCnd}" readonly="readonly"/></td>
+          </tr>
+          <tr><td colspan="2" align="right"><input type="submit" value="Send"/></td></tr>
         </table>
       </form>
     </c:when>
