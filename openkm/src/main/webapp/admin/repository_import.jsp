@@ -25,6 +25,7 @@
 		request.setCharacterEncoding("UTF-8");
 		String repoPath = WebUtil.getString(request, "repoPath", "/okm:root");
 		String fsPath = WebUtil.getString(request, "fsPath");
+		boolean metadata = WebUtil.getBoolean(request, "metadata");
 		
 		out.println("<h1>Repository import</h1>");
 		out.println("<form action=\"repository_import.jsp\">");
@@ -38,6 +39,7 @@
 		out.println("<td><input type=\"text\" size=\"50\" name=\"repoPath\" value=\""+repoPath+"\" ></td>");
 		out.println("</td>");
 		out.println("</tr>");
+		out.println("<tr><td>Metadata</td><td><input type=\"checkbox\" name=\"metadata\"/></td></tr>");
 		out.println("<tr><td colspan=\"2\" align=\"right\">");
 		out.println("<input type=\"submit\" value=\"Send\">");
 		out.println("</td></tr>");
@@ -50,7 +52,7 @@
 				File dir = new File(Config.CHROOT + fsPath);
 				int docs = FileUtils.listFiles(dir, null, true).size();
 				long begin = System.currentTimeMillis();
-				ImpExpStats stats = RepositoryImporter.importDocuments(dir, repoPath, true, out, 
+				ImpExpStats stats = RepositoryImporter.importDocuments(dir, repoPath, metadata, out, 
 						new HTMLInfoDecorator(docs));
 				long end = System.currentTimeMillis();
 				out.println("<hr/>");
