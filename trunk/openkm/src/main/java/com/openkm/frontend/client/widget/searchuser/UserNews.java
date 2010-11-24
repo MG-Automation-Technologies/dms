@@ -21,17 +21,19 @@
 
 package com.openkm.frontend.client.widget.searchuser;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.config.Config;
@@ -39,6 +41,7 @@ import com.openkm.frontend.client.service.OKMDashboardService;
 import com.openkm.frontend.client.service.OKMDashboardServiceAsync;
 import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.service.OKMSearchServiceAsync;
+import com.openkm.frontend.client.util.OKMBundleResources;
 
 /**
  * User news searches 
@@ -55,14 +58,16 @@ public class UserNews extends Composite {
 	public MenuPopup menuPopup;
 	private Status status;
 	private boolean firstTime = true;
-	private List<GWTQueryParams> savedSearches;
+	// Holds the data rows of the table this is a list of RowData Object
+	public Map<Integer, GWTQueryParams> data;
+	private int dataIndexValue = 0;
 	private int searchIdToDelete = 0;
 	
 	/**
 	 * UserNews
 	 */
 	public UserNews() {
-		savedSearches = new ArrayList<GWTQueryParams>();
+		data = new HashMap<Integer, GWTQueryParams>();
 		table = new ExtendedFlexTable();
 		menuPopup = new MenuPopup();
 		menuPopup.setStyleName("okm-SearchSaved-MenuPopup");
@@ -92,6 +97,7 @@ public class UserNews extends Composite {
 	public void showMenu() {
 		// The browser menu depends on actual view
 		// Must substract top position from Y Screen Position
+		menuPopup.evaluateMenuOptions();
 		menuPopup.setPopupPosition(table.getMouseX(), table.getMouseY());
 		menuPopup.show();		
 	}
@@ -110,7 +116,6 @@ public class UserNews extends Composite {
 	 */
 	final AsyncCallback<List<GWTQueryParams>> callbackGetUserSearchs = new AsyncCallback<List<GWTQueryParams>>() {
 		public void onSuccess(List<GWTQueryParams> result){
-			savedSearches = result;
 			table.removeAllRows();
 			
 			for (Iterator<GWTQueryParams> it = result.iterator(); it.hasNext();){
@@ -141,16 +146,7 @@ public class UserNews extends Composite {
 		public void onSuccess(Object result) {
 			table.removeRow(getSelectedRow());
 			table.selectPrevRow();
-			
-			for (Iterator<GWTQueryParams> it = savedSearches.iterator(); it.hasNext();) {
-				GWTQueryParams params = it.next();
-				if (params.getId() == searchIdToDelete) {
-					savedSearches.remove(params);
-					searchIdToDelete = 0;
-					break;
-				}
-			}
-			
+			data.remove(new Integer(searchIdToDelete));
 			Main.get().mainPanel.dashboard.newsDashboard.getUserSearchs(true);
 			status.unsetFlag_deleteSearch();
 		}
@@ -167,7 +163,6 @@ public class UserNews extends Composite {
 	 * @param search
 	 */
 	public void addNewSavedSearch(GWTQueryParams search) {
-		savedSearches.add(search);
 		addRow(search);
 	}
 		
@@ -179,17 +174,29 @@ public class UserNews extends Composite {
 	public void addRow(GWTQueryParams search) {
 		int rows = table.getRowCount();
 		
-		table.setHTML(rows, 0, search.getQueryName());
-		table.setHTML(rows, 1, ""+search.getId());
-		table.setHTML(rows, 2, "");
-		table.getFlexCellFormatter().setVisible(rows, 1, false);
+		data.put(dataIndexValue, search);
+		
+		if (!search.isShared()) {
+			table.setHTML(rows, 0, "&nbsp;");
+		} else {
+			table.setWidget(rows, 0, new Image(OKMBundleResources.INSTANCE.sharedQuery()));
+		}
+		
+		table.setHTML(rows, 1, search.getQueryName());
+		table.setHTML(rows, 2, ""+dataIndexValue++);
+		table.setHTML(rows, 3, "");
+		table.getFlexCellFormatter().setVisible(rows, 2, false);
 		
 		// The hidden column extends table to 100% width
 		CellFormatter cellFormatter = table.getCellFormatter();
-		cellFormatter.setWidth(rows, 2, "100%");
+		cellFormatter.setWidth(rows, 0, "30");
+		cellFormatter.setHeight(rows, 0, "20");
+		cellFormatter.setHorizontalAlignment(rows, 0, HasAlignment.ALIGN_CENTER);
+		cellFormatter.setVerticalAlignment(rows, 0, HasAlignment.ALIGN_MIDDLE);
+		cellFormatter.setWidth(rows, 3, "100%");
 		
 		table.getRowFormatter().setStyleName(rows, "okm-userNews");
-		setRowWordWarp(rows, 3, false);
+		setRowWordWarp(rows, 4, false);
 	}
 	
 	/**
@@ -223,14 +230,22 @@ public class UserNews extends Composite {
 	 */
 	public void getSearch() {
 		if (getSelectedRow() >= 0) {
-			int id = Integer.parseInt(table.getText(getSelectedRow(), 1));
-			for (Iterator<GWTQueryParams> it = savedSearches.iterator(); it.hasNext();) {
-				GWTQueryParams params = it.next();
-				if (params.getId()==id) {
-					Main.get().mainPanel.search.searchBrowser.searchResult.getSearch(params);
-					break;
-				}
-			}
+			int id = Integer.parseInt(table.getText(getSelectedRow(), 2));
+			Main.get().mainPanel.search.searchBrowser.searchResult.getSearch(data.get(new Integer(id)));
+		}
+	}
+	
+	/**
+	 * getSavedSearch
+	 * 
+	 * @return
+	 */
+	public GWTQueryParams getSavedSearch() {
+		if (getSelectedRow() >= 0) {
+			int id = Integer.parseInt(table.getText(getSelectedRow(), 2));
+			return data.get(new Integer(id));
+		} else { 
+			return null;
 		}
 	}
 	
@@ -240,10 +255,14 @@ public class UserNews extends Composite {
 	public void deleteSearch() {
 		if (getSelectedRow() >= 0) {
 			status.setFlag_deleteSearch();
-			searchIdToDelete = Integer.parseInt(table.getText(getSelectedRow(),1));
+			searchIdToDelete = Integer.parseInt(table.getText(getSelectedRow(),2));
 			ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
 			endPoint.setServiceEntryPoint(Config.SearchService);
-			searchService.deleteSearch(searchIdToDelete, callbackDeleteSearch);
+			if (!getSavedSearch().isShared()) {
+				searchService.deleteSearch(data.get(new Integer(searchIdToDelete)).getId(), callbackDeleteSearch);
+			} else {
+				searchService.unshare(data.get(new Integer(searchIdToDelete)).getId(), callbackDeleteSearch);
+			}
 		}
 	}
 	

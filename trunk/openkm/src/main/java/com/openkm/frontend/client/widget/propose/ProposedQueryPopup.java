@@ -48,6 +48,10 @@ import com.openkm.frontend.client.widget.notify.NotifyPanel;
  */
 public class ProposedQueryPopup extends DialogBox  {
 	
+	public static final int NONE 		= 1;
+	public static final int SAVE_SEARCH = 0;
+	public static final int USER_NEWS 	= 1;
+	
 	private final OKMProposedQueryServiceAsync proposedQueryService = (OKMProposedQueryServiceAsync) GWT.create(OKMProposedQueryService.class);
 	
 	private VerticalPanel vPanel;
@@ -61,6 +65,7 @@ public class ProposedQueryPopup extends DialogBox  {
 	private HTML errorNotify;
 	private String users;
 	private String roles;
+	private int type = NONE;
 	
 	public ProposedQueryPopup() {
 		// Establishes auto-close when click outside
@@ -166,11 +171,22 @@ public class ProposedQueryPopup extends DialogBox  {
 	 * 
 	 * @param TYPE
 	 */
-	public void executeProposeQuery() {
-		if (Main.get().mainPanel.search.historySearch.searchSaved.getSelectedRow()>=0) {
-			reset();
-			super.center();
-		} 
+	public void executeProposeQuery(int type) {
+		this.type = type;
+		switch (type) {
+			case SAVE_SEARCH:
+				if (Main.get().mainPanel.search.historySearch.searchSaved.getSelectedRow()>=0) {
+					reset();
+					super.center();
+				} 
+				break;
+			case USER_NEWS:
+				if (Main.get().mainPanel.search.historySearch.userNews.getSelectedRow()>=0) {
+					reset();
+					super.center();
+				} 
+				break;
+		}
 	}	
 
 	/**
@@ -179,7 +195,15 @@ public class ProposedQueryPopup extends DialogBox  {
 	private void sendProposal() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) proposedQueryService;
 		endPoint.setServiceEntryPoint(Config.ProposeQueryService);
-		GWTQueryParams params = Main.get().mainPanel.search.historySearch.searchSaved.getSavedSearch();
+		GWTQueryParams params = new GWTQueryParams();
+		switch (type) {
+			case SAVE_SEARCH:
+				params = Main.get().mainPanel.search.historySearch.searchSaved.getSavedSearch();
+				break;
+			case USER_NEWS:
+				params = Main.get().mainPanel.search.historySearch.userNews.getSavedSearch(); 
+				break;
+		}
 		proposedQueryService.create(params.getId(), users, roles, message.getText(), new AsyncCallback<Object>() {
 			@Override
 			public void onSuccess(Object result) {

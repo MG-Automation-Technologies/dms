@@ -40,6 +40,7 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.dao.QueryParamsDAO;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
@@ -223,6 +224,14 @@ public class DashboardServlet extends OKMRemoteServiceServlet implements OKMDash
 		try {
 			for (Iterator<QueryParams> it = OKMDashboard.getInstance().getUserSearchs(null).iterator(); it.hasNext(); ) {
 				searchList.add(GWTUtil.copy(it.next()));
+			}
+			for (QueryParams params : QueryParamsDAO.findShared(getThreadLocalRequest().getRemoteUser())) {
+				// Only dashboard queries
+				if (params.isDashboard()) {
+					GWTQueryParams gWTQueryParams = GWTUtil.copy(params);
+					gWTQueryParams.setShared(true);
+					searchList.add(gWTQueryParams);
+				}
 			}
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);

@@ -362,7 +362,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	public void refreshLang(String lang) {
 		this.lang = lang;
 		ServiceDefTarget endPoint = (ServiceDefTarget) languageService;
-		endPoint.setServiceEntryPoint(Config.GeneralService);
+		endPoint.setServiceEntryPoint(Config.LanguageService);
 		languageService.getFrontEndTranslations(lang, new AsyncCallback<Map<String,String>>() {
 			@Override
 			public void onSuccess(Map<String, String> result) {

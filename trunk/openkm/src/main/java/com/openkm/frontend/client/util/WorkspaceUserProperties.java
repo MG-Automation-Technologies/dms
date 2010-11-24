@@ -285,6 +285,7 @@ public class WorkspaceUserProperties {
 			if (MessagingToolBarBox.isRegistered(Main.get().getExtensionUuidList())) {
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.document.showProposedSusbcription();
 				Main.get().mainPanel.search.historySearch.searchSaved.menuPopup.showShareSearch();
+				Main.get().mainPanel.search.historySearch.userNews.menuPopup.showShareSearch();
 			}
 			
 			Main.get().startUp.nextStatus(StartUp.STARTUP_GET_TAXONOMY_ROOT);
