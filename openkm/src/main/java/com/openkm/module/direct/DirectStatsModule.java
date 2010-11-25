@@ -152,7 +152,7 @@ public class DirectStatsModule implements StatsModule {
 	 */
 	private long getCount(QueryManager queryManager, String statement) throws InvalidQueryException,
 			javax.jcr.RepositoryException {
-		Query query = queryManager.createQuery(statement, "xpath");
+		Query query = queryManager.createQuery(statement, Query.XPATH);
 		QueryResult result = query.execute();
 		return result.getRows().getSize();
 	}
@@ -209,7 +209,7 @@ public class DirectStatsModule implements StatsModule {
 	 */
 	private long getSize(QueryManager queryManager, String statement) throws InvalidQueryException,
 			javax.jcr.RepositoryException {
-		Query query = queryManager.createQuery(statement, "xpath");
+		Query query = queryManager.createQuery(statement, Query.XPATH);
 		QueryResult result = query.execute();
 		long size = 0;
 		
