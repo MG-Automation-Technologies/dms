@@ -231,7 +231,7 @@ public class DirectDashboardModule implements DashboardModule {
 		List<DashboardDocumentResult> al = new ArrayList<DashboardDocumentResult>();
 		Workspace workspace = session.getWorkspace();
 		QueryManager queryManager = workspace.getQueryManager();
-		Query query = queryManager.createQuery(qs, "xpath");
+		Query query = queryManager.createQuery(qs, Query.XPATH);
 		QueryResult result = query.execute();
 		int i = 0;
 		
@@ -263,7 +263,7 @@ public class DirectDashboardModule implements DashboardModule {
 		ArrayList<DashboardFolderResult> al = new ArrayList<DashboardFolderResult>();
 		Workspace workspace = session.getWorkspace();
 		QueryManager queryManager = workspace.getQueryManager();
-		Query query = queryManager.createQuery(qs, "xpath");
+		Query query = queryManager.createQuery(qs, Query.XPATH);
 		QueryResult result = query.execute();
 		int i = 0;
 		
