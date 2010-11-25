@@ -14,6 +14,11 @@
     <property name="dashboard" column="QP_DASHBOARD"/>
     <property name="lastModifiedFrom" column="QP_LAST_MODIFIED_FROM"/>
     <property name="lastModifiedTo" column="QP_LAST_MODIFIED_TO"/>
+    <property name="mailSubject" column="QP_MAIL_SUBJECT"/>
+    <property name="mailFrom" column="QP_MAIL_FROM"/>
+	<property name="mailTo" column="QP_MAIL_TO"/>
+    <property name="statementQuery" column="QP_STATEMENT_QUERY" type="text"/>
+    <property name="statementType" column="QP_STATEMENT_TYPE"/>
     <set name="keywords" table="OKM_QUERY_PARAMS_KEYWORD" lazy="false">
       <key column="QPK_ID" not-null="true"/>
       <element column="QPK_NAME" type="string"/>
