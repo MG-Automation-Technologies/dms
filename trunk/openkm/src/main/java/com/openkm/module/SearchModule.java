@@ -164,8 +164,8 @@ public interface SearchModule {
 	 * @throws PathNotFoundException If there is no saved search with this name.
 	 * @throws RepositoryException If there is any general repository problem or the query fails
 	 */
-	public void deleteSearch(String token, int qpId) throws AccessDeniedException, PathNotFoundException,
-			RepositoryException, DatabaseException;
+	public void deleteSearch(String token, int qpId) throws AccessDeniedException, RepositoryException,
+			DatabaseException;
 	
 	/**
 	 * Return a Keyword map. This is a hash with the keywords and the occurrence.
