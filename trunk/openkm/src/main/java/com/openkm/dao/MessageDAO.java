@@ -32,7 +32,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
-import com.openkm.dao.bean.Message;
+import com.openkm.dao.bean.MessageReceived;
+import com.openkm.dao.bean.MessageSent;
 
 public class MessageDAO {
 	private static Logger log = LoggerFactory.getLogger(MessageDAO.class);
@@ -42,16 +43,32 @@ public class MessageDAO {
 	/**
 	 * Create message
 	 */
-	public static void create(Message msg) throws DatabaseException {
-		log.debug("create({})", msg);
+	public static void send(String from, String to, String user, String subject, String content) throws 
+			DatabaseException {
+		log.debug("create({}, {}, {}, {}, {})", new Object[] { from, to, user, subject, content });
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-			if (msg.getSentDate() == null) msg.setSentDate(Calendar.getInstance());
-			session.save(msg);
+			tx = session.beginTransaction();		
+			
+			MessageSent msgSent = new MessageSent();
+			msgSent.setFrom(from);
+			msgSent.setTo(to);
+			msgSent.setSubject(subject);
+			msgSent.setContent(content);
+			session.save(msgSent);
+			
+			MessageReceived msgReceived = new MessageReceived();
+			msgReceived.setFrom(from);
+			msgReceived.setTo(to);
+			msgReceived.setUser(user);
+			msgReceived.setSubject(subject);
+			msgReceived.setContent(content);
+			msgReceived.setSentDate(Calendar.getInstance());
+			session.save(msgReceived);
+			
 			HibernateUtil.commit(tx);
 		} catch(HibernateException e) {
 			HibernateUtil.rollback(tx);
@@ -64,17 +81,18 @@ public class MessageDAO {
 	}
 	
 	/**
-	 * Update
+	 * Delete sent message
 	 */
-	public static void update(Message msg) throws DatabaseException {
-		log.debug("update({})", msg);
+	public static void deleteSent(int msgId) throws DatabaseException {
+		log.debug("deleteSent({})", msgId);
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			session.update(msg);
+			MessageSent msg = (MessageSent) session.load(MessageSent.class, msgId);
+			session.delete(msg);
 			HibernateUtil.commit(tx);
 		} catch(HibernateException e) {
 			HibernateUtil.rollback(tx);
@@ -83,21 +101,21 @@ public class MessageDAO {
 			HibernateUtil.close(session);
 		}
 		
-		log.debug("update: void");
+		log.debug("deleteSent: void");
 	}
 	
 	/**
-	 * Delete
+	 * Delete received message
 	 */
-	public static void delete(int msgId) throws DatabaseException {
-		log.debug("delete({})", msgId);
+	public static void deleteReceived(int msgId) throws DatabaseException {
+		log.debug("deleteReceived({})", msgId);
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			Message msg = (Message) session.load(Message.class, msgId);
+			MessageReceived msg = (MessageReceived) session.load(MessageReceived.class, msgId);
 			session.delete(msg);
 			HibernateUtil.commit(tx);
 		} catch(HibernateException e) {
@@ -109,22 +127,22 @@ public class MessageDAO {
 		
 		log.debug("delete: void");
 	}
-
+	
 	/**
-	 * Find by user
+	 * Find sent by user
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<Message> findByUser(String user) throws DatabaseException {
+	public static List<MessageSent> findSentByUser(String user) throws DatabaseException {
 		log.debug("findByUser({})", user);
-		String qs = "from Message msg where msg.user=:user order by msg.id";
+		String qs = "from MessageSent msg where msg.from=:user order by msg.id";
 		Session session = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
 			q.setString("user", user);
-			List<Message> ret = q.list();
-			log.debug("findByUser: {}", ret);
+			List<MessageSent> ret = q.list();
+			log.debug("findSentByUser: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
@@ -134,41 +152,20 @@ public class MessageDAO {
 	}
 
 	/**
-	 * Find all messages
+	 * Find received by user
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<Message> findAll() throws DatabaseException {
-		log.debug("findAll()");
-		String qs = "from Message msg order by msg.id";
+	public static List<MessageReceived> findReceivedByUser(String user) throws DatabaseException {
+		log.debug("findByUser({})", user);
+		String qs = "from MessageReceived msg where msg.user=:user order by msg.id";
 		Session session = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
-			List<Message> ret = q.list();
-			log.debug("findAll: {}", ret);
-			return ret;
-		} catch (HibernateException e) {
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-	}
-
-	/**
-	 * Find by pk
-	 */
-	public static Message findByPk(int msgId) throws DatabaseException {
-		log.debug("findByPk({})", msgId);
-		String qs = "from Message msg where msg.id=:id";
-		Session session = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			Query q = session.createQuery(qs);
-			q.setInteger("id", msgId);
-			Message ret = (Message) q.setMaxResults(1).uniqueResult();
-			log.debug("findByPk: {}", ret);
+			q.setString("user", user);
+			List<MessageReceived> ret = q.list();
+			log.debug("findReceivedByUser: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
@@ -182,7 +179,7 @@ public class MessageDAO {
 	 */
 	public static void markSeen(int msgId) throws DatabaseException {
 		log.debug("markSeen({})", msgId);
-		String qs = "update Message msg set msg.seenDate=:seenDate where msg.id=:id";
+		String qs = "update MessageReceived msg set msg.seenDate=:seenDate where msg.id=:id";
 		Session session = null;
 		
 		try {
