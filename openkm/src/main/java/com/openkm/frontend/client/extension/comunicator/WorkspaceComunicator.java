@@ -47,4 +47,11 @@ public class WorkspaceComunicator {
 	public static void setSearchView() {
 		Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(ExtendedDockPanel.SEARCH);
 	}
+	
+	/**
+	 * @return
+	 */
+	public static int getSelectedWorkspace() {
+		return Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace();
+	}
 }
