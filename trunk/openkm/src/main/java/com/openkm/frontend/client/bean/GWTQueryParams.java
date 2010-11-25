@@ -53,9 +53,9 @@ public class GWTQueryParams implements IsSerializable {
 	private Date lastModifiedTo;
 	private boolean isDashboard = false;
 	private long domain = 0;
-	private String from = "";
-	private String to = "";
-	private String subject = "";
+	private String mailFrom = "";
+	private String mailTo = "";
+	private String mailSubject = "";
 	private String categoryUuid = "";
 	private String categoryPath = "";
 	private boolean isShared = false;
@@ -162,28 +162,28 @@ public class GWTQueryParams implements IsSerializable {
 		this.domain = domain;
 	}
 
-	public String getFrom() {
-		return from;
+	public String getMailFrom() {
+		return mailFrom;
 	}
 
-	public void setFrom(String from) {
-		this.from = from;
+	public void setMailFrom(String mailFrom) {
+		this.mailFrom = mailFrom;
 	}
 
-	public String getTo() {
-		return to;
+	public String getMailTo() {
+		return mailTo;
 	}
 
-	public void setTo(String to) {
-		this.to = to;
+	public void setMailTo(String mailTo) {
+		this.mailTo = mailTo;
 	}
 
-	public String getSubject() {
-		return subject;
+	public String getMailSubject() {
+		return mailSubject;
 	}
 
-	public void setSubject(String subject) {
-		this.subject = subject;
+	public void setMailSubject(String mailSubject) {
+		this.mailSubject = mailSubject;
 	}
 
 	public String getOperator() {
