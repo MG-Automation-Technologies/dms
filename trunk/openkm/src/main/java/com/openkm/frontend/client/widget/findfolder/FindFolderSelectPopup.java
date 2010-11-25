@@ -136,9 +136,9 @@ public class FindFolderSelectPopup extends DialogBox  {
 					gwtParams.setMimeType("");
 					gwtParams.setName(keyword.getText()+"*"); // add wildcard at ends
 					gwtParams.setAuthor("");
-					gwtParams.setFrom("");
-					gwtParams.setTo("");
-					gwtParams.setSubject("");
+					gwtParams.setMailFrom("");
+					gwtParams.setMailTo("");
+					gwtParams.setMailSubject("");
 					gwtParams.setOperator(GWTQueryParams.OPERATOR_AND);
 					gwtParams.setLastModifiedFrom(null);
 					gwtParams.setLastModifiedTo(null);
