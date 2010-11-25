@@ -127,8 +127,19 @@ public class DirectSearchModule implements SearchModule {
 	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) throws 
 			IOException, ParseException, RepositoryException, DatabaseException {
 		log.debug("findPaginated({}, {}, {}, {})", new Object[] { token, params, offset, limit });
-		String query = prepareStatement(params);
-		ResultSet rs = findByStatementPaginated(token, query, "xpath", offset, limit);
+		String type = null;
+		String query = null;
+		
+		if (!"".equals(params.getStatementQuery()) && (Query.XPATH.equals(params.getStatementType()) |
+				Query.SQL.equals(params.getStatementType()))) {
+			query = params.getStatementQuery();
+			type = params.getStatementType();
+		} else {
+			query = prepareStatement(params);
+			type = Query.XPATH;
+		}
+		
+		ResultSet rs = findByStatementPaginated(token, query, type, offset, limit);
 		log.debug("findPaginated: {}", rs);
 		return rs;
 	}
@@ -179,9 +190,9 @@ public class DirectSearchModule implements SearchModule {
 		params.setMimeType(params.getMimeType() != null?params.getMimeType().trim():"");
 		params.setAuthor(params.getAuthor() != null?params.getAuthor().trim():"");
 		params.setPath(params.getPath() != null?params.getPath().trim():"");
-		params.setSubject(params.getSubject() != null?params.getSubject().trim():"");
-		params.setFrom(params.getFrom() != null?params.getFrom().trim():"");
-		params.setTo(params.getTo() != null?params.getTo().trim():"");
+		params.setMailSubject(params.getMailSubject() != null?params.getMailSubject().trim():"");
+		params.setMailFrom(params.getMailFrom() != null?params.getMailFrom().trim():"");
+		params.setMailTo(params.getMailTo() != null?params.getMailTo().trim():"");
 		params.setProperties(params.getProperties() != null?params.getProperties():new HashMap<String, String>());
 
 		// Domains
@@ -203,8 +214,8 @@ public class DirectSearchModule implements SearchModule {
 		if (!params.getContent().equals("") || !params.getName().equals("") ||
 				!params.getKeywords().equals("") || !params.getMimeType().equals("") ||
 				!params.getAuthor().equals("") || !params.getProperties().isEmpty() ||
-				!params.getSubject().equals("") || !params.getFrom().equals("") ||
-				!params.getTo().equals("") ||
+				!params.getMailSubject().equals("") || !params.getMailFrom().equals("") ||
+				!params.getMailTo().equals("") ||
 				(params.getLastModifiedFrom() != null && params.getLastModifiedTo() != null)) {
 			
 			// Construct the query
@@ -314,19 +325,19 @@ public class DirectSearchModule implements SearchModule {
 					sb.append(" and jcr:contains(.,'" + params.getContent() + "')");
 				}
 				
-				if (!params.getSubject().equals("")) {
+				if (!params.getMailSubject().equals("")) {
 					sb.append(" "+params.getOperator()+" ");
-					sb.append("jcr:contains(@okm:subject,'"+ params.getSubject()+ "')");
+					sb.append("jcr:contains(@okm:subject,'"+ params.getMailSubject()+ "')");
 				}
 				
-				if (!params.getFrom().equals("")) {
+				if (!params.getMailFrom().equals("")) {
 					sb.append(" "+params.getOperator()+" ");
-					sb.append("jcr:contains(@okm:from,'"+ params.getFrom()+ "')");
+					sb.append("jcr:contains(@okm:from,'"+ params.getMailFrom()+ "')");
 				}
 
-				if (!params.getTo().equals("")) {
+				if (!params.getMailTo().equals("")) {
 					sb.append(" "+params.getOperator()+" ");
-					sb.append("jcr:contains(@okm:to,'"+ params.getTo()+ "')");
+					sb.append("jcr:contains(@okm:to,'"+ params.getMailTo()+ "')");
 				}
 				
 				if (!params.getMimeType().equals("")) {
