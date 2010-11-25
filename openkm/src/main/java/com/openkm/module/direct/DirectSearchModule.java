@@ -514,9 +514,41 @@ public class DirectSearchModule implements SearchModule {
 		log.debug("saveSearch: {}", id);
 		return id;
 	}
+	
+	@Override
+	public void updateSearch(String token, QueryParams params) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("updateSearch({}, {})", token, params);
+		Session session = null;
+		
+		if (Config.SYSTEM_READONLY) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
+		
+		try {
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
+			params.setUser(session.getUserID());
+			QueryParamsDAO.update(params);
+			
+			// Activity log
+			UserActivity.log(session.getUserID(), "UPDATE_SEARCH", params.getName(), params.toString());
+		} catch (javax.jcr.RepositoryException e) {
+			throw new RepositoryException(e.getMessage(), e);
+		} catch (DatabaseException e) {
+			throw e;
+		} finally {
+			if (token == null) JCRUtils.logout(session);
+		}
+		
+		log.debug("updateSearch: void");
+	}
 		
 	@Override
-	@Deprecated
 	public QueryParams getSearch(String token, int qpId) throws PathNotFoundException, RepositoryException, 
 			DatabaseException {
 		log.debug("getSearch({}, {})", token, qpId);
