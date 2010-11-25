@@ -29,9 +29,11 @@ public class QueryParams implements Serializable {
 	private String path;
 	private Calendar lastModifiedFrom;
 	private Calendar lastModifiedTo;
-	private String subject;
-	private String from;
-	private String to;
+	private String mailSubject;
+	private String mailFrom;
+	private String mailTo;
+	private String statementQuery;
+	private String statementType;
 	private boolean dashboard;
 	private long domain = DOCUMENT;
 	private String operator = AND;
@@ -135,28 +137,44 @@ public class QueryParams implements Serializable {
 		this.lastModifiedTo = lastModifiedTo;
 	}
 	
-	public String getSubject() {
-		return subject;
+	public String getMailSubject() {
+		return mailSubject;
+	}
+
+	public void setMailSubject(String mailSubject) {
+		this.mailSubject = mailSubject;
+	}
+
+	public String getMailFrom() {
+		return mailFrom;
+	}
+
+	public void setMailFrom(String mailFrom) {
+		this.mailFrom = mailFrom;
+	}
+
+	public String getMailTo() {
+		return mailTo;
+	}
+
+	public void setMailTo(String mailTo) {
+		this.mailTo = mailTo;
 	}
 	
-	public void setSubject(String subject) {
-		this.subject = subject;
+	public String getStatementQuery() {
+		return statementQuery;
 	}
-	
-	public String getFrom() {
-		return from;
+
+	public void setStatementQuery(String statementQuery) {
+		this.statementQuery = statementQuery;
 	}
-	
-	public void setFrom(String from) {
-		this.from = from;
+
+	public String getStatementType() {
+		return statementType;
 	}
-	
-	public String getTo() {
-		return to;
-	}
-	
-	public void setTo(String to) {
-		this.to = to;
+
+	public void setStatementType(String statementType) {
+		this.statementType = statementType;
 	}
 	
 	public boolean isDashboard() {
@@ -225,6 +243,8 @@ public class QueryParams implements Serializable {
 		sb.append(", operator="); sb.append(operator);
 		sb.append(", shared="); sb.append(shared);
 		sb.append(", proposed="); sb.append(proposed);
+		sb.append(", statementQuery="); sb.append(statementQuery);
+		sb.append(", statementType="); sb.append(statementType);
 		sb.append(", lastModifiedFrom="); sb.append(lastModifiedFrom==null?null:lastModifiedFrom.getTime());
 		sb.append(", lastModifiedTo="); sb.append(lastModifiedTo==null?null:lastModifiedTo.getTime());
 		sb.append("}");
