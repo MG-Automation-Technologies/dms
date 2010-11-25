@@ -187,7 +187,7 @@ public class DocConverter {
 			OfficeDocumentConverter converter = new OfficeDocumentConverter(officeManager);
 			converter.convert(inputFile, outputFile);
 		} catch (OfficeException e) {
-			throw new IOException("Error convertind document: "+e.getMessage());
+			throw new IOException("Error converting document: "+e.getMessage());
 		}
 	}
 	
