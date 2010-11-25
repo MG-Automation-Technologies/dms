@@ -330,9 +330,9 @@ public class SearchIn extends Composite {
 				params.setLastModifiedFrom(modifyDateFrom);
 				params.setLastModifiedTo(modifyDateTo);
 				params.setDashboard(dashboard.getValue());
-				params.setFrom(from.getText());
-				params.setTo(to.getText());
-				params.setSubject(subject.getText());
+				params.setMailFrom(from.getText());
+				params.setMailTo(to.getText());
+				params.setMailSubject(subject.getText());
 				
 				if (typeDocument.getValue()) {
 					domain += GWTQueryParams.DOCUMENT;
@@ -896,9 +896,9 @@ public class SearchIn extends Composite {
 		gwtParams.setName(name.getText());
 		gwtParams.setAuthor(userListBox.getValue(userListBox.getSelectedIndex()));
 		
-		gwtParams.setFrom(from.getText());
-		gwtParams.setTo(to.getText());
-		gwtParams.setSubject(subject.getText());
+		gwtParams.setMailFrom(from.getText());
+		gwtParams.setMailTo(to.getText());
+		gwtParams.setMailSubject(subject.getText());
 		
 		if (searchTypeAnd.getValue()) {
 			gwtParams.setOperator(GWTQueryParams.OPERATOR_AND);
@@ -1118,9 +1118,9 @@ public class SearchIn extends Composite {
 		keywords.setText(gWTParams.getKeywords());
 		dashboard.setValue(gWTParams.isDashboard());
 		
-		from.setText(gWTParams.getFrom());
-		to.setText(gWTParams.getTo());
-		subject.setText(gWTParams.getSubject());
+		from.setText(gWTParams.getMailFrom());
+		to.setText(gWTParams.getMailTo());
+		subject.setText(gWTParams.getMailSubject());
 		
 		if (gWTParams.getOperator().equals(GWTQueryParams.OPERATOR_AND)) {
 			searchTypeAnd.setValue(true);
