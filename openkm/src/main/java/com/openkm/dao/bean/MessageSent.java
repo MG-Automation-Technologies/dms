@@ -24,16 +24,13 @@ package com.openkm.dao.bean;
 import java.io.Serializable;
 import java.util.Calendar;
 
-public class Message implements Serializable {
+public class MessageSent implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private String from;
 	private String to;
-	private String user;
-	private String uuid;
 	private String subject;
 	private String content;
-	private Calendar seenDate;
 	private Calendar sentDate;
 	
 	public int getId() {
@@ -60,22 +57,6 @@ public class Message implements Serializable {
 		this.to = to;
 	}
 	
-	public String getUser() {
-		return user;
-	}
-	
-	public void setUser(String user) {
-		this.user = user;
-	}
-	
-	public String getUuid() {
-		return uuid;
-	}
-	
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-	
 	public String getSubject() {
 		return subject;
 	}
@@ -92,14 +73,6 @@ public class Message implements Serializable {
 		this.content = content;
 	}
 	
-	public Calendar getSeenDate() {
-		return seenDate;
-	}
-	
-	public void setSeenDate(Calendar seenDate) {
-		this.seenDate = seenDate;
-	}
-	
 	public Calendar getSentDate() {
 		return sentDate;
 	}
@@ -114,11 +87,8 @@ public class Message implements Serializable {
 		sb.append("id="); sb.append(id);
 		sb.append(", from="); sb.append(from);
 		sb.append(", to="); sb.append(to);
-		sb.append(", user="); sb.append(user);
-		sb.append(", uuid="); sb.append(uuid);
 		sb.append(", subject="); sb.append(subject);
 		sb.append(", content="); sb.append(content);
-		sb.append(", seenDate="); sb.append(seenDate==null?null:seenDate.getTime());
 		sb.append(", sentDate="); sb.append(sentDate==null?null:sentDate.getTime());
 		sb.append("}");
 		return sb.toString();
