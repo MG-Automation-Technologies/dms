@@ -37,7 +37,6 @@ import com.openkm.bean.QueryResult;
 import com.openkm.bean.ResultSet;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
-import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.QueryParamsDAO;
 import com.openkm.dao.bean.QueryParams;
@@ -123,9 +122,6 @@ public class SearchServlet extends OKMRemoteServiceServlet implements OKMSearchS
 		
 		try {
 			OKMSearch.getInstance().deleteSearch(null, id);
-		} catch (PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
