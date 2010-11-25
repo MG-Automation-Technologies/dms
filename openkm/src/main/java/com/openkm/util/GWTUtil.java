@@ -434,9 +434,9 @@ public class GWTUtil {
 		params.setLastModifiedTo(lastModifiedTo);
 		params.setDashboard(gWTParams.isDashboard());
 		params.setDomain(gWTParams.getDomain());
-		params.setSubject(gWTParams.getSubject());
-		params.setTo(gWTParams.getTo());
-		params.setFrom(gWTParams.getFrom());
+		params.setMailSubject(gWTParams.getMailSubject());
+		params.setMailTo(gWTParams.getMailTo());
+		params.setMailFrom(gWTParams.getMailFrom());
 		params.setOperator(gWTParams.getOperator());
 		
 		return params;
@@ -495,9 +495,9 @@ public class GWTUtil {
 		gWTParams.setAuthor(params.getAuthor());
 		gWTParams.setDashboard(params.isDashboard());
 		gWTParams.setDomain(params.getDomain());
-		gWTParams.setSubject(params.getSubject());
-		gWTParams.setFrom(params.getFrom());
-		gWTParams.setTo(params.getTo());
+		gWTParams.setMailSubject(params.getMailSubject());
+		gWTParams.setMailFrom(params.getMailFrom());
+		gWTParams.setMailTo(params.getMailTo());
 		gWTParams.setOperator(params.getOperator());
 		Iterator<String> itCat = params.getCategories().iterator();
 		if (itCat.hasNext()) {
