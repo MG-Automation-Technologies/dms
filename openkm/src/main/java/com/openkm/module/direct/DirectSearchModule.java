@@ -624,8 +624,8 @@ public class DirectSearchModule implements SearchModule {
 	}
 
 	@Override
-	public void deleteSearch(String token, int qpId) throws AccessDeniedException, PathNotFoundException,
-			RepositoryException, DatabaseException {
+	public void deleteSearch(String token, int qpId) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
 		log.debug("deleteSearch({}, {})", token, qpId);
 		Session session = null;
 		
@@ -653,9 +653,6 @@ public class DirectSearchModule implements SearchModule {
 		} catch (DatabaseException e) {
 			log.warn(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
-		} catch (javax.jcr.PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
-			throw new PathNotFoundException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
