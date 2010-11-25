@@ -164,8 +164,8 @@ public class OKMSearch implements SearchModule {
 	}
 
 	@Override
-	public void deleteSearch(String token, int qpId) throws AccessDeniedException, PathNotFoundException,
-			RepositoryException, DatabaseException {
+	public void deleteSearch(String token, int qpId) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
 		log.debug("deleteSearch({}, {})", token, qpId);
 		SearchModule sm = ModuleManager.getSearchModule();
 		sm.deleteSearch(token, qpId);
