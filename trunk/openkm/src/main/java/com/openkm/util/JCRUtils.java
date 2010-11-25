@@ -375,7 +375,7 @@ public class JCRUtils {
 		String qs = "/jcr:root//element(*, okm:document)[okm:content/@okm:author='"+session.getUserID()+"']";
 		Workspace workspace = session.getWorkspace();
 		QueryManager queryManager = workspace.getQueryManager();
-		Query query = queryManager.createQuery(qs, "xpath");
+		Query query = queryManager.createQuery(qs, Query.XPATH);
 		QueryResult result = query.execute();
 		long size = 0;
 		
