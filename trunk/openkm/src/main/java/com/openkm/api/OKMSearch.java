@@ -134,9 +134,17 @@ public class OKMSearch implements SearchModule {
 		log.debug("saveSearch: {}", id);
 		return id;
 	}
+	
+	@Override
+	public void updateSearch(String token, QueryParams params) throws AccessDeniedException,
+			RepositoryException, DatabaseException {
+		log.debug("updateSearch({}, {})", token, params);
+		SearchModule sm = ModuleManager.getSearchModule();
+		sm.saveSearch(token, params);
+		log.debug("updateSearch: void");
+	}
 
 	@Override
-	@Deprecated
 	public QueryParams getSearch(String token, int qpId) throws PathNotFoundException, RepositoryException,
 			DatabaseException {
 		log.debug("getSearch({}, {})", token, qpId);
