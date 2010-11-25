@@ -97,7 +97,7 @@ public class UserItemsManager {
 			String statement = "/jcr:root/okm:root//element(*, okm:document)[okm:content/@okm:author='"+session.getUserID()+"']";
 			Workspace workspace = session.getWorkspace();
 			QueryManager queryManager = workspace.getQueryManager();
-			Query query = queryManager.createQuery(statement, "xpath");
+			Query query = queryManager.createQuery(statement, Query.XPATH);
 			QueryResult result = query.execute();
 			long size = 0;
 			
