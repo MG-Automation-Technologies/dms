@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.MimeTypeDAO;
 import com.openkm.dao.bean.MimeType;
+import com.openkm.util.SecureStore;
 
 /**
  * Mime Icon Servlet
@@ -54,10 +55,10 @@ public class MimeIconServlet extends HttpServlet {
 		
 		try {
 			if (mime.length() > 1) {
-				MimeType mt = MimeTypeDAO.findByName(mime.substring(1), false);
+				MimeType mt = MimeTypeDAO.findByName(mime.substring(1));
 				
 				if (mt != null) {
-					byte[] img = mt.getImageContent();
+					byte[] img = SecureStore.b64Decode(new String(mt.getImageContent()));
 					response.setContentType(mt.getImageMime());
 					response.setContentLength(img.length);
 					os = response.getOutputStream();

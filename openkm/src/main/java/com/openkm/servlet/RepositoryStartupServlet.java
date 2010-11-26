@@ -22,7 +22,6 @@
 package com.openkm.servlet;
 
 import java.io.File;
-import java.io.FileReader;
 import java.util.Calendar;
 import java.util.Properties;
 import java.util.Timer;
@@ -30,7 +29,6 @@ import java.util.Timer;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.SessionImpl;
 import org.apache.velocity.app.Velocity;
@@ -40,12 +38,10 @@ import org.jbpm.JbpmContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import bsh.EvalError;
-import bsh.Interpreter;
-
 import com.openkm.cache.UserDocumentKeywordsManager;
 import com.openkm.cache.UserItemsManager;
 import com.openkm.core.Config;
+import com.openkm.core.Cron;
 import com.openkm.core.DataStoreGarbageCollector;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryInfo;
@@ -56,10 +52,9 @@ import com.openkm.dao.HibernateUtil;
 import com.openkm.kea.RDFREpository;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.DocConverter;
+import com.openkm.util.ExecutionUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WarUtils;
-import com.openkm.util.cl.ClassLoaderUtils;
-import com.openkm.util.cl.JarClassLoader;
 
 /**
  * Servlet Class
@@ -72,8 +67,14 @@ import com.openkm.util.cl.JarClassLoader;
 public class RepositoryStartupServlet extends HttpServlet {
 	private static Logger log = LoggerFactory.getLogger(RepositoryStartupServlet.class);
 	private static final long serialVersionUID = 207151527252937549L;
-	private Timer timer;
+	private Timer dsgcTimer;
+	private Timer wdTimer;
+	private Timer riTimer;
+	private Timer uiTimer;
+	private Timer umiTimer;
+	private Timer cronTimer;
 	private Watchdog wd;
+	private Cron cron;
 	private UpdateInfo ui;
 	private RepositoryInfo ri;
 	private UserMailImporter umi;
@@ -136,8 +137,13 @@ public class RepositoryStartupServlet extends HttpServlet {
         	hasConfiguredDataStore = true;
         }
         
-        // Scheduler
-        timer = new Timer();
+		// Create timers
+		uiTimer = new Timer();
+		wdTimer = new Timer();
+		cronTimer = new Timer();
+		riTimer = new Timer();
+		umiTimer = new Timer();
+		dsgcTimer = new Timer();
         
         // Workflow
         log.info("*** Initializing workflow engine... ***");
@@ -154,21 +160,30 @@ public class RepositoryStartupServlet extends HttpServlet {
         if (Config.UPDATE_INFO) {
         	 log.info("*** Activating update info ***");
         	 ui = new UpdateInfo();
-        	 timer.schedule(ui, 1000, 24*60*60*1000); // First in 1 seg, next each 24 hours
+        	 uiTimer.schedule(ui, 1000, 24*60*60*1000); // First in 1 seg, next each 24 hours
         }
 		
         log.info("*** Activating watchdog ***");
         wd = new Watchdog();
-        timer.schedule(wd, 60*1000, 5*60*1000); // First in 1 min, next each 5 mins
+        wdTimer.schedule(wd, 60*1000, 5*60*1000); // First in 1 min, next each 5 mins
+        
+        log.info("*** Activating cron ***");
+        cron = new Cron();
+        Calendar calCron = Calendar.getInstance();
+        calCron.add(Calendar.MINUTE, 1);
+        calCron.set(Calendar.SECOND, 0);
+        calCron.set(Calendar.MILLISECOND, 0);
+        // Round begin to next minute, 0 seconds, 0 miliseconds
+        cronTimer.scheduleAtFixedRate(cron, calCron.getTime(), 60*1000); // First in 1 min, next each 1 min
         
         log.info("*** Activating repository info ***");
         ri = new RepositoryInfo();
-        timer.schedule(ri, 60*1000, Config.SCHEDULE_REPOSITORY_INFO); // First in 1 min, next each X minutes
+        riTimer.schedule(ri, 60*1000, Config.SCHEDULE_REPOSITORY_INFO); // First in 1 min, next each X minutes
         
         if (Config.SCHEDULE_MAIL_IMPORTER > 0) {
         	log.info("*** Activating user mail importer ***");
         	umi = new UserMailImporter();
-        	timer.schedule(umi, 5*60*1000, Config.SCHEDULE_MAIL_IMPORTER); // First in 5 mins, next each X minutes
+        	umiTimer.schedule(umi, 5*60*1000, Config.SCHEDULE_MAIL_IMPORTER); // First in 5 mins, next each X minutes
         } else {
         	log.info("*** User mail importer disabled ***");
         }
@@ -182,7 +197,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         	now.set(Calendar.MINUTE, 0);
         	now.set(Calendar.SECOND, 0);
         	now.set(Calendar.MILLISECOND, 0);
-        	timer.scheduleAtFixedRate(dsgc, now.getTime(), 24*60*60*1000); // First tomorrow at 00:00, next each 24 hours
+        	dsgcTimer.scheduleAtFixedRate(dsgc, now.getTime(), 24*60*60*1000); // First tomorrow at 00:00, next each 24 hours
         }
         
         try {
@@ -201,8 +216,10 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         try {
         	log.info("*** Ejecute start script ***");
-        	runScript(Config.START_SCRIPT);
-        	runJar(Config.START_JAR);
+        	File script = new File(Config.HOME_DIR + File.separatorChar + Config.START_SCRIPT);
+        	ExecutionUtils.runScript(script);
+        	File jar = new File(Config.HOME_DIR + File.separatorChar + Config.START_JAR);
+        	ExecutionUtils.runJar(jar);
         } catch (Throwable e) {
         	log.warn(e.getMessage(), e);
         }
@@ -239,15 +256,27 @@ public class RepositoryStartupServlet extends HttpServlet {
         else log.info("*** Shutting down repository info... ***");
         ri.cancel();
         
+        if (log == null) log("*** Shutting down cron... ***");
+        else log.info("*** Shutting down cron... ***");
+        cron.cancel();
+        
         if (log == null) log("*** Shutting down watchdog... ***");
         else log.info("*** Shutting down watchdog... ***");
         wd.cancel();
         
-        if (log == null) log("*** Shutting down update info... ***");
-        else log.info("*** Shutting down update info... ***");
-        ui.cancel();
+        if (Config.UPDATE_INFO) {
+        	if (log == null) log("*** Shutting down update info... ***");
+        	else log.info("*** Shutting down update info... ***");
+        	ui.cancel();
+        }
         
-        timer.cancel();
+        // Cancel timers
+        dsgcTimer.cancel();
+        umiTimer.cancel();
+        riTimer.cancel();
+        cronTimer.cancel();
+        wdTimer.cancel();
+        uiTimer.cancel();
         
         if (log == null) log("*** Shutting down workflow engine... ***");
         else log.info("*** Shutting down workflow engine... ***");
@@ -280,8 +309,10 @@ public class RepositoryStartupServlet extends HttpServlet {
         try {
         	if (log == null) log("*** Ejecute stop script ***");
         	else log.info("*** Ejecute stop script ***");
-        	runScript(Config.STOP_SCRIPT);
-        	runJar(Config.STOP_JAR);
+        	File script = new File(Config.HOME_DIR + File.separatorChar + Config.STOP_SCRIPT);
+        	ExecutionUtils.runScript(script);
+        	File jar = new File(Config.HOME_DIR + File.separatorChar + Config.STOP_JAR);
+        	ExecutionUtils.runJar(jar);
         } catch (Throwable e) {
         	log.warn(e.getMessage(), e);
         }
@@ -289,57 +320,4 @@ public class RepositoryStartupServlet extends HttpServlet {
         // Activity log
 		UserActivity.log(Config.SYSTEM_USER, "OPENKM_STOP", null, null);
     }
-    
-    /**
-     * Ejecute script
-     */
-    private void runScript(String name) {
-    	try {
-    		File script = new File(Config.HOME_DIR + File.separatorChar + name); 
-        	FileReader fr = null;
-        	
-        	if (script.exists() && script.canRead()) {
-        		Interpreter i = new Interpreter();
-        		fr = new FileReader(script);
-				
-				try {
-					Object result = i.eval(fr);
-					log.info("Script output: "+(result!=null?result.toString():"null"));
-				} catch (EvalError e) {
-					log.warn(e.getMessage(), e);
-				} finally {
-					IOUtils.closeQuietly(fr);
-				}
-        	} else {
-        		log.warn("Unable to read script: {}", script.getPath());
-        	}
-        } catch (Exception e) {
-        	log.warn(e.getMessage(), e);
-        }
-    }
-    
-    /**
-     * Ejecute jar
-     */
-    private void runJar(String name) {
-    	try {
-    		File jar = new File(Config.HOME_DIR + File.separatorChar + name); 
-    		
-    		if (jar.exists() && jar.canRead()) {
-    			JarClassLoader jcl = new JarClassLoader(jar.toURI().toURL(), getClass().getClassLoader());
-    			String mainClass = jcl.getMainClassName();
-    			
-    			if (mainClass != null) {
-    				Class<?> c = jcl.loadClass(jcl.getMainClassName());
-    				ClassLoaderUtils.invokeClass(c, new String[] {});
-    			} else {
-    				log.error("Main class not defined at: {}", jar.getPath());
-    			}
-    		} else {
-    			log.warn("Unable to read jar: {}", jar.getPath());
-    		}
-    	} catch (Exception e) {
-    		log.warn(e.getMessage(), e);
-    	}
-	}
 }
