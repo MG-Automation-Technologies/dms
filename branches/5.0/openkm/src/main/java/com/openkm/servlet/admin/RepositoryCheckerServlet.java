@@ -50,6 +50,7 @@ public class RepositoryCheckerServlet extends BaseServlet {
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
 		String repoPath = WebUtil.getString(request, "repoPath", "/okm:root");
+		boolean versions = WebUtil.getBoolean(request, "versions");
 		updateSessionManager(request);
 		PrintWriter out = response.getWriter();
 		response.setContentType("text/html");
@@ -68,10 +69,12 @@ public class RepositoryCheckerServlet extends BaseServlet {
 			if (!repoPath.equals("")) {
 				ContentInfo cInfo = OKMFolder.getInstance().getContentInfo(null, repoPath);
 				long begin = System.currentTimeMillis();
-				ImpExpStats stats = RepositoryChecker.checkDocuments(repoPath, out,	new HTMLInfoDecorator((int)cInfo.getDocuments()));
+				ImpExpStats stats = RepositoryChecker.checkDocuments(repoPath, versions, out,
+						new HTMLInfoDecorator((int)cInfo.getDocuments()));
 				long end = System.currentTimeMillis();
 				out.println("<hr/>");
-				out.println("<div class=\"ok\">Folder '"+repoPath+"'</div>");
+				out.println("<div class=\"ok\">Path: "+repoPath+"</div>");
+				out.println("<div class=\"ok\">Versions: "+versions+"</div>");
 				out.println("<br/>");
 				out.println("<b>Documents:</b> "+stats.getDocuments()+"<br/>");
 				out.println("<b>Folders:</b> "+stats.getFolders()+"<br/>");
