@@ -105,12 +105,13 @@ public class RepositoryChecker {
 				InputStream is = dm.getContent(null, docChild.getPath(), false);
 				IOUtils.copy(is, fos);
 				is.close();
-								
-				// Check version history
-				for (Version ver : dm.getVersionHistory(null, docChild.getPath())) {
-					is = dm.getContentByVersion(null, docChild.getPath(), ver.getName());
-					IOUtils.copy(is, fos);
-					is.close();
+				
+				if (versions) { // Check version history
+					for (Version ver : dm.getVersionHistory(null, docChild.getPath())) {
+						is = dm.getContentByVersion(null, docChild.getPath(), ver.getName());
+						IOUtils.copy(is, fos);
+						is.close();
+					}
 				}
 				
 				fos.close();
