@@ -42,6 +42,7 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.dao.MimeTypeDAO;
 import com.openkm.dao.bean.MimeType;
+import com.openkm.util.SecureStore;
 
 public class Config {
 	private static Logger log = LoggerFactory.getLogger(Config.class);
@@ -672,14 +673,12 @@ public class Config {
 			}
 			
 			for (MimeType mt : mimeTypeList) {
-				if (mt.isActive()) {
-					String entry = mt.getName();
-					for (String ext : mt.getExtensions()) {
-						entry += " " + ext;
-					}
-					log.debug("loadMimeTypes => Add Entry: {}", entry);
-					Config.mimeTypes.addMimeTypes(entry);
+				String entry = mt.getName();
+				for (String ext : mt.getExtensions()) {
+					entry += " " + ext;
 				}
+				log.debug("loadMimeTypes => Add Entry: {}", entry);
+				Config.mimeTypes.addMimeTypes(entry);
 			}
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
@@ -708,10 +707,9 @@ public class Config {
 						MimeType mt = new MimeType();
 						mt.setName(data[0]);
 						InputStream iis = sc.getResourceAsStream("/META-INF/mime/" + mt.getName() + ".gif");
-						mt.setImageContent(IOUtils.toByteArray(iis));
+						mt.setImageContent(SecureStore.b64Encode(IOUtils.toByteArray(iis)));
 						iis.close();
 						mt.setImageMime("image/gif");
-						mt.setActive(true);
 						
 						for (int i=1; i<data.length; i++) {
 							mt.getExtensions().add(data[i]);
