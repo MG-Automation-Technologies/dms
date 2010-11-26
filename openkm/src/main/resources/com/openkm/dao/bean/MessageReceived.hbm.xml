@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-  <class name="com.openkm.dao.bean.Message" table="OKM_MESSAGE_RECEIVED">
+  <class name="com.openkm.dao.bean.MessageReceived" table="OKM_MESSAGE_RECEIVED">
     <id name="id" column="MSR_ID"><generator class="native"/></id>
     <property name="from" column="MSR_FROM" not-null="true" length="127"/>
     <property name="to" column="MSR_TO" not-null="true"/>
