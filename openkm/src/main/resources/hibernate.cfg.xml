@@ -223,7 +223,6 @@
     <mapping resource="com/openkm/dao/bean/Report.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Config.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Profile.hbm.xml"/>
-    <mapping resource="com/openkm/dao/bean/Message.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/CronTab.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Bookmark.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Activity.hbm.xml"/>
@@ -234,6 +233,8 @@
     <mapping resource="com/openkm/dao/bean/FilterRule.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/MailAccount.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/QueryParams.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/MessageSent.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/MessageReceived.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/ProposedQuery.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/TwitterAccount.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/DashboardStats.hbm.xml"/>
