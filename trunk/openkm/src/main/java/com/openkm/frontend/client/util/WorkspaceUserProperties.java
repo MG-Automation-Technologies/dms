@@ -99,6 +99,7 @@ public class WorkspaceUserProperties {
 			if (result.isUserQuotaEnabled() && result.getUserQuotaLimit() > 0) {
 				Main.get().mainPanel.bottomPanel.userInfo.enableUserQuota(workspace.getUserQuotaLimit());
 			}
+			Main.get().mainPanel.bottomPanel.userInfo.showExtensions();
 			Main.get().aboutPopup.setAppVersion(result.getAppVersion());
 			getUserDocumentsSize(); // Refreshing user document size ( here is yet set userQuota limit )
 			

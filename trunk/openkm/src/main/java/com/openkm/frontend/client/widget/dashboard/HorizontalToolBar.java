@@ -315,4 +315,16 @@ public class HorizontalToolBar extends Composite {
 	public void addToolBarBoxExtension(ToolBarBoxExtension extension) {
 		widgetExtensionList.add(extension);
 	}
+	
+	/**
+	 * showToolBoxExtension
+	 * 
+	 * @param widget
+	 */
+	public void showToolBoxExtension(ToolBarBoxExtension extension) {
+		enabledWidget.removeStyleName("okm-ToolBar-Big-selected");
+		((Widget) extension).setStyleName("okm-ToolBar-Big-selected");
+		enabledWidget = ((Widget) extension);
+		Main.get().mainPanel.dashboard.changeView(Dashboard.DASHBOARD_EXTENSION);
+	}
 }

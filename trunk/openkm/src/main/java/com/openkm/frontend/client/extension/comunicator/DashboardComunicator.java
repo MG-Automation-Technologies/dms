@@ -22,8 +22,7 @@
 package com.openkm.frontend.client.extension.comunicator;
 
 import com.openkm.frontend.client.Main;
-
-
+import com.openkm.frontend.client.extension.widget.ToolBarBoxExtension;
 
 /**
  * DashboardComunicator
@@ -54,4 +53,12 @@ public class DashboardComunicator {
 		Main.get().mainPanel.dashboard.newsDashboard.refreshAllSearchs();
 	}
 	
+	/**
+	 * showToolBoxExtension
+	 * 
+	 * @param extension
+	 */
+	public static void showToolBoxExtension(ToolBarBoxExtension extension) {
+		Main.get().mainPanel.dashboard.horizontalToolBar.showToolBoxExtension(extension);
+	}
 }
