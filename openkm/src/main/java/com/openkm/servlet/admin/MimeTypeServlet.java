@@ -48,6 +48,7 @@ import com.openkm.core.DatabaseException;
 import com.openkm.dao.MimeTypeDAO;
 import com.openkm.dao.bean.MimeType;
 import com.openkm.util.JCRUtils;
+import com.openkm.util.SecureStore;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtil;
 
@@ -153,8 +154,6 @@ public class MimeTypeServlet extends BaseServlet {
 							mt.setId(Integer.parseInt(item.getString("UTF-8")));
 						} else if (item.getFieldName().equals("mt_name")) {
 							mt.setName(item.getString("UTF-8"));
-						} else if (item.getFieldName().equals("mt_active")) {
-							mt.setActive(true);
 						} else if (item.getFieldName().equals("mt_extensions")) {
 							String[] extensions = item.getString("UTF-8").split(" ");
 							for (int i=0; i<extensions.length; i++) {
@@ -164,7 +163,7 @@ public class MimeTypeServlet extends BaseServlet {
 					} else {
 						is = item.getInputStream();
 						mt.setImageMime(Config.mimeTypes.getContentType(item.getName()));
-						mt.setImageContent(IOUtils.toByteArray(is));
+						mt.setImageContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
 						is.close();
 					}
 				}

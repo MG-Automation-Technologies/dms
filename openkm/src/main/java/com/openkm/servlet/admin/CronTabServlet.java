@@ -21,13 +21,8 @@
 
 package com.openkm.servlet.admin;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URLEncoder;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -36,13 +31,10 @@ import java.util.Map;
 import javax.jcr.LoginException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.mail.internet.MimeUtility;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.jasperreports.engine.JRException;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -56,23 +48,21 @@ import org.slf4j.LoggerFactory;
 
 import bsh.EvalError;
 
+import com.openkm.core.Cron;
 import com.openkm.core.DatabaseException;
-import com.openkm.dao.HibernateUtil;
-import com.openkm.dao.ReportDAO;
-import com.openkm.dao.bean.Report;
-import com.openkm.util.DocConverter;
+import com.openkm.dao.CronTabDAO;
+import com.openkm.dao.bean.CronTab;
 import com.openkm.util.JCRUtils;
-import com.openkm.util.ReportUtil;
 import com.openkm.util.SecureStore;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtil;
 
 /**
- * Execute report servlet
+ * Execute crontab servlet
  */
-public class ReportServlet extends BaseServlet {
+public class CronTabServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
-	private static Logger log = LoggerFactory.getLogger(ReportServlet.class);
+	private static Logger log = LoggerFactory.getLogger(CronTabServlet.class);
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
@@ -86,37 +76,35 @@ public class ReportServlet extends BaseServlet {
 			session = JCRUtils.getSession();
 
 			Map<String, String> types = new LinkedHashMap<String, String>();
-			types.put(Report.SQL, "SQL");
-			types.put(Report.SCRIPT, "Script");
-			//types.put(Report.HIBERNATE, "Hibernate");
-			//types.put(Report.COLLECTION, "Collection");
-			//types.put(Report.XPATH, "XPath");
+			types.put(CronTab.BSH, "BSH");
+			types.put(CronTab.JAR, "JAR");
 			
 			if (action.equals("create")) {
 				ServletContext sc = getServletContext();
-				Report rp = new Report();
+				CronTab ct = new CronTab();
 				sc.setAttribute("action", action);
 				sc.setAttribute("types", types);
-				sc.setAttribute("rp", rp);
-				sc.getRequestDispatcher("/admin/report_edit.jsp").forward(request, response);
+				sc.setAttribute("ct", ct);
+				sc.getRequestDispatcher("/admin/crontab_edit.jsp").forward(request, response);
 			} else if (action.equals("edit")) {
 				ServletContext sc = getServletContext();
-				int rpId = WebUtil.getInt(request, "rp_id");
-				Report rp = ReportDAO.findByPk(rpId);
+				int ctId = WebUtil.getInt(request, "ct_id");
+				CronTab ct = CronTabDAO.findByPk(ctId);
 				sc.setAttribute("action", action);
 				sc.setAttribute("types", types);
-				sc.setAttribute("rp", rp);
-				sc.getRequestDispatcher("/admin/report_edit.jsp").forward(request, response);
+				sc.setAttribute("ct", ct);
+				sc.getRequestDispatcher("/admin/crontab_edit.jsp").forward(request, response);
 			} else if (action.equals("delete")) {
 				ServletContext sc = getServletContext();
-				int rpId = WebUtil.getInt(request, "rp_id");
-				Report rp = ReportDAO.findByPk(rpId);
+				int ctId = WebUtil.getInt(request, "ct_id");
+				CronTab ct = CronTabDAO.findByPk(ctId);
 				sc.setAttribute("action", action);
 				sc.setAttribute("types", types);
-				sc.setAttribute("rp", rp);
-				sc.getRequestDispatcher("/admin/report_edit.jsp").forward(request, response);
+				sc.setAttribute("ct", ct);
+				sc.getRequestDispatcher("/admin/crontab_edit.jsp").forward(request, response);
 			} else if (action.equals("execute")) {
 				execute(session, request, response);
+				list(session, request, response);
 			} else {
 				list(session, request, response);
 			}
@@ -127,9 +115,6 @@ public class ReportServlet extends BaseServlet {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);
 		} catch (DatabaseException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (JRException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);
 		} catch (EvalError e) {
@@ -156,7 +141,7 @@ public class ReportServlet extends BaseServlet {
 				FileItemFactory factory = new DiskFileItemFactory(); 
 				ServletFileUpload upload = new ServletFileUpload(factory);
 				List<FileItem> items = upload.parseRequest(request);
-				Report rp = new Report();
+				CronTab ct = new CronTab();
 				
 				for (Iterator<FileItem> it = items.iterator(); it.hasNext();) {
 					FileItem item = it.next();
@@ -164,41 +149,44 @@ public class ReportServlet extends BaseServlet {
 					if (item.isFormField()) {
 						if (item.getFieldName().equals("action")) {
 							action = item.getString("UTF-8");
-						} else if (item.getFieldName().equals("rp_id")) {
-							rp.setId(Integer.parseInt(item.getString("UTF-8")));
-						} else if (item.getFieldName().equals("rp_name")) {
-							rp.setName(item.getString("UTF-8"));
-						} else if (item.getFieldName().equals("rp_type")) {
-							rp.setType(item.getString("UTF-8"));
-						} else if (item.getFieldName().equals("rp_active")) {
-							rp.setActive(true);
-						
+						} else if (item.getFieldName().equals("ct_id")) {
+							ct.setId(Integer.parseInt(item.getString("UTF-8")));
+						} else if (item.getFieldName().equals("ct_name")) {
+							ct.setName(item.getString("UTF-8"));
+						} else if (item.getFieldName().equals("ct_mail")) {
+							ct.setMail(item.getString("UTF-8"));
+						} else if (item.getFieldName().equals("ct_expression")) {
+							ct.setExpression(item.getString("UTF-8"));
+						} else if (item.getFieldName().equals("ct_type")) {
+							ct.setType(item.getString("UTF-8"));
+						} else if (item.getFieldName().equals("ct_active")) {
+							ct.setActive(true);
 						}
 					} else {
 						is = item.getInputStream();
-						rp.setFileName(FilenameUtils.getName(item.getName()));
-						rp.setFileContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
+						ct.setFileName(FilenameUtils.getName(item.getName()));
+						ct.setFileContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
 						is.close();
 					}
 				}
 			
 				if (action.equals("create")) {
-					ReportDAO.create(rp);
+					CronTabDAO.create(ct);
 					
 					// Activity log
-					UserActivity.log(session.getUserID(), "ADMIN_REPORT_CREATE", null, rp.toString());
+					UserActivity.log(session.getUserID(), "ADMIN_CRONTAB_CREATE", null, ct.toString());
 					list(session, request, response);
 				} else if (action.equals("edit")) {
-					ReportDAO.update(rp);
+					CronTabDAO.update(ct);
 					
 					// Activity log
-					UserActivity.log(session.getUserID(), "ADMIN_REPORT_EDIT", Integer.toString(rp.getId()), rp.toString());
+					UserActivity.log(session.getUserID(), "ADMIN_CRONTAB_EDIT", Integer.toString(ct.getId()), ct.toString());
 					list(session, request, response);
 				} else if (action.equals("delete")) {
-					ReportDAO.delete(rp.getId());
+					CronTabDAO.delete(ct.getId());
 					
 					// Activity log
-					UserActivity.log(session.getUserID(), "ADMIN_REPORT_DELETE", Integer.toString(rp.getId()), null);
+					UserActivity.log(session.getUserID(), "ADMIN_CRONTAB_DELETE", Integer.toString(ct.getId()), null);
 					list(session, request, response);
 				}
 			}
@@ -226,24 +214,18 @@ public class ReportServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException {
 		log.debug("list({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
-		List<Report> list = ReportDAO.findAll();
+		List<CronTab> list = CronTabDAO.findAll();
 		
-		for (Report rp : list) {
-			if (Report.SQL.equals(rp.getType())) {
-				rp.setType("SQL");
-			} else if (Report.SCRIPT.equals(rp.getType())) {
-				rp.setType("Script");
-			} else if (Report.HIBERNATE.equals(rp.getType())) {
-				rp.setType("Hibernate");
-			} else if (Report.XPATH.equals(rp.getType())) {
-				rp.setType("XPath");
-			} else if (Report.COLLECTION.equals(rp.getType())) {
-				rp.setType("Collection");
+		for (CronTab ct : list) {
+			if (CronTab.BSH.equals(ct.getType())) {
+				ct.setType("BSH");
+			} else if (CronTab.JAR.equals(ct.getType())) {
+				ct.setType("Script");
 			}
 		}
 		
-		sc.setAttribute("reports", list);
-		sc.getRequestDispatcher("/admin/report_list.jsp").forward(request, response);
+		sc.setAttribute("crontabs", list);
+		sc.getRequestDispatcher("/admin/crontab_list.jsp").forward(request, response);
 		log.debug("list: void");
 	}
 	
@@ -251,71 +233,23 @@ public class ReportServlet extends BaseServlet {
 	 * Execute report
 	 */
 	private void execute(Session session, HttpServletRequest request, HttpServletResponse response) throws 
-			IOException, DatabaseException, JRException, EvalError {
+			IOException, DatabaseException, EvalError {
 		log.debug("execute({}, {}, {})", new Object[] { session, request, response });
-		int rpId = WebUtil.getInt(request, "rp_id");
-		Report rp = ReportDAO.findByPk(rpId);
-		String agent = request.getHeader("USER-AGENT");
+		int ctId = WebUtil.getInt(request, "ct_id");
+		CronTab ct = CronTabDAO.findByPk(ctId);
 		
-		// Disable browser cache
-		response.setHeader("Expires", "Sat, 6 May 1971 12:00:00 GMT");
-		response.setHeader("Cache-Control", "max-age=0, must-revalidate");
-		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-		response.setHeader("Pragma", "no-cache");
-		
-		// Set MIME type
-		response.setContentType(DocConverter.PDF);
-		String fileName = rp.getFileName().substring(0, rp.getFileName().indexOf('.')) + ".pdf"; 
-		
-		if (null != agent && -1 != agent.indexOf("MSIE")) {
-			log.debug("Agent: Explorer");
-			fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", " ");
-		} else if (null != agent && -1 != agent.indexOf("Mozilla"))	{
-			log.debug("Agent: Mozilla");
-			fileName = MimeUtility.encodeText(fileName, "UTF-8", "B");
-		} else {
-			log.debug("Agent: Unknown");
-		}
-		
-		// Set filename
-		response.setHeader("Content-disposition", "attachment; filename=\""+ fileName +"\"");
-		
-		// Set default report parameters
-		Map<String, String> parameters = new HashMap<String, String>();
-		String host = com.openkm.core.Config.APPLICATION_URL;
-		parameters.put("host", host.substring(0, host.lastIndexOf("/")+1));
-		
-		ByteArrayOutputStream baos = null;
-		ByteArrayInputStream bais = null;
-		OutputStream os = null;
-		org.hibernate.Session dbSession = null;
-		
-		try {
-			baos = new ByteArrayOutputStream();
-			bais = new ByteArrayInputStream(SecureStore.b64Decode(rp.getFileContent()));
-			
-			if (Report.SQL.equals(rp.getType())) {
-				dbSession = HibernateUtil.getSessionFactory().openSession();
-				ReportUtil.generateReport(baos, bais, parameters, ReportUtil.PDF_OUTPUT, dbSession.connection());
-			} else if (Report.SCRIPT.equals(rp.getType())) {
-				ReportUtil.generateReport(baos, bais, parameters, ReportUtil.PDF_OUTPUT);
-			}
-			
-			// Send back to browser
-			os = response.getOutputStream();
-			IOUtils.write(baos.toByteArray(), os);
-			os.flush();
-		} finally {
-			if (Report.SQL.equals(rp.getType())) {
-				HibernateUtil.close(dbSession);
-			}
-			IOUtils.closeQuietly(bais);
-			IOUtils.closeQuietly(baos);
-			IOUtils.closeQuietly(os);
+		if (CronTab.BSH.equals(ct.getType())) {
+			Cron.RunnerBsh runner = new Cron.RunnerBsh(ct.getId(), ct.getMail(),  
+					new String(SecureStore.b64Decode(ct.getFileContent())));
+			runner.run();
+		} else if (CronTab.JAR.equals(ct.getType())) {
+			Cron.RunnerJar runner = new Cron.RunnerJar(ct.getId(), ct.getMail(), 
+					SecureStore.b64Decode(ct.getFileContent()));
+			runner.run();
 		}
 		
 		// Activity log
-		UserActivity.log(request.getRemoteUser(), "ADMIN_REPORT_EXECUTE", Integer.toString(rpId), rp.toString());
+		UserActivity.log(request.getRemoteUser(), "ADMIN_CRONTAB_EXECUTE", Integer.toString(ctId), ct.toString());
 		log.debug("execute: void");
 	}
 }
