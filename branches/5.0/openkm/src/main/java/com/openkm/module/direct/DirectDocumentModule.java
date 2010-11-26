@@ -384,7 +384,7 @@ public class DirectDocumentModule implements DocumentModule {
 			// Check file restrictions
 			String mimeType = Config.mimeTypes.getContentType(name.toLowerCase());
 			
-			if (Config.RESTRICT_FILE_MIME && MimeTypeDAO.findByName(mimeType, true) == null) {
+			if (Config.RESTRICT_FILE_MIME && MimeTypeDAO.findByName(mimeType) == null) {
 				throw new UnsupportedMimeTypeException(mimeType);
 			}
 			
