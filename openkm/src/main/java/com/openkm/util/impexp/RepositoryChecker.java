@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
+import com.openkm.bean.Version;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
@@ -53,13 +54,14 @@ public class RepositoryChecker {
 	/**
 	 * Performs a recursive repository document check
 	 */
-	public static ImpExpStats checkDocuments(String fldPath, Writer out, InfoDecorator deco) throws 
-			PathNotFoundException, AccessDeniedException, RepositoryException, IOException, DatabaseException {
-		log.debug("checkDocuments({}, {}, {})", new Object[] { fldPath, out, deco });
+	public static ImpExpStats checkDocuments(String fldPath, boolean versions, Writer out,
+			InfoDecorator deco) throws PathNotFoundException, AccessDeniedException, RepositoryException,
+			IOException, DatabaseException {
+		log.debug("checkDocuments({}, {}, {}, {})", new Object[] { fldPath, versions, out, deco });
 		ImpExpStats stats;
 		
 		try {
-			stats = checkDocumentsHelper(fldPath, out, deco);
+			stats = checkDocumentsHelper(fldPath, versions, out, deco);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw e;
@@ -87,10 +89,10 @@ public class RepositoryChecker {
 	/**
 	 * Performs a recursive repository document check
 	 */
-	private static ImpExpStats checkDocumentsHelper(String fldPath, Writer out, InfoDecorator deco) throws
-			FileNotFoundException, PathNotFoundException, AccessDeniedException, RepositoryException,
-			IOException, DatabaseException {
-		log.debug("checkDocumentsHelper({}, {}, {})", new Object[] { fldPath, out, deco });
+	private static ImpExpStats checkDocumentsHelper(String fldPath, boolean versions, Writer out,
+			InfoDecorator deco) throws FileNotFoundException, PathNotFoundException, AccessDeniedException,
+			RepositoryException, IOException, DatabaseException {
+		log.debug("checkDocumentsHelper({}, {}, {}, {})", new Object[] { fldPath, versions, out, deco });
 		ImpExpStats stats = new ImpExpStats();
 		File fsPath = new File(Config.NULL_DEVICE);
 		
@@ -103,6 +105,15 @@ public class RepositoryChecker {
 				InputStream is = dm.getContent(null, docChild.getPath(), false);
 				IOUtils.copy(is, fos);
 				is.close();
+				
+				if (versions) { // Check version history
+					for (Version ver : dm.getVersionHistory(null, docChild.getPath())) {
+						is = dm.getContentByVersion(null, docChild.getPath(), ver.getName());
+						IOUtils.copy(is, fos);
+						is.close();
+					}
+				}
+				
 				fos.close();
 				out.write(deco.print(docChild.getPath(), docChild.getActualVersion().getSize(), null));
 				out.flush();
@@ -120,7 +131,7 @@ public class RepositoryChecker {
 		FolderModule fm = ModuleManager.getFolderModule();
 		for (Iterator<Folder> it = fm.getChilds(null, fldPath).iterator(); it.hasNext();) {
 			Folder fldChild = it.next();
-			ImpExpStats tmp = checkDocumentsHelper(fldChild.getPath(), out, deco);
+			ImpExpStats tmp = checkDocumentsHelper(fldChild.getPath(), versions, out, deco);
 			
 			// Stats
 			stats.setSize(stats.getSize() + tmp.getSize());
