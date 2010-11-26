@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.widget.UserInfoExtension;
 import com.openkm.frontend.client.panel.ExtendedDockPanel;
 import com.openkm.frontend.client.service.OKMChatService;
 import com.openkm.frontend.client.service.OKMChatServiceAsync;
@@ -62,11 +63,13 @@ public class UserInfo extends Composite {
 	private boolean quotaExceeded = false;
 	private HTML quotaUsed;
 	private int percent = 0;
+	private List<UserInfoExtension> widgetExtensionList;
 	
 	/**
 	 * UserInfo
 	 */
 	public UserInfo() {
+		widgetExtensionList = new ArrayList<UserInfoExtension>();
 		connectUsersList = new ArrayList<String>();
 		chatRoomList = new ArrayList<ChatRoomDialogBox>();
 		img = new Image(OKMBundleResources.INSTANCE.openkmConnected());
@@ -613,5 +616,31 @@ public class UserInfo extends Composite {
 	 */
 	public boolean isQuotaExceed() {
 		return quotaExceeded;
+	}
+	
+	/**
+	 * showExtensions
+	 */
+	public void showExtensions() {
+		if (widgetExtensionList.size()>0) {
+			panel.add(new Image(OKMBundleResources.INSTANCE.separator()));
+			panel.add(new HTML("&nbsp;"));
+			for (UserInfoExtension extension : widgetExtensionList) {
+				panel.add(extension);
+				panel.add(new HTML("&nbsp;"));
+			}
+		}
+		for (UserInfoExtension extension : widgetExtensionList) {
+			panel.add(extension);
+		}
+	}
+	
+	/**
+	 * addUserInfoExtension
+	 * 
+	 * @param extension
+	 */
+	public void addUserInfoExtension(UserInfoExtension extension) {
+		widgetExtensionList.add(extension);
 	}
 }

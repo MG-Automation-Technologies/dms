@@ -42,6 +42,7 @@ import com.openkm.frontend.client.extension.widget.TabMailExtension;
 import com.openkm.frontend.client.extension.widget.TabWorkspaceExtension;
 import com.openkm.frontend.client.extension.widget.ToolBarBoxExtension;
 import com.openkm.frontend.client.extension.widget.ToolBarButtonExtension;
+import com.openkm.frontend.client.extension.widget.UserInfoExtension;
 
 /**
  * ExtensionManager
@@ -72,6 +73,8 @@ public class ExtensionManager {
 				addToolBarBoxExtension((ToolBarBoxExtension) obj);
 			} else if (obj instanceof PreviewExtension) {
 				addPreviewExtension((PreviewExtension) obj);
+			} else if (obj instanceof UserInfoExtension) {
+				addUserInfoExtension((UserInfoExtension) obj);
 			}
 			
 			// Registering handlers
@@ -175,6 +178,15 @@ public class ExtensionManager {
 	 */
 	private static void addPreviewExtension(PreviewExtension extension) {
 		Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.addPreviewExtension(extension);
+	}
+	
+	/**
+	 * addUserInfoExtension
+	 * 
+	 * @param extension
+	 */
+	private static void addUserInfoExtension(UserInfoExtension extension) {
+		Main.get().mainPanel.bottomPanel.userInfo.addUserInfoExtension(extension);
 	}
 	
 	/**

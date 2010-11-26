@@ -19,40 +19,14 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.extension.comunicator;
+package com.openkm.frontend.client.extension;
 
-import com.openkm.frontend.client.Main;
 
 /**
- * WorkspaceComunicator
+ * HasUserInfoExtension
  * 
  * @author jllort
  *
  */
-public class WorkspaceComunicator {
-	
-	/**
-	 * getSelectedTab
-	 * 
-	 * @return
-	 */
-	public static int getSelectedTab() {
-		return Main.get().mainPanel.topPanel.tabWorkspace.getSelectedTab();
-	}
-	
-	/**
-	 * setSearchView
-	 */
-	public static void changeSelectedTab(int selectedTab) {
-		Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(selectedTab);
-	}
-	
-	/**
-	 * @return
-	 */
-	public static int getSelectedWorkspace() {
-		return Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace();
-	}
-	
-	public static void setSearchView() {}
+public interface HasUserInfoExtension extends HasExtension {	
 }
