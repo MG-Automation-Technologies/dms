@@ -171,7 +171,7 @@ public class DefaultHandler implements IOHandler, PropertyHandler {
         	
         	// Restrict for MIME
         	try {
-        		if (Config.RESTRICT_FILE_MIME && MimeTypeDAO.findByName(mimeType, true) == null) {
+        		if (Config.RESTRICT_FILE_MIME && MimeTypeDAO.findByName(mimeType) == null) {
         			return false;
         		}
         	} catch (DatabaseException e) {
