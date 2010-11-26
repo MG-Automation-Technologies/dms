@@ -18,8 +18,10 @@
     <c:when test="${isAdmin}">
       <h1>Repository cheker</h1>
       <form action="RepositoryChecker">
-      <table class="form" align="center">
-      <tr><td colspan="2" align="right"><input type="submit" value="Send"/></td></tr>
+        <table class="form" align="center">
+          <tr><td>Path</td><td><input name="repoPath" value="/okm:root"/></td></tr>
+          <tr><td>Versions</td><td><input name="versions" type="checkbox"/></td></tr>
+          <tr><td colspan="2" align="right"><input type="submit" value="Send"/></td></tr>
         </table>
       </form>
     </c:when>

@@ -21,7 +21,7 @@
       <h1>Mime Types <span style="font-size: 10px;">(<a href="${urlReset}">Reset</a>)</span></h1>
       <table class="results" width="70%">
         <tr>
-          <th>Name</th><th>Image</th><th>Extensions</th><th>Active</th>
+          <th>Name</th><th>Image</th><th>Extensions</th>
           <th width="50px">
             <c:url value="MimeType" var="urlCreate">
               <c:param name="action" value="create"/>
@@ -44,16 +44,6 @@
             <td>${mt.name}</td>
             <td align="center"><img src="${urlIcon}"/></td>
             <td>${mt.extensions}</td>
-            <td align="center">
-              <c:choose>
-                <c:when test="${mt.active}">
-                  <img src="img/true.png" alt="Active" title="Active"/>
-                </c:when>
-                <c:otherwise>
-                  <img src="img/false.png" alt="Inactive" title="Inactive"/>
-                </c:otherwise>
-              </c:choose>
-            </td>
             <td>
               <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
               &nbsp;
