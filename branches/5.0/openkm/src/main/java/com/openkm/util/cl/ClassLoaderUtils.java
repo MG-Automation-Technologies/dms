@@ -13,16 +13,16 @@ public class ClassLoaderUtils {
 	/**
 	 * Invoke class
 	 */
-	public static void invokeClass(String className, String[] args, ClassLoader classLoader) throws 
+	public static Object invokeClass(String className, String[] args, ClassLoader classLoader) throws 
 			ClassNotFoundException, NoSuchMethodException, InvocationTargetException {
 		Class<?> c = classLoader.loadClass(className);
-		invokeClass(c, args);
+		return invokeClass(c, args);
 	}
 	
 	/**
 	 * Invoke class
 	 */
-	public static void invokeClass(Class<?> c, String[] args) throws ClassNotFoundException,
+	public static Object invokeClass(Class<?> c, String[] args) throws ClassNotFoundException,
 			NoSuchMethodException, InvocationTargetException {
 		log.debug("invokeClass({}, {})", c, args);
 		Method m = c.getMethod("main", new Class[] { args.getClass() });
@@ -34,9 +34,11 @@ public class ClassLoaderUtils {
 		}
 		
 		try {
-			m.invoke(null, new Object[] { args });
+			return m.invoke(null, new Object[] { args });
 		} catch (IllegalAccessException e) {
 			// This should not happen, as we have disabled access checks
 		}
+		
+		return null;
 	}
 }
