@@ -2,5 +2,6 @@
 <%@ page import="com.openkm.core.Config" %>
 <% 
 	session.invalidate();
-	response.sendRedirect(request.getContextPath()+"/index.jsp");
+	response.sendRedirect("index.jsp");
+	//response.sendRedirect(request.getContextPath()+"/index.jsp");
 %>
