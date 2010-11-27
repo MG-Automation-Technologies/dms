@@ -21,7 +21,6 @@
 
 package com.openkm.dao;
 
-import java.sql.Blob;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -73,7 +72,7 @@ public class MimeTypeDAO {
 	 */
 	public static void update(MimeType mt) throws DatabaseException {
 		log.debug("update({})", mt);
-		String qs = "select mt.imageContentBlob, mt.imageMime from MimeType mt where mt.id=:id";
+		String qs = "select mt.imageContent, mt.imageMime from MimeType mt where mt.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -81,11 +80,11 @@ public class MimeTypeDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 
-			if (mt.getImageContent().length == 0) {
+			if (mt.getImageContent() == null || mt.getImageContent().length() == 0) {
 				Query q = session.createQuery(qs);
 				q.setParameter("id", mt.getId());
 				Object[] data = (Object[]) q.setMaxResults(1).uniqueResult();
-				mt.setImageContent(HibernateUtil.toByteArray((Blob) data[0]));
+				mt.setImageContent((String) data[0]);
 				mt.setImageMime((String) data[1]);
 			}
 			
@@ -210,10 +209,9 @@ public class MimeTypeDAO {
 	/**
 	 * Find by name
 	 */
-	public static MimeType findByName(String name, boolean filterByActive) throws DatabaseException {
+	public static MimeType findByName(String name) throws DatabaseException {
 		log.debug("findByName({})", name);
-		String qs = "from MimeType mt where mt.name=:name " +
-			(filterByActive?"and mt.active=:active":"");
+		String qs = "from MimeType mt where mt.name=:name";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -222,11 +220,6 @@ public class MimeTypeDAO {
 			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setString("name", name);
-			
-			if (filterByActive) {
-				q.setBoolean("active", true);
-			}
-			
 			MimeType ret = (MimeType) q.setMaxResults(1).uniqueResult();
 			HibernateUtil.commit(tx);
 			log.debug("findByName: {}", ret);
