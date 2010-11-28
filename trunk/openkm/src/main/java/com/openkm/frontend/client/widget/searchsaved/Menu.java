@@ -25,12 +25,12 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
+import com.openkm.extension.frontend.client.widget.messaging.MessagingToolBarBox;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.extension.comunicator.GeneralComunicator;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.ConfirmPopup;
-import com.openkm.frontend.client.widget.propose.ProposedQueryPopup;
 
 /**
  * Search saved menu
@@ -87,7 +87,7 @@ public class Menu extends Composite {
 	Command shareSearch = new Command() {
 		public void execute() {
 			if (shareOption) {
-				Main.get().proposedQueryPopup.executeProposeQuery(ProposedQueryPopup.SAVE_SEARCH);
+				MessagingToolBarBox.get().executeProposeQuery(MessagingToolBarBox.PROPOSED_QUERY_SAVE_SEARCH);
 				hide();
 			}
 		}
