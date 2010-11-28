@@ -54,6 +54,7 @@ import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
+import com.openkm.extension.frontend.client.widget.messaging.MessagingToolBarBox;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
@@ -216,7 +217,7 @@ public class Document extends Composite {
 		proposeSubscribeImage.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				Main.get().proposedSubscriptionPopup.executeProposeSubscription();
+				MessagingToolBarBox.get().executeProposeSubscription();
 			}
 		});
 		hPanelSubscribedUsers.add(subcribedUsersText);

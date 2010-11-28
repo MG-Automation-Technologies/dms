@@ -31,6 +31,7 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTLanguage;
 import com.openkm.frontend.client.bean.ToolBarOption;
+import com.openkm.frontend.client.extension.ui.UIMenuConstants;
 import com.openkm.frontend.client.extension.widget.MenuItemExtension;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.ConfirmPopup;
@@ -1163,7 +1164,27 @@ public class MainMenu extends Composite {
 	 * @param extension
 	 */
 	public void addMenuExtension(MenuItemExtension extension) {
-		MainMenu.addItem(extension);
+		switch (extension.getMenuLocation()) {
+			case UIMenuConstants.NEW_MENU:
+				MainMenu.addItem(extension);
+				break;
+			case UIMenuConstants.MAIN_MENU_FILE:
+				subMenuFile.addItem(extension);
+				break;
+			case UIMenuConstants.MAIN_MENU_EDIT:
+				subMenuEdit.addItem(extension);
+				break;
+			case UIMenuConstants.MAIN_MENU_TOOLS:
+				subMenuTools.addItem(extension);
+				break;
+			case UIMenuConstants.MAIN_MENU_BOOKMARS:
+				subMenuBookmark.addItem(extension);
+				break;
+			case UIMenuConstants.MAIN_MENU_HELP:
+				subMenuHelp.addItem(extension);
+				break;
+		}
+		
 	}
 	
 	/**
