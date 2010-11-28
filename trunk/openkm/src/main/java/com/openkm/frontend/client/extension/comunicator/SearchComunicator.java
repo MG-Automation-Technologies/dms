@@ -52,4 +52,40 @@ public class SearchComunicator {
 	public static void getUserSearchs() {
 		Main.get().mainPanel.search.historySearch.userNews.getUserSearchs();
 	}
+	
+	/**
+	 * getSelectedRowSearchSaved
+	 * 
+	 * @return
+	 */
+	public static int getSelectedRowSearchSaved() {
+		return Main.get().mainPanel.search.historySearch.searchSaved.getSelectedRow();
+	}
+	
+	/**
+	 * getSelectedRowUserNews
+	 * 
+	 * @return
+	 */
+	public static int getSelectedRowUserNews() {
+		return Main.get().mainPanel.search.historySearch.userNews.getSelectedRow();
+	}
+	
+	/**
+	 * getSavedSearch
+	 * 
+	 * @return
+	 */
+	public static GWTQueryParams getSavedSearch() {
+		return Main.get().mainPanel.search.historySearch.searchSaved.getSavedSearch();
+	}
+	
+	/**
+	 * getSavedUserNews
+	 * 
+	 * @return
+	 */
+	public static GWTQueryParams getSavedUserNews() {
+		return Main.get().mainPanel.search.historySearch.userNews.getSavedSearch();
+	}
 }

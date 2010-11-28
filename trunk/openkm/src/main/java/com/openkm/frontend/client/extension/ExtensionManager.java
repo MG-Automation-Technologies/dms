@@ -34,6 +34,7 @@ import com.openkm.frontend.client.extension.event.handler.NavigatorHandlerExtens
 import com.openkm.frontend.client.extension.event.handler.PropertyGroupHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.ToolBarHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.WorkspaceHandlerExtension;
+import com.openkm.frontend.client.extension.ui.UIMenuConstants;
 import com.openkm.frontend.client.extension.widget.MenuItemExtension;
 import com.openkm.frontend.client.extension.widget.PreviewExtension;
 import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
@@ -75,7 +76,7 @@ public class ExtensionManager {
 				addPreviewExtension((PreviewExtension) obj);
 			} else if (obj instanceof UserInfoExtension) {
 				addUserInfoExtension((UserInfoExtension) obj);
-			}
+			} 
 			
 			// Registering handlers
 			if (obj instanceof DocumentHandlerExtension) {
@@ -141,7 +142,16 @@ public class ExtensionManager {
 	 * @param extension
 	 */
 	private static void addMenuExtension(MenuItemExtension extension) {
-		Main.get().mainPanel.topPanel.mainMenu.addMenuExtension(extension);
+		switch (extension.getMenuLocation()) {
+			case UIMenuConstants.NEW_MENU:
+			case UIMenuConstants.MAIN_MENU_FILE:
+			case UIMenuConstants.MAIN_MENU_EDIT:
+			case UIMenuConstants.MAIN_MENU_TOOLS:
+			case UIMenuConstants.MAIN_MENU_BOOKMARS:
+			case UIMenuConstants.MAIN_MENU_HELP:
+			     Main.get().mainPanel.topPanel.mainMenu.addMenuExtension(extension);
+				 break;
+		}
 	}
 	
 	/**

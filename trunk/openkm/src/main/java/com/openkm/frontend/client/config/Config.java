@@ -58,4 +58,5 @@ public class Config {
 	public static String StaplingDownloadService = Main.CONTEXT+"/extension/StaplingDownload";
 	public static String ProposeSubscriptionService = Main.CONTEXT+"/extension/ProposedSubscription";
 	public static String ProposeQueryService = Main.CONTEXT+"/extension/ProposedQuery";
+	public static String MessageService = Main.CONTEXT+"/extension/Message";
 }
