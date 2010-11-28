@@ -54,12 +54,12 @@ import com.openkm.bean.form.Option;
 import com.openkm.bean.form.Select;
 import com.openkm.bean.form.TextArea;
 import com.openkm.bean.form.Validator;
-import com.openkm.core.Config;
 import com.openkm.core.ParseException;
 
 public class FormUtils {
 	private static Logger log = LoggerFactory.getLogger(FormUtils.class);
 	private static Map<PropertyGroup, List<FormElement>> pGroups = null;
+	private static final String BASE_DIR = "src/test/resources";
 
 	/**
 	 * Parse form.xml definitions
@@ -120,7 +120,7 @@ public class FormUtils {
 		log.debug("parseMetadataForms()");
 		// long begin = Calendar.getInstance().getTimeInMillis();
 		if (pGroups == null) {
-			String pgFile = Config.PROPERTY_GROUPS_XML;
+			String pgFile = BASE_DIR + "/PropertyGroups.xml";
 			log.debug("PropertyGroupForms: {}", pgFile);
 			pGroups = new HashMap<PropertyGroup, List<FormElement>>();
 			FileInputStream fis = null;
