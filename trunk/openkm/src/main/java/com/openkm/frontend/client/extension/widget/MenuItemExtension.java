@@ -24,6 +24,7 @@ package com.openkm.frontend.client.extension.widget;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
+import com.openkm.frontend.client.extension.ui.UIMenuConstants;
 import com.openkm.frontend.client.util.Util;
 
 /**
@@ -33,6 +34,8 @@ import com.openkm.frontend.client.util.Util;
  *
  */
 public class MenuItemExtension extends MenuItem {
+	
+	private int menuLocation = UIMenuConstants.NEW_MENU;
 	
 	/**
 	 * MenuItemExtension
@@ -67,5 +70,23 @@ public class MenuItemExtension extends MenuItem {
 	public MenuItemExtension(String text, MenuBar menuBar) {
 		super(text, menuBar);
 		addStyleName("okm-MainMenuBar");
+	}
+	
+	/**
+	 * setMenuLocation
+	 * 
+	 * @param menuLocation
+	 */
+	public void setMenuLocation(int menuLocation) {
+		this.menuLocation = menuLocation;
+	}
+	
+	/**
+	 * getMenuLocation
+	 * 
+	 * @return
+	 */
+	public int getMenuLocation() {
+		return menuLocation;
 	}
 }
