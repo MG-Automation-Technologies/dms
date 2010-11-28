@@ -58,6 +58,7 @@ public class MessageDAO {
 			msgSent.setTo(to);
 			msgSent.setSubject(subject);
 			msgSent.setContent(content);
+			msgSent.setSentDate(Calendar.getInstance());
 			session.save(msgSent);
 			
 			MessageReceived msgReceived = new MessageReceived();
