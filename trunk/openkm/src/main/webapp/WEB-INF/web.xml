@@ -157,6 +157,10 @@
     <servlet-name>ProposedQueryServlet</servlet-name>
     <servlet-class>com.openkm.servlet.extension.ProposedQueryServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>MessageServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.extension.MessageServlet</servlet-class>
+  </servlet>
   
   <!-- Misc servlets -->
   <servlet>
@@ -475,14 +479,6 @@
     <servlet-name>FrontendLanguageServlet</servlet-name>
     <url-pattern>/frontend/Language</url-pattern>
   </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ProposedSubscriptionServlet</servlet-name>
-    <url-pattern>/extension/ProposedSubscription</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ProposedQueryServlet</servlet-name>
-    <url-pattern>/extension/ProposedQuery</url-pattern>
-  </servlet-mapping>
   
   <!-- Extensions Servlet Mappings -->
   <servlet-mapping>
@@ -492,6 +488,18 @@
   <servlet-mapping>
     <servlet-name>StaplingDownloadServlet</servlet-name>
     <url-pattern>/extension/StaplingDownload</url-pattern>
+  </servlet-mapping>
+    <servlet-mapping>
+    <servlet-name>ProposedSubscriptionServlet</servlet-name>
+    <url-pattern>/extension/ProposedSubscription</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ProposedQueryServlet</servlet-name>
+    <url-pattern>/extension/ProposedQuery</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>MessageServlet</servlet-name>
+    <url-pattern>/extension/Message</url-pattern>
   </servlet-mapping>
   
   <!-- Misc servlets mappings -->
