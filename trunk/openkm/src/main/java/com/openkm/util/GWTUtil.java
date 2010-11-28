@@ -74,6 +74,8 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.Bookmark;
 import com.openkm.dao.bean.Language;
+import com.openkm.dao.bean.MessageReceived;
+import com.openkm.dao.bean.MessageSent;
 import com.openkm.dao.bean.ProposedQuery;
 import com.openkm.dao.bean.ProposedSubscription;
 import com.openkm.dao.bean.QueryParams;
@@ -111,6 +113,8 @@ import com.openkm.frontend.client.bean.GWTUserConfig;
 import com.openkm.frontend.client.bean.GWTValidator;
 import com.openkm.frontend.client.bean.GWTVersion;
 import com.openkm.frontend.client.bean.GWTWorkflowComment;
+import com.openkm.frontend.client.bean.extension.GWTMessageReceived;
+import com.openkm.frontend.client.bean.extension.GWTMessageSent;
 import com.openkm.frontend.client.bean.extension.GWTProposedQuery;
 import com.openkm.frontend.client.bean.extension.GWTProposedSubscription;
 import com.openkm.frontend.client.bean.extension.GWTStaple;
@@ -1165,5 +1169,45 @@ public class GWTUtil {
 		}
 		gWTProposedQuery.setParams(copy(params));
 		return gWTProposedQuery;
+	}
+	
+	/**
+	 * Copy MessageSent to GWTMessageSent
+	 * 
+	 * @param ms
+	 * @return
+	 */
+	public static GWTMessageSent copy(MessageSent ms) {
+		GWTMessageSent gWTMessageSent  = new GWTMessageSent();
+		gWTMessageSent.setContent(ms.getContent());
+		gWTMessageSent.setFrom(ms.getFrom());
+		gWTMessageSent.setId(ms.getId());
+		gWTMessageSent.setSentDate(ms.getSentDate().getTime());
+		gWTMessageSent.setSubject(ms.getSubject());
+		gWTMessageSent.setTo(ms.getTo());
+		
+		return gWTMessageSent;
+	}
+	
+	/**
+	 * Copy MessageReceived to GWTMessageReceived
+	 * 
+	 * @param mr
+	 * @return
+	 */
+	public static GWTMessageReceived copy(MessageReceived mr) {
+		GWTMessageReceived gWTMessageReceived = new GWTMessageReceived();
+		gWTMessageReceived.setContent(mr.getContent());
+		gWTMessageReceived.setFrom(mr.getFrom());
+		gWTMessageReceived.setId(mr.getId());
+		if (mr.getSeenDate()!=null) {
+			gWTMessageReceived.setSeenDate(mr.getSeenDate().getTime());
+		}
+		gWTMessageReceived.setSentDate(mr.getSentDate().getTime());
+		gWTMessageReceived.setSubject(mr.getSubject());
+		gWTMessageReceived.setTo(mr.getTo());
+		gWTMessageReceived.setUser(mr.getUser());
+		
+		return gWTMessageReceived;
 	}
 }
