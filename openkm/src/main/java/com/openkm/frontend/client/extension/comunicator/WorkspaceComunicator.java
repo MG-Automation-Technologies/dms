@@ -22,6 +22,7 @@
 package com.openkm.frontend.client.extension.comunicator;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTWorkspace;
 
 /**
  * WorkspaceComunicator
@@ -54,5 +55,13 @@ public class WorkspaceComunicator {
 		return Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace();
 	}
 	
-	public static void setSearchView() {}
+	/**
+	 * getWorkspace
+	 * 
+	 * @return
+	 */
+	public static GWTWorkspace getWorkspace() {
+		return Main.get().workspaceUserProperties.getWorkspace();
+	}
+
 }

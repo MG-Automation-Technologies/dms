@@ -68,8 +68,6 @@ import com.openkm.frontend.client.widget.chat.OnlineUsersPopup;
 import com.openkm.frontend.client.widget.findfolder.FindFolderSelectPopup;
 import com.openkm.frontend.client.widget.foldertree.FolderTree;
 import com.openkm.frontend.client.widget.notify.NotifyPopup;
-import com.openkm.frontend.client.widget.propose.ProposedQueryPopup;
-import com.openkm.frontend.client.widget.propose.ProposedSubscriptionPopup;
 import com.openkm.frontend.client.widget.security.SecurityPopup;
 import com.openkm.frontend.client.widget.startup.StartUp;
 import com.openkm.frontend.client.widget.startup.StartUpPopup;
@@ -119,8 +117,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	public FindFolderSelectPopup findFolderSelectPopup;
 	public WizardPopup wizardPopup;
 	public OnlineUsersPopup onlineUsersPopup;
-	public ProposedSubscriptionPopup proposedSubscriptionPopup;
-	public ProposedQueryPopup proposedQueryPopup;
+	
 	
 	// User workspace properties
 	public WorkspaceUserProperties workspaceUserProperties;
@@ -313,14 +310,6 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		onlineUsersPopup.setHeight("350px");
 		onlineUsersPopup.setStyleName("okm-Popup");
 		onlineUsersPopup.addStyleName("okm-DisableSelect");
-		proposedSubscriptionPopup = new ProposedSubscriptionPopup();
-		proposedSubscriptionPopup.setWidth("300px");
-		proposedSubscriptionPopup.setHeight("100px");
-		proposedSubscriptionPopup.setStyleName("okm-Popup");
-		proposedQueryPopup = new ProposedQueryPopup();
-		proposedQueryPopup.setWidth("300px");
-		proposedQueryPopup.setHeight("100px");
-		proposedQueryPopup.setStyleName("okm-Popup");
 
 		// Get grid of scrollbars, and clear out the window's built-in margin,
 	    // because we want to take advantage of the entire client area.
@@ -392,7 +381,6 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 				findFolderSelectPopup.langRefresh();
 				wizardPopup.langRefresh();
 				onlineUsersPopup.langRefresh();
-				proposedSubscriptionPopup.langRefresh();
 				// Refreshing all menus on tabs not only the active
 				mainPanel.desktop.navigator.taxonomyTree.langRefresh();
 				mainPanel.desktop.navigator.thesaurusTree.langRefresh();

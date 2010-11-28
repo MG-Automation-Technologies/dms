@@ -55,6 +55,7 @@ public class ErrorCode {
 	public static final String ORIGIN_OKMGeneralService					= "022";
 	public static final String ORIGIN_OKMProposedSubscriptionService 	= "023";
 	public static final String ORIGIN_OKMProposedQueryService 			= "024";
+	public static final String ORIGIN_OKMMessageService 				= "025";
 	
 	// Cause code error is XXX digits
 	public static final String CAUSE_Repository 				= "001";
