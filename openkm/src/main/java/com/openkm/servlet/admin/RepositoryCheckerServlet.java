@@ -69,7 +69,7 @@ public class RepositoryCheckerServlet extends BaseServlet {
 			if (!repoPath.equals("")) {
 				ContentInfo cInfo = OKMFolder.getInstance().getContentInfo(null, repoPath);
 				long begin = System.currentTimeMillis();
-				ImpExpStats stats = RepositoryChecker.checkDocuments(repoPath, versions, out,
+				ImpExpStats stats = RepositoryChecker.checkDocuments(null, repoPath, versions, out,
 						new HTMLInfoDecorator((int)cInfo.getDocuments()));
 				long end = System.currentTimeMillis();
 				out.println("<hr/>");

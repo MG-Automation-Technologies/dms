@@ -150,7 +150,7 @@ public class DownloadServlet extends OKMHttpServlet {
 			
 			// Export files
 			StringWriter out = new StringWriter();
-			RepositoryExporter.exportDocuments(path, tmp, false, out, new TextInfoDecorator(path));
+			RepositoryExporter.exportDocuments(null, path, tmp, false, out, new TextInfoDecorator(path));
 			out.close();
 			
 			// Zip files
