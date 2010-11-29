@@ -69,7 +69,7 @@
 					String name = language.getName();
 					String id = language.getId();
 					String selected = "";
-					if (preset.equalsIgnoreCase(id) || preset.substring(0, 2).equalsIgnoreCase(id.substring(0, 2))) {
+					if (preset.equalsIgnoreCase(id)) {
 						selected = "selected";
 					}
 					out.print("<option "+selected+" value=\""+id+"\">"+name+"</option>");
