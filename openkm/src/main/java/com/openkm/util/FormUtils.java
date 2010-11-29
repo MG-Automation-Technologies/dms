@@ -59,8 +59,7 @@ import com.openkm.core.ParseException;
 public class FormUtils {
 	private static Logger log = LoggerFactory.getLogger(FormUtils.class);
 	private static Map<PropertyGroup, List<FormElement>> pGroups = null;
-	private static final String BASE_DIR = "src/test/resources";
-
+	
 	/**
 	 * Parse form.xml definitions
 	 * 
@@ -115,12 +114,11 @@ public class FormUtils {
 	 * 
 	 * @return A Map with all the forms and its form elements.
 	 */
-	public static synchronized Map<PropertyGroup, List<FormElement>> parsePropertyGroupsForms() 
+	public static synchronized Map<PropertyGroup, List<FormElement>> parsePropertyGroupsForms(String pgFile) 
 			throws IOException,	ParseException {
 		log.debug("parseMetadataForms()");
 		// long begin = Calendar.getInstance().getTimeInMillis();
 		if (pGroups == null) {
-			String pgFile = BASE_DIR + "/PropertyGroups.xml";
 			log.debug("PropertyGroupForms: {}", pgFile);
 			pGroups = new HashMap<PropertyGroup, List<FormElement>>();
 			FileInputStream fis = null;
