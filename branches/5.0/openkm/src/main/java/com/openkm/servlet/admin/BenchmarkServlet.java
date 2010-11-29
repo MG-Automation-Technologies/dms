@@ -110,7 +110,7 @@ public class BenchmarkServlet extends BaseServlet {
 				long begin = System.currentTimeMillis();
 				fld.setPath("/okm:root/Benchmark/"+i);
 				OKMFolder.getInstance().create(null, fld);
-				ImpExpStats stats = RepositoryImporter.importDocuments(dir, fld.getPath(), out, 
+				ImpExpStats stats = RepositoryImporter.importDocuments(null, dir, fld.getPath(), out, 
 						new HTMLInfoDecorator(docs));
 				long end = System.currentTimeMillis();
 				tStats.setSize(tStats.getSize() + stats.getSize());

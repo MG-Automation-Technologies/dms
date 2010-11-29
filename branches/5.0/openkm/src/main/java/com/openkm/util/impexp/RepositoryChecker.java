@@ -54,14 +54,14 @@ public class RepositoryChecker {
 	/**
 	 * Performs a recursive repository document check
 	 */
-	public static ImpExpStats checkDocuments(String fldPath, boolean versions, Writer out,
+	public static ImpExpStats checkDocuments(String token, String fldPath, boolean versions, Writer out,
 			InfoDecorator deco) throws PathNotFoundException, AccessDeniedException, RepositoryException,
 			IOException, DatabaseException {
-		log.debug("checkDocuments({}, {}, {}, {})", new Object[] { fldPath, versions, out, deco });
+		log.debug("checkDocuments({}, {}, {}, {}, {})", new Object[] { token, fldPath, versions, out, deco });
 		ImpExpStats stats;
 		
 		try {
-			stats = checkDocumentsHelper(fldPath, versions, out, deco);
+			stats = checkDocumentsHelper(token, fldPath, versions, out, deco);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw e;
@@ -89,26 +89,26 @@ public class RepositoryChecker {
 	/**
 	 * Performs a recursive repository document check
 	 */
-	private static ImpExpStats checkDocumentsHelper(String fldPath, boolean versions, Writer out,
+	private static ImpExpStats checkDocumentsHelper(String token, String fldPath, boolean versions, Writer out,
 			InfoDecorator deco) throws FileNotFoundException, PathNotFoundException, AccessDeniedException,
 			RepositoryException, IOException, DatabaseException {
-		log.debug("checkDocumentsHelper({}, {}, {}, {})", new Object[] { fldPath, versions, out, deco });
+		log.debug("checkDocumentsHelper({}, {}, {}, {}, {})", new Object[] { token, fldPath, versions, out, deco });
 		ImpExpStats stats = new ImpExpStats();
 		File fsPath = new File(Config.NULL_DEVICE);
 		
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		for (Iterator<Document> it = dm.getChilds(null, fldPath).iterator(); it.hasNext();) {
+		for (Iterator<Document> it = dm.getChilds(token, fldPath).iterator(); it.hasNext();) {
 			Document docChild = it.next();
 			
 			try {
 				FileOutputStream fos = new FileOutputStream(fsPath);
-				InputStream is = dm.getContent(null, docChild.getPath(), false);
+				InputStream is = dm.getContent(token, docChild.getPath(), false);
 				IOUtils.copy(is, fos);
 				is.close();
 				
 				if (versions) { // Check version history
-					for (Version ver : dm.getVersionHistory(null, docChild.getPath())) {
-						is = dm.getContentByVersion(null, docChild.getPath(), ver.getName());
+					for (Version ver : dm.getVersionHistory(token, docChild.getPath())) {
+						is = dm.getContentByVersion(token, docChild.getPath(), ver.getName());
 						IOUtils.copy(is, fos);
 						is.close();
 					}
@@ -129,9 +129,9 @@ public class RepositoryChecker {
 		}
 
 		FolderModule fm = ModuleManager.getFolderModule();
-		for (Iterator<Folder> it = fm.getChilds(null, fldPath).iterator(); it.hasNext();) {
+		for (Iterator<Folder> it = fm.getChilds(token, fldPath).iterator(); it.hasNext();) {
 			Folder fldChild = it.next();
-			ImpExpStats tmp = checkDocumentsHelper(fldChild.getPath(), versions, out, deco);
+			ImpExpStats tmp = checkDocumentsHelper(token, fldChild.getPath(), versions, out, deco);
 			
 			// Stats
 			stats.setSize(stats.getSize() + tmp.getSize());
