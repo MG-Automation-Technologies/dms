@@ -123,7 +123,7 @@ public class PropertyGroupsServlet extends BaseServlet {
 		
 		// Check xml property groups definition
 		FormUtils.resetPropertyGroupsForms();
-		FormUtils.parsePropertyGroupsForms();
+		FormUtils.parsePropertyGroupsForms(Config.PROPERTY_GROUPS_XML);
 		
 		// If it is ok, register it
 		FileInputStream fis = null;
