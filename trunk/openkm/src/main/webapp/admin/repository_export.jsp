@@ -51,7 +51,7 @@
 				File dir = new File(Config.CHROOT + fsPath);
 				ContentInfo cInfo = OKMFolder.getInstance().getContentInfo(null, repoPath);
 				long begin = System.currentTimeMillis();
-				ImpExpStats stats = RepositoryExporter.exportDocuments(repoPath, dir, metadata, out,
+				ImpExpStats stats = RepositoryExporter.exportDocuments(null, repoPath, dir, metadata, out,
 						new HTMLInfoDecorator((int)cInfo.getDocuments()));
 				long end = System.currentTimeMillis();
 				out.println("<hr/>");

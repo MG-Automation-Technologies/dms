@@ -269,7 +269,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 			
 			// Import files
 			StringWriter out = new StringWriter();
-			ImpExpStats stats = RepositoryImporter.importDocuments(tmpOut, path, false, out, new TextInfoDecorator(tmpOut));
+			ImpExpStats stats = RepositoryImporter.importDocuments(null, tmpOut, path, false, out, new TextInfoDecorator(tmpOut));
 			if (!stats.isOk()) {
 				errorMsg = out.toString();
 			}

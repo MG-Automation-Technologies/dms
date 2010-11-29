@@ -52,7 +52,7 @@
 				File dir = new File(Config.CHROOT + fsPath);
 				int docs = FileUtils.listFiles(dir, null, true).size();
 				long begin = System.currentTimeMillis();
-				ImpExpStats stats = RepositoryImporter.importDocuments(dir, repoPath, metadata, out, 
+				ImpExpStats stats = RepositoryImporter.importDocuments(null, dir, repoPath, metadata, out, 
 						new HTMLInfoDecorator(docs));
 				long end = System.currentTimeMillis();
 				out.println("<hr/>");

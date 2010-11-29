@@ -53,15 +53,15 @@ public class RepositoryImporter {
 	/**
 	 * Import documents from filesystem into document repository.
 	 */
-	public static ImpExpStats importDocuments(File fs, String fldPath, boolean metadata, Writer out,
-			InfoDecorator deco) throws PathNotFoundException, ItemExistsException, AccessDeniedException,
-			RepositoryException, FileNotFoundException, IOException, DatabaseException {
-		log.debug("importDocuments({}, {}, {}, {}, {})", new Object[] { fs, fldPath, metadata, out, deco });
+	public static ImpExpStats importDocuments(String token, File fs, String fldPath, boolean metadata,
+			Writer out, InfoDecorator deco) throws PathNotFoundException, ItemExistsException,
+			AccessDeniedException, RepositoryException, FileNotFoundException, IOException, DatabaseException {
+		log.debug("importDocuments({}, {}, {}, {}, {}, {})", new Object[] { token, fs, fldPath, metadata, out, deco });
 		ImpExpStats stats;
 		
 		try {
 			if (fs.exists()) {
-				stats = importDocumentsHelper(fs, fldPath, metadata, out, deco);
+				stats = importDocumentsHelper(token, fs, fldPath, metadata, out, deco);
 			} else  {
 				throw new FileNotFoundException(fs.getPath());
 			}
@@ -95,10 +95,10 @@ public class RepositoryImporter {
 	/**
 	 * Import documents from filesystem into document repository (recursive).
 	 */
-	private static ImpExpStats importDocumentsHelper(File fs, String fldPath, boolean metadata, Writer out,
-			InfoDecorator deco) throws FileNotFoundException, PathNotFoundException, AccessDeniedException,
-			ItemExistsException, RepositoryException, IOException, DatabaseException {
-		log.debug("importDocumentsHelper({}, {}, {}, {}, {})", new Object[] { fs, fldPath, metadata, out, deco });
+	private static ImpExpStats importDocumentsHelper(String token, File fs, String fldPath, boolean metadata,
+			Writer out, InfoDecorator deco) throws FileNotFoundException, PathNotFoundException,
+			AccessDeniedException, ItemExistsException, RepositoryException, IOException, DatabaseException {
+		log.debug("importDocumentsHelper({}, {}, {}, {}, {}, {})", new Object[] { token, fs, fldPath, metadata, out, deco });
 		File[] files = fs.listFiles();
 		ImpExpStats stats = new ImpExpStats();
 		
@@ -108,8 +108,8 @@ public class RepositoryImporter {
 				fld.setPath(fldPath + "/" + files[i].getName());
 				
 				try {
-					ModuleManager.getFolderModule().create(null, fld);
-					ImpExpStats tmp = importDocumentsHelper(files[i], fld.getPath(), metadata, out, deco);
+					ModuleManager.getFolderModule().create(token, fld);
+					ImpExpStats tmp = importDocumentsHelper(token, files[i], fld.getPath(), metadata, out, deco);
 					
 					// Stats
 					stats.setOk(stats.isOk() && tmp.isOk());
@@ -131,7 +131,7 @@ public class RepositoryImporter {
 				
 				try {
 					DocumentModule dm = ModuleManager.getDocumentModule();
-					dm.create(null, doc, fisContent);
+					dm.create(token, doc, fisContent);
 					
 					// Metadata
 					//Gson gson = new Gson();
