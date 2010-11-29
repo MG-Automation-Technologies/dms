@@ -33,10 +33,16 @@ import com.openkm.frontend.client.extension.widget.ToolBarBoxExtension;
  */
 public class MessagingToolBarBox {
 	
+	public static final int PROPOSED_QUERY_NONE 		= -1;
+	public static final int PROPOSED_QUERY_SAVE_SEARCH 	= 0;
+	public static final int PROPOSED_QUERY_USER_NEWS 	= 1;
+	private static MessagingToolBarBox singleton;
+	
 	/**
 	 * MessagingToolBarBox
 	 */
 	public MessagingToolBarBox(List<String> uuidList) {
+		singleton = this;
 	}
 	
 	/**
@@ -65,5 +71,28 @@ public class MessagingToolBarBox {
 	 */
 	public static boolean isRegistered(List<String> uuidList) {
 		return false;
+	}
+	
+	/**
+	 * MessagingToolBarBox
+	 * 
+	 * @return
+	 */
+	public static MessagingToolBarBox get() {	
+		return singleton;
+	}
+	
+	/**
+	 * executeProposeSubscription
+	 */
+	public void executeProposeSubscription() {
+	}
+	
+	/**
+	 * executeProposeQuery
+	 * 
+	 * @param type
+	 */
+	public void executeProposeQuery(int type) {
 	}
 }
