@@ -95,7 +95,7 @@
 					String key = it.next();
 					String value = langs.get(key);
 					String selected = "";
-					if (preset.equalsIgnoreCase(value) || preset.substring(0, 2).equalsIgnoreCase(value.substring(0, 2))) {
+					if (preset.equalsIgnoreCase(value)) {
 						selected = "selected";
 					}
 					out.print("<option "+selected+" value=\""+value+"\">"+key+"</option>");
