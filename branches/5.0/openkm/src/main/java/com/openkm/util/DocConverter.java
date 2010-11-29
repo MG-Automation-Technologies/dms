@@ -92,11 +92,15 @@ public class DocConverter {
 		if (instance == null) {
 			instance = new DocConverter();
 			
-			if (!Config.SYSTEM_OPENOFFICE.equals("")) {
+			if (!Config.SYSTEM_OPENOFFICE_PATH.equals("")) {
 				log.info("*** Build Office Manager ***");
 				officeManager = new DefaultOfficeManagerConfiguration()
-					.setOfficeHome(Config.SYSTEM_OPENOFFICE)
+					.setOfficeHome(Config.SYSTEM_OPENOFFICE_PATH)
+					.setMaxTasksPerProcess(Config.SYSTEM_OPENOFFICE_TASKS)
+					.setPortNumber(Config.SYSTEM_OPENOFFICE_PORT)
 					.buildOfficeManager();
+			} else {
+				log.warn("system.openoffice not configured");
 			}
 		}
 		
@@ -125,13 +129,13 @@ public class DocConverter {
 	 * Test if a MIME document can be converted to PDF
 	 */
 	public boolean convertibleToPdf(String from) {
-		if (!Config.SYSTEM_OPENOFFICE.equals("") && validOpenOffice.contains(from)) {
+		if (!Config.SYSTEM_OPENOFFICE_PATH.equals("") && validOpenOffice.contains(from)) {
 			return true;
 		} else if (!Config.SYSTEM_IMG2PDF.equals("") && validImageMagick.contains(from)) {
 			return true;
+		} else {
+			return false;
 		}
-		
-		return false;
 	}
 	
 	/**
@@ -140,9 +144,9 @@ public class DocConverter {
 	public boolean convertibleToSwf(String from) {
 		if (!Config.SYSTEM_PDF2SWF.equals("") && (convertibleToPdf(from) || PDF.equals(from))) {
 			return true;
+		} else {
+			return false;
 		}
-	
-		return false;
 	}
 
 	/**
@@ -151,7 +155,7 @@ public class DocConverter {
 	public void convert(File inputFile, String mimeType, File outputFile) throws IOException {
 		log.debug("convert({}, {}, {})", new Object[] { inputFile, mimeType, outputFile });
 
-		if (Config.SYSTEM_OPENOFFICE.equals("")) {
+		if (Config.SYSTEM_OPENOFFICE_PATH.equals("")) {
 			throw new IOException("system.openoffice not configured");
 		}
 
@@ -163,7 +167,7 @@ public class DocConverter {
 			OfficeDocumentConverter converter = new OfficeDocumentConverter(officeManager);
 			converter.convert(inputFile, outputFile);
 		} catch (OfficeException e) {
-			throw new IOException("Error convertind document: "+e.getMessage());
+			throw new IOException("Error converting document: "+e.getMessage());
 		}
 	}
 	
