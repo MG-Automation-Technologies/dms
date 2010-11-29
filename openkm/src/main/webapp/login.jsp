@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List"%>
+<%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.Locale"%>
 <%@ page import="java.util.Iterator"%>
 <%@ page import="java.util.LinkedHashMap"%>
@@ -33,7 +35,7 @@
     }
     
     if (preset == null) {
-    	preset = locale.getLanguage()+"_"+locale.getCountry();
+    	preset = locale.getLanguage()+"-"+locale.getCountry();
     }
   %>
   <title>OpenKM Login</title>
@@ -65,11 +67,37 @@
           <label for="j_language">Language</label><br/>
           <select name="j_language" id="j_language">
 			<%
+			    // Selecting candidate locales
+			    List<String> selectedCandidate = new ArrayList<String>();
+			    String selectedLanguage = null;
 			 	for (Language language : LanguageDAO.findAll()) {
 					String name = language.getName();
 					String id = language.getId();
+					if (preset.substring(2).equalsIgnoreCase(id.substring(2))) {
+						selectedCandidate.add(id);
+					}
+				}
+			 	// Iterate trying locate right locale
+			 	if (selectedCandidate.size()>1 && preset.length()==5) {
+			 		for (String language : selectedCandidate) {
+			 			if (preset.equalsIgnoreCase(language)) {
+			 				selectedLanguage = language;
+			 				break;
+			 			}
+			 		}
+			 	}
+			 	// Setting the language
+			 	if (selectedLanguage==null && selectedCandidate.size()>0) {
+			 		selectedLanguage = selectedCandidate.get(0);
+			 	} else {
+			 		selectedLanguage = "en-GB"; // English always it'll be the default language
+			 	}
+			
+				for (Language language : LanguageDAO.findAll()) {
+					String name = language.getName();
+					String id = language.getId();
 					String selected = "";
-					if (preset.equalsIgnoreCase(id)) {
+					if (id.equalsIgnoreCase(selectedLanguage)) {
 						selected = "selected";
 					}
 					out.print("<option "+selected+" value=\""+id+"\">"+name+"</option>");
