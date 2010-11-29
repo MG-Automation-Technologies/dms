@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.Locale"%>
-<%@ page import="java.util.Iterator"%>
+<%@ page import="java.util.Map.Entry"%>
 <%@ page import="java.util.LinkedHashMap"%>
 <%@ page import="com.openkm.core.Config"%>
 <%@ page import="com.openkm.util.FormatUtil"%>
@@ -18,8 +18,8 @@
   <link rel="stylesheet" href="<%=request.getContextPath() %>/css/desktop.css" type="text/css" />
   <% } %>
   <% 
-  	LinkedHashMap<String, String> langs = new LinkedHashMap<String, String>();
-  	langs.put("Arabic", Lang.LANG_ar_PS);
+    LinkedHashMap<String, String> langs = new LinkedHashMap<String, String>();
+    langs.put("Arabic", Lang.LANG_ar_PS);
     langs.put("Bosnian", Lang.LANG_bs_BA);
     langs.put("Català", Lang.LANG_ca_ES);
     langs.put("Chinese simple", Lang.LANG_zh_CN);
@@ -67,7 +67,7 @@
     }
     
     if (preset == null) {
-    	preset = locale.getLanguage()+"_"+locale.getCountry();
+    	preset = locale.getLanguage()+"-"+locale.getCountry();
     }
   %>
   <title>OpenKM Login</title>
@@ -91,15 +91,35 @@
           <label for="j_language">Language</label><br/>
           <select name="j_language" id="j_language">
 			<%
-				for (Iterator<String> it = langs.keySet().iterator(); it.hasNext(); ) {
-					String key = it.next();
-					String value = langs.get(key);
-					String selected = "";
-					if (preset.equalsIgnoreCase(value)) {
-						selected = "selected";
+				String whole = null;
+            	String part = null;
+            	
+            	// Match whole locale
+				for (Entry<String, String> lang : langs.entrySet()) {
+					String id = lang.getValue();
+					
+					if (preset.equalsIgnoreCase(id)) {
+						whole = id;
+					} else if (preset.substring(0, 2).equalsIgnoreCase(id.substring(0, 2))) {
+						part = id;
 					}
-					out.print("<option "+selected+" value=\""+value+"\">"+key+"</option>");
 				}
+				
+				// Select selected
+	            for (Entry<String, String> lang : langs.entrySet()) {
+	              String id = lang.getValue();
+	              String selected = "";
+	              
+	              if (whole != null && id.equalsIgnoreCase(whole)) {
+	                selected = "selected";
+	              } else if (whole == null && part != null && id.equalsIgnoreCase(part)) {
+	                selected = "selected";
+	              } else if (whole == null && part == null && "en-GB".equals(id)) {
+	                selected = "selected";
+	              }
+	              
+	              out.print("<option "+selected+" value=\""+id+"\">"+lang.getKey()+"</option>");
+	            }
 			%>
           </select>
         <% } %>
@@ -128,15 +148,6 @@
   	    var value = document.getElementById('j_language').value;
   	    exdate.setDate(exdate.getDate() + 7);
   	    document.cookie="lang="+escape(value)+";expires="+exdate.toUTCString();
-  	}
-
-  	function getBrowserLanguage() {
-  	    var lang = navigator.language ? navigator.language : navigator.userLanguage;
-	    if (lang) {
-		    return lang;
-		} else {
-	  		return "en";
-		}
   	}
   </script>
 </body>
