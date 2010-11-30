@@ -185,7 +185,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 				// If the document have been added to the repository, perform user notification
 				if ((action == FancyFileUpload.ACTION_INSERT || action == FancyFileUpload.ACTION_UPDATE) & notify) {
 					List<String> userNames = new ArrayList<String>(Arrays.asList(users.split(",")));
-					List<String> roleNames = new ArrayList<String>(Arrays.asList(roles.split(",")));
+					List<String> roleNames = Arrays.asList(roles.split(","));
 					
 					for (String role : roleNames) {
 						List<String> usersInRole = OKMAuth.getInstance().getUsersByRole(null, role);

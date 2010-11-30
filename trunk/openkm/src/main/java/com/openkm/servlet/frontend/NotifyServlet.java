@@ -115,7 +115,7 @@ public class NotifyServlet extends OKMRemoteServiceServlet implements OKMNotifyS
 		
 		try {
 			List<String> userNames = new ArrayList<String>(Arrays.asList(users.split(",")));
-			List<String> roleNames = new ArrayList<String>(Arrays.asList(roles.split(",")));
+			List<String> roleNames = Arrays.asList(roles.split(","));
 			
 			for (String role : roleNames) {
 				List<String> usersInRole = OKMAuth.getInstance().getUsersByRole(null, role);
