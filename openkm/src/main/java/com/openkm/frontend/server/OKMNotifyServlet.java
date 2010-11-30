@@ -21,6 +21,7 @@
 
 package com.openkm.frontend.server;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -113,8 +114,8 @@ public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNoti
 		updateSessionManager();
 		
 		try {
-			List<String> userNames = Arrays.asList(users.split(","));
-			List<String> roleNames = Arrays.asList(roles.split(","));
+			List<String> userNames = new ArrayList<String>(Arrays.asList(users.split(",")));
+			List<String> roleNames = new ArrayList<String>(Arrays.asList(roles.split(",")));
 			
 			for (String role : roleNames) {
 				List<String> usersInRole = OKMAuth.getInstance().getUsersByRole(null, role);
