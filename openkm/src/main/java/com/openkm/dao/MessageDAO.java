@@ -183,7 +183,7 @@ public class MessageDAO {
 	@SuppressWarnings("unchecked")
 	public static List<String> findReceivedUsersFrom(String me) throws DatabaseException {
 		log.debug("findReceivedUsersFrom({})", me);
-		String qs = "from MessageReceived msg.from where msg.user=:me order by msg.from";
+		String qs = "select msg.from from MessageReceived msg where msg.user=:me order by msg.from";
 		Session session = null;
 		
 		try {
