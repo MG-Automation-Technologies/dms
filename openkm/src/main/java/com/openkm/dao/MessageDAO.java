@@ -56,6 +56,7 @@ public class MessageDAO {
 			MessageSent msgSent = new MessageSent();
 			msgSent.setFrom(from);
 			msgSent.setTo(to);
+			msgSent.setUser(user);
 			msgSent.setSubject(subject);
 			msgSent.setContent(content);
 			msgSent.setSentDate(Calendar.getInstance());
@@ -130,20 +131,67 @@ public class MessageDAO {
 	}
 	
 	/**
-	 * Find sent by user
+	 * Find users whom sent an message
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<MessageSent> findSentByUser(String user) throws DatabaseException {
-		log.debug("findByUser({})", user);
-		String qs = "from MessageSent msg where msg.from=:user order by msg.id";
+	public static List<String> findSentUsersTo(String me) throws DatabaseException {
+		log.debug("findSentUsersTo({})", me);
+		String qs = "from MessageSent msg.user where msg.from=:me order by msg.user";
 		Session session = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
+			q.setString("me", me);
+			List<String> ret = q.list();
+			log.debug("findSentUsersTo: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Find sent from me to user
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<MessageSent> findSentFromMeToUser(String me, String user) throws DatabaseException {
+		log.debug("findSentFromMeToUser({}, {})", me, user);
+		String qs = "from MessageSent msg where msg.from=:me and msg.user=:user order by msg.id";
+		Session session = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setString("me", me);
 			q.setString("user", user);
 			List<MessageSent> ret = q.list();
-			log.debug("findSentByUser: {}", ret);
+			log.debug("findSentFromMeToUser: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Find users who sent an message to me
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<String> findReceivedUsersFrom(String me) throws DatabaseException {
+		log.debug("findSentUsersTo({})", me);
+		String qs = "from MessageReceived msg.from where msg.user=:me order by msg.from";
+		Session session = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setString("me", me);
+			List<String> ret = q.list();
+			log.debug("findSentUsersTo: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
@@ -156,9 +204,9 @@ public class MessageDAO {
 	 * Find received by user
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<MessageReceived> findReceivedByUser(String user) throws DatabaseException {
+	public static List<MessageReceived> findReceivedByMeFromUser(String me, String user) throws DatabaseException {
 		log.debug("findByUser({})", user);
-		String qs = "from MessageReceived msg where msg.user=:user order by msg.id";
+		String qs = "from MessageReceived msg where msg.from=:user and msg.user=:me order by msg.id";
 		Session session = null;
 		
 		try {
