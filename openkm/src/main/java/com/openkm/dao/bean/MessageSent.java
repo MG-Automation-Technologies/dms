@@ -29,6 +29,7 @@ public class MessageSent implements Serializable {
 	private int id;
 	private String from;
 	private String to;
+	private String user;
 	private String subject;
 	private String content;
 	private Calendar sentDate;
@@ -55,6 +56,14 @@ public class MessageSent implements Serializable {
 	
 	public void setTo(String to) {
 		this.to = to;
+	}
+	
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
 	}
 	
 	public String getSubject() {
@@ -87,6 +96,7 @@ public class MessageSent implements Serializable {
 		sb.append("id="); sb.append(id);
 		sb.append(", from="); sb.append(from);
 		sb.append(", to="); sb.append(to);
+		sb.append(", user="); sb.append(user);
 		sb.append(", subject="); sb.append(subject);
 		sb.append(", content="); sb.append(content);
 		sb.append(", sentDate="); sb.append(sentDate==null?null:sentDate.getTime());
