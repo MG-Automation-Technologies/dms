@@ -66,10 +66,11 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 				to = users + roles;
 			}
 			List<String> userNames = new ArrayList<String>(Arrays.asList(users.split(",")));
-			List<String> roleNames = new ArrayList<String>(Arrays.asList(roles.split(",")));
+			List<String> roleNames = Arrays.asList(roles.split(","));
 			
 			for (String role : roleNames) {
 				List<String> usersInRole = OKMAuth.getInstance().getUsersByRole(null, role);
+				
 				for (String user : usersInRole) {
 					if (!userNames.contains(user)) {
 						userNames.add(user);
