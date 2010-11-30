@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -183,8 +184,8 @@ public class FileUploadServlet extends OKMHttpServlet {
 
 				// If the document have been added to the repository, perform user notification
 				if ((action == FancyFileUpload.ACTION_INSERT || action == FancyFileUpload.ACTION_UPDATE) & notify) {
-					List<String> userNames = Arrays.asList(users.split(","));
-					List<String> roleNames = Arrays.asList(roles.split(","));
+					List<String> userNames = new ArrayList<String>(Arrays.asList(users.split(",")));
+					List<String> roleNames = new ArrayList<String>(Arrays.asList(roles.split(",")));
 					
 					for (String role : roleNames) {
 						List<String> usersInRole = OKMAuth.getInstance().getUsersByRole(null, role);
