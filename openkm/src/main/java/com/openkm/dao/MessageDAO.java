@@ -136,7 +136,7 @@ public class MessageDAO {
 	@SuppressWarnings("unchecked")
 	public static List<String> findSentUsersTo(String me) throws DatabaseException {
 		log.debug("findSentUsersTo({})", me);
-		String qs = "from MessageSent msg.user where msg.from=:me order by msg.user";
+		String qs = "select msg.user from MessageSent msg where msg.from=:me order by msg.user";
 		Session session = null;
 		
 		try {
