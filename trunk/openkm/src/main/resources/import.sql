@@ -804,6 +804,13 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('e
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'dasboard.messaging.delete.message.received', 'Delete message received', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'dasboard.messaging.get.messages.received', 'Getting messages received', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'messaging.label.message.received', 'Messages received', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'dasboard.messaging.delete.message.received', 'Deleting received message', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'dasboard.messaging.delete.message.sent', 'Deleting received sent', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'confirm.delete.message.sent', '¿ Are you sure want deleting message sent ?', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'button.cancel', 'Cancel', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'confirm.delete.message.sent.to.user', '¿ Sure you want to delete all messages sent to user ?', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'messaging.message.send.from', 'Sent from', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'confirm.delete.message.received', '¿ Are you sure want delete message received ?', 'en-GB');
 INSERT INTO OKM_LANGUAGE (LG_ID, LG_NAME, LG_IMAGE_CONTENT, LG_IMAGE_MIME) VALUES ('es-ES', 'Español', 'R0lGODlhEAALANUAAPxcXPpTU/X1Jfb2K/QtLfxjY+bmAP5yc/7+dvMWFv39APz8TOwAAPMAAP39bfLyE/7+Wvv7RfdLS/pERPQzM/k8PfDyQfT1O/1ra/96evdEROxoVfU7O+UAAPg2NvENDfb2MPPzGfkAAPT0H/j4NuAAAPn5PPXDsf39U/F+V+7fTu3gjfUhIezT1Pnx1vXq4ra7nezhQvj0S9/fAPLzVfTuV+xTUfxMTPK9sMDOqOCMUeSnSuvJS90AAP0AAP8AACH5BAAAAAAALAAAAAAQAAsAAAaFwJ/w5yv6RMiGksH4ZZ6ZwwGDKRQAgYCkmQF4s7fJpOKhELYKBARSU8kiERMJNBDIDGkILbVZWeR0AiMXeAgoJxstODFzdSMhhAoOCy46Ni8qgY8PkZM5PDswFo4hDw8gMyIFY2QEBCwsCQkfHwQlql9aGhocHBRmBD1KDUzFHcclJT3LQQA7', 'image/gif');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.date.pattern', 'dd/MM/yyyy HH:mm:ss', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.day.pattern', 'dd/MM/yyyy', 'es-ES');
@@ -1475,6 +1482,13 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('e
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'dasboard.messaging.delete.message.received', 'Eliminando mensaje recibido', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'dasboard.messaging.get.messages.received', 'Obteniendo mensajes recibidos', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'messaging.label.message.received', 'Mensajes recibidos', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'dasboard.messaging.delete.message.received', 'Eliminando mensaje recibido', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'dasboard.messaging.delete.message.sent', 'Eliminando mensaje enviado', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'confirm.delete.message.sent', '¿ Seguro que desea eliminar el mensaje enviado ?', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'button.cancel', 'Cancelar', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'confirm.delete.message.sent.to.user', '¿ Seguro que desea eliminar todos los mensajes enviados al usuario ?', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'messaging.message.send.from', 'Enviado por', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'confirm.delete.message.received', '¿ Seguro que desea eliminar el mensaje recibido ?', 'es-ES');
 INSERT INTO OKM_LANGUAGE (LG_ID, LG_NAME, LG_IMAGE_CONTENT, LG_IMAGE_MIME) VALUES ('ar-PS', 'Arabic', 'R0lGODlhEAALANUAAEixSJIAAEKtQfsAAPxKSjuqOwBTAP5dXVO1U1y6XGNjY0xMTGtra9bW1iiiKABHAPv7+4J4eEJCQlNTUzQ0NPydn/tERBqbGwA4AP1WVv96egArAP1PUP1vb/Ly8vmOkdDQ0Pn5+fT19TinOCwsLHBwcfmIibVpP+hsYvpESbxcXJSbXQBgADCmMGK+YjWpNWNZWVxcXPxoaOt7eyGfIf5ZWVhXV91TSvPz8/j4+Pf39/T09PX19fb29v8AAAAAACH5BAAAAAAALAAAAAAQAAsAAAaDwMBvSCwafbOIslRiMBSKmG2y+Pk0BxVsQl1IJBQKqXo91G4ViDqU0/V4vcagc8hwMmm2m7fjyekcBBYWJm1vOzgiIHMcHBYpH4Z8OB47izKCN5F7iB4eOJcWJwACBS8tDg40FxcFGwMoKy4JCQgIAKSlIyMbAQYsLAbCDw8YxhvIG0EAOw==', 'image/gif');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.date.pattern', 'dd-MM-yyyy hh:mm:ss', 'ar-PS');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.day.pattern', 'dd-MM-yyyy', 'ar-PS');
