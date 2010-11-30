@@ -63,8 +63,8 @@ public class ProposedQueryServlet extends OKMRemoteServiceServlet implements OKM
 		
 		try {
 			String remoteUser = getThreadLocalRequest().getRemoteUser();
-			List<String> userNames = Arrays.asList(users.split(","));
-			List<String> roleNames = Arrays.asList(roles.split(","));
+			List<String> userNames = new ArrayList<String>(Arrays.asList(users.split(",")));
+			List<String> roleNames = new ArrayList<String>(Arrays.asList(roles.split(",")));
 			
 			for (String role : roleNames) {
 				List<String> usersInRole;
