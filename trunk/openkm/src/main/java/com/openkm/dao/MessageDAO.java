@@ -136,7 +136,7 @@ public class MessageDAO {
 	@SuppressWarnings("unchecked")
 	public static List<String> findSentUsersTo(String me) throws DatabaseException {
 		log.debug("findSentUsersTo({})", me);
-		String qs = "select msg.user from MessageSent msg where msg.from=:me order by msg.user";
+		String qs = "select distinct(msg.user) from MessageSent msg where msg.from=:me order by msg.user";
 		Session session = null;
 		
 		try {
@@ -183,7 +183,7 @@ public class MessageDAO {
 	@SuppressWarnings("unchecked")
 	public static List<String> findReceivedUsersFrom(String me) throws DatabaseException {
 		log.debug("findReceivedUsersFrom({})", me);
-		String qs = "select msg.from from MessageReceived msg where msg.user=:me order by msg.from";
+		String qs = "select distinct(msg.from) from MessageReceived msg where msg.user=:me order by msg.from";
 		Session session = null;
 		
 		try {
@@ -213,6 +213,7 @@ public class MessageDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
 			q.setString("user", user);
+			q.setString("me", me);
 			List<MessageReceived> ret = q.list();
 			log.debug("findReceivedByMeFromUser: {}", ret);
 			return ret;
