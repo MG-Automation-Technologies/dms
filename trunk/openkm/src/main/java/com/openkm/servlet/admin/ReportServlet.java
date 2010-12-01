@@ -45,6 +45,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -58,6 +59,7 @@ import org.slf4j.LoggerFactory;
 
 import bsh.EvalError;
 
+import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.HibernateUtil;
 import com.openkm.dao.ReportDAO;
@@ -173,11 +175,11 @@ public class ReportServlet extends BaseServlet {
 							rp.setType(item.getString("UTF-8"));
 						} else if (item.getFieldName().equals("rp_active")) {
 							rp.setActive(true);
-						
 						}
 					} else {
 						is = item.getInputStream();
 						rp.setFileName(FilenameUtils.getName(item.getName()));
+						rp.setFileMime(Config.mimeTypes.getContentType(item.getName()));
 						rp.setFileContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
 						is.close();
 					}
@@ -256,7 +258,7 @@ public class ReportServlet extends BaseServlet {
 			IOException, DatabaseException, JRException, EvalError {
 		log.debug("execute({}, {}, {})", new Object[] { session, request, response });
 		int rpId = WebUtil.getInt(request, "rp_id");
-		int out = WebUtil.getInt(request, "out",  ReportUtil.PDF_OUTPUT);
+		int out = WebUtil.getInt(request, "out",  ReportUtil.OUTPUT_PDF);
 		Report rp = ReportDAO.findByPk(rpId);
 		String agent = request.getHeader("USER-AGENT");
 		
@@ -299,11 +301,22 @@ public class ReportServlet extends BaseServlet {
 			
 			if (Report.SQL.equals(rp.getType())) {
 				dbSession = HibernateUtil.getSessionFactory().openSession();
-				JasperReport jr = JasperCompileManager.compileReport(bais);
-				ReportUtil.generateReport(baos, jr, parameters, out, dbSession.connection());
+				
+				if (ReportUtil.MIME_JRXML.equals(rp.getFileMime())) {
+					JasperReport jr = JasperCompileManager.compileReport(bais);
+					ReportUtil.generateReport(baos, jr, parameters, out, dbSession.connection());
+				} else if (ReportUtil.MIME_JASPER.equals(rp.getFileMime())) {
+					JasperReport jr = (JasperReport) JRLoader.loadObject(bais);
+					ReportUtil.generateReport(baos, jr, parameters, out, dbSession.connection());
+				}
 			} else if (Report.SCRIPT.equals(rp.getType())) {
-				JasperReport jr = JasperCompileManager.compileReport(bais);
-				ReportUtil.generateReport(baos, jr, parameters, out);
+				if (ReportUtil.MIME_JRXML.equals(rp.getFileMime())) {
+					JasperReport jr = JasperCompileManager.compileReport(bais);
+					ReportUtil.generateReport(baos, jr, parameters, out);
+				} else if (ReportUtil.MIME_JASPER.equals(rp.getFileMime())) {
+					JasperReport jr = (JasperReport) JRLoader.loadObject(bais);
+					ReportUtil.generateReport(baos, jr, parameters, out);
+				}
 			}
 			
 			// Send back to browser
