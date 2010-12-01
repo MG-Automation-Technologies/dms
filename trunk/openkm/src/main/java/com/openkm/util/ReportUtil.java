@@ -55,8 +55,7 @@ import bsh.Interpreter;
 /**
  * Utilidades para jasper reports
  * 
- * @author jllort
- * 
+ * http://www.javalobby.org/articles/hibernatequery103/
  */
 public class ReportUtil {
 	@SuppressWarnings("unused")
@@ -70,6 +69,9 @@ public class ReportUtil {
 	public static final int OUTPUT_CSV = 4;
 	public static final int OUTPUT_ODT = 5;
 	public static final int OUTPUT_DOCX = 6;
+	
+	public static final String MIME_JASPER = "application/x-jasper";
+	public static final String MIME_JRXML = "application/x-jrxml";
 	
 	public static final String MIME_TEXT = "text/plain"; 
 	public static final String MIME_HTML = "text/html";
