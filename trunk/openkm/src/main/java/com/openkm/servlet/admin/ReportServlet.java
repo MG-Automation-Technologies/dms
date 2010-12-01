@@ -43,6 +43,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperReport;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -297,9 +299,11 @@ public class ReportServlet extends BaseServlet {
 			
 			if (Report.SQL.equals(rp.getType())) {
 				dbSession = HibernateUtil.getSessionFactory().openSession();
-				ReportUtil.generateReport(baos, bais, parameters, out, dbSession.connection());
+				JasperReport jr = JasperCompileManager.compileReport(bais);
+				ReportUtil.generateReport(baos, jr, parameters, out, dbSession.connection());
 			} else if (Report.SCRIPT.equals(rp.getType())) {
-				ReportUtil.generateReport(baos, bais, parameters, out);
+				JasperReport jr = JasperCompileManager.compileReport(bais);
+				ReportUtil.generateReport(baos, jr, parameters, out);
 			}
 			
 			// Send back to browser
