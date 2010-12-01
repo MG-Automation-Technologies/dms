@@ -21,7 +21,6 @@
 
 package com.openkm.dao;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -204,10 +203,10 @@ public class MessageDAO {
 	}
 	
 	/**
-	 * Return a list of users and number of unread received messages from them
+	 * Return a map users and number of unread received messages from them
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<Map<String, Long>> findReceivedUsersFromUnread(String me) throws DatabaseException {
+	public static Map<String, Long> findReceivedUsersFromUnread(String me) throws DatabaseException {
 		log.debug("findReceivedUsersFromUnread({})", me);
 		String qs = "select msg.from, count(msg.from) from MessageReceived msg " + 
 			"group by msg.from,msg.user,msg.seenDate having msg.seenDate is null and msg.user=:me";
@@ -218,12 +217,10 @@ public class MessageDAO {
 			Query q = session.createQuery(qs);
 			q.setString("me", me);
 			List<Object[]> list =  q.list();
-			List<Map<String, Long>> ret = new ArrayList<Map<String, Long>>();
+			Map<String, Long> ret = new HashMap<String, Long>();
 			
 			for (Object[] item : list) {
-				Map<String, Long> map = new HashMap<String, Long>();
-				map.put((String) item[0], (Long) item[1]);
-				ret.add(map);
+				ret.put((String) item[0], (Long) item[1]);
 			} 
 			
 			log.debug("findReceivedUsersFromUnread: {}", ret);
