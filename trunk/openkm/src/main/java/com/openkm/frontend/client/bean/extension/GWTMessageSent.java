@@ -29,6 +29,7 @@ public class GWTMessageSent implements Serializable {
 	private int id;
 	private String from;
 	private String to;
+	private String user;
 	private String subject;
 	private String content;
 	private Date sentDate;
@@ -81,12 +82,21 @@ public class GWTMessageSent implements Serializable {
 		this.sentDate = sentDate;
 	}
 	
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("id="); sb.append(id);
 		sb.append(", from="); sb.append(from);
 		sb.append(", to="); sb.append(to);
+		sb.append(", user="); sb.append(user);
 		sb.append(", subject="); sb.append(subject);
 		sb.append(", content="); sb.append(content);
 		sb.append(", sentDate="); sb.append(sentDate);

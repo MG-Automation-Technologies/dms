@@ -23,7 +23,9 @@ package com.openkm.servlet.extension;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,15 +93,10 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 	}
 	
 	@Override
-	public List<GWTMessageSent> findSentByUser() throws OKMException {
-		log.debug("findSentByUser()");
-		List<GWTMessageSent> ms = new ArrayList<GWTMessageSent>();
-		
+	public List<String> findSentUsersTo() throws OKMException {
+		log.debug("findSentUsersTo()");
 		try {
-			for (MessageSent message : MessageDAO.findSentByUser(getThreadLocalRequest().getRemoteUser())) {
-				ms.add(GWTUtil.copy(message));
-			}
-			return ms;
+			return MessageDAO.findSentUsersTo(getThreadLocalRequest().getRemoteUser());
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMessageService, ErrorCode.CAUSE_Database), e.getMessage());
@@ -107,15 +104,50 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 	}
 	
 	@Override
-	public List<GWTMessageReceived> findReceivedByUser() throws OKMException {
-		log.debug("findReceivedByUser()");
-		List<GWTMessageReceived> mr = new ArrayList<GWTMessageReceived>();
-		
+	public Map<String,Long> findReceivedUsersFrom() throws OKMException {
+		log.debug("findReceivedUsersFrom()");
+		Map<String,Long> received = new HashMap<String, Long>();
 		try {
-			for (MessageReceived message : MessageDAO.findReceivedByUser(getThreadLocalRequest().getRemoteUser())) {
-				mr.add(GWTUtil.copy(message));
+			String user = getThreadLocalRequest().getRemoteUser();
+			Map<String, Long> unreadMap = MessageDAO.findReceivedUsersFromUnread(user);
+			for (String sender : MessageDAO.findReceivedUsersFrom(getThreadLocalRequest().getRemoteUser())) {
+				if (unreadMap.containsKey(sender)) {
+					received.put(sender, unreadMap.get(sender));
+				} else {
+					received.put(sender, new Long(0));
+				}
 			}
-			return mr;
+			return received;
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMessageService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+	}
+	
+	@Override
+	public List<GWTMessageSent> findSentFromMeToUser(String user) throws OKMException {
+		log.debug("findSentFromMeToUser({})",user);
+		List<GWTMessageSent> messageSentList = new ArrayList<GWTMessageSent>();
+		try {
+			for (MessageSent messageSent :MessageDAO.findSentFromMeToUser(getThreadLocalRequest().getRemoteUser(), user)) {
+				messageSentList.add(GWTUtil.copy(messageSent));
+			}
+			return messageSentList;
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMessageService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+	}
+	
+	@Override
+	public List<GWTMessageReceived> findReceivedByMeFromUser(String user) throws OKMException {
+		log.debug("findSentFromMeToUser({})",user);
+		List<GWTMessageReceived> messageReceivedList = new ArrayList<GWTMessageReceived>();
+		try {
+			for (MessageReceived messageReceived: MessageDAO.findReceivedByMeFromUser(getThreadLocalRequest().getRemoteUser(), user)) {
+				messageReceivedList.add(GWTUtil.copy(messageReceived));
+			}
+			return messageReceivedList;
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMessageService, ErrorCode.CAUSE_Database), e.getMessage());
@@ -154,13 +186,38 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMessageService, ErrorCode.CAUSE_Database), e.getMessage());
 		}
 	}
-
+	
 	@Override
-	public void deleteAllByReceiver(String user) throws OKMException {
-	}
-
-	@Override
-	public void deleteAllBySender(String user) throws OKMException {
+	public void deleteSentFromMeToUser(String user) throws OKMException {
+		log.debug("deleteSentFromMeToUser({})",user);
+		List<String> msgId = new ArrayList<String>();
+		try {
+			for (MessageSent messageSent :MessageDAO.findSentFromMeToUser(getThreadLocalRequest().getRemoteUser(), user)) {
+				msgId.add(String.valueOf(messageSent.getId()));
+			}
+			for (String id : msgId) {
+				MessageDAO.deleteSent(Integer.valueOf(id));
+			}
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMessageService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
 	}
 	
+	@Override
+	public void deleteReceivedByMeFromUser(String user) throws OKMException {
+		log.debug("deleteReceivedByMeFromUser({})",user);
+		List<String> msgId = new ArrayList<String>();
+		try {
+			for (MessageReceived messageReceived :MessageDAO.findReceivedByMeFromUser(getThreadLocalRequest().getRemoteUser(), user)) {
+				msgId.add(String.valueOf(messageReceived.getId()));
+			}
+			for (String id : msgId) {
+				MessageDAO.deleteReceived(Integer.valueOf(id));
+			}
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMessageService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+	}
 }

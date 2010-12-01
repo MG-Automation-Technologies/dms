@@ -22,6 +22,7 @@
 package com.openkm.frontend.client.service.extension;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.openkm.frontend.client.OKMException;
@@ -36,9 +37,11 @@ public interface OKMMessageService extends RemoteService {
 	public void send(String users, String roles, String subject, String content) throws OKMException;
 	public void deleteSent(int msgId) throws OKMException;
 	public void deleteReceived(int msgId) throws OKMException;
-	public List<GWTMessageSent> findSentByUser() throws OKMException;
-	public List<GWTMessageReceived> findReceivedByUser() throws OKMException;
+	public List<String> findSentUsersTo() throws OKMException;
+	public Map<String, Long> findReceivedUsersFrom() throws OKMException;
 	public void markSeen(int msgId) throws OKMException;
-	public void deleteAllBySender(String user) throws OKMException;
-	public void deleteAllByReceiver(String user) throws OKMException;
+	public List<GWTMessageSent> findSentFromMeToUser(String user) throws OKMException;
+	public void deleteSentFromMeToUser(String user) throws OKMException;
+	public List<GWTMessageReceived> findReceivedByMeFromUser(String user) throws OKMException;
+	public void deleteReceivedByMeFromUser(String user) throws OKMException;
 }

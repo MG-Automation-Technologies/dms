@@ -1181,6 +1181,7 @@ public class GWTUtil {
 		GWTMessageSent gWTMessageSent  = new GWTMessageSent();
 		gWTMessageSent.setContent(ms.getContent());
 		gWTMessageSent.setFrom(ms.getFrom());
+		gWTMessageSent.setUser(ms.getUser());
 		gWTMessageSent.setId(ms.getId());
 		gWTMessageSent.setSentDate(ms.getSentDate().getTime());
 		gWTMessageSent.setSubject(ms.getSubject());
