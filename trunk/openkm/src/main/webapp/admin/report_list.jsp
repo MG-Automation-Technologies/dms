@@ -44,7 +44,7 @@
           <c:url value="Report" var="urlExecuteRtf">
             <c:param name="action" value="execute"/>
             <c:param name="rp_id" value="${rp.id}"/>
-            <c:param name="out" value="${ReportUtil.OUTPUT_ODT}"/>
+            <c:param name="out" value="${ReportUtil.OUTPUT_RTF}"/>
           </c:url>
           <c:url value="Report" var="urlExecuteCsv">
             <c:param name="action" value="execute"/>
