@@ -21,8 +21,11 @@
 
 package com.openkm.dao;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -192,6 +195,38 @@ public class MessageDAO {
 			q.setString("me", me);
 			List<String> ret = q.list();
 			log.debug("findReceivedUsersFrom: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Return a list of users and number of unread received messages from them
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<Map<String, Long>> findReceivedUsersFromUnread(String me) throws DatabaseException {
+		log.debug("findReceivedUsersFromUnread({})", me);
+		String qs = "select msg.from, count(msg.from) from MessageReceived msg " + 
+			"group by msg.from,msg.user,msg.seenDate having msg.seenDate is null and msg.user=:me";
+		Session session = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setString("me", me);
+			List<Object[]> list =  q.list();
+			List<Map<String, Long>> ret = new ArrayList<Map<String, Long>>();
+			
+			for (Object[] item : list) {
+				Map<String, Long> map = new HashMap<String, Long>();
+				map.put((String) item[0], (Long) item[1]);
+				ret.add(map);
+			} 
+			
+			log.debug("findReceivedUsersFromUnread: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
