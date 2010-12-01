@@ -184,9 +184,9 @@ public class MimeTypeDAO {
 	 * Find by pk
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<MimeType> findAll() throws DatabaseException {
+	public static List<MimeType> findAll(String sort) throws DatabaseException {
 		log.debug("findAll()");
-		String qs = "from MimeType mt order by mt.name";
+		String qs = "from MimeType mt order by "+sort;
 		Session session = null;
 		Transaction tx = null;
 		
