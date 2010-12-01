@@ -290,9 +290,9 @@
 
     <!-- JasperReports -->
     <dependency>
-      <groupId>jasperreports</groupId>
+      <groupId>net.sf.jasperreports</groupId>
       <artifactId>jasperreports</artifactId>
-      <version>3.5.3</version>
+      <version>3.7.6</version>
       <exclusions>
         <!-- Avoid java.lang.NoSuchMethodError: org.eclipse.jdt.internal.compiler.Compiler -->
         <!-- See http://groups.google.com/group/google-web-toolkit/browse_thread/thread/49e20fb5185b34ce/75436f95e29dce85?hl=en -->
@@ -490,7 +490,7 @@
         <executions>
           <execution>
             <goals>
-              <goal>compile</goal>
+              <!-- <goal>compile</goal> -->
               <!-- <goal>generateAsync</goal> -->
               <!-- <goal>test</goal> -->
             </goals>
