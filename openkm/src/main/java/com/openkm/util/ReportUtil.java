@@ -63,23 +63,23 @@ public class ReportUtil {
 	private static Logger log = LoggerFactory.getLogger(ReportUtil.class);
 	public static Map<String, JasperReport> JasperCharged = new HashMap<String, JasperReport>();
 	
-	public static final int TEXT_OUTPUT = 0;
-	public static final int HTML_OUTPUT = 1;
-	public static final int PDF_OUTPUT = 2;
-	public static final int RTF_OUTPUT = 3;
-	public static final int CSV_OUTPUT = 4;
-	public static final int ODT_OUTPUT = 5;
-	public static final int DOCX_OUTPUT = 6;
+	public static final int OUTPUT_TEXT = 0;
+	public static final int OUTPUT_HTML = 1;
+	public static final int OUTPUT_PDF = 2;
+	public static final int OUTPUT_RTF = 3;
+	public static final int OUTPUT_CSV = 4;
+	public static final int OUTPUT_ODT = 5;
+	public static final int OUTPUT_DOCX = 6;
 	
-	public static final String TEXT_MIME = "text/plain"; 
-	public static final String HTML_MIME = "text/html";
-	public static final String PDF_MIME = "application/pdf";
-	public static final String RTF_MIME = "application/rtf";
-	public static final String CSV_MIME = "text/csv";
-	public static final String ODT_MIME = "application/vnd.oasis.opendocument.text";
-	public static final String DOCX_MIME = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+	public static final String MIME_TEXT = "text/plain"; 
+	public static final String MIME_HTML = "text/html";
+	public static final String MIME_PDF = "application/pdf";
+	public static final String MIME_RTF = "application/rtf";
+	public static final String MIME_CSV = "text/csv";
+	public static final String MIME_ODT = "application/vnd.oasis.opendocument.text";
+	public static final String MIME_DOCX = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 	
-	public static final String[] FILE_MIME = { TEXT_MIME, HTML_MIME, PDF_MIME, RTF_MIME, CSV_MIME, ODT_MIME, DOCX_MIME };
+	public static final String[] FILE_MIME = { MIME_TEXT, MIME_HTML, MIME_PDF, MIME_RTF, MIME_CSV, MIME_ODT, MIME_DOCX };
 	public static final String[] FILE_EXTENSION = { ".txt", ".html", ".pdf", ".rtf", ".csv", ".odt", ".docx" };
 
 	/**
@@ -186,7 +186,7 @@ public class ReportUtil {
 	 */
 	private static void export(OutputStream out, int outputType, JasperPrint print) throws JRException {
 		switch (outputType) {
-		case TEXT_OUTPUT:
+		case OUTPUT_TEXT:
 			JRTextExporter textExp = new JRTextExporter();
 			textExp.setParameter(JRTextExporterParameter.PAGE_HEIGHT, 300);
 			textExp.setParameter(JRTextExporterParameter.PAGE_WIDTH, 100);
@@ -197,14 +197,14 @@ public class ReportUtil {
 			textExp.exportReport();
 			break;
 			
-		case PDF_OUTPUT:
+		case OUTPUT_PDF:
 			JRPdfExporter pdfExp = new JRPdfExporter();
 			pdfExp.setParameter(JRExporterParameter.JASPER_PRINT, print);
 			pdfExp.setParameter(JRExporterParameter.OUTPUT_STREAM, out);
 			pdfExp.exportReport();
 			break;
 			
-		case HTML_OUTPUT:
+		case OUTPUT_HTML:
 			JRHtmlExporter htmlExp = new JRHtmlExporter();
 			htmlExp.setParameter(JRExporterParameter.CHARACTER_ENCODING, "UTF-8");
 			htmlExp.setParameter(JRExporterParameter.JASPER_PRINT, print);
@@ -213,7 +213,7 @@ public class ReportUtil {
 			htmlExp.exportReport();
 			break;
 			
-		case RTF_OUTPUT:
+		case OUTPUT_RTF:
 			JRRtfExporter rtfExp = new JRRtfExporter();
 			rtfExp.setParameter(JRExporterParameter.CHARACTER_ENCODING, "UTF-8");
 			rtfExp.setParameter(JRExporterParameter.JASPER_PRINT, print);
@@ -221,7 +221,7 @@ public class ReportUtil {
 			rtfExp.exportReport();
 			break;
 			
-		case CSV_OUTPUT:
+		case OUTPUT_CSV:
 			JRCsvExporter csvExp = new JRCsvExporter();
 			csvExp.setParameter(JRExporterParameter.CHARACTER_ENCODING, "UTF-8");
 			csvExp.setParameter(JRExporterParameter.JASPER_PRINT, print);
@@ -229,14 +229,14 @@ public class ReportUtil {
 			csvExp.exportReport();
 			break;
 			
-		case ODT_OUTPUT:
+		case OUTPUT_ODT:
 			JROdtExporter odtExp = new JROdtExporter();
 			odtExp.setParameter(JRExporterParameter.JASPER_PRINT, print);
 			odtExp.setParameter(JRExporterParameter.OUTPUT_STREAM, out);
 			odtExp.exportReport();
 			break;
 			
-		case DOCX_OUTPUT:
+		case OUTPUT_DOCX:
 			JRDocxExporter docxExp = new JRDocxExporter();
 			docxExp.setParameter(JRExporterParameter.JASPER_PRINT, print);
 			docxExp.setParameter(JRExporterParameter.OUTPUT_STREAM, out);
