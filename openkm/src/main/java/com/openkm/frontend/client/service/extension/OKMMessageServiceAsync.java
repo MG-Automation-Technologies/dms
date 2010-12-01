@@ -22,6 +22,7 @@
 package com.openkm.frontend.client.service.extension;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -36,9 +37,11 @@ public interface OKMMessageServiceAsync extends RemoteService {
 	public void send(String users, String roles, String subject, String content, AsyncCallback<?> callback);
 	public void deleteSent(int msgId, AsyncCallback<?> callback);
 	public void deleteReceived(int msgId, AsyncCallback<?> callback);
-	public void findSentByUser(AsyncCallback<List<GWTMessageSent>> callback);
-	public void findReceivedByUser(AsyncCallback<List<GWTMessageReceived>> callback);
+	public void findSentUsersTo(AsyncCallback<List<String>> callback);
+	public void findReceivedUsersFrom(AsyncCallback<Map<String, Long>> callback);
 	public void markSeen(int msgId, AsyncCallback<?> callback);
-	public void deleteAllBySender(String user, AsyncCallback<?> callback);
-	public void deleteAllByReceiver(String user, AsyncCallback<?> callback);
+	public void findSentFromMeToUser(String user, AsyncCallback<List<GWTMessageSent>> callback);
+	public void deleteSentFromMeToUser(String user, AsyncCallback<?> callback);
+	public void findReceivedByMeFromUser(String user, AsyncCallback<List<GWTMessageReceived>> callback);
+	public void deleteReceivedByMeFromUser(String user, AsyncCallback<?> callback);
 }
