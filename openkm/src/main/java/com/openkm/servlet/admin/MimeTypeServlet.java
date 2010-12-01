@@ -215,7 +215,7 @@ public class MimeTypeServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException {
 		log.debug("list({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
-		sc.setAttribute("mimeTypes", MimeTypeDAO.findAll());
+		sc.setAttribute("mimeTypes", MimeTypeDAO.findAll("mt.name"));
 		sc.getRequestDispatcher("/admin/mime_list.jsp").forward(request, response);
 		log.debug("list: void");
 	}
@@ -297,7 +297,7 @@ public class MimeTypeServlet extends BaseServlet {
 		out.println("DELETE FROM OKM_MIME_TYPE;" );
 		out.println("DELETE FROM OKM_MIME_TYPE_EXTENSION;");
 		
-		for (MimeType mimeType: MimeTypeDAO.findAll()) {
+		for (MimeType mimeType: MimeTypeDAO.findAll("mt.id")) {
 			StringBuffer insertMime = new StringBuffer("INSERT INTO OKM_MIME_TYPE (MT_ID, MT_NAME, MT_IMAGE_CONTENT, MT_IMAGE_MIME) VALUES ('");
 			insertMime.append(mimeType.getId() + "', '");
 			insertMime.append(mimeType.getName() + "', '");
