@@ -686,7 +686,7 @@ public class Config {
 	 */
 	public static void loadMimeTypes() {
 		try {
-			List<MimeType> mimeTypeList = MimeTypeDAO.findAll();
+			List<MimeType> mimeTypeList = MimeTypeDAO.findAll("mt.id");
 			Config.mimeTypes = new MimetypesFileTypeMap();
 			
 			for (MimeType mt : mimeTypeList) {
