@@ -212,8 +212,8 @@ public class MessageDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
-			q.setString("user", user);
 			q.setString("me", me);
+			q.setString("user", user);
 			List<MessageReceived> ret = q.list();
 			log.debug("findReceivedByMeFromUser: {}", ret);
 			return ret;
