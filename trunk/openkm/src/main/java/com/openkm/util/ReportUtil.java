@@ -126,16 +126,15 @@ public class ReportUtil {
 	/**
 	 * Generates a report based on a map collection (from stream)
 	 */
-	public static OutputStream generateReport(OutputStream out, InputStream report, 
+	public static OutputStream generateReport(OutputStream out, JasperReport jr, 
 			Map<String, String> parameters, int outputType) throws JRException, EvalError {
-		JasperReport jasperReport = JasperCompileManager.compileReport(report);
-		JRQuery query = jasperReport.getQuery();
+		JRQuery query = jr.getQuery();
 		
 		if (query != null) {
 			Interpreter bsh = new Interpreter(null, System.out, System.err, false);
 			@SuppressWarnings("rawtypes")
 			Collection list = (Collection) bsh.eval(query.getText());
-			JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, 
+			JasperPrint print = JasperFillManager.fillReport(jr, parameters, 
 					new JRMapCollectionDataSource(list));
 			export(out, outputType, print);
 		} else {
@@ -175,10 +174,9 @@ public class ReportUtil {
 	/**
 	 * Generates a report based on a JDBC connection (from stream)
 	 */
-	public static OutputStream generateReport(OutputStream out, InputStream report, 
+	public static OutputStream generateReport(OutputStream out, JasperReport jr, 
 			Map<String, String> parameters, int outputType,	Connection con) throws JRException {
-		JasperReport jasperReport = JasperCompileManager.compileReport(report);
-		JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, con);
+		JasperPrint print = JasperFillManager.fillReport(jr, parameters, con);
 		export(out, outputType, print);
 		return out;
 	}
