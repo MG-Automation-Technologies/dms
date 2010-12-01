@@ -302,7 +302,7 @@ public class MimeTypeServlet extends BaseServlet {
 			insertMime.append(mimeType.getId() + "', '");
 			insertMime.append(mimeType.getName() + "', '");
 			insertMime.append(mimeType.getImageContent() + "', '");
-			insertMime.append(mimeType.getImageMime() + ");");
+			insertMime.append(mimeType.getImageMime() + "');");
 			out.println(insertMime);
 			
 			for (String ext : mimeType.getExtensions()) {
