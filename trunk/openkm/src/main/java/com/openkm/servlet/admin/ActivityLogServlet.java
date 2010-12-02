@@ -40,7 +40,7 @@ import com.openkm.dao.ActivityDAO;
 import com.openkm.dao.bean.ActivityFilter;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.util.UserActivity;
-import com.openkm.util.WebUtil;
+import com.openkm.util.WebUtils;
 
 /**
  * Activity log servlet
@@ -65,10 +65,10 @@ public class ActivityLogServlet extends BaseServlet {
 		log.debug("doGet({}, {})", request, response);
 		ServletContext sc = getServletContext();
 		request.setCharacterEncoding("UTF-8");
-		String dbegin = WebUtil.getString(request, "dbegin");
-		String dend = WebUtil.getString(request, "dend");		
-		String user = WebUtil.getString(request, "user");
-		String action = WebUtil.getString(request, "action");
+		String dbegin = WebUtils.getString(request, "dbegin");
+		String dend = WebUtils.getString(request, "dend");		
+		String user = WebUtils.getString(request, "user");
+		String action = WebUtils.getString(request, "action");
 		
 		try {
 			if (!dbegin.equals("") && !dend.equals("")) {
