@@ -50,6 +50,7 @@ import com.openkm.bean.StatsInfo;
 import com.openkm.core.Config;
 import com.openkm.core.RepositoryInfo;
 import com.openkm.util.FormatUtil;
+import com.openkm.util.WebUtils;
 
 /**
  * Stats graphical servlet
@@ -65,7 +66,7 @@ public class StatsGraphServlet extends BaseServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
-		String type = request.getParameter("t");
+		String type = WebUtils.getString(request, "t");
 		JFreeChart chart = null;
 		updateSessionManager(request);
 		
