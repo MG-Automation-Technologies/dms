@@ -21,6 +21,7 @@
 
 package com.openkm.util;
 
+import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,35 +30,78 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
 import com.lowagie.text.Image;
+import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfContentByte;
+import com.lowagie.text.pdf.PdfGState;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 
 public class PDFUtils {
 	private static Logger log = LoggerFactory.getLogger(PDFUtils.class);
-	
+
 	/**
 	 * Stamp PDF document with watermark
 	 * 
 	 * http://www.chillisoft.co.za/blog/?p=223
 	 */
-	public static void stamp(String input, String image, String output) throws FileNotFoundException,
+	public static void stampImage(String input, String image, String output) throws FileNotFoundException,
 			DocumentException, IOException {
 		log.info("stamp({}, {}, {})", new Object[] { input, image, output });
 		Image img = Image.getInstance(image);
 		PdfReader reader = new PdfReader(input);
 		PdfStamper stamp = new PdfStamper(reader, new FileOutputStream(output));
-		PdfContentByte under;
+		PdfGState gs = new PdfGState();
+		gs.setFillOpacity(0.3f);
+		gs.setStrokeOpacity(0.3f);
 		int numPages = reader.getNumberOfPages();
 		int count = 0;
-		
-		while (count < numPages) {
-		    count++;
-		    under = stamp.getUnderContent(count);
-		    under.addImage(img);
+				
+		while (count++ < numPages) {
+			float width = reader.getPageSizeWithRotation(1).getWidth() / 2 - img.getWidth() / 2;
+			float height = reader.getPageSizeWithRotation(count).getHeight() / 2 - img.getHeight() / 2;
+			img.setAbsolutePosition(width, height);
+			PdfContentByte cb = stamp.getUnderContent(count);
+			cb.saveState();
+			cb.setGState(gs);
+			cb.addImage(img);
+			cb.restoreState();
 		}
-		
+
 		stamp.close();
 	}
+	
+	/**
+	 * 
+	 */
+	public static void stampText(String input, String text, String output) throws FileNotFoundException,
+			DocumentException, IOException {
+		log.info("stamp({}, {}, {})", new Object[] { input, text, output });
+		PdfReader reader = new PdfReader(input);
+		PdfStamper stamp = new PdfStamper(reader, new FileOutputStream(output));
+		BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.EMBEDDED);
+		PdfGState gs = new PdfGState();
+		gs.setFillOpacity(0.3f);
+		gs.setStrokeOpacity(0.3f);
+		int numPages = reader.getNumberOfPages();
+		int count = 0;
+
+		while (count++ < numPages) {
+			float width = reader.getPageSizeWithRotation(1).getWidth() / 2;
+			float height = reader.getPageSizeWithRotation(count).getHeight() / 2;
+			PdfContentByte cb = stamp.getUnderContent(count);
+			cb.saveState();
+			cb.setColorFill(Color.LIGHT_GRAY);
+			cb.setGState(gs);
+			cb.beginText();
+			cb.setFontAndSize(bf, 100);
+			cb.showTextAligned(Element.ALIGN_CENTER, text, width, height, 35);
+			cb.endText();
+			cb.restoreState();
+		}
+
+		stamp.close();
+	}
+
 }
