@@ -41,8 +41,8 @@ import org.slf4j.LoggerFactory;
  * @author jllort
  *
  */
-public class WebUtil {
-	private static Logger log = LoggerFactory.getLogger(WebUtil.class);
+public class WebUtils {
+	private static Logger log = LoggerFactory.getLogger(WebUtils.class);
 	public static final String EMPTY_STRING = "";
 	
 	/**

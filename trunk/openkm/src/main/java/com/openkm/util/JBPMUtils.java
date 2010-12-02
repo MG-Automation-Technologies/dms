@@ -32,8 +32,8 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
 
-public class JBPMUtil {
-	private static Logger log = LoggerFactory.getLogger(JBPMUtil.class);
+public class JBPMUtils {
+	private static Logger log = LoggerFactory.getLogger(JBPMUtils.class);
 	private static JbpmConfiguration jbpmConfig = null;
 	
 	public static synchronized JbpmConfiguration getConfig() {

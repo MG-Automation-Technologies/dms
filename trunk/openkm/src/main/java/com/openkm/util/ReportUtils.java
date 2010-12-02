@@ -57,9 +57,9 @@ import bsh.Interpreter;
  * 
  * http://www.javalobby.org/articles/hibernatequery103/
  */
-public class ReportUtil {
+public class ReportUtils {
 	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(ReportUtil.class);
+	private static Logger log = LoggerFactory.getLogger(ReportUtils.class);
 	public static Map<String, JasperReport> JasperCharged = new HashMap<String, JasperReport>();
 	
 	public static final int OUTPUT_TEXT = 0;
