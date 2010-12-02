@@ -60,7 +60,7 @@ public class PDFUtils {
 		gs.setStrokeOpacity(0.3f);
 		int numPages = reader.getNumberOfPages();
 		int count = 0;
-				
+		
 		while (count++ < numPages) {
 			float width = reader.getPageSizeWithRotation(1).getWidth() / 2 - img.getWidth() / 2;
 			float height = reader.getPageSizeWithRotation(count).getHeight() / 2 - img.getHeight() / 2;
@@ -71,7 +71,7 @@ public class PDFUtils {
 			cb.addImage(img);
 			cb.restoreState();
 		}
-
+		
 		stamp.close();
 	}
 	
@@ -89,7 +89,7 @@ public class PDFUtils {
 		gs.setStrokeOpacity(0.3f);
 		int numPages = reader.getNumberOfPages();
 		int count = 0;
-
+		
 		while (count++ < numPages) {
 			float width = reader.getPageSizeWithRotation(1).getWidth() / 2;
 			float height = reader.getPageSizeWithRotation(count).getHeight() / 2;
@@ -103,7 +103,7 @@ public class PDFUtils {
 			cb.endText();
 			cb.restoreState();
 		}
-
+		
 		stamp.close();
 	}
 
