@@ -25,6 +25,8 @@ import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +34,9 @@ import org.slf4j.LoggerFactory;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
 import com.lowagie.text.Image;
+import com.lowagie.text.pdf.AcroFields;
 import com.lowagie.text.pdf.BaseFont;
+import com.lowagie.text.pdf.PRAcroForm;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfGState;
 import com.lowagie.text.pdf.PdfReader;
@@ -51,10 +55,10 @@ public class PDFUtils {
 	 */
 	public static void stampImage(String input, String image, String output) throws FileNotFoundException,
 			DocumentException, IOException {
-		log.info("stamp({}, {}, {})", new Object[] { input, image, output });
+		log.info("stampImage({}, {}, {})", new Object[] { input, image, output });
 		Image img = Image.getInstance(image);
 		PdfReader reader = new PdfReader(input);
-		PdfStamper stamp = new PdfStamper(reader, new FileOutputStream(output));
+		PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(output));
 		PdfGState gs = new PdfGState();
 		gs.setFillOpacity(0.3f);
 		gs.setStrokeOpacity(0.3f);
@@ -65,14 +69,14 @@ public class PDFUtils {
 			float width = reader.getPageSizeWithRotation(1).getWidth() / 2 - img.getWidth() / 2;
 			float height = reader.getPageSizeWithRotation(count).getHeight() / 2 - img.getHeight() / 2;
 			img.setAbsolutePosition(width, height);
-			PdfContentByte cb = stamp.getUnderContent(count);
+			PdfContentByte cb = stamper.getUnderContent(count);
 			cb.saveState();
 			cb.setGState(gs);
 			cb.addImage(img);
 			cb.restoreState();
 		}
 		
-		stamp.close();
+		stamper.close();
 	}
 	
 	/**
@@ -80,9 +84,9 @@ public class PDFUtils {
 	 */
 	public static void stampText(String input, String text, String output) throws FileNotFoundException,
 			DocumentException, IOException {
-		log.info("stamp({}, {}, {})", new Object[] { input, text, output });
+		log.info("stampText({}, {}, {})", new Object[] { input, text, output });
 		PdfReader reader = new PdfReader(input);
-		PdfStamper stamp = new PdfStamper(reader, new FileOutputStream(output));
+		PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(output));
 		BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.EMBEDDED);
 		PdfGState gs = new PdfGState();
 		gs.setFillOpacity(0.3f);
@@ -93,7 +97,7 @@ public class PDFUtils {
 		while (count++ < numPages) {
 			float width = reader.getPageSizeWithRotation(1).getWidth() / 2;
 			float height = reader.getPageSizeWithRotation(count).getHeight() / 2;
-			PdfContentByte cb = stamp.getUnderContent(count);
+			PdfContentByte cb = stamper.getUnderContent(count);
 			cb.saveState();
 			cb.setColorFill(Color.LIGHT_GRAY);
 			cb.setGState(gs);
@@ -104,7 +108,32 @@ public class PDFUtils {
 			cb.restoreState();
 		}
 		
-		stamp.close();
+		stamper.close();
+		reader.close();
 	}
-
+	
+	/**
+	 * Fill PDF form
+	 */
+	@SuppressWarnings("rawtypes")
+	public static void fillForm(String input, Map<String, String> values, 
+			String output) throws FileNotFoundException, DocumentException, IOException {
+		log.info("fillForm({}, {}, {})", new Object[] { input, values, output });
+		PdfReader reader = new PdfReader(input);
+		PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(output));
+		AcroFields form = stamper.getAcroFields();
+		
+		for (Iterator it = reader.getAcroForm().getFields().iterator(); it.hasNext(); ) {
+			PRAcroForm.FieldInformation field = (PRAcroForm.FieldInformation) it.next();
+			String value = values.get(field.getName());
+			
+			if (value != null) {
+				form.setField(field.getName(), value);
+			}
+		}
+		
+		stamper.setFormFlattening(true);
+		stamper.close();
+		reader.close();
+	}
 }
