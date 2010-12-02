@@ -49,7 +49,7 @@ import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.util.ArchiveUtils;
 import com.openkm.util.FileUtils;
-import com.openkm.util.WebUtil;
+import com.openkm.util.WebUtils;
 import com.openkm.util.impexp.RepositoryExporter;
 import com.openkm.util.impexp.TextInfoDecorator;
 
@@ -99,7 +99,7 @@ public class DownloadServlet extends OKMHttpServlet {
 				
 				// Send document
 				String fileName = FileUtils.getName(path)+".zip";
-				WebUtil.sendFile(request, response, fileName, "application/zip", inline, is);
+				WebUtils.sendFile(request, response, fileName, "application/zip", inline, is);
 			} else {
 				// Get document
 				doc = OKMDocument.getInstance().getProperties(null, path);
@@ -112,7 +112,7 @@ public class DownloadServlet extends OKMHttpServlet {
 				
 				// Send document
 				String fileName = FileUtils.getName(doc.getPath());
-				WebUtil.sendFile(request, response, fileName, doc.getMimeType(), inline, is);
+				WebUtils.sendFile(request, response, fileName, doc.getMimeType(), inline, is);
 			}
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);

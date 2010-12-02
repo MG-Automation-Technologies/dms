@@ -46,7 +46,7 @@ import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.util.DocConverter;
 import com.openkm.util.FileUtils;
-import com.openkm.util.WebUtil;
+import com.openkm.util.WebUtils;
 
 /**
  * Document converter service
@@ -59,10 +59,10 @@ public class ConverterServlet extends OKMHttpServlet {
 			IOException {
 		log.debug("service({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		String uuid = WebUtil.getString(request, "uuid");
-		boolean toPdf = WebUtil.getBoolean(request, "toPdf");
-		boolean toSwf = WebUtil.getBoolean(request, "toSwf");
-		boolean toDxf = WebUtil.getBoolean(request, "toDxf");
+		String uuid = WebUtils.getString(request, "uuid");
+		boolean toPdf = WebUtils.getBoolean(request, "toPdf");
+		boolean toSwf = WebUtils.getBoolean(request, "toSwf");
+		boolean toDxf = WebUtils.getBoolean(request, "toDxf");
 		File tmp = null;
 		InputStream is = null;
 		updateSessionManager(request);
@@ -157,7 +157,7 @@ public class ConverterServlet extends OKMHttpServlet {
 					fileName = FileUtils.getFileName(fileName)+".swf";
 				}
 				
-				WebUtil.sendFile(request, response, fileName, mimeType, true, is);
+				WebUtils.sendFile(request, response, fileName, mimeType, true, is);
 				is.close();
 			}
 		} catch (PathNotFoundException e) {
