@@ -42,7 +42,7 @@ import com.openkm.core.JcrSessionManager;
 import com.openkm.module.direct.DirectDocumentModule;
 import com.openkm.servlet.BasicSecuredServlet;
 import com.openkm.util.FileUtils;
-import com.openkm.util.WebUtil;
+import com.openkm.util.WebUtils;
 
 /**
  * Download Servlet
@@ -57,9 +57,9 @@ public class DownloadServlet extends BasicSecuredServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		request.setCharacterEncoding("UTF-8");
-		String path = WebUtil.getString(request, "path");
-		String uuid = WebUtil.getString(request, "uuid");
-		String token = WebUtil.getString(request, "token");
+		String path = WebUtils.getString(request, "path");
+		String uuid = WebUtils.getString(request, "uuid");
+		String token = WebUtils.getString(request, "token");
 		Session session = null;
 		
 		try {
@@ -79,7 +79,7 @@ public class DownloadServlet extends BasicSecuredServlet {
 					String fileName = FileUtils.getName(doc.getPath());
 					log.info("Download {} by {}", path, session.getUserID());
 					InputStream is = new DirectDocumentModule().getContent(session, path, false);
-					WebUtil.sendFile(request, response, fileName, doc.getMimeType(), true, is);
+					WebUtils.sendFile(request, response, fileName, doc.getMimeType(), true, is);
 					is.close();
 				} else {
 					response.setContentType("text/plain; charset=UTF-8");
