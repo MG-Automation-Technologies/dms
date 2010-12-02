@@ -630,9 +630,6 @@ public class UserInfo extends Composite {
 				panel.add(new HTML("&nbsp;"));
 			}
 		}
-		for (UserInfoExtension extension : widgetExtensionList) {
-			panel.add(extension);
-		}
 	}
 	
 	/**
