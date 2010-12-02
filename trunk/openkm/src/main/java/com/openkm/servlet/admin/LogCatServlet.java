@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.core.Config;
 import com.openkm.util.FormatUtil;
 import com.openkm.util.UserActivity;
-import com.openkm.util.WebUtil;
+import com.openkm.util.WebUtils;
 
 /**
  * LogCatServlet servlet
@@ -50,7 +50,7 @@ public class LogCatServlet extends BaseServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws 
 			ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		String action = WebUtil.getString(request, "action");
+		String action = WebUtils.getString(request, "action");
 		updateSessionManager(request);
 		
 		if (action.equals("view")) {
@@ -85,10 +85,10 @@ public class LogCatServlet extends BaseServlet {
 	private void view(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
 		log.debug("view({}, {})", request, response);
-		int begin = WebUtil.getInt(request, "begin");
-		int end = WebUtil.getInt(request, "end");
-		String str = WebUtil.getString(request, "str");
-		String file = WebUtil.getString(request, "file");
+		int begin = WebUtils.getInt(request, "begin");
+		int end = WebUtils.getInt(request, "end");
+		String str = WebUtils.getString(request, "str");
+		String file = WebUtils.getString(request, "file");
 		ServletContext sc = getServletContext();
 		File lf = new File(logFolder, file);
 		sc.setAttribute("file", file);

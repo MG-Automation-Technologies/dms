@@ -66,7 +66,7 @@ import com.openkm.dao.bean.Translation;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.SecureStore;
 import com.openkm.util.WarUtils;
-import com.openkm.util.WebUtil;
+import com.openkm.util.WebUtils;
 
 /**
  * Language servlet
@@ -80,7 +80,7 @@ public class LanguageServlet extends BaseServlet {
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		String action = WebUtil.getString(request, "action");
+		String action = WebUtils.getString(request, "action");
 		Session session = null;
 		updateSessionManager(request);
 		
@@ -103,7 +103,7 @@ public class LanguageServlet extends BaseServlet {
 				addTranslation(session, request, response);
 			} 
 			
-			if (action.equals("") || WebUtil.getBoolean(request, "persist")) {
+			if (action.equals("") || WebUtils.getBoolean(request, "persist")) {
 				list(session, request, response);
 			}
 		} catch (DatabaseException e) {
@@ -124,8 +124,8 @@ public class LanguageServlet extends BaseServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		log.debug("doPost({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		String action = WebUtil.getString(request, "action");
-		boolean persist = WebUtil.getBoolean(request, "persist");
+		String action = WebUtils.getString(request, "action");
+		boolean persist = WebUtils.getBoolean(request, "persist");
 		Session session = null;
 		org.hibernate.classic.Session hibernateSession = null;
 		updateSessionManager(request);
@@ -247,8 +247,8 @@ public class LanguageServlet extends BaseServlet {
 		log.debug("delete({}, {}, {})", new Object[] { session, request, response });
 		
 		ServletContext sc = getServletContext();
-		String lgId = WebUtil.getString(request, "lg_id");
-		sc.setAttribute("action", WebUtil.getString(request, "action"));
+		String lgId = WebUtils.getString(request, "lg_id");
+		sc.setAttribute("action", WebUtils.getString(request, "action"));
 		sc.setAttribute("persist", true);
 		sc.setAttribute("lang", LanguageDAO.findByPk(lgId));
 		sc.getRequestDispatcher("/admin/language_edit.jsp").forward(request, response);
@@ -264,8 +264,8 @@ public class LanguageServlet extends BaseServlet {
 		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
 		
 		ServletContext sc = getServletContext();
-		String lgId = WebUtil.getString(request, "lg_id");
-		sc.setAttribute("action", WebUtil.getString(request, "action"));
+		String lgId = WebUtils.getString(request, "lg_id");
+		sc.setAttribute("action", WebUtils.getString(request, "action"));
 		sc.setAttribute("persist", true);
 		sc.setAttribute("lang", LanguageDAO.findByPk(lgId));
 		sc.getRequestDispatcher("/admin/language_edit.jsp").forward(request, response);
@@ -281,7 +281,7 @@ public class LanguageServlet extends BaseServlet {
 		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
 		
 		ServletContext sc = getServletContext();
-		sc.setAttribute("action", WebUtil.getString(request, "action"));
+		sc.setAttribute("action", WebUtils.getString(request, "action"));
 		sc.setAttribute("persist", true);
 		sc.setAttribute("lang", null);
 		sc.getRequestDispatcher("/admin/language_edit.jsp").forward(request, response);
@@ -296,12 +296,12 @@ public class LanguageServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException {
 		log.debug("addTranslation({}, {}, {})", new Object[] { session, request, response });
 		
-		if (WebUtil.getBoolean(request, "persist")) {
+		if (WebUtils.getBoolean(request, "persist")) {
 			Language language = LanguageDAO.findByPk(LANG_BASE_CODE);
 			Translation translation = new Translation();
-			translation.setModule(WebUtil.getString(request, "tr_module"));
-			translation.setKey(WebUtil.getString(request, "tr_key"));
-			translation.setText(WebUtil.getString(request, "tr_text"));
+			translation.setModule(WebUtils.getString(request, "tr_module"));
+			translation.setKey(WebUtils.getString(request, "tr_key"));
+			translation.setText(WebUtils.getString(request, "tr_text"));
 			language.getTranslations().add(translation);
 			LanguageDAO.update(language);
 		}
@@ -311,7 +311,7 @@ public class LanguageServlet extends BaseServlet {
 		modules.add(Translation.MODULE_EXTENSION);
 		modules.add(Translation.MODULE_ADMINISTRATION);
 		ServletContext sc = getServletContext();
-		sc.setAttribute("action", WebUtil.getString(request, "action"));
+		sc.setAttribute("action", WebUtils.getString(request, "action"));
 		sc.setAttribute("persist", true);
 		sc.setAttribute("tr_module", modules);
 		sc.setAttribute("tr_key", "");
@@ -329,12 +329,12 @@ public class LanguageServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException {
 		log.debug("translate({}, {}, {})", new Object[] { session, request, response });
 		
-		if (WebUtil.getBoolean(request, "persist")) {
+		if (WebUtils.getBoolean(request, "persist")) {
 			Set<Translation> newTranslations = new HashSet<Translation>();
 			Language langBase = LanguageDAO.findByPk(LANG_BASE_CODE);
 			
 			for (Translation translation : langBase.getTranslations()) {
-				String text = WebUtil.getString(request, String.valueOf(translation.getKey()));
+				String text = WebUtils.getString(request, String.valueOf(translation.getKey()));
 				if (!text.equals("")) {
 					Translation newTranslation = new Translation();
 					newTranslation.setModule(translation.getModule());
@@ -344,13 +344,13 @@ public class LanguageServlet extends BaseServlet {
 				}
 			}
 			
-			String lgId = WebUtil.getString(request, "lg_id");
+			String lgId = WebUtils.getString(request, "lg_id");
 			Language language = LanguageDAO.findByPk(lgId);
 			language.setTranslations(newTranslations);
 			LanguageDAO.update(language);
 		} else {
 			ServletContext sc = getServletContext();
-			String lgId = WebUtil.getString(request, "lg_id");
+			String lgId = WebUtils.getString(request, "lg_id");
 			Language langToTranslate = LanguageDAO.findByPk(lgId);
 			Map<String, String> translations = new HashMap<String, String>();
 			
@@ -358,7 +358,7 @@ public class LanguageServlet extends BaseServlet {
 				translations.put(translation.getKey(), translation.getText());
 			}
 			
-			sc.setAttribute("action", WebUtil.getString(request, "action"));
+			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("lg_id", lgId);
 			sc.setAttribute("langToTranslateName", langToTranslate.getName());
@@ -375,7 +375,7 @@ public class LanguageServlet extends BaseServlet {
 	 */
 	private void flag(Session session, HttpServletRequest request, HttpServletResponse response) throws DatabaseException, IOException {
 		log.debug("flag({}, {}, {})", new Object[] { session, request, response });
-		String lgId = WebUtil.getString(request, "lg_id");
+		String lgId = WebUtils.getString(request, "lg_id");
 		ServletOutputStream out = response.getOutputStream();
 		Language language = LanguageDAO.findByPk(lgId);
 		byte[] img = SecureStore.b64Decode(new String(language.getImageContent()));
@@ -389,7 +389,7 @@ public class LanguageServlet extends BaseServlet {
 	
 	private void export(Session session, HttpServletRequest request, HttpServletResponse response) throws DatabaseException, IOException {
 		log.debug("export({}, {}, {})", new Object[] { session, request, response });
-		String lgId = WebUtil.getString(request, "lg_id");
+		String lgId = WebUtils.getString(request, "lg_id");
 		Language language = LanguageDAO.findByPk(lgId);
 		
 		// Disable browser cache

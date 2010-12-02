@@ -42,7 +42,7 @@ import com.openkm.dao.ConfigDAO;
 import com.openkm.dao.bean.Config;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
-import com.openkm.util.WebUtil;
+import com.openkm.util.WebUtils;
 
 /**
  * Execute config servlet
@@ -55,7 +55,7 @@ public class ConfigServlet extends BaseServlet {
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		String action = WebUtil.getString(request, "action");
+		String action = WebUtils.getString(request, "action");
 		Session session = null;
 		updateSessionManager(request);
 		
@@ -76,7 +76,7 @@ public class ConfigServlet extends BaseServlet {
 				delete(session, types, request, response);
 			}
 			
-			if (action.equals("") || WebUtil.getBoolean(request, "persist")) {
+			if (action.equals("") || WebUtils.getBoolean(request, "persist")) {
 				list(session, request, response);
 			}
 		} catch (LoginException e) {
@@ -100,12 +100,12 @@ public class ConfigServlet extends BaseServlet {
 			HttpServletResponse response) throws ServletException, IOException, DatabaseException {
 		ServletContext sc = getServletContext();
 		
-		if (WebUtil.getBoolean(request, "persist")) {
-			String cfgKey = WebUtil.getString(request, "cfg_key");
+		if (WebUtils.getBoolean(request, "persist")) {
+			String cfgKey = WebUtils.getString(request, "cfg_key");
 			Config cfg = new Config();
 			cfg.setKey(cfgKey);
-			cfg.setType(WebUtil.getString(request, "cfg_type"));
-			cfg.setValue(WebUtil.getString(request, "cfg_value"));
+			cfg.setType(WebUtils.getString(request, "cfg_type"));
+			cfg.setValue(WebUtils.getString(request, "cfg_value"));
 			ConfigDAO.create(cfg);
 			com.openkm.core.Config.reload(sc.getContextPath().substring(1));
 			
@@ -113,7 +113,7 @@ public class ConfigServlet extends BaseServlet {
 			UserActivity.log(session.getUserID(), "ADMIN_CONFIG_CREATE", cfgKey, cfg.toString());
 		} else {
 			Config cfg = new Config();
-			sc.setAttribute("action", WebUtil.getString(request, "action"));
+			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("types", types);
 			sc.setAttribute("cfg", cfg);
@@ -128,16 +128,16 @@ public class ConfigServlet extends BaseServlet {
 			HttpServletResponse response) throws ServletException, IOException, DatabaseException {
 		ServletContext sc = getServletContext();
 		
-		if (WebUtil.getBoolean(request, "persist")) {
-			String cfgKey = WebUtil.getString(request, "cfg_key");
-			String cfgType = WebUtil.getString(request, "cfg_type");
+		if (WebUtils.getBoolean(request, "persist")) {
+			String cfgKey = WebUtils.getString(request, "cfg_key");
+			String cfgType = WebUtils.getString(request, "cfg_type");
 			Config cfg = ConfigDAO.findByPk(cfgKey);
 			cfg.setType(cfgType);
 			
 			if (Config.BOOLEAN.equals(cfgType)) {
-				cfg.setValue(Boolean.toString(WebUtil.getBoolean(request, "cfg_value")));
+				cfg.setValue(Boolean.toString(WebUtils.getBoolean(request, "cfg_value")));
 			} else {
-				cfg.setValue(WebUtil.getString(request, "cfg_value"));
+				cfg.setValue(WebUtils.getString(request, "cfg_value"));
 			}
 			
 			ConfigDAO.update(cfg);
@@ -146,9 +146,9 @@ public class ConfigServlet extends BaseServlet {
 			// Activity log
 			UserActivity.log(session.getUserID(), "ADMIN_CONFIG_EDIT", cfgKey, cfg.toString());
 		} else {
-			String cfgKey = WebUtil.getString(request, "cfg_key");
+			String cfgKey = WebUtils.getString(request, "cfg_key");
 			Config cfg = ConfigDAO.findByPk(cfgKey);
-			sc.setAttribute("action", WebUtil.getString(request, "action"));
+			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("types", types);
 			sc.setAttribute("cfg", cfg);
@@ -163,17 +163,17 @@ public class ConfigServlet extends BaseServlet {
 			HttpServletResponse response) throws ServletException, IOException, DatabaseException {
 		ServletContext sc = getServletContext();
 		
-		if (WebUtil.getBoolean(request, "persist")) {
-			String cfgKey = WebUtil.getString(request, "cfg_key");
+		if (WebUtils.getBoolean(request, "persist")) {
+			String cfgKey = WebUtils.getString(request, "cfg_key");
 			ConfigDAO.delete(cfgKey);
 			com.openkm.core.Config.reload(sc.getContextPath().substring(1));
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "ADMIN_CONFIG_DELETE", cfgKey, null);
 		} else {
-			String cfgKey = WebUtil.getString(request, "cfg_key");
+			String cfgKey = WebUtils.getString(request, "cfg_key");
 			Config cfg = ConfigDAO.findByPk(cfgKey);
-			sc.setAttribute("action", WebUtil.getString(request, "action"));
+			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("types", types);
 			sc.setAttribute("cfg", cfg);
