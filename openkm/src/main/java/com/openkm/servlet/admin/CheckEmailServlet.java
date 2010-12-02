@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.util.MailUtils;
 import com.openkm.util.UserActivity;
-import com.openkm.util.WebUtil;
+import com.openkm.util.WebUtils;
 
 /**
  * CheckEmailServlet servlet
@@ -46,7 +46,7 @@ public class CheckEmailServlet extends BaseServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws 
 			ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		String action = WebUtil.getString(request, "action");
+		String action = WebUtils.getString(request, "action");
 		updateSessionManager(request);
 		
 		if (action.equals("send")) {
@@ -63,10 +63,10 @@ public class CheckEmailServlet extends BaseServlet {
 	private void send(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
 		log.debug("send({}, {})", request, response);
-		String from = WebUtil.getString(request, "from");
-		String to = WebUtil.getString(request, "to");
-		String subject = WebUtil.getString(request, "subject");
-		String content = WebUtil.getString(request, "content");
+		String from = WebUtils.getString(request, "from");
+		String to = WebUtils.getString(request, "to");
+		String subject = WebUtils.getString(request, "subject");
+		String content = WebUtils.getString(request, "content");
 		ServletContext sc = getServletContext();
 		sc.setAttribute("from", from);
 		sc.setAttribute("to", to);
