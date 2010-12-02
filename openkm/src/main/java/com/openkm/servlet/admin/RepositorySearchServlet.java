@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.core.DatabaseException;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
-import com.openkm.util.WebUtil;
+import com.openkm.util.WebUtils;
 
 /**
  * Repository search servlet
@@ -62,8 +62,8 @@ public class RepositorySearchServlet extends BaseServlet {
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		String statement = WebUtil.getString(request, "statement");
-		String type = WebUtil.getString(request, "type");
+		String statement = WebUtils.getString(request, "statement");
+		String type = WebUtils.getString(request, "type");
 		Session session = null;
 		updateSessionManager(request);
 		

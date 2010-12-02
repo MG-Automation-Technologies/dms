@@ -61,7 +61,7 @@ import com.openkm.util.JCRUtils;
 import com.openkm.util.SecureStore;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WarUtils;
-import com.openkm.util.WebUtil;
+import com.openkm.util.WebUtils;
 
 /**
  * Mime type management servlet
@@ -74,7 +74,7 @@ public class MimeTypeServlet extends BaseServlet {
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		String action = WebUtil.getString(request, "action");
+		String action = WebUtils.getString(request, "action");
 		Session session = null;
 		updateSessionManager(request);
 		
@@ -111,7 +111,7 @@ public class MimeTypeServlet extends BaseServlet {
 			ServletException {
 		log.debug("doPost({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		String action = WebUtil.getString(request, "action");
+		String action = WebUtils.getString(request, "action");
 		Session session = null;
 		org.hibernate.classic.Session hibernateSession = null;
 		updateSessionManager(request);
@@ -227,7 +227,7 @@ public class MimeTypeServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException {
 		log.debug("delete({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
-		int mtId = WebUtil.getInt(request, "mt_id");
+		int mtId = WebUtils.getInt(request, "mt_id");
 		MimeType mt = MimeTypeDAO.findByPk(mtId);
 		String extensions = "";
 		
@@ -235,7 +235,7 @@ public class MimeTypeServlet extends BaseServlet {
 			extensions += ext + " ";
 		}
 		
-		sc.setAttribute("action", WebUtil.getString(request, "action"));
+		sc.setAttribute("action", WebUtils.getString(request, "action"));
 		sc.setAttribute("extensions", extensions.trim());
 		sc.setAttribute("mt", mt);
 		sc.getRequestDispatcher("/admin/mime_edit.jsp").forward(request, response);
@@ -250,7 +250,7 @@ public class MimeTypeServlet extends BaseServlet {
 		log.debug("create({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
 		MimeType mt = new MimeType();
-		sc.setAttribute("action", WebUtil.getString(request, "action"));
+		sc.setAttribute("action", WebUtils.getString(request, "action"));
 		sc.setAttribute("extensions", null);
 		sc.setAttribute("mt", mt);
 		sc.getRequestDispatcher("/admin/mime_edit.jsp").forward(request, response);
@@ -264,7 +264,7 @@ public class MimeTypeServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException {
 		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
-		int mtId = WebUtil.getInt(request, "mt_id");
+		int mtId = WebUtils.getInt(request, "mt_id");
 		MimeType mt = MimeTypeDAO.findByPk(mtId);
 		String extensions = "";
 		
@@ -272,7 +272,7 @@ public class MimeTypeServlet extends BaseServlet {
 			extensions += ext + " ";
 		}
 		
-		sc.setAttribute("action", WebUtil.getString(request, "action"));
+		sc.setAttribute("action", WebUtils.getString(request, "action"));
 		sc.setAttribute("extensions", extensions.trim());
 		sc.setAttribute("mt", mt);
 		sc.getRequestDispatcher("/admin/mime_edit.jsp").forward(request, response);
