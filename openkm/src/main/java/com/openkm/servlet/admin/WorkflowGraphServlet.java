@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.api.OKMWorkflow;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.WorkflowException;
+import com.openkm.util.WebUtils;
 
 /**
  * Workflow graphic servlet
@@ -24,14 +25,10 @@ public class WorkflowGraphServlet extends BaseServlet {
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException {
 		request.setCharacterEncoding("UTF-8");
-		long id = Long.parseLong(request.getParameter("id"));
-		String node = request.getParameter("node");
+		long id = WebUtils.getLong(request, "id");
+		String node = WebUtils.getString(request, "node");;
 		ServletOutputStream sos = response.getOutputStream();
 		updateSessionManager(request);
-		
-		if (node != null && !node.equals("")) {
-			node = new String(node.getBytes("ISO-8859-1"), "UTF-8");
-		}
 		
 		try {
 			// Get image

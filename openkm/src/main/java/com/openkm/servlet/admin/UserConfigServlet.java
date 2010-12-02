@@ -39,7 +39,7 @@ import com.openkm.dao.ProfileDAO;
 import com.openkm.dao.UserConfigDAO;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
-import com.openkm.util.WebUtil;
+import com.openkm.util.WebUtils;
 
 /**
  * User config servlet
@@ -58,10 +58,10 @@ public class UserConfigServlet extends BaseServlet {
 		try {
 			session = JCRUtils.getSession();
 			
-			if (WebUtil.getBoolean(request, "persist")) {
+			if (WebUtils.getBoolean(request, "persist")) {
 				ServletContext sc = getServletContext();
-				String ucUser = WebUtil.getString(request, "uc_user");
-				int upId = WebUtil.getInt(request, "uc_profile");
+				String ucUser = WebUtils.getString(request, "uc_user");
+				int upId = WebUtils.getInt(request, "uc_profile");
 				UserConfigDAO.updateProfile(ucUser, upId);
 				sc.getRequestDispatcher("/admin/Auth").forward(request, response);
 				
@@ -69,7 +69,7 @@ public class UserConfigServlet extends BaseServlet {
 				UserActivity.log(session.getUserID(), "ADMIN_USER_CONFIG_EDIT", ucUser, Integer.toString(upId));
 			} else {
 				ServletContext sc = getServletContext();
-				String ucUser = WebUtil.getString(request, "uc_user");
+				String ucUser = WebUtils.getString(request, "uc_user");
 				sc.setAttribute("persist", true);
 				sc.setAttribute("profiles", ProfileDAO.findAll(true));
 				sc.setAttribute("uc", UserConfigDAO.findByPk(session, ucUser));

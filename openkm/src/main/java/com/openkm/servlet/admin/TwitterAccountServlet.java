@@ -40,7 +40,7 @@ import com.openkm.dao.TwitterAccountDAO;
 import com.openkm.dao.bean.TwitterAccount;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
-import com.openkm.util.WebUtil;
+import com.openkm.util.WebUtils;
 
 /**
  * User twitter accounts servlet
@@ -53,7 +53,7 @@ public class TwitterAccountServlet extends BaseServlet {
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		String action = WebUtil.getString(request, "action");
+		String action = WebUtils.getString(request, "action");
 		Session session = null;
 		updateSessionManager(request);
 		
@@ -68,7 +68,7 @@ public class TwitterAccountServlet extends BaseServlet {
 				delete(session, request, response);
 			}
 			
-			if (action.equals("") || WebUtil.getBoolean(request, "persist")) {
+			if (action.equals("") || WebUtils.getBoolean(request, "persist")) {
 				list(session, request, response);
 			}
 		} catch (LoginException e) {
@@ -95,11 +95,11 @@ public class TwitterAccountServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException {
 		log.info("create({}, {}, {})", new Object[] { session, request, response });
 		
-		if (WebUtil.getBoolean(request, "persist")) {
+		if (WebUtils.getBoolean(request, "persist")) {
 			TwitterAccount ta = new TwitterAccount();
-			ta.setUser(WebUtil.getString(request, "ta_user"));
-			ta.setTwitterUser(WebUtil.getString(request, "ta_tuser"));
-			ta.setActive(WebUtil.getBoolean(request, "ta_active"));
+			ta.setUser(WebUtils.getString(request, "ta_user"));
+			ta.setTwitterUser(WebUtils.getString(request, "ta_tuser"));
+			ta.setActive(WebUtils.getBoolean(request, "ta_active"));
 			TwitterAccountDAO.create(ta);
 			
 			// Activity log
@@ -107,8 +107,8 @@ public class TwitterAccountServlet extends BaseServlet {
 		} else {
 			ServletContext sc = getServletContext();
 			TwitterAccount ta = new TwitterAccount();
-			ta.setUser(WebUtil.getString(request, "ta_user"));
-			sc.setAttribute("action", WebUtil.getString(request, "action"));
+			ta.setUser(WebUtils.getString(request, "ta_user"));
+			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("ta", ta);
 			sc.getRequestDispatcher("/admin/twitter_account_edit.jsp").forward(request, response);
@@ -124,20 +124,20 @@ public class TwitterAccountServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
 		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
 		
-		if (WebUtil.getBoolean(request, "persist")) {
+		if (WebUtils.getBoolean(request, "persist")) {
 			TwitterAccount ta = new TwitterAccount();
-			ta.setId(WebUtil.getInt(request, "ta_id"));
-			ta.setUser(WebUtil.getString(request, "ta_user"));
-			ta.setTwitterUser(WebUtil.getString(request, "ta_tuser"));
-			ta.setActive(WebUtil.getBoolean(request, "ta_active"));
+			ta.setId(WebUtils.getInt(request, "ta_id"));
+			ta.setUser(WebUtils.getString(request, "ta_user"));
+			ta.setTwitterUser(WebUtils.getString(request, "ta_tuser"));
+			ta.setActive(WebUtils.getBoolean(request, "ta_active"));
 			TwitterAccountDAO.update(ta);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "ADMIN_TWITTER_ACCOUNT_EDIT", Integer.toString(ta.getId()), ta.toString());
 		} else {
 			ServletContext sc = getServletContext();
-			int taId = WebUtil.getInt(request, "ta_id");
-			sc.setAttribute("action", WebUtil.getString(request, "action"));
+			int taId = WebUtils.getInt(request, "ta_id");
+			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("ta", TwitterAccountDAO.findByPk(taId));
 			sc.getRequestDispatcher("/admin/twitter_account_edit.jsp").forward(request, response);
@@ -153,16 +153,16 @@ public class TwitterAccountServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
 		log.debug("delete({}, {}, {})", new Object[] { session, request, response });
 		
-		if (WebUtil.getBoolean(request, "persist")) {
-			int taId = WebUtil.getInt(request, "ta_id");
+		if (WebUtils.getBoolean(request, "persist")) {
+			int taId = WebUtils.getInt(request, "ta_id");
 			TwitterAccountDAO.delete(taId);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "ADMIN_TWITTER_ACCOUNT_DELETE", Integer.toString(taId), null);
 		} else {
 			ServletContext sc = getServletContext();
-			int taId = WebUtil.getInt(request, "ta_id");
-			sc.setAttribute("action", WebUtil.getString(request, "action"));
+			int taId = WebUtils.getInt(request, "ta_id");
+			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("ta", TwitterAccountDAO.findByPk(taId));
 			sc.getRequestDispatcher("/admin/twitter_account_edit.jsp").forward(request, response);
@@ -178,7 +178,7 @@ public class TwitterAccountServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException {
 		log.debug("list({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
-		String usrId = WebUtil.getString(request, "ta_user");
+		String usrId = WebUtils.getString(request, "ta_user");
 		sc.setAttribute("ta_user", usrId);
 		sc.setAttribute("twitterAccounts", TwitterAccountDAO.findByUser(usrId, false));
 		sc.getRequestDispatcher("/admin/twitter_account_list.jsp").forward(request, response);
