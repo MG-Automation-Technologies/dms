@@ -21,7 +21,7 @@
 
 package com.openkm.util;
 
-public class StackTraceUtil {
+public class StackTraceUtils {
 	
 	/**
 	 * Return the method who make the call.
