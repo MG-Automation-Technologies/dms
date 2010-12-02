@@ -48,7 +48,7 @@
 		try {
 			if (repoPath != null && !repoPath.equals("") && fsPath != null && !fsPath.equals("")) {
 				out.println("<hr/>");
-				File dir = new File(Config.CHROOT + fsPath);
+				File dir = new File(Config.INSTANCE_CHROOT_PATH + fsPath);
 				ContentInfo cInfo = OKMFolder.getInstance().getContentInfo(null, repoPath);
 				long begin = System.currentTimeMillis();
 				ImpExpStats stats = RepositoryExporter.exportDocuments(null, repoPath, dir, metadata, out,
