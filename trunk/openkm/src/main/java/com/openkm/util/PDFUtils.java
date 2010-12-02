@@ -38,13 +38,16 @@ import com.lowagie.text.pdf.PdfGState;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 
+/**
+ * http://itextpdf.sourceforge.net/howtosign.html
+ * 
+ * @author pavila
+ */
 public class PDFUtils {
 	private static Logger log = LoggerFactory.getLogger(PDFUtils.class);
 
 	/**
-	 * Stamp PDF document with watermark
-	 * 
-	 * http://www.chillisoft.co.za/blog/?p=223
+	 * Stamp PDF document with image watermark
 	 */
 	public static void stampImage(String input, String image, String output) throws FileNotFoundException,
 			DocumentException, IOException {
@@ -73,7 +76,7 @@ public class PDFUtils {
 	}
 	
 	/**
-	 * 
+	 * Stamp PDF document with text watermark
 	 */
 	public static void stampText(String input, String text, String output) throws FileNotFoundException,
 			DocumentException, IOException {
