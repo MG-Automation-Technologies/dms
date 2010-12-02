@@ -62,7 +62,7 @@ public class Config {
 	public static final String NODE_DEFINITIONS = "CustomNodes.cnd";
 	public static String CONTEXT;
 	public static String INSTANCE;
-	public static String CHROOT;
+	public static String INSTANCE_CHROOT_PATH;
 	public static boolean MULTIPLE_INSTANCES;
 	public static String JBPM_CONFIG;
 	public static String PROPERTY_GROUPS_XML;
@@ -436,15 +436,15 @@ public class Config {
 			if ("OpenKM".equals(CONTEXT)) {
 				INSTANCE = HOME_DIR;
 				values.put("instance", INSTANCE);
-				CHROOT = "";
-				values.put("chroot", CHROOT);
+				INSTANCE_CHROOT_PATH = "";
+				values.put("instance.chroot.path", INSTANCE_CHROOT_PATH);
 				MULTIPLE_INSTANCES = false;
 				values.put("multiple.instances", Boolean.toString(MULTIPLE_INSTANCES));
 			} else {
 				INSTANCE = HOME_DIR + File.separator + "instances" + File.separator + CONTEXT;
 				values.put("instance", INSTANCE);
-				CHROOT = INSTANCE + File.separator + "root" + File.separator;
-				values.put("chroot", CHROOT);
+				INSTANCE_CHROOT_PATH = INSTANCE + File.separator + "root" + File.separator;
+				values.put("instance.chroot.path", INSTANCE_CHROOT_PATH);
 				MULTIPLE_INSTANCES = true;
 				values.put("multiple.instances", Boolean.toString(MULTIPLE_INSTANCES));
 			}
