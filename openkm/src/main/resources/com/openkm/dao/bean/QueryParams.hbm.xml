@@ -42,7 +42,7 @@
     </set>
     <set name="proposedReceived" table="OKM_PROPOSED_QUERY_RECEIVED" order-by="PQ_ID asc" cascade="all-delete-orphan" lazy="false">
       <key column="PQR_QUERY"/>
-      <one-to-many class="com.openkm.dao.bean.ProposedQuery"/>
+      <one-to-many class="com.openkm.dao.bean.ProposedQueryReceived"/>
     </set>
   </class>
 </hibernate-mapping>
