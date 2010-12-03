@@ -137,15 +137,15 @@ public class ProposedQueryDAO {
 	 * Find by user
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<String> findProposedQueriesUsersFrom(String usrId) throws DatabaseException {
-		log.debug("findProposedQueriesUsersFrom({})", usrId);
+	public static List<String> findProposedQueriesUsersFrom(String me) throws DatabaseException {
+		log.debug("findProposedQueriesUsersFrom({})", me);
 		String qs = "select distinct(pq.from) from ProposedQueryReceived pq where pq.user=:me order by pq.from";
 		Session session = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
-			q.setString("user", usrId);
+			q.setString("me", me);
 			List<String> ret = q.list();
 			log.debug("findProposedQueriesUsersFrom: {}", ret);
 			return ret;
