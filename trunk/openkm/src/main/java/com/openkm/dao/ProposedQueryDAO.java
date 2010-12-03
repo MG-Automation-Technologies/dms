@@ -211,6 +211,29 @@ public class ProposedQueryDAO {
 	}
 	
 	/**
+	 * Find users whom sent an proposed query
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<String> findProposedQuerySentUsersTo(String me) throws DatabaseException {
+		log.debug("findSentUsersTo({})", me);
+		String qs = "select distinct(pq.user) from ProposedQuerySent pq where pq.from=:me order by pq.user";
+		Session session = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setString("me", me);
+			List<String> ret = q.list();
+			log.debug("findProposedQuerySentUsersTo: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
 	 * Mark proposed as seen
 	 */
 	public static void markSeen(int pqId) throws DatabaseException {

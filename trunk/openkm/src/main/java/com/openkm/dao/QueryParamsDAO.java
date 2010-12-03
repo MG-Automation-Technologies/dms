@@ -245,7 +245,7 @@ public class QueryParamsDAO {
 	}
 	
 	/**
-	 * Find all proposed
+	 * Find all proposed receibed from some user
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<QueryParams> findProposedQueryByMeFromUser(String me, String user) throws DatabaseException {
@@ -262,6 +262,33 @@ public class QueryParamsDAO {
 			List<QueryParams> ret = q.list();
 
 			log.debug("findProposedQueryByMeFromUser: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}	
+	
+	/**
+	 * Find all proposed
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<QueryParams> findProposedQueryFromMeToUser(String me, String user) throws DatabaseException {
+		log.debug("findProposedQueryFromMeToUser({}, {})", me);
+		String qs = "select distinct(qp) from QueryParams qp, ProposedQuerySent pr where pr.user=:user and pr.from=:me and pr in elements(qp.proposedSent)";		
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setString("me", me);
+			q.setString("user", user);
+			List<QueryParams> ret = q.list();
+
+			log.debug("findProposedQueryFromMeToUser: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
