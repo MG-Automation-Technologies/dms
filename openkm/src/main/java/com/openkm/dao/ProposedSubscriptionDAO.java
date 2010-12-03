@@ -22,7 +22,9 @@
 package com.openkm.dao;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 
@@ -37,8 +39,6 @@ import com.openkm.bean.Folder;
 import com.openkm.bean.Repository;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
-import com.openkm.dao.bean.MessageReceived;
-import com.openkm.dao.bean.MessageSent;
 import com.openkm.dao.bean.ProposedSubscriptionReceived;
 import com.openkm.dao.bean.ProposedSubscriptionSent;
 import com.openkm.util.JCRUtils;
@@ -139,13 +139,67 @@ public class ProposedSubscriptionDAO {
 	}
 	
 	/**
-	 * Finde by user
+	 * Find by user
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<ProposedSubscription> findByUser(javax.jcr.Session jcrSession, String usrId) throws 
-			DatabaseException, RepositoryException {
-		log.debug("findByUser({}, {})", jcrSession, usrId);
-		String qs = "from ProposedSubscription ps where ps.to=:user order by ps.id";
+	public static List<String> findProposedSubscriptionsUsersFrom(String me) throws DatabaseException {
+		log.debug("findProposedSubscriptionsUsersFrom({})", me);
+		String qs = "select distinct(ps.from) from ProposedSubscriptionReceived ps where ps.user=:me order by ps.from";
+		Session session = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setString("me", me);
+			List<String> ret = q.list();
+			log.debug("findProposedSubscriptionsUsersFrom: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Return a map users and number of unread proposed queries from them
+	 */
+	@SuppressWarnings("unchecked")
+	public static Map<String, Long> findProposedSubscriptionsUsersFromUnread(String me) throws
+			DatabaseException {
+		log.debug("findProposedSubscriptionsUsersFromUnread({})", me);
+		String qs = "select ps.from, count(ps.from) from ProposedSubscriptionReceived ps " + 
+			"group by ps.from, ps.user, ps.seenDate having ps.seenDate is null and ps.user=:me";
+		Session session = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setString("me", me);
+			List<Object[]> list =  q.list();
+			Map<String, Long> ret = new HashMap<String, Long>();
+			
+			for (Object[] item : list) {
+				ret.put((String) item[0], (Long) item[1]);
+			} 
+			
+			log.debug("findProposedSubscriptionsUsersFromUnread: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Find received by user
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<ProposedSubscriptionReceived> findProposedSubscriptionByMeFromUser(javax.jcr.Session jcrSession, 
+			String me, String user) throws DatabaseException, RepositoryException {
+		log.debug("findProposedSubscriptionByMeFromUser({}, {})", jcrSession, user);
+		String qs = "from ProposedSubscriptionReceived ps where ps.from=:user and ps.user=:me order by ps.id";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -153,10 +207,11 @@ public class ProposedSubscriptionDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
-			q.setString("user", usrId);
-			List<ProposedSubscription> ret = q.list();
+			q.setString("me", me);
+			q.setString("user", user);
+			List<ProposedSubscriptionReceived> ret = q.list();
 			
-			for (ProposedSubscription ps : ret) {
+			for (ProposedSubscriptionReceived ps : ret) {
 				try {
 					Node node = jcrSession.getNodeByUUID(ps.getUuid());
 					String nType = JCRUtils.getNodeType(node);
@@ -168,7 +223,7 @@ public class ProposedSubscriptionDAO {
 						session.update(ps);
 					}
 				} catch (javax.jcr.ItemNotFoundException e) {
-					// If user bookmark is missing, set a default
+					// If node is missing, set a default
 					Node okmRoot = jcrSession.getRootNode().getNode(Repository.ROOT);
 					ps.setPath(okmRoot.getPath());
 					ps.setUuid(okmRoot.getUUID());
@@ -178,7 +233,7 @@ public class ProposedSubscriptionDAO {
 			}
 			
 			HibernateUtil.commit(tx);
-			log.debug("findByUser: {}", ret);
+			log.debug("findProposedSubscriptionByMeFromUser: {}", ret);
 			return ret;
 		} catch (javax.jcr.RepositoryException e) {
 			HibernateUtil.rollback(tx);
