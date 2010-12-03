@@ -155,15 +155,18 @@ public class QueryParamsDAO {
 		log.debug("findByUser({})", user);
 		String qs = "from QueryParams qp where qp.user=:user";
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
 			q.setString("user", user);
 			List<QueryParams> ret = q.list();
+			HibernateUtil.commit(tx);
 			log.debug("findByUser: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
