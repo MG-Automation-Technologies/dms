@@ -39,7 +39,8 @@ public class QueryParams implements Serializable {
 	private String operator = AND;
 	private Map<String, String> properties = new HashMap<String, String>();
 	private Set<String> shared = new HashSet<String>();
-	private Set<ProposedQuery> proposed = new HashSet<ProposedQuery>();
+	private Set<ProposedQuerySent> proposedSent = new HashSet<ProposedQuerySent>();
+	private Set<ProposedQueryReceived> proposedReceived = new HashSet<ProposedQueryReceived>();
 	
 	public int getId() {
 		return id;
@@ -217,14 +218,22 @@ public class QueryParams implements Serializable {
 		this.shared = shared;
 	}
 	
-	public Set<ProposedQuery> getProposed() {
-		return proposed;
+	public Set<ProposedQuerySent> getProposedSent() {
+		return proposedSent;
 	}
 
-	public void setProposed(Set<ProposedQuery> proposed) {
-		this.proposed = proposed;
+	public void setProposedSent(Set<ProposedQuerySent> proposedSent) {
+		this.proposedSent = proposedSent;
 	}
-	
+
+	public Set<ProposedQueryReceived> getProposedReceived() {
+		return proposedReceived;
+	}
+
+	public void setProposedReceived(Set<ProposedQueryReceived> proposedReceived) {
+		this.proposedReceived = proposedReceived;
+	}
+		
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -242,7 +251,8 @@ public class QueryParams implements Serializable {
 		sb.append(", domain="); sb.append(domain);
 		sb.append(", operator="); sb.append(operator);
 		sb.append(", shared="); sb.append(shared);
-		sb.append(", proposed="); sb.append(proposed);
+		sb.append(", proposedSent="); sb.append(proposedSent);
+		sb.append(", proposedReceived="); sb.append(proposedReceived);
 		sb.append(", statementQuery="); sb.append(statementQuery);
 		sb.append(", statementType="); sb.append(statementType);
 		sb.append(", lastModifiedFrom="); sb.append(lastModifiedFrom==null?null:lastModifiedFrom.getTime());
