@@ -77,6 +77,7 @@ import com.openkm.dao.bean.Language;
 import com.openkm.dao.bean.MessageReceived;
 import com.openkm.dao.bean.MessageSent;
 import com.openkm.dao.bean.ProposedQueryReceived;
+import com.openkm.dao.bean.ProposedQuerySent;
 import com.openkm.dao.bean.ProposedSubscription;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.UserConfig;
@@ -114,8 +115,9 @@ import com.openkm.frontend.client.bean.GWTValidator;
 import com.openkm.frontend.client.bean.GWTVersion;
 import com.openkm.frontend.client.bean.GWTWorkflowComment;
 import com.openkm.frontend.client.bean.extension.GWTMessageReceived;
-import com.openkm.frontend.client.bean.extension.GWTMessageSent;
+import com.openkm.frontend.client.bean.extension.GWTTextMessageSent;
 import com.openkm.frontend.client.bean.extension.GWTProposedQueryReceived;
+import com.openkm.frontend.client.bean.extension.GWTProposedQuerySent;
 import com.openkm.frontend.client.bean.extension.GWTProposedSubscription;
 import com.openkm.frontend.client.bean.extension.GWTStaple;
 import com.openkm.frontend.client.bean.extension.GWTStapleGroup;
@@ -1173,13 +1175,38 @@ public class GWTUtil {
 	}
 	
 	/**
+	 * Copy ProposedQuery to GWTProposedQuery
+	 * 
+	 * @param pq
+	 * @return
+	 * @throws DatabaseException 
+	 * @throws ParseException 
+	 * @throws PathNotFoundException 
+	 * @throws IOException 
+	 * @throws RepositoryException 
+	 */
+	public static GWTProposedQuerySent copy(ProposedQuerySent pq, QueryParams params) throws RepositoryException, IOException, 
+																					 PathNotFoundException, ParseException, 
+																					 DatabaseException {
+		GWTProposedQuerySent gWTProposedQuery = new GWTProposedQuerySent();
+		gWTProposedQuery.setComment(pq.getComment());
+		gWTProposedQuery.setFrom(pq.getFrom());
+		gWTProposedQuery.setTo(pq.getTo());
+		gWTProposedQuery.setUser(pq.getUser());
+		gWTProposedQuery.setId(pq.getId());
+		gWTProposedQuery.setSentDate(pq.getSentDate().getTime());
+		gWTProposedQuery.setParams(copy(params));
+		return gWTProposedQuery;
+	}
+	
+	/**
 	 * Copy MessageSent to GWTMessageSent
 	 * 
 	 * @param ms
 	 * @return
 	 */
-	public static GWTMessageSent copy(MessageSent ms) {
-		GWTMessageSent gWTMessageSent  = new GWTMessageSent();
+	public static GWTTextMessageSent copy(MessageSent ms) {
+		GWTTextMessageSent gWTMessageSent  = new GWTTextMessageSent();
 		gWTMessageSent.setContent(ms.getContent());
 		gWTMessageSent.setFrom(ms.getFrom());
 		gWTMessageSent.setUser(ms.getUser());

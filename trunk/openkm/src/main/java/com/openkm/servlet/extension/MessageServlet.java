@@ -21,8 +21,10 @@
 
 package com.openkm.servlet.extension;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,14 +34,24 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMAuth;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.ParseException;
+import com.openkm.core.PathNotFoundException;
+import com.openkm.core.RepositoryException;
 import com.openkm.dao.MessageDAO;
+import com.openkm.dao.ProposedQueryDAO;
+import com.openkm.dao.QueryParamsDAO;
 import com.openkm.dao.bean.MessageReceived;
 import com.openkm.dao.bean.MessageSent;
+import com.openkm.dao.bean.ProposedQuerySent;
+import com.openkm.dao.bean.QueryParams;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.extension.GWTMessageReceived;
 import com.openkm.frontend.client.bean.extension.GWTMessageSent;
+import com.openkm.frontend.client.bean.extension.GWTProposedQuerySent;
+import com.openkm.frontend.client.bean.extension.GWTTextMessageSent;
 import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.service.extension.OKMMessageService;
+import com.openkm.frontend.client.util.GWTMessageSentComparator;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.servlet.frontend.OKMRemoteServiceServlet;
 import com.openkm.util.GWTUtil;
@@ -98,7 +110,10 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 		log.debug("findSentUsersTo()");
 		updateSessionManager();
 		try {
-			return MessageDAO.findSentUsersTo(getThreadLocalRequest().getRemoteUser());
+			String me = getThreadLocalRequest().getRemoteUser();
+			List<String> usersList = ProposedQueryDAO.findProposedQuerySentUsersTo(me);
+			usersList.addAll(MessageDAO.findSentUsersTo(me));
+			return usersList;
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMessageService, ErrorCode.CAUSE_Database), e.getMessage());
@@ -133,13 +148,41 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 		List<GWTMessageSent> messageSentList = new ArrayList<GWTMessageSent>();
 		updateSessionManager();
 		try {
-			for (MessageSent messageSent :MessageDAO.findSentFromMeToUser(getThreadLocalRequest().getRemoteUser(), user)) {
-				messageSentList.add(GWTUtil.copy(messageSent));
+			String me = getThreadLocalRequest().getRemoteUser();
+			for (MessageSent messageSent : MessageDAO.findSentFromMeToUser(me, user)) {
+				GWTTextMessageSent textMessageSent = new GWTTextMessageSent();
+				textMessageSent = GWTUtil.copy(messageSent);
+				GWTMessageSent message = new GWTMessageSent();
+				message.setTestMessageSent(textMessageSent);
+				message.setSentDate(textMessageSent.getSentDate());
+				messageSentList.add(message);
 			}
+			for (QueryParams queryParams : QueryParamsDAO.findProposedQueryFromMeToUser(me, user)) {
+				for (ProposedQuerySent proposedQuerySent : queryParams.getProposedSent()) {
+					GWTProposedQuerySent gWTproposedQuerySent  = GWTUtil.copy(proposedQuerySent, queryParams);	
+					GWTMessageSent message = new GWTMessageSent();
+					message.setProposedQuerySent(gWTproposedQuerySent);
+					message.setSentDate(gWTproposedQuerySent.getSentDate());
+					messageSentList.add(message);
+				}
+			}
+			Collections.sort(messageSentList, GWTMessageSentComparator.getInstance());
 			return messageSentList;
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMessageService, ErrorCode.CAUSE_Database), e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMessageService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (IOException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMessageService, ErrorCode.CAUSE_IO), e.getMessage());
+		} catch (PathNotFoundException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMessageService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+		} catch (ParseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMessageService, ErrorCode.CAUSE_Parse), e.getMessage());
 		}
 	}
 	
