@@ -76,7 +76,7 @@ import com.openkm.dao.bean.Bookmark;
 import com.openkm.dao.bean.Language;
 import com.openkm.dao.bean.MessageReceived;
 import com.openkm.dao.bean.MessageSent;
-import com.openkm.dao.bean.ProposedQuery;
+import com.openkm.dao.bean.ProposedQueryReceived;
 import com.openkm.dao.bean.ProposedSubscription;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.UserConfig;
@@ -115,7 +115,7 @@ import com.openkm.frontend.client.bean.GWTVersion;
 import com.openkm.frontend.client.bean.GWTWorkflowComment;
 import com.openkm.frontend.client.bean.extension.GWTMessageReceived;
 import com.openkm.frontend.client.bean.extension.GWTMessageSent;
-import com.openkm.frontend.client.bean.extension.GWTProposedQuery;
+import com.openkm.frontend.client.bean.extension.GWTProposedReceivedQuery;
 import com.openkm.frontend.client.bean.extension.GWTProposedSubscription;
 import com.openkm.frontend.client.bean.extension.GWTStaple;
 import com.openkm.frontend.client.bean.extension.GWTStapleGroup;
@@ -1154,14 +1154,15 @@ public class GWTUtil {
 	 * @throws IOException 
 	 * @throws RepositoryException 
 	 */
-	public static GWTProposedQuery copy(ProposedQuery pq, QueryParams params) throws RepositoryException, IOException, 
+	public static GWTProposedReceivedQuery copy(ProposedQueryReceived pq, QueryParams params) throws RepositoryException, IOException, 
 																					 PathNotFoundException, ParseException, 
 																					 DatabaseException {
-		GWTProposedQuery gWTProposedQuery = new GWTProposedQuery();
+		GWTProposedReceivedQuery gWTProposedQuery = new GWTProposedReceivedQuery();
 		gWTProposedQuery.setAccepted(pq.isAccepted());
 		gWTProposedQuery.setComment(pq.getComment());
 		gWTProposedQuery.setFrom(pq.getFrom());
 		gWTProposedQuery.setTo(pq.getTo());
+		gWTProposedQuery.setUser(pq.getUser());
 		gWTProposedQuery.setId(pq.getId());
 		gWTProposedQuery.setSentDate(pq.getSentDate().getTime());
 		if (pq.getSeenDate()!=null) {
