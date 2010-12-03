@@ -115,7 +115,7 @@ import com.openkm.frontend.client.bean.GWTVersion;
 import com.openkm.frontend.client.bean.GWTWorkflowComment;
 import com.openkm.frontend.client.bean.extension.GWTMessageReceived;
 import com.openkm.frontend.client.bean.extension.GWTMessageSent;
-import com.openkm.frontend.client.bean.extension.GWTProposedReceivedQuery;
+import com.openkm.frontend.client.bean.extension.GWTProposedQueryReceived;
 import com.openkm.frontend.client.bean.extension.GWTProposedSubscription;
 import com.openkm.frontend.client.bean.extension.GWTStaple;
 import com.openkm.frontend.client.bean.extension.GWTStapleGroup;
@@ -1154,10 +1154,10 @@ public class GWTUtil {
 	 * @throws IOException 
 	 * @throws RepositoryException 
 	 */
-	public static GWTProposedReceivedQuery copy(ProposedQueryReceived pq, QueryParams params) throws RepositoryException, IOException, 
+	public static GWTProposedQueryReceived copy(ProposedQueryReceived pq, QueryParams params) throws RepositoryException, IOException, 
 																					 PathNotFoundException, ParseException, 
 																					 DatabaseException {
-		GWTProposedReceivedQuery gWTProposedQuery = new GWTProposedReceivedQuery();
+		GWTProposedQueryReceived gWTProposedQuery = new GWTProposedQueryReceived();
 		gWTProposedQuery.setAccepted(pq.isAccepted());
 		gWTProposedQuery.setComment(pq.getComment());
 		gWTProposedQuery.setFrom(pq.getFrom());

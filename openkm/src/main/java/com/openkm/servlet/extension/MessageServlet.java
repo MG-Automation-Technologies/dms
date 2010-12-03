@@ -58,6 +58,7 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 	public void send(String users, String roles, String subject, String content) throws OKMException {
 		Object obj[] = {(Object)users, (Object)roles,(Object)subject,  (Object)content};
 		log.debug("send({}, {}, {}, {})", obj);
+		updateSessionManager();
 		
 		try {
 			String remoteUser = getThreadLocalRequest().getRemoteUser();
@@ -95,6 +96,7 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 	@Override
 	public List<String> findSentUsersTo() throws OKMException {
 		log.debug("findSentUsersTo()");
+		updateSessionManager();
 		try {
 			return MessageDAO.findSentUsersTo(getThreadLocalRequest().getRemoteUser());
 		} catch (DatabaseException e) {
@@ -107,6 +109,7 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 	public Map<String,Long> findReceivedUsersFrom() throws OKMException {
 		log.debug("findReceivedUsersFrom()");
 		Map<String,Long> received = new HashMap<String, Long>();
+		updateSessionManager();
 		try {
 			String user = getThreadLocalRequest().getRemoteUser();
 			Map<String, Long> unreadMap = MessageDAO.findReceivedUsersFromUnread(user);
@@ -128,6 +131,7 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 	public List<GWTMessageSent> findSentFromMeToUser(String user) throws OKMException {
 		log.debug("findSentFromMeToUser({})",user);
 		List<GWTMessageSent> messageSentList = new ArrayList<GWTMessageSent>();
+		updateSessionManager();
 		try {
 			for (MessageSent messageSent :MessageDAO.findSentFromMeToUser(getThreadLocalRequest().getRemoteUser(), user)) {
 				messageSentList.add(GWTUtil.copy(messageSent));
@@ -143,6 +147,7 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 	public List<GWTMessageReceived> findReceivedByMeFromUser(String user) throws OKMException {
 		log.debug("findSentFromMeToUser({})",user);
 		List<GWTMessageReceived> messageReceivedList = new ArrayList<GWTMessageReceived>();
+		updateSessionManager();
 		try {
 			for (MessageReceived messageReceived: MessageDAO.findReceivedByMeFromUser(getThreadLocalRequest().getRemoteUser(), user)) {
 				messageReceivedList.add(GWTUtil.copy(messageReceived));
@@ -157,6 +162,7 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 	@Override
 	public void deleteReceived(int msgId) throws OKMException {
 		log.debug("deleteReceived({})", msgId);
+		updateSessionManager();
 		try {
 			MessageDAO.deleteReceived(msgId);
 		} catch (DatabaseException e) {
@@ -168,6 +174,7 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 	@Override
 	public void deleteSent(int msgId) throws OKMException {
 		log.debug("deleteSent({})", msgId);
+		updateSessionManager();
 		try {
 			MessageDAO.deleteSent(msgId);
 		} catch (DatabaseException e) {
@@ -179,6 +186,7 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 	@Override
 	public void markSeen(int msgId) throws OKMException {
 		log.debug("markSeen({})", msgId);
+		updateSessionManager();
 		try {
 			MessageDAO.markSeen(msgId);
 		} catch (DatabaseException e) {
@@ -191,6 +199,7 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 	public void deleteSentFromMeToUser(String user) throws OKMException {
 		log.debug("deleteSentFromMeToUser({})",user);
 		List<String> msgId = new ArrayList<String>();
+		updateSessionManager();
 		try {
 			for (MessageSent messageSent :MessageDAO.findSentFromMeToUser(getThreadLocalRequest().getRemoteUser(), user)) {
 				msgId.add(String.valueOf(messageSent.getId()));
@@ -208,6 +217,7 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 	public void deleteReceivedByMeFromUser(String user) throws OKMException {
 		log.debug("deleteReceivedByMeFromUser({})",user);
 		List<String> msgId = new ArrayList<String>();
+		updateSessionManager();
 		try {
 			for (MessageReceived messageReceived :MessageDAO.findReceivedByMeFromUser(getThreadLocalRequest().getRemoteUser(), user)) {
 				msgId.add(String.valueOf(messageReceived.getId()));
