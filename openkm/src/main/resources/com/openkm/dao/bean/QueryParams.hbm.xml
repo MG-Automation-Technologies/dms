@@ -36,11 +36,11 @@
       <key column="QPS_ID" not-null="true"/>
       <element column="QPS_USER" type="string"/>
     </set>
-    <set name="proposedSent" table="OKM_PROPOSED_QUERY_SENT" order-by="PQ_ID asc" cascade="all-delete-orphan" lazy="false">
+    <set name="proposedSent" table="OKM_PROPOSED_QUERY_SENT" cascade="all-delete-orphan" lazy="false">
       <key column="PQS_QUERY"/>
       <one-to-many class="com.openkm.dao.bean.ProposedQuerySent"/>
     </set>
-    <set name="proposedReceived" table="OKM_PROPOSED_QUERY_RECEIVED" order-by="PQ_ID asc" cascade="all-delete-orphan" lazy="false">
+    <set name="proposedReceived" table="OKM_PROPOSED_QUERY_RECEIVED" cascade="all-delete-orphan" lazy="false">
       <key column="PQR_QUERY"/>
       <one-to-many class="com.openkm.dao.bean.ProposedQueryReceived"/>
     </set>
