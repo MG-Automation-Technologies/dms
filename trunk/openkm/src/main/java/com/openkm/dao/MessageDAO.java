@@ -47,7 +47,7 @@ public class MessageDAO {
 	 */
 	public static void send(String from, String to, String user, String subject, String content) throws 
 			DatabaseException {
-		log.debug("create({}, {}, {}, {}, {})", new Object[] { from, to, user, subject, content });
+		log.debug("send({}, {}, {}, {}, {})", new Object[] { from, to, user, subject, content });
 		Session session = null;
 		Transaction tx = null;
 		
@@ -81,7 +81,7 @@ public class MessageDAO {
 			HibernateUtil.close(session);
 		}
 		
-		log.debug("create: void");
+		log.debug("send: void");
 	}
 	
 	/**
