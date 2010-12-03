@@ -4,7 +4,7 @@
 <%@ page import="com.openkm.core.Config" %>
 <%@ page import="com.openkm.bean.ContentInfo" %>
 <%@ page import="com.openkm.api.OKMFolder" %>
-<%@ page import="com.openkm.util.WebUtil"%>
+<%@ page import="com.openkm.util.WebUtils"%>
 <%@ page import="com.openkm.util.FormatUtil" %>
 <%@ page import="com.openkm.util.impexp.RepositoryExporter" %>
 <%@ page import="com.openkm.util.impexp.HTMLInfoDecorator" %>
@@ -23,9 +23,9 @@
 <%
 	if (request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
 		request.setCharacterEncoding("UTF-8");
-		String repoPath = WebUtil.getString(request, "repoPath", "/okm:root");
-		String fsPath = WebUtil.getString(request, "fsPath");
-		boolean metadata = WebUtil.getBoolean(request, "metadata");
+		String repoPath = WebUtils.getString(request, "repoPath", "/okm:root");
+		String fsPath = WebUtils.getString(request, "fsPath");
+		boolean metadata = WebUtils.getBoolean(request, "metadata");
 		
 		out.println("<h1>Repository export</h1>");
 		out.println("<form action=\"repository_export.jsp\">");
