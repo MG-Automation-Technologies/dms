@@ -22,10 +22,11 @@
 package com.openkm.frontend.client.service.extension;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.openkm.frontend.client.OKMException;
-import com.openkm.frontend.client.bean.extension.GWTProposedQuery;
+import com.openkm.frontend.client.bean.extension.GWTProposedQueryReceived;
 
 /**
  * @author jllort
@@ -33,9 +34,10 @@ import com.openkm.frontend.client.bean.extension.GWTProposedQuery;
  */
 public interface OKMProposedQueryService extends RemoteService {
 	public void create(int qpId, String users, String roles, String comment) throws OKMException;
-	public List<GWTProposedQuery> findAll() throws OKMException;
+	public Map<String, Long> findProposedQueriesUsersFrom() throws OKMException;
 	public void markSeen(int msgId) throws OKMException;
 	public void markAccepted(int msgId) throws OKMException;
 	public void delete(int msgId) throws OKMException;
-	public void deleteAllBySender(String sender) throws OKMException;
+	public List<GWTProposedQueryReceived> findProposedQueryByMeFromUser(String sender) throws OKMException;
+	public void deleteProposedQueryByMeFromUser(String user) throws OKMException;
 }
