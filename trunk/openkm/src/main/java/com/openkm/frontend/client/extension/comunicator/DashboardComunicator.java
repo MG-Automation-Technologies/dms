@@ -61,4 +61,13 @@ public class DashboardComunicator {
 	public static void showToolBoxExtension(ToolBarBoxExtension extension) {
 		Main.get().mainPanel.dashboard.horizontalToolBar.showToolBoxExtension(extension);
 	}
+	
+	/**
+	 * getUserSearchs
+	 * 
+	 * @param refresh
+	 */
+	public static void getUserSearchs(boolean refresh) {
+		Main.get().mainPanel.dashboard.newsDashboard.getUserSearchs(refresh);
+	}
 }
