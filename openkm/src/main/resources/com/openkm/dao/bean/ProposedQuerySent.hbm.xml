@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-  <class name="com.openkm.dao.bean.ProposedQuery" table="OKM_PROPOSED_QUERY_SENT">
+  <class name="com.openkm.dao.bean.ProposedQuerySent" table="OKM_PROPOSED_QUERY_SENT">
     <id name="id" column="PQS_ID"><generator class="native"/></id>
     <property name="from" column="PQS_FROM" not-null="true" length="127"/>
     <property name="to" column="PQS_TO" not-null="true" length="127"/>
