@@ -24,11 +24,12 @@ package com.openkm.dao.bean;
 import java.io.Serializable;
 import java.util.Calendar;
 
-public class ProposedSubscription implements Serializable {
+public class ProposedSubscriptionReceived implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private String from;
 	private String to;
+	private String user;
 	private String path;
 	private String uuid;
 	private String type;
@@ -59,6 +60,14 @@ public class ProposedSubscription implements Serializable {
 
 	public void setTo(String to) {
 		this.to = to;
+	}
+	
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
 	}
 	
 	public String getPath() {

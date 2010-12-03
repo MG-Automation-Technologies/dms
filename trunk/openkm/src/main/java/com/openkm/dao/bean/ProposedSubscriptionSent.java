@@ -24,12 +24,15 @@ package com.openkm.dao.bean;
 import java.io.Serializable;
 import java.util.Calendar;
 
-public class ProposedQuerySent implements Serializable {
+public class ProposedSubscriptionSent implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private String from;
 	private String to;
 	private String user;
+	private String path;
+	private String uuid;
+	private String type;
 	private String comment;
 	private Calendar sentDate;
 	
@@ -65,6 +68,30 @@ public class ProposedQuerySent implements Serializable {
 		this.user = user;
 	}
 	
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+	
 	public String getComment() {
 		return comment;
 	}
@@ -87,7 +114,9 @@ public class ProposedQuerySent implements Serializable {
 		sb.append("id="); sb.append(id);
 		sb.append(", from="); sb.append(from);
 		sb.append(", to="); sb.append(to);
-		sb.append(", user="); sb.append(user);
+		sb.append(", path="); sb.append(path);
+		sb.append(", uuid="); sb.append(uuid);
+		sb.append(", type="); sb.append(type);
 		sb.append(", sentDate="); sb.append(sentDate==null?null:sentDate.getTime());
 		sb.append("}");
 		return sb.toString();
