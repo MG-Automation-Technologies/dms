@@ -44,7 +44,7 @@ public class ProposedQueryDAO {
 	private ProposedQueryDAO() {}
 	
 	/**
-	 * Create message
+	 * Send proposed query
 	 */
 	public static void send(int qpId, String from, String to, String user, String comment) throws
 			DatabaseException {
@@ -86,7 +86,7 @@ public class ProposedQueryDAO {
 	}
 	
 	/**
-	 * Delete sent
+	 * Delete sent proposed query
 	 */
 	public static void deleteSent(int pqId) throws DatabaseException {
 		log.debug("deleteSent({})", pqId);
@@ -110,7 +110,7 @@ public class ProposedQueryDAO {
 	}
 
 	/**
-	 * Delete received
+	 * Delete received proposed query
 	 */
 	public static void deleteReceived(int pqId) throws DatabaseException {
 		log.debug("deleteReceived({})", pqId);
