@@ -37,7 +37,10 @@ import com.openkm.bean.Folder;
 import com.openkm.bean.Repository;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
-import com.openkm.dao.bean.ProposedSubscription;
+import com.openkm.dao.bean.MessageReceived;
+import com.openkm.dao.bean.MessageSent;
+import com.openkm.dao.bean.ProposedSubscriptionReceived;
+import com.openkm.dao.bean.ProposedSubscriptionSent;
 import com.openkm.util.JCRUtils;
 
 public class ProposedSubscriptionDAO {
@@ -46,44 +49,86 @@ public class ProposedSubscriptionDAO {
 	private ProposedSubscriptionDAO() {}
 	
 	/**
-	 * Create
+	 * Send proposed subscription
 	 */
-	public static void create(ProposedSubscription ps) throws DatabaseException {
-		log.debug("create({})", ps);
+	public static void send(String from, String to, String user, String uuid, String comment) throws 
+			DatabaseException {
+		log.debug("send({}, {}, {}, {}, {})", new Object[] { from, to, user, uuid, comment });
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-			if (ps.getSentDate() == null) ps.setSentDate(Calendar.getInstance());
-			session.save(ps);
+			tx = session.beginTransaction();		
+			
+			ProposedSubscriptionSent psSent = new ProposedSubscriptionSent();
+			psSent.setFrom(from);
+			psSent.setTo(to);
+			psSent.setUser(user);
+			psSent.setUuid(uuid);
+			psSent.setComment(comment);
+			psSent.setSentDate(Calendar.getInstance());
+			session.save(psSent);
+			
+			ProposedSubscriptionReceived psReceived = new ProposedSubscriptionReceived();
+			psReceived.setFrom(from);
+			psReceived.setTo(to);
+			psReceived.setUser(user);
+			psSent.setUuid(uuid);
+			psSent.setComment(comment);
+			psReceived.setSentDate(Calendar.getInstance());
+			session.save(psReceived);
+			
 			HibernateUtil.commit(tx);
-		} catch (HibernateException e) {
+		} catch(HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
 		}
 		
-		log.debug("create: void");
+		log.debug("send: void");
 	}
 	
 	/**
-	 * Delete
+	 * Delete sent proposed subscription
 	 */
-	public static void delete(int psId) throws DatabaseException {
-		log.debug("delete({})", psId);
+	public static void deleteSent(int psId) throws DatabaseException {
+		log.debug("deleteSent({})", psId);
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			ProposedSubscription ps = (ProposedSubscription) session.load(ProposedSubscription.class, psId);
+			ProposedSubscriptionSent ps = (ProposedSubscriptionSent) session.load(ProposedSubscriptionSent.class, psId);
 			session.delete(ps);
 			HibernateUtil.commit(tx);
-		} catch (HibernateException e) {
+		} catch(HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("deleteSent: void");
+	}
+	
+	/**
+	 * Delete received proposed subscription
+	 */
+	public static void deleteReceived(int psId) throws DatabaseException {
+		log.debug("deleteReceived({})", psId);
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			ProposedSubscriptionReceived ps = (ProposedSubscriptionReceived) session.load(ProposedSubscriptionReceived.class, psId);
+			session.delete(ps);
+			HibernateUtil.commit(tx);
+		} catch(HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
@@ -147,61 +192,11 @@ public class ProposedSubscriptionDAO {
 	}
 	
 	/**
-	 * Find by pk
-	 */
-	public static ProposedSubscription findByPk(javax.jcr.Session jcrSession, int psId) throws DatabaseException,
-			RepositoryException {
-		log.debug("findByPk({}, {})", jcrSession, psId);
-		String qs = "from ProposedSubscription ps where ps.id=:id";
-		Session session = null;
-		Transaction tx = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-			Query q = session.createQuery(qs);
-			q.setInteger("id", psId);
-			ProposedSubscription ret = (ProposedSubscription) q.setMaxResults(1).uniqueResult();
-			
-			try {
-				Node node = jcrSession.getNodeByUUID(ret.getUuid());
-				String nType = JCRUtils.getNodeType(node);
-				ret.setPath(node.getPath());
-				
-				// TODO Se supone que el tipo no cambia
-				if (!nType.equals(ret.getType())) {
-					ret.setType(JCRUtils.getNodeType(node));
-					session.update(ret);
-				}
-			} catch (javax.jcr.ItemNotFoundException e) {
-				// If user bookmark is missing, set a default
-				Node okmRoot = jcrSession.getRootNode().getNode(Repository.ROOT);
-				ret.setPath(okmRoot.getPath());
-				ret.setUuid(okmRoot.getUUID());
-				ret.setType(Folder.TYPE);
-				session.save(ret);
-			}
-			
-			HibernateUtil.commit(tx);
-			log.debug("findByPk: {}", ret);
-			return ret;
-		} catch (javax.jcr.RepositoryException e) {
-			HibernateUtil.rollback(tx);
-			throw new RepositoryException(e.getMessage(), e);
-		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-	}
-	
-	/**
 	 * Mark proposed as seen
 	 */
 	public static void markSeen(int psId) throws DatabaseException {
 		log.debug("markSeen({})", psId);
-		String qs = "update ProposedSubscription ps set ps.seenDate=:seenDate where ps.id=:id";
+		String qs = "update ProposedSubscriptionReceived ps set ps.seenDate=:seenDate where ps.id=:id";
 		Session session = null;
 		
 		try {
@@ -223,7 +218,7 @@ public class ProposedSubscriptionDAO {
 	 */
 	public static void markAccepted(int psId) throws DatabaseException {
 		log.debug("markAccepted({})", psId);
-		String qs = "update ProposedSubscription ps set ps.accepted=:accepted where ps.id=:id";
+		String qs = "update ProposedSubscriptionReceived ps set ps.accepted=:accepted where ps.id=:id";
 		Session session = null;
 		
 		try {
