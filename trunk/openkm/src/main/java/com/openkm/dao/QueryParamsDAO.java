@@ -248,19 +248,20 @@ public class QueryParamsDAO {
 	 * Find all proposed
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<QueryParams> findProposed(String to) throws DatabaseException {
-		log.debug("findAll({}, {})", to);
-		String qs = "select qp from QueryParams qp, ProposedQuery pq where pq.to=:to and pq in elements(qp.proposed)";		
+	public static List<QueryParams> findProposedQueryByMeFromUser(String me, String user) throws DatabaseException {
+		log.debug("findProposedQueryByMeFromUser({}, {})", me);
+		String qs = "select distinct(qp) from QueryParams qp, ProposedQueryReceived pr where pr.user=:me and pr.from=:user and pr in elements(qp.proposedReceived)";		
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
-			q.setString("to", to);
+			q.setString("me", me);
+			q.setString("user", user);
 			List<QueryParams> ret = q.list();
 
-			log.debug("findAll: {}", ret);
+			log.debug("findProposedQueryByMeFromUser: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);

@@ -192,7 +192,7 @@ public class ProposedQueryDAO {
 	@SuppressWarnings("unchecked")
 	public static List<ProposedQueryReceived> findProposedQueryByMeFromUser(String me, String user) throws DatabaseException {
 		log.debug("findProposedQueryByMeFromUser({})", user);
-		String qs = "from ProposedQueryReceived pq where pq.from=:user and pq.user=:me order by msg.id";
+		String qs = "from ProposedQueryReceived pq where pq.from=:user and pq.user=:me order by pq.id";
 		Session session = null;
 		
 		try {
