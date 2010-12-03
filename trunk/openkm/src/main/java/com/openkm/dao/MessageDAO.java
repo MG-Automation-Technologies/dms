@@ -43,7 +43,7 @@ public class MessageDAO {
 	private MessageDAO() {}
 	
 	/**
-	 * Create message
+	 * Send message
 	 */
 	public static void send(String from, String to, String user, String subject, String content) throws 
 			DatabaseException {
