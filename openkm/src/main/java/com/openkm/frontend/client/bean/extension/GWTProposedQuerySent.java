@@ -24,47 +24,83 @@ package com.openkm.frontend.client.bean.extension;
 import java.util.Date;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
+import com.openkm.frontend.client.bean.GWTQueryParams;
 
-/**
- * GWTMessageSent
- * 
- * @author jllort
- *
- */
-public class GWTMessageSent implements IsSerializable {
+public class GWTProposedQuerySent implements IsSerializable {
 	private static final long serialVersionUID = 1L;
+	private int id;
+	private String from;
+	private String to;
+	private String user;
+	private String comment;
 	private Date sentDate;
-	private GWTTextMessageSent testMessageSent;
-	private GWTProposedQuerySent proposedQuerySent;
+	private GWTQueryParams params;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 	
-	public GWTProposedQuerySent getProposedQuerySent() {
-		return proposedQuerySent;
+	public String getFrom() {
+		return from;
 	}
 
-	public void setProposedQuerySent(GWTProposedQuerySent proposedQuerySent) {
-		this.proposedQuerySent = proposedQuerySent;
+	public void setFrom(String from) {
+		this.from = from;
 	}
 
-	public GWTTextMessageSent getTestMessageSent() {
-		return testMessageSent;
+	public String getTo() {
+		return to;
 	}
 
-	public void setTestMessageSent(GWTTextMessageSent testMessageSent) {
-		this.testMessageSent = testMessageSent;
+	public void setTo(String to) {
+		this.to = to;
+	}
+	
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+	
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	public Date getSentDate() {
 		return sentDate;
 	}
-	
+
 	public void setSentDate(Date sentDate) {
 		this.sentDate = sentDate;
 	}
 	
+	public GWTQueryParams getParams() {
+		return params;
+	}
+
+	public void setParams(GWTQueryParams params) {
+		this.params = params;
+	}
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
+		sb.append("id="); sb.append(id);
+		sb.append(", from="); sb.append(from);
+		sb.append(", to="); sb.append(to);
+		sb.append(", user="); sb.append(user);
 		sb.append(", sentDate="); sb.append(sentDate);
+		sb.append(", params="); sb.append(params);
 		sb.append("}");
 		return sb.toString();
 	}
