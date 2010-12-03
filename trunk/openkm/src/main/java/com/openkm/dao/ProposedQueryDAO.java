@@ -22,7 +22,9 @@
 package com.openkm.dao;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -91,26 +93,22 @@ public class ProposedQueryDAO {
 	}
 	
 	/**
-	 * Finde by user
+	 * Find by user
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<ProposedQuery> findByUser(String usrId) throws DatabaseException {
-		log.debug("findByUser({})", usrId);
-		String qs = "from ProposedQuery pq where pq.to=:user order by pq.id";
+	public static List<String> findProposedQueriesUsersFrom(String usrId) throws DatabaseException {
+		log.debug("findProposedQueriesUsersFrom({})", usrId);
+		String qs = "select distinct(pq.from) from ProposedQuery pq where pq.user=:me order by pq.from";
 		Session session = null;
-		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setString("user", usrId);
-			List<ProposedQuery> ret = q.list();
-			HibernateUtil.commit(tx);
-			log.debug("findByUser: {}", ret);
+			List<String> ret = q.list();
+			log.debug("findProposedQueriesUsersFrom: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -137,6 +135,60 @@ public class ProposedQueryDAO {
 			return ret;
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Return a map users and number of unread proposed queries from them
+	 */
+	@SuppressWarnings("unchecked")
+	public static Map<String, Long> findProposedQueriesUsersFromUnread(String me) throws DatabaseException {
+		log.debug("findProposedQueriesUsersFromUnread({})", me);
+		String qs = "select pq.from, count(pq.from) from ProposedQuery pq " + 
+			"group by pq.from, pq.user, pq.seenDate having pq.seenDate is null and pq.user=:me";
+		Session session = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setString("me", me);
+			List<Object[]> list =  q.list();
+			Map<String, Long> ret = new HashMap<String, Long>();
+			
+			for (Object[] item : list) {
+				ret.put((String) item[0], (Long) item[1]);
+			} 
+			
+			log.debug("findProposedQueriesUsersFromUnread: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Find received by user
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<ProposedQuery> findProposedQueryByMeFromUser(String me, String user) throws DatabaseException {
+		log.debug("findProposedQueryByMeFromUser({})", user);
+		String qs = "from ProposedQuery pq where pq.from=:user and pq.user=:me order by msg.id";
+		Session session = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setString("me", me);
+			q.setString("user", user);
+			List<ProposedQuery> ret = q.list();
+			log.debug("findProposedQueryByMeFromUser: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
