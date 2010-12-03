@@ -34,7 +34,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
-import com.openkm.dao.bean.ProposedQuery;
+import com.openkm.dao.bean.ProposedQueryReceived;
+import com.openkm.dao.bean.ProposedQuerySent;
 import com.openkm.dao.bean.QueryParams;
 
 public class ProposedQueryDAO {
@@ -43,43 +44,59 @@ public class ProposedQueryDAO {
 	private ProposedQueryDAO() {}
 	
 	/**
-	 * Create
+	 * Create message
 	 */
-	public static void create(int qpId, ProposedQuery pq) throws DatabaseException {
-		log.debug("create({}, {})", qpId, pq);
+	public static void send(int qpId, String from, String to, String user, String comment) throws
+			DatabaseException {
+		log.debug("send({}, {}, {}, {}, {}, {}, {})", new Object[] { qpId, from, to, user, comment });
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-			if (pq.getSentDate() == null) pq.setSentDate(Calendar.getInstance());
+			tx = session.beginTransaction();		
 			QueryParams qp = (QueryParams) session.get(QueryParams.class, qpId);
-			qp.getProposed().add(pq);
+			
+			ProposedQuerySent pqSent = new ProposedQuerySent();
+			pqSent.setFrom(from);
+			pqSent.setTo(to);
+			pqSent.setUser(user);
+			pqSent.setComment(comment);
+			pqSent.setSentDate(Calendar.getInstance());
+			qp.getProposedSent().add(pqSent);
+			
+			ProposedQueryReceived pqReceived = new ProposedQueryReceived();
+			pqReceived.setFrom(from);
+			pqReceived.setTo(to);
+			pqReceived.setUser(user);
+			pqReceived.setComment(comment);
+			pqReceived.setSentDate(Calendar.getInstance());
+			qp.getProposedReceived().add(pqReceived);
+			
 			session.save(qp);
 			HibernateUtil.commit(tx);
-		} catch (HibernateException e) {
+		} catch(HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
 		}
 		
-		log.debug("create: void");
+		log.debug("send: void");
 	}
 	
 	/**
-	 * Delete
+	 * Delete sent
 	 */
-	public static void delete(int pqId) throws DatabaseException {
-		log.debug("delete({})", pqId);
+	public static void deleteSent(int pqId) throws DatabaseException {
+		log.debug("deleteSent({})", pqId);
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			ProposedQuery pq = (ProposedQuery) session.load(ProposedQuery.class, pqId);
+			ProposedQuerySent pq = (ProposedQuerySent) session.load(ProposedQuerySent.class, pqId);
 			session.delete(pq);
 			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
@@ -89,16 +106,40 @@ public class ProposedQueryDAO {
 			HibernateUtil.close(session);
 		}
 		
-		log.debug("delete: void");
+		log.debug("deleteSent: void");
 	}
-	
+
+	/**
+	 * Delete received
+	 */
+	public static void deleteReceived(int pqId) throws DatabaseException {
+		log.debug("deleteReceived({})", pqId);
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			ProposedQueryReceived pq = (ProposedQueryReceived) session.load(ProposedQueryReceived.class, pqId);
+			session.delete(pq);
+			HibernateUtil.commit(tx);
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("deleteReceived: void");
+	}
+
 	/**
 	 * Find by user
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<String> findProposedQueriesUsersFrom(String usrId) throws DatabaseException {
 		log.debug("findProposedQueriesUsersFrom({})", usrId);
-		String qs = "select distinct(pq.from) from ProposedQuery pq where pq.user=:me order by pq.from";
+		String qs = "select distinct(pq.from) from ProposedQueryReceived pq where pq.user=:me order by pq.from";
 		Session session = null;
 		
 		try {
@@ -116,38 +157,12 @@ public class ProposedQueryDAO {
 	}
 	
 	/**
-	 * Find by pk
-	 */
-	public static ProposedQuery findByPk(int pqId) throws DatabaseException {
-		log.debug("findByPk({})", pqId);
-		String qs = "from ProposedQuery pq where pq.id=:id";
-		Session session = null;
-		Transaction tx = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-			Query q = session.createQuery(qs);
-			q.setInteger("id", pqId);
-			ProposedQuery ret = (ProposedQuery) q.setMaxResults(1).uniqueResult();
-			HibernateUtil.commit(tx);
-			log.debug("findByPk: {}", ret);
-			return ret;
-		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-	}
-	
-	/**
 	 * Return a map users and number of unread proposed queries from them
 	 */
 	@SuppressWarnings("unchecked")
 	public static Map<String, Long> findProposedQueriesUsersFromUnread(String me) throws DatabaseException {
 		log.debug("findProposedQueriesUsersFromUnread({})", me);
-		String qs = "select pq.from, count(pq.from) from ProposedQuery pq " + 
+		String qs = "select pq.from, count(pq.from) from ProposedQueryReceived pq " + 
 			"group by pq.from, pq.user, pq.seenDate having pq.seenDate is null and pq.user=:me";
 		Session session = null;
 		
@@ -175,9 +190,9 @@ public class ProposedQueryDAO {
 	 * Find received by user
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<ProposedQuery> findProposedQueryByMeFromUser(String me, String user) throws DatabaseException {
+	public static List<ProposedQueryReceived> findProposedQueryByMeFromUser(String me, String user) throws DatabaseException {
 		log.debug("findProposedQueryByMeFromUser({})", user);
-		String qs = "from ProposedQuery pq where pq.from=:user and pq.user=:me order by msg.id";
+		String qs = "from ProposedQueryReceived pq where pq.from=:user and pq.user=:me order by msg.id";
 		Session session = null;
 		
 		try {
@@ -185,7 +200,7 @@ public class ProposedQueryDAO {
 			Query q = session.createQuery(qs);
 			q.setString("me", me);
 			q.setString("user", user);
-			List<ProposedQuery> ret = q.list();
+			List<ProposedQueryReceived> ret = q.list();
 			log.debug("findProposedQueryByMeFromUser: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
@@ -200,7 +215,7 @@ public class ProposedQueryDAO {
 	 */
 	public static void markSeen(int pqId) throws DatabaseException {
 		log.debug("markSeen({})", pqId);
-		String qs = "update ProposedQuery pq set pq.seenDate=:seenDate where pq.id=:id";
+		String qs = "update ProposedQueryReceived pq set pq.seenDate=:seenDate where pq.id=:id";
 		Session session = null;
 		
 		try {
@@ -222,7 +237,7 @@ public class ProposedQueryDAO {
 	 */
 	public static void markAccepted(int pqId) throws DatabaseException {
 		log.debug("markAccepted({})", pqId);
-		String qs = "update ProposedQuery ps set ps.accepted=:accepted where ps.id=:id";
+		String qs = "update ProposedQueryReceived ps set ps.accepted=:accepted where ps.id=:id";
 		Session session = null;
 		
 		try {
