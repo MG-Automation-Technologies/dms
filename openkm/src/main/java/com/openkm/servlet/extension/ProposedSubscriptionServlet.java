@@ -23,7 +23,9 @@ package com.openkm.servlet.extension;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.LoginException;
 import javax.jcr.Session;
@@ -35,9 +37,9 @@ import com.openkm.api.OKMAuth;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.ProposedSubscriptionDAO;
-import com.openkm.dao.bean.ProposedSubscription;
+import com.openkm.dao.bean.ProposedSubscriptionReceived;
 import com.openkm.frontend.client.OKMException;
-import com.openkm.frontend.client.bean.extension.GWTProposedSubscription;
+import com.openkm.frontend.client.bean.extension.GWTProposedSubscriptionReceived;
 import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.service.extension.OKMProposedSubscriptionService;
 import com.openkm.principal.PrincipalAdapterException;
@@ -56,12 +58,18 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 	private static Logger log = LoggerFactory.getLogger(ProposedSubscriptionServlet.class);
 	
 	@Override
-	public void create(String uuid, String path, String type, String users, String roles, String comment) throws OKMException {
-		Object obj[] = {(Object)uuid, (Object)path, (Object)type, (Object)users, (Object)roles, (Object)comment};
-		log.debug("create({}, {}, {}, {}, {}, {})", obj);
+	public void send(String uuid, String users, String roles, String comment) throws OKMException {
+		Object obj[] = {(Object)uuid,(Object)users, (Object)roles, (Object)comment};
+		log.debug("create({}, {}, {}, {})", obj);
 		
 		try {
 			String remoteUser = getThreadLocalRequest().getRemoteUser();
+			String to = "";
+			if (!users.equals("") && !roles.equals("")) {
+				to = users + "," + roles;
+			} else {
+				to = users + roles;
+			}
 			List<String> userNames = new ArrayList<String>(Arrays.asList(users.split(",")));
 			List<String> roleNames = Arrays.asList(roles.split(","));
 			
@@ -76,14 +84,7 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 			}
 			
 			for (String user : userNames) {
-				ProposedSubscription ps = new ProposedSubscription();
-				ps.setFrom(remoteUser);
-				ps.setTo(user);
-				ps.setUuid(uuid);
-				ps.setPath(path);
-				ps.setType(type);
-				ps.setComment(comment);
-				ProposedSubscriptionDAO.create(ps);
+				ProposedSubscriptionDAO.send(remoteUser, to, user, uuid, comment);
 			}
 			
 		} catch (DatabaseException e) {
@@ -97,33 +98,55 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 	}
 
 	@Override
-	public List<GWTProposedSubscription> findAll() throws OKMException {
-		log.debug("findAll()");
+	public Map<String,Long> findProposedSubscriptionsUsersFrom() throws OKMException {
+		log.debug("findProposedSubscriptionsUsersFrom()");
+		Map<String,Long> received = new HashMap<String, Long>();
 		updateSessionManager();
-		List<GWTProposedSubscription> psList = new ArrayList<GWTProposedSubscription>();
-		Session session = null;
-		try {
-			session = JCRUtils.getSession();			
-			for (ProposedSubscription ps : ProposedSubscriptionDAO.findByUser(session, getThreadLocalRequest().getRemoteUser())) {
-				psList.add(GWTUtil.copy(ps));
+		try {		
+			String user = getThreadLocalRequest().getRemoteUser();
+			Map<String, Long> unreadMap = ProposedSubscriptionDAO.findProposedSubscriptionsUsersFromUnread(user);
+			for (String sender : ProposedSubscriptionDAO.findProposedSubscriptionsUsersFrom(user)) {
+				if (unreadMap.containsKey(sender)) {
+					received.put(sender, unreadMap.get(sender));
+				} else {
+					received.put(sender, new Long(0));
+				}
 			}
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Database), e.getMessage());
+		} 
+		log.debug("findProposedSubscriptionsUsersFrom: Map"+received);
+		return received;
+	}
+	
+	@Override
+	public List<GWTProposedSubscriptionReceived> findProposedSubscriptionByMeFromUser(String user) throws OKMException {
+		log.debug("findProposedSubscriptionByMeFromUser()");
+		updateSessionManager();
+		List<GWTProposedSubscriptionReceived> proposedQuerySubscriptionList = new ArrayList<GWTProposedSubscriptionReceived>();
+		Session session = null;
+		try {
+			session = JCRUtils.getSession();		
+			for (ProposedSubscriptionReceived proposedSubscriptionReceived : ProposedSubscriptionDAO.findProposedSubscriptionByMeFromUser(session, getThreadLocalRequest().getRemoteUser(), user)) {
+				proposedQuerySubscriptionList.add(GWTUtil.copy(proposedSubscriptionReceived));
+			}
+			return proposedQuerySubscriptionList;
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedQueryService, ErrorCode.CAUSE_Database), e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Repository), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedQueryService, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (LoginException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Login), e.getMessage());
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Repository), e.getMessage());
-		}finally {
+		} finally {
 			JCRUtils.logout(session);
 		}
-		log.debug("findAll: List"+psList);
-		return psList;
 	}
 
 	@Override
@@ -157,7 +180,7 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 		log.debug("delete({})", msgId);
 		updateSessionManager();
 		try {
-			ProposedSubscriptionDAO.delete(msgId);
+			ProposedSubscriptionDAO.deleteReceived(msgId);
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Database), e.getMessage());
@@ -166,20 +189,20 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 	}
 
 	@Override
-	public void deleteAllBySender(String sender) throws OKMException {
-		log.debug("deleteAllBySender()");
+	public void deleteProposedSubscriptionByMeFromUser(String sender) throws OKMException {
+		log.debug("deleteProposedSubscriptionByMeFromUser()");
 		updateSessionManager();
 		List<String> IdToDelete = new ArrayList<String>();
 		Session session = null;
 		try {
 			session = JCRUtils.getSession();			
-			for (ProposedSubscription ps : ProposedSubscriptionDAO.findByUser(session, getThreadLocalRequest().getRemoteUser())) {
+			for (ProposedSubscriptionReceived ps : ProposedSubscriptionDAO.findProposedSubscriptionByMeFromUser(session, getThreadLocalRequest().getRemoteUser(), sender)) {
 				if (ps.getFrom().equals(sender)) {
 					IdToDelete.add(String.valueOf(ps.getId()));
 				}
 			}
 			for (String id : IdToDelete) {
-				ProposedSubscriptionDAO.delete(Integer.valueOf(id));
+				ProposedSubscriptionDAO.deleteReceived(Integer.valueOf(id));
 			}
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
@@ -196,6 +219,6 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 		} finally {
 			JCRUtils.logout(session);
 		}
-		log.debug("deleteAllBySender: void");
+		log.debug("deleteProposedSubscriptionByMeFromUser: void");
 	}
 }

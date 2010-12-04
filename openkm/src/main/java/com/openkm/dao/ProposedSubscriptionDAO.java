@@ -65,7 +65,7 @@ public class ProposedSubscriptionDAO {
 			psSent.setFrom(from);
 			psSent.setTo(to);
 			psSent.setUser(user);
-			psSent.setUuid(uuid);
+			psSent.setUuid(uuid);			
 			psSent.setComment(comment);
 			psSent.setSentDate(Calendar.getInstance());
 			session.save(psSent);
@@ -74,8 +74,8 @@ public class ProposedSubscriptionDAO {
 			psReceived.setFrom(from);
 			psReceived.setTo(to);
 			psReceived.setUser(user);
-			psSent.setUuid(uuid);
-			psSent.setComment(comment);
+			psReceived.setUuid(uuid);	
+			psReceived.setComment(comment);
 			psReceived.setSentDate(Calendar.getInstance());
 			session.save(psReceived);
 			
