@@ -30,7 +30,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @author jllort
  *
  */
-public class GWTProposedSubscription implements IsSerializable {
+public class GWTProposedSubscriptionReceived implements IsSerializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private String from;

@@ -22,20 +22,22 @@
 package com.openkm.frontend.client.service.extension;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.openkm.frontend.client.OKMException;
-import com.openkm.frontend.client.bean.extension.GWTProposedSubscription;
+import com.openkm.frontend.client.bean.extension.GWTProposedSubscriptionReceived;
 
 /**
  * @author jllort
  *
  */
 public interface OKMProposedSubscriptionService extends RemoteService {
-	public void create(String uuid, String path, String type, String users, String roles, String comment) throws OKMException;
-	public List<GWTProposedSubscription> findAll() throws OKMException;
+	public void send(String uuid, String users, String roles, String comment) throws OKMException;
+	public Map<String, Long> findProposedSubscriptionsUsersFrom() throws OKMException;
 	public void markSeen(int msgId) throws OKMException;
 	public void markAccepted(int msgId) throws OKMException;
 	public void delete(int msgId) throws OKMException;
-	public void deleteAllBySender(String sender) throws OKMException;
+	public void deleteProposedSubscriptionByMeFromUser(String sender) throws OKMException;
+	public List<GWTProposedSubscriptionReceived> findProposedSubscriptionByMeFromUser(String user) throws OKMException;
 }

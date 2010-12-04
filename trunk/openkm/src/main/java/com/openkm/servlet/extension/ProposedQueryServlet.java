@@ -101,7 +101,6 @@ public class ProposedQueryServlet extends OKMRemoteServiceServlet implements OKM
 		log.debug("findProposedQueriesUsersFrom()");
 		Map<String,Long> received = new HashMap<String, Long>();
 		updateSessionManager();
-		List<GWTProposedQueryReceived> pqList = new ArrayList<GWTProposedQueryReceived>();
 		try {
 			String user = getThreadLocalRequest().getRemoteUser();
 			Map<String, Long> unreadMap = ProposedQueryDAO.findProposedQueriesUsersFromUnread(user);
@@ -116,7 +115,7 @@ public class ProposedQueryServlet extends OKMRemoteServiceServlet implements OKM
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedQueryService, ErrorCode.CAUSE_Database), e.getMessage());
 		} 
-		log.debug("findProposedQueriesUsersFromUnread: List"+pqList);
+		log.debug("findProposedQueriesUsersFromUnread: Map"+received);
 		return received;
 	}
 

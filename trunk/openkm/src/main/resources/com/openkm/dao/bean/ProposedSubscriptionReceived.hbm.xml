@@ -6,8 +6,8 @@
     <id name="id" column="PSR_ID"><generator class="native"/></id>
     <property name="from" column="PSR_FROM" not-null="true" length="127"/>
     <property name="to" column="PSR_TO" not-null="true" length="127"/>
+    <property name="user" column="PSR_USER" not-null="true" length="127"/>
     <property name="uuid" column="PSR_UUID" not-null="true"/>
-    <property name="type" column="PSR_TYPE" not-null="true"/>
     <property name="comment" column="PSR_COMMENT" type="text"/>
     <property name="accepted" column="PSR_ACCEPTED" not-null="true"/>
     <property name="sentDate" column="PSR_SENT_DATE" not-null="true"/>

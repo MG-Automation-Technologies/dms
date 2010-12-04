@@ -78,7 +78,7 @@ import com.openkm.dao.bean.MessageReceived;
 import com.openkm.dao.bean.MessageSent;
 import com.openkm.dao.bean.ProposedQueryReceived;
 import com.openkm.dao.bean.ProposedQuerySent;
-import com.openkm.dao.bean.ProposedSubscription;
+import com.openkm.dao.bean.ProposedSubscriptionReceived;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.UserConfig;
 import com.openkm.dao.bean.extension.Staple;
@@ -115,12 +115,12 @@ import com.openkm.frontend.client.bean.GWTValidator;
 import com.openkm.frontend.client.bean.GWTVersion;
 import com.openkm.frontend.client.bean.GWTWorkflowComment;
 import com.openkm.frontend.client.bean.extension.GWTMessageReceived;
-import com.openkm.frontend.client.bean.extension.GWTTextMessageSent;
 import com.openkm.frontend.client.bean.extension.GWTProposedQueryReceived;
 import com.openkm.frontend.client.bean.extension.GWTProposedQuerySent;
-import com.openkm.frontend.client.bean.extension.GWTProposedSubscription;
+import com.openkm.frontend.client.bean.extension.GWTProposedSubscriptionReceived;
 import com.openkm.frontend.client.bean.extension.GWTStaple;
 import com.openkm.frontend.client.bean.extension.GWTStapleGroup;
+import com.openkm.frontend.client.bean.extension.GWTTextMessageSent;
 
 public class GWTUtil {
 	private static Logger log = LoggerFactory.getLogger(GWTUtil.class);
@@ -1122,13 +1122,13 @@ public class GWTUtil {
 	}
 	
 	/**
-	 * Copy ProposedSubscription to GWTProposedSubscription
+	 * Copy GWTProposedSubscriptionReceived to GWTProposedSubscription
 	 * 
 	 * @param ps
 	 * @return
 	 */
-	public static GWTProposedSubscription copy(ProposedSubscription ps) {
-		GWTProposedSubscription gWTProposedSubscription = new GWTProposedSubscription();
+	public static GWTProposedSubscriptionReceived copy(ProposedSubscriptionReceived ps) {
+		GWTProposedSubscriptionReceived gWTProposedSubscription = new GWTProposedSubscriptionReceived();
 		gWTProposedSubscription.setId(ps.getId());
 		gWTProposedSubscription.setFrom(ps.getFrom());
 		gWTProposedSubscription.setTo(ps.getTo());

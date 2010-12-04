@@ -21,21 +21,21 @@
 
 package com.openkm.frontend.client.service.extension;
 
-import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
-import com.openkm.frontend.client.bean.extension.GWTProposedSubscription;
 
 /**
  * @author jllort
  *
  */
 public interface OKMProposedSubscriptionServiceAsync extends RemoteService {
-	public void create(String uuid, String path, String type, String users, String roles, String comment, AsyncCallback<?> callback);
-	public void findAll(AsyncCallback<List<GWTProposedSubscription>> callback);
+	public void send(String uuid, String users, String roles, String comment, AsyncCallback<?> callback);
+	public void findProposedSubscriptionsUsersFrom(AsyncCallback<Map<String, Long>> callback);
 	public void markSeen(int msgId, AsyncCallback<?> callback);
 	public void markAccepted(int msgId, AsyncCallback<?> callback);
 	public void delete(int msgId, AsyncCallback<?> callback);
-	public void deleteAllBySender(String sender, AsyncCallback<?> callback);
+	public void deleteProposedSubscriptionByMeFromUser(String sender, AsyncCallback<?> callback);
+	public void findProposedSubscriptionByMeFromUser(String user, AsyncCallback<?> asyncCallback);
 }
