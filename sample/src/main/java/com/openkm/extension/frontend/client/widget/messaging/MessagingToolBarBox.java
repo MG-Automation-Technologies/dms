@@ -85,7 +85,7 @@ public class MessagingToolBarBox {
 	/**
 	 * executeProposeSubscription
 	 */
-	public void executeProposeSubscription() {
+	public void executeProposeSubscription(String uuid) {
 	}
 	
 	/**
