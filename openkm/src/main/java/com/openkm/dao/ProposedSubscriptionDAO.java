@@ -139,6 +139,61 @@ public class ProposedSubscriptionDAO {
 	}
 	
 	/**
+	 * Find sent from me to user
+	 * @throws RepositoryException 
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<ProposedSubscriptionSent> findSentProposedSubscriptionFromMeToUser(javax.jcr.Session jcrSession, 
+			String me, String user) throws DatabaseException, RepositoryException {
+		log.debug("findSentProposedSubscriptionFromMeToUser({}, {})", me, user);
+		String qs = "from ProposedSubscriptionSent ps where ps.from=:me and ps.user=:user order by ps.id";
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			Query q = session.createQuery(qs);
+			q.setString("me", me);
+			q.setString("user", user);
+			List<ProposedSubscriptionSent> ret = q.list();
+			
+			for (ProposedSubscriptionSent ps : ret) {
+				try {
+					Node node = jcrSession.getNodeByUUID(ps.getUuid());
+					String nType = JCRUtils.getNodeType(node);
+					ps.setPath(node.getPath());
+					
+					// TODO Se supone que el tipo no cambia
+					if (!nType.equals(ps.getType())) {
+						ps.setType(JCRUtils.getNodeType(node));
+						session.update(ps);
+					}
+				} catch (javax.jcr.ItemNotFoundException e) {
+					// If node is missing, set a default
+					Node okmRoot = jcrSession.getRootNode().getNode(Repository.ROOT);
+					ps.setPath(okmRoot.getPath());
+					ps.setUuid(okmRoot.getUUID());
+					ps.setType(Folder.TYPE);
+					session.save(ps);
+				}
+			}
+			
+			
+			log.debug("findSentProposedSubscriptionFromMeToUser: {}", ret);
+			return ret;
+		} catch (javax.jcr.RepositoryException e) {
+			HibernateUtil.rollback(tx);
+			throw new RepositoryException(e.getMessage(), e);
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
 	 * Find by user
 	 */
 	@SuppressWarnings("unchecked")
@@ -240,6 +295,29 @@ public class ProposedSubscriptionDAO {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Find users whom sent an proposed query
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<String> findProposedSubscriptionSentUsersTo(String me) throws DatabaseException {
+		log.debug("findProposedSubscriptionSentUsersTo({})", me);
+		String qs = "select distinct(ps.user) from ProposedSubscriptionSent ps where ps.from=:me order by ps.user";
+		Session session = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setString("me", me);
+			List<String> ret = q.list();
+			log.debug("findProposedSubscriptionSentUsersTo: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);

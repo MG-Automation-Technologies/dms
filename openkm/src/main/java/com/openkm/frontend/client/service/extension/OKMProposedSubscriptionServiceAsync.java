@@ -35,7 +35,8 @@ public interface OKMProposedSubscriptionServiceAsync extends RemoteService {
 	public void findProposedSubscriptionsUsersFrom(AsyncCallback<Map<String, Long>> callback);
 	public void markSeen(int msgId, AsyncCallback<?> callback);
 	public void markAccepted(int msgId, AsyncCallback<?> callback);
-	public void delete(int msgId, AsyncCallback<?> callback);
+	public void deleteReceived(int msgId, AsyncCallback<?> callback);
+	public void deleteSent(int msgId, AsyncCallback<?> callback);
 	public void deleteProposedSubscriptionByMeFromUser(String sender, AsyncCallback<?> callback);
 	public void findProposedSubscriptionByMeFromUser(String user, AsyncCallback<?> asyncCallback);
 }

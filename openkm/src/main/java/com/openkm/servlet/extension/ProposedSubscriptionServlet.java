@@ -176,8 +176,8 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 	}
 
 	@Override
-	public void delete(int msgId) throws OKMException {
-		log.debug("delete({})", msgId);
+	public void deleteReceived(int msgId) throws OKMException {
+		log.debug("deleteReceived({})", msgId);
 		updateSessionManager();
 		try {
 			ProposedSubscriptionDAO.deleteReceived(msgId);
@@ -185,7 +185,20 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Database), e.getMessage());
 		}
-		log.debug("delete() : void");
+		log.debug("deleteReceived() : void");
+	}
+	
+	@Override
+	public void deleteSent(int msgId) throws OKMException {
+		log.debug("deleteSent({})", msgId);
+		updateSessionManager();
+		try {
+			ProposedSubscriptionDAO.deleteSent(msgId);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+		log.debug("deleteSent() : void");
 	}
 
 	@Override

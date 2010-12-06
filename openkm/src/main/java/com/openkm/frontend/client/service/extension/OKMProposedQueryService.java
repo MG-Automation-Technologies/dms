@@ -37,7 +37,8 @@ public interface OKMProposedQueryService extends RemoteService {
 	public Map<String, Long> findProposedQueriesUsersFrom() throws OKMException;
 	public void markSeen(int msgId) throws OKMException;
 	public void markAccepted(int msgId) throws OKMException;
-	public void delete(int msgId) throws OKMException;
+	public void deleteReceived(int msgId) throws OKMException;
+	public void deleteSent(int msgId) throws OKMException;
 	public List<GWTProposedQueryReceived> findProposedQueryByMeFromUser(String sender) throws OKMException;
 	public void deleteProposedQueryByMeFromUser(String user) throws OKMException;
 }

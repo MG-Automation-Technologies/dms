@@ -37,7 +37,8 @@ public interface OKMProposedSubscriptionService extends RemoteService {
 	public Map<String, Long> findProposedSubscriptionsUsersFrom() throws OKMException;
 	public void markSeen(int msgId) throws OKMException;
 	public void markAccepted(int msgId) throws OKMException;
-	public void delete(int msgId) throws OKMException;
+	public void deleteReceived(int msgId) throws OKMException;
+	public void deleteSent(int msgId) throws OKMException;
 	public void deleteProposedSubscriptionByMeFromUser(String sender) throws OKMException;
 	public List<GWTProposedSubscriptionReceived> findProposedSubscriptionByMeFromUser(String user) throws OKMException;
 }

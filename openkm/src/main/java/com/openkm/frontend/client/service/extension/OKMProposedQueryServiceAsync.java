@@ -37,7 +37,8 @@ public interface OKMProposedQueryServiceAsync extends RemoteService {
 	public void findProposedQueriesUsersFrom(AsyncCallback<Map<String, Long>> callback);
 	public void markSeen(int msgId, AsyncCallback<?> callback);
 	public void markAccepted(int msgId, AsyncCallback<?> callback);
-	public void delete(int msgId, AsyncCallback<?> callback);
+	public void deleteReceived(int msgId, AsyncCallback<?> callback);
+	public void deleteSent(int msgId, AsyncCallback<?> callback);
 	public void findProposedQueryByMeFromUser(String sender, AsyncCallback<List<GWTProposedQueryReceived>> callback);
 	public void deleteProposedQueryByMeFromUser(String user, AsyncCallback<?> callback);
 }
