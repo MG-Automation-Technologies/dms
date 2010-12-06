@@ -26,53 +26,104 @@ import java.util.Date;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
- * GWTMessageSent
+ * GWTProposedSubscriptionSent
  * 
  * @author jllort
  *
  */
-public class GWTMessageSent implements IsSerializable {
+public class GWTProposedSubscriptionSent implements IsSerializable {
 	private static final long serialVersionUID = 1L;
+	private int id;
+	private String from;
+	private String to;
+	private String user;
+	private String path;
+	private String uuid;
+	private String type;
+	private String comment;
 	private Date sentDate;
-	private GWTTextMessageSent textMessageSent;
-	private GWTProposedQuerySent proposedQuerySent;
-	private GWTProposedSubscriptionSent proposedSubscriptionSent;
 	
-	public GWTProposedSubscriptionSent getProposedSubscriptionSent() {
-		return proposedSubscriptionSent;
+	public int getId() {
+		return id;
 	}
 
-	public void setProposedSubscriptionSent(GWTProposedSubscriptionSent proposedSubscriptionSent) {
-		this.proposedSubscriptionSent = proposedSubscriptionSent;
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public String getFrom() {
+		return from;
 	}
 
-	public GWTProposedQuerySent getProposedQuerySent() {
-		return proposedQuerySent;
+	public void setFrom(String from) {
+		this.from = from;
 	}
 
-	public void setProposedQuerySent(GWTProposedQuerySent proposedQuerySent) {
-		this.proposedQuerySent = proposedQuerySent;
+	public String getTo() {
+		return to;
 	}
 
-	public GWTTextMessageSent getTextMessageSent() {
-		return textMessageSent;
+	public void setTo(String to) {
+		this.to = to;
+	}
+	
+	public String getUser() {
+		return user;
 	}
 
-	public void setTextMessageSent(GWTTextMessageSent textMessageSent) {
-		this.textMessageSent = textMessageSent;
+	public void setUser(String user) {
+		this.user = user;
+	}
+	
+	public String getPath() {
+		return path;
 	}
 
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+	
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+	
 	public Date getSentDate() {
 		return sentDate;
 	}
-	
+
 	public void setSentDate(Date sentDate) {
 		this.sentDate = sentDate;
 	}
-	
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
+		sb.append("id="); sb.append(id);
+		sb.append(", from="); sb.append(from);
+		sb.append(", to="); sb.append(to);
+		sb.append(", path="); sb.append(path);
+		sb.append(", uuid="); sb.append(uuid);
+		sb.append(", type="); sb.append(type);
 		sb.append(", sentDate="); sb.append(sentDate);
 		sb.append("}");
 		return sb.toString();

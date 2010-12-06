@@ -29,6 +29,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.jcr.LoginException;
+import javax.jcr.Session;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,15 +42,18 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.MessageDAO;
 import com.openkm.dao.ProposedQueryDAO;
+import com.openkm.dao.ProposedSubscriptionDAO;
 import com.openkm.dao.QueryParamsDAO;
 import com.openkm.dao.bean.MessageReceived;
 import com.openkm.dao.bean.MessageSent;
 import com.openkm.dao.bean.ProposedQuerySent;
+import com.openkm.dao.bean.ProposedSubscriptionSent;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.extension.GWTMessageReceived;
 import com.openkm.frontend.client.bean.extension.GWTMessageSent;
 import com.openkm.frontend.client.bean.extension.GWTProposedQuerySent;
+import com.openkm.frontend.client.bean.extension.GWTProposedSubscriptionSent;
 import com.openkm.frontend.client.bean.extension.GWTTextMessageSent;
 import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.service.extension.OKMMessageService;
@@ -55,6 +61,7 @@ import com.openkm.frontend.client.util.GWTMessageSentComparator;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.servlet.frontend.OKMRemoteServiceServlet;
 import com.openkm.util.GWTUtil;
+import com.openkm.util.JCRUtils;
 
 /**
  * MessageServlet
@@ -111,8 +118,22 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 		updateSessionManager();
 		try {
 			String me = getThreadLocalRequest().getRemoteUser();
-			List<String> usersList = ProposedQueryDAO.findProposedQuerySentUsersTo(me);
-			usersList.addAll(MessageDAO.findSentUsersTo(me));
+			List<String> usersList = new ArrayList<String>(ProposedQueryDAO.findProposedQuerySentUsersTo(me));
+			for (String user : MessageDAO.findSentUsersTo(me)) {
+				if (!usersList.contains(user)) {
+					usersList.add(user);
+				}
+			}
+			for (String user : ProposedQueryDAO.findProposedQuerySentUsersTo(me)) {
+				if (!usersList.contains(user)) {
+					usersList.add(user);
+				}
+			}
+			for (String user : ProposedSubscriptionDAO.findProposedSubscriptionSentUsersTo(me)) {
+				if (!usersList.contains(user)) {
+					usersList.add(user);
+				}
+			}
 			return usersList;
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
@@ -146,25 +167,37 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 	public List<GWTMessageSent> findSentFromMeToUser(String user) throws OKMException {
 		log.debug("findSentFromMeToUser({})",user);
 		List<GWTMessageSent> messageSentList = new ArrayList<GWTMessageSent>();
+		Session session = null;
 		updateSessionManager();
 		try {
+			session = JCRUtils.getSession();
 			String me = getThreadLocalRequest().getRemoteUser();
 			for (MessageSent messageSent : MessageDAO.findSentFromMeToUser(me, user)) {
 				GWTTextMessageSent textMessageSent = new GWTTextMessageSent();
 				textMessageSent = GWTUtil.copy(messageSent);
 				GWTMessageSent message = new GWTMessageSent();
-				message.setTestMessageSent(textMessageSent);
+				message.setTextMessageSent(textMessageSent);
 				message.setSentDate(textMessageSent.getSentDate());
 				messageSentList.add(message);
 			}
 			for (QueryParams queryParams : QueryParamsDAO.findProposedQueryFromMeToUser(me, user)) {
 				for (ProposedQuerySent proposedQuerySent : queryParams.getProposedSent()) {
-					GWTProposedQuerySent gWTproposedQuerySent  = GWTUtil.copy(proposedQuerySent, queryParams);	
-					GWTMessageSent message = new GWTMessageSent();
-					message.setProposedQuerySent(gWTproposedQuerySent);
-					message.setSentDate(gWTproposedQuerySent.getSentDate());
-					messageSentList.add(message);
+					// Only proposed queries sent by me to some specific user
+					if (proposedQuerySent.getUser().equals(user)) {
+						GWTProposedQuerySent gWTproposedQuerySent  = GWTUtil.copy(proposedQuerySent, queryParams);	
+						GWTMessageSent message = new GWTMessageSent();
+						message.setProposedQuerySent(gWTproposedQuerySent);
+						message.setSentDate(gWTproposedQuerySent.getSentDate());
+						messageSentList.add(message);
+					}
 				}
+			}
+			for (ProposedSubscriptionSent proposedSubscriptionSent : ProposedSubscriptionDAO.findSentProposedSubscriptionFromMeToUser(session, me, user)) {
+				GWTProposedSubscriptionSent gWTproposedSubscriptionSent  = GWTUtil.copy(proposedSubscriptionSent);	
+				GWTMessageSent message = new GWTMessageSent();
+				message.setProposedSubscriptionSent(gWTproposedSubscriptionSent);
+				message.setSentDate(gWTproposedSubscriptionSent.getSentDate());
+				messageSentList.add(message);
 			}
 			Collections.sort(messageSentList, GWTMessageSentComparator.getInstance());
 			return messageSentList;
@@ -183,6 +216,14 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 		} catch (ParseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMessageService, ErrorCode.CAUSE_Parse), e.getMessage());
+		} catch (LoginException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMessageService, ErrorCode.CAUSE_Login), e.getMessage());
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMessageService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} finally {
+			JCRUtils.logout(session);
 		}
 	}
 	
@@ -242,17 +283,50 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 	public void deleteSentFromMeToUser(String user) throws OKMException {
 		log.debug("deleteSentFromMeToUser({})",user);
 		List<String> msgId = new ArrayList<String>();
+		List<String> pqId = new ArrayList<String>();
+		List<String> psId = new ArrayList<String>();
+		Session session = null;
 		updateSessionManager();
 		try {
-			for (MessageSent messageSent :MessageDAO.findSentFromMeToUser(getThreadLocalRequest().getRemoteUser(), user)) {
+			session = JCRUtils.getSession();
+			String me = getThreadLocalRequest().getRemoteUser();
+			for (MessageSent messageSent :MessageDAO.findSentFromMeToUser(me, user)) {
 				msgId.add(String.valueOf(messageSent.getId()));
+			}
+			for (QueryParams queryParams : QueryParamsDAO.findProposedQueryFromMeToUser(me, user)) {
+				for (ProposedQuerySent proposedQuerySent : queryParams.getProposedSent()) {
+					// Only proposed queries sent by me to some specific user
+					if (proposedQuerySent.getUser().equals(user)) {
+						pqId.add(String.valueOf(proposedQuerySent.getId()));
+					}
+				}
+			}
+			for (ProposedSubscriptionSent proposedSubscriptionSent : ProposedSubscriptionDAO.findSentProposedSubscriptionFromMeToUser(session, me, user)) {
+				psId.add(String.valueOf(proposedSubscriptionSent.getId()));
 			}
 			for (String id : msgId) {
 				MessageDAO.deleteSent(Integer.valueOf(id));
 			}
+			for (String id : pqId) {
+				ProposedQueryDAO.deleteSent(Integer.valueOf(id));
+			}
+			for (String id : psId) {
+				ProposedSubscriptionDAO.deleteSent(Integer.valueOf(id));
+			}
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMessageService, ErrorCode.CAUSE_Database), e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMessageService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (LoginException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMessageService, ErrorCode.CAUSE_Login), e.getMessage());
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMessageService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} finally {
+			JCRUtils.logout(session);
 		}
 	}
 	

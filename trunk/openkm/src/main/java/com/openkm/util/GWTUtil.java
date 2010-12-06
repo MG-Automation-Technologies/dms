@@ -79,6 +79,7 @@ import com.openkm.dao.bean.MessageSent;
 import com.openkm.dao.bean.ProposedQueryReceived;
 import com.openkm.dao.bean.ProposedQuerySent;
 import com.openkm.dao.bean.ProposedSubscriptionReceived;
+import com.openkm.dao.bean.ProposedSubscriptionSent;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.UserConfig;
 import com.openkm.dao.bean.extension.Staple;
@@ -118,6 +119,7 @@ import com.openkm.frontend.client.bean.extension.GWTMessageReceived;
 import com.openkm.frontend.client.bean.extension.GWTProposedQueryReceived;
 import com.openkm.frontend.client.bean.extension.GWTProposedQuerySent;
 import com.openkm.frontend.client.bean.extension.GWTProposedSubscriptionReceived;
+import com.openkm.frontend.client.bean.extension.GWTProposedSubscriptionSent;
 import com.openkm.frontend.client.bean.extension.GWTStaple;
 import com.openkm.frontend.client.bean.extension.GWTStapleGroup;
 import com.openkm.frontend.client.bean.extension.GWTTextMessageSent;
@@ -1141,6 +1143,26 @@ public class GWTUtil {
 		if (ps.getSeenDate()!=null) {
 			gWTProposedSubscription.setSeenDate(ps.getSeenDate().getTime());
 		}
+		
+		return gWTProposedSubscription;
+	}
+	
+	/**
+	 * Copy ProposedSubscriptionSent to GWTProposedSubscriptionSent
+	 * 
+	 * @param ps
+	 * @return
+	 */
+	public static GWTProposedSubscriptionSent copy(ProposedSubscriptionSent ps) {
+		GWTProposedSubscriptionSent gWTProposedSubscription = new GWTProposedSubscriptionSent();
+		gWTProposedSubscription.setId(ps.getId());
+		gWTProposedSubscription.setFrom(ps.getFrom());
+		gWTProposedSubscription.setTo(ps.getTo());
+		gWTProposedSubscription.setUuid(ps.getUuid());
+		gWTProposedSubscription.setPath(ps.getPath());
+		gWTProposedSubscription.setType(ps.getType());
+		gWTProposedSubscription.setComment(ps.getComment());
+		gWTProposedSubscription.setSentDate(ps.getSentDate().getTime());
 		
 		return gWTProposedSubscription;
 	}

@@ -120,8 +120,8 @@ public class ProposedQueryServlet extends OKMRemoteServiceServlet implements OKM
 	}
 
 	@Override
-	public void delete(int pqId) throws OKMException {
-		log.debug("delete({})", pqId);
+	public void deleteReceived(int pqId) throws OKMException {
+		log.debug("deleteReceived({})", pqId);
 		updateSessionManager();
 		try {
 			ProposedQueryDAO.deleteReceived(pqId);
@@ -129,18 +129,35 @@ public class ProposedQueryServlet extends OKMRemoteServiceServlet implements OKM
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedQueryService, ErrorCode.CAUSE_Database), e.getMessage());
 		}
-		log.debug("delete() : void");
+		log.debug("deleteReceived() : void");
+	}
+	
+	@Override
+	public void deleteSent(int pqId) throws OKMException {
+		log.debug("deleteSent({})", pqId);
+		updateSessionManager();
+		try {
+			ProposedQueryDAO.deleteSent(pqId);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedQueryService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+		log.debug("deleteSent() : void");
 	}
 
 	@Override
-	public List<GWTProposedQueryReceived> findProposedQueryByMeFromUser(String sender) throws OKMException {
+	public List<GWTProposedQueryReceived> findProposedQueryByMeFromUser(String user) throws OKMException {
 		log.debug("findProposedQueryByMeFromUser()");
 		updateSessionManager();
 		List<GWTProposedQueryReceived> proposedQueryReceivedList = new ArrayList<GWTProposedQueryReceived>();
 		try {			
-			for (QueryParams queryParams :QueryParamsDAO.findProposedQueryByMeFromUser(getThreadLocalRequest().getRemoteUser(), sender)) {
+			String me = getThreadLocalRequest().getRemoteUser();
+			for (QueryParams queryParams :QueryParamsDAO.findProposedQueryByMeFromUser(me, user)) {
 				for (ProposedQueryReceived proposedQueryReceived : queryParams.getProposedReceived()) {
-					proposedQueryReceivedList.add(GWTUtil.copy(proposedQueryReceived, queryParams));					
+					// Queries can have several proposals to other users, might only be the mine
+					if (proposedQueryReceived.getUser().equals(me)) {
+						proposedQueryReceivedList.add(GWTUtil.copy(proposedQueryReceived, queryParams));
+					}
 				}
 			}
 			return proposedQueryReceivedList;
@@ -191,13 +208,13 @@ public class ProposedQueryServlet extends OKMRemoteServiceServlet implements OKM
 	@Override
 	public void deleteProposedQueryByMeFromUser(String user) throws OKMException {
 		log.debug("deleteProposedQueryByMeFromUser({})",user);
-		List<String> msgId = new ArrayList<String>();
+		List<String> pqId = new ArrayList<String>();
 		updateSessionManager();
 		try {
 			for (ProposedQueryReceived proposedQueryReceived :ProposedQueryDAO.findProposedQueryByMeFromUser(getThreadLocalRequest().getRemoteUser(), user)) {
-				msgId.add(String.valueOf(proposedQueryReceived.getId()));
+				pqId.add(String.valueOf(proposedQueryReceived.getId()));
 			}
-			for (String id : msgId) {
+			for (String id : pqId) {
 				ProposedQueryDAO.deleteReceived(Integer.valueOf(id));
 			}
 		} catch (DatabaseException e) {
