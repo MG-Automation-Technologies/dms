@@ -58,7 +58,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	private int SECURITY_TAB = -1;
 	
 	public TabPanel tabPanel;
-	private Folder folder;
+	public Folder folder;
 	private SecurityScrollTable security;
 	public Notes notes;
 	private VerticalPanel panel;

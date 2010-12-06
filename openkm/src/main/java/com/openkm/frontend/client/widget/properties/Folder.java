@@ -23,17 +23,23 @@ package com.openkm.frontend.client.widget.properties;
 
 import java.util.Iterator;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
+import com.openkm.extension.frontend.client.widget.messaging.MessagingToolBarBox;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.panel.PanelDefinition;
+import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
 
 public class Folder extends Composite {
@@ -43,6 +49,9 @@ public class Folder extends Composite {
 	private FlexTable tableSubscribedUsers;
 	private FlexTable table;
 	private GWTFolder folder;
+	HorizontalPanel hPanelSubscribedUsers;
+	private HTML subcribedUsersText;
+	private Image proposeSubscribeImage;
 	
 	/**
 	 * The folder
@@ -75,7 +84,20 @@ public class Folder extends Composite {
 		tableProperties.setHTML(9, 0, "<b>"+Main.i18n("folder.webdav")+"</b>");
 		tableProperties.setWidget(9, 1, new HTML(""));
 		
-		tableSubscribedUsers.setHTML(0,0,"<b>"+Main.i18n("folder.subscribed.users")+"<b>");
+		hPanelSubscribedUsers = new HorizontalPanel();
+		subcribedUsersText = new HTML("<b>"+Main.i18n("folder.subscribed.users")+"<b>");
+		proposeSubscribeImage = new Image(OKMBundleResources.INSTANCE.proposeSubscription());
+		proposeSubscribeImage.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				MessagingToolBarBox.get().executeProposeSubscription(folder.getUuid());
+			}
+		});
+		hPanelSubscribedUsers.add(subcribedUsersText);
+		hPanelSubscribedUsers.add(new HTML("&nbsp;"));
+		hPanelSubscribedUsers.setCellVerticalAlignment(subcribedUsersText, HasAlignment.ALIGN_MIDDLE);
+		
+		tableSubscribedUsers.setWidget(0, 0, hPanelSubscribedUsers);
 				
 		table.setWidget(0, 0, tableProperties);
 		table.setHTML(0,1, "");
@@ -100,6 +122,7 @@ public class Folder extends Composite {
 		
 		tableProperties.setStyleName("okm-DisableSelect");
 		tableSubscribedUsers.setStyleName("okm-DisableSelect");
+		proposeSubscribeImage.addStyleName("okm-Hyperlink");
 		
 		initWidget(scrollPanel);
 	}
@@ -218,6 +241,14 @@ public class Folder extends Composite {
 				tableProperties.getRowFormatter().setVisible(7, true); // Number of e-mails
 				break;
 		}
+		
+		// Propose subscription only must be enabled in taxonomy, categories, thesaurus and templates with
+		if (Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TAXONOMY || 
+			Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TEMPLATES) {
+			proposeSubscribeImage.setVisible(true);
+		} else {
+			proposeSubscribeImage.setVisible(false);
+		}
 	}
 
 	/**
@@ -273,6 +304,14 @@ public class Folder extends Composite {
 			}
 		}
 		
-		tableSubscribedUsers.setHTML(0, 0, "<b>"+Main.i18n("folder.subscribed.users")+"<b>");
+		subcribedUsersText.setHTML("<b>"+Main.i18n("folder.subscribed.users")+"<b>");
+	}
+	
+	/**
+	 * showProposedSusbcription
+	 */
+	public void showProposedSusbcription() {
+		// Adds to panel
+		hPanelSubscribedUsers.add(proposeSubscribeImage);
 	}
 }
