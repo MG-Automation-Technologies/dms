@@ -766,7 +766,7 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('f
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-024025', 'PrincipalAdapter error', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'propose.query.title', 'Send propose query', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'dasboard.messaging.get.proposed.queries', 'Getting proposed queries', 'en-GB');
-INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'messaging.message.type.propose.query', 'Query propsoted', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'messaging.message.type.propose.query', 'Query prososed', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'messaging.detail.shared', 'Shared', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'messaging.label.share.query', 'Proposed queries', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'dasboard.messaging.delete.proposed.query', 'Deleting proposed query', 'en-GB');
@@ -793,7 +793,7 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('f
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'OKM-025025', 'Principal adapter error', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'messaging.label.notify.subject', 'Subject', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'messaging.message.type.message.sent', 'Message sent', 'en-GB');
-INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'messaging.message.proposed.folder.document', 'Proposed documento/folder', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'messaging.message.proposed.folder.document', 'Proposed document/folder', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'messaging.message.proposed.query', 'Proposed query', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'messaging.message.subject', 'Subject', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'messaging.message.send.to', 'Send to', 'en-GB');
