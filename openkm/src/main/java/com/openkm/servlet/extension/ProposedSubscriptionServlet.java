@@ -83,6 +83,11 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 				}
 			}
 			
+			// You might not sending messages to youself
+			if (userNames.contains(remoteUser)) {
+				userNames.remove(remoteUser);
+			}
+			
 			for (String user : userNames) {
 				ProposedSubscriptionDAO.send(remoteUser, to, user, uuid, comment);
 			}
