@@ -84,6 +84,11 @@ public class ProposedQueryServlet extends OKMRemoteServiceServlet implements OKM
 				}
 			}
 			
+			// You might not sending messages to youself
+			if (userNames.contains(remoteUser)) {
+				userNames.remove(remoteUser);
+			}
+			
 			for (String user : userNames) {
 				ProposedQueryDAO.send(qpId, remoteUser, to, user, comment);
 			}
