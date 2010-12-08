@@ -29,7 +29,7 @@ import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.extension.event.HasFolderEvent;
 import com.openkm.frontend.client.extension.event.HasFolderEvent.FolderEventConstant;
 import com.openkm.frontend.client.extension.event.handler.FolderHandlerExtension;
-import com.openkm.frontend.client.extension.widget.TabFolderExtension;
+import com.openkm.frontend.client.extension.widget.tabfolder.TabFolderExtension;
 
 /**
  * TabFolderExample
