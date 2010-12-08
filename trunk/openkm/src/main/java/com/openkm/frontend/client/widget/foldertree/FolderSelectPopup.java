@@ -44,7 +44,7 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.general.RPCService;
 import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
@@ -215,7 +215,7 @@ public class FolderSelectPopup extends DialogBox  {
 						if (!fatherPath.equals(actualPath)) {
 							setActionView();
 							endPoint = (ServiceDefTarget) documentService;
-							endPoint.setServiceEntryPoint(Config.DocumentService);
+							endPoint.setServiceEntryPoint(RPCService.DocumentService);
 							documentService.move( ((GWTDocument) node).getPath(),actualPath, callbackMove);
 						} else {
 							changeStatusOnError("fileupload.label.error.not.allowed.copy.same.folder");
@@ -228,7 +228,7 @@ public class FolderSelectPopup extends DialogBox  {
 						if (!fatherPath.equals(actualPath)) {
 							setActionView();
 							endPoint = (ServiceDefTarget) documentService;
-							endPoint.setServiceEntryPoint(Config.DocumentService);
+							endPoint.setServiceEntryPoint(RPCService.DocumentService);
 							documentService.copy( ((GWTDocument) node).getPath(),actualPath, callbackCopy);
 						} else {
 							changeStatusOnError("fileupload.label.error.not.allowed.copy.same.folder");
@@ -238,7 +238,7 @@ public class FolderSelectPopup extends DialogBox  {
 					case ACTION_RESTORE:
 						setActionView();
 						endPoint = (ServiceDefTarget) documentService;
-						endPoint.setServiceEntryPoint(Config.DocumentService);
+						endPoint.setServiceEntryPoint(RPCService.DocumentService);
 						documentService.move( ((GWTDocument) node).getPath(),actualPath, callbackRestore);
 						break;
 					
@@ -248,7 +248,7 @@ public class FolderSelectPopup extends DialogBox  {
 						if (!fatherPath.equals(actualPath)) {
 							setActionView();
 							endPoint = (ServiceDefTarget) documentService;
-							endPoint.setServiceEntryPoint(Config.DocumentService);								
+							endPoint.setServiceEntryPoint(RPCService.DocumentService);								
 							documentService.copy(((GWTDocument) node).getPath(),actualPath,callbackCopyFromTemplate);
 						} else {
 							changeStatusOnError("fileupload.label.error.not.allowed.create.from.template.same.folder");
@@ -265,7 +265,7 @@ public class FolderSelectPopup extends DialogBox  {
 						if (!fatherPath.equals(actualPath)) {
 							setActionView();
 							endPoint = (ServiceDefTarget) mailService;
-							endPoint.setServiceEntryPoint(Config.MailService);
+							endPoint.setServiceEntryPoint(RPCService.MailService);
 							mailService.move( ((GWTMail) node).getPath(),actualPath, callbackMove);
 						} else {
 							changeStatusOnError("fileupload.label.error.not.allowed.copy.same.folder");
@@ -278,7 +278,7 @@ public class FolderSelectPopup extends DialogBox  {
 						if (!fatherPath.equals(actualPath)) {
 							setActionView();
 							endPoint = (ServiceDefTarget) mailService;
-							endPoint.setServiceEntryPoint(Config.MailService);
+							endPoint.setServiceEntryPoint(RPCService.MailService);
 							mailService.copy( ((GWTMail) node).getPath(),actualPath, callbackCopy);
 						} else {
 							changeStatusOnError("fileupload.label.error.not.allowed.copy.same.folder");
@@ -288,7 +288,7 @@ public class FolderSelectPopup extends DialogBox  {
 					case ACTION_RESTORE:
 						setActionView();
 						endPoint = (ServiceDefTarget) mailService;
-						endPoint.setServiceEntryPoint(Config.MailService);
+						endPoint.setServiceEntryPoint(RPCService.MailService);
 						mailService.move( ((GWTMail) node).getPath(),actualPath, callbackRestore);
 						break;
 				}
@@ -301,7 +301,7 @@ public class FolderSelectPopup extends DialogBox  {
 					if ( actualPath.indexOf(((GWTFolder) node).getPath())==-1 && !((GWTFolder) node).getParentPath().equals(actualPath)) {
 						setActionView();
 						endPoint = (ServiceDefTarget) folderService;
-						endPoint.setServiceEntryPoint(Config.FolderService);
+						endPoint.setServiceEntryPoint(RPCService.FolderService);
 						folderService.move( ((GWTFolder) node).getPath(),actualPath, callbackMove);
 					} else {
 						changeStatusOnError("fileupload.label.error.not.allowed.move.folder.child");
@@ -313,7 +313,7 @@ public class FolderSelectPopup extends DialogBox  {
 					if ( !((GWTFolder) node).getPath().equals(actualPath) ) {
 						setActionView();
 						endPoint = (ServiceDefTarget) folderService;
-						endPoint.setServiceEntryPoint(Config.FolderService);
+						endPoint.setServiceEntryPoint(RPCService.FolderService);
 						folderService.copy( ((GWTFolder) node).getPath(),actualPath, callbackCopy);
 					} else {
 						changeStatusOnError("fileupload.label.error.not.allowed.copy.same.folder");
@@ -323,7 +323,7 @@ public class FolderSelectPopup extends DialogBox  {
 				case ACTION_RESTORE:
 					setActionView();
 					endPoint = (ServiceDefTarget) folderService;
-					endPoint.setServiceEntryPoint(Config.FolderService);
+					endPoint.setServiceEntryPoint(RPCService.FolderService);
 					folderService.move( ((GWTFolder) node).getPath(), actualPath, callbackRestore);
 					break;
 			}

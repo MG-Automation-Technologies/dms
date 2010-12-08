@@ -37,7 +37,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.extension.widget.ToolBarBoxExtension;
+import com.openkm.frontend.client.extension.widget.toolbar.ToolBarBoxExtension;
 import com.openkm.frontend.client.panel.center.Dashboard;
 import com.openkm.frontend.client.util.OKMBundleResources;
 

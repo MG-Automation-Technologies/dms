@@ -33,7 +33,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
 import com.openkm.frontend.client.bean.GWTDashboardFolderResult;
-import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.general.RPCService;
 import com.openkm.frontend.client.service.OKMDashboardService;
 import com.openkm.frontend.client.service.OKMDashboardServiceAsync;
 
@@ -268,7 +268,7 @@ public class UserDashboard extends Composite {
 			lockedDocuments.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(Config.DashboardService);		
+		endPoint.setServiceEntryPoint(RPCService.DashboardService);		
 		dashboardService.getUserLockedDocuments(callbackGetUserLockedDocuments);
 	}
 	
@@ -293,7 +293,7 @@ public class UserDashboard extends Composite {
 			chechoutDocuments.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(Config.DashboardService);		
+		endPoint.setServiceEntryPoint(RPCService.DashboardService);		
 		dashboardService.getUserCheckedOutDocuments(callbackGetUserCheckOutDocuments);
 	}
 	
@@ -305,7 +305,7 @@ public class UserDashboard extends Composite {
 			lastModifiedDocuments.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(Config.DashboardService);		
+		endPoint.setServiceEntryPoint(RPCService.DashboardService);		
 		dashboardService.getUserLastModifiedDocuments(callbackGetUserLastModifiedDocuments);
 	}
 	
@@ -317,7 +317,7 @@ public class UserDashboard extends Composite {
 			subscribedDocuments.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(Config.DashboardService);		
+		endPoint.setServiceEntryPoint(RPCService.DashboardService);		
 		dashboardService.getUserSubscribedDocuments(callbackGetUserSubscribedDocuments);
 	}
 	
@@ -329,7 +329,7 @@ public class UserDashboard extends Composite {
 			subscribedFolder.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(Config.DashboardService);		
+		endPoint.setServiceEntryPoint(RPCService.DashboardService);		
 		dashboardService.getUserSubscribedFolders(callbackGetUserSubscribedFolders);
 	}
 	
@@ -341,7 +341,7 @@ public class UserDashboard extends Composite {
 			lastDownloadedDocuments.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(Config.DashboardService);		
+		endPoint.setServiceEntryPoint(RPCService.DashboardService);		
 		dashboardService.getUserLastDownloadedDocuments(callbackGetUserLastDownloadedDocuments);
 	}
 	
@@ -353,7 +353,7 @@ public class UserDashboard extends Composite {
 			lastUploadedDocuments.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(Config.DashboardService);		
+		endPoint.setServiceEntryPoint(RPCService.DashboardService);		
 		dashboardService.getUserLastUploadedDocuments(callbackGetUserLastUploadedDocuments);	
 	}
 	

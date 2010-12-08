@@ -27,7 +27,7 @@ import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.openkm.extension.frontend.client.widget.messaging.MessagingToolBarBox;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTWorkspace;
-import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.general.RPCService;
 import com.openkm.frontend.client.service.OKMRepositoryService;
 import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
 import com.openkm.frontend.client.service.OKMWorkspaceService;
@@ -318,7 +318,7 @@ public class WorkspaceUserProperties {
 	 */
 	private void getUpdateMessage() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(Config.RepositoryService);	
+		endPoint.setServiceEntryPoint(RPCService.RepositoryService);	
 		repositoryService.getUpdateMessage(callbackGetUpdateMessage);
 	}
 	
@@ -327,7 +327,7 @@ public class WorkspaceUserProperties {
 	 */
 	public void getUserWorkspace() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) workspaceService;
-		endPoint.setServiceEntryPoint(Config.WorkspaceService);	
+		endPoint.setServiceEntryPoint(RPCService.WorkspaceService);	
 		workspaceService.getUserWorkspace(callbackGetUserWorkspace);
 	}
 	
@@ -336,7 +336,7 @@ public class WorkspaceUserProperties {
 	 */
 	public void getUserDocumentsSize() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) workspaceService;
-		endPoint.setServiceEntryPoint(Config.WorkspaceService);	
+		endPoint.setServiceEntryPoint(RPCService.WorkspaceService);	
 		workspaceService.getUserDocumentsSize(callbackGetUserDocumentsSize);
 	}
 	

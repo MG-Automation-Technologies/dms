@@ -33,7 +33,7 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTBookmark;
-import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.general.RPCService;
 import com.openkm.frontend.client.service.OKMBookmarkService;
 import com.openkm.frontend.client.service.OKMBookmarkServiceAsync;
 import com.openkm.frontend.client.service.OKMUserConfigService;
@@ -101,7 +101,7 @@ public class Bookmark {
 						public void execute() {
 							if (bookmarkEnabled) {
 								ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
-								endPoint.setServiceEntryPoint(Config.BookmarkService);
+								endPoint.setServiceEntryPoint(RPCService.BookmarkService);
 								bookmarkService.get(bookmark.getId(), new AsyncCallback<GWTBookmark>() {
 									@Override
 									public void onSuccess(GWTBookmark result) {
@@ -162,7 +162,7 @@ public class Bookmark {
 				public void execute() {
 					if (bookmarkEnabled) {
 						ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
-						endPoint.setServiceEntryPoint(Config.BookmarkService);
+						endPoint.setServiceEntryPoint(RPCService.BookmarkService);
 						bookmarkService.get(bookmark.getId(), new AsyncCallback<GWTBookmark>() {
 							@Override
 							public void onSuccess(GWTBookmark result) {
@@ -237,7 +237,7 @@ public class Bookmark {
 	 */
 	public void getAll() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
-		endPoint.setServiceEntryPoint(Config.BookmarkService);			
+		endPoint.setServiceEntryPoint(RPCService.BookmarkService);			
 		bookmarkService.getAll(callbackGetAll);
 	}
 	
@@ -250,7 +250,7 @@ public class Bookmark {
 	 */
 	public void add(String nodePath, String name) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
-		endPoint.setServiceEntryPoint(Config.BookmarkService);			
+		endPoint.setServiceEntryPoint(RPCService.BookmarkService);			
 		bookmarkService.add(nodePath, name, callbackAdd);
 	}
 	
@@ -261,7 +261,7 @@ public class Bookmark {
 	public void setUserHome() {
 		if (nodePath!=null && !nodePath.equals("")) { 
 			ServiceDefTarget endPoint = (ServiceDefTarget) userConfigService;
-			endPoint.setServiceEntryPoint(Config.UserConfigService);			
+			endPoint.setServiceEntryPoint(RPCService.UserConfigService);			
 			userConfigService.setUserHome(nodePath, callbackSetUserHome);
 		}
 	}

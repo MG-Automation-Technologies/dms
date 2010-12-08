@@ -49,7 +49,7 @@ import com.openkm.frontend.client.bean.GWTPropertyParams;
 import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.bean.GWTQueryResult;
 import com.openkm.frontend.client.bean.GWTResultSet;
-import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.general.RPCService;
 import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.service.OKMSearchServiceAsync;
@@ -338,7 +338,7 @@ public class FindFolderSelectPopup extends DialogBox  {
 	private void find(GWTQueryParams params) {
 		status.setFlagChilds();
 		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
-		endPoint.setServiceEntryPoint(Config.SearchService);
+		endPoint.setServiceEntryPoint(RPCService.SearchService);
 		searchService.find(params, callbackFind);
 	}
 }

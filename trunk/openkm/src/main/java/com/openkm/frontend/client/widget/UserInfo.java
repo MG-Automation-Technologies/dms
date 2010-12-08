@@ -15,8 +15,8 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.config.Config;
-import com.openkm.frontend.client.extension.widget.UserInfoExtension;
+import com.openkm.frontend.client.extension.general.RPCService;
+import com.openkm.frontend.client.extension.widget.userinfo.UserInfoExtension;
 import com.openkm.frontend.client.panel.ExtendedDockPanel;
 import com.openkm.frontend.client.service.OKMChatService;
 import com.openkm.frontend.client.service.OKMChatServiceAsync;
@@ -401,7 +401,7 @@ public class UserInfo extends Composite {
 	private void refreshConnectedUsers() {
 		if (chatConnected) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-			endPoint.setServiceEntryPoint(Config.ChatService);
+			endPoint.setServiceEntryPoint(RPCService.ChatService);
 			chatService.getLoggedUsers(new AsyncCallback<List<String>>() {
 				@Override
 				public void onSuccess(List<String> result) {
@@ -430,7 +430,7 @@ public class UserInfo extends Composite {
 	private void getPendingChatRoomUser() {
 		if (chatConnected) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-			endPoint.setServiceEntryPoint(Config.ChatService);
+			endPoint.setServiceEntryPoint(RPCService.ChatService);
 			chatService.getPendingChatRoomUser(new AsyncCallback<List<String>>() {
 				
 				@Override
@@ -534,7 +534,7 @@ public class UserInfo extends Composite {
 			final ChatRoomDialogBox chatRoom = getChatRoomList().get(0);
 			chatRoom.setChatRoomActive(false);
 			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-			endPoint.setServiceEntryPoint(Config.ChatService);
+			endPoint.setServiceEntryPoint(RPCService.ChatService);
 			chatService.closeRoom(chatRoom.getRoom(),new AsyncCallback<Object>() {
 				@Override
 				public void onSuccess(Object arg0) {
@@ -554,7 +554,7 @@ public class UserInfo extends Composite {
 			// Disconnect chat
 			disconnectChat(); // Only used to change view and disabling some RPC
 			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-			endPoint.setServiceEntryPoint(Config.ChatService);
+			endPoint.setServiceEntryPoint(RPCService.ChatService);
 			chatService.logout(new AsyncCallback<Object>() {
 				@Override
 				public void onSuccess(Object result) {
@@ -590,7 +590,7 @@ public class UserInfo extends Composite {
 	 */
 	public void loginChat() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-		endPoint.setServiceEntryPoint(Config.ChatService);
+		endPoint.setServiceEntryPoint(RPCService.ChatService);
 		chatService.login(new AsyncCallback<Object>() {
 			@Override
 			public void onSuccess(Object result) {

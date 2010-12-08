@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.extension.event.HasDashboardEvent;
 import com.openkm.frontend.client.extension.event.handler.DashboardHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasDashboardHandlerExtension;
-import com.openkm.frontend.client.extension.widget.ToolBarBoxExtension;
+import com.openkm.frontend.client.extension.widget.toolbar.ToolBarBoxExtension;
 import com.openkm.frontend.client.widget.dashboard.GeneralDashboard;
 import com.openkm.frontend.client.widget.dashboard.HorizontalToolBar;
 import com.openkm.frontend.client.widget.dashboard.MailDashboard;
