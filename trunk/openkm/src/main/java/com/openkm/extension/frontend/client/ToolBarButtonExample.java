@@ -38,7 +38,7 @@ import com.openkm.frontend.client.extension.event.HasLanguageEvent.LanguageEvent
 import com.openkm.frontend.client.extension.event.HasToolBarEvent.ToolBarEventConstant;
 import com.openkm.frontend.client.extension.event.handler.LanguageHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.ToolBarHandlerExtension;
-import com.openkm.frontend.client.extension.widget.ToolBarButtonExtension;
+import com.openkm.frontend.client.extension.widget.toolbar.ToolBarButtonExtension;
 
 /**
  * ToolBarButtonExample

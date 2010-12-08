@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.extension.frontend.client.util.OKMExtensionBundleExampleResources;
-import com.openkm.frontend.client.extension.widget.ToolBarBoxExtension;
+import com.openkm.frontend.client.extension.widget.toolbar.ToolBarBoxExtension;
 
 /**
  * ToolBarBoxExample

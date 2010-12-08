@@ -35,15 +35,15 @@ import com.openkm.frontend.client.extension.event.handler.PropertyGroupHandlerEx
 import com.openkm.frontend.client.extension.event.handler.ToolBarHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.WorkspaceHandlerExtension;
 import com.openkm.frontend.client.extension.ui.UIMenuConstants;
-import com.openkm.frontend.client.extension.widget.MenuItemExtension;
-import com.openkm.frontend.client.extension.widget.PreviewExtension;
-import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
-import com.openkm.frontend.client.extension.widget.TabFolderExtension;
-import com.openkm.frontend.client.extension.widget.TabMailExtension;
-import com.openkm.frontend.client.extension.widget.TabWorkspaceExtension;
-import com.openkm.frontend.client.extension.widget.ToolBarBoxExtension;
-import com.openkm.frontend.client.extension.widget.ToolBarButtonExtension;
-import com.openkm.frontend.client.extension.widget.UserInfoExtension;
+import com.openkm.frontend.client.extension.widget.menu.MenuItemExtension;
+import com.openkm.frontend.client.extension.widget.preview.PreviewExtension;
+import com.openkm.frontend.client.extension.widget.tabdocument.TabDocumentExtension;
+import com.openkm.frontend.client.extension.widget.tabfolder.TabFolderExtension;
+import com.openkm.frontend.client.extension.widget.tabmail.TabMailExtension;
+import com.openkm.frontend.client.extension.widget.tabworkspace.TabWorkspaceExtension;
+import com.openkm.frontend.client.extension.widget.toolbar.ToolBarBoxExtension;
+import com.openkm.frontend.client.extension.widget.toolbar.ToolBarButtonExtension;
+import com.openkm.frontend.client.extension.widget.userinfo.UserInfoExtension;
 
 /**
  * ExtensionManager
