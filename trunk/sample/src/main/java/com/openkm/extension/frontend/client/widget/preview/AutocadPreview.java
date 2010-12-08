@@ -25,7 +25,7 @@ package com.openkm.extension.frontend.client.widget.preview;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.Widget;
-import com.openkm.frontend.client.extension.widget.PreviewExtension;
+import com.openkm.frontend.client.extension.widget.preview.PreviewExtension;
 
 /**
  * AutocadPreview
