@@ -21,15 +21,16 @@
 
 package com.openkm.frontend.client.extension.widget;
 
-import com.google.gwt.user.client.ui.Composite;
-import com.openkm.frontend.client.extension.HasUserInfoExtension;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
- * UserInfoExtension
+ * HasWidget
  * 
  * @author jllort
  *
  */
- 
- public abstract class UserInfoExtension extends Composite implements HasUserInfoExtension {
- }
+public interface HasWidget {
+	
+	public abstract Widget getWidget();
+	
+}

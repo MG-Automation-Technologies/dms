@@ -22,7 +22,7 @@
 package com.openkm.frontend.client.extension.comunicator;
 
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.extension.widget.ToolBarBoxExtension;
+import com.openkm.frontend.client.extension.widget.toolbar.ToolBarBoxExtension;
 
 /**
  * DashboardComunicator
