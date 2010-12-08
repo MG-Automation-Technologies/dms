@@ -70,7 +70,7 @@ import com.openkm.frontend.client.bean.GWTSelect;
 import com.openkm.frontend.client.bean.GWTTaskInstance;
 import com.openkm.frontend.client.bean.GWTTextArea;
 import com.openkm.frontend.client.bean.GWTWorkflowComment;
-import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.general.RPCService;
 import com.openkm.frontend.client.service.OKMRepositoryService;
 import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
 import com.openkm.frontend.client.service.OKMWorkflowService;
@@ -344,7 +344,7 @@ public class WorkflowFormPanel extends Composite {
 							               "</b>");
 					
 					ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-					endPoint.setServiceEntryPoint(Config.RepositoryService);		
+					endPoint.setServiceEntryPoint(RPCService.RepositoryService);		
 					repositoryService.getPathByUUID(value, new AsyncCallback<String>() {
 						@Override
 						public void onSuccess(final String docPath) {
@@ -456,7 +456,7 @@ public class WorkflowFormPanel extends Composite {
 	 */
 	public void getProcessDefinitionForms(double id) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-		endPoint.setServiceEntryPoint(Config.WorkflowService);		
+		endPoint.setServiceEntryPoint(RPCService.WorkflowService);		
 		workflowService.getProcessDefinitionForms(id, callbackGetProcessDefinitionForms);
 	}
 	
@@ -898,7 +898,7 @@ public class WorkflowFormPanel extends Composite {
 		}
 		
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-		endPoint.setServiceEntryPoint(Config.WorkflowService);		
+		endPoint.setServiceEntryPoint(RPCService.WorkflowService);		
 		workflowService.setTaskInstanceValues(id, transitionName, formElementList, callbackSetTaskInstanceValues);
 	}
 	
@@ -994,7 +994,7 @@ public class WorkflowFormPanel extends Composite {
 	private void addComment() {
 		if (!textArea.getText().equals("")) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-			endPoint.setServiceEntryPoint(Config.WorkflowService);
+			endPoint.setServiceEntryPoint(RPCService.WorkflowService);
 			workflowService.addComment(taskInstance.getProcessInstance().getRootToken().getId(), textArea.getText(), callbackAddComment);
 		}
 	}

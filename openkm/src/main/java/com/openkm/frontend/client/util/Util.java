@@ -26,7 +26,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.general.RPCService;
 
 public class Util {
 	
@@ -184,7 +184,7 @@ public class Util {
 		}
 		
 		final Element downloadIframe = RootPanel.get("__download").getElement(); 
-		String url = Config.DownloadServlet + "?" + params + "id=" + URL.encodeComponent(path);
+		String url = RPCService.DownloadServlet + "?" + params + "id=" + URL.encodeComponent(path);
 		DOM.setElementAttribute(downloadIframe, "src", url); 
 	}
 	
@@ -196,7 +196,7 @@ public class Util {
 	 */
 	public static void downloadFilePdf(String uuid) {
 		final Element downloadIframe = RootPanel.get("__download").getElement(); 
-		String url = Config.ConverterServlet + "?toPdf=1&uuid=" + URL.encodeComponent(uuid);
+		String url = RPCService.ConverterServlet + "?toPdf=1&uuid=" + URL.encodeComponent(uuid);
 		DOM.setElementAttribute(downloadIframe, "src", url); 
 	}
 	

@@ -34,7 +34,7 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.extension.event.HasWorkspaceEvent;
 import com.openkm.frontend.client.extension.event.handler.WorkspaceHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasWorkspaceHandlerExtension;
-import com.openkm.frontend.client.extension.widget.TabWorkspaceExtension;
+import com.openkm.frontend.client.extension.widget.tabworkspace.TabWorkspaceExtension;
 import com.openkm.frontend.client.panel.ExtendedDockPanel;
 
 /**
