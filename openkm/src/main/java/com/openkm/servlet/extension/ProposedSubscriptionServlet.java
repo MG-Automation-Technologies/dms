@@ -40,7 +40,7 @@ import com.openkm.dao.ProposedSubscriptionDAO;
 import com.openkm.dao.bean.ProposedSubscriptionReceived;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.extension.GWTProposedSubscriptionReceived;
-import com.openkm.frontend.client.extension.general.ErrorCode;
+import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.extension.OKMProposedSubscriptionService;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.servlet.frontend.OKMRemoteServiceServlet;

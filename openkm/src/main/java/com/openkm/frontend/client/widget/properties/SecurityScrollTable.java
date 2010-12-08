@@ -46,7 +46,7 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.extension.general.RPCService;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 import com.openkm.frontend.client.util.RoleComparator;

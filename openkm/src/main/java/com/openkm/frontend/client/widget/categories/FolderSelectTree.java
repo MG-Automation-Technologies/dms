@@ -35,7 +35,7 @@ import com.google.gwt.user.client.ui.TreeItem;
 
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.extension.general.RPCService;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMFolderService;
 import com.openkm.frontend.client.service.OKMFolderServiceAsync;
 import com.openkm.frontend.client.service.OKMRepositoryService;

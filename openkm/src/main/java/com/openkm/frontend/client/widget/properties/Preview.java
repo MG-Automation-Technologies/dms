@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.extension.general.RPCService;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.extension.widget.preview.PreviewExtension;
 import com.openkm.frontend.client.util.Util;
 

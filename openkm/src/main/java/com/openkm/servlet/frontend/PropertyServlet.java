@@ -32,7 +32,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.VersionException;
 import com.openkm.frontend.client.OKMException;
-import com.openkm.frontend.client.extension.general.ErrorCode;
+import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.OKMPropertyService;
 
 /**

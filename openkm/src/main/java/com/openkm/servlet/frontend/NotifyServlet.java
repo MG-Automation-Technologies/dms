@@ -35,7 +35,7 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.OKMException;
-import com.openkm.frontend.client.extension.general.ErrorCode;
+import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.OKMNotifyService;
 import com.openkm.principal.PrincipalAdapterException;
 

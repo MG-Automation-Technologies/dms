@@ -46,7 +46,7 @@ import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.extension.general.RPCService;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMThesaurusService;
 import com.openkm.frontend.client.service.OKMThesaurusServiceAsync;
 

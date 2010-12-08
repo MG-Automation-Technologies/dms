@@ -40,7 +40,7 @@ import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
-import com.openkm.frontend.client.extension.general.ErrorCode;
+import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.widget.upload.FancyFileUpload;
 import com.openkm.util.FileUtils;
 import com.openkm.util.impexp.ImpExpStats;

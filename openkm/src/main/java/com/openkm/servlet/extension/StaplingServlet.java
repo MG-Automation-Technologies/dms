@@ -35,7 +35,7 @@ import com.openkm.dao.bean.extension.StapleGroup;
 import com.openkm.dao.extension.StapleGroupDAO;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.extension.GWTStapleGroup;
-import com.openkm.frontend.client.extension.general.ErrorCode;
+import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.extension.OKMStaplingService;
 import com.openkm.servlet.frontend.OKMRemoteServiceServlet;
 import com.openkm.util.GWTUtil;

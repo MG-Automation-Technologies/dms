@@ -44,7 +44,7 @@ import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.google.gwt.user.client.ui.HTMLTable.RowFormatter;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.extension.general.RPCService;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMPropertyService;
 import com.openkm.frontend.client.service.OKMPropertyServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;

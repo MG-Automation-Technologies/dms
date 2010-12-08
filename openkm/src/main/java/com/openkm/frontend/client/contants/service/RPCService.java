@@ -19,7 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.extension.general;
+package com.openkm.frontend.client.contants.service;
 
 import com.openkm.frontend.client.Main;
 

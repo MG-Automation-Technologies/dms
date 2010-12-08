@@ -36,7 +36,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
 import com.openkm.frontend.client.bean.GWTQueryParams;
-import com.openkm.frontend.client.extension.general.RPCService;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMDashboardService;
 import com.openkm.frontend.client.service.OKMDashboardServiceAsync;
 

@@ -45,7 +45,7 @@ import com.openkm.frontend.client.bean.GWTKeyword;
 import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.bean.GWTQueryResult;
 import com.openkm.frontend.client.bean.GWTResultSet;
-import com.openkm.frontend.client.extension.general.ErrorCode;
+import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.util.KeywordComparator;
 import com.openkm.frontend.client.util.QueryParamsComparator;
