@@ -36,7 +36,7 @@ import com.openkm.dao.bean.MailAccount;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
 import com.openkm.frontend.client.bean.GWTTestImap;
-import com.openkm.frontend.client.config.ErrorCode;
+import com.openkm.frontend.client.extension.general.ErrorCode;
 import com.openkm.frontend.client.service.OKMGeneralService;
 import com.openkm.util.MailUtils;
 

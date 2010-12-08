@@ -42,7 +42,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.general.RPCService;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 
@@ -450,7 +450,7 @@ public class UserScrollTable extends Composite {
 		if (path != null) {
 			Main.get().securityPopup.status.setFlag_update();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(Config.AuthService);	
+			endPoint.setServiceEntryPoint(RPCService.AuthService);	
 			authService.grantUser(path, user, permissions, recursive, callbackGrantUser);
 		}
 	}
@@ -465,7 +465,7 @@ public class UserScrollTable extends Composite {
 		if (path != null) {
 			Main.get().securityPopup.status.setFlag_update();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(Config.AuthService);	
+			endPoint.setServiceEntryPoint(RPCService.AuthService);	
 			authService.revokeUser(path, user, permissions, recursive, callbackRevokeUser);
 		}
 	}

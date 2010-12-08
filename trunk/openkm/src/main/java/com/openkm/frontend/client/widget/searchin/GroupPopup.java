@@ -46,7 +46,7 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.GWTPropertyParams;
-import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.general.RPCService;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
 
@@ -300,7 +300,7 @@ public class GroupPopup extends DialogBox {
 	 */
 	private void getAllGroups() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(Config.PropertyGroupService);	
+		endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
 		propertyGroupService.getAllGroups(callbackGetAllGroups);
 	}
 	
@@ -309,7 +309,7 @@ public class GroupPopup extends DialogBox {
 	 */
 	private void getMetaData() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(Config.PropertyGroupService);	
+		endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
 		propertyGroupService.getPropertyGroupForm(groupListBox.getValue(groupListBox.getSelectedIndex()), callbackGetPropertyGroupForm);
 	}
 	
@@ -329,7 +329,7 @@ public class GroupPopup extends DialogBox {
 		if (groupListBox.getItemCount()>validate) {
 			String value = groupListBox.getValue(validate);
 			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-			endPoint.setServiceEntryPoint(Config.PropertyGroupService);	
+			endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
 			propertyGroupService.getPropertyGroupForm(value, callbackGetPropertyGroupFormDataToValidate);
 		} else {
 			// Validate button 

@@ -48,9 +48,9 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTNote;
-import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.extension.event.HasDocumentEvent;
 import com.openkm.frontend.client.extension.event.HasFolderEvent;
+import com.openkm.frontend.client.extension.general.RPCService;
 import com.openkm.frontend.client.service.OKMNoteService;
 import com.openkm.frontend.client.service.OKMNoteServiceAsync;
 import com.openkm.frontend.client.util.OKMBundleResources;
@@ -372,7 +372,7 @@ public class Notes extends Composite {
 	 */
 	private void addNote() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) noteService;
-		endPoint.setServiceEntryPoint(Config.NoteService);
+		endPoint.setServiceEntryPoint(RPCService.NoteService);
 		String path = "";
 		if (document!=null) {
 			path = document.getPath();
@@ -434,7 +434,7 @@ public class Notes extends Composite {
 	 */
 	private void removeNote(final String notePath, final int row) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) noteService;
-		endPoint.setServiceEntryPoint(Config.NoteService);
+		endPoint.setServiceEntryPoint(RPCService.NoteService);
 		noteService.remove(notePath, new AsyncCallback<Object>() {
 			@Override
 			public void onSuccess(Object result) {
@@ -486,7 +486,7 @@ public class Notes extends Composite {
 	 */
 	private void setNote(String notePath, final String text, final int row) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) noteService;
-		endPoint.setServiceEntryPoint(Config.NoteService);
+		endPoint.setServiceEntryPoint(RPCService.NoteService);
 		noteService.set(notePath, text, new AsyncCallback<Object>() {
 			@Override
 			public void onSuccess(Object result) {

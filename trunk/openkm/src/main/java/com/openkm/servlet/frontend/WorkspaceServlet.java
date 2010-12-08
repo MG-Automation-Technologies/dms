@@ -54,7 +54,7 @@ import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTLanguage;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.GWTWorkspace;
-import com.openkm.frontend.client.config.ErrorCode;
+import com.openkm.frontend.client.extension.general.ErrorCode;
 import com.openkm.frontend.client.service.OKMWorkspaceService;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.util.GWTUtil;

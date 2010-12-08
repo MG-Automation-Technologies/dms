@@ -33,8 +33,8 @@ import com.google.gwt.widgetideas.client.ProgressBar.TextFormatter;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
-import com.openkm.frontend.client.config.Config;
-import com.openkm.frontend.client.config.ErrorCode;
+import com.openkm.frontend.client.extension.general.ErrorCode;
+import com.openkm.frontend.client.extension.general.RPCService;
 import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMGeneralService;
 import com.openkm.frontend.client.service.OKMGeneralServiceAsync;
@@ -460,7 +460,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		
 		// Set Form details
 		// Set the action to call on submit
-		uploadForm.setAction(Config.FileUploadService);
+		uploadForm.setAction(RPCService.FileUploadService);
 		// Set the form encoding to multipart to indicate a file upload
 		uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
 		// Set the method to Post
@@ -807,7 +807,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	
 	private void getFileUploadStatus() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) generalService;
-		endPoint.setServiceEntryPoint(Config.GeneralService);	
+		endPoint.setServiceEntryPoint(RPCService.GeneralService);	
 		generalService.getFileUploadStatus(callbackGetFileUploadStatus);
 	}
 	

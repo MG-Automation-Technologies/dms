@@ -37,7 +37,7 @@ import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.Bookmark;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTBookmark;
-import com.openkm.frontend.client.config.ErrorCode;
+import com.openkm.frontend.client.extension.general.ErrorCode;
 import com.openkm.frontend.client.service.OKMBookmarkService;
 import com.openkm.frontend.client.util.BookmarkComparator;
 import com.openkm.util.GWTUtil;

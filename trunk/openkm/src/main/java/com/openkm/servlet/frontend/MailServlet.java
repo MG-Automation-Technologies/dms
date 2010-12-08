@@ -41,7 +41,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTMail;
-import com.openkm.frontend.client.config.ErrorCode;
+import com.openkm.frontend.client.extension.general.ErrorCode;
 import com.openkm.frontend.client.service.OKMMailService;
 import com.openkm.util.GWTUtil;
 

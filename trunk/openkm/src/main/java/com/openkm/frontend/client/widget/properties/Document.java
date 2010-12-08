@@ -60,8 +60,8 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTKeyword;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.extension.event.HasDocumentEvent;
+import com.openkm.frontend.client.extension.general.RPCService;
 import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
@@ -590,7 +590,7 @@ public class Document extends Composite {
 	public void getVersionHistorySize() {
 		Main.get().mainPanel.desktop.browser.tabMultiple.status.setGetVersionHistorySize();
 		ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
-		endPoint.setServiceEntryPoint(Config.DocumentService);
+		endPoint.setServiceEntryPoint(RPCService.DocumentService);
 		documentService.getVersionHistorySize(document.getPath(), callbackGetVersionHistorySize);
 	}
 	
@@ -599,7 +599,7 @@ public class Document extends Composite {
 	 */
 	public void addKeyword(String keyword) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
-		endPoint.setServiceEntryPoint(Config.PropertyService);
+		endPoint.setServiceEntryPoint(RPCService.PropertyService);
 		propertyService.addKeyword(document.getPath(), keyword, callbackAddKeywords);
 	}
 	
@@ -609,7 +609,7 @@ public class Document extends Composite {
 	public void removeKeyword(String keyword) {
 		Main.get().mainPanel.desktop.browser.tabMultiple.status.setKeywords();
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
-		endPoint.setServiceEntryPoint(Config.PropertyService);
+		endPoint.setServiceEntryPoint(RPCService.PropertyService);
 		propertyService.removeKeyword(document.getPath(), keyword, callbackRemoveKeywords);
 	}
 	
@@ -622,7 +622,7 @@ public class Document extends Composite {
 			drawCategory(category,remove);
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.setCategories();
 			ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
-			endPoint.setServiceEntryPoint(Config.PropertyService);
+			endPoint.setServiceEntryPoint(RPCService.PropertyService);
 			propertyService.addCategory(document.getPath(), category.getUuid(), callbackAddCategory);
 		}
 	}
@@ -633,7 +633,7 @@ public class Document extends Composite {
 	public void removeCategory(String UUID) {
 		Main.get().mainPanel.desktop.browser.tabMultiple.status.setCategories();
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
-		endPoint.setServiceEntryPoint(Config.PropertyService);
+		endPoint.setServiceEntryPoint(RPCService.PropertyService);
 		propertyService.removeCategory(document.getPath(), UUID, callbackRemoveCategory);
 	}
 	

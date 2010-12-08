@@ -36,7 +36,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTQueryParams;
-import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.general.RPCService;
 import com.openkm.frontend.client.service.OKMDashboardService;
 import com.openkm.frontend.client.service.OKMDashboardServiceAsync;
 import com.openkm.frontend.client.service.OKMSearchService;
@@ -221,7 +221,7 @@ public class UserNews extends Composite {
 			status.setFlag_getUserNews();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(Config.DashboardService);
+		endPoint.setServiceEntryPoint(RPCService.DashboardService);
 		dashboardService.getUserSearchs(callbackGetUserSearchs);
 	}
 	
@@ -257,7 +257,7 @@ public class UserNews extends Composite {
 			status.setFlag_deleteSearch();
 			searchIdToDelete = Integer.parseInt(table.getText(getSelectedRow(),2));
 			ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
-			endPoint.setServiceEntryPoint(Config.SearchService);
+			endPoint.setServiceEntryPoint(RPCService.SearchService);
 			if (!getSavedSearch().isShared()) {
 				searchService.deleteSearch(data.get(new Integer(searchIdToDelete)).getId(), callbackDeleteSearch);
 			} else {

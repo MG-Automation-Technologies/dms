@@ -49,12 +49,12 @@ import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPermission;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.ToolBarOption;
-import com.openkm.frontend.client.config.Config;
-import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.extension.event.HasToolBarEvent;
 import com.openkm.frontend.client.extension.event.handler.ToolBarHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasToolBarHandlerExtension;
-import com.openkm.frontend.client.extension.widget.ToolBarButtonExtension;
+import com.openkm.frontend.client.extension.general.ErrorCode;
+import com.openkm.frontend.client.extension.general.RPCService;
+import com.openkm.frontend.client.extension.widget.toolbar.ToolBarButtonExtension;
 import com.openkm.frontend.client.panel.ExtendedDockPanel;
 import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMDocumentService;
@@ -624,11 +624,11 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		if (Main.get().userHome!=null && !Main.get().userHome.getHomePath().equals("")) {
 			if (Main.get().userHome.getHomeType().equals(Bookmark.BOOKMARK_DOCUMENT)) {
 				ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
-				endPoint.setServiceEntryPoint(Config.DocumentService);
+				endPoint.setServiceEntryPoint(RPCService.DocumentService);
 				documentService.isValid( Main.get().userHome.getHomePath() ,callbackIsValidDocument);
 			} else if (Main.get().userHome.getHomeType().equals(Bookmark.BOOKMARK_FOLDER)) {
 				ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-				endPoint.setServiceEntryPoint(Config.FolderService);	
+				endPoint.setServiceEntryPoint(RPCService.FolderService);	
 				folderService.isValid(Main.get().userHome.getHomePath(), callbackIsValidFolder);
 			}
 		}
@@ -2488,7 +2488,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 		if (gwtDocument!= null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-			endPoint.setServiceEntryPoint(Config.PropertyGroupService);	
+			endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
 			propertyGroupService.getAllGroups(gwtDocument.getPath(), callbackGetAllGroups);
 		}
 	}

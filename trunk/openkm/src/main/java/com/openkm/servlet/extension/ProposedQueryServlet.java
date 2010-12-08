@@ -42,7 +42,7 @@ import com.openkm.dao.bean.ProposedQueryReceived;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.extension.GWTProposedQueryReceived;
-import com.openkm.frontend.client.config.ErrorCode;
+import com.openkm.frontend.client.extension.general.ErrorCode;
 import com.openkm.frontend.client.service.extension.OKMProposedQueryService;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.servlet.frontend.OKMRemoteServiceServlet;

@@ -39,7 +39,7 @@ import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.bean.GWTQueryResult;
 import com.openkm.frontend.client.bean.GWTResultSet;
-import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.general.RPCService;
 import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.service.OKMSearchServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
@@ -335,7 +335,7 @@ public class SearchResult extends Composite {
 	public void findPaginated(GWTQueryParams params, int offset, int limit) {
 		status.setFlag_findPaginated();
 		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
-		endPoint.setServiceEntryPoint(Config.SearchService);
+		endPoint.setServiceEntryPoint(RPCService.SearchService);
 		searchService.findPaginated(params, offset, limit, callbackFindPaginated);
 	}
 	
