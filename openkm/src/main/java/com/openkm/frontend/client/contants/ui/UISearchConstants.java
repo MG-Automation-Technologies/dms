@@ -19,27 +19,17 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.util;
-
-import java.util.Comparator;
-import java.util.Date;
-
-import com.openkm.frontend.client.bean.extension.GWTMessageSent;
+package com.openkm.frontend.client.contants.ui;
 
 /**
- * GWTMessageComparator
+ * Defines contants values for the search panels
  * 
  * @author jllort
  *
  */
-public class GWTMessageSentComparator implements Comparator<GWTMessageSent> {
-	private static final Comparator<GWTMessageSent> INSTANCE  = new GWTMessageSentComparator();
+public class UISearchConstants {
 	
-	public static Comparator<GWTMessageSent> getInstance() {
-		return INSTANCE;
-	}
-
-	public int compare(GWTMessageSent arg0, GWTMessageSent arg1) {
-		return ((Date)arg0.getSentDate()).compareTo((Date)arg1.getSentDate());
-	}
+	// Navigator stack panel definition
+	public static final int SEARCH_SAVED 			= 0;
+	public static final int SEARCH_USER_NEWS		= 1;
 }

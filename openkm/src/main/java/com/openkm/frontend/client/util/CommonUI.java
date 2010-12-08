@@ -22,8 +22,8 @@
 package com.openkm.frontend.client.util;
 
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.panel.ExtendedDockPanel;
-import com.openkm.frontend.client.panel.PanelDefinition;
+import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
+import com.openkm.frontend.client.contants.ui.UIDockPanelConstants;
 
 /**
  * @author jllort
@@ -53,22 +53,22 @@ public class CommonUI {
 			}
 			
 			if (found) {
-				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(ExtendedDockPanel.DESKTOP);
+				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(UIDockPanelConstants.DESKTOP);
 				
 				if (path.startsWith(Main.get().mainPanel.desktop.navigator.taxonomyTree.folderRoot.getPath())) {
-					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_TAXONOMY, false);
+					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(UIDesktopConstants.NAVIGATOR_TAXONOMY, false);
 				} else if (path.startsWith(Main.get().mainPanel.desktop.navigator.categoriesTree.folderRoot.getPath())) {
-					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_CATEGORIES, false);
+					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(UIDesktopConstants.NAVIGATOR_CATEGORIES, false);
 				} else if (path.startsWith(Main.get().mainPanel.desktop.navigator.thesaurusTree.folderRoot.getPath())) {
-					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_THESAURUS, false);
+					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(UIDesktopConstants.NAVIGATOR_THESAURUS, false);
 				} else if (path.startsWith(Main.get().mainPanel.desktop.navigator.personalTree.folderRoot.getPath())) {
-					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_PERSONAL, false);
+					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(UIDesktopConstants.NAVIGATOR_PERSONAL, false);
 				} else if (path.startsWith(Main.get().mainPanel.desktop.navigator.templateTree.folderRoot.getPath())) {
-					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_TEMPLATES, false);
+					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(UIDesktopConstants.NAVIGATOR_TEMPLATES, false);
 				} else if (path.startsWith(Main.get().mainPanel.desktop.navigator.trashTree.folderRoot.getPath())) {
-					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_TRASH, false);
+					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(UIDesktopConstants.NAVIGATOR_TRASH, false);
 				} else if (path.startsWith(Main.get().mainPanel.desktop.navigator.mailTree.folderRoot.getPath())) {
-					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_MAIL, false);
+					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(UIDesktopConstants.NAVIGATOR_MAIL, false);
 				}
 				
 				Main.get().activeFolderTree.openAllPathFolder(path, docPath);

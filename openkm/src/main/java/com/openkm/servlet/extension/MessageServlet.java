@@ -57,7 +57,7 @@ import com.openkm.frontend.client.bean.extension.GWTProposedSubscriptionSent;
 import com.openkm.frontend.client.bean.extension.GWTTextMessageSent;
 import com.openkm.frontend.client.extension.general.ErrorCode;
 import com.openkm.frontend.client.service.extension.OKMMessageService;
-import com.openkm.frontend.client.util.GWTMessageSentComparator;
+import com.openkm.frontend.client.util.MessageSentComparator;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.servlet.frontend.OKMRemoteServiceServlet;
 import com.openkm.util.GWTUtil;
@@ -199,7 +199,7 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 				message.setSentDate(gWTproposedSubscriptionSent.getSentDate());
 				messageSentList.add(message);
 			}
-			Collections.sort(messageSentList, GWTMessageSentComparator.getInstance());
+			Collections.sort(messageSentList, MessageSentComparator.getInstance());
 			return messageSentList;
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);

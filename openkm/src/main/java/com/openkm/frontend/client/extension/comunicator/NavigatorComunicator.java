@@ -22,7 +22,7 @@
 package com.openkm.frontend.client.extension.comunicator;
 
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.panel.PanelDefinition;
+import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 
 
 
@@ -49,7 +49,7 @@ public class NavigatorComunicator {
 	 * @return
 	 */
 	public static boolean isTaxonomyShown() {
-		return Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TAXONOMY;
+		return Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TAXONOMY;
 	}
 	
 	/**
@@ -58,7 +58,7 @@ public class NavigatorComunicator {
 	 * @return
 	 */
 	public static boolean isCategoriesShown() {
-		return Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_CATEGORIES;
+		return Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_CATEGORIES;
 	}
 	
 	/**
@@ -67,7 +67,7 @@ public class NavigatorComunicator {
 	 * @return
 	 */
 	public static boolean isThesaurusShown() {
-		return Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_THESAURUS;
+		return Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_THESAURUS;
 	}
 	
 	/**
@@ -76,7 +76,7 @@ public class NavigatorComunicator {
 	 * @return
 	 */
 	public static boolean isTemplatesShown() {
-		return Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TEMPLATES;
+		return Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TEMPLATES;
 	}
 	
 	/**
@@ -85,7 +85,7 @@ public class NavigatorComunicator {
 	 * @return
 	 */
 	public static boolean isPersonalShown() {
-		return Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_PERSONAL;
+		return Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_PERSONAL;
 	}
 	
 	/**
@@ -94,7 +94,7 @@ public class NavigatorComunicator {
 	 * @return
 	 */
 	public static boolean isMailShown() {
-		return Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_MAIL;
+		return Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_MAIL;
 	}
 	
 	/**
@@ -103,6 +103,6 @@ public class NavigatorComunicator {
 	 * @return
 	 */
 	public static boolean isTrashShown() {
-		return Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TRASH;
+		return Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TRASH;
 	}
 }

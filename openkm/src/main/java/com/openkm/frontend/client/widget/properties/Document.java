@@ -60,9 +60,9 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTKeyword;
 import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.extension.event.HasDocumentEvent;
 import com.openkm.frontend.client.extension.general.RPCService;
-import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import com.openkm.frontend.client.service.OKMPropertyService;
@@ -382,10 +382,10 @@ public class Document extends Composite {
 		}
 		
 		// Propose subscription only must be enabled in taxonomy, categories, thesaurus and templates with
-		if (Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TAXONOMY || 
-			Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_CATEGORIES ||
-			Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_THESAURUS ||
-			Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TEMPLATES) {
+		if (Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TAXONOMY || 
+			Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_CATEGORIES ||
+			Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_THESAURUS ||
+			Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TEMPLATES) {
 			proposeSubscribeImage.setVisible(true);
 		} else {
 			proposeSubscribeImage.setVisible(false);
@@ -422,8 +422,8 @@ public class Document extends Composite {
 		
 		// Some preoperties only must be visible on taxonomy or trash view
 		int actualView = Main.get().mainPanel.desktop.navigator.getStackIndex();
-		if (actualView==PanelDefinition.NAVIGATOR_TAXONOMY || actualView==PanelDefinition.NAVIGATOR_TRASH ||
-			actualView==PanelDefinition.NAVIGATOR_THESAURUS || actualView==PanelDefinition.NAVIGATOR_CATEGORIES){
+		if (actualView==UIDesktopConstants.NAVIGATOR_TAXONOMY || actualView==UIDesktopConstants.NAVIGATOR_TRASH ||
+			actualView==UIDesktopConstants.NAVIGATOR_THESAURUS || actualView==UIDesktopConstants.NAVIGATOR_CATEGORIES){
 			tableProperties.getCellFormatter().setVisible(7,0,true);
 			tableProperties.getCellFormatter().setVisible(7,1,true);
 			tableProperties.getCellFormatter().setVisible(9,0,true);
@@ -440,7 +440,7 @@ public class Document extends Composite {
 		}
 		
 		// Some data must not be visible on personal view
-		if (actualView==PanelDefinition.NAVIGATOR_PERSONAL) {
+		if (actualView==UIDesktopConstants.NAVIGATOR_PERSONAL) {
 			subcribedUsersText.setVisible(false);
 			tableSubscribedUsers.setVisible(false);
 			tableSubscribedCategories.setVisible(false);
@@ -669,7 +669,7 @@ public class Document extends Composite {
 			removeKeyword(keyword);
 			Main.get().mainPanel.dashboard.keyMapDashboard.decreaseKeywordRate(keyword);
 			drawTagCloud(document.getKeywords());
-			if (Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_THESAURUS) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_THESAURUS) {
 				GWTFolder folder = ((GWTFolder) Main.get().activeFolderTree.actualItem.getUserObject());
 				// When remove the keyword for which are browsing must refreshing filebrowser view
 				if (folder.getPath().substring(folder.getPath().lastIndexOf("/")+1).replace(" ", "_").equals(keyword)) {

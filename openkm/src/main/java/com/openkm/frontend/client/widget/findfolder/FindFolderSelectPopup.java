@@ -49,8 +49,8 @@ import com.openkm.frontend.client.bean.GWTPropertyParams;
 import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.bean.GWTQueryResult;
 import com.openkm.frontend.client.bean.GWTResultSet;
+import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.extension.general.RPCService;
-import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.service.OKMSearchServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
@@ -109,25 +109,25 @@ public class FindFolderSelectPopup extends DialogBox  {
 					GWTQueryParams gwtParams = new GWTQueryParams();
 					int actualView = Main.get().mainPanel.desktop.navigator.stackPanel.getStackIndex();
 					switch (actualView){
-						case PanelDefinition.NAVIGATOR_TAXONOMY:
+						case UIDesktopConstants.NAVIGATOR_TAXONOMY:
 							gwtParams.setPath(Main.get().taxonomyRootFolder.getPath());
 							break;
-						case PanelDefinition.NAVIGATOR_CATEGORIES:
+						case UIDesktopConstants.NAVIGATOR_CATEGORIES:
 							gwtParams.setPath(Main.get().categoriesRootFolder.getPath());
 							break;
-						case PanelDefinition.NAVIGATOR_THESAURUS:
+						case UIDesktopConstants.NAVIGATOR_THESAURUS:
 							gwtParams.setPath(Main.get().thesaurusRootFolder.getPath());
 							break;
-						case PanelDefinition.NAVIGATOR_TEMPLATES:
+						case UIDesktopConstants.NAVIGATOR_TEMPLATES:
 							gwtParams.setPath(Main.get().templatesRootFolder.getPath());
 							break;
-						case PanelDefinition.NAVIGATOR_PERSONAL:
+						case UIDesktopConstants.NAVIGATOR_PERSONAL:
 							gwtParams.setPath(Main.get().personalRootFolder.getPath());
 							break;
-						case PanelDefinition.NAVIGATOR_MAIL:
+						case UIDesktopConstants.NAVIGATOR_MAIL:
 							gwtParams.setPath(Main.get().mailRootFolder.getPath());
 							break;
-						case PanelDefinition.NAVIGATOR_TRASH:
+						case UIDesktopConstants.NAVIGATOR_TRASH:
 							gwtParams.setPath(Main.get().trashRootFolder.getPath());
 							break;
 					}

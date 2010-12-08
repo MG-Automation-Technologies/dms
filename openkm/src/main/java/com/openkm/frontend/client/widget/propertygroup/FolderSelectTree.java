@@ -35,8 +35,8 @@ import com.google.gwt.user.client.ui.TreeItem;
 
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
+import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.extension.general.RPCService;
-import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMFolderService;
 import com.openkm.frontend.client.service.OKMFolderServiceAsync;
 import com.openkm.frontend.client.service.OKMRepositoryService;
@@ -107,7 +107,7 @@ public class FolderSelectTree extends Composite {
 			actualItem.getChild(0).remove();
 		}
 
-		changeView(PanelDefinition.NAVIGATOR_TAXONOMY);
+		changeView(UIDesktopConstants.NAVIGATOR_TAXONOMY);
 	}
 	
 	/**
@@ -122,27 +122,27 @@ public class FolderSelectTree extends Composite {
 		}
 		
 		switch (view){
-			case PanelDefinition.NAVIGATOR_TAXONOMY :
+			case UIDesktopConstants.NAVIGATOR_TAXONOMY :
 				getRoot();
 				break;
 				
-			case PanelDefinition.NAVIGATOR_CATEGORIES :
+			case UIDesktopConstants.NAVIGATOR_CATEGORIES :
 				getCategories();
 				break;
 				
-			case PanelDefinition.NAVIGATOR_TEMPLATES :
+			case UIDesktopConstants.NAVIGATOR_TEMPLATES :
 				getTemplate();
 				break;
 				
-			case PanelDefinition.NAVIGATOR_PERSONAL :
+			case UIDesktopConstants.NAVIGATOR_PERSONAL :
 				getPersonal();
 				break;
 			
-			case PanelDefinition.NAVIGATOR_MAIL :
+			case UIDesktopConstants.NAVIGATOR_MAIL :
 				getMail();
 				break;	
 			
-			case PanelDefinition.NAVIGATOR_TRASH :
+			case UIDesktopConstants.NAVIGATOR_TRASH :
 				getTrash();
 				break;
 		}

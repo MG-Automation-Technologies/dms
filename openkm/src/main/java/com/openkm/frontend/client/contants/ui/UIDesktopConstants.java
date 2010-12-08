@@ -19,15 +19,15 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.panel;
+package com.openkm.frontend.client.contants.ui;
 
 /**
- * Defines contants values for the diferent panels
+ * Defines contants values for the desktop panels
  * 
  * @author jllort
  *
  */
-public class PanelDefinition {
+public class UIDesktopConstants {
 	
 	// Navigator stack panel definition
 	public static final int NAVIGATOR_TAXONOMY 		= 0; // Number indicates ordering
@@ -38,9 +38,6 @@ public class PanelDefinition {
 	public static final int NAVIGATOR_MAIL  		= 5;
 	public static final int NAVIGATOR_TRASH  		= 6;
 	public static final int NAVIGATOR_ALL_CONTEXT 	= 7; // Used to indicate operation to all context ( search ) really it's not a panel
-	public static final int SEARCH_SAVED 			= 0;
-	public static final int SEARCH_USER_NEWS		= 1;
 	public static final int NUMBER_OF_STACKS 		= 7;
-	public static final int STACK_HEIGHT     		= 22;
-	
+	public static final int STACK_HEIGHT     		= 22;	
 }

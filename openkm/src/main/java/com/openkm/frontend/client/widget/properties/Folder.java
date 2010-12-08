@@ -38,7 +38,7 @@ import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.openkm.extension.frontend.client.widget.messaging.MessagingToolBarBox;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.panel.PanelDefinition;
+import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
 
@@ -208,8 +208,8 @@ public class Folder extends Composite {
 		// Some preoperties only must be visible on taxonomy or trash view
 		int actualView = Main.get().mainPanel.desktop.navigator.getStackIndex();
 		switch(actualView) {
-			case PanelDefinition.NAVIGATOR_TAXONOMY:   // Some preperties only must be visible on taxonomy or trash view
-			case PanelDefinition.NAVIGATOR_TRASH:
+			case UIDesktopConstants.NAVIGATOR_TAXONOMY:   // Some preperties only must be visible on taxonomy or trash view
+			case UIDesktopConstants.NAVIGATOR_TRASH:
 				tableSubscribedUsers.setVisible(true);
 				tableProperties.getRowFormatter().setVisible(4, true); // Is user subscribed
 				tableProperties.getRowFormatter().setVisible(5, true); // Number of folders
@@ -217,15 +217,15 @@ public class Folder extends Composite {
 				tableProperties.getRowFormatter().setVisible(7, true); // Number of e-mails
 				break;
 				
-			case PanelDefinition.NAVIGATOR_THESAURUS:
-			case PanelDefinition.NAVIGATOR_CATEGORIES:
+			case UIDesktopConstants.NAVIGATOR_THESAURUS:
+			case UIDesktopConstants.NAVIGATOR_CATEGORIES:
 				tableSubscribedUsers.setVisible(true);
 				tableProperties.getRowFormatter().setVisible(4, false);
 				tableProperties.getRowFormatter().setVisible(5, true);
 				tableProperties.getRowFormatter().setVisible(6, true);
 				tableProperties.getRowFormatter().setVisible(7, false);
 				break;
-			case PanelDefinition.NAVIGATOR_MAIL:
+			case UIDesktopConstants.NAVIGATOR_MAIL:
 				tableSubscribedUsers.setVisible(false);
 				tableProperties.getRowFormatter().setVisible(4, false);
 				tableProperties.getRowFormatter().setVisible(5, true);
@@ -233,7 +233,7 @@ public class Folder extends Composite {
 				tableProperties.getRowFormatter().setVisible(7, false);
 				break;
 		
-			case PanelDefinition.NAVIGATOR_PERSONAL:
+			case UIDesktopConstants.NAVIGATOR_PERSONAL:
 				tableSubscribedUsers.setVisible(false); // Some data must not be visible on personal view
 				tableProperties.getRowFormatter().setVisible(4, false);
 				tableProperties.getRowFormatter().setVisible(5, true); // Number of folders
@@ -243,8 +243,8 @@ public class Folder extends Composite {
 		}
 		
 		// Propose subscription only must be enabled in taxonomy, categories, thesaurus and templates with
-		if (Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TAXONOMY || 
-			Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TEMPLATES) {
+		if (Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TAXONOMY || 
+			Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TEMPLATES) {
 			proposeSubscribeImage.setVisible(true);
 		} else {
 			proposeSubscribeImage.setVisible(false);

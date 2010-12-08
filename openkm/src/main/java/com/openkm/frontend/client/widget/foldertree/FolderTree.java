@@ -37,9 +37,9 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.extension.general.ErrorCode;
 import com.openkm.frontend.client.extension.general.RPCService;
-import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import com.openkm.frontend.client.service.OKMFolderService;
@@ -590,7 +590,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	public void confirmDelete() {
 		// In categories stack view, must not fire deleting if user view some
 		// document
-		if (!(Main.get().mainPanel.desktop.navigator.getStackIndex() == PanelDefinition.NAVIGATOR_CATEGORIES && Main
+		if (!(Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_CATEGORIES && Main
 				.get().mainPanel.desktop.browser.fileBrowser.hasRows())) {
 			Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_DELETE_FOLDER);
 			Main.get().confirmPopup.show();
@@ -958,7 +958,7 @@ public class FolderTree extends Composite implements OriginPanel {
 			menuPopup.evaluateMenuOptions();
 			menuPopup.setPopupPosition(tree.mouseX, tree.mouseY);
 			// In thesaurus view must not be showed the menu popup
-			if (Main.get().mainPanel.desktop.navigator.getStackIndex() != PanelDefinition.NAVIGATOR_THESAURUS ) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_THESAURUS ) {
 				menuPopup.show();
 			}
 		}
@@ -968,9 +968,9 @@ public class FolderTree extends Composite implements OriginPanel {
 		// and root item is not dragable
 		// On trash drag and drop is always disabled
 		if (tree.isDragged() && folderAction == ACTION_NONE && !actualItem.equals(rootItem) && 
-			Main.get().mainPanel.desktop.navigator.getStackIndex() != PanelDefinition.NAVIGATOR_CATEGORIES &&
-			Main.get().mainPanel.desktop.navigator.getStackIndex() != PanelDefinition.NAVIGATOR_THESAURUS &&
-			Main.get().mainPanel.desktop.navigator.getStackIndex() != PanelDefinition.NAVIGATOR_TRASH) {
+			Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_CATEGORIES &&
+			Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_THESAURUS &&
+			Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_TRASH) {
 			Main.get().dragable.show(actualItem.getHTML(), OriginPanel.TREE_ROOT);
 			tree.unsetDraged();
 		}

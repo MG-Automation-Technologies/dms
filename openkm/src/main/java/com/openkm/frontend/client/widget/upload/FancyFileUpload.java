@@ -33,9 +33,9 @@ import com.google.gwt.widgetideas.client.ProgressBar.TextFormatter;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
+import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.extension.general.ErrorCode;
 import com.openkm.frontend.client.extension.general.RPCService;
-import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMGeneralService;
 import com.openkm.frontend.client.service.OKMGeneralServiceAsync;
 import com.openkm.frontend.client.util.Util;
@@ -377,7 +377,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			getAllUsers();
 			
 			// On on root stack panel enabled must be enabled notify to user option
-			if (Main.get().mainPanel.desktop.navigator.getStackIndex() != PanelDefinition.NAVIGATOR_TAXONOMY) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_TAXONOMY) {
 				hNotifyPanel.setVisible(false);
 			} else {
 				hNotifyPanel.setVisible(true);

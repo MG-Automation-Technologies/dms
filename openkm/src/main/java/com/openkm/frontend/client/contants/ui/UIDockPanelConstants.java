@@ -1,4 +1,5 @@
 /**
+ *  OpenKM, Open Document Management System (http://www.openkm.com)
  *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
@@ -18,20 +19,19 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.extension.ui;
+package com.openkm.frontend.client.contants.ui;
 
 /**
+ * Defines contants values for the dockpanel
+ * 
  * @author jllort
  *
  */
-public class UIMenuConstants {
+public class UIDockPanelConstants {
 	
-	// MENU CONTANTS
-	public static final int NEW_MENU			= -1;
-	// MAIN MENU
-	public static final int MAIN_MENU_FILE 		= 0;
-	public static final int MAIN_MENU_EDIT 		= 1;
-	public static final int MAIN_MENU_TOOLS 	= 2;
-	public static final int MAIN_MENU_BOOKMARS 	= 3;
-	public static final int MAIN_MENU_HELP 		= 4;
+	public static final int DESKTOP 		= 0;
+	public static final int SEARCH 			= 1;
+	public static final int DASHBOARD		= 2;
+	public static final int ADMINISTRATION	= 3;
+	public static final int EXTENSIONS 		= 4;	
 }
