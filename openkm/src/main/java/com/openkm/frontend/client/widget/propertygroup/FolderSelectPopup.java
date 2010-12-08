@@ -68,12 +68,6 @@ public class FolderSelectPopup extends DialogBox  {
 	private boolean templatesVisible = false;
 	private boolean personalVisible = false;
 	private boolean mailVisible		= false;
-	private int posTaxonomy = 0;
-	private int posCategories = 0;
-	private int posThesaurus = 0;
-	private int posTemplates = 0;
-	private int posPersonal = 0;
-	private int posMail = 0;
 	
 	/**
 	 * FolderSelectPopup
@@ -212,27 +206,20 @@ public class FolderSelectPopup extends DialogBox  {
 		mailVisible = workspace.isStackMailVisible();
 		
 		removeAllContextListItems();
-		int count = 0;
-		posTaxonomy = count++;
 		contextListBox.addItem(Main.i18n("leftpanel.label.taxonomy"),""+UIDesktopConstants.NAVIGATOR_TAXONOMY);
 		if (categoriesVisible) {
-			posCategories = count++;
 			contextListBox.addItem(Main.i18n("leftpanel.label.categories"),""+UIDesktopConstants.NAVIGATOR_CATEGORIES);
 		}
 		if (thesaurusVisible) {
-			posThesaurus = count++;
 			contextListBox.addItem(Main.i18n("leftpanel.label.thesaurus"),""+UIDesktopConstants.NAVIGATOR_THESAURUS);
 		}
 		if (templatesVisible) {
-			posTemplates = count++;
 			contextListBox.addItem(Main.i18n("leftpanel.label.templates"),""+UIDesktopConstants.NAVIGATOR_TEMPLATES);
 		}
-		if (personalVisible) {
-			posPersonal = count++;			
+		if (personalVisible) {	
 			contextListBox.addItem(Main.i18n("leftpanel.label.my.documents"),""+UIDesktopConstants.NAVIGATOR_PERSONAL);
 		}
 		if (mailVisible) {
-			posMail = count++;
 			contextListBox.addItem(Main.i18n("leftpanel.label.mail"),""+UIDesktopConstants.NAVIGATOR_MAIL);
 		}
 		
@@ -256,37 +243,5 @@ public class FolderSelectPopup extends DialogBox  {
 		while (contextListBox.getItemCount()>0) {
 			contextListBox.removeItem(0);
 		}
-	}
-	
-	/**
-	 * showCategories
-	 */
-	private void showCategories() {
-		categoriesVisible = true;
-	}
-	
-	/**
-	 * showThesaurus
-	 */
-	private void showThesaurus() {
-		thesaurusVisible = true;
-	}
-	
-	private void showTemplates() {
-		templatesVisible = true;
-	}
-	
-	/**
-	 * showPersonal
-	 */
-	private void showPersonal() {
-		personalVisible = true;
-	}
-	
-	/**
-	 * showMail
-	 */
-	private void showMail() {
-		mailVisible = true;
 	}
 }
