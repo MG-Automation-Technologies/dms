@@ -60,10 +60,10 @@ public class ExtendedDockPanel extends Composite {
 	
 	// Workspace constants
 //	public static final int DESKTOP 		= 0;
-	public static final int SEARCH 			= 1;
-	public static final int DASHBOARD		= 2;
-	public static final int ADMINISTRATION	= 3;
-	public static final int EXTENSIONS 		= 4;
+//	public static final int SEARCH 			= 1;
+//	public static final int DASHBOARD		= 2;
+//	public static final int ADMINISTRATION	= 3;
+//	public static final int EXTENSIONS 		= 4;
 	
 	public DockPanel dockPanel;
 	
@@ -159,23 +159,23 @@ public class ExtendedDockPanel extends Composite {
 				actualView = workspace;
 				break;
 				
-			case SEARCH :
-				Main.get().mainPanel.topPanel.toolBar.changeView(0, SEARCH);
+			case UIDockPanelConstants.SEARCH:
+				Main.get().mainPanel.topPanel.toolBar.changeView(0, UIDockPanelConstants.SEARCH);
 				actualView = workspace;
 				break;
 			
-			case DASHBOARD :
-				Main.get().mainPanel.topPanel.toolBar.changeView(0, DASHBOARD);
+			case UIDockPanelConstants.DASHBOARD :
+				Main.get().mainPanel.topPanel.toolBar.changeView(0, UIDockPanelConstants.DASHBOARD);
 				actualView = workspace;
 				break;
 				
-			case ADMINISTRATION :
-				Main.get().mainPanel.topPanel.toolBar.changeView(0, ADMINISTRATION);
+			case UIDockPanelConstants.ADMINISTRATION :
+				Main.get().mainPanel.topPanel.toolBar.changeView(0, UIDockPanelConstants.ADMINISTRATION);
 				actualView = workspace;
 				break;
 			
 			default:
-				Main.get().mainPanel.topPanel.toolBar.changeView(0, EXTENSIONS);
+				Main.get().mainPanel.topPanel.toolBar.changeView(0, UIDockPanelConstants.EXTENSIONS);
 				actualView = workspace;
 		}
 		enableView();
@@ -187,15 +187,15 @@ public class ExtendedDockPanel extends Composite {
 				dockPanel.remove(desktop);
 				break;
 				
-			case SEARCH :
+			case UIDockPanelConstants.SEARCH :
 				dockPanel.remove(search);
 				break;
 				
-			case DASHBOARD:
+			case UIDockPanelConstants.DASHBOARD:
 				dockPanel.remove(dashboard);
 				break;
 			
-			case ADMINISTRATION:
+			case UIDockPanelConstants.ADMINISTRATION:
 				dockPanel.remove(administration);
 				break;
 			
@@ -212,16 +212,16 @@ public class ExtendedDockPanel extends Composite {
 				desktop.refreshSpliterAfterAdded();
 				break;
 				
-			case SEARCH :
+			case UIDockPanelConstants.SEARCH :
 				dockPanel.add(search,DockPanel.CENTER);
 				search.refreshSpliterAfterAdded();
 				break;
 		
-			case DASHBOARD :
+			case UIDockPanelConstants.DASHBOARD :
 				dockPanel.add(dashboard,DockPanel.CENTER);
 				break;
 			
-			case ADMINISTRATION :
+			case UIDockPanelConstants.ADMINISTRATION :
 				dockPanel.add(administration,DockPanel.CENTER);
 				break;
 			

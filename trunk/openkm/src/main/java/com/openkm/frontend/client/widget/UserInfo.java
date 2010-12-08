@@ -16,8 +16,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.contants.service.RPCService;
+import com.openkm.frontend.client.contants.ui.UIDockPanelConstants;
 import com.openkm.frontend.client.extension.widget.userinfo.UserInfoExtension;
-import com.openkm.frontend.client.panel.ExtendedDockPanel;
 import com.openkm.frontend.client.service.OKMChatService;
 import com.openkm.frontend.client.service.OKMChatServiceAsync;
 import com.openkm.frontend.client.util.OKMBundleResources;
@@ -119,7 +119,7 @@ public class UserInfo extends Composite {
 		imgLockedDocuments.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(ExtendedDockPanel.DASHBOARD);
+				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(UIDockPanelConstants.DASHBOARD);
 				Main.get().mainPanel.dashboard.horizontalToolBar.showUserView();
 			}
 		});
@@ -127,7 +127,7 @@ public class UserInfo extends Composite {
 		imgCheckoutDocuments.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(ExtendedDockPanel.DASHBOARD);
+				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(UIDockPanelConstants.DASHBOARD);
 				Main.get().mainPanel.dashboard.horizontalToolBar.showUserView();
 			}
 		});
@@ -135,7 +135,7 @@ public class UserInfo extends Composite {
 		imgSubscriptions.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(ExtendedDockPanel.DASHBOARD);
+				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(UIDockPanelConstants.DASHBOARD);
 				Main.get().mainPanel.dashboard.horizontalToolBar.showUserView();
 			}
 		});
@@ -143,7 +143,7 @@ public class UserInfo extends Composite {
 		imgNewsDocuments.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(ExtendedDockPanel.DASHBOARD);
+				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(UIDockPanelConstants.DASHBOARD);
 				Main.get().mainPanel.dashboard.horizontalToolBar.showNewsView();
 			}
 		});
@@ -151,7 +151,7 @@ public class UserInfo extends Composite {
 		imgWorkflows.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(ExtendedDockPanel.DASHBOARD);
+				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(UIDockPanelConstants.DASHBOARD);
 				Main.get().mainPanel.dashboard.horizontalToolBar.showWorkflowView();
 			}
 		});
