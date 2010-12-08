@@ -55,7 +55,7 @@ import com.openkm.frontend.client.bean.extension.GWTMessageSent;
 import com.openkm.frontend.client.bean.extension.GWTProposedQuerySent;
 import com.openkm.frontend.client.bean.extension.GWTProposedSubscriptionSent;
 import com.openkm.frontend.client.bean.extension.GWTTextMessageSent;
-import com.openkm.frontend.client.extension.general.ErrorCode;
+import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.extension.OKMMessageService;
 import com.openkm.frontend.client.util.MessageSentComparator;
 import com.openkm.principal.PrincipalAdapterException;

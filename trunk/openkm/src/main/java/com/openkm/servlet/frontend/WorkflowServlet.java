@@ -42,7 +42,7 @@ import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTProcessDefinition;
 import com.openkm.frontend.client.bean.GWTTaskInstance;
-import com.openkm.frontend.client.extension.general.ErrorCode;
+import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.OKMWorkflowService;
 import com.openkm.util.GWTUtil;
 

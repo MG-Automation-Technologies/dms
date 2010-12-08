@@ -19,7 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.extension.general;
+package com.openkm.frontend.client.contants.service;
 
 /**
  * Error code to determine more exactly by administrator the error cause

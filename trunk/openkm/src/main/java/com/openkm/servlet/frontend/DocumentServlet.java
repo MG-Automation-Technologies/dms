@@ -50,7 +50,7 @@ import com.openkm.dao.bean.QueryParams;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTVersion;
-import com.openkm.frontend.client.extension.general.ErrorCode;
+import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.util.DocumentComparator;
 import com.openkm.util.GWTUtil;

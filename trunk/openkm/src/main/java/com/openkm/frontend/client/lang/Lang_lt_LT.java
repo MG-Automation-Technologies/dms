@@ -23,7 +23,7 @@ package com.openkm.frontend.client.lang;
 
 import java.util.HashMap;
 
-import com.openkm.frontend.client.extension.general.ErrorCode;
+import com.openkm.frontend.client.contants.service.ErrorCode;
 
 /**
  * Lithuanian (Lithuania)

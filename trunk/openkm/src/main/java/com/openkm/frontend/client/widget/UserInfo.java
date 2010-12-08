@@ -15,7 +15,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.extension.general.RPCService;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.extension.widget.userinfo.UserInfoExtension;
 import com.openkm.frontend.client.panel.ExtendedDockPanel;
 import com.openkm.frontend.client.service.OKMChatService;

@@ -33,7 +33,7 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTBookmark;
-import com.openkm.frontend.client.extension.general.RPCService;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMBookmarkService;
 import com.openkm.frontend.client.service.OKMBookmarkServiceAsync;
 import com.openkm.frontend.client.service.OKMUserConfigService;

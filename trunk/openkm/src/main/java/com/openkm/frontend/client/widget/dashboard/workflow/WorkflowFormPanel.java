@@ -70,7 +70,7 @@ import com.openkm.frontend.client.bean.GWTSelect;
 import com.openkm.frontend.client.bean.GWTTaskInstance;
 import com.openkm.frontend.client.bean.GWTTextArea;
 import com.openkm.frontend.client.bean.GWTWorkflowComment;
-import com.openkm.frontend.client.extension.general.RPCService;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMRepositoryService;
 import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
 import com.openkm.frontend.client.service.OKMWorkflowService;
