@@ -168,7 +168,7 @@ public class SearchIn extends Composite {
 	private String personalContextValue = "";
 	private String mailContextValue = "";
 	private String templatesContextValue = "";
-	private String taxonomyContextValue = "";
+//	private String taxonomyContextValue = "";
 	
 	/**
 	 * SearchIn
@@ -1233,7 +1233,7 @@ public class SearchIn extends Composite {
 	public void setContextValue(String contextValue, int stackView){
 		switch (stackView) {
 		 	case UIDesktopConstants.NAVIGATOR_TAXONOMY:
-		 		taxonomyContextValue = contextValue;
+//		 		taxonomyContextValue = contextValue;
 		 		context.setValue(posTaxonomy,contextValue);
 		 		break;
 		 	
