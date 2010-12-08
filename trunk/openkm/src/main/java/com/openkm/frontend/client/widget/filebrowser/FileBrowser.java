@@ -42,6 +42,7 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
+import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.extension.event.HasDocumentEvent;
 import com.openkm.frontend.client.extension.event.HasFolderEvent;
 import com.openkm.frontend.client.extension.event.HasMailEvent;
@@ -52,7 +53,6 @@ import com.openkm.frontend.client.extension.event.hashandler.HasDocumentHandlerE
 import com.openkm.frontend.client.extension.event.hashandler.HasFolderHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasMailHandlerExtension;
 import com.openkm.frontend.client.extension.general.RPCService;
-import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import com.openkm.frontend.client.service.OKMFolderService;
@@ -122,7 +122,7 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 	private String initialRowValueName = ""; // Used on rename to preserve initial value name
 	private GWTFolder tmpFolder;
 	public int fileBrowserAction = ACTION_NONE;  // To control rename and create folder actions
-	private int actualView = PanelDefinition.NAVIGATOR_TAXONOMY; // Used to indicate the actual view
+	private int actualView = UIDesktopConstants.NAVIGATOR_TAXONOMY; // Used to indicate the actual view
 	private HashMap<String, String> viewValues;
 	private boolean createdFromTemplate = false;
 	private int numberOfFolders = 0;
@@ -134,7 +134,7 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 	
 	public FileBrowser() {
 		// Sets the actual view and view values hashMap object
-		actualView = PanelDefinition.NAVIGATOR_TAXONOMY; 
+		actualView = UIDesktopConstants.NAVIGATOR_TAXONOMY; 
 		viewValues = new HashMap<String, String>();
 		docHandlerExtensionList = new ArrayList<DocumentHandlerExtension>();
 		folderHandlerExtensionList = new ArrayList<FolderHandlerExtension>();
@@ -407,8 +407,8 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagDocumentChilds();
 			
 			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS);
-			if (Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS &&
-				Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_CATEGORIES) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_THESAURUS &&
+				Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_CATEGORIES) {
 				getMailChilds(fldId);
 			} else {
 				selectSelectedRowInTable();
@@ -899,8 +899,8 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 	 */
 	public void getFolderChilds(String fldId) {
 		// In thesaurus and categories view must not be showed folders only documents
-		if (Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS &&
-			Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_CATEGORIES) {
+		if (Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_THESAURUS &&
+			Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_CATEGORIES) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
 			endPoint.setServiceEntryPoint(RPCService.FolderService);	
 			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagFolderChilds();		
@@ -973,33 +973,33 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 		MenuPopup menuPopup = null;
 		// The browser menu depends on actual view
 		switch(actualView){
-			case PanelDefinition.NAVIGATOR_TAXONOMY:
+			case UIDesktopConstants.NAVIGATOR_TAXONOMY:
 				menuPopup = taxonomyMenuPopup;
 				break;
 				
-			case PanelDefinition.NAVIGATOR_CATEGORIES:
+			case UIDesktopConstants.NAVIGATOR_CATEGORIES:
 				menuPopup = categoriesMenuPopup;
 				break;
 				
-			case PanelDefinition.NAVIGATOR_THESAURUS:
+			case UIDesktopConstants.NAVIGATOR_THESAURUS:
 				menuPopup = thesaurusMenuPopup;
 				break;
 				
-			case PanelDefinition.NAVIGATOR_TRASH:
+			case UIDesktopConstants.NAVIGATOR_TRASH:
 				// Must substract top position from Y Screen Position
 				trashMenuPopup.setPopupPosition(table.getMouseX(), table.getMouseY());
 				trashMenuPopup.show();
 				break;
 				
-			case PanelDefinition.NAVIGATOR_TEMPLATES:
+			case UIDesktopConstants.NAVIGATOR_TEMPLATES:
 				menuPopup = templatesMenuPopup;
 				break;
 			
-			case PanelDefinition.NAVIGATOR_PERSONAL:
+			case UIDesktopConstants.NAVIGATOR_PERSONAL:
 				menuPopup = personalMenuPopup;
 				break;
 				
-			case PanelDefinition.NAVIGATOR_MAIL:
+			case UIDesktopConstants.NAVIGATOR_MAIL:
 				menuPopup = mailMenuPopup;
 				break;
 		}
@@ -1426,7 +1426,7 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 	public void changeView(int view){
 		// Saves actual view values on hashMap
 		switch (actualView) {
-			case PanelDefinition.NAVIGATOR_TAXONOMY:
+			case UIDesktopConstants.NAVIGATOR_TAXONOMY:
 				if (table.getSelectedRow()>0){
 					viewValues.put("view_root:selectedRowId", table.getSelectedId());
 					table.resetSelectedRows();
@@ -1437,7 +1437,7 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 				}
 				break;
 				
-			case PanelDefinition.NAVIGATOR_TRASH:
+			case UIDesktopConstants.NAVIGATOR_TRASH:
 				if (table.getSelectedRow()>0){
 					viewValues.put("view_trash:selectedRowId", table.getSelectedId());
 					table.resetSelectedRows();
@@ -1448,7 +1448,7 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 				}
 				break;
 			
-			case PanelDefinition.NAVIGATOR_TEMPLATES:
+			case UIDesktopConstants.NAVIGATOR_TEMPLATES:
 				if (table.getSelectedRow()>0){
 					viewValues.put("view_templates:selectedRowId", table.getSelectedId());
 					table.resetSelectedRows();
@@ -1459,7 +1459,7 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 				}
 				break;
 			
-			case PanelDefinition.NAVIGATOR_PERSONAL:
+			case UIDesktopConstants.NAVIGATOR_PERSONAL:
 				if (table.getSelectedRow()>0){
 					viewValues.put("view_my_documents:selectedRowId", table.getSelectedId());
 					table.resetSelectedRows();
@@ -1470,7 +1470,7 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 				}
 				break;
 				
-			case PanelDefinition.NAVIGATOR_MAIL:
+			case UIDesktopConstants.NAVIGATOR_MAIL:
 				if (table.getSelectedRow()>0){
 					viewValues.put("view_mail:selectedRowId", table.getSelectedId());
 					table.resetSelectedRows();
@@ -1487,31 +1487,31 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 		
 		// Restores view values from hashMap
 		switch (view) {
-			case PanelDefinition.NAVIGATOR_TAXONOMY:
+			case UIDesktopConstants.NAVIGATOR_TAXONOMY:
 				if (viewValues.containsKey("view_root:selectedRowId")){
 					Main.get().mainPanel.desktop.browser.fileBrowser.setSelectedRowId((String) viewValues.get("view_root:selectedRowId"));
 				} 
 				break;
 				
-			case PanelDefinition.NAVIGATOR_TRASH:
+			case UIDesktopConstants.NAVIGATOR_TRASH:
 				if (viewValues.containsKey("view_trash:selectedRowId")){
 					Main.get().mainPanel.desktop.browser.fileBrowser.setSelectedRowId((String) viewValues.get("view_trash:selectedRowId"));
 				} 
 				break;
 			
-			case PanelDefinition.NAVIGATOR_TEMPLATES:
+			case UIDesktopConstants.NAVIGATOR_TEMPLATES:
 				if (viewValues.containsKey("view_templates:selectedRowId")){
 					Main.get().mainPanel.desktop.browser.fileBrowser.setSelectedRowId((String) viewValues.get("view_templates:selectedRowId"));
 				} 
 				break;
 			
-			case PanelDefinition.NAVIGATOR_PERSONAL:
+			case UIDesktopConstants.NAVIGATOR_PERSONAL:
 				if (viewValues.containsKey("view_my_documents:selectedRowId")){
 					Main.get().mainPanel.desktop.browser.fileBrowser.setSelectedRowId((String) viewValues.get("view_my_documents:selectedRowId"));
 				} 
 				break;
 			
-			case PanelDefinition.NAVIGATOR_MAIL:
+			case UIDesktopConstants.NAVIGATOR_MAIL:
 				if (viewValues.containsKey("view_mail:selectedRowId")){
 					Main.get().mainPanel.desktop.browser.fileBrowser.setSelectedRowId((String) viewValues.get("view_mail:selectedRowId"));
 				} 
@@ -1541,16 +1541,16 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 		
 		if (selected){
 			switch (actualView) {
-				case PanelDefinition.NAVIGATOR_TAXONOMY:
-				case PanelDefinition.NAVIGATOR_CATEGORIES:
-				case PanelDefinition.NAVIGATOR_THESAURUS:
-				case PanelDefinition.NAVIGATOR_TEMPLATES:
-				case PanelDefinition.NAVIGATOR_PERSONAL:
-				case PanelDefinition.NAVIGATOR_MAIL:
+				case UIDesktopConstants.NAVIGATOR_TAXONOMY:
+				case UIDesktopConstants.NAVIGATOR_CATEGORIES:
+				case UIDesktopConstants.NAVIGATOR_THESAURUS:
+				case UIDesktopConstants.NAVIGATOR_TEMPLATES:
+				case UIDesktopConstants.NAVIGATOR_PERSONAL:
+				case UIDesktopConstants.NAVIGATOR_MAIL:
 					Main.get().activeFolderTree.setSelectedPanel(false);
 					break;
 					
-				case PanelDefinition.NAVIGATOR_TRASH:	
+				case UIDesktopConstants.NAVIGATOR_TRASH:	
 					Main.get().activeFolderTree.setSelectedPanel(false);
 					break;
 			}

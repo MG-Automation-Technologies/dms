@@ -40,7 +40,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTWorkspace;
-import com.openkm.frontend.client.panel.PanelDefinition;
+import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 
 /**
  * FolderSelectPopup
@@ -214,26 +214,26 @@ public class FolderSelectPopup extends DialogBox  {
 		removeAllContextListItems();
 		int count = 0;
 		posTaxonomy = count++;
-		contextListBox.addItem(Main.i18n("leftpanel.label.taxonomy"),""+PanelDefinition.NAVIGATOR_TAXONOMY);
+		contextListBox.addItem(Main.i18n("leftpanel.label.taxonomy"),""+UIDesktopConstants.NAVIGATOR_TAXONOMY);
 		if (categoriesVisible) {
 			posCategories = count++;
-			contextListBox.addItem(Main.i18n("leftpanel.label.categories"),""+PanelDefinition.NAVIGATOR_CATEGORIES);
+			contextListBox.addItem(Main.i18n("leftpanel.label.categories"),""+UIDesktopConstants.NAVIGATOR_CATEGORIES);
 		}
 		if (thesaurusVisible) {
 			posThesaurus = count++;
-			contextListBox.addItem(Main.i18n("leftpanel.label.thesaurus"),""+PanelDefinition.NAVIGATOR_THESAURUS);
+			contextListBox.addItem(Main.i18n("leftpanel.label.thesaurus"),""+UIDesktopConstants.NAVIGATOR_THESAURUS);
 		}
 		if (templatesVisible) {
 			posTemplates = count++;
-			contextListBox.addItem(Main.i18n("leftpanel.label.templates"),""+PanelDefinition.NAVIGATOR_TEMPLATES);
+			contextListBox.addItem(Main.i18n("leftpanel.label.templates"),""+UIDesktopConstants.NAVIGATOR_TEMPLATES);
 		}
 		if (personalVisible) {
 			posPersonal = count++;			
-			contextListBox.addItem(Main.i18n("leftpanel.label.my.documents"),""+PanelDefinition.NAVIGATOR_PERSONAL);
+			contextListBox.addItem(Main.i18n("leftpanel.label.my.documents"),""+UIDesktopConstants.NAVIGATOR_PERSONAL);
 		}
 		if (mailVisible) {
 			posMail = count++;
-			contextListBox.addItem(Main.i18n("leftpanel.label.mail"),""+PanelDefinition.NAVIGATOR_MAIL);
+			contextListBox.addItem(Main.i18n("leftpanel.label.mail"),""+UIDesktopConstants.NAVIGATOR_MAIL);
 		}
 		
 		super.show();

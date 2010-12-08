@@ -39,7 +39,7 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.panel.PanelDefinition;
+import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.OriginPanel;
 
@@ -454,9 +454,9 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 		            
 		            // On trash drag is disabled
 					if (isSelectedRow() && Main.get().mainPanel.desktop.browser.fileBrowser.fileBrowserAction==noAction &&
-						Main.get().mainPanel.desktop.navigator.getStackIndex()!=PanelDefinition.NAVIGATOR_CATEGORIES &&
-						Main.get().mainPanel.desktop.navigator.getStackIndex()!=PanelDefinition.NAVIGATOR_THESAURUS && 
-						Main.get().mainPanel.desktop.navigator.getStackIndex()!=PanelDefinition.NAVIGATOR_TRASH){					
+						Main.get().mainPanel.desktop.navigator.getStackIndex()!=UIDesktopConstants.NAVIGATOR_CATEGORIES &&
+						Main.get().mainPanel.desktop.navigator.getStackIndex()!=UIDesktopConstants.NAVIGATOR_THESAURUS && 
+						Main.get().mainPanel.desktop.navigator.getStackIndex()!=UIDesktopConstants.NAVIGATOR_TRASH){					
 						Main.get().dragable.show(dataTable.getHTML(getSelectedRow(),1)+dataTable.getHTML(getSelectedRow(),2), OriginPanel.FILE_BROWSER);
 					}
 					unsetDraged(); 

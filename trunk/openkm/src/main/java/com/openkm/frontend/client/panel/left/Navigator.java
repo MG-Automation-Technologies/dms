@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.panel.PanelDefinition;
+import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.categories.CategoriesTree;
 import com.openkm.frontend.client.widget.foldertree.Status;
@@ -197,25 +197,25 @@ public class Navigator extends Composite {
 		stackPanel.setSize(""+width, ""+height);
 		// Substract 2 pixels for borders on stackPanel
 		if (stackPanel.isTaxonomyVisible()) {
-			scrollTaxonomyPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+			scrollTaxonomyPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * UIDesktopConstants.STACK_HEIGHT)));
 		}
 		if (stackPanel.isCategoriesVisible()) {
-			scrollCategoriesPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+			scrollCategoriesPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * UIDesktopConstants.STACK_HEIGHT)));
 		}
 		if (stackPanel.isThesaurusVisible()) {
-			scrollThesaurusPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+			scrollThesaurusPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * UIDesktopConstants.STACK_HEIGHT)));
 		}
 		if (stackPanel.isTemplatesVisible()) {
-			scrollTemplatePanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+			scrollTemplatePanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * UIDesktopConstants.STACK_HEIGHT)));
 		}
 		if (stackPanel.isPersonalVisible()) {
-			scrollPersonalPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+			scrollPersonalPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * UIDesktopConstants.STACK_HEIGHT)));
 		}
 		if (stackPanel.isMailVisible()) {
-			scrollMailPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+			scrollMailPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * UIDesktopConstants.STACK_HEIGHT)));
 		}
 		if (stackPanel.isTrashVisible()) {
-			scrollTrashPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+			scrollTrashPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * UIDesktopConstants.STACK_HEIGHT)));
 		}
 	}
 	

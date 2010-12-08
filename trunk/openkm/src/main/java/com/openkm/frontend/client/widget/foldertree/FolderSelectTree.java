@@ -36,8 +36,8 @@ import com.google.gwt.user.client.ui.TreeItem;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.extension.general.RPCService;
-import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMFolderService;
 import com.openkm.frontend.client.service.OKMFolderServiceAsync;
 import com.openkm.frontend.client.service.OKMRepositoryService;
@@ -115,18 +115,18 @@ public class FolderSelectTree extends Composite {
 		int mainPanelView = Main.get().mainPanel.desktop.navigator.getStackIndex();
 		
 		switch (mainPanelView){
-			case PanelDefinition.NAVIGATOR_TAXONOMY :
-			case PanelDefinition.NAVIGATOR_TRASH :
+			case UIDesktopConstants.NAVIGATOR_TAXONOMY :
+			case UIDesktopConstants.NAVIGATOR_TRASH :
 				Main.get().activeFolderTree.folderSelectPopup.enableTaxonomy();
 				getRoot();
 				break;
 			
-			case PanelDefinition.NAVIGATOR_CATEGORIES :
+			case UIDesktopConstants.NAVIGATOR_CATEGORIES :
 				Main.get().activeFolderTree.folderSelectPopup.enableCategories();
 				getCategoriesFolder();
 				break;
 				
-			case PanelDefinition.NAVIGATOR_TEMPLATES :
+			case UIDesktopConstants.NAVIGATOR_TEMPLATES :
 				switch (Main.get().activeFolderTree.folderSelectPopup.getAction()) {
 					case FolderSelectPopup.ACTION_CREATE_FROM_TEMPLATE:
 						Main.get().activeFolderTree.folderSelectPopup.enableTaxonomy();
@@ -141,12 +141,12 @@ public class FolderSelectTree extends Composite {
 				
 				break;
 			
-			case PanelDefinition.NAVIGATOR_PERSONAL :
+			case UIDesktopConstants.NAVIGATOR_PERSONAL :
 				Main.get().activeFolderTree.folderSelectPopup.enableMyDocuments();
 				getPersonal();
 				break;
 			
-			case PanelDefinition.NAVIGATOR_MAIL :
+			case UIDesktopConstants.NAVIGATOR_MAIL :
 				Main.get().activeFolderTree.folderSelectPopup.enableMails();
 				getMail();
 				break;
@@ -165,28 +165,28 @@ public class FolderSelectTree extends Composite {
 		}
 		
 		switch (view){
-			case PanelDefinition.NAVIGATOR_TAXONOMY :
+			case UIDesktopConstants.NAVIGATOR_TAXONOMY :
 				Main.get().activeFolderTree.folderSelectPopup.enableTaxonomy();
-			case PanelDefinition.NAVIGATOR_TRASH :
+			case UIDesktopConstants.NAVIGATOR_TRASH :
 				getRoot();
 				break;
 				
-			case PanelDefinition.NAVIGATOR_CATEGORIES :
+			case UIDesktopConstants.NAVIGATOR_CATEGORIES :
 				Main.get().activeFolderTree.folderSelectPopup.enableCategories();
 				getTemplatesFolder();
 				break;
 				
-			case PanelDefinition.NAVIGATOR_TEMPLATES :
+			case UIDesktopConstants.NAVIGATOR_TEMPLATES :
 				Main.get().activeFolderTree.folderSelectPopup.enableTemplates();
 				getTemplatesFolder();
 				break;
 			
-			case PanelDefinition.NAVIGATOR_PERSONAL :
+			case UIDesktopConstants.NAVIGATOR_PERSONAL :
 				Main.get().activeFolderTree.folderSelectPopup.enableMyDocuments();
 				getPersonal();
 				break;
 				
-			case PanelDefinition.NAVIGATOR_MAIL :
+			case UIDesktopConstants.NAVIGATOR_MAIL :
 				Main.get().activeFolderTree.folderSelectPopup.enableMails();
 				getMail();
 				break;

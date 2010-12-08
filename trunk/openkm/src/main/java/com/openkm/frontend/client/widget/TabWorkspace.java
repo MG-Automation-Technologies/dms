@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TabBar;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.contants.ui.UIDockPanelConstants;
 import com.openkm.frontend.client.extension.event.HasWorkspaceEvent;
 import com.openkm.frontend.client.extension.event.handler.WorkspaceHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasWorkspaceHandlerExtension;
@@ -67,8 +68,8 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 			public void onSelection(SelectionEvent<Integer> event) {
 				int index = indexCorrectedChangeViewIndex(event.getSelectedItem().intValue());
 				switch (index) {
-					case ExtendedDockPanel.DESKTOP :
-						Main.get().mainPanel.setView(ExtendedDockPanel.DESKTOP);
+					case UIDockPanelConstants.DESKTOP :
+						Main.get().mainPanel.setView(UIDockPanelConstants.DESKTOP);
 						Main.get().activeFolderTree.centerActulItemOnScroll(); // Center the actual item every time
 						break;
 						
@@ -141,9 +142,9 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 	 */
 	public void changeSelectedTab(int tabIndex){
 		switch (tabIndex ) {
-			case ExtendedDockPanel.DESKTOP :
-				tabBar.selectTab(ExtendedDockPanel.DESKTOP);
-				Main.get().mainPanel.setView(ExtendedDockPanel.DESKTOP);
+			case UIDockPanelConstants.DESKTOP :
+				tabBar.selectTab(UIDockPanelConstants.DESKTOP);
+				Main.get().mainPanel.setView(UIDockPanelConstants.DESKTOP);
 				break;
 				
 			case ExtendedDockPanel.SEARCH :
@@ -173,7 +174,7 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 	 */
 	public int indexCorrectedChangeViewIndex(int index) {
 		int corrected = index;
-		if (!desktopVisible && corrected>=ExtendedDockPanel.DESKTOP) {
+		if (!desktopVisible && corrected>=UIDockPanelConstants.DESKTOP) {
 			corrected++;
 		}
 		if (!searchVisible && corrected>=ExtendedDockPanel.SEARCH) {

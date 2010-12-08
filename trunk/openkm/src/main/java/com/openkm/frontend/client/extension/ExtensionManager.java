@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.contants.ui.UIMenuConstants;
 import com.openkm.frontend.client.extension.event.handler.DashboardHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.DocumentHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.FolderHandlerExtension;
@@ -34,7 +35,6 @@ import com.openkm.frontend.client.extension.event.handler.NavigatorHandlerExtens
 import com.openkm.frontend.client.extension.event.handler.PropertyGroupHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.ToolBarHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.WorkspaceHandlerExtension;
-import com.openkm.frontend.client.extension.ui.UIMenuConstants;
 import com.openkm.frontend.client.extension.widget.menu.MenuItemExtension;
 import com.openkm.frontend.client.extension.widget.preview.PreviewExtension;
 import com.openkm.frontend.client.extension.widget.tabdocument.TabDocumentExtension;

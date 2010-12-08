@@ -23,7 +23,7 @@ package com.openkm.frontend.client.widget.mail;
 
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.panel.PanelDefinition;
+import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.widget.MenuPopup;
 import com.openkm.frontend.client.widget.foldertree.FolderSelectPopup;
 import com.openkm.frontend.client.widget.foldertree.FolderTree;
@@ -48,7 +48,7 @@ public class MailTree extends FolderTree {
 
 		// Sets the context on list context search values
 		Main.get().repositoryContext.setContextMail(folderRoot.getPath());
-		Main.get().mainPanel.search.searchBrowser.searchIn.setContextValue(folderRoot.getPath(),PanelDefinition.NAVIGATOR_MAIL);
+		Main.get().mainPanel.search.searchBrowser.searchIn.setContextValue(folderRoot.getPath(),UIDesktopConstants.NAVIGATOR_MAIL);
 		
 		actualItem.setUserObject(folderRoot);
 		evaluesFolderIcon(actualItem);			

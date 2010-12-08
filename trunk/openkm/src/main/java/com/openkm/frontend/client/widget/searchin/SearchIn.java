@@ -64,8 +64,9 @@ import com.openkm.frontend.client.bean.GWTPropertyParams;
 import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.bean.GWTSelect;
 import com.openkm.frontend.client.bean.GWTTextArea;
+import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
+import com.openkm.frontend.client.contants.ui.UISearchConstants;
 import com.openkm.frontend.client.extension.general.RPCService;
-import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 import com.openkm.frontend.client.service.OKMSearchService;
@@ -1231,12 +1232,12 @@ public class SearchIn extends Composite {
 	 */
 	public void setContextValue(String contextValue, int stackView){
 		switch (stackView) {
-		 	case PanelDefinition.NAVIGATOR_TAXONOMY:
+		 	case UIDesktopConstants.NAVIGATOR_TAXONOMY:
 		 		taxonomyContextValue = contextValue;
 		 		context.setValue(posTaxonomy,contextValue);
 		 		break;
 		 	
-		 	case PanelDefinition.NAVIGATOR_TEMPLATES:
+		 	case UIDesktopConstants.NAVIGATOR_TEMPLATES:
 		 		templatesContextValue = contextValue;
 		 		if (templatesVisible) {
 		 			posTemplates = context.getItemCount(); // Item count by default is good id, 0 is first item, etc...
@@ -1244,7 +1245,7 @@ public class SearchIn extends Composite {
 		 		}
 		 		break;
 		 		
-		 	case PanelDefinition.NAVIGATOR_PERSONAL:
+		 	case UIDesktopConstants.NAVIGATOR_PERSONAL:
 		 		personalContextValue = contextValue;
 		 		if (personalVisible) {
 		 			posPersonal = context.getItemCount(); 
@@ -1252,7 +1253,7 @@ public class SearchIn extends Composite {
 		 		}
 		 		break;
 		 		
-		 	case PanelDefinition.NAVIGATOR_MAIL:
+		 	case UIDesktopConstants.NAVIGATOR_MAIL:
 		 		mailContextValue = contextValue;
 		 		if (mailVisible) {
 		 			posMail = context.getItemCount(); 
@@ -1260,7 +1261,7 @@ public class SearchIn extends Composite {
 		 		}
 		 		break;
 		 		
-		 	case PanelDefinition.NAVIGATOR_TRASH:
+		 	case UIDesktopConstants.NAVIGATOR_TRASH:
 		 		trashContextValue = contextValue;
 		 		if (trashVisible) {
 		 			posTrash = context.getItemCount(); 
@@ -1331,11 +1332,11 @@ public class SearchIn extends Composite {
 			params.setId(result.intValue());
 			if (userNews) {
 				Main.get().mainPanel.search.historySearch.userNews.addNewSavedSearch(params);
-				Main.get().mainPanel.search.historySearch.stackPanel.showStack(PanelDefinition.SEARCH_USER_NEWS);
+				Main.get().mainPanel.search.historySearch.stackPanel.showStack(UISearchConstants.SEARCH_USER_NEWS);
 				Main.get().mainPanel.dashboard.newsDashboard.getUserSearchs(true);
 			} else {
 				Main.get().mainPanel.search.historySearch.searchSaved.addNewSavedSearch(params);
-				Main.get().mainPanel.search.historySearch.stackPanel.showStack(PanelDefinition.SEARCH_SAVED);
+				Main.get().mainPanel.search.historySearch.stackPanel.showStack(UISearchConstants.SEARCH_SAVED);
 			}
 			
 			searchSavedName.setText(""); // Clean name atfer saved
@@ -1394,15 +1395,15 @@ public class SearchIn extends Composite {
 	public int getSelectedView() {
 		int index = context.getSelectedIndex();
 		if (index==posTaxonomy) {
-			return PanelDefinition.NAVIGATOR_TAXONOMY;
+			return UIDesktopConstants.NAVIGATOR_TAXONOMY;
 		} else if (index==posTemplates) {
-			return PanelDefinition.NAVIGATOR_TEMPLATES;
+			return UIDesktopConstants.NAVIGATOR_TEMPLATES;
 		} else if (index==posPersonal) {
-			return PanelDefinition.NAVIGATOR_PERSONAL;
+			return UIDesktopConstants.NAVIGATOR_PERSONAL;
 		} else if (index==posMail) {
-			return PanelDefinition.NAVIGATOR_MAIL;
+			return UIDesktopConstants.NAVIGATOR_MAIL;
 		} else {
-			return PanelDefinition.NAVIGATOR_TRASH;
+			return UIDesktopConstants.NAVIGATOR_TRASH;
 		}
 	}
 }
