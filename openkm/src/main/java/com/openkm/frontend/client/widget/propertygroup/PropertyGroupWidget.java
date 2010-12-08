@@ -61,10 +61,10 @@ import com.openkm.frontend.client.bean.GWTInput;
 import com.openkm.frontend.client.bean.GWTOption;
 import com.openkm.frontend.client.bean.GWTSelect;
 import com.openkm.frontend.client.bean.GWTTextArea;
-import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.extension.event.HasPropertyGroupEvent;
 import com.openkm.frontend.client.extension.event.handler.PropertyGroupHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasPropertyGroupHandlerExtension;
+import com.openkm.frontend.client.extension.general.RPCService;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
@@ -344,7 +344,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 		}
 
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(Config.PropertyGroupService);	
+		endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
 		propertyGroupService.setProperties(docPath, grpName, formElementList, callbackSetProperties);
 	}
 	
@@ -683,7 +683,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	 */
 	public void getProperties() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(Config.PropertyGroupService);	
+		endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
 		propertyGroupService.getProperties(docPath, grpName, callbackGetProperties);
 	}
 
@@ -692,7 +692,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	 */
 	public void removeGroup() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(Config.PropertyGroupService);	
+		endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
 		propertyGroupService.removeGroup(docPath, grpName, callbackRemoveGroup);
 	}
 	

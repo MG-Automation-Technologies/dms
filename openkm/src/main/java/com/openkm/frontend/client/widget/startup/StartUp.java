@@ -32,8 +32,8 @@ import com.openkm.extension.frontend.client.Customization;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTUserConfig;
-import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.extension.ExtensionManager;
+import com.openkm.frontend.client.extension.general.RPCService;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 import com.openkm.frontend.client.service.OKMGeneralService;
@@ -90,7 +90,7 @@ public class StartUp {
 	 */
 	public void init(){
 		ServiceDefTarget endPoint = (ServiceDefTarget) generalService;
-		endPoint.setServiceEntryPoint(Config.GeneralService);
+		endPoint.setServiceEntryPoint(RPCService.GeneralService);
 		generalService.getEnabledExtensions(new AsyncCallback<List<String>>() {
 			@Override
 			public void onSuccess(List<String> result) {
@@ -257,7 +257,7 @@ public class StartUp {
 	 */
 	public void getTrash() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(Config.RepositoryService);	
+		endPoint.setServiceEntryPoint(RPCService.RepositoryService);	
 		repositoryService.getTrashFolder(callbackGetTrashFolder);
 	}
 	
@@ -266,7 +266,7 @@ public class StartUp {
 	 */
 	public void getPersonal() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(Config.RepositoryService);
+		endPoint.setServiceEntryPoint(RPCService.RepositoryService);
 		repositoryService.getPersonalFolder(callbackGetPersonalFolder);
 	}
 	
@@ -276,7 +276,7 @@ public class StartUp {
 	 */
 	public void getUserHome() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) userConfigService;
-		endPoint.setServiceEntryPoint(Config.UserConfigService);			
+		endPoint.setServiceEntryPoint(RPCService.UserConfigService);			
 		userConfigService.getUserHome(callbackGetUserHome);
 	}
 	
@@ -285,7 +285,7 @@ public class StartUp {
 	 */
 	public void getTemplate() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(Config.RepositoryService);
+		endPoint.setServiceEntryPoint(RPCService.RepositoryService);
 		repositoryService.getTemplatesFolder(callbackGetTemplatesFolder);
 	}
 	
@@ -294,7 +294,7 @@ public class StartUp {
 	 */
 	public void getMail() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(Config.RepositoryService);
+		endPoint.setServiceEntryPoint(RPCService.RepositoryService);
 		repositoryService.getMailFolder(callbackGetMailFolder);
 	}
 	
@@ -303,13 +303,13 @@ public class StartUp {
 	 */
 	public void getThesaurus() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(Config.RepositoryService);
+		endPoint.setServiceEntryPoint(RPCService.RepositoryService);
 		repositoryService.getThesaurusFolder(callbackGetThesaurusFolder);
 	}
 	
 	public void getCategories() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(Config.RepositoryService);
+		endPoint.setServiceEntryPoint(RPCService.RepositoryService);
 		repositoryService.getCategoriesFolder(callbackGetCategoriesFolder);
 	}	
 	
@@ -319,14 +319,14 @@ public class StartUp {
 	 */
 	public void getRoot() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(Config.RepositoryService);	
+		endPoint.setServiceEntryPoint(RPCService.RepositoryService);	
 		repositoryService.getRootFolder(callbackGetRootFolder);
 	}
 	
 	public void startKeepAlive(double scheduleTime) {
 		// KeepAlieve thread
 	    ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-		endPoint.setServiceEntryPoint(Config.AuthService);
+		endPoint.setServiceEntryPoint(RPCService.AuthService);
 		keepAlive = new Timer() {
 			public void run() {
 				authService.keepAlive(callbackKeepAlive);

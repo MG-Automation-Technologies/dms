@@ -64,7 +64,7 @@ import com.openkm.frontend.client.bean.GWTPropertyParams;
 import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.bean.GWTSelect;
 import com.openkm.frontend.client.bean.GWTTextArea;
-import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.general.RPCService;
 import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
@@ -1310,7 +1310,7 @@ public class SearchIn extends Composite {
 	 */
 	public void getAllUsers() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-		endPoint.setServiceEntryPoint(Config.AuthService);	
+		endPoint.setServiceEntryPoint(RPCService.AuthService);	
 		authService.getAllUsers(callbackGetAllUsers);
 	}
 	
@@ -1354,7 +1354,7 @@ public class SearchIn extends Composite {
 	public void saveSearch(GWTQueryParams params, String type) {
 		status.setFlag_saveSearch();
 		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
-		endPoint.setServiceEntryPoint(Config.SearchService);
+		endPoint.setServiceEntryPoint(RPCService.SearchService);
 		searchService.saveSearch(params, type, callbackSaveSearch);
 	}	
 	

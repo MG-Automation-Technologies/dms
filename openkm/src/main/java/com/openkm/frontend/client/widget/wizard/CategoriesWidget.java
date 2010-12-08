@@ -44,7 +44,7 @@ import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.google.gwt.user.client.ui.HTMLTable.RowFormatter;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.general.RPCService;
 import com.openkm.frontend.client.service.OKMPropertyService;
 import com.openkm.frontend.client.service.OKMPropertyServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
@@ -191,7 +191,7 @@ public class CategoriesWidget extends Composite {
 			docCategories.add(category);
 			drawCategory(category,remove);
 			ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
-			endPoint.setServiceEntryPoint(Config.PropertyService);
+			endPoint.setServiceEntryPoint(RPCService.PropertyService);
 			propertyService.addCategory(docPath, category.getUuid(), callbackAddCategory);
 		}
 	}
@@ -201,7 +201,7 @@ public class CategoriesWidget extends Composite {
 	 */
 	public void removeCategory(String UUID) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
-		endPoint.setServiceEntryPoint(Config.PropertyService);
+		endPoint.setServiceEntryPoint(RPCService.PropertyService);
 		propertyService.removeCategory(docPath, UUID, callbackRemoveCategory);
 	}
 	

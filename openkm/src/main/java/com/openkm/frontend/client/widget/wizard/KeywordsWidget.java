@@ -52,7 +52,7 @@ import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.google.gwt.user.client.ui.HTMLTable.RowFormatter;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTKeyword;
-import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.general.RPCService;
 import com.openkm.frontend.client.service.OKMPropertyService;
 import com.openkm.frontend.client.service.OKMPropertyServiceAsync;
 import com.openkm.frontend.client.util.OKMBundleResources;
@@ -348,7 +348,7 @@ public class KeywordsWidget extends Composite {
 	 */
 	public void addKeyword(String keyword) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
-		endPoint.setServiceEntryPoint(Config.PropertyService);
+		endPoint.setServiceEntryPoint(RPCService.PropertyService);
 		propertyService.addKeyword(docPath, keyword, callbackAddKeywords);
 	}
 	
@@ -357,7 +357,7 @@ public class KeywordsWidget extends Composite {
 	 */
 	public void removeKeyword(String keyword) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
-		endPoint.setServiceEntryPoint(Config.PropertyService);
+		endPoint.setServiceEntryPoint(RPCService.PropertyService);
 		propertyService.removeKeyword(docPath, keyword, callbackRemoveKeywords);
 	}
 }

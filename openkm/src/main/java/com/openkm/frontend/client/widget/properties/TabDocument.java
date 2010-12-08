@@ -42,14 +42,14 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTPermission;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
-import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.extension.event.HasDocumentEvent;
 import com.openkm.frontend.client.extension.event.handler.DocumentHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.PropertyGroupHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasDocumentHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasPropertyGroupHandlerExtension;
-import com.openkm.frontend.client.extension.widget.PreviewExtension;
-import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
+import com.openkm.frontend.client.extension.general.RPCService;
+import com.openkm.frontend.client.extension.widget.preview.PreviewExtension;
+import com.openkm.frontend.client.extension.widget.tabdocument.TabDocumentExtension;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
 
@@ -370,7 +370,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	private void getGroups(String docPath) {
 		Main.get().mainPanel.desktop.browser.tabMultiple.status.setGroupProperties();
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(Config.PropertyGroupService);	
+		endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
 		propertyGroupService.getGroups(docPath, callbackGetGroups);
 	}
 	
@@ -507,7 +507,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 				doc.getMimeType().equals("application/x-shockwave-flash") ||  
 				doc.getMimeType().equals("audio/mpeg")) {
 			if (!refreshing) {
-				preview.showMediaFile(Config.DownloadServlet +"?uuid=" + URL.encodeComponent(getDocument().getUuid()), getDocument().getMimeType());
+				preview.showMediaFile(RPCService.DownloadServlet +"?uuid=" + URL.encodeComponent(getDocument().getUuid()), getDocument().getMimeType());
 			}
 		} else if (doc.isConvertibleToDxf()) {
 			PreviewExtension previewExtension = null;
@@ -518,7 +518,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 				}
 			}
 			if (previewExtension!=null) {
-				preview.showPreviewExtension(previewExtension, Config.DownloadServlet +"?uuid=" + URL.encodeComponent(getDocument().getUuid()));
+				preview.showPreviewExtension(previewExtension, RPCService.DownloadServlet +"?uuid=" + URL.encodeComponent(getDocument().getUuid()));
 			} else {
 				// There's no preview
 				preview.showEmbedSWF(doc.getUuid());

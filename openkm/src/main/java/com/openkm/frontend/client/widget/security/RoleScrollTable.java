@@ -42,7 +42,7 @@ import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
 
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.general.RPCService;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 
@@ -448,7 +448,7 @@ public class RoleScrollTable extends Composite {
 		if (path != null) {
 			Main.get().securityPopup.status.setFlag_update();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(Config.AuthService);
+			endPoint.setServiceEntryPoint(RPCService.AuthService);
 			authService.grantRole(path, role, permissions, recursive, callbackGrantRole);
 		}
 	}
@@ -463,7 +463,7 @@ public class RoleScrollTable extends Composite {
 		if (path != null) {
 			Main.get().securityPopup.status.setFlag_update();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(Config.AuthService);	
+			endPoint.setServiceEntryPoint(RPCService.AuthService);	
 			authService.revokeRole(path, role, permissions, recursive, callbackRevokeRole);
 		}
 	}

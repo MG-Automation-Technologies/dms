@@ -32,7 +32,7 @@ import com.openkm.dao.LanguageDAO;
 import com.openkm.dao.bean.Language;
 import com.openkm.dao.bean.Translation;
 import com.openkm.frontend.client.OKMException;
-import com.openkm.frontend.client.config.ErrorCode;
+import com.openkm.frontend.client.extension.general.ErrorCode;
 import com.openkm.frontend.client.service.OKMLanguageService;
 
 /**

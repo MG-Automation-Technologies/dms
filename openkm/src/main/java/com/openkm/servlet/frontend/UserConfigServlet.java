@@ -30,7 +30,7 @@ import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.UserConfig;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTUserConfig;
-import com.openkm.frontend.client.config.ErrorCode;
+import com.openkm.frontend.client.extension.general.ErrorCode;
 import com.openkm.frontend.client.service.OKMUserConfigService;
 import com.openkm.util.GWTUtil;
 

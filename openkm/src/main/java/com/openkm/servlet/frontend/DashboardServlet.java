@@ -47,7 +47,7 @@ import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
 import com.openkm.frontend.client.bean.GWTDashboardFolderResult;
 import com.openkm.frontend.client.bean.GWTDashboardMailResult;
 import com.openkm.frontend.client.bean.GWTQueryParams;
-import com.openkm.frontend.client.config.ErrorCode;
+import com.openkm.frontend.client.extension.general.ErrorCode;
 import com.openkm.frontend.client.service.OKMDashboardService;
 import com.openkm.util.GWTUtil;
 

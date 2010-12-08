@@ -38,11 +38,11 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.extension.event.HasFolderEvent;
 import com.openkm.frontend.client.extension.event.handler.FolderHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasFolderHandlerExtension;
-import com.openkm.frontend.client.extension.widget.TabFolderExtension;
+import com.openkm.frontend.client.extension.general.RPCService;
+import com.openkm.frontend.client.extension.widget.tabfolder.TabFolderExtension;
 import com.openkm.frontend.client.service.OKMRepositoryService;
 import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
 
@@ -236,7 +236,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	 */
 	public void getRoot() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(Config.RepositoryService);	
+		endPoint.setServiceEntryPoint(RPCService.RepositoryService);	
 		repositoryService.getRootFolder(callbackGetRootFolder);
 	}
 	
