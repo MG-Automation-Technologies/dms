@@ -57,7 +57,6 @@ import com.openkm.frontend.client.extension.event.HasToolBarEvent;
 import com.openkm.frontend.client.extension.event.handler.ToolBarHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasToolBarHandlerExtension;
 import com.openkm.frontend.client.extension.widget.toolbar.ToolBarButtonExtension;
-import com.openkm.frontend.client.panel.ExtendedDockPanel;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import com.openkm.frontend.client.service.OKMFolderService;
@@ -595,10 +594,10 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				}
 				break;
 				
-			case ExtendedDockPanel.SEARCH :
+			case UIDockPanelConstants.SEARCH :
 				break;
 				
-			case ExtendedDockPanel.DASHBOARD :
+			case UIDockPanelConstants.DASHBOARD :
 				Main.get().mainPanel.dashboard.refreshAll();
 				break;
 		}
@@ -2302,19 +2301,19 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				}
 				break;
 				
-			case ExtendedDockPanel.SEARCH:
+			case UIDockPanelConstants.SEARCH:
 				viewValues.put("view_search:option", toolBarOption);
 				break;
 				
-			case ExtendedDockPanel.DASHBOARD:
+			case UIDockPanelConstants.DASHBOARD:
 				viewValues.put("view_dashboard:option", toolBarOption);
 				break;
 				
-			case ExtendedDockPanel.ADMINISTRATION:
+			case UIDockPanelConstants.ADMINISTRATION:
 				viewValues.put("view_administration:option", toolBarOption);
 				break;
 				
-			case ExtendedDockPanel.EXTENSIONS:
+			case UIDockPanelConstants.EXTENSIONS:
 				viewValues.put("view_extension:option", toolBarOption);
 				break;
 		}
@@ -2377,7 +2376,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				}
 				break;
 				
-			case ExtendedDockPanel.SEARCH:
+			case UIDockPanelConstants.SEARCH:
 				if (viewValues.containsKey("view_search:option")){
 					toolBarOption = (ToolBarOption) viewValues.get("view_search:option");
 				} else {
@@ -2386,7 +2385,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				toolBarEnabled = false;
 				break;
 			
-			case ExtendedDockPanel.DASHBOARD:
+			case UIDockPanelConstants.DASHBOARD:
 				if (viewValues.containsKey("view_dashboard:option")){
 					toolBarOption = (ToolBarOption) viewValues.get("view_dashboard:option");
 				} else {
@@ -2395,7 +2394,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				toolBarEnabled = false;
 				break;
 				
-			case ExtendedDockPanel.ADMINISTRATION:
+			case UIDockPanelConstants.ADMINISTRATION:
 				if (viewValues.containsKey("view_administration:option")){
 					toolBarOption = (ToolBarOption) viewValues.get("view_administration:option");
 				} else {
@@ -2404,7 +2403,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				toolBarEnabled = false;
 				break;
 				
-			case ExtendedDockPanel.EXTENSIONS:
+			case UIDockPanelConstants.EXTENSIONS:
 				if (viewValues.containsKey("view_extension:option")){
 					toolBarOption = (ToolBarOption) viewValues.get("view_extension:option");
 				} else {

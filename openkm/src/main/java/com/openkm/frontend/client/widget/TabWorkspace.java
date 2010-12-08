@@ -36,7 +36,6 @@ import com.openkm.frontend.client.extension.event.HasWorkspaceEvent;
 import com.openkm.frontend.client.extension.event.handler.WorkspaceHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasWorkspaceHandlerExtension;
 import com.openkm.frontend.client.extension.widget.tabworkspace.TabWorkspaceExtension;
-import com.openkm.frontend.client.panel.ExtendedDockPanel;
 
 /**
  * Tab Workspace
@@ -73,16 +72,16 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 						Main.get().activeFolderTree.centerActulItemOnScroll(); // Center the actual item every time
 						break;
 						
-					case ExtendedDockPanel.SEARCH :
-						Main.get().mainPanel.setView(ExtendedDockPanel.SEARCH);
+					case UIDockPanelConstants.SEARCH :
+						Main.get().mainPanel.setView(UIDockPanelConstants.SEARCH);
 						break;
 						
-					case ExtendedDockPanel.DASHBOARD :
-						Main.get().mainPanel.setView(ExtendedDockPanel.DASHBOARD);
+					case UIDockPanelConstants.DASHBOARD :
+						Main.get().mainPanel.setView(UIDockPanelConstants.DASHBOARD);
 						break;
 					
-					case ExtendedDockPanel.ADMINISTRATION :
-						Main.get().mainPanel.setView(ExtendedDockPanel.ADMINISTRATION);
+					case UIDockPanelConstants.ADMINISTRATION :
+						Main.get().mainPanel.setView(UIDockPanelConstants.ADMINISTRATION);
 						break;
 					
 					default :
@@ -147,19 +146,19 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 				Main.get().mainPanel.setView(UIDockPanelConstants.DESKTOP);
 				break;
 				
-			case ExtendedDockPanel.SEARCH :
-				tabBar.selectTab(ExtendedDockPanel.SEARCH);
-				Main.get().mainPanel.setView(ExtendedDockPanel.SEARCH);
+			case UIDockPanelConstants.SEARCH :
+				tabBar.selectTab(UIDockPanelConstants.SEARCH);
+				Main.get().mainPanel.setView(UIDockPanelConstants.SEARCH);
 				break;
 				
-			case ExtendedDockPanel.DASHBOARD :
-				tabBar.selectTab(ExtendedDockPanel.DASHBOARD);
-				Main.get().mainPanel.setView(ExtendedDockPanel.DASHBOARD);
+			case UIDockPanelConstants.DASHBOARD :
+				tabBar.selectTab(UIDockPanelConstants.DASHBOARD);
+				Main.get().mainPanel.setView(UIDockPanelConstants.DASHBOARD);
 				break;
 				
-			case ExtendedDockPanel.ADMINISTRATION :
-				tabBar.selectTab(ExtendedDockPanel.ADMINISTRATION);
-				Main.get().mainPanel.setView(ExtendedDockPanel.ADMINISTRATION);
+			case UIDockPanelConstants.ADMINISTRATION :
+				tabBar.selectTab(UIDockPanelConstants.ADMINISTRATION);
+				Main.get().mainPanel.setView(UIDockPanelConstants.ADMINISTRATION);
 				break;
 		}
 	}
@@ -177,10 +176,10 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 		if (!desktopVisible && corrected>=UIDockPanelConstants.DESKTOP) {
 			corrected++;
 		}
-		if (!searchVisible && corrected>=ExtendedDockPanel.SEARCH) {
+		if (!searchVisible && corrected>=UIDockPanelConstants.SEARCH) {
 			corrected++;
 		}
-		if (!dashboardVisible && corrected>=ExtendedDockPanel.DASHBOARD) {
+		if (!dashboardVisible && corrected>=UIDockPanelConstants.DASHBOARD) {
 			corrected++;
 		}
 		return corrected;
