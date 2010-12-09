@@ -46,13 +46,10 @@ public class DocConverter {
 	private static Logger log = LoggerFactory.getLogger(DocConverter.class);
 	private static ArrayList<String> validOpenOffice = new ArrayList<String>();
 	private static ArrayList<String> validImageMagick = new ArrayList<String>();
-	private static ArrayList<String> validAutoCad = new ArrayList<String>();
 	private static DocConverter instance = null;
 	private static OfficeManager officeManager = null;
 	public static final String PDF = "application/pdf";
 	public static final String SWF = "application/x-shockwave-flash";
-	public static final String DXF = "image/vnd.dxf";
-	public static final String DWG = "image/vnd.dwg";
 	
 	private DocConverter() {
 		// Basic
@@ -86,10 +83,6 @@ public class DocConverter {
 		validImageMagick.add("image/bmp");
 		validImageMagick.add("image/svg+xml");
 		validImageMagick.add("image/x-psd");
-		
-		// AutoCad
-		validAutoCad.add(DXF);
-		validAutoCad.add(DWG);
 	}
 	
 	/**
@@ -140,8 +133,6 @@ public class DocConverter {
 			return true;
 		} else if (!Config.SYSTEM_IMG2PDF.equals("") && validImageMagick.contains(from)) {
 			return true;
-		//} else if (!Config.SYSTEM_DWG2DXF.equals("") && validAutoCad.contains(from)) {
-		//	return true;
 		} else {
 			return false;
 		}
@@ -152,17 +143,6 @@ public class DocConverter {
 	 */
 	public boolean convertibleToSwf(String from) {
 		if (!Config.SYSTEM_PDF2SWF.equals("") && (convertibleToPdf(from) || PDF.equals(from))) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	/**
-	 * Test if a MIME document can be converted to DXF
-	 */
-	public boolean convertibleToDxf(String from) {
-		if (!Config.SYSTEM_DWG2DXF.equals("") && validAutoCad.contains(from)) {
 			return true;
 		} else {
 			return false;
@@ -293,45 +273,6 @@ public class DocConverter {
 	}
 	
 	/**
-	 * Convert CAD files to PDF
-	 */
-	public void cad2pdf(InputStream is, String mimeType, File output) throws IOException {
-		log.debug("** Convert from {} to PDF **", mimeType);
-		File tmp = File.createTempFile("okm", ".cad");
-		String cmd[] = { "wine", Config.SYSTEM_DWG2DXF, "/r", "/ad", "/lw 1", "/f 104", tmp.getPath(), output.getPath() };
-		FileOutputStream fos = null;
-		log.info("Command: {}", Arrays.toString(cmd));
-		
-	    try {
-			long start = System.currentTimeMillis();
-			fos = new FileOutputStream(tmp);
-			IOUtils.copy(is, fos);
-			fos.flush();
-			fos.close();
-			
-			ProcessBuilder pb = new ProcessBuilder(cmd);
-			Process process = pb.start();
-			process.waitFor();
-			String info = IOUtils.toString(process.getInputStream());
-			process.destroy();
-		
-			// Check return code
-			if (process.exitValue() == 1) {
-				log.warn(info);
-			}
-			
-			log.debug("Elapse cad2pdf time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
-		} catch (Exception e) {
-			log.error("Error in CAD to PDF conversion", e);
-			output.delete();
-			throw new IOException("Error in CAD to PDF conversion", e);
-		} finally {
-			IOUtils.closeQuietly(fos);
-			tmp.delete();
-		}
-	}
-	
-	/**
 	 * Convert PDF to SWF (for document preview feature).
 	 */
 	public void pdf2swf(File input, File output) throws IOException {
@@ -368,49 +309,6 @@ public class DocConverter {
 			log.error("Error in PDF to SWF conversion", e);
 			output.delete();
 			throw new IOException("Error in PDF to SWF conversion", e);
-		} finally {
-			IOUtils.closeQuietly(stdout);
-		}
-	}
-	
-	/**
-	 * Convert DWG to DXF (for document preview feature).
-	 * Actually only works with Acme CAD Converter 2010 v8.1.4
-	 */
-	public void dwg2dxf(File input, File output) throws IOException {
-		log.debug("** Convert from DWG to DXF **");
-		String cmd[] = { "wine", Config.SYSTEM_DWG2DXF, "/r", "/ad", "/x14", input.getPath(), output.getPath() };
-		log.info("Command: {}", Arrays.toString(cmd));
-		BufferedReader stdout = null;
-	    String line;
-	    
-		try {
-			long start = System.currentTimeMillis();
-			ProcessBuilder pb = new ProcessBuilder(cmd);
-			Process process = pb.start();
-			stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			
-			while ((line = stdout.readLine()) != null) {
-				log.debug("STDOUT: {}", line);
-			}
-			
-			process.waitFor();
-			
-			// Check return code
-			if (process.exitValue() != 0) {
-				log.warn("Abnormal program termination: {}" + process.exitValue());
-				log.warn("STDERR: {}", IOUtils.toString(process.getErrorStream()));
-			} else {
-				log.debug("Normal program termination");
-			}
-			
-			process.destroy();
-			log.debug("Elapse dwg2dxf time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
-		} catch (Exception e) {
-			log.error(Arrays.toString(cmd));
-			log.error("Error in DWG to DXF conversion", e);
-			output.delete();
-			throw new IOException("Error in DWG to DXF conversion", e);
 		} finally {
 			IOUtils.closeQuietly(stdout);
 		}

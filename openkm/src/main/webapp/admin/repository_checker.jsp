@@ -16,7 +16,7 @@
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
-      <h1>Repository checker</h1>
+      <h1>Repository cheker</h1>
       <form action="RepositoryChecker">
         <table class="form" align="center">
           <tr><td>Path</td><td><input name="repoPath" value="/okm:root"/></td></tr>

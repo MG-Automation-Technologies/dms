@@ -22,7 +22,8 @@
 package com.openkm.frontend.client.extension.comunicator;
 
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.extension.widget.toolbar.ToolBarBoxExtension;
+
+
 
 /**
  * DashboardComunicator
@@ -44,30 +45,5 @@ public class DashboardComunicator {
 	 */
 	public static void getUserSubscribedFolders() {
 		Main.get().mainPanel.dashboard.userDashboard.getUserSubscribedFolders();
-	}
-	
-	/**
-	 * refreshAllSearchs
-	 */
-	public static void refreshAllSearchs() {
-		Main.get().mainPanel.dashboard.newsDashboard.refreshAllSearchs();
-	}
-	
-	/**
-	 * showToolBoxExtension
-	 * 
-	 * @param extension
-	 */
-	public static void showToolBoxExtension(ToolBarBoxExtension extension) {
-		Main.get().mainPanel.dashboard.horizontalToolBar.showToolBoxExtension(extension);
-	}
-	
-	/**
-	 * getUserSearchs
-	 * 
-	 * @param refresh
-	 */
-	public static void getUserSearchs(boolean refresh) {
-		Main.get().mainPanel.dashboard.newsDashboard.getUserSearchs(refresh);
 	}
 }

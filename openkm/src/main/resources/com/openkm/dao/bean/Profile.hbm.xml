@@ -116,9 +116,6 @@
         <property name="securityVisible" not-null="true">
           <column name="PRF_TB_FLD_SECURITY_VIS" default="true"/>
         </property>
-        <property name="notesVisible" not-null="true">
-          <column name="PRF_TB_FLD_NOTES_VIS" default="true"/>
-        </property>
       </component> 
 
       <!-- TAB MAIL -->

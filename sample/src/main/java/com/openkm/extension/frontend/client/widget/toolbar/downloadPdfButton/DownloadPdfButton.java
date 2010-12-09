@@ -24,7 +24,7 @@ package com.openkm.extension.frontend.client.widget.toolbar.downloadPdfButton;
 
 import java.util.List;
 
-import com.openkm.frontend.client.extension.widget.toolbar.ToolBarButtonExtension;
+import com.openkm.frontend.client.extension.widget.ToolBarButtonExtension;
 
 /**
  * DownloadPdfButton

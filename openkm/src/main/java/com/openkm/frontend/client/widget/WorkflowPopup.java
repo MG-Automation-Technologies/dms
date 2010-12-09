@@ -61,7 +61,7 @@ import com.openkm.frontend.client.bean.GWTOption;
 import com.openkm.frontend.client.bean.GWTProcessDefinition;
 import com.openkm.frontend.client.bean.GWTSelect;
 import com.openkm.frontend.client.bean.GWTTextArea;
-import com.openkm.frontend.client.contants.service.RPCService;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMWorkflowService;
 import com.openkm.frontend.client.service.OKMWorkflowServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
@@ -234,7 +234,7 @@ public class WorkflowPopup extends DialogBox {
 	 */
 	private void findLatestProcessDefinitions() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-		endPoint.setServiceEntryPoint(RPCService.WorkflowService);	
+		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);	
 		workflowService.findLatestProcessDefinitions(callbackFindLatestProcessDefinitions);
 	}	
 	
@@ -312,7 +312,7 @@ public class WorkflowPopup extends DialogBox {
 		
 		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-		endPoint.setServiceEntryPoint(RPCService.WorkflowService);
+		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);
 		workflowService.runProcessDefinition(gwtDocument.getUuid(), 
 				new Double(listBox.getValue(listBox.getSelectedIndex())).doubleValue(),
 				formFieldList, callbackRunProcessDefinition);
@@ -350,7 +350,7 @@ public class WorkflowPopup extends DialogBox {
 	 */
 	public void getProcessDefinitionForms(double id) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-		endPoint.setServiceEntryPoint(RPCService.WorkflowService);		
+		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);		
 		workflowService.getProcessDefinitionForms(id, callbackGetProcessDefinitionForms);
 	}
 	

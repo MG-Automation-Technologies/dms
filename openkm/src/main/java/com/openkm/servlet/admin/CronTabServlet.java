@@ -55,7 +55,7 @@ import com.openkm.dao.bean.CronTab;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.SecureStore;
 import com.openkm.util.UserActivity;
-import com.openkm.util.WebUtils;
+import com.openkm.util.WebUtil;
 
 /**
  * Execute crontab servlet
@@ -68,7 +68,7 @@ public class CronTabServlet extends BaseServlet {
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		String action = WebUtils.getString(request, "action");
+		String action = WebUtil.getString(request, "action");
 		Session session = null;
 		updateSessionManager(request);
 		
@@ -88,7 +88,7 @@ public class CronTabServlet extends BaseServlet {
 				sc.getRequestDispatcher("/admin/crontab_edit.jsp").forward(request, response);
 			} else if (action.equals("edit")) {
 				ServletContext sc = getServletContext();
-				int ctId = WebUtils.getInt(request, "ct_id");
+				int ctId = WebUtil.getInt(request, "ct_id");
 				CronTab ct = CronTabDAO.findByPk(ctId);
 				sc.setAttribute("action", action);
 				sc.setAttribute("types", types);
@@ -96,7 +96,7 @@ public class CronTabServlet extends BaseServlet {
 				sc.getRequestDispatcher("/admin/crontab_edit.jsp").forward(request, response);
 			} else if (action.equals("delete")) {
 				ServletContext sc = getServletContext();
-				int ctId = WebUtils.getInt(request, "ct_id");
+				int ctId = WebUtil.getInt(request, "ct_id");
 				CronTab ct = CronTabDAO.findByPk(ctId);
 				sc.setAttribute("action", action);
 				sc.setAttribute("types", types);
@@ -235,7 +235,7 @@ public class CronTabServlet extends BaseServlet {
 	private void execute(Session session, HttpServletRequest request, HttpServletResponse response) throws 
 			IOException, DatabaseException, EvalError {
 		log.debug("execute({}, {}, {})", new Object[] { session, request, response });
-		int ctId = WebUtils.getInt(request, "ct_id");
+		int ctId = WebUtil.getInt(request, "ct_id");
 		CronTab ct = CronTabDAO.findByPk(ctId);
 		
 		if (CronTab.BSH.equals(ct.getType())) {

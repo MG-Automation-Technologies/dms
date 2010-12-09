@@ -69,7 +69,7 @@ import com.openkm.dao.LockTokenDAO;
 import com.openkm.util.FormatUtil;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
-import com.openkm.util.WebUtils;
+import com.openkm.util.WebUtil;
 
 /**
  * RepositoryView servlet
@@ -84,8 +84,8 @@ public class RepositoryViewServlet extends BaseServlet {
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		String action = WebUtils.getString(request, "action");
-		String path = WebUtils.getString(request, "path");
+		String action = WebUtil.getString(request, "action");
+		String path = WebUtil.getString(request, "path");
 		Session session = null;
 		updateSessionManager(request);
 		
@@ -222,7 +222,7 @@ public class RepositoryViewServlet extends BaseServlet {
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
 		log.debug("removeMixin({}, {}, {}, {})", new Object[] { session, path, request, response });
 		Node node = session.getRootNode().getNode(path.substring(1));
-		String mixin = WebUtils.getString(request, "mixin");
+		String mixin = WebUtil.getString(request, "mixin");
 		node.removeMixin(mixin);		
 		node.save();
 				
@@ -237,7 +237,7 @@ public class RepositoryViewServlet extends BaseServlet {
 	private void edit(Session session, String path, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
 		log.debug("edit({}, {}, {}, {})", new Object[] { session, path, request, response });
-		String property = WebUtils.getString(request, "property");
+		String property = WebUtil.getString(request, "property");
 		ServletContext sc = getServletContext();
 		Node node = session.getRootNode().getNode(path.substring(1));
 		Property prop = node.getProperty(property);
@@ -268,8 +268,8 @@ public class RepositoryViewServlet extends BaseServlet {
 	private void save(Session session, String path, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
 		log.debug("save({}, {}, {}, {})", new Object[] { session, path, request, response });
-		String value = WebUtils.getString(request, "value");
-		String property = WebUtils.getString(request, "property");
+		String value = WebUtil.getString(request, "value");
+		String property = WebUtil.getString(request, "property");
 		Node node = session.getRootNode().getNode(path.substring(1));
 		Property prop = node.getProperty(property);
 		ValueFactory vf = session.getValueFactory();
@@ -300,8 +300,8 @@ public class RepositoryViewServlet extends BaseServlet {
 	private void list(Session session, String path, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
 		log.debug("list({}, {}, {}, {})", new Object[] { session, path, request, response });
-		String stats = WebUtils.getString(request, "stats");
-		String uuid = WebUtils.getString(request, "uuid");
+		String stats = WebUtil.getString(request, "stats");
+		String uuid = WebUtil.getString(request, "uuid");
 		ServletContext sc = getServletContext();
 		ContentInfo ci = null;
 		Node node = null;

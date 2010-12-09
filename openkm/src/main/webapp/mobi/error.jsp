@@ -4,6 +4,14 @@
 <%@page import="com.openkm.core.Config"%>
 <%@page import="com.openkm.core.HttpSessionManager"%>
 <%@page import="com.openkm.bean.HttpSessionInfo"%>
+<%
+  String msg = "Unknown error";
+  String logged = null;
+  
+  if (exception != null) {
+    msg = exception.getMessage();
+  }
+%>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -20,8 +28,13 @@
       <center><img src="<%=request.getContextPath()%>/img/error.png"/></center>
     </div>
     <div id="form-error">
-      <div id="error"><%=exception.getMessage()%></div>
+      <div id="error"><%=msg%></div>
+      <% if (logged != null) { %>
+      <p><%=logged%></p>
+      <center><input type="button" value="Go to login" onclick="document.location='<%=request.getContextPath()%>/'"/></center>
+      <% } else { %>
       <center><input type="button" value="Go back" onclick="history.go(-1)"/></center>
+      <% } %>
     </div>
   </div>
 </body>

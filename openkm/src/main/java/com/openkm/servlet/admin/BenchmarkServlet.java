@@ -44,7 +44,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.util.FormatUtil;
-import com.openkm.util.WebUtils;
+import com.openkm.util.WebUtil;
 import com.openkm.util.impexp.HTMLInfoDecorator;
 import com.openkm.util.impexp.ImpExpStats;
 import com.openkm.util.impexp.RepositoryImporter;
@@ -78,8 +78,8 @@ public class BenchmarkServlet extends BaseServlet {
 	 */
 	private void load(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		log.debug("load({}, {})", request, response);
-		String path = WebUtils.getString(request, "param1");
-		int times = WebUtils.getInt(request, "param2");
+		String path = WebUtil.getString(request, "param1");
+		int times = WebUtil.getInt(request, "param2");
 		PrintWriter out = response.getWriter();
 		ImpExpStats tStats = new ImpExpStats();
 		long tBegin = 0, tEnd = 0;
@@ -110,7 +110,7 @@ public class BenchmarkServlet extends BaseServlet {
 				long begin = System.currentTimeMillis();
 				fld.setPath("/okm:root/Benchmark/"+i);
 				OKMFolder.getInstance().create(null, fld);
-				ImpExpStats stats = RepositoryImporter.importDocuments(null, dir, fld.getPath(), false, out, 
+				ImpExpStats stats = RepositoryImporter.importDocuments(null, dir, fld.getPath(), out, 
 						new HTMLInfoDecorator(docs));
 				long end = System.currentTimeMillis();
 				tStats.setSize(tStats.getSize() + stats.getSize());
@@ -161,9 +161,9 @@ public class BenchmarkServlet extends BaseServlet {
 	 */
 	private void copy(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		log.debug("copy({}, {})", request, response);
-		String src = WebUtils.getString(request, "param1");
-		String dst = WebUtils.getString(request, "param2");
-		int times = WebUtils.getInt(request, "param3");
+		String src = WebUtil.getString(request, "param1");
+		String dst = WebUtil.getString(request, "param2");
+		int times = WebUtil.getInt(request, "param3");
 		PrintWriter out = response.getWriter();
 		ContentInfo cInfo = new ContentInfo();
 		long tBegin = 0, tEnd = 0;

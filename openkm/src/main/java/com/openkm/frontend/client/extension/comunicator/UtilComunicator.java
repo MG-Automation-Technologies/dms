@@ -72,15 +72,6 @@ public class UtilComunicator {
 	 * @return
 	 */
 	public static String getTextAsBoldHTML(String text, boolean mark) {
-		return Util.getTextAsBoldHTML(text, mark);
-	}
-	
-	/**
-	 * getUserAgent
-	 * 
-	 * @return
-	 */
-	public static String getUserAgent() {
-		return Util.getUserAgent();
+		return "";
 	}
 }

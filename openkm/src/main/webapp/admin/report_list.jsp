@@ -13,14 +13,13 @@
 </head>
 <body>
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
-  <u:constantsMap className="com.openkm.util.ReportUtil" var="ReportUtil"/>
   <c:choose>
     <c:when test="${isAdmin}">
       <h1>Reports</h1>
       <table class="results" width="70%">
         <tr>
           <th>Name</th><th>Type</th><th>File Name</th><th>Active</th>
-          <th width="130px">
+          <th width="75px">
             <c:url value="Report" var="urlCreate">
               <c:param name="action" value="create"/>
             </c:url>
@@ -36,20 +35,9 @@
             <c:param name="action" value="delete"/>
             <c:param name="rp_id" value="${rp.id}"/>
           </c:url>
-          <c:url value="Report" var="urlExecutePdf">
+          <c:url value="Report" var="urlExecute">
             <c:param name="action" value="execute"/>
             <c:param name="rp_id" value="${rp.id}"/>
-            <c:param name="out" value="${ReportUtil.OUTPUT_PDF}"/>
-          </c:url>
-          <c:url value="Report" var="urlExecuteRtf">
-            <c:param name="action" value="execute"/>
-            <c:param name="rp_id" value="${rp.id}"/>
-            <c:param name="out" value="${ReportUtil.OUTPUT_RTF}"/>
-          </c:url>
-          <c:url value="Report" var="urlExecuteCsv">
-            <c:param name="action" value="execute"/>
-            <c:param name="rp_id" value="${rp.id}"/>
-            <c:param name="out" value="${ReportUtil.OUTPUT_CSV}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
             <td>${rp.name}</td><td>${rp.type}</td><td>${rp.fileName}</td>
@@ -68,11 +56,7 @@
               &nbsp;
               <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
               &nbsp;
-              <a href="${urlExecutePdf}"><img src="img/action/pdf.png" alt="Generate PDF" title="Generate PDF"/></a>
-              &nbsp;
-              <a href="${urlExecuteRtf}"><img src="img/action/rtf.png" alt="Generate RTF" title="Generate RTF"/></a>
-              &nbsp;
-              <a href="${urlExecuteCsv}"><img src="img/action/csv.png" alt="Generate CSV" title="Generate CSV"/></a>
+              <a href="${urlExecute}"><img src="img/action/signal.png" alt="Execute" title="Execute"/></a>
             </td>
           </tr>
         </c:forEach>

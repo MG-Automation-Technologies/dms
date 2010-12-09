@@ -24,7 +24,7 @@ package com.openkm.extension.frontend.client;
 
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.openkm.frontend.client.extension.widget.tabworkspace.TabWorkspaceExtension;
+import com.openkm.frontend.client.extension.widget.TabWorkspaceExtension;
 
 /**
  * @author jllort

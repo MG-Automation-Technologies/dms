@@ -24,8 +24,8 @@ package com.openkm.extension.frontend.client;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
-import com.openkm.frontend.client.extension.widget.menu.MenuBarExtension;
-import com.openkm.frontend.client.extension.widget.menu.MenuItemExtension;
+import com.openkm.frontend.client.extension.widget.MenuBarExtension;
+import com.openkm.frontend.client.extension.widget.MenuItemExtension;
 
 /**
  * MainMenuExample

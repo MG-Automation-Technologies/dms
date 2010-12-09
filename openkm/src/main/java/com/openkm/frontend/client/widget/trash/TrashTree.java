@@ -23,7 +23,7 @@ package com.openkm.frontend.client.widget.trash;
 
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
+import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.widget.ConfirmPopup;
 import com.openkm.frontend.client.widget.MenuPopup;
 import com.openkm.frontend.client.widget.foldertree.FolderSelectPopup;
@@ -43,7 +43,7 @@ public class TrashTree extends FolderTree {
 		
 		// Sets the context on list context search values
 		Main.get().repositoryContext.setContextTrash(folderRoot.getPath());
-		Main.get().mainPanel.search.searchBrowser.searchIn.setContextValue(folderRoot.getPath(),UIDesktopConstants.NAVIGATOR_TRASH);
+		Main.get().mainPanel.search.searchBrowser.searchIn.setContextValue(folderRoot.getPath(),PanelDefinition.NAVIGATOR_TRASH);
 		
 		rootItem = actualItem; // Save rootItem
 		actualItem.setUserObject(folderRoot);

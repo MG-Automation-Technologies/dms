@@ -61,7 +61,7 @@ import com.openkm.frontend.client.bean.GWTInput;
 import com.openkm.frontend.client.bean.GWTOption;
 import com.openkm.frontend.client.bean.GWTSelect;
 import com.openkm.frontend.client.bean.GWTTextArea;
-import com.openkm.frontend.client.contants.service.RPCService;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.extension.event.HasPropertyGroupEvent;
 import com.openkm.frontend.client.extension.event.handler.PropertyGroupHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasPropertyGroupHandlerExtension;
@@ -344,7 +344,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 		}
 
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
+		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
 		propertyGroupService.setProperties(docPath, grpName, formElementList, callbackSetProperties);
 	}
 	
@@ -683,7 +683,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	 */
 	public void getProperties() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
+		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
 		propertyGroupService.getProperties(docPath, grpName, callbackGetProperties);
 	}
 
@@ -692,7 +692,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	 */
 	public void removeGroup() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
+		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
 		propertyGroupService.removeGroup(docPath, grpName, callbackRemoveGroup);
 	}
 	

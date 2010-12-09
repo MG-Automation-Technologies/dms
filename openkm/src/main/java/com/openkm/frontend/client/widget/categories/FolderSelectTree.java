@@ -35,7 +35,7 @@ import com.google.gwt.user.client.ui.TreeItem;
 
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.contants.service.RPCService;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMFolderService;
 import com.openkm.frontend.client.service.OKMFolderServiceAsync;
 import com.openkm.frontend.client.service.OKMRepositoryService;
@@ -197,7 +197,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getChilds(String path) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-		endPoint.setServiceEntryPoint(RPCService.FolderService);	
+		endPoint.setServiceEntryPoint(Config.OKMFolderService);	
 		Main.get().mainPanel.desktop.navigator.categoriesTree.categoriesSelectPopup.status.setFlagChilds();
 		folderService.getChilds(path, callbackGetChilds);
 	}	
@@ -207,7 +207,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getCategories() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(RPCService.RepositoryService);	
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
 		Main.get().mainPanel.desktop.navigator.categoriesTree.categoriesSelectPopup.status.setFlagRoot();
 		repositoryService.getCategoriesFolder(callbackGetCategoriesFolder);
 	}

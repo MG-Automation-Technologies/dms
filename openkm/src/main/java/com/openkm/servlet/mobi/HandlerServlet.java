@@ -127,7 +127,7 @@ public class HandlerServlet extends HttpServlet {
 		log.debug("docProperties({}, {})", request, response);
 		ServletContext sc = getServletContext();
 		String path = request.getParameter("path");
-				
+		
 		if (path == null || path.equals("")) {
 			path = "/okm:root";
 		}

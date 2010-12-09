@@ -5,14 +5,14 @@
   <artifactId>scanner</artifactId>
   <packaging>jar</packaging>
   <name>OpenKM Scanner Applet</name>
-  <version>5.1-SNAPSHOT</version>
+  <version>5.0</version>
   <url>http://www.openkm.com</url>
   <description>Java applet used to scan document directly from OpenKM web interface.</description>
-
+  
   <scm>
-    <url>http://openkm.svn.sourceforge.net/viewvc/openkm/trunk</url>
-    <connection>scm:svn:https://openkm.svn.sourceforge.net/svnroot/openkm/trunk</connection>
-    <developerConnection>scm:svn:https://openkm.svn.sourceforge.net/svnroot/openkm/trunk</developerConnection>
+    <url>http://openkm.svn.sourceforge.net/viewvc/openkm/branches/5.0</url>
+    <connection>scm:svn:https://openkm.svn.sourceforge.net/svnroot/openkm/branches/5.0</connection>
+    <developerConnection>scm:svn:https://openkm.svn.sourceforge.net/svnroot/openkm/branches/5.0</developerConnection>
   </scm>
 
   <licenses>

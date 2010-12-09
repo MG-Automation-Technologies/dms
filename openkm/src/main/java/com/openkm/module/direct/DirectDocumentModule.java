@@ -222,7 +222,6 @@ public class DirectDocumentModule implements DocumentModule {
 		DocConverter convert = DocConverter.getInstance();
 		doc.setConvertibleToPdf(convert.convertibleToPdf(doc.getMimeType()));
 		doc.setConvertibleToSwf(convert.convertibleToSwf(doc.getMimeType()));
-		doc.setConvertibleToDxf(convert.convertibleToDxf(doc.getMimeType()));
 		
 		// Get notes
 		if (documentNode.isNodeType(Note.MIX_TYPE)) {
@@ -241,7 +240,7 @@ public class DirectDocumentModule implements DocumentModule {
 			
 			doc.setNotes(notes);
 		}
-		
+				
 		log.debug("Permisos: {} => {}", docPath, doc.getPermissions());
 		log.debug("getProperties[session]: {}", doc);
 		return doc;
@@ -589,26 +588,12 @@ public class DirectDocumentModule implements DocumentModule {
 	 */
 	public InputStream getContent(Session session, Node docNode) throws javax.jcr.PathNotFoundException,
 			javax.jcr.RepositoryException, IOException {
-		log.debug("getContent({}, {})", session, docNode);
+		log.debug("getContent[session]({}, {})", session, docNode);
 		
 		Node contentNode = docNode.getNode(Document.CONTENT);
 		InputStream is = contentNode.getProperty(JcrConstants.JCR_DATA).getStream();
 		
-		log.debug("getContent: {}", is);
-		return is;
-	}
-	
-	/**
-	 * Retrieve the content input stream from a document path
-	 */
-	public InputStream getContent(Session session, String docPath, boolean checkout) throws 
-			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException, IOException {
-		Node documentNode = session.getRootNode().getNode(docPath.substring(1));
-		InputStream is = getContent(session, documentNode);
-
-		// Activity log
-		UserActivity.log(session.getUserID(), (checkout?"GET_DOCUMENT_CONTENT_CHECKOUT":"GET_DOCUMENT_CONTENT"), docPath, ""+is.available());
-		
+		log.debug("getContent[]session: {}", is);
 		return is;
 	}
 
@@ -626,7 +611,11 @@ public class DirectDocumentModule implements DocumentModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			is = getContent(session, docPath, checkout);
+			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
+			is = getContent(session, documentNode);
+
+			// Activity log
+			UserActivity.log(session.getUserID(), (checkout?"GET_DOCUMENT_CONTENT_CHECKOUT":"GET_DOCUMENT_CONTENT"), docPath, ""+is.available());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -1240,9 +1229,8 @@ public class DirectDocumentModule implements DocumentModule {
 			UserItemsManager.incSize(session.getUserID(), size);
 			
 			// Remove pdf & preview from cache
-			new File(Config.CACHE_DXF + File.separator + documentNode.getUUID() + ".dxf").delete();
-			new File(Config.CACHE_PDF + File.separator + documentNode.getUUID() + ".pdf").delete();
-			new File(Config.CACHE_SWF + File.separator + documentNode.getUUID() + ".swf").delete();
+			new File(Config.PDF_CACHE+File.separator+documentNode.getUUID()+".pdf").delete();
+			new File(Config.SWF_CACHE+File.separator+documentNode.getUUID()+".swf").delete();
 
 			// Check subscriptions
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CHECKIN", comment);
@@ -1668,9 +1656,8 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("VersionHistory UUID: {}", vh.getUUID());
 
 		// Remove pdf & preview from cache
-		new File(Config.CACHE_DXF + File.separator + docNode.getUUID() + ".dxf").delete();
-		new File(Config.CACHE_PDF + File.separator + docNode.getUUID() + ".pdf").delete();
-		new File(Config.CACHE_SWF + File.separator + docNode.getUUID() + ".swf").delete();
+		new File(Config.PDF_CACHE + File.separator + docNode.getUUID()+".pdf").delete();
+		new File(Config.SWF_CACHE + File.separator + docNode.getUUID()+".swf").delete();
 		
 		// Remove node itself
 		docNode.remove();

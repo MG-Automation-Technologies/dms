@@ -14,17 +14,12 @@
   <title>OpenKM Mobile</title>
 </head>
 <body>
-  <c:url value="Handler" var="urlBrowse">
-    <c:set var="parent"><u:getParent path="${fld.path}"/></c:set>
-    <c:param name="action" value="browse"/>
-    <c:param name="path" value="${parent}"/>
-  </c:url>
   <table class="results" >
     <tr><th colspan="2">Folder <span style="font-weight: normal">${path}</span></th></tr>
     <tr><th>Property</th><th>Value</th></tr>
     <tr class="even"><td><b>UUID</b></td><td>${fld.uuid}</td></tr>
     <tr class="odd"><td><b>Name</b></td><td><u:getName path="${fld.path}"/></td></tr>
-    <tr class="even"><td><b>Parent</b></td><td><a href="${urlBrowse}"><u:getParent path="${fld.path}"/></a></td></tr>
+    <tr class="even"><td><b>Parent</b></td><td><u:getParent path="${fld.path}"/></td></tr>
     <tr class="odd"><td><b>Created</b></td><td><f:formatDate value="${fld.created.time}" type="both"/> by ${doc.author}</td></tr>
     <c:choose>
       <c:when test="${fld.subscribed}"><c:set var="subscribed" value="Yes"/></c:when>

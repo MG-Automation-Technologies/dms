@@ -48,7 +48,7 @@ import com.openkm.dao.bean.extension.StapleGroup;
 import com.openkm.dao.extension.StapleGroupDAO;
 import com.openkm.util.ArchiveUtils;
 import com.openkm.util.FileUtils;
-import com.openkm.util.WebUtils;
+import com.openkm.util.WebUtil;
 
 /**
  * Staple Download Servlet
@@ -63,7 +63,7 @@ public class StaplingDownloadServlet extends BaseServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		request.setCharacterEncoding("UTF-8");
-		int sgId = WebUtils.getInt(request, "sgId");
+		int sgId = WebUtil.getInt(request, "sgId");
 		File tmpZip = File.createTempFile("okm", ".zip");
 		
 		try {

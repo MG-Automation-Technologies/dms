@@ -46,7 +46,7 @@ import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.contants.service.RPCService;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMThesaurusService;
 import com.openkm.frontend.client.service.OKMThesaurusServiceAsync;
 
@@ -298,7 +298,7 @@ public class ThesaurusSelectPopup extends DialogBox  {
 	 */
 	public void getKeywords(String filter) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) thesaurusService;
-		endPoint.setServiceEntryPoint(RPCService.ThesaurusService);	
+		endPoint.setServiceEntryPoint(Config.OKMThesaurusService);	
 		status.setFlagKeywords();
 		thesaurusService.getKeywords(filter, callbackGetKeywords);
 	}

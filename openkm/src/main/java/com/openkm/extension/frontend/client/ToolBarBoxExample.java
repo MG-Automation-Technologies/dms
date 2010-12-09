@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.extension.frontend.client.util.OKMExtensionBundleExampleResources;
-import com.openkm.frontend.client.extension.widget.toolbar.ToolBarBoxExtension;
+import com.openkm.frontend.client.extension.widget.ToolBarBoxExtension;
 
 /**
  * ToolBarBoxExample
@@ -48,11 +48,6 @@ public class ToolBarBoxExample  {
 			@Override
 			public Widget getWidget() {
 				return hPanel;
-			}
-
-			@Override
-			public String getExtensionUUID() {
-				return "4d245f30-ef47-11df-98cf-0800200c9a66";
 			}
 		};
 		

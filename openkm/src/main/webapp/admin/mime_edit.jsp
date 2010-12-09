@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.openkm.core.Config" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -41,9 +42,7 @@
                   <input class=":required :only_on_blur" type="file" name="image"/>
                 </c:when>
                 <c:otherwise>
-                  <c:url value="/mime/${mt.name}" var="urlIcon">
-                  </c:url>
-                  <table><tr><td><img src="${urlIcon}"/>&nbsp;</td><td><input type="file" name="image"/></td></tr></table>
+                  <input type="file" name="image"/>
                 </c:otherwise>
               </c:choose>
             </td>

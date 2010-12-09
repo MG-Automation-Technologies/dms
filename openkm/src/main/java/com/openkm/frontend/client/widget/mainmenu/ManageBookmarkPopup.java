@@ -46,7 +46,7 @@ import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTBookmark;
-import com.openkm.frontend.client.contants.service.RPCService;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMBookmarkService;
 import com.openkm.frontend.client.service.OKMBookmarkServiceAsync;
 import com.openkm.frontend.client.util.Util;
@@ -357,7 +357,7 @@ public class ManageBookmarkPopup extends DialogBox {
 	 */
 	public void getAll() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
-		endPoint.setServiceEntryPoint(RPCService.BookmarkService);			
+		endPoint.setServiceEntryPoint(Config.OKMBookmarkService);			
 		bookmarkService.getAll(callbackGetAll);
 	}
 	
@@ -368,7 +368,7 @@ public class ManageBookmarkPopup extends DialogBox {
 	 */
 	private void remove(int id) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
-		endPoint.setServiceEntryPoint(RPCService.BookmarkService);			
+		endPoint.setServiceEntryPoint(Config.OKMBookmarkService);			
 		bookmarkService.remove(id, callbackRemove);
 	}
 	
@@ -380,7 +380,7 @@ public class ManageBookmarkPopup extends DialogBox {
 	 */
 	private void rename(int id, String newName) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
-		endPoint.setServiceEntryPoint(RPCService.BookmarkService);
+		endPoint.setServiceEntryPoint(Config.OKMBookmarkService);
 		bookmarkService.rename(id, newName, callbackRename);
 	}
 	

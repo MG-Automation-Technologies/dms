@@ -6,4 +6,4 @@ mvn install:install-file -DgroupId=com.google.code.gwt-log -DartifactId=gwt-log 
 mvn install:install-file -DgroupId=org.artofsolving.jodconverter -DartifactId=jodconverter-core -Dversion=3.0-beta-3 -Dpackaging=jar -Dfile=jodconverter-core-3.0-beta-3.jar
 
 #PROPIETARY OPENKM EXTENSIONS LIBRARY NOT INCLUDED BY DEFAULT
-#mvn install:install-file -DgroupId=com.openkm.extension -DartifactId=sample-full -Dversion=5.1 -Dpackaging=jar -Dfile=sample-5.1-full.jar
+#mvn install:install-file -DgroupId=com.openkm.extension -DartifactId=sample-full -Dversion=5.0 -Dpackaging=jar -Dfile=sample-5.0-full.jar

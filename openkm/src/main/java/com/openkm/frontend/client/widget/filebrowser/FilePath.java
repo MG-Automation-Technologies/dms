@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.contants.service.RPCService;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMRepositoryService;
 import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
 
@@ -100,7 +100,7 @@ public class FilePath  extends Composite {
 	 */
 	public void getRootPath() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(RPCService.RepositoryService);	
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
 		repositoryService.getRootFolder(callbackGetRootFolder);
 	}	
 }

@@ -41,6 +41,7 @@ import javax.imageio.ImageIO;
 import javax.jcr.Session;
 
 import org.apache.commons.io.IOUtils;
+import org.jbpm.JbpmConfiguration;
 import org.jbpm.JbpmContext;
 import org.jbpm.JbpmException;
 import org.jbpm.db.GraphSession;
@@ -63,7 +64,6 @@ import com.openkm.core.RepositoryException;
 import com.openkm.core.WorkflowException;
 import com.openkm.module.WorkflowModule;
 import com.openkm.util.FormUtils;
-import com.openkm.util.JBPMUtils;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WorkflowUtils;
@@ -75,7 +75,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public void registerProcessDefinition(String token, InputStream is) throws ParseException, 
 			RepositoryException, WorkflowException, DatabaseException {
 		log.debug("registerProcessDefinition({}, {})", token, is);
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		InputStream isForms = null;
 		ZipInputStream zis = null;
 		Session session = null;
@@ -118,7 +118,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public void deleteProcessDefinition(String token, long processDefinitionId) throws RepositoryException, 
 			DatabaseException, WorkflowException {
 		log.debug("deleteProcessDefinition({}, {})", token, processDefinitionId);
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Session session = null;
 		
 		try {
@@ -150,7 +150,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public ProcessDefinition getProcessDefinition(String token, long processDefinitionId) throws 
 			RepositoryException, DatabaseException, WorkflowException {
 		log.debug("getProcessDefinition({}, {})", token, processDefinitionId);
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		ProcessDefinition vo = new ProcessDefinition();
 		Session session = null;
 		
@@ -184,7 +184,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public byte[] getProcessDefinitionImage(String token, long processDefinitionId, String node) throws 
 			RepositoryException, DatabaseException, WorkflowException  {
 		log.debug("getProcessDefinitionImage({}, {}, {})", new Object[] { token, processDefinitionId, node });
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		byte[] image = null;
 		Session session = null;
 		
@@ -243,7 +243,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			throws ParseException, RepositoryException, DatabaseException, WorkflowException {
 		log.debug("getProcessDefinitionForms({}, {})", token, processDefinitionId);
 		//long begin = Calendar.getInstance().getTimeInMillis();
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Map<String, List<FormElement>> forms = new HashMap<String, List<FormElement>>();
 		InputStream is = null;
 		Session session = null;
@@ -288,7 +288,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public ProcessInstance runProcessDefinition(String token, long processDefinitionId, String uuid, 
 			List<FormElement> variables) throws RepositoryException, DatabaseException, WorkflowException {
 		log.info("runProcessDefinition({}, {}, {})", new Object[] { token, processDefinitionId, variables });
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		ProcessInstance vo = new ProcessInstance();
 		Session session = null;
 		
@@ -349,7 +349,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public ProcessInstance sendProcessInstanceSignal(String token, long processInstanceId, 
 			String transitionName) throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("sendProcessInstanceSignal({}, {}, {})", new Object[] { token, processInstanceId, transitionName });
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		ProcessInstance vo = new ProcessInstance();
 		Session session = null;
 		
@@ -392,7 +392,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public void endProcessInstance(String token, long processInstanceId) throws RepositoryException,
 			DatabaseException, WorkflowException {
 		log.debug("endProcessInstance({}, {})", token, processInstanceId);
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Session session = null;
 		
 		try {
@@ -424,7 +424,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public void deleteProcessInstance(String token, long processInstanceId) throws RepositoryException,
 			DatabaseException, WorkflowException {
 		log.debug("deleteProcessInstance({}, {})", token, processInstanceId);
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Session session = null;
 		
 		try {
@@ -457,7 +457,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public List<ProcessInstance> findProcessInstances(String token, long processDefinitionId) throws 
 			RepositoryException, DatabaseException, WorkflowException {
 		log.debug("findProcessInstances({}, {})", token, processDefinitionId);
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		List<ProcessInstance> al = new ArrayList<ProcessInstance>();
 		Session session = null;
 		
@@ -494,7 +494,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public List<ProcessDefinition> findAllProcessDefinitions(String token) throws RepositoryException,
 			DatabaseException, WorkflowException {
 		log.debug("findAllProcessDefinitions({})", token);
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		List<ProcessDefinition> al = new ArrayList<ProcessDefinition>();
 		Session session = null;
 		
@@ -531,7 +531,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public List<ProcessDefinition> findLatestProcessDefinitions(String token) throws RepositoryException,
 			DatabaseException, WorkflowException {
 		log.debug("findLatestProcessDefinitions({})", token);
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		List<ProcessDefinition> al = new ArrayList<ProcessDefinition>();
 		Session session = null;
 		
@@ -568,7 +568,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public List<ProcessDefinition> findAllProcessDefinitionVersions(String token, String name) throws 
 			RepositoryException, DatabaseException, WorkflowException {
 		log.debug("findAllProcessDefinitionVersions({}, {})", token, name);
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		List<ProcessDefinition> al = new ArrayList<ProcessDefinition>();
 		Session session = null;
 		
@@ -604,7 +604,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public ProcessInstance getProcessInstance(String token, long processInstanceId) throws 
 			RepositoryException, DatabaseException, WorkflowException {
 		log.debug("getProcessInstance({}, {})", token, processInstanceId);
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		ProcessInstance vo = new ProcessInstance();
 		Session session = null;
 		
@@ -638,7 +638,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public void suspendProcessInstance(String token, long processInstanceId) throws RepositoryException,
 			DatabaseException, WorkflowException {
 		log.debug("suspendProcessInstance({}, {})", token, processInstanceId);
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Session session = null;
 		
 		try {
@@ -670,7 +670,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public void resumeProcessInstance(String token, long processInstanceId) throws RepositoryException,
 			DatabaseException, WorkflowException {
 		log.debug("resumeProcessInstance({}, {})", token, processInstanceId);
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Session session = null;
 		
 		try {
@@ -702,7 +702,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public void addProcessInstanceVariable(String token, long processInstanceId, String name, Object value)
 			throws RepositoryException, DatabaseException, WorkflowException{
 		log.debug("addProcessInstanceVariable({}, {}, {}, {})", new Object[] { token, processInstanceId, name, value });
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Session session = null;
 		
 		try {
@@ -734,7 +734,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public void deleteProcessInstanceVariable(String token, long processInstanceId, String name) throws
 			RepositoryException, DatabaseException, WorkflowException {
 		log.debug("deleteProcessInstanceVariable({}, {}, {})", new Object[] { token, processInstanceId, name });
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Session session = null;
 		
 		try {
@@ -767,7 +767,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public List<TaskInstance> findUserTaskInstances(String token) throws RepositoryException,
 			DatabaseException, WorkflowException {
 		log.debug("findUserTaskInstances({})", token);
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		List<TaskInstance> al = new ArrayList<TaskInstance>();
 		Session session = null;
 		
@@ -808,7 +808,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public List<TaskInstance> findPooledTaskInstances(String token) throws RepositoryException,
 			DatabaseException, WorkflowException {
 		log.debug("findPooledTaskInstances({})", token);
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		ArrayList<TaskInstance> al = new ArrayList<TaskInstance>();
 		Session session = null;
 		
@@ -849,7 +849,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public List<TaskInstance> findTaskInstances(String token, long processInstanceId) throws
 			RepositoryException, DatabaseException, WorkflowException {
 		log.debug("findTaskInstances({})", token);
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		ArrayList<TaskInstance> al = new ArrayList<TaskInstance>();
 		Session session = null;
 		
@@ -893,7 +893,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public void setTaskInstanceValues(String token, long taskInstanceId, String transitionName,
 			List<FormElement> values) throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("setTaskInstanceValues({}, {}, {}, {})", new Object[] { token, taskInstanceId, transitionName, values });
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Session session = null;
 		
 		try {
@@ -945,7 +945,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public void addTaskInstanceComment(String token, long taskInstanceId, String message) throws
 			RepositoryException, DatabaseException, WorkflowException {
 		log.debug("addTaskInstanceComment({}, {}, {})", new Object[] { token, taskInstanceId, message });
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Session session = null;
 		
 		try {
@@ -978,7 +978,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public TaskInstance getTaskInstance(String token, long taskInstanceId) throws RepositoryException,
 			DatabaseException, WorkflowException {
 		log.debug("getTaskInstance({}, {})", token, taskInstanceId);
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		TaskInstance vo = new TaskInstance();
 		Session session = null;
 		
@@ -1012,7 +1012,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public void setTaskInstanceActorId(String token, long taskInstanceId, String actorId) throws
 			RepositoryException, DatabaseException, WorkflowException {
 		log.debug("setTaskInstanceActorId({}, {}, {})", new Object[] { token, taskInstanceId, actorId });
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Session session = null;
 		
 		try {
@@ -1045,7 +1045,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public void addTaskInstanceVariable(String token, long taskInstanceId, String name, Object value) throws
 			RepositoryException, DatabaseException, WorkflowException {
 		log.debug("addTaskInstanceVariable({}, {}, {}, {})", new Object[] { token, taskInstanceId, name, value });
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Session session = null;
 		
 		try {
@@ -1077,7 +1077,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public void deleteTaskInstanceVariable(String token, long taskInstanceId, String name) throws
 			RepositoryException, DatabaseException, WorkflowException {
 		log.debug("deleteTaskInstanceVariable({}, {}, {})", new Object[] { token, taskInstanceId, name });
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Session session = null;
 		
 		try {
@@ -1109,7 +1109,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public void startTaskInstance(String token, long taskInstanceId) throws RepositoryException,
 			DatabaseException, WorkflowException {
 		log.debug("startTaskInstance({}, {})", token, taskInstanceId);
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Session session = null;
 		
 		try {
@@ -1142,7 +1142,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public void endTaskInstance(String token, long taskInstanceId, String transitionName) throws
 			RepositoryException, DatabaseException, WorkflowException {
 		log.debug("endTaskInstance({}, {}, {})", new Object[] { token, taskInstanceId, transitionName });
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Session session = null;
 		
 		try {
@@ -1189,7 +1189,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public void suspendTaskInstance(String token, long taskInstanceId) throws RepositoryException,
 			DatabaseException, WorkflowException {
 		log.debug("suspendTaskInstance({}, {})", token, taskInstanceId);
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Session session = null;
 		
 		try {
@@ -1222,7 +1222,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public void resumeTaskInstance(String token, long taskInstanceId) throws RepositoryException,
 			DatabaseException, WorkflowException {
 		log.debug("resumeTaskInstance({}, {})", token, taskInstanceId);
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Session session = null;
 		
 		try {
@@ -1255,7 +1255,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public Token getToken(String token, long tokenId) throws RepositoryException, DatabaseException,
 			WorkflowException {
 		log.debug("getToken({}, {})", token, tokenId);
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Token vo = new Token();
 		Session session = null;
 		
@@ -1289,7 +1289,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public void addTokenComment(String token, long tokenId, String message) throws RepositoryException,
 			DatabaseException, WorkflowException {
 		log.debug("addTokenComment({}, {}, {})", new Object[] { token, tokenId, message });
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Session session = null;
 		
 		try {
@@ -1321,7 +1321,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public void suspendToken(String token, long tokenId) throws RepositoryException, DatabaseException,
 			WorkflowException {
 		log.debug("suspendToken({}, {})", token, tokenId);
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Session session = null;
 		
 		try {
@@ -1353,7 +1353,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public void resumeToken(String token, long tokenId) throws RepositoryException, DatabaseException,
 			WorkflowException {
 		log.debug("resumeToken({}, {})", token, tokenId);
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Session session = null;
 		
 		try {
@@ -1385,7 +1385,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public Token sendTokenSignal(String token, long tokenId, String transitionName) throws 
 			RepositoryException, DatabaseException, WorkflowException {
 		log.debug("sendTokenSignal({}, {}, {})", new Object[] { token, tokenId, transitionName });
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Token vo = new Token();
 		Session session = null;
 		
@@ -1427,7 +1427,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public void setTokenNode(String token, long tokenId, String nodeName) throws RepositoryException,
 			DatabaseException, WorkflowException {
 		log.debug("setTokenNode({}, {}, {})", new Object[] { token, tokenId, nodeName });
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Session session = null;
 		
 		try {
@@ -1460,7 +1460,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	public void endToken(String token, long tokenId) throws RepositoryException, DatabaseException,
 			WorkflowException {
 		log.debug("endToken({}, {})", token, tokenId);
-		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Session session = null;
 		
 		try {

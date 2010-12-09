@@ -21,18 +21,13 @@
 
 package com.openkm.servlet.admin;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -41,12 +36,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.IOUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.type.Type;
@@ -57,6 +46,7 @@ import com.openkm.core.Config;
 import com.openkm.dao.HibernateUtil;
 import com.openkm.dao.LegacyDAO;
 import com.openkm.util.UserActivity;
+import com.openkm.util.WebUtil;
 
 /**
  * Database query
@@ -69,81 +59,28 @@ public class DatabaseQueryServlet extends BaseServlet {
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		updateSessionManager(request);
-		
-		try {
-			ServletContext sc = getServletContext();
-			sc.setAttribute("qs", null);
-			sc.setAttribute("method", null);
-			sc.setAttribute("columns", null);
-			sc.setAttribute("results", null);
-			sc.setAttribute("rows", null);
-			sc.setAttribute("errors", null);
-			sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
-		} catch (Exception e) {
-			sendErrorRedirect(request,response, e);
-		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException,
-			ServletException {
-		log.debug("doPost({}, {})", request, response);
-		request.setCharacterEncoding("UTF-8");
+		String qs = WebUtil.getString(request, "qs");
+		String method = WebUtil.getString(request, "method");
 		Session session = null;
 		updateSessionManager(request);
 		
 		try {
-			if (ServletFileUpload.isMultipartContent(request)) {
-				FileItemFactory factory = new DiskFileItemFactory(); 
-				ServletFileUpload upload = new ServletFileUpload(factory);
-				List<FileItem> items = upload.parseRequest(request);
-				InputStream is = null;
-				String method = "";
-				String qs = "";
-				byte[] data = null;
+			if (!qs.equals("") && !method.equals("")) {
+				session = HibernateUtil.getSessionFactory().openSession();
 				
-				for (Iterator<FileItem> it = items.iterator(); it.hasNext();) {
-					FileItem item = it.next();
-					
-					if (item.isFormField()) {
-						if (item.getFieldName().equals("qs")) {
-							qs = item.getString("UTF-8");
-						} else if (item.getFieldName().equals("method")) {
-							method = item.getString("UTF-8");
-						}
-					} else {
-						is = item.getInputStream();
-						data = IOUtils.toByteArray(is);
-						is.close();
-					}
+				if (method.equals("jdbc")) {
+					executeJdbc(session, qs, request, response);
+				} else if (method.equals("hibernate")) {
+					executeHibernate(session, qs, request, response);
 				}
 				
-				if (!qs.equals("") && !method.equals("")) {
-					session = HibernateUtil.getSessionFactory().openSession();
-					
-					if (method.equals("jdbc")) {
-						executeJdbc(session, qs, request, response);
-					} else if (method.equals("hibernate")) {
-						executeHibernate(session, qs, request, response);
-					}
-					
-					// Activity log
-					UserActivity.log(request.getRemoteUser(), "ADMIN_DATABASE_QUERY", null, qs);
-				} else if (data != null && data.length > 0) {
-					session = HibernateUtil.getSessionFactory().openSession();
-					executeUpdate(session, data, request, response);
-					
-					// Activity log
-					UserActivity.log(request.getRemoteUser(), "ADMIN_DATABASE_UPDATE", null, new String(data));
-				} else {
-					ServletContext sc = getServletContext();
-					sc.setAttribute("qs", qs);
-					sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
-				}
+				// Activity log
+				UserActivity.log(request.getRemoteUser(), "ADMIN_DATABASE_QUERY", null, qs);
+			} else {
+				ServletContext sc = getServletContext();
+				sc.setAttribute("qs", qs);
+				sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 			}
-		} catch (FileUploadException e) {
-			sendErrorRedirect(request,response, e);
 		} catch (SQLException e) {
 			sendErrorRedirect(request,response, e);
 		} finally {
@@ -199,7 +136,6 @@ public class DatabaseQueryServlet extends BaseServlet {
 		
 		sc.setAttribute("qs", qs);
 		sc.setAttribute("method", "hibernate");
-		sc.setAttribute("errors", null);
 		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 	}
 	
@@ -252,60 +188,6 @@ public class DatabaseQueryServlet extends BaseServlet {
 		
 		sc.setAttribute("qs", qs);
 		sc.setAttribute("method", "jdbc");
-		sc.setAttribute("errors", null);
 		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
-	}
-	
-	/**
-	 * Import into database
-	 */
-	private void executeUpdate(Session session, byte[] data, HttpServletRequest request, 
-			HttpServletResponse response) throws SQLException, ServletException, IOException {
-		log.debug("executeUpdate({}, {}, {})", new Object[] { session, request, response });
-		ServletContext sc = getServletContext();
-		Connection con = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		List<HashMap<String, String>> errors = new ArrayList<HashMap<String, String>>();
-		int rows = 0;
-		
-		try {
-			con = session.connection();
-			stmt = con.createStatement();
-			InputStreamReader is = new InputStreamReader(new ByteArrayInputStream(data));
-			BufferedReader br = new BufferedReader(is);
-			String sql;
-			int ln = 0;
-			
-			while ((sql = br.readLine()) != null) {
-				ln++;
-				
-				if (sql.length() > 0) {
-					try {
-						rows += stmt.executeUpdate(sql);
-					} catch (SQLException e) {
-						HashMap<String, String> error = new HashMap<String, String>();
-						error.put("ln", Integer.toString(ln));
-						error.put("sql", sql);
-						error.put("msg", e.getMessage());
-						errors.add(error);
-					}
-				}
-			}
-		} finally {
-			LegacyDAO.close(rs);
-			LegacyDAO.close(stmt);
-			LegacyDAO.close(con);
-		}
-		
-		sc.setAttribute("qs", "");
-		sc.setAttribute("method", "");
-		sc.setAttribute("columns", null);
-		sc.setAttribute("results", null);
-		sc.setAttribute("rows", rows);
-		sc.setAttribute("errors", errors);
-		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
-		
-		log.debug("executeUpdate: void");
 	}
 }

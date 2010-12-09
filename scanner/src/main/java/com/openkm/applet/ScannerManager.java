@@ -38,8 +38,8 @@ import uk.co.mmscomputing.device.scanner.Scanner;
 import uk.co.mmscomputing.device.scanner.ScannerDevice;
 import uk.co.mmscomputing.device.scanner.ScannerIOException;
 import uk.co.mmscomputing.device.scanner.ScannerIOMetadata;
-import uk.co.mmscomputing.device.scanner.ScannerIOMetadata.Type;
 import uk.co.mmscomputing.device.scanner.ScannerListener;
+import uk.co.mmscomputing.device.scanner.ScannerIOMetadata.Type;
 
 public class ScannerManager implements ScannerListener {
 	private static Logger log = Logger.getLogger(ScannerManager.class.getName());
@@ -124,10 +124,12 @@ public class ScannerManager implements ScannerListener {
 				}
 			} catch (IOException e) {
 				log.log(Level.SEVERE, "IOException: " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error",
+						JOptionPane.ERROR_MESSAGE);
 			} catch (Throwable e) { // Catch java.lang.OutOfMemeoryException
 				log.log(Level.SEVERE, "Throwable: " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		} else if (type.equals(ScannerIOMetadata.STATECHANGE)) {
 			log.fine("***** STATECHANGE: " + metadata.getStateStr() + " *****");

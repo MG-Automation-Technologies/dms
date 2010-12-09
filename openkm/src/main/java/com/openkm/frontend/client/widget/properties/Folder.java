@@ -23,23 +23,17 @@ package com.openkm.frontend.client.widget.properties;
 
 import java.util.Iterator;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
-import com.openkm.extension.frontend.client.widget.messaging.MessagingToolBarBox;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
-import com.openkm.frontend.client.util.OKMBundleResources;
+import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.util.Util;
 
 public class Folder extends Composite {
@@ -49,9 +43,6 @@ public class Folder extends Composite {
 	private FlexTable tableSubscribedUsers;
 	private FlexTable table;
 	private GWTFolder folder;
-	HorizontalPanel hPanelSubscribedUsers;
-	private HTML subcribedUsersText;
-	private Image proposeSubscribeImage;
 	
 	/**
 	 * The folder
@@ -84,20 +75,7 @@ public class Folder extends Composite {
 		tableProperties.setHTML(9, 0, "<b>"+Main.i18n("folder.webdav")+"</b>");
 		tableProperties.setWidget(9, 1, new HTML(""));
 		
-		hPanelSubscribedUsers = new HorizontalPanel();
-		subcribedUsersText = new HTML("<b>"+Main.i18n("folder.subscribed.users")+"<b>");
-		proposeSubscribeImage = new Image(OKMBundleResources.INSTANCE.proposeSubscription());
-		proposeSubscribeImage.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				MessagingToolBarBox.get().executeProposeSubscription(folder.getUuid());
-			}
-		});
-		hPanelSubscribedUsers.add(subcribedUsersText);
-		hPanelSubscribedUsers.add(new HTML("&nbsp;"));
-		hPanelSubscribedUsers.setCellVerticalAlignment(subcribedUsersText, HasAlignment.ALIGN_MIDDLE);
-		
-		tableSubscribedUsers.setWidget(0, 0, hPanelSubscribedUsers);
+		tableSubscribedUsers.setHTML(0,0,"<b>"+Main.i18n("folder.subscribed.users")+"<b>");
 				
 		table.setWidget(0, 0, tableProperties);
 		table.setHTML(0,1, "");
@@ -122,7 +100,6 @@ public class Folder extends Composite {
 		
 		tableProperties.setStyleName("okm-DisableSelect");
 		tableSubscribedUsers.setStyleName("okm-DisableSelect");
-		proposeSubscribeImage.addStyleName("okm-Hyperlink");
 		
 		initWidget(scrollPanel);
 	}
@@ -208,8 +185,8 @@ public class Folder extends Composite {
 		// Some preoperties only must be visible on taxonomy or trash view
 		int actualView = Main.get().mainPanel.desktop.navigator.getStackIndex();
 		switch(actualView) {
-			case UIDesktopConstants.NAVIGATOR_TAXONOMY:   // Some preperties only must be visible on taxonomy or trash view
-			case UIDesktopConstants.NAVIGATOR_TRASH:
+			case PanelDefinition.NAVIGATOR_TAXONOMY:   // Some preperties only must be visible on taxonomy or trash view
+			case PanelDefinition.NAVIGATOR_TRASH:
 				tableSubscribedUsers.setVisible(true);
 				tableProperties.getRowFormatter().setVisible(4, true); // Is user subscribed
 				tableProperties.getRowFormatter().setVisible(5, true); // Number of folders
@@ -217,15 +194,15 @@ public class Folder extends Composite {
 				tableProperties.getRowFormatter().setVisible(7, true); // Number of e-mails
 				break;
 				
-			case UIDesktopConstants.NAVIGATOR_THESAURUS:
-			case UIDesktopConstants.NAVIGATOR_CATEGORIES:
+			case PanelDefinition.NAVIGATOR_THESAURUS:
+			case PanelDefinition.NAVIGATOR_CATEGORIES:
 				tableSubscribedUsers.setVisible(true);
 				tableProperties.getRowFormatter().setVisible(4, false);
 				tableProperties.getRowFormatter().setVisible(5, true);
 				tableProperties.getRowFormatter().setVisible(6, true);
 				tableProperties.getRowFormatter().setVisible(7, false);
 				break;
-			case UIDesktopConstants.NAVIGATOR_MAIL:
+			case PanelDefinition.NAVIGATOR_MAIL:
 				tableSubscribedUsers.setVisible(false);
 				tableProperties.getRowFormatter().setVisible(4, false);
 				tableProperties.getRowFormatter().setVisible(5, true);
@@ -233,21 +210,13 @@ public class Folder extends Composite {
 				tableProperties.getRowFormatter().setVisible(7, false);
 				break;
 		
-			case UIDesktopConstants.NAVIGATOR_PERSONAL:
+			case PanelDefinition.NAVIGATOR_PERSONAL:
 				tableSubscribedUsers.setVisible(false); // Some data must not be visible on personal view
 				tableProperties.getRowFormatter().setVisible(4, false);
 				tableProperties.getRowFormatter().setVisible(5, true); // Number of folders
 				tableProperties.getRowFormatter().setVisible(6, true); // Number of documents
 				tableProperties.getRowFormatter().setVisible(7, true); // Number of e-mails
 				break;
-		}
-		
-		// Propose subscription only must be enabled in taxonomy, categories, thesaurus and templates with
-		if (Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TAXONOMY || 
-			Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TEMPLATES) {
-			proposeSubscribeImage.setVisible(true);
-		} else {
-			proposeSubscribeImage.setVisible(false);
 		}
 	}
 
@@ -304,14 +273,6 @@ public class Folder extends Composite {
 			}
 		}
 		
-		subcribedUsersText.setHTML("<b>"+Main.i18n("folder.subscribed.users")+"<b>");
-	}
-	
-	/**
-	 * showProposedSusbcription
-	 */
-	public void showProposedSusbcription() {
-		// Adds to panel
-		hPanelSubscribedUsers.add(proposeSubscribeImage);
+		tableSubscribedUsers.setHTML(0, 0, "<b>"+Main.i18n("folder.subscribed.users")+"<b>");
 	}
 }

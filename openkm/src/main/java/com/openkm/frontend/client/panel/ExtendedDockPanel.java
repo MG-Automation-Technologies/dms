@@ -35,8 +35,6 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
-import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
-import com.openkm.frontend.client.contants.ui.UIDockPanelConstants;
 import com.openkm.frontend.client.panel.bottom.BottomPanel;
 import com.openkm.frontend.client.panel.center.Administration;
 import com.openkm.frontend.client.panel.center.Dashboard;
@@ -59,11 +57,11 @@ public class ExtendedDockPanel extends Composite {
 	public static final int VERTICAL_BORDER_PANEL_WIDTH = 10;
 	
 	// Workspace constants
-//	public static final int DESKTOP 		= 0;
-//	public static final int SEARCH 			= 1;
-//	public static final int DASHBOARD		= 2;
-//	public static final int ADMINISTRATION	= 3;
-//	public static final int EXTENSIONS 		= 4;
+	public static final int DESKTOP 		= 0;
+	public static final int SEARCH 			= 1;
+	public static final int DASHBOARD		= 2;
+	public static final int ADMINISTRATION	= 3;
+	public static final int EXTENSIONS 		= 4;
 	
 	public DockPanel dockPanel;
 	
@@ -128,7 +126,7 @@ public class ExtendedDockPanel extends Composite {
 		dashboard.setSize(centerWidth, centerHeight);
 		administration.setSize(centerWidth, centerHeight);
 		
-		actualView = UIDockPanelConstants.DESKTOP;	
+		actualView = DESKTOP;	
 		
 		// Creates the dockPanel
 		dockPanel.add(topPanel, DockPanel.NORTH);
@@ -153,29 +151,29 @@ public class ExtendedDockPanel extends Composite {
 	public void setView(int workspace) {
 		disableView();
 		switch (workspace) {
-			case UIDockPanelConstants.DESKTOP :
+			case DESKTOP :
 				int navigatorView = Main.get().mainPanel.desktop.navigator.getStackIndex();
-				Main.get().mainPanel.topPanel.toolBar.changeView(navigatorView, UIDockPanelConstants.DESKTOP);
+				Main.get().mainPanel.topPanel.toolBar.changeView(navigatorView, DESKTOP);
 				actualView = workspace;
 				break;
 				
-			case UIDockPanelConstants.SEARCH:
-				Main.get().mainPanel.topPanel.toolBar.changeView(0, UIDockPanelConstants.SEARCH);
+			case SEARCH :
+				Main.get().mainPanel.topPanel.toolBar.changeView(0, SEARCH);
 				actualView = workspace;
 				break;
 			
-			case UIDockPanelConstants.DASHBOARD :
-				Main.get().mainPanel.topPanel.toolBar.changeView(0, UIDockPanelConstants.DASHBOARD);
+			case DASHBOARD :
+				Main.get().mainPanel.topPanel.toolBar.changeView(0, DASHBOARD);
 				actualView = workspace;
 				break;
 				
-			case UIDockPanelConstants.ADMINISTRATION :
-				Main.get().mainPanel.topPanel.toolBar.changeView(0, UIDockPanelConstants.ADMINISTRATION);
+			case ADMINISTRATION :
+				Main.get().mainPanel.topPanel.toolBar.changeView(0, ADMINISTRATION);
 				actualView = workspace;
 				break;
 			
 			default:
-				Main.get().mainPanel.topPanel.toolBar.changeView(0, UIDockPanelConstants.EXTENSIONS);
+				Main.get().mainPanel.topPanel.toolBar.changeView(0, EXTENSIONS);
 				actualView = workspace;
 		}
 		enableView();
@@ -183,19 +181,19 @@ public class ExtendedDockPanel extends Composite {
 	
 	private void disableView() {
 		switch (actualView) {
-			case UIDockPanelConstants.DESKTOP :
+			case DESKTOP :
 				dockPanel.remove(desktop);
 				break;
 				
-			case UIDockPanelConstants.SEARCH :
+			case SEARCH :
 				dockPanel.remove(search);
 				break;
 				
-			case UIDockPanelConstants.DASHBOARD:
+			case DASHBOARD:
 				dockPanel.remove(dashboard);
 				break;
 			
-			case UIDockPanelConstants.ADMINISTRATION:
+			case ADMINISTRATION:
 				dockPanel.remove(administration);
 				break;
 			
@@ -207,21 +205,21 @@ public class ExtendedDockPanel extends Composite {
 	
 	private void enableView() {
 		switch (actualView) {
-			case UIDockPanelConstants.DESKTOP :
+			case DESKTOP :
 				dockPanel.add(desktop,DockPanel.CENTER);
 				desktop.refreshSpliterAfterAdded();
 				break;
 				
-			case UIDockPanelConstants.SEARCH :
+			case SEARCH :
 				dockPanel.add(search,DockPanel.CENTER);
 				search.refreshSpliterAfterAdded();
 				break;
 		
-			case UIDockPanelConstants.DASHBOARD :
+			case DASHBOARD :
 				dockPanel.add(dashboard,DockPanel.CENTER);
 				break;
 			
-			case UIDockPanelConstants.ADMINISTRATION :
+			case ADMINISTRATION :
 				dockPanel.add(administration,DockPanel.CENTER);
 				break;
 			
@@ -244,7 +242,7 @@ public class ExtendedDockPanel extends Composite {
 	 * enableKeyShorcuts
 	 */
 	public void enableKeyShorcuts() {
-		Log.debug("ExtendedDockPanel enableKeyShortcuts");
+		Log.debug("ExtendedDockPanel enableKeyShorcuts");
 		dockPanel.sinkEvents(Event.KEYEVENTS);
 		handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
 			@Override
@@ -255,13 +253,13 @@ public class ExtendedDockPanel extends Composite {
 						int keyCode = event.getNativeEvent().getKeyCode(); 
 						switch (keyCode) {
 							case Keyboard.KEY_F2:
-								if (actualView == UIDockPanelConstants.DESKTOP && Main.get().activeFolderTree.isPanelSelected() && 
+								if (actualView == DESKTOP && Main.get().activeFolderTree.isPanelSelected() && 
 									Main.get().mainPanel.topPanel.toolBar.getToolBarOption().renameOption &&
-									(Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TAXONOMY ||
-									 Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_PERSONAL || 		
-									 Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TEMPLATES ||
-									 Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_CATEGORIES ||
-									 Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_MAIL)) {
+									(Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TAXONOMY ||
+									 Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_PERSONAL || 		
+									 Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TEMPLATES ||
+									 Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_CATEGORIES ||
+									 Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_MAIL)) {
 									
 									Main.get().activeFolderTree.rename();
 									propagate = false;
@@ -275,13 +273,13 @@ public class ExtendedDockPanel extends Composite {
 								break;
 							
 							case Keyboard.KEY_SUPR:
-								if (actualView == UIDockPanelConstants.DESKTOP && Main.get().activeFolderTree.isPanelSelected() && 
+								if (actualView == DESKTOP && Main.get().activeFolderTree.isPanelSelected() && 
 									Main.get().mainPanel.topPanel.toolBar.getToolBarOption().deleteOption &&
-									(Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TAXONOMY ||
-									 Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_CATEGORIES || 	
-									 Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_PERSONAL || 		
-									 Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TEMPLATES ||
-									 Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_MAIL)) {
+									(Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TAXONOMY ||
+									 Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_CATEGORIES || 	
+									 Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_PERSONAL || 		
+									 Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TEMPLATES ||
+									 Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_MAIL)) {
 										
 									Main.get().mainPanel.topPanel.toolBar.executeDelete();
 									propagate = false;
@@ -299,12 +297,12 @@ public class ExtendedDockPanel extends Composite {
 							case Keyboard.KEY_X:
 								// Case CTRL + C
 								if (event.getNativeEvent().getCtrlKey()) {
-									if (actualView == UIDockPanelConstants.DESKTOP && Main.get().activeFolderTree.isPanelSelected() && 
+									if (actualView == DESKTOP && Main.get().activeFolderTree.isPanelSelected() && 
 											Main.get().mainPanel.topPanel.toolBar.getToolBarOption().copyOption &&
-											(Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TAXONOMY ||
-											 Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_PERSONAL || 		
-											 Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TEMPLATES ||
-											 Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_MAIL)) {
+											(Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TAXONOMY ||
+											 Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_PERSONAL || 		
+											 Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TEMPLATES ||
+											 Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_MAIL)) {
 										
 										// Saves folder to be copied
 										GWTFolder folder = Main.get().activeFolderTree.getFolder();
@@ -386,11 +384,11 @@ public class ExtendedDockPanel extends Composite {
 									 folderSelectPopup.getAction()== FolderSelectPopup.ACTION_MOVE )) {
 									
 									// Destination folder is always selected by tree
-									if (actualView == UIDockPanelConstants.DESKTOP && Main.get().activeFolderTree.isPanelSelected() && 
-										(Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TAXONOMY ||
-										 Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_PERSONAL || 		
-										 Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TEMPLATES || 
-										 Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_MAIL)) {
+									if (actualView == DESKTOP && Main.get().activeFolderTree.isPanelSelected() && 
+										(Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TAXONOMY ||
+										 Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_PERSONAL || 		
+										 Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TEMPLATES || 
+										 Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_MAIL)) {
 										
 										// Evaluates destination folder grant to copy
 										GWTFolder folder = Main.get().activeFolderTree.getFolder();
@@ -404,7 +402,7 @@ public class ExtendedDockPanel extends Composite {
 							
 							case Keyboard.KEY_D:
 								// Case CTRL + D
-								if (event.getNativeEvent().getCtrlKey() && actualView == UIDockPanelConstants.DESKTOP && 
+								if (event.getNativeEvent().getCtrlKey() && actualView == DESKTOP && 
 									Main.get().mainPanel.topPanel.toolBar.getToolBarOption().downloadOption) {
 									Main.get().mainPanel.topPanel.toolBar.executeDownload();
 									propagate = false;
@@ -428,7 +426,7 @@ public class ExtendedDockPanel extends Composite {
 							
 							case Keyboard.KEY_N:
 								// Case CTRL + N
-								if (event.getNativeEvent().getCtrlKey() && actualView == UIDockPanelConstants.DESKTOP && 
+								if (event.getNativeEvent().getCtrlKey() && actualView == DESKTOP && 
 									Main.get().mainPanel.topPanel.toolBar.getToolBarOption().createFolderOption) {
 									Main.get().mainPanel.topPanel.toolBar.executeFolderDirectory();
 									propagate = false;
@@ -436,7 +434,7 @@ public class ExtendedDockPanel extends Composite {
 								break;
 							
 							case Keyboard.KEY_F5:
-								if (actualView == UIDockPanelConstants.DESKTOP && 
+								if (actualView == DESKTOP && 
 									Main.get().mainPanel.topPanel.toolBar.getToolBarOption().refreshOption){
 									Main.get().mainPanel.topPanel.toolBar.executeRefresh();
 									propagate = false;
@@ -444,7 +442,7 @@ public class ExtendedDockPanel extends Composite {
 								break;
 							
 							case Keyboard.KEY_INSERT:
-								if (actualView == UIDockPanelConstants.DESKTOP && 
+								if (actualView == DESKTOP && 
 									Main.get().mainPanel.topPanel.toolBar.getToolBarOption().addDocumentOption) {
 									Main.get().mainPanel.topPanel.toolBar.executeAddDocument();
 									propagate = false;

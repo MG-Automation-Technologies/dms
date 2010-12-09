@@ -22,7 +22,7 @@ import com.openkm.util.FormUtils;
 public class FormsTest extends TestCase {
 	private static Logger log = LoggerFactory.getLogger(FormsTest.class);
 	private static final String BASE_DIR = "src/test/resources";
-	
+
 	public FormsTest(String name) {
 		super(name);
 	}
@@ -113,8 +113,7 @@ public class FormsTest extends TestCase {
 	}
 	
 	public void testPropertyGroups() throws Exception {
-		String pgFile = BASE_DIR + "/PropertyGroups.xml";
-		Map<PropertyGroup, List<FormElement>> pgForms = FormUtils.parsePropertyGroupsForms(pgFile);
+		Map<PropertyGroup, List<FormElement>> pgForms = FormUtils.parsePropertyGroupsForms();
 		assertFalse(pgForms.isEmpty());
 		
 		List<FormElement> consulting = FormUtils.getPropertyGroupForms(pgForms, "okg:consulting");

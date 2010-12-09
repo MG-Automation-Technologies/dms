@@ -44,8 +44,8 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.contants.service.RPCService;
-import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
+import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import com.openkm.frontend.client.service.OKMFolderService;
@@ -215,7 +215,7 @@ public class FolderSelectPopup extends DialogBox  {
 						if (!fatherPath.equals(actualPath)) {
 							setActionView();
 							endPoint = (ServiceDefTarget) documentService;
-							endPoint.setServiceEntryPoint(RPCService.DocumentService);
+							endPoint.setServiceEntryPoint(Config.OKMDocumentService);
 							documentService.move( ((GWTDocument) node).getPath(),actualPath, callbackMove);
 						} else {
 							changeStatusOnError("fileupload.label.error.not.allowed.copy.same.folder");
@@ -228,7 +228,7 @@ public class FolderSelectPopup extends DialogBox  {
 						if (!fatherPath.equals(actualPath)) {
 							setActionView();
 							endPoint = (ServiceDefTarget) documentService;
-							endPoint.setServiceEntryPoint(RPCService.DocumentService);
+							endPoint.setServiceEntryPoint(Config.OKMDocumentService);
 							documentService.copy( ((GWTDocument) node).getPath(),actualPath, callbackCopy);
 						} else {
 							changeStatusOnError("fileupload.label.error.not.allowed.copy.same.folder");
@@ -238,7 +238,7 @@ public class FolderSelectPopup extends DialogBox  {
 					case ACTION_RESTORE:
 						setActionView();
 						endPoint = (ServiceDefTarget) documentService;
-						endPoint.setServiceEntryPoint(RPCService.DocumentService);
+						endPoint.setServiceEntryPoint(Config.OKMDocumentService);
 						documentService.move( ((GWTDocument) node).getPath(),actualPath, callbackRestore);
 						break;
 					
@@ -248,7 +248,7 @@ public class FolderSelectPopup extends DialogBox  {
 						if (!fatherPath.equals(actualPath)) {
 							setActionView();
 							endPoint = (ServiceDefTarget) documentService;
-							endPoint.setServiceEntryPoint(RPCService.DocumentService);								
+							endPoint.setServiceEntryPoint(Config.OKMDocumentService);								
 							documentService.copy(((GWTDocument) node).getPath(),actualPath,callbackCopyFromTemplate);
 						} else {
 							changeStatusOnError("fileupload.label.error.not.allowed.create.from.template.same.folder");
@@ -265,7 +265,7 @@ public class FolderSelectPopup extends DialogBox  {
 						if (!fatherPath.equals(actualPath)) {
 							setActionView();
 							endPoint = (ServiceDefTarget) mailService;
-							endPoint.setServiceEntryPoint(RPCService.MailService);
+							endPoint.setServiceEntryPoint(Config.OKMMailService);
 							mailService.move( ((GWTMail) node).getPath(),actualPath, callbackMove);
 						} else {
 							changeStatusOnError("fileupload.label.error.not.allowed.copy.same.folder");
@@ -278,7 +278,7 @@ public class FolderSelectPopup extends DialogBox  {
 						if (!fatherPath.equals(actualPath)) {
 							setActionView();
 							endPoint = (ServiceDefTarget) mailService;
-							endPoint.setServiceEntryPoint(RPCService.MailService);
+							endPoint.setServiceEntryPoint(Config.OKMMailService);
 							mailService.copy( ((GWTMail) node).getPath(),actualPath, callbackCopy);
 						} else {
 							changeStatusOnError("fileupload.label.error.not.allowed.copy.same.folder");
@@ -288,7 +288,7 @@ public class FolderSelectPopup extends DialogBox  {
 					case ACTION_RESTORE:
 						setActionView();
 						endPoint = (ServiceDefTarget) mailService;
-						endPoint.setServiceEntryPoint(RPCService.MailService);
+						endPoint.setServiceEntryPoint(Config.OKMMailService);
 						mailService.move( ((GWTMail) node).getPath(),actualPath, callbackRestore);
 						break;
 				}
@@ -301,7 +301,7 @@ public class FolderSelectPopup extends DialogBox  {
 					if ( actualPath.indexOf(((GWTFolder) node).getPath())==-1 && !((GWTFolder) node).getParentPath().equals(actualPath)) {
 						setActionView();
 						endPoint = (ServiceDefTarget) folderService;
-						endPoint.setServiceEntryPoint(RPCService.FolderService);
+						endPoint.setServiceEntryPoint(Config.OKMFolderService);
 						folderService.move( ((GWTFolder) node).getPath(),actualPath, callbackMove);
 					} else {
 						changeStatusOnError("fileupload.label.error.not.allowed.move.folder.child");
@@ -313,7 +313,7 @@ public class FolderSelectPopup extends DialogBox  {
 					if ( !((GWTFolder) node).getPath().equals(actualPath) ) {
 						setActionView();
 						endPoint = (ServiceDefTarget) folderService;
-						endPoint.setServiceEntryPoint(RPCService.FolderService);
+						endPoint.setServiceEntryPoint(Config.OKMFolderService);
 						folderService.copy( ((GWTFolder) node).getPath(),actualPath, callbackCopy);
 					} else {
 						changeStatusOnError("fileupload.label.error.not.allowed.copy.same.folder");
@@ -323,7 +323,7 @@ public class FolderSelectPopup extends DialogBox  {
 				case ACTION_RESTORE:
 					setActionView();
 					endPoint = (ServiceDefTarget) folderService;
-					endPoint.setServiceEntryPoint(RPCService.FolderService);
+					endPoint.setServiceEntryPoint(Config.OKMFolderService);
 					folderService.move( ((GWTFolder) node).getPath(), actualPath, callbackRestore);
 					break;
 			}
@@ -416,32 +416,32 @@ public class FolderSelectPopup extends DialogBox  {
 						}
 						
 						switch(originPanel) {
-							case UIDesktopConstants.NAVIGATOR_TAXONOMY:
+							case PanelDefinition.NAVIGATOR_TAXONOMY:
 								Main.get().mainPanel.desktop.navigator.taxonomyTree.evaluesFolderIcon(parentItem);
 								Main.get().mainPanel.desktop.navigator.taxonomyTree.actualItem = parentItem; // Changes the actualItem because
 																									 // has been moved and on restore
 																									 // view ( refreshing ) needs new path
 								break;
-							case UIDesktopConstants.NAVIGATOR_PERSONAL:
+							case PanelDefinition.NAVIGATOR_PERSONAL:
 								Main.get().mainPanel.desktop.navigator.personalTree.evaluesFolderIcon(parentItem);
 								Main.get().mainPanel.desktop.navigator.taxonomyTree.actualItem = parentItem; // Changes the actualItem because
 								 																	 // has been moved and on restore
 								 																	 // view ( refreshing ) needs new path
 								break;
-							case UIDesktopConstants.NAVIGATOR_TEMPLATES:
+							case PanelDefinition.NAVIGATOR_TEMPLATES:
 								Main.get().mainPanel.desktop.navigator.templateTree.evaluesFolderIcon(parentItem);
 								Main.get().mainPanel.desktop.navigator.taxonomyTree.actualItem = parentItem; // Changes the actualItem because
 								 																	 // has been moved and on restore
 								 																	 // view ( refreshing ) needs new path
 								break;
-							case UIDesktopConstants.NAVIGATOR_MAIL:
+							case PanelDefinition.NAVIGATOR_MAIL:
 								Main.get().mainPanel.desktop.navigator.mailTree.evaluesFolderIcon(parentItem);
 								Main.get().mainPanel.desktop.navigator.taxonomyTree.actualItem = parentItem; // Changes the actualItem because
 								 																	 // has been moved and on restore
 								 																	 // view ( refreshing ) needs new path
 							
 								break;
-							case UIDesktopConstants.NAVIGATOR_CATEGORIES:
+							case PanelDefinition.NAVIGATOR_CATEGORIES:
 								Main.get().mainPanel.desktop.navigator.mailTree.evaluesFolderIcon(parentItem);
 								Main.get().mainPanel.desktop.navigator.taxonomyTree.actualItem = parentItem; // Changes the actualItem because
 								 																	 // has been moved and on restore
@@ -506,20 +506,20 @@ public class FolderSelectPopup extends DialogBox  {
 			String docPath = folderSelectTree.getActualPath() + "/" + ((GWTDocument) node).getName();
 			String path = folderSelectTree.getActualPath();
 			switch (Integer.parseInt(contextListBox.getValue(contextListBox.getSelectedIndex()))) {
-				case UIDesktopConstants.NAVIGATOR_TAXONOMY:
-					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(UIDesktopConstants.NAVIGATOR_TAXONOMY, false);
+				case PanelDefinition.NAVIGATOR_TAXONOMY:
+					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_TAXONOMY, false);
 					Main.get().mainPanel.desktop.browser.fileBrowser.setFlagCreatedFromTemplate();
 					Main.get().activeFolderTree.openAllPathFolder(path,docPath);
 					break;
 					
-				case UIDesktopConstants.NAVIGATOR_PERSONAL:
-					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(UIDesktopConstants.NAVIGATOR_PERSONAL, false);
+				case PanelDefinition.NAVIGATOR_PERSONAL:
+					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_PERSONAL, false);
 					Main.get().mainPanel.desktop.browser.fileBrowser.setFlagCreatedFromTemplate();
 					Main.get().activeFolderTree.openAllPathFolder(path,docPath);
 					break;
 					
-				case UIDesktopConstants.NAVIGATOR_MAIL:
-					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(UIDesktopConstants.NAVIGATOR_MAIL, false);
+				case PanelDefinition.NAVIGATOR_MAIL:
+					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_MAIL, false);
 					Main.get().mainPanel.desktop.browser.fileBrowser.setFlagCreatedFromTemplate();
 					Main.get().activeFolderTree.openAllPathFolder(path,docPath);
 					break;
@@ -710,22 +710,22 @@ public class FolderSelectPopup extends DialogBox  {
 		if (entryPoint!=FolderSelectPopup.ENTRYPOINT_CATEGORIES) {
 			int count = 0;
 			posTaxonomy = count++;
-			contextListBox.addItem(Main.i18n("leftpanel.label.taxonomy"),""+UIDesktopConstants.NAVIGATOR_TAXONOMY);
+			contextListBox.addItem(Main.i18n("leftpanel.label.taxonomy"),""+PanelDefinition.NAVIGATOR_TAXONOMY);
 			if (templatesVisible) {
 				posTemplates = count++;
-				contextListBox.addItem(Main.i18n("leftpanel.label.templates"),""+UIDesktopConstants.NAVIGATOR_TEMPLATES);
+				contextListBox.addItem(Main.i18n("leftpanel.label.templates"),""+PanelDefinition.NAVIGATOR_TEMPLATES);
 			}
 			if (personalVisible) {
 				posPersonal = count++;			
-				contextListBox.addItem(Main.i18n("leftpanel.label.my.documents"),""+UIDesktopConstants.NAVIGATOR_PERSONAL);
+				contextListBox.addItem(Main.i18n("leftpanel.label.my.documents"),""+PanelDefinition.NAVIGATOR_PERSONAL);
 			}
 			if (mailVisible) {
 				posMail = count++;
-				contextListBox.addItem(Main.i18n("leftpanel.label.mail"),""+UIDesktopConstants.NAVIGATOR_MAIL);
+				contextListBox.addItem(Main.i18n("leftpanel.label.mail"),""+PanelDefinition.NAVIGATOR_MAIL);
 			}
 		} else {
 			posCategories = 0;
-			contextListBox.addItem(Main.i18n("leftpanel.label.categories"),""+UIDesktopConstants.NAVIGATOR_CATEGORIES);
+			contextListBox.addItem(Main.i18n("leftpanel.label.categories"),""+PanelDefinition.NAVIGATOR_CATEGORIES);
 		}
 		this.entryPoint = entryPoint;
 	}
@@ -851,7 +851,7 @@ public class FolderSelectPopup extends DialogBox  {
 	}
 	
 	public void showTemplates() {
-		contextListBox.addItem(Main.i18n("leftpanel.label.templates"),""+UIDesktopConstants.NAVIGATOR_TEMPLATES);
+		contextListBox.addItem(Main.i18n("leftpanel.label.templates"),""+PanelDefinition.NAVIGATOR_TEMPLATES);
 		templatesVisible = true;
 	}
 	
@@ -859,7 +859,7 @@ public class FolderSelectPopup extends DialogBox  {
 	 * showPersonal
 	 */
 	public void showPersonal() {
-		contextListBox.addItem(Main.i18n("leftpanel.label.my.documents"),""+UIDesktopConstants.NAVIGATOR_PERSONAL);
+		contextListBox.addItem(Main.i18n("leftpanel.label.my.documents"),""+PanelDefinition.NAVIGATOR_PERSONAL);
 		personalVisible = true;
 	}
 	
@@ -867,7 +867,7 @@ public class FolderSelectPopup extends DialogBox  {
 	 * showMail
 	 */
 	public void showMail() {
-		contextListBox.addItem(Main.i18n("leftpanel.label.mail"),""+UIDesktopConstants.NAVIGATOR_MAIL);
+		contextListBox.addItem(Main.i18n("leftpanel.label.mail"),""+PanelDefinition.NAVIGATOR_MAIL);
 		mailVisible = true;
 	}
 }

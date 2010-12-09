@@ -40,7 +40,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTWorkspace;
-import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
+import com.openkm.frontend.client.panel.PanelDefinition;
 
 /**
  * FolderSelectPopup
@@ -68,6 +68,12 @@ public class FolderSelectPopup extends DialogBox  {
 	private boolean templatesVisible = false;
 	private boolean personalVisible = false;
 	private boolean mailVisible		= false;
+	private int posTaxonomy = 0;
+	private int posCategories = 0;
+	private int posThesaurus = 0;
+	private int posTemplates = 0;
+	private int posPersonal = 0;
+	private int posMail = 0;
 	
 	/**
 	 * FolderSelectPopup
@@ -206,21 +212,28 @@ public class FolderSelectPopup extends DialogBox  {
 		mailVisible = workspace.isStackMailVisible();
 		
 		removeAllContextListItems();
-		contextListBox.addItem(Main.i18n("leftpanel.label.taxonomy"),""+UIDesktopConstants.NAVIGATOR_TAXONOMY);
+		int count = 0;
+		posTaxonomy = count++;
+		contextListBox.addItem(Main.i18n("leftpanel.label.taxonomy"),""+PanelDefinition.NAVIGATOR_TAXONOMY);
 		if (categoriesVisible) {
-			contextListBox.addItem(Main.i18n("leftpanel.label.categories"),""+UIDesktopConstants.NAVIGATOR_CATEGORIES);
+			posCategories = count++;
+			contextListBox.addItem(Main.i18n("leftpanel.label.categories"),""+PanelDefinition.NAVIGATOR_CATEGORIES);
 		}
 		if (thesaurusVisible) {
-			contextListBox.addItem(Main.i18n("leftpanel.label.thesaurus"),""+UIDesktopConstants.NAVIGATOR_THESAURUS);
+			posThesaurus = count++;
+			contextListBox.addItem(Main.i18n("leftpanel.label.thesaurus"),""+PanelDefinition.NAVIGATOR_THESAURUS);
 		}
 		if (templatesVisible) {
-			contextListBox.addItem(Main.i18n("leftpanel.label.templates"),""+UIDesktopConstants.NAVIGATOR_TEMPLATES);
+			posTemplates = count++;
+			contextListBox.addItem(Main.i18n("leftpanel.label.templates"),""+PanelDefinition.NAVIGATOR_TEMPLATES);
 		}
-		if (personalVisible) {	
-			contextListBox.addItem(Main.i18n("leftpanel.label.my.documents"),""+UIDesktopConstants.NAVIGATOR_PERSONAL);
+		if (personalVisible) {
+			posPersonal = count++;			
+			contextListBox.addItem(Main.i18n("leftpanel.label.my.documents"),""+PanelDefinition.NAVIGATOR_PERSONAL);
 		}
 		if (mailVisible) {
-			contextListBox.addItem(Main.i18n("leftpanel.label.mail"),""+UIDesktopConstants.NAVIGATOR_MAIL);
+			posMail = count++;
+			contextListBox.addItem(Main.i18n("leftpanel.label.mail"),""+PanelDefinition.NAVIGATOR_MAIL);
 		}
 		
 		super.show();
@@ -243,5 +256,37 @@ public class FolderSelectPopup extends DialogBox  {
 		while (contextListBox.getItemCount()>0) {
 			contextListBox.removeItem(0);
 		}
+	}
+	
+	/**
+	 * showCategories
+	 */
+	private void showCategories() {
+		categoriesVisible = true;
+	}
+	
+	/**
+	 * showThesaurus
+	 */
+	private void showThesaurus() {
+		thesaurusVisible = true;
+	}
+	
+	private void showTemplates() {
+		templatesVisible = true;
+	}
+	
+	/**
+	 * showPersonal
+	 */
+	private void showPersonal() {
+		personalVisible = true;
+	}
+	
+	/**
+	 * showMail
+	 */
+	private void showMail() {
+		mailVisible = true;
 	}
 }

@@ -38,7 +38,7 @@ import com.openkm.frontend.client.bean.GWTPermission;
 import com.openkm.frontend.client.extension.event.HasMailEvent;
 import com.openkm.frontend.client.extension.event.handler.MailHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasMailHandlerExtension;
-import com.openkm.frontend.client.extension.widget.tabmail.TabMailExtension;
+import com.openkm.frontend.client.extension.widget.TabMailExtension;
 
 /**
  * The tab mail

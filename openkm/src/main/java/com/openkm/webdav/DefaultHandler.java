@@ -273,12 +273,10 @@ public class DefaultHandler implements IOHandler, PropertyHandler {
             
             // Remove pdf & preview from cache
             Node documentNode = contentNode.getParent();
-            log.info("Delete: {}", Config.CACHE_DXF + File.separator + documentNode.getUUID() + ".dxf");
-            new File(Config.CACHE_DXF + File.separator + documentNode.getUUID() + ".dxf").delete();
-            log.info("Delete: {}", Config.CACHE_PDF + File.separator + documentNode.getUUID() + ".pdf");
-            new File(Config.CACHE_PDF + File.separator + documentNode.getUUID() + ".pdf").delete();
-            log.info("Delete: {}", Config.CACHE_SWF + File.separator + documentNode.getUUID() + ".swf");
-			new File(Config.CACHE_SWF + File.separator + documentNode.getUUID() + ".swf").delete();
+            log.info("Delete: {}", Config.PDF_CACHE+File.separator+documentNode.getUUID()+".pdf");
+            log.info("Delete: {}", Config.SWF_CACHE+File.separator+documentNode.getUUID()+".swf");
+			new File(Config.PDF_CACHE+File.separator+documentNode.getUUID()+".pdf").delete();
+			new File(Config.SWF_CACHE+File.separator+documentNode.getUUID()+".swf").delete();
         } catch (RepositoryException e) {
             success = false;
             throw new IOException(e.getMessage());

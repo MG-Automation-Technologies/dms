@@ -36,7 +36,7 @@ import com.openkm.frontend.client.extension.event.HasDocumentEvent.DocumentEvent
 import com.openkm.frontend.client.extension.event.HasLanguageEvent.LanguageEventConstant;
 import com.openkm.frontend.client.extension.event.handler.DocumentHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.LanguageHandlerExtension;
-import com.openkm.frontend.client.extension.widget.tabdocument.TabDocumentExtension;
+import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
 
 /**
  * DocumentForum

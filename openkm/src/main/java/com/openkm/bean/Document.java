@@ -63,7 +63,6 @@ public class Document implements Serializable {
 	private boolean subscribed;
 	private boolean convertibleToPdf;
 	private boolean convertibleToSwf;
-	private boolean convertibleToDxf;
 	private Set<String> subscriptors = new HashSet<String>();
 	private Set<String> keywords = new HashSet<String>();
 	private Set<Folder> categories = new HashSet<Folder>();
@@ -221,14 +220,6 @@ public class Document implements Serializable {
 		this.convertibleToSwf = convertibleToSwf;
 	}
 	
-	public boolean isConvertibleToDxf() {
-		return convertibleToDxf;
-	}
-
-	public void setConvertibleToDxf(boolean convertibleToDxf) {
-		this.convertibleToDxf = convertibleToDxf;
-	}
-	
 	public List<Note> getNotes() {
 		return notes;
 	}
@@ -257,7 +248,6 @@ public class Document implements Serializable {
 		sb.append(", uuid="); sb.append(uuid);
 		sb.append(", convertibleToPdf="); sb.append(convertibleToPdf);
 		sb.append(", convertibleToSwf="); sb.append(convertibleToSwf);
-		sb.append(", convertibleToDxf="); sb.append(convertibleToDxf);
 		sb.append(", notes="); sb.append(notes);
 		sb.append("}");
 		return sb.toString();

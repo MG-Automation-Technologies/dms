@@ -31,11 +31,11 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TabBar;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.contants.ui.UIDockPanelConstants;
 import com.openkm.frontend.client.extension.event.HasWorkspaceEvent;
 import com.openkm.frontend.client.extension.event.handler.WorkspaceHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasWorkspaceHandlerExtension;
-import com.openkm.frontend.client.extension.widget.tabworkspace.TabWorkspaceExtension;
+import com.openkm.frontend.client.extension.widget.TabWorkspaceExtension;
+import com.openkm.frontend.client.panel.ExtendedDockPanel;
 
 /**
  * Tab Workspace
@@ -67,21 +67,21 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 			public void onSelection(SelectionEvent<Integer> event) {
 				int index = indexCorrectedChangeViewIndex(event.getSelectedItem().intValue());
 				switch (index) {
-					case UIDockPanelConstants.DESKTOP :
-						Main.get().mainPanel.setView(UIDockPanelConstants.DESKTOP);
+					case ExtendedDockPanel.DESKTOP :
+						Main.get().mainPanel.setView(ExtendedDockPanel.DESKTOP);
 						Main.get().activeFolderTree.centerActulItemOnScroll(); // Center the actual item every time
 						break;
 						
-					case UIDockPanelConstants.SEARCH :
-						Main.get().mainPanel.setView(UIDockPanelConstants.SEARCH);
+					case ExtendedDockPanel.SEARCH :
+						Main.get().mainPanel.setView(ExtendedDockPanel.SEARCH);
 						break;
 						
-					case UIDockPanelConstants.DASHBOARD :
-						Main.get().mainPanel.setView(UIDockPanelConstants.DASHBOARD);
+					case ExtendedDockPanel.DASHBOARD :
+						Main.get().mainPanel.setView(ExtendedDockPanel.DASHBOARD);
 						break;
 					
-					case UIDockPanelConstants.ADMINISTRATION :
-						Main.get().mainPanel.setView(UIDockPanelConstants.ADMINISTRATION);
+					case ExtendedDockPanel.ADMINISTRATION :
+						Main.get().mainPanel.setView(ExtendedDockPanel.ADMINISTRATION);
 						break;
 					
 					default :
@@ -141,24 +141,24 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 	 */
 	public void changeSelectedTab(int tabIndex){
 		switch (tabIndex ) {
-			case UIDockPanelConstants.DESKTOP :
-				tabBar.selectTab(UIDockPanelConstants.DESKTOP);
-				Main.get().mainPanel.setView(UIDockPanelConstants.DESKTOP);
+			case ExtendedDockPanel.DESKTOP :
+				tabBar.selectTab(ExtendedDockPanel.DESKTOP);
+				Main.get().mainPanel.setView(ExtendedDockPanel.DESKTOP);
 				break;
 				
-			case UIDockPanelConstants.SEARCH :
-				tabBar.selectTab(UIDockPanelConstants.SEARCH);
-				Main.get().mainPanel.setView(UIDockPanelConstants.SEARCH);
+			case ExtendedDockPanel.SEARCH :
+				tabBar.selectTab(ExtendedDockPanel.SEARCH);
+				Main.get().mainPanel.setView(ExtendedDockPanel.SEARCH);
 				break;
 				
-			case UIDockPanelConstants.DASHBOARD :
-				tabBar.selectTab(UIDockPanelConstants.DASHBOARD);
-				Main.get().mainPanel.setView(UIDockPanelConstants.DASHBOARD);
+			case ExtendedDockPanel.DASHBOARD :
+				tabBar.selectTab(ExtendedDockPanel.DASHBOARD);
+				Main.get().mainPanel.setView(ExtendedDockPanel.DASHBOARD);
 				break;
 				
-			case UIDockPanelConstants.ADMINISTRATION :
-				tabBar.selectTab(UIDockPanelConstants.ADMINISTRATION);
-				Main.get().mainPanel.setView(UIDockPanelConstants.ADMINISTRATION);
+			case ExtendedDockPanel.ADMINISTRATION :
+				tabBar.selectTab(ExtendedDockPanel.ADMINISTRATION);
+				Main.get().mainPanel.setView(ExtendedDockPanel.ADMINISTRATION);
 				break;
 		}
 	}
@@ -173,13 +173,13 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 	 */
 	public int indexCorrectedChangeViewIndex(int index) {
 		int corrected = index;
-		if (!desktopVisible && corrected>=UIDockPanelConstants.DESKTOP) {
+		if (!desktopVisible && corrected>=ExtendedDockPanel.DESKTOP) {
 			corrected++;
 		}
-		if (!searchVisible && corrected>=UIDockPanelConstants.SEARCH) {
+		if (!searchVisible && corrected>=ExtendedDockPanel.SEARCH) {
 			corrected++;
 		}
-		if (!dashboardVisible && corrected>=UIDockPanelConstants.DASHBOARD) {
+		if (!dashboardVisible && corrected>=ExtendedDockPanel.DASHBOARD) {
 			corrected++;
 		}
 		return corrected;
