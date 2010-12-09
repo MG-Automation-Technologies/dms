@@ -67,6 +67,7 @@ public class Scanner extends JApplet {
         	log.warning("Can't access JSObject object");
         }
         
+        log.info("AppVersion: " + JarUtils.getAppVersion());
     	log.info("openkm.token => "+token);
     	log.info("openkm.path => "+path);
     	log.info("openkm.lang => " + lang);
