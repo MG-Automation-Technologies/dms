@@ -83,8 +83,15 @@
     </div>
     <div id="form">
       <form name="login" method="post" action="j_security_check" onsubmit="setCookie()">
+      <% if (Config.SYSTEM_MAINTENANCE) { %>
+        <table border="0" cellpadding="2" cellspacing="0" align="center" class="demo" style="width: 100%">
+        <tr><td class="demo_alert">System under maintenance</td></tr>
+        </table>
+        <input name="j_username" id="j_username" type="hidden" value="<%=Config.SYSTEM_LOGIN_LOWERCASE?Config.ADMIN_USER.toLowerCase():Config.ADMIN_USER%>"/><br/>
+      <% } else { %>
         <label for="j_username">User</label><br/>
         <input name="j_username" id="j_username" type="text" <%=Config.SYSTEM_LOGIN_LOWERCASE?"onchange=\"makeLowercase();\"":""%>/><br/><br/>
+      <% } %>
         <label for="j_password">Password</label><br/>
         <input name="j_password" id="j_password" type="password"/><br/><br/>
         <% if (!FormatUtil.isMobile(request)) { %> 
