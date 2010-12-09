@@ -52,6 +52,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -108,9 +109,17 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 		super("Uploader");
 
 		try {
-			logo = ImageIO.read(MainFrame.class.getResource("openkm.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
+			URL img = MainFrame.class.getResource("openkm.png");
+			
+			if (img != null) {
+				logo = ImageIO.read(img);
+			} else {
+				log.warning("Unable to load image resource");
+				logo = new BufferedImage(150, 50, BufferedImage.TYPE_INT_RGB);
+			}
+		} catch (Exception e) {
+			log.warning("Unable to decode image: " + e.getMessage());
+			logo = new BufferedImage(150, 50, BufferedImage.TYPE_INT_RGB);
 		}
 
 		initGUI();
