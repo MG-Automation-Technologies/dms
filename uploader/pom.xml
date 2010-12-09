@@ -5,7 +5,7 @@
   <artifactId>uploader</artifactId>
   <packaging>jar</packaging>
   <name>OpenKM Uploader Applet</name>
-  <version>5.0-RC1</version>
+  <version>5.0</version>
   <url>http://www.openkm.com</url>
   <description>Java applet used to scan document directly from OpenKM web interface.</description>
 
