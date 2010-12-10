@@ -22,6 +22,8 @@
 package com.openkm.dao.bean.extension;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 public class StampImage implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -32,9 +34,10 @@ public class StampImage implements Serializable {
 	private String imageMime;
 	private int layer;
 	private float opacity;
-	private int x;
-	private int y;
+	private int exprX;
+	private int exprY;
 	private boolean active;
+	private Set<String> users = new HashSet<String>();
 
 	public int getId() {
 		return id;
@@ -92,20 +95,20 @@ public class StampImage implements Serializable {
 		this.opacity = opacity;
 	}
 
-	public int getX() {
-		return x;
+	public int getExprX() {
+		return exprX;
 	}
 
-	public void setX(int x) {
-		this.x = x;
+	public void setExprX(int exprX) {
+		this.exprX = exprX;
 	}
 
-	public int getY() {
-		return y;
+	public int getExprY() {
+		return exprY;
 	}
 
-	public void setY(int y) {
-		this.y = y;
+	public void setExprY(int exprY) {
+		this.exprY = exprY;
 	}
 	
 	public boolean isActive() {
@@ -116,6 +119,14 @@ public class StampImage implements Serializable {
 		this.active = active;
 	}
 
+	public Set<String> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<String> users) {
+		this.users = users;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -126,9 +137,10 @@ public class StampImage implements Serializable {
 		sb.append(", imageContent="); sb.append("[BIG]");
 		sb.append(", layer="); sb.append(layer);
 		sb.append(", opacity="); sb.append(opacity);
-		sb.append(", x="); sb.append(x);
-		sb.append(", y="); sb.append(y);
+		sb.append(", exprX="); sb.append(exprX);
+		sb.append(", exprY="); sb.append(exprY);
 		sb.append(", active="); sb.append(active);
+		sb.append(", users="); sb.append(users);
 		sb.append("}");
 		return sb.toString();
 	}

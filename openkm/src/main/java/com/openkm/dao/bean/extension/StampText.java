@@ -22,6 +22,8 @@
 package com.openkm.dao.bean.extension;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 public class StampText implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -34,9 +36,10 @@ public class StampText implements Serializable {
 	private int size;
 	private int color;
 	private int rotation;
-	private int x;
-	private int y;
+	private int exprX;
+	private int exprY;
 	private boolean active;
+	private Set<String> users = new HashSet<String>();
 	
 	public int getId() {
 		return id;
@@ -110,20 +113,20 @@ public class StampText implements Serializable {
 		this.rotation = rotation;
 	}
 
-	public int getX() {
-		return x;
+	public int getExprX() {
+		return exprX;
 	}
 
-	public void setX(int x) {
-		this.x = x;
+	public void setExprX(int exprX) {
+		this.exprX = exprX;
 	}
 
-	public int getY() {
-		return y;
+	public int getExprY() {
+		return exprY;
 	}
 
-	public void setY(int y) {
-		this.y = y;
+	public void setExprY(int exprY) {
+		this.exprY = exprY;
 	}
 	
 	public boolean isActive() {
@@ -132,6 +135,14 @@ public class StampText implements Serializable {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+	
+	public Set<String> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<String> users) {
+		this.users = users;
 	}
 	
 	public String toString() {
@@ -146,9 +157,10 @@ public class StampText implements Serializable {
 		sb.append(", size="); sb.append(size);
 		sb.append(", color="); sb.append(color);
 		sb.append(", rotation="); sb.append(rotation);
-		sb.append(", x="); sb.append(x);
-		sb.append(", y="); sb.append(y);
+		sb.append(", exprX="); sb.append(exprX);
+		sb.append(", exprY="); sb.append(exprY);
 		sb.append(", active="); sb.append(active);
+		sb.append(", users="); sb.append(users);
 		sb.append("}");
 		return sb.toString();
 	}
