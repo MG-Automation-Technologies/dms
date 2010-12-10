@@ -4,8 +4,9 @@
 <hibernate-mapping>
   <class name="com.openkm.dao.bean.StampText" table="OKM_STAMP_TEXT">
     <id name="id" column="ST_ID"><generator class="native"/></id>
-    <property name="name" column="ST_NAME" not-null="true" unique="true"/>
-    <property name="text" column="ST_TEXT" not-null="true" unique="true"/>
+    <property name="name" column="ST_NAME" not-null="true"/>
+    <property name="description" column="ST_DESCRIPTION" type="text"/>
+    <property name="text" column="ST_TEXT" not-null="true"/>
     <property name="opacity" column="ST_OPACITY" not-null="true"/>
     <property name="size" column="ST_SIZE" not-null="true"/>
     <property name="color" column="ST_COLOR" not-null="true"/>
