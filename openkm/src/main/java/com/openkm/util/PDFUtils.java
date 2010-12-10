@@ -68,9 +68,9 @@ public class PDFUtils {
 	/**
 	 * Stamp PDF document with image watermark
 	 */
-	public static void stampImage(String input, String image, int layer, float opacity, String x, String y,
+	public static void stampImage(String input, String image, int layer, float opacity, String exprX, String exprY,
 			String output) throws FileNotFoundException, DocumentException, EvalError, IOException {
-		log.info("stampImage({}, {}, {}, {}, {}, {}, {})", new Object[] { input, image, layer, opacity, x, y, output });
+		log.info("stampImage({}, {}, {}, {}, {}, {}, {})", new Object[] { input, image, layer, opacity, exprX, exprY, output });
 		Image img = Image.getInstance(image);
 		PdfReader reader = new PdfReader(input);
 		PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(output));
@@ -88,8 +88,8 @@ public class PDFUtils {
 			i.set("PAGE_HEIGHT", (int) reader.getPageSizeWithRotation(count).getHeight());
 			i.set("PAGE_CENTER", (int) reader.getPageSizeWithRotation(count).getWidth() / 2);
 			i.set("PAGE_MIDDLE", (int) reader.getPageSizeWithRotation(count).getHeight() / 2);
-			int evalX = (Integer) i.eval(x);
-			int evalY = (Integer) i.eval(y);
+			int evalX = (Integer) i.eval(exprX);
+			int evalY = (Integer) i.eval(exprY);
 			log.info("evalX: {}", evalX);
 			log.info("evalY: {}", evalY);
 			
@@ -126,9 +126,9 @@ public class PDFUtils {
 	 * Stamp PDF document with text watermark
 	 */
 	public static void stampText(String input, String text, int layer, float opacity, int size, Color color,
-			int rotation, int align, String x, String y, String output) throws FileNotFoundException,
+			int rotation, int align, String exprX, String exprY, String output) throws FileNotFoundException,
 			DocumentException, EvalError, IOException  {
-		log.info("stampText({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})", new Object[] { input, text, layer, opacity, size, color, rotation, align, x, y, output });
+		log.info("stampText({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})", new Object[] { input, text, layer, opacity, size, color, rotation, align, exprX, exprY, output });
 		PdfReader reader = new PdfReader(input);
 		PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(output));
 		BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.EMBEDDED);
@@ -144,8 +144,8 @@ public class PDFUtils {
 			i.set("PAGE_HEIGHT", (int) reader.getPageSizeWithRotation(count).getHeight());
 			i.set("PAGE_CENTER", (int) reader.getPageSizeWithRotation(count).getWidth() / 2);
 			i.set("PAGE_MIDDLE", (int) reader.getPageSizeWithRotation(count).getHeight() / 2);
-			int evalX = (Integer) i.eval(x);
-			int evalY = (Integer) i.eval(y);
+			int evalX = (Integer) i.eval(exprX);
+			int evalY = (Integer) i.eval(exprY);
 			log.info("evalX: {}", evalX);
 			log.info("evalY: {}", evalY);
 			
