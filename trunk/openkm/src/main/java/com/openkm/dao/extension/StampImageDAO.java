@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.HibernateUtil;
 import com.openkm.dao.bean.extension.StampImage;
+import com.openkm.dao.bean.extension.StampText;
 
 public class StampImageDAO {
 	private static Logger log = LoggerFactory.getLogger(StampImageDAO.class);
@@ -155,6 +156,31 @@ public class StampImageDAO {
 			return ret;
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Find by user
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<StampText> findByUser(String usrId) throws DatabaseException {
+		log.debug("findByUser({})", usrId);
+		String qs = "from StampImage si where :user in elements(si.users)" +
+			"and si.active=:active order by si.id";
+		Session session = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setString("user", usrId);
+			q.setBoolean("active", true);
+			List<StampText> ret = q.list();
+			log.debug("findByUser: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
