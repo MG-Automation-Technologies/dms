@@ -157,21 +157,17 @@ public class StampTextDAO {
 	 * Find by user
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<StampText> findByUser(String usrId, boolean filterByActive) throws DatabaseException {
-		log.debug("findByUser({}, {})", usrId, filterByActive);
-		String qs = "from StampText st where st.user=:user " +
-			(filterByActive?"and ma.active=:active":"") + " order by ma.id";
+	public static List<StampText> findByUser(String usrId) throws DatabaseException {
+		log.debug("findByUser({})", usrId);
+		String qs = "from StampText st where :user in elements(st.users)" +
+			"and st.active=:active order by st.id";
 		Session session = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
 			q.setString("user", usrId);
-			
-			if (filterByActive) {
-				q.setBoolean("active", true);
-			}
-			
+			q.setBoolean("active", true);
 			List<StampText> ret = q.list();
 			log.debug("findByUser: {}", ret);
 			return ret;
