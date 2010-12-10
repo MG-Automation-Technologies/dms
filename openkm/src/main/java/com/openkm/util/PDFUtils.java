@@ -52,11 +52,8 @@ import com.lowagie.text.pdf.PdfStamper;
  */
 public class PDFUtils {
 	private static Logger log = LoggerFactory.getLogger(PDFUtils.class);
-	public static int TOP_LEFT = 0;
-	public static int TOP_RIGHT = 1;
-	public static int CENTER = 2;
-	public static int BOTTOM_LEFT = 3;
-	public static int BOTTOM_RIGHT = 4;
+	public static int LAYER_UNDER_CONTENT = 0;
+	public static int LAYER_OVER_CONTENT = 1;
 	
 	/**
 	 * Stamp PDF document with image watermark
@@ -64,16 +61,16 @@ public class PDFUtils {
 	public static void stampImage(String input, String image, String output) throws FileNotFoundException,
 			DocumentException, EvalError, IOException {
 		log.info("stampImage({}, {}, {})", new Object[] { input, image, output });
-		stampImage(input, image, 0.3f, "PAGE_CENTER - IMAGE_WIDTH / 2", "PAGE_MIDDLE - IMAGE_HEIGHT / 2", output);
+		stampImage(input, image, LAYER_UNDER_CONTENT, 0.3f, "PAGE_CENTER - IMAGE_WIDTH / 2", "PAGE_MIDDLE - IMAGE_HEIGHT / 2", output);
 		
 	}
 
 	/**
 	 * Stamp PDF document with image watermark
 	 */
-	public static void stampImage(String input, String image, float opacity, String x, String y, String output)
-			throws FileNotFoundException, DocumentException, EvalError, IOException {
-		log.info("stampImage({}, {}, {}, {}, {})", new Object[] { input, image, x, y, output });
+	public static void stampImage(String input, String image, int layer, float opacity, String x, String y,
+			String output) throws FileNotFoundException, DocumentException, EvalError, IOException {
+		log.info("stampImage({}, {}, {}, {}, {}, {}, {})", new Object[] { input, image, layer, opacity, x, y, output });
 		Image img = Image.getInstance(image);
 		PdfReader reader = new PdfReader(input);
 		PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(output));
@@ -97,7 +94,16 @@ public class PDFUtils {
 			log.info("evalY: {}", evalY);
 			
 			img.setAbsolutePosition(evalX, evalY);
-			PdfContentByte cb = stamper.getUnderContent(count);
+			PdfContentByte cb = null;
+			
+			if (layer == LAYER_UNDER_CONTENT) {
+				cb = stamper.getUnderContent(count);
+			} else if (layer == LAYER_OVER_CONTENT) {
+				cb = stamper.getOverContent(count);
+			} else {
+				throw new IllegalArgumentException();
+			}
+			
 			cb.saveState();
 			cb.setGState(gs);
 			cb.addImage(img);
@@ -113,16 +119,16 @@ public class PDFUtils {
 	public static void stampText(String input, String text, String output) throws FileNotFoundException,
 			DocumentException, EvalError, IOException {
 		log.info("stampText({}, {}, {})", new Object[] { input, text, output });
-		stampText(input, text, 0.5f, 100, Color.RED, 35, Element.ALIGN_CENTER, "PAGE_CENTER", "PAGE_MIDDLE", output);
+		stampText(input, text, LAYER_UNDER_CONTENT, 0.5f, 100, Color.RED, 35, Element.ALIGN_CENTER, "PAGE_CENTER", "PAGE_MIDDLE", output);
 	}
 	
 	/**
 	 * Stamp PDF document with text watermark
 	 */
-	public static void stampText(String input, String text, float opacity, int size, Color color, int rotation,
-			int align, String x, String y, String output) throws FileNotFoundException, DocumentException,
-			EvalError, IOException  {
-		log.info("stampText({}, {}, {}, {}, {}, {}, {}, {}, {}, {})", new Object[] { input, text, opacity, size, color, rotation, align, x, y, output });
+	public static void stampText(String input, String text, int layer, float opacity, int size, Color color,
+			int rotation, int align, String x, String y, String output) throws FileNotFoundException,
+			DocumentException, EvalError, IOException  {
+		log.info("stampText({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})", new Object[] { input, text, layer, opacity, size, color, rotation, align, x, y, output });
 		PdfReader reader = new PdfReader(input);
 		PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(output));
 		BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.EMBEDDED);
@@ -143,7 +149,16 @@ public class PDFUtils {
 			log.info("evalX: {}", evalX);
 			log.info("evalY: {}", evalY);
 			
-			PdfContentByte cb = stamper.getUnderContent(count);
+			PdfContentByte cb = null;
+			
+			if (layer == LAYER_UNDER_CONTENT) {
+				cb = stamper.getUnderContent(count);
+			} else if (layer == LAYER_OVER_CONTENT) {
+				cb = stamper.getOverContent(count);
+			} else {
+				throw new IllegalArgumentException();
+			}
+						
 			cb.saveState();
 			cb.setColorFill(color);
 			cb.setGState(gs);
