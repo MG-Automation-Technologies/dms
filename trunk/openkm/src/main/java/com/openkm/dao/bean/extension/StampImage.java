@@ -30,6 +30,7 @@ public class StampImage implements Serializable {
 	private String description;
 	private String imageContent;
 	private String imageMime;
+	private int layer;
 	private float opacity;
 	private int x;
 	private int y;
@@ -74,6 +75,14 @@ public class StampImage implements Serializable {
 		this.imageMime = imageMime;
 	}
 	
+	public int getLayer() {
+		return layer;
+	}
+
+	public void setLayer(int layer) {
+		this.layer = layer;
+	}
+	
 	public float getOpacity() {
 		return opacity;
 	}
@@ -106,6 +115,7 @@ public class StampImage implements Serializable {
 		sb.append(", description="); sb.append(description);
 		sb.append(", imageMime="); sb.append(imageMime);
 		sb.append(", imageContent="); sb.append("[BIG]");
+		sb.append(", layer="); sb.append(layer);
 		sb.append(", opacity="); sb.append(opacity);
 		sb.append(", x="); sb.append(x);
 		sb.append(", y="); sb.append(y);

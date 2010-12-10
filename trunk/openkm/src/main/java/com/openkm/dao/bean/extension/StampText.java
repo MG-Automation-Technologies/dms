@@ -29,6 +29,7 @@ public class StampText implements Serializable {
 	private String name;
 	private String description;
 	private String text;
+	private int layer;
 	private float opacity;
 	private int size;
 	private int color;
@@ -66,6 +67,14 @@ public class StampText implements Serializable {
 
 	public void setText(String text) {
 		this.text = text;
+	}
+	
+	public int getLayer() {
+		return layer;
+	}
+
+	public void setLayer(int layer) {
+		this.layer = layer;
 	}
 
 	public float getOpacity() {
@@ -123,6 +132,7 @@ public class StampText implements Serializable {
 		sb.append(", name="); sb.append(name);
 		sb.append(", description="); sb.append(description);
 		sb.append(", text="); sb.append(text);
+		sb.append(", layer="); sb.append(layer);
 		sb.append(", opacity="); sb.append(opacity);
 		sb.append(", size="); sb.append(size);
 		sb.append(", color="); sb.append(color);
