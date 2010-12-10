@@ -30,6 +30,8 @@
   &nbsp;
   <a target="frame" href="Workflow"><img src="img/toolbar/workflow.png" title="Workflow"></a>
   &nbsp;
+  <a target="frame" href="Stamp"><img src="img/toolbar/stamp.png" title="Stamp"></a>
+  &nbsp;
   <a target="frame" href="CronTab"><img src="img/toolbar/crontab.png" title="Crontab"></a>
   &nbsp;
   <a target="frame" href="generate_thesaurus.jsp"><img src="img/toolbar/thesaurus.png" title="Generate thesaurus"></a>
