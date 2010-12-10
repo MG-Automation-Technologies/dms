@@ -12,5 +12,6 @@
     <property name="opacity" column="SI_OPACITY" not-null="true"/>
     <property name="x" column="SI_X" not-null="true"/>
     <property name="y" column="SI_Y" not-null="true"/>
+    <property name="active" column="SI_ACTIVE" not-null="true"/>
   </class>
 </hibernate-mapping>
