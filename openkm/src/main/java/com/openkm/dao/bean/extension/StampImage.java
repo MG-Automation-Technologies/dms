@@ -34,6 +34,7 @@ public class StampImage implements Serializable {
 	private float opacity;
 	private int x;
 	private int y;
+	private boolean active;
 
 	public int getId() {
 		return id;
@@ -106,6 +107,14 @@ public class StampImage implements Serializable {
 	public void setY(int y) {
 		this.y = y;
 	}
+	
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -119,6 +128,7 @@ public class StampImage implements Serializable {
 		sb.append(", opacity="); sb.append(opacity);
 		sb.append(", x="); sb.append(x);
 		sb.append(", y="); sb.append(y);
+		sb.append(", active="); sb.append(active);
 		sb.append("}");
 		return sb.toString();
 	}

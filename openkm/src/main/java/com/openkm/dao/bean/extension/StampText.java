@@ -36,6 +36,7 @@ public class StampText implements Serializable {
 	private int rotation;
 	private int x;
 	private int y;
+	private boolean active;
 	
 	public int getId() {
 		return id;
@@ -125,6 +126,14 @@ public class StampText implements Serializable {
 		this.y = y;
 	}
 	
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -139,6 +148,7 @@ public class StampText implements Serializable {
 		sb.append(", rotation="); sb.append(rotation);
 		sb.append(", x="); sb.append(x);
 		sb.append(", y="); sb.append(y);
+		sb.append(", active="); sb.append(active);
 		sb.append("}");
 		return sb.toString();
 	}
