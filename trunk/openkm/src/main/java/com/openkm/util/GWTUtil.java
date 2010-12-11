@@ -779,6 +779,7 @@ public class GWTUtil {
 			GWTValidator valid = new GWTValidator();
 			valid.setParameter(validator.getParameter());
 			valid.setType(validator.getType());
+			gwtValidatorsList.add(valid);
 		}
 		
 		return gwtValidatorsList;
@@ -798,64 +799,69 @@ public class GWTUtil {
 			gWTButton.setLabel(formElement.getLabel());
 			gWTButton.setWidth(formElement.getWidth());
 			gWTButton.setHeight(formElement.getHeight());
-			gWTButton.setName(((Button) formElement).getName());
-			gWTButton.setValue(((Button) formElement).getValue());
-			gWTButton.setType(((Button) formElement).getType());
+			Button button = (Button) formElement;
+			gWTButton.setName(button.getName());
+			gWTButton.setValue(button.getValue());
+			gWTButton.setType(button.getType());
 			return gWTButton;
 		} else if (formElement instanceof Input) {
 			GWTInput gWTInput = new GWTInput();
 			gWTInput.setLabel(formElement.getLabel());
 			gWTInput.setWidth(formElement.getWidth());
 			gWTInput.setHeight(formElement.getHeight());
-			gWTInput.setName(((Input) formElement).getName());
-			gWTInput.setReadonly(((Input) formElement).isReadonly());
-			if (((Input) formElement).getType().equals(Input.TYPE_TEXT) || 
-				((Input) formElement).getType().equals(Input.TYPE_LINK) ||
-				((Input) formElement).getType().equals(Input.TYPE_FOLDER )) {
-				gWTInput.setValue(((Input) formElement).getValue());
-			} else if (((Input) formElement).getType().equals(Input.TYPE_DATE)) {
-				if (!((Input) formElement).getValue().equals("")) {
-					gWTInput.setDate(ISO8601.parse(((Input) formElement).getValue()).getTime());
+			Input input = (Input) formElement;
+			gWTInput.setName(input.getName());
+			gWTInput.setReadonly(input.isReadonly());
+			if (input.getType().equals(Input.TYPE_TEXT) || 
+				input.getType().equals(Input.TYPE_LINK) ||
+				input.getType().equals(Input.TYPE_FOLDER )) {
+				gWTInput.setValue(input.getValue());
+			} else if (input.getType().equals(Input.TYPE_DATE)) {
+				if (!input.getValue().equals("")) {
+					gWTInput.setDate(ISO8601.parse(input.getValue()).getTime());
 				}
 			}
-			if (((Input) formElement).getType().equals(Input.TYPE_FOLDER) && !gWTInput.getValue().equals("")) {
+			if (input.getType().equals(Input.TYPE_FOLDER) && !gWTInput.getValue().equals("")) {
 				gWTInput.setFolder(copy(OKMFolder.getInstance().getProperties(null, ((Input) formElement).getValue())));
 			}
 			gWTInput.setType(((Input) formElement).getType());
-			gWTInput.setValidators(copyValidators(((Input) formElement).getValidators()));
+			gWTInput.setValidators(copyValidators(input.getValidators()));
 			return gWTInput;
 		} else if (formElement instanceof CheckBox) {
 			GWTCheckBox gWTCheckbox = new GWTCheckBox();
 			gWTCheckbox.setLabel(formElement.getLabel());
-			gWTCheckbox.setName(((CheckBox) formElement).getName());
-			gWTCheckbox.setValue(((CheckBox) formElement).getValue());
-			gWTCheckbox.setReadonly(((CheckBox) formElement).isReadonly());
-			gWTCheckbox.setValidators(copyValidators(((CheckBox) formElement).getValidators()));
+			CheckBox checkbox = (CheckBox) formElement;
+			gWTCheckbox.setName(checkbox.getName());
+			gWTCheckbox.setValue(checkbox.getValue());
+			gWTCheckbox.setReadonly(checkbox.isReadonly());
+			gWTCheckbox.setValidators(copyValidators(checkbox.getValidators()));
 			return gWTCheckbox;
 		} else if (formElement instanceof Select) {
 			GWTSelect gWTselect = new GWTSelect();
 			gWTselect.setLabel(formElement.getLabel());
 			gWTselect.setWidth(formElement.getWidth());
 			gWTselect.setHeight(formElement.getHeight());
-			gWTselect.setName(((Select) formElement).getName());
-			gWTselect.setType(((Select) formElement).getType());
-			gWTselect.setReadonly(((Select) formElement).isReadonly());
+			Select select = (Select) formElement;
+			gWTselect.setName(select.getName());
+			gWTselect.setType(select.getType());
+			gWTselect.setReadonly(select.isReadonly());
 			List<GWTOption> options = new ArrayList<GWTOption>();
-			for (Iterator<Option> it = ((Select) formElement).getOptions().iterator(); it.hasNext();) {
+			for (Iterator<Option> it = select.getOptions().iterator(); it.hasNext();) {
 				options.add(copy(it.next()));
 			}
 			gWTselect.setOptions(options);
-			gWTselect.setValidators(copyValidators(((Select) formElement).getValidators()));
+			gWTselect.setValidators(copyValidators(select.getValidators()));
 			return gWTselect;
 		} else if (formElement instanceof TextArea) {
 			GWTTextArea gWTTextArea= new GWTTextArea();
 			gWTTextArea.setLabel(formElement.getLabel());
 			gWTTextArea.setWidth(formElement.getWidth());
 			gWTTextArea.setHeight(formElement.getHeight());
-			gWTTextArea.setName(((TextArea) formElement).getName());
-			gWTTextArea.setValue(((TextArea) formElement).getValue());
-			gWTTextArea.setReadonly(((TextArea) formElement).isReadonly());
-			gWTTextArea.setValidators(copyValidators(((TextArea) formElement).getValidators()));
+			TextArea textArea = (TextArea) formElement;
+			gWTTextArea.setName(textArea.getName());
+			gWTTextArea.setValue(textArea.getValue());
+			gWTTextArea.setReadonly(textArea.isReadonly());
+			gWTTextArea.setValidators(copyValidators(textArea.getValidators()));
 			return gWTTextArea;
 		} else {
 			return new GWTFormElement();
