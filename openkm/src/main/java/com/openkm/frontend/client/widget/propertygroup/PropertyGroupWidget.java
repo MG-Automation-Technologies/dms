@@ -61,6 +61,7 @@ import com.openkm.frontend.client.bean.GWTInput;
 import com.openkm.frontend.client.bean.GWTOption;
 import com.openkm.frontend.client.bean.GWTSelect;
 import com.openkm.frontend.client.bean.GWTTextArea;
+import com.openkm.frontend.client.bean.GWTValidator;
 import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.extension.event.HasPropertyGroupEvent;
 import com.openkm.frontend.client.extension.event.handler.PropertyGroupHandlerExtension;
@@ -70,7 +71,12 @@ import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
 import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
+import com.openkm.frontend.client.util.validator.ValidatorBuilder;
 import com.openkm.frontend.client.widget.searchin.CalendarWidget;
+
+import eu.maydu.gwt.validation.client.DefaultValidationProcessor;
+import eu.maydu.gwt.validation.client.ValidationProcessor;
+import eu.maydu.gwt.validation.client.actions.FocusAction;
 
 /**
  * PropertyGroupWidget
@@ -91,6 +97,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	private PropertyGroupWidgetToFire propertyGroupWidgetToFire;
 	private List<PropertyGroupHandlerExtension> propertyGroupHandlerExtensionList;
 	private FolderSelectPopup folderSelectPopup;
+	ValidationProcessor validationProcessor;
 	
 	/**
 	 * PropertyGroup
@@ -223,17 +230,29 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	 */
 	public void edit(){
 		int rows = 1;
+		validationProcessor = new DefaultValidationProcessor();
+		FocusAction focusAction = new FocusAction();
 
 		for (Iterator<GWTFormElement> it = formElementList.iterator(); it.hasNext();) {
 			GWTFormElement formField = it.next();
 			
 			if (formField instanceof GWTTextArea) {
-				TextArea textArea = (TextArea) hWidgetProperties.get(formField.getName());
-				table.setWidget(rows, 1, textArea);
+				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formField.getName());
+				table.setWidget(rows, 1, hPanel);
+				
+				for (GWTValidator validator : ((GWTTextArea) formField).getValidators()) {
+					TextArea textArea = (TextArea) hPanel.getWidget(0);
+					ValidatorBuilder.addValidator(validationProcessor, focusAction, hPanel, "textarea_"+rows, validator, textArea);
+				}
 				
 			} else if (formField instanceof GWTInput) {
 				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formField.getName());
 				table.setWidget(rows, 1, hPanel);
+				
+				for (GWTValidator validator : ((GWTInput) formField).getValidators()) {
+					TextBox textBox = (TextBox) hPanel.getWidget(0);
+					ValidatorBuilder.addValidator(validationProcessor, focusAction, hPanel, "input_"+rows, validator, textBox);
+				}
 				
 			} else if (formField instanceof GWTCheckBox) {
 				CheckBox checkBox = (CheckBox) hWidgetProperties.get(formField.getName());
@@ -242,8 +261,13 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 			} else if (formField instanceof GWTSelect) {
 				GWTSelect gwtSelect = (GWTSelect) formField;
 				if (gwtSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
-					ListBox listBox = (ListBox) hWidgetProperties.get(formField.getName());
-					table.setWidget(rows, 1, listBox);
+					HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formField.getName());
+					ListBox listBox = (ListBox) hPanel.getWidget(0);
+					table.setWidget(rows, 1, hPanel);
+					
+					for (GWTValidator validator : ((GWTSelect) formField).getValidators()) {
+						ValidatorBuilder.addValidator(validationProcessor, focusAction, hPanel, "select_"+rows, validator, listBox);
+					}
 					
 				} else if (gwtSelect.getType().equals(GWTSelect.TYPE_MULTIPLE)) {
 					HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formField.getName());
@@ -262,6 +286,10 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 						((Image) tableMulti.getWidget(i,1)).setVisible(true);
 					}
 					table.setWidget(rows, 1, hPanel);
+					
+					for (GWTValidator validator : ((GWTSelect) formField).getValidators()) {
+						ValidatorBuilder.addValidator(validationProcessor, focusAction, hPanel, "select_"+rows, validator, tableMulti);
+					}
 				}
 			}
 			rows++;
@@ -280,7 +308,8 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 			GWTFormElement formElement = it.next();
 			
 			if (formElement instanceof GWTTextArea) {
-				TextArea textArea = (TextArea) hWidgetProperties.get(formElement.getName());
+				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
+				TextArea textArea = (TextArea) hPanel.getWidget(0);
 				((GWTTextArea) formElement).setValue(textArea.getText());
 
 			} else if (formElement instanceof GWTInput) {
@@ -301,7 +330,8 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 			} else if (formElement instanceof GWTSelect) {
 				GWTSelect gwtSelect = (GWTSelect) formElement;
 				if (gwtSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
-					ListBox listBox = (ListBox) hWidgetProperties.get(formElement.getName());
+					HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
+					ListBox listBox = (ListBox) hPanel.getWidget(0);
 					String selectedValue = "";
 					if (listBox.getSelectedIndex()>0) {
 						selectedValue = listBox.getValue(listBox.getSelectedIndex());
@@ -371,13 +401,15 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 		final String propertyName = gwtMetadata.getName();
 		
 		if (gwtMetadata instanceof GWTTextArea) {
+			HorizontalPanel hPanel = new HorizontalPanel();
 			TextArea textArea = new TextArea();
+			hPanel.add(textArea);
 			textArea.setStyleName("okm-Input");
 			textArea.setText(((GWTTextArea) gwtMetadata).getValue());
 			textArea.setSize(gwtMetadata.getWidth(), gwtMetadata.getHeight());
 			HTML text = new HTML(); // Create a widget for this property
 			text.setHTML(((GWTTextArea) gwtMetadata).getValue().replaceAll("\n", "<br>"));
-			hWidgetProperties.put(propertyName,textArea);
+			hWidgetProperties.put(propertyName,hPanel);
 			table.setHTML(row, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
 			table.setWidget(row, 1, text);
 			table.getCellFormatter().setVerticalAlignment(row,0,VerticalPanel.ALIGN_TOP);
@@ -522,7 +554,9 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 			final GWTSelect gwtSelect = (GWTSelect) gwtMetadata;
 			if (gwtSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
 				String selectedLabel = "";
+				HorizontalPanel hPanel = new HorizontalPanel();
 				ListBox listBox = new ListBox();
+				hPanel.add(listBox);
 				listBox.setStyleName("okm-Select");
 				listBox.addItem("", ""); // Always we set and empty value
 				
@@ -535,7 +569,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 					}
 				}
 				
-				hWidgetProperties.put(propertyName,listBox);
+				hWidgetProperties.put(propertyName,hPanel);
 				
 				table.setHTML(row, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
 				table.setHTML(row, 1, selectedLabel);
@@ -703,6 +737,15 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	 */
 	public String getGrpName(){
 		return grpName;
+	}
+	
+	/**
+	 * getValidationProcessor
+	 * 
+	 * @return
+	 */
+	public ValidationProcessor getValidationProcessor() {
+		return validationProcessor;
 	}
 	
 

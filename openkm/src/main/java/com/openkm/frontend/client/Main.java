@@ -162,7 +162,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	public void onModuleLoad() {
 		Log.getLogger(DivLogger.class).getWidget().setVisible(false);
 		Log.setUncaughtExceptionHandler();
-		Log.setCurrentLogLevel(Log.LOG_LEVEL_OFF);
+		Log.setCurrentLogLevel(Log.LOG_LEVEL_DEBUG);
 
 		singleton = this;
 		

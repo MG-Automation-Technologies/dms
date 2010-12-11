@@ -1477,3 +1477,12 @@ iframe {
     user-select: normal;
     white-space: nowrap;
 }
+
+.okm-validationFailedBorder {
+	border: 2px solid #ff0000;		
+}
+
+.okm-validationFailedText {
+	color: #ff0000;
+	font-weight: bold;		
+}
