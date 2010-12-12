@@ -304,7 +304,7 @@ public class ValidatorBuilder {
 			
 		} else if (type.equals("alpha")) {
 			HTML space = new HTML("");
-			Label errorLabel = new Label(Main.i18n("validation.alphanumeric.required") + " - (" + validator.getParameter() + ")");
+			Label errorLabel = new Label(Main.i18n("validation.alphanumeric.required"));
 			errorLabel.setStyleName("okm-validationFailedText");
 			hPanel.add(space);
 			hPanel.add(errorLabel);
@@ -329,7 +329,7 @@ public class ValidatorBuilder {
 			
 		} else if (type.equals("num")) {
 			HTML space = new HTML("");
-			Label errorLabel = new Label(Main.i18n("validation.numeric.required") + " - (" + validator.getParameter() + ")");
+			Label errorLabel = new Label(Main.i18n("validation.numeric.required"));
 			errorLabel.setStyleName("okm-validationFailedText");
 			hPanel.add(space);
 			hPanel.add(errorLabel);
