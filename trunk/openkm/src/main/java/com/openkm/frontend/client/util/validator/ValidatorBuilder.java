@@ -302,6 +302,55 @@ public class ValidatorBuilder {
 				);
 			}
 			
+		} else if (type.equals("alpha")) {
+			HTML space = new HTML("");
+			Label errorLabel = new Label(Main.i18n("validation.alphanumeric.required") + " - (" + validator.getParameter() + ")");
+			errorLabel.setStyleName("okm-validationFailedText");
+			hPanel.add(space);
+			hPanel.add(errorLabel);
+			hPanel.setCellWidth(space, "5");
+			if (widget instanceof TextBox) {
+				hPanel.setCellVerticalAlignment(errorLabel, HasAlignment.ALIGN_MIDDLE);
+				validationProcessor.addValidators(name+"_alpha", 
+						new AlphaNumericValidator((TextBox) widget)
+						.addActionForFailure(focusAction)
+						.addActionForFailure(new StyleAction("okm-validationFailedBorder"))
+						.addActionForFailure(new ErrorMsgLabelTextAction(errorLabel))
+				);
+			} else if (widget instanceof TextArea) {
+				hPanel.setCellVerticalAlignment(errorLabel, HasAlignment.ALIGN_TOP);
+				validationProcessor.addValidators(name+"_alpha", 
+						new AlphaNumericValidator((TextArea) widget)
+						.addActionForFailure(focusAction)
+						.addActionForFailure(new StyleAction("okm-validationFailedBorder"))
+						.addActionForFailure(new ErrorMsgLabelTextAction(errorLabel))
+				);
+			}
+			
+		} else if (type.equals("num")) {
+			HTML space = new HTML("");
+			Label errorLabel = new Label(Main.i18n("validation.numeric.required") + " - (" + validator.getParameter() + ")");
+			errorLabel.setStyleName("okm-validationFailedText");
+			hPanel.add(space);
+			hPanel.add(errorLabel);
+			hPanel.setCellWidth(space, "5");
+			if (widget instanceof TextBox) {
+				hPanel.setCellVerticalAlignment(errorLabel, HasAlignment.ALIGN_MIDDLE);
+				validationProcessor.addValidators(name+"_num", 
+						new NumericValidator((TextBox) widget)
+						.addActionForFailure(focusAction)
+						.addActionForFailure(new StyleAction("okm-validationFailedBorder"))
+						.addActionForFailure(new ErrorMsgLabelTextAction(errorLabel))
+				);
+			} else if (widget instanceof TextArea) {
+				hPanel.setCellVerticalAlignment(errorLabel, HasAlignment.ALIGN_TOP);
+				validationProcessor.addValidators(name+"_num", 
+						new NumericValidator((TextArea) widget)
+						.addActionForFailure(focusAction)
+						.addActionForFailure(new StyleAction("okm-validationFailedBorder"))
+						.addActionForFailure(new ErrorMsgLabelTextAction(errorLabel))
+				);
+			}
 		}
 	}
 }
