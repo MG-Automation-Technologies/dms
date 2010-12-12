@@ -69,6 +69,7 @@ import com.openkm.frontend.client.bean.GWTProcessInstance;
 import com.openkm.frontend.client.bean.GWTSelect;
 import com.openkm.frontend.client.bean.GWTTaskInstance;
 import com.openkm.frontend.client.bean.GWTTextArea;
+import com.openkm.frontend.client.bean.GWTValidator;
 import com.openkm.frontend.client.bean.GWTWorkflowComment;
 import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMRepositoryService;
@@ -78,8 +79,13 @@ import com.openkm.frontend.client.service.OKMWorkflowServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
 import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
+import com.openkm.frontend.client.util.validator.ValidatorBuilder;
 import com.openkm.frontend.client.widget.propertygroup.FolderSelectPopup;
 import com.openkm.frontend.client.widget.searchin.CalendarWidget;
+
+import eu.maydu.gwt.validation.client.DefaultValidationProcessor;
+import eu.maydu.gwt.validation.client.ValidationProcessor;
+import eu.maydu.gwt.validation.client.actions.FocusAction;
 
 /**
  * WorkflowFormPanel
@@ -113,6 +119,7 @@ public class WorkflowFormPanel extends Composite {
 	private Button add;
 	private FlexTable tableNotes;
 	private FolderSelectPopup folderSelectPopup;
+	ValidationProcessor validationProcessor;
 	
 	/**
 	 * WorkflowFormPanel
@@ -151,7 +158,9 @@ public class WorkflowFormPanel extends Composite {
 		submitForm = new Button(Main.i18n("button.accept"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				setTaskInstanceValues(taskInstance.getId(), null); 
+				if (validationProcessor.validate()) {
+					setTaskInstanceValues(taskInstance.getId(), null);
+				}
 			}
 		});
 		
@@ -464,6 +473,9 @@ public class WorkflowFormPanel extends Composite {
 	 * drawForm
 	 */
 	private void drawForm() {
+		validationProcessor = new DefaultValidationProcessor();
+		FocusAction focusAction = new FocusAction();
+		
 		submitForm.setVisible(true); // always set form visible
 		HorizontalPanel hPanel = new HorizontalPanel();
 		formWidgetList = new HashMap<String, Widget>(); // Init new form widget list
@@ -502,19 +514,21 @@ public class WorkflowFormPanel extends Composite {
 				transButton.addClickHandler(new ClickHandler() { 
 					@Override
 					public void onClick(ClickEvent event) {
-						if (gWTButton.getType().equals(GWTButton.TYPE_TRANSITION)) {
-							setTaskInstanceValues(taskInstance.getId(), gWTButton.getValue());
-						} else {
-							setTaskInstanceValues(taskInstance.getId(), null);
+						if (validationProcessor.validate()) {
+							if (gWTButton.getType().equals(GWTButton.TYPE_TRANSITION)) {
+								setTaskInstanceValues(taskInstance.getId(), gWTButton.getValue());
+							} else {
+								setTaskInstanceValues(taskInstance.getId(), null);
+							}
 						}
 					}
 				});
 				
 			} else if (formField instanceof GWTInput) {
 				final GWTInput gWTInput = (GWTInput) formField;
-				HorizontalPanel hInputPanel = new HorizontalPanel();
+				HorizontalPanel hFormPanel = new HorizontalPanel();
 				final TextBox textBox = new TextBox();
-				hInputPanel.add(textBox);
+				hFormPanel.add(textBox);
 				textBox.setName(gWTInput.getName());
 				if (gWTInput.getType().equals(GWTInput.TYPE_TEXT) || 
 					gWTInput.getType().equals(GWTInput.TYPE_LINK) ||
@@ -532,7 +546,7 @@ public class WorkflowFormPanel extends Composite {
 				if (textBox.isReadOnly()) {
 					textBox.setVisible(false);
 					if (gWTInput.getType().equals(GWTInput.TYPE_TEXT) || gWTInput.getType().equals(GWTInput.TYPE_DATE)) {
-						hInputPanel.add(new HTML(textBox.getValue()));
+						hFormPanel.add(new HTML(textBox.getValue()));
 					}
 				}
 				
@@ -559,10 +573,10 @@ public class WorkflowFormPanel extends Composite {
 						}
 					});
 					if (!gWTInput.isReadonly()) {
-						hInputPanel.add(new HTML("&nbsp;"));
-						hInputPanel.add(calendarIcon);
+						hFormPanel.add(new HTML("&nbsp;"));
+						hFormPanel.add(calendarIcon);
 						textBox.setEnabled(false);
-						hInputPanel.setCellVerticalAlignment(calendarIcon, HasAlignment.ALIGN_MIDDLE);
+						hFormPanel.setCellVerticalAlignment(calendarIcon, HasAlignment.ALIGN_MIDDLE);
 					} 
 					
 				} else if (gWTInput.getType().equals(GWTInput.TYPE_LINK))  {
@@ -584,9 +598,9 @@ public class WorkflowFormPanel extends Composite {
 						hLinkPanel.add(anchor);
 						hLinkPanel.setCellWidth(space, "5px");
 						if (gWTInput.isReadonly()) {
-							hInputPanel.add(hLinkPanel);
+							hFormPanel.add(hLinkPanel);
 							Util.createLinkClipboardButton(url, containerName);
-							hInputPanel.setCellVerticalAlignment(hLinkPanel, HasAlignment.ALIGN_MIDDLE);
+							hFormPanel.setCellVerticalAlignment(hLinkPanel, HasAlignment.ALIGN_MIDDLE);
 						}
 					} 					
 					
@@ -611,8 +625,8 @@ public class WorkflowFormPanel extends Composite {
 						});
 						anchor.setStyleName("okm-KeyMap-ImageHover");
 						if (gWTInput.isReadonly()) {
-							hInputPanel.add(anchor);
-							hInputPanel.setCellVerticalAlignment(anchor, HasAlignment.ALIGN_MIDDLE);
+							hFormPanel.add(anchor);
+							hFormPanel.setCellVerticalAlignment(anchor, HasAlignment.ALIGN_MIDDLE);
 						}
 					} 
 					Image pathExplorer = new Image(OKMBundleResources.INSTANCE.folderExplorer());
@@ -640,17 +654,21 @@ public class WorkflowFormPanel extends Composite {
 					hFolderPanel.setCellVerticalAlignment(pathExplorer, HasAlignment.ALIGN_MIDDLE);
 					hFolderPanel.setCellVerticalAlignment(cleanPathExplorer, HasAlignment.ALIGN_MIDDLE);
 					if (!gWTInput.isReadonly()) {
-						hInputPanel.add(hFolderPanel);
+						hFormPanel.add(hFolderPanel);
 						textBox.setEnabled(false);
-						hInputPanel.setCellVerticalAlignment(hFolderPanel, HasAlignment.ALIGN_MIDDLE);
+						hFormPanel.setCellVerticalAlignment(hFolderPanel, HasAlignment.ALIGN_MIDDLE);
 					}
 				}
 				
 				textBox.setWidth(gWTInput.getWidth());
 				textBox.setStyleName("okm-Input");
 				formTable.setHTML(row, 0, "<b>" + gWTInput.getLabel() + "</b>");
-				formTable.setWidget(row, 1, hInputPanel);
-				widget = hInputPanel;
+				formTable.setWidget(row, 1, hFormPanel);
+				widget = hFormPanel;
+				
+				for (GWTValidator validator : ((GWTInput) formField).getValidators()) {
+					ValidatorBuilder.addValidator(validationProcessor, focusAction, hFormPanel, "input_"+row, validator, textBox);
+				}
 				
 			} else if (formField instanceof GWTCheckBox) {
 				GWTCheckBox gWTCheckBox = (GWTCheckBox) formField;
@@ -664,6 +682,7 @@ public class WorkflowFormPanel extends Composite {
 			} else if (formField instanceof GWTSelect) {
 				final int rowButton = row;
 				final GWTSelect gWTSelect = (GWTSelect) formField;
+				HorizontalPanel hFormPanel = new HorizontalPanel();
 				final FlexTable tableMulti = new FlexTable();
 				final ListBox listBox = new ListBox();
 				final Button addButton = new Button(Main.i18n("button.add"),new ClickHandler() { 
@@ -730,18 +749,29 @@ public class WorkflowFormPanel extends Composite {
 				
 				formTable.setHTML(row, 0, "<b>" + gWTSelect.getLabel() + "</b>");
 				if (gWTSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
+					hFormPanel.add(listBox);
 					listBox.setEnabled(!gWTSelect.isReadonly());
-					formTable.setWidget(row, 1, listBox);
-					widget = listBox;
+					formTable.setWidget(row, 1, hFormPanel);
+					widget = hFormPanel;
+					
+					for (GWTValidator validator : ((GWTSelect) formField).getValidators()) {
+						ValidatorBuilder.addValidator(validationProcessor, focusAction, hFormPanel, "select_"+row, validator, listBox);
+					}
 				} else if (gWTSelect.getType().equals(GWTSelect.TYPE_MULTIPLE)) {
-					formTable.setWidget(row, 2, addButton);
+					hFormPanel.add(tableMulti);
+					hFormPanel.add(addButton);
+					hFormPanel.setCellVerticalAlignment(addButton, HasAlignment.ALIGN_TOP);
 					row++; // Incrementing row
 					formTable.setHTML(row, 0, "");
-					formTable.setWidget(row, 1, tableMulti);
+					formTable.setWidget(row, 1, hFormPanel);
 					HTML name = new HTML(gWTSelect.getName()); // First table name it'll be the value name
 					tableMulti.setWidget(0,0,name);
 					name.setVisible(false);
-					widget = tableMulti;
+					widget = hFormPanel;
+					
+					for (GWTValidator validator : ((GWTSelect) formField).getValidators()) {
+						ValidatorBuilder.addValidator(validationProcessor, focusAction, hFormPanel, "select_"+row, validator, tableMulti);
+					}
 				} 
 				
 				for (Iterator<GWTOption> itx = gWTSelect.getOptions().iterator(); itx.hasNext(); ) {
@@ -795,7 +825,9 @@ public class WorkflowFormPanel extends Composite {
 				
 			} else if (formField instanceof GWTTextArea) {
 				GWTTextArea gWTTextArea = (GWTTextArea) formField;
+				HorizontalPanel hFormPanel = new HorizontalPanel();
 				TextArea textArea = new TextArea();
+				hFormPanel.add(textArea);
 				textArea.setName(gWTTextArea.getName());
 				textArea.setSize(gWTTextArea.getWidth(), gWTTextArea.getHeight());
 				textArea.setValue(gWTTextArea.getValue());
@@ -803,9 +835,13 @@ public class WorkflowFormPanel extends Composite {
 				
 				textArea.setStyleName("okm-Input");
 				formTable.setHTML(row, 0, "<b>" + gWTTextArea.getLabel() + "</b>");
-				formTable.setWidget(row, 1, textArea);
+				formTable.setWidget(row, 1, hFormPanel);
 				formTable.getCellFormatter().setVerticalAlignment(row, 0, HasAlignment.ALIGN_TOP);
-				widget = textArea;
+				widget = hFormPanel;
+				
+				for (GWTValidator validator : ((GWTTextArea) formField).getValidators()) {
+					ValidatorBuilder.addValidator(validationProcessor, focusAction, hFormPanel, "textarea_"+row, validator, textArea);
+				}
 			} 
 			
 			// Saves widget
@@ -864,7 +900,9 @@ public class WorkflowFormPanel extends Composite {
 					((GWTCheckBox) formElement).setValue(((CheckBox) widget).getValue());
 					
 				} else if (formElement instanceof GWTTextArea) {
-					((GWTTextArea) formElement).setValue(((TextArea) widget).getValue());
+					HorizontalPanel hPanel = (HorizontalPanel) widget;
+					TextArea textArea = (TextArea) hPanel.getWidget(0);
+					((GWTTextArea) formElement).setValue(textArea.getValue());
 					
 				} else if (formElement instanceof GWTSelect) {
 					GWTSelect select = (GWTSelect) formElement; 
@@ -873,7 +911,8 @@ public class WorkflowFormPanel extends Composite {
 						itx.next().setSelected(false);
 					}
 					if (select.getType().equals(GWTSelect.TYPE_SIMPLE)) {
-						ListBox listBox = (ListBox) widget;
+						HorizontalPanel hPanel = (HorizontalPanel) widget;
+						ListBox listBox = (ListBox) hPanel.getWidget(0);
 						if (listBox.getSelectedIndex()>=0) {
 							for (Iterator<GWTOption> itx = select.getOptions().iterator(); itx.hasNext();)  {
 								GWTOption option = itx.next();
@@ -883,7 +922,8 @@ public class WorkflowFormPanel extends Composite {
 							}
 						}
 					} else if (select.getType().equals(GWTSelect.TYPE_MULTIPLE)) {
-						FlexTable tableMulti = (FlexTable) widget;
+						HorizontalPanel hPanel = (HorizontalPanel) widget;
+						FlexTable tableMulti = (FlexTable) hPanel.getWidget(0);
 						for (int i=1; i<tableMulti.getRowCount(); i++) {
 							for (Iterator<GWTOption> itx = select.getOptions().iterator(); itx.hasNext();)  {
 								GWTOption option = itx.next();
