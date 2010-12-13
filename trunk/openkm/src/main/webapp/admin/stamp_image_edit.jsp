@@ -82,11 +82,11 @@
           </tr>
           <tr>
             <td>Expr. X</td>
-            <td><input class=":required :only_on_blur" name="si_expr_x" size="25" value="${stamp.exprX}"/></td>
+            <td><input class=":required :only_on_blur" name="si_expr_x" size="30" value="${stamp.exprX}"/></td>
           </tr>
           <tr>
             <td>Expr. Y</td>
-            <td><input class=":required :only_on_blur" name="si_expr_y" size="25" value="${stamp.exprY}"/></td>
+            <td><input class=":required :only_on_blur" name="si_expr_y" size="30" value="${stamp.exprY}"/></td>
           </tr>
           <tr>
             <td>Active</td>
