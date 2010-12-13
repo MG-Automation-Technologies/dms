@@ -87,7 +87,11 @@ public class Preview extends Composite {
 			String url = RPCService.ConverterServlet +"?toSwf=1&uuid=" + URL.encodeComponent(Uuid);
 			text.setHTML("<div id=\"pdfviewercontainer\"></div>\n"); // needed for rewriting purpose
 			if (Main.get().workspaceUserProperties.getWorkspace().getPreviewer().equals("flexpaper")) {
-				Util.createPDFViewerFlexPaper(url, ""+width, ""+height);
+				if (Main.get().workspaceUserProperties.getWorkspace().isPrintPreview()) {
+					Util.createPDFViewerFlexPaper(url, ""+width, ""+height, "true");
+				} else {
+					Util.createPDFViewerFlexPaper(url, ""+width, ""+height, "false");
+				}
 			} else {
 				Util.createPDFViewerZviewer(url, ""+width, ""+height);
 			}

@@ -62,6 +62,7 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean chatEnabled;
 	private boolean chatAutoLogin;
 	private long userQuotaLimit;
+	private boolean printPreview;
 	private boolean userQuotaEnabled;
 	private List<GWTPropertyGroup> wizardPropertyGroupsList = new ArrayList<GWTPropertyGroup>();
 	private boolean wizardPropertyGroups;
@@ -281,6 +282,14 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setUserQuotaLimit(long userQuotaLimit) {
 		this.userQuotaLimit = userQuotaLimit;
+	}
+	
+	public boolean isPrintPreview() {
+		return printPreview;
+	}
+
+	public void setPrintPreview(boolean printPreview) {
+		this.printPreview = printPreview;
 	}
 
 	public boolean isUserQuotaEnabled() {
