@@ -288,7 +288,7 @@ public class Util {
 		$wnd.swfobject.embedSWF("/OpenKM/js/zviewer/zviewer.swf", "pdfviewercontainer", width, height, "9.0.0", "/OpenKM/js/mediaplayer/expressinstall.swf", {doc_url:pdfUrl}, {allowFullScreen:"true",menu:"false",bgcolor:"#efefef"}, {id:"jspdfviewer",name:"jspdfviewer"});
 	}-*/;
     
-    public static native void createPDFViewerFlexPaper(String pdfUrl, String width, String height) /*-{
+    public static native void createPDFViewerFlexPaper(String pdfUrl, String width, String height, String printEnabled) /*-{
 	pdfUrl = encodeURIComponent(pdfUrl);
 	$wnd.swfobject.embedSWF("/OpenKM/js/flexpaper/FlexPaperViewer.swf", "pdfviewercontainer",width, height,"10.0.0", "playerProductInstall.swf",
                   {
@@ -299,11 +299,11 @@ public class Util {
   				  	ZoomInterval : 0.1,
   				  	FitPageOnLoad : false,
   				  	FitWidthOnLoad : true,
-  				  	PrintEnabled : true,
+  				  	PrintEnabled : printEnabled,
   				  	FullScreenAsMaxWindow : false,
   				  	ProgressiveLoading : true,
   				  
-  				  	PrintToolsVisible : true,
+  				  	PrintToolsVisible : printEnabled,
   				  	ViewModeToolsVisible : true,
   				  	ZoomToolsVisible : true,
   				  	FullScreenVisible : true,

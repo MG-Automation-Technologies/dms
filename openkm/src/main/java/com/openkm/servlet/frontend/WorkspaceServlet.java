@@ -158,6 +158,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 		// User quota ( limit user repository size )
 		workspace.setUserQuotaEnabled(up.getMisc().getUserQuota() > 0);
 		workspace.setUserQuotaLimit(up.getMisc().getUserQuota());
+		workspace.setPrintPreview(up.getMisc().isPrintPreview());
 		
 		// Stack visibility
 		workspace.setStackTaxonomy(up.getStack().isTaxonomyVisible());
