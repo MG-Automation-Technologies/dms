@@ -55,6 +55,7 @@ public class WebUtils {
 	public static final String getString(HttpServletRequest request, String name) {
 		String value = request.getParameter(name);
 		String stringValue = EMPTY_STRING;
+		
 		if (value != null) {
 			try {
 				return new String(value.getBytes("ISO-8859-1"), "UTF-8").trim();
@@ -62,6 +63,7 @@ public class WebUtils {
 				// Ignore
 			}
 		}
+		
 		return stringValue;
 	}
 
@@ -75,7 +77,8 @@ public class WebUtils {
 	 */
 	public static final String getString(HttpServletRequest request, String name, String defaultValue) {
 		String value = request.getParameter(name);
-		String stringValue = defaultValue; 
+		String stringValue = defaultValue;
+		
 		if (value != null) {
 			try {
 				return new String(value.getBytes("ISO-8859-1"), "UTF-8");
@@ -83,6 +86,7 @@ public class WebUtils {
 				// Ignore
 			}
 		}
+		
 		return stringValue;
 	}
 	
@@ -96,6 +100,7 @@ public class WebUtils {
 	public static final List<String> getStringList(HttpServletRequest request, String name) {
 		String[] value = request.getParameterValues(name);
 		List<String> stringValue = new ArrayList<String>();
+		
 		if (value != null) {
 			try {
 				for (int i=0; i<value.length; i++) {
@@ -105,6 +110,7 @@ public class WebUtils {
 				// Ignore
 			}
 		}
+		
 		return stringValue;
 	}
 	
@@ -118,6 +124,7 @@ public class WebUtils {
 	public static final int getInt(HttpServletRequest request, String name) {
 		String strValue = request.getParameter(name);
 		int intValue = 0;
+		
 		if (strValue != null && !EMPTY_STRING.equals(strValue)) {
 			try {
 				intValue = Integer.parseInt(strValue);
@@ -125,6 +132,7 @@ public class WebUtils {
 				// Ignore
 			}
 		}
+		
 		return intValue;
 	}
 	
@@ -139,6 +147,7 @@ public class WebUtils {
 	public static final int getInt(HttpServletRequest request, String name, int defaultValue) {
 		String strValue = request.getParameter(name);
 		int intValue = defaultValue;
+		
 		if (strValue != null && !EMPTY_STRING.equals(strValue)) {
 			try {
 				intValue = Integer.parseInt(strValue);
@@ -146,6 +155,7 @@ public class WebUtils {
 				// Ignore
 			}
 		}
+		
 		return intValue;
 	}
 
@@ -159,6 +169,7 @@ public class WebUtils {
 	public static final long getLong(HttpServletRequest request, String name) {
 		String strValue = request.getParameter(name);
 		long longValue = 0;
+		
 		if (strValue != null && !EMPTY_STRING.equals(strValue)) {
 			try {
 				longValue = Long.parseLong(strValue);
@@ -166,7 +177,30 @@ public class WebUtils {
 				// Ignore
 			}
 		}
+		
 		return longValue;
+	}
+	
+	/**
+	 * Extrae un parámetro de tipo float del request. 
+	 * Si el parámetro no existe o no es valido devuelve 0.
+	 * @param request Petición de la que extraer el parámetro.
+	 * @param name Nombre del parámetro
+	 * @return El valor float del parámetro o 0 si no existe o no es valido.
+	 */
+	public static final float getFloat(HttpServletRequest request, String name) {
+		String strValue = request.getParameter(name);
+		float floatValue = 0;
+		
+		if (strValue != null && !EMPTY_STRING.equals(strValue)) {
+			try {
+				floatValue = Float.parseFloat(strValue);
+			} catch (Throwable t) {
+				// Ignore
+			}
+		}
+		
+		return floatValue;
 	}
 	
 	/**
