@@ -368,10 +368,10 @@ public class StampServlet extends BaseServlet {
 		log.debug("textColor({}, {}, {})", new Object[] { session, request, response });
 		int stId = WebUtils.getInt(request, "st_id");
 		StampText st = StampTextDAO.findByPk(stId);
-		BufferedImage bi = new BufferedImage(20, 20, BufferedImage.TYPE_INT_RGB);
+		BufferedImage bi = new BufferedImage(16, 16, BufferedImage.TYPE_INT_RGB);
 		Graphics g = bi.getGraphics();
 		g.setColor(Color.decode(st.getColor()));
-		g.fillRect(0, 0, 20, 20);
+		g.fillRect(0, 0, 16, 16);
 		response.setContentType("image/jpeg");
 		ImageIO.write(bi, "jpg", response.getOutputStream());
 		log.debug("textColor: void");
