@@ -34,8 +34,8 @@ public class StampImage implements Serializable {
 	private String imageMime;
 	private int layer;
 	private float opacity;
-	private int exprX;
-	private int exprY;
+	private String exprX;
+	private String exprY;
 	private boolean active;
 	private Set<String> users = new HashSet<String>();
 
@@ -95,19 +95,19 @@ public class StampImage implements Serializable {
 		this.opacity = opacity;
 	}
 
-	public int getExprX() {
+	public String getExprX() {
 		return exprX;
 	}
 
-	public void setExprX(int exprX) {
+	public void setExprX(String exprX) {
 		this.exprX = exprX;
 	}
 
-	public int getExprY() {
+	public String getExprY() {
 		return exprY;
 	}
 
-	public void setExprY(int exprY) {
+	public void setExprY(String exprY) {
 		this.exprY = exprY;
 	}
 	

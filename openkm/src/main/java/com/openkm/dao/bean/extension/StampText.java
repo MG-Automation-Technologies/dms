@@ -36,8 +36,8 @@ public class StampText implements Serializable {
 	private int size;
 	private int color;
 	private int rotation;
-	private int exprX;
-	private int exprY;
+	private String exprX;
+	private String exprY;
 	private boolean active;
 	private Set<String> users = new HashSet<String>();
 	
@@ -113,19 +113,19 @@ public class StampText implements Serializable {
 		this.rotation = rotation;
 	}
 
-	public int getExprX() {
+	public String getExprX() {
 		return exprX;
 	}
 
-	public void setExprX(int exprX) {
+	public void setExprX(String exprX) {
 		this.exprX = exprX;
 	}
 
-	public int getExprY() {
+	public String getExprY() {
 		return exprY;
 	}
 
-	public void setExprY(int exprY) {
+	public void setExprY(String exprY) {
 		this.exprY = exprY;
 	}
 	
