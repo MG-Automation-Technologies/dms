@@ -68,7 +68,7 @@ public class PDFUtils {
 	 */
 	public static void stampImage(InputStream input, byte[] image, OutputStream output) throws FileNotFoundException,
 			DocumentException, EvalError, IOException {
-		log.info("stampImage({}, {}, {})", new Object[] { input, image, output });
+		log.debug("stampImage({}, {}, {})", new Object[] { input, image, output });
 		stampImage(input, image, LAYER_UNDER_CONTENT, 0.3f, "PAGE_CENTER - IMAGE_WIDTH / 2", "PAGE_MIDDLE - IMAGE_HEIGHT / 2", output);
 		
 	}
@@ -78,7 +78,7 @@ public class PDFUtils {
 	 */
 	public static void stampImage(InputStream input, byte[] image, int layer, float opacity, String exprX, String exprY,
 			OutputStream output) throws FileNotFoundException, DocumentException, EvalError, IOException {
-		log.info("stampImage({}, {}, {}, {}, {}, {}, {})", new Object[] { input, image, layer, opacity, exprX, exprY, output });
+		log.debug("stampImage({}, {}, {}, {}, {}, {}, {})", new Object[] { input, image, layer, opacity, exprX, exprY, output });
 		Image img = Image.getInstance(image);
 		PdfReader reader = new PdfReader(input);
 		PdfStamper stamper = new PdfStamper(reader, output);
@@ -126,7 +126,7 @@ public class PDFUtils {
 	 */
 	public static void stampText(InputStream input, String text, OutputStream output) throws FileNotFoundException,
 			DocumentException, EvalError, IOException {
-		log.info("stampText({}, {}, {})", new Object[] { input, text, output });
+		log.debug("stampText({}, {}, {})", new Object[] { input, text, output });
 		stampText(input, text, LAYER_UNDER_CONTENT, 0.5f, 100, Color.RED, 35, Element.ALIGN_CENTER, "PAGE_CENTER", "PAGE_MIDDLE", output);
 	}
 	
@@ -136,7 +136,7 @@ public class PDFUtils {
 	public static void stampText(InputStream input, String text, int layer, float opacity, int size, Color color,
 			int rotation, int align, String exprX, String exprY, OutputStream output) throws FileNotFoundException,
 			DocumentException, EvalError, IOException  {
-		log.info("stampText({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})", new Object[] { input, text, layer, opacity, size, color, rotation, align, exprX, exprY, output });
+		log.debug("stampText({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})", new Object[] { input, text, layer, opacity, size, color, rotation, align, exprX, exprY, output });
 		PdfReader reader = new PdfReader(input);
 		PdfStamper stamper = new PdfStamper(reader, output);
 		BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.EMBEDDED);
