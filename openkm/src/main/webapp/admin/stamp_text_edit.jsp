@@ -116,7 +116,7 @@
                   </c:otherwise>
                 </c:choose>
                 <c:choose>
-                  <c:when test="${stamp.layer == 1}">
+                  <c:when test="${stamp.align == 1}">
                     <option value="1" selected="selected">Center</option>
                   </c:when>
                   <c:otherwise>
@@ -124,7 +124,7 @@
                   </c:otherwise>
                 </c:choose>
                 <c:choose>
-                  <c:when test="${stamp.layer == 2}">
+                  <c:when test="${stamp.align == 2}">
                     <option value="2" selected="selected">Right</option>
                   </c:when>
                   <c:otherwise>
