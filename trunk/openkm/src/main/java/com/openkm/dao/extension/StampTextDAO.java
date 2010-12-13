@@ -88,7 +88,7 @@ public class StampTextDAO {
 	/**
 	 * Active
 	 */
-	public static void active(String stId, boolean active) throws DatabaseException {
+	public static void active(int stId, boolean active) throws DatabaseException {
 		log.debug("active({}, {})", stId, active);
 		String qs = "update StampText st set st.active=:active where st.id=:id";
 		Session session = null;
@@ -99,7 +99,7 @@ public class StampTextDAO {
 			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setBoolean("active", active);
-			q.setString("id", stId);
+			q.setInteger("id", stId);
 			q.executeUpdate();
 			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
