@@ -189,6 +189,7 @@ public class ProfileServlet extends BaseServlet {
 		prf.getMisc().setUserQuota(WebUtils.getLong(request, "prf_misc_user_quota"));
 		prf.getMisc().setAdvancedFilters(WebUtils.getBoolean(request, "prf_misc_advanced_filter"));
 		prf.getMisc().setWebSkin(WebUtils.getString(request, "prf_misc_web_skin"));
+		prf.getMisc().setPrintPreview(WebUtils.getBoolean(request, "prf_misc_print_preview"));
 		
 		// Wizard
 		prf.getWizard().setPropertyGroups(WebUtils.getString(request, "prf_wizard_property_groups"));
