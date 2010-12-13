@@ -12,51 +12,49 @@
   <link rel="stylesheet" type="text/css" href="css/colorpicker.css" />
   <script src="js/jquery-1.3.2.min.js" type="text/javascript"></script>
   <script src="js/vanadium-min.js" type="text/javascript"></script>
-  <script src="js/colorpicker.js" type="text/javascript"></script>
-  <script type="text/javascript">
-    $('#st_color').ColorPicker({
-		onSubmit: function(hsb, hex, rgb) {
-			$('#st_color').val(hex);
-		},
-		onBeforeShow: function () {
-			$(this).ColorPickerSetColor(this.value);
-		}
-	}).bind('keyup', function() {
-		$(this).ColorPickerSetColor(this.value);
-	});
-  </script>
-  <title>Text stamp edit</title>
+  <title>Image stamp edit</title>
 </head>
 <body>
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
       <c:choose>
-        <c:when test="${action == 'textCreate'}"><h1>Create text stamp</h1></c:when>
-        <c:when test="${action == 'textEdit'}"><h1>Edit text stamp</h1></c:when>
-        <c:when test="${action == 'textDelete'}"><h1>Delete text stamp</h1></c:when>
+        <c:when test="${action == 'imageCreate'}"><h1>Create image stamp</h1></c:when>
+        <c:when test="${action == 'imageEdit'}"><h1>Edit image stamp</h1></c:when>
+        <c:when test="${action == 'imageDelete'}"><h1>Delete image stamp</h1></c:when>
       </c:choose>
-      <form action="Stamp">
+      <form action="Stamp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="action" value="${action}"/>
         <input type="hidden" name="persist" value="${persist}"/>
-        <input type="hidden" name="st_id" value="${stamp.id}"/>
+        <input type="hidden" name="si_id" value="${stamp.id}"/>
         <table class="form" width="420px">
           <tr>
             <td>Name</td>
-            <td><input class=":required :only_on_blur" name="st_name" value="${stamp.name}"/></td>
+            <td><input class=":required :only_on_blur" name="si_name" value="${stamp.name}"/></td>
           </tr>
           <tr>
             <td>Description</td>
-            <td><textarea class="" name="st_description" cols="50">${stamp.description}</textarea></td>
+            <td><textarea class="" name="si_description" cols="50">${stamp.description}</textarea></td>
           </tr>
           <tr>
-            <td>Text</td>
-            <td><input class=":required :only_on_blur" name="st_text" size="25" value="${stamp.text}"/></td>
+            <td>Image</td>
+            <td>
+              <c:choose>
+                <c:when test="${action == 'imageCreate'}">
+                  <input class=":required :only_on_blur" type="file" name="image"/>
+                </c:when>
+                <c:otherwise>
+                  <c:url value="/mime/${mt.name}" var="urlIcon">
+                  </c:url>
+                  <table><tr><td><img src="${urlIcon}"/>&nbsp;</td><td><input type="file" name="image"/></td></tr></table>
+                </c:otherwise>
+              </c:choose>
+            </td>
           </tr>
           <tr>
             <td>Layer</td>
             <td>
-              <select class=":required :only_on_blur" name="st_layer">
+              <select class=":required :only_on_blur" name="si_layer">
                 <c:choose>
                   <c:when test="${stamp.layer == 0}">
                     <option value="0" selected="selected">Under content</option>
@@ -78,37 +76,25 @@
           </tr>
           <tr>
             <td>Opacity</td>
-            <td><input class=":required :float :only_on_blur" name="st_opacity" size="4" value="${stamp.opacity}"/></td>
-          </tr>
-          <tr>
-            <td>Size</td>
-            <td><input class=":required :integer :only_on_blur" name="st_size" size="4" value="${stamp.size}"/></td>
-          </tr>
-          <tr>
-            <td>Color</td>
-            <td><input class=":required :only_on_submit" name="st_color" id="st_color" readonly="readonly" size="6" value="${stamp.color}"/></td>
-          </tr>
-          <tr>
-            <td>Rotation</td>
-            <td><input class=":required :integer :only_on_blur" name="st_rotation" size="4" value="${stamp.rotation}"/></td>
+            <td><input class=":required :float :only_on_blur" name="si_opacity" size="4" value="${stamp.opacity}"/></td>
           </tr>
           <tr>
             <td>Expr. X</td>
-            <td><input class=":required :only_on_blur" name="st_expr_x" size="25" value="${stamp.exprX}"/></td>
+            <td><input class=":required :only_on_blur" name="si_expr_x" size="25" value="${stamp.exprX}"/></td>
           </tr>
           <tr>
             <td>Expr. Y</td>
-            <td><input class=":required :only_on_blur" name="st_expr_y" size="25" value="${stamp.exprY}"/></td>
+            <td><input class=":required :only_on_blur" name="si_expr_y" size="25" value="${stamp.exprY}"/></td>
           </tr>
           <tr>
             <td>Active</td>
             <td>
               <c:choose>
                 <c:when test="${stamp.active}">
-                  <input name="st_active" type="checkbox" checked="checked"/>
+                  <input name="si_active" type="checkbox" checked="checked"/>
                 </c:when>
                 <c:otherwise>
-                  <input name="st_active" type="checkbox"/>
+                  <input name="si_active" type="checkbox"/>
                 </c:otherwise>
               </c:choose>
             </td>
@@ -143,17 +129,5 @@
       <div class="error"><h3>Only admin users allowed</h3></div>
     </c:otherwise>
   </c:choose>
-  <script type="text/javascript">
-    $('#st_color').ColorPicker({
-		onSubmit: function(hsb, hex, rgb) {
-			$('#st_color').val("#"+hex);
-		},
-		onBeforeShow: function () {
-			$(this).ColorPickerSetColor(this.value);
-		}
-	}).bind('keyup', function() {
-		$(this).ColorPickerSetColor(this.value);
-	});
-  </script>
 </body>
 </html>
