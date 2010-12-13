@@ -68,12 +68,22 @@ public class StampImageDAO {
 	 */
 	public static void update(StampImage si) throws DatabaseException {
 		log.debug("update({})", si);
+		String qs = "select si.imageContent, si.imageMime from StampImage si where si.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
+			
+			if (si.getImageContent() == null || si.getImageContent().length() == 0) {
+				Query q = session.createQuery(qs);
+				q.setParameter("id", si.getId());
+				Object[] data = (Object[]) q.setMaxResults(1).uniqueResult();
+				si.setImageContent((String) data[0]);
+				si.setImageMime((String) data[1]);
+			}
+			
 			session.update(si);
 			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
