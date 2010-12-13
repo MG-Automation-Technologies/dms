@@ -21,6 +21,10 @@
       <property name="printPreview" not-null="true">
         <column name="PRF_MSC_PRINT_PREVIEW" default="true"/>
       </property>
+      <set name="extensions" table="OKM_PROFILE_EXTENSION" lazy="false">
+        <key column="PE_ID" not-null="true"/>
+      <element column="PE_EXTENSION" type="string"/>
+    </set>
     </component>
     
     <!-- CHAT -->
