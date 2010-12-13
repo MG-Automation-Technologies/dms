@@ -24,7 +24,6 @@ package com.openkm.servlet.admin;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
-import java.util.List;
 
 import javax.jcr.LoginException;
 import javax.jcr.RepositoryException;
@@ -40,7 +39,6 @@ import org.slf4j.LoggerFactory;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.AuthDAO;
 import com.openkm.dao.bean.Role;
-import com.openkm.dao.bean.User;
 import com.openkm.dao.bean.extension.StampText;
 import com.openkm.dao.extension.StampImageDAO;
 import com.openkm.dao.extension.StampTextDAO;
@@ -132,9 +130,7 @@ public class StampServlet extends BaseServlet {
 			st.setExprX(WebUtils.getString(request, "st_expr_x"));
 			st.setExprY(WebUtils.getString(request, "st_expr_y"));
 			st.setActive(WebUtils.getBoolean(request, "st_active"));
-			
-			List<String> users = WebUtils.getStringList(request, "st_users");
-			st.setUsers(new HashSet<String>(users));
+			st.setUsers(new HashSet<String>(WebUtils.getStringList(request, "st_users")));
 			
 			StampTextDAO.create(st);
 			
@@ -160,34 +156,33 @@ public class StampServlet extends BaseServlet {
 		log.debug("textEdit({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
-			String password = WebUtils.getString(request, "usr_password");
-			User usr = new User();
-			usr.setId(WebUtils.getString(request, "usr_id"));
-			usr.setName(WebUtils.getString(request, "usr_name"));
-			usr.setEmail(WebUtils.getString(request, "usr_email"));
-			usr.setActive(WebUtils.getBoolean(request, "usr_active"));
-			List<String> usrRoles = WebUtils.getStringList(request, "usr_roles");
+			StampText st = new StampText();
+			st.setId(WebUtils.getInt(request, "st_id"));
+			st.setName(WebUtils.getString(request, "st_name"));
+			st.setDescription(WebUtils.getString(request, "st_description"));
+			st.setText(WebUtils.getString(request, "st_text"));
+			st.setLayer(WebUtils.getInt(request, "st_layer"));
+			st.setOpacity(WebUtils.getFloat(request, "st_opacity"));
+			st.setSize(WebUtils.getInt(request, "st_size"));
+			st.setColor(WebUtils.getString(request, "st_color"));
+			st.setRotation(WebUtils.getInt(request, "st_rotation"));
+			st.setExprX(WebUtils.getString(request, "st_expr_x"));
+			st.setExprY(WebUtils.getString(request, "st_expr_y"));
+			st.setActive(WebUtils.getBoolean(request, "st_active"));
+			st.setUsers(new HashSet<String>(WebUtils.getStringList(request, "st_users")));
 			
-			for (String rolId : usrRoles) {
-				usr.getRoles().add(AuthDAO.findRoleByPk(rolId));
-			}
-			
-			AuthDAO.updateUser(usr);
-			
-			if (!password.equals("")) {
-				AuthDAO.updateUserPassword(usr.getId(), password);
-			}
+			StampTextDAO.update(st);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_USER_EDIT", usr.getId(), usr.toString());
+			UserActivity.log(session.getUserID(), "ADMIN_STAMP_TEXT_EDIT", Integer.toString(st.getId()), st.toString());
 		} else {
 			ServletContext sc = getServletContext();
-			String usrId = WebUtils.getString(request, "usr_id");
+			int stId = WebUtils.getInt(request, "st_id");
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
-			sc.setAttribute("roles", AuthDAO.findAllRoles());
-			sc.setAttribute("usr", AuthDAO.findUserByPk(usrId));
-			sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
+			sc.setAttribute("users", AuthDAO.findAllUsers(true));
+			sc.setAttribute("stamp", StampTextDAO.findByPk(stId));
+			sc.getRequestDispatcher("/admin/stamp_text_edit.jsp").forward(request, response);
 		}
 		
 		log.debug("textEdit: void");
@@ -201,19 +196,19 @@ public class StampServlet extends BaseServlet {
 		log.debug("textDelete({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
-			String usrId = WebUtils.getString(request, "usr_id");
-			AuthDAO.deleteUser(usrId);
+			int stId = WebUtils.getInt(request, "st_id");
+			StampTextDAO.delete(stId);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_USER_DELETE", usrId, null);
+			UserActivity.log(session.getUserID(), "ADMIN_STAMP_TEXT_DELETE", Integer.toString(stId), null);
 		} else {
 			ServletContext sc = getServletContext();
-			String usrId = WebUtils.getString(request, "usr_id");
+			int stId = WebUtils.getInt(request, "st_id");
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
-			sc.setAttribute("roles", AuthDAO.findAllRoles());
-			sc.setAttribute("usr", AuthDAO.findUserByPk(usrId));
-			sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
+			sc.setAttribute("users", AuthDAO.findAllUsers(true));
+			sc.setAttribute("stamp", StampTextDAO.findByPk(stId));
+			sc.getRequestDispatcher("/admin/stamp_text_edit.jsp").forward(request, response);
 		}
 		
 		log.debug("textDelete: void");
