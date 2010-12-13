@@ -55,7 +55,27 @@
           </tr>
           <tr>
             <td>Layer</td>
-            <td><input class=":required :only_on_blur" name="st_text" value="${stamp.text}"/></td>
+            <td>
+              <select class=":required :only_on_blur" name="st_layer">
+                <option></option>
+                <c:choose>
+                  <c:when test="${stamp.layer == 0}">
+                    <option value="0" selected="selected">Under content</option>
+                  </c:when>
+                  <c:otherwise>
+                    <option value="0">Under content</option>
+                  </c:otherwise>
+                </c:choose>
+                <c:choose>
+                  <c:when test="${stamp.layer == 1}">
+                    <option value="1" selected="selected">Over content</option>
+                  </c:when>
+                  <c:otherwise>
+                    <option value="1">Over content</option>
+                  </c:otherwise>
+                </c:choose>
+              </select>
+            </td>
           </tr>
           <tr>
             <td>Opacity</td>
@@ -67,7 +87,7 @@
           </tr>
           <tr>
             <td>Color</td>
-            <td><input class=":required :only_on_submit" name="st_color" id="st_color" size="6" value="${stamp.color}"/></td>
+            <td><input class=":required :only_on_submit" name="st_color" id="st_color" readonly="readonly" size="6" value="${stamp.color}"/></td>
           </tr>
           <tr>
             <td>Rotation</td>
@@ -127,7 +147,7 @@
   <script type="text/javascript">
     $('#st_color').ColorPicker({
 		onSubmit: function(hsb, hex, rgb) {
-			$('#st_color').val(hex);
+			$('#st_color').val("#"+hex);
 		},
 		onBeforeShow: function () {
 			$(this).ColorPickerSetColor(this.value);
