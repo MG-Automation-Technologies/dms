@@ -87,6 +87,33 @@ public class StampImageDAO {
 	}
 	
 	/**
+	 * Active
+	 */
+	public static void active(String siId, boolean active) throws DatabaseException {
+		log.debug("active({}, {})", siId, active);
+		String qs = "update StampImage si set si.active=:active where si.id=:id";
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			Query q = session.createQuery(qs);
+			q.setBoolean("active", active);
+			q.setString("id", siId);
+			q.executeUpdate();
+			HibernateUtil.commit(tx);
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("active: void");
+	}
+	
+	/**
 	 * Delete
 	 */
 	public static void delete(int siId) throws DatabaseException {

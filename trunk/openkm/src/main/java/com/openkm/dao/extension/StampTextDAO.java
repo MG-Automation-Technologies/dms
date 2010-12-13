@@ -86,6 +86,33 @@ public class StampTextDAO {
 	}
 	
 	/**
+	 * Active
+	 */
+	public static void active(String stId, boolean active) throws DatabaseException {
+		log.debug("active({}, {})", stId, active);
+		String qs = "update StampText st set st.active=:active where st.id=:id";
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			Query q = session.createQuery(qs);
+			q.setBoolean("active", active);
+			q.setString("id", stId);
+			q.executeUpdate();
+			HibernateUtil.commit(tx);
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("active: void");
+	}
+	
+	/**
 	 * Delete
 	 */
 	public static void delete(int stId) throws DatabaseException {
