@@ -47,7 +47,8 @@
             <c:param name="si_id" value="${stamp.id}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td>${stamp.name}</td><td>${stamp.description}</td><td><img src="${urlImage}"/></td>
+            <td>${stamp.name}</td><td>${stamp.description}</td>
+            <td align="center"><img src="${urlImage}"/></td>
             <td>
               <c:forEach var="user" items="${stamp.users}">
                 ${user}
