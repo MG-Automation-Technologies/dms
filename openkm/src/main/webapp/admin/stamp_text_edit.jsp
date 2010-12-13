@@ -104,6 +104,37 @@
             </td>
           </tr>
           <tr>
+            <td>Align</td>
+            <td>
+              <select class=":required :only_on_blur" name="st_align">
+                <c:choose>
+                  <c:when test="${stamp.align == 0}">
+                    <option value="0" selected="selected">Left</option>
+                  </c:when>
+                  <c:otherwise>
+                    <option value="0">Left</option>
+                  </c:otherwise>
+                </c:choose>
+                <c:choose>
+                  <c:when test="${stamp.layer == 1}">
+                    <option value="1" selected="selected">Center</option>
+                  </c:when>
+                  <c:otherwise>
+                    <option value="1">Center</option>
+                  </c:otherwise>
+                </c:choose>
+                <c:choose>
+                  <c:when test="${stamp.layer == 2}">
+                    <option value="2" selected="selected">Right</option>
+                  </c:when>
+                  <c:otherwise>
+                    <option value="2">Right</option>
+                  </c:otherwise>
+                </c:choose>
+              </select>
+            </td>
+          </tr>
+          <tr>
             <td>Rotation</td>
             <td><input class=":required :integer :only_on_blur" name="st_rotation" size="4" value="${stamp.rotation}"/></td>
           </tr>

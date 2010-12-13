@@ -12,6 +12,7 @@
     <property name="size" column="ST_SIZE" not-null="true"/>
     <property name="color" column="ST_COLOR" not-null="true"/>
     <property name="rotation" column="ST_ROTATION" not-null="true"/>
+    <property name="align" column="ST_ALIGN" not-null="true"/>
     <property name="exprX" column="ST_EXPR_X" not-null="true"/>
     <property name="exprY" column="ST_EXPR_Y" not-null="true"/>
     <property name="active" column="ST_ACTIVE" not-null="true"/>
