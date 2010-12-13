@@ -21,7 +21,7 @@
       <table class="results" width="80%">
         <tr>
           <th>Name</th><th>Description</th><th>Text</th><th>Users</th><th width="25px">Active</th>
-          <th width="130px">
+          <th width="25px">
             <c:url value="Stamp" var="urlCreate">
               <c:param name="action" value="textCreate"/>
             </c:url>
