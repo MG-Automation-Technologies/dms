@@ -44,9 +44,11 @@
                   <input class=":required :only_on_blur" type="file" name="image"/>
                 </c:when>
                 <c:otherwise>
-                  <c:url value="/mime/${mt.name}" var="urlIcon">
+                  <c:url value="Stamp" var="urlImage">
+                    <c:param name="action" value="imageView"/>
+                    <c:param name="si_id" value="${stamp.id}"/>
                   </c:url>
-                  <table><tr><td><img src="${urlIcon}"/>&nbsp;</td><td><input type="file" name="image"/></td></tr></table>
+                  <table><tr><td><img src="${urlImage}"/></td></tr><tr><td><input type="file" name="image"/></td></tr></table>
                 </c:otherwise>
               </c:choose>
             </td>
