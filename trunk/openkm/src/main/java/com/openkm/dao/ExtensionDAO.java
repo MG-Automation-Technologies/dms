@@ -54,8 +54,7 @@ public class ExtensionDAO {
 	 * @throws RepositoryException
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<Extension> findAll() throws DatabaseException,
-			RepositoryException {
+	public static List<Extension> findAll() throws DatabaseException {
 		log.debug("findAll({})");
 		String qs = "select ex from Extension ex order by ex.description asc";		
 		Session session = null;
