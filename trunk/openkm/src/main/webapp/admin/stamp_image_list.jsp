@@ -21,7 +21,7 @@
       <table class="results" width="80%">
         <tr>
           <th>Name</th><th>Description</th><th>Image</th><th>Users</th><th width="25px">Active</th>
-          <th width="50px">
+          <th width="75px">
             <c:url value="Stamp" var="urlCreate">
               <c:param name="action" value="imageCreate"/>
             </c:url>
@@ -35,6 +35,10 @@
           </c:url>
           <c:url value="Stamp" var="urlDelete">
             <c:param name="action" value="imageDelete"/>
+            <c:param name="si_id" value="${stamp.id}"/>
+          </c:url>
+          <c:url value="Stamp" var="urlTest">
+            <c:param name="action" value="imageTest"/>
             <c:param name="si_id" value="${stamp.id}"/>
           </c:url>
           <c:url value="Stamp" var="urlActive">
@@ -68,6 +72,8 @@
               <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
               &nbsp;
               <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+              &nbsp;
+              <a href="${urlTest}"><img src="img/action/pdf.png" alt="Test" title="Test"/></a>
             </td>
           </tr>
         </c:forEach>

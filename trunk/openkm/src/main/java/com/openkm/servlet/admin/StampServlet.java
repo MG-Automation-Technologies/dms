@@ -24,8 +24,11 @@ package com.openkm.servlet.admin;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -50,6 +53,9 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import bsh.EvalError;
+
+import com.lowagie.text.DocumentException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.AuthDAO;
@@ -59,6 +65,7 @@ import com.openkm.dao.extension.StampImageDAO;
 import com.openkm.dao.extension.StampTextDAO;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.util.JCRUtils;
+import com.openkm.util.PDFUtils;
 import com.openkm.util.SecureStore;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
@@ -93,6 +100,8 @@ public class StampServlet extends BaseServlet {
 				textDelete(session, request, response);
 			} else if (action.equals("textColor")) {
 				textColor(session, request, response);
+			} else if (action.equals("textTest")) {
+				textTest(session, request, response);
 			} else if (action.equals("imageDelete")) {
 				imageDelete(session, request, response);
 			} else if (action.equals("textActive")) {
@@ -101,6 +110,8 @@ public class StampServlet extends BaseServlet {
 				imageActive(session, request, response);
 			} else if (action.equals("imageView")) {
 				imageView(session, request, response);
+			} else if (action.equals("imageTest")) {
+				imageTest(session, request, response);
 			}
 			
 			if (action.equals("") || action.equals("textList") || action.equals("textActive") ||
@@ -122,6 +133,12 @@ public class StampServlet extends BaseServlet {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} catch (PrincipalAdapterException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} catch (DocumentException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} catch (EvalError e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} finally {
@@ -245,6 +262,7 @@ public class StampServlet extends BaseServlet {
 			st.setOpacity(WebUtils.getFloat(request, "st_opacity"));
 			st.setSize(WebUtils.getInt(request, "st_size"));
 			st.setColor(WebUtils.getString(request, "st_color"));
+			st.setAlign(WebUtils.getInt(request, "st_align"));
 			st.setRotation(WebUtils.getInt(request, "st_rotation"));
 			st.setExprX(WebUtils.getString(request, "st_expr_x"));
 			st.setExprY(WebUtils.getString(request, "st_expr_y"));
@@ -284,6 +302,7 @@ public class StampServlet extends BaseServlet {
 			st.setOpacity(WebUtils.getFloat(request, "st_opacity"));
 			st.setSize(WebUtils.getInt(request, "st_size"));
 			st.setColor(WebUtils.getString(request, "st_color"));
+			st.setAlign(WebUtils.getInt(request, "st_align"));
 			st.setRotation(WebUtils.getInt(request, "st_rotation"));
 			st.setExprX(WebUtils.getString(request, "st_expr_x"));
 			st.setExprY(WebUtils.getString(request, "st_expr_y"));
@@ -378,6 +397,26 @@ public class StampServlet extends BaseServlet {
 	}
 	
 	/**
+	 * Test text stamp
+	 */
+	private void textTest(Session session, HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException, DatabaseException, DocumentException, EvalError {
+		log.debug("textTest({}, {}, {})", new Object[] { session, request, response });
+		int stId = WebUtils.getInt(request, "st_id");
+		StampText st = StampTextDAO.findByPk(stId);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		PDFUtils.generateSample(5, baos);
+		response.setContentType("application/pdf");
+		OutputStream sos = response.getOutputStream();
+		ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+		PDFUtils.stampText(bais, st.getText(), st.getLayer(), st.getOpacity(), st.getSize(),
+				Color.decode(st.getColor()), st.getRotation(), st.getAlign(), st.getExprX(), st.getExprY(), sos);
+		sos.flush();
+		sos.close();
+		log.debug("textTest: void");
+	}
+	
+	/**
 	 * New image stamp
 	 */
 	private void imageCreate(Session session, HttpServletRequest request, HttpServletResponse response) 
@@ -465,5 +504,25 @@ public class StampServlet extends BaseServlet {
 		sos.flush();
 		sos.close();
 		log.debug("imageView: void");
+	}
+	
+	/**
+	 * Test image stamp
+	 */
+	private void imageTest(Session session, HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException, DatabaseException, DocumentException, EvalError {
+		log.debug("imageTest({}, {}, {})", new Object[] { session, request, response });
+		int siId = WebUtils.getInt(request, "si_id");
+		StampImage si = StampImageDAO.findByPk(siId);
+		byte[] image = SecureStore.b64Decode(si.getImageContent());
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		PDFUtils.generateSample(5, baos);
+		response.setContentType("application/pdf");
+		OutputStream sos = response.getOutputStream();
+		ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+		PDFUtils.stampImage(bais, image, si.getLayer(), si.getOpacity(), si.getExprX(), si.getExprY(), sos);
+		sos.flush();
+		sos.close();
+		log.debug("imageTest: void");
 	}
 }

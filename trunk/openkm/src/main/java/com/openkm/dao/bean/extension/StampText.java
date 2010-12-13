@@ -35,6 +35,7 @@ public class StampText implements Serializable {
 	private float opacity;
 	private int size;
 	private String color;
+	private int align;
 	private int rotation;
 	private String exprX;
 	private String exprY;
@@ -103,6 +104,14 @@ public class StampText implements Serializable {
 
 	public void setColor(String color) {
 		this.color = color;
+	}
+	
+	public int getAlign() {
+		return align;
+	}
+
+	public void setAlign(int align) {
+		this.align = align;
 	}
 
 	public int getRotation() {
