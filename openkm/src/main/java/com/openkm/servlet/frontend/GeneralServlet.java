@@ -29,7 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
-import com.openkm.core.RepositoryException;
 import com.openkm.dao.ExtensionDAO;
 import com.openkm.dao.bean.Extension;
 import com.openkm.dao.bean.MailAccount;
@@ -108,9 +107,6 @@ public class GeneralServlet extends OKMRemoteServiceServlet implements OKMGenera
 		} catch (DatabaseException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMGeneralService, ErrorCode.CAUSE_Database), e.getMessage());
-		} catch (RepositoryException e) {
-			log.warn(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMGeneralService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}
 		
 		return extensions;
