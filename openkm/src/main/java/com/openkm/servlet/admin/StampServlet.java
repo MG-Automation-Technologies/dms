@@ -33,6 +33,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -92,6 +93,8 @@ public class StampServlet extends BaseServlet {
 				textActive(session, request, response);
 			} else if (action.equals("imageActive")) {
 				imageActive(session, request, response);
+			} else if (action.equals("imageView")) {
+				imageView(session, request, response);
 			}
 			
 			if (action.equals("") || action.equals("textList") || action.equals("textActive") ||
@@ -119,7 +122,7 @@ public class StampServlet extends BaseServlet {
 			JCRUtils.logout(session);
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
@@ -213,9 +216,6 @@ public class StampServlet extends BaseServlet {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} catch (FileUploadException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request,response, e);
-		} catch (PrincipalAdapterException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} finally {
@@ -333,12 +333,12 @@ public class StampServlet extends BaseServlet {
 	private void textActive(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
 		log.debug("textActive({}, {}, {})", new Object[] { session, request, response });
-		String stId = WebUtils.getString(request, "st_id");
+		int stId = WebUtils.getInt(request, "st_id");
 		boolean active = WebUtils.getBoolean(request, "st_active");
 		StampTextDAO.active(stId, active);
-			
+		
 		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_STAMP_TEXT_ACTIVE", stId, Boolean.toString(active));
+		UserActivity.log(session.getUserID(), "ADMIN_STAMP_TEXT_ACTIVE", Integer.toString(stId), Boolean.toString(active));
 		log.debug("textActive: void");
 	}
 
@@ -405,14 +405,14 @@ public class StampServlet extends BaseServlet {
 	 * Active image stamp
 	 */
 	private void imageActive(Session session, HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
+			throws ServletException, IOException, DatabaseException {
 		log.debug("imageActive({}, {}, {})", new Object[] { session, request, response });
-		String siId = WebUtils.getString(request, "si_id");
+		int siId = WebUtils.getInt(request, "si_id");
 		boolean active = WebUtils.getBoolean(request, "si_active");
 		StampImageDAO.active(siId, active);
-			
+		
 		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_STAMP_IMAGE_ACTIVE", siId, Boolean.toString(active));
+		UserActivity.log(session.getUserID(), "ADMIN_STAMP_IMAGE_ACTIVE", Integer.toString(siId), Boolean.toString(active));
 		log.debug("imageActive: void");
 	}
 
@@ -420,11 +420,27 @@ public class StampServlet extends BaseServlet {
 	 * List image stamp
 	 */
 	private void imageList(Session session, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException, PrincipalAdapterException {
+			throws ServletException, IOException, DatabaseException {
 		log.debug("imageList({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
 		sc.setAttribute("stamps", StampImageDAO.findAll());
 		sc.getRequestDispatcher("/admin/stamp_image_list.jsp").forward(request, response);
 		log.debug("imageList: void");
+	}
+	
+	/**
+	 * View image stamp
+	 */
+	private void imageView(Session session, HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException, DatabaseException {
+		log.debug("imageView({}, {}, {})", new Object[] { session, request, response });
+		int siId = WebUtils.getInt(request, "si_id");
+		StampImage si = StampImageDAO.findByPk(siId);
+		response.setContentType(si.getImageMime());
+		ServletOutputStream sos = response.getOutputStream();
+		sos.write(SecureStore.b64Decode(si.getImageContent()));
+		sos.flush();
+		sos.close();
+		log.debug("imageView: void");
 	}
 }
