@@ -28,6 +28,7 @@ public class ProfileMisc implements Serializable {
 	private boolean advancedFilters;
 	private long userQuota;
 	private String webSkin;
+	private boolean printPreview;
 
 	public boolean isAdvancedFilters() {
 		return advancedFilters;
@@ -53,12 +54,21 @@ public class ProfileMisc implements Serializable {
 		this.webSkin = webSkin;
 	}
 	
+	public boolean isPrintPreview() {
+		return printPreview;
+	}
+
+	public void setPrintPreview(boolean printPreview) {
+		this.printPreview = printPreview;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("userQuota="); sb.append(userQuota);
 		sb.append(", advancedFilters="); sb.append(advancedFilters);
 		sb.append(", webSkin="); sb.append(webSkin);
+		sb.append(", printPreview="); sb.append(printPreview);
 		sb.append("}");
 		return sb.toString();
 	}
