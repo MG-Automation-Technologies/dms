@@ -34,7 +34,7 @@ public class StampText implements Serializable {
 	private int layer;
 	private float opacity;
 	private int size;
-	private int color;
+	private String color;
 	private int rotation;
 	private String exprX;
 	private String exprY;
@@ -97,11 +97,11 @@ public class StampText implements Serializable {
 		this.size = size;
 	}
 
-	public int getColor() {
+	public String getColor() {
 		return color;
 	}
 
-	public void setColor(int color) {
+	public void setColor(String color) {
 		this.color = color;
 	}
 
