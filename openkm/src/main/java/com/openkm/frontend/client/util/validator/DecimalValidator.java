@@ -71,10 +71,7 @@ public class DecimalValidator extends Validator<DecimalValidator> {
 		if(text.equals("") && !isRequired())
 			return null;
 		
-
 		String numberPattern = Main.i18n("general.decimal.pattern");
-		numberPattern = ",";
-			
 		// Must be only two section
 		String[] number = text.split(numberPattern);
 		if (number.length!=2) {
