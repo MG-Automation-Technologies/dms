@@ -28,7 +28,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -64,6 +63,7 @@ import com.openkm.dao.bean.extension.StampText;
 import com.openkm.dao.extension.StampImageDAO;
 import com.openkm.dao.extension.StampTextDAO;
 import com.openkm.principal.PrincipalAdapterException;
+import com.openkm.util.DocConverter;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.PDFUtils;
 import com.openkm.util.SecureStore;
@@ -406,13 +406,13 @@ public class StampServlet extends BaseServlet {
 		StampText st = StampTextDAO.findByPk(stId);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		PDFUtils.generateSample(5, baos);
-		response.setContentType("application/pdf");
-		OutputStream sos = response.getOutputStream();
 		ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+		baos = new ByteArrayOutputStream();
 		PDFUtils.stampText(bais, st.getText(), st.getLayer(), st.getOpacity(), st.getSize(),
-				Color.decode(st.getColor()), st.getRotation(), st.getAlign(), st.getExprX(), st.getExprY(), sos);
-		sos.flush();
-		sos.close();
+				Color.decode(st.getColor()), st.getRotation(), st.getAlign(), st.getExprX(), st.getExprY(),
+				baos);
+		bais = new ByteArrayInputStream(baos.toByteArray());
+		WebUtils.sendFile(request, response, "sample.pdf", DocConverter.PDF, true, bais);
 		log.debug("textTest: void");
 	}
 	
@@ -517,12 +517,11 @@ public class StampServlet extends BaseServlet {
 		byte[] image = SecureStore.b64Decode(si.getImageContent());
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		PDFUtils.generateSample(5, baos);
-		response.setContentType("application/pdf");
-		OutputStream sos = response.getOutputStream();
 		ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-		PDFUtils.stampImage(bais, image, si.getLayer(), si.getOpacity(), si.getExprX(), si.getExprY(), sos);
-		sos.flush();
-		sos.close();
+		baos = new ByteArrayOutputStream();
+		PDFUtils.stampImage(bais, image, si.getLayer(), si.getOpacity(), si.getExprX(), si.getExprY(), baos);
+		bais = new ByteArrayInputStream(baos.toByteArray());
+		WebUtils.sendFile(request, response, "sample.pdf", DocConverter.PDF, true, bais);
 		log.debug("imageTest: void");
 	}
 }
