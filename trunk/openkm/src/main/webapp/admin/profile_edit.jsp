@@ -37,12 +37,18 @@
               <jsp:include page="profile_stacks.jsp"/>
               <!-- CHAT -->
               <jsp:include page="profile_chat_edit.jsp"/>
+              <!-- TAB DOCUMENT -->
+              <jsp:include page="profile_tab_document.jsp"/>
             </td>
             <td valign="top" rowspan="3" width="25%">
               <!-- DASHBOARD -->
               <jsp:include page="profile_dashboard.jsp"/>
               <!-- TAB -->
               <jsp:include page="profile_tab.jsp"/>
+              <!-- TAB FOLDER -->
+              <jsp:include page="profile_tab_folder.jsp"/>
+              <!-- TAB MAIL -->
+              <jsp:include page="profile_tab_mail.jsp"/>
             </td>
           </tr>
           <tr>
@@ -63,8 +69,6 @@
               <jsp:include page="profile_menu.jsp"/>
               <!-- MENU BOOKMARK -->
               <jsp:include page="profile_menu_bookmark.jsp"/>
-              <!-- MENU HELP -->
-              <jsp:include page="profile_menu_help.jsp"/>
             </td>
             <td valign="top">
               <!-- MENU FILE -->
@@ -73,16 +77,12 @@
             <td valign="top">
               <!-- MENU EDIT -->
               <jsp:include page="profile_menu_edit.jsp"/>
-              <!-- MENU TOOL -->
-              <jsp:include page="profile_menu_tool.jsp"/>
             </td>
             <td valign="top">
-              <!-- TAB DOCUMENT -->
-              <jsp:include page="profile_tab_document.jsp"/>
-              <!-- TAB FOLDER -->
-              <jsp:include page="profile_tab_folder.jsp"/>
-              <!-- TAB MAIL -->
-              <jsp:include page="profile_tab_mail.jsp"/>
+              <!-- MENU TOOL -->
+              <jsp:include page="profile_menu_tool.jsp"/>
+              <!-- MENU HELP -->
+              <jsp:include page="profile_menu_help.jsp"/>
             </td>
           </tr>
           <tr>

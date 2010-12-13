@@ -67,7 +67,7 @@
     <tr>
       <td>Entensions</td>
       <td>
-        <select multiple="multiple" name="prf_misc_extensions" size="5">
+        <select multiple="multiple" name="prf_misc_extensions" size="4">
           <c:forEach var="ext" items="${exts}">
             <c:choose>
               <c:when test="${fn:contains(prf.misc.extensions, ext.uuid)}">
