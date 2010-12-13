@@ -46,9 +46,9 @@ import com.openkm.dao.MailAccountDAO;
 import com.openkm.dao.UserConfigDAO;
 import com.openkm.dao.bean.Language;
 import com.openkm.dao.bean.MailAccount;
+import com.openkm.dao.bean.Profile;
 import com.openkm.dao.bean.User;
 import com.openkm.dao.bean.UserConfig;
-import com.openkm.dao.bean.Profile;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTLanguage;
@@ -102,11 +102,10 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 			session = JCRUtils.getSession();
 			UserConfig uc = UserConfigDAO.findByPk(session, session.getUserID());
 			up = uc.getProfile();
-			String[] wizardProperties = up.getWizard().getPropertyGroups().split(" ");
-			
-			for (int i=0; i<wizardProperties.length; i++) {
+						
+			for (String pgroup: up.getWizard().getPropertyGroups()) {
 				for (PropertyGroup pg : OKMPropertyGroup.getInstance().getAllGroups(null)) {
-					if (pg.getName().equals(wizardProperties[i]) && pg.isVisible()) {
+					if (pg.getName().equals(pgroup) && pg.isVisible()) {
 						wizardPropGrpLst.add(GWTUtil.copy(pg));
 						break;
 					}
