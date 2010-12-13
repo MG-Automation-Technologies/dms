@@ -23,6 +23,7 @@ package com.openkm.servlet.admin;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashSet;
 
 import javax.jcr.LoginException;
 import javax.jcr.RepositoryException;
@@ -36,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
+import com.openkm.dao.ExtensionDAO;
 import com.openkm.dao.ProfileDAO;
 import com.openkm.dao.bean.Profile;
 import com.openkm.util.JCRUtils;
@@ -106,6 +108,7 @@ public class ProfileServlet extends BaseServlet {
 			Profile prf = new Profile();
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
+			sc.setAttribute("exts", ExtensionDAO.findAll());
 			sc.setAttribute("prf", prf);
 			sc.getRequestDispatcher("/admin/profile_edit.jsp").forward(request, response);
 		}
@@ -131,6 +134,7 @@ public class ProfileServlet extends BaseServlet {
 			int prfId = WebUtils.getInt(request, "prf_id");
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
+			sc.setAttribute("exts", ExtensionDAO.findAll());
 			sc.setAttribute("prf", ProfileDAO.findByPk(prfId));
 			sc.getRequestDispatcher("/admin/profile_edit.jsp").forward(request, response);
 		}
@@ -190,6 +194,7 @@ public class ProfileServlet extends BaseServlet {
 		prf.getMisc().setAdvancedFilters(WebUtils.getBoolean(request, "prf_misc_advanced_filter"));
 		prf.getMisc().setWebSkin(WebUtils.getString(request, "prf_misc_web_skin"));
 		prf.getMisc().setPrintPreview(WebUtils.getBoolean(request, "prf_misc_print_preview"));
+		prf.getMisc().setExtensions(new HashSet<String>(WebUtils.getStringList(request, "prf_misc_extensions")));
 		
 		// Wizard
 		prf.getWizard().setPropertyGroups(WebUtils.getString(request, "prf_wizard_property_groups"));
