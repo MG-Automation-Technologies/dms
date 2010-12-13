@@ -55,7 +55,7 @@
                     <c:param name="action" value="flag"/>
                     <c:param name="lg_id" value="${lang.id}"/>
                   </c:url>
-                  <table><tr><td><img src="${urlFlag}"/>&nbsp;</td><td><input type="file" name="image"/></td></tr></table>
+                  <table cellpadding="0" cellspacing="0"><tr><td><img src="${urlFlag}"/>&nbsp;</td><td><input type="file" name="image"/></td></tr></table>
                 </c:otherwise>
               </c:choose>
             </td>

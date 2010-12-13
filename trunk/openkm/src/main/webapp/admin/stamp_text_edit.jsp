@@ -86,7 +86,22 @@
           </tr>
           <tr>
             <td>Color</td>
-            <td><input class=":required :only_on_submit" name="st_color" id="st_color" readonly="readonly" size="6" value="${stamp.color}"/></td>
+            <td>
+              <table cellpadding="0" cellspacing="0"><tr>
+                <td>
+                  <c:if test="${action != 'textCreate'}">
+                    <c:url value="Stamp" var="urlImage">
+                      <c:param name="action" value="textColor"/>
+                      <c:param name="st_id" value="${stamp.id}"/>
+                    </c:url>
+                    <img src="${urlImage}"/>&nbsp;
+                  </c:if>
+                </td>
+                <td>
+                  <input class=":required :only_on_submit" name="st_color" id="st_color" readonly="readonly" size="6" value="${stamp.color}"/>
+                </td>
+              </tr></table>
+            </td>
           </tr>
           <tr>
             <td>Rotation</td>
