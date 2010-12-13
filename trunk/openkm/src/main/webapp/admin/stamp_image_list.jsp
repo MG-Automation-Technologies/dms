@@ -20,7 +20,7 @@
       <h1>Image stamp list <span style="font-size: 10px;">(<a href="${urlTextList}">Text stamps</a>)</span></h1>
       <table class="results" width="80%">
         <tr>
-          <th>Name</th><th>Description</th><th>Users</th><th width="25px">Active</th>
+          <th>Name</th><th>Description</th><th>Image</th><th>Users</th><th width="25px">Active</th>
           <th width="50px">
             <c:url value="Stamp" var="urlCreate">
               <c:param name="action" value="imageCreate"/>
@@ -42,8 +42,12 @@
             <c:param name="si_id" value="${stamp.id}"/>
             <c:param name="si_active" value="${!stamp.active}"/>
           </c:url>
+          <c:url value="Stamp" var="urlImage">
+            <c:param name="action" value="imageView"/>
+            <c:param name="si_id" value="${stamp.id}"/>
+          </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td>${stamp.name}</td><td>${stamp.description}</td>
+            <td>${stamp.name}</td><td>${stamp.description}</td><td><img src="${urlImage}"/></td>
             <td>
               <c:forEach var="user" items="${stamp.users}">
                 ${user}
