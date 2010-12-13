@@ -13,7 +13,7 @@
 </head>
 <body>
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
-  <u:constantsMap className="com.openkm.util.ReportUtil" var="ReportUtil"/>
+  <u:constantsMap className="com.openkm.util.ReportUtils" var="ReportUtils"/>
   <c:choose>
     <c:when test="${isAdmin}">
       <h1>Reports</h1>
@@ -39,17 +39,17 @@
           <c:url value="Report" var="urlExecutePdf">
             <c:param name="action" value="execute"/>
             <c:param name="rp_id" value="${rp.id}"/>
-            <c:param name="out" value="${ReportUtil.OUTPUT_PDF}"/>
+            <c:param name="out" value="${ReportUtils.OUTPUT_PDF}"/>
           </c:url>
           <c:url value="Report" var="urlExecuteRtf">
             <c:param name="action" value="execute"/>
             <c:param name="rp_id" value="${rp.id}"/>
-            <c:param name="out" value="${ReportUtil.OUTPUT_RTF}"/>
+            <c:param name="out" value="${ReportUtils.OUTPUT_RTF}"/>
           </c:url>
           <c:url value="Report" var="urlExecuteCsv">
             <c:param name="action" value="execute"/>
             <c:param name="rp_id" value="${rp.id}"/>
-            <c:param name="out" value="${ReportUtil.OUTPUT_CSV}"/>
+            <c:param name="out" value="${ReportUtils.OUTPUT_CSV}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
             <td>${rp.name}</td><td>${rp.type}</td><td>${rp.fileName}</td>
