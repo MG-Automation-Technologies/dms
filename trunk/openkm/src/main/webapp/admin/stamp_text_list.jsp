@@ -21,7 +21,7 @@
       <table class="results" width="80%">
         <tr>
           <th>Name</th><th>Description</th><th>Text</th><th>Users</th><th width="25px">Active</th>
-          <th width="25px">
+          <th width="50px">
             <c:url value="Stamp" var="urlCreate">
               <c:param name="action" value="textCreate"/>
             </c:url>
@@ -63,7 +63,6 @@
               <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
               &nbsp;
               <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
-              &nbsp;
             </td>
           </tr>
         </c:forEach>
