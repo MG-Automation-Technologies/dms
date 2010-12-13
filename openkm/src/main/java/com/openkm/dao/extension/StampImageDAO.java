@@ -99,7 +99,7 @@ public class StampImageDAO {
 	/**
 	 * Active
 	 */
-	public static void active(String siId, boolean active) throws DatabaseException {
+	public static void active(int siId, boolean active) throws DatabaseException {
 		log.debug("active({}, {})", siId, active);
 		String qs = "update StampImage si set si.active=:active where si.id=:id";
 		Session session = null;
@@ -110,7 +110,7 @@ public class StampImageDAO {
 			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setBoolean("active", active);
-			q.setString("id", siId);
+			q.setInteger("id", siId);
 			q.executeUpdate();
 			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
