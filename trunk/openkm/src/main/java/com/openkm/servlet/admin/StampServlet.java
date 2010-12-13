@@ -21,6 +21,9 @@
 
 package com.openkm.servlet.admin;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
@@ -28,6 +31,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.jcr.LoginException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -87,6 +91,8 @@ public class StampServlet extends BaseServlet {
 				imageEdit(session, request, response);
 			} else if (action.equals("textDelete")) {
 				textDelete(session, request, response);
+			} else if (action.equals("textColor")) {
+				textColor(session, request, response);
 			} else if (action.equals("imageDelete")) {
 				imageDelete(session, request, response);
 			} else if (action.equals("textActive")) {
@@ -352,6 +358,23 @@ public class StampServlet extends BaseServlet {
 		sc.setAttribute("stamps", StampTextDAO.findAll());
 		sc.getRequestDispatcher("/admin/stamp_text_list.jsp").forward(request, response);
 		log.debug("textList: void");
+	}
+	
+	/**
+	 * View text color
+	 */
+	private void textColor(Session session, HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException, DatabaseException {
+		log.debug("textColor({}, {}, {})", new Object[] { session, request, response });
+		int stId = WebUtils.getInt(request, "st_id");
+		StampText st = StampTextDAO.findByPk(stId);
+		BufferedImage bi = new BufferedImage(20, 20, BufferedImage.TYPE_INT_RGB);
+		Graphics g = bi.getGraphics();
+		g.setColor(Color.decode(st.getColor()));
+		g.fillRect(0, 0, 20, 20);
+		response.setContentType("image/jpeg");
+		ImageIO.write(bi, "jpg", response.getOutputStream());
+		log.debug("textColor: void");
 	}
 	
 	/**
