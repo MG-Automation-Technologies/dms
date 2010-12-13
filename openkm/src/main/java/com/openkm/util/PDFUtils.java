@@ -98,8 +98,8 @@ public class PDFUtils {
 			i.set("PAGE_MIDDLE", (int) reader.getPageSizeWithRotation(count).getHeight() / 2);
 			int evalX = (Integer) i.eval(exprX);
 			int evalY = (Integer) i.eval(exprY);
-			log.info("evalX: {}", evalX);
-			log.info("evalY: {}", evalY);
+			log.debug("evalX: {}", evalX);
+			log.debug("evalY: {}", evalY);
 			
 			img.setAbsolutePosition(evalX, evalY);
 			PdfContentByte cb = null;
@@ -154,8 +154,8 @@ public class PDFUtils {
 			i.set("PAGE_MIDDLE", (int) reader.getPageSizeWithRotation(count).getHeight() / 2);
 			int evalX = (Integer) i.eval(exprX);
 			int evalY = (Integer) i.eval(exprY);
-			log.info("evalX: {}", evalX);
-			log.info("evalY: {}", evalY);
+			log.debug("evalX: {}", evalX);
+			log.debug("evalY: {}", evalY);
 			
 			PdfContentByte cb = null;
 			
