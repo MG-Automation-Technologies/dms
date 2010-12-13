@@ -18,6 +18,9 @@
       <property name="webSkin" not-null="true">
         <column name="PRF_MSC_WEB_SKIN" default="'default'"/>
       </property>
+      <property name="printPreview" not-null="true">
+        <column name="PRF_MSC_PRINT_PREVIEW" default="true"/>
+      </property>
     </component>
     
     <!-- CHAT -->
