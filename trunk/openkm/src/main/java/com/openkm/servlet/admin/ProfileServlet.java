@@ -25,8 +25,6 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 
-import javax.jcr.LoginException;
-import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -36,7 +34,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.api.OKMPropertyGroup;
+import com.openkm.api.OKMWorkflow;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.ParseException;
+import com.openkm.core.RepositoryException;
+import com.openkm.core.WorkflowException;
 import com.openkm.dao.ExtensionDAO;
 import com.openkm.dao.ProfileDAO;
 import com.openkm.dao.bean.Profile;
@@ -73,16 +76,25 @@ public class ProfileServlet extends BaseServlet {
 			if (action.equals("") || WebUtils.getBoolean(request, "persist")) {
 				list(session, request, response);
 			}
-		} catch (LoginException e) {
+		} catch (javax.jcr.LoginException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
-		} catch (RepositoryException e) {
+		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} catch (NoSuchAlgorithmException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} catch (ParseException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} catch (WorkflowException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} finally {
@@ -94,7 +106,8 @@ public class ProfileServlet extends BaseServlet {
 	 * New user
 	 */
 	private void create(Session session, HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException, DatabaseException {
+			throws ServletException, IOException, DatabaseException, RepositoryException, ParseException,
+			WorkflowException {
 		log.debug("create({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
@@ -109,6 +122,8 @@ public class ProfileServlet extends BaseServlet {
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("exts", ExtensionDAO.findAll());
+			sc.setAttribute("pgroups", OKMPropertyGroup.getInstance().getAllGroups(null));
+			sc.setAttribute("wflows", OKMWorkflow.getInstance().findAllProcessDefinitions(null));
 			sc.setAttribute("prf", prf);
 			sc.getRequestDispatcher("/admin/profile_edit.jsp").forward(request, response);
 		}
@@ -120,7 +135,8 @@ public class ProfileServlet extends BaseServlet {
 	 * Edit user
 	 */
 	private void edit(Session session, HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
+			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException,
+			RepositoryException, ParseException, WorkflowException {
 		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
@@ -135,6 +151,8 @@ public class ProfileServlet extends BaseServlet {
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("exts", ExtensionDAO.findAll());
+			sc.setAttribute("pgroups", OKMPropertyGroup.getInstance().getAllGroups(null));
+			sc.setAttribute("wflows", OKMWorkflow.getInstance().findAllProcessDefinitions(null));
 			sc.setAttribute("prf", ProfileDAO.findByPk(prfId));
 			sc.getRequestDispatcher("/admin/profile_edit.jsp").forward(request, response);
 		}
@@ -146,7 +164,8 @@ public class ProfileServlet extends BaseServlet {
 	 * Update user
 	 */
 	private void delete(Session session, HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
+			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException,
+			RepositoryException, ParseException, WorkflowException {
 		log.debug("delete({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
@@ -160,6 +179,9 @@ public class ProfileServlet extends BaseServlet {
 			int prfId = WebUtils.getInt(request, "prf_id");
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
+			sc.setAttribute("exts", ExtensionDAO.findAll());
+			sc.setAttribute("pgroups", OKMPropertyGroup.getInstance().getAllGroups(null));
+			sc.setAttribute("wflows", OKMWorkflow.getInstance().findAllProcessDefinitions(null));
 			sc.setAttribute("prf", ProfileDAO.findByPk(prfId));
 			sc.getRequestDispatcher("/admin/profile_edit.jsp").forward(request, response);
 		}
@@ -197,10 +219,10 @@ public class ProfileServlet extends BaseServlet {
 		prf.getMisc().setExtensions(new HashSet<String>(WebUtils.getStringList(request, "prf_misc_extensions")));
 		
 		// Wizard
-		prf.getWizard().setPropertyGroups(WebUtils.getString(request, "prf_wizard_property_groups"));
-		prf.getWizard().setWorkflows(WebUtils.getString(request, "prf_wizard_workflows"));
 		prf.getWizard().setKeywordsEnabled(WebUtils.getBoolean(request, "prf_wizard_keywords"));
 		prf.getWizard().setCategoriesEnabled(WebUtils.getBoolean(request, "prf_wizard_categories"));
+		prf.getWizard().setPropertyGroups(new HashSet<String>(WebUtils.getStringList(request, "prf_wizard_property_groups")));
+		prf.getWizard().setWorkflows(new HashSet<String>(WebUtils.getStringList(request, "prf_wizard_workflows")));
 		
 		// Chat
 		prf.getChat().setChatEnabled(WebUtils.getBoolean(request, "prf_chat_enabled"));
