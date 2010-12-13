@@ -22,8 +22,11 @@
 package com.openkm.servlet.admin;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.jcr.LoginException;
 import javax.jcr.RepositoryException;
@@ -33,17 +36,25 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.AuthDAO;
-import com.openkm.dao.bean.Role;
+import com.openkm.dao.bean.extension.StampImage;
 import com.openkm.dao.bean.extension.StampText;
 import com.openkm.dao.extension.StampImageDAO;
 import com.openkm.dao.extension.StampTextDAO;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.util.JCRUtils;
+import com.openkm.util.SecureStore;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
 
@@ -86,8 +97,7 @@ public class StampServlet extends BaseServlet {
 			if (action.equals("") || action.equals("textList") || action.equals("textActive") ||
 					(action.startsWith("text") && WebUtils.getBoolean(request, "persist"))) {
 				textList(session, request, response);
-			} else if (action.equals("imageList") || action.equals("imageActive") ||
-					(action.startsWith("image") && WebUtils.getBoolean(request, "persist"))) {
+			} else if (action.equals("imageList") || action.equals("imageActive")) {
 				imageList(session, request, response);
 			}
 		} catch (LoginException e) {
@@ -100,6 +110,109 @@ public class StampServlet extends BaseServlet {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} catch (NoSuchAlgorithmException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} catch (PrincipalAdapterException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} finally {
+			JCRUtils.logout(session);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException,
+			ServletException {
+		log.debug("doPost({}, {})", request, response);
+		request.setCharacterEncoding("UTF-8");
+		String action = WebUtils.getString(request, "action");
+		Session session = null;
+		updateSessionManager(request);
+		
+		try {
+			if (ServletFileUpload.isMultipartContent(request)) {
+				session = JCRUtils.getSession();
+				InputStream is = null;
+				FileItemFactory factory = new DiskFileItemFactory(); 
+				ServletFileUpload upload = new ServletFileUpload(factory);
+				List<FileItem> items = upload.parseRequest(request);
+				StampImage si = new StampImage();
+				byte data[] = null;
+				
+				for (Iterator<FileItem> it = items.iterator(); it.hasNext();) {
+					FileItem item = it.next();
+					
+					if (item.isFormField()) {
+						if (item.getFieldName().equals("action")) {
+							action = item.getString("UTF-8");
+						} else if (item.getFieldName().equals("si_id")) {
+							si.setId(Integer.parseInt(item.getString("UTF-8")));
+						} else if (item.getFieldName().equals("si_name")) {
+							si.setName(item.getString("UTF-8"));
+						} else if (item.getFieldName().equals("si_description")) {
+							si.setDescription(item.getString("UTF-8"));
+						} else if (item.getFieldName().equals("si_layer")) {
+							si.setLayer(Integer.parseInt(item.getString("UTF-8")));
+						} else if (item.getFieldName().equals("si_opacity")) {
+							si.setOpacity(Float.parseFloat(item.getString("UTF-8")));
+						} else if (item.getFieldName().equals("si_expr_x")) {
+							si.setExprX(item.getString("UTF-8"));
+						} else if (item.getFieldName().equals("si_expr_y")) {
+							si.setExprY(item.getString("UTF-8"));
+						} else if (item.getFieldName().equals("si_active")) {
+							si.setActive(Boolean.parseBoolean(item.getString("UTF-8")));
+						} else if (item.getFieldName().equals("si_description")) {
+							String[] extensions = item.getString("UTF-8").split(" ");
+							for (int i=0; i<extensions.length; i++) {
+								//mt.getExtensions().add(extensions[i].toLowerCase());
+							}
+						}
+					} else {
+						is = item.getInputStream();
+						si.setImageMime(Config.mimeTypes.getContentType(item.getName()));
+						data = IOUtils.toByteArray(is);
+						is.close();
+					}
+				}
+			
+				if (action.equals("imageCreate")) {
+					if (data != null && data.length > 0) {
+						si.setImageContent(SecureStore.b64Encode(data));
+					}
+					
+					StampImageDAO.create(si);
+					
+					// Activity log
+					UserActivity.log(session.getUserID(), "ADMIN_STAMP_IMAGE_CREATE", null, si.toString());
+					imageList(session, request, response);
+				} else if (action.equals("imageEdit")) {
+					if (data != null && data.length > 0) {
+						si.setImageContent(SecureStore.b64Encode(data));
+					}
+					
+					StampImageDAO.update(si);
+					
+					// Activity log
+					UserActivity.log(session.getUserID(), "ADMIN_STAMP_IMAGE_EDIT", Integer.toString(si.getId()), si.toString());
+					imageList(session, request, response);
+				} else if (action.equals("imageDelete")) {
+					StampImageDAO.delete(si.getId());
+					
+					// Activity log
+					UserActivity.log(session.getUserID(), "ADMIN_STAMP_IMAGE_DELETE", Integer.toString(si.getId()), null);
+					imageList(session, request, response);
+				}
+			}
+		} catch (LoginException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} catch (FileUploadException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} catch (PrincipalAdapterException e) {
@@ -141,7 +254,7 @@ public class StampServlet extends BaseServlet {
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("users", AuthDAO.findAllUsers(true));
-			sc.setAttribute("stamp", null);
+			sc.setAttribute("stamp", new StampText());
 			sc.getRequestDispatcher("/admin/stamp_text_edit.jsp").forward(request, response);
 		}
 		
@@ -247,23 +360,12 @@ public class StampServlet extends BaseServlet {
 	private void imageCreate(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException {
 		log.debug("imageCreate({}, {}, {})", new Object[] { session, request, response });
-		
-		if (WebUtils.getBoolean(request, "persist")) {
-			Role rol = new Role();
-			rol.setId(WebUtils.getString(request, "si_id"));
-			rol.setActive(WebUtils.getBoolean(request, "rol_active"));
-			AuthDAO.createRole(rol);
-			
-			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_ROLE_CREATE", rol.getId(), rol.toString());
-		} else {
-			ServletContext sc = getServletContext();
-			sc.setAttribute("action", WebUtils.getString(request, "action"));
-			sc.setAttribute("persist", true);
-			sc.setAttribute("rol", null);
-			sc.getRequestDispatcher("/admin/role_edit.jsp").forward(request, response);
-		}
-		
+		ServletContext sc = getServletContext();
+		sc.setAttribute("action", WebUtils.getString(request, "action"));
+		sc.setAttribute("persist", true);
+		sc.setAttribute("users", AuthDAO.findAllUsers(true));
+		sc.setAttribute("stamp", new StampImage());
+		sc.getRequestDispatcher("/admin/stamp_image_edit.jsp").forward(request, response);
 		log.debug("imageCreate: void");
 	}
 	
@@ -273,24 +375,13 @@ public class StampServlet extends BaseServlet {
 	private void imageEdit(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
 		log.debug("imageEdit({}, {}, {})", new Object[] { session, request, response });
-		
-		if (WebUtils.getBoolean(request, "persist")) {
-			Role rol = new Role();
-			rol.setId(WebUtils.getString(request, "rol_id"));
-			rol.setActive(WebUtils.getBoolean(request, "rol_active"));
-			AuthDAO.updateRole(rol);
-			
-			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_ROLE_EDIT", rol.getId(), rol.toString());
-		} else {
-			ServletContext sc = getServletContext();
-			String rolId = WebUtils.getString(request, "rol_id");
-			sc.setAttribute("action", WebUtils.getString(request, "action"));
-			sc.setAttribute("persist", true);
-			sc.setAttribute("rol", AuthDAO.findRoleByPk(rolId));
-			sc.getRequestDispatcher("/admin/role_edit.jsp").forward(request, response);
-		}
-		
+		ServletContext sc = getServletContext();
+		int siId = WebUtils.getInt(request, "si_id");
+		sc.setAttribute("action", WebUtils.getString(request, "action"));
+		sc.setAttribute("persist", true);
+		sc.setAttribute("users", AuthDAO.findAllUsers(true));
+		sc.setAttribute("stamp", StampImageDAO.findByPk(siId));
+		sc.getRequestDispatcher("/admin/stamp_image_edit.jsp").forward(request, response);
 		log.debug("imageEdit: void");
 	}
 	
@@ -300,22 +391,13 @@ public class StampServlet extends BaseServlet {
 	private void imageDelete(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
 		log.debug("imageDelete({}, {}, {})", new Object[] { session, request, response });
-		
-		if (WebUtils.getBoolean(request, "persist")) {
-			String rolId = WebUtils.getString(request, "rol_id");
-			AuthDAO.deleteRole(rolId);
-			
-			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_ROLE_DELETE", rolId, null);
-		} else {
-			ServletContext sc = getServletContext();
-			String rolId = WebUtils.getString(request, "rol_id");
-			sc.setAttribute("action", WebUtils.getString(request, "action"));
-			sc.setAttribute("persist", true);
-			sc.setAttribute("rol", AuthDAO.findRoleByPk(rolId));
-			sc.getRequestDispatcher("/admin/role_edit.jsp").forward(request, response);
-		}
-		
+		ServletContext sc = getServletContext();
+		int siId = WebUtils.getInt(request, "si_id");
+		sc.setAttribute("action", WebUtils.getString(request, "action"));
+		sc.setAttribute("persist", true);
+		sc.setAttribute("users", AuthDAO.findAllUsers(true));
+		sc.setAttribute("stamp", StampImageDAO.findByPk(siId));
+		sc.getRequestDispatcher("/admin/stamp_image_edit.jsp").forward(request, response);
 		log.debug("imageDelete: void");
 	}
 	
