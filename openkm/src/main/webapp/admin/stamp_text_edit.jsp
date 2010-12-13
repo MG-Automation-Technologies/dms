@@ -1,0 +1,140 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="com.openkm.core.Config" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="Shortcut icon" href="favicon.ico" />
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <link rel="stylesheet" type="text/css" href="css/colorpicker.css" />
+  <script src="js/jquery-1.3.2.min.js" type="text/javascript"></script>
+  <script src="js/vanadium-min.js" type="text/javascript"></script>
+  <script src="js/colorpicker.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    $('#st_color').ColorPicker({
+		onSubmit: function(hsb, hex, rgb) {
+			$('#st_color').val(hex);
+		},
+		onBeforeShow: function () {
+			$(this).ColorPickerSetColor(this.value);
+		}
+	}).bind('keyup', function() {
+		$(this).ColorPickerSetColor(this.value);
+	});
+  </script>
+  <title>Text stamp edit</title>
+</head>
+<body>
+  <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
+  <c:choose>
+    <c:when test="${isAdmin}">
+      <c:choose>
+        <c:when test="${action == 'textCreate'}"><h1>Create stamp</h1></c:when>
+        <c:when test="${action == 'textEdit'}"><h1>Edit stamp</h1></c:when>
+        <c:when test="${action == 'textDelete'}"><h1>Delete stamp</h1></c:when>
+      </c:choose>
+      <form action="Stamp">
+        <input type="hidden" name="action" value="${action}"/>
+        <input type="hidden" name="persist" value="${persist}"/>
+        <input type="hidden" name="st_id" value="${stamp.id}"/>
+        <table class="form" width="420px">
+          <tr>
+            <td>Name</td>
+            <td><input class=":required :only_on_blur" name="st_name" value="${stamp.name}"/></td>
+          </tr>
+          <tr>
+            <td>Description</td>
+            <td><textarea class="" name="st_description" cols="30">${stamp.description}</textarea></td>
+          </tr>
+          <tr>
+            <td>Text</td>
+            <td><input class=":required :only_on_blur" name="st_text" value="${stamp.text}"/></td>
+          </tr>
+          <tr>
+            <td>Layer</td>
+            <td><input class=":required :only_on_blur" name="st_text" value="${stamp.text}"/></td>
+          </tr>
+          <tr>
+            <td>Opacity</td>
+            <td><input class=":required :float :only_on_blur" name="st_opacity" value="${stamp.opacity}"/></td>
+          </tr>
+          <tr>
+            <td>Size</td>
+            <td><input class=":required :integer :only_on_blur" name="st_size" value="${stamp.size}"/></td>
+          </tr>
+          <tr>
+            <td>Color</td>
+            <td><input class=":required :only_on_submit" name="st_color" id="st_color" value="${stamp.color}"/></td>
+          </tr>
+          <tr>
+            <td>Rotation</td>
+            <td><input class=":required :integer :only_on_blur" name="st_rotation" value="${stamp.rotation}"/></td>
+          </tr>
+          <tr>
+            <td>Expr. X</td>
+            <td><input class=":required :only_on_blur" name="st_expr_x" value="${stamp.expr_x}"/></td>
+          </tr>
+          <tr>
+            <td>Expr. Y</td>
+            <td><input class=":required :only_on_blur" name="st_expr_y" value="${stamp.expr_y}"/></td>
+          </tr>
+          <tr>
+            <td>Active</td>
+            <td>
+              <c:choose>
+                <c:when test="${stamp.active}">
+                  <input name="st_active" type="checkbox" checked="checked"/>
+                </c:when>
+                <c:otherwise>
+                  <input name="st_active" type="checkbox"/>
+                </c:otherwise>
+              </c:choose>
+            </td>
+          </tr>
+          <tr>
+            <td>Users</td>
+            <td>
+              <select multiple="multiple" name="st_users" size="7">
+                <c:forEach var="user" items="${users}">
+                  <c:choose>
+                    <c:when test="${fn:contains(st.users, user.id)}">
+                      <option value="${user.id}" selected="selected">${user.id}</option>
+                    </c:when>
+                    <c:otherwise>
+                      <option value="${user.id}">${user.id}</option>
+                    </c:otherwise>
+                  </c:choose>
+                </c:forEach>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" align="right">
+              <input type="button" onclick="javascript:window.history.back()" value="Cancel"/>
+              <input type="submit" value="Send"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </c:when>
+    <c:otherwise>
+      <div class="error"><h3>Only admin users allowed</h3></div>
+    </c:otherwise>
+  </c:choose>
+  <script type="text/javascript">
+    $('#st_color').ColorPicker({
+		onSubmit: function(hsb, hex, rgb) {
+			$('#st_color').val(hex);
+		},
+		onBeforeShow: function () {
+			$(this).ColorPickerSetColor(this.value);
+		}
+	}).bind('keyup', function() {
+		$(this).ColorPickerSetColor(this.value);
+	});
+  </script>
+</body>
+</html>
