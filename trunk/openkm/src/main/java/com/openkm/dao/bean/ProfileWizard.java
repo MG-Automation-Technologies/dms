@@ -22,29 +22,15 @@
 package com.openkm.dao.bean;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ProfileWizard implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String propertyGroups;
-	private String workflows;
 	private boolean keywordsEnabled;
 	private boolean categoriesEnabled;
-
-	public String getPropertyGroups() {
-		return propertyGroups;
-	}
-
-	public void setPropertyGroups(String propertyGroups) {
-		this.propertyGroups = propertyGroups;
-	}
-	
-	public String getWorkflows() {
-		return workflows;
-	}
-
-	public void setWorkflows(String workflows) {
-		this.workflows = workflows;
-	}
+	private Set<String> propertyGroups = new HashSet<String>();
+	private Set<String> workflows = new HashSet<String>();
 
 	public boolean isKeywordsEnabled() {
 		return keywordsEnabled;
@@ -62,13 +48,29 @@ public class ProfileWizard implements Serializable {
 		this.categoriesEnabled = categoriesEnabled;
 	}
 	
+	public Set<String> getPropertyGroups() {
+		return propertyGroups;
+	}
+
+	public void setPropertyGroups(Set<String> propertyGroups) {
+		this.propertyGroups = propertyGroups;
+	}
+
+	public Set<String> getWorkflows() {
+		return workflows;
+	}
+
+	public void setWorkflows(Set<String> workflows) {
+		this.workflows = workflows;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("propertyGroups="); sb.append(propertyGroups);
-		sb.append(", workflows="); sb.append(workflows);
-		sb.append(", keywordsEnabled="); sb.append(keywordsEnabled);
+		sb.append("keywordsEnabled="); sb.append(keywordsEnabled);
 		sb.append(", categoriesEnabled="); sb.append(categoriesEnabled);
+		sb.append(", propertyGroups="); sb.append(propertyGroups);
+		sb.append(", workflows="); sb.append(workflows);
 		sb.append("}");
 		return sb.toString();
 	}
