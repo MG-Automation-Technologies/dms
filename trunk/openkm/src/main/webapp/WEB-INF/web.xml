@@ -297,6 +297,10 @@
     <servlet-name>ConfigServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.ConfigServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>StampServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.StampServlet</servlet-class>
+  </servlet>
   
   <!-- Extensions -->
   <servlet>
@@ -636,6 +640,10 @@
   <servlet-mapping>
     <servlet-name>ConfigServlet</servlet-name>
     <url-pattern>/admin/Config</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>StampServlet</servlet-name>
+    <url-pattern>/admin/Stamp</url-pattern>
   </servlet-mapping>
 
   <!-- WebServices Servlet Mappings -->
