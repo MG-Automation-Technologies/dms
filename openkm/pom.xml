@@ -476,6 +476,13 @@
       <version>1.0.1</version>
     </dependency>
     
+    <!--  Lorem Ipsu for Java -->
+    <dependency>
+      <groupId>de.sven-jacobs</groupId>
+      <artifactId>loremipsum</artifactId>
+      <version>1.0</version>
+    </dependency>
+    
     <!-- OpenKM extensions -->
     <dependency>
       <groupId>com.openkm.extension</groupId>
