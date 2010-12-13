@@ -169,7 +169,7 @@ public class ValidatorBuilder {
 				);
 			} else if (widget instanceof TextArea) {
 				hPanel.setCellVerticalAlignment(errorLabel, HasAlignment.ALIGN_TOP);
-				validationProcessor.addValidators(name+"_req", 
+				validationProcessor.addValidators(name+"_maxlen", 
 						new StringMaxLengthValidator((TextArea) widget, Integer.parseInt(validator.getParameter()))
 						.addActionForFailure(focusAction)
 						.addActionForFailure(new StyleAction("okm-validationFailedBorder"))
@@ -346,6 +346,31 @@ public class ValidatorBuilder {
 				hPanel.setCellVerticalAlignment(errorLabel, HasAlignment.ALIGN_TOP);
 				validationProcessor.addValidators(name+"_num", 
 						new NumericValidator((TextArea) widget)
+						.addActionForFailure(focusAction)
+						.addActionForFailure(new StyleAction("okm-validationFailedBorder"))
+						.addActionForFailure(new ErrorMsgLabelTextAction(errorLabel))
+				);
+			}
+			
+		} else if (type.equals("dec")) {
+			HTML space = new HTML("");
+			Label errorLabel = new Label(Main.i18n("validation.decimal.required") + " - (000" + Main.i18n("general.decimal.pattern") + "00)");
+			errorLabel.setStyleName("okm-validationFailedText");
+			hPanel.add(space);
+			hPanel.add(errorLabel);
+			hPanel.setCellWidth(space, "5");
+			if (widget instanceof TextBox) {
+				hPanel.setCellVerticalAlignment(errorLabel, HasAlignment.ALIGN_MIDDLE);
+				validationProcessor.addValidators(name+"_dec", 
+						new DecimalValidator((TextBox) widget)
+						.addActionForFailure(focusAction)
+						.addActionForFailure(new StyleAction("okm-validationFailedBorder"))
+						.addActionForFailure(new ErrorMsgLabelTextAction(errorLabel))
+				);
+			} else if (widget instanceof TextArea) {
+				hPanel.setCellVerticalAlignment(errorLabel, HasAlignment.ALIGN_TOP);
+				validationProcessor.addValidators(name+"_dec", 
+						new DecimalValidator((TextArea) widget)
 						.addActionForFailure(focusAction)
 						.addActionForFailure(new StyleAction("okm-validationFailedBorder"))
 						.addActionForFailure(new ErrorMsgLabelTextAction(errorLabel))
