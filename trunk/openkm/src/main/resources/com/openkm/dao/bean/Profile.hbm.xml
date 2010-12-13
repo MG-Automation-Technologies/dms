@@ -21,10 +21,10 @@
       <property name="printPreview" not-null="true">
         <column name="PRF_MSC_PRINT_PREVIEW" default="true"/>
       </property>
-      <set name="extensions" table="OKM_PROFILE_EXTENSION" lazy="false">
-        <key column="PE_ID" not-null="true"/>
-      <element column="PE_EXTENSION" type="string"/>
-    </set>
+      <set name="extensions" table="OKM_PROFILE_MSC_EXTENSION" lazy="false">
+        <key column="PEX_ID" not-null="true"/>
+        <element column="PEX_EXTENSION" type="string"/>
+      </set>
     </component>
     
     <!-- CHAT -->
@@ -39,12 +39,14 @@
     
     <!-- WIZARD -->
     <component name="wizard" class="com.openkm.dao.bean.ProfileWizard">
-      <property name="propertyGroups" not-null="true">
-        <column name="PRF_WZRD_PROPERTY_GROUPS" default="''"/>
-      </property>
-      <property name="workflows" not-null="true">
-        <column name="PRF_WZRD_WORKFLOWS" default="''"/>
-      </property>
+      <set name="propertyGroups" table="OKM_PROFILE_WZRD_PROP_GRP" lazy="false">
+        <key column="PPG_ID" not-null="true"/>
+        <element column="PPG_PROPERTY_GROUP" type="string"/>
+      </set>
+      <set name="workflows" table="OKM_PROFILE_WZRD_WORKFLOW" lazy="false">
+        <key column="PWF_ID" not-null="true"/>
+        <element column="PWF_WORKFLOW" type="string"/>
+      </set>
       <property name="keywordsEnabled" not-null="true">
         <column name="PRF_WZRD_KEYWORDS_EN" default="false"/>
       </property>
