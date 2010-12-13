@@ -127,7 +127,7 @@ public class StampServlet extends BaseServlet {
 			st.setLayer(WebUtils.getInt(request, "st_layer"));
 			st.setOpacity(WebUtils.getFloat(request, "st_opacity"));
 			st.setSize(WebUtils.getInt(request, "st_size"));
-			st.setColor(WebUtils.getInt(request, "st_color"));
+			st.setColor(WebUtils.getString(request, "st_color"));
 			st.setRotation(WebUtils.getInt(request, "st_rotation"));
 			st.setExprX(WebUtils.getString(request, "st_expr_x"));
 			st.setExprY(WebUtils.getString(request, "st_expr_y"));
