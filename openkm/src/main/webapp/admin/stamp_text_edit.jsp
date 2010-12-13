@@ -47,11 +47,11 @@
           </tr>
           <tr>
             <td>Description</td>
-            <td><textarea class="" name="st_description" cols="30">${stamp.description}</textarea></td>
+            <td><textarea class="" name="st_description" cols="50">${stamp.description}</textarea></td>
           </tr>
           <tr>
             <td>Text</td>
-            <td><input class=":required :only_on_blur" name="st_text" value="${stamp.text}"/></td>
+            <td><input class=":required :only_on_blur" name="st_text" size="25" value="${stamp.text}"/></td>
           </tr>
           <tr>
             <td>Layer</td>
@@ -59,27 +59,27 @@
           </tr>
           <tr>
             <td>Opacity</td>
-            <td><input class=":required :float :only_on_blur" name="st_opacity" value="${stamp.opacity}"/></td>
+            <td><input class=":required :float :only_on_blur" name="st_opacity" size="4" value="${stamp.opacity}"/></td>
           </tr>
           <tr>
             <td>Size</td>
-            <td><input class=":required :integer :only_on_blur" name="st_size" value="${stamp.size}"/></td>
+            <td><input class=":required :integer :only_on_blur" name="st_size" size="4" value="${stamp.size}"/></td>
           </tr>
           <tr>
             <td>Color</td>
-            <td><input class=":required :only_on_submit" name="st_color" id="st_color" value="${stamp.color}"/></td>
+            <td><input class=":required :only_on_submit" name="st_color" id="st_color" size="6" value="${stamp.color}"/></td>
           </tr>
           <tr>
             <td>Rotation</td>
-            <td><input class=":required :integer :only_on_blur" name="st_rotation" value="${stamp.rotation}"/></td>
+            <td><input class=":required :integer :only_on_blur" name="st_rotation" size="4" value="${stamp.rotation}"/></td>
           </tr>
           <tr>
             <td>Expr. X</td>
-            <td><input class=":required :only_on_blur" name="st_expr_x" value="${stamp.expr_x}"/></td>
+            <td><input class=":required :only_on_blur" name="st_expr_x" size="25" value="${stamp.expr_x}"/></td>
           </tr>
           <tr>
             <td>Expr. Y</td>
-            <td><input class=":required :only_on_blur" name="st_expr_y" value="${stamp.expr_y}"/></td>
+            <td><input class=":required :only_on_blur" name="st_expr_y" size="25" value="${stamp.expr_y}"/></td>
           </tr>
           <tr>
             <td>Active</td>
