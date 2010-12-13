@@ -25,18 +25,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jcr.LoginException;
+import javax.jcr.Session;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
-import com.openkm.dao.ExtensionDAO;
-import com.openkm.dao.bean.Extension;
+import com.openkm.dao.UserConfigDAO;
 import com.openkm.dao.bean.MailAccount;
+import com.openkm.dao.bean.Profile;
+import com.openkm.dao.bean.UserConfig;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
 import com.openkm.frontend.client.bean.GWTTestImap;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.OKMGeneralService;
+import com.openkm.util.JCRUtils;
 import com.openkm.util.MailUtils;
 
 /**
@@ -99,14 +104,25 @@ public class GeneralServlet extends OKMRemoteServiceServlet implements OKMGenera
 	@Override
 	public List<String> getEnabledExtensions() throws OKMException {
 		List<String> extensions = new ArrayList<String>();
+		Session session = null;
 		
 		try {
-			for (Extension extension :ExtensionDAO.findAll()) {
-				extensions.add(extension.getUuid());
-			}
+			Profile up = new Profile();
+			session = JCRUtils.getSession();
+			UserConfig uc = UserConfigDAO.findByPk(session, session.getUserID());
+			up = uc.getProfile();
+			extensions = new ArrayList<String>(up.getMisc().getExtensions());
+		} catch (LoginException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMGeneralService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMGeneralService, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (DatabaseException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMGeneralService, ErrorCode.CAUSE_Database), e.getMessage());
+		} finally {
+			JCRUtils.logout(session);
 		}
 		
 		return extensions;
