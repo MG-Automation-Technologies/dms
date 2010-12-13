@@ -43,7 +43,7 @@
                 <c:otherwise>
                   <c:url value="/mime/${mt.name}" var="urlIcon">
                   </c:url>
-                  <table><tr><td><img src="${urlIcon}"/>&nbsp;</td><td><input type="file" name="image"/></td></tr></table>
+                  <table cellpadding="0" cellspacing="0"><tr><td><img src="${urlIcon}"/>&nbsp;</td><td><input type="file" name="image"/></td></tr></table>
                 </c:otherwise>
               </c:choose>
             </td>

@@ -48,7 +48,7 @@
                     <c:param name="action" value="imageView"/>
                     <c:param name="si_id" value="${stamp.id}"/>
                   </c:url>
-                  <table><tr><td><img src="${urlImage}"/></td></tr><tr><td><input type="file" name="image"/></td></tr></table>
+                  <table cellpadding="0" cellspacing="0"><tr><td><img src="${urlImage}"/></td></tr><tr><td><input type="file" name="image"/></td></tr></table>
                 </c:otherwise>
               </c:choose>
             </td>
