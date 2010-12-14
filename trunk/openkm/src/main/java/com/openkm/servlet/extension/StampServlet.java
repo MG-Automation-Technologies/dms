@@ -154,14 +154,14 @@ public class StampServlet extends OKMRemoteServiceServlet implements OKMStampSer
 			is = new FileInputStream(tmpStampPdf);
 			// Uploading document to repository if original is pdf we increment version otheside create new file
 			if (!doc.getMimeType().equals("application/pdf")) {
-				OKMDocument.getInstance().checkout(null, path);
-				OKMDocument.getInstance().setContent(null, path, is);
-				OKMDocument.getInstance().checkin(null, path, "Stamped");
-			} else {
 				Document newDoc = new Document();
 				path = path.substring(0,path.lastIndexOf(".")+1) + "pdf";
 				newDoc.setPath(path);
 				OKMDocument.getInstance().create(null, newDoc, is);
+			} else {
+				OKMDocument.getInstance().checkout(null, path);
+				OKMDocument.getInstance().setContent(null, path, is);
+				OKMDocument.getInstance().checkin(null, path, "Stamped");
 			}
 			is.close();
 			
