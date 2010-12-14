@@ -59,4 +59,5 @@ public class RPCService {
 	public static String ProposeSubscriptionService = Main.CONTEXT+"/extension/ProposedSubscription";
 	public static String ProposeQueryService = Main.CONTEXT+"/extension/ProposedQuery";
 	public static String MessageService = Main.CONTEXT+"/extension/Message";
+	public static String StampService = Main.CONTEXT+"/extension/Stamp";
 }

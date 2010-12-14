@@ -28,6 +28,7 @@ import java.util.List;
 import com.openkm.extension.frontend.client.widget.client.metromusa.MetromUsa;
 import com.openkm.extension.frontend.client.widget.messaging.MessagingToolBarBox;
 import com.openkm.extension.frontend.client.widget.preview.AutocadPreview;
+import com.openkm.extension.frontend.client.widget.stamp.StampToolBarButton;
 import com.openkm.extension.frontend.client.widget.stapling.Stapling;
 import com.openkm.extension.frontend.client.widget.toolbar.downloadButton.DownloadButton;
 import com.openkm.extension.frontend.client.widget.toolbar.downloadPdfButton.DownloadPdfButton;
@@ -86,6 +87,9 @@ public class Customization {
 		}
 		if (MessagingToolBarBox.isRegistered(uuidList)) {
 			extensions.addAll(new MessagingToolBarBox(uuidList).getExtensions());
+		}
+		if (StampToolBarButton.isRegistered(uuidList)) {
+			extensions.addAll(new StampToolBarButton(uuidList).getExtensions());
 		}
 		
 		return extensions;

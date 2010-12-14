@@ -56,6 +56,7 @@ public class ErrorCode {
 	public static final String ORIGIN_OKMProposedSubscriptionService 	= "023";
 	public static final String ORIGIN_OKMProposedQueryService 			= "024";
 	public static final String ORIGIN_OKMMessageService 				= "025";
+	public static final String ORIGIN_OKMStampService 					= "026";
 	
 	// Cause code error is XXX digits
 	public static final String CAUSE_Repository 				= "001";
@@ -87,6 +88,9 @@ public class ErrorCode {
 	public static final String CAUSE_DocumentNameMismatch		= "027";
 	public static final String CAUSE_NumberFormat				= "028";
 	public static final String CAUSE_Login						= "029";
+	public static final String CAUSE_Document					= "030";
+	public static final String CAUSE_Eval						= "031";
+	public static final String CAUSE_Virus						= "032";
 
 	/**
 	 * Gets the error

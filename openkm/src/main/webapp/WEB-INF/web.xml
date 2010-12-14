@@ -149,6 +149,8 @@
     <servlet-name>FrontendLanguageServlet</servlet-name>
     <servlet-class>com.openkm.servlet.frontend.LanguageServlet</servlet-class>
   </servlet>
+  
+  <!-- Extension servlets -->
   <servlet>
     <servlet-name>ProposedSubscriptionServlet</servlet-name>
     <servlet-class>com.openkm.servlet.extension.ProposedSubscriptionServlet</servlet-class>
@@ -160,6 +162,18 @@
   <servlet>
     <servlet-name>MessageServlet</servlet-name>
     <servlet-class>com.openkm.servlet.extension.MessageServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>FrontendStampServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.extension.StampServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>StaplingServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.extension.StaplingServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>StaplingDownloadServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.extension.StaplingDownloadServlet</servlet-class>
   </servlet>
   
   <!-- Misc servlets -->
@@ -300,16 +314,6 @@
   <servlet>
     <servlet-name>StampServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.StampServlet</servlet-class>
-  </servlet>
-  
-  <!-- Extensions -->
-  <servlet>
-    <servlet-name>StaplingServlet</servlet-name>
-    <servlet-class>com.openkm.servlet.extension.StaplingServlet</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>StaplingDownloadServlet</servlet-name>
-    <servlet-class>com.openkm.servlet.extension.StaplingDownloadServlet</servlet-class>
   </servlet>
     
   <!-- WebServices -->
@@ -504,6 +508,10 @@
   <servlet-mapping>
     <servlet-name>MessageServlet</servlet-name>
     <url-pattern>/extension/Message</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FrontendStampServlet</servlet-name>
+    <url-pattern>/extension/Stamp</url-pattern>
   </servlet-mapping>
   
   <!-- Misc servlets mappings -->
