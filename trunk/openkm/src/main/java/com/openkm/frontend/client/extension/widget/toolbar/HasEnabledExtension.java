@@ -21,15 +21,13 @@
 
 package com.openkm.frontend.client.extension.widget.toolbar;
 
-import com.openkm.frontend.client.extension.widget.HasExtension;
-
 /**
  * HasEnabledExtension
  * 
  * @author jllort
  *
  */
-public interface HasEnabledExtension extends HasExtension {
+public interface HasEnabledExtension {
 	
 	public abstract boolean isEnabled();
 	

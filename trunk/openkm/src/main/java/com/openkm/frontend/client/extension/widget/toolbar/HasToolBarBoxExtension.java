@@ -21,14 +21,11 @@
 
 package com.openkm.frontend.client.extension.widget.toolbar;
 
-import com.openkm.frontend.client.extension.widget.HasExtension;
-
-
 /**
  * HasToolBarBoxExtension
  * 
  * @author jllort
  *
  */
-public interface HasToolBarBoxExtension extends HasExtension {
+public interface HasToolBarBoxExtension {
 }

@@ -21,16 +21,13 @@
 
 package com.openkm.frontend.client.extension.widget.tabworkspace;
 
-import com.openkm.frontend.client.extension.widget.HasExtension;
-
-
 /**
  * HasWorkspaceExtension
  * 
  * @author jllort
  *
  */
-public interface HasWorkspaceExtension extends HasExtension {
+public interface HasWorkspaceExtension {
 	
 	public abstract String getTabText();
 	

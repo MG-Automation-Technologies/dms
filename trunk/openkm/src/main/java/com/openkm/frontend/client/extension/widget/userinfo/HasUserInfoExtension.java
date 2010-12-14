@@ -21,14 +21,11 @@
 
 package com.openkm.frontend.client.extension.widget.userinfo;
 
-import com.openkm.frontend.client.extension.widget.HasExtension;
-
-
 /**
  * HasUserInfoExtension
  * 
  * @author jllort
  *
  */
-public interface HasUserInfoExtension extends HasExtension {	
+public interface HasUserInfoExtension {	
 }

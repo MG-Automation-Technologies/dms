@@ -22,7 +22,6 @@
 package com.openkm.frontend.client.extension.widget.tabfolder;
 
 import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.extension.widget.HasExtension;
 
 /**
  * HasFolderExtension
@@ -30,7 +29,7 @@ import com.openkm.frontend.client.extension.widget.HasExtension;
  * @author jllort
  *
  */
-public interface HasFolderExtension extends HasExtension {
+public interface HasFolderExtension {
 	
 	public abstract String getTabText();
 	
