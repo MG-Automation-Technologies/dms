@@ -21,10 +21,11 @@
 
 package com.openkm.frontend.client.bean.extension;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class GWTMessageReceived implements Serializable {
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class GWTMessageReceived implements IsSerializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private String from;

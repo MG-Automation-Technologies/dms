@@ -82,6 +82,8 @@ import com.openkm.dao.bean.ProposedSubscriptionReceived;
 import com.openkm.dao.bean.ProposedSubscriptionSent;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.UserConfig;
+import com.openkm.dao.bean.extension.StampImage;
+import com.openkm.dao.bean.extension.StampText;
 import com.openkm.dao.bean.extension.Staple;
 import com.openkm.dao.bean.extension.StapleGroup;
 import com.openkm.frontend.client.bean.GWTBookmark;
@@ -120,6 +122,7 @@ import com.openkm.frontend.client.bean.extension.GWTProposedQueryReceived;
 import com.openkm.frontend.client.bean.extension.GWTProposedQuerySent;
 import com.openkm.frontend.client.bean.extension.GWTProposedSubscriptionReceived;
 import com.openkm.frontend.client.bean.extension.GWTProposedSubscriptionSent;
+import com.openkm.frontend.client.bean.extension.GWTStamp;
 import com.openkm.frontend.client.bean.extension.GWTStaple;
 import com.openkm.frontend.client.bean.extension.GWTStapleGroup;
 import com.openkm.frontend.client.bean.extension.GWTTextMessageSent;
@@ -1266,5 +1269,37 @@ public class GWTUtil {
 		gWTMessageReceived.setUser(mr.getUser());
 		
 		return gWTMessageReceived;
+	}
+	
+	/**
+	 * Copy StampText to GWTStamp
+	 * 
+	 * @param st
+	 * @return
+	 */
+	public static GWTStamp copy(StampText st) {
+		GWTStamp gst = new GWTStamp();
+		
+		gst.setId(st.getId());
+		gst.setName(st.getName());
+		gst.setType(GWTStamp.STAMP_TEXT);
+		
+		return gst;
+	}
+	
+	/**
+	 * Copy StampText to StampImage
+	 * 
+	 * @param st
+	 * @return
+	 */
+	public static GWTStamp copy(StampImage st) {
+		GWTStamp gst = new GWTStamp();
+		
+		gst.setId(st.getId());
+		gst.setName(st.getName());
+		gst.setType(GWTStamp.STAMP_IMAGE);
+		
+		return gst;
 	}
 }
