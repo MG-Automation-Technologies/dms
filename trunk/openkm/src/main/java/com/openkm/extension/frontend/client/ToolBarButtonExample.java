@@ -125,10 +125,5 @@ public class ToolBarButtonExample  {
 				Window.alert("language changed");
 			}
 		}
-
-		@Override
-		public String getExtensionUUID() {
-			return String.valueOf("9f84b330-d096-11df-bd3b-0800200c9a66");
-		}
 	}
 }

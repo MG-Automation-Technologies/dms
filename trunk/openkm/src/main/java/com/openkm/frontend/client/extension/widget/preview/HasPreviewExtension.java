@@ -21,14 +21,11 @@
 
 package com.openkm.frontend.client.extension.widget.preview;
 
-import com.openkm.frontend.client.extension.widget.HasExtension;
-
-
 /**
  * HasPreviewExtension
  * 
  * @author jllort
  *
  */
-public interface HasPreviewExtension extends HasExtension {	
+public interface HasPreviewExtension {	
 }
