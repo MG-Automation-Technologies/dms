@@ -24,7 +24,6 @@ package com.openkm.frontend.client.extension.widget.toolbar;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
-import com.openkm.frontend.client.extension.widget.HasExtension;
 
 /**
  * HasPermissionsExtension
@@ -32,7 +31,7 @@ import com.openkm.frontend.client.extension.widget.HasExtension;
  * @author jllort
  *
  */
-public interface HasPermissionsExtension extends HasExtension {
+public interface HasPermissionsExtension {
 	
 	public abstract void checkPermissions(GWTFolder folder, GWTFolder folderParent, int originPanel);
 	

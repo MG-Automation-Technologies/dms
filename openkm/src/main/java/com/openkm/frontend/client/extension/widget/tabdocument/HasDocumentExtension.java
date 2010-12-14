@@ -21,16 +21,13 @@
 
 package com.openkm.frontend.client.extension.widget.tabdocument;
 
-import com.openkm.frontend.client.extension.widget.HasExtension;
-
-
 /**
  * HasDocumentExtension
  * 
  * @author jllort
  *
  */
-public interface HasDocumentExtension extends HasExtension {
+public interface HasDocumentExtension {
 	
 	public abstract String getTabText();
 	

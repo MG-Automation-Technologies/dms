@@ -22,7 +22,6 @@
 package com.openkm.frontend.client.extension.widget.tabmail;
 
 import com.openkm.frontend.client.bean.GWTMail;
-import com.openkm.frontend.client.extension.widget.HasExtension;
 
 /**
  * HasMailExtension
@@ -30,7 +29,7 @@ import com.openkm.frontend.client.extension.widget.HasExtension;
  * @author jllort
  *
  */
-public interface HasMailExtension extends HasExtension {
+public interface HasMailExtension {
 	
 	public abstract String getTabText();
 	
