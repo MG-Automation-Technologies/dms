@@ -49,11 +49,6 @@ public class ToolBarBoxExample  {
 			public Widget getWidget() {
 				return hPanel;
 			}
-
-			@Override
-			public String getExtensionUUID() {
-				return "4d245f30-ef47-11df-98cf-0800200c9a66";
-			}
 		};
 		
 		hPanel = new HorizontalPanel();
