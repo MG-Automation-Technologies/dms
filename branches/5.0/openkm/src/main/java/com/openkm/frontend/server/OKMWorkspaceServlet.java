@@ -101,8 +101,12 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		try {
 			session = JCRUtils.getSession();
 			UserConfig uc = UserConfigDAO.findByPk(session, session.getUserID());
+			String[] wizardProperties = new String[]{};
 			up = uc.getProfile();
-			String[] wizardProperties = up.getWizard().getPropertyGroups().split(" ");
+			
+			if (up.getWizard().getPropertyGroups() != null) {
+				wizardProperties = up.getWizard().getPropertyGroups().split(" ");
+			}
 			
 			for (int i=0; i<wizardProperties.length; i++) {
 				for (PropertyGroup pg : OKMPropertyGroup.getInstance().getAllGroups(null)) {
@@ -140,8 +144,9 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		// Advanced filters ( used when there a lot of users and groups )
 		workspace.setAdvancedFilters(up.getMisc().isAdvancedFilters());
 		
-		// Is a wizard to uploading documents
-		workspace.setWizardPropertyGroups(!up.getWizard().getPropertyGroups().equals(""));
+		// Is a wizard to uploading documents 
+		workspace.setWizardPropertyGroups(up.getWizard().getPropertyGroups() != null &&
+				!up.getWizard().getPropertyGroups().equals(""));
 		workspace.setWizardPropertyGroupsList(wizardPropGrpLst);
 		workspace.setWizardCategories(up.getWizard().isCategoriesEnabled());
 		workspace.setWizardKeywords(up.getWizard().isKeywordsEnabled());
