@@ -187,11 +187,6 @@ public class StampServlet extends BaseServlet {
 							si.setExprY(item.getString("UTF-8"));
 						} else if (item.getFieldName().equals("si_active")) {
 							si.setActive(Boolean.parseBoolean(item.getString("UTF-8")));
-						} else if (item.getFieldName().equals("si_description")) {
-							String[] extensions = item.getString("UTF-8").split(" ");
-							for (int i=0; i<extensions.length; i++) {
-								//mt.getExtensions().add(extensions[i].toLowerCase());
-							}
 						}
 					} else {
 						is = item.getInputStream();

@@ -21,7 +21,10 @@
 
 package com.openkm.servlet.admin;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,13 +37,21 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.bean.ConfigFile;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.ConfigDAO;
 import com.openkm.dao.bean.Config;
 import com.openkm.util.JCRUtils;
+import com.openkm.util.SecureStore;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
 
@@ -67,6 +78,7 @@ public class ConfigServlet extends BaseServlet {
 			types.put(Config.BOOLEAN, "Boolean");
 			types.put(Config.INTEGER, "Integer");
 			types.put(Config.LONG, "Long");
+			types.put(Config.FILE, "File");
 			
 			if (action.equals("create")) {
 				create(session, types, request, response);
@@ -74,9 +86,9 @@ public class ConfigServlet extends BaseServlet {
 				edit(session, types, request, response);
 			} else if (action.equals("delete")) {
 				delete(session, types, request, response);
-			}
-			
-			if (action.equals("") || WebUtils.getBoolean(request, "persist")) {
+			} else if (action.equals("view")) {
+				view(session, request, response);
+			} else {
 				list(session, request, response);
 			}
 		} catch (LoginException e) {
@@ -92,6 +104,106 @@ public class ConfigServlet extends BaseServlet {
 			JCRUtils.logout(session);
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException,
+			ServletException {
+		log.debug("doPost({}, {})", request, response);
+		request.setCharacterEncoding("UTF-8");
+		ServletContext sc = getServletContext();
+		String action = WebUtils.getString(request, "action");
+		Session session = null;
+		updateSessionManager(request);
+		
+		try {
+			if (ServletFileUpload.isMultipartContent(request)) {
+				session = JCRUtils.getSession();
+				InputStream is = null;
+				FileItemFactory factory = new DiskFileItemFactory(); 
+				ServletFileUpload upload = new ServletFileUpload(factory);
+				List<FileItem> items = upload.parseRequest(request);
+				Config cfg = new Config();
+				ConfigFile cfgFile = new ConfigFile();
+				byte data[] = null;
+				
+				for (Iterator<FileItem> it = items.iterator(); it.hasNext();) {
+					FileItem item = it.next();
+					
+					if (item.isFormField()) {
+						if (item.getFieldName().equals("action")) {
+							action = item.getString("UTF-8");
+						} else if (item.getFieldName().equals("cfg_key")) {
+							cfg.setKey(item.getString("UTF-8"));
+						} else if (item.getFieldName().equals("cfg_type")) {
+							cfg.setType(item.getString("UTF-8"));
+						} else if (item.getFieldName().equals("cfg_value")) {
+							cfg.setValue(item.getString("UTF-8"));
+						}
+					} else {
+						is = item.getInputStream();
+						cfgFile.setName(item.getName());
+						cfgFile.setMime(com.openkm.core.Config.mimeTypes.getContentType(item.getName()));
+						data = IOUtils.toByteArray(is);
+						is.close();
+					}
+				}
+			
+				if (action.equals("create")) {
+					if (data != null && data.length > 0) {
+						cfg.setValue(SecureStore.b64Encode(data));
+					}
+					
+					ConfigDAO.create(cfg);
+					com.openkm.core.Config.reload(sc.getContextPath().substring(1));
+					
+					// Activity log
+					UserActivity.log(session.getUserID(), "ADMIN_CONFIG_CREATE", cfg.getKey(), cfg.toString());
+					list(session, request, response);
+				} else if (action.equals("edit")) {
+					if (Config.FILE.equals(cfg.getType())) {
+						if (data != null && data.length > 0) {
+							cfgFile.setContent(SecureStore.b64Encode(data));
+							cfg.setValue(cfgFile.toRaw());
+							ConfigDAO.update(cfg);
+							com.openkm.core.Config.reload(sc.getContextPath().substring(1));
+						}
+					} else if (Config.BOOLEAN.equals(cfg.getType())) {
+						cfg.setValue(Boolean.toString(cfg.getValue() != null && !cfg.getValue().equals("")));
+						ConfigDAO.update(cfg);
+						com.openkm.core.Config.reload(sc.getContextPath().substring(1));
+					} else {
+						ConfigDAO.update(cfg);
+						com.openkm.core.Config.reload(sc.getContextPath().substring(1));
+					}
+										
+					// Activity log
+					UserActivity.log(session.getUserID(), "ADMIN_CONFIG_EDIT", cfg.getKey(), cfg.toString());
+					list(session, request, response);
+				} else if (action.equals("delete")) {
+					ConfigDAO.delete(cfg.getKey());
+					com.openkm.core.Config.reload(sc.getContextPath().substring(1));
+					
+					// Activity log
+					UserActivity.log(session.getUserID(), "ADMIN_CONFIG_DELETE", cfg.getKey(), null);
+					list(session, request, response);
+				}
+			}
+		} catch (LoginException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request, response, e);
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request, response, e);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request, response, e);
+		} catch (FileUploadException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} finally {
+			JCRUtils.logout(session);
+		}
+	}
 
 	/**
 	 * Create config
@@ -99,26 +211,12 @@ public class ConfigServlet extends BaseServlet {
 	private void create(Session session, Map<String, String> types, HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException, DatabaseException {
 		ServletContext sc = getServletContext();
-		
-		if (WebUtils.getBoolean(request, "persist")) {
-			String cfgKey = WebUtils.getString(request, "cfg_key");
-			Config cfg = new Config();
-			cfg.setKey(cfgKey);
-			cfg.setType(WebUtils.getString(request, "cfg_type"));
-			cfg.setValue(WebUtils.getString(request, "cfg_value"));
-			ConfigDAO.create(cfg);
-			com.openkm.core.Config.reload(sc.getContextPath().substring(1));
-			
-			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_CONFIG_CREATE", cfgKey, cfg.toString());
-		} else {
-			Config cfg = new Config();
-			sc.setAttribute("action", WebUtils.getString(request, "action"));
-			sc.setAttribute("persist", true);
-			sc.setAttribute("types", types);
-			sc.setAttribute("cfg", cfg);
-			sc.getRequestDispatcher("/admin/config_edit.jsp").forward(request, response);
-		}
+		Config cfg = new Config();
+		sc.setAttribute("action", WebUtils.getString(request, "action"));
+		sc.setAttribute("persist", true);
+		sc.setAttribute("types", types);
+		sc.setAttribute("cfg", cfg);
+		sc.getRequestDispatcher("/admin/config_edit.jsp").forward(request, response);
 	}
 	
 	/**
@@ -127,33 +225,13 @@ public class ConfigServlet extends BaseServlet {
 	private void edit(Session session, Map<String, String> types, HttpServletRequest request, 
 			HttpServletResponse response) throws ServletException, IOException, DatabaseException {
 		ServletContext sc = getServletContext();
-		
-		if (WebUtils.getBoolean(request, "persist")) {
-			String cfgKey = WebUtils.getString(request, "cfg_key");
-			String cfgType = WebUtils.getString(request, "cfg_type");
-			Config cfg = ConfigDAO.findByPk(cfgKey);
-			cfg.setType(cfgType);
-			
-			if (Config.BOOLEAN.equals(cfgType)) {
-				cfg.setValue(Boolean.toString(WebUtils.getBoolean(request, "cfg_value")));
-			} else {
-				cfg.setValue(WebUtils.getString(request, "cfg_value"));
-			}
-			
-			ConfigDAO.update(cfg);
-			com.openkm.core.Config.reload(sc.getContextPath().substring(1));
-			
-			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_CONFIG_EDIT", cfgKey, cfg.toString());
-		} else {
-			String cfgKey = WebUtils.getString(request, "cfg_key");
-			Config cfg = ConfigDAO.findByPk(cfgKey);
-			sc.setAttribute("action", WebUtils.getString(request, "action"));
-			sc.setAttribute("persist", true);
-			sc.setAttribute("types", types);
-			sc.setAttribute("cfg", cfg);
-			sc.getRequestDispatcher("/admin/config_edit.jsp").forward(request, response);
-		}
+		String cfgKey = WebUtils.getString(request, "cfg_key");
+		Config cfg = ConfigDAO.findByPk(cfgKey);
+		sc.setAttribute("action", WebUtils.getString(request, "action"));
+		sc.setAttribute("persist", true);
+		sc.setAttribute("types", types);
+		sc.setAttribute("cfg", cfg);
+		sc.getRequestDispatcher("/admin/config_edit.jsp").forward(request, response);
 	}
 
 	/**
@@ -162,23 +240,13 @@ public class ConfigServlet extends BaseServlet {
 	private void delete(Session session, Map<String, String> types, HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException, DatabaseException {
 		ServletContext sc = getServletContext();
-		
-		if (WebUtils.getBoolean(request, "persist")) {
-			String cfgKey = WebUtils.getString(request, "cfg_key");
-			ConfigDAO.delete(cfgKey);
-			com.openkm.core.Config.reload(sc.getContextPath().substring(1));
-			
-			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_CONFIG_DELETE", cfgKey, null);
-		} else {
-			String cfgKey = WebUtils.getString(request, "cfg_key");
-			Config cfg = ConfigDAO.findByPk(cfgKey);
-			sc.setAttribute("action", WebUtils.getString(request, "action"));
-			sc.setAttribute("persist", true);
-			sc.setAttribute("types", types);
-			sc.setAttribute("cfg", cfg);
-			sc.getRequestDispatcher("/admin/config_edit.jsp").forward(request, response);
-		}
+		String cfgKey = WebUtils.getString(request, "cfg_key");
+		Config cfg = ConfigDAO.findByPk(cfgKey);
+		sc.setAttribute("action", WebUtils.getString(request, "action"));
+		sc.setAttribute("persist", true);
+		sc.setAttribute("types", types);
+		sc.setAttribute("cfg", cfg);
+		sc.getRequestDispatcher("/admin/config_edit.jsp").forward(request, response);
 	}
 
 	/**
@@ -201,11 +269,32 @@ public class ConfigServlet extends BaseServlet {
 				cfg.setType("Integer");
 			} else if (Config.LONG.equals(cfg.getType())) {
 				cfg.setType("Long");
+			} else if (Config.FILE.equals(cfg.getType())) {
+				cfg.setType("File");
 			}
 		}
 		
 		sc.setAttribute("configs", list);
 		sc.getRequestDispatcher("/admin/config_list.jsp").forward(request, response);
 		log.debug("list: void");
+	}
+	
+	/**
+	 * Download file
+	 */
+	private void view(Session session, HttpServletRequest request, HttpServletResponse response) throws
+			ServletException, IOException, DatabaseException {
+		log.debug("view({}, {}, {})", new Object[] { session, request, response });
+		String cfgKey = WebUtils.getString(request, "cfg_key");
+		Config cfg = ConfigDAO.findByPk(cfgKey);
+		
+		if (cfg != null) {
+			ConfigFile cfgFile = ConfigFile.parseRaw(cfg.getValue());
+			byte[] content = SecureStore.b64Decode(cfgFile.getContent());
+			ByteArrayInputStream bais = new ByteArrayInputStream(content);
+			WebUtils.sendFile(request, response, cfgFile.getName(), cfgFile.getMime(), true, bais);
+		}
+		
+		log.debug("view: void");
 	}
 }
