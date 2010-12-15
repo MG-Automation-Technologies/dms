@@ -21,23 +21,23 @@
 
 package com.openkm.servlet;
 
-import java.io.File;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.MalformedURLException;
-import java.net.URL;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.bean.ConfigFile;
 import com.openkm.core.Config;
+import com.openkm.util.SecureStore;
+import com.openkm.util.WebUtils;
 
 /**
  * Image Logo Servlet
@@ -49,86 +49,56 @@ public class ImageLogoServlet extends HttpServlet {
 	/**
 	 * 
 	 */
-	public void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
+			ServletException {
 		String img = request.getPathInfo();
-		OutputStream os = response.getOutputStream();
 		
 		try {
 			if (img != null && img.length() > 1) {
-				URL logo = getImage(img.substring(1));
+				ConfigFile logo = getImage(img.substring(1));
 				
 				if (logo != null) {
-					if (logo.toString().endsWith(".gif")) {
-						response.setContentType("image/gif");
-					} else if (logo.toString().endsWith(".jpg")) {
-						response.setContentType("image/jpg");
-					} else if (logo.toString().endsWith(".png")) {
-						response.setContentType("image/png");
-					}
-					
-					InputStream is = logo.openStream();
-					IOUtils.copy(is, os);
-					os.flush();		
+					byte[] content = SecureStore.b64Decode(logo.getContent());
+					ByteArrayInputStream bais = new ByteArrayInputStream(content);
+					WebUtils.sendFile(request, response, logo.getName(), logo.getMime(), true, bais);
 				} else {
-					sendError(response, os);
+					sendError(request, response);
 				}
 			}
 		} catch (MalformedURLException e) {
-			sendError(response, os);
+			sendError(request, response);
 			log.warn(e.getMessage(), e);
 		} catch (IOException e) {
-			sendError(response, os);
+			sendError(request, response);
 			log.error(e.getMessage(), e);
-		} finally {
-			IOUtils.closeQuietly(os);
 		}
 	}
 	
 	/**
 	 * Send error image
 	 */
-	private void sendError(HttpServletResponse response, OutputStream os) throws IOException {
-		response.setContentType("image/png");
+	private void sendError(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		InputStream is = getServletContext().getResource("/img/error.png").openStream();
-		IOUtils.copy(is, os);
-		os.flush();
+		WebUtils.sendFile(request, response, "error.png", "image/png", true, is);
+		is.close();
 	}
 
 	/**
 	 * Get requested image input stream.
 	 */
-	private URL getImage(String img) throws MalformedURLException, IOException {
+	private ConfigFile getImage(String img) throws MalformedURLException, IOException {
 		log.debug("getImage({})", img);
-		URL urlLogo = null;
+		ConfigFile cfgFile = null;
 		
 		if ("login".equals(img)) {
-			File logo = new File(Config.HOME_DIR + File.separator + Config.LOGO_LOGIN);
-			
-			if (logo.exists()) {
-				urlLogo = logo.toURI().toURL();
-			} else {
-				urlLogo = new URL(Config.LOGO_LOGIN);
-			}
+			cfgFile = Config.LOGO_LOGIN;
 		} else if ("mobi".equals(img)) {
-			File logo = new File(Config.HOME_DIR + File.separator + Config.LOGO_MOBI);
-			
-			if (logo.exists()) {
-				urlLogo = logo.toURI().toURL();
-			} else {
-				urlLogo = new URL(Config.LOGO_MOBI);
-			}
+			cfgFile = Config.LOGO_MOBI;
 		} else if ("report".equals(img)) {
-			File logo = new File(Config.HOME_DIR + File.separator + Config.LOGO_REPORT);
-			
-			if (logo.exists()) {
-				urlLogo = logo.toURI().toURL();
-			} else {
-				urlLogo = new URL(Config.LOGO_REPORT);
-			}
+			cfgFile = Config.LOGO_REPORT;
 		}
 		
-		log.debug("getImage: {}", urlLogo);
-		return urlLogo;
+		log.debug("getImage: {}", cfgFile);
+		return cfgFile;
 	}
 }
