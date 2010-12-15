@@ -30,6 +30,8 @@ public class Config implements Serializable {
 	public static final String BOOLEAN = "boolean";
 	public static final String INTEGER = "integer";
 	public static final String LONG = "long";
+	public static final String FILE = "file";
+	
 	private String key;
 	private String type;
 	private String value;
