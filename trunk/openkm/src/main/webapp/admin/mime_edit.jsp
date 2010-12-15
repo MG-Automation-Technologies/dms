@@ -27,7 +27,7 @@
         <table class="form" width="425px">
           <tr>
             <td nowrap="nowrap">Name</td>
-            <td><input class=":required :only_on_blur" name="mt_name" value="${mt.name}"/></td>
+            <td><input class=":required :only_on_blur" size="32" name="mt_name" value="${mt.name}"/></td>
           </tr>
           <tr>
             <td>Extensions</td>
