@@ -21,8 +21,11 @@
 
 package com.openkm.dao;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -30,12 +33,14 @@ import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.bean.ConfigFile;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.bean.Config;
+import com.openkm.util.FileUtils;
+import com.openkm.util.SecureStore;
 
 public class ConfigDAO  {
 	private static Logger log = LoggerFactory.getLogger(ConfigDAO.class);
-
 	private ConfigDAO() {}
 	
 	/**
@@ -199,6 +204,30 @@ public class ConfigDAO  {
 	 */
 	public static int getLong(String key, long value) throws DatabaseException {
 		return Integer.parseInt(getProperty(key, Long.toString(value), Config.LONG));
+	}
+	
+	/**
+	 * Find by pk with a default value
+	 */
+	public static ConfigFile getFile(String key, String path) throws DatabaseException, IOException {
+		InputStream is = null;
+		
+		try {
+			is = Config.class.getResourceAsStream(path);
+			ConfigFile cfgFile = new ConfigFile();
+			cfgFile.setContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
+			cfgFile.setName(FileUtils.getName(path));
+			cfgFile.setMime(com.openkm.core.Config.mimeTypes.getContentType(cfgFile.getName()));
+			String value = getProperty(key, cfgFile.toRaw(), Config.FILE);
+			
+			if (value == null) {
+				return null;
+			} else {
+				return cfgFile;
+			}
+		} finally {
+			IOUtils.closeQuietly(is);
+		}
 	}
 	
 	/**
