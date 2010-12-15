@@ -52,6 +52,13 @@
                 <c:when test="${cfg.key == 'notification.message.body' || cfg.key == 'subscription.message.body'}">
                   <u:escapeHtml string="${cfg.value}"/> 
                 </c:when>
+                <c:when test="${cfg.type == 'File'}">
+                  <c:url value="Config" var="urlView">
+                    <c:param name="action" value="view"/>
+                    <c:param name="cfg_key" value="${cfg.key}"/>
+                  </c:url>
+                  <img src="${urlView}"/>
+                </c:when>
                 <c:otherwise>${cfg.value}</c:otherwise>
               </c:choose>
             </td>
