@@ -25,7 +25,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 import java.util.Properties;
 import java.util.TreeMap;
@@ -35,6 +34,7 @@ import javax.activation.MimetypesFileTypeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.bean.ConfigFile;
 import com.openkm.dao.ConfigDAO;
 import com.openkm.dao.MimeTypeDAO;
 import com.openkm.dao.bean.MimeType;
@@ -46,7 +46,6 @@ public class Config {
 	// Default directories
 	public static final String HOME_DIR = getHomeDir();
 	public static final String OPENKM_HOME = "$OPENKM_HOME";
-	public static final String OPENKM_WAR = "$OPENKM_WAR";
 	public static final String TMP_DIR = getTempDir();
 	public static final String NULL_DEVICE = getNullDevice();
 	public static final boolean IN_SERVER = inServer();
@@ -312,16 +311,16 @@ public class Config {
 	public static String HIBERNATE_SHOW_SQL = "false";
 	
 	// Logo icons
-	public static String LOGO_LOGIN;
+	public static ConfigFile LOGO_LOGIN;
 	public static String LOGO_TEXT;
-	public static String LOGO_MOBI;
-	public static String LOGO_REPORT;
+	public static ConfigFile LOGO_MOBI;
+	public static ConfigFile LOGO_REPORT;
 	
 	// Misc
 	public static int SESSION_EXPIRATION = 1800; // 30 mins (session.getMaxInactiveInterval())
 	
 	// Registered MIME types
-	public static MimetypesFileTypeMap mimeTypes = null;
+	public static MimetypesFileTypeMap mimeTypes = new MimetypesFileTypeMap();
 	
 	/**
 	 * Guess the application server home directory
@@ -398,15 +397,7 @@ public class Config {
 		
 		return ret;
 	}
-	
-	/**
-	 * Get resource
-	 */
-	private static String getResource(String file) {
-		URL url = Config.class.getResource(file);
-		return url != null ? url.toString() : null;
-	}
-	
+		
 	/**
 	 * Load OpenKM configuration from OpenKM.cfg 
 	 */
@@ -668,15 +659,17 @@ public class Config {
 			values.put(PROPERTY_VALIDATOR_PASSWORD_MIN_SPECIAL, Integer.toString(VALIDATOR_PASSWORD_MIN_SPECIAL));
 			
 			// Logo icons
-			LOGO_LOGIN = ConfigDAO.getString(PROPERTY_LOGO_LOGIN, getResource("/img/logo_login.gif"));
-			values.put(PROPERTY_LOGO_LOGIN, LOGO_LOGIN);
+			LOGO_LOGIN = ConfigDAO.getFile(PROPERTY_LOGO_LOGIN, "/img/logo_login.gif");
+			values.put(PROPERTY_LOGO_LOGIN, LOGO_LOGIN.getName());
 			LOGO_TEXT = ConfigDAO.getString(PROPERTY_LOGO_TEXT, "&nbsp;");
 			values.put(PROPERTY_LOGO_TEXT, LOGO_TEXT);
-			LOGO_MOBI = ConfigDAO.getString(PROPERTY_LOGO_MOBI, getResource("/img/logo_mobi.gif"));
-			values.put(PROPERTY_LOGO_MOBI, LOGO_MOBI);
-			LOGO_REPORT = ConfigDAO.getString(PROPERTY_LOGO_REPORT, getResource("/img/logo_report.gif"));
-			values.put(PROPERTY_LOGO_REPORT, LOGO_REPORT);
+			LOGO_MOBI = ConfigDAO.getFile(PROPERTY_LOGO_MOBI, "/img/logo_mobi.gif");
+			values.put(PROPERTY_LOGO_MOBI, LOGO_MOBI.getName());
+			LOGO_REPORT = ConfigDAO.getFile(PROPERTY_LOGO_REPORT, "/img/logo_report.gif");
+			values.put(PROPERTY_LOGO_REPORT, LOGO_REPORT.getName());
 		} catch (DatabaseException e) {
+			log.error("** Error reading configuration table **");
+		} catch (IOException e) {
 			log.error("** Error reading configuration table **");
 		}
 	}
