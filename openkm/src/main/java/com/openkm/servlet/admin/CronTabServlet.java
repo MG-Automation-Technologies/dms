@@ -48,6 +48,7 @@ import org.slf4j.LoggerFactory;
 
 import bsh.EvalError;
 
+import com.openkm.core.Config;
 import com.openkm.core.Cron;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.CronTabDAO;
@@ -166,6 +167,7 @@ public class CronTabServlet extends BaseServlet {
 						is = item.getInputStream();
 						ct.setFileName(FilenameUtils.getName(item.getName()));
 						ct.setFileContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
+						ct.setFileMime(Config.mimeTypes.getContentType(item.getName()));
 						is.close();
 					}
 				}
