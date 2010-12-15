@@ -158,8 +158,6 @@ public class CronTabServlet extends BaseServlet {
 							ct.setMail(item.getString("UTF-8"));
 						} else if (item.getFieldName().equals("ct_expression")) {
 							ct.setExpression(item.getString("UTF-8"));
-						} else if (item.getFieldName().equals("ct_type")) {
-							ct.setType(item.getString("UTF-8"));
 						} else if (item.getFieldName().equals("ct_active")) {
 							ct.setActive(true);
 						}
@@ -217,15 +215,6 @@ public class CronTabServlet extends BaseServlet {
 		log.debug("list({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
 		List<CronTab> list = CronTabDAO.findAll();
-		
-		for (CronTab ct : list) {
-			if (CronTab.BSH.equals(ct.getType())) {
-				ct.setType("BSH");
-			} else if (CronTab.JAR.equals(ct.getType())) {
-				ct.setType("Script");
-			}
-		}
-		
 		sc.setAttribute("crontabs", list);
 		sc.getRequestDispatcher("/admin/crontab_list.jsp").forward(request, response);
 		log.debug("list: void");
@@ -240,11 +229,11 @@ public class CronTabServlet extends BaseServlet {
 		int ctId = WebUtils.getInt(request, "ct_id");
 		CronTab ct = CronTabDAO.findByPk(ctId);
 		
-		if (CronTab.BSH.equals(ct.getType())) {
+		if (CronTab.BSH.equals(ct.getFileMime())) {
 			Cron.RunnerBsh runner = new Cron.RunnerBsh(ct.getId(), ct.getMail(),  
 					new String(SecureStore.b64Decode(ct.getFileContent())));
 			runner.run();
-		} else if (CronTab.JAR.equals(ct.getType())) {
+		} else if (CronTab.JAR.equals(ct.getFileMime())) {
 			Cron.RunnerJar runner = new Cron.RunnerJar(ct.getId(), ct.getMail(), 
 					SecureStore.b64Decode(ct.getFileContent()));
 			runner.run();
