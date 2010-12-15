@@ -6,7 +6,6 @@
     <id name="id" column="CT_ID"><generator class="native"/></id>
     <property name="name" column="CT_NAME" not-null="true"/>
     <property name="expression" column="CT_EXPRESSION" not-null="true"/>
-    <property name="type" column="CT_TYPE" not-null="true"/>
     <property name="fileContent" column="CT_FILE_CONTENT" type="text" not-null="true"/>
     <property name="fileName" column="CT_FILE_NAME" not-null="true"/>
     <property name="fileMime" column="CT_FILE_MIME" not-null="true"/>
