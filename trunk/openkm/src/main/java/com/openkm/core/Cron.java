@@ -52,14 +52,14 @@ public class Cron extends TimerTask {
 						CronTabExpression cte = CronTabExpression.parse(ct.getExpression());
 						
 						if (cte.matches(cal)) {
-							log.info("Id: {}, Name: {}, Type: {}", new Object[] {ct.getId(), ct.getName(),
-									ct.getType()});
+							log.info("Id: {}, Name: {}, Mime: {}", new Object[] {ct.getId(), ct.getName(),
+									ct.getFileMime()});
 							
-							if (CronTab.BSH.equals(ct.getType())) {
+							if (CronTab.BSH.equals(ct.getFileMime())) {
 								RunnerBsh runner = new RunnerBsh(ct.getId(), ct.getMail(),  
 										new String(SecureStore.b64Decode(ct.getFileContent())));
 								new Thread(runner).start();
-							} else if (CronTab.JAR.equals(ct.getType())) {
+							} else if (CronTab.JAR.equals(ct.getFileMime())) {
 								RunnerJar runner = new RunnerJar(ct.getId(), ct.getMail(), 
 										SecureStore.b64Decode(ct.getFileContent()));
 								new Thread(runner).start();
