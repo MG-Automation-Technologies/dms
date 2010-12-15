@@ -21,7 +21,7 @@
         <c:when test="${action == 'edit'}"><h1>Edit configuration</h1></c:when>
         <c:when test="${action == 'delete'}"><h1>Delete configuration</h1></c:when>
       </c:choose>
-      <form action="Config">
+      <form action="Config" method="post" enctype="multipart/form-data">
         <input type="hidden" name="action" value="${action}"/>
         <input type="hidden" name="persist" value="${persist}"/>
         <table class="form" width="425px">
@@ -41,7 +41,8 @@
           <tr>
             <td>Type</td>
             <td>
-              <select name="cfg_type">
+              <!-- http://stackoverflow.com/questions/368813/readonly-select-tag -->
+              <select name="cfg_type" onfocus="this.defaultIndex=this.selectedIndex;" onchange="this.selectedIndex=this.defaultIndex;">
                 <c:forEach var="type" items="${types}">
                   <c:choose>
                     <c:when test="${cfg.type == type.key}">
@@ -69,6 +70,20 @@
                     </c:when>
                     <c:otherwise>
                       <input name="cfg_value" type="checkbox"/>
+                    </c:otherwise>
+                  </c:choose>
+                </c:when>
+                <c:when test="${cfg.type == 'file'}">
+                  <c:choose>
+                    <c:when test="${action == 'create'}">
+                      <input class=":required :only_on_blur" type="file" name="file"/>
+                    </c:when>
+                    <c:otherwise>
+                      <c:url value="Config" var="urlView">
+                        <c:param name="action" value="view"/>
+                        <c:param name="cfg_key" value="${cfg.key}"/>
+                      </c:url>
+                      <table cellpadding="0" cellspacing="0"><tr><td><img src="${urlView}"/></td></tr><tr><td><input type="file" name="image"/></td></tr></table>
                     </c:otherwise>
                   </c:choose>
                 </c:when>
