@@ -140,7 +140,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 		workspace.setAdvancedFilters(up.getMisc().isAdvancedFilters());
 		
 		// Is a wizard to uploading documents
-		workspace.setWizardPropertyGroups(!up.getWizard().getPropertyGroups().equals(""));
+		workspace.setWizardPropertyGroups(!up.getWizard().getPropertyGroups().isEmpty());
 		workspace.setWizardPropertyGroupsList(wizardPropGrpLst);
 		workspace.setWizardCategories(up.getWizard().isCategoriesEnabled());
 		workspace.setWizardKeywords(up.getWizard().isKeywordsEnabled());
