@@ -26,7 +26,7 @@
       </table>
       <table class="results" width="80%">
         <tr>
-          <th>Name</th><th>Expression</th><th>Type</th><th>File Name</th><th>Mail</th>
+          <th>Name</th><th>Expression</th><th>Mime</th><th>File Name</th><th>Mail</th>
           <th>Last Begin</th><th>Last End</th><th>Active</th>
           <th width="75px">
             <c:url value="CronTab" var="urlCreate">
@@ -49,7 +49,7 @@
             <c:param name="ct_id" value="${ct.id}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td>${ct.name}</td><td>${ct.expression}</td><td>${ct.type}</td><td>${ct.fileName}</td>
+            <td>${ct.name}</td><td>${ct.expression}</td><td>${ct.fileMime}</td><td>${ct.fileName}</td>
             <td>${ct.mail}</td>
             <td><fmt:formatDate value="${ct.lastBegin.time}" type="both"/></td>
             <td><fmt:formatDate value="${ct.lastEnd.time}" type="both"/></td>
