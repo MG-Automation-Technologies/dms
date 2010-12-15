@@ -1,3 +1,7 @@
+<%@ page import="com.openkm.dao.ExtensionDAO"%>
+<%@ page import="com.openkm.extension.frontend.client.widget.stamp.StampToolBarButton"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<c:set var="isStampRegistered"><%=StampToolBarButton.isRegistered(ExtensionDAO.findAllUuids())%></c:set>
 <table width="100%" border="0">
   <tr><td align="center" width="100%">
   <a target="frame" href="home.jsp"><img src="img/toolbar/home.png" title="Home"></a>
@@ -30,8 +34,10 @@
   &nbsp;
   <a target="frame" href="Workflow"><img src="img/toolbar/workflow.png" title="Workflow"></a>
   &nbsp;
-  <a target="frame" href="Stamp"><img src="img/toolbar/stamp.png" title="Stamp"></a>
-  &nbsp;
+  <c:if test="${isStampRegistered}">
+    <a target="frame" href="Stamp"><img src="img/toolbar/stamp.png" title="Stamp"></a>
+    &nbsp;
+  </c:if>
   <a target="frame" href="CronTab"><img src="img/toolbar/crontab.png" title="Crontab"></a>
   &nbsp;
   <a target="frame" href="generate_thesaurus.jsp"><img src="img/toolbar/thesaurus.png" title="Generate thesaurus"></a>
