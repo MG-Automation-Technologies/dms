@@ -34,6 +34,7 @@ public class CronTab implements Serializable {
 	private String type;
 	private String fileContent;
 	private String fileName;
+	private String fileMime;
 	private String mail;
 	private Calendar lastBegin;
 	private Calendar lastEnd;
@@ -85,6 +86,14 @@ public class CronTab implements Serializable {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+	
+	public String getFileMime() {
+		return fileMime;
+	}
+
+	public void setFileMime(String fileMime) {
+		this.fileMime = fileMime;
 	}
 	
 	public String getMail() {
