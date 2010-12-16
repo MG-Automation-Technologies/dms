@@ -92,7 +92,7 @@ public class Lang {
 			if (LANG_pt_PT.equalsIgnoreCase(lang)) {
 				hLang = Lang_pt_PT.lang;
 			} else if (LANG_pt_BR.equalsIgnoreCase(lang)) {
-				hLang = Lang_pt_BR.lang;
+//				hLang = Lang_pt_BR.lang;
 			} else {
 				hLang = Lang_pt_PT.lang;
 			}
