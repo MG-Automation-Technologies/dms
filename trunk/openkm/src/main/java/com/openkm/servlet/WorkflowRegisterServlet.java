@@ -49,6 +49,7 @@ import org.jbpm.graph.def.ProcessDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.core.Config;
 import com.openkm.util.FormUtils;
 import com.openkm.util.JBPMUtils;
 
@@ -71,7 +72,10 @@ public class WorkflowRegisterServlet extends BasicSecuredServlet {
 		try {
 			if (action != null && action.length() > 1 && action.indexOf(':') > 0) {
 				String[] usrpass = action.substring(1).split(":");
-				session = getSession(usrpass[0], usrpass[1]);
+				
+				if (Config.ADMIN_USER.equals(usrpass[0])) {
+					session = getSession(usrpass[0], usrpass[1]);
+				}
 			}
 						
 			if (session != null) {
