@@ -22,8 +22,10 @@
 package com.openkm.servlet;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.List;
+import java.util.zip.ZipInputStream;
 
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.LoginException;
@@ -34,21 +36,23 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.jbpm.JbpmContext;
+import org.jbpm.graph.def.ProcessDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.bean.Document;
-import com.openkm.core.JcrSessionManager;
-import com.openkm.module.direct.DirectDocumentModule;
-import com.openkm.servlet.BasicSecuredServlet;
-import com.openkm.util.FileUtils;
-import com.openkm.util.WebUtils;
+import com.openkm.util.JBPMUtils;
 
 /**
- * Download Servlet
+ * Workflow Register Servlet
  */
-public class DownloadServlet extends BasicSecuredServlet {
-	private static Logger log = LoggerFactory.getLogger(DownloadServlet.class);
+public class WorkflowRegisterServlet extends BasicSecuredServlet {
+	private static Logger log = LoggerFactory.getLogger(WorkflowRegisterServlet.class);
 	private static final long serialVersionUID = 1L;
 	
 	/**
@@ -57,36 +61,17 @@ public class DownloadServlet extends BasicSecuredServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
 		request.setCharacterEncoding("UTF-8");
-		String path = WebUtils.getString(request, "path");
-		String uuid = WebUtils.getString(request, "uuid");
-		String token = WebUtils.getString(request, "token");
+		String action = request.getPathInfo();
 		Session session = null;
 		
 		try {
-			if (token.equals("")) {
-				session = getSession(request);
-			} else {
-				session = JcrSessionManager.getInstance().get(token);
+			if (action != null && action.length() > 1 && action.indexOf(':') > 0) {
+				String[] usrpass = action.substring(1).split(":");
+				session = getSession(usrpass[0], usrpass[1]);
 			}
-			
+						
 			if (session != null) {
-				if (!uuid.equals("")) {
-					path = session.getNodeByUUID(uuid).getPath();
-				}
-				
-				if (!path.equals("")) {
-					Document doc = new DirectDocumentModule().getProperties(session, path);
-					String fileName = FileUtils.getName(doc.getPath());
-					log.info("Download {} by {}", path, session.getUserID());
-					InputStream is = new DirectDocumentModule().getContent(session, path, false);
-					WebUtils.sendFile(request, response, fileName, doc.getMimeType(), true, is);
-					is.close();
-				} else {
-					response.setContentType("text/plain; charset=UTF-8");
-					PrintWriter out = response.getWriter();
-					out.println("Missing document reference");
-					out.close();
-				}
+				handleRequest(request);
 			} else {
 				response.setContentType("text/plain; charset=UTF-8");
 				PrintWriter out = response.getWriter();
@@ -95,7 +80,7 @@ public class DownloadServlet extends BasicSecuredServlet {
 			}
 		} catch (LoginException e) {
 			log.warn(e.getMessage(), e);
-			response.setHeader("WWW-Authenticate", "Basic realm=\"OpenKM Download Server\"");
+			response.setHeader("WWW-Authenticate", "Basic realm=\"OpenKM Worflow Register Server\"");
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
 		} catch (ItemNotFoundException e) {
 			log.warn(e.getMessage(), e);
@@ -106,12 +91,42 @@ public class DownloadServlet extends BasicSecuredServlet {
 		} catch (RepositoryException e) {
 			log.warn(e.getMessage(), e);
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "RepositoryException: "+e.getMessage());
+		} catch (FileUploadException e) {
+			log.warn(e.getMessage(), e);
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "FileUploadException: "+e.getMessage());
+		} catch (IOException e) {
+			log.warn(e.getMessage(), e);
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "IOException: "+e.getMessage());
 		} catch (Exception e) {
 			log.warn(e.getMessage(), e);
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 		} finally {
-			if (token.equals("") && session != null) {
+			if (session != null) {
 				session.logout();
+			}
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void handleRequest(HttpServletRequest request) throws FileUploadException, IOException, Exception {
+		if (ServletFileUpload.isMultipartContent(request)) {
+			FileItemFactory factory = new DiskFileItemFactory();
+			ServletFileUpload upload = new ServletFileUpload(factory);
+			List<FileItem> items = upload.parseRequest(request);
+			
+			for (Iterator<FileItem> it = items.iterator(); it.hasNext();) {
+				FileItem fileItem = (FileItem) it.next();
+				if (fileItem.getContentType().indexOf("application/x-zip-compressed") == -1) {
+					throw new Exception("Not a process archive");
+				} else {
+					log.debug("Deploying process archive " + fileItem.getName());
+					ZipInputStream zipInputStream = new ZipInputStream(fileItem.getInputStream());
+					JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+					ProcessDefinition processDefinition = ProcessDefinition.parseParZipInputStream(zipInputStream);
+					log.debug("Created a processdefinition : " + processDefinition.getName());
+					jbpmContext.deployProcessDefinition(processDefinition);
+					zipInputStream.close();
+				}
 			}
 		}
 	}

@@ -4,6 +4,7 @@ import javax.jcr.Credentials;
 import javax.jcr.LoginException;
 import javax.jcr.Repository;
 import javax.jcr.Session;
+import javax.jcr.SimpleCredentials;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +21,7 @@ public class BasicSecuredServlet extends HttpServlet {
 	/**
 	 * Get JCR session
 	 */
-	public synchronized Session getSession(HttpServletRequest request)	throws LoginException,
+	public synchronized Session getSession(HttpServletRequest request) throws LoginException,
 			javax.jcr.RepositoryException, ServletException {
 		Credentials creds = cp.getCredentials(request);
 		Repository rep = DirectRepositoryModule.getRepository();
@@ -30,5 +31,15 @@ public class BasicSecuredServlet extends HttpServlet {
 		} else {
 			return rep.login(creds);
 		}
+	}
+	
+	/**
+	 * Get JCR session
+	 */
+	public synchronized Session getSession(String user, String password) throws LoginException,
+			javax.jcr.RepositoryException, ServletException {
+		Credentials creds = new SimpleCredentials(user, password.toCharArray());
+		Repository rep = DirectRepositoryModule.getRepository();
+		return rep.login(creds);
 	}
 }
