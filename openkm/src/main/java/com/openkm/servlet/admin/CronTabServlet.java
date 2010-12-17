@@ -139,7 +139,7 @@ public class CronTabServlet extends BaseServlet {
 			if (ServletFileUpload.isMultipartContent(request)) {
 				session = JCRUtils.getSession();
 				InputStream is = null;
-				FileItemFactory factory = new DiskFileItemFactory(); 
+				FileItemFactory factory = new DiskFileItemFactory();
 				ServletFileUpload upload = new ServletFileUpload(factory);
 				List<FileItem> items = upload.parseRequest(request);
 				CronTab ct = new CronTab();
