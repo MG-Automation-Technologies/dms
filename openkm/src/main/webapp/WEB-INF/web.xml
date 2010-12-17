@@ -54,11 +54,6 @@
     </init-param>
     <load-on-startup>2</load-on-startup>
   </servlet>
-  <servlet>
-    <servlet-name>GDP Deployer Servlet</servlet-name>
-    <servlet-class>org.jbpm.web.ProcessUploadServlet</servlet-class>
-    <load-on-startup>3</load-on-startup>
-  </servlet>
 
   <!-- Frontend Servlets -->
   <servlet>
@@ -204,6 +199,10 @@
   <servlet>
     <servlet-name>FlagIconServlet</servlet-name>
     <servlet-class>com.openkm.servlet.FlagIconServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>WorkflowRegisterServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.WorkflowRegisterServlet</servlet-class>
   </servlet>
   
   <!-- Admin servlets -->
@@ -385,19 +384,9 @@
   -->
 
   <!-- Frontend Servlet Mappings -->
-  <!-- 
-  <servlet-mapping>
-    <servlet-name>RepositoryStartup</servlet-name>
-    <url-pattern>/RepositoryStartupServlet</url-pattern>
-  </servlet-mapping>
-  -->
   <servlet-mapping>
     <servlet-name>Webdav</servlet-name>
     <url-pattern>/repository/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GDP Deployer Servlet</servlet-name>
-    <url-pattern>/upload/*</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>WorkspaceServlet</servlet-name>
@@ -542,6 +531,10 @@
   <servlet-mapping>
     <servlet-name>TextToSpeechServlet</servlet-name>
     <url-pattern>/TextToSpeech</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>WorkflowRegisterServlet</servlet-name>
+    <url-pattern>/workflow-register/*</url-pattern>
   </servlet-mapping>
   
   <!-- Admin Servlet Mappings -->
