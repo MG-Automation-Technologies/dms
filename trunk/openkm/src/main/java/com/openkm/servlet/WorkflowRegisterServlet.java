@@ -22,6 +22,7 @@
 package com.openkm.servlet;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
@@ -41,11 +42,14 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
 import org.jbpm.JbpmContext;
+import org.jbpm.file.def.FileDefinition;
 import org.jbpm.graph.def.ProcessDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.util.FormUtils;
 import com.openkm.util.JBPMUtils;
 
 /**
@@ -56,9 +60,9 @@ public class WorkflowRegisterServlet extends BasicSecuredServlet {
 	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * 
+	 * Handle GET and POST
 	 */
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
+	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
 		request.setCharacterEncoding("UTF-8");
 		String action = request.getPathInfo();
@@ -119,13 +123,28 @@ public class WorkflowRegisterServlet extends BasicSecuredServlet {
 				if (fileItem.getContentType().indexOf("application/x-zip-compressed") == -1) {
 					throw new Exception("Not a process archive");
 				} else {
-					log.debug("Deploying process archive " + fileItem.getName());
-					ZipInputStream zipInputStream = new ZipInputStream(fileItem.getInputStream());
+					log.debug("Deploying process archive: {}", fileItem.getName());
 					JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
-					ProcessDefinition processDefinition = ProcessDefinition.parseParZipInputStream(zipInputStream);
-					log.debug("Created a processdefinition : " + processDefinition.getName());
-					jbpmContext.deployProcessDefinition(processDefinition);
-					zipInputStream.close();
+					InputStream isForms = null;
+					ZipInputStream zis = null;
+					
+					try {
+						zis = new ZipInputStream(fileItem.getInputStream());
+						ProcessDefinition processDefinition = ProcessDefinition.parseParZipInputStream(zis);
+						
+						// Check xml form definition  
+						FileDefinition fileDef = processDefinition.getFileDefinition();
+						isForms = fileDef.getInputStream("forms.xml");
+						FormUtils.parseWorkflowForms(isForms);
+						
+						log.debug("Created a processdefinition: {}", processDefinition.getName());
+						jbpmContext.deployProcessDefinition(processDefinition);
+						zis.close();
+					} finally {
+						IOUtils.closeQuietly(isForms);
+						IOUtils.closeQuietly(zis);
+						jbpmContext.close();
+					}
 				}
 			}
 		}
