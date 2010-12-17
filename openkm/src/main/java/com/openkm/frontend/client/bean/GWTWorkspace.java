@@ -65,7 +65,9 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean printPreview;
 	private boolean userQuotaEnabled;
 	private List<GWTPropertyGroup> wizardPropertyGroupsList = new ArrayList<GWTPropertyGroup>();
+	private List<Double> wizardWorkflowsList = new ArrayList<Double>();
 	private boolean wizardPropertyGroups;
+	private boolean wizardWorkflows;
 	private boolean wizardKeywords;
 	private boolean wizardCategories;
 	private boolean stackTaxonomy;
@@ -314,6 +316,22 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setWizardPropertyGroupsList(List<GWTPropertyGroup> wizardPropertyGroupsList) {
 		this.wizardPropertyGroupsList = wizardPropertyGroupsList;
+	}
+	
+	public List<Double> getWizardWorkflowsList() {
+		return wizardWorkflowsList;
+	}
+
+	public void setWizardWorkflowsList(List<Double> wizardWorkflowsList) {
+		this.wizardWorkflowsList = wizardWorkflowsList;
+	}
+
+	public boolean isWizardWorkflows() {
+		return wizardWorkflows;
+	}
+
+	public void setWizardWorkflows(boolean wizardWorkflows) {
+		this.wizardWorkflows = wizardWorkflows;
 	}
 
 	public boolean isWizardKeywords() {

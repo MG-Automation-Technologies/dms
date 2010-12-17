@@ -95,6 +95,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 		workspace.setDashboardSchedule(Config.SCHEDULE_DASHBOARD_REFRESH);
 		
 		List<GWTPropertyGroup> wizardPropGrpLst = new ArrayList<GWTPropertyGroup>();
+		List<Double> wizardWorkflowLst = new ArrayList<Double>();
 		Profile up = new Profile();
 		Session session = null;
 		
@@ -110,6 +111,9 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 						break;
 					}
 				}
+			}
+			for (String workflow : up.getWizard().getWorkflows()) {			
+				wizardWorkflowLst.add(new Double(workflow));
 			}
 		} catch (LoginException e) {
 			log.error(e.getMessage(), e);
@@ -142,6 +146,8 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 		// Is a wizard to uploading documents
 		workspace.setWizardPropertyGroups(!up.getWizard().getPropertyGroups().isEmpty());
 		workspace.setWizardPropertyGroupsList(wizardPropGrpLst);
+		workspace.setWizardWorkflows(!up.getWizard().getWorkflows().isEmpty());
+		workspace.setWizardWorkflowsList(wizardWorkflowLst);
 		workspace.setWizardCategories(up.getWizard().isCategoriesEnabled());
 		workspace.setWizardKeywords(up.getWizard().isKeywordsEnabled());
 		

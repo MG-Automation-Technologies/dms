@@ -59,17 +59,21 @@ public class WizardPopup extends DialogBox {
 	private static final int STATUS_NONE 				= -1;
 	private static final int STATUS_ADD_PROPERTY_GROUPS = 0;
 	private static final int STATUS_PROPERTY_GROUPS 	= 1;
-	private static final int STATUS_CATEGORIES 			= 2;
-	private static final int STATUS_KEYWORDS 			= 3;
-	private static final int STATUS_FINISH 				= 4;
+	private static final int STATUS_WORKFLOWS 			= 2;
+	private static final int STATUS_CATEGORIES 			= 3;
+	private static final int STATUS_KEYWORDS 			= 4;
+	private static final int STATUS_FINISH 				= 5;
 	
 	private FiredVerticalPanel vPanelFired;
 	private String docPath = "";
 	private List<GWTPropertyGroup> groupsList = null;
+	private List<Double> workflowsList = null;
 	private int groupIndex = 0;
+	private int workflowIndex = 0;
 	private PropertyGroupWidget propertyGroupWidget = null;
+	private WorkflowWidget workflowWidget= null;
 	private int status = STATUS_NONE;
-	private Button actualButton;
+	public Button actualButton;
 	public KeywordsWidget keywordsWidget;
 	public CategoriesWidget categoriesWidget;
 	
@@ -106,6 +110,11 @@ public class WizardPopup extends DialogBox {
 		// Wizard
 		groupIndex = 0;
 		groupsList = Main.get().workspaceUserProperties.getWorkspace().getWizardPropertyGroupsList();
+		
+		// workflow 
+		workflowIndex = 0;
+		workflowsList = Main.get().workspaceUserProperties.getWorkspace().getWizardWorkflowsList();
+		
 		addPropertyGroups();
 	}
 	
@@ -139,11 +148,11 @@ public class WizardPopup extends DialogBox {
 			propertyGroupService.addGroup(docPath, groupsList.get(groupIndex).getName(), callbackAddGroup);
 			
 		} else if(groupsList==null || (groupsList!=null && groupsList.isEmpty() )) {
-			status = STATUS_CATEGORIES;
+			status = STATUS_WORKFLOWS;
 			showNextWizard();
 			
 		} else if(groupsList.size()==0) {
-			status = STATUS_CATEGORIES;
+			status = STATUS_WORKFLOWS;
 			showNextWizard();
 		}
 	}
@@ -170,16 +179,35 @@ public class WizardPopup extends DialogBox {
 		propertyGroupWidget.getProperties();
 	}
 	
+	public void getWorkflows() {
+		HorizontalPanel hPanel = new HorizontalPanel();
+		HTML space = new HTML("");
+		hPanel.add(actualButton);
+		hPanel.add(space);
+		hPanel.setCellWidth(space, "3");
+		workflowWidget = new WorkflowWidget(workflowsList.get(workflowIndex).doubleValue(), docPath);
+		vPanelFired.clear();
+		vPanelFired.add(workflowWidget);
+		vPanelFired.add(hPanel);
+		HTML space2 = new HTML("");
+		vPanelFired.add(space2);
+		vPanelFired.setCellVerticalAlignment(workflowWidget, HasAlignment.ALIGN_TOP);
+		vPanelFired.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_RIGHT);
+		vPanelFired.setCellHeight(space2, "5");
+		workflowWidget.runProcessDefinition();
+	}
+	
 	/**
 	 * showNextWizard
 	 */
-	private void showNextWizard() {
+	public void showNextWizard() {
 		switch (status) {
 			case STATUS_PROPERTY_GROUPS:
 				if (groupsList!=null && groupsList.size()>groupIndex) {
 					if (groupsList.size()==groupIndex+1) {
 						// Case last property group to be added
-						if (!Main.get().workspaceUserProperties.getWorkspace().isWizardCategories() && 
+						if (!Main.get().workspaceUserProperties.getWorkspace().isWizardWorkflows() &&
+							!Main.get().workspaceUserProperties.getWorkspace().isWizardCategories() && 
 							!Main.get().workspaceUserProperties.getWorkspace().isWizardKeywords()) {
 							actualButton = acceptButton();
 						} else {
@@ -190,6 +218,28 @@ public class WizardPopup extends DialogBox {
 					}
 					getProperties();
 					groupIndex++;
+				} else {
+					// Forward to next status
+					status = STATUS_WORKFLOWS;
+					showNextWizard();
+				}
+				break;
+			
+			case STATUS_WORKFLOWS:
+				if (workflowsList!=null && workflowsList.size()>workflowIndex) {
+					if (workflowsList.size()==workflowIndex+1) {
+						// Case last property group to be added
+						if (!Main.get().workspaceUserProperties.getWorkspace().isWizardCategories() && 
+							!Main.get().workspaceUserProperties.getWorkspace().isWizardKeywords()) {
+							actualButton = acceptButton();
+						} else {
+							actualButton = nextButton();
+						}
+					} else {
+						actualButton = nextButton();
+					}
+					getWorkflows();
+					workflowIndex++;
 				} else {
 					// Forward to next status
 					status = STATUS_CATEGORIES;
@@ -272,6 +322,12 @@ public class WizardPopup extends DialogBox {
 				}
 				break;
 				
+			case STATUS_WORKFLOWS:
+				if (workflowWidget!=null) {
+					workflowWidget.runProcessDefinition();
+				}
+				break;
+				
 			case STATUS_CATEGORIES:
 				status = STATUS_KEYWORDS;
 				showNextWizard();
@@ -338,7 +394,7 @@ public class WizardPopup extends DialogBox {
 	 * 
 	 * Ensures fileupload is hiden and panel is centered
 	 */
-	private void changeView() {
+	public void changeView() {
 		Main.get().fileUpload.hide();
 		center();
 	}

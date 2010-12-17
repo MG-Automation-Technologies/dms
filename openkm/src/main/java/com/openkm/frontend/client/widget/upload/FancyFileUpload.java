@@ -610,7 +610,8 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 					
 					// Case is not importing a zip and wizard is enabled
 					if (!importZip.getValue() && action== ACTION_INSERT &&
-						(Main.get().workspaceUserProperties.getWorkspace().isWizardPropertyGroups() || 
+						(Main.get().workspaceUserProperties.getWorkspace().isWizardPropertyGroups() ||
+						 Main.get().workspaceUserProperties.getWorkspace().isWizardWorkflows() ||
 						 Main.get().workspaceUserProperties.getWorkspace().isWizardCategories() ||
 						 Main.get().workspaceUserProperties.getWorkspace().isWizardKeywords())) {
 						
