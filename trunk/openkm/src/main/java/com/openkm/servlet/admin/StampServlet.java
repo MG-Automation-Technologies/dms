@@ -186,8 +186,7 @@ public class StampServlet extends BaseServlet {
 						} else if (item.getFieldName().equals("si_expr_y")) {
 							si.setExprY(item.getString("UTF-8"));
 						} else if (item.getFieldName().equals("si_active")) {
-							String strValue = item.getString("UTF-8");
-							si.setActive(strValue != null && !strValue.equals(""));
+							si.setActive(true);
 						} else if (item.getFieldName().equals("si_users")) {
 							si.getUsers().add(item.getString("UTF-8"));
 						}
