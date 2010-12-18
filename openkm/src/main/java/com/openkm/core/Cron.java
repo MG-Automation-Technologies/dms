@@ -19,7 +19,6 @@
 
 package com.openkm.core;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.TimerTask;
@@ -67,8 +66,6 @@ public class Cron extends TimerTask {
 						}
 					} catch (ParseException e) {
 						log.warn(e.getMessage() + " : " + ct.getExpression());
-					} catch (IOException e) {
-						log.warn(e.getMessage());
 					}
 				}
 			}
