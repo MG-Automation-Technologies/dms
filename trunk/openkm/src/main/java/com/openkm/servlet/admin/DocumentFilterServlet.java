@@ -21,8 +21,6 @@
 
 package com.openkm.servlet.admin;
 
-import static com.openkm.dao.MailAccountDAO.findRuleByPk;
-
 import java.io.IOException;
 
 import javax.jcr.LoginException;
@@ -37,9 +35,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
-import com.openkm.dao.MailAccountDAO;
+import com.openkm.dao.DocumentFilterDAO;
+import com.openkm.dao.bean.DocumentFilter;
+import com.openkm.dao.bean.DocumentFilterRule;
 import com.openkm.dao.bean.MailAccount;
-import com.openkm.dao.bean.MailFilter;
 import com.openkm.dao.bean.MailFilterRule;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
@@ -111,13 +110,8 @@ public class DocumentFilterServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException {
 		log.debug("list({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
-		int maId = WebUtils.getInt(request, "ma_id");
-		String ma_user = WebUtils.getString(request, "ma_user");
-		sc.setAttribute("ma_id", maId);
-		sc.setAttribute("ma_user", ma_user);
-		MailAccount ma = MailAccountDAO.findByPk(maId);
-		sc.setAttribute("mailFilters", ma.getMailFilters());
-		sc.getRequestDispatcher("/admin/mail_filter_list.jsp").forward(request, response);
+		sc.setAttribute("documentFilters", DocumentFilterDAO.findAll(false));
+		sc.getRequestDispatcher("/admin/document_filter_list.jsp").forward(request, response);
 		log.debug("list: void");
 	}
 	
@@ -129,25 +123,21 @@ public class DocumentFilterServlet extends BaseServlet {
 		log.debug("create({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
-			int maId = WebUtils.getInt(request, "ma_id");
-			MailFilter mf = new MailFilter();
-			mf.setPath(WebUtils.getString(request, "mf_path"));
-			mf.setUuid(JCRUtils.getUUID(session, mf.getPath()));
-			mf.setGrouping(WebUtils.getBoolean(request, "mf_grouping"));
-			mf.setActive(WebUtils.getBoolean(request, "mf_active"));
-			MailAccount ma = MailAccountDAO.findByPk(maId);
-			ma.getMailFilters().add(mf);
-			MailAccountDAO.update(ma);
+			DocumentFilter df = new DocumentFilter();
+			df.setFilter(WebUtils.getString(request, "df_filter"));
+			df.setType(WebUtils.getString(request, "df_type"));
+			df.setActive(WebUtils.getBoolean(request, "df_active"));
+			DocumentFilterDAO.create(df);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_MAIL_FILTER_CREATE", Integer.toString(ma.getId()), mf.toString());
+			UserActivity.log(session.getUserID(), "ADMIN_DOCUMENT_FILTER_CREATE", Integer.toString(df.getId()), df.toString());
 		} else {
 			ServletContext sc = getServletContext();
-			MailFilter mf = new MailFilter();
+			DocumentFilter df = new DocumentFilter();
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
-			sc.setAttribute("mf", mf);
-			sc.getRequestDispatcher("/admin/mail_filter_edit.jsp").forward(request, response);
+			sc.setAttribute("df", df);
+			sc.getRequestDispatcher("/admin/document_filter_edit.jsp").forward(request, response);
 		}
 		
 		log.debug("create: void");
@@ -161,28 +151,25 @@ public class DocumentFilterServlet extends BaseServlet {
 		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
-			int mfId = WebUtils.getInt(request, "mf_id");
-			MailFilter mf = MailAccountDAO.findFilterByPk(session, mfId);
+			int dfId = WebUtils.getInt(request, "df_id");
+			DocumentFilter df = DocumentFilterDAO.findByPk(dfId);
 			
-			if (mf != null) {
-				mf.setPath(WebUtils.getString(request, "mf_path"));
-				mf.setUuid(JCRUtils.getUUID(session, mf.getPath()));
-				mf.setGrouping(WebUtils.getBoolean(request, "mf_grouping"));
-				mf.setActive(WebUtils.getBoolean(request, "mf_active"));
-				MailAccountDAO.updateFilter(mf);
+			if (df != null) {
+				df.setFilter(WebUtils.getString(request, "df_filter"));
+				df.setType(WebUtils.getString(request, "df_type"));
+				df.setActive(WebUtils.getBoolean(request, "df_active"));
+				DocumentFilterDAO.update(df);
 			}
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_MAIL_FILTER_EDIT", Integer.toString(mf.getId()), mf.toString());
+			UserActivity.log(session.getUserID(), "ADMIN_DOCUMENT_FILTER_EDIT", Integer.toString(df.getId()), df.toString());
 		} else {
 			ServletContext sc = getServletContext();
-			int maId = WebUtils.getInt(request, "ma_id");
-			int mfId = WebUtils.getInt(request, "mf_id");
+			int dfId = WebUtils.getInt(request, "df_id");
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
-			sc.setAttribute("ma_id", maId);
-			sc.setAttribute("mf", MailAccountDAO.findFilterByPk(session, mfId));
-			sc.getRequestDispatcher("/admin/mail_filter_edit.jsp").forward(request, response);
+			sc.setAttribute("df", DocumentFilterDAO.findByPk(dfId));
+			sc.getRequestDispatcher("/admin/document_filter_edit.jsp").forward(request, response);
 		}
 		
 		log.debug("edit: void");
@@ -196,21 +183,18 @@ public class DocumentFilterServlet extends BaseServlet {
 		log.debug("delete({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
-			int maId = WebUtils.getInt(request, "ma_id");
-			int mfId = WebUtils.getInt(request, "mf_id");
-			MailAccountDAO.deleteFilter(mfId);
+			int dfId = WebUtils.getInt(request, "df_id");
+			DocumentFilterDAO.delete(dfId);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_MAIL_FILTER_DELETE", Integer.toString(maId), null);
+			UserActivity.log(session.getUserID(), "ADMIN_DOCUMENT_FILTER_DELETE", Integer.toString(dfId), null);
 		} else {
 			ServletContext sc = getServletContext();
-			int maId = WebUtils.getInt(request, "ma_id");
-			int mfId = WebUtils.getInt(request, "mf_id");
+			int dfId = WebUtils.getInt(request, "df_id");
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
-			sc.setAttribute("ma_id", maId);
-			sc.setAttribute("mf", MailAccountDAO.findFilterByPk(session, mfId));
-			sc.getRequestDispatcher("/admin/mail_filter_edit.jsp").forward(request, response);
+			sc.setAttribute("df", DocumentFilterDAO.findByPk(dfId));
+			sc.getRequestDispatcher("/admin/document_filter_edit.jsp").forward(request, response);
 		}
 		
 		log.debug("delete: void");
@@ -223,19 +207,15 @@ public class DocumentFilterServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException {
 		log.debug("ruleList({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
-		int maId = WebUtils.getInt(request, "ma_id");
-		int mfId = WebUtils.getInt(request, "mf_id");
-		sc.setAttribute("ma_id", maId);
-		sc.setAttribute("mf_id", mfId);
-		MailAccount ma = MailAccountDAO.findByPk(maId);
+		int dfId = WebUtils.getInt(request, "df_id");
+		sc.setAttribute("mf_id", dfId);
+		DocumentFilter df = DocumentFilterDAO.findByPk(dfId);
 		
-		for (MailFilter mf : ma.getMailFilters()) {
-			if (mf.getId() == mfId) {
-				sc.setAttribute("filterRules", mf.getFilterRules());		
-			}
+		for (DocumentFilterRule dfr : df.getFilterRules()) {
+			sc.setAttribute("filterRules", dfr);
 		}
 		
-		sc.getRequestDispatcher("/admin/mail_filter_rule_list.jsp").forward(request, response);
+		sc.getRequestDispatcher("/admin/document_filter_rule_list.jsp").forward(request, response);
 		log.debug("ruleList: void");
 	}
 	
@@ -247,27 +227,27 @@ public class DocumentFilterServlet extends BaseServlet {
 		log.debug("ruleCreate({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
-			int mf_id = WebUtils.getInt(request, "mf_id");
-			MailFilterRule mfr = new MailFilterRule();
-			mfr.setField(WebUtils.getString(request, "mfr_field"));
-			mfr.setOperation(WebUtils.getString(request, "mfr_operation"));
-			mfr.setValue(WebUtils.getString(request, "mfr_value"));
-			mfr.setActive(WebUtils.getBoolean(request, "mfr_active"));
-			MailFilter mf = MailAccountDAO.findFilterByPk(session, mf_id);
-			mf.getFilterRules().add(mfr);
-			MailAccountDAO.updateFilter(mf);
+			int df_id = WebUtils.getInt(request, "df_id");
+			DocumentFilterRule dfr = new DocumentFilterRule();
+			//dfr.setField(WebUtils.getString(request, "mfr_field"));
+			//dfr.setOperation(WebUtils.getString(request, "mfr_operation"));
+			dfr.setValue(WebUtils.getString(request, "mfr_value"));
+			dfr.setActive(WebUtils.getBoolean(request, "mfr_active"));
+			DocumentFilter df = DocumentFilterDAO.findByPk(df_id);
+			df.getFilterRules().add(dfr);
+			DocumentFilterDAO.update(df);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_MAIL_FILTER_CREATE", Integer.toString(mf.getId()), mf.toString());
+			UserActivity.log(session.getUserID(), "ADMIN_DOCUMENT_FILTER_RULE_CREATE", Integer.toString(df.getId()), df.toString());
 		} else {
 			ServletContext sc = getServletContext();
-			MailFilterRule mfr = new MailFilterRule();
+			DocumentFilterRule dfr = new DocumentFilterRule();
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
-			sc.setAttribute("mfr", mfr);
+			sc.setAttribute("dfr", dfr);
 			sc.setAttribute("fields", fields);
 			sc.setAttribute("operations", operations);
-			sc.getRequestDispatcher("/admin/mail_filter_rule_edit.jsp").forward(request, response);
+			sc.getRequestDispatcher("/admin/document_filter_rule_edit.jsp").forward(request, response);
 		}
 		
 		log.debug("ruleCreate: void");
@@ -281,32 +261,30 @@ public class DocumentFilterServlet extends BaseServlet {
 		log.debug("ruleEdit({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
-			int mfrId = WebUtils.getInt(request, "mfr_id");
-			MailFilterRule mfr = MailAccountDAO.findRuleByPk(mfrId);
+			int dfrId = WebUtils.getInt(request, "dfr_id");
+			DocumentFilterRule dfr = DocumentFilterDAO.findRuleByPk(dfrId);
 			
-			if (mfr != null) {
-				mfr.setField(WebUtils.getString(request, "mfr_field"));
-				mfr.setOperation(WebUtils.getString(request, "mfr_operation"));
-				mfr.setValue(WebUtils.getString(request, "mfr_value"));
-				mfr.setActive(WebUtils.getBoolean(request, "mfr_active"));
-				MailAccountDAO.updateRule(mfr);
+			if (dfr != null) {
+				//dfr.setField(WebUtils.getString(request, "dfr_field"));
+				//dfr.setOperation(WebUtils.getString(request, "dfr_operation"));
+				dfr.setValue(WebUtils.getString(request, "dfr_value"));
+				dfr.setActive(WebUtils.getBoolean(request, "dfr_active"));
+				DocumentFilterDAO.updateRule(dfr);
 			}
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_FILTER_RULE_EDIT", Integer.toString(mfr.getId()), mfr.toString());
+			UserActivity.log(session.getUserID(), "ADMIN_DOCUMENT_FILTER_RULE_EDIT", Integer.toString(dfr.getId()), dfr.toString());
 		} else {
 			ServletContext sc = getServletContext();
-			int maId = WebUtils.getInt(request, "ma_id");
-			int mfId = WebUtils.getInt(request, "mf_id");
-			int mfrId = WebUtils.getInt(request, "mfr_id");
+			int dfId = WebUtils.getInt(request, "df_id");
+			int dfrId = WebUtils.getInt(request, "dfr_id");
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
-			sc.setAttribute("ma_id", maId);
-			sc.setAttribute("mf_id", mfId);
-			sc.setAttribute("mfr", findRuleByPk(mfrId));
+			sc.setAttribute("df_id", dfId);
+			sc.setAttribute("dfr", DocumentFilterDAO.findRuleByPk(dfrId));
 			sc.setAttribute("fields", fields);
 			sc.setAttribute("operations", operations);
-			sc.getRequestDispatcher("/admin/mail_filter_rule_edit.jsp").forward(request, response);
+			sc.getRequestDispatcher("/admin/document_filter_rule_edit.jsp").forward(request, response);
 		}
 		
 		log.debug("ruleEdit: void");
@@ -320,24 +298,22 @@ public class DocumentFilterServlet extends BaseServlet {
 		log.debug("ruleDelete({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
-			int mfrId = WebUtils.getInt(request, "mfr_id");
-			MailAccountDAO.deleteRule(mfrId);
+			int dfrId = WebUtils.getInt(request, "dfr_id");
+			DocumentFilterDAO.deleteRule(dfrId);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_FILTER_RULE_DELETE", Integer.toString(mfrId), null);
+			UserActivity.log(session.getUserID(), "ADMIN_DOCUMENT_FILTER_RULE_DELETE", Integer.toString(dfrId), null);
 		} else {
 			ServletContext sc = getServletContext();
-			int maId = WebUtils.getInt(request, "ma_id");
-			int mfId = WebUtils.getInt(request, "mf_id");
-			int mfrId = WebUtils.getInt(request, "mfr_id");
+			int dfId = WebUtils.getInt(request, "df_id");
+			int dfrId = WebUtils.getInt(request, "dfr_id");
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
-			sc.setAttribute("ma_id", maId);
-			sc.setAttribute("mf_id", mfId);
-			sc.setAttribute("mfr", MailAccountDAO.findRuleByPk(mfrId));
+			sc.setAttribute("df_id", dfId);
+			sc.setAttribute("dfr", DocumentFilterDAO.findRuleByPk(dfrId));
 			sc.setAttribute("fields", fields);
 			sc.setAttribute("operations", operations);
-			sc.getRequestDispatcher("/admin/mail_filter_rule_edit.jsp").forward(request, response);
+			sc.getRequestDispatcher("/admin/document_filter_rule_edit.jsp").forward(request, response);
 		}
 		
 		log.debug("ruleDelete: void");
