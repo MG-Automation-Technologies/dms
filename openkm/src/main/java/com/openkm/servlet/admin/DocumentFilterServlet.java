@@ -24,8 +24,6 @@ package com.openkm.servlet.admin;
 import static com.openkm.dao.MailAccountDAO.findRuleByPk;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.security.NoSuchAlgorithmException;
 
 import javax.jcr.LoginException;
 import javax.jcr.RepositoryException;
@@ -44,16 +42,15 @@ import com.openkm.dao.bean.MailAccount;
 import com.openkm.dao.bean.MailFilter;
 import com.openkm.dao.bean.MailFilterRule;
 import com.openkm.util.JCRUtils;
-import com.openkm.util.MailUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
 
 /**
- * User mail accounts servlet
+ * Document filter servlet
  */
-public class MailAccountServlet extends BaseServlet {
+public class DocumentFilterServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
-	private static Logger log = LoggerFactory.getLogger(MailAccountServlet.class);
+	private static Logger log = LoggerFactory.getLogger(DocumentFilterServlet.class);
 	String fields[] = { MailFilterRule.FIELD_FROM, MailFilterRule.FIELD_TO, MailFilterRule.FIELD_SUBJECT,
 			MailFilterRule.FIELD_CONTENT };
 	String operations[] = { MailFilterRule.OPERATION_CONTAINS, MailFilterRule.OPERATION_EQUALS };
@@ -76,14 +73,6 @@ public class MailAccountServlet extends BaseServlet {
 				edit(session, request, response);
 			} else if (action.equals("delete")) {
 				delete(session, request, response);
-			} else if (action.equals("filterList")) {
-				filterList(session, request, response);
-			} else if (action.equals("filterCreate")) {
-				filterCreate(session, request, response);
-			} else if (action.equals("filterEdit")) {
-				filterEdit(session, request, response);
-			} else if (action.equals("filterDelete")) {
-				filterDelete(session, request, response);
 			} else if (action.equals("ruleList")) {
 				ruleList(session, request, response);
 			} else if (action.equals("ruleCreate")) {
@@ -95,9 +84,7 @@ public class MailAccountServlet extends BaseServlet {
 			}
 			
 			if (action.equals("") || WebUtils.getBoolean(request, "persist")) {
-				if (action.startsWith("filter")) {
-					filterList(session, request, response);
-				} else if (action.startsWith("rule")) {
+				if (action.startsWith("rule")) {
 					ruleList(session, request, response);
 				} else {
 					list(session, request, response);
@@ -112,197 +99,17 @@ public class MailAccountServlet extends BaseServlet {
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
-		} catch (NoSuchAlgorithmException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request,response, e);
 		} finally {
 			JCRUtils.logout(session);
 		}
-	}	
-
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException,
-			ServletException {
-		log.debug("doGet({}, {})", request, response);
-		request.setCharacterEncoding("UTF-8");
-		String action = WebUtils.getString(request, "action");
-		Session session = null;
-		updateSessionManager(request);
-		PrintWriter pw = response.getWriter();
-		
-		try {
-			session = JCRUtils.getSession();
-			
-			if (action.equals("check")) {
-				check(session, request, response);
-				pw.println("Success!");
-			}
-		} catch (LoginException e) {
-			log.error(e.getMessage(), e);
-			pw.print(e.getMessage());
-		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-			pw.print(e.getMessage());
-		} catch (DatabaseException e) {
-			log.error(e.getMessage(), e);
-			pw.print(e.getMessage());
-		} catch (IOException e) {
-			log.error(e.getMessage(), e);
-			pw.print(e.getMessage());
-		} finally {
-			JCRUtils.logout(session);
-			pw.flush();
-			pw.close();
-		}
-	}
-
-	/**
-	 * New mail account
-	 */
-	private void create(Session session, HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException, DatabaseException {
-		log.debug("create({}, {}, {})", new Object[] { session, request, response });
-		
-		if (WebUtils.getBoolean(request, "persist")) {
-			MailAccount ma = new MailAccount();
-			ma.setUser(WebUtils.getString(request, "ma_user"));
-			ma.setMailProtocol(WebUtils.getString(request, "ma_mprotocol"));
-			ma.setMailUser(WebUtils.getString(request, "ma_muser"));
-			ma.setMailPassword(WebUtils.getString(request, "ma_mpassword"));
-			ma.setMailHost(WebUtils.getString(request, "ma_mhost"));
-			ma.setMailFolder(WebUtils.getString(request, "ma_mfolder"));
-			ma.setMailMarkSeen(WebUtils.getBoolean(request, "ma_mmark_seen"));
-			ma.setMailMarkDeleted(WebUtils.getBoolean(request, "ma_mmark_deleted"));
-			ma.setActive(WebUtils.getBoolean(request, "ma_active"));
-			MailAccountDAO.create(ma);
-			
-			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_MAIL_ACCOUNT_CREATE", ma.getUser(), ma.toString());
-		} else {
-			ServletContext sc = getServletContext();
-			MailAccount ma = new MailAccount();
-			ma.setUser(WebUtils.getString(request, "ma_user"));
-			sc.setAttribute("action", WebUtils.getString(request, "action"));
-			sc.setAttribute("persist", true);
-			sc.setAttribute("ma", ma);
-			sc.setAttribute("protocols", protocols);
-			sc.getRequestDispatcher("/admin/mail_account_edit.jsp").forward(request, response);
-		}
-		
-		log.debug("create: void");
 	}
 	
 	/**
-	 * Edit mail account
-	 */
-	private void edit(Session session, HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
-		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
-		
-		if (WebUtils.getBoolean(request, "persist")) {
-			String password = WebUtils.getString(request, "ma_mpassword");
-			MailAccount ma = new MailAccount();
-			ma.setId(WebUtils.getInt(request, "ma_id"));
-			ma.setUser(WebUtils.getString(request, "ma_user"));
-			ma.setMailProtocol(WebUtils.getString(request, "ma_mprotocol"));
-			ma.setMailUser(WebUtils.getString(request, "ma_muser"));
-			ma.setMailHost(WebUtils.getString(request, "ma_mhost"));
-			ma.setMailFolder(WebUtils.getString(request, "ma_mfolder"));
-			ma.setMailMarkSeen(WebUtils.getBoolean(request, "ma_mmark_seen"));
-			ma.setMailMarkDeleted(WebUtils.getBoolean(request, "ma_mmark_deleted"));
-			ma.setActive(WebUtils.getBoolean(request, "ma_active"));
-			MailAccountDAO.update(ma);
-			
-			if (!password.equals("")) {
-				MailAccountDAO.updatePassword(ma.getId(), password);
-			}
-			
-			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_MAIL_ACCOUNT_EDIT", Integer.toString(ma.getId()), ma.toString());
-		} else {
-			ServletContext sc = getServletContext();
-			int maId = WebUtils.getInt(request, "ma_id");
-			sc.setAttribute("action", WebUtils.getString(request, "action"));
-			sc.setAttribute("persist", true);
-			sc.setAttribute("ma", MailAccountDAO.findByPk(maId));
-			sc.setAttribute("protocols", protocols);
-			sc.getRequestDispatcher("/admin/mail_account_edit.jsp").forward(request, response);
-		}
-		
-		log.debug("edit: void");
-	}
-	
-	/**
-	 * Check connectivity
-	 */
-	private void check(Session session, HttpServletRequest request, HttpServletResponse response) throws 
-			ServletException, IOException {
-		log.debug("check({}, {}, {})", new Object[] { session, request, response });
-		MailAccount ma = new MailAccount();
-		ma.setId(WebUtils.getInt(request, "ma_id"));
-		ma.setUser(WebUtils.getString(request, "ma_user"));
-		ma.setMailUser(WebUtils.getString(request, "ma_muser"));
-		ma.setMailProtocol(WebUtils.getString(request, "ma_mprotocol"));
-		ma.setMailPassword(WebUtils.getString(request, "ma_mpassword"));
-		ma.setMailHost(WebUtils.getString(request, "ma_mhost"));
-		ma.setMailFolder(WebUtils.getString(request, "ma_mfolder"));
-		ma.setMailMarkSeen(WebUtils.getBoolean(request, "ma_mmark_seen"));
-		ma.setMailMarkDeleted(WebUtils.getBoolean(request, "ma_mmark_deleted"));
-		ma.setActive(WebUtils.getBoolean(request, "ma_active"));
-				
-		// Check
-		MailUtils.testConnection(ma);
-		
-		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_MAIL_ACCOUNT_CHECK", Integer.toString(ma.getId()), ma.toString());
-		log.debug("check: void");
-	}
-	
-	/**
-	 * Update mail account
-	 */
-	private void delete(Session session, HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
-		log.debug("delete({}, {}, {})", new Object[] { session, request, response });
-		
-		if (WebUtils.getBoolean(request, "persist")) {
-			int maId = WebUtils.getInt(request, "ma_id");
-			MailAccountDAO.delete(maId);
-			
-			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_MAIL_ACCOUNT_DELETE", Integer.toString(maId), null);
-		} else {
-			ServletContext sc = getServletContext();
-			int maId = WebUtils.getInt(request, "ma_id");
-			sc.setAttribute("action", WebUtils.getString(request, "action"));
-			sc.setAttribute("persist", true);
-			sc.setAttribute("ma", MailAccountDAO.findByPk(maId));
-			sc.setAttribute("protocols", protocols);
-			sc.getRequestDispatcher("/admin/mail_account_edit.jsp").forward(request, response);
-		}
-		
-		log.debug("delete: void");
-	}
-
-	/**
-	 * List mail accounts
+	 * List document filters
 	 */
 	private void list(Session session, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DatabaseException {
 		log.debug("list({}, {}, {})", new Object[] { session, request, response });
-		ServletContext sc = getServletContext();
-		String usrId = WebUtils.getString(request, "ma_user");
-		sc.setAttribute("ma_user", usrId);
-		sc.setAttribute("mailAccounts", MailAccountDAO.findByUser(usrId, false));
-		sc.getRequestDispatcher("/admin/mail_account_list.jsp").forward(request, response);
-		log.debug("list: void");
-	}
-	
-	/**
-	 * List mail filters
-	 */
-	private void filterList(Session session, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
-		log.debug("filterList({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
 		int maId = WebUtils.getInt(request, "ma_id");
 		String ma_user = WebUtils.getString(request, "ma_user");
@@ -311,15 +118,15 @@ public class MailAccountServlet extends BaseServlet {
 		MailAccount ma = MailAccountDAO.findByPk(maId);
 		sc.setAttribute("mailFilters", ma.getMailFilters());
 		sc.getRequestDispatcher("/admin/mail_filter_list.jsp").forward(request, response);
-		log.debug("filterList: void");
+		log.debug("list: void");
 	}
 	
 	/**
-	 * Create mail filter 
+	 * Create document filter 
 	 */
-	private void filterCreate(Session session, HttpServletRequest request, HttpServletResponse response) 
+	private void create(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, RepositoryException {
-		log.debug("filterCreate({}, {}, {})", new Object[] { session, request, response });
+		log.debug("create({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
 			int maId = WebUtils.getInt(request, "ma_id");
@@ -343,15 +150,15 @@ public class MailAccountServlet extends BaseServlet {
 			sc.getRequestDispatcher("/admin/mail_filter_edit.jsp").forward(request, response);
 		}
 		
-		log.debug("filterCreate: void");
+		log.debug("create: void");
 	}
 	
 	/**
-	 * Edit mail filter
+	 * Edit document filter
 	 */
-	private void filterEdit(Session session, HttpServletRequest request, HttpServletResponse response) 
+	private void edit(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, RepositoryException {
-		log.debug("filterEdit({}, {}, {})", new Object[] { session, request, response });
+		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
 			int mfId = WebUtils.getInt(request, "mf_id");
@@ -378,15 +185,15 @@ public class MailAccountServlet extends BaseServlet {
 			sc.getRequestDispatcher("/admin/mail_filter_edit.jsp").forward(request, response);
 		}
 		
-		log.debug("filterEdit: void");
+		log.debug("edit: void");
 	}
 	
 	/**
 	 * Delete filter rule
 	 */
-	private void filterDelete(Session session, HttpServletRequest request, HttpServletResponse response) 
+	private void delete(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, RepositoryException {
-		log.debug("filterDelete({}, {}, {})", new Object[] { session, request, response });
+		log.debug("delete({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
 			int maId = WebUtils.getInt(request, "ma_id");
@@ -406,7 +213,7 @@ public class MailAccountServlet extends BaseServlet {
 			sc.getRequestDispatcher("/admin/mail_filter_edit.jsp").forward(request, response);
 		}
 		
-		log.debug("filterDelete: void");
+		log.debug("delete: void");
 	}
 	
 	/**
