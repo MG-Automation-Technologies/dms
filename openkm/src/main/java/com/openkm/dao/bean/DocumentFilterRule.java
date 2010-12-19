@@ -22,18 +22,27 @@
 package com.openkm.dao.bean;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
-public class MailFilter implements Serializable {
+public class DocumentFilterRule implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	public static final String FIELD_FROM = "FROM";
+	public static final String FIELD_TO = "TO";
+	public static final String FIELD_SUBJECT = "SUBJECT";
+	public static final String FIELD_CONTENT = "CONTENT";
+	public static final String FIELD_ATTACHMENT = "ATTACHMENT";
+	
+	public static final String OPERATION_EQUALS = "EQUALS";
+	public static final String OPERATION_NOT_EQUALS = "NOT_EQUALS";
+	public static final String OPERATION_CONTAINS = "CONTAINS";
+	public static final String OPERATION_ENDS_WITH = "ENDS_WITH";
+	public static final String OPERATION_STARTS_WITH = "STARTS_WITH";
+	
 	private int id;
-	private String path;
-	private String uuid;
-	private boolean grouping = true;
-	private boolean active = false;
-	private Set<MailFilterRule> filterRules = new HashSet<MailFilterRule>();
-
+	private String action;
+	private String value;
+	private boolean active;
+	
 	public int getId() {
 		return id;
 	}
@@ -41,29 +50,21 @@ public class MailFilter implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public String getPath() {
-		return path;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
-	}
-
-	public String getUuid() {
-		return uuid;
-	}
-
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
 	
-	public boolean isGrouping() {
-		return grouping;
+	public String getAction() {
+		return action;
 	}
 
-	public void setGrouping(boolean grouping) {
-		this.grouping = grouping;
+	public void setAction(String action) {
+		this.action = action;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 
 	public boolean isActive() {
@@ -74,23 +75,13 @@ public class MailFilter implements Serializable {
 		this.active = active;
 	}
 	
-	public Set<MailFilterRule> getFilterRules() {
-		return filterRules;
-	}
-
-	public void setFilterRules(Set<MailFilterRule> filterRules) {
-		this.filterRules = filterRules;
-	}
-	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("id="); sb.append(id);
-		sb.append(", path="); sb.append(path);
-		sb.append(", uuid="); sb.append(uuid);
-		sb.append(", grouping="); sb.append(grouping);
+		sb.append(", action="); sb.append(action);
+		sb.append(", value="); sb.append(value);
 		sb.append(", active="); sb.append(active);
-		sb.append(", filterRules="); sb.append(filterRules);
 		sb.append("}");
 		return sb.toString();
 	}
