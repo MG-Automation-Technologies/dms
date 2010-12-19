@@ -10,31 +10,31 @@
   <link rel="stylesheet" type="text/css" href="css/style.css" />
   <script src="js/jquery-1.3.2.min.js" type="text/javascript"></script>
   <script src="js/vanadium-min.js" type="text/javascript"></script>
-  <title>Filter rule</title>
+  <title>Mail filter rule</title>
 </head>
 <body>
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
       <c:choose>
-        <c:when test="${action == 'ruleCreate'}"><h1>Create filter rule</h1></c:when>
-        <c:when test="${action == 'ruleEdit'}"><h1>Edit filter rule</h1></c:when>
-        <c:when test="${action == 'ruleDelete'}"><h1>Delete filter rule</h1></c:when>
+        <c:when test="${action == 'ruleCreate'}"><h1>Create document filter rule</h1></c:when>
+        <c:when test="${action == 'ruleEdit'}"><h1>Edit document filter rule</h1></c:when>
+        <c:when test="${action == 'ruleDelete'}"><h1>Delete document filter rule</h1></c:when>
       </c:choose>
       <form action="MailAccount" id="form">
         <input type="hidden" name="action" id="action" value="${action}"/>
         <input type="hidden" name="persist" value="${persist}"/>
         <input type="hidden" name="ma_id" value="${ma_id}"/>
         <input type="hidden" name="mf_id" value="${mf_id}"/>
-        <input type="hidden" name="fr_id" value="${fr.id}"/>
+        <input type="hidden" name="dfr_id" value="${dfr.id}"/>
         <table class="form" width="345px" align="center">
           <tr>
             <td nowrap="nowrap">Field</td>
             <td>
-              <select name="fr_field">
+              <select name="dfr_field">
                 <c:forEach var="fld" items="${fields}">
                   <c:choose>
-                    <c:when test="${fld == fr.field}">
+                    <c:when test="${fld == dfr.field}">
                       <option value="${fld}" selected="selected">${fld}</option>
                     </c:when>
                     <c:otherwise>
@@ -48,10 +48,10 @@
           <tr>
             <td nowrap="nowrap">Operation</td>
             <td>
-              <select name="fr_operation">
+              <select name="dfr_operation">
                 <c:forEach var="ope" items="${operations}">
                   <c:choose>
-                    <c:when test="${ope == fr.operation}">
+                    <c:when test="${ope == dfr.operation}">
                       <option value="${ope}" selected="selected">${ope}</option>
                     </c:when>
                     <c:otherwise>
@@ -64,17 +64,17 @@
           </tr>
           <tr>
             <td nowrap="nowrap">Value</td>
-            <td><input name="fr_value" value="${fr.value}"/></td>
+            <td><input name="dfr_value" value="${dfr.value}"/></td>
           </tr>
           <tr>
             <td>Active</td>
             <td>
               <c:choose>
-                <c:when test="${fr.active}">
-                  <input name="fr_active" type="checkbox" checked="checked"/>
+                <c:when test="${dfr.active}">
+                  <input name="dfr_active" type="checkbox" checked="checked"/>
                 </c:when>
                 <c:otherwise>
-                  <input name="fr_active" type="checkbox"/>
+                  <input name="dfr_active" type="checkbox"/>
                 </c:otherwise>
               </c:choose>
             </td>
