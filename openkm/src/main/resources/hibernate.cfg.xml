@@ -230,7 +230,9 @@
     <mapping resource="com/openkm/dao/bean/LockToken.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/UserConfig.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/MailFilter.hbm.xml"/>
-    <mapping resource="com/openkm/dao/bean/FilterRule.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/MailFilterRule.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/DocumentFilter.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/DocumentFilterRule.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/MailAccount.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/QueryParams.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/MessageSent.hbm.xml"/>
