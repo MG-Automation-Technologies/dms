@@ -46,6 +46,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
 import com.openkm.bean.ConfigFile;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.ConfigDAO;
@@ -149,6 +150,7 @@ public class ConfigServlet extends BaseServlet {
 				}
 			
 				if (action.equals("create")) {
+					// ACTUALLY NOT USED
 					if (data != null && data.length > 0) {
 						cfg.setValue(SecureStore.b64Encode(data));
 					}
@@ -163,7 +165,7 @@ public class ConfigServlet extends BaseServlet {
 					if (Config.FILE.equals(cfg.getType())) {
 						if (data != null && data.length > 0) {
 							cfgFile.setContent(SecureStore.b64Encode(data));
-							cfg.setValue(cfgFile.toRaw());
+							cfg.setValue(new Gson().toJson(cfgFile));
 							ConfigDAO.update(cfg);
 							com.openkm.core.Config.reload(sc.getContextPath().substring(1));
 						}
@@ -289,7 +291,7 @@ public class ConfigServlet extends BaseServlet {
 		Config cfg = ConfigDAO.findByPk(cfgKey);
 		
 		if (cfg != null) {
-			ConfigFile cfgFile = ConfigFile.parseRaw(cfg.getValue());
+			ConfigFile cfgFile = new Gson().fromJson(cfg.getValue(), ConfigFile.class);
 			byte[] content = SecureStore.b64Decode(cfgFile.getContent());
 			ByteArrayInputStream bais = new ByteArrayInputStream(content);
 			WebUtils.sendFile(request, response, cfgFile.getName(), cfgFile.getMime(), true, bais);
