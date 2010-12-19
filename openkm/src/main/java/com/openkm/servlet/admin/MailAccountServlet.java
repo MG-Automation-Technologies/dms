@@ -451,7 +451,7 @@ public class MailAccountServlet extends BaseServlet {
 			MailAccountDAO.updateFilter(mf);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_MAIL_FILTER_CREATE", Integer.toString(mf.getId()), mf.toString());
+			UserActivity.log(session.getUserID(), "ADMIN_MAIL_FILTER_RULE_CREATE", Integer.toString(mf.getId()), mf.toString());
 		} else {
 			ServletContext sc = getServletContext();
 			MailFilterRule mfr = new MailFilterRule();
@@ -486,7 +486,7 @@ public class MailAccountServlet extends BaseServlet {
 			}
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_FILTER_RULE_EDIT", Integer.toString(mfr.getId()), mfr.toString());
+			UserActivity.log(session.getUserID(), "ADMIN_MAIL_FILTER_RULE_EDIT", Integer.toString(mfr.getId()), mfr.toString());
 		} else {
 			ServletContext sc = getServletContext();
 			int maId = WebUtils.getInt(request, "ma_id");
@@ -517,7 +517,7 @@ public class MailAccountServlet extends BaseServlet {
 			MailAccountDAO.deleteRule(mfrId);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_FILTER_RULE_DELETE", Integer.toString(mfrId), null);
+			UserActivity.log(session.getUserID(), "ADMIN_MAIL_FILTER_RULE_DELETE", Integer.toString(mfrId), null);
 		} else {
 			ServletContext sc = getServletContext();
 			int maId = WebUtils.getInt(request, "ma_id");
