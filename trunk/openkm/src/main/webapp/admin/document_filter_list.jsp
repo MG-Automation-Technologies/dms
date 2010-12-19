@@ -14,13 +14,10 @@
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
-      <c:url value="MailAccount" var="urlMailList">
-        <c:param name="ma_user" value="${ma_user}"/>
-      </c:url>
       <h1>Document filters</h1>
       <table class="results" width="70%">
         <tr>
-          <th>Folder</th><th>Grouping</th><th>Active</th>
+          <th>Type</th><th>Filter</th><th>Active</th>
           <th width="75px">
             <c:url value="DocumentFilter" var="urlCreate">
               <c:param name="action" value="create"/>
@@ -42,20 +39,10 @@
             <c:param name="df_id" value="${df.id}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td>${df.path}</td>
+            <td>${df.type}</td><td>${df.filter}</td>
             <td align="center">
               <c:choose>
-                <c:when test="${df.grouping}">
-                  <img src="img/true.png" alt="Active" title="Active"/>
-                </c:when>
-                <c:otherwise>
-                  <img src="img/false.png" alt="Inactive" title="Inactive"/>
-                </c:otherwise>
-              </c:choose>
-            </td>
-            <td align="center">
-              <c:choose>
-                <c:when test="${mf.active}">
+                <c:when test="${df.active}">
                   <img src="img/true.png" alt="Active" title="Active"/>
                 </c:when>
                 <c:otherwise>
