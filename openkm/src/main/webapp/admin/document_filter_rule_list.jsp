@@ -8,7 +8,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="favicon.ico" />
   <link rel="stylesheet" type="text/css" href="css/style.css" />
-  <title>Filter rules</title>
+  <title>Document filter rules</title>
 </head>
 <body>
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
@@ -19,7 +19,7 @@
         <c:param name="ma_user" value="${ma.user}"/>
         <c:param name="ma_id" value="${ma_id}"/>
       </c:url>
-      <h1>Filters rules <span style="font-size: 10px;">(<a href="${urlFilterList}">Mail filters</a>)</span></h1>
+      <h1>Mail filters rules <span style="font-size: 10px;">(<a href="${urlFilterList}">Document filters</a>)</span></h1>
       <table class="results" width="70%">
         <tr>
           <th>Field</th><th>Operation</th><th>Value</th><th>Active</th>
@@ -33,28 +33,28 @@
             <a href="${urlCreate}"><img src="img/action/new.png" alt="New rule" title="New rule"/></a>
           </th>
         </tr>
-        <c:forEach var="fr" items="${filterRules}" varStatus="row">
+        <c:forEach var="mfr" items="${filterRules}" varStatus="row">
           <c:url value="MailAccount" var="urlEdit">
             <c:param name="action" value="ruleEdit"/>
             <c:param name="ma_user" value="${ma_user}"/>
             <c:param name="ma_id" value="${ma_id}"/>
             <c:param name="mf_id" value="${mf_id}"/>
-            <c:param name="fr_id" value="${fr.id}"/>
+            <c:param name="mfr_id" value="${mfr.id}"/>
           </c:url>
           <c:url value="MailAccount" var="urlDelete">
             <c:param name="action" value="ruleDelete"/>
             <c:param name="ma_user" value="${ma_user}"/>
             <c:param name="ma_id" value="${ma_id}"/>
             <c:param name="mf_id" value="${mf_id}"/>
-            <c:param name="fr_id" value="${fr.id}"/>
+            <c:param name="mfr_id" value="${mfr.id}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td>${fr.field}</td>
-            <td>${fr.operation}</td>
-            <td>${fr.value}</td>
+            <td>${mfr.field}</td>
+            <td>${mfr.operation}</td>
+            <td>${mfr.value}</td>
             <td align="center">
               <c:choose>
-                <c:when test="${fr.active}">
+                <c:when test="${mfr.active}">
                   <img src="img/true.png" alt="Active" title="Active"/>
                 </c:when>
                 <c:otherwise>
