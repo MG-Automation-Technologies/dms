@@ -144,17 +144,16 @@ public class MimeTypeServlet extends BaseServlet {
 						}
 					} else {
 						is = item.getInputStream();
-						mt.setImageMime(Config.mimeTypes.getContentType(item.getName()));
 						data = IOUtils.toByteArray(is);
+						mt.setImageMime(Config.mimeTypes.getContentType(item.getName()));
 						is.close();
 					}
 				}
 			
 				if (action.equals("create")) {
-					if (data != null && data.length > 0) {
-						mt.setImageContent(SecureStore.b64Encode(data));
-					}
-					
+					// Because this servlet is also used for SQL import and in that case I don't
+					// want to waste a b64Encode conversion. Call it a sort of optimization.
+					mt.setImageContent(SecureStore.b64Encode(data));
 					MimeTypeDAO.create(mt);
 					Config.loadMimeTypes();
 					
@@ -162,10 +161,9 @@ public class MimeTypeServlet extends BaseServlet {
 					UserActivity.log(session.getUserID(), "ADMIN_MIME_TYPE_CREATE", null, mt.toString());
 					list(session, request, response);
 				} else if (action.equals("edit")) {
-					if (data != null && data.length > 0) {
-						mt.setImageContent(SecureStore.b64Encode(data));
-					}
-					
+					// Because this servlet is also used for SQL import and in that case I don't
+					// want to waste a b64Encode conversion. Call it a sort of optimization.
+					mt.setImageContent(SecureStore.b64Encode(data));
 					MimeTypeDAO.update(mt);
 					Config.loadMimeTypes();
 					
