@@ -314,6 +314,10 @@
     <servlet-name>StampServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.StampServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>DocumentFilterServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.DocumentFilterServlet</servlet-class>
+  </servlet>
     
   <!-- WebServices -->
   <servlet>
@@ -645,6 +649,10 @@
   <servlet-mapping>
     <servlet-name>StampServlet</servlet-name>
     <url-pattern>/admin/Stamp</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DocumentFilterServlet</servlet-name>
+    <url-pattern>/admin/DocumentFilter</url-pattern>
   </servlet-mapping>
 
   <!-- WebServices Servlet Mappings -->
