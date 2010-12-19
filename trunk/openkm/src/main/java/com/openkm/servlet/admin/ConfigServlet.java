@@ -125,7 +125,6 @@ public class ConfigServlet extends BaseServlet {
 				List<FileItem> items = upload.parseRequest(request);
 				Config cfg = new Config();
 				ConfigFile cfgFile = new ConfigFile();
-				byte data[] = null;
 				
 				for (Iterator<FileItem> it = items.iterator(); it.hasNext();) {
 					FileItem item = it.next();
@@ -144,15 +143,16 @@ public class ConfigServlet extends BaseServlet {
 						is = item.getInputStream();
 						cfgFile.setName(item.getName());
 						cfgFile.setMime(com.openkm.core.Config.mimeTypes.getContentType(item.getName()));
-						data = IOUtils.toByteArray(is);
+						cfgFile.setContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
 						is.close();
 					}
 				}
 			
 				if (action.equals("create")) {
-					// ACTUALLY NOT USED
-					if (data != null && data.length > 0) {
-						cfg.setValue(SecureStore.b64Encode(data));
+					if (Config.FILE.equals(cfg.getType())) {
+						cfg.setValue(new Gson().toJson(cfgFile));
+					} else if (Config.BOOLEAN.equals(cfg.getType())) {
+						cfg.setValue(Boolean.toString(cfg.getValue() != null && !cfg.getValue().equals("")));
 					}
 					
 					ConfigDAO.create(cfg);
@@ -163,20 +163,13 @@ public class ConfigServlet extends BaseServlet {
 					list(session, request, response);
 				} else if (action.equals("edit")) {
 					if (Config.FILE.equals(cfg.getType())) {
-						if (data != null && data.length > 0) {
-							cfgFile.setContent(SecureStore.b64Encode(data));
-							cfg.setValue(new Gson().toJson(cfgFile));
-							ConfigDAO.update(cfg);
-							com.openkm.core.Config.reload(sc.getContextPath().substring(1));
-						}
+						cfg.setValue(new Gson().toJson(cfgFile));
 					} else if (Config.BOOLEAN.equals(cfg.getType())) {
 						cfg.setValue(Boolean.toString(cfg.getValue() != null && !cfg.getValue().equals("")));
-						ConfigDAO.update(cfg);
-						com.openkm.core.Config.reload(sc.getContextPath().substring(1));
-					} else {
-						ConfigDAO.update(cfg);
-						com.openkm.core.Config.reload(sc.getContextPath().substring(1));
 					}
+					
+					ConfigDAO.update(cfg);
+					com.openkm.core.Config.reload(sc.getContextPath().substring(1));
 										
 					// Activity log
 					UserActivity.log(session.getUserID(), "ADMIN_CONFIG_EDIT", cfg.getKey(), cfg.toString());
