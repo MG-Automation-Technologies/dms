@@ -17,43 +17,32 @@
   <c:choose>
     <c:when test="${isAdmin}">
       <c:choose>
-        <c:when test="${action == 'filterCreate'}"><h1>Create mail filter</h1></c:when>
-        <c:when test="${action == 'filterEdit'}"><h1>Edit mail filter</h1></c:when>
-        <c:when test="${action == 'filterDelete'}"><h1>Delete mail filter</h1></c:when>
+        <c:when test="${action == 'create'}"><h1>Create document filter</h1></c:when>
+        <c:when test="${action == 'edit'}"><h1>Edit document filter</h1></c:when>
+        <c:when test="${action == 'delete'}"><h1>Delete document filter</h1></c:when>
       </c:choose>
       <form action="MailAccount" id="form">
         <input type="hidden" name="action" id="action" value="${action}"/>
         <input type="hidden" name="persist" value="${persist}"/>
-        <input type="hidden" name="ma_id" value="${ma_id}"/>
-        <input type="hidden" name="ma_user" value="${ma_user}"/>
-        <input type="hidden" name="mf_id" value="${mf.id}"/>
+        <input type="hidden" name="df_id" value="${df.id}"/>
         <table class="form" width="345px" align="center">
           <tr>
-            <td nowrap="nowrap">Folder</td>
-            <td><input name="mf_path" value="${mf.path}" size="48"/></td>
+            <td nowrap="nowrap">Type</td>
+            <td><input name="df_type" value="${df.type}" size="48"/></td>
           </tr>
           <tr>
-            <td>Grouping</td>
-            <td>
-              <c:choose>
-                <c:when test="${mf.grouping}">
-                  <input name="mf_grouping" type="checkbox" checked="checked"/>
-                </c:when>
-                <c:otherwise>
-                  <input name="mf_grouping" type="checkbox"/>
-                </c:otherwise>
-              </c:choose>
-            </td>
+            <td>Filter</td>
+             <td><input name="df_filter" value="${df.filter}" size="48"/></td>
           </tr>
           <tr>
             <td>Active</td>
             <td>
               <c:choose>
-                <c:when test="${mf.active}">
-                  <input name="mf_active" type="checkbox" checked="checked"/>
+                <c:when test="${df.active}">
+                  <input name="df_active" type="checkbox" checked="checked"/>
                 </c:when>
                 <c:otherwise>
-                  <input name="mf_active" type="checkbox"/>
+                  <input name="df_active" type="checkbox"/>
                 </c:otherwise>
               </c:choose>
             </td>
