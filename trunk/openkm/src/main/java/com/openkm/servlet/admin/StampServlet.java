@@ -163,7 +163,6 @@ public class StampServlet extends BaseServlet {
 				ServletFileUpload upload = new ServletFileUpload(factory);
 				List<FileItem> items = upload.parseRequest(request);
 				StampImage si = new StampImage();
-				byte data[] = null;
 				
 				for (Iterator<FileItem> it = items.iterator(); it.hasNext();) {
 					FileItem item = it.next();
@@ -193,26 +192,18 @@ public class StampServlet extends BaseServlet {
 					} else {
 						is = item.getInputStream();
 						si.setImageMime(Config.mimeTypes.getContentType(item.getName()));
-						data = IOUtils.toByteArray(is);
+						si.setImageContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
 						is.close();
 					}
 				}
 			
 				if (action.equals("imageCreate")) {
-					if (data != null && data.length > 0) {
-						si.setImageContent(SecureStore.b64Encode(data));
-					}
-					
 					StampImageDAO.create(si);
 					
 					// Activity log
 					UserActivity.log(session.getUserID(), "ADMIN_STAMP_IMAGE_CREATE", null, si.toString());
 					imageList(session, request, response);
 				} else if (action.equals("imageEdit")) {
-					if (data != null && data.length > 0) {
-						si.setImageContent(SecureStore.b64Encode(data));
-					}
-					
 					StampImageDAO.update(si);
 					
 					// Activity log
