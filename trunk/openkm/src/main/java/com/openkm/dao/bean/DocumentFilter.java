@@ -22,28 +22,17 @@
 package com.openkm.dao.bean;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
-public class FilterRule implements Serializable {
+public class DocumentFilter implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	public static final String FIELD_FROM = "FROM";
-	public static final String FIELD_TO = "TO";
-	public static final String FIELD_SUBJECT = "SUBJECT";
-	public static final String FIELD_CONTENT = "CONTENT";
-	public static final String FIELD_ATTACHMENT = "ATTACHMENT";
-	
-	public static final String OPERATION_EQUALS = "EQUALS";
-	public static final String OPERATION_NOT_EQUALS = "NOT_EQUALS";
-	public static final String OPERATION_CONTAINS = "CONTAINS";
-	public static final String OPERATION_ENDS_WITH = "ENDS_WITH";
-	public static final String OPERATION_STARTS_WITH = "STARTS_WITH";
-	
 	private int id;
-	private String field;
-	private String operation;
-	private String value;
-	private boolean active;
-	
+	private String type;
+	private String filter;
+	private boolean active = false;
+	private Set<DocumentFilterRule> filterRules = new HashSet<DocumentFilterRule>();
+
 	public int getId() {
 		return id;
 	}
@@ -52,28 +41,20 @@ public class FilterRule implements Serializable {
 		this.id = id;
 	}
 
-	public String getField() {
-		return field;
+	public String getType() {
+		return type;
 	}
 
-	public void setField(String field) {
-		this.field = field;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	public String getOperation() {
-		return operation;
+	public String getFilter() {
+		return filter;
 	}
 
-	public void setOperation(String operation) {
-		this.operation = operation;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
+	public void setFilter(String filter) {
+		this.filter = filter;
 	}
 
 	public boolean isActive() {
@@ -84,14 +65,22 @@ public class FilterRule implements Serializable {
 		this.active = active;
 	}
 	
+	public Set<DocumentFilterRule> getFilterRules() {
+		return filterRules;
+	}
+
+	public void setFilterRules(Set<DocumentFilterRule> filterRules) {
+		this.filterRules = filterRules;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("id="); sb.append(id);
-		sb.append(", field="); sb.append(field);
-		sb.append(", operation="); sb.append(operation);
-		sb.append(", value="); sb.append(value);
+		sb.append(", type="); sb.append(type);
+		sb.append(", filter="); sb.append(filter);
 		sb.append(", active="); sb.append(active);
+		sb.append(", filterRules="); sb.append(filterRules);
 		sb.append("}");
 		return sb.toString();
 	}
