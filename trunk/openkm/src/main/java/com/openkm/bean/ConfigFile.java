@@ -25,7 +25,6 @@ import java.io.Serializable;
 
 public class ConfigFile implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private static final String FILE_FIELD = "·";
 	private String name;
 	private String mime;
 	private String content;
@@ -53,24 +52,7 @@ public class ConfigFile implements Serializable {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	
-	public static ConfigFile parseRaw(String raw) {
-		if (raw != null) {
-			String[] data = raw.split(FILE_FIELD);
-			ConfigFile cfgFile = new ConfigFile();
-			cfgFile.setName(data[0]);
-			cfgFile.setMime(data[1]);
-			cfgFile.setContent(data[2]);
-			return cfgFile;
-		} else {
-			return null;
-		}
-	}
-	
-	public String toRaw() {
-		return name + FILE_FIELD + mime + FILE_FIELD + content;
-	}
-	
+		
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
