@@ -33,6 +33,7 @@ import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
 import com.openkm.bean.ConfigFile;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.bean.Config;
@@ -218,7 +219,7 @@ public class ConfigDAO  {
 			cfgFile.setContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
 			cfgFile.setName(FileUtils.getName(path));
 			cfgFile.setMime(com.openkm.core.Config.mimeTypes.getContentType(cfgFile.getName()));
-			String value = getProperty(key, cfgFile.toRaw(), Config.FILE);
+			String value = getProperty(key, new Gson().toJson(cfgFile), Config.FILE);
 			
 			if (value == null) {
 				return null;
