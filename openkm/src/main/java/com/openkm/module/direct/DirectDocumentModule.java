@@ -94,6 +94,7 @@ import com.openkm.kea.metadata.MetadataExtractionException;
 import com.openkm.kea.metadata.MetadataExtractor;
 import com.openkm.module.DocumentModule;
 import com.openkm.util.DocConverter;
+import com.openkm.util.DocumentUtils;
 import com.openkm.util.FileUtils;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.Transaction;
@@ -442,6 +443,9 @@ public class DirectDocumentModule implements DocumentModule {
 			parentNode = session.getRootNode().getNode(parent.substring(1));
 			Node documentNode = create(session, parentNode, name, null /* doc.getTitle() */, mimeType,
 					keywords.toArray(new String[keywords.size()]), is);
+			
+			// Check document filters
+			DocumentUtils.checkFilters(session, documentNode, mimeType);
 			
 			// Set returned document properties
 			newDocument = getProperties(session, doc.getPath());
