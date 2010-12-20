@@ -5,7 +5,7 @@
   <class name="com.openkm.dao.bean.DocumentFilter" table="OKM_DOCUMENT_FILTER">
     <id name="id" column="DF_ID"><generator class="native"/></id>
     <property name="type" column="DF_TYPE" not-null="true"/>
-    <property name="filter" column="DF_FILTER" not-null="true"/>
+    <property name="value" column="DF_VALUE" not-null="true"/>
     <property name="active" column="DF_ACTIVE" not-null="true"/>
     <set name="filterRules" table="OKM_DOCUMENT_FILTER_RULE" order-by="DFR_ID asc" cascade="all-delete-orphan" lazy="false">
       <key column="DFR_DOCUMENT_FILTER" not-null="true"/>
