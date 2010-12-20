@@ -72,6 +72,7 @@ import com.openkm.bean.Permission;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.MimeTypeDAO;
+import com.openkm.util.DocumentUtils;
 import com.openkm.util.JCRUtils;
 
 public class DefaultHandler implements IOHandler, PropertyHandler {
@@ -342,13 +343,15 @@ public class DefaultHandler implements IOHandler, PropertyHandler {
      */
     protected boolean importProperties(ImportContext context, boolean isCollection, Node contentNode) {
     	log.debug("importProperties({}, {}, {})", new Object[] { context, isCollection, contentNode });
+    	String mimeType = null;
+    	
         try {
             // set mimeType property upon resource creation but don't modify
             // it on a subsequent PUT. In contrast to a PROPPATCH request, which
             // is handled by  #importProperties(PropertyContext, boolean)}
             if (!contentNode.hasProperty(JcrConstants.JCR_MIMETYPE)) {
             	//contentNode.setProperty(JcrConstants.JCR_MIMETYPE, context.getMimeType());
-            	String mimeType = Config.mimeTypes.getContentType(context.getSystemId().toLowerCase());
+            	mimeType = Config.mimeTypes.getContentType(context.getSystemId().toLowerCase());
         		contentNode.setProperty(JcrConstants.JCR_MIMETYPE, mimeType);
             }
         } catch (RepositoryException e) {
@@ -376,7 +379,7 @@ public class DefaultHandler implements IOHandler, PropertyHandler {
         		log.debug("Folder node type");
         		Node folderNode = contentNode;
         		parentNode = folderNode.getParent();
-        	
+        		
         		// Basic folder properties
         		folderNode.setProperty(Folder.AUTHOR, session.getUserID());
         		folderNode.setProperty(Folder.NAME, folderNode.getName());
@@ -421,7 +424,7 @@ public class DefaultHandler implements IOHandler, PropertyHandler {
     		String[] rolesDelete = JCRUtils.rolValue2String(rolesDeleteParent);
     		Value[] rolesSecurityParent = parentNode.getProperty(Permission.ROLES_SECURITY).getValues();
     		String[] rolesSecurity = JCRUtils.rolValue2String(rolesSecurityParent);
-	
+    		
     		// Set auth info
     		mainNode.setProperty(Permission.USERS_READ, usersRead);
     		mainNode.setProperty(Permission.USERS_WRITE, usersWrite);
@@ -431,18 +434,23 @@ public class DefaultHandler implements IOHandler, PropertyHandler {
     		mainNode.setProperty(Permission.ROLES_WRITE, rolesWrite);
     		mainNode.setProperty(Permission.ROLES_DELETE, rolesDelete);
     		mainNode.setProperty(Permission.ROLES_SECURITY, rolesSecurity);
-
+    		
     		if (contentNode.isNodeType(Document.CONTENT_TYPE)) {
     			// Esta línea vale millones!! Resuelve la incidencia del isCkechedOut.
         		// Por lo visto un nuevo nodo se añade con el isCheckedOut a true :/
         		parentNode.save();
         		contentNode.checkin();
+        		
+        		// Check document filters
+    			DocumentUtils.checkFilters(session, mainNode, mimeType);
     		}
         } catch (ItemNotFoundException e) {
 			e.printStackTrace();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
 		} catch (RepositoryException e) {
+			e.printStackTrace();
+		} catch (DatabaseException e) {
 			e.printStackTrace();
 		}
         
