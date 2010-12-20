@@ -21,17 +21,12 @@
 
 package com.openkm.module.direct;
 
-import java.util.ArrayList;
-
 import javax.jcr.Node;
-import javax.jcr.PropertyType;
 import javax.jcr.Session;
-import javax.jcr.Value;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.bean.Property;
 import com.openkm.cache.UserDocumentKeywordsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
@@ -42,6 +37,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.VersionException;
 import com.openkm.module.PropertyModule;
+import com.openkm.module.base.BasePropertyModule;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 
@@ -68,27 +64,7 @@ public class DirectPropertyModule implements PropertyModule {
 			}
 			
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
-			
-			synchronized (documentNode) {
-				Value[] property = documentNode.getProperty(Property.CATEGORIES).getValues();
-				Value[] newProperty = new Value[property.length+1];
-				boolean alreadyAdded = false;
-				
-				for (int i=0; i<property.length; i++) {
-					newProperty[i] = property[i];
-					
-					if (property[i].getString().equals(catId)) {
-						alreadyAdded = true;
-					}
-				}
-				
-				if (!alreadyAdded) {
-					Node reference = session.getNodeByUUID(catId);
-					newProperty[newProperty.length-1] = session.getValueFactory().createValue(reference);
-					documentNode.setProperty(Property.CATEGORIES, newProperty, PropertyType.REFERENCE);
-					documentNode.save();
-				}
-			}
+			BasePropertyModule.addCategory(session, documentNode, catId);
 			
 			// Check subscriptions
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "ADD_CATEGORY", null);
@@ -99,23 +75,18 @@ public class DirectPropertyModule implements PropertyModule {
 			// Activity log
 			UserActivity.log(session.getUserID(), "ADD_CATEGORY", nodePath, catId);
 		} catch (javax.jcr.PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new PathNotFoundException(e.getMessage(), e);
 		} catch (javax.jcr.AccessDeniedException e) {
-			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new AccessDeniedException(e.getMessage(), e);
 		} catch (javax.jcr.version.VersionException e) {
-			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new VersionException(e.getMessage(), e);
 		} catch (javax.jcr.lock.LockException e) {
-			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new LockException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
@@ -145,25 +116,7 @@ public class DirectPropertyModule implements PropertyModule {
 			}
 			
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
-			boolean removed = false;
-			
-			synchronized (documentNode) {
-				Value[] property = documentNode.getProperty(Property.CATEGORIES).getValues();
-				ArrayList<Value> newProperty = new ArrayList<Value>();
-				
-				for (int i=0; i<property.length; i++) {
-					if (!property[i].getString().equals(catId)) {
-						newProperty.add(property[i]);
-					} else {
-						removed = true;
-					}
-				}
-				
-				if (removed) {
-					documentNode.setProperty(Property.CATEGORIES, (Value[])newProperty.toArray(new Value[newProperty.size()]), PropertyType.REFERENCE);
-					documentNode.save();
-				}
-			}
+			BasePropertyModule.removeCategory(session, documentNode, catId);
 			
 			// Check subscriptions
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "REMOVE_CATEGORY", null);
@@ -174,23 +127,18 @@ public class DirectPropertyModule implements PropertyModule {
 			// Activity log
 			UserActivity.log(session.getUserID(), "REMOVE_CATEGORY", nodePath, catId);
 		} catch (javax.jcr.PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new PathNotFoundException(e.getMessage(), e);
 		} catch (javax.jcr.AccessDeniedException e) {
-			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new AccessDeniedException(e.getMessage(), e);
 		} catch (javax.jcr.version.VersionException e) {
-			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new VersionException(e.getMessage(), e);
 		} catch (javax.jcr.lock.LockException e) {
-			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new LockException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
@@ -220,26 +168,7 @@ public class DirectPropertyModule implements PropertyModule {
 			}
 			
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
-			
-			synchronized (documentNode) {
-				Value[] property = documentNode.getProperty(Property.KEYWORDS).getValues();
-				Value[] newProperty = new Value[property.length+1];
-				boolean alreadyAdded = false;
-				
-				for (int i=0; i<property.length; i++) {
-					newProperty[i] = property[i];
-					
-					if (property[i].equals(keyword)) {
-						alreadyAdded = true;
-					}
-				}
-				
-				if (!alreadyAdded) {
-					newProperty[newProperty.length-1] = session.getValueFactory().createValue(keyword);
-					documentNode.setProperty(Property.KEYWORDS, newProperty);
-					documentNode.save();
-				}
-			}
+			BasePropertyModule.addKeyword(session, documentNode, keyword);
 			
 			// Update cache
 			if (Config.USER_KEYWORDS_CACHE) {
@@ -255,23 +184,18 @@ public class DirectPropertyModule implements PropertyModule {
 			// Activity log
 			UserActivity.log(session.getUserID(), "ADD_KEYWORD", nodePath, keyword);
 		} catch (javax.jcr.PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new PathNotFoundException(e.getMessage(), e);
 		} catch (javax.jcr.AccessDeniedException e) {
-			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new AccessDeniedException(e.getMessage(), e);
 		} catch (javax.jcr.version.VersionException e) {
-			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new VersionException(e.getMessage(), e);
 		} catch (javax.jcr.lock.LockException e) {
-			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new LockException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
@@ -301,25 +225,7 @@ public class DirectPropertyModule implements PropertyModule {
 			}
 			
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
-			boolean removed = false;
-			
-			synchronized (documentNode) {
-				Value[] property = documentNode.getProperty(Property.KEYWORDS).getValues();
-				ArrayList<Value> newProperty = new ArrayList<Value>();
-				
-				for (int i=0; i<property.length; i++) {
-					if (!property[i].getString().equals(keyword)) {
-						newProperty.add(property[i]);
-					} else {
-						removed = true;
-					}
-				}
-				
-				if (removed) {
-					documentNode.setProperty(Property.KEYWORDS, (Value[])newProperty.toArray(new Value[newProperty.size()]));
-					documentNode.save();
-				}
-			}
+			BasePropertyModule.removeKeyword(session, documentNode, keyword);
 			
 			// Update cache
 			if (Config.USER_KEYWORDS_CACHE) {
@@ -335,23 +241,18 @@ public class DirectPropertyModule implements PropertyModule {
 			// Activity log
 			UserActivity.log(session.getUserID(), "REMOVE_KEYWORD", nodePath, keyword);
 		} catch (javax.jcr.PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new PathNotFoundException(e.getMessage(), e);
 		} catch (javax.jcr.AccessDeniedException e) {
-			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new AccessDeniedException(e.getMessage(), e);
 		} catch (javax.jcr.version.VersionException e) {
-			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new VersionException(e.getMessage(), e);
 		} catch (javax.jcr.lock.LockException e) {
-			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new LockException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
