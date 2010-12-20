@@ -34,7 +34,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.api.OKMPropertyGroup;
+import com.openkm.api.OKMWorkflow;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.ParseException;
+import com.openkm.core.WorkflowException;
 import com.openkm.dao.DocumentFilterDAO;
 import com.openkm.dao.MimeTypeDAO;
 import com.openkm.dao.bean.DocumentFilter;
@@ -50,9 +54,9 @@ public class DocumentFilterServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(DocumentFilterServlet.class);
 	String types [] = { DocumentFilter.TYPE_PATH, DocumentFilter.TYPE_MIME_TYPE };
-	String actions[] = { DocumentFilterRule.ACTION_WIZARD_PROPGRP, DocumentFilterRule.ACTION_WIZARD_WORKFLOW,
+	String actions[] = { DocumentFilterRule.ACTION_WIZARD_PROPERTY_GROUP, DocumentFilterRule.ACTION_WIZARD_WORKFLOW,
 			DocumentFilterRule.ACTION_WIZARD_CATEGORY, DocumentFilterRule.ACTION_WIZARD_KEYWORD,
-			DocumentFilterRule.ACTION_METADATA, DocumentFilterRule.ACTION_WORKFLOW, 
+			DocumentFilterRule.ACTION_PROPERTY_GROUP, DocumentFilterRule.ACTION_WORKFLOW, 
 			DocumentFilterRule.ACTION_CATEGORY, DocumentFilterRule.ACTION_KEYWORD };
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
@@ -98,6 +102,15 @@ public class DocumentFilterServlet extends BaseServlet {
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
+		} catch (ParseException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} catch (com.openkm.core.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} catch (WorkflowException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
 		} finally {
 			JCRUtils.logout(session);
 		}
@@ -125,14 +138,17 @@ public class DocumentFilterServlet extends BaseServlet {
 		if (WebUtils.getBoolean(request, "persist")) {
 			DocumentFilter df = new DocumentFilter();
 			df.setType(WebUtils.getString(request, "df_type"));
-			df.setValue(WebUtils.getString(request, "df_value"));
 			df.setActive(WebUtils.getBoolean(request, "df_active"));
 			
 			if (DocumentFilter.TYPE_MIME_TYPE.equals(df.getType())) {
+				df.setValue(WebUtils.getString(request, "df_value_mime"));
+				
 				if (MimeTypeDAO.findByName(df.getValue()) == null) {
 					throw new DatabaseException("Mime type not registered");
 				}
 			} else if (DocumentFilter.TYPE_PATH.equals(df.getType())) {
+				df.setValue(WebUtils.getString(request, "df_value_path"));
+				
 				if (!session.getRootNode().hasNode(df.getValue())) {
 					throw new RepositoryException("Node path not found");
 				}
@@ -148,6 +164,7 @@ public class DocumentFilterServlet extends BaseServlet {
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("types", types);
+			sc.setAttribute("mimes", MimeTypeDAO.findAll("mt.name"));
 			sc.setAttribute("df", df);
 			sc.getRequestDispatcher("/admin/document_filter_edit.jsp").forward(request, response);
 		}
@@ -166,14 +183,17 @@ public class DocumentFilterServlet extends BaseServlet {
 			DocumentFilter df = new DocumentFilter();
 			df.setId(WebUtils.getInt(request, "df_id"));
 			df.setType(WebUtils.getString(request, "df_type"));
-			df.setValue(WebUtils.getString(request, "df_value"));
 			df.setActive(WebUtils.getBoolean(request, "df_active"));
 			
 			if (DocumentFilter.TYPE_MIME_TYPE.equals(df.getType())) {
+				df.setValue(WebUtils.getString(request, "df_value_mime"));
+				
 				if (MimeTypeDAO.findByName(df.getValue()) == null) {
 					throw new DatabaseException("Mime type not registered");
 				}
 			} else if (DocumentFilter.TYPE_PATH.equals(df.getType())) {
+				df.setValue(WebUtils.getString(request, "df_value_path"));
+				
 				if (!session.getRootNode().hasNode(df.getValue())) {
 					throw new RepositoryException("Node path not found");
 				}
@@ -189,6 +209,7 @@ public class DocumentFilterServlet extends BaseServlet {
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("types", types);
+			sc.setAttribute("mimes", MimeTypeDAO.findAll("mt.name"));
 			sc.setAttribute("df", DocumentFilterDAO.findByPk(dfId));
 			sc.getRequestDispatcher("/admin/document_filter_edit.jsp").forward(request, response);
 		}
@@ -215,6 +236,7 @@ public class DocumentFilterServlet extends BaseServlet {
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("types", types);
+			sc.setAttribute("mimes", MimeTypeDAO.findAll("mt.name"));
 			sc.setAttribute("df", DocumentFilterDAO.findByPk(dfId));
 			sc.getRequestDispatcher("/admin/document_filter_edit.jsp").forward(request, response);
 		}
@@ -238,18 +260,33 @@ public class DocumentFilterServlet extends BaseServlet {
 	}
 	
 	/**
-	 * Create filter rule
+	 * Create filter rule 
 	 */
 	private void ruleCreate(Session session, HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException, DatabaseException, RepositoryException {
+			throws ServletException, IOException, DatabaseException, RepositoryException, ParseException, 
+			com.openkm.core.RepositoryException, WorkflowException {
 		log.debug("ruleCreate({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
 			int df_id = WebUtils.getInt(request, "df_id");
 			DocumentFilterRule dfr = new DocumentFilterRule();
 			dfr.setAction(WebUtils.getString(request, "dfr_action"));
-			dfr.setValue(WebUtils.getString(request, "dfr_value"));
 			dfr.setActive(WebUtils.getBoolean(request, "dfr_active"));
+			
+			if (DocumentFilterRule.ACTION_WIZARD_PROPERTY_GROUP.equals(dfr.getAction()) || 
+					DocumentFilterRule.ACTION_PROPERTY_GROUP.equals(dfr.getAction())) {
+				dfr.setValue(WebUtils.getString(request, "dfr_value_pg"));
+			} else if (DocumentFilterRule.ACTION_WIZARD_WORKFLOW.equals(dfr.getAction()) || 
+					DocumentFilterRule.ACTION_WORKFLOW.equals(dfr.getAction())) {
+				dfr.setValue(WebUtils.getString(request, "dfr_value_wf"));
+			} else if (DocumentFilterRule.ACTION_WIZARD_CATEGORY.equals(dfr.getAction()) || 
+					DocumentFilterRule.ACTION_WIZARD_KEYWORD.equals(dfr.getAction())) {
+				dfr.setValue(Boolean.toString(WebUtils.getBoolean(request, "dfr_value_bool")));
+			} else if (DocumentFilterRule.ACTION_CATEGORY.equals(dfr.getAction()) || 
+					DocumentFilterRule.ACTION_KEYWORD.equals(dfr.getAction())) {
+				dfr.setValue(WebUtils.getString(request, "dfr_value_str"));
+			}
+			
 			DocumentFilter df = DocumentFilterDAO.findByPk(df_id);
 			df.getFilterRules().add(dfr);
 			DocumentFilterDAO.update(df);
@@ -263,6 +300,8 @@ public class DocumentFilterServlet extends BaseServlet {
 			sc.setAttribute("df_id", WebUtils.getInt(request, "df_id"));
 			sc.setAttribute("dfr",  new DocumentFilterRule());
 			sc.setAttribute("actions", actions);
+			sc.setAttribute("pgroups", OKMPropertyGroup.getInstance().getAllGroups(null));
+			sc.setAttribute("wflows", OKMWorkflow.getInstance().findAllProcessDefinitions(null));
 			sc.getRequestDispatcher("/admin/document_filter_rule_edit.jsp").forward(request, response);
 		}
 		
@@ -273,7 +312,8 @@ public class DocumentFilterServlet extends BaseServlet {
 	 * Edit filter rule 
 	 */
 	private void ruleEdit(Session session, HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException, DatabaseException, RepositoryException {
+			throws ServletException, IOException, DatabaseException, RepositoryException, ParseException,
+			com.openkm.core.RepositoryException, WorkflowException {
 		log.debug("ruleEdit({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
@@ -282,8 +322,22 @@ public class DocumentFilterServlet extends BaseServlet {
 			
 			if (dfr != null) {
 				dfr.setAction(WebUtils.getString(request, "dfr_action"));
-				dfr.setValue(WebUtils.getString(request, "dfr_value"));
 				dfr.setActive(WebUtils.getBoolean(request, "dfr_active"));
+				
+				if (DocumentFilterRule.ACTION_WIZARD_PROPERTY_GROUP.equals(dfr.getAction()) || 
+						DocumentFilterRule.ACTION_PROPERTY_GROUP.equals(dfr.getAction())) {
+					dfr.setValue(WebUtils.getString(request, "dfr_value_pg"));
+				} else if (DocumentFilterRule.ACTION_WIZARD_WORKFLOW.equals(dfr.getAction()) || 
+						DocumentFilterRule.ACTION_WORKFLOW.equals(dfr.getAction())) {
+					dfr.setValue(WebUtils.getString(request, "dfr_value_wf"));
+				} else if (DocumentFilterRule.ACTION_WIZARD_CATEGORY.equals(dfr.getAction()) || 
+						DocumentFilterRule.ACTION_WIZARD_KEYWORD.equals(dfr.getAction())) {
+					dfr.setValue(Boolean.toString(WebUtils.getBoolean(request, "dfr_value_bool")));
+				} else if (DocumentFilterRule.ACTION_CATEGORY.equals(dfr.getAction()) || 
+						DocumentFilterRule.ACTION_KEYWORD.equals(dfr.getAction())) {
+					dfr.setValue(WebUtils.getString(request, "dfr_value_str"));
+				}
+				
 				DocumentFilterDAO.updateRule(dfr);
 			}
 			
@@ -297,6 +351,8 @@ public class DocumentFilterServlet extends BaseServlet {
 			sc.setAttribute("df_id", WebUtils.getInt(request, "df_id"));
 			sc.setAttribute("dfr", DocumentFilterDAO.findRuleByPk(dfrId));
 			sc.setAttribute("actions", actions);
+			sc.setAttribute("pgroups", OKMPropertyGroup.getInstance().getAllGroups(null));
+			sc.setAttribute("wflows", OKMWorkflow.getInstance().findAllProcessDefinitions(null));
 			sc.getRequestDispatcher("/admin/document_filter_rule_edit.jsp").forward(request, response);
 		}
 		
@@ -304,10 +360,11 @@ public class DocumentFilterServlet extends BaseServlet {
 	}
 	
 	/**
-	 * Delete filter rule
+	 * Delete filter rule 
 	 */
 	private void ruleDelete(Session session, HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException, DatabaseException {
+			throws ServletException, IOException, DatabaseException, ParseException,
+			com.openkm.core.RepositoryException, WorkflowException {
 		log.debug("ruleDelete({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
@@ -324,6 +381,8 @@ public class DocumentFilterServlet extends BaseServlet {
 			sc.setAttribute("df_id", WebUtils.getInt(request, "df_id"));
 			sc.setAttribute("dfr", DocumentFilterDAO.findRuleByPk(dfrId));
 			sc.setAttribute("actions", actions);
+			sc.setAttribute("pgroups", OKMPropertyGroup.getInstance().getAllGroups(null));
+			sc.setAttribute("wflows", OKMWorkflow.getInstance().findAllProcessDefinitions(null));
 			sc.getRequestDispatcher("/admin/document_filter_rule_edit.jsp").forward(request, response);
 		}
 		
