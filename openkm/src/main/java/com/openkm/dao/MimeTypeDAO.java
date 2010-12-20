@@ -182,6 +182,8 @@ public class MimeTypeDAO {
 	
 	/**
 	 * Find by pk
+	 * 
+	 * @param sort Can be "mt.id" or "mt.name".
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<MimeType> findAll(String sort) throws DatabaseException {
