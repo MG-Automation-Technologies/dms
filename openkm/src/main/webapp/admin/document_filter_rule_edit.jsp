@@ -125,9 +125,9 @@
         $("#dfr_value_bool").hide();
         $("#dfr_value_pg").hide();
         $("#dfr_value_wf").hide();
-      } else {
+      } else if (action == 'EXTRACT_METADATA') {
         $("#dfr_value_str").hide();
-        $("#dfr_value_bool").hide();
+        $("#dfr_value_bool").show();
         $("#dfr_value_pg").hide();
         $("#dfr_value_wf").hide();
       }
