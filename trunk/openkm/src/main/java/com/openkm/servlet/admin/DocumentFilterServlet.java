@@ -57,7 +57,8 @@ public class DocumentFilterServlet extends BaseServlet {
 	String actions[] = { DocumentFilterRule.ACTION_WIZARD_PROPERTY_GROUP, DocumentFilterRule.ACTION_WIZARD_WORKFLOW,
 			DocumentFilterRule.ACTION_WIZARD_CATEGORY, DocumentFilterRule.ACTION_WIZARD_KEYWORD,
 			DocumentFilterRule.ACTION_PROPERTY_GROUP, DocumentFilterRule.ACTION_WORKFLOW, 
-			DocumentFilterRule.ACTION_CATEGORY, DocumentFilterRule.ACTION_KEYWORD };
+			DocumentFilterRule.ACTION_CATEGORY, DocumentFilterRule.ACTION_KEYWORD,
+			DocumentFilterRule.ACTION_EXTRACT_METADATA };
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
@@ -280,7 +281,8 @@ public class DocumentFilterServlet extends BaseServlet {
 					DocumentFilterRule.ACTION_WORKFLOW.equals(dfr.getAction())) {
 				dfr.setValue(WebUtils.getString(request, "dfr_value_wf"));
 			} else if (DocumentFilterRule.ACTION_WIZARD_CATEGORY.equals(dfr.getAction()) || 
-					DocumentFilterRule.ACTION_WIZARD_KEYWORD.equals(dfr.getAction())) {
+					DocumentFilterRule.ACTION_WIZARD_KEYWORD.equals(dfr.getAction()) ||
+					DocumentFilterRule.ACTION_EXTRACT_METADATA.equals(dfr.getAction())) {
 				dfr.setValue(Boolean.toString(WebUtils.getBoolean(request, "dfr_value_bool")));
 			} else if (DocumentFilterRule.ACTION_CATEGORY.equals(dfr.getAction()) || 
 					DocumentFilterRule.ACTION_KEYWORD.equals(dfr.getAction())) {
@@ -331,7 +333,8 @@ public class DocumentFilterServlet extends BaseServlet {
 						DocumentFilterRule.ACTION_WORKFLOW.equals(dfr.getAction())) {
 					dfr.setValue(WebUtils.getString(request, "dfr_value_wf"));
 				} else if (DocumentFilterRule.ACTION_WIZARD_CATEGORY.equals(dfr.getAction()) || 
-						DocumentFilterRule.ACTION_WIZARD_KEYWORD.equals(dfr.getAction())) {
+						DocumentFilterRule.ACTION_WIZARD_KEYWORD.equals(dfr.getAction()) ||
+						DocumentFilterRule.ACTION_EXTRACT_METADATA.equals(dfr.getAction())) {
 					dfr.setValue(Boolean.toString(WebUtils.getBoolean(request, "dfr_value_bool")));
 				} else if (DocumentFilterRule.ACTION_CATEGORY.equals(dfr.getAction()) || 
 						DocumentFilterRule.ACTION_KEYWORD.equals(dfr.getAction())) {
