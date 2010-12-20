@@ -10,7 +10,7 @@
   <link rel="stylesheet" type="text/css" href="css/style.css" />
   <script src="js/jquery-1.3.2.min.js" type="text/javascript"></script>
   <script src="js/vanadium-min.js" type="text/javascript"></script>
-  <title>Mail filter</title>
+  <title>Document filter</title>
 </head>
 <body>
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
@@ -21,18 +21,31 @@
         <c:when test="${action == 'edit'}"><h1>Edit document filter</h1></c:when>
         <c:when test="${action == 'delete'}"><h1>Delete document filter</h1></c:when>
       </c:choose>
-      <form action="MailAccount" id="form">
+      <form action="DocumentFilter" id="form">
         <input type="hidden" name="action" id="action" value="${action}"/>
         <input type="hidden" name="persist" value="${persist}"/>
         <input type="hidden" name="df_id" value="${df.id}"/>
         <table class="form" width="345px" align="center">
           <tr>
             <td nowrap="nowrap">Type</td>
-            <td><input name="df_type" value="${df.type}" size="48"/></td>
+            <td>
+              <select name="df_type">
+                <c:forEach var="tp" items="${types}">
+                  <c:choose>
+                    <c:when test="${tp == df.type}">
+                      <option value="${tp}" selected="selected">${tp}</option>
+                    </c:when>
+                    <c:otherwise>
+                      <option value="${tp}">${tp}</option>
+                    </c:otherwise>
+                  </c:choose>
+                </c:forEach>
+              </select>
+            </td>
           </tr>
           <tr>
-            <td>Filter</td>
-             <td><input name="df_filter" value="${df.filter}" size="48"/></td>
+            <td>Value</td>
+             <td><input name="df_value" value="${df.value}" size="48"/></td>
           </tr>
           <tr>
             <td>Active</td>

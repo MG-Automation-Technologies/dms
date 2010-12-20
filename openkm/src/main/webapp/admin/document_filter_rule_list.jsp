@@ -14,47 +14,39 @@
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
-      <c:url value="MailAccount" var="urlFilterList">
+      <c:url value="DocumentFilter" var="urlFilterList">
         <c:param name="action" value="filterList"/>
-        <c:param name="ma_user" value="${ma.user}"/>
-        <c:param name="ma_id" value="${ma_id}"/>
       </c:url>
-      <h1>Mail filters rules <span style="font-size: 10px;">(<a href="${urlFilterList}">Document filters</a>)</span></h1>
+      <h1>Document filter rules <span style="font-size: 10px;">(<a href="${urlFilterList}">Document filters</a>)</span></h1>
       <table class="results" width="70%">
         <tr>
           <th>Field</th><th>Operation</th><th>Value</th><th>Active</th>
           <th width="50px">
-            <c:url value="MailAccount" var="urlCreate">
+            <c:url value="DocumentFilter" var="urlCreate">
               <c:param name="action" value="ruleCreate"/>
-              <c:param name="ma_user" value="${ma_user}"/>
-              <c:param name="ma_id" value="${ma_id}"/>
-              <c:param name="mf_id" value="${mf_id}"/>
+              <c:param name="df_id" value="${mf_id}"/>
             </c:url>
             <a href="${urlCreate}"><img src="img/action/new.png" alt="New rule" title="New rule"/></a>
           </th>
         </tr>
-        <c:forEach var="mfr" items="${filterRules}" varStatus="row">
-          <c:url value="MailAccount" var="urlEdit">
+        <c:forEach var="dfr" items="${filterRules}" varStatus="row">
+          <c:url value="DocumentFilter" var="urlEdit">
             <c:param name="action" value="ruleEdit"/>
-            <c:param name="ma_user" value="${ma_user}"/>
-            <c:param name="ma_id" value="${ma_id}"/>
-            <c:param name="mf_id" value="${mf_id}"/>
-            <c:param name="mfr_id" value="${mfr.id}"/>
+            <c:param name="df_id" value="${mf_id}"/>
+            <c:param name="dfr_id" value="${mfr.id}"/>
           </c:url>
-          <c:url value="MailAccount" var="urlDelete">
+          <c:url value="DocumentFilter" var="urlDelete">
             <c:param name="action" value="ruleDelete"/>
-            <c:param name="ma_user" value="${ma_user}"/>
-            <c:param name="ma_id" value="${ma_id}"/>
-            <c:param name="mf_id" value="${mf_id}"/>
-            <c:param name="mfr_id" value="${mfr.id}"/>
+            <c:param name="df_id" value="${mf_id}"/>
+            <c:param name="dfr_id" value="${mfr.id}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td>${mfr.field}</td>
-            <td>${mfr.operation}</td>
-            <td>${mfr.value}</td>
+            <td>${dfr.field}</td>
+            <td>${dfr.operation}</td>
+            <td>${dfr.value}</td>
             <td align="center">
               <c:choose>
-                <c:when test="${mfr.active}">
+                <c:when test="${dfr.active}">
                   <img src="img/true.png" alt="Active" title="Active"/>
                 </c:when>
                 <c:otherwise>
