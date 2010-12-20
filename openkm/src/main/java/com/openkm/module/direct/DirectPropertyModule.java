@@ -177,10 +177,10 @@ public class DirectPropertyModule implements PropertyModule {
 			
 			// Check subscriptions
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "ADD_KEYWORD", null);
-
+			
 			// Check scripting
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "ADD_KEYWORD");
-
+			
 			// Activity log
 			UserActivity.log(session.getUserID(), "ADD_KEYWORD", nodePath, keyword);
 		} catch (javax.jcr.PathNotFoundException e) {
