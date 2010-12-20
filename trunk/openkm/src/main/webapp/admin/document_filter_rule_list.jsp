@@ -15,16 +15,15 @@
   <c:choose>
     <c:when test="${isAdmin}">
       <c:url value="DocumentFilter" var="urlFilterList">
-        <c:param name="action" value="filterList"/>
       </c:url>
       <h1>Document filter rules <span style="font-size: 10px;">(<a href="${urlFilterList}">Document filters</a>)</span></h1>
       <table class="results" width="70%">
         <tr>
-          <th>Field</th><th>Operation</th><th>Value</th><th>Active</th>
+          <th>Action</th><th>Value</th><th>Active</th>
           <th width="50px">
             <c:url value="DocumentFilter" var="urlCreate">
               <c:param name="action" value="ruleCreate"/>
-              <c:param name="df_id" value="${mf_id}"/>
+              <c:param name="df_id" value="${df_id}"/>
             </c:url>
             <a href="${urlCreate}"><img src="img/action/new.png" alt="New rule" title="New rule"/></a>
           </th>
@@ -32,17 +31,16 @@
         <c:forEach var="dfr" items="${filterRules}" varStatus="row">
           <c:url value="DocumentFilter" var="urlEdit">
             <c:param name="action" value="ruleEdit"/>
-            <c:param name="df_id" value="${mf_id}"/>
-            <c:param name="dfr_id" value="${mfr.id}"/>
+            <c:param name="df_id" value="${df_id}"/>
+            <c:param name="dfr_id" value="${dfr.id}"/>
           </c:url>
           <c:url value="DocumentFilter" var="urlDelete">
             <c:param name="action" value="ruleDelete"/>
-            <c:param name="df_id" value="${mf_id}"/>
-            <c:param name="dfr_id" value="${mfr.id}"/>
+            <c:param name="df_id" value="${df_id}"/>
+            <c:param name="dfr_id" value="${dfr.id}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td>${dfr.field}</td>
-            <td>${dfr.operation}</td>
+            <td>${dfr.action}</td>
             <td>${dfr.value}</td>
             <td align="center">
               <c:choose>
