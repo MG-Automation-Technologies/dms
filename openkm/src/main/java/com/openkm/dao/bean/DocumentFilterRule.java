@@ -34,6 +34,7 @@ public class DocumentFilterRule implements Serializable {
 	public static final String ACTION_WORKFLOW = "WORKFLOW";
 	public static final String ACTION_CATEGORY = "CATEGORY";
 	public static final String ACTION_KEYWORD = "KEYWORD";
+	public static final String ACTION_EXTRACT_METADATA = "EXTRACT_METADATA";
 	
 	private int id;
 	private String action;
