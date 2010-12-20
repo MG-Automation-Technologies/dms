@@ -79,7 +79,7 @@ public class DocumentFilterServlet extends BaseServlet {
 			} else if (action.equals("ruleEdit")) {
 				ruleEdit(session, request, response);
 			} else if (action.equals("ruleDelete")) {
-				ruleDelete(session, request, response);
+				ruleDelete(session, request, response);			
 			}
 			
 			if (action.equals("") || WebUtils.getBoolean(request, "persist")) {
@@ -230,13 +230,9 @@ public class DocumentFilterServlet extends BaseServlet {
 		log.debug("ruleList({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
 		int dfId = WebUtils.getInt(request, "df_id");
-		sc.setAttribute("mf_id", dfId);
 		DocumentFilter df = DocumentFilterDAO.findByPk(dfId);
-		
-		for (DocumentFilterRule dfr : df.getFilterRules()) {
-			sc.setAttribute("filterRules", dfr);
-		}
-		
+		sc.setAttribute("df_id", dfId);
+		sc.setAttribute("filterRules", df.getFilterRules());
 		sc.getRequestDispatcher("/admin/document_filter_rule_list.jsp").forward(request, response);
 		log.debug("ruleList: void");
 	}
@@ -251,10 +247,9 @@ public class DocumentFilterServlet extends BaseServlet {
 		if (WebUtils.getBoolean(request, "persist")) {
 			int df_id = WebUtils.getInt(request, "df_id");
 			DocumentFilterRule dfr = new DocumentFilterRule();
-			//dfr.setField(WebUtils.getString(request, "mfr_field"));
-			//dfr.setOperation(WebUtils.getString(request, "mfr_operation"));
-			dfr.setValue(WebUtils.getString(request, "mfr_value"));
-			dfr.setActive(WebUtils.getBoolean(request, "mfr_active"));
+			dfr.setAction(WebUtils.getString(request, "dfr_action"));
+			dfr.setValue(WebUtils.getString(request, "dfr_value"));
+			dfr.setActive(WebUtils.getBoolean(request, "dfr_active"));
 			DocumentFilter df = DocumentFilterDAO.findByPk(df_id);
 			df.getFilterRules().add(dfr);
 			DocumentFilterDAO.update(df);
@@ -263,10 +258,10 @@ public class DocumentFilterServlet extends BaseServlet {
 			UserActivity.log(session.getUserID(), "ADMIN_DOCUMENT_FILTER_RULE_CREATE", Integer.toString(df.getId()), df.toString());
 		} else {
 			ServletContext sc = getServletContext();
-			DocumentFilterRule dfr = new DocumentFilterRule();
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
-			sc.setAttribute("dfr", dfr);
+			sc.setAttribute("df_id", WebUtils.getInt(request, "df_id"));
+			sc.setAttribute("dfr",  new DocumentFilterRule());
 			sc.setAttribute("actions", actions);
 			sc.getRequestDispatcher("/admin/document_filter_rule_edit.jsp").forward(request, response);
 		}
@@ -286,8 +281,7 @@ public class DocumentFilterServlet extends BaseServlet {
 			DocumentFilterRule dfr = DocumentFilterDAO.findRuleByPk(dfrId);
 			
 			if (dfr != null) {
-				//dfr.setField(WebUtils.getString(request, "dfr_field"));
-				//dfr.setOperation(WebUtils.getString(request, "dfr_operation"));
+				dfr.setAction(WebUtils.getString(request, "dfr_action"));
 				dfr.setValue(WebUtils.getString(request, "dfr_value"));
 				dfr.setActive(WebUtils.getBoolean(request, "dfr_active"));
 				DocumentFilterDAO.updateRule(dfr);
@@ -297,11 +291,10 @@ public class DocumentFilterServlet extends BaseServlet {
 			UserActivity.log(session.getUserID(), "ADMIN_DOCUMENT_FILTER_RULE_EDIT", Integer.toString(dfr.getId()), dfr.toString());
 		} else {
 			ServletContext sc = getServletContext();
-			int dfId = WebUtils.getInt(request, "df_id");
 			int dfrId = WebUtils.getInt(request, "dfr_id");
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
-			sc.setAttribute("df_id", dfId);
+			sc.setAttribute("df_id", WebUtils.getInt(request, "df_id"));
 			sc.setAttribute("dfr", DocumentFilterDAO.findRuleByPk(dfrId));
 			sc.setAttribute("actions", actions);
 			sc.getRequestDispatcher("/admin/document_filter_rule_edit.jsp").forward(request, response);
@@ -325,11 +318,10 @@ public class DocumentFilterServlet extends BaseServlet {
 			UserActivity.log(session.getUserID(), "ADMIN_DOCUMENT_FILTER_RULE_DELETE", Integer.toString(dfrId), null);
 		} else {
 			ServletContext sc = getServletContext();
-			int dfId = WebUtils.getInt(request, "df_id");
 			int dfrId = WebUtils.getInt(request, "dfr_id");
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
-			sc.setAttribute("df_id", dfId);
+			sc.setAttribute("df_id", WebUtils.getInt(request, "df_id"));
 			sc.setAttribute("dfr", DocumentFilterDAO.findRuleByPk(dfrId));
 			sc.setAttribute("actions", actions);
 			sc.getRequestDispatcher("/admin/document_filter_rule_edit.jsp").forward(request, response);
