@@ -10,7 +10,7 @@
   <link rel="stylesheet" type="text/css" href="css/style.css" />
   <script src="js/jquery-1.3.2.min.js" type="text/javascript"></script>
   <script src="js/vanadium-min.js" type="text/javascript"></script>
-  <title>Mail filter rule</title>
+  <title>Document filter rule</title>
 </head>
 <body>
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
@@ -21,41 +21,23 @@
         <c:when test="${action == 'ruleEdit'}"><h1>Edit document filter rule</h1></c:when>
         <c:when test="${action == 'ruleDelete'}"><h1>Delete document filter rule</h1></c:when>
       </c:choose>
-      <form action="MailAccount" id="form">
+      <form action="DocumentFilter" id="form">
         <input type="hidden" name="action" id="action" value="${action}"/>
         <input type="hidden" name="persist" value="${persist}"/>
-        <input type="hidden" name="ma_id" value="${ma_id}"/>
-        <input type="hidden" name="mf_id" value="${mf_id}"/>
+        <input type="hidden" name="df_id" value="${df_id}"/>
         <input type="hidden" name="dfr_id" value="${dfr.id}"/>
         <table class="form" width="345px" align="center">
           <tr>
-            <td nowrap="nowrap">Field</td>
+            <td nowrap="nowrap">Action</td>
             <td>
-              <select name="dfr_field">
-                <c:forEach var="fld" items="${fields}">
+              <select name="dfr_action">
+                <c:forEach var="act" items="${actions}">
                   <c:choose>
-                    <c:when test="${fld == dfr.field}">
-                      <option value="${fld}" selected="selected">${fld}</option>
+                    <c:when test="${act == dfr.action}">
+                      <option value="${act}" selected="selected">${act}</option>
                     </c:when>
                     <c:otherwise>
-                      <option value="${fld}">${fld}</option>
-                    </c:otherwise>
-                  </c:choose>
-                </c:forEach>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td nowrap="nowrap">Operation</td>
-            <td>
-              <select name="dfr_operation">
-                <c:forEach var="ope" items="${operations}">
-                  <c:choose>
-                    <c:when test="${ope == dfr.operation}">
-                      <option value="${ope}" selected="selected">${ope}</option>
-                    </c:when>
-                    <c:otherwise>
-                      <option value="${ope}">${ope}</option>
+                      <option value="${act}">${act}</option>
                     </c:otherwise>
                   </c:choose>
                 </c:forEach>
