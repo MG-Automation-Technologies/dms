@@ -30,7 +30,7 @@
           <tr>
             <td nowrap="nowrap">Action</td>
             <td>
-              <select name="dfr_action">
+              <select name="dfr_action" id="dfr_action">
                 <c:forEach var="act" items="${actions}">
                   <c:choose>
                     <c:when test="${act == dfr.action}">
@@ -45,8 +45,35 @@
             </td>
           </tr>
           <tr>
-            <td nowrap="nowrap">Value</td>
-            <td><input name="dfr_value" value="${dfr.value}"/></td>
+            <td>Value</td>
+            <td>
+              <input name="dfr_value_str" id="dfr_value_str" value="${dfr.value}"/>
+              <input name="dfr_value_bool" id="dfr_value_bool" type="checkbox"/>
+              <select name="dfr_value_pg" id="dfr_value_pg">
+                <c:forEach var="pg" items="${pgroups}">
+                  <c:choose>
+                    <c:when test="${pg.name == dfr.value}">
+                      <option value="${pg.name}" selected="selected">${pg.label}</option>
+                    </c:when>
+                    <c:otherwise>
+                      <option value="${pg.name}">${pg.label}</option>
+                    </c:otherwise>
+                  </c:choose>
+                </c:forEach>
+              </select>
+              <select name="dfr_value_wf" id="dfr_value_wf">
+                <c:forEach var="wf" items="${wflows}">
+                  <c:choose>
+                    <c:when test="${wf.id == dfr.id}">
+                      <option value="${wf.id}" selected="selected">${wf.name}</option>
+                    </c:when>
+                    <c:otherwise>
+                      <option value="${wf.id}">${wf.name}</option>
+                    </c:otherwise>
+                  </c:choose>
+                </c:forEach>
+              </select>
+            </td>
           </tr>
           <tr>
             <td>Active</td>
@@ -76,5 +103,43 @@
       <div class="error"><h3>Only admin users allowed</h3></div>
     </c:otherwise>
   </c:choose>
+  <script type="text/javascript">
+    function valueType(action) {
+      if (action == 'WIZARD_PROPERTY_GROUP' || action == 'PROPERTY_GROUP') {
+        $("#dfr_value_str").hide();
+        $("#dfr_value_bool").hide();
+        $("#dfr_value_pg").show();
+        $("#dfr_value_wf").hide();
+      } else if (action == 'WIZARD_WORKFLOW' || action == 'WORKFLOW') {
+        $("#dfr_value_str").hide();
+        $("#dfr_value_bool").hide();
+        $("#dfr_value_pg").hide();
+        $("#dfr_value_wf").show();
+      } else if (action == 'WIZARD_CATEGORY' || action == 'WIZARD_KEYWORD') {
+        $("#dfr_value_str").hide();
+        $("#dfr_value_bool").show();
+        $("#dfr_value_pg").hide();
+        $("#dfr_value_wf").hide();
+      } else if (action == 'CATEGORY' || action == 'KEYWORD') {
+        $("#dfr_value_str").show();
+        $("#dfr_value_bool").hide();
+        $("#dfr_value_pg").hide();
+        $("#dfr_value_wf").hide();
+      } else {
+        $("#dfr_value_str").hide();
+        $("#dfr_value_bool").hide();
+        $("#dfr_value_pg").hide();
+        $("#dfr_value_wf").hide();
+      }
+    }
+    
+    // Set value type by selected default type 
+    valueType($("#dfr_action").attr('value'));
+    
+    // Set value type when change type
+    $("#dfr_action").bind("change", function() {
+    	valueType($(this).attr('value'));
+    });
+  </script>
 </body>
 </html>

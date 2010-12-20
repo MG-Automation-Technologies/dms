@@ -27,9 +27,9 @@
         <input type="hidden" name="df_id" value="${df.id}"/>
         <table class="form" width="345px" align="center">
           <tr>
-            <td nowrap="nowrap">Type</td>
+            <td style="width: 32px;">Type</td>
             <td>
-              <select name="df_type">
+              <select name="df_type" id="df_type">
                 <c:forEach var="tp" items="${types}">
                   <c:choose>
                     <c:when test="${tp == df.type}">
@@ -44,11 +44,25 @@
             </td>
           </tr>
           <tr>
-            <td>Value</td>
-             <td><input name="df_value" value="${df.value}" size="48"/></td>
+            <td style="width: 32px;">Value</td>
+             <td>
+               <input name="df_value_path" id="df_value_path" value="${df.value}" size="45"/>
+               <select name="df_value_mime" id="df_value_mime">
+                <c:forEach var="mt" items="${mimes}">
+                  <c:choose>
+                    <c:when test="${mt.name == df.value}">
+                      <option value="${mt.name}" selected="selected">${mt.name}</option>
+                    </c:when>
+                    <c:otherwise>
+                      <option value="${mt.name}">${mt.name}</option>
+                    </c:otherwise>
+                  </c:choose>
+                </c:forEach>
+              </select>
+             </td>
           </tr>
           <tr>
-            <td>Active</td>
+            <td style="width: 32px;">Active</td>
             <td>
               <c:choose>
                 <c:when test="${df.active}">
@@ -75,5 +89,24 @@
       <div class="error"><h3>Only admin users allowed</h3></div>
     </c:otherwise>
   </c:choose>
+  <script type="text/javascript">
+    function valueType(type) {
+      if (type == 'MIME_TYPE') {
+        $("#df_value_path").hide();
+        $("#df_value_mime").show();
+      } else {
+        $("#df_value_path").show();
+        $("#df_value_mime").hide();
+      }
+    }
+    
+    // Set value type by selected default type 
+    valueType($("#df_type").attr('value'));
+    
+    // Set value type when change type
+    $("#df_type").bind("change", function() {
+    	valueType($(this).attr('value'));
+    });
+  </script>
 </body>
 </html>
