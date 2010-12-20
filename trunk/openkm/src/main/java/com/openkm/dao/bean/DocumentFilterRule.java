@@ -26,17 +26,14 @@ import java.io.Serializable;
 public class DocumentFilterRule implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	public static final String FIELD_FROM = "FROM";
-	public static final String FIELD_TO = "TO";
-	public static final String FIELD_SUBJECT = "SUBJECT";
-	public static final String FIELD_CONTENT = "CONTENT";
-	public static final String FIELD_ATTACHMENT = "ATTACHMENT";
-	
-	public static final String OPERATION_EQUALS = "EQUALS";
-	public static final String OPERATION_NOT_EQUALS = "NOT_EQUALS";
-	public static final String OPERATION_CONTAINS = "CONTAINS";
-	public static final String OPERATION_ENDS_WITH = "ENDS_WITH";
-	public static final String OPERATION_STARTS_WITH = "STARTS_WITH";
+	public static final String ACTION_WIZARD_PROPGRP = "WIZARD_PROPGRP";
+	public static final String ACTION_WIZARD_WORKFLOW = "WIZARD_WORKFLOW";
+	public static final String ACTION_WIZARD_CATEGORY = "WIZARD_CATEGORY";
+	public static final String ACTION_WIZARD_KEYWORD = "WIZARD_KEYWORD";
+	public static final String ACTION_METADATA = "METADATA";
+	public static final String ACTION_WORKFLOW = "WORKFLOW";
+	public static final String ACTION_CATEGORY = "CATEGORY";
+	public static final String ACTION_KEYWORD = "KEYWORD";
 	
 	private int id;
 	private String action;

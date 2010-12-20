@@ -27,9 +27,13 @@ import java.util.Set;
 
 public class DocumentFilter implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	public static final String TYPE_PATH = "PATH";
+	public static final String TYPE_MIME_TYPE = "MIME_TYPE";
+	
 	private int id;
 	private String type;
-	private String filter;
+	private String value;
 	private boolean active = false;
 	private Set<DocumentFilterRule> filterRules = new HashSet<DocumentFilterRule>();
 
@@ -49,12 +53,12 @@ public class DocumentFilter implements Serializable {
 		this.type = type;
 	}
 
-	public String getFilter() {
-		return filter;
+	public String getValue() {
+		return value;
 	}
 
-	public void setFilter(String filter) {
-		this.filter = filter;
+	public void setValue(String value) {
+		this.value = value;
 	}
 
 	public boolean isActive() {
@@ -78,7 +82,7 @@ public class DocumentFilter implements Serializable {
 		sb.append("{");
 		sb.append("id="); sb.append(id);
 		sb.append(", type="); sb.append(type);
-		sb.append(", filter="); sb.append(filter);
+		sb.append(", value="); sb.append(value);
 		sb.append(", active="); sb.append(active);
 		sb.append(", filterRules="); sb.append(filterRules);
 		sb.append("}");
