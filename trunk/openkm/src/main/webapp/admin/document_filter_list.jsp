@@ -17,7 +17,7 @@
       <h1>Document filters</h1>
       <table class="results" width="70%">
         <tr>
-          <th>Type</th><th>Filter</th><th>Active</th>
+          <th>Type</th><th>Value</th><th>Active</th>
           <th width="75px">
             <c:url value="DocumentFilter" var="urlCreate">
               <c:param name="action" value="create"/>
@@ -34,12 +34,12 @@
             <c:param name="action" value="delete"/>
             <c:param name="df_id" value="${df.id}"/>
           </c:url>
-          <c:url value="MailAccount" var="urlRule">
+          <c:url value="DocumentFilter" var="urlRule">
             <c:param name="action" value="ruleList"/>
             <c:param name="df_id" value="${df.id}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td>${df.type}</td><td>${df.filter}</td>
+            <td>${df.type}</td><td>${df.value}</td>
             <td align="center">
               <c:choose>
                 <c:when test="${df.active}">
