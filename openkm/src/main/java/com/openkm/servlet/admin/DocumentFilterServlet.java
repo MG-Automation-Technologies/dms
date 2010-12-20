@@ -36,10 +36,9 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.DocumentFilterDAO;
+import com.openkm.dao.MimeTypeDAO;
 import com.openkm.dao.bean.DocumentFilter;
 import com.openkm.dao.bean.DocumentFilterRule;
-import com.openkm.dao.bean.MailAccount;
-import com.openkm.dao.bean.MailFilterRule;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
@@ -50,10 +49,11 @@ import com.openkm.util.WebUtils;
 public class DocumentFilterServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(DocumentFilterServlet.class);
-	String fields[] = { MailFilterRule.FIELD_FROM, MailFilterRule.FIELD_TO, MailFilterRule.FIELD_SUBJECT,
-			MailFilterRule.FIELD_CONTENT };
-	String operations[] = { MailFilterRule.OPERATION_CONTAINS, MailFilterRule.OPERATION_EQUALS };
-	String protocols[] = { MailAccount.PROTOCOL_POP3, MailAccount.PROTOCOL_IMAP, MailAccount.PROTOCOL_IMAPS };
+	String types [] = { DocumentFilter.TYPE_PATH, DocumentFilter.TYPE_MIME_TYPE };
+	String actions[] = { DocumentFilterRule.ACTION_WIZARD_PROPGRP, DocumentFilterRule.ACTION_WIZARD_WORKFLOW,
+			DocumentFilterRule.ACTION_WIZARD_CATEGORY, DocumentFilterRule.ACTION_WIZARD_KEYWORD,
+			DocumentFilterRule.ACTION_METADATA, DocumentFilterRule.ACTION_WORKFLOW, 
+			DocumentFilterRule.ACTION_CATEGORY, DocumentFilterRule.ACTION_KEYWORD };
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
@@ -124,9 +124,20 @@ public class DocumentFilterServlet extends BaseServlet {
 		
 		if (WebUtils.getBoolean(request, "persist")) {
 			DocumentFilter df = new DocumentFilter();
-			df.setFilter(WebUtils.getString(request, "df_filter"));
 			df.setType(WebUtils.getString(request, "df_type"));
+			df.setValue(WebUtils.getString(request, "df_value"));
 			df.setActive(WebUtils.getBoolean(request, "df_active"));
+			
+			if (DocumentFilter.TYPE_MIME_TYPE.equals(df.getType())) {
+				if (MimeTypeDAO.findByName(df.getValue()) == null) {
+					throw new DatabaseException("Mime type not registered");
+				}
+			} else if (DocumentFilter.TYPE_PATH.equals(df.getType())) {
+				if (!session.getRootNode().hasNode(df.getValue())) {
+					throw new RepositoryException("Node path not found");
+				}
+			}
+			
 			DocumentFilterDAO.create(df);
 			
 			// Activity log
@@ -136,6 +147,7 @@ public class DocumentFilterServlet extends BaseServlet {
 			DocumentFilter df = new DocumentFilter();
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
+			sc.setAttribute("types", types);
 			sc.setAttribute("df", df);
 			sc.getRequestDispatcher("/admin/document_filter_edit.jsp").forward(request, response);
 		}
@@ -151,15 +163,23 @@ public class DocumentFilterServlet extends BaseServlet {
 		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
-			int dfId = WebUtils.getInt(request, "df_id");
-			DocumentFilter df = DocumentFilterDAO.findByPk(dfId);
+			DocumentFilter df = new DocumentFilter();
+			df.setId(WebUtils.getInt(request, "df_id"));
+			df.setType(WebUtils.getString(request, "df_type"));
+			df.setValue(WebUtils.getString(request, "df_value"));
+			df.setActive(WebUtils.getBoolean(request, "df_active"));
 			
-			if (df != null) {
-				df.setFilter(WebUtils.getString(request, "df_filter"));
-				df.setType(WebUtils.getString(request, "df_type"));
-				df.setActive(WebUtils.getBoolean(request, "df_active"));
-				DocumentFilterDAO.update(df);
+			if (DocumentFilter.TYPE_MIME_TYPE.equals(df.getType())) {
+				if (MimeTypeDAO.findByName(df.getValue()) == null) {
+					throw new DatabaseException("Mime type not registered");
+				}
+			} else if (DocumentFilter.TYPE_PATH.equals(df.getType())) {
+				if (!session.getRootNode().hasNode(df.getValue())) {
+					throw new RepositoryException("Node path not found");
+				}
 			}
+			
+			DocumentFilterDAO.update(df);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "ADMIN_DOCUMENT_FILTER_EDIT", Integer.toString(df.getId()), df.toString());
@@ -168,6 +188,7 @@ public class DocumentFilterServlet extends BaseServlet {
 			int dfId = WebUtils.getInt(request, "df_id");
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
+			sc.setAttribute("types", types);
 			sc.setAttribute("df", DocumentFilterDAO.findByPk(dfId));
 			sc.getRequestDispatcher("/admin/document_filter_edit.jsp").forward(request, response);
 		}
@@ -193,6 +214,7 @@ public class DocumentFilterServlet extends BaseServlet {
 			int dfId = WebUtils.getInt(request, "df_id");
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
+			sc.setAttribute("types", types);
 			sc.setAttribute("df", DocumentFilterDAO.findByPk(dfId));
 			sc.getRequestDispatcher("/admin/document_filter_edit.jsp").forward(request, response);
 		}
@@ -245,8 +267,7 @@ public class DocumentFilterServlet extends BaseServlet {
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("dfr", dfr);
-			sc.setAttribute("fields", fields);
-			sc.setAttribute("operations", operations);
+			sc.setAttribute("actions", actions);
 			sc.getRequestDispatcher("/admin/document_filter_rule_edit.jsp").forward(request, response);
 		}
 		
@@ -282,8 +303,7 @@ public class DocumentFilterServlet extends BaseServlet {
 			sc.setAttribute("persist", true);
 			sc.setAttribute("df_id", dfId);
 			sc.setAttribute("dfr", DocumentFilterDAO.findRuleByPk(dfrId));
-			sc.setAttribute("fields", fields);
-			sc.setAttribute("operations", operations);
+			sc.setAttribute("actions", actions);
 			sc.getRequestDispatcher("/admin/document_filter_rule_edit.jsp").forward(request, response);
 		}
 		
@@ -311,8 +331,7 @@ public class DocumentFilterServlet extends BaseServlet {
 			sc.setAttribute("persist", true);
 			sc.setAttribute("df_id", dfId);
 			sc.setAttribute("dfr", DocumentFilterDAO.findRuleByPk(dfrId));
-			sc.setAttribute("fields", fields);
-			sc.setAttribute("operations", operations);
+			sc.setAttribute("actions", actions);
 			sc.getRequestDispatcher("/admin/document_filter_rule_edit.jsp").forward(request, response);
 		}
 		
