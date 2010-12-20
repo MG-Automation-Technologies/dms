@@ -26,11 +26,11 @@ import java.io.Serializable;
 public class DocumentFilterRule implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	public static final String ACTION_WIZARD_PROPGRP = "WIZARD_PROPGRP";
+	public static final String ACTION_WIZARD_PROPERTY_GROUP = "WIZARD_PROPERTY_GROUP";
 	public static final String ACTION_WIZARD_WORKFLOW = "WIZARD_WORKFLOW";
 	public static final String ACTION_WIZARD_CATEGORY = "WIZARD_CATEGORY";
 	public static final String ACTION_WIZARD_KEYWORD = "WIZARD_KEYWORD";
-	public static final String ACTION_METADATA = "METADATA";
+	public static final String ACTION_PROPERTY_GROUP = "PROPERTY_GROUP";
 	public static final String ACTION_WORKFLOW = "WORKFLOW";
 	public static final String ACTION_CATEGORY = "CATEGORY";
 	public static final String ACTION_KEYWORD = "KEYWORD";
