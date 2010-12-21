@@ -418,7 +418,7 @@ public class DirectDocumentModule implements DocumentModule {
 			Collection<String> keywords = doc.getKeywords() != null ? doc.getKeywords() : new ArrayList<String>(); // Adding submitted keywords
 	        if (!Config.KEA_MODEL_FILE.equals("")) {
 		        MetadataExtractor mdExtractor = new MetadataExtractor(Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER);
-		        MetadataDTO mdDTO = mdExtractor.extract(is, tmpKea);
+		        MetadataDTO mdDTO = mdExtractor.extract(tmpKea);
 		        log.info("Creator: "+mdDTO.getCreator());
 		        log.info("Title: "+mdDTO.getTitle());
 		        log.info("Mime type: "+mdDTO.getMimeType());
@@ -438,7 +438,7 @@ public class DirectDocumentModule implements DocumentModule {
 		        	}
 		        }
 	        }
-	        // Ends KEA
+	        // End KEA
 	        
 			parentNode = session.getRootNode().getNode(parent.substring(1));
 			Node documentNode = create(session, parentNode, name, null /* doc.getTitle() */, mimeType,
@@ -449,13 +449,13 @@ public class DirectDocumentModule implements DocumentModule {
 			
 			// Set returned document properties
 			newDocument = getProperties(session, doc.getPath());
-
+			
 			// Check subscriptions
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CREATE", null);
 			
 			// Check scripting
 			DirectScriptingModule.checkScripts(session, parentNode, documentNode, "CREATE_DOCUMENT");
-
+			
 			// Activity log
 			UserActivity.log(session.getUserID(), "CREATE_DOCUMENT", doc.getPath(), mimeType+", "+size);
 		} catch (javax.jcr.ItemExistsException e) {
