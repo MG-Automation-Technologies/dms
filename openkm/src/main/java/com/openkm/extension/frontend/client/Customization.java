@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.openkm.extension.frontend.client.widget.client.metromusa.MetromUsa;
+import com.openkm.extension.frontend.client.widget.digitalsignature.DigitalSignature;
 import com.openkm.extension.frontend.client.widget.messaging.MessagingToolBarBox;
 import com.openkm.extension.frontend.client.widget.preview.AutocadPreview;
 import com.openkm.extension.frontend.client.widget.stamp.StampToolBarButton;
@@ -90,6 +91,9 @@ public class Customization {
 		}
 		if (StampToolBarButton.isRegistered(uuidList)) {
 			extensions.addAll(new StampToolBarButton(uuidList).getExtensions());
+		}
+		if (DigitalSignature.isRegistered(uuidList)) {
+			extensions.addAll(new DigitalSignature(uuidList).getExtensions());
 		}
 		
 		return extensions;

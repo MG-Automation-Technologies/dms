@@ -56,6 +56,8 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	public static final int ACTION_INSERT = 0;
 	public static final int ACTION_UPDATE = 1;
 	public static final int ACTION_FOLDER = 2;
+	public static final int ACTION_DIGITAL_SIGNATURE_INSERT = 3;
+	public static final int ACTION_DIGITAL_SIGNATURE_UPDATE = 4;
 	
 	/**
 	 * State definitions
