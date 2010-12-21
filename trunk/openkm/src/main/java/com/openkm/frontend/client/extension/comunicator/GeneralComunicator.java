@@ -183,5 +183,13 @@ public class GeneralComunicator {
 	public static void openAllFolderPath(String path, String docPath) {
 		CommonUI.openAllFolderPath(path, docPath);
 	}
-
+	
+	/**
+	 * getAppContext
+	 * 
+	 * @return
+	 */
+	public static String getAppContext() {
+		return Main.CONTEXT;
+	}
 }

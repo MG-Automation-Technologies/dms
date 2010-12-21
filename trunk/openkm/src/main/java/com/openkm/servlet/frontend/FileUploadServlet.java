@@ -1,5 +1,7 @@
 package com.openkm.servlet.frontend;
 
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -43,6 +45,7 @@ import com.openkm.core.VirusDetectedException;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.widget.upload.FancyFileUpload;
 import com.openkm.util.FileUtils;
+import com.openkm.util.SecureStore;
 import com.openkm.util.impexp.ImpExpStats;
 import com.openkm.util.impexp.RepositoryImporter;
 import com.openkm.util.impexp.TextInfoDecorator;
@@ -51,12 +54,7 @@ import de.schlichtherle.io.File;
 import de.schlichtherle.io.FileOutputStream;
 
 /**
- * Servlet Class
- * 
- * @web.servlet name="FileUploadServlet" display-name="Name for FileUploadServlet"
- *              description="Description for FileUploadServlet"
- * @web.servlet-mapping url-pattern="/FileUploadServlet"
- * @web.servlet-init-param name="A parameter" value="A value"
+ * FileUploadServlet
  * 
  * @author pavila
  *
@@ -86,6 +84,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 		String folder = null;
 		PrintWriter out = null;
 		String uploadedDocPath = null;
+		java.io.File tmp = null;
 		updateSessionManager(request);
 		
 		try {
@@ -199,6 +198,37 @@ public class FileUploadServlet extends OKMHttpServlet {
 					
 					OKMNotification.getInstance().notify(null, uploadedDocPath, userNames, message, false);
 				}
+			} else {
+				// Used only when document is digital signed ( form in that case is not multiplart it's a normal post )
+				action = (request.getParameter("action")!=null?Integer.parseInt(request.getParameter("action")):-1);
+				if (action == FancyFileUpload.ACTION_DIGITAL_SIGNATURE_INSERT || 
+					action == FancyFileUpload.ACTION_DIGITAL_SIGNATURE_UPDATE) {
+					path = request.getParameter("path");
+					String data = request.getParameter("data");
+					tmp = java.io.File.createTempFile("okm", ".tmp");
+					FileOutputStream fos = new FileOutputStream(tmp);
+					BufferedOutputStream bos = new BufferedOutputStream(fos);
+					bos.write(SecureStore.b64Decode(data));
+					bos.flush();
+					bos.close();
+					fos.flush();
+					fos.close();
+					FileInputStream fis = new FileInputStream(tmp);
+					switch (action) {
+						case FancyFileUpload.ACTION_DIGITAL_SIGNATURE_INSERT:
+							Document newDoc = new Document();
+							path = path.substring(0,path.lastIndexOf(".")+1) + "pdf";
+							newDoc.setPath(path);
+							OKMDocument.getInstance().create(null, newDoc, fis);
+							break;
+						
+						case FancyFileUpload.ACTION_DIGITAL_SIGNATURE_UPDATE:
+							OKMDocument.getInstance().checkout(null, path);
+							OKMDocument.getInstance().setContent(null, path, fis);
+							OKMDocument.getInstance().checkin(null, path, "Signed");
+							break;
+					}
+				}
 			}
 		} catch (AccessDeniedException e) {
 			log.warn(e.getMessage(), e);
@@ -234,6 +264,9 @@ public class FileUploadServlet extends OKMHttpServlet {
 			log.error(e.getMessage(), e);
 			out.print(e.toString());
 		} finally {
+			if (tmp!=null) {
+				tmp.delete();
+			}
 			IOUtils.closeQuietly(is);
 			out.flush();
 			IOUtils.closeQuietly(out);
