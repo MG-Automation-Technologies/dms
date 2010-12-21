@@ -26,7 +26,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -69,8 +68,6 @@ public class MetadataExtractor {
 
     /**
      * MetadataExtractor
-     * 
-     * @throws MetadataExtractionException
      */
     public MetadataExtractor() throws MetadataExtractionException {
         mdDTO = new MetadataDTO();
@@ -79,20 +76,14 @@ public class MetadataExtractor {
 
     /**
      * MetadataExtractor
-     * 
-     * @param subjectLimit
-     * @throws MetadataExtractionException
      */
     public MetadataExtractor(int subjectLimit) throws MetadataExtractionException {
         mdDTO = new MetadataDTO();
         subjectExtractor = new SubjectExtractor(subjectLimit);
     }
 
-
     /**
      * getTempFile
-     * 
-     * @return
      */
     public File getTempFile() {
         return tempFile;
@@ -100,24 +91,19 @@ public class MetadataExtractor {
 
     /**
      * getOriginalFileName
-     * 
-     * @return
      */
     public String getOriginalFileName() {
         return mdDTO.getFileName();
     }
 
-
     /**
      * getMdDTO
-     * 
-     * @return
      */
     public MetadataDTO getMdDTO() {
         return mdDTO;
     }
 
-    public MetadataDTO extract(InputStream is, File tempFile) throws MetadataExtractionException {
+    public MetadataDTO extract(File tempFile) throws MetadataExtractionException {
         try {
         	this.tempFile = tempFile;
             loadRDF();
@@ -136,7 +122,7 @@ public class MetadataExtractor {
      * loadRDF
      */
     @SuppressWarnings("unchecked")
-	public void loadRDF() {
+	private void loadRDF() {
         MimeTypeIdentifier identifier = new MagicMimeTypeIdentifier();
         ExtractorRegistry extractorRegistry = new DefaultExtractorRegistry();
         String mimeType;
@@ -148,6 +134,7 @@ public class MetadataExtractor {
             byte[] bytes = IOUtil.readBytes(bis, identifier.getMinArrayLength());
             bis.close();
             mimeType = identifier.identify(bytes, tempFile.getPath(), null);
+            
             if (mimeType == null) {
                 throw new MetadataExtractionException("Unable to extract MimeType for: " + mdDTO.getFileName());
             } else {
@@ -175,8 +162,6 @@ public class MetadataExtractor {
             fis = new FileInputStream(tempFile);
             bis = new BufferedInputStream(fis, 8192);
             extractor.extract(uri, bis, null, mimeType, rdf);
-
-
         } catch (FileNotFoundException e) {
             log.error("Unable to locate the workspace file for: " + mdDTO.getFileName(), e);
         } catch (IOException e) {
@@ -186,25 +171,24 @@ public class MetadataExtractor {
         } catch (ExtractorException e) {
             log.error("Aperture extraction error: " + e.getMessage(), e);
         }
-
     }
 
     /**
      * extractMetadataFromRDF
      */
     @SuppressWarnings("unchecked")
-	public void extractMetadataFromRDF() {
-
+	private void extractMetadataFromRDF() {
         // set up secondary RDF container for creator
         String creator = "";
         Collection<Node> creators = rdf.getAll(NCO.creator);
+        
         for (Iterator<Node> iterator = creators.iterator(); iterator.hasNext();) {
             Node node = iterator.next();
             RDFContainer container = new RDFContainerImpl(rdf.getModel(), node.asURI());
             creator = container.getString(NCO.fullname);
             if (creator!=null && !creator.equals("")) break;
         }
-
+        
         // copy values to metadataDTO
         mdDTO.setTitle(rdf.getString(NIE.title));
         mdDTO.setCreator(creator);
@@ -218,7 +202,7 @@ public class MetadataExtractor {
      * 
      * @throws MetadataExtractionException
      */
-    public void extractSuggestedSubjects() throws MetadataExtractionException {
+    private void extractSuggestedSubjects() throws MetadataExtractionException {
         List<String> sugSubjects = subjectExtractor.extractSuggestedSubjects(rdf.getString(NIE.plainTextContent));
         Iterator<String> iter = sugSubjects.iterator();
         while (iter.hasNext()) {
