@@ -79,29 +79,24 @@ public class ConverterServlet extends OKMHttpServlet {
 				String fileName = FileUtils.getName(doc.getPath());
 				String mimeType = null;
 				DocConverter converter = DocConverter.getInstance();
+				
+				// Save content to temporary file
 				tmp = File.createTempFile("okm", "."+FileUtils.getFileExtension(fileName));
 				is = OKMDocument.getInstance().getContent(null, path, false);
 				
 				// Convert to DXF
-				if (toPdf || toDxf && !Config.SYSTEM_DWG2DXF.equals("")) {
+				if (toDxf && !Config.SYSTEM_DWG2DXF.equals("")) {
 					if (!doc.getMimeType().equals(DocConverter.DXF)) {
-						if (dxfCache.exists()) {
-							is.close();
-							is = new FileInputStream(dxfCache);
-						} else {
-							if (doc.getMimeType().equals(DocConverter.DWG)) {
-								FileOutputStream os = new FileOutputStream(tmp);
-								IOUtils.copy(is, os);
-								os.flush();
-								os.close();
-								converter.dwg2dxf(tmp, dxfCache);
-							}
-							
-							is.close();
-							is = new FileInputStream(dxfCache);
+						if (!dxfCache.exists() && doc.getMimeType().equals(DocConverter.DWG)) {
+							FileOutputStream fos = new FileOutputStream(tmp);
+							IOUtils.copy(is, fos);
+							fos.flush();
+							fos.close();
+							converter.dwg2dxf(tmp, dxfCache);
 						}
+						is.close();
+						is = new FileInputStream(dxfCache);
 					}
-					
 					mimeType = DocConverter.DXF;
 					fileName = FileUtils.getFileName(fileName)+".dxf";
 				}
@@ -109,55 +104,47 @@ public class ConverterServlet extends OKMHttpServlet {
 				// Convert to PDF
 				if (toPdf || toSwf && !Config.SYSTEM_PDF2SWF.equals("")) {
 					if (!doc.getMimeType().equals(DocConverter.PDF)) {
-						if (pdfCache.exists()) {
-							is.close();
-							is = new FileInputStream(pdfCache);
-						} else {
+						if (!pdfCache.exists()) {							
 							if (doc.getMimeType().startsWith("image/")) {
 								converter.img2pdf(is, doc.getMimeType(), pdfCache);
 							} else {
 								converter.doc2pdf(is, doc.getMimeType(), pdfCache);
 							}
-							
-							is.close();
-							is = new FileInputStream(pdfCache);
 						}
-					}
-					
+						is.close();
+						is = new FileInputStream(pdfCache);
+					} 
 					mimeType = DocConverter.PDF;
 					fileName = FileUtils.getFileName(fileName)+".pdf";
 				}
 				
 				// Convert to SWF
 				if (toSwf && !Config.SYSTEM_PDF2SWF.equals("")) {
-					if (swfCache.exists()) {
-						is.close();
-						is = new FileInputStream(swfCache);
-					} else {
+					if (!swfCache.exists()) {
 						try {
 							if (doc.getMimeType().equals(DocConverter.PDF)) {
-								FileOutputStream os = new FileOutputStream(tmp);
-								IOUtils.copy(is, os);
-								os.flush();
-								os.close();
+								FileOutputStream fos = new FileOutputStream(tmp);
+								IOUtils.copy(is, fos);
+								fos.flush();
+								fos.close();
 								converter.pdf2swf(tmp, swfCache);
 							} else {
 								converter.pdf2swf(pdfCache, swfCache);
 							}
-							
 							is.close();
 							is = new FileInputStream(swfCache);
 						} catch (Exception e) {
 							log.error(e.getMessage(), e);
 							is = DownloadServlet.class.getResourceAsStream("preview_problem.swf");
 						}
+					} else {
+						is = new FileInputStream(swfCache);
 					}
-					
 					mimeType = DocConverter.SWF;
 					fileName = FileUtils.getFileName(fileName)+".swf";
 				}
 				
-				WebUtils.sendFile(request, response, fileName, mimeType, true, is);
+				WebUtils.sendFile(request, response, fileName, mimeType, false, is);
 				is.close();
 			}
 		} catch (PathNotFoundException e) {
