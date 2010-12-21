@@ -31,12 +31,9 @@ import java.util.Iterator;
  * MetadataDTO
  * 
  * @author jllort
- *
  */
 public class MetadataDTO implements Serializable {
-
 	private static final long serialVersionUID = 2530668808598426112L;
-	
 	private String fileName;
     private String tempFileName;
     private String mimeType = "";
@@ -147,7 +144,6 @@ public class MetadataDTO implements Serializable {
         }
     }
 
-
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -200,5 +196,4 @@ public class MetadataDTO implements Serializable {
         }
         return str.toString();
     }
-
 }
