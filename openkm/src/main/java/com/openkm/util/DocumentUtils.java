@@ -60,14 +60,14 @@ public class DocumentUtils {
 				if (match) {
 					for (DocumentFilterRule dfr : df.getFilterRules()) {
 						if (dfr.isActive()) {
-							if (DocumentFilterRule.ACTION_PROPERTY_GROUP.equals(dfr.getAction())) {
+							if (DocumentFilterRule.ACTION_ASSIGN_PROPERTY_GROUP.equals(dfr.getAction())) {
 								try {
 									log.info("ACTION_PROPERTY_GROUP");
 									BasePropertyGroupModule.addGroup(session, node, dfr.getValue());
 								} catch (Exception e) {
 									JCRUtils.discardsPendingChanges(node);
 								}
-							} else if (DocumentFilterRule.ACTION_WORKFLOW.equals(dfr.getAction())) {
+							} else if (DocumentFilterRule.ACTION_ASSIGN_WORKFLOW.equals(dfr.getAction())) {
 								JbpmContext jbpmContext = null;
 								
 								try {
@@ -81,14 +81,14 @@ public class DocumentUtils {
 										jbpmContext.close();
 									}
 								}
-							} else if (DocumentFilterRule.ACTION_CATEGORY.equals(dfr.getAction())) {
+							} else if (DocumentFilterRule.ACTION_ADD_CATEGORY.equals(dfr.getAction())) {
 								try {
 									log.info("ACTION_CATEGORY {}", dfr.getValue());
 									BasePropertyModule.addCategory(session, node, dfr.getValue());
 								} catch (Exception e) {
 									JCRUtils.discardsPendingChanges(node);
 								}
-							} else if (DocumentFilterRule.ACTION_KEYWORD.equals(dfr.getAction())) {
+							} else if (DocumentFilterRule.ACTION_ADD_KEYWORD.equals(dfr.getAction())) {
 								try {
 									log.info("ACTION_KEYWORD: {}", dfr.getValue());
 									BasePropertyModule.addKeyword(session, node, dfr.getValue());
