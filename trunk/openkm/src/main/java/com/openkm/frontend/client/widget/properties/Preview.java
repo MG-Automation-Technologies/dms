@@ -84,7 +84,7 @@ public class Preview extends Composite {
 		space.setVisible(false);
 		video.setVisible(false);
 		if (previewAvailable) {
-			String url = RPCService.ConverterServlet +"?toSwf=1&uuid=" + URL.encodeComponent(Uuid);
+			String url = RPCService.ConverterServlet +"?inline=true&toSwf=true&uuid=" + URL.encodeComponent(Uuid);
 			text.setHTML("<div id=\"pdfviewercontainer\"></div>\n"); // needed for rewriting purpose
 			if (Main.get().workspaceUserProperties.getWorkspace().getPreviewer().equals("flexpaper")) {
 				if (Main.get().workspaceUserProperties.getWorkspace().isPrintPreview()) {
