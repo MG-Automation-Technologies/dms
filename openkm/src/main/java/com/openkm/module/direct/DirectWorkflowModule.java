@@ -55,13 +55,13 @@ import com.openkm.bean.workflow.ProcessDefinition;
 import com.openkm.bean.workflow.ProcessInstance;
 import com.openkm.bean.workflow.TaskInstance;
 import com.openkm.bean.workflow.Token;
-import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.JcrSessionManager;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.WorkflowException;
 import com.openkm.module.WorkflowModule;
+import com.openkm.module.base.BaseWorkflowModule;
 import com.openkm.util.FormUtils;
 import com.openkm.util.JBPMUtils;
 import com.openkm.util.JCRUtils;
@@ -299,36 +299,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			jbpmContext.setActorId(session.getUserID());
-			GraphSession graphSession = jbpmContext.getGraphSession();
-			Map<String, Object> hm = new HashMap<String, Object>();
-			hm.put(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_UUID, uuid);
-			
-			for (FormElement fe : variables) {
-				hm.put(fe.getName(), fe);
-			}
-			
-			org.jbpm.graph.def.ProcessDefinition pd = graphSession.getProcessDefinition(processDefinitionId);
-			org.jbpm.graph.exe.ProcessInstance pi = pd.createProcessInstance(hm);
-			
-			if (pi != null) {
-				org.jbpm.taskmgmt.exe.TaskMgmtInstance tmi = pi.getTaskMgmtInstance();
-				
-				// http://community.jboss.org/thread/115182
-				if (tmi.getTaskMgmtDefinition().getStartTask() != null) {
-					org.jbpm.taskmgmt.exe.TaskInstance ti = tmi.createStartTaskInstance();
-					
-					if (Config.WORKFLOW_START_TASK_AUTO_RUN) {
-						ti.start();
-						ti.end();
-					}
-				} else {
-					pi.getRootToken().signal();
-				}
-				
-				jbpmContext.save(pi);
-				vo = WorkflowUtils.copy(pi);
-			}
+			vo = BaseWorkflowModule.runProcessDefinition(session, jbpmContext, processDefinitionId, uuid, variables);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "RUN_PROCESS_DEFINITION", ""+processDefinitionId, variables.toString());
