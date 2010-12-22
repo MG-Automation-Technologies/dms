@@ -139,7 +139,7 @@ public class Lang {
 		} else if (LANG_co_ES.equalsIgnoreCase(lang) || LANG_co_ES.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 //			hLang = Lang_co_ES.lang;
 		} else if (LANG_ru_RU.equalsIgnoreCase(lang) || LANG_ru_RU.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			hLang = Lang_ru_RU.lang;
+//			hLang = Lang_ru_RU.lang;
 		} else if (LANG_bs_BA.equalsIgnoreCase(lang) || LANG_bs_BA.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 //			hLang = Lang_bs_BA.lang;
 		} else if (LANG_cs_CZ.equalsIgnoreCase(lang) || LANG_cs_CZ.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
