@@ -65,13 +65,18 @@ public class MetadataExtractor {
     private File tempFile;
     private RDFContainer rdf;
     private SubjectExtractor subjectExtractor;
+    private boolean se = true;
 
     /**
      * MetadataExtractor
      */
-    public MetadataExtractor() throws MetadataExtractionException {
+    public MetadataExtractor(boolean se) throws MetadataExtractionException {
         mdDTO = new MetadataDTO();
-        subjectExtractor = new SubjectExtractor();
+        this.se = se;
+        
+        if (se) {
+        	subjectExtractor = new SubjectExtractor();
+        }
     }
 
     /**
@@ -108,7 +113,11 @@ public class MetadataExtractor {
         	this.tempFile = tempFile;
             loadRDF();
             extractMetadataFromRDF();
-            extractSuggestedSubjects();
+            
+            if (se) {
+            	extractSuggestedSubjects();
+            }
+            
             rdf.dispose();
             return mdDTO;
         } catch (MetadataExtractionException e) {
