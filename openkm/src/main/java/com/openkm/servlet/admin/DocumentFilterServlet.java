@@ -56,8 +56,8 @@ public class DocumentFilterServlet extends BaseServlet {
 	String types [] = { DocumentFilter.TYPE_PATH, DocumentFilter.TYPE_MIME_TYPE };
 	String actions[] = { DocumentFilterRule.ACTION_WIZARD_PROPERTY_GROUP, DocumentFilterRule.ACTION_WIZARD_WORKFLOW,
 			DocumentFilterRule.ACTION_WIZARD_CATEGORY, DocumentFilterRule.ACTION_WIZARD_KEYWORD,
-			DocumentFilterRule.ACTION_PROPERTY_GROUP, DocumentFilterRule.ACTION_WORKFLOW, 
-			DocumentFilterRule.ACTION_CATEGORY, DocumentFilterRule.ACTION_KEYWORD,
+			DocumentFilterRule.ACTION_ASSIGN_PROPERTY_GROUP, DocumentFilterRule.ACTION_ASSIGN_WORKFLOW, 
+			DocumentFilterRule.ACTION_ADD_CATEGORY, DocumentFilterRule.ACTION_ADD_KEYWORD,
 			DocumentFilterRule.ACTION_EXTRACT_METADATA };
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
@@ -275,17 +275,17 @@ public class DocumentFilterServlet extends BaseServlet {
 			dfr.setActive(WebUtils.getBoolean(request, "dfr_active"));
 			
 			if (DocumentFilterRule.ACTION_WIZARD_PROPERTY_GROUP.equals(dfr.getAction()) || 
-					DocumentFilterRule.ACTION_PROPERTY_GROUP.equals(dfr.getAction())) {
+					DocumentFilterRule.ACTION_ASSIGN_PROPERTY_GROUP.equals(dfr.getAction())) {
 				dfr.setValue(WebUtils.getString(request, "dfr_value_pg"));
 			} else if (DocumentFilterRule.ACTION_WIZARD_WORKFLOW.equals(dfr.getAction()) || 
-					DocumentFilterRule.ACTION_WORKFLOW.equals(dfr.getAction())) {
+					DocumentFilterRule.ACTION_ASSIGN_WORKFLOW.equals(dfr.getAction())) {
 				dfr.setValue(WebUtils.getString(request, "dfr_value_wf"));
 			} else if (DocumentFilterRule.ACTION_WIZARD_CATEGORY.equals(dfr.getAction()) || 
 					DocumentFilterRule.ACTION_WIZARD_KEYWORD.equals(dfr.getAction()) ||
 					DocumentFilterRule.ACTION_EXTRACT_METADATA.equals(dfr.getAction())) {
 				dfr.setValue(Boolean.toString(WebUtils.getBoolean(request, "dfr_value_bool")));
-			} else if (DocumentFilterRule.ACTION_CATEGORY.equals(dfr.getAction()) || 
-					DocumentFilterRule.ACTION_KEYWORD.equals(dfr.getAction())) {
+			} else if (DocumentFilterRule.ACTION_ADD_CATEGORY.equals(dfr.getAction()) || 
+					DocumentFilterRule.ACTION_ADD_KEYWORD.equals(dfr.getAction())) {
 				dfr.setValue(WebUtils.getString(request, "dfr_value_str"));
 			}
 			
@@ -327,17 +327,17 @@ public class DocumentFilterServlet extends BaseServlet {
 				dfr.setActive(WebUtils.getBoolean(request, "dfr_active"));
 				
 				if (DocumentFilterRule.ACTION_WIZARD_PROPERTY_GROUP.equals(dfr.getAction()) || 
-						DocumentFilterRule.ACTION_PROPERTY_GROUP.equals(dfr.getAction())) {
+						DocumentFilterRule.ACTION_ASSIGN_PROPERTY_GROUP.equals(dfr.getAction())) {
 					dfr.setValue(WebUtils.getString(request, "dfr_value_pg"));
 				} else if (DocumentFilterRule.ACTION_WIZARD_WORKFLOW.equals(dfr.getAction()) || 
-						DocumentFilterRule.ACTION_WORKFLOW.equals(dfr.getAction())) {
+						DocumentFilterRule.ACTION_ASSIGN_WORKFLOW.equals(dfr.getAction())) {
 					dfr.setValue(WebUtils.getString(request, "dfr_value_wf"));
 				} else if (DocumentFilterRule.ACTION_WIZARD_CATEGORY.equals(dfr.getAction()) || 
 						DocumentFilterRule.ACTION_WIZARD_KEYWORD.equals(dfr.getAction()) ||
 						DocumentFilterRule.ACTION_EXTRACT_METADATA.equals(dfr.getAction())) {
 					dfr.setValue(Boolean.toString(WebUtils.getBoolean(request, "dfr_value_bool")));
-				} else if (DocumentFilterRule.ACTION_CATEGORY.equals(dfr.getAction()) || 
-						DocumentFilterRule.ACTION_KEYWORD.equals(dfr.getAction())) {
+				} else if (DocumentFilterRule.ACTION_ADD_CATEGORY.equals(dfr.getAction()) || 
+						DocumentFilterRule.ACTION_ADD_KEYWORD.equals(dfr.getAction())) {
 					dfr.setValue(WebUtils.getString(request, "dfr_value_str"));
 				}
 				
