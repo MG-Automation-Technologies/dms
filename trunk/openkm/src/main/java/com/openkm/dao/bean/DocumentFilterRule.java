@@ -30,10 +30,10 @@ public class DocumentFilterRule implements Serializable {
 	public static final String ACTION_WIZARD_WORKFLOW = "WIZARD_WORKFLOW";
 	public static final String ACTION_WIZARD_CATEGORY = "WIZARD_CATEGORY";
 	public static final String ACTION_WIZARD_KEYWORD = "WIZARD_KEYWORD";
-	public static final String ACTION_PROPERTY_GROUP = "PROPERTY_GROUP";
-	public static final String ACTION_WORKFLOW = "WORKFLOW";
-	public static final String ACTION_CATEGORY = "CATEGORY";
-	public static final String ACTION_KEYWORD = "KEYWORD";
+	public static final String ACTION_ASSIGN_PROPERTY_GROUP = "ASSIGN_PROPERTY_GROUP";
+	public static final String ACTION_ASSIGN_WORKFLOW = "ASSIGN_WORKFLOW";
+	public static final String ACTION_ADD_CATEGORY = "ADD_CATEGORY";
+	public static final String ACTION_ADD_KEYWORD = "ADD_KEYWORD";
 	public static final String ACTION_EXTRACT_METADATA = "EXTRACT_METADATA";
 	
 	private int id;
