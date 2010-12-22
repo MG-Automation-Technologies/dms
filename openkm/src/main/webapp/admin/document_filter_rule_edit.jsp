@@ -105,12 +105,12 @@
   </c:choose>
   <script type="text/javascript">
     function valueType(action) {
-      if (action == 'WIZARD_PROPERTY_GROUP' || action == 'PROPERTY_GROUP') {
+      if (action == 'WIZARD_PROPERTY_GROUP' || action == 'ASSIGN_PROPERTY_GROUP') {
         $("#dfr_value_str").hide();
         $("#dfr_value_bool").hide();
         $("#dfr_value_pg").show();
         $("#dfr_value_wf").hide();
-      } else if (action == 'WIZARD_WORKFLOW' || action == 'WORKFLOW') {
+      } else if (action == 'WIZARD_WORKFLOW' || action == 'ASSIGN_WORKFLOW') {
         $("#dfr_value_str").hide();
         $("#dfr_value_bool").hide();
         $("#dfr_value_pg").hide();
@@ -120,7 +120,7 @@
         $("#dfr_value_bool").show();
         $("#dfr_value_pg").hide();
         $("#dfr_value_wf").hide();
-      } else if (action == 'CATEGORY' || action == 'KEYWORD') {
+      } else if (action == 'ADD_CATEGORY' || action == 'ADD_KEYWORD') {
         $("#dfr_value_str").show();
         $("#dfr_value_bool").hide();
         $("#dfr_value_pg").hide();
