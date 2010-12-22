@@ -21,18 +21,25 @@
 
 package com.openkm.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
+import org.jbpm.JbpmContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.bean.form.FormElement;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.DocumentFilterDAO;
 import com.openkm.dao.bean.DocumentFilter;
 import com.openkm.dao.bean.DocumentFilterRule;
+import com.openkm.module.base.BasePropertyGroupModule;
 import com.openkm.module.base.BasePropertyModule;
+import com.openkm.module.base.BaseWorkflowModule;
 
 public class DocumentUtils {
 	private static Logger log = LoggerFactory.getLogger(DocumentUtils.class);
@@ -54,9 +61,26 @@ public class DocumentUtils {
 					for (DocumentFilterRule dfr : df.getFilterRules()) {
 						if (dfr.isActive()) {
 							if (DocumentFilterRule.ACTION_PROPERTY_GROUP.equals(dfr.getAction())) {
-								log.info("ACTION_PROPERTY_GROUP");
+								try {
+									log.info("ACTION_PROPERTY_GROUP");
+									BasePropertyGroupModule.addGroup(session, node, dfr.getValue());
+								} catch (Exception e) {
+									JCRUtils.discardsPendingChanges(node);
+								}
 							} else if (DocumentFilterRule.ACTION_WORKFLOW.equals(dfr.getAction())) {
-								log.info("ACTION_WORKFLOW");
+								JbpmContext jbpmContext = null;
+								
+								try {
+									log.info("ACTION_WORKFLOW");
+									jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+									List<FormElement> vars = new ArrayList<FormElement>();
+									int pdId = Integer.parseInt(dfr.getValue());
+									BaseWorkflowModule.runProcessDefinition(session, jbpmContext, pdId, node.getUUID(), vars);
+								} finally {
+									if (jbpmContext != null) { 
+										jbpmContext.close();
+									}
+								}
 							} else if (DocumentFilterRule.ACTION_CATEGORY.equals(dfr.getAction())) {
 								try {
 									log.info("ACTION_CATEGORY {}", dfr.getValue());
