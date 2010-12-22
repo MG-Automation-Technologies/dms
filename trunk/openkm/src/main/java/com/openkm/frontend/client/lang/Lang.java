@@ -90,11 +90,11 @@ public class Lang {
 			//hLang = Lang_fr_FR.lang;
 		} else if (LANG_pt_PT.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 			if (LANG_pt_PT.equalsIgnoreCase(lang)) {
-				hLang = Lang_pt_PT.lang;
+//				hLang = Lang_pt_PT.lang;
 			} else if (LANG_pt_BR.equalsIgnoreCase(lang)) {
 //				hLang = Lang_pt_BR.lang;
 			} else {
-				hLang = Lang_pt_PT.lang;
+//				hLang = Lang_pt_PT.lang;
 			}
 		} else if (LANG_nl_BE.equalsIgnoreCase(lang) || LANG_nl_BE.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 //			hLang = Lang_nl_BE.lang;
