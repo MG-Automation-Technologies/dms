@@ -419,12 +419,6 @@ public class DirectDocumentModule implements DocumentModule {
 	        if (!Config.KEA_MODEL_FILE.equals("")) {
 		        MetadataExtractor mdExtractor = new MetadataExtractor(Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER);
 		        MetadataDTO mdDTO = mdExtractor.extract(tmpKea);
-		        log.info("Creator: "+mdDTO.getCreator());
-		        log.info("Title: "+mdDTO.getTitle());
-		        log.info("Mime type: "+mdDTO.getMimeType());
-		        log.info("Filename: "+mdDTO.getFileName());
-		        log.info("Content created: "+mdDTO.getContentCreated());
-		        log.info("Content last modified: "+mdDTO.getContentLastModified());
 		        
 		        for (ListIterator<Term> it = mdDTO.getSubjectsAsTerms().listIterator(); it.hasNext();) {
 		        	Term term =  it.next();
