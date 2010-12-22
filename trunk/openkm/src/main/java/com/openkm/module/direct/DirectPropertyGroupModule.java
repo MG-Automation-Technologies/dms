@@ -57,6 +57,7 @@ import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.PropertyGroupModule;
+import com.openkm.module.base.BasePropertyGroupModule;
 import com.openkm.util.FormUtils;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
@@ -84,11 +85,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			}
 			
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
-			
-			synchronized (documentNode) {
-				documentNode.addMixin(grpName);
-				documentNode.save();
-			}
+			BasePropertyGroupModule.addGroup(session, documentNode, grpName);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "ADD_PROPERTY_GROUP", nodePath, grpName);
