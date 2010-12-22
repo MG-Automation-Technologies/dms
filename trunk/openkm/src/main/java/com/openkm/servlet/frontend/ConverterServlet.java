@@ -60,6 +60,7 @@ public class ConverterServlet extends OKMHttpServlet {
 		log.debug("service({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
 		String uuid = WebUtils.getString(request, "uuid");
+		boolean inline = WebUtils.getBoolean(request, "inline");
 		boolean toPdf = WebUtils.getBoolean(request, "toPdf");
 		boolean toSwf = WebUtils.getBoolean(request, "toSwf");
 		boolean toDxf = WebUtils.getBoolean(request, "toDxf");
@@ -94,9 +95,11 @@ public class ConverterServlet extends OKMHttpServlet {
 							fos.close();
 							converter.dwg2dxf(tmp, dxfCache);
 						}
+						
 						is.close();
 						is = new FileInputStream(dxfCache);
 					}
+					
 					mimeType = DocConverter.DXF;
 					fileName = FileUtils.getFileName(fileName)+".dxf";
 				}
@@ -111,9 +114,11 @@ public class ConverterServlet extends OKMHttpServlet {
 								converter.doc2pdf(is, doc.getMimeType(), pdfCache);
 							}
 						}
+						
 						is.close();
 						is = new FileInputStream(pdfCache);
-					} 
+					}
+					
 					mimeType = DocConverter.PDF;
 					fileName = FileUtils.getFileName(fileName)+".pdf";
 				}
@@ -131,6 +136,7 @@ public class ConverterServlet extends OKMHttpServlet {
 							} else {
 								converter.pdf2swf(pdfCache, swfCache);
 							}
+							
 							is.close();
 							is = new FileInputStream(swfCache);
 						} catch (Exception e) {
@@ -138,13 +144,15 @@ public class ConverterServlet extends OKMHttpServlet {
 							is = DownloadServlet.class.getResourceAsStream("preview_problem.swf");
 						}
 					} else {
+						is.close();
 						is = new FileInputStream(swfCache);
 					}
+					
 					mimeType = DocConverter.SWF;
 					fileName = FileUtils.getFileName(fileName)+".swf";
 				}
 				
-				WebUtils.sendFile(request, response, fileName, mimeType, false, is);
+				WebUtils.sendFile(request, response, fileName, mimeType, inline, is);
 				is.close();
 			}
 		} catch (PathNotFoundException e) {
