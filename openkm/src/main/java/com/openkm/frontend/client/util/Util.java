@@ -191,12 +191,11 @@ public class Util {
 	/**
 	 * Download file
 	 * 
-	 * @param path
-	 * @param params
+	 * @param uuid
 	 */
 	public static void downloadFilePdf(String uuid) {
 		final Element downloadIframe = RootPanel.get("__download").getElement(); 
-		String url = RPCService.ConverterServlet + "?toPdf=1&uuid=" + URL.encodeComponent(uuid);
+		String url = RPCService.ConverterServlet + "?inline=false&toPdf=true&uuid=" + URL.encodeComponent(uuid);
 		DOM.setElementAttribute(downloadIframe, "src", url); 
 	}
 	
