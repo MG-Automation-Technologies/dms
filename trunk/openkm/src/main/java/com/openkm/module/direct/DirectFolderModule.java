@@ -27,8 +27,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -95,6 +95,7 @@ public class DirectFolderModule implements FolderModule {
 
 			if (node.isNodeType(Folder.TYPE)) {
 				fld.setHasChilds(true);
+				break;
 			}
 		}
 		
@@ -813,7 +814,7 @@ public class DirectFolderModule implements FolderModule {
 			RepositoryException, PathNotFoundException {
 		log.debug("getContentInfoHelper({})", folderNode);
 		ContentInfo contentInfo = new ContentInfo();
-
+		
 		try {
 			for (NodeIterator ni = folderNode.getNodes(); ni.hasNext(); ) {
 				Node child = ni.nextNode();
