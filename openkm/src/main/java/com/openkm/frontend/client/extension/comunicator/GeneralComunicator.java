@@ -27,6 +27,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.ToolBarOption;
 import com.openkm.frontend.client.util.CommonUI;
 import com.openkm.frontend.client.util.Util;
@@ -191,5 +192,28 @@ public class GeneralComunicator {
 	 */
 	public static String getAppContext() {
 		return Main.CONTEXT;
+	}
+	
+	/**
+	 * showNextWizard
+	 */
+	public static void showNextWizard() {
+		Main.get().wizardPopup.showNextWizard();
+	}
+	
+	/**
+	 * isDigitalSignature
+	 */
+	public static boolean isDigitalSignature() {
+		return Main.get().fileUpload.isDigitalSignature();
+	}
+	
+	/**
+	 * getDocumentToSign
+	 * 
+	 * @return
+	 */
+	public static GWTDocument getDocumentToSign() {
+		return Main.get().wizardPopup.getDocumentToSign();
 	}
 }

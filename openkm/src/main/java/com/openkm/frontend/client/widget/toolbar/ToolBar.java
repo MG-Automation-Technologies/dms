@@ -53,6 +53,7 @@ import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.contants.ui.UIDockPanelConstants;
+import com.openkm.frontend.client.contants.ui.UIFileUploadConstants;
 import com.openkm.frontend.client.extension.event.HasToolBarEvent;
 import com.openkm.frontend.client.extension.event.handler.ToolBarHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasToolBarHandlerExtension;
@@ -68,7 +69,6 @@ import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.ConfirmPopup;
 import com.openkm.frontend.client.widget.OriginPanel;
 import com.openkm.frontend.client.widget.mainmenu.Bookmark;
-import com.openkm.frontend.client.widget.upload.FancyFileUpload;
 
 /**
  * ToolBar
@@ -229,7 +229,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public void executeAddDocument() {
 		Main.get().fileUpload.setPath((String) Main.get().activeFolderTree.getActualPath());
-		Main.get().fileUpload.setAction(FancyFileUpload.ACTION_INSERT);
+		Main.get().fileUpload.setAction(UIFileUploadConstants.ACTION_INSERT);
 		Main.get().fileUpload.showPopup(true,true);
 		fireEvent(HasToolBarEvent.EXECUTE_ADD_DOCUMENT);
 	}
@@ -336,7 +336,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public void exectuteCheckin() {
 		Main.get().fileUpload.setPath(Main.get().mainPanel.desktop.browser.fileBrowser.getPath());
-		Main.get().fileUpload.setAction(FancyFileUpload.ACTION_UPDATE);
+		Main.get().fileUpload.setAction(UIFileUploadConstants.ACTION_UPDATE);
 		Main.get().fileUpload.showPopup(false,false);
 		fireEvent(HasToolBarEvent.EXECUTE_CHECKIN);
 	}

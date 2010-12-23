@@ -7,7 +7,6 @@ function onSignError(txt){
 }
 
 function Sign(downloadUrl, uploadUrl, lang, signatureOutputFormat, inputDataEncoding, outputDataEncoding) {
-	alert(downloadUrl);
 	var cp= document.getElementById("CryptoApplet");
 	var loc= document.location.href;
 	

@@ -22,6 +22,7 @@
 package com.openkm.frontend.client.extension.comunicator;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 
 
@@ -104,5 +105,14 @@ public class NavigatorComunicator {
 	 */
 	public static boolean isTrashShown() {
 		return Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TRASH;
+	}
+	
+	/**
+	 * getFolder
+	 * 
+	 * @return
+	 */
+	public static GWTFolder getFolder() {
+		return Main.get().activeFolderTree.getFolder();
 	}
 }

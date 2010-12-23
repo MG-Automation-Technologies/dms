@@ -33,6 +33,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
+import com.openkm.frontend.client.contants.ui.UIFileUploadConstants;
 
 /**
  * File Upload
@@ -46,7 +47,7 @@ public class FileUpload extends DialogBox {
 	private Button addButton;
 	private VerticalPanel vPanel;
 	private HorizontalPanel vButtonPanel;
-	private FancyFileUpload ffUpload = new FancyFileUpload();
+	private FancyFileUpload ffUpload;
 	private int popupWidth = 315;
 	private int popupHeight = 125;
 	private int doAction = 0;
@@ -58,6 +59,7 @@ public class FileUpload extends DialogBox {
 	 */
 	public FileUpload() {
 		super(false,true);
+		ffUpload = new FancyFileUpload();
 		vPanel = new VerticalPanel();
 		vButtonPanel = new HorizontalPanel();
 		
@@ -135,7 +137,7 @@ public class FileUpload extends DialogBox {
 		closeButton.setHTML(Main.i18n("button.close")); 
 		addButton.setHTML(Main.i18n("fileupload.button.add.other.file"));
 		
-		if (doAction == FancyFileUpload.ACTION_INSERT) {
+		if (doAction == UIFileUploadConstants.ACTION_INSERT) {
 			setText(Main.i18n("fileupload.label.insert"));
 		} else {
 			setText(Main.i18n("fileupload.label.update"));
@@ -164,7 +166,7 @@ public class FileUpload extends DialogBox {
 	 * Hide file upload 
 	 */
 	public void hide() {
-		if (doAction == FancyFileUpload.ACTION_UPDATE) {
+		if (doAction == UIFileUploadConstants.ACTION_UPDATE) {
 			if (Main.get().mainPanel.desktop.browser.fileBrowser.table.isDocumentSelected()) {
 				GWTDocument doc = Main.get().mainPanel.desktop.browser.fileBrowser.table.getDocument();
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.setProperties(doc);
@@ -214,5 +216,21 @@ public class FileUpload extends DialogBox {
 	 */
 	public void enableAdvancedFilter() {
 		ffUpload.enableAdvancedFilter();
+	}
+	
+	/**
+	 * showDigitalSignature
+	 */
+	public void showDigitalSignature() {
+		ffUpload.showDigitalSignature();
+	}
+	
+	/**
+	 * isDigitalSignature
+	 * 
+	 * @return
+	 */
+	public boolean isDigitalSignature() {
+		return ffUpload.isDigitalSignature();
 	}
 }
