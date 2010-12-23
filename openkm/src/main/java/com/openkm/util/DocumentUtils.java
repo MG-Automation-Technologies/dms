@@ -52,6 +52,9 @@ import com.openkm.util.metadata.PdfMetadata;
 public class DocumentUtils {
 	private static Logger log = LoggerFactory.getLogger(DocumentUtils.class);
 	
+	/**
+	 * Check for document filters and execute proper actions.
+	 */	
 	public static void checkFilters(Session session, Node node, String mimeType) throws DatabaseException,
 			RepositoryException {
 		log.info("checkFilters({}, {})", node.getPath(), mimeType);
@@ -134,6 +137,9 @@ public class DocumentUtils {
 		}
 	}
 	
+	/**
+	 * Check document path helper
+	 */
 	private static boolean checkPathFilter(Node node, String path) throws RepositoryException {
 		if (node.getPath().equals(path)) {
 			return true;
