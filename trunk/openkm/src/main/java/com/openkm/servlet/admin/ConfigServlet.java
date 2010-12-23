@@ -47,7 +47,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
-import com.openkm.bean.ConfigFile;
+import com.openkm.bean.StoredFile;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.ConfigDAO;
 import com.openkm.dao.bean.Config;
@@ -124,7 +124,7 @@ public class ConfigServlet extends BaseServlet {
 				ServletFileUpload upload = new ServletFileUpload(factory);
 				List<FileItem> items = upload.parseRequest(request);
 				Config cfg = new Config();
-				ConfigFile cfgFile = new ConfigFile();
+				StoredFile stFile = new StoredFile();
 				
 				for (Iterator<FileItem> it = items.iterator(); it.hasNext();) {
 					FileItem item = it.next();
@@ -141,16 +141,16 @@ public class ConfigServlet extends BaseServlet {
 						}
 					} else {
 						is = item.getInputStream();
-						cfgFile.setName(item.getName());
-						cfgFile.setMime(com.openkm.core.Config.mimeTypes.getContentType(item.getName()));
-						cfgFile.setContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
+						stFile.setName(item.getName());
+						stFile.setMime(com.openkm.core.Config.mimeTypes.getContentType(item.getName()));
+						stFile.setContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
 						is.close();
 					}
 				}
 			
 				if (action.equals("create")) {
 					if (Config.FILE.equals(cfg.getType())) {
-						cfg.setValue(new Gson().toJson(cfgFile));
+						cfg.setValue(new Gson().toJson(stFile));
 					} else if (Config.BOOLEAN.equals(cfg.getType())) {
 						cfg.setValue(Boolean.toString(cfg.getValue() != null && !cfg.getValue().equals("")));
 					}
@@ -163,7 +163,7 @@ public class ConfigServlet extends BaseServlet {
 					list(session, request, response);
 				} else if (action.equals("edit")) {
 					if (Config.FILE.equals(cfg.getType())) {
-						cfg.setValue(new Gson().toJson(cfgFile));
+						cfg.setValue(new Gson().toJson(stFile));
 					} else if (Config.BOOLEAN.equals(cfg.getType())) {
 						cfg.setValue(Boolean.toString(cfg.getValue() != null && !cfg.getValue().equals("")));
 					}
@@ -284,10 +284,10 @@ public class ConfigServlet extends BaseServlet {
 		Config cfg = ConfigDAO.findByPk(cfgKey);
 		
 		if (cfg != null) {
-			ConfigFile cfgFile = new Gson().fromJson(cfg.getValue(), ConfigFile.class);
-			byte[] content = SecureStore.b64Decode(cfgFile.getContent());
+			StoredFile stFile = new Gson().fromJson(cfg.getValue(), StoredFile.class);
+			byte[] content = SecureStore.b64Decode(stFile.getContent());
 			ByteArrayInputStream bais = new ByteArrayInputStream(content);
-			WebUtils.sendFile(request, response, cfgFile.getName(), cfgFile.getMime(), true, bais);
+			WebUtils.sendFile(request, response, stFile.getName(), stFile.getMime(), true, bais);
 		}
 		
 		log.debug("view: void");
