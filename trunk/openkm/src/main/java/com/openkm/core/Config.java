@@ -188,6 +188,15 @@ public class Config {
 	public static final String PROPERTY_LOGO_MOBI = "logo.mobi";
 	public static final String PROPERTY_LOGO_REPORT = "logo.report";
 	
+	// Mime types
+	public static String MIME_PDF = "application/pdf";
+	public static String MIME_MS_WORD = "application/msword";
+	public static String MIME_MS_EXCEL = "application/vnd.ms-excel";
+	public static String MIME_MS_POWERPOINT = "application/vnd.ms-powerpoint";
+	public static String MIME_SWF = "application/x-shockwave-flash";
+	public static String MIME_DXF = "image/vnd.dxf";
+	public static String MIME_DWG = "image/vnd.dwg";
+	
 	/**
 	 *  Default values
 	 */
