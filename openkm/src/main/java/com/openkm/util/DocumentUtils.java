@@ -46,6 +46,7 @@ import com.openkm.module.base.BasePropertyGroupModule;
 import com.openkm.module.base.BasePropertyModule;
 import com.openkm.module.base.BaseWorkflowModule;
 import com.openkm.util.metadata.MetadataExtractor;
+import com.openkm.util.metadata.OfficeMetadata;
 import com.openkm.util.metadata.PdfMetadata;
 
 public class DocumentUtils {
@@ -104,25 +105,21 @@ public class DocumentUtils {
 									JCRUtils.discardsPendingChanges(node);
 								}
 							} else if (DocumentFilterRule.ACTION_EXTRACT_METADATA.equals(dfr.getAction())) {
-								//String ext = FileUtils.getFileExtension(node.getName());
-								//File tmpFile = null; 
 								InputStream is = null;
-								//OutputStream os = null;
 								
 								try {
 									if (Config.MIME_PDF.equals(mimeType)) {
-										//tmpFile = File.createTempFile("kea", ext);
 										Node contentNode = node.getNode(Document.CONTENT);
 										is = contentNode.getProperty(JcrConstants.JCR_DATA).getStream();
-										// os = new FileOutputStream(tmpFile);
-										//IOUtils.copy(is, os);
-										//MetadataDTO md = new MetadataExtractor(false).extract(tmpFile);
-										//log.info("Metadata: {}", md);
-									
 										PdfMetadata md = MetadataExtractor.pdfExtractor(is);
 										log.info("{}", md);
-									} else if (true) {
-										
+									} else if (Config.MIME_MS_WORD.equals(mimeType) ||
+											Config.MIME_MS_EXCEL.equals(mimeType) ||
+											Config.MIME_MS_POWERPOINT.equals(mimeType)) {
+										Node contentNode = node.getNode(Document.CONTENT);
+										is = contentNode.getProperty(JcrConstants.JCR_DATA).getStream();
+										OfficeMetadata md = MetadataExtractor.officeExtractor(is, mimeType);
+										log.info("{}", md);
 									}
 								} catch (Exception e) {
 									e.printStackTrace();
