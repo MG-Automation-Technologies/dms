@@ -47,6 +47,7 @@ import org.semanticdesktop.aperture.rdf.RDFContainer;
 import org.semanticdesktop.aperture.rdf.impl.RDFContainerImpl;
 import org.semanticdesktop.aperture.util.IOUtil;
 import org.semanticdesktop.aperture.vocabulary.NCO;
+import org.semanticdesktop.aperture.vocabulary.NFO;
 import org.semanticdesktop.aperture.vocabulary.NIE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -202,8 +203,11 @@ public class MetadataExtractor {
         mdDTO.setTitle(rdf.getString(NIE.title));
         mdDTO.setCreator(creator);
         mdDTO.addSubject(rdf.getString(NIE.subject));
+        mdDTO.setGenerator(rdf.getString(NIE.generator));
         mdDTO.setContentCreated(rdf.getDate(NIE.contentCreated));
         mdDTO.setContentLastModified(rdf.getDate(NIE.contentLastModified));
+        mdDTO.setPageCount(rdf.getInteger(NFO.pageCount));
+        mdDTO.setKeyword(rdf.getString(NIE.keyword));
     }
 
     /**
