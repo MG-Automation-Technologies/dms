@@ -43,7 +43,7 @@ import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
 import com.openkm.frontend.client.contants.service.ErrorCode;
-import com.openkm.frontend.client.widget.upload.FancyFileUpload;
+import com.openkm.frontend.client.contants.ui.UIFileUploadConstants;
 import com.openkm.util.FileUtils;
 import com.openkm.util.SecureStore;
 import com.openkm.util.impexp.ImpExpStats;
@@ -128,7 +128,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 				}
 
 				// Now, we have read all parameters and the uploaded file
-				if (action == FancyFileUpload.ACTION_INSERT) {
+				if (action == UIFileUploadConstants.ACTION_INSERT) {
 					if (fileName != null && !fileName.equals("")) {
 						if (importZip && FilenameUtils.getExtension(fileName).equalsIgnoreCase("zip")) {
 							log.info("Import zip file '{}' into '{}'", fileName, path);
@@ -152,7 +152,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 							out.print(returnOKMessage + " path["+uploadedDocPath+"]path");
 						}
 					}
-				} else if (action == FancyFileUpload.ACTION_UPDATE) {
+				} else if (action == UIFileUploadConstants.ACTION_UPDATE) {
 					log.info("File updated: {}", path);
 					
 					if (FileUtils.getName(path).equals(fileName)) {
@@ -171,7 +171,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 					} else {
 						out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_DocumentNameMismatch));
 					}
-				} else if (action == FancyFileUpload.ACTION_FOLDER) {
+				} else if (action == UIFileUploadConstants.ACTION_FOLDER) {
 					log.info("Folder create: {}", path);
 					Folder fld = new Folder();
 					fld.setPath(path+"/"+folder);
@@ -182,7 +182,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 				listener.setUploadFinish(true); // Mark uploading operation has finished
 
 				// If the document have been added to the repository, perform user notification
-				if ((action == FancyFileUpload.ACTION_INSERT || action == FancyFileUpload.ACTION_UPDATE) & notify) {
+				if ((action == UIFileUploadConstants.ACTION_INSERT || action == UIFileUploadConstants.ACTION_UPDATE) & notify) {
 					List<String> userNames = new ArrayList<String>(Arrays.asList(users.split(",")));
 					List<String> roleNames = Arrays.asList(roles.split(","));
 					
@@ -201,8 +201,8 @@ public class FileUploadServlet extends OKMHttpServlet {
 			} else {
 				// Used only when document is digital signed ( form in that case is not multiplart it's a normal post )
 				action = (request.getParameter("action")!=null?Integer.parseInt(request.getParameter("action")):-1);
-				if (action == FancyFileUpload.ACTION_DIGITAL_SIGNATURE_INSERT || 
-					action == FancyFileUpload.ACTION_DIGITAL_SIGNATURE_UPDATE) {
+				if (action == UIFileUploadConstants.ACTION_DIGITAL_SIGNATURE_INSERT || 
+					action == UIFileUploadConstants.ACTION_DIGITAL_SIGNATURE_UPDATE) {
 					path = request.getParameter("path");
 					String data = request.getParameter("data");
 					tmp = java.io.File.createTempFile("okm", ".tmp");
@@ -215,14 +215,14 @@ public class FileUploadServlet extends OKMHttpServlet {
 					fos.close();
 					FileInputStream fis = new FileInputStream(tmp);
 					switch (action) {
-						case FancyFileUpload.ACTION_DIGITAL_SIGNATURE_INSERT:
+						case UIFileUploadConstants.ACTION_DIGITAL_SIGNATURE_INSERT:
 							Document newDoc = new Document();
 							path = path.substring(0,path.lastIndexOf(".")+1) + "pdf";
 							newDoc.setPath(path);
 							OKMDocument.getInstance().create(null, newDoc, fis);
 							break;
 						
-						case FancyFileUpload.ACTION_DIGITAL_SIGNATURE_UPDATE:
+						case UIFileUploadConstants.ACTION_DIGITAL_SIGNATURE_UPDATE:
 							OKMDocument.getInstance().checkout(null, path);
 							OKMDocument.getInstance().setContent(null, path, fis);
 							OKMDocument.getInstance().checkin(null, path, "Signed");

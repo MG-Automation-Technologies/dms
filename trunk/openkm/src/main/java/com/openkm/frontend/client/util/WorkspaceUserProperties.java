@@ -24,6 +24,7 @@ package com.openkm.frontend.client.util;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
+import com.openkm.extension.frontend.client.widget.digitalsignature.DigitalSignature;
 import com.openkm.extension.frontend.client.widget.messaging.MessagingToolBarBox;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTWorkspace;
@@ -287,6 +288,9 @@ public class WorkspaceUserProperties {
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.folder.showProposedSusbcription();
 				Main.get().mainPanel.search.historySearch.searchSaved.menuPopup.showShareSearch();
 				Main.get().mainPanel.search.historySearch.userNews.menuPopup.showShareSearch();
+			}
+			if (DigitalSignature.isRegistered(Main.get().getExtensionUuidList())) {
+				Main.get().fileUpload.showDigitalSignature();
 			}
 			
 			Main.get().startUp.nextStatus(StartUp.STARTUP_GET_TAXONOMY_ROOT);
