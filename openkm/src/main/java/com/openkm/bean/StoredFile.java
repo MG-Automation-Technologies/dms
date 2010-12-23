@@ -23,7 +23,7 @@ package com.openkm.bean;
 
 import java.io.Serializable;
 
-public class ConfigFile implements Serializable {
+public class StoredFile implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String mime;
