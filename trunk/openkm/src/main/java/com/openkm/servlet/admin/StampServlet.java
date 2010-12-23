@@ -63,7 +63,6 @@ import com.openkm.dao.bean.extension.StampText;
 import com.openkm.dao.extension.StampImageDAO;
 import com.openkm.dao.extension.StampTextDAO;
 import com.openkm.principal.PrincipalAdapterException;
-import com.openkm.util.DocConverter;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.PDFUtils;
 import com.openkm.util.SecureStore;
@@ -400,7 +399,7 @@ public class StampServlet extends BaseServlet {
 				Color.decode(st.getColor()), st.getRotation(), st.getAlign(), st.getExprX(), st.getExprY(),
 				baos);
 		bais = new ByteArrayInputStream(baos.toByteArray());
-		WebUtils.sendFile(request, response, "sample.pdf", DocConverter.PDF, true, bais);
+		WebUtils.sendFile(request, response, "sample.pdf", Config.MIME_PDF, true, bais);
 		log.debug("textTest: void");
 	}
 	
@@ -509,7 +508,7 @@ public class StampServlet extends BaseServlet {
 		baos = new ByteArrayOutputStream();
 		PDFUtils.stampImage(bais, image, si.getLayer(), si.getOpacity(), si.getExprX(), si.getExprY(), baos);
 		bais = new ByteArrayInputStream(baos.toByteArray());
-		WebUtils.sendFile(request, response, "sample.pdf", DocConverter.PDF, true, bais);
+		WebUtils.sendFile(request, response, "sample.pdf", Config.MIME_PDF, true, bais);
 		log.debug("imageTest: void");
 	}
 }
