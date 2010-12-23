@@ -30,10 +30,10 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.contants.ui.UIFileUploadConstants;
 import com.openkm.frontend.client.util.CommonUI;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.MenuBase;
-import com.openkm.frontend.client.widget.upload.FancyFileUpload;
 
 /**
  * CategoryMenu menu
@@ -130,7 +130,7 @@ public class CategoriesMenu extends MenuBase {
 		public void execute() {
 			if (checkinOption) {
 				Main.get().fileUpload.setPath(Main.get().mainPanel.desktop.browser.fileBrowser.getPath());
-				Main.get().fileUpload.setAction(FancyFileUpload.ACTION_UPDATE);
+				Main.get().fileUpload.setAction(UIFileUploadConstants.ACTION_UPDATE);
 				Main.get().fileUpload.showPopup(false,false);
 				hide();
 			}

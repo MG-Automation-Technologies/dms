@@ -24,16 +24,15 @@ package com.openkm.frontend.client.widget.taxonomy;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.contants.ui.UIFileUploadConstants;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.MenuBase;
-import com.openkm.frontend.client.widget.upload.FancyFileUpload;
 
 /**
  * Taxonomy menu
@@ -157,7 +156,7 @@ public class TaxonomyMenu extends MenuBase {
 		public void execute() {
 			if (addDocumentOption) {
 				Main.get().fileUpload.setPath((String) Main.get().activeFolderTree.getActualPath());
-				Main.get().fileUpload.setAction(FancyFileUpload.ACTION_INSERT);
+				Main.get().fileUpload.setAction(UIFileUploadConstants.ACTION_INSERT);
 				Main.get().fileUpload.showPopup(true,true);
 				Main.get().activeFolderTree.hideMenuPopup();
 			}
