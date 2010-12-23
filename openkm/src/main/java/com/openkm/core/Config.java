@@ -34,7 +34,7 @@ import javax.activation.MimetypesFileTypeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.bean.ConfigFile;
+import com.openkm.bean.StoredFile;
 import com.openkm.dao.ConfigDAO;
 import com.openkm.dao.MimeTypeDAO;
 import com.openkm.dao.bean.MimeType;
@@ -311,10 +311,10 @@ public class Config {
 	public static String HIBERNATE_SHOW_SQL = "false";
 	
 	// Logo icons
-	public static ConfigFile LOGO_LOGIN;
+	public static StoredFile LOGO_LOGIN;
 	public static String LOGO_TEXT;
-	public static ConfigFile LOGO_MOBI;
-	public static ConfigFile LOGO_REPORT;
+	public static StoredFile LOGO_MOBI;
+	public static StoredFile LOGO_REPORT;
 	
 	// Misc
 	public static int SESSION_EXPIRATION = 1800; // 30 mins (session.getMaxInactiveInterval())
