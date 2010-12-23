@@ -162,7 +162,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	public void onModuleLoad() {
 		Log.getLogger(DivLogger.class).getWidget().setVisible(false);
 		Log.setUncaughtExceptionHandler();
-		Log.setCurrentLogLevel(Log.LOG_LEVEL_DEBUG);
+		Log.setCurrentLogLevel(Log.LOG_LEVEL_OFF);
 
 		singleton = this;
 		
@@ -329,9 +329,6 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		// Sets the active folder tree, it'll be used to store the active folder 
 		// every time switching stack panel
 		activeFolderTree = mainPanel.desktop.navigator.taxonomyTree;
-		
-		// Start extensions
-		//ExtensionManager.start(Customization.getExtensionWidgets());
 		
 		// Initialize on startup when all objects are created sequentially
 		startUpPopup.show();
