@@ -87,8 +87,8 @@ public class ConverterServlet extends OKMHttpServlet {
 				
 				// Convert to DXF
 				if (toDxf && !Config.SYSTEM_DWG2DXF.equals("")) {
-					if (!doc.getMimeType().equals(DocConverter.DXF)) {
-						if (!dxfCache.exists() && doc.getMimeType().equals(DocConverter.DWG)) {
+					if (!doc.getMimeType().equals(Config.MIME_DXF)) {
+						if (!dxfCache.exists() && doc.getMimeType().equals(Config.MIME_DWG)) {
 							FileOutputStream fos = new FileOutputStream(tmp);
 							IOUtils.copy(is, fos);
 							fos.flush();
@@ -100,13 +100,13 @@ public class ConverterServlet extends OKMHttpServlet {
 						is = new FileInputStream(dxfCache);
 					}
 					
-					mimeType = DocConverter.DXF;
+					mimeType = Config.MIME_DXF;
 					fileName = FileUtils.getFileName(fileName)+".dxf";
 				}
 				
 				// Convert to PDF
 				if (toPdf || toSwf && !Config.SYSTEM_PDF2SWF.equals("")) {
-					if (!doc.getMimeType().equals(DocConverter.PDF)) {
+					if (!doc.getMimeType().equals(Config.MIME_PDF)) {
 						if (!pdfCache.exists()) {							
 							if (doc.getMimeType().startsWith("image/")) {
 								converter.img2pdf(is, doc.getMimeType(), pdfCache);
@@ -119,7 +119,7 @@ public class ConverterServlet extends OKMHttpServlet {
 						is = new FileInputStream(pdfCache);
 					}
 					
-					mimeType = DocConverter.PDF;
+					mimeType = Config.MIME_PDF;
 					fileName = FileUtils.getFileName(fileName)+".pdf";
 				}
 				
@@ -127,7 +127,7 @@ public class ConverterServlet extends OKMHttpServlet {
 				if (toSwf && !Config.SYSTEM_PDF2SWF.equals("")) {
 					if (!swfCache.exists()) {
 						try {
-							if (doc.getMimeType().equals(DocConverter.PDF)) {
+							if (doc.getMimeType().equals(Config.MIME_PDF)) {
 								FileOutputStream fos = new FileOutputStream(tmp);
 								IOUtils.copy(is, fos);
 								fos.flush();
@@ -148,7 +148,7 @@ public class ConverterServlet extends OKMHttpServlet {
 						is = new FileInputStream(swfCache);
 					}
 					
-					mimeType = DocConverter.SWF;
+					mimeType = Config.MIME_SWF;
 					fileName = FileUtils.getFileName(fileName)+".swf";
 				}
 				
