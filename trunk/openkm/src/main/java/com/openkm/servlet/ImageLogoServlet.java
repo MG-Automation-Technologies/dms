@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.bean.ConfigFile;
+import com.openkm.bean.StoredFile;
 import com.openkm.core.Config;
 import com.openkm.util.SecureStore;
 import com.openkm.util.WebUtils;
@@ -55,7 +55,7 @@ public class ImageLogoServlet extends HttpServlet {
 		
 		try {
 			if (img != null && img.length() > 1) {
-				ConfigFile logo = getImage(img.substring(1));
+				StoredFile logo = getImage(img.substring(1));
 				
 				if (logo != null) {
 					byte[] content = SecureStore.b64Decode(logo.getContent());
@@ -86,19 +86,19 @@ public class ImageLogoServlet extends HttpServlet {
 	/**
 	 * Get requested image input stream.
 	 */
-	private ConfigFile getImage(String img) throws MalformedURLException, IOException {
+	private StoredFile getImage(String img) throws MalformedURLException, IOException {
 		log.debug("getImage({})", img);
-		ConfigFile cfgFile = null;
+		StoredFile stFile = null;
 		
 		if ("login".equals(img)) {
-			cfgFile = Config.LOGO_LOGIN;
+			stFile = Config.LOGO_LOGIN;
 		} else if ("mobi".equals(img)) {
-			cfgFile = Config.LOGO_MOBI;
+			stFile = Config.LOGO_MOBI;
 		} else if ("report".equals(img)) {
-			cfgFile = Config.LOGO_REPORT;
+			stFile = Config.LOGO_REPORT;
 		}
 		
-		log.debug("getImage: {}", cfgFile);
-		return cfgFile;
+		log.debug("getImage: {}", stFile);
+		return stFile;
 	}
 }
