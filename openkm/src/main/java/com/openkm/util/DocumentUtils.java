@@ -124,9 +124,7 @@ public class DocumentUtils {
 								} catch (Exception e) {
 									e.printStackTrace();
 								} finally {
-									//org.apache.commons.io.FileUtils.deleteQuietly(tmpFile);
 									IOUtils.closeQuietly(is);
-									//IOUtils.closeQuietly(os);
 								}
 							}
 						}
