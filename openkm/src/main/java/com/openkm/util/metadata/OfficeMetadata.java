@@ -16,15 +16,15 @@ public class OfficeMetadata {
     private String comments;
     private String template;
     private String revNumber;
-    private String applicationName;
-    private Calendar editTime;
+    private String applicationName;    
     private Calendar lastPrinted;
     private Calendar createDateTime;
     private Calendar lastSaveDateTime;
+    private long editTime;
     private int pageCount;
 	private int wordCount;
 	private int charCount;
-	private int getSecurity;
+	private int security;
 
 	public String getTitle() {
 		return title;
@@ -98,14 +98,6 @@ public class OfficeMetadata {
 		this.applicationName = applicationName;
 	}
 
-	public Calendar getEditTime() {
-		return editTime;
-	}
-
-	public void setEditTime(Calendar editTime) {
-		this.editTime = editTime;
-	}
-
 	public Calendar getLastPrinted() {
 		return lastPrinted;
 	}
@@ -128,6 +120,14 @@ public class OfficeMetadata {
 
 	public void setLastSaveDateTime(Calendar lastSaveDateTime) {
 		this.lastSaveDateTime = lastSaveDateTime;
+	}
+	
+	public long getEditTime() {
+		return editTime;
+	}
+
+	public void setEditTime(long editTime) {
+		this.editTime = editTime;
 	}
 
 	public int getPageCount() {
@@ -154,12 +154,12 @@ public class OfficeMetadata {
 		this.charCount = charCount;
 	}
 
-	public int getGetSecurity() {
-		return getSecurity;
+	public int getSecurity() {
+		return security;
 	}
 
-	public void setGetSecurity(int getSecurity) {
-		this.getSecurity = getSecurity;
+	public void setSecurity(int security) {
+		this.security = security;
 	}
 	
 	public String toString() {
@@ -174,14 +174,14 @@ public class OfficeMetadata {
 		sb.append(", template=").append(template);
 		sb.append(", revNumber=").append(revNumber);
 		sb.append(", applicationName=").append(applicationName);
-		sb.append(", editTime=").append(editTime==null?null:editTime.getTime());
 		sb.append(", lastPrinted=").append(lastPrinted==null?null:lastPrinted.getTime());
 		sb.append(", createDateTime=").append(createDateTime==null?null:createDateTime.getTime());
 		sb.append(", lastSaveDateTime=").append(lastSaveDateTime==null?null:lastSaveDateTime.getTime());
+		sb.append(", editTime=").append(editTime);
 		sb.append(", pageCount=").append(pageCount);
 		sb.append(", wordCount=").append(wordCount);
 		sb.append(", charCount=").append(charCount);
-		sb.append(", getSecurity=").append(getSecurity);
+		sb.append(", security=").append(security);
 		sb.append("}");
 		return sb.toString();
 	}
