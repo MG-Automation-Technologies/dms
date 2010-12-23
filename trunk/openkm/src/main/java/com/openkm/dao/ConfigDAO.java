@@ -34,7 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
-import com.openkm.bean.ConfigFile;
+import com.openkm.bean.StoredFile;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.bean.Config;
 import com.openkm.util.FileUtils;
@@ -210,21 +210,21 @@ public class ConfigDAO  {
 	/**
 	 * Find by pk with a default value
 	 */
-	public static ConfigFile getFile(String key, String path) throws DatabaseException, IOException {
+	public static StoredFile getFile(String key, String path) throws DatabaseException, IOException {
 		InputStream is = null;
 		
 		try {
 			is = Config.class.getResourceAsStream(path);
-			ConfigFile cfgFile = new ConfigFile();
-			cfgFile.setContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
-			cfgFile.setName(FileUtils.getName(path));
-			cfgFile.setMime(com.openkm.core.Config.mimeTypes.getContentType(cfgFile.getName()));
-			String value = getProperty(key, new Gson().toJson(cfgFile), Config.FILE);
+			StoredFile stFile = new StoredFile();
+			stFile.setContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
+			stFile.setName(FileUtils.getName(path));
+			stFile.setMime(com.openkm.core.Config.mimeTypes.getContentType(stFile.getName()));
+			String value = getProperty(key, new Gson().toJson(stFile), Config.FILE);
 			
 			if (value == null) {
 				return null;
 			} else {
-				return cfgFile;
+				return stFile;
 			}
 		} finally {
 			IOUtils.closeQuietly(is);
