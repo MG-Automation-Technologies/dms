@@ -49,10 +49,6 @@ public class DocConverter {
 	private static ArrayList<String> validAutoCad = new ArrayList<String>();
 	private static DocConverter instance = null;
 	private static OfficeManager officeManager = null;
-	public static final String PDF = "application/pdf";
-	public static final String SWF = "application/x-shockwave-flash";
-	public static final String DXF = "image/vnd.dxf";
-	public static final String DWG = "image/vnd.dwg";
 	
 	private DocConverter() {
 		// Basic
@@ -88,8 +84,8 @@ public class DocConverter {
 		validImageMagick.add("image/x-psd");
 		
 		// AutoCad
-		validAutoCad.add(DXF);
-		validAutoCad.add(DWG);
+		validAutoCad.add(Config.MIME_DXF);
+		validAutoCad.add(Config.MIME_DWG);
 	}
 	
 	/**
@@ -151,7 +147,7 @@ public class DocConverter {
 	 * Test if a MIME document can be converted to SWF
 	 */
 	public boolean convertibleToSwf(String from) {
-		if (!Config.SYSTEM_PDF2SWF.equals("") && (convertibleToPdf(from) || PDF.equals(from))) {
+		if (!Config.SYSTEM_PDF2SWF.equals("") && (convertibleToPdf(from) || Config.MIME_PDF.equals(from))) {
 			return true;
 		} else {
 			return false;
@@ -229,7 +225,7 @@ public class DocConverter {
 		try {
 			long start = System.currentTimeMillis();
 			
-			if (PDF.equals(mimeType)) {
+			if (Config.MIME_PDF.equals(mimeType)) {
 				Reader r = new PdfTextExtractor().extractText(input, mimeType, "utf-8");
 				fos.close();
 				fos = new FileOutputStream(output);
