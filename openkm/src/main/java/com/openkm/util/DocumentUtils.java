@@ -21,6 +21,7 @@
 
 package com.openkm.util;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,11 +29,15 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.jackrabbit.JcrConstants;
 import org.jbpm.JbpmContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.bean.Document;
 import com.openkm.bean.form.FormElement;
+import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.DocumentFilterDAO;
 import com.openkm.dao.bean.DocumentFilter;
@@ -40,11 +45,14 @@ import com.openkm.dao.bean.DocumentFilterRule;
 import com.openkm.module.base.BasePropertyGroupModule;
 import com.openkm.module.base.BasePropertyModule;
 import com.openkm.module.base.BaseWorkflowModule;
+import com.openkm.util.metadata.MetadataExtractor;
+import com.openkm.util.metadata.PdfMetadata;
 
 public class DocumentUtils {
 	private static Logger log = LoggerFactory.getLogger(DocumentUtils.class);
 	
-	public static void checkFilters(Session session, Node node, String mimeType) throws DatabaseException, RepositoryException {
+	public static void checkFilters(Session session, Node node, String mimeType) throws DatabaseException,
+			RepositoryException {
 		log.info("checkFilters({}, {})", node.getPath(), mimeType);
 		
 		for (DocumentFilter df : DocumentFilterDAO.findAll(true)) {
@@ -94,6 +102,34 @@ public class DocumentUtils {
 									BasePropertyModule.addKeyword(session, node, dfr.getValue());
 								} catch (Exception e) {
 									JCRUtils.discardsPendingChanges(node);
+								}
+							} else if (DocumentFilterRule.ACTION_EXTRACT_METADATA.equals(dfr.getAction())) {
+								//String ext = FileUtils.getFileExtension(node.getName());
+								//File tmpFile = null; 
+								InputStream is = null;
+								//OutputStream os = null;
+								
+								try {
+									if (Config.MIME_PDF.equals(mimeType)) {
+										//tmpFile = File.createTempFile("kea", ext);
+										Node contentNode = node.getNode(Document.CONTENT);
+										is = contentNode.getProperty(JcrConstants.JCR_DATA).getStream();
+										// os = new FileOutputStream(tmpFile);
+										//IOUtils.copy(is, os);
+										//MetadataDTO md = new MetadataExtractor(false).extract(tmpFile);
+										//log.info("Metadata: {}", md);
+									
+										PdfMetadata md = MetadataExtractor.pdfExtractor(is);
+										log.info("{}", md);
+									} else if (true) {
+										
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+								} finally {
+									//org.apache.commons.io.FileUtils.deleteQuietly(tmpFile);
+									IOUtils.closeQuietly(is);
+									//IOUtils.closeQuietly(os);
 								}
 							}
 						}
