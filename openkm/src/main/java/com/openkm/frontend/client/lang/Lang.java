@@ -117,7 +117,7 @@ public class Lang {
 //				hLang = Lang_zh_CN.lang;
 			}			
 		} else if (LANG_sv_SE.equalsIgnoreCase(lang) || LANG_sv_SE.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			hLang = Lang_sv_SE.lang;
+//			hLang = Lang_sv_SE.lang;
 		} else if (LANG_sr_BA.equalsIgnoreCase(lang) || LANG_sr_BA.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 //			hLang = Lang_sr_BA.lang;
 		} else if (LANG_tr_TR.equalsIgnoreCase(lang) || LANG_tr_TR.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
