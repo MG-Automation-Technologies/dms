@@ -121,7 +121,7 @@ public class Lang {
 		} else if (LANG_sr_BA.equalsIgnoreCase(lang) || LANG_sr_BA.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 //			hLang = Lang_sr_BA.lang;
 		} else if (LANG_tr_TR.equalsIgnoreCase(lang) || LANG_tr_TR.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			hLang = Lang_tr_TR.lang;
+//			hLang = Lang_tr_TR.lang;
 		} else if (LANG_ja_JP.equalsIgnoreCase(lang) || LANG_ja_JP.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 //			hLang = Lang_ja_JP.lang;
 		} else if (LANG_ro_RO.equalsIgnoreCase(lang) || LANG_ro_RO.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
