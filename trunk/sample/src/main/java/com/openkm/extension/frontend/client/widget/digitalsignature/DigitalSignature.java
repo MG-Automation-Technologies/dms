@@ -41,6 +41,21 @@ public class DigitalSignature {
 	}
 	
 	/**
+	 * DigitalSignature
+	 * 
+	 * @return
+	 */
+	public DigitalSignature get() {
+		return null;
+	}
+	
+	/**
+	 * sign
+	 */
+	public void sign() {
+	}
+	
+	/**
 	 * getExtensions
 	 * 
 	 * @return
