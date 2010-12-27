@@ -35,6 +35,8 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.catcode.odf.ODFMetaFileAnalyzer;
+import com.catcode.odf.OpenDocumentMetadata;
 import com.openkm.core.Config;
 
 public class MetadataExtractor {
@@ -110,5 +112,42 @@ public class MetadataExtractor {
 		
 		log.info("officeExtractor: {}", md);
 		return md;
+	}
+	
+	public static void OpenOfficeExtractor(InputStream is) {
+		ODFMetaFileAnalyzer analyzer = new ODFMetaFileAnalyzer();
+		OpenDocumentMetadata odmt = analyzer.analyzeZip(is);
+		OpenOfficeMetadata md = new OpenOfficeMetadata();
+		
+		if (odmt != null) {
+			md.setTitle(odmt.getTitle());
+			md.setSubject(odmt.getSubject());
+			md.setCreator(odmt.getCreator());
+			md.setInitialCreator(odmt.getInitialCreator());
+			md.setKeyword(odmt.getKeyword());
+			md.setDescription(odmt.getDescription());
+			md.setEditingCycles(odmt.getEditingCycles());
+			md.setEditingDuration((long) odmt.getEditingDuration().getSeconds() + 
+					odmt.getEditingDuration().getMinutes() * 60 +
+					odmt.getEditingDuration().getHours() * 3600 +
+					odmt.getEditingDuration().getDays() * 86400);
+			md.setPageCount(odmt.getPageCount());
+			md.setWordCount(odmt.getWordCount());
+			md.setCharacterCount(odmt.getCharacterCount());
+						
+			Calendar creationDate = Calendar.getInstance();
+			creationDate.setTime(odmt.getCreationDate());
+			md.setCreationDate(creationDate);
+			
+			Calendar date = Calendar.getInstance();
+			date.setTime(odmt.getDate());
+			md.setDate(date);
+			
+			Calendar printDate = Calendar.getInstance();
+			printDate.setTime(odmt.getPrintDate());
+			md.setPrintDate(printDate);
+		}
+		
+		log.info("OpenOfficeExtractor: {}", odmt);
 	}
 }
