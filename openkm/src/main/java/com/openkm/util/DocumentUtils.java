@@ -47,6 +47,7 @@ import com.openkm.module.base.BasePropertyModule;
 import com.openkm.module.base.BaseWorkflowModule;
 import com.openkm.util.metadata.MetadataExtractor;
 import com.openkm.util.metadata.OfficeMetadata;
+import com.openkm.util.metadata.OpenOfficeMetadata;
 import com.openkm.util.metadata.PdfMetadata;
 
 public class DocumentUtils {
@@ -122,6 +123,13 @@ public class DocumentUtils {
 										Node contentNode = node.getNode(Document.CONTENT);
 										is = contentNode.getProperty(JcrConstants.JCR_DATA).getStream();
 										OfficeMetadata md = MetadataExtractor.officeExtractor(is, mimeType);
+										log.info("{}", md);
+									} else if (Config.MIME_OO_TEXT.equals(mimeType) ||
+												Config.MIME_OO_SPREADSHEET.equals(mimeType) ||
+												Config.MIME_OO_PRESENTATION.equals(mimeType)) {
+										Node contentNode = node.getNode(Document.CONTENT);
+										is = contentNode.getProperty(JcrConstants.JCR_DATA).getStream();
+										OpenOfficeMetadata md = new OpenOfficeMetadata();
 										log.info("{}", md);
 									}
 								} catch (Exception e) {
