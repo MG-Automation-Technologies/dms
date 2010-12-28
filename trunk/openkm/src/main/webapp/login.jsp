@@ -3,7 +3,6 @@
 <%@ page import="java.util.Locale"%>
 <%@ page import="com.openkm.core.Config"%>
 <%@ page import="com.openkm.util.FormatUtil"%>
-<%@ page import="com.openkm.frontend.client.lang.Lang"%>
 <%@ page import="com.openkm.dao.LanguageDAO"%>
 <%@ page import="com.openkm.dao.bean.Language"%>
 <?xml version="1.0" encoding="UTF-8" ?>
