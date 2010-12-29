@@ -396,7 +396,8 @@ public class LanguageServlet extends BaseServlet {
 		response.setHeader("Expires", "Sat, 6 May 1971 12:00:00 GMT");
 		response.setHeader("Cache-Control", "max-age=0, must-revalidate");
 		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-		String fileName = "OpenKM_" + WarUtils.getAppVersion() + "_" +language.getId() + "_" + language.getTranslations().size() + ".sql";
+		String app = "OpenKM_" + WarUtils.getAppVersion().getMajor() + "." + WarUtils.getAppVersion().getMinor();
+		String fileName =  app + "_" +language.getId() + "_" + language.getTranslations().size() + ".sql";
 		
 		response.setHeader("Content-disposition", "inline; filename=\""+fileName+"\"");		
 		response.setContentType("text/x-sql; charset=UTF-8");
@@ -407,12 +408,14 @@ public class LanguageServlet extends BaseServlet {
 		insertLang.append(language.getId() + "', '" + language.getName() + "', '" + language.getImageContent() + "', '");
 		insertLang.append(language.getImageMime()+"');");
 		out.println(insertLang);
+		
 		for (Translation translation : language.getTranslations()) {
 			StringBuffer insertTranslation = new StringBuffer("INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('");
 			insertTranslation.append(translation.getModule() + "', '" +translation.getKey() + "', '");
 			insertTranslation.append(translation.getText() + "', '" +language.getId() + "');");
 			out.println(insertTranslation);
 		}
+		
 		out.flush();
 		log.debug("export: void");
 	}
