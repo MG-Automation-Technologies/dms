@@ -397,7 +397,7 @@ public class LanguageServlet extends BaseServlet {
 		response.setHeader("Cache-Control", "max-age=0, must-revalidate");
 		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
 		String app = "OpenKM_" + WarUtils.getAppVersion().getMajor() + "." + WarUtils.getAppVersion().getMinor();
-		String fileName =  app + "_" +language.getId() + "_" + language.getTranslations().size() + ".sql";
+		String fileName =  app + "_" +language.getId() + ".sql";
 		
 		response.setHeader("Content-disposition", "inline; filename=\""+fileName+"\"");		
 		response.setContentType("text/x-sql; charset=UTF-8");
