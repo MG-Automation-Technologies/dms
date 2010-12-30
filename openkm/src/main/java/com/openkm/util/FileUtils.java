@@ -27,14 +27,15 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.core.DatabaseException;
+import com.openkm.dao.MimeTypeDAO;
+import com.openkm.dao.bean.MimeType;
+
 public class FileUtils {
 	private static Logger log = LoggerFactory.getLogger(FileUtils.class);
 	
 	/**
-	 * Returns the name of the file whithout the extension.  
-	 * 
-	 * @param file
-	 * @return
+	 * Returns the name of the file whithout the extension.
 	 */
 	public static String getFileName(String file) {
 		log.debug("getFileName("+file+")");
@@ -45,10 +46,7 @@ public class FileUtils {
 	}
 	
 	/**
-	 * Returns the filename extension
-	 * 
-	 * @param file
-	 * @return
+	 * Returns the filename extension.
 	 */
 	public static String getFileExtension(String file) {
 		log.debug("getFileExtension("+file+")");
@@ -59,8 +57,7 @@ public class FileUtils {
 	}
 	
 	/**
-	 * @param path
-	 * @return
+	 * Get parent node.
 	 */
 	public static String getParent(String path) {
 		log.debug("getParent("+path+")");
@@ -71,8 +68,7 @@ public class FileUtils {
 	}
 
 	/**
-	 * @param path
-	 * @return
+	 * Get node name.
 	 */
 	public static String getName(String path) {
 		log.debug("getName("+path+")");
@@ -82,10 +78,7 @@ public class FileUtils {
 	}
 	
 	/**
-	 * Eliminate dangerous chars in name
-	 * 
-	 * @param name
-	 * @return
+	 * Eliminate dangerous chars in node name.
 	 */
 	public static String escape(String name) {
 		log.debug("escape("+name+")");
@@ -111,11 +104,19 @@ public class FileUtils {
 		File tmpFile = File.createTempFile("okm", null);
 		
 		if (!tmpFile.delete())
-            throw new IOException();
-        if (!tmpFile.mkdir())
-            throw new IOException();
-        
-        return tmpFile;       
+			throw new IOException();
+		if (!tmpFile.mkdir())
+			throw new IOException();
+		return tmpFile;       
+	}
+	
+	/**
+	 * Create temp file with extension from mime
+	 */
+	public static File createTempFileFromMime(String mimeType) throws DatabaseException, IOException {
+		MimeType mt = MimeTypeDAO.findByName(mimeType);
+		String ext = mt.getExtensions().iterator().next();
+		return File.createTempFile("okm", ext);
 	}
 	
 	/**
