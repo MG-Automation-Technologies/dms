@@ -41,6 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 
 public class DocConverter {
 	private static Logger log = LoggerFactory.getLogger(DocConverter.class);
@@ -174,9 +175,9 @@ public class DocConverter {
 	/**
 	 * Convert document to PDF.
 	 */
-	public void doc2pdf(InputStream is, String mimeType, File output) throws IOException {
+	public void doc2pdf(InputStream is, String mimeType, File output) throws DatabaseException, IOException {
 		log.debug("** Convert from {} to PDF **", mimeType);
-		File tmp = File.createTempFile("okm", ".doc");
+		File tmp = FileUtils.createTempFileFromMime(mimeType);
 		FileOutputStream fos = null;
 		
 		try {
@@ -201,9 +202,9 @@ public class DocConverter {
 	/**
 	 * Convert document to TXT.
 	 */
-	public void doc2txt(InputStream input, String mimeType, File output) throws IOException {
+	public void doc2txt(InputStream input, String mimeType, File output) throws DatabaseException, IOException {
 		log.debug("** Convert from {} to TXT **", mimeType);
-		File tmp = File.createTempFile(input.toString(), ".cnv");
+		File tmp = FileUtils.createTempFileFromMime(mimeType);
 		FileOutputStream fos = new FileOutputStream(tmp);
 		
 		try {
@@ -237,9 +238,9 @@ public class DocConverter {
 	 * 
 	 * [0] => http://www.rubblewebs.co.uk/imagemagick/psd.php
 	 */
-	public void img2pdf(InputStream is, String mimeType, File output) throws IOException {
+	public void img2pdf(InputStream is, String mimeType, File output) throws DatabaseException, IOException {
 		log.debug("** Convert from {} to PDF **", mimeType);
-		File tmp = File.createTempFile("okm", ".img");
+		File tmp = FileUtils.createTempFileFromMime(mimeType);
 		String inputFile = tmp.getPath()+"[0]";
 		FileOutputStream fos = null;
 		
