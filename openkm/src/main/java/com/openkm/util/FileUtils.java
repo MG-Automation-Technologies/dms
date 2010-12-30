@@ -33,10 +33,12 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.module.direct.DirectDocumentModule;
+import com.openkm.core.DatabaseException;
+import com.openkm.dao.MimeTypeDAO;
+import com.openkm.dao.bean.MimeType;
 
 public class FileUtils {
-	private static Logger log = LoggerFactory.getLogger(DirectDocumentModule.class);
+	private static Logger log = LoggerFactory.getLogger(FileUtils.class);
 	
 	/**
 	 * Returns the name of the file whithout the extension.  
@@ -124,6 +126,15 @@ public class FileUtils {
             throw new IOException();
         
         return tmpFile;       
+	}
+	
+	/**
+	 * Create temp file with extension from mime
+	 */
+	public static File createTempFileFromMime(String mimeType) throws DatabaseException, IOException {
+		MimeType mt = MimeTypeDAO.findByName(mimeType);
+		String ext = mt.getExtensions().iterator().next();
+		return File.createTempFile("okm", ext);
 	}
 	
 	/**
