@@ -45,7 +45,7 @@ public class DigitalSignature {
 	 * 
 	 * @return
 	 */
-	public DigitalSignature get() {
+	public static DigitalSignature get() {
 		return null;
 	}
 	
