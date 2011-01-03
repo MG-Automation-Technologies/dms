@@ -1065,8 +1065,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 						enableMove();
 						enableRemovePropertyGroup(); // Always enable it ( not controls button, only boolean value )
 						enableWorkflow();
-						if (Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_TEMPLATES &&
-							Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_CATEGORIES &&
+						if (Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_CATEGORIES &&
 							Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_THESAURUS &&
 							Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_PERSONAL &&
 							Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_TRASH && 
@@ -1147,13 +1146,18 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			}
 			
 			// Excepts on taxonomy, categories and thesaurus panel always disabling 
-			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TEMPLATES ||
-				Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_PERSONAL || 
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_PERSONAL || 
 				Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TRASH || 
 				Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_MAIL) {
 				disableAddPropertyGroup();
 				disableRemovePropertyGroup();
 				disableFiredRemovePropertyGroup();
+				disableAddSubscription();
+				disableRemoveSubscription();
+			}
+			
+			// On templates disables subscription, but property group are enabled
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TEMPLATES) {
 				disableAddSubscription();
 				disableRemoveSubscription();
 			}
