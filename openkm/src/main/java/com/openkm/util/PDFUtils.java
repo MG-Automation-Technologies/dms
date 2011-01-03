@@ -23,7 +23,6 @@ package com.openkm.util;
 
 import java.awt.Color;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -186,15 +185,16 @@ public class PDFUtils {
 	 * Fill PDF form
 	 */
 	@SuppressWarnings("rawtypes")
-	public static void fillForm(String input, Map<String, String> values, 
-			String output) throws FileNotFoundException, DocumentException, IOException {
+	public static void fillForm(InputStream input, Map<String, String> values, 
+			OutputStream output) throws FileNotFoundException, DocumentException, IOException {
 		log.info("fillForm({}, {}, {})", new Object[] { input, values, output });
 		PdfReader reader = new PdfReader(input);
-		PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(output));
+		PdfStamper stamper = new PdfStamper(reader, output);
 		AcroFields form = stamper.getAcroFields();
 		
 		for (Iterator it = reader.getAcroForm().getFields().iterator(); it.hasNext(); ) {
 			PRAcroForm.FieldInformation field = (PRAcroForm.FieldInformation) it.next();
+			log.info("Field: {}", field.getName());
 			String value = values.get(field.getName());
 			
 			if (value != null) {
