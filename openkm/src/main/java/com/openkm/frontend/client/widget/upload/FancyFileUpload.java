@@ -767,7 +767,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		send.setText(Main.i18n("fileupload.send"));	
 		notifyToUserText.setHTML(Main.i18n("fileupload.label.users.notify"));
 		importZipText.setHTML(Main.i18n("fileupload.label.importZip"));
-		digitalSignatureText = new HTML(Main.i18n("fileupload.digital.signature"));
+		digitalSignatureText.setHTML(Main.i18n("fileupload.digital.signature"));
 		versionCommentText.setHTML(Main.i18n("fileupload.label.comment"));
 		commentTXT.setHTML(Main.i18n("fileupload.label.notify.comment"));
 		notifyPanel.langRefresh();
