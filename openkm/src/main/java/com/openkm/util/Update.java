@@ -35,6 +35,8 @@ import java.net.UnknownHostException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.bean.AppVersion;
+
 public class Update {
 	private static Logger log = LoggerFactory.getLogger(Update.class);
 	
@@ -45,8 +47,10 @@ public class Update {
 		try {
 			URL url = new URL("http://update.openkm.com");
 			HttpURLConnection urlConn =(HttpURLConnection)url.openConnection();
+			AppVersion av = WarUtils.getAppVersion();
 			String content = "okm_uuid="+URLEncoder.encode(uuid, "UTF-8")+
-				"&okm_version="+URLEncoder.encode(WarUtils.getAppVersion().toString(), "UTF-8")+
+				"&okm_version="+URLEncoder.encode(av.getVersion(), "UTF-8")+
+				"&okm_build="+URLEncoder.encode(av.getBuild(), "UTF-8")+
 				"&os_name="+URLEncoder.encode(System.getProperty("os.name"), "UTF-8")+
 				"&os_version="+URLEncoder.encode(System.getProperty("os.version"), "UTF-8")+
 				"&java_vendor="+URLEncoder.encode(System.getProperty("java.vm.vendor"), "UTF-8")+
