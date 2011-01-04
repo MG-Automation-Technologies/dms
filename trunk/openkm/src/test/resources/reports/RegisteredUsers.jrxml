@@ -41,7 +41,7 @@ return al;]]>
 		<band height="44" splitType="Stretch">
 			<image>
 				<reportElement key="image-1" x="374" y="0" width="150" height="35"/>
-				<imageExpression class="java.lang.String"><![CDATA[$P{host}+"../logo/report"]]></imageExpression>
+				<imageExpression class="java.lang.String"><![CDATA[$P{host}+"/logo/report"]]></imageExpression>
 			</image>
 			<textField pattern="yyyy/MM/dd" isBlankWhenNull="false">
 				<reportElement key="textField-13" x="0" y="0" width="65" height="10" forecolor="#010101"/>
