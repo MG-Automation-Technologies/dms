@@ -3,7 +3,7 @@
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="315"/>
+	<property name="ireport.x" value="242"/>
 	<property name="ireport.y" value="0"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
@@ -58,7 +58,7 @@ for (RowIterator it = result.getRows(); it.hasNext();) {
 		<band height="44" splitType="Stretch">
 			<image>
 				<reportElement key="image-1" x="374" y="0" width="150" height="35"/>
-				<imageExpression class="java.lang.String"><![CDATA[$P{host}+"../logo/report"]]></imageExpression>
+				<imageExpression class="java.lang.String"><![CDATA[$P{host}+"/logo/report"]]></imageExpression>
 			</image>
 			<textField pattern="yyyy/MM/dd" isBlankWhenNull="false">
 				<reportElement key="textField-13" x="0" y="0" width="65" height="10" forecolor="#010101"/>
