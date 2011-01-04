@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -630,14 +631,17 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 	@Override
 	public void createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties) throws OKMException  {
 		File tmp = null;
+		InputStream fis = null;
+		FileOutputStream fos = null;
+		
 		try {
 			// Reading original document
-			InputStream fis = OKMDocument.getInstance().getContent(null, docPath, false);
+			fis = OKMDocument.getInstance().getContent(null, docPath, false);
 			
 			// Save content to temporary file
 			String fileName = FileUtils.getName(docPath);
 			tmp = File.createTempFile("okm", "."+FileUtils.getFileExtension(fileName));
-			FileOutputStream fos = new FileOutputStream(tmp);
+			fos = new FileOutputStream(tmp);
 			
 			// Setting values to document 
 			Map<String, String> values = new HashMap<String, String>();
@@ -647,16 +651,13 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 			
 			// Create document in temporary 
 			PDFUtils.fillForm(fis, values, fos);
-	        fis.close();
-	        fos.close();
-	        
+			fis.close();
+			
 	        // Creating document
 	        fis = new FileInputStream(tmp);
 	        Document newDoc = new Document();
 			newDoc.setPath(destinationPath);
 			OKMDocument.getInstance().create(null, newDoc, fis);
-			fis.close();
-			
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_IO), e.getMessage());
@@ -691,9 +692,9 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_AccessDenied), e.getMessage());
 		} finally {
-			if (tmp!=null) {
-				FileUtils.deleteQuietly(tmp);
-			}
+			FileUtils.deleteQuietly(tmp);
+			IOUtils.closeQuietly(fis);
+			IOUtils.closeQuietly(fos);
 		}
 	}
 }
