@@ -378,6 +378,85 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 		propertyGroupService.setProperties(docPath, grpName, formElementList, callbackSetProperties);
 	}
 	
+	/**
+	 * getFormElements
+	 * 
+	 * @return
+	 */
+	public List<GWTFormElement> getFormElements() {
+		int rows = 1;
+		
+		for (Iterator<GWTFormElement> it = formElementList.iterator(); it.hasNext();) {
+			GWTFormElement formElement = it.next();
+			
+			if (formElement instanceof GWTTextArea) {
+				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
+				TextArea textArea = (TextArea) hPanel.getWidget(0);
+				((GWTTextArea) formElement).setValue(textArea.getText());
+
+			} else if (formElement instanceof GWTInput) {
+				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
+				TextBox textBox = (TextBox) hPanel.getWidget(0);
+				if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_LINK)) {
+					// Always must start with http://
+					if (!textBox.getText().equals("") && !textBox.getText().startsWith("http://")) {
+						textBox.setText("http://" + textBox.getText());
+					}
+				} 
+				((GWTInput) formElement).setValue(textBox.getText()); // note that date is added by click handler in drawform method
+
+			} else if (formElement instanceof GWTCheckBox) {	
+				CheckBox checkbox = (CheckBox) hWidgetProperties.get(formElement.getName());
+				((GWTCheckBox) formElement).setValue(checkbox.getValue());
+					
+			} else if (formElement instanceof GWTSelect) {
+				GWTSelect gwtSelect = (GWTSelect) formElement;
+				if (gwtSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
+					HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
+					ListBox listBox = (ListBox) hPanel.getWidget(0);
+					String selectedValue = "";
+					if (listBox.getSelectedIndex()>0) {
+						selectedValue = listBox.getValue(listBox.getSelectedIndex());
+					}
+					for (Iterator<GWTOption> itOptions = gwtSelect.getOptions().iterator(); itOptions.hasNext();) {
+						GWTOption option = itOptions.next();
+						if (option.getValue().equals(selectedValue)) {
+							option.setSelected(true);
+						} else {
+							option.setSelected(false);
+						}
+					}
+					
+				} else if (gwtSelect.getType().equals(GWTSelect.TYPE_MULTIPLE)) {
+					HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
+					FlexTable tableMulti = (FlexTable) hPanel.getWidget(0);		
+					
+					// Disables all options
+					for (Iterator<GWTOption> itOptions = gwtSelect.getOptions().iterator(); itOptions.hasNext();) {
+						itOptions.next().setSelected(false);
+					}
+					
+					// Enables options
+					if (tableMulti.getRowCount()>0) {
+						for (int i=0; i<tableMulti.getRowCount(); i++) {
+							String selectedValue = tableMulti.getText(i,0);
+							for (Iterator<GWTOption> itOptions = gwtSelect.getOptions().iterator(); itOptions.hasNext();) {
+								GWTOption option = itOptions.next();
+								if (option.getValue().equals(selectedValue)) {
+									option.setSelected(true);
+								} 
+							}
+						}
+					} 
+				}
+			}
+			
+			rows ++;
+		}
+		
+		return formElementList;
+	}
+	
 	
 	/**
 	 * Cancel edition and restores values

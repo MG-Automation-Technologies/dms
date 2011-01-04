@@ -930,6 +930,39 @@ public class GWTUtil {
 	}
 	
 	/**
+	 * getFormElementValue
+	 * 
+	 * @param formElement
+	 * @return
+	 */
+	public static String getFormElementValue( GWTFormElement formElement) {
+		if (formElement instanceof GWTButton) {
+			return ((GWTButton) formElement).getValue();
+			
+		} else if (formElement instanceof GWTInput) {
+			return ((GWTInput) formElement).getValue();
+
+		} else if (formElement instanceof GWTCheckBox) {
+			return ((GWTCheckBox) formElement).getValue()?"true":"false";
+
+		} else if (formElement instanceof GWTSelect) {
+			String value = "";
+			for (Iterator<GWTOption> it = ((GWTSelect) formElement).getOptions().iterator(); it.hasNext();) {
+				GWTOption option = it.next();
+				if (option.isSelected()) {
+					value += option.getValue();
+				}
+			}
+			return value;
+			
+		} else if (formElement instanceof GWTTextArea) {
+			return ((GWTTextArea) formElement).getValue();
+		} 
+		
+		return "";
+	}
+	
+	/**
 	 * Copy to GWTOption data to  Option
 	 * @param GWTOption the original data
 	 * @return The Option object with data values from original GWTOption

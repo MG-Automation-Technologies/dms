@@ -247,9 +247,14 @@ public class FolderSelectPopup extends DialogBox  {
 						// Only create from template when origin and destination path are not equals
 						if (!fatherPath.equals(actualPath)) {
 							setActionView();
-							endPoint = (ServiceDefTarget) documentService;
-							endPoint.setServiceEntryPoint(RPCService.DocumentService);								
-							documentService.copy(((GWTDocument) node).getPath(),actualPath,callbackCopyFromTemplate);
+							if (((GWTDocument) node).getMimeType().equals("application/pdf") && 
+								Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.hasPropertyGroups()) {
+								Main.get().templateWizardPopup.start(((GWTDocument) node).getPath(), actualPath + "/" + ((GWTDocument) node).getName());
+							} else {
+								endPoint = (ServiceDefTarget) documentService;
+								endPoint.setServiceEntryPoint(RPCService.DocumentService);								
+								documentService.copy(((GWTDocument) node).getPath(),actualPath,callbackCopyFromTemplate);
+							}
 						} else {
 							changeStatusOnError("fileupload.label.error.not.allowed.create.from.template.same.folder");
 						}
@@ -848,6 +853,15 @@ public class FolderSelectPopup extends DialogBox  {
 		while (contextListBox.getItemCount()>0) {
 			contextListBox.removeItem(0);
 		}
+	}
+	
+	/**
+	 * getSelectedIndex
+	 * 
+	 * @return
+	 */
+	public int getSelectedIndex() {
+		return Integer.parseInt(contextListBox.getValue(contextListBox.getSelectedIndex()));
 	}
 	
 	public void showTemplates() {
