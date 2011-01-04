@@ -29,6 +29,10 @@ public class AppVersion {
 		this.build = build;
 	}
 	
+	public String getVersion() {
+		return major+"."+minor;
+	}
+	
 	public String toString() {
 		return major+"."+minor+" (build: "+build+")";
 	}
