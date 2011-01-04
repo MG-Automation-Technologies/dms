@@ -950,7 +950,7 @@ public class GWTUtil {
 			for (Iterator<GWTOption> it = ((GWTSelect) formElement).getOptions().iterator(); it.hasNext();) {
 				GWTOption option = it.next();
 				if (option.isSelected()) {
-					value += option.getValue();
+					value += option.getLabel() + " ";
 				}
 			}
 			return value;
