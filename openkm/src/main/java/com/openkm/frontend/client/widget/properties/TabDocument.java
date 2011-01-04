@@ -586,4 +586,13 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	public void addPreviewExtension(PreviewExtension extension) {
 		widgetPreviewExtensionList.add(extension);
 	}
+	
+	/**
+	 * hasPropertyGroups
+	 * 
+	 * @return
+	 */
+	public boolean hasPropertyGroups() {
+		return (propertyGroup.size()>0);
+	}
 }

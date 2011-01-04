@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.openkm.frontend.client.bean.GWTDocument;
+import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTVersion;
 
 /**
@@ -50,4 +51,5 @@ public interface OKMDocumentServiceAsync {
 	public void purgeVersionHistory(String docPath, AsyncCallback<?> callback);
 	public void forceUnlock(String docPath, AsyncCallback<?> callback);
 	public void forceCancelCheckout(String docPath, AsyncCallback<?> callback);
+	public void createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties, AsyncCallback<?> callback);
 }

@@ -21,18 +21,25 @@
 
 package com.openkm.servlet.frontend;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.lowagie.text.DocumentException;
 import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
 import com.openkm.api.OKMRepository;
@@ -42,18 +49,25 @@ import com.openkm.bean.QueryResult;
 import com.openkm.bean.Version;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.core.UnsupportedMimeTypeException;
+import com.openkm.core.UserQuotaExceededException;
+import com.openkm.core.VirusDetectedException;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTDocument;
+import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTVersion;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.util.DocumentComparator;
+import com.openkm.util.FileUtils;
 import com.openkm.util.GWTUtil;
+import com.openkm.util.PDFUtils;
 
 /**
  * Servlet Class
@@ -611,5 +625,75 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 		}
 		
 		log.debug("forceCancelCheckout: void");
+	}
+	
+	@Override
+	public void createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties) throws OKMException  {
+		File tmp = null;
+		try {
+			// Reading original document
+			InputStream fis = OKMDocument.getInstance().getContent(null, docPath, false);
+			
+			// Save content to temporary file
+			String fileName = FileUtils.getName(docPath);
+			tmp = File.createTempFile("okm", "."+FileUtils.getFileExtension(fileName));
+			FileOutputStream fos = new FileOutputStream(tmp);
+			
+			// Setting values to document 
+			Map<String, String> values = new HashMap<String, String>();
+			for (GWTFormElement formElement : formProperties) {
+				values.put(formElement.getName().replace(".", "_"), GWTUtil.getFormElementValue(formElement));
+			}
+			
+			// Create document in temporary 
+			PDFUtils.fillForm(fis, values, fos);
+	        fis.close();
+	        fos.close();
+	        
+	        // Creating document
+	        fis = new FileInputStream(tmp);
+	        Document newDoc = new Document();
+			newDoc.setPath(destinationPath);
+			OKMDocument.getInstance().create(null, newDoc, fis);
+			fis.close();
+			
+		} catch (IOException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_IO), e.getMessage());
+		} catch (PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Database), e.getMessage());
+		} catch (DocumentException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Document), e.getMessage());
+		} catch (UnsupportedMimeTypeException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_UnsupportedMimeType), e.getMessage());
+		} catch (FileSizeExceededException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_FileSizeExceeded), e.getMessage());
+		} catch (UserQuotaExceededException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_QuotaExceed), e.getMessage());
+		} catch (VirusDetectedException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Virus), e.getMessage());
+		} catch (ItemExistsException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_ItemExists), e.getMessage());
+		} catch (AccessDeniedException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_AccessDenied), e.getMessage());
+		} finally {
+			if (tmp!=null) {
+				FileUtils.deleteQuietly(tmp);
+			}
+		}
 	}
 }
