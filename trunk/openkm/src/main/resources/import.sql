@@ -866,6 +866,7 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('e
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'digital.signature.sign', 'Sign document', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'digital.signature.loading', 'Please wait meanwhile digital signature applet is loading ...', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'fileupload.digital.signature', 'Sign document', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'template.wizard.creation','Create document wizard', 'en-GB');
 INSERT INTO OKM_LANGUAGE (LG_ID, LG_NAME, LG_IMAGE_CONTENT, LG_IMAGE_MIME) VALUES ('es-ES', 'Español', 'R0lGODlhEAALANUAAPxcXPpTU/X1Jfb2K/QtLfxjY+bmAP5yc/7+dvMWFv39APz8TOwAAPMAAP39bfLyE/7+Wvv7RfdLS/pERPQzM/k8PfDyQfT1O/1ra/96evdEROxoVfU7O+UAAPg2NvENDfb2MPPzGfkAAPT0H/j4NuAAAPn5PPXDsf39U/F+V+7fTu3gjfUhIezT1Pnx1vXq4ra7nezhQvj0S9/fAPLzVfTuV+xTUfxMTPK9sMDOqOCMUeSnSuvJS90AAP0AAP8AACH5BAAAAAAALAAAAAAQAAsAAAaFwJ/w5yv6RMiGksH4ZZ6ZwwGDKRQAgYCkmQF4s7fJpOKhELYKBARSU8kiERMJNBDIDGkILbVZWeR0AiMXeAgoJxstODFzdSMhhAoOCy46Ni8qgY8PkZM5PDswFo4hDw8gMyIFY2QEBCwsCQkfHwQlql9aGhocHBRmBD1KDUzFHcclJT3LQQA7', 'image/gif');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.date.pattern', 'dd/MM/yyyy HH:mm:ss', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.day.pattern', 'dd/MM/yyyy', 'es-ES');
@@ -1590,3 +1591,4 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('e
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'digital.signature.sign', 'Firmar documento', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'digital.signature.loading', 'Por favor espere mientras el applet de firma digital se carga ...', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'fileupload.digital.signature', 'Firmar documento', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'template.wizard.creation','Asistente para la creación de documentos', 'es-ES');
