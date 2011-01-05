@@ -141,6 +141,7 @@ public class Config {
 	public static final String PROPERTY_SYSTEM_LOGIN_LOWERCASE = "system.login.lowercase";
 	public static final String PROPERTY_SYSTEM_PREVIEWER = "system.previewer";
 	public static final String PROPERTY_SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK = "system.document.name.mismatch.check";
+	public static final String PROPERTY_SYSTEM_KEYWORD_LOWERCASE = "system.keyword.lowercase";
 	
 	public static final String PROPERTY_UPDATE_INFO = "update.info";
 	public static final String PROPERTY_APPLICATION_URL = "application.url";
@@ -275,6 +276,7 @@ public class Config {
 	public static boolean SYSTEM_LOGIN_LOWERCASE;
 	public static String SYSTEM_PREVIEWER;
 	public static boolean SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK;
+	public static boolean SYSTEM_KEYWORD_LOWERCASE;
 	
 	public static boolean UPDATE_INFO;
 	public static String APPLICATION_URL;
@@ -607,6 +609,8 @@ public class Config {
 			values.put(PROPERTY_SYSTEM_LOGIN_LOWERCASE, Boolean.toString(SYSTEM_LOGIN_LOWERCASE));
 			SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK = ConfigDAO.getBoolean(PROPERTY_SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK, true);
 			values.put(PROPERTY_SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK, Boolean.toString(SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK));
+			SYSTEM_KEYWORD_LOWERCASE = ConfigDAO.getBoolean(PROPERTY_SYSTEM_KEYWORD_LOWERCASE, false);
+			values.put(PROPERTY_SYSTEM_KEYWORD_LOWERCASE, Boolean.toString(SYSTEM_KEYWORD_LOWERCASE));
 			
 			// Modify default admin user if login lowercase is active
 			if (SYSTEM_LOGIN_LOWERCASE) {
