@@ -80,7 +80,7 @@ public interface PropertyModule {
 	 * you can't modify the node because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void addKeyword(String token, String nodePath, String keyword) throws VersionException,
+	public String addKeyword(String token, String nodePath, String keyword) throws VersionException,
 			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
 			DatabaseException;
 

@@ -68,13 +68,14 @@ public class OKMProperty implements PropertyModule {
 	}
 
 	@Override
-	public void addKeyword(String token, String nodePath, String keyword) throws VersionException,
+	public String addKeyword(String token, String nodePath, String keyword) throws VersionException,
 			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
 			DatabaseException {
 		log.debug("addKeyword({}, {}, {})", new Object[] { token, nodePath, keyword });
 		PropertyModule pm = ModuleManager.getPropertyModule();
-		pm.addKeyword(token, nodePath, keyword);
-		log.debug("addKeyword: void");
+		String ret = pm.addKeyword(token, nodePath, keyword);
+		log.debug("addKeyword: {}", ret);
+		return ret;
 	}
 
 	@Override
