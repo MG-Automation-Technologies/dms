@@ -140,6 +140,7 @@ public class Config {
 	public static final String PROPERTY_SYSTEM_ANTIVIR = "system.antivir";
 	public static final String PROPERTY_SYSTEM_LOGIN_LOWERCASE = "system.login.lowercase";
 	public static final String PROPERTY_SYSTEM_PREVIEWER = "system.previewer";
+	public static final String PROPERTY_SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK = "system.document.name.mismatch.check";
 	
 	public static final String PROPERTY_UPDATE_INFO = "update.info";
 	public static final String PROPERTY_APPLICATION_URL = "application.url";
@@ -273,6 +274,7 @@ public class Config {
 	public static String SYSTEM_ANTIVIR;
 	public static boolean SYSTEM_LOGIN_LOWERCASE;
 	public static String SYSTEM_PREVIEWER;
+	public static boolean SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK;
 	
 	public static boolean UPDATE_INFO;
 	public static String APPLICATION_URL;
@@ -603,6 +605,8 @@ public class Config {
 			values.put(PROPERTY_SYSTEM_PREVIEWER, SYSTEM_PREVIEWER);
 			SYSTEM_LOGIN_LOWERCASE = ConfigDAO.getBoolean(PROPERTY_SYSTEM_LOGIN_LOWERCASE, false);
 			values.put(PROPERTY_SYSTEM_LOGIN_LOWERCASE, Boolean.toString(SYSTEM_LOGIN_LOWERCASE));
+			SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK = ConfigDAO.getBoolean(PROPERTY_SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK, true);
+			values.put(PROPERTY_SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK, Boolean.toString(SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK));
 			
 			// Modify default admin user if login lowercase is active
 			if (SYSTEM_LOGIN_LOWERCASE) {
