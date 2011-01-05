@@ -143,6 +143,7 @@ public class Config {
 	public static final String PROPERTY_SYSTEM_ANTIVIR = "system.antivir";
 	public static final String PROPERTY_SYSTEM_LOGIN_LOWERCASE = "system.login.lowercase";
 	public static final String PROPERTY_SYSTEM_PREVIEWER = "system.previewer";
+	public static final String PROPERTY_SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK = "system.document.name.mismatch.check";
 	
 	public static final String PROPERTY_UPDATE_INFO = "update.info";
 	public static final String PROPERTY_APPLICATION_URL = "application.url";
@@ -274,6 +275,8 @@ public class Config {
 	private static String SYSTEM_LOGIN_LOWERCASE_STR = "off";
 	public static boolean SYSTEM_LOGIN_LOWERCASE = "on".equalsIgnoreCase(SYSTEM_LOGIN_LOWERCASE_STR);
 	public static String SYSTEM_PREVIEWER = "zviewer"; // flexpaper
+	private static String SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK_STR = "on";
+	public static boolean SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK = "on".equalsIgnoreCase(SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK_STR);
 	
 	private static String UPDATE_INFO_STR = "on";
 	public static boolean UPDATE_INFO = "on".equalsIgnoreCase(UPDATE_INFO_STR);
@@ -557,6 +560,9 @@ public class Config {
 			values.put(PROPERTY_SYSTEM_LOGIN_LOWERCASE, SYSTEM_LOGIN_LOWERCASE_STR+" ("+SYSTEM_LOGIN_LOWERCASE+")");
 			SYSTEM_PREVIEWER = config.getProperty(PROPERTY_SYSTEM_PREVIEWER, SYSTEM_PREVIEWER);
 			values.put(PROPERTY_SYSTEM_PREVIEWER, SYSTEM_PREVIEWER);
+			SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK_STR = config.getProperty(PROPERTY_SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK, SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK_STR);
+			SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK = "on".equalsIgnoreCase(SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK_STR);
+			values.put(PROPERTY_SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK, SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK_STR+" ("+SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK+")");
 			
 			// Modify default admin user if login lowercase is active
 			if (SYSTEM_LOGIN_LOWERCASE) {

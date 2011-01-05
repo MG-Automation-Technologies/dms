@@ -31,6 +31,7 @@ import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Version;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
@@ -156,7 +157,8 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 				} else if (action == FancyFileUpload.ACTION_UPDATE) {
 					log.info("File updated: {}", path);
 					
-					if (FileUtils.getName(path).equals(fileName)) {
+					// http://en.wikipedia.org/wiki/Truth_table#Applications => ¬p ∨ q
+					if (!Config.SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK || FileUtils.getName(path).equals(fileName)) {
 						OKMDocument document = OKMDocument.getInstance();
 						document.setContent(null, path, is);
 						Version ver = document.checkin(null, path, comment);
