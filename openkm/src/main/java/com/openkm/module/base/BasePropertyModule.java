@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Property;
+import com.openkm.core.Config;
 
 public class BasePropertyModule {
 	private static Logger log = LoggerFactory.getLogger(BasePropertyModule.class);
@@ -108,6 +109,10 @@ public class BasePropertyModule {
 			Value[] property = node.getProperty(Property.KEYWORDS).getValues();
 			Value[] newProperty = new Value[property.length+1];
 			boolean alreadyAdded = false;
+			
+			if (Config.SYSTEM_KEYWORD_LOWERCASE) {
+				keyword = keyword.toLowerCase();
+			}
 			
 			for (int i=0; i<property.length; i++) {
 				newProperty[i] = property[i];
