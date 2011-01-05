@@ -149,7 +149,7 @@ public class DirectPropertyModule implements PropertyModule {
 	}
 
 	@Override
-	public void addKeyword(String token, String nodePath, String keyword) throws VersionException,
+	public String addKeyword(String token, String nodePath, String keyword) throws VersionException,
 			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
 			DatabaseException {
 		log.debug("addKeyword({}, {}, {})", new Object[] { token, nodePath, keyword });
@@ -168,7 +168,7 @@ public class DirectPropertyModule implements PropertyModule {
 			}
 			
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
-			BasePropertyModule.addKeyword(session, documentNode, keyword);
+			keyword = BasePropertyModule.addKeyword(session, documentNode, keyword);
 			
 			// Update cache
 			if (Config.USER_KEYWORDS_CACHE) {
@@ -202,7 +202,8 @@ public class DirectPropertyModule implements PropertyModule {
 			if (token == null) JCRUtils.logout(session);
 		}
 
-		log.debug("addKeyword: void");
+		log.debug("addKeyword: {}", keyword);
+		return keyword;
 	}
 
 	@Override

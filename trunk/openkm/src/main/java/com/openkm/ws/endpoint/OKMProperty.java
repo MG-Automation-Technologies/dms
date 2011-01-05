@@ -77,15 +77,16 @@ public class OKMProperty implements PropertyModule {
 	}
 
 	@WebMethod
-	public void addKeyword(@WebParam(name = "token") String token, 
+	public String addKeyword(@WebParam(name = "token") String token, 
 			@WebParam(name = "nodePath") String nodePath, 
 			@WebParam(name = "keyword") String keyword) throws VersionException,
 			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
 			DatabaseException {
 		log.debug("addKeyword({}, {}, {})", new Object[] { token, nodePath, keyword });
 		PropertyModule pm = ModuleManager.getPropertyModule();
-		pm.addKeyword(token, nodePath, keyword);
-		log.debug("addKeyword: void");
+		String ret = pm.addKeyword(token, nodePath, keyword);
+		log.debug("addKeyword: {}", ret);
+		return ret;
 	}
 
 	@WebMethod

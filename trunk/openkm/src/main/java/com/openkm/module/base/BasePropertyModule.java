@@ -101,7 +101,7 @@ public class BasePropertyModule {
 	/**
 	 * Add keyword
 	 */
-	public static void addKeyword(Session session, Node node, String keyword) throws ValueFormatException,
+	public static String addKeyword(Session session, Node node, String keyword) throws ValueFormatException,
 			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException  {
 		log.debug("addKeyword({}, {}, {})", new Object[] { session, node, keyword });
 		
@@ -129,7 +129,8 @@ public class BasePropertyModule {
 			}
 		}
 		
-		log.debug("addKeyword: void");
+		log.debug("addKeyword: {}", keyword);
+		return keyword;
 	}
 	
 	/**
