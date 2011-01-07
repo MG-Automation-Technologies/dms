@@ -68,7 +68,7 @@ public class Util {
 				form.addPart("file", new FileBody(tmpFile));
 				form.addPart("path", new StringBody(path, Charset.forName("UTF-8")));
 				form.addPart("action", new StringBody("0")); // FancyFileUpload.ACTION_INSERT
-				HttpPost post = new HttpPost(url+"/OKMFileUploadServlet;jsessionid="+token);
+				HttpPost post = new HttpPost(url+"/frontend/FileUpload;jsessionid="+token);
 				post.setHeader("Cookie", "jsessionid="+token);
 				post.setEntity(form);
 				ResponseHandler<String> responseHandler = new BasicResponseHandler();
