@@ -115,4 +115,13 @@ public class NavigatorComunicator {
 	public static GWTFolder getFolder() {
 		return Main.get().activeFolderTree.getFolder();
 	}
+	
+	/**
+	 * getActualPath
+	 * 
+	 * @return
+	 */
+	public static String getActualPath() {
+		return Main.get().activeFolderTree.getActualPath();
+	}
 }
