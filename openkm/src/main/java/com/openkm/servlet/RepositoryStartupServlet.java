@@ -220,8 +220,14 @@ public class RepositoryStartupServlet extends HttpServlet {
         }
         
         try {
-        	log.info("*** Start OpenOffice manager ***");
-        	DocConverter.getInstance().start();
+        	if (!Config.SYSTEM_OPENOFFICE_PATH.equals("")) {
+        		log.info("*** Start OpenOffice manager ***");
+        		DocConverter.getInstance().start();
+        	} else if (!Config.SYSTEM_OPENOFFICE_SERVER.equals("")) {
+        		log.info("*** Using OpenOffice conversion server ***");
+        	} else {
+        		log.warn("*** No OpenOffice manager nor server configured ***");
+        	}
         } catch (Throwable e) {
         	log.warn(e.getMessage(), e);
         }
@@ -245,9 +251,11 @@ public class RepositoryStartupServlet extends HttpServlet {
         super.destroy();
 
         try {
-        	if (log == null) log("*** Shutting down OpenOffice manager ***");
-        	else log.info("*** Shutting down OpenOffice manager ***");
-        	DocConverter.getInstance().stop();
+        	if (!Config.SYSTEM_OPENOFFICE_PATH.equals("")) {
+        		if (log == null) log("*** Shutting down OpenOffice manager ***");
+        		else log.info("*** Shutting down OpenOffice manager ***");
+        		DocConverter.getInstance().stop();
+        	}
         } catch (Throwable e) {
         	log.warn(e.getMessage(), e);
         }
