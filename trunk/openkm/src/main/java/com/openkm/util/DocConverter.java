@@ -21,6 +21,7 @@
 
 package com.openkm.util;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,6 +32,14 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.multipart.FilePart;
+import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.io.IOUtils;
 import org.apache.jackrabbit.extractor.PdfTextExtractor;
 import org.artofsolving.jodconverter.OfficeDocumentConverter;
@@ -104,7 +113,7 @@ public class DocConverter {
 					.setPortNumber(Config.SYSTEM_OPENOFFICE_PORT)
 					.buildOfficeManager();
 			} else {
-				log.warn("system.openoffice not configured");
+				log.warn("system.openoffice.path not configured");
 			}
 		}
 		
@@ -133,7 +142,8 @@ public class DocConverter {
 	 * Test if a MIME document can be converted to PDF
 	 */
 	public boolean convertibleToPdf(String from) {
-		if (!Config.SYSTEM_OPENOFFICE_PATH.equals("") && validOpenOffice.contains(from)) {
+		if ((!Config.SYSTEM_OPENOFFICE_PATH.equals("") || !Config.SYSTEM_OPENOFFICE_SERVER.equals("")) 
+				&& validOpenOffice.contains(from)) {
 			return true;
 		} else if (!Config.SYSTEM_IMG2PDF.equals("") && validImageMagick.contains(from)) {
 			return true;
@@ -172,8 +182,8 @@ public class DocConverter {
 	public void convert(File inputFile, String mimeType, File outputFile) throws IOException {
 		log.debug("convert({}, {}, {})", new Object[] { inputFile, mimeType, outputFile });
 
-		if (Config.SYSTEM_OPENOFFICE_PATH.equals("")) {
-			throw new IOException("system.openoffice not configured");
+		if (Config.SYSTEM_OPENOFFICE_PATH.equals("") && Config.SYSTEM_OPENOFFICE_SERVER.equals("")) {
+			throw new IOException("system.openoffice.path or system.openoffice.server not configured");
 		}
 
 		if (!validOpenOffice.contains(mimeType)) {
@@ -181,10 +191,49 @@ public class DocConverter {
 		}
 
 		try {
-			OfficeDocumentConverter converter = new OfficeDocumentConverter(officeManager);
-			converter.convert(inputFile, outputFile);
+			if (!Config.SYSTEM_OPENOFFICE_PATH.equals("")) {
+				// Document conversion managed by local OO instance
+				OfficeDocumentConverter converter = new OfficeDocumentConverter(officeManager);
+				converter.convert(inputFile, outputFile);
+			} else if (!Config.SYSTEM_OPENOFFICE_SERVER.equals("")) {
+				// Document conversion managed by remote conversion server
+				remoteConvert(inputFile, mimeType, outputFile);
+			}
 		} catch (OfficeException e) {
 			throw new IOException("Error converting document: "+e.getMessage());
+		}
+	}
+	
+	/**
+	 * Handle remote OpenOffice server conversion
+	 */
+	private void remoteConvert(File inputFile, String mimeType, File outputFile) throws IOException {
+		PostMethod post = new PostMethod(Config.SYSTEM_OPENOFFICE_SERVER);
+		
+		try {
+			Part[] parts = { 
+					new FilePart(inputFile.getName(), inputFile),
+					new StringPart("src_mime", mimeType),
+					new StringPart("dst_mime", "application/pdf")
+				};
+			post.setRequestEntity(new MultipartRequestEntity(parts, post.getParams()));
+			HttpClient httpclient = new HttpClient();
+			int rc = httpclient.executeMethod(post);
+			log.info("Response Code: {}", rc);
+			
+			if (rc == HttpStatus.SC_OK) { 
+				FileOutputStream fos = new FileOutputStream(outputFile);
+				BufferedInputStream bis = new BufferedInputStream(post.getResponseBodyAsStream());
+				IOUtils.copy(bis, fos);
+				bis.close();
+				fos.close();
+			} else {
+				throw new IOException("Error in conversion: " + rc);
+			}
+		} catch (HttpException e) {
+			throw new IOException(e.getMessage(), e);
+		} finally {
+			post.releaseConnection();
 		}
 	}
 	
