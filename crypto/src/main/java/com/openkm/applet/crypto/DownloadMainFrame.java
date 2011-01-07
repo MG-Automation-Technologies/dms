@@ -69,10 +69,11 @@ public class DownloadMainFrame extends JFrame implements ActionListener, WindowL
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				DownloadMainFrame inst = new DownloadMainFrame(new CryptoManager("8E520CF147843CB343DC1754B13A40AC", 
-																 "/okm:root/backup.txt", 
-																 "http://localhost:8080/OpenKM", 
-																 "download",
-																 "f89dd6f2-e1a4-4cfc-8178-f3fe766cc005"), 
+															   "/okm:root/backup.txt", 
+															   "http://localhost:8080/OpenKM", 
+															   "download",
+															   "f89dd6f2-e1a4-4cfc-8178-f3fe766cc005",
+															   null), 
 											   null);
 				inst.setLocationRelativeTo(null);
 				inst.setVisible(true);
@@ -196,6 +197,9 @@ public class DownloadMainFrame extends JFrame implements ActionListener, WindowL
 						// Removing tmp file
 						tmp.delete();
 						log.log(Level.INFO, "Tmp file removed: ");
+						
+						// Refreshing OpenKM UI
+						cryptoManager.refreshFolder(this);
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(this, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				} 

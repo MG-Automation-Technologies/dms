@@ -29,6 +29,9 @@ import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
+import netscape.javascript.JSException;
+import netscape.javascript.JSObject;
+
 import org.apache.http.client.ClientProtocolException;
 
 /**
@@ -44,6 +47,7 @@ public class CryptoManager {
 	private String url;
 	private String uuid;
 	private String action;
+	private JSObject win;
 	private CryptoByPassword criptoByPassword;
 
 	/**
@@ -52,12 +56,13 @@ public class CryptoManager {
 	 * @param token
 	 * @param win
 	 */
-	public CryptoManager(String token, String path, String url, String action, String uuid) {
+	public CryptoManager(String token, String path, String url, String action, String uuid, JSObject win) {
 		this.token = token;
 		this.path = path;
 		this.url = url;
 		this.action = action;
 		this.uuid = uuid;
+		this.win = win;
 		criptoByPassword = new CryptoByPassword();
 	}
 	
@@ -151,5 +156,23 @@ public class CryptoManager {
 	 */
 	public String getFileName() {
 		return path.substring(path.lastIndexOf("/"));
+	}
+	
+	/**
+	 * refreshFolder
+	 * 
+	 * @param parentComponent
+	 */
+	public void refreshFolder(Component parentComponent) {
+		try {
+			win.call("refreshFolder", null);
+		} catch (JSException e) {
+			log.log(Level.WARNING, "JSException: " + e.getMessage(), e);
+			
+			// TODO Investigate why occurs but js method is executed
+			if (!"JavaScript error while calling \"refreshFolder\"".equals(e.getMessage())) {
+				JOptionPane.showMessageDialog(parentComponent, e.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
+			}
+		} 
 	}
 }

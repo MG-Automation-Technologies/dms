@@ -71,7 +71,8 @@ public class UploadMainFrame extends JFrame implements ActionListener, WindowLis
 																 "/okm:root", 
 																 "http://localhost:8080/OpenKM", 
 																 "insert",
-																 ""), 
+																 "",
+																 null), 
 											   null);
 				inst.setLocationRelativeTo(null);
 				inst.setVisible(true);
@@ -194,6 +195,8 @@ public class UploadMainFrame extends JFrame implements ActionListener, WindowLis
 						cryptoManager.upload(tmp, files[i].getName(), this);
 						log.log(Level.INFO, "Crypt file uploaded: ");
 						
+						// Refreshing OpenKM UI
+						cryptoManager.refreshFolder(this);
 					} catch (Exception e1) {
 						JOptionPane.showMessageDialog(this, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					} finally {
