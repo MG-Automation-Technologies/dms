@@ -649,6 +649,9 @@ public class MailUtils {
 	
 	/**
 	 * User tinyurl service as url shorter
+	 * 
+	 * Depends on commons-httpclient:commons-httpclient:jar:3.0 
+	 * because of org.apache.jackrabbit:jackrabbit-webdav:jar:1.6.4
 	 */
 	public static String getTinyUrl(String fullUrl) throws HttpException, IOException {
 		HttpClient httpclient = new HttpClient();
