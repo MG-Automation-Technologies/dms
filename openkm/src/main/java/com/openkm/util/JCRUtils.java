@@ -36,6 +36,8 @@ import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 import javax.jcr.Workspace;
+import javax.jcr.lock.Lock;
+import javax.jcr.lock.LockException;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
@@ -49,9 +51,12 @@ import org.apache.jackrabbit.api.jsr283.security.AccessControlManager;
 import org.apache.jackrabbit.api.jsr283.security.AccessControlPolicy;
 import org.apache.jackrabbit.api.jsr283.security.AccessControlPolicyIterator;
 import org.apache.jackrabbit.api.jsr283.security.Privilege;
+import org.apache.jackrabbit.core.NodeImpl;
 import org.apache.jackrabbit.core.RepositoryCopier;
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.SessionImpl;
+import org.apache.jackrabbit.core.lock.LockManager;
+import org.apache.jackrabbit.core.lock.LockManagerImpl;
 import org.apache.jackrabbit.core.security.principal.PrincipalImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -203,6 +208,21 @@ public class JCRUtils {
 		log.debug("removeLockToken({}, {})", session, node);
 		LockTokenDAO.remove(session.getUserID(), getLockToken(node.getUUID()));
 		log.debug("removeLockToken: void");
+	}
+	
+	/**
+	 * Obtain lock token from node
+	 */
+	public static String getLockToken(Session session, Node node) throws LockException, 
+			javax.jcr.RepositoryException {
+		LockManager lm = ((SessionImpl)session).getLockManager();
+		Lock lock = ((LockManagerImpl) lm).getLock((NodeImpl)node);
+		
+		if (lock != null) {
+			return lock.getLockToken();
+		} else {
+			return null;
+		}
 	}
 	
 	/**
