@@ -216,4 +216,13 @@ public class GeneralComunicator {
 	public static GWTDocument getDocumentToSign() {
 		return Main.get().wizardPopup.getDocumentToSign();
 	}
+	
+	/**
+	 * getToken
+	 * 
+	 * @return
+	 */
+	public static String getToken() {
+		return Main.get().workspaceUserProperties.getWorkspace().getToken();
+	}
 }

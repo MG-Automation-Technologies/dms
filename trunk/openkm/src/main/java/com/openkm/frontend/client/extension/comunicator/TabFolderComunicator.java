@@ -37,7 +37,7 @@ public class TabFolderComunicator {
 	 * 
 	 * @return
 	 */
-	public int getSelectedTab() {
+	public static int getSelectedTab() {
 		return Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.getSelectedTab();
 	}
 
@@ -46,11 +46,11 @@ public class TabFolderComunicator {
 	 * 
 	 * @return
 	 */
-	public GWTFolder getFolder() {
+	public static GWTFolder getFolder() {
 		return Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.getFolder();
 	}
 	
-	public boolean isVisibleButton() {
+	public static boolean isVisibleButton() {
 		return Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.isVisibleButton();
 	}
 }
