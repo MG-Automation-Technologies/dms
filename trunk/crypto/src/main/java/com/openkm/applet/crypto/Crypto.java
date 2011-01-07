@@ -79,7 +79,7 @@ public class Crypto extends JApplet {
         }
 		
         // Create the cryto manager instance
-        cryptoManager = new CryptoManager(token, path, url, action, uuid);
+        cryptoManager = new CryptoManager(token, path, url, action, uuid, win);
         
 		try {
             SwingUtilities.invokeAndWait(new Runnable() {
