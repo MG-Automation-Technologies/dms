@@ -1,6 +1,7 @@
 <%@ page import="java.io.File" %>
 <%@ page import="java.util.Vector" %>
 <%@ page import="com.openkm.core.Config" %>
+<%@ page import="com.openkm.servlet.admin.BaseServlet" %>
 <%@ page import="com.openkm.core.HttpSessionManager" %>
 <%@ page import="com.openkm.kea.tree.KEATree" %>
 <%@ page import="com.openkm.util.FormatUtil" %>
@@ -20,7 +21,7 @@
 </head>
 <body>
 <%
-	if (request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
+	if (BaseServlet.isMultipleInstancesAdmin(request)) {
 		request.setCharacterEncoding("UTF-8");
 		String strLevel = request.getParameter("level");
 				

@@ -3,6 +3,7 @@
 <%@ page import="java.io.File" %>
 <%@ page import="org.apache.commons.io.FileUtils" %>
 <%@ page import="com.openkm.core.Config" %>
+<%@ page import="com.openkm.servlet.admin.BaseServlet" %>
 <%@ page import="com.openkm.core.HttpSessionManager" %>
 <%@ page import="com.openkm.util.WebUtils"%>
 <%@ page import="com.openkm.util.FormatUtil"%>
@@ -21,7 +22,7 @@
 </head>
 <body>
 <%
-	if (request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
+	if (BaseServlet.isAdmin(request)) {
 		request.setCharacterEncoding("UTF-8");
 		String repoPath = WebUtils.getString(request, "repoPath", "/okm:root");
 		String fsPath = WebUtils.getString(request, "fsPath");
