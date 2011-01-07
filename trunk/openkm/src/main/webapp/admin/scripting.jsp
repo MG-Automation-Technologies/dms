@@ -1,4 +1,4 @@
-<%@ page import="com.openkm.core.Config" %>
+<%@ page import="com.openkm.servlet.admin.BaseServlet" %>
 <%@ page import="bsh.Interpreter"%>
 <%@ page import="java.io.ByteArrayOutputStream"%>
 <%@ page import="java.io.PrintStream"%>
@@ -14,7 +14,7 @@
 </head>
 <body>
 <%
-	if (request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
+	if (BaseServlet.isMultipleInstancesAdmin(request)) {
 		request.setCharacterEncoding("UTF-8");
 		String script = request.getParameter("script");
 		StringBuffer scriptOutput = new StringBuffer();
