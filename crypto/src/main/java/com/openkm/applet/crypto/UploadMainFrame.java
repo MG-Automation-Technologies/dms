@@ -68,11 +68,12 @@ public class UploadMainFrame extends JFrame implements ActionListener, WindowLis
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				UploadMainFrame inst = new UploadMainFrame(new CryptoManager("8E520CF147843CB343DC1754B13A40AC", 
-																 "/okm:root", 
-																 "http://localhost:8080/OpenKM", 
-																 "insert",
-																 "",
-																 null), 
+														   "/okm:root", 
+														   "http://localhost:8080/OpenKM", 
+														   "insert",
+														   "",
+														   "",
+														   null), 
 											   null);
 				inst.setLocationRelativeTo(null);
 				inst.setVisible(true);
@@ -113,7 +114,6 @@ public class UploadMainFrame extends JFrame implements ActionListener, WindowLis
 	 */
 	private void initGUI() {
 		try {
-			{
 				getContentPane().setLayout(null);
 				
 				jLabel1 = new JLabel();
@@ -138,7 +138,6 @@ public class UploadMainFrame extends JFrame implements ActionListener, WindowLis
 				selectFile.setText("Select file");
 				selectFile.setBounds(19, 84, 235, 22);
 				selectFile.addActionListener(this);
-			}
 			pack();
 			this.setSize(283, 159);
 		} catch (Exception e) {
@@ -149,6 +148,7 @@ public class UploadMainFrame extends JFrame implements ActionListener, WindowLis
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		boolean error = false;
 		if (!jPasswordField1.getPassword().equals("") && new String(jPasswordField1.getPassword()).equals(new String(jPasswordField2.getPassword()))) {
 			selectFile.setVisible(false);
 			jPasswordField1.setEditable(false);
@@ -158,9 +158,6 @@ public class UploadMainFrame extends JFrame implements ActionListener, WindowLis
 			chooser.setDialogTitle(choosertitle);
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			chooser.setMultiSelectionEnabled(true);
-	
-	//		chooser.addChoosableFileFilter(new FileNameExtensionFilter("Word file","doc","doc"));
-	//		chooser.addChoosableFileFilter(new FileNameExtensionFilter("Java file","java","java"));
 	
 			/* Enable the "All files" option */
 			chooser.setAcceptAllFileFilterUsed(true);
@@ -198,10 +195,16 @@ public class UploadMainFrame extends JFrame implements ActionListener, WindowLis
 						// Refreshing OpenKM UI
 						cryptoManager.refreshFolder(this);
 					} catch (Exception e1) {
+						error = true;
 						JOptionPane.showMessageDialog(this, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					} finally {
 						tmpDir.delete();
 					}
+				}
+				
+				// Uploading message
+				if (!error) {
+					JOptionPane.showMessageDialog(this, "Files successfully uploaded", "Information", JOptionPane.INFORMATION_MESSAGE);
 				}
 			} else {
 				JOptionPane.showMessageDialog(this, "Must be selected at least one document", "Error", JOptionPane.ERROR_MESSAGE);
@@ -214,12 +217,19 @@ public class UploadMainFrame extends JFrame implements ActionListener, WindowLis
 			jPasswordField1.setText("");
 			jPasswordField2.setText("");
 		} else if (jPasswordField1.getPassword().equals("")) {
+			error = true;
 			JOptionPane.showMessageDialog(this, "Password must not be empty", "Error", JOptionPane.ERROR_MESSAGE);
 		} else {
+			error = true;
 			JOptionPane.showMessageDialog(this, "Password might be equals", "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		// Setting button visible
-		selectFile.setVisible(true);
+		
+		if (error) {
+			selectFile.setVisible(true);
+		} else {
+			setVisible(false);
+			dispose();
+		}
 	}
 	
 	@Override

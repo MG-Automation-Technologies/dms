@@ -59,7 +59,7 @@ public class Util {
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 */
-	public static String createDocument(String token, String path, String fileName, String url, File tmpFile) 
+	public static String createDocument(String token, String path, String fileName, String url, File tmpFile, String cipherName) 
 										throws MalformedURLException, IOException {
 		log.info("createDocument(" + token + ", " + path + ", " + fileName + ", " + url + ")");
 		String response = "";
@@ -69,6 +69,7 @@ public class Util {
 		form.addPart("file", new FileBody(tmpFile));
 		form.addPart("path", new StringBody(path, Charset.forName("UTF-8")));
 		form.addPart("action", new StringBody("0")); // FancyFileUpload.ACTION_INSERT
+		form.addPart("cipherName", new StringBody(cipherName));
 		HttpPost post = new HttpPost(url+"/frontend/FileUpload;jsessionid="+token);
 		post.setHeader("Cookie", "jsessionid="+token);
 		post.setEntity(form);
@@ -126,7 +127,7 @@ public class Util {
 	}
 	
 	/**
-	 * 
+	 * parseLocaleString
 	 */
 	public static Locale parseLocaleString(String localeString) {
 		if (localeString == null) {
