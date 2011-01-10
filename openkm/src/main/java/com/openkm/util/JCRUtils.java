@@ -238,6 +238,8 @@ public class JCRUtils {
 	
 	/**
 	 * Calculate check digit for lock token
+	 * 
+	 * @see org.apache.jackrabbit.core.lock.LockToken.getCheckDigit(String uuid)
 	 */
 	private static char getCheckDigit(String uuid) {
         int result = 0;
