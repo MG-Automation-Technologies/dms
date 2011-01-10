@@ -238,9 +238,13 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 		if (doc.isSubscribed()) {
 			dataTable.setHTML(row, 0, dataTable.getHTML(row,0) + Util.imageItemHTML("img/icon/subscribed.gif"));
 		}
-		
+		// Document has notes
 		if (doc.isHasNotes()) {
 			dataTable.setHTML(row, 0, dataTable.getHTML(row,0) + Util.imageItemHTML("img/icon/note.gif"));
+		}
+		// Document encrypted
+		if (doc.getCipherName()!=null && !doc.getCipherName().equals("")) {
+			dataTable.setHTML(row, 0, dataTable.getHTML(row,0) + Util.imageItemHTML("img/icon/actions/crypt.png"));
 		}
 		
 		dataTable.setHTML(row, 1, Util.mimeImageHTML(doc.getMimeType()));
@@ -639,6 +643,14 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 			// Subscribed is a special case, must add icon with others
 			if (doc.isSubscribed()) {
 				dataTable.setHTML(row, 0, dataTable.getHTML(row,0) + Util.imageItemHTML("img/icon/subscribed.gif"));
+			}
+			// Document has notes
+			if (doc.isHasNotes()) {
+				dataTable.setHTML(row, 0, dataTable.getHTML(row,0) + Util.imageItemHTML("img/icon/note.gif"));
+			}
+			// Document encrypted
+			if (doc.getCipherName()!=null && !doc.getCipherName().equals("")) {
+				dataTable.setHTML(row, 0, dataTable.getHTML(row,0) + Util.imageItemHTML("img/icon/actions/crypt.png"));
 			}
 			
 			dataTable.setHTML(row, 1, Util.mimeImageHTML(doc.getMimeType()));

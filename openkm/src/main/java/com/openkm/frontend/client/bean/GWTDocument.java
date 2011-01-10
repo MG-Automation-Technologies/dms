@@ -58,6 +58,15 @@ public class GWTDocument implements IsSerializable {
 	private String uuid;
 	private boolean isAttachment = false;
 	private boolean hasNotes = false;
+	private String cipherName;
+
+	public String getCipherName() {
+		return cipherName;
+	}
+
+	public void setCipherName(String cipherName) {
+		this.cipherName = cipherName;
+	}
 
 	private Set<String> subscriptors;
 	private List<GWTNote> notes;

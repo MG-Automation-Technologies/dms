@@ -29,6 +29,7 @@ import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
 import com.openkm.api.OKMNote;
 import com.openkm.api.OKMNotification;
+import com.openkm.api.OKMProperty;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Version;
@@ -83,6 +84,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 		String message = null;
 		String comment = null;
 		String folder = null;
+		String cipherName = null;
 		PrintWriter out = null;
 		String uploadedDocPath = null;
 		java.io.File tmp = null;
@@ -122,6 +124,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 						if (item.getFieldName().equals("message")) { message = item.getString("UTF-8"); }
 						if (item.getFieldName().equals("comment")) { comment = item.getString("UTF-8"); }
 						if (item.getFieldName().equals("folder")) { folder = item.getString("UTF-8"); }
+						if (item.getFieldName().equals("cipherName")) { cipherName = item.getString("UTF-8"); }
 					} else {
 						fileName = item.getName();
 						is = item.getInputStream();
@@ -149,6 +152,11 @@ public class FileUploadServlet extends OKMHttpServlet {
 							OKMDocument.getInstance().create(null, doc, is);
 							uploadedDocPath = doc.getPath();
 							
+							// Case is uploaded a encrypted document
+							if (cipherName!=null && !cipherName.equals("")) {
+								OKMProperty.getInstance().setEncryption(null, doc.getPath(), cipherName);
+							}
+							
 							// Return the path of the inserted document in response
 							out.print(returnOKMessage + " path["+uploadedDocPath+"]path");
 						}
@@ -162,6 +170,13 @@ public class FileUploadServlet extends OKMHttpServlet {
 						document.setContent(null, path, is);
 						Version ver = document.checkin(null, path, comment);
 						uploadedDocPath = path;
+						
+						// Case is uploaded a encrypted document
+						if (cipherName!=null && !cipherName.equals("")) {
+							OKMProperty.getInstance().setEncryption(null, path, cipherName);
+							// In that case is mandatory compact the history
+							document.purgeVersionHistory(null, path);
+						}
 						
 						// Add comment (as system user)
 						String text = "New version "+ver.getName()+" by "+request.getRemoteUser()+": "+ver.getComment();
