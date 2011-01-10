@@ -64,13 +64,22 @@ public class CryptoByPassword
     }
 
     /**
-     * CryptoByPassword
+     * setCipherName
      * 
      * @param name
      */
-    public void setCipherName (String name)
+    public void setCipherName (String cipherName)
     {
-        this.cipherName = name;
+        this.cipherName = cipherName;
+    }
+    
+    /**
+     * getCipherName
+     * 
+     * @return
+     */
+    public String getCipherName() {
+    	return cipherName;
     }
 
     /**

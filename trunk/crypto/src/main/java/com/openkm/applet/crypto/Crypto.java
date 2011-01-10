@@ -44,6 +44,7 @@ public class Crypto extends JApplet {
 	private String url;
 	private String action;
 	private String uuid;
+	private String cipherName;
 	private JSObject win;
 	private CryptoManager cryptoManager;
 	
@@ -66,6 +67,7 @@ public class Crypto extends JApplet {
        		path = getParameter("path");
        		action = getParameter("action");
        		uuid = getParameter("uuid");
+       		cipherName = getParameter("cipherName");
         	win = (JSObject) JSObject.getWindow(this);
         	
         	log.info("openkm.token => "+token);
@@ -73,13 +75,14 @@ public class Crypto extends JApplet {
         	log.info("applet.url => "+url);
         	log.info("applet.action => "+action);
         	log.info("applet.uuid => "+uuid);
+        	log.info("applet.cipherName => "+cipherName);
         	log.info("applet.jsobject => "+win);
         } catch (Exception e) {
         	log.warning("Can't access JSObject object");
         }
 		
         // Create the cryto manager instance
-        cryptoManager = new CryptoManager(token, path, url, action, uuid, win);
+        cryptoManager = new CryptoManager(token, path, url, action, uuid, cipherName, win);
         
 		try {
             SwingUtilities.invokeAndWait(new Runnable() {
@@ -102,12 +105,14 @@ public class Crypto extends JApplet {
 			main.setVisible(true);
 			main.setResizable(false);
 			main.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			cryptoManager.cryptographyLoaded(main);
 		} else {
 			JFrame.setDefaultLookAndFeelDecorated(true);
 			JFrame main = new DownloadMainFrame(cryptoManager, win);
 			main.setVisible(true);
 			main.setResizable(false);
 			main.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			cryptoManager.cryptographyLoaded(main);
 		}
 	}
 }

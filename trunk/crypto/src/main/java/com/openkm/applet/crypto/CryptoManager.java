@@ -47,6 +47,7 @@ public class CryptoManager {
 	private String url;
 	private String uuid;
 	private String action;
+	private String cipherName;
 	private JSObject win;
 	private CryptoByPassword criptoByPassword;
 
@@ -56,12 +57,13 @@ public class CryptoManager {
 	 * @param token
 	 * @param win
 	 */
-	public CryptoManager(String token, String path, String url, String action, String uuid, JSObject win) {
+	public CryptoManager(String token, String path, String url, String action, String uuid, String cipherName, JSObject win) {
 		this.token = token;
 		this.path = path;
 		this.url = url;
 		this.action = action;
 		this.uuid = uuid;
+		this.cipherName = cipherName;
 		this.win = win;
 		criptoByPassword = new CryptoByPassword();
 	}
@@ -86,6 +88,7 @@ public class CryptoManager {
 	public byte[] encrypt(byte[] data, String passWord) throws Exception
 	{    
 		try {
+			cipherName = criptoByPassword.getCipherName(); // Initialize the cipherName
 			return criptoByPassword.encrypt(data, passWord.toCharArray());
 		} catch (Exception e) {
 			return null;
@@ -115,7 +118,7 @@ public class CryptoManager {
 	public void upload(File tmpFile, String fileName, Component parentComponent) {
 		log.log(Level.INFO, "**** UPLOAD DOCUMENT ****");
 		try {
-			String response = Util.createDocument(token, path, fileName, url, tmpFile);
+			String response = Util.createDocument(token, path, fileName, url, tmpFile, cipherName);
 			if (!response.startsWith("OKM_OK")) {
 				log.log(Level.SEVERE, "Error: " + response);
 				ErrorCode.displayError(response, path+"/"+fileName);
@@ -171,6 +174,24 @@ public class CryptoManager {
 			
 			// TODO Investigate why occurs but js method is executed
 			if (!"JavaScript error while calling \"refreshFolder\"".equals(e.getMessage())) {
+				JOptionPane.showMessageDialog(parentComponent, e.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
+			}
+		} 
+	}
+	
+	/**
+	 * cryptographyLoaded
+	 * 
+	 * @param parentComponent
+	 */
+	public void cryptographyLoaded(Component parentComponent) {
+		try {
+			win.call("cryptographyLoaded", null);
+		} catch (JSException e) {
+			log.log(Level.WARNING, "JSException: " + e.getMessage(), e);
+			
+			// TODO Investigate why occurs but js method is executed
+			if (!"JavaScript error while calling \"cryptographyLoaded\"".equals(e.getMessage())) {
 				JOptionPane.showMessageDialog(parentComponent, e.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
 			}
 		} 

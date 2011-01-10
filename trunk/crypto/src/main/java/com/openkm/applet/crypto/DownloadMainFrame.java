@@ -73,6 +73,7 @@ public class DownloadMainFrame extends JFrame implements ActionListener, WindowL
 															   "http://localhost:8080/OpenKM", 
 															   "download",
 															   "f89dd6f2-e1a4-4cfc-8178-f3fe766cc005",
+															   "PBEWithSHA1AndDESede",
 															   null), 
 											   null);
 				inst.setLocationRelativeTo(null);
@@ -114,7 +115,6 @@ public class DownloadMainFrame extends JFrame implements ActionListener, WindowL
 	 */
 	private void initGUI() {
 		try {
-			{
 				getContentPane().setLayout(null);
 				
 				jLabel1 = new JLabel();
@@ -139,7 +139,6 @@ public class DownloadMainFrame extends JFrame implements ActionListener, WindowL
 				selectFile.setText("Donwload file");
 				selectFile.setBounds(19, 84, 235, 22);
 				selectFile.addActionListener(this);
-			}
 			pack();
 			this.setSize(283, 159);
 		} catch (Exception e) {
@@ -150,6 +149,7 @@ public class DownloadMainFrame extends JFrame implements ActionListener, WindowL
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		boolean error = false;
 		if (!jPasswordField1.getPassword().equals("") && new String(jPasswordField1.getPassword()).equals(new String(jPasswordField2.getPassword()))) {
 			selectFile.setVisible(false);
 			jPasswordField1.setEditable(false);
@@ -174,7 +174,6 @@ public class DownloadMainFrame extends JFrame implements ActionListener, WindowL
 						log.log(Level.INFO, "Downloading encrypted file: ");
 						
 						// Reading local encrypt file
-						//FileInputStream fis = new FileInputStream("/home/jllort/Escritorio/test/backup_crypt.txt");
 						FileInputStream fis = new FileInputStream(tmp);
 						byte[] data = new byte[fis.available()];
 						int read = -1;
@@ -200,10 +199,15 @@ public class DownloadMainFrame extends JFrame implements ActionListener, WindowL
 						
 						// Refreshing OpenKM UI
 						cryptoManager.refreshFolder(this);
+						
+						// File download message
+						JOptionPane.showMessageDialog(this, "Document downloaded localy", "Information", JOptionPane.INFORMATION_MESSAGE);
 				} catch (Exception e1) {
+					error = true;
 					JOptionPane.showMessageDialog(this, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				} 
 			} else {
+				error = true;
 				JOptionPane.showMessageDialog(this, "Must be selected a local folder to downloading document", "Error", JOptionPane.ERROR_MESSAGE);
 			} 
 			
@@ -214,12 +218,21 @@ public class DownloadMainFrame extends JFrame implements ActionListener, WindowL
 			jPasswordField1.setText("");
 			jPasswordField2.setText("");
 		} else if (jPasswordField1.getPassword().equals("")) {
+			error = true;
 			JOptionPane.showMessageDialog(this, "Password must not be empty", "Error", JOptionPane.ERROR_MESSAGE);
 		} else {
+			error = true;
 			JOptionPane.showMessageDialog(this, "Password might be equals", "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		// Setting button visible
-		selectFile.setVisible(true);
+		
+		if (error) {
+			// Setting button visible
+			selectFile.setVisible(true);
+		} else {
+			// Closing 
+			setVisible(false);
+			dispose();
+		}
 	}
 	
 	@Override
