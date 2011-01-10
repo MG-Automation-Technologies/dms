@@ -64,6 +64,7 @@ public class Document implements Serializable {
 	private boolean convertibleToPdf;
 	private boolean convertibleToSwf;
 	private boolean convertibleToDxf;
+	private String cipherName;
 	private Set<String> subscriptors = new HashSet<String>();
 	private Set<String> keywords = new HashSet<String>();
 	private Set<Folder> categories = new HashSet<Folder>();
@@ -229,6 +230,14 @@ public class Document implements Serializable {
 		this.convertibleToDxf = convertibleToDxf;
 	}
 	
+	public void setCipherName(String cipherName) {
+		this.cipherName = cipherName;
+	}
+
+	public String getCipherName() {
+		return cipherName;
+	}
+	
 	public List<Note> getNotes() {
 		return notes;
 	}
@@ -258,6 +267,7 @@ public class Document implements Serializable {
 		sb.append(", convertibleToPdf="); sb.append(convertibleToPdf);
 		sb.append(", convertibleToSwf="); sb.append(convertibleToSwf);
 		sb.append(", convertibleToDxf="); sb.append(convertibleToDxf);
+		sb.append(", cipherName="); sb.append(cipherName);
 		sb.append(", notes="); sb.append(notes);
 		sb.append("}");
 		return sb.toString();

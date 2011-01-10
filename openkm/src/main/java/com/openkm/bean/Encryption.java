@@ -23,9 +23,9 @@ package com.openkm.bean;
 
 import java.io.Serializable;
 
-public class Crypto implements Serializable {
+public class Encryption implements Serializable {
 	private static final long serialVersionUID = 1L;
-	public static final String TYPE = "mix:crypto";
+	public static final String TYPE = "mix:encryption";
 	public static final String CIPHER_NAME = "okm:cipherName";
 	
 	public String toString() {
