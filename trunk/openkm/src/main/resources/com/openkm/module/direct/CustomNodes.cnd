@@ -19,6 +19,9 @@
 [mix:scripting] mixin
 - okm:scriptCode (string) mandatory
 
+[mix:crypto] mixin
+- okm:cipherName (string) mandatory
+
 [okm:resource] > nt:resource, mix:versionable
 - okm:size (long) mandatory
 - okm:author (string) mandatory
