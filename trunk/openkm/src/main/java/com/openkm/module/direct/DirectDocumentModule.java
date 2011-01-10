@@ -58,6 +58,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
+import com.openkm.bean.Encryption;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Lock;
 import com.openkm.bean.Note;
@@ -241,6 +242,12 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 			
 			doc.setNotes(notes);
+		}
+		
+		// Get crypto
+		if (documentNode.isNodeType(Encryption.TYPE)) {
+			String cipherName = documentNode.getProperty(Encryption.CIPHER_NAME).getString();
+			doc.setCipherName(cipherName);
 		}
 		
 		log.debug("Permisos: {} => {}", docPath, doc.getPermissions());
