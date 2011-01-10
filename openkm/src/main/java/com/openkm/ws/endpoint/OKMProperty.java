@@ -100,4 +100,26 @@ public class OKMProperty implements PropertyModule {
 		pm.removeKeyword(token, nodePath, keyword);
 		log.debug("removeKeyword: void");
 	}
+
+	@Override
+	public void setEncryption(@WebParam(name = "token") String token, 
+			@WebParam(name = "nodePath") String nodePath,
+			@WebParam(name = "cipherName") String cipherName) throws VersionException,
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("setEncryption({}, {}, {})", new Object[] { token, nodePath, cipherName });
+		PropertyModule pm = ModuleManager.getPropertyModule();
+		pm.setEncryption(token, nodePath, cipherName);
+		log.debug("setEncryption: void");
+	}
+
+	@Override
+	public void unsetEncryption(@WebParam(name = "token") String token, 
+			@WebParam(name = "nodePath") String nodePath) throws VersionException, LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("unsetEncryption({}, {})", new Object[] { token, nodePath });
+		PropertyModule pm = ModuleManager.getPropertyModule();
+		pm.unsetEncryption(token, nodePath);
+		log.debug("unsetEncryption: void");
+	}
 }
