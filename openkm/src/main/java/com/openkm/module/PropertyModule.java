@@ -101,4 +101,39 @@ public interface PropertyModule {
 	public void removeKeyword(String token, String nodePath, String keyword) throws VersionException,
 			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
 			DatabaseException;
+	
+	/**
+	 * Define a document as encrypted. 
+	 * 
+	 * @param token The session authorization token.
+	 * @param nodePath The complete path to the node.
+	 * @param cipherName The cipher used in the encryption.
+	 * @throws VersionException A document checked in can't be modified.
+	 * @throws LockException A locked document can't be modified.
+	 * @throws PathNotFoundException If there is no node in this
+	 * repository path.
+	 * @throws AccessDeniedException If there is any security problem: 
+	 * you can't modify the node because of lack of permissions.
+	 * @throws RepositoryException If there is any general repository problem.
+	 */
+	public void setEncryption(String token, String nodePath, String cipherName) throws VersionException,
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException;
+	
+	/**
+	 * Unset a document as encrypted. 
+	 * 
+	 * @param token The session authorization token.
+	 * @param nodePath The complete path to the node.
+	 * @throws VersionException A document checked in can't be modified.
+	 * @throws LockException A locked document can't be modified.
+	 * @throws PathNotFoundException If there is no node in this
+	 * repository path.
+	 * @throws AccessDeniedException If there is any security problem: 
+	 * you can't modify the node because of lack of permissions.
+	 * @throws RepositoryException If there is any general repository problem.
+	 */
+	public void unsetEncryption(String token, String nodePath) throws VersionException,
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException;
 }
