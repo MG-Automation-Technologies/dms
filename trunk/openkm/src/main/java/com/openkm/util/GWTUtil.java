@@ -159,6 +159,7 @@ public class GWTUtil {
 		gWTDoc.setConvertibleToPdf(doc.isConvertibleToPdf());
 		gWTDoc.setConvertibleToSwf(doc.isConvertibleToSwf());
 		gWTDoc.setConvertibleToDxf(doc.isConvertibleToDxf());
+		gWTDoc.setCipherName(doc.getCipherName());
 		gWTDoc.setSubscriptors(doc.getSubscriptors());
 		gWTDoc.setUuid(doc.getUuid());
 		gWTDoc.setNotes(copy(doc.getNotes()));
