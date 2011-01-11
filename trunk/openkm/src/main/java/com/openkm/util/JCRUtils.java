@@ -74,7 +74,10 @@ import com.openkm.module.direct.DirectRepositoryModule;
 
 public class JCRUtils {
 	private static Logger log = LoggerFactory.getLogger(JCRUtils.class);
-
+	private static long activeSessions = 0;
+	private static long sessionCreationCount = 0;
+	private static long sessionDestroyCount = 0;
+	
 	/**
 	 * 
 	 */
@@ -170,7 +173,12 @@ public class JCRUtils {
 	 */
 	public static void logout(Session session) {
 		if (session != null && session.isLive()) {
+			for (String lt: session.getLockTokens()) {
+				log.info("Remove LockToken: {}", lt);
+				session.removeLockToken(lt);
+			}
 			session.logout();
+			log.info("#{} - {} Destroy session {} from {}", new Object[] { ++sessionDestroyCount, --activeSessions, session, StackTraceUtils.whoCalledMe() });
 		}
 	}
 	
@@ -348,6 +356,7 @@ public class JCRUtils {
 			throw (javax.jcr.LoginException) obj;
 		} else if (obj instanceof javax.jcr.Session) {
 			Session session = (javax.jcr.Session) obj;
+			log.info("#{} - {} Create session {} from {}", new Object[] { ++sessionCreationCount, ++activeSessions, session, StackTraceUtils.whoCalledMe() });
 			DirectAuthModule.loadUserData(session);
 			return session;
 		} else {
