@@ -77,6 +77,16 @@ public class CryptoManager {
 		return action;
 	}
 	
+	
+	/**
+	 * setCipherName
+	 * 
+	 * @param cipherName
+	 */
+	public void setCipherName(String cipherName) {
+		this.cipherName = cipherName;
+	}
+	
 	/**
 	 * encrypt
 	 * 
@@ -115,13 +125,13 @@ public class CryptoManager {
 	 * @param fileName
 	 * @param parentComponent
 	 */
-	public void upload(File tmpFile, String fileName, Component parentComponent) {
+	public void upload(File tmpFile, boolean update, Component parentComponent) {
 		log.log(Level.INFO, "**** UPLOAD DOCUMENT ****");
 		try {
-			String response = Util.createDocument(token, path, fileName, url, tmpFile, cipherName);
+			String response = Util.uploadDocument(token, path, url, tmpFile, cipherName, update);
 			if (!response.startsWith("OKM_OK")) {
 				log.log(Level.SEVERE, "Error: " + response);
-				ErrorCode.displayError(response, path+"/"+fileName);
+				ErrorCode.displayError(response, path);
 			}
 		} catch (IOException e) {
 			log.log(Level.SEVERE, "IOException: " + e.getMessage(), e);
@@ -136,12 +146,13 @@ public class CryptoManager {
 	/**
 	 * download
 	 * 
+	 * @param checkout
 	 * @param parentComponent
 	 * @return
 	 */
-	public File download(Component parentComponent) {
+	public File download(boolean checkout, Component parentComponent) {
 		try {
-			return Util.downloadDocument(token, uuid, url);
+			return Util.downloadDocument(token, uuid, url, checkout);
 		} catch (ClientProtocolException e) {
 			log.log(Level.SEVERE, "IOException: " + e.getMessage(), e);
 			JOptionPane.showMessageDialog(parentComponent, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -158,7 +169,7 @@ public class CryptoManager {
 	 * @return
 	 */
 	public String getFileName() {
-		return path.substring(path.lastIndexOf("/"));
+		return path.substring(path.lastIndexOf("/")+1);
 	}
 	
 	/**

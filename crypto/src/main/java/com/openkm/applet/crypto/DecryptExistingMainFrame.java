@@ -34,7 +34,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -44,23 +43,20 @@ import javax.swing.SwingUtilities;
 import netscape.javascript.JSObject;
 
 /**
- * DownloadMainFrame
+ * MainFrame
  * 
  * @author jllort
  *
  */
-public class DownloadMainFrame extends JFrame implements ActionListener, WindowListener {
+public class DecryptExistingMainFrame extends JFrame implements ActionListener, WindowListener {
 
 	private static final long serialVersionUID = 1L;
-	private static Logger log = Logger.getLogger(DownloadMainFrame.class.getName());
+	private static Logger log = Logger.getLogger(CryptExistingMainFrame.class.getName());
 	private JLabel jLabel1;
 	private JPasswordField jPasswordField1;
 	private JPasswordField jPasswordField2;
-	private JButton selectFile;
+	private JButton cryptOpenKMFile;
 	private CryptoManager cryptoManager;
-	private JFileChooser chooser;
-	private String choosertitle;
-	private File folder; 
 
 	/**
 	 * Auto-generated main method to display this JFrame
@@ -68,14 +64,14 @@ public class DownloadMainFrame extends JFrame implements ActionListener, WindowL
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				DownloadMainFrame inst = new DownloadMainFrame(new CryptoManager("4E5C10CC30535A5D64323952759052CF", 
-															   "/okm:root/backup.txt", 
-															   "http://localhost:8080/OpenKM", 
-															   "download",
-															   "f89dd6f2-e1a4-4cfc-8178-f3fe766cc005",
-															   "PBEWithSHA1AndDESede",
-															   null), 
-											   null);
+				DecryptExistingMainFrame inst = new DecryptExistingMainFrame(new CryptoManager("4E5C10CC30535A5D64323952759052CF", 
+															   										 "/okm:root/test/backup.txt", 
+															   										 "http://localhost:8080/OpenKM", 
+															   										 "updatedecrypt",
+															   										 "9439948e-8dd6-43cb-8a54-7433a6f4caf6",
+															   										 "PBEWithSHA1AndDESede",
+															   										 null), 
+															   					   null);
 				inst.setLocationRelativeTo(null);
 				inst.setVisible(true);
 				inst.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -89,8 +85,8 @@ public class DownloadMainFrame extends JFrame implements ActionListener, WindowL
 	 * @param crypto
 	 * @param applet
 	 */
-	public DownloadMainFrame(CryptoManager cryptoManager, JSObject win) {
-		super("Decrypt");
+	public DecryptExistingMainFrame(CryptoManager cryptoManager, JSObject win) {
+		super("Decrypt existing document");
 		initGUI();
 		addWindowListener(this);
 
@@ -134,11 +130,11 @@ public class DownloadMainFrame extends JFrame implements ActionListener, WindowL
 				jPasswordField2.setBounds(19, 57, 235, 22);
 				jPasswordField2.setSize(235, 20);
 
-				selectFile = new JButton();
-				getContentPane().add(selectFile);
-				selectFile.setText("Donwload file");
-				selectFile.setBounds(19, 84, 235, 22);
-				selectFile.addActionListener(this);
+				cryptOpenKMFile = new JButton();
+				getContentPane().add(cryptOpenKMFile);
+				cryptOpenKMFile.setText("Decrypt file");
+				cryptOpenKMFile.setBounds(19, 84, 235, 22);
+				cryptOpenKMFile.addActionListener(this);
 			pack();
 			this.setSize(283, 159);
 		} catch (Exception e) {
@@ -151,65 +147,59 @@ public class DownloadMainFrame extends JFrame implements ActionListener, WindowL
 	public void actionPerformed(ActionEvent e) {
 		boolean error = false;
 		if (!jPasswordField1.getPassword().equals("") && new String(jPasswordField1.getPassword()).equals(new String(jPasswordField2.getPassword()))) {
-			selectFile.setVisible(false);
+			cryptOpenKMFile.setVisible(false);
 			jPasswordField1.setEditable(false);
 			jPasswordField2.setEditable(false);
-			chooser = new JFileChooser();
-			chooser.setCurrentDirectory(new java.io.File("."));
-			chooser.setDialogTitle(choosertitle);
-			chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			chooser.setMultiSelectionEnabled(false);
-	
-			/* Enable the "All files" option */
-			chooser.setAcceptAllFileFilterUsed(true);
-	
-			if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-				folder = chooser.getSelectedFile();
-				
-				// If theres some folder selected
-				log.log(Level.INFO, "Document to crypt: " + folder.getAbsoluteFile());
-				try {
-						// Downloading file
-						File tmp = cryptoManager.download(false, this);
-						log.log(Level.INFO, "Downloading encrypted file: ");
-						
-						// Reading local encrypt file
-						FileInputStream fis = new FileInputStream(tmp);
-						byte[] data = new byte[fis.available()];
-						int read = -1;
-						while ((read = fis.read(data)) > 0) {
-						}
-						log.log(Level.INFO, "Reading local temporary encrypted file: ");
-						
-						// Decrypt
-						byte[] decryptData = cryptoManager.decrypt(data, new String(jPasswordField1.getPassword()));
-						log.log(Level.INFO, "Decrypted: ");
-						
-						// Writing
-						String fileName = folder.getAbsoluteFile() + "/" + cryptoManager.getFileName();
-						FileOutputStream fos = new FileOutputStream(fileName);
-						fos.write(decryptData);
-						fos.flush();
-						fos.close();
-						log.log(Level.INFO, "Document saved: ");
-						
-						// Removing tmp file
-						tmp.delete();
-						log.log(Level.INFO, "Tmp file removed: ");
-						
-						// Refreshing OpenKM UI
-						cryptoManager.refreshFolder(this);
-						
-						// File download message
-						JOptionPane.showMessageDialog(this, "Document downloaded localy", "Information", JOptionPane.INFORMATION_MESSAGE);
-				} catch (Exception e1) {
-					error = true;
-					JOptionPane.showMessageDialog(this, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-				} 
-			} else {
+
+			log.log(Level.INFO, "Document to decrypt: ");
+			File tmpDir = null;
+			try {
+					// Downloading file
+					File tmp = cryptoManager.download(true, this);
+					log.log(Level.INFO, "Downloading encrypted file: ");
+					
+					// Reading local encrypt file
+					FileInputStream fis = new FileInputStream(tmp);
+					byte[] data = new byte[fis.available()];
+					int read = -1;
+					while ((read = fis.read(data)) > 0) {
+					}
+					log.log(Level.INFO, "Reading local temporary encrypted file: ");
+					
+					// Create temporary file in temporary folder and save decrypted document
+					tmpDir = Util.createTempDir();
+					
+					// Decrypt
+					byte[] decryptData = cryptoManager.decrypt(data, new String(jPasswordField1.getPassword()));
+					log.log(Level.INFO, "Decrypted: ");
+					
+					File cryptTmp = new File(tmpDir, cryptoManager.getFileName());
+					FileOutputStream fos = new FileOutputStream(cryptTmp);
+					fos.write(decryptData);
+					fos.flush();
+					fos.close();
+					log.log(Level.INFO, "Document decrypted saved localy in temporary folder: ");
+					
+					// Upload file
+					cryptoManager.setCipherName(""); // resetting cipherName ( important for uploading )
+					cryptoManager.upload(cryptTmp, true, this);
+					log.log(Level.INFO, "Decrypt file uploaded: ");
+					
+					// Removing tmp file
+					tmp.delete();
+					log.log(Level.INFO, "Tmp file removed: ");
+					
+					// Refreshing OpenKM UI
+					cryptoManager.refreshFolder(this);
+					
+					// File download message
+					JOptionPane.showMessageDialog(this, "OpenKM document decrypted", "Information", JOptionPane.INFORMATION_MESSAGE);
+			} catch (Exception e1) {
 				error = true;
-				JOptionPane.showMessageDialog(this, "Must be selected a local folder to downloading document", "Error", JOptionPane.ERROR_MESSAGE);
-			} 
+				JOptionPane.showMessageDialog(this, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			} finally {
+				tmpDir.delete(); // tmp folder removed
+			}
 			
 			// Making editable
 			jPasswordField1.setEditable(true);
@@ -227,7 +217,7 @@ public class DownloadMainFrame extends JFrame implements ActionListener, WindowL
 		
 		if (error) {
 			// Setting button visible
-			selectFile.setVisible(true);
+			cryptOpenKMFile.setVisible(true);
 		} else {
 			// Closing 
 			setVisible(false);

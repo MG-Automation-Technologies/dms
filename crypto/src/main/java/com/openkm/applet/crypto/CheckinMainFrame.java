@@ -44,15 +44,15 @@ import javax.swing.SwingUtilities;
 import netscape.javascript.JSObject;
 
 /**
- * DownloadMainFrame
+ * CheckinMainFrame
  * 
  * @author jllort
  *
  */
-public class DownloadMainFrame extends JFrame implements ActionListener, WindowListener {
+public class CheckinMainFrame extends JFrame implements ActionListener, WindowListener {
 
 	private static final long serialVersionUID = 1L;
-	private static Logger log = Logger.getLogger(DownloadMainFrame.class.getName());
+	private static Logger log = Logger.getLogger(UploadMainFrame.class.getName());
 	private JLabel jLabel1;
 	private JPasswordField jPasswordField1;
 	private JPasswordField jPasswordField2;
@@ -60,21 +60,20 @@ public class DownloadMainFrame extends JFrame implements ActionListener, WindowL
 	private CryptoManager cryptoManager;
 	private JFileChooser chooser;
 	private String choosertitle;
-	private File folder; 
-
+	private File[] files; 
 	/**
 	 * Auto-generated main method to display this JFrame
 	 */
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				DownloadMainFrame inst = new DownloadMainFrame(new CryptoManager("4E5C10CC30535A5D64323952759052CF", 
-															   "/okm:root/backup.txt", 
-															   "http://localhost:8080/OpenKM", 
-															   "download",
-															   "f89dd6f2-e1a4-4cfc-8178-f3fe766cc005",
-															   "PBEWithSHA1AndDESede",
-															   null), 
+				CheckinMainFrame inst = new CheckinMainFrame(new CryptoManager("8E520CF147843CB343DC1754B13A40AC", 
+														   "/okm:root", 
+														   "http://localhost:8080/OpenKM", 
+														   "checkin",
+														   "",
+														   "",
+														   null), 
 											   null);
 				inst.setLocationRelativeTo(null);
 				inst.setVisible(true);
@@ -84,13 +83,13 @@ public class DownloadMainFrame extends JFrame implements ActionListener, WindowL
 	}
 
 	/**
-	 * MainFrame
+	 * CheckinMainFrame
 	 * 
 	 * @param crypto
 	 * @param applet
 	 */
-	public DownloadMainFrame(CryptoManager cryptoManager, JSObject win) {
-		super("Decrypt");
+	public CheckinMainFrame(CryptoManager cryptoManager, JSObject win) {
+		super("Encrypt");
 		initGUI();
 		addWindowListener(this);
 
@@ -136,7 +135,7 @@ public class DownloadMainFrame extends JFrame implements ActionListener, WindowL
 
 				selectFile = new JButton();
 				getContentPane().add(selectFile);
-				selectFile.setText("Donwload file");
+				selectFile.setText("Select file");
 				selectFile.setBounds(19, 84, 235, 22);
 				selectFile.addActionListener(this);
 			pack();
@@ -157,58 +156,58 @@ public class DownloadMainFrame extends JFrame implements ActionListener, WindowL
 			chooser = new JFileChooser();
 			chooser.setCurrentDirectory(new java.io.File("."));
 			chooser.setDialogTitle(choosertitle);
-			chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			chooser.setMultiSelectionEnabled(false);
+			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			chooser.setMultiSelectionEnabled(true);
 	
 			/* Enable the "All files" option */
 			chooser.setAcceptAllFileFilterUsed(true);
 	
 			if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-				folder = chooser.getSelectedFile();
+				files = chooser.getSelectedFiles();
 				
-				// If theres some folder selected
-				log.log(Level.INFO, "Document to crypt: " + folder.getAbsoluteFile());
-				try {
-						// Downloading file
-						File tmp = cryptoManager.download(false, this);
-						log.log(Level.INFO, "Downloading encrypted file: ");
-						
-						// Reading local encrypt file
-						FileInputStream fis = new FileInputStream(tmp);
+				/* Loop through all files */
+				for (int i=0;i<files.length;i++) {
+					log.log(Level.INFO, "Document to crypt: " + files[i].getAbsoluteFile());
+					File tmpDir = null;
+					try {
+						// Reading local document
+						FileInputStream fis = new FileInputStream(files[i].getAbsoluteFile());
 						byte[] data = new byte[fis.available()];
 						int read = -1;
 						while ((read = fis.read(data)) > 0) {
 						}
-						log.log(Level.INFO, "Reading local temporary encrypted file: ");
+						log.log(Level.INFO, "Document readed: " + files[i].getAbsoluteFile());
 						
-						// Decrypt
-						byte[] decryptData = cryptoManager.decrypt(data, new String(jPasswordField1.getPassword()));
-						log.log(Level.INFO, "Decrypted: ");
-						
-						// Writing
-						String fileName = folder.getAbsoluteFile() + "/" + cryptoManager.getFileName();
-						FileOutputStream fos = new FileOutputStream(fileName);
-						fos.write(decryptData);
+						// Create temporary file in temporary folder and save encrypted document
+						tmpDir = Util.createTempDir();
+						byte[] cryptData = cryptoManager.encrypt(data, new String(jPasswordField1.getPassword()));
+						File tmp = new File(tmpDir, files[i].getName());
+						FileOutputStream fos = new FileOutputStream(tmp);
+						fos.write(cryptData);
 						fos.flush();
 						fos.close();
-						log.log(Level.INFO, "Document saved: ");
+						log.log(Level.INFO, "Document encrypted saved localy in temporary folder: ");
 						
-						// Removing tmp file
-						tmp.delete();
-						log.log(Level.INFO, "Tmp file removed: ");
+						// Upload file
+						cryptoManager.upload(tmp, true, this);
+						log.log(Level.INFO, "Crypt file uploaded: ");
 						
 						// Refreshing OpenKM UI
 						cryptoManager.refreshFolder(this);
-						
-						// File download message
-						JOptionPane.showMessageDialog(this, "Document downloaded localy", "Information", JOptionPane.INFORMATION_MESSAGE);
-				} catch (Exception e1) {
-					error = true;
-					JOptionPane.showMessageDialog(this, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-				} 
+					} catch (Exception e1) {
+						error = true;
+						JOptionPane.showMessageDialog(this, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					} finally {
+						tmpDir.delete(); // tmp folder removed
+					}
+				}
+				
+				// Uploading message
+				if (!error) {
+					JOptionPane.showMessageDialog(this, "Files successfully uploaded", "Information", JOptionPane.INFORMATION_MESSAGE);
+				}
 			} else {
-				error = true;
-				JOptionPane.showMessageDialog(this, "Must be selected a local folder to downloading document", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Must be selected at least one document", "Error", JOptionPane.ERROR_MESSAGE);
 			} 
 			
 			// Making editable
@@ -226,10 +225,8 @@ public class DownloadMainFrame extends JFrame implements ActionListener, WindowL
 		}
 		
 		if (error) {
-			// Setting button visible
 			selectFile.setVisible(true);
 		} else {
-			// Closing 
 			setVisible(false);
 			dispose();
 		}

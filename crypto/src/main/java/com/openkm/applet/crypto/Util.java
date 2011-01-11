@@ -55,20 +55,26 @@ public class Util {
 	 * @param fileName
 	 * @param url
 	 * @param tmpFile
+	 * @param update
 	 * @return
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 */
-	public static String createDocument(String token, String path, String fileName, String url, File tmpFile, String cipherName) 
-										throws MalformedURLException, IOException {
-		log.info("createDocument(" + token + ", " + path + ", " + fileName + ", " + url + ")");
+	public static String uploadDocument(String token, String path, String url, File tmpFile, String cipherName,
+										boolean update) throws MalformedURLException, IOException {
+		log.info("createDocument(" + token + ", " + path + ", " + url + ")");
 		String response = "";
 		
 		HttpClient client = new DefaultHttpClient();
 		MultipartEntity form = new MultipartEntity();
 		form.addPart("file", new FileBody(tmpFile));
 		form.addPart("path", new StringBody(path, Charset.forName("UTF-8")));
-		form.addPart("action", new StringBody("0")); // FancyFileUpload.ACTION_INSERT
+		form.addPart("comment", new StringBody(""));		
+		if (!update) {
+			form.addPart("action", new StringBody("0")); // UIFileUploadConstants.ACTION_INSERT
+		} else {
+			form.addPart("action", new StringBody("1")); // UIFileUploadConstants.ACTION_UPDATE
+		}
 		form.addPart("cipherName", new StringBody(cipherName));
 		HttpPost post = new HttpPost(url+"/frontend/FileUpload;jsessionid="+token);
 		post.setHeader("Cookie", "jsessionid="+token);
@@ -86,14 +92,15 @@ public class Util {
 	 * @param token
 	 * @param path
 	 * @param url
+	 * @param chekcout
 	 * @throws IOException 
 	 * @throws ClientProtocolException 
 	 */
-	public static File downloadDocument(String token, String path, String url) throws ClientProtocolException, IOException {
+	public static File downloadDocument(String token, String path, String url, boolean checkout) throws ClientProtocolException, IOException {
 		log.info("downloadDocument(" + token + ", " + path + ", " + url + ")");
 		File tmp = null;
 		HttpClient client = new DefaultHttpClient();
-		HttpGet get = new HttpGet(url+"/frontend/Download;jsessionid="+token+"?uuid="+path);
+		HttpGet get = new HttpGet(url+"/frontend/Download;jsessionid="+token+"?uuid="+path+(checkout?"&checkout":""));
 		get.setHeader("Cookie", "jsessionid="+token);
 
 		HttpResponse response = client.execute(get);
