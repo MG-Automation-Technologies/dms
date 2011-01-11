@@ -28,6 +28,7 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
+import com.openkm.frontend.client.bean.GWTWorkspace;
 import com.openkm.frontend.client.bean.ToolBarOption;
 import com.openkm.frontend.client.util.CommonUI;
 import com.openkm.frontend.client.util.Util;
@@ -224,5 +225,14 @@ public class GeneralComunicator {
 	 */
 	public static String getToken() {
 		return Main.get().workspaceUserProperties.getWorkspace().getToken();
+	}
+	
+	/**
+	 * getWorkspace
+	 * 
+	 * @return
+	 */
+	public static GWTWorkspace getWorkspace() {
+		return Main.get().workspaceUserProperties.getWorkspace();
 	}
 }
