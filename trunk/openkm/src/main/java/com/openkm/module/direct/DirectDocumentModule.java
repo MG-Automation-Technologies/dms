@@ -1196,7 +1196,6 @@ public class DirectDocumentModule implements DocumentModule {
 			RepositoryException, PathNotFoundException, LockException, VersionException, DatabaseException {
 		log.debug("checkin({}, {}, {})", new Object[] { token, docPath, comment });
 		Version version = new Version();
-		Node contentNode = null;
 		Transaction t = null;
 		XASession session = null;
 		
@@ -1215,16 +1214,17 @@ public class DirectDocumentModule implements DocumentModule {
 			t.start();
 			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
+			Node contentNode = null;
 			
 			synchronized (documentNode) {
 				JCRUtils.loadLockTokens(session);
 				contentNode = documentNode.getNode(Document.CONTENT);
-
+				
 				// Set version author
 				contentNode.setProperty(Document.AUTHOR, session.getUserID());
 				contentNode.setProperty(Document.VERSION_COMMENT, comment);
 				contentNode.save();
-
+				
 				// Performs checkin & unlock
 				javax.jcr.version.Version ver = contentNode.checkin();
 				version.setAuthor(contentNode.getProperty(Document.AUTHOR).getString());
