@@ -165,6 +165,9 @@ public class JCRUtils {
 	 */
 	public static void logout(Session session) {
 		if (session != null && session.isLive()) {
+			for (String lt: session.getLockTokens()) {
+				session.removeLockToken(lt);
+			}
 			session.logout();
 		}
 	}
