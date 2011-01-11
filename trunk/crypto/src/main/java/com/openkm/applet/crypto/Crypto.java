@@ -106,9 +106,35 @@ public class Crypto extends JApplet {
 			main.setResizable(false);
 			main.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			cryptoManager.cryptographyLoaded(main);
-		} else {
+			
+		} else if (action.equals("download")) {
 			JFrame.setDefaultLookAndFeelDecorated(true);
 			JFrame main = new DownloadMainFrame(cryptoManager, win);
+			main.setVisible(true);
+			main.setResizable(false);
+			main.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			cryptoManager.cryptographyLoaded(main);
+			
+		} else if (action.equals("updatecrypt")) {
+			JFrame.setDefaultLookAndFeelDecorated(true);
+			JFrame main = new CryptExistingMainFrame(cryptoManager, win);
+			main.setVisible(true);
+			main.setResizable(false);
+			main.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			cryptoManager.cryptographyLoaded(main);
+			
+		} else if (action.equals("updatedecrypt")) {
+			JFrame.setDefaultLookAndFeelDecorated(true);
+			JFrame main = new DecryptExistingMainFrame(cryptoManager, win);
+			main.setVisible(true);
+			main.setResizable(false);
+			main.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			cryptoManager.cryptographyLoaded(main);
+			
+		} else {
+			// Case checkin
+			JFrame.setDefaultLookAndFeelDecorated(true);
+			JFrame main = new CheckinMainFrame(cryptoManager, win);
 			main.setVisible(true);
 			main.setResizable(false);
 			main.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

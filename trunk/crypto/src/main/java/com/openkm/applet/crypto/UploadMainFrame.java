@@ -44,7 +44,7 @@ import javax.swing.SwingUtilities;
 import netscape.javascript.JSObject;
 
 /**
- * MainFrame
+ * UploadMainFrame
  * 
  * @author jllort
  *
@@ -189,7 +189,7 @@ public class UploadMainFrame extends JFrame implements ActionListener, WindowLis
 						log.log(Level.INFO, "Document encrypted saved localy in temporary folder: ");
 						
 						// Upload file
-						cryptoManager.upload(tmp, files[i].getName(), this);
+						cryptoManager.upload(tmp, false, this);
 						log.log(Level.INFO, "Crypt file uploaded: ");
 						
 						// Refreshing OpenKM UI
@@ -198,7 +198,7 @@ public class UploadMainFrame extends JFrame implements ActionListener, WindowLis
 						error = true;
 						JOptionPane.showMessageDialog(this, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					} finally {
-						tmpDir.delete();
+						tmpDir.delete(); // tmp folder removed
 					}
 				}
 				
