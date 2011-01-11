@@ -167,23 +167,26 @@ public class FileUploadServlet extends OKMHttpServlet {
 					// http://en.wikipedia.org/wiki/Truth_table#Applications => ¬p ∨ q
 					if (!Config.SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK || FileUtils.getName(path).equals(fileName)) {
 						OKMDocument document = OKMDocument.getInstance();
+						Document doc = document.getProperties(null, path);
 						document.setContent(null, path, is);
 						Version ver = document.checkin(null, path, comment);
 						uploadedDocPath = path;
 						
 						// Case is uploaded a encrypted document
 						if (cipherName!=null && !cipherName.equals("")) {
-							OKMProperty.getInstance().setEncryption(null, path, cipherName);
-							// In that case is mandatory compact the history
-							document.purgeVersionHistory(null, path);
+							// Case updated document was not encripted yet
+							if (doc.getCipherName()==null) {
+								OKMProperty.getInstance().setEncryption(null, path, cipherName);
+								// In that case is mandatory compact the history
+								document.purgeVersionHistory(null, path);
+							}
 						} else {
 							// Case us uploaded a decrypt document
-							Document doc = document.getProperties(null, path);
 							if (doc.getCipherName()!=null && !doc.getCipherName().equals("")) {
 								OKMProperty.getInstance().unsetEncryption(null, path);
 								// In that case is mandatory compact the history too
 								document.purgeVersionHistory(null, path);
-							}
+							} 
 						}
 						
 						// Add comment (as system user)
