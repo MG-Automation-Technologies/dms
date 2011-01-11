@@ -170,6 +170,7 @@ public class JCRUtils {
 	
 	/**
 	 * Make a silent logout
+	 * See http://jackrabbit.510166.n4.nabble.com/Lock-token-not-being-added-to-session-td2018601.html
 	 */
 	public static void logout(Session session) {
 		if (session != null && session.isLive()) {
