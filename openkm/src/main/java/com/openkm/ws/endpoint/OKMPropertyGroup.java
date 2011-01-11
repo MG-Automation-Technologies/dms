@@ -22,6 +22,7 @@
 package com.openkm.ws.endpoint;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,6 +31,7 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.jboss.annotation.security.SecurityDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +48,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.ModuleManager;
 import com.openkm.module.PropertyGroupModule;
+import com.openkm.ws.util.FormElementComplex;
 
 /**
  * Servlet Class
@@ -107,14 +110,28 @@ public class OKMPropertyGroup {
 	}
 
 	@WebMethod
-	public FormElement[] getProperties(@WebParam(name = "token") String token,
+	public FormElementComplex[] getProperties(@WebParam(name = "token") String token,
 			@WebParam(name = "nodePath") String nodePath,
 			@WebParam(name = "grpName") String grpName) throws IOException, ParseException,
 			NoSuchGroupException, PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getProperties({}, {}, {})", new Object[] { token, nodePath, grpName });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		List<FormElement> col = cm.getProperties(token, nodePath, grpName);
-		FormElement[] result = (FormElement[]) col.toArray(new FormElement[col.size()]);
+		FormElementComplex[] result = new FormElementComplex[col.size()];
+		
+		try {
+			for (int i=0; i<col.size(); i++) {
+				result[i] = new FormElementComplex();
+				BeanUtils.copyProperties(result[i], col.get(i));
+				System.out.println("Es: "+result[i]);
+				System.out.println(col.get(i));
+			}
+		} catch (IllegalAccessException e) {
+			log.error(e.getMessage(), e);
+		} catch (InvocationTargetException e) {
+			log.error(e.getMessage(), e);
+		}
+		
 		log.debug("getProperties: {}", result);
 		return result;
 	}
