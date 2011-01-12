@@ -19,12 +19,12 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.dao.bean;
+package com.openkm.dao.bean.extension;
 
 import java.io.Serializable;
 import java.util.Calendar;
 
-public class MessageReceived implements Serializable {
+public class MessageSent implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private String from;
@@ -32,7 +32,6 @@ public class MessageReceived implements Serializable {
 	private String user;
 	private String subject;
 	private String content;
-	private Calendar seenDate;
 	private Calendar sentDate;
 	
 	public int getId() {
@@ -62,7 +61,7 @@ public class MessageReceived implements Serializable {
 	public String getUser() {
 		return user;
 	}
-	
+
 	public void setUser(String user) {
 		this.user = user;
 	}
@@ -83,14 +82,6 @@ public class MessageReceived implements Serializable {
 		this.content = content;
 	}
 	
-	public Calendar getSeenDate() {
-		return seenDate;
-	}
-	
-	public void setSeenDate(Calendar seenDate) {
-		this.seenDate = seenDate;
-	}
-	
 	public Calendar getSentDate() {
 		return sentDate;
 	}
@@ -108,7 +99,6 @@ public class MessageReceived implements Serializable {
 		sb.append(", user="); sb.append(user);
 		sb.append(", subject="); sb.append(subject);
 		sb.append(", content="); sb.append(content);
-		sb.append(", seenDate="); sb.append(seenDate==null?null:seenDate.getTime());
 		sb.append(", sentDate="); sb.append(sentDate==null?null:sentDate.getTime());
 		sb.append("}");
 		return sb.toString();

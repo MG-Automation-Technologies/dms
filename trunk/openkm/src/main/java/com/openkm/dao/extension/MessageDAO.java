@@ -19,7 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.dao;
+package com.openkm.dao.extension;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -34,8 +34,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
-import com.openkm.dao.bean.MessageReceived;
-import com.openkm.dao.bean.MessageSent;
+import com.openkm.dao.HibernateUtil;
+import com.openkm.dao.bean.extension.MessageReceived;
+import com.openkm.dao.bean.extension.MessageSent;
 
 public class MessageDAO {
 	private static Logger log = LoggerFactory.getLogger(MessageDAO.class);
