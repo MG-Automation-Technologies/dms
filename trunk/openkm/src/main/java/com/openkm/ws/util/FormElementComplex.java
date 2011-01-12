@@ -25,6 +25,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.openkm.bean.form.Button;
 import com.openkm.bean.form.CheckBox;
 import com.openkm.bean.form.FormElement;
@@ -35,6 +38,7 @@ import com.openkm.bean.form.TextArea;
 import com.openkm.bean.form.Validator;
 
 public class FormElementComplex implements Serializable {
+	private static Logger log = LoggerFactory.getLogger(FormElementComplex.class);
 	private static final long serialVersionUID = 1L;
 	private String objClass;
 	private String label;
@@ -134,6 +138,7 @@ public class FormElementComplex implements Serializable {
 	 * Conversion from FormElement to FormElementComplex.
 	 */
 	public static FormElementComplex toFormElementComplex(FormElement fe) {
+		log.debug("toFormElementComplex({})", fe);
 		FormElementComplex fec = new FormElementComplex();
 		
 		fec.setHeight(fe.getHeight());
@@ -165,6 +170,7 @@ public class FormElementComplex implements Serializable {
 			fec.setObjClass(b.getClass().getName());
 		}
 		
+		log.debug("toFormElementComplex: ", fec);
 		return fec;
 	}
 	
@@ -172,13 +178,9 @@ public class FormElementComplex implements Serializable {
 	 * Conversion from FormElementComplex to FormElement.
 	 */
 	public static FormElement toFormElement(FormElementComplex fec) {
+		log.debug("toFormElement({})", fec);
 		FormElement fe = new FormElement();
-		
-		fe.setHeight(fec.getHeight());
-		fe.setWidth(fec.getWidth());
-		fe.setLabel(fec.getLabel());
-		fe.setName(fec.getName());
-		
+				
 		if (Input.class.getName().equals(fec.getObjClass())) {
 			fe = new Input();
 			((Input) fe).setType(fec.getType());
@@ -198,6 +200,12 @@ public class FormElementComplex implements Serializable {
 			((Button) fe).setValue(fec.getValue());
 		}
 		
+		fe.setHeight(fec.getHeight());
+		fe.setWidth(fec.getWidth());
+		fe.setLabel(fec.getLabel());
+		fe.setName(fec.getName());
+		
+		log.debug("toFormElement: {}", fe);
 		return fe;
 	}
 	
