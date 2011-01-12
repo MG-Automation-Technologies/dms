@@ -235,8 +235,8 @@
     <mapping resource="com/openkm/dao/bean/DocumentFilterRule.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/MailAccount.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/QueryParams.hbm.xml"/>
-    <mapping resource="com/openkm/dao/bean/MessageSent.hbm.xml"/>
-    <mapping resource="com/openkm/dao/bean/MessageReceived.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/extension/MessageSent.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/extension/MessageReceived.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/ProposedQuerySent.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/ProposedQueryReceived.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/TwitterAccount.hbm.xml"/>
