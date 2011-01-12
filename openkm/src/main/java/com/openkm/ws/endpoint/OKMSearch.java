@@ -127,7 +127,7 @@ public class OKMSearch {
 	@WebMethod
 	public IntegerPair[] getKeywordMap(@WebParam(name = "token") String token,
 			@WebParam(name = "filter") String[] filter) throws RepositoryException, DatabaseException {
-		log.info("getKeywordMap({}, {})", token, filter);
+		log.debug("getKeywordMap({}, {})", token, filter);
 		SearchModule sm = ModuleManager.getSearchModule();
 		List<String> alFilter = Arrays.asList(filter);
 		Map<String, Integer> map = sm.getKeywordMap(token, alFilter);
