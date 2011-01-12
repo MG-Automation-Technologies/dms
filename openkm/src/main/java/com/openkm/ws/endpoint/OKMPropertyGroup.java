@@ -22,7 +22,7 @@
 package com.openkm.ws.endpoint;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jws.WebMethod;
@@ -46,6 +46,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.ModuleManager;
 import com.openkm.module.PropertyGroupModule;
+import com.openkm.ws.util.FormElementComplex;
 
 /**
  * Servlet Class
@@ -107,14 +108,19 @@ public class OKMPropertyGroup {
 	}
 
 	@WebMethod
-	public FormElement[] getProperties(@WebParam(name = "token") String token,
+	public FormElementComplex[] getProperties(@WebParam(name = "token") String token,
 			@WebParam(name = "nodePath") String nodePath,
 			@WebParam(name = "grpName") String grpName) throws IOException, ParseException,
 			NoSuchGroupException, PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getProperties({}, {}, {})", new Object[] { token, nodePath, grpName });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		List<FormElement> col = cm.getProperties(token, nodePath, grpName);
-		FormElement[] result = (FormElement[]) col.toArray(new FormElement[col.size()]);
+		FormElementComplex[] result = new FormElementComplex[col.size()];
+		
+		for (int i=0; i<col.size(); i++) {
+			result[i] = FormElementComplex.toFormElementComplex(col.get(i));
+		}
+		
 		log.debug("getProperties: {}", result);
 		return result;
 	}
@@ -123,12 +129,18 @@ public class OKMPropertyGroup {
 	public void setProperties(@WebParam(name = "token") String token,
 			@WebParam(name = "nodePath") String nodePath,
 			@WebParam(name = "grpName") String grpName,
-			@WebParam(name = "properties") FormElement[] properties) throws IOException, ParseException,
+			@WebParam(name = "properties") FormElementComplex[] properties) throws IOException, ParseException,
 			NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("setProperties({}, {}, {}, {})", new Object[] { token, nodePath, grpName, properties });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		cm.setProperties(token, nodePath, grpName, Arrays.asList(properties));
+		List<FormElement> al = new ArrayList<FormElement>();
+		
+		for (int i=0; i<properties.length; i++) {
+			al.add(FormElementComplex.toFormElement(properties[i]));
+		}
+		
+		cm.setProperties(token, nodePath, grpName, al);
 		log.debug("setProperties: void");
 	}
 	
