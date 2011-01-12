@@ -316,6 +316,25 @@ public class WorkspaceUserProperties {
 	}
 	
 	/**
+	 * refreshUserWorkspace
+	 */
+	public void refreshUserWorkspace() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) workspaceService;
+		endPoint.setServiceEntryPoint(Config.OKMWorkspaceService);	
+		workspaceService.getUserWorkspace(new AsyncCallback<GWTWorkspace>() {
+			@Override
+			public void onSuccess(GWTWorkspace result) {
+				workspace = result;
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				Main.get().showError("getUserWorkspace", caught);
+			}
+		});
+	}
+	
+	/**
 	 * Gets the user documents size
 	 */
 	public void getUserDocumentsSize() {
