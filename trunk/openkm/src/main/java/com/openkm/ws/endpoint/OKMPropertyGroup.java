@@ -22,8 +22,7 @@
 package com.openkm.ws.endpoint;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jws.WebMethod;
@@ -31,7 +30,6 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.jboss.annotation.security.SecurityDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,17 +117,8 @@ public class OKMPropertyGroup {
 		List<FormElement> col = cm.getProperties(token, nodePath, grpName);
 		FormElementComplex[] result = new FormElementComplex[col.size()];
 		
-		try {
-			for (int i=0; i<col.size(); i++) {
-				result[i] = new FormElementComplex();
-				BeanUtils.copyProperties(result[i], col.get(i));
-				System.out.println("Es: "+result[i]);
-				System.out.println(col.get(i));
-			}
-		} catch (IllegalAccessException e) {
-			log.error(e.getMessage(), e);
-		} catch (InvocationTargetException e) {
-			log.error(e.getMessage(), e);
+		for (int i=0; i<col.size(); i++) {
+			result[i] = FormElementComplex.toFormElementComplex(col.get(i));
 		}
 		
 		log.debug("getProperties: {}", result);
@@ -140,12 +129,18 @@ public class OKMPropertyGroup {
 	public void setProperties(@WebParam(name = "token") String token,
 			@WebParam(name = "nodePath") String nodePath,
 			@WebParam(name = "grpName") String grpName,
-			@WebParam(name = "properties") FormElement[] properties) throws IOException, ParseException,
+			@WebParam(name = "properties") FormElementComplex[] properties) throws IOException, ParseException,
 			NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("setProperties({}, {}, {}, {})", new Object[] { token, nodePath, grpName, properties });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		cm.setProperties(token, nodePath, grpName, Arrays.asList(properties));
+		List<FormElement> al = new ArrayList<FormElement>();
+		
+		for (int i=0; i<properties.length; i++) {
+			al.add(FormElementComplex.toFormElement(properties[i]));
+		}
+		
+		cm.setProperties(token, nodePath, grpName, al);
 		log.debug("setProperties: void");
 	}
 	
