@@ -89,11 +89,12 @@ public class OKMSearch {
 
 	@WebMethod
 	public QueryResult[] findByKeywords(@WebParam(name = "token") String token,
-			@WebParam(name = "keywords") HashSet<String> keywords) throws
-			IOException, ParseException, RepositoryException, DatabaseException {
+			@WebParam(name = "keywords") String[] keywords) throws IOException, ParseException,
+			RepositoryException, DatabaseException {
 		log.debug("findByKeywords({}, {})", token, keywords);
 		SearchModule sm = ModuleManager.getSearchModule();
-		List<QueryResult> col = sm.findByKeywords(token, keywords);
+		Set<String> set = new HashSet<String>(Arrays.asList(keywords));
+		List<QueryResult> col = sm.findByKeywords(token, set);
 		QueryResult[] result = (QueryResult[]) col.toArray(new QueryResult[col.size()]);
 		log.debug("findByKeywords: {}", result);
 		return result;
@@ -126,7 +127,7 @@ public class OKMSearch {
 	@WebMethod
 	public IntegerPair[] getKeywordMap(@WebParam(name = "token") String token,
 			@WebParam(name = "filter") String[] filter) throws RepositoryException, DatabaseException {
-		log.debug("getKeywordMap({}, {})", token, filter);
+		log.info("getKeywordMap({}, {})", token, filter);
 		SearchModule sm = ModuleManager.getSearchModule();
 		List<String> alFilter = Arrays.asList(filter);
 		Map<String, Integer> map = sm.getKeywordMap(token, alFilter);
