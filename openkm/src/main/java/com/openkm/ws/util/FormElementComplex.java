@@ -25,11 +25,18 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.openkm.bean.form.Button;
+import com.openkm.bean.form.CheckBox;
+import com.openkm.bean.form.FormElement;
+import com.openkm.bean.form.Input;
 import com.openkm.bean.form.Option;
+import com.openkm.bean.form.Select;
+import com.openkm.bean.form.TextArea;
 import com.openkm.bean.form.Validator;
 
 public class FormElementComplex implements Serializable {
 	private static final long serialVersionUID = 1L;
+	private String objClass;
 	private String label;
 	private String name;
 	private String width;
@@ -43,6 +50,14 @@ public class FormElementComplex implements Serializable {
 	public FormElementComplex() {
 	}
 
+	public String getObjClass() {
+		return objClass;
+	}
+
+	public void setObjClass(String objClass) {
+		this.objClass = objClass;
+	}
+	
 	public String getLabel() {
 		return label;
 	}
@@ -113,6 +128,77 @@ public class FormElementComplex implements Serializable {
 
 	public void setValidators(List<Validator> validators) {
 		this.validators = validators;
+	}
+	
+	/**
+	 * Conversion from FormElement to FormElementComplex.
+	 */
+	public static FormElementComplex toFormElementComplex(FormElement fe) {
+		FormElementComplex fec = new FormElementComplex();
+		
+		fec.setHeight(fe.getHeight());
+		fec.setWidth(fe.getWidth());
+		fec.setLabel(fe.getLabel());
+		fec.setName(fe.getName());
+		
+		if (fe instanceof Input) {
+			Input i = (Input) fe;
+			fec.setType(i.getType());
+			fec.setValue(i.getValue());
+			fec.setObjClass(i.getClass().getName());
+		} else if (fe instanceof TextArea) {
+			TextArea ta = (TextArea) fe;
+			fec.setValue(ta.getValue());
+			fec.setObjClass(ta.getClass().getName());
+		} else if (fe instanceof CheckBox) {
+			CheckBox cb = (CheckBox) fe;
+			fec.setValue(Boolean.toString(cb.getValue()));
+			fec.setObjClass(cb.getClass().getName());
+		} else if (fe instanceof Select) {
+			Select s = (Select) fe;
+			fec.setOptions(s.getOptions());
+			fec.setObjClass(s.getClass().getName());
+		} else if (fe instanceof Button) {
+			Button b = (Button) fe;
+			fec.setType(b.getType());
+			fec.setValue(b.getValue());
+			fec.setObjClass(b.getClass().getName());
+		}
+		
+		return fec;
+	}
+	
+	/**
+	 * Conversion from FormElementComplex to FormElement.
+	 */
+	public static FormElement toFormElement(FormElementComplex fec) {
+		FormElement fe = new FormElement();
+		
+		fe.setHeight(fec.getHeight());
+		fe.setWidth(fec.getWidth());
+		fe.setLabel(fec.getLabel());
+		fe.setName(fec.getName());
+		
+		if (Input.class.getName().equals(fec.getObjClass())) {
+			fe = new Input();
+			((Input) fe).setType(fec.getType());
+			((Input) fe).setValue(fec.getValue());
+		} else if (TextArea.class.getName().equals(fec.getObjClass())) {
+			fe = new TextArea();
+			((TextArea) fe).setValue(fec.getValue());
+		} else if (CheckBox.class.getName().equals(fec.getObjClass())) {
+			fe = new CheckBox();
+			((CheckBox) fe).setValue(Boolean.valueOf(fec.getValue()));
+		} else if (Select.class.getName().equals(fec.getObjClass())) {
+			fe = new Select();
+			((Select) fe).setOptions(fec.getOptions());			
+		} else if (Button.class.getName().equals(fec.getObjClass())) {
+			fe = new Button();
+			((Button) fe).setType(fec.getType());
+			((Button) fe).setValue(fec.getValue());
+		}
+		
+		return fe;
 	}
 	
 	public String toString() {
