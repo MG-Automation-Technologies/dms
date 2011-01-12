@@ -460,7 +460,7 @@ public class UserPopup extends DialogBox implements ClickHandler {
 	 */
 	final AsyncCallback<Object> callbackUpdateUserWorkspace = new AsyncCallback<Object>() {
 		public void onSuccess(Object result){
-			Main.get().workspaceUserProperties.getUserWorkspace(); // Refreshing workspace saved values
+			Main.get().workspaceUserProperties.refreshUserWorkspace(); // Refreshing workspace saved values
 			hide();
 		}
 
