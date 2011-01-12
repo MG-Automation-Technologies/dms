@@ -40,4 +40,15 @@ public class FormElement implements Serializable {
 	public void setHeight(String height) {
 		this.height = height;
 	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append("label="); sb.append(label);
+		sb.append(", name="); sb.append(name);
+		sb.append(", width="); sb.append(width);
+		sb.append(", height="); sb.append(height);
+		sb.append("}");
+		return sb.toString();
+	}
 }
