@@ -36,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
+import com.openkm.util.FileUtils;
 
 /**
  * Text extractor for TIFF image documents.
@@ -101,10 +102,10 @@ public class Tesseract2TextExtractor extends AbstractTextExtractor {
 				return new StringReader("");
 			} finally {
 				stream.close();
-				tmpFileIn.delete();
-				tmpFilePre.delete();
-				tmpFileOut.delete();
-				new File(tmpFileOut.getPath()+".txt").delete();
+				FileUtils.deleteQuietly(tmpFileIn);
+				FileUtils.deleteQuietly(tmpFilePre);
+				FileUtils.deleteQuietly(tmpFileOut);
+				FileUtils.deleteQuietly(new File(tmpFileOut.getPath()+".txt"));
 			}
 		} else {
 			log.warn("Undefined OCR application");
