@@ -83,7 +83,7 @@ public class CuneiformTextExtractor extends AbstractTextExtractor {
     			// Performs OCR
     			long start = System.currentTimeMillis();
     			cmd = new String[] { Config.SYSTEM_OCR, tmpFileIn.getPath(), "-o", tmpFileOut.getPath() };
-    			log.info("Command: {}", Arrays.toString(cmd));
+    			log.debug("Command: {}", Arrays.toString(cmd));
     			ProcessBuilder pb = new ProcessBuilder(cmd);
     			Process process = pb.start();
     			stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
