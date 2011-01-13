@@ -397,7 +397,7 @@ public class DocConverter {
 				log.debug("STDOUT: {}", line);
 			}
 			
-			process.waitFor();	
+			process.waitFor();
 			
 			// Check return code
 			if (process.exitValue() != 0) {
