@@ -3,17 +3,26 @@ package com.openkm.extractor;
 import java.io.BufferedInputStream;
 import java.io.CharArrayReader;
 import java.io.CharArrayWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.jackrabbit.extractor.AbstractTextExtractor;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDResources;
+import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
 import org.apache.pdfbox.util.PDFTextStripper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.openkm.util.FileUtils;
 
 /**
  * Text extractor for Portable Document Format (PDF).
@@ -23,8 +32,7 @@ public class PdfTextExtractor extends AbstractTextExtractor {
     /**
      * Logger instance.
      */
-    private static final Logger logger =
-        LoggerFactory.getLogger(PdfTextExtractor.class);
+	private static final Logger log = LoggerFactory.getLogger(PdfTextExtractor.class);
 
     /**
      * Force loading of dependent class.
@@ -37,7 +45,7 @@ public class PdfTextExtractor extends AbstractTextExtractor {
      * Creates a new <code>PdfTextExtractor</code> instance.
      */
     public PdfTextExtractor() {
-        super(new String[]{"application/pdf"});
+        super(new String[]{ "application/pdf" });
     }
 
     //-------------------------------------------------------< TextExtractor >
@@ -45,21 +53,51 @@ public class PdfTextExtractor extends AbstractTextExtractor {
     /**
      * {@inheritDoc}
      */
-    public Reader extractText(InputStream stream,
-                              String type,
-                              String encoding) throws IOException {
+    @SuppressWarnings("rawtypes")
+	public Reader extractText(InputStream stream, String type, String encoding) throws IOException {
         try {
             PDFParser parser = new PDFParser(new BufferedInputStream(stream));
+            
             try {
                 parser.parse();
                 PDDocument document = parser.getPDDocument();
                 CharArrayWriter writer = new CharArrayWriter();
-
+                
                 PDFTextStripper stripper = new PDFTextStripper();
                 stripper.setLineSeparator("\n");
                 stripper.writeText(document, writer);
-
-                return new CharArrayReader(writer.toCharArray());
+                
+                if (writer.size() <= 1) {
+                	log.info("PDF does not contains text layer");
+                	
+                	// Extract images from PDF
+					List pages = document.getDocumentCatalog().getAllPages();
+                	StringBuilder sb = new StringBuilder();
+                	
+                	for (Iterator itPg = pages.iterator(); itPg.hasNext(); ) {
+                		PDPage page = (PDPage) itPg.next();
+                        PDResources resources = page.getResources();
+                        Map images = resources.getImages();
+                        
+                        if (images != null) {
+                        	for (Iterator itImg = images.keySet().iterator(); itImg.hasNext(); ) {
+                        		 String key = (String) itImg.next();
+                                 PDXObjectImage image = (PDXObjectImage) images.get(key);
+                                 File pdfImg = File.createTempFile(key, "." + image.getSuffix());
+                                 log.info("Writing image: {}", pdfImg.getPath());
+                                 image.write2file(pdfImg);
+                                 String txt = new CuneiformTextExtractor().doOcr(pdfImg);
+                                 sb.append(txt).append(" ");
+                                 log.info("Salida: {}", txt);
+                                 FileUtils.deleteQuietly(pdfImg);
+                        	}
+                        }
+                	}
+                	
+                	return new StringReader(sb.toString());
+                } else {
+                	return new CharArrayReader(writer.toCharArray());
+                }
             } finally {
                 try {
                     PDDocument doc = parser.getPDDocument();
@@ -73,7 +111,7 @@ public class PdfTextExtractor extends AbstractTextExtractor {
         } catch (Exception e) {
             // it may happen that PDFParser throws a runtime
             // exception when parsing certain pdf documents
-            logger.warn("Failed to extract PDF text content", e);
+        	log.warn("Failed to extract PDF text content", e);
             return new StringReader("");
         } finally {
             stream.close();
