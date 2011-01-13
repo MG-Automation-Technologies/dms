@@ -65,24 +65,49 @@ public class CuneiformTextExtractor extends AbstractTextExtractor {
      * {@inheritDoc}
      */ 
     public Reader extractText(InputStream stream, String type, String encoding) throws IOException {
-    	BufferedReader stdout = null;
     	File tmpFileIn = null;
-    	File tmpFileOut = null;
-    	String cmd[] = null;
-    	String line;
     	
 		if (!Config.SYSTEM_OCR.equals("")) {
 			try {
     			// Create temp file
     			tmpFileIn = FileUtils.createTempFileFromMime(type);
-    			tmpFileOut = File.createTempFile("okm", ".txt");
     			FileOutputStream fos = new FileOutputStream(tmpFileIn);
     			IOUtils.copy(stream, fos);
     			fos.close();
     			
+    			// Read result
+    			String text = doOcr(tmpFileIn);
+    			return new StringReader(text);
+			} catch (Exception e) {
+				log.warn("Failed to extract OCR text", e);
+				return new StringReader("");
+			} finally {
+				IOUtils.closeQuietly(stream);
+				FileUtils.deleteQuietly(tmpFileIn);
+			}
+		} else {
+			log.warn("Undefined OCR application");
+			return new StringReader("");
+		}
+    }
+    
+    /**
+     * Performs OCR on image file
+     */
+    public String doOcr(File fileIn) throws Exception {
+    	BufferedReader stdout = null;
+    	File tmpFileOut = null;
+    	String cmd[] = null;
+    	String line;
+    	
+    	if (!Config.SYSTEM_OCR.equals("")) {
+			try {
+    			// Create temp file
+    			tmpFileOut = File.createTempFile("okm", ".txt");
+    			
     			// Performs OCR
     			long start = System.currentTimeMillis();
-    			cmd = new String[] { Config.SYSTEM_OCR, tmpFileIn.getPath(), "-o", tmpFileOut.getPath() };
+    			cmd = new String[] { Config.SYSTEM_OCR, fileIn.getPath(), "-o", tmpFileOut.getPath() };
     			log.debug("Command: {}", Arrays.toString(cmd));
     			ProcessBuilder pb = new ProcessBuilder(cmd);
     			Process process = pb.start();
@@ -108,21 +133,19 @@ public class CuneiformTextExtractor extends AbstractTextExtractor {
     			// Read result
     			String text = IOUtils.toString(new FileInputStream(tmpFileOut.getPath()));
     			log.debug("TEXT: "+text);
-    			return new StringReader(text);
+    			return text;
 			} catch (Exception e) {
 				log.warn(Arrays.toString(cmd));
 				log.warn("Failed to extract OCR text", e);
-				return new StringReader("");
+				return "";
 			} finally {
-				IOUtils.closeQuietly(stream);
 				IOUtils.closeQuietly(stdout);
-				tmpFileIn.delete();
-				tmpFileOut.delete();
-				new File(tmpFileOut.getPath()+".txt").delete();
+				FileUtils.deleteQuietly(tmpFileOut);
+				FileUtils.deleteQuietly(new File(tmpFileOut.getPath()));
 			}
 		} else {
 			log.warn("Undefined OCR application");
-			return new StringReader("");
+			return "";
 		}
     }
 }
