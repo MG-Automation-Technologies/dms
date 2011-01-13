@@ -116,7 +116,7 @@ public class FileUtils {
 	public static File createTempFileFromMime(String mimeType) throws DatabaseException, IOException {
 		MimeType mt = MimeTypeDAO.findByName(mimeType);
 		String ext = mt.getExtensions().iterator().next();
-		return File.createTempFile("okm", ext);
+		return File.createTempFile("okm", "."+ext);
 	}
 	
 	/**
