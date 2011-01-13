@@ -21,13 +21,16 @@
 
 package com.openkm.extractor;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Arrays;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.jackrabbit.extractor.AbstractTextExtractor;
@@ -35,23 +38,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
+import com.openkm.util.FileUtils;
+import com.openkm.util.FormatUtil;
 
 /**
- * Text extractor for TIFF image documents.
+ * Text extractor for image documents.
  * Use OCR from http://code.google.com/p/tesseract-ocr/ 
  */
-public class TiffTextExtractor extends AbstractTextExtractor {
+public class Tesseract3TextExtractor extends AbstractTextExtractor {
 
     /**
      * Logger instance.
      */
-    private static final Logger log = LoggerFactory.getLogger(TiffTextExtractor.class);
+    private static final Logger log = LoggerFactory.getLogger(Tesseract3TextExtractor.class);
     
     /**
-     * Creates a new <code>TiffTextExtractor</code> instance.
+     * Creates a new <code>TextExtractor</code> instance.
      */
-    public TiffTextExtractor() {
-        super(new String[]{"image/tiff"});
+    public Tesseract3TextExtractor() {
+    	 super(new String[] { "image/tiff", "image/gif", "image/jpg", "image/png" });
     }
     
     //-------------------------------------------------------< TextExtractor >
@@ -60,46 +65,58 @@ public class TiffTextExtractor extends AbstractTextExtractor {
      * {@inheritDoc}
      */ 
     public Reader extractText(InputStream stream, String type, String encoding) throws IOException {
+    	BufferedReader stdout = null;
     	File tmpFileIn = null;
-    	File tmpFilePre = null;
     	File tmpFileOut = null;
-
+    	String cmd[] = null;
+    	String line;
+    	
 		if (!Config.SYSTEM_OCR.equals("")) {
 			try {
     			// Create temp file
-    			tmpFileIn = File.createTempFile("okm", ".tif");
-    			tmpFilePre = File.createTempFile("okm", ".tif");
+    			tmpFileIn = FileUtils.createTempFileFromMime(type);
     			tmpFileOut = File.createTempFile("okm", "");
     			FileOutputStream fos = new FileOutputStream(tmpFileIn);
     			IOUtils.copy(stream, fos);
     			fos.close();
-
-    			// Performs image pre-processing
-    			log.debug("CMD: convert -depth 8 -monochrome "+tmpFileIn.getPath()+" "+tmpFilePre.getPath());
-    			ProcessBuilder pb = new ProcessBuilder("convert", "-depth", "8", "-monochrome", tmpFileIn.getPath(), tmpFilePre.getPath());
-    			Process process = pb.start();
-    			process.waitFor();
-    			process.destroy();
     			
     			// Performs OCR
-    			log.debug("CMD: "+Config.SYSTEM_OCR+" "+tmpFilePre.getPath()+" "+tmpFileOut.getPath());
-    			pb = new ProcessBuilder(Config.SYSTEM_OCR, tmpFilePre.getPath(), tmpFileOut.getPath());
-    			process = pb.start();
+    			long start = System.currentTimeMillis();
+    			cmd = new String[] { Config.SYSTEM_OCR, tmpFileIn.getPath(), tmpFileOut.getPath() };
+    			log.debug("Command: {}", Arrays.toString(cmd));
+    			ProcessBuilder pb = new ProcessBuilder(cmd);
+    			Process process = pb.start();
+    			stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
+    			
+    			while ((line = stdout.readLine()) != null) {
+    				log.debug("STDOUT: {}", line);
+    			}
+    			
     			process.waitFor();
+    			
+    			// Check return code
+    			if (process.exitValue() != 0) {
+    				log.warn("Abnormal program termination: {}" + process.exitValue());
+    				log.warn("STDERR: {}", IOUtils.toString(process.getErrorStream()));
+    			} else {
+    				log.debug("Normal program termination");
+    			}
+    			
     			process.destroy();
+    			log.debug("Elapse time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
     			
     			// Read result
     			String text = IOUtils.toString(new FileInputStream(tmpFileOut.getPath()+".txt"));
-    		
     			log.debug("TEXT: "+text);
     			return new StringReader(text);
 			} catch (Exception e) {
+				log.warn(Arrays.toString(cmd));
 				log.warn("Failed to extract OCR text", e);
 				return new StringReader("");
 			} finally {
-				stream.close();
+				IOUtils.closeQuietly(stream);
+				IOUtils.closeQuietly(stdout);
 				tmpFileIn.delete();
-				tmpFilePre.delete();
 				tmpFileOut.delete();
 				new File(tmpFileOut.getPath()+".txt").delete();
 			}
