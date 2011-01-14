@@ -21,9 +21,12 @@
 
 package com.openkm.util;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
+import java.util.zip.ZipFile;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -31,6 +34,8 @@ import javax.jcr.Session;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.jackrabbit.JcrConstants;
+import org.dts.spell.SpellChecker;
+import org.dts.spell.dictionary.OpenOfficeSpellDictionary;
 import org.jbpm.JbpmContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -154,5 +159,41 @@ public class DocumentUtils {
 		} else {
 			return checkPathFilter(node.getParent(), path);
 		}
+	}
+	
+	/**
+	 * Text spell checker
+	 */
+	public static String spellChecker(String text) throws IOException {
+		log.debug("spellChecker({})", text);
+		StringBuilder sb = new StringBuilder();
+		
+		if (Config.SYSTEM_OPENOFFICE_DICTIONARY.equals("")) {
+			log.warn("OpenOffice dictionary not configured");
+			sb.append(text);
+		} else {
+			log.info("Using OpenOffice dictionary: {}", Config.SYSTEM_OPENOFFICE_DICTIONARY);
+			ZipFile zf = new ZipFile(Config.SYSTEM_OPENOFFICE_DICTIONARY);
+			OpenOfficeSpellDictionary oosd = new OpenOfficeSpellDictionary(zf);
+			SpellChecker sc = new SpellChecker(oosd);
+			sc.setCaseSensitive(false);
+			StringTokenizer st = new StringTokenizer(text);
+			
+			while (st.hasMoreTokens()) {
+				String w = st.nextToken();
+				List<String> s = sc.getDictionary().getSuggestions(w);
+				
+				if (s.isEmpty()) {
+					sb.append(w).append(" ");
+				} else {
+					sb.append(s.get(0)).append(" ");
+				}
+			}
+			
+			zf.close();
+		}
+		
+		log.debug("spellChecker: {}", sb.toString());
+		return sb.toString();
 	}
 }
