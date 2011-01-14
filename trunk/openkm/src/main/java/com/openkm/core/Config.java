@@ -135,6 +135,7 @@ public class Config {
 	public static final String PROPERTY_SYSTEM_OPENOFFICE_TASKS = "system.openoffice.tasks";
 	public static final String PROPERTY_SYSTEM_OPENOFFICE_PORT = "system.openoffice.port";
 	public static final String PROPERTY_SYSTEM_OPENOFFICE_SERVER = "system.openoffice.server";
+	public static final String PROPERTY_SYSTEM_OPENOFFICE_DICTIONARY = "system.openoffice.dictionary";
 	public static final String PROPERTY_SYSTEM_IMG2PDF = "system.img2pdf";
 	public static final String PROPERTY_SYSTEM_PDF2SWF = "system.pdf2swf";
 	public static final String PROPERTY_SYSTEM_DWG2DXF = "system.dwg2dxf";
@@ -271,6 +272,7 @@ public class Config {
 	public static int SYSTEM_OPENOFFICE_TASKS;
 	public static int SYSTEM_OPENOFFICE_PORT;
 	public static String SYSTEM_OPENOFFICE_SERVER;
+	public static String SYSTEM_OPENOFFICE_DICTIONARY;
 	public static String SYSTEM_IMG2PDF;
 	public static String SYSTEM_PDF2SWF;
 	public static String SYSTEM_DWG2DXF;
@@ -596,6 +598,8 @@ public class Config {
 			values.put(PROPERTY_SYSTEM_OPENOFFICE_PORT, Integer.toString(SYSTEM_OPENOFFICE_PORT));
 			SYSTEM_OPENOFFICE_SERVER = ConfigDAO.getString(PROPERTY_SYSTEM_OPENOFFICE_SERVER, "");
 			values.put(PROPERTY_SYSTEM_OPENOFFICE_SERVER, SYSTEM_OPENOFFICE_SERVER);
+			SYSTEM_OPENOFFICE_DICTIONARY = ConfigDAO.getString(PROPERTY_SYSTEM_OPENOFFICE_DICTIONARY, "");
+			values.put(PROPERTY_SYSTEM_OPENOFFICE_DICTIONARY, SYSTEM_OPENOFFICE_DICTIONARY);
 			
 			SYSTEM_OCR = ConfigDAO.getString(PROPERTY_SYSTEM_OCR, "");
 			values.put(PROPERTY_SYSTEM_OCR, SYSTEM_OCR);
