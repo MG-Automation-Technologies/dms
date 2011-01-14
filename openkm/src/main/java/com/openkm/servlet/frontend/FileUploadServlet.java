@@ -59,7 +59,6 @@ import de.schlichtherle.io.FileOutputStream;
  * FileUploadServlet
  * 
  * @author pavila
- *
  */
 public class FileUploadServlet extends OKMHttpServlet {
 	private static Logger log = LoggerFactory.getLogger(FileUploadServlet.class);
