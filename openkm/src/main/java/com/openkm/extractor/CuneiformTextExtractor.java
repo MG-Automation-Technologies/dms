@@ -31,18 +31,14 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
-import java.util.List;
-import java.util.StringTokenizer;
-import java.util.zip.ZipFile;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.jackrabbit.extractor.AbstractTextExtractor;
-import org.dts.spell.SpellChecker;
-import org.dts.spell.dictionary.OpenOfficeSpellDictionary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
+import com.openkm.util.DocumentUtils;
 import com.openkm.util.FileUtils;
 import com.openkm.util.FormatUtil;
 
@@ -140,30 +136,12 @@ public class CuneiformTextExtractor extends AbstractTextExtractor {
     			
     			// Spellchecker
     			if (Config.SYSTEM_OPENOFFICE_DICTIONARY.equals("")) {
-    				log.info("TEXT: "+text);
+    				log.info("TEXT: {}", text);
     				return text;
     			} else {
-    				ZipFile zf = new ZipFile(Config.SYSTEM_OPENOFFICE_DICTIONARY);
-    				OpenOfficeSpellDictionary oosd = new OpenOfficeSpellDictionary(zf);
-    				SpellChecker sc = new SpellChecker(oosd);
-    				sc.setCaseSensitive(false);
-    				StringTokenizer st = new StringTokenizer(text);
-    				StringBuilder sb = new StringBuilder();
-    				
-    				while (st.hasMoreTokens()) {
-    					String w = st.nextToken();
-    					List<String> s = sc.getDictionary().getSuggestions(w);
-    					
-    					if (s.isEmpty()) {
-    						sb.append(w).append(" ");
-    					} else {
-    						sb.append(s.get(0)).append(" ");
-    					}
-    				}
-    				
-    				zf.close();
-        			log.info("TEXT: "+sb.toString());
-        			return sb.toString();
+    				text = DocumentUtils.spellChecker(text);
+        			log.info("TEXT: {}", text);
+        			return text;
     			}
 			} catch (Exception e) {
 				log.warn(Arrays.toString(cmd));

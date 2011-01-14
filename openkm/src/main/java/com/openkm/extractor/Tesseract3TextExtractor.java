@@ -38,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
+import com.openkm.util.DocumentUtils;
 import com.openkm.util.FileUtils;
 import com.openkm.util.FormatUtil;
 
@@ -107,8 +108,16 @@ public class Tesseract3TextExtractor extends AbstractTextExtractor {
     			
     			// Read result
     			String text = IOUtils.toString(new FileInputStream(tmpFileOut.getPath()+".txt"));
-    			log.debug("TEXT: "+text);
-    			return new StringReader(text);
+    			
+    			// Spellchecker
+    			if (Config.SYSTEM_OPENOFFICE_DICTIONARY.equals("")) {
+    				log.info("TEXT: {}", text);
+    				return new StringReader(text);
+    			} else {
+    				text = DocumentUtils.spellChecker(text);
+        			log.info("TEXT: {}", text);
+        			return new StringReader(text);
+    			}
 			} catch (Exception e) {
 				log.warn(Arrays.toString(cmd));
 				log.warn("Failed to extract OCR text", e);
