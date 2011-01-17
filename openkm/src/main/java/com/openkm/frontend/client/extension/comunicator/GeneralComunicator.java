@@ -78,6 +78,16 @@ public class GeneralComunicator {
 	}
 	
 	/**
+	 * i18n
+	 * 
+	 * @param property
+	 * @return
+	 */
+	public static String i18n(String property) {
+		return Main.i18n(property);
+	}
+	
+	/**
 	 * Download Document
 	 * 
 	 * @param checkout

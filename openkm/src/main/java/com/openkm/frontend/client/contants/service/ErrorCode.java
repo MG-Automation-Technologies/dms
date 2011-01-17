@@ -57,6 +57,7 @@ public class ErrorCode {
 	public static final String ORIGIN_OKMProposedQueryService 			= "024";
 	public static final String ORIGIN_OKMMessageService 				= "025";
 	public static final String ORIGIN_OKMStampService 					= "026";
+	public static final String ORIGIN_OKMContactService 				= "027";
 	
 	// Cause code error is XXX digits
 	public static final String CAUSE_Repository 				= "001";
