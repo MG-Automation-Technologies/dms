@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -374,8 +373,6 @@ public class DirectNotificationModule implements NotificationModule {
 			e.printStackTrace();
 		} catch (javax.jcr.RepositoryException e) {
 			e.printStackTrace();
-		} catch (RepositoryException e) {
-			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -416,8 +413,6 @@ public class DirectNotificationModule implements NotificationModule {
 		} catch (HttpException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (javax.jcr.RepositoryException e) {
 			e.printStackTrace();
