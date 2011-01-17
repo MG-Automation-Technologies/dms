@@ -102,6 +102,29 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 	}
 	
 	@Override
+	public List<String> getMails(List<String> users) throws PrincipalAdapterException {
+		log.debug("getMails({})", users);
+		List<String> list = new ArrayList<String>();
+		
+		for (Iterator<String> it = users.iterator(); it.hasNext();) {
+			String user = it.next();
+			List<String> ldap = ldapSearch(
+					Config.PRINCIPAL_LDAP_SERVER,
+					Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
+					Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
+					MessageFormat.format(Config.PRINCIPAL_LDAP_MAIL_SEARCH_BASE, user), 
+					Config.PRINCIPAL_LDAP_MAIL_SEARCH_FILTER, 
+					Config.PRINCIPAL_LDAP_MAIL_ATTRIBUTE);
+			if (!ldap.isEmpty()) {
+				list.add(ldap.get(0));
+			}
+		}
+
+		log.debug("getMails: {}", list);
+		return list;
+	}
+	
+	@Override
 	public List<String> getUsersByRole(String role) throws PrincipalAdapterException {
 		log.debug("getUsersByRole({})", role);
 		List<String> list = new ArrayList<String>();
@@ -147,29 +170,6 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 		}
 
 		log.debug("getRolesByUser: {}", list);
-		return list;
-	}
-
-	@Override
-	public List<String> getMails(List<String> users) throws PrincipalAdapterException {
-		log.debug("getMails({})", users);
-		List<String> list = new ArrayList<String>();
-		
-		for (Iterator<String> it = users.iterator(); it.hasNext();) {
-			String user = it.next();
-			List<String> ldap = ldapSearch(
-					Config.PRINCIPAL_LDAP_SERVER,
-					Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
-					Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
-					MessageFormat.format(Config.PRINCIPAL_LDAP_MAIL_SEARCH_BASE, user), 
-					Config.PRINCIPAL_LDAP_MAIL_SEARCH_FILTER, 
-					Config.PRINCIPAL_LDAP_MAIL_ATTRIBUTE);
-			if (!ldap.isEmpty()) {
-				list.add(ldap.get(0));
-			}
-		}
-
-		log.debug("getMails: {}", list);
 		return list;
 	}
 	
