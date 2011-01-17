@@ -564,21 +564,21 @@ public class Config {
 			RESTRICT_FILE_EXTENSION = ConfigDAO.getString(PROPERTY_RESTRICT_FILE_EXTENSION, "*~,*.bak");
 			values.put(PROPERTY_RESTRICT_FILE_EXTENSION, RESTRICT_FILE_EXTENSION);
 			
-			NOTIFICATION_MESSAGE_SUBJECT = ConfigDAO.getText(PROPERTY_NOTIFICATION_MESSAGE_SUBJECT, "OpenKM - NOTIFICATION - $documentName");
+			NOTIFICATION_MESSAGE_SUBJECT = ConfigDAO.getText(PROPERTY_NOTIFICATION_MESSAGE_SUBJECT, "OpenKM - NOTIFICATION - ${documentName}");
 			values.put(PROPERTY_NOTIFICATION_MESSAGE_SUBJECT, NOTIFICATION_MESSAGE_SUBJECT);
-			NOTIFICATION_MESSAGE_BODY = ConfigDAO.getText(PROPERTY_NOTIFICATION_MESSAGE_BODY, "<b>Document: </b><a href=\"$documentUrl\">$documentPath</a><br/><b>User: </b>$userId<br/><b>Message: </b>$notificationMessage<br/>");
+			NOTIFICATION_MESSAGE_BODY = ConfigDAO.getText(PROPERTY_NOTIFICATION_MESSAGE_BODY, "<b>Document: </b><a href=\"${documentUrl}\">${documentPath}</a><br/><b>User: </b>${userId}<br/><b>Message: </b>${notificationMessage}<br/>");
 			values.put(PROPERTY_NOTIFICATION_MESSAGE_BODY, NOTIFICATION_MESSAGE_BODY);
 			
-			SUBSCRIPTION_MESSAGE_SUBJECT = ConfigDAO.getText(PROPERTY_SUBSCRIPTION_MESSAGE_SUBJECT, "OpenKM - $eventType - $documentPath");
+			SUBSCRIPTION_MESSAGE_SUBJECT = ConfigDAO.getText(PROPERTY_SUBSCRIPTION_MESSAGE_SUBJECT, "OpenKM - ${eventType} - ${documentPath}");
 			values.put(PROPERTY_SUBSCRIPTION_MESSAGE_SUBJECT, SUBSCRIPTION_MESSAGE_SUBJECT);
-			SUBSCRIPTION_MESSAGE_BODY = ConfigDAO.getText(PROPERTY_SUBSCRIPTION_MESSAGE_BODY, "<b>Document: </b><a href=\"$documentUrl\">$documentPath</a><br/><b>User: </b>$userId<br/><b>Event: </b>$eventType<br/><b>Comment: </b>$subscriptionComment<br/>");
+			SUBSCRIPTION_MESSAGE_BODY = ConfigDAO.getText(PROPERTY_SUBSCRIPTION_MESSAGE_BODY, "<b>Document: </b><a href=\"${documentUrl}\">${documentPath}</a><br/><b>User: </b>${userId}<br/><b>Event: </b>${eventType}<br/><b>Comment: </b>${subscriptionComment}<br/>");
 			values.put(PROPERTY_SUBSCRIPTION_MESSAGE_BODY, SUBSCRIPTION_MESSAGE_BODY);
 			
 			SUBSCRIPTION_TWITTER_USER = ConfigDAO.getString(PROPERTY_SUBSCRIPTION_TWITTER_USER, "");
 			values.put(PROPERTY_SUBSCRIPTION_TWITTER_USER, SUBSCRIPTION_TWITTER_USER);
 			SUBSCRIPTION_TWITTER_PASSWORD = ConfigDAO.getString(PROPERTY_SUBSCRIPTION_TWITTER_PASSWORD, "");
 			values.put(PROPERTY_SUBSCRIPTION_TWITTER_PASSWORD, SUBSCRIPTION_TWITTER_PASSWORD);
-			SUBSCRIPTION_TWITTER_STATUS = ConfigDAO.getText(PROPERTY_SUBSCRIPTION_TWITTER_STATUS, "OpenKM - $documentUrl - $documentPath - $userId - $eventType");
+			SUBSCRIPTION_TWITTER_STATUS = ConfigDAO.getText(PROPERTY_SUBSCRIPTION_TWITTER_STATUS, "OpenKM - ${documentUrl} - ${documentPath} - ${userId} - ${eventType}");
 			values.put(PROPERTY_SUBSCRIPTION_TWITTER_STATUS, SUBSCRIPTION_TWITTER_STATUS);
 			
 			SYSTEM_DEMO = ConfigDAO.getBoolean(PROPERTY_SYSTEM_DEMO, false);
