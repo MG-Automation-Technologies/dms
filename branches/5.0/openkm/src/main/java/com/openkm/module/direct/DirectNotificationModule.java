@@ -287,7 +287,7 @@ public class DirectNotificationModule implements NotificationModule {
 					}
 					
 					if (Velocity.resourceExists(Config.NOTIFICATION_MESSAGE_BODY)) {
-						Velocity.mergeTemplate(Config.NOTIFICATION_MESSAGE_BODY, "UTF-8", context, swSubject);
+						Velocity.mergeTemplate(Config.NOTIFICATION_MESSAGE_BODY, "UTF-8", context, swBody);
 					} else {
 						Velocity.evaluate(context, swBody, "NotificationMessageBody", Config.NOTIFICATION_MESSAGE_BODY);	
 					}
