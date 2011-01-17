@@ -80,6 +80,7 @@ import com.openkm.dao.bean.ProposedSubscriptionReceived;
 import com.openkm.dao.bean.ProposedSubscriptionSent;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.UserConfig;
+import com.openkm.dao.bean.extension.Contact;
 import com.openkm.dao.bean.extension.MessageReceived;
 import com.openkm.dao.bean.extension.MessageSent;
 import com.openkm.dao.bean.extension.StampImage;
@@ -117,6 +118,7 @@ import com.openkm.frontend.client.bean.GWTUserConfig;
 import com.openkm.frontend.client.bean.GWTValidator;
 import com.openkm.frontend.client.bean.GWTVersion;
 import com.openkm.frontend.client.bean.GWTWorkflowComment;
+import com.openkm.frontend.client.bean.extension.GWTContact;
 import com.openkm.frontend.client.bean.extension.GWTMessageReceived;
 import com.openkm.frontend.client.bean.extension.GWTProposedQueryReceived;
 import com.openkm.frontend.client.bean.extension.GWTProposedQuerySent;
@@ -1335,5 +1337,57 @@ public class GWTUtil {
 		gst.setType(GWTStamp.STAMP_IMAGE);
 		
 		return gst;
+	}
+	
+	/**
+	 * Copy GWTContact to  Contact
+	 * 
+	 * @param gWTContact
+	 * @return
+	 */
+	public static Contact copy(GWTContact gWTContact) {
+		Contact contact = new Contact();
+		contact.setUuid(gWTContact.getUuid());
+		contact.setAddress(gWTContact.getAddress());
+		contact.setCity(gWTContact.getCity());
+		contact.setCountry(gWTContact.getCountry());
+		contact.setFax(gWTContact.getFax());
+		contact.setId(gWTContact.getId());
+		contact.setMail(gWTContact.getMail());
+		contact.setMobile(gWTContact.getMobile());
+		contact.setName(gWTContact.getName());
+		contact.setNotes(gWTContact.getNotes());
+		contact.setPc(gWTContact.getPc());
+		contact.setPhone(gWTContact.getPhone());
+		contact.setProvince(gWTContact.getProvince());
+		contact.setWeb(gWTContact.getWeb());
+		
+		return contact;
+	}
+	
+	/**
+	 * Copy Contact to GWTContact
+	 * 
+	 * @param contact
+	 * @return
+	 */
+	public static GWTContact copy(Contact contact) {
+		GWTContact gwtContact = new GWTContact();
+		gwtContact.setUuid(contact.getUuid());
+		gwtContact.setAddress(contact.getAddress());
+		gwtContact.setCity(contact.getCity());
+		gwtContact.setCountry(contact.getCountry());
+		gwtContact.setFax(contact.getFax());
+		gwtContact.setId(contact.getId());
+		gwtContact.setMail(contact.getMail());
+		gwtContact.setMobile(contact.getMobile());
+		gwtContact.setName(contact.getName());
+		gwtContact.setNotes(contact.getNotes());
+		gwtContact.setPc(contact.getPc());
+		gwtContact.setPhone(contact.getPhone());
+		gwtContact.setProvince(contact.getProvince());
+		gwtContact.setWeb(contact.getWeb());
+		
+		return gwtContact;
 	}
 }
