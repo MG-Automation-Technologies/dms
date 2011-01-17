@@ -22,13 +22,16 @@
 package com.openkm.module.direct;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
@@ -37,8 +40,6 @@ import javax.jcr.ValueFormatException;
 import javax.mail.MessagingException;
 
 import org.apache.commons.httpclient.HttpException;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +61,11 @@ import com.openkm.module.NotificationModule;
 import com.openkm.util.FileUtils;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.MailUtils;
+import com.openkm.util.TemplateUtils;
 import com.openkm.util.UserActivity;
+
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 
 public class DirectNotificationModule implements NotificationModule {
 	private static Logger log = LoggerFactory.getLogger(DirectNotificationModule.class);
@@ -271,24 +276,33 @@ public class DirectNotificationModule implements NotificationModule {
 				if (!emails.isEmpty() && !from.isEmpty()) {
 					StringWriter swSubject = new StringWriter();
 					StringWriter swBody = new StringWriter();
+					Configuration cfg = TemplateUtils.getConfig();
 					
-					VelocityContext context = new VelocityContext();
-					context.put("documentUrl", Config.APPLICATION_URL+"?docPath=" + URLEncoder.encode(nodePath, "UTF-8"));
-					context.put("documentPath", nodePath);
-					context.put("documentName", FileUtils.getName(nodePath));
-					context.put("userId", session.getUserID());
-					context.put("notificationMessage", message);
+					Map<String, String> model = new HashMap<String, String>();
+					model.put("documentUrl", Config.APPLICATION_URL+"?docPath=" + URLEncoder.encode(nodePath, "UTF-8"));
+					model.put("documentPath", nodePath);
+					model.put("documentName", FileUtils.getName(nodePath));
+					model.put("userId", session.getUserID());
+					model.put("notificationMessage", message);
 					
-					if (Velocity.resourceExists(Config.NOTIFICATION_MESSAGE_SUBJECT)) {
-						Velocity.mergeTemplate(Config.NOTIFICATION_MESSAGE_SUBJECT, "UTF-8", context, swSubject);
+					if (TemplateUtils.templateExists(Config.NOTIFICATION_MESSAGE_SUBJECT)) {
+						Template tpl = cfg.getTemplate(Config.NOTIFICATION_MESSAGE_SUBJECT);
+						tpl.process(model, swSubject);
 					} else {
-						Velocity.evaluate(context, swSubject, "NotificationMessageSubject", Config.NOTIFICATION_MESSAGE_SUBJECT);	
+						StringReader sr = new StringReader(Config.NOTIFICATION_MESSAGE_SUBJECT);
+						Template tpl = new Template("NotificationMessageSubject", sr, cfg);
+						tpl.process(model, swSubject);
+						sr.close();
 					}
 					
-					if (Velocity.resourceExists(Config.NOTIFICATION_MESSAGE_BODY)) {
-						Velocity.mergeTemplate(Config.NOTIFICATION_MESSAGE_BODY, "UTF-8", context, swSubject);
+					if (TemplateUtils.templateExists(Config.NOTIFICATION_MESSAGE_BODY)) {
+						Template tpl = cfg.getTemplate(Config.NOTIFICATION_MESSAGE_BODY);
+						tpl.process(model, swBody);
 					} else {
-						Velocity.evaluate(context, swBody, "NotificationMessageBody", Config.NOTIFICATION_MESSAGE_BODY);	
+						StringReader sr = new StringReader(Config.NOTIFICATION_MESSAGE_BODY);
+						Template tpl = new Template("NotificationMessageBody", sr, cfg);
+						tpl.process(model, swBody);
+						sr.close();
 					}
 					
 					if (attachment) {
@@ -339,25 +353,34 @@ public class DirectNotificationModule implements NotificationModule {
 					if (comment == null) { comment = ""; }
 					StringWriter swSubject = new StringWriter();
 					StringWriter swBody = new StringWriter();
+					Configuration cfg = TemplateUtils.getConfig();
 					
-					VelocityContext context = new VelocityContext();
-					context.put("documentUrl", Config.APPLICATION_URL+"?docPath=" + URLEncoder.encode(node.getPath(), "UTF-8"));
-					context.put("documentPath", node.getPath());
-					context.put("documentName", node.getName());
-					context.put("userId", user);
-					context.put("eventType", eventType);
-					context.put("subscriptionComment", comment);
+					Map<String, String> model = new HashMap<String, String>();
+					model.put("documentUrl", Config.APPLICATION_URL+"?docPath=" + URLEncoder.encode(node.getPath(), "UTF-8"));
+					model.put("documentPath", node.getPath());
+					model.put("documentName", node.getName());
+					model.put("userId", user);
+					model.put("eventType", eventType);
+					model.put("subscriptionComment", comment);
 					
-					if (Velocity.resourceExists(Config.SUBSCRIPTION_MESSAGE_SUBJECT)) {
-						Velocity.mergeTemplate(Config.SUBSCRIPTION_MESSAGE_SUBJECT, "UTF-8", context, swSubject);
+					if (TemplateUtils.templateExists(Config.SUBSCRIPTION_MESSAGE_SUBJECT)) {
+						Template tpl = cfg.getTemplate(Config.SUBSCRIPTION_MESSAGE_SUBJECT);
+						tpl.process(model, swSubject);
 					} else {
-						Velocity.evaluate(context, swSubject, "SubscriptionMessageSubject", Config.SUBSCRIPTION_MESSAGE_SUBJECT);	
+						StringReader sr = new StringReader(Config.SUBSCRIPTION_MESSAGE_SUBJECT);
+						Template tpl = new Template("SubscriptionMessageSubject", sr, cfg);
+						tpl.process(model, swSubject);
+						sr.close();
 					}
 					
-					if (Velocity.resourceExists(Config.SUBSCRIPTION_MESSAGE_BODY)) {
-						Velocity.mergeTemplate(Config.SUBSCRIPTION_MESSAGE_BODY, "UTF-8", context, swBody);
+					if (TemplateUtils.templateExists(Config.SUBSCRIPTION_MESSAGE_BODY)) {
+						Template tpl = cfg.getTemplate(Config.SUBSCRIPTION_MESSAGE_BODY);
+						tpl.process(model, swBody);
 					} else {
-						Velocity.evaluate(context, swBody, "SubscriptionMessageBody", Config.SUBSCRIPTION_MESSAGE_BODY);
+						StringReader sr = new StringReader(Config.SUBSCRIPTION_MESSAGE_BODY);
+						Template tpl = new Template("SubscriptionMessageBody", sr, cfg);
+						tpl.process(model, swBody);
+						sr.close();
 					}
 					
 					MailUtils.sendMessage(emails, swSubject.toString(), swBody.toString());
@@ -384,19 +407,24 @@ public class DirectNotificationModule implements NotificationModule {
 			if (users != null && !users.isEmpty() && !Config.SUBSCRIPTION_TWITTER_USER.equals("") && !Config.SUBSCRIPTION_TWITTER_PASSWORD.equals("")) {
 				Twitter twitter = new Twitter(Config.SUBSCRIPTION_TWITTER_USER, Config.SUBSCRIPTION_TWITTER_PASSWORD);
 				StringWriter swStatus = new StringWriter();
+				Configuration cfg = TemplateUtils.getConfig();
 				
-				VelocityContext context = new VelocityContext();
-				context.put("documentUrl", MailUtils.getTinyUrl(Config.APPLICATION_URL+"?docPath="+node.getPath()));
-				context.put("documentPath", node.getPath());
-				context.put("documentName", node.getName());
-				context.put("userId", user);
-				context.put("eventType", eventType);
-				context.put("subscriptionComment", comment);
+				Map<String, String> model = new HashMap<String, String>();
+				model.put("documentUrl", MailUtils.getTinyUrl(Config.APPLICATION_URL+"?docPath="+node.getPath()));
+				model.put("documentPath", node.getPath());
+				model.put("documentName", node.getName());
+				model.put("userId", user);
+				model.put("eventType", eventType);
+				model.put("subscriptionComment", comment);
 
-				if (Velocity.resourceExists(Config.SUBSCRIPTION_TWITTER_STATUS)) {
-					Velocity.mergeTemplate(Config.SUBSCRIPTION_TWITTER_STATUS, "UTF-8", context, swStatus);
+				if (TemplateUtils.templateExists(Config.SUBSCRIPTION_TWITTER_STATUS)) {
+					Template tpl = cfg.getTemplate(Config.SUBSCRIPTION_TWITTER_STATUS);
+					tpl.process(model, swStatus);
 				} else {
-					Velocity.evaluate(context, swStatus, "SubscriptionTwitterStatus", Config.SUBSCRIPTION_TWITTER_STATUS);	
+					StringReader sr = new StringReader(Config.SUBSCRIPTION_TWITTER_STATUS);
+					Template tpl = new Template("SubscriptionTwitterStatus", sr, cfg);
+					tpl.process(model, swStatus);
+					sr.close();	
 				}
 				
 				for (Iterator<String> itUsers = users.iterator(); itUsers.hasNext(); ) {
