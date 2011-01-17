@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.openkm.extension.frontend.client.widget.client.metromusa.MetromUsa;
+import com.openkm.extension.frontend.client.widget.contact.Contact;
 import com.openkm.extension.frontend.client.widget.crypto.Cryptography;
 import com.openkm.extension.frontend.client.widget.digitalsignature.DigitalSignature;
 import com.openkm.extension.frontend.client.widget.messaging.MessagingToolBarBox;
@@ -98,6 +99,9 @@ public class Customization {
 		}
 		if (Cryptography.isRegistered(uuidList)) {
 			extensions.addAll(new Cryptography(uuidList).getExtensions());
+		}
+		if (Contact.isRegistered(uuidList)) {
+			extensions.addAll(new Contact(uuidList).getExtensions());
 		}
 		
 		return extensions;
