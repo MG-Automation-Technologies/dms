@@ -278,13 +278,6 @@
       <version>2.0.10</version>
     </dependency>
 
-    <!-- Velocity -->
-    <dependency>
-      <groupId>org.apache.velocity</groupId>
-      <artifactId>velocity</artifactId>
-      <version>1.7</version>
-    </dependency>
-
     <!-- ROME -->
     <dependency>
       <groupId>rome</groupId>
