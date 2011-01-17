@@ -170,6 +170,10 @@
     <servlet-name>StaplingDownloadServlet</servlet-name>
     <servlet-class>com.openkm.servlet.extension.StaplingDownloadServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>ContactServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.extension.ContactServlet</servlet-class>
+  </servlet>
   
   <!-- Misc servlets -->
   <servlet>
@@ -505,6 +509,10 @@
   <servlet-mapping>
     <servlet-name>FrontendStampServlet</servlet-name>
     <url-pattern>/extension/Stamp</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ContactServlet</servlet-name>
+    <url-pattern>/extension/Contact</url-pattern>
   </servlet-mapping>
   
   <!-- Misc servlets mappings -->
