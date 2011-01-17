@@ -46,8 +46,7 @@ public class OOUtils {
 	private static Logger log = LoggerFactory.getLogger(OOUtils.class);
 	
 	/**
-	 * Fill PDF form
-	 * @throws  
+	 * Fill ODT template
 	 */
 	public static void fillTemplate(InputStream input, Map<String, Object> model, 
 			OutputStream output) throws FileNotFoundException, DocumentTemplateException, IOException {
