@@ -282,7 +282,7 @@
     <dependency>
       <groupId>org.apache.velocity</groupId>
       <artifactId>velocity</artifactId>
-      <version>1.6.3</version>
+      <version>1.7</version>
     </dependency>
 
     <!-- ROME -->
@@ -375,6 +375,25 @@
       <groupId>com.catcode</groupId>
       <artifactId>odfutils</artifactId>
       <version>051129</version>
+    </dependency>
+    
+    <!-- Spell checking -->
+    <dependency>
+      <groupId>org.dts</groupId>
+      <artifactId>jmyspell-core</artifactId>
+      <version>1.0.0-beta-2</version>
+    </dependency>
+    
+    <!-- Templates -->
+    <dependency>
+      <groupId>net.sf</groupId>
+      <artifactId>jodreports</artifactId>
+      <version>2.3.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.odftoolkit</groupId>
+      <artifactId>odfdom-java</artifactId>
+      <version>0.8.6</version>
     </dependency>
     
     <!-- GWT -->
