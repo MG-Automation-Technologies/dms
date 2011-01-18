@@ -77,20 +77,19 @@ public class DirectFolderModule implements FolderModule {
 	/**
 	 * Get folder properties
 	 */
-	public Folder getProperties(Session session, String fldPath) throws 
+	public Folder getProperties(Session session, Node fldNode) throws 
 			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException  {
-		log.debug("getProperties[session]({}, {})", session, fldPath);
+		log.debug("getProperties[session]({}, {})", session, fldNode);
 		Folder fld = new Folder();
-		Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
-			
+		
 		// Properties
-		fld.setPath(folderNode.getPath());
+		fld.setPath(fldNode.getPath());
 		fld.setHasChilds(false);
-		fld.setCreated(folderNode.getProperty(JcrConstants.JCR_CREATED).getDate());
-		fld.setAuthor(folderNode.getProperty(Folder.AUTHOR).getString());
-		fld.setUuid(folderNode.getUUID());
+		fld.setCreated(fldNode.getProperty(JcrConstants.JCR_CREATED).getDate());
+		fld.setAuthor(fldNode.getProperty(Folder.AUTHOR).getString());
+		fld.setUuid(fldNode.getUUID());
 					
-		for (NodeIterator nit = folderNode.getNodes(); nit.hasNext(); ) {
+		for (NodeIterator nit = fldNode.getNodes(); nit.hasNext(); ) {
 			Node node = nit.nextNode();
 
 			if (node.isNodeType(Folder.TYPE)) {
@@ -104,7 +103,7 @@ public class DirectFolderModule implements FolderModule {
 			fld.setPermissions(Permission.NONE);
 		} else {
 			AccessManager am = ((SessionImpl) session).getAccessManager();
-			Path path = ((NodeImpl)folderNode).getPrimaryPath();
+			Path path = ((NodeImpl)fldNode).getPrimaryPath();
 			//Path path = ((SessionImpl)session).getHierarchyManager().getPath(((NodeImpl)folderNode).getId());
 			if (am.isGranted(path, org.apache.jackrabbit.core.security.authorization.Permission.READ)) {
 				fld.setPermissions(Permission.READ);
@@ -126,8 +125,8 @@ public class DirectFolderModule implements FolderModule {
 		// Get user subscription
 		Set<String> subscriptorSet = new HashSet<String>();
 		
-		if (folderNode.isNodeType(Notification.TYPE)) {
-			Value[] subscriptors = folderNode.getProperty(Notification.SUBSCRIPTORS).getValues();
+		if (fldNode.isNodeType(Notification.TYPE)) {
+			Value[] subscriptors = fldNode.getProperty(Notification.SUBSCRIPTORS).getValues();
 
 			for (int i=0; i<subscriptors.length; i++) {
 				subscriptorSet.add(subscriptors[i].getString());
@@ -141,9 +140,9 @@ public class DirectFolderModule implements FolderModule {
 		fld.setSubscriptors(subscriptorSet);
 		
 		// Get notes
-		if (folderNode.isNodeType(Note.MIX_TYPE)) {
+		if (fldNode.isNodeType(Note.MIX_TYPE)) {
 			List<Note> notes = new ArrayList<Note>();
-			Node notesNode = folderNode.getNode(Note.LIST);
+			Node notesNode = fldNode.getNode(Note.LIST);
 			
 			for (NodeIterator nit = notesNode.getNodes(); nit.hasNext(); ) {
 				Node noteNode = nit.nextNode();
@@ -158,7 +157,7 @@ public class DirectFolderModule implements FolderModule {
 			fld.setNotes(notes);
 		}
 		
-		log.debug("Permisos: {} => {}", fldPath, fld.getPermissions());
+		log.debug("Permisos: {} => {}", fldNode.getPath(), fld.getPermissions());
 		log.debug("getProperties[session]: {}", fld);
 		return fld;
 	}
@@ -243,13 +242,13 @@ public class DirectFolderModule implements FolderModule {
 			Node folderNode = create(session, parentNode, name);
 						
 			// Set returned folder properties
-			newFolder = getProperties(session, fld.getPath());
+			newFolder = getProperties(session, folderNode);
 			
 			// Check scripting
 			DirectScriptingModule.checkScripts(session, parentNode, folderNode, "CREATE_FOLDER");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "CREATE_FOLDER", fld.getPath(), null);
+			UserActivity.log(session.getUserID(), "CREATE_FOLDER", folderNode.getUUID(), fld.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -287,10 +286,11 @@ public class DirectFolderModule implements FolderModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			fld = getProperties(session, fldPath);
+			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
+			fld = getProperties(session, folderNode);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_FOLDER_PROPERTIES", fldPath, null);
+			UserActivity.log(session.getUserID(), "GET_FOLDER_PROPERTIES", folderNode.getUUID(), fldPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -353,7 +353,7 @@ public class DirectFolderModule implements FolderModule {
 			DirectScriptingModule.checkScripts(session, parentNode, folderNode, "DELETE_FOLDER");
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "DELETE_FOLDER", fldPath, null);
+			UserActivity.log(session.getUserID(), "DELETE_FOLDER", folderNode.getUUID(), fldPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
@@ -470,7 +470,7 @@ public class DirectFolderModule implements FolderModule {
 			DirectScriptingModule.checkScripts(session, parentNode, folderNode, "PURGE_FOLDER");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "PURGE_FOLDER", fldPath, null);
+			UserActivity.log(session.getUserID(), "PURGE_FOLDER", folderNode.getUUID(), fldPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
@@ -534,6 +534,7 @@ public class DirectFolderModule implements FolderModule {
 		log.debug("rename({}, {}, {})", new Object[] { token, fldPath, newName });
 		Folder renamedFolder = null;
 		Session session = null;
+		Node folderNode = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
@@ -557,21 +558,22 @@ public class DirectFolderModule implements FolderModule {
 				session.move(fldPath, newPath);
 				
 				// Set new name
-				Node folderNode = session.getRootNode().getNode(newPath.substring(1));
+				folderNode = session.getRootNode().getNode(newPath.substring(1));
 				folderNode.setProperty(Folder.NAME, newName);
 			
 				// Publish changes
 				session.save();	
 			
 				// Set returned document properties
-				renamedFolder = getProperties(session, newPath);
+				renamedFolder = getProperties(session, folderNode);
 			} else {
 				// Don't change anything
-				renamedFolder = getProperties(session, fldPath);
+				folderNode = session.getRootNode().getNode(fldPath.substring(1));
+				renamedFolder = getProperties(session, folderNode);
 			}
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "RENAME_FOLDER", fldPath, newName);
+			UserActivity.log(session.getUserID(), "RENAME_FOLDER", folderNode.getUUID(), newName+", "+fldPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
@@ -613,12 +615,13 @@ public class DirectFolderModule implements FolderModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
+			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
 			String name = FileUtils.getName(fldPath);
 			session.move(fldPath, dstPath+"/"+name);
 			session.save();
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "MOVE_FOLDER", fldPath, dstPath);
+			UserActivity.log(session.getUserID(), "MOVE_FOLDER", folderNode.getUUID(), dstPath+", "+fldPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
@@ -676,7 +679,7 @@ public class DirectFolderModule implements FolderModule {
 			//t.commit();
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "COPY_FOLDER", fldPath, dstPath);
+			UserActivity.log(session.getUserID(), "COPY_FOLDER", srcFolderNode.getUUID(), dstPath+", "+fldPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			//t.rollback();
@@ -751,12 +754,12 @@ public class DirectFolderModule implements FolderModule {
 				Node child = ni.nextNode();
 				
 				if (child.isNodeType(Folder.TYPE)) {
-					childs.add(getProperties(session, child.getPath()));
+					childs.add(getProperties(session, child));
 				}
 			}
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_CHILD_FOLDERS", fldPath, null);
+			UserActivity.log(session.getUserID(), "GET_CHILD_FOLDERS", folderNode.getUUID(), fldPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -789,7 +792,7 @@ public class DirectFolderModule implements FolderModule {
 			contentInfo = getContentInfoHelper(folderNode);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_FOLDER_CONTENT_INFO", fldPath, contentInfo.toString());
+			UserActivity.log(session.getUserID(), "GET_FOLDER_CONTENT_INFO", folderNode.getUUID(), contentInfo.toString()+", "+fldPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);

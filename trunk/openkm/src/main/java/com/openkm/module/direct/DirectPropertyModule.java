@@ -74,7 +74,7 @@ public class DirectPropertyModule implements PropertyModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "ADD_CATEGORY");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADD_CATEGORY", nodePath, catId);
+			UserActivity.log(session.getUserID(), "ADD_CATEGORY", documentNode.getUUID(), catId+", "+nodePath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -126,7 +126,7 @@ public class DirectPropertyModule implements PropertyModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "REMOVE_CATEGORY");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "REMOVE_CATEGORY", nodePath, catId);
+			UserActivity.log(session.getUserID(), "REMOVE_CATEGORY", documentNode.getUUID(), catId+", "+nodePath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -183,7 +183,7 @@ public class DirectPropertyModule implements PropertyModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "ADD_KEYWORD");
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADD_KEYWORD", nodePath, keyword);
+			UserActivity.log(session.getUserID(), "ADD_KEYWORD", documentNode.getUUID(), keyword+", "+nodePath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -241,7 +241,7 @@ public class DirectPropertyModule implements PropertyModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "REMOVE_KEYWORD");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "REMOVE_KEYWORD", nodePath, keyword);
+			UserActivity.log(session.getUserID(), "REMOVE_KEYWORD", documentNode.getUUID(), keyword+", "+nodePath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -298,7 +298,7 @@ public class DirectPropertyModule implements PropertyModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "SET_ENCRYPTION");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "SET_ENCRYPTION", nodePath, cipherName);
+			UserActivity.log(session.getUserID(), "SET_ENCRYPTION", documentNode.getUUID(), cipherName+", "+nodePath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -354,7 +354,7 @@ public class DirectPropertyModule implements PropertyModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "UNSET_ENCRYPTION");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "UNSET_ENCRYPTION", nodePath, null);
+			UserActivity.log(session.getUserID(), "UNSET_ENCRYPTION", documentNode.getUUID(), nodePath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new PathNotFoundException(e.getMessage(), e);

@@ -29,6 +29,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
@@ -237,10 +238,10 @@ public class DirectDashboardModule implements DashboardModule {
 		
 		for (NodeIterator nit = result.getNodes(); nit.hasNext() && i++ < maxResults; ) {
 			Node node = nit.nextNode();
-			Document doc = new DirectDocumentModule().getProperties(session, node.getPath());
+			Document doc = new DirectDocumentModule().getProperties(session, node);
 			DashboardDocumentResult vo = new DashboardDocumentResult();
 			vo.setDocument(doc);
-			vo.setDate(ActivityDAO.getActivityDate(session.getUserID(), action, node.getPath()));
+			vo.setDate(ActivityDAO.getActivityDate(session.getUserID(), action, node.getUUID()));
 			vo.setVisited(false);
 			al.add(vo);
 		}
@@ -269,10 +270,10 @@ public class DirectDashboardModule implements DashboardModule {
 		
 		for (NodeIterator nit = result.getNodes(); nit.hasNext() && i++ < maxResults; ) {
 			Node node = nit.nextNode();
-			Folder fld = new DirectFolderModule().getProperties(session, node.getPath());
+			Folder fld = new DirectFolderModule().getProperties(session, node);
 			DashboardFolderResult vo = new DashboardFolderResult();
 			vo.setFolder(fld);
-			vo.setDate(ActivityDAO.getActivityDate(session.getUserID(), action, node.getPath()));
+			vo.setDate(ActivityDAO.getActivityDate(session.getUserID(), action, node.getUUID()));
 			vo.setVisited(false);
 			al.add(vo);
 		}
@@ -517,13 +518,16 @@ public class DirectDashboardModule implements DashboardModule {
 				String actItem = (String) actData[0];
 				Calendar actDate = (Calendar) actData[1];
 				
-				if (session.getRootNode().hasNode(actItem.substring(1))) {
-					Document doc = new DirectDocumentModule().getProperties(session, actItem);
+				try {
+					Node node = session.getNodeByUUID(actItem);
+					Document doc = new DirectDocumentModule().getProperties(session, node);
 					DashboardDocumentResult vo = new DashboardDocumentResult();
 					vo.setDocument(doc);
 					vo.setDate(actDate);
 					vo.setVisited(false);
 					al.add(vo);
+				} catch (ItemNotFoundException e) {
+					// Do nothing
 				}
 			}
 		} catch (HibernateException e) {
@@ -555,13 +559,16 @@ public class DirectDashboardModule implements DashboardModule {
 			for (Iterator<Activity> it = q.list().iterator(); it.hasNext(); ) {
 				Activity act = it.next();
 				
-				if (session.getRootNode().hasNode(act.getItem().substring(1))) {
-					Mail mail = new DirectMailModule().getProperties(session, act.getItem());
+				try {
+					Node node = session.getNodeByUUID(act.getItem());
+					Mail mail = new DirectMailModule().getProperties(session, node);
 					DashboardMailResult vo = new DashboardMailResult();
 					vo.setMail(mail);
 					vo.setDate(act.getDate());
 					vo.setVisited(false);
 					al.add(vo);
+				} catch (ItemNotFoundException e) {
+					// Do nothing
 				}
 			}
 		} catch (HibernateException e) {
@@ -1058,13 +1065,16 @@ public class DirectDashboardModule implements DashboardModule {
 				String resItem = (String) obj[0];
 				Calendar resDate = (Calendar) obj[1];
 				
-				if (session.getRootNode().hasNode(resItem.substring(1))) {
-					Document doc = new DirectDocumentModule().getProperties(session, resItem);
+				try {
+					Node node = session.getNodeByUUID(resItem);
+					Document doc = new DirectDocumentModule().getProperties(session, node);
 					DashboardDocumentResult vo = new DashboardDocumentResult();
 					vo.setDocument(doc);
 					vo.setDate(resDate);
 					vo.setVisited(false);
 					al.add(vo);
+				} catch (ItemNotFoundException e) {
+					// Do nothing
 				}
 			}
 			

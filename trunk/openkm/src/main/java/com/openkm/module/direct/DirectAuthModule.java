@@ -222,7 +222,7 @@ public class DirectAuthModule implements AuthModule {
 			}
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "GRANT_USER", nodePath, user+", "+permissions);
+			UserActivity.log(session.getUserID(), "GRANT_USER", node.getUUID(), user+", "+permissions+", "+nodePath);
 		} catch (javax.jcr.AccessDeniedException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(node);
@@ -322,7 +322,7 @@ public class DirectAuthModule implements AuthModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "REVOKE_USER", nodePath, user+", "+permissions);
+			UserActivity.log(session.getUserID(), "REVOKE_USER", node.getUUID(), user+", "+permissions+", "+nodePath);
 		} catch (javax.jcr.AccessDeniedException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(node);
@@ -419,7 +419,7 @@ public class DirectAuthModule implements AuthModule {
 			}
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "GRANT_ROLE", nodePath, role+", "+permissions);
+			UserActivity.log(session.getUserID(), "GRANT_ROLE", node.getUUID(), role+", "+permissions+", "+nodePath);
 		} catch (javax.jcr.AccessDeniedException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(node);
@@ -519,7 +519,7 @@ public class DirectAuthModule implements AuthModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "REVOKE_ROLE", nodePath, role+", "+permissions);
+			UserActivity.log(session.getUserID(), "REVOKE_ROLE", node.getUUID(), role+", "+permissions+", "+nodePath);
 		} catch (javax.jcr.AccessDeniedException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(node);
