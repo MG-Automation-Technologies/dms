@@ -295,7 +295,7 @@ public class MailUtils {
 			}
 		}
         
-        m.setContent(content);		
+        m.setContent(content);
 		Transport.send(m);
 		log.debug("send: void");
 	}
