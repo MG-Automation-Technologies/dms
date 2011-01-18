@@ -197,10 +197,10 @@ public class StampServlet extends BaseServlet {
 				}
 			
 				if (action.equals("imageCreate")) {
-					StampImageDAO.create(si);
+					int id = StampImageDAO.create(si);
 					
 					// Activity log
-					UserActivity.log(session.getUserID(), "ADMIN_STAMP_IMAGE_CREATE", null, si.toString());
+					UserActivity.log(session.getUserID(), "ADMIN_STAMP_IMAGE_CREATE", Integer.toString(id), si.toString());
 					imageList(session, request, response);
 				} else if (action.equals("imageEdit")) {
 					StampImageDAO.update(si);
@@ -256,10 +256,10 @@ public class StampServlet extends BaseServlet {
 			st.setActive(WebUtils.getBoolean(request, "st_active"));
 			st.setUsers(new HashSet<String>(WebUtils.getStringList(request, "st_users")));
 			
-			StampTextDAO.create(st);
+			int id = StampTextDAO.create(st);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_STAMP_TEXT_CREATE", null, st.toString());
+			UserActivity.log(session.getUserID(), "ADMIN_STAMP_TEXT_CREATE", Integer.toString(id), st.toString());
 		} else {
 			ServletContext sc = getServletContext();
 			sc.setAttribute("action", WebUtils.getString(request, "action"));

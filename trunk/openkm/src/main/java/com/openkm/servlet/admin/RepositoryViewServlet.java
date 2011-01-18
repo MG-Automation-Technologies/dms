@@ -160,7 +160,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		}
 		
 		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_UNLOCK", path, "");
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_UNLOCK", node.getUUID(), path);
 		log.debug("unlock: void");
 	}
 	
@@ -174,7 +174,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		node.checkin();
 
 		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_CHECKIN", path, "");
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_CHECKIN", node.getUUID(), path);
 		log.debug("checkin: void");
 	}
 
@@ -193,7 +193,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		}
 		
 		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_REMOVE_CONTENT", path, "");
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_REMOVE_CONTENT", node.getUUID(), path);
 		log.debug("removeCurrent: void");
 	}
 	
@@ -210,7 +210,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		parent.save();
 				
 		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_REMOVE_CURRENT", path, "");
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_REMOVE_CURRENT", node.getUUID(), path);
 		log.debug("removeCurrent: {}", path);
 		return parentPath;
 	}
@@ -227,7 +227,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		node.save();
 				
 		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_REMOVE_MIXIN", path, mixin);
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_REMOVE_MIXIN", node.getUUID(), mixin+", "+path);
 		log.debug("removeMixin: {}", path);
 	}
 	
@@ -252,7 +252,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		}
 		
 		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_EDIT", path, property+" : "+value);
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_EDIT", node.getUUID(), property+", "+value+", "+path);
 		
 		sc.setAttribute("node", node);
 		sc.setAttribute("property", prop);
@@ -290,7 +290,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		node.save();
 		
 		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_SAVE", path, property+" : "+value);
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_SAVE", node.getUUID(), property+", "+value+", "+path);
 		log.debug("save: void");
 	}
 
@@ -340,7 +340,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		}
 
 		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_LIST", node.getPath(), null);
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_LIST", node.getUUID(), node.getPath());
 		
 		sc.setAttribute("contentInfo", ci);
 		sc.setAttribute("node", node);

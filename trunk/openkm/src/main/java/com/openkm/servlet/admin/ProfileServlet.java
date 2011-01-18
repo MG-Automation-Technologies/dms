@@ -112,10 +112,10 @@ public class ProfileServlet extends BaseServlet {
 		
 		if (WebUtils.getBoolean(request, "persist")) {
 			Profile prf = getUserProfile(request);
-			ProfileDAO.create(prf);
+			int id = ProfileDAO.create(prf);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_USER_PROFILE_CREATE", null, prf.toString());
+			UserActivity.log(session.getUserID(), "ADMIN_USER_PROFILE_CREATE", Integer.toString(id), prf.toString());
 		} else {
 			ServletContext sc = getServletContext();
 			Profile prf = new Profile();

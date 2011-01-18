@@ -83,7 +83,7 @@ public class CheckEmailServlet extends BaseServlet {
 		sc.getRequestDispatcher("/admin/check_email.jsp").forward(request, response);
 		
 		// Activity log
-		UserActivity.log(request.getRemoteUser(), "ADMIN_CHECK_EMAIL", from, to+" - "+subject+" - "+content);		
+		UserActivity.log(request.getRemoteUser(), "ADMIN_CHECK_EMAIL", null, from+", "+to+", "+subject+", "+content);		
 		log.debug("view: void");
 	}
 }
