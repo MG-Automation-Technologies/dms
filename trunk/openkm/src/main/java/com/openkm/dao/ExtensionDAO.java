@@ -50,7 +50,7 @@ public class ExtensionDAO {
 	@SuppressWarnings("unchecked")
 	public static List<Extension> findAll() throws DatabaseException {
 		log.debug("findAll({})");
-		String qs = "select ex from Extension ex order by ex.description asc";		
+		String qs = "select ex from Extension ex order by ex.name asc";		
 		Session session = null;
 		Transaction tx = null;
 		
@@ -75,7 +75,7 @@ public class ExtensionDAO {
 	@SuppressWarnings("unchecked")
 	public static List<String> findAllUuids() throws DatabaseException {
 		log.debug("findAllUuids({})");
-		String qs = "select ex.uuid from Extension ex order by ex.description asc";		
+		String qs = "select ex.uuid from Extension ex order by ex.name asc";		
 		Session session = null;
 		Transaction tx = null;
 		
