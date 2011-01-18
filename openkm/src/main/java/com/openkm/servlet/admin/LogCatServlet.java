@@ -74,7 +74,7 @@ public class LogCatServlet extends BaseServlet {
 		sc.getRequestDispatcher("/admin/logcat.jsp").forward(request, response);
 		
 		// Activity log
-		UserActivity.log(request.getRemoteUser(), "ADMIN_LOGCAT_LIST", logFolder.getPath(), null);
+		UserActivity.log(request.getRemoteUser(), "ADMIN_LOGCAT_LIST", null, logFolder.getPath());
 		
 		log.debug("list: void");
 	}

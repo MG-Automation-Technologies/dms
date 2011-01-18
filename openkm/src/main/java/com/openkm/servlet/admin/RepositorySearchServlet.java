@@ -74,7 +74,7 @@ public class RepositorySearchServlet extends BaseServlet {
 				search(session, statement, type, request, response);
 				
 				// Activity log
-				UserActivity.log(request.getRemoteUser(), "ADMIN_REPOSITORY_SEARCH", null, type+" : "+statement);
+				UserActivity.log(request.getRemoteUser(), "ADMIN_REPOSITORY_SEARCH", null, type+", "+statement);
 			} else {
 				ServletContext sc = getServletContext();
 				sc.setAttribute("statement", null);

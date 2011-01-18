@@ -154,11 +154,11 @@ public class MimeTypeServlet extends BaseServlet {
 					// Because this servlet is also used for SQL import and in that case I don't
 					// want to waste a b64Encode conversion. Call it a sort of optimization.
 					mt.setImageContent(SecureStore.b64Encode(data));
-					MimeTypeDAO.create(mt);
+					int id = MimeTypeDAO.create(mt);
 					Config.loadMimeTypes();
 					
 					// Activity log
-					UserActivity.log(session.getUserID(), "ADMIN_MIME_TYPE_CREATE", null, mt.toString());
+					UserActivity.log(session.getUserID(), "ADMIN_MIME_TYPE_CREATE", Integer.toString(id), mt.toString());
 					list(session, request, response);
 				} else if (action.equals("edit")) {
 					// Because this servlet is also used for SQL import and in that case I don't

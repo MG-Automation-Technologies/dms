@@ -186,10 +186,10 @@ public class ReportServlet extends BaseServlet {
 				}
 			
 				if (action.equals("create")) {
-					ReportDAO.create(rp);
+					int id = ReportDAO.create(rp);
 					
 					// Activity log
-					UserActivity.log(session.getUserID(), "ADMIN_REPORT_CREATE", null, rp.toString());
+					UserActivity.log(session.getUserID(), "ADMIN_REPORT_CREATE", Integer.toString(id), rp.toString());
 					list(session, request, response);
 				} else if (action.equals("edit")) {
 					ReportDAO.update(rp);

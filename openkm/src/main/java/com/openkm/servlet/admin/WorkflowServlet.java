@@ -210,7 +210,7 @@ public class WorkflowServlet extends BaseServlet {
 		OKMWorkflow.getInstance().deleteProcessDefinition(null, pdid);
 		
 		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_DEFINITION_DELETE", null, null);
+		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_DEFINITION_DELETE", Long.toString(pdid), null);
 		log.debug("deleteProcessDefinition: void");
 	}
 	
