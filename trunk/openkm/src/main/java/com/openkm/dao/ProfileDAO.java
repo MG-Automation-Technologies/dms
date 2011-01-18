@@ -41,7 +41,7 @@ public class ProfileDAO {
 	/**
 	 * Create
 	 */
-	public static void create(Profile up) throws DatabaseException {
+	public static int create(Profile up) throws DatabaseException {
 		log.debug("create({})", up);
 		Session session = null;
 		Transaction tx = null;
@@ -49,16 +49,16 @@ public class ProfileDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			session.save(up);
+			Integer id = (Integer) session.save(up);
 			HibernateUtil.commit(tx);
+			log.debug("create: {}", id);
+			return id.intValue();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
 		}
-		
-		log.debug("create: void");
 	}
 	
 	/**
