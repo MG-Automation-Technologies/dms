@@ -71,10 +71,10 @@
           <c:forEach var="ext" items="${exts}">
             <c:choose>
               <c:when test="${fn:contains(prf.misc.extensions, ext.uuid)}">
-                <option value="${ext.uuid}" selected="selected">${ext.description}</option>
+                <option value="${ext.uuid}" selected="selected">${ext.name}</option>
               </c:when>
               <c:otherwise>
-                <option value="${ext.uuid}">${ext.description}</option>
+                <option value="${ext.uuid}">${ext.name}</option>
               </c:otherwise>
             </c:choose>
           </c:forEach>
