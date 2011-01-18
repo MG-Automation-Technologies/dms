@@ -326,8 +326,8 @@ public class DirectMailModule implements MailModule {
 			}
 			
 			String name = FileUtils.getName(mailPath);
-			Node folderNode = session.getRootNode().getNode(mailPath.substring(1));
-			Node parentNode = folderNode.getParent();
+			Node mailNode = session.getRootNode().getNode(mailPath.substring(1));
+			Node parentNode = mailNode.getParent();
 			Node userTrash = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
 			
 			// Test if already exists a mail with the same name in the trash
@@ -338,14 +338,14 @@ public class DirectMailModule implements MailModule {
 				testName = name+" ("+i+")";
 			}
 			
-			session.move(folderNode.getPath(), destPath+testName);
+			session.move(mailNode.getPath(), destPath+testName);
 			session.getRootNode().save();
 			
 			// Check scripting
-			DirectScriptingModule.checkScripts(session, parentNode, folderNode, "DELETE_MAIL");
+			DirectScriptingModule.checkScripts(session, parentNode, mailNode, "DELETE_MAIL");
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "DELETE_MAIL", mailPath, null);
+			UserActivity.log(session.getUserID(), "DELETE_MAIL", mailNode.getUUID(), mailPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
@@ -383,16 +383,16 @@ public class DirectMailModule implements MailModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node folderNode = session.getRootNode().getNode(mailPath.substring(1));
-			parentNode = folderNode.getParent();
-			folderNode.remove();
+			Node mailNode = session.getRootNode().getNode(mailPath.substring(1));
+			parentNode = mailNode.getParent();
+			mailNode.remove();
 			parentNode.save();
 						
 			// Check scripting
-			DirectScriptingModule.checkScripts(session, parentNode, folderNode, "PURGE_MAIL");
+			DirectScriptingModule.checkScripts(session, parentNode, mailNode, "PURGE_MAIL");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "PURGE_MAIL", mailPath, null);
+			UserActivity.log(session.getUserID(), "PURGE_MAIL", mailNode.getUUID(), mailPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
@@ -499,12 +499,13 @@ public class DirectMailModule implements MailModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
+			Node mailNode = session.getRootNode().getNode(mailPath.substring(1));
 			String name = FileUtils.getName(mailPath);
 			session.move(mailPath, dstPath+"/"+name);
 			session.save();
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "MOVE_MAIL", mailPath, dstPath);
+			UserActivity.log(session.getUserID(), "MOVE_MAIL", mailNode.getUUID(), dstPath+", "+mailPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
