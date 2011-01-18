@@ -42,7 +42,7 @@ public class StampTextDAO {
 	/**
 	 * Create
 	 */
-	public static void create(StampText st) throws DatabaseException {
+	public static int create(StampText st) throws DatabaseException {
 		log.debug("create({})", st);
 		Session session = null;
 		Transaction tx = null;
@@ -50,16 +50,16 @@ public class StampTextDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			session.save(st);
+			Integer id = (Integer) session.save(st);
 			HibernateUtil.commit(tx);
+			log.debug("create: {}", id);
+			return id.intValue();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
 		}
-		
-		log.debug("create: void");
 	}
 	
 	/**
