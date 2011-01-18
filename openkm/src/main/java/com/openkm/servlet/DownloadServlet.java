@@ -27,6 +27,7 @@ import java.io.PrintWriter;
 
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.LoginException;
+import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -70,12 +71,17 @@ public class DownloadServlet extends BasicSecuredServlet {
 			}
 			
 			if (session != null) {
+				Node node = null;
+				
 				if (!uuid.equals("")) {
-					path = session.getNodeByUUID(uuid).getPath();
+					node = session.getNodeByUUID(uuid);
+					path = node.getPath();
+				} else if (!path.equals("")) {
+					node = session.getRootNode().getNode(path.substring(1));
 				}
 				
-				if (!path.equals("")) {
-					Document doc = new DirectDocumentModule().getProperties(session, path);
+				if (node != null) {
+					Document doc = new DirectDocumentModule().getProperties(session, node);
 					String fileName = FileUtils.getName(doc.getPath());
 					log.info("Download {} by {}", path, session.getUserID());
 					InputStream is = new DirectDocumentModule().getContent(session, path, false);
