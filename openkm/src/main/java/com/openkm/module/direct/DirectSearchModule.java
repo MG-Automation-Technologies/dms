@@ -444,7 +444,7 @@ public class DirectSearchModule implements SearchModule {
 					QueryResult qr = new QueryResult();
 					
 					if (node.isNodeType(Document.TYPE)) {
-						Document doc = new DirectDocumentModule().getProperties(session, path);
+						Document doc = new DirectDocumentModule().getProperties(session, node);
 						
 						try {
 							if (node.getParent().isNodeType(Mail.TYPE)) {
@@ -456,10 +456,10 @@ public class DirectSearchModule implements SearchModule {
 							qr.setDocument(doc);
 						}
 					} else if (node.isNodeType(Folder.TYPE)) {
-						Folder fld = new DirectFolderModule().getProperties(session, path);
+						Folder fld = new DirectFolderModule().getProperties(session, node);
 						qr.setFolder(fld);
 					} else if (node.isNodeType(Mail.TYPE)) {
-						Mail mail = new DirectMailModule().getProperties(session, path);
+						Mail mail = new DirectMailModule().getProperties(session, node);
 						qr.setMail(mail);
 					}
 					
@@ -794,7 +794,7 @@ public class DirectSearchModule implements SearchModule {
 				
 				if (com.openkm.bean.Property.CATEGORIES.equals(refProp.getName())) {
 					Node node = refProp.getParent();
-					Document doc = new DirectDocumentModule().getProperties(session, node.getPath());
+					Document doc = new DirectDocumentModule().getProperties(session, node);
 					documents.add(doc);
 				}
 			}

@@ -69,12 +69,11 @@ public class DirectMailModule implements MailModule {
 	/**
 	 * Get mail properties
 	 */
-	public Mail getProperties(Session session, String mailPath) throws 
+	public Mail getProperties(Session session, Node mailNode) throws 
 			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException  {
-		log.debug("getProperties[session]({}, {})", session, mailPath);
+		log.debug("getProperties[session]({}, {})", session, mailNode);
 		Mail mail = new Mail();
-		Node mailNode = session.getRootNode().getNode(mailPath.substring(1));
-			
+		
 		// Properties
 		Value[] replyValues = mailNode.getProperty(Mail.REPLY).getValues();
 		String[] reply = JCRUtils.value2String(replyValues);
@@ -106,7 +105,7 @@ public class DirectMailModule implements MailModule {
 			Node node = nit.nextNode();
 
 			if (node.isNodeType(Document.TYPE)) {
-				Document attachment = new DirectDocumentModule().getProperties(session, node.getPath());
+				Document attachment = new DirectDocumentModule().getProperties(session, node);
 				attachments.add(attachment);
 			}
 		}
@@ -137,7 +136,7 @@ public class DirectMailModule implements MailModule {
 			}
 		}
 		
-		log.debug("Permisos: {} => {}", mailPath, mail.getPermissions());
+		log.debug("Permisos: {} => {}", mailNode.getPath(), mail.getPermissions());
 		log.debug("getProperties[session]: {}", mail);
 		return mail;
 	}
@@ -236,7 +235,7 @@ public class DirectMailModule implements MailModule {
 					mail.getSubject(), mail.getContent(), mail.getMimeType());
 						
 			// Set returned mail properties
-			newMail = getProperties(session, mail.getPath());
+			newMail = getProperties(session, mailNode);
 			
 			t.end();
 			t.commit();
@@ -248,7 +247,7 @@ public class DirectMailModule implements MailModule {
 			DirectScriptingModule.checkScripts(session, parentNode, mailNode, "CREATE_MAIL");
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "CREATE_MAIL", mail.getPath(), null);
+			UserActivity.log(session.getUserID(), "CREATE_MAIL", mailNode.getUUID(), mail.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -290,10 +289,11 @@ public class DirectMailModule implements MailModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			mail = getProperties(session, mailPath);
+			Node mailNode = session.getRootNode().getNode(mailPath.substring(1));
+			mail = getProperties(session, mailNode);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_MAIL_PROPERTIES", mailPath, null);
+			UserActivity.log(session.getUserID(), "GET_MAIL_PROPERTIES", mailNode.getUUID(), mailPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -418,6 +418,7 @@ public class DirectMailModule implements MailModule {
 		log.debug("rename({}, {}, {})", new Object[] { token, mailPath, newName });
 		Mail renamedMail = null;
 		Session session = null;
+		Node mailNode = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
@@ -441,21 +442,22 @@ public class DirectMailModule implements MailModule {
 				session.move(mailPath, newPath);
 				
 				// Set new name
-				Node mailNode = session.getRootNode().getNode(newPath.substring(1));
+				mailNode = session.getRootNode().getNode(newPath.substring(1));
 				mailNode.setProperty(Mail.SUBJECT, newName);
 			
 				// Publish changes
 				session.save();	
 			
 				// Set returned document properties
-				renamedMail = getProperties(session, newPath);
+				renamedMail = getProperties(session, mailNode);
 			} else {
 				// Don't change anything
-				renamedMail = getProperties(session, mailPath);
+				mailNode = session.getRootNode().getNode(mailPath.substring(1));
+				renamedMail = getProperties(session, mailNode);
 			}
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "RENAME_MAIL", mailPath, newName);
+			UserActivity.log(session.getUserID(), "RENAME_MAIL", mailNode.getUUID(), newName+", "+mailPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
@@ -597,7 +599,7 @@ public class DirectMailModule implements MailModule {
 			DirectNotificationModule.checkSubscriptions(dstFolderNode, session.getUserID(), "COPY", null);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "COPY_MAIL", mailPath, dstPath);
+			UserActivity.log(session.getUserID(), "COPY_MAIL", srcMailNode.getUUID(), dstPath+", "+mailPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			t.rollback();
@@ -645,12 +647,12 @@ public class DirectMailModule implements MailModule {
 				Node child = ni.nextNode();
 				
 				if (child.isNodeType(Mail.TYPE)) {
-					childs.add(getProperties(session, child.getPath()));
+					childs.add(getProperties(session, child));
 				}
 			}
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_CHILD_MAILS", fldPath, null);
+			UserActivity.log(session.getUserID(), "GET_CHILD_MAILS", folderNode.getUUID(), fldPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
