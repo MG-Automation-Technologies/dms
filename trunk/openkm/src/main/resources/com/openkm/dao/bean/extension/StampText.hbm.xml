@@ -15,7 +15,7 @@
     <property name="align" column="ST_ALIGN" not-null="true"/>
     <property name="exprX" column="ST_EXPR_X" not-null="true"/>
     <property name="exprY" column="ST_EXPR_Y" not-null="true"/>
-    <property name="active" column="ST_ACTIVE" not-null="true"/>
+    <property name="active" column="ST_ACTIVE" type="true_false" not-null="true"/>
     <set name="users" table="OKM_STAMP_TEXT_USER" lazy="false">
       <key column="STU_ID" not-null="true"/>
       <element column="STU_USER" type="string"/>
