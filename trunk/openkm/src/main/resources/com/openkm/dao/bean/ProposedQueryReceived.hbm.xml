@@ -8,7 +8,7 @@
     <property name="to" column="PQR_TO" not-null="true"/>
     <property name="user" column="PQR_USER" not-null="true" length="127"/>
     <property name="comment" column="PQR_COMMENT" type="text"/>
-    <property name="accepted" column="PQR_ACCEPTED" not-null="true"/>
+    <property name="accepted" column="PQR_ACCEPTED" type="true_false" not-null="true"/>
     <property name="sentDate" column="PQR_SENT_DATE" not-null="true"/>
     <property name="seenDate" column="PQR_SEEN_DATE"/>
   </class>

@@ -9,7 +9,7 @@
     <property name="user" column="PSR_USER" not-null="true" length="127"/>
     <property name="uuid" column="PSR_UUID" not-null="true"/>
     <property name="comment" column="PSR_COMMENT" type="text"/>
-    <property name="accepted" column="PSR_ACCEPTED" not-null="true"/>
+    <property name="accepted" column="PSR_ACCEPTED" type="true_false" not-null="true"/>
     <property name="sentDate" column="PSR_SENT_DATE" not-null="true"/>
     <property name="seenDate" column="PSR_SEEN_DATE"/>
   </class>

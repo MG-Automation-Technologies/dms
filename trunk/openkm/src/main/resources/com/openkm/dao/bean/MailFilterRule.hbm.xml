@@ -7,6 +7,6 @@
     <property name="field" column="MFR_FIELD" not-null="true"/>
     <property name="operation" column="MFR_OPERATION" not-null="true"/>
     <property name="value" column="MFR_VALUE" not-null="true"/>
-    <property name="active" column="MFR_ACTIVE" not-null="true"/>
+    <property name="active" column="MFR_ACTIVE" type="true_false" not-null="true"/>
   </class>
 </hibernate-mapping>

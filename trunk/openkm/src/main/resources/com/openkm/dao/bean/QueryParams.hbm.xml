@@ -11,7 +11,7 @@
     <property name="mimeType" column="QP_MIME_TYPE"/>
     <property name="author" column="QP_AUTHOR"/>
     <property name="path" column="QP_PATH"/>
-    <property name="dashboard" column="QP_DASHBOARD"/>
+    <property name="dashboard" type="true_false" column="QP_DASHBOARD"/>
     <property name="lastModifiedFrom" column="QP_LAST_MODIFIED_FROM"/>
     <property name="lastModifiedTo" column="QP_LAST_MODIFIED_TO"/>
     <property name="mailSubject" column="QP_MAIL_SUBJECT"/>

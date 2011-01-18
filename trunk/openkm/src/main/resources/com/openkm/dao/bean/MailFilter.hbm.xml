@@ -7,7 +7,7 @@
     <property name="path" column="MF_PATH" not-null="true"/>
     <property name="uuid" column="MF_UUID" not-null="true"/>
     <property name="grouping" column="MF_GROUPING" not-null="true"/>
-    <property name="active" column="MF_ACTIVE" not-null="true"/>
+    <property name="active" column="MF_ACTIVE" type="true_false" not-null="true"/>
     <set name="filterRules" table="OKM_MAIL_FILTER_RULE" order-by="MFR_ID asc" cascade="all-delete-orphan" lazy="false">
       <key column="MFR_MAIL_FILTER" not-null="true"/>
       <one-to-many class="com.openkm.dao.bean.MailFilterRule"/>

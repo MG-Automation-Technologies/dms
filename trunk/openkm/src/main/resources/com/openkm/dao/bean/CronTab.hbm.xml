@@ -10,7 +10,7 @@
     <property name="fileName" column="CT_FILE_NAME" not-null="true"/>
     <property name="fileMime" column="CT_FILE_MIME" not-null="true"/>
     <property name="mail" column="CT_MAIL" not-null="true"/>
-    <property name="active" column="CT_ACTIVE" not-null="true"/>
+    <property name="active" column="CT_ACTIVE" type="true_false" not-null="true"/>
     <property name="lastBegin" column="CT_LAST_BEGIN"/>
     <property name="lastEnd" column="CT_LAST_END"/>
   </class>
