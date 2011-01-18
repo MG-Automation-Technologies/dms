@@ -1,8 +1,8 @@
-INSERT INTO OKM_USER (USR_ID, USR_NAME, USR_PASSWORD, USR_EMAIL, USR_ACTIVE) VALUES ('okmAdmin', 'Administrator', '21232f297a57a5a743894a0e4a801fc3', 'admin@noreply.com', true);
-INSERT INTO OKM_ROLE (ROL_ID, ROL_ACTIVE) VALUES ('AdminRole', true);
-INSERT INTO OKM_ROLE (ROL_ID, ROL_ACTIVE) VALUES ('UserRole', true);
+INSERT INTO OKM_USER (USR_ID, USR_NAME, USR_PASSWORD, USR_EMAIL, USR_ACTIVE) VALUES ('okmAdmin', 'Administrator', '21232f297a57a5a743894a0e4a801fc3', 'admin@noreply.com', 'T');
+INSERT INTO OKM_ROLE (ROL_ID, ROL_ACTIVE) VALUES ('AdminRole', 'T');
+INSERT INTO OKM_ROLE (ROL_ID, ROL_ACTIVE) VALUES ('UserRole', 'T');
 INSERT INTO OKM_USER_ROLE (UR_USER, UR_ROLE) VALUES ('okmAdmin', 'AdminRole');
-INSERT INTO OKM_PROFILE (PRF_ID, PRF_NAME, PRF_ACTIVE) VALUES (1, 'Default', true);
+INSERT INTO OKM_PROFILE (PRF_ID, PRF_NAME, PRF_ACTIVE) VALUES (1, 'Default', 'T');
 INSERT INTO OKM_MIME_TYPE (MT_ID, MT_NAME, MT_IMAGE_CONTENT, MT_IMAGE_MIME) VALUES ('1', 'application/vnd.oasis.opendocument.text', 'R0lGODlhFwAQAOeeABUyQBkyPxc2Rhg5SRg6Sh84RR05Rxk7Sxk7TCE6SBk9Tho9Tho+Txo+UBtAUhtBUxxEVx1FWB5GWSVLXSZOYTVWZzpVYkJVYkNXYz5ZZj5aZ0VYYjpdb0Jeb0JfbUNgbklebEhfa0Bic0pfbUxicUZlc01jckpqeVFpeUtsfFNqelRreFhuflJxgFZvgFl0hVl0hlp1hl52hl55i155jF56jF97jWB7jWR6iGV9iGl/jmiAkG9/h2uAjWiElnWDjG+GlXaEjniIkHeOmHmNmnaPoHeQoYGSnHyUn32UoICUooWTnIaWoYyVmo+Xm4yZoI+Yn4qbp46bo4mdq4qeq5GcpI6eqo+gq5Kgpo2isI6ir5WhqZGlrpakrZeosaGlqJmos56nraGnqZ2or5ypsp6ttpyuuaWsr6CutqGwuqKyvaOzu6KzvqO0v6S0v6izvKe1vq20t6e2wai2wLK1tqi4w7K4u7W4urK7wba6vLe7vbe8vrPBy77Bw7nEy7/Dxb/ExbrGzMXHyMbJysPKzcLN1MfMzsPP1tDR0tHS087T1tHT09DV2NTV1tTW1tTb39Tc39fd4Nzi5tzj597k5+Lm6uHn6uPo6+fn5+Pp7Onq6/Dx8fv7+/3+/v///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////yH5BAEKAP8ALAAAAAAXABAAAAjlAP8J/HeCAgEATpwI+cHjR5OBECO+0ADAghM9mDh5MkTpzJ2IEV2EeORJo0InPyRx4uEE5EATK2QACMCDRxNHTlR64uFSoIUEAGZiKqmJxwoTX1b0/Oekk6ennpzQGRSpUZ8fP3pG8gToDI9OPJ6kqcNn0yYhPQcN+hm0hI8iRqZMycSp5VISEwAU2MRJI1RND3vGOJHXRKHDhfwaCuzyRokIAErIlZvpKZ2l/26IeADgTKfPoDt9wayZMxHEiDmNXppjc2QjsGFP2fRx6YwSnFmY3W12EGOXFIIGaFLli3HjxUEGBAA7', 'image/gif');
 INSERT INTO OKM_MIME_TYPE_EXTENSION (MTE_ID, MTE_NAME) VALUES ('1', 'ott');
 INSERT INTO OKM_MIME_TYPE_EXTENSION (MTE_ID, MTE_NAME) VALUES ('1', 'odt');
