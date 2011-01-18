@@ -6,6 +6,6 @@
     <id name="id" column="DFR_ID"><generator class="native"/></id>
     <property name="action" column="DFR_ACTION" not-null="true"/>
     <property name="value" column="DFR_VALUE" not-null="true"/>
-    <property name="active" column="DFR_ACTIVE" not-null="true"/>
+    <property name="active" column="DFR_ACTIVE" type="true_false" not-null="true"/>
   </class>
 </hibernate-mapping>

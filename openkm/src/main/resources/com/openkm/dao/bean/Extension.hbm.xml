@@ -4,6 +4,6 @@
 <hibernate-mapping>
   <class name="com.openkm.dao.bean.Extension" table="OKM_EXTENSION">
     <id name="uuid" column="EX_UUID" length="127"><generator class="assigned"/></id>
-    <property name="description" column="EX_DESCRIPTION" not-null="true" type="text"/>
+    <property name="name" column="EX_NAME" not-null="true"/>
   </class>
 </hibernate-mapping>
