@@ -745,7 +745,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "SET_DOCUMENT_CONTENT");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "SET_DOCUMENT_CONTENT", docPath, ""+size);
+			UserActivity.log(session.getUserID(), "SET_DOCUMENT_CONTENT", documentNode.getUUID(), size+", "+docPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(contentNode);
@@ -923,7 +923,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "SET_DOCUMENT_PROPERTIES");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "SET_DOCUMENT_PROPERTIES", doc.getPath(), null);
+			UserActivity.log(session.getUserID(), "SET_DOCUMENT_PROPERTIES", documentNode.getUUID(), doc.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
@@ -1432,7 +1432,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "UNLOCK_DOCUMENT");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "UNLOCK_DOCUMENT", docPath, null);
+			UserActivity.log(session.getUserID(), "UNLOCK_DOCUMENT", documentNode.getUUID(), docPath);
 		} catch (javax.jcr.lock.LockException e) {
 			log.error(e.getMessage(), e);
 			throw new LockException(e.getMessage(), e);
@@ -1869,7 +1869,7 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "RESTORE_VERSION", docPath, versionId);
+			UserActivity.log(session.getUserID(), "RESTORE_VERSION", documentNode.getUUID(), versionId+", "+docPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(contentNode);

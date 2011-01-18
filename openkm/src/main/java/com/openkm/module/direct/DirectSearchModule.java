@@ -406,7 +406,7 @@ public class DirectSearchModule implements SearchModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "FIND", type, statement);
+			UserActivity.log(session.getUserID(), "FIND_BY_STATEMENT", null, type+", "+statement);
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
