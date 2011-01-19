@@ -253,6 +253,7 @@
     <mapping resource="com/openkm/dao/bean/Translation.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Extension.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/extension/Contact.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/extension/DocumentContact.hbm.xml"/>
 
     <!-- ################################### -->
     <!-- # cache settings                  # -->

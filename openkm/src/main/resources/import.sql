@@ -883,7 +883,7 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('e
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.manager.mobile','Mobile', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.manager.address','Address', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.manager.city','City', 'en-GB');
-INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.manager.pc','PC', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.manager.pc','Postcode', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.manager.province','Province', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.manager.country','Country', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.manager.web','Web', 'en-GB');
@@ -892,7 +892,12 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('e
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.tab.update.contacts','Updating contact', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.tab.delete.contacts','Deleting contact', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.tab.create.contacts','Creating contact', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.tab.add.contacts','Adding contact', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'confirm.delete.contact','¿ Are you sure want deleting contact ?', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.manage','Manage contacts', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.popup.list','Select contacts', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.popup.manage','Manage contacts', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'button.add.new.contact','New contact', 'en-GB');
 INSERT INTO OKM_LANGUAGE (LG_ID, LG_NAME, LG_IMAGE_CONTENT, LG_IMAGE_MIME) VALUES ('es-ES', 'Español', 'R0lGODlhEAALANUAAPxcXPpTU/X1Jfb2K/QtLfxjY+bmAP5yc/7+dvMWFv39APz8TOwAAPMAAP39bfLyE/7+Wvv7RfdLS/pERPQzM/k8PfDyQfT1O/1ra/96evdEROxoVfU7O+UAAPg2NvENDfb2MPPzGfkAAPT0H/j4NuAAAPn5PPXDsf39U/F+V+7fTu3gjfUhIezT1Pnx1vXq4ra7nezhQvj0S9/fAPLzVfTuV+xTUfxMTPK9sMDOqOCMUeSnSuvJS90AAP0AAP8AACH5BAAAAAAALAAAAAAQAAsAAAaFwJ/w5yv6RMiGksH4ZZ6ZwwGDKRQAgYCkmQF4s7fJpOKhELYKBARSU8kiERMJNBDIDGkILbVZWeR0AiMXeAgoJxstODFzdSMhhAoOCy46Ni8qgY8PkZM5PDswFo4hDw8gMyIFY2QEBCwsCQkfHwQlql9aGhocHBRmBD1KDUzFHcclJT3LQQA7', 'image/gif');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.date.pattern', 'dd/MM/yyyy HH:mm:ss', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.day.pattern', 'dd/MM/yyyy', 'es-ES');
@@ -1643,4 +1648,9 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('e
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.tab.update.contacts','Actualizando contacto', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.tab.delete.contacts','Eliminando contacto', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.tab.create.contacts','Creando contacto', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.tab.add.contacts','Añdiendo contacto', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'confirm.delete.contact','¿ Seguro que desea eliminar el contacto ?', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.manage','Gestionar contactos', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.popup.list','Selección de contactos', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.popup.manage','Gestión de contactos', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'button.add.new.contact','Nuevo contacto', 'es-ES');
