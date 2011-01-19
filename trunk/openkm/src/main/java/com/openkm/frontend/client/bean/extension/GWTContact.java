@@ -32,7 +32,6 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class GWTContact implements IsSerializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
-	private String uuid = "";
 	private String name = "";
 	private String mail = "";
 	private String phone = "";
@@ -45,6 +44,7 @@ public class GWTContact implements IsSerializable {
 	private String country = "";
 	private String web = "";
 	private String notes = "";
+	private int docId = -1;
 
 	public int getId() {
 		return id;
@@ -52,14 +52,6 @@ public class GWTContact implements IsSerializable {
 	
 	public void setId(int id) {
 		this.id = id;
-	}
-	
-	public String getUuid() {
-		return uuid;
-	}
-
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
 	}
 	
 	public String getName() {
@@ -157,6 +149,15 @@ public class GWTContact implements IsSerializable {
 	public void setNotes(String notes) {
 		this.notes = notes;
 	}
+	
+	public int getDocId() {
+		return docId;
+	}
+
+	public void setDocId(int docId) {
+		this.docId = docId;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -173,6 +174,7 @@ public class GWTContact implements IsSerializable {
 		sb.append(", country="); sb.append(country);
 		sb.append(", web="); sb.append(web);
 		sb.append(", notes="); sb.append(notes);
+		sb.append(", docId="); sb.append(docId);
 		sb.append("}");
 		return sb.toString();
 	}
