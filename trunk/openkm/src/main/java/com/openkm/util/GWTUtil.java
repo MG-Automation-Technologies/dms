@@ -81,6 +81,7 @@ import com.openkm.dao.bean.ProposedSubscriptionSent;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.UserConfig;
 import com.openkm.dao.bean.extension.Contact;
+import com.openkm.dao.bean.extension.DocumentContact;
 import com.openkm.dao.bean.extension.MessageReceived;
 import com.openkm.dao.bean.extension.MessageSent;
 import com.openkm.dao.bean.extension.StampImage;
@@ -1347,7 +1348,6 @@ public class GWTUtil {
 	 */
 	public static Contact copy(GWTContact gWTContact) {
 		Contact contact = new Contact();
-		contact.setUuid(gWTContact.getUuid());
 		contact.setAddress(gWTContact.getAddress());
 		contact.setCity(gWTContact.getCity());
 		contact.setCountry(gWTContact.getCountry());
@@ -1371,9 +1371,8 @@ public class GWTUtil {
 	 * @param contact
 	 * @return
 	 */
-	public static GWTContact copy(Contact contact) {
+	public static GWTContact copy(Contact contact, String uuid) {
 		GWTContact gwtContact = new GWTContact();
-		gwtContact.setUuid(contact.getUuid());
 		gwtContact.setAddress(contact.getAddress());
 		gwtContact.setCity(contact.getCity());
 		gwtContact.setCountry(contact.getCountry());
@@ -1387,7 +1386,14 @@ public class GWTUtil {
 		gwtContact.setPhone(contact.getPhone());
 		gwtContact.setProvince(contact.getProvince());
 		gwtContact.setWeb(contact.getWeb());
-		
+		if (uuid!=null) {
+			for (DocumentContact docCon : contact.getUuids()) {
+				if (docCon.getUuid().equals(uuid)) {
+					gwtContact.setDocId(docCon.getId());
+					break;
+				}
+			}
+		}
 		return gwtContact;
 	}
 }

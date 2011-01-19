@@ -4,7 +4,6 @@
 <hibernate-mapping>
   <class name="com.openkm.dao.bean.extension.Contact" table="OKM_CONTACT">
     <id name="id" column="CON_ID"><generator class="native"/></id>
-    <property name="uuid" column="CON_UUID" not-null="true"/>
     <property name="name" column="CON_NAME" length="256"/>
     <property name="mail" column="CON_MAIL" length="256"/>
     <property name="phone" column="CON_PHONE" length="40"/>
@@ -17,5 +16,9 @@
     <property name="country" column="CON_COUNTRY" length="127"/>
     <property name="web" column="CON_WEB" length="256"/>
     <property name="notes" column="CON_NOTES" type="text"/>
+    <set name="uuids" table="OKM_DOCUMENT_CONTACT" order-by="DCO_ID asc" cascade="all-delete-orphan" lazy="false">
+      <key column="DCO_CONID"/>
+      <one-to-many class="com.openkm.dao.bean.extension.DocumentContact"/>
+    </set>
   </class>
 </hibernate-mapping>
