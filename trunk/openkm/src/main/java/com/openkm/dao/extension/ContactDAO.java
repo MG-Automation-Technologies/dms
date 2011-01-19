@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.HibernateUtil;
 import com.openkm.dao.bean.extension.Contact;
+import com.openkm.dao.bean.extension.DocumentContact;
 
 /**
  * ContactDAO
@@ -51,7 +52,7 @@ public class ContactDAO {
 	 * @param contact
 	 * @throws DatabaseException
 	 */
-	public static void create(Contact contact) throws DatabaseException {
+	public static int create(Contact contact) throws DatabaseException {
 		log.debug("create()");
 		Session session = null;
 		Transaction tx = null;
@@ -59,16 +60,16 @@ public class ContactDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			session.save(contact);
+			Integer id = (Integer) session.save(contact);
 			HibernateUtil.commit(tx);
+			log.debug("create: {}" + id);
+			return id.intValue();
 		} catch(HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
 		}
-		
-		log.debug("create: void");
 	}
 	
 	/**
@@ -99,12 +100,39 @@ public class ContactDAO {
 	}
 	
 	/**
+	 * deleteDocumentContact 
+	 * 
+	 * @param id
+	 * @throws DatabaseException
+	 */
+	public static void deleteDocumentContact(int id) throws DatabaseException {
+		log.debug("deleteDocumentContact({})", id);
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			DocumentContact documentContact = (DocumentContact) session.load(DocumentContact.class, id);
+			session.delete(documentContact);
+			HibernateUtil.commit(tx);
+		} catch(HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("deleteDocumentContact: void");
+	}
+	
+	/**
 	 * Find users whom sent an message
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<Contact> findByUuid(String uuid) throws DatabaseException {
 		log.debug("findByUuid({})", uuid);
-		String qs = "from Contact con where con.uuid=:uuid order by con.name";
+		String qs = "select con from Contact con, DocumentContact dco where dco.uuid=:uuid and dco in elements(con.uuids) order by con.name";
 		Session session = null;
 		
 		try {
@@ -113,6 +141,28 @@ public class ContactDAO {
 			q.setString("uuid", uuid);
 			List<Contact> ret =  q.list();
 			log.debug("findByUuid: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Find users whom sent an message
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<Contact> findAll() throws DatabaseException {
+		log.debug("findAll({})");
+		String qs = "from Contact con order by con.name";
+		Session session = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			List<Contact> ret =  q.list();
+			log.debug("findAll: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
@@ -145,5 +195,27 @@ public class ContactDAO {
 		}
 		
 		log.debug("update: void");
+	}
+	
+	/**
+	 * Find by pk
+	 */
+	public static Contact findByPk(int id) throws DatabaseException {
+		log.debug("findByPk({})", id);
+		String qs = "from Contact con where con.id=:id";
+		Session session = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setInteger("id", id);
+			Contact ret = (Contact) q.setMaxResults(1).uniqueResult();
+			log.debug("findByPk: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
 	}
 }
