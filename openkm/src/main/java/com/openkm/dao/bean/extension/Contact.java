@@ -22,6 +22,8 @@
 package com.openkm.dao.bean.extension;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Contact
@@ -30,9 +32,10 @@ import java.io.Serializable;
  *
  */
 public class Contact implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
+	
 	private int id;
-	private String uuid = "";
 	private String name = "";
 	private String mail = "";
 	private String phone = "";
@@ -45,6 +48,7 @@ public class Contact implements Serializable {
 	private String country = "";
 	private String web = "";
 	private String notes = "";
+	private Set<DocumentContact> uuids = new HashSet<DocumentContact>();
 
 	public int getId() {
 		return id;
@@ -52,14 +56,6 @@ public class Contact implements Serializable {
 	
 	public void setId(int id) {
 		this.id = id;
-	}
-	
-	public String getUuid() {
-		return uuid;
-	}
-
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
 	}
 	
 	public String getName() {
@@ -157,6 +153,15 @@ public class Contact implements Serializable {
 	public void setNotes(String notes) {
 		this.notes = notes;
 	}
+	
+	public Set<DocumentContact> getUuids() {
+		return uuids;
+	}
+
+	public void setUuids(Set<DocumentContact> uuids) {
+		this.uuids = uuids;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -173,6 +178,7 @@ public class Contact implements Serializable {
 		sb.append(", country="); sb.append(country);
 		sb.append(", web="); sb.append(web);
 		sb.append(", notes="); sb.append(notes);
+		sb.append(", uuids="); sb.append(uuids);
 		sb.append("}");
 		return sb.toString();
 	}
