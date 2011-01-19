@@ -34,8 +34,11 @@ import com.openkm.frontend.client.bean.extension.GWTContact;
  *
  */
 public interface OKMContactService extends RemoteService {
-	public void create (GWTContact contact) throws OKMException;
+	public void create (String uuid, GWTContact contact) throws OKMException;
 	public void delete (int id) throws OKMException;
+	public void deleteDocumentContact (int id) throws OKMException;
 	public List<GWTContact> findByUuid(String uuid) throws OKMException;
+	public List<GWTContact> findAll() throws OKMException;
 	public void update(GWTContact contact) throws OKMException;
+	public void addContact(int id, String uuid) throws OKMException;
 }

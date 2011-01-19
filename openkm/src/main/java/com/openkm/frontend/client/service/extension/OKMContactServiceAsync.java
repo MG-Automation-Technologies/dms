@@ -34,8 +34,11 @@ import com.openkm.frontend.client.bean.extension.GWTContact;
  *
  */
 public interface OKMContactServiceAsync extends RemoteService {
-	public void create (GWTContact contact, AsyncCallback<?> callback);
+	public void create (String uuid, GWTContact contact, AsyncCallback<?> callback);
 	public void delete (int id, AsyncCallback<?> callback);
+	public void deleteDocumentContact (int id, AsyncCallback<?> callback);
 	public void findByUuid(String uuid, AsyncCallback<List<GWTContact>> callback);
+	public void findAll(AsyncCallback<List<GWTContact>> callback);
 	public void update(GWTContact contact, AsyncCallback<?> callback);
+	public void addContact(int id, String uuid, AsyncCallback<?> callback); 
 }

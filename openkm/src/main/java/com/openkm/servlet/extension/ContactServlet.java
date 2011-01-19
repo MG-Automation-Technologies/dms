@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.bean.extension.Contact;
+import com.openkm.dao.bean.extension.DocumentContact;
 import com.openkm.dao.extension.ContactDAO;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.extension.GWTContact;
@@ -48,9 +49,16 @@ public class ContactServlet extends OKMRemoteServiceServlet implements OKMContac
 	private static Logger log = LoggerFactory.getLogger(ContactServlet.class);
 	
 	@Override
-	public void create(GWTContact contact) throws OKMException {
+	public void create(String uuid, GWTContact contact) throws OKMException {
 		try {
-			ContactDAO.create(GWTUtil.copy(contact));
+			int id = ContactDAO.create( GWTUtil.copy(contact)); // Create
+			if (uuid!=null) {
+				Contact newContact = ContactDAO.findByPk(id);		// Find by pk
+				DocumentContact docContact = new DocumentContact();
+				docContact.setUuid(uuid);
+				newContact.getUuids().add(docContact);
+				ContactDAO.update(newContact);						// Update with document uuid
+			}
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMContactService, ErrorCode.CAUSE_Database), e.getMessage());
@@ -68,11 +76,35 @@ public class ContactServlet extends OKMRemoteServiceServlet implements OKMContac
 	}
 	
 	@Override
+	public void deleteDocumentContact(int id) throws OKMException {
+		try {
+			ContactDAO.deleteDocumentContact(id);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMContactService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+	}
+	
+	@Override
 	public List<GWTContact> findByUuid(String uuid) throws OKMException {
 		List<GWTContact> contacts = new ArrayList<GWTContact>();
 		try {
 			for (Contact contact : ContactDAO.findByUuid(uuid)) {
-				contacts.add(GWTUtil.copy(contact));
+				contacts.add(GWTUtil.copy(contact, uuid));
+			}
+			return contacts;
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMContactService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+	}
+	
+	@Override
+	public List<GWTContact> findAll() throws OKMException {
+		List<GWTContact> contacts = new ArrayList<GWTContact>();
+		try {
+			for (Contact contact : ContactDAO.findAll()) {
+				contacts.add(GWTUtil.copy(contact, null));
 			}
 			return contacts;
 		} catch (DatabaseException e) {
@@ -84,7 +116,23 @@ public class ContactServlet extends OKMRemoteServiceServlet implements OKMContac
 	@Override
 	public void update(GWTContact contact) throws OKMException {
 		try {
-			ContactDAO.update(GWTUtil.copy(contact));
+			Contact contactToUpdate = GWTUtil.copy(contact);
+			contactToUpdate.setUuids(ContactDAO.findByPk(contact.getId()).getUuids()); // Loading uuids	
+			ContactDAO.update(contactToUpdate);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMContactService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+	}
+	
+	@Override
+	public void addContact(int id, String uuid) throws OKMException {
+		try {
+			Contact contact = ContactDAO.findByPk(id);	// Find by pk
+			DocumentContact docContact = new DocumentContact();
+			docContact.setUuid(uuid);
+			contact.getUuids().add(docContact);
+			ContactDAO.update(contact);					// Update with document uuid
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMContactService, ErrorCode.CAUSE_Database), e.getMessage());
