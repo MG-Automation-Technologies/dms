@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.bean.extension.Contact;
-import com.openkm.dao.bean.extension.DocumentContact;
 import com.openkm.dao.extension.ContactDAO;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.extension.GWTContact;
@@ -54,9 +53,7 @@ public class ContactServlet extends OKMRemoteServiceServlet implements OKMContac
 			int id = ContactDAO.create( GWTUtil.copy(contact)); // Create
 			if (uuid!=null) {
 				Contact newContact = ContactDAO.findByPk(id);		// Find by pk
-				DocumentContact docContact = new DocumentContact();
-				docContact.setUuid(uuid);
-				newContact.getUuids().add(docContact);
+				newContact.getUuids().add(uuid);
 				ContactDAO.update(newContact);						// Update with document uuid
 			}
 		} catch (DatabaseException e) {
@@ -76,9 +73,11 @@ public class ContactServlet extends OKMRemoteServiceServlet implements OKMContac
 	}
 	
 	@Override
-	public void deleteDocumentContact(int id) throws OKMException {
+	public void delete(int id, String uuid) throws OKMException {
 		try {
-			ContactDAO.deleteDocumentContact(id);
+			Contact contact = ContactDAO.findByPk(id);	// Find by pk
+			contact.getUuids().remove(uuid);
+			ContactDAO.update(contact);
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMContactService, ErrorCode.CAUSE_Database), e.getMessage());
@@ -129,10 +128,11 @@ public class ContactServlet extends OKMRemoteServiceServlet implements OKMContac
 	public void addContact(int id, String uuid) throws OKMException {
 		try {
 			Contact contact = ContactDAO.findByPk(id);	// Find by pk
-			DocumentContact docContact = new DocumentContact();
-			docContact.setUuid(uuid);
-			contact.getUuids().add(docContact);
-			ContactDAO.update(contact);					// Update with document uuid
+			// Only add new uuid not existing ones
+			if (!contact.getUuids().contains(uuid)) {
+				contact.getUuids().add(uuid);
+				ContactDAO.update(contact);					// Update with document uuid
+			}
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMContactService, ErrorCode.CAUSE_Database), e.getMessage());
