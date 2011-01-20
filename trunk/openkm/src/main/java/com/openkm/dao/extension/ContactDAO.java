@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.HibernateUtil;
 import com.openkm.dao.bean.extension.Contact;
-import com.openkm.dao.bean.extension.DocumentContact;
 
 /**
  * ContactDAO
@@ -100,39 +99,12 @@ public class ContactDAO {
 	}
 	
 	/**
-	 * deleteDocumentContact 
-	 * 
-	 * @param id
-	 * @throws DatabaseException
-	 */
-	public static void deleteDocumentContact(int id) throws DatabaseException {
-		log.debug("deleteDocumentContact({})", id);
-		Session session = null;
-		Transaction tx = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-			DocumentContact documentContact = (DocumentContact) session.load(DocumentContact.class, id);
-			session.delete(documentContact);
-			HibernateUtil.commit(tx);
-		} catch(HibernateException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-		
-		log.debug("deleteDocumentContact: void");
-	}
-	
-	/**
-	 * Find users whom sent an message
+	 * Find users who sent an message
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<Contact> findByUuid(String uuid) throws DatabaseException {
 		log.debug("findByUuid({})", uuid);
-		String qs = "select con from Contact con, DocumentContact dco where dco.uuid=:uuid and dco in elements(con.uuids) order by con.name";
+		String qs = "select con from Contact con where :uuid in elements(con.uuids) order by con.name";
 		Session session = null;
 		
 		try {
