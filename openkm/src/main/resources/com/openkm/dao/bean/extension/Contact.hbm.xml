@@ -11,14 +11,14 @@
     <property name="mobile" column="CON_MOBILE" length="40"/>
     <property name="address" column="CON_ADDRESS" length="256"/>
     <property name="city" column="CON_CITY" length="127"/>
-    <property name="pc" column="CON_PC" length="40"/>
+    <property name="postalcode" column="CON_POSTALCODE" length="40"/>
     <property name="province" column="CON_PROVINCE" length="127"/>
     <property name="country" column="CON_COUNTRY" length="127"/>
     <property name="web" column="CON_WEB" length="256"/>
     <property name="notes" column="CON_NOTES" type="text"/>
-    <set name="uuids" table="OKM_DOCUMENT_CONTACT" order-by="DCO_ID asc" cascade="all-delete-orphan" lazy="false">
-      <key column="DCO_CONID"/>
-      <one-to-many class="com.openkm.dao.bean.extension.DocumentContact"/>
+    <set name="uuids" table="OKM_DOCUMENT_CONTACT" order-by="DCO_ID asc" lazy="false">
+      <key column="DCO_ID" not-null="true"/>
+      <element column="DCO_UUID" type="java.lang.String"/>
     </set>
   </class>
 </hibernate-mapping>
