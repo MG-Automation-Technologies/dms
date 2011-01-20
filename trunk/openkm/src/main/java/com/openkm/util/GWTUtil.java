@@ -81,7 +81,6 @@ import com.openkm.dao.bean.ProposedSubscriptionSent;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.UserConfig;
 import com.openkm.dao.bean.extension.Contact;
-import com.openkm.dao.bean.extension.DocumentContact;
 import com.openkm.dao.bean.extension.MessageReceived;
 import com.openkm.dao.bean.extension.MessageSent;
 import com.openkm.dao.bean.extension.StampImage;
@@ -1357,7 +1356,7 @@ public class GWTUtil {
 		contact.setMobile(gWTContact.getMobile());
 		contact.setName(gWTContact.getName());
 		contact.setNotes(gWTContact.getNotes());
-		contact.setPc(gWTContact.getPc());
+		contact.setPostalcode(gWTContact.getPc());
 		contact.setPhone(gWTContact.getPhone());
 		contact.setProvince(gWTContact.getProvince());
 		contact.setWeb(gWTContact.getWeb());
@@ -1382,18 +1381,11 @@ public class GWTUtil {
 		gwtContact.setMobile(contact.getMobile());
 		gwtContact.setName(contact.getName());
 		gwtContact.setNotes(contact.getNotes());
-		gwtContact.setPc(contact.getPc());
+		gwtContact.setPc(contact.getPostalcode());
 		gwtContact.setPhone(contact.getPhone());
 		gwtContact.setProvince(contact.getProvince());
 		gwtContact.setWeb(contact.getWeb());
-		if (uuid!=null) {
-			for (DocumentContact docCon : contact.getUuids()) {
-				if (docCon.getUuid().equals(uuid)) {
-					gwtContact.setDocId(docCon.getId());
-					break;
-				}
-			}
-		}
+		
 		return gwtContact;
 	}
 }
