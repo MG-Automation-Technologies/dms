@@ -247,7 +247,7 @@ public class Config {
 	public static String PRINCIPAL_LDAP_MAIL_SEARCH_FILTER; // (&(objectClass=inetOrgPerson)(mail=*))
 	public static String PRINCIPAL_LDAP_MAIL_ATTRIBUTE; // mail
 	
-	public static int MAX_FILE_SIZE;
+	public static long MAX_FILE_SIZE;
 	public static int MAX_SEARCH_RESULTS;
 	
 	public static boolean RESTRICT_FILE_MIME;
@@ -554,8 +554,8 @@ public class Config {
 			PRINCIPAL_LDAP_MAIL_ATTRIBUTE= ConfigDAO.getString(PROPERTY_PRINCIPAL_LDAP_MAIL_ATTRIBUTE, "");
 			values.put(PROPERTY_PRINCIPAL_LDAP_MAIL_ATTRIBUTE, PRINCIPAL_LDAP_MAIL_ATTRIBUTE);
 			
-			MAX_FILE_SIZE = ConfigDAO.getInteger(PROPERTY_MAX_FILE_SIZE, 64) * 1024 * 1024; // 64 * 1024 * 1024 = 64 MB
-			values.put(PROPERTY_MAX_FILE_SIZE, Integer.toString(MAX_FILE_SIZE));
+			MAX_FILE_SIZE = ConfigDAO.getLong(PROPERTY_MAX_FILE_SIZE, 64) * 1024 * 1024; // 64 * 1024 * 1024 = 64 MB
+			values.put(PROPERTY_MAX_FILE_SIZE, Long.toString(MAX_FILE_SIZE));
 			MAX_SEARCH_RESULTS = ConfigDAO.getInteger(PROPERTY_MAX_SEARCH_RESULTS, 261006); // Almost infinite
 			values.put(PROPERTY_MAX_SEARCH_RESULTS, Integer.toString(MAX_SEARCH_RESULTS));
 
