@@ -44,7 +44,6 @@ public class GWTContact implements IsSerializable {
 	private String country = "";
 	private String web = "";
 	private String notes = "";
-	private int docId = -1;
 
 	public int getId() {
 		return id;
@@ -150,14 +149,6 @@ public class GWTContact implements IsSerializable {
 		this.notes = notes;
 	}
 	
-	public int getDocId() {
-		return docId;
-	}
-
-	public void setDocId(int docId) {
-		this.docId = docId;
-	}
-	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -174,7 +165,6 @@ public class GWTContact implements IsSerializable {
 		sb.append(", country="); sb.append(country);
 		sb.append(", web="); sb.append(web);
 		sb.append(", notes="); sb.append(notes);
-		sb.append(", docId="); sb.append(docId);
 		sb.append("}");
 		return sb.toString();
 	}
