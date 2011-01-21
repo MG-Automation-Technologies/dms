@@ -39,6 +39,7 @@ public interface OKMContactServiceAsync extends RemoteService {
 	public void delete (int id, String uuid, AsyncCallback<?> callback);
 	public void findByUuid(String uuid, AsyncCallback<List<GWTContact>> callback);
 	public void findAll(AsyncCallback<List<GWTContact>> callback);
+	public void findAllFiltered(String uuid, AsyncCallback<List<GWTContact>> callback);
 	public void update(GWTContact contact, AsyncCallback<?> callback);
 	public void addContact(int id, String uuid, AsyncCallback<?> callback); 
 }
