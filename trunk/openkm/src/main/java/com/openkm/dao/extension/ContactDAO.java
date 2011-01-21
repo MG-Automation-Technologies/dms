@@ -144,6 +144,29 @@ public class ContactDAO {
 	}
 	
 	/**
+	 * Find users whom sent an message
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<Contact> findAllFiltered(String uuid) throws DatabaseException {
+		log.debug("findAll({})");
+		String qs = "from Contact con where :uuid not in elements(con.uuids) order by con.name";
+		Session session = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setString("uuid", uuid);
+			List<Contact> ret =  q.list();
+			log.debug("findAll: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
 	 * update 
 	 * 
 	 * @param contact
