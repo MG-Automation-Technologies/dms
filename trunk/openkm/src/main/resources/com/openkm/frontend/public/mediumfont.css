@@ -29,6 +29,12 @@ a:active {
 	white-space: nowrap;
 }
 
+.okm-Vertical-Line-Border {
+	background-image: url(img/vertical_line_back.gif);
+	background-repeat: repeat;
+	width: 2px;
+}
+
 /* row results */
 .okm-Table-Row {
 	height: 20px;
