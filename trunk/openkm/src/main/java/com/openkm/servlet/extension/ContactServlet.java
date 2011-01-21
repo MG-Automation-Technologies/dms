@@ -113,6 +113,20 @@ public class ContactServlet extends OKMRemoteServiceServlet implements OKMContac
 	}
 	
 	@Override
+	public List<GWTContact> findAllFiltered(String uuid) throws OKMException {
+		List<GWTContact> contacts = new ArrayList<GWTContact>();
+		try {
+			for (Contact contact : ContactDAO.findAllFiltered(uuid)) {
+				contacts.add(GWTUtil.copy(contact, null));
+			}
+			return contacts;
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMContactService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+	}
+	
+	@Override
 	public void update(GWTContact contact) throws OKMException {
 		try {
 			Contact contactToUpdate = GWTUtil.copy(contact);
