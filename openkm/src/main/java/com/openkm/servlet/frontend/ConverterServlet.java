@@ -66,6 +66,7 @@ public class ConverterServlet extends OKMHttpServlet {
 		boolean toDxf = WebUtils.getBoolean(request, "toDxf");
 		File tmp = null;
 		InputStream is = null;
+		boolean success = true;
 		updateSessionManager(request);
 		
 		try {
@@ -93,11 +94,11 @@ public class ConverterServlet extends OKMHttpServlet {
 							IOUtils.copy(is, fos);
 							fos.flush();
 							fos.close();
-							converter.dwg2dxf(tmp, dxfCache);
+							success = converter.dwg2dxf(tmp, dxfCache);
 						}
 						
 						is.close();
-						is = new FileInputStream(dxfCache);
+						if (success) is = new FileInputStream(dxfCache);
 					}
 					
 					mimeType = Config.MIME_DXF;
@@ -109,14 +110,14 @@ public class ConverterServlet extends OKMHttpServlet {
 					if (!doc.getMimeType().equals(Config.MIME_PDF)) {
 						if (!pdfCache.exists()) {							
 							if (doc.getMimeType().startsWith("image/")) {
-								converter.img2pdf(is, doc.getMimeType(), pdfCache);
+								success = converter.img2pdf(is, doc.getMimeType(), pdfCache);
 							} else {
-								converter.doc2pdf(is, doc.getMimeType(), pdfCache);
+								success = converter.doc2pdf(is, doc.getMimeType(), pdfCache);
 							}
 						}
 						
 						is.close();
-						is = new FileInputStream(pdfCache);
+						if (success) is = new FileInputStream(pdfCache);
 					}
 					
 					mimeType = Config.MIME_PDF;
@@ -132,20 +133,20 @@ public class ConverterServlet extends OKMHttpServlet {
 								IOUtils.copy(is, fos);
 								fos.flush();
 								fos.close();
-								converter.pdf2swf(tmp, swfCache);
+								success = converter.pdf2swf(tmp, swfCache);
 							} else {
-								converter.pdf2swf(pdfCache, swfCache);
+								success = converter.pdf2swf(pdfCache, swfCache);
 							}
 							
 							is.close();
-							is = new FileInputStream(swfCache);
+							if (success) is = new FileInputStream(swfCache);
 						} catch (Exception e) {
 							log.error(e.getMessage(), e);
 							is = DownloadServlet.class.getResourceAsStream("preview_problem.swf");
 						}
 					} else {
 						is.close();
-						is = new FileInputStream(swfCache);
+						if (success) is = new FileInputStream(swfCache);
 					}
 					
 					mimeType = Config.MIME_SWF;
