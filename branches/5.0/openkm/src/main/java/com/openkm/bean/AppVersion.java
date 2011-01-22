@@ -3,6 +3,7 @@ package com.openkm.bean;
 public class AppVersion {
 	private String major = "0";
 	private String minor = "0";
+	private String maintenance = "0";
 	private String build = "0";
 	
 	public String getMajor() {
@@ -20,6 +21,14 @@ public class AppVersion {
 	public void setMinor(String minor) {
 		this.minor = minor;
 	}
+	
+	public String getMaintenance() {
+		return maintenance;
+	}
+
+	public void setMaintenance(String maintenance) {
+		this.maintenance = maintenance;
+	}
 
 	public String getBuild() {
 		return build;
@@ -30,10 +39,18 @@ public class AppVersion {
 	}
 	
 	public String getVersion() {
-		return major+"."+minor;
+		if (maintenance != null && !maintenance.equals("") && !maintenance.equals("0")) {
+			return major+"."+minor+"."+maintenance;
+		} else {
+			return major+"."+minor;
+		}
 	}
 	
 	public String toString() {
-		return major+"."+minor+" (build: "+build+")";
+		if (maintenance != null && !maintenance.equals("") && !maintenance.equals("0")) {
+			return major+"."+minor+"."+maintenance+" (build: "+build+")";	
+		} else {
+			return major+"."+minor+" (build: "+build+")";
+		}
 	}
 }
