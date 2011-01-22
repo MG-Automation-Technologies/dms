@@ -66,7 +66,9 @@ import com.openkm.util.impexp.TextInfoDecorator;
 public class DownloadServlet extends OKMHttpServlet {
 	private static Logger log = LoggerFactory.getLogger(DownloadServlet.class);
 	private static final long serialVersionUID = 1L;
-
+	private static final boolean exportZip = true;
+	private static final boolean exportJar = false;
+	
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException {
 		log.debug("service({}, {})", request, response);
@@ -90,16 +92,30 @@ public class DownloadServlet extends OKMHttpServlet {
 			}
 						
 			if (export) {
-				// Get document
-				FileOutputStream os = new FileOutputStream(tmp);
-				exportZip(path, os);
-				os.flush();
-				os.close();
-				is = new FileInputStream(tmp);
-				
-				// Send document
-				String fileName = FileUtils.getName(path)+".zip";
-				WebUtils.sendFile(request, response, fileName, "application/zip", inline, is);
+				if (exportZip) {
+					// Get document
+					FileOutputStream os = new FileOutputStream(tmp);
+					exportZip(path, os);
+					os.flush();
+					os.close();
+					is = new FileInputStream(tmp);
+					
+					// Send document
+					String fileName = FileUtils.getName(path)+".zip";
+					WebUtils.sendFile(request, response, fileName, "application/zip", inline, is);
+				} else if (exportJar) {
+					// Get document
+					FileOutputStream os = new FileOutputStream(tmp);
+					exportJar(path, os);
+					os.flush();
+					os.close();
+					is = new FileInputStream(tmp);
+					
+					// Send document
+					String fileName = FileUtils.getName(path)+".jar";
+					WebUtils.sendFile(request, response, fileName, "application/x-java-archive", inline, is);
+
+				}
 			} else {
 				// Get document
 				doc = OKMDocument.getInstance().getProperties(null, path);
@@ -170,5 +186,40 @@ public class DownloadServlet extends OKMHttpServlet {
 		}
 		
 		log.debug("exportZip: void");
+	}
+	
+	/**
+	 * Generate a jar file from a repository folder path   
+	 */
+	private void exportJar(String path, OutputStream os) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, ArchiveException, IOException, DatabaseException  {
+		log.debug("exportJar({}, {})", path, os);
+		File tmp = null;
+		
+		try {
+			tmp = FileUtils.createTempDir();
+			
+			// Export files
+			StringWriter out = new StringWriter();
+			RepositoryExporter.exportDocuments(null, path, tmp, false, out, new TextInfoDecorator(path));
+			out.close();
+			
+			// Jar files
+			ArchiveUtils.createJar(tmp, FileUtils.getName(path), os);
+		} catch (IOException e) {
+			log.error("Error exporting jar", e);
+			throw e;
+		} finally {
+			if (tmp != null) {
+				try {
+					org.apache.commons.io.FileUtils.deleteDirectory(tmp);
+				} catch (IOException e) {
+					log.error("Error deleting temporal directory", e);
+					throw e;
+				}
+			}
+		}
+		
+		log.debug("exportJar: void");
 	}
 }
