@@ -66,9 +66,6 @@ public class RepositoryImporter {
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw e;
-		} catch (ItemExistsException e) {
-			log.error(e.getMessage(), e);
-			throw e;
 		} catch (AccessDeniedException e) {
 			log.error(e.getMessage(), e);
 			throw e;
@@ -95,7 +92,7 @@ public class RepositoryImporter {
 	 */
 	private static ImpExpStats importDocumentsHelper(String token, File fs, String fldPath, Writer out,
 			InfoDecorator deco) throws FileNotFoundException, PathNotFoundException, AccessDeniedException,
-			ItemExistsException, RepositoryException, IOException, DatabaseException {
+			RepositoryException, IOException, DatabaseException {
 		log.debug("importDocumentsHelper({}, {}, {}, {}, {})", new Object[] { token, fs, fldPath, out, deco });
 		File[] files = fs.listFiles();
 		ImpExpStats stats = new ImpExpStats();
@@ -107,19 +104,20 @@ public class RepositoryImporter {
 				
 				try {
 					ModuleManager.getFolderModule().create(token, fld);
-					ImpExpStats tmp = importDocumentsHelper(token, files[i], fld.getPath(), out, deco);
-					
-					// Stats
-					stats.setOk(stats.isOk() && tmp.isOk());
-					stats.setSize(stats.getSize() + tmp.getSize());
-					stats.setDocuments(stats.getDocuments() + tmp.getDocuments());
-					stats.setFolders(stats.getFolders() + tmp.getFolders() + 1);
 				} catch (ItemExistsException e) {
 					log.warn("ItemExistsException: {}", e.getMessage());
 					out.write(deco.print(files[i].getPath(), files[i].length(), "ItemExists"));
 					out.flush();
 					stats.setOk(false);
 				}
+				
+				ImpExpStats tmp = importDocumentsHelper(token, files[i], fld.getPath(), out, deco);
+				
+				// Stats
+				stats.setOk(stats.isOk() && tmp.isOk());
+				stats.setSize(stats.getSize() + tmp.getSize());
+				stats.setDocuments(stats.getDocuments() + tmp.getDocuments());
+				stats.setFolders(stats.getFolders() + tmp.getFolders() + 1);
 			} else {
 				Document doc = new Document();
 				doc.setPath(fldPath + "/" + files[i].getName());
