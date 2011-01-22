@@ -16,6 +16,6 @@ public class Test {
 		SchemaExport se = new SchemaExport(cfg);
 		se.setOutputFile("/tmp/schema.sql");
 		se.setFormat(true);
-		se.create(false, false);		
+		se.create(false, false);
 	}
 }
