@@ -125,4 +125,24 @@ public class FileUtils {
 	public static boolean deleteQuietly(File file) {
 		return org.apache.commons.io.FileUtils.deleteQuietly(file);
 	}
+	
+	/**
+	 * Count files and directories from a selected directory.
+	 */
+	public static int countFiles(File dir) {
+		File[] found = dir.listFiles();
+		int ret = 0;
+		
+		if (found != null) {
+			for (int i = 0; i < found.length; i++) {
+				if (found[i].isDirectory()) {
+					ret += countFiles(found[i]);
+				}
+				
+				ret++;
+			}
+		}
+		
+		return ret;
+	}
 }
