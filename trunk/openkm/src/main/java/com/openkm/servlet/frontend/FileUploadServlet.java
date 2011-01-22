@@ -143,6 +143,16 @@ public class FileUploadServlet extends OKMHttpServlet {
 								log.warn("erroMsg: {}", erroMsg);
 								out.print(erroMsg);
 							}
+						} else if (importZip && FilenameUtils.getExtension(fileName).equalsIgnoreCase("jar")) {
+							log.info("Import jar file '{}' into '{}'", fileName, path);
+							String erroMsg = importJar(path, is);
+							
+							if (erroMsg == null) {
+								out.print(returnOKMessage);
+							} else {
+								log.warn("erroMsg: {}", erroMsg);
+								out.print(erroMsg);
+							}
 						} else {
 							fileName = FilenameUtils.getName(fileName);
 							log.info("Upload file '{}' into '{}'", fileName, path);
@@ -304,9 +314,8 @@ public class FileUploadServlet extends OKMHttpServlet {
 	/**
 	 * Import zipped documents
 	 * 
-	 * @param token User session token.
 	 * @param path Where import into the repository.
-	 * @param zip The zip file to import.
+	 * @param is The zip file to import.
 	 */
 	private String importZip(String path, InputStream is) throws 
 			PathNotFoundException, ItemExistsException, AccessDeniedException, 
@@ -359,6 +368,66 @@ public class FileUploadServlet extends OKMHttpServlet {
 		}
 		
 		log.debug("importZip: {}", errorMsg);
+		return errorMsg;
+	}
+	
+	/**
+	 * Import jarred documents
+	 * 
+	 * @param path Where import into the repository.
+	 * @param is The jar file to import.
+	 */
+	private String importJar(String path, InputStream is) throws 
+			PathNotFoundException, ItemExistsException, AccessDeniedException, 
+			RepositoryException, IOException, DatabaseException {
+		log.debug("importJar({}, {})", path, is);
+        java.io.File tmpIn = null;
+        java.io.File tmpOut = null;
+        String errorMsg = null;
+       	
+		try {
+			// Create temporal
+			tmpIn = File.createTempFile("okm", ".jar");
+	        tmpOut = FileUtils.createTempDir();
+	        FileOutputStream fos = new FileOutputStream(tmpIn);
+			IOUtils.copy(is, fos);
+			fos.close();
+			
+			// Unzip files
+			File fileTmpIn = new File(tmpIn);
+			fileTmpIn.archiveCopyAllTo(tmpOut);
+			
+			// Import files
+			StringWriter out = new StringWriter();
+			ImpExpStats stats = RepositoryImporter.importDocuments(null, tmpOut, path, false, out, new TextInfoDecorator(tmpOut));
+			if (!stats.isOk()) {
+				errorMsg = out.toString();
+			}
+			out.close();
+		} catch (IOException e) {
+			log.error("Error importing jar", e);
+			throw e;
+		} finally {
+			if (tmpIn != null) {
+				File.umount();
+				org.apache.commons.io.FileUtils.deleteQuietly(tmpIn);
+			}
+
+			if (tmpOut != null) {
+				org.apache.commons.io.FileUtils.deleteQuietly(tmpOut);
+			}
+
+			if (is != null) {
+				try {
+					is.close();
+				} catch (IOException e) {
+					log.error("Error closing zip input stream", e);
+					throw e;
+				}
+			}
+		}
+		
+		log.debug("importJar: {}", errorMsg);
 		return errorMsg;
 	}
 }
