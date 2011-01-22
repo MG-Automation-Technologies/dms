@@ -76,6 +76,11 @@ public class WarUtils {
 				String[] version = impVersion.split("\\.");
 				appVersion.setMajor(version[0]);
 				appVersion.setMinor(version[1]);
+				
+				if (version.length > 2 && version[2] != null && !version[2].equals("")) {
+					appVersion.setMaintenance(version[2]);
+				}
+				
 				appVersion.setBuild(impBuild);
 			}
 		} catch (FileNotFoundException e) {
