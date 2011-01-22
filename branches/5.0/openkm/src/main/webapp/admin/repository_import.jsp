@@ -1,7 +1,7 @@
 <%@ page import="java.io.File" %>
-<%@ page import="org.apache.commons.io.FileUtils" %>
 <%@ page import="com.openkm.core.Config" %>
 <%@ page import="com.openkm.core.HttpSessionManager" %>
+<%@ page import="com.openkm.util.FileUtils" %>
 <%@ page import="com.openkm.util.FormatUtil"%>
 <%@ page import="com.openkm.util.impexp.RepositoryImporter" %>
 <%@ page import="com.openkm.util.impexp.HTMLInfoDecorator" %>
@@ -53,9 +53,10 @@
 			if (repoPath != null && !repoPath.equals("") && fsPath != null && !fsPath.equals("")) {
 				out.println("<hr/>");
 				File dir = new File(fsPath);
-				int docs = FileUtils.listFiles(dir, null, true).size();
+				int files = FileUtils.countFiles(dir);
+				out.println("<b>Files to import:</b> "+files+"<br/>");
 				long begin = System.currentTimeMillis();
-				ImpExpStats stats = RepositoryImporter.importDocuments(null, dir, repoPath, out, new HTMLInfoDecorator(docs));
+				ImpExpStats stats = RepositoryImporter.importDocuments(null, dir, repoPath, out, new HTMLInfoDecorator(files));
 				long end = System.currentTimeMillis();
 				out.println("<hr/>");
 				out.println("<div class=\"ok\">Filesystem '"+new File(fsPath).getAbsolutePath()+"' imported into '"+repoPath+"'</div>");
