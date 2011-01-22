@@ -38,7 +38,7 @@ public class HTMLInfoDecorator implements InfoDecorator {
 	public String print(String path, long size, String error) {
 		log.debug("print({}, {}, {})", new Object[] { path, size, error });
 		StringBuffer sb = new StringBuffer();
-		int perCent = idx++ * 100 / total;
+		int perCent = ++idx * 100 / total;
 		
 		if (perCent > oldPerCent) {
 			sb.append(" (");
