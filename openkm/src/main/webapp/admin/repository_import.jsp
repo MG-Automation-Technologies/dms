@@ -1,10 +1,10 @@
 <%@ page import="java.io.FileNotFoundException"%>
 <%@ page import="java.io.IOException"%>
 <%@ page import="java.io.File" %>
-<%@ page import="org.apache.commons.io.FileUtils" %>
 <%@ page import="com.openkm.core.Config" %>
 <%@ page import="com.openkm.servlet.admin.BaseServlet" %>
 <%@ page import="com.openkm.core.HttpSessionManager" %>
+<%@ page import="com.openkm.util.FileUtils" %>
 <%@ page import="com.openkm.util.WebUtils"%>
 <%@ page import="com.openkm.util.FormatUtil"%>
 <%@ page import="com.openkm.util.impexp.RepositoryImporter" %>
@@ -51,10 +51,11 @@
 			if (repoPath != null && !repoPath.equals("") && fsPath != null && !fsPath.equals("")) {
 				out.println("<hr/>");
 				File dir = new File(Config.INSTANCE_CHROOT_PATH + fsPath);
-				int docs = FileUtils.listFiles(dir, null, true).size();
+				int files = FileUtils.countFiles(dir);
+				out.println("<b>Files to import:</b> "+files+"<br/>");
 				long begin = System.currentTimeMillis();
 				ImpExpStats stats = RepositoryImporter.importDocuments(null, dir, repoPath, metadata, out, 
-						new HTMLInfoDecorator(docs));
+						new HTMLInfoDecorator(files));
 				long end = System.currentTimeMillis();
 				out.println("<hr/>");
 				out.println("<div class=\"ok\">Filesystem '"+new File(fsPath).getAbsolutePath()+"' imported into '"+repoPath+"'</div>");
