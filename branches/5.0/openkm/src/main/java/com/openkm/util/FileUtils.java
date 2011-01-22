@@ -192,4 +192,25 @@ public class FileUtils {
 		
 		log.debug("createZipHelper: void");
 	}
+	
+	/**
+	 * Count files and directories from a selected directory.
+	 */
+	public static int countFiles(File dir) {
+		File[] found = dir.listFiles();
+		int ret = 0;
+		
+		if (found != null) {
+			for (int i = 0; i < found.length; i++) {
+				if (found[i].isDirectory()) {
+					ret += countFiles(found[i]);
+				}
+				
+				ret++;
+			}
+		}
+		
+		return ret;
+	}
 }
+
