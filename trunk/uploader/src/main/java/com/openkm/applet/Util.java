@@ -35,6 +35,7 @@ import java.util.logging.Logger;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
@@ -50,13 +51,19 @@ public class Util {
 	public static String createDocument(String token, String path, String url, File file) throws IOException {
 		log.info("createDocument(" + token + ", " + path + ", " + url + ", " + file + ")");
 		HttpClient client = new DefaultHttpClient();
-		MultipartEntity form = new MultipartEntity();
+		MultipartEntity form = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
 		form.addPart("file", new FileBody(file));
 		form.addPart("path", new StringBody(path, Charset.forName("UTF-8")));
 		form.addPart("action", new StringBody("0")); // FancyFileUpload.ACTION_INSERT
 		HttpPost post = new HttpPost(url+"/frontend/FileUpload;jsessionid="+token);
 		post.setHeader("Cookie", "jsessionid="+token);
 		post.setEntity(form);
+		
+		//ByteArrayOutputStream out = new ByteArrayOutputStream();
+		//form.writeTo(out);
+		//out.close();
+		//log.info(out.toString());
+		
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
 		String response = client.execute(post, responseHandler);
 		log.info("createDocument: "+response);
@@ -69,9 +76,9 @@ public class Util {
 	public static String createFolder(String token, String path, String url, File file) throws IOException {
 		log.info("createFolder(" + token + ", " + path + ", " + url + ", " + file + ")");
 		HttpClient client = new DefaultHttpClient();
-		MultipartEntity form = new MultipartEntity();
-		form.addPart("folder", new StringBody(file.getName()));
-		form.addPart("path", new StringBody(path));
+		MultipartEntity form = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, Charset.forName("UTF-8"));
+		form.addPart("folder", new StringBody(file.getName(), Charset.forName("UTF-8")));
+		form.addPart("path", new StringBody(path, Charset.forName("UTF-8")));
 		form.addPart("action", new StringBody("2")); // FancyFileUpload.ACTION_FOLDER
 		HttpPost post = new HttpPost(url+"/frontend/FileUpload;jsessionid="+token);
 		post.setHeader("Cookie", "jsessionid="+token);

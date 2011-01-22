@@ -89,7 +89,7 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 			public void run() {
 				// JFrame.setDefaultLookAndFeelDecorated(true);
 				Messages.init(Locale.getDefault());
-				MainFrame inst = new MainFrame("000", "/okm:root", null, null);
+				MainFrame inst = new MainFrame("000", "/okm:root", "http://localhost:6666", null);
 				inst.setUndecorated(true);
 				inst.setResizable(false);
 				inst.setVisible(true);
