@@ -32,7 +32,9 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTDocument;
+import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.contants.ui.UIFileUploadConstants;
 
 /**
@@ -45,6 +47,7 @@ public class FileUpload extends DialogBox {
 	
 	private Button closeButton;
 	private Button addButton;
+	private Button sendButton;
 	private VerticalPanel vPanel;
 	private HorizontalPanel vButtonPanel;
 	private FancyFileUpload ffUpload;
@@ -77,10 +80,33 @@ public class FileUpload extends DialogBox {
 			public void onClick(ClickEvent event) {
 					ffUpload.reset(enableImport);
 					addButton.setVisible(false); // Add new file button must be unvisible after clicking
+					sendButton.setVisible(true);
 				}
 			}
 		);
 		addButton.setVisible(false);
+		
+		sendButton = new Button();
+		sendButton.setText(Main.i18n("fileupload.send"));
+		sendButton.setStyleName("okm-Button");
+		// Set up a click listener on the proceed check box
+		sendButton.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
+				if (Main.get().mainPanel.bottomPanel.userInfo.isQuotaExceed()) {
+					Main.get().showError("UserQuotaExceed", 
+				             			 new OKMException("OKM-"+ErrorCode.ORIGIN_OKMBrowser + ErrorCode.CAUSE_QuotaExceed, ""));
+				} else {
+					ffUpload.users.setText(ffUpload.notifyPanel.getUsersToNotify());
+					ffUpload.roles.setText(ffUpload.notifyPanel.getRolesToNotify());
+					if (ffUpload.notifyToUser.getValue() && ffUpload.users.getText().equals("") && ffUpload.roles.getText().equals("")) {
+						ffUpload.errorNotify.setVisible(true);
+					} else if (ffUpload.getFilename() != null && !ffUpload.getFilename().equals("")) {
+						ffUpload.pendingUpload();
+					}
+				}
+			}
+		});
 		
 		vPanel.setWidth("415px");
 		vPanel.setHeight("100px");
@@ -95,6 +121,7 @@ public class FileUpload extends DialogBox {
             		ffUpload.getUploadState() == FancyFileUpload.UPLOADING_STATE) {
             		closeButton.setEnabled(false);
             		addButton.setVisible(false);
+            		sendButton.setVisible(false);
             	   
             	} else if (ffUpload.getUploadState() == FancyFileUpload.EMPTY_STATE ||
             			   ffUpload.getUploadState() == FancyFileUpload.FAILED_STATE ||
@@ -104,10 +131,15 @@ public class FileUpload extends DialogBox {
             			if (ffUpload.getUploadState() == FancyFileUpload.UPLOADED_STATE) {
             				boolean visible = !ffUpload.isWizard();
             				closeButton.setVisible(visible);
+            				sendButton.setVisible(false);
            					addButton.setVisible(visible);
             			} else {
             				addButton.setVisible(true);
+            				sendButton.setVisible(false);
             			}
+            		} else {
+            			// on failed or empty state
+            			sendButton.setVisible(true);
             		}
                }
             }
@@ -116,6 +148,8 @@ public class FileUpload extends DialogBox {
 		vButtonPanel.add(closeButton);
 		vButtonPanel.add(new HTML("&nbsp;&nbsp;"));
 		vButtonPanel.add(addButton);
+		vButtonPanel.add(new HTML("&nbsp;&nbsp;"));
+		vButtonPanel.add(sendButton);
 		
 		vPanel.add(vButtonPanel);
 		vPanel.add(new HTML("<br>"));
@@ -136,6 +170,7 @@ public class FileUpload extends DialogBox {
 	public void langRefresh() {
 		closeButton.setHTML(Main.i18n("button.close")); 
 		addButton.setHTML(Main.i18n("fileupload.button.add.other.file"));
+		sendButton.setText(Main.i18n("fileupload.send"));	
 		
 		if (doAction == UIFileUploadConstants.ACTION_INSERT) {
 			setText(Main.i18n("fileupload.label.insert"));
