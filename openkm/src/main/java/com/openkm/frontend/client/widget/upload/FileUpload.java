@@ -38,120 +38,118 @@ import com.openkm.frontend.client.bean.GWTDocument;
  * File Upload
  * 
  * @author jllort
- *
+ * 
  */
 public class FileUpload extends DialogBox {
-	
+
 	private Button closeButton;
 	private Button addButton;
 	private VerticalPanel vPanel;
 	private HorizontalPanel vButtonPanel;
 	private FancyFileUpload ffUpload = new FancyFileUpload();
-	private int popupWidth = 315;
+	private int popupWidth = 415;
 	private int popupHeight = 125;
 	private int doAction = 0;
 	private boolean enableAddButton = false;
 	private boolean enableImport = true;
-	
+
 	/**
 	 * File upload
 	 */
 	public FileUpload() {
-		super(false,true);
+		super(false, true);
 		vPanel = new VerticalPanel();
 		vButtonPanel = new HorizontalPanel();
-		
-		closeButton = new Button(Main.i18n("fileupload.button.close"), new ClickHandler() { 
+
+		closeButton = new Button(Main.i18n("fileupload.button.close"), new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-					hide();
-					addButton.setVisible(false);
-				}
+				hide();
+				addButton.setVisible(false);
 			}
-		);
-		
-		addButton = new Button(Main.i18n("fileupload.button.add.other.file"), new ClickHandler() { 
+		});
+
+		addButton = new Button(Main.i18n("fileupload.button.add.other.file"), new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-					ffUpload.reset(enableImport);
-					addButton.setVisible(false); // Add new file button must be unvisible after clicking
-				}
+				ffUpload.reset(enableImport);
+				addButton.setVisible(false); // Add new file button must be
+												// unvisible after clicking
 			}
-		);
+		});
 		addButton.setVisible(false);
-		
-		vPanel.setWidth("315px");
+
+		vPanel.setWidth("415px");
 		vPanel.setHeight("100px");
-		
+
 		vPanel.add(new HTML("<br>"));
 		vPanel.add(ffUpload);
-		        
-		ffUpload.addChangeHandler(new ChangeHandler(){
+
+		ffUpload.addChangeHandler(new ChangeHandler() {
 			@Override
 			public void onChange(ChangeEvent event) {
-            	if (ffUpload.getUploadState() == FancyFileUpload.PENDING_STATE ||
-            		ffUpload.getUploadState() == FancyFileUpload.UPLOADING_STATE) {
-            		closeButton.setEnabled(false);
-            		addButton.setVisible(false);
-            	   
-            	} else if (ffUpload.getUploadState() == FancyFileUpload.EMPTY_STATE ||
-            			   ffUpload.getUploadState() == FancyFileUpload.FAILED_STATE ||
-            		       ffUpload.getUploadState() == FancyFileUpload.UPLOADED_STATE) {
-            		closeButton.setEnabled(true);
-            		if (ffUpload.getUploadState() != FancyFileUpload.EMPTY_STATE && enableAddButton) {
-            			if (ffUpload.getUploadState() == FancyFileUpload.UPLOADED_STATE) {
-            				boolean visible = !ffUpload.isWizard();
-            				closeButton.setVisible(visible);
-           					addButton.setVisible(visible);
-            			} else {
-            				addButton.setVisible(true);
-            			}
-            		}
-               }
-            }
-	    }); 
-		
+				if (ffUpload.getUploadState() == FancyFileUpload.PENDING_STATE
+						|| ffUpload.getUploadState() == FancyFileUpload.UPLOADING_STATE) {
+					closeButton.setEnabled(false);
+					addButton.setVisible(false);
+
+				} else if (ffUpload.getUploadState() == FancyFileUpload.EMPTY_STATE
+						|| ffUpload.getUploadState() == FancyFileUpload.FAILED_STATE
+						|| ffUpload.getUploadState() == FancyFileUpload.UPLOADED_STATE) {
+					closeButton.setEnabled(true);
+					if (ffUpload.getUploadState() != FancyFileUpload.EMPTY_STATE && enableAddButton) {
+						if (ffUpload.getUploadState() == FancyFileUpload.UPLOADED_STATE) {
+							boolean visible = !ffUpload.isWizard();
+							closeButton.setVisible(visible);
+							addButton.setVisible(visible);
+						} else {
+							addButton.setVisible(true);
+						}
+					}
+				}
+			}
+		});
+
 		vButtonPanel.add(closeButton);
 		vButtonPanel.add(new HTML("&nbsp;&nbsp;"));
 		vButtonPanel.add(addButton);
-		
+
 		vPanel.add(vButtonPanel);
 		vPanel.add(new HTML("<br>"));
-		
+
 		vPanel.setCellHorizontalAlignment(ffUpload, VerticalPanel.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(vButtonPanel, VerticalPanel.ALIGN_CENTER);
-		
+
 		closeButton.setStyleName("okm-Button");
 		addButton.setStyleName("okm-Button");
-		
+
 		setWidget(vPanel);
 	}
-	
-	
+
 	/**
 	 * Language refresh
 	 */
 	public void langRefresh() {
-		closeButton.setHTML(Main.i18n("button.close")); 
+		closeButton.setHTML(Main.i18n("button.close"));
 		addButton.setHTML(Main.i18n("fileupload.button.add.other.file"));
-		
+
 		if (doAction == FancyFileUpload.ACTION_INSERT) {
 			setText(Main.i18n("fileupload.label.insert"));
 		} else {
 			setText(Main.i18n("fileupload.label.update"));
 		}
-		
+
 		ffUpload.langRefresh();
 	}
-	
+
 	/**
 	 * Show file upload popup
 	 */
 	public void showPopup(boolean enableAddButton, boolean enableImport) {
 		this.enableAddButton = enableAddButton;
 		this.enableImport = enableImport;
-		setWidth(""+popupWidth);
-		setHeight(""+popupHeight);
+		setWidth("" + popupWidth);
+		setHeight("" + popupHeight);
 		ffUpload.init(); // Inits to correct center position
 		center();
 
@@ -159,9 +157,9 @@ public class FileUpload extends DialogBox {
 		langRefresh();
 		ffUpload.reset(enableImport);
 	}
-	
+
 	/**
-	 * Hide file upload 
+	 * Hide file upload
 	 */
 	public void hide() {
 		if (doAction == FancyFileUpload.ACTION_UPDATE) {
@@ -172,7 +170,7 @@ public class FileUpload extends DialogBox {
 		}
 		super.hide();
 	}
-	
+
 	/**
 	 * resetAfterWizardFinished
 	 */
@@ -182,21 +180,24 @@ public class FileUpload extends DialogBox {
 		addButton.setVisible(true);
 		super.show();
 	}
-	
+
 	/**
-	 * Sets the action to do on upload ( create new file or update and existing )
+	 * Sets the action to do on upload ( create new file or update and existing
+	 * )
 	 * 
-	 * @param action Action to do on upload 
+	 * @param action
+	 *            Action to do on upload
 	 */
 	public void setAction(int action) {
 		doAction = action;
 		ffUpload.setAction(action);
 	}
-	
+
 	/**
 	 * Sets the path ( document if it's update or directory if it's insert )
 	 * 
-	 * @param path The document or directory path
+	 * @param path
+	 *            The document or directory path
 	 */
 	public void setPath(String path) {
 		ffUpload.setPath(path);
@@ -208,7 +209,7 @@ public class FileUpload extends DialogBox {
 	public void disableErrorNotify() {
 		ffUpload.disableErrorNotify();
 	}
-	
+
 	/**
 	 * enableAdvancedFilter
 	 */
