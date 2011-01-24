@@ -199,7 +199,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			hFileUpload.add(uploadFileWidget);
 			hFileUpload.add(new HTML("&nbsp;&nbsp;"));
 			hFileUpload.add(send);
-			hFileUpload.setWidth("250");
+			hFileUpload.setWidth("350");
 			
 			status.setWidth("100%");
 			status.setWordWrap(true);
@@ -212,7 +212,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			statusZipNotifyScroll = new ScrollPanel(statusZipNotify);
 			statusZipNotifyScroll.setAlwaysShowScrollBars(false);
 			statusZipNotifyScroll.setVisible(false);
-			statusZipNotifyScroll.setSize("280","100");
+			statusZipNotifyScroll.setSize("375","100");
 			statusZipNotifyScroll.setStyleName("okm-Bookmark-Panel");
 			statusZipNotifyScroll.addStyleName("okm-Input");
 			
@@ -243,9 +243,9 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			hPBPanel.add(progressBar); 
 			hPBPanel.setCellVerticalAlignment(progressBar, HasAlignment.ALIGN_MIDDLE);
 			hPBPanel.setCellHorizontalAlignment(progressBar, HasAlignment.ALIGN_LEFT); // Corrects some problem with centering progress status 
-			progressBar.setSize("260", "20"); 
+			progressBar.setSize("360", "20"); 
 			
-			pendingPanel.setWidth("280");
+			pendingPanel.setWidth("375");
 			pendingPanel.setVisible(true);
 			pendingPanel.add(status);
 			pendingPanel.add(hPBPanel);
@@ -476,7 +476,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		
 		// Adds error panel, whem user select notify but not select any user
 		errorNotify = new HTML(Main.i18n("fileupload.label.must.select.users"));
-		errorNotify.setWidth("270");
+		errorNotify.setWidth("370");
 		errorNotify.setVisible(false);
 		errorNotify.setStyleName("fancyfileupload-failed");
 		mainPanel.add(errorNotify);
@@ -485,7 +485,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		versionHTMLBR = new HTML("<br>");
 		mainPanel.add(versionHTMLBR);
 		versionComment = new TextArea();
-		versionComment.setWidth("280");
+		versionComment.setWidth("375");
 		versionComment.setHeight("50");
 		versionComment.setName("comment");
 		versionComment.setStyleName("okm-Input");
@@ -556,7 +556,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		message = new TextArea();
 		commentTXT = new HTML(Main.i18n("fileupload.label.notify.comment"));
 		message.setName("message");
-		message.setSize("280","60");
+		message.setSize("375","60");
 		message.setStyleName("okm-Input");
 		
 		vNotifyPanel = new VerticalPanel();

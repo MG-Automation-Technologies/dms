@@ -48,7 +48,7 @@ public class FileUpload extends DialogBox {
 	private VerticalPanel vPanel;
 	private HorizontalPanel vButtonPanel;
 	private FancyFileUpload ffUpload;
-	private int popupWidth = 315;
+	private int popupWidth = 415;
 	private int popupHeight = 125;
 	private int doAction = 0;
 	private boolean enableAddButton = false;
@@ -82,7 +82,7 @@ public class FileUpload extends DialogBox {
 		);
 		addButton.setVisible(false);
 		
-		vPanel.setWidth("315px");
+		vPanel.setWidth("415px");
 		vPanel.setHeight("100px");
 		
 		vPanel.add(new HTML("<br>"));
