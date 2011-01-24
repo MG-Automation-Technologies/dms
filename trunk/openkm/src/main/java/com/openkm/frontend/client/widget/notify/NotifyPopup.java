@@ -82,7 +82,7 @@ public class NotifyPopup extends DialogBox  {
 		message = new TextArea();
 		
 		errorNotify = new HTML(Main.i18n("fileupload.label.must.select.users"));
-		errorNotify.setWidth("270");
+		errorNotify.setWidth("365");
 		errorNotify.setVisible(false);
 		errorNotify.setStyleName("fancyfileupload-failed");
 		
@@ -120,7 +120,7 @@ public class NotifyPopup extends DialogBox  {
 		
 		hPanel.setCellWidth(space, "40");
 		
-		message.setSize("280","60");
+		message.setSize("375","60");
 		message.setStyleName("okm-Input");
 		// TODO This is a workaround for a Firefox 2 bug
 		// http://code.google.com/p/google-web-toolkit/issues/detail?id=891
