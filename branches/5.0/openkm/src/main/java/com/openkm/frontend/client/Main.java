@@ -252,7 +252,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		workflowPopup.setStyleName("okm-Popup");
 		workflowPopup.addStyleName("okm-DisableSelect");
 		notifyPopup = new NotifyPopup();
-		notifyPopup.setWidth("300px");
+		notifyPopup.setWidth("400px");
 		notifyPopup.setHeight("100px");
 		notifyPopup.setStyleName("okm-Popup");
 		debugConsolePopup = new DebugConsolePopup();

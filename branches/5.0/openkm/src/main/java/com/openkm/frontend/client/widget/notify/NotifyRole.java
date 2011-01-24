@@ -79,7 +79,7 @@ public class NotifyRole extends Composite {
 		addButtom.addClickHandler(addButtomHandler);
 		removeButtom.addClickHandler(removeButtomHandler);
 		
-		hPanel.setSize("280","140");
+		hPanel.setSize("375","140");
 		hPanel.add(notifyRolesTable);
 		hPanel.add(buttonPanel);
 		hPanel.add(rolesTable);
