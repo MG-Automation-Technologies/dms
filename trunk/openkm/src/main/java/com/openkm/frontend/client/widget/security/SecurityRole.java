@@ -108,7 +108,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 		panel.setCellVerticalAlignment(buttonPanel,HasAlignment.ALIGN_MIDDLE);
 		panel.setCellHorizontalAlignment(buttonPanel,HasAlignment.ALIGN_CENTER);
 		
-		panel.setSize("318", "235");
+		panel.setSize("693", "365");
 		
 		initWidget(panel);
 	}

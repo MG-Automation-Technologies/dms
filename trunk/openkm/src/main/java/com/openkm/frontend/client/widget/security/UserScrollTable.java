@@ -130,21 +130,21 @@ public class UserScrollTable extends Composite {
 		
 		// Level 1 headers
 		if (isAssigned) {
-			table.setSize("290","235");
+			table.setSize("455","365");
 			headerTable.setHTML(0, 0, Main.i18n("security.user.name"));
 			headerTable.setHTML(0, 1, Main.i18n("security.user.permission.read"));
 			headerTable.setHTML(0, 2, Main.i18n("security.user.permission.write"));
 			headerTable.setHTML(0, 3, Main.i18n("security.user.permission.delete"));
 			headerTable.setHTML(0, 4, Main.i18n("security.user.permission.security"));
-			table.setColumnWidth(0,52);
-			table.setColumnWidth(1,50);
-			table.setColumnWidth(2,50);
-			table.setColumnWidth(3,50);
-			table.setColumnWidth(4,50);
+			table.setColumnWidth(0,235);
+			table.setColumnWidth(1,55);
+			table.setColumnWidth(2,55);
+			table.setColumnWidth(3,55);
+			table.setColumnWidth(4,55);
 		} else {
-			table.setSize("115","235");
+			table.setSize("235","365");
 			headerTable.setHTML(0, 0, Main.i18n("security.user.name"));
-			table.setColumnWidth(0,97);
+			table.setColumnWidth(0,217);
 		}
 		
 		// Table data
