@@ -86,8 +86,8 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 		recursive = new CheckBox(Main.i18n("security.recursive"));
 		button = new Button(Main.i18n("button.close"), this);
 		
-		vPanel.setWidth("345");
-		vPanel.setHeight("330");
+		vPanel.setWidth("700");
+		vPanel.setHeight("400");
 		sp.setHeight("4");
 				
 		tabPanel.add(securityUser, Main.i18n("security.users"));
@@ -103,11 +103,13 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 						groupsFilter = filter.getText();
 						filter.setText(usersFilter);
 						filterText.setHTML(Main.i18n("secutiry.filter.by.users"));
+						securityUser.fillWidth();
 						break;
 					case TAB_GROUPS:
 						usersFilter = filter.getText();
 						filter.setText(groupsFilter);
 						filterText.setHTML(Main.i18n("secutiry.filter.by.groups"));
+						securityRole.fillWidth();
 						break;
 				}
 			}
@@ -177,7 +179,7 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 		vPanel.add(button);
 		
 		vPanel.setCellHeight(sp, "4");
-		vPanel.setCellHeight(tabPanel, "255");
+		vPanel.setCellHeight(tabPanel, "365");
 		vPanel.setCellHeight(recursive, "25");
 		vPanel.setCellHeight(button, "25");
 		vPanel.setCellHorizontalAlignment(filterPanel, VerticalPanel.ALIGN_RIGHT);
