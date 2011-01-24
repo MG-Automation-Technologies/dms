@@ -130,21 +130,21 @@ public class RoleScrollTable extends Composite {
 		
 		// Level 1 headers
 		if (isAssigned) {
-			table.setSize("455","365");
+			table.setSize("405","365");
 			headerTable.setHTML(0, 0, Main.i18n("security.group.name"));
 			headerTable.setHTML(0, 1, Main.i18n("security.group.permission.read"));
 			headerTable.setHTML(0, 2, Main.i18n("security.group.permission.write"));
 			headerTable.setHTML(0, 3, Main.i18n("security.group.permission.delete"));
 			headerTable.setHTML(0, 4, Main.i18n("security.group.permission.security"));
-			table.setColumnWidth(0,235);
+			table.setColumnWidth(0,175);
 			table.setColumnWidth(1,55);
 			table.setColumnWidth(2,55);
 			table.setColumnWidth(3,55);
 			table.setColumnWidth(4,55);
 		} else {
-			table.setSize("235","365");
+			table.setSize("185","365");
 			headerTable.setHTML(0, 0, Main.i18n("security.group.name"));
-			table.setColumnWidth(0,217);
+			table.setColumnWidth(0,167);
 		}
 		
 		// Table data
