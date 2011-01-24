@@ -86,7 +86,7 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 		recursive = new CheckBox(Main.i18n("security.recursive"));
 		button = new Button(Main.i18n("button.close"), this);
 		
-		vPanel.setWidth("700");
+		vPanel.setWidth("600");
 		vPanel.setHeight("400");
 		sp.setHeight("4");
 				
@@ -240,7 +240,7 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 	 * Show the security popup
 	 */
 	public void show(String path) {
-		int left = (Window.getClientWidth()-325) / 2;
+		int left = (Window.getClientWidth()-600) / 2;
 		int top = (Window.getClientHeight()-330) / 2;
 		setPopupPosition(left, top);
 		setText(Main.i18n("security.label"));

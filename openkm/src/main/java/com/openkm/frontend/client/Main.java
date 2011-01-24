@@ -258,7 +258,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		logoutPopup.setStyleName("okm-Popup");
 		logoutPopup.addStyleName("okm-DisableSelect");
 		securityPopup = new SecurityPopup();
-		securityPopup.setWidth("700");
+		securityPopup.setWidth("600");
 		securityPopup.setHeight("400");
 		securityPopup.setStyleName("okm-Popup");
 		securityPopup.addStyleName("okm-DisableSelect");
