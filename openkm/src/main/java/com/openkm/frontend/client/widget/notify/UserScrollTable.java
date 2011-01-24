@@ -109,7 +109,7 @@ public class UserScrollTable extends Composite {
 		table = new ScrollTable(dataTable,headerTable,scrollTableImages);
 		table.setCellSpacing(0);
 		table.setCellPadding(0);
-		table.setSize("128","140");
+		table.setSize("175","140");
 		
 		// Level 1 headers
 	    if (isUserToNofity) {
@@ -118,7 +118,7 @@ public class UserScrollTable extends Composite {
 			headerTable.setHTML(0, 0, Main.i18n("fileupload.label.users"));
 		}
 	    
-	    table.setColumnWidth(0,120);
+	    table.setColumnWidth(0,167);
 	    
 	    // Table data
 	    dataTable.setSelectionPolicy(SelectionGrid.SelectionPolicy.ONE_ROW);
