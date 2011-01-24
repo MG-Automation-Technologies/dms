@@ -79,7 +79,7 @@ public class NotifyUser extends Composite {
 		addButtom.addClickHandler(addButtomHandler);
 		removeButtom.addClickHandler(removeButtomHandler);
 		
-		hPanel.setSize("280","140");
+		hPanel.setSize("375","140");
 		hPanel.add(notifyUsersTable);
 		hPanel.add(buttonPanel);
 		hPanel.add(userTable);
