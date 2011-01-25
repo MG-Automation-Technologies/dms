@@ -242,17 +242,17 @@
     <mapping resource="com/openkm/dao/bean/cache/UserItems.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/cache/UserDocumentKeyword.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Extension.hbm.xml"/>
-    <mapping resource="com/openkm/dao/bean/extension/ProposedSubscriptionSent.hbm.xml"/>
-    <mapping resource="com/openkm/dao/bean/extension/ProposedSubscriptionReceived.hbm.xml"/>
-    <mapping resource="com/openkm/dao/bean/extension/ProposedQuerySent.hbm.xml"/>
-    <mapping resource="com/openkm/dao/bean/extension/ProposedQueryReceived.hbm.xml"/>
-    <mapping resource="com/openkm/dao/bean/extension/Staple.hbm.xml"/>
-    <mapping resource="com/openkm/dao/bean/extension/StapleGroup.hbm.xml"/>
-    <mapping resource="com/openkm/dao/bean/extension/StampText.hbm.xml"/>
-    <mapping resource="com/openkm/dao/bean/extension/StampImage.hbm.xml"/>
-    <mapping resource="com/openkm/dao/bean/extension/Contact.hbm.xml"/>
-    <mapping resource="com/openkm/dao/bean/extension/MessageSent.hbm.xml"/>
-    <mapping resource="com/openkm/dao/bean/extension/MessageReceived.hbm.xml"/>
+    <mapping resource="com/openkm/extension/dao/bean/ProposedSubscriptionSent.hbm.xml"/>
+    <mapping resource="com/openkm/extension/dao/bean/ProposedSubscriptionReceived.hbm.xml"/>
+    <mapping resource="com/openkm/extension/dao/bean/ProposedQuerySent.hbm.xml"/>
+    <mapping resource="com/openkm/extension/dao/bean/ProposedQueryReceived.hbm.xml"/>
+    <mapping resource="com/openkm/extension/dao/bean/Staple.hbm.xml"/>
+    <mapping resource="com/openkm/extension/dao/bean/StapleGroup.hbm.xml"/>
+    <mapping resource="com/openkm/extension/dao/bean/StampText.hbm.xml"/>
+    <mapping resource="com/openkm/extension/dao/bean/StampImage.hbm.xml"/>
+    <mapping resource="com/openkm/extension/dao/bean/Contact.hbm.xml"/>
+    <mapping resource="com/openkm/extension/dao/bean/MessageSent.hbm.xml"/>
+    <mapping resource="com/openkm/extension/dao/bean/MessageReceived.hbm.xml"/>
 
     <!-- ################################### -->
     <!-- # cache settings                  # -->
