@@ -35,8 +35,10 @@
   &nbsp;
   <a target="frame" href="Profile"><img src="img/toolbar/profile.png" title="Profiles"></a>
   &nbsp;
+  <%--
   <a target="frame" href="DocumentFilter"><img src="img/toolbar/filter.png" title="Document filter"></a>
   &nbsp;
+  --%>
   <c:if test="${isMultipleInstancesAdmin}">
     <a target="frame" href="DatabaseQuery"><img src="img/toolbar/database.png" title="Database query"></a>
     &nbsp;
