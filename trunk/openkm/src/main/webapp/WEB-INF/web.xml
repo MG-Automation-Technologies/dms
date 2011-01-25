@@ -148,31 +148,31 @@
   <!-- Extension servlets -->
   <servlet>
     <servlet-name>ProposedSubscriptionServlet</servlet-name>
-    <servlet-class>com.openkm.servlet.extension.ProposedSubscriptionServlet</servlet-class>
+    <servlet-class>com.openkm.extension.servlet.ProposedSubscriptionServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>ProposedQueryServlet</servlet-name>
-    <servlet-class>com.openkm.servlet.extension.ProposedQueryServlet</servlet-class>
+    <servlet-class>com.openkm.extension.servlet.ProposedQueryServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>MessageServlet</servlet-name>
-    <servlet-class>com.openkm.servlet.extension.MessageServlet</servlet-class>
+    <servlet-class>com.openkm.extension.servlet.MessageServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>FrontendStampServlet</servlet-name>
-    <servlet-class>com.openkm.servlet.extension.StampServlet</servlet-class>
+    <servlet-class>com.openkm.extension.servlet.StampServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>StaplingServlet</servlet-name>
-    <servlet-class>com.openkm.servlet.extension.StaplingServlet</servlet-class>
+    <servlet-class>com.openkm.extension.servlet.StaplingServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>StaplingDownloadServlet</servlet-name>
-    <servlet-class>com.openkm.servlet.extension.StaplingDownloadServlet</servlet-class>
+    <servlet-class>com.openkm.extension.servlet.StaplingDownloadServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>ContactServlet</servlet-name>
-    <servlet-class>com.openkm.servlet.extension.ContactServlet</servlet-class>
+    <servlet-class>com.openkm.extension.servlet.ContactServlet</servlet-class>
   </servlet>
   
   <!-- Misc servlets -->
