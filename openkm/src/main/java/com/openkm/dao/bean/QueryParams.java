@@ -7,6 +7,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.openkm.dao.bean.extension.ProposedQueryReceived;
+import com.openkm.dao.bean.extension.ProposedQuerySent;
+
 public class QueryParams implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
