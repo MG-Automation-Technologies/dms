@@ -38,11 +38,11 @@
     </set>
     <set name="proposedSent" table="OKM_PROP_QUERY_SENT" order-by="PQS_ID asc" cascade="all-delete-orphan" lazy="false">
       <key column="PQS_QUERY"/>
-      <one-to-many class="com.openkm.dao.bean.extension.ProposedQuerySent"/>
+      <one-to-many class="com.openkm.extension.dao.bean.ProposedQuerySent"/>
     </set>
     <set name="proposedReceived" table="OKM_PROP_QUERY_RECEIVED" order-by="PQR_ID asc" cascade="all-delete-orphan" lazy="false">
       <key column="PQR_QUERY"/>
-      <one-to-many class="com.openkm.dao.bean.extension.ProposedQueryReceived"/>
+      <one-to-many class="com.openkm.extension.dao.bean.ProposedQueryReceived"/>
     </set>
   </class>
 </hibernate-mapping>
