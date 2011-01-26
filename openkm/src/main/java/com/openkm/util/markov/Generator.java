@@ -1,0 +1,80 @@
+/**
+ *  OpenKM, Open Document Management System (http://www.openkm.com)
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
+ *
+ *  No bytes were intentionally harmed during the development of this application.
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
+package com.openkm.util.markov;
+
+import java.io.Reader;
+import java.io.Writer;
+import java.util.Random;
+
+/**
+ * Creates a Markov graph from an input file and generates text
+ * based on it. Given two input files, generates two graphs
+ * and interpolates between them.
+ * 
+ * @author Lawrence Kesteloot
+ * @author Paco Avila
+ */
+public class Generator {
+	private static final int DEFAULT_PREFIX_LENGTH = 4;
+	private static final int LINE_WIDTH = 65;
+	private static final int TOTAL_CHARACTERS = 300;
+	
+	public static void generate(Reader in, Writer out) throws Exception {
+		generate(DEFAULT_PREFIX_LENGTH, in, out);
+	}
+	
+	public static void generate(int prefixLength, Reader in, Writer out) throws Exception {
+		Markov markov1 = new Markov(in, prefixLength);
+		Random random = new Random();
+		CharQueue queue = new CharQueue(prefixLength);
+		float weight = 0;
+		int width = prefixLength;
+		int c;
+		
+		queue.set(markov1.getBootstrapPrefix());
+		out.write(queue.toString());
+		
+		do {
+			String prefix = queue.toString();
+
+			// get a character from each chain
+			c = markov1.get(prefix, random);
+
+			if (c == -1) {
+				break;
+			}
+
+			out.write((char)c);
+			queue.put((char)c);
+			width++;
+			
+			// line wrap
+			if (c == ' ' && width > LINE_WIDTH) {
+				out.write("\n");
+				width = 0;
+			}
+
+			// go towards second markov chain
+			weight += 1.0/TOTAL_CHARACTERS;
+		} while (weight < 1 || c != '.');
+	}
+}
