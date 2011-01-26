@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="com.openkm.servlet.admin.BaseServlet" %>
+<%@ page import="com.openkm.core.Config" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -11,7 +12,7 @@
   <title>Workflow Process Definition Browser</title>
 </head>
 <body>
-  <c:set var="isAdmin"><%=BaseServlet.isAdmin(request)%></c:set>
+  <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
       <c:url value="Workflow" var="urlProcessDefinitionList">
@@ -45,19 +46,15 @@
             </td>
           </tr>
         </c:forEach>
-        <tr class="fuzzy">
-          <td colspan="5" align="right">
-            <form action="RegisterWorkflow" method="post" enctype="multipart/form-data">
-              <table>
-                <tr>
-                  <td><input class=":required :only_on_blur" type="file" name="definition"/></td>
-                  <td><input type="submit" value="Register process definition"/></td>
-                </tr>
-              </table>
-            </form>
-          </td>
-        </tr>
       </table>
+      <br/>
+      <h2 style="text-align: center">Upload process definition</h2>
+      <form action="RegisterWorkflow" method="post" enctype="multipart/form-data">
+        <table class="form">
+          <tr><td><input type="file" name="definition"/></td></tr>
+          <tr><td align="right"><input type="submit" value="Upload"/></td></tr>
+        </table>
+      </form>
     </c:when>
     <c:otherwise>
       <div class="error"><h3>Only admin users allowed</h3></div>

@@ -22,11 +22,8 @@
 package com.openkm.bean;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author pavila
@@ -46,8 +43,7 @@ public class Folder implements Serializable {
 	private byte permissions;
 	private String uuid;
 	private boolean subscribed;
-	private Set<String> subscriptors = new HashSet<String>();
-	private List<Note> notes = new ArrayList<Note>();
+	private List<String> subscriptors;
 	
 	public boolean getHasChilds() {
 		return hasChilds;
@@ -97,11 +93,11 @@ public class Folder implements Serializable {
 		this.subscribed = subscribed;
 	}
 
-	public Set<String> getSubscriptors() {
+	public List<String> getSubscriptors() {
 		return subscriptors;
 	}
 
-	public void setSubscriptors(Set<String> subscriptors) {
+	public void setSubscriptors(List<String> subscriptors) {
 		this.subscriptors = subscriptors;
 	}
 
@@ -113,14 +109,6 @@ public class Folder implements Serializable {
 		this.uuid = uuid;
 	}
 	
-	public List<Note> getNotes() {
-		return notes;
-	}
-
-	public void setNotes(List<Note> notes) {
-		this.notes = notes;
-	}
-	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -130,7 +118,6 @@ public class Folder implements Serializable {
 		sb.append(", hasChilds="); sb.append(hasChilds);
 		sb.append(", subscribed="); sb.append(subscribed);
 		sb.append(", uuid="); sb.append(uuid);
-		sb.append(", notes="); sb.append(notes);
 		sb.append("}");
 		return sb.toString();
 	}

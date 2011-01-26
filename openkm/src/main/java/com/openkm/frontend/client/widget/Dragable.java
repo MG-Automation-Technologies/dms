@@ -45,7 +45,7 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.contants.service.RPCService;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import com.openkm.frontend.client.service.OKMFolderService;
@@ -139,7 +139,7 @@ public class Dragable extends Composite implements OriginPanel {
 	                                
 	                                // Move the folder
 	                                ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-									endPoint.setServiceEntryPoint(RPCService.FolderService);
+									endPoint.setServiceEntryPoint(Config.OKMFolderService);
 	                                folderService.move( fldPath, dstPath, new AsyncCallback<Object>() {
 		                            		public void onSuccess(Object result) {		
 		                            			// Sets the folder new path itself and childs
@@ -206,7 +206,7 @@ public class Dragable extends Composite implements OriginPanel {
 		                                    
 		                            		// Move the folder
 		                                    ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-		    								endPoint.setServiceEntryPoint(RPCService.FolderService);
+		    								endPoint.setServiceEntryPoint(Config.OKMFolderService);
 		                                    folderService.move( fldPath, dstPath, new AsyncCallback<Object>() {
 				                            		public void onSuccess(Object result) {		
 				                            			// Sets the folder new path ( parent and itself ) recursive for itself and childs
@@ -236,7 +236,7 @@ public class Dragable extends Composite implements OriginPanel {
 		                        		
 		                        		// Move the document
 		                        		ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
-		    							endPoint.setServiceEntryPoint(RPCService.DocumentService);
+		    							endPoint.setServiceEntryPoint(Config.OKMDocumentService);
 		    							documentService.move( gwtDocument.getPath(),dstPath, callbackMove);
 		    							
 		    							// refresh file browser
@@ -248,7 +248,7 @@ public class Dragable extends Composite implements OriginPanel {
 		                        		
 		                        		// Move the document
 		                        		ServiceDefTarget endPoint = (ServiceDefTarget) mailService;
-		    							endPoint.setServiceEntryPoint(RPCService.MailService);
+		    							endPoint.setServiceEntryPoint(Config.OKMMailService);
 		    							mailService.move( gwtMail.getPath(),dstPath, callbackMove);
 		    							
 		    							// refresh file browser

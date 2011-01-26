@@ -38,7 +38,6 @@ import com.openkm.util.MailUtils;
 public class UserMailImporter extends TimerTask {
 	private static Logger log = LoggerFactory.getLogger(UserMailImporter.class);
 
-	@Override
 	public void run() {
 		log.info("*** UserMailImporter activated ***");
         

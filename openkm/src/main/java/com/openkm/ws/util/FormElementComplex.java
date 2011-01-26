@@ -180,7 +180,7 @@ public class FormElementComplex implements Serializable {
 	public static FormElement toFormElement(FormElementComplex fec) {
 		log.debug("toFormElement({})", fec);
 		FormElement fe = new FormElement();
-				
+		
 		if (Input.class.getName().equals(fec.getObjClass())) {
 			fe = new Input();
 			((Input) fe).setType(fec.getType());

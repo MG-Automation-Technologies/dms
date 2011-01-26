@@ -77,7 +77,7 @@ public class DirectScriptingModule implements ScriptingModule {
 				sNode.save();
 
 				// Activity log
-				UserActivity.log(session.getUserID(), "SET_SCRIPT", node.getUUID(), nodePath);
+				UserActivity.log(session.getUserID(), "SET_SCRIPT", nodePath, null);
 			} else {
 				throw new AccessDeniedException("Sorry, only for admin user");
 			}
@@ -131,7 +131,7 @@ public class DirectScriptingModule implements ScriptingModule {
 				}
 
 				// Activity log
-				UserActivity.log(session.getUserID(), "REMOVE_SCRIPT", node.getUUID(), nodePath);
+				UserActivity.log(session.getUserID(), "REMOVE_SCRIPT", nodePath, null);
 			} else {
 				throw new AccessDeniedException("Sorry, only for admin user");
 			}

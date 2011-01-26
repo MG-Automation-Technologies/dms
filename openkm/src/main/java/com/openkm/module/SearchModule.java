@@ -130,22 +130,13 @@ public interface SearchModule {
 			RepositoryException, DatabaseException;
 	
 	/**
-	 * Updated a saved search.
-	 * 
-	 * @param params The query params.
-	 * @param name The name of the query to be saved.
-	 * @throws RepositoryException If there is any general repository problem or the query fails.
-	 */
-	public void updateSearch(String token, QueryParams params) throws AccessDeniedException,
-			RepositoryException, DatabaseException;
-	
-	/**
 	 * Get a saved search.
 	 * 
 	 * @param name The name of the saved search to retrieve.
 	 * @return The saved search query params.
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
+	@Deprecated
 	public QueryParams getSearch(String token, int qpId) throws PathNotFoundException, RepositoryException, 
 			DatabaseException;
 	
@@ -164,8 +155,8 @@ public interface SearchModule {
 	 * @throws PathNotFoundException If there is no saved search with this name.
 	 * @throws RepositoryException If there is any general repository problem or the query fails
 	 */
-	public void deleteSearch(String token, int qpId) throws AccessDeniedException, RepositoryException,
-			DatabaseException;
+	public void deleteSearch(String token, int qpId) throws AccessDeniedException, PathNotFoundException,
+			RepositoryException, DatabaseException;
 	
 	/**
 	 * Return a Keyword map. This is a hash with the keywords and the occurrence.

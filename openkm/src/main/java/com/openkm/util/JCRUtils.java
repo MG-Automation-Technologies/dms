@@ -36,8 +36,6 @@ import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 import javax.jcr.Workspace;
-import javax.jcr.lock.Lock;
-import javax.jcr.lock.LockException;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
@@ -51,12 +49,9 @@ import org.apache.jackrabbit.api.jsr283.security.AccessControlManager;
 import org.apache.jackrabbit.api.jsr283.security.AccessControlPolicy;
 import org.apache.jackrabbit.api.jsr283.security.AccessControlPolicyIterator;
 import org.apache.jackrabbit.api.jsr283.security.Privilege;
-import org.apache.jackrabbit.core.NodeImpl;
 import org.apache.jackrabbit.core.RepositoryCopier;
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.SessionImpl;
-import org.apache.jackrabbit.core.lock.LockManager;
-import org.apache.jackrabbit.core.lock.LockManagerImpl;
 import org.apache.jackrabbit.core.security.principal.PrincipalImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,10 +69,7 @@ import com.openkm.module.direct.DirectRepositoryModule;
 
 public class JCRUtils {
 	private static Logger log = LoggerFactory.getLogger(JCRUtils.class);
-	private static long activeSessions = 0;
-	private static long sessionCreationCount = 0;
-	private static long sessionDestroyCount = 0;
-	
+
 	/**
 	 * 
 	 */
@@ -170,16 +162,13 @@ public class JCRUtils {
 	
 	/**
 	 * Make a silent logout
-	 * See http://jackrabbit.510166.n4.nabble.com/Lock-token-not-being-added-to-session-td2018601.html
 	 */
 	public static void logout(Session session) {
 		if (session != null && session.isLive()) {
 			for (String lt: session.getLockTokens()) {
-				log.debug("Remove LockToken: {}", lt);
 				session.removeLockToken(lt);
 			}
 			session.logout();
-			log.debug("#{} - {} Destroy session {} from {}", new Object[] { ++sessionDestroyCount, --activeSessions, session, StackTraceUtils.whoCalledMe() });
 		}
 	}
 	
@@ -220,21 +209,6 @@ public class JCRUtils {
 	}
 	
 	/**
-	 * Obtain lock token from node
-	 */
-	public static String getLockToken(Session session, Node node) throws LockException, 
-			javax.jcr.RepositoryException {
-		LockManager lm = ((SessionImpl)session).getLockManager();
-		Lock lock = ((LockManagerImpl) lm).getLock((NodeImpl)node);
-		
-		if (lock != null) {
-			return lock.getLockToken();
-		} else {
-			return null;
-		}
-	}
-	
-	/**
 	 * Obtain lock token from node id
 	 */
 	public static String getLockToken(String id) {
@@ -247,8 +221,6 @@ public class JCRUtils {
 	
 	/**
 	 * Calculate check digit for lock token
-	 * 
-	 * @see org.apache.jackrabbit.core.lock.LockToken.getCheckDigit(String uuid)
 	 */
 	private static char getCheckDigit(String uuid) {
         int result = 0;
@@ -302,7 +274,7 @@ public class JCRUtils {
 	public static File hotBackup() throws RepositoryException, IOException {
 		log.debug("hotBackup()");
 		String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-		String backDirName = Config.CONTEXT + "_" + date; 
+		String backDirName = "OpenKM" + Config.INSTALL + "_" + date; 
 		File backDir = new File(System.getProperty("java.io.tmpdir") + File.separator + backDirName);
 		FileUtils.deleteQuietly(backDir);
 		backDir.mkdir();
@@ -357,7 +329,6 @@ public class JCRUtils {
 			throw (javax.jcr.LoginException) obj;
 		} else if (obj instanceof javax.jcr.Session) {
 			Session session = (javax.jcr.Session) obj;
-			log.debug("#{} - {} Create session {} from {}", new Object[] { ++sessionCreationCount, ++activeSessions, session, StackTraceUtils.whoCalledMe() });
 			DirectAuthModule.loadUserData(session);
 			return session;
 		} else {
@@ -407,7 +378,7 @@ public class JCRUtils {
 		String qs = "/jcr:root//element(*, okm:document)[okm:content/@okm:author='"+session.getUserID()+"']";
 		Workspace workspace = session.getWorkspace();
 		QueryManager queryManager = workspace.getQueryManager();
-		Query query = queryManager.createQuery(qs, Query.XPATH);
+		Query query = queryManager.createQuery(qs, "xpath");
 		QueryResult result = query.execute();
 		long size = 0;
 		

@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.JcrSessionInfo;
 import com.openkm.core.JcrSessionManager;
 import com.openkm.util.UserActivity;
-import com.openkm.util.WebUtils;
+import com.openkm.util.WebUtil;
 
 /**
  * Active sessions servlet
@@ -50,7 +50,7 @@ public class ActiveSessionsServlet extends BaseServlet {
 		log.debug("doGet({}, {})", request, response);
 		ServletContext sc = getServletContext();
 		request.setCharacterEncoding("UTF-8");
-		String action = WebUtils.getString(request, "action");
+		String action = WebUtil.getString(request, "action");
 		updateSessionManager(request);
 		
 		if (action.equals("logout")) {
@@ -69,7 +69,7 @@ public class ActiveSessionsServlet extends BaseServlet {
 	 * Force session logout
 	 */
 	private void logout(HttpServletRequest request, HttpServletResponse response) {
-		String token = WebUtils.getString(request, "token");
+		String token = WebUtil.getString(request, "token");
 		Session session = JcrSessionManager.getInstance().get(token);
 		
 		if (session != null && session.isLive()) {

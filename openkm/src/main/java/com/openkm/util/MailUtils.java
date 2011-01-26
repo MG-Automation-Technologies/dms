@@ -85,9 +85,9 @@ import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VirusDetectedException;
+import com.openkm.dao.bean.FilterRule;
 import com.openkm.dao.bean.MailAccount;
 import com.openkm.dao.bean.MailFilter;
-import com.openkm.dao.bean.MailFilterRule;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.pop3.POP3Folder;
 
@@ -295,7 +295,7 @@ public class MailUtils {
 			}
 		}
         
-        m.setContent(content);
+        m.setContent(content);		
 		Transport.send(m);
 		log.debug("send: void");
 	}
@@ -466,40 +466,40 @@ public class MailUtils {
 	/**
 	 * Check mail import rules
 	 */
-	private static boolean checkRules(com.openkm.bean.Mail mail, Set<MailFilterRule> filterRules) {
+	private static boolean checkRules(com.openkm.bean.Mail mail, Set<FilterRule> filterRules) {
 		log.info("checkRules({}, {})", mail, filterRules);
 		boolean ret = true;
 		
-		for (MailFilterRule fr : filterRules) {
+		for (FilterRule fr : filterRules) {
 			log.info("FilterRule: {}", fr);
 			
 			if (fr.isActive()) {
-				if (MailFilterRule.FIELD_FROM.equals(fr.getField())) {
-					if (MailFilterRule.OPERATION_CONTAINS.equals(fr.getOperation())) {
+				if (FilterRule.FIELD_FROM.equals(fr.getField())) {
+					if (FilterRule.OPERATION_CONTAINS.equals(fr.getOperation())) {
 						ret &= mail.getFrom().toLowerCase().contains(fr.getValue().toLowerCase());
-					} else if (MailFilterRule.OPERATION_EQUALS.equals(fr.getOperation())) {
+					} else if (FilterRule.OPERATION_EQUALS.equals(fr.getOperation())) {
 						ret &= mail.getFrom().equalsIgnoreCase(fr.getValue());
 					}
-				} else if (MailFilterRule.FIELD_TO.equals(fr.getField())) {
-					if (MailFilterRule.OPERATION_CONTAINS.equals(fr.getOperation())) {
+				} else if (FilterRule.FIELD_TO.equals(fr.getField())) {
+					if (FilterRule.OPERATION_CONTAINS.equals(fr.getOperation())) {
 						for (int j=0; j<mail.getTo().length; j++) {
 							ret &= mail.getTo()[j].toLowerCase().contains(fr.getValue().toLowerCase());
 						}
-					} else if (MailFilterRule.OPERATION_EQUALS.equals(fr.getOperation())) {
+					} else if (FilterRule.OPERATION_EQUALS.equals(fr.getOperation())) {
 						for (int j=0; j<mail.getTo().length; j++) {
 							ret &= mail.getTo()[j].equalsIgnoreCase(fr.getValue());
 						}
 					}
-				} else if (MailFilterRule.FIELD_SUBJECT.equals(fr.getField())) {
-					if (MailFilterRule.OPERATION_CONTAINS.equals(fr.getOperation())) {
+				} else if (FilterRule.FIELD_SUBJECT.equals(fr.getField())) {
+					if (FilterRule.OPERATION_CONTAINS.equals(fr.getOperation())) {
 						ret &= mail.getSubject().toLowerCase().contains(fr.getValue().toLowerCase());
-					} else if (MailFilterRule.OPERATION_EQUALS.equals(fr.getOperation())) {
+					} else if (FilterRule.OPERATION_EQUALS.equals(fr.getOperation())) {
 						ret &= mail.getSubject().equalsIgnoreCase(fr.getValue());
 					}
-				} else if (MailFilterRule.FIELD_CONTENT.equals(fr.getField())) {
-					if (MailFilterRule.OPERATION_CONTAINS.equals(fr.getOperation())) {
+				} else if (FilterRule.FIELD_CONTENT.equals(fr.getField())) {
+					if (FilterRule.OPERATION_CONTAINS.equals(fr.getOperation())) {
 						ret &= mail.getContent().toLowerCase().contains(fr.getValue().toLowerCase());
-					} else if (MailFilterRule.OPERATION_EQUALS.equals(fr.getOperation())) {
+					} else if (FilterRule.OPERATION_EQUALS.equals(fr.getOperation())) {
 						ret &= mail.getContent().equalsIgnoreCase(fr.getValue());
 					}
 				}
@@ -649,9 +649,6 @@ public class MailUtils {
 	
 	/**
 	 * User tinyurl service as url shorter
-	 * 
-	 * Depends on commons-httpclient:commons-httpclient:jar:3.0 
-	 * because of org.apache.jackrabbit:jackrabbit-webdav:jar:1.6.4
 	 */
 	public static String getTinyUrl(String fullUrl) throws HttpException, IOException {
 		HttpClient httpclient = new HttpClient();

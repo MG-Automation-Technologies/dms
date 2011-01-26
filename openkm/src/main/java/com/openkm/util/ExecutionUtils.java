@@ -21,12 +21,10 @@
 
 package com.openkm.util;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.Arrays;
 
@@ -162,49 +160,4 @@ public class ExecutionUtils {
     	log.debug("runJar: {}", ret!=null?ret.toString():"null");
         return ret;
 	}
-    
-    /**
-     * Execute command line
-     */
-    public static int runCmd(String cmd[], String stdout, String stderr) {
-    	log.debug("runCmd({})", Arrays.toString(cmd));
-    	StringBuilder sb = new StringBuilder();
-    	BufferedReader br = null;
-    	String line;
-    	int ret = 0;
-    	
-    	try {
-    		long start = System.currentTimeMillis();
-    		ProcessBuilder pb = new ProcessBuilder(cmd);
-    		Process process = pb.start();
-    		br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-    		
-    		while ((line = br.readLine()) != null) {
-    			sb.append(line);
-    		}
-    		
-    		process.waitFor();
-    		
-    		// Check return code
-    		if (process.exitValue() != 0) {
-    			log.warn("Abnormal program termination: {}", process.exitValue());
-    		} else {
-    			log.debug("Normal program termination");
-    		}
-    		
-    		process.destroy();
-    		log.debug("Elapse time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
-    		stderr = IOUtils.toString(process.getErrorStream());
-    		ret = process.exitValue();
-    		stderr = sb.toString();
-    		stderr = IOUtils.toString(process.getErrorStream());
-    	} catch (Exception e) {
-			log.warn(Arrays.toString(cmd));
-			log.warn("Failed to extract OCR text", e);
-    	} finally {
-    		IOUtils.closeQuietly(br);
-    	}
-    	
-    	return ret;
-    }
 }

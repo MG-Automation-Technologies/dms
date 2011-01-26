@@ -64,9 +64,8 @@ import com.openkm.frontend.client.bean.GWTPropertyParams;
 import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.bean.GWTSelect;
 import com.openkm.frontend.client.bean.GWTTextArea;
-import com.openkm.frontend.client.contants.service.RPCService;
-import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
-import com.openkm.frontend.client.contants.ui.UISearchConstants;
+import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 import com.openkm.frontend.client.service.OKMSearchService;
@@ -168,7 +167,7 @@ public class SearchIn extends Composite {
 	private String personalContextValue = "";
 	private String mailContextValue = "";
 	private String templatesContextValue = "";
-//	private String taxonomyContextValue = "";
+	private String taxonomyContextValue = "";
 	
 	/**
 	 * SearchIn
@@ -222,12 +221,12 @@ public class SearchIn extends Composite {
 				switch (calendarFired) {
 					case CALENDAR_FIRED_START:
 						startDate.setText(dtf.format(calendar.getDate()));
-						modifyDateFrom = (Date)calendar.getDate().clone();
+						modifyDateFrom = (Date) calendar.getDate().clone();
 						break;
 					
 					case CALENDAR_FIRED_END:
 						endDate.setText(dtf.format(calendar.getDate()));
-						modifyDateTo = (Date)calendar.getDate().clone();
+						modifyDateTo = (Date) calendar.getDate().clone();
 						break;
 				}
 				calendarFired = CALENDAR_FIRED_NONE;
@@ -1232,20 +1231,20 @@ public class SearchIn extends Composite {
 	 */
 	public void setContextValue(String contextValue, int stackView){
 		switch (stackView) {
-		 	case UIDesktopConstants.NAVIGATOR_TAXONOMY:
-//		 		taxonomyContextValue = contextValue;
+		 	case PanelDefinition.NAVIGATOR_TAXONOMY:
+		 		taxonomyContextValue = contextValue;
 		 		context.setValue(posTaxonomy,contextValue);
 		 		break;
 		 	
-		 	case UIDesktopConstants.NAVIGATOR_TEMPLATES:
+		 	case PanelDefinition.NAVIGATOR_TEMPLATES:
 		 		templatesContextValue = contextValue;
 		 		if (templatesVisible) {
-		 			posTemplates = context.getItemCount(); // Item count by default is good id, 0 is first item, etc...
+		 			posTemplates = context.getItemCount(); 
 		 			context.addItem(Main.i18n("leftpanel.label.templates"), templatesContextValue);
 		 		}
 		 		break;
 		 		
-		 	case UIDesktopConstants.NAVIGATOR_PERSONAL:
+		 	case PanelDefinition.NAVIGATOR_PERSONAL:
 		 		personalContextValue = contextValue;
 		 		if (personalVisible) {
 		 			posPersonal = context.getItemCount(); 
@@ -1253,7 +1252,7 @@ public class SearchIn extends Composite {
 		 		}
 		 		break;
 		 		
-		 	case UIDesktopConstants.NAVIGATOR_MAIL:
+		 	case PanelDefinition.NAVIGATOR_MAIL:
 		 		mailContextValue = contextValue;
 		 		if (mailVisible) {
 		 			posMail = context.getItemCount(); 
@@ -1261,7 +1260,7 @@ public class SearchIn extends Composite {
 		 		}
 		 		break;
 		 		
-		 	case UIDesktopConstants.NAVIGATOR_TRASH:
+		 	case PanelDefinition.NAVIGATOR_TRASH:
 		 		trashContextValue = contextValue;
 		 		if (trashVisible) {
 		 			posTrash = context.getItemCount(); 
@@ -1311,7 +1310,7 @@ public class SearchIn extends Composite {
 	 */
 	public void getAllUsers() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-		endPoint.setServiceEntryPoint(RPCService.AuthService);	
+		endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 		authService.getAllUsers(callbackGetAllUsers);
 	}
 	
@@ -1332,11 +1331,11 @@ public class SearchIn extends Composite {
 			params.setId(result.intValue());
 			if (userNews) {
 				Main.get().mainPanel.search.historySearch.userNews.addNewSavedSearch(params);
-				Main.get().mainPanel.search.historySearch.stackPanel.showStack(UISearchConstants.SEARCH_USER_NEWS);
+				Main.get().mainPanel.search.historySearch.stackPanel.showStack(PanelDefinition.SEARCH_USER_NEWS);
 				Main.get().mainPanel.dashboard.newsDashboard.getUserSearchs(true);
 			} else {
 				Main.get().mainPanel.search.historySearch.searchSaved.addNewSavedSearch(params);
-				Main.get().mainPanel.search.historySearch.stackPanel.showStack(UISearchConstants.SEARCH_SAVED);
+				Main.get().mainPanel.search.historySearch.stackPanel.showStack(PanelDefinition.SEARCH_SAVED);
 			}
 			
 			searchSavedName.setText(""); // Clean name atfer saved
@@ -1355,7 +1354,7 @@ public class SearchIn extends Composite {
 	public void saveSearch(GWTQueryParams params, String type) {
 		status.setFlag_saveSearch();
 		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
-		endPoint.setServiceEntryPoint(RPCService.SearchService);
+		endPoint.setServiceEntryPoint(Config.OKMSearchService);
 		searchService.saveSearch(params, type, callbackSaveSearch);
 	}	
 	
@@ -1395,15 +1394,15 @@ public class SearchIn extends Composite {
 	public int getSelectedView() {
 		int index = context.getSelectedIndex();
 		if (index==posTaxonomy) {
-			return UIDesktopConstants.NAVIGATOR_TAXONOMY;
+			return PanelDefinition.NAVIGATOR_TAXONOMY;
 		} else if (index==posTemplates) {
-			return UIDesktopConstants.NAVIGATOR_TEMPLATES;
+			return PanelDefinition.NAVIGATOR_TEMPLATES;
 		} else if (index==posPersonal) {
-			return UIDesktopConstants.NAVIGATOR_PERSONAL;
+			return PanelDefinition.NAVIGATOR_PERSONAL;
 		} else if (index==posMail) {
-			return UIDesktopConstants.NAVIGATOR_MAIL;
+			return PanelDefinition.NAVIGATOR_MAIL;
 		} else {
-			return UIDesktopConstants.NAVIGATOR_TRASH;
+			return PanelDefinition.NAVIGATOR_TRASH;
 		}
 	}
 }

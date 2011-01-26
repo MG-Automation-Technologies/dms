@@ -38,11 +38,14 @@ import com.openkm.frontend.client.bean.GWTResultSet;
 public interface OKMSearchService extends RemoteService {
 		
 	public List<GWTQueryParams> getAllSearchs() throws OKMException; 
+	
 	public Integer saveSearch(GWTQueryParams params, String type) throws OKMException;
+	
 	public void deleteSearch(int id) throws OKMException;
+	
 	public GWTResultSet findPaginated(GWTQueryParams params, int offset, int limit)  throws OKMException;
+	
 	public List<GWTKeyword> getKeywordMap(List<String> filter) throws OKMException;
-	public GWTResultSet find(GWTQueryParams params) throws OKMException;
-	public void share(int qpId) throws OKMException;
-	public void unshare(int qpId) throws OKMException;
+	
+	public GWTResultSet find(GWTQueryParams params)  throws OKMException;
 }

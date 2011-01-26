@@ -37,13 +37,9 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
-import com.openkm.extension.frontend.client.widget.digitalsignature.DigitalSignature;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
-import com.openkm.frontend.client.contants.service.RPCService;
-import com.openkm.frontend.client.service.OKMDocumentService;
-import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
 import com.openkm.frontend.client.widget.propertygroup.PropertyGroupWidget;
@@ -59,30 +55,23 @@ import com.openkm.frontend.client.widget.propertygroup.WidgetToFire;
 public class WizardPopup extends DialogBox {
 	
 	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT.create(OKMPropertyGroupService.class);
-	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
 	
 	private static final int STATUS_NONE 				= -1;
 	private static final int STATUS_ADD_PROPERTY_GROUPS = 0;
 	private static final int STATUS_PROPERTY_GROUPS 	= 1;
-	private static final int STATUS_WORKFLOWS 			= 2;
-	private static final int STATUS_CATEGORIES 			= 3;
-	private static final int STATUS_KEYWORDS 			= 4;
-	private static final int STATUS_DIGITAL_SIGNATURE 	= 5;
-	private static final int STATUS_FINISH 				= 6;
+	private static final int STATUS_CATEGORIES 			= 2;
+	private static final int STATUS_KEYWORDS 			= 3;
+	private static final int STATUS_FINISH 				= 4;
 	
 	private FiredVerticalPanel vPanelFired;
 	private String docPath = "";
 	private List<GWTPropertyGroup> groupsList = null;
-	private List<Double> workflowsList = null;
 	private int groupIndex = 0;
-	private int workflowIndex = 0;
 	private PropertyGroupWidget propertyGroupWidget = null;
-	private WorkflowWidget workflowWidget= null;
 	private int status = STATUS_NONE;
-	public Button actualButton;
+	private Button actualButton;
 	public KeywordsWidget keywordsWidget;
 	public CategoriesWidget categoriesWidget;
-	public GWTDocument docToSign = null;
 	
 	/**
 	 * WizardPopup
@@ -112,17 +101,11 @@ public class WizardPopup extends DialogBox {
 		actualButton = new Button("");
 		actualButton.setEnabled(false);
 		this.docPath = docPath;
-		docToSign = null;
 		status = STATUS_ADD_PROPERTY_GROUPS;
 		
 		// Wizard
 		groupIndex = 0;
 		groupsList = Main.get().workspaceUserProperties.getWorkspace().getWizardPropertyGroupsList();
-		
-		// workflow 
-		workflowIndex = 0;
-		workflowsList = Main.get().workspaceUserProperties.getWorkspace().getWizardWorkflowsList();
-		
 		addPropertyGroups();
 	}
 	
@@ -152,15 +135,15 @@ public class WizardPopup extends DialogBox {
 		if (groupsList!=null && groupsList.size()>groupIndex) {
 			status = STATUS_PROPERTY_GROUPS;
 			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-			endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
+			endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
 			propertyGroupService.addGroup(docPath, groupsList.get(groupIndex).getName(), callbackAddGroup);
 			
 		} else if(groupsList==null || (groupsList!=null && groupsList.isEmpty() )) {
-			status = STATUS_WORKFLOWS;
+			status = STATUS_CATEGORIES;
 			showNextWizard();
 			
 		} else if(groupsList.size()==0) {
-			status = STATUS_WORKFLOWS;
+			status = STATUS_CATEGORIES;
 			showNextWizard();
 		}
 	}
@@ -187,55 +170,14 @@ public class WizardPopup extends DialogBox {
 		propertyGroupWidget.getProperties();
 	}
 	
-	public void getWorkflows() {
-		HorizontalPanel hPanel = new HorizontalPanel();
-		HTML space = new HTML("");
-		hPanel.add(actualButton);
-		hPanel.add(space);
-		hPanel.setCellWidth(space, "3");
-		workflowWidget = new WorkflowWidget(workflowsList.get(workflowIndex).doubleValue(), docPath);
-		vPanelFired.clear();
-		vPanelFired.add(workflowWidget);
-		vPanelFired.add(hPanel);
-		HTML space2 = new HTML("");
-		vPanelFired.add(space2);
-		vPanelFired.setCellVerticalAlignment(workflowWidget, HasAlignment.ALIGN_TOP);
-		vPanelFired.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_RIGHT);
-		vPanelFired.setCellHeight(space2, "5");
-		workflowWidget.runProcessDefinition();
-	}
-	
 	/**
 	 * showNextWizard
 	 */
-	public void showNextWizard() {
+	private void showNextWizard() {
 		switch (status) {
 			case STATUS_PROPERTY_GROUPS:
 				if (groupsList!=null && groupsList.size()>groupIndex) {
 					if (groupsList.size()==groupIndex+1) {
-						// Case last property group to be added
-						if (!Main.get().workspaceUserProperties.getWorkspace().isWizardWorkflows() &&
-							!Main.get().workspaceUserProperties.getWorkspace().isWizardCategories() && 
-							!Main.get().workspaceUserProperties.getWorkspace().isWizardKeywords()) {
-							actualButton = acceptButton();
-						} else {
-							actualButton = nextButton();
-						}
-					} else {
-						actualButton = nextButton();
-					}
-					getProperties();
-					groupIndex++;
-				} else {
-					// Forward to next status
-					status = STATUS_WORKFLOWS;
-					showNextWizard();
-				}
-				break;
-			
-			case STATUS_WORKFLOWS:
-				if (workflowsList!=null && workflowsList.size()>workflowIndex) {
-					if (workflowsList.size()==workflowIndex+1) {
 						// Case last property group to be added
 						if (!Main.get().workspaceUserProperties.getWorkspace().isWizardCategories() && 
 							!Main.get().workspaceUserProperties.getWorkspace().isWizardKeywords()) {
@@ -246,8 +188,8 @@ public class WizardPopup extends DialogBox {
 					} else {
 						actualButton = nextButton();
 					}
-					getWorkflows();
-					workflowIndex++;
+					getProperties();
+					groupIndex++;
 				} else {
 					// Forward to next status
 					status = STATUS_CATEGORIES;
@@ -273,29 +215,6 @@ public class WizardPopup extends DialogBox {
 				if (Main.get().workspaceUserProperties.getWorkspace().isWizardKeywords()) {
 					actualButton = acceptButton();
 					setKeywords();
-				} else {
-					status = STATUS_DIGITAL_SIGNATURE;
-					showNextWizard();
-				}
-				break;
-				
-			case STATUS_DIGITAL_SIGNATURE:
-				if (Main.get().fileUpload.isDigitalSignature()) {
-					Main.get().fileUpload.hide(); // Ensure fileUpload is hidden
-					ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
-					endPoint.setServiceEntryPoint(RPCService.DocumentService);	
-					documentService.get(docPath, new AsyncCallback<GWTDocument>() {
-						@Override
-						public void onSuccess(GWTDocument result) {
-							docToSign = result;
-							DigitalSignature.get().sign();
-						}
-						@Override
-						public void onFailure(Throwable caught) {
-							Main.get().showError("get", caught);
-						}
-					});
-					status = STATUS_FINISH;
 				} else {
 					status = STATUS_FINISH;
 					showNextWizard();
@@ -350,12 +269,6 @@ public class WizardPopup extends DialogBox {
 			case STATUS_PROPERTY_GROUPS:
 				if (propertyGroupWidget!=null) {
 					propertyGroupWidget.setProperties();
-				}
-				break;
-				
-			case STATUS_WORKFLOWS:
-				if (workflowWidget!=null) {
-					workflowWidget.runProcessDefinition();
 				}
 				break;
 				
@@ -425,7 +338,7 @@ public class WizardPopup extends DialogBox {
 	 * 
 	 * Ensures fileupload is hiden and panel is centered
 	 */
-	public void changeView() {
+	private void changeView() {
 		Main.get().fileUpload.hide();
 		center();
 	}
@@ -511,14 +424,5 @@ public class WizardPopup extends DialogBox {
 	 */
 	public void langRefresh() {
 		setText(Main.i18n("wizard.document.uploading"));
-	}
-	
-	/**
-	 * getDocumentToSign
-	 * 
-	 * @return
-	 */
-	public GWTDocument getDocumentToSign() {
-		return docToSign;
 	}
 }

@@ -36,8 +36,8 @@ import com.google.gwt.user.client.ui.TreeItem;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.contants.service.RPCService;
-import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
+import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMFolderService;
 import com.openkm.frontend.client.service.OKMFolderServiceAsync;
 import com.openkm.frontend.client.service.OKMRepositoryService;
@@ -115,18 +115,18 @@ public class FolderSelectTree extends Composite {
 		int mainPanelView = Main.get().mainPanel.desktop.navigator.getStackIndex();
 		
 		switch (mainPanelView){
-			case UIDesktopConstants.NAVIGATOR_TAXONOMY :
-			case UIDesktopConstants.NAVIGATOR_TRASH :
+			case PanelDefinition.NAVIGATOR_TAXONOMY :
+			case PanelDefinition.NAVIGATOR_TRASH :
 				Main.get().activeFolderTree.folderSelectPopup.enableTaxonomy();
 				getRoot();
 				break;
 			
-			case UIDesktopConstants.NAVIGATOR_CATEGORIES :
+			case PanelDefinition.NAVIGATOR_CATEGORIES :
 				Main.get().activeFolderTree.folderSelectPopup.enableCategories();
 				getCategoriesFolder();
 				break;
 				
-			case UIDesktopConstants.NAVIGATOR_TEMPLATES :
+			case PanelDefinition.NAVIGATOR_TEMPLATES :
 				switch (Main.get().activeFolderTree.folderSelectPopup.getAction()) {
 					case FolderSelectPopup.ACTION_CREATE_FROM_TEMPLATE:
 						Main.get().activeFolderTree.folderSelectPopup.enableTaxonomy();
@@ -141,12 +141,12 @@ public class FolderSelectTree extends Composite {
 				
 				break;
 			
-			case UIDesktopConstants.NAVIGATOR_PERSONAL :
+			case PanelDefinition.NAVIGATOR_PERSONAL :
 				Main.get().activeFolderTree.folderSelectPopup.enableMyDocuments();
 				getPersonal();
 				break;
 			
-			case UIDesktopConstants.NAVIGATOR_MAIL :
+			case PanelDefinition.NAVIGATOR_MAIL :
 				Main.get().activeFolderTree.folderSelectPopup.enableMails();
 				getMail();
 				break;
@@ -165,28 +165,28 @@ public class FolderSelectTree extends Composite {
 		}
 		
 		switch (view){
-			case UIDesktopConstants.NAVIGATOR_TAXONOMY :
+			case PanelDefinition.NAVIGATOR_TAXONOMY :
 				Main.get().activeFolderTree.folderSelectPopup.enableTaxonomy();
-			case UIDesktopConstants.NAVIGATOR_TRASH :
+			case PanelDefinition.NAVIGATOR_TRASH :
 				getRoot();
 				break;
 				
-			case UIDesktopConstants.NAVIGATOR_CATEGORIES :
+			case PanelDefinition.NAVIGATOR_CATEGORIES :
 				Main.get().activeFolderTree.folderSelectPopup.enableCategories();
 				getTemplatesFolder();
 				break;
 				
-			case UIDesktopConstants.NAVIGATOR_TEMPLATES :
+			case PanelDefinition.NAVIGATOR_TEMPLATES :
 				Main.get().activeFolderTree.folderSelectPopup.enableTemplates();
 				getTemplatesFolder();
 				break;
 			
-			case UIDesktopConstants.NAVIGATOR_PERSONAL :
+			case PanelDefinition.NAVIGATOR_PERSONAL :
 				Main.get().activeFolderTree.folderSelectPopup.enableMyDocuments();
 				getPersonal();
 				break;
 				
-			case UIDesktopConstants.NAVIGATOR_MAIL :
+			case PanelDefinition.NAVIGATOR_MAIL :
 				Main.get().activeFolderTree.folderSelectPopup.enableMails();
 				getMail();
 				break;
@@ -275,7 +275,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getChilds(String path) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-		endPoint.setServiceEntryPoint(RPCService.FolderService);	
+		endPoint.setServiceEntryPoint(Config.OKMFolderService);	
 		folderService.getChilds(path, callbackGetChilds);
 	}	
 	
@@ -284,7 +284,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getRoot() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(RPCService.RepositoryService);	
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
 		repositoryService.getRootFolder(callbackGetRootFolder);
 	}
 	
@@ -398,7 +398,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getPersonal() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(RPCService.RepositoryService);
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
 		repositoryService.getPersonalFolder(callbackGetPersonalFolder);
 	}
 	
@@ -407,7 +407,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getCategoriesFolder() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(RPCService.RepositoryService);
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
 		repositoryService.getCategoriesFolder(callbackGetCategoriesFolder);
 	}				
 	
@@ -417,7 +417,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getTemplatesFolder() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(RPCService.RepositoryService);
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
 		repositoryService.getTemplatesFolder(callbackGetTemplatesFolder);
 	}
 	
@@ -426,7 +426,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getMail() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(RPCService.RepositoryService);
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
 		repositoryService.getMailFolder(callbackGetMailFolder);
 	}
 	

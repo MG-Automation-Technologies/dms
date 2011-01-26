@@ -48,7 +48,7 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTPermission;
 import com.openkm.frontend.client.bean.GWTVersion;
-import com.openkm.frontend.client.contants.service.RPCService;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import com.openkm.frontend.client.util.Util;
@@ -361,7 +361,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 		if (doc != null) {
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.setVersionHistory();
 			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
-			endPoint.setServiceEntryPoint(RPCService.DocumentService);	
+			endPoint.setServiceEntryPoint(Config.OKMDocumentService);	
 			documentService.getVersionHistory(doc.getPath(), callbackGetVersionHistory);
 		}
 	}
@@ -373,7 +373,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 		if (doc != null) {
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.setRestoreVersion();
 			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
-			endPoint.setServiceEntryPoint(RPCService.DocumentService);	
+			endPoint.setServiceEntryPoint(Config.OKMDocumentService);	
 			documentService.restoreVersion(doc.getPath(), versionId, callbackRestoreVersion);
 		}
 	}
@@ -385,7 +385,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 		if (doc != null) {
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.setPurgeVersionHistory();
 			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
-			endPoint.setServiceEntryPoint(RPCService.DocumentService);	
+			endPoint.setServiceEntryPoint(Config.OKMDocumentService);	
 			documentService.purgeVersionHistory(doc.getPath(), callbackPurgeVersionHistory);
 		}
 	}

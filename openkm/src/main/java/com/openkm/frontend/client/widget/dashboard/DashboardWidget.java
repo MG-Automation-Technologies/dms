@@ -53,7 +53,7 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.contants.service.RPCService;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMDashboardService;
 import com.openkm.frontend.client.service.OKMDashboardServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
@@ -67,6 +67,7 @@ import com.openkm.frontend.client.util.Util;
  *
  */
 public class DashboardWidget extends Composite {
+	
 	private final OKMDashboardServiceAsync dashboardService = (OKMDashboardServiceAsync) GWT.create(OKMDashboardService.class);
 
 	private static int HEADER_SQUARE = 24;
@@ -458,7 +459,7 @@ public class DashboardWidget extends Composite {
 	 */
 	public void visiteNode(String source, String node, Date date) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(RPCService.DashboardService);		
+		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
 		dashboardService.visiteNode(source, node, date, callbackVisiteNode);
 	}
 	
@@ -535,7 +536,7 @@ public class DashboardWidget extends Composite {
 			feedImage.addClickHandler(new ClickHandler() { 
 				@Override
 				public void onClick(ClickEvent event) {
-					Window.open(RPCService.FeedService+feedUrl, "_blank", null);
+					Window.open(Config.OKMFeedService+feedUrl, "_blank", null);
 				}
 			});
 			

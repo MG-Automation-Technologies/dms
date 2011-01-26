@@ -57,7 +57,6 @@ import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.PropertyGroupModule;
-import com.openkm.module.base.BasePropertyGroupModule;
 import com.openkm.util.FormUtils;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
@@ -85,10 +84,14 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			}
 			
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
-			BasePropertyGroupModule.addGroup(session, documentNode, grpName);
+			
+			synchronized (documentNode) {
+				documentNode.addMixin(grpName);
+				documentNode.save();
+			}
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADD_PROPERTY_GROUP", documentNode.getUUID(), grpName+", "+nodePath);
+			UserActivity.log(session.getUserID(), "ADD_PROPERTY_GROUP", nodePath, grpName);
 		} catch (javax.jcr.nodetype.NoSuchNodeTypeException e) {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
@@ -143,7 +146,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "REMOVE_PROPERTY_GROUP", documentNode.getUUID(), grpName+", "+nodePath);
+			UserActivity.log(session.getUserID(), "REMOVE_PROPERTY_GROUP", nodePath, grpName);
 		} catch (javax.jcr.nodetype.NoSuchNodeTypeException e) {
 			log.error(e.getMessage(), e);
 			throw new NoSuchGroupException(e.getMessage(), e);
@@ -179,7 +182,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			
 			Node documentNode = session.getRootNode().getNode(nodePath.substring(1));
 			NodeType[] nt = documentNode.getMixinNodeTypes();
-			Map<PropertyGroup, List<FormElement>> pgf = FormUtils.parsePropertyGroupsForms(Config.PROPERTY_GROUPS_XML);
+			Map<PropertyGroup, List<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
 			
 			// Only return registered property definitions
 			for (int i=0; i<nt.length; i++) {
@@ -222,7 +225,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			}
 			
 			NodeTypeManager ntm = session.getWorkspace().getNodeTypeManager();
-			Map<PropertyGroup, List<FormElement>> pgf = FormUtils.parsePropertyGroupsForms(Config.PROPERTY_GROUPS_XML);
+			Map<PropertyGroup, List<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
 			
 			// Only return registered property definitions
 			for (NodeTypeIterator nti = ntm.getMixinNodeTypes(); nti.hasNext();) {
@@ -263,7 +266,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Map<PropertyGroup, List<FormElement>> pgfs = FormUtils.parsePropertyGroupsForms(Config.PROPERTY_GROUPS_XML);
+			Map<PropertyGroup, List<FormElement>> pgfs = FormUtils.parsePropertyGroupsForms();
 			List<FormElement> pgf = FormUtils.getPropertyGroupForms(pgfs, grpName);
 			Node documentNode = session.getRootNode().getNode(nodePath.substring(1));
 			NodeTypeManager ntm = session.getWorkspace().getNodeTypeManager();
@@ -317,7 +320,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_PROPERTY_GROUP_PROPERTIES", documentNode.getUUID(), grpName+", "+pgf+", "+nodePath);
+			UserActivity.log(session.getUserID(), "GET_PROPERTY_GROUP_PROPERTIES", nodePath, grpName+", "+pgf);
 			
 			log.debug("getProperties: {}", pgf);
 			return pgf;
@@ -405,7 +408,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			documentNode.save();
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "SET_PROPERTY_GROUP_PROPERTIES", documentNode.getUUID(), grpName+", "+properties+", "+nodePath);
+			UserActivity.log(session.getUserID(), "SET_PROPERTY_GROUP_PROPERTIES", nodePath, grpName+", "+properties);
 		} catch (javax.jcr.nodetype.NoSuchNodeTypeException e) {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
@@ -450,7 +453,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			NodeTypeManager ntm = session.getWorkspace().getNodeTypeManager();
 			NodeType nt = ntm.getNodeType(grpName);
 			PropertyDefinition[] pd = nt.getDeclaredPropertyDefinitions();
-			Map<PropertyGroup, List<FormElement>> pgf = FormUtils.parsePropertyGroupsForms(Config.PROPERTY_GROUPS_XML);
+			Map<PropertyGroup, List<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
 			List<FormElement> tmp = FormUtils.getPropertyGroupForms(pgf, grpName);
 			
 			// Only return registered property definitions
@@ -488,7 +491,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			
 			Node documentNode = session.getRootNode().getNode(nodePath.substring(1));
 			NodeType[] nt = documentNode.getMixinNodeTypes();
-			Map<PropertyGroup, List<FormElement>> pgf = FormUtils.parsePropertyGroupsForms(Config.PROPERTY_GROUPS_XML);
+			Map<PropertyGroup, List<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
 			
 			// Only return registered property definitions
 			for (int i=0; i<nt.length; i++) {

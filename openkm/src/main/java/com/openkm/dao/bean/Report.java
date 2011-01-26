@@ -34,7 +34,6 @@ public class Report implements Serializable {
 	private String name;
 	private String type;
 	private String fileContent;
-	private String fileMime;
 	private String fileName;
 	private boolean active;
 	
@@ -69,14 +68,6 @@ public class Report implements Serializable {
 	public void setFileContent(String fileContent) {
 		this.fileContent = fileContent;
 	}
-	
-	public String getFileMime() {
-		return fileMime;
-	}
-
-	public void setFileMime(String fileMime) {
-		this.fileMime = fileMime;
-	}
 
 	public String getFileName() {
 		return fileName;
@@ -101,7 +92,6 @@ public class Report implements Serializable {
 		sb.append(", name="); sb.append(name);
 		sb.append(", type="); sb.append(type);
 		sb.append(", fileName="); sb.append(fileName);
-		sb.append(", fileMime="); sb.append(fileMime);
 		sb.append(", fileContent="); sb.append("[BIG]");
 		sb.append(", active="); sb.append(active);
 		sb.append("}");

@@ -21,13 +21,17 @@
 
 package com.openkm.module.direct;
 
+import java.util.ArrayList;
+
 import javax.jcr.Node;
+import javax.jcr.PropertyType;
 import javax.jcr.Session;
+import javax.jcr.Value;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.bean.Encryption;
+import com.openkm.bean.Property;
 import com.openkm.cache.UserDocumentKeywordsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
@@ -38,7 +42,6 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.VersionException;
 import com.openkm.module.PropertyModule;
-import com.openkm.module.base.BasePropertyModule;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 
@@ -65,7 +68,27 @@ public class DirectPropertyModule implements PropertyModule {
 			}
 			
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
-			BasePropertyModule.addCategory(session, documentNode, catId);
+			
+			synchronized (documentNode) {
+				Value[] property = documentNode.getProperty(Property.CATEGORIES).getValues();
+				Value[] newProperty = new Value[property.length+1];
+				boolean alreadyAdded = false;
+				
+				for (int i=0; i<property.length; i++) {
+					newProperty[i] = property[i];
+					
+					if (property[i].getString().equals(catId)) {
+						alreadyAdded = true;
+					}
+				}
+				
+				if (!alreadyAdded) {
+					Node reference = session.getNodeByUUID(catId);
+					newProperty[newProperty.length-1] = session.getValueFactory().createValue(reference);
+					documentNode.setProperty(Property.CATEGORIES, newProperty, PropertyType.REFERENCE);
+					documentNode.save();
+				}
+			}
 			
 			// Check subscriptions
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "ADD_CATEGORY", null);
@@ -74,20 +97,25 @@ public class DirectPropertyModule implements PropertyModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "ADD_CATEGORY");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADD_CATEGORY", documentNode.getUUID(), catId+", "+nodePath);
+			UserActivity.log(session.getUserID(), "ADD_CATEGORY", nodePath, catId);
 		} catch (javax.jcr.PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new PathNotFoundException(e.getMessage(), e);
 		} catch (javax.jcr.AccessDeniedException e) {
+			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new AccessDeniedException(e.getMessage(), e);
 		} catch (javax.jcr.version.VersionException e) {
+			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new VersionException(e.getMessage(), e);
 		} catch (javax.jcr.lock.LockException e) {
+			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new LockException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
@@ -117,7 +145,25 @@ public class DirectPropertyModule implements PropertyModule {
 			}
 			
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
-			BasePropertyModule.removeCategory(session, documentNode, catId);
+			boolean removed = false;
+			
+			synchronized (documentNode) {
+				Value[] property = documentNode.getProperty(Property.CATEGORIES).getValues();
+				ArrayList<Value> newProperty = new ArrayList<Value>();
+				
+				for (int i=0; i<property.length; i++) {
+					if (!property[i].getString().equals(catId)) {
+						newProperty.add(property[i]);
+					} else {
+						removed = true;
+					}
+				}
+				
+				if (removed) {
+					documentNode.setProperty(Property.CATEGORIES, (Value[])newProperty.toArray(new Value[newProperty.size()]), PropertyType.REFERENCE);
+					documentNode.save();
+				}
+			}
 			
 			// Check subscriptions
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "REMOVE_CATEGORY", null);
@@ -126,20 +172,25 @@ public class DirectPropertyModule implements PropertyModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "REMOVE_CATEGORY");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "REMOVE_CATEGORY", documentNode.getUUID(), catId+", "+nodePath);
+			UserActivity.log(session.getUserID(), "REMOVE_CATEGORY", nodePath, catId);
 		} catch (javax.jcr.PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new PathNotFoundException(e.getMessage(), e);
 		} catch (javax.jcr.AccessDeniedException e) {
+			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new AccessDeniedException(e.getMessage(), e);
 		} catch (javax.jcr.version.VersionException e) {
+			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new VersionException(e.getMessage(), e);
 		} catch (javax.jcr.lock.LockException e) {
+			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new LockException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
@@ -150,7 +201,7 @@ public class DirectPropertyModule implements PropertyModule {
 	}
 
 	@Override
-	public String addKeyword(String token, String nodePath, String keyword) throws VersionException,
+	public void addKeyword(String token, String nodePath, String keyword) throws VersionException,
 			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
 			DatabaseException {
 		log.debug("addKeyword({}, {}, {})", new Object[] { token, nodePath, keyword });
@@ -169,7 +220,26 @@ public class DirectPropertyModule implements PropertyModule {
 			}
 			
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
-			keyword = BasePropertyModule.addKeyword(session, documentNode, keyword);
+			
+			synchronized (documentNode) {
+				Value[] property = documentNode.getProperty(Property.KEYWORDS).getValues();
+				Value[] newProperty = new Value[property.length+1];
+				boolean alreadyAdded = false;
+				
+				for (int i=0; i<property.length; i++) {
+					newProperty[i] = property[i];
+					
+					if (property[i].equals(keyword)) {
+						alreadyAdded = true;
+					}
+				}
+				
+				if (!alreadyAdded) {
+					newProperty[newProperty.length-1] = session.getValueFactory().createValue(keyword);
+					documentNode.setProperty(Property.KEYWORDS, newProperty);
+					documentNode.save();
+				}
+			}
 			
 			// Update cache
 			if (Config.USER_KEYWORDS_CACHE) {
@@ -178,33 +248,37 @@ public class DirectPropertyModule implements PropertyModule {
 			
 			// Check subscriptions
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "ADD_KEYWORD", null);
-			
+
 			// Check scripting
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "ADD_KEYWORD");
-			
+
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADD_KEYWORD", documentNode.getUUID(), keyword+", "+nodePath);
+			UserActivity.log(session.getUserID(), "ADD_KEYWORD", nodePath, keyword);
 		} catch (javax.jcr.PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new PathNotFoundException(e.getMessage(), e);
 		} catch (javax.jcr.AccessDeniedException e) {
+			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new AccessDeniedException(e.getMessage(), e);
 		} catch (javax.jcr.version.VersionException e) {
+			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new VersionException(e.getMessage(), e);
 		} catch (javax.jcr.lock.LockException e) {
+			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new LockException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
 			if (token == null) JCRUtils.logout(session);
 		}
 
-		log.debug("addKeyword: {}", keyword);
-		return keyword;
+		log.debug("addKeyword: void");
 	}
 
 	@Override
@@ -227,7 +301,25 @@ public class DirectPropertyModule implements PropertyModule {
 			}
 			
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
-			BasePropertyModule.removeKeyword(session, documentNode, keyword);
+			boolean removed = false;
+			
+			synchronized (documentNode) {
+				Value[] property = documentNode.getProperty(Property.KEYWORDS).getValues();
+				ArrayList<Value> newProperty = new ArrayList<Value>();
+				
+				for (int i=0; i<property.length; i++) {
+					if (!property[i].getString().equals(keyword)) {
+						newProperty.add(property[i]);
+					} else {
+						removed = true;
+					}
+				}
+				
+				if (removed) {
+					documentNode.setProperty(Property.KEYWORDS, (Value[])newProperty.toArray(new Value[newProperty.size()]));
+					documentNode.save();
+				}
+			}
 			
 			// Update cache
 			if (Config.USER_KEYWORDS_CACHE) {
@@ -241,20 +333,25 @@ public class DirectPropertyModule implements PropertyModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "REMOVE_KEYWORD");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "REMOVE_KEYWORD", documentNode.getUUID(), keyword+", "+nodePath);
+			UserActivity.log(session.getUserID(), "REMOVE_KEYWORD", nodePath, keyword);
 		} catch (javax.jcr.PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new PathNotFoundException(e.getMessage(), e);
 		} catch (javax.jcr.AccessDeniedException e) {
+			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new AccessDeniedException(e.getMessage(), e);
 		} catch (javax.jcr.version.VersionException e) {
+			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new VersionException(e.getMessage(), e);
 		} catch (javax.jcr.lock.LockException e) {
+			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new LockException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
@@ -262,118 +359,5 @@ public class DirectPropertyModule implements PropertyModule {
 		}
 
 		log.debug("removeKeyword: void");
-	}
-	
-	@Override
-	public void setEncryption(String token, String nodePath, String cipherName) throws VersionException,
-			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
-			DatabaseException {
-		log.debug("setEncryption({}, {}, {})", new Object[] { token, nodePath, cipherName });
-		Node documentNode = null;
-		Session session = null;
-		
-		if (Config.SYSTEM_READONLY) {
-			throw new AccessDeniedException("System is in read-only mode");
-		}
-
-		try {
-			if (token == null) {
-				session = JCRUtils.getSession();
-			} else {
-				session = JcrSessionManager.getInstance().get(token);
-			}
-			
-			documentNode = session.getRootNode().getNode(nodePath.substring(1));
-			
-			if (!documentNode.isNodeType(Encryption.TYPE) && cipherName != null) {
-				documentNode.addMixin(Encryption.TYPE);
-				documentNode.setProperty(Encryption.CIPHER_NAME, cipherName);
-				documentNode.save();
-			}
-			
-			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "SET_ENCRYPTION", null);
-
-			// Check scripting
-			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "SET_ENCRYPTION");
-
-			// Activity log
-			UserActivity.log(session.getUserID(), "SET_ENCRYPTION", documentNode.getUUID(), cipherName+", "+nodePath);
-		} catch (javax.jcr.PathNotFoundException e) {
-			JCRUtils.discardsPendingChanges(documentNode);
-			throw new PathNotFoundException(e.getMessage(), e);
-		} catch (javax.jcr.AccessDeniedException e) {
-			JCRUtils.discardsPendingChanges(documentNode);
-			throw new AccessDeniedException(e.getMessage(), e);
-		} catch (javax.jcr.version.VersionException e) {
-			JCRUtils.discardsPendingChanges(documentNode);
-			throw new VersionException(e.getMessage(), e);
-		} catch (javax.jcr.lock.LockException e) {
-			JCRUtils.discardsPendingChanges(documentNode);
-			throw new LockException(e.getMessage(), e);
-		} catch (javax.jcr.RepositoryException e) {
-			JCRUtils.discardsPendingChanges(documentNode);
-			throw new RepositoryException(e.getMessage(), e);
-		} finally {
-			if (token == null) JCRUtils.logout(session);
-		}
-
-		log.debug("setEncryption: void");
-	}
-	
-	@Override
-	public void unsetEncryption(String token, String nodePath) throws VersionException,
-			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
-			DatabaseException {
-		log.debug("unsetEncryption({}, {})", new Object[] { token, nodePath });
-		Node documentNode = null;
-		Session session = null;
-		
-		if (Config.SYSTEM_READONLY) {
-			throw new AccessDeniedException("System is in read-only mode");
-		}
-
-		try {
-			if (token == null) {
-				session = JCRUtils.getSession();
-			} else {
-				session = JcrSessionManager.getInstance().get(token);
-			}
-			
-			documentNode = session.getRootNode().getNode(nodePath.substring(1));
-			
-			if (documentNode.isNodeType(Encryption.TYPE)) {
-				documentNode.removeMixin(Encryption.TYPE);
-				documentNode.save();
-			}
-			
-			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "UNSET_ENCRYPTION", null);
-
-			// Check scripting
-			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "UNSET_ENCRYPTION");
-
-			// Activity log
-			UserActivity.log(session.getUserID(), "UNSET_ENCRYPTION", documentNode.getUUID(), nodePath);
-		} catch (javax.jcr.PathNotFoundException e) {
-			JCRUtils.discardsPendingChanges(documentNode);
-			throw new PathNotFoundException(e.getMessage(), e);
-		} catch (javax.jcr.AccessDeniedException e) {
-			JCRUtils.discardsPendingChanges(documentNode);
-			throw new AccessDeniedException(e.getMessage(), e);
-		} catch (javax.jcr.version.VersionException e) {
-			JCRUtils.discardsPendingChanges(documentNode);
-			throw new VersionException(e.getMessage(), e);
-		} catch (javax.jcr.lock.LockException e) {
-			JCRUtils.discardsPendingChanges(documentNode);
-			throw new LockException(e.getMessage(), e);
-		} catch (javax.jcr.RepositoryException e) {
-			JCRUtils.discardsPendingChanges(documentNode);
-			throw new RepositoryException(e.getMessage(), e);
-		} finally {
-			if (token == null) JCRUtils.logout(session);
-		}
-
-		log.debug("unsetEncryption: void");
 	}
 }

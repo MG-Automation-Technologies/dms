@@ -58,7 +58,6 @@ public class GWTQueryParams implements IsSerializable {
 	private String mailSubject = "";
 	private String categoryUuid = "";
 	private String categoryPath = "";
-	private boolean isShared = false;
 
 	private String operator = OPERATOR_AND;
 	
@@ -137,6 +136,30 @@ public class GWTQueryParams implements IsSerializable {
 	public void setLastModifiedTo(Date lastModifiedTo) {
 		this.lastModifiedTo = lastModifiedTo;
 	}
+	
+	public String getMailFrom() {
+		return mailFrom;
+	}
+
+	public void setMailFrom(String mailFrom) {
+		this.mailFrom = mailFrom;
+	}
+
+	public String getMailTo() {
+		return mailTo;
+	}
+
+	public void setMailTo(String mailTo) {
+		this.mailTo = mailTo;
+	}
+
+	public String getMailSubject() {
+		return mailSubject;
+	}
+
+	public void setMailSubject(String mailSubject) {
+		this.mailSubject = mailSubject;
+	}
 
 	public boolean isDashboard() {
 		return isDashboard;
@@ -160,30 +183,6 @@ public class GWTQueryParams implements IsSerializable {
 
 	public void setDomain(long domain) {
 		this.domain = domain;
-	}
-
-	public String getMailFrom() {
-		return mailFrom;
-	}
-
-	public void setMailFrom(String mailFrom) {
-		this.mailFrom = mailFrom;
-	}
-
-	public String getMailTo() {
-		return mailTo;
-	}
-
-	public void setMailTo(String mailTo) {
-		this.mailTo = mailTo;
-	}
-
-	public String getMailSubject() {
-		return mailSubject;
-	}
-
-	public void setMailSubject(String mailSubject) {
-		this.mailSubject = mailSubject;
 	}
 
 	public String getOperator() {
@@ -226,14 +225,6 @@ public class GWTQueryParams implements IsSerializable {
 		this.queryName = queryName;
 	}
 	
-	public boolean isShared() {
-		return isShared;
-	}
-
-	public void setShared(boolean isShared) {
-		this.isShared = isShared;
-	}
-	
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[");
@@ -244,7 +235,6 @@ public class GWTQueryParams implements IsSerializable {
 		sb.append(", mimeType="); sb.append(mimeType);
 		sb.append(", author="); sb.append(author);
 		sb.append(", isDashboard="+isDashboard);
-		sb.append(", isShared="+isShared);
 		sb.append(", lastModifiedFrom="); sb.append(lastModifiedFrom==null?null:lastModifiedFrom.getTime());
 		sb.append(", lastModifiedTo="); sb.append(lastModifiedTo==null?null:lastModifiedTo.getTime());
 		sb.append(", properties="); sb.append(properties);

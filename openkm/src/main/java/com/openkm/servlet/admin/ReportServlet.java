@@ -43,9 +43,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -59,16 +56,16 @@ import org.slf4j.LoggerFactory;
 
 import bsh.EvalError;
 
-import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.HibernateUtil;
 import com.openkm.dao.ReportDAO;
 import com.openkm.dao.bean.Report;
+import com.openkm.util.DocConverter;
 import com.openkm.util.JCRUtils;
-import com.openkm.util.ReportUtils;
+import com.openkm.util.ReportUtil;
 import com.openkm.util.SecureStore;
 import com.openkm.util.UserActivity;
-import com.openkm.util.WebUtils;
+import com.openkm.util.WebUtil;
 
 /**
  * Execute report servlet
@@ -81,7 +78,7 @@ public class ReportServlet extends BaseServlet {
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		String action = WebUtils.getString(request, "action");
+		String action = WebUtil.getString(request, "action");
 		Session session = null;
 		updateSessionManager(request);
 		
@@ -104,7 +101,7 @@ public class ReportServlet extends BaseServlet {
 				sc.getRequestDispatcher("/admin/report_edit.jsp").forward(request, response);
 			} else if (action.equals("edit")) {
 				ServletContext sc = getServletContext();
-				int rpId = WebUtils.getInt(request, "rp_id");
+				int rpId = WebUtil.getInt(request, "rp_id");
 				Report rp = ReportDAO.findByPk(rpId);
 				sc.setAttribute("action", action);
 				sc.setAttribute("types", types);
@@ -112,7 +109,7 @@ public class ReportServlet extends BaseServlet {
 				sc.getRequestDispatcher("/admin/report_edit.jsp").forward(request, response);
 			} else if (action.equals("delete")) {
 				ServletContext sc = getServletContext();
-				int rpId = WebUtils.getInt(request, "rp_id");
+				int rpId = WebUtil.getInt(request, "rp_id");
 				Report rp = ReportDAO.findByPk(rpId);
 				sc.setAttribute("action", action);
 				sc.setAttribute("types", types);
@@ -175,21 +172,21 @@ public class ReportServlet extends BaseServlet {
 							rp.setType(item.getString("UTF-8"));
 						} else if (item.getFieldName().equals("rp_active")) {
 							rp.setActive(true);
+						
 						}
 					} else {
 						is = item.getInputStream();
 						rp.setFileName(FilenameUtils.getName(item.getName()));
-						rp.setFileMime(Config.mimeTypes.getContentType(item.getName()));
 						rp.setFileContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
 						is.close();
 					}
 				}
 			
 				if (action.equals("create")) {
-					int id = ReportDAO.create(rp);
+					ReportDAO.create(rp);
 					
 					// Activity log
-					UserActivity.log(session.getUserID(), "ADMIN_REPORT_CREATE", Integer.toString(id), rp.toString());
+					UserActivity.log(session.getUserID(), "ADMIN_REPORT_CREATE", null, rp.toString());
 					list(session, request, response);
 				} else if (action.equals("edit")) {
 					ReportDAO.update(rp);
@@ -246,7 +243,6 @@ public class ReportServlet extends BaseServlet {
 		}
 		
 		sc.setAttribute("reports", list);
-		sc.setAttribute("ReportUtil", new ReportUtils());
 		sc.getRequestDispatcher("/admin/report_list.jsp").forward(request, response);
 		log.debug("list: void");
 	}
@@ -257,8 +253,7 @@ public class ReportServlet extends BaseServlet {
 	private void execute(Session session, HttpServletRequest request, HttpServletResponse response) throws 
 			IOException, DatabaseException, JRException, EvalError {
 		log.debug("execute({}, {}, {})", new Object[] { session, request, response });
-		int rpId = WebUtils.getInt(request, "rp_id");
-		int out = WebUtils.getInt(request, "out",  ReportUtils.OUTPUT_PDF);
+		int rpId = WebUtil.getInt(request, "rp_id");
 		Report rp = ReportDAO.findByPk(rpId);
 		String agent = request.getHeader("USER-AGENT");
 		
@@ -269,8 +264,8 @@ public class ReportServlet extends BaseServlet {
 		response.setHeader("Pragma", "no-cache");
 		
 		// Set MIME type
-		response.setContentType(ReportUtils.FILE_MIME[out]);
-		String fileName = rp.getFileName().substring(0, rp.getFileName().indexOf('.')) + ReportUtils.FILE_EXTENSION[out]; 
+		response.setContentType(DocConverter.PDF);
+		String fileName = rp.getFileName().substring(0, rp.getFileName().indexOf('.')) + ".pdf"; 
 		
 		if (null != agent && -1 != agent.indexOf("MSIE")) {
 			log.debug("Agent: Explorer");
@@ -301,22 +296,9 @@ public class ReportServlet extends BaseServlet {
 			
 			if (Report.SQL.equals(rp.getType())) {
 				dbSession = HibernateUtil.getSessionFactory().openSession();
-				
-				if (ReportUtils.MIME_JRXML.equals(rp.getFileMime())) {
-					JasperReport jr = JasperCompileManager.compileReport(bais);
-					ReportUtils.generateReport(baos, jr, parameters, out, dbSession.connection());
-				} else if (ReportUtils.MIME_JASPER.equals(rp.getFileMime())) {
-					JasperReport jr = (JasperReport) JRLoader.loadObject(bais);
-					ReportUtils.generateReport(baos, jr, parameters, out, dbSession.connection());
-				}
+				ReportUtil.generateReport(baos, bais, parameters, ReportUtil.PDF_OUTPUT, dbSession.connection());
 			} else if (Report.SCRIPT.equals(rp.getType())) {
-				if (ReportUtils.MIME_JRXML.equals(rp.getFileMime())) {
-					JasperReport jr = JasperCompileManager.compileReport(bais);
-					ReportUtils.generateReport(baos, jr, parameters, out);
-				} else if (ReportUtils.MIME_JASPER.equals(rp.getFileMime())) {
-					JasperReport jr = (JasperReport) JRLoader.loadObject(bais);
-					ReportUtils.generateReport(baos, jr, parameters, out);
-				}
+				ReportUtil.generateReport(baos, bais, parameters, ReportUtil.PDF_OUTPUT);
 			}
 			
 			// Send back to browser

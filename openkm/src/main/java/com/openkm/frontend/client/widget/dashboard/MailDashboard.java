@@ -33,7 +33,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
 import com.openkm.frontend.client.bean.GWTDashboardMailResult;
-import com.openkm.frontend.client.contants.service.RPCService;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMDashboardService;
 import com.openkm.frontend.client.service.OKMDashboardServiceAsync;
 
@@ -146,7 +146,7 @@ public class MailDashboard extends Composite {
 			userLastImportedMails.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(RPCService.DashboardService);		
+		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
 		dashboardService.getUserLastImportedMails(callbackGetUserLastImportedMails);
 	}
 	
@@ -158,7 +158,7 @@ public class MailDashboard extends Composite {
 			userLastImportedAttachments.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(RPCService.DashboardService);		
+		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
 		dashboardService.getUserLastImportedMailAttachments(callbackGetUserLastImportedMailAttachments);
 	}
 	

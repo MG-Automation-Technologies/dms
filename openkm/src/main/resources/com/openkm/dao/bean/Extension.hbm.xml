@@ -3,7 +3,7 @@
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
   <class name="com.openkm.dao.bean.Extension" table="OKM_EXTENSION">
-    <id name="uuid" column="EXT_UUID" length="127"><generator class="assigned"/></id>
-    <property name="name" column="EXT_NAME" not-null="true"/>
+    <id name="uuid" column="EX_UUID" length="127"><generator class="assigned"/></id>
+    <property name="description" column="EX_DESCRIPTION" not-null="true" type="text"/>
   </class>
 </hibernate-mapping>

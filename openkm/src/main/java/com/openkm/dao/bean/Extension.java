@@ -30,9 +30,11 @@ import java.io.Serializable;
  *
  */
 public class Extension implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
+
 	private String uuid = "";
-	private String name = "";
+	private String description = "";
 	
 	public String getUuid() {
 		return uuid;
@@ -42,20 +44,20 @@ public class Extension implements Serializable {
 		this.uuid = uuid;
 	}
 	
-	public String getName() {
-		return name;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("uuid="); sb.append(uuid);
-		sb.append(", name="); sb.append(name);
+		sb.append(", uuid="); sb.append(uuid);
+		sb.append(", description="); sb.append(description);
 		sb.append("}");
 		return sb.toString();
-	}
+	}	
 }

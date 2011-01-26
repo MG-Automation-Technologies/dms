@@ -27,8 +27,6 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.bean.GWTDocument;
-import com.openkm.frontend.client.bean.GWTWorkspace;
 import com.openkm.frontend.client.bean.ToolBarOption;
 import com.openkm.frontend.client.util.CommonUI;
 import com.openkm.frontend.client.util.Util;
@@ -74,17 +72,7 @@ public class GeneralComunicator {
 	 * @return
 	 */
 	public static String i18nExtension(String property) {
-		return Main.get().i18nExtension(property);
-	}
-	
-	/**
-	 * i18n
-	 * 
-	 * @param property
-	 * @return
-	 */
-	public static String i18n(String property) {
-		return Main.i18n(property);
+		return null;
 	}
 	
 	/**
@@ -103,7 +91,7 @@ public class GeneralComunicator {
 	 */
 	public static void downloadDocumentPdf() {
 		if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
-			Util.downloadFilePdf(Main.get().mainPanel.desktop.browser.fileBrowser.getDocument().getUuid());
+			
 		}
 	}
 	
@@ -195,54 +183,5 @@ public class GeneralComunicator {
 	public static void openAllFolderPath(String path, String docPath) {
 		CommonUI.openAllFolderPath(path, docPath);
 	}
-	
-	/**
-	 * getAppContext
-	 * 
-	 * @return
-	 */
-	public static String getAppContext() {
-		return Main.CONTEXT;
-	}
-	
-	/**
-	 * showNextWizard
-	 */
-	public static void showNextWizard() {
-		Main.get().wizardPopup.showNextWizard();
-	}
-	
-	/**
-	 * isDigitalSignature
-	 */
-	public static boolean isDigitalSignature() {
-		return Main.get().fileUpload.isDigitalSignature();
-	}
-	
-	/**
-	 * getDocumentToSign
-	 * 
-	 * @return
-	 */
-	public static GWTDocument getDocumentToSign() {
-		return Main.get().wizardPopup.getDocumentToSign();
-	}
-	
-	/**
-	 * getToken
-	 * 
-	 * @return
-	 */
-	public static String getToken() {
-		return Main.get().workspaceUserProperties.getWorkspace().getToken();
-	}
-	
-	/**
-	 * getWorkspace
-	 * 
-	 * @return
-	 */
-	public static GWTWorkspace getWorkspace() {
-		return Main.get().workspaceUserProperties.getWorkspace();
-	}
+
 }

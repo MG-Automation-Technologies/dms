@@ -22,16 +22,12 @@
 package com.openkm.dao.bean;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 public class ProfileMisc implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private boolean advancedFilters;
 	private long userQuota;
 	private String webSkin;
-	private boolean printPreview;
-	private Set<String> extensions = new HashSet<String>();
 
 	public boolean isAdvancedFilters() {
 		return advancedFilters;
@@ -57,30 +53,12 @@ public class ProfileMisc implements Serializable {
 		this.webSkin = webSkin;
 	}
 	
-	public boolean isPrintPreview() {
-		return printPreview;
-	}
-
-	public void setPrintPreview(boolean printPreview) {
-		this.printPreview = printPreview;
-	}
-	
-	public Set<String> getExtensions() {
-		return extensions;
-	}
-
-	public void setExtensions(Set<String> extensions) {
-		this.extensions = extensions;
-	}
-	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("userQuota="); sb.append(userQuota);
 		sb.append(", advancedFilters="); sb.append(advancedFilters);
 		sb.append(", webSkin="); sb.append(webSkin);
-		sb.append(", printPreview="); sb.append(printPreview);
-		sb.append(", extensions="); sb.append(extensions);
 		sb.append("}");
 		return sb.toString();
 	}

@@ -11,11 +11,10 @@ public class Test {
 	 */
 	public static void main(String[] args) throws Exception {
 		Configuration cfg = new Configuration();
-		cfg.configure(new File("/path/to/openkm/src/main/resources/hibernate.cfg.xml"));
-		cfg.setProperty("hibernate.dialect", "org.hibernate.dialect.OracleDialect");
+		cfg.configure(new File("/path/to/hibernate.cfg.xml"));
 		SchemaExport se = new SchemaExport(cfg);
-		se.setOutputFile("/tmp/schema.sql");
+		se.setOutputFile("/path/to/schema.sql");
 		se.setFormat(true);
-		se.create(false, false);
+		se.create(false, false);		
 	}
 }

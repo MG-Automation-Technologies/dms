@@ -21,25 +21,21 @@
 
 package com.openkm.frontend.client.widget.searchsaved;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HasAlignment;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTQueryParams;
-import com.openkm.frontend.client.contants.service.RPCService;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.service.OKMSearchServiceAsync;
-import com.openkm.frontend.client.util.OKMBundleResources;
 
 /**
  * Saved searches 
@@ -55,16 +51,14 @@ public class SearchSaved extends Composite {
 	public MenuPopup menuPopup;
 	private Status status;
 	private boolean firstTime = true;
-	// Holds the data rows of the table this is a list of RowData Object
-	public Map<Integer, GWTQueryParams> data;
-	private int dataIndexValue = 0;
+	private List<GWTQueryParams> savedSearches;
 	private int searchIdToDelete = 0;
 	
 	/**
 	 * SearchSaved
 	 */
 	public SearchSaved() {
-		data = new HashMap<Integer, GWTQueryParams>();
+		savedSearches = new ArrayList<GWTQueryParams>();
 		table = new ExtendedFlexTable();
 		menuPopup = new MenuPopup();
 		menuPopup.setStyleName("okm-SearchSaved-MenuPopup");
@@ -94,7 +88,6 @@ public class SearchSaved extends Composite {
 	public void showMenu() {
 		// The browser menu depends on actual view
 		// Must substract top position from Y Screen Position
-		menuPopup.evaluateMenuOptions();
 		menuPopup.setPopupPosition(table.getMouseX(), table.getMouseY());
 		menuPopup.show();		
 	}
@@ -113,6 +106,7 @@ public class SearchSaved extends Composite {
 	 */
 	final AsyncCallback<List<GWTQueryParams>> callbackGetSearchs = new AsyncCallback<List<GWTQueryParams>>() {
 		public void onSuccess(List<GWTQueryParams> result){
+			savedSearches = result;
 			table.removeAllRows();
 			
 			for (Iterator<GWTQueryParams> it = result.iterator(); it.hasNext();){
@@ -143,7 +137,16 @@ public class SearchSaved extends Composite {
 		public void onSuccess(Object result) {
 			table.removeRow(getSelectedRow());
 			table.selectPrevRow();
-			data.remove(new Integer(searchIdToDelete));
+			
+			for (Iterator<GWTQueryParams> it = savedSearches.iterator(); it.hasNext();) {
+				GWTQueryParams params = it.next();
+				if (params.getId() == searchIdToDelete) {
+					savedSearches.remove(params);
+					searchIdToDelete = 0;
+					break;
+				}
+			}
+			
 			status.unsetFlag_deleteSearch();
 		}
 		
@@ -159,6 +162,7 @@ public class SearchSaved extends Composite {
 	 * @param search
 	 */
 	public void addNewSavedSearch(GWTQueryParams search) {
+		savedSearches.add(search);
 		addRow(search);
 	}
 		
@@ -170,29 +174,17 @@ public class SearchSaved extends Composite {
 	private void addRow(GWTQueryParams search) {
 		int rows = table.getRowCount();
 		
-		data.put(dataIndexValue, search);
-		
-		if (!search.isShared()) {
-			table.setHTML(rows, 0, "&nbsp;");
-		} else {
-			table.setWidget(rows, 0, new Image(OKMBundleResources.INSTANCE.sharedQuery()));
-		}
-
-		table.setHTML(rows, 1, search.getQueryName());
-		table.setHTML(rows, 2, ""+dataIndexValue++);
-		table.setHTML(rows, 3, "");
-		table.getCellFormatter().setVisible(rows, 2, false);
+		table.setHTML(rows, 0, search.getQueryName());
+		table.setHTML(rows, 1, ""+search.getId());
+		table.setHTML(rows, 2, "");
+		table.getCellFormatter().setVisible(rows, 1, false);
 		
 		// The hidden column extends table to 100% width
 		CellFormatter cellFormatter = table.getCellFormatter();
-		cellFormatter.setWidth(rows, 0, "30");
-		cellFormatter.setHeight(rows, 0, "20");
-		cellFormatter.setHorizontalAlignment(rows, 0, HasAlignment.ALIGN_CENTER);
-		cellFormatter.setVerticalAlignment(rows, 0, HasAlignment.ALIGN_MIDDLE);
-		cellFormatter.setWidth(rows, 3, "100%");
+		cellFormatter.setWidth(rows, 2, "100%");
 		
 		table.getRowFormatter().setStyleName(rows, "okm-SearchSaved");
-		setRowWordWarp(rows, 4, false);
+		setRowWordWarp(rows, 3, false);
 	}
 	
 	/**
@@ -219,7 +211,7 @@ public class SearchSaved extends Composite {
 			status.setFlag_getSearchs();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
-		endPoint.setServiceEntryPoint(RPCService.SearchService);
+		endPoint.setServiceEntryPoint(Config.OKMSearchService);
 		searchService.getAllSearchs(callbackGetSearchs);
 	}
 	
@@ -228,22 +220,14 @@ public class SearchSaved extends Composite {
 	 */
 	public void getSearch() {
 		if (getSelectedRow() >= 0) {
-			int id = Integer.parseInt(table.getText(getSelectedRow(), 2));
-			Main.get().mainPanel.search.searchBrowser.searchResult.getSearch(data.get(new Integer(id)));
-		}
-	}
-	
-	/**
-	 * getSavedSearch
-	 * 
-	 * @return
-	 */
-	public GWTQueryParams getSavedSearch() {
-		if (getSelectedRow() >= 0) {
-			int id = Integer.parseInt(table.getText(getSelectedRow(), 2));
-			return data.get(new Integer(id));
-		} else { 
-			return null;
+			int id = Integer.parseInt(table.getText(getSelectedRow(), 1));
+			for (Iterator<GWTQueryParams> it = savedSearches.iterator(); it.hasNext();) {
+				GWTQueryParams params = it.next();
+				if (params.getId()==id) {
+					Main.get().mainPanel.search.searchBrowser.searchResult.getSearch(params);
+					break;
+				}
+			}
 		}
 	}
 	
@@ -253,14 +237,10 @@ public class SearchSaved extends Composite {
 	public void deleteSearch() {
 		if (getSelectedRow() >= 0) {
 			status.setFlag_deleteSearch();
-			searchIdToDelete = Integer.parseInt(table.getText(getSelectedRow(),2));
+			searchIdToDelete = Integer.parseInt(table.getText(getSelectedRow(),1));
 			ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
-			endPoint.setServiceEntryPoint(RPCService.SearchService);
-			if (!getSavedSearch().isShared()) {
-				searchService.deleteSearch(data.get(new Integer(searchIdToDelete)).getId(), callbackDeleteSearch);
-			} else {
-				searchService.unshare(data.get(new Integer(searchIdToDelete)).getId(), callbackDeleteSearch);
-			}
+			endPoint.setServiceEntryPoint(Config.OKMSearchService);
+			searchService.deleteSearch(searchIdToDelete, callbackDeleteSearch);
 		}
 	}
 	

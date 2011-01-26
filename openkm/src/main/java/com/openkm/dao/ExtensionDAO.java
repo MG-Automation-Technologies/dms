@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
+import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.Extension;
 
 /**
@@ -46,11 +47,17 @@ public class ExtensionDAO {
 	
 	/**
 	 * Find all extensions
+	 *
+	 * @param uuid
+	 * @return
+	 * @throws DatabaseException
+	 * @throws RepositoryException
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<Extension> findAll() throws DatabaseException {
+	public static List<Extension> findAll() throws DatabaseException,
+			RepositoryException {
 		log.debug("findAll({})");
-		String qs = "select ex from Extension ex order by ex.name asc";		
+		String qs = "select ex from Extension ex order by ex.description asc";		
 		Session session = null;
 		Transaction tx = null;
 		
@@ -60,31 +67,6 @@ public class ExtensionDAO {
 			List<Extension> ret = q.list();
 
 			log.debug("findAll: {}", ret);
-			return ret;
-		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-	}
-	
-	/**
-	 * Find all extensions uuid
-	 */
-	@SuppressWarnings("unchecked")
-	public static List<String> findAllUuids() throws DatabaseException {
-		log.debug("findAllUuids({})");
-		String qs = "select ex.uuid from Extension ex order by ex.name asc";		
-		Session session = null;
-		Transaction tx = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			Query q = session.createQuery(qs);
-			List<String> ret = q.list();
-
-			log.debug("findAllUuids: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);

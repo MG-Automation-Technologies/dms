@@ -43,7 +43,7 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.util.DocConverter;
-import com.openkm.util.WebUtils;
+import com.openkm.util.WebUtil;
 
 /**
  * Only for enjoy
@@ -56,8 +56,8 @@ public class TextToSpeechServlet extends HttpServlet {
 			ServletException {
 		String cmd = "espeak -v mb-es1 -f input.txt | mbrola -e /usr/share/mbrola/voices/es1 - -.wav " + 
 			"| oggenc -Q - -o output.ogg";
-		String text = WebUtils.getString(request, "text");
-		String docPath = WebUtils.getString(request, "docPath");
+		String text = WebUtil.getString(request, "text");
+		String docPath = WebUtil.getString(request, "docPath");
 		response.setContentType("audio/ogg");
 		FileInputStream fis = null;
 		OutputStream os = null;

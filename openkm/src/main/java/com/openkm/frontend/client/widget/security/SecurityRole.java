@@ -42,7 +42,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.contants.service.RPCService;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 import com.openkm.frontend.client.util.RoleComparator;
@@ -247,7 +247,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 	public void getGrantedRoles() {
 		if (path != null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(RPCService.AuthService);	
+			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 			authService.getGrantedRoles(path, callbackGetGrantedRoles);
 		}
 	}
@@ -258,7 +258,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 	public void getUngrantedRoles() {
 		if (path != null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(RPCService.AuthService);	
+			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 			authService.getUngrantedRoles(path, callbackGetUngrantedRoles);
 		}
 	}
@@ -270,7 +270,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 		if (path != null) {
 			resetUnassigned();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(RPCService.AuthService);	
+			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 			authService.getFilteredUngrantedRoles(path, filter, callbackGetUngrantedRoles);
 		}
 	}
@@ -285,7 +285,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 		if (path != null) {
 			Main.get().securityPopup.status.setFlag_update();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(RPCService.AuthService);	
+			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 			authService.grantRole(path, role, permissions, recursive, callbackAddRole);
 		}
 	}
@@ -299,7 +299,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 		if (path != null) {
 			Main.get().securityPopup.status.setFlag_update();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(RPCService.AuthService);	
+			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 			authService.revokeRole(path, role, recursive, callbackRevokeRole);
 		}
 	}

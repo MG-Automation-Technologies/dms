@@ -7,9 +7,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.openkm.extension.dao.bean.ProposedQueryReceived;
-import com.openkm.extension.dao.bean.ProposedQuerySent;
-
 public class QueryParams implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -35,15 +32,10 @@ public class QueryParams implements Serializable {
 	private String mailSubject;
 	private String mailFrom;
 	private String mailTo;
-	private String statementQuery;
-	private String statementType;
 	private boolean dashboard;
 	private long domain = DOCUMENT;
 	private String operator = AND;
 	private Map<String, String> properties = new HashMap<String, String>();
-	private Set<String> shared = new HashSet<String>();
-	private Set<ProposedQuerySent> proposedSent = new HashSet<ProposedQuerySent>();
-	private Set<ProposedQueryReceived> proposedReceived = new HashSet<ProposedQueryReceived>();
 	
 	public int getId() {
 		return id;
@@ -165,22 +157,6 @@ public class QueryParams implements Serializable {
 		this.mailTo = mailTo;
 	}
 	
-	public String getStatementQuery() {
-		return statementQuery;
-	}
-
-	public void setStatementQuery(String statementQuery) {
-		this.statementQuery = statementQuery;
-	}
-
-	public String getStatementType() {
-		return statementType;
-	}
-
-	public void setStatementType(String statementType) {
-		this.statementType = statementType;
-	}
-	
 	public boolean isDashboard() {
 		return dashboard;
 	}
@@ -213,30 +189,6 @@ public class QueryParams implements Serializable {
 		this.properties = properties;
 	}
 	
-	public Set<String> getShared() {
-		return shared;
-	}
-
-	public void setShared(Set<String> shared) {
-		this.shared = shared;
-	}
-	
-	public Set<ProposedQuerySent> getProposedSent() {
-		return proposedSent;
-	}
-
-	public void setProposedSent(Set<ProposedQuerySent> proposedSent) {
-		this.proposedSent = proposedSent;
-	}
-
-	public Set<ProposedQueryReceived> getProposedReceived() {
-		return proposedReceived;
-	}
-
-	public void setProposedReceived(Set<ProposedQueryReceived> proposedReceived) {
-		this.proposedReceived = proposedReceived;
-	}
-		
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -253,11 +205,6 @@ public class QueryParams implements Serializable {
 		sb.append(", dashboard="); sb.append(dashboard);
 		sb.append(", domain="); sb.append(domain);
 		sb.append(", operator="); sb.append(operator);
-		sb.append(", shared="); sb.append(shared);
-		sb.append(", proposedSent="); sb.append(proposedSent);
-		sb.append(", proposedReceived="); sb.append(proposedReceived);
-		sb.append(", statementQuery="); sb.append(statementQuery);
-		sb.append(", statementType="); sb.append(statementType);
 		sb.append(", lastModifiedFrom="); sb.append(lastModifiedFrom==null?null:lastModifiedFrom.getTime());
 		sb.append(", lastModifiedTo="); sb.append(lastModifiedTo==null?null:lastModifiedTo.getTime());
 		sb.append("}");

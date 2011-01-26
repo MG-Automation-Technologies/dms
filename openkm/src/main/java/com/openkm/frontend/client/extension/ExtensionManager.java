@@ -25,8 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.contants.ui.UIMenuConstants;
-import com.openkm.frontend.client.extension.event.handler.DashboardHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.DocumentHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.FolderHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.LanguageHandlerExtension;
@@ -35,15 +33,14 @@ import com.openkm.frontend.client.extension.event.handler.NavigatorHandlerExtens
 import com.openkm.frontend.client.extension.event.handler.PropertyGroupHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.ToolBarHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.WorkspaceHandlerExtension;
-import com.openkm.frontend.client.extension.widget.menu.MenuItemExtension;
-import com.openkm.frontend.client.extension.widget.preview.PreviewExtension;
-import com.openkm.frontend.client.extension.widget.tabdocument.TabDocumentExtension;
-import com.openkm.frontend.client.extension.widget.tabfolder.TabFolderExtension;
-import com.openkm.frontend.client.extension.widget.tabmail.TabMailExtension;
-import com.openkm.frontend.client.extension.widget.tabworkspace.TabWorkspaceExtension;
-import com.openkm.frontend.client.extension.widget.toolbar.ToolBarBoxExtension;
-import com.openkm.frontend.client.extension.widget.toolbar.ToolBarButtonExtension;
-import com.openkm.frontend.client.extension.widget.userinfo.UserInfoExtension;
+import com.openkm.frontend.client.extension.widget.MenuItemExtension;
+import com.openkm.frontend.client.extension.widget.PreviewExtension;
+import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
+import com.openkm.frontend.client.extension.widget.TabFolderExtension;
+import com.openkm.frontend.client.extension.widget.TabMailExtension;
+import com.openkm.frontend.client.extension.widget.TabWorkspaceExtension;
+import com.openkm.frontend.client.extension.widget.ToolBarBoxExtension;
+import com.openkm.frontend.client.extension.widget.ToolBarButtonExtension;
 
 /**
  * ExtensionManager
@@ -74,9 +71,7 @@ public class ExtensionManager {
 				addToolBarBoxExtension((ToolBarBoxExtension) obj);
 			} else if (obj instanceof PreviewExtension) {
 				addPreviewExtension((PreviewExtension) obj);
-			} else if (obj instanceof UserInfoExtension) {
-				addUserInfoExtension((UserInfoExtension) obj);
-			} 
+			}
 			
 			// Registering handlers
 			if (obj instanceof DocumentHandlerExtension) {
@@ -102,9 +97,6 @@ public class ExtensionManager {
 			}
 			if (obj instanceof PropertyGroupHandlerExtension) {
 				addPropertyGroupHandlerExtension((PropertyGroupHandlerExtension) obj);
-			}
-			if (obj instanceof DashboardHandlerExtension) {
-				addDashboardHandlerExtension((DashboardHandlerExtension) obj);
 			}
 		}
 	}
@@ -142,16 +134,7 @@ public class ExtensionManager {
 	 * @param extension
 	 */
 	private static void addMenuExtension(MenuItemExtension extension) {
-		switch (extension.getMenuLocation()) {
-			case UIMenuConstants.NEW_MENU:
-			case UIMenuConstants.MAIN_MENU_FILE:
-			case UIMenuConstants.MAIN_MENU_EDIT:
-			case UIMenuConstants.MAIN_MENU_TOOLS:
-			case UIMenuConstants.MAIN_MENU_BOOKMARS:
-			case UIMenuConstants.MAIN_MENU_HELP:
-			     Main.get().mainPanel.topPanel.mainMenu.addMenuExtension(extension);
-				 break;
-		}
+		Main.get().mainPanel.topPanel.mainMenu.addMenuExtension(extension);
 	}
 	
 	/**
@@ -188,15 +171,6 @@ public class ExtensionManager {
 	 */
 	private static void addPreviewExtension(PreviewExtension extension) {
 		Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.addPreviewExtension(extension);
-	}
-	
-	/**
-	 * addUserInfoExtension
-	 * 
-	 * @param extension
-	 */
-	private static void addUserInfoExtension(UserInfoExtension extension) {
-		Main.get().mainPanel.bottomPanel.userInfo.addUserInfoExtension(extension);
 	}
 	
 	/**
@@ -272,14 +246,5 @@ public class ExtensionManager {
 	 */
 	private static void addPropertyGroupHandlerExtension(PropertyGroupHandlerExtension handlerExtension) {
 		Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.addPropertyGroupHandlerExtension(handlerExtension);
-	}
-	
-	/**
-	 * addDashboardHandlerExtension
-	 * 
-	 * @param handlerExtension
-	 */
-	private static void addDashboardHandlerExtension(DashboardHandlerExtension handlerExtension) {
-		Main.get().mainPanel.dashboard.addDashboardHandlerExtension(handlerExtension);
 	}
 }

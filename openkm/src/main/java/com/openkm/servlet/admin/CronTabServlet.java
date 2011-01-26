@@ -48,7 +48,6 @@ import org.slf4j.LoggerFactory;
 
 import bsh.EvalError;
 
-import com.openkm.core.Config;
 import com.openkm.core.Cron;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.CronTabDAO;
@@ -56,7 +55,7 @@ import com.openkm.dao.bean.CronTab;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.SecureStore;
 import com.openkm.util.UserActivity;
-import com.openkm.util.WebUtils;
+import com.openkm.util.WebUtil;
 
 /**
  * Execute crontab servlet
@@ -69,7 +68,7 @@ public class CronTabServlet extends BaseServlet {
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		String action = WebUtils.getString(request, "action");
+		String action = WebUtil.getString(request, "action");
 		Session session = null;
 		updateSessionManager(request);
 		
@@ -89,7 +88,7 @@ public class CronTabServlet extends BaseServlet {
 				sc.getRequestDispatcher("/admin/crontab_edit.jsp").forward(request, response);
 			} else if (action.equals("edit")) {
 				ServletContext sc = getServletContext();
-				int ctId = WebUtils.getInt(request, "ct_id");
+				int ctId = WebUtil.getInt(request, "ct_id");
 				CronTab ct = CronTabDAO.findByPk(ctId);
 				sc.setAttribute("action", action);
 				sc.setAttribute("types", types);
@@ -97,7 +96,7 @@ public class CronTabServlet extends BaseServlet {
 				sc.getRequestDispatcher("/admin/crontab_edit.jsp").forward(request, response);
 			} else if (action.equals("delete")) {
 				ServletContext sc = getServletContext();
-				int ctId = WebUtils.getInt(request, "ct_id");
+				int ctId = WebUtil.getInt(request, "ct_id");
 				CronTab ct = CronTabDAO.findByPk(ctId);
 				sc.setAttribute("action", action);
 				sc.setAttribute("types", types);
@@ -139,7 +138,7 @@ public class CronTabServlet extends BaseServlet {
 			if (ServletFileUpload.isMultipartContent(request)) {
 				session = JCRUtils.getSession();
 				InputStream is = null;
-				FileItemFactory factory = new DiskFileItemFactory();
+				FileItemFactory factory = new DiskFileItemFactory(); 
 				ServletFileUpload upload = new ServletFileUpload(factory);
 				List<FileItem> items = upload.parseRequest(request);
 				CronTab ct = new CronTab();
@@ -158,6 +157,8 @@ public class CronTabServlet extends BaseServlet {
 							ct.setMail(item.getString("UTF-8"));
 						} else if (item.getFieldName().equals("ct_expression")) {
 							ct.setExpression(item.getString("UTF-8"));
+						} else if (item.getFieldName().equals("ct_type")) {
+							ct.setType(item.getString("UTF-8"));
 						} else if (item.getFieldName().equals("ct_active")) {
 							ct.setActive(true);
 						}
@@ -165,7 +166,6 @@ public class CronTabServlet extends BaseServlet {
 						is = item.getInputStream();
 						ct.setFileName(FilenameUtils.getName(item.getName()));
 						ct.setFileContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
-						ct.setFileMime(Config.mimeTypes.getContentType(item.getName()));
 						is.close();
 					}
 				}
@@ -215,6 +215,15 @@ public class CronTabServlet extends BaseServlet {
 		log.debug("list({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
 		List<CronTab> list = CronTabDAO.findAll();
+		
+		for (CronTab ct : list) {
+			if (CronTab.BSH.equals(ct.getType())) {
+				ct.setType("BSH");
+			} else if (CronTab.JAR.equals(ct.getType())) {
+				ct.setType("Script");
+			}
+		}
+		
 		sc.setAttribute("crontabs", list);
 		sc.getRequestDispatcher("/admin/crontab_list.jsp").forward(request, response);
 		log.debug("list: void");
@@ -226,14 +235,14 @@ public class CronTabServlet extends BaseServlet {
 	private void execute(Session session, HttpServletRequest request, HttpServletResponse response) throws 
 			IOException, DatabaseException, EvalError {
 		log.debug("execute({}, {}, {})", new Object[] { session, request, response });
-		int ctId = WebUtils.getInt(request, "ct_id");
+		int ctId = WebUtil.getInt(request, "ct_id");
 		CronTab ct = CronTabDAO.findByPk(ctId);
 		
-		if (CronTab.BSH.equals(ct.getFileMime())) {
+		if (CronTab.BSH.equals(ct.getType())) {
 			Cron.RunnerBsh runner = new Cron.RunnerBsh(ct.getId(), ct.getMail(),  
 					new String(SecureStore.b64Decode(ct.getFileContent())));
 			runner.run();
-		} else if (CronTab.JAR.equals(ct.getFileMime())) {
+		} else if (CronTab.JAR.equals(ct.getType())) {
 			Cron.RunnerJar runner = new Cron.RunnerJar(ct.getId(), ct.getMail(), 
 					SecureStore.b64Decode(ct.getFileContent()));
 			runner.run();

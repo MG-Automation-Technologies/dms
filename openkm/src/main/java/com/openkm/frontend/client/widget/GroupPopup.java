@@ -42,7 +42,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
-import com.openkm.frontend.client.contants.service.RPCService;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
 
@@ -205,7 +205,7 @@ public class GroupPopup extends DialogBox {
 		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 		if (gwtDocument!= null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-			endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
+			endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
 			propertyGroupService.getAllGroups(gwtDocument.getPath(), callbackGetAllGroups);
 		}
 	}
@@ -219,7 +219,7 @@ public class GroupPopup extends DialogBox {
 			if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
 				GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 				ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-				endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
+				endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
 				propertyGroupService.addGroup(gwtDocument.getPath(), grpName, callbackAddGroup);
 			}
 		}

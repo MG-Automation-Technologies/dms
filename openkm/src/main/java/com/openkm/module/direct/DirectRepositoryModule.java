@@ -95,10 +95,10 @@ public class DirectRepositoryModule implements RepositoryModule {
 	 */
 	public synchronized static javax.jcr.Repository getRepository() throws javax.jcr.RepositoryException {
 		log.debug("getRepository()");
-		String repConfig = Config.REPOSITORY_CONFIG;
+		String repConfig = Config.HOME_DIR + File.separator + Config.REPOSITORY_CONFIG;
 		String repHome = null;
 		WorkspaceConfig wc = null;
-		
+				
 		if (repository == null) {
 			// Allow absolute repository path
 			if ((new File(Config.REPOSITORY_HOME)).isAbsolute()) {
@@ -400,11 +400,10 @@ public class DirectRepositoryModule implements RepositoryModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node rootNode = session.getRootNode().getNode(Repository.ROOT);
-			rootFolder = new DirectFolderModule().getProperties(session, rootNode);
+			rootFolder = new DirectFolderModule().getProperties(session, "/"+Repository.ROOT);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_ROOT_FOLDER", rootNode.getUUID(), rootFolder.getPath());
+			UserActivity.log(session.getUserID(), "GET_ROOT_FOLDER", null, rootFolder.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -433,11 +432,10 @@ public class DirectRepositoryModule implements RepositoryModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node trashNode = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
-			trashFolder = new DirectFolderModule().getProperties(session, trashNode);
+			trashFolder = new DirectFolderModule().getProperties(session, "/"+Repository.TRASH+"/"+session.getUserID());
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_TRASH_FOLDER", trashNode.getUUID(), trashFolder.getPath());
+			UserActivity.log(session.getUserID(), "GET_TRASH_FOLDER", null, trashFolder.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -466,11 +464,10 @@ public class DirectRepositoryModule implements RepositoryModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node trashNode = session.getRootNode().getNode(Repository.TRASH);
-			trashFolder = new DirectFolderModule().getProperties(session, trashNode);
+			trashFolder = new DirectFolderModule().getProperties(session, "/"+Repository.TRASH);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_TRASH_FOLDER_BASE", trashNode.getUUID(), trashFolder.getPath());
+			UserActivity.log(session.getUserID(), "GET_TRASH_FOLDER_BASE", null, trashFolder.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -499,11 +496,10 @@ public class DirectRepositoryModule implements RepositoryModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node templatesNode = session.getRootNode().getNode(Repository.TEMPLATES);
-			templatesFolder = new DirectFolderModule().getProperties(session, templatesNode);
+			templatesFolder = new DirectFolderModule().getProperties(session, "/"+Repository.TEMPLATES);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_TEMPLATES_FOLDER", templatesNode.getUUID(), templatesFolder.getPath());
+			UserActivity.log(session.getUserID(), "GET_TEMPLATES_FOLDER", null, templatesFolder.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -532,11 +528,10 @@ public class DirectRepositoryModule implements RepositoryModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node personalNode = session.getRootNode().getNode(Repository.PERSONAL+"/"+session.getUserID());
-			personalFolder = new DirectFolderModule().getProperties(session, personalNode);
+			personalFolder = new DirectFolderModule().getProperties(session, "/"+Repository.PERSONAL+"/"+session.getUserID());
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_PERSONAL_FOLDER", personalNode.getUUID(), personalFolder.getPath());
+			UserActivity.log(session.getUserID(), "GET_PERSONAL_FOLDER", null, personalFolder.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -565,11 +560,10 @@ public class DirectRepositoryModule implements RepositoryModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node personalNode = session.getRootNode().getNode(Repository.PERSONAL);
-			personalFolder = new DirectFolderModule().getProperties(session, personalNode);
+			personalFolder = new DirectFolderModule().getProperties(session, "/"+Repository.PERSONAL);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_PERSONAL_FOLDER_BASE", personalNode.getUUID(), personalFolder.getPath());
+			UserActivity.log(session.getUserID(), "GET_PERSONAL_FOLDER_BASE", null, personalFolder.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -599,11 +593,10 @@ public class DirectRepositoryModule implements RepositoryModule {
 			}
 			
 			String mailPath = MailUtils.getUserMailPath(session.getUserID());
-			Node mailNode = session.getRootNode().getNode(mailPath.substring(1));
-			mailFolder = new DirectFolderModule().getProperties(session, mailNode);
+			mailFolder = new DirectFolderModule().getProperties(session, mailPath);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_MAIL_FOLDER", mailNode.getUUID(), mailFolder.getPath());
+			UserActivity.log(session.getUserID(), "GET_MAIL_FOLDER", null, mailFolder.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -632,11 +625,10 @@ public class DirectRepositoryModule implements RepositoryModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node mailNode = session.getRootNode().getNode(Repository.MAIL);
-			mailFolder = new DirectFolderModule().getProperties(session, mailNode);
+			mailFolder = new DirectFolderModule().getProperties(session, "/"+Repository.MAIL);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_MAIL_FOLDER_BASE", mailNode.getUUID(), mailFolder.getPath());
+			UserActivity.log(session.getUserID(), "GET_MAIL_FOLDER_BASE", null, mailFolder.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -665,11 +657,10 @@ public class DirectRepositoryModule implements RepositoryModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node thesaurusNode = session.getRootNode().getNode(Repository.THESAURUS);
-			thesaurusFolder = new DirectFolderModule().getProperties(session, thesaurusNode);
+			thesaurusFolder = new DirectFolderModule().getProperties(session, "/"+Repository.THESAURUS);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_THESAURUS_FOLDER", thesaurusNode.getUUID(), thesaurusFolder.getPath());
+			UserActivity.log(session.getUserID(), "GET_THESAURUS_FOLDER", null, thesaurusFolder.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -698,11 +689,10 @@ public class DirectRepositoryModule implements RepositoryModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node categoriesNode = session.getRootNode().getNode(Repository.CATEGORIES);
-			categoriesFolder = new DirectFolderModule().getProperties(session, categoriesNode);
+			categoriesFolder = new DirectFolderModule().getProperties(session, "/"+Repository.CATEGORIES);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_CATEGORIES_FOLDER", categoriesNode.getUUID(), categoriesFolder.getPath());
+			UserActivity.log(session.getUserID(), "GET_CATEGORIES_FOLDER", null, categoriesFolder.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);

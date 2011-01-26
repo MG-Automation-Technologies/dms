@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="com.openkm.servlet.admin.BaseServlet" %>
+<%@ page import="com.openkm.core.Config" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -13,7 +14,7 @@
   <title>Mime Type</title>
 </head>
 <body>
-  <c:set var="isAdmin"><%=BaseServlet.isAdmin(request)%></c:set>
+  <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
       <c:choose>
@@ -27,7 +28,7 @@
         <table class="form" width="425px">
           <tr>
             <td nowrap="nowrap">Name</td>
-            <td><input class=":required :only_on_blur" size="32" name="mt_name" value="${mt.name}"/></td>
+            <td><input class=":required :only_on_blur" name="mt_name" value="${mt.name}"/></td>
           </tr>
           <tr>
             <td>Extensions</td>
@@ -41,9 +42,7 @@
                   <input class=":required :only_on_blur" type="file" name="image"/>
                 </c:when>
                 <c:otherwise>
-                  <c:url value="/mime/${mt.name}" var="urlIcon">
-                  </c:url>
-                  <table cellpadding="0" cellspacing="0"><tr><td><img src="${urlIcon}"/>&nbsp;</td><td><input type="file" name="image"/></td></tr></table>
+                  <input type="file" name="image"/>
                 </c:otherwise>
               </c:choose>
             </td>

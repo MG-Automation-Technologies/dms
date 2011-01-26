@@ -45,7 +45,8 @@ public class QueryBank {
     /**
      * QueryBank
      */
-    private QueryBank() { }
+    private QueryBank() {
+    }
 
     /**
      * QueryBank

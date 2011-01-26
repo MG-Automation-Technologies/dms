@@ -35,8 +35,8 @@ import com.google.gwt.user.client.ui.TreeItem;
 
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.contants.service.RPCService;
-import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
+import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMFolderService;
 import com.openkm.frontend.client.service.OKMFolderServiceAsync;
 import com.openkm.frontend.client.service.OKMRepositoryService;
@@ -107,7 +107,7 @@ public class FolderSelectTree extends Composite {
 			actualItem.getChild(0).remove();
 		}
 
-		changeView(UIDesktopConstants.NAVIGATOR_TAXONOMY);
+		changeView(PanelDefinition.NAVIGATOR_TAXONOMY);
 	}
 	
 	/**
@@ -122,27 +122,27 @@ public class FolderSelectTree extends Composite {
 		}
 		
 		switch (view){
-			case UIDesktopConstants.NAVIGATOR_TAXONOMY :
+			case PanelDefinition.NAVIGATOR_TAXONOMY :
 				getRoot();
 				break;
 				
-			case UIDesktopConstants.NAVIGATOR_CATEGORIES :
+			case PanelDefinition.NAVIGATOR_CATEGORIES :
 				getCategories();
 				break;
 				
-			case UIDesktopConstants.NAVIGATOR_TEMPLATES :
+			case PanelDefinition.NAVIGATOR_TEMPLATES :
 				getTemplate();
 				break;
 				
-			case UIDesktopConstants.NAVIGATOR_PERSONAL :
+			case PanelDefinition.NAVIGATOR_PERSONAL :
 				getPersonal();
 				break;
 			
-			case UIDesktopConstants.NAVIGATOR_MAIL :
+			case PanelDefinition.NAVIGATOR_MAIL :
 				getMail();
 				break;	
 			
-			case UIDesktopConstants.NAVIGATOR_TRASH :
+			case PanelDefinition.NAVIGATOR_TRASH :
 				getTrash();
 				break;
 		}
@@ -226,7 +226,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getChilds(String path) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-		endPoint.setServiceEntryPoint(RPCService.FolderService);	
+		endPoint.setServiceEntryPoint(Config.OKMFolderService);	
 		folderService.getChilds(path, callbackGetChilds);
 	}	
 	
@@ -235,7 +235,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getRoot() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(RPCService.RepositoryService);	
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
 		repositoryService.getRootFolder(callbackGetRootFolder);
 	}
 	
@@ -264,7 +264,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getTemplate() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(RPCService.RepositoryService);
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
 		repositoryService.getTemplatesFolder(callbackGetTemplatesFolder);
 	}
 	
@@ -293,7 +293,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getCategories() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(RPCService.RepositoryService);
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
 		repositoryService.getCategoriesFolder(callbackGetCategoriesFolder);
 	}
 	
@@ -322,7 +322,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getMail() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(RPCService.RepositoryService);
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
 		repositoryService.getMailFolder(callbackGetMailFolder);
 	}
 	
@@ -351,7 +351,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getPersonal() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(RPCService.RepositoryService);
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
 		repositoryService.getPersonalFolder(callbackGetPersonalFolder);
 	}
 	
@@ -380,7 +380,7 @@ public class FolderSelectTree extends Composite {
 	 */
 	public void getTrash() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(RPCService.RepositoryService);	
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
 		repositoryService.getTrashFolder(callbackGetTrashFolder);
 	}
 	

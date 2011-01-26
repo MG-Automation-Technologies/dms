@@ -40,7 +40,6 @@ public interface PropertyGroupModule {
 	/**
 	 * Add a property group to a document.
 	 * 
-	 * @param token The session authorization token.
 	 * @param nodePath The path that identifies an unique node.
 	 * @param grpName The group name previously registered in the system.
 	 * @throws NoSuchGroupException If there is no such registered group name.
@@ -58,7 +57,6 @@ public interface PropertyGroupModule {
 	/**
 	 * Removes a property group from a document.
 	 * 
-	 * @param token The session authorization token.
 	 * @param nodePath The path that identifies an unique node.
 	 * @param grpName The group name previously registered in the system.
 	 * @throws NoSuchGroupException If there is no such registered group name.
@@ -74,9 +72,7 @@ public interface PropertyGroupModule {
 	/**
 	 * Get groups assigned to a document.
 	 * 
-	 * @param token The session authorization token.
 	 * @param nodePath The path that identifies an unique node.
-	 * @return A list with all groups assigned to the document.
 	 * @throws PathNotFoundException If there is no document in this 
 	 * repository path.
 	 * @throws RepositoryException If there is any general repository problem.
@@ -87,8 +83,6 @@ public interface PropertyGroupModule {
 	/**
 	 * Get all groups defined in the system.
 	 * 
-	 * @param token The session authorization token.
-	 * @return A list with all groups registered in the system.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public List<PropertyGroup> getAllGroups(String token) throws IOException, ParseException,
@@ -97,10 +91,8 @@ public interface PropertyGroupModule {
 	/**
 	 * Get all properties defined in a document by group.
 	 * 
-	 * @param token The session authorization token.
 	 * @param nodePath The path that identifies an unique node.
 	 * @param grpName The group name previously registered in the system.
-	 * @return A list with all properties defined in the group and its actual values.
 	 * @throws NoSuchGroupException If there is no such registered group name.
 	 * @throws PathNotFoundException If there is no document in this 
 	 * repository path.
@@ -113,10 +105,9 @@ public interface PropertyGroupModule {
 	/**
 	 * Set group properties to a document.
 	 * 
-	 * @param token The session authorization token.
 	 * @param nodePath The path that identifies an unique node.
 	 * @param grpName The group name previously registered in the system.
-	 * @param properties The property values.
+	 * @param propName The category property name.
 	 * @throws NoSuchPropertyException If there is no such registered category property.
 	 * @throws NoSuchGroupException If there is no such registered group name.
 	 * @throws LockException Can't modify a locked document. 
@@ -132,8 +123,7 @@ public interface PropertyGroupModule {
 
 	/**
 	 * Get all possible values which can have a property.
-	 * 
-	 * @param token The session authorization token.
+	 *  
 	 * @param grpName The group name previously registered in the system.
 	 * @throws IOException If there is any problem reading the property values.
 	 * @throws RepositoryException If there is any general repository problem.
@@ -143,11 +133,9 @@ public interface PropertyGroupModule {
 	
 	/**
 	 * Test if a node has a property group assigned
-	 * 
-	 * @param token The session authorization token.
+	 *
 	 * @param nodePath The path that identifies an unique node.
 	 * @param grpName The group name previously registered in the system.
-	 * @return True if the document has the given property group assigned, and false otherwise.
 	 * @throws NoSuchGroupException If there is no such registered group name.
 	 * @throws PathNotFoundException If there is no document in this 
 	 * repository path.

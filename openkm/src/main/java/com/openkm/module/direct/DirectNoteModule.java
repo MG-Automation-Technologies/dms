@@ -103,7 +103,7 @@ public class DirectNoteModule implements NoteModule {
 			DirectNotificationModule.checkSubscriptions(node, session.getUserID(), "ADD_NOTE", text);
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADD_NOTE", node.getUUID(), text+", "+nodePath);
+			UserActivity.log(session.getUserID(), "ADD_NOTE", nodePath, text);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(node);
@@ -164,7 +164,7 @@ public class DirectNoteModule implements NoteModule {
 			}
 						
 			// Activity log
-			UserActivity.log(session.getUserID(), "REMOVE_NOTE", noteNode.getUUID(), notePath);
+			UserActivity.log(session.getUserID(), "REMOVE_NOTE", notePath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
@@ -210,7 +210,7 @@ public class DirectNoteModule implements NoteModule {
 			note = get(noteNode);
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_NOTE", noteNode.getUUID(), notePath);
+			UserActivity.log(session.getUserID(), "GET_NOTE", notePath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -262,7 +262,7 @@ public class DirectNoteModule implements NoteModule {
 			DirectNotificationModule.checkSubscriptions(noteNode, session.getUserID(), "SET_NOTE", null);
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "SET_NOTE", noteNode.getUUID(), notePath);
+			UserActivity.log(session.getUserID(), "SET_NOTE", notePath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(noteNode);
@@ -314,7 +314,7 @@ public class DirectNoteModule implements NoteModule {
 			}
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "LIST_NOTES", nodeNode.getUUID(), nodePath);
+			UserActivity.log(session.getUserID(), "LIST_NOTES", nodePath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);

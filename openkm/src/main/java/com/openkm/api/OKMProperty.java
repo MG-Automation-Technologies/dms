@@ -68,14 +68,13 @@ public class OKMProperty implements PropertyModule {
 	}
 
 	@Override
-	public String addKeyword(String token, String nodePath, String keyword) throws VersionException,
+	public void addKeyword(String token, String nodePath, String keyword) throws VersionException,
 			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
 			DatabaseException {
 		log.debug("addKeyword({}, {}, {})", new Object[] { token, nodePath, keyword });
 		PropertyModule pm = ModuleManager.getPropertyModule();
-		String ret = pm.addKeyword(token, nodePath, keyword);
-		log.debug("addKeyword: {}", ret);
-		return ret;
+		pm.addKeyword(token, nodePath, keyword);
+		log.debug("addKeyword: void");
 	}
 
 	@Override
@@ -86,25 +85,5 @@ public class OKMProperty implements PropertyModule {
 		PropertyModule pm = ModuleManager.getPropertyModule();
 		pm.removeKeyword(token, nodePath, keyword);
 		log.debug("removeKeyword: void");
-	}
-
-	@Override
-	public void setEncryption(String token, String nodePath, String cipherName) throws VersionException,
-			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
-			DatabaseException {
-		log.debug("setEncryption({}, {}, {})", new Object[] { token, nodePath, cipherName });
-		PropertyModule pm = ModuleManager.getPropertyModule();
-		pm.setEncryption(token, nodePath, cipherName);
-		log.debug("setEncryption: void");
-	}
-	
-	@Override
-	public void unsetEncryption(String token, String nodePath) throws VersionException,
-			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
-			DatabaseException {
-		log.debug("unsetEncryption({}, {})", new Object[] { token, nodePath });
-		PropertyModule pm = ModuleManager.getPropertyModule();
-		pm.unsetEncryption(token, nodePath);
-		log.debug("unsetEncryption: void");
 	}
 }
