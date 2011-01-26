@@ -21,6 +21,7 @@
 
 package com.openkm.util.markov;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.Random;
@@ -35,29 +36,50 @@ import java.util.Random;
  */
 public class Generator {
 	private static final int DEFAULT_PREFIX_LENGTH = 4;
-	private static final int LINE_WIDTH = 65;
+	private static final int LINE_WIDTH = 80;
 	private static final int TOTAL_CHARACTERS = 300;
+	private int prefixLength;
+	private Markov markov;
 	
-	public static void generate(Reader in, Writer out) throws Exception {
-		generate(DEFAULT_PREFIX_LENGTH, in, out);
+	public Generator(int prefixLength, Reader in) throws IOException {
+		markov = new Markov(in, prefixLength);
+		this.prefixLength = prefixLength; 
 	}
 	
-	public static void generate(int prefixLength, Reader in, Writer out) throws Exception {
-		Markov markov1 = new Markov(in, prefixLength);
+	public Generator(Reader in) throws IOException {
+		markov = new Markov(in, DEFAULT_PREFIX_LENGTH);
+		this.prefixLength = DEFAULT_PREFIX_LENGTH;
+	}
+	
+	public void generateText(int paragraphs, Writer out) throws Exception {
+		generateText(paragraphs, LINE_WIDTH, TOTAL_CHARACTERS, out);
+	}
+	
+	public void generateText(int paragraphs, int lineWidth, int totalCharacters, Writer out) 
+			throws Exception {
+		for (int i=0; i<paragraphs; i++) {
+			generateParagraph(lineWidth, totalCharacters, out);
+			out.write("\n\n");
+		}
+	}
+	
+	public void generateParagraph(Writer out) throws Exception {
+		generateParagraph(LINE_WIDTH, TOTAL_CHARACTERS, out);
+	}
+	
+	public void generateParagraph(int lineWidth, int totalCharacters, Writer out) throws Exception {
 		Random random = new Random();
 		CharQueue queue = new CharQueue(prefixLength);
 		float weight = 0;
 		int width = prefixLength;
 		int c;
 		
-		queue.set(markov1.getBootstrapPrefix());
+		queue.set(markov.getBootstrapPrefix());
 		out.write(queue.toString());
 		
 		do {
 			String prefix = queue.toString();
-
-			// get a character from each chain
-			c = markov1.get(prefix, random);
+			c = markov.get(prefix, random);
 
 			if (c == -1) {
 				break;
@@ -68,13 +90,13 @@ public class Generator {
 			width++;
 			
 			// line wrap
-			if (c == ' ' && width > LINE_WIDTH) {
+			if (c == ' ' && width > lineWidth) {
 				out.write("\n");
 				width = 0;
 			}
 
 			// go towards second markov chain
-			weight += 1.0/TOTAL_CHARACTERS;
+			weight += 1.0 / totalCharacters;
 		} while (weight < 1 || c != '.');
 	}
 }
