@@ -281,7 +281,7 @@ public class SearchResult extends Composite {
 	final AsyncCallback<GWTResultSet> callbackFindPaginated = new AsyncCallback<GWTResultSet>() {
 		public void onSuccess(GWTResultSet result){
 			GWTResultSet resultSet = result;	
-			Main.get().mainPanel.search.searchBrowser.searchIn.controlSearch.refreshControl(resultSet.getTotal());
+			Main.get().mainPanel.search.searchBrowser.searchIn.searchControl.controlSearch.refreshControl(resultSet.getTotal());
 			
 			removeAllRows();
 			int size = 0;

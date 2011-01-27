@@ -106,7 +106,7 @@ public class GroupPopup extends DialogBox {
 							param.setGrpName(grpName);
 							param.setGrpLabel(grpLabel);
 							param.setFormElement(formElement);
-							Main.get().mainPanel.search.searchBrowser.searchIn.addProperty(param);
+							Main.get().mainPanel.search.searchBrowser.searchIn.searchMetadata.addProperty(param);
 						}
 					}
 				}
@@ -334,9 +334,9 @@ public class GroupPopup extends DialogBox {
 		} else {
 			// Validate button 
 			if (groupListBox.getItemCount()>1) {
-				Main.get().mainPanel.search.searchBrowser.searchIn.addGroup.setEnabled(true);
+				Main.get().mainPanel.search.searchBrowser.searchIn.searchMetadata.addGroup.setEnabled(true);
 			} else {
-				Main.get().mainPanel.search.searchBrowser.searchIn.addGroup.setEnabled(false);
+				Main.get().mainPanel.search.searchBrowser.searchIn.searchMetadata.addGroup.setEnabled(false);
 			}
 			validate = -1; // Resets values
 		}
