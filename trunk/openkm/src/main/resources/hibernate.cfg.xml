@@ -241,7 +241,7 @@
     <mapping resource="com/openkm/dao/bean/Translation.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/cache/UserItems.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/cache/UserDocumentKeyword.hbm.xml"/>
-    <mapping resource="com/openkm/dao/bean/Extension.hbm.xml"/>
+    <mapping resource="com/openkm/extension/dao/bean/Extension.hbm.xml"/>
     <mapping resource="com/openkm/extension/dao/bean/ProposedSubscriptionSent.hbm.xml"/>
     <mapping resource="com/openkm/extension/dao/bean/ProposedSubscriptionReceived.hbm.xml"/>
     <mapping resource="com/openkm/extension/dao/bean/ProposedQuerySent.hbm.xml"/>
