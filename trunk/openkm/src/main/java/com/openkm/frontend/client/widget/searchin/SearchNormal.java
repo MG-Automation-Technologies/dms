@@ -41,6 +41,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.openkm.frontend.client.Main;
@@ -63,6 +64,7 @@ public class SearchNormal extends Composite {
 	private static final int CALENDAR_FIRED_START = 0;
 	private static final int CALENDAR_FIRED_END = 1;
 	
+	private ScrollPanel scrollPanel;
 	private FlexTable table;
 	public ListBox context;
 	public TextBox content;
@@ -99,6 +101,7 @@ public class SearchNormal extends Composite {
 	 */
 	public SearchNormal() {
 		table = new FlexTable();
+		scrollPanel = new ScrollPanel(table);
 		
 		context = new ListBox();
 		context.setStyleName("okm-Select");
@@ -246,7 +249,7 @@ public class SearchNormal extends Composite {
 		startDate.setStyleName("okm-Input");
 		endDate.setStyleName("okm-Input");
 		
-		initWidget(table);
+		initWidget(scrollPanel);
 	}
 	
 	/**

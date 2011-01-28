@@ -33,6 +33,7 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.openkm.frontend.client.Main;
@@ -44,6 +45,7 @@ import com.openkm.frontend.client.util.OKMBundleResources;
  */
 public class SearchAdvanced extends Composite {
 	
+	private ScrollPanel scrollPanel;
 	private FlexTable table;
 	public HorizontalPanel pathExplorerPanel;
 	public HorizontalPanel categoryExplorerPanel;
@@ -72,6 +74,7 @@ public class SearchAdvanced extends Composite {
 	 */
 	public SearchAdvanced() {
 		table = new FlexTable();
+		scrollPanel = new ScrollPanel(table);
 		
 		// Sets the folder explorer
 		folderSelectPopup = new FolderSelectPopup();
@@ -215,7 +218,7 @@ public class SearchAdvanced extends Composite {
 		mail.addStyleName("okm-NoWrap");
 		mimeTypes.setStyleName("okm-Select");
 		
-		initWidget(table);
+		initWidget(scrollPanel);
 	}
 	
 	/**

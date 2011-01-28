@@ -40,6 +40,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTQueryParams;
@@ -60,6 +61,7 @@ public class SearchControl extends Composite {
 	
 	private static final int MIN_WORD_LENGTH = 3;
 	
+	private ScrollPanel scrollPanel;
 	private FlexTable table;
 	public Button searchButton;
 	private Button saveSearchButton;
@@ -86,6 +88,7 @@ public class SearchControl extends Composite {
 		table = new FlexTable();
 		table.setCellPadding(2);
 		table.setCellSpacing(2);
+		scrollPanel = new ScrollPanel(table);
 		dashboard = new CheckBox();
 		searchSavedName = new TextBox();
 		searchSavedName.setWidth("200");
@@ -295,7 +298,7 @@ public class SearchControl extends Composite {
 		searchSavedName.setStyleName("okm-Input");
 		resultPage.setStyleName("okm-Input");
 		
-		initWidget(table);
+		initWidget(scrollPanel);
 	}
 	
 	/**
