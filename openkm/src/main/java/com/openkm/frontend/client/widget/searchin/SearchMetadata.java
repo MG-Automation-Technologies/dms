@@ -34,6 +34,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
@@ -53,6 +54,7 @@ import com.openkm.frontend.client.util.OKMBundleResources;
  */
 public class SearchMetadata extends Composite {
 	
+	private ScrollPanel scrollPanel;
 	private FlexTable table;
 	private GroupPopup groupPopup;
 	public Button addGroup;
@@ -65,6 +67,7 @@ public class SearchMetadata extends Composite {
 	 */
 	public SearchMetadata() {
 		table = new FlexTable();
+		scrollPanel = new ScrollPanel(table);
 		tableProperties = new FlexTable();
 		
 		// Table padding and spacing properties
@@ -90,7 +93,7 @@ public class SearchMetadata extends Composite {
 		addGroup.setStyleName("okm-Button");
 		addGroup.addStyleName("okm-NoWrap");
 		
-		initWidget(table);
+		initWidget(scrollPanel);
 	}
 	
 	/**

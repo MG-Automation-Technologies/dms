@@ -28,7 +28,6 @@ import java.util.Map;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -128,10 +127,25 @@ public class SearchIn extends Composite {
 	public void setSize(int width, int height) {
 		setPixelSize(width, height);
 		int tabWidth = MINIMUM_TAB_WIDTH;
-		if ((width-CONTROLER_WIDTH)>tabWidth) {
-			tabWidth = width-CONTROLER_WIDTH;
+		int controlWidth = CONTROLER_WIDTH;		
+		// Case width is too small the decision is distribute at 50%
+		if (MINIMUM_TAB_WIDTH+CONTROLER_WIDTH>width) {
+			if (width>10) {
+				tabWidth = width / 2;
+				controlWidth = width -tabWidth;
+			} else {
+				// Minim values
+				tabWidth = 10;
+				controlWidth = 10;
+			}
+		} else if ((width-CONTROLER_WIDTH)>tabWidth) {
+			tabWidth = width-CONTROLER_WIDTH; // Always trying expand tab panel
 		}
-		tabPanel.setWidth(""+tabWidth);
+		tabPanel.setWidth(""+(tabWidth-2));
+		searchNormal.setPixelSize(tabWidth-2, height-22); // Substract tab height
+		searchAdvanced.setPixelSize(tabWidth-2, height-22); // Substract tab height
+		searchMetadata.setPixelSize(tabWidth-2, height-22); // Substract tab height
+		searchControl.setPixelSize(controlWidth-4, height-2); // Substract tab height -2 pixels for vertical line too
 	}
 	
 	/**
