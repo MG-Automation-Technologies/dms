@@ -92,8 +92,8 @@ public class ImageLogoServlet extends HttpServlet {
 		
 		if ("login".equals(img)) {
 			stFile = Config.LOGO_LOGIN;
-		} else if ("mobi".equals(img)) {
-			stFile = Config.LOGO_MOBI;
+		} else if ("mobile".equals(img)) {
+			stFile = Config.LOGO_MOBILE;
 		} else if ("report".equals(img)) {
 			stFile = Config.LOGO_REPORT;
 		}
