@@ -189,7 +189,7 @@ public class Config {
 	// Logo icons
 	public static final String PROPERTY_LOGO_LOGIN = "logo.login";
 	public static final String PROPERTY_LOGO_TEXT = "logo.text";
-	public static final String PROPERTY_LOGO_MOBI = "logo.mobi";
+	public static final String PROPERTY_LOGO_MOBILE = "logo.mobile";
 	public static final String PROPERTY_LOGO_REPORT = "logo.report";
 	
 	// Mime types
@@ -333,7 +333,7 @@ public class Config {
 	// Logo icons
 	public static StoredFile LOGO_LOGIN;
 	public static String LOGO_TEXT;
-	public static StoredFile LOGO_MOBI;
+	public static StoredFile LOGO_MOBILE;
 	public static StoredFile LOGO_REPORT;
 	
 	// Misc
@@ -691,8 +691,8 @@ public class Config {
 			values.put(PROPERTY_LOGO_LOGIN, LOGO_LOGIN.getName());
 			LOGO_TEXT = ConfigDAO.getString(PROPERTY_LOGO_TEXT, "&nbsp;");
 			values.put(PROPERTY_LOGO_TEXT, LOGO_TEXT);
-			LOGO_MOBI = ConfigDAO.getFile(PROPERTY_LOGO_MOBI, "/img/logo_mobi.gif");
-			values.put(PROPERTY_LOGO_MOBI, LOGO_MOBI.getName());
+			LOGO_MOBILE = ConfigDAO.getFile(PROPERTY_LOGO_MOBILE, "/img/logo_mobile.gif");
+			values.put(PROPERTY_LOGO_MOBILE, LOGO_MOBILE.getName());
 			LOGO_REPORT = ConfigDAO.getFile(PROPERTY_LOGO_REPORT, "/img/logo_report.gif");
 			values.put(PROPERTY_LOGO_REPORT, LOGO_REPORT.getName());
 		} catch (DatabaseException e) {
