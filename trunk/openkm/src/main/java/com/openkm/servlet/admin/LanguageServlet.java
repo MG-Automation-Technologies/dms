@@ -410,7 +410,8 @@ public class LanguageServlet extends BaseServlet {
 		out.println(insertLang);
 		
 		for (Translation translation : language.getTranslations()) {
-			StringBuffer insertTranslation = new StringBuffer("INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('");
+			StringBuffer insertTranslation = new StringBuffer("INSERT INTO OKM_TRANSLATION (TR_ID, TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES (");
+			insertTranslation.append(translation.getId() + ", '");
 			insertTranslation.append(translation.getModule() + "', '" +translation.getKey() + "', '");
 			insertTranslation.append(translation.getText() + "', '" +language.getId() + "');");
 			out.println(insertTranslation);
