@@ -1,4 +1,4 @@
-package com.openkm.servlet.mobi;
+package com.openkm.servlet.mobile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -97,7 +97,7 @@ public class HandlerServlet extends HttpServlet {
 		sc.setAttribute("documentChilds", OKMDocument.getInstance().getChilds(null, path));
 		sc.setAttribute("userId", userId);
 		sc.setAttribute("path", path);
-		sc.getRequestDispatcher("/mobi/browse.jsp").forward(request, response);
+		sc.getRequestDispatcher("/mobile/browse.jsp").forward(request, response);
 	}
 	
 	/**
@@ -116,7 +116,7 @@ public class HandlerServlet extends HttpServlet {
 		path = new String(path.getBytes("ISO-8859-1"), "UTF-8");
 		sc.setAttribute("fld", OKMFolder.getInstance().getProperties(null, path));
 		sc.setAttribute("path", path);
-		sc.getRequestDispatcher("/mobi/fld-properties.jsp").forward(request, response);
+		sc.getRequestDispatcher("/mobile/fld-properties.jsp").forward(request, response);
 	}
 	
 	/**
@@ -143,7 +143,7 @@ public class HandlerServlet extends HttpServlet {
 		sc.setAttribute("doc", doc);
 		sc.setAttribute("path", path);
 		sc.setAttribute("categories", categories);
-		sc.getRequestDispatcher("/mobi/doc-properties.jsp").forward(request, response);
+		sc.getRequestDispatcher("/mobile/doc-properties.jsp").forward(request, response);
 	}
 	
 	/**
@@ -161,7 +161,7 @@ public class HandlerServlet extends HttpServlet {
 			sc.setAttribute("queryResult", OKMSearch.getInstance().findByContent(null, query));	
 		}
 
-		sc.getRequestDispatcher("/mobi/search.jsp").forward(request, response);
+		sc.getRequestDispatcher("/mobile/search.jsp").forward(request, response);
 	}
 	
 	/**
