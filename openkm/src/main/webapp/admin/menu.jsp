@@ -1,5 +1,5 @@
 <%@ page import="com.openkm.servlet.admin.BaseServlet" %>
-<%@ page import="com.openkm.dao.ExtensionDAO"%>
+<%@ page import="com.openkm.extension.dao.ExtensionDAO"%>
 <%@ page import="com.openkm.extension.frontend.client.widget.stamp.StampToolBarButton"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <c:set var="isStampRegistered"><%=StampToolBarButton.isRegistered(ExtensionDAO.findAllUuids())%></c:set>
