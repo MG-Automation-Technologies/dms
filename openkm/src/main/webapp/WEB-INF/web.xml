@@ -178,7 +178,7 @@
   <!-- Misc servlets -->
   <servlet>
   	<servlet-name>HandlerServlet</servlet-name>
-  	<servlet-class>com.openkm.servlet.mobi.HandlerServlet</servlet-class>
+  	<servlet-class>com.openkm.servlet.mobile.HandlerServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>SyndicationServlet</servlet-name>
@@ -518,7 +518,7 @@
   <!-- Misc servlets mappings -->
   <servlet-mapping>
   	<servlet-name>HandlerServlet</servlet-name>
-  	<url-pattern>/mobi/Handler</url-pattern>
+  	<url-pattern>/mobile/Handler</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>SyndicationServlet</servlet-name>
@@ -747,7 +747,7 @@
             
       <!-- JSPs -->
       <url-pattern>/admin/*</url-pattern>
-      <url-pattern>/mobi/*</url-pattern>
+      <url-pattern>/mobile/*</url-pattern>
             
       <!-- Servlets -->
 	  <url-pattern>/RepositoryStartup</url-pattern>
