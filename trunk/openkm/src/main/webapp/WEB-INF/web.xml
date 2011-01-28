@@ -743,7 +743,7 @@
       <web-resource-name>OpenKM Protected Area</web-resource-name>
       
       <!-- GWT -->
-      <url-pattern>/com.openkm.frontend.Main/*</url-pattern>
+      <url-pattern>/frontend/*</url-pattern>
             
       <!-- JSPs -->
       <url-pattern>/admin/*</url-pattern>
