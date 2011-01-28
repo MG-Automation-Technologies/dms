@@ -296,17 +296,17 @@ public class MimeTypeServlet extends BaseServlet {
 		out.println("DELETE FROM OKM_MIME_TYPE_EXTENSION;");
 		
 		for (MimeType mimeType: MimeTypeDAO.findAll("mt.id")) {
-			StringBuffer insertMime = new StringBuffer("INSERT INTO OKM_MIME_TYPE (MT_ID, MT_NAME, MT_IMAGE_CONTENT, MT_IMAGE_MIME) VALUES ('");
-			insertMime.append(mimeType.getId() + "', '");
-			insertMime.append(mimeType.getName() + "', '");
-			insertMime.append(mimeType.getImageContent() + "', '");
-			insertMime.append(mimeType.getImageMime() + "');");
+			StringBuffer insertMime = new StringBuffer("INSERT INTO OKM_MIME_TYPE (MT_ID, MT_NAME, MT_IMAGE_CONTENT, MT_IMAGE_MIME) VALUES (");
+			insertMime.append(mimeType.getId()).append(", '");
+			insertMime.append(mimeType.getName()).append("', '");
+			insertMime.append(mimeType.getImageContent()).append("', '");
+			insertMime.append(mimeType.getImageMime()).append("');");
 			out.println(insertMime);
 			
 			for (String ext : mimeType.getExtensions()) {
-				StringBuffer insertExtension = new StringBuffer("INSERT INTO OKM_MIME_TYPE_EXTENSION (MTE_ID, MTE_NAME) VALUES ('");
-				insertExtension.append(mimeType.getId() + "', '");
-				insertExtension.append(ext + "');");
+				StringBuffer insertExtension = new StringBuffer("INSERT INTO OKM_MIME_TYPE_EXTENSION (MTE_ID, MTE_NAME) VALUES (");
+				insertExtension.append(mimeType.getId()).append(", '");
+				insertExtension.append(ext).append("');");
 				out.println(insertExtension);
 			}
 		}

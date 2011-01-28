@@ -404,16 +404,20 @@ public class LanguageServlet extends BaseServlet {
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(response.getOutputStream(), "UTF8"), true);
 		out.println("DELETE FROM OKM_TRANSLATION WHERE TR_LANGUAGE='" + language.getId() +"';" );
 		out.println("DELETE FROM OKM_LANGUAGE WHERE LG_ID='" + language.getId() +"';" );
-		StringBuffer insertLang = new StringBuffer("INSERT INTO OKM_LANGUAGE (LG_ID, LG_NAME, LG_IMAGE_CONTENT, LG_IMAGE_MIME ) VALUES ('");
-		insertLang.append(language.getId() + "', '" + language.getName() + "', '" + language.getImageContent() + "', '");
-		insertLang.append(language.getImageMime()+"');");
+		StringBuffer insertLang = new StringBuffer("INSERT INTO OKM_LANGUAGE (LG_ID, LG_NAME, LG_IMAGE_CONTENT, LG_IMAGE_MIME) VALUES ('");
+		insertLang.append(language.getId()).append("', '");
+		insertLang.append(language.getName()).append("', '");
+		insertLang.append(language.getImageContent()).append("', '");
+		insertLang.append(language.getImageMime()).append("');");
 		out.println(insertLang);
 		
 		for (Translation translation : language.getTranslations()) {
 			StringBuffer insertTranslation = new StringBuffer("INSERT INTO OKM_TRANSLATION (TR_ID, TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES (");
-			insertTranslation.append(translation.getId() + ", '");
-			insertTranslation.append(translation.getModule() + "', '" +translation.getKey() + "', '");
-			insertTranslation.append(translation.getText() + "', '" +language.getId() + "');");
+			insertTranslation.append(translation.getId()).append(", '");
+			insertTranslation.append(translation.getModule()).append("', '");
+			insertTranslation.append(translation.getKey()).append("', '");
+			insertTranslation.append(translation.getText()).append("', '");
+			insertTranslation.append(language.getId()).append("');");
 			out.println(insertTranslation);
 		}
 		
