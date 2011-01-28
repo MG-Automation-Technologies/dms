@@ -27,7 +27,7 @@
         <c:param name="path" value="${qr.document.path}"/>
       </c:url>
       <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-        <td width="18px"><img src="../com.openkm.frontend.Main/img/icon/mime/${qr.document.mimeType}.gif"/></td>
+        <td width="18px"><img src="../frontend/img/icon/mime/${qr.document.mimeType}.gif"/></td>
         <td width="100%" onclick="if (confirm('Download ${size} document?')) { document.location='${urlDownload}'; }">
           <u:getName path="${qr.document.path}"/>
         </td>

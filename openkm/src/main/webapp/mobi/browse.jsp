@@ -59,7 +59,7 @@
         <c:param name="path" value="${fld.path}"/>
       </c:url>
       <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-        <td width="18px"><img src="../com.openkm.frontend.Main/img/${fldImg}"/></td>
+        <td width="18px"><img src="../frontend/img/${fldImg}"/></td>
         <td width="100%" onclick="document.location='${urlBrowse}'">
           <u:getName path="${fld.path}"/>
         </td>

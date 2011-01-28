@@ -10,7 +10,7 @@
 	if (FormatUtil.isMobile(request)) {
 		url = "mobi/index.jsp";
 	} else {
-		url = "com.openkm.frontend.Main/index.jsp";
+		url = "frontend/index.jsp";
 	}
 	
 	if (docPath != null) {
