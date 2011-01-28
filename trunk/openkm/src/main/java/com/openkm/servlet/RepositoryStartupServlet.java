@@ -55,12 +55,7 @@ import com.openkm.util.UserActivity;
 import com.openkm.util.WarUtils;
 
 /**
- * Servlet Class
- * 
- * @web.servlet name="RepositoryStartup" display-name="Name for RepositoryStartup"
- *              description="Description for RepositoryStartup" load-on-startup = "1"
- * @web.servlet-mapping url-pattern="/RepositoryStartupServlet"
- * @web.servlet-init-param name="repository-config" value="A value"
+ * Servlet Startup Class
  */
 public class RepositoryStartupServlet extends HttpServlet {
 	private static Logger log = LoggerFactory.getLogger(RepositoryStartupServlet.class);
