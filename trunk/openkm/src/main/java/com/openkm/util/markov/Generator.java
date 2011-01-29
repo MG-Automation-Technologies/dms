@@ -22,8 +22,10 @@
 package com.openkm.util.markov;
 
 import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.util.InputMismatchException;
 import java.util.Random;
 
 /**
@@ -41,33 +43,52 @@ public class Generator {
 	private int prefixLength;
 	private Markov markov;
 	
-	public Generator(int prefixLength, Reader in) throws IOException {
-		markov = new Markov(in, prefixLength);
+	public Generator(InputStream in, int prefixLength) throws IOException {
+		markov = new Markov(new InputStreamReader(in), prefixLength);
 		this.prefixLength = prefixLength; 
 	}
 	
-	public Generator(Reader in) throws IOException {
-		markov = new Markov(in, DEFAULT_PREFIX_LENGTH);
+	public Generator(InputStream in) throws IOException {
+		markov = new Markov(new InputStreamReader(in), DEFAULT_PREFIX_LENGTH);
 		this.prefixLength = DEFAULT_PREFIX_LENGTH;
 	}
 	
-	public void generateText(int paragraphs, Writer out) throws Exception {
+	/**
+	 * Generate a text using defaults to a writer
+	 */
+	public void generateText(int paragraphs, OutputStream out) throws Exception {
 		generateText(paragraphs, LINE_WIDTH, TOTAL_CHARACTERS, out);
 	}
 	
-	public void generateText(int paragraphs, int lineWidth, int totalCharacters, Writer out) 
-			throws Exception {
+	/**
+	 * Generate a text to a writer
+	 * @throws IOException 
+	 * @throws InputMismatchException 
+	 */
+	public void generateText(int paragraphs, int lineWidth, int totalCharacters, OutputStream out)
+			throws InputMismatchException, IOException {
 		for (int i=0; i<paragraphs; i++) {
 			generateParagraph(lineWidth, totalCharacters, out);
-			out.write("\n\n");
+			out.write("\n\n".getBytes());
 		}
 	}
 	
-	public void generateParagraph(Writer out) throws Exception {
+	/**
+	 * Generate a paragraph using defaults to a writer
+	 * @throws IOException 
+	 * @throws InputMismatchException 
+	 */
+	public void generateParagraph(OutputStream out) throws InputMismatchException, IOException {
 		generateParagraph(LINE_WIDTH, TOTAL_CHARACTERS, out);
 	}
 	
-	public void generateParagraph(int lineWidth, int totalCharacters, Writer out) throws Exception {
+	/**
+	 * Generate a paragraph to a writer
+	 * @throws IOException 
+	 * @throws InputMismatchException 
+	 */
+	public void generateParagraph(int lineWidth, int totalCharacters, OutputStream out) throws 
+			InputMismatchException, IOException {
 		Random random = new Random();
 		CharQueue queue = new CharQueue(prefixLength);
 		float weight = 0;
@@ -75,7 +96,7 @@ public class Generator {
 		int c;
 		
 		queue.set(markov.getBootstrapPrefix());
-		out.write(queue.toString());
+		out.write(queue.toString().getBytes());
 		
 		do {
 			String prefix = queue.toString();
@@ -91,11 +112,11 @@ public class Generator {
 			
 			// line wrap
 			if (c == ' ' && width > lineWidth) {
-				out.write("\n");
+				out.write("\n".getBytes());
 				width = 0;
 			}
 
-			// go towards second markov chain
+			// go towards second Markov chain
 			weight += 1.0 / totalCharacters;
 		} while (weight < 1 || c != '.');
 	}
