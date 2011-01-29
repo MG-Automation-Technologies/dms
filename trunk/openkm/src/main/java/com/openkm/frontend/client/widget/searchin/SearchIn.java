@@ -156,6 +156,14 @@ public class SearchIn extends Composite {
 		searchAdvanced.langRefresh();
 		searchMetadata.langRefresh();
 		searchControl.langRefresh();
+		int selectedTab = tabPanel.getTabBar().getSelectedTab();
+		while (tabPanel.getWidgetCount() > 0) {
+			tabPanel.remove(0);
+		}
+		tabPanel.add(searchNormal, Main.i18n("search.normal"));
+		tabPanel.add(searchAdvanced, Main.i18n("search.advanced"));
+		tabPanel.add(searchMetadata, Main.i18n("search.metadata"));
+		tabPanel.selectTab(selectedTab);
 	}
 	
 	/**
