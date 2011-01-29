@@ -21,6 +21,8 @@
 
 package com.openkm.util.markov;
 
+import java.util.InputMismatchException;
+
 /**
  * Keeps a fixed-length queue of characters.  There are only three
  * operations on the queue: set the whole thing; append a character
@@ -48,12 +50,12 @@ class CharQueue {
 	}
 
 	/**
-	 * Sets the contents of the queue.  The length of the string
+	 * Sets the contents of the queue. The length of the string
 	 * must be the same as the length passed to the constructor.
 	 */
-	public void set(String s) throws Exception {
+	public void set(String s) throws InputMismatchException {
 		if (s.length() != length) {
-			throw new Exception("Lengths don't match");
+			throw new InputMismatchException("Lengths don't match");
 		}
 
 		queue = s.toCharArray();
