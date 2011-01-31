@@ -259,7 +259,7 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<b>- Folders:</b> "+bm.getMaxFolders()+"<br/>");
 			out.println("<b>- Depth:</b> "+bm.getMaxDepth()+"<br/>");
 			out.println("<table class=\"results\" width=\"80%\">");
-			out.println("<tr><th>Date</th><th>Partial time</th><th>Total folders</th><th>Total documents</th></tr>");
+			out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th></tr>");
 			out.flush();
 			tBegin = System.currentTimeMillis();
 			Folder root = new DirectRepositoryModule().getRootFolder(null);

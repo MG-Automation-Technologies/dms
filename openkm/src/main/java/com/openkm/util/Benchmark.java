@@ -136,7 +136,13 @@ public class Benchmark {
 				long end = Calendar.getInstance().getTimeInMillis();
 				String elapse = FormatUtil.formatSeconds(end - begin);
 				log.info("Partial Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
-				out.println("<tr class=\""+(row++%2==0?"even":"odd")+"\"><td>"+FormatUtil.formatDate(Calendar.getInstance())+"</td><td>"+elapse+"</td><td>"+totalFolders+"</td><td>"+totalDocuments+"</td></tr>");
+				out.print("<tr class=\""+(row++%2==0?"even":"odd")+"\">");
+				out.print("<td>"+FormatUtil.formatDate(Calendar.getInstance())+"</td>");
+				out.print("<td>"+elapse+"</td>");
+				out.print("<td>"+(end - begin)+"</td>");
+				out.print("<td>"+totalFolders+"</td>");
+				out.print("<td>"+totalDocuments+"</td>");
+				out.println("</tr>");
 				out.flush();
 				
 				// Go depth
