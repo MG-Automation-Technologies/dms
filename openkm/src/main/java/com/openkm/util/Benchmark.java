@@ -34,9 +34,9 @@ public class Benchmark {
 	private static final int PARAGRAPH = 250;
 	private static final int LINE_WIDTH = 80;
 	private static final int TOTAL_CHARS = 27500;
-	private static final int MAX_DOCUMENTS = 2;
-	private static final int MAX_FOLDERS = 2;
-	private static final int MAX_DEPTH = 2;
+	private static final int MAX_DOCUMENTS = 6;
+	private static final int MAX_FOLDERS = 3;
+	private static final int MAX_DEPTH = 3;
 	private int maxDocuments = 0;
 	private int maxFolders = 0;
 	private int maxDepth = 0;
