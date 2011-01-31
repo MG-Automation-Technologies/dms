@@ -5,12 +5,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Calendar;
 import java.util.InputMismatchException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ibm.icu.util.Calendar;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.core.AccessDeniedException;
@@ -33,9 +34,12 @@ public class Benchmark {
 	private static final int PARAGRAPH = 250;
 	private static final int LINE_WIDTH = 80;
 	private static final int TOTAL_CHARS = 27500;
-	private static final int DOCUMENTS = 6;
-	private static final int FOLDERS = 3;
-	private static final int DEPTH = 3;
+	private static final int MAX_DOCUMENTS = 2;
+	private static final int MAX_FOLDERS = 2;
+	private static final int MAX_DEPTH = 2;
+	private int maxDocuments = 0;
+	private int maxFolders = 0;
+	private int maxDepth = 0;
 	private int totalFolders = 0;
 	private int totalDocuments = 0;
 	
@@ -45,57 +49,68 @@ public class Benchmark {
 	public static void main(String[] args) {
 	}
 	
+	public Benchmark() {
+		this.maxDocuments = MAX_DOCUMENTS;
+		this.maxFolders = MAX_FOLDERS;
+		this.maxDepth = MAX_DEPTH;
+	}
+	
+	public Benchmark(int maxDocuments, int maxFolders, int maxDepth) {
+		this.maxDocuments = maxDocuments;
+		this.maxFolders = maxFolders;
+		this.maxDepth = maxDepth;
+	}
+	
+	public int getMaxDocuments() {
+		return maxDocuments;
+	}
+	
+	public int getMaxFolders() {
+		return maxFolders;
+	}
+	
+	public int getMaxDepth() {
+		return maxDepth;
+	}
+	
+	public int getTotalFolders() {
+		return totalFolders;
+	}
+	
+	public int getTotalDocuments() {
+		return totalDocuments;
+	}
+	
 	/**
 	 * Run text document insertions
 	 */
-	public void populateText(String token, Folder root) {
-		try {
-			FileInputStream fis = new FileInputStream(SEED);
-			Generator gen = new Generator(fis);	
-			fis.close();
-			
-			// Repository insertion
-			long begin = Calendar.getInstance().getTimeInMillis();
-			populateTextHelper(token, root, gen, 0);
-			long end = Calendar.getInstance().getTimeInMillis();
-			log.info("Total Time: {} - Folders: {}, Documents: {}", new Object[] { 
-					FormatUtil.formatSeconds(end - begin), totalFolders, totalDocuments });
-		} catch (InputMismatchException e) {
-			System.err.println(e);
-		} catch (IOException e) {
-			System.err.println(e);
-		} catch (ItemExistsException e) {
-			System.err.println(e);
-		} catch (PathNotFoundException e) {
-			System.err.println(e);
-		} catch (AccessDeniedException e) {
-			System.err.println(e);
-		} catch (RepositoryException e) {
-			System.err.println(e);
-		} catch (DatabaseException e) {
-			System.err.println(e);
-		} catch (UserQuotaExceededException e) {
-			System.err.println(e);
-		} catch (UnsupportedMimeTypeException e) {
-			System.err.println(e);
-		} catch (FileSizeExceededException e) {
-			System.err.println(e);
-		} catch (VirusDetectedException e) {
-			System.err.println(e);
-		}
+	public void populateText(String token, Folder root, PrintWriter out) throws IOException,
+			InputMismatchException, ItemExistsException, PathNotFoundException, UserQuotaExceededException, 
+			AccessDeniedException, UnsupportedMimeTypeException, FileSizeExceededException,
+			VirusDetectedException, RepositoryException, DatabaseException {
+		FileInputStream fis = new FileInputStream(SEED);
+		Generator gen = new Generator(fis);	
+		fis.close();
+		
+		// Repository insertion
+		long begin = Calendar.getInstance().getTimeInMillis();
+		populateTextHelper(token, root, out, gen, 0);
+		long end = Calendar.getInstance().getTimeInMillis();
+		String elapse = FormatUtil.formatSeconds(end - begin);
+		log.info("Total Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
 	}
 	
 	/**
 	 * Helper
 	 */
-	private void populateTextHelper(String token, Folder root, Generator gen, int depth) throws 
+	private void populateTextHelper(String token, Folder root, PrintWriter out, Generator gen, int depth) throws 
 			InputMismatchException, IOException, ItemExistsException, PathNotFoundException,
 			UserQuotaExceededException,	AccessDeniedException, UnsupportedMimeTypeException, 
 			FileSizeExceededException, VirusDetectedException, RepositoryException, DatabaseException {
 		log.debug("populateTextHelper({}, {}, {}, {})", new Object[] { token, root, gen, depth });
 		
-		if (depth < DEPTH) {
-			for (int i=0; i<FOLDERS; i++) {
+		if (depth < maxDepth) {
+			for (int i=0; i<maxFolders; i++) {
 				long begin = Calendar.getInstance().getTimeInMillis();
 				Folder fld = new Folder();
 				fld.setPath(root.getPath() + "/" + Calendar.getInstance().getTimeInMillis());
@@ -103,7 +118,7 @@ public class Benchmark {
 				totalFolders++;
 				log.info("At depth {}, created folder {}", depth, fld.getPath());
 				
-				for (int j=0; j<DOCUMENTS; j++) {
+				for (int j=0; j<maxDocuments; j++) {
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					gen.generateText(PARAGRAPH, LINE_WIDTH, TOTAL_CHARS, baos);
 					baos.close();
@@ -118,11 +133,13 @@ public class Benchmark {
 				}
 				
 				long end = Calendar.getInstance().getTimeInMillis();
-				log.info("Partial Time: {} - Folders: {}, Documents: {}", new Object[] {
-						FormatUtil.formatSeconds(end - begin), totalFolders, totalDocuments });
+				String elapse = FormatUtil.formatSeconds(end - begin);
+				log.info("Partial Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
+				out.println("<tr><td>"+FormatUtil.formatDate(Calendar.getInstance())+"</td><td>"+elapse+"</td><td>"+totalFolders+"</td><td>"+totalDocuments+"</td></tr>");
+				out.flush();
 				
 				// Go depth
-				populateTextHelper(token, fld, gen, depth+1);
+				populateTextHelper(token, fld, out, gen, depth+1);
 			}
 		} else {
 			log.info("Max depth reached: {}", depth);

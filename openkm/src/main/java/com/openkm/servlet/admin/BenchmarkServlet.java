@@ -24,6 +24,7 @@ package com.openkm.servlet.admin;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.InputMismatchException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -39,10 +40,15 @@ import com.openkm.bean.ContentInfo;
 import com.openkm.bean.Folder;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.UserQuotaExceededException;
+import com.openkm.core.VirusDetectedException;
+import com.openkm.module.direct.DirectRepositoryModule;
+import com.openkm.util.Benchmark;
 import com.openkm.util.FormatUtil;
 import com.openkm.util.WebUtils;
 import com.openkm.util.impexp.HTMLInfoDecorator;
@@ -63,10 +69,12 @@ public class BenchmarkServlet extends BaseServlet {
 		String action = request.getParameter("action")!=null?request.getParameter("action"):"";
 		updateSessionManager(request);
 				
-		if (action.equals("load")) {
-			load(request, response);
+		if (action.equals("import")) {
+			okmImport(request, response);
 		} else if (action.equals("copy")) {
-			copy(request, response);
+			okmCopy(request, response);
+		} else if (action.equals("generate")) {
+			okmGenerate(request, response);
 		} else {
 			ServletContext sc = getServletContext();
 			sc.getRequestDispatcher("/admin/benchmark.jsp").forward(request, response);
@@ -76,8 +84,8 @@ public class BenchmarkServlet extends BaseServlet {
 	/**
 	 * Load documents into repository several times
 	 */
-	private void load(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		log.debug("load({}, {})", request, response);
+	private void okmImport(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		log.debug("okmImport({}, {})", request, response);
 		String path = WebUtils.getString(request, "param1");
 		int times = WebUtils.getInt(request, "param2");
 		PrintWriter out = response.getWriter();
@@ -153,14 +161,14 @@ public class BenchmarkServlet extends BaseServlet {
 		out.print("</html>");
 		out.flush();
 		out.close();
-		log.debug("load: void");
+		log.debug("okmImport: void");
 	}
 	
 	/**
 	 * Copy documents into repository several times
 	 */
-	private void copy(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		log.debug("copy({}, {})", request, response);
+	private void okmCopy(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		log.debug("okmCopy({}, {})", request, response);
 		String src = WebUtils.getString(request, "param1");
 		String dst = WebUtils.getString(request, "param2");
 		int times = WebUtils.getInt(request, "param3");
@@ -227,7 +235,78 @@ public class BenchmarkServlet extends BaseServlet {
 		out.print("</html>");
 		out.flush();
 		out.close();
-		log.debug("copy: void");
+		log.debug("okmCopy: void");
+	}
+	
+	/**
+	 * Generate documents into repository
+	 */
+	private void okmGenerate(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		log.debug("okmGenerate({}, {})", request, response);
+		//int maxDocuments = WebUtils.getInt(request, "param1");
+		//int maxFolder = WebUtils.getInt(request, "param2");
+		//int maxDepth = WebUtils.getInt(request, "param3");
+		PrintWriter out = response.getWriter();
+		long tBegin = 0, tEnd = 0;
+		response.setContentType("text/html");
+		header(out);
+		out.println("<h1>Benchmark</h1>");
+		out.flush();
+		Benchmark bm = new Benchmark();
+		
+		try {	
+			out.println("<b>- Documents:</b> "+bm.getMaxDocuments()+"<br/>");
+			out.println("<b>- Folders:</b> "+bm.getMaxFolders()+"<br/>");
+			out.println("<b>- Depth:</b> "+bm.getMaxDepth()+"<br/>");
+			out.println("<table class=\"results\" width=\"80%\">");
+			out.println("<tr><th>Date</th><th>Elapsed</th><th>Total folders</th><th>Total documents</th></tr>");
+			out.flush();
+			tBegin = System.currentTimeMillis();
+			Folder root = new DirectRepositoryModule().getRootFolder(null);
+			bm.populateText(null, root, out);
+			tEnd = System.currentTimeMillis();
+			out.println("</table>");
+		} catch (PathNotFoundException e) {
+			out.println("<div class=\"warn\">PathNotFoundException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (ItemExistsException e) {
+			out.println("<div class=\"warn\">ItemExistsException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (AccessDeniedException e) {
+			out.println("<div class=\"warn\">AccessDeniedException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (RepositoryException e) {
+			out.println("<div class=\"warn\">RepositoryException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (DatabaseException e) {
+			out.println("<div class=\"warn\">DatabaseException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (UserQuotaExceededException e) {
+			out.println("<div class=\"warn\">UserQuotaExceededException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (InputMismatchException e) {
+			out.println("<div class=\"warn\">InputMismatchException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (UnsupportedMimeTypeException e) {
+			out.println("<div class=\"warn\">UnsupportedMimeTypeException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (FileSizeExceededException e) {
+			out.println("<div class=\"warn\">FileSizeExceededException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (VirusDetectedException e) {
+			out.println("<div class=\"warn\">VirusDetectedException: "+e.getMessage()+"</div>");
+			out.flush();
+		}
+				
+		out.println("<hr/>");
+		out.println("<b>Total folders:</b> "+bm.getTotalFolders()+"<br/>");
+		out.println("<b>Total documents:</b> "+bm.getTotalDocuments()+"<br/>");
+		out.println("<b>Total time:</b> "+FormatUtil.formatSeconds(tEnd - tBegin)+"<br/>");
+		out.print("</body>");
+		out.print("</html>");
+		out.flush();
+		out.close();
+		log.debug("okmGenerate: void");
 	}
 
 	private void header(PrintWriter out) {
