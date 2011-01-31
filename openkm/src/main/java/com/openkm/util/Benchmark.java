@@ -42,6 +42,7 @@ public class Benchmark {
 	private int maxDepth = 0;
 	private int totalFolders = 0;
 	private int totalDocuments = 0;
+	private int row = 0;
 	
 	/**
 	 * Main method for testing purposes
@@ -135,7 +136,7 @@ public class Benchmark {
 				long end = Calendar.getInstance().getTimeInMillis();
 				String elapse = FormatUtil.formatSeconds(end - begin);
 				log.info("Partial Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
-				out.println("<tr><td>"+FormatUtil.formatDate(Calendar.getInstance())+"</td><td>"+elapse+"</td><td>"+totalFolders+"</td><td>"+totalDocuments+"</td></tr>");
+				out.println("<tr class=\""+(row++%2==0?"even":"odd")+"\"><td>"+FormatUtil.formatDate(Calendar.getInstance())+"</td><td>"+elapse+"</td><td>"+totalFolders+"</td><td>"+totalDocuments+"</td></tr>");
 				out.flush();
 				
 				// Go depth
