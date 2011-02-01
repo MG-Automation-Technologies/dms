@@ -73,7 +73,7 @@ public class JCRUtils {
 	/**
 	 * 
 	 */
-	public static String[] usrValue2String(Value[] values, String val) throws ValueFormatException, IllegalStateException, javax.jcr.RepositoryException {
+	public static String[] usrValue2String(Value[] values, String usrId) throws ValueFormatException, IllegalStateException, javax.jcr.RepositoryException {
 		ArrayList<String> list = new ArrayList<String>();
 		
 		for (int i=0; i<values.length; i++) {
@@ -84,9 +84,11 @@ public class JCRUtils {
 			}
 		}
 		
-		// No add an user twice
-		if (!list.contains(val)) {
-			list.add(val);
+		if (Config.USER_ASSIGN_DOCUMENT_CREATION) {
+			// No add an user twice
+			if (!list.contains(usrId)) {
+				list.add(usrId);
+			}
 		}
 		
 		return (String[]) list.toArray(new String[list.size()]);
