@@ -58,12 +58,6 @@ public class Util {
 		HttpPost post = new HttpPost(url+"/frontend/FileUpload;jsessionid="+token);
 		post.setHeader("Cookie", "jsessionid="+token);
 		post.setEntity(form);
-		
-		//ByteArrayOutputStream out = new ByteArrayOutputStream();
-		//form.writeTo(out);
-		//out.close();
-		//log.info(out.toString());
-		
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
 		String response = client.execute(post, responseHandler);
 		log.info("createDocument: "+response);
