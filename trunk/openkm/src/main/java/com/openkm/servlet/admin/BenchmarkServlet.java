@@ -22,6 +22,7 @@
 package com.openkm.servlet.admin;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.InputMismatchException;
@@ -243,21 +244,23 @@ public class BenchmarkServlet extends BaseServlet {
 	 */
 	private void okmGenerate(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		log.debug("okmGenerate({}, {})", request, response);
-		//int maxDocuments = WebUtils.getInt(request, "param1");
-		//int maxFolder = WebUtils.getInt(request, "param2");
-		//int maxDepth = WebUtils.getInt(request, "param3");
+		int maxDocuments = WebUtils.getInt(request, "param1");
+		int maxFolder = WebUtils.getInt(request, "param2");
+		int maxDepth = WebUtils.getInt(request, "param3");
 		PrintWriter out = response.getWriter();
 		long tBegin = 0, tEnd = 0;
+		Benchmark bm = null;
 		response.setContentType("text/html");
 		header(out);
 		out.println("<h1>Benchmark</h1>");
 		out.flush();
-		Benchmark bm = new Benchmark();
 		
-		try {	
+		try {
+			bm = new Benchmark(maxDocuments, maxFolder, maxDepth);
 			out.println("<b>- Documents:</b> "+bm.getMaxDocuments()+"<br/>");
 			out.println("<b>- Folders:</b> "+bm.getMaxFolders()+"<br/>");
 			out.println("<b>- Depth:</b> "+bm.getMaxDepth()+"<br/>");
+			out.println("<b>- Calibrarion:</b> "+bm.runCalibration()+" ms<br/>");
 			out.println("<table class=\"results\" width=\"80%\">");
 			out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th></tr>");
 			out.flush();
@@ -266,6 +269,9 @@ public class BenchmarkServlet extends BaseServlet {
 			bm.populateText(null, root, out);
 			tEnd = System.currentTimeMillis();
 			out.println("</table>");
+		} catch (FileNotFoundException e) {
+			out.println("<div class=\"warn\">FileNotFoundException: "+e.getMessage()+"</div>");
+			out.flush();
 		} catch (PathNotFoundException e) {
 			out.println("<div class=\"warn\">PathNotFoundException: "+e.getMessage()+"</div>");
 			out.flush();
