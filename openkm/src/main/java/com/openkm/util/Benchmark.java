@@ -100,6 +100,36 @@ public class Benchmark {
 	}
 	
 	/**
+	 * Calculates the number of folder created
+	 */
+	public int calculateFolders() {
+		int nodesAtLevel = 1;
+		int total = 0;
+		
+		for (int i=1; i<=maxDepth; i++) {
+			nodesAtLevel = nodesAtLevel * maxFolders;
+			total += nodesAtLevel;
+		}
+		
+		return total;	
+	}
+	
+	/**
+	 * Calculates the number of document created
+	 */
+	public int calculateDocuments() {
+		int nodesAtLevel = 1;
+		int total = 0;
+		
+		for (int i=1; i<=maxDepth + 1; i++) {
+			nodesAtLevel = nodesAtLevel * maxDocuments;
+			total += nodesAtLevel;
+		}
+		
+		return total;	
+	}
+	
+	/**
 	 * Run system calibration
 	 * @throws IOException 
 	 * @throws InputMismatchException 
