@@ -28,15 +28,21 @@ import com.openkm.module.direct.DirectDocumentModule;
 import com.openkm.module.direct.DirectFolderModule;
 import com.openkm.util.markov.Generator;
 
+/**
+ * Default values generate text files with about 39 pages.
+ * 
+ * @author pavila
+ */
 public class Benchmark {
 	private static Logger log = LoggerFactory.getLogger(Benchmark.class);
 	private static final String SEED = Config.HOME_DIR + File.separator + "benchmark.txt";
 	private static final int PARAGRAPH = 250;
 	private static final int LINE_WIDTH = 80;
-	private static final int TOTAL_CHARS = 27500;
-	private static final int MAX_DOCUMENTS = 6;
+	private static final int TOTAL_CHARS = 500;
+	private static final int MAX_DOCUMENTS = 12;
 	private static final int MAX_FOLDERS = 3;
 	private static final int MAX_DEPTH = 3;
+	private Generator gen = null;
 	private int maxDocuments = 0;
 	private int maxFolders = 0;
 	private int maxDepth = 0;
@@ -50,16 +56,24 @@ public class Benchmark {
 	public static void main(String[] args) {
 	}
 	
-	public Benchmark() {
+	public Benchmark() throws IOException {
 		this.maxDocuments = MAX_DOCUMENTS;
 		this.maxFolders = MAX_FOLDERS;
 		this.maxDepth = MAX_DEPTH;
+		init();
 	}
 	
-	public Benchmark(int maxDocuments, int maxFolders, int maxDepth) {
+	public Benchmark(int maxDocuments, int maxFolders, int maxDepth) throws IOException {
 		this.maxDocuments = maxDocuments;
 		this.maxFolders = maxFolders;
 		this.maxDepth = maxDepth;
+		init();
+	}
+	
+	private void init() throws IOException {
+		FileInputStream fis = new FileInputStream(SEED);
+		gen = new Generator(fis);	
+		fis.close();
 	}
 	
 	public int getMaxDocuments() {
@@ -83,20 +97,37 @@ public class Benchmark {
 	}
 	
 	/**
+	 * Run system calibration
+	 * @throws IOException 
+	 * @throws InputMismatchException 
+	 */
+	public long runCalibration() throws InputMismatchException, IOException {
+		final int ITERATIONS = 10;
+		long total = 0;
+		
+		for (int i=0; i<ITERATIONS; i++) {
+			long calBegin = System.currentTimeMillis();
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			gen.generateText(PARAGRAPH, LINE_WIDTH, TOTAL_CHARS, baos);
+			baos.close();
+			long calEnd = System.currentTimeMillis();
+			total = calEnd - calBegin;
+		}
+		
+		log.info("Calibration: {} ms", total / ITERATIONS);
+		return total / ITERATIONS;
+	}
+	
+	/**
 	 * Run text document insertions
 	 */
 	public void populateText(String token, Folder root, PrintWriter out) throws IOException,
 			InputMismatchException, ItemExistsException, PathNotFoundException, UserQuotaExceededException, 
 			AccessDeniedException, UnsupportedMimeTypeException, FileSizeExceededException,
 			VirusDetectedException, RepositoryException, DatabaseException {
-		FileInputStream fis = new FileInputStream(SEED);
-		Generator gen = new Generator(fis);	
-		fis.close();
-		
-		// Repository insertion
-		long begin = Calendar.getInstance().getTimeInMillis();
+		long begin = System.currentTimeMillis();
 		populateTextHelper(token, root, out, gen, 0);
-		long end = Calendar.getInstance().getTimeInMillis();
+		long end = System.currentTimeMillis();
 		String elapse = FormatUtil.formatSeconds(end - begin);
 		log.info("Total Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
 	}
@@ -112,9 +143,9 @@ public class Benchmark {
 		
 		if (depth < maxDepth) {
 			for (int i=0; i<maxFolders; i++) {
-				long begin = Calendar.getInstance().getTimeInMillis();
+				long begin = System.currentTimeMillis();
 				Folder fld = new Folder();
-				fld.setPath(root.getPath() + "/" + Calendar.getInstance().getTimeInMillis());
+				fld.setPath(root.getPath() + "/" + System.currentTimeMillis());
 				fld = new DirectFolderModule().create(token, fld);
 				totalFolders++;
 				log.info("At depth {}, created folder {}", depth, fld.getPath());
@@ -128,12 +159,12 @@ public class Benchmark {
 					ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
 					Document doc = new Document();
 					doc.setMimeType("text/plain");
-					doc.setPath(fld.getPath() + "/" + Calendar.getInstance().getTimeInMillis() + ".txt");
+					doc.setPath(fld.getPath() + "/" + System.currentTimeMillis() + ".txt");
 					new DirectDocumentModule().create(token, doc, bais);
 					totalDocuments++;
 				}
 				
-				long end = Calendar.getInstance().getTimeInMillis();
+				long end = System.currentTimeMillis();
 				String elapse = FormatUtil.formatSeconds(end - begin);
 				log.info("Partial Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
 				out.print("<tr class=\""+(row++%2==0?"even":"odd")+"\">");
