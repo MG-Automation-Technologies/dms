@@ -217,6 +217,7 @@ public class Benchmark {
 			for (int i=0; i<maxFolders; i++) {
 				long begin = System.currentTimeMillis();
 				Node fld = root.addNode(Long.toString(System.currentTimeMillis()), JcrConstants.NT_FOLDER);
+				fld.addMixin(JcrConstants.MIX_REFERENCEABLE);
 				root.save();
 				totalFolders++;
 				log.info("At depth {}, created folder {}", depth, fld.getPath());
@@ -229,6 +230,7 @@ public class Benchmark {
 					// Repository insertion
 					ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
 					Node doc = fld.addNode(System.currentTimeMillis() + ".txt", JcrConstants.NT_FILE);
+					doc.addMixin(JcrConstants.MIX_REFERENCEABLE);
 					Node res = doc.addNode(JcrConstants.JCR_CONTENT, JcrConstants.NT_RESOURCE);
 					res.setProperty(JcrConstants.JCR_MIMETYPE, "text/plain");
 					res.setProperty(JcrConstants.JCR_ENCODING, "UTF-8");
