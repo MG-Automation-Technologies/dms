@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.InputMismatchException;
 
+import javax.jcr.Node;
+import javax.jcr.Session;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -51,6 +53,7 @@ import com.openkm.core.VirusDetectedException;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.Benchmark;
 import com.openkm.util.FormatUtil;
+import com.openkm.util.JCRUtils;
 import com.openkm.util.WebUtils;
 import com.openkm.util.impexp.HTMLInfoDecorator;
 import com.openkm.util.impexp.ImpExpStats;
@@ -70,12 +73,14 @@ public class BenchmarkServlet extends BaseServlet {
 		String action = request.getParameter("action")!=null?request.getParameter("action"):"";
 		updateSessionManager(request);
 				
-		if (action.equals("import")) {
+		if (action.equals("okmImport")) {
 			okmImport(request, response);
-		} else if (action.equals("copy")) {
+		} else if (action.equals("okmCopy")) {
 			okmCopy(request, response);
-		} else if (action.equals("generate")) {
+		} else if (action.equals("okmGenerate")) {
 			okmGenerate(request, response);
+		} else if (action.equals("jcrGenerate")) {
+			jcrGenerate(request, response);
 		} else {
 			ServletContext sc = getServletContext();
 			sc.getRequestDispatcher("/admin/benchmark.jsp").forward(request, response);
@@ -94,7 +99,7 @@ public class BenchmarkServlet extends BaseServlet {
 		long tBegin = 0, tEnd = 0;
 		response.setContentType("text/html");
 		header(out);
-		out.println("<h1>Benchmark</h1>");
+		out.println("<h1>Benchmark: OpenKM import documents</h1>");
 		out.flush();
 		
 		try {
@@ -178,7 +183,7 @@ public class BenchmarkServlet extends BaseServlet {
 		long tBegin = 0, tEnd = 0;
 		response.setContentType("text/html");
 		header(out);
-		out.println("<h1>Benchmark</h1>");
+		out.println("<h1>Benchmark: OpenKM copy documents</h1>");
 		out.flush();
 		
 		try {
@@ -240,7 +245,7 @@ public class BenchmarkServlet extends BaseServlet {
 	}
 	
 	/**
-	 * Generate documents into repository
+	 * Generate documents into repository (OpenKM)
 	 */
 	private void okmGenerate(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		log.debug("okmGenerate({}, {})", request, response);
@@ -252,7 +257,7 @@ public class BenchmarkServlet extends BaseServlet {
 		Benchmark bm = null;
 		response.setContentType("text/html");
 		header(out);
-		out.println("<h1>Benchmark</h1>");
+		out.println("<h1>Benchmark: OpenKM generate documents</h1>");
 		out.flush();
 		
 		try {
@@ -266,7 +271,7 @@ public class BenchmarkServlet extends BaseServlet {
 			out.flush();
 			tBegin = System.currentTimeMillis();
 			Folder root = new DirectRepositoryModule().getRootFolder(null);
-			bm.populateText(null, root, out);
+			bm.okmPopulate(null, root, out);
 			tEnd = System.currentTimeMillis();
 			out.println("</table>");
 		} catch (FileNotFoundException e) {
@@ -303,16 +308,88 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<div class=\"warn\">VirusDetectedException: "+e.getMessage()+"</div>");
 			out.flush();
 		}
-				
+		
+		long elapse = tEnd - tBegin;
 		out.println("<hr/>");
 		out.println("<b>Total folders:</b> "+bm.getTotalFolders()+"<br/>");
 		out.println("<b>Total documents:</b> "+bm.getTotalDocuments()+"<br/>");
-		out.println("<b>Total time:</b> "+FormatUtil.formatSeconds(tEnd - tBegin)+"<br/>");
+		out.println("<b>Total time:</b> "+FormatUtil.formatSeconds(elapse)+"<br/>");
+		out.println("<b>Documents per second:</b> "+bm.getTotalDocuments()/(elapse/1000)+"<br/>");
 		out.print("</body>");
 		out.print("</html>");
 		out.flush();
 		out.close();
 		log.debug("okmGenerate: void");
+	}
+	
+	/**
+	 * Generate documents into repository (Jackrabbit)
+	 */
+	private void jcrGenerate(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		log.debug("jcrGenerate({}, {})", request, response);
+		int maxDocuments = WebUtils.getInt(request, "param1");
+		int maxFolder = WebUtils.getInt(request, "param2");
+		int maxDepth = WebUtils.getInt(request, "param3");
+		PrintWriter out = response.getWriter();
+		long tBegin = 0, tEnd = 0;
+		Benchmark bm = null;
+		Session session = null;
+		response.setContentType("text/html");
+		header(out);
+		out.println("<h1>Benchmark: Jackrabbit generate documents</h1>");
+		out.flush();
+		
+		try {
+			session = JCRUtils.getSession();
+			bm = new Benchmark(maxDocuments, maxFolder, maxDepth);
+			out.println("<b>- Documents:</b> "+bm.getMaxDocuments()+"<br/>");
+			out.println("<b>- Folders:</b> "+bm.getMaxFolders()+"<br/>");
+			out.println("<b>- Depth:</b> "+bm.getMaxDepth()+"<br/>");
+			out.println("<b>- Calibration:</b> "+bm.runCalibration()+" ms<br/>");
+			out.println("<table class=\"results\" width=\"80%\">");
+			out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th></tr>");
+			out.flush();
+			tBegin = System.currentTimeMillis();
+			Node root = session.getRootNode();
+			bm.jcrPopulate(null, root, out);
+			tEnd = System.currentTimeMillis();
+			out.println("</table>");
+		} catch (FileNotFoundException e) {
+			out.println("<div class=\"warn\">FileNotFoundException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (javax.jcr.PathNotFoundException e) {
+			out.println("<div class=\"warn\">PathNotFoundException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (javax.jcr.ItemExistsException e) {
+			out.println("<div class=\"warn\">ItemExistsException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (javax.jcr.AccessDeniedException e) {
+			out.println("<div class=\"warn\">AccessDeniedException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (javax.jcr.RepositoryException e) {
+			out.println("<div class=\"warn\">RepositoryException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (InputMismatchException e) {
+			out.println("<div class=\"warn\">InputMismatchException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (DatabaseException e) {
+			out.println("<div class=\"warn\">DatabaseException: "+e.getMessage()+"</div>");
+			out.flush();
+		} finally {
+			JCRUtils.logout(session);
+		}
+		
+		long elapse = tEnd - tBegin;
+		out.println("<hr/>");
+		out.println("<b>Total folders:</b> "+bm.getTotalFolders()+"<br/>");
+		out.println("<b>Total documents:</b> "+bm.getTotalDocuments()+"<br/>");
+		out.println("<b>Total time:</b> "+FormatUtil.formatSeconds(elapse)+"<br/>");
+		out.println("<b>Documents per second:</b> "+bm.getTotalDocuments()/(elapse/1000)+"<br/>");
+		out.print("</body>");
+		out.print("</html>");
+		out.flush();
+		out.close();
+		log.debug("jcrGenerate: void");
 	}
 
 	private void header(PrintWriter out) {
