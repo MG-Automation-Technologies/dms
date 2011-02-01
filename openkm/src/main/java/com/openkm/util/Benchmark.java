@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.InputMismatchException;
@@ -63,20 +64,25 @@ public class Benchmark {
 		this.maxDocuments = MAX_DOCUMENTS;
 		this.maxFolders = MAX_FOLDERS;
 		this.maxDepth = MAX_DEPTH;
-		init();
+		FileInputStream fis = new FileInputStream(SEED);
+		gen = new Generator(fis);
+		fis.close();
 	}
 	
 	public Benchmark(int maxDocuments, int maxFolders, int maxDepth) throws IOException {
 		this.maxDocuments = maxDocuments;
 		this.maxFolders = maxFolders;
 		this.maxDepth = maxDepth;
-		init();
+		FileInputStream fis = new FileInputStream(SEED);
+		gen = new Generator(fis);
+		fis.close();
 	}
 	
-	private void init() throws IOException {
-		FileInputStream fis = new FileInputStream(SEED);
-		gen = new Generator(fis);	
-		fis.close();
+	public Benchmark(int maxDocuments, int maxFolders, int maxDepth, InputStream is) throws IOException {
+		this.maxDocuments = maxDocuments;
+		this.maxFolders = maxFolders;
+		this.maxDepth = maxDepth;
+		gen = new Generator(is);
 	}
 	
 	public int getMaxDocuments() {
@@ -111,7 +117,7 @@ public class Benchmark {
 			total += nodesAtLevel;
 		}
 		
-		return total;	
+		return total;
 	}
 	
 	/**
@@ -121,12 +127,12 @@ public class Benchmark {
 		int nodesAtLevel = 1;
 		int total = 0;
 		
-		for (int i=1; i<=maxDepth + 1; i++) {
-			nodesAtLevel = nodesAtLevel * maxDocuments;
+		for (int i=1; i<=maxDepth; i++) {
+			nodesAtLevel = nodesAtLevel * maxFolders;
 			total += nodesAtLevel;
 		}
 		
-		return total;	
+		return total * maxDocuments;
 	}
 	
 	/**
