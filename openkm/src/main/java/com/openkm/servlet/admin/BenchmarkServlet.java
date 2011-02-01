@@ -260,7 +260,7 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<b>- Documents:</b> "+bm.getMaxDocuments()+"<br/>");
 			out.println("<b>- Folders:</b> "+bm.getMaxFolders()+"<br/>");
 			out.println("<b>- Depth:</b> "+bm.getMaxDepth()+"<br/>");
-			out.println("<b>- Calibrarion:</b> "+bm.runCalibration()+" ms<br/>");
+			out.println("<b>- Calibration:</b> "+bm.runCalibration()+" ms<br/>");
 			out.println("<table class=\"results\" width=\"80%\">");
 			out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th></tr>");
 			out.flush();
