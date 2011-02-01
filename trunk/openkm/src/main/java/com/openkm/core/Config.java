@@ -148,6 +148,7 @@ public class Config {
 	public static final String PROPERTY_UPDATE_INFO = "update.info";
 	public static final String PROPERTY_APPLICATION_URL = "application.url";
 	public static final String PROPERTY_DEFAULT_LANG = "default.lang";
+	public static final String PROPERTY_USER_ASSIGN_DOCUMENT_CREATION = "user.assign.document.creation";
 	public static final String PROPERTY_USER_KEYWORDS_CACHE = "user.keywords.cache";
 	public static final String PROPERTY_USER_SIZE_CACHE = "user.size.cache";
 	
@@ -286,6 +287,7 @@ public class Config {
 	public static String APPLICATION_URL;
 	public static String APPLICATION_BASE;
 	public static String DEFAULT_LANG;
+	public static boolean USER_ASSIGN_DOCUMENT_CREATION;
 	public static boolean USER_KEYWORDS_CACHE;
 	public static boolean USER_SIZE_CACHE;
 	
@@ -632,6 +634,9 @@ public class Config {
 			values.put(PROPERTY_APPLICATION_URL, APPLICATION_URL);
 			DEFAULT_LANG = ConfigDAO.getString(PROPERTY_DEFAULT_LANG, "");
 			values.put(PROPERTY_DEFAULT_LANG, DEFAULT_LANG);
+			
+			USER_ASSIGN_DOCUMENT_CREATION = ConfigDAO.getBoolean(PROPERTY_USER_ASSIGN_DOCUMENT_CREATION, true);
+			values.put(PROPERTY_USER_ASSIGN_DOCUMENT_CREATION, Boolean.toString(USER_ASSIGN_DOCUMENT_CREATION));
 			USER_KEYWORDS_CACHE = ConfigDAO.getBoolean(PROPERTY_USER_KEYWORDS_CACHE, false);
 			values.put(PROPERTY_USER_KEYWORDS_CACHE, Boolean.toString(USER_KEYWORDS_CACHE));
 			USER_SIZE_CACHE = ConfigDAO.getBoolean(PROPERTY_USER_SIZE_CACHE, false);
