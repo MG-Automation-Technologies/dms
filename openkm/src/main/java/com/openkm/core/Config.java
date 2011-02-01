@@ -147,6 +147,7 @@ public class Config {
 	
 	public static final String PROPERTY_UPDATE_INFO = "update.info";
 	public static final String PROPERTY_APPLICATION_URL = "application.url";
+	public static final String PROPERTY_USER_ASSIGN_DOCUMENT_CREATION = "user.assign.document.creation";
 	public static final String PROPERTY_USER_KEYWORDS_CACHE = "user.keywords.cache";
 	public static final String PROPERTY_USER_SIZE_CACHE = "user.size.cache";
 	
@@ -283,6 +284,8 @@ public class Config {
 	public static String APPLICATION_URL = "http://localhost:8080/OpenKM"+INSTALL+"/com.openkm.frontend.Main/index.jsp";
 	public static String APPLICATION_BASE = getBase(APPLICATION_URL);
 	public static String DEFAULT_LANG = "";
+	private static String USER_ASSIGN_DOCUMENT_CREATION_STR = "on";
+	public static boolean USER_ASSIGN_DOCUMENT_CREATION = "on".equalsIgnoreCase(USER_ASSIGN_DOCUMENT_CREATION_STR);
 	private static String USER_KEYWORDS_CACHE_STR = "off";
 	public static boolean USER_KEYWORDS_CACHE = "on".equalsIgnoreCase(USER_KEYWORDS_CACHE_STR);
 	private static String USER_SIZE_CACHE_STR = "off";
@@ -575,6 +578,10 @@ public class Config {
 			APPLICATION_URL = config.getProperty(PROPERTY_APPLICATION_URL, APPLICATION_URL);
 			APPLICATION_BASE = getBase(APPLICATION_URL); 
 			values.put(PROPERTY_APPLICATION_URL, APPLICATION_URL);
+			
+			USER_ASSIGN_DOCUMENT_CREATION_STR = config.getProperty(PROPERTY_USER_ASSIGN_DOCUMENT_CREATION, USER_ASSIGN_DOCUMENT_CREATION_STR);
+			USER_ASSIGN_DOCUMENT_CREATION = "on".equalsIgnoreCase(USER_ASSIGN_DOCUMENT_CREATION_STR);
+			values.put(PROPERTY_USER_ASSIGN_DOCUMENT_CREATION, USER_ASSIGN_DOCUMENT_CREATION_STR+" ("+USER_ASSIGN_DOCUMENT_CREATION+")");
 			USER_KEYWORDS_CACHE_STR = config.getProperty(PROPERTY_USER_KEYWORDS_CACHE, USER_KEYWORDS_CACHE_STR);
 			USER_KEYWORDS_CACHE = "on".equalsIgnoreCase(USER_KEYWORDS_CACHE_STR);
 			values.put(PROPERTY_USER_KEYWORDS_CACHE, USER_KEYWORDS_CACHE_STR+" ("+USER_KEYWORDS_CACHE+")");
