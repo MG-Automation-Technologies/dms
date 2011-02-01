@@ -22,9 +22,10 @@
             <td>Action</td>
             <td>
               <select name="action">
-                <option value="load">Load documents</option>
-                <option value="copy">Copy documents</option>
-                <option value="generate">Generate documents</option>
+                <option value="okmImport">OpenKM import documents</option>
+                <option value="okmCopy">OpenKM copy documents</option>
+                <option value="okmGenerate">OpenKM generate documents</option>
+                <option value="jcrGenerate">Jackrabbit generate documents</option>
               </select>
             </td>
           </tr>
