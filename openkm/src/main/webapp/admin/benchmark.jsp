@@ -24,6 +24,7 @@
               <select name="action">
                 <option value="load">Load documents</option>
                 <option value="copy">Copy documents</option>
+                <option value="generate">Generate documents</option>
               </select>
             </td>
           </tr>
