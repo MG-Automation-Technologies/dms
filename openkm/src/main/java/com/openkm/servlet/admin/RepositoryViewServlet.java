@@ -52,6 +52,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.jackrabbit.JcrConstants;
+import org.apache.jackrabbit.core.NodeImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -204,13 +206,14 @@ public class RepositoryViewServlet extends BaseServlet {
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
 		log.debug("removeCurrent({}, {}, {}, {})", new Object[] { session, path, request, response });
 		Node node = session.getRootNode().getNode(path.substring(1));
+		String uuid = node.getUUID();
 		Node parent = node.getParent();
 		String parentPath = parent.getPath();
 		node.remove();
 		parent.save();
 				
 		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_REMOVE_CURRENT", node.getUUID(), path);
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_REMOVE_CURRENT", uuid, path);
 		log.debug("removeCurrent: {}", path);
 		return parentPath;
 	}
@@ -317,7 +320,11 @@ public class RepositoryViewServlet extends BaseServlet {
 
 		// Handle path or uuid
 		if (!path.equals("")) {
-			node = session.getRootNode().getNode(path.substring(1));
+			if (path.equals("/")) {
+				node = session.getRootNode();
+			} else {
+				node = session.getRootNode().getNode(path.substring(1));
+			}
 		} else if (!uuid.equals("")) {
 			node = session.getNodeByUUID(uuid);
 			path = node.getPath();
@@ -338,9 +345,13 @@ public class RepositoryViewServlet extends BaseServlet {
 				log.warn(e.getMessage(), e);
 			}
 		}
-
+		
 		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_LIST", node.getUUID(), node.getPath());
+		if (node.isNodeType(JcrConstants.MIX_REFERENCEABLE)) {
+			UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_LIST", node.getUUID(), node.getPath());
+		} else {
+			UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_LIST", ((NodeImpl)node).getId().toString(), node.getPath());
+		}
 		
 		sc.setAttribute("contentInfo", ci);
 		sc.setAttribute("node", node);
