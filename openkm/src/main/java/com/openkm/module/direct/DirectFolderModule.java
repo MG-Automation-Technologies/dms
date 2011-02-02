@@ -165,7 +165,7 @@ public class DirectFolderModule implements FolderModule {
 	/**
 	 * Create a new folder
 	 */
-	private Node create(Session session, Node parentNode, String name) throws javax.jcr.ItemExistsException,
+	public Node create(Session session, Node parentNode, String name) throws javax.jcr.ItemExistsException,
 			javax.jcr.PathNotFoundException, NoSuchNodeTypeException, 
 			javax.jcr.lock.LockException, VersionException, 
 			ConstraintViolationException, javax.jcr.RepositoryException {
