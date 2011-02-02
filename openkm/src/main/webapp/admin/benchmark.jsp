@@ -24,7 +24,8 @@
               <select name="action">
                 <option value="okmImport">OpenKM import documents</option>
                 <option value="okmCopy">OpenKM copy documents</option>
-                <option value="okmGenerate">OpenKM generate documents</option>
+                <option value="okmApiGenerate">OpenKM generate documents (API)</option>
+                <option value="okmRawGenerate">OpenKM generate documents (RAW)</option>
                 <option value="jcrGenerate">Jackrabbit generate documents</option>
               </select>
             </td>
