@@ -163,12 +163,12 @@ public class Benchmark {
 	/**
 	 * Run OpenKM text document insertions (API)
 	 */
-	public void okmApiPopulate(String token, Folder root, PrintWriter out) throws IOException,
+	public void okmApiHighPopulate(String token, Folder root, PrintWriter out) throws IOException,
 			InputMismatchException, ItemExistsException, PathNotFoundException, UserQuotaExceededException, 
 			AccessDeniedException, UnsupportedMimeTypeException, FileSizeExceededException,
 			VirusDetectedException, RepositoryException, DatabaseException {
 		long begin = System.currentTimeMillis();
-		okmApiPopulateHelper(token, root, out, gen, 0);
+		okmApiHighPopulateHelper(token, root, out, gen, 0);
 		long end = System.currentTimeMillis();
 		String elapse = FormatUtil.formatSeconds(end - begin);
 		log.info("Total Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
@@ -177,11 +177,11 @@ public class Benchmark {
 	/**
 	 * Helper
 	 */
-	private void okmApiPopulateHelper(String token, Folder root, PrintWriter out, Generator gen, int depth) throws 
+	private void okmApiHighPopulateHelper(String token, Folder root, PrintWriter out, Generator gen, int depth) throws 
 			InputMismatchException, IOException, ItemExistsException, PathNotFoundException,
 			UserQuotaExceededException,	AccessDeniedException, UnsupportedMimeTypeException, 
 			FileSizeExceededException, VirusDetectedException, RepositoryException, DatabaseException {
-		log.debug("okmApiPopulateHelper({}, {}, {}, {})", new Object[] { token, root, gen, depth });
+		log.debug("okmApiHighPopulateHelper({}, {}, {}, {})", new Object[] { token, root, gen, depth });
 		
 		if (depth < maxDepth) {
 			for (int i=0; i<maxFolders; i++) {
@@ -219,10 +219,77 @@ public class Benchmark {
 				out.flush();
 				
 				// Go depth
-				okmApiPopulateHelper(token, fld, out, gen, depth+1);
+				okmApiHighPopulateHelper(token, fld, out, gen, depth+1);
 			}
 		} else {
-			log.info("Max depth reached: {}", depth);
+			log.debug("Max depth reached: {}", depth);
+			return;
+		}
+	}
+	
+	/**
+	 * Run OpenKM text document insertions (API)
+	 */
+	public void okmApiLowPopulate(Session session, Node root, PrintWriter out) throws
+			javax.jcr.ItemExistsException, javax.jcr.PathNotFoundException, 
+			javax.jcr.nodetype.NoSuchNodeTypeException, javax.jcr.lock.LockException,
+			javax.jcr.version.VersionException, javax.jcr.nodetype.ConstraintViolationException, 
+			javax.jcr.RepositoryException, InputMismatchException, IOException, DatabaseException,
+			UserQuotaExceededException {
+		long begin = System.currentTimeMillis();
+		okmApiLowPopulateHelper(session, root, out, gen, 0);
+		long end = System.currentTimeMillis();
+		String elapse = FormatUtil.formatSeconds(end - begin);
+		log.info("Total Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
+	}
+	
+	/**
+	 * Helper
+	 */
+	private void okmApiLowPopulateHelper(Session session, Node root, PrintWriter out, Generator gen, int depth) throws 
+			javax.jcr.ItemExistsException, javax.jcr.PathNotFoundException, 
+			javax.jcr.nodetype.NoSuchNodeTypeException, javax.jcr.lock.LockException,
+			javax.jcr.version.VersionException, javax.jcr.nodetype.ConstraintViolationException, 
+			javax.jcr.RepositoryException, InputMismatchException, IOException, DatabaseException, 
+			UserQuotaExceededException {
+		log.debug("okmApiLowPopulateHelper({}, {}, {}, {})", new Object[] { session, root, gen, depth });
+		
+		if (depth < maxDepth) {
+			for (int i=0; i<maxFolders; i++) {
+				long begin = System.currentTimeMillis();
+				Node fld = new DirectFolderModule().create(session, root, Long.toString(System.currentTimeMillis()));
+				totalFolders++;
+				log.info("At depth {}, created folder {}", depth, fld.getPath());
+				
+				for (int j=0; j<maxDocuments; j++) {
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					gen.generateText(PARAGRAPH, LINE_WIDTH, TOTAL_CHARS, baos);
+					baos.close();
+					
+					// Repository insertion
+					ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+					new DirectDocumentModule().create(session, fld, System.currentTimeMillis() + ".txt", 
+							null, "text/plain", new String[]{}, bais);
+					totalDocuments++;
+				}
+				
+				long end = System.currentTimeMillis();
+				String elapse = FormatUtil.formatSeconds(end - begin);
+				log.info("Partial Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
+				out.print("<tr class=\""+(row++%2==0?"even":"odd")+"\">");
+				out.print("<td>"+FormatUtil.formatDate(Calendar.getInstance())+"</td>");
+				out.print("<td>"+elapse+"</td>");
+				out.print("<td>"+(end - begin)+"</td>");
+				out.print("<td>"+totalFolders+"</td>");
+				out.print("<td>"+totalDocuments+"</td>");
+				out.println("</tr>");
+				out.flush();
+				
+				// Go depth
+				okmApiLowPopulateHelper(session, fld, out, gen, depth+1);
+			}
+		} else {
+			log.debug("Max depth reached: {}", depth);
 			return;
 		}
 	}
@@ -230,7 +297,7 @@ public class Benchmark {
 	/**
 	 * Run OpenKM text document insertions (RAW)
 	 */
-	public void okmRawPopulate(Session session, Node root, PrintWriter out) throws IOException,
+	public void okmRawPopulate(Session session, Node root, PrintWriter out) throws
 			javax.jcr.ItemExistsException, javax.jcr.PathNotFoundException, 
 			javax.jcr.nodetype.NoSuchNodeTypeException, javax.jcr.lock.LockException,
 			javax.jcr.version.VersionException, javax.jcr.nodetype.ConstraintViolationException, 
@@ -303,7 +370,7 @@ public class Benchmark {
 				okmRawPopulateHelper(session, fld, out, gen, depth+1);
 			}
 		} else {
-			log.info("Max depth reached: {}", depth);
+			log.debug("Max depth reached: {}", depth);
 			return;
 		}
 	}
@@ -376,7 +443,7 @@ public class Benchmark {
 				jcrPopulateHelper(session, fld, out, gen, depth+1);
 			}
 		} else {
-			log.info("Max depth reached: {}", depth);
+			log.debug("Max depth reached: {}", depth);
 			return;
 		}
 	}
