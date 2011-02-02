@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.api.OKMFolder;
 import com.openkm.bean.ContentInfo;
 import com.openkm.bean.Folder;
+import com.openkm.bean.Repository;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
@@ -77,8 +78,10 @@ public class BenchmarkServlet extends BaseServlet {
 			okmImport(request, response);
 		} else if (action.equals("okmCopy")) {
 			okmCopy(request, response);
-		} else if (action.equals("okmApiGenerate")) {
-			okmApiGenerate(request, response);
+		} else if (action.equals("okmApiHighGenerate")) {
+			okmApiHighGenerate(request, response);
+		} else if (action.equals("okmApiLowGenerate")) {
+			okmApiLowGenerate(request, response);
 		} else if (action.equals("okmRawGenerate")) {
 			okmRawGenerate(request, response);
 		} else if (action.equals("jcrGenerate")) {
@@ -249,8 +252,8 @@ public class BenchmarkServlet extends BaseServlet {
 	/**
 	 * Generate documents into repository (OpenKM API)
 	 */
-	private void okmApiGenerate(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		log.debug("okmApiGenerate({}, {})", request, response);
+	private void okmApiHighGenerate(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		log.debug("okmApiHighGenerate({}, {})", request, response);
 		int maxDocuments = WebUtils.getInt(request, "param1");
 		int maxFolder = WebUtils.getInt(request, "param2");
 		int maxDepth = WebUtils.getInt(request, "param3");
@@ -259,7 +262,7 @@ public class BenchmarkServlet extends BaseServlet {
 		Benchmark bm = null;
 		response.setContentType("text/html");
 		header(out);
-		out.println("<h1>Benchmark: OpenKM generate documents (API)</h1>");
+		out.println("<h1>Benchmark: OpenKM generate documents (API HIGH)</h1>");
 		out.flush();
 		
 		try {
@@ -275,7 +278,7 @@ public class BenchmarkServlet extends BaseServlet {
 			out.flush();
 			tBegin = System.currentTimeMillis();
 			Folder root = new DirectRepositoryModule().getRootFolder(null);
-			bm.okmApiPopulate(null, root, out);
+			bm.okmApiHighPopulate(null, root, out);
 			tEnd = System.currentTimeMillis();
 			out.println("</table>");
 		} catch (FileNotFoundException e) {
@@ -323,7 +326,82 @@ public class BenchmarkServlet extends BaseServlet {
 		out.print("</html>");
 		out.flush();
 		out.close();
-		log.debug("okmApiGenerate: void");
+		log.debug("okmApiHighGenerate: void");
+	}
+	
+	/**
+	 * Generate documents into repository (OpenKM RAW)
+	 */
+	private void okmApiLowGenerate(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		log.debug("okmApiLowGenerate({}, {})", request, response);
+		int maxDocuments = WebUtils.getInt(request, "param1");
+		int maxFolder = WebUtils.getInt(request, "param2");
+		int maxDepth = WebUtils.getInt(request, "param3");
+		PrintWriter out = response.getWriter();
+		long tBegin = 0, tEnd = 0;
+		Benchmark bm = null;
+		Session session = null;
+		response.setContentType("text/html");
+		header(out);
+		out.println("<h1>Benchmark: OpenKM generate documents (API LOW)</h1>");
+		out.flush();
+		
+		try {
+			session = JCRUtils.getSession();
+			bm = new Benchmark(maxDocuments, maxFolder, maxDepth);
+			out.println("<b>- Documents:</b> "+bm.getMaxDocuments()+"<br/>");
+			out.println("<b>- Folders:</b> "+bm.getMaxFolders()+"<br/>");
+			out.println("<b>- Depth:</b> "+bm.getMaxDepth()+"<br/>");
+			out.println("<b>- Calibration:</b> "+bm.runCalibration()+" ms<br/>");
+			out.println("<b>- Calculated foldes:</b> "+bm.calculateFolders()+" ms<br/>");
+			out.println("<b>- Calculated documents:</b> "+bm.calculateDocuments()+" ms<br/>");
+			out.println("<table class=\"results\" width=\"80%\">");
+			out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th></tr>");
+			out.flush();
+			tBegin = System.currentTimeMillis();
+			Node root = session.getRootNode().getNode(Repository.ROOT);
+			bm.okmApiLowPopulate(session, root, out);
+			tEnd = System.currentTimeMillis();
+			out.println("</table>");
+		} catch (FileNotFoundException e) {
+			out.println("<div class=\"warn\">FileNotFoundException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (javax.jcr.PathNotFoundException e) {
+			out.println("<div class=\"warn\">PathNotFoundException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (javax.jcr.ItemExistsException e) {
+			out.println("<div class=\"warn\">ItemExistsException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (javax.jcr.AccessDeniedException e) {
+			out.println("<div class=\"warn\">AccessDeniedException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (javax.jcr.RepositoryException e) {
+			out.println("<div class=\"warn\">RepositoryException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (InputMismatchException e) {
+			out.println("<div class=\"warn\">InputMismatchException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (UserQuotaExceededException e) {
+			out.println("<div class=\"warn\">UserQuotaExceededException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (DatabaseException e) {
+			out.println("<div class=\"warn\">DatabaseException: "+e.getMessage()+"</div>");
+			out.flush();
+		} finally {
+			JCRUtils.logout(session);
+		}
+		
+		long elapse = tEnd - tBegin;
+		out.println("<hr/>");
+		out.println("<b>Total folders:</b> "+bm.getTotalFolders()+"<br/>");
+		out.println("<b>Total documents:</b> "+bm.getTotalDocuments()+"<br/>");
+		out.println("<b>Total time:</b> "+FormatUtil.formatSeconds(elapse)+"<br/>");
+		out.println("<b>Documents per second:</b> "+bm.getTotalDocuments()/(elapse/1000)+"<br/>");
+		out.print("</body>");
+		out.print("</html>");
+		out.flush();
+		out.close();
+		log.debug("okmApiLowGenerate: void");
 	}
 	
 	/**
@@ -356,7 +434,7 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th></tr>");
 			out.flush();
 			tBegin = System.currentTimeMillis();
-			Node root = session.getRootNode();
+			Node root = session.getRootNode().getNode(Repository.ROOT);
 			bm.jcrPopulate(session, root, out);
 			tEnd = System.currentTimeMillis();
 			out.println("</table>");
