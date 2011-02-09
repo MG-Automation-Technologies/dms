@@ -27,10 +27,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.Arrays;
+import java.util.HashMap;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.jackrabbit.extractor.AbstractTextExtractor;
@@ -39,8 +38,9 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
 import com.openkm.util.DocumentUtils;
+import com.openkm.util.ExecutionUtils;
 import com.openkm.util.FileUtils;
-import com.openkm.util.FormatUtil;
+import com.openkm.util.TemplateUtils;
 
 /**
  * Text extractor for image documents.
@@ -69,8 +69,6 @@ public class Tesseract3TextExtractor extends AbstractTextExtractor {
     	BufferedReader stdout = null;
     	File tmpFileIn = null;
     	File tmpFileOut = null;
-    	String cmd[] = null;
-    	String line;
     	
 		if (!Config.SYSTEM_OCR.equals("")) {
 			try {
@@ -82,29 +80,12 @@ public class Tesseract3TextExtractor extends AbstractTextExtractor {
     			fos.close();
     			
     			// Performs OCR
-    			long start = System.currentTimeMillis();
-    			cmd = new String[] { Config.SYSTEM_OCR, tmpFileIn.getPath(), tmpFileOut.getPath() };
-    			log.debug("Command: {}", Arrays.toString(cmd));
-    			ProcessBuilder pb = new ProcessBuilder(cmd);
-    			Process process = pb.start();
-    			stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
-    			
-    			while ((line = stdout.readLine()) != null) {
-    				log.debug("STDOUT: {}", line);
-    			}
-    			
-    			process.waitFor();
-    			
-    			// Check return code
-    			if (process.exitValue() != 0) {
-    				log.warn("Abnormal program termination: {}" + process.exitValue());
-    				log.warn("STDERR: {}", IOUtils.toString(process.getErrorStream()));
-    			} else {
-    				log.debug("Normal program termination");
-    			}
-    			
-    			process.destroy();
-    			log.debug("Elapse time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
+    			// /usr/bin/tesseract ${fileIn} ${fileOut}
+    			HashMap<String, String> hm = new HashMap<String, String>();
+    			hm.put("fileIn", tmpFileIn.getPath());
+    			hm.put("fileOut", tmpFileOut.getPath());
+    			String cmd = TemplateUtils.replace("SYSTEM_OCR", Config.SYSTEM_OCR, hm);
+    			ExecutionUtils.runCmd(cmd);
     			
     			// Read result
     			String text = IOUtils.toString(new FileInputStream(tmpFileOut.getPath()+".txt"));
@@ -119,7 +100,6 @@ public class Tesseract3TextExtractor extends AbstractTextExtractor {
         			return new StringReader(text);
     			}
 			} catch (Exception e) {
-				log.warn(Arrays.toString(cmd));
 				log.warn("Failed to extract OCR text", e);
 				return new StringReader("");
 			} finally {
