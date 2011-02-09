@@ -23,6 +23,9 @@ package com.openkm.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +34,8 @@ import com.openkm.core.Config;
 
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 
 public class TemplateUtils {
 	private static Logger log = LoggerFactory.getLogger(Config.class);
@@ -63,5 +68,19 @@ public class TemplateUtils {
 		} catch (IOException e) {
 			return false;
 		}
+	}
+	
+	/**
+	 * Quick replace utility function 
+	 */
+	public static String replace(String name, String template, Map<String, String> model) throws 
+			IOException, TemplateException {
+		StringReader sr = new StringReader(template);
+		Template tpl = new Template(name, sr, cfg);
+		StringWriter sw = new StringWriter();
+		tpl.process(model, sw);
+		sw.close();
+		sr.close();
+		return sw.toString();
 	}
 }
