@@ -27,10 +27,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.Arrays;
+import java.util.HashMap;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.jackrabbit.extractor.AbstractTextExtractor;
@@ -39,8 +38,9 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
 import com.openkm.util.DocumentUtils;
+import com.openkm.util.ExecutionUtils;
 import com.openkm.util.FileUtils;
-import com.openkm.util.FormatUtil;
+import com.openkm.util.TemplateUtils;
 
 /**
  * Text extractor for image documents.
@@ -95,11 +95,9 @@ public class CuneiformTextExtractor extends AbstractTextExtractor {
     /**
      * Performs OCR on image file
      */
-    public String doOcr(File fileIn) throws Exception {
+    public String doOcr(File tmpFileIn) throws Exception {
     	BufferedReader stdout = null;
     	File tmpFileOut = null;
-    	String cmd[] = null;
-    	String line;
     	
     	if (!Config.SYSTEM_OCR.equals("")) {
 			try {
@@ -107,29 +105,12 @@ public class CuneiformTextExtractor extends AbstractTextExtractor {
     			tmpFileOut = File.createTempFile("okm", ".txt");
     			
     			// Performs OCR
-    			long start = System.currentTimeMillis();
-    			cmd = new String[] { Config.SYSTEM_OCR, fileIn.getPath(), "-o", tmpFileOut.getPath() };
-    			log.debug("Command: {}", Arrays.toString(cmd));
-    			ProcessBuilder pb = new ProcessBuilder(cmd);
-    			Process process = pb.start();
-    			stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
-    			
-    			while ((line = stdout.readLine()) != null) {
-    				log.debug("STDOUT: {}", line);
-    			}
-    			
-    			process.waitFor();
-    			
-    			// Check return code
-    			if (process.exitValue() != 0) {
-    				log.warn("Abnormal program termination: {}" + process.exitValue());
-    				log.warn("STDERR: {}", IOUtils.toString(process.getErrorStream()));
-    			} else {
-    				log.debug("Normal program termination");
-    			}
-    			
-    			process.destroy();
-    			log.debug("Elapse time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
+    			// /usr/bin/cuneiform ${fileIn} -o ${fileOut}
+    			HashMap<String, String> hm = new HashMap<String, String>();
+    			hm.put("fileIn", tmpFileIn.getPath());
+    			hm.put("fileOut", tmpFileOut.getPath());
+    			String cmd = TemplateUtils.replace("SYSTEM_OCR", Config.SYSTEM_OCR, hm);
+    			ExecutionUtils.runCmd(cmd);
     			
     			// Read result
     			String text = IOUtils.toString(new FileInputStream(tmpFileOut.getPath()));
@@ -144,7 +125,6 @@ public class CuneiformTextExtractor extends AbstractTextExtractor {
         			return text;
     			}
 			} catch (Exception e) {
-				log.warn(Arrays.toString(cmd));
 				log.warn("Failed to extract OCR text", e);
 				return "";
 			} finally {
