@@ -21,12 +21,10 @@
 
 package com.openkm.util;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.Arrays;
 
@@ -37,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import bsh.EvalError;
 import bsh.Interpreter;
 
+import com.openkm.bean.ExecutionResult;
 import com.openkm.util.cl.BinaryClassLoader;
 import com.openkm.util.cl.ClassLoaderUtils;
 import com.openkm.util.cl.JarClassLoader;
@@ -166,44 +165,63 @@ public class ExecutionUtils {
     /**
      * Execute command line
      */
-    public static int runCmd(String cmd[], String stdout, String stderr) {
+    public static ExecutionResult runCmd(String cmd) throws SecurityException, InterruptedException,
+    		IOException {
+    	log.debug("runCmd({})", cmd);
+    	return runCmdImpl(cmd.split(" "));
+    }
+    
+    /**
+     * Execute command line 
+     */
+    public static ExecutionResult runCmd(String cmd[]) throws SecurityException, InterruptedException,
+    		IOException {
     	log.debug("runCmd({})", Arrays.toString(cmd));
-    	StringBuilder sb = new StringBuilder();
-    	BufferedReader br = null;
-    	String line;
-    	int ret = 0;
+    	return runCmdImpl(cmd);
+    }
+    
+    /**
+     * Execute command line: implementation
+     */
+    private static ExecutionResult runCmdImpl(String cmd[]) throws SecurityException, InterruptedException,
+    		IOException {
+    	log.debug("runCmd({})", Arrays.toString(cmd));
+    	ExecutionResult ret = new ExecutionResult();
     	
     	try {
     		long start = System.currentTimeMillis();
     		ProcessBuilder pb = new ProcessBuilder(cmd);
     		Process process = pb.start();
-    		br = new BufferedReader(new InputStreamReader(process.getInputStream()));
     		
-    		while ((line = br.readLine()) != null) {
-    			sb.append(line);
-    		}
+    		ret.setStdout(IOUtils.toString(process.getInputStream()));
+    		ret.setStderr(IOUtils.toString(process.getErrorStream()));
     		
     		process.waitFor();
+    		ret.setExitValue(process.exitValue());
     		
     		// Check return code
-    		if (process.exitValue() != 0) {
-    			log.warn("Abnormal program termination: {}", process.exitValue());
+    		if (ret.getExitValue() != 0) {
+    			log.warn("Abnormal program termination: {}", ret.getExitValue());
+    			log.warn("STDERR: {}", ret.getStderr());
     		} else {
     			log.debug("Normal program termination");
     		}
     		
     		process.destroy();
     		log.debug("Elapse time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
-    		stderr = IOUtils.toString(process.getErrorStream());
-    		ret = process.exitValue();
-    		stderr = sb.toString();
-    		stderr = IOUtils.toString(process.getErrorStream());
-    	} catch (Exception e) {
+    	} catch (SecurityException e) {
 			log.warn(Arrays.toString(cmd));
-			log.warn("Failed to extract OCR text", e);
-    	} finally {
-    		IOUtils.closeQuietly(br);
-    	}
+			log.warn("Security exception executing command", e);
+			throw e;
+    	} catch (IOException e) {
+			log.warn(Arrays.toString(cmd));
+			log.warn("IO exception executing command", e);
+			throw e;
+    	} catch (InterruptedException e) {
+    		log.warn(Arrays.toString(cmd));
+			log.warn("Interrupted exception executing command", e);
+			throw e;
+		}
     	
     	return ret;
     }
