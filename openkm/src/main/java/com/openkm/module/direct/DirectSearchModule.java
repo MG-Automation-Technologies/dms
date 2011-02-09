@@ -240,14 +240,14 @@ public class DirectSearchModule implements SearchModule {
 				if (!params.getKeywords().isEmpty()) {
 					for (Iterator<String> it = params.getKeywords().iterator(); it.hasNext(); ) {
 						sb.append(" "+params.getOperator()+" ");
-						sb.append("@okm:keywords = '" + escapeContains(it.next()) + "'");
+						sb.append("@okm:keywords='" + escapeContains(it.next()) + "'");
 					}
 				}
 				
 				if (!params.getCategories().isEmpty()) {
 					for (Iterator<String> it = params.getCategories().iterator(); it.hasNext(); ) {
 						sb.append(" "+params.getOperator()+" ");
-						sb.append("@okm:categories = '" + it.next() + "'");
+						sb.append("@okm:categories='" + it.next() + "'");
 					}
 				}
 
