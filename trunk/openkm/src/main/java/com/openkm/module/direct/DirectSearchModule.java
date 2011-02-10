@@ -74,6 +74,9 @@ import com.openkm.dao.QueryParamsDAO;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.cache.UserDocumentKeywords;
 import com.openkm.module.SearchModule;
+import com.openkm.module.base.BaseDocumentModule;
+import com.openkm.module.base.BaseFolderModule;
+import com.openkm.module.base.BaseMailModule;
 import com.openkm.util.FormUtils;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
@@ -444,7 +447,7 @@ public class DirectSearchModule implements SearchModule {
 					QueryResult qr = new QueryResult();
 					
 					if (node.isNodeType(Document.TYPE)) {
-						Document doc = new DirectDocumentModule().getProperties(session, node);
+						Document doc = BaseDocumentModule.getProperties(session, node);
 						
 						try {
 							if (node.getParent().isNodeType(Mail.TYPE)) {
@@ -456,10 +459,10 @@ public class DirectSearchModule implements SearchModule {
 							qr.setDocument(doc);
 						}
 					} else if (node.isNodeType(Folder.TYPE)) {
-						Folder fld = new DirectFolderModule().getProperties(session, node);
+						Folder fld = BaseFolderModule.getProperties(session, node);
 						qr.setFolder(fld);
 					} else if (node.isNodeType(Mail.TYPE)) {
-						Mail mail = new DirectMailModule().getProperties(session, node);
+						Mail mail = BaseMailModule.getProperties(session, node);
 						qr.setMail(mail);
 					}
 					
@@ -794,7 +797,7 @@ public class DirectSearchModule implements SearchModule {
 				
 				if (com.openkm.bean.Property.CATEGORIES.equals(refProp.getName())) {
 					Node node = refProp.getParent();
-					Document doc = new DirectDocumentModule().getProperties(session, node);
+					Document doc = BaseDocumentModule.getProperties(session, node);
 					documents.add(doc);
 				}
 			}
