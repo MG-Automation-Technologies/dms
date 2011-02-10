@@ -31,6 +31,8 @@ import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VirusDetectedException;
+import com.openkm.module.base.BaseDocumentModule;
+import com.openkm.module.base.BaseFolderModule;
 import com.openkm.module.direct.DirectDocumentModule;
 import com.openkm.module.direct.DirectFolderModule;
 import com.openkm.util.markov.Generator;
@@ -257,7 +259,7 @@ public class Benchmark {
 		if (depth < maxDepth) {
 			for (int i=0; i<maxFolders; i++) {
 				long begin = System.currentTimeMillis();
-				Node fld = new DirectFolderModule().create(session, root, Long.toString(System.currentTimeMillis()));
+				Node fld = BaseFolderModule.create(session, root, Long.toString(System.currentTimeMillis()));
 				totalFolders++;
 				log.info("At depth {}, created folder {}", depth, fld.getPath());
 				
@@ -268,7 +270,7 @@ public class Benchmark {
 					
 					// Repository insertion
 					ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-					new DirectDocumentModule().create(session, fld, System.currentTimeMillis() + ".txt", 
+					BaseDocumentModule.create(session, fld, System.currentTimeMillis() + ".txt", 
 							null, "text/plain", new String[]{}, bais);
 					totalDocuments++;
 				}
