@@ -31,40 +31,25 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.PropertyType;
 import javax.jcr.Session;
-import javax.jcr.UnsupportedRepositoryOperationException;
-import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.jackrabbit.api.XASession;
-import org.apache.jackrabbit.core.NodeImpl;
-import org.apache.jackrabbit.core.SessionImpl;
-import org.apache.jackrabbit.core.security.AccessManager;
-import org.apache.jackrabbit.spi.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
-import com.openkm.bean.Encryption;
-import com.openkm.bean.Folder;
 import com.openkm.bean.Lock;
-import com.openkm.bean.Note;
-import com.openkm.bean.Notification;
-import com.openkm.bean.Permission;
-import com.openkm.bean.Property;
 import com.openkm.bean.Repository;
 import com.openkm.bean.Version;
 import com.openkm.bean.kea.MetadataDTO;
@@ -86,16 +71,14 @@ import com.openkm.core.VirusDetectedException;
 import com.openkm.core.VirusDetection;
 import com.openkm.dao.LockTokenDAO;
 import com.openkm.dao.MimeTypeDAO;
-import com.openkm.dao.UserConfigDAO;
-import com.openkm.dao.bean.ProfileMisc;
-import com.openkm.dao.bean.UserConfig;
 import com.openkm.dao.bean.cache.UserItems;
 import com.openkm.kea.RDFREpository;
 import com.openkm.kea.metadata.MetadataExtractionException;
 import com.openkm.kea.metadata.MetadataExtractor;
 import com.openkm.module.DocumentModule;
-import com.openkm.util.DocConverter;
-import com.openkm.util.DocumentUtils;
+import com.openkm.module.base.BaseDocumentModule;
+import com.openkm.module.base.BaseNotificationModule;
+import com.openkm.module.base.BaseScriptingModule;
 import com.openkm.util.FileUtils;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.Transaction;
@@ -103,250 +86,6 @@ import com.openkm.util.UserActivity;
 
 public class DirectDocumentModule implements DocumentModule {
 	private static Logger log = LoggerFactory.getLogger(DirectDocumentModule.class);
-
-	/**
-	 * Get document properties using a given Session.
-	 */
-	public Document getProperties(Session session, Node docNode) throws javax.jcr.PathNotFoundException,
-			javax.jcr.RepositoryException {
-		log.debug("getProperties[session]({}, {})", session, docNode);
-		Document doc = new Document();
-		Node contentNode = docNode.getNode(Document.CONTENT);
-
-		// Properties
-		doc.setAuthor(docNode.getProperty(Document.AUTHOR).getString());
-		
-		// TODO Remove this check in OpenKM 6
-		// if (documentNode.hasProperty(Document.TITLE)) {
-		// 	doc.setTitle(documentNode.getProperty(Document.TITLE).getPath());		
-		// }
-		
-		doc.setPath(docNode.getPath());
-		doc.setLocked(docNode.isLocked());
-		doc.setUuid(docNode.getUUID());
-		
-		if (doc.isLocked()) {
-			doc.setLockInfo(getLock(session, docNode.getPath()));
-		} else {
-			doc.setLockInfo(null);
-		}
-
-		doc.setCheckedOut(contentNode.isCheckedOut());
-		doc.setMimeType(contentNode.getProperty(JcrConstants.JCR_MIMETYPE).getString());
-		doc.setLastModified(contentNode.getProperty(JcrConstants.JCR_LASTMODIFIED).getDate());
-
-		// Get actual version
-		if (docNode.isNodeType(Document.TYPE)) {
-			javax.jcr.version.Version ver = contentNode.getBaseVersion();
-			Version version = new Version();
-			version.setAuthor(contentNode.getProperty(Document.AUTHOR).getString());
-			version.setSize(contentNode.getProperty(Document.SIZE).getLong());
-			version.setComment(contentNode.getProperty(Document.VERSION_COMMENT).getString());
-			version.setName(ver.getName());
-			version.setCreated(ver.getCreated());
-			version.setActual(true);
-			doc.setActualVersion(version);
-		}
-
-		// If this is a frozen node, we must get create property from
-		// the original referenced node.
-		if (docNode.isNodeType(JcrConstants.NT_FROZENNODE)) {
-			Node node = docNode.getProperty(JcrConstants.JCR_FROZENUUID).getNode();
-			doc.setCreated(node.getProperty(JcrConstants.JCR_CREATED).getDate());
-		} else {
-			doc.setCreated(docNode.getProperty(JcrConstants.JCR_CREATED).getDate());
-		}
-
-		// Get permissions
-		if (Config.SYSTEM_READONLY) {
-			doc.setPermissions(Permission.NONE);
-		} else {
-			AccessManager am = ((SessionImpl) session).getAccessManager();
-			Path path = ((NodeImpl)docNode).getPrimaryPath();
-			//Path path = ((SessionImpl)session).getHierarchyManager().getPath(((NodeImpl)folderNode).getId());
-			if (am.isGranted(path, org.apache.jackrabbit.core.security.authorization.Permission.READ)) {
-				doc.setPermissions(Permission.READ);
-			}
-			
-			if (am.isGranted(path, org.apache.jackrabbit.core.security.authorization.Permission.ADD_NODE)) {
-				doc.setPermissions((byte) (doc.getPermissions() | Permission.WRITE));
-			}
-			
-			if (am.isGranted(path, org.apache.jackrabbit.core.security.authorization.Permission.REMOVE_NODE)) {
-				doc.setPermissions((byte) (doc.getPermissions() | Permission.DELETE));
-			}
-			
-			if (am.isGranted(path, org.apache.jackrabbit.core.security.authorization.Permission.MODIFY_AC)) {
-				doc.setPermissions((byte) (doc.getPermissions() | Permission.SECURITY));
-			}
-		}
-		
-		// Get user subscription
-		Set<String> subscriptorSet = new HashSet<String>();
-
-		if (docNode.isNodeType(Notification.TYPE)) {
-			Value[] subscriptors = docNode.getProperty(Notification.SUBSCRIPTORS).getValues();
-
-			for (int i=0; i<subscriptors.length; i++) {
-				subscriptorSet.add(subscriptors[i].getString());
-
-				if (session.getUserID().equals(subscriptors[i].getString())) {
-					doc.setSubscribed(true);
-				}
-			}
-		}
-
-		doc.setSubscriptors(subscriptorSet);
-		
-		// Get document keywords
-		Set<String> keywordsSet = new HashSet<String>();
-		Value[] keywords = docNode.getProperty(Property.KEYWORDS).getValues();
-
-		for (int i=0; i<keywords.length; i++) {
-			keywordsSet.add(keywords[i].getString());
-		}
-
-		doc.setKeywords(keywordsSet);
-		
-		// Get document categories
-		Set<Folder> categoriesSet = new HashSet<Folder>();
-		Value[] categories = docNode.getProperty(Property.CATEGORIES).getValues();
-
-		for (int i=0; i<categories.length; i++) {
-			Node node = session.getNodeByUUID(categories[i].getString());
-			categoriesSet.add(new DirectFolderModule().getProperties(session, node));
-		}
-
-		doc.setCategories(categoriesSet);
-		
-		DocConverter convert = DocConverter.getInstance();
-		doc.setConvertibleToPdf(convert.convertibleToPdf(doc.getMimeType()));
-		doc.setConvertibleToSwf(convert.convertibleToSwf(doc.getMimeType()));
-		doc.setConvertibleToDxf(convert.convertibleToDxf(doc.getMimeType()));
-		
-		// Get notes
-		if (docNode.isNodeType(Note.MIX_TYPE)) {
-			List<Note> notes = new ArrayList<Note>();
-			Node notesNode = docNode.getNode(Note.LIST);
-			
-			for (NodeIterator nit = notesNode.getNodes(); nit.hasNext(); ) {
-				Node noteNode = nit.nextNode();
-				Note note = new Note();
-				note.setDate(noteNode.getProperty(Note.DATE).getDate());
-				note.setUser(noteNode.getProperty(Note.USER).getString());
-				note.setText(noteNode.getProperty(Note.TEXT).getString());
-				note.setPath(noteNode.getPath());
-				notes.add(note);
-			}
-			
-			doc.setNotes(notes);
-		}
-		
-		// Get crypto
-		if (docNode.isNodeType(Encryption.TYPE)) {
-			String cipherName = docNode.getProperty(Encryption.CIPHER_NAME).getString();
-			doc.setCipherName(cipherName);
-		}
-		
-		log.debug("Permisos: {} => {}", docNode.getPath(), doc.getPermissions());
-		log.debug("getProperties[session]: {}", doc);
-		return doc;
-	}
-
-	/**
-	 * Create a new document
-	 * 
-	 * TODO Parameter title to be used in OpenKM 6
-	 */
-	public Node create(Session session, Node parentNode, String name, String title, String mimeType,
-			String[] keywords, InputStream is) throws javax.jcr.ItemExistsException,
-			javax.jcr.PathNotFoundException, javax.jcr.AccessDeniedException, javax.jcr.RepositoryException,
-			IOException, DatabaseException, UserQuotaExceededException {
-		// Create and add a new file node
-		Node documentNode = parentNode.addNode(name, Document.TYPE);
-		documentNode.setProperty(Property.KEYWORDS, keywords);
-		documentNode.setProperty(Property.CATEGORIES, new String[]{}, PropertyType.REFERENCE);
-		documentNode.setProperty(Document.AUTHOR, session.getUserID());
-		documentNode.setProperty(Document.NAME, name);
-		// documentNode.setProperty(Document.TITLE, title == null ? "" : title);
-		long size = is.available();
-		
-		// Check user quota
-		UserConfig uc = UserConfigDAO.findByPk(session, session.getUserID());
-		ProfileMisc pm = uc.getProfile().getMisc();
-		
-		// System user don't care quotas
-		if (!Config.SYSTEM_USER.equals(session.getUserID())) {
-			long currentQuota = 0;
-			
-			if (Config.USER_SIZE_CACHE) {
-				UserItems ui = UserItemsManager.get(session.getUserID());
-				currentQuota = ui.getSize();
-			} else {
-				currentQuota = JCRUtils.calculateQuota(session);
-			}
-			
-			if (pm.getUserQuota() > 0 && currentQuota + size > pm.getUserQuota()) {
-				throw new UserQuotaExceededException(Long.toString(currentQuota + size));
-			}
-		}
-		
-		// Get parent node auth info
-		Value[] usersReadParent = parentNode.getProperty(Permission.USERS_READ).getValues();
-		String[] usersRead = JCRUtils.usrValue2String(usersReadParent, session.getUserID());
-		Value[] usersWriteParent = parentNode.getProperty(Permission.USERS_WRITE).getValues();
-		String[] usersWrite = JCRUtils.usrValue2String(usersWriteParent, session.getUserID());
-		Value[] usersDeleteParent = parentNode.getProperty(Permission.USERS_DELETE).getValues();
-		String[] usersDelete = JCRUtils.usrValue2String(usersDeleteParent, session.getUserID());
-		Value[] usersSecurityParent = parentNode.getProperty(Permission.USERS_SECURITY).getValues();
-		String[] usersSecurity = JCRUtils.usrValue2String(usersSecurityParent, session.getUserID());
-
-		Value[] rolesReadParent = parentNode.getProperty(Permission.ROLES_READ).getValues();
-		String[] rolesRead = JCRUtils.rolValue2String(rolesReadParent);
-		Value[] rolesWriteParent = parentNode.getProperty(Permission.ROLES_WRITE).getValues();
-		String[] rolesWrite = JCRUtils.rolValue2String(rolesWriteParent);
-		Value[] rolesDeleteParent = parentNode.getProperty(Permission.ROLES_DELETE).getValues();
-		String[] rolesDelete = JCRUtils.rolValue2String(rolesDeleteParent);
-		Value[] rolesSecurityParent = parentNode.getProperty(Permission.ROLES_SECURITY).getValues();
-		String[] rolesSecurity = JCRUtils.rolValue2String(rolesSecurityParent);
-
-		// Set auth info
-		documentNode.setProperty(Permission.USERS_READ, usersRead);
-		documentNode.setProperty(Permission.USERS_WRITE, usersWrite);
-		documentNode.setProperty(Permission.USERS_DELETE, usersDelete);
-		documentNode.setProperty(Permission.USERS_SECURITY, usersSecurity);
-		documentNode.setProperty(Permission.ROLES_READ, rolesRead);
-		documentNode.setProperty(Permission.ROLES_WRITE, rolesWrite);
-		documentNode.setProperty(Permission.ROLES_DELETE, rolesDelete);
-		documentNode.setProperty(Permission.ROLES_SECURITY, rolesSecurity);
-
-		Node contentNode = documentNode.addNode(Document.CONTENT, Document.CONTENT_TYPE);
-		contentNode.setProperty(Document.SIZE, size);
-		contentNode.setProperty(Document.AUTHOR, session.getUserID());
-		contentNode.setProperty(Document.VERSION_COMMENT, "");
-		contentNode.setProperty(JcrConstants.JCR_MIMETYPE, mimeType);
-		
-		// jcr:encoding only have sense for text/* MIME
-		if (mimeType.startsWith("text/")) {
-			contentNode.setProperty(JcrConstants.JCR_ENCODING, "UTF-8");
-		}
-
-		contentNode.setProperty(JcrConstants.JCR_DATA, is);
-		contentNode.setProperty(JcrConstants.JCR_LASTMODIFIED, Calendar.getInstance());
-		parentNode.save();
-
-		// Esta línea vale millones!! Resuelve la incidencia del isCkechedOut.
-		// Por lo visto un nuevo nodo se añade con el isCheckedOut a true :/
-		contentNode.checkin();
-		
-		// Update user items size
-		if (Config.USER_SIZE_CACHE) {
-			UserItemsManager.incSize(session.getUserID(), size);
-			UserItemsManager.incDocuments(session.getUserID(), 1);
-		}
-		
-		return documentNode;
-	}
 	
 	@Override
 	public Document create(String token, Document doc, InputStream is) throws UnsupportedMimeTypeException, 
@@ -440,20 +179,20 @@ public class DirectDocumentModule implements DocumentModule {
 	        // End KEA
 	        
 			parentNode = session.getRootNode().getNode(parent.substring(1));
-			Node documentNode = create(session, parentNode, name, null /* doc.getTitle() */, mimeType,
-					keywords.toArray(new String[keywords.size()]), is);
+			Node documentNode = BaseDocumentModule.create(session, parentNode, name, null /* doc.getTitle() */,
+					mimeType, keywords.toArray(new String[keywords.size()]), is);
 			
 			// Check document filters
-			DocumentUtils.checkFilters(session, documentNode, mimeType);
+			//DocumentUtils.checkFilters(session, documentNode, mimeType);
 			
 			// Set returned document properties
-			newDocument = getProperties(session, documentNode);
+			newDocument = BaseDocumentModule.getProperties(session, documentNode);
 			
 			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CREATE", null);
+			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CREATE", null);
 			
 			// Check scripting
-			DirectScriptingModule.checkScripts(session, parentNode, documentNode, "CREATE_DOCUMENT");
+			BaseScriptingModule.checkScripts(session, parentNode, documentNode, "CREATE_DOCUMENT");
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "CREATE_DOCUMENT", documentNode.getUUID(), mimeType+", "+size+", "+doc.getPath());
@@ -532,7 +271,7 @@ public class DirectDocumentModule implements DocumentModule {
 			session.getRootNode().save();
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(session, parentNode, documentNode, "DELETE_DOCUMENT");
+			BaseScriptingModule.checkScripts(session, parentNode, documentNode, "DELETE_DOCUMENT");
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "DELETE_DOCUMENT", documentNode.getUUID(), docPath);
@@ -570,7 +309,7 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
-			doc = getProperties(session, documentNode);
+			doc = BaseDocumentModule.getProperties(session, documentNode);
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "GET_DOCUMENT_PROPERTIES", documentNode.getUUID(), doc.getKeywords().toString()+", "+docPath);
@@ -742,7 +481,7 @@ public class DirectDocumentModule implements DocumentModule {
 			contentNode.save();
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "SET_DOCUMENT_CONTENT");
+			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "SET_DOCUMENT_CONTENT");
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "SET_DOCUMENT_CONTENT", documentNode.getUUID(), size+", "+docPath);
@@ -800,7 +539,7 @@ public class DirectDocumentModule implements DocumentModule {
 				log.debug("Child: "+child.getPath()+", "+child.getPrimaryNodeType().getName());
 
 				if (child.isNodeType(Document.TYPE)) {
-					childs.add(getProperties(session, child));
+					childs.add(BaseDocumentModule.getProperties(session, child));
 				}
 			}
 
@@ -857,11 +596,11 @@ public class DirectDocumentModule implements DocumentModule {
 				session.save();
 
 				// Set returned document properties
-				renamedDocument = getProperties(session, documentNode);
+				renamedDocument = BaseDocumentModule.getProperties(session, documentNode);
 			} else {
 				// Don't change anything
 				documentNode = session.getRootNode().getNode(docPath.substring(1));
-				renamedDocument = getProperties(session, documentNode);				
+				renamedDocument = BaseDocumentModule.getProperties(session, documentNode);				
 			}
 			
 			// Activity log
@@ -917,10 +656,10 @@ public class DirectDocumentModule implements DocumentModule {
 			// documentNode.setProperty(Document.TITLE, doc.getTitle() == null ? "" : doc.getTitle());
 
 			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "SET_PROPERTIES", null);
+			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "SET_PROPERTIES", null);
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "SET_DOCUMENT_PROPERTIES");
+			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "SET_DOCUMENT_PROPERTIES");
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "SET_DOCUMENT_PROPERTIES", documentNode.getUUID(), doc.getPath());
@@ -984,7 +723,7 @@ public class DirectDocumentModule implements DocumentModule {
 			t.commit();
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "CHECKOUT_DOCUMENT");
+			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "CHECKOUT_DOCUMENT");
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "CHECKOUT_DOCUMENT", documentNode.getUUID(), lck.getLockToken()+", "+docPath);
@@ -1047,10 +786,10 @@ public class DirectDocumentModule implements DocumentModule {
 			t.commit();
 
 			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CANCEL_CHECKOUT", null);
+			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CANCEL_CHECKOUT", null);
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "CANCEL_CHECKOUT_DOCUMENT");
+			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "CANCEL_CHECKOUT_DOCUMENT");
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "CANCEL_CHECKOUT_DOCUMENT", documentNode.getUUID(), docPath);
@@ -1127,10 +866,10 @@ public class DirectDocumentModule implements DocumentModule {
 			t.commit();
 
 			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "FORCE_CANCEL_CHECKOUT", null);
+			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "FORCE_CANCEL_CHECKOUT", null);
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "FORCE_CANCEL_CHECKOUT_DOCUMENT");
+			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "FORCE_CANCEL_CHECKOUT_DOCUMENT");
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "FORCE_CANCEL_CHECKOUT_DOCUMENT", documentNode.getUUID(), docPath);
@@ -1251,10 +990,10 @@ public class DirectDocumentModule implements DocumentModule {
 			new File(Config.CACHE_SWF + File.separator + documentNode.getUUID() + ".swf").delete();
 
 			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CHECKIN", comment);
+			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CHECKIN", comment);
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "CHECKIN_DOCUMENT");
+			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "CHECKIN_DOCUMENT");
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "CHECKIN_DOCUMENT", documentNode.getUUID(), comment+", "+docPath);
@@ -1374,10 +1113,10 @@ public class DirectDocumentModule implements DocumentModule {
 			JCRUtils.addLockToken(session, documentNode);
 			
 			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "LOCK", null);
+			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "LOCK", null);
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "LOCK_DOCUMENT");
+			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "LOCK_DOCUMENT");
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "LOCK_DOCUMENT", documentNode.getUUID(), lck.getLockToken()+", "+docPath);
@@ -1426,10 +1165,10 @@ public class DirectDocumentModule implements DocumentModule {
 			JCRUtils.removeLockToken(session, documentNode);
 
 			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "UNLOCK", null);
+			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "UNLOCK", null);
 			
 			// Check scripting
-			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "UNLOCK_DOCUMENT");
+			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "UNLOCK_DOCUMENT");
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "UNLOCK_DOCUMENT", documentNode.getUUID(), docPath);
@@ -1491,10 +1230,10 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 
 			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "FORCE_UNLOCK", null);
+			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "FORCE_UNLOCK", null);
 			
 			// Check scripting
-			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "FORCE_UNLOCK_DOCUMENT");
+			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "FORCE_UNLOCK_DOCUMENT");
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "FORCE_UNLOCK_DOCUMENT", documentNode.getUUID(), docPath);
@@ -1564,7 +1303,7 @@ public class DirectDocumentModule implements DocumentModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			lock = getLock(session, docPath);
+			lock = BaseDocumentModule.getLock(session, docPath);
 		} catch (javax.jcr.lock.LockException e) {
 			log.error(e.getMessage(), e);
 			throw new LockException(e.getMessage(), e);
@@ -1578,22 +1317,6 @@ public class DirectDocumentModule implements DocumentModule {
 			if (token == null) JCRUtils.logout(session);
 		}
 		
-		log.debug("getLock: {}", lock);
-		return lock;
-	}
-
-	/**
-	 * Retrieve lock info from a document path
-	 */
-	private Lock getLock(Session session, String docPath) throws UnsupportedRepositoryOperationException,
-			javax.jcr.lock.LockException, javax.jcr.AccessDeniedException, javax.jcr.RepositoryException {
-		log.debug("getLock({}, {})", session, docPath);
-		Lock lock = new Lock();
-		Node documentNode = session.getRootNode().getNode(docPath.substring(1));
-		javax.jcr.lock.Lock lck = documentNode.getLock();
-		lock.setOwner(lck.getLockOwner());
-		lock.setNodePath(lck.getNode().getPath());
-		lock.setToken(lck.getLockToken());
 		log.debug("getLock: {}", lock);
 		return lock;
 	}
@@ -1637,7 +1360,7 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 			
 			// Check scripting
-			DirectScriptingModule.checkScripts(session, parentNode, documentNode, "PURGE_DOCUMENT");
+			BaseScriptingModule.checkScripts(session, parentNode, documentNode, "PURGE_DOCUMENT");
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "PURGE_DOCUMENT", documentNode.getUUID(), docPath);
@@ -1793,7 +1516,7 @@ public class DirectDocumentModule implements DocumentModule {
 			copy(session, srcDocumentNode, dstFolderNode);
 
 			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(dstFolderNode, session.getUserID(), "COPY", null);
+			BaseNotificationModule.checkSubscriptions(dstFolderNode, session.getUserID(), "COPY", null);
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "COPY_DOCUMENT", srcDocumentNode.getUUID(), dstPath+", "+docPath);
@@ -1836,7 +1559,8 @@ public class DirectDocumentModule implements DocumentModule {
 		String mimeType = srcDocumentContentNode.getProperty("jcr:mimeType").getString();
 		// String title = srcDocumentContentNode.getProperty(Document.TITLE).getString();
 		InputStream is = srcDocumentContentNode.getProperty("jcr:data").getStream();
-		create(session, dstFolderNode, srcDocumentNode.getName(), null /* title */, mimeType, new String[]{}, is);
+		BaseDocumentModule.create(session, dstFolderNode, srcDocumentNode.getName(), null /* title */,
+				mimeType, new String[]{}, is);
 		is.close();
 		
 		log.debug("copy: void");

@@ -41,6 +41,7 @@ import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.NoteModule;
+import com.openkm.module.base.BaseNotificationModule;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 
@@ -100,7 +101,7 @@ public class DirectNoteModule implements NoteModule {
 			newNote = get(noteNode);
 						
 			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(node, session.getUserID(), "ADD_NOTE", text);
+			BaseNotificationModule.checkSubscriptions(node, session.getUserID(), "ADD_NOTE", text);
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "ADD_NOTE", node.getUUID(), text+", "+nodePath);
@@ -259,7 +260,7 @@ public class DirectNoteModule implements NoteModule {
 			}
 			
 			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(noteNode, session.getUserID(), "SET_NOTE", null);
+			BaseNotificationModule.checkSubscriptions(noteNode, session.getUserID(), "SET_NOTE", null);
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "SET_NOTE", noteNode.getUUID(), notePath);

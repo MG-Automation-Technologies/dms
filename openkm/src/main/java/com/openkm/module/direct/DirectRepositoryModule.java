@@ -75,6 +75,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.cache.UserItems;
 import com.openkm.module.RepositoryModule;
+import com.openkm.module.base.BaseFolderModule;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.MailUtils;
 import com.openkm.util.UUIDGenerator;
@@ -401,7 +402,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			}
 			
 			Node rootNode = session.getRootNode().getNode(Repository.ROOT);
-			rootFolder = new DirectFolderModule().getProperties(session, rootNode);
+			rootFolder = BaseFolderModule.getProperties(session, rootNode);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "GET_ROOT_FOLDER", rootNode.getUUID(), rootFolder.getPath());
@@ -434,7 +435,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			}
 			
 			Node trashNode = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
-			trashFolder = new DirectFolderModule().getProperties(session, trashNode);
+			trashFolder = BaseFolderModule.getProperties(session, trashNode);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "GET_TRASH_FOLDER", trashNode.getUUID(), trashFolder.getPath());
@@ -467,7 +468,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			}
 			
 			Node trashNode = session.getRootNode().getNode(Repository.TRASH);
-			trashFolder = new DirectFolderModule().getProperties(session, trashNode);
+			trashFolder = BaseFolderModule.getProperties(session, trashNode);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "GET_TRASH_FOLDER_BASE", trashNode.getUUID(), trashFolder.getPath());
@@ -500,7 +501,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			}
 			
 			Node templatesNode = session.getRootNode().getNode(Repository.TEMPLATES);
-			templatesFolder = new DirectFolderModule().getProperties(session, templatesNode);
+			templatesFolder = BaseFolderModule.getProperties(session, templatesNode);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "GET_TEMPLATES_FOLDER", templatesNode.getUUID(), templatesFolder.getPath());
@@ -533,7 +534,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			}
 			
 			Node personalNode = session.getRootNode().getNode(Repository.PERSONAL+"/"+session.getUserID());
-			personalFolder = new DirectFolderModule().getProperties(session, personalNode);
+			personalFolder = BaseFolderModule.getProperties(session, personalNode);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "GET_PERSONAL_FOLDER", personalNode.getUUID(), personalFolder.getPath());
@@ -566,7 +567,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			}
 			
 			Node personalNode = session.getRootNode().getNode(Repository.PERSONAL);
-			personalFolder = new DirectFolderModule().getProperties(session, personalNode);
+			personalFolder = BaseFolderModule.getProperties(session, personalNode);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "GET_PERSONAL_FOLDER_BASE", personalNode.getUUID(), personalFolder.getPath());
@@ -600,7 +601,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			
 			String mailPath = MailUtils.getUserMailPath(session.getUserID());
 			Node mailNode = session.getRootNode().getNode(mailPath.substring(1));
-			mailFolder = new DirectFolderModule().getProperties(session, mailNode);
+			mailFolder = BaseFolderModule.getProperties(session, mailNode);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "GET_MAIL_FOLDER", mailNode.getUUID(), mailFolder.getPath());
@@ -633,7 +634,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			}
 			
 			Node mailNode = session.getRootNode().getNode(Repository.MAIL);
-			mailFolder = new DirectFolderModule().getProperties(session, mailNode);
+			mailFolder = BaseFolderModule.getProperties(session, mailNode);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "GET_MAIL_FOLDER_BASE", mailNode.getUUID(), mailFolder.getPath());
@@ -666,7 +667,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			}
 			
 			Node thesaurusNode = session.getRootNode().getNode(Repository.THESAURUS);
-			thesaurusFolder = new DirectFolderModule().getProperties(session, thesaurusNode);
+			thesaurusFolder = BaseFolderModule.getProperties(session, thesaurusNode);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "GET_THESAURUS_FOLDER", thesaurusNode.getUUID(), thesaurusFolder.getPath());
@@ -699,7 +700,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			}
 			
 			Node categoriesNode = session.getRootNode().getNode(Repository.CATEGORIES);
-			categoriesFolder = new DirectFolderModule().getProperties(session, categoriesNode);
+			categoriesFolder = BaseFolderModule.getProperties(session, categoriesNode);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "GET_CATEGORIES_FOLDER", categoriesNode.getUUID(), categoriesFolder.getPath());

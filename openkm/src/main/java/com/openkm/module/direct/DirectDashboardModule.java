@@ -63,6 +63,9 @@ import com.openkm.dao.bean.Dashboard;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.cache.UserItems;
 import com.openkm.module.DashboardModule;
+import com.openkm.module.base.BaseDocumentModule;
+import com.openkm.module.base.BaseFolderModule;
+import com.openkm.module.base.BaseMailModule;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 
@@ -238,7 +241,7 @@ public class DirectDashboardModule implements DashboardModule {
 		
 		for (NodeIterator nit = result.getNodes(); nit.hasNext() && i++ < maxResults; ) {
 			Node node = nit.nextNode();
-			Document doc = new DirectDocumentModule().getProperties(session, node);
+			Document doc = BaseDocumentModule.getProperties(session, node);
 			DashboardDocumentResult vo = new DashboardDocumentResult();
 			vo.setDocument(doc);
 			vo.setDate(ActivityDAO.getActivityDate(session.getUserID(), action, node.getUUID()));
@@ -270,7 +273,7 @@ public class DirectDashboardModule implements DashboardModule {
 		
 		for (NodeIterator nit = result.getNodes(); nit.hasNext() && i++ < maxResults; ) {
 			Node node = nit.nextNode();
-			Folder fld = new DirectFolderModule().getProperties(session, node);
+			Folder fld = BaseFolderModule.getProperties(session, node);
 			DashboardFolderResult vo = new DashboardFolderResult();
 			vo.setFolder(fld);
 			vo.setDate(ActivityDAO.getActivityDate(session.getUserID(), action, node.getUUID()));
@@ -520,7 +523,7 @@ public class DirectDashboardModule implements DashboardModule {
 				
 				try {
 					Node node = session.getNodeByUUID(actItem);
-					Document doc = new DirectDocumentModule().getProperties(session, node);
+					Document doc = BaseDocumentModule.getProperties(session, node);
 					DashboardDocumentResult vo = new DashboardDocumentResult();
 					vo.setDocument(doc);
 					vo.setDate(actDate);
@@ -561,7 +564,7 @@ public class DirectDashboardModule implements DashboardModule {
 				
 				try {
 					Node node = session.getNodeByUUID(act.getItem());
-					Mail mail = new DirectMailModule().getProperties(session, node);
+					Mail mail = BaseMailModule.getProperties(session, node);
 					DashboardMailResult vo = new DashboardMailResult();
 					vo.setMail(mail);
 					vo.setDate(act.getDate());
@@ -1067,7 +1070,7 @@ public class DirectDashboardModule implements DashboardModule {
 				
 				try {
 					Node node = session.getNodeByUUID(resItem);
-					Document doc = new DirectDocumentModule().getProperties(session, node);
+					Document doc = BaseDocumentModule.getProperties(session, node);
 					DashboardDocumentResult vo = new DashboardDocumentResult();
 					vo.setDocument(doc);
 					vo.setDate(resDate);

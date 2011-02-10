@@ -38,7 +38,9 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.VersionException;
 import com.openkm.module.PropertyModule;
+import com.openkm.module.base.BaseNotificationModule;
 import com.openkm.module.base.BasePropertyModule;
+import com.openkm.module.base.BaseScriptingModule;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 
@@ -68,10 +70,10 @@ public class DirectPropertyModule implements PropertyModule {
 			BasePropertyModule.addCategory(session, documentNode, catId);
 			
 			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "ADD_CATEGORY", null);
+			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "ADD_CATEGORY", null);
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "ADD_CATEGORY");
+			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "ADD_CATEGORY");
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "ADD_CATEGORY", documentNode.getUUID(), catId+", "+nodePath);
@@ -120,10 +122,10 @@ public class DirectPropertyModule implements PropertyModule {
 			BasePropertyModule.removeCategory(session, documentNode, catId);
 			
 			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "REMOVE_CATEGORY", null);
+			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "REMOVE_CATEGORY", null);
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "REMOVE_CATEGORY");
+			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "REMOVE_CATEGORY");
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "REMOVE_CATEGORY", documentNode.getUUID(), catId+", "+nodePath);
@@ -177,10 +179,10 @@ public class DirectPropertyModule implements PropertyModule {
 			}
 			
 			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "ADD_KEYWORD", null);
+			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "ADD_KEYWORD", null);
 			
 			// Check scripting
-			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "ADD_KEYWORD");
+			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "ADD_KEYWORD");
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "ADD_KEYWORD", documentNode.getUUID(), keyword+", "+nodePath);
@@ -235,10 +237,10 @@ public class DirectPropertyModule implements PropertyModule {
 			}
 			
 			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "REMOVE_KEYWORD", null);
+			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "REMOVE_KEYWORD", null);
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "REMOVE_KEYWORD");
+			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "REMOVE_KEYWORD");
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "REMOVE_KEYWORD", documentNode.getUUID(), keyword+", "+nodePath);
@@ -292,10 +294,10 @@ public class DirectPropertyModule implements PropertyModule {
 			}
 			
 			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "SET_ENCRYPTION", null);
+			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "SET_ENCRYPTION", null);
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "SET_ENCRYPTION");
+			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "SET_ENCRYPTION");
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "SET_ENCRYPTION", documentNode.getUUID(), cipherName+", "+nodePath);
@@ -348,10 +350,10 @@ public class DirectPropertyModule implements PropertyModule {
 			}
 			
 			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "UNSET_ENCRYPTION", null);
+			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "UNSET_ENCRYPTION", null);
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "UNSET_ENCRYPTION");
+			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "UNSET_ENCRYPTION");
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "UNSET_ENCRYPTION", documentNode.getUUID(), nodePath);
