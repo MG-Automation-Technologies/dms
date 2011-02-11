@@ -39,6 +39,7 @@ import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMRepository;
 import com.openkm.bean.Document;
 import com.openkm.core.Config;
+import com.openkm.core.ConversionException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
@@ -66,7 +67,6 @@ public class ConverterServlet extends OKMHttpServlet {
 		boolean toDxf = WebUtils.getBoolean(request, "toDxf");
 		File tmp = null;
 		InputStream is = null;
-		boolean success = true;
 		updateSessionManager(request);
 		
 		try {
@@ -89,16 +89,21 @@ public class ConverterServlet extends OKMHttpServlet {
 				// Convert to DXF
 				if (toDxf && !Config.SYSTEM_DWG2DXF.equals("")) {
 					if (!doc.getMimeType().equals(Config.MIME_DXF)) {
-						if (!dxfCache.exists() && doc.getMimeType().equals(Config.MIME_DWG)) {
-							FileOutputStream fos = new FileOutputStream(tmp);
-							IOUtils.copy(is, fos);
-							fos.flush();
-							fos.close();
-							success = converter.dwg2dxf(tmp, dxfCache);
+						try {
+							if (!dxfCache.exists() && doc.getMimeType().equals(Config.MIME_DWG)) {
+								FileOutputStream fos = new FileOutputStream(tmp);
+								IOUtils.copy(is, fos);
+								fos.flush();
+								fos.close();
+								converter.dwg2dxf(tmp, dxfCache);
+							}
+							
+							is.close();
+							is = new FileInputStream(dxfCache);
+						} catch (ConversionException e) {
+							dxfCache.delete();
+							log.error(e.getMessage(), e);
 						}
-						
-						is.close();
-						if (success) is = new FileInputStream(dxfCache);
 					}
 					
 					mimeType = Config.MIME_DXF;
@@ -108,16 +113,22 @@ public class ConverterServlet extends OKMHttpServlet {
 				// Convert to PDF
 				if (toPdf || toSwf && !Config.SYSTEM_PDF2SWF.equals("")) {
 					if (!doc.getMimeType().equals(Config.MIME_PDF)) {
-						if (!pdfCache.exists()) {							
-							if (doc.getMimeType().startsWith("image/")) {
-								success = converter.img2pdf(is, doc.getMimeType(), pdfCache);
-							} else {
-								success = converter.doc2pdf(is, doc.getMimeType(), pdfCache);
+						try {
+							if (!pdfCache.exists()) {
+								if (doc.getMimeType().startsWith("image/")) {
+									converter.img2pdf(is, doc.getMimeType(), pdfCache);
+								} else {
+									converter.doc2pdf(is, doc.getMimeType(), pdfCache);
+								}
 							}
+							
+							is.close();
+							is = new FileInputStream(pdfCache);
+						} catch (ConversionException e) {
+							pdfCache.delete();
+							log.error(e.getMessage(), e);
+							is = ConverterServlet.class.getResourceAsStream("conversion_problem.pdf");
 						}
-						
-						is.close();
-						if (success) is = new FileInputStream(pdfCache);
 					}
 					
 					mimeType = Config.MIME_PDF;
@@ -133,20 +144,21 @@ public class ConverterServlet extends OKMHttpServlet {
 								IOUtils.copy(is, fos);
 								fos.flush();
 								fos.close();
-								success = converter.pdf2swf(tmp, swfCache);
+								converter.pdf2swf(tmp, swfCache);
 							} else {
-								success = converter.pdf2swf(pdfCache, swfCache);
+								converter.pdf2swf(pdfCache, swfCache);
 							}
 							
 							is.close();
-							if (success) is = new FileInputStream(swfCache);
-						} catch (Exception e) {
+							is = new FileInputStream(swfCache);
+						} catch (ConversionException e) {
+							swfCache.delete();
 							log.error(e.getMessage(), e);
-							is = DownloadServlet.class.getResourceAsStream("preview_problem.swf");
+							is = ConverterServlet.class.getResourceAsStream("conversion_problem.swf");
 						}
 					} else {
 						is.close();
-						if (success) is = new FileInputStream(swfCache);
+						is = new FileInputStream(swfCache);
 					}
 					
 					mimeType = Config.MIME_SWF;
