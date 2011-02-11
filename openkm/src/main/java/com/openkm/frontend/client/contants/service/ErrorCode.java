@@ -92,6 +92,7 @@ public class ErrorCode {
 	public static final String CAUSE_Document					= "030";
 	public static final String CAUSE_Eval						= "031";
 	public static final String CAUSE_Virus						= "032";
+	public static final String CAUSE_Conversion					= "033";
 
 	/**
 	 * Gets the error
