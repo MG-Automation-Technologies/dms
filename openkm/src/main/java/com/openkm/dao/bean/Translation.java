@@ -35,24 +35,15 @@ public class Translation implements Serializable {
 	public static final String MODULE_EXTENSION = "extension";
 	public static final String MODULE_ADMINISTRATION = "administration";
 	
-	private String module = "";
-	private String key = "";
+	private TranslationId translationId = new TranslationId();
 	private String text = "";
 	
-	public String getModule() {
-		return module;
+	public TranslationId getTranslationId() {
+		return translationId;
 	}
 
-	public void setModule(String module) {
-		this.module = module;
-	}
-
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
+	public void setTranslationId(TranslationId translationId) {
+		this.translationId = translationId;
 	}
 
 	public String getText() {
@@ -66,8 +57,7 @@ public class Translation implements Serializable {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("module="); sb.append(module);
-		sb.append(", key="); sb.append(key);
+		sb.append("translationId="); sb.append(translationId);
 		sb.append(", text="); sb.append(text);
 		sb.append("}");
 		return sb.toString();
