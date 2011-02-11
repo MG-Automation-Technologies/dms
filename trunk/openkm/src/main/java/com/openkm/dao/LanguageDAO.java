@@ -74,7 +74,6 @@ public class LanguageDAO {
 	/**
 	 * Find all languages
 	 *
-	 * @param uuid
 	 * @return
 	 * @throws DatabaseException
 	 * @throws RepositoryException
