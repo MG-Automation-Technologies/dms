@@ -34,6 +34,7 @@ import org.apache.jackrabbit.extractor.AbstractTextExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.core.ConversionException;
 import com.openkm.util.DocConverter;
 
 /**
@@ -95,6 +96,9 @@ public class OOTextExtractor extends AbstractTextExtractor {
 			ret = FileUtils.readFileToString(fOut);
     		log.debug("TEXT: "+ret);
             return new StringReader(ret);
+		} catch (ConversionException e) {
+			log.warn("Failed to extract text", e);
+			return new StringReader("");
 		} finally {
 			stream.close();
 			fIn.delete();
