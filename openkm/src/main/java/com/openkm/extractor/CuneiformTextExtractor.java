@@ -106,11 +106,11 @@ public class CuneiformTextExtractor extends AbstractTextExtractor {
     			tmpFileOut = File.createTempFile("okm", ".txt");
     			
     			// Performs OCR
-    			// /usr/bin/cuneiform ${fileIn} -o ${fileOut}
     			HashMap<String, String> hm = new HashMap<String, String>();
     			hm.put("fileIn", tmpFileIn.getPath());
     			hm.put("fileOut", tmpFileOut.getPath());
-    			cmd = TemplateUtils.replace("SYSTEM_OCR", Config.SYSTEM_OCR, hm);
+    			String tpl = Config.SYSTEM_OCR + " ${fileIn} -o ${fileOut}";
+    			cmd = TemplateUtils.replace("SYSTEM_OCR", tpl, hm);
     			ExecutionUtils.runCmd(cmd);
     			
     			// Read result

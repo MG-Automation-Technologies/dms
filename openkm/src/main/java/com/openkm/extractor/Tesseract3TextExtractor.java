@@ -81,11 +81,11 @@ public class Tesseract3TextExtractor extends AbstractTextExtractor {
     			fos.close();
     			
     			// Performs OCR
-    			// /usr/bin/tesseract ${fileIn} ${fileOut}
     			HashMap<String, String> hm = new HashMap<String, String>();
     			hm.put("fileIn", tmpFileIn.getPath());
     			hm.put("fileOut", tmpFileOut.getPath());
-    			cmd = TemplateUtils.replace("SYSTEM_OCR", Config.SYSTEM_OCR, hm);
+    			String tpl = Config.SYSTEM_OCR + " ${fileIn} ${fileOut}";
+    			cmd = TemplateUtils.replace("SYSTEM_OCR", tpl, hm);
     			ExecutionUtils.runCmd(cmd);
     			
     			// Read result
