@@ -22,15 +22,15 @@
         	<input type="hidden" name="lg_id" value="${lg_id}"/>
         	<table class="results" width="95%">
           	<tr>
-            	<th></th><th>Key property</th><th>${langBase.name}</th><th>${langToTranslateName}</th>
+            	<th>#</th><th>Key property</th><th>${langBase.name}</th><th>${langToTranslateName}</th>
           	</tr>
           	<c:forEach var="translation" items="${langBase.translations}" varStatus="row">
           	<tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
           		<td align="right">${row.index+1}&nbsp;&nbsp;</td>
-          		<td width="30%">${translation.key}</td>
+          		<td width="30%">${translation.translationId.key}</td>
           		<td width="35%">${translation.text}</td>
           		<td width="35%">
-       				<input size="60" class="" name="${translation.key}" value="${translations[translation.key]}"/>
+       				<input size="60" name="${translation.translationId.key}" value="${translations[translation.translationId.key]}"/>
           		</td>
           	</tr>
           	</c:forEach>
