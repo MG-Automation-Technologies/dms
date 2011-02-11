@@ -26,18 +26,13 @@ import java.io.Serializable;
 /**
  * Translation
  * 
- * @author jllort
- *
+ * @author pavila
  */
-public class Translation implements Serializable {
+public class TranslationId implements Serializable {
 	private static final long serialVersionUID = 1L;
-	public static final String MODULE_FRONTEND			= "frontend";
-	public static final String MODULE_EXTENSION  		= "extension";
-	public static final String MODULE_ADMINISTRATION 	= "administration";
-	
 	private String module = "";
-	private String key 	  = "";
-	private String text	  = "";
+	private String key = "";
+	private String language = "";
 	
 	public String getModule() {
 		return module;
@@ -54,13 +49,36 @@ public class Translation implements Serializable {
 	public void setKey(String key) {
 		this.key = key;
 	}
-
-	public String getText() {
-		return text;
+	
+	public String getLanguage() {
+		return language;
 	}
 
-	public void setText(String text) {
-		this.text = text;
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+	
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		if (!(o instanceof TranslationId)) return false;
+		
+		final TranslationId transId = (TranslationId) o;
+		
+		if (!module.equals(transId.getModule()))
+			return false;
+		
+		if (!key.equals(transId.getKey()))
+			return false;
+		
+		if (!language.equals(transId.getLanguage()))
+			return false;
+		
+		return true;
+	}
+	
+	public int hashCode() {
+		return (module + key + language).hashCode();
 	}
 	
 	public String toString() {
@@ -68,7 +86,7 @@ public class Translation implements Serializable {
 		sb.append("{");
 		sb.append("module="); sb.append(module);
 		sb.append(", key="); sb.append(key);
-		sb.append(", text="); sb.append(text);
+		sb.append(", language="); sb.append(language);
 		sb.append("}");
 		return sb.toString();
 	}
