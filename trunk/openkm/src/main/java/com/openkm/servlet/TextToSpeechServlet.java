@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMDocument;
 import com.openkm.bean.Document;
+import com.openkm.core.ConversionException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
@@ -96,6 +97,8 @@ public class TextToSpeechServlet extends HttpServlet {
 		} catch (RepositoryException e) {
 			log.warn(e.getMessage(), e);
 		} catch (DatabaseException e) {
+			log.warn(e.getMessage(), e);
+		} catch (ConversionException e) {
 			log.warn(e.getMessage(), e);
 		} finally {
 			IOUtils.closeQuietly(fis);
