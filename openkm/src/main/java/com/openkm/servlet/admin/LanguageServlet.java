@@ -156,7 +156,7 @@ public class LanguageServlet extends BaseServlet {
 							name = item.getString("UTF-8");
 						} else if (item.getFieldName().equals("persist")) {
 							persist = true;
-						} 
+						}
 					} else {
 						if (item.getSize() > 0) {
 							mimeType = Config.mimeTypes.getContentType(item.getName());
@@ -332,23 +332,23 @@ public class LanguageServlet extends BaseServlet {
 		if (WebUtils.getBoolean(request, "persist")) {
 			Set<Translation> newTranslations = new HashSet<Translation>();
 			Language langBase = LanguageDAO.findByPk(LANG_BASE_CODE);
+			Language lang = LanguageDAO.findByPk(request.getParameter("lg_id"));
 			
 			for (Translation translation : langBase.getTranslations()) {
-				String text = WebUtils.getString(request, String.valueOf(translation.getTranslationId().getKey()));
+				String text = request.getParameter(translation.getTranslationId().getKey());
 				
 				if (!text.equals("")) {
 					Translation newTranslation = new Translation();
 					newTranslation.getTranslationId().setModule(translation.getTranslationId().getModule());
 					newTranslation.getTranslationId().setKey(translation.getTranslationId().getKey());
+					newTranslation.getTranslationId().setLanguage(lang);
 					newTranslation.setText(text);
 					newTranslations.add(newTranslation);
 				}
 			}
 			
-			String lgId = WebUtils.getString(request, "lg_id");
-			Language language = LanguageDAO.findByPk(lgId);
-			language.setTranslations(newTranslations);
-			LanguageDAO.update(language);
+			lang.setTranslations(newTranslations);
+			LanguageDAO.update(lang);
 		} else {
 			ServletContext sc = getServletContext();
 			String lgId = WebUtils.getString(request, "lg_id");
