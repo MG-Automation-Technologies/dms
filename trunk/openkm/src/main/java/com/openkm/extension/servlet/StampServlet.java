@@ -98,6 +98,7 @@ public class StampServlet extends OKMRemoteServiceServlet implements OKMStampSer
 		File tmp = null; 
 		File tmpPdf= null;
 		File tmpStampPdf = null;
+		
 		try {
 			Document doc = OKMDocument.getInstance().getProperties(null, path); 
 			tmp = File.createTempFile("okm", ".tmp");
@@ -111,6 +112,7 @@ public class StampServlet extends OKMRemoteServiceServlet implements OKMStampSer
 			} else {
 				fos = new FileOutputStream(tmpPdf);
 			}
+			
 			InputStream is = OKMDocument.getInstance().getContent(null, path, false);
 			IOUtils.copy(is, fos);
 			fos.flush();
@@ -121,29 +123,33 @@ public class StampServlet extends OKMRemoteServiceServlet implements OKMStampSer
 			if (!doc.getMimeType().equals("application/pdf")) {
 				is = new FileInputStream(tmp);
 				DocConverter converter = DocConverter.getInstance();
+				
 				if (doc.getMimeType().startsWith("image/")) {
 					converter.img2pdf(is, doc.getMimeType(), tmpPdf);
 				} else {
 					converter.doc2pdf(is, doc.getMimeType(), tmpPdf);
 				}
+				
 				is.close();
 			}
 			
 			// Stamping pdf file
 			is = new FileInputStream(tmpPdf);
 			fos = new FileOutputStream(tmpStampPdf);
+			
 			switch (type) {
 				case GWTStamp.STAMP_TEXT:
 					StampText st = StampTextDAO.findByPk(id);
 					PDFUtils.stampText(is, st.getText(), st.getLayer(), st.getOpacity(), st.getSize(),
-							Color.decode(st.getColor()), st.getRotation(), st.getAlign(), st.getExprX(), st.getExprY(),
-							fos);
+							Color.decode(st.getColor()), st.getRotation(), st.getAlign(), st.getExprX(),
+							st.getExprY(), fos);
 					break;
 					
 				case GWTStamp.STAMP_IMAGE:
 					StampImage si = StampImageDAO.findByPk(id);
 					byte[] image = SecureStore.b64Decode(si.getImageContent());
-					PDFUtils.stampImage(is, image, si.getLayer(), si.getOpacity(), si.getExprX(), si.getExprY(), fos);
+					PDFUtils.stampImage(is, image, si.getLayer(), si.getOpacity(), si.getExprX(),
+							si.getExprY(), fos);
 					break;
 			}
 			fos.close();
@@ -153,7 +159,7 @@ public class StampServlet extends OKMRemoteServiceServlet implements OKMStampSer
 			// Uploading document to repository if original is pdf we increment version otheside create new file
 			if (!doc.getMimeType().equals("application/pdf")) {
 				Document newDoc = new Document();
-				path = path.substring(0,path.lastIndexOf(".")+1) + "pdf";
+				path = path.substring(0, path.lastIndexOf(".")+1) + "pdf";
 				newDoc.setPath(path);
 				OKMDocument.getInstance().create(null, newDoc, is);
 			} else {
