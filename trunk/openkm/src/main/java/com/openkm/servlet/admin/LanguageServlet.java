@@ -337,7 +337,7 @@ public class LanguageServlet extends BaseServlet {
 			for (Translation translation : langBase.getTranslations()) {
 				String text = request.getParameter(translation.getTranslationId().getKey());
 				
-				if (!text.equals("")) {
+				if (text != null && !text.equals("")) {
 					Translation newTranslation = new Translation();
 					newTranslation.getTranslationId().setModule(translation.getTranslationId().getModule());
 					newTranslation.getTranslationId().setKey(translation.getTranslationId().getKey());
