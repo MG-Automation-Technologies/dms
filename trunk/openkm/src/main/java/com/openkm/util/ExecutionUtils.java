@@ -185,44 +185,28 @@ public class ExecutionUtils {
      */
     private static ExecutionResult runCmdImpl(String cmd[]) throws SecurityException, InterruptedException,
     		IOException {
-    	log.debug("runCmd({})", Arrays.toString(cmd));
+    	log.debug("runCmdImpl({})", Arrays.toString(cmd));
     	ExecutionResult ret = new ExecutionResult();
+    	long start = System.currentTimeMillis();
+    	ProcessBuilder pb = new ProcessBuilder(cmd);
+    	Process process = pb.start();
     	
-    	try {
-    		long start = System.currentTimeMillis();
-    		ProcessBuilder pb = new ProcessBuilder(cmd);
-    		Process process = pb.start();
-    		
-    		ret.setStdout(IOUtils.toString(process.getInputStream()));
-    		ret.setStderr(IOUtils.toString(process.getErrorStream()));
-    		
-    		process.waitFor();
-    		ret.setExitValue(process.exitValue());
-    		
-    		// Check return code
-    		if (ret.getExitValue() != 0) {
-    			log.warn("Abnormal program termination: {}", ret.getExitValue());
-    			log.warn("STDERR: {}", ret.getStderr());
-    		} else {
-    			log.debug("Normal program termination");
-    		}
-    		
-    		process.destroy();
-    		log.debug("Elapse time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
-    	} catch (SecurityException e) {
-			log.warn(Arrays.toString(cmd));
-			log.warn("Security exception executing command", e);
-			throw e;
-    	} catch (IOException e) {
-			log.warn(Arrays.toString(cmd));
-			log.warn("IO exception executing command", e);
-			throw e;
-    	} catch (InterruptedException e) {
-    		log.warn(Arrays.toString(cmd));
-			log.warn("Interrupted exception executing command", e);
-			throw e;
-		}
+    	ret.setStdout(IOUtils.toString(process.getInputStream()));
+    	ret.setStderr(IOUtils.toString(process.getErrorStream()));
     	
+    	process.waitFor();
+    	ret.setExitValue(process.exitValue());
+    	
+    	// Check return code
+    	if (ret.getExitValue() != 0) {
+    		log.warn("Abnormal program termination: {}", ret.getExitValue());
+    		log.warn("STDERR: {}", ret.getStderr());
+    	} else {
+    		log.debug("Normal program termination");
+    	}
+    	
+    	process.destroy();
+    	log.debug("Elapse time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));    	
     	return ret;
     }
 }
