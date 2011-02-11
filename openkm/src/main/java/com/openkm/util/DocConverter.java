@@ -393,7 +393,7 @@ public class DocConverter {
 			HashMap<String, String> hm = new HashMap<String, String>();
 			hm.put("fileIn", input.getPath());
 			hm.put("fileOut", output.getPath());
-			String tpl = Config.SYSTEM_PDF2SWF + " -T 9 ${fileIn} -o ${fileOut}"; 
+			String tpl = Config.SYSTEM_PDF2SWF + " -T 9 ${fileIn} -o ${fileOut}";
 			cmd = TemplateUtils.replace("SYSTEM_PDF2SWF", tpl, hm);
 			ExecutionUtils.runCmd(cmd);
 		} catch (SecurityException e) {
