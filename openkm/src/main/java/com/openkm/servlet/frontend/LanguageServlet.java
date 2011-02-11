@@ -53,9 +53,11 @@ public class LanguageServlet extends OKMRemoteServiceServlet implements OKMLangu
 			Language language = LanguageDAO.findByPk(lang);
 			if (language!=null) {
 				for (Translation translation : language.getTranslations()) {
-					if (translation.getModule().equals(Translation.MODULE_FRONTEND) || translation.getModule().equals(Translation.MODULE_EXTENSION)) {
+					if (translation.getTranslationId().getModule().equals(Translation.MODULE_FRONTEND) ||
+							translation.getTranslationId().getModule().equals(Translation.MODULE_EXTENSION)) {
 						// Module is added module name as starting translation key
-						translations.put(translation.getModule() + "."+ translation.getKey(), translation.getText());
+						translations.put(translation.getTranslationId().getModule() + "."+
+								translation.getTranslationId().getKey(), translation.getText());
 					}
 				}
 			}
