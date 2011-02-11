@@ -4,7 +4,7 @@
 <hibernate-mapping>
   <class name="com.openkm.dao.bean.Translation" table="OKM_TRANSLATION">
     <!-- Hibernate In Action 8.3.1 -->
-    <composite-id class="com.openkm.dao.bean.TranslationId">
+    <composite-id name="translationId" class="com.openkm.dao.bean.TranslationId">
       <key-property name="module" column="TR_MODULE" length="127"/>
       <key-property name="key" column="TR_KEY" length="127"/>
       <key-many-to-one name="language" class="com.openkm.dao.bean.Language" column="TR_LANGUAGE"/>
