@@ -32,7 +32,7 @@ public class TranslationId implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String module = "";
 	private String key = "";
-	private String language = "";
+	private Language language = new Language();
 	
 	public String getModule() {
 		return module;
@@ -50,11 +50,11 @@ public class TranslationId implements Serializable {
 		this.key = key;
 	}
 	
-	public String getLanguage() {
+	public Language getLanguage() {
 		return language;
 	}
 
-	public void setLanguage(String language) {
+	public void setLanguage(Language language) {
 		this.language = language;
 	}
 	
