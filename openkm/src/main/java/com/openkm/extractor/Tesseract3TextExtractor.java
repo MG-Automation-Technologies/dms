@@ -69,6 +69,7 @@ public class Tesseract3TextExtractor extends AbstractTextExtractor {
     	BufferedReader stdout = null;
     	File tmpFileIn = null;
     	File tmpFileOut = null;
+    	String cmd = null;
     	
 		if (!Config.SYSTEM_OCR.equals("")) {
 			try {
@@ -84,7 +85,7 @@ public class Tesseract3TextExtractor extends AbstractTextExtractor {
     			HashMap<String, String> hm = new HashMap<String, String>();
     			hm.put("fileIn", tmpFileIn.getPath());
     			hm.put("fileOut", tmpFileOut.getPath());
-    			String cmd = TemplateUtils.replace("SYSTEM_OCR", Config.SYSTEM_OCR, hm);
+    			cmd = TemplateUtils.replace("SYSTEM_OCR", Config.SYSTEM_OCR, hm);
     			ExecutionUtils.runCmd(cmd);
     			
     			// Read result
@@ -99,6 +100,15 @@ public class Tesseract3TextExtractor extends AbstractTextExtractor {
         			log.info("TEXT: {}", text);
         			return new StringReader(text);
     			}
+			} catch (SecurityException e) {
+				log.warn("Security exception executing command: " + cmd, e);
+				return new StringReader("");
+	    	} catch (IOException e) {
+				log.warn("IO exception executing command: " + cmd, e);
+				return new StringReader("");
+	    	} catch (InterruptedException e) {
+				log.warn("Interrupted exception executing command: " + cmd, e);
+				return new StringReader("");
 			} catch (Exception e) {
 				log.warn("Failed to extract OCR text", e);
 				return new StringReader("");
