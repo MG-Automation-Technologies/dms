@@ -36,8 +36,8 @@ public class Translation implements Serializable {
 	public static final String MODULE_ADMINISTRATION = "administration";
 	
 	private String module = "";
-	private String key 	  = "";
-	private String text	  = "";
+	private String key = "";
+	private String text = "";
 	
 	public String getModule() {
 		return module;
