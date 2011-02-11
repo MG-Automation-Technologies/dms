@@ -98,6 +98,7 @@ public class CuneiformTextExtractor extends AbstractTextExtractor {
     public String doOcr(File tmpFileIn) throws Exception {
     	BufferedReader stdout = null;
     	File tmpFileOut = null;
+    	String cmd = null;
     	
     	if (!Config.SYSTEM_OCR.equals("")) {
 			try {
@@ -109,7 +110,7 @@ public class CuneiformTextExtractor extends AbstractTextExtractor {
     			HashMap<String, String> hm = new HashMap<String, String>();
     			hm.put("fileIn", tmpFileIn.getPath());
     			hm.put("fileOut", tmpFileOut.getPath());
-    			String cmd = TemplateUtils.replace("SYSTEM_OCR", Config.SYSTEM_OCR, hm);
+    			cmd = TemplateUtils.replace("SYSTEM_OCR", Config.SYSTEM_OCR, hm);
     			ExecutionUtils.runCmd(cmd);
     			
     			// Read result
@@ -124,6 +125,15 @@ public class CuneiformTextExtractor extends AbstractTextExtractor {
         			log.info("TEXT: {}", text);
         			return text;
     			}
+			} catch (SecurityException e) {
+				log.warn("Security exception executing command: " + cmd, e);
+				return "";
+	    	} catch (IOException e) {
+				log.warn("IO exception executing command: " + cmd, e);
+				return "";
+	    	} catch (InterruptedException e) {
+				log.warn("Interrupted exception executing command: " + cmd, e);
+				return "";
 			} catch (Exception e) {
 				log.warn("Failed to extract OCR text", e);
 				return "";

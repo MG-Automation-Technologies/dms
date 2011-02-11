@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.Arrays;
+import java.util.HashMap;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.jackrabbit.extractor.AbstractTextExtractor;
@@ -37,7 +37,9 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
 import com.openkm.util.DocumentUtils;
+import com.openkm.util.ExecutionUtils;
 import com.openkm.util.FileUtils;
+import com.openkm.util.TemplateUtils;
 
 /**
  * Text extractor for TIFF image documents.
@@ -66,7 +68,7 @@ public class Tesseract2TextExtractor extends AbstractTextExtractor {
     	File tmpFileIn = null;
     	File tmpFilePre = null;
     	File tmpFileOut = null;
-    	String cmd[] = null;
+    	String cmd = null;
 
 		if (!Config.SYSTEM_OCR.equals("")) {
 			try {
@@ -79,20 +81,18 @@ public class Tesseract2TextExtractor extends AbstractTextExtractor {
     			fos.close();
 
     			// Performs image pre-processing
-    			cmd = new String[] { Config.SYSTEM_IMG2PDF, "-depth", "8", "-monochrome", tmpFileIn.getPath(), tmpFilePre.getPath() };
-    			log.debug("Command: {}", Arrays.toString(cmd));
-    			ProcessBuilder pb = new ProcessBuilder(cmd);
-    			Process process = pb.start();
-    			process.waitFor();
-    			process.destroy();
+    			HashMap<String, String> hm = new HashMap<String, String>();
+    			hm.put("fileIn", tmpFileIn.getPath());
+    			hm.put("fileOut", tmpFilePre.getPath());
+    			cmd = TemplateUtils.replace("SYSTEM_IMG2PDF", Config.SYSTEM_IMG2PDF + " -depth 8 -monochrome ${fileIn} ${fileOut}", hm);
+    			ExecutionUtils.runCmd(cmd);
     			
     			// Performs OCR
-    			cmd = new String[] { Config.SYSTEM_OCR, tmpFilePre.getPath(), tmpFileOut.getPath() };
-    			log.debug("Command: {}", Arrays.toString(cmd));
-    			pb = new ProcessBuilder(cmd);
-    			process = pb.start();
-    			process.waitFor();
-    			process.destroy();
+    			hm = new HashMap<String, String>();
+    			hm.put("fileIn", tmpFilePre.getPath());
+    			hm.put("fileOut", tmpFileOut.getPath());
+    			cmd = TemplateUtils.replace("SYSTEM_OCR", Config.SYSTEM_OCR, hm);
+    			ExecutionUtils.runCmd(cmd);
     			
     			// Read result
     			String text = IOUtils.toString(new FileInputStream(tmpFileOut.getPath()+".txt"));
@@ -106,6 +106,15 @@ public class Tesseract2TextExtractor extends AbstractTextExtractor {
         			log.info("TEXT: {}", text);
         			return new StringReader(text);
     			}
+			} catch (SecurityException e) {
+				log.warn("Security exception executing command: " + cmd, e);
+				return new StringReader("");
+	    	} catch (IOException e) {
+				log.warn("IO exception executing command: " + cmd, e);
+				return new StringReader("");
+	    	} catch (InterruptedException e) {
+				log.warn("Interrupted exception executing command: " + cmd, e);
+				return new StringReader("");
 			} catch (Exception e) {
 				log.warn("Failed to extract OCR text", e);
 				return new StringReader("");
