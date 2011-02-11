@@ -24,13 +24,13 @@ package com.openkm.util;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
@@ -50,7 +50,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
+import com.openkm.core.ConversionException;
 import com.openkm.core.DatabaseException;
+
+import freemarker.template.TemplateException;
 
 public class DocConverter {
 	private static Logger log = LoggerFactory.getLogger(DocConverter.class);
@@ -179,15 +182,15 @@ public class DocConverter {
 	/**
 	 * Convert a document format to another one.
 	 */
-	public void convert(File inputFile, String mimeType, File outputFile) throws IOException {
+	public void convert(File inputFile, String mimeType, File outputFile) throws ConversionException {
 		log.debug("convert({}, {}, {})", new Object[] { inputFile, mimeType, outputFile });
 
 		if (Config.SYSTEM_OPENOFFICE_PATH.equals("") && Config.SYSTEM_OPENOFFICE_SERVER.equals("")) {
-			throw new IOException("system.openoffice.path or system.openoffice.server not configured");
+			throw new ConversionException("system.openoffice.path or system.openoffice.server not configured");
 		}
 
 		if (!validOpenOffice.contains(mimeType)) {
-			throw new IOException("Invalid document conversion MIME type: "+mimeType);
+			throw new ConversionException("Invalid document conversion MIME type: "+mimeType);
 		}
 
 		try {
@@ -200,14 +203,14 @@ public class DocConverter {
 				remoteConvert(inputFile, mimeType, outputFile);
 			}
 		} catch (OfficeException e) {
-			throw new IOException("Error converting document: "+e.getMessage());
+			throw new ConversionException("Error converting document: "+e.getMessage());
 		}
 	}
 	
 	/**
 	 * Handle remote OpenOffice server conversion
 	 */
-	private void remoteConvert(File inputFile, String mimeType, File outputFile) throws IOException {
+	private void remoteConvert(File inputFile, String mimeType, File outputFile) throws ConversionException {
 		PostMethod post = new PostMethod(Config.SYSTEM_OPENOFFICE_SERVER);
 		
 		try {
@@ -231,7 +234,11 @@ public class DocConverter {
 				throw new IOException("Error in conversion: " + rc);
 			}
 		} catch (HttpException e) {
-			throw new IOException(e.getMessage(), e);
+			throw new ConversionException("Http exception", e);
+		} catch (FileNotFoundException e) {
+			throw new ConversionException("File not found exeption", e);
+		} catch (IOException e) {
+			throw new ConversionException("IO exception", e);
 		} finally {
 			post.releaseConnection();
 		}
@@ -240,11 +247,11 @@ public class DocConverter {
 	/**
 	 * Convert document to PDF.
 	 */
-	public boolean doc2pdf(InputStream is, String mimeType, File output) throws DatabaseException, IOException {
+	public void doc2pdf(InputStream is, String mimeType, File output) throws ConversionException,
+			DatabaseException, IOException {
 		log.debug("** Convert from {} to PDF **", mimeType);
 		File tmp = FileUtils.createTempFileFromMime(mimeType);
 		FileOutputStream fos = null;
-		boolean success = true;
 		
 		try {
 			long start = System.currentTimeMillis();
@@ -256,22 +263,18 @@ public class DocConverter {
 			convert(tmp, mimeType, output);
 			log.debug("Elapse doc2pdf time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
 		} catch (Exception e) {
-			log.error("Error in {} to PDF conversion", mimeType, e);
-			success = false;
-			output.delete();
-			throw new IOException("Error in "+mimeType+" to PDF conversion", e);
+			throw new ConversionException("Error in "+mimeType+" to PDF conversion", e);
 		} finally {
 			IOUtils.closeQuietly(fos);
 			tmp.delete();
 		}
-		
-		return success;
 	}
 	
 	/**
 	 * Convert document to TXT.
 	 */
-	public void doc2txt(InputStream input, String mimeType, File output) throws DatabaseException, IOException {
+	public void doc2txt(InputStream input, String mimeType, File output) throws ConversionException, 
+			DatabaseException, IOException {
 		log.debug("** Convert from {} to TXT **", mimeType);
 		File tmp = FileUtils.createTempFileFromMime(mimeType);
 		FileOutputStream fos = new FileOutputStream(tmp);
@@ -293,9 +296,7 @@ public class DocConverter {
 			
 			log.debug("Elapse doc2txt time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
 		} catch (Exception e) {
-			log.error("Error in {} to TXT conversion", mimeType, e);
-			output.delete();
-			throw new IOException("Error in "+mimeType+" to TXT conversion", e);
+			throw new ConversionException("Error in "+mimeType+" to TXT conversion", e);
 		} finally {
 			FileUtils.deleteQuietly(tmp);
 			IOUtils.closeQuietly(fos);
@@ -305,209 +306,137 @@ public class DocConverter {
 	/**
 	 * Convert IMG to PDF (for document preview feature).
 	 * 
-	 * [0] => http://www.rubblewebs.co.uk/imagemagick/psd.php
+	 * [0] => http://www.rubblewebs.co.uk/imagemagick/psd.php 
 	 */
-	public boolean img2pdf(InputStream is, String mimeType, File output) throws DatabaseException, IOException {
+	public void img2pdf(InputStream is, String mimeType, File output) throws ConversionException,
+			DatabaseException, IOException {
 		log.debug("** Convert from {} to PDF **", mimeType);
-		File tmp = FileUtils.createTempFileFromMime(mimeType);
-		String cmd[] = { Config.SYSTEM_IMG2PDF, tmp.getPath()+"[0]", output.getPath() };
-		log.debug("Command: {}", Arrays.toString(cmd));
-		BufferedReader stdout = null;
+		File tmpFileIn = FileUtils.createTempFileFromMime(mimeType);
 		FileOutputStream fos = null;
-	    boolean success = true;
-	    String line;
-		
+		String cmd = null;
+	    
 		try {
-			long start = System.currentTimeMillis();
-			fos = new FileOutputStream(tmp);
+			fos = new FileOutputStream(tmpFileIn);
 			IOUtils.copy(is, fos);
 			fos.flush();
 			fos.close();
 			
-			ProcessBuilder pb = new ProcessBuilder(cmd);
-			Process process = pb.start();
-			StringBuilder sb = new StringBuilder();
-			stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			
-			while ((line = stdout.readLine()) != null) {
-				sb.append(line);
-			}
-			
-			process.waitFor();
-			
-			// Check return code
-			if (process.exitValue() != 0) {
-				success = false;
-				log.warn("Abnormal program termination: {}" + process.exitValue());
-				log.warn("STDERR: {}", IOUtils.toString(process.getErrorStream()));
-				log.warn("STDOUT: {}", sb.toString());
-			} else {
-				log.debug("Normal program termination");
-			}
-			
-			process.destroy();
-			log.debug("Elapse img2pdf time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
-		} catch (Exception e) {
-			log.error("Error in IMG to PDF conversion", e);
-			output.delete();
-			throw new IOException("Error in IMG to PDF conversion", e);
+			// Performs conversion
+			HashMap<String, String> hm = new HashMap<String, String>();
+			hm.put("fileIn", tmpFileIn.getPath());
+			hm.put("fileOut", output.getPath());
+			String tpl = Config.SYSTEM_IMG2PDF + " ${fileIn}[0] ${fileOut}";
+			cmd = TemplateUtils.replace("SYSTEM_OCR", tpl, hm);
+			ExecutionUtils.runCmd(cmd);
+		} catch (SecurityException e) {
+			throw new ConversionException("Security exception executing command: " + cmd, e);
+    	} catch (InterruptedException e) {
+			throw new ConversionException("Interrupted exception executing command: " + cmd, e);
+    	} catch (IOException e) {
+			throw new ConversionException("IO exception executing command: " + cmd, e);
+		} catch (TemplateException e) {
+			throw new ConversionException("Template exception", e);
 		} finally {
 			IOUtils.closeQuietly(fos);
-			tmp.delete();
+			tmpFileIn.delete();
 		}
-		
-		return success;
 	}
 	
 	/**
 	 * Convert CAD files to PDF
 	 */
-	public boolean cad2pdf(InputStream is, String mimeType, File output) throws IOException {
+	public void cad2pdf(InputStream is, String mimeType, File output) throws ConversionException,
+			DatabaseException, IOException {
 		log.debug("** Convert from {} to PDF **", mimeType);
-		File tmp = File.createTempFile("okm", ".cad");
-		String cmd[] = { "wine", Config.SYSTEM_DWG2DXF, "/r", "/ad", "/lw 1", "/f 104", tmp.getPath(), output.getPath() };
+		File tmpFileIn = File.createTempFile("okm", ".cad");
 		FileOutputStream fos = null;
-		log.info("Command: {}", Arrays.toString(cmd));
-		BufferedReader stdout = null;
-		boolean success = true;
-		String line;
+		String cmd = null;
 		
 	    try {
-			long start = System.currentTimeMillis();
-			fos = new FileOutputStream(tmp);
+			fos = new FileOutputStream(tmpFileIn);
 			IOUtils.copy(is, fos);
 			fos.flush();
 			fos.close();
 			
-			ProcessBuilder pb = new ProcessBuilder(cmd);
-			Process process = pb.start();
-			StringBuilder sb = new StringBuilder();
-			stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			
-			while ((line = stdout.readLine()) != null) {
-				sb.append(line);
-			}
-			
-			process.waitFor();
-			
-			// Check return code
-			if (process.exitValue() != 0) {
-				success = false;
-				log.warn("Abnormal program termination: {}" + process.exitValue());
-				log.warn("STDERR: {}", IOUtils.toString(process.getErrorStream()));
-				log.warn("STDOUT: {}", sb.toString());
-			} else {
-				log.debug("Normal program termination");
-			}
-			
-			process.destroy();
-			log.debug("Elapse cad2pdf time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
-		} catch (Exception e) {
-			log.error("Error in CAD to PDF conversion", e);
-			output.delete();
-			throw new IOException("Error in CAD to PDF conversion", e);
+			// Performs conversion
+			HashMap<String, String> hm = new HashMap<String, String>();
+			hm.put("fileIn", tmpFileIn.getPath());
+			hm.put("fileOut", output.getPath());
+			String tpl = "wine " + Config.SYSTEM_DWG2DXF + " /r /ad /lw 1 /f 104 ${fileIn} ${fileOut}"; 
+			cmd = TemplateUtils.replace("SYSTEM_DWG2DXF", tpl, hm);
+			ExecutionUtils.runCmd(cmd);
+	    } catch (SecurityException e) {
+			throw new ConversionException("Security exception executing command: " + cmd, e);
+    	} catch (InterruptedException e) {
+			throw new ConversionException("Interrupted exception executing command: " + cmd, e);
+    	} catch (IOException e) {
+			throw new ConversionException("IO exception executing command: " + cmd, e);
+		} catch (TemplateException e) {
+			throw new ConversionException("Template exception", e);
 		} finally {
 			IOUtils.closeQuietly(fos);
-			tmp.delete();
+			tmpFileIn.delete();
 		}
-		
-		return success;
 	}
 	
 	/**
 	 * Convert PDF to SWF (for document preview feature).
 	 */
-	public boolean pdf2swf(File input, File output) throws IOException {
+	public void pdf2swf(File input, File output) throws ConversionException, DatabaseException,
+			IOException {
 		log.debug("** Convert from PDF to SWF **");
-		String cmd[] = { Config.SYSTEM_PDF2SWF, "-T 9", input.getPath(), "-o", output.getPath() };
-		log.debug("Command: {}", Arrays.toString(cmd));
 		BufferedReader stdout = null;
-	    boolean success = true;
-	    String line;
-	    
+		String cmd = null;
+		
 		try {
-			long start = System.currentTimeMillis();
-			ProcessBuilder pb = new ProcessBuilder(cmd);
-			Process process = pb.start();
-			StringBuilder sb = new StringBuilder();
-			stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			
-			while ((line = stdout.readLine()) != null) {
-				sb.append(line);
-			}
-			
-			process.waitFor();
-			
-			// Check return code
-			if (process.exitValue() != 0) {
-				success = false;
-				log.warn("Abnormal program termination: {}" + process.exitValue());
-				log.warn("STDERR: {}", IOUtils.toString(process.getErrorStream()));
-				log.warn("STDOUT: {}", sb.toString());
-			} else {
-				log.debug("Normal program termination");
-			}
-			
-			process.destroy();
-			log.debug("Elapse pdf2swf time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
-		} catch (Exception e) {
-			log.error(Arrays.toString(cmd));
-			log.error("Error in PDF to SWF conversion", e);
-			output.delete();
-			throw new IOException("Error in PDF to SWF conversion", e);
+			// Performs conversion
+			HashMap<String, String> hm = new HashMap<String, String>();
+			hm.put("fileIn", input.getPath());
+			hm.put("fileOut", output.getPath());
+			String tpl = Config.SYSTEM_PDF2SWF + " -T 9 ${fileIn} -o ${fileOut}"; 
+			cmd = TemplateUtils.replace("SYSTEM_PDF2SWF", tpl, hm);
+			ExecutionUtils.runCmd(cmd);
+		} catch (SecurityException e) {
+			throw new ConversionException("Security exception executing command: " + cmd, e);
+    	} catch (InterruptedException e) {
+			throw new ConversionException("Interrupted exception executing command: " + cmd, e);
+    	} catch (IOException e) {
+			throw new ConversionException("IO exception executing command: " + cmd, e);
+		} catch (TemplateException e) {
+			throw new ConversionException("Template exception", e);
 		} finally {
 			IOUtils.closeQuietly(stdout);
 		}
-		
-		return success;
 	}
 	
 	/**
 	 * Convert DWG to DXF (for document preview feature).
 	 * Actually only works with Acme CAD Converter 2010 v8.1.4
 	 */
-	public boolean dwg2dxf(File input, File output) throws IOException {
+	public void dwg2dxf(File input, File output) throws ConversionException, DatabaseException,
+			IOException {
 		log.debug("** Convert from DWG to DXF **");
-		String cmd[] = { "wine", Config.SYSTEM_DWG2DXF, "/r", "/ad", "/x14", input.getPath(), output.getPath() };
-		log.info("Command: {}", Arrays.toString(cmd));
 		BufferedReader stdout = null;
-	    boolean success = true;
-	    String line;
+		String cmd = null;
 	    
 		try {
-			long start = System.currentTimeMillis();
-			ProcessBuilder pb = new ProcessBuilder(cmd);
-			Process process = pb.start();
-			StringBuilder sb = new StringBuilder();
-			stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			
-			while ((line = stdout.readLine()) != null) {
-				sb.append(line);
-			}
-			
-			process.waitFor();
-			
-			// Check return code
-			if (process.exitValue() != 0) {
-				success = false;
-				log.warn("Abnormal program termination: {}" + process.exitValue());
-				log.warn("STDERR: {}", IOUtils.toString(process.getErrorStream()));
-				log.warn("STDOUT: {}", sb.toString());
-			} else {
-				log.debug("Normal program termination");
-			}
-			
-			process.destroy();
-			log.debug("Elapse dwg2dxf time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
-		} catch (Exception e) {
-			log.error(Arrays.toString(cmd));
-			log.error("Error in DWG to DXF conversion", e);
-			output.delete();
-			throw new IOException("Error in DWG to DXF conversion", e);
+			// Performs conversion
+			HashMap<String, String> hm = new HashMap<String, String>();
+			hm.put("fileIn", input.getPath());
+			hm.put("fileOut", output.getPath());
+			String tpl = "wine " + Config.SYSTEM_DWG2DXF + " /r /ad /x14 ${fileIn} ${fileOut}";
+			cmd = TemplateUtils.replace("SYSTEM_DWG2DXF", tpl, hm);
+			ExecutionUtils.runCmd(cmd);
+		} catch (SecurityException e) {
+			throw new ConversionException("Security exception executing command: " + cmd, e);
+    	} catch (InterruptedException e) {
+			throw new ConversionException("Interrupted exception executing command: " + cmd, e);
+    	} catch (IOException e) {
+			throw new ConversionException("IO exception executing command: " + cmd, e);
+		} catch (TemplateException e) {
+			throw new ConversionException("Template exception", e);
 		} finally {
 			IOUtils.closeQuietly(stdout);
 		}
-		
-		return success;
 	}
 }
