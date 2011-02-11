@@ -335,6 +335,7 @@ public class LanguageServlet extends BaseServlet {
 			
 			for (Translation translation : langBase.getTranslations()) {
 				String text = WebUtils.getString(request, String.valueOf(translation.getKey()));
+				
 				if (!text.equals("")) {
 					Translation newTranslation = new Translation();
 					newTranslation.setModule(translation.getModule());
@@ -411,8 +412,8 @@ public class LanguageServlet extends BaseServlet {
 		out.println(insertLang);
 		
 		for (Translation translation : language.getTranslations()) {
-			StringBuffer insertTranslation = new StringBuffer("INSERT INTO OKM_TRANSLATION (TR_ID, TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES (");
-			insertTranslation.append(translation.getId()).append(", '");
+			StringBuffer insertTranslation = new StringBuffer("INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES (");
+			insertTranslation.append("'");
 			insertTranslation.append(translation.getModule()).append("', '");
 			insertTranslation.append(translation.getKey()).append("', '");
 			insertTranslation.append(translation.getText()).append("', '");
