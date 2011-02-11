@@ -40,6 +40,7 @@ import com.lowagie.text.DocumentException;
 import com.openkm.api.OKMDocument;
 import com.openkm.bean.Document;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.ConversionException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
@@ -207,6 +208,9 @@ public class StampServlet extends OKMRemoteServiceServlet implements OKMStampSer
 		} catch (VersionException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStampService, ErrorCode.CAUSE_Version), e.getMessage());
+		} catch (ConversionException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStampService, ErrorCode.CAUSE_Conversion), e.getMessage());
 		} finally {
 			// Cleaning temp files
 			tmp.delete();
