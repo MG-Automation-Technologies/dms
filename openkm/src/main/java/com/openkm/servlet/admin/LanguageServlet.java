@@ -299,8 +299,8 @@ public class LanguageServlet extends BaseServlet {
 		if (WebUtils.getBoolean(request, "persist")) {
 			Language language = LanguageDAO.findByPk(LANG_BASE_CODE);
 			Translation translation = new Translation();
-			translation.setModule(WebUtils.getString(request, "tr_module"));
-			translation.setKey(WebUtils.getString(request, "tr_key"));
+			translation.getTranslationId().setModule(WebUtils.getString(request, "tr_module"));
+			translation.getTranslationId().setKey(WebUtils.getString(request, "tr_key"));
 			translation.setText(WebUtils.getString(request, "tr_text"));
 			language.getTranslations().add(translation);
 			LanguageDAO.update(language);
@@ -334,12 +334,12 @@ public class LanguageServlet extends BaseServlet {
 			Language langBase = LanguageDAO.findByPk(LANG_BASE_CODE);
 			
 			for (Translation translation : langBase.getTranslations()) {
-				String text = WebUtils.getString(request, String.valueOf(translation.getKey()));
+				String text = WebUtils.getString(request, String.valueOf(translation.getTranslationId().getKey()));
 				
 				if (!text.equals("")) {
 					Translation newTranslation = new Translation();
-					newTranslation.setModule(translation.getModule());
-					newTranslation.setKey(translation.getKey());
+					newTranslation.getTranslationId().setModule(translation.getTranslationId().getModule());
+					newTranslation.getTranslationId().setKey(translation.getTranslationId().getKey());
 					newTranslation.setText(text);
 					newTranslations.add(newTranslation);
 				}
@@ -356,14 +356,14 @@ public class LanguageServlet extends BaseServlet {
 			Map<String, String> translations = new HashMap<String, String>();
 			
 			for (Translation translation : langToTranslate.getTranslations()) {
-				translations.put(translation.getKey(), translation.getText());
+				translations.put(translation.getTranslationId().getKey(), translation.getText());
 			}
 			
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("lg_id", lgId);
 			sc.setAttribute("langToTranslateName", langToTranslate.getName());
-			sc.setAttribute("translations",translations);
+			sc.setAttribute("translations", translations);
 			sc.setAttribute("langBase", LanguageDAO.findByPk(LANG_BASE_CODE)); // English always it'll be used as a translations base
 			sc.getRequestDispatcher("/admin/translation_edit.jsp").forward(request, response);
 		}
@@ -414,8 +414,8 @@ public class LanguageServlet extends BaseServlet {
 		for (Translation translation : language.getTranslations()) {
 			StringBuffer insertTranslation = new StringBuffer("INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES (");
 			insertTranslation.append("'");
-			insertTranslation.append(translation.getModule()).append("', '");
-			insertTranslation.append(translation.getKey()).append("', '");
+			insertTranslation.append(translation.getTranslationId().getModule()).append("', '");
+			insertTranslation.append(translation.getTranslationId().getKey()).append("', '");
 			insertTranslation.append(translation.getText()).append("', '");
 			insertTranslation.append(language.getId()).append("');");
 			out.println(insertTranslation);
