@@ -24,7 +24,8 @@ package com.openkm.bean;
 import java.io.Serializable;
 
 public class Notification implements Serializable {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 7492226582552064878L;
+	
 	public static final String TYPE = "mix:notification";
 	public static final String SUBSCRIPTORS = "okm:subscriptors";
 		

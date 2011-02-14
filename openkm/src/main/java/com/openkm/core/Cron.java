@@ -19,6 +19,7 @@
 
 package com.openkm.core;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.TimerTask;
@@ -51,14 +52,14 @@ public class Cron extends TimerTask {
 						CronTabExpression cte = CronTabExpression.parse(ct.getExpression());
 						
 						if (cte.matches(cal)) {
-							log.info("Id: {}, Name: {}, Mime: {}", new Object[] {ct.getId(), ct.getName(),
-									ct.getFileMime()});
+							log.info("Id: {}, Name: {}, Type: {}", new Object[] {ct.getId(), ct.getName(),
+									ct.getType()});
 							
-							if (CronTab.BSH.equals(ct.getFileMime())) {
+							if (CronTab.BSH.equals(ct.getType())) {
 								RunnerBsh runner = new RunnerBsh(ct.getId(), ct.getMail(),  
 										new String(SecureStore.b64Decode(ct.getFileContent())));
 								new Thread(runner).start();
-							} else if (CronTab.JAR.equals(ct.getFileMime())) {
+							} else if (CronTab.JAR.equals(ct.getType())) {
 								RunnerJar runner = new RunnerJar(ct.getId(), ct.getMail(), 
 										SecureStore.b64Decode(ct.getFileContent()));
 								new Thread(runner).start();
@@ -66,6 +67,8 @@ public class Cron extends TimerTask {
 						}
 					} catch (ParseException e) {
 						log.warn(e.getMessage() + " : " + ct.getExpression());
+					} catch (IOException e) {
+						log.warn(e.getMessage());
 					}
 				}
 			}

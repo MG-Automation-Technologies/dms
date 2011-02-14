@@ -15,9 +15,8 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.contants.service.RPCService;
-import com.openkm.frontend.client.contants.ui.UIDockPanelConstants;
-import com.openkm.frontend.client.extension.widget.userinfo.UserInfoExtension;
+import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.panel.ExtendedDockPanel;
 import com.openkm.frontend.client.service.OKMChatService;
 import com.openkm.frontend.client.service.OKMChatServiceAsync;
 import com.openkm.frontend.client.util.OKMBundleResources;
@@ -63,13 +62,11 @@ public class UserInfo extends Composite {
 	private boolean quotaExceeded = false;
 	private HTML quotaUsed;
 	private int percent = 0;
-	private List<UserInfoExtension> widgetExtensionList;
 	
 	/**
 	 * UserInfo
 	 */
 	public UserInfo() {
-		widgetExtensionList = new ArrayList<UserInfoExtension>();
 		connectUsersList = new ArrayList<String>();
 		chatRoomList = new ArrayList<ChatRoomDialogBox>();
 		img = new Image(OKMBundleResources.INSTANCE.openkmConnected());
@@ -119,7 +116,7 @@ public class UserInfo extends Composite {
 		imgLockedDocuments.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(UIDockPanelConstants.DASHBOARD);
+				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(ExtendedDockPanel.DASHBOARD);
 				Main.get().mainPanel.dashboard.horizontalToolBar.showUserView();
 			}
 		});
@@ -127,7 +124,7 @@ public class UserInfo extends Composite {
 		imgCheckoutDocuments.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(UIDockPanelConstants.DASHBOARD);
+				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(ExtendedDockPanel.DASHBOARD);
 				Main.get().mainPanel.dashboard.horizontalToolBar.showUserView();
 			}
 		});
@@ -135,7 +132,7 @@ public class UserInfo extends Composite {
 		imgSubscriptions.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(UIDockPanelConstants.DASHBOARD);
+				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(ExtendedDockPanel.DASHBOARD);
 				Main.get().mainPanel.dashboard.horizontalToolBar.showUserView();
 			}
 		});
@@ -143,7 +140,7 @@ public class UserInfo extends Composite {
 		imgNewsDocuments.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(UIDockPanelConstants.DASHBOARD);
+				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(ExtendedDockPanel.DASHBOARD);
 				Main.get().mainPanel.dashboard.horizontalToolBar.showNewsView();
 			}
 		});
@@ -151,7 +148,7 @@ public class UserInfo extends Composite {
 		imgWorkflows.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(UIDockPanelConstants.DASHBOARD);
+				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(ExtendedDockPanel.DASHBOARD);
 				Main.get().mainPanel.dashboard.horizontalToolBar.showWorkflowView();
 			}
 		});
@@ -401,7 +398,7 @@ public class UserInfo extends Composite {
 	private void refreshConnectedUsers() {
 		if (chatConnected) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-			endPoint.setServiceEntryPoint(RPCService.ChatService);
+			endPoint.setServiceEntryPoint(Config.OKMChatService);
 			chatService.getLoggedUsers(new AsyncCallback<List<String>>() {
 				@Override
 				public void onSuccess(List<String> result) {
@@ -430,7 +427,7 @@ public class UserInfo extends Composite {
 	private void getPendingChatRoomUser() {
 		if (chatConnected) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-			endPoint.setServiceEntryPoint(RPCService.ChatService);
+			endPoint.setServiceEntryPoint(Config.OKMChatService);
 			chatService.getPendingChatRoomUser(new AsyncCallback<List<String>>() {
 				
 				@Override
@@ -534,7 +531,7 @@ public class UserInfo extends Composite {
 			final ChatRoomDialogBox chatRoom = getChatRoomList().get(0);
 			chatRoom.setChatRoomActive(false);
 			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-			endPoint.setServiceEntryPoint(RPCService.ChatService);
+			endPoint.setServiceEntryPoint(Config.OKMChatService);
 			chatService.closeRoom(chatRoom.getRoom(),new AsyncCallback<Object>() {
 				@Override
 				public void onSuccess(Object arg0) {
@@ -554,7 +551,7 @@ public class UserInfo extends Composite {
 			// Disconnect chat
 			disconnectChat(); // Only used to change view and disabling some RPC
 			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-			endPoint.setServiceEntryPoint(RPCService.ChatService);
+			endPoint.setServiceEntryPoint(Config.OKMChatService);
 			chatService.logout(new AsyncCallback<Object>() {
 				@Override
 				public void onSuccess(Object result) {
@@ -590,7 +587,7 @@ public class UserInfo extends Composite {
 	 */
 	public void loginChat() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-		endPoint.setServiceEntryPoint(RPCService.ChatService);
+		endPoint.setServiceEntryPoint(Config.OKMChatService);
 		chatService.login(new AsyncCallback<Object>() {
 			@Override
 			public void onSuccess(Object result) {
@@ -616,28 +613,5 @@ public class UserInfo extends Composite {
 	 */
 	public boolean isQuotaExceed() {
 		return quotaExceeded;
-	}
-	
-	/**
-	 * showExtensions
-	 */
-	public void showExtensions() {
-		if (widgetExtensionList.size()>0) {
-			panel.add(new Image(OKMBundleResources.INSTANCE.separator()));
-			panel.add(new HTML("&nbsp;"));
-			for (UserInfoExtension extension : widgetExtensionList) {
-				panel.add(extension);
-				panel.add(new HTML("&nbsp;"));
-			}
-		}
-	}
-	
-	/**
-	 * addUserInfoExtension
-	 * 
-	 * @param extension
-	 */
-	public void addUserInfoExtension(UserInfoExtension extension) {
-		widgetExtensionList.add(extension);
 	}
 }

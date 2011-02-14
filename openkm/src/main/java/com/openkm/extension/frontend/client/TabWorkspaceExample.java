@@ -24,7 +24,7 @@ package com.openkm.extension.frontend.client;
 
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.openkm.frontend.client.extension.widget.tabworkspace.TabWorkspaceExtension;
+import com.openkm.frontend.client.extension.widget.TabWorkspaceExtension;
 
 /**
  * @author jllort
@@ -49,5 +49,10 @@ public class TabWorkspaceExample extends TabWorkspaceExtension {
 	@Override
 	public String getTabText() {
 		return "tab workspace";
+	}
+
+	@Override
+	public String getExtensionUUID() {
+		return String.valueOf("44f94470-d097-11df-bd3b-0800200c9a66");
 	}
 }

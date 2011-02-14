@@ -103,7 +103,7 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 	
 	@Override
 	public List<String> getMails(List<String> users) throws PrincipalAdapterException {
-		log.debug("getMails({})", users);
+		log.debug("getMails()");
 		List<String> list = new ArrayList<String>();
 		
 		for (Iterator<String> it = users.iterator(); it.hasNext();) {
@@ -126,7 +126,7 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 	
 	@Override
 	public List<String> getUsersByRole(String role) throws PrincipalAdapterException {
-		log.debug("getUsersByRole({})", role);
+		log.debug("getUsersByRole()");
 		List<String> list = new ArrayList<String>();
 		List<String> ldap = ldapSearch(
 				Config.PRINCIPAL_LDAP_SERVER,
@@ -154,13 +154,13 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 	
 	@Override
 	public List<String> getRolesByUser(String user) throws PrincipalAdapterException {
-		log.debug("getRolesByUser({})", user);
+		log.debug("getRolesByUser()");
 		List<String> list = new ArrayList<String>();
 		List<String> ldap = ldapSearch(
 				Config.PRINCIPAL_LDAP_SERVER,
 				Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
 				Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
-				Config.PRINCIPAL_LDAP_USER_SEARCH_BASE,
+				Config.PRINCIPAL_LDAP_USER_SEARCH_BASE, 
 				MessageFormat.format(Config.PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_FILTER, user),
 				Config.PRINCIPAL_LDAP_ROLE_ATTRIBUTE);
 		

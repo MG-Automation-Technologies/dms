@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="com.openkm.servlet.admin.BaseServlet" %>
+<%@ page import="com.openkm.core.Config" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -16,7 +16,7 @@
   <title>Activity Log</title>
 </head>
 <body>
-  <c:set var="isAdmin"><%=BaseServlet.isAdmin(request)%></c:set>
+  <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
       <h1>Activity log</h1>
@@ -71,7 +71,7 @@
         <tr><th>Date</th><th>User</th><th>Action</th><th>Item</th><th>Params</th></tr>
         <c:forEach var="act" items="${results}" varStatus="row">
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td nowrap="nowrap"><fmt:formatDate value="${act.date.time}" type="both"/></td>
+            <td><fmt:formatDate value="${act.date.time}" type="both"/></td>
             <td>${act.user}</td><td>${act.action}</td><td>${act.item}</td><td>${act.params}</td>
           </tr>
         </c:forEach>

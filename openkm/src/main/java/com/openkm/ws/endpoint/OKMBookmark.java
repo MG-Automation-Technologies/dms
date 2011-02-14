@@ -56,7 +56,7 @@ public class OKMBookmark {
 	@WebMethod
 	public Bookmark add(@WebParam(name = "token") String token, 
 			@WebParam(name = "nodePath") String nodePath, 
-			@WebParam(name = "name") String name) throws AccessDeniedException, 
+			@WebParam(name = "name") String name) throws AccessDeniedException,
 			PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("add({}, {}, {})", new Object[] { token, nodePath, name });
 		BookmarkModule bm = ModuleManager.getBookmarkModule();

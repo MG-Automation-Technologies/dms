@@ -38,7 +38,7 @@ import com.openkm.frontend.client.extension.event.HasLanguageEvent.LanguageEvent
 import com.openkm.frontend.client.extension.event.HasToolBarEvent.ToolBarEventConstant;
 import com.openkm.frontend.client.extension.event.handler.LanguageHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.ToolBarHandlerExtension;
-import com.openkm.frontend.client.extension.widget.toolbar.ToolBarButtonExtension;
+import com.openkm.frontend.client.extension.widget.ToolBarButtonExtension;
 
 /**
  * ToolBarButtonExample
@@ -124,6 +124,11 @@ public class ToolBarButtonExample  {
 			if (event.equals(HasLanguageEvent.LANGUAGE_CHANGED)) {
 				Window.alert("language changed");
 			}
+		}
+
+		@Override
+		public String getExtensionUUID() {
+			return String.valueOf("9f84b330-d096-11df-bd3b-0800200c9a66");
 		}
 	}
 }

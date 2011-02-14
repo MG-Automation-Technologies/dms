@@ -21,6 +21,7 @@
 
 package com.openkm.util;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,12 +55,13 @@ import com.openkm.bean.form.Option;
 import com.openkm.bean.form.Select;
 import com.openkm.bean.form.TextArea;
 import com.openkm.bean.form.Validator;
+import com.openkm.core.Config;
 import com.openkm.core.ParseException;
 
 public class FormUtils {
 	private static Logger log = LoggerFactory.getLogger(FormUtils.class);
 	private static Map<PropertyGroup, List<FormElement>> pGroups = null;
-	
+
 	/**
 	 * Parse form.xml definitions
 	 * 
@@ -114,11 +116,12 @@ public class FormUtils {
 	 * 
 	 * @return A Map with all the forms and its form elements.
 	 */
-	public static synchronized Map<PropertyGroup, List<FormElement>> parsePropertyGroupsForms(String pgFile) 
+	public static synchronized Map<PropertyGroup, List<FormElement>> parsePropertyGroupsForms() 
 			throws IOException,	ParseException {
 		log.debug("parseMetadataForms()");
 		// long begin = Calendar.getInstance().getTimeInMillis();
 		if (pGroups == null) {
+			String pgFile = Config.HOME_DIR + File.separator +"PropertyGroups" + Config.INSTALL + ".xml";
 			log.debug("PropertyGroupForms: {}", pgFile);
 			pGroups = new HashMap<PropertyGroup, List<FormElement>>();
 			FileInputStream fis = null;

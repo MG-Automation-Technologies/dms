@@ -34,9 +34,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
+import com.openkm.dao.bean.FilterRule;
 import com.openkm.dao.bean.MailAccount;
 import com.openkm.dao.bean.MailFilter;
-import com.openkm.dao.bean.MailFilterRule;
 
 public class MailAccountDAO {
 	private static Logger log = LoggerFactory.getLogger(MailAccountDAO.class);
@@ -311,7 +311,7 @@ public class MailAccountDAO {
 	/**
 	 * Update
 	 */
-	public static void updateRule(MailFilterRule fr) throws DatabaseException {
+	public static void updateRule(FilterRule fr) throws DatabaseException {
 		log.debug("updateRule({})", fr);
 		Session session = null;
 		Transaction tx = null;
@@ -342,7 +342,7 @@ public class MailAccountDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			MailFilterRule fr = (MailFilterRule) session.load(MailFilterRule.class, frId);
+			FilterRule fr = (FilterRule) session.load(FilterRule.class, frId);
 			session.delete(fr);
 			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
@@ -358,13 +358,13 @@ public class MailAccountDAO {
 	/**
 	 * Find by pk
 	 */
-	public static MailFilterRule findRuleByPk(int frId) throws DatabaseException {
+	public static FilterRule findRuleByPk(int frId) throws DatabaseException {
 		log.debug("findRuleByPk({})", frId);
 		Session session = null;
 				
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			MailFilterRule ret = (MailFilterRule) session.load(MailFilterRule.class, frId);
+			FilterRule ret = (FilterRule) session.load(FilterRule.class, frId);
 			
 			log.debug("findRuleByPk: {}", ret);
 			return ret;

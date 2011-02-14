@@ -135,13 +135,11 @@ public class BookmarkDAO {
 			for (Bookmark bm : ret) {
 				try {
 					Node node = jcrSession.getNodeByUUID(bm.getUuid());
-					String nType = JCRUtils.getNodeType(node);
-					bm.setPath(node.getPath());
 					
-					// TODO Se supone que el tipo no cambia
-					if (!nType.equals(bm.getType())) {
+					if (!node.getPath().equals(bm.getPath())) {
+						bm.setPath(node.getPath());
 						bm.setType(JCRUtils.getNodeType(node));
-						session.update(ret);
+						session.update(bm);
 					}
 				} catch (javax.jcr.ItemNotFoundException e) {
 					// If user bookmark is missing, set a default
@@ -173,7 +171,7 @@ public class BookmarkDAO {
 	 */
 	public static Bookmark findByPk(javax.jcr.Session jcrSession, int bmId) throws DatabaseException,
 			RepositoryException {
-		log.debug("findByPk({}, {})", jcrSession, bmId);
+		log.debug("findByPk({})", bmId);
 		String qs = "from Bookmark bm where bm.id=:id";
 		Session session = null;
 		Transaction tx = null;
@@ -187,11 +185,9 @@ public class BookmarkDAO {
 			
 			try {
 				Node node = jcrSession.getNodeByUUID(ret.getUuid());
-				String nType = JCRUtils.getNodeType(node);
-				ret.setPath(node.getPath());
 				
-				// TODO Se supone que el tipo no cambia
-				if (!nType.equals(ret.getType())) {
+				if (!node.getPath().equals(ret.getPath())) {
+					ret.setPath(node.getPath());
 					ret.setType(JCRUtils.getNodeType(node));
 					session.update(ret);
 				}

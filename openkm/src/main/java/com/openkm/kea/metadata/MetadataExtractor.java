@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -47,7 +48,6 @@ import org.semanticdesktop.aperture.rdf.RDFContainer;
 import org.semanticdesktop.aperture.rdf.impl.RDFContainerImpl;
 import org.semanticdesktop.aperture.util.IOUtil;
 import org.semanticdesktop.aperture.vocabulary.NCO;
-import org.semanticdesktop.aperture.vocabulary.NFO;
 import org.semanticdesktop.aperture.vocabulary.NIE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,30 +66,33 @@ public class MetadataExtractor {
     private File tempFile;
     private RDFContainer rdf;
     private SubjectExtractor subjectExtractor;
-    private boolean se = true;
 
     /**
      * MetadataExtractor
+     * 
+     * @throws MetadataExtractionException
      */
-    public MetadataExtractor(boolean se) throws MetadataExtractionException {
+    public MetadataExtractor() throws MetadataExtractionException {
         mdDTO = new MetadataDTO();
-        this.se = se;
-        
-        if (se) {
-        	subjectExtractor = new SubjectExtractor();
-        }
+        subjectExtractor = new SubjectExtractor();
     }
 
     /**
      * MetadataExtractor
+     * 
+     * @param subjectLimit
+     * @throws MetadataExtractionException
      */
     public MetadataExtractor(int subjectLimit) throws MetadataExtractionException {
         mdDTO = new MetadataDTO();
         subjectExtractor = new SubjectExtractor(subjectLimit);
     }
 
+
     /**
      * getTempFile
+     * 
+     * @return
      */
     public File getTempFile() {
         return tempFile;
@@ -97,28 +100,29 @@ public class MetadataExtractor {
 
     /**
      * getOriginalFileName
+     * 
+     * @return
      */
     public String getOriginalFileName() {
         return mdDTO.getFileName();
     }
 
+
     /**
      * getMdDTO
+     * 
+     * @return
      */
     public MetadataDTO getMdDTO() {
         return mdDTO;
     }
 
-    public MetadataDTO extract(File tempFile) throws MetadataExtractionException {
+    public MetadataDTO extract(InputStream is, File tempFile) throws MetadataExtractionException {
         try {
         	this.tempFile = tempFile;
             loadRDF();
             extractMetadataFromRDF();
-            
-            if (se) {
-            	extractSuggestedSubjects();
-            }
-            
+            extractSuggestedSubjects();
             rdf.dispose();
             return mdDTO;
         } catch (MetadataExtractionException e) {
@@ -132,7 +136,7 @@ public class MetadataExtractor {
      * loadRDF
      */
     @SuppressWarnings("unchecked")
-	private void loadRDF() {
+	public void loadRDF() {
         MimeTypeIdentifier identifier = new MagicMimeTypeIdentifier();
         ExtractorRegistry extractorRegistry = new DefaultExtractorRegistry();
         String mimeType;
@@ -144,7 +148,6 @@ public class MetadataExtractor {
             byte[] bytes = IOUtil.readBytes(bis, identifier.getMinArrayLength());
             bis.close();
             mimeType = identifier.identify(bytes, tempFile.getPath(), null);
-            
             if (mimeType == null) {
                 throw new MetadataExtractionException("Unable to extract MimeType for: " + mdDTO.getFileName());
             } else {
@@ -172,6 +175,8 @@ public class MetadataExtractor {
             fis = new FileInputStream(tempFile);
             bis = new BufferedInputStream(fis, 8192);
             extractor.extract(uri, bis, null, mimeType, rdf);
+
+
         } catch (FileNotFoundException e) {
             log.error("Unable to locate the workspace file for: " + mdDTO.getFileName(), e);
         } catch (IOException e) {
@@ -181,33 +186,31 @@ public class MetadataExtractor {
         } catch (ExtractorException e) {
             log.error("Aperture extraction error: " + e.getMessage(), e);
         }
+
     }
 
     /**
      * extractMetadataFromRDF
      */
     @SuppressWarnings("unchecked")
-	private void extractMetadataFromRDF() {
+	public void extractMetadataFromRDF() {
+
         // set up secondary RDF container for creator
         String creator = "";
         Collection<Node> creators = rdf.getAll(NCO.creator);
-        
         for (Iterator<Node> iterator = creators.iterator(); iterator.hasNext();) {
             Node node = iterator.next();
             RDFContainer container = new RDFContainerImpl(rdf.getModel(), node.asURI());
             creator = container.getString(NCO.fullname);
             if (creator!=null && !creator.equals("")) break;
         }
-        
+
         // copy values to metadataDTO
         mdDTO.setTitle(rdf.getString(NIE.title));
         mdDTO.setCreator(creator);
         mdDTO.addSubject(rdf.getString(NIE.subject));
-        mdDTO.setGenerator(rdf.getString(NIE.generator));
         mdDTO.setContentCreated(rdf.getDate(NIE.contentCreated));
         mdDTO.setContentLastModified(rdf.getDate(NIE.contentLastModified));
-        mdDTO.setPageCount(rdf.getInteger(NFO.pageCount));
-        mdDTO.setKeyword(rdf.getString(NIE.keyword));
     }
 
     /**
@@ -215,7 +218,7 @@ public class MetadataExtractor {
      * 
      * @throws MetadataExtractionException
      */
-    private void extractSuggestedSubjects() throws MetadataExtractionException {
+    public void extractSuggestedSubjects() throws MetadataExtractionException {
         List<String> sugSubjects = subjectExtractor.extractSuggestedSubjects(rdf.getString(NIE.plainTextContent));
         Iterator<String> iter = sugSubjects.iterator();
         while (iter.hasNext()) {

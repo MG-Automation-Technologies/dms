@@ -46,7 +46,7 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.contants.service.RPCService;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 import com.openkm.frontend.client.util.RoleComparator;
@@ -370,7 +370,7 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 		if (path != null) {
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.setUserSecurity();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(RPCService.AuthService);	
+			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 			authService.getGrantedUsers(path, callbackGetGrantedUsers);
 		}
 	}
@@ -383,7 +383,7 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 		if (path != null) {
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.setRoleSecurity();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(RPCService.AuthService);	
+			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 			authService.getGrantedRoles(path, callbackGetGrantedRoles);
 		}
 	}

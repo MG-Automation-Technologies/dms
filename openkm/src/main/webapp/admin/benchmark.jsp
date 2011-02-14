@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="com.openkm.servlet.admin.BaseServlet" %>
+<%@ page import="com.openkm.core.Config" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -12,7 +12,7 @@
   <title>Benchmark</title>
 </head>
 <body>
-  <c:set var="isAdmin"><%=BaseServlet.isMultipleInstancesAdmin(request)%></c:set>
+  <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
    <c:choose>
     <c:when test="${isAdmin}">
       <h1>Benchmark</h1>
@@ -22,12 +22,9 @@
             <td>Action</td>
             <td>
               <select name="action">
-                <option value="okmImport">OpenKM import documents</option>
-                <option value="okmCopy">OpenKM copy documents</option>
-                <option value="okmApiHighGenerate">OpenKM generate documents (API HIGH)</option>
-                <option value="okmApiLowGenerate">OpenKM generate documents (API LOW)</option>
-                <option value="okmRawGenerate">OpenKM generate documents (RAW)</option>
-                <option value="jcrGenerate">Jackrabbit generate documents</option>
+                <option value="load">Load documents</option>
+                <option value="copy">Copy documents</option>
+                <option value="generate">Generate documents</option>
               </select>
             </td>
           </tr>

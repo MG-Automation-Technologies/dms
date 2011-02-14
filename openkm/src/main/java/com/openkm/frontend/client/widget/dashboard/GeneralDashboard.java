@@ -32,7 +32,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
-import com.openkm.frontend.client.contants.service.RPCService;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMDashboardService;
 import com.openkm.frontend.client.service.OKMDashboardServiceAsync;
 
@@ -239,7 +239,7 @@ public class GeneralDashboard extends Composite {
 			lastWeekTopDownloadedDocuments.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(RPCService.DashboardService);		
+		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
 		dashboardService.getLastWeekTopDownloadedDocuments(callbackGetLastWeekTopDownloadedDocuments);
 	}
 	
@@ -251,7 +251,7 @@ public class GeneralDashboard extends Composite {
 			lastMonthTopDownloadedDocuments.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(RPCService.DashboardService);		
+		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
 		dashboardService.getLastMonthTopDownloadedDocuments(callbackGetLastMonthTopDownloadedDocuments);
 	}
 	
@@ -263,7 +263,7 @@ public class GeneralDashboard extends Composite {
 			lastMonthTopModifiedDocuments.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(RPCService.DashboardService);		
+		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
 		dashboardService.getLastMonthTopModifiedDocuments(callbackGetLastMonthTopModifiedDocuments);
 	}
 	
@@ -275,7 +275,7 @@ public class GeneralDashboard extends Composite {
 			lastWeekTopModifiedDocuments.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(RPCService.DashboardService);		
+		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
 		dashboardService.getLastWeekTopModifiedDocuments(callbackGetLastWeekTopModifiedDocuments);
 	}
 	
@@ -287,7 +287,7 @@ public class GeneralDashboard extends Composite {
 			lastModifiedDocuments.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(RPCService.DashboardService);		
+		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
 		dashboardService.getLastModifiedDocuments(callbackGetLastModifiedDocuments);
 	}
 	
@@ -299,7 +299,7 @@ public class GeneralDashboard extends Composite {
 			lastUploadedDocuments.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(RPCService.DashboardService);		
+		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
 		dashboardService.getLastUploadedDocuments(callbackGetLastUploadedDocuments);
 	}
 	

@@ -81,19 +81,15 @@ public class DirectAuthModule implements AuthModule {
 		String token = null;
 		
 		try {
-			if (Config.SYSTEM_MAINTENANCE) {
-				throw new AccessDeniedException("System under maintenance");
-			} else {
-				javax.jcr.Repository r = DirectRepositoryModule.getRepository();
-				Session session = r.login(new SimpleCredentials(user, password.toCharArray()), null);
-				token = UUIDGenerator.generate(this);
-				JcrSessionManager.getInstance().add(token, session);
-				
-				// Activity log
-				UserActivity.log(session.getUserID(), "LOGIN", null, token);
-								
-				return token;
-			}
+			javax.jcr.Repository r = DirectRepositoryModule.getRepository();
+			Session session = r.login(new SimpleCredentials(user, password.toCharArray()), null);
+			token = UUIDGenerator.generate(this);
+			JcrSessionManager.getInstance().add(token, session);
+			
+			// Activity log
+			UserActivity.log(session.getUserID(), "LOGIN", null, token);
+			
+			return token;
 		} catch (LoginException e) {
 			log.error(e.getMessage(), e);
 			throw new AccessDeniedException(e.getMessage(), e);
@@ -116,7 +112,7 @@ public class DirectAuthModule implements AuthModule {
 			
 			if (session != null) {
 				// Activity log
-				UserActivity.log(session.getUserID(), "LOGOUT", token, null);
+				UserActivity.log(session.getUserID(), "LOGOUT", null, null);
 				
 				JcrSessionManager.getInstance().remove(token);
 				session.logout();
@@ -222,7 +218,7 @@ public class DirectAuthModule implements AuthModule {
 			}
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "GRANT_USER", node.getUUID(), user+", "+permissions+", "+nodePath);
+			UserActivity.log(session.getUserID(), "GRANT_USER", nodePath, user+", "+permissions);
 		} catch (javax.jcr.AccessDeniedException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(node);
@@ -322,7 +318,7 @@ public class DirectAuthModule implements AuthModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "REVOKE_USER", node.getUUID(), user+", "+permissions+", "+nodePath);
+			UserActivity.log(session.getUserID(), "REVOKE_USER", nodePath, user+", "+permissions);
 		} catch (javax.jcr.AccessDeniedException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(node);
@@ -419,7 +415,7 @@ public class DirectAuthModule implements AuthModule {
 			}
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "GRANT_ROLE", node.getUUID(), role+", "+permissions+", "+nodePath);
+			UserActivity.log(session.getUserID(), "GRANT_ROLE", nodePath, role+", "+permissions);
 		} catch (javax.jcr.AccessDeniedException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(node);
@@ -519,7 +515,7 @@ public class DirectAuthModule implements AuthModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "REVOKE_ROLE", node.getUUID(), role+", "+permissions+", "+nodePath);
+			UserActivity.log(session.getUserID(), "REVOKE_ROLE", nodePath, role+", "+permissions);
 		} catch (javax.jcr.AccessDeniedException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(node);

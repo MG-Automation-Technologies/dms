@@ -27,7 +27,6 @@ import com.google.gwt.user.client.rpc.RemoteService;
 
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTDocument;
-import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTVersion;
 
 /**
@@ -53,5 +52,4 @@ public interface OKMDocumentService extends RemoteService {
 	public void purgeVersionHistory(String docPath) throws OKMException;
 	public void forceUnlock(String docPath) throws OKMException;
 	public void forceCancelCheckout(String docPath) throws OKMException;
-	public void createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties) throws OKMException;
 }

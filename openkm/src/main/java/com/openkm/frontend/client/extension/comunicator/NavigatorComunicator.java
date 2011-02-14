@@ -22,8 +22,7 @@
 package com.openkm.frontend.client.extension.comunicator;
 
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
+import com.openkm.frontend.client.panel.PanelDefinition;
 
 
 
@@ -50,7 +49,7 @@ public class NavigatorComunicator {
 	 * @return
 	 */
 	public static boolean isTaxonomyShown() {
-		return Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TAXONOMY;
+		return Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TAXONOMY;
 	}
 	
 	/**
@@ -59,7 +58,7 @@ public class NavigatorComunicator {
 	 * @return
 	 */
 	public static boolean isCategoriesShown() {
-		return Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_CATEGORIES;
+		return Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_CATEGORIES;
 	}
 	
 	/**
@@ -68,7 +67,7 @@ public class NavigatorComunicator {
 	 * @return
 	 */
 	public static boolean isThesaurusShown() {
-		return Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_THESAURUS;
+		return Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_THESAURUS;
 	}
 	
 	/**
@@ -77,7 +76,7 @@ public class NavigatorComunicator {
 	 * @return
 	 */
 	public static boolean isTemplatesShown() {
-		return Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TEMPLATES;
+		return Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TEMPLATES;
 	}
 	
 	/**
@@ -86,7 +85,7 @@ public class NavigatorComunicator {
 	 * @return
 	 */
 	public static boolean isPersonalShown() {
-		return Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_PERSONAL;
+		return Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_PERSONAL;
 	}
 	
 	/**
@@ -95,7 +94,7 @@ public class NavigatorComunicator {
 	 * @return
 	 */
 	public static boolean isMailShown() {
-		return Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_MAIL;
+		return Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_MAIL;
 	}
 	
 	/**
@@ -104,24 +103,6 @@ public class NavigatorComunicator {
 	 * @return
 	 */
 	public static boolean isTrashShown() {
-		return Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TRASH;
-	}
-	
-	/**
-	 * getFolder
-	 * 
-	 * @return
-	 */
-	public static GWTFolder getFolder() {
-		return Main.get().activeFolderTree.getFolder();
-	}
-	
-	/**
-	 * getActualPath
-	 * 
-	 * @return
-	 */
-	public static String getActualPath() {
-		return Main.get().activeFolderTree.getActualPath();
+		return Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TRASH;
 	}
 }

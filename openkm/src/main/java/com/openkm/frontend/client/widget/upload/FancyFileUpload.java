@@ -12,6 +12,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FileUpload;
@@ -30,10 +31,11 @@ import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
 import com.google.gwt.widgetideas.client.ProgressBar;
 import com.google.gwt.widgetideas.client.ProgressBar.TextFormatter;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
-import com.openkm.frontend.client.contants.service.RPCService;
-import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
-import com.openkm.frontend.client.contants.ui.UIFileUploadConstants;
+import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.config.ErrorCode;
+import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMGeneralService;
 import com.openkm.frontend.client.service.OKMGeneralServiceAsync;
 import com.openkm.frontend.client.util.Util;
@@ -48,6 +50,12 @@ import com.openkm.frontend.client.widget.notify.NotifyPanel;
 public class FancyFileUpload extends Composite implements HasText, HasChangeHandlers {
 	
 	private final OKMGeneralServiceAsync generalService = (OKMGeneralServiceAsync) GWT.create(OKMGeneralService.class);
+	
+	// Upload actions
+	public static final int ACTION_NONE   = -1;
+	public static final int ACTION_INSERT = 0;
+	public static final int ACTION_UPDATE = 1;
+	public static final int ACTION_FOLDER = 2;
 	
 	/**
 	 * State definitions
@@ -78,33 +86,31 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	private TextBox inputPath = new TextBox();
 	private TextBox inputAction = new TextBox();
 	private FormPanel uploadForm = new FormPanel();
+	private Button send = new Button();
 	private VerticalPanel mainPanel = new VerticalPanel();
-	public CheckBox notifyToUser = new CheckBox();
+	private CheckBox notifyToUser = new CheckBox();
 	private CheckBox importZip = new CheckBox();
-	private CheckBox digitalSignature = new CheckBox();
 	private HTML versionCommentText = new HTML();
 	private HTML notifyToUserText = new HTML();
 	private HTML importZipText = new HTML();
-	private HTML digitalSignatureText = new HTML();
 	private HorizontalPanel hNotifyPanel = new HorizontalPanel();
 	private HorizontalPanel hUnzipPanel = new HorizontalPanel();
-	private HorizontalPanel hDigitalSignaturePanel = new HorizontalPanel();
-	public NotifyPanel notifyPanel = new NotifyPanel();
+	private NotifyPanel notifyPanel = new NotifyPanel();
 	private HTML versionHTMLBR;
 	private TextArea versionComment;
 	private ScrollPanel versionCommentScrollPanel;
-	public TextBox users;
-	public TextBox roles;
+	private TextBox users;
+	private TextBox roles;
 	private TextArea message;
 	private VerticalPanel vNotifyPanel = new VerticalPanel();
 	private HTML commentTXT;
 	private ScrollPanel messageScroll;
-	public HTML errorNotify;
+	private HTML errorNotify;
 	private ProgressBar progressBar;
 	private TextFormatter progressiveFormater;
 	private TextFormatter finalFormater;
 	private boolean wizard = false;
-	private int action = UIFileUploadConstants.ACTION_NONE;
+	private int action = ACTION_NONE;
 
 	/**
 	 * Internal timer for checking if pending delay is over.
@@ -168,9 +174,31 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		 */
 		public UploadDisplay() {
 			uploadFileWidget.setStyleName("okm-Input");
-			uploadFileWidget.getElement().setAttribute("size", "45");
+			
+			send.setText(Main.i18n("fileupload.send"));
+			send.setStyleName("okm-Button");
+			// Set up a click listener on the proceed check box
+			send.addClickHandler(new ClickHandler() { 
+				@Override
+				public void onClick(ClickEvent event) {
+					if (Main.get().mainPanel.bottomPanel.userInfo.isQuotaExceed()) {
+						Main.get().showError("UserQuotaExceed", 
+					             			 new OKMException("OKM-"+ErrorCode.ORIGIN_OKMBrowser + ErrorCode.CAUSE_QuotaExceed, ""));
+					} else {
+						users.setText(notifyPanel.getUsersToNotify());
+						roles.setText(notifyPanel.getRolesToNotify());
+						if (notifyToUser.getValue() && users.getText().equals("") && roles.getText().equals("")) {
+							errorNotify.setVisible(true);
+						} else if (uploadFileWidget.getFilename() != null && !uploadFileWidget.getFilename().equals("")) {
+							pendingUpload();
+						}
+					}
+				}
+			});
 			
 			hFileUpload.add(uploadFileWidget);
+			hFileUpload.add(new HTML("&nbsp;&nbsp;"));
+			hFileUpload.add(send);
 			hFileUpload.setWidth("350");
 			
 			status.setWidth("100%");
@@ -349,7 +377,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			getAllUsers();
 			
 			// On on root stack panel enabled must be enabled notify to user option
-			if (Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_TAXONOMY) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex() != PanelDefinition.NAVIGATOR_TAXONOMY) {
 				hNotifyPanel.setVisible(false);
 			} else {
 				hNotifyPanel.setVisible(true);
@@ -359,7 +387,6 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			vNotifyPanel.setVisible(false);
 			notifyToUser.setValue(false);
 			importZip.setValue(false);
-			digitalSignature.setValue(false);
 			hFileUpload.setVisible(true);
 			pendingPanel.setVisible(false);
 			
@@ -368,7 +395,6 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			} else {
 				hUnzipPanel.setVisible(false);
 			}
-			hDigitalSignaturePanel.setVisible(true);
 			
 			resetProgressBar();
 		}
@@ -408,7 +434,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	 * the upload file method when ran out.
 	 * 
 	 */
-	public void pendingUpload() {
+	private void pendingUpload() {
 		// Fire an onChange event to anyone who is listening
 		uploadItem.setPending();
 		p = new Timer() {
@@ -434,7 +460,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		
 		// Set Form details
 		// Set the action to call on submit
-		uploadForm.setAction(RPCService.FileUploadService);
+		uploadForm.setAction(Config.OKMFileUploadService);
 		// Set the form encoding to multipart to indicate a file upload
 		uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
 		// Set the method to Post
@@ -481,11 +507,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 					if (importZip.getValue()) {
 						notifyToUser.setValue(false);
 						vNotifyPanel.setVisible(false);
-						digitalSignature.setValue(false);
-						hDigitalSignaturePanel.setVisible(false);
-					} else {
-						hDigitalSignaturePanel.setVisible(true);
-					}
+					} 
 				}
 			}
 		);
@@ -498,14 +520,6 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		hUnzipPanel.setCellVerticalAlignment(importZipText, VerticalPanel.ALIGN_MIDDLE);
 		mainPanel.add(new HTML("<br>"));
 		mainPanel.add(hUnzipPanel);
-		
-		// Adds digital signature
-		digitalSignature = new CheckBox();
-		digitalSignature.setName("digitalSignature");
-		digitalSignatureText = new HTML(Main.i18n("fileupload.digital.signature"));
-		hDigitalSignaturePanel = new HorizontalPanel();
-		mainPanel.add(hDigitalSignaturePanel);
-		
 		
 		// Adds the notify checkbox
 		users = new TextBox();
@@ -521,7 +535,6 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 					if (notifyToUser.getValue()) {
 						vNotifyPanel.setVisible(true);
 						importZip.setValue(false);
-						hDigitalSignaturePanel.setVisible(true);
 					} else {
 						errorNotify.setVisible(false);
 						vNotifyPanel.setVisible(false);
@@ -565,7 +578,6 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		// Set align to panels
 		mainPanel.setCellHorizontalAlignment(hNotifyPanel,HorizontalPanel.ALIGN_LEFT);
 		mainPanel.setCellHorizontalAlignment(hUnzipPanel,HorizontalPanel.ALIGN_LEFT);
-		mainPanel.setCellHorizontalAlignment(hDigitalSignaturePanel,HorizontalPanel.ALIGN_LEFT);
 		
 		// Initialices users
 		getAllUsers();
@@ -597,20 +609,15 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 					}
 					
 					// Case is not importing a zip and wizard is enabled
-					if (!importZip.getValue() && action== UIFileUploadConstants.ACTION_INSERT &&
-						(Main.get().workspaceUserProperties.getWorkspace().isWizardPropertyGroups() ||
-						 Main.get().workspaceUserProperties.getWorkspace().isWizardWorkflows() ||
+					if (!importZip.getValue() && action== ACTION_INSERT &&
+						(Main.get().workspaceUserProperties.getWorkspace().isWizardPropertyGroups() || 
 						 Main.get().workspaceUserProperties.getWorkspace().isWizardCategories() ||
 						 Main.get().workspaceUserProperties.getWorkspace().isWizardKeywords())) {
 						
+						Main.get().wizardPopup.start(docPath);
 						wizard = true;
 					} else {
-						// wizard only it'll be enable in case digital signature be true
-						wizard = digitalSignature.getValue();
-					}
-					
-					if (wizard) {
-						Main.get().wizardPopup.start(docPath);
+						wizard = false;
 					}
 					
 					// By default selected row after uploading is uploaded file
@@ -711,13 +718,13 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	public void setAction(int action) {
 		this.action = action;
 		switch (action) {
-			case UIFileUploadConstants.ACTION_INSERT :
+			case ACTION_INSERT :
 				versionComment.setVisible(false);
 				versionCommentText.setVisible(false);
 				versionHTMLBR.setVisible(false);
 				break;
 				
-			case UIFileUploadConstants.ACTION_UPDATE:
+			case ACTION_UPDATE:
 				versionComment.setVisible(true);
 				versionCommentText.setVisible(true);
 				versionHTMLBR.setVisible(true);
@@ -738,9 +745,9 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	 * Refreshing language
 	 */
 	public void langRefresh() {
+		send.setText(Main.i18n("fileupload.send"));	
 		notifyToUserText.setHTML(Main.i18n("fileupload.label.users.notify"));
 		importZipText.setHTML(Main.i18n("fileupload.label.importZip"));
-		digitalSignatureText.setHTML(Main.i18n("fileupload.digital.signature"));
 		versionCommentText.setHTML(Main.i18n("fileupload.label.comment"));
 		commentTXT.setHTML(Main.i18n("fileupload.label.notify.comment"));
 		notifyPanel.langRefresh();
@@ -800,7 +807,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	
 	private void getFileUploadStatus() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) generalService;
-		endPoint.setServiceEntryPoint(RPCService.GeneralService);	
+		endPoint.setServiceEntryPoint(Config.OKMGeneralService);	
 		generalService.getFileUploadStatus(callbackGetFileUploadStatus);
 	}
 	
@@ -816,33 +823,5 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	 */
 	public void enableAdvancedFilter() {
 		notifyPanel.enableAdvancedFilter();
-	}
-	
-	/**
-	 * isDigitalSignature
-	 * 
-	 * @return
-	 */
-	public boolean isDigitalSignature() {
-		return digitalSignature.getValue();
-	}
-	
-	/**
-	 * showDigitalSignature
-	 */
-	public void showDigitalSignature() {
-		hDigitalSignaturePanel.add(digitalSignature);
-		hDigitalSignaturePanel.add(digitalSignatureText);
-		hDigitalSignaturePanel.setCellVerticalAlignment(digitalSignature, VerticalPanel.ALIGN_MIDDLE);
-		hDigitalSignaturePanel.setCellVerticalAlignment(digitalSignatureText, VerticalPanel.ALIGN_MIDDLE);
-	}
-	
-	/**
-	 * getFileName
-	 * 
-	 * @return
-	 */
-	public String getFilename() {
-		return uploadItem.uploadFileWidget.getFilename();
 	}
 }

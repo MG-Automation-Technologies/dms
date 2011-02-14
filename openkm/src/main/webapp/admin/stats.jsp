@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="com.openkm.servlet.admin.BaseServlet" %>
+<%@ page import="com.openkm.core.Config" %>
 <%@ page import="com.openkm.util.WarUtils" %>
 <%@ page import="com.openkm.api.OKMRepository" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -13,7 +13,7 @@
   <title>Statistics</title>
 </head>
 <body>
-  <c:set var="isAdmin"><%=BaseServlet.isAdmin(request)%></c:set>
+  <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
       <h1>Statistics</h1>

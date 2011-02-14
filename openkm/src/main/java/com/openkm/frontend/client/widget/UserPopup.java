@@ -43,7 +43,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTTestImap;
 import com.openkm.frontend.client.bean.GWTWorkspace;
-import com.openkm.frontend.client.contants.service.RPCService;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMGeneralService;
 import com.openkm.frontend.client.service.OKMGeneralServiceAsync;
 import com.openkm.frontend.client.service.OKMWorkspaceService;
@@ -178,7 +178,7 @@ public class UserPopup extends DialogBox implements ClickHandler {
 					workspace.setPassword(userPasswordText.getText());
 					workspace.setImapID(Main.get().workspaceUserProperties.getWorkspace().getImapID());
 					ServiceDefTarget endPoint = (ServiceDefTarget) workspaceService;
-					endPoint.setServiceEntryPoint(RPCService.WorkspaceService);
+					endPoint.setServiceEntryPoint(Config.OKMWorkspaceService);
 					// First must validate password
 					workspaceService.isValidPassword(userPasswordText.getText(), new AsyncCallback<String>() {
 						@Override
@@ -196,6 +196,8 @@ public class UserPopup extends DialogBox implements ClickHandler {
 							Main.get().showError("callbackIsValidPassword", caught);
 						}
 					});
+					
+					
 				}
 			}			
 		});
@@ -214,7 +216,7 @@ public class UserPopup extends DialogBox implements ClickHandler {
 				imapTestOK.setVisible(false);
 				test.setEnabled(false);
 				ServiceDefTarget endPoint = (ServiceDefTarget) generalService;
-				endPoint.setServiceEntryPoint(RPCService.GeneralService);
+				endPoint.setServiceEntryPoint(Config.OKMGeneralService);
 				generalService.testImapConnection(hostText.getText(), imapUserText.getText(), imapUserPasswordText.getText(), imapFolderText.getText(), new AsyncCallback<GWTTestImap>() {					
 					@Override
 					public void onSuccess(GWTTestImap result) {
@@ -246,7 +248,7 @@ public class UserPopup extends DialogBox implements ClickHandler {
 				int Id = Main.get().workspaceUserProperties.getWorkspace().getImapID();
 				if (Id>=0) {
 					ServiceDefTarget endPoint = (ServiceDefTarget) workspaceService;
-					endPoint.setServiceEntryPoint(RPCService.WorkspaceService);
+					endPoint.setServiceEntryPoint(Config.OKMWorkspaceService);
 					workspaceService.deleteMailAccount(Id, callbackDeleteMailAccount);
 				}
 			}			

@@ -35,7 +35,6 @@ import org.slf4j.LoggerFactory;
 import bsh.EvalError;
 import bsh.Interpreter;
 
-import com.openkm.bean.ExecutionResult;
 import com.openkm.util.cl.BinaryClassLoader;
 import com.openkm.util.cl.ClassLoaderUtils;
 import com.openkm.util.cl.JarClassLoader;
@@ -161,52 +160,4 @@ public class ExecutionUtils {
     	log.debug("runJar: {}", ret!=null?ret.toString():"null");
         return ret;
 	}
-    
-    /**
-     * Execute command line
-     */
-    public static ExecutionResult runCmd(String cmd) throws SecurityException, InterruptedException,
-    		IOException {
-    	log.debug("runCmd({})", cmd);
-    	return runCmdImpl(cmd.split(" "));
-    }
-    
-    /**
-     * Execute command line 
-     */
-    public static ExecutionResult runCmd(String cmd[]) throws SecurityException, InterruptedException,
-    		IOException {
-    	log.debug("runCmd({})", Arrays.toString(cmd));
-    	return runCmdImpl(cmd);
-    }
-    
-    /**
-     * Execute command line: implementation
-     */
-    private static ExecutionResult runCmdImpl(String cmd[]) throws SecurityException, InterruptedException,
-    		IOException {
-    	log.debug("runCmdImpl({})", Arrays.toString(cmd));
-    	ExecutionResult ret = new ExecutionResult();
-    	long start = System.currentTimeMillis();
-    	ProcessBuilder pb = new ProcessBuilder(cmd);
-    	Process process = pb.start();
-    	
-    	ret.setStdout(IOUtils.toString(process.getInputStream()));
-    	ret.setStderr(IOUtils.toString(process.getErrorStream()));
-    	
-    	process.waitFor();
-    	ret.setExitValue(process.exitValue());
-    	
-    	// Check return code
-    	if (ret.getExitValue() != 0) {
-    		log.warn("Abnormal program termination: {}", ret.getExitValue());
-    		log.warn("STDERR: {}", ret.getStderr());
-    	} else {
-    		log.debug("Normal program termination");
-    	}
-    	
-    	process.destroy();
-    	log.debug("Elapse time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));    	
-    	return ret;
-    }
 }

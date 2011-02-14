@@ -39,7 +39,7 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
+import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.OriginPanel;
 
@@ -142,10 +142,6 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 			dataTable.setHTML(row, 0, "&nbsp;");
 		}
 		
-		if (folder.isHasNotes()) {
-			dataTable.setHTML(row, 0, dataTable.getHTML(row,0) + Util.imageItemHTML("img/icon/note.gif"));
-		}
-		
 		// Looks if must change icon on parent if now has no childs and properties with user security atention
 		if ( (folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
 			if (folder.getHasChilds()) {
@@ -238,13 +234,9 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 		if (doc.isSubscribed()) {
 			dataTable.setHTML(row, 0, dataTable.getHTML(row,0) + Util.imageItemHTML("img/icon/subscribed.gif"));
 		}
-		// Document has notes
+		
 		if (doc.isHasNotes()) {
 			dataTable.setHTML(row, 0, dataTable.getHTML(row,0) + Util.imageItemHTML("img/icon/note.gif"));
-		}
-		// Document encrypted
-		if (doc.getCipherName()!=null && !doc.getCipherName().equals("")) {
-			dataTable.setHTML(row, 0, dataTable.getHTML(row,0) + Util.imageItemHTML("img/icon/actions/crypt.png"));
 		}
 		
 		dataTable.setHTML(row, 1, Util.mimeImageHTML(doc.getMimeType()));
@@ -458,9 +450,9 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 		            
 		            // On trash drag is disabled
 					if (isSelectedRow() && Main.get().mainPanel.desktop.browser.fileBrowser.fileBrowserAction==noAction &&
-						Main.get().mainPanel.desktop.navigator.getStackIndex()!=UIDesktopConstants.NAVIGATOR_CATEGORIES &&
-						Main.get().mainPanel.desktop.navigator.getStackIndex()!=UIDesktopConstants.NAVIGATOR_THESAURUS && 
-						Main.get().mainPanel.desktop.navigator.getStackIndex()!=UIDesktopConstants.NAVIGATOR_TRASH){					
+						Main.get().mainPanel.desktop.navigator.getStackIndex()!=PanelDefinition.NAVIGATOR_CATEGORIES &&
+						Main.get().mainPanel.desktop.navigator.getStackIndex()!=PanelDefinition.NAVIGATOR_THESAURUS && 
+						Main.get().mainPanel.desktop.navigator.getStackIndex()!=PanelDefinition.NAVIGATOR_TRASH){				
 						Main.get().dragable.show(dataTable.getHTML(getSelectedRow(),1)+dataTable.getHTML(getSelectedRow(),2), OriginPanel.FILE_BROWSER);
 					}
 					unsetDraged(); 
@@ -643,14 +635,6 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 			// Subscribed is a special case, must add icon with others
 			if (doc.isSubscribed()) {
 				dataTable.setHTML(row, 0, dataTable.getHTML(row,0) + Util.imageItemHTML("img/icon/subscribed.gif"));
-			}
-			// Document has notes
-			if (doc.isHasNotes()) {
-				dataTable.setHTML(row, 0, dataTable.getHTML(row,0) + Util.imageItemHTML("img/icon/note.gif"));
-			}
-			// Document encrypted
-			if (doc.getCipherName()!=null && !doc.getCipherName().equals("")) {
-				dataTable.setHTML(row, 0, dataTable.getHTML(row,0) + Util.imageItemHTML("img/icon/actions/crypt.png"));
 			}
 			
 			dataTable.setHTML(row, 1, Util.mimeImageHTML(doc.getMimeType()));
@@ -882,7 +866,7 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 		Log.debug("downloadDocumentPdf()");
 		if (isDocumentSelected()) {
 			Log.debug("jump to download");
-			Util.downloadFilePdf(getDocument().getUuid());
+			Util.downloadFile(getDocument().getPath(), "toPdf");
 		}
 		Log.debug("downloadDocumentPdf: void");
 	}

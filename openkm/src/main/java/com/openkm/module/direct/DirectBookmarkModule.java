@@ -79,7 +79,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 			BookmarkDAO.create(newBookmark);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "BOOKMARK_ADD", name, node.getUUID()+", "+nodePath);
+			UserActivity.log(session.getUserID(), "BOOKMARK_ADD", name, nodePath);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {

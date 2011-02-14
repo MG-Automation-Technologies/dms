@@ -74,9 +74,6 @@ import com.openkm.dao.QueryParamsDAO;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.cache.UserDocumentKeywords;
 import com.openkm.module.SearchModule;
-import com.openkm.module.base.BaseDocumentModule;
-import com.openkm.module.base.BaseFolderModule;
-import com.openkm.module.base.BaseMailModule;
 import com.openkm.util.FormUtils;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
@@ -130,19 +127,8 @@ public class DirectSearchModule implements SearchModule {
 	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) throws 
 			IOException, ParseException, RepositoryException, DatabaseException {
 		log.debug("findPaginated({}, {}, {}, {})", new Object[] { token, params, offset, limit });
-		String type = null;
-		String query = null;
-		
-		if (!"".equals(params.getStatementQuery()) && (Query.XPATH.equals(params.getStatementType()) |
-				Query.SQL.equals(params.getStatementType()))) {
-			query = params.getStatementQuery();
-			type = params.getStatementType();
-		} else {
-			query = prepareStatement(params);
-			type = Query.XPATH;
-		}
-		
-		ResultSet rs = findByStatementPaginated(token, query, type, offset, limit);
+		String query = prepareStatement(params);
+		ResultSet rs = findByStatementPaginated(token, query, "xpath", offset, limit);
 		log.debug("findPaginated: {}", rs);
 		return rs;
 	}
@@ -243,14 +229,14 @@ public class DirectSearchModule implements SearchModule {
 				if (!params.getKeywords().isEmpty()) {
 					for (Iterator<String> it = params.getKeywords().iterator(); it.hasNext(); ) {
 						sb.append(" "+params.getOperator()+" ");
-						sb.append("@okm:keywords='" + escapeContains(it.next()) + "'");
+						sb.append("@okm:keywords = '" + escapeContains(it.next()) + "'");
 					}
 				}
 				
 				if (!params.getCategories().isEmpty()) {
 					for (Iterator<String> it = params.getCategories().iterator(); it.hasNext(); ) {
 						sb.append(" "+params.getOperator()+" ");
-						sb.append("@okm:categories='" + it.next() + "'");
+						sb.append("@okm:categories = '" + it.next() + "'");
 					}
 				}
 
@@ -274,7 +260,7 @@ public class DirectSearchModule implements SearchModule {
 				}
 
 				if (!params.getProperties().isEmpty()) {
-					Map<PropertyGroup, List<FormElement>> formsElements = FormUtils.parsePropertyGroupsForms(Config.PROPERTY_GROUPS_XML);
+					Map<PropertyGroup, List<FormElement>> formsElements = FormUtils.parsePropertyGroupsForms();
 					
 					for (Iterator<Entry<String, String>> it = params.getProperties().entrySet().iterator(); it.hasNext() ; ) {
 						Entry<String, String> ent = it.next();
@@ -349,7 +335,7 @@ public class DirectSearchModule implements SearchModule {
 				}
 
 				if (!params.getProperties().isEmpty()) {
-					Map<PropertyGroup, List<FormElement>> formsElements = FormUtils.parsePropertyGroupsForms(Config.PROPERTY_GROUPS_XML);
+					Map<PropertyGroup, List<FormElement>> formsElements = FormUtils.parsePropertyGroupsForms();
 					
 					for (Iterator<Entry<String, String>> it = params.getProperties().entrySet().iterator(); it.hasNext() ; ) {
 						Entry<String, String> ent = it.next();
@@ -409,7 +395,7 @@ public class DirectSearchModule implements SearchModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "FIND_BY_STATEMENT", null, type+", "+statement);
+			UserActivity.log(session.getUserID(), "FIND", type, statement);
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
@@ -447,7 +433,7 @@ public class DirectSearchModule implements SearchModule {
 					QueryResult qr = new QueryResult();
 					
 					if (node.isNodeType(Document.TYPE)) {
-						Document doc = BaseDocumentModule.getProperties(session, node);
+						Document doc = new DirectDocumentModule().getProperties(session, path);
 						
 						try {
 							if (node.getParent().isNodeType(Mail.TYPE)) {
@@ -459,10 +445,10 @@ public class DirectSearchModule implements SearchModule {
 							qr.setDocument(doc);
 						}
 					} else if (node.isNodeType(Folder.TYPE)) {
-						Folder fld = BaseFolderModule.getProperties(session, node);
+						Folder fld = new DirectFolderModule().getProperties(session, path);
 						qr.setFolder(fld);
 					} else if (node.isNodeType(Mail.TYPE)) {
-						Mail mail = BaseMailModule.getProperties(session, node);
+						Mail mail = new DirectMailModule().getProperties(session, path);
 						qr.setMail(mail);
 					}
 					
@@ -517,41 +503,9 @@ public class DirectSearchModule implements SearchModule {
 		log.debug("saveSearch: {}", id);
 		return id;
 	}
-	
-	@Override
-	public void updateSearch(String token, QueryParams params) throws AccessDeniedException, RepositoryException,
-			DatabaseException {
-		log.debug("updateSearch({}, {})", token, params);
-		Session session = null;
-		
-		if (Config.SYSTEM_READONLY) {
-			throw new AccessDeniedException("System is in read-only mode");
-		}
-		
-		try {
-			if (token == null) {
-				session = JCRUtils.getSession();
-			} else {
-				session = JcrSessionManager.getInstance().get(token);
-			}
-			
-			params.setUser(session.getUserID());
-			QueryParamsDAO.update(params);
-			
-			// Activity log
-			UserActivity.log(session.getUserID(), "UPDATE_SEARCH", params.getName(), params.toString());
-		} catch (javax.jcr.RepositoryException e) {
-			throw new RepositoryException(e.getMessage(), e);
-		} catch (DatabaseException e) {
-			throw e;
-		} finally {
-			if (token == null) JCRUtils.logout(session);
-		}
-		
-		log.debug("updateSearch: void");
-	}
 		
 	@Override
+	@Deprecated
 	public QueryParams getSearch(String token, int qpId) throws PathNotFoundException, RepositoryException, 
 			DatabaseException {
 		log.debug("getSearch({}, {})", token, qpId);
@@ -627,8 +581,8 @@ public class DirectSearchModule implements SearchModule {
 	}
 
 	@Override
-	public void deleteSearch(String token, int qpId) throws AccessDeniedException, RepositoryException,
-			DatabaseException {
+	public void deleteSearch(String token, int qpId) throws AccessDeniedException, PathNotFoundException,
+			RepositoryException, DatabaseException {
 		log.debug("deleteSearch({}, {})", token, qpId);
 		Session session = null;
 		
@@ -656,6 +610,9 @@ public class DirectSearchModule implements SearchModule {
 		} catch (DatabaseException e) {
 			log.warn(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} catch (javax.jcr.PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+			throw new PathNotFoundException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
@@ -797,7 +754,7 @@ public class DirectSearchModule implements SearchModule {
 				
 				if (com.openkm.bean.Property.CATEGORIES.equals(refProp.getName())) {
 					Node node = refProp.getParent();
-					Document doc = BaseDocumentModule.getProperties(session, node);
+					Document doc = new DirectDocumentModule().getProperties(session, node.getPath());
 					documents.add(doc);
 				}
 			}

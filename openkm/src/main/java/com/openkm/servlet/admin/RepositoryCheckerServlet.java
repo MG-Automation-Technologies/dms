@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.api.OKMFolder;
 import com.openkm.bean.ContentInfo;
 import com.openkm.util.FormatUtil;
-import com.openkm.util.WebUtils;
+import com.openkm.util.WebUtil;
 import com.openkm.util.impexp.HTMLInfoDecorator;
 import com.openkm.util.impexp.ImpExpStats;
 import com.openkm.util.impexp.RepositoryChecker;
@@ -49,8 +49,8 @@ public class RepositoryCheckerServlet extends BaseServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
-		String repoPath = WebUtils.getString(request, "repoPath", "/okm:root");
-		boolean versions = WebUtils.getBoolean(request, "versions");
+		String repoPath = WebUtil.getString(request, "repoPath", "/okm:root");
+		boolean versions = WebUtil.getBoolean(request, "versions");
 		updateSessionManager(request);
 		PrintWriter out = response.getWriter();
 		response.setContentType("text/html");

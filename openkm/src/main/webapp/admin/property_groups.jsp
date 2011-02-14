@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.openkm.core.Config" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -51,13 +52,9 @@
       <br/>
       <h2 style="text-align: center;">Register property group</h2>
       <form action="PropertyGroups">
-        <input type="hidden" name="action" value="register"/>
         <table class="form" align="center">
-          <tr>
-            <td>Property Group definition</td>
-            <td><input type="text" name="pgCnd" value="${pgCnd}" readonly="readonly"/></td>
-          </tr>
-          <tr><td colspan="2" align="right"><input type="submit" value="Send"/></td></tr>
+          <tr><td>Property Group definition path <input type="text" size="50" name="pgPath" value=""/></td></tr>
+          <tr><td align="right"><input type="submit" value="Send"/></td></tr>
         </table>
       </form>
     </c:when>

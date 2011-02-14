@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="com.openkm.servlet.admin.BaseServlet" %>
+<%@ page import="com.openkm.core.Config" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -14,7 +15,7 @@
   <title>User Profile</title>
 </head>
 <body>
-  <c:set var="isAdmin"><%=BaseServlet.isAdmin(request)%></c:set>
+  <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
       <c:choose>
@@ -37,18 +38,12 @@
               <jsp:include page="profile_stacks.jsp"/>
               <!-- CHAT -->
               <jsp:include page="profile_chat_edit.jsp"/>
-              <!-- TAB DOCUMENT -->
-              <jsp:include page="profile_tab_document.jsp"/>
             </td>
             <td valign="top" rowspan="3" width="25%">
               <!-- DASHBOARD -->
               <jsp:include page="profile_dashboard.jsp"/>
               <!-- TAB -->
               <jsp:include page="profile_tab.jsp"/>
-              <!-- TAB FOLDER -->
-              <jsp:include page="profile_tab_folder.jsp"/>
-              <!-- TAB MAIL -->
-              <jsp:include page="profile_tab_mail.jsp"/>
             </td>
           </tr>
           <tr>
@@ -69,6 +64,8 @@
               <jsp:include page="profile_menu.jsp"/>
               <!-- MENU BOOKMARK -->
               <jsp:include page="profile_menu_bookmark.jsp"/>
+              <!-- MENU HELP -->
+              <jsp:include page="profile_menu_help.jsp"/>
             </td>
             <td valign="top">
               <!-- MENU FILE -->
@@ -77,12 +74,16 @@
             <td valign="top">
               <!-- MENU EDIT -->
               <jsp:include page="profile_menu_edit.jsp"/>
-            </td>
-            <td valign="top">
               <!-- MENU TOOL -->
               <jsp:include page="profile_menu_tool.jsp"/>
-              <!-- MENU HELP -->
-              <jsp:include page="profile_menu_help.jsp"/>
+            </td>
+            <td valign="top">
+              <!-- TAB DOCUMENT -->
+              <jsp:include page="profile_tab_document.jsp"/>
+              <!-- TAB FOLDER -->
+              <jsp:include page="profile_tab_folder.jsp"/>
+              <!-- TAB MAIL -->
+              <jsp:include page="profile_tab_mail.jsp"/>
             </td>
           </tr>
           <tr>

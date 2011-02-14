@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.ItemExistsException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.Bookmark;
@@ -32,40 +33,33 @@ import com.openkm.dao.bean.Bookmark;
 public interface BookmarkModule {
 
 	/**
-	 * Add a new bookmark which points to this document.
+	 * Create a new folder in the repository.
 	 * 
-	 * @param token The session authorization token.
 	 * @param nodePath A node path to be bookmarked.
 	 * @param name The name of the bookmark.
-	 * @return A bookmark object with the new created bookmark properties.
-	 * @throws AccessDeniedException If there is any security problem: 
-	 * you can't modify the node because of lack of permissions.
 	 * @thows PathNotFoundException If there is no node with this nodePath.
+	 * @throws ItemExistsException If there is already a bookmark in the
+	 * repository with the same name.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Bookmark add(String token, String nodePath, String name) throws AccessDeniedException,
 			PathNotFoundException, RepositoryException, DatabaseException;
 
 	/**
-	 * Get info from a previously created bookmark.
+	 * Get info from a previously created bookmark
 	 * 
-	 * @param token The session authorization token.
+	 * @param token 
 	 * @param bmId The unique bookmark id.
 	 * @return The bookmark object.
-	 * @throws AccessDeniedException If there is any security problem: 
-	 * you can't modify the node because of lack of permissions.
-	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Bookmark get(String token, int bmId) throws AccessDeniedException, RepositoryException,
 			DatabaseException;
 	
 	/**
-	 * Remove a bookmark.
+	 * Remove a bookmark
 	 * 
-	 * @param token The session authorization token.
-	 * @param bmId The bookmark id to be deleted.
-	 * @throws AccessDeniedException If there is any security problem: 
-	 * you can't modify the node because of lack of permissions.
+	 * @param name The bookmark name to be deleted. 
+	 * @throws PathNotFoundException If the indicated bookmark doesn't exist.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void remove(String token, int bmId) throws AccessDeniedException, RepositoryException,
@@ -74,12 +68,11 @@ public interface BookmarkModule {
 	/**
 	 * Rename a previous stored bookmark.
 	 * 
-	 * @param token The session authorization token.
-	 * @param bmId The actual bookmark id.
+	 * @param name The actual bookmark name.
 	 * @param newName The new bookmark name.
-	 * @return The updated bookmark properties.
-	 * @throws AccessDeniedException If there is any security problem: 
-	 * you can't modify the node because of lack of permissions.
+	 * @thows PathNotFoundException If there is no node with this name.
+	 * @throws ItemExistsException If there is already a bookmark in the
+	 * repository with the same name.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Bookmark rename(String token, int bmId, String newName) throws AccessDeniedException, 
@@ -88,8 +81,7 @@ public interface BookmarkModule {
 	/**
 	 * Retrive an user bookmark collection.
 	 * 
-	 * @param token The session authorization token.
-	 * @return All the user bookmarks.
+	 * @return All the user bookmarks
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public List<Bookmark> getAll(String token) throws RepositoryException, DatabaseException;

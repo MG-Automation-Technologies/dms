@@ -39,7 +39,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.contants.service.RPCService;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMChatService;
 import com.openkm.frontend.client.service.OKMChatServiceAsync;
 
@@ -194,7 +194,7 @@ public class OnlineUsersPopup extends DialogBox {
 		if (table.getSelectedRow()>=0) {
 			final String user = table.getHTML(table.getSelectedRow(), 0);
 			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-			endPoint.setServiceEntryPoint(RPCService.ChatService);
+			endPoint.setServiceEntryPoint(Config.OKMChatService);
 			chatService.createNewChatRoom(user, new AsyncCallback<String>() {
 				@Override
 				public void onSuccess(String result) {
@@ -219,7 +219,7 @@ public class OnlineUsersPopup extends DialogBox {
 		if (table.getSelectedRow()>=0) {
 			String user = table.getHTML(table.getSelectedRow(), 0);
 			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-			endPoint.setServiceEntryPoint(RPCService.ChatService);
+			endPoint.setServiceEntryPoint(Config.OKMChatService);
 			chatService.addUserToChatRoom(room, user, new AsyncCallback<Object>() {
 				@Override
 				public void onSuccess(Object result) {
