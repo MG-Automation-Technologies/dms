@@ -310,7 +310,8 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 								throw new ParseException("Inconsistent property definition: " + pd[i].getName());
 							}
 						} catch (javax.jcr.PathNotFoundException e) {
-							throw new RepositoryException("Requested property not found: "+e.getMessage());
+							// Maybe the property is not found because was added after the assignment
+							// throw new RepositoryException("Requested property not found: "+e.getMessage());
 						}
 					}
 				}
