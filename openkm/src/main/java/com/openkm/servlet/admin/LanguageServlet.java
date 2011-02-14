@@ -297,13 +297,14 @@ public class LanguageServlet extends BaseServlet {
 		log.debug("addTranslation({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
-			Language language = LanguageDAO.findByPk(LANG_BASE_CODE);
-			Translation translation = new Translation();
-			translation.getTranslationId().setModule(WebUtils.getString(request, "tr_module"));
-			translation.getTranslationId().setKey(WebUtils.getString(request, "tr_key"));
-			translation.setText(WebUtils.getString(request, "tr_text"));
-			language.getTranslations().add(translation);
-			LanguageDAO.update(language);
+			Language lang = LanguageDAO.findByPk(LANG_BASE_CODE);
+			Translation trans = new Translation();
+			trans.getTranslationId().setModule(WebUtils.getString(request, "tr_module"));
+			trans.getTranslationId().setKey(WebUtils.getString(request, "tr_key"));
+			trans.getTranslationId().setLanguage(lang.getId());
+			trans.setText(WebUtils.getString(request, "tr_text"));
+			lang.getTranslations().add(trans);
+			LanguageDAO.update(lang);
 		}
 		
 		List<String> modules = new ArrayList<String>();
@@ -341,7 +342,7 @@ public class LanguageServlet extends BaseServlet {
 					Translation newTranslation = new Translation();
 					newTranslation.getTranslationId().setModule(translation.getTranslationId().getModule());
 					newTranslation.getTranslationId().setKey(translation.getTranslationId().getKey());
-					newTranslation.getTranslationId().setLanguage(lang);
+					newTranslation.getTranslationId().setLanguage(lang.getId());
 					newTranslation.setText(text);
 					newTranslations.add(newTranslation);
 				}
