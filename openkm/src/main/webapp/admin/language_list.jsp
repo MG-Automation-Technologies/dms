@@ -51,8 +51,7 @@
               <td align="center">${lang.id}</td>
               <td align="center"><img src="${urlFlag}"/></td>
               <td>${lang.name}</td>
-              <td>
-                ${fn:length(lang.translations)}
+              <td>${fn:length(lang.translations)}
                 <c:if test="${max>fn:length(lang.translations)}">
                   &nbsp;( Warning, translations needed )
                 </c:if>
@@ -60,10 +59,15 @@
               <td>
                 <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
                 &nbsp;
-                <c:if test="${lang.id!='en-GB'}">
-                  <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
-                  &nbsp;
-                </c:if>
+                <c:choose>
+                  <c:when test="${lang.id == 'en-GB'}">
+                    <img src="img/action/delete_disabled.png" alt="Delete" title="Delete"/>
+                  </c:when>
+                  <c:otherwise>
+                    <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+                  </c:otherwise>
+                </c:choose>
+                &nbsp;
                 <a href="${urlTranslate}"><img src="img/action/translate.png" alt="Edit translations" title="Edit translations"/></a>
                 &nbsp;
                 <a href="${urlExport}"><img src="img/action/export.png" alt="Export translations" title="Export translations"/></a>
