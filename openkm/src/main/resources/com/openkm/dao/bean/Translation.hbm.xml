@@ -7,8 +7,8 @@
     <composite-id name="translationId" class="com.openkm.dao.bean.TranslationId">
       <key-property name="module" column="TR_MODULE" length="127"/>
       <key-property name="key" column="TR_KEY" length="127"/>
-      <key-many-to-one name="language" class="com.openkm.dao.bean.Language" column="TR_LANGUAGE"/>
+      <key-property name="language" column="TR_LANGUAGE" length="8" />
     </composite-id>
-    <property name="text" column="TR_TEXT" not-null="true"/>
+    <property name="text" column="TR_TEXT" not-null="true" />
   </class>
 </hibernate-mapping>
