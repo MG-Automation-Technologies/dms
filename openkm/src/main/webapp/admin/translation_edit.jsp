@@ -22,20 +22,21 @@
         	<input type="hidden" name="lg_id" value="${lg_id}"/>
         	<table class="results" width="95%">
           	<tr>
-            	<th>#</th><th>Key property</th><th>${langBase.name}</th><th>${langToTranslateName}</th>
+            	<th>#</th><th>Module</th><th>Key property</th><th>${langBase.name}</th><th>${langToTranslateName}</th>
           	</tr>
           	<c:forEach var="translation" items="${langBase.translations}" varStatus="row">
           	<tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
           		<td align="right">${row.index+1}&nbsp;&nbsp;</td>
+          		<td width="10%">${translation.translationId.module}</td>
           		<td width="30%">${translation.translationId.key}</td>
-          		<td width="35%">${translation.text}</td>
-          		<td width="35%">
+          		<td width="30%">${translation.text}</td>
+          		<td width="30%">
        				<input size="60" name="${translation.translationId.key}" value="${translations[translation.translationId.key]}"/>
           		</td>
           	</tr>
           	</c:forEach>
           	<tr>
-            	<td colspan="4" align="right">
+            	<td colspan="5" align="right">
               		<input type="button" onclick="javascript:window.history.back()" value="Cancel"/>
               		<input type="submit" value="Send"/>
             	</td>
