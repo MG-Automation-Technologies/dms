@@ -7,7 +7,8 @@
     <property name="name" column="LG_NAME" length="127" not-null="true"/>
     <property name="imageContent" column="LG_IMAGE_CONTENT" type="text" not-null="true"/>
     <property name="imageMime" column="LG_IMAGE_MIME" length="127" not-null="true"/>
-    <set name="translations" table="OKM_TRANSLATION" order-by="TR_KEY asc" cascade="all-delete-orphan" lazy="false">
+    <!-- http://docs.jboss.org/hibernate/core/3.3/reference/en/html/associations.html#assoc-bidirectional -->
+    <set name="translations" table="OKM_TRANSLATION" order-by="TR_KEY asc" inverse="true" cascade="all-delete-orphan" lazy="false">
       <key column="TR_LANGUAGE"/>
       <one-to-many class="com.openkm.dao.bean.Translation"/>
     </set>
