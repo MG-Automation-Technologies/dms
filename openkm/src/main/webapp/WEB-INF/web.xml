@@ -174,6 +174,11 @@
     <servlet-name>ContactServlet</servlet-name>
     <servlet-class>com.openkm.extension.servlet.ContactServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>FrontendActivityLogServlet</servlet-name>
+    <servlet-class>com.openkm.extension.servlet.ActivityLogServlet</servlet-class>
+  </servlet>
+  
   
   <!-- Misc servlets -->
   <servlet>
@@ -513,6 +518,10 @@
   <servlet-mapping>
     <servlet-name>ContactServlet</servlet-name>
     <url-pattern>/extension/Contact</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FrontendActivityLogServlet</servlet-name>
+    <url-pattern>/extension/ActivityLog</url-pattern>
   </servlet-mapping>
   
   <!-- Misc servlets mappings -->
