@@ -25,6 +25,7 @@ package com.openkm.extension.frontend.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.openkm.extension.frontend.client.widget.activitylog.ActivityLog;
 import com.openkm.extension.frontend.client.widget.client.metromusa.MetromUsa;
 import com.openkm.extension.frontend.client.widget.contact.Contact;
 import com.openkm.extension.frontend.client.widget.crypto.Cryptography;
@@ -102,6 +103,9 @@ public class Customization {
 		}
 		if (Contact.isRegistered(uuidList)) {
 			extensions.addAll(new Contact(uuidList).getExtensions());
+		}
+		if (ActivityLog.isRegistered(uuidList)) {
+			extensions.addAll(new ActivityLog(uuidList).getExtensions());
 		}
 		
 		return extensions;

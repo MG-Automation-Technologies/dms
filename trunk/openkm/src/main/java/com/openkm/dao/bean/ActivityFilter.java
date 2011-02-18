@@ -26,6 +26,7 @@ import java.util.Calendar;
 
 public class ActivityFilter implements Serializable {
 	private static final long serialVersionUID = 1L;
+	private String item = "";
 	private Calendar begin;
 	private Calendar end;
 	private String user;
@@ -63,6 +64,14 @@ public class ActivityFilter implements Serializable {
 		this.action = action;
 	}
 	
+	public String getItem() {
+		return item;
+	}
+
+	public void setItem(String item) {
+		this.item = item;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -70,6 +79,7 @@ public class ActivityFilter implements Serializable {
 		sb.append(", end="); sb.append(end==null?null:end.getTime());
 		sb.append(", user="); sb.append(user);
 		sb.append(", action="); sb.append(action);
+		sb.append(", act_item="); sb.append(item);
 		sb.append("}");
 		return sb.toString();
 	}
