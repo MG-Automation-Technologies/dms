@@ -72,6 +72,7 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.dao.bean.Activity;
 import com.openkm.dao.bean.Bookmark;
 import com.openkm.dao.bean.Language;
 import com.openkm.dao.bean.QueryParams;
@@ -118,6 +119,7 @@ import com.openkm.frontend.client.bean.GWTUserConfig;
 import com.openkm.frontend.client.bean.GWTValidator;
 import com.openkm.frontend.client.bean.GWTVersion;
 import com.openkm.frontend.client.bean.GWTWorkflowComment;
+import com.openkm.frontend.client.bean.extension.GWTActivity;
 import com.openkm.frontend.client.bean.extension.GWTContact;
 import com.openkm.frontend.client.bean.extension.GWTMessageReceived;
 import com.openkm.frontend.client.bean.extension.GWTProposedQueryReceived;
@@ -1387,5 +1389,23 @@ public class GWTUtil {
 		gwtContact.setWeb(contact.getWeb());
 		
 		return gwtContact;
+	}
+	
+	/**
+	 * Copy Activity to GWTActivity
+	 * 
+	 * @param activity
+	 * @return
+	 */
+	public static GWTActivity copy(Activity activity) {
+		GWTActivity gWTActivity = new GWTActivity();
+		gWTActivity.setAction(activity.getAction());
+		gWTActivity.setDate(activity.getDate().getTime());
+		gWTActivity.setId(activity.getId());
+		gWTActivity.setItem(activity.getItem());
+		gWTActivity.setParams(activity.getParams());
+		gWTActivity.setUser(activity.getUser());
+		
+		return gWTActivity;
 	}
 }
