@@ -158,6 +158,15 @@ public class TabMail extends Composite implements HasMailEvent, HasMailHandlerEx
 	}
 	
 	/**
+	 * getSelectedTab
+	 * 
+	 * @return
+	 */
+	public int getSelectedTab() {
+		return selectedTab;
+	}
+	
+	/**
 	 * Language refresh
 	 */
 	public void langRefresh() {
@@ -254,6 +263,15 @@ public class TabMail extends Composite implements HasMailEvent, HasMailHandlerEx
 				}
 			}
 		}
+	}
+	
+	/**
+	 * getMail
+	 * 
+	 * @return
+	 */
+	public GWTMail getMail() {
+		return mail.get();
 	}
 	
 	/**
