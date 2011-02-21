@@ -71,6 +71,7 @@ import com.openkm.frontend.client.widget.notify.NotifyPopup;
 import com.openkm.frontend.client.widget.security.SecurityPopup;
 import com.openkm.frontend.client.widget.startup.StartUp;
 import com.openkm.frontend.client.widget.startup.StartUpPopup;
+import com.openkm.frontend.client.widget.test.TestPopup;
 import com.openkm.frontend.client.widget.upload.FileUpload;
 import com.openkm.frontend.client.widget.wizard.TemplateWizardPopup;
 import com.openkm.frontend.client.widget.wizard.WizardPopup;
@@ -119,6 +120,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	public WizardPopup wizardPopup;
 	public TemplateWizardPopup templateWizardPopup;
 	public OnlineUsersPopup onlineUsersPopup;
+	public TestPopup testPopup;
 	
 	
 	// User workspace properties
@@ -317,6 +319,10 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		onlineUsersPopup.setHeight("350px");
 		onlineUsersPopup.setStyleName("okm-Popup");
 		onlineUsersPopup.addStyleName("okm-DisableSelect");
+		testPopup = new TestPopup();
+		testPopup.setWidth("600px");
+		testPopup.setHeight("500px");
+		testPopup.setStyleName("okm-Popup");
 
 		// Get grid of scrollbars, and clear out the window's built-in margin,
 	    // because we want to take advantage of the entire client area.

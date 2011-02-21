@@ -62,4 +62,6 @@ public class RPCService {
 	public static String StampService = Main.CONTEXT+"/extension/Stamp";
 	public static String ContactService = Main.CONTEXT+"/extension/Contact";
 	public static String ActivityLogService = Main.CONTEXT+"/extension/ActivityLog";
+	public static String TestService = Main.CONTEXT+"/frontend/Test";
+	
 }
