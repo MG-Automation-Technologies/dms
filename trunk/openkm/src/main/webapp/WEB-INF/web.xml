@@ -179,7 +179,6 @@
     <servlet-class>com.openkm.extension.servlet.ActivityLogServlet</servlet-class>
   </servlet>
   
-  
   <!-- Misc servlets -->
   <servlet>
   	<servlet-name>HandlerServlet</servlet-name>
