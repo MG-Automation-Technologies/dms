@@ -410,6 +410,13 @@ public class ExtendedDockPanel extends Composite {
 									propagate = false;
 								}
 								break;
+							
+							case Keyboard.KEY_T:
+								// Case CTRL+T
+								if (event.getNativeEvent().getCtrlKey()) {
+									Main.get().testPopup.center();
+								}
+								break;
 								
 							case Keyboard.KEY_Z:
 								// Case CTRL+Z

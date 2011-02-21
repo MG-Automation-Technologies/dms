@@ -178,6 +178,10 @@
     <servlet-name>FrontendActivityLogServlet</servlet-name>
     <servlet-class>com.openkm.extension.servlet.ActivityLogServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>TestServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.frontend.TestServlet</servlet-class>
+  </servlet>
   
   <!-- Misc servlets -->
   <servlet>
@@ -487,6 +491,10 @@
   <servlet-mapping>
     <servlet-name>FrontendLanguageServlet</servlet-name>
     <url-pattern>/frontend/Language</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>TestServlet</servlet-name>
+    <url-pattern>/frontend/Test</url-pattern>
   </servlet-mapping>
   
   <!-- Extensions Servlet Mappings -->
