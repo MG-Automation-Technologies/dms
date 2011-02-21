@@ -273,8 +273,8 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		wizardPopup.setStyleName("okm-Popup");
 		wizardPopup.addStyleName("okm-DisableSelect");
 		testPopup = new TestPopup();
-		testPopup.setWidth("800px");
-		testPopup.setHeight("600px");
+		testPopup.setWidth("600px");
+		testPopup.setHeight("500px");
 		testPopup.setStyleName("okm-Popup");
 		onlineUsersPopup = new OnlineUsersPopup();
 		onlineUsersPopup.setWidth("250px");
