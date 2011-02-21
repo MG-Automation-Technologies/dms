@@ -51,10 +51,8 @@ import com.openkm.frontend.client.service.OKMTestServiceAsync;
  * Test Popup
  * 
  * @author jllort
- *
  */
 public class TestPopup extends DialogBox {
-	
 	private final OKMTestServiceAsync testService = (OKMTestServiceAsync) GWT.create(OKMTestService.class);
 	
 	VerticalPanel vPanel;
@@ -80,14 +78,20 @@ public class TestPopup extends DialogBox {
 	 */
 	public TestPopup() {
 		// Establishes auto-close when click outside
-		super(false,true);
+		super(false, true);
 		setText("GWT Testing");
-		
 		vPanel = new VerticalPanel();
 		
-		// Controler
+		// Controller
 		hPanel = new HorizontalPanel();
-		hPanel.add (new HTML("Number of elements:"));
+		hPanel.add(new HTML("&nbsp;Type:"));
+		type = new ListBox();
+		type.addItem("String", "String");
+		type.addItem("GWTFolder", "GWTFolder");
+		type.addItem("GWTDocument", "GWTDocument");
+		type.setStyleName("okm-Input");
+		hPanel.add(type);
+		hPanel.add(new HTML("&nbsp;Elements:"));
 		sizeTest = new TextBox();
 		sizeTest.setSize("60", "20");
 		sizeTest.setText("2000");
@@ -126,12 +130,6 @@ public class TestPopup extends DialogBox {
 		run.setStyleName("okm-Input");
 		hPanel.add(run);
 		hPanel.add (new HTML("&nbsp;"));
-		type = new ListBox();
-		type.addItem("String", "String");
-		type.addItem("GWTFolder", "GWTFolder");
-		type.addItem("GWTDocument", "GWTDocument");
-		type.setStyleName("okm-Input");
-		hPanel.add(type);
 		
 		// Log
 		table = new FlexTable();
@@ -175,7 +173,8 @@ public class TestPopup extends DialogBox {
 		log(runnningTest, "Starting");
 		int threat = Integer.parseInt(numThreats.getText()); 
 		int count = 0;
-		while (count<threat) {
+		
+		while (count < threat) {
 			controller();
 			count ++;
 		}
@@ -211,11 +210,11 @@ public class TestPopup extends DialogBox {
 	private void stringTest(final int cycle) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) testService;
 		endPoint.setServiceEntryPoint(Config.OKMTestService);
-		log(runnningTest, "Calling rpc:" + cycle);
+		log(runnningTest, "Calling RPC: " + cycle);
 		testService.StringTest(textSize, new AsyncCallback<String>() {
 			@Override
 			public void onSuccess(String result) {
-				log(runnningTest, "Finished rpc:" + cycle + " ,String length: " + result.length());
+				log(runnningTest, "Finished RPC: " + cycle + ", Result length: " + result.length());
 				controller();
 			}
 			
@@ -232,12 +231,12 @@ public class TestPopup extends DialogBox {
 	private void folderTest(final int cycle) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) testService;
 		endPoint.setServiceEntryPoint(Config.OKMTestService);
-		log(runnningTest, "Calling rpc:" + cycle);
+		log(runnningTest, "Calling RPC: " + cycle);
 		testService.folderText(textSize, new AsyncCallback<List<GWTFolder>>() {
 			
 			@Override
 			public void onSuccess(List<GWTFolder> result) {
-				log(runnningTest, "Finished rpc:" + cycle + " ,Objects size: " + result.size());
+				log(runnningTest, "Finished RPC: " + cycle + ", Result size: " + result.size());
 				controller();
 			}
 			
@@ -254,11 +253,11 @@ public class TestPopup extends DialogBox {
 	private void documentTest(final int cycle) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) testService;
 		endPoint.setServiceEntryPoint(Config.OKMTestService);
-		log(runnningTest, "Calling rpc:" + cycle);
+		log(runnningTest, "Calling RPC: " + cycle);
 		testService.documentText(textSize, new AsyncCallback<List<GWTDocument>>() {
 			@Override
 			public void onSuccess(List<GWTDocument> result) {
-				log(runnningTest, "Finished rpc:" + cycle + " ,Objects size: " + result.size());
+				log(runnningTest, "Finished RPC: " + cycle + ", Result size: " + result.size());
 				controller();
 			}
 			@Override
