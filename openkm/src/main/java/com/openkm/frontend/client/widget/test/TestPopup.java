@@ -119,6 +119,7 @@ public class TestPopup extends DialogBox {
 		hPanel.add(sizeTest);
 		hPanel.add (new HTML("&nbsp;Cycles:"));
 		cyclesTest = new TextBox();
+		cyclesTest.setText("100");
 		cyclesTest.setStyleName("okm-Input");
 		hPanel.add(cyclesTest);
 		numThreats = new TextBox();
