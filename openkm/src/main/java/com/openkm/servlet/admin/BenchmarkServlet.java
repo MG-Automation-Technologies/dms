@@ -272,7 +272,7 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<b>- Depth:</b> "+bm.getMaxDepth()+"<br/>");
 			out.println("<b>- Calibration:</b> "+bm.runCalibration()+" ms<br/>");
 			out.println("<b>- Calculated foldes:</b> "+bm.calculateFolders()+"<br/>");
-			out.println("<b>- Calculated documents:</b> "+bm.calculateDocuments()+"<br/>");
+			out.println("<b>- Calculated documents:</b> "+bm.calculateDocuments()+"<br/><br/>");
 			out.println("<table class=\"results\" width=\"80%\">");
 			out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th></tr>");
 			out.flush();
@@ -354,7 +354,7 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<b>- Depth:</b> "+bm.getMaxDepth()+"<br/>");
 			out.println("<b>- Calibration:</b> "+bm.runCalibration()+" ms<br/>");
 			out.println("<b>- Calculated foldes:</b> "+bm.calculateFolders()+"<br/>");
-			out.println("<b>- Calculated documents:</b> "+bm.calculateDocuments()+"<br/>");
+			out.println("<b>- Calculated documents:</b> "+bm.calculateDocuments()+"<br/><br/>");
 			out.println("<table class=\"results\" width=\"80%\">");
 			out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th></tr>");
 			out.flush();
@@ -429,7 +429,7 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<b>- Depth:</b> "+bm.getMaxDepth()+"<br/>");
 			out.println("<b>- Calibration:</b> "+bm.runCalibration()+" ms<br/>");
 			out.println("<b>- Calculated foldes:</b> "+bm.calculateFolders()+"<br/>");
-			out.println("<b>- Calculated documents:</b> "+bm.calculateDocuments()+"<br/>");
+			out.println("<b>- Calculated documents:</b> "+bm.calculateDocuments()+"<br/><br/>");
 			out.println("<table class=\"results\" width=\"80%\">");
 			out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th></tr>");
 			out.flush();
@@ -501,7 +501,7 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<b>- Depth:</b> "+bm.getMaxDepth()+"<br/>");
 			out.println("<b>- Calibration:</b> "+bm.runCalibration()+" ms<br/>");
 			out.println("<b>- Calculated foldes:</b> "+bm.calculateFolders()+"<br/>");
-			out.println("<b>- Calculated documents:</b> "+bm.calculateDocuments()+"<br/>");
+			out.println("<b>- Calculated documents:</b> "+bm.calculateDocuments()+"<br/><br/>");
 			out.println("<table class=\"results\" width=\"80%\">");
 			out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th></tr>");
 			out.flush();
