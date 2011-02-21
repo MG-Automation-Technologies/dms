@@ -49,7 +49,6 @@ import org.apache.jackrabbit.core.query.QueryImpl;
 import org.apache.jackrabbit.core.query.lucene.QueryResultImpl;
 import org.apache.jackrabbit.util.ISO8601;
 import org.apache.jackrabbit.util.ISO9075;
-import org.apache.jackrabbit.util.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -149,21 +148,29 @@ public class DirectSearchModule implements SearchModule {
 	
 	/**
 	 * Escape jcr:contains searchExp (view 6.6.5.2)
-	 *  
+	 * 
+	 * Text.escapeIllegalXpathSearchChars(searchTerm).replaceAll("'", "''")
+	 * 
+	 * @see http://svn.apache.org/repos/asf/jackrabbit/branches/2.2/jackrabbit-jcr-commons/src/main/java/org/apache/jackrabbit/util/Text.java
+	 * @see http://wiki.apache.org/jackrabbit/EncodingAndEscaping
 	 * @param str The String to be escaped.
 	 * @return The escaped String.
 	 */
 	private String escapeContains(String str) {
-		String ret = str;
-		//ret = ret.replace("\\", "\\\\");
-		//ret = ret.replace("'", "\\'");
-		//ret = ret.replace("-", "\\-");
-		ret = ret.replace("\"", "\\\"");
-		ret = ret.replace("[", "\\[");
-		ret = ret.replace("]", "\\]");
-		ret = Text.escapeIllegalXpathSearchChars(ret);
-		ret = escapeXPath(ret);
-		return ret;
+		StringBuilder sb = new StringBuilder();
+		
+		for (int i=0; i<str.length(); i++) {
+			char c = str.charAt(i);
+			
+			if (c == '!' || c == '(' || c == ':' || c == '^' || c == '"'
+				|| c == '[' || c == ']' || c == '{' || c == '}' || c == '?') {
+				sb.append('\\');
+			}
+			
+			sb.append(c);
+		}
+		
+		return sb.toString().replace("'", "''");
 	}
 
 	/**
