@@ -71,7 +71,7 @@ public class ActivityDAO  {
 			qs += "and a.user=:user ";
 		if (filter.getAction() != null && !filter.getAction().equals("")) 
 			qs += "and a.action=:action ";
-		if (filter.getItem()!=null && !filter.getItem().equals("")) {
+		if (filter.getItem() != null && !filter.getItem().equals("")) {
 			qs += "and a.item=:item ";
 		}
 		Session session = null;
@@ -86,7 +86,7 @@ public class ActivityDAO  {
 				q.setString("user", filter.getUser());
 			if (filter.getAction() != null && !filter.getAction().equals(""))
 				q.setString("action", filter.getAction());
-			if (filter.getItem()!=null && !filter.getItem().equals(""))
+			if (filter.getItem() != null && !filter.getItem().equals(""))
 				q.setString("item", filter.getItem());
 			
 			List<Activity> ret = q.list();
