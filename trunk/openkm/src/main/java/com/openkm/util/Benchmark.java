@@ -353,6 +353,8 @@ public class Benchmark {
 					cont.setProperty(JcrConstants.JCR_DATA, bais);
 					cont.setProperty(JcrConstants.JCR_LASTMODIFIED, Calendar.getInstance());
 					fld.save();
+					
+					cont.checkin();
 					totalDocuments++;
 				}
 				
