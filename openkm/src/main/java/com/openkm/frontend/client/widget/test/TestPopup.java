@@ -134,7 +134,7 @@ public class TestPopup extends DialogBox {
 		// Log
 		table = new FlexTable();
 		scroll = new ScrollPanel(table);
-		scroll.setSize("800", "550");
+		scroll.setSize("600", "450");
 		table.setWidth("100%");
 		table.setCellPadding(5);
 		table.setCellSpacing(0);
@@ -153,7 +153,7 @@ public class TestPopup extends DialogBox {
 		vPanel.add(scroll);
 		vPanel.add(close);
 		vPanel.setCellHeight(hPanel, "30");
-		vPanel.setCellHeight(scroll, "550");
+		vPanel.setCellHeight(scroll, "450");
 		vPanel.setCellHeight(close, "20");
 		vPanel.setCellHorizontalAlignment(close, HasAlignment.ALIGN_CENTER);
 		
