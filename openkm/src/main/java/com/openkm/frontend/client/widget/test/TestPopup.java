@@ -87,6 +87,25 @@ public class TestPopup extends DialogBox {
 		
 		// Controler
 		hPanel = new HorizontalPanel();
+		hPanel.add (new HTML("Number of elements:"));
+		sizeTest = new TextBox();
+		sizeTest.setSize("60", "20");
+		sizeTest.setText("2000");
+		sizeTest.setStyleName("okm-Input");
+		hPanel.add(sizeTest);
+		hPanel.add (new HTML("&nbsp;Cycles:"));
+		cyclesTest = new TextBox();
+		cyclesTest.setText("100");
+		cyclesTest.setSize("60", "20");
+		cyclesTest.setStyleName("okm-Input");
+		hPanel.add(cyclesTest);
+		hPanel.add (new HTML("&nbsp;Threats:"));
+		numThreats = new TextBox();
+		numThreats.setText("1");
+		numThreats.setSize("60", "20");
+		numThreats.setStyleName("okm-Input");
+		hPanel.add(numThreats);
+		hPanel.add(new HTML("&nbsp;"));
 		clean = new Button("Clean");
 		clean.addClickHandler(new ClickHandler() {
 			@Override
@@ -113,19 +132,6 @@ public class TestPopup extends DialogBox {
 		type.addItem("GWTDocument", "GWTDocument");
 		type.setStyleName("okm-Input");
 		hPanel.add(type);
-		hPanel.add (new HTML("&nbsp;Number of elements:"));
-		sizeTest = new TextBox();
-		sizeTest.setStyleName("okm-Input");
-		hPanel.add(sizeTest);
-		hPanel.add (new HTML("&nbsp;Cycles:"));
-		cyclesTest = new TextBox();
-		cyclesTest.setText("100");
-		cyclesTest.setStyleName("okm-Input");
-		hPanel.add(cyclesTest);
-		numThreats = new TextBox();
-		numThreats.setText("1");
-		numThreats.setStyleName("okm-Input");
-		hPanel.add(numThreats);
 		
 		// Log
 		table = new FlexTable();
