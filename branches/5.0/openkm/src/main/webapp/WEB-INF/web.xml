@@ -141,6 +141,10 @@
   	<servlet-name>OKMNoteServlet</servlet-name>
     <servlet-class>com.openkm.frontend.server.OKMNoteServlet</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>OKMTestServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.OKMTestServlet</servlet-class>
+  </servlet>
   
   <!-- Misc servlets -->
   <servlet>
@@ -430,6 +434,10 @@
   <servlet-mapping>
     <servlet-name>OKMNoteServlet</servlet-name>
     <url-pattern>/OKMNoteServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>OKMTestServlet</servlet-name>
+    <url-pattern>/OKMTestServlet</url-pattern>
   </servlet-mapping>
   
   <!-- Extensions Servlet Mappings -->

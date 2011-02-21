@@ -66,6 +66,7 @@ import com.openkm.frontend.client.widget.notify.NotifyPopup;
 import com.openkm.frontend.client.widget.security.SecurityPopup;
 import com.openkm.frontend.client.widget.startup.StartUp;
 import com.openkm.frontend.client.widget.startup.StartUpPopup;
+import com.openkm.frontend.client.widget.test.TestPopup;
 import com.openkm.frontend.client.widget.upload.FileUpload;
 import com.openkm.frontend.client.widget.wizard.WizardPopup;
 
@@ -108,6 +109,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	public DebugConsolePopup debugConsolePopup;
 	public FindFolderSelectPopup findFolderSelectPopup;
 	public WizardPopup wizardPopup;
+	public TestPopup testPopup;
 	public OnlineUsersPopup onlineUsersPopup;
 	
 	// User workspace properties
@@ -270,6 +272,10 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		wizardPopup.setHeight("40px");
 		wizardPopup.setStyleName("okm-Popup");
 		wizardPopup.addStyleName("okm-DisableSelect");
+		testPopup = new TestPopup();
+		testPopup.setWidth("800px");
+		testPopup.setHeight("600px");
+		testPopup.setStyleName("okm-Popup");
 		onlineUsersPopup = new OnlineUsersPopup();
 		onlineUsersPopup.setWidth("250px");
 		onlineUsersPopup.setHeight("350px");
