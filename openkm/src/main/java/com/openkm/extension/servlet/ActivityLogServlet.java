@@ -58,7 +58,7 @@ public class ActivityLogServlet extends OKMRemoteServiceServlet implements OKMAc
 				if (!action.equals("ALL_ACTIONS")) {
 					filter.setAction(action);
 				}
-			
+				
 				for (Activity activity : ActivityDAO.findByFilterByItem(filter)) {
 					if (getChilds) {
 						activityList.add(GWTUtil.copy(activity));
@@ -78,6 +78,7 @@ public class ActivityLogServlet extends OKMRemoteServiceServlet implements OKMAc
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMActivityLogService, ErrorCode.CAUSE_Database), e.getMessage());
 		}
+		
 		return activityList;
 	}
 }
