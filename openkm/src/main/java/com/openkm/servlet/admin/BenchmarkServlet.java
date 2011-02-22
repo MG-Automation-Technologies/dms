@@ -35,10 +35,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.jackrabbit.JcrConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMFolder;
+import com.openkm.api.OKMRepository;
 import com.openkm.bean.ContentInfo;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Repository;
@@ -51,7 +53,7 @@ import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VirusDetectedException;
-import com.openkm.module.direct.DirectRepositoryModule;
+import com.openkm.module.base.BaseFolderModule;
 import com.openkm.util.Benchmark;
 import com.openkm.util.FormatUtil;
 import com.openkm.util.JCRUtils;
@@ -67,6 +69,7 @@ import com.openkm.util.impexp.RepositoryImporter;
 public class BenchmarkServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(BenchmarkServlet.class);
+	private static String BM_FLD_BASE = "benchmark";
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws 
@@ -115,9 +118,10 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<b>- Times:</b> "+times+"<br/>");
 			out.println("<b>- Documents:</b> "+docs+"<br/>");
 			out.flush();
-			
+			String FOLDER = BM_FLD_BASE + "_okm_import";
+			Folder rootFld = OKMRepository.getInstance().getRootFolder(null);
 			Folder fld = new Folder();
-			fld.setPath("/okm:root/Benchmark");
+			fld.setPath(rootFld.getPath() + "/" + FOLDER);
 			OKMFolder.getInstance().create(null, fld);
 			tBegin = System.currentTimeMillis();
 			
@@ -128,7 +132,7 @@ public class BenchmarkServlet extends BaseServlet {
 				//out.println("<tr><th>#</th><th>Document</th><th>Size</th></tr>");
 				
 				long begin = System.currentTimeMillis();
-				fld.setPath("/okm:root/Benchmark/"+i);
+				fld.setPath(rootFld.getPath() + "/" + FOLDER + "/" + i);
 				OKMFolder.getInstance().create(null, fld);
 				ImpExpStats stats = RepositoryImporter.importDocuments(null, dir, fld.getPath(), false, out, 
 						new HTMLInfoDecorator(docs));
@@ -291,9 +295,16 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<table class=\"results\" width=\"80%\">");
 			out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th></tr>");
 			out.flush();
+			String FOLDER = BM_FLD_BASE + "_okm_api_high";
+			Folder fld = OKMRepository.getInstance().getRootFolder(null);
+			fld.setPath(fld.getPath() + "/" + FOLDER);
+			
+			if (!OKMRepository.getInstance().hasNode(null, FOLDER)) {
+				fld = OKMFolder.getInstance().create(null, fld);
+			}
+			
 			tBegin = System.currentTimeMillis();
-			Folder root = new DirectRepositoryModule().getRootFolder(null);
-			size = bm.okmApiHighPopulate(null, root, out);
+			size = bm.okmApiHighPopulate(null, fld, out);
 			tEnd = System.currentTimeMillis();
 			out.println("</table>");
 		} catch (FileNotFoundException e) {
@@ -381,9 +392,18 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<table class=\"results\" width=\"80%\">");
 			out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th></tr>");
 			out.flush();
+			Node rootNode = session.getRootNode().getNode(Repository.ROOT);
+			Node baseNode = null;
+			String FOLDER = BM_FLD_BASE + "_okm_api_low";
+			
+			if (rootNode.hasNode(FOLDER)) {
+				baseNode = rootNode.getNode(FOLDER);
+			} else {
+				rootNode = BaseFolderModule.create(session, rootNode, FOLDER);
+			}
+			
 			tBegin = System.currentTimeMillis();
-			Node root = session.getRootNode().getNode(Repository.ROOT);
-			size = bm.okmApiLowPopulate(session, root, out);
+			size = bm.okmApiLowPopulate(session, baseNode, out);
 			tEnd = System.currentTimeMillis();
 			out.println("</table>");
 		} catch (FileNotFoundException e) {
@@ -464,9 +484,18 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<table class=\"results\" width=\"80%\">");
 			out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th></tr>");
 			out.flush();
+			Node rootNode = session.getRootNode().getNode(Repository.ROOT);
+			Node baseNode = null;
+			String FOLDER = BM_FLD_BASE + "_okm_raw";
+			
+			if (rootNode.hasNode(FOLDER)) {
+				baseNode = rootNode.getNode(FOLDER);
+			} else {
+				rootNode = BaseFolderModule.create(session, rootNode, FOLDER);
+			}
+			
 			tBegin = System.currentTimeMillis();
-			Node root = session.getRootNode().getNode(Repository.ROOT);
-			size = bm.okmRawPopulate(session, root, out);
+			size = bm.okmRawPopulate(session, baseNode, out);
 			tEnd = System.currentTimeMillis();
 			out.println("</table>");
 		} catch (FileNotFoundException e) {
@@ -544,9 +573,19 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<table class=\"results\" width=\"80%\">");
 			out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th></tr>");
 			out.flush();
+			Node rootNode = session.getRootNode().getNode(Repository.ROOT);
+			Node baseNode = null;
+			String FOLDER = BM_FLD_BASE + "_jcr";
+			
+			if (rootNode.hasNode(FOLDER)) {
+				baseNode = rootNode.getNode(FOLDER);
+			} else {
+				baseNode = rootNode.addNode(FOLDER, JcrConstants.NT_FOLDER);
+				rootNode.save();
+			}
+			
 			tBegin = System.currentTimeMillis();
-			Node root = session.getRootNode();
-			size = bm.jcrPopulate(session, root, out);
+			size = bm.jcrPopulate(session, baseNode, out);
 			tEnd = System.currentTimeMillis();
 			out.println("</table>");
 		} catch (FileNotFoundException e) {
