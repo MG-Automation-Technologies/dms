@@ -23,6 +23,7 @@ import com.openkm.api.OKMWorkflow;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.WorkflowException;
+import com.openkm.util.UserActivity;
 
 /**
  * Register workflow Servlet
@@ -68,6 +69,8 @@ public class RegisterWorkflowServlet extends BaseServlet {
 					is.close();
 				}
 				
+				// Activity log
+				UserActivity.log(request.getRemoteUser(), "ADMIN_WORKFLOW_REGISTER", fileName, null);
 				response.sendRedirect("Workflow");
 			}
 		} catch (ParseException e) {
