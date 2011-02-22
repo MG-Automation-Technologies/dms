@@ -45,7 +45,7 @@
                 <option value=""></option>
                 <c:forEach var="act" items="${actions}">
                   <c:choose>
-                    <c:when test="${act == 'Auth' || act == 'Document' || act == 'Folder' || act == 'Admin'}">
+                    <c:when test="${act == 'Auth' || act == 'Document' || act == 'Folder' || act == 'Mail' || act == 'Admin'}">
                       <optgroup label="${act}"/>
                     </c:when>
                     <c:otherwise>
