@@ -55,6 +55,7 @@ import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.Benchmark;
 import com.openkm.util.FormatUtil;
 import com.openkm.util.JCRUtils;
+import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
 import com.openkm.util.impexp.HTMLInfoDecorator;
 import com.openkm.util.impexp.ImpExpStats;
@@ -172,6 +173,13 @@ public class BenchmarkServlet extends BaseServlet {
 		out.print("</html>");
 		out.flush();
 		out.close();
+		
+		// Activity log
+		UserActivity.log(request.getRemoteUser(), "ADMIN_BENCHMARK_OKM_IMPORT", null, 
+				"Size: " + FormatUtil.formatSize(tStats.getSize()) +
+				", Folders: " + tStats.getFolders() +
+				", Documents: " + tStats.getDocuments() +
+				", Time: " + FormatUtil.formatSeconds(tEnd - tBegin));
 		log.debug("okmImport: void");
 	}
 	
@@ -246,6 +254,13 @@ public class BenchmarkServlet extends BaseServlet {
 		out.print("</html>");
 		out.flush();
 		out.close();
+		
+		// Activity log
+		UserActivity.log(request.getRemoteUser(), "ADMIN_BENCHMARK_OKM_COPY", null, 
+				"Size: " + FormatUtil.formatSize(cInfo.getSize() * times) +
+				", Folders: " + cInfo.getMails() * times +
+				", Documents: " + cInfo.getDocuments() * times +
+				", Time: " + FormatUtil.formatSeconds(tEnd - tBegin));
 		log.debug("okmCopy: void");
 	}
 	
@@ -258,7 +273,7 @@ public class BenchmarkServlet extends BaseServlet {
 		int maxFolder = WebUtils.getInt(request, "param2");
 		int maxDepth = WebUtils.getInt(request, "param3");
 		PrintWriter out = response.getWriter();
-		long tBegin = 0, tEnd = 0;
+		long tBegin = 0, tEnd = 0, size = 0;
 		Benchmark bm = null;
 		response.setContentType("text/html");
 		header(out);
@@ -278,7 +293,7 @@ public class BenchmarkServlet extends BaseServlet {
 			out.flush();
 			tBegin = System.currentTimeMillis();
 			Folder root = new DirectRepositoryModule().getRootFolder(null);
-			bm.okmApiHighPopulate(null, root, out);
+			size = bm.okmApiHighPopulate(null, root, out);
 			tEnd = System.currentTimeMillis();
 			out.println("</table>");
 		} catch (FileNotFoundException e) {
@@ -318,6 +333,7 @@ public class BenchmarkServlet extends BaseServlet {
 		
 		long elapse = tEnd - tBegin;
 		out.println("<hr/>");
+		out.println("<b>Total size:</b> "+FormatUtil.formatSize(size)+"<br/>");
 		out.println("<b>Total folders:</b> "+bm.getTotalFolders()+"<br/>");
 		out.println("<b>Total documents:</b> "+bm.getTotalDocuments()+"<br/>");
 		out.println("<b>Total time:</b> "+FormatUtil.formatSeconds(elapse)+"<br/>");
@@ -326,6 +342,13 @@ public class BenchmarkServlet extends BaseServlet {
 		out.print("</html>");
 		out.flush();
 		out.close();
+		
+		// Activity log
+		UserActivity.log(request.getRemoteUser(), "ADMIN_BENCHMARK_OKM_API_HIGH", null, 
+				"Size: " + FormatUtil.formatSize(size) +
+				", Folders: " + bm.getTotalFolders() +
+				", Documents: " + bm.getTotalDocuments() +
+				", Time: " + FormatUtil.formatSeconds(elapse));
 		log.debug("okmApiHighGenerate: void");
 	}
 	
@@ -338,7 +361,7 @@ public class BenchmarkServlet extends BaseServlet {
 		int maxFolder = WebUtils.getInt(request, "param2");
 		int maxDepth = WebUtils.getInt(request, "param3");
 		PrintWriter out = response.getWriter();
-		long tBegin = 0, tEnd = 0;
+		long tBegin = 0, tEnd = 0, size = 0;
 		Benchmark bm = null;
 		Session session = null;
 		response.setContentType("text/html");
@@ -360,7 +383,7 @@ public class BenchmarkServlet extends BaseServlet {
 			out.flush();
 			tBegin = System.currentTimeMillis();
 			Node root = session.getRootNode().getNode(Repository.ROOT);
-			bm.okmApiLowPopulate(session, root, out);
+			size = bm.okmApiLowPopulate(session, root, out);
 			tEnd = System.currentTimeMillis();
 			out.println("</table>");
 		} catch (FileNotFoundException e) {
@@ -393,6 +416,7 @@ public class BenchmarkServlet extends BaseServlet {
 		
 		long elapse = tEnd - tBegin;
 		out.println("<hr/>");
+		out.println("<b>Total size:</b> "+FormatUtil.formatSize(size)+"<br/>");
 		out.println("<b>Total folders:</b> "+bm.getTotalFolders()+"<br/>");
 		out.println("<b>Total documents:</b> "+bm.getTotalDocuments()+"<br/>");
 		out.println("<b>Total time:</b> "+FormatUtil.formatSeconds(elapse)+"<br/>");
@@ -401,6 +425,13 @@ public class BenchmarkServlet extends BaseServlet {
 		out.print("</html>");
 		out.flush();
 		out.close();
+		
+		// Activity log
+		UserActivity.log(request.getRemoteUser(), "ADMIN_BENCHMARK_OKM_API_LOW", null, 
+				"Size: " + FormatUtil.formatSize(size) +
+				", Folders: " + bm.getTotalFolders() +
+				", Documents: " + bm.getTotalDocuments() +
+				", Time: " + FormatUtil.formatSeconds(elapse));
 		log.debug("okmApiLowGenerate: void");
 	}
 	
@@ -413,7 +444,7 @@ public class BenchmarkServlet extends BaseServlet {
 		int maxFolder = WebUtils.getInt(request, "param2");
 		int maxDepth = WebUtils.getInt(request, "param3");
 		PrintWriter out = response.getWriter();
-		long tBegin = 0, tEnd = 0;
+		long tBegin = 0, tEnd = 0, size = 0;
 		Benchmark bm = null;
 		Session session = null;
 		response.setContentType("text/html");
@@ -435,7 +466,7 @@ public class BenchmarkServlet extends BaseServlet {
 			out.flush();
 			tBegin = System.currentTimeMillis();
 			Node root = session.getRootNode().getNode(Repository.ROOT);
-			bm.jcrPopulate(session, root, out);
+			size = bm.okmRawPopulate(session, root, out);
 			tEnd = System.currentTimeMillis();
 			out.println("</table>");
 		} catch (FileNotFoundException e) {
@@ -465,6 +496,7 @@ public class BenchmarkServlet extends BaseServlet {
 		
 		long elapse = tEnd - tBegin;
 		out.println("<hr/>");
+		out.println("<b>Total size:</b> "+FormatUtil.formatSize(size)+"<br/>");
 		out.println("<b>Total folders:</b> "+bm.getTotalFolders()+"<br/>");
 		out.println("<b>Total documents:</b> "+bm.getTotalDocuments()+"<br/>");
 		out.println("<b>Total time:</b> "+FormatUtil.formatSeconds(elapse)+"<br/>");
@@ -473,6 +505,13 @@ public class BenchmarkServlet extends BaseServlet {
 		out.print("</html>");
 		out.flush();
 		out.close();
+		
+		// Activity log
+		UserActivity.log(request.getRemoteUser(), "ADMIN_BENCHMARK_OKM_RAW", null, 
+				"Size: " + FormatUtil.formatSize(size) +
+				", Folders: " + bm.getTotalFolders() +
+				", Documents: " + bm.getTotalDocuments() +
+				", Time: " + FormatUtil.formatSeconds(elapse));
 		log.debug("okmRawGenerate: void");
 	}
 	
@@ -485,7 +524,7 @@ public class BenchmarkServlet extends BaseServlet {
 		int maxFolder = WebUtils.getInt(request, "param2");
 		int maxDepth = WebUtils.getInt(request, "param3");
 		PrintWriter out = response.getWriter();
-		long tBegin = 0, tEnd = 0;
+		long tBegin = 0, tEnd = 0, size = 0;
 		Benchmark bm = null;
 		Session session = null;
 		response.setContentType("text/html");
@@ -507,7 +546,7 @@ public class BenchmarkServlet extends BaseServlet {
 			out.flush();
 			tBegin = System.currentTimeMillis();
 			Node root = session.getRootNode();
-			bm.jcrPopulate(session, root, out);
+			size = bm.jcrPopulate(session, root, out);
 			tEnd = System.currentTimeMillis();
 			out.println("</table>");
 		} catch (FileNotFoundException e) {
@@ -537,6 +576,7 @@ public class BenchmarkServlet extends BaseServlet {
 		
 		long elapse = tEnd - tBegin;
 		out.println("<hr/>");
+		out.println("<b>Total size:</b> "+FormatUtil.formatSize(size)+"<br/>");
 		out.println("<b>Total folders:</b> "+bm.getTotalFolders()+"<br/>");
 		out.println("<b>Total documents:</b> "+bm.getTotalDocuments()+"<br/>");
 		out.println("<b>Total time:</b> "+FormatUtil.formatSeconds(elapse)+"<br/>");
@@ -545,6 +585,13 @@ public class BenchmarkServlet extends BaseServlet {
 		out.print("</html>");
 		out.flush();
 		out.close();
+		
+		// Activity log
+		UserActivity.log(request.getRemoteUser(), "ADMIN_BENCHMARK_JCR", null, 
+				"Size: " + FormatUtil.formatSize(size) +
+				", Folders: " + bm.getTotalFolders() +
+				", Documents: " + bm.getTotalDocuments() +
+				", Time: " + FormatUtil.formatSeconds(elapse));
 		log.debug("jcrGenerate: void");
 	}
 
