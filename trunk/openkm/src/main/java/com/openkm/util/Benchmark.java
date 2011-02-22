@@ -165,25 +165,27 @@ public class Benchmark {
 	/**
 	 * Run OpenKM text document insertions (API)
 	 */
-	public void okmApiHighPopulate(String token, Folder root, PrintWriter out) throws IOException,
+	public long okmApiHighPopulate(String token, Folder root, PrintWriter out) throws IOException,
 			InputMismatchException, ItemExistsException, PathNotFoundException, UserQuotaExceededException, 
 			AccessDeniedException, UnsupportedMimeTypeException, FileSizeExceededException,
 			VirusDetectedException, RepositoryException, DatabaseException {
 		long begin = System.currentTimeMillis();
-		okmApiHighPopulateHelper(token, root, out, gen, 0);
+		long size = okmApiHighPopulateHelper(token, root, out, gen, 0);
 		long end = System.currentTimeMillis();
 		String elapse = FormatUtil.formatSeconds(end - begin);
 		log.info("Total Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
+		return size;
 	}
 	
 	/**
 	 * Helper
 	 */
-	private void okmApiHighPopulateHelper(String token, Folder root, PrintWriter out, Generator gen, int depth) throws 
+	private long okmApiHighPopulateHelper(String token, Folder root, PrintWriter out, Generator gen, int depth) throws 
 			InputMismatchException, IOException, ItemExistsException, PathNotFoundException,
 			UserQuotaExceededException,	AccessDeniedException, UnsupportedMimeTypeException, 
 			FileSizeExceededException, VirusDetectedException, RepositoryException, DatabaseException {
 		log.debug("okmApiHighPopulateHelper({}, {}, {}, {})", new Object[] { token, root, gen, depth });
+		long size = 0;
 		
 		if (depth < maxDepth) {
 			for (int i=0; i<maxFolders; i++) {
@@ -198,6 +200,7 @@ public class Benchmark {
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					gen.generateText(PARAGRAPH, LINE_WIDTH, TOTAL_CHARS, baos);
 					baos.close();
+					size += baos.size();
 					
 					// Repository insertion
 					ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
@@ -221,40 +224,43 @@ public class Benchmark {
 				out.flush();
 				
 				// Go depth
-				okmApiHighPopulateHelper(token, fld, out, gen, depth+1);
+				size += okmApiHighPopulateHelper(token, fld, out, gen, depth+1);
 			}
 		} else {
 			log.debug("Max depth reached: {}", depth);
-			return;
 		}
+		
+		return size;
 	}
 	
 	/**
 	 * Run OpenKM text document insertions (API)
 	 */
-	public void okmApiLowPopulate(Session session, Node root, PrintWriter out) throws
+	public long okmApiLowPopulate(Session session, Node root, PrintWriter out) throws
 			javax.jcr.ItemExistsException, javax.jcr.PathNotFoundException, 
 			javax.jcr.nodetype.NoSuchNodeTypeException, javax.jcr.lock.LockException,
 			javax.jcr.version.VersionException, javax.jcr.nodetype.ConstraintViolationException, 
 			javax.jcr.RepositoryException, InputMismatchException, IOException, DatabaseException,
 			UserQuotaExceededException {
 		long begin = System.currentTimeMillis();
-		okmApiLowPopulateHelper(session, root, out, gen, 0);
+		long size = okmApiLowPopulateHelper(session, root, out, gen, 0);
 		long end = System.currentTimeMillis();
 		String elapse = FormatUtil.formatSeconds(end - begin);
 		log.info("Total Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
+		return size;
 	}
 	
 	/**
 	 * Helper
 	 */
-	private void okmApiLowPopulateHelper(Session session, Node root, PrintWriter out, Generator gen, int depth) throws 
+	private long okmApiLowPopulateHelper(Session session, Node root, PrintWriter out, Generator gen, int depth) throws 
 			javax.jcr.ItemExistsException, javax.jcr.PathNotFoundException, 
 			javax.jcr.nodetype.NoSuchNodeTypeException, javax.jcr.lock.LockException,
 			javax.jcr.version.VersionException, javax.jcr.nodetype.ConstraintViolationException, 
 			javax.jcr.RepositoryException, InputMismatchException, IOException, DatabaseException, 
 			UserQuotaExceededException {
 		log.debug("okmApiLowPopulateHelper({}, {}, {}, {})", new Object[] { session, root, gen, depth });
+		long size = 0;
 		
 		if (depth < maxDepth) {
 			for (int i=0; i<maxFolders; i++) {
@@ -267,6 +273,7 @@ public class Benchmark {
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					gen.generateText(PARAGRAPH, LINE_WIDTH, TOTAL_CHARS, baos);
 					baos.close();
+					size += baos.size();
 					
 					// Repository insertion
 					ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
@@ -288,38 +295,41 @@ public class Benchmark {
 				out.flush();
 				
 				// Go depth
-				okmApiLowPopulateHelper(session, fld, out, gen, depth+1);
+				size += okmApiLowPopulateHelper(session, fld, out, gen, depth+1);
 			}
 		} else {
 			log.debug("Max depth reached: {}", depth);
-			return;
 		}
+		
+		return size;
 	}
 	
 	/**
 	 * Run OpenKM text document insertions (RAW)
 	 */
-	public void okmRawPopulate(Session session, Node root, PrintWriter out) throws
+	public long okmRawPopulate(Session session, Node root, PrintWriter out) throws
 			javax.jcr.ItemExistsException, javax.jcr.PathNotFoundException, 
 			javax.jcr.nodetype.NoSuchNodeTypeException, javax.jcr.lock.LockException,
 			javax.jcr.version.VersionException, javax.jcr.nodetype.ConstraintViolationException, 
 			javax.jcr.RepositoryException, InputMismatchException, IOException {
 		long begin = System.currentTimeMillis();
-		okmRawPopulateHelper(session, root, out, gen, 0);
+		long size = okmRawPopulateHelper(session, root, out, gen, 0);
 		long end = System.currentTimeMillis();
 		String elapse = FormatUtil.formatSeconds(end - begin);
 		log.info("Total Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
+		return size;
 	}
 	
 	/**
 	 * Helper
 	 */
-	private void okmRawPopulateHelper(Session session, Node root, PrintWriter out, Generator gen, int depth)
+	private long okmRawPopulateHelper(Session session, Node root, PrintWriter out, Generator gen, int depth)
 			throws javax.jcr.ItemExistsException, javax.jcr.PathNotFoundException, 
 			javax.jcr.nodetype.NoSuchNodeTypeException, javax.jcr.lock.LockException,
 			javax.jcr.version.VersionException, javax.jcr.nodetype.ConstraintViolationException, 
 			javax.jcr.RepositoryException, InputMismatchException, IOException {
 		log.debug("okmRawPopulateHelper({}, {}, {}, {})", new Object[] { session, root, gen, depth });
+		long size = 0;
 		
 		if (depth < maxDepth) {
 			for (int i=0; i<maxFolders; i++) {
@@ -334,6 +344,7 @@ public class Benchmark {
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					gen.generateText(PARAGRAPH, LINE_WIDTH, TOTAL_CHARS, baos);
 					baos.close();
+					size += baos.size();
 					
 					// Repository insertion
 					ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
@@ -371,38 +382,41 @@ public class Benchmark {
 				out.flush();
 				
 				// Go depth
-				okmRawPopulateHelper(session, fld, out, gen, depth+1);
+				size += okmRawPopulateHelper(session, fld, out, gen, depth+1);
 			}
 		} else {
 			log.debug("Max depth reached: {}", depth);
-			return;
 		}
+		
+		return size;
 	}
 	
 	/**
 	 * Run JCR text document insertions
 	 */
-	public void jcrPopulate(Session session, Node root, PrintWriter out) throws IOException,
+	public long jcrPopulate(Session session, Node root, PrintWriter out) throws IOException,
 			javax.jcr.ItemExistsException, javax.jcr.PathNotFoundException, 
 			javax.jcr.nodetype.NoSuchNodeTypeException, javax.jcr.lock.LockException,
 			javax.jcr.version.VersionException, javax.jcr.nodetype.ConstraintViolationException, 
 			javax.jcr.RepositoryException, InputMismatchException, IOException {
 		long begin = System.currentTimeMillis();
-		jcrPopulateHelper(session, root, out, gen, 0);
+		long size = jcrPopulateHelper(session, root, out, gen, 0);
 		long end = System.currentTimeMillis();
 		String elapse = FormatUtil.formatSeconds(end - begin);
 		log.info("Total Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
+		return size;
 	}
 	
 	/**
 	 * Helper
 	 */
-	private void jcrPopulateHelper(Session session, Node root, PrintWriter out, Generator gen, int depth) throws 
+	private long jcrPopulateHelper(Session session, Node root, PrintWriter out, Generator gen, int depth) throws 
 			javax.jcr.ItemExistsException, javax.jcr.PathNotFoundException, 
 			javax.jcr.nodetype.NoSuchNodeTypeException, javax.jcr.lock.LockException,
 			javax.jcr.version.VersionException, javax.jcr.nodetype.ConstraintViolationException, 
 			javax.jcr.RepositoryException, InputMismatchException, IOException {
 		log.debug("jcrPopulateHelper({}, {}, {}, {})", new Object[] { session, root, gen, depth });
+		long size = 0;
 		
 		if (depth < maxDepth) {
 			for (int i=0; i<maxFolders; i++) {
@@ -417,6 +431,7 @@ public class Benchmark {
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					gen.generateText(PARAGRAPH, LINE_WIDTH, TOTAL_CHARS, baos);
 					baos.close();
+					size += baos.size();
 					
 					// Repository insertion
 					ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
@@ -444,11 +459,12 @@ public class Benchmark {
 				out.flush();
 				
 				// Go depth
-				jcrPopulateHelper(session, fld, out, gen, depth+1);
+				size += jcrPopulateHelper(session, fld, out, gen, depth+1);
 			}
 		} else {
 			log.debug("Max depth reached: {}", depth);
-			return;
 		}
+		
+		return size;
 	}
 }
