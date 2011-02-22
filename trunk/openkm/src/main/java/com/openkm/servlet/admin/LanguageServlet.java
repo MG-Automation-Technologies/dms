@@ -65,6 +65,7 @@ import com.openkm.dao.bean.Language;
 import com.openkm.dao.bean.Translation;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.SecureStore;
+import com.openkm.util.UserActivity;
 import com.openkm.util.WarUtils;
 import com.openkm.util.WebUtils;
 
@@ -177,6 +178,9 @@ public class LanguageServlet extends BaseServlet {
 					}
 					
 					LanguageDAO.create(lang);
+					
+					// Activity log
+					UserActivity.log(request.getRemoteUser(), "ADMIN_LANGUAGE_CREATE", lang.getId(), lang.toString());
 				} else if (action.equals("edit")) {
 					Language lang = LanguageDAO.findByPk(lgId);
 					lang.setName(name);
@@ -187,11 +191,20 @@ public class LanguageServlet extends BaseServlet {
 					}
 					
 					LanguageDAO.update(lang);
+					
+					// Activity log
+					UserActivity.log(request.getRemoteUser(), "ADMIN_LANGUAGE_EDIT", lang.getId(), lang.toString());
 				} else  if (action.equals("delete")) {
 					LanguageDAO.delete(lgId);
+					
+					// Activity log
+					UserActivity.log(request.getRemoteUser(), "ADMIN_LANGUAGE_DELETE", lgId, null);
 				} else if (action.equals("import")) {
 					hibernateSession = HibernateUtil.getSessionFactory().openSession();
 					importLanguage(session, request, response, data, hibernateSession);
+					
+					// Activity log
+					UserActivity.log(request.getRemoteUser(), "ADMIN_LANGUAGE_IMPORT", null, null);
 				}
 			} else if (action.equals("translate")) {
 				translate(session, request, response);
