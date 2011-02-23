@@ -110,6 +110,10 @@ public class DocConverter {
 			
 			if (!Config.SYSTEM_OPENOFFICE_PATH.equals("")) {
 				log.info("*** Build Office Manager ***");
+				log.info("system.openoffice.path=" + Config.SYSTEM_OPENOFFICE_PATH);
+				log.info("system.openoffice.tasks=" + Config.SYSTEM_OPENOFFICE_TASKS);
+				log.info("system.openoffice.port=" + Config.SYSTEM_OPENOFFICE_PORT);
+				
 				officeManager = new DefaultOfficeManagerConfiguration()
 					.setOfficeHome(Config.SYSTEM_OPENOFFICE_PATH)
 					.setMaxTasksPerProcess(Config.SYSTEM_OPENOFFICE_TASKS)
