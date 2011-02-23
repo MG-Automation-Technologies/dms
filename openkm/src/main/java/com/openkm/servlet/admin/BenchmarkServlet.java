@@ -517,7 +517,6 @@ public class BenchmarkServlet extends BaseServlet {
 		} catch (javax.jcr.RepositoryException e) {
 			out.println("<div class=\"warn\">RepositoryException: "+e.getMessage()+"</div>");
 			out.flush();
-			e.printStackTrace();
 		} catch (InputMismatchException e) {
 			out.println("<div class=\"warn\">InputMismatchException: "+e.getMessage()+"</div>");
 			out.flush();
