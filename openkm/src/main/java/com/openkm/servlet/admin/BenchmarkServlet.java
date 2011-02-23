@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Calendar;
 import java.util.InputMismatchException;
 
 import javax.jcr.Node;
@@ -45,6 +46,7 @@ import com.openkm.bean.ContentInfo;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Repository;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
@@ -278,8 +280,10 @@ public class BenchmarkServlet extends BaseServlet {
 		int maxDocuments = WebUtils.getInt(request, "param1");
 		int maxFolder = WebUtils.getInt(request, "param2");
 		int maxDepth = WebUtils.getInt(request, "param3");
+		int maxIterations = WebUtils.getInt(request, "param4");
 		PrintWriter out = response.getWriter();
-		long tBegin = 0, tEnd = 0, size = 0;
+		PrintWriter results = new PrintWriter(Config.HOME_DIR + File.separator + base + ".csv");
+		long tBegin = 0, tEnd = 0, pBegin = 0, pEnd = 0;
 		Benchmark bm = null;
 		response.setContentType("text/html");
 		header(out);
@@ -294,21 +298,49 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<b>- Calibration:</b> "+bm.runCalibration()+" ms<br/>");
 			out.println("<b>- Calculated foldes:</b> "+bm.calculateFolders()+"<br/>");
 			out.println("<b>- Calculated documents:</b> "+bm.calculateDocuments()+"<br/><br/>");
-			out.println("<table class=\"results\" width=\"80%\">");
-			out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th></tr>");
-			out.flush();
+			tBegin = System.currentTimeMillis();
 			
-			Folder fld = OKMRepository.getInstance().getRootFolder(null);
-			fld.setPath(fld.getPath() + "/" + base);
-			
-			if (!OKMRepository.getInstance().hasNode(null, fld.getPath())) {
-				fld = OKMFolder.getInstance().create(null, fld);
+			for (int i=0; i < maxIterations; i++) {
+				out.println("<h2>Iteration "+i+"</h2>");
+				out.println("<table class=\"results\" width=\"80%\">");
+				out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th><th>Total size</th></tr>");
+				out.flush();
+				
+				Folder fld = OKMRepository.getInstance().getRootFolder(null);
+				fld.setPath(fld.getPath() + "/" + base);
+				
+				if (!OKMRepository.getInstance().hasNode(null, fld.getPath())) {
+					fld = OKMFolder.getInstance().create(null, fld);
+				}
+				
+				PrintWriter pResults = new PrintWriter(Config.HOME_DIR + File.separator + base + "_" + i + ".csv");
+				pBegin = System.currentTimeMillis();
+				bm.okmApiHighPopulate(null, fld, out, pResults);
+				pEnd = System.currentTimeMillis();
+				pResults.close();
+				out.println("</table>");
+				
+				results.print("\"" + FormatUtil.formatDate(Calendar.getInstance()) + "\",");
+				results.print("\"" + FormatUtil.formatSeconds(pEnd - pBegin) + "\",");
+				results.print("\"" + (pEnd - pBegin) + "\",");
+				results.print("\"" + bm.getTotalFolders() + "\",");
+				results.print("\"" + bm.getTotalDocuments() + "\",");
+				results.print("\"" + FormatUtil.formatSize(bm.getTotalSize()) + "\"\n");
+				results.flush();
+				
+				out.println("<table class=\"results\" width=\"80%\">");
+				out.println("<tr><th>Date</th><th>Partial seconds</th><th>Total folders</th><th>Total documents</th><th>Total size</th></tr>");
+				out.println("<td>"+FormatUtil.formatDate(Calendar.getInstance())+"</td>");
+				out.println("<td>"+FormatUtil.formatSeconds(pEnd - pBegin)+"</td>");
+				out.println("<td>"+bm.getTotalFolders()+"</td>");
+				out.println("<td>"+bm.getTotalDocuments()+"</td>");
+				out.println("<td>"+FormatUtil.formatSize(bm.getTotalSize())+"</td>");
+				out.println("</tr>");
+				out.println("</table>");
+				out.flush();
 			}
 			
-			tBegin = System.currentTimeMillis();
-			size = bm.okmApiHighPopulate(null, fld, out);
 			tEnd = System.currentTimeMillis();
-			out.println("</table>");
 		} catch (FileNotFoundException e) {
 			out.println("<div class=\"warn\">FileNotFoundException: "+e.getMessage()+"</div>");
 			out.flush();
@@ -346,7 +378,7 @@ public class BenchmarkServlet extends BaseServlet {
 		
 		long elapse = tEnd - tBegin;
 		out.println("<hr/>");
-		out.println("<b>Total size:</b> "+FormatUtil.formatSize(size)+"<br/>");
+		out.println("<b>Total size:</b> "+FormatUtil.formatSize(bm.getTotalSize())+"<br/>");
 		out.println("<b>Total folders:</b> "+bm.getTotalFolders()+"<br/>");
 		out.println("<b>Total documents:</b> "+bm.getTotalDocuments()+"<br/>");
 		out.println("<b>Total time:</b> "+FormatUtil.formatSeconds(elapse)+"<br/>");
@@ -355,10 +387,11 @@ public class BenchmarkServlet extends BaseServlet {
 		out.print("</html>");
 		out.flush();
 		out.close();
+		results.close();
 		
 		// Activity log
 		UserActivity.log(request.getRemoteUser(), "ADMIN_BENCHMARK_OKM_API_HIGH", null, 
-				"Size: " + FormatUtil.formatSize(size) +
+				"Size: " + FormatUtil.formatSize(bm.getTotalSize()) +
 				", Folders: " + bm.getTotalFolders() +
 				", Documents: " + bm.getTotalDocuments() +
 				", Time: " + FormatUtil.formatSeconds(elapse));
@@ -374,8 +407,10 @@ public class BenchmarkServlet extends BaseServlet {
 		int maxDocuments = WebUtils.getInt(request, "param1");
 		int maxFolder = WebUtils.getInt(request, "param2");
 		int maxDepth = WebUtils.getInt(request, "param3");
+		int maxIterations = WebUtils.getInt(request, "param4");
 		PrintWriter out = response.getWriter();
-		long tBegin = 0, tEnd = 0, size = 0;
+		PrintWriter results = new PrintWriter(Config.HOME_DIR + File.separator + base + ".csv");
+		long tBegin = 0, tEnd = 0, pBegin = 0, pEnd = 0;
 		Benchmark bm = null;
 		Session session = null;
 		response.setContentType("text/html");
@@ -392,23 +427,51 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<b>- Calibration:</b> "+bm.runCalibration()+" ms<br/>");
 			out.println("<b>- Calculated foldes:</b> "+bm.calculateFolders()+"<br/>");
 			out.println("<b>- Calculated documents:</b> "+bm.calculateDocuments()+"<br/><br/>");
-			out.println("<table class=\"results\" width=\"80%\">");
-			out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th></tr>");
-			out.flush();
+			tBegin = System.currentTimeMillis();
 			
-			Node rootNode = session.getRootNode().getNode(Repository.ROOT);
-			Node baseNode = null;
-						
-			if (rootNode.hasNode(base)) {
-				baseNode = rootNode.getNode(base);
-			} else {
-				baseNode = BaseFolderModule.create(session, rootNode, base);
+			for (int i=0; i < maxIterations; i++) {
+				out.println("<h2>Iteration "+i+"</h2>");
+				out.println("<table class=\"results\" width=\"80%\">");
+				out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th><th>Total size</th></tr>");
+				out.flush();
+				
+				Node rootNode = session.getRootNode().getNode(Repository.ROOT);
+				Node baseNode = null;
+				
+				if (rootNode.hasNode(base)) {
+					baseNode = rootNode.getNode(base);
+				} else {
+					baseNode = BaseFolderModule.create(session, rootNode, base);
+				}
+				
+				PrintWriter pResults = new PrintWriter(Config.HOME_DIR + File.separator + base + "_" + i + ".csv");
+				pBegin = System.currentTimeMillis();
+				bm.okmApiLowPopulate(session, baseNode, out, pResults);
+				pEnd = System.currentTimeMillis();
+				pResults.close();
+				out.println("</table>");
+				
+				results.print("\"" + FormatUtil.formatDate(Calendar.getInstance()) + "\",");
+				results.print("\"" + FormatUtil.formatSeconds(pEnd - pBegin) + "\",");
+				results.print("\"" + (pEnd - pBegin) + "\",");
+				results.print("\"" + bm.getTotalFolders() + "\",");
+				results.print("\"" + bm.getTotalDocuments() + "\",");
+				results.print("\"" + FormatUtil.formatSize(bm.getTotalSize()) + "\"\n");
+				results.flush();
+				
+				out.println("<table class=\"results\" width=\"80%\">");
+				out.println("<tr><th>Date</th><th>Partial seconds</th><th>Total folders</th><th>Total documents</th><th>Total size</th></tr>");
+				out.println("<td>"+FormatUtil.formatDate(Calendar.getInstance())+"</td>");
+				out.println("<td>"+FormatUtil.formatSeconds(pEnd - pBegin)+"</td>");
+				out.println("<td>"+bm.getTotalFolders()+"</td>");
+				out.println("<td>"+bm.getTotalDocuments()+"</td>");
+				out.println("<td>"+FormatUtil.formatSize(bm.getTotalSize())+"</td>");
+				out.println("</tr>");
+				out.println("</table>");
+				out.flush();
 			}
 			
-			tBegin = System.currentTimeMillis();
-			size = bm.okmApiLowPopulate(session, baseNode, out);
 			tEnd = System.currentTimeMillis();
-			out.println("</table>");
 		} catch (FileNotFoundException e) {
 			out.println("<div class=\"warn\">FileNotFoundException: "+e.getMessage()+"</div>");
 			out.flush();
@@ -439,7 +502,7 @@ public class BenchmarkServlet extends BaseServlet {
 		
 		long elapse = tEnd - tBegin;
 		out.println("<hr/>");
-		out.println("<b>Total size:</b> "+FormatUtil.formatSize(size)+"<br/>");
+		out.println("<b>Total size:</b> "+FormatUtil.formatSize(bm.getTotalSize())+"<br/>");
 		out.println("<b>Total folders:</b> "+bm.getTotalFolders()+"<br/>");
 		out.println("<b>Total documents:</b> "+bm.getTotalDocuments()+"<br/>");
 		out.println("<b>Total time:</b> "+FormatUtil.formatSeconds(elapse)+"<br/>");
@@ -448,10 +511,11 @@ public class BenchmarkServlet extends BaseServlet {
 		out.print("</html>");
 		out.flush();
 		out.close();
+		results.close();
 		
 		// Activity log
 		UserActivity.log(request.getRemoteUser(), "ADMIN_BENCHMARK_OKM_API_LOW", null, 
-				"Size: " + FormatUtil.formatSize(size) +
+				"Size: " + FormatUtil.formatSize(bm.getTotalSize()) +
 				", Folders: " + bm.getTotalFolders() +
 				", Documents: " + bm.getTotalDocuments() +
 				", Time: " + FormatUtil.formatSeconds(elapse));
@@ -467,8 +531,10 @@ public class BenchmarkServlet extends BaseServlet {
 		int maxDocuments = WebUtils.getInt(request, "param1");
 		int maxFolder = WebUtils.getInt(request, "param2");
 		int maxDepth = WebUtils.getInt(request, "param3");
+		int maxIterations = WebUtils.getInt(request, "param4");
 		PrintWriter out = response.getWriter();
-		long tBegin = 0, tEnd = 0, size = 0;
+		PrintWriter results = new PrintWriter(Config.HOME_DIR + File.separator + base + ".csv");
+		long tBegin = 0, tEnd = 0, pBegin = 0, pEnd = 0;
 		Benchmark bm = null;
 		Session session = null;
 		response.setContentType("text/html");
@@ -485,23 +551,51 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<b>- Calibration:</b> "+bm.runCalibration()+" ms<br/>");
 			out.println("<b>- Calculated foldes:</b> "+bm.calculateFolders()+"<br/>");
 			out.println("<b>- Calculated documents:</b> "+bm.calculateDocuments()+"<br/><br/>");
-			out.println("<table class=\"results\" width=\"80%\">");
-			out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th></tr>");
-			out.flush();
+			tBegin = System.currentTimeMillis();
 			
-			Node rootNode = session.getRootNode().getNode(Repository.ROOT);
-			Node baseNode = null;
-						
-			if (rootNode.hasNode(base)) {
-				baseNode = rootNode.getNode(base);
-			} else {
-				baseNode = BaseFolderModule.create(session, rootNode, base);
+			for (int i=0; i < maxIterations; i++) {
+				out.println("<h2>Iteration "+i+"</h2>");
+				out.println("<table class=\"results\" width=\"80%\">");
+				out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th><th>Total size</th></tr>");
+				out.flush();
+				
+				Node rootNode = session.getRootNode().getNode(Repository.ROOT);
+				Node baseNode = null;
+				
+				if (rootNode.hasNode(base)) {
+					baseNode = rootNode.getNode(base);
+				} else {
+					baseNode = BaseFolderModule.create(session, rootNode, base);
+				}
+				
+				PrintWriter pResults = new PrintWriter(Config.HOME_DIR + File.separator + base + "_" + i + ".csv");
+				pBegin = System.currentTimeMillis();
+				bm.okmRawPopulate(session, baseNode, out, pResults);
+				pEnd = System.currentTimeMillis();
+				pResults.close();
+				out.println("</table>");
+				
+				results.print("\"" + FormatUtil.formatDate(Calendar.getInstance()) + "\",");
+				results.print("\"" + FormatUtil.formatSeconds(pEnd - pBegin) + "\",");
+				results.print("\"" + (pEnd - pBegin) + "\",");
+				results.print("\"" + bm.getTotalFolders() + "\",");
+				results.print("\"" + bm.getTotalDocuments() + "\",");
+				results.print("\"" + FormatUtil.formatSize(bm.getTotalSize()) + "\"\n");
+				results.flush();
+				
+				out.println("<table class=\"results\" width=\"80%\">");
+				out.println("<tr><th>Date</th><th>Partial seconds</th><th>Total folders</th><th>Total documents</th><th>Total size</th></tr>");
+				out.println("<td>"+FormatUtil.formatDate(Calendar.getInstance())+"</td>");
+				out.println("<td>"+FormatUtil.formatSeconds(pEnd - pBegin)+"</td>");
+				out.println("<td>"+bm.getTotalFolders()+"</td>");
+				out.println("<td>"+bm.getTotalDocuments()+"</td>");
+				out.println("<td>"+FormatUtil.formatSize(bm.getTotalSize())+"</td>");
+				out.println("</tr>");
+				out.println("</table>");
+				out.flush();
 			}
 			
-			tBegin = System.currentTimeMillis();
-			size = bm.okmRawPopulate(session, baseNode, out);
 			tEnd = System.currentTimeMillis();
-			out.println("</table>");
 		} catch (FileNotFoundException e) {
 			out.println("<div class=\"warn\">FileNotFoundException: "+e.getMessage()+"</div>");
 			out.flush();
@@ -529,7 +623,7 @@ public class BenchmarkServlet extends BaseServlet {
 		
 		long elapse = tEnd - tBegin;
 		out.println("<hr/>");
-		out.println("<b>Total size:</b> "+FormatUtil.formatSize(size)+"<br/>");
+		out.println("<b>Total size:</b> "+FormatUtil.formatSize(bm.getTotalSize())+"<br/>");
 		out.println("<b>Total folders:</b> "+bm.getTotalFolders()+"<br/>");
 		out.println("<b>Total documents:</b> "+bm.getTotalDocuments()+"<br/>");
 		out.println("<b>Total time:</b> "+FormatUtil.formatSeconds(elapse)+"<br/>");
@@ -538,10 +632,11 @@ public class BenchmarkServlet extends BaseServlet {
 		out.print("</html>");
 		out.flush();
 		out.close();
+		results.close();
 		
 		// Activity log
 		UserActivity.log(request.getRemoteUser(), "ADMIN_BENCHMARK_OKM_RAW", null, 
-				"Size: " + FormatUtil.formatSize(size) +
+				"Size: " + FormatUtil.formatSize(bm.getTotalSize()) +
 				", Folders: " + bm.getTotalFolders() +
 				", Documents: " + bm.getTotalDocuments() +
 				", Time: " + FormatUtil.formatSeconds(elapse));
@@ -557,8 +652,10 @@ public class BenchmarkServlet extends BaseServlet {
 		int maxDocuments = WebUtils.getInt(request, "param1");
 		int maxFolder = WebUtils.getInt(request, "param2");
 		int maxDepth = WebUtils.getInt(request, "param3");
+		int maxIterations = WebUtils.getInt(request, "param4");
 		PrintWriter out = response.getWriter();
-		long tBegin = 0, tEnd = 0, size = 0;
+		PrintWriter results = new PrintWriter(Config.HOME_DIR + File.separator + base + ".csv");
+		long tBegin = 0, tEnd = 0, pBegin = 0, pEnd = 0;
 		Benchmark bm = null;
 		Session session = null;
 		response.setContentType("text/html");
@@ -575,24 +672,52 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<b>- Calibration:</b> "+bm.runCalibration()+" ms<br/>");
 			out.println("<b>- Calculated foldes:</b> "+bm.calculateFolders()+"<br/>");
 			out.println("<b>- Calculated documents:</b> "+bm.calculateDocuments()+"<br/><br/>");
-			out.println("<table class=\"results\" width=\"80%\">");
-			out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th></tr>");
-			out.flush();
+			tBegin = System.currentTimeMillis();
 			
-			Node rootNode = session.getRootNode().getNode(Repository.ROOT);
-			Node baseNode = null;
-						
-			if (rootNode.hasNode(base)) {
-				baseNode = rootNode.getNode(base);
-			} else {
-				baseNode = rootNode.addNode(base, JcrConstants.NT_FOLDER);
-				rootNode.save();
+			for (int i=0; i < maxIterations; i++) {
+				out.println("<h2>Iteration "+i+"</h2>");
+				out.println("<table class=\"results\" width=\"80%\">");
+				out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th><th>Total size</th></tr>");
+				out.flush();
+				
+				Node rootNode = session.getRootNode().getNode(Repository.ROOT);
+				Node baseNode = null;
+				
+				if (rootNode.hasNode(base)) {
+					baseNode = rootNode.getNode(base);
+				} else {
+					baseNode = rootNode.addNode(base, JcrConstants.NT_FOLDER);
+					rootNode.save();
+				}
+				
+				PrintWriter pResults = new PrintWriter(Config.HOME_DIR + File.separator + base + "_" + i + ".csv");
+				pBegin = System.currentTimeMillis();
+				bm.jcrPopulate(session, baseNode, out, pResults);
+				pEnd = System.currentTimeMillis();
+				pResults.close();
+				out.println("</table>");
+				
+				results.print("\"" + FormatUtil.formatDate(Calendar.getInstance()) + "\",");
+				results.print("\"" + FormatUtil.formatSeconds(pEnd - pBegin) + "\",");
+				results.print("\"" + (pEnd - pBegin) + "\",");
+				results.print("\"" + bm.getTotalFolders() + "\",");
+				results.print("\"" + bm.getTotalDocuments() + "\",");
+				results.print("\"" + FormatUtil.formatSize(bm.getTotalSize()) + "\"\n");
+				results.flush();
+				
+				out.println("<table class=\"results\" width=\"80%\">");
+				out.println("<tr><th>Date</th><th>Partial seconds</th><th>Total folders</th><th>Total documents</th><th>Total size</th></tr>");
+				out.println("<td>"+FormatUtil.formatDate(Calendar.getInstance())+"</td>");
+				out.println("<td>"+FormatUtil.formatSeconds(pEnd - pBegin)+"</td>");
+				out.println("<td>"+bm.getTotalFolders()+"</td>");
+				out.println("<td>"+bm.getTotalDocuments()+"</td>");
+				out.println("<td>"+FormatUtil.formatSize(bm.getTotalSize())+"</td>");
+				out.println("</tr>");
+				out.println("</table>");
+				out.flush();
 			}
 			
-			tBegin = System.currentTimeMillis();
-			size = bm.jcrPopulate(session, baseNode, out);
 			tEnd = System.currentTimeMillis();
-			out.println("</table>");
 		} catch (FileNotFoundException e) {
 			out.println("<div class=\"warn\">FileNotFoundException: "+e.getMessage()+"</div>");
 			out.flush();
@@ -620,7 +745,7 @@ public class BenchmarkServlet extends BaseServlet {
 		
 		long elapse = tEnd - tBegin;
 		out.println("<hr/>");
-		out.println("<b>Total size:</b> "+FormatUtil.formatSize(size)+"<br/>");
+		out.println("<b>Total size:</b> "+FormatUtil.formatSize(bm.getTotalSize())+"<br/>");
 		out.println("<b>Total folders:</b> "+bm.getTotalFolders()+"<br/>");
 		out.println("<b>Total documents:</b> "+bm.getTotalDocuments()+"<br/>");
 		out.println("<b>Total time:</b> "+FormatUtil.formatSeconds(elapse)+"<br/>");
@@ -629,10 +754,11 @@ public class BenchmarkServlet extends BaseServlet {
 		out.print("</html>");
 		out.flush();
 		out.close();
+		results.close();
 		
 		// Activity log
 		UserActivity.log(request.getRemoteUser(), "ADMIN_BENCHMARK_JCR", null, 
-				"Size: " + FormatUtil.formatSize(size) +
+				"Size: " + FormatUtil.formatSize(bm.getTotalSize()) +
 				", Folders: " + bm.getTotalFolders() +
 				", Documents: " + bm.getTotalDocuments() +
 				", Time: " + FormatUtil.formatSeconds(elapse));
