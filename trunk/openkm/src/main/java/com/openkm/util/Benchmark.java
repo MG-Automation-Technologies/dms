@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
+import com.openkm.bean.Permission;
 import com.openkm.bean.Property;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
@@ -334,11 +335,24 @@ public class Benchmark {
 		if (depth < maxDepth) {
 			for (int i=0; i<maxFolders; i++) {
 				long begin = System.currentTimeMillis();
-				Node fld = root.addNode(Long.toString(System.currentTimeMillis()), JcrConstants.NT_FOLDER);
-				fld.addMixin(JcrConstants.MIX_REFERENCEABLE);
+				String fldName = Long.toString(System.currentTimeMillis());
+				Node fldNode = root.addNode(fldName, Folder.TYPE);
+				fldNode.setProperty(Folder.AUTHOR, session.getUserID());
+				fldNode.setProperty(Folder.NAME, fldName);
+				
+				// Set auth info
+				fldNode.setProperty(Permission.USERS_READ, new String[] { session.getUserID() });
+				fldNode.setProperty(Permission.USERS_WRITE, new String[] { session.getUserID() });
+				fldNode.setProperty(Permission.USERS_DELETE, new String[] { session.getUserID() });
+				fldNode.setProperty(Permission.USERS_SECURITY, new String[] { session.getUserID() });
+				fldNode.setProperty(Permission.ROLES_READ, new String[] { session.getUserID() });
+				fldNode.setProperty(Permission.ROLES_WRITE, new String[] { session.getUserID() });
+				fldNode.setProperty(Permission.ROLES_DELETE, new String[] { session.getUserID() });
+				fldNode.setProperty(Permission.ROLES_SECURITY, new String[] { session.getUserID() });
+				
 				root.save();
 				totalFolders++;
-				log.info("At depth {}, created folder {}", depth, fld.getPath());
+				log.info("At depth {}, created folder {}", depth, fldNode.getPath());
 				
 				for (int j=0; j<maxDocuments; j++) {
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -348,24 +362,34 @@ public class Benchmark {
 					
 					// Repository insertion
 					ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-					String name = System.currentTimeMillis() + ".txt";
-					Node doc = fld.addNode(name, Document.TYPE);
-					doc.setProperty(Property.KEYWORDS, "");
-					doc.setProperty(Property.CATEGORIES, new String[]{}, PropertyType.REFERENCE);
-					doc.setProperty(Document.AUTHOR, session.getUserID());
-					doc.setProperty(Document.NAME, name);
+					String docName = System.currentTimeMillis() + ".txt";
+					Node docNode = fldNode.addNode(docName, Document.TYPE);
+					docNode.setProperty(Property.KEYWORDS, new String[] {});
+					docNode.setProperty(Property.CATEGORIES, new String[]{}, PropertyType.REFERENCE);
+					docNode.setProperty(Document.AUTHOR, session.getUserID());
+					docNode.setProperty(Document.NAME, docName);
 					
-					Node cont = doc.addNode(Document.CONTENT, Document.CONTENT_TYPE);
-					cont.setProperty(Document.SIZE, bais.available());
-					cont.setProperty(Document.AUTHOR, session.getUserID());
-					cont.setProperty(Document.VERSION_COMMENT, "");
-					cont.setProperty(JcrConstants.JCR_MIMETYPE, "text/plain");
-					cont.setProperty(JcrConstants.JCR_ENCODING, "UTF-8");
-					cont.setProperty(JcrConstants.JCR_DATA, bais);
-					cont.setProperty(JcrConstants.JCR_LASTMODIFIED, Calendar.getInstance());
-					fld.save();
+					// Set auth info
+					docNode.setProperty(Permission.USERS_READ, new String[] { session.getUserID() });
+					docNode.setProperty(Permission.USERS_WRITE, new String[] { session.getUserID() });
+					docNode.setProperty(Permission.USERS_DELETE, new String[] { session.getUserID() });
+					docNode.setProperty(Permission.USERS_SECURITY, new String[] { session.getUserID() });
+					docNode.setProperty(Permission.ROLES_READ, new String[] { session.getUserID() });
+					docNode.setProperty(Permission.ROLES_WRITE, new String[] { session.getUserID() });
+					docNode.setProperty(Permission.ROLES_DELETE, new String[] { session.getUserID() });
+					docNode.setProperty(Permission.ROLES_SECURITY, new String[] { session.getUserID() });
 					
-					cont.checkin();
+					Node contNode = docNode.addNode(Document.CONTENT, Document.CONTENT_TYPE);
+					contNode.setProperty(Document.SIZE, bais.available());
+					contNode.setProperty(Document.AUTHOR, session.getUserID());
+					contNode.setProperty(Document.VERSION_COMMENT, "");
+					contNode.setProperty(JcrConstants.JCR_MIMETYPE, "text/plain");
+					contNode.setProperty(JcrConstants.JCR_ENCODING, "UTF-8");
+					contNode.setProperty(JcrConstants.JCR_DATA, bais);
+					contNode.setProperty(JcrConstants.JCR_LASTMODIFIED, Calendar.getInstance());
+					fldNode.save();
+					
+					contNode.checkin();
 					totalDocuments++;
 				}
 				
@@ -382,7 +406,7 @@ public class Benchmark {
 				out.flush();
 				
 				// Go depth
-				size += okmRawPopulateHelper(session, fld, out, gen, depth+1);
+				size += okmRawPopulateHelper(session, fldNode, out, gen, depth+1);
 			}
 		} else {
 			log.debug("Max depth reached: {}", depth);
@@ -421,11 +445,11 @@ public class Benchmark {
 		if (depth < maxDepth) {
 			for (int i=0; i<maxFolders; i++) {
 				long begin = System.currentTimeMillis();
-				Node fld = root.addNode(Long.toString(System.currentTimeMillis()), JcrConstants.NT_FOLDER);
-				fld.addMixin(JcrConstants.MIX_REFERENCEABLE);
+				Node fldNode = root.addNode(Long.toString(System.currentTimeMillis()), JcrConstants.NT_FOLDER);
+				fldNode.addMixin(JcrConstants.MIX_REFERENCEABLE);
 				root.save();
 				totalFolders++;
-				log.info("At depth {}, created folder {}", depth, fld.getPath());
+				log.info("At depth {}, created folder {}", depth, fldNode.getPath());
 				
 				for (int j=0; j<maxDocuments; j++) {
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -435,14 +459,14 @@ public class Benchmark {
 					
 					// Repository insertion
 					ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-					Node doc = fld.addNode(System.currentTimeMillis() + ".txt", JcrConstants.NT_FILE);
-					doc.addMixin(JcrConstants.MIX_REFERENCEABLE);
-					Node res = doc.addNode(JcrConstants.JCR_CONTENT, JcrConstants.NT_RESOURCE);
-					res.setProperty(JcrConstants.JCR_MIMETYPE, "text/plain");
-					res.setProperty(JcrConstants.JCR_ENCODING, "UTF-8");
-					res.setProperty(JcrConstants.JCR_DATA, bais);
-					res.setProperty(JcrConstants.JCR_LASTMODIFIED, Calendar.getInstance());
-					fld.save();
+					Node docNode = fldNode.addNode(System.currentTimeMillis() + ".txt", JcrConstants.NT_FILE);
+					docNode.addMixin(JcrConstants.MIX_REFERENCEABLE);
+					Node resNode = docNode.addNode(JcrConstants.JCR_CONTENT, JcrConstants.NT_RESOURCE);
+					resNode.setProperty(JcrConstants.JCR_MIMETYPE, "text/plain");
+					resNode.setProperty(JcrConstants.JCR_ENCODING, "UTF-8");
+					resNode.setProperty(JcrConstants.JCR_DATA, bais);
+					resNode.setProperty(JcrConstants.JCR_LASTMODIFIED, Calendar.getInstance());
+					fldNode.save();
 					totalDocuments++;
 				}
 				
@@ -459,7 +483,7 @@ public class Benchmark {
 				out.flush();
 				
 				// Go depth
-				size += jcrPopulateHelper(session, fld, out, gen, depth+1);
+				size += jcrPopulateHelper(session, fldNode, out, gen, depth+1);
 			}
 		} else {
 			log.debug("Max depth reached: {}", depth);
