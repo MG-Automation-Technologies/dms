@@ -69,7 +69,7 @@ import com.openkm.util.impexp.RepositoryImporter;
 public class BenchmarkServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(BenchmarkServlet.class);
-	private static String BM_FLD_BASE = "benchmark";
+	private static String BM_FOLDER = "benchmark";
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws 
@@ -79,17 +79,17 @@ public class BenchmarkServlet extends BaseServlet {
 		updateSessionManager(request);
 				
 		if (action.equals("okmImport")) {
-			okmImport(request, response);
+			okmImport(request, response, BM_FOLDER + "_okm_import");
 		} else if (action.equals("okmCopy")) {
 			okmCopy(request, response);
 		} else if (action.equals("okmApiHighGenerate")) {
-			okmApiHighGenerate(request, response);
+			okmApiHighGenerate(request, response, BM_FOLDER + "_okm_api_high");
 		} else if (action.equals("okmApiLowGenerate")) {
-			okmApiLowGenerate(request, response);
+			okmApiLowGenerate(request, response, BM_FOLDER + "_okm_api_low");
 		} else if (action.equals("okmRawGenerate")) {
-			okmRawGenerate(request, response);
+			okmRawGenerate(request, response, BM_FOLDER + "_okm_raw");
 		} else if (action.equals("jcrGenerate")) {
-			jcrGenerate(request, response);
+			jcrGenerate(request, response, BM_FOLDER + "_jcr");
 		} else {
 			ServletContext sc = getServletContext();
 			sc.getRequestDispatcher("/admin/benchmark.jsp").forward(request, response);
@@ -99,8 +99,9 @@ public class BenchmarkServlet extends BaseServlet {
 	/**
 	 * Load documents into repository several times
 	 */
-	private void okmImport(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		log.debug("okmImport({}, {})", request, response);
+	private void okmImport(HttpServletRequest request, HttpServletResponse response, 
+			String base) throws IOException {
+		log.debug("okmImport({}, {}, {})", new Object[] { request, response, base });
 		String path = WebUtils.getString(request, "param1");
 		int times = WebUtils.getInt(request, "param2");
 		PrintWriter out = response.getWriter();
@@ -118,10 +119,10 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<b>- Times:</b> "+times+"<br/>");
 			out.println("<b>- Documents:</b> "+docs+"<br/>");
 			out.flush();
-			String FOLDER = BM_FLD_BASE + "_okm_import";
+			
 			Folder rootFld = OKMRepository.getInstance().getRootFolder(null);
 			Folder fld = new Folder();
-			fld.setPath(rootFld.getPath() + "/" + FOLDER);
+			fld.setPath(rootFld.getPath() + "/" + base);
 			OKMFolder.getInstance().create(null, fld);
 			tBegin = System.currentTimeMillis();
 			
@@ -132,7 +133,7 @@ public class BenchmarkServlet extends BaseServlet {
 				//out.println("<tr><th>#</th><th>Document</th><th>Size</th></tr>");
 				
 				long begin = System.currentTimeMillis();
-				fld.setPath(rootFld.getPath() + "/" + FOLDER + "/" + i);
+				fld.setPath(rootFld.getPath() + "/" + base + "/" + i);
 				OKMFolder.getInstance().create(null, fld);
 				ImpExpStats stats = RepositoryImporter.importDocuments(null, dir, fld.getPath(), false, out, 
 						new HTMLInfoDecorator(docs));
@@ -191,7 +192,7 @@ public class BenchmarkServlet extends BaseServlet {
 	 * Copy documents into repository several times
 	 */
 	private void okmCopy(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		log.debug("okmCopy({}, {})", request, response);
+		log.debug("okmCopy({}, {})", new Object[] { request, response });
 		String src = WebUtils.getString(request, "param1");
 		String dst = WebUtils.getString(request, "param2");
 		int times = WebUtils.getInt(request, "param3");
@@ -271,8 +272,9 @@ public class BenchmarkServlet extends BaseServlet {
 	/**
 	 * Generate documents into repository (OpenKM API)
 	 */
-	private void okmApiHighGenerate(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		log.debug("okmApiHighGenerate({}, {})", request, response);
+	private void okmApiHighGenerate(HttpServletRequest request, HttpServletResponse response, 
+			String base) throws IOException {
+		log.debug("okmApiHighGenerate({}, {}, {})", new Object[] { request, response });
 		int maxDocuments = WebUtils.getInt(request, "param1");
 		int maxFolder = WebUtils.getInt(request, "param2");
 		int maxDepth = WebUtils.getInt(request, "param3");
@@ -295,11 +297,11 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<table class=\"results\" width=\"80%\">");
 			out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th></tr>");
 			out.flush();
-			String FOLDER = BM_FLD_BASE + "_okm_api_high";
-			Folder fld = OKMRepository.getInstance().getRootFolder(null);
-			fld.setPath(fld.getPath() + "/" + FOLDER);
 			
-			if (!OKMRepository.getInstance().hasNode(null, FOLDER)) {
+			Folder fld = OKMRepository.getInstance().getRootFolder(null);
+			fld.setPath(fld.getPath() + "/" + base);
+			
+			if (!OKMRepository.getInstance().hasNode(null, fld.getPath())) {
 				fld = OKMFolder.getInstance().create(null, fld);
 			}
 			
@@ -366,8 +368,9 @@ public class BenchmarkServlet extends BaseServlet {
 	/**
 	 * Generate documents into repository (OpenKM RAW)
 	 */
-	private void okmApiLowGenerate(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		log.debug("okmApiLowGenerate({}, {})", request, response);
+	private void okmApiLowGenerate(HttpServletRequest request, HttpServletResponse response,
+			String base) throws IOException {
+		log.debug("okmApiLowGenerate({}, {}, {})", new Object[] { request, response, base });
 		int maxDocuments = WebUtils.getInt(request, "param1");
 		int maxFolder = WebUtils.getInt(request, "param2");
 		int maxDepth = WebUtils.getInt(request, "param3");
@@ -392,14 +395,14 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<table class=\"results\" width=\"80%\">");
 			out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th></tr>");
 			out.flush();
+			
 			Node rootNode = session.getRootNode().getNode(Repository.ROOT);
 			Node baseNode = null;
-			String FOLDER = BM_FLD_BASE + "_okm_api_low";
-			
-			if (rootNode.hasNode(FOLDER)) {
-				baseNode = rootNode.getNode(FOLDER);
+						
+			if (rootNode.hasNode(base)) {
+				baseNode = rootNode.getNode(base);
 			} else {
-				rootNode = BaseFolderModule.create(session, rootNode, FOLDER);
+				baseNode = BaseFolderModule.create(session, rootNode, base);
 			}
 			
 			tBegin = System.currentTimeMillis();
@@ -458,8 +461,9 @@ public class BenchmarkServlet extends BaseServlet {
 	/**
 	 * Generate documents into repository (OpenKM RAW)
 	 */
-	private void okmRawGenerate(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		log.debug("okmRawGenerate({}, {})", request, response);
+	private void okmRawGenerate(HttpServletRequest request, HttpServletResponse response,
+			String base) throws IOException {
+		log.debug("okmRawGenerate({}, {}, {})", new Object[] { request, response, base });
 		int maxDocuments = WebUtils.getInt(request, "param1");
 		int maxFolder = WebUtils.getInt(request, "param2");
 		int maxDepth = WebUtils.getInt(request, "param3");
@@ -484,14 +488,14 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<table class=\"results\" width=\"80%\">");
 			out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th></tr>");
 			out.flush();
+			
 			Node rootNode = session.getRootNode().getNode(Repository.ROOT);
 			Node baseNode = null;
-			String FOLDER = BM_FLD_BASE + "_okm_raw";
-			
-			if (rootNode.hasNode(FOLDER)) {
-				baseNode = rootNode.getNode(FOLDER);
+						
+			if (rootNode.hasNode(base)) {
+				baseNode = rootNode.getNode(base);
 			} else {
-				rootNode = BaseFolderModule.create(session, rootNode, FOLDER);
+				baseNode = BaseFolderModule.create(session, rootNode, base);
 			}
 			
 			tBegin = System.currentTimeMillis();
@@ -513,6 +517,7 @@ public class BenchmarkServlet extends BaseServlet {
 		} catch (javax.jcr.RepositoryException e) {
 			out.println("<div class=\"warn\">RepositoryException: "+e.getMessage()+"</div>");
 			out.flush();
+			e.printStackTrace();
 		} catch (InputMismatchException e) {
 			out.println("<div class=\"warn\">InputMismatchException: "+e.getMessage()+"</div>");
 			out.flush();
@@ -547,8 +552,9 @@ public class BenchmarkServlet extends BaseServlet {
 	/**
 	 * Generate documents into repository (Jackrabbit)
 	 */
-	private void jcrGenerate(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		log.debug("jcrGenerate({}, {})", request, response);
+	private void jcrGenerate(HttpServletRequest request, HttpServletResponse response, 
+			String base) throws IOException {
+		log.debug("jcrGenerate({}, {}, {})", new Object[] { request, response, base });
 		int maxDocuments = WebUtils.getInt(request, "param1");
 		int maxFolder = WebUtils.getInt(request, "param2");
 		int maxDepth = WebUtils.getInt(request, "param3");
@@ -573,14 +579,14 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<table class=\"results\" width=\"80%\">");
 			out.println("<tr><th>Date</th><th>Partial seconds</th><th>Partial miliseconds</th><th>Total folders</th><th>Total documents</th></tr>");
 			out.flush();
+			
 			Node rootNode = session.getRootNode().getNode(Repository.ROOT);
 			Node baseNode = null;
-			String FOLDER = BM_FLD_BASE + "_jcr";
-			
-			if (rootNode.hasNode(FOLDER)) {
-				baseNode = rootNode.getNode(FOLDER);
+						
+			if (rootNode.hasNode(base)) {
+				baseNode = rootNode.getNode(base);
 			} else {
-				baseNode = rootNode.addNode(FOLDER, JcrConstants.NT_FOLDER);
+				baseNode = rootNode.addNode(base, JcrConstants.NT_FOLDER);
 				rootNode.save();
 			}
 			
