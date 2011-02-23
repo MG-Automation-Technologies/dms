@@ -480,7 +480,7 @@ public class Config {
 			values.put("property.groups.cnd", PROPERTY_GROUPS_CND);
 			
 			// Load or reload database configuration
-			reload(CONTEXT);
+			reload(CONTEXT, config);
 		} catch (FileNotFoundException e) {
 			log.warn("** No "+OPENKM_CONFIG+" file found, set default config **");
 		} catch (IOException e) {
@@ -491,7 +491,7 @@ public class Config {
 	/**
 	 * Reload OpenKM configuration from database
 	 */
-	public static void reload(String ctx) {
+	public static void reload(String ctx, Properties cfg) {
 		try {
 			REPOSITORY_CONFIG = ConfigDAO.getString(PROPERTY_REPOSITORY_CONFIG, REPOSITORY_CONFIG);
 			values.put(PROPERTY_REPOSITORY_CONFIG, REPOSITORY_CONFIG);
@@ -583,7 +583,7 @@ public class Config {
 			SUBSCRIPTION_TWITTER_STATUS = ConfigDAO.getText(PROPERTY_SUBSCRIPTION_TWITTER_STATUS, "OpenKM - ${documentUrl} - ${documentPath} - ${userId} - ${eventType}");
 			values.put(PROPERTY_SUBSCRIPTION_TWITTER_STATUS, SUBSCRIPTION_TWITTER_STATUS);
 			
-			SYSTEM_DEMO = ConfigDAO.getBoolean(PROPERTY_SYSTEM_DEMO, false);
+			SYSTEM_DEMO = ConfigDAO.getBoolean(PROPERTY_SYSTEM_DEMO, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_SYSTEM_DEMO, "off")));
 			values.put(PROPERTY_SYSTEM_DEMO, Boolean.toString(SYSTEM_DEMO));
 			SYSTEM_WEBDAV = ConfigDAO.getBoolean(PROPERTY_SYSTEM_WEBDAV, false);
 			values.put(PROPERTY_SYSTEM_WEBDAV, Boolean.toString(SYSTEM_WEBDAV));
@@ -592,26 +592,26 @@ public class Config {
 			SYSTEM_READONLY = ConfigDAO.getBoolean(PROPERTY_SYSTEM_READONLY, false);
 			values.put(PROPERTY_SYSTEM_READONLY, Boolean.toString(SYSTEM_READONLY));
 			
-			SYSTEM_OPENOFFICE_PATH = ConfigDAO.getString(PROPERTY_SYSTEM_OPENOFFICE_PATH, "");
+			SYSTEM_OPENOFFICE_PATH = ConfigDAO.getString(PROPERTY_SYSTEM_OPENOFFICE_PATH, cfg.getProperty(PROPERTY_SYSTEM_OPENOFFICE_PATH, ""));
 			values.put(PROPERTY_SYSTEM_OPENOFFICE_PATH, SYSTEM_OPENOFFICE_PATH);
 			SYSTEM_OPENOFFICE_TASKS = ConfigDAO.getInteger(PROPERTY_SYSTEM_OPENOFFICE_TASKS, 200);
 			values.put(PROPERTY_SYSTEM_OPENOFFICE_TASKS, Integer.toString(SYSTEM_OPENOFFICE_TASKS));
 			SYSTEM_OPENOFFICE_PORT = ConfigDAO.getInteger(PROPERTY_SYSTEM_OPENOFFICE_PORT, 2002);
 			values.put(PROPERTY_SYSTEM_OPENOFFICE_PORT, Integer.toString(SYSTEM_OPENOFFICE_PORT));
-			SYSTEM_OPENOFFICE_SERVER = ConfigDAO.getString(PROPERTY_SYSTEM_OPENOFFICE_SERVER, "");
+			SYSTEM_OPENOFFICE_SERVER = ConfigDAO.getString(PROPERTY_SYSTEM_OPENOFFICE_SERVER, cfg.getProperty(PROPERTY_SYSTEM_OPENOFFICE_SERVER, ""));
 			values.put(PROPERTY_SYSTEM_OPENOFFICE_SERVER, SYSTEM_OPENOFFICE_SERVER);
 			SYSTEM_OPENOFFICE_DICTIONARY = ConfigDAO.getString(PROPERTY_SYSTEM_OPENOFFICE_DICTIONARY, "");
 			values.put(PROPERTY_SYSTEM_OPENOFFICE_DICTIONARY, SYSTEM_OPENOFFICE_DICTIONARY);
 			
-			SYSTEM_OCR = ConfigDAO.getString(PROPERTY_SYSTEM_OCR, "");
+			SYSTEM_OCR = ConfigDAO.getString(PROPERTY_SYSTEM_OCR, cfg.getProperty(PROPERTY_SYSTEM_OCR, ""));
 			values.put(PROPERTY_SYSTEM_OCR, SYSTEM_OCR);
-			SYSTEM_IMG2PDF = ConfigDAO.getString(PROPERTY_SYSTEM_IMG2PDF, "");
+			SYSTEM_IMG2PDF = ConfigDAO.getString(PROPERTY_SYSTEM_IMG2PDF, cfg.getProperty(PROPERTY_SYSTEM_IMG2PDF, ""));
 			values.put(PROPERTY_SYSTEM_IMG2PDF, SYSTEM_IMG2PDF);
-			SYSTEM_PDF2SWF = ConfigDAO.getString(PROPERTY_SYSTEM_PDF2SWF, "");
+			SYSTEM_PDF2SWF = ConfigDAO.getString(PROPERTY_SYSTEM_PDF2SWF, cfg.getProperty(PROPERTY_SYSTEM_PDF2SWF, ""));
 			values.put(PROPERTY_SYSTEM_PDF2SWF, SYSTEM_PDF2SWF);
-			SYSTEM_DWG2DXF = ConfigDAO.getString(PROPERTY_SYSTEM_DWG2DXF, "");
+			SYSTEM_DWG2DXF = ConfigDAO.getString(PROPERTY_SYSTEM_DWG2DXF, cfg.getProperty(PROPERTY_SYSTEM_DWG2DXF, ""));
 			values.put(PROPERTY_SYSTEM_DWG2DXF, SYSTEM_DWG2DXF);
-			SYSTEM_ANTIVIR = ConfigDAO.getString(PROPERTY_SYSTEM_ANTIVIR, "");
+			SYSTEM_ANTIVIR = ConfigDAO.getString(PROPERTY_SYSTEM_ANTIVIR, cfg.getProperty(PROPERTY_SYSTEM_ANTIVIR, ""));
 			values.put(PROPERTY_SYSTEM_ANTIVIR, SYSTEM_ANTIVIR);
 			SYSTEM_PREVIEWER = ConfigDAO.getString(PROPERTY_SYSTEM_PREVIEWER, "zviewer"); // flexpaper
 			values.put(PROPERTY_SYSTEM_PREVIEWER, SYSTEM_PREVIEWER);
@@ -627,7 +627,7 @@ public class Config {
 				ADMIN_USER = ADMIN_USER.toLowerCase();
 			}
 			
-			UPDATE_INFO = ConfigDAO.getBoolean(PROPERTY_UPDATE_INFO, true);
+			UPDATE_INFO = ConfigDAO.getBoolean(PROPERTY_UPDATE_INFO, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_UPDATE_INFO, "on")));
 			values.put(PROPERTY_UPDATE_INFO, Boolean.toString(UPDATE_INFO));
 			APPLICATION_URL = ConfigDAO.getString(PROPERTY_APPLICATION_URL, "http://localhost:8080/"+ctx+"/index.jsp");
 			APPLICATION_BASE = getBase(APPLICATION_URL); 
