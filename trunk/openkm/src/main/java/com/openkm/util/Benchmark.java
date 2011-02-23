@@ -50,7 +50,7 @@ public class Benchmark {
 	private static final int LINE_WIDTH = 80;
 	private static final int TOTAL_CHARS = 500;
 	private static final int MAX_DOCUMENTS = 12;
-	private static final int MAX_FOLDERS = 3;
+	private static final int MAX_FOLDERS = 4;
 	private static final int MAX_DEPTH = 3;
 	private Generator gen = null;
 	private int maxDocuments = 0;
@@ -58,6 +58,7 @@ public class Benchmark {
 	private int maxDepth = 0;
 	private int totalFolders = 0;
 	private int totalDocuments = 0;
+	private long totalSize = 0;
 	private int row = 0;
 	
 	/**
@@ -111,6 +112,10 @@ public class Benchmark {
 		return totalDocuments;
 	}
 	
+	public long getTotalSize() {
+		return totalSize;
+	}
+	
 	/**
 	 * Calculates the number of folder created
 	 */
@@ -159,34 +164,33 @@ public class Benchmark {
 			total = calEnd - calBegin;
 		}
 		
-		log.info("Calibration: {} ms", total / ITERATIONS);
+		log.debug("Calibration: {} ms", total / ITERATIONS);
 		return total / ITERATIONS;
 	}
 	
 	/**
 	 * Run OpenKM text document insertions (API)
 	 */
-	public long okmApiHighPopulate(String token, Folder root, PrintWriter out) throws IOException,
+	public void okmApiHighPopulate(String token, Folder root, PrintWriter out, PrintWriter res) throws IOException,
 			InputMismatchException, ItemExistsException, PathNotFoundException, UserQuotaExceededException, 
 			AccessDeniedException, UnsupportedMimeTypeException, FileSizeExceededException,
 			VirusDetectedException, RepositoryException, DatabaseException {
 		long begin = System.currentTimeMillis();
-		long size = okmApiHighPopulateHelper(token, root, out, gen, 0);
+		okmApiHighPopulateHelper(token, root, out, res, gen, 0);
 		long end = System.currentTimeMillis();
 		String elapse = FormatUtil.formatSeconds(end - begin);
-		log.info("Total Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
-		return size;
+		log.debug("Total Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
 	}
 	
 	/**
 	 * Helper
 	 */
-	private long okmApiHighPopulateHelper(String token, Folder root, PrintWriter out, Generator gen, int depth) throws 
+	private void okmApiHighPopulateHelper(String token, Folder root, PrintWriter out, PrintWriter res,
+			Generator gen, int depth) throws 
 			InputMismatchException, IOException, ItemExistsException, PathNotFoundException,
 			UserQuotaExceededException,	AccessDeniedException, UnsupportedMimeTypeException, 
 			FileSizeExceededException, VirusDetectedException, RepositoryException, DatabaseException {
 		log.debug("okmApiHighPopulateHelper({}, {}, {}, {})", new Object[] { token, root, gen, depth });
-		long size = 0;
 		
 		if (depth < maxDepth) {
 			for (int i=0; i<maxFolders; i++) {
@@ -195,13 +199,13 @@ public class Benchmark {
 				fld.setPath(root.getPath() + "/" + System.currentTimeMillis());
 				fld = new DirectFolderModule().create(token, fld);
 				totalFolders++;
-				log.info("At depth {}, created folder {}", depth, fld.getPath());
+				log.debug("At depth {}, created folder {}", depth, fld.getPath());
 				
 				for (int j=0; j<maxDocuments; j++) {
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					gen.generateText(PARAGRAPH, LINE_WIDTH, TOTAL_CHARS, baos);
 					baos.close();
-					size += baos.size();
+					totalSize += baos.size();
 					
 					// Repository insertion
 					ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
@@ -214,67 +218,73 @@ public class Benchmark {
 				
 				long end = System.currentTimeMillis();
 				String elapse = FormatUtil.formatSeconds(end - begin);
-				log.info("Partial Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
+				log.debug("Partial Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
 				out.print("<tr class=\""+(row++%2==0?"even":"odd")+"\">");
 				out.print("<td>"+FormatUtil.formatDate(Calendar.getInstance())+"</td>");
 				out.print("<td>"+elapse+"</td>");
 				out.print("<td>"+(end - begin)+"</td>");
 				out.print("<td>"+totalFolders+"</td>");
 				out.print("<td>"+totalDocuments+"</td>");
+				out.print("<td>"+FormatUtil.formatSize(totalSize)+"</td>");
 				out.println("</tr>");
 				out.flush();
 				
+				res.print("\"" + FormatUtil.formatDate(Calendar.getInstance()) + "\",");
+				res.print("\"" + elapse + "\",");
+				res.print("\"" + (end - begin) + "\",");
+				res.print("\"" + totalFolders + "\",");
+				res.print("\"" + totalDocuments + "\",");
+				res.print("\"" + FormatUtil.formatSize(totalSize) + "\"\n");
+				res.flush();
+				
 				// Go depth
-				size += okmApiHighPopulateHelper(token, fld, out, gen, depth+1);
+				okmApiHighPopulateHelper(token, fld, out, res, gen, depth+1);
 			}
 		} else {
 			log.debug("Max depth reached: {}", depth);
 		}
-		
-		return size;
 	}
 	
 	/**
 	 * Run OpenKM text document insertions (API)
 	 */
-	public long okmApiLowPopulate(Session session, Node root, PrintWriter out) throws
+	public void okmApiLowPopulate(Session session, Node root, PrintWriter out, PrintWriter res) throws
 			javax.jcr.ItemExistsException, javax.jcr.PathNotFoundException, 
 			javax.jcr.nodetype.NoSuchNodeTypeException, javax.jcr.lock.LockException,
 			javax.jcr.version.VersionException, javax.jcr.nodetype.ConstraintViolationException, 
 			javax.jcr.RepositoryException, InputMismatchException, IOException, DatabaseException,
 			UserQuotaExceededException {
 		long begin = System.currentTimeMillis();
-		long size = okmApiLowPopulateHelper(session, root, out, gen, 0);
+		okmApiLowPopulateHelper(session, root, out, res, gen, 0);
 		long end = System.currentTimeMillis();
 		String elapse = FormatUtil.formatSeconds(end - begin);
-		log.info("Total Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
-		return size;
+		log.debug("Total Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
 	}
 	
 	/**
 	 * Helper
 	 */
-	private long okmApiLowPopulateHelper(Session session, Node root, PrintWriter out, Generator gen, int depth) throws 
+	private void okmApiLowPopulateHelper(Session session, Node root, PrintWriter out, PrintWriter res,
+			Generator gen, int depth) throws 
 			javax.jcr.ItemExistsException, javax.jcr.PathNotFoundException, 
 			javax.jcr.nodetype.NoSuchNodeTypeException, javax.jcr.lock.LockException,
 			javax.jcr.version.VersionException, javax.jcr.nodetype.ConstraintViolationException, 
 			javax.jcr.RepositoryException, InputMismatchException, IOException, DatabaseException, 
 			UserQuotaExceededException {
 		log.debug("okmApiLowPopulateHelper({}, {}, {}, {})", new Object[] { session, root, gen, depth });
-		long size = 0;
 		
 		if (depth < maxDepth) {
 			for (int i=0; i<maxFolders; i++) {
 				long begin = System.currentTimeMillis();
 				Node fld = BaseFolderModule.create(session, root, Long.toString(System.currentTimeMillis()));
 				totalFolders++;
-				log.info("At depth {}, created folder {}", depth, fld.getPath());
+				log.debug("At depth {}, created folder {}", depth, fld.getPath());
 				
 				for (int j=0; j<maxDocuments; j++) {
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					gen.generateText(PARAGRAPH, LINE_WIDTH, TOTAL_CHARS, baos);
 					baos.close();
-					size += baos.size();
+					totalSize += baos.size();
 					
 					// Repository insertion
 					ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
@@ -285,52 +295,58 @@ public class Benchmark {
 				
 				long end = System.currentTimeMillis();
 				String elapse = FormatUtil.formatSeconds(end - begin);
-				log.info("Partial Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
+				log.debug("Partial Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
 				out.print("<tr class=\""+(row++%2==0?"even":"odd")+"\">");
 				out.print("<td>"+FormatUtil.formatDate(Calendar.getInstance())+"</td>");
 				out.print("<td>"+elapse+"</td>");
 				out.print("<td>"+(end - begin)+"</td>");
 				out.print("<td>"+totalFolders+"</td>");
 				out.print("<td>"+totalDocuments+"</td>");
+				out.print("<td>"+FormatUtil.formatSize(totalSize)+"</td>");
 				out.println("</tr>");
 				out.flush();
 				
+				res.print("\"" + FormatUtil.formatDate(Calendar.getInstance()) + "\",");
+				res.print("\"" + elapse + "\",");
+				res.print("\"" + (end - begin) + "\",");
+				res.print("\"" + totalFolders + "\",");
+				res.print("\"" + totalDocuments + "\",");
+				res.print("\"" + FormatUtil.formatSize(totalSize) + "\"\n");
+				res.flush();
+				
 				// Go depth
-				size += okmApiLowPopulateHelper(session, fld, out, gen, depth+1);
+				okmApiLowPopulateHelper(session, fld, out, res, gen, depth+1);
 			}
 		} else {
 			log.debug("Max depth reached: {}", depth);
 		}
-		
-		return size;
 	}
 	
 	/**
 	 * Run OpenKM text document insertions (RAW)
 	 */
-	public long okmRawPopulate(Session session, Node root, PrintWriter out) throws
+	public void okmRawPopulate(Session session, Node root, PrintWriter out, PrintWriter res) throws
 			javax.jcr.ItemExistsException, javax.jcr.PathNotFoundException, 
 			javax.jcr.nodetype.NoSuchNodeTypeException, javax.jcr.lock.LockException,
 			javax.jcr.version.VersionException, javax.jcr.nodetype.ConstraintViolationException, 
 			javax.jcr.RepositoryException, InputMismatchException, IOException {
 		long begin = System.currentTimeMillis();
-		long size = okmRawPopulateHelper(session, root, out, gen, 0);
+		okmRawPopulateHelper(session, root, out, res, gen, 0);
 		long end = System.currentTimeMillis();
 		String elapse = FormatUtil.formatSeconds(end - begin);
-		log.info("Total Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
-		return size;
+		log.debug("Total Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
 	}
 	
 	/**
 	 * Helper
 	 */
-	private long okmRawPopulateHelper(Session session, Node root, PrintWriter out, Generator gen, int depth)
+	private void okmRawPopulateHelper(Session session, Node root, PrintWriter out, PrintWriter res,
+			Generator gen, int depth)
 			throws javax.jcr.ItemExistsException, javax.jcr.PathNotFoundException, 
 			javax.jcr.nodetype.NoSuchNodeTypeException, javax.jcr.lock.LockException,
 			javax.jcr.version.VersionException, javax.jcr.nodetype.ConstraintViolationException, 
 			javax.jcr.RepositoryException, InputMismatchException, IOException {
 		log.debug("okmRawPopulateHelper({}, {}, {}, {})", new Object[] { session, root, gen, depth });
-		long size = 0;
 		
 		if (depth < maxDepth) {
 			for (int i=0; i<maxFolders; i++) {
@@ -352,13 +368,13 @@ public class Benchmark {
 				
 				root.save();
 				totalFolders++;
-				log.info("At depth {}, created folder {}", depth, fldNode.getPath());
+				log.debug("At depth {}, created folder {}", depth, fldNode.getPath());
 				
 				for (int j=0; j<maxDocuments; j++) {
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					gen.generateText(PARAGRAPH, LINE_WIDTH, TOTAL_CHARS, baos);
 					baos.close();
-					size += baos.size();
+					totalSize += baos.size();
 					
 					// Repository insertion
 					ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
@@ -395,52 +411,58 @@ public class Benchmark {
 				
 				long end = System.currentTimeMillis();
 				String elapse = FormatUtil.formatSeconds(end - begin);
-				log.info("Partial Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
+				log.debug("Partial Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
 				out.print("<tr class=\""+(row++%2==0?"even":"odd")+"\">");
 				out.print("<td>"+FormatUtil.formatDate(Calendar.getInstance())+"</td>");
 				out.print("<td>"+elapse+"</td>");
 				out.print("<td>"+(end - begin)+"</td>");
 				out.print("<td>"+totalFolders+"</td>");
 				out.print("<td>"+totalDocuments+"</td>");
+				out.print("<td>"+FormatUtil.formatSize(totalSize)+"</td>");
 				out.println("</tr>");
 				out.flush();
 				
+				res.print("\"" + FormatUtil.formatDate(Calendar.getInstance()) + "\",");
+				res.print("\"" + elapse + "\",");
+				res.print("\"" + (end - begin) + "\",");
+				res.print("\"" + totalFolders + "\",");
+				res.print("\"" + totalDocuments + "\",");
+				res.print("\"" + FormatUtil.formatSize(totalSize) + "\"\n");
+				res.flush();
+				
 				// Go depth
-				size += okmRawPopulateHelper(session, fldNode, out, gen, depth+1);
+				okmRawPopulateHelper(session, fldNode, out, res, gen, depth+1);
 			}
 		} else {
 			log.debug("Max depth reached: {}", depth);
 		}
-		
-		return size;
 	}
 	
 	/**
 	 * Run JCR text document insertions
 	 */
-	public long jcrPopulate(Session session, Node root, PrintWriter out) throws IOException,
+	public void jcrPopulate(Session session, Node root, PrintWriter out, PrintWriter res) throws IOException,
 			javax.jcr.ItemExistsException, javax.jcr.PathNotFoundException, 
 			javax.jcr.nodetype.NoSuchNodeTypeException, javax.jcr.lock.LockException,
 			javax.jcr.version.VersionException, javax.jcr.nodetype.ConstraintViolationException, 
 			javax.jcr.RepositoryException, InputMismatchException, IOException {
 		long begin = System.currentTimeMillis();
-		long size = jcrPopulateHelper(session, root, out, gen, 0);
+		jcrPopulateHelper(session, root, out, res, gen, 0);
 		long end = System.currentTimeMillis();
 		String elapse = FormatUtil.formatSeconds(end - begin);
-		log.info("Total Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
-		return size;
+		log.debug("Total Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
 	}
 	
 	/**
 	 * Helper
 	 */
-	private long jcrPopulateHelper(Session session, Node root, PrintWriter out, Generator gen, int depth) throws 
+	private void jcrPopulateHelper(Session session, Node root, PrintWriter out, PrintWriter res, 
+			Generator gen, int depth) throws 
 			javax.jcr.ItemExistsException, javax.jcr.PathNotFoundException, 
 			javax.jcr.nodetype.NoSuchNodeTypeException, javax.jcr.lock.LockException,
 			javax.jcr.version.VersionException, javax.jcr.nodetype.ConstraintViolationException, 
 			javax.jcr.RepositoryException, InputMismatchException, IOException {
 		log.debug("jcrPopulateHelper({}, {}, {}, {})", new Object[] { session, root, gen, depth });
-		long size = 0;
 		
 		if (depth < maxDepth) {
 			for (int i=0; i<maxFolders; i++) {
@@ -449,13 +471,13 @@ public class Benchmark {
 				fldNode.addMixin(JcrConstants.MIX_REFERENCEABLE);
 				root.save();
 				totalFolders++;
-				log.info("At depth {}, created folder {}", depth, fldNode.getPath());
+				log.debug("At depth {}, created folder {}", depth, fldNode.getPath());
 				
 				for (int j=0; j<maxDocuments; j++) {
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					gen.generateText(PARAGRAPH, LINE_WIDTH, TOTAL_CHARS, baos);
 					baos.close();
-					size += baos.size();
+					totalSize += baos.size();
 					
 					// Repository insertion
 					ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
@@ -472,23 +494,30 @@ public class Benchmark {
 				
 				long end = System.currentTimeMillis();
 				String elapse = FormatUtil.formatSeconds(end - begin);
-				log.info("Partial Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
+				log.debug("Partial Time: {} - Folders: {}, Documents: {}", new Object[] { elapse, totalFolders, totalDocuments });
 				out.print("<tr class=\""+(row++%2==0?"even":"odd")+"\">");
 				out.print("<td>"+FormatUtil.formatDate(Calendar.getInstance())+"</td>");
 				out.print("<td>"+elapse+"</td>");
 				out.print("<td>"+(end - begin)+"</td>");
 				out.print("<td>"+totalFolders+"</td>");
 				out.print("<td>"+totalDocuments+"</td>");
+				out.print("<td>"+FormatUtil.formatSize(totalSize)+"</td>");
 				out.println("</tr>");
 				out.flush();
 				
+				res.print("\"" + FormatUtil.formatDate(Calendar.getInstance()) + "\",");
+				res.print("\"" + elapse + "\",");
+				res.print("\"" + (end - begin) + "\",");
+				res.print("\"" + totalFolders + "\",");
+				res.print("\"" + totalDocuments + "\",");
+				res.print("\"" + FormatUtil.formatSize(totalSize) + "\"\n");
+				res.flush();
+				
 				// Go depth
-				size += jcrPopulateHelper(session, fldNode, out, gen, depth+1);
+				jcrPopulateHelper(session, fldNode, out, res, gen, depth+1);
 			}
 		} else {
 			log.debug("Max depth reached: {}", depth);
 		}
-		
-		return size;
 	}
 }
