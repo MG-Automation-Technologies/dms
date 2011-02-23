@@ -298,6 +298,13 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<b>- Calibration:</b> "+bm.runCalibration()+" ms<br/>");
 			out.println("<b>- Calculated foldes:</b> "+bm.calculateFolders()+"<br/>");
 			out.println("<b>- Calculated documents:</b> "+bm.calculateDocuments()+"<br/><br/>");
+			results.print("\"Date\",");
+			results.print("\"Time\",");
+			results.print("\"Seconds\",");
+			results.print("\"Folders\",");
+			results.print("\"Documents\",");
+			results.print("\"Size\"\n");
+			results.flush();
 			tBegin = System.currentTimeMillis();
 			
 			for (int i=0; i < maxIterations; i++) {
@@ -314,6 +321,14 @@ public class BenchmarkServlet extends BaseServlet {
 				}
 				
 				PrintWriter pResults = new PrintWriter(Config.HOME_DIR + File.separator + base + "_" + i + ".csv");
+				pResults.print("\"Date\",");
+				pResults.print("\"Time\",");
+				pResults.print("\"Seconds\",");
+				pResults.print("\"Folders\",");
+				pResults.print("\"Documents\",");
+				pResults.print("\"Size\"\n");
+				pResults.flush();
+				
 				pBegin = System.currentTimeMillis();
 				bm.okmApiHighPopulate(null, fld, out, pResults);
 				pEnd = System.currentTimeMillis();
@@ -427,6 +442,13 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<b>- Calibration:</b> "+bm.runCalibration()+" ms<br/>");
 			out.println("<b>- Calculated foldes:</b> "+bm.calculateFolders()+"<br/>");
 			out.println("<b>- Calculated documents:</b> "+bm.calculateDocuments()+"<br/><br/>");
+			results.print("\"Date\",");
+			results.print("\"Time\",");
+			results.print("\"Seconds\",");
+			results.print("\"Folders\",");
+			results.print("\"Documents\",");
+			results.print("\"Size\"\n");
+			results.flush();
 			tBegin = System.currentTimeMillis();
 			
 			for (int i=0; i < maxIterations; i++) {
@@ -445,6 +467,14 @@ public class BenchmarkServlet extends BaseServlet {
 				}
 				
 				PrintWriter pResults = new PrintWriter(Config.HOME_DIR + File.separator + base + "_" + i + ".csv");
+				pResults.print("\"Date\",");
+				pResults.print("\"Time\",");
+				pResults.print("\"Seconds\",");
+				pResults.print("\"Folders\",");
+				pResults.print("\"Documents\",");
+				pResults.print("\"Size\"\n");
+				pResults.flush();
+				
 				pBegin = System.currentTimeMillis();
 				bm.okmApiLowPopulate(session, baseNode, out, pResults);
 				pEnd = System.currentTimeMillis();
@@ -551,6 +581,13 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<b>- Calibration:</b> "+bm.runCalibration()+" ms<br/>");
 			out.println("<b>- Calculated foldes:</b> "+bm.calculateFolders()+"<br/>");
 			out.println("<b>- Calculated documents:</b> "+bm.calculateDocuments()+"<br/><br/>");
+			results.print("\"Date\",");
+			results.print("\"Time\",");
+			results.print("\"Seconds\",");
+			results.print("\"Folders\",");
+			results.print("\"Documents\",");
+			results.print("\"Size\"\n");
+			results.flush();
 			tBegin = System.currentTimeMillis();
 			
 			for (int i=0; i < maxIterations; i++) {
@@ -569,6 +606,14 @@ public class BenchmarkServlet extends BaseServlet {
 				}
 				
 				PrintWriter pResults = new PrintWriter(Config.HOME_DIR + File.separator + base + "_" + i + ".csv");
+				pResults.print("\"Date\",");
+				pResults.print("\"Time\",");
+				pResults.print("\"Seconds\",");
+				pResults.print("\"Folders\",");
+				pResults.print("\"Documents\",");
+				pResults.print("\"Size\"\n");
+				pResults.flush();
+				
 				pBegin = System.currentTimeMillis();
 				bm.okmRawPopulate(session, baseNode, out, pResults);
 				pEnd = System.currentTimeMillis();
@@ -672,6 +717,13 @@ public class BenchmarkServlet extends BaseServlet {
 			out.println("<b>- Calibration:</b> "+bm.runCalibration()+" ms<br/>");
 			out.println("<b>- Calculated foldes:</b> "+bm.calculateFolders()+"<br/>");
 			out.println("<b>- Calculated documents:</b> "+bm.calculateDocuments()+"<br/><br/>");
+			results.print("\"Date\",");
+			results.print("\"Time\",");
+			results.print("\"Seconds\",");
+			results.print("\"Folders\",");
+			results.print("\"Documents\",");
+			results.print("\"Size\"\n");
+			results.flush();
 			tBegin = System.currentTimeMillis();
 			
 			for (int i=0; i < maxIterations; i++) {
@@ -691,6 +743,14 @@ public class BenchmarkServlet extends BaseServlet {
 				}
 				
 				PrintWriter pResults = new PrintWriter(Config.HOME_DIR + File.separator + base + "_" + i + ".csv");
+				pResults.print("\"Date\",");
+				pResults.print("\"Time\",");
+				pResults.print("\"Seconds\",");
+				pResults.print("\"Folders\",");
+				pResults.print("\"Documents\",");
+				pResults.print("\"Size\"\n");
+				pResults.flush();
+				
 				pBegin = System.currentTimeMillis();
 				bm.jcrPopulate(session, baseNode, out, pResults);
 				pEnd = System.currentTimeMillis();
