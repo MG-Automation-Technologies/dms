@@ -93,6 +93,22 @@ public class FormatUtil {
 	 * Format time interval for humans 
 	 */
 	public static String formatSeconds(long time) {
+		long hours, minutes, seconds;
+		time = time / 1000;
+		hours = time / 3600;
+		time = time - (hours * 3600);
+		minutes = time / 60;
+		time = time - (minutes * 60);
+		seconds = time;
+		return (hours<10?"0"+hours:hours)+":"+
+			(minutes<10?"0"+minutes:minutes)+":"+
+			(seconds<10?"0"+seconds:seconds);
+	}
+	
+	/**
+	 * Format time interval for humans 
+	 */
+	public static String formatMiliSeconds(long time) {
 		long hours, minutes, seconds, mseconds;
 		mseconds = time % 1000;
 		time = time / 1000;
