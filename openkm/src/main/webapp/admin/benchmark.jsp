@@ -22,18 +22,19 @@
             <td>Action</td>
             <td>
               <select name="action">
-                <option value="okmImport">OpenKM import documents</option>
-                <option value="okmCopy">OpenKM copy documents</option>
-                <option value="okmApiHighGenerate">OpenKM generate documents (API HIGH)</option>
-                <option value="okmApiLowGenerate">OpenKM generate documents (API LOW)</option>
-                <option value="okmRawGenerate">OpenKM generate documents (RAW)</option>
-                <option value="jcrGenerate">Jackrabbit generate documents</option>
+                <option value="okmImport">OpenKM import</option>
+                <option value="okmCopy">OpenKM copy</option>
+                <option value="okmApiHighGenerate">OpenKM generate (API HIGH)</option>
+                <option value="okmApiLowGenerate">OpenKM generate (API LOW)</option>
+                <option value="okmRawGenerate">OpenKM generate (RAW)</option>
+                <option value="jcrGenerate">Jackrabbit generate</option>
               </select>
             </td>
           </tr>
           <tr><td>Param 1</td><td><input type="text" name="param1" size="32"/></td></tr>
           <tr><td>Param 2</td><td><input type="text" name="param2" size="32"/></td></tr>
           <tr><td>Param 3</td><td><input type="text" name="param3" size="32"/></td></tr>
+          <tr><td>Param 4</td><td><input type="text" name="param4" size="32" value="1"/></td></tr>
           <tr><td colspan="2" align="right"><input type="submit" value="Send"/></td></tr>
         </table>
       </form>
