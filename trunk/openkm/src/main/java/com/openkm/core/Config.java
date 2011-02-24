@@ -639,7 +639,7 @@ public class Config {
 			values.put(PROPERTY_USER_ASSIGN_DOCUMENT_CREATION, Boolean.toString(USER_ASSIGN_DOCUMENT_CREATION));
 			USER_KEYWORDS_CACHE = ConfigDAO.getBoolean(PROPERTY_USER_KEYWORDS_CACHE, false);
 			values.put(PROPERTY_USER_KEYWORDS_CACHE, Boolean.toString(USER_KEYWORDS_CACHE));
-			USER_ITEM_CACHE = ConfigDAO.getBoolean(PROPERTY_USER_ITEM_CACHE, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_SYSTEM_DEMO, "off")));
+			USER_ITEM_CACHE = ConfigDAO.getBoolean(PROPERTY_USER_ITEM_CACHE, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_USER_ITEM_CACHE, "off")));
 			values.put(PROPERTY_USER_ITEM_CACHE, Boolean.toString(USER_ITEM_CACHE));
 			
 			// Schedule
