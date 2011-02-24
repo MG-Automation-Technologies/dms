@@ -102,8 +102,10 @@ public class BaseFolderModule {
 		
 		parentNode.save();
 		
-		// Update user items
-		UserItemsManager.incFolders(session.getUserID(), 1);
+		if (Config.USER_ITEM_CACHE) {
+			// Update user items size
+			UserItemsManager.incFolders(session.getUserID(), 1);
+		}
 		
 		return folderNode;
 	}
