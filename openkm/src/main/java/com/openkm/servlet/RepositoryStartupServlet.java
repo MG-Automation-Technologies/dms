@@ -112,13 +112,15 @@ public class RepositoryStartupServlet extends HttpServlet {
         	throw new ServletException(e.getMessage(), e);
         }
         
-        // Deserialize
-        try {
-        	log.info("*** Cache deserialization ***");
-        	UserItemsManager.deserialize();
-        	UserDocumentKeywordsManager.deserialize();
-        } catch (DatabaseException e) {
-        	log.warn(e.getMessage(), e);
+        if (Config.USER_ITEM_CACHE) {
+        	// Deserialize
+        	try {
+        		log.info("*** Cache deserialization ***");
+        		UserItemsManager.deserialize();
+        		UserDocumentKeywordsManager.deserialize();
+        	} catch (DatabaseException e) {
+        		log.warn(e.getMessage(), e);
+        	}
         }
         
         log.info("*** User database initialized ***");
@@ -290,13 +292,15 @@ public class RepositoryStartupServlet extends HttpServlet {
         if (log == null) log("*** Shutting down repository... ***");
         else log.info("*** Shutting down repository...");
         
-        // Serialize
-        try {
-        	log.info("*** Cache serialization ***");
-        	UserItemsManager.serialize();
-        	UserDocumentKeywordsManager.serialize();
-        } catch (DatabaseException e) {
-        	log.warn(e.getMessage(), e);
+        if (Config.USER_ITEM_CACHE) {
+        	// Serialize
+        	try {
+        		log.info("*** Cache serialization ***");
+        		UserItemsManager.serialize();
+        		UserDocumentKeywordsManager.serialize();
+        	} catch (DatabaseException e) {
+        		log.warn(e.getMessage(), e);
+        	}
         }
         
         try {
