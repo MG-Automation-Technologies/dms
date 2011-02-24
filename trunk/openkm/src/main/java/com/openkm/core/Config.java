@@ -150,7 +150,7 @@ public class Config {
 	public static final String PROPERTY_DEFAULT_LANG = "default.lang";
 	public static final String PROPERTY_USER_ASSIGN_DOCUMENT_CREATION = "user.assign.document.creation";
 	public static final String PROPERTY_USER_KEYWORDS_CACHE = "user.keywords.cache";
-	public static final String PROPERTY_USER_SIZE_CACHE = "user.size.cache";
+	public static final String PROPERTY_USER_ITEM_CACHE = "user.item.cache";
 	
 	// Schedule
 	public static final String PROPERTY_SCHEDULE_REPOSITORY_INFO = "schedule.repository.info";
@@ -289,7 +289,7 @@ public class Config {
 	public static String DEFAULT_LANG;
 	public static boolean USER_ASSIGN_DOCUMENT_CREATION;
 	public static boolean USER_KEYWORDS_CACHE;
-	public static boolean USER_SIZE_CACHE;
+	public static boolean USER_ITEM_CACHE;
 	
 	// Schedule
 	public static long SCHEDULE_REPOSITORY_INFO;
@@ -639,8 +639,8 @@ public class Config {
 			values.put(PROPERTY_USER_ASSIGN_DOCUMENT_CREATION, Boolean.toString(USER_ASSIGN_DOCUMENT_CREATION));
 			USER_KEYWORDS_CACHE = ConfigDAO.getBoolean(PROPERTY_USER_KEYWORDS_CACHE, false);
 			values.put(PROPERTY_USER_KEYWORDS_CACHE, Boolean.toString(USER_KEYWORDS_CACHE));
-			USER_SIZE_CACHE = ConfigDAO.getBoolean(PROPERTY_USER_SIZE_CACHE, false);
-			values.put(PROPERTY_USER_SIZE_CACHE, Boolean.toString(USER_SIZE_CACHE));
+			USER_ITEM_CACHE = ConfigDAO.getBoolean(PROPERTY_USER_ITEM_CACHE, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_SYSTEM_DEMO, "off")));
+			values.put(PROPERTY_USER_ITEM_CACHE, Boolean.toString(USER_ITEM_CACHE));
 			
 			// Schedule
 			SCHEDULE_REPOSITORY_INFO = ConfigDAO.getLong(PROPERTY_SCHEDULE_REPOSITORY_INFO, 1440) * 60 * 1000; // 1440 * 60 * 1000 = 24 hours
