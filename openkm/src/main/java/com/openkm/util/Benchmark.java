@@ -361,10 +361,10 @@ public class Benchmark {
 				fldNode.setProperty(Permission.USERS_WRITE, new String[] { session.getUserID() });
 				fldNode.setProperty(Permission.USERS_DELETE, new String[] { session.getUserID() });
 				fldNode.setProperty(Permission.USERS_SECURITY, new String[] { session.getUserID() });
-				fldNode.setProperty(Permission.ROLES_READ, new String[] { session.getUserID() });
-				fldNode.setProperty(Permission.ROLES_WRITE, new String[] { session.getUserID() });
-				fldNode.setProperty(Permission.ROLES_DELETE, new String[] { session.getUserID() });
-				fldNode.setProperty(Permission.ROLES_SECURITY, new String[] { session.getUserID() });
+				fldNode.setProperty(Permission.ROLES_READ, new String[] {});
+				fldNode.setProperty(Permission.ROLES_WRITE, new String[] {});
+				fldNode.setProperty(Permission.ROLES_DELETE, new String[] {});
+				fldNode.setProperty(Permission.ROLES_SECURITY, new String[] {});
 				
 				root.save();
 				totalFolders++;
