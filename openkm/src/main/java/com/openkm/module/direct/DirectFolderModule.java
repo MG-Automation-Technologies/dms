@@ -312,7 +312,7 @@ public class DirectFolderModule implements FolderModule {
 				parentNode.save();
 			}
 			
-			if (Config.USER_SIZE_CACHE) {
+			if (Config.USER_ITEM_CACHE) {
 				// Update user items
 				for (Iterator<Entry<String, UserItems>> it = userItemsHash.entrySet().iterator(); it.hasNext(); ) {
 					Entry<String, UserItems> entry = it.next();
@@ -367,7 +367,7 @@ public class DirectFolderModule implements FolderModule {
 				//userItemsHashRet.get(key)
 			}
 			
-			if (Config.USER_SIZE_CACHE) {
+			if (Config.USER_ITEM_CACHE) {
 				// Join hash maps
 				for (Iterator<Entry<String, UserItems>> entIt = userItemsHashRet.entrySet().iterator(); entIt.hasNext(); ) {
 					Entry<String, UserItems> entry = entIt.next();
