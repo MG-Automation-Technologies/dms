@@ -22,7 +22,7 @@ import com.openkm.dao.bean.cache.UserItems;
 
 public class UserItemsManager {
 	private static Logger log = LoggerFactory.getLogger(UserItemsManager.class);
-	private static Map<String, UserItems> userItemsMgr;
+	private static Map<String, UserItems> userItemsMgr = new HashMap<String, UserItems>();
 	
 	/**
 	 * 
@@ -130,8 +130,6 @@ public class UserItemsManager {
 	 * 
 	 */
 	public static synchronized void deserialize() throws DatabaseException {
-		userItemsMgr = new HashMap<String, UserItems>();
-		
 		for (UserItems ui : UserItemsDAO.findAll()) {
 			userItemsMgr.put(ui.getUser(), ui);
 		}
