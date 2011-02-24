@@ -980,9 +980,12 @@ public class DirectDocumentModule implements DocumentModule {
 			t.end();
 			t.commit();
 			
-			// Update user items
-			long size = contentNode.getProperty(Document.SIZE).getLong();
-			UserItemsManager.incSize(session.getUserID(), size);
+			
+			if (Config.USER_ITEM_CACHE) {
+				// Update user items
+				long size = contentNode.getProperty(Document.SIZE).getLong();
+				UserItemsManager.incSize(session.getUserID(), size);
+			}
 			
 			// Remove pdf & preview from cache
 			new File(Config.CACHE_DXF + File.separator + documentNode.getUUID() + ".dxf").delete();
@@ -1348,7 +1351,7 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 			
 			// Update user items
-			if (Config.USER_SIZE_CACHE) {
+			if (Config.USER_ITEM_CACHE) {
 				for (Iterator<Entry<String, UserItems>> it = userItemsHash.entrySet().iterator(); it.hasNext(); ) {
 					Entry<String, UserItems> entry = it.next();
 					String uid = entry.getKey();
@@ -1422,7 +1425,7 @@ public class DirectDocumentModule implements DocumentModule {
 				log.debug("vh.removeVersion({})", versionName);
 				vh.removeVersion(versionName);
 				
-				if (Config.USER_SIZE_CACHE) {
+				if (Config.USER_ITEM_CACHE) {
 					// Update local user items for versions
 					UserItems userItems = userItemsHash.get(author);
 					if (userItems == null) userItems = new UserItems();
@@ -1433,7 +1436,7 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 		}
 		
-		if (Config.USER_SIZE_CACHE) {
+		if (Config.USER_ITEM_CACHE) {
 			// Update local user items for working version
 			UserItems userItems = userItemsHash.get(author);
 			if (userItems == null) userItems = new UserItems();
