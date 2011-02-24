@@ -96,7 +96,7 @@ public class BaseDocumentModule {
 		if (!Config.SYSTEM_USER.equals(session.getUserID())) {
 			long currentQuota = 0;
 			
-			if (Config.USER_SIZE_CACHE) {
+			if (Config.USER_ITEM_CACHE) {
 				UserItems ui = UserItemsManager.get(session.getUserID());
 				currentQuota = ui.getSize();
 			} else {
@@ -157,7 +157,7 @@ public class BaseDocumentModule {
 		contentNode.checkin();
 		
 		// Update user items size
-		if (Config.USER_SIZE_CACHE) {
+		if (Config.USER_ITEM_CACHE) {
 			UserItemsManager.incSize(session.getUserID(), size);
 			UserItemsManager.incDocuments(session.getUserID(), 1);
 		}
