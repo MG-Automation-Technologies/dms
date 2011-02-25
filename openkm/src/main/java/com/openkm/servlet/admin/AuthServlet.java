@@ -378,7 +378,7 @@ public class AuthServlet extends BaseServlet {
 	}
 	
 	/**
-	 * Convenient conversion method 
+	 * Convenient conversion method
 	 */
 	private List<User> str2user(List<String> strList) throws PrincipalAdapterException {
 		List<User> usrList = new ArrayList<User>();
