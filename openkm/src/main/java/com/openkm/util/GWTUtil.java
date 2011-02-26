@@ -1362,6 +1362,8 @@ public class GWTUtil {
 		contact.setPhone(gWTContact.getPhone());
 		contact.setProvince(gWTContact.getProvince());
 		contact.setWeb(gWTContact.getWeb());
+		contact.setExternalid(gWTContact.getExternalid());
+		contact.setOrigin(gWTContact.getOrigin());
 		
 		return contact;
 	}
