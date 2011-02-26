@@ -22,6 +22,7 @@
 package com.openkm.frontend.client.service.extension;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.openkm.frontend.client.OKMException;
@@ -39,6 +40,10 @@ public interface OKMContactService extends RemoteService {
 	public void delete (int id, String uuid) throws OKMException;
 	public List<GWTContact> findByUuid(String uuid) throws OKMException;
 	public List<GWTContact> findAll() throws OKMException;
+	public List<GWTContact> getGoogleContacts(String username, String userpass, String groupId, Map<String,String> googleFieldMap) throws OKMException;
+	public Boolean loginGoogleContact(String username, String userpass) throws OKMException;
+	public Map<String,String> getContactGroups(String username, String userpass) throws OKMException;
+	public void syncGoogleContacts(List<GWTContact> contacts)  throws OKMException;
 	public List<GWTContact> findAllFiltered(String uuid) throws OKMException;
 	public void update(GWTContact contact) throws OKMException;
 	public void addContact(int id, String uuid) throws OKMException;

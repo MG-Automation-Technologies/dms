@@ -22,6 +22,7 @@
 package com.openkm.frontend.client.service.extension;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -39,6 +40,10 @@ public interface OKMContactServiceAsync extends RemoteService {
 	public void delete (int id, String uuid, AsyncCallback<?> callback);
 	public void findByUuid(String uuid, AsyncCallback<List<GWTContact>> callback);
 	public void findAll(AsyncCallback<List<GWTContact>> callback);
+	public void getGoogleContacts(String username, String userpass, String groupId, Map<String,String> googleFieldMap, AsyncCallback<List<GWTContact>> callback);
+	public void loginGoogleContact(String username, String userpass, AsyncCallback<Boolean> callback);
+	public void getContactGroups(String username, String userpass, AsyncCallback<Map<String,String>> callback);
+	public void syncGoogleContacts(List<GWTContact> contacts, AsyncCallback<?> callback);
 	public void findAllFiltered(String uuid, AsyncCallback<List<GWTContact>> callback);
 	public void update(GWTContact contact, AsyncCallback<?> callback);
 	public void addContact(int id, String uuid, AsyncCallback<?> callback); 
