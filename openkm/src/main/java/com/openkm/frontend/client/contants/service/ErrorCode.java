@@ -94,6 +94,8 @@ public class ErrorCode {
 	public static final String CAUSE_Eval						= "031";
 	public static final String CAUSE_Virus						= "032";
 	public static final String CAUSE_Conversion					= "033";
+	public static final String CAUSE_Authentication				= "034";
+	public static final String CAUSE_Google						= "035";
 
 	/**
 	 * Gets the error
