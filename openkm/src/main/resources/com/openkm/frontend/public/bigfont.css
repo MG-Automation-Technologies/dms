@@ -35,6 +35,12 @@ a:active {
 	width: 2px;
 }
 
+.okm-Horizontal-Line-Border {
+	background-image: url(img/horizontal_line_back.gif);
+	background-repeat: repeat;
+	height: 2px;
+}
+
 /* row results */
 .okm-Table-Row {
 	height: 20px;
