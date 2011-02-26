@@ -774,6 +774,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 								}
 							}
 						});
+						removeImage.setStyleName("okm-KeyMap-ImageHover");
 						
 						tableMulti.setWidget(rowTableMulti, 0, htmlValue);
 						tableMulti.setWidget(rowTableMulti, 1, removeImage);
