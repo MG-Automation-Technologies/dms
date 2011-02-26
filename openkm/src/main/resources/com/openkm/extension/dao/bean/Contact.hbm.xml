@@ -16,6 +16,8 @@
     <property name="country" column="CON_COUNTRY" length="127"/>
     <property name="web" column="CON_WEB" length="256"/>
     <property name="notes" column="CON_NOTES" type="text"/>
+    <property name="externalid" column="CON_EXTERNALID" length="512"/>
+    <property name="origin" column="CON_ORIGIN" length="127"/>
     <set name="uuids" table="OKM_NODE_CONTACT" order-by="NCO_ID asc" lazy="false">
       <key column="NCO_ID" not-null="true"/>
       <element column="NCO_UUID" type="java.lang.String"/>
