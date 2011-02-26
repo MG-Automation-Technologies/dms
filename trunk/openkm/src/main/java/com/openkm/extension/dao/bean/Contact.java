@@ -45,6 +45,8 @@ public class Contact implements Serializable {
 	private String country = "";
 	private String web = "";
 	private String notes = "";
+	private String externalid = "";
+	private String origin = "";
 	private Set<String> uuids = new HashSet<String>();
 
 	public int getId() {
@@ -159,6 +161,22 @@ public class Contact implements Serializable {
 		this.uuids = uuids;
 	}
 	
+	public String getExternalid() {
+		return externalid;
+	}
+
+	public void setExternalid(String externalid) {
+		this.externalid = externalid;
+	}
+
+	public String getOrigin() {
+		return origin;
+	}
+
+	public void setOrigin(String origin) {
+		this.origin = origin;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -175,6 +193,8 @@ public class Contact implements Serializable {
 		sb.append(", country="); sb.append(country);
 		sb.append(", web="); sb.append(web);
 		sb.append(", notes="); sb.append(notes);
+		sb.append(", externalid="); sb.append(externalid);
+		sb.append(", origin="); sb.append(origin);
 		sb.append(", uuids="); sb.append(uuids);
 		sb.append("}");
 		return sb.toString();
