@@ -505,8 +505,15 @@
       <artifactId>sample-full</artifactId>
       <version>5.1</version>
     </dependency>
+    
+    <!-- Gdata librariess -->
+    <dependency>
+     <groupId>com.github.dcarter.gdata-java-client</groupId>
+ 	 <artifactId>gdata-contacts-3.0</artifactId>
+ 	 <version>1.41.1</version>
+ 	</dependency>
   </dependencies>
-
+  
   <build>
     <finalName>OpenKM</finalName>
     <outputDirectory>war/WEB-INF/classes</outputDirectory>
