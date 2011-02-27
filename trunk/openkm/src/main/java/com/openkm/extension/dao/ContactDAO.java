@@ -222,15 +222,15 @@ public class ContactDAO {
 	 * @return
 	 * @throws DatabaseException
 	 */
-	public static Contact findByOrigin(String externalid, String origin) throws DatabaseException {
-		log.debug("findByOrigin({},{})", externalid, origin);
-		String qs = "from Contact con where con.externalid=:externalid and con.origin=:origin";
+	public static Contact findByOrigin(String externalId, String origin) throws DatabaseException {
+		log.debug("findByOrigin({},{})", externalId, origin);
+		String qs = "from Contact con where con.externalId=:externalId and con.origin=:origin";
 		Session session = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
-			q.setString("externalid", externalid);
+			q.setString("externalId", externalId);
 			q.setString("origin", origin);
 			Contact ret = (Contact) q.setMaxResults(1).uniqueResult();
 			log.debug("findByOrigin: {}", ret);
