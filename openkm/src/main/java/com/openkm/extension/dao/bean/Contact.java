@@ -40,12 +40,12 @@ public class Contact implements Serializable {
 	private String mobile = "";
 	private String address = "";
 	private String city = "";
-	private String postalcode = "";
+	private String postalCode = "";
 	private String province = "";
 	private String country = "";
 	private String web = "";
 	private String notes = "";
-	private String externalid = "";
+	private String externalId = "";
 	private String origin = "";
 	private Set<String> uuids = new HashSet<String>();
 
@@ -113,12 +113,12 @@ public class Contact implements Serializable {
 		this.city = city;
 	}
 
-	public String getPostalcode() {
-		return postalcode;
+	public String getPostalCode() {
+		return postalCode;
 	}
 
-	public void setPostalcode(String postalcode) {
-		this.postalcode = postalcode;
+	public void setPostalCode(String postalCode) {
+		this.postalCode = postalCode;
 	}
 
 	public String getProvince() {
@@ -161,12 +161,12 @@ public class Contact implements Serializable {
 		this.uuids = uuids;
 	}
 	
-	public String getExternalid() {
-		return externalid;
+	public String getExternalId() {
+		return externalId;
 	}
 
-	public void setExternalid(String externalid) {
-		this.externalid = externalid;
+	public void setExternalId(String externalId) {
+		this.externalId = externalId;
 	}
 
 	public String getOrigin() {
@@ -188,12 +188,12 @@ public class Contact implements Serializable {
 		sb.append(", mobile="); sb.append(mobile);
 		sb.append(", address="); sb.append(address);
 		sb.append(", city="); sb.append(city);
-		sb.append(", pc="); sb.append(postalcode);
+		sb.append(", postalCode="); sb.append(postalCode);
 		sb.append(", province="); sb.append(province);
 		sb.append(", country="); sb.append(country);
 		sb.append(", web="); sb.append(web);
 		sb.append(", notes="); sb.append(notes);
-		sb.append(", externalid="); sb.append(externalid);
+		sb.append(", externalId="); sb.append(externalId);
 		sb.append(", origin="); sb.append(origin);
 		sb.append(", uuids="); sb.append(uuids);
 		sb.append("}");
