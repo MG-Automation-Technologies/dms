@@ -39,12 +39,12 @@ public class GWTContact implements IsSerializable {
 	private String mobile = "";
 	private String address = "";
 	private String city = "";
-	private String pc = "";
+	private String postalCode = "";
 	private String province = "";
 	private String country = "";
 	private String web = "";
 	private String notes = "";
-	private String externalid = "";
+	private String externalId = "";
 	private String origin = "";
 
 	public int getId() {
@@ -111,12 +111,12 @@ public class GWTContact implements IsSerializable {
 		this.city = city;
 	}
 
-	public String getPc() {
-		return pc;
+	public String getPostalCode() {
+		return postalCode;
 	}
 
-	public void setPc(String pc) {
-		this.pc = pc;
+	public void setPostalCode(String postalCode) {
+		this.postalCode = postalCode;
 	}
 
 	public String getProvince() {
@@ -151,12 +151,12 @@ public class GWTContact implements IsSerializable {
 		this.notes = notes;
 	}
 	
-	public String getExternalid() {
-		return externalid;
+	public String getExternalId() {
+		return externalId;
 	}
 
-	public void setExternalid(String externalid) {
-		this.externalid = externalid;
+	public void setExternalId(String externalId) {
+		this.externalId = externalId;
 	}
 
 	public String getOrigin() {
@@ -178,11 +178,11 @@ public class GWTContact implements IsSerializable {
 		sb.append(", mobile="); sb.append(mobile);
 		sb.append(", address="); sb.append(address);
 		sb.append(", city="); sb.append(city);
-		sb.append(", pc="); sb.append(pc);
+		sb.append(", postalCode="); sb.append(postalCode);
 		sb.append(", province="); sb.append(province);
 		sb.append(", country="); sb.append(country);
 		sb.append(", web="); sb.append(web);
-		sb.append(", externalid="); sb.append(externalid);
+		sb.append(", externalId="); sb.append(externalId);
 		sb.append(", origin="); sb.append(origin);
 		sb.append(", notes="); sb.append(notes);
 		sb.append("}");
