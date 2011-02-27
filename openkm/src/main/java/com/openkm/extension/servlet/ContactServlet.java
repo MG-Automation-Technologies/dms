@@ -314,12 +314,11 @@ public class ContactServlet extends OKMRemoteServiceServlet implements OKMContac
 			for (GWTContact contact : contacts) {
 				Contact tmp = ContactDAO.findByOrigin(contact.getExternalid(), contact.getOrigin()); 
 				if (tmp!=null) {
-					// Need update
+					contact.setId(tmp.getId()); 
+					ContactDAO.update(GWTUtil.copy(contact));
 				} else {
-					ContactDAO.create(GWTUtil.copy(contact)); // Create
+					ContactDAO.create(GWTUtil.copy(contact)); 
 				} 
-				
-				// Need delete 
 			}
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);

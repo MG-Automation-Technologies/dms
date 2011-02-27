@@ -914,6 +914,11 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('e
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.mapping.to', 'Mapped to', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.google.groups', 'Groups', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.menu', 'Contacts', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.google.login', 'Login in Google', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.google.getting.groups', 'Getting groups', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.google.getting.contacts', 'Getting contacts', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.google.synchronizing', 'Synchronizing contacts', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.google.synchronized', 'Contacts synchronized', 'en-GB');
 DELETE FROM OKM_TRANSLATION WHERE TR_LANGUAGE='es-ES';
 DELETE FROM OKM_LANGUAGE WHERE LG_ID='es-ES';
 INSERT INTO OKM_LANGUAGE (LG_ID, LG_NAME, LG_IMAGE_CONTENT, LG_IMAGE_MIME) VALUES ('es-ES', 'Español', 'R0lGODlhEAALANUAAPxcXPpTU/X1Jfb2K/QtLfxjY+bmAP5yc/7+dvMWFv39APz8TOwAAPMAAP39bfLyE/7+Wvv7RfdLS/pERPQzM/k8PfDyQfT1O/1ra/96evdEROxoVfU7O+UAAPg2NvENDfb2MPPzGfkAAPT0H/j4NuAAAPn5PPXDsf39U/F+V+7fTu3gjfUhIezT1Pnx1vXq4ra7nezhQvj0S9/fAPLzVfTuV+xTUfxMTPK9sMDOqOCMUeSnSuvJS90AAP0AAP8AACH5BAAAAAAALAAAAAAQAAsAAAaFwJ/w5yv6RMiGksH4ZZ6ZwwGDKRQAgYCkmQF4s7fJpOKhELYKBARSU8kiERMJNBDIDGkILbVZWeR0AiMXeAgoJxstODFzdSMhhAoOCy46Ni8qgY8PkZM5PDswFo4hDw8gMyIFY2QEBCwsCQkfHwQlql9aGhocHBRmBD1KDUzFHcclJT3LQQA7', 'image/gif');
@@ -1680,7 +1685,12 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('e
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.synchornize', 'Sincronizar', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.mapping.key', 'Campo personalizado en Google', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.google.title', 'Sincronización de Google Contacts', 'es-ES');
-INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'button.add.mapping', 'Añadir mapeao', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'button.add.mapping', 'Añadir mapeo', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.mapping.to', 'Mapeado con', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.google.groups', 'Grupos', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.menu', 'Contactos', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.google.login', 'Atentificandose en Google', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.google.getting.groups', 'Obteniendo grupos', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.google.getting.contacts', 'Obteniendo contactos', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.google.synchronizing', 'Sincronizando contactos', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.google.synchronized', 'Contactos sincronizados', 'es-ES');
