@@ -919,6 +919,10 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('e
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.google.getting.contacts', 'Getting contacts', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.google.synchronizing', 'Synchronizing contacts', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.google.synchronized', 'Contacts synchronized', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'activitylog.action', 'Action', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'activitylog.user', 'User', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'activitylog.date', 'Date', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'activitylog.params', 'Parameters', 'en-GB');
 DELETE FROM OKM_TRANSLATION WHERE TR_LANGUAGE='es-ES';
 DELETE FROM OKM_LANGUAGE WHERE LG_ID='es-ES';
 INSERT INTO OKM_LANGUAGE (LG_ID, LG_NAME, LG_IMAGE_CONTENT, LG_IMAGE_MIME) VALUES ('es-ES', 'Español', 'R0lGODlhEAALANUAAPxcXPpTU/X1Jfb2K/QtLfxjY+bmAP5yc/7+dvMWFv39APz8TOwAAPMAAP39bfLyE/7+Wvv7RfdLS/pERPQzM/k8PfDyQfT1O/1ra/96evdEROxoVfU7O+UAAPg2NvENDfb2MPPzGfkAAPT0H/j4NuAAAPn5PPXDsf39U/F+V+7fTu3gjfUhIezT1Pnx1vXq4ra7nezhQvj0S9/fAPLzVfTuV+xTUfxMTPK9sMDOqOCMUeSnSuvJS90AAP0AAP8AACH5BAAAAAAALAAAAAAQAAsAAAaFwJ/w5yv6RMiGksH4ZZ6ZwwGDKRQAgYCkmQF4s7fJpOKhELYKBARSU8kiERMJNBDIDGkILbVZWeR0AiMXeAgoJxstODFzdSMhhAoOCy46Ni8qgY8PkZM5PDswFo4hDw8gMyIFY2QEBCwsCQkfHwQlql9aGhocHBRmBD1KDUzFHcclJT3LQQA7', 'image/gif');
@@ -1694,3 +1698,7 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('e
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.google.getting.contacts', 'Obteniendo contactos', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.google.synchronizing', 'Sincronizando contactos', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'contact.google.synchronized', 'Contactos sincronizados', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'activitylog.action', 'Acción', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'activitylog.user', 'Usuario', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'activitylog.date', 'Fecha', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'activitylog.params', 'Parámetros', 'es-ES');
