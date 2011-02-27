@@ -146,7 +146,7 @@ public class ContactServlet extends OKMRemoteServiceServlet implements OKMContac
 				// Only contacts with name will be added
 				if (entry.hasName()) {
 					GWTContact contact = new GWTContact();
-					contact.setExternalid(entry.getId());
+					contact.setExternalId(entry.getId());
 					contact.setOrigin("google");
 					Name name = entry.getName();
 					if (name.hasFullName()) {
@@ -231,8 +231,8 @@ public class ContactServlet extends OKMRemoteServiceServlet implements OKMContac
 										contact.setAddress(userfield.getValue());
 									} else if (key.equals("city")) {
 										contact.setCity(userfield.getValue());
-									} else if (key.equals("pc")) {
-										contact.setPc(userfield.getValue());
+									} else if (key.equals("postalCode")) {
+										contact.setPostalCode(userfield.getValue());
 									} else if (key.equals("province")) {
 										contact.setProvince(userfield.getValue());
 									} else if (key.equals("country")) {
@@ -312,7 +312,7 @@ public class ContactServlet extends OKMRemoteServiceServlet implements OKMContac
 	public void syncGoogleContacts(List<GWTContact> contacts) throws OKMException {
 		try {
 			for (GWTContact contact : contacts) {
-				Contact tmp = ContactDAO.findByOrigin(contact.getExternalid(), contact.getOrigin()); 
+				Contact tmp = ContactDAO.findByOrigin(contact.getExternalId(), contact.getOrigin()); 
 				if (tmp!=null) {
 					contact.setId(tmp.getId()); 
 					ContactDAO.update(GWTUtil.copy(contact));
