@@ -1358,11 +1358,11 @@ public class GWTUtil {
 		contact.setMobile(gWTContact.getMobile());
 		contact.setName(gWTContact.getName());
 		contact.setNotes(gWTContact.getNotes());
-		contact.setPostalcode(gWTContact.getPc());
+		contact.setPostalCode(gWTContact.getPostalCode());
 		contact.setPhone(gWTContact.getPhone());
 		contact.setProvince(gWTContact.getProvince());
 		contact.setWeb(gWTContact.getWeb());
-		contact.setExternalid(gWTContact.getExternalid());
+		contact.setExternalId(gWTContact.getExternalId());
 		contact.setOrigin(gWTContact.getOrigin());
 		
 		return contact;
@@ -1385,7 +1385,7 @@ public class GWTUtil {
 		gwtContact.setMobile(contact.getMobile());
 		gwtContact.setName(contact.getName());
 		gwtContact.setNotes(contact.getNotes());
-		gwtContact.setPc(contact.getPostalcode());
+		gwtContact.setPostalCode(contact.getPostalCode());
 		gwtContact.setPhone(contact.getPhone());
 		gwtContact.setProvince(contact.getProvince());
 		gwtContact.setWeb(contact.getWeb());
