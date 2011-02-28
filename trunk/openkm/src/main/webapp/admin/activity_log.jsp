@@ -16,6 +16,11 @@
   <script type="text/javascript" src="js/jscalendar/calendar-setup.js"></script>
   <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
   <script type="text/javascript" src="js/fixedTableHeader.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+    	TABLE.fixHeader('table')
+	});
+  </script>
   <title>Activity Log</title>
 </head>
 <body>
@@ -101,7 +106,6 @@
       ifFormat   : "%Y-%m-%d",
       button     : "f_trigger_end"
     });
-    TABLE.fixHeader("#magic");
   </script>
 </body>
 </html>
