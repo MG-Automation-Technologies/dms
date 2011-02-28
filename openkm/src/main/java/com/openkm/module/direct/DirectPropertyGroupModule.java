@@ -280,7 +280,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 							if (fe instanceof Select && ((Select) fe).getType().equals(Select.TYPE_MULTIPLE) 
 									&& pd[i].isMultiple()) {
 								Value[] values = prop.getValues();
-
+								
 								for (int j=0; j<values.length; j++) {
 									for (Option opt : ((Select) fe).getOptions()) {
 										if (opt.getValue().equals(values[j].getString())) {
