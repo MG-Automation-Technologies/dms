@@ -9,21 +9,45 @@ TABLE.fixHeader = function(table) {
     $table.data('top', $thead.offset().top);
     $table.data('left', $thead.offset().left);
     $table.data('bottom', $table.data('top') + $table.height() - $thead.height());
-
     var $list = $('<ul class="faux-head"></ul>');
-    $ths.each(function(i){
+    var idx = 0;
+    
+    $ths.each(function(i) {
       _th = $(this);
-      $list.append($("<li></li>")
-        .addClass(_th.attr("class"))
-        .html(_th.html())
-        .width(_th.width())
-        .click(function(){
-          _th.click()
-        })
-      ).hide().css({left: $table.data('left'), top: $table.data('top')});
+      
+      if (/chrome/.test(navigator.userAgent.toLowerCase())) {
+    	if (idx++ == 0) {
+          $list.append($("<li style='border-left: 1px solid #A5A596;'></li>")
+            .addClass(_th.attr("class")).html(_th.html()).width(_th.width() + 1)
+            .click(function(){
+              _th.click();
+            })
+          ).hide().css({left: $table.data('left'), top: $table.data('top')});
+    	} else {
+          $list.append($("<li></li>")
+            .addClass(_th.attr("class")).html(_th.html()).width(_th.width() + 1)
+            .click(function(){
+              _th.click();
+            })
+          ).hide().css({left: $table.data('left'), top: $table.data('top')});
+    	}
+      } else if (/msie/.test(navigator.userAgent.toLowerCase())) {
+        $list.append($("<li></li>")
+          .addClass(_th.attr("class")).html(_th.html()).width(_th.width() + 1)
+          .click(function(){
+            _th.click();
+          })
+        ).hide().css({left: $table.data('left'), top: $table.data('top')});
+      } else {
+    	$list.append($("<li></li>").addClass(_th.attr("class")).html(_th.html()).width(_th.width())
+    	  .click(function(){
+    	    _th.click();
+    	  })
+    	).hide().css({left: $table.data('left'), top: $table.data('top')});
+      }
     });
     $('body').append($list);
-      
+    
     $(window).scroll(function() {
       clearTimeout(timer);
       timer = setTimeout(function() {
@@ -43,4 +67,4 @@ TABLE.fixHeader = function(table) {
       }, 100);
     });    
   });
-}
+};
