@@ -11,11 +11,17 @@
   float: left;
   margin: 0px;
   padding: 1px;
+  height: 16px;
   font-size: 10px;
   font-weight: bold;
   text-align: center;
+  text-valign: middle;
   border-right: 1px solid #A5A596;
   border-bottom: 1px solid #A5A596;
 }
 
-
+/**
+.faux-head li:first-child {
+  border-left: 1px solid #A5A596;
+}
+*/
