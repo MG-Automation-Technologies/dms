@@ -8,11 +8,14 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="favicon.ico" />
-  <link rel="stylesheet" href="css/style.css" type="text/css" />
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <link rel="stylesheet" type="text/css" href="css/fixedTableHeader.css" />
   <link rel="stylesheet" type="text/css" href="js/jscalendar/calendar-win2k-1.css" />
   <script type="text/javascript" src="js/jscalendar/calendar.js"></script>
   <script type="text/javascript" src="js/jscalendar/lang/calendar-en.js"></script>
   <script type="text/javascript" src="js/jscalendar/calendar-setup.js"></script>
+  <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+  <script type="text/javascript" src="js/fixedTableHeader.js"></script>
   <title>Activity Log</title>
 </head>
 <body>
@@ -67,15 +70,21 @@
         </table>
       </form>
       <br/>
+      <div id="magic">
       <table class="results" width="100%">
-        <tr><th>Date</th><th>User</th><th>Action</th><th>Item</th><th>Params</th></tr>
-        <c:forEach var="act" items="${results}" varStatus="row">
-          <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td nowrap="nowrap"><fmt:formatDate value="${act.date.time}" type="both"/></td>
-            <td>${act.user}</td><td>${act.action}</td><td>${act.item}</td><td>${act.params}</td>
-          </tr>
-        </c:forEach>
+        <thead>
+          <tr><th>Date</th><th>User</th><th>Action</th><th>Item</th><th>Params</th></tr>
+        </thead>
+        <tbody>
+          <c:forEach var="act" items="${results}" varStatus="row">
+            <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
+              <td nowrap="nowrap"><fmt:formatDate value="${act.date.time}" type="both"/></td>
+              <td>${act.user}</td><td>${act.action}</td><td>${act.item}</td><td>${act.params}</td>
+            </tr>
+          </c:forEach>
+        </tbody>
       </table>
+      </div>
     </c:when>
     <c:otherwise>
       <div class="error"><h3>Only admin users allowed</h3></div>
@@ -92,6 +101,7 @@
       ifFormat   : "%Y-%m-%d",
       button     : "f_trigger_end"
     });
+    TABLE.fixHeader("#magic");
   </script>
 </body>
 </html>
