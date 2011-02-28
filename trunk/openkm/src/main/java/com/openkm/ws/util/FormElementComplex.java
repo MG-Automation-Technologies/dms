@@ -161,6 +161,7 @@ public class FormElementComplex implements Serializable {
 			fec.setObjClass(cb.getClass().getName());
 		} else if (fe instanceof Select) {
 			Select s = (Select) fe;
+			fec.setType(s.getType());
 			fec.setOptions(s.getOptions());
 			fec.setObjClass(s.getClass().getName());
 		} else if (fe instanceof Button) {
@@ -193,6 +194,7 @@ public class FormElementComplex implements Serializable {
 			((CheckBox) fe).setValue(Boolean.valueOf(fec.getValue()));
 		} else if (Select.class.getName().equals(fec.getObjClass())) {
 			fe = new Select();
+			((Select) fe).setType(fec.getType());
 			((Select) fe).setOptions(fec.getOptions());			
 		} else if (Button.class.getName().equals(fec.getObjClass())) {
 			fe = new Button();
