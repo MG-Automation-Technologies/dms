@@ -8,6 +8,14 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="favicon.ico" />
   <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <link rel="stylesheet" type="text/css" href="css/fixedTableHeader.css" />
+  <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+  <script type="text/javascript" src="js/fixedTableHeader.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+    	TABLE.fixHeader('table')
+	});
+  </script>
   <title>Mime types</title>
 </head>
 <body>
@@ -16,19 +24,21 @@
     <c:when test="${isAdmin}">
       <h1>Mime Types</h1>
       <table class="results" width="70%">
-        <tr>
-          <th>Name</th><th>Image</th><th>Extensions</th>
-          <th width="50px">
-            <c:url value="MimeType" var="urlCreate">
-              <c:param name="action" value="create"/>
-            </c:url>
-            <c:url value="MimeType" var="urlExport">
-              <c:param name="action" value="export"/>
-            </c:url>
-            <a href="${urlCreate}"><img src="img/action/new.png" alt="New mime type" title="New mime type"/></a>
-            <a href="${urlExport}"><img src="img/action/export.png" alt="Export mime types" title="Export mime types"/></a>
-          </th>
-        </tr>
+        <thead>
+          <tr>
+            <th>Name</th><th>Image</th><th>Extensions</th>
+            <th width="50px">
+              <c:url value="MimeType" var="urlCreate">
+                <c:param name="action" value="create"/>
+              </c:url>
+              <c:url value="MimeType" var="urlExport">
+                <c:param name="action" value="export"/>
+              </c:url>
+              <a href="${urlCreate}"><img src="img/action/new.png" alt="New mime type" title="New mime type"/></a>
+              <a href="${urlExport}"><img src="img/action/export.png" alt="Export mime types" title="Export mime types"/></a>
+            </th>
+          </tr>
+        </thead>
         <c:forEach var="mt" items="${mimeTypes}" varStatus="row">
           <c:url value="/mime/${mt.name}" var="urlIcon">
           </c:url>
@@ -40,17 +50,19 @@
             <c:param name="action" value="delete"/>
             <c:param name="mt_id" value="${mt.id}"/>
           </c:url>
-          <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td>${mt.name}</td>
-            <td align="center"><img src="${urlIcon}"/></td>
-            <td>${mt.extensions}</td>
-            <td align="center">
-              <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
-              &nbsp;
-              <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
-            </td>
-          </tr>
-        </c:forEach>
+          <tbody>
+            <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
+              <td>${mt.name}</td>
+              <td align="center"><img src="${urlIcon}"/></td>
+              <td>${mt.extensions}</td>
+              <td align="center">
+                <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
+                &nbsp;
+                <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+              </td>
+            </tr>
+          </c:forEach>
+        </tbody>
         <tr class="fuzzy">
           <td colspan="4" align="right">
             <form action="MimeType" method="post" enctype="multipart/form-data">
