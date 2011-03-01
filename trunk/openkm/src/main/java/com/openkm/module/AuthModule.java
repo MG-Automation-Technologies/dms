@@ -162,11 +162,20 @@ public interface AuthModule {
 	public List<String> getRolesByUser(String token, String user) throws PrincipalAdapterException;
 	
 	/**
-	 * Retrieves the user mails from an user list.
+	 * Retrieves the mail from an user.
 	 * 
-	 * @param users A collection of user names.
-	 * @return A collection of user mails.
-	 * @throws RepositoryException If there is any error retrieving the mail list.
+	 * @param users The user id.
+	 * @return A email of the user.
+	 * @throws RepositoryException If there is any error retrieving the mail.
 	 */
-	public List<String> getMails(String token, List<String> users) throws PrincipalAdapterException;
+	public String getMail(String token, String user) throws PrincipalAdapterException;
+	
+	/**
+	 * Retrieves the name from an user.
+	 * 
+	 * @param users The user id.
+	 * @return A name of the user.
+	 * @throws RepositoryException If there is any error retrieving the mail.
+	 */
+	public String getName(String token, String user) throws PrincipalAdapterException;
 }
