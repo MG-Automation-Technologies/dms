@@ -390,7 +390,7 @@ public class AuthServlet extends BaseServlet {
 			usr.setActive(true);
 			usr.setName(OKMAuth.getInstance().getName(null, usrId));
 			usr.setEmail(OKMAuth.getInstance().getMail(null, usrId));
-						
+			
 			if (!roleList.isEmpty()) {
 				Set<Role> roles = new HashSet<Role>();
 				for (String rolId : roleList) {
