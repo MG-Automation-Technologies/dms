@@ -21,7 +21,6 @@
 
 package com.openkm.ws.endpoint;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -219,13 +218,22 @@ public class OKMAuth {
 	}
 	
 	@WebMethod
-	public String[] getMails(@WebParam(name = "token") String token,
-			@WebParam(name = "users") String[] users) throws PrincipalAdapterException {
-		log.debug("getMails({}, {})", token, users);
+	public String getMail(@WebParam(name = "token") String token,
+			@WebParam(name = "user") String user) throws PrincipalAdapterException {
+		log.debug("getMail({}, {})", token, user);
 		AuthModule am = ModuleManager.getAuthModule();
-		List<String> col = am.getMails(token, Arrays.asList(users));
-		String[] result = (String[]) col.toArray(new String[col.size()]);
-		log.debug("getMails: {}", result);
-		return result;
+		String ret = am.getMail(token, user);
+		log.debug("getMail: {}", ret);
+		return ret;
+	}
+	
+	@WebMethod
+	public String getName(@WebParam(name = "token") String token,
+			@WebParam(name = "user") String user) throws PrincipalAdapterException {
+		log.debug("getName({}, {})", token, user);
+		AuthModule am = ModuleManager.getAuthModule();
+		String ret = am.getName(token, user);
+		log.debug("getName: {}", ret);
+		return ret;
 	}
 }
