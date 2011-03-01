@@ -149,7 +149,7 @@ public class Config {
 	public static final String PROPERTY_APPLICATION_URL = "application.url";
 	public static final String PROPERTY_USER_ASSIGN_DOCUMENT_CREATION = "user.assign.document.creation";
 	public static final String PROPERTY_USER_KEYWORDS_CACHE = "user.keywords.cache";
-	public static final String PROPERTY_USER_SIZE_CACHE = "user.size.cache";
+	public static final String PROPERTY_USER_ITEM_CACHE = "user.item.cache";
 	
 	// Schedule
 	public static final String PROPERTY_SCHEDULE_REPOSITORY_INFO = "schedule.repository.info";
@@ -288,8 +288,8 @@ public class Config {
 	public static boolean USER_ASSIGN_DOCUMENT_CREATION = "on".equalsIgnoreCase(USER_ASSIGN_DOCUMENT_CREATION_STR);
 	private static String USER_KEYWORDS_CACHE_STR = "off";
 	public static boolean USER_KEYWORDS_CACHE = "on".equalsIgnoreCase(USER_KEYWORDS_CACHE_STR);
-	private static String USER_SIZE_CACHE_STR = "off";
-	public static boolean USER_SIZE_CACHE = "on".equalsIgnoreCase(USER_SIZE_CACHE_STR);
+	private static String USER_ITEM_CACHE_STR = "off";
+	public static boolean USER_ITEM_CACHE = "on".equalsIgnoreCase(USER_ITEM_CACHE_STR);
 	
 	// Schedule
 	private static String SCHEDULE_REPOSITORY_INFO_STR = "1440"; // 24*60 min = 24 hours
@@ -585,9 +585,9 @@ public class Config {
 			USER_KEYWORDS_CACHE_STR = config.getProperty(PROPERTY_USER_KEYWORDS_CACHE, USER_KEYWORDS_CACHE_STR);
 			USER_KEYWORDS_CACHE = "on".equalsIgnoreCase(USER_KEYWORDS_CACHE_STR);
 			values.put(PROPERTY_USER_KEYWORDS_CACHE, USER_KEYWORDS_CACHE_STR+" ("+USER_KEYWORDS_CACHE+")");
-			USER_SIZE_CACHE_STR = config.getProperty(PROPERTY_USER_SIZE_CACHE, USER_SIZE_CACHE_STR);
-			USER_SIZE_CACHE = "on".equalsIgnoreCase(USER_SIZE_CACHE_STR);
-			values.put(PROPERTY_USER_SIZE_CACHE, USER_SIZE_CACHE_STR+" ("+USER_SIZE_CACHE+")");
+			USER_ITEM_CACHE_STR = config.getProperty(PROPERTY_USER_ITEM_CACHE, USER_ITEM_CACHE_STR);
+			USER_ITEM_CACHE = "on".equalsIgnoreCase(USER_ITEM_CACHE_STR);
+			values.put(PROPERTY_USER_ITEM_CACHE, USER_ITEM_CACHE_STR+" ("+USER_ITEM_CACHE+")");
 			
 			// Schedule
 			SCHEDULE_REPOSITORY_INFO_STR = config.getProperty(PROPERTY_SCHEDULE_REPOSITORY_INFO, SCHEDULE_REPOSITORY_INFO_STR);
