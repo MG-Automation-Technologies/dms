@@ -99,7 +99,12 @@ public class EJBAuthModule implements com.openkm.module.AuthModule {
 	}
 
 	@Override
-	public List<String> getMails(String token, List<String> users) throws PrincipalAdapterException {
+	public String getMail(String token, String user) throws PrincipalAdapterException {
+		return null;
+	}
+
+	@Override
+	public String getName(String token, String user) throws PrincipalAdapterException {
 		return null;
 	}
 }
