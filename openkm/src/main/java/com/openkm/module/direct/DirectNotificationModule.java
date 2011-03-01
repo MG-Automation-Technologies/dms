@@ -243,25 +243,31 @@ public class DirectNotificationModule implements NotificationModule {
 	public void notify(String token, String nodePath, List<String> users, String message, boolean attachment)
 			throws PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("notify({}, {}, {}, {})", new Object[] { token, nodePath, users, message });
+		List<String> to = new ArrayList<String>();
 		Session session = null;
 		
 		if (!users.isEmpty()) {
 			try {
 				log.debug("Nodo: {}, Message: {}", nodePath, message);
+				
 				if (token == null) {
 					session = JCRUtils.getSession();
 				} else {
 					session = JcrSessionManager.getInstance().get(token);
 				}
 				
-				List<String> emails = new DirectAuthModule().getMails(token, users);
+				for (String user : users) {
+					String mail = new DirectAuthModule().getMail(token, user);
+					
+					if (mail != null) {
+						to.add(mail);
+					}
+				}
 				
 				// Get session user email address
-				ArrayList<String> dummy = new ArrayList<String>();
-				dummy.add(session.getUserID());
-				ArrayList<String> from = (ArrayList<String>) new DirectAuthModule().getMails(token, dummy);
+				String from = new DirectAuthModule().getMail(token, session.getUserID());
 				
-				if (!emails.isEmpty() && !from.isEmpty()) {
+				if (!to.isEmpty() && from != null && !from.isEmpty()) {
 					StringWriter swSubject = new StringWriter();
 					StringWriter swBody = new StringWriter();
 					Configuration cfg = TemplateUtils.getConfig();
@@ -294,9 +300,9 @@ public class DirectNotificationModule implements NotificationModule {
 					}
 					
 					if (attachment) {
-						MailUtils.sendDocument((String) from.get(0), emails, swSubject.toString(), swBody.toString(), nodePath);
+						MailUtils.sendDocument((String) from, to, swSubject.toString(), swBody.toString(), nodePath);
 					} else {
-						MailUtils.sendMessage((String) from.get(0), emails, swSubject.toString(), swBody.toString());
+						MailUtils.sendMessage((String) from, to, swSubject.toString(), swBody.toString());
 					}
 				}
 			} catch (UnsupportedEncodingException e) {
