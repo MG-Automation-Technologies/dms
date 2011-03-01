@@ -49,7 +49,8 @@ public class BaseNotificationModule {
 	 */
 	public static void checkSubscriptions(Node node, String user, String eventType, String comment) {
 		log.debug("checkSubscriptions({}, {}, {}, {})", new Object[] { node, user, eventType, comment });
-		List<String> users = null;
+		List<String> users = new ArrayList<String>();
+		List<String> mails = new ArrayList<String>();
 		
 		try {
 			users = checkSubscriptionsHelper(node);
@@ -61,45 +62,49 @@ public class BaseNotificationModule {
 		 * Mail notification
 		 */
 		try {
-			if (users != null && !users.isEmpty()) {
-				List<String> emails = new DirectAuthModule().getMails(null, users);
-					
-				if (!emails.isEmpty()) {
-					if (comment == null) { comment = ""; }
-					StringWriter swSubject = new StringWriter();
-					StringWriter swBody = new StringWriter();
-					Configuration cfg = TemplateUtils.getConfig();
-					
-					Map<String, String> model = new HashMap<String, String>();
-					model.put("documentUrl", Config.APPLICATION_URL+"?docPath=" + URLEncoder.encode(node.getPath(), "UTF-8"));
-					model.put("documentPath", node.getPath());
-					model.put("documentName", node.getName());
-					model.put("userId", user);
-					model.put("eventType", eventType);
-					model.put("subscriptionComment", comment);
-					
-					if (TemplateUtils.templateExists(Config.SUBSCRIPTION_MESSAGE_SUBJECT)) {
-						Template tpl = cfg.getTemplate(Config.SUBSCRIPTION_MESSAGE_SUBJECT);
-						tpl.process(model, swSubject);
-					} else {
-						StringReader sr = new StringReader(Config.SUBSCRIPTION_MESSAGE_SUBJECT);
-						Template tpl = new Template("SubscriptionMessageSubject", sr, cfg);
-						tpl.process(model, swSubject);
-						sr.close();
-					}
-					
-					if (TemplateUtils.templateExists(Config.SUBSCRIPTION_MESSAGE_BODY)) {
-						Template tpl = cfg.getTemplate(Config.SUBSCRIPTION_MESSAGE_BODY);
-						tpl.process(model, swBody);
-					} else {
-						StringReader sr = new StringReader(Config.SUBSCRIPTION_MESSAGE_BODY);
-						Template tpl = new Template("SubscriptionMessageBody", sr, cfg);
-						tpl.process(model, swBody);
-						sr.close();
-					}
-					
-					MailUtils.sendMessage(emails, swSubject.toString(), swBody.toString());
+			for (String userId : users) {
+				String mail = new DirectAuthModule().getMail(null, userId);
+				
+				if (mail != null && !mail.isEmpty()) {
+					mails.add(mail);
 				}
+			}
+				
+			if (!mails.isEmpty()) {
+				if (comment == null) { comment = ""; }
+				StringWriter swSubject = new StringWriter();
+				StringWriter swBody = new StringWriter();
+				Configuration cfg = TemplateUtils.getConfig();
+				
+				Map<String, String> model = new HashMap<String, String>();
+				model.put("documentUrl", Config.APPLICATION_URL+"?docPath=" + URLEncoder.encode(node.getPath(), "UTF-8"));
+				model.put("documentPath", node.getPath());
+				model.put("documentName", node.getName());
+				model.put("userId", user);
+				model.put("eventType", eventType);
+				model.put("subscriptionComment", comment);
+				
+				if (TemplateUtils.templateExists(Config.SUBSCRIPTION_MESSAGE_SUBJECT)) {
+					Template tpl = cfg.getTemplate(Config.SUBSCRIPTION_MESSAGE_SUBJECT);
+					tpl.process(model, swSubject);
+				} else {
+					StringReader sr = new StringReader(Config.SUBSCRIPTION_MESSAGE_SUBJECT);
+					Template tpl = new Template("SubscriptionMessageSubject", sr, cfg);
+					tpl.process(model, swSubject);
+					sr.close();
+				}
+				
+				if (TemplateUtils.templateExists(Config.SUBSCRIPTION_MESSAGE_BODY)) {
+					Template tpl = cfg.getTemplate(Config.SUBSCRIPTION_MESSAGE_BODY);
+					tpl.process(model, swBody);
+				} else {
+					StringReader sr = new StringReader(Config.SUBSCRIPTION_MESSAGE_BODY);
+					Template tpl = new Template("SubscriptionMessageBody", sr, cfg);
+					tpl.process(model, swBody);
+					sr.close();
+				}
+				
+				MailUtils.sendMessage(mails, swSubject.toString(), swBody.toString());
 			}
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
