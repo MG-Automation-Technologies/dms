@@ -127,7 +127,8 @@ public class Config {
 	public static final String PROPERTY_SUBSCRIPTION_TWITTER_STATUS = "notify.twitter.status";
 	
 	public static final String PROPERTY_SYSTEM_DEMO = "system.demo";
-	public static final String PROPERTY_SYSTEM_WEBDAV = "system.webdav";
+	public static final String PROPERTY_SYSTEM_WEBDAV_SERVER = "system.webdav.server";
+	public static final String PROPERTY_SYSTEM_WEBDAV_FIX = "system.webdav.fix";
 	public static final String PROPERTY_SYSTEM_READONLY = "system.readonly";
 	public static final String PROPERTY_SYSTEM_MAINTENANCE = "system.maintenance";
 	public static final String PROPERTY_SYSTEM_OCR = "system.ocr";
@@ -265,7 +266,8 @@ public class Config {
 	public static String SUBSCRIPTION_TWITTER_STATUS;
 	
 	public static boolean SYSTEM_DEMO;
-	public static boolean SYSTEM_WEBDAV;
+	public static boolean SYSTEM_WEBDAV_SERVER;
+	public static boolean SYSTEM_WEBDAV_FIX;
 	public static boolean SYSTEM_MAINTENANCE;
 	public static boolean SYSTEM_READONLY;
 	public static String SYSTEM_OCR;
@@ -585,8 +587,10 @@ public class Config {
 			
 			SYSTEM_DEMO = ConfigDAO.getBoolean(PROPERTY_SYSTEM_DEMO, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_SYSTEM_DEMO, "off")));
 			values.put(PROPERTY_SYSTEM_DEMO, Boolean.toString(SYSTEM_DEMO));
-			SYSTEM_WEBDAV = ConfigDAO.getBoolean(PROPERTY_SYSTEM_WEBDAV, false);
-			values.put(PROPERTY_SYSTEM_WEBDAV, Boolean.toString(SYSTEM_WEBDAV));
+			SYSTEM_WEBDAV_SERVER = ConfigDAO.getBoolean(PROPERTY_SYSTEM_WEBDAV_SERVER, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_SYSTEM_WEBDAV_SERVER, "off")));
+			values.put(PROPERTY_SYSTEM_WEBDAV_SERVER, Boolean.toString(SYSTEM_WEBDAV_SERVER));
+			SYSTEM_WEBDAV_FIX = ConfigDAO.getBoolean(PROPERTY_SYSTEM_WEBDAV_FIX, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_SYSTEM_WEBDAV_FIX, "off")));
+			values.put(PROPERTY_SYSTEM_WEBDAV_FIX, Boolean.toString(SYSTEM_WEBDAV_FIX));
 			SYSTEM_MAINTENANCE = ConfigDAO.getBoolean(PROPERTY_SYSTEM_MAINTENANCE, false);
 			values.put(PROPERTY_SYSTEM_MAINTENANCE, Boolean.toString(SYSTEM_MAINTENANCE));
 			SYSTEM_READONLY = ConfigDAO.getBoolean(PROPERTY_SYSTEM_READONLY, false);
