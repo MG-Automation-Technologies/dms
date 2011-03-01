@@ -272,7 +272,7 @@ public class DirectDocumentModule implements DocumentModule {
 		if (!Config.SYSTEM_USER.equals(session.getUserID())) {
 			long currentQuota = 0;
 			
-			if (Config.USER_SIZE_CACHE) {
+			if (Config.USER_ITEM_CACHE) {
 				UserItems ui = UserItemsManager.get(session.getUserID());
 				currentQuota = ui.getSize();
 			} else {
@@ -333,7 +333,7 @@ public class DirectDocumentModule implements DocumentModule {
 		contentNode.checkin();
 		
 		// Update user items size
-		if (Config.USER_SIZE_CACHE) {
+		if (Config.USER_ITEM_CACHE) {
 			UserItemsManager.incSize(session.getUserID(), size);
 			UserItemsManager.incDocuments(session.getUserID(), 1);
 		}
@@ -1607,7 +1607,7 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 			
 			// Update user items
-			if (Config.USER_SIZE_CACHE) {
+			if (Config.USER_ITEM_CACHE) {
 				for (Iterator<Entry<String, UserItems>> it = userItemsHash.entrySet().iterator(); it.hasNext(); ) {
 					Entry<String, UserItems> entry = it.next();
 					String uid = entry.getKey();
@@ -1680,7 +1680,7 @@ public class DirectDocumentModule implements DocumentModule {
 				log.debug("vh.removeVersion({})", versionName);
 				vh.removeVersion(versionName);
 				
-				if (Config.USER_SIZE_CACHE) {
+				if (Config.USER_ITEM_CACHE) {
 					// Update local user items for versions
 					UserItems userItems = userItemsHash.get(author);
 					if (userItems == null) userItems = new UserItems();
@@ -1691,7 +1691,7 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 		}
 		
-		if (Config.USER_SIZE_CACHE) {
+		if (Config.USER_ITEM_CACHE) {
 			// Update local user items for working version
 			UserItems userItems = userItemsHash.get(author);
 			if (userItems == null) userItems = new UserItems();
