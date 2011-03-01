@@ -21,12 +21,11 @@
 
 package com.openkm.webdav;
 
-import org.apache.jackrabbit.util.Text;
 import org.apache.jackrabbit.webdav.AbstractLocatorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.util.FileUtils;
+import com.openkm.core.Config;
 
 public class LocatorFactoryImplEx extends AbstractLocatorFactory {
     private static Logger log = LoggerFactory.getLogger(LocatorFactoryImplEx.class);
@@ -53,11 +52,19 @@ public class LocatorFactoryImplEx extends AbstractLocatorFactory {
         
         if (resourcePath.equals(wspPath) || startsWithWorkspace(resourcePath, wspPath)) {
             String repositoryPath = resourcePath.substring(wspPath.length());
-            String name = Text.getName(repositoryPath);
-            String parent = Text.getRelativeParent(repositoryPath, 1);
+            //String name = Text.getName(repositoryPath);
+            //String parent = Text.getRelativeParent(repositoryPath, 1);
             
-            if (!name.startsWith("okm:")) {
-            	repositoryPath = parent + "/" + FileUtils.escape(name);
+            //if (!name.startsWith("okm:")) {
+            	//repositoryPath = parent + "/" + FileUtils.escape(name);
+            //}
+            
+            if (Config.SYSTEM_WEBDAV_FIX) {
+            	if (repositoryPath.contains("okm_root")) {
+            		repositoryPath = repositoryPath.replace("okm_root", "okm:root");
+            	} else if (repositoryPath.contains("okm_personal")) {
+            		repositoryPath = repositoryPath.replace("okm_personal", "okm:personal");
+            	}
             }
             
             String ret = (repositoryPath.length() == 0) ? "/" : repositoryPath;
@@ -77,6 +84,15 @@ public class LocatorFactoryImplEx extends AbstractLocatorFactory {
         if (repositoryPath == null) {
             throw new IllegalArgumentException("Cannot build resource path from 'null' repository path");
         }
+        
+        if (Config.SYSTEM_WEBDAV_FIX) {
+        	if (repositoryPath.contains("okm:root")) {
+        		repositoryPath = repositoryPath.replace("okm:root", "okm_root");
+        	} else if (repositoryPath.contains("okm:personal")) {
+        		repositoryPath = repositoryPath.replace("okm:personal", "okm_personal");
+        	}
+        }
+        
         String ret = (startsWithWorkspace(repositoryPath, wspPath)) ? repositoryPath : wspPath + repositoryPath;
         log.debug("getResourcePath: {}", ret);
         return ret;
