@@ -59,11 +59,20 @@ public interface PrincipalAdapter {
 	public List<String> getRolesByUser(String user) throws PrincipalAdapterException;
 	
 	/**
-	 * Method to retrieve the mail from a list of users.
+	 * Method to retrieve the mail from a user.
 	 * 
-	 * @param users A list of users.
-	 * @return A list of user emails.
+	 * @param users A user id.
+	 * @return The email of the user.
 	 * @throws PrincipalAdapterException If any error occurs.
 	 */
-	public List<String> getMails(List<String> users) throws PrincipalAdapterException;
+	public String getMail(String user) throws PrincipalAdapterException;
+	
+	/**
+	 * Method to retrieve the name from a user.
+	 * 
+	 * @param users A user id.
+	 * @return The name of the user.
+	 * @throws PrincipalAdapterException If any error occurs.
+	 */
+	public String getName(String user) throws PrincipalAdapterException;
 }
