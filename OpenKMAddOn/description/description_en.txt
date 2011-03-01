@@ -1,3 +1,0 @@
-OpenKM AddOn
-
-Allow to edit, update, cancel update and add documents to and from OpenKM repository servers.
