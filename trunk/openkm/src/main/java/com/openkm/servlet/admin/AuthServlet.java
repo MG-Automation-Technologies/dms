@@ -384,19 +384,13 @@ public class AuthServlet extends BaseServlet {
 		List<User> usrList = new ArrayList<User>();
 		
 		for (String usrId : strList) {
-			List<String> userList = new ArrayList<String>();
-			userList.add(usrId);
-			List<String> mailList = OKMAuth.getInstance().getMails(null, userList);
 			List<String> roleList = OKMAuth.getInstance().getRolesByUser(null, usrId);			
 			User usr = new User();
 			usr.setId(usrId);
 			usr.setActive(true);
-			usr.setName(Config.PRINCIPAL_ADAPTER);
-			
-			if (!mailList.isEmpty()) {
-				usr.setEmail(mailList.iterator().next());
-			}
-			
+			usr.setName(OKMAuth.getInstance().getName(null, usrId));
+			usr.setEmail(OKMAuth.getInstance().getMail(null, usrId));
+						
 			if (!roleList.isEmpty()) {
 				Set<Role> roles = new HashSet<Role>();
 				for (String rolId : roleList) {
