@@ -79,14 +79,12 @@ public class PropertyGroup extends Composite implements HasPropertyGroupHandlerE
 					editValues = true;
 					removeButton.setVisible(false);
 				} else {
-					if (propertyGroupWidget.getValidationProcessor().validate()) {
-						Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications
-						changeButton.setHTML(Main.i18n("button.change"));
-						setProperties();
-						editValues = false;
-						removeButton.setVisible(true);
-						cancelButton.setVisible(false);
-					} 
+					Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications
+					changeButton.setHTML(Main.i18n("button.change"));
+					setProperties();
+					editValues = false;
+					removeButton.setVisible(true);
+					cancelButton.setVisible(false);
 				}
 			}
 		});

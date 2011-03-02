@@ -81,19 +81,15 @@ public class DirectAuthModule implements AuthModule {
 		String token = null;
 		
 		try {
-			if (Config.SYSTEM_MAINTENANCE) {
-				throw new AccessDeniedException("System under maintenance");
-			} else {
-				javax.jcr.Repository r = DirectRepositoryModule.getRepository();
-				Session session = r.login(new SimpleCredentials(user, password.toCharArray()), null);
-				token = UUIDGenerator.generate(this);
-				JcrSessionManager.getInstance().add(token, session);
-				
-				// Activity log
-				UserActivity.log(session.getUserID(), "LOGIN", null, token);
-								
-				return token;
-			}
+			javax.jcr.Repository r = DirectRepositoryModule.getRepository();
+			Session session = r.login(new SimpleCredentials(user, password.toCharArray()), null);
+			token = UUIDGenerator.generate(this);
+			JcrSessionManager.getInstance().add(token, session);
+			
+			// Activity log
+			UserActivity.log(session.getUserID(), "LOGIN", null, token);
+			
+			return token;
 		} catch (LoginException e) {
 			log.error(e.getMessage(), e);
 			throw new AccessDeniedException(e.getMessage(), e);
@@ -116,7 +112,7 @@ public class DirectAuthModule implements AuthModule {
 			
 			if (session != null) {
 				// Activity log
-				UserActivity.log(session.getUserID(), "LOGOUT", token, null);
+				UserActivity.log(session.getUserID(), "LOGOUT", null, null);
 				
 				JcrSessionManager.getInstance().remove(token);
 				session.logout();
@@ -222,7 +218,7 @@ public class DirectAuthModule implements AuthModule {
 			}
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "GRANT_USER", node.getUUID(), user+", "+permissions+", "+nodePath);
+			UserActivity.log(session.getUserID(), "GRANT_USER", nodePath, user+", "+permissions);
 		} catch (javax.jcr.AccessDeniedException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(node);
@@ -322,7 +318,7 @@ public class DirectAuthModule implements AuthModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "REVOKE_USER", node.getUUID(), user+", "+permissions+", "+nodePath);
+			UserActivity.log(session.getUserID(), "REVOKE_USER", nodePath, user+", "+permissions);
 		} catch (javax.jcr.AccessDeniedException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(node);
@@ -419,7 +415,7 @@ public class DirectAuthModule implements AuthModule {
 			}
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "GRANT_ROLE", node.getUUID(), role+", "+permissions+", "+nodePath);
+			UserActivity.log(session.getUserID(), "GRANT_ROLE", nodePath, role+", "+permissions);
 		} catch (javax.jcr.AccessDeniedException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(node);
@@ -519,7 +515,7 @@ public class DirectAuthModule implements AuthModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "REVOKE_ROLE", node.getUUID(), role+", "+permissions+", "+nodePath);
+			UserActivity.log(session.getUserID(), "REVOKE_ROLE", nodePath, role+", "+permissions);
 		} catch (javax.jcr.AccessDeniedException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(node);
@@ -846,38 +842,21 @@ public class DirectAuthModule implements AuthModule {
 		log.debug("getRolesByUser: {}", list);
 		return list;
 	}
-
+	
 	@Override
-	public String getMail(String token, String user) throws PrincipalAdapterException {
-		log.debug("getMail({}, {})", token, user);
-		String mail = null;
+	public List<String> getMails(String token, List<String> users) throws PrincipalAdapterException {
+		log.debug("getMails()");
+		List<String> list = null;
 
 		try {
 			PrincipalAdapter principalAdapter = getPrincipalAdapter();
-			mail = principalAdapter.getMail(user);
+			list = principalAdapter.getMails(users);
 		} catch (PrincipalAdapterException e) {
 			log.error(e.getMessage(), e);
 			throw e;
 		}
 
-		log.debug("getMail: {}", mail);
-		return mail;
-	}
-
-	@Override
-	public String getName(String token, String user) throws PrincipalAdapterException {
-		log.debug("getName({}, {})", token, user);
-		String name = null;
-
-		try {
-			PrincipalAdapter principalAdapter = getPrincipalAdapter();
-			name = principalAdapter.getName(user);
-		} catch (PrincipalAdapterException e) {
-			log.error(e.getMessage(), e);
-			throw e;
-		}
-
-		log.debug("getName: {}", name);
-		return name;
+		log.debug("getMails: {}", list);
+		return list;
 	}
 }

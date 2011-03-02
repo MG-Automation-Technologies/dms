@@ -54,15 +54,14 @@ import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
-import com.openkm.extension.frontend.client.widget.messaging.MessagingToolBarBox;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTKeyword;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.contants.service.RPCService;
-import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.extension.event.HasDocumentEvent;
+import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import com.openkm.frontend.client.service.OKMPropertyService;
@@ -71,7 +70,7 @@ import com.openkm.frontend.client.util.CommonUI;
 import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.dashboard.ImageHover;
-import com.openkm.frontend.client.widget.dashboard.keymap.TagCloud;
+import com.openkm.frontend.client.widget.dashboard.TagCloud;
 import com.openkm.frontend.client.widget.thesaurus.ThesaurusSelectPopup;
 
 /**
@@ -101,13 +100,11 @@ public class Document extends Composite {
 	private boolean visible = true;
 	private HTML subcribedUsersText;
 	private HTML keywordsCloudText;
-	private Image proposeSubscribeImage;
 	private Image categoriesImage;
 	private Image thesaurusImage;
 	private HTML categoriesText;
 	private boolean remove = true;
 	private List<String> keyWordsListPending; // Keyword list pending to be added ( each one is added sequentially )
-	HorizontalPanel hPanelSubscribedUsers;
 	
 	public Document() {
 		keywordMap = new HashMap<String,Widget>();
@@ -210,24 +207,11 @@ public class Document extends Composite {
 		keywordsCloud.setWidth("350");
 		
 		VerticalPanel vPanel2 = new VerticalPanel();
-		
-		hPanelSubscribedUsers = new HorizontalPanel();
 		subcribedUsersText = new HTML("<b>"+Main.i18n("document.subscribed.users")+"<b>");
-		proposeSubscribeImage = new Image(OKMBundleResources.INSTANCE.proposeSubscription());
-		proposeSubscribeImage.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				MessagingToolBarBox.get().executeProposeSubscription(document.getUuid());
-			}
-		});
-		hPanelSubscribedUsers.add(subcribedUsersText);
-		hPanelSubscribedUsers.add(new HTML("&nbsp;"));
-		hPanelSubscribedUsers.setCellVerticalAlignment(subcribedUsersText, HasAlignment.ALIGN_MIDDLE);
-
 		keywordsCloudText = new HTML("<b>"+Main.i18n("document.keywords.cloud")+"</b>");
-		
 		HorizontalPanel hPanelCategories = new HorizontalPanel();
 		categoriesText = new HTML("<b>"+Main.i18n("document.categories")+"</b>");
+	
 		categoriesImage = new Image(OKMBundleResources.INSTANCE.tableKeyIcon());
 		categoriesImage.addClickHandler(new ClickHandler() {
 			@Override
@@ -239,9 +223,8 @@ public class Document extends Composite {
 		hPanelCategories.add(categoriesText);
 		hPanelCategories.add(new HTML("&nbsp;"));
 		hPanelCategories.add(categoriesImage);
-		hPanelCategories.setCellVerticalAlignment(categoriesText, HasAlignment.ALIGN_MIDDLE);
 		
-		vPanel2.add(hPanelSubscribedUsers);
+		vPanel2.add(subcribedUsersText);
 		vPanel2.add(tableSubscribedUsers);
 		HTML space2 = new HTML("");
 		vPanel2.add(space2);
@@ -280,7 +263,6 @@ public class Document extends Composite {
 		suggestKey.addStyleName("okm-Input");
 		hKeyPanel.setStylePrimaryName("okm-cloudWrap");
 		keywordsCloud.setStylePrimaryName("okm-cloudWrap");
-		proposeSubscribeImage.addStyleName("okm-Hyperlink");
 		categoriesImage.addStyleName("okm-Hyperlink");
 		thesaurusImage.addStyleName("okm-Hyperlink");
 		
@@ -381,16 +363,6 @@ public class Document extends Composite {
 			thesaurusImage.setVisible(false);
 		}
 		
-		// Propose subscription only must be enabled in taxonomy, categories, thesaurus and templates with
-		if (Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TAXONOMY || 
-			Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_CATEGORIES ||
-			Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_THESAURUS ||
-			Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TEMPLATES) {
-			proposeSubscribeImage.setVisible(true);
-		} else {
-			proposeSubscribeImage.setVisible(false);
-		}
-		
 		getVersionHistorySize();
 		
 		// Sets wordWrap for al rows
@@ -422,8 +394,8 @@ public class Document extends Composite {
 		
 		// Some preoperties only must be visible on taxonomy or trash view
 		int actualView = Main.get().mainPanel.desktop.navigator.getStackIndex();
-		if (actualView==UIDesktopConstants.NAVIGATOR_TAXONOMY || actualView==UIDesktopConstants.NAVIGATOR_TRASH ||
-			actualView==UIDesktopConstants.NAVIGATOR_THESAURUS || actualView==UIDesktopConstants.NAVIGATOR_CATEGORIES){
+		if (actualView==PanelDefinition.NAVIGATOR_TAXONOMY || actualView==PanelDefinition.NAVIGATOR_TRASH ||
+			actualView==PanelDefinition.NAVIGATOR_THESAURUS || actualView==PanelDefinition.NAVIGATOR_CATEGORIES){
 			tableProperties.getCellFormatter().setVisible(7,0,true);
 			tableProperties.getCellFormatter().setVisible(7,1,true);
 			tableProperties.getCellFormatter().setVisible(9,0,true);
@@ -440,7 +412,7 @@ public class Document extends Composite {
 		}
 		
 		// Some data must not be visible on personal view
-		if (actualView==UIDesktopConstants.NAVIGATOR_PERSONAL) {
+		if (actualView==PanelDefinition.NAVIGATOR_PERSONAL) {
 			subcribedUsersText.setVisible(false);
 			tableSubscribedUsers.setVisible(false);
 			tableSubscribedCategories.setVisible(false);
@@ -590,7 +562,7 @@ public class Document extends Composite {
 	public void getVersionHistorySize() {
 		Main.get().mainPanel.desktop.browser.tabMultiple.status.setGetVersionHistorySize();
 		ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
-		endPoint.setServiceEntryPoint(RPCService.DocumentService);
+		endPoint.setServiceEntryPoint(Config.OKMDocumentService);
 		documentService.getVersionHistorySize(document.getPath(), callbackGetVersionHistorySize);
 	}
 	
@@ -599,7 +571,7 @@ public class Document extends Composite {
 	 */
 	public void addKeyword(String keyword) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
-		endPoint.setServiceEntryPoint(RPCService.PropertyService);
+		endPoint.setServiceEntryPoint(Config.OKMPropertyService);
 		propertyService.addKeyword(document.getPath(), keyword, callbackAddKeywords);
 	}
 	
@@ -609,7 +581,7 @@ public class Document extends Composite {
 	public void removeKeyword(String keyword) {
 		Main.get().mainPanel.desktop.browser.tabMultiple.status.setKeywords();
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
-		endPoint.setServiceEntryPoint(RPCService.PropertyService);
+		endPoint.setServiceEntryPoint(Config.OKMPropertyService);
 		propertyService.removeKeyword(document.getPath(), keyword, callbackRemoveKeywords);
 	}
 	
@@ -622,7 +594,7 @@ public class Document extends Composite {
 			drawCategory(category,remove);
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.setCategories();
 			ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
-			endPoint.setServiceEntryPoint(RPCService.PropertyService);
+			endPoint.setServiceEntryPoint(Config.OKMPropertyService);
 			propertyService.addCategory(document.getPath(), category.getUuid(), callbackAddCategory);
 		}
 	}
@@ -633,7 +605,7 @@ public class Document extends Composite {
 	public void removeCategory(String UUID) {
 		Main.get().mainPanel.desktop.browser.tabMultiple.status.setCategories();
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
-		endPoint.setServiceEntryPoint(RPCService.PropertyService);
+		endPoint.setServiceEntryPoint(Config.OKMPropertyService);
 		propertyService.removeCategory(document.getPath(), UUID, callbackRemoveCategory);
 	}
 	
@@ -650,14 +622,6 @@ public class Document extends Composite {
 	}
 	
 	/**
-	 * showProposedSusbcription
-	 */
-	public void showProposedSusbcription() {
-		// Adds to panel
-		hPanelSubscribedUsers.add(proposeSubscribeImage);
-	}
-	
-	/**
 	 * Removes a key
 	 * 
 	 * @param keyword The key to be removed
@@ -669,7 +633,7 @@ public class Document extends Composite {
 			removeKeyword(keyword);
 			Main.get().mainPanel.dashboard.keyMapDashboard.decreaseKeywordRate(keyword);
 			drawTagCloud(document.getKeywords());
-			if (Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_THESAURUS) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_THESAURUS) {
 				GWTFolder folder = ((GWTFolder) Main.get().activeFolderTree.actualItem.getUserObject());
 				// When remove the keyword for which are browsing must refreshing filebrowser view
 				if (folder.getPath().substring(folder.getPath().lastIndexOf("/")+1).replace(" ", "_").equals(keyword)) {

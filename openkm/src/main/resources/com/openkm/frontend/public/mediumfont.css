@@ -29,18 +29,6 @@ a:active {
 	white-space: nowrap;
 }
 
-.okm-Vertical-Line-Border {
-	background-image: url(img/vertical_line_back.gif);
-	background-repeat: repeat;
-	width: 2px;
-}
-
-.okm-Horizontal-Line-Border {
-	background-image: url(img/horizontal_line_back.gif);
-	background-repeat: repeat;
-	height: 2px;
-}
-
 /* row results */
 .okm-Table-Row {
 	height: 20px;
@@ -1436,53 +1424,4 @@ iframe {
 [disabled] {
 	color: #777;
 	background-color: #ddd;
-}
-
-/* Stack Panel */
-.okm-DashboardStackPanel {
-	border-right: 1px solid #A5A596;
-}
-
-.okm-DashboardStackPanel .gwt-StackPanelItem {
-	height: 19px;
-	background-image: url(img/stackpanel_back.gif);
-	background-repeat: repeat;
-}
-
-.okm-DashboardStackPanel .gwt-StackPanelItem-selected {
-	height: 19px;
-	background-image: url(img/stackpanel_back.gif);
-	background-repeat: repeat;
-}
-
-/* Inputs */
-.okm-Left-Bottom-Border {
-	border-left: 1px solid #A5A596;
-	border-bottom: 1px solid #A5A596;
-	font-size: 10px;
-	font-family: verdana, arial, sans-serif;
-	-moz-user-select: normal;
-    -khtml-user-select: normal;
-    user-select: normal;
-    white-space: nowrap;
-}
-
-.okm-Left-Top-Border {
-	border-left: 1px solid #A5A596;
-	border-top: 1px solid #A5A596;
-	font-size: 10px;
-	font-family: verdana, arial, sans-serif;
-	-moz-user-select: normal;
-    -khtml-user-select: normal;
-    user-select: normal;
-    white-space: nowrap;
-}
-
-.okm-validationFailedBorder {
-	border: 2px solid #ff0000;		
-}
-
-.okm-validationFailedText {
-	color: #ff0000;
-	font-weight: bold;		
 }

@@ -33,7 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
-import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.Role;
 import com.openkm.dao.bean.User;
 import com.openkm.util.SecureStore;
@@ -189,7 +188,6 @@ public class AuthDAO {
 	/**
 	 * Delete user from database
 	 */
-	@SuppressWarnings("unchecked")
 	public static void deleteUser(String usrId) throws DatabaseException {
 		log.debug("deleteUser({})", usrId);
 		String qsMail = "delete from MailAccount ma where ma.user=:user";
@@ -197,7 +195,6 @@ public class AuthDAO {
 		String qsBookmark = "delete from Bookmark bm where bm.user=:user";
 		String qsConfig = "delete from UserConfig uc where uc.user=:user";
 		String qsItems = "delete from UserItems ui where ui.user=:user";
-		String qsSharedQuery = "from QueryParams qp where :user in elements(qp.shared)";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -226,13 +223,6 @@ public class AuthDAO {
 			Query qItems = session.createQuery(qsItems);
 			qItems.setString("user", usrId);
 			qItems.executeUpdate();
-			
-			Query qSharedQuery = session.createQuery(qsSharedQuery);
-			qSharedQuery.setString("user", usrId);
-			for (QueryParams qp : (List<QueryParams>) qSharedQuery.list()) {
-				qp.getShared().remove(usrId);
-				session.update(qp);
-			}
 			
 			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {

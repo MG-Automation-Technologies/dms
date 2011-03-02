@@ -49,9 +49,9 @@ public class LegacyDAO {
 	public static Connection getConnection() {
 		try {
 			if (ds == null) {
-				log.info("Looking for {} DataSource...", Config.HIBERNATE_DATASOURCE);
+				log.info("Looking for {} DataSource...", Config.DATASOURCE);
 				Context ctx = new InitialContext();
-				ds = (DataSource) ctx.lookup(Config.HIBERNATE_DATASOURCE);
+				ds = (DataSource) ctx.lookup(Config.DATASOURCE);
 				ctx.close();
 			}
 			

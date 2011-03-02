@@ -32,8 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.core.DataStoreGarbageCollector;
-
 /**
  * Only for testing purposes
  */
@@ -49,9 +47,7 @@ public class TestServlet extends HttpServlet {
 		response.setContentType("text/html");
 		
 		try {
-			out.println("DSGC.begin");
-			new DataStoreGarbageCollector().run();
-			out.println("DSGC.end");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

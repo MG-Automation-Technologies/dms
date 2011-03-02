@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.util.ArchiveUtils;
 import com.openkm.util.FileUtils;
 import com.openkm.util.JCRUtils;
 
@@ -56,7 +55,7 @@ public class RepositoryBackupServlet extends BaseServlet {
 			response.setHeader("Content-disposition", "attachment; filename=\""+archive+"\"");
 			response.setContentType("application/zip");
 			OutputStream out = response.getOutputStream();
-			ArchiveUtils.createZip(backup, "", out);
+			FileUtils.createZip(backup, out);
 			out.flush();
 			out.close();
 		} catch (Exception e) {

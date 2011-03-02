@@ -40,10 +40,8 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
 import com.openkm.bean.QueryResult;
-import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
-import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.module.ModuleManager;
@@ -156,58 +154,5 @@ public class OKMSearch {
 		Document[] result = (Document[]) col.toArray(new Document[col.size()]);
 		log.debug("getCategorizedDocuments: {}", result);
 		return result;
-	}
-	
-	@WebMethod
-	public int saveSearch(@WebParam(name = "token") String token,
-			@WebParam(name = "params") QueryParams params) throws AccessDeniedException, RepositoryException,
-			DatabaseException {
-		log.debug("saveSearch({}, {})", token, params);
-		SearchModule sm = ModuleManager.getSearchModule();
-		int id = sm.saveSearch(token, params);
-		log.debug("saveSearch: {}", id);
-		return id;
-	}
-	
-	@WebMethod
-	public void updateSearch(@WebParam(name = "token") String token,
-			@WebParam(name = "params") QueryParams params) throws AccessDeniedException, RepositoryException,
-			DatabaseException {
-		log.debug("updateSearch({}, {})", token, params);
-		SearchModule sm = ModuleManager.getSearchModule();
-		sm.saveSearch(token, params);
-		log.debug("updateSearch: void");
-	}
-
-	@WebMethod
-	public QueryParams getSearch(@WebParam(name = "token") String token,
-			@WebParam(name = "qpId") int qpId) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
-		log.debug("getSearch({}, {})", token, qpId);
-		SearchModule sm = ModuleManager.getSearchModule();
-		QueryParams qp = sm.getSearch(token, qpId);
-		log.debug("getSearch: {}", qp);
-		return qp;
-	}
-
-	@WebMethod
-	public QueryParams[] getAllSearchs(@WebParam(name = "token") String token) throws 
-			RepositoryException, DatabaseException {
-		log.debug("getAllSearchs({})", token);
-		SearchModule sm = ModuleManager.getSearchModule();
-		List<QueryParams> col = sm.getAllSearchs(token);
-		QueryParams[] result = (QueryParams[]) col.toArray(new QueryParams[col.size()]);
-		log.debug("getAllSearchs: {}", col);
-		return result;
-	}
-
-	@WebMethod
-	public void deleteSearch(@WebParam(name = "token") String token,
-			@WebParam(name = "qpId") int qpId) throws AccessDeniedException, RepositoryException,
-			DatabaseException {
-		log.debug("deleteSearch({}, {})", token, qpId);
-		SearchModule sm = ModuleManager.getSearchModule();
-		sm.deleteSearch(token, qpId);
-		log.debug("deleteSearch: void");
 	}
 }

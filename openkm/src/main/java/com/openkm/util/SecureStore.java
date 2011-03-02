@@ -21,6 +21,7 @@
 
 package com.openkm.util;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
@@ -34,7 +35,6 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
-
 import org.apache.commons.codec.binary.Base64;
 
 public class SecureStore {
@@ -86,7 +86,7 @@ public class SecureStore {
 	/**
 	 * Base64 decoder
 	 */
-	public static byte[] b64Decode(String src) {
+	public static byte[] b64Decode(String src) throws IOException {
 		return Base64.decodeBase64(src);
 	}
 	

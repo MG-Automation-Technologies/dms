@@ -155,146 +155,18 @@ public class QueryParamsDAO {
 		log.debug("findByUser({})", user);
 		String qs = "from QueryParams qp where qp.user=:user";
 		Session session = null;
-		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
 			q.setString("user", user);
 			List<QueryParams> ret = q.list();
-			HibernateUtil.commit(tx);
 			log.debug("findByUser: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
 		}
 	}
-	
-	/**
-	 * Share
-	 */
-	public static void share(int qpId, String user) throws DatabaseException {
-		log.debug("share({})", qpId);
-		Session session = null;
-		Transaction tx = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-			QueryParams qp = (QueryParams) session.load(QueryParams.class, qpId);
-			qp.getShared().add(user);
-			session.update(qp);
-			HibernateUtil.commit(tx);
-			log.debug("share: void");
-		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-	}
-	
-	/**
-	 * Unshare
-	 */
-	public static void unshare(int qpId, String user) throws DatabaseException {
-		log.debug("share({})", qpId);
-		Session session = null;
-		Transaction tx = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-			QueryParams qp = (QueryParams) session.load(QueryParams.class, qpId);
-			qp.getShared().remove(user);
-			session.update(qp);
-			HibernateUtil.commit(tx);
-			log.debug("share: void");
-		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-	}
-	
-	/**
-	 * Find shared
-	 */
-	@SuppressWarnings("unchecked")
-	public static List<QueryParams> findShared(String user) throws DatabaseException {
-		log.debug("findShared({})", user);
-		String qs = "from QueryParams qp where :user in elements(qp.shared)";
-		Session session = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			Query q = session.createQuery(qs);
-			q.setString("user", user);
-			List<QueryParams> ret = q.list();
-			log.debug("findShared: {}", ret);
-			return ret;
-		} catch (HibernateException e) {
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-	}
-	
-	/**
-	 * Find all proposed receibed from some user
-	 */
-	@SuppressWarnings("unchecked")
-	public static List<QueryParams> findProposedQueryByMeFromUser(String me, String user) throws DatabaseException {
-		log.debug("findProposedQueryByMeFromUser({}, {})", me);
-		String qs = "select distinct(qp) from QueryParams qp, ProposedQueryReceived pr where pr.user=:me and pr.from=:user and pr in elements(qp.proposedReceived)";		
-		Session session = null;
-		Transaction tx = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			Query q = session.createQuery(qs);
-			q.setString("me", me);
-			q.setString("user", user);
-			List<QueryParams> ret = q.list();
-
-			log.debug("findProposedQueryByMeFromUser: {}", ret);
-			return ret;
-		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-	}	
-	
-	/**
-	 * Find all proposed
-	 */
-	@SuppressWarnings("unchecked")
-	public static List<QueryParams> findProposedQueryFromMeToUser(String me, String user) throws DatabaseException {
-		log.debug("findProposedQueryFromMeToUser({}, {})", me);
-		String qs = "select distinct(qp) from QueryParams qp, ProposedQuerySent pr where pr.user=:user and pr.from=:me and pr in elements(qp.proposedSent)";		
-		Session session = null;
-		Transaction tx = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			Query q = session.createQuery(qs);
-			q.setString("me", me);
-			q.setString("user", user);
-			List<QueryParams> ret = q.list();
-
-			log.debug("findProposedQueryFromMeToUser: {}", ret);
-			return ret;
-		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-	}	
 }

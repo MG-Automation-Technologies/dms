@@ -79,24 +79,17 @@ public class DummyPrincipalAdapter implements PrincipalAdapter {
 	}
 
 	@Override
-	public String getMail(String user) throws PrincipalAdapterException {
-		String mail = null;
+	public List<String> getMails(List<String> users) throws PrincipalAdapterException {
+		List<String> list = new ArrayList<String>();
 		
-		if (user.equals("okmAdmin")) {
-			mail = "admin@openkm.com";
+		for (String user : users) {
+			if (user.equals("okmAdmin")) {
+				list.add("admin@openkm.com");
+			} else if (user.equals("monkiki")) {
+				list.add("mokiki@openkm.com");
+			}
 		}
-		
-		return mail;
-	}
-
-	@Override
-	public String getName(String user) throws PrincipalAdapterException {
-		String name = null;
-		
-		if (user.equals("okmAdmin")) {
-			name = "Administrator";
-		}
-		
-		return name;
+	
+		return list;
 	}
 }

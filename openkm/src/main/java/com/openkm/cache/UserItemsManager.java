@@ -22,7 +22,7 @@ import com.openkm.dao.bean.cache.UserItems;
 
 public class UserItemsManager {
 	private static Logger log = LoggerFactory.getLogger(UserItemsManager.class);
-	private static Map<String, UserItems> userItemsMgr = new HashMap<String, UserItems>();
+	private static Map<String, UserItems> userItemsMgr;
 	
 	/**
 	 * 
@@ -97,7 +97,7 @@ public class UserItemsManager {
 			String statement = "/jcr:root/okm:root//element(*, okm:document)[okm:content/@okm:author='"+session.getUserID()+"']";
 			Workspace workspace = session.getWorkspace();
 			QueryManager queryManager = workspace.getQueryManager();
-			Query query = queryManager.createQuery(statement, Query.XPATH);
+			Query query = queryManager.createQuery(statement, "xpath");
 			QueryResult result = query.execute();
 			long size = 0;
 			
@@ -130,6 +130,8 @@ public class UserItemsManager {
 	 * 
 	 */
 	public static synchronized void deserialize() throws DatabaseException {
+		userItemsMgr = new HashMap<String, UserItems>();
+		
 		for (UserItems ui : UserItemsDAO.findAll()) {
 			userItemsMgr.put(ui.getUser(), ui);
 		}

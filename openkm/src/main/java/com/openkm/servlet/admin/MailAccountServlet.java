@@ -21,8 +21,6 @@
 
 package com.openkm.servlet.admin;
 
-import static com.openkm.dao.MailAccountDAO.findRuleByPk;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
@@ -40,13 +38,13 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.MailAccountDAO;
+import com.openkm.dao.bean.FilterRule;
 import com.openkm.dao.bean.MailAccount;
 import com.openkm.dao.bean.MailFilter;
-import com.openkm.dao.bean.MailFilterRule;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.MailUtils;
 import com.openkm.util.UserActivity;
-import com.openkm.util.WebUtils;
+import com.openkm.util.WebUtil;
 
 /**
  * User mail accounts servlet
@@ -54,16 +52,16 @@ import com.openkm.util.WebUtils;
 public class MailAccountServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(MailAccountServlet.class);
-	String fields[] = { MailFilterRule.FIELD_FROM, MailFilterRule.FIELD_TO, MailFilterRule.FIELD_SUBJECT,
-			MailFilterRule.FIELD_CONTENT };
-	String operations[] = { MailFilterRule.OPERATION_CONTAINS, MailFilterRule.OPERATION_EQUALS };
+	String fields[] = { FilterRule.FIELD_FROM, FilterRule.FIELD_TO, FilterRule.FIELD_SUBJECT,
+			FilterRule.FIELD_CONTENT };
+	String operations[] = { FilterRule.OPERATION_CONTAINS, FilterRule.OPERATION_EQUALS };
 	String protocols[] = { MailAccount.PROTOCOL_POP3, MailAccount.PROTOCOL_IMAP, MailAccount.PROTOCOL_IMAPS };
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		String action = WebUtils.getString(request, "action");
+		String action = WebUtil.getString(request, "action");
 		Session session = null;
 		updateSessionManager(request);
 		
@@ -94,7 +92,7 @@ public class MailAccountServlet extends BaseServlet {
 				ruleDelete(session, request, response);
 			}
 			
-			if (action.equals("") || WebUtils.getBoolean(request, "persist")) {
+			if (action.equals("") || WebUtil.getBoolean(request, "persist")) {
 				if (action.startsWith("filter")) {
 					filterList(session, request, response);
 				} else if (action.startsWith("rule")) {
@@ -124,7 +122,7 @@ public class MailAccountServlet extends BaseServlet {
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		String action = WebUtils.getString(request, "action");
+		String action = WebUtil.getString(request, "action");
 		Session session = null;
 		updateSessionManager(request);
 		PrintWriter pw = response.getWriter();
@@ -162,17 +160,17 @@ public class MailAccountServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException {
 		log.debug("create({}, {}, {})", new Object[] { session, request, response });
 		
-		if (WebUtils.getBoolean(request, "persist")) {
+		if (WebUtil.getBoolean(request, "persist")) {
 			MailAccount ma = new MailAccount();
-			ma.setUser(WebUtils.getString(request, "ma_user"));
-			ma.setMailProtocol(WebUtils.getString(request, "ma_mprotocol"));
-			ma.setMailUser(WebUtils.getString(request, "ma_muser"));
-			ma.setMailPassword(WebUtils.getString(request, "ma_mpassword"));
-			ma.setMailHost(WebUtils.getString(request, "ma_mhost"));
-			ma.setMailFolder(WebUtils.getString(request, "ma_mfolder"));
-			ma.setMailMarkSeen(WebUtils.getBoolean(request, "ma_mmark_seen"));
-			ma.setMailMarkDeleted(WebUtils.getBoolean(request, "ma_mmark_deleted"));
-			ma.setActive(WebUtils.getBoolean(request, "ma_active"));
+			ma.setUser(WebUtil.getString(request, "ma_user"));
+			ma.setMailProtocol(WebUtil.getString(request, "ma_mprotocol"));
+			ma.setMailUser(WebUtil.getString(request, "ma_muser"));
+			ma.setMailPassword(WebUtil.getString(request, "ma_mpassword"));
+			ma.setMailHost(WebUtil.getString(request, "ma_mhost"));
+			ma.setMailFolder(WebUtil.getString(request, "ma_mfolder"));
+			ma.setMailMarkSeen(WebUtil.getBoolean(request, "ma_mmark_seen"));
+			ma.setMailMarkDeleted(WebUtil.getBoolean(request, "ma_mmark_deleted"));
+			ma.setActive(WebUtil.getBoolean(request, "ma_active"));
 			MailAccountDAO.create(ma);
 			
 			// Activity log
@@ -180,8 +178,8 @@ public class MailAccountServlet extends BaseServlet {
 		} else {
 			ServletContext sc = getServletContext();
 			MailAccount ma = new MailAccount();
-			ma.setUser(WebUtils.getString(request, "ma_user"));
-			sc.setAttribute("action", WebUtils.getString(request, "action"));
+			ma.setUser(WebUtil.getString(request, "ma_user"));
+			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("ma", ma);
 			sc.setAttribute("protocols", protocols);
@@ -198,18 +196,18 @@ public class MailAccountServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
 		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
 		
-		if (WebUtils.getBoolean(request, "persist")) {
-			String password = WebUtils.getString(request, "ma_mpassword");
+		if (WebUtil.getBoolean(request, "persist")) {
+			String password = WebUtil.getString(request, "ma_mpassword");
 			MailAccount ma = new MailAccount();
-			ma.setId(WebUtils.getInt(request, "ma_id"));
-			ma.setUser(WebUtils.getString(request, "ma_user"));
-			ma.setMailProtocol(WebUtils.getString(request, "ma_mprotocol"));
-			ma.setMailUser(WebUtils.getString(request, "ma_muser"));
-			ma.setMailHost(WebUtils.getString(request, "ma_mhost"));
-			ma.setMailFolder(WebUtils.getString(request, "ma_mfolder"));
-			ma.setMailMarkSeen(WebUtils.getBoolean(request, "ma_mmark_seen"));
-			ma.setMailMarkDeleted(WebUtils.getBoolean(request, "ma_mmark_deleted"));
-			ma.setActive(WebUtils.getBoolean(request, "ma_active"));
+			ma.setId(WebUtil.getInt(request, "ma_id"));
+			ma.setUser(WebUtil.getString(request, "ma_user"));
+			ma.setMailProtocol(WebUtil.getString(request, "ma_mprotocol"));
+			ma.setMailUser(WebUtil.getString(request, "ma_muser"));
+			ma.setMailHost(WebUtil.getString(request, "ma_mhost"));
+			ma.setMailFolder(WebUtil.getString(request, "ma_mfolder"));
+			ma.setMailMarkSeen(WebUtil.getBoolean(request, "ma_mmark_seen"));
+			ma.setMailMarkDeleted(WebUtil.getBoolean(request, "ma_mmark_deleted"));
+			ma.setActive(WebUtil.getBoolean(request, "ma_active"));
 			MailAccountDAO.update(ma);
 			
 			if (!password.equals("")) {
@@ -220,8 +218,8 @@ public class MailAccountServlet extends BaseServlet {
 			UserActivity.log(session.getUserID(), "ADMIN_MAIL_ACCOUNT_EDIT", Integer.toString(ma.getId()), ma.toString());
 		} else {
 			ServletContext sc = getServletContext();
-			int maId = WebUtils.getInt(request, "ma_id");
-			sc.setAttribute("action", WebUtils.getString(request, "action"));
+			int maId = WebUtil.getInt(request, "ma_id");
+			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("ma", MailAccountDAO.findByPk(maId));
 			sc.setAttribute("protocols", protocols);
@@ -238,16 +236,16 @@ public class MailAccountServlet extends BaseServlet {
 			ServletException, IOException {
 		log.debug("check({}, {}, {})", new Object[] { session, request, response });
 		MailAccount ma = new MailAccount();
-		ma.setId(WebUtils.getInt(request, "ma_id"));
-		ma.setUser(WebUtils.getString(request, "ma_user"));
-		ma.setMailUser(WebUtils.getString(request, "ma_muser"));
-		ma.setMailProtocol(WebUtils.getString(request, "ma_mprotocol"));
-		ma.setMailPassword(WebUtils.getString(request, "ma_mpassword"));
-		ma.setMailHost(WebUtils.getString(request, "ma_mhost"));
-		ma.setMailFolder(WebUtils.getString(request, "ma_mfolder"));
-		ma.setMailMarkSeen(WebUtils.getBoolean(request, "ma_mmark_seen"));
-		ma.setMailMarkDeleted(WebUtils.getBoolean(request, "ma_mmark_deleted"));
-		ma.setActive(WebUtils.getBoolean(request, "ma_active"));
+		ma.setId(WebUtil.getInt(request, "ma_id"));
+		ma.setUser(WebUtil.getString(request, "ma_user"));
+		ma.setMailUser(WebUtil.getString(request, "ma_muser"));
+		ma.setMailProtocol(WebUtil.getString(request, "ma_mprotocol"));
+		ma.setMailPassword(WebUtil.getString(request, "ma_mpassword"));
+		ma.setMailHost(WebUtil.getString(request, "ma_mhost"));
+		ma.setMailFolder(WebUtil.getString(request, "ma_mfolder"));
+		ma.setMailMarkSeen(WebUtil.getBoolean(request, "ma_mmark_seen"));
+		ma.setMailMarkDeleted(WebUtil.getBoolean(request, "ma_mmark_deleted"));
+		ma.setActive(WebUtil.getBoolean(request, "ma_active"));
 				
 		// Check
 		MailUtils.testConnection(ma);
@@ -264,16 +262,16 @@ public class MailAccountServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
 		log.debug("delete({}, {}, {})", new Object[] { session, request, response });
 		
-		if (WebUtils.getBoolean(request, "persist")) {
-			int maId = WebUtils.getInt(request, "ma_id");
+		if (WebUtil.getBoolean(request, "persist")) {
+			int maId = WebUtil.getInt(request, "ma_id");
 			MailAccountDAO.delete(maId);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "ADMIN_MAIL_ACCOUNT_DELETE", Integer.toString(maId), null);
 		} else {
 			ServletContext sc = getServletContext();
-			int maId = WebUtils.getInt(request, "ma_id");
-			sc.setAttribute("action", WebUtils.getString(request, "action"));
+			int maId = WebUtil.getInt(request, "ma_id");
+			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("ma", MailAccountDAO.findByPk(maId));
 			sc.setAttribute("protocols", protocols);
@@ -290,7 +288,7 @@ public class MailAccountServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException {
 		log.debug("list({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
-		String usrId = WebUtils.getString(request, "ma_user");
+		String usrId = WebUtil.getString(request, "ma_user");
 		sc.setAttribute("ma_user", usrId);
 		sc.setAttribute("mailAccounts", MailAccountDAO.findByUser(usrId, false));
 		sc.getRequestDispatcher("/admin/mail_account_list.jsp").forward(request, response);
@@ -304,8 +302,8 @@ public class MailAccountServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException {
 		log.debug("filterList({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
-		int maId = WebUtils.getInt(request, "ma_id");
-		String ma_user = WebUtils.getString(request, "ma_user");
+		int maId = WebUtil.getInt(request, "ma_id");
+		String ma_user = WebUtil.getString(request, "ma_user");
 		sc.setAttribute("ma_id", maId);
 		sc.setAttribute("ma_user", ma_user);
 		MailAccount ma = MailAccountDAO.findByPk(maId);
@@ -321,13 +319,13 @@ public class MailAccountServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException, RepositoryException {
 		log.debug("filterCreate({}, {}, {})", new Object[] { session, request, response });
 		
-		if (WebUtils.getBoolean(request, "persist")) {
-			int maId = WebUtils.getInt(request, "ma_id");
+		if (WebUtil.getBoolean(request, "persist")) {
+			int maId = WebUtil.getInt(request, "ma_id");
 			MailFilter mf = new MailFilter();
-			mf.setPath(WebUtils.getString(request, "mf_path"));
+			mf.setPath(WebUtil.getString(request, "mf_path"));
 			mf.setUuid(JCRUtils.getUUID(session, mf.getPath()));
-			mf.setGrouping(WebUtils.getBoolean(request, "mf_grouping"));
-			mf.setActive(WebUtils.getBoolean(request, "mf_active"));
+			mf.setGrouping(WebUtil.getBoolean(request, "mf_grouping"));
+			mf.setActive(WebUtil.getBoolean(request, "mf_active"));
 			MailAccount ma = MailAccountDAO.findByPk(maId);
 			ma.getMailFilters().add(mf);
 			MailAccountDAO.update(ma);
@@ -337,7 +335,7 @@ public class MailAccountServlet extends BaseServlet {
 		} else {
 			ServletContext sc = getServletContext();
 			MailFilter mf = new MailFilter();
-			sc.setAttribute("action", WebUtils.getString(request, "action"));
+			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("mf", mf);
 			sc.getRequestDispatcher("/admin/mail_filter_edit.jsp").forward(request, response);
@@ -353,15 +351,15 @@ public class MailAccountServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException, RepositoryException {
 		log.debug("filterEdit({}, {}, {})", new Object[] { session, request, response });
 		
-		if (WebUtils.getBoolean(request, "persist")) {
-			int mfId = WebUtils.getInt(request, "mf_id");
+		if (WebUtil.getBoolean(request, "persist")) {
+			int mfId = WebUtil.getInt(request, "mf_id");
 			MailFilter mf = MailAccountDAO.findFilterByPk(session, mfId);
 			
 			if (mf != null) {
-				mf.setPath(WebUtils.getString(request, "mf_path"));
+				mf.setPath(WebUtil.getString(request, "mf_path"));
 				mf.setUuid(JCRUtils.getUUID(session, mf.getPath()));
-				mf.setGrouping(WebUtils.getBoolean(request, "mf_grouping"));
-				mf.setActive(WebUtils.getBoolean(request, "mf_active"));
+				mf.setGrouping(WebUtil.getBoolean(request, "mf_grouping"));
+				mf.setActive(WebUtil.getBoolean(request, "mf_active"));
 				MailAccountDAO.updateFilter(mf);
 			}
 			
@@ -369,9 +367,9 @@ public class MailAccountServlet extends BaseServlet {
 			UserActivity.log(session.getUserID(), "ADMIN_MAIL_FILTER_EDIT", Integer.toString(mf.getId()), mf.toString());
 		} else {
 			ServletContext sc = getServletContext();
-			int maId = WebUtils.getInt(request, "ma_id");
-			int mfId = WebUtils.getInt(request, "mf_id");
-			sc.setAttribute("action", WebUtils.getString(request, "action"));
+			int maId = WebUtil.getInt(request, "ma_id");
+			int mfId = WebUtil.getInt(request, "mf_id");
+			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("ma_id", maId);
 			sc.setAttribute("mf", MailAccountDAO.findFilterByPk(session, mfId));
@@ -388,18 +386,18 @@ public class MailAccountServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException, RepositoryException {
 		log.debug("filterDelete({}, {}, {})", new Object[] { session, request, response });
 		
-		if (WebUtils.getBoolean(request, "persist")) {
-			int maId = WebUtils.getInt(request, "ma_id");
-			int mfId = WebUtils.getInt(request, "mf_id");
+		if (WebUtil.getBoolean(request, "persist")) {
+			int maId = WebUtil.getInt(request, "ma_id");
+			int mfId = WebUtil.getInt(request, "mf_id");
 			MailAccountDAO.deleteFilter(mfId);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "ADMIN_MAIL_FILTER_DELETE", Integer.toString(maId), null);
 		} else {
 			ServletContext sc = getServletContext();
-			int maId = WebUtils.getInt(request, "ma_id");
-			int mfId = WebUtils.getInt(request, "mf_id");
-			sc.setAttribute("action", WebUtils.getString(request, "action"));
+			int maId = WebUtil.getInt(request, "ma_id");
+			int mfId = WebUtil.getInt(request, "mf_id");
+			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("ma_id", maId);
 			sc.setAttribute("mf", MailAccountDAO.findFilterByPk(session, mfId));
@@ -416,8 +414,8 @@ public class MailAccountServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException {
 		log.debug("ruleList({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
-		int maId = WebUtils.getInt(request, "ma_id");
-		int mfId = WebUtils.getInt(request, "mf_id");
+		int maId = WebUtil.getInt(request, "ma_id");
+		int mfId = WebUtil.getInt(request, "mf_id");
 		sc.setAttribute("ma_id", maId);
 		sc.setAttribute("mf_id", mfId);
 		MailAccount ma = MailAccountDAO.findByPk(maId);
@@ -428,7 +426,7 @@ public class MailAccountServlet extends BaseServlet {
 			}
 		}
 		
-		sc.getRequestDispatcher("/admin/mail_filter_rule_list.jsp").forward(request, response);
+		sc.getRequestDispatcher("/admin/filter_rule_list.jsp").forward(request, response);
 		log.debug("ruleList: void");
 	}
 	
@@ -439,28 +437,28 @@ public class MailAccountServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException, RepositoryException {
 		log.debug("ruleCreate({}, {}, {})", new Object[] { session, request, response });
 		
-		if (WebUtils.getBoolean(request, "persist")) {
-			int mf_id = WebUtils.getInt(request, "mf_id");
-			MailFilterRule mfr = new MailFilterRule();
-			mfr.setField(WebUtils.getString(request, "mfr_field"));
-			mfr.setOperation(WebUtils.getString(request, "mfr_operation"));
-			mfr.setValue(WebUtils.getString(request, "mfr_value"));
-			mfr.setActive(WebUtils.getBoolean(request, "mfr_active"));
+		if (WebUtil.getBoolean(request, "persist")) {
+			int mf_id = WebUtil.getInt(request, "mf_id");
+			FilterRule fr = new FilterRule();
+			fr.setField(WebUtil.getString(request, "fr_field"));
+			fr.setOperation(WebUtil.getString(request, "fr_operation"));
+			fr.setValue(WebUtil.getString(request, "fr_value"));
+			fr.setActive(WebUtil.getBoolean(request, "fr_active"));
 			MailFilter mf = MailAccountDAO.findFilterByPk(session, mf_id);
-			mf.getFilterRules().add(mfr);
+			mf.getFilterRules().add(fr);
 			MailAccountDAO.updateFilter(mf);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_MAIL_FILTER_RULE_CREATE", Integer.toString(mf.getId()), mf.toString());
+			UserActivity.log(session.getUserID(), "ADMIN_MAIL_FILTER_CREATE", Integer.toString(mf.getId()), mf.toString());
 		} else {
 			ServletContext sc = getServletContext();
-			MailFilterRule mfr = new MailFilterRule();
-			sc.setAttribute("action", WebUtils.getString(request, "action"));
+			FilterRule fr = new FilterRule();
+			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
-			sc.setAttribute("mfr", mfr);
+			sc.setAttribute("fr", fr);
 			sc.setAttribute("fields", fields);
 			sc.setAttribute("operations", operations);
-			sc.getRequestDispatcher("/admin/mail_filter_rule_edit.jsp").forward(request, response);
+			sc.getRequestDispatcher("/admin/filter_rule_edit.jsp").forward(request, response);
 		}
 		
 		log.debug("ruleCreate: void");
@@ -473,33 +471,33 @@ public class MailAccountServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException, RepositoryException {
 		log.debug("ruleEdit({}, {}, {})", new Object[] { session, request, response });
 		
-		if (WebUtils.getBoolean(request, "persist")) {
-			int mfrId = WebUtils.getInt(request, "mfr_id");
-			MailFilterRule mfr = MailAccountDAO.findRuleByPk(mfrId);
+		if (WebUtil.getBoolean(request, "persist")) {
+			int frId = WebUtil.getInt(request, "fr_id");
+			FilterRule fr = MailAccountDAO.findRuleByPk(frId);
 			
-			if (mfr != null) {
-				mfr.setField(WebUtils.getString(request, "mfr_field"));
-				mfr.setOperation(WebUtils.getString(request, "mfr_operation"));
-				mfr.setValue(WebUtils.getString(request, "mfr_value"));
-				mfr.setActive(WebUtils.getBoolean(request, "mfr_active"));
-				MailAccountDAO.updateRule(mfr);
+			if (fr != null) {
+				fr.setField(WebUtil.getString(request, "fr_field"));
+				fr.setOperation(WebUtil.getString(request, "fr_operation"));
+				fr.setValue(WebUtil.getString(request, "fr_value"));
+				fr.setActive(WebUtil.getBoolean(request, "fr_active"));
+				MailAccountDAO.updateRule(fr);
 			}
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_MAIL_FILTER_RULE_EDIT", Integer.toString(mfr.getId()), mfr.toString());
+			UserActivity.log(session.getUserID(), "ADMIN_FILTER_RULE_EDIT", Integer.toString(fr.getId()), fr.toString());
 		} else {
 			ServletContext sc = getServletContext();
-			int maId = WebUtils.getInt(request, "ma_id");
-			int mfId = WebUtils.getInt(request, "mf_id");
-			int mfrId = WebUtils.getInt(request, "mfr_id");
-			sc.setAttribute("action", WebUtils.getString(request, "action"));
+			int maId = WebUtil.getInt(request, "ma_id");
+			int mfId = WebUtil.getInt(request, "mf_id");
+			int frId = WebUtil.getInt(request, "fr_id");
+			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("ma_id", maId);
 			sc.setAttribute("mf_id", mfId);
-			sc.setAttribute("mfr", findRuleByPk(mfrId));
+			sc.setAttribute("fr", MailAccountDAO.findRuleByPk(frId));
 			sc.setAttribute("fields", fields);
 			sc.setAttribute("operations", operations);
-			sc.getRequestDispatcher("/admin/mail_filter_rule_edit.jsp").forward(request, response);
+			sc.getRequestDispatcher("/admin/filter_rule_edit.jsp").forward(request, response);
 		}
 		
 		log.debug("ruleEdit: void");
@@ -512,25 +510,25 @@ public class MailAccountServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException {
 		log.debug("ruleDelete({}, {}, {})", new Object[] { session, request, response });
 		
-		if (WebUtils.getBoolean(request, "persist")) {
-			int mfrId = WebUtils.getInt(request, "mfr_id");
-			MailAccountDAO.deleteRule(mfrId);
+		if (WebUtil.getBoolean(request, "persist")) {
+			int frId = WebUtil.getInt(request, "fr_id");
+			MailAccountDAO.deleteRule(frId);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_MAIL_FILTER_RULE_DELETE", Integer.toString(mfrId), null);
+			UserActivity.log(session.getUserID(), "ADMIN_FILTER_RULE_DELETE", Integer.toString(frId), null);
 		} else {
 			ServletContext sc = getServletContext();
-			int maId = WebUtils.getInt(request, "ma_id");
-			int mfId = WebUtils.getInt(request, "mf_id");
-			int mfrId = WebUtils.getInt(request, "mfr_id");
-			sc.setAttribute("action", WebUtils.getString(request, "action"));
+			int maId = WebUtil.getInt(request, "ma_id");
+			int mfId = WebUtil.getInt(request, "mf_id");
+			int frId = WebUtil.getInt(request, "fr_id");
+			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("ma_id", maId);
 			sc.setAttribute("mf_id", mfId);
-			sc.setAttribute("mfr", MailAccountDAO.findRuleByPk(mfrId));
+			sc.setAttribute("fr", MailAccountDAO.findRuleByPk(frId));
 			sc.setAttribute("fields", fields);
 			sc.setAttribute("operations", operations);
-			sc.getRequestDispatcher("/admin/mail_filter_rule_edit.jsp").forward(request, response);
+			sc.getRequestDispatcher("/admin/filter_rule_edit.jsp").forward(request, response);
 		}
 		
 		log.debug("ruleDelete: void");

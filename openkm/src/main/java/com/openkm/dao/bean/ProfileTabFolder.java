@@ -27,7 +27,6 @@ public class ProfileTabFolder implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private boolean propertiesVisible;
 	private boolean securityVisible;
-	private boolean notesVisible;
 
 	public boolean isPropertiesVisible() {
 		return propertiesVisible;
@@ -44,21 +43,12 @@ public class ProfileTabFolder implements Serializable {
 	public void setSecurityVisible(boolean securityVisible) {
 		this.securityVisible = securityVisible;
 	}
-
-	public boolean isNotesVisible() {
-		return notesVisible;
-	}
-
-	public void setNotesVisible(boolean notesVisible) {
-		this.notesVisible = notesVisible;
-	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("propertiesVisible="); sb.append(propertiesVisible);
 		sb.append(", securityVisible="); sb.append(securityVisible);
-		sb.append(", notesVisible="); sb.append(notesVisible);
 		sb.append("}");
 		return sb.toString();
 	}

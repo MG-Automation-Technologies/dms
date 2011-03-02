@@ -25,8 +25,7 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.contants.service.RPCService;
+import com.openkm.frontend.client.config.Config;
 
 public class Util {
 	
@@ -106,19 +105,7 @@ public class Util {
 	 * @return the html image of mime-type file
 	 */
 	public static String mimeImageHTML(String mime) {
-		return "<img align=\"absmidle\" style=\"margin-right:4px\" src=\""+Main.CONTEXT+"/mime/"+mime+"\"'>";
-	}
-	
-	/**
-	 * Return the menu html value
-	 * 
-	 * @param imageUrl The image url
-	 * @param text The text value
-	 * @return
-	 */
-	public static String flagMenuHTML(String flag, String text) {
-		return "<img style='margin-right:8px; margin-left:2px; vertical-align:middle;' "+
-		        "src=\""+Main.CONTEXT+"/flag/"+flag+"\"'>" + text;
+		return "<img align=\"absmidle\" style=\"margin-right:4px\" src=\"/OpenKM"+Config.INSTALL+"/mime/"+mime+"\"'>";
 	}
 	
 	/**
@@ -130,7 +117,7 @@ public class Util {
 	 */
 	public static String menuHTML(String imageUrl, String text) {
 		return "<img style='margin-right:8px; margin-left:2px; vertical-align:middle;' src='" 
-			   + imageUrl + "'>" + text;
+			   + imageUrl.toLowerCase() + "'>" + text;
 	}
 	
 	/**
@@ -154,7 +141,7 @@ public class Util {
 	 * @param uri The url to open
 	 * @return
 	 */
-	public static String windowOpen(String text, String uri) {
+	public static String windowOpen(String text, String uri){
 		return "<span onclick=\"javascript:window.open('"+ uri +"')\">" + text + "</span>";
 	}
 	
@@ -165,7 +152,7 @@ public class Util {
 	 */
 	public static boolean isJREInstalled() {
 		String[] jreList = getJREs();
-		if (jreList != null && jreList.length > 0) {
+		if (jreList!=null && jreList.length>0) {
 			return true;
 		} else {
 			return false;
@@ -179,38 +166,13 @@ public class Util {
 	 * @param params
 	 */
 	public static void downloadFile(String path, String params) {
+
 		if (!params.equals("") && !params.endsWith("&")) {
 			params += "&";
 		}
-		
 		final Element downloadIframe = RootPanel.get("__download").getElement(); 
-		String url = RPCService.DownloadServlet + "?" + params + "id=" + URL.encodeComponent(path);
+		String url = Config.OKMDownloadServlet + "?" + params + "id=" + URL.encodeComponent(path);
 		DOM.setElementAttribute(downloadIframe, "src", url); 
-	}
-	
-	/**
-	 * Download file
-	 * 
-	 * @param uuid
-	 */
-	public static void downloadFilePdf(String uuid) {
-		final Element downloadIframe = RootPanel.get("__download").getElement(); 
-		String url = RPCService.ConverterServlet + "?inline=false&toPdf=true&uuid=" + URL.encodeComponent(uuid);
-		DOM.setElementAttribute(downloadIframe, "src", url); 
-	}
-	
-	/**
-	 * markHTMLTextAsBold
-	 * 
-	 * @param text
-	 * @param mark
-	 */
-	public static String getTextAsBoldHTML(String text, boolean mark) {
-		if (mark) {
-			return "<b>" + text + "</b>"; 
-		} else {
-			return text;
-		}
 	}
 	
 	/**
@@ -287,7 +249,7 @@ public class Util {
 		$wnd.swfobject.embedSWF("/OpenKM/js/zviewer/zviewer.swf", "pdfviewercontainer", width, height, "9.0.0", "/OpenKM/js/mediaplayer/expressinstall.swf", {doc_url:pdfUrl}, {allowFullScreen:"true",menu:"false",bgcolor:"#efefef"}, {id:"jspdfviewer",name:"jspdfviewer"});
 	}-*/;
     
-    public static native void createPDFViewerFlexPaper(String pdfUrl, String width, String height, String printEnabled) /*-{
+    public static native void createPDFViewerFlexPaper(String pdfUrl, String width, String height) /*-{
 	pdfUrl = encodeURIComponent(pdfUrl);
 	$wnd.swfobject.embedSWF("/OpenKM/js/flexpaper/FlexPaperViewer.swf", "pdfviewercontainer",width, height,"10.0.0", "playerProductInstall.swf",
                   {
@@ -298,11 +260,11 @@ public class Util {
   				  	ZoomInterval : 0.1,
   				  	FitPageOnLoad : false,
   				  	FitWidthOnLoad : true,
-  				  	PrintEnabled : printEnabled,
+  				  	PrintEnabled : true,
   				  	FullScreenAsMaxWindow : false,
   				  	ProgressiveLoading : true,
   				  
-  				  	PrintToolsVisible : printEnabled,
+  				  	PrintToolsVisible : true,
   				  	ViewModeToolsVisible : true,
   				  	ZoomToolsVisible : true,
   				  	FullScreenVisible : true,
@@ -321,7 +283,7 @@ public class Util {
   	  	  	  	  	id:"FlexPaperViewer",
   	  	  	  	    name:"FlexPaperViewer"
   	  	  	  	  });
-	}-*/;
+}-*/;
     
     public static native String[] getJREs() /*-{
 		return $wnd.deployJava.getJREs();

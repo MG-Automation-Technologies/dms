@@ -221,7 +221,6 @@
     <mapping resource="com/openkm/dao/bean/User.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Role.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Report.hbm.xml"/>
-    <mapping resource="com/openkm/dao/bean/Config.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Profile.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/CronTab.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Bookmark.hbm.xml"/>
@@ -230,29 +229,16 @@
     <mapping resource="com/openkm/dao/bean/LockToken.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/UserConfig.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/MailFilter.hbm.xml"/>
-    <mapping resource="com/openkm/dao/bean/MailFilterRule.hbm.xml"/>
-    <!-- <mapping resource="com/openkm/dao/bean/DocumentFilter.hbm.xml"/> -->
-    <!-- <mapping resource="com/openkm/dao/bean/DocumentFilterRule.hbm.xml"/> -->
+    <mapping resource="com/openkm/dao/bean/FilterRule.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/MailAccount.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/QueryParams.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/TwitterAccount.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/DashboardStats.hbm.xml"/>
-    <mapping resource="com/openkm/dao/bean/Language.hbm.xml"/>
-    <mapping resource="com/openkm/dao/bean/Translation.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/cache/UserItems.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/cache/UserDocumentKeyword.hbm.xml"/>
-    <mapping resource="com/openkm/extension/dao/bean/Extension.hbm.xml"/>
-    <mapping resource="com/openkm/extension/dao/bean/ProposedSubscriptionSent.hbm.xml"/>
-    <mapping resource="com/openkm/extension/dao/bean/ProposedSubscriptionReceived.hbm.xml"/>
-    <mapping resource="com/openkm/extension/dao/bean/ProposedQuerySent.hbm.xml"/>
-    <mapping resource="com/openkm/extension/dao/bean/ProposedQueryReceived.hbm.xml"/>
-    <mapping resource="com/openkm/extension/dao/bean/Staple.hbm.xml"/>
-    <mapping resource="com/openkm/extension/dao/bean/StapleGroup.hbm.xml"/>
-    <mapping resource="com/openkm/extension/dao/bean/StampText.hbm.xml"/>
-    <mapping resource="com/openkm/extension/dao/bean/StampImage.hbm.xml"/>
-    <mapping resource="com/openkm/extension/dao/bean/Contact.hbm.xml"/>
-    <mapping resource="com/openkm/extension/dao/bean/MessageSent.hbm.xml"/>
-    <mapping resource="com/openkm/extension/dao/bean/MessageReceived.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/extension/Staple.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/extension/StapleGroup.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/Extension.hbm.xml"/>
 
     <!-- ################################### -->
     <!-- # cache settings                  # -->

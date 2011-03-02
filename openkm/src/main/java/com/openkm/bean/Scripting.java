@@ -24,7 +24,8 @@ package com.openkm.bean;
 import java.io.Serializable;
 
 public class Scripting implements Serializable {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 7491221581551061878L;
+	
 	public static final String TYPE = "mix:scripting";
 	public static final String SCRIPT_CODE = "okm:scriptCode";
 	

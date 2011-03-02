@@ -26,14 +26,14 @@ import java.util.Calendar;
 
 public class CronTab implements Serializable {
 	private static final long serialVersionUID = 1L;
-	public static final String BSH = "application/x-bsh";
-	public static final String JAR = "application/x-java-archive";
+	public static final String BSH = "bsh";
+	public static final String JAR = "jar";
 	private int id;
 	private String name;
 	private String expression;
+	private String type;
 	private String fileContent;
 	private String fileName;
-	private String fileMime;
 	private String mail;
 	private Calendar lastBegin;
 	private Calendar lastEnd;
@@ -63,6 +63,14 @@ public class CronTab implements Serializable {
 		this.expression = expression;
 	}
 	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+	
 	public String getFileContent() {
 		return fileContent;
 	}
@@ -77,14 +85,6 @@ public class CronTab implements Serializable {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
-	}
-	
-	public String getFileMime() {
-		return fileMime;
-	}
-
-	public void setFileMime(String fileMime) {
-		this.fileMime = fileMime;
 	}
 	
 	public String getMail() {
@@ -124,8 +124,8 @@ public class CronTab implements Serializable {
 		sb.append("{");
 		sb.append("id="); sb.append(id);
 		sb.append(", name="); sb.append(name);
+		sb.append(", type="); sb.append(type);
 		sb.append(", fileName="); sb.append(fileName);
-		sb.append(", fileMime="); sb.append(fileMime);
 		sb.append(", fileContent="); sb.append("[BIG]");
 		sb.append(", mail="); sb.append(mail);
 		sb.append(", lastBegin="); sb.append(lastBegin==null?null:lastBegin.getTime());

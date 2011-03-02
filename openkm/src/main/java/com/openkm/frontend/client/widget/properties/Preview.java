@@ -28,8 +28,8 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.contants.service.RPCService;
-import com.openkm.frontend.client.extension.widget.preview.PreviewExtension;
+import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.widget.PreviewExtension;
 import com.openkm.frontend.client.util.Util;
 
 /**
@@ -84,14 +84,10 @@ public class Preview extends Composite {
 		space.setVisible(false);
 		video.setVisible(false);
 		if (previewAvailable) {
-			String url = RPCService.ConverterServlet +"?inline=true&toSwf=true&uuid=" + URL.encodeComponent(Uuid);
+			String url = Config.OKMDownloadServlet +"?toSwf&inline&uuid=" + URL.encodeComponent(Uuid);
 			text.setHTML("<div id=\"pdfviewercontainer\"></div>\n"); // needed for rewriting purpose
 			if (Main.get().workspaceUserProperties.getWorkspace().getPreviewer().equals("flexpaper")) {
-				if (Main.get().workspaceUserProperties.getWorkspace().isPrintPreview()) {
-					Util.createPDFViewerFlexPaper(url, ""+width, ""+height, "true");
-				} else {
-					Util.createPDFViewerFlexPaper(url, ""+width, ""+height, "false");
-				}
+				Util.createPDFViewerFlexPaper(url, ""+width, ""+height);
 			} else {
 				Util.createPDFViewerZviewer(url, ""+width, ""+height);
 			}

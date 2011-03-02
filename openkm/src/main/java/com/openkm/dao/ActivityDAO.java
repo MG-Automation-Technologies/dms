@@ -71,9 +71,6 @@ public class ActivityDAO  {
 			qs += "and a.user=:user ";
 		if (filter.getAction() != null && !filter.getAction().equals("")) 
 			qs += "and a.action=:action ";
-		if (filter.getItem() != null && !filter.getItem().equals("")) {
-			qs += "and a.item=:item ";
-		}
 		Session session = null;
 		
 		try {
@@ -86,39 +83,9 @@ public class ActivityDAO  {
 				q.setString("user", filter.getUser());
 			if (filter.getAction() != null && !filter.getAction().equals(""))
 				q.setString("action", filter.getAction());
-			if (filter.getItem() != null && !filter.getItem().equals(""))
-				q.setString("item", filter.getItem());
-			
+		
 			List<Activity> ret = q.list();
 			log.debug("findByFilter: {}", ret);
-			return ret;
-		} catch (HibernateException e) {
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-	}
-	
-	/**
-	 * Find by filter
-	 */
-	@SuppressWarnings("unchecked")
-	public static List<Activity> findByFilterByItem(ActivityFilter filter) throws DatabaseException {
-		log.debug("findByFilter({})", filter);
-		String qs = "from Activity a where a.item=:item ";
-		if (filter.getAction()!=null && !filter.getAction().equals(""))
-			qs += "and a.action=:action ";
-		Session session = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			Query q = session.createQuery(qs);
-			q.setString("item", filter.getItem());
-			if (filter.getAction() != null && !filter.getAction().equals(""))
-				q.setString("action", filter.getAction());
-			
-			List<Activity> ret = q.list();
-			log.debug("findByFilterByItem: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);

@@ -76,7 +76,7 @@ public class WebdavServlet extends SimpleWebdavServlet {
 	@Override
 	public void service(HttpServletRequest request, HttpServletResponse response)
     		throws ServletException, IOException {
-		if (Config.SYSTEM_WEBDAV_SERVER) {
+		if (Config.SYSTEM_WEBDAV) {
 			super.service(request, response);
 		} else {
 			PrintWriter out = response.getWriter();

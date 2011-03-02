@@ -85,9 +85,9 @@ import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VirusDetectedException;
+import com.openkm.dao.bean.FilterRule;
 import com.openkm.dao.bean.MailAccount;
 import com.openkm.dao.bean.MailFilter;
-import com.openkm.dao.bean.MailFilterRule;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.pop3.POP3Folder;
 
@@ -295,7 +295,7 @@ public class MailUtils {
 			}
 		}
         
-        m.setContent(content);
+        m.setContent(content);		
 		Transport.send(m);
 		log.debug("send: void");
 	}
@@ -324,7 +324,7 @@ public class MailUtils {
 	public static void importMessages(String uid, MailAccount ma) throws PathNotFoundException, ItemExistsException,
 			VirusDetectedException, AccessDeniedException, RepositoryException, DatabaseException, 
 			UserQuotaExceededException {
-		log.info("importMessages({}, {})", new Object[] { uid, ma });
+		log.debug("importMessages({}, {})", new Object[] { uid, ma });
 		Properties props = System.getProperties();
 		Session session = Session.getDefaultInstance(props);
 		
@@ -357,7 +357,7 @@ public class MailUtils {
 					sentDate.setTime(msg.getSentDate());
 				}
 				
-				log.info("{} -> {} - {}", new Object[] { i ,msg.getSubject(), msg.getReceivedDate() });
+				log.debug("{} -> {} - {}", new Object[] { i , msg.getSubject(), msg.getReceivedDate() });
 				com.openkm.bean.Mail mail = new com.openkm.bean.Mail();
 				String body = getText(msg);
 				
@@ -385,12 +385,12 @@ public class MailUtils {
 				mail.setSentDate(sentDate);
 				
 				if (ma.getMailFilters().isEmpty()) {
-					log.info("Import in compatibility mode");
+					log.debug("Import in compatibility mode");
 					String mailPath = getUserMailPath(uid);
 					importMail(mailPath, true, folder, msg, ma, mail);
 				} else {
 					for (MailFilter mf : ma.getMailFilters()) {
-						log.info("MailFilter: {}", mf);
+						log.debug("MailFilter: {}", mf);
 						
 						if (checkRules(mail, mf.getFilterRules())) {
 							String  mailPath = mf.getPath();
@@ -413,7 +413,7 @@ public class MailUtils {
 			}
 			
 			// Close connection
-			log.info("Expunge: {}", ma.isMailMarkDeleted());
+			log.debug("Expunge: {}", ma.isMailMarkDeleted());
 			folder.close(ma.isMailMarkDeleted());
 			store.close();
 		} catch (NoSuchProviderException e) {
@@ -424,7 +424,7 @@ public class MailUtils {
 			log.error(e.getMessage(), e);
 		}
 		
-		log.info("importMessages: void");
+		log.debug("importMessages: void");
 	}
 	
 	/**
@@ -446,7 +446,7 @@ public class MailUtils {
 		}
 		
 		String newMailPath = FileUtils.getParent(mail.getPath())+"/"+FileUtils.escape(FileUtils.getName(mail.getPath())); 
-		log.info("newMailPath: {}", newMailPath);
+		log.debug("newMailPath: {}", newMailPath);
 		
 		if (!okmRepository.hasNode(systemToken, newMailPath)) {
 			okmMail.create(systemToken, mail);
@@ -466,49 +466,49 @@ public class MailUtils {
 	/**
 	 * Check mail import rules
 	 */
-	private static boolean checkRules(com.openkm.bean.Mail mail, Set<MailFilterRule> filterRules) {
-		log.info("checkRules({}, {})", mail, filterRules);
+	private static boolean checkRules(com.openkm.bean.Mail mail, Set<FilterRule> filterRules) {
+		log.debug("checkRules({}, {})", mail, filterRules);
 		boolean ret = true;
 		
-		for (MailFilterRule fr : filterRules) {
-			log.info("FilterRule: {}", fr);
+		for (FilterRule fr : filterRules) {
+			log.debug("FilterRule: {}", fr);
 			
 			if (fr.isActive()) {
-				if (MailFilterRule.FIELD_FROM.equals(fr.getField())) {
-					if (MailFilterRule.OPERATION_CONTAINS.equals(fr.getOperation())) {
+				if (FilterRule.FIELD_FROM.equals(fr.getField())) {
+					if (FilterRule.OPERATION_CONTAINS.equals(fr.getOperation())) {
 						ret &= mail.getFrom().toLowerCase().contains(fr.getValue().toLowerCase());
-					} else if (MailFilterRule.OPERATION_EQUALS.equals(fr.getOperation())) {
+					} else if (FilterRule.OPERATION_EQUALS.equals(fr.getOperation())) {
 						ret &= mail.getFrom().equalsIgnoreCase(fr.getValue());
 					}
-				} else if (MailFilterRule.FIELD_TO.equals(fr.getField())) {
-					if (MailFilterRule.OPERATION_CONTAINS.equals(fr.getOperation())) {
+				} else if (FilterRule.FIELD_TO.equals(fr.getField())) {
+					if (FilterRule.OPERATION_CONTAINS.equals(fr.getOperation())) {
 						for (int j=0; j<mail.getTo().length; j++) {
 							ret &= mail.getTo()[j].toLowerCase().contains(fr.getValue().toLowerCase());
 						}
-					} else if (MailFilterRule.OPERATION_EQUALS.equals(fr.getOperation())) {
+					} else if (FilterRule.OPERATION_EQUALS.equals(fr.getOperation())) {
 						for (int j=0; j<mail.getTo().length; j++) {
 							ret &= mail.getTo()[j].equalsIgnoreCase(fr.getValue());
 						}
 					}
-				} else if (MailFilterRule.FIELD_SUBJECT.equals(fr.getField())) {
-					if (MailFilterRule.OPERATION_CONTAINS.equals(fr.getOperation())) {
+				} else if (FilterRule.FIELD_SUBJECT.equals(fr.getField())) {
+					if (FilterRule.OPERATION_CONTAINS.equals(fr.getOperation())) {
 						ret &= mail.getSubject().toLowerCase().contains(fr.getValue().toLowerCase());
-					} else if (MailFilterRule.OPERATION_EQUALS.equals(fr.getOperation())) {
+					} else if (FilterRule.OPERATION_EQUALS.equals(fr.getOperation())) {
 						ret &= mail.getSubject().equalsIgnoreCase(fr.getValue());
 					}
-				} else if (MailFilterRule.FIELD_CONTENT.equals(fr.getField())) {
-					if (MailFilterRule.OPERATION_CONTAINS.equals(fr.getOperation())) {
+				} else if (FilterRule.FIELD_CONTENT.equals(fr.getField())) {
+					if (FilterRule.OPERATION_CONTAINS.equals(fr.getOperation())) {
 						ret &= mail.getContent().toLowerCase().contains(fr.getValue().toLowerCase());
-					} else if (MailFilterRule.OPERATION_EQUALS.equals(fr.getOperation())) {
+					} else if (FilterRule.OPERATION_EQUALS.equals(fr.getOperation())) {
 						ret &= mail.getContent().equalsIgnoreCase(fr.getValue());
 					}
 				}
 			}
 			
-			log.info("FilterRule: {}", ret);
+			log.debug("FilterRule: {}", ret);
 		}
 		
-		log.info("checkRules: {}", ret);
+		log.debug("checkRules: {}", ret);
 		return ret;
 	}
 	
@@ -517,7 +517,7 @@ public class MailUtils {
 	 */
 	private static String createGroupPath(String mailPath, Calendar receivedDate) throws DatabaseException,
 			RepositoryException, AccessDeniedException, ItemExistsException, PathNotFoundException {
-		log.info("createPath({}, {})", new Object[] { mailPath, receivedDate });
+		log.debug("createPath({}, {})", new Object[] { mailPath, receivedDate });
 		String systemToken = JcrSessionManager.getInstance().getSystemToken();
 		OKMRepository okmRepository = OKMRepository.getInstance();
 		String path = mailPath+"/"+receivedDate.get(Calendar.YEAR);
@@ -545,7 +545,7 @@ public class MailUtils {
 			okmFolder.create(systemToken, fld);
 		}
 		
-		log.info("createPath: {}", path);
+		log.debug("createPath: {}", path);
 		return path;
 	}
 	
@@ -649,9 +649,6 @@ public class MailUtils {
 	
 	/**
 	 * User tinyurl service as url shorter
-	 * 
-	 * Depends on commons-httpclient:commons-httpclient:jar:3.0 
-	 * because of org.apache.jackrabbit:jackrabbit-webdav:jar:1.6.4
 	 */
 	public static String getTinyUrl(String fullUrl) throws HttpException, IOException {
 		HttpClient httpclient = new HttpClient();
@@ -673,7 +670,7 @@ public class MailUtils {
 	 * Test IMAP connection
 	 */
 	public static void testConnection(MailAccount ma) throws IOException {
-		log.info("testConnection({})", ma);
+		log.debug("testConnection({})", ma);
 		Properties props = System.getProperties();
 		Session session = Session.getDefaultInstance(props);
 		Store store = null;
@@ -709,6 +706,6 @@ public class MailUtils {
 			}
 		}
 		
-		log.info("testConnection: void");
+		log.debug("testConnection: void");
 	}
 }

@@ -31,17 +31,17 @@ import java.util.Iterator;
  * MetadataDTO
  * 
  * @author jllort
+ *
  */
 public class MetadataDTO implements Serializable {
+
 	private static final long serialVersionUID = 2530668808598426112L;
+	
 	private String fileName;
     private String tempFileName;
     private String mimeType = "";
     private String title = "";
     private String creator = "";
-    private String generator = "";
-    private String keyword = "";
-    private int pageCount;
     private List<String> subjects;
     private Date contentCreated = null;
     private Date contentLastModified = null;
@@ -114,14 +114,6 @@ public class MetadataDTO implements Serializable {
     public void setTitle(String title) {
         if (title != null) this.title = title;
     }
-    
-	public String getGenerator() {
-		return generator;
-	}
-
-	public void setGenerator(String generator) {
-		this.generator = generator;
-	}
 
     public Date getContentCreated() {
         if (contentCreated != null) {
@@ -154,22 +146,7 @@ public class MetadataDTO implements Serializable {
             this.contentLastModified = null;
         }
     }
-    
-	public int getPageCount() {
-		return pageCount;
-	}
 
-	public void setPageCount(int pageCount) {
-		this.pageCount = pageCount;
-	}
-	
-	public String getKeyword() {
-		return keyword;
-	}
-
-	public void setKeyword(String keyword) {
-		this.keyword = keyword;
-	}
 
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -204,20 +181,24 @@ public class MetadataDTO implements Serializable {
     }
 
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("{");
-        sb.append("title=").append(title);
-        sb.append(", mimeType=").append(mimeType);
-        sb.append(", fileName=").append(fileName);
-        sb.append(", tempFileName=").append(tempFileName);
-        sb.append(", creator=").append(creator);
-        sb.append(", generator=").append(generator);
-        sb.append(", keyword=").append(keyword);
-        sb.append(", pageCount=").append(pageCount);
-        sb.append(", contentCreated=").append(contentCreated==null?null:contentCreated.getTime());
-        sb.append(", contentLastModified=").append(contentLastModified==null?null:contentLastModified.getTime());
-        sb.append(", subjects=").append(subjects);
-        sb.append("}");
-		return sb.toString();
+        StringBuilder str = new StringBuilder();
+        str.append("Title:\t").append(title)
+                .append("\nMime type:\t").append(mimeType)
+                .append("\nFile:\t").append(fileName)
+                .append("\nTemp File:\t").append(tempFileName)
+                .append("\nCreator:\t").append(creator);
+        if (contentCreated != null) {
+            str.append("\nCreated on:\t").append(contentCreated.toString());
+        }
+        if (contentLastModified != null) {
+            str.append("\nModified on:\t").append(contentLastModified.toString());
+        }
+        str.append("\nSubjects:\t");
+        Iterator<String> iter = subjects.iterator();
+        while (iter.hasNext()) {
+            str.append(iter.next()).append(", ");
+        }
+        return str.toString();
     }
+
 }

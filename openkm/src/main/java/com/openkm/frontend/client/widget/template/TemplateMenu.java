@@ -46,7 +46,7 @@ public class TemplateMenu extends MenuBase {
 	private boolean removeOption 	= false;
 	private boolean renameOption 	= false;
 	private boolean moveOption 		= false;
-	private boolean copyOption 		= false;
+	private boolean copyOption 	= false;
 	private boolean exportOption	= false;
 	
 	private boolean rootNode 		= true;  // Indicates root node selected ( option menu are specific on this case ).

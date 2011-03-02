@@ -21,23 +21,33 @@
 
 package com.openkm.module.direct;
 
-import java.io.StringReader;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.jcr.Value;
+import javax.jcr.ValueFormatException;
 import javax.mail.MessagingException;
 
+import org.apache.commons.httpclient.HttpException;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+
+import com.openkm.bean.Document;
+import com.openkm.bean.Folder;
 import com.openkm.bean.Notification;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
@@ -45,15 +55,13 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.JcrSessionManager;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.dao.TwitterAccountDAO;
+import com.openkm.dao.bean.TwitterAccount;
 import com.openkm.module.NotificationModule;
 import com.openkm.util.FileUtils;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.MailUtils;
-import com.openkm.util.TemplateUtils;
 import com.openkm.util.UserActivity;
-
-import freemarker.template.Configuration;
-import freemarker.template.Template;
 
 public class DirectNotificationModule implements NotificationModule {
 	private static Logger log = LoggerFactory.getLogger(DirectNotificationModule.class);
@@ -112,7 +120,7 @@ public class DirectNotificationModule implements NotificationModule {
 			sNode.save();
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "SUBSCRIBE_USER", node.getUUID(), nodePath);
+			UserActivity.log(session.getUserID(), "SUBSCRIBE_USER", nodePath, null);
 		} catch (javax.jcr.AccessDeniedException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(sNode);
@@ -181,7 +189,7 @@ public class DirectNotificationModule implements NotificationModule {
 			sNode.save();
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "UNSUBSCRIBE_USER", node.getUUID(), nodePath);
+			UserActivity.log(session.getUserID(), "UNSUBSCRIBE_USER", nodePath, null);
 		} catch (javax.jcr.AccessDeniedException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(sNode);
@@ -243,66 +251,51 @@ public class DirectNotificationModule implements NotificationModule {
 	public void notify(String token, String nodePath, List<String> users, String message, boolean attachment)
 			throws PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("notify({}, {}, {}, {})", new Object[] { token, nodePath, users, message });
-		List<String> to = new ArrayList<String>();
 		Session session = null;
 		
 		if (!users.isEmpty()) {
 			try {
 				log.debug("Nodo: {}, Message: {}", nodePath, message);
-				
 				if (token == null) {
 					session = JCRUtils.getSession();
 				} else {
 					session = JcrSessionManager.getInstance().get(token);
 				}
 				
-				for (String user : users) {
-					String mail = new DirectAuthModule().getMail(token, user);
-					
-					if (mail != null) {
-						to.add(mail);
-					}
-				}
+				List<String> emails = new DirectAuthModule().getMails(token, users);
 				
 				// Get session user email address
-				String from = new DirectAuthModule().getMail(token, session.getUserID());
+				ArrayList<String> dummy = new ArrayList<String>();
+				dummy.add(session.getUserID());
+				ArrayList<String> from = (ArrayList<String>) new DirectAuthModule().getMails(token, dummy);
 				
-				if (!to.isEmpty() && from != null && !from.isEmpty()) {
+				if (!emails.isEmpty() && !from.isEmpty()) {
 					StringWriter swSubject = new StringWriter();
 					StringWriter swBody = new StringWriter();
-					Configuration cfg = TemplateUtils.getConfig();
 					
-					Map<String, String> model = new HashMap<String, String>();
-					model.put("documentUrl", Config.APPLICATION_URL+"?docPath=" + URLEncoder.encode(nodePath, "UTF-8"));
-					model.put("documentPath", nodePath);
-					model.put("documentName", FileUtils.getName(nodePath));
-					model.put("userId", session.getUserID());
-					model.put("notificationMessage", message);
+					VelocityContext context = new VelocityContext();
+					context.put("documentUrl", Config.APPLICATION_URL+"?docPath=" + URLEncoder.encode(nodePath, "UTF-8"));
+					context.put("documentPath", nodePath);
+					context.put("documentName", FileUtils.getName(nodePath));
+					context.put("userId", session.getUserID());
+					context.put("notificationMessage", message);
 					
-					if (TemplateUtils.templateExists(Config.NOTIFICATION_MESSAGE_SUBJECT)) {
-						Template tpl = cfg.getTemplate(Config.NOTIFICATION_MESSAGE_SUBJECT);
-						tpl.process(model, swSubject);
+					if (Velocity.resourceExists(Config.NOTIFICATION_MESSAGE_SUBJECT)) {
+						Velocity.mergeTemplate(Config.NOTIFICATION_MESSAGE_SUBJECT, "UTF-8", context, swSubject);
 					} else {
-						StringReader sr = new StringReader(Config.NOTIFICATION_MESSAGE_SUBJECT);
-						Template tpl = new Template("NotificationMessageSubject", sr, cfg);
-						tpl.process(model, swSubject);
-						sr.close();
+						Velocity.evaluate(context, swSubject, "NotificationMessageSubject", Config.NOTIFICATION_MESSAGE_SUBJECT);	
 					}
 					
-					if (TemplateUtils.templateExists(Config.NOTIFICATION_MESSAGE_BODY)) {
-						Template tpl = cfg.getTemplate(Config.NOTIFICATION_MESSAGE_BODY);
-						tpl.process(model, swBody);
+					if (Velocity.resourceExists(Config.NOTIFICATION_MESSAGE_BODY)) {
+						Velocity.mergeTemplate(Config.NOTIFICATION_MESSAGE_BODY, "UTF-8", context, swBody);
 					} else {
-						StringReader sr = new StringReader(Config.NOTIFICATION_MESSAGE_BODY);
-						Template tpl = new Template("NotificationMessageBody", sr, cfg);
-						tpl.process(model, swBody);
-						sr.close();
+						Velocity.evaluate(context, swBody, "NotificationMessageBody", Config.NOTIFICATION_MESSAGE_BODY);	
 					}
 					
 					if (attachment) {
-						MailUtils.sendDocument((String) from, to, swSubject.toString(), swBody.toString(), nodePath);
+						MailUtils.sendDocument((String) from.get(0), emails, swSubject.toString(), swBody.toString(), nodePath);
 					} else {
-						MailUtils.sendMessage((String) from, to, swSubject.toString(), swBody.toString());
+						MailUtils.sendMessage((String) from.get(0), emails, swSubject.toString(), swBody.toString());
 					}
 				}
 			} catch (UnsupportedEncodingException e) {
@@ -317,5 +310,153 @@ public class DirectNotificationModule implements NotificationModule {
 		}
 
 		log.debug("notify: void");
+	}
+	
+	/**
+	 * Check for user subscriptions and send an notification
+	 * 
+	 * @param node Node modified (Document or Folder)
+	 * @param user User who generated the modification event
+	 * @param eventType Type of modification event
+	 */
+	public static void checkSubscriptions(Node node, String user, String eventType, String comment) {
+		log.debug("checkSubscriptions({}, {}, {}, {})", new Object[] { node, user, eventType, comment });
+		List<String> users = null;
+		
+		try {
+			users = checkSubscriptionsHelper(node);
+		} catch (javax.jcr.RepositoryException e1) {
+			e1.printStackTrace();
+		}
+		
+		/**
+		 * Mail notification
+		 */
+		try {
+			if (users != null && !users.isEmpty()) {
+				List<String> emails = new DirectAuthModule().getMails(null, users);
+					
+				if (!emails.isEmpty()) {
+					if (comment == null) { comment = ""; }
+					StringWriter swSubject = new StringWriter();
+					StringWriter swBody = new StringWriter();
+					
+					VelocityContext context = new VelocityContext();
+					context.put("documentUrl", Config.APPLICATION_URL+"?docPath=" + URLEncoder.encode(node.getPath(), "UTF-8"));
+					context.put("documentPath", node.getPath());
+					context.put("documentName", node.getName());
+					context.put("userId", user);
+					context.put("eventType", eventType);
+					context.put("subscriptionComment", comment);
+					
+					if (Velocity.resourceExists(Config.SUBSCRIPTION_MESSAGE_SUBJECT)) {
+						Velocity.mergeTemplate(Config.SUBSCRIPTION_MESSAGE_SUBJECT, "UTF-8", context, swSubject);
+					} else {
+						Velocity.evaluate(context, swSubject, "SubscriptionMessageSubject", Config.SUBSCRIPTION_MESSAGE_SUBJECT);	
+					}
+					
+					if (Velocity.resourceExists(Config.SUBSCRIPTION_MESSAGE_BODY)) {
+						Velocity.mergeTemplate(Config.SUBSCRIPTION_MESSAGE_BODY, "UTF-8", context, swBody);
+					} else {
+						Velocity.evaluate(context, swBody, "SubscriptionMessageBody", Config.SUBSCRIPTION_MESSAGE_BODY);
+					}
+					
+					MailUtils.sendMessage(emails, swSubject.toString(), swBody.toString());
+				}
+			}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		} catch (ValueFormatException e) {
+			e.printStackTrace();
+		} catch (javax.jcr.PathNotFoundException e) {
+			e.printStackTrace();
+		} catch (javax.jcr.RepositoryException e) {
+			e.printStackTrace();
+		} catch (RepositoryException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		/**
+		 * Twitter notification
+		 */
+		try {
+			if (users != null && !users.isEmpty() && !Config.SUBSCRIPTION_TWITTER_USER.equals("") && !Config.SUBSCRIPTION_TWITTER_PASSWORD.equals("")) {
+				Twitter twitter = new Twitter(Config.SUBSCRIPTION_TWITTER_USER, Config.SUBSCRIPTION_TWITTER_PASSWORD);
+				StringWriter swStatus = new StringWriter();
+				
+				VelocityContext context = new VelocityContext();
+				context.put("documentUrl", MailUtils.getTinyUrl(Config.APPLICATION_URL+"?docPath="+node.getPath()));
+				context.put("documentPath", node.getPath());
+				context.put("documentName", node.getName());
+				context.put("userId", user);
+				context.put("eventType", eventType);
+				context.put("subscriptionComment", comment);
+
+				if (Velocity.resourceExists(Config.SUBSCRIPTION_TWITTER_STATUS)) {
+					Velocity.mergeTemplate(Config.SUBSCRIPTION_TWITTER_STATUS, "UTF-8", context, swStatus);
+				} else {
+					Velocity.evaluate(context, swStatus, "SubscriptionTwitterStatus", Config.SUBSCRIPTION_TWITTER_STATUS);	
+				}
+				
+				for (Iterator<String> itUsers = users.iterator(); itUsers.hasNext(); ) {
+					String itUser = itUsers.next();
+					Collection<TwitterAccount> twitterAccounts = TwitterAccountDAO.findByUser(itUser, true);
+					
+					for (Iterator<TwitterAccount> itTwitter = twitterAccounts.iterator(); itTwitter.hasNext(); ) {
+						TwitterAccount ta = itTwitter.next();
+						log.info("Twitter Notify from {} to {} ({}) - {}", new Object[] { twitter.getUserId(), ta.getTwitterUser(), itUser, swStatus.toString() });
+						twitter.sendDirectMessage(ta.getTwitterUser(), swStatus.toString());
+					}
+				}
+			}
+		} catch (HttpException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (javax.jcr.RepositoryException e) {
+			e.printStackTrace();
+		} catch (TwitterException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		log.debug("checkSubscriptions: void");
+	}
+	
+	/**
+	 * Check for subscriptions recursively
+	 */
+	private static List<String> checkSubscriptionsHelper(Node node) throws 
+			javax.jcr.RepositoryException {
+		log.debug("checkSubscriptionsHelper: {}", node.getPath());
+		ArrayList<String> al = new ArrayList<String>();
+		
+		if (node.isNodeType(Folder.TYPE) || node.isNodeType(Document.TYPE)) {
+			if (node.isNodeType(Notification.TYPE)) {
+				Value[] subscriptors = node.getProperty(Notification.SUBSCRIPTORS).getValues();
+			
+				for (int i=0; i<subscriptors.length; i++) {
+					al.add(subscriptors[i].getString());
+				}
+			}
+			
+			// An user shouldn't be notified twice
+			List<String> tmp = checkSubscriptionsHelper(node.getParent());
+			for (Iterator<String> it = tmp.iterator(); it.hasNext(); ) {
+				String usr = it.next();
+				if (!al.contains(usr)) {
+					al.add(usr);
+				}
+			}
+		}
+		
+		return al;
 	}
 }

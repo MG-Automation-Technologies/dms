@@ -33,7 +33,6 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.core.AccessDeniedException;
@@ -54,16 +53,16 @@ public class RepositoryExporter {
 	/**
 	 * Performs a recursive repository content export with metadata
 	 */
-	public static ImpExpStats exportDocuments(String token, String fldPath, File fs, boolean metadata,
-			Writer out, InfoDecorator deco) throws PathNotFoundException, AccessDeniedException, 
-			RepositoryException, FileNotFoundException, IOException, DatabaseException {
-		log.debug("exportDocuments({}, {}, {}, {}, {}, {})", new Object[] { token, fldPath, fs, metadata, out, deco });
+	public static ImpExpStats exportDocuments(String token, String fldPath, File fs, Writer out,
+			InfoDecorator deco) throws PathNotFoundException, AccessDeniedException, RepositoryException,
+			IOException, DatabaseException {
+		log.debug("exportDocuments({}, {}, {}, {}, {})", new Object[] { token, fldPath, fs, out, deco });
 		ImpExpStats stats;
 		
 		try {
 			if (fs.exists()) {
 				firstTime = true;
-				stats = exportDocumentsHelper(token, fldPath, fs, metadata, out, deco);
+				stats = exportDocumentsHelper(token, fldPath, fs, out, deco);
 			} else  {
 				throw new FileNotFoundException(fs.getPath());
 			}
@@ -94,10 +93,10 @@ public class RepositoryExporter {
 	/**
 	 * Performs a recursive repository content export with metadata
 	 */
-	private static ImpExpStats exportDocumentsHelper(String token, String fldPath, File fs, boolean metadata,
-			Writer out, InfoDecorator deco) throws FileNotFoundException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException {
-		log.debug("exportDocumentsHelper({}, {}, {}, {}, {}, {})", new Object[] { token, fldPath, fs, metadata, out, deco });
+	private static ImpExpStats exportDocumentsHelper(String token, String fldPath, File fs,  Writer out,
+			InfoDecorator deco) throws FileNotFoundException, PathNotFoundException, AccessDeniedException,
+			RepositoryException, IOException, DatabaseException {
+		log.debug("exportDocumentsHelper({}, {}, {}, {}, {})", new Object[] { token, fldPath, fs, out, deco });
 		ImpExpStats stats = new ImpExpStats();
 		String path = null;
 		
@@ -105,7 +104,7 @@ public class RepositoryExporter {
 			path = fs.getPath();
 			firstTime = false;
 		} else {
-			// Repository path needs to be "corrected" under Windoze
+			// Repository path needs to be "corrected" under Windoze new
 			path = fs.getPath() + File.separator + FileUtils.getName(fldPath).replace(':', '_');
 		}
 		
@@ -124,15 +123,6 @@ public class RepositoryExporter {
 			out.write(deco.print(docChild.getPath(), docChild.getActualVersion().getSize(), null));
 			out.flush();
 			
-			// Metadata
-			if (metadata) {
-				Gson gson = new Gson();
-				String json = gson.toJson(docChild);
-				fos = new FileOutputStream(path + ".json");
-				IOUtils.write(json, fos);
-				fos.close();
-			}
-			
 			// Stats
 			stats.setSize(stats.getSize() + docChild.getActualVersion().getSize());
 			stats.setDocuments(stats.getDocuments() + 1);
@@ -141,7 +131,7 @@ public class RepositoryExporter {
 		FolderModule fm = ModuleManager.getFolderModule();
 		for (Iterator<Folder> it = fm.getChilds(token, fldPath).iterator(); it.hasNext();) {
 			Folder fldChild = it.next();
-			ImpExpStats tmp = exportDocumentsHelper(token, fldChild.getPath(), fsPath, metadata, out, deco);
+			ImpExpStats tmp = exportDocumentsHelper(token, fldChild.getPath(), fsPath, out, deco);
 			
 			// Stats
 			stats.setSize(stats.getSize() + tmp.getSize());

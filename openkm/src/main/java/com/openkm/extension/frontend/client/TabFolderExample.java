@@ -29,7 +29,7 @@ import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.extension.event.HasFolderEvent;
 import com.openkm.frontend.client.extension.event.HasFolderEvent.FolderEventConstant;
 import com.openkm.frontend.client.extension.event.handler.FolderHandlerExtension;
-import com.openkm.frontend.client.extension.widget.tabfolder.TabFolderExtension;
+import com.openkm.frontend.client.extension.widget.TabFolderExtension;
 
 /**
  * TabFolderExample
@@ -70,5 +70,10 @@ public class TabFolderExample extends TabFolderExtension implements FolderHandle
 		if (event.equals(HasFolderEvent.TAB_CHANGED)) {
 			Window.alert("tab changed - " + event.getType());
 		}
+	}
+
+	@Override
+	public String getExtensionUUID() {
+		return String.valueOf("d95e01a0-d097-11df-bd3b-0800200c9a66");
 	}
 }

@@ -31,25 +31,39 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.PropertyType;
 import javax.jcr.Session;
+import javax.jcr.UnsupportedRepositoryOperationException;
+import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.jackrabbit.api.XASession;
+import org.apache.jackrabbit.core.NodeImpl;
+import org.apache.jackrabbit.core.SessionImpl;
+import org.apache.jackrabbit.core.security.AccessManager;
+import org.apache.jackrabbit.spi.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
+import com.openkm.bean.Folder;
 import com.openkm.bean.Lock;
+import com.openkm.bean.Note;
+import com.openkm.bean.Notification;
+import com.openkm.bean.Permission;
+import com.openkm.bean.Property;
 import com.openkm.bean.Repository;
 import com.openkm.bean.Version;
 import com.openkm.bean.kea.MetadataDTO;
@@ -71,14 +85,15 @@ import com.openkm.core.VirusDetectedException;
 import com.openkm.core.VirusDetection;
 import com.openkm.dao.LockTokenDAO;
 import com.openkm.dao.MimeTypeDAO;
+import com.openkm.dao.UserConfigDAO;
+import com.openkm.dao.bean.ProfileMisc;
+import com.openkm.dao.bean.UserConfig;
 import com.openkm.dao.bean.cache.UserItems;
 import com.openkm.kea.RDFREpository;
 import com.openkm.kea.metadata.MetadataExtractionException;
 import com.openkm.kea.metadata.MetadataExtractor;
 import com.openkm.module.DocumentModule;
-import com.openkm.module.base.BaseDocumentModule;
-import com.openkm.module.base.BaseNotificationModule;
-import com.openkm.module.base.BaseScriptingModule;
+import com.openkm.util.DocConverter;
 import com.openkm.util.FileUtils;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.Transaction;
@@ -86,6 +101,245 @@ import com.openkm.util.UserActivity;
 
 public class DirectDocumentModule implements DocumentModule {
 	private static Logger log = LoggerFactory.getLogger(DirectDocumentModule.class);
+
+	/**
+	 * Get document properties using a given Session.
+	 */
+	public Document getProperties(Session session, String docPath) throws javax.jcr.PathNotFoundException,
+			javax.jcr.RepositoryException {
+		log.debug("getProperties[session]({}, {})", session, docPath);
+		Document doc = new Document();
+
+		Node documentNode = session.getRootNode().getNode(docPath.substring(1));
+		Node contentNode = documentNode.getNode(Document.CONTENT);
+
+		// Properties
+		doc.setAuthor(documentNode.getProperty(Document.AUTHOR).getString());
+		
+		// TODO Remove this check in OpenKM 6
+		// if (documentNode.hasProperty(Document.TITLE)) {
+		// 	doc.setTitle(documentNode.getProperty(Document.TITLE).getPath());		
+		// }
+		
+		doc.setPath(documentNode.getPath());
+		doc.setLocked(documentNode.isLocked());
+		doc.setUuid(documentNode.getUUID());
+		
+		if (doc.isLocked()) {
+			doc.setLockInfo(getLock(session, docPath));
+		} else {
+			doc.setLockInfo(null);
+		}
+
+		doc.setCheckedOut(contentNode.isCheckedOut());
+		doc.setMimeType(contentNode.getProperty(JcrConstants.JCR_MIMETYPE).getString());
+		doc.setLastModified(contentNode.getProperty(JcrConstants.JCR_LASTMODIFIED).getDate());
+
+		// Get actual version
+		if (documentNode.isNodeType(Document.TYPE)) {
+			javax.jcr.version.Version ver = contentNode.getBaseVersion();
+			Version version = new Version();
+			version.setAuthor(contentNode.getProperty(Document.AUTHOR).getString());
+			version.setSize(contentNode.getProperty(Document.SIZE).getLong());
+			version.setComment(contentNode.getProperty(Document.VERSION_COMMENT).getString());
+			version.setName(ver.getName());
+			version.setCreated(ver.getCreated());
+			version.setActual(true);
+			doc.setActualVersion(version);
+		}
+
+		// If this is a frozen node, we must get create property from
+		// the original referenced node.
+		if (documentNode.isNodeType(JcrConstants.NT_FROZENNODE)) {
+			Node node = documentNode.getProperty(JcrConstants.JCR_FROZENUUID).getNode();
+			doc.setCreated(node.getProperty(JcrConstants.JCR_CREATED).getDate());
+		} else {
+			doc.setCreated(documentNode.getProperty(JcrConstants.JCR_CREATED).getDate());
+		}
+
+		// Get permissions
+		if (Config.SYSTEM_READONLY) {
+			doc.setPermissions(Permission.NONE);
+		} else {
+			AccessManager am = ((SessionImpl) session).getAccessManager();
+			Path path = ((NodeImpl)documentNode).getPrimaryPath();
+			//Path path = ((SessionImpl)session).getHierarchyManager().getPath(((NodeImpl)folderNode).getId());
+			if (am.isGranted(path, org.apache.jackrabbit.core.security.authorization.Permission.READ)) {
+				doc.setPermissions(Permission.READ);
+			}
+			
+			if (am.isGranted(path, org.apache.jackrabbit.core.security.authorization.Permission.ADD_NODE)) {
+				doc.setPermissions((byte) (doc.getPermissions() | Permission.WRITE));
+			}
+			
+			if (am.isGranted(path, org.apache.jackrabbit.core.security.authorization.Permission.REMOVE_NODE)) {
+				doc.setPermissions((byte) (doc.getPermissions() | Permission.DELETE));
+			}
+			
+			if (am.isGranted(path, org.apache.jackrabbit.core.security.authorization.Permission.MODIFY_AC)) {
+				doc.setPermissions((byte) (doc.getPermissions() | Permission.SECURITY));
+			}
+		}
+		
+		// Get user subscription
+		Set<String> subscriptorSet = new HashSet<String>();
+
+		if (documentNode.isNodeType(Notification.TYPE)) {
+			Value[] subscriptors = documentNode.getProperty(Notification.SUBSCRIPTORS).getValues();
+
+			for (int i=0; i<subscriptors.length; i++) {
+				subscriptorSet.add(subscriptors[i].getString());
+
+				if (session.getUserID().equals(subscriptors[i].getString())) {
+					doc.setSubscribed(true);
+				}
+			}
+		}
+
+		doc.setSubscriptors(subscriptorSet);
+		
+		// Get document keywords
+		Set<String> keywordsSet = new HashSet<String>();
+		Value[] keywords = documentNode.getProperty(Property.KEYWORDS).getValues();
+
+		for (int i=0; i<keywords.length; i++) {
+			keywordsSet.add(keywords[i].getString());
+		}
+
+		doc.setKeywords(keywordsSet);
+		
+		// Get document categories
+		Set<Folder> categoriesSet = new HashSet<Folder>();
+		Value[] categories = documentNode.getProperty(Property.CATEGORIES).getValues();
+
+		for (int i=0; i<categories.length; i++) {
+			Node node = session.getNodeByUUID(categories[i].getString());
+			categoriesSet.add(new DirectFolderModule().getProperties(session, node.getPath()));
+		}
+
+		doc.setCategories(categoriesSet);
+		
+		DocConverter convert = DocConverter.getInstance();
+		doc.setConvertibleToPdf(convert.convertibleToPdf(doc.getMimeType()));
+		doc.setConvertibleToSwf(convert.convertibleToSwf(doc.getMimeType()));
+		
+		// Get notes
+		if (documentNode.isNodeType(Note.MIX_TYPE)) {
+			List<Note> notes = new ArrayList<Note>();
+			Node notesNode = documentNode.getNode(Note.LIST);
+			
+			for (NodeIterator nit = notesNode.getNodes(); nit.hasNext(); ) {
+				Node noteNode = nit.nextNode();
+				Note note = new Note();
+				note.setDate(noteNode.getProperty(Note.DATE).getDate());
+				note.setUser(noteNode.getProperty(Note.USER).getString());
+				note.setText(noteNode.getProperty(Note.TEXT).getString());
+				note.setPath(noteNode.getPath());
+				notes.add(note);
+			}
+			
+			doc.setNotes(notes);
+		}
+				
+		log.debug("Permisos: {} => {}", docPath, doc.getPermissions());
+		log.debug("getProperties[session]: {}", doc);
+		return doc;
+	}
+
+	/**
+	 * Create a new document
+	 * 
+	 * TODO Parameter title to be used in OpenKM 6
+	 */
+	public Node create(Session session, Node parentNode, String name, String title, String mimeType,
+			String[] keywords, InputStream is) throws javax.jcr.ItemExistsException,
+			javax.jcr.PathNotFoundException, javax.jcr.AccessDeniedException, javax.jcr.RepositoryException,
+			IOException, DatabaseException, UserQuotaExceededException {
+		// Create and add a new file node
+		Node documentNode = parentNode.addNode(name, Document.TYPE);
+		documentNode.setProperty(Property.KEYWORDS, keywords);
+		documentNode.setProperty(Property.CATEGORIES, new String[]{}, PropertyType.REFERENCE);
+		documentNode.setProperty(Document.AUTHOR, session.getUserID());
+		documentNode.setProperty(Document.NAME, name);
+		// documentNode.setProperty(Document.TITLE, title == null ? "" : title);
+		long size = is.available();
+		
+		// Check user quota
+		UserConfig uc = UserConfigDAO.findByPk(session, session.getUserID());
+		ProfileMisc pm = uc.getProfile().getMisc();
+		
+		// System user don't care quotas
+		if (!Config.SYSTEM_USER.equals(session.getUserID())) {
+			long currentQuota = 0;
+			
+			if (Config.USER_ITEM_CACHE) {
+				UserItems ui = UserItemsManager.get(session.getUserID());
+				currentQuota = ui.getSize();
+			} else {
+				currentQuota = JCRUtils.calculateQuota(session);
+			}
+			
+			if (pm.getUserQuota() > 0 && currentQuota + size > pm.getUserQuota()) {
+				throw new UserQuotaExceededException(Long.toString(currentQuota + size));
+			}
+		}
+		
+		// Get parent node auth info
+		Value[] usersReadParent = parentNode.getProperty(Permission.USERS_READ).getValues();
+		String[] usersRead = JCRUtils.usrValue2String(usersReadParent, session.getUserID());
+		Value[] usersWriteParent = parentNode.getProperty(Permission.USERS_WRITE).getValues();
+		String[] usersWrite = JCRUtils.usrValue2String(usersWriteParent, session.getUserID());
+		Value[] usersDeleteParent = parentNode.getProperty(Permission.USERS_DELETE).getValues();
+		String[] usersDelete = JCRUtils.usrValue2String(usersDeleteParent, session.getUserID());
+		Value[] usersSecurityParent = parentNode.getProperty(Permission.USERS_SECURITY).getValues();
+		String[] usersSecurity = JCRUtils.usrValue2String(usersSecurityParent, session.getUserID());
+
+		Value[] rolesReadParent = parentNode.getProperty(Permission.ROLES_READ).getValues();
+		String[] rolesRead = JCRUtils.rolValue2String(rolesReadParent);
+		Value[] rolesWriteParent = parentNode.getProperty(Permission.ROLES_WRITE).getValues();
+		String[] rolesWrite = JCRUtils.rolValue2String(rolesWriteParent);
+		Value[] rolesDeleteParent = parentNode.getProperty(Permission.ROLES_DELETE).getValues();
+		String[] rolesDelete = JCRUtils.rolValue2String(rolesDeleteParent);
+		Value[] rolesSecurityParent = parentNode.getProperty(Permission.ROLES_SECURITY).getValues();
+		String[] rolesSecurity = JCRUtils.rolValue2String(rolesSecurityParent);
+
+		// Set auth info
+		documentNode.setProperty(Permission.USERS_READ, usersRead);
+		documentNode.setProperty(Permission.USERS_WRITE, usersWrite);
+		documentNode.setProperty(Permission.USERS_DELETE, usersDelete);
+		documentNode.setProperty(Permission.USERS_SECURITY, usersSecurity);
+		documentNode.setProperty(Permission.ROLES_READ, rolesRead);
+		documentNode.setProperty(Permission.ROLES_WRITE, rolesWrite);
+		documentNode.setProperty(Permission.ROLES_DELETE, rolesDelete);
+		documentNode.setProperty(Permission.ROLES_SECURITY, rolesSecurity);
+
+		Node contentNode = documentNode.addNode(Document.CONTENT, Document.CONTENT_TYPE);
+		contentNode.setProperty(Document.SIZE, size);
+		contentNode.setProperty(Document.AUTHOR, session.getUserID());
+		contentNode.setProperty(Document.VERSION_COMMENT, "");
+		contentNode.setProperty(JcrConstants.JCR_MIMETYPE, mimeType);
+		
+		// jcr:encoding only have sense for text/* MIME
+		if (mimeType.startsWith("text/")) {
+			contentNode.setProperty(JcrConstants.JCR_ENCODING, "UTF-8");
+		}
+
+		contentNode.setProperty(JcrConstants.JCR_DATA, is);
+		contentNode.setProperty(JcrConstants.JCR_LASTMODIFIED, Calendar.getInstance());
+		parentNode.save();
+
+		// Esta línea vale millones!! Resuelve la incidencia del isCkechedOut.
+		// Por lo visto un nuevo nodo se añade con el isCheckedOut a true :/
+		contentNode.checkin();
+		
+		// Update user items size
+		if (Config.USER_ITEM_CACHE) {
+			UserItemsManager.incSize(session.getUserID(), size);
+			UserItemsManager.incDocuments(session.getUserID(), 1);
+		}
+		
+		return documentNode;
+	}
 	
 	@Override
 	public Document create(String token, Document doc, InputStream is) throws UnsupportedMimeTypeException, 
@@ -162,7 +416,13 @@ public class DirectDocumentModule implements DocumentModule {
 			Collection<String> keywords = doc.getKeywords() != null ? doc.getKeywords() : new ArrayList<String>(); // Adding submitted keywords
 	        if (!Config.KEA_MODEL_FILE.equals("")) {
 		        MetadataExtractor mdExtractor = new MetadataExtractor(Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER);
-		        MetadataDTO mdDTO = mdExtractor.extract(tmpKea);
+		        MetadataDTO mdDTO = mdExtractor.extract(is, tmpKea);
+		        log.info("Creator: "+mdDTO.getCreator());
+		        log.info("Title: "+mdDTO.getTitle());
+		        log.info("Mime type: "+mdDTO.getMimeType());
+		        log.info("Filename: "+mdDTO.getFileName());
+		        log.info("Content created: "+mdDTO.getContentCreated());
+		        log.info("Content last modified: "+mdDTO.getContentLastModified());
 		        
 		        for (ListIterator<Term> it = mdDTO.getSubjectsAsTerms().listIterator(); it.hasNext();) {
 		        	Term term =  it.next();
@@ -176,26 +436,23 @@ public class DirectDocumentModule implements DocumentModule {
 		        	}
 		        }
 	        }
-	        // End KEA
+	        // Ends KEA
 	        
 			parentNode = session.getRootNode().getNode(parent.substring(1));
-			Node documentNode = BaseDocumentModule.create(session, parentNode, name, null /* doc.getTitle() */,
-					mimeType, keywords.toArray(new String[keywords.size()]), is);
-			
-			// Check document filters
-			//DocumentUtils.checkFilters(session, documentNode, mimeType);
+			Node documentNode = create(session, parentNode, name, null /* doc.getTitle() */, mimeType,
+					keywords.toArray(new String[keywords.size()]), is);
 			
 			// Set returned document properties
-			newDocument = BaseDocumentModule.getProperties(session, documentNode);
-			
+			newDocument = getProperties(session, doc.getPath());
+
 			// Check subscriptions
-			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CREATE", null);
+			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CREATE", null);
 			
 			// Check scripting
-			BaseScriptingModule.checkScripts(session, parentNode, documentNode, "CREATE_DOCUMENT");
-			
+			DirectScriptingModule.checkScripts(session, parentNode, documentNode, "CREATE_DOCUMENT");
+
 			// Activity log
-			UserActivity.log(session.getUserID(), "CREATE_DOCUMENT", documentNode.getUUID(), mimeType+", "+size+", "+doc.getPath());
+			UserActivity.log(session.getUserID(), "CREATE_DOCUMENT", doc.getPath(), mimeType+", "+size);
 		} catch (javax.jcr.ItemExistsException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
@@ -271,10 +528,10 @@ public class DirectDocumentModule implements DocumentModule {
 			session.getRootNode().save();
 
 			// Check scripting
-			BaseScriptingModule.checkScripts(session, parentNode, documentNode, "DELETE_DOCUMENT");
+			DirectScriptingModule.checkScripts(session, parentNode, documentNode, "DELETE_DOCUMENT");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "DELETE_DOCUMENT", documentNode.getUUID(), docPath);
+			UserActivity.log(session.getUserID(), "DELETE_DOCUMENT", docPath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
@@ -308,11 +565,10 @@ public class DirectDocumentModule implements DocumentModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
-			doc = BaseDocumentModule.getProperties(session, documentNode);
+			doc = getProperties(session, docPath);
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_DOCUMENT_PROPERTIES", documentNode.getUUID(), doc.getKeywords().toString()+", "+docPath);
+			UserActivity.log(session.getUserID(), "GET_DOCUMENT_PROPERTIES", docPath, doc.getKeywords().toString());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -332,26 +588,12 @@ public class DirectDocumentModule implements DocumentModule {
 	 */
 	public InputStream getContent(Session session, Node docNode) throws javax.jcr.PathNotFoundException,
 			javax.jcr.RepositoryException, IOException {
-		log.debug("getContent({}, {})", session, docNode);
+		log.debug("getContent[session]({}, {})", session, docNode);
 		
 		Node contentNode = docNode.getNode(Document.CONTENT);
 		InputStream is = contentNode.getProperty(JcrConstants.JCR_DATA).getStream();
 		
-		log.debug("getContent: {}", is);
-		return is;
-	}
-	
-	/**
-	 * Retrieve the content input stream from a document path
-	 */
-	public InputStream getContent(Session session, String docPath, boolean checkout) throws 
-			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException, IOException {
-		Node documentNode = session.getRootNode().getNode(docPath.substring(1));
-		InputStream is = getContent(session, documentNode);
-
-		// Activity log
-		UserActivity.log(session.getUserID(), (checkout?"GET_DOCUMENT_CONTENT_CHECKOUT":"GET_DOCUMENT_CONTENT"), documentNode.getUUID(), is.available()+", "+docPath);
-		
+		log.debug("getContent[]session: {}", is);
 		return is;
 	}
 
@@ -369,7 +611,11 @@ public class DirectDocumentModule implements DocumentModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			is = getContent(session, docPath, checkout);
+			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
+			is = getContent(session, documentNode);
+
+			// Activity log
+			UserActivity.log(session.getUserID(), (checkout?"GET_DOCUMENT_CONTENT_CHECKOUT":"GET_DOCUMENT_CONTENT"), docPath, ""+is.available());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -409,7 +655,7 @@ public class DirectDocumentModule implements DocumentModule {
 			is = frozenNode.getProperty(JcrConstants.JCR_DATA).getStream();
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_DOCUMENT_CONTENT_BY_VERSION", documentNode.getUUID(), versionId+", "+is.available()+", "+docPath);
+			UserActivity.log(session.getUserID(), "GET_DOCUMENT_CONTENT_BY_VERSION", docPath, versionId+", "+is.available());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -481,10 +727,10 @@ public class DirectDocumentModule implements DocumentModule {
 			contentNode.save();
 
 			// Check scripting
-			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "SET_DOCUMENT_CONTENT");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "SET_DOCUMENT_CONTENT");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "SET_DOCUMENT_CONTENT", documentNode.getUUID(), size+", "+docPath);
+			UserActivity.log(session.getUserID(), "SET_DOCUMENT_CONTENT", docPath, ""+size);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(contentNode);
@@ -539,12 +785,12 @@ public class DirectDocumentModule implements DocumentModule {
 				log.debug("Child: "+child.getPath()+", "+child.getPrimaryNodeType().getName());
 
 				if (child.isNodeType(Document.TYPE)) {
-					childs.add(BaseDocumentModule.getProperties(session, child));
+					childs.add(getProperties(session, child.getPath()));
 				}
 			}
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_CHILD_DOCUMENTS", folderNode.getUUID(), fldPath);
+			UserActivity.log(session.getUserID(), "GET_CHILD_DOCUMENTS", fldPath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -565,7 +811,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("rename:({}, {}, {})", new Object[] { token, docPath, newName });
 		Document renamedDocument = null;
 		Session session = null;
-		Node documentNode = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
@@ -585,26 +830,25 @@ public class DirectDocumentModule implements DocumentModule {
 			newName = FileUtils.escape(newName);
 
 			if (newName != null && !newName.equals("") && !newName.equals(name)) {
-				String newPath = parent + "/" + newName;
+				String newPath = parent+"/"+newName;
 				session.move(docPath, newPath);
 
 				// Set new name
-				documentNode = session.getRootNode().getNode(newPath.substring(1));
+				Node documentNode = session.getRootNode().getNode(newPath.substring(1));
 				documentNode.setProperty(Document.NAME, newName);
 
 				// Publish changes
 				session.save();
 
 				// Set returned document properties
-				renamedDocument = BaseDocumentModule.getProperties(session, documentNode);
+				renamedDocument = getProperties(session, newPath);
 			} else {
 				// Don't change anything
-				documentNode = session.getRootNode().getNode(docPath.substring(1));
-				renamedDocument = BaseDocumentModule.getProperties(session, documentNode);				
+				renamedDocument = getProperties(session, docPath);
 			}
-			
+
 			// Activity log
-			UserActivity.log(session.getUserID(), "RENAME_DOCUMENT", documentNode.getUUID(), newName+", "+docPath);
+			UserActivity.log(session.getUserID(), "RENAME_DOCUMENT", docPath, newName);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
@@ -656,13 +900,13 @@ public class DirectDocumentModule implements DocumentModule {
 			// documentNode.setProperty(Document.TITLE, doc.getTitle() == null ? "" : doc.getTitle());
 
 			// Check subscriptions
-			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "SET_PROPERTIES", null);
+			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "SET_PROPERTIES", null);
 
 			// Check scripting
-			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "SET_DOCUMENT_PROPERTIES");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "SET_DOCUMENT_PROPERTIES");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "SET_DOCUMENT_PROPERTIES", documentNode.getUUID(), doc.getPath());
+			UserActivity.log(session.getUserID(), "SET_DOCUMENT_PROPERTIES", doc.getPath(), null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
@@ -723,10 +967,10 @@ public class DirectDocumentModule implements DocumentModule {
 			t.commit();
 
 			// Check scripting
-			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "CHECKOUT_DOCUMENT");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "CHECKOUT_DOCUMENT");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "CHECKOUT_DOCUMENT", documentNode.getUUID(), lck.getLockToken()+", "+docPath);
+			UserActivity.log(session.getUserID(), "CHECKOUT_DOCUMENT", docPath, lck.getLockToken());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			t.rollback();
@@ -786,13 +1030,13 @@ public class DirectDocumentModule implements DocumentModule {
 			t.commit();
 
 			// Check subscriptions
-			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CANCEL_CHECKOUT", null);
+			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CANCEL_CHECKOUT", null);
 
 			// Check scripting
-			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "CANCEL_CHECKOUT_DOCUMENT");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "CANCEL_CHECKOUT_DOCUMENT");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "CANCEL_CHECKOUT_DOCUMENT", documentNode.getUUID(), docPath);
+			UserActivity.log(session.getUserID(), "CANCEL_CHECKOUT_DOCUMENT", docPath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			t.rollback();
@@ -866,13 +1110,13 @@ public class DirectDocumentModule implements DocumentModule {
 			t.commit();
 
 			// Check subscriptions
-			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "FORCE_CANCEL_CHECKOUT", null);
+			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "FORCE_CANCEL_CHECKOUT", null);
 
 			// Check scripting
-			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "FORCE_CANCEL_CHECKOUT_DOCUMENT");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "FORCE_CANCEL_CHECKOUT_DOCUMENT");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "FORCE_CANCEL_CHECKOUT_DOCUMENT", documentNode.getUUID(), docPath);
+			UserActivity.log(session.getUserID(), "FORCE_CANCEL_CHECKOUT_DOCUMENT", docPath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			t.rollback();
@@ -936,6 +1180,7 @@ public class DirectDocumentModule implements DocumentModule {
 			RepositoryException, PathNotFoundException, LockException, VersionException, DatabaseException {
 		log.debug("checkin({}, {}, {})", new Object[] { token, docPath, comment });
 		Version version = new Version();
+		Node contentNode = null;
 		Transaction t = null;
 		XASession session = null;
 		
@@ -954,17 +1199,16 @@ public class DirectDocumentModule implements DocumentModule {
 			t.start();
 			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
-			Node contentNode = null;
 			
 			synchronized (documentNode) {
 				JCRUtils.loadLockTokens(session);
 				contentNode = documentNode.getNode(Document.CONTENT);
-				
+
 				// Set version author
 				contentNode.setProperty(Document.AUTHOR, session.getUserID());
 				contentNode.setProperty(Document.VERSION_COMMENT, comment);
 				contentNode.save();
-				
+
 				// Performs checkin & unlock
 				javax.jcr.version.Version ver = contentNode.checkin();
 				version.setAuthor(contentNode.getProperty(Document.AUTHOR).getString());
@@ -980,26 +1224,22 @@ public class DirectDocumentModule implements DocumentModule {
 			t.end();
 			t.commit();
 			
-			
-			if (Config.USER_ITEM_CACHE) {
-				// Update user items
-				long size = contentNode.getProperty(Document.SIZE).getLong();
-				UserItemsManager.incSize(session.getUserID(), size);
-			}
+			// Update user items
+			long size = contentNode.getProperty(Document.SIZE).getLong();
+			UserItemsManager.incSize(session.getUserID(), size);
 			
 			// Remove pdf & preview from cache
-			new File(Config.CACHE_DXF + File.separator + documentNode.getUUID() + ".dxf").delete();
-			new File(Config.CACHE_PDF + File.separator + documentNode.getUUID() + ".pdf").delete();
-			new File(Config.CACHE_SWF + File.separator + documentNode.getUUID() + ".swf").delete();
+			new File(Config.PDF_CACHE+File.separator+documentNode.getUUID()+".pdf").delete();
+			new File(Config.SWF_CACHE+File.separator+documentNode.getUUID()+".swf").delete();
 
 			// Check subscriptions
-			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CHECKIN", comment);
+			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CHECKIN", comment);
 
 			// Check scripting
-			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "CHECKIN_DOCUMENT");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "CHECKIN_DOCUMENT");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "CHECKIN_DOCUMENT", documentNode.getUUID(), comment+", "+docPath);
+			UserActivity.log(session.getUserID(), "CHECKIN_DOCUMENT", docPath, comment);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			t.rollback();
@@ -1079,7 +1319,7 @@ public class DirectDocumentModule implements DocumentModule {
 			Collections.reverse(history);
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_DOCUMENT_VERSION_HISTORY", documentNode.getUUID(), docPath);
+			UserActivity.log(session.getUserID(), "GET_DOCUMENT_VERSION_HISTORY", docPath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -1116,13 +1356,13 @@ public class DirectDocumentModule implements DocumentModule {
 			JCRUtils.addLockToken(session, documentNode);
 			
 			// Check subscriptions
-			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "LOCK", null);
+			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "LOCK", null);
 
 			// Check scripting
-			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "LOCK_DOCUMENT");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "LOCK_DOCUMENT");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "LOCK_DOCUMENT", documentNode.getUUID(), lck.getLockToken()+", "+docPath);
+			UserActivity.log(session.getUserID(), "LOCK_DOCUMENT", docPath, lck.getLockToken());
 		} catch (javax.jcr.lock.LockException e) {
 			log.error(e.getMessage(), e);
 			throw new LockException(e.getMessage(), e);
@@ -1168,13 +1408,13 @@ public class DirectDocumentModule implements DocumentModule {
 			JCRUtils.removeLockToken(session, documentNode);
 
 			// Check subscriptions
-			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "UNLOCK", null);
+			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "UNLOCK", null);
 			
 			// Check scripting
-			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "UNLOCK_DOCUMENT");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "UNLOCK_DOCUMENT");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "UNLOCK_DOCUMENT", documentNode.getUUID(), docPath);
+			UserActivity.log(session.getUserID(), "UNLOCK_DOCUMENT", docPath, null);
 		} catch (javax.jcr.lock.LockException e) {
 			log.error(e.getMessage(), e);
 			throw new LockException(e.getMessage(), e);
@@ -1233,13 +1473,13 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 
 			// Check subscriptions
-			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "FORCE_UNLOCK", null);
+			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "FORCE_UNLOCK", null);
 			
 			// Check scripting
-			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "FORCE_UNLOCK_DOCUMENT");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "FORCE_UNLOCK_DOCUMENT");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "FORCE_UNLOCK_DOCUMENT", documentNode.getUUID(), docPath);
+			UserActivity.log(session.getUserID(), "FORCE_UNLOCK_DOCUMENT", docPath, null);
 		} catch (javax.jcr.lock.LockException e) {
 			log.error(e.getMessage(), e);
 			throw new LockException(e.getMessage(), e);
@@ -1306,7 +1546,7 @@ public class DirectDocumentModule implements DocumentModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			lock = BaseDocumentModule.getLock(session, docPath);
+			lock = getLock(session, docPath);
 		} catch (javax.jcr.lock.LockException e) {
 			log.error(e.getMessage(), e);
 			throw new LockException(e.getMessage(), e);
@@ -1320,6 +1560,22 @@ public class DirectDocumentModule implements DocumentModule {
 			if (token == null) JCRUtils.logout(session);
 		}
 		
+		log.debug("getLock: {}", lock);
+		return lock;
+	}
+
+	/**
+	 * Retrieve lock info from a document path
+	 */
+	private Lock getLock(Session session, String docPath) throws UnsupportedRepositoryOperationException,
+			javax.jcr.lock.LockException, javax.jcr.AccessDeniedException, javax.jcr.RepositoryException {
+		log.debug("getLock({}, {})", session, docPath);
+		Lock lock = new Lock();
+		Node documentNode = session.getRootNode().getNode(docPath.substring(1));
+		javax.jcr.lock.Lock lck = documentNode.getLock();
+		lock.setOwner(lck.getLockOwner());
+		lock.setNodePath(lck.getNode().getPath());
+		lock.setToken(lck.getLockToken());
 		log.debug("getLock: {}", lock);
 		return lock;
 	}
@@ -1363,10 +1619,10 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 			
 			// Check scripting
-			BaseScriptingModule.checkScripts(session, parentNode, documentNode, "PURGE_DOCUMENT");
+			DirectScriptingModule.checkScripts(session, parentNode, documentNode, "PURGE_DOCUMENT");
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "PURGE_DOCUMENT", documentNode.getUUID(), docPath);
+			UserActivity.log(session.getUserID(), "PURGE_DOCUMENT", docPath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
@@ -1400,9 +1656,8 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("VersionHistory UUID: {}", vh.getUUID());
 
 		// Remove pdf & preview from cache
-		new File(Config.CACHE_DXF + File.separator + docNode.getUUID() + ".dxf").delete();
-		new File(Config.CACHE_PDF + File.separator + docNode.getUUID() + ".pdf").delete();
-		new File(Config.CACHE_SWF + File.separator + docNode.getUUID() + ".swf").delete();
+		new File(Config.PDF_CACHE + File.separator + docNode.getUUID()+".pdf").delete();
+		new File(Config.SWF_CACHE + File.separator + docNode.getUUID()+".swf").delete();
 		
 		// Remove node itself
 		docNode.remove();
@@ -1465,13 +1720,12 @@ public class DirectDocumentModule implements DocumentModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			String name = FileUtils.getName(docPath);
 			session.move(docPath, dstPath+"/"+name);
 			session.save();
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "MOVE_DOCUMENT", documentNode.getUUID(), dstPath+", "+docPath);
+			UserActivity.log(session.getUserID(), "MOVE_DOCUMENT", docPath, dstPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
@@ -1519,10 +1773,10 @@ public class DirectDocumentModule implements DocumentModule {
 			copy(session, srcDocumentNode, dstFolderNode);
 
 			// Check subscriptions
-			BaseNotificationModule.checkSubscriptions(dstFolderNode, session.getUserID(), "COPY", null);
+			DirectNotificationModule.checkSubscriptions(dstFolderNode, session.getUserID(), "COPY", null);
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "COPY_DOCUMENT", srcDocumentNode.getUUID(), dstPath+", "+docPath);
+			UserActivity.log(session.getUserID(), "COPY_DOCUMENT", docPath, dstPath);
 		} catch (javax.jcr.ItemExistsException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(dstFolderNode);
@@ -1562,8 +1816,7 @@ public class DirectDocumentModule implements DocumentModule {
 		String mimeType = srcDocumentContentNode.getProperty("jcr:mimeType").getString();
 		// String title = srcDocumentContentNode.getProperty(Document.TITLE).getString();
 		InputStream is = srcDocumentContentNode.getProperty("jcr:data").getStream();
-		BaseDocumentModule.create(session, dstFolderNode, srcDocumentNode.getName(), null /* title */,
-				mimeType, new String[]{}, is);
+		create(session, dstFolderNode, srcDocumentNode.getName(), null /* title */, mimeType, new String[]{}, is);
 		is.close();
 		
 		log.debug("copy: void");
@@ -1596,7 +1849,7 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "RESTORE_VERSION", documentNode.getUUID(), versionId+", "+docPath);
+			UserActivity.log(session.getUserID(), "RESTORE_VERSION", docPath, versionId);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(contentNode);
@@ -1652,7 +1905,7 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "PURGE_VERSION_HISTORY", documentNode.getUUID(), docPath);
+			UserActivity.log(session.getUserID(), "PURGE_VERSION_HISTORY", docPath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);

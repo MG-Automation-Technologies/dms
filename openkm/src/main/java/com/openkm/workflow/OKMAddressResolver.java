@@ -21,6 +21,10 @@
 
 package com.openkm.workflow;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.jbpm.mail.AddressResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,16 +37,22 @@ public class OKMAddressResolver implements AddressResolver {
 	private static final long serialVersionUID = 1L;
 
 	public Object resolveAddress(String actorId) {
-		log.info("resolveAddress({})", actorId);
-		String mail = null;
+		log.info("resolveAddress("+actorId+")");
+		String email = null;
 		
 		try {
-			mail = new DirectAuthModule().getMail(null, actorId);
+			List<String> users = new ArrayList<String>();
+			users.add(actorId);
+			List<String> emails = new DirectAuthModule().getMails(null, users);
+			
+			for (Iterator<String> it = emails.iterator(); it.hasNext(); ) {
+				email = it.next();
+			}
 		} catch (PrincipalAdapterException e) {
 			log.warn(e.getMessage());
 		}
 		
-		log.info("resolveAddress: {}", mail);
-		return mail;
+		log.info("resolveAddress: "+email);
+		return email;
 	}
 }

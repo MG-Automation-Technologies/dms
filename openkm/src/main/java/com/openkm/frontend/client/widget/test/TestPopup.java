@@ -43,7 +43,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.contants.service.RPCService;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMTestService;
 import com.openkm.frontend.client.service.OKMTestServiceAsync;
 
@@ -51,7 +51,6 @@ import com.openkm.frontend.client.service.OKMTestServiceAsync;
  * Test Popup
  * 
  * @author jllort
- *
  */
 public class TestPopup extends DialogBox {
 	private final OKMTestServiceAsync testService = (OKMTestServiceAsync) GWT.create(OKMTestService.class);
@@ -210,7 +209,7 @@ public class TestPopup extends DialogBox {
 	 */
 	private void stringTest(final int cycle) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) testService;
-		endPoint.setServiceEntryPoint(RPCService.TestService);
+		endPoint.setServiceEntryPoint(Config.OKMTestService);
 		log(runnningTest, "Calling RPC: " + cycle);
 		testService.StringTest(textSize, new AsyncCallback<String>() {
 			@Override
@@ -231,7 +230,7 @@ public class TestPopup extends DialogBox {
 	 */
 	private void folderTest(final int cycle) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) testService;
-		endPoint.setServiceEntryPoint(RPCService.TestService);
+		endPoint.setServiceEntryPoint(Config.OKMTestService);
 		log(runnningTest, "Calling RPC: " + cycle);
 		testService.folderText(textSize, new AsyncCallback<List<GWTFolder>>() {
 			
@@ -253,7 +252,7 @@ public class TestPopup extends DialogBox {
 	 */
 	private void documentTest(final int cycle) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) testService;
-		endPoint.setServiceEntryPoint(RPCService.TestService);
+		endPoint.setServiceEntryPoint(Config.OKMTestService);
 		log(runnningTest, "Calling RPC: " + cycle);
 		testService.documentText(textSize, new AsyncCallback<List<GWTDocument>>() {
 			@Override

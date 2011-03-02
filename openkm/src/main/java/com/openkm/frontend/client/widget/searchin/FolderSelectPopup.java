@@ -124,8 +124,8 @@ public class FolderSelectPopup extends DialogBox  {
 	 * Sets the repository path
 	 */
 	public void setRepositoryPath(String actualPath, String Uuid, boolean refresh) {
-		Main.get().mainPanel.search.searchBrowser.searchIn.searchAdvanced.categoryUuid = Uuid;
-		Main.get().mainPanel.search.searchBrowser.searchIn.searchAdvanced.categoryPath.setText(actualPath.substring(16)); // Removes /okm:categories;
+		Main.get().mainPanel.search.searchBrowser.searchIn.categoryUuid = Uuid;
+		Main.get().mainPanel.search.searchBrowser.searchIn.categoryPath.setText(actualPath.substring(16)); // Removes /okm:categories;
 		hide();
 	}
 	
@@ -133,7 +133,7 @@ public class FolderSelectPopup extends DialogBox  {
 	 * Sets the repository path
 	 */
 	public void setRepositoryPath(String actualPath, boolean refresh) {
-		Main.get().mainPanel.search.searchBrowser.searchIn.searchAdvanced.path.setText(actualPath);
+		Main.get().mainPanel.search.searchBrowser.searchIn.path.setText(actualPath);
 		hide();
 	}
 	

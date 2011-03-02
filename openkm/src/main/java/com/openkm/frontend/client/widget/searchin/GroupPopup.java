@@ -46,7 +46,7 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.GWTPropertyParams;
-import com.openkm.frontend.client.contants.service.RPCService;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
 
@@ -106,7 +106,7 @@ public class GroupPopup extends DialogBox {
 							param.setGrpName(grpName);
 							param.setGrpLabel(grpLabel);
 							param.setFormElement(formElement);
-							Main.get().mainPanel.search.searchBrowser.searchIn.searchMetadata.addProperty(param);
+							Main.get().mainPanel.search.searchBrowser.searchIn.addProperty(param);
 						}
 					}
 				}
@@ -300,7 +300,7 @@ public class GroupPopup extends DialogBox {
 	 */
 	private void getAllGroups() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
+		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
 		propertyGroupService.getAllGroups(callbackGetAllGroups);
 	}
 	
@@ -309,7 +309,7 @@ public class GroupPopup extends DialogBox {
 	 */
 	private void getMetaData() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
+		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
 		propertyGroupService.getPropertyGroupForm(groupListBox.getValue(groupListBox.getSelectedIndex()), callbackGetPropertyGroupForm);
 	}
 	
@@ -329,14 +329,14 @@ public class GroupPopup extends DialogBox {
 		if (groupListBox.getItemCount()>validate) {
 			String value = groupListBox.getValue(validate);
 			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-			endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
+			endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
 			propertyGroupService.getPropertyGroupForm(value, callbackGetPropertyGroupFormDataToValidate);
 		} else {
 			// Validate button 
 			if (groupListBox.getItemCount()>1) {
-				Main.get().mainPanel.search.searchBrowser.searchIn.searchMetadata.addGroup.setEnabled(true);
+				Main.get().mainPanel.search.searchBrowser.searchIn.addGroup.setEnabled(true);
 			} else {
-				Main.get().mainPanel.search.searchBrowser.searchIn.searchMetadata.addGroup.setEnabled(false);
+				Main.get().mainPanel.search.searchBrowser.searchIn.addGroup.setEnabled(false);
 			}
 			validate = -1; // Resets values
 		}

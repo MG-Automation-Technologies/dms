@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -102,10 +103,10 @@ public class UsersRolesPrincipalAdapter implements PrincipalAdapter {
 	}
 
 	@Override
-	public String getMail(String user) throws PrincipalAdapterException {
-		log.debug("getMail({})", user);
+	public List<String> getMails(List<String> users) throws PrincipalAdapterException {
+		log.debug("getMails()");
+		List<String> list = new ArrayList<String>();
 		Properties prop = new Properties();
-		String mail = null;
 		
 		try {
 			prop.load(new FileInputStream(Config.HOME_DIR+"/server/default/conf/props/openkm-emails.properties"));
@@ -115,27 +116,16 @@ public class UsersRolesPrincipalAdapter implements PrincipalAdapter {
 			e.printStackTrace();
 		}
 		
-		mail = prop.getProperty(user);
-		log.debug("getMail: {}", mail);
-		return mail;
-	}
-
-	@Override
-	public String getName(String user) throws PrincipalAdapterException {
-		log.debug("getName({})", user);
-		Properties prop = new Properties();
-		String name = null;
-		
-		try {
-			prop.load(new FileInputStream(Config.HOME_DIR+"/server/default/conf/props/openkm-names.properties"));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		for (Iterator<String> it = users.iterator(); it.hasNext(); ) {
+			String userId = it.next();
+			String email = prop.getProperty(userId);
+			
+			if (email != null) {
+				list.add(email);
+			}
 		}
 		
-		name = prop.getProperty(user);
-		log.debug("getName: {}", name);
-		return name;
+		log.debug("getMails: {}", list);
+		return list;
 	}
 }

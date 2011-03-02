@@ -118,38 +118,23 @@ public class DatabasePrincipalAdapter implements PrincipalAdapter {
 	}
 
 	@Override
-	public String getMail(String user) throws PrincipalAdapterException {
-		log.debug("getMail({})", user);
-		String mail = null;
+	public List<String> getMails(List<String> users) throws PrincipalAdapterException {
+		log.debug("getMails()");
+		List<String> list = new ArrayList<String>();
 
 		try {
-			com.openkm.dao.bean.User usr = AuthDAO.findUserByPk(user);
-			if (usr != null && !usr.getEmail().equals("")) {
-				mail = usr.getEmail();
+			for (Iterator<String> it = users.iterator(); it.hasNext(); ) {
+				String userId = it.next();
+				com.openkm.dao.bean.User user = AuthDAO.findUserByPk(userId);
+				if (user != null && !user.getEmail().equals("")) {
+					list.add(user.getEmail());
+				}
 			}
 		} catch (DatabaseException e) {
 			throw new PrincipalAdapterException(e.getMessage(), e);
 		}
 
-		log.debug("getMail: {}", mail);
-		return mail;
-	}
-
-	@Override
-	public String getName(String user) throws PrincipalAdapterException {
-		log.debug("getName({})", user);
-		String name = null;
-
-		try {
-			com.openkm.dao.bean.User usr = AuthDAO.findUserByPk(user);
-			if (usr != null && !usr.getName().equals("")) {
-				name = usr.getName();
-			}
-		} catch (DatabaseException e) {
-			throw new PrincipalAdapterException(e.getMessage(), e);
-		}
-
-		log.debug("getName: {}", name);
-		return name;
+		log.debug("getMails: {}", list);
+		return list;
 	}
 }

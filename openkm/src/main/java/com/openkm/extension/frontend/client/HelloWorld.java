@@ -36,7 +36,7 @@ import com.openkm.frontend.client.extension.event.HasDocumentEvent.DocumentEvent
 import com.openkm.frontend.client.extension.event.HasLanguageEvent.LanguageEventConstant;
 import com.openkm.frontend.client.extension.event.handler.DocumentHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.LanguageHandlerExtension;
-import com.openkm.frontend.client.extension.widget.tabdocument.TabDocumentExtension;
+import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
 
 /**
  * DocumentForum
@@ -100,6 +100,11 @@ public class HelloWorld extends TabDocumentExtension implements DocumentHandlerE
 		if (event.equals(HasLanguageEvent.LANGUAGE_CHANGED)) {
 			Window.alert("language changed");
 		} 
+	}
+
+	@Override
+	public String getExtensionUUID() {
+		return String.valueOf("d9dab640-d098-11df-bd3b-0800200c9a66");
 	}
 }
 

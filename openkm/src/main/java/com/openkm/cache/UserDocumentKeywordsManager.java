@@ -45,7 +45,7 @@ import com.openkm.dao.bean.cache.UserDocumentKeywords;
 
 public class UserDocumentKeywordsManager {
 	private static Logger log = LoggerFactory.getLogger(UserDocumentKeywordsManager.class);
-	private static Map<String, Map<String, UserDocumentKeywords>> userDocumentKeywordsMgr = new HashMap<String, Map<String, UserDocumentKeywords>>();
+	private static Map<String, Map<String, UserDocumentKeywords>> userDocumentKeywordsMgr;
 
 	/**
 	 * 
@@ -145,7 +145,6 @@ public class UserDocumentKeywordsManager {
 		
 		for (String user : userDocumentKeywordsMgr.keySet()) {
 			log.info("User: {}", user);
-			
 			for (UserDocumentKeywords udk : userDocumentKeywordsMgr.get(user).values()) {
 				log.info("Document: {}", udk);
 				UserDocumentKeywordsDAO.create(udk);
@@ -157,6 +156,8 @@ public class UserDocumentKeywordsManager {
 	 * 
 	 */
 	public static synchronized void deserialize() throws DatabaseException {
+		userDocumentKeywordsMgr = new HashMap<String, Map<String, UserDocumentKeywords>>();
+		
 		for (String user : UserDocumentKeywordsDAO.findUsers()) {
 			Map<String, UserDocumentKeywords> udkMap = new HashMap<String, UserDocumentKeywords>();
 			

@@ -1,5 +1,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <fieldset>
   <legend>Misc</legend>
   <table>
@@ -48,36 +47,6 @@
             </c:when>
             <c:otherwise><option value="bigfont">bigfont</option></c:otherwise>
           </c:choose>
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <td>Print preview</td>
-      <td>
-        <c:choose>
-          <c:when test="${prf.misc.printPreview}">
-            <input name="prf_misc_print_preview" type="checkbox" checked="checked"/>
-          </c:when>
-          <c:otherwise>
-            <input name="prf_misc_print_preview" type="checkbox"/>
-          </c:otherwise>
-        </c:choose>
-      </td>
-    </tr>
-    <tr>
-      <td>Entensions</td>
-      <td>
-        <select multiple="multiple" name="prf_misc_extensions" size="4">
-          <c:forEach var="ext" items="${exts}">
-            <c:choose>
-              <c:when test="${fn:contains(prf.misc.extensions, ext.uuid)}">
-                <option value="${ext.uuid}" selected="selected">${ext.name}</option>
-              </c:when>
-              <c:otherwise>
-                <option value="${ext.uuid}">${ext.name}</option>
-              </c:otherwise>
-            </c:choose>
-          </c:forEach>
         </select>
       </td>
     </tr>

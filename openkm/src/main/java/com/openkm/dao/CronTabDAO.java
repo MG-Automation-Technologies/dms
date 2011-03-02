@@ -67,7 +67,7 @@ public class CronTabDAO {
 	 */
 	public static void update(CronTab ct) throws DatabaseException {
 		log.debug("update({})", ct);
-		String qs = "select ct.fileContent, ct.fileName, ct.fileMime, ct.lastBegin, ct.lastEnd from CronTab ct where ct.id=:id";
+		String qs = "select ct.fileContent, ct.fileName, ct.lastBegin, ct.lastEnd from CronTab ct where ct.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -81,9 +81,8 @@ public class CronTabDAO {
 				Object[] data = (Object[]) q.setMaxResults(1).uniqueResult();
 				ct.setFileContent((String) data[0]);
 				ct.setFileName((String) data[1]);
-				ct.setFileMime((String) data[2]);
-				ct.setLastBegin((Calendar) data[3]);
-				ct.setLastEnd((Calendar) data[4]);
+				ct.setLastBegin((Calendar) data[2]);
+				ct.setLastEnd((Calendar) data[3]);
 			}
 			
 			session.update(ct);

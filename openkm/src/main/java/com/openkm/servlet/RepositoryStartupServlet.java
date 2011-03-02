@@ -23,14 +23,17 @@ package com.openkm.servlet;
 
 import java.io.File;
 import java.util.Calendar;
+import java.util.Properties;
 import java.util.Timer;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.SessionImpl;
+import org.apache.velocity.app.Velocity;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.jbpm.JbpmConfiguration;
 import org.jbpm.JbpmContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,12 +53,16 @@ import com.openkm.kea.RDFREpository;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.DocConverter;
 import com.openkm.util.ExecutionUtils;
-import com.openkm.util.JBPMUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WarUtils;
 
 /**
- * Servlet Startup Class
+ * Servlet Class
+ * 
+ * @web.servlet name="RepositoryStartup" display-name="Name for RepositoryStartup"
+ *              description="Description for RepositoryStartup" load-on-startup = "1"
+ * @web.servlet-mapping url-pattern="/RepositoryStartupServlet"
+ * @web.servlet-init-param name="repository-config" value="A value"
  */
 public class RepositoryStartupServlet extends HttpServlet {
 	private static Logger log = LoggerFactory.getLogger(RepositoryStartupServlet.class);
@@ -73,36 +80,34 @@ public class RepositoryStartupServlet extends HttpServlet {
 	private UserMailImporter umi;
 	private DataStoreGarbageCollector dsgc;
 	private boolean hasConfiguredDataStore;
-	
+
     @Override
     public void init() throws ServletException {
         super.init();
-        ServletContext sc = getServletContext();
         
         // Read config file
-        Config.load(sc.getContextPath().substring(1));
+        Config.load();
         
         // Get OpenKM version
-        WarUtils.readAppVersion(sc);
+        WarUtils.readAppVersion(getServletContext());
         log.info("*** Application version: "+WarUtils.getAppVersion()+" ***");
-        
-        // Initialize DXF cache folder
-        File dxfCacheFolder = new File(Config.CACHE_DXF);
-        if (!dxfCacheFolder.exists()) dxfCacheFolder.mkdirs();
-        
-        // Initialize PDF cache folder
-        File pdfCacheFolder = new File(Config.CACHE_PDF);
+
+        // Initialize folder pdf cache
+        File pdfCacheFolder = new File(Config.PDF_CACHE);
         if (!pdfCacheFolder.exists()) pdfCacheFolder.mkdirs();
-        
-        // Initialize SWF cache folder
-        File previewCacheFolder = new File(Config.CACHE_SWF);
+
+        // Initialize folder preview cache
+        File previewCacheFolder = new File(Config.SWF_CACHE);
         if (!previewCacheFolder.exists()) previewCacheFolder.mkdirs();
         
-        // Initialize chroot folder
-        if (Config.MULTIPLE_INSTANCES) {
-        	File chrootFolder = new File(Config.INSTANCE_CHROOT_PATH);
-        	if (!chrootFolder.exists()) chrootFolder.mkdirs();
-        }
+        // Initialize Velocity engine
+	    try {
+	        Properties p = new Properties();
+		    p.setProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, Config.HOME_DIR);
+			Velocity.init(p);
+		} catch (Exception e) {
+			throw new ServletException(e.getMessage());
+		}
         
         try {
         	log.info("*** Repository initializing... ***");
@@ -112,15 +117,13 @@ public class RepositoryStartupServlet extends HttpServlet {
         	throw new ServletException(e.getMessage(), e);
         }
         
-        if (Config.USER_ITEM_CACHE) {
-        	// Deserialize
-        	try {
-        		log.info("*** Cache deserialization ***");
-        		UserItemsManager.deserialize();
-        		UserDocumentKeywordsManager.deserialize();
-        	} catch (DatabaseException e) {
-        		log.warn(e.getMessage(), e);
-        	}
+        // Deserialize
+        try {
+        	log.info("*** Cache deserialization ***");
+        	UserItemsManager.deserialize();
+        	UserDocumentKeywordsManager.deserialize();
+        } catch (DatabaseException e) {
+        	log.warn(e.getMessage(), e);
         }
         
         log.info("*** User database initialized ***");
@@ -134,7 +137,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         	hasConfiguredDataStore = true;
         }
         
-        // Create timers
+		// Create timers
 		uiTimer = new Timer();
 		wdTimer = new Timer();
 		cronTimer = new Timer();
@@ -144,15 +147,15 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         // Workflow
         log.info("*** Initializing workflow engine... ***");
-        JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+        JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
         jbpmContext.setSessionFactory(HibernateUtil.getSessionFactory());
         jbpmContext.getGraphSession();
-        jbpmContext.getJbpmConfiguration().getJobExecutor().start(); // startJobExecutor();
+        jbpmContext.getJbpmConfiguration().getJobExecutor().start();//startJobExecutor();
         jbpmContext.close();
         
         // Mime types
         log.info("*** Initializing MIME types... ***");
-        Config.loadMimeTypes();
+        Config.loadMimeTypes(getServletContext());
                 
         if (Config.UPDATE_INFO) {
         	 log.info("*** Activating update info ***");
@@ -188,13 +191,13 @@ public class RepositoryStartupServlet extends HttpServlet {
         if (hasConfiguredDataStore) {
         	log.info("*** Activating datastore garbage collection ***");
         	dsgc = new DataStoreGarbageCollector();
-        	Calendar calGc = Calendar.getInstance();
-        	calGc.add(Calendar.DAY_OF_YEAR, 1);
-        	calGc.set(Calendar.HOUR_OF_DAY, 0);
-        	calGc.set(Calendar.MINUTE, 0);
-        	calGc.set(Calendar.SECOND, 0);
-        	calGc.set(Calendar.MILLISECOND, 0);
-        	dsgcTimer.scheduleAtFixedRate(dsgc, calGc.getTime(), 24*60*60*1000); // First tomorrow at 00:00, next each 24 hours
+        	Calendar now = Calendar.getInstance();
+        	now.add(Calendar.DAY_OF_YEAR, 1);
+        	now.set(Calendar.HOUR_OF_DAY, 0);
+        	now.set(Calendar.MINUTE, 0);
+        	now.set(Calendar.SECOND, 0);
+        	now.set(Calendar.MILLISECOND, 0);
+        	dsgcTimer.scheduleAtFixedRate(dsgc, now.getTime(), 24*60*60*1000); // First tomorrow at 00:00, next each 24 hours
         }
         
         try {
@@ -205,14 +208,8 @@ public class RepositoryStartupServlet extends HttpServlet {
         }
         
         try {
-        	if (!Config.SYSTEM_OPENOFFICE_PATH.equals("")) {
-        		log.info("*** Start OpenOffice manager ***");
-        		DocConverter.getInstance().start();
-        	} else if (!Config.SYSTEM_OPENOFFICE_SERVER.equals("")) {
-        		log.info("*** Using OpenOffice conversion server ***");
-        	} else {
-        		log.warn("*** No OpenOffice manager nor server configured ***");
-        	}
+        	log.info("*** Start OpenOffice manager ***");
+        	DocConverter.getInstance().start();
         } catch (Throwable e) {
         	log.warn(e.getMessage(), e);
         }
@@ -227,20 +224,18 @@ public class RepositoryStartupServlet extends HttpServlet {
         	log.warn(e.getMessage(), e);
         }
         
-        // Activity log
-		UserActivity.log(Config.SYSTEM_USER, "ADMIN_OPENKM_START", null, null);
+     // Activity log
+		UserActivity.log(Config.SYSTEM_USER, "OPENKM_START", null, null);
     }
 
 	@Override
     public void destroy() {
         super.destroy();
-
+        
         try {
-        	if (!Config.SYSTEM_OPENOFFICE_PATH.equals("")) {
-        		if (log == null) log("*** Shutting down OpenOffice manager ***");
-        		else log.info("*** Shutting down OpenOffice manager ***");
-        		DocConverter.getInstance().stop();
-        	}
+        	if (log == null) log("*** Shutting down OpenOffice manager ***");
+        	else log.info("*** Shutting down OpenOffice manager ***");
+        	DocConverter.getInstance().stop();
         } catch (Throwable e) {
         	log.warn(e.getMessage(), e);
         }
@@ -282,25 +277,23 @@ public class RepositoryStartupServlet extends HttpServlet {
         cronTimer.cancel();
         wdTimer.cancel();
         uiTimer.cancel();
-		
+        
         if (log == null) log("*** Shutting down workflow engine... ***");
         else log.info("*** Shutting down workflow engine... ***");
-        JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+        JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
         jbpmContext.getJbpmConfiguration().getJobExecutor().stop();
         jbpmContext.close();
         
         if (log == null) log("*** Shutting down repository... ***");
         else log.info("*** Shutting down repository...");
         
-        if (Config.USER_ITEM_CACHE) {
-        	// Serialize
-        	try {
-        		log.info("*** Cache serialization ***");
-        		UserItemsManager.serialize();
-        		UserDocumentKeywordsManager.serialize();
-        	} catch (DatabaseException e) {
-        		log.warn(e.getMessage(), e);
-        	}
+        // Serialize
+        try {
+        	log.info("*** Cache serialization ***");
+        	UserItemsManager.serialize();
+        	UserDocumentKeywordsManager.serialize();
+        } catch (DatabaseException e) {
+        	log.warn(e.getMessage(), e);
         }
         
         try {
@@ -325,6 +318,6 @@ public class RepositoryStartupServlet extends HttpServlet {
         }
         
         // Activity log
-		UserActivity.log(Config.SYSTEM_USER, "ADMIN_OPENKM_STOP", null, null);
+		UserActivity.log(Config.SYSTEM_USER, "OPENKM_STOP", null, null);
     }
 }
