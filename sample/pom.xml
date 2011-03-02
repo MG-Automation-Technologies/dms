@@ -44,7 +44,7 @@
 		<dependency>
 			<groupId>com.openkm</groupId>
 			<artifactId>openkm</artifactId>
-			<version>5.0-RC1</version>
+			<version>5.0.3</version>
 			<classifier>classes</classifier>
 		</dependency>
 
