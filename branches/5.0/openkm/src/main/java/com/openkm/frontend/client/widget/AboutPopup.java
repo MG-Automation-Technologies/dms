@@ -35,6 +35,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.widget.eastereggs.Futurama;
+import com.openkm.extension.frontend.client.ExtensionVersion;
 
 /**
  * About popup
@@ -50,12 +51,13 @@ public class AboutPopup extends DialogBox implements ClickHandler {
 	private HTML htmlAppVersion;
 	private Button button;
 	private String msg1 = "<b>Be Open, my friend!</b><br>";
-	private String copy = "&nbsp;&copy 2006 - 2010 OpenKM <br><br>";
+	private String copy = "&nbsp;&copy 2006 - 2011 OpenKM <br><br>";
 	private String team = "<b>OpenKM Team</b><br>" + 
 							"Francisco José Ávila Bermejo (<i>Monkiki</i>)<br>"+
 							"Josep Llort Tella (<i>Darkman97i</i>)<br><br>";
 	private String web = "<a href=\"http://www.openkm.com\" target=\"_blank\">http://www.openkm.com</a><br><br>";
 	private String appVersion = "Version 0.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+	private HTML extensionVersion;
 	private Futurama futurama;
 	
 	/**
@@ -84,6 +86,8 @@ public class AboutPopup extends DialogBox implements ClickHandler {
 		vPanel.add(logo);
 		htmlAppVersion = new HTML(appVersion);
 		vPanel.add(htmlAppVersion);
+		extensionVersion = new HTML(ExtensionVersion.get() + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+		vPanel.add(extensionVersion);
 		vPanel.add(new HTML("<br>"));
 		vPanel.add(text);
 		HTML htmlWeb = new HTML(web);
@@ -97,6 +101,7 @@ public class AboutPopup extends DialogBox implements ClickHandler {
 		
 		vPanel.setCellHorizontalAlignment(logo, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(htmlAppVersion, HasAlignment.ALIGN_RIGHT);
+		vPanel.setCellHorizontalAlignment(extensionVersion, HasAlignment.ALIGN_RIGHT);
 		vPanel.setCellHorizontalAlignment(text, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(htmlWeb, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(htmlTeam, HasAlignment.ALIGN_CENTER);
