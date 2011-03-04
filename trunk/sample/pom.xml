@@ -4,7 +4,7 @@
 	<groupId>com.openkm.extension</groupId>
 	<artifactId>sample</artifactId>
 	<packaging>jar</packaging>
-	<version>5.1</version>
+	<version>5.2</version>
 	<name>OpenKM sample extension</name>
 	<url>http://www.openkm.com</url>
 	<description>OpenKM sample extension</description>
@@ -44,7 +44,7 @@
 		<dependency>
 			<groupId>com.openkm</groupId>
 			<artifactId>openkm</artifactId>
-			<version>5.1-SNAPSHOT</version>
+			<version>5.2-SNAPSHOT</version>
 			<classifier>classes</classifier>
 		</dependency>
 
