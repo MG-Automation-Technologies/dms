@@ -777,6 +777,30 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 	};
 	
 	/**
+	 * Document rename
+	 */
+	final AsyncCallback<GWTMail> callbackMailRename = new AsyncCallback<GWTMail>() {
+		public void onSuccess(GWTMail result) {
+			GWTMail mail = result;
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagMailRename();
+			dataTable.setHTML(table.getSelectedRow(), 2, mail.getSubject());
+			
+			if (table.getMail() != null) {
+				table.setMail(mail);
+			}
+			
+			mantainSelectedRow();
+			hideRename();
+			refresh(fldId);
+		}
+
+		public void onFailure(Throwable caught) {
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagMailRename();
+			Main.get().showError("MailRename", caught);
+		}
+	};
+	
+	/**
 	 * Gets actual folder row selectd
 	 */
 	final AsyncCallback<GWTFolder> callbackGetFolder = new AsyncCallback<GWTFolder>() {
@@ -1313,6 +1337,11 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 			endPoint.setServiceEntryPoint(RPCService.FolderService);
 			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagFolderRename();
 			folderService.rename(table.getFolder().getPath(),newName, callbackFolderRename);
+		} else if (table.isMailSelected() && table.getMail() != null) {
+			ServiceDefTarget endPoint = (ServiceDefTarget) mailService;
+			endPoint.setServiceEntryPoint(RPCService.MailService);
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagMailRename();
+			mailService.rename(table.getMail().getPath(),newName, callbackMailRename);
 		}
 	}
 	
@@ -1375,7 +1404,7 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 	 * Show the rename text Box
 	 */
 	public void rename() {
-		if (table.isDocumentSelected() || table.isFolderSelected()) {
+		if (table.isDocumentSelected() || table.isFolderSelected() || table.isMailSelected()) {
 			Main.get().mainPanel.disableKeyShorcuts(); // Disables key shortcuts while renaming
 			fileBrowserAction = ACTION_RENAME;
 			fileTextBox.reset();
