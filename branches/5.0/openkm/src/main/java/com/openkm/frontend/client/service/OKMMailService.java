@@ -40,4 +40,5 @@ public interface OKMMailService extends RemoteService {
 	public void purge(String mailPath) throws OKMException;
 	public void copy(String mailPath, String fldPath) throws OKMException;
 	public GWTMail getProperties(String mailPath) throws OKMException;
+	public GWTMail rename(String mailId, String newName) throws OKMException;
 }
