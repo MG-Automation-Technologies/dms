@@ -241,4 +241,36 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 		log.debug("copy: getProperties");
 		return mailClient;
 	}
+	
+	@Override
+	public GWTMail rename(String mailId, String newName) throws OKMException  {
+		log.debug("rename({}, {})", mailId, newName);
+		GWTMail gWTMail = new GWTMail();
+		updateSessionManager();
+		
+		try {
+			gWTMail = Util.copy(OKMMail.getInstance().rename(null, mailId, newName));
+		} catch (ItemExistsException e){
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_ItemExists), e.getMessage());
+		} catch (PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+		} catch (AccessDeniedException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_AccessDenied), e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e ){
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_General), e.getMessage());
+		}
+		
+		log.debug("rename: {}", gWTMail);
+		return gWTMail;
+	}
 }
