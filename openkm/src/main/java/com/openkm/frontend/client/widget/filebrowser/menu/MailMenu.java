@@ -186,9 +186,11 @@ public class MailMenu extends MenuBase {
 		
 		if ( (mail.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE)  {
 			if ( (folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE)  {
+				renameOption 			= true;
 				deleteOption 			= true;
 				moveOption 				= true;
 			} else {
+				renameOption 			= false;
 				deleteOption 			= false;
 				moveOption 				= false;
 			}
