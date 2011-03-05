@@ -425,13 +425,16 @@ public class TaxonomyMenu extends MenuBase {
 		
 		if ( (mail.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE)  {
 			if ( (folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE)  {
+				renameOption			= true;
 				deleteOption 			= true;
 				moveOption 				= true;
 			} else {
+				renameOption			= false;
 				deleteOption 			= false;
 				moveOption 				= false;
 			}
 		} else {
+			renameOption			= true;
 			deleteOption 			= false;
 			moveOption 				= false;
 		}	
