@@ -38,4 +38,5 @@ public interface OKMMailServiceAsync {
 	public void purge(String mailPath, AsyncCallback<?> callback);
 	public void copy(String mailPath, String fldPath, AsyncCallback<?> callback);
 	public void getProperties(String mailPath, AsyncCallback<GWTMail> callback);
+	public void rename(String mailId, String newName, AsyncCallback<GWTMail> callback);
 }
