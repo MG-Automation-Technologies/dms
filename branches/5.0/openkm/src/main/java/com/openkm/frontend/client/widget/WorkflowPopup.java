@@ -53,7 +53,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTCheckBox;
-import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTInput;
@@ -310,17 +309,23 @@ public class WorkflowPopup extends DialogBox {
 			}
 		}
 		
-		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
+		String uuid = "";
+		if (Main.get().activeFolderTree.isPanelSelected()) {
+			uuid = Main.get().activeFolderTree.getFolder().getUuid();
+		} else {
+			if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
+				uuid = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument().getUuid();
+			} else if(Main.get().mainPanel.desktop.browser.fileBrowser.isFolderSelected()) {
+				uuid = Main.get().mainPanel.desktop.browser.fileBrowser.getFolder().getUuid();
+			} else if(Main.get().mainPanel.desktop.browser.fileBrowser.isMailSelected()) {
+				uuid = Main.get().mainPanel.desktop.browser.fileBrowser.getMail().getUuid();
+			}
+		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
 		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);
-		workflowService.runProcessDefinition(gwtDocument.getUuid(), 
-				new Double(listBox.getValue(listBox.getSelectedIndex())).doubleValue(),
-				formFieldList, callbackRunProcessDefinition);
+		workflowService.runProcessDefinition(uuid, new Double(listBox.getValue(listBox.getSelectedIndex())).doubleValue(),
+											 formFieldList, callbackRunProcessDefinition);
 		hide();
-		if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected() ){
-			GWTDocument doc = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
-			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.setProperties(doc);
-		}
 	}
 	
 	/**
