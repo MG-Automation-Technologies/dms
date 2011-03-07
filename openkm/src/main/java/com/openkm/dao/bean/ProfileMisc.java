@@ -31,6 +31,7 @@ public class ProfileMisc implements Serializable {
 	private long userQuota;
 	private String webSkin;
 	private boolean printPreview;
+	private boolean keywordsEnabled;
 	private Set<String> extensions = new HashSet<String>();
 
 	public boolean isAdvancedFilters() {
@@ -65,6 +66,14 @@ public class ProfileMisc implements Serializable {
 		this.printPreview = printPreview;
 	}
 	
+	public boolean isKeywordsEnabled() {
+		return keywordsEnabled;
+	}
+
+	public void setKeywordsEnabled(boolean keywordsEnabled) {
+		this.keywordsEnabled = keywordsEnabled;
+	}
+	
 	public Set<String> getExtensions() {
 		return extensions;
 	}
@@ -80,6 +89,7 @@ public class ProfileMisc implements Serializable {
 		sb.append(", advancedFilters="); sb.append(advancedFilters);
 		sb.append(", webSkin="); sb.append(webSkin);
 		sb.append(", printPreview="); sb.append(printPreview);
+		sb.append(", keywordsEnabled="); sb.append(keywordsEnabled);
 		sb.append(", extensions="); sb.append(extensions);
 		sb.append("}");
 		return sb.toString();
