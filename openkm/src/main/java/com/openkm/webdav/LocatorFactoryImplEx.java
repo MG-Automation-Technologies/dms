@@ -50,13 +50,7 @@ public class LocatorFactoryImplEx extends AbstractLocatorFactory {
         
         if (resourcePath.equals(wspPath) || startsWithWorkspace(resourcePath, wspPath)) {
             String repositoryPath = resourcePath.substring(wspPath.length());
-            
-            if (repositoryPath.contains("okm_root")) {
-            	repositoryPath = repositoryPath.replace("okm_root", "okm:root");
-            } else if (repositoryPath.contains("okm_personal")) {
-            	repositoryPath = repositoryPath.replace("okm_personal", "okm:personal");
-            }
-            
+            repositoryPath = repositoryPath.replace("okm_", "okm:");
             String ret = (repositoryPath.length() == 0) ? "/" : repositoryPath;
             log.debug("getRepositoryPath: {}", ret);
             return ret;
@@ -75,12 +69,7 @@ public class LocatorFactoryImplEx extends AbstractLocatorFactory {
             throw new IllegalArgumentException("Cannot build resource path from 'null' repository path");
         }
         
-        if (repositoryPath.contains("okm:root")) {
-        	repositoryPath = repositoryPath.replace("okm:root", "okm_root");
-        } else if (repositoryPath.contains("okm:personal")) {
-        	repositoryPath = repositoryPath.replace("okm:personal", "okm_personal");
-        }
-        
+        repositoryPath = repositoryPath.replace("okm:", "okm_");
         String ret = (startsWithWorkspace(repositoryPath, wspPath)) ? repositoryPath : wspPath + repositoryPath;
         log.debug("getResourcePath: {}", ret);
         return ret;
