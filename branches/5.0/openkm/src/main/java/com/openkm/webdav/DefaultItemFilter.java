@@ -60,8 +60,6 @@ public class DefaultItemFilter implements ItemFilter {
 				return true;
 			} else if ("okm:categories".equals(item.getName())) {
 				return true;
-			} else if ("okm:templates".equals(item.getName())) {
-				return true;
 			} else if ("okm:mail".equals(item.getName())) {
 				return true;
 			} else if ("okm:trash".equals(item.getName())) {
