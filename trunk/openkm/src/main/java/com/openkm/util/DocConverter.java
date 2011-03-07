@@ -28,6 +28,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,6 +50,11 @@ import org.artofsolving.jodconverter.office.OfficeManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.html.simpleparser.HTMLWorker;
+import com.lowagie.text.pdf.PdfWriter;
 import com.openkm.core.Config;
 import com.openkm.core.ConversionException;
 import com.openkm.core.DatabaseException;
@@ -380,6 +386,31 @@ public class DocConverter {
 		} finally {
 			IOUtils.closeQuietly(fos);
 			tmpFileIn.delete();
+		}
+	}
+	
+	/**
+	 * Convert HTML to PDF
+	 */
+	public void html2pdf(InputStream is, File output) throws ConversionException,
+			DatabaseException, IOException {
+		log.debug("** Convert from HTML to PDF **");
+		FileOutputStream fos = null;
+		
+	    try {			
+	    	fos = new FileOutputStream(output);
+	    	
+	    	// Make conversion
+			Document doc = new Document(PageSize.A4);
+			PdfWriter.getInstance(doc, fos);
+			doc.open();
+			HTMLWorker html = new HTMLWorker(doc);
+			html.parse(new InputStreamReader(is));
+			doc.close();
+		} catch (DocumentException e) {
+			throw new ConversionException("Exception in conversion: " + e.getMessage(), e);
+		} finally {
+			IOUtils.closeQuietly(fos);
 		}
 	}
 	
