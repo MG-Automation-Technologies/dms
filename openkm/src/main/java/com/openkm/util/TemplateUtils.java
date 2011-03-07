@@ -71,7 +71,7 @@ public class TemplateUtils {
 	}
 	
 	/**
-	 * Quick replace utility function 
+	 * Quick replace utility function
 	 */
 	public static String replace(String name, String template, Map<String, String> model) throws 
 			IOException, TemplateException {
