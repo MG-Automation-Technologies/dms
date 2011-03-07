@@ -21,6 +21,9 @@
       <property name="printPreview" type="true_false" not-null="true">
         <column name="PRF_MSC_PRINT_PREVIEW" default="'T'"/>
       </property>
+      <property name="keywordsEnabled" type="true_false" not-null="true">
+        <column name="PRF_MSC_KEYWORDS_EN" default="'T'"/>
+      </property>
       <set name="extensions" table="OKM_PROFILE_MSC_EXTENSION" lazy="false">
         <key column="PEX_ID" not-null="true"/>
         <element column="PEX_EXTENSION" type="string"/>
