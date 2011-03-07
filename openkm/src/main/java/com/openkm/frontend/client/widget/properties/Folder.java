@@ -169,7 +169,14 @@ public class Folder extends Composite {
 		String webdavUrl = Main.get().workspaceUserProperties.getApplicationURL();
 		if (webdavUrl.lastIndexOf('/')>0) {
 			int idx = webdavUrl.lastIndexOf('/');
-			webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/', idx-1)) + "/repository/default" + folder.getPath();
+			String webdavPath = folder.getPath();
+			
+			// TODO This replace should be performed only when system.webdav.fix=on
+			if (true) {
+				webdavPath.replace("okm:", "okm_");
+			}
+			
+			webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/', idx-1)) + "/repository/default" + webdavPath;
 			tableProperties.setWidget(9, 1, new HTML("<div id=\"folderwebdavclipboardcontainer\"></div>\n"));
 			Util.createFolderWebDavClipboardButton(webdavUrl);
 		}
