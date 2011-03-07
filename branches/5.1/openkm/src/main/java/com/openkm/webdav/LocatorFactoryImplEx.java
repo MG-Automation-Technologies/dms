@@ -54,11 +54,7 @@ public class LocatorFactoryImplEx extends AbstractLocatorFactory {
             String repositoryPath = resourcePath.substring(wspPath.length());
             
             if (Config.SYSTEM_WEBDAV_FIX) {
-            	if (repositoryPath.contains("okm_root")) {
-            		repositoryPath = repositoryPath.replace("okm_root", "okm:root");
-            	} else if (repositoryPath.contains("okm_personal")) {
-            		repositoryPath = repositoryPath.replace("okm_personal", "okm:personal");
-            	}
+            	repositoryPath = repositoryPath.replace("okm_", "okm:");
             }
             
             String ret = (repositoryPath.length() == 0) ? "/" : repositoryPath;
@@ -80,11 +76,7 @@ public class LocatorFactoryImplEx extends AbstractLocatorFactory {
         }
         
         if (Config.SYSTEM_WEBDAV_FIX) {
-        	if (repositoryPath.contains("okm:root")) {
-        		repositoryPath = repositoryPath.replace("okm:root", "okm_root");
-        	} else if (repositoryPath.contains("okm:personal")) {
-        		repositoryPath = repositoryPath.replace("okm:personal", "okm_personal");
-        	}
+        	repositoryPath = repositoryPath.replace("okm:", "okm_");
         }
         
         String ret = (startsWithWorkspace(repositoryPath, wspPath)) ? repositoryPath : wspPath + repositoryPath;
