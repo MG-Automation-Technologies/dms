@@ -64,6 +64,7 @@ public class GWTWorkspace implements IsSerializable {
 	private long userQuotaLimit;
 	private boolean printPreview;
 	private boolean userQuotaEnabled;
+	private boolean webdavFix;
 	private List<GWTPropertyGroup> wizardPropertyGroupsList = new ArrayList<GWTPropertyGroup>();
 	private List<Double> wizardWorkflowsList = new ArrayList<Double>();
 	private boolean wizardPropertyGroups;
@@ -300,6 +301,14 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setUserQuotaEnabled(boolean userQuotaEnabled) {
 		this.userQuotaEnabled = userQuotaEnabled;
+	}
+	
+	public boolean isWebdavFix() {
+		return webdavFix;
+	}
+
+	public void setWebdavFix(boolean webdavFix) {
+		this.webdavFix = webdavFix;
 	}
 
 	public boolean isWizardPropertyGroups() {

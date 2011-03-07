@@ -322,9 +322,8 @@ public class Document extends Composite {
 		String webdavUrl = Main.get().workspaceUserProperties.getApplicationURL();
 		int idx = webdavUrl.lastIndexOf('/');
 		String webdavPath = document.getPath();
-		
-		// TODO This replace should be performed only when system.webdav.fix=on
-		if (true) {
+		// Replace only in case webdav fix is enabled
+		if (Main.get().workspaceUserProperties.getWorkspace().isWebdavFix()) {
 			webdavPath.replace("okm:", "okm_");
 		}
 		
