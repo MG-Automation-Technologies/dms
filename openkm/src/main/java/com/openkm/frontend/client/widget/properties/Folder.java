@@ -166,13 +166,13 @@ public class Folder extends Composite {
 		Util.createFolderURLClipboardButton(url);
 		
 		// Webdav
+		// Webdav
 		String webdavUrl = Main.get().workspaceUserProperties.getApplicationURL();
 		if (webdavUrl.lastIndexOf('/')>0) {
 			int idx = webdavUrl.lastIndexOf('/');
 			String webdavPath = folder.getPath();
-			
-			// TODO This replace should be performed only when system.webdav.fix=on
-			if (true) {
+			// Replace only in case webdav fix is enabled
+			if (Main.get().workspaceUserProperties.getWorkspace().isWebdavFix()) {
 				webdavPath.replace("okm:", "okm_");
 			}
 			

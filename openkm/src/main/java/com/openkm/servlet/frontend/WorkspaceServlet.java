@@ -165,6 +165,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 		workspace.setUserQuotaEnabled(up.getMisc().getUserQuota() > 0);
 		workspace.setUserQuotaLimit(up.getMisc().getUserQuota());
 		workspace.setPrintPreview(up.getMisc().isPrintPreview());
+		workspace.setWebdavFix(Config.SYSTEM_WEBDAV_FIX);
 		
 		// Stack visibility
 		workspace.setStackTaxonomy(up.getStack().isTaxonomyVisible());
