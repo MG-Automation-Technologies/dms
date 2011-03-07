@@ -938,6 +938,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 					enableUploader();
 				}
 				
+				// Enable workflow
+				if (Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_THESAURUS ||
+					Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_CATEGORIES) {
+					enableWorkflow();
+				}
+				
 			} else {
 				if (originPanel != FILE_BROWSER) {
 					disableCreateDirectory();
@@ -1237,6 +1243,14 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			
 			if (((mail.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) && 
 				((folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE)) {
+				
+				// In thesaurus and categories view must not evaluate write folder permissions
+				if ((folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE ||
+					 Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_THESAURUS ||
+					 Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_CATEGORIES) {
+					enableWorkflow();
+				}
+				
 				enableRename();
 				enableCopy();
 				enableMove();

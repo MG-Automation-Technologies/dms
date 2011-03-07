@@ -72,6 +72,10 @@ import com.openkm.frontend.client.bean.GWTTextArea;
 import com.openkm.frontend.client.bean.GWTValidator;
 import com.openkm.frontend.client.bean.GWTWorkflowComment;
 import com.openkm.frontend.client.contants.service.RPCService;
+import com.openkm.frontend.client.service.OKMDocumentService;
+import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
+import com.openkm.frontend.client.service.OKMFolderService;
+import com.openkm.frontend.client.service.OKMFolderServiceAsync;
 import com.openkm.frontend.client.service.OKMRepositoryService;
 import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
 import com.openkm.frontend.client.service.OKMWorkflowService;
@@ -97,6 +101,8 @@ public class WorkflowFormPanel extends Composite {
 	
 	private final OKMWorkflowServiceAsync workflowService = (OKMWorkflowServiceAsync) GWT.create(OKMWorkflowService.class);
 	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
+	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
+	private final OKMFolderServiceAsync folderService = (OKMFolderServiceAsync) GWT.create(OKMFolderService.class);
 	
 	private VerticalPanel vPanel;
 	private GWTTaskInstance taskInstance;
@@ -357,30 +363,39 @@ public class WorkflowFormPanel extends Composite {
 					repositoryService.getPathByUUID(value, new AsyncCallback<String>() {
 						@Override
 						public void onSuccess(final String docPath) {
-							Anchor link = new Anchor();
-							link.setText(docPath);
-							table.setWidget(10, 1, link);
-							link.addClickHandler(new ClickHandler() { 
+							// Validating if is document / folder / mail and displaying object path
+							ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
+							endPoint.setServiceEntryPoint(RPCService.DocumentService);
+							documentService.isValid(docPath, new AsyncCallback<Boolean>() {
+								public void onSuccess(Boolean result) {
+									if (result.booleanValue()) {
+										writePath(documentRow, docPath, false);
+									} else {
+										ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
+										endPoint.setServiceEntryPoint(RPCService.FolderService);
+										folderService.isValid(docPath, new AsyncCallback<Boolean>() {
+											public void onSuccess(Boolean result) {
+												if (result.booleanValue()) {
+													writePath(documentRow, docPath, true);
+												} else {
+													// must be a mail object
+													writePath(documentRow, docPath, false);
+												}
+											}
+											
+											@Override
+											public void onFailure(Throwable caught) {
+												Main.get().showError("isValid",caught);
+											}
+										});
+									}
+								}
+								
 								@Override
-								public void onClick(ClickEvent event) {
-									String path = docPath.substring(0,docPath.lastIndexOf("/"));
-									CommonUI.openAllFolderPath(path, docPath);	
+								public void onFailure(Throwable caught) {
+									Main.get().showError("isValid",caught);
 								}
 							});
-							link.setStyleName("okm-Hyperlink");
-							
-							// Clones link
-							documentLink = new Anchor();
-							documentLink.setText(docPath);
-							documentLink.addClickHandler(new ClickHandler() { 
-								@Override
-								public void onClick(ClickEvent event) {
-									String path = docPath.substring(0,docPath.lastIndexOf("/"));
-									CommonUI.openAllFolderPath(path, docPath);	
-								}
-							});
-							documentLink.setStyleName("okm-Hyperlink");
-							parameterTable.setWidget(documentRow, 1, documentLink);
 						}
 						
 						@Override
@@ -388,7 +403,6 @@ public class WorkflowFormPanel extends Composite {
 							Main.get().showError("getPathByUUID", caught);
 						}
 					});
-					
 					
 				}  else {
 					
@@ -1051,6 +1065,48 @@ public class WorkflowFormPanel extends Composite {
 		for (int i=0; i<columns; i++){
 			table.getCellFormatter().setWordWrap(row, i, false);
 		}
+	}
+	
+	/**
+	 * writePath
+	 * 
+	 * @param row
+	 * @param docPath
+	 * @param isFolder
+	 */
+	private void writePath(int row, final String docPath, final boolean isFolder) {
+		Anchor link = new Anchor();
+		link.setText(docPath);
+		table.setWidget(10, 1, link);
+		link.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
+				if (!isFolder) {
+					String path = docPath.substring(0,docPath.lastIndexOf("/"));
+					CommonUI.openAllFolderPath(path, docPath);
+				} else {
+					CommonUI.openAllFolderPath(docPath, "");
+				}
+			}
+		});
+		link.setStyleName("okm-Hyperlink");
+		
+		// Clones link
+		documentLink = new Anchor();
+		documentLink.setText(docPath);
+		documentLink.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
+				if (!isFolder) {
+					String path = docPath.substring(0,docPath.lastIndexOf("/"));
+					CommonUI.openAllFolderPath(path, docPath);
+				} else {
+					CommonUI.openAllFolderPath(docPath, "");
+				}
+			}
+		});
+		documentLink.setStyleName("okm-Hyperlink");
+		parameterTable.setWidget(row, 1, documentLink);
 	}
 	
 	/**
