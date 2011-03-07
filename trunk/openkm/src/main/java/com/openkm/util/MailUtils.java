@@ -30,6 +30,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -73,9 +74,11 @@ import com.openkm.api.OKMFolder;
 import com.openkm.api.OKMMail;
 import com.openkm.api.OKMRepository;
 import com.openkm.bean.Document;
+import com.openkm.bean.Mail;
 import com.openkm.bean.Repository;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
+import com.openkm.core.ConversionException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
@@ -90,6 +93,9 @@ import com.openkm.dao.bean.MailFilter;
 import com.openkm.dao.bean.MailFilterRule;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.pop3.POP3Folder;
+
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 
 public class MailUtils {
 	private static Logger log = LoggerFactory.getLogger(MailUtils.class);
@@ -710,5 +716,40 @@ public class MailUtils {
 		}
 		
 		log.info("testConnection: void");
+	}
+	
+	/**
+	 * Generate HTML with mail object data and contents
+	 */
+	public static String mail2html(Mail mail) throws ConversionException {
+		HashMap<String, String> hm = new HashMap<String, String>();
+		StringBuilder sb = new StringBuilder();
+		
+		for (int i=0; i < mail.getTo().length - 1; i++) {
+			sb.append(mail.getTo()[i]).append(", ");
+		}
+		
+		sb.append(mail.getTo()[mail.getTo().length - 1]);
+		hm.put("mailTo", sb.toString());
+		hm.put("mailFrom", mail.getFrom());
+		hm.put("mailSubject", mail.getSubject());
+		hm.put("mailContent", mail.getContent());
+		StringWriter sw = new StringWriter();
+		InputStreamReader isr = null;
+		
+		try {
+			isr = new InputStreamReader(MailUtils.class.getResourceAsStream("mail.html"));
+			Template tpl = new Template("mail", isr, TemplateUtils.getConfig());
+			tpl.process(hm, sw);
+		} catch (IOException e) {
+			throw new ConversionException("IOException: " + e.getMessage(), e);
+		} catch (TemplateException e) {
+			throw new ConversionException("TemplateException: " + e.getMessage(), e);
+		} finally {
+			IOUtils.closeQuietly(sw);
+			IOUtils.closeQuietly(isr);
+		}
+		
+		return sw.toString();
 	}
 }
