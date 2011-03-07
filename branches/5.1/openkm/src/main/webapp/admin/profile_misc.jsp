@@ -65,7 +65,20 @@
       </td>
     </tr>
     <tr>
-      <td>Entensions</td>
+      <td>Keywords enabled</td>
+      <td>
+        <c:choose>
+          <c:when test="${prf.misc.keywordsEnabled}">
+            <input name="prf_misc_keywords_enabled" type="checkbox" checked="checked"/>
+          </c:when>
+          <c:otherwise>
+            <input name="prf_misc_keywords_enabled" type="checkbox"/>
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
+    <tr>
+      <td>Extensions</td>
       <td>
         <select multiple="multiple" name="prf_misc_extensions" size="4">
           <c:forEach var="ext" items="${exts}">
