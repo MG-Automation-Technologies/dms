@@ -321,7 +321,14 @@ public class Document extends Composite {
 		// Webdav button
 		String webdavUrl = Main.get().workspaceUserProperties.getApplicationURL();
 		int idx = webdavUrl.lastIndexOf('/');
-		webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/', idx-1)) + "/repository/default" + document.getPath();
+		String webdavPath = document.getPath();
+		
+		// TODO This replace should be performed only when system.webdav.fix=on
+		if (true) {
+			webdavPath.replace("okm:", "okm_");
+		}
+		
+		webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/', idx-1)) + "/repository/default" + webdavPath;
 		tableProperties.setWidget(12, 1, new HTML("<div id=\"webdavclipboardcontainer\"></div>\n"));
 		Util.createWebDavClipboardButton(webdavUrl);
 		
