@@ -738,7 +738,7 @@ public class MailUtils {
 		InputStreamReader isr = null;
 		
 		try {
-			isr = new InputStreamReader(MailUtils.class.getResourceAsStream("mail.html"));
+			isr = new InputStreamReader(MailUtils.class.getResourceAsStream("mail.ftl"));
 			Template tpl = new Template("mail", isr, TemplateUtils.getConfig());
 			tpl.process(hm, sw);
 		} catch (IOException e) {
