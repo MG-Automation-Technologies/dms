@@ -144,9 +144,11 @@ public class Folder extends Composite {
 		
 		// Webdav
 		String webdavUrl = Main.get().workspaceUserProperties.getApplicationURL();
-		if (webdavUrl.lastIndexOf('/')>0) {
+		
+		if (webdavUrl.lastIndexOf('/') > 0) {
 			int idx = webdavUrl.lastIndexOf('/');
-			webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/', idx-1)) + "/repository/default" + folder.getPath();
+			String webdavPath = folder.getPath().replace("okm:", "okm_");
+			webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/', idx-1)) + "/repository/default" + webdavPath;
 			tableProperties.setWidget(9, 1, new HTML("<div id=\"folderwebdavclipboardcontainer\"></div>\n"));
 			Util.createFolderWebDavClipboardButton(webdavUrl);
 		}
@@ -185,7 +187,7 @@ public class Folder extends Composite {
 		// Some preoperties only must be visible on taxonomy or trash view
 		int actualView = Main.get().mainPanel.desktop.navigator.getStackIndex();
 		switch(actualView) {
-			case PanelDefinition.NAVIGATOR_TAXONOMY:   // Some preperties only must be visible on taxonomy or trash view
+			case PanelDefinition.NAVIGATOR_TAXONOMY:   // Some properties only must be visible on taxonomy or trash view
 			case PanelDefinition.NAVIGATOR_TRASH:
 				tableSubscribedUsers.setVisible(true);
 				tableProperties.getRowFormatter().setVisible(4, true); // Is user subscribed
