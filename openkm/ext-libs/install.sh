@@ -7,5 +7,5 @@
 #mvn install:install-file -DgroupId=gwt-vl.sourceforge.net -DartifactId=gwt-vl -Dversion=2.0b-without-hibernate -Dpackaging=jar -Dfile=gwt-vl-2.0b-without-hibernate.jar
 #mvn install:install-file -DgroupId=com.catcode -DartifactId=odfutils -Dversion=051129 -Dpackaging=jar -Dfile=odfutils-051129.jar
 
-#PROPIETARY OPENKM EXTENSIONS LIBRARY NOT INCLUDED BY DEFAULT
+# PROPIETARY OPENKM EXTENSIONS LIBRARY NOT INCLUDED BY DEFAULT
 mvn install:install-file -DgroupId=com.openkm -DartifactId=extensions-full -Dversion=LTE -Dpackaging=jar -Dfile=extensions-LTE-full.jar
