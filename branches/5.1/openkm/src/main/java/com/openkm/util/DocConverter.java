@@ -445,6 +445,36 @@ public class DocConverter {
 	}
 	
 	/**
+	 * Convert PDF to IMG (for document preview feature).
+	 */
+	public void pdf2img(File input, File output) throws ConversionException, DatabaseException,
+			IOException {
+		log.debug("** Convert from PDF to IMG **");
+		BufferedReader stdout = null;
+		String cmd = null;
+		
+		try {
+			// Performs conversion
+			HashMap<String, String> hm = new HashMap<String, String>();
+			hm.put("fileIn", input.getPath());
+			hm.put("fileOut", output.getPath());
+			String tpl = Config.SYSTEM_IMG2PDF + " ${fileIn} ${fileOut}";
+			cmd = TemplateUtils.replace("SYSTEM_IMG2PDF", tpl, hm);
+			ExecutionUtils.runCmd(cmd);
+		} catch (SecurityException e) {
+			throw new ConversionException("Security exception executing command: " + cmd, e);
+    	} catch (InterruptedException e) {
+			throw new ConversionException("Interrupted exception executing command: " + cmd, e);
+    	} catch (IOException e) {
+			throw new ConversionException("IO exception executing command: " + cmd, e);
+		} catch (TemplateException e) {
+			throw new ConversionException("Template exception", e);
+		} finally {
+			IOUtils.closeQuietly(stdout);
+		}
+	}
+	
+	/**
 	 * Convert DWG to DXF (for document preview feature).
 	 * Actually only works with Acme CAD Converter 2010 v8.1.4
 	 */
