@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.openkm.extension</groupId>
-	<artifactId>sample</artifactId>
+	<groupId>com.openkm</groupId>
+	<artifactId>extensions</artifactId>
 	<packaging>jar</packaging>
-	<version>5.2</version>
-	<name>OpenKM sample extension</name>
+	<version>LTE</version>
+	<name>OpenKM extension</name>
 	<url>http://www.openkm.com</url>
-	<description>OpenKM sample extension</description>
+	<description>OpenKM extension</description>
 
 	<licenses>
 		<license>
@@ -44,7 +44,7 @@
 		<dependency>
 			<groupId>com.openkm</groupId>
 			<artifactId>openkm</artifactId>
-			<version>5.2-SNAPSHOT</version>
+			<version>LTE</version>
 			<classifier>classes</classifier>
 		</dependency>
 
