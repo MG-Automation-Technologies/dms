@@ -8,4 +8,4 @@
 #mvn install:install-file -DgroupId=com.catcode -DartifactId=odfutils -Dversion=051129 -Dpackaging=jar -Dfile=odfutils-051129.jar
 
 #PROPIETARY OPENKM EXTENSIONS LIBRARY NOT INCLUDED BY DEFAULT
-mvn install:install-file -DgroupId=com.openkm.extension -DartifactId=sample-full -Dversion=LTE -Dpackaging=jar -Dfile=sample-LTE-full.jar
+mvn install:install-file -DgroupId=com.openkm -DartifactId=extensions-full -Dversion=LTE -Dpackaging=jar -Dfile=extensions-LTE-full.jar
