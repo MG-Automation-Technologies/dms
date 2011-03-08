@@ -72,10 +72,13 @@ public class WarUtils {
 			log.info("Implementation-Version: "+impVersion);
 			log.info("Implementation-Build: "+impBuild);
 			
-			if (impVersion != null && impBuild != null && impVersion.indexOf('.') > 0) {
+			if (impVersion != null && impBuild != null) {
 				String[] version = impVersion.split("\\.");
 				appVersion.setMajor(version[0]);
-				appVersion.setMinor(version[1]);
+				
+				if (version.length > 1 && version[1] != null) {
+					appVersion.setMinor(version[1]);
+				}
 				
 				if (version.length > 2 && version[2] != null && !version[2].equals("")) {
 					appVersion.setMaintenance(version[2]);
