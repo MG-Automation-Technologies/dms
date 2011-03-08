@@ -501,8 +501,8 @@
     
     <!-- OpenKM extensions -->
     <dependency>
-      <groupId>com.openkm.extension</groupId>
-      <artifactId>sample-full</artifactId>
+      <groupId>com.openkm</groupId>
+      <artifactId>extensions-full</artifactId>
       <version>5.1</version>
     </dependency>
     
@@ -525,7 +525,7 @@
         <executions>
           <execution>
             <goals>
-              <goal>compile</goal>
+              <!-- <goal>compile</goal> -->
               <!-- <goal>generateAsync</goal> -->
               <!-- <goal>test</goal> -->
             </goals>
