@@ -31,6 +31,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -450,15 +452,31 @@ public class DocConverter {
 	public void pdf2img(File input, File output) throws ConversionException, DatabaseException,
 			IOException {
 		log.debug("** Convert from PDF to IMG **");
-		BufferedReader stdout = null;
+		File tmpDir = FileUtils.createTempDir();
 		String cmd = null;
 		
 		try {
-			// Performs conversion
+			// Performs step 1: split pdf into several images
 			HashMap<String, String> hm = new HashMap<String, String>();
 			hm.put("fileIn", input.getPath());
-			hm.put("fileOut", output.getPath());
+			hm.put("fileOut", tmpDir + File.separator + "out.jpg");
 			String tpl = Config.SYSTEM_IMAGEMAGICK_CONVERT + " ${fileIn} ${fileOut}";
+			cmd = TemplateUtils.replace("SYSTEM_IMG2PDF", tpl, hm);
+			ExecutionUtils.runCmd(cmd);
+			
+			// Performs step 2: join split images into a big one
+			hm = new HashMap<String, String>();
+			StringBuilder sb = new StringBuilder();
+			File files[] = tmpDir.listFiles();
+			Arrays.sort(files, new FileOrderComparator());
+			
+			for (File f : files) {
+				sb.append(f.getPath()).append(" ");
+			}
+			
+			hm.put("fileIn", sb.toString());
+			hm.put("fileOut", output.getPath());
+			tpl = Config.SYSTEM_IMAGEMAGICK_CONVERT + " ${fileIn}-append ${fileOut}";
 			cmd = TemplateUtils.replace("SYSTEM_IMG2PDF", tpl, hm);
 			ExecutionUtils.runCmd(cmd);
 		} catch (SecurityException e) {
@@ -470,7 +488,22 @@ public class DocConverter {
 		} catch (TemplateException e) {
 			throw new ConversionException("Template exception", e);
 		} finally {
-			IOUtils.closeQuietly(stdout);
+			org.apache.commons.io.FileUtils.deleteQuietly(tmpDir);
+		}
+	}
+	
+	/**
+	 * User by pdf2img
+	 */
+	private class FileOrderComparator implements Comparator<File> {
+		@Override
+		public int compare(File o1, File o2) {
+			int o1Ord = Integer.parseInt((o1.getName().split("\\.")[0]).split("-")[1]);
+			int o2Ord = Integer.parseInt((o2.getName().split("\\.")[0]).split("-")[1]);
+			
+			if (o1Ord > o2Ord) return 1;
+			else if (o1Ord < o2Ord) return -1;
+			else return 0;
 		}
 	}
 	
