@@ -171,7 +171,7 @@ public class DocConverter {
 	 * Test if a MIME document can be converted to SWF
 	 */
 	public boolean convertibleToSwf(String from) {
-		if (!Config.SYSTEM_PDF2SWF.equals("") && (convertibleToPdf(from) || Config.MIME_PDF.equals(from))) {
+		if (!Config.SYSTEM_SWFTOOLS_PDF2SWF.equals("") && (convertibleToPdf(from) || Config.MIME_PDF.equals(from))) {
 			return true;
 		} else {
 			return false;
@@ -428,7 +428,7 @@ public class DocConverter {
 			HashMap<String, String> hm = new HashMap<String, String>();
 			hm.put("fileIn", input.getPath());
 			hm.put("fileOut", output.getPath());
-			String tpl = Config.SYSTEM_PDF2SWF + " -T 9 ${fileIn} -o ${fileOut}";
+			String tpl = Config.SYSTEM_SWFTOOLS_PDF2SWF + " -T 9 ${fileIn} -o ${fileOut}";
 			cmd = TemplateUtils.replace("SYSTEM_PDF2SWF", tpl, hm);
 			ExecutionUtils.runCmd(cmd);
 		} catch (SecurityException e) {

@@ -111,7 +111,7 @@ public class ConverterServlet extends OKMHttpServlet {
 				}
 				
 				// Convert to PDF
-				if (toPdf || toSwf && !Config.SYSTEM_PDF2SWF.equals("")) {
+				if (toPdf || toSwf && !Config.SYSTEM_SWFTOOLS_PDF2SWF.equals("")) {
 					if (!doc.getMimeType().equals(Config.MIME_PDF)) {
 						try {
 							if (!pdfCache.exists()) {
@@ -136,7 +136,7 @@ public class ConverterServlet extends OKMHttpServlet {
 				}
 				
 				// Convert to SWF
-				if (toSwf && !Config.SYSTEM_PDF2SWF.equals("")) {
+				if (toSwf && !Config.SYSTEM_SWFTOOLS_PDF2SWF.equals("")) {
 					if (!swfCache.exists()) {
 						try {
 							if (doc.getMimeType().equals(Config.MIME_PDF)) {
