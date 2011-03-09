@@ -84,7 +84,7 @@ public class Tesseract2TextExtractor extends AbstractTextExtractor {
     			HashMap<String, String> hm = new HashMap<String, String>();
     			hm.put("fileIn", tmpFileIn.getPath());
     			hm.put("fileOut", tmpFilePre.getPath());
-    			String tpl = Config.SYSTEM_IMG2PDF + " -depth 8 -monochrome ${fileIn} ${fileOut}";
+    			String tpl = Config.SYSTEM_IMAGEMAGICK_CONVERT + " -depth 8 -monochrome ${fileIn} ${fileOut}";
     			cmd = TemplateUtils.replace("SYSTEM_IMG2PDF", tpl, hm);
     			ExecutionUtils.runCmd(cmd);
     			
