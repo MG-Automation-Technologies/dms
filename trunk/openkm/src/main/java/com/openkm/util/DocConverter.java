@@ -158,7 +158,7 @@ public class DocConverter {
 		if ((!Config.SYSTEM_OPENOFFICE_PATH.equals("") || !Config.SYSTEM_OPENOFFICE_SERVER.equals("")) 
 				&& validOpenOffice.contains(from)) {
 			return true;
-		} else if (!Config.SYSTEM_IMG2PDF.equals("") && validImageMagick.contains(from)) {
+		} else if (!Config.SYSTEM_IMAGEMAGICK_CONVERT.equals("") && validImageMagick.contains(from)) {
 			return true;
 		//} else if (!Config.SYSTEM_DWG2DXF.equals("") && validAutoCad.contains(from)) {
 		//	return true;
@@ -335,7 +335,7 @@ public class DocConverter {
 			HashMap<String, String> hm = new HashMap<String, String>();
 			hm.put("fileIn", tmpFileIn.getPath());
 			hm.put("fileOut", output.getPath());
-			String tpl = Config.SYSTEM_IMG2PDF + " ${fileIn}[0] ${fileOut}";
+			String tpl = Config.SYSTEM_IMAGEMAGICK_CONVERT + " ${fileIn}[0] ${fileOut}";
 			cmd = TemplateUtils.replace("SYSTEM_OCR", tpl, hm);
 			ExecutionUtils.runCmd(cmd);
 		} catch (SecurityException e) {
@@ -458,7 +458,7 @@ public class DocConverter {
 			HashMap<String, String> hm = new HashMap<String, String>();
 			hm.put("fileIn", input.getPath());
 			hm.put("fileOut", output.getPath());
-			String tpl = Config.SYSTEM_IMG2PDF + " ${fileIn} ${fileOut}";
+			String tpl = Config.SYSTEM_IMAGEMAGICK_CONVERT + " ${fileIn} ${fileOut}";
 			cmd = TemplateUtils.replace("SYSTEM_IMG2PDF", tpl, hm);
 			ExecutionUtils.runCmd(cmd);
 		} catch (SecurityException e) {
