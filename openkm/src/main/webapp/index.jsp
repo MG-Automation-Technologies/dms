@@ -25,6 +25,10 @@
 		}
 	}
 	
+	Cookie cookie = new Cookie("ctx", request.getContextPath());
+	cookie.setMaxAge(365 * 24 * 60 * 60); // One year
+	response.addCookie(cookie);
+	  
 	// Go to party
 	response.sendRedirect(url);
 %>
