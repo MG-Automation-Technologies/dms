@@ -212,7 +212,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 			
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert("Severe error getting translations: " + caught.getMessage());
+				Window.alert("Error getting translations: " + caught.getMessage());
 			}
 		});
 	}
