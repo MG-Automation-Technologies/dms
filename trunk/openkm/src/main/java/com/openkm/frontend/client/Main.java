@@ -178,11 +178,13 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		
 		// Request parameter
 		loc = WindowUtils.getLocation();
-		
-		// Capturing context
-		CONTEXT = loc.getContext();
-		if (CONTEXT.equals("/frontend")) {
-			CONTEXT = "";
+	
+		// Capture ctx
+		if (Cookies.getCookie("ctx") != null && !Cookies.getCookie("ctx").equals("")) {
+			CONTEXT = Cookies.getCookie("ctx");
+		} else {
+			// Otherside we trying capture
+			CONTEXT = loc.getContext();
 		}
 		
 		if (loc.getParameter("docPath")!=null && !loc.getParameter("docPath").equals("")) {
@@ -205,6 +207,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		// Getting language
 		ServiceDefTarget endPoint = (ServiceDefTarget) languageService;
 		endPoint.setServiceEntryPoint(RPCService.LanguageService);
+		Window.alert(RPCService.LanguageService);
 		languageService.getFrontEndTranslations(Main.get().getLang(), new AsyncCallback<Map<String,String>>() {
 			@Override
 			public void onSuccess(Map<String, String> result) {
