@@ -460,7 +460,7 @@ public class DocConverter {
 			HashMap<String, String> hm = new HashMap<String, String>();
 			hm.put("fileIn", input.getPath());
 			hm.put("fileOut", tmpDir + File.separator + "out.jpg");
-			String tpl = Config.SYSTEM_IMAGEMAGICK_CONVERT + " ${fileIn} ${fileOut}";
+			String tpl = Config.SYSTEM_IMAGEMAGICK_CONVERT + " -bordercolor #666 -border 2x2 ${fileIn} ${fileOut}";
 			cmd = TemplateUtils.replace("SYSTEM_IMG2PDF", tpl, hm);
 			ExecutionUtils.runCmd(cmd);
 			
