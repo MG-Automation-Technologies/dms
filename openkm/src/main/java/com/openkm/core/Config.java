@@ -78,6 +78,7 @@ public class Config {
 	// Configuration properties
 	public static final String PROPERTY_REPOSITORY_CONFIG = "repository.config";
 	public static final String PROPERTY_REPOSITORY_HOME = "repository.home";
+	public static final String PROPERTY_MULTIPLE_INSTANCES = "multiple.instances";
 	
 	public static final String PROPERTY_DEFAULT_USER_ROLE = "default.user.role";
 	public static final String PROPERTY_DEFAULT_ADMIN_ROLE = "default.admin.role";
@@ -446,22 +447,22 @@ public class Config {
 			HIBERNATE_SHOW_SQL = config.getProperty(PROPERTY_HIBERNATE_SHOW_SQL, HIBERNATE_SHOW_SQL);
 			values.put(PROPERTY_HIBERNATE_SHOW_SQL, HIBERNATE_SHOW_SQL);
 			
+			// Misc
+			MULTIPLE_INSTANCES = "on".equalsIgnoreCase(config.getProperty(PROPERTY_MULTIPLE_INSTANCES, "off"));
+			values.put(PROPERTY_MULTIPLE_INSTANCES, Boolean.toString(MULTIPLE_INSTANCES));
+			
 			fis.close();
 			
-			if ("OpenKM".equals(CONTEXT)) {
-				INSTANCE = HOME_DIR;
-				values.put("instance", INSTANCE);
-				INSTANCE_CHROOT_PATH = "";
-				values.put("instance.chroot.path", INSTANCE_CHROOT_PATH);
-				MULTIPLE_INSTANCES = false;
-				values.put("multiple.instances", Boolean.toString(MULTIPLE_INSTANCES));
-			} else {
+			if (MULTIPLE_INSTANCES) {
 				INSTANCE = HOME_DIR + File.separator + "instances" + File.separator + CONTEXT;
 				values.put("instance", INSTANCE);
 				INSTANCE_CHROOT_PATH = INSTANCE + File.separator + "root" + File.separator;
 				values.put("instance.chroot.path", INSTANCE_CHROOT_PATH);
-				MULTIPLE_INSTANCES = true;
-				values.put("multiple.instances", Boolean.toString(MULTIPLE_INSTANCES));
+			} else {
+				INSTANCE = HOME_DIR;
+				values.put("instance", INSTANCE);
+				INSTANCE_CHROOT_PATH = "";
+				values.put("instance.chroot.path", INSTANCE_CHROOT_PATH);
 			}
 			
 			REPOSITORY_CONFIG = INSTANCE + File.separator + "repository.xml";
