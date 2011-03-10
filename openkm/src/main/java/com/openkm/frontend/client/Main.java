@@ -122,7 +122,6 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	public OnlineUsersPopup onlineUsersPopup;
 	public TestPopup testPopup;
 	
-	
 	// User workspace properties
 	public WorkspaceUserProperties workspaceUserProperties;
 	
