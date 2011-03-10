@@ -179,9 +179,13 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		// Request parameter
 		loc = WindowUtils.getLocation();
 		
-		// Capturing context
-		CONTEXT = loc.getPath();
-		CONTEXT = loc.getContext();
+		// Capture web application context
+		if (Cookies.getCookie("ctx") != null && !Cookies.getCookie("ctx").equals("")) {
+			CONTEXT = Cookies.getCookie("ctx");
+		} else {
+			// Otherwise we try to guess
+			CONTEXT = loc.getContext();
+		}
 		
 		if (loc.getParameter("docPath")!=null && !loc.getParameter("docPath").equals("")) {
 			fldPath = loc.getParameter("docPath").substring(0, loc.getParameter("docPath").lastIndexOf("/")); 
@@ -190,7 +194,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 			fldPath = loc.getParameter("fldPath"); 
 		}
 		
-		// Tries to capture lang parameter
+		// Try to capture lang parameter
 		if (loc.getParameter("lang")!=null && !loc.getParameter("lang").equals("")) {
 			lang = loc.getParameter("lang");
 		} else if (Cookies.getCookie("lang") != null && !Cookies.getCookie("lang").equals("")) {
