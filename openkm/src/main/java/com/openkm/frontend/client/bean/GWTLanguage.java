@@ -21,7 +21,7 @@
 
 package com.openkm.frontend.client.bean;
 
-import java.io.Serializable;
+import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * Language
@@ -29,7 +29,7 @@ import java.io.Serializable;
  * @author jllort
  *
  */
-public class GWTLanguage implements Serializable {
+public class GWTLanguage implements IsSerializable {
 
 	private static final long serialVersionUID = 1495639327488094214L;
 	
