@@ -253,6 +253,7 @@
     <mapping resource="com/openkm/extension/dao/bean/Contact.hbm.xml"/>
     <mapping resource="com/openkm/extension/dao/bean/MessageSent.hbm.xml"/>
     <mapping resource="com/openkm/extension/dao/bean/MessageReceived.hbm.xml"/>
+    <mapping resource="com/openkm/extension/dao/bean/WikiPage.hbm.xml"/>
 
     <!-- ################################### -->
     <!-- # cache settings                  # -->
