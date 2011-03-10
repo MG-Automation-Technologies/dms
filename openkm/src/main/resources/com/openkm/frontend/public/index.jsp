@@ -5,7 +5,7 @@
   HttpSessionManager.getInstance().add(request);
   com.openkm.api.OKMAuth.getInstance().login();
   Cookie cookie = new Cookie("ctx", request.getContextPath());
-  cookie.setMaxAge(365*24*60*60);
+  cookie.setMaxAge(365 * 24 * 60 * 60); // One year
   response.addCookie(cookie);
 %>
 <jsp:include flush="true" page="index.html" />
