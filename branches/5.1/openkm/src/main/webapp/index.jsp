@@ -25,5 +25,6 @@
 		}
 	}
 	
+	// Go to party
 	response.sendRedirect(url);
 %>
