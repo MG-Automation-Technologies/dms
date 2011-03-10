@@ -187,15 +187,15 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 			CONTEXT = loc.getContext();
 		}
 		
-		if (loc.getParameter("docPath")!=null && !loc.getParameter("docPath").equals("")) {
+		if (loc.getParameter("docPath") != null && !loc.getParameter("docPath").equals("")) {
 			fldPath = loc.getParameter("docPath").substring(0, loc.getParameter("docPath").lastIndexOf("/")); 
 			docPath = loc.getParameter("docPath"); 
-		} else if (loc.getParameter("fldPath")!=null && !loc.getParameter("fldPath").equals("")) {
+		} else if (loc.getParameter("fldPath") != null && !loc.getParameter("fldPath").equals("")) {
 			fldPath = loc.getParameter("fldPath"); 
 		}
 		
 		// Try to capture lang parameter
-		if (loc.getParameter("lang")!=null && !loc.getParameter("lang").equals("")) {
+		if (loc.getParameter("lang") != null && !loc.getParameter("lang").equals("")) {
 			lang = loc.getParameter("lang");
 		} else if (Cookies.getCookie("lang") != null && !Cookies.getCookie("lang").equals("")) {
 			lang = Cookies.getCookie("lang");
