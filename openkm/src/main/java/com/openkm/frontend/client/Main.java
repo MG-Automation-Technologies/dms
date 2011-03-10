@@ -183,7 +183,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		if (Cookies.getCookie("ctx") != null && !Cookies.getCookie("ctx").equals("")) {
 			CONTEXT = Cookies.getCookie("ctx");
 		} else {
-			// Otherside we trying capture
+			// Otherwise we try to guess
 			CONTEXT = loc.getContext();
 		}
 		
