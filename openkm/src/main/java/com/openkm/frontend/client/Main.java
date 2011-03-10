@@ -179,7 +179,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		// Request parameter
 		loc = WindowUtils.getLocation();
 	
-		// Capture ctx
+		// Capture web application context
 		if (Cookies.getCookie("ctx") != null && !Cookies.getCookie("ctx").equals("")) {
 			CONTEXT = Cookies.getCookie("ctx");
 		} else {
