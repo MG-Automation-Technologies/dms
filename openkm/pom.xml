@@ -464,8 +464,8 @@
     
     <!-- OpenKM extensions -->
     <dependency>
-      <groupId>com.openkm.extension</groupId>
-      <artifactId>sample-full</artifactId>
+      <groupId>com.openkm</groupId>
+      <artifactId>extensions-full</artifactId>
       <version>5.0</version>
     </dependency>
   </dependencies>
