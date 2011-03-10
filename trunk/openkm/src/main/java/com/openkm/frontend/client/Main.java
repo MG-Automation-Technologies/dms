@@ -122,7 +122,6 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	public OnlineUsersPopup onlineUsersPopup;
 	public TestPopup testPopup;
 	
-	
 	// User workspace properties
 	public WorkspaceUserProperties workspaceUserProperties;
 	
@@ -178,7 +177,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		
 		// Request parameter
 		loc = WindowUtils.getLocation();
-	
+		
 		// Capture web application context
 		if (Cookies.getCookie("ctx") != null && !Cookies.getCookie("ctx").equals("")) {
 			CONTEXT = Cookies.getCookie("ctx");
