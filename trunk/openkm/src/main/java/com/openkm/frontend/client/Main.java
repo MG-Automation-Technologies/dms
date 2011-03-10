@@ -181,6 +181,9 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		
 		// Capturing context
 		CONTEXT = loc.getContext();
+		if (CONTEXT.equals("/frontend")) {
+			CONTEXT = "";
+		}
 		
 		if (loc.getParameter("docPath")!=null && !loc.getParameter("docPath").equals("")) {
 			fldPath = loc.getParameter("docPath").substring(0, loc.getParameter("docPath").lastIndexOf("/")); 
