@@ -21,7 +21,6 @@ public class Location {
 
 	private HashMap<String, String> paramMap;
 
-
     public String getHash() {
         return hash;
     }
