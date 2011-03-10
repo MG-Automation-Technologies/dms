@@ -180,7 +180,6 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		loc = WindowUtils.getLocation();
 		
 		// Capturing context
-		CONTEXT = loc.getPath();
 		CONTEXT = loc.getContext();
 		
 		if (loc.getParameter("docPath")!=null && !loc.getParameter("docPath").equals("")) {
@@ -190,7 +189,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 			fldPath = loc.getParameter("fldPath"); 
 		}
 		
-		// Tries to capture lang parameter
+		// Try to capture lang parameter
 		if (loc.getParameter("lang")!=null && !loc.getParameter("lang").equals("")) {
 			lang = loc.getParameter("lang");
 		} else if (Cookies.getCookie("lang") != null && !Cookies.getCookie("lang").equals("")) {
