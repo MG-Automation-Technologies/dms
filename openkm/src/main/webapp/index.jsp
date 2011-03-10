@@ -25,5 +25,10 @@
 		}
 	}
 	
+	// Setting cookie context path 
+	Cookie cookie = new Cookie("ctx", request.getContextPath());
+	cookie.setMaxAge(365*24*60*60);
+	response.addCookie(cookie);
+	
 	response.sendRedirect(url);
 %>
