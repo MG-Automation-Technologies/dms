@@ -30,7 +30,6 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.openkm.frontend.client.Main;
@@ -38,7 +37,6 @@ import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTPermission;
 import com.openkm.frontend.client.contants.service.ErrorCode;
-import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
@@ -533,8 +531,6 @@ public class FolderTree extends Composite implements OriginPanel {
 	 *            The folder path selected to list items
 	 */
 	public void getChilds(String path) {
-		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-		endPoint.setServiceEntryPoint(RPCService.FolderService);
 		folderService.getChilds(path, callbackGetChilds);
 		Main.get().mainPanel.desktop.navigator.status.setFlagChilds();
 	}
@@ -548,8 +544,6 @@ public class FolderTree extends Composite implements OriginPanel {
 	 *            The folder path selected to list items
 	 */
 	public void getOnlyChilds(String path) {
-		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-		endPoint.setServiceEntryPoint(RPCService.FolderService);
 		folderService.getChilds(path, callbackGetOnlyChilds);
 	}
 
@@ -560,8 +554,6 @@ public class FolderTree extends Composite implements OriginPanel {
 	 *            The folder subpath selected by user = name
 	 */
 	public void create(String path) {
-		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-		endPoint.setServiceEntryPoint(RPCService.FolderService);
 		// On creation the actualItem is tmpFolder and must create from the
 		// parent of tmpFolder ( the real actualItem )
 		folderService.create(path, ((GWTFolder) actualItem.getParentItem().getUserObject()).getPath(),
@@ -577,8 +569,6 @@ public class FolderTree extends Composite implements OriginPanel {
 	 *            The folder subpath selected by user = name
 	 */
 	public void rename(String path) {
-		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-		endPoint.setServiceEntryPoint(RPCService.FolderService);
 		folderService.rename(((GWTFolder) actualItem.getUserObject()).getPath(), path, callbackRename);
 		Main.get().mainPanel.desktop.navigator.status.setFlagRename();
 		hideMenuPopup();
@@ -607,8 +597,6 @@ public class FolderTree extends Composite implements OriginPanel {
 	 * parent
 	 */
 	public void delete() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-		endPoint.setServiceEntryPoint(RPCService.FolderService);
 		String path = ((GWTFolder) actualItem.getUserObject()).getPath();
 		folderService.delete(path, callbackDelete);
 		Main.get().mainPanel.desktop.navigator.status.setFlagDelete();
@@ -684,8 +672,6 @@ public class FolderTree extends Composite implements OriginPanel {
 	 * Adds a subscription
 	 */
 	public void addSubscription() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) notifyService;
-		endPoint.setServiceEntryPoint(RPCService.NotifyService);
 		Main.get().mainPanel.desktop.navigator.status.setFlagAddSubscription();
 		notifyService.subscribe(((GWTFolder) actualItem.getUserObject()).getPath(), callbackAddSubscription);
 	}
@@ -694,8 +680,6 @@ public class FolderTree extends Composite implements OriginPanel {
 	 * Removes a subscription
 	 */
 	public void removeSubscription() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) notifyService;
-		endPoint.setServiceEntryPoint(RPCService.NotifyService);
 		Main.get().mainPanel.desktop.navigator.status.setFlagRemoveSubscription();
 		notifyService.unsubscribe(((GWTFolder) actualItem.getUserObject()).getPath(),
 				callbackRemoveSubscription);
@@ -710,12 +694,8 @@ public class FolderTree extends Composite implements OriginPanel {
 		if (Main.get().fldPath != null && !Main.get().fldPath.equals("") && Main.get().docPath != null
 				&& !Main.get().docPath.equals("")) {
 			// Evalues if document passed by parameter is valid
-			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
-			endPoint.setServiceEntryPoint(RPCService.DocumentService);
 			documentService.isValid(Main.get().docPath, callbackIsValidDocument);
 		} else if (Main.get().fldPath != null && !Main.get().fldPath.equals("")) {
-			ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-			endPoint.setServiceEntryPoint(RPCService.FolderService);
 			folderService.isValid(Main.get().fldPath, callbackIsValidFolder);
 		}
 	}
@@ -789,8 +769,6 @@ public class FolderTree extends Composite implements OriginPanel {
 	 * Gets the actual folder (actualItem) and refresh all information on it
 	 */
 	private void get() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-		endPoint.setServiceEntryPoint(RPCService.FolderService);
 		Main.get().mainPanel.desktop.navigator.status.setFlagGet();
 		folderService.getProperties(((GWTFolder) actualItem.getUserObject()).getPath(), callbackGet);
 	}
@@ -1531,8 +1509,6 @@ public class FolderTree extends Composite implements OriginPanel {
 	 * Purge folder on file browser ( only trash mode )
 	 */
 	public void purge() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-		endPoint.setServiceEntryPoint(RPCService.FolderService);
 		String path = ((GWTFolder) actualItem.getUserObject()).getPath();
 		folderService.purge(path, callbackPurge);
 		Main.get().mainPanel.desktop.navigator.status.setFlagPurge();
@@ -1542,8 +1518,6 @@ public class FolderTree extends Composite implements OriginPanel {
 	 * Purge all trash ( only trash mode )
 	 */
 	public void purgeTrash() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(RPCService.RepositoryService);
 		repositoryService.purgeTrash(callbackPurgeTrash);
 		Main.get().mainPanel.desktop.navigator.status.setFlagPurgeTrash();
 	}

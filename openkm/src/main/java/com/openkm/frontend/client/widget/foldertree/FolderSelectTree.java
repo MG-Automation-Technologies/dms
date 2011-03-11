@@ -28,15 +28,12 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.service.OKMFolderService;
 import com.openkm.frontend.client.service.OKMFolderServiceAsync;
@@ -273,18 +270,14 @@ public class FolderSelectTree extends Composite {
 	 * 
 	 * @param path The folder path selected to list items
 	 */
-	public void getChilds(String path) {
-		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-		endPoint.setServiceEntryPoint(RPCService.FolderService);	
+	public void getChilds(String path) {	
 		folderService.getChilds(path, callbackGetChilds);
 	}	
 	
 	/**
 	 * Gets the root
 	 */
-	public void getRoot() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(RPCService.RepositoryService);	
+	public void getRoot() {	
 		repositoryService.getRootFolder(callbackGetRootFolder);
 	}
 	
@@ -397,8 +390,6 @@ public class FolderSelectTree extends Composite {
 	 * Gets the personal documents
 	 */
 	public void getPersonal() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(RPCService.RepositoryService);
 		repositoryService.getPersonalFolder(callbackGetPersonalFolder);
 	}
 	
@@ -406,8 +397,6 @@ public class FolderSelectTree extends Composite {
 	 * Gets the categories documents
 	 */
 	public void getCategoriesFolder() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(RPCService.RepositoryService);
 		repositoryService.getCategoriesFolder(callbackGetCategoriesFolder);
 	}				
 	
@@ -416,8 +405,6 @@ public class FolderSelectTree extends Composite {
 	 * Gets the template
 	 */
 	public void getTemplatesFolder() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(RPCService.RepositoryService);
 		repositoryService.getTemplatesFolder(callbackGetTemplatesFolder);
 	}
 	
@@ -425,8 +412,6 @@ public class FolderSelectTree extends Composite {
 	 * Gets the template
 	 */
 	public void getMail() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(RPCService.RepositoryService);
 		repositoryService.getMailFolder(callbackGetMailFolder);
 	}
 	
