@@ -22,15 +22,15 @@
       <element column="NGUS_USER" type="string"/>
     </set>
     <set name="rolesRead" table="OKM_NODE_GRANTS_ROL_RD" lazy="false">
-      <key column="NGUR_ID" not-null="true"/>
+      <key column="NGRR_ID" not-null="true"/>
       <element column="NGRR_ROLE" type="string"/>
     </set>
     <set name="rolesWrite" table="OKM_NODE_GRANTS_ROL_WR" lazy="false">
-      <key column="NGUW_ID" not-null="true"/>
+      <key column="NGRW_ID" not-null="true"/>
       <element column="NGRW_ROLE" type="string"/>
     </set>
     <set name="rolesDelete" table="OKM_NODE_GRANTS_ROL_DL" lazy="false">
-      <key column="NGUD_ID" not-null="true"/>
+      <key column="NGRD_ID" not-null="true"/>
       <element column="NGRD_ROLE" type="string"/>
     </set>
     <set name="rolesSecurity" table="OKM_NODE_GRANTS_ROL_SG" lazy="false">
