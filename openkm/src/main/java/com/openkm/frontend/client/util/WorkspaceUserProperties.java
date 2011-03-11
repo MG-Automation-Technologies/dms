@@ -23,12 +23,10 @@ package com.openkm.frontend.client.util;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.openkm.extension.frontend.client.widget.digitalsignature.DigitalSignature;
 import com.openkm.extension.frontend.client.widget.messaging.MessagingToolBarBox;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTWorkspace;
-import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMRepositoryService;
 import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
 import com.openkm.frontend.client.service.OKMWorkspaceService;
@@ -320,9 +318,7 @@ public class WorkspaceUserProperties {
 	/**
 	 * Gets the remote user
 	 */
-	private void getUpdateMessage() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(RPCService.RepositoryService);	
+	private void getUpdateMessage() {	
 		repositoryService.getUpdateMessage(callbackGetUpdateMessage);
 	}
 	
@@ -330,8 +326,6 @@ public class WorkspaceUserProperties {
 	 * Gets the workspace user data
 	 */
 	public void getUserWorkspace() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) workspaceService;
-		endPoint.setServiceEntryPoint(RPCService.WorkspaceService);	
 		workspaceService.getUserWorkspace(callbackGetUserWorkspace);
 	}
 	
@@ -339,8 +333,6 @@ public class WorkspaceUserProperties {
 	 * refreshUserWorkspace
 	 */
 	public void refreshUserWorkspace() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) workspaceService;
-		endPoint.setServiceEntryPoint(RPCService.WorkspaceService);	
 		workspaceService.getUserWorkspace(new AsyncCallback<GWTWorkspace>() {
 			@Override
 			public void onSuccess(GWTWorkspace result) {
@@ -358,8 +350,6 @@ public class WorkspaceUserProperties {
 	 * Gets the user documents size
 	 */
 	public void getUserDocumentsSize() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) workspaceService;
-		endPoint.setServiceEntryPoint(RPCService.WorkspaceService);	
 		workspaceService.getUserDocumentsSize(callbackGetUserDocumentsSize);
 	}
 	

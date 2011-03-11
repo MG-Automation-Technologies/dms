@@ -28,7 +28,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -43,7 +42,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTTestImap;
 import com.openkm.frontend.client.bean.GWTWorkspace;
-import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMGeneralService;
 import com.openkm.frontend.client.service.OKMGeneralServiceAsync;
 import com.openkm.frontend.client.service.OKMWorkspaceService;
@@ -177,8 +175,6 @@ public class UserPopup extends DialogBox implements ClickHandler {
 					workspace.setImapPassword(imapUserPasswordText.getText());
 					workspace.setPassword(userPasswordText.getText());
 					workspace.setImapID(Main.get().workspaceUserProperties.getWorkspace().getImapID());
-					ServiceDefTarget endPoint = (ServiceDefTarget) workspaceService;
-					endPoint.setServiceEntryPoint(RPCService.WorkspaceService);
 					// First must validate password
 					workspaceService.isValidPassword(userPasswordText.getText(), new AsyncCallback<String>() {
 						@Override
@@ -213,8 +209,6 @@ public class UserPopup extends DialogBox implements ClickHandler {
 				imapTestError.setVisible(false);
 				imapTestOK.setVisible(false);
 				test.setEnabled(false);
-				ServiceDefTarget endPoint = (ServiceDefTarget) generalService;
-				endPoint.setServiceEntryPoint(RPCService.GeneralService);
 				generalService.testImapConnection(hostText.getText(), imapUserText.getText(), imapUserPasswordText.getText(), imapFolderText.getText(), new AsyncCallback<GWTTestImap>() {					
 					@Override
 					public void onSuccess(GWTTestImap result) {
@@ -245,8 +239,6 @@ public class UserPopup extends DialogBox implements ClickHandler {
 			public void onClick(ClickEvent event) {
 				int Id = Main.get().workspaceUserProperties.getWorkspace().getImapID();
 				if (Id>=0) {
-					ServiceDefTarget endPoint = (ServiceDefTarget) workspaceService;
-					endPoint.setServiceEntryPoint(RPCService.WorkspaceService);
 					workspaceService.deleteMailAccount(Id, callbackDeleteMailAccount);
 				}
 			}			

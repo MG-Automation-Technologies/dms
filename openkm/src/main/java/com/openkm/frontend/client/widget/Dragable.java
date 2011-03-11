@@ -34,7 +34,6 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -45,7 +44,6 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import com.openkm.frontend.client.service.OKMFolderService;
@@ -138,8 +136,6 @@ public class Dragable extends Composite implements OriginPanel {
 	                                Main.get().activeFolderTree.evaluesFolderIcon(clickedTreeItem);
 	                                
 	                                // Move the folder
-	                                ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-									endPoint.setServiceEntryPoint(RPCService.FolderService);
 	                                folderService.move( fldPath, dstPath, new AsyncCallback<Object>() {
 		                            		public void onSuccess(Object result) {		
 		                            			// Sets the folder new path itself and childs
@@ -205,8 +201,6 @@ public class Dragable extends Composite implements OriginPanel {
 		                                    Main.get().activeFolderTree.evaluesFolderIcon(clickedTreeItem);
 		                                    
 		                            		// Move the folder
-		                                    ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-		    								endPoint.setServiceEntryPoint(RPCService.FolderService);
 		                                    folderService.move( fldPath, dstPath, new AsyncCallback<Object>() {
 				                            		public void onSuccess(Object result) {		
 				                            			// Sets the folder new path ( parent and itself ) recursive for itself and childs
@@ -235,8 +229,6 @@ public class Dragable extends Composite implements OriginPanel {
 		                        		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument(); // The dragged document
 		                        		
 		                        		// Move the document
-		                        		ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
-		    							endPoint.setServiceEntryPoint(RPCService.DocumentService);
 		    							documentService.move( gwtDocument.getPath(),dstPath, callbackMove);
 		    							
 		    							// refresh file browser
@@ -247,8 +239,6 @@ public class Dragable extends Composite implements OriginPanel {
 		                        		GWTMail gwtMail = Main.get().mainPanel.desktop.browser.fileBrowser.getMail(); // The dragged document
 		                        		
 		                        		// Move the document
-		                        		ServiceDefTarget endPoint = (ServiceDefTarget) mailService;
-		    							endPoint.setServiceEntryPoint(RPCService.MailService);
 		    							mailService.move( gwtMail.getPath(),dstPath, callbackMove);
 		    							
 		    							// refresh file browser

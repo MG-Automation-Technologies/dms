@@ -24,6 +24,7 @@ package com.openkm.frontend.client.service.extension;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.extension.GWTStapleGroup;
 
@@ -31,6 +32,7 @@ import com.openkm.frontend.client.bean.extension.GWTStapleGroup;
  * @author jllort
  *
  */
+@RemoteServiceRelativePath("../extension/Stapling")
 public interface OKMStaplingService extends RemoteService {
 	public String create(String username, String uuid, String type, String uuid2, String type2) throws OKMException;
 	public void add(String id, String uuid, String type) throws OKMException;
