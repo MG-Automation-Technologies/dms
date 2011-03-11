@@ -35,7 +35,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -61,7 +60,6 @@ import com.openkm.frontend.client.bean.GWTProcessDefinition;
 import com.openkm.frontend.client.bean.GWTSelect;
 import com.openkm.frontend.client.bean.GWTTextArea;
 import com.openkm.frontend.client.bean.GWTValidator;
-import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMWorkflowService;
 import com.openkm.frontend.client.service.OKMWorkflowServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
@@ -239,8 +237,6 @@ public class WorkflowPopup extends DialogBox {
 	 * Gets all process definitions
 	 */
 	private void findLatestProcessDefinitions() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-		endPoint.setServiceEntryPoint(RPCService.WorkflowService);	
 		workflowService.findLatestProcessDefinitions(callbackFindLatestProcessDefinitions);
 	}	
 	
@@ -334,8 +330,6 @@ public class WorkflowPopup extends DialogBox {
 				uuid = Main.get().mainPanel.desktop.browser.fileBrowser.getMail().getUuid();
 			}
 		}
-		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-		endPoint.setServiceEntryPoint(RPCService.WorkflowService);
 		workflowService.runProcessDefinition(uuid,new Double(listBox.getValue(listBox.getSelectedIndex())).doubleValue(),
 											 formFieldList, callbackRunProcessDefinition);
 		hide();
@@ -366,9 +360,7 @@ public class WorkflowPopup extends DialogBox {
 	 * 
 	 * @param id
 	 */
-	public void getProcessDefinitionForms(double id) {
-		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-		endPoint.setServiceEntryPoint(RPCService.WorkflowService);		
+	public void getProcessDefinitionForms(double id) {	
 		workflowService.getProcessDefinitionForms(id, callbackGetProcessDefinitionForms);
 	}
 	

@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.extension.GWTMessageReceived;
 import com.openkm.frontend.client.bean.extension.GWTMessageSent;
@@ -33,6 +34,7 @@ import com.openkm.frontend.client.bean.extension.GWTMessageSent;
  * @author jllort
  *
  */
+@RemoteServiceRelativePath("../extension/Message")
 public interface OKMMessageService extends RemoteService {
 	public void send(String users, String roles, String subject, String content) throws OKMException;
 	public void deleteSent(int msgId) throws OKMException;

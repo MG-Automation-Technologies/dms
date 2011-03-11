@@ -24,6 +24,7 @@ package com.openkm.frontend.client.service.extension;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.extension.GWTActivity;
 
@@ -33,6 +34,7 @@ import com.openkm.frontend.client.bean.extension.GWTActivity;
  * @author jllort
  *
  */
+@RemoteServiceRelativePath("../extension/ActivityLog")
 public interface OKMActivityLogService extends RemoteService {
 	public List<GWTActivity> findByFilterByItem(String item, String action, boolean getChilds) throws OKMException;
 }
