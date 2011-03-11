@@ -41,7 +41,6 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -71,7 +70,6 @@ import com.openkm.frontend.client.bean.GWTTaskInstance;
 import com.openkm.frontend.client.bean.GWTTextArea;
 import com.openkm.frontend.client.bean.GWTValidator;
 import com.openkm.frontend.client.bean.GWTWorkflowComment;
-import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import com.openkm.frontend.client.service.OKMFolderService;
@@ -357,22 +355,16 @@ public class WorkflowFormPanel extends Composite {
 					parameterTable.setHTML(documentRow, 0, "<b>"+ 
 							               Main.get().workspaceUserProperties.getWorkspace().getWorkflowProcessIntanceVariablePath() + 
 							               "</b>");
-					
-					ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-					endPoint.setServiceEntryPoint(RPCService.RepositoryService);		
+						
 					repositoryService.getPathByUUID(value, new AsyncCallback<String>() {
 						@Override
 						public void onSuccess(final String docPath) {
 							// Validating if is document / folder / mail and displaying object path
-							ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
-							endPoint.setServiceEntryPoint(RPCService.DocumentService);
 							documentService.isValid(docPath, new AsyncCallback<Boolean>() {
 								public void onSuccess(Boolean result) {
 									if (result.booleanValue()) {
 										writePath(documentRow, docPath, false);
 									} else {
-										ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-										endPoint.setServiceEntryPoint(RPCService.FolderService);
 										folderService.isValid(docPath, new AsyncCallback<Boolean>() {
 											public void onSuccess(Boolean result) {
 												if (result.booleanValue()) {
@@ -477,9 +469,7 @@ public class WorkflowFormPanel extends Composite {
 	 * 
 	 * @param id
 	 */
-	public void getProcessDefinitionForms(double id) {
-		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-		endPoint.setServiceEntryPoint(RPCService.WorkflowService);		
+	public void getProcessDefinitionForms(double id) {	
 		workflowService.getProcessDefinitionForms(id, callbackGetProcessDefinitionForms);
 	}
 	
@@ -949,10 +939,7 @@ public class WorkflowFormPanel extends Composite {
 					}
 				} 
 			}
-		}
-		
-		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-		endPoint.setServiceEntryPoint(RPCService.WorkflowService);		
+		}		
 		workflowService.setTaskInstanceValues(id, transitionName, formElementList, callbackSetTaskInstanceValues);
 	}
 	
@@ -1047,8 +1034,6 @@ public class WorkflowFormPanel extends Composite {
 	 */
 	private void addComment() {
 		if (!textArea.getText().equals("")) {
-			ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-			endPoint.setServiceEntryPoint(RPCService.WorkflowService);
 			workflowService.addComment(taskInstance.getProcessInstance().getRootToken().getId(), textArea.getText(), callbackAddComment);
 		}
 	}

@@ -23,14 +23,11 @@ package com.openkm.frontend.client.widget.filebrowser;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMRepositoryService;
 import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
 
@@ -98,9 +95,7 @@ public class FilePath  extends Composite {
 	/**
 	 * Gets the root
 	 */
-	public void getRootPath() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-		endPoint.setServiceEntryPoint(RPCService.RepositoryService);	
+	public void getRootPath() {	
 		repositoryService.getRootFolder(callbackGetRootFolder);
 	}	
 }
