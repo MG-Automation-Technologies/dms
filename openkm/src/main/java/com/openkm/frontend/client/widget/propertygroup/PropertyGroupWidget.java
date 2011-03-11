@@ -35,7 +35,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -62,7 +61,6 @@ import com.openkm.frontend.client.bean.GWTOption;
 import com.openkm.frontend.client.bean.GWTSelect;
 import com.openkm.frontend.client.bean.GWTTextArea;
 import com.openkm.frontend.client.bean.GWTValidator;
-import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.extension.event.HasPropertyGroupEvent;
 import com.openkm.frontend.client.extension.event.handler.PropertyGroupHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasPropertyGroupHandlerExtension;
@@ -372,9 +370,6 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 			drawFormElement(rows, formElement);
 			rows ++;
 		}
-
-		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
 		propertyGroupService.setProperties(docPath, grpName, formElementList, callbackSetProperties);
 	}
 	
@@ -796,8 +791,6 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	 * Gets all group properties 
 	 */
 	public void getProperties() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
 		propertyGroupService.getProperties(docPath, grpName, callbackGetProperties);
 	}
 
@@ -805,8 +798,6 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	 * Remove the document property group
 	 */
 	public void removeGroup() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
 		propertyGroupService.removeGroup(docPath, grpName, callbackRemoveGroup);
 	}
 	

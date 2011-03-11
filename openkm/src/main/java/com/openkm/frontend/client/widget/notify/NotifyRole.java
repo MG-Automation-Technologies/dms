@@ -28,14 +28,12 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 import com.openkm.frontend.client.util.OKMBundleResources;
@@ -167,8 +165,6 @@ public class NotifyRole extends Composite {
 	 * Gets all roles
 	 */
 	public void getAllRoles() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-		endPoint.setServiceEntryPoint(RPCService.AuthService);	
 		authService.getAllRoles(callbackAllRoles);
 	}
 	
@@ -176,8 +172,6 @@ public class NotifyRole extends Composite {
 	 * Gets all roles
 	 */
 	public void getFilteredAllRoles(String filter) {
-		ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-		endPoint.setServiceEntryPoint(RPCService.AuthService);	
 		authService.getFilteredAllRoles(filter, notifyRolesTable.getRolesToNotifyList() ,callbackAllRoles);
 	}
 	

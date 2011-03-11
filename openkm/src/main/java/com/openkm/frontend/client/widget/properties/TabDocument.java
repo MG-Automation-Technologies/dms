@@ -31,7 +31,6 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TabBar;
 import com.google.gwt.user.client.ui.TabPanel;
@@ -369,8 +368,6 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	 */
 	private void getGroups(String docPath) {
 		Main.get().mainPanel.desktop.browser.tabMultiple.status.setGroupProperties();
-		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
 		propertyGroupService.getGroups(docPath, callbackGetGroups);
 	}
 	
