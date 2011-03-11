@@ -24,6 +24,7 @@ package com.openkm.frontend.client.service;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTBookmark;
@@ -32,6 +33,7 @@ import com.openkm.frontend.client.bean.GWTBookmark;
  * @author jllort
  *
  */
+@RemoteServiceRelativePath("Bookmark")
 public interface OKMBookmarkService extends RemoteService {
 	public List<GWTBookmark> getAll() throws OKMException;
 	public GWTBookmark add(String nodePath, String name) throws OKMException;
