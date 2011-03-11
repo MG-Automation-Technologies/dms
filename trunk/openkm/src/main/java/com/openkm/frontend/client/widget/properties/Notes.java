@@ -31,7 +31,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -48,7 +47,6 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTNote;
-import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.extension.event.HasDocumentEvent;
 import com.openkm.frontend.client.extension.event.HasFolderEvent;
 import com.openkm.frontend.client.service.OKMNoteService;
@@ -371,8 +369,6 @@ public class Notes extends Composite {
 	 * addNote
 	 */
 	private void addNote() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) noteService;
-		endPoint.setServiceEntryPoint(RPCService.NoteService);
 		String path = "";
 		if (document!=null) {
 			path = document.getPath();
@@ -433,8 +429,6 @@ public class Notes extends Composite {
 	 * @param notePath
 	 */
 	private void removeNote(final String notePath, final int row) {
-		ServiceDefTarget endPoint = (ServiceDefTarget) noteService;
-		endPoint.setServiceEntryPoint(RPCService.NoteService);
 		noteService.remove(notePath, new AsyncCallback<Object>() {
 			@Override
 			public void onSuccess(Object result) {
@@ -485,8 +479,6 @@ public class Notes extends Composite {
 	 * @param row
 	 */
 	private void setNote(String notePath, final String text, final int row) {
-		ServiceDefTarget endPoint = (ServiceDefTarget) noteService;
-		endPoint.setServiceEntryPoint(RPCService.NoteService);
 		noteService.set(notePath, text, new AsyncCallback<Object>() {
 			@Override
 			public void onSuccess(Object result) {
