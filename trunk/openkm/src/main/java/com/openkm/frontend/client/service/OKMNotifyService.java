@@ -22,6 +22,7 @@
 package com.openkm.frontend.client.service;
 
 import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import com.openkm.frontend.client.OKMException;
 
@@ -31,6 +32,7 @@ import com.openkm.frontend.client.OKMException;
  * @author jllort
  *
  */
+@RemoteServiceRelativePath("Notify")
 public interface OKMNotifyService extends RemoteService {
 	public void subscribe( String nodePath ) throws OKMException;
 	public void unsubscribe( String nodePath ) throws OKMException;

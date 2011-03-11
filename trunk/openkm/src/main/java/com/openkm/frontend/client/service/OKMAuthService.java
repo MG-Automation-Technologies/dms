@@ -25,12 +25,14 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.openkm.frontend.client.OKMException;
 
 /**
  * @author jllort
  *
  */
+@RemoteServiceRelativePath("Auth")
 public interface OKMAuthService extends RemoteService {
 	public void logout() throws OKMException;
 	public Map<String, Byte> getGrantedUsers(String nodePath) throws OKMException;

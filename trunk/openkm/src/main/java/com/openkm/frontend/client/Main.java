@@ -36,13 +36,11 @@ import com.google.gwt.user.client.Window.ClosingEvent;
 import com.google.gwt.user.client.Window.ClosingHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.InvocationException;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTUserConfig;
 import com.openkm.frontend.client.bean.RepositoryContext;
-import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.extension.event.HasLanguageEvent;
 import com.openkm.frontend.client.extension.event.handler.LanguageHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasLanguageHandlerExtension;
@@ -204,9 +202,6 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		}
 		
 		// Getting language
-		ServiceDefTarget endPoint = (ServiceDefTarget) languageService;
-		endPoint.setServiceEntryPoint(RPCService.LanguageService);
-		Window.alert(RPCService.LanguageService);
 		languageService.getFrontEndTranslations(Main.get().getLang(), new AsyncCallback<Map<String,String>>() {
 			@Override
 			public void onSuccess(Map<String, String> result) {
@@ -364,8 +359,6 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	 */
 	public void refreshLang(String lang) {
 		this.lang = lang;
-		ServiceDefTarget endPoint = (ServiceDefTarget) languageService;
-		endPoint.setServiceEntryPoint(RPCService.LanguageService);
 		languageService.getFrontEndTranslations(lang, new AsyncCallback<Map<String,String>>() {
 			@Override
 			public void onSuccess(Map<String, String> result) {

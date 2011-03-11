@@ -22,12 +22,14 @@
 package com.openkm.frontend.client.service;
 
 import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.openkm.frontend.client.OKMException;
 
 /**
  * @author jllort
  *
  */
+@RemoteServiceRelativePath("Property")
 public interface OKMPropertyService extends RemoteService {
 	public void addCategory(String nodePath, String category) throws OKMException;
 	public void removeCategory(String nodePath, String category) throws OKMException;
