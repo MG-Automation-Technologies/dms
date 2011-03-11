@@ -31,7 +31,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -42,7 +41,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 import com.openkm.frontend.client.util.OKMBundleResources;
@@ -246,9 +244,7 @@ public class SecurityUser extends Composite implements HasWidgets {
 	 * Gets the granted users
 	 */
 	public void getGrantedUsers() {
-		if (path != null) {
-			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(RPCService.AuthService);	
+		if (path != null) {	
 			authService.getGrantedUsers(path, callbackGetGrantedUsers);
 		}
 	}
@@ -258,8 +254,6 @@ public class SecurityUser extends Composite implements HasWidgets {
 	 */
 	public void getUngrantedUsers() {
 		if (path != null) {
-			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(RPCService.AuthService);	
 			authService.getUngrantedUsers(path, callbackGetUngrantedUsers);
 		}
 	}
@@ -270,8 +264,6 @@ public class SecurityUser extends Composite implements HasWidgets {
 	public void getFilteredUngrantedUsers(String filter) {
 		if (path != null) {
 			resetUnassigned();
-			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(RPCService.AuthService);	
 			authService.getFilteredUngrantedUsers(path, filter, callbackGetUngrantedUsers);
 		}
 	}
@@ -285,8 +277,6 @@ public class SecurityUser extends Composite implements HasWidgets {
 	public void addUser(String user, int permissions, boolean recursive) {
 		if (path != null) {
 			Main.get().securityPopup.status.setFlag_update();
-			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(RPCService.AuthService);	
 			authService.grantUser(path, user, permissions, recursive, callbackAddUser);
 		}
 	}
@@ -299,8 +289,6 @@ public class SecurityUser extends Composite implements HasWidgets {
 	public void removeUser(String user, boolean recursive) {
 		if (path != null) {
 			Main.get().securityPopup.status.setFlag_update();
-			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(RPCService.AuthService);	
 			authService.revokeUser(path, user, recursive, callbackRevokeUser);
 		}
 	}

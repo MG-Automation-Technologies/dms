@@ -31,7 +31,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -42,7 +41,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 import com.openkm.frontend.client.util.RoleComparator;
@@ -246,8 +244,6 @@ public class SecurityRole extends Composite implements HasWidgets {
 	 */
 	public void getGrantedRoles() {
 		if (path != null) {
-			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(RPCService.AuthService);	
 			authService.getGrantedRoles(path, callbackGetGrantedRoles);
 		}
 	}
@@ -257,8 +253,6 @@ public class SecurityRole extends Composite implements HasWidgets {
 	 */
 	public void getUngrantedRoles() {
 		if (path != null) {
-			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(RPCService.AuthService);	
 			authService.getUngrantedRoles(path, callbackGetUngrantedRoles);
 		}
 	}
@@ -269,8 +263,6 @@ public class SecurityRole extends Composite implements HasWidgets {
 	public void getFilteredUngrantedRoles(String filter) {
 		if (path != null) {
 			resetUnassigned();
-			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(RPCService.AuthService);	
 			authService.getFilteredUngrantedRoles(path, filter, callbackGetUngrantedRoles);
 		}
 	}
@@ -284,8 +276,6 @@ public class SecurityRole extends Composite implements HasWidgets {
 	public void addRole(String role, int permissions, boolean recursive) {
 		if (path != null) {
 			Main.get().securityPopup.status.setFlag_update();
-			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(RPCService.AuthService);	
 			authService.grantRole(path, role, permissions, recursive, callbackAddRole);
 		}
 	}
@@ -298,8 +288,6 @@ public class SecurityRole extends Composite implements HasWidgets {
 	public void revokeRole(String role, boolean recursive) {
 		if (path != null) {
 			Main.get().securityPopup.status.setFlag_update();
-			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(RPCService.AuthService);	
 			authService.revokeRole(path, role, recursive, callbackRevokeRole);
 		}
 	}

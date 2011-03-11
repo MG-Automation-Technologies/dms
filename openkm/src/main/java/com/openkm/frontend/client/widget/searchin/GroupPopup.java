@@ -33,7 +33,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -46,7 +45,6 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.GWTPropertyParams;
-import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
 
@@ -299,8 +297,6 @@ public class GroupPopup extends DialogBox {
 	 * Gets all property groups
 	 */
 	private void getAllGroups() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
 		propertyGroupService.getAllGroups(callbackGetAllGroups);
 	}
 	
@@ -308,8 +304,6 @@ public class GroupPopup extends DialogBox {
 	 * Gets all metadata group properties 
 	 */
 	private void getMetaData() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
 		propertyGroupService.getPropertyGroupForm(groupListBox.getValue(groupListBox.getSelectedIndex()), callbackGetPropertyGroupForm);
 	}
 	
@@ -327,9 +321,7 @@ public class GroupPopup extends DialogBox {
 	 */
 	private void validateGroupsNoEmpty(){
 		if (groupListBox.getItemCount()>validate) {
-			String value = groupListBox.getValue(validate);
-			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-			endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
+			String value = groupListBox.getValue(validate);	
 			propertyGroupService.getPropertyGroupForm(value, callbackGetPropertyGroupFormDataToValidate);
 		} else {
 			// Validate button 
