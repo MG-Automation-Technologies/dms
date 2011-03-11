@@ -29,7 +29,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -43,7 +42,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMTestService;
 import com.openkm.frontend.client.service.OKMTestServiceAsync;
 
@@ -209,8 +207,6 @@ public class TestPopup extends DialogBox {
 	 * stringTest
 	 */
 	private void stringTest(final int cycle) {
-		ServiceDefTarget endPoint = (ServiceDefTarget) testService;
-		endPoint.setServiceEntryPoint(RPCService.TestService);
 		log(runnningTest, "Calling RPC: " + cycle);
 		testService.StringTest(textSize, new AsyncCallback<String>() {
 			@Override
@@ -230,8 +226,6 @@ public class TestPopup extends DialogBox {
 	 * folderTest
 	 */
 	private void folderTest(final int cycle) {
-		ServiceDefTarget endPoint = (ServiceDefTarget) testService;
-		endPoint.setServiceEntryPoint(RPCService.TestService);
 		log(runnningTest, "Calling RPC: " + cycle);
 		testService.folderText(textSize, new AsyncCallback<List<GWTFolder>>() {
 			
@@ -252,8 +246,6 @@ public class TestPopup extends DialogBox {
 	 * documentTest
 	 */
 	private void documentTest(final int cycle) {
-		ServiceDefTarget endPoint = (ServiceDefTarget) testService;
-		endPoint.setServiceEntryPoint(RPCService.TestService);
 		log(runnningTest, "Calling RPC: " + cycle);
 		testService.documentText(textSize, new AsyncCallback<List<GWTDocument>>() {
 			@Override

@@ -35,7 +35,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -61,7 +60,6 @@ import com.openkm.frontend.client.bean.GWTOption;
 import com.openkm.frontend.client.bean.GWTSelect;
 import com.openkm.frontend.client.bean.GWTTextArea;
 import com.openkm.frontend.client.bean.GWTValidator;
-import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import com.openkm.frontend.client.service.OKMWorkflowService;
@@ -218,13 +216,9 @@ public class WorkflowWidget extends Composite {
 			}
 		}
 		
-		ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
-		endPoint.setServiceEntryPoint(RPCService.DocumentService);
 		documentService.get(docPath, new AsyncCallback<GWTDocument>() {
 			@Override
 			public void onSuccess(GWTDocument result) {
-				ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-				endPoint.setServiceEntryPoint(RPCService.WorkflowService);
 				workflowService.runProcessDefinition(result.getUuid(), id, formFieldList, callbackRunProcessDefinition);
 				Main.get().wizardPopup.showNextWizard();
 			}
@@ -263,9 +257,7 @@ public class WorkflowWidget extends Composite {
 	 * 
 	 * @param id
 	 */
-	public void getProcessDefinitionForms(double id) {
-		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-		endPoint.setServiceEntryPoint(RPCService.WorkflowService);		
+	public void getProcessDefinitionForms(double id) {	
 		workflowService.getProcessDefinitionForms(id, callbackGetProcessDefinitionForms);
 	}
 	

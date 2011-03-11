@@ -28,7 +28,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
@@ -41,7 +40,6 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConst
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
-import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
@@ -111,8 +109,6 @@ public class TemplateWizardPopup extends DialogBox {
 		
 		// Wizard
 		groupIndex = 0;		
-		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
 		propertyGroupService.getGroups(docPath, new AsyncCallback<List<GWTPropertyGroup>>() {
 			@Override
 			public void onSuccess(List<GWTPropertyGroup> result) {
@@ -165,8 +161,6 @@ public class TemplateWizardPopup extends DialogBox {
 					getProperties();
 					groupIndex++;
 				} else {
-					ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
-					endPoint.setServiceEntryPoint(RPCService.DocumentService);	
 					documentService.createFromTemplate(docPath, destinationPath, formElementList, new AsyncCallback<Object>() {
 						@Override
 						public void onSuccess(Object result) {

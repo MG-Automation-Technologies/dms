@@ -11,7 +11,6 @@ import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FileUpload;
@@ -798,9 +797,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		notifyPanel.getAll();
 	}
 	
-	private void getFileUploadStatus() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) generalService;
-		endPoint.setServiceEntryPoint(RPCService.GeneralService);	
+	private void getFileUploadStatus() {	
 		generalService.getFileUploadStatus(callbackGetFileUploadStatus);
 	}
 	
