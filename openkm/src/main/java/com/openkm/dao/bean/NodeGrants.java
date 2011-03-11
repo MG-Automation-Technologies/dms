@@ -25,7 +25,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class AccessManager implements Serializable {
+public class NodeGrants implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String uuid;
 	private Set<String> usersRead = new HashSet<String>();
