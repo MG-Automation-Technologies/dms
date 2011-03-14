@@ -25,6 +25,9 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.google.gwt.user.server.rpc.SerializationPolicy;
 import com.openkm.core.Config;
@@ -38,6 +41,7 @@ import com.openkm.core.HttpSessionManager;
  *
  */
 public class OKMRemoteServiceServlet extends RemoteServiceServlet {
+	private static Logger log = LoggerFactory.getLogger(OKMRemoteServiceServlet.class);
 	private static final long serialVersionUID = 1L;
 	
 	@Override
@@ -54,6 +58,7 @@ public class OKMRemoteServiceServlet extends RemoteServiceServlet {
 	    	// ProxyPass /app/ ajp://localhost:8009/OpenKM/
 	    	// RequestHeader edit X-GWT-Module-Base ^(.*)/app/(.*)$ $1/OpenKM/$2
 	    	String moduleBaseURLHdr = request.getHeader("X-GWT-Module-Base");
+	    	log.debug("X-GWT-Module-Base: {}", moduleBaseURLHdr);
 	    	
 	    	if	(moduleBaseURLHdr != null) {
 	    		moduleBaseURL = moduleBaseURLHdr;
