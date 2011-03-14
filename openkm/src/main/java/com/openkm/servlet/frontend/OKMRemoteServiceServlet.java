@@ -23,8 +23,10 @@ package com.openkm.servlet.frontend;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.google.gwt.user.server.rpc.SerializationPolicy;
 import com.openkm.core.HttpSessionManager;
 
 /**
@@ -41,6 +43,23 @@ public class OKMRemoteServiceServlet extends RemoteServiceServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 	}
+	
+	@Override
+	protected SerializationPolicy doGetSerializationPolicy(HttpServletRequest request, String moduleBaseURL, String strongName) {
+	    // get the base url from the header instead of the body this way 
+	    // apache reverse proxy with rewrite on the header can work
+		// Suggested by http://stackoverflow.com/questions/1517290/problem-with-gwt-behind-a-reverse-proxy-either-nginx-or-apache
+		// ProxyPass /app/ ajp://localhost:8009/OpenKM/
+		// RequestHeader edit X-GWT-Module-Base ^(.*)/app/(.*)$ $1/OpenKM/$2
+	    String moduleBaseURLHdr = request.getHeader("X-GWT-Module-Base");
+
+	    if(moduleBaseURLHdr != null) {
+	        moduleBaseURL = moduleBaseURLHdr;
+	    }
+
+	    return super.doGetSerializationPolicy(request, moduleBaseURL, strongName);
+	}
+
 	
 	public void updateSessionManager() {
 		HttpSessionManager.getInstance().update(getThreadLocalRequest().getSession().getId());
