@@ -63,6 +63,7 @@ import com.openkm.dao.bean.UserConfig;
 import com.openkm.dao.bean.cache.UserItems;
 import com.openkm.util.DocConverter;
 import com.openkm.util.JCRUtils;
+import com.openkm.util.UserActivity;
 
 public class BaseDocumentModule {
 	private static Logger log = LoggerFactory.getLogger(BaseDocumentModule.class);
@@ -328,5 +329,33 @@ public class BaseDocumentModule {
 		lock.setToken(lck.getLockToken());
 		log.debug("getLock: {}", lock);
 		return lock;
+	}
+	
+	/**
+	 * Retrieve the content input stream from a document path
+	 */
+	public static InputStream getContent(Session session, String docPath, boolean checkout) throws 
+			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException, IOException {
+		Node documentNode = session.getRootNode().getNode(docPath.substring(1));
+		InputStream is = getContent(session, documentNode);
+
+		// Activity log
+		UserActivity.log(session.getUserID(), (checkout?"GET_DOCUMENT_CONTENT_CHECKOUT":"GET_DOCUMENT_CONTENT"), documentNode.getUUID(), is.available()+", "+docPath);
+		
+		return is;
+	}
+	
+	/**
+	 * Retrieve the content InputStream from a given Node. 
+	 */
+	public static InputStream getContent(Session session, Node docNode) throws javax.jcr.PathNotFoundException,
+			javax.jcr.RepositoryException, IOException {
+		log.debug("getContent({}, {})", session, docNode);
+		
+		Node contentNode = docNode.getNode(Document.CONTENT);
+		InputStream is = contentNode.getProperty(JcrConstants.JCR_DATA).getStream();
+		
+		log.debug("getContent: {}", is);
+		return is;
 	}
 }
