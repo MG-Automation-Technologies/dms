@@ -128,7 +128,7 @@ public class Config {
 	public static final String PROPERTY_SUBSCRIPTION_TWITTER_STATUS = "notify.twitter.status";
 	
 	public static final String PROPERTY_SYSTEM_DEMO = "system.demo";
-	public static final String PROPERTY_SYSTEM_APACHE_PROXY = "system.apache.proxy";
+	public static final String PROPERTY_SYSTEM_APACHE_REQUEST_HEADER_FIX = "system.apache.request.header.fix";
 	public static final String PROPERTY_SYSTEM_WEBDAV_SERVER = "system.webdav.server";
 	public static final String PROPERTY_SYSTEM_WEBDAV_FIX = "system.webdav.fix";
 	public static final String PROPERTY_SYSTEM_READONLY = "system.readonly";
@@ -268,7 +268,7 @@ public class Config {
 	public static String SUBSCRIPTION_TWITTER_STATUS;
 	
 	public static boolean SYSTEM_DEMO;
-	public static boolean SYSTEM_APACHE_PROXY;
+	public static boolean SYSTEM_APACHE_REQUEST_HEADER_FIX;
 	public static boolean SYSTEM_WEBDAV_SERVER;
 	public static boolean SYSTEM_WEBDAV_FIX;
 	public static boolean SYSTEM_MAINTENANCE;
@@ -590,8 +590,8 @@ public class Config {
 			
 			SYSTEM_DEMO = ConfigDAO.getBoolean(PROPERTY_SYSTEM_DEMO, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_SYSTEM_DEMO, "off")));
 			values.put(PROPERTY_SYSTEM_DEMO, Boolean.toString(SYSTEM_DEMO));
-			SYSTEM_APACHE_PROXY = ConfigDAO.getBoolean(PROPERTY_SYSTEM_APACHE_PROXY, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_SYSTEM_APACHE_PROXY, "off")));
-			values.put(PROPERTY_SYSTEM_APACHE_PROXY, Boolean.toString(SYSTEM_APACHE_PROXY));
+			SYSTEM_APACHE_REQUEST_HEADER_FIX = ConfigDAO.getBoolean(PROPERTY_SYSTEM_APACHE_REQUEST_HEADER_FIX, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_SYSTEM_APACHE_REQUEST_HEADER_FIX, "off")));
+			values.put(PROPERTY_SYSTEM_APACHE_REQUEST_HEADER_FIX, Boolean.toString(SYSTEM_APACHE_REQUEST_HEADER_FIX));
 			SYSTEM_WEBDAV_SERVER = ConfigDAO.getBoolean(PROPERTY_SYSTEM_WEBDAV_SERVER, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_SYSTEM_WEBDAV_SERVER, "off")));
 			values.put(PROPERTY_SYSTEM_WEBDAV_SERVER, Boolean.toString(SYSTEM_WEBDAV_SERVER));
 			SYSTEM_WEBDAV_FIX = ConfigDAO.getBoolean(PROPERTY_SYSTEM_WEBDAV_FIX, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_SYSTEM_WEBDAV_FIX, "off")));
