@@ -34,6 +34,7 @@ import org.apache.jackrabbit.core.SessionImpl;
 import org.jbpm.JbpmContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import com.openkm.cache.UserDocumentKeywordsManager;
 import com.openkm.cache.UserItemsManager;
@@ -81,6 +82,10 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         // Read config file
         Config.load(sc.getContextPath().substring(1));
+        
+        // Call only once during initialization time of your application
+        // @see http://issues.openkm.com/view.php?id=1577
+        SLF4JBridgeHandler.install();
         
         // Get OpenKM version
         WarUtils.readAppVersion(sc);
