@@ -51,7 +51,7 @@ public class OKMRemoteServiceServlet extends RemoteServiceServlet {
 	
 	@Override
 	protected SerializationPolicy doGetSerializationPolicy(HttpServletRequest request, String moduleBaseURL, String strongName) {
-	    if (Config.SYSTEM_APACHE_PROXY) {
+	    if (Config.SYSTEM_APACHE_REQUEST_HEADER_FIX) {
 	    	// Get base url from the header instead of the body. This way 
 	    	// Apache reverse proxy with rewrite on header can work.
 	    	// Suggested at http://stackoverflow.com/questions/1517290/problem-with-gwt-behind-a-reverse-proxy-either-nginx-or-apache
