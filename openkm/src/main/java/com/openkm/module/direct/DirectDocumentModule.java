@@ -326,34 +326,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("getProperties: {}", doc);
 		return doc;
 	}
-	
-	/**
-	 * Retrieve the content InputStream from a given Node. 
-	 */
-	public InputStream getContent(Session session, Node docNode) throws javax.jcr.PathNotFoundException,
-			javax.jcr.RepositoryException, IOException {
-		log.debug("getContent({}, {})", session, docNode);
-		
-		Node contentNode = docNode.getNode(Document.CONTENT);
-		InputStream is = contentNode.getProperty(JcrConstants.JCR_DATA).getStream();
-		
-		log.debug("getContent: {}", is);
-		return is;
-	}
-	
-	/**
-	 * Retrieve the content input stream from a document path
-	 */
-	public InputStream getContent(Session session, String docPath, boolean checkout) throws 
-			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException, IOException {
-		Node documentNode = session.getRootNode().getNode(docPath.substring(1));
-		InputStream is = getContent(session, documentNode);
-
-		// Activity log
-		UserActivity.log(session.getUserID(), (checkout?"GET_DOCUMENT_CONTENT_CHECKOUT":"GET_DOCUMENT_CONTENT"), documentNode.getUUID(), is.available()+", "+docPath);
-		
-		return is;
-	}
 
 	@Override
 	public InputStream getContent(String token, String docPath, boolean checkout) throws 
@@ -369,7 +341,7 @@ public class DirectDocumentModule implements DocumentModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			is = getContent(session, docPath, checkout);
+			is = BaseDocumentModule.getContent(session, docPath, checkout);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
