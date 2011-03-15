@@ -34,9 +34,8 @@ import java.util.Set;
  */
 public class Document implements Serializable {
 	private static final long serialVersionUID = 4453338766237619444L;
-	
 	public static final String TYPE = "okm:document";
-	public static final String CONTENT = "okm:content"; 
+	public static final String CONTENT = "okm:content";
 	public static final String CONTENT_TYPE = "okm:resource";
 	public static final String SIZE = "okm:size";
 	public static final String LANGUAGE = "okm:language";
