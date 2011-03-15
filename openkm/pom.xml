@@ -4,7 +4,7 @@
   <groupId>com.openkm</groupId>
   <artifactId>openkm</artifactId>
   <packaging>war</packaging>
-  <version>LTE</version>
+  <version>5.1</version>
   <name>OpenKM Web Application</name>
   <url>http://www.openkm.com</url>
   <description>OpenKM is powerful scalable Document Management System (DMS). OpenKM uses JBoss + J2EE + Ajax web (GWT) + Jackrabbit (lucene) open source technologies.</description>
@@ -215,11 +215,10 @@
 
     <!-- Base64 encoding / decoding -->
     <!-- http://www.techiegyan.com/?p=333 -->
-    <!-- Downgraded to 1.3 due to GWT 2.2 dependency -->
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
-      <version>1.2</version>
+      <version>1.4</version>
     </dependency>
 
     <!-- Jackrabbit -->
@@ -509,7 +508,7 @@
     <dependency>
       <groupId>com.openkm</groupId>
       <artifactId>extensions-full</artifactId>
-      <version>LTE</version>
+      <version>5.1</version>
     </dependency>
     
     <!-- Gdata librariess -->

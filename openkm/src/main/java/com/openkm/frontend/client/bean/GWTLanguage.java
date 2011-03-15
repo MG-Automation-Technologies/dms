@@ -30,6 +30,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  *
  */
 public class GWTLanguage implements IsSerializable {
+	private static final long serialVersionUID = 1495639327488094214L;
 	private String id = "";
 	private String name = "";
 	

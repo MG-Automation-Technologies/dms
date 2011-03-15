@@ -36,6 +36,7 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -53,6 +54,7 @@ import com.openkm.frontend.client.bean.GWTKeyword;
 import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.bean.GWTQueryResult;
 import com.openkm.frontend.client.bean.GWTResultSet;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.service.OKMSearchServiceAsync;
 import com.openkm.frontend.client.widget.dashboard.AnchorExtended;
@@ -574,7 +576,9 @@ public class KeyMapDashboard extends Composite {
 		if (!firstTime) {
 			keyAllTable.setRefreshing();
 			keyTopTable.setRefreshing();
-		}		
+		}
+		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
+		endPoint.setServiceEntryPoint(RPCService.SearchService);		
 		searchService.getKeywordMap(new ArrayList<String>(), callbackGetKeywordMap);
 	}
 	
@@ -587,7 +591,10 @@ public class KeyMapDashboard extends Composite {
 		if (!filter.isEmpty()) {
 			if (!firstTime && keyRelatedTable.isVisible()) {
 				keyRelatedTable.setRefreshing();
-			}		
+			}
+			
+			ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
+			endPoint.setServiceEntryPoint(RPCService.SearchService);		
 			searchService.getKeywordMap(filter, callbackGetKeywordMapFiltered);
 		} else {
 			keyRelatedTable.reset();
@@ -608,7 +615,10 @@ public class KeyMapDashboard extends Composite {
 		
 		if (!firstTime) {
 			table.setRefreshing();
-		}		
+		}
+		
+		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
+		endPoint.setServiceEntryPoint(RPCService.SearchService);		
 		GWTQueryParams params = new GWTQueryParams();
 		params.setKeywords(getWordsToFilter());
 		params.setDomain(GWTQueryParams.DOCUMENT); // Only make searches for documents

@@ -33,6 +33,7 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -49,6 +50,7 @@ import com.openkm.frontend.client.bean.GWTPermission;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.ToolBarOption;
 import com.openkm.frontend.client.contants.service.ErrorCode;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.contants.ui.UIDockPanelConstants;
 import com.openkm.frontend.client.contants.ui.UIFileUploadConstants;
@@ -621,8 +623,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		// First must validate path is correct
 		if (Main.get().userHome!=null && !Main.get().userHome.getHomePath().equals("")) {
 			if (Main.get().userHome.getHomeType().equals(Bookmark.BOOKMARK_DOCUMENT)) {
+				ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
+				endPoint.setServiceEntryPoint(RPCService.DocumentService);
 				documentService.isValid( Main.get().userHome.getHomePath() ,callbackIsValidDocument);
 			} else if (Main.get().userHome.getHomeType().equals(Bookmark.BOOKMARK_FOLDER)) {
+				ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
+				endPoint.setServiceEntryPoint(RPCService.FolderService);	
 				folderService.isValid(Main.get().userHome.getHomePath(), callbackIsValidFolder);
 			}
 		}
@@ -2499,6 +2505,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	private void getAllGroups() {
 		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 		if (gwtDocument!= null) {
+			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
+			endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
 			propertyGroupService.getAllGroups(gwtDocument.getPath(), callbackGetAllGroups);
 		}
 	}

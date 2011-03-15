@@ -498,7 +498,6 @@ public class DocConverter {
 	private class FileOrderComparator implements Comparator<File> {
 		@Override
 		public int compare(File o1, File o2) {
-			// Filenames are out-1.jpg, out-2.jpg, ..., out-10.jpg, ... 
 			int o1Ord = Integer.parseInt((o1.getName().split("\\.")[0]).split("-")[1]);
 			int o2Ord = Integer.parseInt((o2.getName().split("\\.")[0]).split("-")[1]);
 			

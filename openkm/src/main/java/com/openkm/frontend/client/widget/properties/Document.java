@@ -38,6 +38,7 @@ import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -59,6 +60,7 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTKeyword;
 import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.extension.event.HasDocumentEvent;
 import com.openkm.frontend.client.service.OKMDocumentService;
@@ -593,6 +595,8 @@ public class Document extends Composite {
 	 */
 	public void getVersionHistorySize() {
 		Main.get().mainPanel.desktop.browser.tabMultiple.status.setGetVersionHistorySize();
+		ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
+		endPoint.setServiceEntryPoint(RPCService.DocumentService);
 		documentService.getVersionHistorySize(document.getPath(), callbackGetVersionHistorySize);
 	}
 	
@@ -600,6 +604,8 @@ public class Document extends Composite {
 	 * addKeyword document
 	 */
 	public void addKeyword(String keyword) {
+		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
+		endPoint.setServiceEntryPoint(RPCService.PropertyService);
 		propertyService.addKeyword(document.getPath(), keyword, callbackAddKeywords);
 	}
 	
@@ -608,6 +614,8 @@ public class Document extends Composite {
 	 */
 	public void removeKeyword(String keyword) {
 		Main.get().mainPanel.desktop.browser.tabMultiple.status.setKeywords();
+		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
+		endPoint.setServiceEntryPoint(RPCService.PropertyService);
 		propertyService.removeKeyword(document.getPath(), keyword, callbackRemoveKeywords);
 	}
 	
@@ -619,6 +627,8 @@ public class Document extends Composite {
 			document.getCategories().add(category);
 			drawCategory(category,remove);
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.setCategories();
+			ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
+			endPoint.setServiceEntryPoint(RPCService.PropertyService);
 			propertyService.addCategory(document.getPath(), category.getUuid(), callbackAddCategory);
 		}
 	}
@@ -628,6 +638,8 @@ public class Document extends Composite {
 	 */
 	public void removeCategory(String UUID) {
 		Main.get().mainPanel.desktop.browser.tabMultiple.status.setCategories();
+		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
+		endPoint.setServiceEntryPoint(RPCService.PropertyService);
 		propertyService.removeCategory(document.getPath(), UUID, callbackRemoveCategory);
 	}
 	

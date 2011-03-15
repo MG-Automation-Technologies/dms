@@ -28,11 +28,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
+
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMFolderService;
 import com.openkm.frontend.client.service.OKMFolderServiceAsync;
 import com.openkm.frontend.client.service.OKMRepositoryService;
@@ -192,7 +195,9 @@ public class FolderSelectTree extends Composite {
 	 * 
 	 * @param path The folder path selected to list items
 	 */
-	public void getChilds(String path) {	
+	public void getChilds(String path) {
+		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
+		endPoint.setServiceEntryPoint(RPCService.FolderService);	
 		Main.get().mainPanel.desktop.navigator.categoriesTree.categoriesSelectPopup.status.setFlagChilds();
 		folderService.getChilds(path, callbackGetChilds);
 	}	
@@ -200,7 +205,9 @@ public class FolderSelectTree extends Composite {
 	/**
 	 * Gets the root
 	 */
-	public void getCategories() {	
+	public void getCategories() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
+		endPoint.setServiceEntryPoint(RPCService.RepositoryService);	
 		Main.get().mainPanel.desktop.navigator.categoriesTree.categoriesSelectPopup.status.setFlagRoot();
 		repositoryService.getCategoriesFolder(callbackGetCategoriesFolder);
 	}

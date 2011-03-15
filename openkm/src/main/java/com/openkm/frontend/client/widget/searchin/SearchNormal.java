@@ -32,6 +32,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -44,6 +45,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
@@ -268,6 +270,8 @@ public class SearchNormal extends Composite {
 	 * Gets all users
 	 */
 	public void getAllUsers() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+		endPoint.setServiceEntryPoint(RPCService.AuthService);	
 		authService.getAllUsers(new AsyncCallback<List<String>>() {
 			public void onSuccess(List<String> result) {
 				List<String> users = (List<String>) result;

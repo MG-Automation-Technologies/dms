@@ -28,10 +28,12 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTBookmark;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMBookmarkService;
 import com.openkm.frontend.client.service.OKMBookmarkServiceAsync;
 import com.openkm.frontend.client.service.OKMUserConfigService;
@@ -98,6 +100,8 @@ public class Bookmark {
 				MenuItem tmpBookmark = new MenuItem(Util.menuHTML(icon, bookmark.getName()), true, new Command() {
 						public void execute() {
 							if (bookmarkEnabled) {
+								ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
+								endPoint.setServiceEntryPoint(RPCService.BookmarkService);
 								bookmarkService.get(bookmark.getId(), new AsyncCallback<GWTBookmark>() {
 									@Override
 									public void onSuccess(GWTBookmark result) {
@@ -157,6 +161,8 @@ public class Bookmark {
 			MenuItem tmpBookmark = new MenuItem(Util.menuHTML(icon, bookmark.getName()), true, new Command() {
 				public void execute() {
 					if (bookmarkEnabled) {
+						ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
+						endPoint.setServiceEntryPoint(RPCService.BookmarkService);
 						bookmarkService.get(bookmark.getId(), new AsyncCallback<GWTBookmark>() {
 							@Override
 							public void onSuccess(GWTBookmark result) {
@@ -229,7 +235,9 @@ public class Bookmark {
 	 * Gets the bookmark list from the server
 	 * 
 	 */
-	public void getAll() {		
+	public void getAll() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
+		endPoint.setServiceEntryPoint(RPCService.BookmarkService);			
 		bookmarkService.getAll(callbackGetAll);
 	}
 	
@@ -240,7 +248,9 @@ public class Bookmark {
 	 * @param name String The bookmark name
 	 * @param document boolean is document
 	 */
-	public void add(String nodePath, String name) {			
+	public void add(String nodePath, String name) {
+		ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
+		endPoint.setServiceEntryPoint(RPCService.BookmarkService);			
 		bookmarkService.add(nodePath, name, callbackAdd);
 	}
 	
@@ -249,7 +259,9 @@ public class Bookmark {
 	 * 
 	 */
 	public void setUserHome() {
-		if (nodePath!=null && !nodePath.equals("")) { 		
+		if (nodePath!=null && !nodePath.equals("")) { 
+			ServiceDefTarget endPoint = (ServiceDefTarget) userConfigService;
+			endPoint.setServiceEntryPoint(RPCService.UserConfigService);			
 			userConfigService.setUserHome(nodePath, callbackSetUserHome);
 		}
 	}

@@ -31,13 +31,22 @@ import java.util.Map.Entry;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
+import javax.jcr.nodetype.ConstraintViolationException;
+import javax.jcr.nodetype.NoSuchNodeTypeException;
+import javax.jcr.version.VersionException;
 
 import org.apache.jackrabbit.api.XASession;
+import org.apache.jackrabbit.core.NodeImpl;
+import org.apache.jackrabbit.core.SessionImpl;
+import org.apache.jackrabbit.core.security.AccessManager;
+import org.apache.jackrabbit.spi.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.ContentInfo;
+import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
+import com.openkm.bean.Mail;
 import com.openkm.bean.Repository;
 import com.openkm.cache.UserItemsManager;
 import com.openkm.core.AccessDeniedException;
@@ -172,11 +181,11 @@ public class DirectFolderModule implements FolderModule {
 			Node parentNode = folderNode.getParent();
 			Node userTrash = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
 			
-			if (BaseFolderModule.hasLockedNodes(folderNode)) {
+			if (hasLockedNodes(folderNode)) {
 				throw new LockException("Can't delete a folder with child locked nodes");
 			}
 			
-			if (!BaseFolderModule.hasWriteAccess(folderNode)) {
+			if (!hasWriteAccess(folderNode)) {
 				throw new AccessDeniedException("Can't delete a folder with readonly nodes");
 			}
 			
@@ -221,6 +230,60 @@ public class DirectFolderModule implements FolderModule {
 				
 		log.debug("delete: void");
 	}
+
+	/**
+	 * Check recursively if the folder contains locked nodes
+	 */
+	private boolean hasLockedNodes(Node node) throws javax.jcr.RepositoryException {
+		boolean hasLock = false;
+		
+		for (NodeIterator ni = node.getNodes(); ni.hasNext(); ) {
+			Node child = ni.nextNode();
+			
+			if (child.isNodeType(Document.TYPE)) {
+				hasLock |= child.isLocked();
+			} else if (child.isNodeType(Folder.TYPE)) {
+				hasLock |= hasLockedNodes(child);
+			} else if (child.isNodeType(Mail.TYPE)) {
+				// Mail nodes can't be locked
+			} else {
+				throw new javax.jcr.RepositoryException("Unknown node type");
+			}
+		}
+		
+		return hasLock;
+	}
+	
+	/**
+	 * Check if a node has removable childs
+	 * TODO: Is this neccessary? The access manager should prevent this an
+	 * make the core thown an exception. 
+	 */
+	private boolean hasWriteAccess(Node node) throws javax.jcr.RepositoryException {
+		log.debug("hasWriteAccess({})", node.getPath());
+		final int REMOVE_NODE = org.apache.jackrabbit.core.security.authorization.Permission.REMOVE_NODE;
+		boolean canWrite = true;
+		AccessManager am = ((SessionImpl) node.getSession()).getAccessManager();
+		
+		for (NodeIterator ni = node.getNodes(); ni.hasNext(); ) {
+			Node child = ni.nextNode();
+			Path path = ((NodeImpl)node).getPrimaryPath();
+			
+			if (child.isNodeType(Document.TYPE)) {
+				canWrite &= am.isGranted(path, REMOVE_NODE);
+			} else if (child.isNodeType(Folder.TYPE)) {
+				canWrite &= am.isGranted(path, REMOVE_NODE);
+				canWrite &= hasWriteAccess(child);
+			} else if (child.isNodeType(Mail.TYPE)) {
+				canWrite &= am.isGranted(path, REMOVE_NODE);
+			} else {
+				throw new javax.jcr.RepositoryException("Unknown node type");
+			}
+		}
+		
+		log.debug("hasWriteAccess: {}", canWrite);
+		return canWrite;
+	}
 	
 	@Override
 	public void purge(String token, String fldPath) throws AccessDeniedException, RepositoryException, 
@@ -245,7 +308,7 @@ public class DirectFolderModule implements FolderModule {
 			
 			synchronized (folderNode) {
 				parentNode = folderNode.getParent();
-				userItemsHash = BaseFolderModule.purge(session, folderNode);
+				userItemsHash = purgeHelper(session, folderNode);
 				parentNode.save();
 			}
 			
@@ -283,6 +346,44 @@ public class DirectFolderModule implements FolderModule {
 		}
 		
 		log.debug("purge: void");
+	}
+	
+	/**
+	 * Purge folders recursively
+	 */
+	public HashMap<String, UserItems> purgeHelper(Session session, Node fldNode) throws VersionException, 
+			javax.jcr.lock.LockException, ConstraintViolationException, javax.jcr.RepositoryException {
+		HashMap<String, UserItems> userItemsHash = new HashMap<String, UserItems>();
+		
+		for (NodeIterator nit = fldNode.getNodes(); nit.hasNext(); ) {
+			HashMap<String, UserItems> userItemsHashRet = new HashMap<String, UserItems>();
+			Node node = nit.nextNode();
+			
+			if (node.isNodeType(Document.TYPE)) {
+				userItemsHashRet = new DirectDocumentModule().purgeHelper(session, node.getParent(), node);
+			} else if (node.isNodeType(Folder.TYPE)) {
+				userItemsHashRet = purgeHelper(session, node);
+				//String author = node.getProperty(Folder.AUTHOR).getString();
+				//userItemsHashRet.get(key)
+			}
+			
+			if (Config.USER_ITEM_CACHE) {
+				// Join hash maps
+				for (Iterator<Entry<String, UserItems>> entIt = userItemsHashRet.entrySet().iterator(); entIt.hasNext(); ) {
+					Entry<String, UserItems> entry = entIt.next();
+					String uid = entry.getKey();
+					UserItems userItem = entry.getValue();
+					UserItems userItemTmp = userItemsHash.get(uid);
+					if (userItemTmp == null) userItemTmp = new UserItems();
+					userItemTmp.setSize(userItemTmp.getSize() + userItem.getSize());
+					userItemTmp.setDocuments(userItemTmp.getDocuments() + userItem.getDocuments());
+					userItemsHash.put(uid, userItemTmp);
+				}
+			}
+		}
+		
+		fldNode.remove();
+		return userItemsHash;
 	}
 	
 	@Override
@@ -430,7 +531,7 @@ public class DirectFolderModule implements FolderModule {
 			Node dstFolderNode = session.getRootNode().getNode(dstPath.substring(1));
 			Node newFolder = BaseFolderModule.create(session, dstFolderNode, name);
 			dstFolderNode.save();
-			BaseFolderModule.copy(session, srcFolderNode, newFolder);
+			copyHelper(session, srcFolderNode, newFolder);
 			
 			//t.end();
 			//t.commit();
@@ -462,6 +563,33 @@ public class DirectFolderModule implements FolderModule {
 		}
 
 		log.debug("copy: void");
+	}
+
+	/**
+	 * Performs recursive node copy
+	 */
+	private void copyHelper(Session session, Node srcFolderNode, Node dstFolderNode) throws NoSuchNodeTypeException, 
+			VersionException, ConstraintViolationException, javax.jcr.lock.LockException, 
+			javax.jcr.RepositoryException, IOException, DatabaseException, UserQuotaExceededException {
+		log.debug("copyHelper({}, {}, {})", new Object[] { session, srcFolderNode.getPath(), dstFolderNode.getPath() });
+		
+		for (NodeIterator it = srcFolderNode.getNodes(); it.hasNext(); ) {
+			Node child = it.nextNode();
+			
+			if (child.isNodeType(Document.TYPE)) {
+				new DirectDocumentModule().copy(session, child, dstFolderNode);
+				dstFolderNode.save();
+			} else if (child.isNodeType(Mail.TYPE)) {
+				new DirectMailModule().copy(session, child, dstFolderNode);
+				dstFolderNode.save();
+			} else if (child.isNodeType(Folder.TYPE)) {
+				Node newFolder = BaseFolderModule.create(session, dstFolderNode, child.getName());
+				dstFolderNode.save();
+				copyHelper(session, child, newFolder);
+			}
+		}
+		
+		log.debug("copyHelper: void");
 	}
 	
 	@Override
@@ -519,7 +647,7 @@ public class DirectFolderModule implements FolderModule {
 			}
 			
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
-			contentInfo = BaseFolderModule.getContentInfo(folderNode);
+			contentInfo = getContentInfoHelper(folderNode);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "GET_FOLDER_CONTENT_INFO", folderNode.getUUID(), contentInfo.toString()+", "+fldPath);
@@ -537,6 +665,49 @@ public class DirectFolderModule implements FolderModule {
 		}
 		
 		log.debug("getContentInfo: {}", contentInfo);
+		return contentInfo;
+	}
+
+	/**
+	 * Get content info recursively
+	 */
+	private ContentInfo getContentInfoHelper(Node folderNode) throws AccessDeniedException, 
+			RepositoryException, PathNotFoundException {
+		log.debug("getContentInfoHelper({})", folderNode);
+		ContentInfo contentInfo = new ContentInfo();
+		
+		try {
+			for (NodeIterator ni = folderNode.getNodes(); ni.hasNext(); ) {
+				Node child = ni.nextNode();
+				
+				if (child.isNodeType(Folder.TYPE)) {
+					ContentInfo ci = getContentInfoHelper(child);
+					contentInfo.setFolders(contentInfo.getFolders() + ci.getFolders() + 1);
+					contentInfo.setDocuments(contentInfo.getDocuments() + ci.getDocuments());
+					contentInfo.setSize(contentInfo.getSize() + ci.getSize());
+				} else if (child.isNodeType(Document.TYPE)) {
+					Node documentContentNode = child.getNode(Document.CONTENT);
+					long size = documentContentNode.getProperty(Document.SIZE).getLong();
+					contentInfo.setDocuments(contentInfo.getDocuments() + 1);
+					contentInfo.setSize(contentInfo.getSize() + size);
+				} else if (child.isNodeType(Mail.TYPE)) {
+					long size = child.getProperty(Mail.SIZE).getLong();
+					contentInfo.setMails(contentInfo.getMails() + 1);
+					contentInfo.setSize(contentInfo.getSize() + size);
+				}
+			}
+		} catch (javax.jcr.PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+			throw new PathNotFoundException(e.getMessage(), e);
+		} catch (javax.jcr.AccessDeniedException e) {
+			log.warn(e.getMessage(), e);
+			throw new AccessDeniedException(e.getMessage(), e);
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		}
+		
+		log.debug("getContentInfoHelper: {}", contentInfo);
 		return contentInfo;
 	}
 	

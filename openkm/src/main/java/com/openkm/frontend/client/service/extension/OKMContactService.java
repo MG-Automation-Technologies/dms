@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.extension.GWTContact;
 
@@ -35,7 +34,6 @@ import com.openkm.frontend.client.bean.extension.GWTContact;
  * @author jllort
  *
  */
-@RemoteServiceRelativePath("../extension/Contact")
 public interface OKMContactService extends RemoteService {
 	public void create (String uuid, GWTContact contact) throws OKMException;
 	public void delete (int id) throws OKMException;

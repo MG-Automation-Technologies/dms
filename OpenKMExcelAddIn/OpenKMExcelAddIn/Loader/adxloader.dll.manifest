@@ -1,5 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<configuration>
-  <assemblyIdentity name="OpenKMExcelAddIn, PublicKeyToken=8a49bccff3235731" />
-  <loaderSettings generateLogFile="true" shadowCopyEnabled="true" privileges="user" configFileName="app.config" />
-</configuration>

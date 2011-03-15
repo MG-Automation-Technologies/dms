@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.extension.GWTProposedQueryReceived;
 
@@ -33,7 +32,6 @@ import com.openkm.frontend.client.bean.extension.GWTProposedQueryReceived;
  * @author jllort
  *
  */
-@RemoteServiceRelativePath("../extension/ProposedQuery")
 public interface OKMProposedQueryService extends RemoteService {
 	public void create(int qpId, String users, String roles, String comment) throws OKMException;
 	public Map<String, Long> findProposedQueriesUsersFrom() throws OKMException;

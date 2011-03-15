@@ -267,7 +267,7 @@ public class ExtendedDockPanel extends Composite {
 									propagate = false;
 								} else if (Main.get().mainPanel.topPanel.toolBar.getToolBarOption().renameOption && (
 										   Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected() || 
-										   Main.get().mainPanel.desktop.browser.fileBrowser.isFolderSelected() || 
+										   Main.get().mainPanel.desktop.browser.fileBrowser.isFolderSelected()|| 
 										   Main.get().mainPanel.desktop.browser.fileBrowser.isMailSelected())) {
 									
 									Main.get().mainPanel.desktop.browser.fileBrowser.rename();

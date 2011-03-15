@@ -166,6 +166,7 @@ public class Folder extends Composite {
 		Util.createFolderURLClipboardButton(url);
 		
 		// Webdav
+		// Webdav
 		String webdavUrl = Main.get().workspaceUserProperties.getApplicationURL();
 		if (webdavUrl.lastIndexOf('/')>0) {
 			int idx = webdavUrl.lastIndexOf('/');

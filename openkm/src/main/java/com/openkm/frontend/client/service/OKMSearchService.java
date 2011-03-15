@@ -24,7 +24,6 @@ package com.openkm.frontend.client.service;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTKeyword;
 import com.openkm.frontend.client.bean.GWTQueryParams;
@@ -36,8 +35,8 @@ import com.openkm.frontend.client.bean.GWTResultSet;
  * @author jllort
  *
  */
-@RemoteServiceRelativePath("Search")
 public interface OKMSearchService extends RemoteService {
+		
 	public List<GWTQueryParams> getAllSearchs() throws OKMException; 
 	public Integer saveSearch(GWTQueryParams params, String type) throws OKMException;
 	public void deleteSearch(int id) throws OKMException;

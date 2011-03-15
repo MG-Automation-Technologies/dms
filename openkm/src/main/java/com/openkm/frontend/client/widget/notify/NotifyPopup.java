@@ -25,6 +25,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
@@ -34,6 +35,7 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMNotifyService;
 import com.openkm.frontend.client.service.OKMNotifyServiceAsync;
 
@@ -200,7 +202,9 @@ public class NotifyPopup extends DialogBox  {
 	/**
 	 * Sens the link notification
 	 */
-	private void sendLinkNotification() {	
+	private void sendLinkNotification() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) notifyService;
+		endPoint.setServiceEntryPoint(RPCService.NotifyService);	
 		switch(type) {
 			case NOTIFY_WITH_LINK:
 				notifyService.notify(doc.getPath(), users, roles, message.getText(), false, callbackNotify);

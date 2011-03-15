@@ -25,11 +25,14 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTTaskInstance;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMWorkflowService;
 import com.openkm.frontend.client.service.OKMWorkflowServiceAsync;
 
@@ -176,7 +179,9 @@ public class WorkflowDashboard extends Composite {
 	public void findUserTaskInstances() {
 		if (!firstTime) {
 			pendingTasks.setRefreshing();
-		}	
+		}
+		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
+		endPoint.setServiceEntryPoint(RPCService.WorkflowService);		
 		workflowService.findUserTaskInstances(callbackFindUserTaskInstancess);
 	}
 	
@@ -186,7 +191,9 @@ public class WorkflowDashboard extends Composite {
 	private void findPooledTaskInstances() {
 		if (!firstTime) {
 			pendingPooledTasks.setRefreshing();
-		}	
+		}
+		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
+		endPoint.setServiceEntryPoint(RPCService.WorkflowService);		
 		workflowService.findPooledTaskInstances(callbackPooledTaskInstances);
 	}
 	
@@ -195,7 +202,9 @@ public class WorkflowDashboard extends Composite {
 	 */
 	public void setTaskInstanceActorId() {
 		if (pendingPooledTasks.getPooledTaskInstance() != null) {
-			GWTTaskInstance taskInstance = pendingPooledTasks.getPooledTaskInstance();		
+			GWTTaskInstance taskInstance = pendingPooledTasks.getPooledTaskInstance();
+			ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
+			endPoint.setServiceEntryPoint(RPCService.WorkflowService);		
 			workflowService.setTaskInstanceActorId(taskInstance.getId(), callbackSetTaskInstanceActorId);
 		}
 	}

@@ -87,7 +87,7 @@ public class SecureStore {
 	 * Base64 decoder
 	 */
 	public static byte[] b64Decode(String src) {
-		return Base64.decodeBase64(src.getBytes());
+		return Base64.decodeBase64(src);
 	}
 	
 	/**

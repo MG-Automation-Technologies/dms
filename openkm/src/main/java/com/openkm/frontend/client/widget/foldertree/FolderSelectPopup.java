@@ -28,6 +28,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
@@ -43,6 +44,7 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
@@ -200,6 +202,7 @@ public class FolderSelectPopup extends DialogBox  {
 	 * Executes the action
 	 */
 	public void executeAction(String actualPath, boolean refresh) {
+		ServiceDefTarget endPoint;
 		String fatherPath = "";
 		this.refresh = refresh;
 		
@@ -211,6 +214,8 @@ public class FolderSelectPopup extends DialogBox  {
 						// Only move when origin and destination path are not equals
 						if (!fatherPath.equals(actualPath)) {
 							setActionView();
+							endPoint = (ServiceDefTarget) documentService;
+							endPoint.setServiceEntryPoint(RPCService.DocumentService);
 							documentService.move( ((GWTDocument) node).getPath(),actualPath, callbackMove);
 						} else {
 							changeStatusOnError("fileupload.label.error.not.allowed.copy.same.folder");
@@ -222,6 +227,8 @@ public class FolderSelectPopup extends DialogBox  {
 						// Only copy when origin and destination path are not equals
 						if (!fatherPath.equals(actualPath)) {
 							setActionView();
+							endPoint = (ServiceDefTarget) documentService;
+							endPoint.setServiceEntryPoint(RPCService.DocumentService);
 							documentService.copy( ((GWTDocument) node).getPath(),actualPath, callbackCopy);
 						} else {
 							changeStatusOnError("fileupload.label.error.not.allowed.copy.same.folder");
@@ -230,6 +237,8 @@ public class FolderSelectPopup extends DialogBox  {
 					
 					case ACTION_RESTORE:
 						setActionView();
+						endPoint = (ServiceDefTarget) documentService;
+						endPoint.setServiceEntryPoint(RPCService.DocumentService);
 						documentService.move( ((GWTDocument) node).getPath(),actualPath, callbackRestore);
 						break;
 					
@@ -241,7 +250,9 @@ public class FolderSelectPopup extends DialogBox  {
 							if (((GWTDocument) node).getMimeType().equals("application/pdf") && 
 								Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.hasPropertyGroups()) {
 								Main.get().templateWizardPopup.start(((GWTDocument) node).getPath(), actualPath + "/" + ((GWTDocument) node).getName());
-							} else {						
+							} else {
+								endPoint = (ServiceDefTarget) documentService;
+								endPoint.setServiceEntryPoint(RPCService.DocumentService);								
 								documentService.copy(((GWTDocument) node).getPath(),actualPath,callbackCopyFromTemplate);
 							}
 						} else {
@@ -258,6 +269,8 @@ public class FolderSelectPopup extends DialogBox  {
 						// Only move when origin and destination path are not equals
 						if (!fatherPath.equals(actualPath)) {
 							setActionView();
+							endPoint = (ServiceDefTarget) mailService;
+							endPoint.setServiceEntryPoint(RPCService.MailService);
 							mailService.move( ((GWTMail) node).getPath(),actualPath, callbackMove);
 						} else {
 							changeStatusOnError("fileupload.label.error.not.allowed.copy.same.folder");
@@ -269,6 +282,8 @@ public class FolderSelectPopup extends DialogBox  {
 						// Only copy when origin and destination path are not equals
 						if (!fatherPath.equals(actualPath)) {
 							setActionView();
+							endPoint = (ServiceDefTarget) mailService;
+							endPoint.setServiceEntryPoint(RPCService.MailService);
 							mailService.copy( ((GWTMail) node).getPath(),actualPath, callbackCopy);
 						} else {
 							changeStatusOnError("fileupload.label.error.not.allowed.copy.same.folder");
@@ -277,6 +292,8 @@ public class FolderSelectPopup extends DialogBox  {
 					
 					case ACTION_RESTORE:
 						setActionView();
+						endPoint = (ServiceDefTarget) mailService;
+						endPoint.setServiceEntryPoint(RPCService.MailService);
 						mailService.move( ((GWTMail) node).getPath(),actualPath, callbackRestore);
 						break;
 				}
@@ -288,6 +305,8 @@ public class FolderSelectPopup extends DialogBox  {
 					// Only move when origin not contained on destination path and destination not equals actual parent
 					if ( actualPath.indexOf(((GWTFolder) node).getPath())==-1 && !((GWTFolder) node).getParentPath().equals(actualPath)) {
 						setActionView();
+						endPoint = (ServiceDefTarget) folderService;
+						endPoint.setServiceEntryPoint(RPCService.FolderService);
 						folderService.move( ((GWTFolder) node).getPath(),actualPath, callbackMove);
 					} else {
 						changeStatusOnError("fileupload.label.error.not.allowed.move.folder.child");
@@ -298,6 +317,8 @@ public class FolderSelectPopup extends DialogBox  {
 					// Only copy when origin and destination path are not equals
 					if ( !((GWTFolder) node).getPath().equals(actualPath) ) {
 						setActionView();
+						endPoint = (ServiceDefTarget) folderService;
+						endPoint.setServiceEntryPoint(RPCService.FolderService);
 						folderService.copy( ((GWTFolder) node).getPath(),actualPath, callbackCopy);
 					} else {
 						changeStatusOnError("fileupload.label.error.not.allowed.copy.same.folder");
@@ -306,6 +327,8 @@ public class FolderSelectPopup extends DialogBox  {
 				
 				case ACTION_RESTORE:
 					setActionView();
+					endPoint = (ServiceDefTarget) folderService;
+					endPoint.setServiceEntryPoint(RPCService.FolderService);
 					folderService.move( ((GWTFolder) node).getPath(), actualPath, callbackRestore);
 					break;
 			}

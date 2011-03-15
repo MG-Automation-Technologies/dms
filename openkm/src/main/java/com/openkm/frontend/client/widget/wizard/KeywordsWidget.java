@@ -36,6 +36,7 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -51,6 +52,7 @@ import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.google.gwt.user.client.ui.HTMLTable.RowFormatter;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTKeyword;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMPropertyService;
 import com.openkm.frontend.client.service.OKMPropertyServiceAsync;
 import com.openkm.frontend.client.util.OKMBundleResources;
@@ -345,6 +347,8 @@ public class KeywordsWidget extends Composite {
 	 * addKeyword document
 	 */
 	public void addKeyword(String keyword) {
+		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
+		endPoint.setServiceEntryPoint(RPCService.PropertyService);
 		propertyService.addKeyword(docPath, keyword, callbackAddKeywords);
 	}
 	
@@ -352,6 +356,8 @@ public class KeywordsWidget extends Composite {
 	 * removeKeyword document
 	 */
 	public void removeKeyword(String keyword) {
+		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
+		endPoint.setServiceEntryPoint(RPCService.PropertyService);
 		propertyService.removeKeyword(docPath, keyword, callbackRemoveKeywords);
 	}
 }

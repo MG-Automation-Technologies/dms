@@ -32,14 +32,17 @@ import com.google.gwt.gen2.table.client.AbstractScrollTable.ResizePolicy;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollPolicy;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
+
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 
@@ -445,7 +448,9 @@ public class UserScrollTable extends Composite {
 	 */
 	public void grant(String user, int permissions, boolean recursive) {
 		if (path != null) {
-			Main.get().securityPopup.status.setFlag_update();	
+			Main.get().securityPopup.status.setFlag_update();
+			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+			endPoint.setServiceEntryPoint(RPCService.AuthService);	
 			authService.grantUser(path, user, permissions, recursive, callbackGrantUser);
 		}
 	}
@@ -459,6 +464,8 @@ public class UserScrollTable extends Composite {
 	public void revoke(String user, int permissions, boolean recursive) {
 		if (path != null) {
 			Main.get().securityPopup.status.setFlag_update();
+			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+			endPoint.setServiceEntryPoint(RPCService.AuthService);	
 			authService.revokeUser(path, user, permissions, recursive, callbackRevokeUser);
 		}
 	}
