@@ -23,19 +23,16 @@ package com.openkm.module.direct;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
-import javax.jcr.ValueFormatException;
 
 import org.apache.jackrabbit.api.XASession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.bean.Document;
 import com.openkm.bean.Mail;
 import com.openkm.bean.Repository;
 import com.openkm.core.AccessDeniedException;
@@ -391,43 +388,6 @@ public class DirectMailModule implements MailModule {
 		
 		log.debug("move: void");
 	}
-	
-	/**
-	 * Copy recursively
-	 */
-	public void copy(Session session, Node srcMailNode, Node dstFolderNode) throws ValueFormatException, 
-			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException, IOException, DatabaseException,
-			UserQuotaExceededException {
-		log.debug("copy({}, {}, {})", new Object[] { session, srcMailNode, dstFolderNode });
-		
-		String name = srcMailNode.getName();
-		long size = srcMailNode.getProperty(Mail.SIZE).getLong();
-		String from = srcMailNode.getProperty(Mail.FROM).getString();
-		String[] reply = JCRUtils.value2String(srcMailNode.getProperty(Mail.REPLY).getValues());
-		String[] to = JCRUtils.value2String(srcMailNode.getProperty(Mail.TO).getValues());
-		String[] cc = JCRUtils.value2String(srcMailNode.getProperty(Mail.CC).getValues());
-		String[] bcc = JCRUtils.value2String(srcMailNode.getProperty(Mail.BCC).getValues());
-		Calendar sentDate = srcMailNode.getProperty(Mail.SENT_DATE).getDate(); 
-		Calendar receivedDate = srcMailNode.getProperty(Mail.RECEIVED_DATE).getDate();
-		String subject = srcMailNode.getProperty(Mail.SUBJECT).getString();
-		String content = srcMailNode.getProperty(Mail.CONTENT).getString();
-		String mimeType = srcMailNode.getProperty(Mail.MIME_TYPE).getString();
-		DirectDocumentModule ddm = new DirectDocumentModule();
-		
-		Node mNode = BaseMailModule.create(session, dstFolderNode, name, size, from, reply, to, 
-				cc, bcc, sentDate, receivedDate, subject, content, mimeType);
-		
-		// Get attachments
-		for (NodeIterator nit = srcMailNode.getNodes(); nit.hasNext(); ) {
-			Node node = nit.nextNode();
-
-			if (node.isNodeType(Document.TYPE)) {
-				ddm.copy(session, node, mNode);
-			}
-		}
-		
-		log.debug("copy: void");
-	}
 
 	@Override
 	public void copy(String token, String mailPath, String dstPath) throws AccessDeniedException,
@@ -454,7 +414,7 @@ public class DirectMailModule implements MailModule {
 			// Make some work
 			Node srcMailNode = session.getRootNode().getNode(mailPath.substring(1)); 
 			Node dstFolderNode = session.getRootNode().getNode(dstPath.substring(1));
-			copy(session, srcMailNode, dstFolderNode);
+			BaseMailModule.copy(session, srcMailNode, dstFolderNode);
 
 			t.end();
 			t.commit();
