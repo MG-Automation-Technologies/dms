@@ -75,6 +75,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.cache.UserItems;
 import com.openkm.module.RepositoryModule;
+import com.openkm.module.base.BaseDocumentModule;
 import com.openkm.module.base.BaseFolderModule;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.MailUtils;
@@ -798,9 +799,9 @@ public class DirectRepositoryModule implements RepositoryModule {
 				Node child = it.nextNode();
 				
 				if (child.isNodeType(Document.TYPE)) {
-					userItemsHashRet = new DirectDocumentModule().purgeHelper(session, child.getParent(), child);
+					userItemsHashRet = BaseDocumentModule.purge(session, child.getParent(), child);
 				} else if (child.isNodeType(Folder.TYPE)) {
-					userItemsHashRet = new DirectFolderModule().purgeHelper(session, child);
+					userItemsHashRet = BaseFolderModule.purge(session, child);
 				}
 				
 				if (Config.USER_ITEM_CACHE) {
