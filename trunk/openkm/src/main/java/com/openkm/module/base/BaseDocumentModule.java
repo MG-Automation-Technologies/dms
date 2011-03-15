@@ -21,10 +21,12 @@
 
 package com.openkm.module.base;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,6 +37,9 @@ import javax.jcr.PropertyType;
 import javax.jcr.Session;
 import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.jcr.Value;
+import javax.jcr.ValueFormatException;
+import javax.jcr.version.VersionHistory;
+import javax.jcr.version.VersionIterator;
 
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.jackrabbit.core.NodeImpl;
@@ -357,5 +362,86 @@ public class BaseDocumentModule {
 		
 		log.debug("getContent: {}", is);
 		return is;
+	}
+	
+	/**
+	 * Remove version history, compute free space and remove obsolete files from
+	 * PDF and previsualization cache.
+	 */
+	public static HashMap<String, UserItems> purge(Session session, Node parentNode, Node docNode) 
+			throws javax.jcr.PathNotFoundException, javax.jcr.RepositoryException {
+		Node contentNode = docNode.getNode(Document.CONTENT);
+		long size = contentNode.getProperty(Document.SIZE).getLong();
+		String author = contentNode.getProperty(Document.AUTHOR).getString();
+		VersionHistory vh = contentNode.getVersionHistory();
+		HashMap<String, UserItems> userItemsHash = new HashMap<String, UserItems>();
+		log.debug("VersionHistory UUID: {}", vh.getUUID());
+
+		// Remove pdf & preview from cache
+		new File(Config.CACHE_DXF + File.separator + docNode.getUUID() + ".dxf").delete();
+		new File(Config.CACHE_PDF + File.separator + docNode.getUUID() + ".pdf").delete();
+		new File(Config.CACHE_SWF + File.separator + docNode.getUUID() + ".swf").delete();
+		
+		// Remove node itself
+		docNode.remove();
+		parentNode.save();
+
+		// Unreferenced VersionHistory should be deleted automatically
+		// https://issues.apache.org/jira/browse/JCR-134
+		// http://markmail.org/message/7aildokt74yeoar5
+		// http://markmail.org/message/nhbwe7o3c7pd4sga
+		for (VersionIterator vi = vh.getAllVersions(); vi.hasNext(); ) {
+			javax.jcr.version.Version ver = vi.nextVersion();
+			String versionName = ver.getName();
+			log.debug("Version: {}", versionName);
+			
+			// The rootVersion is not a "real" version node.
+			if (!versionName.equals(JcrConstants.JCR_ROOTVERSION)) {
+				Node frozenNode = ver.getNode(JcrConstants.JCR_FROZENNODE);
+				size = frozenNode.getProperty(Document.SIZE).getLong();
+				author = frozenNode.getProperty(Document.AUTHOR).getString();
+				log.debug("vh.removeVersion({})", versionName);
+				vh.removeVersion(versionName);
+				
+				if (Config.USER_ITEM_CACHE) {
+					// Update local user items for versions
+					UserItems userItems = userItemsHash.get(author);
+					if (userItems == null) userItems = new UserItems();
+					userItems.setSize(userItems.getSize() + size);
+					userItems.setDocuments(userItems.getDocuments() + 1);
+					userItemsHash.put(author, userItems);
+				}
+			}
+		}
+		
+		if (Config.USER_ITEM_CACHE) {
+			// Update local user items for working version
+			UserItems userItems = userItemsHash.get(author);
+			if (userItems == null) userItems = new UserItems();
+			userItems.setSize(userItems.getSize() + size);
+			userItems.setDocuments(userItems.getDocuments() + 1);
+			userItemsHash.put(author, userItems);
+		}
+		
+		return userItemsHash;
+	}
+	
+	/**
+	 * Is invoked from DirectDocumentNode and DirectFolderNode.
+	 */
+	public static void copy(Session session, Node srcDocumentNode, Node dstFolderNode) throws
+			ValueFormatException, javax.jcr.PathNotFoundException, javax.jcr.RepositoryException,
+			IOException, DatabaseException, UserQuotaExceededException {
+		log.debug("copy({}, {}, {})", new Object[] { session, srcDocumentNode, dstFolderNode });
+		
+		Node srcDocumentContentNode = srcDocumentNode.getNode(Document.CONTENT);
+		String mimeType = srcDocumentContentNode.getProperty("jcr:mimeType").getString();
+		// String title = srcDocumentContentNode.getProperty(Document.TITLE).getString();
+		InputStream is = srcDocumentContentNode.getProperty("jcr:data").getStream();
+		BaseDocumentModule.create(session, dstFolderNode, srcDocumentNode.getName(), null /* title */,
+				mimeType, new String[]{}, is);
+		is.close();
+		
+		log.debug("copy: void");
 	}
 }
