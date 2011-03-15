@@ -32,6 +32,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.Property;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
@@ -399,6 +400,28 @@ public class JCRUtils {
 	public static String getPath(Session session, String uuid) throws javax.jcr.RepositoryException {
 		Node node = session.getNodeByUUID(uuid);
 		return node.getPath();
+	}
+	
+	/**
+	 * Get property from node
+	 */
+	public static Property getProperty(Node node, String name) throws javax.jcr.RepositoryException {
+		if (node.hasProperty(name)) {
+			return node.getProperty(name);
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Get property from node
+	 */
+	public static String getStringProperty(Node node, String name) throws javax.jcr.RepositoryException {
+		if (node.hasProperty(name)) {
+			return node.getProperty(name).getString();
+		} else {
+			return null;
+		}
 	}
 	
 	/**
