@@ -136,7 +136,7 @@ public class OKMDocument implements DocumentModule {
 	@Override
 	public Document rename(String token, String docPath, String newName) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("rename({}, {})", docPath, newName);
+		log.debug("rename({}, {}, {})", new Object[] { token, docPath, newName });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Document renamedDocument = dm.rename(token, docPath, newName);
 		log.debug("rename: {}", renamedDocument);
@@ -224,7 +224,7 @@ public class OKMDocument implements DocumentModule {
 	@Override
 	public void lock(String token, String docPath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("lock({})", docPath);
+		log.debug("lock({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.lock(token, docPath);
 		log.debug("lock: void");
