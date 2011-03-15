@@ -39,7 +39,7 @@ public class BaseServlet extends HttpServlet  {
 	 * Test if an user can access to administration when configured as SaaS
 	 */
 	public static boolean isMultipleInstancesAdmin(HttpServletRequest request) {
-		return Config.MULTIPLE_INSTANCES && request.getRemoteUser().equals(Config.ADMIN_USER) ||
-			!Config.MULTIPLE_INSTANCES && request.isUserInRole(Config.DEFAULT_ADMIN_ROLE);
+		return Config.SYSTEM_MULTIPLE_INSTANCES && request.getRemoteUser().equals(Config.ADMIN_USER) ||
+			!Config.SYSTEM_MULTIPLE_INSTANCES && request.isUserInRole(Config.DEFAULT_ADMIN_ROLE);
 	}
 }

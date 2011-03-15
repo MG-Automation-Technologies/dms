@@ -62,7 +62,6 @@ public class Config {
 	public static String CONTEXT;
 	public static String INSTANCE;
 	public static String INSTANCE_CHROOT_PATH;
-	public static boolean MULTIPLE_INSTANCES;
 	public static String JBPM_CONFIG;
 	public static String PROPERTY_GROUPS_XML;
 	public static String PROPERTY_GROUPS_CND;
@@ -78,7 +77,6 @@ public class Config {
 	// Configuration properties
 	public static final String PROPERTY_REPOSITORY_CONFIG = "repository.config";
 	public static final String PROPERTY_REPOSITORY_HOME = "repository.home";
-	public static final String PROPERTY_MULTIPLE_INSTANCES = "multiple.instances";
 	
 	public static final String PROPERTY_DEFAULT_USER_ROLE = "default.user.role";
 	public static final String PROPERTY_DEFAULT_ADMIN_ROLE = "default.admin.role";
@@ -128,6 +126,7 @@ public class Config {
 	public static final String PROPERTY_SUBSCRIPTION_TWITTER_STATUS = "notify.twitter.status";
 	
 	public static final String PROPERTY_SYSTEM_DEMO = "system.demo";
+	public static final String PROPERTY_SYSTEM_MULTIPLE_INSTANCES = "system.multiple.instances";
 	public static final String PROPERTY_SYSTEM_APACHE_REQUEST_HEADER_FIX = "system.apache.request.header.fix";
 	public static final String PROPERTY_SYSTEM_WEBDAV_SERVER = "system.webdav.server";
 	public static final String PROPERTY_SYSTEM_WEBDAV_FIX = "system.webdav.fix";
@@ -268,6 +267,7 @@ public class Config {
 	public static String SUBSCRIPTION_TWITTER_STATUS;
 	
 	public static boolean SYSTEM_DEMO;
+	public static boolean SYSTEM_MULTIPLE_INSTANCES;
 	public static boolean SYSTEM_APACHE_REQUEST_HEADER_FIX;
 	public static boolean SYSTEM_WEBDAV_SERVER;
 	public static boolean SYSTEM_WEBDAV_FIX;
@@ -450,12 +450,12 @@ public class Config {
 			values.put(PROPERTY_HIBERNATE_SHOW_SQL, HIBERNATE_SHOW_SQL);
 			
 			// Misc
-			MULTIPLE_INSTANCES = "on".equalsIgnoreCase(config.getProperty(PROPERTY_MULTIPLE_INSTANCES, "off"));
-			values.put(PROPERTY_MULTIPLE_INSTANCES, Boolean.toString(MULTIPLE_INSTANCES));
+			SYSTEM_MULTIPLE_INSTANCES = "on".equalsIgnoreCase(config.getProperty(PROPERTY_SYSTEM_MULTIPLE_INSTANCES, "off"));
+			values.put(PROPERTY_SYSTEM_MULTIPLE_INSTANCES, Boolean.toString(SYSTEM_MULTIPLE_INSTANCES));
 			
 			fis.close();
 			
-			if (MULTIPLE_INSTANCES) {
+			if (SYSTEM_MULTIPLE_INSTANCES) {
 				INSTANCE = HOME_DIR + File.separator + "instances" + File.separator + CONTEXT;
 				values.put("instance", INSTANCE);
 				INSTANCE_CHROOT_PATH = INSTANCE + File.separator + "root" + File.separator;
