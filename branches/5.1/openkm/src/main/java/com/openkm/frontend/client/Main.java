@@ -83,7 +83,6 @@ import com.openkm.frontend.client.widget.wizard.WizardPopup;
  *
  */
 public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasLanguageEvent {
-	
 	public static String CONTEXT = "/OpenKM";
 	private static Main singleton;
 	private final OKMLanguageServiceAsync languageService = (OKMLanguageServiceAsync) GWT.create(OKMLanguageService.class);
