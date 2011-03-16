@@ -65,7 +65,7 @@ public class TestPopup extends DialogBox {
 	Button close;
 	TextBox sizeTest;
 	TextBox cyclesTest;
-	TextBox numThreats;
+	TextBox numThreads;
 	ListBox type;
 	
 	String runnningTest = "";
@@ -104,12 +104,12 @@ public class TestPopup extends DialogBox {
 		cyclesTest.setSize("60", "20");
 		cyclesTest.setStyleName("okm-Input");
 		hPanel.add(cyclesTest);
-		hPanel.add (new HTML("&nbsp;Threats:"));
-		numThreats = new TextBox();
-		numThreats.setText("1");
-		numThreats.setSize("60", "20");
-		numThreats.setStyleName("okm-Input");
-		hPanel.add(numThreats);
+		hPanel.add (new HTML("&nbsp;Threads:"));
+		numThreads = new TextBox();
+		numThreads.setText("1");
+		numThreads.setSize("60", "20");
+		numThreads.setStyleName("okm-Input");
+		hPanel.add(numThreads);
 		hPanel.add(new HTML("&nbsp;"));
 		clean = new Button("Clean");
 		clean.addClickHandler(new ClickHandler() {
@@ -172,10 +172,10 @@ public class TestPopup extends DialogBox {
 		maxCycle = Integer.parseInt(cyclesTest.getText());
 		textSize = Integer.parseInt(sizeTest.getText());
 		log(runnningTest, "Starting");
-		int threat = Integer.parseInt(numThreats.getText()); 
+		int thread = Integer.parseInt(numThreads.getText()); 
 		int count = 0;
 		
-		while (count < threat) {
+		while (count < thread) {
 			controller();
 			count ++;
 		}
