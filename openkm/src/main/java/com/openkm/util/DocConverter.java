@@ -164,38 +164,50 @@ public class DocConverter {
 	 * Test if a MIME document can be converted to PDF
 	 */
 	public boolean convertibleToPdf(String from) {
+		log.debug("convertibleToPdf({})", from);
+		boolean ret = false;
+		
 		if ((!Config.SYSTEM_OPENOFFICE_PATH.equals("") || !Config.SYSTEM_OPENOFFICE_SERVER.equals("")) 
 				&& validOpenOffice.contains(from)) {
-			return true;
+			ret = true;
 		} else if (!Config.SYSTEM_IMAGEMAGICK_CONVERT.equals("") && validImageMagick.contains(from)) {
-			return true;
+			ret = true;
 		//} else if (!Config.SYSTEM_DWG2DXF.equals("") && validAutoCad.contains(from)) {
 		//	return true;
-		} else {
-			return false;
 		}
+		
+		log.debug("convertibleToPdf: {}", ret);
+		return ret;
 	}
 	
 	/**
 	 * Test if a MIME document can be converted to SWF
 	 */
 	public boolean convertibleToSwf(String from) {
+		log.debug("convertibleToSwf({})", from);
+		boolean ret = false;
+		
 		if (!Config.SYSTEM_SWFTOOLS_PDF2SWF.equals("") && (Config.MIME_PDF.equals(from) || convertibleToPdf(from))) {
-			return true;
-		} else {
-			return false;
+			ret = true;
 		}
+		
+		log.debug("convertibleToSwf: {}", ret);
+		return ret;
 	}
 	
 	/**
 	 * Test if a MIME document can be converted to DXF
 	 */
 	public boolean convertibleToDxf(String from) {
+		log.debug("convertibleToDxf({})", from);
+		boolean ret = false;
+		
 		if (!Config.SYSTEM_DWG2DXF.equals("") && validAutoCad.contains(from)) {
-			return true;
-		} else {
-			return false;
+			ret = true;
 		}
+		
+		log.debug("convertibleToDxf: {}", ret);
+		return ret;
 	}
 
 	/**
