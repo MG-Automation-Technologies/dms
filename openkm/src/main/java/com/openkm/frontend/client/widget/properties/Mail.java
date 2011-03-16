@@ -175,7 +175,7 @@ public class Mail extends Composite {
 		hFrom.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				Window.open("mailto:"+mailFrom, "_self", "");
+				Window.open("mailto:" + mailFrom, "_self", "");
 			}
 		});
 		dataTable.setWidget(0, 1, hFrom);
@@ -191,7 +191,7 @@ public class Mail extends Composite {
 			hReply.addClickHandler(new ClickHandler() { 
 				@Override
 				public void onClick(ClickEvent event) {
-					Window.open("mailto:"+mailReply, "_self", "");
+					Window.open("mailto:" + mailReply, "_self", "");
 				}
 			});
 			replyPanel.add(hReply);
@@ -209,7 +209,7 @@ public class Mail extends Composite {
 			hTo.addClickHandler(new ClickHandler() { 
 				@Override
 				public void onClick(ClickEvent event) {
-					Window.open("mailto:"+mailTo, "_self", "");
+					Window.open("mailto:" + mailTo, "_self", "");
 				}
 			});
 			toPanel.add(hTo);
