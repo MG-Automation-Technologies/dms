@@ -487,9 +487,9 @@ public class Config {
 			// Load or reload database configuration
 			reload(CONTEXT, config);
 		} catch (FileNotFoundException e) {
-			log.warn("** No "+OPENKM_CONFIG+" file found, set default config **");
+			log.warn("** No {} file found, set default config **", OPENKM_CONFIG);
 		} catch (IOException e) {
-			log.warn("** IOError reading "+OPENKM_CONFIG+", set default config **");
+			log.warn("** IOError reading {}, set default config **", OPENKM_CONFIG);
 		}
 	}
 	
