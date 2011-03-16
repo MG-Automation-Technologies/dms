@@ -128,7 +128,13 @@ public class DocConverter {
 					.setPortNumber(Config.SYSTEM_OPENOFFICE_PORT)
 					.buildOfficeManager();
 			} else {
-				log.warn("system.openoffice.path not configured");
+				log.warn("{} not configured", Config.PROPERTY_SYSTEM_OPENOFFICE_PATH);
+				
+				if (!Config.SYSTEM_OPENOFFICE_SERVER.equals("")) {
+					log.info("but {} is configured", Config.PROPERTY_SYSTEM_OPENOFFICE_SERVER);
+				} else {
+					log.warn("and also {} not configured", Config.PROPERTY_SYSTEM_OPENOFFICE_SERVER);
+				}
 			}
 		}
 		
@@ -198,7 +204,8 @@ public class DocConverter {
 		log.debug("convert({}, {}, {})", new Object[] { inputFile, mimeType, outputFile });
 
 		if (Config.SYSTEM_OPENOFFICE_PATH.equals("") && Config.SYSTEM_OPENOFFICE_SERVER.equals("")) {
-			throw new ConversionException("system.openoffice.path or system.openoffice.server not configured");
+			throw new ConversionException(Config.PROPERTY_SYSTEM_OPENOFFICE_PATH + " or " + 
+					Config.PROPERTY_SYSTEM_OPENOFFICE_SERVER + " not configured");
 		}
 
 		if (!validOpenOffice.contains(mimeType)) {
