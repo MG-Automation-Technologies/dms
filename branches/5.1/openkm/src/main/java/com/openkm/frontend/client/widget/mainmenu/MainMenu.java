@@ -716,7 +716,7 @@ public class MainMenu extends Composite {
 	// Command menu to show administration
 	Command showAdministration = new Command() {
 		public void execute() {
-			Window.open(Main.CONTEXT+"/admin/index.jsp", "Administration", "");
+			Window.open(Main.CONTEXT + "/admin/index.jsp", "Administration", "");
 		}
 	};
 	
