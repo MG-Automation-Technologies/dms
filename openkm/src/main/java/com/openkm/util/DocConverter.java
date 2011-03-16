@@ -131,7 +131,7 @@ public class DocConverter {
 				log.warn("{} not configured", Config.PROPERTY_SYSTEM_OPENOFFICE_PATH);
 				
 				if (!Config.SYSTEM_OPENOFFICE_SERVER.equals("")) {
-					log.info("but {} is configured", Config.PROPERTY_SYSTEM_OPENOFFICE_SERVER);
+					log.warn("but {} is configured", Config.PROPERTY_SYSTEM_OPENOFFICE_SERVER);
 					log.info("{}={}", Config.PROPERTY_SYSTEM_OPENOFFICE_SERVER, Config.SYSTEM_OPENOFFICE_SERVER);
 				} else {
 					log.warn("and also {} not configured", Config.PROPERTY_SYSTEM_OPENOFFICE_SERVER);
