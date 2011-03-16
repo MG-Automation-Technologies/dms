@@ -78,11 +78,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 	public GWTWorkspace getUserWorkspace() throws OKMException {
 		GWTWorkspace workspace = new GWTWorkspace();
 		updateSessionManager();
-		
-		if (Config.APPLICATION_URL != null && Config.APPLICATION_URL.indexOf("/OpenKM") > 0) {
-			workspace.setApplicationURL(Config.APPLICATION_URL);
-		}
-		
+		workspace.setApplicationURL(Config.APPLICATION_URL);
 		workspace.setUser(getThreadLocalRequest().getRemoteUser());
 		workspace.setAppVersion(WarUtils.getAppVersion().toString());
 		workspace.setWorkflowRunConfigForm(Config.WORKFLOW_RUN_CONFIG_FORM);
