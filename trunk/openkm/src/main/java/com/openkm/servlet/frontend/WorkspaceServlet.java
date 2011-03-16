@@ -79,7 +79,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 		GWTWorkspace workspace = new GWTWorkspace();
 		updateSessionManager();
 		
-		if ( Config.APPLICATION_URL!= null && Config.APPLICATION_URL.indexOf("/OpenKM")>0) {
+		if (Config.APPLICATION_URL != null && Config.APPLICATION_URL.indexOf("/OpenKM") > 0) {
 			workspace.setApplicationURL(Config.APPLICATION_URL);
 		}
 		
