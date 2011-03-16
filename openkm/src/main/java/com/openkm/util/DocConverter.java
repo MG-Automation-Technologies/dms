@@ -180,7 +180,7 @@ public class DocConverter {
 	 * Test if a MIME document can be converted to SWF
 	 */
 	public boolean convertibleToSwf(String from) {
-		if (!Config.SYSTEM_SWFTOOLS_PDF2SWF.equals("") && (convertibleToPdf(from) || Config.MIME_PDF.equals(from))) {
+		if (!Config.SYSTEM_SWFTOOLS_PDF2SWF.equals("") && (Config.MIME_PDF.equals(from) || convertibleToPdf(from))) {
 			return true;
 		} else {
 			return false;
