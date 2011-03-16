@@ -535,7 +535,7 @@ public class DashboardWidget extends Composite {
 			feedImage.addClickHandler(new ClickHandler() { 
 				@Override
 				public void onClick(ClickEvent event) {
-					Window.open(RPCService.FeedService+feedUrl, "_blank", null);
+					Window.open(RPCService.FeedService + feedUrl, "_blank", null);
 				}
 			});
 			
