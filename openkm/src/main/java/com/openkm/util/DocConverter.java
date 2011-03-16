@@ -118,9 +118,9 @@ public class DocConverter {
 			
 			if (!Config.SYSTEM_OPENOFFICE_PATH.equals("")) {
 				log.info("*** Build Office Manager ***");
-				log.info("system.openoffice.path=" + Config.SYSTEM_OPENOFFICE_PATH);
-				log.info("system.openoffice.tasks=" + Config.SYSTEM_OPENOFFICE_TASKS);
-				log.info("system.openoffice.port=" + Config.SYSTEM_OPENOFFICE_PORT);
+				log.info("{}={}", Config.PROPERTY_SYSTEM_OPENOFFICE_PATH, Config.SYSTEM_OPENOFFICE_PATH);
+				log.info("{}={}", Config.PROPERTY_SYSTEM_OPENOFFICE_TASKS, Config.SYSTEM_OPENOFFICE_TASKS);
+				log.info("{}={}", Config.PROPERTY_SYSTEM_OPENOFFICE_PORT, Config.SYSTEM_OPENOFFICE_PORT);
 				
 				officeManager = new DefaultOfficeManagerConfiguration()
 					.setOfficeHome(Config.SYSTEM_OPENOFFICE_PATH)
@@ -128,7 +128,14 @@ public class DocConverter {
 					.setPortNumber(Config.SYSTEM_OPENOFFICE_PORT)
 					.buildOfficeManager();
 			} else {
-				log.warn("system.openoffice.path not configured");
+				log.warn("{} not configured", Config.PROPERTY_SYSTEM_OPENOFFICE_PATH);
+				
+				if (!Config.SYSTEM_OPENOFFICE_SERVER.equals("")) {
+					log.info("but {} is configured", Config.PROPERTY_SYSTEM_OPENOFFICE_SERVER);
+					log.info("{}={}", Config.PROPERTY_SYSTEM_OPENOFFICE_SERVER, Config.SYSTEM_OPENOFFICE_PATH);
+				} else {
+					log.warn("and also {} not configured", Config.PROPERTY_SYSTEM_OPENOFFICE_SERVER);
+				}
 			}
 		}
 		
@@ -198,7 +205,8 @@ public class DocConverter {
 		log.debug("convert({}, {}, {})", new Object[] { inputFile, mimeType, outputFile });
 
 		if (Config.SYSTEM_OPENOFFICE_PATH.equals("") && Config.SYSTEM_OPENOFFICE_SERVER.equals("")) {
-			throw new ConversionException("system.openoffice.path or system.openoffice.server not configured");
+			throw new ConversionException(Config.PROPERTY_SYSTEM_OPENOFFICE_PATH + " or " + 
+					Config.PROPERTY_SYSTEM_OPENOFFICE_SERVER + " not configured");
 		}
 
 		if (!validOpenOffice.contains(mimeType)) {
