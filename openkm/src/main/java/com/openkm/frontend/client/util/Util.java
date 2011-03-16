@@ -279,17 +279,17 @@ public class Util {
 	}-*/;
     
    public static native void createMediaPlayer(String mediaUrl, String mediaProvider, String width, String height) /*-{    	
-    	$wnd.swfobject.embedSWF("/OpenKM/js/mediaplayer/player.swf", "mediaplayercontainer", width, height, "9.0.0", "/OpenKM/js/mediaplayer/expressinstall.swf", {file:mediaUrl,provider:mediaProvider,autostart:"true",width:width,height:height}, {allowscriptaccess:"always",allowfullscreen: "true"}, {id:"jsmediaplayer",name:"jsmediaplayer"});
+    	$wnd.swfobject.embedSWF("../js/mediaplayer/player.swf", "mediaplayercontainer", width, height, "9.0.0", "../js/mediaplayer/expressinstall.swf", {file:mediaUrl,provider:mediaProvider,autostart:"true",width:width,height:height}, {allowscriptaccess:"always",allowfullscreen: "true"}, {id:"jsmediaplayer",name:"jsmediaplayer"});
     }-*/;
     
     public static native void createPDFViewerZviewer(String pdfUrl, String width, String height) /*-{
     	pdfUrl = encodeURIComponent(pdfUrl);
-		$wnd.swfobject.embedSWF("/OpenKM/js/zviewer/zviewer.swf", "pdfviewercontainer", width, height, "9.0.0", "/OpenKM/js/mediaplayer/expressinstall.swf", {doc_url:pdfUrl}, {allowFullScreen:"true",menu:"false",bgcolor:"#efefef"}, {id:"jspdfviewer",name:"jspdfviewer"});
+		$wnd.swfobject.embedSWF("../js/zviewer/zviewer.swf", "pdfviewercontainer", width, height, "9.0.0", "../js/mediaplayer/expressinstall.swf", {doc_url:pdfUrl}, {allowFullScreen:"true",menu:"false",bgcolor:"#efefef"}, {id:"jspdfviewer",name:"jspdfviewer"});
 	}-*/;
     
     public static native void createPDFViewerFlexPaper(String pdfUrl, String width, String height, String printEnabled) /*-{
 	pdfUrl = encodeURIComponent(pdfUrl);
-	$wnd.swfobject.embedSWF("/OpenKM/js/flexpaper/FlexPaperViewer.swf", "pdfviewercontainer",width, height,"10.0.0", "playerProductInstall.swf",
+	$wnd.swfobject.embedSWF("../js/flexpaper/FlexPaperViewer.swf", "pdfviewercontainer",width, height,"10.0.0", "playerProductInstall.swf",
                   {
             		SwfFile : pdfUrl,
 				  	Scale : 0.6, 
@@ -328,22 +328,22 @@ public class Util {
 	}-*/;  
     
     public static native void createLinkClipboardButton(String textToCopy, String containerName) /*-{
-		$wnd.swfobject.embedSWF("/OpenKM/clippy.swf", containerName, 14, 14, "9.0.0", "/OpenKM/clippy.swf", {text:textToCopy}, {quality:"high",scale:"noscale",bgcolor:"#FFFFFF"}, {id:"clippy",name:"clippy"});
+		$wnd.swfobject.embedSWF("../clippy.swf", containerName, 14, 14, "9.0.0", "../clippy.swf", {text:textToCopy}, {quality:"high",scale:"noscale",bgcolor:"#FFFFFF"}, {id:"clippy",name:"clippy"});
 	}-*/;
     
     public static native void createURLClipboardButton(String textToCopy) /*-{
-		$wnd.swfobject.embedSWF("/OpenKM/clippy.swf", "urlclipboardcontainer", 14, 14, "9.0.0", "/OpenKM/clippy.swf", {text:textToCopy}, {quality:"high",scale:"noscale",bgcolor:"#FFFFFF"}, {id:"clippy",name:"clippy"});
+		$wnd.swfobject.embedSWF("../clippy.swf", "urlclipboardcontainer", 14, 14, "9.0.0", "../clippy.swf", {text:textToCopy}, {quality:"high",scale:"noscale",bgcolor:"#FFFFFF"}, {id:"clippy",name:"clippy"});
 	}-*/;
     
     public static native void createWebDavClipboardButton(String textToCopy) /*-{
-		$wnd.swfobject.embedSWF("/OpenKM/clippy.swf", "webdavclipboardcontainer", 14, 14, "9.0.0", "/OpenKM/clippy.swf", {text:textToCopy}, {quality:"high",scale:"noscale",bgcolor:"#FFFFFF"}, {id:"clippy",name:"clippy"});
+		$wnd.swfobject.embedSWF("../clippy.swf", "webdavclipboardcontainer", 14, 14, "9.0.0", "../clippy.swf", {text:textToCopy}, {quality:"high",scale:"noscale",bgcolor:"#FFFFFF"}, {id:"clippy",name:"clippy"});
 	}-*/;
     
     public static native void createFolderURLClipboardButton(String textToCopy) /*-{
-		$wnd.swfobject.embedSWF("/OpenKM/clippy.swf", "folderurlclipboardcontainer", 14, 14, "9.0.0", "/OpenKM/clippy.swf", {text:textToCopy}, {quality:"high",scale:"noscale",bgcolor:"#FFFFFF"}, {id:"clippy",name:"clippy"});
+		$wnd.swfobject.embedSWF("../clippy.swf", "folderurlclipboardcontainer", 14, 14, "9.0.0", "../clippy.swf", {text:textToCopy}, {quality:"high",scale:"noscale",bgcolor:"#FFFFFF"}, {id:"clippy",name:"clippy"});
 	}-*/;
     
     public static native void createFolderWebDavClipboardButton(String textToCopy) /*-{
-		$wnd.swfobject.embedSWF("/OpenKM/clippy.swf", "folderwebdavclipboardcontainer", 14, 14, "9.0.0", "/OpenKM/clippy.swf", {text:textToCopy}, {quality:"high",scale:"noscale",bgcolor:"#FFFFFF"}, {id:"clippy",name:"clippy"});
+		$wnd.swfobject.embedSWF("../clippy.swf", "folderwebdavclipboardcontainer", 14, 14, "9.0.0", "../clippy.swf", {text:textToCopy}, {quality:"high",scale:"noscale",bgcolor:"#FFFFFF"}, {id:"clippy",name:"clippy"});
 	}-*/;
 }
