@@ -32,6 +32,7 @@ public class RegisterWorkflowServlet extends BaseServlet {
 	private static Logger log = LoggerFactory.getLogger(RegisterWorkflowServlet.class);
 	private static final long serialVersionUID = 1L;
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws 
 			ServletException, IOException {
@@ -39,7 +40,7 @@ public class RegisterWorkflowServlet extends BaseServlet {
 		byte[] content = null;
 		PrintWriter out = null;
 		updateSessionManager(request);
-
+		
 		try {
 			boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 			out = response.getWriter();	
