@@ -64,7 +64,22 @@ import com.openkm.util.WebUtils;
 public class CronTabServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(CronTabServlet.class);
-
+	
+	@Override
+	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException,
+			ServletException {
+		String method = request.getMethod();
+		
+		if (checkMultipleInstancesAccess(request, response)) {
+			if (method.equals(METHOD_GET)) {
+				doGet(request, response);
+			} else if (method.equals(METHOD_POST)) {
+				doPost(request, response);
+			}
+		}
+	}
+	
+	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
@@ -125,7 +140,8 @@ public class CronTabServlet extends BaseServlet {
 			JCRUtils.logout(session);
 		}
 	}
-
+	
+	@Override
 	@SuppressWarnings("unchecked")
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
