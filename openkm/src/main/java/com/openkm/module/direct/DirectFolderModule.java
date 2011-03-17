@@ -242,22 +242,23 @@ public class DirectFolderModule implements FolderModule {
 			
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
 			HashMap<String, UserItems> userItemsHash = null;
+			String fldUuid = folderNode.getUUID();
 			
 			synchronized (folderNode) {
 				parentNode = folderNode.getParent();
 				userItemsHash = BaseFolderModule.purge(session, folderNode);
 				parentNode.save();
-			}
-			
-			if (Config.USER_ITEM_CACHE) {
-				// Update user items
-				for (Iterator<Entry<String, UserItems>> it = userItemsHash.entrySet().iterator(); it.hasNext(); ) {
-					Entry<String, UserItems> entry = it.next();
-					String uid = entry.getKey();
-					UserItems userItems = entry.getValue();
-					UserItemsManager.decSize(uid, userItems.getSize());
-					UserItemsManager.decDocuments(uid, userItems.getDocuments());
-					UserItemsManager.decFolders(uid, userItems.getFolders());
+				
+				if (Config.USER_ITEM_CACHE) {
+					// Update user items
+					for (Iterator<Entry<String, UserItems>> it = userItemsHash.entrySet().iterator(); it.hasNext(); ) {
+						Entry<String, UserItems> entry = it.next();
+						String uid = entry.getKey();
+						UserItems userItems = entry.getValue();
+						UserItemsManager.decSize(uid, userItems.getSize());
+						UserItemsManager.decDocuments(uid, userItems.getDocuments());
+						UserItemsManager.decFolders(uid, userItems.getFolders());
+					}
 				}
 			}
 			
@@ -265,7 +266,7 @@ public class DirectFolderModule implements FolderModule {
 			BaseScriptingModule.checkScripts(session, parentNode, folderNode, "PURGE_FOLDER");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "PURGE_FOLDER", folderNode.getUUID(), fldPath);
+			UserActivity.log(session.getUserID(), "PURGE_FOLDER", fldUuid, fldPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
