@@ -550,8 +550,9 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 					
 					rowIndex++;
 				}
+		} else {
+			selected = -1;
 		}
-		
 		
 		return selected;
 	}

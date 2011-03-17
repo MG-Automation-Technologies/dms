@@ -459,15 +459,16 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 		// If selectedRow > 0 must continue selecting the row ( after refreshing )
 		if (!selectedRowId.equals("")) {
 			int selectedRow = table.findSelectedRowById(selectedRowId);
-			table.setSelectedRow(selectedRow);
-			
-			// Ensures selected row is visible before resfreshing
-			// Must create a tmp widget to ensure row is visible and after we restore values
-			String tmpHTML = dataTable.getHTML(selectedRow,0);
-			HTML tmpWidget = new HTML("");
-			dataTable.setWidget(selectedRow,0,tmpWidget);
-			//fileBrowserPanel.ensureVisible(tmpWidget); // TODO: El ensure visible ha cambiado al ser un ScrollTable !! 
-			dataTable.setHTML(selectedRow,0,tmpHTML);
+			if (selectedRow>=0) {
+				table.setSelectedRow(selectedRow);
+				// Ensures selected row is visible before resfreshing
+				// Must create a tmp widget to ensure row is visible and after we restore values
+				String tmpHTML = dataTable.getHTML(selectedRow,0);
+				HTML tmpWidget = new HTML("");
+				dataTable.setWidget(selectedRow,0,tmpWidget);
+				//fileBrowserPanel.ensureVisible(tmpWidget); // TODO: El ensure visible ha cambiado al ser un ScrollTable !! 
+				dataTable.setHTML(selectedRow,0,tmpHTML);
+			}
 			
 			setSelectedPanel(true);
 			GWTDocument doc = table.getDocument();
