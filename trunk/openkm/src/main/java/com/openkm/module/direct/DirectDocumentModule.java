@@ -1315,21 +1315,22 @@ public class DirectDocumentModule implements DocumentModule {
 			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			HashMap<String, UserItems> userItemsHash = null;
+			String docUuid = documentNode.getUUID();
 			
 			synchronized (documentNode) {
 				parentNode = documentNode.getParent();
 				userItemsHash = BaseDocumentModule.purge(session, parentNode, documentNode);
-			}
-			
-			// Update user items
-			if (Config.USER_ITEM_CACHE) {
-				for (Iterator<Entry<String, UserItems>> it = userItemsHash.entrySet().iterator(); it.hasNext(); ) {
-					Entry<String, UserItems> entry = it.next();
-					String uid = entry.getKey();
-					UserItems userItems = entry.getValue();
-					UserItemsManager.decSize(uid, userItems.getSize());
-					UserItemsManager.decDocuments(uid, userItems.getDocuments());
-					UserItemsManager.decFolders(uid, userItems.getFolders());
+				
+				// Update user items
+				if (Config.USER_ITEM_CACHE) {
+					for (Iterator<Entry<String, UserItems>> it = userItemsHash.entrySet().iterator(); it.hasNext(); ) {
+						Entry<String, UserItems> entry = it.next();
+						String uid = entry.getKey();
+						UserItems userItems = entry.getValue();
+						UserItemsManager.decSize(uid, userItems.getSize());
+						UserItemsManager.decDocuments(uid, userItems.getDocuments());
+						UserItemsManager.decFolders(uid, userItems.getFolders());
+					}
 				}
 			}
 			
@@ -1337,7 +1338,7 @@ public class DirectDocumentModule implements DocumentModule {
 			BaseScriptingModule.checkScripts(session, parentNode, documentNode, "PURGE_DOCUMENT");
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "PURGE_DOCUMENT", documentNode.getUUID(), docPath);
+			UserActivity.log(session.getUserID(), "PURGE_DOCUMENT", docUuid, docPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
