@@ -23,11 +23,8 @@ package com.openkm.module.base;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.jcr.Node;
@@ -62,7 +59,6 @@ import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.UserQuotaExceededException;
-import com.openkm.dao.bean.cache.UserItems;
 import com.openkm.util.JCRUtils;
 
 public class BaseFolderModule {
@@ -335,39 +331,24 @@ public class BaseFolderModule {
 	/**
 	 * Purge folders recursively
 	 */
-	public static HashMap<String, UserItems> purge(Session session, Node fldNode) throws VersionException, 
+	public static void purge(Session session, Node fldNode) throws VersionException, 
 			javax.jcr.lock.LockException, ConstraintViolationException, javax.jcr.RepositoryException {
-		HashMap<String, UserItems> userItemsHash = new HashMap<String, UserItems>();
-		
 		for (NodeIterator nit = fldNode.getNodes(); nit.hasNext(); ) {
-			HashMap<String, UserItems> userItemsHashRet = new HashMap<String, UserItems>();
 			Node node = nit.nextNode();
 			
 			if (node.isNodeType(Document.TYPE)) {
-				userItemsHashRet = BaseDocumentModule.purge(session, node.getParent(), node);
+				BaseDocumentModule.purge(session, node.getParent(), node);
 			} else if (node.isNodeType(Folder.TYPE)) {
-				userItemsHashRet = BaseFolderModule.purge(session, node);
-				//String author = node.getProperty(Folder.AUTHOR).getString();
-				//userItemsHashRet.get(key)
-			}
-			
-			if (Config.USER_ITEM_CACHE) {
-				// Join hash maps
-				for (Iterator<Entry<String, UserItems>> entIt = userItemsHashRet.entrySet().iterator(); entIt.hasNext(); ) {
-					Entry<String, UserItems> entry = entIt.next();
-					String uid = entry.getKey();
-					UserItems userItem = entry.getValue();
-					UserItems userItemTmp = userItemsHash.get(uid);
-					if (userItemTmp == null) userItemTmp = new UserItems();
-					userItemTmp.setSize(userItemTmp.getSize() + userItem.getSize());
-					userItemTmp.setDocuments(userItemTmp.getDocuments() + userItem.getDocuments());
-					userItemsHash.put(uid, userItemTmp);
-				}
+				BaseFolderModule.purge(session, node);
 			}
 		}
 		
+		String author = fldNode.getProperty(Folder.AUTHOR).getString();
 		fldNode.remove();
-		return userItemsHash;
+		
+		if (Config.USER_ITEM_CACHE) {
+			UserItemsManager.decFolders(author, 1);
+		}
 	}
 	
 	/**
