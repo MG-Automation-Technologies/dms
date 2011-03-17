@@ -387,9 +387,12 @@ public class BaseDocumentModule {
 		parentNode.save();
 
 		// Unreferenced VersionHistory should be deleted automatically
+		// after removal of the last Version
 		// https://issues.apache.org/jira/browse/JCR-134
 		// http://markmail.org/message/7aildokt74yeoar5
 		// http://markmail.org/message/nhbwe7o3c7pd4sga
+		//
+		// ********** THIS IS ACCORDING WITH JCR-134
 		for (VersionIterator vi = vh.getAllVersions(); vi.hasNext(); ) {
 			javax.jcr.version.Version ver = vi.nextVersion();
 			String versionName = ver.getName();
