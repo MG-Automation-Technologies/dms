@@ -43,6 +43,7 @@ public class UserItemsManager {
 	 * 
 	 */
 	public static synchronized void incDocuments(String uid, int value) {
+		log.debug("incDocuments({}, {})", uid, value);
 		UserItems userItems = get(uid);
 		userItems.setDocuments(userItems.getDocuments() + value);
 	}
@@ -51,6 +52,7 @@ public class UserItemsManager {
 	 * 
 	 */
 	public static synchronized void decDocuments(String uid, int value) {
+		log.debug("decDocuments({}, {})", uid, value);
 		UserItems userItems = get(uid);
 		userItems.setDocuments(userItems.getDocuments() - value);
 	}
@@ -59,6 +61,7 @@ public class UserItemsManager {
 	 * 
 	 */
 	public static synchronized void incFolders(String uid, int value) {
+		log.debug("incFolders({}, {})", uid, value);
 		UserItems userItems = get(uid);
 		userItems.setFolders(userItems.getFolders() + value);
 	}
@@ -67,6 +70,7 @@ public class UserItemsManager {
 	 * 
 	 */
 	public static synchronized void decFolders(String uid, int value) {
+		log.debug("decFolders({}, {})", uid, value);
 		UserItems userItems = get(uid);
 		userItems.setFolders(userItems.getFolders() - value);
 	}
@@ -75,6 +79,7 @@ public class UserItemsManager {
 	 * 
 	 */
 	public static synchronized void incSize(String uid, long value) {
+		log.debug("incSize({}, {})", uid, value);
 		UserItems userItems = get(uid);
 		userItems.setSize(userItems.getSize() + value);
 	}
@@ -82,9 +87,10 @@ public class UserItemsManager {
 	/**
 	 * 
 	 */
-	public static synchronized void decSize(String uid, long size) {
+	public static synchronized void decSize(String uid, long value) {
+		log.debug("decSize({}, {})", uid, value);
 		UserItems userItems = get(uid);
-		userItems.setSize(userItems.getSize() - size);
+		userItems.setSize(userItems.getSize() - value);
 	}
 	
 	/**
