@@ -244,6 +244,7 @@ public class DirectMailModule implements MailModule {
 			}
 			
 			Node mailNode = session.getRootNode().getNode(mailPath.substring(1));
+			String mailUuid = mailNode.getUUID();
 			parentNode = mailNode.getParent();
 			mailNode.remove();
 			parentNode.save();
@@ -252,7 +253,7 @@ public class DirectMailModule implements MailModule {
 			BaseScriptingModule.checkScripts(session, parentNode, mailNode, "PURGE_MAIL");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "PURGE_MAIL", mailNode.getUUID(), mailPath);
+			UserActivity.log(session.getUserID(), "PURGE_MAIL", mailUuid, mailPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
