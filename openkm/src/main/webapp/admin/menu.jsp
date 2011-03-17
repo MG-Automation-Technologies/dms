@@ -58,10 +58,10 @@
     &nbsp;
     <a target="frame" href="Language"><img src="img/toolbar/language.png" title="Language"></a>
     &nbsp;
+    <a target="frame" href="repository_import.jsp"><img src="img/toolbar/import.png" title="Repository import"></a>
+    &nbsp;
+    <a target="frame" href="repository_export.jsp"><img src="img/toolbar/export.png" title="Repository export"></a>
   </c:if>
-  <a target="frame" href="repository_import.jsp"><img src="img/toolbar/import.png" title="Repository import"></a>
-  &nbsp;
-  <a target="frame" href="repository_export.jsp"><img src="img/toolbar/export.png" title="Repository export"></a>
   <script type="text/javascript">
     // Identify if being loaded inside an iframe
     if (self == top) {
