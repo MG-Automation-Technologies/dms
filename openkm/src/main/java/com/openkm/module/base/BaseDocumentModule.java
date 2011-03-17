@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -368,13 +367,12 @@ public class BaseDocumentModule {
 	 * Remove version history, compute free space and remove obsolete files from
 	 * PDF and previsualization cache.
 	 */
-	public static HashMap<String, UserItems> purge(Session session, Node parentNode, Node docNode) 
+	public static void purge(Session session, Node parentNode, Node docNode) 
 			throws javax.jcr.PathNotFoundException, javax.jcr.RepositoryException {
 		Node contentNode = docNode.getNode(Document.CONTENT);
 		long size = contentNode.getProperty(Document.SIZE).getLong();
 		String author = contentNode.getProperty(Document.AUTHOR).getString();
 		VersionHistory vh = contentNode.getVersionHistory();
-		HashMap<String, UserItems> userItemsHash = new HashMap<String, UserItems>();
 		log.debug("VersionHistory UUID: {}", vh.getUUID());
 
 		// Remove pdf & preview from cache
@@ -400,33 +398,18 @@ public class BaseDocumentModule {
 			
 			// The rootVersion is not a "real" version node.
 			if (!versionName.equals(JcrConstants.JCR_ROOTVERSION)) {
-				Node frozenNode = ver.getNode(JcrConstants.JCR_FROZENNODE);
-				size = frozenNode.getProperty(Document.SIZE).getLong();
-				author = frozenNode.getProperty(Document.AUTHOR).getString();
+				//Node frozenNode = ver.getNode(JcrConstants.JCR_FROZENNODE);
+				//size = frozenNode.getProperty(Document.SIZE).getLong();
+				//author = frozenNode.getProperty(Document.AUTHOR).getString();
 				log.debug("vh.removeVersion({})", versionName);
 				vh.removeVersion(versionName);
-				
-				if (Config.USER_ITEM_CACHE) {
-					// Update local user items for versions
-					UserItems userItems = userItemsHash.get(author);
-					if (userItems == null) userItems = new UserItems();
-					userItems.setSize(userItems.getSize() + size);
-					userItems.setDocuments(userItems.getDocuments() + 1);
-					userItemsHash.put(author, userItems);
-				}
 			}
 		}
 		
 		if (Config.USER_ITEM_CACHE) {
-			// Update local user items for working version
-			UserItems userItems = userItemsHash.get(author);
-			if (userItems == null) userItems = new UserItems();
-			userItems.setSize(userItems.getSize() + size);
-			userItems.setDocuments(userItems.getDocuments() + 1);
-			userItemsHash.put(author, userItems);
+			UserItemsManager.decSize(author, size);
+			UserItemsManager.decDocuments(author, 1);
 		}
-		
-		return userItemsHash;
 	}
 	
 	/**
