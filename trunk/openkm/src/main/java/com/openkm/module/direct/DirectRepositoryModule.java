@@ -26,10 +26,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 
 import javax.jcr.ItemExistsException;
 import javax.jcr.LoginException;
@@ -65,7 +63,6 @@ import com.openkm.bean.Folder;
 import com.openkm.bean.Permission;
 import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.Repository;
-import com.openkm.cache.UserItemsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
@@ -73,7 +70,6 @@ import com.openkm.core.JcrSessionManager;
 import com.openkm.core.OKMSystemSession;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.dao.bean.cache.UserItems;
 import com.openkm.module.RepositoryModule;
 import com.openkm.module.base.BaseDocumentModule;
 import com.openkm.module.base.BaseFolderModule;
@@ -792,46 +788,18 @@ public class DirectRepositoryModule implements RepositoryModule {
 			}
 			
 			userTrash = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
-			HashMap<String, UserItems> userItemsHash = new HashMap<String, UserItems>(); 
 			
 			for (NodeIterator it = userTrash.getNodes(); it.hasNext(); ) {
-				HashMap<String, UserItems> userItemsHashRet = new HashMap<String, UserItems>();
 				Node child = it.nextNode();
 				
 				if (child.isNodeType(Document.TYPE)) {
-					userItemsHashRet = BaseDocumentModule.purge(session, child.getParent(), child);
+					BaseDocumentModule.purge(session, child.getParent(), child);
 				} else if (child.isNodeType(Folder.TYPE)) {
-					userItemsHashRet = BaseFolderModule.purge(session, child);
-				}
-				
-				if (Config.USER_ITEM_CACHE) {
-					// Join hash maps
-					for (Iterator<Entry<String, UserItems>> entIt = userItemsHashRet.entrySet().iterator(); entIt.hasNext(); ) {
-						Entry<String, UserItems> entry = entIt.next();
-						String uid = entry.getKey();
-						UserItems userItem = entry.getValue();
-						UserItems userItemTmp = userItemsHash.get(uid);
-						if (userItemTmp == null) userItemTmp = new UserItems();
-						userItemTmp.setSize(userItemTmp.getSize() + userItem.getSize());
-						userItemTmp.setDocuments(userItemTmp.getDocuments() + userItem.getDocuments());
-						userItemsHash.put(uid, userItemTmp);
-					}
+					BaseFolderModule.purge(session, child);
 				}
 			}
 			
 			userTrash.save();
-			
-			if (Config.USER_ITEM_CACHE) {
-				// Update user items
-				for (Iterator<Entry<String, UserItems>> it = userItemsHash.entrySet().iterator(); it.hasNext(); ) {
-					Entry<String, UserItems> entry = it.next();
-					String uid = entry.getKey();
-					UserItems userItems = entry.getValue();
-					UserItemsManager.decSize(uid, userItems.getSize());
-					UserItemsManager.decDocuments(uid, userItems.getDocuments());
-					UserItemsManager.decFolders(uid, userItems.getFolders());
-				}
-			}
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "PURGE_TRASH", null, null);
