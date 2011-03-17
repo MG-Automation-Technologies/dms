@@ -41,8 +41,6 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.Document;
 import com.openkm.core.JcrSessionManager;
 import com.openkm.module.base.BaseDocumentModule;
-import com.openkm.module.direct.DirectDocumentModule;
-import com.openkm.servlet.BasicSecuredServlet;
 import com.openkm.util.FileUtils;
 import com.openkm.util.WebUtils;
 
@@ -85,7 +83,7 @@ public class DownloadServlet extends BasicSecuredServlet {
 					Document doc = BaseDocumentModule.getProperties(session, node);
 					String fileName = FileUtils.getName(doc.getPath());
 					log.info("Download {} by {}", path, session.getUserID());
-					InputStream is = new DirectDocumentModule().getContent(session, path, false);
+					InputStream is = BaseDocumentModule.getContent(session, path, false);
 					WebUtils.sendFile(request, response, fileName, doc.getMimeType(), true, is);
 					is.close();
 				} else {
