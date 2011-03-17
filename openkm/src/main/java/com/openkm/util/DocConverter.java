@@ -55,6 +55,7 @@ import org.slf4j.LoggerFactory;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
 import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.lowagie.text.pdf.PdfWriter;
 import com.openkm.core.Config;
@@ -428,6 +429,36 @@ public class DocConverter {
 			doc.open();
 			HTMLWorker html = new HTMLWorker(doc);
 			html.parse(new InputStreamReader(is));
+			doc.close();
+		} catch (DocumentException e) {
+			throw new ConversionException("Exception in conversion: " + e.getMessage(), e);
+		} finally {
+			IOUtils.closeQuietly(fos);
+		}
+	}
+	
+	/**
+	 * Convert TXT to PDF
+	 */
+	public void txt2pdf(InputStream is, File output) throws ConversionException,
+			DatabaseException, IOException {
+		log.debug("** Convert from TXT to PDF **");
+		FileOutputStream fos = null;
+		String line = null;
+		
+	    try {			
+	    	fos = new FileOutputStream(output);
+	    	
+	    	// Make conversion
+	    	BufferedReader br = new BufferedReader(new InputStreamReader(is));
+	    	Document doc = new Document(PageSize.A4);
+			PdfWriter.getInstance(doc, fos);
+			doc.open();
+			
+			while ((line = br.readLine()) != null) {
+				doc.add(new Paragraph(12F, line));
+			}
+						
 			doc.close();
 		} catch (DocumentException e) {
 			throw new ConversionException("Exception in conversion: " + e.getMessage(), e);
