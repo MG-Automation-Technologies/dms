@@ -22,7 +22,7 @@
 </head>
 <body>
 <%
-	if (BaseServlet.isAdmin(request)) {
+	if (BaseServlet.isMultipleInstancesAdmin(request)) {
 		request.setCharacterEncoding("UTF-8");
 		String repoPath = WebUtils.getString(request, "repoPath", "/okm:root");
 		String fsPath = WebUtils.getString(request, "fsPath");
