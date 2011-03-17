@@ -20,15 +20,13 @@
   <c:if test="${isMultipleInstancesAdmin}">
     <a target="frame" href="scripting.jsp"><img src="img/toolbar/scripting.png" title="Scripting"></a>
     &nbsp;
-  </c:if>
-  <a target="frame" href="RepositorySearch"><img src="img/toolbar/search.png" title="Repository Search"></a>
-  &nbsp;
-  <c:if test="${isMultipleInstancesAdmin}">
+    <a target="frame" href="RepositorySearch"><img src="img/toolbar/search.png" title="Repository Search"></a>
+    &nbsp;
     <a target="frame" href="RepositoryView"><img src="img/toolbar/repository.png" title="Repository view"></a>
     &nbsp;
+    <a target="frame" href="PropertyGroups"><img src="img/toolbar/properties.png" title="Property groups"></a>
+    &nbsp;
   </c:if>
-  <a target="frame" href="PropertyGroups"><img src="img/toolbar/properties.png" title="Property groups"></a>
-  &nbsp;
   <a target="frame" href="LoggedUsers"><img src="img/toolbar/logged.png" title="Logged users"></a>
   &nbsp;
   <a target="frame" href="Auth"><img src="img/toolbar/users.png" title="Users"></a>
