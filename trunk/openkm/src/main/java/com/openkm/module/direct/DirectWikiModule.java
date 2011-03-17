@@ -1028,6 +1028,7 @@ public class DirectWikiModule implements WikiModule {
 			}
 			
 			Node wikiNode = session.getRootNode().getNode(wikiPath.substring(1));
+			String wikiUuid = wikiNode.getUUID();
 			@SuppressWarnings("unused")
 			HashMap<String, UserItems> userItemsHash = null;
 			
@@ -1052,7 +1053,7 @@ public class DirectWikiModule implements WikiModule {
 			BaseScriptingModule.checkScripts(session, parentNode, wikiNode, "PURGE_WIKI");
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "PURGE_WIKI", wikiNode.getUUID(), wikiPath);
+			UserActivity.log(session.getUserID(), "PURGE_WIKI", wikiUuid, wikiPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
