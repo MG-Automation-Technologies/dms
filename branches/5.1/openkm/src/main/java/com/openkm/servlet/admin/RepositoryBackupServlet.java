@@ -43,6 +43,21 @@ public class RepositoryBackupServlet extends BaseServlet {
 	private static Logger log = LoggerFactory.getLogger(RepositoryBackupServlet.class);
 	private static final long serialVersionUID = 1L;
 	
+	@Override
+	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException,
+			ServletException {
+		String method = request.getMethod();
+		
+		if (checkMultipleInstancesAccess(request, response)) {
+			if (method.equals(METHOD_GET)) {
+				doGet(request, response);
+			} else if (method.equals(METHOD_POST)) {
+				doPost(request, response);
+			}
+		}
+	}
+	
+	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
