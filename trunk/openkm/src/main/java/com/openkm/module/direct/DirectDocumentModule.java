@@ -30,11 +30,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Map.Entry;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -70,7 +67,6 @@ import com.openkm.core.VirusDetectedException;
 import com.openkm.core.VirusDetection;
 import com.openkm.dao.LockTokenDAO;
 import com.openkm.dao.MimeTypeDAO;
-import com.openkm.dao.bean.cache.UserItems;
 import com.openkm.kea.RDFREpository;
 import com.openkm.kea.metadata.MetadataExtractionException;
 import com.openkm.kea.metadata.MetadataExtractor;
@@ -1314,24 +1310,11 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
-			HashMap<String, UserItems> userItemsHash = null;
 			String docUuid = documentNode.getUUID();
 			
 			synchronized (documentNode) {
 				parentNode = documentNode.getParent();
-				userItemsHash = BaseDocumentModule.purge(session, parentNode, documentNode);
-				
-				// Update user items
-				if (Config.USER_ITEM_CACHE) {
-					for (Iterator<Entry<String, UserItems>> it = userItemsHash.entrySet().iterator(); it.hasNext(); ) {
-						Entry<String, UserItems> entry = it.next();
-						String uid = entry.getKey();
-						UserItems userItems = entry.getValue();
-						UserItemsManager.decSize(uid, userItems.getSize());
-						UserItemsManager.decDocuments(uid, userItems.getDocuments());
-						UserItemsManager.decFolders(uid, userItems.getFolders());
-					}
-				}
+				BaseDocumentModule.purge(session, parentNode, documentNode);
 			}
 			
 			// Check scripting
