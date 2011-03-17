@@ -29,6 +29,7 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 import javax.jcr.Value;
+import javax.jcr.ValueFormatException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.version.VersionException;
@@ -181,5 +182,41 @@ public class BaseMailModule {
 		log.debug("Permisos: {} => {}", mailNode.getPath(), mail.getPermissions());
 		log.debug("getProperties[session]: {}", mail);
 		return mail;
+	}
+	
+	/**
+	 * Copy recursively
+	 */
+	public static void copy(Session session, Node srcMailNode, Node dstFolderNode) throws ValueFormatException, 
+			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException, IOException, DatabaseException,
+			UserQuotaExceededException {
+		log.debug("copy({}, {}, {})", new Object[] { session, srcMailNode, dstFolderNode });
+		
+		String name = srcMailNode.getName();
+		long size = srcMailNode.getProperty(Mail.SIZE).getLong();
+		String from = srcMailNode.getProperty(Mail.FROM).getString();
+		String[] reply = JCRUtils.value2String(srcMailNode.getProperty(Mail.REPLY).getValues());
+		String[] to = JCRUtils.value2String(srcMailNode.getProperty(Mail.TO).getValues());
+		String[] cc = JCRUtils.value2String(srcMailNode.getProperty(Mail.CC).getValues());
+		String[] bcc = JCRUtils.value2String(srcMailNode.getProperty(Mail.BCC).getValues());
+		Calendar sentDate = srcMailNode.getProperty(Mail.SENT_DATE).getDate(); 
+		Calendar receivedDate = srcMailNode.getProperty(Mail.RECEIVED_DATE).getDate();
+		String subject = srcMailNode.getProperty(Mail.SUBJECT).getString();
+		String content = srcMailNode.getProperty(Mail.CONTENT).getString();
+		String mimeType = srcMailNode.getProperty(Mail.MIME_TYPE).getString();
+		
+		Node mNode = BaseMailModule.create(session, dstFolderNode, name, size, from, reply, to, 
+				cc, bcc, sentDate, receivedDate, subject, content, mimeType);
+		
+		// Get attachments
+		for (NodeIterator nit = srcMailNode.getNodes(); nit.hasNext(); ) {
+			Node node = nit.nextNode();
+
+			if (node.isNodeType(Document.TYPE)) {
+				BaseDocumentModule.copy(session, node, mNode);
+			}
+		}
+		
+		log.debug("copy: void");
 	}
 }
