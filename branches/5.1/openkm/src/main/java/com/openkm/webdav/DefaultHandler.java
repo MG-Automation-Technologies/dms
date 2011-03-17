@@ -69,6 +69,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Permission;
+import com.openkm.cache.UserItemsManager;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.MimeTypeDAO;
@@ -255,7 +256,7 @@ public class DefaultHandler implements IOHandler, PropertyHandler {
         boolean success = false;
         try {
             Node contentNode = getContentNode(context, isCollection);
-            log.info("contentNode: "+contentNode.getPath());
+            log.info("contentNode: {}", contentNode.getPath());
             
             if (contentNode.isNodeType("mix:versionable")) {
             	log.debug("CHECKOUT");
@@ -263,13 +264,29 @@ public class DefaultHandler implements IOHandler, PropertyHandler {
             }
             
             success = importData(context, isCollection, contentNode);
+            
             if (success) {
                 success = importProperties(context, isCollection, contentNode);
             }
             
             if (contentNode.isNodeType("mix:versionable")) {
             	log.debug("CHECKIN");
-            	contentNode.checkin();
+            	javax.jcr.version.Version ver = contentNode.checkin();
+            	
+                if (Config.USER_ITEM_CACHE) {
+    				// Get previous version document size
+    				for (javax.jcr.version.Version pred : ver.getPredecessors()) {
+    					Node frozenNode = pred.getNode(JcrConstants.JCR_FROZENNODE);
+    					String author = frozenNode.getProperty(Document.AUTHOR).getString();
+    					long size = frozenNode.getProperty(Document.SIZE).getLong();
+    					UserItemsManager.decSize(author, size);
+    					log.info("Version: " + pred.getName() + "Author: "+author+", Size: " + size);
+    				}
+    				
+    				// Update user items
+    				long size = contentNode.getProperty(Document.SIZE).getLong();
+    				UserItemsManager.incSize(contentNode.getSession().getUserID(), size);
+    			}
             }
             
             // Remove pdf & preview from cache
