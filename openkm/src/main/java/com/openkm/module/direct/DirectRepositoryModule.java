@@ -71,6 +71,7 @@ import com.openkm.core.OKMSystemSession;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.RepositoryModule;
+import com.openkm.module.base.BaseDocumentModule;
 import com.openkm.module.base.BaseFolderModule;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.MailUtils;
@@ -786,15 +787,15 @@ public class DirectRepositoryModule implements RepositoryModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			userTrash = session.getRootNode().getNode(Repository.TRASH + "/"+session.getUserID());
+			userTrash = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
 			
 			for (NodeIterator it = userTrash.getNodes(); it.hasNext(); ) {
 				Node child = it.nextNode();
 				
 				if (child.isNodeType(Document.TYPE)) {
-					new DirectDocumentModule().purgeHelper(session, child.getParent(), child);
+					BaseDocumentModule.purge(session, child.getParent(), child);
 				} else if (child.isNodeType(Folder.TYPE)) {
-					new DirectFolderModule().purgeHelper(session, child);
+					BaseFolderModule.purge(session, child);
 				}
 			}
 			
