@@ -23,10 +23,7 @@ package com.openkm.module.direct;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -39,7 +36,6 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.ContentInfo;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Repository;
-import com.openkm.cache.UserItemsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
@@ -49,7 +45,6 @@ import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UserQuotaExceededException;
-import com.openkm.dao.bean.cache.UserItems;
 import com.openkm.module.FolderModule;
 import com.openkm.module.base.BaseFolderModule;
 import com.openkm.module.base.BaseScriptingModule;
@@ -241,25 +236,12 @@ public class DirectFolderModule implements FolderModule {
 			}
 			
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
-			HashMap<String, UserItems> userItemsHash = null;
 			String fldUuid = folderNode.getUUID();
 			
 			synchronized (folderNode) {
 				parentNode = folderNode.getParent();
-				userItemsHash = BaseFolderModule.purge(session, folderNode);
+				BaseFolderModule.purge(session, folderNode);
 				parentNode.save();
-				
-				if (Config.USER_ITEM_CACHE) {
-					// Update user items
-					for (Iterator<Entry<String, UserItems>> it = userItemsHash.entrySet().iterator(); it.hasNext(); ) {
-						Entry<String, UserItems> entry = it.next();
-						String uid = entry.getKey();
-						UserItems userItems = entry.getValue();
-						UserItemsManager.decSize(uid, userItems.getSize());
-						UserItemsManager.decDocuments(uid, userItems.getDocuments());
-						UserItemsManager.decFolders(uid, userItems.getFolders());
-					}
-				}
 			}
 			
 			// Check scripting
