@@ -1344,21 +1344,22 @@ public class DirectDocumentModule implements DocumentModule {
 			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			HashMap<String, UserItems> userItemsHash = null;
+			String docUuid = documentNode.getUUID();
 			
 			synchronized (documentNode) {
 				parentNode = documentNode.getParent();
 				userItemsHash = purgeHelper(session, parentNode, documentNode);
-			}
-			
-			// Update user items
-			if (Config.USER_ITEM_CACHE) {
-				for (Iterator<Entry<String, UserItems>> it = userItemsHash.entrySet().iterator(); it.hasNext(); ) {
-					Entry<String, UserItems> entry = it.next();
-					String uid = entry.getKey();
-					UserItems userItems = entry.getValue();
-					UserItemsManager.decSize(uid, userItems.getSize());
-					UserItemsManager.decDocuments(uid, userItems.getDocuments());
-					UserItemsManager.decFolders(uid, userItems.getFolders());
+				
+				// Update user items
+				if (Config.USER_ITEM_CACHE) {
+					for (Iterator<Entry<String, UserItems>> it = userItemsHash.entrySet().iterator(); it.hasNext(); ) {
+						Entry<String, UserItems> entry = it.next();
+						String uid = entry.getKey();
+						UserItems userItems = entry.getValue();
+						UserItemsManager.decSize(uid, userItems.getSize());
+						UserItemsManager.decDocuments(uid, userItems.getDocuments());
+						UserItemsManager.decFolders(uid, userItems.getFolders());
+					}
 				}
 			}
 			
@@ -1366,7 +1367,7 @@ public class DirectDocumentModule implements DocumentModule {
 			BaseScriptingModule.checkScripts(session, parentNode, documentNode, "PURGE_DOCUMENT");
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "PURGE_DOCUMENT", documentNode.getUUID(), docPath);
+			UserActivity.log(session.getUserID(), "PURGE_DOCUMENT", docUuid, docPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
@@ -1398,7 +1399,7 @@ public class DirectDocumentModule implements DocumentModule {
 		VersionHistory vh = contentNode.getVersionHistory();
 		HashMap<String, UserItems> userItemsHash = new HashMap<String, UserItems>();
 		log.debug("VersionHistory UUID: {}", vh.getUUID());
-
+		
 		// Remove pdf & preview from cache
 		new File(Config.CACHE_DXF + File.separator + docNode.getUUID() + ".dxf").delete();
 		new File(Config.CACHE_PDF + File.separator + docNode.getUUID() + ".pdf").delete();
@@ -1407,11 +1408,14 @@ public class DirectDocumentModule implements DocumentModule {
 		// Remove node itself
 		docNode.remove();
 		parentNode.save();
-
+		
 		// Unreferenced VersionHistory should be deleted automatically
+		// after removal of the last Version
 		// https://issues.apache.org/jira/browse/JCR-134
 		// http://markmail.org/message/7aildokt74yeoar5
 		// http://markmail.org/message/nhbwe7o3c7pd4sga
+		//
+		// ********** THIS IS ACCORDING WITH JCR-134
 		for (VersionIterator vi = vh.getAllVersions(); vi.hasNext(); ) {
 			javax.jcr.version.Version ver = vi.nextVersion();
 			String versionName = ver.getName();
