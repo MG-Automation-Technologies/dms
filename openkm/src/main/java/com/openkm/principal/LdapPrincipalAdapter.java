@@ -92,6 +92,7 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 		
 		for (Iterator<String> it = ldap.iterator(); it.hasNext(); ) {
 			String role = it.next();
+			
 			if (!Config.DEFAULT_ADMIN_ROLE.equals(role)) {
 				list.add(role);
 			}
@@ -141,7 +142,7 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 					user = user.toLowerCase();
 				}
 				
-				list.add(role);
+				list.add(user);
 			}
 		}
 
