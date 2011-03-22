@@ -203,7 +203,7 @@ namespace OpenKMOutlookAddIn
                             newMail.to = mailTo;
 
                             // Creating mail
-                            mailService.create(token, newMail);
+                            newMail = mailService.create(token, newMail);
 
                             // Setting attachments
                             if (mailItem.Attachments.Count > 0)
