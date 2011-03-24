@@ -64,7 +64,6 @@ public class SecurityRole extends Composite implements HasWidgets {
 	public RoleScrollTable unassignedRole;
 	private HorizontalPanel panel;
 	private VerticalPanel buttonPanel;
-	private SimplePanel spLeft;
 	private SimplePanel spRight;
 	private SimplePanel spHeight;
 	private HTML addButtom;
@@ -80,10 +79,8 @@ public class SecurityRole extends Composite implements HasWidgets {
 		buttonPanel = new VerticalPanel();
 		assignedRole = new RoleScrollTable(true);
 		unassignedRole = new RoleScrollTable(false);
-		spLeft = new SimplePanel();
 		spRight = new SimplePanel();
 		spHeight = new SimplePanel();
-		spLeft.setWidth("4");
 		spRight.setWidth("1");
 		spHeight.setHeight("30");
 		addButtom = new HTML(Util.imageHTML("img/icon/security/add.gif"));
@@ -96,17 +93,23 @@ public class SecurityRole extends Composite implements HasWidgets {
 		addButtom.addClickHandler(addButtomListener);
 		removeButtom.addClickHandler(removeButtomListener);
 		
-		panel.add(spLeft);
 		panel.add(assignedRole);
 		panel.add(buttonPanel);
 		panel.add(unassignedRole);
 
 		panel.setCellWidth(buttonPanel, "20");
-		panel.setCellWidth(spLeft, "4");
 		panel.setCellVerticalAlignment(buttonPanel,HasAlignment.ALIGN_MIDDLE);
 		panel.setCellHorizontalAlignment(buttonPanel,HasAlignment.ALIGN_CENTER);
 		
-		panel.setSize("593", "365");
+		assignedRole.addStyleName("okm-Border-Left");
+		assignedRole.addStyleName("okm-Border-Bottom");
+		assignedRole.addStyleName("okm-Border-Right");
+		
+		unassignedRole.addStyleName("okm-Border-Left");
+		unassignedRole.addStyleName("okm-Border-Bottom");
+		unassignedRole.addStyleName("okm-Border-Right");
+		
+		panel.setSize("612", "365");
 		
 		initWidget(panel);
 	}

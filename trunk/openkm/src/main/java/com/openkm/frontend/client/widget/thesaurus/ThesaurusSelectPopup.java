@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
@@ -40,8 +41,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.TabBar;
-import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
@@ -58,6 +58,7 @@ public class ThesaurusSelectPopup extends DialogBox  {
 	
 	private final OKMThesaurusServiceAsync thesaurusService = (OKMThesaurusServiceAsync) GWT.create(OKMThesaurusService.class);
 	
+	private static final int TAB_HEIGHT = 20;
 	public static final int NONE 				= -1;
 	public static final int DOCUMENT_PROPERTIES = 0;
 	public static final int WIZARD			 	= 1;
@@ -77,7 +78,7 @@ public class ThesaurusSelectPopup extends DialogBox  {
 	private TextBox keyword;
 	private VerticalPanel vPanelKeyword;
 	private FlexTable keywordTable;
-	public TabPanel tabPanel;
+	public TabLayoutPanel tabPanel;
 	private int selectedRow = -1;
 	private int selectedTab = TAB_TREE;
 	private int selectedFrom = NONE;
@@ -92,8 +93,8 @@ public class ThesaurusSelectPopup extends DialogBox  {
 		status = new Status();
 		status.setStyleName("okm-StatusPopup");
 		
-		tabPanel = new TabPanel();
-		tabPanel.setSize("290", "175");
+		tabPanel = new TabLayoutPanel(TAB_HEIGHT, Unit.PX);
+		tabPanel.setSize("292", "200");
 		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
@@ -109,15 +110,20 @@ public class ThesaurusSelectPopup extends DialogBox  {
 		hPanel = new HorizontalPanel();
 		
 		scrollDirectoryPanel = new ScrollPanel();
-		scrollDirectoryPanel.setSize("100%", "100%");
-		scrollDirectoryPanel.setStyleName("okm-Popup-text");
+		scrollDirectoryPanel.setSize("290", "175");
+		scrollDirectoryPanel.addStyleName("okm-Background-White");
+		scrollDirectoryPanel.addStyleName("okm-Border-Left");
+		scrollDirectoryPanel.addStyleName("okm-Border-Right");
+		scrollDirectoryPanel.addStyleName("okm-Border-Bottom");
 		scrollKeywordPanel = new ScrollPanel();
 		scrollKeywordPanel.setStyleName("okm-Popup-text");
 		verticalDirectoryPanel = new VerticalPanel();
+		verticalDirectoryPanel.setSize("100%", "100%");
 		folderSelectTree = new FolderSelectTree();
 		folderSelectTree.setSize("100%", "100%");
 				
 		verticalDirectoryPanel.add(folderSelectTree);
+		verticalDirectoryPanel.setCellHorizontalAlignment(folderSelectTree, HasAlignment.ALIGN_LEFT);
 		scrollDirectoryPanel.add(verticalDirectoryPanel);
 		
 		cancelButton = new Button(Main.i18n("button.close"), new ClickHandler() { 
@@ -187,7 +193,7 @@ public class ThesaurusSelectPopup extends DialogBox  {
 		
 		vPanel.setCellHorizontalAlignment(tabPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
-		vPanel.setCellHeight(tabPanel, "150");
+		vPanel.setCellHeight(tabPanel, "200");
 
 		cancelButton.setStyleName("okm-Button");
 		actionButton.setStyleName("okm-Button");
@@ -220,8 +226,7 @@ public class ThesaurusSelectPopup extends DialogBox  {
 	 * Language refresh
 	 */
 	public void langRefresh() {
-		TabBar tabBar = tabPanel.getTabBar();
-		selectedTab = tabBar.getSelectedTab();
+		selectedTab = tabPanel.getSelectedIndex();
 		
 		while (tabPanel.getWidgetCount() > 0) {
 			tabPanel.remove(0);
