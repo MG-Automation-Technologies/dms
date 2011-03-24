@@ -47,7 +47,7 @@
 
   <properties>
     <!-- Using this GWT version -->
-    <gwt.version>2.0.4</gwt.version>
+    <gwt.version>2.1.0</gwt.version>
 
     <!-- Using this Jackrabbit version -->
     <jcr.version>1.6.4</jcr.version>
@@ -65,13 +65,6 @@
       <id>jboss.org</id>
       <name>JBoss Maven Repository</name>
       <url>http://repository.jboss.org/maven2</url>
-    </repository>
-
-    <!-- Needed for com.google.gwt:gchart -->
-    <repository>
-      <id>jboss.com</id>
-      <name>JBoss Maven Repository</name>
-      <url>http://repository.jboss.com/maven2</url>
     </repository>
 
     <!-- Needed for KEA - openrdf -->
@@ -114,6 +107,11 @@
       <id>openkm.com</id>
       <name>OpenKM Maven Reporitory</name>
       <url>http://repository.openkm.com/maven2</url>
+    </repository>
+    <repository>
+    	<id>StringTree</id>
+    	<name>String Tree</name>
+    	<url>http://stringtree.org/repository/</url>
     </repository>
   </repositories>
 
@@ -420,7 +418,7 @@
     <dependency>
       <groupId>org.codehaus.mojo</groupId>
       <artifactId>gwt-maven-plugin</artifactId>
-      <version>1.2</version>
+      <version>${gwt.version}</version>
     </dependency>
 
     <!-- GWT plugins -->
@@ -432,7 +430,7 @@
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-incubator</artifactId>
-      <version>2.0.1</version>
+      <version>2.1.0</version>
     </dependency>
     <dependency>
       <groupId>gwt-vl.sourceforge.net</groupId>
@@ -518,6 +516,11 @@
  	 <artifactId>gdata-contacts-3.0</artifactId>
  	 <version>1.41.1</version>
  	</dependency>
+    <dependency>
+    	<groupId>org.stringtree</groupId>
+    	<artifactId>stringtree</artifactId>
+    	<version>2.0.10</version>
+    </dependency>
   </dependencies>
   
   <build>
@@ -527,7 +530,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
-        <version>1.2</version>
+        <version>${gwt.version}</version>
         <executions>
           <execution>
             <goals>
@@ -538,7 +541,7 @@
           </execution>
         </executions>
         <configuration>
-          <runTarget>com.openkm.frontend.Main/index.html</runTarget>
+          <runTarget>frontend/index.html</runTarget>
           <modules>
             <module>com.openkm.frontend.Main</module>
           </modules>
