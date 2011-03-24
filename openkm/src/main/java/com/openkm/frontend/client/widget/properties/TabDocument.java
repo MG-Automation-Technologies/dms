@@ -26,14 +26,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.TabBar;
-import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.extension.frontend.client.widget.preview.AutocadPreview;
 import com.openkm.frontend.client.Main;
@@ -51,6 +51,7 @@ import com.openkm.frontend.client.extension.widget.preview.PreviewExtension;
 import com.openkm.frontend.client.extension.widget.tabdocument.TabDocumentExtension;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
+import com.openkm.frontend.client.util.Util;
 
 /**
  * The tab document
@@ -60,12 +61,13 @@ import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
  */
 public class TabDocument extends Composite implements HasDocumentEvent, HasDocumentHandlerExtension, HasPropertyGroupHandlerExtension {
 	
+	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT.create(OKMPropertyGroupService.class);
+	
+	private static final int TAB_HEIGHT = 20;
 	public int PREVIEW_TAB = -1;
 	private int SECURITY_TAB = -1;
 	
-	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT.create(OKMPropertyGroupService.class);
-
-	public TabPanel tabPanel;
+	public TabLayoutPanel tabPanel;
 	public Document document;
 	public VersionScrollTable version;
 	public SecurityScrollTable security;
@@ -95,7 +97,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	 */
 	public TabDocument() {
 		propertyGroupHandlerExtensionList = new ArrayList<PropertyGroupHandlerExtension>();
-		tabPanel = new TabPanel();
+		tabPanel = new TabLayoutPanel(TAB_HEIGHT, Unit.PX);
 		document = new Document();
 		notes = new Notes();
 		version = new VersionScrollTable();
@@ -114,7 +116,13 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 				Main.get().mainPanel.topPanel.toolBar.evaluateRemoveGroupProperty(isSelectedTabGroupProperty(tabIndex));
 				selectedTab = tabIndex;
 				if (tabIndex==SECURITY_TAB) {
-					security.fillWidth(); // Always when shows fires fill width
+					Timer timer = new Timer() {
+						@Override
+						public void run() {
+							security.fillWidth(); // Always when shows fires fill width
+						}
+					};
+					timer.schedule(50); // Fill width must be done after really it'll be visible
 				}
 				Timer previewTimer = new Timer() {
 					@Override
@@ -150,23 +158,23 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		this.height = height;
 		this.width = width;
 		tabPanel.setPixelSize(width, height);
-		document.setPixelSize(width,height-20); // Substract tab height
-		preview.setPixelSize(width,height-20); // Substract tab height
-		notes.setPixelSize(width,height-20); // Substract tab height
-		version.setPixelSize(width-2,height-22); // Substract tab height
+		document.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
+		preview.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
+		notes.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
+		version.setPixelSize(width-2,height-TAB_HEIGHT); // Substract tab height
 		version.fillWidth();
-		security.setPixelSize(width-2,height-22); // Substract tab height
+		security.setPixelSize(width-2,height-TAB_HEIGHT); // Substract tab height
 		security.fillWidth();
 		
 		// Setting size to extension
 		for (Iterator<TabDocumentExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
-			it.next().setPixelSize(width,height-20); // Substract tab height
+			it.next().setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
 		}
 		
 		if (!propertyGroup.isEmpty()) {			 // Sets size to propety groups	
 			for (Iterator<PropertyGroup> it = propertyGroup.iterator(); it.hasNext();){
 				PropertyGroup group =  it.next();
-				group.setPixelSize(width,height-20);
+				group.setPixelSize(width,height-TAB_HEIGHT);
 			}
 		}
 
@@ -183,7 +191,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	public void refreshNotesSize() {
 		// Solve some UI defect on firefox
 		notes.setPixelSize(width-1,height-21); // Substract tab height
-		notes.setPixelSize(width,height-20); // Substract tab height
+		notes.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
 	}
 	
 	/**
@@ -205,7 +213,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		}
 		
 		this.doc = doc;
-		selectedTab = tabPanel.getTabBar().getSelectedTab(); // Sets the actual selected Tab
+		selectedTab = tabPanel.getSelectedIndex(); // Sets the actual selected Tab
 		
 		document.set(doc); // Used by TabDocumentCommunicator
 		notes.set(doc);	   // Used by TabDocumentCommunicator
@@ -258,8 +266,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	 * Language refresh
 	 */
 	public void langRefresh() {
-		TabBar tabBar = tabPanel.getTabBar();
-		selectedTab = tabBar.getSelectedTab();
+		selectedTab = tabPanel.getSelectedIndex();
 		
 		while (tabPanel.getWidgetCount() > 0) {
 			tabPanel.remove(0);
@@ -348,8 +355,8 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 				}
 			}
 			// To prevent change on document that has minor tabs than previous the new selected tab it'll be the max - 1 on that cases
-			if (tabPanel.getTabBar().getTabCount()-1<selectedTab) {
-				tabPanel.selectTab(tabPanel.getTabBar().getTabCount()-1);
+			if (tabPanel.getWidgetCount()-1<selectedTab) {
+				tabPanel.selectTab(tabPanel.getWidgetCount()-1);
 			} else {
 				tabPanel.selectTab(selectedTab); // Always enable selected tab because on document change tab group are removed
 												 // and on remove loses selectedTab
@@ -375,7 +382,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	 * Removes the actual property group
 	 */
 	public void removePropertyGroup(){
-		selectedTab = tabPanel.getTabBar().getSelectedTab(); // Sets the actual selectedted Tab
+		selectedTab = tabPanel.getSelectedIndex(); // Sets the actual selectedted Tab
 		
 		// Removes group 
 		PropertyGroup group = (PropertyGroup) tabPanel.getWidget(selectedTab);
@@ -386,7 +393,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		tabPanel.remove(selectedTab);
 		
 		// If removed tab is last the new selected tab is selectedTab -1
-		if (tabPanel.getTabBar().getTabCount()-1<selectedTab) {
+		if (tabPanel.getWidgetCount()-1<selectedTab) {
 			selectedTab--;
 		}
 		
@@ -420,6 +427,24 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		security.setPixelSize(getOffsetWidth()-2, getOffsetHeight()-22); // Substract tab height
 		version.fillWidth();
 		security.fillWidth();
+		// TODO:Solves minor bug with IE
+		if (Util.getUserAgent().startsWith("ie")) {
+			Timer timer = new Timer() {
+				@Override
+				public void run() {
+					tabPanel.setWidth(""+width);
+					tabPanel.setWidth(""+(width+1));
+					Timer timer = new Timer() {
+						@Override
+						public void run() {
+							tabPanel.setWidth(""+width);
+						}
+					};
+					timer.schedule(50);
+				}
+			};
+			timer.schedule(100);
+		}
 	}
 	
 	/**
@@ -467,7 +492,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	public void showSecurity() {
 		tabPanel.add(security, Main.i18n("tab.document.security"));
 		securityVisible = true;
-		SECURITY_TAB = tabPanel.getTabBar().getTabCount()-1; // starts at 0
+		SECURITY_TAB = tabPanel.getWidgetCount()-1; // starts at 0
 	}
 	
 	/**
@@ -476,7 +501,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	public void showPreview() {
 		tabPanel.add(preview, Main.i18n("tab.document.preview"));
 		previewVisible = true;
-		PREVIEW_TAB = tabPanel.getTabBar().getTabCount()-1; // starts at 0
+		PREVIEW_TAB = tabPanel.getWidgetCount()-1; // starts at 0
 	}
 	
 	/**
@@ -492,7 +517,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	public void showExtensions() {
 		for (TabDocumentExtension extension : widgetExtensionList) {
 			tabPanel.add(extension, extension.getTabText());
-			extension.setPixelSize(width, height-20); // Substract tab height
+			extension.setPixelSize(width, height-TAB_HEIGHT); // Substract tab height
 		}
 	}
 	
@@ -504,7 +529,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 				doc.getMimeType().equals("application/x-shockwave-flash") ||  
 				doc.getMimeType().equals("audio/mpeg")) {
 			if (!refreshing) {
-				preview.showMediaFile(RPCService.DownloadServlet +"?uuid=" + URL.encodeComponent(getDocument().getUuid()), getDocument().getMimeType());
+				preview.showMediaFile(RPCService.DownloadServlet +"?uuid=" + URL.encodeQueryString(getDocument().getUuid()), getDocument().getMimeType());
 			}
 		} else if (doc.isConvertibleToDxf()) {
 			PreviewExtension previewExtension = null;
@@ -515,7 +540,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 				}
 			}
 			if (previewExtension!=null) {
-				preview.showPreviewExtension(previewExtension, RPCService.DownloadServlet +"?uuid=" + URL.encodeComponent(getDocument().getUuid()));
+				preview.showPreviewExtension(previewExtension, RPCService.DownloadServlet +"?uuid=" + URL.encodeQueryString(getDocument().getUuid()));
 			} else {
 				// There's no preview
 				preview.showEmbedSWF(doc.getUuid());
@@ -530,7 +555,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	 * init
 	 */
 	public void init() {
-		if (tabPanel.getTabBar().getTabCount()>0) {
+		if (tabPanel.getWidgetCount()>0) {
 			tabPanel.selectTab(0);
 			
 			if (securityVisible && doc!=null) {

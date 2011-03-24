@@ -25,11 +25,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.TabBar;
-import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
@@ -39,6 +40,7 @@ import com.openkm.frontend.client.extension.event.HasMailEvent;
 import com.openkm.frontend.client.extension.event.handler.MailHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasMailHandlerExtension;
 import com.openkm.frontend.client.extension.widget.tabmail.TabMailExtension;
+import com.openkm.frontend.client.util.Util;
 
 /**
  * The tab mail
@@ -47,9 +49,10 @@ import com.openkm.frontend.client.extension.widget.tabmail.TabMailExtension;
  *
  */
 public class TabMail extends Composite implements HasMailEvent, HasMailHandlerExtension {
+	private static final int TAB_HEIGHT = 20;
 	private int SECURITY_TAB = -1;
 	
-	public TabPanel tabPanel;
+	public TabLayoutPanel tabPanel;
 	public Mail mail;
 	public SecurityScrollTable security;
 	private VerticalPanel panel;
@@ -68,7 +71,7 @@ public class TabMail extends Composite implements HasMailEvent, HasMailHandlerEx
 	public TabMail() {
 		widgetExtensionList = new ArrayList<TabMailExtension>();
 		mailHandlerExtensionList = new ArrayList<MailHandlerExtension>();
-		tabPanel = new TabPanel();
+		tabPanel = new TabLayoutPanel(TAB_HEIGHT, Unit.PX);
 		mail = new Mail();
 		security = new SecurityScrollTable();
 		panel = new VerticalPanel();
@@ -79,7 +82,13 @@ public class TabMail extends Composite implements HasMailEvent, HasMailHandlerEx
 				int tabIndex = event.getSelectedItem().intValue();
 				selectedTab = tabIndex;
 				if (tabIndex==SECURITY_TAB) {
-					security.fillWidth(); // Always when shows fires fill width
+					Timer timer = new Timer() {
+						@Override
+						public void run() {
+							security.fillWidth(); // Always when shows fires fill width
+						}
+					};
+					timer.schedule(50); // Fill width must be done after really it'll be visible
 				}
 				Main.get().mainPanel.topPanel.toolBar.evaluateRemoveGroupProperty(isSelectedTabGroupPropety(event.getSelectedItem().intValue()));
 				fireEvent(HasMailEvent.TAB_CHANGED);
@@ -106,13 +115,13 @@ public class TabMail extends Composite implements HasMailEvent, HasMailHandlerEx
 		this.height = height;
 		this.width = width;
 		tabPanel.setPixelSize(width, height);
-		mail.setPixelSize(width,height-20); // Substract tab height
-		security.setPixelSize(width-2,height-22); // Substract tab height
+		mail.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
+		security.setPixelSize(width-2,height-TAB_HEIGHT); // Substract tab height
 		security.fillWidth();
 		
 		// Setting size to extension
 		for (Iterator<TabMailExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
-			it.next().setPixelSize(width,height-20);
+			it.next().setPixelSize(width,height-TAB_HEIGHT);
 		}
 		
 		fireEvent(HasMailEvent.PANEL_RESIZED);
@@ -124,7 +133,7 @@ public class TabMail extends Composite implements HasMailEvent, HasMailHandlerEx
 	 * @param doc The document object
 	 */
 	public void setProperties(GWTMail gWTMail) {	
-		selectedTab = tabPanel.getTabBar().getSelectedTab(); // Sets the actual selected Tab
+		selectedTab = tabPanel.getSelectedIndex(); // Sets the actual selected Tab
 		
 		if (securityVisible) {
 			security.setPath(gWTMail.getPath());
@@ -170,8 +179,7 @@ public class TabMail extends Composite implements HasMailEvent, HasMailHandlerEx
 	 * Language refresh
 	 */
 	public void langRefresh() {
-		TabBar tabBar = tabPanel.getTabBar();
-		selectedTab = tabBar.getSelectedTab();
+		selectedTab = tabPanel.getSelectedIndex();
 		
 		while (tabPanel.getWidgetCount() > 0) {
 			tabPanel.remove(0);
@@ -230,7 +238,7 @@ public class TabMail extends Composite implements HasMailEvent, HasMailHandlerEx
 	public void showSecurity() {
 		tabPanel.add(security, Main.i18n("tab.document.security"));
 		securityVisible = true;
-		SECURITY_TAB = tabPanel.getTabBar().getTabCount()-1; // Starts at 0
+		SECURITY_TAB = tabPanel.getWidgetCount()-1; // Starts at 0
 	}
 	
 	/**
@@ -239,7 +247,7 @@ public class TabMail extends Composite implements HasMailEvent, HasMailHandlerEx
 	public void showExtensions() {
 		for (TabMailExtension extension : widgetExtensionList) {
 			tabPanel.add(extension, extension.getTabText());
-			extension.setPixelSize(width,height-20);
+			extension.setPixelSize(width,height-TAB_HEIGHT);
 		}
 	}
 	
@@ -247,7 +255,7 @@ public class TabMail extends Composite implements HasMailEvent, HasMailHandlerEx
 	 * init
 	 */
 	public void init() {
-		if (tabPanel.getTabBar().getTabCount()>0) {
+		if (tabPanel.getWidgetCount()>0) {
 			tabPanel.selectTab(0);
 			
 			if (securityVisible && mail.get()!=null) {
@@ -291,6 +299,24 @@ public class TabMail extends Composite implements HasMailEvent, HasMailHandlerEx
 	public void resizingIncubatorWidgets() {
 		security.setPixelSize(getOffsetWidth()-2, getOffsetHeight()-22); // Substract tab height
 		security.fillWidth();
+		// TODO:Solves minor bug with IE
+		if (Util.getUserAgent().startsWith("ie")) {
+			Timer timer = new Timer() {
+				@Override
+				public void run() {
+					tabPanel.setWidth(""+width);
+					tabPanel.setWidth(""+(width+1));
+					Timer timer = new Timer() {
+						@Override
+						public void run() {
+							tabPanel.setWidth(""+width);
+						}
+					};
+					timer.schedule(50);
+				}
+			};
+			timer.schedule(100);
+		}
 	}
 	
 	@Override

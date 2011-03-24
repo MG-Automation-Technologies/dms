@@ -161,7 +161,7 @@ public class Folder extends Composite {
 		
 		// url
 		String url = Main.get().workspaceUserProperties.getApplicationURL();
-		url += "?fldPath=" + URL.encodeComponent(folder.getPath());
+		url += "?fldPath=" + URL.encodeQueryString(folder.getPath());
 		tableProperties.setWidget(8, 1, new HTML("<div id=\"folderurlclipboardcontainer\"></div>\n"));
 		Util.createFolderURLClipboardButton(url);
 		
