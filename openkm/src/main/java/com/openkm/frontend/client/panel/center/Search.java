@@ -54,6 +54,7 @@ public class Search extends Composite {
 	/**
 	 * Desktop
 	 */
+	@SuppressWarnings("deprecation")
 	public Search() {
 		horizontalSplitPanel = new HorizontalSplitPanelExtended();
 		historySearch = new HistorySearch();
@@ -138,13 +139,8 @@ public class Search extends Composite {
 	 * @param right
 	 */
 	private void resizePanels() {
-		int total = 0;
-		left = 0;
-		right = 0;
-		String value = DOM.getStyleAttribute (horizontalSplitPanel.getSplitPanel().getElement(), "width");
-		if (value.contains("px")) { value = value.substring(0,value.indexOf("px")); }
-		total = Integer.parseInt(value);
-		value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(horizontalSplitPanel.getSplitPanel().getElement(),0), 0), "width");
+		int total = horizontalSplitPanel.getOffsetWidth();
+		String value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(horizontalSplitPanel.getSplitPanel().getElement(),0), 0), "width");
 		if (value.contains("px")) { value = value.substring(0,value.indexOf("px")); }
 		left = Integer.parseInt(value);
 		value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(horizontalSplitPanel.getSplitPanel().getElement(),0), 2), "left");
@@ -166,6 +162,7 @@ public class Search extends Composite {
 	/**
 	 * refreshSpliterAfterAdded
 	 */
+	@SuppressWarnings("deprecation")
 	public void refreshSpliterAfterAdded() {
 		horizontalSplitPanel.getSplitPanel().setSplitPosition(""+left);
 		searchBrowser.refreshSpliterAfterAdded();

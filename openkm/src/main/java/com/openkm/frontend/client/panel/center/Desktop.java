@@ -54,6 +54,7 @@ public class Desktop extends Composite {
 	/**
 	 * Desktop
 	 */
+	@SuppressWarnings("deprecation")
 	public Desktop() {
 		horizontalSplitPanel = new HorizontalSplitPanelExtended();
 		navigator = new Navigator();
@@ -141,11 +142,8 @@ public class Desktop extends Composite {
 	 * @param right
 	 */
 	private void resizePanels() {
-		int total = 0;
-		String value = DOM.getStyleAttribute (horizontalSplitPanel.getSplitPanel().getElement(), "width");
-		if (value.contains("px")) { value = value.substring(0,value.indexOf("px")); }
-		total = Integer.parseInt(value);
-		value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(horizontalSplitPanel.getSplitPanel().getElement(),0), 0), "width");
+		int total = horizontalSplitPanel.getOffsetWidth();
+		String value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(horizontalSplitPanel.getSplitPanel().getElement(),0), 0), "width");
 		if (value.contains("px")) { value = value.substring(0,value.indexOf("px")); }
 		left = Integer.parseInt(value);
 		value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(horizontalSplitPanel.getSplitPanel().getElement(),0), 2), "left");
@@ -167,6 +165,7 @@ public class Desktop extends Composite {
 	/**
 	 * refreshSpliterAfterAdded
 	 */
+	@SuppressWarnings("deprecation")
 	public void refreshSpliterAfterAdded() {
 		horizontalSplitPanel.getSplitPanel().setSplitPosition(""+left);
 		browser.refreshSpliterAfterAdded();

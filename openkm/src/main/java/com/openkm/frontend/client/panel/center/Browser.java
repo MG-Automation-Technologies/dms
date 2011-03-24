@@ -56,6 +56,10 @@ public class Browser extends Composite {
 	public int topHeight = 0;
 	public int bottomHeight = 0;
 	
+	/**
+	 * Browser
+	 */
+	@SuppressWarnings("deprecation")
 	public Browser() {
 		verticalSplitPanel = new VerticalSplitPanelExtended();
 		fileBrowser = new FileBrowser();
@@ -132,6 +136,7 @@ public class Browser extends Composite {
 	 * @param width The max width of the widget
 	 * @param height The max height of the widget
 	 */
+	@SuppressWarnings("deprecation")
 	public void setSize(int width, int height) {
 		this.width = width;
 		this.height = height;
@@ -189,11 +194,8 @@ public class Browser extends Composite {
 	 * @param right
 	 */
 	private void resizePanels() {
-		int total = 0;
-		String value = DOM.getStyleAttribute (verticalSplitPanel.getSplitPanel().getElement(), "height");
-		if (value.contains("px")) { value = value.substring(0,value.indexOf("px")); }
-		total = Integer.parseInt(value);
-		value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(verticalSplitPanel.getSplitPanel().getElement(),0), 0), "height");
+		int total = verticalSplitPanel.getOffsetHeight();
+		String value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(verticalSplitPanel.getSplitPanel().getElement(),0), 0), "height");
 		if (value.contains("px")) { value = value.substring(0,value.indexOf("px")); }
 		topHeight = Integer.parseInt(value);
 		value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(verticalSplitPanel.getSplitPanel().getElement(),0), 2), "top");
@@ -219,6 +221,7 @@ public class Browser extends Composite {
 	 * refreshSpliterAfterAdded
 	 * 
 	 */
+	@SuppressWarnings("deprecation")
 	public void refreshSpliterAfterAdded() {
 		verticalSplitPanel.getSplitPanel().setSplitPosition(""+topHeight);
 		if (Util.getUserAgent().equals("chrome")) {
