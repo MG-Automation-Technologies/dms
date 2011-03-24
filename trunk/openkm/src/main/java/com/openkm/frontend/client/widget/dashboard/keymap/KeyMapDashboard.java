@@ -65,6 +65,7 @@ import com.openkm.frontend.client.widget.dashboard.ImageHover;
  * @author jllort
  *
  */
+@SuppressWarnings("deprecation")
 public class KeyMapDashboard extends Composite {
 	
 	private final OKMSearchServiceAsync searchService = (OKMSearchServiceAsync) GWT.create(OKMSearchService.class);
@@ -117,6 +118,7 @@ public class KeyMapDashboard extends Composite {
 	/**
 	 * KeyMapDashboard
 	 */
+	@SuppressWarnings("deprecation")
 	public KeyMapDashboard() {
 		horizontalSplitPanel = new HorizontalSplitPanel();
 		keyAllTable = new KeywordWidget(Main.i18n("dashboard.keyword.all"));
@@ -418,6 +420,7 @@ public class KeyMapDashboard extends Composite {
 	/* (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.UIObject#setSize(java.lang.String, java.lang.String)
 	 */
+	@SuppressWarnings("deprecation")
 	public void setSize(String width, String height) {
 		horizontalSplitPanel.setSize(width, height);
 		horizontalSplitPanel.setSplitPosition(""+(Integer.valueOf(width)-220));

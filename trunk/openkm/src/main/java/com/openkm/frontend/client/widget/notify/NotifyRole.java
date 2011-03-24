@@ -77,16 +77,20 @@ public class NotifyRole extends Composite {
 		addButtom.addClickHandler(addButtomHandler);
 		removeButtom.addClickHandler(removeButtomHandler);
 		
-		hPanel.setSize("375","140");
+		hPanel.setSize("374","140");
 		hPanel.add(notifyRolesTable);
 		hPanel.add(buttonPanel);
 		hPanel.add(rolesTable);
 		hPanel.setCellVerticalAlignment(buttonPanel,VerticalPanel.ALIGN_MIDDLE);
 		hPanel.setCellHorizontalAlignment(buttonPanel,HorizontalPanel.ALIGN_CENTER);
 		hPanel.setCellWidth(buttonPanel,"20");
-		
-		notifyRolesTable.addStyleName("okm-Input");
-		rolesTable.addStyleName("okm-Input");
+
+		notifyRolesTable.addStyleName("okm-Border-Left");
+		notifyRolesTable.addStyleName("okm-Border-Right");
+		notifyRolesTable.addStyleName("okm-Border-Bottom");
+		rolesTable.addStyleName("okm-Border-Left");
+		rolesTable.addStyleName("okm-Border-Right");
+		rolesTable.addStyleName("okm-Border-Bottom");
 		
 		reset();
 		

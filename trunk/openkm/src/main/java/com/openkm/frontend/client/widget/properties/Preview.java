@@ -26,7 +26,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.extension.widget.preview.PreviewExtension;
@@ -84,7 +83,7 @@ public class Preview extends Composite {
 		space.setVisible(false);
 		video.setVisible(false);
 		if (previewAvailable) {
-			String url = RPCService.ConverterServlet +"?inline=true&toSwf=true&uuid=" + URL.encodeComponent(Uuid);
+			String url = RPCService.ConverterServlet +"?inline=true&toSwf=true&uuid=" + URL.encodeQueryString(Uuid);
 			text.setHTML("<div id=\"pdfviewercontainer\"></div>\n"); // needed for rewriting purpose
 			if (Main.get().workspaceUserProperties.getWorkspace().getPreviewer().equals("flexpaper")) {
 				if (Main.get().workspaceUserProperties.getWorkspace().isPrintPreview()) {

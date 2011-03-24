@@ -77,7 +77,7 @@ public class NotifyUser extends Composite {
 		addButtom.addClickHandler(addButtomHandler);
 		removeButtom.addClickHandler(removeButtomHandler);
 		
-		hPanel.setSize("375","140");
+		hPanel.setSize("374","140");
 		hPanel.add(notifyUsersTable);
 		hPanel.add(buttonPanel);
 		hPanel.add(userTable);
@@ -85,8 +85,12 @@ public class NotifyUser extends Composite {
 		hPanel.setCellHorizontalAlignment(buttonPanel,HorizontalPanel.ALIGN_CENTER);
 		hPanel.setCellWidth(buttonPanel,"20");
 		
-		notifyUsersTable.addStyleName("okm-Input");
-		userTable.addStyleName("okm-Input");
+		userTable.addStyleName("okm-Border-Left");
+		userTable.addStyleName("okm-Border-Right");
+		userTable.addStyleName("okm-Border-Bottom");
+		notifyUsersTable.addStyleName("okm-Border-Left");
+		notifyUsersTable.addStyleName("okm-Border-Right");
+		notifyUsersTable.addStyleName("okm-Border-Bottom");
 		
 		reset();
 		

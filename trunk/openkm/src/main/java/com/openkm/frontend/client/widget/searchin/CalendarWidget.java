@@ -33,13 +33,12 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.openkm.frontend.client.Main;
 
 /**
@@ -49,7 +48,7 @@ public class CalendarWidget extends Composite implements ClickHandler, HasChange
 
 	private class NavBar extends Composite implements ClickHandler {
 	
-		public final DockPanel bar = new DockPanel();
+		public final HorizontalPanel hPanel = new HorizontalPanel();
 		public final Button prevMonth = new Button("&lt;", this);
 		public final Button prevYear = new Button("&lt;&lt;", this);
 		public final Button nextYear = new Button("&gt;&gt;", this);
@@ -59,11 +58,11 @@ public class CalendarWidget extends Composite implements ClickHandler, HasChange
 		private final CalendarWidget calendar;
 		
 		public NavBar(CalendarWidget calendar) {
-			initWidget(bar);
+			initWidget(hPanel);
 			
 			this.calendar = calendar;
 
-			bar.setStyleName("navbar");
+			hPanel.setStyleName("navbar");
 			title.setStyleName("header");
 		
 			HorizontalPanel prevButtons = new HorizontalPanel();
@@ -79,15 +78,17 @@ public class CalendarWidget extends Composite implements ClickHandler, HasChange
 			nextYear.addStyleName("okm-Input");
 			nextMonth.addStyleName("okm-Input");
 		
-			bar.add(prevButtons, DockPanel.WEST);
-			bar.setCellHorizontalAlignment(prevButtons, DockPanel.ALIGN_LEFT);
-			bar.add(nextButtons, DockPanel.EAST);
-			bar.setCellHorizontalAlignment(nextButtons, DockPanel.ALIGN_RIGHT);
-		  	bar.add(title, DockPanel.CENTER);
-		  	bar.setVerticalAlignment(DockPanel.ALIGN_MIDDLE);
-		  	bar.setCellHorizontalAlignment(title, HasAlignment.ALIGN_CENTER);
-		  	bar.setCellVerticalAlignment(title, HasAlignment.ALIGN_MIDDLE);
-		  	bar.setCellWidth(title, "100%");
+			hPanel.add(prevButtons);
+			hPanel.add(title);
+			hPanel.add(nextButtons);
+			hPanel.setCellWidth(prevButtons, "60");
+			hPanel.setCellWidth(nextButtons, "60");
+			hPanel.setCellHeight(prevButtons, "18");
+			hPanel.setCellHeight(nextButtons, "18");
+			hPanel.setCellHorizontalAlignment(prevButtons, HasAlignment.ALIGN_LEFT);
+			hPanel.setCellHorizontalAlignment(title, HasAlignment.ALIGN_CENTER);
+			hPanel.setCellHorizontalAlignment(nextButtons, HasAlignment.ALIGN_RIGHT);
+
 		}
 		
 		/* (non-Javadoc)
@@ -122,7 +123,7 @@ public class CalendarWidget extends Composite implements ClickHandler, HasChange
 	}
 	
 	private final NavBar navbar = new NavBar(this);
-	private final DockPanel outer = new DockPanel();
+	private final VerticalPanel calendarPanel = new VerticalPanel();
 	
 	private final Grid grid = new Grid(7, 7) {
 		public boolean clearCell(int row, int column) {
@@ -144,11 +145,12 @@ public class CalendarWidget extends Composite implements ClickHandler, HasChange
 	 * CalendarWidget
 	 */
 	public CalendarWidget() {
-		initWidget(outer);
+		initWidget(calendarPanel);
 		grid.setStyleName("table");
 		grid.setCellSpacing(0);
-		outer.add(navbar, DockPanel.NORTH);
-		outer.add(grid, DockPanel.CENTER);
+		calendarPanel.add(navbar);
+		calendarPanel.add(grid);
+		calendarPanel.setWidth("230");
 		langRefresh(); // Sets language translations
 		drawCalendar();
 		setStyleName("CalendarWidget");
