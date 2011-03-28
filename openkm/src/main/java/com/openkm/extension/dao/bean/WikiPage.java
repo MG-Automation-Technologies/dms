@@ -29,7 +29,7 @@ public class WikiPage implements Serializable {
 	private int id;
 	private Calendar date;
 	private String user;
-	private String node;
+	private String uuid;
 	private String content;
 
 	public int getId() {
@@ -56,12 +56,12 @@ public class WikiPage implements Serializable {
 		this.user = user;
 	}
 	
-	public String getNode() {
-		return node;
+	public String getUuid() {
+		return uuid;
 	}
 	
-	public void setNode(String node) {
-		this.node = node;
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 	
 	public String getContent() {
@@ -77,7 +77,7 @@ public class WikiPage implements Serializable {
 		sb.append("{");
 		sb.append("id="); sb.append(id);
 		sb.append(", user="); sb.append(user);
-		sb.append(", node="); sb.append(node);
+		sb.append(", uuid="); sb.append(uuid);
 		sb.append(", date="); sb.append(date==null?null:date.getTime());
 		sb.append(", content="); sb.append(content);
 		sb.append("}");
