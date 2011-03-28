@@ -77,6 +77,7 @@ public class ToolBarButtonExample  {
 	 *
 	 */
 	private class ToolBarButton extends ToolBarButtonExtension implements ToolBarHandlerExtension, LanguageHandlerExtension, Serializable {
+		private static final long serialVersionUID = 1L;
 
 		public ToolBarButton(Image image, String title, ClickHandler handler) {
 			super(image, title, handler);
