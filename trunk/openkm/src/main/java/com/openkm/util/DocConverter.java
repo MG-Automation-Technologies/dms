@@ -337,6 +337,43 @@ public class DocConverter {
 	}
 	
 	/**
+	 * Convert PS to PDF (for document preview feature). 
+	 */
+	public void ps2pdf(InputStream is, File output) throws ConversionException,
+			DatabaseException, IOException {
+		log.debug("** Convert from PS to PDF **");
+		File tmpFileIn = File.createTempFile("okm", ".ps");
+		FileOutputStream fos = null;
+		String cmd = null;
+	    
+		try {
+			fos = new FileOutputStream(tmpFileIn);
+			IOUtils.copy(is, fos);
+			fos.flush();
+			fos.close();
+			
+			// Performs conversion
+			HashMap<String, String> hm = new HashMap<String, String>();
+			hm.put("fileIn", tmpFileIn.getPath());
+			hm.put("fileOut", output.getPath());
+			String tpl = Config.SYSTEM_GHOSTSCRIPT_PS2PDF + " ${fileIn} ${fileOut}";
+			cmd = TemplateUtils.replace("SYSTEM_GHOSTSCRIPT_PS2PDF", tpl, hm);
+			ExecutionUtils.runCmd(cmd);
+		} catch (SecurityException e) {
+			throw new ConversionException("Security exception executing command: " + cmd, e);
+    	} catch (InterruptedException e) {
+			throw new ConversionException("Interrupted exception executing command: " + cmd, e);
+    	} catch (IOException e) {
+			throw new ConversionException("IO exception executing command: " + cmd, e);
+		} catch (TemplateException e) {
+			throw new ConversionException("Template exception", e);
+		} finally {
+			IOUtils.closeQuietly(fos);
+			tmpFileIn.delete();
+		}
+	}
+	
+	/**
 	 * Convert IMG to PDF (for document preview feature).
 	 * 
 	 * [0] => http://www.rubblewebs.co.uk/imagemagick/psd.php 
@@ -359,7 +396,7 @@ public class DocConverter {
 			hm.put("fileIn", tmpFileIn.getPath());
 			hm.put("fileOut", output.getPath());
 			String tpl = Config.SYSTEM_IMAGEMAGICK_CONVERT + " ${fileIn}[0] ${fileOut}";
-			cmd = TemplateUtils.replace("SYSTEM_OCR", tpl, hm);
+			cmd = TemplateUtils.replace("SYSTEM_IMAGEMAGICK_CONVERT", tpl, hm);
 			ExecutionUtils.runCmd(cmd);
 		} catch (SecurityException e) {
 			throw new ConversionException("Security exception executing command: " + cmd, e);
