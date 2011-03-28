@@ -6,7 +6,7 @@
     <id name="id" column="WKP_ID"><generator class="native"/></id>
     <property name="date" column="WKP_DATE" not-null="true"/>
     <property name="user" column="WKP_USER" not-null="true" length="127"/>
-    <property name="node" column="WKP_NODE" length="127"/>
+    <property name="uuid" column="WKP_UUID" length="127"/>
     <property name="content" column="KWP_CONTENT" type="text"/>
   </class>
 </hibernate-mapping>
