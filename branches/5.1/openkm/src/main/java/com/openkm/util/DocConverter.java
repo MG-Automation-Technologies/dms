@@ -67,6 +67,7 @@ public class DocConverter {
 	private static Logger log = LoggerFactory.getLogger(DocConverter.class);
 	private static ArrayList<String> validOpenOffice = new ArrayList<String>();
 	private static ArrayList<String> validImageMagick = new ArrayList<String>();
+	private static ArrayList<String> validGhoscript = new ArrayList<String>();
 	private static ArrayList<String> validAutoCad = new ArrayList<String>();
 	private static DocConverter instance = null;
 	private static OfficeManager officeManager = null;
@@ -94,6 +95,9 @@ public class DocConverter {
 		validOpenOffice.add("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
 		validOpenOffice.add("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 		validOpenOffice.add("application/vnd.openxmlformats-officedocument.presentationml.presentation");
+		
+		// Postcript
+		validGhoscript.add("application/postscript");
 		
 		// Images
 		validImageMagick.add("image/jpeg");
@@ -172,9 +176,12 @@ public class DocConverter {
 			ret = true;
 		} else if (!Config.SYSTEM_IMAGEMAGICK_CONVERT.equals("") && validImageMagick.contains(from)) {
 			ret = true;
+		} else if (!Config.SYSTEM_GHOSTSCRIPT_PS2PDF.equals("") && validGhoscript.contains(from)) {
+			ret = true;
+		}
 		//} else if (!Config.SYSTEM_DWG2DXF.equals("") && validAutoCad.contains(from)) {
 		//	return true;
-		}
+		
 		
 		log.debug("convertibleToPdf: {}", ret);
 		return ret;
@@ -332,6 +339,43 @@ public class DocConverter {
 		} finally {
 			FileUtils.deleteQuietly(tmp);
 			IOUtils.closeQuietly(fos);
+		}
+	}
+	
+	/**
+	 * Convert PS to PDF (for document preview feature). 
+	 */
+	public void ps2pdf(InputStream is, File output) throws ConversionException,
+			DatabaseException, IOException {
+		log.debug("** Convert from PS to PDF **");
+		File tmpFileIn = File.createTempFile("okm", ".ps");
+		FileOutputStream fos = null;
+		String cmd = null;
+	    
+		try {
+			fos = new FileOutputStream(tmpFileIn);
+			IOUtils.copy(is, fos);
+			fos.flush();
+			fos.close();
+			
+			// Performs conversion
+			HashMap<String, String> hm = new HashMap<String, String>();
+			hm.put("fileIn", tmpFileIn.getPath());
+			hm.put("fileOut", output.getPath());
+			String tpl = Config.SYSTEM_GHOSTSCRIPT_PS2PDF + " ${fileIn} ${fileOut}";
+			cmd = TemplateUtils.replace("SYSTEM_GHOSTSCRIPT_PS2PDF", tpl, hm);
+			ExecutionUtils.runCmd(cmd);
+		} catch (SecurityException e) {
+			throw new ConversionException("Security exception executing command: " + cmd, e);
+    	} catch (InterruptedException e) {
+			throw new ConversionException("Interrupted exception executing command: " + cmd, e);
+    	} catch (IOException e) {
+			throw new ConversionException("IO exception executing command: " + cmd, e);
+		} catch (TemplateException e) {
+			throw new ConversionException("Template exception", e);
+		} finally {
+			IOUtils.closeQuietly(fos);
+			tmpFileIn.delete();
 		}
 	}
 	
