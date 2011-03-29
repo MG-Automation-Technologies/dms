@@ -69,16 +69,7 @@ public class RepositoryCheckerServlet extends BaseServlet {
 		boolean versions = WebUtils.getBoolean(request, "versions");
 		updateSessionManager(request);
 		PrintWriter out = response.getWriter();
-		response.setContentType("text/html");
-		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
-		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">");
-		out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
-		out.println("<head>");
-		out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />");
-		out.println("<link rel=\"Shortcut icon\" href=\"favicon.ico\" />");
-		out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"css/style.css\" />");
-		out.println("<body>");
-		out.println("<h1>Repository checker</h1>");
+		header(out, "Repository checker");
 		out.flush();
 		
 		try {
@@ -107,9 +98,9 @@ public class RepositoryCheckerServlet extends BaseServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			out.println("</body>");
-			out.println("</html>");
+			footer(out);
 			out.flush();
+			out.close();
 		}
 	}
 }
