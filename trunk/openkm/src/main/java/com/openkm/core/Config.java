@@ -38,6 +38,7 @@ import com.openkm.bean.StoredFile;
 import com.openkm.dao.ConfigDAO;
 import com.openkm.dao.MimeTypeDAO;
 import com.openkm.dao.bean.MimeType;
+import com.openkm.principal.DatabasePrincipalAdapter;
 
 public class Config {
 	private static Logger log = LoggerFactory.getLogger(Config.class);
@@ -537,7 +538,7 @@ public class Config {
 			values.put(PROPERTY_WORKFLOW_START_TASK_AUTO_RUN, Boolean.toString(WORKFLOW_START_TASK_AUTO_RUN));
 			
 			// Principal
-			PRINCIPAL_ADAPTER = ConfigDAO.getString(PROPERTY_PRINCIPAL_ADAPTER, "com.openkm.principal.DatabasePrincipalAdapter");
+			PRINCIPAL_ADAPTER = ConfigDAO.getString(PROPERTY_PRINCIPAL_ADAPTER, DatabasePrincipalAdapter.class.getCanonicalName());
 			values.put(PROPERTY_PRINCIPAL_ADAPTER, PRINCIPAL_ADAPTER);
 			PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS = ConfigDAO.getBoolean(PROPERTY_PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS, true);
 			values.put(PROPERTY_PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS, Boolean.toString(PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS));
