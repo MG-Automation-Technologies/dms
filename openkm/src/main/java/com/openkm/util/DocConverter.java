@@ -68,6 +68,7 @@ public class DocConverter {
 	private static Logger log = LoggerFactory.getLogger(DocConverter.class);
 	private static ArrayList<String> validOpenOffice = new ArrayList<String>();
 	private static ArrayList<String> validImageMagick = new ArrayList<String>();
+	private static ArrayList<String> validGhoscript = new ArrayList<String>();
 	private static ArrayList<String> validAutoCad = new ArrayList<String>();
 	private static DocConverter instance = null;
 	private static OfficeManager officeManager = null;
@@ -95,6 +96,9 @@ public class DocConverter {
 		validOpenOffice.add("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
 		validOpenOffice.add("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 		validOpenOffice.add("application/vnd.openxmlformats-officedocument.presentationml.presentation");
+		
+		// Postcript
+		validGhoscript.add("application/postscript");
 		
 		// Images
 		validImageMagick.add("image/jpeg");
@@ -173,9 +177,12 @@ public class DocConverter {
 			ret = true;
 		} else if (!Config.SYSTEM_IMAGEMAGICK_CONVERT.equals("") && validImageMagick.contains(from)) {
 			ret = true;
+		} else if (!Config.SYSTEM_GHOSTSCRIPT_PS2PDF.equals("") && validGhoscript.contains(from)) {
+			ret = true;
+		}
 		//} else if (!Config.SYSTEM_DWG2DXF.equals("") && validAutoCad.contains(from)) {
 		//	return true;
-		}
+		
 		
 		log.debug("convertibleToPdf: {}", ret);
 		return ret;
