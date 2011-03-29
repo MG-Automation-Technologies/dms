@@ -258,7 +258,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		availableOption.setLanguagesOption(up.getMenu().getTool().isLanguagesVisible());
 		availableOption.setSkinOption(up.getMenu().getTool().isSkinVisible());
 		availableOption.setDebugOption(up.getMenu().getTool().isDebugVisible());
-		availableOption.setAdministrationOption(up.getMenu().getTool().isAdministrationVisible());
+		availableOption.setAdministrationOption(up.getMenu().getTool().isAdministrationVisible() && getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
 		availableOption.setPreferencesOption(up.getMenu().getTool().isPreferencesVisible());
 		
 		// Menu Help
