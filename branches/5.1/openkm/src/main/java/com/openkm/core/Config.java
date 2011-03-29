@@ -140,6 +140,7 @@ public class Config {
 	public static final String PROPERTY_SYSTEM_OPENOFFICE_DICTIONARY = "system.openoffice.dictionary";
 	public static final String PROPERTY_SYSTEM_IMAGEMAGICK_CONVERT = "system.imagemagick.convert";
 	public static final String PROPERTY_SYSTEM_SWFTOOLS_PDF2SWF = "system.swftools.pdf2swf";
+	public static final String PROPERTY_SYSTEM_GHOSTSCRIPT_PS2PDF = "system.ghostscript.ps2pdf";
 	public static final String PROPERTY_SYSTEM_DWG2DXF = "system.dwg2dxf";
 	public static final String PROPERTY_SYSTEM_ANTIVIR = "system.antivir";
 	public static final String PROPERTY_SYSTEM_LOGIN_LOWERCASE = "system.login.lowercase";
@@ -197,6 +198,7 @@ public class Config {
 	
 	// Mime types
 	public static String MIME_PDF = "application/pdf";
+	public static String MIME_POSTSCRIPT = "application/postscript";
 	public static String MIME_MS_WORD = "application/msword";
 	public static String MIME_MS_EXCEL = "application/vnd.ms-excel";
 	public static String MIME_MS_POWERPOINT = "application/vnd.ms-powerpoint";
@@ -281,6 +283,7 @@ public class Config {
 	public static String SYSTEM_OPENOFFICE_DICTIONARY;
 	public static String SYSTEM_IMAGEMAGICK_CONVERT;
 	public static String SYSTEM_SWFTOOLS_PDF2SWF;
+	public static String SYSTEM_GHOSTSCRIPT_PS2PDF;
 	public static String SYSTEM_DWG2DXF;
 	public static String SYSTEM_ANTIVIR;
 	public static boolean SYSTEM_LOGIN_LOWERCASE;
@@ -618,6 +621,8 @@ public class Config {
 			values.put(PROPERTY_SYSTEM_IMAGEMAGICK_CONVERT, SYSTEM_IMAGEMAGICK_CONVERT);
 			SYSTEM_SWFTOOLS_PDF2SWF = ConfigDAO.getString(PROPERTY_SYSTEM_SWFTOOLS_PDF2SWF, cfg.getProperty(PROPERTY_SYSTEM_SWFTOOLS_PDF2SWF, ""));
 			values.put(PROPERTY_SYSTEM_SWFTOOLS_PDF2SWF, SYSTEM_SWFTOOLS_PDF2SWF);
+			SYSTEM_GHOSTSCRIPT_PS2PDF = ConfigDAO.getString(PROPERTY_SYSTEM_GHOSTSCRIPT_PS2PDF, cfg.getProperty(PROPERTY_SYSTEM_GHOSTSCRIPT_PS2PDF, ""));
+			values.put(PROPERTY_SYSTEM_GHOSTSCRIPT_PS2PDF, SYSTEM_GHOSTSCRIPT_PS2PDF);
 			SYSTEM_DWG2DXF = ConfigDAO.getString(PROPERTY_SYSTEM_DWG2DXF, cfg.getProperty(PROPERTY_SYSTEM_DWG2DXF, ""));
 			values.put(PROPERTY_SYSTEM_DWG2DXF, SYSTEM_DWG2DXF);
 			SYSTEM_ANTIVIR = ConfigDAO.getString(PROPERTY_SYSTEM_ANTIVIR, cfg.getProperty(PROPERTY_SYSTEM_ANTIVIR, ""));
