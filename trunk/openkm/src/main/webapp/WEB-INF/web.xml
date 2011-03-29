@@ -319,6 +319,10 @@
     <servlet-class>com.openkm.servlet.admin.RepositorySearchServlet</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>InstallationResetServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.InstallationResetServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>CheckEmailServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.CheckEmailServlet</servlet-class>
   </servlet>
@@ -673,6 +677,10 @@
   <servlet-mapping>
     <servlet-name>RepositorySearchServlet</servlet-name>
     <url-pattern>/admin/RepositorySearch</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>InstallationResetServlet</servlet-name>
+    <url-pattern>/admin/InstallationReset</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>CheckEmailServlet</servlet-name>
