@@ -56,6 +56,7 @@ import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.GWTWorkspace;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.OKMWorkspaceService;
+import com.openkm.principal.DatabasePrincipalAdapter;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.util.GWTUtil;
 import com.openkm.util.JCRUtils;
@@ -285,7 +286,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 			
 			User user = new User();
 			
-			if (Config.PRINCIPAL_ADAPTER.equals(com.openkm.principal.DatabasePrincipalAdapter.class.getName())) {
+			if (Config.PRINCIPAL_ADAPTER.equals(DatabasePrincipalAdapter.class.getCanonicalName())) {
 				user = AuthDAO.findUserByPk(getThreadLocalRequest().getRemoteUser());
 				workspace.setEmail(user.getEmail());
 			} else {
@@ -316,7 +317,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}	
 		
-		if (Config.PRINCIPAL_ADAPTER.equals("com.openkm.principal.DatabasePrincipalAdapter")) {
+		if (Config.PRINCIPAL_ADAPTER.equals(DatabasePrincipalAdapter.class.getCanonicalName())) {
 			workspace.setChangePassword(true);
 		} else {
 			workspace.setChangePassword(false);
@@ -367,7 +368,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 		if (!Config.SYSTEM_DEMO) {
 			try {
 				// Can change password
-				if (Config.PRINCIPAL_ADAPTER.equals("com.openkm.principal.DatabasePrincipalAdapter")) {
+				if (Config.PRINCIPAL_ADAPTER.equals(DatabasePrincipalAdapter.class.getCanonicalName())) {
 					AuthDAO.updateUserPassword(workspace.getUser(), workspace.getPassword());
 					
 					if (!user.getEmail().equals("")) {
