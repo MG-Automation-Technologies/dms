@@ -204,6 +204,7 @@ public class Config {
 	
 	// Mime types
 	public static String MIME_PDF = "application/pdf";
+	public static String MIME_POSTSCRIPT = "application/postscript";
 	public static String MIME_MS_WORD = "application/msword";
 	public static String MIME_MS_EXCEL = "application/vnd.ms-excel";
 	public static String MIME_MS_POWERPOINT = "application/vnd.ms-powerpoint";
