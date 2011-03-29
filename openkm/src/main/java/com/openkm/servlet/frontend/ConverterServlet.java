@@ -112,7 +112,20 @@ public class ConverterServlet extends OKMHttpServlet {
 				
 				// Convert to PDF
 				if (toPdf || toSwf && !Config.SYSTEM_SWFTOOLS_PDF2SWF.equals("")) {
-					if (!doc.getMimeType().equals(Config.MIME_PDF)) {
+					if (doc.getMimeType().equals(Config.MIME_POSTSCRIPT)) {
+						try {
+							if (!pdfCache.exists()) {
+								converter.ps2pdf(is, pdfCache);
+							}
+							
+							is.close();
+							is = new FileInputStream(pdfCache);
+						} catch (ConversionException e) {
+							pdfCache.delete();
+							log.error(e.getMessage(), e);
+							is = ConverterServlet.class.getResourceAsStream("conversion_problem.pdf");
+						}
+					} else if (!doc.getMimeType().equals(Config.MIME_PDF)) {
 						try {
 							if (!pdfCache.exists()) {
 								if (doc.getMimeType().startsWith("image/")) {
