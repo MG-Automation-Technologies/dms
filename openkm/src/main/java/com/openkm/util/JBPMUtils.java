@@ -36,6 +36,9 @@ public class JBPMUtils {
 	private static Logger log = LoggerFactory.getLogger(JBPMUtils.class);
 	private static JbpmConfiguration jbpmConfig = null;
 	
+	/**
+	 * Create instance
+	 */
 	public static synchronized JbpmConfiguration getConfig() {
 		if (jbpmConfig == null) {
 			File jbpmCfg = new File(Config.JBPM_CONFIG);
@@ -54,5 +57,15 @@ public class JBPMUtils {
 		}
 		
 		return jbpmConfig;
+	}
+	
+	/**
+	 * Close instance
+	 */
+	public static synchronized void closeConfig() {
+		if (jbpmConfig != null) {
+			jbpmConfig.close();
+			jbpmConfig = null;
+		}
 	}
 }
