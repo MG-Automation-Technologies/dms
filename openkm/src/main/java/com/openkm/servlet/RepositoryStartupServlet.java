@@ -25,6 +25,7 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.Timer;
 
+import javax.servlet.GenericServlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -60,20 +61,21 @@ import com.openkm.util.WarUtils;
  */
 public class RepositoryStartupServlet extends HttpServlet {
 	private static Logger log = LoggerFactory.getLogger(RepositoryStartupServlet.class);
-	private static final long serialVersionUID = 207151527252937549L;
-	private Timer dsgcTimer;
-	private Timer wdTimer;
-	private Timer riTimer;
-	private Timer uiTimer;
-	private Timer umiTimer;
-	private Timer cronTimer;
-	private Watchdog wd;
-	private Cron cron;
-	private UpdateInfo ui;
-	private RepositoryInfo ri;
-	private UserMailImporter umi;
-	private DataStoreGarbageCollector dsgc;
-	private boolean hasConfiguredDataStore;
+	private static final long serialVersionUID = 1L;
+	private static Timer dsgcTimer;
+	private static Timer wdTimer;
+	private static Timer riTimer;
+	private static Timer uiTimer;
+	private static Timer umiTimer;
+	private static Timer cronTimer;
+	private static Watchdog wd;
+	private static Cron cron;
+	private static UpdateInfo ui;
+	private static RepositoryInfo ri;
+	private static UserMailImporter umi;
+	private static DataStoreGarbageCollector dsgc;
+	private static boolean hasConfiguredDataStore;
+	private static boolean running = false;
 	
     @Override
     public void init() throws ServletException {
@@ -109,6 +111,32 @@ public class RepositoryStartupServlet extends HttpServlet {
         	if (!chrootFolder.exists()) chrootFolder.mkdirs();
         }
         
+        // Invoke start
+        start();
+        
+        // Activity log
+		UserActivity.log(Config.SYSTEM_USER, "ADMIN_OPENKM_START", null, null);
+    }
+    
+	@Override
+    public void destroy() {
+        super.destroy();
+        
+        // Invoke stop
+        stop(this);
+        
+        // Activity log
+		UserActivity.log(Config.SYSTEM_USER, "ADMIN_OPENKM_STOP", null, null);
+    }
+	
+	/**
+	 * Start OpenKM and possible repository and database initialization
+	 */
+	public static synchronized void start() throws ServletException {
+		if (running) {
+			throw new IllegalStateException("OpenKM already started");
+		}
+		
         try {
         	log.info("*** Repository initializing... ***");
         	DirectRepositoryModule.initialize();
@@ -232,17 +260,21 @@ public class RepositoryStartupServlet extends HttpServlet {
         	log.warn(e.getMessage(), e);
         }
         
-        // Activity log
-		UserActivity.log(Config.SYSTEM_USER, "ADMIN_OPENKM_START", null, null);
-    }
-
-	@Override
-    public void destroy() {
-        super.destroy();
-
-        try {
+        // OpenKM is started
+        running = true;
+	}
+	
+	/**
+	 * Close OpenKM and free resources
+	 */
+	public static synchronized void stop(GenericServlet gs) {
+		if (!running) {
+			throw new IllegalStateException("OpenKM not started");
+		}
+		
+		try {
         	if (!Config.SYSTEM_OPENOFFICE_PATH.equals("")) {
-        		if (log == null) log("*** Shutting down OpenOffice manager ***");
+        		if (log == null && gs != null) gs.log("*** Shutting down OpenOffice manager ***");
         		else log.info("*** Shutting down OpenOffice manager ***");
         		DocConverter.getInstance().stop();
         	}
@@ -251,31 +283,31 @@ public class RepositoryStartupServlet extends HttpServlet {
         }
         
         if (hasConfiguredDataStore) {
-        	if (log == null) log("*** Shutting down datastore garbage collection... ***");
+        	if (log == null && gs != null) gs.log("*** Shutting down datastore garbage collection... ***");
         	else log.info("*** Shutting down datastore garbage collection... ***");
         	dsgc.cancel();
         }
         
         if (Config.SCHEDULE_MAIL_IMPORTER > 0) {
-        	if (log == null) log("*** Shutting down user mail importer ***");
+        	if (log == null && gs != null) gs.log("*** Shutting down user mail importer ***");
         	else log.info("*** Shutting down user mail importer ***");
         	umi.cancel();
         }
         
-        if (log == null) log("*** Shutting down repository info... ***");
+        if (log == null && gs != null) gs.log("*** Shutting down repository info... ***");
         else log.info("*** Shutting down repository info... ***");
         ri.cancel();
         
-        if (log == null) log("*** Shutting down cron... ***");
+        if (log == null && gs != null) gs.log("*** Shutting down cron... ***");
         else log.info("*** Shutting down cron... ***");
         cron.cancel();
         
-        if (log == null) log("*** Shutting down watchdog... ***");
+        if (log == null && gs != null) gs.log("*** Shutting down watchdog... ***");
         else log.info("*** Shutting down watchdog... ***");
         wd.cancel();
         
         if (Config.UPDATE_INFO) {
-        	if (log == null) log("*** Shutting down update info... ***");
+        	if (log == null && gs != null) gs.log("*** Shutting down update info... ***");
         	else log.info("*** Shutting down update info... ***");
         	ui.cancel();
         }
@@ -288,13 +320,13 @@ public class RepositoryStartupServlet extends HttpServlet {
         wdTimer.cancel();
         uiTimer.cancel();
 		
-        if (log == null) log("*** Shutting down workflow engine... ***");
+        if (log == null && gs != null) gs.log("*** Shutting down workflow engine... ***");
         else log.info("*** Shutting down workflow engine... ***");
         JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
         jbpmContext.getJbpmConfiguration().getJobExecutor().stop();
         jbpmContext.close();
         
-        if (log == null) log("*** Shutting down repository... ***");
+        if (log == null && gs != null) gs.log("*** Shutting down repository... ***");
         else log.info("*** Shutting down repository...");
         
         if (Config.USER_ITEM_CACHE) {
@@ -315,11 +347,11 @@ public class RepositoryStartupServlet extends HttpServlet {
         	log.error(e.getMessage(), e);
         }
         
-        if (log == null) log("*** Repository shutted down ***");
+        if (log == null && gs != null) gs.log("*** Repository shutted down ***");
         else log.info("*** Repository shutted down ***");
         
         try {
-        	if (log == null) log("*** Ejecute stop script ***");
+        	if (log == null && gs != null) gs.log("*** Ejecute stop script ***");
         	else log.info("*** Ejecute stop script ***");
         	File script = new File(Config.HOME_DIR + File.separatorChar + Config.STOP_SCRIPT);
         	ExecutionUtils.runScript(script);
@@ -329,7 +361,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         	log.warn(e.getMessage(), e);
         }
         
-        // Activity log
-		UserActivity.log(Config.SYSTEM_USER, "ADMIN_OPENKM_STOP", null, null);
-    }
+        // OpenKM is stopped
+        running = false;
+	}
 }
