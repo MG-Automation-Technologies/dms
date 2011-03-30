@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -66,17 +67,32 @@ public class InstallationResetServlet extends BaseServlet {
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		String type = WebUtils.getString(request, "type");
+		String confirmation = WebUtils.getString(request, "confirmation");
 		updateSessionManager(request);
+		
+		if (confirmation.equals("Yes")) {
+			reset(request, response);
+		} else {
+			ServletContext sc = getServletContext();
+			sc.getRequestDispatcher("/admin/installation_reset.jsp").forward(request, response);
+		}
+	}
+	
+	/**
+	 * Perform installation reset (repository and database)
+	 */
+	private void reset(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException {
 		PrintWriter out = response.getWriter();
 		response.setContentType("text/html");
-		header(out, "Repository reset");
+		header(out, "Installation reset");
 		out.flush();
 		out.println("<h1>Repository reset</h1>");
 		out.println("<ul>");
 		out.flush();
 		
 		try {
+			RepositoryStartupServlet.start();
 			// Stop
 			out.println("<li>Stop repository</li>");
 			out.flush();
@@ -101,11 +117,17 @@ public class InstallationResetServlet extends BaseServlet {
 			out.flush();
 			RepositoryStartupServlet.start();
 			
-			// Activity log
-			UserActivity.log(request.getRemoteUser(), "ADMIN_INSTALLATION_RESET", null, type);
-		} finally {
+			// Finalized
 			out.println("<li>Installation reset completed!</li>");
 			out.println("</ul>");
+			out.flush();
+			
+			// Activity log
+			UserActivity.log(request.getRemoteUser(), "ADMIN_INSTALLATION_RESET", null, null);
+		} catch (Exception e) {
+			out.println("<div class=\"warn\">Exception: "+e.getMessage()+"</div>");
+			out.flush();
+		} finally {
 			footer(out);
 			out.flush();
 			out.close();
