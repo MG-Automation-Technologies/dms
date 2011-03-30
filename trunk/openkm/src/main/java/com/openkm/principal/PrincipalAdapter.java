@@ -23,7 +23,6 @@ package com.openkm.principal;
 
 import java.util.List;
 
-
 public interface PrincipalAdapter {
 	
 	/**
