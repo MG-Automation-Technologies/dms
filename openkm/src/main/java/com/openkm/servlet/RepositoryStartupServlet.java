@@ -75,6 +75,7 @@ public class RepositoryStartupServlet extends HttpServlet {
 	private static UserMailImporter umi;
 	private static DataStoreGarbageCollector dsgc;
 	private static boolean hasConfiguredDataStore;
+	private static boolean running = false;
 	
     @Override
     public void init() throws ServletException {
@@ -131,7 +132,11 @@ public class RepositoryStartupServlet extends HttpServlet {
 	/**
 	 * Start OpenKM and possible repository and database initialization
 	 */
-	public static void start() throws ServletException {
+	public static synchronized void start() throws ServletException {
+		if (running) {
+			throw new IllegalStateException("OpenKM already started");
+		}
+		
         try {
         	log.info("*** Repository initializing... ***");
         	DirectRepositoryModule.initialize();
@@ -254,12 +259,19 @@ public class RepositoryStartupServlet extends HttpServlet {
         } catch (Throwable e) {
         	log.warn(e.getMessage(), e);
         }
+        
+        // OpenKM is started
+        running = true;
 	}
 	
 	/**
 	 * Close OpenKM and free resources
 	 */
-	public static void stop(GenericServlet gs) {
+	public static synchronized void stop(GenericServlet gs) {
+		if (!running) {
+			throw new IllegalStateException("OpenKM not started");
+		}
+		
 		try {
         	if (!Config.SYSTEM_OPENOFFICE_PATH.equals("")) {
         		if (log == null && gs != null) gs.log("*** Shutting down OpenOffice manager ***");
@@ -348,5 +360,8 @@ public class RepositoryStartupServlet extends HttpServlet {
         } catch (Throwable e) {
         	log.warn(e.getMessage(), e);
         }
+        
+        // OpenKM is stopped
+        running = false;
 	}
 }
