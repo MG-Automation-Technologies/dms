@@ -91,6 +91,9 @@ public class InstallationResetServlet extends BaseServlet {
 		out.println("<ul>");
 		out.flush();
 		
+		Config.SYSTEM_MAINTENANCE = true;
+		out.println("<li>System into maintenance mode</li>");
+		
 		try {
 			RepositoryStartupServlet.start();
 			// Stop
@@ -121,6 +124,9 @@ public class InstallationResetServlet extends BaseServlet {
 			out.println("<li>Installation reset completed!</li>");
 			out.println("</ul>");
 			out.flush();
+			
+			Config.SYSTEM_MAINTENANCE = false;
+			out.println("<li>System out of maintenance mode</li>");
 			
 			// Activity log
 			UserActivity.log(request.getRemoteUser(), "ADMIN_INSTALLATION_RESET", null, null);
