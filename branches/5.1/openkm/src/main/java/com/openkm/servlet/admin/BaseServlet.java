@@ -1,6 +1,7 @@
 package com.openkm.servlet.admin;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -62,5 +63,31 @@ public class BaseServlet extends HttpServlet  {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Print HTML page header
+	 */
+	public void header(PrintWriter out, String title) {
+		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
+		out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
+		out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
+		out.println("<head>");
+		out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />");
+		out.println("<link rel=\"Shortcut icon\" href=\"favicon.ico\" />");
+		out.println("<link rel=\"stylesheet\" href=\"css/style.css\" type=\"text/css\" />");
+		out.println("<script src=\"js/biblioteca.js\" type=\"text/javascript\"></script>");
+		out.println("<script type=\"text/javascript\">scrollToBottom();</script>");
+		out.println("<title>" + title + "</title>");
+		out.println("</head>");
+		out.println("<body>");
+	}
+	
+	/**
+	 * Print HTML page footer
+	 */
+	public void footer(PrintWriter out) {
+		out.println("</body>");
+		out.println("</html>");
 	}
 }
