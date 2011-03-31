@@ -23,7 +23,7 @@ public class WikiPageIdx {
 	 */
 	public static void index(WikiPage item) throws IOException {
 		log.info("index({})", item);
-		IndexWriter writer = Indexer.getIndexWriter(false);
+		IndexWriter writer = Indexer.getIndexWriter();
 		Document doc = new Document();
 		doc.add(new Field("id", Integer.toString(item.getId()), Field.Store.YES, Field.Index.NO));
 		doc.add(new Field("user", item.getUser(), Field.Store.YES, Field.Index.NOT_ANALYZED));
@@ -34,10 +34,10 @@ public class WikiPageIdx {
 	/**
 	 * Perform search
 	 */
-	public TopDocs performSearch(String queryString) throws IOException, ParseException {		
+	public static TopDocs performSearch(String field, String qs) throws IOException, ParseException {		
 		Searcher searcher = Indexer.getIndexSearcher();
-		QueryParser parser = new QueryParser("content", Indexer.getAnalyzer());
-		Query query = parser.parse(queryString);
+		QueryParser parser = new QueryParser(field, Indexer.getAnalyzer());
+		Query query = parser.parse(qs);
 		TopDocs result = searcher.search(query, Indexer.HITS_PER_PAGE);
 		return result;
 	}
