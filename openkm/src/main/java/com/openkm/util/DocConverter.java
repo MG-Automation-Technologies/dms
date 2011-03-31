@@ -360,7 +360,7 @@ public class DocConverter {
 			fos.close();
 			
 			// Performs conversion
-			HashMap<String, String> hm = new HashMap<String, String>();
+			HashMap<String, Object> hm = new HashMap<String, Object>();
 			hm.put("fileIn", tmpFileIn.getPath());
 			hm.put("fileOut", output.getPath());
 			String tpl = Config.SYSTEM_GHOSTSCRIPT_PS2PDF + " ${fileIn} ${fileOut}";
@@ -399,7 +399,7 @@ public class DocConverter {
 			fos.close();
 			
 			// Performs conversion
-			HashMap<String, String> hm = new HashMap<String, String>();
+			HashMap<String, Object> hm = new HashMap<String, Object>();
 			hm.put("fileIn", tmpFileIn.getPath());
 			hm.put("fileOut", output.getPath());
 			String tpl = Config.SYSTEM_IMAGEMAGICK_CONVERT + " ${fileIn}[0] ${fileOut}";
@@ -436,7 +436,7 @@ public class DocConverter {
 			fos.close();
 			
 			// Performs conversion
-			HashMap<String, String> hm = new HashMap<String, String>();
+			HashMap<String, Object> hm = new HashMap<String, Object>();
 			hm.put("fileIn", tmpFileIn.getPath());
 			hm.put("fileOut", output.getPath());
 			String tpl = "wine " + Config.SYSTEM_DWG2DXF + " /r /ad /lw 1 /f 104 ${fileIn} ${fileOut}"; 
@@ -522,7 +522,7 @@ public class DocConverter {
 		
 		try {
 			// Performs conversion
-			HashMap<String, String> hm = new HashMap<String, String>();
+			HashMap<String, Object> hm = new HashMap<String, Object>();
 			hm.put("fileIn", input.getPath());
 			hm.put("fileOut", output.getPath());
 			String tpl = Config.SYSTEM_SWFTOOLS_PDF2SWF + " -T 9 ${fileIn} -o ${fileOut}";
@@ -552,7 +552,7 @@ public class DocConverter {
 		
 		try {
 			// Performs step 1: split pdf into several images
-			HashMap<String, String> hm = new HashMap<String, String>();
+			HashMap<String, Object> hm = new HashMap<String, Object>();
 			hm.put("fileIn", input.getPath());
 			hm.put("fileOut", tmpDir + File.separator + "out.jpg");
 			String tpl = Config.SYSTEM_IMAGEMAGICK_CONVERT + " -bordercolor #666 -border 2x2 ${fileIn} ${fileOut}";
@@ -560,7 +560,7 @@ public class DocConverter {
 			ExecutionUtils.runCmd(cmd);
 			
 			// Performs step 2: join split images into a big one
-			hm = new HashMap<String, String>();
+			hm = new HashMap<String, Object>();
 			StringBuilder sb = new StringBuilder();
 			File files[] = tmpDir.listFiles();
 			Arrays.sort(files, new FileOrderComparator());
@@ -615,7 +615,7 @@ public class DocConverter {
 	    
 		try {
 			// Performs conversion
-			HashMap<String, String> hm = new HashMap<String, String>();
+			HashMap<String, Object> hm = new HashMap<String, Object>();
 			hm.put("fileIn", input.getPath());
 			hm.put("fileOut", output.getPath());
 			String tpl = "wine " + Config.SYSTEM_DWG2DXF + " /r /ad /x14 ${fileIn} ${fileOut}";
