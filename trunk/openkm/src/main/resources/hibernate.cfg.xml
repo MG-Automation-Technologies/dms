@@ -236,7 +236,7 @@
     <mapping resource="com/openkm/dao/bean/MailAccount.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/QueryParams.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/TwitterAccount.hbm.xml"/>
-    <mapping resource="com/openkm/dao/bean/DashboardStats.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/Dashboard.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Language.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Translation.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/cache/UserItems.hbm.xml"/>
