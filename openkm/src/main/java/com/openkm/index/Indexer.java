@@ -31,10 +31,10 @@ public class Indexer {
 	/**
 	 * Obtain index writer 
 	 */
-	public static synchronized IndexWriter getIndexWriter(boolean create) throws CorruptIndexException,
+	public static synchronized IndexWriter getIndexWriter() throws CorruptIndexException,
 			LockObtainFailedException, IOException  {
 		if (indexWriter == null) {
-			indexWriter = new IndexWriter(INDEX_PATH, getAnalyzer(), create, MaxFieldLength.LIMITED);
+			indexWriter = new IndexWriter(INDEX_PATH, getAnalyzer(), true, MaxFieldLength.LIMITED);
 		}
 		
 		return indexWriter;
