@@ -95,7 +95,6 @@ public class InstallationResetServlet extends BaseServlet {
 		out.println("<li>System into maintenance mode</li>");
 		
 		try {
-			RepositoryStartupServlet.start();
 			// Stop
 			out.println("<li>Stop repository</li>");
 			out.flush();
