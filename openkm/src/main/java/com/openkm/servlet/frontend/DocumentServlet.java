@@ -36,6 +36,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.jooreports.templates.DocumentTemplateException;
+
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +70,7 @@ import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.util.DocumentComparator;
 import com.openkm.util.FileUtils;
 import com.openkm.util.GWTUtil;
+import com.openkm.util.OOUtils;
 import com.openkm.util.PDFUtils;
 
 /**
@@ -644,14 +647,20 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 			fos = new FileOutputStream(tmp);
 			
 			// Setting values to document 
-			Map<String, String> values = new HashMap<String, String>();
+			Map<String, Object> values = new HashMap<String, Object>();
 			for (GWTFormElement formElement : formProperties) {
 				values.put(formElement.getName().replace(".", "_"), GWTUtil.getFormElementValue(formElement));
 			}
 			
-			// Create document in temporary 
-			PDFUtils.fillForm(fis, values, fos);
-			fis.close();
+			Document doc = OKMDocument.getInstance().getProperties(null, docPath);
+			if (doc.getMimeType().equals("application/pdf")) {
+				// Fill form
+				PDFUtils.fillForm(fis, values, fos);
+				fis.close();
+			} else if (doc.getMimeType().equals("text/html")) {
+				OOUtils.fillTemplate(fis, values, fos);
+				fis.close();
+			}
 			
 	        // Creating document
 	        fis = new FileInputStream(tmp);
@@ -691,7 +700,10 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 		} catch (AccessDeniedException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_AccessDenied), e.getMessage());
-		} finally {
+		} catch (DocumentTemplateException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_DocumentTemplate), e.getMessage());
+		}finally {
 			FileUtils.deleteQuietly(tmp);
 			IOUtils.closeQuietly(fis);
 			IOUtils.closeQuietly(fos);
