@@ -703,7 +703,7 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 		} catch (DocumentTemplateException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_DocumentTemplate), e.getMessage());
-		}finally {
+		} finally {
 			FileUtils.deleteQuietly(tmp);
 			IOUtils.closeQuietly(fis);
 			IOUtils.closeQuietly(fos);
