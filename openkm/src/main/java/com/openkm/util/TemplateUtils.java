@@ -23,6 +23,10 @@ package com.openkm.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Map;
@@ -82,5 +86,18 @@ public class TemplateUtils {
 		sw.close();
 		sr.close();
 		return sw.toString();
+	}
+	
+	/**
+	 * Quick replace utility function
+	 */
+	public static void replace(String name, InputStream input, Map<String, Object> model, 
+			OutputStream out) throws IOException, TemplateException {
+		InputStreamReader isr = new InputStreamReader(input);
+		Template tpl = new Template(name, isr, cfg);
+		OutputStreamWriter osw = new OutputStreamWriter(out);
+		tpl.process(model, osw);
+		osw.close();
+		isr.close();
 	}
 }
