@@ -167,9 +167,10 @@ public class TemplateWizardPopup extends DialogBox {
 				} else {
 					ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
 					endPoint.setServiceEntryPoint(RPCService.DocumentService);	
-					documentService.createFromTemplate(docPath, destinationPath, formElementList, new AsyncCallback<Object>() {
+					documentService.createFromTemplate(docPath, destinationPath, formElementList, new AsyncCallback<String>() {
 						@Override
-						public void onSuccess(Object result) {
+						public void onSuccess(String result) {
+							destinationPath = result; // path could be changed ( for example html is converted to pdf )
 							// Forward to next status
 							status = STATUS_FINISH;
 							showNextWizard();
