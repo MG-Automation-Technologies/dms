@@ -81,7 +81,7 @@ public class Tesseract3TextExtractor extends AbstractTextExtractor {
     			fos.close();
     			
     			// Performs OCR
-    			HashMap<String, String> hm = new HashMap<String, String>();
+    			HashMap<String, Object> hm = new HashMap<String, Object>();
     			hm.put("fileIn", tmpFileIn.getPath());
     			hm.put("fileOut", tmpFileOut.getPath());
     			String tpl = Config.SYSTEM_OCR + " ${fileIn} ${fileOut}";
