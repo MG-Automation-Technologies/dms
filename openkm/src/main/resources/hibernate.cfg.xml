@@ -255,6 +255,9 @@
     <mapping resource="com/openkm/extension/dao/bean/MessageReceived.hbm.xml"/>
     <!-- <mapping resource="com/openkm/extension/dao/bean/WikiPage.hbm.xml"/> -->
     <mapping resource="com/openkm/extension/dao/bean/ZohoEditing.hbm.xml"/>
+    <mapping resource="com/openkm/extension/dao/bean/Forum.hbm.xml"/>
+    <mapping resource="com/openkm/extension/dao/bean/ForumTopic.hbm.xml"/>
+    <mapping resource="com/openkm/extension/dao/bean/ForumPost.hbm.xml"/>
 
     <!-- ################################### -->
     <!-- # cache settings                  # -->
