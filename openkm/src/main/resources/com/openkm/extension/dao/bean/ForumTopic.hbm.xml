@@ -13,7 +13,7 @@
    <property name="lastDate" column="FTP_LAST_DATE" not-null="true"/>
    <set name="posts" table="OKM_FORUM_POST" order-by="FPS_ID asc" cascade="all-delete-orphan" lazy="false">
      <key column="FPS_TOPIC" not-null="true"/>
-     <one-to-many class="com.openkm.dao.bean.ForumPost"/>
+     <one-to-many class="com.openkm.extension.dao.bean.ForumPost"/>
    </set>
  </class>
 </hibernate-mapping>

@@ -10,7 +10,7 @@
    <property name="active" column="FRM_ACTIVE" type="true_false" not-null="true"/>
    <set name="topics" table="OKM_FORUM_TOPIC" order-by="FTP_ID asc" cascade="all-delete-orphan" lazy="false">
      <key column="FTP_FORUM" not-null="true"/>
-     <one-to-many class="com.openkm.dao.bean.ForumTopic"/>
+     <one-to-many class="com.openkm.extension.dao.bean.ForumTopic"/>
    </set>
  </class>
 </hibernate-mapping>
