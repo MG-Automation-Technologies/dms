@@ -11,6 +11,8 @@ public class Forum implements Serializable {
 	private String name;
 	private String description;
 	private Calendar date;
+	private String lastUser;
+	private Calendar lastDate;
 	private boolean active;
 	private Set<ForumTopic> topics = new HashSet<ForumTopic>();
 	
@@ -60,5 +62,21 @@ public class Forum implements Serializable {
 
 	public void setDate(Calendar date) {
 		this.date = date;
+	}
+
+	public String getLastUser() {
+		return lastUser;
+	}
+
+	public void setLastUser(String lastUser) {
+		this.lastUser = lastUser;
+	}
+
+	public Calendar getLastDate() {
+		return lastDate;
+	}
+
+	public void setLastDate(Calendar lastDate) {
+		this.lastDate = lastDate;
 	}
 }
