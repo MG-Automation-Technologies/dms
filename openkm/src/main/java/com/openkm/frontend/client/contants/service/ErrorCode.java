@@ -102,6 +102,7 @@ public class ErrorCode {
 	public static final String CAUSE_MalformedURL				= "037";
 	public static final String CAUSE_Zoho						= "038";
 	public static final String CAUSE_DocumentTemplate			= "039";
+	public static final String CAUSE_Template					= "040";
 
 	/**
 	 * Gets the error
