@@ -185,7 +185,7 @@ public class PDFUtils {
 	 * Fill PDF form
 	 */
 	@SuppressWarnings("rawtypes")
-	public static void fillForm(InputStream input, Map<String, String> values, 
+	public static void fillForm(InputStream input, Map<String, Object> values, 
 			OutputStream output) throws FileNotFoundException, DocumentException, IOException {
 		log.info("fillForm({}, {}, {})", new Object[] { input, values, output });
 		PdfReader reader = new PdfReader(input);
@@ -195,7 +195,7 @@ public class PDFUtils {
 		for (Iterator it = reader.getAcroForm().getFields().iterator(); it.hasNext(); ) {
 			PRAcroForm.FieldInformation field = (PRAcroForm.FieldInformation) it.next();
 			log.info("Field: {}", field.getName());
-			String value = values.get(field.getName());
+			String value = (String) values.get(field.getName());
 			
 			if (value != null) {
 				form.setField(field.getName(), value);
