@@ -96,6 +96,11 @@ public class ErrorCode {
 	public static final String CAUSE_Conversion					= "033";
 	public static final String CAUSE_Authentication				= "034";
 	public static final String CAUSE_Google						= "035";
+	public static final String CAUSE_UnsupportedEncoding		= "036";
+	public static final String CAUSE_MalformedURL				= "037";
+	public static final String CAUSE_Zoho						= "038";
+	public static final String CAUSE_DocumentTemplate			= "039";
+	public static final String CAUSE_Template					= "040";
 
 	/**
 	 * Gets the error
