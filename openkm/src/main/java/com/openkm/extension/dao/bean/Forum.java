@@ -1,6 +1,7 @@
 package com.openkm.extension.dao.bean;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,6 +10,7 @@ public class Forum implements Serializable {
 	private int id;
 	private String name;
 	private String description;
+	private Calendar date;
 	private boolean active;
 	private Set<ForumTopic> topics = new HashSet<ForumTopic>();
 	
@@ -50,5 +52,13 @@ public class Forum implements Serializable {
 
 	public void setTopics(Set<ForumTopic> topics) {
 		this.topics = topics;
+	}
+
+	public Calendar getDate() {
+		return date;
+	}
+
+	public void setDate(Calendar date) {
+		this.date = date;
 	}
 }

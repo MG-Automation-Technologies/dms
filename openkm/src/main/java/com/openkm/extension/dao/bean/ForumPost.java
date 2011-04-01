@@ -9,7 +9,7 @@ public class ForumPost implements Serializable {
 	private String user;
 	private String subject;
 	private String message;
-	private Calendar time;
+	private Calendar date;
 	
 	public int getId() {
 		return id;
@@ -42,12 +42,12 @@ public class ForumPost implements Serializable {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
-	public Calendar getTime() {
-		return time;
+
+	public Calendar getDate() {
+		return date;
 	}
-	
-	public void setTime(Calendar time) {
-		this.time = time;
+
+	public void setDate(Calendar date) {
+		this.date = date;
 	}
 }
