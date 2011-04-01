@@ -652,12 +652,14 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 				values.put(formElement.getName().replace(".", "_"), GWTUtil.getFormElementValue(formElement));
 			}
 			
+			// Fill document by mime type
 			Document doc = OKMDocument.getInstance().getProperties(null, docPath);
 			if (doc.getMimeType().equals("application/pdf")) {
 				// Fill form
 				PDFUtils.fillForm(fis, values, fos);
 				fis.close();
 			} else if (doc.getMimeType().equals("text/html")) {
+				//Fill template
 				OOUtils.fillTemplate(fis, values, fos);
 				fis.close();
 			}
@@ -703,7 +705,7 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 		} catch (DocumentTemplateException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_DocumentTemplate), e.getMessage());
-		} finally {
+		}finally {
 			FileUtils.deleteQuietly(tmp);
 			IOUtils.closeQuietly(fis);
 			IOUtils.closeQuietly(fos);
