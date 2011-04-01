@@ -115,12 +115,36 @@ public class ForumDAO {
 	}
 	
 	/**
-	 * Find all wiki pages
+	 * Finde by pk
+	 */
+	public static Forum findByPk(int frmId) throws DatabaseException {
+		log.debug("findAll({})");
+		String qs = "from Forum frm where frm.id=:id";		
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setInteger("id", frmId);
+			Forum ret = (Forum) q.setMaxResults(1).uniqueResult();
+			log.debug("findByPk: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Find all forums
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<Forum> findAll() throws DatabaseException {
 		log.debug("findAll({})");
-		String qs = "select frm from Forum frm order by frm.date asc";		
+		String qs = "from Forum frm order by frm.date asc";		
 		Session session = null;
 		Transaction tx = null;
 		
