@@ -51,5 +51,5 @@ public interface OKMDocumentServiceAsync {
 	public void purgeVersionHistory(String docPath, AsyncCallback<?> callback);
 	public void forceUnlock(String docPath, AsyncCallback<?> callback);
 	public void forceCancelCheckout(String docPath, AsyncCallback<?> callback);
-	public void createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties, AsyncCallback<?> callback);
+	public void createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties, AsyncCallback<String> callback);
 }

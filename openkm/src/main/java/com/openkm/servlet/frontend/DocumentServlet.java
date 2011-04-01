@@ -51,6 +51,7 @@ import com.openkm.bean.Document;
 import com.openkm.bean.QueryResult;
 import com.openkm.bean.Version;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.ConversionException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
@@ -68,10 +69,14 @@ import com.openkm.frontend.client.bean.GWTVersion;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.util.DocumentComparator;
+import com.openkm.util.DocConverter;
 import com.openkm.util.FileUtils;
 import com.openkm.util.GWTUtil;
 import com.openkm.util.OOUtils;
 import com.openkm.util.PDFUtils;
+import com.openkm.util.TemplateUtils;
+
+import freemarker.template.TemplateException;
 
 /**
  * Servlet Class
@@ -632,7 +637,7 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 	}
 	
 	@Override
-	public void createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties) throws OKMException  {
+	public String createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties) throws OKMException  {
 		File tmp = null;
 		InputStream fis = null;
 		FileOutputStream fos = null;
@@ -649,7 +654,7 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 			// Setting values to document 
 			Map<String, Object> values = new HashMap<String, Object>();
 			for (GWTFormElement formElement : formProperties) {
-				values.put(formElement.getName().replace(".", "_"), GWTUtil.getFormElementValue(formElement));
+				values.put(formElement.getName().replace(".", "_").replace(":", "_"), GWTUtil.getFormElementValue(formElement));
 			}
 			
 			// Fill document by mime type
@@ -658,10 +663,28 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 				// Fill form
 				PDFUtils.fillForm(fis, values, fos);
 				fis.close();
-			} else if (doc.getMimeType().equals("text/html")) {
-				//Fill template
+				fos.close();
+			} else if (doc.getMimeType().equals("application/vnd.oasis.opendocument.text")) {
+				// Fill template
 				OOUtils.fillTemplate(fis, values, fos);
 				fis.close();
+				fos.close();
+			} else if (doc.getMimeType().equals("text/html")) {
+				//Fill template
+				TemplateUtils.replace(fileName, fis, values, fos);
+				fis.close();
+				fos.close();
+				// Converting to pdf
+				fis = new FileInputStream(tmp);
+				File tmp2 = tmp;
+				tmp = File.createTempFile("okm", ".pdf");
+				DocConverter.getInstance().html2pdf(fis,tmp); // tmp has converted pdf file
+				tmp2.delete(); // deleting html tmp file
+				// Changing fileName after conversion
+				System.out.println(destinationPath.lastIndexOf("."));
+				destinationPath = destinationPath.substring(0,destinationPath.lastIndexOf(".")) + ".pdf";
+				fis.close();
+				fos.close();
 			}
 			
 	        // Creating document
@@ -700,15 +723,23 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_ItemExists), e.getMessage());
 		} catch (AccessDeniedException e) {
-			log.warn(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_AccessDenied), e.getMessage());
 		} catch (DocumentTemplateException e) {
-			log.warn(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_DocumentTemplate), e.getMessage());
-		}finally {
+		} catch (ConversionException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Conversion), e.getMessage());
+		} catch (TemplateException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Template), e.getMessage());
+		} finally {
 			FileUtils.deleteQuietly(tmp);
 			IOUtils.closeQuietly(fis);
 			IOUtils.closeQuietly(fos);
 		}
+		
+		return destinationPath;
 	}
 }
