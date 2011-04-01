@@ -238,7 +238,7 @@ public class FolderSelectPopup extends DialogBox  {
 						// Only create from template when origin and destination path are not equals
 						if (!fatherPath.equals(actualPath)) {
 							setActionView();
-							if (((GWTDocument) node).getMimeType().equals("application/pdf") && 
+							if ((((GWTDocument) node).getMimeType().equals("application/pdf") || ((GWTDocument) node).getMimeType().equals("text/html")) && 
 								Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.hasPropertyGroups()) {
 								Main.get().templateWizardPopup.start(((GWTDocument) node).getPath(), actualPath + "/" + ((GWTDocument) node).getName());
 							} else {						
