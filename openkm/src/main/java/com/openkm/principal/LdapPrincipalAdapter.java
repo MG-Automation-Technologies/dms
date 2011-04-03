@@ -130,9 +130,9 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 				Config.PRINCIPAL_LDAP_SERVER,
 				Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
 				Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
-				Config.PRINCIPAL_LDAP_USER_SEARCH_BASE, 
+				Config.PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_BASE, 
 				MessageFormat.format(Config.PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_FILTER, role),
-				Config.PRINCIPAL_LDAP_USER_ATTRIBUTE);
+				Config.PRINCIPAL_LDAP_USERS_BY_ROLE_ATTRIBUTE);
 		
 		for (Iterator<String> it = ldap.iterator(); it.hasNext(); ) {
 			String user = it.next();
@@ -158,9 +158,9 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 				Config.PRINCIPAL_LDAP_SERVER,
 				Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
 				Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
-				Config.PRINCIPAL_LDAP_USER_SEARCH_BASE,
+				Config.PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_BASE,
 				MessageFormat.format(Config.PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_FILTER, user),
-				Config.PRINCIPAL_LDAP_ROLE_ATTRIBUTE);
+				Config.PRINCIPAL_LDAP_ROLES_BY_USER_ATTRIBUTE);
 		
 		for (Iterator<String> it = ldap.iterator(); it.hasNext(); ) {
 			String role = it.next();
