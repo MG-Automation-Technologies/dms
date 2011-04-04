@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -71,6 +71,7 @@ public class ZohoFileUploadServlet extends OKMHttpServlet {
 		String format = "";
 		String id = "";
 		String filename = "";
+		
 		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 		if (isMultipart) {
 			FileItemFactory factory = new DiskFileItemFactory(); 
@@ -102,7 +103,6 @@ public class ZohoFileUploadServlet extends OKMHttpServlet {
 				String text = "New version "+ver.getName()+" by "+request.getRemoteUser()+": "+ver.getComment();
 				String sysToken = JcrSessionManager.getInstance().getSystemToken();
 				OKMNote.getInstance().add(sysToken, path, text);
-				
 			} catch (FileUploadException e) {
 				e.printStackTrace();
 			} catch (PathNotFoundException e) {
