@@ -4,7 +4,7 @@
   <groupId>com.openkm</groupId>
   <artifactId>openkm</artifactId>
   <packaging>war</packaging>
-  <version>5.1.1</version>
+  <version>5.1.2-SNAPSHOT</version>
   <name>OpenKM Web Application</name>
   <url>http://www.openkm.com</url>
   <description>OpenKM is powerful scalable Document Management System (DMS). OpenKM uses JBoss + J2EE + Ajax web (GWT) + Jackrabbit (lucene) open source technologies.</description>
@@ -183,9 +183,9 @@
       <version>1.0</version>
     </dependency>
     <dependency>
-      <groupId>de.schlichtherle.io</groupId>
+      <groupId>de.schlichtherle</groupId>
       <artifactId>truezip</artifactId>
-      <version>6.6</version>
+      <version>6.8.2</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
