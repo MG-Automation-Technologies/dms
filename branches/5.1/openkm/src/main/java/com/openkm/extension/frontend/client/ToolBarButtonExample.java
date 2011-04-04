@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -77,7 +77,8 @@ public class ToolBarButtonExample  {
 	 *
 	 */
 	private class ToolBarButton extends ToolBarButtonExtension implements ToolBarHandlerExtension, LanguageHandlerExtension, Serializable {
-
+		private static final long serialVersionUID = 1L;
+		
 		public ToolBarButton(Image image, String title, ClickHandler handler) {
 			super(image, title, handler);
 		}
