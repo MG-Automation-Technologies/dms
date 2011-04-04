@@ -100,7 +100,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 			session = JCRUtils.getSession();
 			UserConfig uc = UserConfigDAO.findByPk(session, session.getUserID());
 			up = uc.getProfile();
-						
+			
 			for (String pgroup: up.getWizard().getPropertyGroups()) {
 				for (PropertyGroup pg : OKMPropertyGroup.getInstance().getAllGroups(null)) {
 					if (pg.getName().equals(pgroup) && pg.isVisible()) {

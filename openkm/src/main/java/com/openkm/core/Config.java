@@ -146,7 +146,7 @@ public class Config {
 	public static final String PROPERTY_SYSTEM_OPENOFFICE_DICTIONARY = "system.openoffice.dictionary";
 	public static final String PROPERTY_SYSTEM_IMAGEMAGICK_CONVERT = "system.imagemagick.convert";
 	public static final String PROPERTY_SYSTEM_SWFTOOLS_PDF2SWF = "system.swftools.pdf2swf";
-	public static final String PROPERTY_SYSTEM_GHOSTSCRIPT_PS2PDF = "system.ghostscript.ps2pdf"; 
+	public static final String PROPERTY_SYSTEM_GHOSTSCRIPT_PS2PDF = "system.ghostscript.ps2pdf";
 	public static final String PROPERTY_SYSTEM_DWG2DXF = "system.dwg2dxf";
 	public static final String PROPERTY_SYSTEM_ANTIVIR = "system.antivir";
 	public static final String PROPERTY_SYSTEM_LOGIN_LOWERCASE = "system.login.lowercase";
@@ -201,12 +201,6 @@ public class Config {
 	public static final String PROPERTY_LOGO_TEXT = "logo.text";
 	public static final String PROPERTY_LOGO_MOBILE = "logo.mobile";
 	public static final String PROPERTY_LOGO_REPORT = "logo.report";
-	
-	// Zoho
-	public static final String PROPERTY_ZOHO_USER = "zoho.user";
-	public static final String PROPERTY_ZOHO_PASSWORD = "zoho.password";
-	public static final String PROPERTY_ZOHO_API_KEY = "zoho.api.key";
-	public static final String PROPERTY_ZOHO_SECRET_KEY = "zoho.secret.key";
 	
 	// Mime types
 	public static String MIME_PDF = "application/pdf";
@@ -362,12 +356,6 @@ public class Config {
 	public static String LOGO_TEXT;
 	public static StoredFile LOGO_MOBILE;
 	public static StoredFile LOGO_REPORT;
-	
-	// Zoho
-	public static String ZOHO_USER;
-	public static String ZOHO_PASSWORD;
-	public static String ZOHO_API_KEY;
-	public static String ZOHO_SECRET_KEY;
 	
 	// Misc
 	public static int SESSION_EXPIRATION = 1800; // 30 mins (session.getMaxInactiveInterval())
@@ -746,16 +734,6 @@ public class Config {
 			values.put(PROPERTY_LOGO_MOBILE, LOGO_MOBILE.getName());
 			LOGO_REPORT = ConfigDAO.getFile(PROPERTY_LOGO_REPORT, "/img/logo_report.gif");
 			values.put(PROPERTY_LOGO_REPORT, LOGO_REPORT.getName());
-			
-			// Zoho
-			ZOHO_USER = ConfigDAO.getString(PROPERTY_ZOHO_USER, cfg.getProperty(PROPERTY_ZOHO_USER, ""));
-			values.put(PROPERTY_ZOHO_USER, ZOHO_USER);
-			ZOHO_PASSWORD = ConfigDAO.getString(PROPERTY_ZOHO_PASSWORD, cfg.getProperty(PROPERTY_ZOHO_PASSWORD, ""));
-			values.put(PROPERTY_ZOHO_PASSWORD, ZOHO_PASSWORD);
-			ZOHO_API_KEY = ConfigDAO.getString(PROPERTY_ZOHO_API_KEY, cfg.getProperty(PROPERTY_ZOHO_API_KEY, ""));
-			values.put(PROPERTY_ZOHO_API_KEY, ZOHO_API_KEY);
-			ZOHO_SECRET_KEY = ConfigDAO.getString(PROPERTY_ZOHO_SECRET_KEY, cfg.getProperty(PROPERTY_ZOHO_SECRET_KEY, ""));
-			values.put(PROPERTY_ZOHO_SECRET_KEY, ZOHO_SECRET_KEY);
 		} catch (DatabaseException e) {
 			log.error("** Error reading configuration table **");
 		} catch (IOException e) {

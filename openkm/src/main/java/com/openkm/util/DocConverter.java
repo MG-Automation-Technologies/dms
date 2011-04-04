@@ -55,7 +55,6 @@ import org.slf4j.LoggerFactory;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
 import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.lowagie.text.pdf.PdfWriter;
 import com.openkm.core.Config;
@@ -403,7 +402,7 @@ public class DocConverter {
 			hm.put("fileIn", tmpFileIn.getPath());
 			hm.put("fileOut", output.getPath());
 			String tpl = Config.SYSTEM_IMAGEMAGICK_CONVERT + " ${fileIn}[0] ${fileOut}";
-			cmd = TemplateUtils.replace("SYSTEM_IMAGEMAGICK_CONVERT", tpl, hm);
+			cmd = TemplateUtils.replace("SYSTEM_OCR", tpl, hm);
 			ExecutionUtils.runCmd(cmd);
 		} catch (SecurityException e) {
 			throw new ConversionException("Security exception executing command: " + cmd, e);
@@ -473,36 +472,6 @@ public class DocConverter {
 			doc.open();
 			HTMLWorker html = new HTMLWorker(doc);
 			html.parse(new InputStreamReader(is));
-			doc.close();
-		} catch (DocumentException e) {
-			throw new ConversionException("Exception in conversion: " + e.getMessage(), e);
-		} finally {
-			IOUtils.closeQuietly(fos);
-		}
-	}
-	
-	/**
-	 * Convert TXT to PDF
-	 */
-	public void txt2pdf(InputStream is, File output) throws ConversionException,
-			DatabaseException, IOException {
-		log.debug("** Convert from TXT to PDF **");
-		FileOutputStream fos = null;
-		String line = null;
-		
-	    try {			
-	    	fos = new FileOutputStream(output);
-	    	
-	    	// Make conversion
-	    	BufferedReader br = new BufferedReader(new InputStreamReader(is));
-	    	Document doc = new Document(PageSize.A4);
-			PdfWriter.getInstance(doc, fos);
-			doc.open();
-			
-			while ((line = br.readLine()) != null) {
-				doc.add(new Paragraph(12F, line));
-			}
-						
 			doc.close();
 		} catch (DocumentException e) {
 			throw new ConversionException("Exception in conversion: " + e.getMessage(), e);
@@ -593,7 +562,6 @@ public class DocConverter {
 	private class FileOrderComparator implements Comparator<File> {
 		@Override
 		public int compare(File o1, File o2) {
-			// Filenames are out-1.jpg, out-2.jpg, ..., out-10.jpg, ... 
 			int o1Ord = Integer.parseInt((o1.getName().split("\\.")[0]).split("-")[1]);
 			int o2Ord = Integer.parseInt((o2.getName().split("\\.")[0]).split("-")[1]);
 			

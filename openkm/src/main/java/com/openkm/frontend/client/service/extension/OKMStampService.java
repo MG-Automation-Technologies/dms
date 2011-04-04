@@ -24,7 +24,6 @@ package com.openkm.frontend.client.service.extension;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.extension.GWTStamp;
 
@@ -32,7 +31,6 @@ import com.openkm.frontend.client.bean.extension.GWTStamp;
  * @author jllort
  *
  */
-@RemoteServiceRelativePath("../extension/Stamp")
 public interface OKMStampService extends RemoteService {
 	public List<GWTStamp> findAll() throws OKMException;
 	public void Stamp(int id, int type, String path) throws OKMException;

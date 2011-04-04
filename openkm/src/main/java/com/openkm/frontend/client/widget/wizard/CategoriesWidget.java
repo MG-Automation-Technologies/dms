@@ -29,6 +29,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -43,6 +44,7 @@ import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.google.gwt.user.client.ui.HTMLTable.RowFormatter;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMPropertyService;
 import com.openkm.frontend.client.service.OKMPropertyServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
@@ -188,6 +190,8 @@ public class CategoriesWidget extends Composite {
 		if (!existCategory(category.getUuid())) {
 			docCategories.add(category);
 			drawCategory(category,remove);
+			ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
+			endPoint.setServiceEntryPoint(RPCService.PropertyService);
 			propertyService.addCategory(docPath, category.getUuid(), callbackAddCategory);
 		}
 	}
@@ -196,6 +200,8 @@ public class CategoriesWidget extends Composite {
 	 * removeCategory document
 	 */
 	public void removeCategory(String UUID) {
+		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
+		endPoint.setServiceEntryPoint(RPCService.PropertyService);
 		propertyService.removeCategory(docPath, UUID, callbackRemoveCategory);
 	}
 	

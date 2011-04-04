@@ -22,7 +22,6 @@
 package com.openkm.frontend.client.service;
 
 import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTUserConfig;
 
@@ -32,8 +31,9 @@ import com.openkm.frontend.client.bean.GWTUserConfig;
  * @author jllort
  *
  */
-@RemoteServiceRelativePath("UserConfig")
 public interface OKMUserConfigService extends RemoteService {
+	
 	public void setUserHome(String path) throws OKMException;
 	public GWTUserConfig getUserHome() throws OKMException;
+	
 }

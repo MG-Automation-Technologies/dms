@@ -36,8 +36,6 @@ import com.openkm.extension.frontend.client.widget.stamp.StampToolBarButton;
 import com.openkm.extension.frontend.client.widget.stapling.Stapling;
 import com.openkm.extension.frontend.client.widget.toolbar.downloadButton.DownloadButton;
 import com.openkm.extension.frontend.client.widget.toolbar.downloadPdfButton.DownloadPdfButton;
-import com.openkm.extension.frontend.client.widget.wiki.Wiki;
-import com.openkm.extension.frontend.client.widget.zoho.Zoho;
 
 /**
  * Customization
@@ -108,12 +106,6 @@ public class Customization {
 		}
 		if (ActivityLog.isRegistered(uuidList)) {
 			extensions.addAll(new ActivityLog(uuidList).getExtensions());
-		}
-		if (Wiki.isRegistered(uuidList)) {
-			extensions.addAll(new Wiki(uuidList).getExtensions());
-		}
-		if (Zoho.isRegistered(uuidList)) {
-			extensions.addAll(new Zoho(uuidList).getExtensions());
 		}
 		
 		return extensions;

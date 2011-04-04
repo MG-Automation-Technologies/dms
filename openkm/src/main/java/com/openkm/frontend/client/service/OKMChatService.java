@@ -24,13 +24,11 @@ package com.openkm.frontend.client.service;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 /**
  * @author jllort
  *
  */
-@RemoteServiceRelativePath("Chat")
 public interface OKMChatService extends RemoteService {
 	public void login();
 	public void logout();

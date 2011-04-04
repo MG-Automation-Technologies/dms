@@ -681,7 +681,6 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 				DocConverter.getInstance().html2pdf(fis,tmp); // tmp has converted pdf file
 				tmp2.delete(); // deleting html tmp file
 				// Changing fileName after conversion
-				System.out.println(destinationPath.lastIndexOf("."));
 				destinationPath = destinationPath.substring(0,destinationPath.lastIndexOf(".")) + ".pdf";
 				fis.close();
 				fos.close();
@@ -733,7 +732,7 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Conversion), e.getMessage());
 		} catch (TemplateException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Template), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Conversion), e.getMessage());
 		} finally {
 			FileUtils.deleteQuietly(tmp);
 			IOUtils.closeQuietly(fis);

@@ -468,7 +468,7 @@ public class LanguageServlet extends BaseServlet {
 		BufferedReader br = new BufferedReader(is);
 		String query;
 		
-		while ((query = br.readLine()) != null) {
+		while ((query = br.readLine())!=null) {
 			stmt.executeUpdate(query);
 		}
 		
