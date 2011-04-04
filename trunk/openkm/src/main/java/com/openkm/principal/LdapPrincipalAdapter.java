@@ -112,7 +112,7 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 				Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
 				Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
 				MessageFormat.format(Config.PRINCIPAL_LDAP_MAIL_SEARCH_BASE, user), 
-				Config.PRINCIPAL_LDAP_MAIL_SEARCH_FILTER, 
+				MessageFormat.format(Config.PRINCIPAL_LDAP_MAIL_SEARCH_FILTER, user), 
 				Config.PRINCIPAL_LDAP_MAIL_ATTRIBUTE);
 		if (!ldap.isEmpty()) {
 			mail = ldap.get(0);
@@ -130,7 +130,7 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 				Config.PRINCIPAL_LDAP_SERVER,
 				Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
 				Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
-				Config.PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_BASE, 
+				MessageFormat.format(Config.PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_BASE, role), 
 				MessageFormat.format(Config.PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_FILTER, role),
 				Config.PRINCIPAL_LDAP_USERS_BY_ROLE_ATTRIBUTE);
 		
@@ -158,7 +158,7 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 				Config.PRINCIPAL_LDAP_SERVER,
 				Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
 				Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
-				Config.PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_BASE,
+				MessageFormat.format(Config.PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_BASE, user),
 				MessageFormat.format(Config.PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_FILTER, user),
 				Config.PRINCIPAL_LDAP_ROLES_BY_USER_ATTRIBUTE);
 		
@@ -203,18 +203,30 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 				
 				if (attribute.equals("")) {
 					StringBuilder sb = new StringBuilder();
+					
 					for (NamingEnumeration<?> ne = attributes.getAll(); ne.hasMore(); ) {
-						Attribute attr = (Attribute)ne.nextElement();
+						Attribute attr = (Attribute) ne.nextElement();
 						sb.append(attr.toString());
 						sb.append("\n");
 					}
+					
 					al.add(sb.toString());
 				} else {
 					Attribute attrib = attributes.get(attribute);
 					
 					if (attrib != null) {
-						String item = (String) attrib.get();
-						al.add(item);
+						for (NamingEnumeration<?> ne = attrib.getAll(); ne.hasMore(); ) {
+							String value = (String) ne.nextElement();
+							
+							// If FQDN get only main part
+							if (value.startsWith("CN=") || value.startsWith("cn=")) {
+								String cn = value.substring(3, value.indexOf(','));
+								log.debug("FQDN: {}, CN: {}", value, cn);
+								al.add(cn);
+							} else {
+								al.add(value);
+							}
+						}
 					}
 				}
 			}
