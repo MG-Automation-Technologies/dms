@@ -317,7 +317,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 	 * @param path Where import into the repository.
 	 * @param is The zip file to import.
 	 */
-	private String importZip(String path, InputStream is) throws 
+	private synchronized String importZip(String path, InputStream is) throws 
 			PathNotFoundException, ItemExistsException, AccessDeniedException, 
 			RepositoryException, IOException, DatabaseException {
 		log.debug("importZip({}, {})", path, is);
@@ -336,6 +336,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 			// Unzip files
 			File fileTmpIn = new File(tmpIn);
 			fileTmpIn.archiveCopyAllTo(tmpOut);
+			File.umount();
 			
 			// Import files
 			StringWriter out = new StringWriter();
@@ -349,7 +350,6 @@ public class FileUploadServlet extends OKMHttpServlet {
 			throw e;
 		} finally {
 			if (tmpIn != null) {
-				File.umount();
 				org.apache.commons.io.FileUtils.deleteQuietly(tmpIn);
 			}
 
