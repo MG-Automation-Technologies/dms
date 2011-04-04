@@ -215,6 +215,7 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 					Attribute attrib = attributes.get(attribute);
 					
 					if (attrib != null) {
+						// Handle multi-value attributes
 						for (NamingEnumeration<?> ne = attrib.getAll(); ne.hasMore(); ) {
 							String value = (String) ne.nextElement();
 							
