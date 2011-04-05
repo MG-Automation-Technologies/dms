@@ -2,10 +2,10 @@
 <!DOCTYPE property-groups PUBLIC "-//OpenKM//DTD Property Groups 1.0//EN"
                                  "http://www.openkm.com/dtd/property-groups-1.1.dtd">
 <property-groups>
-  <property-group label="Sample Form" name="okg:form">
-    <input label="Name" name="okp:form.name"/>
-    <input label="Bird Date" name="okp:form.bird_date" type="date" />
-    <select label="Language" name="okp:form.language" type="simple">
+  <property-group label="Sample Template" name="okg:tpl">
+    <input label="Name" name="okp:tpl.name"/>
+    <input label="Bird Date" name="okp:tpl.bird_date" type="date" />
+    <select label="Language" name="okp:tpl.language" type="simple">
       <option label="Java" value="java"/>
       <option label="Python" value="python"/>
       <option label="PHP" value="php" />
