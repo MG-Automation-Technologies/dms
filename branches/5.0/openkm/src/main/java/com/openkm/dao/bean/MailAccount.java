@@ -29,6 +29,7 @@ public class MailAccount implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public static final String PROTOCOL_POP3 = "pop3";
+	public static final String PROTOCOL_POP3S = "pop3s";
 	public static final String PROTOCOL_IMAP = "imap";
 	public static final String PROTOCOL_IMAPS = "imaps";
 	
