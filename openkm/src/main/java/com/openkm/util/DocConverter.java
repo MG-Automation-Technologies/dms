@@ -592,6 +592,22 @@ public class DocConverter {
 	}
 	
 	/**
+	 * User by pdf2img
+	 */
+	private class FileOrderComparator implements Comparator<File> {
+		@Override
+		public int compare(File o1, File o2) {
+			// Filenames are out-1.jpg, out-2.jpg, ..., out-10.jpg, ... 
+			int o1Ord = Integer.parseInt((o1.getName().split("\\.")[0]).split("-")[1]);
+			int o2Ord = Integer.parseInt((o2.getName().split("\\.")[0]).split("-")[1]);
+			
+			if (o1Ord > o2Ord) return 1;
+			else if (o1Ord < o2Ord) return -1;
+			else return 0;
+		}
+	}
+	
+	/**
 	 * TIFF to PDF conversion
 	 */
 	public void tiff2pdf(InputStream input, File output) throws ConversionException {
@@ -614,7 +630,7 @@ public class DocConverter {
 				Image img = TiffImage.getTiffImage(ra, c + 1);
 				
 				if (img != null) {
-					log.info("page {}", c+1);
+					log.debug("tiff2pdf - page {}", c+1);
 					
 					if (img.getScaledWidth() > 500 || img.getScaledHeight() > 700) {
 						img.scaleToFit(500, 700);
@@ -645,22 +661,6 @@ public class DocConverter {
 			if (doc != null) {
 				doc.close();
 			}
-		}
-	}
-	
-	/**
-	 * User by pdf2img
-	 */
-	private class FileOrderComparator implements Comparator<File> {
-		@Override
-		public int compare(File o1, File o2) {
-			// Filenames are out-1.jpg, out-2.jpg, ..., out-10.jpg, ... 
-			int o1Ord = Integer.parseInt((o1.getName().split("\\.")[0]).split("-")[1]);
-			int o2Ord = Integer.parseInt((o2.getName().split("\\.")[0]).split("-")[1]);
-			
-			if (o1Ord > o2Ord) return 1;
-			else if (o1Ord < o2Ord) return -1;
-			else return 0;
 		}
 	}
 	
