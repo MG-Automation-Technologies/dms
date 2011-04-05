@@ -55,11 +55,11 @@ public class TemplateTest extends TestCase {
 	public void testPdf() throws IOException, DocumentException {
 		log.debug("testPdf()");
 		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("okp:form.name", "el nombre");
-		model.put("okp:form.bird_date", "el apellido");
-		model.put("okp:form.language", "el lenguaje");
-		InputStream input = new FileInputStream(BASE_DIR + "/templates/form.pdf");
-		OutputStream output = new FileOutputStream(BASE_DIR + "/templates/form_out.pdf");
+		model.put("okp_tpl_name", "el nombre");
+		model.put("okp_tpl_bird_date", "el apellido");
+		model.put("okp_tpl_language", "el lenguaje");
+		InputStream input = new FileInputStream(BASE_DIR + "/templates/tpl.pdf");
+		OutputStream output = new FileOutputStream(BASE_DIR + "/templates/tpl_out.pdf");
 		PDFUtils.fillForm(input, model, output);
 		input.close();
 		output.close();
@@ -68,11 +68,11 @@ public class TemplateTest extends TestCase {
 	public void testOpenOffice() throws IOException, DocumentTemplateException {
 		log.debug("testOpenOffice()");
 		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("okp:form.name", "el nombre");
-		model.put("okp:form.bird_date", "el apellido");
-		model.put("okp:form.language", "el lenguaje");
-		InputStream input = new FileInputStream(BASE_DIR + "/templates/form.odt");
-		OutputStream output = new FileOutputStream(BASE_DIR + "/templates/form_out.odt");
+		model.put("okp_tpl_name", "el nombre");
+		model.put("okp_tpl_bird_date", "el apellido");
+		model.put("okp_tpl_language", "el lenguaje");
+		InputStream input = new FileInputStream(BASE_DIR + "/templates/tpl.odt");
+		OutputStream output = new FileOutputStream(BASE_DIR + "/templates/tpl_out.odt");
 		OOUtils.fillTemplate(input, model, output);
 		input.close();
 		output.close();
@@ -81,11 +81,11 @@ public class TemplateTest extends TestCase {
 	public void testHtml() throws IOException, TemplateException {
 		log.debug("testHtml()");
 		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("okp_form_name", "el nombre");
-		model.put("okp_form_bird_date", "el apellido");
-		model.put("okp_form_language", "el lenguaje");
-		InputStream input = new FileInputStream(BASE_DIR + "/templates/form.html");
-		OutputStream output = new FileOutputStream(BASE_DIR + "/templates/form_out.html");
+		model.put("okp_tpl_name", "el nombre");
+		model.put("okp_tpl_bird_date", "el apellido");
+		model.put("okp_tpl_language", "el lenguaje");
+		InputStream input = new FileInputStream(BASE_DIR + "/templates/tpl.html");
+		OutputStream output = new FileOutputStream(BASE_DIR + "/templates/tpl_out.html");
 		String in = IOUtils.toString(input);
 		String out = TemplateUtils.replace("sample", in, model);
 		IOUtils.write(out, output);
