@@ -293,10 +293,10 @@ public class Config {
 	public static boolean SYSTEM_MAINTENANCE;
 	public static boolean SYSTEM_READONLY;
 	public static String SYSTEM_OCR;
-	public static String SYSTEM_OPENOFFICE_PATH;
+	public static String SYSTEM_OPENOFFICE_PATH = "";
 	public static int SYSTEM_OPENOFFICE_TASKS;
 	public static int SYSTEM_OPENOFFICE_PORT;
-	public static String SYSTEM_OPENOFFICE_SERVER;
+	public static String SYSTEM_OPENOFFICE_SERVER = "";
 	public static String SYSTEM_OPENOFFICE_DICTIONARY;
 	public static String SYSTEM_IMAGEMAGICK_CONVERT;
 	public static String SYSTEM_SWFTOOLS_PDF2SWF;
