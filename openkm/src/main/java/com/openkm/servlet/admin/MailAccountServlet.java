@@ -57,7 +57,8 @@ public class MailAccountServlet extends BaseServlet {
 	String fields[] = { MailFilterRule.FIELD_FROM, MailFilterRule.FIELD_TO, MailFilterRule.FIELD_SUBJECT,
 			MailFilterRule.FIELD_CONTENT };
 	String operations[] = { MailFilterRule.OPERATION_CONTAINS, MailFilterRule.OPERATION_EQUALS };
-	String protocols[] = { MailAccount.PROTOCOL_POP3, MailAccount.PROTOCOL_IMAP, MailAccount.PROTOCOL_IMAPS };
+	String protocols[] = { MailAccount.PROTOCOL_POP3, MailAccount.PROTOCOL_POP3S,
+			MailAccount.PROTOCOL_IMAP, MailAccount.PROTOCOL_IMAPS };
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
