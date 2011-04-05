@@ -54,10 +54,14 @@ import org.slf4j.LoggerFactory;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
+import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.html.simpleparser.HTMLWorker;
+import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfWriter;
+import com.lowagie.text.pdf.RandomAccessFileOrArray;
+import com.lowagie.text.pdf.codec.TiffImage;
 import com.openkm.core.Config;
 import com.openkm.core.ConversionException;
 import com.openkm.core.DatabaseException;
@@ -584,6 +588,63 @@ public class DocConverter {
 			throw new ConversionException("Template exception", e);
 		} finally {
 			org.apache.commons.io.FileUtils.deleteQuietly(tmpDir);
+		}
+	}
+	
+	/**
+	 * TIFF to PDF conversion
+	 */
+	public void tiff2pdf(InputStream input, File output) throws ConversionException {
+		RandomAccessFileOrArray ra = null;
+		Document doc = null;
+		
+		try {
+			// Open PDF
+			doc = new Document();
+			PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream(output));
+			doc.open();
+			PdfContentByte cb = writer.getDirectContent();
+			int pages = 0;
+			
+			// Open TIFF
+			ra = new RandomAccessFileOrArray(input);
+			int comps = TiffImage.getNumberOfPages(ra);
+			
+			for (int c = 0; c < comps; ++c) {
+				Image img = TiffImage.getTiffImage(ra, c + 1);
+				
+				if (img != null) {
+					log.info("page {}", c+1);
+					
+					if (img.getScaledWidth() > 500 || img.getScaledHeight() > 700) {
+						img.scaleToFit(500, 700);
+					}
+					
+					img.setAbsolutePosition(20, 20);
+					//doc.add(new Paragraph("page " + (c + 1)));
+					cb.addImage(img);
+					doc.newPage();
+					++pages;
+				}
+			}
+		} catch (FileNotFoundException e) {
+			throw new ConversionException("File not found: " + e.getMessage(), e);
+		} catch (DocumentException e) {
+			throw new ConversionException("Document exception: " + e.getMessage(), e);
+		} catch (IOException e) {
+			throw new ConversionException("IO exception: " + e.getMessage(), e);
+		} finally {
+			if (ra != null) {
+				try {
+					ra.close();
+				} catch (IOException e) {
+					// Ignore
+				}
+			}
+			
+			if (doc != null) {
+				doc.close();
+			}
 		}
 	}
 	
