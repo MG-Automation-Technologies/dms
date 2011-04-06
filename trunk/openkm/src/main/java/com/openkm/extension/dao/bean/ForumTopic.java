@@ -10,6 +10,7 @@ public class ForumTopic implements Serializable {
 	private int id;
 	private String title;
 	private Calendar date;
+	private String user;
 	private String uuid;
 	private int replies;
 	private int views;
@@ -87,5 +88,13 @@ public class ForumTopic implements Serializable {
 
 	public void setDate(Calendar date) {
 		this.date = date;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
 	}
 }
