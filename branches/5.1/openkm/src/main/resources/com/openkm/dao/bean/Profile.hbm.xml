@@ -28,6 +28,10 @@
         <key column="PEX_ID" not-null="true"/>
         <element column="PEX_EXTENSION" type="string"/>
       </set>
+      <set name="reports" table="OKM_PROFILE_MSC_REPORT" lazy="false">
+        <key column="PRP_ID" not-null="true"/>
+        <element column="PRP_REPORT" type="string"/>
+      </set>
     </component>
     
     <!-- CHAT -->

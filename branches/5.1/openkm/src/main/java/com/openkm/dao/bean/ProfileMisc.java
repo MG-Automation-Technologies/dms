@@ -33,6 +33,7 @@ public class ProfileMisc implements Serializable {
 	private boolean printPreview;
 	private boolean keywordsEnabled;
 	private Set<String> extensions = new HashSet<String>();
+	private Set<String> reports = new HashSet<String>();
 
 	public boolean isAdvancedFilters() {
 		return advancedFilters;
@@ -82,6 +83,14 @@ public class ProfileMisc implements Serializable {
 		this.extensions = extensions;
 	}
 	
+	public Set<String> getReports() {
+		return reports;
+	}
+
+	public void setReports(Set<String> reports) {
+		this.reports = reports;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -91,6 +100,7 @@ public class ProfileMisc implements Serializable {
 		sb.append(", printPreview="); sb.append(printPreview);
 		sb.append(", keywordsEnabled="); sb.append(keywordsEnabled);
 		sb.append(", extensions="); sb.append(extensions);
+		sb.append(", reports="); sb.append(reports);
 		sb.append("}");
 		return sb.toString();
 	}
