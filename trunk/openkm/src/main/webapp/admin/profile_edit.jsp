@@ -71,18 +71,18 @@
               <jsp:include page="profile_menu_bookmark.jsp"/>
             </td>
             <td valign="top">
+              <!-- MENU TOOL -->
+              <jsp:include page="profile_menu_tool.jsp"/>
+              <!-- MENU HELP -->
+              <jsp:include page="profile_menu_help.jsp"/>
+            </td>
+            <td valign="top">
               <!-- MENU FILE -->
               <jsp:include page="profile_menu_file.jsp"/>
             </td>
             <td valign="top">
               <!-- MENU EDIT -->
-              <jsp:include page="profile_menu_edit.jsp"/>
-            </td>
-            <td valign="top">
-              <!-- MENU TOOL -->
-              <jsp:include page="profile_menu_tool.jsp"/>
-              <!-- MENU HELP -->
-              <jsp:include page="profile_menu_help.jsp"/>
+              <jsp:include page="profile_menu_edit.jsp"/>             
             </td>
           </tr>
           <tr>

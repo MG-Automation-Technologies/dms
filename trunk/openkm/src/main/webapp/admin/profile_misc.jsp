@@ -94,5 +94,22 @@
         </select>
       </td>
     </tr>
+    <tr>
+      <td>Reports</td>
+      <td>
+        <select multiple="multiple" name="prf_misc_reports" size="4">
+          <c:forEach var="rep" items="${reps}">
+            <c:choose>
+              <c:when test="${fn:contains(prf.misc.reports, rep.id)}">
+                <option value="${rep.id}" selected="selected">${rep.name}</option>
+              </c:when>
+              <c:otherwise>
+                <option value="${rep.id}">${rep.name}</option>
+              </c:otherwise>
+            </c:choose>
+          </c:forEach>
+        </select>
+      </td>
+    </tr>
   </table>
 </fieldset>
