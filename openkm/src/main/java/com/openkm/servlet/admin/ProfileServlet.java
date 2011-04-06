@@ -41,6 +41,7 @@ import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.WorkflowException;
 import com.openkm.dao.ProfileDAO;
+import com.openkm.dao.ReportDAO;
 import com.openkm.dao.bean.Profile;
 import com.openkm.extension.dao.ExtensionDAO;
 import com.openkm.util.JCRUtils;
@@ -122,6 +123,7 @@ public class ProfileServlet extends BaseServlet {
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("exts", ExtensionDAO.findAll());
+			sc.setAttribute("reps", ReportDAO.findAll());
 			sc.setAttribute("pgroups", OKMPropertyGroup.getInstance().getAllGroups(null));
 			sc.setAttribute("wflows", OKMWorkflow.getInstance().findAllProcessDefinitions(null));
 			sc.setAttribute("prf", prf);
@@ -151,6 +153,7 @@ public class ProfileServlet extends BaseServlet {
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("exts", ExtensionDAO.findAll());
+			sc.setAttribute("reps", ReportDAO.findAll());
 			sc.setAttribute("pgroups", OKMPropertyGroup.getInstance().getAllGroups(null));
 			sc.setAttribute("wflows", OKMWorkflow.getInstance().findAllProcessDefinitions(null));
 			sc.setAttribute("prf", ProfileDAO.findByPk(prfId));
@@ -180,6 +183,7 @@ public class ProfileServlet extends BaseServlet {
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("exts", ExtensionDAO.findAll());
+			sc.setAttribute("reps", ReportDAO.findAll());
 			sc.setAttribute("pgroups", OKMPropertyGroup.getInstance().getAllGroups(null));
 			sc.setAttribute("wflows", OKMWorkflow.getInstance().findAllProcessDefinitions(null));
 			sc.setAttribute("prf", ProfileDAO.findByPk(prfId));
@@ -218,6 +222,7 @@ public class ProfileServlet extends BaseServlet {
 		prf.getMisc().setPrintPreview(WebUtils.getBoolean(request, "prf_misc_print_preview"));
 		prf.getMisc().setKeywordsEnabled(WebUtils.getBoolean(request, "prf_misc_keywords_enabled"));
 		prf.getMisc().setExtensions(new HashSet<String>(WebUtils.getStringList(request, "prf_misc_extensions")));
+		prf.getMisc().setReports(new HashSet<String>(WebUtils.getStringList(request, "prf_misc_reports")));
 		
 		// Wizard
 		prf.getWizard().setKeywordsEnabled(WebUtils.getBoolean(request, "prf_wizard_keywords"));
