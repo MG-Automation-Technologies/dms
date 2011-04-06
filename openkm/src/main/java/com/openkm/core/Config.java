@@ -220,6 +220,7 @@ public class Config {
 	public static String MIME_SWF = "application/x-shockwave-flash";
 	public static String MIME_DXF = "image/vnd.dxf";
 	public static String MIME_DWG = "image/vnd.dwg";
+	public static String MIME_TIFF = "image/tiff";
 	
 	/**
 	 *  Default values
