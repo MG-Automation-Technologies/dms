@@ -128,7 +128,9 @@ public class ConverterServlet extends OKMHttpServlet {
 					} else if (!doc.getMimeType().equals(Config.MIME_PDF)) {
 						try {
 							if (!pdfCache.exists()) {
-								if (doc.getMimeType().startsWith("image/")) {
+								if (doc.getMimeType().equals(Config.MIME_TIFF)) {
+									converter.tiff2pdf(is, pdfCache);
+								} else if (doc.getMimeType().startsWith("image/")) {
 									converter.img2pdf(is, doc.getMimeType(), pdfCache);
 								} else {
 									converter.doc2pdf(is, doc.getMimeType(), pdfCache);
