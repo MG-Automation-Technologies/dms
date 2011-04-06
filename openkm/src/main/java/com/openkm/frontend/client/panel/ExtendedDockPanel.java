@@ -463,8 +463,8 @@ public class ExtendedDockPanel extends Composite {
 								break;
 								
 							case Keyboard.KEY_Q: 
-								// Case CTRL + Q
-								if (event.getNativeEvent().getCtrlKey()) {
+								// Case CTRL + ALT + Q
+								if (event.getNativeEvent().getCtrlKey() && event.getNativeEvent().getAltKey()) {
 									Main.get().logoutPopup.logout();
 								}
 								break;
