@@ -35,7 +35,7 @@ public class Profile implements Serializable {
 	private ProfileStack stack = new ProfileStack();
 	private ProfileTab tab = new ProfileTab();
 	private ProfileWizard wizard = new ProfileWizard();
-		
+	
 	public int getId() {
 		return id;
 	}
