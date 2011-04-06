@@ -74,6 +74,7 @@ public class DocConverter {
 	private static ArrayList<String> validImageMagick = new ArrayList<String>();
 	private static ArrayList<String> validGhoscript = new ArrayList<String>();
 	private static ArrayList<String> validAutoCad = new ArrayList<String>();
+	private static ArrayList<String> validInternal = new ArrayList<String>();
 	private static DocConverter instance = null;
 	private static OfficeManager officeManager = null;
 	
@@ -108,7 +109,7 @@ public class DocConverter {
 		validImageMagick.add("image/jpeg");
 		validImageMagick.add("image/png");
 		validImageMagick.add("image/gif");
-		validImageMagick.add("image/tiff");
+		//validImageMagick.add("image/tiff");
 		validImageMagick.add("image/bmp");
 		validImageMagick.add("image/svg+xml");
 		validImageMagick.add("image/x-psd");
@@ -116,6 +117,9 @@ public class DocConverter {
 		// AutoCad
 		validAutoCad.add(Config.MIME_DXF);
 		validAutoCad.add(Config.MIME_DWG);
+		
+		// Internal conversion
+		validInternal.add("image/tiff");
 	}
 	
 	/**
@@ -182,6 +186,8 @@ public class DocConverter {
 		} else if (!Config.SYSTEM_IMAGEMAGICK_CONVERT.equals("") && validImageMagick.contains(from)) {
 			ret = true;
 		} else if (!Config.SYSTEM_GHOSTSCRIPT_PS2PDF.equals("") && validGhoscript.contains(from)) {
+			ret = true;
+		} else if (validInternal.contains(from)) {
 			ret = true;
 		}
 		//} else if (!Config.SYSTEM_DWG2DXF.equals("") && validAutoCad.contains(from)) {
