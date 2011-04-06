@@ -138,4 +138,26 @@ public class WikiPageDAO {
 			HibernateUtil.close(session);
 		}
 	}
+	
+	/**
+	 * Find by pk
+	 */
+	public static WikiPage findByPk(String node) throws DatabaseException {
+		log.debug("findByPk({})", node);
+		String qs = "from WikiPage wp where wp.node=:node";
+		Session session = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setString("node", node);
+			WikiPage ret = (WikiPage) q.setMaxResults(1).uniqueResult();
+			log.debug("findByPk: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
 }
