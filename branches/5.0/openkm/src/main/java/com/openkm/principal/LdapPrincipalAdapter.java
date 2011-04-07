@@ -114,7 +114,7 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 					Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
 					Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
 					MessageFormat.format(Config.PRINCIPAL_LDAP_MAIL_SEARCH_BASE, user), 
-					Config.PRINCIPAL_LDAP_MAIL_SEARCH_FILTER, 
+					MessageFormat.format(Config.PRINCIPAL_LDAP_MAIL_SEARCH_FILTER, user), 
 					Config.PRINCIPAL_LDAP_MAIL_ATTRIBUTE);
 			if (!ldap.isEmpty()) {
 				list.add(ldap.get(0));
@@ -133,7 +133,7 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 				Config.PRINCIPAL_LDAP_SERVER,
 				Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
 				Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
-				Config.PRINCIPAL_LDAP_USER_SEARCH_BASE, 
+				MessageFormat.format(Config.PRINCIPAL_LDAP_USER_SEARCH_BASE, role), 
 				MessageFormat.format(Config.PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_FILTER, role),
 				Config.PRINCIPAL_LDAP_USER_ATTRIBUTE);
 		
@@ -161,7 +161,7 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 				Config.PRINCIPAL_LDAP_SERVER,
 				Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
 				Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
-				Config.PRINCIPAL_LDAP_USER_SEARCH_BASE, 
+				MessageFormat.format(Config.PRINCIPAL_LDAP_USER_SEARCH_BASE, user), 
 				MessageFormat.format(Config.PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_FILTER, user),
 				Config.PRINCIPAL_LDAP_ROLE_ATTRIBUTE);
 		
