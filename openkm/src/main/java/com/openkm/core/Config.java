@@ -29,9 +29,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.ServletContext;
@@ -107,12 +107,17 @@ public class Config {
 	public static final String PROPERTY_PRINCIPAL_LDAP_ROLE_SEARCH_FILTER = "principal.ldap.role.search.filter";
 	public static final String PROPERTY_PRINCIPAL_LDAP_ROLE_ATTRIBUTE = "principal.ldap.role.attribute";
 	
-	public static final String PROPERTY_PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_FILTER = "principal.ldap.users.by.role.search.filter";
-	public static final String PROPERTY_PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_FILTER = "principal.ldap.roles.by.user.search.filter";
-	
 	public static final String PROPERTY_PRINCIPAL_LDAP_MAIL_SEARCH_BASE = "principal.ldap.mail.search.base";
 	public static final String PROPERTY_PRINCIPAL_LDAP_MAIL_SEARCH_FILTER = "principal.ldap.mail.search.filter";
 	public static final String PROPERTY_PRINCIPAL_LDAP_MAIL_ATTRIBUTE = "principal.ldap.mail.attribute";
+	
+	public static final String PROPERTY_PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_BASE = "principal.ldap.users.by.role.search.base";
+	public static final String PROPERTY_PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_FILTER = "principal.ldap.users.by.role.search.filter";
+	public static final String PROPERTY_PRINCIPAL_LDAP_USERS_BY_ROLE_ATTRIBUTE = "principal.ldap.users.by.role.attribute";
+	
+	public static final String PROPERTY_PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_BASE = "principal.ldap.roles.by.user.search.base";
+	public static final String PROPERTY_PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_FILTER = "principal.ldap.roles.by.user.search.filter";
+	public static final String PROPERTY_PRINCIPAL_LDAP_ROLES_BY_USER_ATTRIBUTE = "principal.ldap.roles.by.user.attribute";
 	
 	public static final String PROPERTY_MAX_FILE_SIZE = "max.file.size";
 	public static final String PROPERTY_MAX_SEARCH_RESULTS = "max.search.results";
@@ -230,12 +235,17 @@ public class Config {
 	public static String PRINCIPAL_LDAP_ROLE_SEARCH_FILTER = ""; // (&(objectClass=posixGroup)(cn=*)(|(description=*OpenKM*)(cn=users)))
 	public static String PRINCIPAL_LDAP_ROLE_ATTRIBUTE = ""; // cn
 	
-	public static String PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_FILTER = ""; // (&(objectClass=group)(cn={0}))
-	public static String PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_FILTER = ""; // (&(objectClass=group)(cn={0}))
-	
 	public static String PRINCIPAL_LDAP_MAIL_SEARCH_BASE = ""; // uid={0},ou=people,dc=openkm,dc=com
 	public static String PRINCIPAL_LDAP_MAIL_SEARCH_FILTER = ""; // (&(objectClass=inetOrgPerson)(mail=*))
 	public static String PRINCIPAL_LDAP_MAIL_ATTRIBUTE = ""; // mail
+	
+	public static String PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_BASE; 
+	public static String PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_FILTER; // (&(objectClass=group)(cn={0}))
+	public static String PRINCIPAL_LDAP_USERS_BY_ROLE_ATTRIBUTE;
+	
+	public static String PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_BASE;
+	public static String PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_FILTER; // (&(objectClass=group)(cn={0}))
+	public static String PRINCIPAL_LDAP_ROLES_BY_USER_ATTRIBUTE;
 	
 	private static String MAX_FILE_SIZE_STR = "64"; // 64 Megas
 	public static long MAX_FILE_SIZE = Long.parseLong(MAX_FILE_SIZE_STR) * 1024 * 1024;
@@ -486,17 +496,26 @@ public class Config {
 			PRINCIPAL_LDAP_ROLE_ATTRIBUTE = config.getProperty(PROPERTY_PRINCIPAL_LDAP_ROLE_ATTRIBUTE, PRINCIPAL_LDAP_ROLE_ATTRIBUTE);
 			values.put(PROPERTY_PRINCIPAL_LDAP_ROLE_ATTRIBUTE, PRINCIPAL_LDAP_ROLE_ATTRIBUTE);
 			
-			PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_FILTER = config.getProperty(PROPERTY_PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_FILTER, PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_FILTER);
-			values.put(PROPERTY_PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_FILTER, PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_FILTER);
-			PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_FILTER = config.getProperty(PROPERTY_PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_FILTER, PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_FILTER);
-			values.put(PROPERTY_PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_FILTER, PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_FILTER);
-			
 			PRINCIPAL_LDAP_MAIL_SEARCH_BASE = config.getProperty(PROPERTY_PRINCIPAL_LDAP_MAIL_SEARCH_BASE, PRINCIPAL_LDAP_MAIL_SEARCH_BASE);
 			values.put(PROPERTY_PRINCIPAL_LDAP_MAIL_SEARCH_BASE, PRINCIPAL_LDAP_MAIL_SEARCH_BASE);
 			PRINCIPAL_LDAP_MAIL_SEARCH_FILTER = config.getProperty(PROPERTY_PRINCIPAL_LDAP_MAIL_SEARCH_FILTER, PRINCIPAL_LDAP_MAIL_SEARCH_FILTER);
 			values.put(PROPERTY_PRINCIPAL_LDAP_MAIL_SEARCH_FILTER, PRINCIPAL_LDAP_MAIL_SEARCH_FILTER);
 			PRINCIPAL_LDAP_MAIL_ATTRIBUTE= config.getProperty(PROPERTY_PRINCIPAL_LDAP_MAIL_ATTRIBUTE, PRINCIPAL_LDAP_MAIL_ATTRIBUTE);
 			values.put(PROPERTY_PRINCIPAL_LDAP_MAIL_ATTRIBUTE, PRINCIPAL_LDAP_MAIL_ATTRIBUTE);
+			
+			PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_BASE = config.getProperty(PROPERTY_PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_BASE, PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_BASE);
+			values.put(PROPERTY_PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_BASE, PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_BASE);
+			PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_FILTER = config.getProperty(PROPERTY_PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_FILTER, PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_FILTER);
+			values.put(PROPERTY_PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_FILTER, PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_FILTER);
+			PRINCIPAL_LDAP_USERS_BY_ROLE_ATTRIBUTE = config.getProperty(PROPERTY_PRINCIPAL_LDAP_USERS_BY_ROLE_ATTRIBUTE, PRINCIPAL_LDAP_USERS_BY_ROLE_ATTRIBUTE);
+			values.put(PROPERTY_PRINCIPAL_LDAP_USERS_BY_ROLE_ATTRIBUTE, PRINCIPAL_LDAP_USERS_BY_ROLE_ATTRIBUTE);
+			
+			PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_BASE = config.getProperty(PROPERTY_PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_BASE, PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_BASE);
+			values.put(PROPERTY_PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_BASE, PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_BASE);
+			PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_FILTER = config.getProperty(PROPERTY_PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_FILTER, PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_FILTER);
+			values.put(PROPERTY_PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_FILTER, PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_FILTER);
+			PRINCIPAL_LDAP_ROLES_BY_USER_ATTRIBUTE = config.getProperty(PROPERTY_PRINCIPAL_LDAP_ROLES_BY_USER_ATTRIBUTE, PRINCIPAL_LDAP_ROLES_BY_USER_ATTRIBUTE);
+			values.put(PROPERTY_PRINCIPAL_LDAP_ROLES_BY_USER_ATTRIBUTE, PRINCIPAL_LDAP_ROLES_BY_USER_ATTRIBUTE);
 			
 			MAX_FILE_SIZE_STR = config.getProperty(PROPERTY_MAX_FILE_SIZE, MAX_FILE_SIZE_STR);
 			MAX_FILE_SIZE = Integer.parseInt(MAX_FILE_SIZE_STR) * 1024 * 1024;
