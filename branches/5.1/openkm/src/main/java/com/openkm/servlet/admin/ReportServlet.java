@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.jcr.LoginException;
 import javax.jcr.RepositoryException;
@@ -64,6 +65,7 @@ import com.openkm.core.DatabaseException;
 import com.openkm.dao.HibernateUtil;
 import com.openkm.dao.ReportDAO;
 import com.openkm.dao.bean.Report;
+import com.openkm.dao.bean.ReportParameter;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.ReportUtils;
 import com.openkm.util.SecureStore;
@@ -76,7 +78,22 @@ import com.openkm.util.WebUtils;
 public class ReportServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(ReportServlet.class);
-
+	private static Map<String, String> paramTypes = new LinkedHashMap<String, String>();
+	private static Map<String, String> types = new LinkedHashMap<String, String>();
+	
+	static {
+		types.put(Report.SQL, "SQL");
+		types.put(Report.SCRIPT, "Script");
+		//types.put(Report.HIBERNATE, "Hibernate");
+		//types.put(Report.COLLECTION, "Collection");
+		//types.put(Report.XPATH, "XPath");
+		
+		paramTypes.put(ReportParameter.INPUT, "INPUT");
+		paramTypes.put(ReportParameter.TEXTAREA, "TEXTAREA");
+		paramTypes.put(ReportParameter.DATE, "DATE");
+		paramTypes.put(ReportParameter.PATH, "PATH");
+	}
+	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
@@ -87,13 +104,6 @@ public class ReportServlet extends BaseServlet {
 		
 		try {
 			session = JCRUtils.getSession();
-
-			Map<String, String> types = new LinkedHashMap<String, String>();
-			types.put(Report.SQL, "SQL");
-			types.put(Report.SCRIPT, "Script");
-			//types.put(Report.HIBERNATE, "Hibernate");
-			//types.put(Report.COLLECTION, "Collection");
-			//types.put(Report.XPATH, "XPath");
 			
 			if (action.equals("create")) {
 				ServletContext sc = getServletContext();
@@ -118,6 +128,14 @@ public class ReportServlet extends BaseServlet {
 				sc.setAttribute("types", types);
 				sc.setAttribute("rp", rp);
 				sc.getRequestDispatcher("/admin/report_edit.jsp").forward(request, response);
+			} else if (action.equals("paramList")) {
+				paramList(session, request, response);
+			} else if (action.equals("paramCreate")) {
+				paramCreate(session, request, response);
+			} else if (action.equals("paramEdit")) {
+				paramEdit(session, request, response);
+			} else if (action.equals("paramDelete")) {
+				paramDelete(session, request, response);
 			} else if (action.equals("execute")) {
 				execute(session, request, response);
 			} else {
@@ -335,5 +353,128 @@ public class ReportServlet extends BaseServlet {
 		// Activity log
 		UserActivity.log(request.getRemoteUser(), "ADMIN_REPORT_EXECUTE", Integer.toString(rpId), rp.toString());
 		log.debug("execute: void");
+	}
+	
+	/**
+	 * List reports parameters
+	 */
+	private void paramList(Session session, HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, DatabaseException {
+		log.debug("paramList({}, {}, {})", new Object[] { session, request, response });
+		ServletContext sc = getServletContext();
+		int rpId = WebUtils.getInt(request, "rp_id");
+		Report rep = ReportDAO.findByPk(rpId);
+		Set<ReportParameter> params = rep.getParams();
+		
+		for (ReportParameter rpp : params) {
+			if (ReportParameter.INPUT.equals(rpp.getType())) {
+				rpp.setType("Input");
+			} else if (ReportParameter.TEXTAREA.equals(rpp.getType())) {
+				rpp.setType("TextArea");
+			} else if (ReportParameter.DATE.equals(rpp.getType())) {
+				rpp.setType("Date");
+			} else if (ReportParameter.PATH.equals(rpp.getType())) {
+				rpp.setType("Path");
+			}
+		}
+		
+		sc.setAttribute("rp_id", rpId);
+		sc.setAttribute("params", params);
+		sc.getRequestDispatcher("/admin/report_param_list.jsp").forward(request, response);
+		log.debug("list: void");
+	}
+	
+	/**
+	 * Create report parameter 
+	 */
+	private void paramCreate(Session session, HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException, DatabaseException, RepositoryException {
+		log.debug("paramCreate({}, {}, {})", new Object[] { session, request, response });
+		
+		if (WebUtils.getBoolean(request, "persist")) {
+			int rpId = WebUtils.getInt(request, "rp_id");
+			ReportParameter rpp = new ReportParameter();
+			rpp.setLabel(WebUtils.getString(request, "rpp_label"));
+			rpp.setName(WebUtils.getString(request, "rpp_name"));
+			rpp.setType(WebUtils.getString(request, "rpp_type"));
+			Report rp = ReportDAO.findByPk(rpId);
+			rp.getParams().add(rpp);
+			ReportDAO.update(rp);
+			
+			// Activity log
+			UserActivity.log(session.getUserID(), "ADMIN_REPORT_PARAMETER_CREATE", Integer.toString(rp.getId()), rpp.toString());
+			paramList(session, request, response);
+		} else {
+			ServletContext sc = getServletContext();
+			ReportParameter rpp = new ReportParameter();
+			sc.setAttribute("action", WebUtils.getString(request, "action"));
+			sc.setAttribute("persist", true);
+			sc.setAttribute("paramTypes", paramTypes);
+			sc.setAttribute("rpp", rpp);
+			sc.getRequestDispatcher("/admin/report_param_edit.jsp").forward(request, response);
+		}
+		
+		log.debug("paramCreate: void");
+	}
+	
+	/**
+	 * Edit report parameter
+	 */
+	private void paramEdit(Session session, HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, DatabaseException {
+		log.debug("paramEdit({}, {}, {})", new Object[] { session, request, response });
+		
+		if (WebUtils.getBoolean(request, "persist")) {
+			int rppId = WebUtils.getInt(request, "rpp_id");
+			ReportParameter rpp = ReportDAO.findParamByPk(rppId);
+			rpp.setLabel(WebUtils.getString(request, "rpp_label"));
+			rpp.setName(WebUtils.getString(request, "rpp_name"));
+			rpp.setType(WebUtils.getString(request, "rpp_type"));
+			ReportDAO.updateParam(rpp);
+			
+			// Activity log
+			UserActivity.log(session.getUserID(), "ADMIN_REPORT_PARAMETER_EDIT", Integer.toString(rpp.getId()), rpp.toString());
+			paramList(session, request, response);
+		} else {
+			ServletContext sc = getServletContext();
+			//int rpId = WebUtils.getInt(request, "rp_id");
+			int rppId = WebUtils.getInt(request, "rpp_id");
+			sc.setAttribute("action", WebUtils.getString(request, "action"));
+			sc.setAttribute("persist", true);
+			sc.setAttribute("paramTypes", paramTypes);
+			sc.setAttribute("rpp", ReportDAO.findParamByPk(rppId));
+			sc.getRequestDispatcher("/admin/report_param_edit.jsp").forward(request, response);
+		}
+		
+		log.debug("paramEdit: void");
+	}
+	
+	/**
+	 * Delete report parameter
+	 */
+	private void paramDelete(Session session, HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, DatabaseException {
+		log.debug("paramDelete({}, {}, {})", new Object[] { session, request, response });
+		
+		if (WebUtils.getBoolean(request, "persist")) {
+			//int rpId = WebUtils.getInt(request, "rp_id");
+			int rppId = WebUtils.getInt(request, "rpp_id");
+			ReportDAO.deleteParam(rppId);
+			
+			// Activity log
+			UserActivity.log(session.getUserID(), "ADMIN_REPORT_PARAMETER_DELETE", Integer.toString(rppId), null);
+			paramList(session, request, response);
+		} else {
+			ServletContext sc = getServletContext();
+			//int rpId = WebUtils.getInt(request, "rp_id");
+			int rppId = WebUtils.getInt(request, "rpp_id");
+			sc.setAttribute("action", WebUtils.getString(request, "action"));
+			sc.setAttribute("persist", true);
+			sc.setAttribute("paramTypes", paramTypes);
+			sc.setAttribute("rpp", ReportDAO.findParamByPk(rppId));
+			sc.getRequestDispatcher("/admin/report_param_edit.jsp").forward(request, response);
+		}
+		
+		log.debug("paramDelete: void");
 	}
 }
