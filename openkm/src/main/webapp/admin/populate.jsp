@@ -1,4 +1,4 @@
-<%@ page import="com.openkm.servlet.admin.BaseServlet" %>
+<%@ page import="com.openkm.core.Config" %>
 <%@ page import="com.openkm.util.Populate"%>
 <%@ page import="java.util.Collection" %>
 <%@ page import="java.util.Iterator" %>
@@ -14,7 +14,7 @@
 </head>
 <body>
 <%
-	if (BaseServlet.isMultipleInstancesAdmin(request)) {
+	if (request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
 		request.setCharacterEncoding("UTF-8");
 		String token = (String) session.getAttribute("token");
 		String seedWord = request.getParameter("seedWord")==null?"":request.getParameter("seedWord");

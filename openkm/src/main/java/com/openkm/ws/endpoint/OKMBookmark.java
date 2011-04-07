@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -56,7 +56,7 @@ public class OKMBookmark {
 	@WebMethod
 	public Bookmark add(@WebParam(name = "token") String token, 
 			@WebParam(name = "nodePath") String nodePath, 
-			@WebParam(name = "name") String name) throws AccessDeniedException, 
+			@WebParam(name = "name") String name) throws AccessDeniedException,
 			PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("add({}, {}, {})", new Object[] { token, nodePath, name });
 		BookmarkModule bm = ModuleManager.getBookmarkModule();

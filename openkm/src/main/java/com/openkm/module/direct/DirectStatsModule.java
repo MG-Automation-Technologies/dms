@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -152,7 +152,7 @@ public class DirectStatsModule implements StatsModule {
 	 */
 	private long getCount(QueryManager queryManager, String statement) throws InvalidQueryException,
 			javax.jcr.RepositoryException {
-		Query query = queryManager.createQuery(statement, Query.XPATH);
+		Query query = queryManager.createQuery(statement, "xpath");
 		QueryResult result = query.execute();
 		return result.getRows().getSize();
 	}
@@ -209,7 +209,7 @@ public class DirectStatsModule implements StatsModule {
 	 */
 	private long getSize(QueryManager queryManager, String statement) throws InvalidQueryException,
 			javax.jcr.RepositoryException {
-		Query query = queryManager.createQuery(statement, Query.XPATH);
+		Query query = queryManager.createQuery(statement, "xpath");
 		QueryResult result = query.execute();
 		long size = 0;
 		

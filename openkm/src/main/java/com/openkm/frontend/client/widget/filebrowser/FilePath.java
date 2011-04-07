@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -23,11 +23,14 @@ package com.openkm.frontend.client.widget.filebrowser;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMRepositoryService;
 import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
 
@@ -95,7 +98,9 @@ public class FilePath  extends Composite {
 	/**
 	 * Gets the root
 	 */
-	public void getRootPath() {	
+	public void getRootPath() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
 		repositoryService.getRootFolder(callbackGetRootFolder);
 	}	
 }

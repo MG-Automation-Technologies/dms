@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -30,11 +30,13 @@ import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
 import com.openkm.frontend.client.bean.GWTQueryParams;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMDashboardService;
 import com.openkm.frontend.client.service.OKMDashboardServiceAsync;
 
@@ -172,7 +174,9 @@ public class NewsDashboard extends WidgetToFire {
 	 * getAllSearchs
 	 */
 	public void getUserSearchs(boolean refreshFind) {
-		this.refreshFind = refreshFind;	
+		this.refreshFind = refreshFind;
+		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
+		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
 		dashboardService.getUserSearchs(callbackGetUserSearchs);
 	}
 
@@ -186,6 +190,8 @@ public class NewsDashboard extends WidgetToFire {
 			if (!firstTime) {
 				hWidgetSearch.get(actualRefreshingKey).setRefreshing();
 			}
+			ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
+			endPoint.setServiceEntryPoint(Config.OKMDashboardService);	
 			dashboardService.find(Integer.parseInt(actualRefreshingKey), callbackFind);
 		} else {
 			Main.get().mainPanel.bottomPanel.userInfo.setNewsDocuments(newsDocuments);

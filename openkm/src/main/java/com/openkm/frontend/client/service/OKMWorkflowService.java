@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTProcessDefinition;
@@ -35,7 +34,6 @@ import com.openkm.frontend.client.bean.GWTTaskInstance;
  * @author jllort
  *
  */
-@RemoteServiceRelativePath("Workflow")
 public interface OKMWorkflowService extends RemoteService {
 	public List<GWTProcessDefinition> findLatestProcessDefinitions() throws OKMException;
 	public void runProcessDefinition(String UUID, double id, List<GWTFormElement> formElements) throws OKMException;

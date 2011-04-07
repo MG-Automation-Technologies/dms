@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -49,19 +49,5 @@ public class MenuPopup extends PopupPanel {
 	 */
 	public void langRefresh() {
 		menu.langRefresh();
-	}
-	
-	/**
-	 * show share search
-	 */
-	public void showShareSearch() {
-		menu.showShareSearch();
-	}
-	
-	/**
-	 * evaluateMenuOptions
-	 */
-	public void evaluateMenuOptions() {
-		menu.evaluateMenuOptions();
 	}
 }

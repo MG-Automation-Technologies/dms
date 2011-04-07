@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -24,8 +24,8 @@ package com.openkm.extension.frontend.client;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
-import com.openkm.frontend.client.extension.widget.menu.MenuBarExtension;
-import com.openkm.frontend.client.extension.widget.menu.MenuItemExtension;
+import com.openkm.frontend.client.extension.widget.MenuBarExtension;
+import com.openkm.frontend.client.extension.widget.MenuItemExtension;
 
 /**
  * MainMenuExample

@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -24,6 +24,7 @@ package com.openkm.frontend.client.service;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
 import com.openkm.frontend.client.bean.GWTTestImap;
 
@@ -33,6 +34,7 @@ import com.openkm.frontend.client.bean.GWTTestImap;
  *
  */
 public interface OKMGeneralServiceAsync {
+	
 	public void getFileUploadStatus(AsyncCallback<GWTFileUploadingStatus> callback);
 	public void testImapConnection(String host, String user, String password, String imapFolder, AsyncCallback<GWTTestImap> callback);
 	public void getEnabledExtensions(AsyncCallback<List<String>> callback);

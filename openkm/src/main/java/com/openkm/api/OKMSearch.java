@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -134,17 +134,9 @@ public class OKMSearch implements SearchModule {
 		log.debug("saveSearch: {}", id);
 		return id;
 	}
-	
-	@Override
-	public void updateSearch(String token, QueryParams params) throws AccessDeniedException,
-			RepositoryException, DatabaseException {
-		log.debug("updateSearch({}, {})", token, params);
-		SearchModule sm = ModuleManager.getSearchModule();
-		sm.saveSearch(token, params);
-		log.debug("updateSearch: void");
-	}
 
 	@Override
+	@Deprecated
 	public QueryParams getSearch(String token, int qpId) throws PathNotFoundException, RepositoryException,
 			DatabaseException {
 		log.debug("getSearch({}, {})", token, qpId);
@@ -164,8 +156,8 @@ public class OKMSearch implements SearchModule {
 	}
 
 	@Override
-	public void deleteSearch(String token, int qpId) throws AccessDeniedException, RepositoryException,
-			DatabaseException {
+	public void deleteSearch(String token, int qpId) throws AccessDeniedException, PathNotFoundException,
+			RepositoryException, DatabaseException {
 		log.debug("deleteSearch({}, {})", token, qpId);
 		SearchModule sm = ModuleManager.getSearchModule();
 		sm.deleteSearch(token, qpId);

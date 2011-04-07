@@ -23,11 +23,15 @@
   <form name="login" method="post" action="j_security_check">
     <table>
       <tr>
-      	<td colspan="2" align="center"><img src="<%=request.getContextPath() %>/logo/login" border="0" /></td>
+      	<td colspan="2" align="center"><img src="<%=request.getContextPath() %>/img/logo_big.gif" border="0" /></td>
       </tr>
       <tr>
         <td colspan="2" align="center" style="padding-top: 25px;">
-        <h2><%=exception.toString()%></h2>
+        <% if (exception != null) { %>
+        	<h2><%=exception.getMessage()%></h2>
+        <% } else { %>
+        	<h2>Unknown error</h2>
+        <% } %>
         <% session.invalidate(); %>
         </td>
       </tr>

@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -28,12 +28,15 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
+
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
+import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMFolderService;
 import com.openkm.frontend.client.service.OKMFolderServiceAsync;
 import com.openkm.frontend.client.service.OKMRepositoryService;
@@ -105,7 +108,7 @@ public class FolderSelectTree extends Composite {
 		}
 		
 		if (categories) {
-			changeView(UIDesktopConstants.NAVIGATOR_CATEGORIES);
+			changeView(PanelDefinition.NAVIGATOR_CATEGORIES);
 		} else {
 			changeView(Main.get().mainPanel.search.searchBrowser.searchIn.getSelectedView());
 		}
@@ -123,27 +126,27 @@ public class FolderSelectTree extends Composite {
 		}
 		
 		switch (view){
-			case UIDesktopConstants.NAVIGATOR_TAXONOMY :
+			case PanelDefinition.NAVIGATOR_TAXONOMY :
 				getRoot();
 				break;
 				
-			case UIDesktopConstants.NAVIGATOR_CATEGORIES :
+			case PanelDefinition.NAVIGATOR_CATEGORIES :
 				getCategories();
 				break;
 				
-			case UIDesktopConstants.NAVIGATOR_TEMPLATES :
+			case PanelDefinition.NAVIGATOR_TEMPLATES :
 				getTemplate();
 				break;
 				
-			case UIDesktopConstants.NAVIGATOR_PERSONAL :
+			case PanelDefinition.NAVIGATOR_PERSONAL :
 				getPersonal();
 				break;
 			
-			case UIDesktopConstants.NAVIGATOR_MAIL :
+			case PanelDefinition.NAVIGATOR_MAIL :
 				getMail();
 				break;	
 			
-			case UIDesktopConstants.NAVIGATOR_TRASH :
+			case PanelDefinition.NAVIGATOR_TRASH :
 				getTrash();
 				break;
 		}
@@ -225,7 +228,9 @@ public class FolderSelectTree extends Composite {
 	 * 
 	 * @param path The folder path selected to list items
 	 */
-	public void getChilds(String path) {	
+	public void getChilds(String path) {
+		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
+		endPoint.setServiceEntryPoint(Config.OKMFolderService);	
 		folderService.getChilds(path, callbackGetChilds);
 	}	
 	
@@ -233,6 +238,8 @@ public class FolderSelectTree extends Composite {
 	 * Gets the root
 	 */
 	public void getRoot() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
 		repositoryService.getRootFolder(callbackGetRootFolder);
 	}
 	
@@ -260,6 +267,8 @@ public class FolderSelectTree extends Composite {
 	 * Gets the template
 	 */
 	public void getTemplate() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
 		repositoryService.getTemplatesFolder(callbackGetTemplatesFolder);
 	}
 	
@@ -287,6 +296,8 @@ public class FolderSelectTree extends Composite {
 	 * Gets the categories
 	 */
 	public void getCategories() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
 		repositoryService.getCategoriesFolder(callbackGetCategoriesFolder);
 	}
 	
@@ -314,6 +325,8 @@ public class FolderSelectTree extends Composite {
 	 * Gets the mail
 	 */
 	public void getMail() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
 		repositoryService.getMailFolder(callbackGetMailFolder);
 	}
 	
@@ -341,6 +354,8 @@ public class FolderSelectTree extends Composite {
 	 * Gets the personal documents
 	 */
 	public void getPersonal() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
 		repositoryService.getPersonalFolder(callbackGetPersonalFolder);
 	}
 	
@@ -367,7 +382,9 @@ public class FolderSelectTree extends Composite {
 	/**
 	 * Gets the trash
 	 */
-	public void getTrash() {	
+	public void getTrash() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
 		repositoryService.getTrashFolder(callbackGetTrashFolder);
 	}
 	

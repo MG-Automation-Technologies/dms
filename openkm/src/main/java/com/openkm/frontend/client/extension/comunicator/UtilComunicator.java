@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -65,16 +65,6 @@ public class UtilComunicator {
 	}
 	
 	/**
-	 * imageItemHTML
-	 * 
-	 * @param imageUrl
-	 * @return
-	 */
-	public static String imageItemHTML(String imageUrl) {
-		return Util.imageHTML(imageUrl);
-	}
-	
-	/**
 	 * getTextAsBoldHTML
 	 * 
 	 * @param text
@@ -82,15 +72,6 @@ public class UtilComunicator {
 	 * @return
 	 */
 	public static String getTextAsBoldHTML(String text, boolean mark) {
-		return Util.getTextAsBoldHTML(text, mark);
-	}
-	
-	/**
-	 * getUserAgent
-	 * 
-	 * @return
-	 */
-	public static String getUserAgent() {
-		return Util.getUserAgent();
+		return "";
 	}
 }

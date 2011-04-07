@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -23,10 +23,10 @@ package com.openkm.frontend.client.util;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.openkm.extension.frontend.client.widget.digitalsignature.DigitalSignature;
-import com.openkm.extension.frontend.client.widget.messaging.MessagingToolBarBox;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTWorkspace;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMRepositoryService;
 import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
 import com.openkm.frontend.client.service.OKMWorkspaceService;
@@ -98,7 +98,6 @@ public class WorkspaceUserProperties {
 			if (result.isUserQuotaEnabled() && result.getUserQuotaLimit() > 0) {
 				Main.get().mainPanel.bottomPanel.userInfo.enableUserQuota(workspace.getUserQuotaLimit());
 			}
-			Main.get().mainPanel.bottomPanel.userInfo.showExtensions();
 			Main.get().aboutPopup.setAppVersion(result.getAppVersion());
 			getUserDocumentsSize(); // Refreshing user document size ( here is yet set userQuota limit )
 			
@@ -119,9 +118,6 @@ public class WorkspaceUserProperties {
 			Main.get().mainPanel.topPanel.mainMenu.setToolsMenuVisible(workspace.isMenuToolsVisible());
 			Main.get().mainPanel.topPanel.mainMenu.setBookmarkMenuVisible(workspace.isMenuBookmarksVisible());
 			Main.get().mainPanel.topPanel.mainMenu.setHelpMenuVisible(workspace.isMenuHelpVisible());
-			
-			// Init available languages
-			Main.get().mainPanel.topPanel.mainMenu.initAvailableLanguage(workspace.getLangs());
 			
 			// Enabling / disabling some actions
 			Main.get().mainPanel.topPanel.toolBar.setAvailableOption(workspace.getAvailableOption());
@@ -240,9 +236,6 @@ public class WorkspaceUserProperties {
 			if (workspace.isTabFolderPropertiesVisible()) {
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.showProperties();
 			}
-			if (workspace.isTabFolderNotesVisible()) {
-				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.showNotes();
-			}
 			if (workspace.isTabFolderSecurityVisible()) {
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.showSecurity();
 			}
@@ -280,17 +273,6 @@ public class WorkspaceUserProperties {
 			}
 			Main.get().mainPanel.dashboard.init();
 			
-			// Extensions enhancements
-			if (MessagingToolBarBox.isRegistered(Main.get().getExtensionUuidList())) {
-				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.document.showProposedSusbcription();
-				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.folder.showProposedSusbcription();
-				Main.get().mainPanel.search.historySearch.searchSaved.menuPopup.showShareSearch();
-				Main.get().mainPanel.search.historySearch.userNews.menuPopup.showShareSearch();
-			}
-			if (DigitalSignature.isRegistered(Main.get().getExtensionUuidList())) {
-				Main.get().fileUpload.showDigitalSignature();
-			}
-			
 			Main.get().startUp.nextStatus(StartUp.STARTUP_GET_TAXONOMY_ROOT);
 			
 			// Getting update messages 
@@ -318,7 +300,9 @@ public class WorkspaceUserProperties {
 	/**
 	 * Gets the remote user
 	 */
-	private void getUpdateMessage() {	
+	private void getUpdateMessage() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
 		repositoryService.getUpdateMessage(callbackGetUpdateMessage);
 	}
 	
@@ -326,6 +310,8 @@ public class WorkspaceUserProperties {
 	 * Gets the workspace user data
 	 */
 	public void getUserWorkspace() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) workspaceService;
+		endPoint.setServiceEntryPoint(Config.OKMWorkspaceService);	
 		workspaceService.getUserWorkspace(callbackGetUserWorkspace);
 	}
 	
@@ -333,6 +319,8 @@ public class WorkspaceUserProperties {
 	 * refreshUserWorkspace
 	 */
 	public void refreshUserWorkspace() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) workspaceService;
+		endPoint.setServiceEntryPoint(Config.OKMWorkspaceService);	
 		workspaceService.getUserWorkspace(new AsyncCallback<GWTWorkspace>() {
 			@Override
 			public void onSuccess(GWTWorkspace result) {
@@ -350,6 +338,8 @@ public class WorkspaceUserProperties {
 	 * Gets the user documents size
 	 */
 	public void getUserDocumentsSize() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) workspaceService;
+		endPoint.setServiceEntryPoint(Config.OKMWorkspaceService);	
 		workspaceService.getUserDocumentsSize(callbackGetUserDocumentsSize);
 	}
 	

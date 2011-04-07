@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -62,13 +62,9 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean chatEnabled;
 	private boolean chatAutoLogin;
 	private long userQuotaLimit;
-	private boolean printPreview;
 	private boolean userQuotaEnabled;
-	private boolean webdavFix;
 	private List<GWTPropertyGroup> wizardPropertyGroupsList = new ArrayList<GWTPropertyGroup>();
-	private List<Double> wizardWorkflowsList = new ArrayList<Double>();
 	private boolean wizardPropertyGroups;
-	private boolean wizardWorkflows;
 	private boolean wizardKeywords;
 	private boolean wizardCategories;
 	private boolean stackTaxonomy;
@@ -101,11 +97,9 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean tabDocumentPropertyGroupsVisible;
 	private boolean tabFolderPropertiesVisible;
 	private boolean tabFolderSecurityVisible;
-	private boolean tabFolderNotesVisible;
 	private boolean tabMailPropertiesVisible;
 	private boolean tabMailSecurityVisible;
 	private GWTAvailableOption availableOption = new GWTAvailableOption();
-	private List<GWTLanguage> langs = new ArrayList<GWTLanguage>();
 
 	/**
 	 * GWTWorkspace
@@ -286,14 +280,6 @@ public class GWTWorkspace implements IsSerializable {
 	public void setUserQuotaLimit(long userQuotaLimit) {
 		this.userQuotaLimit = userQuotaLimit;
 	}
-	
-	public boolean isPrintPreview() {
-		return printPreview;
-	}
-
-	public void setPrintPreview(boolean printPreview) {
-		this.printPreview = printPreview;
-	}
 
 	public boolean isUserQuotaEnabled() {
 		return userQuotaEnabled;
@@ -301,14 +287,6 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setUserQuotaEnabled(boolean userQuotaEnabled) {
 		this.userQuotaEnabled = userQuotaEnabled;
-	}
-	
-	public boolean isWebdavFix() {
-		return webdavFix;
-	}
-
-	public void setWebdavFix(boolean webdavFix) {
-		this.webdavFix = webdavFix;
 	}
 
 	public boolean isWizardPropertyGroups() {
@@ -325,22 +303,6 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setWizardPropertyGroupsList(List<GWTPropertyGroup> wizardPropertyGroupsList) {
 		this.wizardPropertyGroupsList = wizardPropertyGroupsList;
-	}
-	
-	public List<Double> getWizardWorkflowsList() {
-		return wizardWorkflowsList;
-	}
-
-	public void setWizardWorkflowsList(List<Double> wizardWorkflowsList) {
-		this.wizardWorkflowsList = wizardWorkflowsList;
-	}
-
-	public boolean isWizardWorkflows() {
-		return wizardWorkflows;
-	}
-
-	public void setWizardWorkflows(boolean wizardWorkflows) {
-		this.wizardWorkflows = wizardWorkflows;
 	}
 
 	public boolean isWizardKeywords() {
@@ -615,14 +577,6 @@ public class GWTWorkspace implements IsSerializable {
 		this.tabFolderSecurityVisible = tabFolderSecurityVisible;
 	}
 	
-	public boolean isTabFolderNotesVisible() {
-		return tabFolderNotesVisible;
-	}
-
-	public void setTabFolderNotesVisible(boolean tabFolderNotesVisible) {
-		this.tabFolderNotesVisible = tabFolderNotesVisible;
-	}
-	
 	public boolean isTabMailPropertiesVisible() {
 		return tabMailPropertiesVisible;
 	}
@@ -661,13 +615,5 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setPreviewer(String previewer) {
 		this.previewer = previewer;
-	}
-	
-	public List<GWTLanguage> getLangs() {
-		return langs;
-	}
-
-	public void setLangs(List<GWTLanguage> langs) {
-		this.langs = langs;
 	}
 }

@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -33,6 +33,7 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -42,8 +43,10 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
+
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTBookmark;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMBookmarkService;
 import com.openkm.frontend.client.service.OKMBookmarkServiceAsync;
 import com.openkm.frontend.client.util.Util;
@@ -352,7 +355,9 @@ public class ManageBookmarkPopup extends DialogBox {
 	 * Gets the bookmark list from the server
 	 * 
 	 */
-	public void getAll() {		
+	public void getAll() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
+		endPoint.setServiceEntryPoint(Config.OKMBookmarkService);			
 		bookmarkService.getAll(callbackGetAll);
 	}
 	
@@ -361,7 +366,9 @@ public class ManageBookmarkPopup extends DialogBox {
 	 * 
 	 * @param id
 	 */
-	private void remove(int id) {			
+	private void remove(int id) {
+		ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
+		endPoint.setServiceEntryPoint(Config.OKMBookmarkService);			
 		bookmarkService.remove(id, callbackRemove);
 	}
 	
@@ -372,6 +379,8 @@ public class ManageBookmarkPopup extends DialogBox {
 	 * @param newName
 	 */
 	private void rename(int id, String newName) {
+		ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
+		endPoint.setServiceEntryPoint(Config.OKMBookmarkService);
 		bookmarkService.rename(id, newName, callbackRename);
 	}
 	

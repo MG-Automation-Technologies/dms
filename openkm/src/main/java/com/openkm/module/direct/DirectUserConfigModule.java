@@ -47,7 +47,7 @@ public class DirectUserConfigModule implements UserConfigModule {
 			UserConfigDAO.setHome(uc);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "USER_CONFIG_SET_HOME", node.getUUID(), nodePath);
+			UserActivity.log(session.getUserID(), "USER_CONFIG_SET_HOME", null, nodePath);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (DatabaseException e) {

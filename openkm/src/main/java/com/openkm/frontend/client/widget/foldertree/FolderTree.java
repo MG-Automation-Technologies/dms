@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -30,14 +30,16 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.contants.service.ErrorCode;
-import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
+import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.config.ErrorCode;
+import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import com.openkm.frontend.client.service.OKMFolderService;
@@ -531,6 +533,8 @@ public class FolderTree extends Composite implements OriginPanel {
 	 *            The folder path selected to list items
 	 */
 	public void getChilds(String path) {
+		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
+		endPoint.setServiceEntryPoint(Config.OKMFolderService);
 		folderService.getChilds(path, callbackGetChilds);
 		Main.get().mainPanel.desktop.navigator.status.setFlagChilds();
 	}
@@ -544,6 +548,8 @@ public class FolderTree extends Composite implements OriginPanel {
 	 *            The folder path selected to list items
 	 */
 	public void getOnlyChilds(String path) {
+		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
+		endPoint.setServiceEntryPoint(Config.OKMFolderService);
 		folderService.getChilds(path, callbackGetOnlyChilds);
 	}
 
@@ -554,6 +560,8 @@ public class FolderTree extends Composite implements OriginPanel {
 	 *            The folder subpath selected by user = name
 	 */
 	public void create(String path) {
+		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
+		endPoint.setServiceEntryPoint(Config.OKMFolderService);
 		// On creation the actualItem is tmpFolder and must create from the
 		// parent of tmpFolder ( the real actualItem )
 		folderService.create(path, ((GWTFolder) actualItem.getParentItem().getUserObject()).getPath(),
@@ -569,6 +577,8 @@ public class FolderTree extends Composite implements OriginPanel {
 	 *            The folder subpath selected by user = name
 	 */
 	public void rename(String path) {
+		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
+		endPoint.setServiceEntryPoint(Config.OKMFolderService);
 		folderService.rename(((GWTFolder) actualItem.getUserObject()).getPath(), path, callbackRename);
 		Main.get().mainPanel.desktop.navigator.status.setFlagRename();
 		hideMenuPopup();
@@ -580,7 +590,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	public void confirmDelete() {
 		// In categories stack view, must not fire deleting if user view some
 		// document
-		if (!(Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_CATEGORIES && Main
+		if (!(Main.get().mainPanel.desktop.navigator.getStackIndex() == PanelDefinition.NAVIGATOR_CATEGORIES && Main
 				.get().mainPanel.desktop.browser.fileBrowser.hasRows())) {
 			Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_DELETE_FOLDER);
 			Main.get().confirmPopup.show();
@@ -597,6 +607,8 @@ public class FolderTree extends Composite implements OriginPanel {
 	 * parent
 	 */
 	public void delete() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
+		endPoint.setServiceEntryPoint(Config.OKMFolderService);
 		String path = ((GWTFolder) actualItem.getUserObject()).getPath();
 		folderService.delete(path, callbackDelete);
 		Main.get().mainPanel.desktop.navigator.status.setFlagDelete();
@@ -672,6 +684,8 @@ public class FolderTree extends Composite implements OriginPanel {
 	 * Adds a subscription
 	 */
 	public void addSubscription() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) notifyService;
+		endPoint.setServiceEntryPoint(Config.OKMNotifyService);
 		Main.get().mainPanel.desktop.navigator.status.setFlagAddSubscription();
 		notifyService.subscribe(((GWTFolder) actualItem.getUserObject()).getPath(), callbackAddSubscription);
 	}
@@ -680,6 +694,8 @@ public class FolderTree extends Composite implements OriginPanel {
 	 * Removes a subscription
 	 */
 	public void removeSubscription() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) notifyService;
+		endPoint.setServiceEntryPoint(Config.OKMNotifyService);
 		Main.get().mainPanel.desktop.navigator.status.setFlagRemoveSubscription();
 		notifyService.unsubscribe(((GWTFolder) actualItem.getUserObject()).getPath(),
 				callbackRemoveSubscription);
@@ -694,8 +710,12 @@ public class FolderTree extends Composite implements OriginPanel {
 		if (Main.get().fldPath != null && !Main.get().fldPath.equals("") && Main.get().docPath != null
 				&& !Main.get().docPath.equals("")) {
 			// Evalues if document passed by parameter is valid
+			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
+			endPoint.setServiceEntryPoint(Config.OKMDocumentService);
 			documentService.isValid(Main.get().docPath, callbackIsValidDocument);
 		} else if (Main.get().fldPath != null && !Main.get().fldPath.equals("")) {
+			ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
+			endPoint.setServiceEntryPoint(Config.OKMFolderService);
 			folderService.isValid(Main.get().fldPath, callbackIsValidFolder);
 		}
 	}
@@ -769,6 +789,8 @@ public class FolderTree extends Composite implements OriginPanel {
 	 * Gets the actual folder (actualItem) and refresh all information on it
 	 */
 	private void get() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
+		endPoint.setServiceEntryPoint(Config.OKMFolderService);
 		Main.get().mainPanel.desktop.navigator.status.setFlagGet();
 		folderService.getProperties(((GWTFolder) actualItem.getUserObject()).getPath(), callbackGet);
 	}
@@ -936,7 +958,7 @@ public class FolderTree extends Composite implements OriginPanel {
 			menuPopup.evaluateMenuOptions();
 			menuPopup.setPopupPosition(tree.mouseX, tree.mouseY);
 			// In thesaurus view must not be showed the menu popup
-			if (Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_THESAURUS ) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex() != PanelDefinition.NAVIGATOR_THESAURUS ) {
 				menuPopup.show();
 			}
 		}
@@ -945,10 +967,10 @@ public class FolderTree extends Composite implements OriginPanel {
 		// rename or folder creation
 		// and root item is not dragable
 		// On trash drag and drop is always disabled
-		if (tree.isDragged() && folderAction == ACTION_NONE && !actualItem.equals(rootItem) && 
-			Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_CATEGORIES &&
-			Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_THESAURUS &&
-			Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_TRASH) {
+		if (tree.isDragged() && folderAction == ACTION_NONE && !actualItem.equals(rootItem) &&
+			Main.get().mainPanel.desktop.navigator.getStackIndex() != PanelDefinition.NAVIGATOR_CATEGORIES &&
+			Main.get().mainPanel.desktop.navigator.getStackIndex() != PanelDefinition.NAVIGATOR_THESAURUS &&
+			Main.get().mainPanel.desktop.navigator.getStackIndex() != PanelDefinition.NAVIGATOR_TRASH) {
 			Main.get().dragable.show(actualItem.getHTML(), OriginPanel.TREE_ROOT);
 			tree.unsetDraged();
 		}
@@ -964,7 +986,7 @@ public class FolderTree extends Composite implements OriginPanel {
 		String path = ((GWTFolder) actualItem.getUserObject()).getPath();
 		getChilds(path);
 
-		// Case not resets always must show tabfolder properties
+		// Case not resets always musy show tabfolder properties
 		if (!reset) {
 			// Case exists a selected row must mantain other case mus show
 			// folder properties on tab
@@ -1282,14 +1304,6 @@ public class FolderTree extends Composite implements OriginPanel {
 			removeStyleName("okm-PanelSelected");
 		}
 	}
-	
-	/**
-	 * Used only on changing stack
-	 */
-	public void forceSetSelectedPanel() {
-		panelSelected = false;
-		setSelectedPanel(true);
-	}
 
 	/**
 	 * Hides the menu Popup
@@ -1509,6 +1523,8 @@ public class FolderTree extends Composite implements OriginPanel {
 	 * Purge folder on file browser ( only trash mode )
 	 */
 	public void purge() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
+		endPoint.setServiceEntryPoint(Config.OKMFolderService);
 		String path = ((GWTFolder) actualItem.getUserObject()).getPath();
 		folderService.purge(path, callbackPurge);
 		Main.get().mainPanel.desktop.navigator.status.setFlagPurge();
@@ -1518,6 +1534,8 @@ public class FolderTree extends Composite implements OriginPanel {
 	 * Purge all trash ( only trash mode )
 	 */
 	public void purgeTrash() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
 		repositoryService.purgeTrash(callbackPurgeTrash);
 		Main.get().mainPanel.desktop.navigator.status.setFlagPurgeTrash();
 	}

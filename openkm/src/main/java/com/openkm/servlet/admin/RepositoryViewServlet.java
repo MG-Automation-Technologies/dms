@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -52,8 +52,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.jackrabbit.JcrConstants;
-import org.apache.jackrabbit.core.NodeImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +69,7 @@ import com.openkm.dao.LockTokenDAO;
 import com.openkm.util.FormatUtil;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
-import com.openkm.util.WebUtils;
+import com.openkm.util.WebUtil;
 
 /**
  * RepositoryView servlet
@@ -82,27 +80,12 @@ public class RepositoryViewServlet extends BaseServlet {
 	private static final String[] NODE_TYPE = { "UNDEFINED", "STRING", "BINARY", "LONG", "DOUBLE", 
 		"DATE", "BOOLEAN", "NAME", "PATH", "REFERENCE" };
 	
-	@Override
-	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException,
-			ServletException {
-		String method = request.getMethod();
-		
-		if (checkMultipleInstancesAccess(request, response)) {
-			if (method.equals(METHOD_GET)) {
-				doGet(request, response);
-			} else if (method.equals(METHOD_POST)) {
-				doPost(request, response);
-			}
-		}
-	}
-	
-	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		String action = WebUtils.getString(request, "action");
-		String path = WebUtils.getString(request, "path");
+		String action = WebUtil.getString(request, "action");
+		String path = WebUtil.getString(request, "path");
 		Session session = null;
 		updateSessionManager(request);
 		
@@ -177,7 +160,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		}
 		
 		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_UNLOCK", node.getUUID(), path);
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_UNLOCK", path, "");
 		log.debug("unlock: void");
 	}
 	
@@ -191,7 +174,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		node.checkin();
 
 		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_CHECKIN", node.getUUID(), path);
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_CHECKIN", path, "");
 		log.debug("checkin: void");
 	}
 
@@ -210,7 +193,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		}
 		
 		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_REMOVE_CONTENT", node.getUUID(), path);
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_REMOVE_CONTENT", path, "");
 		log.debug("removeCurrent: void");
 	}
 	
@@ -221,14 +204,13 @@ public class RepositoryViewServlet extends BaseServlet {
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
 		log.debug("removeCurrent({}, {}, {}, {})", new Object[] { session, path, request, response });
 		Node node = session.getRootNode().getNode(path.substring(1));
-		String uuid = node.getUUID();
 		Node parent = node.getParent();
 		String parentPath = parent.getPath();
 		node.remove();
 		parent.save();
 				
 		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_REMOVE_CURRENT", uuid, path);
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_REMOVE_CURRENT", path, "");
 		log.debug("removeCurrent: {}", path);
 		return parentPath;
 	}
@@ -240,12 +222,12 @@ public class RepositoryViewServlet extends BaseServlet {
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
 		log.debug("removeMixin({}, {}, {}, {})", new Object[] { session, path, request, response });
 		Node node = session.getRootNode().getNode(path.substring(1));
-		String mixin = WebUtils.getString(request, "mixin");
+		String mixin = WebUtil.getString(request, "mixin");
 		node.removeMixin(mixin);		
 		node.save();
 				
 		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_REMOVE_MIXIN", node.getUUID(), mixin+", "+path);
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_REMOVE_MIXIN", path, mixin);
 		log.debug("removeMixin: {}", path);
 	}
 	
@@ -255,7 +237,7 @@ public class RepositoryViewServlet extends BaseServlet {
 	private void edit(Session session, String path, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
 		log.debug("edit({}, {}, {}, {})", new Object[] { session, path, request, response });
-		String property = WebUtils.getString(request, "property");
+		String property = WebUtil.getString(request, "property");
 		ServletContext sc = getServletContext();
 		Node node = session.getRootNode().getNode(path.substring(1));
 		Property prop = node.getProperty(property);
@@ -270,7 +252,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		}
 		
 		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_EDIT", node.getUUID(), property+", "+value+", "+path);
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_EDIT", path, property+" : "+value);
 		
 		sc.setAttribute("node", node);
 		sc.setAttribute("property", prop);
@@ -286,8 +268,8 @@ public class RepositoryViewServlet extends BaseServlet {
 	private void save(Session session, String path, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
 		log.debug("save({}, {}, {}, {})", new Object[] { session, path, request, response });
-		String value = WebUtils.getString(request, "value");
-		String property = WebUtils.getString(request, "property");
+		String value = WebUtil.getString(request, "value");
+		String property = WebUtil.getString(request, "property");
 		Node node = session.getRootNode().getNode(path.substring(1));
 		Property prop = node.getProperty(property);
 		ValueFactory vf = session.getValueFactory();
@@ -308,7 +290,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		node.save();
 		
 		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_SAVE", node.getUUID(), property+", "+value+", "+path);
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_SAVE", path, property+" : "+value);
 		log.debug("save: void");
 	}
 
@@ -318,8 +300,8 @@ public class RepositoryViewServlet extends BaseServlet {
 	private void list(Session session, String path, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
 		log.debug("list({}, {}, {}, {})", new Object[] { session, path, request, response });
-		String stats = WebUtils.getString(request, "stats");
-		String uuid = WebUtils.getString(request, "uuid");
+		String stats = WebUtil.getString(request, "stats");
+		String uuid = WebUtil.getString(request, "uuid");
 		ServletContext sc = getServletContext();
 		ContentInfo ci = null;
 		Node node = null;
@@ -335,11 +317,7 @@ public class RepositoryViewServlet extends BaseServlet {
 
 		// Handle path or uuid
 		if (!path.equals("")) {
-			if (path.equals("/")) {
-				node = session.getRootNode();
-			} else {
-				node = session.getRootNode().getNode(path.substring(1));
-			}
+			node = session.getRootNode().getNode(path.substring(1));
 		} else if (!uuid.equals("")) {
 			node = session.getNodeByUUID(uuid);
 			path = node.getPath();
@@ -360,13 +338,9 @@ public class RepositoryViewServlet extends BaseServlet {
 				log.warn(e.getMessage(), e);
 			}
 		}
-		
+
 		// Activity log
-		if (node.isNodeType(JcrConstants.MIX_REFERENCEABLE)) {
-			UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_LIST", node.getUUID(), node.getPath());
-		} else {
-			UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_LIST", ((NodeImpl)node).getId().toString(), node.getPath());
-		}
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_LIST", node.getPath(), null);
 		
 		sc.setAttribute("contentInfo", ci);
 		sc.setAttribute("node", node);

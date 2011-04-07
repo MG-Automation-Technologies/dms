@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -30,9 +30,9 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.contants.ui.UIFileUploadConstants;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.MenuBase;
+import com.openkm.frontend.client.widget.upload.FancyFileUpload;
 
 /**
  * Browser menu
@@ -149,7 +149,7 @@ public class TaxonomyMenu extends MenuBase {
 		public void execute() {
 			if (checkinOption) {
 				Main.get().fileUpload.setPath(Main.get().mainPanel.desktop.browser.fileBrowser.getPath());
-				Main.get().fileUpload.setAction(UIFileUploadConstants.ACTION_UPDATE);
+				Main.get().fileUpload.setAction(FancyFileUpload.ACTION_UPDATE);
 				Main.get().fileUpload.showPopup(false,false);
 				hide();
 			}
@@ -434,7 +434,7 @@ public class TaxonomyMenu extends MenuBase {
 				moveOption 				= false;
 			}
 		} else {
-			renameOption			= false;
+			renameOption			= true;
 			deleteOption 			= false;
 			moveOption 				= false;
 		}	

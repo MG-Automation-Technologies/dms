@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -79,7 +79,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 			BookmarkDAO.create(newBookmark);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "BOOKMARK_ADD", name, node.getUUID()+", "+nodePath);
+			UserActivity.log(session.getUserID(), "BOOKMARK_ADD", name, nodePath);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {

@@ -12,7 +12,7 @@
     <property name="mailPassword" column="MA_MPASSWORD" not-null="true"/>
     <property name="mailMarkSeen" column="MA_MMARK_SEEN" not-null="true"/>
     <property name="mailMarkDeleted" column="MA_MMARK_DELETED" not-null="true"/>
-    <property name="active" column="MA_ACTIVE" type="true_false" not-null="true"/>
+    <property name="active" column="MA_ACTIVE" not-null="true"/>
     <set name="mailFilters" table="OKM_MAIL_FILTER" order-by="MF_ID asc" cascade="all-delete-orphan" lazy="false">
       <key column="MF_MAIL_ACCOUNT" not-null="true"/>
       <one-to-many class="com.openkm.dao.bean.MailFilter"/>

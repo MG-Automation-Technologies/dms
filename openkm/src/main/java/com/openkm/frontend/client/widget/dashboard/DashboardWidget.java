@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -35,6 +35,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -52,7 +53,7 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.contants.service.RPCService;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMDashboardService;
 import com.openkm.frontend.client.service.OKMDashboardServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
@@ -66,6 +67,7 @@ import com.openkm.frontend.client.util.Util;
  *
  */
 public class DashboardWidget extends Composite {
+	
 	private final OKMDashboardServiceAsync dashboardService = (OKMDashboardServiceAsync) GWT.create(OKMDashboardService.class);
 
 	private static int HEADER_SQUARE = 24;
@@ -455,7 +457,9 @@ public class DashboardWidget extends Composite {
 	/**
 	 * Visite a node
 	 */
-	public void visiteNode(String source, String node, Date date) {	
+	public void visiteNode(String source, String node, Date date) {
+		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
+		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
 		dashboardService.visiteNode(source, node, date, callbackVisiteNode);
 	}
 	
@@ -532,7 +536,7 @@ public class DashboardWidget extends Composite {
 			feedImage.addClickHandler(new ClickHandler() { 
 				@Override
 				public void onClick(ClickEvent event) {
-					Window.open(RPCService.FeedService + feedUrl, "_blank", null);
+					Window.open(Config.OKMFeedService+feedUrl, "_blank", null);
 				}
 			});
 			

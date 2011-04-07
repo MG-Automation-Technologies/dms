@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.openkm.util.FormatUtil" %>
 <%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.servlet.admin.BaseServlet" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <%
@@ -17,10 +16,11 @@
   <title>Configuration</title>
 </head>
 <body>
-  <c:set var="isAdmin"><%=BaseServlet.isMultipleInstancesAdmin(request)%></c:set>
+  <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
       <h1>Configuration</h1>
+      <h2><%=Config.OPENKM_CONFIG %></h2>
       <table class="results" width="100%">
         <tr><th>Parameter</th><th>Value</th></tr>
         <c:forEach var="value" items="${configValues}" varStatus="row">

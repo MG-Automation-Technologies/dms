@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -419,7 +419,7 @@ public interface DocumentModule {
 	 * 
 	 * @param docPath The path that identifies an unique document.
 	 * @throws AccessDeniedException If there is any security problem: 
-	 * you can't access this node because of lack of permissions.
+	 * you can't access this folder because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 * @throws PathNotFoundException If there is no folder in the repository with this path.
 	 */
@@ -432,7 +432,7 @@ public interface DocumentModule {
 	 * @param uuid The unique document id.
 	 * @return The document path
 	 * @throws AccessDeniedException If there is any security problem: 
-	 * you can't access this node because of lack of permissions.
+	 * you can't access this folder because of lack of permissions.
 	 * @throws RepositoryException If there is any problem.
 	 */
 	public String getPath(String token, String uuid) throws AccessDeniedException, RepositoryException,

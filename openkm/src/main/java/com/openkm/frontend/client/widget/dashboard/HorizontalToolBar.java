@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -37,7 +37,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.extension.widget.toolbar.ToolBarBoxExtension;
+import com.openkm.frontend.client.extension.widget.ToolBarBoxExtension;
 import com.openkm.frontend.client.panel.center.Dashboard;
 import com.openkm.frontend.client.util.OKMBundleResources;
 
@@ -314,17 +314,5 @@ public class HorizontalToolBar extends Composite {
 	 */
 	public void addToolBarBoxExtension(ToolBarBoxExtension extension) {
 		widgetExtensionList.add(extension);
-	}
-	
-	/**
-	 * showToolBoxExtension
-	 * 
-	 * @param widget
-	 */
-	public void showToolBoxExtension(ToolBarBoxExtension extension) {
-		enabledWidget.removeStyleName("okm-ToolBar-Big-selected");
-		((Widget) extension).setStyleName("okm-ToolBar-Big-selected");
-		enabledWidget = ((Widget) extension);
-		Main.get().mainPanel.dashboard.changeView(Dashboard.DASHBOARD_EXTENSION);
 	}
 }

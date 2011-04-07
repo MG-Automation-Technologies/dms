@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -22,14 +22,12 @@
 package com.openkm.frontend.client.service;
 
 import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.openkm.frontend.client.OKMException;
 
 /**
  * @author jllort
  *
  */
-@RemoteServiceRelativePath("Property")
 public interface OKMPropertyService extends RemoteService {
 	public void addCategory(String nodePath, String category) throws OKMException;
 	public void removeCategory(String nodePath, String category) throws OKMException;

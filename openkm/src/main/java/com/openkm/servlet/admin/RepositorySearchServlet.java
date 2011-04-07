@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.core.DatabaseException;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
-import com.openkm.util.WebUtils;
+import com.openkm.util.WebUtil;
 
 /**
  * Repository search servlet
@@ -58,27 +58,12 @@ public class RepositorySearchServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(RepositorySearchServlet.class);
 	
-	@Override
-	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException,
-			ServletException {
-		String method = request.getMethod();
-		
-		if (checkMultipleInstancesAccess(request, response)) {
-			if (method.equals(METHOD_GET)) {
-				doGet(request, response);
-			} else if (method.equals(METHOD_POST)) {
-				doPost(request, response);
-			}
-		}
-	}
-	
-	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		String statement = WebUtils.getString(request, "statement");
-		String type = WebUtils.getString(request, "type");
+		String statement = WebUtil.getString(request, "statement");
+		String type = WebUtil.getString(request, "type");
 		Session session = null;
 		updateSessionManager(request);
 		
@@ -89,7 +74,7 @@ public class RepositorySearchServlet extends BaseServlet {
 				search(session, statement, type, request, response);
 				
 				// Activity log
-				UserActivity.log(request.getRemoteUser(), "ADMIN_REPOSITORY_SEARCH", null, type+", "+statement);
+				UserActivity.log(request.getRemoteUser(), "ADMIN_REPOSITORY_SEARCH", null, type+" : "+statement);
 			} else {
 				ServletContext sc = getServletContext();
 				sc.setAttribute("statement", null);

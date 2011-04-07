@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -22,7 +22,6 @@
 package com.openkm.frontend.client.extension.comunicator;
 
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.bean.GWTWorkspace;
 
 /**
  * WorkspaceComunicator
@@ -41,27 +40,4 @@ public class WorkspaceComunicator {
 		return Main.get().mainPanel.topPanel.tabWorkspace.getSelectedTab();
 	}
 	
-	/**
-	 * setSearchView
-	 */
-	public static void changeSelectedTab(int selectedTab) {
-		Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(selectedTab);
-	}
-	
-	/**
-	 * @return
-	 */
-	public static int getSelectedWorkspace() {
-		return Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace();
-	}
-	
-	/**
-	 * getWorkspace
-	 * 
-	 * @return
-	 */
-	public static GWTWorkspace getWorkspace() {
-		return Main.get().workspaceUserProperties.getWorkspace();
-	}
-
 }

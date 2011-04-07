@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -79,14 +79,12 @@ public class PropertyGroup extends Composite implements HasPropertyGroupHandlerE
 					editValues = true;
 					removeButton.setVisible(false);
 				} else {
-					if (propertyGroupWidget.getValidationProcessor().validate()) {
-						Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications
-						changeButton.setHTML(Main.i18n("button.change"));
-						setProperties();
-						editValues = false;
-						removeButton.setVisible(true);
-						cancelButton.setVisible(false);
-					} 
+					Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications
+					changeButton.setHTML(Main.i18n("button.change"));
+					setProperties();
+					editValues = false;
+					removeButton.setVisible(true);
+					cancelButton.setVisible(false);
 				}
 			}
 		});

@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -24,16 +24,13 @@ package com.openkm.frontend.client.service;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
-
 
 /**
  * @author jllort
  *
  */
-@RemoteServiceRelativePath("Test")
 public interface OKMTestService extends RemoteService {
 	public String StringTest(int size);
 	public List<GWTFolder> folderText(int size);

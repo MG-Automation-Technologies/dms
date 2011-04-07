@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -24,7 +24,8 @@ package com.openkm.bean;
 import java.io.Serializable;
 
 public class Notification implements Serializable {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 7492226582552064878L;
+	
 	public static final String TYPE = "mix:notification";
 	public static final String SUBSCRIPTORS = "okm:subscriptors";
 		

@@ -14,10 +14,10 @@ public class AuthTest extends TestCase {
 	}
 
 	public static void main(String[] args) throws Exception {
-		AuthTest test = new AuthTest("main");
-		test.setUp();
+		//AuthTest test = new AuthTest("main");
+		//test.setUp();
 		//test.testLogin();
-		test.tearDown();
+		//test.tearDown();
 	}
 
 	@Override

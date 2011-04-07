@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -24,6 +24,14 @@ package com.openkm.frontend.client.widget.security;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
+import com.google.gwt.user.client.ui.AbstractImagePrototype;
+import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
 import com.google.gwt.gen2.table.client.FixedWidthGrid;
 import com.google.gwt.gen2.table.client.ScrollTable;
@@ -31,15 +39,10 @@ import com.google.gwt.gen2.table.client.SelectionGrid;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.ResizePolicy;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollPolicy;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.AbstractImagePrototype;
-import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HasAlignment;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Widget;
+
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 
@@ -444,6 +447,8 @@ public class RoleScrollTable extends Composite {
 	public void grant(String role, int permissions, boolean recursive) {
 		if (path != null) {
 			Main.get().securityPopup.status.setFlag_update();
+			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+			endPoint.setServiceEntryPoint(Config.OKMAuthService);
 			authService.grantRole(path, role, permissions, recursive, callbackGrantRole);
 		}
 	}
@@ -457,6 +462,8 @@ public class RoleScrollTable extends Composite {
 	public void revoke(String role, int permissions, boolean recursive) {
 		if (path != null) {
 			Main.get().securityPopup.status.setFlag_update();
+			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 			authService.revokeRole(path, role, permissions, recursive, callbackRevokeRole);
 		}
 	}

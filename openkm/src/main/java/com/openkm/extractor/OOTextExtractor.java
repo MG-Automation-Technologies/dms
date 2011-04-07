@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -34,7 +34,6 @@ import org.apache.jackrabbit.extractor.AbstractTextExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.core.ConversionException;
 import com.openkm.util.DocConverter;
 
 /**
@@ -96,9 +95,6 @@ public class OOTextExtractor extends AbstractTextExtractor {
 			ret = FileUtils.readFileToString(fOut);
     		log.debug("TEXT: "+ret);
             return new StringReader(ret);
-		} catch (ConversionException e) {
-			log.warn("Failed to extract text", e);
-			return new StringReader("");
 		} finally {
 			stream.close();
 			fIn.delete();

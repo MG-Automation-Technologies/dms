@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="com.openkm.servlet.admin.BaseServlet" %>
+<%@ page import="com.openkm.core.Config" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -8,23 +8,15 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="favicon.ico" />
-  <link rel="stylesheet" type="text/css" href="css/style.css" />
-  <link rel="stylesheet" type="text/css" href="css/fixedTableHeader.css" />
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
   <link rel="stylesheet" type="text/css" href="js/jscalendar/calendar-win2k-1.css" />
   <script type="text/javascript" src="js/jscalendar/calendar.js"></script>
   <script type="text/javascript" src="js/jscalendar/lang/calendar-en.js"></script>
   <script type="text/javascript" src="js/jscalendar/calendar-setup.js"></script>
-  <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
-  <script type="text/javascript" src="js/fixedTableHeader.js"></script>
-  <script type="text/javascript">
-    $(document).ready(function() {
-    	TABLE.fixHeader('table')
-	});
-  </script>
   <title>Activity Log</title>
 </head>
 <body>
-  <c:set var="isAdmin"><%=BaseServlet.isAdmin(request)%></c:set>
+  <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
       <h1>Activity log</h1>
@@ -53,7 +45,7 @@
                 <option value=""></option>
                 <c:forEach var="act" items="${actions}">
                   <c:choose>
-                    <c:when test="${act == 'Auth' || act == 'Document' || act == 'Folder' || act == 'Mail' || act == 'Admin'}">
+                    <c:when test="${act == 'Auth' || act == 'Document' || act == 'Folder' || act == 'Admin'}">
                       <optgroup label="${act}"/>
                     </c:when>
                     <c:otherwise>
@@ -75,21 +67,15 @@
         </table>
       </form>
       <br/>
-      <div id="magic">
       <table class="results" width="100%">
-        <thead>
-          <tr><th>Date</th><th>User</th><th>Action</th><th>Item</th><th>Params</th></tr>
-        </thead>
-        <tbody>
-          <c:forEach var="act" items="${results}" varStatus="row">
-            <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-              <td nowrap="nowrap"><fmt:formatDate value="${act.date.time}" type="both"/></td>
-              <td>${act.user}</td><td>${act.action}</td><td>${act.item}</td><td>${act.params}</td>
-            </tr>
-          </c:forEach>
-        </tbody>
+        <tr><th>Date</th><th>User</th><th>Action</th><th>Item</th><th>Params</th></tr>
+        <c:forEach var="act" items="${results}" varStatus="row">
+          <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
+            <td><fmt:formatDate value="${act.date.time}" type="both"/></td>
+            <td>${act.user}</td><td>${act.action}</td><td>${act.item}</td><td>${act.params}</td>
+          </tr>
+        </c:forEach>
       </table>
-      </div>
     </c:when>
     <c:otherwise>
       <div class="error"><h3>Only admin users allowed</h3></div>

@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -33,6 +33,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -45,6 +46,7 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.GWTPropertyParams;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
 
@@ -104,7 +106,7 @@ public class GroupPopup extends DialogBox {
 							param.setGrpName(grpName);
 							param.setGrpLabel(grpLabel);
 							param.setFormElement(formElement);
-							Main.get().mainPanel.search.searchBrowser.searchIn.searchMetadata.addProperty(param);
+							Main.get().mainPanel.search.searchBrowser.searchIn.addProperty(param);
 						}
 					}
 				}
@@ -297,6 +299,8 @@ public class GroupPopup extends DialogBox {
 	 * Gets all property groups
 	 */
 	private void getAllGroups() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
+		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
 		propertyGroupService.getAllGroups(callbackGetAllGroups);
 	}
 	
@@ -304,6 +308,8 @@ public class GroupPopup extends DialogBox {
 	 * Gets all metadata group properties 
 	 */
 	private void getMetaData() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
+		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
 		propertyGroupService.getPropertyGroupForm(groupListBox.getValue(groupListBox.getSelectedIndex()), callbackGetPropertyGroupForm);
 	}
 	
@@ -321,14 +327,16 @@ public class GroupPopup extends DialogBox {
 	 */
 	private void validateGroupsNoEmpty(){
 		if (groupListBox.getItemCount()>validate) {
-			String value = groupListBox.getValue(validate);	
+			String value = groupListBox.getValue(validate);
+			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
+			endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
 			propertyGroupService.getPropertyGroupForm(value, callbackGetPropertyGroupFormDataToValidate);
 		} else {
 			// Validate button 
 			if (groupListBox.getItemCount()>1) {
-				Main.get().mainPanel.search.searchBrowser.searchIn.searchMetadata.addGroup.setEnabled(true);
+				Main.get().mainPanel.search.searchBrowser.searchIn.addGroup.setEnabled(true);
 			} else {
-				Main.get().mainPanel.search.searchBrowser.searchIn.searchMetadata.addGroup.setEnabled(false);
+				Main.get().mainPanel.search.searchBrowser.searchIn.addGroup.setEnabled(false);
 			}
 			validate = -1; // Resets values
 		}

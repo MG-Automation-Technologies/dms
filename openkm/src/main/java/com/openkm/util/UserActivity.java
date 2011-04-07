@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -39,11 +39,6 @@ public class UserActivity {
 		
 	/**
 	 * Log activity
-	 * 
-	 * @param user User id who generated the activity.
-	 * @param action Which action is associated with the activity.
-	 * @param item Unique node identifier if this activity is node related, or another entity identifier. 
-	 * @param params Other activity related parameters.
 	 */
 	public static void log(String user, String action, String item, String params) {
 		try {

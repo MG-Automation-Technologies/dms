@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -22,7 +22,6 @@
 package com.openkm.frontend.client.service;
 
 import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTWorkspace;
@@ -31,7 +30,6 @@ import com.openkm.frontend.client.bean.GWTWorkspace;
  * @author jllort
  *
  */
-@RemoteServiceRelativePath("Workspace")
 public interface OKMWorkspaceService extends RemoteService {
 	public GWTWorkspace getUserWorkspace() throws OKMException ;
 	public Double getUserDocumentsSize() throws OKMException;

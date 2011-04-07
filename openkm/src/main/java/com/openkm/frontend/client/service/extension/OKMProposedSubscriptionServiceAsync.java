@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -21,22 +21,21 @@
 
 package com.openkm.frontend.client.service.extension;
 
-import java.util.Map;
+import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
+import com.openkm.frontend.client.bean.extension.GWTProposedSubscription;
 
 /**
  * @author jllort
  *
  */
 public interface OKMProposedSubscriptionServiceAsync extends RemoteService {
-	public void send(String uuid, String users, String roles, String comment, AsyncCallback<?> callback);
-	public void findProposedSubscriptionsUsersFrom(AsyncCallback<Map<String, Long>> callback);
+	public void create(String uuid, String path, String type, String users, String roles, String comment, AsyncCallback<?> callback);
+	public void findAll(AsyncCallback<List<GWTProposedSubscription>> callback);
 	public void markSeen(int msgId, AsyncCallback<?> callback);
 	public void markAccepted(int msgId, AsyncCallback<?> callback);
-	public void deleteReceived(int msgId, AsyncCallback<?> callback);
-	public void deleteSent(int msgId, AsyncCallback<?> callback);
-	public void deleteProposedSubscriptionByMeFromUser(String sender, AsyncCallback<?> callback);
-	public void findProposedSubscriptionByMeFromUser(String user, AsyncCallback<?> asyncCallback);
+	public void delete(int msgId, AsyncCallback<?> callback);
+	public void deleteAllBySender(String sender, AsyncCallback<?> callback);
 }

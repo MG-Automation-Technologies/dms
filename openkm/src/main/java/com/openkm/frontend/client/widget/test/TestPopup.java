@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -29,6 +29,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -42,6 +43,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMTestService;
 import com.openkm.frontend.client.service.OKMTestServiceAsync;
 
@@ -49,7 +51,6 @@ import com.openkm.frontend.client.service.OKMTestServiceAsync;
  * Test Popup
  * 
  * @author jllort
- *
  */
 public class TestPopup extends DialogBox {
 	private final OKMTestServiceAsync testService = (OKMTestServiceAsync) GWT.create(OKMTestService.class);
@@ -63,7 +64,7 @@ public class TestPopup extends DialogBox {
 	Button close;
 	TextBox sizeTest;
 	TextBox cyclesTest;
-	TextBox numThreads;
+	TextBox numThreats;
 	ListBox type;
 	
 	String runnningTest = "";
@@ -102,12 +103,12 @@ public class TestPopup extends DialogBox {
 		cyclesTest.setSize("60", "20");
 		cyclesTest.setStyleName("okm-Input");
 		hPanel.add(cyclesTest);
-		hPanel.add (new HTML("&nbsp;Threads:"));
-		numThreads = new TextBox();
-		numThreads.setText("1");
-		numThreads.setSize("60", "20");
-		numThreads.setStyleName("okm-Input");
-		hPanel.add(numThreads);
+		hPanel.add (new HTML("&nbsp;Threats:"));
+		numThreats = new TextBox();
+		numThreats.setText("1");
+		numThreats.setSize("60", "20");
+		numThreats.setStyleName("okm-Input");
+		hPanel.add(numThreats);
 		hPanel.add(new HTML("&nbsp;"));
 		clean = new Button("Clean");
 		clean.addClickHandler(new ClickHandler() {
@@ -170,10 +171,10 @@ public class TestPopup extends DialogBox {
 		maxCycle = Integer.parseInt(cyclesTest.getText());
 		textSize = Integer.parseInt(sizeTest.getText());
 		log(runnningTest, "Starting");
-		int thread = Integer.parseInt(numThreads.getText()); 
+		int threat = Integer.parseInt(numThreats.getText()); 
 		int count = 0;
 		
-		while (count < thread) {
+		while (count < threat) {
 			controller();
 			count ++;
 		}
@@ -207,6 +208,8 @@ public class TestPopup extends DialogBox {
 	 * stringTest
 	 */
 	private void stringTest(final int cycle) {
+		ServiceDefTarget endPoint = (ServiceDefTarget) testService;
+		endPoint.setServiceEntryPoint(Config.OKMTestService);
 		log(runnningTest, "Calling RPC: " + cycle);
 		testService.StringTest(textSize, new AsyncCallback<String>() {
 			@Override
@@ -226,6 +229,8 @@ public class TestPopup extends DialogBox {
 	 * folderTest
 	 */
 	private void folderTest(final int cycle) {
+		ServiceDefTarget endPoint = (ServiceDefTarget) testService;
+		endPoint.setServiceEntryPoint(Config.OKMTestService);
 		log(runnningTest, "Calling RPC: " + cycle);
 		testService.folderText(textSize, new AsyncCallback<List<GWTFolder>>() {
 			
@@ -246,6 +251,8 @@ public class TestPopup extends DialogBox {
 	 * documentTest
 	 */
 	private void documentTest(final int cycle) {
+		ServiceDefTarget endPoint = (ServiceDefTarget) testService;
+		endPoint.setServiceEntryPoint(Config.OKMTestService);
 		log(runnningTest, "Calling RPC: " + cycle);
 		testService.documentText(textSize, new AsyncCallback<List<GWTDocument>>() {
 			@Override

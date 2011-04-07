@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -32,8 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.core.DataStoreGarbageCollector;
-
 /**
  * Only for testing purposes
  */
@@ -49,9 +47,7 @@ public class TestServlet extends HttpServlet {
 		response.setContentType("text/html");
 		
 		try {
-			out.println("DSGC.begin");
-			new DataStoreGarbageCollector().run();
-			out.println("DSGC.end");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

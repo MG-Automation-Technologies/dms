@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -57,14 +57,6 @@ public class Activity implements Serializable {
 		this.date = date;
 	}
 	
-	public String getItem() {
-		return item;
-	}
-
-	public void setItem(String item) {
-		this.item = item;
-	}
-	
 	public String getParams() {
 		return params;
 	}
@@ -80,12 +72,19 @@ public class Activity implements Serializable {
 	public void setUser(String user) {
 		this.user = user;
 	}
+
+	public String getItem() {
+		return item;
+	}
+
+	public void setItem(String item) {
+		this.item = item;
+	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("id="); sb.append(id);
-		sb.append(", date="); sb.append(date==null?null:date.getTime());
+		sb.append("date="); sb.append(date==null?null:date.getTime());
 		sb.append(", user="); sb.append(user);
 		sb.append(", action="); sb.append(action);
 		sb.append(", item="); sb.append(item);

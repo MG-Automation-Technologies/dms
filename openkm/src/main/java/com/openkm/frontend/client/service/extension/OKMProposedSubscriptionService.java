@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -22,25 +22,20 @@
 package com.openkm.frontend.client.service.extension;
 
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.openkm.frontend.client.OKMException;
-import com.openkm.frontend.client.bean.extension.GWTProposedSubscriptionReceived;
+import com.openkm.frontend.client.bean.extension.GWTProposedSubscription;
 
 /**
  * @author jllort
  *
  */
-@RemoteServiceRelativePath("../extension/ProposedSubscription")
 public interface OKMProposedSubscriptionService extends RemoteService {
-	public void send(String uuid, String users, String roles, String comment) throws OKMException;
-	public Map<String, Long> findProposedSubscriptionsUsersFrom() throws OKMException;
+	public void create(String uuid, String path, String type, String users, String roles, String comment) throws OKMException;
+	public List<GWTProposedSubscription> findAll() throws OKMException;
 	public void markSeen(int msgId) throws OKMException;
 	public void markAccepted(int msgId) throws OKMException;
-	public void deleteReceived(int msgId) throws OKMException;
-	public void deleteSent(int msgId) throws OKMException;
-	public void deleteProposedSubscriptionByMeFromUser(String sender) throws OKMException;
-	public List<GWTProposedSubscriptionReceived> findProposedSubscriptionByMeFromUser(String user) throws OKMException;
+	public void delete(int msgId) throws OKMException;
+	public void deleteAllBySender(String sender) throws OKMException;
 }

@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -52,16 +52,14 @@ import com.openkm.bean.form.Option;
 import com.openkm.bean.form.Select;
 import com.openkm.bean.form.TextArea;
 import com.openkm.bean.form.Validator;
-import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.direct.DirectRepositoryModule;
-import com.openkm.util.FileUtils;
 import com.openkm.util.FormUtils;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
-import com.openkm.util.WebUtils;
+import com.openkm.util.WebUtil;
 
 /**
  * Property groups servlet
@@ -69,35 +67,20 @@ import com.openkm.util.WebUtils;
 public class PropertyGroupsServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(PropertyGroupsServlet.class);
-	
-	@Override
-	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException,
-			ServletException {
-		String method = request.getMethod();
 		
-		if (checkMultipleInstancesAccess(request, response)) {
-			if (method.equals(METHOD_GET)) {
-				doGet(request, response);
-			} else if (method.equals(METHOD_POST)) {
-				doPost(request, response);
-			}
-		}
-	}
-	
-	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		String action = WebUtils.getString(request, "action");
+		String pgPath = WebUtil.getString(request, "pgPath");
 		Session session = null;
 		updateSessionManager(request);
 		
 		try {
 			session = JCRUtils.getSession();
 			
-			if (action.equals("register")) {
-				register(session, request, response);
+			if (!pgPath.equals("")) {
+				register(session, pgPath, request, response);
 			}
 			
 			list(request, response);
@@ -130,28 +113,28 @@ public class PropertyGroupsServlet extends BaseServlet {
 	/**
 	 * Register property group
 	 */
-	private void register(Session session, HttpServletRequest request, HttpServletResponse response)
+	private void register(Session session, String pgPath, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, ParseException, 
 			org.apache.jackrabbit.core.nodetype.compact.ParseException, 
 			javax.jcr.RepositoryException, InvalidNodeTypeDefException {
-		log.debug("register({}, {}, {})", new Object[] { session, request, response });
+		log.debug("register({}, {}, {}, {})", new Object[] { session, pgPath, request, response });
 		
 		// Check xml property groups definition
 		FormUtils.resetPropertyGroupsForms();
-		FormUtils.parsePropertyGroupsForms(Config.PROPERTY_GROUPS_XML);
+		FormUtils.parsePropertyGroupsForms();
 		
 		// If it is ok, register it
 		FileInputStream fis = null;
 		
 		try {
-			fis = new FileInputStream(Config.PROPERTY_GROUPS_CND);
+			fis = new FileInputStream(pgPath);
 			DirectRepositoryModule.registerCustomNodeTypes(session, fis);
 		} finally {
 			IOUtils.closeQuietly(fis);
 		}
 		
 		// Activity log
-		UserActivity.log(request.getRemoteUser(), "ADMIN_PROPERTY_GROUP_REGISTER", Config.PROPERTY_GROUPS_CND, null);
+		UserActivity.log(request.getRemoteUser(), "ADMIN_PROPERTY_GROUP_REGISTER", pgPath, null);
 		log.debug("register: void");
 	}
 
@@ -178,8 +161,7 @@ public class PropertyGroupsServlet extends BaseServlet {
 			
 			pGroups.put(group, fMaps);
 		}
-		
-		sc.setAttribute("pgCnd", FileUtils.getName(Config.PROPERTY_GROUPS_CND));
+				
 		sc.setAttribute("pGroups", pGroups);
 		sc.getRequestDispatcher("/admin/property_groups.jsp").forward(request, response);
 		

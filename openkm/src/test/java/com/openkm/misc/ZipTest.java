@@ -18,9 +18,6 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Test zip filename encodings
- */
 public class ZipTest extends TestCase {
 	private static Logger log = LoggerFactory.getLogger(ZipTest.class);
 

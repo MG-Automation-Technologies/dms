@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -34,8 +34,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.api.OKMFolder;
 import com.openkm.bean.ContentInfo;
 import com.openkm.util.FormatUtil;
-import com.openkm.util.UserActivity;
-import com.openkm.util.WebUtils;
+import com.openkm.util.WebUtil;
 import com.openkm.util.impexp.HTMLInfoDecorator;
 import com.openkm.util.impexp.ImpExpStats;
 import com.openkm.util.impexp.RepositoryChecker;
@@ -47,29 +46,23 @@ public class RepositoryCheckerServlet extends BaseServlet {
 	private static Logger log = LoggerFactory.getLogger(RepositoryCheckerServlet.class);
 	private static final long serialVersionUID = 1L;
 	
-	@Override
-	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException,
-			ServletException {
-		String method = request.getMethod();
-		
-		if (checkMultipleInstancesAccess(request, response)) {
-			if (method.equals(METHOD_GET)) {
-				doGet(request, response);
-			} else if (method.equals(METHOD_POST)) {
-				doPost(request, response);
-			}
-		}
-	}
-	
-	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
-		String repoPath = WebUtils.getString(request, "repoPath", "/okm:root");
-		boolean versions = WebUtils.getBoolean(request, "versions");
+		String repoPath = WebUtil.getString(request, "repoPath", "/okm:root");
+		boolean versions = WebUtil.getBoolean(request, "versions");
 		updateSessionManager(request);
 		PrintWriter out = response.getWriter();
-		header(out, "Repository checker");
+		response.setContentType("text/html");
+		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
+		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">");
+		out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
+		out.println("<head>");
+		out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />");
+		out.println("<link rel=\"Shortcut icon\" href=\"favicon.ico\" />");
+		out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"css/style.css\" />");
+		out.println("<body>");
+		out.println("<h1>Repository checker</h1>");
 		out.flush();
 		
 		try {
@@ -87,20 +80,13 @@ public class RepositoryCheckerServlet extends BaseServlet {
 				out.println("<b>Folders:</b> "+stats.getFolders()+"<br/>");
 				out.println("<b>Size:</b> "+FormatUtil.formatSize(stats.getSize())+"<br/>");
 				out.println("<b>Time:</b> "+FormatUtil.formatSeconds(end - begin)+"<br/>");
-				
-				// Activity log
-				UserActivity.log(request.getRemoteUser(), "ADMIN_REPOSITORY_CHECKER", null,
-						"Documents: " + stats.getDocuments() +
-						", Folders: " + stats.getFolders() +
-						", Size: " + FormatUtil.formatSize(stats.getSize()) +
-						", Time: " + FormatUtil.formatSeconds(end - begin));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			footer(out);
+			out.println("</body>");
+			out.println("</html>");
 			out.flush();
-			out.close();
 		}
 	}
 }

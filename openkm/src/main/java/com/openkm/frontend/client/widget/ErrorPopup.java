@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -102,7 +102,7 @@ public class ErrorPopup extends DialogBox implements ClickHandler {
 		
 		if (logout) {
 			Log.debug("onClick: redirect");
-			Window.open("index.jsp", "_self", "");
+			Window.open("/OpenKM", "_self", "");
 		}
 		
 		Log.debug("onClick: void");

@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -32,7 +32,6 @@ import com.openkm.frontend.client.panel.ExtendedDockPanel;
 import com.openkm.frontend.client.panel.center.Search;
 import com.openkm.frontend.client.panel.center.SearchBrowser;
 import com.openkm.frontend.client.panel.top.TopPanel;
-import com.openkm.frontend.client.util.OKMBundleResources;
 
 /**
  * Status
@@ -56,7 +55,7 @@ public class Status extends PopupPanel {
 	public Status() {
 		super(false,true);
 		hPanel = new HorizontalPanel();
-		image = new Image(OKMBundleResources.INSTANCE.indicator());
+		image = new Image("img/indicator.gif");
 		msg = new HTML("");
 		space = new HTML("");
 		

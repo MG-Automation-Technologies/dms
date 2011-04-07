@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -54,7 +54,7 @@ public class RepositoryChecker {
 	/**
 	 * Performs a recursive repository document check
 	 */
-	public static ImpExpStats checkDocuments(String token, String fldPath, boolean versions, Writer out, 
+	public static ImpExpStats checkDocuments(String token, String fldPath, boolean versions, Writer out,
 			InfoDecorator deco) throws PathNotFoundException, AccessDeniedException, RepositoryException,
 			IOException, DatabaseException {
 		log.debug("checkDocuments({}, {}, {}, {}, {})", new Object[] { token, fldPath, versions, out, deco });
@@ -89,14 +89,14 @@ public class RepositoryChecker {
 	/**
 	 * Performs a recursive repository document check
 	 */
-	private static ImpExpStats checkDocumentsHelper(String token, String fldPath, boolean versions, Writer out, 
+	private static ImpExpStats checkDocumentsHelper(String token, String fldPath, boolean versions, Writer out,
 			InfoDecorator deco) throws FileNotFoundException, PathNotFoundException, AccessDeniedException,
 			RepositoryException, IOException, DatabaseException {
 		log.debug("checkDocumentsHelper({}, {}, {}, {}, {})", new Object[] { token, fldPath, versions, out, deco });
 		ImpExpStats stats = new ImpExpStats();
 		File fsPath = new File(Config.NULL_DEVICE);
-		DocumentModule dm = ModuleManager.getDocumentModule();
 		
+		DocumentModule dm = ModuleManager.getDocumentModule();
 		for (Iterator<Document> it = dm.getChilds(token, fldPath).iterator(); it.hasNext();) {
 			Document docChild = it.next();
 			

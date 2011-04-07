@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -29,6 +29,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
@@ -38,6 +39,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMChatService;
 import com.openkm.frontend.client.service.OKMChatServiceAsync;
 
@@ -191,6 +193,8 @@ public class OnlineUsersPopup extends DialogBox {
 	public void createNewChatRoom() {
 		if (table.getSelectedRow()>=0) {
 			final String user = table.getHTML(table.getSelectedRow(), 0);
+			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+			endPoint.setServiceEntryPoint(Config.OKMChatService);
 			chatService.createNewChatRoom(user, new AsyncCallback<String>() {
 				@Override
 				public void onSuccess(String result) {
@@ -214,6 +218,8 @@ public class OnlineUsersPopup extends DialogBox {
 	public void addUserToRoom() {
 		if (table.getSelectedRow()>=0) {
 			String user = table.getHTML(table.getSelectedRow(), 0);
+			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+			endPoint.setServiceEntryPoint(Config.OKMChatService);
 			chatService.addUserToChatRoom(room, user, new AsyncCallback<Object>() {
 				@Override
 				public void onSuccess(Object result) {

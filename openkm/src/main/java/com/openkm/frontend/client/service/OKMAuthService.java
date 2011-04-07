@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -25,14 +25,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.openkm.frontend.client.OKMException;
 
 /**
  * @author jllort
  *
  */
-@RemoteServiceRelativePath("Auth")
 public interface OKMAuthService extends RemoteService {
 	public void logout() throws OKMException;
 	public Map<String, Byte> getGrantedUsers(String nodePath) throws OKMException;

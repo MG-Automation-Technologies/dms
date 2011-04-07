@@ -1,4 +1,4 @@
-<%@ page import="com.openkm.servlet.admin.BaseServlet" %>
+<%@ page import="com.openkm.core.Config" %>
 <%@ page import="bsh.Interpreter"%>
 <%@ page import="java.io.ByteArrayOutputStream"%>
 <%@ page import="java.io.PrintStream"%>
@@ -14,7 +14,7 @@
 </head>
 <body>
 <%
-	if (BaseServlet.isMultipleInstancesAdmin(request)) {
+	if (request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
 		request.setCharacterEncoding("UTF-8");
 		String script = request.getParameter("script");
 		StringBuffer scriptOutput = new StringBuffer();
@@ -40,7 +40,7 @@
 			pout.flush();
 			scriptOutput.append(baos.toString());
 		} else {
-			script = "print(\"Hola, mundo!\");";		
+			script = "print(\"Hola, mundo!\")";		
 		}
 		
 		out.println("<h1>Scripting</h1>");

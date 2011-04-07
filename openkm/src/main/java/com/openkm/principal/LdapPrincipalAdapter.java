@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -103,28 +103,31 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 	}
 	
 	@Override
-	public String getMail(String user) throws PrincipalAdapterException {
-		log.debug("getMail({})", user);
-		String mail = null;
+	public List<String> getMails(List<String> users) throws PrincipalAdapterException {
+		log.debug("getMails()");
+		List<String> list = new ArrayList<String>();
 		
-		List<String> ldap = ldapSearch(
-				Config.PRINCIPAL_LDAP_SERVER,
-				Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
-				Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
-				MessageFormat.format(Config.PRINCIPAL_LDAP_MAIL_SEARCH_BASE, user), 
-				MessageFormat.format(Config.PRINCIPAL_LDAP_MAIL_SEARCH_FILTER, user), 
-				Config.PRINCIPAL_LDAP_MAIL_ATTRIBUTE);
-		if (!ldap.isEmpty()) {
-			mail = ldap.get(0);
+		for (Iterator<String> it = users.iterator(); it.hasNext();) {
+			String user = it.next();
+			List<String> ldap = ldapSearch(
+					Config.PRINCIPAL_LDAP_SERVER,
+					Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
+					Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
+					MessageFormat.format(Config.PRINCIPAL_LDAP_MAIL_SEARCH_BASE, user), 
+					MessageFormat.format(Config.PRINCIPAL_LDAP_MAIL_SEARCH_FILTER, user), 
+					Config.PRINCIPAL_LDAP_MAIL_ATTRIBUTE);
+			if (!ldap.isEmpty()) {
+				list.add(ldap.get(0));
+			}
 		}
-		
-		log.debug("getMail: {}", mail);
-		return mail;
+
+		log.debug("getMails: {}", list);
+		return list;
 	}
 	
 	@Override
 	public List<String> getUsersByRole(String role) throws PrincipalAdapterException {
-		log.debug("getUsersByRole({})", role);
+		log.debug("getUsersByRole()");
 		List<String> list = new ArrayList<String>();
 		List<String> ldap = ldapSearch(
 				Config.PRINCIPAL_LDAP_SERVER,
@@ -152,7 +155,7 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 	
 	@Override
 	public List<String> getRolesByUser(String user) throws PrincipalAdapterException {
-		log.debug("getRolesByUser({})", user);
+		log.debug("getRolesByUser()");
 		List<String> list = new ArrayList<String>();
 		List<String> ldap = ldapSearch(
 				Config.PRINCIPAL_LDAP_SERVER,
@@ -203,31 +206,18 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 				
 				if (attribute.equals("")) {
 					StringBuilder sb = new StringBuilder();
-					
 					for (NamingEnumeration<?> ne = attributes.getAll(); ne.hasMore(); ) {
-						Attribute attr = (Attribute) ne.nextElement();
+						Attribute attr = (Attribute)ne.nextElement();
 						sb.append(attr.toString());
 						sb.append("\n");
 					}
-					
 					al.add(sb.toString());
 				} else {
 					Attribute attrib = attributes.get(attribute);
 					
 					if (attrib != null) {
-						// Handle multi-value attributes
-						for (NamingEnumeration<?> ne = attrib.getAll(); ne.hasMore(); ) {
-							String value = (String) ne.nextElement();
-							
-							// If FQDN get only main part
-							if (value.startsWith("CN=") || value.startsWith("cn=")) {
-								String cn = value.substring(3, value.indexOf(','));
-								log.debug("FQDN: {}, CN: {}", value, cn);
-								al.add(cn);
-							} else {
-								al.add(value);
-							}
-						}
+						String item = (String) attrib.get();
+						al.add(item);
 					}
 				}
 			}
@@ -239,10 +229,5 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 		
 		log.debug("ldapSearch: {}", al);
 		return al;
-	}
-
-	@Override
-	public String getName(String user) throws PrincipalAdapterException {
-		return LdapPrincipalAdapter.class.getCanonicalName();
 	}
 }

@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -29,7 +29,6 @@ import com.google.gwt.user.client.ui.PopupPanel;
 
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.panel.top.TopPanel;
-import com.openkm.frontend.client.util.OKMBundleResources;
 
 /**
  * Status
@@ -70,7 +69,7 @@ public class Status extends PopupPanel {
 	public Status() {
 		super(false,true);
 		hPanel = new HorizontalPanel();
-		image = new Image(OKMBundleResources.INSTANCE.indicator());
+		image = new Image("img/indicator.gif");
 		msg = new HTML("");
 		space = new HTML("");
 		
@@ -102,7 +101,7 @@ public class Status extends PopupPanel {
 				|| flag_Folder_purge || flag_GetFolder || flag_GetDocument
 				|| flag_AddSubscription || flag_RemoveSubscription || flag_Mail_getChilds 
 				|| flag_Mail_delete || flag_Mail_purge || flag_Mail_getProperties
-				|| flag_Mail_rename ) {
+				|| flag_Mail_rename) {
 			int left = ((Main.get().mainPanel.desktop.getRight()-200)/2) + Main.get().mainPanel.desktop.getLeft();
 			int top = ((Main.get().mainPanel.desktop.browser.topHeight)/2) + TopPanel.PANEL_HEIGHT;
 			setPopupPosition(left,top);

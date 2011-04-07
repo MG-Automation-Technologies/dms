@@ -1,6 +1,6 @@
 /**
 *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -23,6 +23,8 @@ package com.openkm.frontend.client.widget.foldertree;
 
 import java.util.Vector;
 
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.SelectElement;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.logical.shared.HasSelectionHandlers;
@@ -107,7 +109,7 @@ public class ExtendedTree extends Tree implements HasSelectionHandlers<TreeItem>
 	 * fire a change event
 	 */
 	private void fireSelection(TreeItem treeItem) {
-//		 SelectElement nativeEvent = Document.get().createSelectElement();
+		 SelectElement nativeEvent = Document.get().createSelectElement();
 		 SelectionEvent.fire(this, treeItem);
 		 setSelectedItem(treeItem);
 	}

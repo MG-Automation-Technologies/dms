@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -38,7 +38,7 @@ import com.openkm.frontend.client.extension.event.HasLanguageEvent.LanguageEvent
 import com.openkm.frontend.client.extension.event.HasToolBarEvent.ToolBarEventConstant;
 import com.openkm.frontend.client.extension.event.handler.LanguageHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.ToolBarHandlerExtension;
-import com.openkm.frontend.client.extension.widget.toolbar.ToolBarButtonExtension;
+import com.openkm.frontend.client.extension.widget.ToolBarButtonExtension;
 
 /**
  * ToolBarButtonExample
@@ -77,7 +77,6 @@ public class ToolBarButtonExample  {
 	 *
 	 */
 	private class ToolBarButton extends ToolBarButtonExtension implements ToolBarHandlerExtension, LanguageHandlerExtension, Serializable {
-		private static final long serialVersionUID = 1L;
 
 		public ToolBarButton(Image image, String title, ClickHandler handler) {
 			super(image, title, handler);
@@ -125,6 +124,11 @@ public class ToolBarButtonExample  {
 			if (event.equals(HasLanguageEvent.LANGUAGE_CHANGED)) {
 				Window.alert("language changed");
 			}
+		}
+
+		@Override
+		public String getExtensionUUID() {
+			return String.valueOf("9f84b330-d096-11df-bd3b-0800200c9a66");
 		}
 	}
 }

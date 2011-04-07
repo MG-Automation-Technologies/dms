@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -37,7 +37,7 @@ public class TabFolderComunicator {
 	 * 
 	 * @return
 	 */
-	public static int getSelectedTab() {
+	public int getSelectedTab() {
 		return Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.getSelectedTab();
 	}
 
@@ -46,11 +46,11 @@ public class TabFolderComunicator {
 	 * 
 	 * @return
 	 */
-	public static GWTFolder getFolder() {
+	public GWTFolder getFolder() {
 		return Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.getFolder();
 	}
 	
-	public static boolean isVisibleButton() {
+	public boolean isVisibleButton() {
 		return Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.isVisibleButton();
 	}
 }

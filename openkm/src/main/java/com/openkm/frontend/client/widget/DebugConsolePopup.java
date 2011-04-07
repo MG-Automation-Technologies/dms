@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -68,7 +68,6 @@ public class DebugConsolePopup extends DialogBox implements ClickHandler {
 		button.setStyleName("okm-Button");
 
 		super.hide();
-		Log.getLogger(DivLogger.class).getWidget().setVisible(true);
 		setWidget(vPanel);
 	}
 	

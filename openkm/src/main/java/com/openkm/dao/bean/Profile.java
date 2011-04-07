@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -35,7 +35,7 @@ public class Profile implements Serializable {
 	private ProfileStack stack = new ProfileStack();
 	private ProfileTab tab = new ProfileTab();
 	private ProfileWizard wizard = new ProfileWizard();
-	
+		
 	public int getId() {
 		return id;
 	}

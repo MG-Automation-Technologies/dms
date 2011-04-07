@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.io.File" %>
-<%@ page import="com.openkm.servlet.admin.BaseServlet" %>
+<%@ page import="com.openkm.core.Config" %>
 <%@ page import="com.openkm.util.FormatUtil" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -13,10 +13,10 @@
   <title>Repository Checker</title>
 </head>
 <body>
-  <c:set var="isAdmin"><%=BaseServlet.isMultipleInstancesAdmin(request)%></c:set>
+  <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
-      <h1>Repository checker</h1>
+      <h1>Repository cheker</h1>
       <form action="RepositoryChecker">
         <table class="form" align="center">
           <tr><td>Path</td><td><input name="repoPath" value="/okm:root"/></td></tr>

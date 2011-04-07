@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -136,7 +136,7 @@ public class OKMDocument implements DocumentModule {
 	@Override
 	public Document rename(String token, String docPath, String newName) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("rename({}, {}, {})", new Object[] { token, docPath, newName });
+		log.debug("rename({}, {})", docPath, newName);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Document renamedDocument = dm.rename(token, docPath, newName);
 		log.debug("rename: {}", renamedDocument);
@@ -224,7 +224,7 @@ public class OKMDocument implements DocumentModule {
 	@Override
 	public void lock(String token, String docPath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("lock({}, {})", token, docPath);
+		log.debug("lock({})", docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.lock(token, docPath);
 		log.debug("lock: void");

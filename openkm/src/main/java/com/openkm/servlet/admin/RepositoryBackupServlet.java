@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.util.ArchiveUtils;
 import com.openkm.util.FileUtils;
 import com.openkm.util.JCRUtils;
 
@@ -43,21 +42,6 @@ public class RepositoryBackupServlet extends BaseServlet {
 	private static Logger log = LoggerFactory.getLogger(RepositoryBackupServlet.class);
 	private static final long serialVersionUID = 1L;
 	
-	@Override
-	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException,
-			ServletException {
-		String method = request.getMethod();
-		
-		if (checkMultipleInstancesAccess(request, response)) {
-			if (method.equals(METHOD_GET)) {
-				doGet(request, response);
-			} else if (method.equals(METHOD_POST)) {
-				doPost(request, response);
-			}
-		}
-	}
-	
-	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
@@ -71,7 +55,7 @@ public class RepositoryBackupServlet extends BaseServlet {
 			response.setHeader("Content-disposition", "attachment; filename=\""+archive+"\"");
 			response.setContentType("application/zip");
 			OutputStream out = response.getOutputStream();
-			ArchiveUtils.createZip(backup, "", out);
+			FileUtils.createZip(backup, out);
 			out.flush();
 			out.close();
 		} catch (Exception e) {

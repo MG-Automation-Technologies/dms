@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -182,13 +182,11 @@ public class MimeTypeDAO {
 	
 	/**
 	 * Find by pk
-	 * 
-	 * @param sort Can be "mt.id" or "mt.name".
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<MimeType> findAll(String sort) throws DatabaseException {
+	public static List<MimeType> findAll() throws DatabaseException {
 		log.debug("findAll()");
-		String qs = "from MimeType mt order by "+sort;
+		String qs = "from MimeType mt order by mt.name";
 		Session session = null;
 		Transaction tx = null;
 		

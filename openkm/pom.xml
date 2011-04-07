@@ -4,7 +4,7 @@
   <groupId>com.openkm</groupId>
   <artifactId>openkm</artifactId>
   <packaging>war</packaging>
-  <version>LTE</version>
+  <version>5.0.4-SNAPSHOT</version>
   <name>OpenKM Web Application</name>
   <url>http://www.openkm.com</url>
   <description>OpenKM is powerful scalable Document Management System (DMS). OpenKM uses JBoss + J2EE + Ajax web (GWT) + Jackrabbit (lucene) open source technologies.</description>
@@ -47,7 +47,7 @@
 
   <properties>
     <!-- Using this GWT version -->
-    <gwt.version>2.1.0</gwt.version>
+    <gwt.version>2.0.4</gwt.version>
 
     <!-- Using this Jackrabbit version -->
     <jcr.version>1.6.4</jcr.version>
@@ -65,6 +65,13 @@
       <id>jboss.org</id>
       <name>JBoss Maven Repository</name>
       <url>http://repository.jboss.org/maven2</url>
+    </repository>
+
+    <!-- Needed for com.google.gwt:gchart -->
+    <repository>
+      <id>jboss.com</id>
+      <name>JBoss Maven Repository</name>
+      <url>http://repository.jboss.com/maven2</url>
     </repository>
 
     <!-- Needed for KEA - openrdf -->
@@ -88,13 +95,6 @@
       <url>http://download.java.net/maven/2/</url>
     </repository>
     
-    <!-- Needed for Gson -->
-    <repository>
-      <id>gson</id>
-      <name>GSon Repository for Maven</name>
-      <url>http://google-gson.googlecode.com/svn/mavenrepo</url>
-    </repository>
-    
     <!-- Needed for Java CronTab Syntax Parser -->
     <repository>
       <id>java-crontab-syntax-parser-repo</id>
@@ -107,11 +107,6 @@
       <id>openkm.com</id>
       <name>OpenKM Maven Reporitory</name>
       <url>http://repository.openkm.com/maven2</url>
-    </repository>
-    <repository>
-    	<id>StringTree</id>
-    	<name>String Tree</name>
-    	<url>http://stringtree.org/repository/</url>
     </repository>
   </repositories>
 
@@ -196,28 +191,18 @@
       <version>1.5.3</version>
     </dependency>
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>jul-to-slf4j</artifactId>
-      <version>1.5.3</version>
-    </dependency>
-    <dependency>
       <groupId>dnsjava</groupId>
       <artifactId>dnsjava</artifactId>
       <version>2.0.8</version>
     </dependency>
-    <dependency>
-      <groupId>commons-beanutils</groupId>
-      <artifactId>commons-beanutils</artifactId>
-      <version>1.8.3</version>
-    </dependency>
+    
 
     <!-- Base64 encoding / decoding -->
     <!-- http://www.techiegyan.com/?p=333 -->
-    <!-- Downgraded to 1.3 due to GWT 2.2 dependency -->
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
-      <version>1.2</version>
+      <version>1.4</version>
     </dependency>
 
     <!-- Jackrabbit -->
@@ -282,6 +267,13 @@
       <version>2.0.10</version>
     </dependency>
 
+    <!-- Velocity -->
+    <dependency>
+      <groupId>org.apache.velocity</groupId>
+      <artifactId>velocity</artifactId>
+      <version>1.6.3</version>
+    </dependency>
+
     <!-- ROME -->
     <dependency>
       <groupId>rome</groupId>
@@ -291,9 +283,9 @@
 
     <!-- JasperReports -->
     <dependency>
-      <groupId>net.sf.jasperreports</groupId>
+      <groupId>jasperreports</groupId>
       <artifactId>jasperreports</artifactId>
-      <version>3.7.6</version>
+      <version>3.5.3</version>
       <exclusions>
         <!-- Avoid java.lang.NoSuchMethodError: org.eclipse.jdt.internal.compiler.Compiler -->
         <!-- See http://groups.google.com/group/google-web-toolkit/browse_thread/thread/49e20fb5185b34ce/75436f95e29dce85?hl=en -->
@@ -367,32 +359,7 @@
       <artifactId>pdfbox</artifactId>
       <version>1.2.1</version>
     </dependency>
-    <dependency>
-      <!-- http://books.evc-cit.info/odf_utils -->
-      <groupId>com.catcode</groupId>
-      <artifactId>odfutils</artifactId>
-      <version>051129</version>
-    </dependency>
-    
-    <!-- Spell checking -->
-    <dependency>
-      <groupId>org.dts</groupId>
-      <artifactId>jmyspell-core</artifactId>
-      <version>1.0.0-beta-2</version>
-    </dependency>
-    
-    <!-- Templates -->
-    <dependency>
-      <groupId>net.sf</groupId>
-      <artifactId>jodreports</artifactId>
-      <version>2.3.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.odftoolkit</groupId>
-      <artifactId>odfdom-java</artifactId>
-      <version>0.8.6</version>
-    </dependency>
-    
+
     <!-- GWT -->
     <dependency>
       <groupId>com.google.gwt</groupId>
@@ -407,21 +374,26 @@
       <scope>provided</scope>
     </dependency>
     <!-- Only for development 
-    <dependency> 
+    <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-dev</artifactId>
       <version>${gwt.version}</version>
       <scope>provided</scope>
-    </dependency> -->
+    </dependency>-->
 
     <!-- GWT Maven plugin -->
     <dependency>
       <groupId>org.codehaus.mojo</groupId>
       <artifactId>gwt-maven-plugin</artifactId>
-      <version>${gwt.version}</version>
+      <version>1.2</version>
     </dependency>
 
     <!-- GWT plugins -->
+    <dependency>
+      <groupId>com.googlecode.gchart</groupId>
+      <artifactId>gchart</artifactId>
+      <version>2.6</version>
+    </dependency>
     <dependency>
       <groupId>com.google.code.gwt-log</groupId>
       <artifactId>gwt-log</artifactId>
@@ -430,12 +402,7 @@
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-incubator</artifactId>
-      <version>2.1.0</version>
-    </dependency>
-    <dependency>
-      <groupId>gwt-vl.sourceforge.net</groupId>
-      <artifactId>gwt-vl</artifactId>
-      <version>2.0b-without-hibernate</version>
+      <version>2.0.1</version>
     </dependency>
     
     <!-- KEA -->
@@ -453,6 +420,12 @@
       <groupId>org.semanticdesktop.aperture</groupId>
       <artifactId>aperture-extractor-adobe-pdf</artifactId>
       <version>1.3.0</version>
+      <exclusions>
+        <exclusion>
+          <groupId>pdfbox</groupId>
+          <artifactId>pdfbox</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.semanticdesktop.aperture</groupId>
@@ -482,13 +455,6 @@
       <version>2.6.2</version>
     </dependency>
     
-    <!--  Gson: Java to Json conversion -->
-    <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>1.5</version>
-    </dependency>
-    
     <!-- Java CronTab Syntax Parser -->
     <dependency>
       <groupId>com.kenai.crontab-parser</groupId>
@@ -496,55 +462,14 @@
       <version>1.0.1</version>
     </dependency>
     
-    <!--  Lorem Ipsu for Java -->
-    <dependency>
-      <groupId>de.sven-jacobs</groupId>
-      <artifactId>loremipsum</artifactId>
-      <version>1.0</version>
-    </dependency>
-    
     <!-- OpenKM extensions -->
     <dependency>
       <groupId>com.openkm</groupId>
       <artifactId>extensions-full</artifactId>
-      <version>LTE</version>
-    </dependency>
-    
-    <!-- Gdata librariess -->
-    <dependency>
-     <groupId>com.github.dcarter.gdata-java-client</groupId>
- 	 <artifactId>gdata-contacts-3.0</artifactId>
- 	 <version>1.41.1</version>
- 	</dependency>
- 	
- 	<!-- Wiki librariess -->
-    <dependency>
-    	<groupId>org.apache.maven.doxia</groupId>
-    	<artifactId>doxia-module-twiki</artifactId>
-    	<version>1.1.4</version>
-    	<type>jar</type>
-    	<scope>compile</scope>
-    </dependency>
-    <dependency>
-    	<groupId>org.apache.maven.doxia</groupId>
-    	<artifactId>doxia-core</artifactId>
-    	<version>1.1.4</version>
-    	<type>jar</type>
-    	<scope>compile</scope>
-    </dependency>
-    <dependency>
-    	<groupId>org.apache.maven.doxia</groupId>
-    	<artifactId>doxia-core</artifactId>
-    	<version>1.1.4</version>
-    	<classifier>tests</classifier>
-    </dependency>
-    <dependency>
-    	<groupId>org.apache.maven.doxia</groupId>
-    	<artifactId>doxia-module-xhtml</artifactId>
-    	<version>1.1.4</version>
+      <version>5.0</version>
     </dependency>
   </dependencies>
-  
+
   <build>
     <finalName>OpenKM</finalName>
     <outputDirectory>war/WEB-INF/classes</outputDirectory>
@@ -552,7 +477,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
-        <version>${gwt.version}</version>
+        <version>1.2</version>
         <executions>
           <execution>
             <goals>
@@ -563,7 +488,7 @@
           </execution>
         </executions>
         <configuration>
-          <runTarget>frontend/index.html</runTarget>
+          <runTarget>com.openkm.frontend.Main/index.html</runTarget>
           <modules>
             <module>com.openkm.frontend.Main</module>
           </modules>
@@ -584,7 +509,7 @@
         </executions>
         <configuration>
           <doCheck>false</doCheck>
-          <doUpdate>true</doUpdate>
+          <doUpdate>false</doUpdate>
         </configuration>
       </plugin>
 
@@ -601,7 +526,6 @@
             </manifest>
             <manifestEntries>
               <Implementation-Build>${buildNumber}</Implementation-Build>
-              <Implementation-Timestamp>${timestamp}</Implementation-Timestamp>
             </manifestEntries>
           </archive>
         </configuration>

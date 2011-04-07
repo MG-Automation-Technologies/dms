@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -181,7 +181,7 @@ public class FormElementComplex implements Serializable {
 	public static FormElement toFormElement(FormElementComplex fec) {
 		log.debug("toFormElement({})", fec);
 		FormElement fe = new FormElement();
-				
+		
 		if (Input.class.getName().equals(fec.getObjClass())) {
 			fe = new Input();
 			((Input) fe).setType(fec.getType());

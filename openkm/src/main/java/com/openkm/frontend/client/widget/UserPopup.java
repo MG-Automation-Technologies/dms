@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -28,6 +28,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -42,6 +43,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTTestImap;
 import com.openkm.frontend.client.bean.GWTWorkspace;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMGeneralService;
 import com.openkm.frontend.client.service.OKMGeneralServiceAsync;
 import com.openkm.frontend.client.service.OKMWorkspaceService;
@@ -175,6 +177,8 @@ public class UserPopup extends DialogBox implements ClickHandler {
 					workspace.setImapPassword(imapUserPasswordText.getText());
 					workspace.setPassword(userPasswordText.getText());
 					workspace.setImapID(Main.get().workspaceUserProperties.getWorkspace().getImapID());
+					ServiceDefTarget endPoint = (ServiceDefTarget) workspaceService;
+					endPoint.setServiceEntryPoint(Config.OKMWorkspaceService);
 					// First must validate password
 					workspaceService.isValidPassword(userPasswordText.getText(), new AsyncCallback<String>() {
 						@Override
@@ -192,6 +196,8 @@ public class UserPopup extends DialogBox implements ClickHandler {
 							Main.get().showError("callbackIsValidPassword", caught);
 						}
 					});
+					
+					
 				}
 			}			
 		});
@@ -209,6 +215,8 @@ public class UserPopup extends DialogBox implements ClickHandler {
 				imapTestError.setVisible(false);
 				imapTestOK.setVisible(false);
 				test.setEnabled(false);
+				ServiceDefTarget endPoint = (ServiceDefTarget) generalService;
+				endPoint.setServiceEntryPoint(Config.OKMGeneralService);
 				generalService.testImapConnection(hostText.getText(), imapUserText.getText(), imapUserPasswordText.getText(), imapFolderText.getText(), new AsyncCallback<GWTTestImap>() {					
 					@Override
 					public void onSuccess(GWTTestImap result) {
@@ -239,6 +247,8 @@ public class UserPopup extends DialogBox implements ClickHandler {
 			public void onClick(ClickEvent event) {
 				int Id = Main.get().workspaceUserProperties.getWorkspace().getImapID();
 				if (Id>=0) {
+					ServiceDefTarget endPoint = (ServiceDefTarget) workspaceService;
+					endPoint.setServiceEntryPoint(Config.OKMWorkspaceService);
 					workspaceService.deleteMailAccount(Id, callbackDeleteMailAccount);
 				}
 			}			

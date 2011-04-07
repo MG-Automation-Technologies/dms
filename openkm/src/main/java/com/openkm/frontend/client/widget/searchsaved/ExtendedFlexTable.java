@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -206,7 +206,7 @@ public class ExtendedFlexTable extends FlexTable {
 	 * After deletes document or folder selects a row 
 	 */
 	public void selectPrevRow() {
-		// After deletes document or folder selects a previous row if not 0 or the next if exists ( next row is actual after delete )
+		// After deletes document or folder selects a previos row if not 0 or the next if exists ( next row is actual after delete )
 		// RowCount minor value is 1 for header titles
 		if (getRowCount() > 1) {
 			if (selectedRow > 0) {

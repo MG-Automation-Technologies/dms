@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -38,6 +38,7 @@ import com.google.gwt.gen2.table.client.AbstractScrollTable.ResizePolicy;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollPolicy;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -45,6 +46,7 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 import com.openkm.frontend.client.util.RoleComparator;
@@ -367,6 +369,8 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 	private void getGrantedUsers() {
 		if (path != null) {
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.setUserSecurity();
+			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 			authService.getGrantedUsers(path, callbackGetGrantedUsers);
 		}
 	}
@@ -377,7 +381,9 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 	private void getGrantedRoles() {
 		removeAllRows();
 		if (path != null) {
-			Main.get().mainPanel.desktop.browser.tabMultiple.status.setRoleSecurity();	
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.setRoleSecurity();
+			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 			authService.getGrantedRoles(path, callbackGetGrantedRoles);
 		}
 	}

@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -24,7 +24,8 @@ package com.openkm.bean;
 import java.io.Serializable;
 
 public class Scripting implements Serializable {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 7491221581551061878L;
+	
 	public static final String TYPE = "mix:scripting";
 	public static final String SCRIPT_CODE = "okm:scriptCode";
 	

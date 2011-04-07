@@ -18,8 +18,8 @@ public class Location {
     private String port;
     private String protocol;
     private String queryString;
+    private HashMap<String, String> paramMap;
 
-	private HashMap<String, String> paramMap;
 
     public String getHash() {
         return hash;
@@ -40,12 +40,6 @@ public class Location {
     public String getPath() {
         return path;
     }
-    
-    public String getContext() {
-    	String context = path.substring(path.indexOf("/") + 1);
-    	context = context.substring(0, context.indexOf("/"));
-    	return "/" + context;
-    }
 
     public String getPort() {
         return port;
@@ -58,7 +52,7 @@ public class Location {
     public String getQueryString() {
         return queryString;
     }
-  
+
     protected void setHash(String hash) {
         this.hash = hash;
     }
@@ -97,7 +91,7 @@ public class Location {
             for (int i = 0; i < kvPairs.length; i++) {
                 String[] kv = kvPairs[i].split("=");
                 if (kv.length > 1) {
-                    paramMap.put(kv[0], URL.decodeQueryString(kv[1]));
+                    paramMap.put(kv[0], URL.decodeComponent(kv[1]));
                 }
                 else {
                     paramMap.put(kv[0], "");

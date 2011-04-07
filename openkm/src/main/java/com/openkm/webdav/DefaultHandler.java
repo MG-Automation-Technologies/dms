@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -69,11 +69,9 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Permission;
-import com.openkm.cache.UserItemsManager;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.MimeTypeDAO;
-import com.openkm.util.DocumentUtils;
 import com.openkm.util.JCRUtils;
 
 public class DefaultHandler implements IOHandler, PropertyHandler {
@@ -256,7 +254,7 @@ public class DefaultHandler implements IOHandler, PropertyHandler {
         boolean success = false;
         try {
             Node contentNode = getContentNode(context, isCollection);
-            log.info("contentNode: {}", contentNode.getPath());
+            log.info("contentNode: "+contentNode.getPath());
             
             if (contentNode.isNodeType("mix:versionable")) {
             	log.debug("CHECKOUT");
@@ -264,39 +262,21 @@ public class DefaultHandler implements IOHandler, PropertyHandler {
             }
             
             success = importData(context, isCollection, contentNode);
-            
             if (success) {
                 success = importProperties(context, isCollection, contentNode);
             }
             
             if (contentNode.isNodeType("mix:versionable")) {
             	log.debug("CHECKIN");
-            	javax.jcr.version.Version ver = contentNode.checkin();
-            	
-                if (Config.USER_ITEM_CACHE) {
-    				// Get previous version document size
-    				for (javax.jcr.version.Version pred : ver.getPredecessors()) {
-    					Node frozenNode = pred.getNode(JcrConstants.JCR_FROZENNODE);
-    					String author = frozenNode.getProperty(Document.AUTHOR).getString();
-    					long size = frozenNode.getProperty(Document.SIZE).getLong();
-    					UserItemsManager.decSize(author, size);
-    					log.info("Version: " + pred.getName() + "Author: "+author+", Size: " + size);
-    				}
-    				
-    				// Update user items
-    				long size = contentNode.getProperty(Document.SIZE).getLong();
-    				UserItemsManager.incSize(contentNode.getSession().getUserID(), size);
-    			}
+            	contentNode.checkin();
             }
             
             // Remove pdf & preview from cache
             Node documentNode = contentNode.getParent();
-            log.info("Delete: {}", Config.CACHE_DXF + File.separator + documentNode.getUUID() + ".dxf");
-            new File(Config.CACHE_DXF + File.separator + documentNode.getUUID() + ".dxf").delete();
-            log.info("Delete: {}", Config.CACHE_PDF + File.separator + documentNode.getUUID() + ".pdf");
-            new File(Config.CACHE_PDF + File.separator + documentNode.getUUID() + ".pdf").delete();
-            log.info("Delete: {}", Config.CACHE_SWF + File.separator + documentNode.getUUID() + ".swf");
-			new File(Config.CACHE_SWF + File.separator + documentNode.getUUID() + ".swf").delete();
+            log.info("Delete: {}", Config.PDF_CACHE+File.separator+documentNode.getUUID()+".pdf");
+            log.info("Delete: {}", Config.SWF_CACHE+File.separator+documentNode.getUUID()+".swf");
+			new File(Config.PDF_CACHE+File.separator+documentNode.getUUID()+".pdf").delete();
+			new File(Config.SWF_CACHE+File.separator+documentNode.getUUID()+".swf").delete();
         } catch (RepositoryException e) {
             success = false;
             throw new IOException(e.getMessage());
@@ -360,15 +340,13 @@ public class DefaultHandler implements IOHandler, PropertyHandler {
      */
     protected boolean importProperties(ImportContext context, boolean isCollection, Node contentNode) {
     	log.debug("importProperties({}, {}, {})", new Object[] { context, isCollection, contentNode });
-    	String mimeType = null;
-    	
         try {
             // set mimeType property upon resource creation but don't modify
             // it on a subsequent PUT. In contrast to a PROPPATCH request, which
             // is handled by  #importProperties(PropertyContext, boolean)}
             if (!contentNode.hasProperty(JcrConstants.JCR_MIMETYPE)) {
             	//contentNode.setProperty(JcrConstants.JCR_MIMETYPE, context.getMimeType());
-            	mimeType = Config.mimeTypes.getContentType(context.getSystemId().toLowerCase());
+            	String mimeType = Config.mimeTypes.getContentType(context.getSystemId().toLowerCase());
         		contentNode.setProperty(JcrConstants.JCR_MIMETYPE, mimeType);
             }
         } catch (RepositoryException e) {
@@ -396,7 +374,7 @@ public class DefaultHandler implements IOHandler, PropertyHandler {
         		log.debug("Folder node type");
         		Node folderNode = contentNode;
         		parentNode = folderNode.getParent();
-        		
+        	
         		// Basic folder properties
         		folderNode.setProperty(Folder.AUTHOR, session.getUserID());
         		folderNode.setProperty(Folder.NAME, folderNode.getName());
@@ -441,7 +419,7 @@ public class DefaultHandler implements IOHandler, PropertyHandler {
     		String[] rolesDelete = JCRUtils.rolValue2String(rolesDeleteParent);
     		Value[] rolesSecurityParent = parentNode.getProperty(Permission.ROLES_SECURITY).getValues();
     		String[] rolesSecurity = JCRUtils.rolValue2String(rolesSecurityParent);
-    		
+	
     		// Set auth info
     		mainNode.setProperty(Permission.USERS_READ, usersRead);
     		mainNode.setProperty(Permission.USERS_WRITE, usersWrite);
@@ -451,23 +429,18 @@ public class DefaultHandler implements IOHandler, PropertyHandler {
     		mainNode.setProperty(Permission.ROLES_WRITE, rolesWrite);
     		mainNode.setProperty(Permission.ROLES_DELETE, rolesDelete);
     		mainNode.setProperty(Permission.ROLES_SECURITY, rolesSecurity);
-    		
+
     		if (contentNode.isNodeType(Document.CONTENT_TYPE)) {
     			// Esta línea vale millones!! Resuelve la incidencia del isCkechedOut.
         		// Por lo visto un nuevo nodo se añade con el isCheckedOut a true :/
         		parentNode.save();
         		contentNode.checkin();
-        		
-        		// Check document filters
-    			DocumentUtils.checkFilters(session, mainNode, mimeType);
     		}
         } catch (ItemNotFoundException e) {
 			e.printStackTrace();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
 		} catch (RepositoryException e) {
-			e.printStackTrace();
-		} catch (DatabaseException e) {
 			e.printStackTrace();
 		}
         

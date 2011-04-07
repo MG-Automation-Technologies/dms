@@ -3,9 +3,9 @@
 body {
   margin: 10px;
   background-color: #E5E5E1;
-  color: #333333;
-  font-family: Arial,Helvetica,sans-serif;
-  font-size: 11px;
+  color:#333333;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:11px;
 }
 
 body, td, a, div, p {
@@ -27,12 +27,12 @@ div#box {
   background-color: #F1F3F5;
   border: 1px solid #CCCCCC;
   width: 405px;
-  height: 285px;
-  margin: 40px auto 30px auto;
+  height: 275px;
+  margin: 60px auto 30px auto;
 }
 
 div#logo {
-  background-image: url('../logo/login');
+  background-image: url('../img/logo_big.gif');
   background-repeat: no-repeat;
   width: 316px;
   margin: 15px auto 5px auto;

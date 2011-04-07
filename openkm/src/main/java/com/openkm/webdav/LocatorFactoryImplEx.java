@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -24,8 +24,6 @@ package com.openkm.webdav;
 import org.apache.jackrabbit.webdav.AbstractLocatorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.openkm.core.Config;
 
 public class LocatorFactoryImplEx extends AbstractLocatorFactory {
     private static Logger log = LoggerFactory.getLogger(LocatorFactoryImplEx.class);
@@ -52,17 +50,7 @@ public class LocatorFactoryImplEx extends AbstractLocatorFactory {
         
         if (resourcePath.equals(wspPath) || startsWithWorkspace(resourcePath, wspPath)) {
             String repositoryPath = resourcePath.substring(wspPath.length());
-            //String name = Text.getName(repositoryPath);
-            //String parent = Text.getRelativeParent(repositoryPath, 1);
-            
-            //if (!name.startsWith("okm:")) {
-            	//repositoryPath = parent + "/" + FileUtils.escape(name);
-            //}
-            
-            if (Config.SYSTEM_WEBDAV_FIX) {
-            	repositoryPath = repositoryPath.replace("okm_", "okm:");
-            }
-            
+            repositoryPath = repositoryPath.replace("okm_", "okm:");
             String ret = (repositoryPath.length() == 0) ? "/" : repositoryPath;
             log.debug("getRepositoryPath: {}", ret);
             return ret;
@@ -81,10 +69,7 @@ public class LocatorFactoryImplEx extends AbstractLocatorFactory {
             throw new IllegalArgumentException("Cannot build resource path from 'null' repository path");
         }
         
-        if (Config.SYSTEM_WEBDAV_FIX) {
-        	repositoryPath = repositoryPath.replace("okm:", "okm_");
-        }
-        
+        repositoryPath = repositoryPath.replace("okm:", "okm_");
         String ret = (startsWithWorkspace(repositoryPath, wspPath)) ? repositoryPath : wspPath + repositoryPath;
         log.debug("getResourcePath: {}", ret);
         return ret;

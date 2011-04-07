@@ -22,7 +22,7 @@ import com.openkm.dao.bean.cache.UserItems;
 
 public class UserItemsManager {
 	private static Logger log = LoggerFactory.getLogger(UserItemsManager.class);
-	private static Map<String, UserItems> userItemsMgr = new HashMap<String, UserItems>();
+	private static Map<String, UserItems> userItemsMgr;
 	
 	/**
 	 * 
@@ -43,7 +43,6 @@ public class UserItemsManager {
 	 * 
 	 */
 	public static synchronized void incDocuments(String uid, int value) {
-		log.debug("incDocuments({}, {})", uid, value);
 		UserItems userItems = get(uid);
 		userItems.setDocuments(userItems.getDocuments() + value);
 	}
@@ -52,7 +51,6 @@ public class UserItemsManager {
 	 * 
 	 */
 	public static synchronized void decDocuments(String uid, int value) {
-		log.debug("decDocuments({}, {})", uid, value);
 		UserItems userItems = get(uid);
 		userItems.setDocuments(userItems.getDocuments() - value);
 	}
@@ -61,7 +59,6 @@ public class UserItemsManager {
 	 * 
 	 */
 	public static synchronized void incFolders(String uid, int value) {
-		log.debug("incFolders({}, {})", uid, value);
 		UserItems userItems = get(uid);
 		userItems.setFolders(userItems.getFolders() + value);
 	}
@@ -70,7 +67,6 @@ public class UserItemsManager {
 	 * 
 	 */
 	public static synchronized void decFolders(String uid, int value) {
-		log.debug("decFolders({}, {})", uid, value);
 		UserItems userItems = get(uid);
 		userItems.setFolders(userItems.getFolders() - value);
 	}
@@ -79,7 +75,6 @@ public class UserItemsManager {
 	 * 
 	 */
 	public static synchronized void incSize(String uid, long value) {
-		log.debug("incSize({}, {})", uid, value);
 		UserItems userItems = get(uid);
 		userItems.setSize(userItems.getSize() + value);
 	}
@@ -87,10 +82,9 @@ public class UserItemsManager {
 	/**
 	 * 
 	 */
-	public static synchronized void decSize(String uid, long value) {
-		log.debug("decSize({}, {})", uid, value);
+	public static synchronized void decSize(String uid, long size) {
 		UserItems userItems = get(uid);
-		userItems.setSize(userItems.getSize() - value);
+		userItems.setSize(userItems.getSize() - size);
 	}
 	
 	/**
@@ -103,7 +97,7 @@ public class UserItemsManager {
 			String statement = "/jcr:root/okm:root//element(*, okm:document)[okm:content/@okm:author='"+session.getUserID()+"']";
 			Workspace workspace = session.getWorkspace();
 			QueryManager queryManager = workspace.getQueryManager();
-			Query query = queryManager.createQuery(statement, Query.XPATH);
+			Query query = queryManager.createQuery(statement, "xpath");
 			QueryResult result = query.execute();
 			long size = 0;
 			
@@ -136,6 +130,8 @@ public class UserItemsManager {
 	 * 
 	 */
 	public static synchronized void deserialize() throws DatabaseException {
+		userItemsMgr = new HashMap<String, UserItems>();
+		
 		for (UserItems ui : UserItemsDAO.findAll()) {
 			userItemsMgr.put(ui.getUser(), ui);
 		}

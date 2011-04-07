@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -50,7 +50,6 @@ import com.openkm.bean.StatsInfo;
 import com.openkm.core.Config;
 import com.openkm.core.RepositoryInfo;
 import com.openkm.util.FormatUtil;
-import com.openkm.util.WebUtils;
 
 /**
  * Stats graphical servlet
@@ -66,7 +65,7 @@ public class StatsGraphServlet extends BaseServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
-		String type = WebUtils.getString(request, "t");
+		String type = request.getParameter("t");
 		JFreeChart chart = null;
 		updateSessionManager(request);
 		

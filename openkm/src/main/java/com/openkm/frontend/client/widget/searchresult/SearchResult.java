@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -28,6 +28,7 @@ import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
 import com.google.gwt.gen2.table.client.FixedWidthGrid;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
@@ -38,6 +39,7 @@ import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.bean.GWTQueryResult;
 import com.openkm.frontend.client.bean.GWTResultSet;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.service.OKMSearchServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
@@ -279,7 +281,7 @@ public class SearchResult extends Composite {
 	final AsyncCallback<GWTResultSet> callbackFindPaginated = new AsyncCallback<GWTResultSet>() {
 		public void onSuccess(GWTResultSet result){
 			GWTResultSet resultSet = result;	
-			Main.get().mainPanel.search.searchBrowser.searchIn.searchControl.controlSearch.refreshControl(resultSet.getTotal());
+			Main.get().mainPanel.search.searchBrowser.searchIn.controlSearch.refreshControl(resultSet.getTotal());
 			
 			removeAllRows();
 			int size = 0;
@@ -332,6 +334,8 @@ public class SearchResult extends Composite {
 	 */
 	public void findPaginated(GWTQueryParams params, int offset, int limit) {
 		status.setFlag_findPaginated();
+		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
+		endPoint.setServiceEntryPoint(Config.OKMSearchService);
 		searchService.findPaginated(params, offset, limit, callbackFindPaginated);
 	}
 	

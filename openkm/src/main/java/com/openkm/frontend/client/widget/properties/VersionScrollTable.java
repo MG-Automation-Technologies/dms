@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -37,6 +37,7 @@ import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollPolicy;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -47,6 +48,7 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTPermission;
 import com.openkm.frontend.client.bean.GWTVersion;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import com.openkm.frontend.client.util.Util;
@@ -358,6 +360,8 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 	public void getVersionHistory() {
 		if (doc != null) {
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.setVersionHistory();
+			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
+			endPoint.setServiceEntryPoint(Config.OKMDocumentService);	
 			documentService.getVersionHistory(doc.getPath(), callbackGetVersionHistory);
 		}
 	}
@@ -368,6 +372,8 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 	public void restoreVersion(String versionId) {
 		if (doc != null) {
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.setRestoreVersion();
+			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
+			endPoint.setServiceEntryPoint(Config.OKMDocumentService);	
 			documentService.restoreVersion(doc.getPath(), versionId, callbackRestoreVersion);
 		}
 	}
@@ -378,6 +384,8 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 	public void purgeVersionHistory() {
 		if (doc != null) {
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.setPurgeVersionHistory();
+			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
+			endPoint.setServiceEntryPoint(Config.OKMDocumentService);	
 			documentService.purgeVersionHistory(doc.getPath(), callbackPurgeVersionHistory);
 		}
 	}

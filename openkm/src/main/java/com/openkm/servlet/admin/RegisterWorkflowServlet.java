@@ -20,10 +20,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMWorkflow;
+import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.WorkflowException;
-import com.openkm.util.UserActivity;
 
 /**
  * Register workflow Servlet
@@ -32,7 +32,6 @@ public class RegisterWorkflowServlet extends BaseServlet {
 	private static Logger log = LoggerFactory.getLogger(RegisterWorkflowServlet.class);
 	private static final long serialVersionUID = 1L;
 	
-	@Override
 	@SuppressWarnings("unchecked")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws 
 			ServletException, IOException {
@@ -40,7 +39,7 @@ public class RegisterWorkflowServlet extends BaseServlet {
 		byte[] content = null;
 		PrintWriter out = null;
 		updateSessionManager(request);
-		
+
 		try {
 			boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 			out = response.getWriter();	
@@ -70,9 +69,7 @@ public class RegisterWorkflowServlet extends BaseServlet {
 					is.close();
 				}
 				
-				// Activity log
-				UserActivity.log(request.getRemoteUser(), "ADMIN_WORKFLOW_REGISTER", fileName, null);
-				response.sendRedirect("Workflow");
+				response.sendRedirect("/OpenKM"+Config.INSTALL+"/admin/Workflow");
 			}
 		} catch (ParseException e) {
 			log.error(e.getMessage(), e);

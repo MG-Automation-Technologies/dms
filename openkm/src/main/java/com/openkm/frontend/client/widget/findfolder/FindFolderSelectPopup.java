@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -31,6 +31,7 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -48,7 +49,8 @@ import com.openkm.frontend.client.bean.GWTPropertyParams;
 import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.bean.GWTQueryResult;
 import com.openkm.frontend.client.bean.GWTResultSet;
-import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
+import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.service.OKMSearchServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
@@ -107,25 +109,25 @@ public class FindFolderSelectPopup extends DialogBox  {
 					GWTQueryParams gwtParams = new GWTQueryParams();
 					int actualView = Main.get().mainPanel.desktop.navigator.stackPanel.getStackIndex();
 					switch (actualView){
-						case UIDesktopConstants.NAVIGATOR_TAXONOMY:
+						case PanelDefinition.NAVIGATOR_TAXONOMY:
 							gwtParams.setPath(Main.get().taxonomyRootFolder.getPath());
 							break;
-						case UIDesktopConstants.NAVIGATOR_CATEGORIES:
+						case PanelDefinition.NAVIGATOR_CATEGORIES:
 							gwtParams.setPath(Main.get().categoriesRootFolder.getPath());
 							break;
-						case UIDesktopConstants.NAVIGATOR_THESAURUS:
+						case PanelDefinition.NAVIGATOR_THESAURUS:
 							gwtParams.setPath(Main.get().thesaurusRootFolder.getPath());
 							break;
-						case UIDesktopConstants.NAVIGATOR_TEMPLATES:
+						case PanelDefinition.NAVIGATOR_TEMPLATES:
 							gwtParams.setPath(Main.get().templatesRootFolder.getPath());
 							break;
-						case UIDesktopConstants.NAVIGATOR_PERSONAL:
+						case PanelDefinition.NAVIGATOR_PERSONAL:
 							gwtParams.setPath(Main.get().personalRootFolder.getPath());
 							break;
-						case UIDesktopConstants.NAVIGATOR_MAIL:
+						case PanelDefinition.NAVIGATOR_MAIL:
 							gwtParams.setPath(Main.get().mailRootFolder.getPath());
 							break;
-						case UIDesktopConstants.NAVIGATOR_TRASH:
+						case PanelDefinition.NAVIGATOR_TRASH:
 							gwtParams.setPath(Main.get().trashRootFolder.getPath());
 							break;
 					}
@@ -335,6 +337,8 @@ public class FindFolderSelectPopup extends DialogBox  {
 	 */
 	private void find(GWTQueryParams params) {
 		status.setFlagChilds();
+		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
+		endPoint.setServiceEntryPoint(Config.OKMSearchService);
 		searchService.find(params, callbackFind);
 	}
 }

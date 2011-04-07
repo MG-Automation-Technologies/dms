@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -124,8 +124,8 @@ public class FolderSelectPopup extends DialogBox  {
 	 * Sets the repository path
 	 */
 	public void setRepositoryPath(String actualPath, String Uuid, boolean refresh) {
-		Main.get().mainPanel.search.searchBrowser.searchIn.searchAdvanced.categoryUuid = Uuid;
-		Main.get().mainPanel.search.searchBrowser.searchIn.searchAdvanced.categoryPath.setText(actualPath.substring(16)); // Removes /okm:categories;
+		Main.get().mainPanel.search.searchBrowser.searchIn.categoryUuid = Uuid;
+		Main.get().mainPanel.search.searchBrowser.searchIn.categoryPath.setText(actualPath.substring(16)); // Removes /okm:categories;
 		hide();
 	}
 	
@@ -133,7 +133,7 @@ public class FolderSelectPopup extends DialogBox  {
 	 * Sets the repository path
 	 */
 	public void setRepositoryPath(String actualPath, boolean refresh) {
-		Main.get().mainPanel.search.searchBrowser.searchIn.searchAdvanced.path.setText(actualPath);
+		Main.get().mainPanel.search.searchBrowser.searchIn.path.setText(actualPath);
 		hide();
 	}
 	

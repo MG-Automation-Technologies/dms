@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -22,6 +22,7 @@
 package com.openkm.principal;
 
 import java.util.List;
+
 
 public interface PrincipalAdapter {
 	
@@ -58,20 +59,11 @@ public interface PrincipalAdapter {
 	public List<String> getRolesByUser(String user) throws PrincipalAdapterException;
 	
 	/**
-	 * Method to retrieve the mail from a user.
+	 * Method to retrieve the mail from a list of users.
 	 * 
-	 * @param users A user id.
-	 * @return The email of the user.
+	 * @param users A list of users.
+	 * @return A list of user emails.
 	 * @throws PrincipalAdapterException If any error occurs.
 	 */
-	public String getMail(String user) throws PrincipalAdapterException;
-	
-	/**
-	 * Method to retrieve the name from a user.
-	 * 
-	 * @param users A user id.
-	 * @return The name of the user.
-	 * @throws PrincipalAdapterException If any error occurs.
-	 */
-	public String getName(String user) throws PrincipalAdapterException;
+	public List<String> getMails(List<String> users) throws PrincipalAdapterException;
 }

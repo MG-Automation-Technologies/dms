@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -29,9 +29,10 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
-import com.openkm.frontend.client.contants.ui.UIDockPanelConstants;
+import com.openkm.frontend.client.panel.ExtendedDockPanel;
+import com.openkm.frontend.client.panel.PanelDefinition;
 
 /**
  * Confirm panel
@@ -140,13 +141,13 @@ public class ConfirmPopup extends DialogBox {
 				
 			case CONFIRM_EMPTY_TRASH :
 				// Ensures DESKTOP view is enabled
-				if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace()!=UIDockPanelConstants.DESKTOP){
-					Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(UIDockPanelConstants.DESKTOP);
+				if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace()!=ExtendedDockPanel.DESKTOP){
+					Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(ExtendedDockPanel.DESKTOP);
 				}
 				
 				//Ensures that trash view is enabled
-				if (Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_TRASH) {
-					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(UIDesktopConstants.NAVIGATOR_TRASH, false);
+				if (Main.get().mainPanel.desktop.navigator.getStackIndex() != PanelDefinition.NAVIGATOR_TRASH) {
+					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_TRASH, false);
 				}
 				
 				Main.get().activeFolderTree.purgeTrash();

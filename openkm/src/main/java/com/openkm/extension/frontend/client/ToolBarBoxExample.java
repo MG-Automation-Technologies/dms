@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.extension.frontend.client.util.OKMExtensionBundleExampleResources;
-import com.openkm.frontend.client.extension.widget.toolbar.ToolBarBoxExtension;
+import com.openkm.frontend.client.extension.widget.ToolBarBoxExtension;
 
 /**
  * ToolBarBoxExample

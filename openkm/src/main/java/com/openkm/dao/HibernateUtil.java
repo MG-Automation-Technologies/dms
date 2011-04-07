@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -43,49 +43,33 @@ import com.openkm.core.Config;
  */
 public class HibernateUtil {
 	private static Logger log = LoggerFactory.getLogger(HibernateUtil.class);
-	private static SessionFactory sessionFactory;
+	private static final SessionFactory sessionFactory;
+	
+	static {
+		try {
+			Configuration cfg = new Configuration().configure();
+			cfg.setProperty("hibernate.dialect", Config.HIBERNATE_DIALECT);
+			cfg.setProperty("hibernate.connection.datasource", Config.HIBERNATE_DATASOURCE);
+			cfg.setProperty("hibernate.hbm2ddl.auto", Config.HIBERNATE_HBM2DDL);
+			cfg.setProperty("hibernate.show_sql", Config.HIBERNATE_SHOW_SQL);
+			sessionFactory = cfg.buildSessionFactory();
+		} catch (HibernateException e) {
+			log.error(e.getMessage(), e);
+			throw new ExceptionInInitializerError(e);
+		}
+	}
 	
 	/**
 	 * Disable constructor to guaranty a single instance
 	 */
-	private HibernateUtil() {}
+	private HibernateUtil() {
+	}
 	
 	/**
 	 * Get instance
 	 */
 	public static SessionFactory getSessionFactory() {
-		return getSessionFactory(Config.HIBERNATE_HBM2DDL);
-	}
-	
-	/**
-	 * Get instance
-	 */
-	public static SessionFactory getSessionFactory(String hbm2ddl) {
-		if (sessionFactory == null) {
-			try {
-				Configuration cfg = new Configuration().configure();
-				cfg.setProperty("hibernate.dialect", Config.HIBERNATE_DIALECT);
-				cfg.setProperty("hibernate.connection.datasource", Config.HIBERNATE_DATASOURCE);
-				cfg.setProperty("hibernate.hbm2ddl.auto", hbm2ddl);
-				cfg.setProperty("hibernate.show_sql", Config.HIBERNATE_SHOW_SQL);
-				sessionFactory = cfg.buildSessionFactory();
-			} catch (HibernateException e) {
-				log.error(e.getMessage(), e);
-				throw new ExceptionInInitializerError(e);
-			}
-		}
-		
 		return sessionFactory;
-	}
-	
-	/**
-	 * Close factory
-	 */
-	public static void closeSessionFactory() {
-		if (sessionFactory != null) {
-			sessionFactory.close();
-			sessionFactory = null;
-		}
 	}
 	
 	/**

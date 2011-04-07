@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -34,8 +34,9 @@ import java.util.Set;
  */
 public class Document implements Serializable {
 	private static final long serialVersionUID = 4453338766237619444L;
+	
 	public static final String TYPE = "okm:document";
-	public static final String CONTENT = "okm:content";
+	public static final String CONTENT = "okm:content"; 
 	public static final String CONTENT_TYPE = "okm:resource";
 	public static final String SIZE = "okm:size";
 	public static final String LANGUAGE = "okm:language";
@@ -62,8 +63,6 @@ public class Document implements Serializable {
 	private boolean subscribed;
 	private boolean convertibleToPdf;
 	private boolean convertibleToSwf;
-	private boolean convertibleToDxf;
-	private String cipherName;
 	private Set<String> subscriptors = new HashSet<String>();
 	private Set<String> keywords = new HashSet<String>();
 	private Set<Folder> categories = new HashSet<Folder>();
@@ -221,22 +220,6 @@ public class Document implements Serializable {
 		this.convertibleToSwf = convertibleToSwf;
 	}
 	
-	public boolean isConvertibleToDxf() {
-		return convertibleToDxf;
-	}
-
-	public void setConvertibleToDxf(boolean convertibleToDxf) {
-		this.convertibleToDxf = convertibleToDxf;
-	}
-	
-	public void setCipherName(String cipherName) {
-		this.cipherName = cipherName;
-	}
-
-	public String getCipherName() {
-		return cipherName;
-	}
-	
 	public List<Note> getNotes() {
 		return notes;
 	}
@@ -265,8 +248,6 @@ public class Document implements Serializable {
 		sb.append(", uuid="); sb.append(uuid);
 		sb.append(", convertibleToPdf="); sb.append(convertibleToPdf);
 		sb.append(", convertibleToSwf="); sb.append(convertibleToSwf);
-		sb.append(", convertibleToDxf="); sb.append(convertibleToDxf);
-		sb.append(", cipherName="); sb.append(cipherName);
 		sb.append(", notes="); sb.append(notes);
 		sb.append("}");
 		return sb.toString();
