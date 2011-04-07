@@ -365,7 +365,6 @@ public class MailAccountDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			MailFilterRule ret = (MailFilterRule) session.load(MailFilterRule.class, frId);
-			
 			log.debug("findRuleByPk: {}", ret);
 			return ret;
 		} catch (HibernateException e) {

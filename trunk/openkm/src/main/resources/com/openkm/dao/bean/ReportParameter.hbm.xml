@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="com.openkm.dao.bean.ReportParameter" table="OKM_REPORT_PARAMETER">
+    <id name="id" column="RPP_ID"><generator class="native"/></id>
+    <property name="label" column="RPP_LABEL" not-null="true"/>
+    <property name="name" column="RPP_NAME" not-null="true"/>
+    <property name="type" column="RPP_TYPE" not-null="true"/>
+  </class>
+</hibernate-mapping>
