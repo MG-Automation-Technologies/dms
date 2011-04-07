@@ -20,7 +20,7 @@
       <table class="results" width="70%">
         <tr>
           <th>Name</th><th>Type</th><th>File Name</th><th>Active</th>
-          <th width="130px">
+          <th width="145px">
             <c:url value="Report" var="urlCreate">
               <c:param name="action" value="create"/>
             </c:url>
@@ -34,6 +34,10 @@
           </c:url>
           <c:url value="Report" var="urlDelete">
             <c:param name="action" value="delete"/>
+            <c:param name="rp_id" value="${rp.id}"/>
+          </c:url>
+          <c:url value="Report" var="urlParams">
+            <c:param name="action" value="paramList"/>
             <c:param name="rp_id" value="${rp.id}"/>
           </c:url>
           <c:url value="Report" var="urlExecutePdf">
@@ -67,6 +71,8 @@
               <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
               &nbsp;
               <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+              &nbsp;
+              <a href="${urlParams}"><img src="img/action/params.png" alt="Parameters" title="Parameters"/></a>
               &nbsp;
               <a href="${urlExecutePdf}"><img src="img/action/pdf.png" alt="Generate PDF" title="Generate PDF"/></a>
               &nbsp;
