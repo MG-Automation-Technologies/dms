@@ -22,24 +22,17 @@
 package com.openkm.dao.bean;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
-public class Report implements Serializable {
+public class ReportParameter implements Serializable {
 	private static final long serialVersionUID = 1L;
-	public static final String SQL = "sql";
-	public static final String HIBERNATE = "hibernate";
-	public static final String XPATH = "xpath";
-	public static final String COLLECTION = "collection";
-	public static final String SCRIPT = "script";
+	public static final String INPUT = "input";
+	public static final String TEXTAREA= "textarea";
+	public static final String DATE = "date";
+	public static final String PATH = "path";
 	private int id;
+	private String label;
 	private String name;
 	private String type;
-	private String fileContent;
-	private String fileMime;
-	private String fileName;
-	private Set<ReportParameter> params = new HashSet<ReportParameter>();
-	private boolean active;
 	
 	public int getId() {
 		return id;
@@ -47,6 +40,14 @@ public class Report implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
 	}
 	
 	public String getName() {
@@ -64,58 +65,14 @@ public class Report implements Serializable {
 	public void setType(String type) {
 		this.type = type;
 	}
-	
-	public String getFileContent() {
-		return fileContent;
-	}
-
-	public void setFileContent(String fileContent) {
-		this.fileContent = fileContent;
-	}
-	
-	public String getFileMime() {
-		return fileMime;
-	}
-
-	public void setFileMime(String fileMime) {
-		this.fileMime = fileMime;
-	}
-
-	public String getFileName() {
-		return fileName;
-	}
-
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-	
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-	
-	public Set<ReportParameter> getParams() {
-		return params;
-	}
-
-	public void setParams(Set<ReportParameter> params) {
-		this.params = params;
-	}
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("id="); sb.append(id);
+		sb.append(", label="); sb.append(label);
 		sb.append(", name="); sb.append(name);
 		sb.append(", type="); sb.append(type);
-		sb.append(", fileName="); sb.append(fileName);
-		sb.append(", fileMime="); sb.append(fileMime);
-		sb.append(", fileContent="); sb.append("[BIG]");
-		sb.append(", active="); sb.append(active);
-		sb.append(", params="); sb.append(params);
 		sb.append("}");
 		return sb.toString();
 	}
