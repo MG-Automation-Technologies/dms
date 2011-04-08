@@ -363,8 +363,7 @@ public class ReportServlet extends BaseServlet {
 		log.debug("paramList({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
 		int rpId = WebUtils.getInt(request, "rp_id");
-		Report rep = ReportDAO.findByPk(rpId);
-		Set<ReportParameter> params = rep.getParams();
+		Set<ReportParameter> params = ReportDAO.findParamAll(rpId);
 		
 		for (ReportParameter rpp : params) {
 			if (ReportParameter.INPUT.equals(rpp.getType())) {
@@ -397,12 +396,10 @@ public class ReportServlet extends BaseServlet {
 			rpp.setLabel(WebUtils.getString(request, "rpp_label"));
 			rpp.setName(WebUtils.getString(request, "rpp_name"));
 			rpp.setType(WebUtils.getString(request, "rpp_type"));
-			Report rp = ReportDAO.findByPk(rpId);
-			rp.getParams().add(rpp);
-			ReportDAO.update(rp);
+			ReportDAO.addParam(rpId, rpp);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_REPORT_PARAMETER_CREATE", Integer.toString(rp.getId()), rpp.toString());
+			UserActivity.log(session.getUserID(), "ADMIN_REPORT_PARAMETER_CREATE", Integer.toString(rpId), rpp.toString());
 			paramList(session, request, response);
 		} else {
 			ServletContext sc = getServletContext();
@@ -437,7 +434,6 @@ public class ReportServlet extends BaseServlet {
 			paramList(session, request, response);
 		} else {
 			ServletContext sc = getServletContext();
-			//int rpId = WebUtils.getInt(request, "rp_id");
 			int rppId = WebUtils.getInt(request, "rpp_id");
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
@@ -457,7 +453,6 @@ public class ReportServlet extends BaseServlet {
 		log.debug("paramDelete({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
-			//int rpId = WebUtils.getInt(request, "rp_id");
 			int rppId = WebUtils.getInt(request, "rpp_id");
 			ReportDAO.deleteParam(rppId);
 			
@@ -466,7 +461,6 @@ public class ReportServlet extends BaseServlet {
 			paramList(session, request, response);
 		} else {
 			ServletContext sc = getServletContext();
-			//int rpId = WebUtils.getInt(request, "rp_id");
 			int rppId = WebUtils.getInt(request, "rpp_id");
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
