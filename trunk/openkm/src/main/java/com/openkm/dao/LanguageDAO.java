@@ -47,10 +47,6 @@ public class LanguageDAO {
 	
 	/**
 	 * Find translations by pk
-	 *
-	 * @param lang
-	 * @return
-	 * @throws DatabaseException
 	 */
 	public static Language findByPk(String id) throws DatabaseException {
 		log.debug("findByPk({})", id);
@@ -73,10 +69,6 @@ public class LanguageDAO {
 	
 	/**
 	 * Find all languages
-	 *
-	 * @return
-	 * @throws DatabaseException
-	 * @throws RepositoryException
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<Language> findAll() throws DatabaseException, RepositoryException {
@@ -89,7 +81,6 @@ public class LanguageDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
 			List<Language> ret = q.list();
-
 			log.debug("findAll: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
