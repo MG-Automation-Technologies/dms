@@ -262,7 +262,7 @@ public class LanguageServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException, com.openkm.core.RepositoryException {
 		log.debug("list({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
-		sc.setAttribute("langs", LanguageDAO.findAll());	
+		sc.setAttribute("langs", LanguageDAO.findAll());
 		sc.setAttribute("max", LanguageDAO.findByPk(LANG_BASE_CODE).getTranslations().size()); // Translations reference is english
 		sc.getRequestDispatcher("/admin/language_list.jsp").forward(request, response);
 		log.debug("list: void");
