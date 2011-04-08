@@ -60,7 +60,7 @@
             <td>Value</td>
             <td>
               <c:choose>
-                <c:when test="${cfg.type == 'string' || cfg.type == 'integer'}">
+                <c:when test="${cfg.type == 'string' || cfg.type == 'integer' || cfg.type == 'long'}">
                   <input size="50" name="cfg_value" value="${cfg.value}"/>
                 </c:when>
                 <c:when test="${cfg.type == 'boolean'}">
