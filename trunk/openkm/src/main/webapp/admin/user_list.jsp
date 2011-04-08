@@ -8,6 +8,14 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="favicon.ico" />
   <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <link rel="stylesheet" type="text/css" href="css/fixedTableHeader.css" />
+  <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+  <script type="text/javascript" src="js/fixedTableHeader.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+    	TABLE.fixHeader('table')
+	});
+  </script>
   <title>User List</title>
 </head>
 <body>
@@ -46,73 +54,77 @@
       </form>
       <br/>
       <table class="results" width="80%">
-        <tr>
-          <th>Id</th><th>Name</th><th>Mail</th><th>Roles</th><th width="25px">Active</th>
-          <th width="130px">
-            <c:url value="Auth" var="urlCreate">
-              <c:param name="action" value="userCreate"/>
-            </c:url>
-            <c:if test="${db}">
-              <a href="${urlCreate}"><img src="img/action/new.png" alt="New user" title="New user"/></a>
-            </c:if>
-          </th>
-        </tr>
-        <c:forEach var="user" items="${users}" varStatus="row">
-          <c:url value="Auth" var="urlEdit">
-            <c:param name="action" value="userEdit"/>
-            <c:param name="usr_id" value="${user.id}"/>
-          </c:url>
-          <c:url value="Auth" var="urlDelete">
-            <c:param name="action" value="userDelete"/>
-            <c:param name="usr_id" value="${user.id}"/>
-          </c:url>
-          <c:url value="Auth" var="urlActive">
-            <c:param name="action" value="userActive"/>
-            <c:param name="usr_id" value="${user.id}"/>
-            <c:param name="roleFilter" value="${roleFilter}"/>
-            <c:param name="usr_active" value="${!user.active}"/>
-          </c:url>
-          <c:url value="UserConfig" var="urlConfig">
-            <c:param name="uc_user" value="${user.id}"/>
-          </c:url>
-          <c:url value="MailAccount" var="urlMail">
-            <c:param name="ma_user" value="${user.id}"/>
-          </c:url>
-          <c:url value="TwitterAccount" var="urlTwitter">
-            <c:param name="ta_user" value="${user.id}"/>
-          </c:url>
-          <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td>${user.id}</td><td>${user.name}</td><td>${user.email}</td>
-            <td>
-              <c:forEach var="role" items="${user.roles}">
-                ${role.id}
-              </c:forEach>
-            </td>
-            <td align="center">
-              <c:choose>
-                <c:when test="${user.active}">
-                  <a href="${urlActive}"><img src="img/true.png" alt="Active" title="Active"/></a>
-                </c:when>
-                <c:otherwise>
-                  <a href="${urlActive}"><img src="img/false.png" alt="Inactive" title="Inactive"/></a>
-                </c:otherwise>
-              </c:choose>
-            </td>
-            <td align="center">
+        <thead>
+          <tr>
+            <th>Id</th><th>Name</th><th>Mail</th><th>Roles</th><th width="25px">Active</th>
+            <th width="130px">
+              <c:url value="Auth" var="urlCreate">
+                <c:param name="action" value="userCreate"/>
+              </c:url>
               <c:if test="${db}">
-                <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
-                &nbsp;
-                <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
-                &nbsp;
+                <a href="${urlCreate}"><img src="img/action/new.png" alt="New user" title="New user"/></a>
               </c:if>
-              <a href="${urlConfig}"><img src="img/action/config.png" alt="User config" title="User config"/></a>
-              &nbsp;
-              <a href="${urlMail}"><img src="img/action/email.png" alt="Mail accounts" title="Mail accounts"/></a>
-              &nbsp;
-              <a href="${urlTwitter}"><img src="img/action/twitter.png" alt="Twitter accounts" title="Twitter accounts"/></a>
-            </td>
+            </th>
           </tr>
-        </c:forEach>
+        </thead>
+        <tbody>
+          <c:forEach var="user" items="${users}" varStatus="row">
+            <c:url value="Auth" var="urlEdit">
+              <c:param name="action" value="userEdit"/>
+              <c:param name="usr_id" value="${user.id}"/>
+            </c:url>
+            <c:url value="Auth" var="urlDelete">
+              <c:param name="action" value="userDelete"/>
+              <c:param name="usr_id" value="${user.id}"/>
+            </c:url>
+            <c:url value="Auth" var="urlActive">
+              <c:param name="action" value="userActive"/>
+              <c:param name="usr_id" value="${user.id}"/>
+              <c:param name="roleFilter" value="${roleFilter}"/>
+              <c:param name="usr_active" value="${!user.active}"/>
+            </c:url>
+            <c:url value="UserConfig" var="urlConfig">
+              <c:param name="uc_user" value="${user.id}"/>
+            </c:url>
+            <c:url value="MailAccount" var="urlMail">
+              <c:param name="ma_user" value="${user.id}"/>
+            </c:url>
+            <c:url value="TwitterAccount" var="urlTwitter">
+              <c:param name="ta_user" value="${user.id}"/>
+            </c:url>
+            <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
+              <td>${user.id}</td><td>${user.name}</td><td>${user.email}</td>
+              <td>
+                <c:forEach var="role" items="${user.roles}">
+                  ${role.id}
+                </c:forEach>
+              </td>
+              <td align="center">
+                <c:choose>
+                  <c:when test="${user.active}">
+                    <a href="${urlActive}"><img src="img/true.png" alt="Active" title="Active"/></a>
+                  </c:when>
+                  <c:otherwise>
+                    <a href="${urlActive}"><img src="img/false.png" alt="Inactive" title="Inactive"/></a>
+                  </c:otherwise>
+                </c:choose>
+              </td>
+              <td align="center">
+                <c:if test="${db}">
+                  <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
+                  &nbsp;
+                  <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+                  &nbsp;
+                </c:if>
+                <a href="${urlConfig}"><img src="img/action/config.png" alt="User config" title="User config"/></a>
+                &nbsp;
+                <a href="${urlMail}"><img src="img/action/email.png" alt="Mail accounts" title="Mail accounts"/></a>
+                &nbsp;
+                <a href="${urlTwitter}"><img src="img/action/twitter.png" alt="Twitter accounts" title="Twitter accounts"/></a>
+              </td>
+            </tr>
+          </c:forEach>
+        </tbody>
       </table>
     </c:when>
     <c:otherwise>
