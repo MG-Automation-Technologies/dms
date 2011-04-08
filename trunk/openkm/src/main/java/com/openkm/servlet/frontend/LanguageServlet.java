@@ -47,11 +47,13 @@ public class LanguageServlet extends OKMRemoteServiceServlet implements OKMLangu
 
 	@Override
 	public Map<String, String> getFrontEndTranslations(String lang) throws OKMException {
-		log.debug("getTranslations("+lang+")");
+		log.debug("getTranslations({})", lang);
 		Map<String,String> translations = new HashMap<String,String>();
+		
 		try {
 			Language language = LanguageDAO.findByPk(lang);
-			if (language!=null) {
+			
+			if (language != null) {
 				for (Translation translation : language.getTranslations()) {
 					if (translation.getTranslationId().getModule().equals(Translation.MODULE_FRONTEND) ||
 							translation.getTranslationId().getModule().equals(Translation.MODULE_EXTENSION)) {
@@ -65,6 +67,7 @@ public class LanguageServlet extends OKMRemoteServiceServlet implements OKMLangu
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMGeneralService, ErrorCode.CAUSE_Database), e.getMessage());
 		}
+		
 		log.debug("getTranslations: {}", translations);
 		return translations;
 	}
