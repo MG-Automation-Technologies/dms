@@ -157,7 +157,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 							fileName = FilenameUtils.getName(fileName);
 							log.info("Upload file '{}' into '{}'", fileName, path);
 							Document doc = new Document();
-							doc.setPath(path+"/"+fileName);
+							doc.setPath(path + "/" + fileName);
 							OKMDocument.getInstance().create(null, doc, is);
 							uploadedDocPath = doc.getPath();
 							
@@ -182,16 +182,16 @@ public class FileUploadServlet extends OKMHttpServlet {
 						uploadedDocPath = path;
 						
 						// Case is uploaded a encrypted document
-						if (cipherName!=null && !cipherName.equals("")) {
+						if (cipherName != null && !cipherName.equals("")) {
 							// Case updated document was not encripted yet
-							if (doc.getCipherName()==null) {
+							if (doc.getCipherName() == null) {
 								OKMProperty.getInstance().setEncryption(null, path, cipherName);
 								// In that case is mandatory compact the history
 								document.purgeVersionHistory(null, path);
 							}
 						} else {
 							// Case us uploaded a decrypt document
-							if (doc.getCipherName()!=null && !doc.getCipherName().equals("")) {
+							if (doc.getCipherName() !=null && !doc.getCipherName().equals("")) {
 								OKMProperty.getInstance().unsetEncryption(null, path);
 								// In that case is mandatory compact the history too
 								document.purgeVersionHistory(null, path);
@@ -211,7 +211,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 				} else if (action == UIFileUploadConstants.ACTION_FOLDER) {
 					log.info("Folder create: {}", path);
 					Folder fld = new Folder();
-					fld.setPath(path+"/"+folder);
+					fld.setPath(path + "/" + folder);
 					OKMFolder.getInstance().create(null, fld);
 					out.print(returnOKMessage);
 				}
