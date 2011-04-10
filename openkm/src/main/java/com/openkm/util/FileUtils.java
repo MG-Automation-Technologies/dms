@@ -38,10 +38,10 @@ public class FileUtils {
 	 * Returns the name of the file whithout the extension.
 	 */
 	public static String getFileName(String file) {
-		log.debug("getFileName("+file+")");
+		log.debug("getFileName({})", file);
 		int idx = file.lastIndexOf(".");
 		String ret = idx>=0?file.substring(0, idx):file;
-		log.debug("getFileName: "+ret);
+		log.debug("getFileName: {}", ret);
 		return ret;
 	}
 	
@@ -49,10 +49,10 @@ public class FileUtils {
 	 * Returns the filename extension.
 	 */
 	public static String getFileExtension(String file) {
-		log.debug("getFileExtension("+file+")");
+		log.debug("getFileExtension({})", file);
 		int idx = file.lastIndexOf(".");
 		String ret = idx>=0?file.substring(idx+1):"";
-		log.debug("getFileExtension: "+ret);
+		log.debug("getFileExtension: {}", ret);
 		return ret;
 	}
 	
@@ -60,10 +60,10 @@ public class FileUtils {
 	 * Get parent node.
 	 */
 	public static String getParent(String path) {
-		log.debug("getParent("+path+")");
+		log.debug("getParent({})", path);
 		int lastSlash = path.lastIndexOf('/');
 		String ret = (lastSlash > 0)?path.substring(0, lastSlash):"";
-		log.debug("getParent: "+ret);
+		log.debug("getParent: {}", ret);
 		return ret;	
 	}
 
@@ -71,9 +71,9 @@ public class FileUtils {
 	 * Get node name.
 	 */
 	public static String getName(String path) {
-		log.debug("getName("+path+")");
-		String ret = path.substring(path.lastIndexOf('/')+1);
-		log.debug("getName: "+ret);
+		log.debug("getName({})", path);
+		String ret = path.substring(path.lastIndexOf('/') + 1);
+		log.debug("getName: {}", ret);
 		return ret;
 	}
 	
@@ -81,7 +81,7 @@ public class FileUtils {
 	 * Eliminate dangerous chars in node name.
 	 */
 	public static String escape(String name) {
-		log.debug("escape("+name+")");
+		log.debug("escape({})", name);
 		String ret = name.replace('/', ' ');
 		ret = ret.replace(':', ' ');
 		ret = ret.replace('[', ' ');
@@ -91,7 +91,7 @@ public class FileUtils {
 		ret = ret.replace('"', ' ');
 		ret = ret.replace('|', ' ');
 		ret = ret.trim();
-		log.debug("escape: "+ret);
+		log.debug("escape: {}", ret);
 		return ret;
 	}
 	
