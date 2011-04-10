@@ -220,12 +220,7 @@ public class ConfigDAO  {
 			stFile.setName(FileUtils.getName(path));
 			stFile.setMime(com.openkm.core.Config.mimeTypes.getContentType(stFile.getName()));
 			String value = getProperty(key, new Gson().toJson(stFile), Config.FILE);
-			
-			if (value == null) {
-				return null;
-			} else {
-				return stFile;
-			}
+			return new Gson().fromJson(value, StoredFile.class);
 		} finally {
 			IOUtils.closeQuietly(is);
 		}
