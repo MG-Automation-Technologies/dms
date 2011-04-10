@@ -120,7 +120,7 @@ public class DirectDocumentModule implements DocumentModule {
 			
 			// Escape dangerous chars in name
 			name = FileUtils.escape(name);
-			doc.setPath(parent+"/"+name);
+			doc.setPath(parent + "/" + name);
 			
 			// Check file restrictions
 			String mimeType = Config.mimeTypes.getContentType(name.toLowerCase());
