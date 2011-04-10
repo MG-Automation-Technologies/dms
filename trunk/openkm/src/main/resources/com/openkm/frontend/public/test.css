@@ -1534,3 +1534,21 @@ iframe {
   	cursor:hand;
   	height: 20px;
 }
+
+/* forum */
+.okm-Forum-Topic {
+	color: #105289;
+	font-size: 1.2em;
+    font-weight: bold;
+    text-decoration: none;
+    cursor:pointer; 
+  	cursor:hand;
+}
+
+.okm-Forum-User {
+	color : #105289; 
+}
+
+.okm-Forum-Gray {
+	color: #898989;
+}
