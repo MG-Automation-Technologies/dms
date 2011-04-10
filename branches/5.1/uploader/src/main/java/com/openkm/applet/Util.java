@@ -55,12 +55,12 @@ public class Util {
 		form.addPart("file", new FileBody(file));
 		form.addPart("path", new StringBody(path, Charset.forName("UTF-8")));
 		form.addPart("action", new StringBody("0")); // FancyFileUpload.ACTION_INSERT
-		HttpPost post = new HttpPost(url+"/frontend/FileUpload;jsessionid="+token);
-		post.setHeader("Cookie", "jsessionid="+token);
+		HttpPost post = new HttpPost(url + "/frontend/FileUpload;jsessionid=" + token);
+		post.setHeader("Cookie", "jsessionid=" + token);
 		post.setEntity(form);
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
 		String response = client.execute(post, responseHandler);
-		log.info("createDocument: "+response);
+		log.info("createDocument: " + response);
 		return response;
 	}
 
@@ -74,12 +74,12 @@ public class Util {
 		form.addPart("folder", new StringBody(file.getName(), Charset.forName("UTF-8")));
 		form.addPart("path", new StringBody(path, Charset.forName("UTF-8")));
 		form.addPart("action", new StringBody("2")); // FancyFileUpload.ACTION_FOLDER
-		HttpPost post = new HttpPost(url+"/frontend/FileUpload;jsessionid="+token);
-		post.setHeader("Cookie", "jsessionid="+token);
+		HttpPost post = new HttpPost(url + "/frontend/FileUpload;jsessionid=" + token);
+		post.setHeader("Cookie", "jsessionid=" + token);
 		post.setEntity(form);
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
 		String response = client.execute(post, responseHandler);
-		log.info("createFolder: "+response);
+		log.info("createFolder: " + response);
 		return response;
 	}
 
