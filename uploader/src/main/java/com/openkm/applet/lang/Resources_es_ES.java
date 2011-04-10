@@ -26,7 +26,8 @@ public class Resources_es_ES extends Resources {
 	protected Object[][] getContents() {
 		return new Object[][] { 
 			{ "drag.here", "Arrastra aquí" }, 
-			{ "exit", "Salir" }
+			{ "exit", "Salir" },
+			{ "about", "Acerca de" }
 		};
 	}
 }

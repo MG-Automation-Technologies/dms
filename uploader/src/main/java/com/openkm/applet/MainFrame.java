@@ -78,7 +78,8 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 	private JSObject win;
 	private BufferedImage logo;
 	private JPopupMenu popupMenu;
-	private JMenuItem menuItem;
+	private JMenuItem miExit;
+	private JMenuItem miAbout;
 
 	/**
 	 * Auto-generated main method to display this JFrame
@@ -127,7 +128,8 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 		addMouseListener(pl);
 		WindowListener wl = new WindowListener();
 		addWindowListener(wl);
-		menuItem.addActionListener(this);
+		miExit.addActionListener(new ExitListener());
+		miAbout.addActionListener(new AboutListener(this));
 
 		// Set instances
 		this.token = token;
@@ -155,8 +157,11 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 		try {
 			new DropTarget(getContentPane(), this);
 			popupMenu = new JPopupMenu();
-			menuItem = new JMenuItem(Messages.get("exit"));
-			popupMenu.add(menuItem);
+			miExit = new JMenuItem(Messages.get("exit"));
+			popupMenu.add(miExit);
+			miAbout = new JMenuItem(Messages.get("about"));
+			popupMenu.add(miAbout);
+			
 			setSize(logo.getWidth(), logo.getHeight());
 		} catch (Exception e) {
 			log.log(Level.SEVERE, e.getMessage(), e);
@@ -204,8 +209,6 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		log.info("actionPerformed(" + e + ")");
-		setVisible(false);
-		dispose();
 	}
 
 	@Override
@@ -296,13 +299,13 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 				String response = Util.createDocument(token, path, url, fs);
 				if (!response.startsWith("OKM_OK")) {
 					log.log(Level.SEVERE, "Error: " + response);
-					ErrorCode.displayError(response, path+"/"+fs.getName());
+					ErrorCode.displayError(response, path + "/" + fs.getName());
 				}
 			} else if (fs.isDirectory()) {
 				String response = Util.createFolder(token, path, url, fs);
 				if (!response.startsWith("OKM_OK")) {
 					log.log(Level.SEVERE, "Error: " + response);
-					ErrorCode.displayError(response, path+"/"+fs.getName());
+					ErrorCode.displayError(response, path + "/" + fs.getName());
 				}
 
 				File[] files = fs.listFiles();
@@ -372,5 +375,34 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 						JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
+	}
+	
+	/**
+	 * Handle Exit
+	 */
+	class ExitListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			log.info("actionPerformed(" + e + ")");
+			setVisible(false);
+			dispose();
+		}
+	}
+	
+	/**
+	 * Handle About
+	 */
+	class AboutListener implements ActionListener {
+		private JFrame frame;
+		
+		public AboutListener(JFrame frame) {
+			this.frame = frame;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JOptionPane.showMessageDialog(frame, "OpenKM Uploader v" + JarUtils.getAppVersion(),
+					"About", JOptionPane.INFORMATION_MESSAGE);
+		}	
 	}
 }

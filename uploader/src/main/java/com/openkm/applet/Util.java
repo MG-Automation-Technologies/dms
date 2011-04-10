@@ -46,7 +46,7 @@ public class Util {
 	private static Logger log = Logger.getLogger(Util.class.getName());
 	
 	/**
-	 * 
+	 * Call to create document
 	 */
 	public static String createDocument(String token, String path, String url, File file) throws IOException {
 		log.info("createDocument(" + token + ", " + path + ", " + url + ", " + file + ")");
@@ -55,7 +55,7 @@ public class Util {
 		form.addPart("file", new FileBody(file));
 		form.addPart("path", new StringBody(path, Charset.forName("UTF-8")));
 		form.addPart("action", new StringBody("0")); // FancyFileUpload.ACTION_INSERT
-		HttpPost post = new HttpPost(url+"/frontend/FileUpload;jsessionid="+token);
+		HttpPost post = new HttpPost(url + "/frontend/FileUpload;jsessionid="+token);
 		post.setHeader("Cookie", "jsessionid="+token);
 		post.setEntity(form);
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
@@ -65,7 +65,7 @@ public class Util {
 	}
 
 	/**
-	 * 
+	 * Call to create folder
 	 */
 	public static String createFolder(String token, String path, String url, File file) throws IOException {
 		log.info("createFolder(" + token + ", " + path + ", " + url + ", " + file + ")");
@@ -74,7 +74,7 @@ public class Util {
 		form.addPart("folder", new StringBody(file.getName(), Charset.forName("UTF-8")));
 		form.addPart("path", new StringBody(path, Charset.forName("UTF-8")));
 		form.addPart("action", new StringBody("2")); // FancyFileUpload.ACTION_FOLDER
-		HttpPost post = new HttpPost(url+"/frontend/FileUpload;jsessionid="+token);
+		HttpPost post = new HttpPost(url + "/frontend/FileUpload;jsessionid="+token);
 		post.setHeader("Cookie", "jsessionid="+token);
 		post.setEntity(form);
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
@@ -84,7 +84,7 @@ public class Util {
 	}
 
 	/**
-	 * 
+	 * Parse drag & drop info
 	 */
 	public static List<File> textURIListToFileList(String data) {
 		List<File> list = new ArrayList<File>(1);
