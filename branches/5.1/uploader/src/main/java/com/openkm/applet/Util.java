@@ -46,7 +46,7 @@ public class Util {
 	private static Logger log = Logger.getLogger(Util.class.getName());
 	
 	/**
-	 * 
+	 * Call to create document
 	 */
 	public static String createDocument(String token, String path, String url, File file) throws IOException {
 		log.info("createDocument(" + token + ", " + path + ", " + url + ", " + file + ")");
@@ -65,7 +65,7 @@ public class Util {
 	}
 
 	/**
-	 * 
+	 * Call to create folder
 	 */
 	public static String createFolder(String token, String path, String url, File file) throws IOException {
 		log.info("createFolder(" + token + ", " + path + ", " + url + ", " + file + ")");
@@ -84,7 +84,7 @@ public class Util {
 	}
 
 	/**
-	 * 
+	 * Parse drag & drop info 
 	 */
 	public static List<File> textURIListToFileList(String data) {
 		List<File> list = new ArrayList<File>(1);
