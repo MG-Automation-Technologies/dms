@@ -214,14 +214,14 @@ public class ForumDAO {
 	@SuppressWarnings("unchecked")
 	public static List<ForumTopic> findAllTopicByUuid(String uuid) throws DatabaseException {
 		log.debug("findAllTopicByUuid({})");
-		String qs = "from ForumTopic ft";		
+		String qs = "from ForumTopic ft where ft.uuid=:uuid";		
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
-			//q.setString("uuid", uuid);
+			q.setString("uuid", uuid);
 			List<ForumTopic> ret = q.list();
 
 			log.debug("findAllTopicByUuid: {}", ret);
