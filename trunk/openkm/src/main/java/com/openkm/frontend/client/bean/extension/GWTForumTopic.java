@@ -22,23 +22,69 @@
 package com.openkm.frontend.client.bean.extension;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
- * GWTActivity
+ * GWTForumTopic
  * 
  * @author jllort
  *
  */
-public class GWTActivity implements IsSerializable {
+public class GWTForumTopic implements IsSerializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
+	private String title;
 	private Date date;
 	private String user;
-	private String action;
-	private String item;
-	private String params;
+	private String uuid;
+	private int replies;
+	private int views;
+	private String lastUser;
+	private Date lastDate;
+	private Set<GWTForumPost> posts = new HashSet<GWTForumPost>();
+	
+	public String getLastUser() {
+		return lastUser;
+	}
+
+	public void setLastUser(String lastUser) {
+		this.lastUser = lastUser;
+	}
+
+	public Date getLastDate() {
+		return lastDate;
+	}
+
+	public void setLastDate(Date lastDate) {
+		this.lastDate = lastDate;
+	}
+
+	public int getReplies() {
+		return replies;
+	}
+
+	public void setReplies(int replies) {
+		this.replies = replies;
+	}
+
+	public int getViews() {
+		return views;
+	}
+
+	public void setViews(int views) {
+		this.views = views;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
 	
 	public int getId() {
 		return id;
@@ -48,56 +94,35 @@ public class GWTActivity implements IsSerializable {
 		this.id = id;
 	}
 	
-	public String getAction() {
-		return action;
+	public String getTitle() {
+		return title;
 	}
 	
-	public void setAction(String action) {
-		this.action = action;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
+	public Set<GWTForumPost> getPosts() {
+		return posts;
+	}
+	
+	public void setPosts(Set<GWTForumPost> posts) {
+		this.posts = posts;
+	}
+
 	public Date getDate() {
 		return date;
 	}
-	
+
 	public void setDate(Date date) {
 		this.date = date;
-	}
-	
-	public String getItem() {
-		return item;
-	}
-
-	public void setItem(String item) {
-		this.item = item;
-	}
-	
-	public String getParams() {
-		return params;
-	}
-	
-	public void setParams(String params) {
-		this.params = params;
 	}
 	
 	public String getUser() {
 		return user;
 	}
-	
+
 	public void setUser(String user) {
 		this.user = user;
-	}
-	
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("{");
-		sb.append("id="); sb.append(id);
-		sb.append(", date="); sb.append(date==null?null:date.getTime());
-		sb.append(", user="); sb.append(user);
-		sb.append(", action="); sb.append(action);
-		sb.append(", item="); sb.append(item);
-		sb.append(", params="); sb.append(params);
-		sb.append("}");
-		return sb.toString();
 	}
 }
