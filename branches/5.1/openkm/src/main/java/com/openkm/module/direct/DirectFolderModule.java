@@ -80,7 +80,7 @@ public class DirectFolderModule implements FolderModule {
 
 			// Escape dangerous chars in name
 			name = FileUtils.escape(name);
-			fld.setPath(parent+"/"+name);
+			fld.setPath(parent + "/" + name);
 			
 			// Create node
 			Node folderNode = BaseFolderModule.create(session, parentNode, name);
