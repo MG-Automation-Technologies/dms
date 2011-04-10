@@ -78,6 +78,8 @@ import com.openkm.dao.bean.Language;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.UserConfig;
 import com.openkm.extension.dao.bean.Contact;
+import com.openkm.extension.dao.bean.ForumPost;
+import com.openkm.extension.dao.bean.ForumTopic;
 import com.openkm.extension.dao.bean.MessageReceived;
 import com.openkm.extension.dao.bean.MessageSent;
 import com.openkm.extension.dao.bean.ProposedQueryReceived;
@@ -121,6 +123,8 @@ import com.openkm.frontend.client.bean.GWTVersion;
 import com.openkm.frontend.client.bean.GWTWorkflowComment;
 import com.openkm.frontend.client.bean.extension.GWTActivity;
 import com.openkm.frontend.client.bean.extension.GWTContact;
+import com.openkm.frontend.client.bean.extension.GWTForumPost;
+import com.openkm.frontend.client.bean.extension.GWTForumTopic;
 import com.openkm.frontend.client.bean.extension.GWTMessageReceived;
 import com.openkm.frontend.client.bean.extension.GWTProposedQueryReceived;
 import com.openkm.frontend.client.bean.extension.GWTProposedQuerySent;
@@ -1409,5 +1413,89 @@ public class GWTUtil {
 		gWTActivity.setUser(activity.getUser());
 		
 		return gWTActivity;
+	}
+	
+	/**
+	 * Copy ForumTopic to GWTForumTopic
+	 * 
+	 * @param ForumTopic 
+	 * @return
+	 */
+	public static GWTForumTopic copy(ForumTopic topic) {
+		GWTForumTopic ft = new GWTForumTopic();
+		ft.setDate(topic.getDate().getTime());
+		ft.setId(topic.getId());
+		ft.setReplies(topic.getReplies());
+		ft.setLastDate(topic.getLastDate().getTime());
+		ft.setLastUser(topic.getLastUser());
+		ft.setTitle(topic.getTitle());
+		ft.setUser(topic.getUser());
+		ft.setUuid(topic.getUuid());
+		ft.setViews(topic.getViews());
+		for (Iterator<ForumPost> it = topic.getPosts().iterator(); it.hasNext();) {
+			ft.getPosts().add(copy(it.next()));
+		}
+		return ft;
+	}
+	
+	/**
+	 * Copy ForumPost to GWTForumPost
+	 * 
+	 * @param ForumPost 
+	 * @return
+	 */
+	public static GWTForumPost copy(ForumPost post) {
+		GWTForumPost fp = new GWTForumPost();
+		fp.setDate(post.getDate().getTime());
+		fp.setId(post.getId());
+		fp.setMessage(post.getMessage());
+		fp.setSubject(post.getSubject());
+		fp.setUser(post.getUser());
+		return fp;
+	}
+	
+	/**
+	 * Copy GWTForumTopic to ForumTopic
+	 * 
+	 * @param GWTForumTopic 
+	 * @return
+	 */
+	public static ForumTopic copy(GWTForumTopic topic) {
+		ForumTopic ft = new ForumTopic();
+		Calendar date = Calendar.getInstance();
+		date.setTime(topic.getDate());
+		ft.setDate(date);
+		ft.setId(topic.getId());
+		ft.setReplies(topic.getReplies());
+		Calendar lastDate = Calendar.getInstance();
+		lastDate.setTime(topic.getLastDate());
+		ft.setLastDate(lastDate);
+		ft.setLastUser(topic.getLastUser());
+		ft.setTitle(topic.getTitle());
+		ft.setUser(topic.getUser());
+		ft.setUuid(topic.getUuid());
+		ft.setViews(topic.getViews());
+		for (Iterator<GWTForumPost> it = topic.getPosts().iterator(); it.hasNext();) {
+			ft.getPosts().add(copy(it.next()));
+		}
+		return ft;
+	}
+	
+	/**
+	 * Copy ForumPost to GWTForumPost
+	 * 
+	 * @param ForumPost 
+	 * @return
+	 */
+	public static ForumPost copy(GWTForumPost post) {
+		ForumPost fp = new ForumPost();
+		Calendar date = Calendar.getInstance();
+		date.setTime(post.getDate());
+		fp.setDate(date);
+		fp.setId(post.getId());
+		fp.setMessage(post.getMessage());
+		fp.setSubject(post.getSubject());
+		fp.setUser(post.getUser());
+		return fp;
 	}
 }
