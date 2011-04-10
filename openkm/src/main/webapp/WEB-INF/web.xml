@@ -190,6 +190,10 @@
     <servlet-class>com.openkm.extension.servlet.ZohoFileUploadServlet</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>ForumServlet</servlet-name>
+    <servlet-class>com.openkm.extension.servlet.ForumServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>TestServlet</servlet-name>
     <servlet-class>com.openkm.servlet.frontend.TestServlet</servlet-class>
   </servlet>
@@ -540,6 +544,10 @@
   <servlet-mapping>
     <servlet-name>ZohoServlet</servlet-name>
     <url-pattern>/extension/Zoho</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ForumServlet</servlet-name>
+    <url-pattern>/extension/Forum</url-pattern>
   </servlet-mapping>
   
   <!-- Misc servlets mappings -->
