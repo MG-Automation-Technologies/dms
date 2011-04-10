@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.HibernateUtil;
 import com.openkm.extension.dao.bean.Forum;
+import com.openkm.extension.dao.bean.ForumTopic;
 
 /**
  * ExtensionDAO
@@ -91,6 +92,29 @@ public class ForumDAO {
 	}
 	
 	/**
+	 * Update
+	 */
+	public static void update(ForumTopic topic) throws DatabaseException {
+		log.debug("update({})", topic);
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			session.update(topic);
+			HibernateUtil.commit(tx);
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("update: void");
+	}
+	
+	/**
 	 * Delete
 	 */
 	public static void delete(int frmId) throws DatabaseException {
@@ -115,10 +139,10 @@ public class ForumDAO {
 	}
 	
 	/**
-	 * Finde by pk
+	 * Find by pk
 	 */
-	public static Forum findByPk(int frmId) throws DatabaseException {
-		log.debug("findAll({})");
+	public static Forum findByPk(int id) throws DatabaseException {
+		log.debug("findByPk({})");
 		String qs = "from Forum frm where frm.id=:id";		
 		Session session = null;
 		Transaction tx = null;
@@ -126,9 +150,30 @@ public class ForumDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
-			q.setInteger("id", frmId);
+			q.setInteger("id", id);
 			Forum ret = (Forum) q.setMaxResults(1).uniqueResult();
 			log.debug("findByPk: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Find by pk
+	 */
+	public static ForumTopic findTopicByPk(int id) throws DatabaseException {
+		log.debug("findTopicByPk({})");	
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			ForumTopic ret = (ForumTopic) session.load(ForumTopic.class, id);
+			log.debug("findTopicByPk: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
@@ -154,6 +199,32 @@ public class ForumDAO {
 			List<Forum> ret = q.list();
 
 			log.debug("findAll: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Find all forums
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<ForumTopic> findAllTopicByUuid(String uuid) throws DatabaseException {
+		log.debug("findAllTopicByUuid({})");
+		String qs = "from ForumTopic ft";		
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			//q.setString("uuid", uuid);
+			List<ForumTopic> ret = q.list();
+
+			log.debug("findAllTopicByUuid: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
