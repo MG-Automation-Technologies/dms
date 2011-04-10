@@ -21,24 +21,22 @@
 
 package com.openkm.frontend.client.bean.extension;
 
+import java.io.Serializable;
 import java.util.Date;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
-
 /**
- * GWTActivity
+ * GWTForumPost
  * 
  * @author jllort
  *
  */
-public class GWTActivity implements IsSerializable {
+public class GWTForumPost implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
-	private Date date;
 	private String user;
-	private String action;
-	private String item;
-	private String params;
+	private String subject;
+	private String message;
+	private Date date;
 	
 	public int getId() {
 		return id;
@@ -46,38 +44,6 @@ public class GWTActivity implements IsSerializable {
 	
 	public void setId(int id) {
 		this.id = id;
-	}
-	
-	public String getAction() {
-		return action;
-	}
-	
-	public void setAction(String action) {
-		this.action = action;
-	}
-	
-	public Date getDate() {
-		return date;
-	}
-	
-	public void setDate(Date date) {
-		this.date = date;
-	}
-	
-	public String getItem() {
-		return item;
-	}
-
-	public void setItem(String item) {
-		this.item = item;
-	}
-	
-	public String getParams() {
-		return params;
-	}
-	
-	public void setParams(String params) {
-		this.params = params;
 	}
 	
 	public String getUser() {
@@ -88,16 +54,27 @@ public class GWTActivity implements IsSerializable {
 		this.user = user;
 	}
 	
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("{");
-		sb.append("id="); sb.append(id);
-		sb.append(", date="); sb.append(date==null?null:date.getTime());
-		sb.append(", user="); sb.append(user);
-		sb.append(", action="); sb.append(action);
-		sb.append(", item="); sb.append(item);
-		sb.append(", params="); sb.append(params);
-		sb.append("}");
-		return sb.toString();
+	public String getSubject() {
+		return subject;
+	}
+	
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+	
+	public String getMessage() {
+		return message;
+	}
+	
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 }
