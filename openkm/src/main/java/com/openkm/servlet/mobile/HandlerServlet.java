@@ -2,6 +2,7 @@ package com.openkm.servlet.mobile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -93,8 +94,12 @@ public class HandlerServlet extends HttpServlet {
 		}
 		
 		path = new String(path.getBytes("ISO-8859-1"), "UTF-8");
-		sc.setAttribute("folderChilds", OKMFolder.getInstance().getChilds(null, path));
-		sc.setAttribute("documentChilds", OKMDocument.getInstance().getChilds(null, path));
+		List<Folder> fldList = OKMFolder.getInstance().getChilds(null, path);
+		Collections.sort(fldList, FolderComparator.getInstance());
+		List<Document> docList = OKMDocument.getInstance().getChilds(null, path);
+		Collections.sort(docList, DocumentComparator.getInstance());
+		sc.setAttribute("folderChilds", fldList);
+		sc.setAttribute("documentChilds", docList);
 		sc.setAttribute("userId", userId);
 		sc.setAttribute("path", path);
 		sc.getRequestDispatcher("/mobile/browse.jsp").forward(request, response);
