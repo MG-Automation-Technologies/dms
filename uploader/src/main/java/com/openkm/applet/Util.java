@@ -82,6 +82,24 @@ public class Util {
 		log.info("createFolder: " + response);
 		return response;
 	}
+	
+	/**
+	 * Eliminate dangerous chars in node name.
+	 */
+	public static String escape(String name) {
+		log.fine("escape("+name+")");
+		String ret = name.replace('/', ' ');
+		ret = ret.replace(':', ' ');
+		ret = ret.replace('[', ' ');
+		ret = ret.replace(']', ' ');
+		ret = ret.replace('*', ' ');
+		ret = ret.replace('\'', ' ');
+		ret = ret.replace('"', ' ');
+		ret = ret.replace('|', ' ');
+		ret = ret.trim();
+		log.fine("escape: "+ret);
+		return ret;
+	}
 
 	/**
 	 * Parse drag & drop info 
