@@ -79,6 +79,7 @@ public class FileUtils {
 	
 	/**
 	 * Eliminate dangerous chars in node name.
+	 * TODO Keep on sync with uploader:com.openkm.applet.Util.escape(String)
 	 */
 	public static String escape(String name) {
 		log.debug("escape({})", name);
