@@ -177,6 +177,6 @@ public class HandlerServlet extends HttpServlet {
 		log.debug("logout({}, {})", request, response);
 		OKMAuth.getInstance().logout(null);
 		request.getSession().invalidate();
-		response.sendRedirect(request.getContextPath());
+		response.sendRedirect("index.jsp");
 	}
 }
