@@ -182,18 +182,6 @@
     <servlet-class>com.openkm.extension.servlet.ActivityLogServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>ZohoServlet</servlet-name>
-    <servlet-class>com.openkm.extension.servlet.ZohoServlet</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>ZohoFileUploadServlet</servlet-name>
-    <servlet-class>com.openkm.extension.servlet.ZohoFileUploadServlet</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>ForumServlet</servlet-name>
-    <servlet-class>com.openkm.extension.servlet.ForumServlet</servlet-class>
-  </servlet>
-  <servlet>
     <servlet-name>TestServlet</servlet-name>
     <servlet-class>com.openkm.servlet.frontend.TestServlet</servlet-class>
   </servlet>
@@ -325,7 +313,7 @@
     <servlet-name>RepositorySearchServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.RepositorySearchServlet</servlet-class>
   </servlet>
-  <servlet>
+   <servlet>
     <servlet-name>InstallationResetServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.InstallationResetServlet</servlet-class>
   </servlet>
@@ -541,14 +529,6 @@
     <servlet-name>FrontendActivityLogServlet</servlet-name>
     <url-pattern>/extension/ActivityLog</url-pattern>
   </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ZohoServlet</servlet-name>
-    <url-pattern>/extension/Zoho</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ForumServlet</servlet-name>
-    <url-pattern>/extension/Forum</url-pattern>
-  </servlet-mapping>
   
   <!-- Misc servlets mappings -->
   <servlet-mapping>
@@ -562,10 +542,6 @@
   <servlet-mapping>
     <servlet-name>DownloadServlet</servlet-name>
     <url-pattern>/Download</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ZohoFileUploadServlet</servlet-name>
-    <url-pattern>/ZohoFileUpload</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>MimeIconServlet</servlet-name>

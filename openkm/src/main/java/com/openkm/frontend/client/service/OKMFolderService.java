@@ -23,7 +23,6 @@ package com.openkm.frontend.client.service;
 
 import java.util.List;
 import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTFolder;
@@ -34,9 +33,10 @@ import com.openkm.frontend.client.bean.GWTFolder;
  * @author jllort
  *
  */
-@RemoteServiceRelativePath("Folder")
 public interface OKMFolderService extends RemoteService {
+
 	public List<GWTFolder> getChilds (String fldId) throws OKMException;
+	
 	public void delete(String fldPath) throws OKMException;
 	public GWTFolder create(String fldId, String fldIdParent) throws OKMException;
 	public GWTFolder rename(String fldId, String newName) throws OKMException;

@@ -25,12 +25,6 @@ import java.util.Date;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-/**
- * GWTActivity
- * 
- * @author jllort
- *
- */
 public class GWTActivity implements IsSerializable {
 	private static final long serialVersionUID = 1L;
 	private int id;

@@ -26,7 +26,6 @@ public class ModuleManager {
 	private static RepositoryModule repositoryModule = null;
 	private static FolderModule folderModule = null;
 	private static DocumentModule documentModule = null;
-	private static WikiModule wikiModule = null;	
 	private static NoteModule noteModule = null;
 	private static SearchModule searchModule = null;
 	private static PropertyGroupModule propertyGroupModule= null;
@@ -86,18 +85,6 @@ public class ModuleManager {
 		}
 		
 		return documentModule;
-	}
-	
-	/**
-	 * 
-	 */
-	public static synchronized WikiModule getWikiModule() {
-		if (wikiModule == null) {
-			wikiModule = new com.openkm.module.direct.DirectWikiModule();
-			//wikiModule = new com.openkm.module.ejb.EJBWikiModule(); 
-		}
-		
-		return wikiModule;
 	}
 	
 	/**

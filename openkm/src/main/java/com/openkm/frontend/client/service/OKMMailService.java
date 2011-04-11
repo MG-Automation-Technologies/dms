@@ -24,7 +24,6 @@ package com.openkm.frontend.client.service;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTMail;
@@ -33,8 +32,8 @@ import com.openkm.frontend.client.bean.GWTMail;
  * @author jllort
  *
  */
-@RemoteServiceRelativePath("Mail")
 public interface OKMMailService extends RemoteService {
+
 	public List<GWTMail> getChilds(String fldId) throws OKMException;
 	public void delete(String mailPath) throws OKMException;
 	public void move(String docPath, String destPath) throws OKMException;

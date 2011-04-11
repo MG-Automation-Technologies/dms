@@ -27,11 +27,13 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 import com.openkm.frontend.client.service.OKMChatService;
@@ -128,6 +130,8 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 		if (Main.get().mainPanel.bottomPanel.userInfo.isConnectedToChat()) {
 			disconnectChat();
 		} else {
+			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+			endPoint.setServiceEntryPoint(RPCService.AuthService);	
 			authService.logout(callbackLogout);
 			Log.debug("Logout: void");
 		}
@@ -144,6 +148,8 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 		if (Main.get().mainPanel.bottomPanel.userInfo.getChatRoomList().size()>0) {
 			final ChatRoomDialogBox chatRoom = Main.get().mainPanel.bottomPanel.userInfo.getChatRoomList().get(0);
 			chatRoom.setChatRoomActive(false);
+			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+			endPoint.setServiceEntryPoint(RPCService.ChatService);
 			chatService.closeRoom(chatRoom.getRoom(),new AsyncCallback<Object>() {
 				@Override
 				public void onSuccess(Object arg0) {
@@ -162,10 +168,14 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 		} else {
 			// Disconnect chat
 			Main.get().mainPanel.bottomPanel.userInfo.disconnectChat(); // Only used to change view and disabling some RPC
+			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+			endPoint.setServiceEntryPoint(RPCService.ChatService);
 			chatService.logout(new AsyncCallback<Object>() {
 				@Override
 				public void onSuccess(Object result) {
 					// Logout
+					ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+					endPoint.setServiceEntryPoint(RPCService.AuthService);	
 					authService.logout(callbackLogout);
 					Log.debug("Logout: void");
 				}
@@ -173,6 +183,8 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 				public void onFailure(Throwable caught) {
 					Main.get().showError("GetLogoutChat", caught);
 					// If happens some problem always we try logout
+					ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+					endPoint.setServiceEntryPoint(RPCService.AuthService);	
 					authService.logout(callbackLogout);
 					Log.debug("Logout: void");
 				}

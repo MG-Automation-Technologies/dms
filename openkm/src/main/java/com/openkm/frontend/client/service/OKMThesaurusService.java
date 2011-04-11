@@ -24,7 +24,6 @@ package com.openkm.frontend.client.service;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.openkm.frontend.client.OKMException;
 
 /**
@@ -33,7 +32,7 @@ import com.openkm.frontend.client.OKMException;
  * @author jllort
  *
  */
-@RemoteServiceRelativePath("Thesaurus")
 public interface OKMThesaurusService extends RemoteService {
+
 	public List<String> getKeywords(String filter) throws OKMException;
 }

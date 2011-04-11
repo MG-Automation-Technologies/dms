@@ -787,7 +787,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			userTrash = session.getRootNode().getNode(Repository.TRASH + "/"+session.getUserID());
+			userTrash = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
 			
 			for (NodeIterator it = userTrash.getNodes(); it.hasNext(); ) {
 				Node child = it.nextNode();

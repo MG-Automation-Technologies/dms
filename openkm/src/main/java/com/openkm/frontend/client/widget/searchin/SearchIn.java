@@ -26,14 +26,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
@@ -51,12 +50,11 @@ import com.openkm.frontend.client.widget.searchsaved.Status;
  */
 public class SearchIn extends Composite {
 	
-	private static final int TAB_HEIGHT = 20;
 	private static final int CONTROLER_WIDTH = 375;
 	private static final int MINIMUM_TAB_WIDTH = 400;
 	
 	private HorizontalPanel hPanel;
-	public TabLayoutPanel tabPanel;
+	private TabPanel tabPanel;
 	public SearchNormal searchNormal;
 	public SearchAdvanced searchAdvanced;
 	public SearchMetadata searchMetadata;
@@ -75,7 +73,7 @@ public class SearchIn extends Composite {
 	public SearchIn() {
 		futuramaWalking = new FuturamaWalking();
 		hPanel = new HorizontalPanel();
-		tabPanel = new TabLayoutPanel(TAB_HEIGHT, Unit.PX);
+		tabPanel = new TabPanel();
 		searchNormal = new SearchNormal();
 		searchAdvanced = new SearchAdvanced();
 		searchMetadata = new SearchMetadata();
@@ -144,11 +142,10 @@ public class SearchIn extends Composite {
 			tabWidth = width-CONTROLER_WIDTH; // Always trying expand tab panel
 		}
 		tabPanel.setWidth(""+(tabWidth-2));
-		tabPanel.setHeight(""+(height-2));
 		searchNormal.setPixelSize(tabWidth-2, height-22); // Substract tab height
 		searchAdvanced.setPixelSize(tabWidth-2, height-22); // Substract tab height
 		searchMetadata.setPixelSize(tabWidth-2, height-22); // Substract tab height
-		searchControl.setPixelSize(controlWidth-2, height-2); // Substract tab height -2 pixels for vertical line too
+		searchControl.setPixelSize(controlWidth-4, height-2); // Substract tab height -2 pixels for vertical line too
 	}
 	
 	/**
@@ -159,7 +156,7 @@ public class SearchIn extends Composite {
 		searchAdvanced.langRefresh();
 		searchMetadata.langRefresh();
 		searchControl.langRefresh();
-		int selectedTab = tabPanel.getSelectedIndex();
+		int selectedTab = tabPanel.getTabBar().getSelectedTab();
 		while (tabPanel.getWidgetCount() > 0) {
 			tabPanel.remove(0);
 		}

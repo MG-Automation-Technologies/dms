@@ -27,24 +27,24 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.user.client.ui.TabBar;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.extension.event.HasFolderEvent;
 import com.openkm.frontend.client.extension.event.handler.FolderHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasFolderHandlerExtension;
 import com.openkm.frontend.client.extension.widget.tabfolder.TabFolderExtension;
 import com.openkm.frontend.client.service.OKMRepositoryService;
 import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
-import com.openkm.frontend.client.util.Util;
 
 /**
  * The tab folder
@@ -55,11 +55,9 @@ import com.openkm.frontend.client.util.Util;
 public class TabFolder extends Composite implements HasFolderEvent, HasFolderHandlerExtension {
 	
 	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
-	
-	private static final int TAB_HEIGHT = 20;
 	private int SECURITY_TAB = -1;
 	
-	public TabLayoutPanel tabPanel;
+	public TabPanel tabPanel;
 	public Folder folder;
 	private SecurityScrollTable security;
 	public Notes notes;
@@ -77,7 +75,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	public TabFolder() {
 		widgetExtensionList = new ArrayList<TabFolderExtension>();
 		folderHandlerExtensionList = new ArrayList<FolderHandlerExtension>();
-		tabPanel = new TabLayoutPanel(TAB_HEIGHT, Unit.PX);
+		tabPanel = new TabPanel();
 		folder = new Folder();
 		security = new SecurityScrollTable();
 		notes = new Notes();
@@ -89,13 +87,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 				int tabIndex = event.getSelectedItem().intValue();
 				selectedTab = tabIndex;
 				if (tabIndex==SECURITY_TAB) {
-					Timer timer = new Timer() {
-						@Override
-						public void run() {
-							security.fillWidth(); // Always when shows fires fill width
-						}
-					};
-					timer.schedule(50); // Fill width must be done after really it'll be visible
+					security.fillWidth(); // Always when shows fires fill width
 				}
 				fireEvent(HasFolderEvent.TAB_CHANGED);
 			}
@@ -125,14 +117,14 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 		this.height = height;
 		this.width = width;
 		tabPanel.setSize(""+width, ""+height);
-		folder.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
-		security.setPixelSize(width-2,height-TAB_HEIGHT); // Substract tab height
-		notes.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
+		folder.setPixelSize(width,height-20); // Substract tab height
+		security.setPixelSize(width-2,height-22); // Substract tab height
+		notes.setPixelSize(width,height-20); // Substract tab height
 		security.fillWidth();
 		
 		// Setting size to extension
 		for (Iterator<TabFolderExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
-			it.next().setPixelSize(width,height-TAB_HEIGHT);
+			it.next().setPixelSize(width,height-20);
 		}
 		fireEvent(HasFolderEvent.PANEL_RESIZED);
 	}
@@ -143,7 +135,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	public void refreshNotesSize() {
 		// Solve some UI defect on firefox
 		notes.setPixelSize(width-1,height-21); // Substract tab height
-		notes.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
+		notes.setPixelSize(width,height-20); // Substract tab height
 	}
 	
 	/**
@@ -193,7 +185,8 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	 * Refresh language
 	 */
 	public void langRefresh() {
-		selectedTab = tabPanel.getSelectedIndex();
+		TabBar tabBar = tabPanel.getTabBar();
+		selectedTab = tabBar.getSelectedTab();
 		
 		while (tabPanel.getWidgetCount() > 0) {
 			tabPanel.remove(0);
@@ -241,7 +234,9 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	/**
 	 * Gets the root
 	 */
-	public void getRoot() {	
+	public void getRoot() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
+		endPoint.setServiceEntryPoint(RPCService.RepositoryService);	
 		repositoryService.getRootFolder(callbackGetRootFolder);
 	}
 	
@@ -275,24 +270,6 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	public void resizingIncubatorWidgets() {
 		security.setPixelSize(getOffsetWidth()-2, getOffsetHeight()-22); // Substract tab height
 		security.fillWidth();
-		// TODO:Solves minor bug with IE
-		if (Util.getUserAgent().startsWith("ie")) {
-			Timer timer = new Timer() {
-				@Override
-				public void run() {
-					tabPanel.setWidth(""+width);
-					tabPanel.setWidth(""+(width+1));
-					Timer timer = new Timer() {
-						@Override
-						public void run() {
-							tabPanel.setWidth(""+width);
-						}
-					};
-					timer.schedule(50);
-				}
-			};
-			timer.schedule(100);
-		}
 	}
 	
 	/**
@@ -363,7 +340,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	public void showSecurity() {
 		tabPanel.add(security, Main.i18n("tab.folder.security"));
 		securityVisible = true;
-		SECURITY_TAB = tabPanel.getWidgetCount()-1; // Starts at 0
+		SECURITY_TAB = tabPanel.getTabBar().getTabCount()-1; // Starts at 0
 	}
 	
 	/**
@@ -372,7 +349,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	public void showExtensions() {
 		for (TabFolderExtension extension : widgetExtensionList){
 			tabPanel.add(extension, extension.getTabText());
-			extension.setPixelSize(width,height-TAB_HEIGHT);
+			extension.setPixelSize(width,height-20);
 		}
 	}
 	
@@ -380,7 +357,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	 * init
 	 */
 	public void init() {
-		if (tabPanel.getWidgetCount()>0) {
+		if (tabPanel.getTabBar().getTabCount()>0) {
 			tabPanel.selectTab(0);
 			
 			if (securityVisible && folder.get()!=null) {

@@ -124,7 +124,7 @@ public class BenchmarkServlet extends BaseServlet {
 		ImpExpStats tStats = new ImpExpStats();
 		long tBegin = 0, tEnd = 0;
 		response.setContentType("text/html");
-		header(out, "Benchmark");
+		header(out);
 		out.println("<h1>Benchmark: OpenKM import documents</h1>");
 		out.flush();
 		
@@ -190,7 +190,8 @@ public class BenchmarkServlet extends BaseServlet {
 		out.println("<b>Total folders:</b> "+tStats.getFolders()+"<br/>");
 		out.println("<b>Total documents:</b> "+tStats.getDocuments()+"<br/>");
 		out.println("<b>Total time:</b> "+FormatUtil.formatSeconds(tEnd - tBegin)+"<br/>");
-		footer(out);
+		out.print("</body>");
+		out.print("</html>");
 		out.flush();
 		out.close();
 		
@@ -215,7 +216,7 @@ public class BenchmarkServlet extends BaseServlet {
 		ContentInfo cInfo = new ContentInfo();
 		long tBegin = 0, tEnd = 0;
 		response.setContentType("text/html");
-		header(out, "Benchmark");
+		header(out);
 		out.println("<h1>Benchmark: OpenKM copy documents</h1>");
 		out.flush();
 		
@@ -270,7 +271,8 @@ public class BenchmarkServlet extends BaseServlet {
 		out.println("<b>Total folders:</b> "+cInfo.getFolders() * times+"<br/>");
 		out.println("<b>Total documents:</b> "+cInfo.getDocuments() * times+"<br/>");
 		out.println("<b>Total time:</b> "+FormatUtil.formatSeconds(tEnd - tBegin)+"<br/>");
-		footer(out);
+		out.print("</body>");
+		out.print("</html>");
 		out.flush();
 		out.close();
 		
@@ -298,7 +300,7 @@ public class BenchmarkServlet extends BaseServlet {
 		long tBegin = 0, tEnd = 0, pBegin = 0, pEnd = 0;
 		Benchmark bm = null;
 		response.setContentType("text/html");
-		header(out, "Benchmark");
+		header(out);
 		out.println("<h1>Benchmark: OpenKM generate documents (API HIGH)</h1>");
 		out.flush();
 		
@@ -410,7 +412,8 @@ public class BenchmarkServlet extends BaseServlet {
 		out.println("<b>Total documents:</b> "+bm.getTotalDocuments()+"<br/>");
 		out.println("<b>Total time:</b> "+FormatUtil.formatSeconds(elapse)+"<br/>");
 		out.println("<b>Documents per second:</b> "+bm.getTotalDocuments()/(elapse/1000)+"<br/>");
-		footer(out);
+		out.print("</body>");
+		out.print("</html>");
 		out.flush();
 		out.close();
 		results.close();
@@ -440,7 +443,7 @@ public class BenchmarkServlet extends BaseServlet {
 		Benchmark bm = null;
 		Session session = null;
 		response.setContentType("text/html");
-		header(out, "Benchmark");
+		header(out);
 		out.println("<h1>Benchmark: OpenKM generate documents (API LOW)</h1>");
 		out.flush();
 		
@@ -548,7 +551,8 @@ public class BenchmarkServlet extends BaseServlet {
 		out.println("<b>Total documents:</b> "+bm.getTotalDocuments()+"<br/>");
 		out.println("<b>Total time:</b> "+FormatUtil.formatSeconds(elapse)+"<br/>");
 		out.println("<b>Documents per second:</b> "+bm.getTotalDocuments()/(elapse/1000)+"<br/>");
-		footer(out);
+		out.print("</body>");
+		out.print("</html>");
 		out.flush();
 		out.close();
 		results.close();
@@ -578,7 +582,7 @@ public class BenchmarkServlet extends BaseServlet {
 		Benchmark bm = null;
 		Session session = null;
 		response.setContentType("text/html");
-		header(out, "Benchmark");
+		header(out);
 		out.println("<h1>Benchmark: OpenKM generate documents (RAW)</h1>");
 		out.flush();
 		
@@ -683,7 +687,8 @@ public class BenchmarkServlet extends BaseServlet {
 		out.println("<b>Total documents:</b> "+bm.getTotalDocuments()+"<br/>");
 		out.println("<b>Total time:</b> "+FormatUtil.formatSeconds(elapse)+"<br/>");
 		out.println("<b>Documents per second:</b> "+bm.getTotalDocuments()/(elapse/1000)+"<br/>");
-		footer(out);
+		out.print("</body>");
+		out.print("</html>");
 		out.flush();
 		out.close();
 		results.close();
@@ -713,7 +718,7 @@ public class BenchmarkServlet extends BaseServlet {
 		Benchmark bm = null;
 		Session session = null;
 		response.setContentType("text/html");
-		header(out, "Benchmark");
+		header(out);
 		out.println("<h1>Benchmark: Jackrabbit generate documents</h1>");
 		out.flush();
 		
@@ -819,7 +824,8 @@ public class BenchmarkServlet extends BaseServlet {
 		out.println("<b>Total documents:</b> "+bm.getTotalDocuments()+"<br/>");
 		out.println("<b>Total time:</b> "+FormatUtil.formatSeconds(elapse)+"<br/>");
 		out.println("<b>Documents per second:</b> "+bm.getTotalDocuments()/(elapse/1000)+"<br/>");
-		footer(out);
+		out.print("</body>");
+		out.print("</html>");
 		out.flush();
 		out.close();
 		results.close();
@@ -831,5 +837,20 @@ public class BenchmarkServlet extends BaseServlet {
 				", Documents: " + bm.getTotalDocuments() +
 				", Time: " + FormatUtil.formatSeconds(elapse));
 		log.debug("jcrGenerate: void");
+	}
+
+	private void header(PrintWriter out) {
+		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
+		out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
+		out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
+		out.println("<head>");
+		out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />");
+		out.println("<link rel=\"Shortcut icon\" href=\"favicon.ico\" />");
+		out.println("<link rel=\"stylesheet\" href=\"css/style.css\" type=\"text/css\" />");
+		out.println("<script src=\"js/biblioteca.js\" type=\"text/javascript\"></script>");
+		out.println("<script type=\"text/javascript\">scrollToBottom();</script>");
+		out.println("<title>Benchmark</title>");
+		out.println("</head>");
+		out.println("<body>");
 	}
 }
