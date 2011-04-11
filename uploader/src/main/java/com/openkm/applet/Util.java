@@ -85,6 +85,7 @@ public class Util {
 	
 	/**
 	 * Eliminate dangerous chars in node name.
+	 * TODO Keep on sync with openkm:com.openkm.util.FileUtils.escape(String)
 	 */
 	public static String escape(String name) {
 		log.fine("escape("+name+")");
