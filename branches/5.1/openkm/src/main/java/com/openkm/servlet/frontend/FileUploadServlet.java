@@ -191,7 +191,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 							}
 						} else {
 							// Case us uploaded a decrypt document
-							if (doc.getCipherName() !=null && !doc.getCipherName().equals("")) {
+							if (doc.getCipherName() != null && !doc.getCipherName().equals("")) {
 								OKMProperty.getInstance().unsetEncryption(null, path);
 								// In that case is mandatory compact the history too
 								document.purgeVersionHistory(null, path);
