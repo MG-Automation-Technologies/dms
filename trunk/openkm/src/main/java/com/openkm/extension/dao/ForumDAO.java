@@ -145,7 +145,6 @@ public class ForumDAO {
 		log.debug("findByPk({})");
 		String qs = "from Forum frm where frm.id=:id";		
 		Session session = null;
-		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
@@ -155,7 +154,6 @@ public class ForumDAO {
 			log.debug("findByPk: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -168,7 +166,6 @@ public class ForumDAO {
 	public static ForumTopic findTopicByPk(int id) throws DatabaseException {
 		log.debug("findTopicByPk({})");	
 		Session session = null;
-		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
@@ -176,7 +173,6 @@ public class ForumDAO {
 			log.debug("findTopicByPk: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -191,7 +187,6 @@ public class ForumDAO {
 		log.debug("findAll({})");
 		String qs = "from Forum frm order by frm.date asc";		
 		Session session = null;
-		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
@@ -201,7 +196,6 @@ public class ForumDAO {
 			log.debug("findAll: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -216,7 +210,6 @@ public class ForumDAO {
 		log.debug("findAllTopicByUuid({})");
 		String qs = "from ForumTopic ft where ft.uuid=:uuid";		
 		Session session = null;
-		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
@@ -227,7 +220,6 @@ public class ForumDAO {
 			log.debug("findAllTopicByUuid: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
