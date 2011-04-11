@@ -78,8 +78,8 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 	private JSObject win;
 	private BufferedImage logo;
 	private JPopupMenu popupMenu;
-	private JMenuItem miExit;
 	private JMenuItem miAbout;
+	private JMenuItem miExit;
 
 	/**
 	 * Auto-generated main method to display this JFrame
@@ -128,8 +128,8 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 		addMouseListener(pl);
 		WindowListener wl = new WindowListener();
 		addWindowListener(wl);
-		miExit.addActionListener(new ExitListener());
 		miAbout.addActionListener(new AboutListener(this));
+		miExit.addActionListener(new ExitListener());
 
 		// Set instances
 		this.token = token;
@@ -157,10 +157,10 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 		try {
 			new DropTarget(getContentPane(), this);
 			popupMenu = new JPopupMenu();
-			miExit = new JMenuItem(Messages.get("exit"));
-			popupMenu.add(miExit);
 			miAbout = new JMenuItem(Messages.get("about"));
 			popupMenu.add(miAbout);
+			miExit = new JMenuItem(Messages.get("exit"));
+			popupMenu.add(miExit);
 			
 			setSize(logo.getWidth(), logo.getHeight());
 		} catch (Exception e) {
@@ -310,7 +310,7 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 
 				File[] files = fs.listFiles();
 				for (int i = 0; i < files.length; i++) {
-					createDocumentHelper(token, path + "/" + fs.getName(), url, files[i]);
+					createDocumentHelper(token, path + "/" + Util.escape(fs.getName()), url, files[i]);
 				}
 			} else {
 				log.log(Level.WARNING, "Unknown file type");
