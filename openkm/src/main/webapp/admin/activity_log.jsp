@@ -33,9 +33,9 @@
           <tr>
             <td>
               From <input type="text" name="dbegin" id="dbegin" value="${dbeginFilter}" size="15" readonly="readonly"/>
-              <img src="js/jscalendar/img.gif" id="f_trigger_begin" align="absmiddle"/>
+              <img src="img/action/calendar.png" id="f_trigger_begin" style="vertical-align: middle;"/>
               To <input type="text" name="dend" id="dend" value="${dendFilter}" size="15" readonly="readonly"/>
-              <img src="js/jscalendar/img.gif" id="f_trigger_end" align="absmiddle"/>
+              <img src="img/action/calendar.png" id="f_trigger_end" style="vertical-align: middle;"/>
               User <select name="user">
                 <option value=""></option>
                 <c:forEach var="user" items="${users}" varStatus="row">
