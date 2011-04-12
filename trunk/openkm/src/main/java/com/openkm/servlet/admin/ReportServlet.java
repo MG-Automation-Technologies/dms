@@ -278,7 +278,7 @@ public class ReportServlet extends BaseServlet {
 		log.debug("execParams({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
 		int rpId = WebUtils.getInt(request, "rp_id");
-		Set<ReportParameter> params = ReportDAO.findParamAll(rpId);
+		Set<ReportParameter> params = ReportDAO.findByPk(rpId).getParams();
 		
 		for (ReportParameter rpp : params) {
 			if (ReportParameter.INPUT.equals(rpp.getType())) {
@@ -397,7 +397,8 @@ public class ReportServlet extends BaseServlet {
 		log.debug("paramList({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
 		int rpId = WebUtils.getInt(request, "rp_id");
-		Set<ReportParameter> params = ReportDAO.findParamAll(rpId);
+		Report rep = ReportDAO.findByPk(rpId);
+		Set<ReportParameter> params = rep.getParams();
 		
 		for (ReportParameter rpp : params) {
 			if (ReportParameter.INPUT.equals(rpp.getType())) {
@@ -430,7 +431,9 @@ public class ReportServlet extends BaseServlet {
 			rpp.setLabel(WebUtils.getString(request, "rpp_label"));
 			rpp.setName(WebUtils.getString(request, "rpp_name"));
 			rpp.setType(WebUtils.getString(request, "rpp_type"));
-			ReportDAO.addParam(rpId, rpp);
+			Report rp = ReportDAO.findByPk(rpId);
+			rp.getParams().add(rpp);
+			ReportDAO.update(rp);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "ADMIN_REPORT_PARAMETER_CREATE", Integer.toString(rpId), rpp.toString());
