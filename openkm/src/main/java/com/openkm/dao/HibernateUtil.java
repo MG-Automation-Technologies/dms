@@ -152,12 +152,11 @@ public class HibernateUtil {
 	/**
 	 * HQL to SQL translator
 	 */
-	 public static String toSql(String hqlQueryText) {
-		 if (hqlQueryText != null && hqlQueryText.trim().length() > 0) {
+	 public static String toSql(String hql) {
+		 if (hql != null && hql.trim().length() > 0) {
 			 final QueryTranslatorFactory qtf = new ASTQueryTranslatorFactory();
 			 final SessionFactoryImplementor sfi = (SessionFactoryImplementor) sessionFactory;
-			 final QueryTranslator translator = qtf.createQueryTranslator(hqlQueryText, 
-					 hqlQueryText, Collections.EMPTY_MAP, sfi);
+			 final QueryTranslator translator = qtf.createQueryTranslator(hql, hql, Collections.EMPTY_MAP, sfi);
 			 translator.compile(Collections.EMPTY_MAP, false);
 			 return translator.getSQLString(); 
 		 }
