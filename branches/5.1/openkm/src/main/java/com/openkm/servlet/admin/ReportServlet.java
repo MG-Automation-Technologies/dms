@@ -266,7 +266,6 @@ public class ReportServlet extends BaseServlet {
 		}
 		
 		sc.setAttribute("reports", list);
-		sc.setAttribute("ReportUtil", new ReportUtils());
 		sc.getRequestDispatcher("/admin/report_list.jsp").forward(request, response);
 		log.debug("list: void");
 	}
