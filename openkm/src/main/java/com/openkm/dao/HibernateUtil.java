@@ -24,12 +24,17 @@ package com.openkm.dao;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.sql.Blob;
+import java.util.Collections;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.engine.SessionFactoryImplementor;
+import org.hibernate.hql.QueryTranslator;
+import org.hibernate.hql.QueryTranslatorFactory;
+import org.hibernate.hql.ast.ASTQueryTranslatorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -143,4 +148,20 @@ public class HibernateUtil {
 		
 		return null;
 	}
+	
+	/**
+	 * HQL to SQL translator
+	 */
+	 public static String toSql(String hqlQueryText) {
+		 if (hqlQueryText != null && hqlQueryText.trim().length() > 0) {
+			 final QueryTranslatorFactory qtf = new ASTQueryTranslatorFactory();
+			 final SessionFactoryImplementor sfi = (SessionFactoryImplementor) sessionFactory;
+			 final QueryTranslator translator = qtf.createQueryTranslator(hqlQueryText, 
+					 hqlQueryText, Collections.EMPTY_MAP, sfi);
+			 translator.compile(Collections.EMPTY_MAP, false);
+			 return translator.getSQLString(); 
+		 }
+		 
+		 return null;
+	 }
 }
