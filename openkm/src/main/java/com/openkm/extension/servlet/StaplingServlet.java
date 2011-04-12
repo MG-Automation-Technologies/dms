@@ -51,6 +51,7 @@ public class StaplingServlet extends OKMRemoteServiceServlet implements OKMStapl
 	public String create(String user, String uuid, String type, String uuid2, String type2) throws OKMException {
 		StapleGroup stapleGroup = new StapleGroup();
 		stapleGroup.setUser(user);
+		
 		try {
 			// Creating stapling group
 			int id = StapleGroupDAO.create(stapleGroup);
@@ -78,19 +79,21 @@ public class StaplingServlet extends OKMRemoteServiceServlet implements OKMStapl
 		try {
 			StapleGroup stapleGroup = StapleGroupDAO.findByPk(Integer.valueOf(id));
 			boolean found = false;
+			
 			for (Staple st : stapleGroup.getStaples()) {
 				if (st.getUuid().equals(uuid)) {
 					found = true;
 					break;
 				}
 			}
+			
 			// Only we add if document not exists
 			if (!found) {
 				Staple staple = new Staple();
 				staple.setUuid(uuid);
 				staple.setType(type);
 				stapleGroup.getStaples().add(staple); // Added first
-				StapleGroupDAO.update(stapleGroup); 	// Updating
+				StapleGroupDAO.update(stapleGroup); // Updating
 			}
 		} catch (NumberFormatException e) {
 			log.error(e.getMessage(), e);
@@ -104,6 +107,7 @@ public class StaplingServlet extends OKMRemoteServiceServlet implements OKMStapl
 	@Override
 	public List<GWTStapleGroup> getAll(String uuid) throws OKMException {
 		List<GWTStapleGroup> stapList = new ArrayList<GWTStapleGroup>();
+		
 		try {
 			for (StapleGroup sg : StapleGroupDAO.findAll(uuid)) {
 				stapList.add(GWTUtil.copy(sg));
@@ -118,6 +122,7 @@ public class StaplingServlet extends OKMRemoteServiceServlet implements OKMStapl
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
 		}
+		
 		return stapList;
 	}
 	
@@ -125,6 +130,7 @@ public class StaplingServlet extends OKMRemoteServiceServlet implements OKMStapl
 	public void removeAllStapleByUuid(String uuid) throws OKMException {
 		try {
 			List<String> idToDelete = new ArrayList<String>();
+			
 			for (StapleGroup sg : StapleGroupDAO.findAll(uuid)) {
 				for (Staple staple : sg.getStaples()) {
 					if (staple.getUuid().equals(uuid)) {
@@ -132,6 +138,7 @@ public class StaplingServlet extends OKMRemoteServiceServlet implements OKMStapl
 					}
 				}
 			}
+			
 			for (String id : idToDelete) {
 				StapleGroupDAO.deleteStaple(Integer.parseInt(id));
 			}
