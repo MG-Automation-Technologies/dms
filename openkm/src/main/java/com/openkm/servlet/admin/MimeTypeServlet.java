@@ -149,7 +149,7 @@ public class MimeTypeServlet extends BaseServlet {
 						is.close();
 					}
 				}
-			
+				
 				if (action.equals("create")) {
 					// Because this servlet is also used for SQL import and in that case I don't
 					// want to waste a b64Encode conversion. Call it a sort of optimization.
