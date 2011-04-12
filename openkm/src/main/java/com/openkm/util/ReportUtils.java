@@ -134,6 +134,12 @@ public class ReportUtils {
 		
 		if (query != null) {
 			Interpreter bsh = new Interpreter(null, System.out, System.err, false);
+			
+			// Set parameters
+			for (Map.Entry<String, String> entry : parameters.entrySet()) {
+				bsh.set(entry.getKey(), entry.getValue());
+			}
+			
 			@SuppressWarnings("rawtypes")
 			Collection list = (Collection) bsh.eval(query.getText());
 			JasperPrint print = JasperFillManager.fillReport(jr, parameters, 
