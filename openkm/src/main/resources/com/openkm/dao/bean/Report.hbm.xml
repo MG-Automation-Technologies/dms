@@ -10,7 +10,7 @@
     <property name="fileMime" column="RP_FILE_MIME" not-null="true"/>
     <property name="fileName" column="RP_FILE_NAME" not-null="true"/>
     <property name="active" column="RP_ACTIVE" type="true_false" not-null="true"/>
-    <set name="params" table="OKM_REPORT_PARAMETER" order-by="RPP_ID asc" cascade="all-delete-orphan">
+    <set name="params" table="OKM_REPORT_PARAMETER" order-by="RPP_ID asc" cascade="all-delete-orphan" lazy="false">
       <key column="RPP_REPORT"/>
       <one-to-many class="com.openkm.dao.bean.ReportParameter"/>
     </set>
