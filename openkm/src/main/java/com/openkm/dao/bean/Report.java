@@ -22,23 +22,25 @@
 package com.openkm.dao.bean;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class Report implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
 	public static final String SQL = "sql";
 	public static final String HIBERNATE = "hibernate";
 	public static final String XPATH = "xpath";
 	public static final String COLLECTION = "collection";
 	public static final String SCRIPT = "script";
+	
 	private int id;
 	private String name;
 	private String type;
 	private String fileContent;
 	private String fileMime;
 	private String fileName;
-	private Set<ReportParameter> params = new HashSet<ReportParameter>();
+	private Set<ReportParameter> params = new LinkedHashSet<ReportParameter>();
 	private boolean active;
 	
 	public int getId() {
