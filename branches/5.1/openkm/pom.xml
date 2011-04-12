@@ -64,7 +64,7 @@
     <repository>
       <id>jboss.org</id>
       <name>JBoss Maven Repository</name>
-      <url>http://repository.jboss.org/maven2</url>
+      <url>http://repository.jboss.org/nexus/content/groups/public</url>
     </repository>
 
     <!-- Needed for com.google.gwt:gchart -->
@@ -319,7 +319,7 @@
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate</artifactId>
-      <version>3.2.3.ga</version>
+      <version>3.2.6.ga</version>
       <exclusions>
         <exclusion>
           <groupId>javax.transaction</groupId>
