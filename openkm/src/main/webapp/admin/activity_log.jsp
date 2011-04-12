@@ -77,7 +77,7 @@
       <br/>
       <table class="results" width="100%">
         <thead>
-          <tr><th>Date</th><th>User</th><th>Action</th><th>Item</th><th>Params</th></tr>
+          <tr><th>Date</th><th>User</th><th>Action</th><th>Item</th><th>Parameters</th></tr>
         </thead>
         <tbody>
           <c:forEach var="act" items="${results}" varStatus="row">
