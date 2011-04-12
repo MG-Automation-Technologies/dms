@@ -22,7 +22,6 @@
 package com.openkm.dao;
 
 import java.util.List;
-import java.util.Set;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -68,7 +67,7 @@ public class ReportDAO {
 	 */
 	public static void update(Report rp) throws DatabaseException {
 		log.debug("update({})", rp);
-		String qs = "select rp.fileContent, rp.fileName from Report rp where rp.id=:id";
+		String qs = "select rp.fileContent, rp.fileName, rp.fileMime from Report rp where rp.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -82,6 +81,7 @@ public class ReportDAO {
 				Object[] data = (Object[]) q.setMaxResults(1).uniqueResult();
 				rp.setFileContent((String) data[0]);
 				rp.setFileName((String) data[1]);
+				rp.setFileMime((String) data[2]);
 			}
 			
 			session.update(rp);
@@ -118,30 +118,6 @@ public class ReportDAO {
 		}
 		
 		log.debug("delete: void");
-	}
-	
-	/**
-	 * Add parameter
-	 */
-	public static void addParam(int rpId, ReportParameter rpp) throws DatabaseException {
-		log.debug("addParam({}, rpp)", rpId, rpp);
-		Session session = null;
-		Transaction tx = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-			Report rp = (Report) session.load(Report.class, rpId);
-			rp.getParams().add(rpp);
-			session.update(rp);
-			HibernateUtil.commit(tx);
-			log.debug("addParam: void");
-		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
 	}
 	
 	/**
@@ -250,30 +226,6 @@ public class ReportDAO {
 			ReportParameter ret = (ReportParameter) q.setMaxResults(1).uniqueResult();
 			log.debug("findParamByPk: {}", ret);
 			return ret;
-		} catch (HibernateException e) {
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-	}
-	
-	/**
-	 * Find by report
-	 */
-	public static Set<ReportParameter> findParamAll(int rpId) throws DatabaseException {
-		log.debug("findParamAll({})", rpId);
-		Session session = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			Report rp = (Report) session.load(Report.class, rpId);
-			Set<ReportParameter> params = rp.getParams();
-			
-			// Disable object lazy loading
-			for (ReportParameter rpp : params) { rpp.getId(); }
-			
-			log.debug("findParamAll: {}", params);
-			return params;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
