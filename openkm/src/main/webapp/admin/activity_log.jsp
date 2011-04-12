@@ -75,7 +75,6 @@
         </table>
       </form>
       <br/>
-      <div id="magic">
       <table class="results" width="100%">
         <thead>
           <tr><th>Date</th><th>User</th><th>Action</th><th>Item</th><th>Params</th></tr>
@@ -89,7 +88,6 @@
           </c:forEach>
         </tbody>
       </table>
-      </div>
     </c:when>
     <c:otherwise>
       <div class="error"><h3>Only admin users allowed</h3></div>
