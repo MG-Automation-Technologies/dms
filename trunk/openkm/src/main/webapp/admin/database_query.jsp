@@ -64,6 +64,10 @@
         </tr>
       </table>
       <br/>
+      <c:if test="${sql != null}">
+        <center><c:out value="${sql}"/></center>
+        <br/>
+      </c:if>
       <c:choose>
         <c:when test="${rows != null}">
           <center>Row Count: ${rows}</center>
