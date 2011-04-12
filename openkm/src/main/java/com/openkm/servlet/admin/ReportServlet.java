@@ -136,6 +136,8 @@ public class ReportServlet extends BaseServlet {
 				paramEdit(session, request, response);
 			} else if (action.equals("paramDelete")) {
 				paramDelete(session, request, response);
+			} else if (action.equals("execParams")) {
+				execParams(session, request, response);
 			} else if (action.equals("execute")) {
 				execute(session, request, response);
 			} else {
@@ -270,6 +272,35 @@ public class ReportServlet extends BaseServlet {
 	}
 	
 	/**
+	 * Show report parameters, previous step to execution
+	 */
+	private void execParams(Session session, HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException, DatabaseException {	
+		log.debug("execParams({}, {}, {})", new Object[] { session, request, response });
+		ServletContext sc = getServletContext();
+		int rpId = WebUtils.getInt(request, "rp_id");
+		Set<ReportParameter> params = ReportDAO.findByPk(rpId).getParams();
+		
+		for (ReportParameter rpp : params) {
+			if (ReportParameter.INPUT.equals(rpp.getType())) {
+				rpp.setType("Input");
+			} else if (ReportParameter.TEXTAREA.equals(rpp.getType())) {
+				rpp.setType("TextArea");
+			} else if (ReportParameter.DATE.equals(rpp.getType())) {
+				rpp.setType("Date");
+			} else if (ReportParameter.PATH.equals(rpp.getType())) {
+				rpp.setType("Path");
+			}
+		}
+		
+		sc.setAttribute("rp_id", rpId);
+		sc.setAttribute("params", params);
+		sc.setAttribute("ReportUtil", new ReportUtils());
+		sc.getRequestDispatcher("/admin/report_exec.jsp").forward(request, response);
+		log.debug("execParams: void");
+	}
+	
+	/**
 	 * Execute report
 	 */
 	private void execute(Session session, HttpServletRequest request, HttpServletResponse response) throws 
@@ -307,6 +338,10 @@ public class ReportServlet extends BaseServlet {
 		Map<String, String> parameters = new HashMap<String, String>();
 		String host = com.openkm.core.Config.APPLICATION_URL;
 		parameters.put("host", host.substring(0, host.lastIndexOf("/")+1));
+		
+		for (ReportParameter rpp : rp.getParams()) {
+			parameters.put(rpp.getName(), WebUtils.getString(request, rpp.getName()));
+		}
 		
 		ByteArrayOutputStream baos = null;
 		ByteArrayInputStream bais = null;

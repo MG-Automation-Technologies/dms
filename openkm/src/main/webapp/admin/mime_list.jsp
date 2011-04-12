@@ -39,18 +39,18 @@
             </th>
           </tr>
         </thead>
-        <c:forEach var="mt" items="${mimeTypes}" varStatus="row">
-          <c:url value="/mime/${mt.name}" var="urlIcon">
-          </c:url>
-          <c:url value="MimeType" var="urlEdit">
-            <c:param name="action" value="edit"/>
-            <c:param name="mt_id" value="${mt.id}"/>
-          </c:url>
-          <c:url value="MimeType" var="urlDelete">
-            <c:param name="action" value="delete"/>
-            <c:param name="mt_id" value="${mt.id}"/>
-          </c:url>
-          <tbody>
+        <tbody>
+          <c:forEach var="mt" items="${mimeTypes}" varStatus="row">
+            <c:url value="/mime/${mt.name}" var="urlIcon">
+            </c:url>
+            <c:url value="MimeType" var="urlEdit">
+              <c:param name="action" value="edit"/>
+              <c:param name="mt_id" value="${mt.id}"/>
+            </c:url>
+            <c:url value="MimeType" var="urlDelete">
+              <c:param name="action" value="delete"/>
+              <c:param name="mt_id" value="${mt.id}"/>
+            </c:url>
             <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
               <td>${mt.name}</td>
               <td align="center"><img src="${urlIcon}"/></td>
