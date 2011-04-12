@@ -415,7 +415,7 @@ public class ReportServlet extends BaseServlet {
 		sc.setAttribute("rp_id", rpId);
 		sc.setAttribute("params", params);
 		sc.getRequestDispatcher("/admin/report_param_list.jsp").forward(request, response);
-		log.debug("list: void");
+		log.debug("paramList: void");
 	}
 	
 	/**
