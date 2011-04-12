@@ -40,7 +40,7 @@
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
             <td>${rpp.label}</td><td>${rpp.name}</td><td>${rpp.type}</td>
-            <td>
+            <td align="center">
               <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
               &nbsp;
               <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
