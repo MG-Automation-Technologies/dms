@@ -212,7 +212,14 @@ public class ReportServlet extends BaseServlet {
 					UserActivity.log(session.getUserID(), "ADMIN_REPORT_CREATE", Integer.toString(id), rp.toString());
 					list(session, request, response);
 				} else if (action.equals("edit")) {
-					ReportDAO.update(rp);
+					Report tmp = ReportDAO.findByPk(rp.getId());
+					tmp.setActive(rp.isActive());
+					tmp.setFileContent(rp.getFileContent());
+					tmp.setFileMime(rp.getFileMime());
+					tmp.setFileName(rp.getName());
+					tmp.setName(rp.getName());
+					tmp.setType(rp.getType());
+					ReportDAO.update(tmp);
 					
 					// Activity log
 					UserActivity.log(session.getUserID(), "ADMIN_REPORT_EDIT", Integer.toString(rp.getId()), rp.toString());
