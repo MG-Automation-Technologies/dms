@@ -26,12 +26,19 @@
           <tr>
             <th>Label</th><th>Name</th><th>Type</th><th>Value</th>
           </tr>
-          <c:forEach var="rpp" items="${params}" varStatus="row">
-            <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-              <td>${rpp.label}</td><td>${rpp.name}</td><td>${rpp.type}</td>
-              <td><input name="${rpp.name}" value="" /></td>
-            </tr>
-          </c:forEach>
+          <c:choose>
+            <c:when test="${empty params}">
+              <tr><td colspan="4" align="center">No parameters defined</td></tr>
+            </c:when>
+            <c:otherwise>
+              <c:forEach var="rpp" items="${params}" varStatus="row">
+                <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
+                  <td>${rpp.label}</td><td>${rpp.name}</td><td>${rpp.type}</td>
+                  <td><input name="${rpp.name}" value="" /></td>
+                </tr>
+              </c:forEach>
+            </c:otherwise>
+          </c:choose>
           <tr class="fuzzy">
             <td colspan="4" align="right">
               <button onclick="$('#out').val('<c:out value="${ReportUtils.OUTPUT_PDF}"/>')"><img src="img/action/pdf.png" alt="Generate PDF" title="Generate PDF"/></button>
