@@ -436,7 +436,7 @@ public class ReportServlet extends BaseServlet {
 			ReportDAO.update(rp);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_REPORT_PARAMETER_CREATE", Integer.toString(rp.getId()), rpp.toString());
+			UserActivity.log(session.getUserID(), "ADMIN_REPORT_PARAMETER_CREATE", Integer.toString(rpId), rpp.toString());
 			paramList(session, request, response);
 		} else {
 			ServletContext sc = getServletContext();
@@ -471,7 +471,6 @@ public class ReportServlet extends BaseServlet {
 			paramList(session, request, response);
 		} else {
 			ServletContext sc = getServletContext();
-			//int rpId = WebUtils.getInt(request, "rp_id");
 			int rppId = WebUtils.getInt(request, "rpp_id");
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
@@ -491,7 +490,6 @@ public class ReportServlet extends BaseServlet {
 		log.debug("paramDelete({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
-			//int rpId = WebUtils.getInt(request, "rp_id");
 			int rppId = WebUtils.getInt(request, "rpp_id");
 			ReportDAO.deleteParam(rppId);
 			
@@ -500,7 +498,6 @@ public class ReportServlet extends BaseServlet {
 			paramList(session, request, response);
 		} else {
 			ServletContext sc = getServletContext();
-			//int rpId = WebUtils.getInt(request, "rp_id");
 			int rppId = WebUtils.getInt(request, "rpp_id");
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
