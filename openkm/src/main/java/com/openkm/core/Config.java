@@ -195,6 +195,7 @@ public class Config {
 	public static final String PROPERTY_HIBERNATE_DATASOURCE = "hibernate.datasource";
 	public static final String PROPERTY_HIBERNATE_HBM2DDL = "hibernate.hbm2ddl"; // Used in login.jsp
 	public static final String PROPERTY_HIBERNATE_SHOW_SQL = "hibernate.show_sql";
+	public static final String PROPERTY_HIBERNATE_STATISTICS = "hibernate.statistics";
 	
 	// Logo icons
 	public static final String PROPERTY_LOGO_LOGIN = "logo.login";
@@ -357,6 +358,7 @@ public class Config {
 	public static String HIBERNATE_DATASOURCE = "java:/OpenKMDS";
 	public static String HIBERNATE_HBM2DDL = "create";
 	public static String HIBERNATE_SHOW_SQL = "false";
+	public static String HIBERNATE_STATISTICS = "false";
 	
 	// Logo icons
 	public static StoredFile LOGO_LOGIN;
@@ -475,6 +477,8 @@ public class Config {
 			values.put(PROPERTY_HIBERNATE_HBM2DDL, HIBERNATE_HBM2DDL);
 			HIBERNATE_SHOW_SQL = config.getProperty(PROPERTY_HIBERNATE_SHOW_SQL, HIBERNATE_SHOW_SQL);
 			values.put(PROPERTY_HIBERNATE_SHOW_SQL, HIBERNATE_SHOW_SQL);
+			HIBERNATE_STATISTICS = config.getProperty(PROPERTY_HIBERNATE_STATISTICS, HIBERNATE_STATISTICS);
+			values.put(PROPERTY_HIBERNATE_STATISTICS, HIBERNATE_STATISTICS);
 			
 			// Misc
 			SYSTEM_MULTIPLE_INSTANCES = "on".equalsIgnoreCase(config.getProperty(PROPERTY_SYSTEM_MULTIPLE_INSTANCES, "off"));
