@@ -406,9 +406,12 @@ public class WorkflowServlet extends BaseServlet {
 		Map<String, List<FormElement>> procDefForms = OKMWorkflow.getInstance().getProcessDefinitionForms(null, ti.getProcessInstance().getProcessDefinition().getId());
 		List<Map<String, String>> pdf = new ArrayList<Map<String,String>>();
 		Map<String, String> vars = new HashMap<String, String>();
+		List<FormElement> fes = procDefForms.get(ti.getName());
 		
-		for (FormElement fe : procDefForms.get(ti.getName())) {
-			pdf.add(getMap(fe));
+		if (fes != null) {
+			for (FormElement fe : fes) {
+				pdf.add(getMap(fe));
+			}
 		}
 		
 		for (Entry<String, Object> entry : ti.getVariables().entrySet()) {
