@@ -214,6 +214,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 		}
 		
 		sc.setAttribute("qs", qs);
+		sc.setAttribute("sql", HibernateUtil.toSql(qs));
 		sc.setAttribute("method", "hibernate");
 		sc.setAttribute("errors", null);
 		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
@@ -267,6 +268,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 		}
 		
 		sc.setAttribute("qs", qs);
+		sc.setAttribute("sql", null);
 		sc.setAttribute("method", "jdbc");
 		sc.setAttribute("errors", null);
 		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);

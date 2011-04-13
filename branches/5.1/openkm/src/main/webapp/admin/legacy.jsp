@@ -28,6 +28,7 @@
         <a href="repository_checker.jsp">Repository checker</a><br/>
         <a href="installation_reset.jsp">Installation reset</a><br/>
         <a href="config.jsp">Configuration</a><br/>
+        <a href="HibernateStats">Hibernate stats</a><br/>
         <a href="${urlAddTranslation}">Add translation term</a><br/>
       </center>
     </c:when>
