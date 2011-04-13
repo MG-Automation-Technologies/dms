@@ -79,7 +79,7 @@
             <td>
               <a href="${urlProcessInstanceView}"><img src="img/action/examine.png" alt="Examine" title="Examine"/></a>
               &nbsp;
-              <a href="${urlProcessInstanceDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+              <a href="${urlProcessInstanceDelete}" onclick="return confirm('Are you sure you want to delete?')"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
               <c:if test="${pi.end == null}">
                 &nbsp;
                 <a href="${urlProcessInstanceEnd}"><img src="img/action/end.png" alt="End" title="End"/></a>
