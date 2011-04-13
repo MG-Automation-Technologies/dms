@@ -22,7 +22,7 @@
 package com.openkm.frontend.client.bean.extension;
 
 import java.util.Date;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -44,7 +44,7 @@ public class GWTForumTopic implements IsSerializable {
 	private int views;
 	private String lastUser;
 	private Date lastDate;
-	private Set<GWTForumPost> posts = new HashSet<GWTForumPost>();
+	private Set<GWTForumPost> posts = new LinkedHashSet<GWTForumPost>();
 	
 	public String getLastUser() {
 		return lastUser;
