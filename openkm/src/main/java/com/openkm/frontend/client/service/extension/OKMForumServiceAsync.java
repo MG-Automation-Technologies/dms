@@ -35,10 +35,13 @@ import com.openkm.frontend.client.bean.extension.GWTForumTopic;
  *
  */
 public interface OKMForumServiceAsync extends RemoteService {
+	public void getTopicsByForum(int id, AsyncCallback<List<GWTForumTopic>> callback);
 	public void getTopicsByUuid(String uuid, AsyncCallback<List<GWTForumTopic>> callback);
 	public void createTopic(int id, String uuid, GWTForumTopic topic, AsyncCallback<GWTForumTopic> callback);
 	public void findTopicByPK(int id, AsyncCallback<GWTForumTopic> callback);
 	public void createPost(int id, GWTForumPost post, AsyncCallback<?> callback);
 	public void increaseTopicView(int id, AsyncCallback<?> callback);
 	public void increateTopicReplies(int id, AsyncCallback<?> callback);
+	public void deletePost(int forumId, int topicId, int postId, AsyncCallback<Boolean> callback);
+	public void updatePost(GWTForumPost post, AsyncCallback<?> callback);
 }

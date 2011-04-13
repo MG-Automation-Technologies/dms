@@ -37,10 +37,13 @@ import com.openkm.frontend.client.bean.extension.GWTForumTopic;
  */
 @RemoteServiceRelativePath("../extension/Forum")
 public interface OKMForumService extends RemoteService {
+	public List<GWTForumTopic> getTopicsByForum(int id) throws OKMException;
 	public List<GWTForumTopic> getTopicsByUuid(String uuid) throws OKMException;
 	public GWTForumTopic createTopic(int id, String uuid, GWTForumTopic topic) throws OKMException;
 	public GWTForumTopic findTopicByPK(int id) throws OKMException;
 	public void createPost(int id, GWTForumPost post) throws OKMException;
 	public void increaseTopicView(int id) throws OKMException;
 	public void increateTopicReplies(int id) throws OKMException;
+	public Boolean deletePost(int forumId, int topicId, int postId) throws OKMException;
+	public void updatePost(GWTForumPost post) throws OKMException;
 }
