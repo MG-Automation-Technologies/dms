@@ -15,7 +15,32 @@
   <c:set var="isAdmin"><%=BaseServlet.isAdmin(request)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
-      <h1>Hibernate stats</h1>
+      <c:url value="HibernateStats" var="urlReload">
+      </c:url>
+      <c:url value="HibernateStats" var="urlActivate">
+        <c:param name="action" value="activate"/>
+      </c:url>
+      <c:url value="HibernateStats" var="urlDeactivate">
+        <c:param name="action" value="deactivate"/>
+      </c:url>
+      <c:url value="HibernateStats" var="urlClear">
+        <c:param name="action" value="clear"/>
+      </c:url>
+      <table align="center">
+        <tr>
+          <td><h1>Hibernate stats</h1></td>
+          <td> &nbsp; <a href="${urlReload}"><img src="img/action/reload.png" alt="Reload" title="Reload"/></a></td>
+          <td> &nbsp; <a href="${urlClear}"><img src="img/action/clear.png" alt="Clear" title="Clear"/></a></td>
+          <c:choose>
+            <c:when test="${statsEnabled}">
+              <td> &nbsp; <a href="${urlDeactivate}"><img src="img/action/enabled.png" alt="Enabled" title="Enabled"/></a></td>
+            </c:when>
+            <c:otherwise>
+              <td> &nbsp; <a href="${urlActivate}"><img src="img/action/disabled.png" alt="Disabled" title="Disabled"/></a></td>
+            </c:otherwise>
+          </c:choose>
+        </tr>
+      </table>
       <table class="results" width="30%">
         <tr><th>Element</th><th>Value</th></tr>
         <tr class="even"><td><b>Connects</b></td><td>${generalStats[0]}</td></tr>
