@@ -263,6 +263,8 @@ public class DirectWorkflowModule implements WorkflowModule {
 			if (is != null) {
 				forms = FormUtils.parseWorkflowForms(is);
 				is.close();
+			} else {
+				log.warn("Process definition '{}' has no forms.xml file", processDefinitionId);
 			}
 			
 			// Activity log
