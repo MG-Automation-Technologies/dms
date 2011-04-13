@@ -45,6 +45,7 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.dao.HibernateUtil;
 import com.openkm.util.UserActivity;
+import com.openkm.util.WebUtils;
 
 /**
  * Hibernate statistics servlet
@@ -82,8 +83,68 @@ public class HibernateStatsServlet extends BaseServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws 
 			ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
+		String action = WebUtils.getString(request, "action");
 		updateSessionManager(request);
-		view(request, response);
+		
+		try {
+			if (action.equals("activate")) {
+				activate(request, response);
+			} else if (action.equals("deactivate")) {
+				deactivate(request, response);
+			} else if (action.equals("clear")) {
+				clear(request, response);
+			}
+			
+			view(request, response);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		}
+	}
+	
+	/**
+	 * Activate stats
+	 */
+	private void activate(HttpServletRequest request, HttpServletResponse response) throws IOException,
+			ServletException {
+		Statistics stats = HibernateUtil.getSessionFactory().getStatistics();
+		
+		if (!stats.isStatisticsEnabled()) {
+			stats.setStatisticsEnabled(true);
+		}
+	}
+	
+	/**
+	 * Deactivate stats
+	 */
+	private void deactivate(HttpServletRequest request, HttpServletResponse response) throws IOException,
+			ServletException {
+		Statistics stats = HibernateUtil.getSessionFactory().getStatistics();
+		
+		if (stats.isStatisticsEnabled()) {
+			stats.setStatisticsEnabled(false);
+		}
+	}
+	
+	/**
+	 * Clear stats
+	 */
+	private void clear(HttpServletRequest request, HttpServletResponse response) throws IOException,
+			ServletException {
+		HibernateUtil.getSessionFactory().getStatistics().clear();
+	    generalStatistics.set(0, new Long(0));
+	    generalStatistics.set(1, new Long(0));
+	    generalStatistics.set(2, new Long(0));
+	    generalStatistics.set(3, new Long(0));
+	    generalStatistics.set(4, new Long(0));
+	    generalStatistics.set(5, new Long(0));
+	    generalStatistics.set(6, new Long(0));
+	    generalStatistics.set(7, new Long(0));
+	    generalStatistics.set(8, new Long(0));
+	    queryStatistics.clear();
+	    entityStatistics.clear();
+	    collectionStatistics.clear();
+	    secondLevelCacheStatistics.clear();
 	}
 	
 	/**
@@ -166,6 +227,7 @@ public class HibernateStatsServlet extends BaseServlet {
 		sc.setAttribute("collectionStats", cStats);
 		sc.setAttribute("secondLevelCacheStats", slcStats);
 		sc.setAttribute("totalSizeInMemory", totalSizeInMemory);
+		sc.setAttribute("statsEnabled", HibernateUtil.getSessionFactory().getStatistics().isStatisticsEnabled());
 		sc.getRequestDispatcher("/admin/hibernate_stats.jsp").forward(request, response);
 		
 		// Activity log
@@ -179,7 +241,6 @@ public class HibernateStatsServlet extends BaseServlet {
 	 */
 	private synchronized void refresh() {
 		Statistics statistics = HibernateUtil.getSessionFactory().getStatistics();
-		String [] names;
 		generalStatistics.set(0, statistics.getConnectCount());
 		generalStatistics.set(1, statistics.getFlushCount());
 		generalStatistics.set(2, statistics.getPrepareStatementCount());
@@ -190,7 +251,7 @@ public class HibernateStatsServlet extends BaseServlet {
 		generalStatistics.set(7, statistics.getSuccessfulTransactionCount());
 		generalStatistics.set(8, statistics.getOptimisticFailureCount());
 		queryStatistics.clear();
-		names = statistics.getQueries();
+		String [] names = statistics.getQueries();
 		
 		if (names != null && names.length > 0) {
 			for (int i=0; i<names.length; i++) {
