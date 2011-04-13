@@ -76,19 +76,19 @@ public class RegisterWorkflowServlet extends BaseServlet {
 			}
 		} catch (ParseException e) {
 			log.error(e.getMessage(), e);
-			throw new ServletException(e.getMessage());
+			sendErrorRedirect(request,response, e);
 		} catch (WorkflowException e) {
 			log.error(e.getMessage(), e);
-			throw new ServletException(e.getMessage());
+			sendErrorRedirect(request,response, e);
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
-			throw new ServletException(e.getMessage());
+			sendErrorRedirect(request,response, e);
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
-			throw new ServletException(e.getMessage());
+			sendErrorRedirect(request,response, e);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			throw new ServletException(e.getMessage());
+			sendErrorRedirect(request,response, e);
 		} finally {
 			out.flush();
 			out.close();
