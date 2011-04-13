@@ -235,7 +235,7 @@
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
             <td>${var.key}</td><td>${var.value}</td>
             <td>
-              <a href="${urlProcessInstanceVariableDelete}"><img src="img/action/delete.png" alt="Remove" title="Remove"/></a>
+              <a href="${urlProcessInstanceVariableDelete}" onclick="return confirm('Are you sure you want to delete?')"><img src="img/action/delete.png" alt="Remove" title="Remove"/></a>
             </td>
           </tr>
         </c:forEach>
