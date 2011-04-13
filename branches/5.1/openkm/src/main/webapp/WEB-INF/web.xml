@@ -337,6 +337,10 @@
     <servlet-name>DocumentFilterServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.DocumentFilterServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>HibernateStatsServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.HibernateStatsServlet</servlet-class>
+  </servlet>
     
   <!-- WebServices -->
   <servlet>
@@ -680,6 +684,10 @@
   <servlet-mapping>
     <servlet-name>DocumentFilterServlet</servlet-name>
     <url-pattern>/admin/DocumentFilter</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>HibernateStatsServlet</servlet-name>
+    <url-pattern>/admin/HibernateStats</url-pattern>
   </servlet-mapping>
 
   <!-- WebServices Servlet Mappings -->
