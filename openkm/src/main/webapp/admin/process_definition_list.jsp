@@ -41,7 +41,7 @@
             <td>
               <a href="${urlProcessDefinitionView}"><img src="img/action/examine.png" alt="Examine" title="Examine"/></a>
               &nbsp;
-              <a href="${urlProcessDefinitionDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+              <a href="${urlProcessDefinitionDelete}" onclick="return confirm('Are you sure you want to delete?')"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
             </td>
           </tr>
         </c:forEach>
