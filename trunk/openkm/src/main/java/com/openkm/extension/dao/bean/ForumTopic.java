@@ -2,9 +2,15 @@ package com.openkm.extension.dao.bean;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
+/**
+ * ForumTopic
+ * 
+ * @author jllort
+ *
+ */
 public class ForumTopic implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
@@ -16,7 +22,7 @@ public class ForumTopic implements Serializable {
 	private int views;
 	private String lastUser;
 	private Calendar lastDate;
-	private Set<ForumPost> posts = new HashSet<ForumPost>();
+	private Set<ForumPost> posts = new LinkedHashSet<ForumPost>();
 	
 	public String getLastUser() {
 		return lastUser;

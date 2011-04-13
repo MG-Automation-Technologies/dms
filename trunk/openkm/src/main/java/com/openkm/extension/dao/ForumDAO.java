@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.HibernateUtil;
 import com.openkm.extension.dao.bean.Forum;
+import com.openkm.extension.dao.bean.ForumPost;
 import com.openkm.extension.dao.bean.ForumTopic;
 
 /**
@@ -115,6 +116,29 @@ public class ForumDAO {
 	}
 	
 	/**
+	 * Update
+	 */
+	public static void update(ForumPost post) throws DatabaseException {
+		log.debug("update({})", post);
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			session.update(post);
+			HibernateUtil.commit(tx);
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("update: void");
+	}
+	
+	/**
 	 * Delete
 	 */
 	public static void delete(int frmId) throws DatabaseException {
@@ -180,6 +204,25 @@ public class ForumDAO {
 	}
 	
 	/**
+	 * Find by pk
+	 */
+	public static ForumPost findPostByPk(int id) throws DatabaseException {
+		log.debug("findPostByPk({})");	
+		Session session = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			ForumPost ret = (ForumPost) session.load(ForumPost.class, id);
+			log.debug("findPostByPk: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
 	 * Find all forums
 	 */
 	@SuppressWarnings("unchecked")
@@ -203,12 +246,12 @@ public class ForumDAO {
 	}
 	
 	/**
-	 * Find all forums
+	 * Find all topics by uuid
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<ForumTopic> findAllTopicByUuid(String uuid) throws DatabaseException {
 		log.debug("findAllTopicByUuid({})");
-		String qs = "from ForumTopic ft where ft.uuid=:uuid";		
+		String qs = "from ForumTopic ft where ft.uuid=:uuid order by ft.lastDate desc";		
 		Session session = null;
 		
 		try {
@@ -216,7 +259,6 @@ public class ForumDAO {
 			Query q = session.createQuery(qs);
 			q.setString("uuid", uuid);
 			List<ForumTopic> ret = q.list();
-
 			log.debug("findAllTopicByUuid: {}", ret);
 			return ret;
 		} catch (HibernateException e) {

@@ -33,6 +33,7 @@ import java.util.Calendar;
 import com.openkm.core.DatabaseException;
 import com.openkm.extension.dao.ForumDAO;
 import com.openkm.extension.dao.bean.Forum;
+import com.openkm.extension.dao.bean.ForumPost;
 import com.openkm.extension.dao.bean.ForumTopic;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.extension.GWTForumPost;
@@ -53,8 +54,27 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 	private static Logger log = LoggerFactory.getLogger(ForumServlet.class);
 	
 	@Override
+	public List<GWTForumTopic> getTopicsByForum(int id) throws OKMException {
+		log.debug("getTopicsByForum({})",id);
+		updateSessionManager();
+		List<GWTForumTopic> topicList = new ArrayList<GWTForumTopic>(); 
+		
+		try {
+			for (ForumTopic topic : ForumDAO.findByPk(id).getTopics()) {
+				topicList.add(GWTUtil.copy(topic));
+			}
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMForumService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+		log.debug("getTopicsByUuid:"+topicList);
+		return topicList;
+	}
+	
+	@Override
 	public List<GWTForumTopic> getTopicsByUuid(String uuid) throws OKMException {
 		log.debug("getTopicsByUuid({})",uuid);
+		updateSessionManager();
 		List<GWTForumTopic> topicList = new ArrayList<GWTForumTopic>(); 
 		
 		try {
@@ -72,6 +92,7 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 	@Override
 	public GWTForumTopic createTopic(int id, String uuid, GWTForumTopic topic) throws OKMException {
 		log.debug("createTopic({}, {}, {})", new Object[] {id, uuid, topic});
+		updateSessionManager();
 		try {
 			Forum forum = ForumDAO.findByPk(id);
 			topic.setDate(new Date());
@@ -101,6 +122,7 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 	@Override
 	public GWTForumTopic findTopicByPK(int id) throws OKMException {
 		log.debug("findTopicByPK({})",id);
+		updateSessionManager();
 		try {
 			return GWTUtil.copy(ForumDAO.findTopicByPk(id));
 		} catch (DatabaseException e) {
@@ -112,6 +134,7 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 	@Override
 	public void createPost(int id, GWTForumPost post) throws OKMException {
 		log.debug("createPost({},{})",id,post.getSubject());
+		updateSessionManager();
 		try {
 			ForumTopic topic = ForumDAO.findTopicByPk(id);
 			post.setDate(new Date());
@@ -132,6 +155,7 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 	@Override
 	public void increaseTopicView(int id) throws OKMException {
 		log.debug("increaseTopicView({})",id);
+		updateSessionManager();
 		try {
 			ForumTopic topic = ForumDAO.findTopicByPk(id);
 			topic.setViews(topic.getViews()+1);
@@ -145,10 +169,59 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 	@Override
 	public void increateTopicReplies(int id) throws OKMException {
 		log.debug("increateTopicReplies({})",id);
+		updateSessionManager();
 		try {
 			ForumTopic topic = ForumDAO.findTopicByPk(id);
 			topic.setReplies(topic.getReplies()+1);
 			ForumDAO.update(topic);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMForumService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+	}
+
+	@Override
+	public Boolean deletePost(int forumId, int topicId, int postId) throws OKMException {
+		log.debug("deletePost({},{})",topicId, postId);
+		updateSessionManager();
+		try {
+			ForumTopic topic = ForumDAO.findTopicByPk(topicId);
+			for (ForumPost post : topic.getPosts()) {
+				if (post.getId()==postId) {
+					topic.setReplies(topic.getReplies()-1);
+					topic.getPosts().remove(post);
+					break;
+				}
+			}
+			if (topic.getPosts().size()>0) {
+				ForumDAO.update(topic); // Deleting post
+				return new Boolean(true);
+			} else {
+				Forum forum = ForumDAO.findByPk(forumId);
+				for (ForumTopic fp : forum.getTopics()) {
+					if (fp.getId()==topicId) {
+						forum.getTopics().remove(fp);
+						break;
+					}
+				}
+				ForumDAO.update(forum); // Deleting topic
+				return new Boolean(false);
+			}
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMForumService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+	}
+
+	@Override
+	public void updatePost(GWTForumPost post) throws OKMException {
+		log.debug("updatePost({})",post.getId());
+		updateSessionManager();
+		try {
+			ForumPost fp = ForumDAO.findPostByPk(post.getId());
+			fp.setSubject(post.getSubject());
+			fp.setMessage(post.getMessage());
+			ForumDAO.update(fp);
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMForumService, ErrorCode.CAUSE_Database), e.getMessage());
