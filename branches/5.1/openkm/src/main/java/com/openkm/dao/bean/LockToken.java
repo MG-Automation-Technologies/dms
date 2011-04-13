@@ -31,4 +31,14 @@ public class LockToken implements Serializable {
 	public void setToken(String token) {
 		this.token = token;
 	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append("id="); sb.append(id);
+		sb.append(", user="); sb.append(user);
+		sb.append(", token="); sb.append(token);
+		sb.append("}");
+		return sb.toString();
+	}
 }
