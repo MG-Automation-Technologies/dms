@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -164,13 +165,21 @@ public class RepositoryViewServlet extends BaseServlet {
 		log.debug("unlock({}, {}, {}, {})", new Object[] { session, path, request, response });
 		Node node = session.getRootNode().getNode(path.substring(1));
 		Lock lock = node.getLock();
+		String lt = JCRUtils.getLockToken(node.getUUID());
 		
 		if (lock.getLockOwner().equals(session.getUserID())) {
 			JCRUtils.loadLockTokens(session);
-			node.unlock();
-			JCRUtils.removeLockToken(session, node);
+			
+			// If the session contains the lock token of this locked node
+			if (Arrays.binarySearch(session.getLockTokens(), lt) > -1) {
+				node.unlock();
+				JCRUtils.removeLockToken(session, node);
+			} else {
+				session.addLockToken(lt);
+				node.unlock();
+				LockTokenDAO.remove(lock.getLockOwner(), lt);
+			}
 		} else {
-			String lt = JCRUtils.getLockToken(node.getUUID());
 			session.addLockToken(lt);
 			node.unlock();
 			LockTokenDAO.remove(lock.getLockOwner(), lt);
