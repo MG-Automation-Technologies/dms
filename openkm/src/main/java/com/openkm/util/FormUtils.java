@@ -101,7 +101,7 @@ public class FormUtils {
 		} catch (SAXException e) {
 			throw new ParseException(e.getMessage(), e);
 		} catch (IOException e) {
-			throw new ParseException(e.getCause());
+			throw new ParseException(e.getMessage(), e);
 		}
 
 		log.debug("parseWorkflowForms: {}", forms);
