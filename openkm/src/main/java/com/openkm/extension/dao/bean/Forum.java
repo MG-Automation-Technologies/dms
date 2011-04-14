@@ -13,6 +13,8 @@ public class Forum implements Serializable {
 	private Calendar date;
 	private String lastUser;
 	private Calendar lastDate;
+	private int numTopics;
+	private int numPosts;
 	private boolean active;
 	private Set<ForumTopic> topics = new LinkedHashSet<ForumTopic>();
 	
@@ -78,5 +80,21 @@ public class Forum implements Serializable {
 
 	public void setLastDate(Calendar lastDate) {
 		this.lastDate = lastDate;
+	}
+	
+	public int getNumTopics() {
+		return numTopics;
+	}
+
+	public void setNumTopics(int numTopics) {
+		this.numTopics = numTopics;
+	}
+
+	public int getNumPosts() {
+		return numPosts;
+	}
+
+	public void setNumPosts(int numPosts) {
+		this.numPosts = numPosts;
 	}
 }
