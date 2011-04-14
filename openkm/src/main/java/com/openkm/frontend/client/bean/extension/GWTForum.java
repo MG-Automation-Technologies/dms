@@ -19,6 +19,8 @@ public class GWTForum implements Serializable {
 	private Date date;
 	private String lastUser;
 	private Date lastDate;
+	private int numTopics;
+	private int numPosts;
 	private boolean active;
 	private Set<GWTForumTopic> topics = new LinkedHashSet<GWTForumTopic>();
 	
@@ -84,5 +86,21 @@ public class GWTForum implements Serializable {
 
 	public void setLastDate(Date lastDate) {
 		this.lastDate = lastDate;
+	}
+	
+	public int getNumTopics() {
+		return numTopics;
+	}
+
+	public void setNumTopics(int numTopics) {
+		this.numTopics = numTopics;
+	}
+
+	public int getNumPosts() {
+		return numPosts;
+	}
+
+	public void setNumPosts(int numPosts) {
+		this.numPosts = numPosts;
 	}
 }
