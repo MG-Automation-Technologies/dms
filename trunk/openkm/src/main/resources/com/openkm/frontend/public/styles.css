@@ -763,6 +763,7 @@ iframe {
     -khtml-user-select: normal;
     user-select: normal;
     white-space: nowrap;
+    background-color: #fff;
 }
 
 .okm-Input-System {
