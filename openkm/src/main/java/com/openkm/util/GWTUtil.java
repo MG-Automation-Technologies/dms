@@ -78,6 +78,7 @@ import com.openkm.dao.bean.Language;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.UserConfig;
 import com.openkm.extension.dao.bean.Contact;
+import com.openkm.extension.dao.bean.Forum;
 import com.openkm.extension.dao.bean.ForumPost;
 import com.openkm.extension.dao.bean.ForumTopic;
 import com.openkm.extension.dao.bean.MessageReceived;
@@ -123,6 +124,7 @@ import com.openkm.frontend.client.bean.GWTVersion;
 import com.openkm.frontend.client.bean.GWTWorkflowComment;
 import com.openkm.frontend.client.bean.extension.GWTActivity;
 import com.openkm.frontend.client.bean.extension.GWTContact;
+import com.openkm.frontend.client.bean.extension.GWTForum;
 import com.openkm.frontend.client.bean.extension.GWTForumPost;
 import com.openkm.frontend.client.bean.extension.GWTForumTopic;
 import com.openkm.frontend.client.bean.extension.GWTMessageReceived;
@@ -1416,6 +1418,29 @@ public class GWTUtil {
 	}
 	
 	/**
+	 * Copy Forum to GWTForum
+	 * 
+	 * @param Forum 
+	 * @return
+	 */
+	public static GWTForum copy(Forum forum) {
+		GWTForum f = new GWTForum();
+		f.setActive(forum.isActive());
+		f.setDate(forum.getDate().getTime());
+		f.setDescription(forum.getDescription());
+		f.setId(forum.getId());
+		f.setLastDate(forum.getLastDate().getTime());
+		f.setLastUser(forum.getLastUser());
+		f.setName(forum.getName());
+		f.setNumPosts(forum.getNumPosts());
+		f.setNumTopics(forum.getNumTopics());
+		for (ForumTopic topic : forum.getTopics()) {
+			f.getTopics().add(copy(topic));
+		}
+		return f;
+	}
+	
+	/**
 	 * Copy ForumTopic to GWTForumTopic
 	 * 
 	 * @param ForumTopic 
@@ -1452,6 +1477,33 @@ public class GWTUtil {
 		fp.setSubject(post.getSubject());
 		fp.setUser(post.getUser());
 		return fp;
+	}
+	
+	/**
+	 * Copy GWTForum to Forum
+	 * 
+	 * @param forum 
+	 * @return
+	 */
+	public static Forum copy(GWTForum forum) {
+		Forum f = new Forum();
+		f.setActive(forum.isActive());
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(forum.getDate());
+		f.setDate(cal);
+		f.setDescription(forum.getDescription());
+		f.setId(forum.getId());
+		Calendar cal2 = Calendar.getInstance();
+		cal2.setTime(forum.getLastDate());
+		f.setLastDate(cal2);
+		f.setLastUser(forum.getLastUser());
+		f.setName(forum.getName());
+		f.setNumPosts(forum.getNumPosts());
+		f.setNumTopics(forum.getNumTopics());
+		for (GWTForumTopic topic : forum.getTopics()) {
+			f.getTopics().add(copy(topic));
+		}
+		return f;
 	}
 	
 	/**
