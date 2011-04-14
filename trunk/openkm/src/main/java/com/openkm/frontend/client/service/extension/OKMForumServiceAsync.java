@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
+import com.openkm.frontend.client.bean.extension.GWTForum;
 import com.openkm.frontend.client.bean.extension.GWTForumPost;
 import com.openkm.frontend.client.bean.extension.GWTForumTopic;
 
@@ -39,9 +40,10 @@ public interface OKMForumServiceAsync extends RemoteService {
 	public void getTopicsByUuid(String uuid, AsyncCallback<List<GWTForumTopic>> callback);
 	public void createTopic(int id, String uuid, GWTForumTopic topic, AsyncCallback<GWTForumTopic> callback);
 	public void findTopicByPK(int id, AsyncCallback<GWTForumTopic> callback);
-	public void createPost(int id, GWTForumPost post, AsyncCallback<?> callback);
+	public void createPost(int forumId, int postId, GWTForumPost post, AsyncCallback<?> callback);
 	public void increaseTopicView(int id, AsyncCallback<?> callback);
-	public void increateTopicReplies(int id, AsyncCallback<?> callback);
 	public void deletePost(int forumId, int topicId, int postId, AsyncCallback<Boolean> callback);
 	public void updatePost(GWTForumPost post, AsyncCallback<?> callback);
+	public void getAllForum(AsyncCallback<List<GWTForum>> callback);
+	public void createForum(GWTForum forum, AsyncCallback<GWTForum> callback); 
 }

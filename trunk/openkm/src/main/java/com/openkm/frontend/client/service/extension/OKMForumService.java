@@ -26,6 +26,7 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.openkm.frontend.client.OKMException;
+import com.openkm.frontend.client.bean.extension.GWTForum;
 import com.openkm.frontend.client.bean.extension.GWTForumPost;
 import com.openkm.frontend.client.bean.extension.GWTForumTopic;
 
@@ -41,9 +42,10 @@ public interface OKMForumService extends RemoteService {
 	public List<GWTForumTopic> getTopicsByUuid(String uuid) throws OKMException;
 	public GWTForumTopic createTopic(int id, String uuid, GWTForumTopic topic) throws OKMException;
 	public GWTForumTopic findTopicByPK(int id) throws OKMException;
-	public void createPost(int id, GWTForumPost post) throws OKMException;
+	public void createPost(int forumId, int postId, GWTForumPost post) throws OKMException;
 	public void increaseTopicView(int id) throws OKMException;
-	public void increateTopicReplies(int id) throws OKMException;
 	public Boolean deletePost(int forumId, int topicId, int postId) throws OKMException;
 	public void updatePost(GWTForumPost post) throws OKMException;
+	public List<GWTForum> getAllForum() throws OKMException;
+	public GWTForum createForum(GWTForum forum) throws OKMException;
 }
