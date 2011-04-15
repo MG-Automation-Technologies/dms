@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
+import com.openkm.api.OKMRepository;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.core.DatabaseException;
@@ -150,7 +151,7 @@ public class DataBrowserServlet extends BaseServlet {
 			throws IOException, ServletException, PathNotFoundException, RepositoryException,
 			DatabaseException {
 		log.debug("repositoryList({}, {})", request, response);
-		String path = WebUtils.getString(request, "path");
+		String path = WebUtils.getString(request, "path", OKMRepository.getInstance().getRootFolder(null).getPath());
 		String dst = WebUtils.getString(request, "dst");
 		List<Map<String, String>> folders = new ArrayList<Map<String, String>>();
 		List<Map<String, String>> documents = new ArrayList<Map<String, String>>();
@@ -175,7 +176,7 @@ public class DataBrowserServlet extends BaseServlet {
 		sc.setAttribute("dst", dst);
 		sc.setAttribute("folders", folders);
 		sc.setAttribute("documents", documents);
-		sc.getRequestDispatcher("/admin/hibernate_stats.jsp").forward(request, response);
+		sc.getRequestDispatcher("/admin/data_browser.jsp").forward(request, response);
 		
 		// Activity log
 		UserActivity.log(request.getRemoteUser(), "ADMIN_REPOSITORY_LIST", path, null);
