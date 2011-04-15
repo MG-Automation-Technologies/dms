@@ -117,11 +117,11 @@ public class DataBrowserServlet extends BaseServlet {
 		List<Map<String, String>> folders = new ArrayList<Map<String, String>>();
 		List<Map<String, String>> documents = new ArrayList<Map<String, String>>();
 		
-		// Add parent folder
+		// Add parent folder link
 		if (Arrays.binarySearch(File.listRoots(), dir) < 0) {
 			Map<String, String> item = new HashMap<String, String>();
 			File parent = dir.getParentFile();
-			item.put("name", "..");
+			item.put("name", "<PARENT>");
 			item.put("path", parent.getPath());
 			folders.add(item);
 		}
@@ -161,10 +161,19 @@ public class DataBrowserServlet extends BaseServlet {
 			throws IOException, ServletException, PathNotFoundException, RepositoryException,
 			DatabaseException {
 		log.debug("repositoryList({}, {})", request, response);
-		String path = WebUtils.getString(request, "path", OKMRepository.getInstance().getRootFolder(null).getPath());
+		Folder okmRoot = OKMRepository.getInstance().getRootFolder(null);
+		String path = WebUtils.getString(request, "path", okmRoot.getPath());
 		String dst = WebUtils.getString(request, "dst");
 		List<Map<String, String>> folders = new ArrayList<Map<String, String>>();
 		List<Map<String, String>> documents = new ArrayList<Map<String, String>>();
+		
+		// Add parent folder link
+		if (!okmRoot.getPath().equals(path)) {
+			Map<String, String> item = new HashMap<String, String>();
+			item.put("name", "<PARENT>");
+			item.put("path", FileUtils.getParent(path));
+			folders.add(item);
+		}
 		
 		for (Folder fld : OKMFolder.getInstance().getChilds(null, path)) {
 			Map<String, String> item = new HashMap<String, String>();
