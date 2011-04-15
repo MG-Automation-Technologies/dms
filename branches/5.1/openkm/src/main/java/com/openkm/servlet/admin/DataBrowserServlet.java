@@ -24,6 +24,7 @@ package com.openkm.servlet.admin;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -115,6 +116,15 @@ public class DataBrowserServlet extends BaseServlet {
 		File dir = new File(path);
 		List<Map<String, String>> folders = new ArrayList<Map<String, String>>();
 		List<Map<String, String>> documents = new ArrayList<Map<String, String>>();
+		
+		// Add parent folder
+		if (Arrays.binarySearch(File.listRoots(), dir) < 0) {
+			Map<String, String> item = new HashMap<String, String>();
+			File parent = dir.getParentFile();
+			item.put("name", "..");
+			item.put("path", parent.getPath());
+			folders.add(item);
+		}
 		
 		for (File f : dir.listFiles()) {
 			Map<String, String> item = new HashMap<String, String>();
