@@ -45,13 +45,15 @@
 		out.println("<tr>");
 		out.println("<td>Repository path</td>");
 		out.println("<td><input type=\"text\" size=\"50\" name=\"repoPath\" value=\""+repoPath+"\" ></td>");
+		out.println("<td><a class=\"ds\" href=\"DataBrowser?action=repo&dst=repoPath\"><img src=\"img/action/browse_repo.png\"/></a></td>");
 		out.println("</tr>");
 		out.println("<tr>");
 		out.println("<td>Filesystem path</td>");
 		out.println("<td><input type=\"text\" size=\"50\" name=\"fsPath\" value=\""+fsPath+"\" ></td>");
+		out.println("<td><a class=\"ds\" href=\"DataBrowser?action=fs&dst=fsPath\"><img src=\"img/action/browse_fs.png\"/></a></td>");
 		out.println("</tr>");
 		out.println("<tr><td>Metadata</td><td><input type=\"checkbox\" name=\"metadata\"/></td></tr>");
-		out.println("<tr><td colspan=\"2\" align=\"right\">");
+		out.println("<tr><td colspan=\"3\" align=\"right\">");
 		out.println("<input type=\"submit\" value=\"Send\">");
 		out.println("</td></tr>");
 		out.println("</table>");
