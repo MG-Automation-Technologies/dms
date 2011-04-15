@@ -29,6 +29,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.PathNotFoundException;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -38,14 +42,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.api.OKMDocument;
-import com.openkm.api.OKMFolder;
-import com.openkm.api.OKMRepository;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
-import com.openkm.core.DatabaseException;
-import com.openkm.core.PathNotFoundException;
-import com.openkm.core.RepositoryException;
+import com.openkm.bean.Repository;
 import com.openkm.util.FileUtils;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
@@ -92,9 +91,6 @@ public class DataBrowserServlet extends BaseServlet {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request,response, e);
-		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} catch (Exception e) {
@@ -150,7 +146,6 @@ public class DataBrowserServlet extends BaseServlet {
 		
 		// Activity log
 		UserActivity.log(request.getRemoteUser(), "ADMIN_FILESYSTEM_LIST", path, null);
-		
 		log.debug("fileSystemList: void");
 	}
 	
@@ -158,35 +153,41 @@ public class DataBrowserServlet extends BaseServlet {
 	 * File system list
 	 */
 	private void repositoryList(Session session, HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException, PathNotFoundException, RepositoryException,
-			DatabaseException {
+			throws IOException, ServletException, PathNotFoundException, RepositoryException {
 		log.debug("repositoryList({}, {})", request, response);
-		Folder okmRoot = OKMRepository.getInstance().getRootFolder(null);
-		String path = WebUtils.getString(request, "path", okmRoot.getPath());
+		Node root = session.getRootNode();
+		String path = WebUtils.getString(request, "path", root.getNode(Repository.ROOT).getPath());
 		String dst = WebUtils.getString(request, "dst");
 		List<Map<String, String>> folders = new ArrayList<Map<String, String>>();
 		List<Map<String, String>> documents = new ArrayList<Map<String, String>>();
+		Node base = null;
 		
-		// Add parent folder link
-		if (!okmRoot.getPath().equals(path)) {
+		if ("".equals(path)) {
+			base = session.getRootNode();
+		} else {
+			base = session.getRootNode().getNode(path.substring(1));
+			
+			// Add parent folder link
 			Map<String, String> item = new HashMap<String, String>();
 			item.put("name", "&lt;PARENT FOLDER&gt;");
 			item.put("path", FileUtils.getParent(path));
 			folders.add(item);
 		}
 		
-		for (Folder fld : OKMFolder.getInstance().getChilds(null, path)) {
-			Map<String, String> item = new HashMap<String, String>();
-			item.put("name", FileUtils.getName(fld.getPath()));
-			item.put("path", fld.getPath());
-			folders.add(item);
-		}
-		
-		for (Document doc : OKMDocument.getInstance().getChilds(null, path)) {
-			Map<String, String> item = new HashMap<String, String>();
-			item.put("name", FileUtils.getName(doc.getPath()));
-			item.put("path", doc.getPath());
-			documents.add(item);
+		for (NodeIterator ni = base.getNodes(); ni.hasNext(); ) {
+			Node child = ni.nextNode();
+			
+			if (child.isNodeType(Folder.TYPE)) {
+				Map<String, String> item = new HashMap<String, String>();
+				item.put("name", child.getName());
+				item.put("path", child.getPath());
+				folders.add(item);
+			} else if (child.isNodeType(Document.TYPE)) {
+				Map<String, String> item = new HashMap<String, String>();
+				item.put("name", child.getName());
+				item.put("path", child.getPath());
+				documents.add(item);
+			}
 		}
 		
 		ServletContext sc = getServletContext();
@@ -199,7 +200,6 @@ public class DataBrowserServlet extends BaseServlet {
 		
 		// Activity log
 		UserActivity.log(request.getRemoteUser(), "ADMIN_REPOSITORY_LIST", path, null);
-		
 		log.debug("repositoryList: void");
 	}
 }
