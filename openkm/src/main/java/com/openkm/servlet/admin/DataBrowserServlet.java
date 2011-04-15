@@ -121,7 +121,7 @@ public class DataBrowserServlet extends BaseServlet {
 		if (Arrays.binarySearch(File.listRoots(), dir) < 0) {
 			Map<String, String> item = new HashMap<String, String>();
 			File parent = dir.getParentFile();
-			item.put("name", "<PARENT>");
+			item.put("name", "&lt;PARENT FOLDER&gt;");
 			item.put("path", parent.getPath());
 			folders.add(item);
 		}
@@ -170,7 +170,7 @@ public class DataBrowserServlet extends BaseServlet {
 		// Add parent folder link
 		if (!okmRoot.getPath().equals(path)) {
 			Map<String, String> item = new HashMap<String, String>();
-			item.put("name", "<PARENT>");
+			item.put("name", "&lt;PARENT FOLDER&gt;");
 			item.put("path", FileUtils.getParent(path));
 			folders.add(item);
 		}
