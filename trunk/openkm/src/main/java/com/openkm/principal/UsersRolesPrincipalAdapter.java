@@ -54,7 +54,7 @@ public class UsersRolesPrincipalAdapter implements PrincipalAdapter {
 		
 		for (Enumeration<Object> e = prop.keys(); e.hasMoreElements(); ) {
 			String user = (String) e.nextElement();
-			if (!Config.ADMIN_USER.equals(user) && !Config.SYSTEM_USER.equals(user)) {
+			if (!Config.SYSTEM_USER.equals(user)) {
 				list.add(user);
 			}
 		}
