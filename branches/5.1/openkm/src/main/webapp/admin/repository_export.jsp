@@ -18,6 +18,17 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="favicon.ico" />
   <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+  <script type="text/javascript" src="js/jquery.DOMWindow.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.ds').openDOMWindow({
+        height:200, width:300,
+        eventType:'click',
+        windowSource:'iframe', windowPadding:0
+      }); 
+	});
+  </script>
   <title>Repository Export</title>
 </head>
 <body>

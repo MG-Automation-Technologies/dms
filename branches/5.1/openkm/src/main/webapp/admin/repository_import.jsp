@@ -18,6 +18,17 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="favicon.ico" />
   <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+  <script type="text/javascript" src="js/jquery.DOMWindow.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.ds').openDOMWindow({
+        height:200, width:300,
+        eventType:'click',
+        windowSource:'iframe', windowPadding:0
+      }); 
+	});
+  </script>
   <title>Repository Import</title>
 </head>
 <body>
@@ -33,7 +44,8 @@
 		out.println("<table class=\"form\" align=\"center\">");
 		out.println("<tr>");
 		out.println("<td>Filesystem path</td>");
-		out.println("<td><input type=\"text\" size=\"50\" name=\"fsPath\" value=\""+fsPath+"\" ></td>");
+		out.println("<td><input type=\"text\" size=\"50\" name=\"fsPath\" id=\"fsPath\" value=\""+fsPath+"\" ></td>");
+		out.println("<td><a class=\"ds\" href=\"DataBrowser?action=fs&dst=fsPath\">DS</a></td>");
 		out.println("</tr>");
 		out.println("<tr>");
 		out.println("<td>Repository path</td>");
