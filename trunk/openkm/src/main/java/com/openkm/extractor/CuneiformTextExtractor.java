@@ -118,11 +118,11 @@ public class CuneiformTextExtractor extends AbstractTextExtractor {
     			
     			// Spellchecker
     			if (Config.SYSTEM_OPENOFFICE_DICTIONARY.equals("")) {
-    				log.info("TEXT: {}", text);
+    				log.debug("TEXT: {}", text);
     				return text;
     			} else {
     				text = DocumentUtils.spellChecker(text);
-        			log.info("TEXT: {}", text);
+        			log.debug("TEXT: {}", text);
         			return text;
     			}
 			} catch (SecurityException e) {
