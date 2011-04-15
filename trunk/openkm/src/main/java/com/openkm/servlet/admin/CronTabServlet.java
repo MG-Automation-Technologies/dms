@@ -85,12 +85,9 @@ public class CronTabServlet extends BaseServlet {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
 		String action = WebUtils.getString(request, "action");
-		Session session = null;
 		updateSessionManager(request);
 		
 		try {
-			session = JCRUtils.getSession();
-
 			Map<String, String> types = new LinkedHashMap<String, String>();
 			types.put(CronTab.BSH, "BSH");
 			types.put(CronTab.JAR, "JAR");
@@ -119,25 +116,17 @@ public class CronTabServlet extends BaseServlet {
 				sc.setAttribute("ct", ct);
 				sc.getRequestDispatcher("/admin/crontab_edit.jsp").forward(request, response);
 			} else if (action.equals("execute")) {
-				execute(session, request, response);
-				list(session, request, response);
+				execute(request, response);
+				list(request, response);
 			} else {
-				list(session, request, response);
+				list(request, response);
 			}
-		} catch (LoginException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);
 		} catch (EvalError e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);
-		} finally {
-			JCRUtils.logout(session);
 		}
 	}
 	
@@ -191,19 +180,19 @@ public class CronTabServlet extends BaseServlet {
 					
 					// Activity log
 					UserActivity.log(session.getUserID(), "ADMIN_CRONTAB_CREATE", null, ct.toString());
-					list(session, request, response);
+					list(request, response);
 				} else if (action.equals("edit")) {
 					CronTabDAO.update(ct);
 					
 					// Activity log
 					UserActivity.log(session.getUserID(), "ADMIN_CRONTAB_EDIT", Integer.toString(ct.getId()), ct.toString());
-					list(session, request, response);
+					list(request, response);
 				} else if (action.equals("delete")) {
 					CronTabDAO.delete(ct.getId());
 					
 					// Activity log
 					UserActivity.log(session.getUserID(), "ADMIN_CRONTAB_DELETE", Integer.toString(ct.getId()), null);
-					list(session, request, response);
+					list(request, response);
 				}
 			}
 		} catch (LoginException e) {
@@ -226,9 +215,9 @@ public class CronTabServlet extends BaseServlet {
 	/**
 	 * List registered reports
 	 */
-	private void list(Session session, HttpServletRequest request, HttpServletResponse response)
+	private void list(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DatabaseException {
-		log.debug("list({}, {}, {})", new Object[] { session, request, response });
+		log.debug("list({}, {})", new Object[] { request, response });
 		ServletContext sc = getServletContext();
 		List<CronTab> list = CronTabDAO.findAll();
 		sc.setAttribute("crontabs", list);
@@ -239,9 +228,9 @@ public class CronTabServlet extends BaseServlet {
 	/**
 	 * Execute report
 	 */
-	private void execute(Session session, HttpServletRequest request, HttpServletResponse response) throws 
+	private void execute(HttpServletRequest request, HttpServletResponse response) throws 
 			IOException, DatabaseException, EvalError {
-		log.debug("execute({}, {}, {})", new Object[] { session, request, response });
+		log.debug("execute({}, {})", new Object[] { request, response });
 		int ctId = WebUtils.getInt(request, "ct_id");
 		CronTab ct = CronTabDAO.findByPk(ctId);
 		
