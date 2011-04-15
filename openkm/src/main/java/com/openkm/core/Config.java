@@ -139,6 +139,7 @@ public class Config {
 	public static final String PROPERTY_SYSTEM_READONLY = "system.readonly";
 	public static final String PROPERTY_SYSTEM_MAINTENANCE = "system.maintenance";
 	public static final String PROPERTY_SYSTEM_OCR = "system.ocr";
+	public static final String PROPERTY_SYSTEM_PDF_FORCE_OCR = "system.pdf.force.ocr";
 	public static final String PROPERTY_SYSTEM_OPENOFFICE_PATH = "system.openoffice.path";
 	public static final String PROPERTY_SYSTEM_OPENOFFICE_TASKS = "system.openoffice.tasks";
 	public static final String PROPERTY_SYSTEM_OPENOFFICE_PORT = "system.openoffice.port";
@@ -288,12 +289,13 @@ public class Config {
 	public static boolean SYSTEM_WEBDAV_FIX;
 	public static boolean SYSTEM_MAINTENANCE;
 	public static boolean SYSTEM_READONLY;
-	public static String SYSTEM_OCR;
+	public static String SYSTEM_OCR = "";
+	public static boolean SYSTEM_PDF_FORCE_OCR;
 	public static String SYSTEM_OPENOFFICE_PATH = "";
 	public static int SYSTEM_OPENOFFICE_TASKS;
 	public static int SYSTEM_OPENOFFICE_PORT;
 	public static String SYSTEM_OPENOFFICE_SERVER = "";
-	public static String SYSTEM_OPENOFFICE_DICTIONARY;
+	public static String SYSTEM_OPENOFFICE_DICTIONARY = "";
 	public static String SYSTEM_IMAGEMAGICK_CONVERT;
 	public static String SYSTEM_SWFTOOLS_PDF2SWF;
 	public static String SYSTEM_GHOSTSCRIPT_PS2PDF;
@@ -642,6 +644,8 @@ public class Config {
 			
 			SYSTEM_OCR = ConfigDAO.getString(PROPERTY_SYSTEM_OCR, cfg.getProperty(PROPERTY_SYSTEM_OCR, ""));
 			values.put(PROPERTY_SYSTEM_OCR, SYSTEM_OCR);
+			SYSTEM_PDF_FORCE_OCR = ConfigDAO.getBoolean(PROPERTY_SYSTEM_PDF_FORCE_OCR, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_SYSTEM_PDF_FORCE_OCR, "off")));
+			values.put(PROPERTY_SYSTEM_PDF_FORCE_OCR, Boolean.toString(SYSTEM_PDF_FORCE_OCR));
 			SYSTEM_IMAGEMAGICK_CONVERT = ConfigDAO.getString(PROPERTY_SYSTEM_IMAGEMAGICK_CONVERT, cfg.getProperty(PROPERTY_SYSTEM_IMAGEMAGICK_CONVERT, ""));
 			values.put(PROPERTY_SYSTEM_IMAGEMAGICK_CONVERT, SYSTEM_IMAGEMAGICK_CONVERT);
 			SYSTEM_SWFTOOLS_PDF2SWF = ConfigDAO.getString(PROPERTY_SYSTEM_SWFTOOLS_PDF2SWF, cfg.getProperty(PROPERTY_SYSTEM_SWFTOOLS_PDF2SWF, ""));
