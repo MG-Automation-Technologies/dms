@@ -45,7 +45,6 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Repository;
-import com.openkm.util.FileUtils;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
@@ -162,7 +161,7 @@ public class DataBrowserServlet extends BaseServlet {
 		List<Map<String, String>> documents = new ArrayList<Map<String, String>>();
 		Node base = null;
 		
-		if ("".equals(path)) {
+		if ("/".equals(path)) {
 			base = session.getRootNode();
 		} else {
 			base = session.getRootNode().getNode(path.substring(1));
@@ -170,7 +169,7 @@ public class DataBrowserServlet extends BaseServlet {
 			// Add parent folder link
 			Map<String, String> item = new HashMap<String, String>();
 			item.put("name", "&lt;PARENT FOLDER&gt;");
-			item.put("path", FileUtils.getParent(path));
+			item.put("path", base.getParent().getPath());
 			folders.add(item);
 		}
 		
