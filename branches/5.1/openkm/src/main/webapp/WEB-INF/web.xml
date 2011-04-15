@@ -341,6 +341,10 @@
     <servlet-name>HibernateStatsServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.HibernateStatsServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>DataBrowserServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.DataBrowserServlet</servlet-class>
+  </servlet>
     
   <!-- WebServices -->
   <servlet>
@@ -688,6 +692,10 @@
   <servlet-mapping>
     <servlet-name>HibernateStatsServlet</servlet-name>
     <url-pattern>/admin/HibernateStats</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DataBrowserServlet</servlet-name>
+    <url-pattern>/admin/DataBrowser</url-pattern>
   </servlet-mapping>
 
   <!-- WebServices Servlet Mappings -->
