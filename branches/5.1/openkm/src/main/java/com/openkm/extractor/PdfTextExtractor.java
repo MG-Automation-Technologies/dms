@@ -22,6 +22,7 @@ import org.apache.pdfbox.util.PDFTextStripper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.core.Config;
 import com.openkm.util.FileUtils;
 
 /**
@@ -66,9 +67,11 @@ public class PdfTextExtractor extends AbstractTextExtractor {
                 PDFTextStripper stripper = new PDFTextStripper();
                 stripper.setLineSeparator("\n");
                 stripper.writeText(document, writer);
+                String st = writer.toString().trim();
+                log.debug("TextStripped: '{}'", st);
                 
-                if (writer.size() <= 1) {
-                	log.info("PDF does not contains text layer");
+                if (Config.SYSTEM_PDF_FORCE_OCR || st.length() <= 1) {
+                	log.warn("PDF does not contains text layer");
                 	
                 	// Extract images from PDF
 					List pages = document.getDocumentCatalog().getAllPages();
@@ -84,11 +87,11 @@ public class PdfTextExtractor extends AbstractTextExtractor {
                         		 String key = (String) itImg.next();
                                  PDXObjectImage image = (PDXObjectImage) images.get(key);
                                  File pdfImg = File.createTempFile(key, "." + image.getSuffix());
-                                 log.info("Writing image: {}", pdfImg.getPath());
+                                 log.debug("Writing image: {}", pdfImg.getPath());
                                  image.write2file(pdfImg);
                                  String txt = new CuneiformTextExtractor().doOcr(pdfImg);
                                  sb.append(txt).append(" ");
-                                 log.info("Salida: {}", txt);
+                                 log.debug("OCR Extracted: {}", txt);
                                  FileUtils.deleteQuietly(pdfImg);
                         	}
                         }
