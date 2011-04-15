@@ -65,7 +65,7 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 		for (Iterator<String> it = ldap.iterator(); it.hasNext(); ) {
 			String user = it.next();
 			
-			if (!Config.ADMIN_USER.equals(user) && !Config.SYSTEM_USER.equals(user)) {
+			if (!Config.SYSTEM_USER.equals(user)) {
 				if (Config.SYSTEM_LOGIN_LOWERCASE) {
 					user = user.toLowerCase();
 				}
@@ -92,10 +92,7 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 		
 		for (Iterator<String> it = ldap.iterator(); it.hasNext(); ) {
 			String role = it.next();
-			
-			if (!Config.DEFAULT_ADMIN_ROLE.equals(role)) {
-				list.add(role);
-			}
+			list.add(role);
 		}
 
 		log.debug("getRoles: {}", list);
@@ -123,6 +120,11 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 	}
 	
 	@Override
+	public String getName(String user) throws PrincipalAdapterException {
+		return LdapPrincipalAdapter.class.getCanonicalName();
+	}
+	
+	@Override
 	public List<String> getUsersByRole(String role) throws PrincipalAdapterException {
 		log.debug("getUsersByRole({})", role);
 		List<String> list = new ArrayList<String>();
@@ -137,7 +139,7 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 		for (Iterator<String> it = ldap.iterator(); it.hasNext(); ) {
 			String user = it.next();
 			
-			if (!Config.ADMIN_USER.equals(user) && !Config.SYSTEM_USER.equals(user)) {
+			if (!Config.SYSTEM_USER.equals(user)) {
 				if (Config.SYSTEM_LOGIN_LOWERCASE) {
 					user = user.toLowerCase();
 				}
@@ -239,10 +241,5 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 		
 		log.debug("ldapSearch: {}", al);
 		return al;
-	}
-
-	@Override
-	public String getName(String user) throws PrincipalAdapterException {
-		return LdapPrincipalAdapter.class.getCanonicalName();
 	}
 }
