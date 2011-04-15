@@ -1,3 +1,4 @@
+// http://swip.codylindley.com/DOMWindowDemo.html
 (function($){
 	
 	//closeDOMWindow
