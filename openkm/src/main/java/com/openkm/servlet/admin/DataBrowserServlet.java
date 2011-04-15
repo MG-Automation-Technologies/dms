@@ -110,6 +110,7 @@ public class DataBrowserServlet extends BaseServlet {
 			ServletException {
 		log.debug("fileSystemList({}, {})", request, response);
 		String path = WebUtils.getString(request, "path", System.getProperty("user.home"));
+		String dst = WebUtils.getString(request, "dst");
 		File dir = new File(path);
 		List<Map<String, String>> folders = new ArrayList<Map<String, String>>();
 		List<Map<String, String>> documents = new ArrayList<Map<String, String>>();
@@ -131,6 +132,7 @@ public class DataBrowserServlet extends BaseServlet {
 		ServletContext sc = getServletContext();
 		sc.setAttribute("action", "fs");
 		sc.setAttribute("path", path);
+		sc.setAttribute("dst", dst);
 		sc.setAttribute("folders", folders);
 		sc.setAttribute("documents", documents);
 		sc.getRequestDispatcher("/admin/data_browser.jsp").forward(request, response);
@@ -149,6 +151,7 @@ public class DataBrowserServlet extends BaseServlet {
 			DatabaseException {
 		log.debug("repositoryList({}, {})", request, response);
 		String path = WebUtils.getString(request, "path");
+		String dst = WebUtils.getString(request, "dst");
 		List<Map<String, String>> folders = new ArrayList<Map<String, String>>();
 		List<Map<String, String>> documents = new ArrayList<Map<String, String>>();
 		
@@ -169,6 +172,7 @@ public class DataBrowserServlet extends BaseServlet {
 		ServletContext sc = getServletContext();
 		sc.setAttribute("action", "repo");
 		sc.setAttribute("path", path);
+		sc.setAttribute("dst", dst);
 		sc.setAttribute("folders", folders);
 		sc.setAttribute("documents", documents);
 		sc.getRequestDispatcher("/admin/hibernate_stats.jsp").forward(request, response);
