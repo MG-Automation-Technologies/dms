@@ -9,6 +9,15 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="favicon.ico" />
   <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <link rel="stylesheet" type="text/css" href="css/fixedTableHeader.css" />
+  <style type="text/css">body,html {padding:0; margin:0;}</style>
+  <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+  <script type="text/javascript" src="js/fixedTableHeader.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+    	TABLE.fixHeader('table')
+	});
+  </script>
   <title>Data Browser</title>
 </head>
 <body>
@@ -16,37 +25,42 @@
   <c:set var="row">1</c:set>
   <c:choose>
     <c:when test="${isAdmin}">
-      <h1>Data browser</h1>
-      <table class="results" width="70%">
-        <tr>
-          <th>Name</th><th width="50px"></th>
-        </tr>
-        <c:forEach var="fld" items="${folders}">
-          <c:url value="DataBrowser" var="urlBrowse">
-            <c:param name="action" value="${action}"/>
-            <c:param name="path" value="${fld.path}"/>
-          </c:url>
-          <c:set var="row">${row + 1}</c:set>
-          <tr class="${row % 2 == 0 ? 'even' : 'odd'}">
-            <td><a href="${urlBrowse}">${fld.name}</a></td>
-            <td align="center">
-              <a href="${urlBrowse}"><img src="img/true.png" alt="Select" title="Select"/></a>
-            </td>
+      <table class="results" width="100%">
+        <thead>
+          <tr>
+            <th>Name</th><th width="50px"></th>
           </tr>
-        </c:forEach>
-        <c:forEach var="doc" items="${documents}">
-          <c:url value="DataBrowser" var="urlBrowse">
-            <c:param name="action" value="${action}"/>
-            <c:param name="path" value="${doc.path}"/>
-          </c:url>
-          <c:set var="row">${row + 1}</c:set>
-          <tr class="${row % 2 == 0 ? 'even' : 'odd'}">
-            <td>${doc.name}</td>
-            <td align="center">
-              <a href="${urlBrowse}"><img src="img/true.png" alt="Select" title="Select"/></a>
-            </td>
-          </tr>
-        </c:forEach>
+        </thead>
+        <tbody>
+          <c:forEach var="fld" items="${folders}">
+            <c:url value="DataBrowser" var="urlBrowse">
+              <c:param name="action" value="${action}"/>
+              <c:param name="dst" value="${dst}"/>
+              <c:param name="path" value="${fld.path}"/>
+            </c:url>
+            <c:set var="row">${row + 1}</c:set>
+            <tr class="${row % 2 == 0 ? 'even' : 'odd'}">
+              <td><a href="${urlBrowse}">${fld.name}</a></td>
+              <td align="center">
+                <a href="javascript:void(0)", onclick="$('#${dst}', window.parent.document).val('${fld.path}')"><img src="img/true.png" alt="Select" title="Select"/></a>
+              </td>
+            </tr>
+          </c:forEach>
+          <c:forEach var="doc" items="${documents}">
+            <c:url value="DataBrowser" var="urlBrowse">
+              <c:param name="action" value="${action}"/>
+              <c:param name="dst" value="${dst}"/>
+              <c:param name="path" value="${doc.path}"/>
+            </c:url>
+            <c:set var="row">${row + 1}</c:set>
+            <tr class="${row % 2 == 0 ? 'even' : 'odd'}">
+              <td>${doc.name}</td>
+              <td align="center">
+                <a href="javascript:void(0)", onclick="$('#${dst}', window.parent.document).val('${doc.path}')"><img src="img/true.png" alt="Select" title="Select"/></a>
+              </td>
+            </tr>
+          </c:forEach>
+        </tbody>
       </table>
     </c:when>
     <c:otherwise>
