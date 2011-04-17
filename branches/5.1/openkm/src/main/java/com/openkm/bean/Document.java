@@ -43,6 +43,7 @@ public class Document implements Serializable {
 	public static final String AUTHOR = "okm:author";
 	public static final String VERSION_COMMENT = "okm:versionComment";
 	public static final String NAME = "okm:name";
+	public static final String TEXT = "okm:text";
 	// public static final String TITLE = "okm:title";
 	// public static final String TITLE = "okm:description";
 	
