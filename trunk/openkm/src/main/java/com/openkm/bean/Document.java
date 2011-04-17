@@ -34,6 +34,7 @@ import java.util.Set;
  */
 public class Document implements Serializable {
 	private static final long serialVersionUID = 4453338766237619444L;
+	
 	public static final String TYPE = "okm:document";
 	public static final String CONTENT = "okm:content";
 	public static final String CONTENT_TYPE = "okm:resource";
@@ -42,6 +43,7 @@ public class Document implements Serializable {
 	public static final String AUTHOR = "okm:author";
 	public static final String VERSION_COMMENT = "okm:versionComment";
 	public static final String NAME = "okm:name";
+	public static final String TEXT = "okm:text";
 	// public static final String TITLE = "okm:title";
 	// public static final String TITLE = "okm:description";
 	
