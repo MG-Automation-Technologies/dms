@@ -219,7 +219,8 @@ public class DocConverter {
 		log.debug("convertibleToDxf({})", from);
 		boolean ret = false;
 		
-		if (!Config.SYSTEM_DWG2DXF.equals("") && validAutoCad.contains(from)) {
+		if ((!Config.SYSTEM_DWG2DXF.equals("") && validAutoCad.contains(from)) ||
+				Config.MIME_DXF.equals(from)) {
 			ret = true;
 		}
 		
