@@ -48,6 +48,7 @@ public class LanguageServlet extends OKMRemoteServiceServlet implements OKMLangu
 	@Override
 	public Map<String, String> getFrontEndTranslations(String lang) throws OKMException {
 		log.debug("getTranslations({})", lang);
+		updateSessionManager();
 		Map<String,String> translations = new HashMap<String,String>();
 		
 		try {
@@ -70,9 +71,5 @@ public class LanguageServlet extends OKMRemoteServiceServlet implements OKMLangu
 		
 		log.debug("getTranslations: {}", translations);
 		return translations;
-	}
-	
-	public void getLanguages() {
-		
 	}
 }

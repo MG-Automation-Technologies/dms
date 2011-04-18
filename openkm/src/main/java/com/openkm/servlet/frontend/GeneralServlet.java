@@ -103,6 +103,8 @@ public class GeneralServlet extends OKMRemoteServiceServlet implements OKMGenera
 	
 	@Override
 	public List<String> getEnabledExtensions() throws OKMException {
+		log.debug("getEnabledExtensions()");
+		updateSessionManager();
 		List<String> extensions = new ArrayList<String>();
 		Session session = null;
 		
