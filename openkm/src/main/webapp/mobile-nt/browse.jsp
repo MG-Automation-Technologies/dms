@@ -20,6 +20,7 @@
     </div>
     <div data-role="content">
       <ul data-role="listview">
+        <!-- List folders -->
         <c:forEach var="fld" items="${folderChilds}">
           <li>
             <c:url value="Handler" var="urlBrowse">
@@ -30,7 +31,22 @@
               <c:otherwise><c:set var="fldImg" value="menuitem_empty.gif"/></c:otherwise>
             </c:choose>
             <img src="../frontend/img/${fldImg}" class="ui-li-icon"/>
-            <a href="${urlBrowse}" data-transition="pop"><u:getName path="${fld.path}"/></a>  
+            <a href="${urlBrowse}" data-transition="slide"><u:getName path="${fld.path}"/></a>
+          </li>
+        </c:forEach>
+        <!-- List documents -->
+        <c:forEach var="doc" items="${documentChilds}">
+          <li>
+            <c:url value="/frontend/Download" var="urlDownload">
+              <c:if test="${doc.convertibleToPdf}">
+                <c:param name="toPdf"/>
+              </c:if>
+              <c:param name="id" value="${doc.path}"/>
+            </c:url>
+            <c:url value="/mime/${doc.mimeType}" var="urlIcon">
+            </c:url>
+            <img src="${urlIcon}" class="ui-li-icon"/>
+            <a href="${urlDownload}" data-transition="slide"><u:getName path="${doc.path}"/></a>
           </li>
         </c:forEach>
       </ul>
