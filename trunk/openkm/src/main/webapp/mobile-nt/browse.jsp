@@ -12,11 +12,21 @@
   <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css" />
   <script src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
   <script src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      $('body').bind('taphold', function(e) {
+        alert('You tapped and held!' + e);
+        e.stopImmediatePropagation();
+        return false;
+      });
+    });
+  </script>  
 </head>
 <body>
-  <div data-role="page">
+  <div data-role="page" data-theme="b" id="jkm-home">
     <div data-role="header">
       <h1>OpenKM</h1>
+      <a href="create" data-icon="plus" class="ui-btn-right">Create</a>
     </div>
     <div data-role="content">
       <ul data-role="listview">
@@ -43,17 +53,20 @@
               </c:if>
               <c:param name="id" value="${doc.path}"/>
             </c:url>
-            <c:url value="/mime/${doc.mimeType}" var="urlIcon">
-            </c:url>
+            <c:url value="/mime/${doc.mimeType}" var="urlIcon"></c:url>
+            <c:set var="size"><u:formatSize size="${doc.actualVersion.size}"/></c:set>
             <img src="${urlIcon}" class="ui-li-icon"/>
             <a href="${urlDownload}" data-transition="slide"><u:getName path="${doc.path}"/></a>
+            <span class="ui-li-count">${size}</span>
           </li>
         </c:forEach>
       </ul>
     </div>
-    <div data-role="footer">
-      <h4>Footer</h4>
-    </div>		
+    <!--
+    <div data-role="footer" class="ui-bar">
+      <a href="#jkm-home" data-role="button" data-icon="arrow-u">Up</a>      
+    </div>
+    -->		
   </div>
 </body>
 </html>
