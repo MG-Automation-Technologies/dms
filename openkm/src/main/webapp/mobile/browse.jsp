@@ -72,9 +72,9 @@
       <c:set var="size"><u:formatSize size="${doc.actualVersion.size}"/></c:set>
       <c:url value="/mime/${doc.mimeType}" var="urlIcon">
       </c:url>
-      <c:url value="../OKMDownloadServlet" var="urlDownload">
+      <c:url value="/frontend/Download" var="urlDownload">
         <c:if test="${doc.convertibleToPdf}">
-            <c:param name="toPdf"/>
+          <c:param name="toPdf"/>
         </c:if>
         <c:param name="id" value="${doc.path}"/>
       </c:url>
