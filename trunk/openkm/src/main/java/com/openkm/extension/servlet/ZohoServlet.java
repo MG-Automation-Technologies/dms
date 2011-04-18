@@ -70,6 +70,7 @@ public class ZohoServlet extends OKMRemoteServiceServlet implements OKMZohoServi
 	@Override
 	public String getTicket() throws OKMException {
 		log.debug("getTicket()");
+		updateSessionManager();
 		String ticket = "";
 		try {
 			//Construct data
@@ -111,6 +112,7 @@ public class ZohoServlet extends OKMRemoteServiceServlet implements OKMZohoServi
 	@Override
 	public Map<String,String> getZohoWriterUrl(String uuid, String lang) throws OKMException {
 		log.debug("getZohoWriterUrl({},{})",uuid,lang);
+		updateSessionManager();
 		Map<String,String> result = new HashMap<String,String>();
 		File tmp = null;
 		try {
@@ -139,6 +141,85 @@ public class ZohoServlet extends OKMRemoteServiceServlet implements OKMZohoServi
 			};
 			
 			PostMethod filePost = new PostMethod("https://export.writer.zoho.com/remotedoc.im");
+		    filePost.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET,"UTF-8");
+		    filePost.setRequestEntity(new MultipartRequestEntity(parts,filePost.getParams()));
+		    HttpClient client = new HttpClient();
+		    client.getHttpConnectionManager().getParams().setConnectionTimeout(5000);    
+		    int status = client.executeMethod(filePost);
+		    if (status == HttpStatus.SC_OK) {
+		        System.out.println("OK: "+filePost.getResponseBodyAsString());
+		        
+		     	// Get the response
+		        BufferedReader rd = new BufferedReader(new InputStreamReader(filePost.getResponseBodyAsStream()));
+		        String line;
+		        while ((line = rd.readLine()) != null) {
+		            System.out.println(line);
+		            if (line.startsWith("URL=")) {
+		            	result.put("url",line.substring(4));
+		            	result.put("id", id);
+		            	break;
+		            }
+		        }
+		        rd.close();
+		    } else {
+		    	String error = HttpStatus.getStatusText(status) + "\n\n" + filePost.getResponseBodyAsString();
+		    	log.error("ERROR: "+error);
+		    	throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMZohoService, ErrorCode.CAUSE_Zoho), error);
+		    }
+			
+		} catch (PathNotFoundException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMZohoService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMZohoService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMZohoService, ErrorCode.CAUSE_Database), e.getMessage());
+		} catch (IOException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMZohoService, ErrorCode.CAUSE_IO), e.getMessage());
+		} finally {
+			if (tmp!=null) {
+				tmp.delete();
+			}
+		}
+		log.debug("result:"+result);
+		return result;
+	}
+	
+	@Override
+	public Map<String,String> getZohoSheetUrl(String uuid, String lang) throws OKMException {
+		log.debug("getZohoSheetUrl({},{})",uuid,lang);
+		updateSessionManager();
+		Map<String,String> result = new HashMap<String,String>();
+		File tmp = null;
+		try {
+			String path = OKMRepository.getInstance().getNodePath(null, uuid);
+			String fileName = FileUtils.getName(path);
+			tmp = File.createTempFile("okm", ".tmp");
+			InputStream is = OKMDocument.getInstance().getContent(null, path, false); // Checkouts
+			Document doc = OKMDocument.getInstance().getProperties(null, path);
+			FileOutputStream fos = new FileOutputStream(tmp);
+			IOUtils.copy(is, fos);
+			fos.flush();
+			fos.close();
+			
+			String id = "12345678";
+			
+			Part[] parts = { new FilePart("content", tmp),
+				     		 new StringPart("apikey", Config.ZOHO_API_KEY),
+				     		 new StringPart("output", "url"),
+				     		 new StringPart("mode", "normaledit"),
+				     		 new StringPart("filename", fileName),
+				     		 new StringPart("skey", Config.ZOHO_SECRET_KEY),
+				     		 new StringPart("lang", lang),
+				     		 new StringPart("id", id),
+				     		 new StringPart("format", getFormat(doc.getMimeType())),
+				     		 new StringPart("saveurl", "http://darkman97i.dyndns.org/OpenKM/ZohoFileUpload")
+			};
+			
+			PostMethod filePost = new PostMethod("https://sheet.zoho.com/remotedoc.im");
 		    filePost.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET,"UTF-8");
 		    filePost.setRequestEntity(new MultipartRequestEntity(parts,filePost.getParams()));
 		    HttpClient client = new HttpClient();
