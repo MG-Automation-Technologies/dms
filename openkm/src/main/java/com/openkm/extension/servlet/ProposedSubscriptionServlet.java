@@ -58,6 +58,7 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 	public void send(String uuid, String users, String roles, String comment) throws OKMException {
 		Object obj[] = {(Object)uuid,(Object)users, (Object)roles, (Object)comment};
 		log.debug("create({}, {}, {}, {})", obj);
+		updateSessionManager();
 		
 		try {
 			String remoteUser = getThreadLocalRequest().getRemoteUser();

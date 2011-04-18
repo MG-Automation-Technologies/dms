@@ -41,6 +41,8 @@ public class WikiServlet extends OKMRemoteServiceServlet implements OKMWikiServi
 	
 	@Override
 	public GWTWikiPage findByPk(String uuid) throws OKMException {
+		log.debug("findByPk({})",uuid);
+		updateSessionManager();
 		GWTWikiPage wikiPage = new GWTWikiPage();
 		 try {
 			WikiPageDAO.findByPk(uuid);

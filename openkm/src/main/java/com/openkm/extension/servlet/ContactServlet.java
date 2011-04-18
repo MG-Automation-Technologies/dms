@@ -63,6 +63,8 @@ public class ContactServlet extends OKMRemoteServiceServlet implements OKMContac
 	
 	@Override
 	public void create(String uuid, GWTContact contact) throws OKMException {
+		log.debug("create({})",uuid);
+		updateSessionManager();
 		try {
 			int id = ContactDAO.create( GWTUtil.copy(contact)); // Create
 			if (uuid!=null) {
@@ -78,6 +80,8 @@ public class ContactServlet extends OKMRemoteServiceServlet implements OKMContac
 	
 	@Override
 	public void delete(int id) throws OKMException {
+		log.debug("delete({})",id);
+		updateSessionManager();
 		try {
 			ContactDAO.delete(id);
 		} catch (DatabaseException e) {
@@ -88,6 +92,8 @@ public class ContactServlet extends OKMRemoteServiceServlet implements OKMContac
 	
 	@Override
 	public void delete(int id, String uuid) throws OKMException {
+		log.debug("delete({},{})",id,uuid);
+		updateSessionManager();
 		try {
 			Contact contact = ContactDAO.findByPk(id);	// Find by pk
 			contact.getUuids().remove(uuid);
@@ -100,6 +106,8 @@ public class ContactServlet extends OKMRemoteServiceServlet implements OKMContac
 	
 	@Override
 	public List<GWTContact> findByUuid(String uuid) throws OKMException {
+		log.debug("findByUuid({})",uuid);
+		updateSessionManager();
 		List<GWTContact> contacts = new ArrayList<GWTContact>();
 		try {
 			for (Contact contact : ContactDAO.findByUuid(uuid)) {
@@ -115,6 +123,8 @@ public class ContactServlet extends OKMRemoteServiceServlet implements OKMContac
 	
 	@Override
 	public List<GWTContact> findAll() throws OKMException {
+		log.debug("findAll()");
+		updateSessionManager();
 		List<GWTContact> contacts = new ArrayList<GWTContact>();
 		try {
 			for (Contact contact : ContactDAO.findAll()) {
@@ -130,6 +140,8 @@ public class ContactServlet extends OKMRemoteServiceServlet implements OKMContac
 	
 	@Override
 	public List<GWTContact> getGoogleContacts(String username, String userpass, String groupId, Map<String,String> googleFieldMap) throws OKMException {
+		log.debug("getGoogleContacts({})",username);
+		updateSessionManager();
 		try {
 			List<GWTContact> contactList = new ArrayList<GWTContact>();
 			ContactsService googleService = new ContactsService("OpenKM");
@@ -266,6 +278,8 @@ public class ContactServlet extends OKMRemoteServiceServlet implements OKMContac
 	
 	@Override
 	public Boolean loginGoogleContact(String username, String userpass) throws OKMException {
+		log.debug("loginGoogleContact({})",username);
+		updateSessionManager();
 		Boolean logged = new Boolean(true);
 		try {
 			ContactsService googleService = new ContactsService("OpenKM");
@@ -281,6 +295,8 @@ public class ContactServlet extends OKMRemoteServiceServlet implements OKMContac
 	
 	@Override
 	public Map<String,String> getContactGroups(String username, String userpass) throws OKMException {
+		log.debug("getContactGroups({})",username);
+		updateSessionManager();
 		Map<String,String> contactGroups = new HashMap<String, String>();
 		try {
 			ContactsService googleService = new ContactsService("OpenKM");
@@ -310,6 +326,8 @@ public class ContactServlet extends OKMRemoteServiceServlet implements OKMContac
 	
 	@Override
 	public void syncGoogleContacts(List<GWTContact> contacts) throws OKMException {
+		log.debug("syncGoogleContacts()");
+		updateSessionManager();
 		try {
 			for (GWTContact contact : contacts) {
 				Contact tmp = ContactDAO.findByOrigin(contact.getExternalId(), contact.getOrigin()); 
@@ -328,6 +346,8 @@ public class ContactServlet extends OKMRemoteServiceServlet implements OKMContac
 	
 	@Override
 	public List<GWTContact> findAllFiltered(String uuid) throws OKMException {
+		log.debug("findAllFiltered({})",uuid);
+		updateSessionManager();
 		List<GWTContact> contacts = new ArrayList<GWTContact>();
 		try {
 			for (Contact contact : ContactDAO.findAllFiltered(uuid)) {
@@ -343,6 +363,8 @@ public class ContactServlet extends OKMRemoteServiceServlet implements OKMContac
 	
 	@Override
 	public void update(GWTContact contact) throws OKMException {
+		log.debug("update()");
+		updateSessionManager();
 		try {
 			Contact contactToUpdate = GWTUtil.copy(contact);
 			contactToUpdate.setUuids(ContactDAO.findByPk(contact.getId()).getUuids()); // Loading uuids	
@@ -355,6 +377,8 @@ public class ContactServlet extends OKMRemoteServiceServlet implements OKMContac
 	
 	@Override
 	public void addContact(int id, String uuid) throws OKMException {
+		log.debug("addContact({},{})",id, uuid);
+		updateSessionManager();
 		try {
 			Contact contact = ContactDAO.findByPk(id);	// Find by pk
 			// Only add new uuid not existing ones
