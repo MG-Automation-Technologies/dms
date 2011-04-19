@@ -296,4 +296,24 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMForumService, ErrorCode.CAUSE_Database), e.getMessage());
 		}
 	}
+
+	@Override
+	public void updateTopic(int id, GWTForumPost post) throws OKMException {
+		log.debug("updateTopic({},{})",id,post.getId());
+		updateSessionManager();
+		try {
+			// Update post
+			ForumPost fp = ForumDAO.findPostByPk(post.getId());
+			fp.setSubject(post.getSubject());
+			fp.setMessage(post.getMessage());
+			ForumDAO.update(fp);
+			// Update topic
+			ForumTopic ft = ForumDAO.findTopicByPk(id);
+			ft.setTitle(post.getSubject()); // Updating the title
+			ForumDAO.update(ft);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMForumService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+	}
 }
