@@ -193,7 +193,7 @@ public class ForumDAO {
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			ForumTopic ret = (ForumTopic) session.load(ForumTopic.class, id);
+			ForumTopic ret = (ForumTopic) session.get(ForumTopic.class, id);
 			log.debug("findTopicByPk: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
