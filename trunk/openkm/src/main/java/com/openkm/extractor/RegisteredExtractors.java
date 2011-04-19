@@ -92,6 +92,13 @@ public class RegisteredExtractors {
 				if (Arrays.asList(te.getContentTypes()).contains(mimeType)) {
 					log.info("Resolved extractor: {}", te.getClass().getCanonicalName());
 					Reader rd = te.extractText(is, mimeType, encoding);
+					
+					// Check for minimum text extraction size
+					long sk = rd.skip(MIN_EXTRACTION);
+					if (sk < MIN_EXTRACTION) failure = true;
+					rd.reset();
+					
+					// Convert reader to input stream
 					ret = new ReaderInputStream(rd);
 					break;
 				}
@@ -101,7 +108,7 @@ public class RegisteredExtractors {
 			failure = true;
 		}
 		
-		if (failure || ret == null || ret.available() < MIN_EXTRACTION) {
+		if (failure || ret == null) {
 			if (node != null) {
 				UserActivity.log(node.getSession().getUserID(), "MISC_TEXT_EXTRACTION", node.getUUID(), node.getPath());
 			}
