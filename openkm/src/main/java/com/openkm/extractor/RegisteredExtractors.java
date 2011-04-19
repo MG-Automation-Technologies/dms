@@ -24,11 +24,11 @@ package com.openkm.extractor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.ValueFormatException;
@@ -48,10 +48,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.util.ReaderInputStream;
+import com.openkm.util.UserActivity;
 
 public class RegisteredExtractors {
 	private static Logger log = LoggerFactory.getLogger(RegisteredExtractors.class);
 	private static List<TextExtractor> extractors = new ArrayList<TextExtractor>();
+	private static final int MIN_EXTRACTION = 16;
 	
 	static {
 		log.info("Initializing text extractors");
@@ -76,20 +78,29 @@ public class RegisteredExtractors {
 	/**
 	 * Extract text to be indexed
 	 */
-	public static InputStream getText(String mimeType, String encoding, InputStream is) throws
-			ValueFormatException, PathNotFoundException, RepositoryException, IOException {
+	public static InputStream getText(Node node, String mimeType, String encoding, InputStream is)
+			throws ValueFormatException, PathNotFoundException, RepositoryException, IOException {
 		log.info("getText({}, {}, {})", new Object[] { mimeType, encoding, is });
-		Reader rd = new StringReader("");
+		InputStream ret = null;
+		boolean failure = false;
 		
-		// Check for available text extractor
-		for (TextExtractor te : RegisteredExtractors.extractors) {
-			if (Arrays.binarySearch(te.getContentTypes(), mimeType) > -1) {
-				log.info("Resolved extractor: {}", te.getClass());
-				rd = te.extractText(is, null, encoding);
+		try {
+			// Check for available text extractor
+			for (TextExtractor te : RegisteredExtractors.extractors) {
+				if (Arrays.binarySearch(te.getContentTypes(), mimeType) > -1) {
+					log.info("Resolved extractor: {}", te.getClass());
+					Reader rd = te.extractText(is, null, encoding);
+					ret = new ReaderInputStream(rd);
+				}
 			}
+		} catch (Exception e) {
+			failure = true;
 		}
 		
-		InputStream ret = new ReaderInputStream(rd);
+		if (failure || ret.available() < MIN_EXTRACTION) {
+			UserActivity.log(node.getSession().getUserID(), "TEXT_EXTRACTOR", node.getUUID(), node.getPath());
+		}
+		
 		log.info("getText: {}", ret);
 		return ret;
 	}
