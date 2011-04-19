@@ -26,17 +26,15 @@
         <c:param name="action" value="browse"/>
         <c:param name="path" value="${parent}"/>
       </c:url>
-      <table>
+      <table style="width: 100%">
         <tr><th scope="row">UUID:</th><td>${fld.uuid}</td></tr>
         <tr><th scope="row">Name:</th><td><u:getName path="${fld.path}"/></td></tr>
         <tr><th scope="row">Parent:</th><td><u:getParent path="${fld.path}"/></td></tr>
-        <tr><th scope="row">Size:</th><td><u:formatSize size="${doc.actualVersion.size}"/></td></tr>
         <tr><th scope="row">Created:</th><td><f:formatDate value="${fld.created.time}" type="both"/> by ${fld.author}</td></tr>
         <c:choose>
           <c:when test="${fld.subscribed}"><c:set var="subscribed" value="Yes"/></c:when>
           <c:otherwise><c:set var="subscribed" value="No"/></c:otherwise>
         </c:choose>
-        <tr><th scope="row">Subscribed:</th><td>${subscribed}</td></tr>
         <tr><th scope="row">Subscribed:</th><td>${subscribed}</td></tr>
         <tr>
           <td colspan="2">
