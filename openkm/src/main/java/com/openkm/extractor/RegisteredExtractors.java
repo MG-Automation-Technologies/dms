@@ -102,7 +102,9 @@ public class RegisteredExtractors {
 		}
 		
 		if (failure || ret == null || ret.available() < MIN_EXTRACTION) {
-			UserActivity.log(node.getSession().getUserID(), "MISC_TEXT_EXTRACTION", node.getUUID(), node.getPath());
+			if (node != null) {
+				UserActivity.log(node.getSession().getUserID(), "MISC_TEXT_EXTRACTION", node.getUUID(), node.getPath());
+			}
 		}
 		
 		log.info("getText: {}", ret);
