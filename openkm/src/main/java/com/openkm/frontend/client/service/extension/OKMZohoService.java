@@ -37,5 +37,6 @@ import com.openkm.frontend.client.OKMException;
 public interface OKMZohoService extends RemoteService {
 	public String getTicket() throws OKMException;
 	public Map<String,String> getZohoWriterUrl(String uuid, String lang) throws OKMException;
+	public Map<String,String> getZohoSheetUrl(String uuid, String lang) throws OKMException;
 	public void closeZohoWriter(String id);
 }

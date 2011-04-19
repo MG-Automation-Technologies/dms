@@ -35,5 +35,6 @@ import com.google.gwt.user.client.rpc.RemoteService;
 public interface OKMZohoServiceAsync extends RemoteService {
 	public void getTicket(AsyncCallback<String> callback);
 	public void getZohoWriterUrl(String uuid, String lang, AsyncCallback<Map<String,String>> callback);
+	public void getZohoSheetUrl(String uuid, String lang, AsyncCallback<Map<String,String>> callback);
 	public void closeZohoWriter(String id,AsyncCallback<?> callback);
 }
