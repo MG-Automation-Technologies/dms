@@ -32,7 +32,9 @@ import java.util.Set;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.PropertyType;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.jcr.Value;
@@ -40,6 +42,7 @@ import javax.jcr.ValueFormatException;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.jackrabbit.core.NodeImpl;
 import org.apache.jackrabbit.core.SessionImpl;
@@ -65,6 +68,7 @@ import com.openkm.dao.UserConfigDAO;
 import com.openkm.dao.bean.ProfileMisc;
 import com.openkm.dao.bean.UserConfig;
 import com.openkm.dao.bean.cache.UserItems;
+import com.openkm.extractor.RegisteredExtractors;
 import com.openkm.util.DocConverter;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
@@ -147,13 +151,21 @@ public class BaseDocumentModule {
 		contentNode.setProperty(Document.AUTHOR, session.getUserID());
 		contentNode.setProperty(Document.VERSION_COMMENT, "");
 		contentNode.setProperty(JcrConstants.JCR_MIMETYPE, mimeType);
+		contentNode.setProperty(JcrConstants.JCR_DATA, is);
 		
 		// jcr:encoding only have sense for text/* MIME
 		if (mimeType.startsWith("text/")) {
 			contentNode.setProperty(JcrConstants.JCR_ENCODING, "UTF-8");
 		}
-
-		contentNode.setProperty(JcrConstants.JCR_DATA, is);
+		
+		/** EXPERIMENTAL **/
+		InputStream in = contentNode.getProperty(JcrConstants.JCR_DATA).getStream();
+		InputStream out = RegisteredExtractors.getText(mimeType, "UTF-8", in);
+		contentNode.setProperty(Document.TEXT, out);
+		IOUtils.closeQuietly(out);
+		IOUtils.closeQuietly(in);
+		/** EXPERIMENTAL **/
+		
 		contentNode.setProperty(JcrConstants.JCR_LASTMODIFIED, Calendar.getInstance());
 		parentNode.save();
 
@@ -333,6 +345,29 @@ public class BaseDocumentModule {
 		lock.setToken(lck.getLockToken());
 		log.debug("getLock: {}", lock);
 		return lock;
+	}
+	
+	/**
+	 * Set node content
+	 */
+	public static void setContent(Session session, Node docNode, InputStream is) throws
+			PathNotFoundException, RepositoryException, IOException {
+		long size = is.available();
+		Node contentNode = docNode.getNode(Document.CONTENT);
+		contentNode.setProperty(Document.SIZE, size);
+		contentNode.setProperty(JcrConstants.JCR_DATA, is);
+		
+		/** EXPERIMENTAL **/
+		String mimeType = contentNode.getProperty(JcrConstants.JCR_MIMETYPE).getString();
+		InputStream in = contentNode.getProperty(JcrConstants.JCR_DATA).getStream();
+		InputStream out = RegisteredExtractors.getText(mimeType, "UTF-8", in);
+		contentNode.setProperty(Document.TEXT, out);
+		IOUtils.closeQuietly(out);
+		IOUtils.closeQuietly(in);
+		/** EXPERIMENTAL **/
+		
+		contentNode.setProperty(JcrConstants.JCR_LASTMODIFIED, Calendar.getInstance());
+		contentNode.save();
 	}
 	
 	/**
