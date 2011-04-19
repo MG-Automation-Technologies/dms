@@ -165,7 +165,7 @@ public class BaseDocumentModule {
 			
 			try {
 				in = contentNode.getProperty(JcrConstants.JCR_DATA).getStream();
-				out = RegisteredExtractors.getText(mimeType, "UTF-8", in);
+				out = RegisteredExtractors.getText(documentNode, mimeType, "UTF-8", in);
 				contentNode.setProperty(Document.TEXT, out);
 			} finally {
 				IOUtils.closeQuietly(out);
@@ -373,7 +373,7 @@ public class BaseDocumentModule {
 			try {
 				String mimeType = contentNode.getProperty(JcrConstants.JCR_MIMETYPE).getString();
 				in = contentNode.getProperty(JcrConstants.JCR_DATA).getStream();
-				out = RegisteredExtractors.getText(mimeType, "UTF-8", in);
+				out = RegisteredExtractors.getText(docNode, mimeType, "UTF-8", in);
 				contentNode.setProperty(Document.TEXT, out);
 			} finally {
 				IOUtils.closeQuietly(out);
