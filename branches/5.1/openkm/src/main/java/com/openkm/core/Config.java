@@ -43,6 +43,7 @@ import com.openkm.principal.DatabasePrincipalAdapter;
 public class Config {
 	private static Logger log = LoggerFactory.getLogger(Config.class);
 	public static TreeMap<String, String> values = new TreeMap<String, String>();
+	public static boolean EXPERIMENTAL_TEXT_EXTRACTION = false;
 	
 	// Default directories
 	public static final String HOME_DIR = getHomeDir();

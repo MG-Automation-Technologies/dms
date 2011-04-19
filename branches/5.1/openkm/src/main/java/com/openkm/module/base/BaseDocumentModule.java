@@ -158,13 +158,21 @@ public class BaseDocumentModule {
 			contentNode.setProperty(JcrConstants.JCR_ENCODING, "UTF-8");
 		}
 		
-		/** EXPERIMENTAL **/
-		InputStream in = contentNode.getProperty(JcrConstants.JCR_DATA).getStream();
-		InputStream out = RegisteredExtractors.getText(mimeType, "UTF-8", in);
-		contentNode.setProperty(Document.TEXT, out);
-		IOUtils.closeQuietly(out);
-		IOUtils.closeQuietly(in);
-		/** EXPERIMENTAL **/
+		if (Config.EXPERIMENTAL_TEXT_EXTRACTION) {
+			/** EXPERIMENTAL **/
+			InputStream in = null;
+			InputStream out = null;
+			
+			try {
+				in = contentNode.getProperty(JcrConstants.JCR_DATA).getStream();
+				out = RegisteredExtractors.getText(mimeType, "UTF-8", in);
+				contentNode.setProperty(Document.TEXT, out);
+			} finally {
+				IOUtils.closeQuietly(out);
+				IOUtils.closeQuietly(in);
+			}
+			/** EXPERIMENTAL **/
+		}
 		
 		contentNode.setProperty(JcrConstants.JCR_LASTMODIFIED, Calendar.getInstance());
 		parentNode.save();
@@ -357,14 +365,22 @@ public class BaseDocumentModule {
 		contentNode.setProperty(Document.SIZE, size);
 		contentNode.setProperty(JcrConstants.JCR_DATA, is);
 		
-		/** EXPERIMENTAL **/
-		String mimeType = contentNode.getProperty(JcrConstants.JCR_MIMETYPE).getString();
-		InputStream in = contentNode.getProperty(JcrConstants.JCR_DATA).getStream();
-		InputStream out = RegisteredExtractors.getText(mimeType, "UTF-8", in);
-		contentNode.setProperty(Document.TEXT, out);
-		IOUtils.closeQuietly(out);
-		IOUtils.closeQuietly(in);
-		/** EXPERIMENTAL **/
+		if (Config.EXPERIMENTAL_TEXT_EXTRACTION) {
+			/** EXPERIMENTAL **/
+			InputStream in = null;
+			InputStream out = null;
+			
+			try {
+				String mimeType = contentNode.getProperty(JcrConstants.JCR_MIMETYPE).getString();
+				in = contentNode.getProperty(JcrConstants.JCR_DATA).getStream();
+				out = RegisteredExtractors.getText(mimeType, "UTF-8", in);
+				contentNode.setProperty(Document.TEXT, out);
+			} finally {
+				IOUtils.closeQuietly(out);
+				IOUtils.closeQuietly(in);
+			}
+			/** EXPERIMENTAL **/
+		}
 		
 		contentNode.setProperty(JcrConstants.JCR_LASTMODIFIED, Calendar.getInstance());
 		contentNode.save();
