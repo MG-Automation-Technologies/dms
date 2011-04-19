@@ -39,12 +39,17 @@
             <c:url value="Handler" var="urlBrowse">
               <c:param name="path" value="${fld.path}"/>
             </c:url>
+            <c:url value="Handler" var="urlProperties">
+              <c:param name="action" value="fldprop"/>
+              <c:param name="uuid" value="${fld.uuid}"/>
+            </c:url>
             <c:choose>
               <c:when test="${fld.hasChilds}"><c:set var="fldImg" value="menuitem_childs.gif"/></c:when>
               <c:otherwise><c:set var="fldImg" value="menuitem_empty.gif"/></c:otherwise>
             </c:choose>
             <img src="../frontend/img/${fldImg}" class="ui-li-icon"/>
             <a href="${urlBrowse}" data-transition="slide"><u:getName path="${fld.path}"/></a>
+            <a href="${urlProperties}" data-role="button"></a>
           </li>
         </c:forEach>
         <!-- List documents -->
