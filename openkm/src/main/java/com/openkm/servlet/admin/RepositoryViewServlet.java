@@ -171,7 +171,7 @@ public class RepositoryViewServlet extends BaseServlet {
 			JCRUtils.loadLockTokens(session);
 			
 			// If the session contains the lock token of this locked node
-			if (Arrays.binarySearch(session.getLockTokens(), lt) > -1) {
+			if (Arrays.asList(session.getLockTokens()).contains(lt)) {
 				node.unlock();
 				JCRUtils.removeLockToken(session, node);
 			} else {
