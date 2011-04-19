@@ -113,7 +113,7 @@ public class DataBrowserServlet extends BaseServlet {
 		List<Map<String, String>> documents = new ArrayList<Map<String, String>>();
 		
 		// Add parent folder link
-		if (Arrays.binarySearch(File.listRoots(), dir) < 0) {
+		if (!Arrays.asList(File.listRoots()).contains(dir)) {
 			Map<String, String> item = new HashMap<String, String>();
 			File parent = dir.getParentFile();
 			item.put("name", "&lt;PARENT FOLDER&gt;");

@@ -87,18 +87,21 @@ public class RegisteredExtractors {
 		try {
 			// Check for available text extractor
 			for (TextExtractor te : RegisteredExtractors.extractors) {
-				if (Arrays.binarySearch(te.getContentTypes(), mimeType) > -1) {
-					log.info("Resolved extractor: {}", te.getClass());
-					Reader rd = te.extractText(is, null, encoding);
+				log.info("Testing {} => {}", te.getClass().getCanonicalName(), te.getContentTypes());
+				
+				if (Arrays.asList(te.getContentTypes()).contains(mimeType)) {
+					log.info("Resolved extractor: {}", te.getClass().getCanonicalName());
+					Reader rd = te.extractText(is, mimeType, encoding);
 					ret = new ReaderInputStream(rd);
 				}
 			}
 		} catch (Exception e) {
+			log.warn("Text extraction failure: {}", e.getMessage());
 			failure = true;
 		}
 		
-		if (failure || ret.available() < MIN_EXTRACTION) {
-			UserActivity.log(node.getSession().getUserID(), "TEXT_EXTRACTOR", node.getUUID(), node.getPath());
+		if (failure || ret == null || ret.available() < MIN_EXTRACTION) {
+			UserActivity.log(node.getSession().getUserID(), "MISC_TEXT_EXTRACTION", node.getUUID(), node.getPath());
 		}
 		
 		log.info("getText: {}", ret);
