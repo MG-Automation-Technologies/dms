@@ -544,6 +544,10 @@
   	<url-pattern>/mobile/Handler</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
+  	<servlet-name>HandlerServlet</servlet-name>
+  	<url-pattern>/mobile-nt/Handler</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
     <servlet-name>SyndicationServlet</servlet-name>
     <url-pattern>/feed/*</url-pattern>
   </servlet-mapping>
@@ -783,6 +787,7 @@
       <!-- JSPs -->
       <url-pattern>/admin/*</url-pattern>
       <url-pattern>/mobile/*</url-pattern>
+      <url-pattern>/mobile-nt/*</url-pattern>
             
       <!-- Servlets -->
 	  <url-pattern>/RepositoryStartup</url-pattern>
