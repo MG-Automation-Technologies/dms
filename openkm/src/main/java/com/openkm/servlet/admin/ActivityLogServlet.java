@@ -109,7 +109,11 @@ public class ActivityLogServlet extends BaseServlet {
 			"ADMIN_STAMP_TEXT_CREATE", "ADMIN_STAMP_TEXT_EDIT", "ADMIN_STAMP_TEXT_DELETE", "ADMIN_STAMP_TEXT_ACTIVE",
 			"ADMIN_TWITTER_ACCOUNT_CREATE", "ADMIN_TWITTER_ACCOUNT_EDIT", "ADMIN_TWITTER_ACCOUNT_DELETE",
 			"ADMIN_USER_CONFIG_EDIT",
-			"ADMIN_OPENKM_START", "ADMIN_OPENKM_STOP"
+			
+			//---------------------------------
+			"Misc",
+			"MISC_OPENKM_START", "MISC_OPENKM_STOP",
+			"MISC_TEXT_EXTRACTION"
 		};
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
