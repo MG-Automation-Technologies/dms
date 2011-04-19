@@ -188,7 +188,7 @@ public class ForumDAO {
 	 * Find by pk
 	 */
 	public static ForumTopic findTopicByPk(int id) throws DatabaseException {
-		log.debug("findTopicByPk({})");	
+		log.debug("findTopicByPk({})");
 		Session session = null;
 		
 		try {
