@@ -87,12 +87,13 @@ public class RegisteredExtractors {
 		try {
 			// Check for available text extractor
 			for (TextExtractor te : RegisteredExtractors.extractors) {
-				log.info("Testing {} => {}", te.getClass().getCanonicalName(), te.getContentTypes());
+				log.debug("Testing {} => {}", te.getClass().getCanonicalName(), te.getContentTypes());
 				
 				if (Arrays.asList(te.getContentTypes()).contains(mimeType)) {
 					log.info("Resolved extractor: {}", te.getClass().getCanonicalName());
 					Reader rd = te.extractText(is, mimeType, encoding);
 					ret = new ReaderInputStream(rd);
+					break;
 				}
 			}
 		} catch (Exception e) {
