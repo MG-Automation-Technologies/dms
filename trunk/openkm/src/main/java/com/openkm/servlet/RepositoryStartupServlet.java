@@ -115,7 +115,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         start();
         
         // Activity log
-		UserActivity.log(Config.SYSTEM_USER, "ADMIN_OPENKM_START", null, null);
+		UserActivity.log(Config.SYSTEM_USER, "MISC_OPENKM_START", null, null);
     }
     
 	@Override
@@ -126,7 +126,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         stop(this);
         
         // Activity log
-		UserActivity.log(Config.SYSTEM_USER, "ADMIN_OPENKM_STOP", null, null);
+		UserActivity.log(Config.SYSTEM_USER, "MISC_OPENKM_STOP", null, null);
     }
 	
 	/**
