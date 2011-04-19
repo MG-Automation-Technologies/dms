@@ -58,9 +58,9 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 	
 	@Override
 	public List<GWTForumTopic> getTopicsByForum(int id) throws OKMException {
-		log.debug("getTopicsByForum({})",id);
+		log.debug("getTopicsByForum({})", id);
 		updateSessionManager();
-		List<GWTForumTopic> topicList = new ArrayList<GWTForumTopic>(); 
+		List<GWTForumTopic> topicList = new ArrayList<GWTForumTopic>();
 		
 		try {
 			for (ForumTopic topic : ForumDAO.findByPk(id).getTopics()) {
@@ -70,13 +70,13 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMForumService, ErrorCode.CAUSE_Database), e.getMessage());
 		}
-		log.debug("getTopicsByUuid:"+topicList);
+		log.debug("getTopicsByUuid: {}", topicList);
 		return topicList;
 	}
 	
 	@Override
 	public List<GWTForumTopic> getTopicsByUuid(String uuid) throws OKMException {
-		log.debug("getTopicsByUuid({})",uuid);
+		log.debug("getTopicsByUuid({})", uuid);
 		updateSessionManager();
 		List<GWTForumTopic> topicList = new ArrayList<GWTForumTopic>(); 
 		
@@ -88,14 +88,15 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMForumService, ErrorCode.CAUSE_Database), e.getMessage());
 		}
-		log.debug("getTopicsByUuid:"+topicList);
+		log.debug("getTopicsByUuid: {}", topicList);
 		return topicList;
 	}
 	
 	@Override
 	public GWTForumTopic createTopic(int id, String uuid, GWTForumTopic topic) throws OKMException {
-		log.debug("createTopic({}, {}, {})", new Object[] {id, uuid, topic});
+		log.debug("createTopic({}, {}, {})", new Object[] { id, uuid, topic });
 		updateSessionManager();
+		
 		try {
 			Forum forum = ForumDAO.findByPk(id);
 			topic.setDate(new Date());
@@ -109,14 +110,16 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 			post.setDate(topic.getDate());
 			post.setUser(topic.getUser());
 			forum.getTopics().add(GWTUtil.copy(topic));
-			forum.setNumTopics(forum.getNumTopics()+1);
-			forum.setNumPosts(forum.getNumPosts()+1);
+			forum.setNumTopics(forum.getNumTopics() + 1);
+			forum.setNumPosts(forum.getNumPosts() + 1);
 			ForumDAO.update(forum);
 			ForumTopic ft = new ForumTopic();
+			
 			for (Iterator<ForumTopic> it = forum.getTopics().iterator(); it.hasNext();) {
 				ft = it.next();
 			}
-			log.debug("getTopicsByUuid:"+ft);
+			
+			log.debug("getTopicsByUuid: {}", ft);
 			return GWTUtil.copy(ft);
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
@@ -126,8 +129,9 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 	
 	@Override
 	public GWTForumTopic findTopicByPK(int id) throws OKMException {
-		log.debug("findTopicByPK({})",id);
+		log.debug("findTopicByPK({})", id);
 		updateSessionManager();
+		
 		try {
 			return GWTUtil.copy(ForumDAO.findTopicByPk(id));
 		} catch (DatabaseException e) {
@@ -138,22 +142,24 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 	
 	@Override
 	public void createPost(int forumId, int postId, GWTForumPost post) throws OKMException {
-		log.debug("createPost({},{})", postId,post.getSubject());
+		log.debug("createPost({}, {})", postId, post.getSubject());
 		updateSessionManager();
+		
 		try {
 			ForumTopic topic = ForumDAO.findTopicByPk(postId);
 			post.setDate(new Date());
 			post.setUser(getThreadLocalRequest().getRemoteUser());
 			topic.getPosts().add(GWTUtil.copy(post));
-			topic.setReplies(topic.getReplies()+1);
+			topic.setReplies(topic.getReplies() + 1);
 			topic.setLastUser(post.getUser());
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(post.getDate());
 			topic.setLastDate(cal);
 			ForumDAO.update(topic);
+			
 			// Increase number of post
 			Forum forum = ForumDAO.findByPk(forumId);
-			forum.setNumPosts(forum.getNumPosts()+1);
+			forum.setNumPosts(forum.getNumPosts() + 1);
 			ForumDAO.update(forum);
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
@@ -163,11 +169,12 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 	
 	@Override
 	public void increaseTopicView(int id) throws OKMException {
-		log.debug("increaseTopicView({})",id);
+		log.debug("increaseTopicView({})", id);
 		updateSessionManager();
+		
 		try {
 			ForumTopic topic = ForumDAO.findTopicByPk(id);
-			topic.setViews(topic.getViews()+1);
+			topic.setViews(topic.getViews() + 1);
 			ForumDAO.update(topic);
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
@@ -177,33 +184,38 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 
 	@Override
 	public Boolean deletePost(int forumId, int topicId, int postId) throws OKMException {
-		log.debug("deletePost({},{})",topicId, postId);
+		log.debug("deletePost({}, {})", topicId, postId);
 		updateSessionManager();
+		
 		try {
 			ForumTopic topic = ForumDAO.findTopicByPk(topicId);
+			
 			for (ForumPost post : topic.getPosts()) {
-				if (post.getId()==postId) {
-					topic.setReplies(topic.getReplies()-1);
+				if (post.getId() == postId) {
+					topic.setReplies(topic.getReplies() - 1);
 					topic.getPosts().remove(post);
 					break;
 				}
 			}
-			if (topic.getPosts().size()>0) {
+			
+			if (topic.getPosts().size() > 0) {
 				ForumDAO.update(topic); // Deleting post
 				Forum forum = ForumDAO.findByPk(forumId);
-				forum.setNumPosts(forum.getNumPosts()-1);
+				forum.setNumPosts(forum.getNumPosts() - 1);
 				ForumDAO.update(forum); // Updating forum
 				return new Boolean(true);
 			} else {
 				Forum forum = ForumDAO.findByPk(forumId);
-				forum.setNumPosts(forum.getNumPosts()-1);
-				forum.setNumTopics(forum.getNumTopics()-1);
+				forum.setNumPosts(forum.getNumPosts() - 1);
+				forum.setNumTopics(forum.getNumTopics() - 1);
+				
 				for (ForumTopic fp : forum.getTopics()) {
-					if (fp.getId()==topicId) {
+					if (fp.getId() == topicId) {
 						forum.getTopics().remove(fp);
 						break;
 					}
 				}
+				
 				ForumDAO.update(forum); // Deleting topic
 				return new Boolean(false);
 			}
@@ -215,8 +227,9 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 
 	@Override
 	public void updatePost(GWTForumPost post) throws OKMException {
-		log.debug("updatePost({})",post.getId());
+		log.debug("updatePost({})", post.getId());
 		updateSessionManager();
+		
 		try {
 			ForumPost fp = ForumDAO.findPostByPk(post.getId());
 			fp.setSubject(post.getSubject());
@@ -233,6 +246,7 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 		log.debug("getAllForum()");
 		List<GWTForum> forumList = new ArrayList<GWTForum>();
 		updateSessionManager();
+		
 		try {
 			for (Forum forum : ForumDAO.findAll()) {
 				// Only administrators can see first forum ( all document discussions )
@@ -255,6 +269,7 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 	public GWTForum createForum(GWTForum forum) throws OKMException {
 		log.debug("createForum()");
 		updateSessionManager();
+		
 		try {
 			forum.setDate(new Date());
 			forum.setLastDate(new Date());
@@ -274,6 +289,7 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 	public void deleteForum(int id) throws OKMException {
 		log.debug("deleteForum()");
 		updateSessionManager();
+		
 		try {
 			ForumDAO.delete(id);
 		} catch (DatabaseException e) {
@@ -286,6 +302,7 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 	public void updateForum(GWTForum forum) throws OKMException {
 		log.debug("updateForum()");
 		updateSessionManager();
+		
 		try {
 			Forum f = ForumDAO.findByPk(forum.getId());
 			f.setName(forum.getName());
@@ -299,14 +316,16 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 
 	@Override
 	public void updateTopic(int id, GWTForumPost post) throws OKMException {
-		log.debug("updateTopic({},{})",id,post.getId());
+		log.debug("updateTopic({}, {})", id,post.getId());
 		updateSessionManager();
+		
 		try {
 			// Update post
 			ForumPost fp = ForumDAO.findPostByPk(post.getId());
 			fp.setSubject(post.getSubject());
 			fp.setMessage(post.getMessage());
 			ForumDAO.update(fp);
+			
 			// Update topic
 			ForumTopic ft = ForumDAO.findTopicByPk(id);
 			ft.setTitle(post.getSubject()); // Updating the title
