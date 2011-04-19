@@ -27,7 +27,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -441,11 +440,7 @@ public class DirectDocumentModule implements DocumentModule {
 			
 			JCRUtils.loadLockTokens(session);
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
-			contentNode = documentNode.getNode(Document.CONTENT);
-			contentNode.setProperty(Document.SIZE, size);
-			contentNode.setProperty(JcrConstants.JCR_DATA, is);
-			contentNode.setProperty(JcrConstants.JCR_LASTMODIFIED, Calendar.getInstance());
-			contentNode.save();
+			BaseDocumentModule.setContent(session, documentNode, is);
 
 			// Check scripting
 			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "SET_DOCUMENT_CONTENT");
