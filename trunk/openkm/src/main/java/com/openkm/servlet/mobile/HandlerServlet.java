@@ -27,6 +27,7 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.util.WebUtils;
 
 /**
  * Servlet implementation class HandlerServlet
@@ -43,8 +44,9 @@ public class HandlerServlet extends HttpServlet {
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws
 			ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		String action = request.getParameter("action")!=null?request.getParameter("action"):"";
-		 
+		String action = WebUtils.getString(request, "action");
+		log.debug("action: {}", action);
+		
 		try {
 			if (action.equals("") || action.equals("browse")) {
 				browse(request, response);
@@ -88,7 +90,7 @@ public class HandlerServlet extends HttpServlet {
 		log.debug("browse({}, {})", request, response);
 		ServletContext sc = getServletContext();
 		String userId = request.getRemoteUser();
-		String path = request.getParameter("path");
+		String path = WebUtils.getString(request, "path");
 		
 		if (path == null || path.equals("")) {
 			path = "/okm:root";
@@ -108,12 +110,19 @@ public class HandlerServlet extends HttpServlet {
 	
 	/**
 	 * Folder properties
+	 * @throws AccessDeniedException 
 	 */
 	private void fldProperties(HttpServletRequest request, HttpServletResponse response) throws
-			PathNotFoundException, RepositoryException, IOException, ServletException, DatabaseException {
+			PathNotFoundException, AccessDeniedException, RepositoryException, IOException,
+			ServletException, DatabaseException {
 		log.debug("fldProperties({}, {})", request, response);
 		ServletContext sc = getServletContext();
-		String path = request.getParameter("path");
+		String uuid = WebUtils.getString(request, "uuid", null);
+		String path = WebUtils.getString(request, "path");
+		
+		if (uuid != null) {
+			path = OKMFolder.getInstance().getPath(null, uuid);
+		}
 		
 		if (path == null || path.equals("")) {
 			path = "/okm:root";
@@ -127,12 +136,19 @@ public class HandlerServlet extends HttpServlet {
 	
 	/**
 	 * Document properties
+	 * @throws AccessDeniedException 
 	 */
 	private void docProperties(HttpServletRequest request, HttpServletResponse response) throws
-			PathNotFoundException, RepositoryException, IOException, ServletException, DatabaseException {
+			PathNotFoundException, AccessDeniedException, RepositoryException, IOException,
+			ServletException, DatabaseException {
 		log.debug("docProperties({}, {})", request, response);
 		ServletContext sc = getServletContext();
-		String path = request.getParameter("path");
+		String uuid = WebUtils.getString(request, "uuid", null);
+		String path = WebUtils.getString(request, "path");
+		
+		if (uuid != null) {
+			path = OKMDocument.getInstance().getPath(null, uuid);
+		}
 				
 		if (path == null || path.equals("")) {
 			path = "/okm:root";
