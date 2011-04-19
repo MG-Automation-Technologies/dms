@@ -48,6 +48,7 @@ import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.nodetype.PropertyDefinition;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.jackrabbit.server.io.ExportContext;
 import org.apache.jackrabbit.server.io.IOHandler;
@@ -73,7 +74,7 @@ import com.openkm.cache.UserItemsManager;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.MimeTypeDAO;
-import com.openkm.util.DocumentUtils;
+import com.openkm.extractor.RegisteredExtractors;
 import com.openkm.util.JCRUtils;
 
 public class DefaultHandler implements IOHandler, PropertyHandler {
@@ -263,11 +264,21 @@ public class DefaultHandler implements IOHandler, PropertyHandler {
             	contentNode.checkout();
             }
             
-            success = importData(context, isCollection, contentNode);
+            success = importProperties(context, isCollection, contentNode);
             
             if (success) {
-                success = importProperties(context, isCollection, contentNode);
+            	success = importData(context, isCollection, contentNode);
             }
+            
+            if (contentNode.isNodeType(Document.CONTENT_TYPE)) {
+    			// Esta línea vale millones!! Resuelve la incidencia del isCkechedOut.
+        		// Por lo visto un nuevo nodo se añade con el isCheckedOut a true :/
+            	contentNode.getParent().getParent().save();
+        		contentNode.checkin();
+        		
+        		// Check document filters
+    			//DocumentUtils.checkFilters(session, mainNode, mimeType);
+    		}
             
             if (contentNode.isNodeType("mix:versionable")) {
             	log.debug("CHECKIN");
@@ -336,8 +347,8 @@ public class DefaultHandler implements IOHandler, PropertyHandler {
      */
     protected boolean importData(ImportContext context, boolean isCollection, Node contentNode) throws IOException, RepositoryException {
     	log.debug("importData({}, {}, {})", new Object[] {context, isCollection, contentNode });
-        InputStream in = context.getInputStream();
-        if (in != null) {
+        InputStream is = context.getInputStream();
+        if (is != null) {
             // NOTE: with the default folder-nodetype (nt:folder) no inputstream
             // is allowed. setting the property would therefore fail.
             if (isCollection) {
@@ -345,9 +356,26 @@ public class DefaultHandler implements IOHandler, PropertyHandler {
             }
             
             try {
-                contentNode.setProperty(JcrConstants.JCR_DATA, in);
+                contentNode.setProperty(JcrConstants.JCR_DATA, is);
+                
+                if (Config.EXPERIMENTAL_TEXT_EXTRACTION) {
+        			/** EXPERIMENTAL **/
+        			InputStream in = null;
+        			InputStream out = null;
+        			
+        			try {
+        				String mimeType = contentNode.getProperty(JcrConstants.JCR_MIMETYPE).getString();
+        				in = contentNode.getProperty(JcrConstants.JCR_DATA).getStream();
+        				out = RegisteredExtractors.getText(mimeType, "UTF-8", in);
+        				contentNode.setProperty(Document.TEXT, out);
+        			} finally {
+        				IOUtils.closeQuietly(out);
+        				IOUtils.closeQuietly(in);
+        			}
+        			/** EXPERIMENTAL **/
+        		}
             } finally {
-                in.close();
+                is.close();
             }
         }
         // success if no data to import.
@@ -451,23 +479,11 @@ public class DefaultHandler implements IOHandler, PropertyHandler {
     		mainNode.setProperty(Permission.ROLES_WRITE, rolesWrite);
     		mainNode.setProperty(Permission.ROLES_DELETE, rolesDelete);
     		mainNode.setProperty(Permission.ROLES_SECURITY, rolesSecurity);
-    		
-    		if (contentNode.isNodeType(Document.CONTENT_TYPE)) {
-    			// Esta línea vale millones!! Resuelve la incidencia del isCkechedOut.
-        		// Por lo visto un nuevo nodo se añade con el isCheckedOut a true :/
-        		parentNode.save();
-        		contentNode.checkin();
-        		
-        		// Check document filters
-    			DocumentUtils.checkFilters(session, mainNode, mimeType);
-    		}
         } catch (ItemNotFoundException e) {
 			e.printStackTrace();
 		} catch (AccessDeniedException e) {
 			e.printStackTrace();
 		} catch (RepositoryException e) {
-			e.printStackTrace();
-		} catch (DatabaseException e) {
 			e.printStackTrace();
 		}
         

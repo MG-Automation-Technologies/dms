@@ -78,16 +78,19 @@ public class RegisteredExtractors {
 	 */
 	public static InputStream getText(String mimeType, String encoding, InputStream is) throws
 			ValueFormatException, PathNotFoundException, RepositoryException, IOException {
-		Reader ret = new StringReader("");
+		log.info("getText({}, {}, {})", new Object[] { mimeType, encoding, is });
+		Reader rd = new StringReader("");
 		
 		// Check for available text extractor
 		for (TextExtractor te : RegisteredExtractors.extractors) {
 			if (Arrays.binarySearch(te.getContentTypes(), mimeType) > -1) {
 				log.info("Resolved extractor: {}", te.getClass());
-				ret = te.extractText(is, null, encoding);
+				rd = te.extractText(is, null, encoding);
 			}
 		}
 		
-		return new ReaderInputStream(ret);
+		InputStream ret = new ReaderInputStream(rd);
+		log.info("getText: {}", ret);
+		return ret;
 	}
 }
