@@ -50,4 +50,5 @@ public interface OKMForumService extends RemoteService {
 	public GWTForum createForum(GWTForum forum) throws OKMException;
 	public void deleteForum(int id) throws OKMException;
 	public void updateForum(GWTForum forum) throws OKMException;
+	public void updateTopic(int id, GWTForumPost post) throws OKMException;
 }

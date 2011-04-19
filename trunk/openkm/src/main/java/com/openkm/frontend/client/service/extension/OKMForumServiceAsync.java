@@ -48,4 +48,5 @@ public interface OKMForumServiceAsync extends RemoteService {
 	public void createForum(GWTForum forum, AsyncCallback<GWTForum> callback);
 	public void deleteForum(int id, AsyncCallback<?> callback);
 	public void updateForum(GWTForum forum, AsyncCallback<?> callback);
+	public void updateTopic(int id, GWTForumPost post, AsyncCallback<?> callback);
 }
