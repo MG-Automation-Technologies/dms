@@ -24,6 +24,36 @@ a:active {
 	color: #ff0000;
 }
 
+h1 {
+	font-size: 30px;
+	font-weight: bold;
+}
+
+h2 {
+	font-size: 25x;
+	font-weight: bold;
+}
+
+h3 {
+	font-size: 22px;
+	font-weight: bold;
+}
+
+h4 {
+	font-size: 18px;
+	text-decoration: underline;
+}
+
+h5 {
+	font-size: 14px;
+	text-decoration: underline;
+}
+
+h6 {
+	font-size: 10px;
+	text-decoration: underline;
+}
+
 blockquote {
 	border: 1px solid #DBDBCE;
     background-color: #EBEADD;
