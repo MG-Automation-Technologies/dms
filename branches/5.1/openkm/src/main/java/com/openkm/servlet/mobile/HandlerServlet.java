@@ -22,6 +22,7 @@ import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Repository;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
@@ -102,7 +103,7 @@ public class HandlerServlet extends HttpServlet {
 		sc.setAttribute("documentChilds", docList);
 		sc.setAttribute("userId", userId);
 		sc.setAttribute("path", path);
-		sc.getRequestDispatcher("/mobile/browse.jsp").forward(request, response);
+		sc.getRequestDispatcher(Config.MOBILE_CONTEXT + "/browse.jsp").forward(request, response);
 	}
 	
 	/**
@@ -121,7 +122,7 @@ public class HandlerServlet extends HttpServlet {
 		path = new String(path.getBytes("ISO-8859-1"), "UTF-8");
 		sc.setAttribute("fld", OKMFolder.getInstance().getProperties(null, path));
 		sc.setAttribute("path", path);
-		sc.getRequestDispatcher("/mobile/fld-properties.jsp").forward(request, response);
+		sc.getRequestDispatcher(Config.MOBILE_CONTEXT + "/fld-properties.jsp").forward(request, response);
 	}
 	
 	/**
@@ -148,7 +149,7 @@ public class HandlerServlet extends HttpServlet {
 		sc.setAttribute("doc", doc);
 		sc.setAttribute("path", path);
 		sc.setAttribute("categories", categories);
-		sc.getRequestDispatcher("/mobile/doc-properties.jsp").forward(request, response);
+		sc.getRequestDispatcher(Config.MOBILE_CONTEXT + "/doc-properties.jsp").forward(request, response);
 	}
 	
 	/**
@@ -166,7 +167,7 @@ public class HandlerServlet extends HttpServlet {
 			sc.setAttribute("queryResult", OKMSearch.getInstance().findByContent(null, query));	
 		}
 
-		sc.getRequestDispatcher("/mobile/search.jsp").forward(request, response);
+		sc.getRequestDispatcher(Config.MOBILE_CONTEXT + "/search.jsp").forward(request, response);
 	}
 	
 	/**
