@@ -58,7 +58,7 @@ public class Config {
 	public static final String STOP_JAR = "stop.jar";
 	
 	// Change mobile context
-	public static String MOBILE_CONTEXT = "/mobile-nt";
+	public static String MOBILE_CONTEXT = "mobile-nt";
 	
 	// Configuration files
 	public static final String OPENKM_CONFIG = "OpenKM.cfg";
