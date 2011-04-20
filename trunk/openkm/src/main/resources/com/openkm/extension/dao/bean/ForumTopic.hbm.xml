@@ -10,8 +10,8 @@
    <property name="uuid" column="FTP_UUID" length="127"/>
    <property name="replies" column="FTP_REPLIES" not-null="true"/>
    <property name="views" column="FTP_VIEWS" not-null="true"/>
-   <property name="lastUser" column="FTP_LAST_USER" not-null="true" length="127"/>
-   <property name="lastDate" column="FTP_LAST_DATE" not-null="true"/>
+   <property name="lastPostUser" column="FTP_LAST_POST_USER" not-null="true" length="127"/>
+   <property name="lastPostDate" column="FTP_LAST_POST_DATE" not-null="true"/>
    <set name="posts" table="OKM_FORUM_POST" order-by="FPS_ID asc" cascade="all-delete-orphan" lazy="false">
      <key column="FPS_TOPIC" not-null="true"/>
      <one-to-many class="com.openkm.extension.dao.bean.ForumPost"/>
