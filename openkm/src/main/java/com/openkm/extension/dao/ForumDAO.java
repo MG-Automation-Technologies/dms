@@ -251,7 +251,7 @@ public class ForumDAO {
 	@SuppressWarnings("unchecked")
 	public static List<ForumTopic> findAllTopicByUuid(String uuid) throws DatabaseException {
 		log.debug("findAllTopicByUuid({})");
-		String qs = "from ForumTopic ft where ft.uuid=:uuid order by ft.lastDate desc";		
+		String qs = "from ForumTopic ft where ft.uuid=:uuid order by ft.lastPostDate desc";		
 		Session session = null;
 		
 		try {
