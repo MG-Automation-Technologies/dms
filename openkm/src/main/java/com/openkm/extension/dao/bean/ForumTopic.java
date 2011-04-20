@@ -20,24 +20,24 @@ public class ForumTopic implements Serializable {
 	private String uuid;
 	private int replies;
 	private int views;
-	private String lastUser;
-	private Calendar lastDate;
+	private String lastPostUser;
+	private Calendar lastPostDate;
 	private Set<ForumPost> posts = new LinkedHashSet<ForumPost>();
 	
-	public String getLastUser() {
-		return lastUser;
+	public String getLastPostUser() {
+		return lastPostUser;
 	}
 
-	public void setLastUser(String lastUser) {
-		this.lastUser = lastUser;
+	public void setLastPostUser(String lastPostUser) {
+		this.lastPostUser = lastPostUser;
 	}
 
-	public Calendar getLastDate() {
-		return lastDate;
+	public Calendar getLastPostDate() {
+		return lastPostDate;
 	}
 
-	public void setLastDate(Calendar lastDate) {
-		this.lastDate = lastDate;
+	public void setLastPostDate(Calendar lastPostDate) {
+		this.lastPostDate = lastPostDate;
 	}
 
 	public int getReplies() {
