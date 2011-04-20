@@ -207,7 +207,7 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 		
 		scrollPanel.setStyleName("okm-PanelSelected");
 		scrollPanel.addStyleName("okm-Input");
-		textArea.setStyleName("okm-Input");
+		textArea.setStyleName("okm-TextArea");
 		close.setStyleName("okm-Button");
 		
 		vPanel.setWidth("400px");

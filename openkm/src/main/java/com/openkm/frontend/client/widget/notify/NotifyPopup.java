@@ -120,7 +120,7 @@ public class NotifyPopup extends DialogBox  {
 		hPanel.setCellWidth(space, "40");
 		
 		message.setSize("374","60");
-		message.setStyleName("okm-Input");
+		message.setStyleName("okm-TextArea");
 		// TODO This is a workaround for a Firefox 2 bug
 		// http://code.google.com/p/google-web-toolkit/issues/detail?id=891
 		messageScroll = new ScrollPanel(message);

@@ -461,7 +461,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		versionComment.setWidth("375");
 		versionComment.setHeight("50");
 		versionComment.setName("comment");
-		versionComment.setStyleName("okm-Input");
+		versionComment.setStyleName("okm-TextArea");
 		versionCommentText = new HTML(Main.i18n("fileupload.label.comment"));
 		// TODO This is a workaround for a Firefox 2 bug
 		// http://code.google.com/p/google-web-toolkit/issues/detail?id=891
@@ -543,7 +543,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		commentTXT = new HTML(Main.i18n("fileupload.label.notify.comment"));
 		message.setName("message");
 		message.setSize("375","60");
-		message.setStyleName("okm-Input");
+		message.setStyleName("okm-TextArea");
 		
 		vNotifyPanel = new VerticalPanel();
 		vNotifyPanel.add(commentTXT);
