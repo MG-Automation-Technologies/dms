@@ -150,7 +150,7 @@ public class Notes extends Composite {
 
 		tableNotes.setWidth("100%");
 		gridRichText.setStyleName("cw-RichText");
-		textArea.setStyleName("okm-Input");
+		textArea.setStyleName("okm-TextArea");
 		
 		//Show hides panels depending browser to prevent problems with IE
 		if (Util.getUserAgent().startsWith("ie")) {

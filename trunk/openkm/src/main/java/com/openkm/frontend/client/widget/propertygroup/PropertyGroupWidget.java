@@ -478,7 +478,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 			HorizontalPanel hPanel = new HorizontalPanel();
 			TextArea textArea = new TextArea();
 			hPanel.add(textArea);
-			textArea.setStyleName("okm-Input");
+			textArea.setStyleName("okm-TextArea");
 			textArea.setText(((GWTTextArea) gwtMetadata).getValue());
 			textArea.setSize(gwtMetadata.getWidth(), gwtMetadata.getHeight());
 			HTML text = new HTML(); // Create a widget for this property
