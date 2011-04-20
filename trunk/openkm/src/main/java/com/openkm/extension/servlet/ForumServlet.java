@@ -50,7 +50,6 @@ import com.openkm.util.GWTUtil;
  * ForumServlet
  * 
  * @author jllort
- *
  */
 public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumService {
 	private static final long serialVersionUID = 1L;
