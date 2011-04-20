@@ -11,8 +11,8 @@ public class Forum implements Serializable {
 	private String name;
 	private String description;
 	private Calendar date;
-	private String lastUser;
-	private Calendar lastDate;
+	private String lastPostUser;
+	private Calendar lastPostDate;
 	private int numTopics;
 	private int numPosts;
 	private boolean active;
@@ -66,20 +66,20 @@ public class Forum implements Serializable {
 		this.date = date;
 	}
 
-	public String getLastUser() {
-		return lastUser;
+	public String getLastPostUser() {
+		return lastPostUser;
 	}
 
-	public void setLastUser(String lastUser) {
-		this.lastUser = lastUser;
+	public void setLastPostUser(String lastPostUser) {
+		this.lastPostUser = lastPostUser;
 	}
 
-	public Calendar getLastDate() {
-		return lastDate;
+	public Calendar getLastPostDate() {
+		return lastPostDate;
 	}
 
-	public void setLastDate(Calendar lastDate) {
-		this.lastDate = lastDate;
+	public void setLastPostDate(Calendar lastPostDate) {
+		this.lastPostDate = lastPostDate;
 	}
 	
 	public int getNumTopics() {
