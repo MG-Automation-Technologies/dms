@@ -38,6 +38,7 @@ import com.openkm.bean.StoredFile;
 import com.openkm.dao.ConfigDAO;
 import com.openkm.dao.MimeTypeDAO;
 import com.openkm.dao.bean.MimeType;
+import com.openkm.extractor.RegisteredExtractors;
 import com.openkm.principal.DatabasePrincipalAdapter;
 
 public class Config {
@@ -85,6 +86,9 @@ public class Config {
 	
 	public static final String PROPERTY_DEFAULT_USER_ROLE = "default.user.role";
 	public static final String PROPERTY_DEFAULT_ADMIN_ROLE = "default.admin.role";
+	
+	// Text extractors
+	public static final String PROPERTY_REGISTERED_TEXT_EXTRACTORS = "registered.text.extractors";
 	
 	// Workflow
 	public static final String PROPERTY_WORKFLOW_START_TASK_AUTO_RUN = "workflow.start.task.auto.run";
@@ -234,6 +238,25 @@ public class Config {
 	
 	public static String DEFAULT_USER_ROLE;
 	public static String DEFAULT_ADMIN_ROLE;
+	
+	// Text extractors
+	public static String REGISTERED_TEXT_EXTRACTORS = 
+		"org.apache.jackrabbit.extractor.PlainTextExtractor\n" +
+		"org.apache.jackrabbit.extractor.MsWordTextExtractor\n" +
+		"org.apache.jackrabbit.extractor.MsExcelTextExtractor\n" +
+		"org.apache.jackrabbit.extractor.MsPowerPointTextExtractor\n" +
+		"org.apache.jackrabbit.extractor.OpenOfficeTextExtractor\n" +
+		"org.apache.jackrabbit.extractor.RTFTextExtractor\n" +
+		"org.apache.jackrabbit.extractor.HTMLTextExtractor\n" +
+		"org.apache.jackrabbit.extractor.XMLTextExtractor\n" +
+		"org.apache.jackrabbit.extractor.PngTextExtractor\n" +
+		"org.apache.jackrabbit.extractor.MsOutlookTextExtractor\n" +
+		"com.openkm.extractor.PdfTextExtractor\n" +
+		"com.openkm.extractor.AudioTextExtractor\n" +
+		"com.openkm.extractor.ExifTextExtractor\n" +
+		"com.openkm.extractor.CuneiformTextExtractor\n" +
+		"com.openkm.extractor.SourceCodeTextExtractor\n" +
+		"com.openkm.extractor.MsOffice2007TextExtractor";
 	
 	// Workflow
 	public static String WORKFLOW_RUN_CONFIG_FORM;
@@ -539,6 +562,10 @@ public class Config {
 					"print(\"ScriptNode: \"+scriptNode.getPath());\n");
 			values.put(PROPERTY_DEFAULT_SCRIPT, DEFAULT_SCRIPT);
 			
+			// Text extractors
+			REGISTERED_TEXT_EXTRACTORS = ConfigDAO.getText(PROPERTY_REGISTERED_TEXT_EXTRACTORS, REGISTERED_TEXT_EXTRACTORS);
+			values.put(PROPERTY_REGISTERED_TEXT_EXTRACTORS, REGISTERED_TEXT_EXTRACTORS);
+			RegisteredExtractors.init();
 			
 			// Workflow
 			WORKFLOW_RUN_CONFIG_FORM = ConfigDAO.getString(PROPERTY_WORKFLOW_RUN_CONFIG_FORM, "run_config");

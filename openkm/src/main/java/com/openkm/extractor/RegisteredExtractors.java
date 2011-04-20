@@ -24,55 +24,39 @@ package com.openkm.extractor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.ValueFormatException;
 
-import org.apache.jackrabbit.extractor.HTMLTextExtractor;
-import org.apache.jackrabbit.extractor.MsExcelTextExtractor;
-import org.apache.jackrabbit.extractor.MsOutlookTextExtractor;
-import org.apache.jackrabbit.extractor.MsPowerPointTextExtractor;
-import org.apache.jackrabbit.extractor.MsWordTextExtractor;
-import org.apache.jackrabbit.extractor.OpenOfficeTextExtractor;
-import org.apache.jackrabbit.extractor.PlainTextExtractor;
-import org.apache.jackrabbit.extractor.PngTextExtractor;
-import org.apache.jackrabbit.extractor.RTFTextExtractor;
-import org.apache.jackrabbit.extractor.TextExtractor;
-import org.apache.jackrabbit.extractor.XMLTextExtractor;
+import org.apache.jackrabbit.core.query.lucene.JackrabbitTextExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.core.Config;
 import com.openkm.util.ReaderInputStream;
 import com.openkm.util.UserActivity;
 
 public class RegisteredExtractors {
 	private static Logger log = LoggerFactory.getLogger(RegisteredExtractors.class);
-	private static List<TextExtractor> extractors = new ArrayList<TextExtractor>();
+	private static final String DEFAULT_TEXT_EXTRACTOR = "org.apache.jackrabbit.extractor.EmptyTextExtractor";
+	private static JackrabbitTextExtractor jte = new JackrabbitTextExtractor(DEFAULT_TEXT_EXTRACTOR);
 	private static final int MIN_EXTRACTION = 16;
 	
-	static {
+	/**
+	 * Initialize text extractors from REGISTERED_TEXT_EXTRACTORS
+	 */
+	public static synchronized void init() {
 		log.info("Initializing text extractors");
-		extractors.add(new PlainTextExtractor());
-		extractors.add(new MsWordTextExtractor());
-		extractors.add(new MsExcelTextExtractor());
-		extractors.add(new MsPowerPointTextExtractor());
-		extractors.add(new OpenOfficeTextExtractor());
-		extractors.add(new RTFTextExtractor());
-		extractors.add(new HTMLTextExtractor());
-		extractors.add(new XMLTextExtractor());
-		extractors.add(new PngTextExtractor());
-		extractors.add(new MsOutlookTextExtractor());
-		extractors.add(new PdfTextExtractor());
-		extractors.add(new AudioTextExtractor());
-		extractors.add(new ExifTextExtractor());
-		extractors.add(new CuneiformTextExtractor());
-		extractors.add(new SourceCodeTextExtractor());
-		extractors.add(new MsOffice2007TextExtractor());
+		jte = new JackrabbitTextExtractor(Config.REGISTERED_TEXT_EXTRACTORS);
+	}
+	
+	/**
+	 * Return registered content types
+	 */
+	public static String[] getContentTypes() {
+		return jte.getContentTypes();
 	}
 	
 	/**
@@ -85,24 +69,15 @@ public class RegisteredExtractors {
 		boolean failure = false;
 		
 		try {
-			// Check for available text extractor
-			for (TextExtractor te : RegisteredExtractors.extractors) {
-				log.debug("Testing {} => {}", te.getClass().getCanonicalName(), te.getContentTypes());
-				
-				if (Arrays.asList(te.getContentTypes()).contains(mimeType)) {
-					log.info("Resolved extractor: {}", te.getClass().getCanonicalName());
-					Reader rd = te.extractText(is, mimeType, encoding);
-					
-					// Check for minimum text extraction size
-					long sk = rd.skip(MIN_EXTRACTION);
-					if (sk < MIN_EXTRACTION) failure = true;
-					rd.reset();
-					
-					// Convert reader to input stream
-					ret = new ReaderInputStream(rd);
-					break;
-				}
-			}
+			Reader rd = jte.extractText(is, mimeType, encoding);
+			
+			// Check for minimum text extraction size
+			long sk = rd.skip(MIN_EXTRACTION);
+			if (sk < MIN_EXTRACTION) failure = true;
+			rd.reset();
+			
+			// Convert reader to input stream
+			ret = new ReaderInputStream(rd);
 		} catch (Exception e) {
 			log.warn("Text extraction failure: {}", e.getMessage());
 			failure = true;
@@ -110,6 +85,7 @@ public class RegisteredExtractors {
 		
 		if (failure || ret == null) {
 			if (node != null) {
+				log.warn("There was a problem extracting text from '{}'", node.getPath());
 				UserActivity.log(node.getSession().getUserID(), "MISC_TEXT_EXTRACTION", node.getUUID(), node.getPath());
 			}
 		}
