@@ -26,18 +26,18 @@ import java.util.Calendar;
 
 public class Activity implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private int id;
+	private long id;
 	private Calendar date;
 	private String user;
 	private String action;
 	private String item;
 	private String params;
 	
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 	
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	
