@@ -33,18 +33,18 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 public class GWTActivity implements IsSerializable {
 	private static final long serialVersionUID = 1L;
-	private int id;
+	private double id;
 	private Date date;
 	private String user;
 	private String action;
 	private String item;
 	private String params;
 	
-	public int getId() {
+	public double getId() {
 		return id;
 	}
 	
-	public void setId(int id) {
+	public void setId(double id) {
 		this.id = id;
 	}
 	
