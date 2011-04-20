@@ -17,8 +17,8 @@ public class GWTForum implements Serializable {
 	private String name;
 	private String description;
 	private Date date;
-	private String lastUser;
-	private Date lastDate;
+	private String lastPostUser;
+	private Date lastPostDate;
 	private int numTopics;
 	private int numPosts;
 	private boolean active;
@@ -72,20 +72,20 @@ public class GWTForum implements Serializable {
 		this.date = date;
 	}
 
-	public String getLastUser() {
-		return lastUser;
+	public String getLastPostUser() {
+		return lastPostUser;
 	}
 
-	public void setLastUser(String lastUser) {
-		this.lastUser = lastUser;
+	public void setLastPostUser(String lastPostUser) {
+		this.lastPostUser = lastPostUser;
 	}
 
-	public Date getLastDate() {
-		return lastDate;
+	public Date getLastPostDate() {
+		return lastPostDate;
 	}
 
-	public void setLastDate(Date lastDate) {
-		this.lastDate = lastDate;
+	public void setLastPostDate(Date lastPostDate) {
+		this.lastPostDate = lastPostDate;
 	}
 	
 	public int getNumTopics() {
