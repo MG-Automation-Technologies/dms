@@ -100,10 +100,10 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 		try {
 			Forum forum = ForumDAO.findByPk(id);
 			topic.setDate(new Date());
-			topic.setLastDate(topic.getDate());
+			topic.setLastPostDate(topic.getDate());
 			topic.setUuid(uuid);
 			topic.setUser(getThreadLocalRequest().getRemoteUser());
-			topic.setLastUser(topic.getUser());
+			topic.setLastPostUser(topic.getUser());
 			topic.setReplies(0);
 			topic.setViews(0);
 			GWTForumPost post = topic.getPosts().iterator().next();
@@ -141,25 +141,29 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 	}
 	
 	@Override
-	public void createPost(int forumId, int postId, GWTForumPost post) throws OKMException {
-		log.debug("createPost({}, {})", postId, post.getSubject());
+	public void createPost(int forumId, int topicId, GWTForumPost post) throws OKMException {
+		log.debug("createPost({}, {}, {})", new Object[] { forumId, topicId, post.getSubject() });
 		updateSessionManager();
 		
 		try {
-			ForumTopic topic = ForumDAO.findTopicByPk(postId);
 			post.setDate(new Date());
 			post.setUser(getThreadLocalRequest().getRemoteUser());
+			
+			// Update topic
+			ForumTopic topic = ForumDAO.findTopicByPk(topicId);
 			topic.getPosts().add(GWTUtil.copy(post));
 			topic.setReplies(topic.getReplies() + 1);
-			topic.setLastUser(post.getUser());
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(post.getDate());
-			topic.setLastDate(cal);
+			topic.setLastPostDate(cal);
+			topic.setLastPostUser(post.getUser());
 			ForumDAO.update(topic);
 			
-			// Increase number of post
+			// Update forum
 			Forum forum = ForumDAO.findByPk(forumId);
 			forum.setNumPosts(forum.getNumPosts() + 1);
+			forum.setLastPostDate(cal);
+			forum.setLastPostUser(post.getUser());
 			ForumDAO.update(forum);
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
@@ -272,8 +276,8 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 		
 		try {
 			forum.setDate(new Date());
-			forum.setLastDate(new Date());
-			forum.setLastUser(getThreadLocalRequest().getRemoteUser());
+			forum.setLastPostDate(new Date());
+			forum.setLastPostUser(getThreadLocalRequest().getRemoteUser());
 			forum.setNumPosts(0);
 			forum.setNumTopics(0);
 			Forum f = GWTUtil.copy(forum);
