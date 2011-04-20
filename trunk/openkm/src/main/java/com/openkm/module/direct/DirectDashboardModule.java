@@ -811,8 +811,8 @@ public class DirectDashboardModule implements DashboardModule {
 	public List<DashboardDocumentResult> getLastWeekTopDownloadedDocuments(Session session) throws
 			javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getLastWeekTopDownloadedDocuments({})", session);
-		String qs = "select a.item, max(a.date) from Activity a "+
-			"where a.action='GET_DOCUMENT_CONTENT' and a.item like '/okm:root/%' "+
+		String qs = "select a.item, max(a.date) from Activity a " +
+			"where a.action='GET_DOCUMENT_CONTENT' " +
 			"and a.date>:date group by a.item order by count(a.item) desc";
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.WEEK_OF_YEAR, -1);
@@ -855,8 +855,8 @@ public class DirectDashboardModule implements DashboardModule {
 	public List<DashboardDocumentResult> getLastMonthTopDownloadedDocuments(Session session) throws
 			javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getLastMonthTopDownloadedDocuments({})", session);
-		String qs = "select a.item, max(a.date) from Activity a "+
-			"where a.action='GET_DOCUMENT_CONTENT' and a.item like '/okm:root/%' "+
+		String qs = "select a.item, max(a.date) from Activity a " +
+			"where a.action='GET_DOCUMENT_CONTENT' " +
 			"and a.date>:date group by a.item order by count(a.item) desc";
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.MONTH, -1);
@@ -901,8 +901,8 @@ public class DirectDashboardModule implements DashboardModule {
 	public List<DashboardDocumentResult> getLastWeekTopModifiedDocuments(Session session) throws
 			javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getLastWeekTopModifiedDocuments({})", session);
-		String qs = "select a.item, max(a.date) from Activity a "+
-			"where a.action='SET_DOCUMENT_CONTENT' and a.item like '/okm:root/%' "+
+		String qs = "select a.item, max(a.date) from Activity a " +
+			"where a.action='SET_DOCUMENT_CONTENT' " +
 			"and a.date>:date group by a.item order by count(a.item) desc";
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.WEEK_OF_YEAR, -1);
@@ -945,8 +945,8 @@ public class DirectDashboardModule implements DashboardModule {
 	public List<DashboardDocumentResult> getLastMonthTopModifiedDocuments(Session session) throws
 			javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getLastMonthTopModifiedDocuments({})", session);
-		String qs = "select a.item, max(a.date) from Activity a "+
-			"where a.action='SET_DOCUMENT_CONTENT' and a.item like '/okm:root/%' "+
+		String qs = "select a.item, max(a.date) from Activity a " +
+			"where a.action='SET_DOCUMENT_CONTENT' " +
 			"and a.date>:date group by a.item order by count(a.item) desc";
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.MONTH, -1);
@@ -990,8 +990,8 @@ public class DirectDashboardModule implements DashboardModule {
 	public List<DashboardDocumentResult> getLastModifiedDocuments(Session session) throws
 			javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getLastModifiedDocuments({})", session);
-		String qs = "select distinct a.item, max(a.date) from Activity a "+
-			"where a.action='SET_DOCUMENT_CONTENT' and a.item like '/okm:root/%' "+
+		String qs = "select distinct a.item, max(a.date) from Activity a " +
+			"where a.action='SET_DOCUMENT_CONTENT' " +
 			"group by a.item order by max(a.date) desc";
 		List<DashboardDocumentResult> al = getTopDocuments(session, qs, null);
 		
@@ -1027,12 +1027,13 @@ public class DirectDashboardModule implements DashboardModule {
 	
 	/**
 	 * Convenient method for syndication
+	 * TODO Tiene sentido agrupar por item siendo el UUID único? 
 	 */
 	public List<DashboardDocumentResult> getLastUploadedDocuments(Session session) 
 			throws javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getLastUploadedDocuments({})", session);
-		String qs = "select distinct a.item, max(a.date) from Activity a "+
-			"where a.action='CREATE_DOCUMENT' and a.item like '/okm:root/%' "+
+		String qs = "select distinct a.item, max(a.date) from Activity a " +
+			"where a.action='CREATE_DOCUMENT' " +
 			"group by a.item order by max(a.date) desc";
 		List<DashboardDocumentResult> al = getTopDocuments(session, qs, null);
 		
@@ -1052,6 +1053,7 @@ public class DirectDashboardModule implements DashboardModule {
 		log.debug("getTopDocuments({}, {}, {})", new Object[] { session, qs, (date!=null?date.getTime():"null") });
 		ArrayList<DashboardDocumentResult> al = new ArrayList<DashboardDocumentResult>();
 		org.hibernate.Session hSession = null;
+		int cont = 0;
 		
 		try {
 			hSession = HibernateUtil.getSessionFactory().openSession();
@@ -1061,21 +1063,27 @@ public class DirectDashboardModule implements DashboardModule {
 				q.setCalendar("date", date); 
 			}
 			
-			q.setMaxResults(MAX_RESULTS);
+			// Because we can't filter only documents from /okm:root in the query
+			//q.setMaxResults(MAX_RESULTS);
 			
-			for (Iterator<Object[]> it = q.list().iterator(); it.hasNext(); ) {
+			// While there is more query results and the MAX_RESULT limit has reached
+			for (Iterator<Object[]> it = q.list().iterator(); it.hasNext() && cont < MAX_RESULTS; cont++) {
 				Object[] obj = it.next();
 				String resItem = (String) obj[0];
 				Calendar resDate = (Calendar) obj[1];
 				
 				try {
 					Node node = session.getNodeByUUID(resItem);
-					Document doc = BaseDocumentModule.getProperties(session, node);
-					DashboardDocumentResult vo = new DashboardDocumentResult();
-					vo.setDocument(doc);
-					vo.setDate(resDate);
-					vo.setVisited(false);
-					al.add(vo);
+					
+					// Only documents from taxonomy
+					if (node.getPath().startsWith("/okm:root")) {
+						Document doc = BaseDocumentModule.getProperties(session, node);
+						DashboardDocumentResult vo = new DashboardDocumentResult();
+						vo.setDocument(doc);
+						vo.setDate(resDate);
+						vo.setVisited(false);
+						al.add(vo);
+					}
 				} catch (ItemNotFoundException e) {
 					// Do nothing
 				}
