@@ -1429,8 +1429,8 @@ public class GWTUtil {
 		f.setDate(forum.getDate().getTime());
 		f.setDescription(forum.getDescription());
 		f.setId(forum.getId());
-		f.setLastDate(forum.getLastDate().getTime());
-		f.setLastUser(forum.getLastUser());
+		f.setLastPostDate(forum.getLastPostDate().getTime());
+		f.setLastPostUser(forum.getLastPostUser());
 		f.setName(forum.getName());
 		f.setNumPosts(forum.getNumPosts());
 		f.setNumTopics(forum.getNumTopics());
@@ -1451,8 +1451,8 @@ public class GWTUtil {
 		ft.setDate(topic.getDate().getTime());
 		ft.setId(topic.getId());
 		ft.setReplies(topic.getReplies());
-		ft.setLastDate(topic.getLastDate().getTime());
-		ft.setLastUser(topic.getLastUser());
+		ft.setLastPostDate(topic.getLastPostDate().getTime());
+		ft.setLastPostUser(topic.getLastPostUser());
 		ft.setTitle(topic.getTitle());
 		ft.setUser(topic.getUser());
 		ft.setUuid(topic.getUuid());
@@ -1494,9 +1494,9 @@ public class GWTUtil {
 		f.setDescription(forum.getDescription());
 		f.setId(forum.getId());
 		Calendar cal2 = Calendar.getInstance();
-		cal2.setTime(forum.getLastDate());
-		f.setLastDate(cal2);
-		f.setLastUser(forum.getLastUser());
+		cal2.setTime(forum.getLastPostDate());
+		f.setLastPostDate(cal2);
+		f.setLastPostUser(forum.getLastPostUser());
 		f.setName(forum.getName());
 		f.setNumPosts(forum.getNumPosts());
 		f.setNumTopics(forum.getNumTopics());
@@ -1520,9 +1520,9 @@ public class GWTUtil {
 		ft.setId(topic.getId());
 		ft.setReplies(topic.getReplies());
 		Calendar lastDate = Calendar.getInstance();
-		lastDate.setTime(topic.getLastDate());
-		ft.setLastDate(lastDate);
-		ft.setLastUser(topic.getLastUser());
+		lastDate.setTime(topic.getLastPostDate());
+		ft.setLastPostDate(lastDate);
+		ft.setLastPostUser(topic.getLastPostUser());
 		ft.setTitle(topic.getTitle());
 		ft.setUser(topic.getUser());
 		ft.setUuid(topic.getUuid());
