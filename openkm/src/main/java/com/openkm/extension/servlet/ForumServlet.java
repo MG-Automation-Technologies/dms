@@ -70,6 +70,7 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMForumService, ErrorCode.CAUSE_Database), e.getMessage());
 		}
+		
 		log.debug("getTopicsByUuid: {}", topicList);
 		return topicList;
 	}
@@ -88,6 +89,7 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMForumService, ErrorCode.CAUSE_Database), e.getMessage());
 		}
+		
 		log.debug("getTopicsByUuid: {}", topicList);
 		return topicList;
 	}
@@ -266,6 +268,7 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMForumService, ErrorCode.CAUSE_Database), e.getMessage());
 		}
+		
 		return forumList;
 	}
 
