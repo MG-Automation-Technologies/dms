@@ -30,18 +30,20 @@ import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.ValueFormatException;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.jackrabbit.JcrConstants;
 import org.apache.jackrabbit.core.query.lucene.JackrabbitTextExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.bean.Document;
 import com.openkm.core.Config;
 import com.openkm.util.ReaderInputStream;
 import com.openkm.util.UserActivity;
 
 public class RegisteredExtractors {
 	private static Logger log = LoggerFactory.getLogger(RegisteredExtractors.class);
-	private static final String DEFAULT_TEXT_EXTRACTOR = "org.apache.jackrabbit.extractor.EmptyTextExtractor";
-	private static JackrabbitTextExtractor jte = new JackrabbitTextExtractor(DEFAULT_TEXT_EXTRACTOR);
+	private static JackrabbitTextExtractor jte = new JackrabbitTextExtractor("");
 	private static final int MIN_EXTRACTION = 16;
 	
 	/**
@@ -92,5 +94,23 @@ public class RegisteredExtractors {
 		
 		log.info("getText: {}", ret);
 		return ret;
+	}
+	
+	/** 
+	 * EXPERIMENTAL  
+	 */
+	public static void index(Node docNode, Node contNode, String mimeType) throws ValueFormatException,
+			PathNotFoundException, RepositoryException, IOException {
+		InputStream in = null;
+		InputStream out = null;
+		
+		try {
+			in = contNode.getProperty(JcrConstants.JCR_DATA).getStream();
+			out = RegisteredExtractors.getText(docNode, mimeType, "UTF-8", in);
+			contNode.setProperty(Document.TEXT, out);
+		} finally {
+			IOUtils.closeQuietly(out);
+			IOUtils.closeQuietly(in);
+		}
 	}
 }
