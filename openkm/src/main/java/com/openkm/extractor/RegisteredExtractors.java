@@ -74,9 +74,14 @@ public class RegisteredExtractors {
 			Reader rd = jte.extractText(is, mimeType, encoding);
 			
 			// Check for minimum text extraction size
-			long sk = rd.skip(MIN_EXTRACTION);
-			if (sk < MIN_EXTRACTION) failure = true;
-			rd.reset();
+			if (rd.markSupported()) {
+				rd.mark(0);
+				long sk = rd.skip(MIN_EXTRACTION);
+				if (sk < MIN_EXTRACTION) failure = true;
+				rd.reset();
+			} else {
+				log.warn("Mark not supported in {}", rd.getClass().getCanonicalName());
+			}
 			
 			// Convert reader to input stream
 			ret = new ReaderInputStream(rd);
