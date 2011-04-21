@@ -86,7 +86,7 @@ public class RegisteredExtractors {
 		if (failure || ret == null) {
 			if (node != null) {
 				log.warn("There was a problem extracting text from '{}'", node.getPath());
-				UserActivity.log(node.getSession().getUserID(), "MISC_TEXT_EXTRACTION", node.getUUID(), node.getPath());
+				UserActivity.log(node.getSession().getUserID(), "MISC_TEXT_EXTRACTION_FAILURE", node.getUUID(), node.getPath());
 			}
 		}
 		
