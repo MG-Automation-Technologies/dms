@@ -290,8 +290,7 @@ public class Dragable extends Composite implements OriginPanel {
                     if (selectedTreeItem!=null) {
                     	selectedElement = getSelectedElement(selectedTreeItem.getElement());
                     	if (selectedElement==null) {
-                    		Window.alert("problema");
-                    		Window.alert(selectedTreeItem.getElement().getInnerHTML());
+                    		Window.alert("Problem: '" + selectedTreeItem.getElement().getInnerHTML() + "'");
                     	}
                     	DOM.setElementProperty(selectedElement,"className","gwt-TreeItem gwt-TreeItem-selected");
                     	
