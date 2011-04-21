@@ -47,6 +47,7 @@ import javax.jcr.ValueFactory;
 import javax.jcr.ValueFormatException;
 import javax.jcr.lock.Lock;
 import javax.jcr.nodetype.PropertyDefinition;
+import javax.jcr.util.TraversingItemVisitor;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -69,6 +70,7 @@ import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.dao.LockTokenDAO;
+import com.openkm.extractor.RegisteredExtractors;
 import com.openkm.util.FormatUtil;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
@@ -128,6 +130,8 @@ public class RepositoryViewServlet extends BaseServlet {
 				OKMScripting.getInstance().setScript(null, path, Config.DEFAULT_SCRIPT);
 			} else if (action.equals("remove_script")) {
 				OKMScripting.getInstance().removeScript(null, path);
+			} else if (action.equals("reindex")) {
+				reindex(session, path, request, response);
 			}
 			
 			if (!action.equals("edit")) {
@@ -319,6 +323,41 @@ public class RepositoryViewServlet extends BaseServlet {
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_SAVE", node.getUUID(), property+", "+value+", "+path);
 		log.debug("save: void");
+	}
+	
+	/**
+	 * Reindex repository
+	 */
+	private void reindex(Session session, String path, HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
+		log.debug("reindex({}, {}, {}, {})", new Object[] { session, path, request, response });
+		TraversingItemVisitor tiv = new TraversingItemVisitor.Default() {
+			@Override
+			protected void entering(Node node, int level) throws RepositoryException {
+				if (node.isNodeType(Document.CONTENT_TYPE)) {
+					Node docNode = node.getParent();
+					log.info("Document: {}", docNode.getPath());
+					String mimeType = node.getProperty(JcrConstants.JCR_MIMETYPE).getString();
+					
+					try {
+						node.checkout();
+						RegisteredExtractors.index(docNode, node, mimeType);
+						node.save();
+					} catch (Exception e) {
+						log.error("Error when reindexing: {}", e.getMessage());
+					} finally {
+						node.checkin();
+					}
+				}
+			}
+		};
+		
+		Node node = session.getRootNode().getNode(path.substring(1));
+		session.getItem(node.getPath()).accept(tiv);
+		
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_REINDEX", node.getUUID(), null);
+		log.debug("reindex: void");
 	}
 
 	/**

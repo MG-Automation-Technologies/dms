@@ -42,7 +42,6 @@ import javax.jcr.ValueFormatException;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.jackrabbit.core.NodeImpl;
 import org.apache.jackrabbit.core.SessionImpl;
@@ -159,19 +158,7 @@ public class BaseDocumentModule {
 		}
 		
 		if (Config.EXPERIMENTAL_TEXT_EXTRACTION) {
-			/** EXPERIMENTAL **/
-			InputStream in = null;
-			InputStream out = null;
-			
-			try {
-				in = contentNode.getProperty(JcrConstants.JCR_DATA).getStream();
-				out = RegisteredExtractors.getText(documentNode, mimeType, "UTF-8", in);
-				contentNode.setProperty(Document.TEXT, out);
-			} finally {
-				IOUtils.closeQuietly(out);
-				IOUtils.closeQuietly(in);
-			}
-			/** EXPERIMENTAL **/
+			RegisteredExtractors.index(documentNode, contentNode, mimeType);
 		}
 		
 		contentNode.setProperty(JcrConstants.JCR_LASTMODIFIED, Calendar.getInstance());
@@ -366,20 +353,8 @@ public class BaseDocumentModule {
 		contentNode.setProperty(JcrConstants.JCR_DATA, is);
 		
 		if (Config.EXPERIMENTAL_TEXT_EXTRACTION) {
-			/** EXPERIMENTAL **/
-			InputStream in = null;
-			InputStream out = null;
-			
-			try {
-				String mimeType = contentNode.getProperty(JcrConstants.JCR_MIMETYPE).getString();
-				in = contentNode.getProperty(JcrConstants.JCR_DATA).getStream();
-				out = RegisteredExtractors.getText(docNode, mimeType, "UTF-8", in);
-				contentNode.setProperty(Document.TEXT, out);
-			} finally {
-				IOUtils.closeQuietly(out);
-				IOUtils.closeQuietly(in);
-			}
-			/** EXPERIMENTAL **/
+			String mimeType = contentNode.getProperty(JcrConstants.JCR_MIMETYPE).getString();
+			RegisteredExtractors.index(docNode, contentNode, mimeType);
 		}
 		
 		contentNode.setProperty(JcrConstants.JCR_LASTMODIFIED, Calendar.getInstance());

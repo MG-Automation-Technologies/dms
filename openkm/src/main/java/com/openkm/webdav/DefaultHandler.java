@@ -48,7 +48,6 @@ import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.nodetype.PropertyDefinition;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.jackrabbit.server.io.ExportContext;
 import org.apache.jackrabbit.server.io.IOHandler;
@@ -359,20 +358,8 @@ public class DefaultHandler implements IOHandler, PropertyHandler {
                 contentNode.setProperty(JcrConstants.JCR_DATA, is);
                 
                 if (Config.EXPERIMENTAL_TEXT_EXTRACTION) {
-        			/** EXPERIMENTAL **/
-        			InputStream in = null;
-        			InputStream out = null;
-        			
-        			try {
-        				String mimeType = contentNode.getProperty(JcrConstants.JCR_MIMETYPE).getString();
-        				in = contentNode.getProperty(JcrConstants.JCR_DATA).getStream();
-        				out = RegisteredExtractors.getText(contentNode.getParent(), mimeType, "UTF-8", in);
-        				contentNode.setProperty(Document.TEXT, out);
-        			} finally {
-        				IOUtils.closeQuietly(out);
-        				IOUtils.closeQuietly(in);
-        			}
-        			/** EXPERIMENTAL **/
+       				String mimeType = contentNode.getProperty(JcrConstants.JCR_MIMETYPE).getString();
+    				RegisteredExtractors.index(contentNode.getParent(), contentNode, mimeType);
         		}
             } finally {
                 is.close();
