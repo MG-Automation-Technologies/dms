@@ -339,14 +339,18 @@ public class RepositoryViewServlet extends BaseServlet {
 					log.info("Document: {}", docNode.getPath());
 					String mimeType = node.getProperty(JcrConstants.JCR_MIMETYPE).getString();
 					
-					try {
-						node.checkout();
-						RegisteredExtractors.index(docNode, node, mimeType);
-						node.save();
-					} catch (Exception e) {
-						log.error("Error when reindexing: {}", e.getMessage());
-					} finally {
-						node.checkin();
+					if (!node.isLocked()) {
+						try {
+							node.checkout();
+							RegisteredExtractors.index(docNode, node, mimeType);
+							node.save();
+						} catch (IOException e) {
+							log.error("Error when reindexing: {}", e.getMessage());
+						} finally {
+							if (node.isCheckedOut()) {
+								node.checkin();
+							}
+						}
 					}
 				}
 			}

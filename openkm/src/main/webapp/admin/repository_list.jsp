@@ -48,7 +48,7 @@
               </c:url>
               - <a href="${urlCheckin}">Checkin</a>
             </c:if>
-            <c:if test="${isFolder || isDocument || isDocumentContent}">
+            <c:if test="${(isFolder || isDocument || isDocumentContent) && !node.locked}">
               <c:url value="RepositoryView" var="urlReindex">
                 <c:param name="path" value="${node.path}"/>
                 <c:param name="action" value="reindex"/>
