@@ -101,14 +101,15 @@ public class StartUpPopup extends DialogBox implements ClickHandler {
 	 * @param text The text
 	 * @param actual The actual status
 	 */
-	public void addStatus(String text, int actual){
+	public void addStatus(String text, int actual) {
 		HTML tmpHTML;
 		
 		// We've jumped normally due to errors, must mark as incorrect
 		if (this.actual+1 < actual) {
-			Window.alert("error: actual:" +this.actual +" nou:"+actual);
-			for (int i = this.actual+1; i<actual; i++) {
-				tmpHTML= new HTML("&nbsp;" + Main.get().startUp.getStatusMsg(i));
+			Window.alert("Current error: " + this.actual + ", New error: " + actual);
+			
+			for (int i = this.actual+1; i < actual; i++) {
+				tmpHTML = new HTML("&nbsp;" + Main.get().startUp.getStatusMsg(i));
 				tmpHTML.setStyleName("okm-Input-Error");
 				tmpHTML.setWordWrap(false);
 				status.add(tmpHTML);
