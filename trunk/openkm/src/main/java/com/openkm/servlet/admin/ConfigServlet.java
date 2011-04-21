@@ -154,7 +154,7 @@ public class ConfigServlet extends BaseServlet {
 						} else if (item.getFieldName().equals("cfg_type")) {
 							cfg.setType(item.getString("UTF-8"));
 						} else if (item.getFieldName().equals("cfg_value")) {
-							cfg.setValue(item.getString("UTF-8"));
+							cfg.setValue(item.getString("UTF-8").trim());
 						}
 					} else {
 						is = item.getInputStream();
