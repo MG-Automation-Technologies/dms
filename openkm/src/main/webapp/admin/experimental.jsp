@@ -8,13 +8,13 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="favicon.ico" />
   <link rel="stylesheet" href="css/style.css" type="text/css" />
-  <title>Configuration</title>
+  <title>Experimental</title>
 </head>
 <body>
   <c:set var="isAdmin"><%=BaseServlet.isMultipleInstancesAdmin(request)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
-      <h1>Legacy</h1>
+      <h1>Experimental</h1>
       <c:url value="Language" var="urlAddTranslation">
       	<c:param name="action" value="addTranslation"/>
       </c:url>

@@ -71,7 +71,7 @@
   </script>
   </td>
   <c:if test="${isMultipleInstancesAdmin}">
-    <td><a target="frame" href="legacy.jsp">&nbsp;</a></td>
+    <td><a target="frame" href="experimental.jsp">&nbsp;</a></td>
   </c:if>
   </tr>
 </table>
