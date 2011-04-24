@@ -33,7 +33,6 @@ import com.openkm.frontend.client.Main;
  *
  */
 public class Administration extends Composite {
-	
 	private Frame iframe;
 	
 	/**
@@ -47,8 +46,10 @@ public class Administration extends Composite {
 		DOM.setElementProperty(iframe.getElement(), "marginheight", "0");
 		DOM.setElementProperty(iframe.getElement(), "allowtransparency", "false"); // Commented because on IE show clear if allowtransparency=true
 		DOM.setElementProperty(iframe.getElement(), "scrolling", "no");
+		DOM.setElementProperty(iframe.getElement(), "width", "100%");
+		DOM.setElementProperty(iframe.getElement(), "height", "100%");
 		
-		iframe.setUrl(Main.CONTEXT+"/admin/index.jsp");
+		iframe.setUrl(Main.CONTEXT + "/admin/index.jsp");
 		iframe.setStyleName("okm-Iframe");
 		
 		initWidget(iframe);
@@ -63,5 +64,4 @@ public class Administration extends Composite {
 	public void setSize(int width, int height) {
 		iframe.setPixelSize(width-2, height-2);
 	}
-	
 }
