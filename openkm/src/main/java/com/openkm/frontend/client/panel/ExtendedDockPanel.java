@@ -495,7 +495,8 @@ public class ExtendedDockPanel extends Composite {
 	public void disableKeyShorcuts() {
 		Log.debug("ExtendedDockPanel disableKeyShorcuts");
 		dockPanel.unsinkEvents(Event.KEYEVENTS);
-		if (handlerRegistration!=null) {
+		
+		if (handlerRegistration != null) {
 			handlerRegistration.removeHandler();
 		}
 	}
