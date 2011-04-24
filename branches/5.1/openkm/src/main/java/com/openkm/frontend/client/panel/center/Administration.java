@@ -46,8 +46,6 @@ public class Administration extends Composite {
 		DOM.setElementProperty(iframe.getElement(), "marginheight", "0");
 		DOM.setElementProperty(iframe.getElement(), "allowtransparency", "false"); // Commented because on IE show clear if allowtransparency=true
 		DOM.setElementProperty(iframe.getElement(), "scrolling", "no");
-		DOM.setElementProperty(iframe.getElement(), "width", "100%");
-		DOM.setElementProperty(iframe.getElement(), "height", "100%");
 		
 		iframe.setUrl(Main.CONTEXT + "/admin/index.jsp");
 		iframe.setStyleName("okm-Iframe");
