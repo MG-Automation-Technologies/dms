@@ -44,7 +44,6 @@ import com.openkm.principal.DatabasePrincipalAdapter;
 public class Config {
 	private static Logger log = LoggerFactory.getLogger(Config.class);
 	public static TreeMap<String, String> values = new TreeMap<String, String>();
-	public static boolean EXPERIMENTAL_TEXT_EXTRACTION = true;
 	
 	// Default directories
 	public static final String HOME_DIR = getHomeDir();
@@ -58,9 +57,6 @@ public class Config {
 	public static final String STOP_SCRIPT = "stop.bsh";
 	public static final String START_JAR = "start.jar";
 	public static final String STOP_JAR = "stop.jar";
-	
-	// Change mobile context
-	public static String MOBILE_CONTEXT = "mobile-nt";
 	
 	// Configuration files
 	public static final String OPENKM_CONFIG = "OpenKM.cfg";
@@ -79,6 +75,10 @@ public class Config {
 	public static String CACHE_DXF;
 	public static String CACHE_PDF;
 	public static String CACHE_SWF;
+	
+	// Experimental features
+	public static String PROPERTY_EXPERIMENTAL_MOBILE_CONTEXT = "experimental.mobile.context";
+	public static String PROPERTY_EXPERIMENTAL_TEXT_EXTRACTION = "experimental.text.extraction";
 	
 	// Configuration properties
 	public static final String PROPERTY_REPOSITORY_CONFIG = "repository.config";
@@ -155,7 +155,7 @@ public class Config {
 	public static final String PROPERTY_SYSTEM_OPENOFFICE_DICTIONARY = "system.openoffice.dictionary";
 	public static final String PROPERTY_SYSTEM_IMAGEMAGICK_CONVERT = "system.imagemagick.convert";
 	public static final String PROPERTY_SYSTEM_SWFTOOLS_PDF2SWF = "system.swftools.pdf2swf";
-	public static final String PROPERTY_SYSTEM_GHOSTSCRIPT_PS2PDF = "system.ghostscript.ps2pdf"; 
+	public static final String PROPERTY_SYSTEM_GHOSTSCRIPT_PS2PDF = "system.ghostscript.ps2pdf";
 	public static final String PROPERTY_SYSTEM_DWG2DXF = "system.dwg2dxf";
 	public static final String PROPERTY_SYSTEM_ANTIVIR = "system.antivir";
 	public static final String PROPERTY_SYSTEM_LOGIN_LOWERCASE = "system.login.lowercase";
@@ -235,6 +235,11 @@ public class Config {
 	/**
 	 *  Default values
 	 */
+	// Experimental features
+	public static boolean EXPERIMENTAL_TEXT_EXTRACTION = true;
+	public static boolean EXPERIMENTAL_MOBILE_CONTEXT = true;
+	public static String MOBILE_CONTEXT = "mobile-nt";
+	
 	public static String REPOSITORY_CONFIG;
 	public static String REPOSITORY_HOME;
 	public static String DEFAULT_SCRIPT;
@@ -558,6 +563,17 @@ public class Config {
 	 */
 	public static void reload(String ctx, Properties cfg) {
 		try {
+			// Experimental features
+			EXPERIMENTAL_MOBILE_CONTEXT = ConfigDAO.getBoolean(PROPERTY_EXPERIMENTAL_MOBILE_CONTEXT, EXPERIMENTAL_MOBILE_CONTEXT);
+			values.put(PROPERTY_EXPERIMENTAL_MOBILE_CONTEXT, Boolean.toString(EXPERIMENTAL_MOBILE_CONTEXT));
+			if (EXPERIMENTAL_MOBILE_CONTEXT) {
+				MOBILE_CONTEXT = "mobile-nt";
+			} else {
+				MOBILE_CONTEXT = "mobile";
+			}
+			EXPERIMENTAL_TEXT_EXTRACTION = ConfigDAO.getBoolean(PROPERTY_EXPERIMENTAL_TEXT_EXTRACTION, EXPERIMENTAL_TEXT_EXTRACTION);
+			values.put(PROPERTY_EXPERIMENTAL_TEXT_EXTRACTION, Boolean.toString(EXPERIMENTAL_TEXT_EXTRACTION));
+			
 			REPOSITORY_CONFIG = ConfigDAO.getString(PROPERTY_REPOSITORY_CONFIG, REPOSITORY_CONFIG);
 			values.put(PROPERTY_REPOSITORY_CONFIG, REPOSITORY_CONFIG);
 			REPOSITORY_HOME = ConfigDAO.getString(PROPERTY_REPOSITORY_HOME, REPOSITORY_HOME);
