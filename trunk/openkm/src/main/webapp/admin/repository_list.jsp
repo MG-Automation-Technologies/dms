@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.openkm.servlet.admin.BaseServlet" %>
+<%@ page import="com.openkm.core.Config" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
@@ -14,6 +15,7 @@
 </head>
 <body>
   <c:set var="isAdmin"><%=BaseServlet.isMultipleInstancesAdmin(request)%></c:set>
+  <c:set var="experimentalTextExtraction"><%=Config.EXPERIMENTAL_TEXT_EXTRACTION%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
       <h1>Repository view</h1>
@@ -48,12 +50,12 @@
               </c:url>
               - <a href="${urlCheckin}">Checkin</a>
             </c:if>
-            <c:if test="${(isFolder || isDocument || isDocumentContent) && !node.locked}">
-              <c:url value="RepositoryView" var="urlReindex">
+            <c:if test="${experimentalTextExtraction && (isFolder || isDocument || isDocumentContent) && !node.locked}">
+              <c:url value="RepositoryView" var="urlTextExtraction">
                 <c:param name="path" value="${node.path}"/>
-                <c:param name="action" value="reindex"/>
+                <c:param name="action" value="textExtraction"/>
               </c:url>
-              - <a href="${urlReindex}">Reindex</a>
+              - <a href="${urlTextExtraction}">Text Extraction</a>
             </c:if>
             <c:if test="${isFolder}">
               <c:choose>
