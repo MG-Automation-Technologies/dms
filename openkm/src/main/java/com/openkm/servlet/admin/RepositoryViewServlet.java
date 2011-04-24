@@ -130,8 +130,8 @@ public class RepositoryViewServlet extends BaseServlet {
 				OKMScripting.getInstance().setScript(null, path, Config.DEFAULT_SCRIPT);
 			} else if (action.equals("remove_script")) {
 				OKMScripting.getInstance().removeScript(null, path);
-			} else if (action.equals("reindex")) {
-				reindex(session, path, request, response);
+			} else if (action.equals("textExtraction")) {
+				textExtraction(session, path, request, response);
 			}
 			
 			if (!action.equals("edit")) {
@@ -326,11 +326,11 @@ public class RepositoryViewServlet extends BaseServlet {
 	}
 	
 	/**
-	 * Reindex repository
+	 * Document text extraction
 	 */
-	private void reindex(Session session, String path, HttpServletRequest request, HttpServletResponse response) 
+	private void textExtraction(Session session, String path, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
-		log.debug("reindex({}, {}, {}, {})", new Object[] { session, path, request, response });
+		log.debug("textExtraction({}, {}, {}, {})", new Object[] { session, path, request, response });
 		TraversingItemVisitor tiv = new TraversingItemVisitor.Default() {
 			@Override
 			protected void entering(Node node, int level) throws RepositoryException {
@@ -343,9 +343,10 @@ public class RepositoryViewServlet extends BaseServlet {
 						try {
 							node.checkout();
 							RegisteredExtractors.index(docNode, node, mimeType);
+							node.setProperty(Document.VERSION_COMMENT, "Text extraction");
 							node.save();
 						} catch (IOException e) {
-							log.error("Error when reindexing: {}", e.getMessage());
+							log.error("Error when extracting text: {}", e.getMessage());
 						} finally {
 							if (node.isCheckedOut()) {
 								node.checkin();
@@ -360,8 +361,8 @@ public class RepositoryViewServlet extends BaseServlet {
 		session.getItem(node.getPath()).accept(tiv);
 		
 		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_REINDEX", node.getUUID(), null);
-		log.debug("reindex: void");
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_TEXT_EXTRACTION", node.getUUID(), null);
+		log.debug("textExtraction: void");
 	}
 
 	/**
