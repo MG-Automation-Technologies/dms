@@ -17,6 +17,7 @@
   <title>OpenKM Administration</title>
   <script type="text/javascript">
     if (window.attachEvent) {
+      // Explorer
       trick = '4';
       window.attachEvent("onload", function() { setTimeout(loaded, 100); }, true);
     } else {
