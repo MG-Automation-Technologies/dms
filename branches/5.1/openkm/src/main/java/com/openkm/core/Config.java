@@ -44,7 +44,6 @@ import com.openkm.principal.DatabasePrincipalAdapter;
 public class Config {
 	private static Logger log = LoggerFactory.getLogger(Config.class);
 	public static TreeMap<String, String> values = new TreeMap<String, String>();
-	public static boolean EXPERIMENTAL_TEXT_EXTRACTION = false;
 	
 	// Default directories
 	public static final String HOME_DIR = getHomeDir();
@@ -58,9 +57,6 @@ public class Config {
 	public static final String STOP_SCRIPT = "stop.bsh";
 	public static final String START_JAR = "start.jar";
 	public static final String STOP_JAR = "stop.jar";
-	
-	// Change mobile context
-	public static String MOBILE_CONTEXT = "mobile";
 	
 	// Configuration files
 	public static final String OPENKM_CONFIG = "OpenKM.cfg";
@@ -79,6 +75,10 @@ public class Config {
 	public static String CACHE_DXF;
 	public static String CACHE_PDF;
 	public static String CACHE_SWF;
+	
+	// Experimental features
+	public static String PROPERTY_EXPERIMENTAL_MOBILE_CONTEXT = "experimental.mobile.context";
+	public static String PROPERTY_EXPERIMENTAL_TEXT_EXTRACTION = "experimental.text.extraction";
 	
 	// Configuration properties
 	public static final String PROPERTY_REPOSITORY_CONFIG = "repository.config";
@@ -212,6 +212,12 @@ public class Config {
 	public static final String PROPERTY_LOGO_MOBILE = "logo.mobile";
 	public static final String PROPERTY_LOGO_REPORT = "logo.report";
 	
+	// Zoho
+	public static final String PROPERTY_ZOHO_USER = "zoho.user";
+	public static final String PROPERTY_ZOHO_PASSWORD = "zoho.password";
+	public static final String PROPERTY_ZOHO_API_KEY = "zoho.api.key";
+	public static final String PROPERTY_ZOHO_SECRET_KEY = "zoho.secret.key";
+	
 	// Mime types
 	public static String MIME_PDF = "application/pdf";
 	public static String MIME_POSTSCRIPT = "application/postscript";
@@ -229,6 +235,11 @@ public class Config {
 	/**
 	 *  Default values
 	 */
+	// Experimental features
+	public static boolean EXPERIMENTAL_TEXT_EXTRACTION = true;
+	public static boolean EXPERIMENTAL_MOBILE_CONTEXT = true;
+	public static String MOBILE_CONTEXT = "mobile-nt";
+	
 	public static String REPOSITORY_CONFIG;
 	public static String REPOSITORY_HOME;
 	public static String DEFAULT_SCRIPT;
@@ -389,6 +400,12 @@ public class Config {
 	public static StoredFile LOGO_MOBILE;
 	public static StoredFile LOGO_REPORT;
 	
+	// Zoho
+	public static String ZOHO_USER;
+	public static String ZOHO_PASSWORD;
+	public static String ZOHO_API_KEY;
+	public static String ZOHO_SECRET_KEY;
+	
 	// Misc
 	public static int SESSION_EXPIRATION = 1800; // 30 mins (session.getMaxInactiveInterval())
 	
@@ -546,6 +563,17 @@ public class Config {
 	 */
 	public static void reload(String ctx, Properties cfg) {
 		try {
+			// Experimental features
+			EXPERIMENTAL_MOBILE_CONTEXT = ConfigDAO.getBoolean(PROPERTY_EXPERIMENTAL_MOBILE_CONTEXT, EXPERIMENTAL_MOBILE_CONTEXT);
+			values.put(PROPERTY_EXPERIMENTAL_MOBILE_CONTEXT, Boolean.toString(EXPERIMENTAL_MOBILE_CONTEXT));
+			if (EXPERIMENTAL_MOBILE_CONTEXT) {
+				MOBILE_CONTEXT = "mobile-nt";
+			} else {
+				MOBILE_CONTEXT = "mobile";
+			}
+			EXPERIMENTAL_TEXT_EXTRACTION = ConfigDAO.getBoolean(PROPERTY_EXPERIMENTAL_TEXT_EXTRACTION, EXPERIMENTAL_TEXT_EXTRACTION);
+			values.put(PROPERTY_EXPERIMENTAL_TEXT_EXTRACTION, Boolean.toString(EXPERIMENTAL_TEXT_EXTRACTION));
+			
 			REPOSITORY_CONFIG = ConfigDAO.getString(PROPERTY_REPOSITORY_CONFIG, REPOSITORY_CONFIG);
 			values.put(PROPERTY_REPOSITORY_CONFIG, REPOSITORY_CONFIG);
 			REPOSITORY_HOME = ConfigDAO.getString(PROPERTY_REPOSITORY_HOME, REPOSITORY_HOME);
@@ -774,6 +802,16 @@ public class Config {
 			values.put(PROPERTY_LOGO_MOBILE, LOGO_MOBILE.getName());
 			LOGO_REPORT = ConfigDAO.getFile(PROPERTY_LOGO_REPORT, "/img/logo_report.gif");
 			values.put(PROPERTY_LOGO_REPORT, LOGO_REPORT.getName());
+			
+			// Zoho
+			ZOHO_USER = ConfigDAO.getString(PROPERTY_ZOHO_USER, cfg.getProperty(PROPERTY_ZOHO_USER, ""));
+			values.put(PROPERTY_ZOHO_USER, ZOHO_USER);
+			ZOHO_PASSWORD = ConfigDAO.getString(PROPERTY_ZOHO_PASSWORD, cfg.getProperty(PROPERTY_ZOHO_PASSWORD, ""));
+			values.put(PROPERTY_ZOHO_PASSWORD, ZOHO_PASSWORD);
+			ZOHO_API_KEY = ConfigDAO.getString(PROPERTY_ZOHO_API_KEY, cfg.getProperty(PROPERTY_ZOHO_API_KEY, ""));
+			values.put(PROPERTY_ZOHO_API_KEY, ZOHO_API_KEY);
+			ZOHO_SECRET_KEY = ConfigDAO.getString(PROPERTY_ZOHO_SECRET_KEY, cfg.getProperty(PROPERTY_ZOHO_SECRET_KEY, ""));
+			values.put(PROPERTY_ZOHO_SECRET_KEY, ZOHO_SECRET_KEY);
 		} catch (DatabaseException e) {
 			log.error("** Error reading configuration table **");
 		} catch (IOException e) {
