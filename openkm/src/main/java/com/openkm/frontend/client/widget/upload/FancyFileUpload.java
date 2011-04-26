@@ -96,6 +96,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	public TextBox roles;
 	private TextArea message;
 	private VerticalPanel vNotifyPanel = new VerticalPanel();
+	private VerticalPanel vVersionCommentPanel = new VerticalPanel();
 	private HTML commentTXT;
 	private ScrollPanel messageScroll;
 	public HTML errorNotify;
@@ -472,8 +473,9 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		versionCommentScrollPanel = new ScrollPanel(versionComment);
 		versionCommentScrollPanel.setAlwaysShowScrollBars(false);
 		versionCommentScrollPanel.setSize("100%", "100%");
-		mainPanel.add(versionCommentText);
-		mainPanel.add(versionCommentScrollPanel);
+		vVersionCommentPanel.add(versionCommentText);
+		vVersionCommentPanel.add(versionCommentScrollPanel);
+		mainPanel.add(vVersionCommentPanel);
 		
 		// Ads unzip file
 		importZip = new CheckBox();
@@ -507,7 +509,6 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		digitalSignatureText = new HTML(Main.i18n("fileupload.digital.signature"));
 		hDigitalSignaturePanel = new HorizontalPanel();
 		mainPanel.add(hDigitalSignaturePanel);
-		
 		
 		// Adds the notify checkbox
 		users = new TextBox();
@@ -569,6 +570,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		mainPanel.setCellHorizontalAlignment(hUnzipPanel,HorizontalPanel.ALIGN_LEFT);
 		mainPanel.setCellHorizontalAlignment(hDigitalSignaturePanel,HorizontalPanel.ALIGN_LEFT);
 		mainPanel.setCellHorizontalAlignment(vNotifyPanel, HorizontalPanel.ALIGN_CENTER);
+		mainPanel.setCellHorizontalAlignment(vVersionCommentPanel, HorizontalPanel.ALIGN_CENTER);
 		
 		// Initialices users
 		getAllUsers();
