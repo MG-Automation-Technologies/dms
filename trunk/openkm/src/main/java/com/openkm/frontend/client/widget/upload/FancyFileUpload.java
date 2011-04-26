@@ -45,7 +45,6 @@ import com.openkm.frontend.client.widget.notify.NotifyPanel;
  *
  */
 public class FancyFileUpload extends Composite implements HasText, HasChangeHandlers {
-	
 	private final OKMGeneralServiceAsync generalService = (OKMGeneralServiceAsync) GWT.create(OKMGeneralService.class);
 	
 	/**
@@ -178,12 +177,12 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			
 			// Adds error panel when zip file is uploaded
 			statusZipNotify = new HTML();
-			statusZipNotify.setSize("100%","100%");
+			statusZipNotify.setSize("100%", "100%");
 			statusZipNotify.setVisible(true);
 			statusZipNotifyScroll = new ScrollPanel(statusZipNotify);
 			statusZipNotifyScroll.setAlwaysShowScrollBars(false);
 			statusZipNotifyScroll.setVisible(false);
-			statusZipNotifyScroll.setSize("375","100");
+			statusZipNotifyScroll.setSize("375", "100");
 			statusZipNotifyScroll.setStyleName("okm-Bookmark-Panel");
 			statusZipNotifyScroll.addStyleName("okm-Input");
 			
@@ -275,18 +274,21 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		private void setLoaded() {
 			// Sometimes if upload is fast, has no time to getting file uploading status information
 			// on this cases must be setting it directly ( simulating )
-			if (fileUploadingStatus.getContentLength()==0) {
+			if (fileUploadingStatus.getContentLength() == 0) {
 				progressBar.setTextFormatter(finalFormater);
 				progressBar.setMaxProgress(100);
 				progressBar.setProgress(100);
 			}
+			
 			pendingPanel.setStyleName("fancyfileupload-loaded");
 			status.setHTML(Main.i18n("fileupload.status.ok"));
 			widgetState = UPLOADED_STATE;
 			fileUplodingStartedFlag = false;
+			
 			if (!wizard) {
 				refresh();
 			}
+			
 			fireChange();
 			Main.get().mainPanel.dashboard.userDashboard.getUserLastModifiedDocuments();
 			Main.get().mainPanel.dashboard.userDashboard.getUserCheckedOutDocuments();
@@ -303,7 +305,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		private void setFailed(String msg) {
 			// Sometimes if upload is fast, has no time to getting file uploading status information
 			// on this cases must be setting it directly ( simulating )
-			if (fileUploadingStatus.getContentLength()==0) {
+			if (fileUploadingStatus.getContentLength() == 0) {
 				progressBar.setTextFormatter(finalFormater);
 				progressBar.setMaxProgress(100);
 				progressBar.setProgress(100);
@@ -468,7 +470,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		// Table for solve some visualization problems
 		versionCommentScrollPanel = new ScrollPanel(versionComment);
 		versionCommentScrollPanel.setAlwaysShowScrollBars(false);
-		versionCommentScrollPanel.setSize("100%","100%");
+		versionCommentScrollPanel.setSize("100%", "100%");
 		mainPanel.add(versionCommentText);
 		mainPanel.add(versionCommentScrollPanel);
 		
@@ -542,7 +544,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		message = new TextArea();
 		commentTXT = new HTML(Main.i18n("fileupload.label.notify.comment"));
 		message.setName("message");
-		message.setSize("375","60");
+		message.setSize("375", "60");
 		message.setStyleName("okm-TextArea");
 		
 		vNotifyPanel = new VerticalPanel();
@@ -754,7 +756,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			
 			if (fileUplodingStartedFlag) {
 				if (result.isStarted()) {
-					if (result.getContentLength()!=0 && result.getContentLength()==result.getBytesRead()) {
+					if (result.getContentLength() != 0 && result.getContentLength() == result.getBytesRead()) {
 						result.setUploadFinish(true);
 						uploadItem.setIndexing();
 					}
