@@ -568,6 +568,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		mainPanel.setCellHorizontalAlignment(hNotifyPanel,HorizontalPanel.ALIGN_LEFT);
 		mainPanel.setCellHorizontalAlignment(hUnzipPanel,HorizontalPanel.ALIGN_LEFT);
 		mainPanel.setCellHorizontalAlignment(hDigitalSignaturePanel,HorizontalPanel.ALIGN_LEFT);
+		mainPanel.setCellHorizontalAlignment(vNotifyPanel, HorizontalPanel.ALIGN_CENTER);
 		
 		// Initialices users
 		getAllUsers();
