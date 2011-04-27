@@ -24,12 +24,14 @@ package com.openkm.frontend.client.service;
 import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.openkm.frontend.client.OKMException;
 
 /**
  * @author jllort
  *
  */
+@RemoteServiceRelativePath("Language")
 public interface OKMLanguageService extends RemoteService {
 	public Map<String,String> getFrontEndTranslations(String lang) throws OKMException;
 }

@@ -22,6 +22,7 @@
 package com.openkm.frontend.client.service;
 
 import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTWorkspace;
@@ -30,6 +31,7 @@ import com.openkm.frontend.client.bean.GWTWorkspace;
  * @author jllort
  *
  */
+@RemoteServiceRelativePath("Workspace")
 public interface OKMWorkspaceService extends RemoteService {
 	public GWTWorkspace getUserWorkspace() throws OKMException ;
 	public Double getUserDocumentsSize() throws OKMException;

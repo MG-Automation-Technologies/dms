@@ -22,6 +22,7 @@
 package com.openkm.frontend.client.service;
 
 import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTFolder;
@@ -30,6 +31,7 @@ import com.openkm.frontend.client.bean.GWTFolder;
  * @author jllort
  *
  */
+@RemoteServiceRelativePath("Repository")
 public interface OKMRepositoryService extends RemoteService {
 	public String getUpdateMessage() throws OKMException;
 	public GWTFolder getRootFolder() throws OKMException;

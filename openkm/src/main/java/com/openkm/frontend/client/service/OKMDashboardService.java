@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
@@ -36,6 +37,7 @@ import com.openkm.frontend.client.bean.GWTQueryParams;
  * @author jllort
  *
  */
+@RemoteServiceRelativePath("Dashboard")
 public interface OKMDashboardService extends RemoteService {
 	public List<GWTDashboardDocumentResult> getUserLockedDocuments() throws OKMException;
 	public List<GWTDashboardDocumentResult> getUserCheckedOutDocuments() throws OKMException;
