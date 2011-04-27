@@ -26,8 +26,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -56,9 +54,7 @@ import com.openkm.frontend.client.service.OKMSearchServiceAsync;
  *
  */
 public class SearchControl extends Composite {
-	
 	private final OKMSearchServiceAsync searchService = (OKMSearchServiceAsync) GWT.create(OKMSearchService.class);
-	
 	private static final int MIN_WORD_LENGTH = 3;
 	
 	private ScrollPanel scrollPanel;
@@ -68,7 +64,6 @@ public class SearchControl extends Composite {
 	private Button cleanButton;
 	private TextBox searchSavedName;
 	private GWTQueryParams params;
-	public KeyPressHandler keyPressHandler;
 	public KeyUpHandler keyUpHandler;
 	private boolean userNews = false;
 	public ControlSearchIn controlSearch;
@@ -100,19 +95,14 @@ public class SearchControl extends Composite {
 		resultPage.addItem("50", "50");
 		resultPage.addItem("100", "100");
 		
-		keyPressHandler = new KeyPressHandler() {
-			@Override
-			public void onKeyPress(KeyPressEvent event) {
-				if ((char)KeyCodes.KEY_ENTER == event.getCharCode() && searchButton.isEnabled()) {
-					executeSearch();
-				}
-			}
-		};
-		
 		keyUpHandler = new KeyUpHandler() {
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
 				evaluateSearchButtonVisible();
+				
+				if (KeyCodes.KEY_ENTER == event.getNativeKeyCode() && searchButton.isEnabled()) {
+					executeSearch();
+				}
 			}
 		};
 		
@@ -164,6 +154,7 @@ public class SearchControl extends Composite {
 				SearchAdvanced searchAdvanced = Main.get().mainPanel.search.searchBrowser.searchIn.searchAdvanced;
 				String operator = GWTQueryParams.OPERATOR_AND;
 				params = new GWTQueryParams();
+				
 				if (!searchAdvanced.path.getText().equals("")) {
 					params.setPath(searchAdvanced.path.getText());
 				} else {
@@ -190,12 +181,15 @@ public class SearchControl extends Composite {
 				if (searchAdvanced.typeDocument.getValue()) {
 					domain += GWTQueryParams.DOCUMENT;
 				}
+				
 				if (searchAdvanced.typeFolder.getValue()) {
 					domain += GWTQueryParams.FOLDER;
 				}
+				
 				if (searchAdvanced.typeMail.getValue()) {
 					domain += GWTQueryParams.MAIL;
 				}
+				
 				params.setDomain(domain);
 				
 				if (searchTypeAnd.getValue()) {
@@ -203,6 +197,7 @@ public class SearchControl extends Composite {
 				} else {
 					operator = GWTQueryParams.OPERATOR_OR;
 				}
+				
 				params.setOperator(operator);
 				
 				// Removes dates if dashboard is checked
@@ -310,14 +305,17 @@ public class SearchControl extends Composite {
 		SearchAdvanced searchAdvanced = Main.get().mainPanel.search.searchBrowser.searchIn.searchAdvanced;
 		GWTQueryParams gwtParams = new GWTQueryParams();
 		gwtParams.setContent(searchNormal.content.getText());
+		
 		if (!searchAdvanced.path.getText().equals("")) {
 			gwtParams.setPath(searchAdvanced.path.getText());
 		} else {
 			gwtParams.setPath(searchNormal.context.getValue(searchNormal.context.getSelectedIndex()));
 		}
+		
 		if (!searchAdvanced.categoryUuid.equals("")) {
 			gwtParams.setCategoryUuid(searchAdvanced.categoryUuid);
 		}
+		
 		gwtParams.setKeywords(searchNormal.keywords.getText());
 		gwtParams.setMimeType("");
 		gwtParams.setName(searchNormal.name.getText());
@@ -344,14 +342,16 @@ public class SearchControl extends Composite {
 		if (searchAdvanced.typeDocument.getValue()) {
 			domain += GWTQueryParams.DOCUMENT;
 		}
+		
 		if (searchAdvanced.typeFolder.getValue()) {
 			domain += GWTQueryParams.FOLDER;
 		}
+		
 		if (searchAdvanced.typeMail.getValue()) {
 			domain += GWTQueryParams.MAIL;
 		}
-		gwtParams.setDomain(domain);
 		
+		gwtParams.setDomain(domain);
 		gwtParams.setProperties(Main.get().mainPanel.search.searchBrowser.searchIn.getProperties());
 		gwtParams.setMimeType(searchAdvanced.mimeTypes.getValue(searchAdvanced.mimeTypes.getSelectedIndex()));
 		Main.get().mainPanel.search.searchBrowser.searchIn.futuramaWalking.evaluate(searchNormal.content.getText());
@@ -365,6 +365,7 @@ public class SearchControl extends Composite {
 		SearchNormal searchNormal = Main.get().mainPanel.search.searchBrowser.searchIn.searchNormal;
 		SearchAdvanced searchAdvanced = Main.get().mainPanel.search.searchBrowser.searchIn.searchAdvanced;
 		SearchMetadata searchMetadata = Main.get().mainPanel.search.searchBrowser.searchIn.searchMetadata;
+		
 		if (searchNormal.content.getText().length() >= MIN_WORD_LENGTH || searchNormal.name.getText().length() >= MIN_WORD_LENGTH ||
 			searchNormal.keywords.getText().length() >= MIN_WORD_LENGTH || searchAdvanced.from.getText().length() >= MIN_WORD_LENGTH ||
 			searchAdvanced.to.getText().length() >= MIN_WORD_LENGTH || searchAdvanced.subject.getText().length() >= MIN_WORD_LENGTH) {
@@ -374,12 +375,12 @@ public class SearchControl extends Composite {
 		}
 		
 		// Evaluates Mime Types
-		if (searchAdvanced.mimeTypes.getSelectedIndex()>0) {
+		if (searchAdvanced.mimeTypes.getSelectedIndex() > 0) {
 			searchButton.setEnabled(true);
 		}
 		
 		// Evaluates user list
-		if (searchNormal.userListBox.getSelectedIndex()>0) {
+		if (searchNormal.userListBox.getSelectedIndex() > 0) {
 			searchButton.setEnabled(true);
 		}
 		
@@ -397,7 +398,7 @@ public class SearchControl extends Composite {
 					searchButton.setEnabled(true);
 				}
 			} else if (widget instanceof ListBox) {
-				if (((ListBox) widget).getSelectedIndex()>0) {
+				if (((ListBox) widget).getSelectedIndex() > 0) {
 					searchButton.setEnabled(true);
 				}
 			}
@@ -429,7 +430,6 @@ public class SearchControl extends Composite {
 		resultsPageText.setHTML(Main.i18n("search.page.results"));
 		searchTypeText.setHTML(Main.i18n("search.type"));
 		controlSearch.langRefresh();
-		
 	}
 	
 	/**
@@ -440,7 +440,6 @@ public class SearchControl extends Composite {
 		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
 		endPoint.setServiceEntryPoint(RPCService.SearchService);
 		searchService.saveSearch(params, type, callbackSaveSearch);
-		
 	}	
 	
 	/**

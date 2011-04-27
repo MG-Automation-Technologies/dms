@@ -121,10 +121,9 @@ public class SearchMetadata extends Composite {
 			if (propertyParam.getFormElement() instanceof GWTInput || propertyParam.getFormElement() instanceof GWTTextArea) {
 				TextBox textBox = new TextBox(); // Create a widget for this property
 				textBox.setStyleName("okm-Input");
-				textBox.addKeyPressHandler(Main.get().mainPanel.search.searchBrowser.searchIn.searchControl.keyPressHandler);
 				textBox.addKeyUpHandler(Main.get().mainPanel.search.searchBrowser.searchIn.searchControl.keyUpHandler);
-				hProperties.put(propertyParam.getFormElement().getName(),propertyParam);
-				hWidgetProperties.put(propertyParam.getFormElement().getName(),textBox);
+				hProperties.put(propertyParam.getFormElement().getName(), propertyParam);
+				hWidgetProperties.put(propertyParam.getFormElement().getName(), textBox);
 				tableProperties.setHTML(rows, 0, "<b>" + propertyParam.getGrpLabel() + " :</b>");
 				tableProperties.setHTML(rows, 1, "&nbsp;" + propertyParam.getFormElement().getLabel() + "&nbsp;");
 				tableProperties.setWidget(rows, 2, textBox);
@@ -134,7 +133,7 @@ public class SearchMetadata extends Composite {
 					@Override
 					public void onClick(ClickEvent event) {
 						Widget sender = (Widget) event.getSource();
-						Main.get().mainPanel.search.searchBrowser.searchIn.removeProperty(sender,propertyParam.getFormElement().getName());
+						Main.get().mainPanel.search.searchBrowser.searchIn.removeProperty(sender, propertyParam.getFormElement().getName());
 						groupPopup.enableAddGroupButton(); // Enables or disables button ( depends exist some item on list to be added )
 					}
 				});
