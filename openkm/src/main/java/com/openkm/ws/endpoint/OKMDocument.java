@@ -52,6 +52,7 @@ import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
 import com.openkm.module.DocumentModule;
 import com.openkm.module.ModuleManager;
+import com.openkm.principal.PrincipalAdapterException;
 
 /**
  * Servlet Class
@@ -207,8 +208,8 @@ public class OKMDocument {
 	
 	@WebMethod
 	public void forceCancelCheckout(@WebParam(name = "token") String token,
-			@WebParam(name = "docPath") String docPath) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, LockException, DatabaseException {
+			@WebParam(name = "docPath") String docPath) throws AccessDeniedException, RepositoryException,
+			PathNotFoundException, LockException, DatabaseException, PrincipalAdapterException {
 		log.debug("forceCancelCheckout({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.forceCancelCheckout(token, docPath);
@@ -277,7 +278,7 @@ public class OKMDocument {
 	@WebMethod
 	public void forceUnlock(@WebParam(name = "token") String token,
 			@WebParam(name = "docPath") String docPath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
+			AccessDeniedException, RepositoryException, DatabaseException, PrincipalAdapterException {
 		log.debug("forceUnlock({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.forceUnlock(token, docPath);
