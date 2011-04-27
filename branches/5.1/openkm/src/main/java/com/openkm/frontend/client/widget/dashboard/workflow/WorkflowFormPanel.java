@@ -271,7 +271,7 @@ public class WorkflowFormPanel extends Composite {
 		vPanel.setStyleName("okm-WorkflowFormPanel");
 		submitForm.setStyleName("okm-Button");
 		add.setStyleName("okm-Button");
-		textArea.setStyleName("okm-Input");
+		textArea.setStyleName("okm-TextArea");
 		tableNotes.setStyleName("okm-DisableSelect");
 		
 		tableNotes.setWidth("100%");
@@ -847,7 +847,7 @@ public class WorkflowFormPanel extends Composite {
 				textArea.setValue(gWTTextArea.getValue());
 				textArea.setReadOnly(gWTTextArea.isReadonly());
 				
-				textArea.setStyleName("okm-Input");
+				textArea.setStyleName("okm-TextArea");
 				formTable.setHTML(row, 0, "<b>" + gWTTextArea.getLabel() + "</b>");
 				formTable.setWidget(row, 1, hFormPanel);
 				formTable.getCellFormatter().setVerticalAlignment(row, 0, HasAlignment.ALIGN_TOP);

@@ -191,9 +191,9 @@ public class TabMultiple extends Composite {
 	 * @param width int The width size
 	 * @param height int The height size
 	 */
-	public void setSize(int width, int height) {
-		tabFolder.setSize(width,height);
-		tabDocument.setSize(width,height);
-		tabMail.setSize(width,height);
+	public void setPixelSize(int width, int height) {
+		tabFolder.setPixelSize(width,height);
+		tabDocument.setPixelSize(width,height);
+		tabMail.setPixelSize(width,height);
 	}
 }
