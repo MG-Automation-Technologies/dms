@@ -30,6 +30,7 @@ import com.openkm.extension.frontend.client.widget.client.metromusa.MetromUsa;
 import com.openkm.extension.frontend.client.widget.contact.Contact;
 import com.openkm.extension.frontend.client.widget.crypto.Cryptography;
 import com.openkm.extension.frontend.client.widget.digitalsignature.DigitalSignature;
+import com.openkm.extension.frontend.client.widget.forum.Forum;
 import com.openkm.extension.frontend.client.widget.messaging.MessagingToolBarBox;
 import com.openkm.extension.frontend.client.widget.preview.AutocadPreview;
 import com.openkm.extension.frontend.client.widget.stamp.StampToolBarButton;
@@ -106,6 +107,9 @@ public class Customization {
 		}
 		if (ActivityLog.isRegistered(uuidList)) {
 			extensions.addAll(new ActivityLog(uuidList).getExtensions());
+		}
+		if (Forum.isRegistered(uuidList)) {
+			extensions.addAll(new Forum(uuidList).getExtensions());
 		}
 		
 		return extensions;
