@@ -127,18 +127,18 @@ public class Dashboard extends Composite implements HasDashboardHandlerExtension
 		panel.setCellHeight(sp, ""+(height-60-2));
 		panel.setCellHeight(horizontalToolBar, ""+60);
 		sp.setPixelSize(width-2, height-60-2);
-		scrollPanel.setPixelSize(width-2, height-60-2);
+		scrollPanel.setPixelSize(width-2, height-(60+2));
 		userDashboard.setWidth(width-2);
 		mailDashboard.setWidth(width-2);
 		newsDashboard.setWidth(width-2);
 		generalDashboard.setWidth(width-2);
 		workflowDashboard.setWidth(width-2);
-		keyMapDashboard.setSize(""+(width-2), ""+(height-60-2));
+		keyMapDashboard.setSize(""+(width-2), ""+(height-(60+2)));
 		horizontalToolBar.setHeight("60");
 		horizontalToolBar.setWidth("100%");
 		
 		for (Iterator<ToolBarBoxExtension> it = toolBarBoxExtensionList.iterator(); it.hasNext();) {
-			it.next().getWidget().setSize(""+(width-2), (""+(height-60-2)));
+			it.next().getWidget().setPixelSize(width-2, height-(60+2));
 		}
 		
 		newsDashboard.getUserSearchs(true); // Here must get all searchs to set correct width size
@@ -335,7 +335,7 @@ public class Dashboard extends Composite implements HasDashboardHandlerExtension
 	public void addToolBarBoxExtension(ToolBarBoxExtension extension) {
 		toolBarBoxExtensionList.add(extension);
 		horizontalToolBar.addToolBarBoxExtension(extension);
-		extension.getWidget().setSize(""+(width-2), (""+(height-60-2)));
+		extension.getWidget().setPixelSize(width-2, height-(60+2));
 	}
 
 	@Override
