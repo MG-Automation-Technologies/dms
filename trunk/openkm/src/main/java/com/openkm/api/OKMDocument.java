@@ -44,6 +44,7 @@ import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
 import com.openkm.module.DocumentModule;
 import com.openkm.module.ModuleManager;
+import com.openkm.principal.PrincipalAdapterException;
 
 /**
  * @author pavila
@@ -172,7 +173,7 @@ public class OKMDocument implements DocumentModule {
 	
 	@Override
 	public void forceCancelCheckout(String token, String docPath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
+			AccessDeniedException, RepositoryException, DatabaseException, PrincipalAdapterException {
 		log.debug("forceCancelCheckout({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.forceCancelCheckout(token, docPath);
@@ -241,7 +242,7 @@ public class OKMDocument implements DocumentModule {
 	
 	@Override
 	public void forceUnlock(String token, String docPath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
+			AccessDeniedException, RepositoryException, DatabaseException, PrincipalAdapterException {
 		log.debug("forceUnlock({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.forceUnlock(token, docPath);
