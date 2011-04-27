@@ -70,9 +70,12 @@ import com.openkm.kea.RDFREpository;
 import com.openkm.kea.metadata.MetadataExtractionException;
 import com.openkm.kea.metadata.MetadataExtractor;
 import com.openkm.module.DocumentModule;
+import com.openkm.module.base.BaseAuthModule;
 import com.openkm.module.base.BaseDocumentModule;
 import com.openkm.module.base.BaseNotificationModule;
 import com.openkm.module.base.BaseScriptingModule;
+import com.openkm.principal.PrincipalAdapter;
+import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.util.FileUtils;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.Transaction;
@@ -784,7 +787,8 @@ public class DirectDocumentModule implements DocumentModule {
 	
 	@Override
 	public void forceCancelCheckout(String token, String docPath) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, LockException, DatabaseException {
+			RepositoryException, PathNotFoundException, LockException, DatabaseException,
+			PrincipalAdapterException {
 		log.debug("forceCancelCheckout({}, {})", token, docPath);
 		Transaction t = null;
 		XASession session = null;
@@ -800,7 +804,10 @@ public class DirectDocumentModule implements DocumentModule {
 				session = (XASession) JcrSessionManager.getInstance().get(token);
 			}
 			
-			if (!session.getUserID().equals(Config.ADMIN_USER)) {
+			PrincipalAdapter pa = BaseAuthModule.getPrincipalAdapter();
+			List<String> userRoles = pa.getRolesByUser(session.getUserID());
+			
+			if (!userRoles.contains(Config.DEFAULT_ADMIN_ROLE)) {
 				throw new AccessDeniedException("Only administrator use allowed");
 			}
 			
@@ -1161,7 +1168,7 @@ public class DirectDocumentModule implements DocumentModule {
 	
 	@Override
 	public void forceUnlock(String token, String docPath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
+			AccessDeniedException, RepositoryException, DatabaseException, PrincipalAdapterException {
 		log.debug("forceUnlock({}, {})", token, docPath);
 		Session session = null;
 		
@@ -1176,7 +1183,10 @@ public class DirectDocumentModule implements DocumentModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			if (!session.getUserID().equals(Config.ADMIN_USER)) {
+			PrincipalAdapter pa = BaseAuthModule.getPrincipalAdapter();
+			List<String> userRoles = pa.getRolesByUser(session.getUserID());
+			
+			if (!userRoles.contains(Config.DEFAULT_ADMIN_ROLE)) {
 				throw new AccessDeniedException("Only administrator use allowed");
 			}
 			
