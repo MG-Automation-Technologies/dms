@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.extension.GWTProposedSubscriptionReceived;
 
@@ -32,6 +33,7 @@ import com.openkm.frontend.client.bean.extension.GWTProposedSubscriptionReceived
  * @author jllort
  *
  */
+@RemoteServiceRelativePath("../extension/ProposedSubscription")
 public interface OKMProposedSubscriptionService extends RemoteService {
 	public void send(String uuid, String users, String roles, String comment) throws OKMException;
 	public Map<String, Long> findProposedSubscriptionsUsersFrom() throws OKMException;
