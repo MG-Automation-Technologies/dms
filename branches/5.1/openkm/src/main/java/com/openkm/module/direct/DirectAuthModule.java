@@ -47,6 +47,7 @@ import com.openkm.core.JcrSessionManager;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.AuthModule;
+import com.openkm.module.base.BaseAuthModule;
 import com.openkm.principal.PrincipalAdapter;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.util.JCRUtils;
@@ -55,7 +56,6 @@ import com.openkm.util.UserActivity;
 
 public class DirectAuthModule implements AuthModule {
 	private static Logger log = LoggerFactory.getLogger(DirectAuthModule.class);
-	private static PrincipalAdapter principalAdapter = null;
 
 	@Override
 	public void login() throws RepositoryException, DatabaseException {
@@ -754,30 +754,6 @@ public class DirectAuthModule implements AuthModule {
 			if (token == null) JCRUtils.logout(session);
 		}
 	}
-
-	/**
-	 * Singleton pattern for global Principal Adapter.
-	 */
-	private PrincipalAdapter getPrincipalAdapter() throws PrincipalAdapterException {
-		if (principalAdapter == null) {
-			try {
-				log.info("PrincipalAdapter: {}", Config.PRINCIPAL_ADAPTER);
-				Object object = Class.forName(Config.PRINCIPAL_ADAPTER).newInstance();
-				principalAdapter = (PrincipalAdapter) object;
-			} catch (ClassNotFoundException e) {
-				log.error(e.getMessage(), e);
-				throw new PrincipalAdapterException(e.getMessage(), e);
-			} catch (InstantiationException e) {
-				log.error(e.getMessage(), e);
-				throw new PrincipalAdapterException(e.getMessage(), e);
-			} catch (IllegalAccessException e) {
-				log.error(e.getMessage(), e);
-				throw new PrincipalAdapterException(e.getMessage(), e);
-			}
-		}
-
-		return principalAdapter;
-	}
 	
 	@Override
 	public List<String> getUsers(String token) throws PrincipalAdapterException {
@@ -785,7 +761,7 @@ public class DirectAuthModule implements AuthModule {
 		List<String> list = null;
 
 		try {
-			PrincipalAdapter principalAdapter = getPrincipalAdapter();
+			PrincipalAdapter principalAdapter = BaseAuthModule.getPrincipalAdapter();
 			list = principalAdapter.getUsers();
 		} catch (PrincipalAdapterException e) {
 			log.error(e.getMessage(), e);
@@ -802,7 +778,7 @@ public class DirectAuthModule implements AuthModule {
 		List<String> list = null;
 
 		try {
-			PrincipalAdapter principalAdapter = getPrincipalAdapter();
+			PrincipalAdapter principalAdapter = BaseAuthModule.getPrincipalAdapter();
 			list = principalAdapter.getRoles();
 		} catch (PrincipalAdapterException e) {
 			log.error(e.getMessage(), e);
@@ -819,7 +795,7 @@ public class DirectAuthModule implements AuthModule {
 		List<String> list = null;
 
 		try {
-			PrincipalAdapter principalAdapter = getPrincipalAdapter();
+			PrincipalAdapter principalAdapter = BaseAuthModule.getPrincipalAdapter();
 			list = principalAdapter.getUsersByRole(role);
 		} catch (PrincipalAdapterException e) {
 			log.error(e.getMessage(), e);
@@ -836,7 +812,7 @@ public class DirectAuthModule implements AuthModule {
 		List<String> list = null;
 
 		try {
-			PrincipalAdapter principalAdapter = getPrincipalAdapter();
+			PrincipalAdapter principalAdapter = BaseAuthModule.getPrincipalAdapter();
 			list = principalAdapter.getRolesByUser(user);
 		} catch (PrincipalAdapterException e) {
 			log.error(e.getMessage(), e);
@@ -853,7 +829,7 @@ public class DirectAuthModule implements AuthModule {
 		String mail = null;
 
 		try {
-			PrincipalAdapter principalAdapter = getPrincipalAdapter();
+			PrincipalAdapter principalAdapter = BaseAuthModule.getPrincipalAdapter();
 			mail = principalAdapter.getMail(user);
 		} catch (PrincipalAdapterException e) {
 			log.error(e.getMessage(), e);
@@ -870,7 +846,7 @@ public class DirectAuthModule implements AuthModule {
 		String name = null;
 
 		try {
-			PrincipalAdapter principalAdapter = getPrincipalAdapter();
+			PrincipalAdapter principalAdapter = BaseAuthModule.getPrincipalAdapter();
 			name = principalAdapter.getName(user);
 		} catch (PrincipalAdapterException e) {
 			log.error(e.getMessage(), e);
