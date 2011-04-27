@@ -184,7 +184,7 @@ public class Util {
 		}
 		
 		final Element downloadIframe = RootPanel.get("__download").getElement(); 
-		String url = RPCService.DownloadServlet + "?" + params + "id=" + URL.encodeComponent(path);
+		String url = RPCService.DownloadServlet + "?" + params + "id=" + URL.encodeQueryString(path);
 		DOM.setElementAttribute(downloadIframe, "src", url); 
 	}
 	
@@ -195,7 +195,7 @@ public class Util {
 	 */
 	public static void downloadFilePdf(String uuid) {
 		final Element downloadIframe = RootPanel.get("__download").getElement(); 
-		String url = RPCService.ConverterServlet + "?inline=false&toPdf=true&uuid=" + URL.encodeComponent(uuid);
+		String url = RPCService.ConverterServlet + "?inline=false&toPdf=true&uuid=" + URL.encodeQueryString(uuid);
 		DOM.setElementAttribute(downloadIframe, "src", url); 
 	}
 	
@@ -270,6 +270,7 @@ public class Util {
             if ( ua.indexOf('msie 7.0') != -1 ) return 'ie7';
             if ( ua.indexOf('msie 8.0') != -1 ) return 'ie8';
             if ( ua.indexOf('gecko') != -1 ) return 'gecko';
+            if ( ua.indexOf('opera') != -1 ) return 'opera';
             return 'unknown';
         } catch ( e ) { return 'unknown' }
     }-*/;
