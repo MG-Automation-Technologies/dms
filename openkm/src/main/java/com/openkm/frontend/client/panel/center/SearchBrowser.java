@@ -40,9 +40,9 @@ import com.openkm.frontend.client.widget.searchresult.SearchResult;
  */
 public class SearchBrowser extends Composite {
 	
-	private final static int IE_SIZE_RECTIFICATION = (Util.getUserAgent().equals("ie6")?2:0);
-	private final static int PANEL_TOP_HEIGHT 			= 200;
-	public final static int SPLITTER_HEIGHT = 10;
+	private final static int IE_SIZE_RECTIFICATION = (Util.getUserAgent().startsWith("ie")?2:0);
+	private final static int PANEL_TOP_HEIGHT 	= 200;
+	public final static int SPLITTER_HEIGHT 	= 10;
 	
 	private VerticalSplitPanelExtended verticalSplitPanel;
 	
@@ -55,6 +55,10 @@ public class SearchBrowser extends Composite {
 	public int topHeight = 0;
 	public int bottomHeight = 0;
 	
+	/**
+	 * SearchBrowser
+	 */
+	@SuppressWarnings("deprecation")
 	public SearchBrowser() {
 		verticalSplitPanel = new VerticalSplitPanelExtended();
 		searchIn = new SearchIn();
@@ -127,6 +131,7 @@ public class SearchBrowser extends Composite {
 	 * @param width The max width of the widget
 	 * @param height The max height of the widget
 	 */
+	@SuppressWarnings("deprecation")
 	public void setSize(int width, int height) {
 		this.width = width;
 		this.height = height;
@@ -155,11 +160,8 @@ public class SearchBrowser extends Composite {
 	 * @param right
 	 */
 	private void resizePanels() {
-		int total = 0;
-		String value = DOM.getStyleAttribute (verticalSplitPanel.getSplitPanel().getElement(), "height");
-		if (value.contains("px")) { value = value.substring(0,value.indexOf("px")); }
-		total = Integer.parseInt(value);
-		value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(verticalSplitPanel.getSplitPanel().getElement(),0), 0), "height");
+		int total = verticalSplitPanel.getOffsetHeight();
+		String value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(verticalSplitPanel.getSplitPanel().getElement(),0), 0), "height");
 		if (value.contains("px")) { value = value.substring(0,value.indexOf("px")); }
 		topHeight = Integer.parseInt(value);
 		value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(verticalSplitPanel.getSplitPanel().getElement(),0), 2), "top");
@@ -210,6 +212,7 @@ public class SearchBrowser extends Composite {
 	 * refreshSpliterAfterAdded
 	 * 
 	 */
+	@SuppressWarnings("deprecation")
 	public void refreshSpliterAfterAdded() {
 		verticalSplitPanel.getSplitPanel().setSplitPosition(""+topHeight);
 		if (Util.getUserAgent().equals("chrome")) {
