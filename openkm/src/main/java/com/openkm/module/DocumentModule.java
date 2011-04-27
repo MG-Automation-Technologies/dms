@@ -39,6 +39,7 @@ import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
+import com.openkm.principal.PrincipalAdapterException;
 
 public interface DocumentModule {
 
@@ -222,7 +223,7 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void forceCancelCheckout(String token, String docPath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException;
+			AccessDeniedException, RepositoryException, DatabaseException, PrincipalAdapterException;
 	
 	/**
 	 * Test if a node has been already checked out.
@@ -301,7 +302,7 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void forceUnlock(String token, String docPath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException;
+			AccessDeniedException, RepositoryException, DatabaseException, PrincipalAdapterException;
 	
 	/**
 	 * Tell if a document is locked.
