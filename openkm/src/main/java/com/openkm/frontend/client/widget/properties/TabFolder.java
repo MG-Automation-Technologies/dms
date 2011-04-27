@@ -121,12 +121,12 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	 * @param width With of the widget
 	 * @param height Height of the widget
 	 */
-	public void setSize(int width, int height) {
+	public void setPixelSize(int width, int height) {
 		this.height = height;
 		this.width = width;
-		tabPanel.setSize(""+width, ""+height);
+		tabPanel.setPixelSize(width, height);
 		folder.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
-		security.setPixelSize(width-2,height-TAB_HEIGHT); // Substract tab height
+		security.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
 		notes.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
 		security.fillWidth();
 		
@@ -135,15 +135,6 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 			it.next().setPixelSize(width,height-TAB_HEIGHT);
 		}
 		fireEvent(HasFolderEvent.PANEL_RESIZED);
-	}
-	
-	/**
-	 * refreshNotesSize
-	 */
-	public void refreshNotesSize() {
-		// Solve some UI defect on firefox
-		notes.setPixelSize(width-1,height-21); // Substract tab height
-		notes.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
 	}
 	
 	/**
@@ -273,7 +264,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	 * Needs resizing if not widgets disapears
 	 */
 	public void resizingIncubatorWidgets() {
-		security.setPixelSize(getOffsetWidth()-2, getOffsetHeight()-22); // Substract tab height
+		security.setPixelSize(getOffsetWidth(), getOffsetHeight()-TAB_HEIGHT); // Substract tab height
 		security.fillWidth();
 		// TODO:Solves minor bug with IE
 		if (Util.getUserAgent().startsWith("ie")) {

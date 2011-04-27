@@ -181,7 +181,6 @@ public class Notes extends Composite {
 		}
 		
 		writeAddNote();
-		Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.refreshNotesSize();
 	}
 	
 	/**
@@ -203,7 +202,6 @@ public class Notes extends Composite {
 		}
 		
 		writeAddNote();
-		Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.refreshNotesSize();
 	}
 	
 	/**
@@ -346,7 +344,6 @@ public class Notes extends Composite {
 					Main.get().mainPanel.desktop.browser.fileBrowser.addNoteIconToSelectedRow();
 					document.setHasNotes(true);
 				}
-				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.refreshNotesSize();
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.NOTE_ADDED);
 			} else if (folder!=null) {
 				folder.getNotes().add(result);
@@ -355,7 +352,6 @@ public class Notes extends Composite {
 					Main.get().mainPanel.desktop.browser.fileBrowser.addNoteIconToSelectedRow();
 					folder.setHasNotes(true);
 				}
-				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.refreshNotesSize();
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.fireEvent(HasFolderEvent.NOTE_ADDED);
 			}
 		}

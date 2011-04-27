@@ -154,16 +154,16 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	 * @param width With of the widget
 	 * @param height Height of the widget
 	 */
-	public void setSize(int width, int height) {
+	public void setPixelSize(int width, int height) {
 		this.height = height;
 		this.width = width;
 		tabPanel.setPixelSize(width, height);
 		document.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
 		preview.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
 		notes.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
-		version.setPixelSize(width-2,height-TAB_HEIGHT); // Substract tab height
+		version.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
 		version.fillWidth();
-		security.setPixelSize(width-2,height-TAB_HEIGHT); // Substract tab height
+		security.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
 		security.fillWidth();
 		
 		// Setting size to extension
@@ -183,15 +183,6 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		}
 		
 		fireEvent(HasDocumentEvent.PANEL_RESIZED);
-	}
-	
-	/**
-	 * refreshNotesSize
-	 */
-	public void refreshNotesSize() {
-		// Solve some UI defect on firefox
-		notes.setPixelSize(width-1,height-21); // Substract tab height
-		notes.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
 	}
 	
 	/**
@@ -420,11 +411,11 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		if (!propertyGroup.isEmpty()) {
 			for (Iterator<PropertyGroup> it = propertyGroup.iterator(); it.hasNext();){
 				PropertyGroup group = it.next();
-				group.setPixelSize(getOffsetWidth()-2, getOffsetHeight()-22); // Substract tab height
+				group.setPixelSize(getOffsetWidth(), getOffsetHeight()-TAB_HEIGHT); // Substract tab height
 			}
 		}	
-		version.setPixelSize(getOffsetWidth()-2, getOffsetHeight()-22); // Substract tab height
-		security.setPixelSize(getOffsetWidth()-2, getOffsetHeight()-22); // Substract tab height
+		version.setPixelSize(getOffsetWidth(), getOffsetHeight()-TAB_HEIGHT); // Substract tab height
+		security.setPixelSize(getOffsetWidth(), getOffsetHeight()-TAB_HEIGHT); // Substract tab height
 		version.fillWidth();
 		security.fillWidth();
 		// TODO:Solves minor bug with IE
