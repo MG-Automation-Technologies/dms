@@ -448,6 +448,7 @@ public class SearchControl extends Composite {
 	final AsyncCallback<Integer> callbackSaveSearch = new AsyncCallback<Integer>() {
 		public void onSuccess(Integer result) {
 			params.setId(result.intValue());
+			
 			if (userNews) {
 				Main.get().mainPanel.search.historySearch.userNews.addNewSavedSearch(params);
 				Main.get().mainPanel.search.historySearch.stackPanel.showStack(UISearchConstants.SEARCH_USER_NEWS);
