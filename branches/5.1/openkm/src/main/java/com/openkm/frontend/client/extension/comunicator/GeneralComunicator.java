@@ -245,4 +245,18 @@ public class GeneralComunicator {
 	public static GWTWorkspace getWorkspace() {
 		return Main.get().workspaceUserProperties.getWorkspace();
 	}
+	
+	/**
+	 * enableKeyShorcuts
+	 */
+	public static void enableKeyShorcuts() {
+		Main.get().mainPanel.enableKeyShorcuts();
+	}
+	
+	/**
+	 * disableKeyShorcuts
+	 */
+	public static void disableKeyShorcuts() {
+		Main.get().mainPanel.disableKeyShorcuts();
+	}
 }
