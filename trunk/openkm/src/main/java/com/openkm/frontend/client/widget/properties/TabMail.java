@@ -111,12 +111,12 @@ public class TabMail extends Composite implements HasMailEvent, HasMailHandlerEx
 	 * @param width With of the widget
 	 * @param height Height of the widget
 	 */
-	public void setSize(int width, int height) {
+	public void setPixelSize(int width, int height) {
 		this.height = height;
 		this.width = width;
 		tabPanel.setPixelSize(width, height);
 		mail.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
-		security.setPixelSize(width-2,height-TAB_HEIGHT); // Substract tab height
+		security.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
 		security.fillWidth();
 		
 		// Setting size to extension
@@ -297,7 +297,7 @@ public class TabMail extends Composite implements HasMailEvent, HasMailHandlerEx
 	 * Needs resizing if not widgets disappears
 	 */
 	public void resizingIncubatorWidgets() {
-		security.setPixelSize(getOffsetWidth()-2, getOffsetHeight()-22); // Substract tab height
+		security.setPixelSize(getOffsetWidth(), getOffsetHeight()-TAB_HEIGHT); // Substract tab height
 		security.fillWidth();
 		// TODO:Solves minor bug with IE
 		if (Util.getUserAgent().startsWith("ie")) {
