@@ -82,17 +82,11 @@ public class SearchIn extends Composite {
 		status.setStyleName("okm-StatusPopup");
 
 		// Adding keyword listeners
-		searchNormal.content.addKeyPressHandler(searchControl.keyPressHandler);
 		searchNormal.content.addKeyUpHandler(searchControl.keyUpHandler);
-		searchNormal.name.addKeyPressHandler(searchControl.keyPressHandler);
 		searchNormal.name.addKeyUpHandler(searchControl.keyUpHandler);
-		searchNormal.keywords.addKeyPressHandler(searchControl.keyPressHandler);
 		searchNormal.keywords.addKeyUpHandler(searchControl.keyUpHandler);		
-		searchAdvanced.from.addKeyPressHandler(searchControl.keyPressHandler);
 		searchAdvanced.from.addKeyUpHandler(searchControl.keyUpHandler);
-		searchAdvanced.to.addKeyPressHandler(searchControl.keyPressHandler);
 		searchAdvanced.to.addKeyUpHandler(searchControl.keyUpHandler);
-		searchAdvanced.subject.addKeyPressHandler(searchControl.keyPressHandler);
 		searchAdvanced.subject.addKeyUpHandler(searchControl.keyUpHandler);
 		
 		tabPanel.add(searchNormal, Main.i18n("search.normal"));
