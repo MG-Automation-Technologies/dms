@@ -40,9 +40,9 @@ import com.openkm.frontend.client.widget.searchresult.SearchResult;
  */
 public class SearchBrowser extends Composite {
 	
-	private final static int IE_SIZE_RECTIFICATION = (Util.getUserAgent().equals("ie6")?2:0);
-	private final static int PANEL_TOP_HEIGHT 			= 200;
-	public final static int SPLITTER_HEIGHT = 10;
+	private final static int IE_SIZE_RECTIFICATION = (Util.getUserAgent().startsWith("ie")?2:0);
+	private final static int PANEL_TOP_HEIGHT 	= 200;
+	public final static int SPLITTER_HEIGHT 	= 10;
 	
 	private VerticalSplitPanelExtended verticalSplitPanel;
 	
