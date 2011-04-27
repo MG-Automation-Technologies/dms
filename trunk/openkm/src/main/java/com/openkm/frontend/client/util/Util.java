@@ -270,6 +270,7 @@ public class Util {
             if ( ua.indexOf('msie 7.0') != -1 ) return 'ie7';
             if ( ua.indexOf('msie 8.0') != -1 ) return 'ie8';
             if ( ua.indexOf('gecko') != -1 ) return 'gecko';
+            if ( ua.indexOf('opera') != -1 ) return 'opera';
             return 'unknown';
         } catch ( e ) { return 'unknown' }
     }-*/;
