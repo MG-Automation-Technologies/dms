@@ -24,7 +24,6 @@ package com.openkm.frontend.client.service;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.openkm.frontend.client.bean.GWTMail;
 
 /**
