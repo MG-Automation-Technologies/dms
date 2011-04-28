@@ -42,7 +42,12 @@
 					}
 				}
 			}
-			
+
+	   		function printFile(){
+	   			window.frames['__print'].focus(); 
+	   			parent['__print'].print();
+	   		}
+	
 			document.onmousedown=right;
 			document.oncontextmenu=context;
 		</script>
@@ -53,9 +58,12 @@
 		<div id="uploaderApplet"></div>
 		<div id="digitalSignatureApplet"></div>
 		<div id="cryptoApplet"></div>
+		<div id="print"></div>
 		<!-- Download documents needs this -->
 		<div style="display:none;visibility:hidden;">
 			<iframe src="" id="__download" style="width:0;height:0;border:0"></iframe>
+			
 		</div> 
+		<iframe src="" id="__print" width="0" height="0" name="__print" style="width:0;height:0;border:0"></iframe>
 	</body>
 </html>
