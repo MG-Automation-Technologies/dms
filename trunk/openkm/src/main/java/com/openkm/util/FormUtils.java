@@ -114,12 +114,11 @@ public class FormUtils {
 	 * 
 	 * @return A Map with all the forms and its form elements.
 	 */
-	public static synchronized Map<PropertyGroup, List<FormElement>> parsePropertyGroupsForms(String pgFile) 
+	public static synchronized Map<PropertyGroup, List<FormElement>> parsePropertyGroupsForms(String pgXml) 
 			throws IOException,	ParseException {
-		log.debug("parseMetadataForms()");
+		log.debug("parseMetadataForms({})", pgXml);
 		// long begin = Calendar.getInstance().getTimeInMillis();
 		if (pGroups == null) {
-			log.debug("PropertyGroupForms: {}", pgFile);
 			pGroups = new HashMap<PropertyGroup, List<FormElement>>();
 			FileInputStream fis = null;
 			
@@ -130,7 +129,7 @@ public class FormUtils {
 				ErrorHandler handler = new ErrorHandler();
 				DocumentBuilder db = dbf.newDocumentBuilder();
 				db.setErrorHandler(handler);
-				fis = new FileInputStream(pgFile);
+				fis = new FileInputStream(pgXml);
 				
 				if (fis != null) {
 					Document doc = db.parse(fis);
