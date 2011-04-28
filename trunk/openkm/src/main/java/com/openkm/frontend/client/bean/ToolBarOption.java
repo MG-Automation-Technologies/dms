@@ -26,6 +26,7 @@ public class ToolBarOption {
 	public boolean findFolderOption;
 	public boolean downloadOption;
 	public boolean downloadPdfOption;
+	public boolean printOption;
 	public boolean lockOption;
 	public boolean unLockOption;
 	public boolean addDocumentOption;
