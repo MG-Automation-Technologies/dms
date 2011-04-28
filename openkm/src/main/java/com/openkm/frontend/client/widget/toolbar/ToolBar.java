@@ -2672,10 +2672,11 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		panel.getWidget(6).setVisible(option.isDownloadOption()); // hide space
 		downloadPdf.setVisible(option.isDownloadPdfOption());
 		panel.getWidget(8).setVisible(option.isDownloadPdfOption()); // hide space
-		print.setVisible(true);
-		panel.getWidget(10).setVisible(true);
+		print.setVisible(Main.get().workspaceUserProperties.getWorkspace().isPrintPreview());
+		panel.getWidget(10).setVisible(Main.get().workspaceUserProperties.getWorkspace().isPrintPreview());
 		panel.getWidget(11).setVisible(option.isCreateFolderOption() || option.isFindFolderOption() ||
-					                  option.isDownloadOption() || option.isDownloadPdfOption()); // hide separator
+					                  option.isDownloadOption() || option.isDownloadPdfOption() ||
+					                  Main.get().workspaceUserProperties.getWorkspace().isPrintPreview()); // hide separator
  
 		
 		// SECOND
