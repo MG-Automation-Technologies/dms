@@ -414,13 +414,6 @@
       <scope>provided</scope>
     </dependency> -->
 
-    <!-- GWT Maven plugin -->
-    <dependency>
-      <groupId>org.codehaus.mojo</groupId>
-      <artifactId>gwt-maven-plugin</artifactId>
-      <version>${gwt.version}</version>
-    </dependency>
-
     <!-- GWT plugins -->
     <dependency>
       <groupId>com.google.code.gwt-log</groupId>
