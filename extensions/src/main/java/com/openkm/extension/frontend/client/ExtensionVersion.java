@@ -32,6 +32,6 @@ package com.openkm.extension.frontend.client;
 
 public class ExtensionVersion {
 	public static String get() {
-		return "With Community Extension 5.1";
+		return "With Community Extensions 5.1";
 	}
 }
