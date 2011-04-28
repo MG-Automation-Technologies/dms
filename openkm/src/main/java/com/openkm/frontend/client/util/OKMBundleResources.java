@@ -298,4 +298,10 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/icon/actions/share_query.gif")
 	public ImageResource sharedQuery();
+	
+	@Source("com/openkm/frontend/public/img/icon/actions/printer.png")
+	public ImageResource print();
+	
+	@Source("com/openkm/frontend/public/img/icon/actions/printer_disabled.png")
+	public ImageResource printDisabled();
 }
