@@ -505,36 +505,36 @@
     
     <!-- Gdata librariess -->
     <dependency>
-     <groupId>com.github.dcarter.gdata-java-client</groupId>
- 	 <artifactId>gdata-contacts-3.0</artifactId>
- 	 <version>1.41.1</version>
- 	</dependency>
+      <groupId>com.github.dcarter.gdata-java-client</groupId>
+      <artifactId>gdata-contacts-3.0</artifactId>
+      <version>1.41.1</version>
+    </dependency>
  	
  	<!-- Wiki librariess -->
     <dependency>
-    	<groupId>org.apache.maven.doxia</groupId>
-    	<artifactId>doxia-module-twiki</artifactId>
-    	<version>1.1.4</version>
-    	<type>jar</type>
-    	<scope>compile</scope>
+      <groupId>org.apache.maven.doxia</groupId>
+      <artifactId>doxia-module-twiki</artifactId>
+      <version>1.1.4</version>
+      <type>jar</type>
+      <scope>compile</scope>
     </dependency>
     <dependency>
-    	<groupId>org.apache.maven.doxia</groupId>
-    	<artifactId>doxia-core</artifactId>
-    	<version>1.1.4</version>
-    	<type>jar</type>
-    	<scope>compile</scope>
+      <groupId>org.apache.maven.doxia</groupId>
+      <artifactId>doxia-core</artifactId>
+      <version>1.1.4</version>
+      <type>jar</type>
+      <scope>compile</scope>
     </dependency>
     <dependency>
-    	<groupId>org.apache.maven.doxia</groupId>
-    	<artifactId>doxia-core</artifactId>
-    	<version>1.1.4</version>
-    	<classifier>tests</classifier>
+      <groupId>org.apache.maven.doxia</groupId>
+      <artifactId>doxia-core</artifactId>
+      <version>1.1.4</version>
+      <classifier>tests</classifier>
     </dependency>
     <dependency>
-    	<groupId>org.apache.maven.doxia</groupId>
-    	<artifactId>doxia-module-xhtml</artifactId>
-    	<version>1.1.4</version>
+      <groupId>org.apache.maven.doxia</groupId>
+      <artifactId>doxia-module-xhtml</artifactId>
+      <version>1.1.4</version>
     </dependency>
   </dependencies>
   
