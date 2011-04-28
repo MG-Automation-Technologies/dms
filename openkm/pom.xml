@@ -67,13 +67,6 @@
       <url>http://repository.jboss.org/nexus/content/groups/public</url>
     </repository>
 
-    <!-- Needed for com.google.gwt:gchart -->
-    <repository>
-      <id>jboss.com</id>
-      <name>JBoss Maven Repository</name>
-      <url>http://repository.jboss.com/maven2</url>
-    </repository>
-
     <!-- Needed for KEA - openrdf -->
     <repository>
       <id>openrdf.org</id>
@@ -318,8 +311,8 @@
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
-      <artifactId>hibernate</artifactId>
-      <version>3.2.6.ga</version>
+      <artifactId>hibernate-core</artifactId>
+      <version>3.3.2.GA</version>
       <exclusions>
         <exclusion>
           <groupId>javax.transaction</groupId>
