@@ -4,7 +4,7 @@
   <groupId>com.openkm</groupId>
   <artifactId>openkm</artifactId>
   <packaging>war</packaging>
-  <version>LTE</version>
+  <version>5.1.3</version>
   <name>OpenKM Web Application</name>
   <url>http://www.openkm.com</url>
   <description>OpenKM is powerful scalable Document Management System (DMS). OpenKM uses JBoss + J2EE + Ajax web (GWT) + Jackrabbit (lucene) open source technologies.</description>
@@ -67,6 +67,13 @@
       <url>http://repository.jboss.org/nexus/content/groups/public</url>
     </repository>
 
+    <!-- Needed for com.google.gwt:gchart -->
+    <repository>
+      <id>jboss.com</id>
+      <name>JBoss Maven Repository</name>
+      <url>http://repository.jboss.com/maven2</url>
+    </repository>
+
     <!-- Needed for KEA - openrdf -->
     <repository>
       <id>openrdf.org</id>
@@ -107,11 +114,6 @@
       <id>openkm.com</id>
       <name>OpenKM Maven Reporitory</name>
       <url>http://repository.openkm.com/maven2</url>
-    </repository>
-    <repository>
-    	<id>StringTree</id>
-    	<name>String Tree</name>
-    	<url>http://stringtree.org/repository/</url>
     </repository>
   </repositories>
 
@@ -213,11 +215,10 @@
 
     <!-- Base64 encoding / decoding -->
     <!-- http://www.techiegyan.com/?p=333 -->
-    <!-- Downgraded to 1.3 due to GWT 2.2 dependency -->
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
-      <version>1.2</version>
+      <version>1.4</version>
     </dependency>
 
     <!-- Jackrabbit -->
@@ -317,8 +318,8 @@
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-core</artifactId>
-      <version>3.3.2.GA</version>
+      <artifactId>hibernate</artifactId>
+      <version>3.2.6.ga</version>
       <exclusions>
         <exclusion>
           <groupId>javax.transaction</groupId>
@@ -412,7 +413,7 @@
       <artifactId>gwt-dev</artifactId>
       <version>${gwt.version}</version>
       <scope>provided</scope>
-    </dependency> -->
+    </dependency>-->
 
     <!-- GWT Maven plugin -->
     <dependency>
@@ -507,7 +508,7 @@
     <dependency>
       <groupId>com.openkm</groupId>
       <artifactId>extensions-full</artifactId>
-      <version>LTE</version>
+      <version>5.1</version>
     </dependency>
     
     <!-- Gdata librariess -->
@@ -516,33 +517,6 @@
  	 <artifactId>gdata-contacts-3.0</artifactId>
  	 <version>1.41.1</version>
  	</dependency>
- 	
- 	<!-- Wiki librariess -->
-    <dependency>
-    	<groupId>org.apache.maven.doxia</groupId>
-    	<artifactId>doxia-module-twiki</artifactId>
-    	<version>1.1.4</version>
-    	<type>jar</type>
-    	<scope>compile</scope>
-    </dependency>
-    <dependency>
-    	<groupId>org.apache.maven.doxia</groupId>
-    	<artifactId>doxia-core</artifactId>
-    	<version>1.1.4</version>
-    	<type>jar</type>
-    	<scope>compile</scope>
-    </dependency>
-    <dependency>
-    	<groupId>org.apache.maven.doxia</groupId>
-    	<artifactId>doxia-core</artifactId>
-    	<version>1.1.4</version>
-    	<classifier>tests</classifier>
-    </dependency>
-    <dependency>
-    	<groupId>org.apache.maven.doxia</groupId>
-    	<artifactId>doxia-module-xhtml</artifactId>
-    	<version>1.1.4</version>
-    </dependency>
   </dependencies>
   
   <build>
@@ -563,7 +537,7 @@
           </execution>
         </executions>
         <configuration>
-          <runTarget>frontend/index.html</runTarget>
+          <runTarget>com.openkm.frontend.Main/index.html</runTarget>
           <modules>
             <module>com.openkm.frontend.Main</module>
           </modules>

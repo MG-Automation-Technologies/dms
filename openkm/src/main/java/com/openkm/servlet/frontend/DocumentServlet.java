@@ -45,23 +45,17 @@ import org.slf4j.LoggerFactory;
 import com.lowagie.text.DocumentException;
 import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
-import com.openkm.api.OKMPropertyGroup;
 import com.openkm.api.OKMRepository;
 import com.openkm.api.OKMSearch;
 import com.openkm.bean.Document;
-import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.QueryResult;
 import com.openkm.bean.Version;
-import com.openkm.bean.form.FormElement;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.ConversionException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.LockException;
-import com.openkm.core.NoSuchGroupException;
-import com.openkm.core.NoSuchPropertyException;
-import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
@@ -644,8 +638,6 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 	
 	@Override
 	public String createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties) throws OKMException  {
-		log.debug("createFromTemplate({},{})", docPath, destinationPath);
-		updateSessionManager();
 		File tmp = null;
 		InputStream fis = null;
 		FileOutputStream fos = null;
@@ -699,27 +691,6 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 	        Document newDoc = new Document();
 			newDoc.setPath(destinationPath);
 			OKMDocument.getInstance().create(null, newDoc, fis);
-			
-			// Setting property groups ( metadata )
-			Collection<PropertyGroup> col = OKMPropertyGroup.getInstance().getGroups(null, docPath);
-			for (Iterator<PropertyGroup> it = col.iterator(); it.hasNext();) {	
-				PropertyGroup pg = it.next();
-				// Adding group
-				OKMPropertyGroup.getInstance().addGroup(null, newDoc.getPath(), pg.getName());
-				// Getting group properties
-				List<FormElement> properties = new ArrayList<FormElement>(); // The properties to be saved
-				for (Iterator<FormElement> itx = OKMPropertyGroup.getInstance().getProperties(null, newDoc.getPath(), pg.getName()).iterator(); itx.hasNext();) {
-					FormElement fe = itx.next();
-					// Iterates all properties because can have more than one group
-					for (GWTFormElement fp : formProperties) {
-						if (fe.getName().equals(fp.getName())) {
-							properties.add(GWTUtil.copy(fp));
-						}
-					}
-				}
-				// Setting properties
-				OKMPropertyGroup.getInstance().setProperties(null, newDoc.getPath(), pg.getName(), properties); 
-			}
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_IO), e.getMessage());
@@ -761,20 +732,8 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Conversion), e.getMessage());
 		} catch (TemplateException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Template), e.getMessage());
-		} catch (ParseException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Parse), e.getMessage());
-		} catch (NoSuchGroupException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_NoSuchGroup), e.getMessage());
-		} catch (LockException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Lock), e.getMessage());
-		} catch (NoSuchPropertyException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_NoSuchProperty), e.getMessage());
-		}finally {
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Conversion), e.getMessage());
+		} finally {
 			FileUtils.deleteQuietly(tmp);
 			IOUtils.closeQuietly(fis);
 			IOUtils.closeQuietly(fos);

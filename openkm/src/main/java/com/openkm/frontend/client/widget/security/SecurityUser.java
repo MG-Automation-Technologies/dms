@@ -31,6 +31,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -41,6 +42,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 import com.openkm.frontend.client.util.OKMBundleResources;
@@ -64,6 +66,7 @@ public class SecurityUser extends Composite implements HasWidgets {
 	public UserScrollTable unassignedUser;
 	private HorizontalPanel panel;
 	private VerticalPanel buttonPanel;
+	private SimplePanel spLeft;
 	private SimplePanel spRight;
 	private SimplePanel spHeight;
 	private Image addButtom;
@@ -79,8 +82,10 @@ public class SecurityUser extends Composite implements HasWidgets {
 		buttonPanel = new VerticalPanel();
 		assignedUser = new UserScrollTable(true);
 		unassignedUser = new UserScrollTable(false);
+		spLeft = new SimplePanel();
 		spRight = new SimplePanel();
 		spHeight = new SimplePanel();
+		spLeft.setWidth("4");
 		spRight.setWidth("1");
 		spHeight.setHeight("30");
 		
@@ -94,21 +99,17 @@ public class SecurityUser extends Composite implements HasWidgets {
 		addButtom.addClickHandler(addButtomHandler);
 		removeButtom.addClickHandler(removeButtomHandler);
 		
+		panel.add(spLeft);
 		panel.add(assignedUser);
 		panel.add(buttonPanel);
 		panel.add(unassignedUser);
 		
 		panel.setCellWidth(buttonPanel, "20");
+		panel.setCellWidth(spLeft, "4");
 		panel.setCellVerticalAlignment(buttonPanel,HasAlignment.ALIGN_MIDDLE);
 		panel.setCellHorizontalAlignment(buttonPanel,HasAlignment.ALIGN_CENTER);
 		
-		assignedUser.addStyleName("okm-Border-Left");
-		assignedUser.addStyleName("okm-Border-Right");
-		
-		unassignedUser.addStyleName("okm-Border-Left");
-		unassignedUser.addStyleName("okm-Border-Right");
-		
-		panel.setSize("612", "365");
+		panel.setSize("593", "365");
 		
 		initWidget(panel);
 	}
@@ -245,7 +246,9 @@ public class SecurityUser extends Composite implements HasWidgets {
 	 * Gets the granted users
 	 */
 	public void getGrantedUsers() {
-		if (path != null) {	
+		if (path != null) {
+			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+			endPoint.setServiceEntryPoint(RPCService.AuthService);	
 			authService.getGrantedUsers(path, callbackGetGrantedUsers);
 		}
 	}
@@ -255,6 +258,8 @@ public class SecurityUser extends Composite implements HasWidgets {
 	 */
 	public void getUngrantedUsers() {
 		if (path != null) {
+			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+			endPoint.setServiceEntryPoint(RPCService.AuthService);	
 			authService.getUngrantedUsers(path, callbackGetUngrantedUsers);
 		}
 	}
@@ -265,6 +270,8 @@ public class SecurityUser extends Composite implements HasWidgets {
 	public void getFilteredUngrantedUsers(String filter) {
 		if (path != null) {
 			resetUnassigned();
+			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+			endPoint.setServiceEntryPoint(RPCService.AuthService);	
 			authService.getFilteredUngrantedUsers(path, filter, callbackGetUngrantedUsers);
 		}
 	}
@@ -278,6 +285,8 @@ public class SecurityUser extends Composite implements HasWidgets {
 	public void addUser(String user, int permissions, boolean recursive) {
 		if (path != null) {
 			Main.get().securityPopup.status.setFlag_update();
+			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+			endPoint.setServiceEntryPoint(RPCService.AuthService);	
 			authService.grantUser(path, user, permissions, recursive, callbackAddUser);
 		}
 	}
@@ -290,6 +299,8 @@ public class SecurityUser extends Composite implements HasWidgets {
 	public void removeUser(String user, boolean recursive) {
 		if (path != null) {
 			Main.get().securityPopup.status.setFlag_update();
+			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+			endPoint.setServiceEntryPoint(RPCService.AuthService);	
 			authService.revokeUser(path, user, recursive, callbackRevokeUser);
 		}
 	}

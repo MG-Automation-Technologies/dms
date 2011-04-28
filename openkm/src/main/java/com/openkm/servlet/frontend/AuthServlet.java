@@ -146,7 +146,6 @@ public class AuthServlet extends OKMRemoteServiceServlet implements OKMAuthServi
 	@Override
 	public String getRemoteUser() {
 		log.debug("getRemoteUser()");
-		updateSessionManager();
 		String user = getThreadLocalRequest().getRemoteUser();
 		log.debug("getRemoteUser: {}", user);
 		return user;

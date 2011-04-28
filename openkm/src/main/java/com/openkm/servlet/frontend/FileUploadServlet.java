@@ -157,7 +157,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 							fileName = FilenameUtils.getName(fileName);
 							log.info("Upload file '{}' into '{}'", fileName, path);
 							Document doc = new Document();
-							doc.setPath(path+"/"+fileName);
+							doc.setPath(path + "/" + fileName);
 							OKMDocument.getInstance().create(null, doc, is);
 							uploadedDocPath = doc.getPath();
 							

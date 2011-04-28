@@ -22,7 +22,6 @@
 package com.openkm.frontend.client.panel;
 
 import com.allen_sauer.gwt.log.client.Log;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -30,7 +29,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
@@ -59,7 +58,14 @@ public class ExtendedDockPanel extends Composite {
 	// Panels size
 	public static final int VERTICAL_BORDER_PANEL_WIDTH = 10;
 	
-	public DockLayoutPanel dockPanel;
+	// Workspace constants
+//	public static final int DESKTOP 		= 0;
+//	public static final int SEARCH 			= 1;
+//	public static final int DASHBOARD		= 2;
+//	public static final int ADMINISTRATION	= 3;
+//	public static final int EXTENSIONS 		= 4;
+	
+	public DockPanel dockPanel;
 	
 	public TopPanel topPanel;
 	public VerticalBorderPanel leftBorderPanel;
@@ -84,7 +90,7 @@ public class ExtendedDockPanel extends Composite {
 	 * Extended dock panel
 	 */
 	public ExtendedDockPanel() {
-		dockPanel = new DockLayoutPanel(Unit.PX);
+		dockPanel = new DockPanel();
 		folderSelectPopup = new FolderSelectPopup();
 		enableKeyShorcuts();
 		
@@ -125,12 +131,16 @@ public class ExtendedDockPanel extends Composite {
 		actualView = UIDockPanelConstants.DESKTOP;	
 		
 		// Creates the dockPanel
-		dockPanel.addNorth(topPanel, TopPanel.PANEL_HEIGHT);
-		dockPanel.addSouth(bottomPanel, BottomPanel.PANEL_HEIGHT);
-		dockPanel.addWest(leftBorderPanel, VERTICAL_BORDER_PANEL_WIDTH);		
-		dockPanel.addEast(rightBorderPanel, VERTICAL_BORDER_PANEL_WIDTH);
-		dockPanel.add(desktop);
+		dockPanel.add(topPanel, DockPanel.NORTH);
+		dockPanel.add(bottomPanel, DockPanel.SOUTH);
+		dockPanel.add(leftBorderPanel, DockPanel.WEST);		
+		dockPanel.add(rightBorderPanel, DockPanel.EAST);
+		dockPanel.add(desktop, DockPanel.CENTER);
 		
+		dockPanel.setHorizontalAlignment(DockPanel.ALIGN_LEFT);
+		dockPanel.setVerticalAlignment(DockPanel.ALIGN_TOP);
+		
+		//dockPanel.setVisible(false);
 		initWidget(dockPanel);
 	}
 
@@ -198,25 +208,25 @@ public class ExtendedDockPanel extends Composite {
 	private void enableView() {
 		switch (actualView) {
 			case UIDockPanelConstants.DESKTOP :
-				dockPanel.add(desktop);
+				dockPanel.add(desktop,DockPanel.CENTER);
 				desktop.refreshSpliterAfterAdded();
 				break;
 				
 			case UIDockPanelConstants.SEARCH :
-				dockPanel.add(search);
+				dockPanel.add(search,DockPanel.CENTER);
 				search.refreshSpliterAfterAdded();
 				break;
 		
 			case UIDockPanelConstants.DASHBOARD :
-				dockPanel.add(dashboard);
+				dockPanel.add(dashboard,DockPanel.CENTER);
 				break;
 			
 			case UIDockPanelConstants.ADMINISTRATION :
-				dockPanel.add(administration);
+				dockPanel.add(administration,DockPanel.CENTER);
 				break;
 			
 			default:
-				dockPanel.add(topPanel.tabWorkspace.getWidgetExtensionByIndex(actualView));
+				dockPanel.add(topPanel.tabWorkspace.getWidgetExtensionByIndex(actualView),DockPanel.CENTER);
 				break;
 		}
 	}	
@@ -257,7 +267,7 @@ public class ExtendedDockPanel extends Composite {
 									propagate = false;
 								} else if (Main.get().mainPanel.topPanel.toolBar.getToolBarOption().renameOption && (
 										   Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected() || 
-										   Main.get().mainPanel.desktop.browser.fileBrowser.isFolderSelected() || 
+										   Main.get().mainPanel.desktop.browser.fileBrowser.isFolderSelected()|| 
 										   Main.get().mainPanel.desktop.browser.fileBrowser.isMailSelected())) {
 									
 									Main.get().mainPanel.desktop.browser.fileBrowser.rename();

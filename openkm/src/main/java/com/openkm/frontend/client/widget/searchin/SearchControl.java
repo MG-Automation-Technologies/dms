@@ -29,6 +29,7 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
@@ -41,6 +42,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTQueryParams;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.contants.ui.UISearchConstants;
 import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.service.OKMSearchServiceAsync;
@@ -329,7 +331,7 @@ public class SearchControl extends Composite {
 			gwtParams.setOperator(GWTQueryParams.OPERATOR_OR);
 		}
 		
-		if (searchNormal.modifyDateFrom != null && searchNormal.modifyDateTo != null) {
+		if (searchNormal.modifyDateFrom!=null && searchNormal.modifyDateTo!=null) {
 			gwtParams.setLastModifiedFrom(searchNormal.modifyDateFrom);
 			gwtParams.setLastModifiedTo(searchNormal.modifyDateTo);
 		} else {
@@ -383,15 +385,14 @@ public class SearchControl extends Composite {
 		}
 		
 		// Evaluates date range
-		if (searchNormal.modifyDateFrom != null && searchNormal.modifyDateTo != null) {
+		if (searchNormal.modifyDateFrom!=null && searchNormal.modifyDateTo!=null) {
 			searchButton.setEnabled(true);
 		}
 		
 		// Evaluates properties to enable button		
-		for (Iterator<String> it = searchMetadata.hWidgetProperties.keySet().iterator(); it.hasNext();) {
+		for (Iterator<String> it = searchMetadata.hWidgetProperties.keySet().iterator(); it.hasNext();){
 			String key = it.next();
 			Object widget = searchMetadata.hWidgetProperties.get(key);
-			
 			if (widget instanceof TextBox) {
 				if (((TextBox) widget).getText().length() >= MIN_WORD_LENGTH) {
 					searchButton.setEnabled(true);
@@ -411,7 +412,7 @@ public class SearchControl extends Composite {
 	 * Evalues Save Search button visibility
 	 */
 	public void evalueSaveSearchButtonVisible() {
-		if (searchSavedName.getText().length() > 0 && searchButton.isEnabled()) {
+		if (searchSavedName.getText().length()>0 && searchButton.isEnabled()) {
 			saveSearchButton.setEnabled(true);
 		} else {
 			saveSearchButton.setEnabled(false);
@@ -436,6 +437,8 @@ public class SearchControl extends Composite {
 	 */
 	public void saveSearch(GWTQueryParams params, String type) {
 		Main.get().mainPanel.search.searchBrowser.searchIn.status.setFlag_saveSearch();
+		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
+		endPoint.setServiceEntryPoint(RPCService.SearchService);
 		searchService.saveSearch(params, type, callbackSaveSearch);
 	}	
 	

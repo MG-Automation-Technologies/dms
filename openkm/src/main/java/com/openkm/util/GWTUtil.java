@@ -1417,7 +1417,7 @@ public class GWTUtil {
 		return gWTActivity;
 	}
 	
-	/**
+	/*
 	 * Copy Forum to GWTForum
 	 * 
 	 * @param Forum 
