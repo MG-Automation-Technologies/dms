@@ -413,7 +413,7 @@
       <version>${gwt.version}</version>
       <scope>provided</scope>
     </dependency> -->
-
+	
     <!-- GWT plugins -->
     <dependency>
       <groupId>com.google.code.gwt-log</groupId>
