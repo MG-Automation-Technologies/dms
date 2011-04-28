@@ -92,6 +92,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	private ToolBarButton cancelCheckout;
 	private ToolBarButton download;
 	private ToolBarButton downloadPdf;
+	private ToolBarButton print;
 	private ToolBarButton addPropertyGroup;
 	private ToolBarButton removePropertyGroup;
 	private ToolBarButton startWorkflow;
@@ -390,6 +391,18 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	};
 	
 	/**
+	 * Print as PDF Handler
+	 */
+	ClickHandler printHandler = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
+			if (toolBarOption.printOption) {
+				executePrint();
+			}
+		}
+	};
+	
+	/**
 	 * Download document
 	 */
 	public void executeDownload() {
@@ -403,6 +416,13 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	public void executeDownloadPdf() {
 		Main.get().mainPanel.desktop.browser.fileBrowser.table.downloadDocumentPdf();
 		fireEvent(HasToolBarEvent.EXECUTE_DOWNLOAD_PDF_DOCUMENT);
+	}
+	
+	/**
+	 * executePrint
+	 */
+	public void executePrint() {
+		Main.get().mainPanel.desktop.browser.fileBrowser.table.print();
 	}
 
 	/**
@@ -697,7 +717,10 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 									  Main.i18n("general.menu.file.download.document"), downloadHandler);
 			
 		downloadPdf = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.downloadPdfDisabled()),
-				  						Main.i18n("general.menu.file.download.document.pdf"), downloadPdfHandler); 
+				  						Main.i18n("general.menu.file.download.document.pdf"), downloadPdfHandler);
+		
+		print = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.printDisabled()),
+										Main.i18n("general.menu.file.print"), printHandler); 
 			
 		addPropertyGroup = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.addPropertyGroupDisabled()),
 											 Main.i18n("filebrowser.menu.add.property.group"), addPropertyGroupHandler); 
@@ -749,6 +772,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		download.addMouseOutHandler(mouseOutHandler);
 		downloadPdf.addMouseOverHandler(mouseOverHandler);
 		downloadPdf.addMouseOutHandler(mouseOutHandler);
+		print.addMouseOverHandler(mouseOverHandler);
+		print.addMouseOutHandler(mouseOutHandler);
 		addPropertyGroup.addMouseOverHandler(mouseOverHandler);
 		addPropertyGroup.addMouseOutHandler(mouseOutHandler);
 		removePropertyGroup.addMouseOverHandler(mouseOverHandler);
@@ -779,6 +804,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		cancelCheckout.setStyleName("okm-ToolBar-button-disabled");
 		download.setStyleName("okm-ToolBar-button-disabled");
 		downloadPdf.setStyleName("okm-ToolBar-button-disabled");
+		print.setStyleName("okm-ToolBar-button-disabled");
 		addPropertyGroup.setStyleName("okm-ToolBar-button-disabled");
 		removePropertyGroup.setStyleName("okm-ToolBar-button-disabled");
 		startWorkflow.setStyleName("okm-ToolBar-button-disabled");
@@ -801,6 +827,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		panel.add(download);
 		panel.add(space());
 		panel.add(downloadPdf);
+		panel.add(space());
+		panel.add(print);
 		panel.add(space());
 		panel.add(new Image(OKMBundleResources.INSTANCE.separator())); // pos 9
 		panel.add(lock);
@@ -862,6 +890,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		if (isEnabled()) {			
 			disableDownload();
 			disableDownloadPdf();
+			disablePrint();
 			disableSendDocumentLink();
 			disableSendDocumentAttachment();
 			disableCheckout();
@@ -1017,8 +1046,14 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 
 			if (doc.isConvertibleToPdf()) {
 				enableDownloadPdf();
+				enablePrint();
 			} else {
 				disableDownloadPdf();
+				if (doc.getMimeType().equals("application/pdf")) {
+					enablePrint(); // pdf files are printable
+				} else {
+					disablePrint();
+				}
 			}
 			
 			// Checking delete permissions
@@ -1202,6 +1237,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			disableMove();
 			disableExport();
 			disableDownloadPdf();
+			disablePrint();
 			disableAddSubscription();
 			disableRemoveSubscription();
 			disableCheckout();
@@ -1478,6 +1514,26 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		downloadPdf.setStyleName("okm-ToolBar-button");
 		downloadPdf.setResource(OKMBundleResources.INSTANCE.downloadPdf());
 		downloadPdf.setTitle(Main.i18n("general.menu.file.download.document.pdf"));
+	}
+	
+	/**
+	 * Disables print buttom
+	 */
+	public void disablePrint() {
+		toolBarOption.printOption = false;
+		print.setStyleName("okm-ToolBar-button-disabled");
+		print.setResource(OKMBundleResources.INSTANCE.printDisabled());
+		print.setTitle(Main.i18n("general.menu.file.print"));
+	}
+	
+	/**
+	 * Enables print buttom
+	 */
+	public void enablePrint() {
+		toolBarOption.printOption = true;
+		print.setStyleName("okm-ToolBar-button");
+		print.setResource(OKMBundleResources.INSTANCE.print());
+		print.setTitle(Main.i18n("general.menu.file.print"));
 	}
 
 	/**
@@ -1856,6 +1912,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.unLockOption 					= false;
 		tmpToolBarOption.downloadOption					= false;
 		tmpToolBarOption.downloadPdfOption				= false;
+		tmpToolBarOption.printOption					= false;
 		tmpToolBarOption.deleteOption					= false;
 		tmpToolBarOption.addPropertyGroupOption 		= false;
 		tmpToolBarOption.removePropertyGroupOption  	= false;
@@ -1892,6 +1949,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.unLockOption 					= false;
 		tmpToolBarOption.downloadOption					= false;
 		tmpToolBarOption.downloadPdfOption				= false;
+		tmpToolBarOption.printOption					= false;
 		tmpToolBarOption.deleteOption					= false;
 		tmpToolBarOption.addPropertyGroupOption 		= false;
 		tmpToolBarOption.removePropertyGroupOption  	= false;
@@ -1928,6 +1986,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.unLockOption 					= false;
 		tmpToolBarOption.downloadOption					= false;
 		tmpToolBarOption.downloadPdfOption				= false;
+		tmpToolBarOption.printOption					= false;
 		tmpToolBarOption.deleteOption					= false;
 		tmpToolBarOption.addPropertyGroupOption 		= false;
 		tmpToolBarOption.removePropertyGroupOption  	= false;
@@ -1964,6 +2023,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.unLockOption 					= false;
 		tmpToolBarOption.downloadOption					= false;
 		tmpToolBarOption.downloadPdfOption				= false;
+		tmpToolBarOption.printOption					= false;
 		tmpToolBarOption.deleteOption					= false;
 		tmpToolBarOption.addPropertyGroupOption 		= false;
 		tmpToolBarOption.removePropertyGroupOption  	= false;
@@ -2000,6 +2060,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.unLockOption 					= false;
 		tmpToolBarOption.downloadOption					= false;
 		tmpToolBarOption.downloadPdfOption				= false;
+		tmpToolBarOption.printOption					= false;
 		tmpToolBarOption.deleteOption					= false;
 		tmpToolBarOption.addPropertyGroupOption 		= false;
 		tmpToolBarOption.removePropertyGroupOption  	= false;
@@ -2036,6 +2097,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.unLockOption 					= false;
 		tmpToolBarOption.downloadOption					= false;
 		tmpToolBarOption.downloadPdfOption				= false;
+		tmpToolBarOption.printOption					= false;
 		tmpToolBarOption.deleteOption					= false;
 		tmpToolBarOption.addPropertyGroupOption 		= false;
 		tmpToolBarOption.removePropertyGroupOption  	= false;
@@ -2072,6 +2134,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.unLockOption 					= false;
 		tmpToolBarOption.downloadOption					= false;
 		tmpToolBarOption.downloadPdfOption				= false;
+		tmpToolBarOption.printOption					= false;
 		tmpToolBarOption.deleteOption					= false;
 		tmpToolBarOption.addPropertyGroupOption 		= false;
 		tmpToolBarOption.removePropertyGroupOption  	= false;
@@ -2108,6 +2171,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.unLockOption 					= false;
 		tmpToolBarOption.downloadOption					= false;
 		tmpToolBarOption.downloadPdfOption				= false;
+		tmpToolBarOption.printOption					= false;
 		tmpToolBarOption.deleteOption					= false;
 		tmpToolBarOption.addPropertyGroupOption 		= false;
 		tmpToolBarOption.removePropertyGroupOption  	= false;
@@ -2144,6 +2208,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.unLockOption 					= false;
 		tmpToolBarOption.downloadOption					= false;
 		tmpToolBarOption.downloadPdfOption				= false;
+		tmpToolBarOption.printOption					= false;
 		tmpToolBarOption.deleteOption					= false;
 		tmpToolBarOption.addPropertyGroupOption 		= false;
 		tmpToolBarOption.removePropertyGroupOption  	= false;
@@ -2180,6 +2245,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.unLockOption 					= false;
 		tmpToolBarOption.downloadOption					= false;
 		tmpToolBarOption.downloadPdfOption				= false;
+		tmpToolBarOption.printOption					= false;
 		tmpToolBarOption.deleteOption					= false;
 		tmpToolBarOption.addPropertyGroupOption 		= false;
 		tmpToolBarOption.removePropertyGroupOption  	= false;
@@ -2214,6 +2280,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		if (toolBarOption.unLockOption) { enableUnlock(); } else { disableUnlock(); }
 		if (toolBarOption.downloadOption) { enableDownload(); } else { disableDownload(); }
 		if (toolBarOption.downloadPdfOption) { enableDownloadPdf(); } else { disableDownloadPdf(); }
+		if (toolBarOption.printOption) { enablePrint(); } else { disablePrint(); }
 		if (toolBarOption.deleteOption) { enableDelete(); } else { disableDelete(); }
 		if (toolBarOption.addPropertyGroupOption) { enableAddPropertyGroup(); } else { disableAddPropertyGroup(); }
 		
@@ -2605,62 +2672,64 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		panel.getWidget(6).setVisible(option.isDownloadOption()); // hide space
 		downloadPdf.setVisible(option.isDownloadPdfOption());
 		panel.getWidget(8).setVisible(option.isDownloadPdfOption()); // hide space
-		panel.getWidget(9).setVisible(option.isCreateFolderOption() || option.isFindFolderOption() ||
+		print.setVisible(true);
+		panel.getWidget(10).setVisible(true);
+		panel.getWidget(11).setVisible(option.isCreateFolderOption() || option.isFindFolderOption() ||
 					                  option.isDownloadOption() || option.isDownloadPdfOption()); // hide separator
  
 		
 		// SECOND
 		lock.setVisible(option.isLockOption());
-		panel.getWidget(11).setVisible(option.isLockOption()); // hide space
+		panel.getWidget(13).setVisible(option.isLockOption()); // hide space
 		unLock.setVisible(option.isUnLockOption());
-		panel.getWidget(13).setVisible(option.isUnLockOption()); // hide space
-		panel.getWidget(14).setVisible(option.isLockOption() || option.isUnLockOption()); // hide separator
+		panel.getWidget(15).setVisible(option.isUnLockOption()); // hide space
+		panel.getWidget(16).setVisible(option.isLockOption() || option.isUnLockOption()); // hide separator
 		
 		// THIRD
 		addDocument.setVisible(option.isAddDocumentOption());
-		panel.getWidget(16).setVisible(option.isAddDocumentOption()); // hide space
+		panel.getWidget(18).setVisible(option.isAddDocumentOption()); // hide space
 		edit.setVisible(option.isCheckoutOption());
-		panel.getWidget(18).setVisible(option.isCheckoutOption()); // hide space
+		panel.getWidget(20).setVisible(option.isCheckoutOption()); // hide space
 		checkin.setVisible(option.isCheckinOption());
-		panel.getWidget(20).setVisible(option.isCheckinOption()); // hide space
+		panel.getWidget(22).setVisible(option.isCheckinOption()); // hide space
 		cancelCheckout.setVisible(option.isCancelCheckoutOption());
-		panel.getWidget(22).setVisible(option.isCancelCheckoutOption()); // hide space
+		panel.getWidget(24).setVisible(option.isCancelCheckoutOption()); // hide space
 		delete.setVisible(option.isDeleteOption());
-		panel.getWidget(24).setVisible(option.isDeleteOption()); // hide space
-		panel.getWidget(25).setVisible(option.isAddDocumentOption() || option.isCheckoutOption() || 
+		panel.getWidget(26).setVisible(option.isDeleteOption()); // hide space
+		panel.getWidget(27).setVisible(option.isAddDocumentOption() || option.isCheckoutOption() || 
 									   option.isCheckinOption() || option.isCancelCheckoutOption() || 
 									   option.isDeleteOption()); // hide separator
 		
 		// FOURTH
 		addPropertyGroup.setVisible(option.isAddPropertyGroupOption());
-		panel.getWidget(27).setVisible(option.isAddPropertyGroupOption()); // hide space
+		panel.getWidget(29).setVisible(option.isAddPropertyGroupOption()); // hide space
 		removePropertyGroup.setVisible(option.isRemovePropertyGroupOption());
-		panel.getWidget(29).setVisible(option.isRemovePropertyGroupOption()); // hide space
-		panel.getWidget(30).setVisible(option.isAddPropertyGroupOption() || option.isRemovePropertyGroupOption()); // hide separator
+		panel.getWidget(31).setVisible(option.isRemovePropertyGroupOption()); // hide space
+		panel.getWidget(32).setVisible(option.isAddPropertyGroupOption() || option.isRemovePropertyGroupOption()); // hide separator
 		
 		// FIFTH
 		startWorkflow.setVisible(option.isWorkflowOption());
-		panel.getWidget(32).setVisible(option.isWorkflowOption()); // hide space
-		panel.getWidget(33).setVisible(option.isWorkflowOption()); // hide separator
+		panel.getWidget(34).setVisible(option.isWorkflowOption()); // hide space
+		panel.getWidget(35).setVisible(option.isWorkflowOption()); // hide separator
 		
 		// SIXTH
 		addSubscription.setVisible(option.isAddSubscription());
-		panel.getWidget(35).setVisible(option.isAddSubscription()); // hide space
+		panel.getWidget(37).setVisible(option.isAddSubscription()); // hide space
 		removeSubscription.setVisible(option.isRemoveSubscription());
-		panel.getWidget(37).setVisible(option.isRemoveSubscription()); // hide space
-		panel.getWidget(38).setVisible(option.isAddSubscription() || option.isRemoveSubscription()); // hide separator
+		panel.getWidget(39).setVisible(option.isRemoveSubscription()); // hide space
+		panel.getWidget(40).setVisible(option.isAddSubscription() || option.isRemoveSubscription()); // hide separator
 		
 		// SEVENTH 
 		home.setVisible(option.isHomeOption());
-		panel.getWidget(40).setVisible(option.isHomeOption()); // hide space
+		panel.getWidget(42).setVisible(option.isHomeOption()); // hide space
 		refresh.setVisible(option.isRefreshOption());
-		panel.getWidget(42).setVisible(option.isRefreshOption()); // hide space
-		panel.getWidget(43).setVisible(option.isHomeOption() || option.isRefreshOption()); // hide separator
+		panel.getWidget(44).setVisible(option.isRefreshOption()); // hide space
+		panel.getWidget(45).setVisible(option.isHomeOption() || option.isRefreshOption()); // hide separator
 		
 		scanner.setVisible(option.isScannerOption());
-		panel.getWidget(45).setVisible(option.isScannerOption()); // hide space
+		panel.getWidget(47).setVisible(option.isScannerOption()); // hide space
 		uploader.setVisible(option.isUploaderOption());
-		panel.getWidget(47).setVisible(option.isUploaderOption()); // hide space
+		panel.getWidget(49).setVisible(option.isUploaderOption()); // hide space
 	}
 	
 	/**

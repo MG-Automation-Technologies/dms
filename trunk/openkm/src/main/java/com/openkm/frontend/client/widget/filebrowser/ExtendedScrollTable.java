@@ -889,6 +889,18 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 	}
 	
 	/**
+	 * print
+	 */
+	public void print() {
+		Log.debug("print()");
+		if (isDocumentSelected()) {
+			Log.debug("jump to download");
+			Util.print(getDocument().getUuid());
+		}
+		Log.debug("print: void");
+	}
+	
+	/**
 	 * Gets the checkout flag
 	 * 
 	 * @return Checkout state

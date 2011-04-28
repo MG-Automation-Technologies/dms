@@ -200,6 +200,18 @@ public class Util {
 	}
 	
 	/**
+	 * print file
+	 * 
+	 * @param uuid
+	 */
+	public static void print(String uuid) {
+		final Element printIframe = RootPanel.get("__print").getElement();
+		String url = RPCService.ConverterServlet + "?inline=true&toPdf=true&uuid=" + URL.encodeQueryString(uuid);
+		DOM.setElementAttribute(printIframe, "src", url); 
+		printFile();
+	}
+	
+	/**
 	 * markHTMLTextAsBold
 	 * 
 	 * @param text
@@ -220,6 +232,13 @@ public class Util {
 	 */
 	public static native void changeCss(String title) /*-{
 		new $wnd.changeCss(title);
+	}-*/;
+	
+	/**
+	 * printFile
+	 */
+	public static native void printFile() /*-{
+		new $wnd.printFile();
 	}-*/;
 	
 	/**
