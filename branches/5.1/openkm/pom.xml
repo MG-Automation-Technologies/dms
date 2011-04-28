@@ -499,10 +499,10 @@
     
     <!-- Gdata librariess -->
     <dependency>
-     <groupId>com.github.dcarter.gdata-java-client</groupId>
- 	 <artifactId>gdata-contacts-3.0</artifactId>
- 	 <version>1.41.1</version>
- 	</dependency>
+      <groupId>com.github.dcarter.gdata-java-client</groupId>
+      <artifactId>gdata-contacts-3.0</artifactId>
+      <version>1.41.1</version>
+    </dependency>
   </dependencies>
   
   <build>
