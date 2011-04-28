@@ -10,7 +10,7 @@
   <link rel="Shortcut icon" href="favicon.ico" />
   <link rel="stylesheet" type="text/css" href="css/style.css" />
   <link rel="stylesheet" type="text/css" href="css/fixedTableHeader.css" />
-  <style type="text/css">body,html {padding:0; margin:0;}</style>
+  <style type="text/css">body, html { padding:0; margin:0; }</style>
   <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
   <script type="text/javascript" src="js/fixedTableHeader.js"></script>
   <script type="text/javascript">
