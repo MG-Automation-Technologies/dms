@@ -230,6 +230,18 @@ public class Dashboard extends Composite implements HasDashboardHandlerExtension
 	}
 	
 	/**
+	 * @param widget
+	 * @return
+	 */
+	public boolean isWidgetExtensionVisible(Widget widget) {
+		if (actualView==DASHBOARD_EXTENSION && actualWidgetExtension.equals(widget))  {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
 	 * Refresh all
 	 */
 	public void refreshAll() {
