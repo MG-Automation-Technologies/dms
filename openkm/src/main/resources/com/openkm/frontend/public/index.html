@@ -62,8 +62,18 @@
 		<!-- Download documents needs this -->
 		<div style="display:none;visibility:hidden;">
 			<iframe src="" id="__download" style="width:0;height:0;border:0"></iframe>
-			
-		</div> 
-		<iframe src="" id="__print" width="0" height="0" name="__print" style="width:0;height:0;border:0"></iframe>
+			<script type="text/javascript">
+				var ua = navigator.userAgent.toLowerCase();
+            	if ( ua.indexOf('chrome') != -1 ) {
+                	document.write('<iframe src="" id="__print" width="0" height="0" name="__print" style="width:0;height:0;border:0"></iframe>');
+            	}
+			</script>
+		</div>
+		<script type="text/javascript">
+			var ua = navigator.userAgent.toLowerCase();
+           	if ( ua.indexOf('chrome') == -1 ) {
+               	document.write('<iframe src="" id="__print" width="0" height="0" name="__print" style="width:0;height:0;border:0"></iframe>');
+           	}
+		</script>
 	</body>
 </html>
