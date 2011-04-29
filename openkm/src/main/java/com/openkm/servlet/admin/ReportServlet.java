@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -63,6 +64,7 @@ import bsh.EvalError;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.HibernateUtil;
+import com.openkm.dao.LegacyDAO;
 import com.openkm.dao.ReportDAO;
 import com.openkm.dao.bean.Report;
 import com.openkm.dao.bean.ReportParameter;
@@ -353,6 +355,7 @@ public class ReportServlet extends BaseServlet {
 		ByteArrayInputStream bais = null;
 		OutputStream os = null;
 		org.hibernate.Session dbSession = null;
+		Connection con = null;
 		
 		try {
 			baos = new ByteArrayOutputStream();
@@ -360,13 +363,14 @@ public class ReportServlet extends BaseServlet {
 			
 			if (Report.SQL.equals(rp.getType())) {
 				dbSession = HibernateUtil.getSessionFactory().openSession();
+				con = dbSession.connection();
 				
 				if (ReportUtils.MIME_JRXML.equals(rp.getFileMime())) {
 					JasperReport jr = JasperCompileManager.compileReport(bais);
-					ReportUtils.generateReport(baos, jr, parameters, out, dbSession.connection());
+					ReportUtils.generateReport(baos, jr, parameters, out, con);
 				} else if (ReportUtils.MIME_JASPER.equals(rp.getFileMime())) {
 					JasperReport jr = (JasperReport) JRLoader.loadObject(bais);
-					ReportUtils.generateReport(baos, jr, parameters, out, dbSession.connection());
+					ReportUtils.generateReport(baos, jr, parameters, out, con);
 				}
 			} else if (Report.SCRIPT.equals(rp.getType())) {
 				if (ReportUtils.MIME_JRXML.equals(rp.getFileMime())) {
@@ -384,6 +388,7 @@ public class ReportServlet extends BaseServlet {
 			os.flush();
 		} finally {
 			if (Report.SQL.equals(rp.getType())) {
+				LegacyDAO.close(con);
 				HibernateUtil.close(dbSession);
 			}
 			IOUtils.closeQuietly(bais);
