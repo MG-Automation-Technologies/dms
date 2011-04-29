@@ -143,15 +143,13 @@ public class LanguageServlet extends BaseServlet {
 		request.setCharacterEncoding("UTF-8");
 		String action = WebUtils.getString(request, "action");
 		boolean persist = WebUtils.getBoolean(request, "persist");
-		Session session = null;
-		org.hibernate.classic.Session hibernateSession = null;
+		Session jcrSession = null;
+		org.hibernate.classic.Session dbSession = null;
 		updateSessionManager(request);
 		
 		try {
-			session = JCRUtils.getSession();
-			
 			if (ServletFileUpload.isMultipartContent(request)) {
-				session = JCRUtils.getSession();
+				jcrSession = JCRUtils.getSession();
 				InputStream is = null;
 				FileItemFactory factory = new DiskFileItemFactory(); 
 				ServletFileUpload upload = new ServletFileUpload(factory);
@@ -216,20 +214,20 @@ public class LanguageServlet extends BaseServlet {
 					// Activity log
 					UserActivity.log(request.getRemoteUser(), "ADMIN_LANGUAGE_DELETE", lgId, null);
 				} else if (action.equals("import")) {
-					hibernateSession = HibernateUtil.getSessionFactory().openSession();
-					importLanguage(session, request, response, data, hibernateSession);
+					dbSession = HibernateUtil.getSessionFactory().openSession();
+					importLanguage(jcrSession, request, response, data, dbSession);
 					
 					// Activity log
 					UserActivity.log(request.getRemoteUser(), "ADMIN_LANGUAGE_IMPORT", null, null);
 				}
 			} else if (action.equals("translate")) {
-				translate(session, request, response);
+				translate(jcrSession, request, response);
 			} else if (action.equals("addTranslation")) {
-				addTranslation(session, request, response);
+				addTranslation(jcrSession, request, response);
 			} 
 			
 			if (!action.equals("addTranslation") && (action.equals("") || action.equals("import") || persist)) {
-				list(session, request, response);
+				list(jcrSession, request, response);
 			}
 		} catch (FileUploadException e) {
 			log.error(e.getMessage(), e);
@@ -247,11 +245,8 @@ public class LanguageServlet extends BaseServlet {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} finally {
-			if (hibernateSession != null) {
-				HibernateUtil.close(hibernateSession);
-			}
-			JCRUtils.logout(session);
-			
+			HibernateUtil.close(dbSession);
+			JCRUtils.logout(jcrSession);
 		}
 	}
 	
@@ -459,10 +454,10 @@ public class LanguageServlet extends BaseServlet {
 	 * Import a new language into database
 	 */
 	private void importLanguage(Session session, HttpServletRequest request, HttpServletResponse response,
-			byte[] data, org.hibernate.classic.Session hibernateSession) throws DatabaseException,
+			byte[] data, org.hibernate.classic.Session dbSession) throws DatabaseException,
 			IOException, SQLException {
-		log.debug("import({}, {}, {})", new Object[] { session, request, response });
-		Connection con = hibernateSession.connection();
+		log.debug("import({}, {}, {}, {}, {})", new Object[] { session, request, response, data, dbSession });
+		Connection con = dbSession.connection();
 		Statement stmt = con.createStatement();
 		InputStreamReader is = new InputStreamReader(new ByteArrayInputStream(data));
 		BufferedReader br = new BufferedReader(is);
@@ -474,7 +469,6 @@ public class LanguageServlet extends BaseServlet {
 		
 		LegacyDAO.close(stmt);
 		LegacyDAO.close(con);
-		HibernateUtil.close(hibernateSession);
 		log.debug("import: void");
 	}
 }
