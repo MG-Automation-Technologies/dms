@@ -112,13 +112,13 @@ public class MimeTypeServlet extends BaseServlet {
 		log.debug("doPost({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
 		String action = WebUtils.getString(request, "action");
-		Session session = null;
-		org.hibernate.classic.Session hibernateSession = null;
+		Session jcrSession = null;
+		org.hibernate.classic.Session dbSession = null;
 		updateSessionManager(request);
 		
 		try {
 			if (ServletFileUpload.isMultipartContent(request)) {
-				session = JCRUtils.getSession();
+				jcrSession = JCRUtils.getSession();
 				InputStream is = null;
 				FileItemFactory factory = new DiskFileItemFactory(); 
 				ServletFileUpload upload = new ServletFileUpload(factory);
@@ -158,8 +158,8 @@ public class MimeTypeServlet extends BaseServlet {
 					Config.loadMimeTypes();
 					
 					// Activity log
-					UserActivity.log(session.getUserID(), "ADMIN_MIME_TYPE_CREATE", Integer.toString(id), mt.toString());
-					list(session, request, response);
+					UserActivity.log(jcrSession.getUserID(), "ADMIN_MIME_TYPE_CREATE", Integer.toString(id), mt.toString());
+					list(jcrSession, request, response);
 				} else if (action.equals("edit")) {
 					// Because this servlet is also used for SQL import and in that case I don't
 					// want to waste a b64Encode conversion. Call it a sort of optimization.
@@ -168,19 +168,19 @@ public class MimeTypeServlet extends BaseServlet {
 					Config.loadMimeTypes();
 					
 					// Activity log
-					UserActivity.log(session.getUserID(), "ADMIN_MIME_TYPE_EDIT", Integer.toString(mt.getId()), mt.toString());
-					list(session, request, response);
+					UserActivity.log(jcrSession.getUserID(), "ADMIN_MIME_TYPE_EDIT", Integer.toString(mt.getId()), mt.toString());
+					list(jcrSession, request, response);
 				} else if (action.equals("delete")) {
 					MimeTypeDAO.delete(mt.getId());
 					Config.loadMimeTypes();
 					
 					// Activity log
-					UserActivity.log(session.getUserID(), "ADMIN_MIME_TYPE_DELETE", Integer.toString(mt.getId()), null);
-					list(session, request, response);
+					UserActivity.log(jcrSession.getUserID(), "ADMIN_MIME_TYPE_DELETE", Integer.toString(mt.getId()), null);
+					list(jcrSession, request, response);
 				} else if (action.equals("import")) {
-					hibernateSession = HibernateUtil.getSessionFactory().openSession();
-					importMimeTypes(session, request, response, data, hibernateSession);
-					list(session, request, response);
+					dbSession = HibernateUtil.getSessionFactory().openSession();
+					importMimeTypes(jcrSession, request, response, data, dbSession);
+					list(jcrSession, request, response);
 				}
 			}
 		} catch (LoginException e) {
@@ -199,10 +199,8 @@ public class MimeTypeServlet extends BaseServlet {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} finally {
-			if (hibernateSession != null) {
-				HibernateUtil.close(hibernateSession);
-			}
-			JCRUtils.logout(session);
+			HibernateUtil.close(dbSession);
+			JCRUtils.logout(jcrSession);
 		}
 	}
 
@@ -318,10 +316,10 @@ public class MimeTypeServlet extends BaseServlet {
 	 * Import mime types into database
 	 */
 	private void importMimeTypes(Session session, HttpServletRequest request, HttpServletResponse response,
-			byte[] data, org.hibernate.classic.Session hibernateSession) throws DatabaseException,
+			byte[] data, org.hibernate.classic.Session dbSession) throws DatabaseException,
 			IOException, SQLException {
-		log.debug("import({}, {}, {})", new Object[] { session, request, response });
-		Connection con = hibernateSession.connection();
+		log.debug("import({}, {}, {}, {}, {})", new Object[] { session, request, response, data, dbSession });
+		Connection con = dbSession.connection();
 		Statement stmt = con.createStatement();
 		InputStreamReader is = new InputStreamReader(new ByteArrayInputStream(data));
 		BufferedReader br = new BufferedReader(is);
@@ -333,7 +331,6 @@ public class MimeTypeServlet extends BaseServlet {
 		
 		LegacyDAO.close(stmt);
 		LegacyDAO.close(con);
-		HibernateUtil.close(hibernateSession);
 		log.debug("import: void");
 	}
 }
