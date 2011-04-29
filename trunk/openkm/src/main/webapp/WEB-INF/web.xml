@@ -208,6 +208,10 @@
     <servlet-class>com.openkm.servlet.SyndicationServlet</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>StatusServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.StatusServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>DownloadServlet</servlet-name>
     <servlet-class>com.openkm.servlet.DownloadServlet</servlet-class>
   </servlet>
@@ -570,6 +574,10 @@
   <servlet-mapping>
     <servlet-name>SyndicationServlet</servlet-name>
     <url-pattern>/feed/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>StatusServlet</servlet-name>
+    <url-pattern>/Status</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>DownloadServlet</servlet-name>
