@@ -21,6 +21,7 @@
 
 package com.openkm.frontend.client.extension.comunicator;
 
+import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.extension.widget.toolbar.ToolBarBoxExtension;
 
@@ -69,5 +70,15 @@ public class DashboardComunicator {
 	 */
 	public static void getUserSearchs(boolean refresh) {
 		Main.get().mainPanel.dashboard.newsDashboard.getUserSearchs(refresh);
+	}
+	
+	/**
+	 * isWidgetExtensionVisible
+	 * 
+	 * @param widget
+	 * @return
+	 */
+	public static boolean isWidgetExtensionVisible(Widget widget) {
+		return Main.get().mainPanel.dashboard.isWidgetExtensionVisible(widget);
 	}
 }
