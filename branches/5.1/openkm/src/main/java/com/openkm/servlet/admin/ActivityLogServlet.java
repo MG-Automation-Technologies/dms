@@ -113,7 +113,7 @@ public class ActivityLogServlet extends BaseServlet {
 			//---------------------------------
 			"Misc",
 			"MISC_OPENKM_START", "MISC_OPENKM_STOP",
-			"MISC_TEXT_EXTRACTION_FAILURE"
+			"MISC_STATUS", "MISC_TEXT_EXTRACTION_FAILURE"
 		};
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
