@@ -199,8 +199,8 @@ public class MimeTypeServlet extends BaseServlet {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} finally {
-			HibernateUtil.close(dbSession);
 			JCRUtils.logout(jcrSession);
+			HibernateUtil.close(dbSession);
 		}
 	}
 
