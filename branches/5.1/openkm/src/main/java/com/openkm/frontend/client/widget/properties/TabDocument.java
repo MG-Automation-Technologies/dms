@@ -242,6 +242,11 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 									  // Here evalutates selectedTab
 		}
 		
+		// Refresh preview if tab is visible
+		if (selectedTab == PREVIEW_TAB) {
+			previewDocument(false);
+		}
+		
 		fireEvent(HasDocumentEvent.DOCUMENT_CHANGED);
 	}
 	
@@ -534,6 +539,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 				preview.showPreviewExtension(previewExtension, RPCService.DownloadServlet +"?uuid=" + URL.encodeQueryString(getDocument().getUuid()));
 			} else {
 				// There's no preview
+				preview.setPreviewAvailable(false);
 				preview.showEmbedSWF(doc.getUuid());
 			}
 			
