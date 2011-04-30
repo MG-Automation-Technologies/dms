@@ -37,12 +37,16 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.util.OKMBundleResources;
+import com.openkm.frontend.client.util.Util;
 
 /**
  * @author jllort
  *
  */
 public class StartUpPopup extends DialogBox implements ClickHandler {
+	
+	private final static int IE_SIZE_RECTIFICATION = (Util.getUserAgent().startsWith("ie")?2:0);
+	
 	private VerticalPanel vPanel;
 	private VerticalPanel status;
 	private ScrollPanel scrollPanel;
@@ -64,7 +68,7 @@ public class StartUpPopup extends DialogBox implements ClickHandler {
 		scrollPanel.setSize("490","160");
 		scrollPanel.setStyleName("okm-Input");
 		
-		status.setWidth("490");
+		status.setWidth(""+(490-IE_SIZE_RECTIFICATION));
 		
 		vPanel.add(new HTML("&nbsp;"));
 		vPanel.add(scrollPanel);
