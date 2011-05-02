@@ -56,7 +56,7 @@ public class NotifyRole extends Composite {
 	private Image removeButtom;
 	
 	/**
-	 * NotifyUser
+	 * NotifyRole
 	 */
 	public NotifyRole() {
 		hPanel = new HorizontalPanel();
