@@ -52,7 +52,7 @@ import com.openkm.frontend.client.widget.searchsaved.Status;
 public class SearchIn extends Composite {
 	
 	private static final int TAB_HEIGHT = 20;
-	private static final int CONTROLER_WIDTH = 375;
+	private static final int CONTROLER_WIDTH = 380;
 	private static final int MINIMUM_TAB_WIDTH = 400;
 	
 	private HorizontalPanel hPanel;
