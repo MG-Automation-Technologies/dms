@@ -58,10 +58,10 @@ import com.openkm.frontend.client.bean.extension.GWTTextMessageSent;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.extension.OKMMessageService;
 import com.openkm.frontend.client.util.MessageSentComparator;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.servlet.frontend.OKMRemoteServiceServlet;
 import com.openkm.util.GWTUtil;
-import com.openkm.util.JCRUtils;
 
 /**
  * MessageServlet
@@ -169,6 +169,7 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 		try {
 			session = JCRUtils.getSession();
 			String me = getThreadLocalRequest().getRemoteUser();
+			
 			for (MessageSent messageSent : MessageDAO.findSentFromMeToUser(me, user)) {
 				GWTTextMessageSent textMessageSent = new GWTTextMessageSent();
 				textMessageSent = GWTUtil.copy(messageSent);
@@ -177,6 +178,7 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 				message.setSentDate(textMessageSent.getSentDate());
 				messageSentList.add(message);
 			}
+			
 			for (QueryParams queryParams : QueryParamsDAO.findProposedQueryFromMeToUser(me, user)) {
 				for (ProposedQuerySent proposedQuerySent : queryParams.getProposedSent()) {
 					// Only proposed queries sent by me to some specific user
@@ -189,6 +191,7 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 					}
 				}
 			}
+			
 			for (ProposedSubscriptionSent proposedSubscriptionSent : ProposedSubscriptionDAO.findSentProposedSubscriptionFromMeToUser(session, me, user)) {
 				GWTProposedSubscriptionSent gWTproposedSubscriptionSent  = GWTUtil.copy(proposedSubscriptionSent);	
 				GWTMessageSent message = new GWTMessageSent();
