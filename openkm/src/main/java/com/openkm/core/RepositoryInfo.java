@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMStats;
 import com.openkm.bean.StatsInfo;
+import com.openkm.jcr.JcrSessionManager;
 
 public class RepositoryInfo extends TimerTask {
 	private static Logger log = LoggerFactory.getLogger(RepositoryInfo.class);

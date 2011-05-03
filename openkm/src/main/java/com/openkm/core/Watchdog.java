@@ -28,10 +28,11 @@ import javax.jcr.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.api.OKMAuth;
 import com.openkm.bean.JcrSessionInfo;
+import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.UserActivity;
-import com.openkm.api.OKMAuth;
 
 public class Watchdog extends TimerTask {
 	private static Logger log = LoggerFactory.getLogger(Watchdog.class);
