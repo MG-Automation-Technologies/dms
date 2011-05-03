@@ -57,9 +57,9 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.WorkflowException;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.util.FormatUtil;
-import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
 

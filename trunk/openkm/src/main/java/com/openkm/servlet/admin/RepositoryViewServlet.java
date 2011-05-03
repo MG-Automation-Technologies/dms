@@ -71,8 +71,8 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.dao.LockTokenDAO;
 import com.openkm.extractor.RegisteredExtractors;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.util.FormatUtil;
-import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
 

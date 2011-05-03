@@ -53,7 +53,7 @@ import com.openkm.core.Cron;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.CronTabDAO;
 import com.openkm.dao.bean.CronTab;
-import com.openkm.util.JCRUtils;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.util.SecureStore;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;

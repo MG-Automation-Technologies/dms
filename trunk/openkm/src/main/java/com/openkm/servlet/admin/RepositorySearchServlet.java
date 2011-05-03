@@ -47,7 +47,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
-import com.openkm.util.JCRUtils;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
 
