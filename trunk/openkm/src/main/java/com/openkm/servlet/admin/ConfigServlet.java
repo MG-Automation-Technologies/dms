@@ -173,7 +173,7 @@ public class ConfigServlet extends BaseServlet {
 					}
 					
 					ConfigDAO.create(cfg);
-					com.openkm.core.Config.reload(sc.getContextPath().substring(1), new Properties());
+					com.openkm.core.Config.reload(sc, new Properties());
 					
 					// Activity log
 					UserActivity.log(session.getUserID(), "ADMIN_CONFIG_CREATE", cfg.getKey(), cfg.toString());
@@ -186,14 +186,14 @@ public class ConfigServlet extends BaseServlet {
 					}
 					
 					ConfigDAO.update(cfg);
-					com.openkm.core.Config.reload(sc.getContextPath().substring(1), new Properties());
+					com.openkm.core.Config.reload(sc, new Properties());
 										
 					// Activity log
 					UserActivity.log(session.getUserID(), "ADMIN_CONFIG_EDIT", cfg.getKey(), cfg.toString());
 					list(session, request, response);
 				} else if (action.equals("delete")) {
 					ConfigDAO.delete(cfg.getKey());
-					com.openkm.core.Config.reload(sc.getContextPath().substring(1), new Properties());
+					com.openkm.core.Config.reload(sc, new Properties());
 					
 					// Activity log
 					UserActivity.log(session.getUserID(), "ADMIN_CONFIG_DELETE", cfg.getKey(), null);
