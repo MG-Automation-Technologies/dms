@@ -39,7 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
-import com.openkm.core.JcrSessionManager;
+import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.base.BaseDocumentModule;
 import com.openkm.util.FileUtils;
 import com.openkm.util.WebUtils;
