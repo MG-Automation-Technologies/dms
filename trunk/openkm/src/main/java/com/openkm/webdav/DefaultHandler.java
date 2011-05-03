@@ -74,7 +74,7 @@ import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.MimeTypeDAO;
 import com.openkm.extractor.RegisteredExtractors;
-import com.openkm.util.JCRUtils;
+import com.openkm.jcr.JCRUtils;
 
 public class DefaultHandler implements IOHandler, PropertyHandler {
 	private static Logger log = LoggerFactory.getLogger(DefaultHandler.class);
