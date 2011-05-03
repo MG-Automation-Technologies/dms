@@ -82,7 +82,6 @@ import com.openkm.core.ConversionException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
-import com.openkm.core.JcrSessionManager;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
@@ -91,6 +90,7 @@ import com.openkm.core.VirusDetectedException;
 import com.openkm.dao.bean.MailAccount;
 import com.openkm.dao.bean.MailFilter;
 import com.openkm.dao.bean.MailFilterRule;
+import com.openkm.jcr.JcrSessionManager;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.pop3.POP3Folder;
 
