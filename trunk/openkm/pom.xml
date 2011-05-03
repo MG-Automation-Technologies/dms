@@ -393,6 +393,13 @@
       <version>0.8.6</version>
     </dependency>
     
+    <!-- SIGAR -->
+    <dependency>
+      <groupId>org.hyperic</groupId>
+      <artifactId>sigar</artifactId>
+      <version>1.6.4</version>
+    </dependency>
+    
     <!-- GWT -->
     <dependency>
       <groupId>com.google.gwt</groupId>
