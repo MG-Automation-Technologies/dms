@@ -74,6 +74,14 @@ public class HibernateUtil {
 				cfg.setProperty("hibernate.hbm2ddl.auto", hbm2ddl);
 				cfg.setProperty("hibernate.show_sql", Config.HIBERNATE_SHOW_SQL);
 				cfg.setProperty("hibernate.generate_statistics", Config.HIBERNATE_STATISTICS);
+				
+				// Show configuration
+				log.info("Hibernate 'hibernate.dialect' = {}", cfg.getProperty("hibernate.dialect"));
+				log.info("Hibernate 'hibernate.connection.datasource' = {}", cfg.getProperty("hibernate.connection.datasource"));
+				log.info("Hibernate 'hibernate.hbm2ddl.auto' = {}", cfg.getProperty("hibernate.hbm2ddl.auto"));
+				log.info("Hibernate 'hibernate.show_sql' = {}", cfg.getProperty("hibernate.show_sql"));
+				log.info("Hibernate 'hibernate.generate_statistics' = {}", cfg.getProperty("hibernate.generate_statistics"));
+				
 				sessionFactory = cfg.buildSessionFactory();
 			} catch (HibernateException e) {
 				log.error(e.getMessage(), e);
