@@ -41,7 +41,7 @@ import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
 import com.openkm.frontend.client.bean.GWTTestImap;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.OKMGeneralService;
-import com.openkm.util.JCRUtils;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.util.MailUtils;
 
 /**
