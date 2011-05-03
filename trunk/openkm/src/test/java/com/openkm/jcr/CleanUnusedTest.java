@@ -46,20 +46,20 @@ public class CleanUnusedTest extends TestCase {
 	@Override
 	protected void setUp() {
 		log.info("setUp()");
-		log.info("Delete repository: {}", Config.REPOSITORY_HOME);
-		FileUtils.deleteQuietly(new File(Config.REPOSITORY_HOME));
+		log.info("Delete repository: {}", TestConfig.REPOSITORY_HOME);
+		FileUtils.deleteQuietly(new File(TestConfig.REPOSITORY_HOME));
 	}
 
 	@Override
 	protected void tearDown() {
 		log.info("tearDown()");
-		log.info("Delete repository: {}", Config.REPOSITORY_HOME);
-		FileUtils.deleteQuietly(new File(Config.REPOSITORY_HOME));
+		log.info("Delete repository: {}", TestConfig.REPOSITORY_HOME);
+		FileUtils.deleteQuietly(new File(TestConfig.REPOSITORY_HOME));
 	}
 
 	public void testVersionHistory() throws IOException, LoginException, RepositoryException {
 		log.info("testVersionHistory()");
-		Repository repository = new TransientRepository(Config.REPOSITORY_CONFIG, Config.REPOSITORY_HOME);
+		Repository repository = new TransientRepository(TestConfig.REPOSITORY_CONFIG, TestConfig.REPOSITORY_HOME);
 		Session session = repository.login(new SimpleCredentials("admin", "admin".toCharArray()));
 		Node rootNode = session.getRootNode();
 		Node fileNode = createFile(rootNode, "new file", "Alegoría a la chirigota del Yuyu");
