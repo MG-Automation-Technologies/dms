@@ -42,10 +42,10 @@ import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.extension.GWTProposedSubscriptionReceived;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.extension.OKMProposedSubscriptionService;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.servlet.frontend.OKMRemoteServiceServlet;
 import com.openkm.util.GWTUtil;
-import com.openkm.util.JCRUtils;
 
 /**
  * ProposedSubscriptionServlet
@@ -63,11 +63,13 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 		try {
 			String remoteUser = getThreadLocalRequest().getRemoteUser();
 			String to = "";
+			
 			if (!users.equals("") && !roles.equals("")) {
 				to = users + "," + roles;
 			} else {
 				to = users + roles;
 			}
+			
 			List<String> userNames = new ArrayList<String>(Arrays.asList(users.split(",")));
 			List<String> roleNames = Arrays.asList(roles.split(","));
 			
@@ -89,7 +91,6 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 			for (String user : userNames) {
 				ProposedSubscriptionDAO.send(remoteUser, to, user, uuid, comment);
 			}
-			
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Database), e.getMessage());
