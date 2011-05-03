@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.api.OKMAuth;
 import com.openkm.dao.MailAccountDAO;
 import com.openkm.dao.bean.MailAccount;
+import com.openkm.jcr.JcrSessionManager;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.util.MailUtils;
 
