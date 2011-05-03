@@ -32,9 +32,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.jcr.JCRUtils;
 import com.openkm.util.ArchiveUtils;
 import com.openkm.util.FileUtils;
-import com.openkm.util.JCRUtils;
 
 /**
  * Repository backup servlet

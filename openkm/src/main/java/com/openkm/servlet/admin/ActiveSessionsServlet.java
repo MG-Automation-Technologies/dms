@@ -34,7 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.JcrSessionInfo;
-import com.openkm.core.JcrSessionManager;
+import com.openkm.jcr.JcrSessionManager;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
 
