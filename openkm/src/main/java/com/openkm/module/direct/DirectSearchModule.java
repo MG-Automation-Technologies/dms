@@ -64,7 +64,6 @@ import com.openkm.cache.UserDocumentKeywordsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
-import com.openkm.core.JcrSessionManager;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
@@ -72,12 +71,13 @@ import com.openkm.dao.DashboardDAO;
 import com.openkm.dao.QueryParamsDAO;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.cache.UserDocumentKeywords;
+import com.openkm.jcr.JCRUtils;
+import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.SearchModule;
 import com.openkm.module.base.BaseDocumentModule;
 import com.openkm.module.base.BaseFolderModule;
 import com.openkm.module.base.BaseMailModule;
 import com.openkm.util.FormUtils;
-import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 
 public class DirectSearchModule implements SearchModule {

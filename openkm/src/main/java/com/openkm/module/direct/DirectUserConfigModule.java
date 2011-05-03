@@ -9,12 +9,12 @@ import org.slf4j.LoggerFactory;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
-import com.openkm.core.JcrSessionManager;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.UserConfigDAO;
 import com.openkm.dao.bean.UserConfig;
+import com.openkm.jcr.JCRUtils;
+import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.UserConfigModule;
-import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 
 public class DirectUserConfigModule implements UserConfigModule {

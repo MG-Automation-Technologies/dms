@@ -56,15 +56,15 @@ import com.openkm.bean.workflow.ProcessInstance;
 import com.openkm.bean.workflow.TaskInstance;
 import com.openkm.bean.workflow.Token;
 import com.openkm.core.DatabaseException;
-import com.openkm.core.JcrSessionManager;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.WorkflowException;
+import com.openkm.jcr.JCRUtils;
+import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.WorkflowModule;
 import com.openkm.module.base.BaseWorkflowModule;
 import com.openkm.util.FormUtils;
 import com.openkm.util.JBPMUtils;
-import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WorkflowUtils;
 

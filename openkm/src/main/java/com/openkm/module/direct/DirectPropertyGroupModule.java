@@ -49,17 +49,17 @@ import com.openkm.bean.form.TextArea;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
-import com.openkm.core.JcrSessionManager;
 import com.openkm.core.LockException;
 import com.openkm.core.NoSuchGroupException;
 import com.openkm.core.NoSuchPropertyException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.jcr.JCRUtils;
+import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.PropertyGroupModule;
 import com.openkm.module.base.BasePropertyGroupModule;
 import com.openkm.util.FormUtils;
-import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 
 public class DirectPropertyGroupModule implements PropertyGroupModule {

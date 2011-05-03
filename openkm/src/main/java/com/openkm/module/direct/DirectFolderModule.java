@@ -40,16 +40,16 @@ import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
-import com.openkm.core.JcrSessionManager;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UserQuotaExceededException;
+import com.openkm.jcr.JCRUtils;
+import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.FolderModule;
 import com.openkm.module.base.BaseFolderModule;
 import com.openkm.module.base.BaseScriptingModule;
 import com.openkm.util.FileUtils;
-import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 
 public class DirectFolderModule implements FolderModule {
