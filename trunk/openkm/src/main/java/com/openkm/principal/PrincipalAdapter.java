@@ -69,9 +69,18 @@ public interface PrincipalAdapter {
 	/**
 	 * Method to retrieve the name from a user.
 	 * 
-	 * @param users A user id.
+	 * @param user A user id.
 	 * @return The name of the user.
 	 * @throws PrincipalAdapterException If any error occurs.
 	 */
 	public String getName(String user) throws PrincipalAdapterException;
+	
+	/**
+	 * Method to retrieve the user password
+	 * 
+	 * @param user A user id.
+	 * @return The password of the user.
+	 * @throws PrincipalAdapterException If any error occurs.
+	 */
+	public String getPassword(String user) throws PrincipalAdapterException;
 }
