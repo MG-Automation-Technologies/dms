@@ -125,6 +125,11 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 	}
 	
 	@Override
+	public String getPassword(String user) throws PrincipalAdapterException {
+		throw new UnsupportedOperationException("Not implemented");
+	}
+	
+	@Override
 	public List<String> getUsersByRole(String role) throws PrincipalAdapterException {
 		log.debug("getUsersByRole({})", role);
 		List<String> list = new ArrayList<String>();

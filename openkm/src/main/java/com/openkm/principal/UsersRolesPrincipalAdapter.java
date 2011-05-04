@@ -45,7 +45,7 @@ public class UsersRolesPrincipalAdapter implements PrincipalAdapter {
 		Properties prop = new Properties();
 				
 		try {
-			prop.load(new FileInputStream(Config.HOME_DIR+"/server/default/conf/props/openkm-users.properties"));
+			prop.load(new FileInputStream(Config.HOME_DIR + "/server/default/conf/props/openkm-users.properties"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -70,7 +70,7 @@ public class UsersRolesPrincipalAdapter implements PrincipalAdapter {
 		Properties prop = new Properties();
 		
 		try {
-			prop.load(new FileInputStream(Config.HOME_DIR+"/server/default/conf/props/openkm-roles.properties"));
+			prop.load(new FileInputStream(Config.HOME_DIR + "/server/default/conf/props/openkm-roles.properties"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -108,7 +108,7 @@ public class UsersRolesPrincipalAdapter implements PrincipalAdapter {
 		String mail = null;
 		
 		try {
-			prop.load(new FileInputStream(Config.HOME_DIR+"/server/default/conf/props/openkm-emails.properties"));
+			prop.load(new FileInputStream(Config.HOME_DIR + "/server/default/conf/props/openkm-emails.properties"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -127,7 +127,7 @@ public class UsersRolesPrincipalAdapter implements PrincipalAdapter {
 		String name = null;
 		
 		try {
-			prop.load(new FileInputStream(Config.HOME_DIR+"/server/default/conf/props/openkm-names.properties"));
+			prop.load(new FileInputStream(Config.HOME_DIR + "/server/default/conf/props/openkm-names.properties"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -137,5 +137,10 @@ public class UsersRolesPrincipalAdapter implements PrincipalAdapter {
 		name = prop.getProperty(user);
 		log.debug("getName: {}", name);
 		return name;
+	}
+
+	@Override
+	public String getPassword(String user) throws PrincipalAdapterException {
+		throw new UnsupportedOperationException("Not implemented");
 	}
 }
