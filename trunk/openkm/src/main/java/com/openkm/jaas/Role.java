@@ -14,6 +14,6 @@ public class Role implements Principal {
 	}
 	
 	public String toString() {
-		return "Role: " + name;
+		return "{Role: " + name + "}";
 	}
 }

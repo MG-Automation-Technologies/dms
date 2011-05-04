@@ -14,6 +14,6 @@ public class User implements Principal {
 	}
 	
 	public String toString() {
-		return "User: " + name;
+		return "{User: " + name + "}";
 	}
 }
