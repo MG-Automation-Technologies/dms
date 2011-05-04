@@ -673,7 +673,7 @@ public class DocConverter {
 	
 	/**
 	 * Convert DWG to DXF (for document preview feature).
-	 * Actually only works with Acme CAD Converter 2010 v8.1.4
+	 * Actually only tested with Acme CAD Converter 2010 v8.1.4 & v8.2.1
 	 */
 	public void dwg2dxf(File input, File output) throws ConversionException, DatabaseException,
 			IOException {
