@@ -1,5 +1,6 @@
 package com.openkm.jaas;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 import javax.security.auth.Subject;
@@ -13,6 +14,11 @@ import javax.security.auth.spi.LoginModule;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.openkm.module.base.BaseAuthModule;
+import com.openkm.principal.PrincipalAdapter;
+import com.openkm.principal.PrincipalAdapterException;
+import com.openkm.util.SecureStore;
 
 public class MyLoginModule implements LoginModule {
 	private static Logger log = LoggerFactory.getLogger(MyLoginModule.class);
@@ -29,9 +35,17 @@ public class MyLoginModule implements LoginModule {
 	
 	@Override
 	public boolean commit() throws LoginException {
-		authenticate();
-		populateRoles();
-		return true;
+		try {
+			authenticate();
+			populateRoles();
+			return true;
+		} catch (PrincipalAdapterException pae) {
+			new LoginException(pae.getMessage());
+			return false;
+		} catch (NoSuchAlgorithmException nsae) {
+			new LoginException(nsae.getMessage());
+			return false;
+		}
 	}
 	
 	@Override
@@ -67,15 +81,30 @@ public class MyLoginModule implements LoginModule {
 		return true;
 	}
 	
-	private void populateRoles() {
-		// add user's roles to subject being authenticated
-		subject.getPrincipals().add(new Role("AdminRole"));
+	/**
+	 * Add user's roles to subject being authenticated
+	 */
+	private void populateRoles() throws PrincipalAdapterException { 
+		PrincipalAdapter pa = BaseAuthModule.getPrincipalAdapter();
+		
+		for (String role : pa.getRolesByUser(name)) {
+			subject.getPrincipals().add(new Role(role));	
+		}
+		
 		log.info("Roles: {}", subject.getPrincipals());
 	}
 
-	private void authenticate() {
+	private void authenticate() throws PrincipalAdapterException, NoSuchAlgorithmException {
 		// TODO check if user and password are valid
-		subject.getPrincipals().add(new User(name));
+		PrincipalAdapter pa = BaseAuthModule.getPrincipalAdapter();
+		String password = pa.getPassword(name);
+		
+		if (password.equals(SecureStore.md5Encode(password.getBytes()))) {
+			subject.getPrincipals().add(new User(name));			
+		} else {
+			new LoginException("Password does not match");
+		}
+		
 		log.info("Users: {}", subject.getPrincipals());
 	}
 }
