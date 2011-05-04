@@ -26,6 +26,7 @@ public class MyLoginModule implements LoginModule {
 	private CallbackHandler callbackHandler;
 	private String password;
 	private String name;
+	private boolean customCallbackHandler = false;
 	
 	@Override
 	public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState, Map<String, ?> options) {
@@ -50,23 +51,31 @@ public class MyLoginModule implements LoginModule {
 	
 	@Override
 	public boolean login() throws LoginException {
-		NameCallback name = new NameCallback("User name");
-		PasswordCallback password = new PasswordCallback("Password", true);
+		NameCallback ncb = new NameCallback("User name");
+		PasswordCallback pcb = new PasswordCallback("Password", true);
 		
 		try {
-			this.callbackHandler.handle(new Callback[] { name, password });
-			this.name = name.getName();
-			this.password = new String(password.getPassword());
+			callbackHandler.handle(new Callback[] { ncb, pcb });
+			name = ncb.getName();
+			password = new String(pcb.getPassword());
 		} catch (Exception e) {
-			throw new LoginException(e.getMessage());
+			try {
+				callbackHandler.handle(new Callback[] { ncb });
+				name = ncb.getName();
+				customCallbackHandler = true;
+			} catch (Exception e1) {
+				throw new LoginException(e.getMessage());
+			}
 		}
 		
-		if (this.name == null || this.name.equals("")) {
+		if (name == null || name.equals("")) {
 			throw new CredentialNotFoundException("User name is required");
 		}
 		
-		if (this.password == null || this.password.equals("")) {
-			throw new CredentialNotFoundException("Password is required");
+		if (!customCallbackHandler) {
+			if (password == null || password.equals("")) {
+				throw new CredentialNotFoundException("Password is required");
+			}
 		}
 		
 		return true;
@@ -94,16 +103,19 @@ public class MyLoginModule implements LoginModule {
 		
 		log.info("Roles: {}", subject.getPrincipals());
 	}
-
-	private void authenticate() throws PrincipalAdapterException, NoSuchAlgorithmException {
-		// TODO check if user and password are valid
+	
+	/**
+	 * Check if user and password are valid
+	 */
+	private void authenticate() throws PrincipalAdapterException, NoSuchAlgorithmException, LoginException {
 		PrincipalAdapter pa = BaseAuthModule.getPrincipalAdapter();
-		String password = pa.getPassword(name);
+		String ppass = pa.getPassword(name);
+		log.info("User: {}, Password: {}, DBPassword: {}", new Object[] { name, password, ppass });
 		
-		if (password.equals(SecureStore.md5Encode(password.getBytes()))) {
-			subject.getPrincipals().add(new User(name));			
+		if (customCallbackHandler || ppass.equals(SecureStore.md5Encode(password.getBytes()))) {
+			subject.getPrincipals().add(new User(name));
 		} else {
-			new LoginException("Password does not match");
+			throw new LoginException("Password does not match");
 		}
 		
 		log.info("Users: {}", subject.getPrincipals());
