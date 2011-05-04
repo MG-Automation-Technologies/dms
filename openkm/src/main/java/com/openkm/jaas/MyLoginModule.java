@@ -64,6 +64,7 @@ public class MyLoginModule implements LoginModule {
 		if (this.name == null || this.name.equals("")) {
 			throw new CredentialNotFoundException("User name is required");
 		}
+		
 		if (this.password == null || this.password.equals("")) {
 			throw new CredentialNotFoundException("Password is required");
 		}
