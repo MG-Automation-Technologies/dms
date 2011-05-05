@@ -1199,7 +1199,8 @@ iframe {
 .gwt-ToggleButton-up,
 .gwt-ToggleButton-up-hovering,
 .gwt-ToggleButton-up-disabled {
-  padding: 3px 5px 3px 5px;
+  padding: 3px 5px 0px 5px;
+  height: 20px;
 }
 
 .gwt-ToggleButton-up {
@@ -1253,77 +1254,13 @@ iframe {
   filter: alpha(opacity=40);
 }
 
-/**
- * RichTextArea
- */
-/** Add css rules here for your application. */
-
+/* RichTextArea */
 .RichTextToolbar {
 	background: #E2E2E2;
-	padding:5px;
+	padding:1px;
 	margin:0px;
-	/*border: red 1px solid;*/
 }
 
-.RichTextToolbar .gwt-ToggleButton {
-	background: #F4F4F4;
-	border: 1px outset #ccc;
-}
-
-.RichTextToolbar .gwt-PushButton {
-	background: #F4F4F4;
-	border: 1px outset #ccc;
-}
-
-.RichTextToolbar .gwt-ToggleButton-up-hovering {
-	background: #F4F4F4;
-	border-color: #9cf #69e #69e #7af;
-}
-
-.RichTextToolbar .gwt-PushButton-up-hovering {
-	background: #F4F4F4;
-	border-color: #9cf #69e #69e #7af;
-}
-
-.RichTextToolbar .gwt-ToggleButton-down {
-	background: #D5D5D5;
-	border-color: #777777 #777777 #777777 #777777;
-}
-
-.RichTextToolbar .gwt-PushButton-down {
-	background: #D5D5D5;
-	border-color: #777777 #777777 #777777 #777777;
-}
-
-.RichTextToolbar .gwt-ToggleButton-down-hovering {
-	background: #D5D5D5;
-	border-color: #9cf #69e #69e #7af;
-}
-
-.RichTextToolbar .gwt-PushButton-down-hovering {
-	background: #D5D5D5;
-	border-color: #9cf #69e #69e #7af;
-}
-
-.RichTextToolbar .gwt-PushButton-up-disabled {
-	background: #717171;
-	border-color: #B9968F #B9968F #B9968F #B9968F;
-}
-
-.RichTextToolbar .gwt-PushButton-down-disabled {
-	background: #717171;
-	border-color: #B9968F #B9968F #B9968F #B9968F;
-}
-
-.RichTextToolbar .gwt-ToggleButton-up-disabled {
-	background: #717171;
-	border-color: #B9968F #B9968F #B9968F #B9968F;
-}
-
-.RichTextToolbar .gwt-ToggleButton-down-disabled {
-	background: #717171;
-	border-color: #B9968F #B9968F #B9968F #B9968F;
-}
 
 /* Mail */
 .okm-Mail {
