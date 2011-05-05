@@ -41,7 +41,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
@@ -52,7 +51,6 @@ import com.openkm.frontend.client.extension.event.HasFolderEvent;
 import com.openkm.frontend.client.service.OKMNoteService;
 import com.openkm.frontend.client.service.OKMNoteServiceAsync;
 import com.openkm.frontend.client.util.OKMBundleResources;
-import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.richtext.RichTextToolbar;
 
 /**
@@ -73,7 +71,6 @@ public class Notes extends Composite {
 	private ScrollPanel scrollPanel;
 	private RichTextArea richTextArea;
 	private RichTextToolbar richTextToolbar;
-	private TextArea textArea;
 	private VerticalPanel newNotePanel;
 	private HTML addNote;
 	private Grid gridRichText;
@@ -89,14 +86,13 @@ public class Notes extends Composite {
 		newNotePanel = new VerticalPanel(); 
 		addNote = new HTML("<b>" + Main.i18n("document.add.note") + "</b>");
 		richTextArea = new RichTextArea();
-		textArea = new TextArea();
 		richTextArea.setSize("100%", "14em");
-		textArea.setSize("500px", "200px");
 		richTextToolbar = new RichTextToolbar(richTextArea);
-	    richTextToolbar.setWidth("100%");
+//	    richTextToolbar.setWidth("100%");
 	    
 	    gridRichText = new Grid(2, 1);
-	    gridRichText.setStyleName("cw-RichText");
+	    gridRichText.setStyleName("RichTextToolbar");
+	    gridRichText.addStyleName("okm-Input");
 	    gridRichText.setWidget(0, 0, richTextToolbar);
 	    gridRichText.setWidget(1, 0, richTextArea);
 	    
@@ -127,7 +123,6 @@ public class Notes extends Composite {
 		newNotePanel.add(space);
 		newNotePanel.add(addNote);
 		newNotePanel.add(gridRichText);
-		newNotePanel.add(textArea);
 		HTML space2 = new HTML("");
 		newNotePanel.add(space2);
 		HorizontalPanel hPanel = new HorizontalPanel();
@@ -149,15 +144,6 @@ public class Notes extends Composite {
 		cancel.setStyleName("okm-Button");
 
 		tableNotes.setWidth("100%");
-		gridRichText.setStyleName("cw-RichText");
-		textArea.setStyleName("okm-TextArea");
-		
-		//Show hides panels depending browser to prevent problems with IE
-		if (Util.getUserAgent().startsWith("ie")) {
-			gridRichText.setVisible(false);
-		} else {
-			textArea.setVisible(false);
-		}
 		
 		initWidget(scrollPanel);
 	}
@@ -294,6 +280,7 @@ public class Notes extends Composite {
 		update.setHTML(Main.i18n("button.update"));
 		cancel.setHTML(Main.i18n("button.cancel"));
 		addNote.setHTML("<b>" + Main.i18n("document.add.note") + "</b>");
+		richTextToolbar.langRefresh();
 	}	
 	
 	/**
@@ -305,11 +292,7 @@ public class Notes extends Composite {
 		visibleButtons = visible;
 		add.setVisible(visible);
 		addNote.setVisible(visible);
-		if (Util.getUserAgent().startsWith("ie")) {
-			textArea.setVisible(visible);
-		} else {
-			gridRichText.setVisible(visible);
-		}
+		gridRichText.setVisible(visible);
 	}
 	
 	/**
@@ -321,11 +304,7 @@ public class Notes extends Composite {
 		addNoteOption = visible && visibleButtons;
 		add.setVisible(addNoteOption);
 		addNote.setVisible(addNoteOption);
-		if (Util.getUserAgent().startsWith("ie")) {
-			textArea.setVisible(addNoteOption);
-		} else {
-			gridRichText.setVisible(addNoteOption);
-		}
+		gridRichText.setVisible(addNoteOption);
 	}
 	
 	/**
@@ -380,12 +359,7 @@ public class Notes extends Composite {
 	 * @return
 	 */
 	private String getTextNote() {
-		//Show hides panels depending browser to prevent problems with IE
-		if (Util.getUserAgent().startsWith("ie")) {
-			return textArea.getText();
-		} else {
-			return richTextArea.getHTML();
-		}
+		return richTextArea.getHTML();
 	}
 	
 	/**
@@ -394,12 +368,7 @@ public class Notes extends Composite {
 	 * @param text
 	 */
 	private void setTextNoteToEditor(String text) {
-		//Show hides panels depending browser to prevent problems with IE
-		if (Util.getUserAgent().startsWith("ie")) {
-			textArea.setText(text);
-		} else {
-			richTextArea.setHTML(text);
-		}
+		richTextArea.setHTML(text);
 	}
 	
 	/**
@@ -410,7 +379,6 @@ public class Notes extends Composite {
 		editedNotePath = "";
 		editedNoteRow = 0;
 		richTextArea.setText("");
-		textArea.setText("");
 		add.setHTML(Main.i18n("button.add"));
 		if (visibleButtons) {
 			add.setVisible(true);

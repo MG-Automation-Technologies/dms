@@ -21,310 +21,492 @@
 
 package com.openkm.frontend.client.widget.richtext;
 
-import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JsArrayString;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.IFrameElement;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.AbstractImagePrototype;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.ImageBundle;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.RichTextArea.Formatter;
+import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.util.OKMBundleResources;
 
 /**
- * A sample toolbar for use with {@link RichTextArea}. It provides a simple UI
- * for all rich text formatting, dynamically displayed only for the available
- * functionality.
+ * @author jllort
+ *
  */
-public class RichTextToolbar extends Composite {
+public class RichTextToolbar extends Composite implements RichTextAction {
+	//HTML Related (styles made by SPAN and DIV)
+	private static final String HTML_STYLE_CLOSE_SPAN = "</span>";
+	private static final String HTML_STYLE_CLOSE_DIV = "</div>";
+	private static final String HTML_STYLE_OPEN_BOLD = "<span style=\"font-weight: bold;\">";
+	private static final String HTML_STYLE_OPEN_ITALIC = "<span style=\"font-weight: italic;\">";
+	private static final String HTML_STYLE_OPEN_UNDERLINE = "<span style=\"font-weight: underline;\">";
+	private static final String HTML_STYLE_OPEN_LINETHROUGH = "<span style=\"font-weight: line-through;\">";
+	private static final String HTML_STYLE_OPEN_ALIGNLEFT = "<div style=\"text-align: left;\">";
+	private static final String HTML_STYLE_OPEN_ALIGNCENTER = "<div style=\"text-align: center;\">";
+	private static final String HTML_STYLE_OPEN_ALIGNRIGHT = "<div style=\"text-align: right;\">";
+	private static final String HTML_STYLE_OPEN_INDENTRIGHT = "<div style=\"margin-left: 40px;\">";
+	
+	//HTML Related (styles made by custom HTML-Tags)
+	private static final String HTML_STYLE_OPEN_SUBSCRIPT = "<sub>";
+	private static final String HTML_STYLE_CLOSE_SUBSCRIPT = "</sub>";
+	private static final String HTML_STYLE_OPEN_SUPERSCRIPT = "<sup>";
+	private static final String HTML_STYLE_CLOSE_SUPERSCRIPT = "</sup>";
+	private static final String HTML_STYLE_OPEN_ORDERLIST = "<ol><li>";
+	private static final String HTML_STYLE_CLOSE_ORDERLIST = "</ol></li>";
+	private static final String HTML_STYLE_OPEN_UNORDERLIST = "<ul><li>";
+	private static final String HTML_STYLE_CLOSE_UNORDERLIST = "</ul></li>";
+	
+	//HTML Related (styles without closing Tag)
+	private static final String HTML_STYLE_HLINE = "<hr style=\"width: 100%; height: 2px;\">";
+	
+	/** Private Variables **/
+	//The main (Vertical)-Panel and the two inner (Horizontal)-Panels
+	private VerticalPanel outer;
+	private HorizontalPanel topPanel;
+	private HorizontalPanel bottomPanel;
 
-  /**
-   * This {@link ImageBundle} is used for all the button icons. Using an image
-   * bundle allows all of these images to be packed into a single image, which
-   * saves a lot of HTTP requests, drastically improving startup time.
-   */
-  public interface Images extends ImageBundle {
-    AbstractImagePrototype bold();
-    AbstractImagePrototype createLink();
-    AbstractImagePrototype hr();
-    AbstractImagePrototype indent();
-    AbstractImagePrototype insertImage();
-    AbstractImagePrototype italic();
-    AbstractImagePrototype justifyCenter();
-    AbstractImagePrototype justifyLeft();
-    AbstractImagePrototype justifyRight();
-    AbstractImagePrototype ol();
-    AbstractImagePrototype outdent();
-    AbstractImagePrototype removeFormat();
-    AbstractImagePrototype removeLink();
-    AbstractImagePrototype strikeThrough();
-    AbstractImagePrototype subscript();
-    AbstractImagePrototype superscript();
-    AbstractImagePrototype ul();
-    AbstractImagePrototype underline();
- }
+	//The RichTextArea this Toolbar referes to and the Interfaces to access the RichTextArea
+	private RichTextArea styleText;
+	private Formatter styleTextFormatter;
 
-  /**
-   * We use an inner EventListener class to avoid exposing event methods on the
-   * RichTextToolbar itself.
-   */
-  private KeyUpHandler keyUpHandler = new KeyUpHandler(){
-	@Override
-	public void onKeyUp(KeyUpEvent event) {
-		Widget sender = (Widget) event.getSource();
-		if (sender == richText) {
-	        // We use the RichTextArea's onKeyUp event to update the toolbar status.
-	        // This will catch any cases where the user moves the cursur using the
-	        // keyboard, or uses one of the browser's built-in keyboard shortcuts.
-	        updateStatus();
-	    }
+	//We use an internal class of the ClickHandler and the KeyUpHandler to be private to others with these events
+	private EventHandler evHandler;
+
+	//The Buttons of the Menubar
+	private ToggleButton bold;
+	private ToggleButton italic;
+	private ToggleButton underline;
+	private ToggleButton stroke;
+	private ToggleButton subscript;
+	private ToggleButton superscript;
+	private PushButton alignleft;
+	private PushButton alignmiddle;
+	private PushButton justify;
+	private PushButton alignright;
+	private PushButton orderlist;
+	private PushButton unorderlist;
+	private PushButton indentleft;
+	private PushButton indentright;
+	private PushButton generatelink;
+	private PushButton breaklink;
+	private PushButton insertline;
+	private PushButton insertimage;
+	private PushButton removeformatting;
+	private ToggleButton texthtml;
+	
+	private ListBox fontList;
+	private ListBox colorlist;
+	
+	RichTextPopup richTextPopup;
+
+	/** Constructor of the Toolbar **/
+	public RichTextToolbar(final RichTextArea richtext) {
+		//Initialize the main-panel
+		outer = new VerticalPanel();
+
+		//Initialize the two inner panels
+		topPanel = new HorizontalPanel();
+		bottomPanel = new HorizontalPanel();
+		topPanel.setStyleName("RichTextToolbar");
+		bottomPanel.setStyleName("RichTextToolbar");
+
+		//Save the reference to the RichText area we refer to and get the interfaces to the stylings
+
+		styleText = richtext;
+		styleTextFormatter = styleText.getFormatter();
+
+		//Set some graphical options, so this toolbar looks how we like it.
+		topPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
+		bottomPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
+
+		//Add the two inner panels to the main panel
+		outer.add(topPanel);
+		outer.add(bottomPanel);
+
+		//Some graphical stuff to the main panel and the initialisation of the new widget
+		outer.setStyleName("RichTextToolbar");
+		initWidget(outer);
+
+		//
+		evHandler = new EventHandler();
+
+		//Add KeyUp and Click-Handler to the RichText, so that we can actualize the toolbar if neccessary
+		styleText.addKeyUpHandler(evHandler);
+		styleText.addClickHandler(evHandler);
+		
+		// Changing styles
+		IFrameElement e = IFrameElement.as(richtext.getElement());
+		e.setSrc("iframe_richtext.html");
+		e.setFrameBorder(0); // removing frame border
+		
+		richTextPopup = new RichTextPopup(this);
+		richTextPopup.setWidth("300px");
+		richTextPopup.setHeight("50px");
+		richTextPopup.setStyleName("okm-Popup");
+		
+		//Now lets fill the new toolbar with life
+		buildTools();
 	}
-  };
-  
-  private ClickHandler clickHandler = new ClickHandler(){
-	@Override
-	public void onClick(ClickEvent event) {
-		Widget sender = (Widget) event.getSource();
-		if (sender == bold) {
-	        formater.toggleBold();
-	      } else if (sender == italic) {
-	        formater.toggleItalic();
-	      } else if (sender == underline) {
-	        formater.toggleUnderline();
-	      } else if (sender == subscript) {
-	        formater.toggleSubscript();
-	      } else if (sender == superscript) {
-	        formater.toggleSuperscript();
-	      } else if (sender == strikethrough) {
-	    	formater.toggleStrikethrough();
-	      } else if (sender == indent) {
-	    	formater.rightIndent();
-	      } else if (sender == outdent) {
-	        formater.leftIndent();
-	      } else if (sender == justifyLeft) {
-	        formater.setJustification(RichTextArea.Justification.LEFT);
-	      } else if (sender == justifyCenter) {
-	        formater.setJustification(RichTextArea.Justification.CENTER);
-	      } else if (sender == justifyRight) {
-	        formater.setJustification(RichTextArea.Justification.RIGHT);
-	      } else if (sender == insertImage) {
-	        String url = Window.prompt("Enter an image URL:", "http://");
-	        if (url != null) {
-	          formater.insertImage(url);
-	        }
-	      } else if (sender == createLink) {
-	        String url = Window.prompt("Enter a link URL:", "http://");
-	        if (url != null) {
-	          formater.createLink(url);
-	        }
-	      } else if (sender == removeLink) {
-	        formater.removeLink();
-	      } else if (sender == hr) {
-	        formater.insertHorizontalRule();
-	      } else if (sender == ol) {
-	        formater.insertOrderedList();
-	      } else if (sender == ul) {
-	        formater.insertUnorderedList();
-	      } else if (sender == removeFormat) {
-	        formater.removeFormat();
-	      } else if (sender == richText) {
-	        // We use the RichTextArea's onKeyUp event to update the toolbar status.
-	        // This will catch any cases where the user moves the cursur using the
-	        // keyboard, or uses one of the browser's built-in keyboard shortcuts.
-	        updateStatus();
-	      }
+
+	/** Click Handler of the Toolbar **/
+	private class EventHandler implements ClickHandler,KeyUpHandler, ChangeHandler {
+		public void onClick(ClickEvent event) {
+			if (event.getSource().equals(bold)) {
+				if (isHTMLMode()) {
+					changeHtmlStyle(HTML_STYLE_OPEN_BOLD,HTML_STYLE_CLOSE_SPAN);
+				} else {
+					styleTextFormatter.toggleBold();
+				}
+			} else if (event.getSource().equals(italic)) {
+				if (isHTMLMode()) {
+					changeHtmlStyle(HTML_STYLE_OPEN_ITALIC,HTML_STYLE_CLOSE_SPAN);
+				} else {
+					styleTextFormatter.toggleItalic();
+				}
+			} else if (event.getSource().equals(underline)) {
+				if (isHTMLMode()) {
+					changeHtmlStyle(HTML_STYLE_OPEN_UNDERLINE,HTML_STYLE_CLOSE_SPAN);
+				} else {
+					styleTextFormatter.toggleUnderline();
+				}
+			} else if (event.getSource().equals(stroke)) {
+				if (isHTMLMode()) {
+					changeHtmlStyle(HTML_STYLE_OPEN_LINETHROUGH,HTML_STYLE_CLOSE_SPAN);
+				} else {
+					styleTextFormatter.toggleStrikethrough();
+				}
+			} else if (event.getSource().equals(subscript)) {
+				if (isHTMLMode()) {
+					changeHtmlStyle(HTML_STYLE_OPEN_SUBSCRIPT,HTML_STYLE_CLOSE_SUBSCRIPT);
+				} else {
+					styleTextFormatter.toggleSubscript();
+				}
+			} else if (event.getSource().equals(superscript)) {
+				if (isHTMLMode()) {
+					changeHtmlStyle(HTML_STYLE_OPEN_SUPERSCRIPT,HTML_STYLE_CLOSE_SUPERSCRIPT);
+				} else {
+					styleTextFormatter.toggleSuperscript();
+				}
+			} else if (event.getSource().equals(alignleft)) {
+				if (isHTMLMode()) {
+					changeHtmlStyle(HTML_STYLE_OPEN_ALIGNLEFT,HTML_STYLE_CLOSE_DIV);
+				} else {
+					styleTextFormatter.setJustification(RichTextArea.Justification.LEFT);
+				}
+			} else if (event.getSource().equals(alignmiddle)) {
+				if (isHTMLMode()) {
+					changeHtmlStyle(HTML_STYLE_OPEN_ALIGNCENTER,HTML_STYLE_CLOSE_DIV);
+				} else {
+					styleTextFormatter.setJustification(RichTextArea.Justification.CENTER);
+				}
+			} else if (event.getSource().equals(justify)) {
+				if (isHTMLMode()) {
+					changeHtmlStyle(HTML_STYLE_OPEN_ALIGNCENTER,HTML_STYLE_CLOSE_DIV);
+				} else {
+					styleTextFormatter.setJustification(RichTextArea.Justification.FULL);
+				}
+			} else if (event.getSource().equals(alignright)) {
+				if (isHTMLMode()) {
+					changeHtmlStyle(HTML_STYLE_OPEN_ALIGNRIGHT,HTML_STYLE_CLOSE_DIV);
+				} else {
+					styleTextFormatter.setJustification(RichTextArea.Justification.RIGHT);
+				}
+			} else if (event.getSource().equals(orderlist)) {
+				if (isHTMLMode()) {
+					changeHtmlStyle(HTML_STYLE_OPEN_ORDERLIST,HTML_STYLE_CLOSE_ORDERLIST);
+				} else {
+					styleTextFormatter.insertOrderedList();
+				}
+			} else if (event.getSource().equals(unorderlist)) {
+				if (isHTMLMode()) {
+					changeHtmlStyle(HTML_STYLE_OPEN_UNORDERLIST,HTML_STYLE_CLOSE_UNORDERLIST);
+				} else {
+					styleTextFormatter.insertUnorderedList();
+				}
+			} else if (event.getSource().equals(indentright)) {
+				if (isHTMLMode()) {
+					changeHtmlStyle(HTML_STYLE_OPEN_INDENTRIGHT,HTML_STYLE_CLOSE_DIV);
+				} else {
+					styleTextFormatter.rightIndent();
+				}
+			} else if (event.getSource().equals(indentleft)) {
+				if (isHTMLMode()) {
+				} else {
+					styleTextFormatter.leftIndent();
+				}
+			} else if (event.getSource().equals(generatelink)) {
+				richTextPopup.setAction(RichTextPopup.ACTION_ENTER_URL);
+				richTextPopup.show();
+			} else if (event.getSource().equals(breaklink)) {
+				if (isHTMLMode()) {
+				} else {
+					styleTextFormatter.removeLink();
+				}
+			} else if (event.getSource().equals(insertimage)) {
+				richTextPopup.setAction(RichTextPopup.ACTION_ENTER_IMAGE_URL);
+				richTextPopup.show();
+			}  else if (event.getSource().equals(insertline)) {
+				if (isHTMLMode()) {
+					changeHtmlStyle(HTML_STYLE_HLINE,"");
+				} else {
+					styleTextFormatter.insertHorizontalRule();
+				}
+			} else if (event.getSource().equals(removeformatting)) {
+				if (isHTMLMode()) {
+				} else {
+					styleTextFormatter.removeFormat();
+				}
+			} else if (event.getSource().equals(texthtml)) {
+				if (texthtml.isDown()) {
+					styleText.setText(styleText.getHTML());
+				} else {
+					styleText.setHTML(styleText.getText());
+				}
+			} else if (event.getSource().equals(styleText)) {
+				//Change invoked by the richtextArea
+			}
+			updateStatus();
+		}
+
+		public void onKeyUp(KeyUpEvent event) {
+			updateStatus();
+		}
+
+		public void onChange(ChangeEvent event) {
+			if (event.getSource().equals(fontList)) {
+				if (isHTMLMode()) {
+					changeHtmlStyle("<span style=\"font-family: "+fontList.getValue(fontList.getSelectedIndex())+";\">",HTML_STYLE_CLOSE_SPAN);
+				} else {
+					styleTextFormatter.setFontName(fontList.getValue(fontList.getSelectedIndex()));
+				}
+			} else if (event.getSource().equals(colorlist)) {
+				if (isHTMLMode()) {
+					changeHtmlStyle("<span style=\"color: "+colorlist.getValue(colorlist.getSelectedIndex())+";\">",HTML_STYLE_CLOSE_SPAN);
+				} else {
+					styleTextFormatter.setForeColor(colorlist.getValue(colorlist.getSelectedIndex()));
+				}
+			}
+		}
 	}
-  };
-  
-  private ChangeHandler changeHandler = new ChangeHandler(){
-	@Override
-	public void onChange(ChangeEvent event) {
-		Widget sender = (Widget) event.getSource();
-		if (sender == backColors) {
-	        formater.setBackColor(backColors.getValue(backColors.getSelectedIndex()));
-	        backColors.setSelectedIndex(0);
-	      } else if (sender == foreColors) {
-	        formater.setForeColor(foreColors.getValue(foreColors.getSelectedIndex()));
-	        foreColors.setSelectedIndex(0);
-	      } else if (sender == fonts) {
-	        formater.setFontName(fonts.getValue(fonts.getSelectedIndex()));
-	        fonts.setSelectedIndex(0);
-	      } else if (sender == fontSizes) {
-	        formater.setFontSize(fontSizesConstants[fontSizes.getSelectedIndex() - 1]);
-	        fontSizes.setSelectedIndex(0);
-	      }
+
+	/** Native JavaScript that returns the selected text and position of the start **/
+	public static native JsArrayString getSelection(Element elem) /*-{
+		var txt = "";
+		var pos = 0;
+		var range;
+    	var parentElement;
+    	var container;
+
+        if (elem.contentWindow.getSelection) {
+        	txt = elem.contentWindow.getSelection();
+        	pos = elem.contentWindow.getSelection().getRangeAt(0).startOffset;
+        } else if (elem.contentWindow.document.getSelection) {
+        	txt = elem.contentWindow.document.getSelection();
+        	pos = elem.contentWindow.document.getSelection().getRangeAt(0).startOffset;
+  		} else if (elem.contentWindow.document.selection) {
+  			range = elem.contentWindow.document.selection.createRange();
+        	txt = range.text;
+        	parentElement = range.parentElement();
+        	container = range.duplicate();
+        	container.moveToElementText(parentElement);
+        	container.setEndPoint('EndToEnd', range);
+        	pos = container.text.length - range.text.length;
+        }
+  		return [""+txt,""+pos];
+	}-*/;
+
+	/** Method called to toggle the style in HTML-Mode **/
+	private void changeHtmlStyle(String startTag, String stopTag) {
+		JsArrayString tx = getSelection(styleText.getElement());
+		String txbuffer = styleText.getText();
+		Integer startpos = Integer.parseInt(tx.get(1));
+		String selectedText = tx.get(0);
+		styleText.setText(txbuffer.substring(0, startpos)+startTag+selectedText+stopTag+txbuffer.substring(startpos+selectedText.length()));
 	}
-	  
-  };
 
-  private static final RichTextArea.FontSize[] fontSizesConstants = new RichTextArea.FontSize[] {
-      RichTextArea.FontSize.XX_SMALL, RichTextArea.FontSize.X_SMALL,
-      RichTextArea.FontSize.SMALL, RichTextArea.FontSize.MEDIUM,
-      RichTextArea.FontSize.LARGE, RichTextArea.FontSize.X_LARGE,
-      RichTextArea.FontSize.XX_LARGE};
+	/** Private method with a more understandable name to get if HTML mode is on or not **/
+	private Boolean isHTMLMode() {
+		return  texthtml.isDown();
+	}
 
-  private Images images = (Images) GWT.create(Images.class);
+	/** Private method to set the toggle buttons and disable/enable buttons which do not work in html-mode **/
+	private void updateStatus() {
+		if (styleTextFormatter != null) {
+			bold.setDown(styleTextFormatter.isBold());
+			italic.setDown(styleTextFormatter.isItalic());
+			underline.setDown(styleTextFormatter.isUnderlined());
+			subscript.setDown(styleTextFormatter.isSubscript());
+			superscript.setDown(styleTextFormatter.isSuperscript());
+			stroke.setDown(styleTextFormatter.isStrikethrough());
+		}
+		
+		if (isHTMLMode()) {
+			removeformatting.setEnabled(false);
+			indentleft.setEnabled(false);
+			breaklink.setEnabled(false);
+		} else {
+			removeformatting.setEnabled(true);
+			indentleft.setEnabled(true);
+			breaklink.setEnabled(true);
+		}
+	}
 
-  private RichTextArea richText;
-  private RichTextArea.Formatter formater;
+	/** Initialize the options on the toolbar **/
+	private void buildTools() {
+		//Init the TOP Panel forst
+		topPanel.add(bold = createToggleButton(OKMBundleResources.INSTANCE.bold(),Main.i18n("richtext.bold")));
+		topPanel.add(italic = createToggleButton(OKMBundleResources.INSTANCE.italic(),Main.i18n("richtext.italic")));
+		topPanel.add(underline = createToggleButton(OKMBundleResources.INSTANCE.underline(),Main.i18n("richtext.underline")));
+		topPanel.add(stroke = createToggleButton(OKMBundleResources.INSTANCE.stroke(),Main.i18n("richtext.stroke")));
+		topPanel.add(new HTML("&nbsp;"));
+		topPanel.add(subscript = createToggleButton(OKMBundleResources.INSTANCE.subScript(),Main.i18n("richtext.subscript")));
+		topPanel.add(superscript = createToggleButton(OKMBundleResources.INSTANCE.superScript(),Main.i18n("richtext.superscript")));
+		topPanel.add(new HTML("&nbsp;"));
+		topPanel.add(alignleft = createPushButton(OKMBundleResources.INSTANCE.justifyLeft(),Main.i18n("richtext.justify.left")));
+		topPanel.add(alignmiddle = createPushButton(OKMBundleResources.INSTANCE.justifyCenter(),Main.i18n("richtext.justify.center")));
+		topPanel.add(justify = createPushButton(OKMBundleResources.INSTANCE.justify(),Main.i18n("richtext.justify")));
+		topPanel.add(alignright = createPushButton(OKMBundleResources.INSTANCE.justifyRight(),Main.i18n("richtext.justify.right")));
+		topPanel.add(new HTML("&nbsp;"));
+		topPanel.add(orderlist = createPushButton(OKMBundleResources.INSTANCE.ordered(),Main.i18n("richtext.list.ordered")));
+		topPanel.add(unorderlist = createPushButton(OKMBundleResources.INSTANCE.unOrdered(),Main.i18n("richtext.list.unordered")));
+		topPanel.add(indentright = createPushButton(OKMBundleResources.INSTANCE.identRight(),Main.i18n("richtext.ident.right")));
+		topPanel.add(indentleft = createPushButton(OKMBundleResources.INSTANCE.identLeft(),Main.i18n("richtext.ident.left")));
+		topPanel.add(new HTML("&nbsp;"));
+		topPanel.add(generatelink = createPushButton(OKMBundleResources.INSTANCE.createEditorLink(),Main.i18n("richtext.link.create")));
+		topPanel.add(breaklink = createPushButton(OKMBundleResources.INSTANCE.breakEditorLink(),Main.i18n("richtext.link.break")));
+		topPanel.add(new HTML("&nbsp;"));
+		topPanel.add(insertline = createPushButton(OKMBundleResources.INSTANCE.line(),Main.i18n("richtext.line")));
+		topPanel.add(insertimage = createPushButton(OKMBundleResources.INSTANCE.picture(),Main.i18n("richtext.image")));
+		topPanel.add(new HTML("&nbsp;"));
+		topPanel.add(removeformatting = createPushButton(OKMBundleResources.INSTANCE.removeFormat(),Main.i18n("richtext.remove.format")));
+		topPanel.add(new HTML("&nbsp;"));
+		topPanel.add(texthtml = createToggleButton(OKMBundleResources.INSTANCE.html(),Main.i18n("richtext.switch.view")));
 
-  private VerticalPanel outer = new VerticalPanel();
-  private HorizontalPanel topPanel = new HorizontalPanel();
-  private HorizontalPanel bottomPanel = new HorizontalPanel();
-  private ToggleButton bold;
-  private ToggleButton italic;
-  private ToggleButton underline;
-  private ToggleButton subscript;
-  private ToggleButton superscript;
-  private ToggleButton strikethrough;
-  private PushButton indent;
-  private PushButton outdent;
-  private PushButton justifyLeft;
-  private PushButton justifyCenter;
-  private PushButton justifyRight;
-  private PushButton hr;
-  private PushButton ol;
-  private PushButton ul;
-  private PushButton insertImage;
-  private PushButton createLink;
-  private PushButton removeLink;
-  private PushButton removeFormat;
-
-  private ListBox backColors;
-  private ListBox foreColors;
-  private ListBox fonts;
-  private ListBox fontSizes;
-
-  /**
-   * Creates a new toolbar that drives the given rich text area.
-   * 
-   * @param richText the rich text area to be controlled
-   */
-  public RichTextToolbar(RichTextArea richText) {
-    this.richText = richText;
-    this.formater = richText.getFormatter();
-
-    outer.add(topPanel);
-    outer.add(bottomPanel);
-    topPanel.setWidth("100%");
-    bottomPanel.setWidth("100%");
-
-    initWidget(outer);
-    setStyleName("gwt-RichTextToolbar");
-    richText.addStyleName("hasRichTextToolbar");
-
-    if (formater != null) {
-      topPanel.add(bold = createToggleButton(images.bold(), "Negrita"));
-      topPanel.add(italic = createToggleButton(images.italic(), "Italica"));
-      topPanel.add(underline = createToggleButton(images.underline(), "Subrayado"));
-      topPanel.add(subscript = createToggleButton(images.subscript(), "Sub"));
-      topPanel.add(superscript = createToggleButton(images.superscript(), "Super"));
-      topPanel.add(justifyLeft = createPushButton(images.justifyLeft(), "Izquierda"));
-      topPanel.add(justifyCenter = createPushButton(images.justifyCenter(),"Centro"));
-      topPanel.add(justifyRight = createPushButton(images.justifyRight(),"Derecha"));
-      topPanel.add(strikethrough = createToggleButton(images.strikeThrough(), "Marcar"));
-      topPanel.add(indent = createPushButton(images.indent(), "Identar"));
-      topPanel.add(outdent = createPushButton(images.outdent(), "Desidentar"));
-      topPanel.add(hr = createPushButton(images.hr(), "HR"));
-      topPanel.add(ol = createPushButton(images.ol(), "OL"));
-      topPanel.add(ul = createPushButton(images.ul(), "UL"));
-      topPanel.add(insertImage = createPushButton(images.insertImage(),"Insertar imagen"));
-      topPanel.add(createLink = createPushButton(images.createLink(), "Crear enlace"));
-      topPanel.add(removeLink = createPushButton(images.removeLink(), "Eliminar enlace"));
-      topPanel.add(removeFormat = createPushButton(images.removeFormat(),"Eliminar formato"));
-      bottomPanel.add(backColors = createColorList("Background"));
-      bottomPanel.add(foreColors = createColorList("Foreground"));
-      bottomPanel.add(fonts = createFontList());
-      bottomPanel.add(fontSizes = createFontSizes());
-
-      // We only use these listeners for updating status, so don't hook them up
-      // unless at least basic editing is supported.
-      richText.addKeyUpHandler(keyUpHandler);
-      richText.addClickHandler(clickHandler);
-    }
-  }
-
-  private ListBox createColorList(String caption) {
-    ListBox lb = new ListBox();
-    lb.addChangeHandler(changeHandler);
-    lb.setVisibleItemCount(1);
-
-    lb.addItem(caption);
-    lb.addItem("Blanco", "white");
-    lb.addItem("Negro", "black");
-    lb.addItem("Rojo", "red");
-    lb.addItem("Verde", "green");
-    lb.addItem("Amarillo", "yellow");
-    lb.addItem("Azul", "blue");
-    return lb;
-  }
-
-  private ListBox createFontList() {
-    ListBox lb = new ListBox();
-    lb.addChangeHandler(changeHandler);
-    lb.setVisibleItemCount(1);
-
-    lb.addItem("Fuente", "");
-    lb.addItem("Fuente normal", "");
-    lb.addItem("Times New Roman", "Times New Roman");
-    lb.addItem("Arial", "Arial");
-    lb.addItem("Courier New", "Courier New");
-    lb.addItem("Georgia", "Georgia");
-    lb.addItem("Trebuchet", "Trebuchet");
-    lb.addItem("Verdana", "Verdana");
-    return lb;
-  }
-
-  private ListBox createFontSizes() {
-    ListBox lb = new ListBox();
-    lb.addChangeHandler(changeHandler);
-    lb.setVisibleItemCount(1);
-
-    lb.addItem("Size");
-    lb.addItem("XX-Small");
-    lb.addItem("XS-Small");
-    lb.addItem("Small");
-    lb.addItem("Medium");
-    lb.addItem("Large");
-    lb.addItem("Xlarge");
-    lb.addItem("XXLarge");
-    return lb;
-  }
-
-  private PushButton createPushButton(AbstractImagePrototype img, String tip) {
-    PushButton pb = new PushButton(img.createImage());
-    pb.addClickHandler(clickHandler);
-    pb.setTitle(tip);
-    return pb;
-  }
-
-  private ToggleButton createToggleButton(AbstractImagePrototype img, String tip) {
-    ToggleButton tb = new ToggleButton(img.createImage());
-    tb.addClickHandler(clickHandler);
-    tb.setTitle(tip);
-    return tb;
-  }
-
-  /**
-   * Updates the status of all the stateful buttons.
-   */
-  private void updateStatus() {
-    if (formater != null) {
-      bold.setDown(formater.isBold());
-      italic.setDown(formater.isItalic());
-      underline.setDown(formater.isUnderlined());
-      subscript.setDown(formater.isSubscript());
-      superscript.setDown(formater.isSuperscript());
-      strikethrough.setDown(formater.isStrikethrough());
-    }
-  }
+		//Init the BOTTOM Panel
+		fontList = new ListBox();
+		fontList.addChangeHandler(evHandler);
+		fontList.setVisibleItemCount(1);
+		refreshFontList();
+		colorlist = new ListBox();
+		colorlist.addChangeHandler(evHandler);
+		colorlist.setVisibleItemCount(1);
+		refreshColorList();
+		bottomPanel.add(fontList);
+		bottomPanel.add(new HTML("&nbsp;"));
+		bottomPanel.add(colorlist);
+		
+		fontList.setStyleName("okm-Input");
+		colorlist.setStyleName("okm-Input");
+	}
+	
+	/** Method to create a Toggle button for the toolbar **/
+	private ToggleButton createToggleButton(ImageResource resource, String tip) {
+		ToggleButton tb = new ToggleButton(new Image(resource));
+		tb.addClickHandler(evHandler);
+		if (tip != null) {
+			tb.setTitle(tip);
+		}
+		return tb;
+	}
+	
+	/** Method to create a Push button for the toolbar **/
+	private PushButton createPushButton(ImageResource resource, String tip) {
+		PushButton tb = new PushButton(new Image(resource));
+		tb.addClickHandler(evHandler);
+		if (tip != null) {
+			tb.setTitle(tip);
+		}
+		return tb;
+	}
+	
+	/** Method to refresh the fontlist values for the toolbar **/
+	private void refreshFontList() {
+	    fontList.clear();
+	    fontList.addItem(Main.i18n("richtext.fonts"));
+	    fontList.addItem("Times New Roman", "Times New Roman");
+	    fontList.addItem("Arial", "Arial");
+	    fontList.addItem("Courier New", "Courier New");
+	    fontList.addItem("Georgia", "Georgia");
+	    fontList.addItem("Trebuchet", "Trebuchet");
+	    fontList.addItem("Verdana", "Verdana");
+	   
+	}
+	
+	/** Method to refresh the colorlist for the toolbar **/
+	private void refreshColorList() {
+	    colorlist.clear();
+	    colorlist.addItem(Main.i18n("richtext.colors"));
+	    colorlist.addItem(Main.i18n("richtext.white"), "#FFFFFF");
+	    colorlist.addItem(Main.i18n("richtext.black"), "#000000");
+	    colorlist.addItem(Main.i18n("richtext.red"), "red");
+	    colorlist.addItem(Main.i18n("richtext.green"), "green");
+	    colorlist.addItem(Main.i18n("richtext.yellow"), "yellow");
+	    colorlist.addItem(Main.i18n("richtext.blue"), "blue");
+	}
+	
+	/**
+	 * langRefresh
+	 */
+	public void langRefresh() {
+		refreshFontList(); 
+		refreshColorList();
+		bold.setTitle(Main.i18n("richtext.bold"));
+		italic.setTitle(Main.i18n("richtext.italic"));
+		underline.setTitle(Main.i18n("richtext.underline"));
+		stroke.setTitle(Main.i18n("richtext.stroke"));
+		subscript.setTitle(Main.i18n("richtext.subscript"));
+		superscript.setTitle(Main.i18n("richtext.superscript"));
+		alignleft.setTitle(Main.i18n("richtext.justify.left"));
+		alignmiddle.setTitle(Main.i18n("richtext.justify.center"));
+		justify.setTitle(Main.i18n("richtext.justify"));
+		alignright.setTitle(Main.i18n("richtext.justify.right"));
+		orderlist.setTitle(Main.i18n("richtext.list.ordered"));
+		unorderlist.setTitle(Main.i18n("richtext.list.unordered"));
+		indentright.setTitle(Main.i18n("richtext.ident.right"));
+		indentleft.setTitle(Main.i18n("richtext.ident.left"));
+		generatelink.setTitle(Main.i18n("richtext.link.create"));
+		breaklink.setTitle(Main.i18n("richtext.link.break"));
+		insertline.setTitle(Main.i18n("richtext.line"));
+		insertimage.setTitle(Main.i18n("richtext.image"));
+		removeformatting.setTitle(Main.i18n("richtext.remove.format"));
+		texthtml.setTitle(Main.i18n("richtext.switch.view"));
+		richTextPopup.langRefresh();
+	}
+	
+	@Override
+	public void insertURL(String url) {
+		if (url != null) {
+			if (isHTMLMode()) {
+				changeHtmlStyle("<a href=\""+url+"\">","</a>");
+			} else {
+				styleTextFormatter.createLink(url);
+			}
+		}
+	}
+	
+	@Override
+	public void insertImageURL(String url) {
+		if (url != null) {
+			if (isHTMLMode()) {
+				changeHtmlStyle("<img src=\""+url+"\">","");
+			} else {
+				styleTextFormatter.insertImage(url);
+			}
+		}
+	}
 }
