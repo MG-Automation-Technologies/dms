@@ -21,17 +21,16 @@
 
 package com.openkm.frontend.client.widget.richtext;
 
-import java.util.HashMap;
-
 import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.IFrameElement;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -42,37 +41,14 @@ import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.RichTextArea.Formatter;
+import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.util.OKMBundleResources;
 
 /**
  * @author jllort
  *
  */
-public class RichTextToolbar extends Composite {
-	/** Local CONSTANTS **/
-	//ImageMap and CSS related
-	private static final String HTTP_STATIC_ICONS_GIF = "http://blog.elitecoderz.net/wp-includes/js/tinymce/themes/advanced/img/icons.gif";
-	private static final String CSS_ROOT_NAME = "RichTextToolbar";
-	
-	//Color and Fontlists - First Value (key) is the Name to display, Second Value (value) is the HTML-Definition
-	public final static HashMap<String,String> GUI_COLORLIST = new HashMap<String,String>();
-	static {
-		GUI_COLORLIST.put("White", "#FFFFFF");
-		GUI_COLORLIST.put("Black", "#000000");
-		GUI_COLORLIST.put("Red", "red");
-		GUI_COLORLIST.put("Green", "green");
-		GUI_COLORLIST.put("Yellow", "yellow");
-		GUI_COLORLIST.put("Blue", "blue");
-	}
-	public final static HashMap<String,String> GUI_FONTLIST = new HashMap<String,String>();
-	static {
-	    GUI_FONTLIST.put("Times New Roman", "Times New Roman");
-	    GUI_FONTLIST.put("Arial", "Arial");
-	    GUI_FONTLIST.put("Courier New", "Courier New");
-	    GUI_FONTLIST.put("Georgia", "Georgia");
-	    GUI_FONTLIST.put("Trebuchet", "Trebuchet");
-	    GUI_FONTLIST.put("Verdana", "Verdana");
-	}
-	
+public class RichTextToolbar extends Composite implements RichTextAction {
 	//HTML Related (styles made by SPAN and DIV)
 	private static final String HTML_STYLE_CLOSE_SPAN = "</span>";
 	private static final String HTML_STYLE_CLOSE_DIV = "</div>";
@@ -98,33 +74,6 @@ public class RichTextToolbar extends Composite {
 	//HTML Related (styles without closing Tag)
 	private static final String HTML_STYLE_HLINE = "<hr style=\"width: 100%; height: 2px;\">";
 	
-	//GUI Related stuff
-	private static final String GUI_DIALOG_INSERTURL = "Enter a link URL:";
-	private static final String GUI_DIALOG_IMAGEURL = "Enter an image URL:";
-
-	private static final String GUI_LISTNAME_COLORS = "Colors";
-	private static final String GUI_LISTNAME_FONTS = "Fonts";
-	
-	private static final String GUI_HOVERTEXT_SWITCHVIEW = "Switch View HTML/Source";
-	private static final String GUI_HOVERTEXT_REMOVEFORMAT = "Remove Formatting";
-	private static final String GUI_HOVERTEXT_IMAGE = "Insert Image";
-	private static final String GUI_HOVERTEXT_HLINE = "Insert Horizontal Line";
-	private static final String GUI_HOVERTEXT_BREAKLINK = "Break Link";
-	private static final String GUI_HOVERTEXT_LINK = "Generate Link";
-	private static final String GUI_HOVERTEXT_IDENTLEFT = "Ident Left";
-	private static final String GUI_HOVERTEXT_IDENTRIGHT = "Ident Right";
-	private static final String GUI_HOVERTEXT_UNORDERLIST = "Unordered List";
-	private static final String GUI_HOVERTEXT_ORDERLIST = "Ordered List";
-	private static final String GUI_HOVERTEXT_ALIGNRIGHT = "Align Right";
-	private static final String GUI_HOVERTEXT_ALIGNCENTER = "Align Center";
-	private static final String GUI_HOVERTEXT_ALIGNLEFT = "Align Left";
-	private static final String GUI_HOVERTEXT_SUPERSCRIPT = "Superscript";
-	private static final String GUI_HOVERTEXT_SUBSCRIPT = "Subscript";
-	private static final String GUI_HOVERTEXT_STROKE = "Stroke";
-	private static final String GUI_HOVERTEXT_UNDERLINE = "Underline";
-	private static final String GUI_HOVERTEXT_ITALIC = "Italic";
-	private static final String GUI_HOVERTEXT_BOLD = "Bold";
-	
 	/** Private Variables **/
 	//The main (Vertical)-Panel and the two inner (Horizontal)-Panels
 	private VerticalPanel outer;
@@ -147,6 +96,7 @@ public class RichTextToolbar extends Composite {
 	private ToggleButton superscript;
 	private PushButton alignleft;
 	private PushButton alignmiddle;
+	private PushButton justify;
 	private PushButton alignright;
 	private PushButton orderlist;
 	private PushButton unorderlist;
@@ -159,19 +109,21 @@ public class RichTextToolbar extends Composite {
 	private PushButton removeformatting;
 	private ToggleButton texthtml;
 	
-	private ListBox fontlist;
+	private ListBox fontList;
 	private ListBox colorlist;
+	
+	RichTextPopup richTextPopup;
 
 	/** Constructor of the Toolbar **/
-	public RichTextToolbar(RichTextArea richtext) {
+	public RichTextToolbar(final RichTextArea richtext) {
 		//Initialize the main-panel
 		outer = new VerticalPanel();
 
 		//Initialize the two inner panels
 		topPanel = new HorizontalPanel();
 		bottomPanel = new HorizontalPanel();
-		topPanel.setStyleName(CSS_ROOT_NAME);
-		bottomPanel.setStyleName(CSS_ROOT_NAME);
+		topPanel.setStyleName("RichTextToolbar");
+		bottomPanel.setStyleName("RichTextToolbar");
 
 		//Save the reference to the RichText area we refer to and get the interfaces to the stylings
 
@@ -187,8 +139,7 @@ public class RichTextToolbar extends Composite {
 		outer.add(bottomPanel);
 
 		//Some graphical stuff to the main panel and the initialisation of the new widget
-		outer.setWidth("100%");
-		outer.setStyleName(CSS_ROOT_NAME);
+		outer.setStyleName("RichTextToolbar");
 		initWidget(outer);
 
 		//
@@ -197,7 +148,17 @@ public class RichTextToolbar extends Composite {
 		//Add KeyUp and Click-Handler to the RichText, so that we can actualize the toolbar if neccessary
 		styleText.addKeyUpHandler(evHandler);
 		styleText.addClickHandler(evHandler);
-
+		
+		// Changing styles
+		IFrameElement e = IFrameElement.as(richtext.getElement());
+		e.setSrc("iframe_richtext.html");
+		e.setFrameBorder(0); // removing frame border
+		
+		richTextPopup = new RichTextPopup(this);
+		richTextPopup.setWidth("300px");
+		richTextPopup.setHeight("50px");
+		richTextPopup.setStyleName("okm-Popup");
+		
 		//Now lets fill the new toolbar with life
 		buildTools();
 	}
@@ -253,6 +214,12 @@ public class RichTextToolbar extends Composite {
 				} else {
 					styleTextFormatter.setJustification(RichTextArea.Justification.CENTER);
 				}
+			} else if (event.getSource().equals(justify)) {
+				if (isHTMLMode()) {
+					changeHtmlStyle(HTML_STYLE_OPEN_ALIGNCENTER,HTML_STYLE_CLOSE_DIV);
+				} else {
+					styleTextFormatter.setJustification(RichTextArea.Justification.FULL);
+				}
 			} else if (event.getSource().equals(alignright)) {
 				if (isHTMLMode()) {
 					changeHtmlStyle(HTML_STYLE_OPEN_ALIGNRIGHT,HTML_STYLE_CLOSE_DIV);
@@ -279,34 +246,20 @@ public class RichTextToolbar extends Composite {
 				}
 			} else if (event.getSource().equals(indentleft)) {
 				if (isHTMLMode()) {
-					//TODO nothing can be done here at the moment
 				} else {
 					styleTextFormatter.leftIndent();
 				}
 			} else if (event.getSource().equals(generatelink)) {
-				String url = Window.prompt(GUI_DIALOG_INSERTURL, "http://");
-				if (url != null) {
-					if (isHTMLMode()) {
-						changeHtmlStyle("<a href=\""+url+"\">","</a>");
-					} else {
-						styleTextFormatter.createLink(url);
-					}
-				}
+				richTextPopup.setAction(RichTextPopup.ACTION_ENTER_URL);
+				richTextPopup.show();
 			} else if (event.getSource().equals(breaklink)) {
 				if (isHTMLMode()) {
-					//TODO nothing can be done here at the moment
 				} else {
 					styleTextFormatter.removeLink();
 				}
 			} else if (event.getSource().equals(insertimage)) {
-				String url = Window.prompt(GUI_DIALOG_IMAGEURL, "http://");
-				if (url != null) {
-					if (isHTMLMode()) {
-						changeHtmlStyle("<img src=\""+url+"\">","");
-					} else {
-						styleTextFormatter.insertImage(url);
-					}
-				}
+				richTextPopup.setAction(RichTextPopup.ACTION_ENTER_IMAGE_URL);
+				richTextPopup.show();
 			}  else if (event.getSource().equals(insertline)) {
 				if (isHTMLMode()) {
 					changeHtmlStyle(HTML_STYLE_HLINE,"");
@@ -315,7 +268,6 @@ public class RichTextToolbar extends Composite {
 				}
 			} else if (event.getSource().equals(removeformatting)) {
 				if (isHTMLMode()) {
-					//TODO nothing can be done here at the moment
 				} else {
 					styleTextFormatter.removeFormat();
 				}
@@ -336,11 +288,11 @@ public class RichTextToolbar extends Composite {
 		}
 
 		public void onChange(ChangeEvent event) {
-			if (event.getSource().equals(fontlist)) {
+			if (event.getSource().equals(fontList)) {
 				if (isHTMLMode()) {
-					changeHtmlStyle("<span style=\"font-family: "+fontlist.getValue(fontlist.getSelectedIndex())+";\">",HTML_STYLE_CLOSE_SPAN);
+					changeHtmlStyle("<span style=\"font-family: "+fontList.getValue(fontList.getSelectedIndex())+";\">",HTML_STYLE_CLOSE_SPAN);
 				} else {
-					styleTextFormatter.setFontName(fontlist.getValue(fontlist.getSelectedIndex()));
+					styleTextFormatter.setFontName(fontList.getValue(fontList.getSelectedIndex()));
 				}
 			} else if (event.getSource().equals(colorlist)) {
 				if (isHTMLMode()) {
@@ -417,58 +369,64 @@ public class RichTextToolbar extends Composite {
 	/** Initialize the options on the toolbar **/
 	private void buildTools() {
 		//Init the TOP Panel forst
-		topPanel.add(bold = createToggleButton(HTTP_STATIC_ICONS_GIF,0,0,20,20,GUI_HOVERTEXT_BOLD));
-		topPanel.add(italic = createToggleButton(HTTP_STATIC_ICONS_GIF,0,60,20,20,GUI_HOVERTEXT_ITALIC));
-		topPanel.add(underline = createToggleButton(HTTP_STATIC_ICONS_GIF,0,140,20,20,GUI_HOVERTEXT_UNDERLINE));
-		topPanel.add(stroke = createToggleButton(HTTP_STATIC_ICONS_GIF,0,120,20,20,GUI_HOVERTEXT_STROKE));
+		topPanel.add(bold = createToggleButton(OKMBundleResources.INSTANCE.bold(),Main.i18n("richtext.bold")));
+		topPanel.add(italic = createToggleButton(OKMBundleResources.INSTANCE.italic(),Main.i18n("richtext.italic")));
+		topPanel.add(underline = createToggleButton(OKMBundleResources.INSTANCE.underline(),Main.i18n("richtext.underline")));
+		topPanel.add(stroke = createToggleButton(OKMBundleResources.INSTANCE.stroke(),Main.i18n("richtext.stroke")));
 		topPanel.add(new HTML("&nbsp;"));
-		topPanel.add(subscript = createToggleButton(HTTP_STATIC_ICONS_GIF,0,600,20,20,GUI_HOVERTEXT_SUBSCRIPT));
-		topPanel.add(superscript = createToggleButton(HTTP_STATIC_ICONS_GIF,0,620,20,20,GUI_HOVERTEXT_SUPERSCRIPT));
+		topPanel.add(subscript = createToggleButton(OKMBundleResources.INSTANCE.subScript(),Main.i18n("richtext.subscript")));
+		topPanel.add(superscript = createToggleButton(OKMBundleResources.INSTANCE.superScript(),Main.i18n("richtext.superscript")));
 		topPanel.add(new HTML("&nbsp;"));
-		topPanel.add(alignleft = createPushButton(HTTP_STATIC_ICONS_GIF,0,460,20,20,GUI_HOVERTEXT_ALIGNLEFT));
-		topPanel.add(alignmiddle = createPushButton(HTTP_STATIC_ICONS_GIF,0,420,20,20,GUI_HOVERTEXT_ALIGNCENTER));
-		topPanel.add(alignright = createPushButton(HTTP_STATIC_ICONS_GIF,0,480,20,20,GUI_HOVERTEXT_ALIGNRIGHT));
+		topPanel.add(alignleft = createPushButton(OKMBundleResources.INSTANCE.justifyLeft(),Main.i18n("richtext.justify.left")));
+		topPanel.add(alignmiddle = createPushButton(OKMBundleResources.INSTANCE.justifyCenter(),Main.i18n("richtext.justify.center")));
+		topPanel.add(justify = createPushButton(OKMBundleResources.INSTANCE.justify(),Main.i18n("richtext.justify")));
+		topPanel.add(alignright = createPushButton(OKMBundleResources.INSTANCE.justifyRight(),Main.i18n("richtext.justify.right")));
 		topPanel.add(new HTML("&nbsp;"));
-		topPanel.add(orderlist = createPushButton(HTTP_STATIC_ICONS_GIF,0,80,20,20,GUI_HOVERTEXT_ORDERLIST));
-		topPanel.add(unorderlist = createPushButton(HTTP_STATIC_ICONS_GIF,0,20,20,20,GUI_HOVERTEXT_UNORDERLIST));
-		topPanel.add(indentright = createPushButton(HTTP_STATIC_ICONS_GIF,0,400,20,20,GUI_HOVERTEXT_IDENTRIGHT));
-		topPanel.add(indentleft = createPushButton(HTTP_STATIC_ICONS_GIF,0,540,20,20,GUI_HOVERTEXT_IDENTLEFT));
+		topPanel.add(orderlist = createPushButton(OKMBundleResources.INSTANCE.ordered(),Main.i18n("richtext.list.ordered")));
+		topPanel.add(unorderlist = createPushButton(OKMBundleResources.INSTANCE.unOrdered(),Main.i18n("richtext.list.unordered")));
+		topPanel.add(indentright = createPushButton(OKMBundleResources.INSTANCE.identRight(),Main.i18n("richtext.ident.right")));
+		topPanel.add(indentleft = createPushButton(OKMBundleResources.INSTANCE.identLeft(),Main.i18n("richtext.ident.left")));
 		topPanel.add(new HTML("&nbsp;"));
-		topPanel.add(generatelink = createPushButton(HTTP_STATIC_ICONS_GIF,0,500,20,20,GUI_HOVERTEXT_LINK));
-		topPanel.add(breaklink = createPushButton(HTTP_STATIC_ICONS_GIF,0,640,20,20,GUI_HOVERTEXT_BREAKLINK));
+		topPanel.add(generatelink = createPushButton(OKMBundleResources.INSTANCE.createEditorLink(),Main.i18n("richtext.link.create")));
+		topPanel.add(breaklink = createPushButton(OKMBundleResources.INSTANCE.breakEditorLink(),Main.i18n("richtext.link.break")));
 		topPanel.add(new HTML("&nbsp;"));
-		topPanel.add(insertline = createPushButton(HTTP_STATIC_ICONS_GIF,0,360,20,20,GUI_HOVERTEXT_HLINE));
-		topPanel.add(insertimage = createPushButton(HTTP_STATIC_ICONS_GIF,0,380,20,20,GUI_HOVERTEXT_IMAGE));
+		topPanel.add(insertline = createPushButton(OKMBundleResources.INSTANCE.line(),Main.i18n("richtext.line")));
+		topPanel.add(insertimage = createPushButton(OKMBundleResources.INSTANCE.picture(),Main.i18n("richtext.image")));
 		topPanel.add(new HTML("&nbsp;"));
-		topPanel.add(removeformatting = createPushButton(HTTP_STATIC_ICONS_GIF,20,460,20,20,GUI_HOVERTEXT_REMOVEFORMAT));
+		topPanel.add(removeformatting = createPushButton(OKMBundleResources.INSTANCE.removeFormat(),Main.i18n("richtext.remove.format")));
 		topPanel.add(new HTML("&nbsp;"));
-		topPanel.add(texthtml = createToggleButton(HTTP_STATIC_ICONS_GIF,0,260,20,20,GUI_HOVERTEXT_SWITCHVIEW));
+		topPanel.add(texthtml = createToggleButton(OKMBundleResources.INSTANCE.html(),Main.i18n("richtext.switch.view")));
 
 		//Init the BOTTOM Panel
-		bottomPanel.add(fontlist = createFontList());
+		fontList = new ListBox();
+		fontList.addChangeHandler(evHandler);
+		fontList.setVisibleItemCount(1);
+		refreshFontList();
+		colorlist = new ListBox();
+		colorlist.addChangeHandler(evHandler);
+		colorlist.setVisibleItemCount(1);
+		refreshColorList();
+		bottomPanel.add(fontList);
 		bottomPanel.add(new HTML("&nbsp;"));
-		bottomPanel.add(colorlist = createColorList());
+		bottomPanel.add(colorlist);
+		
+		fontList.setStyleName("okm-Input");
+		colorlist.setStyleName("okm-Input");
 	}
-
+	
 	/** Method to create a Toggle button for the toolbar **/
-	private ToggleButton createToggleButton(String url, Integer top, Integer left, Integer width, Integer height, String tip) {
-		Image extract = new Image(url, left, top, width, height);
-		ToggleButton tb = new ToggleButton(extract);
-		tb.setHeight(height+"px");
-		tb.setWidth(width+"px");
+	private ToggleButton createToggleButton(ImageResource resource, String tip) {
+		ToggleButton tb = new ToggleButton(new Image(resource));
 		tb.addClickHandler(evHandler);
 		if (tip != null) {
 			tb.setTitle(tip);
 		}
 		return tb;
 	}
-
+	
 	/** Method to create a Push button for the toolbar **/
-	private PushButton createPushButton(String url, Integer top, Integer left, Integer width, Integer height, String tip) {
-		Image extract = new Image(url, left, top, width, height);
-		PushButton tb = new PushButton(extract);
-		tb.setHeight(height+"px");
-		tb.setWidth(width+"px");
+	private PushButton createPushButton(ImageResource resource, String tip) {
+		PushButton tb = new PushButton(new Image(resource));
 		tb.addClickHandler(evHandler);
 		if (tip != null) {
 			tb.setTitle(tip);
@@ -476,31 +434,79 @@ public class RichTextToolbar extends Composite {
 		return tb;
 	}
 	
-	/** Method to create the fontlist for the toolbar **/
-	private ListBox createFontList() {
-	    ListBox mylistBox = new ListBox();
-	    mylistBox.addChangeHandler(evHandler);
-	    mylistBox.setVisibleItemCount(1);
-	
-	    mylistBox.addItem(GUI_LISTNAME_FONTS);
-	    for (String name: GUI_FONTLIST.keySet()) {
-	    	mylistBox.addItem(name, GUI_FONTLIST.get(name));
-	    }
-	    
-	    return mylistBox;
+	/** Method to refresh the fontlist values for the toolbar **/
+	private void refreshFontList() {
+	    fontList.clear();
+	    fontList.addItem(Main.i18n("richtext.fonts"));
+	    fontList.addItem("Times New Roman", "Times New Roman");
+	    fontList.addItem("Arial", "Arial");
+	    fontList.addItem("Courier New", "Courier New");
+	    fontList.addItem("Georgia", "Georgia");
+	    fontList.addItem("Trebuchet", "Trebuchet");
+	    fontList.addItem("Verdana", "Verdana");
+	   
 	}
 	
-	/** Method to create the colorlist for the toolbar **/
-	private ListBox createColorList() {
-	    ListBox mylistBox = new ListBox();
-	    mylistBox.addChangeHandler(evHandler);
-	    mylistBox.setVisibleItemCount(1);
+	/** Method to refresh the colorlist for the toolbar **/
+	private void refreshColorList() {
+	    colorlist.clear();
+	    colorlist.addItem(Main.i18n("richtext.colors"));
+	    colorlist.addItem(Main.i18n("richtext.white"), "#FFFFFF");
+	    colorlist.addItem(Main.i18n("richtext.black"), "#000000");
+	    colorlist.addItem(Main.i18n("richtext.red"), "red");
+	    colorlist.addItem(Main.i18n("richtext.green"), "green");
+	    colorlist.addItem(Main.i18n("richtext.yellow"), "yellow");
+	    colorlist.addItem(Main.i18n("richtext.blue"), "blue");
+	}
 	
-	    mylistBox.addItem(GUI_LISTNAME_COLORS);
-	    for (String name: GUI_COLORLIST.keySet()) {
-	    	mylistBox.addItem(name, GUI_COLORLIST.get(name));
-	    }
-	    
-	    return mylistBox;
+	/**
+	 * langRefresh
+	 */
+	public void langRefresh() {
+		refreshFontList(); 
+		refreshColorList();
+		bold.setTitle(Main.i18n("richtext.bold"));
+		italic.setTitle(Main.i18n("richtext.italic"));
+		underline.setTitle(Main.i18n("richtext.underline"));
+		stroke.setTitle(Main.i18n("richtext.stroke"));
+		subscript.setTitle(Main.i18n("richtext.subscript"));
+		superscript.setTitle(Main.i18n("richtext.superscript"));
+		alignleft.setTitle(Main.i18n("richtext.justify.left"));
+		alignmiddle.setTitle(Main.i18n("richtext.justify.center"));
+		justify.setTitle(Main.i18n("richtext.justify"));
+		alignright.setTitle(Main.i18n("richtext.justify.right"));
+		orderlist.setTitle(Main.i18n("richtext.list.ordered"));
+		unorderlist.setTitle(Main.i18n("richtext.list.unordered"));
+		indentright.setTitle(Main.i18n("richtext.ident.right"));
+		indentleft.setTitle(Main.i18n("richtext.ident.left"));
+		generatelink.setTitle(Main.i18n("richtext.link.create"));
+		breaklink.setTitle(Main.i18n("richtext.link.break"));
+		insertline.setTitle(Main.i18n("richtext.line"));
+		insertimage.setTitle(Main.i18n("richtext.image"));
+		removeformatting.setTitle(Main.i18n("richtext.remove.format"));
+		texthtml.setTitle(Main.i18n("richtext.switch.view"));
+		richTextPopup.langRefresh();
+	}
+	
+	@Override
+	public void insertURL(String url) {
+		if (url != null) {
+			if (isHTMLMode()) {
+				changeHtmlStyle("<a href=\""+url+"\">","</a>");
+			} else {
+				styleTextFormatter.createLink(url);
+			}
+		}
+	}
+	
+	@Override
+	public void insertImageURL(String url) {
+		if (url != null) {
+			if (isHTMLMode()) {
+				changeHtmlStyle("<img src=\""+url+"\">","");
+			} else {
+				styleTextFormatter.insertImage(url);
+			}
+		}
 	}
 }

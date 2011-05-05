@@ -304,4 +304,64 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/icon/actions/printer_disabled.png")
 	public ImageResource printDisabled();
+	
+	@Source("com/openkm/frontend/public/img/icon/editor/justifyCenter.gif")
+	public ImageResource justifyCenter();
+	
+	@Source("com/openkm/frontend/public/img/icon/editor/justify.gif")
+	public ImageResource justify();
+	
+	@Source("com/openkm/frontend/public/img/icon/editor/justifyLeft.gif")
+	public ImageResource justifyLeft();
+	
+	@Source("com/openkm/frontend/public/img/icon/editor/justifyRight.gif")
+	public ImageResource justifyRight();
+	
+	@Source("com/openkm/frontend/public/img/icon/editor/bold.gif")
+	public ImageResource bold();
+	
+	@Source("com/openkm/frontend/public/img/icon/editor/italic.gif")
+	public ImageResource italic();
+	
+	@Source("com/openkm/frontend/public/img/icon/editor/underline.gif")
+	public ImageResource underline();
+	
+	@Source("com/openkm/frontend/public/img/icon/editor/stroke.gif")
+	public ImageResource stroke();
+	
+	@Source("com/openkm/frontend/public/img/icon/editor/subscript.gif")
+	public ImageResource subScript();
+	
+	@Source("com/openkm/frontend/public/img/icon/editor/superscript.gif")
+	public ImageResource superScript();
+	
+	@Source("com/openkm/frontend/public/img/icon/editor/unordered.gif")
+	public ImageResource unOrdered();
+	
+	@Source("com/openkm/frontend/public/img/icon/editor/ordered.gif")
+	public ImageResource ordered();
+	
+	@Source("com/openkm/frontend/public/img/icon/editor/identleft.gif")
+	public ImageResource identLeft();
+	
+	@Source("com/openkm/frontend/public/img/icon/editor/identright.gif")
+	public ImageResource identRight();
+	
+	@Source("com/openkm/frontend/public/img/icon/editor/createlink.gif")
+	public ImageResource createEditorLink();
+	
+	@Source("com/openkm/frontend/public/img/icon/editor/breaklink.gif")
+	public ImageResource breakEditorLink();
+	
+	@Source("com/openkm/frontend/public/img/icon/editor/line.gif")
+	public ImageResource line();
+	
+	@Source("com/openkm/frontend/public/img/icon/editor/html.gif")
+	public ImageResource html();
+	
+	@Source("com/openkm/frontend/public/img/icon/editor/picture.gif")
+	public ImageResource picture();
+	
+	@Source("com/openkm/frontend/public/img/icon/editor/removeformat.gif")
+	public ImageResource removeFormat();
 }
