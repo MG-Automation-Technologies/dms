@@ -232,6 +232,7 @@ public class DashboardWidget extends Composite {
 			table.getCellFormatter().setWidth(row, 0, "20"); 
 			table.getCellFormatter().setWidth(row, 1, "100%"); // Table sets de 100% of space
 			table.getCellFormatter().setHorizontalAlignment(row, 2, HasAlignment.ALIGN_RIGHT);
+			table.getCellFormatter().setStyleName(row, 2, "okm-NoWrap");
 			
 			if (!dsDocumentResult.isVisited()) {
 				documentsNotViewed++;
@@ -288,6 +289,8 @@ public class DashboardWidget extends Composite {
 			table.setHTML(row, 2, dtf.format(folder.getCreated()));
 			table.getCellFormatter().setWidth(row, 0, "20"); 
 			table.getCellFormatter().setWidth(row, 1, "100%"); // Table sets de 100% of space
+			table.getCellFormatter().setHorizontalAlignment(row, 2, HasAlignment.ALIGN_RIGHT);
+			table.getCellFormatter().setStyleName(row, 2, "okm-NoWrap");
 			if (!folderResult.isVisited()) {
 				folderNotViewed++;
 				table.getRowFormatter().setStyleName(row, "okm-NotViewed");
@@ -335,6 +338,7 @@ public class DashboardWidget extends Composite {
 			table.getCellFormatter().setWidth(row, 0, "20"); 
 			table.getCellFormatter().setWidth(row, 1, "100%"); // Table sets de 100% of space
 			table.getCellFormatter().setHorizontalAlignment(row, 2, HasAlignment.ALIGN_RIGHT);
+			table.getCellFormatter().setStyleName(row, 2, "okm-NoWrap");
 			
 			if (!dsMailResult.isVisited()) {
 				documentsNotViewed++;
