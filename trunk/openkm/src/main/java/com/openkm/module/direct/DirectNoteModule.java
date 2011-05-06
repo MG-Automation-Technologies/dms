@@ -29,6 +29,7 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 
+import org.apache.jackrabbit.core.NodeImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -135,6 +136,7 @@ public class DirectNoteModule implements NoteModule {
 		log.debug("remove({}, {})", token, notePath);
 		Session session = null;
 		Node parentNode = null;
+		String nid = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
@@ -148,6 +150,7 @@ public class DirectNoteModule implements NoteModule {
 			}
 			
 			Node noteNode = session.getRootNode().getNode(notePath.substring(1));
+			nid = ((NodeImpl) noteNode).getIdentifier();
 			parentNode = noteNode.getParent();
 			
 			if (session.getUserID().equals(noteNode.getProperty(Note.USER).getString())) {
@@ -165,7 +168,7 @@ public class DirectNoteModule implements NoteModule {
 			}
 						
 			// Activity log
-			UserActivity.log(session.getUserID(), "REMOVE_NOTE", noteNode.getUUID(), notePath);
+			UserActivity.log(session.getUserID(), "REMOVE_NOTE", nid, notePath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
@@ -211,7 +214,7 @@ public class DirectNoteModule implements NoteModule {
 			note = get(noteNode);
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_NOTE", noteNode.getUUID(), notePath);
+			UserActivity.log(session.getUserID(), "GET_NOTE", ((NodeImpl) noteNode).getIdentifier(), notePath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -261,9 +264,9 @@ public class DirectNoteModule implements NoteModule {
 			
 			// Check subscriptions
 			BaseNotificationModule.checkSubscriptions(noteNode, session.getUserID(), "SET_NOTE", null);
-
+			
 			// Activity log
-			UserActivity.log(session.getUserID(), "SET_NOTE", noteNode.getUUID(), notePath);
+			UserActivity.log(session.getUserID(), "SET_NOTE", ((NodeImpl) noteNode).getIdentifier(), notePath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(noteNode);
