@@ -28,9 +28,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.jcr.LoginException;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -45,7 +42,6 @@ import com.openkm.core.DatabaseException;
 import com.openkm.dao.AuthDAO;
 import com.openkm.dao.bean.Role;
 import com.openkm.dao.bean.User;
-import com.openkm.jcr.JCRUtils;
 import com.openkm.principal.DatabasePrincipalAdapter;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.util.UserActivity;
@@ -64,43 +60,35 @@ public class AuthServlet extends BaseServlet {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
 		String action = WebUtils.getString(request, "action");
-		Session session = null;
+		String userId = request.getRemoteUser();
 		updateSessionManager(request);
 		
 		try {
-			session = JCRUtils.getSession();
-			
 			if (action.equals("userCreate")) {
-				userCreate(session, request, response);
+				userCreate(userId, request, response);
 			} else if (action.equals("roleCreate")) {
-				roleCreate(session, request, response);
+				roleCreate(userId, request, response);
 			} else if (action.equals("userEdit")) {
-				userEdit(session, request, response);
+				userEdit(userId, request, response);
 			} else if (action.equals("roleEdit")) {
-				roleEdit(session, request, response);
+				roleEdit(userId, request, response);
 			} else if (action.equals("userDelete")) {
-				userDelete(session, request, response);
+				userDelete(userId, request, response);
 			} else if (action.equals("roleDelete")) {
-				roleDelete(session, request, response);
+				roleDelete(userId, request, response);
 			} else if (action.equals("userActive")) {
-				userActive(session, request, response);
+				userActive(userId, request, response);
 			} else if (action.equals("roleActive")) {
-				roleActive(session, request, response);
+				roleActive(userId, request, response);
 			}
 			
 			if (action.equals("") || action.equals("userActive") ||
 					(action.startsWith("user") && WebUtils.getBoolean(request, "persist"))) {
-				userList(session, request, response);
+				userList(userId, request, response);
 			} else if (action.equals("roleList") || action.equals("roleActive") ||
 					(action.startsWith("role") && WebUtils.getBoolean(request, "persist"))) {
-				roleList(session, request, response);
+				roleList(userId, request, response);
 			}
-		} catch (LoginException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request,response, e);
-		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request,response, e);
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
@@ -110,17 +98,15 @@ public class AuthServlet extends BaseServlet {
 		} catch (PrincipalAdapterException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
-		} finally {
-			JCRUtils.logout(session);
 		}
 	}
 	
 	/**
 	 * New user
 	 */
-	private void userCreate(Session session, HttpServletRequest request, HttpServletResponse response) 
+	private void userCreate(String userId, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException {
-		log.debug("userCreate({}, {}, {})", new Object[] { session, request, response });
+		log.debug("userCreate({}, {}, {})", new Object[] { userId, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
 			User usr = new User();
@@ -137,7 +123,7 @@ public class AuthServlet extends BaseServlet {
 			AuthDAO.createUser(usr);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_USER_CREATE", usr.getId(), usr.toString());
+			UserActivity.log(userId, "ADMIN_USER_CREATE", usr.getId(), usr.toString());
 		} else {
 			ServletContext sc = getServletContext();
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
@@ -153,9 +139,9 @@ public class AuthServlet extends BaseServlet {
 	/**
 	 * Edit user
 	 */
-	private void userEdit(Session session, HttpServletRequest request, HttpServletResponse response) 
+	private void userEdit(String userId, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
-		log.debug("userEdit({}, {}, {})", new Object[] { session, request, response });
+		log.debug("userEdit({}, {}, {})", new Object[] { userId, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
 			String password = WebUtils.getString(request, "usr_password");
@@ -177,7 +163,7 @@ public class AuthServlet extends BaseServlet {
 			}
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_USER_EDIT", usr.getId(), usr.toString());
+			UserActivity.log(userId, "ADMIN_USER_EDIT", usr.getId(), usr.toString());
 		} else {
 			ServletContext sc = getServletContext();
 			String usrId = WebUtils.getString(request, "usr_id");
@@ -194,16 +180,16 @@ public class AuthServlet extends BaseServlet {
 	/**
 	 * Update user
 	 */
-	private void userDelete(Session session, HttpServletRequest request, HttpServletResponse response) 
+	private void userDelete(String userId, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
-		log.debug("userDelete({}, {}, {})", new Object[] { session, request, response });
+		log.debug("userDelete({}, {}, {})", new Object[] { userId, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
 			String usrId = WebUtils.getString(request, "usr_id");
 			AuthDAO.deleteUser(usrId);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_USER_DELETE", usrId, null);
+			UserActivity.log(userId, "ADMIN_USER_DELETE", usrId, null);
 		} else {
 			ServletContext sc = getServletContext();
 			String usrId = WebUtils.getString(request, "usr_id");
@@ -220,24 +206,24 @@ public class AuthServlet extends BaseServlet {
 	/**
 	 * Active user
 	 */
-	private void userActive(Session session, HttpServletRequest request, HttpServletResponse response) 
+	private void userActive(String userId, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
-		log.debug("userActive({}, {}, {})", new Object[] { session, request, response });
+		log.debug("userActive({}, {}, {})", new Object[] { userId, request, response });
 		String usrId = WebUtils.getString(request, "usr_id");
 		boolean active = WebUtils.getBoolean(request, "usr_active");
 		AuthDAO.activeUser(usrId, active);
 			
 		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_USER_ACTIVE", usrId, Boolean.toString(active));
+		UserActivity.log(userId, "ADMIN_USER_ACTIVE", usrId, Boolean.toString(active));
 		log.debug("userActive: void");
 	}
 
 	/**
 	 * List users
 	 */
-	private void userList(Session session, HttpServletRequest request, HttpServletResponse response)
+	private void userList(String userId, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DatabaseException, PrincipalAdapterException {
-		log.debug("userList({}, {}, {})", new Object[] { session, request, response });
+		log.debug("userList({}, {}, {})", new Object[] { userId, request, response });
 		String roleFilter = WebUtils.getString(request, "roleFilter");
 		ServletContext sc = getServletContext();
 		sc.setAttribute("roleFilter", roleFilter);
@@ -268,9 +254,9 @@ public class AuthServlet extends BaseServlet {
 	/**
 	 * New role
 	 */
-	private void roleCreate(Session session, HttpServletRequest request, HttpServletResponse response) 
+	private void roleCreate(String userId, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException {
-		log.debug("roleCreate({}, {}, {})", new Object[] { session, request, response });
+		log.debug("roleCreate({}, {}, {})", new Object[] { userId, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
 			Role rol = new Role();
@@ -279,7 +265,7 @@ public class AuthServlet extends BaseServlet {
 			AuthDAO.createRole(rol);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_ROLE_CREATE", rol.getId(), rol.toString());
+			UserActivity.log(userId, "ADMIN_ROLE_CREATE", rol.getId(), rol.toString());
 		} else {
 			ServletContext sc = getServletContext();
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
@@ -294,9 +280,9 @@ public class AuthServlet extends BaseServlet {
 	/**
 	 * Edit role
 	 */
-	private void roleEdit(Session session, HttpServletRequest request, HttpServletResponse response) 
+	private void roleEdit(String userId, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
-		log.debug("roleEdit({}, {}, {})", new Object[] { session, request, response });
+		log.debug("roleEdit({}, {}, {})", new Object[] { userId, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
 			Role rol = new Role();
@@ -305,7 +291,7 @@ public class AuthServlet extends BaseServlet {
 			AuthDAO.updateRole(rol);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_ROLE_EDIT", rol.getId(), rol.toString());
+			UserActivity.log(userId, "ADMIN_ROLE_EDIT", rol.getId(), rol.toString());
 		} else {
 			ServletContext sc = getServletContext();
 			String rolId = WebUtils.getString(request, "rol_id");
@@ -321,16 +307,16 @@ public class AuthServlet extends BaseServlet {
 	/**
 	 * Delete role
 	 */
-	private void roleDelete(Session session, HttpServletRequest request, HttpServletResponse response) 
+	private void roleDelete(String userId, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
-		log.debug("roleDelete({}, {}, {})", new Object[] { session, request, response });
+		log.debug("roleDelete({}, {}, {})", new Object[] { userId, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
 			String rolId = WebUtils.getString(request, "rol_id");
 			AuthDAO.deleteRole(rolId);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_ROLE_DELETE", rolId, null);
+			UserActivity.log(userId, "ADMIN_ROLE_DELETE", rolId, null);
 		} else {
 			ServletContext sc = getServletContext();
 			String rolId = WebUtils.getString(request, "rol_id");
@@ -346,24 +332,24 @@ public class AuthServlet extends BaseServlet {
 	/**
 	 * Active role
 	 */
-	private void roleActive(Session session, HttpServletRequest request, HttpServletResponse response) 
+	private void roleActive(String userId, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
-		log.debug("roleActive({}, {}, {})", new Object[] { session, request, response });
+		log.debug("roleActive({}, {}, {})", new Object[] { userId, request, response });
 		String rolId = WebUtils.getString(request, "rol_id");
 		boolean active = WebUtils.getBoolean(request, "rol_active");
 		AuthDAO.activeRole(rolId, active);
 			
 		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_ROLE_ACTIVE", rolId, Boolean.toString(active));
+		UserActivity.log(userId, "ADMIN_ROLE_ACTIVE", rolId, Boolean.toString(active));
 		log.debug("roleActive: void");
 	}
 
 	/**
 	 * List roles
 	 */
-	private void roleList(Session session, HttpServletRequest request, HttpServletResponse response)
+	private void roleList(String userId, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DatabaseException, PrincipalAdapterException {
-		log.debug("roleList({}, {}, {})", new Object[] { session, request, response });
+		log.debug("roleList({}, {}, {})", new Object[] { userId, request, response });
 		ServletContext sc = getServletContext();
 		
 		if (db) {
