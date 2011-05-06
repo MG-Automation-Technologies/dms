@@ -32,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
-import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.Language;
 import com.openkm.dao.bean.Translation;
 
@@ -73,7 +72,7 @@ public class LanguageDAO {
 	 * Find all languages
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<Language> findAll() throws DatabaseException, RepositoryException {
+	public static List<Language> findAll() throws DatabaseException {
 		log.debug("findAll({})");
 		String qs = "from Language lg order by lg.name asc";		
 		Session session = null;
