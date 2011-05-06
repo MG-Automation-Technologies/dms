@@ -34,9 +34,6 @@ import java.sql.Statement;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.jcr.LoginException;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -57,7 +54,6 @@ import com.openkm.dao.HibernateUtil;
 import com.openkm.dao.LegacyDAO;
 import com.openkm.dao.MimeTypeDAO;
 import com.openkm.dao.bean.MimeType;
-import com.openkm.jcr.JCRUtils;
 import com.openkm.util.SecureStore;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WarUtils;
@@ -75,34 +71,24 @@ public class MimeTypeServlet extends BaseServlet {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
 		String action = WebUtils.getString(request, "action");
-		Session session = null;
+		String userId = request.getRemoteUser();
 		updateSessionManager(request);
 		
 		try {
-			session = JCRUtils.getSession();
-			
 			if (action.equals("create")) {
-				create(session, request, response);
+				create(userId, request, response);
 			} else if (action.equals("edit")) {
-				edit(session, request, response);
+				edit(userId, request, response);
 			} else if (action.equals("delete")) {
-				delete(session, request, response);
+				delete(userId, request, response);
 			} else if (action.equals("export")) {
-				export(session, request, response);
+				export(userId, request, response);
 			} else {
-				list(session, request, response);
+				list(userId, request, response);
 			}
-		} catch (LoginException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request,response, e);
-		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request,response, e);
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
-		} finally {
-			JCRUtils.logout(session);
 		}
 	}
 	
@@ -112,13 +98,12 @@ public class MimeTypeServlet extends BaseServlet {
 		log.debug("doPost({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
 		String action = WebUtils.getString(request, "action");
-		Session jcrSession = null;
+		String userId = request.getRemoteUser();
 		org.hibernate.classic.Session dbSession = null;
 		updateSessionManager(request);
 		
 		try {
 			if (ServletFileUpload.isMultipartContent(request)) {
-				jcrSession = JCRUtils.getSession();
 				InputStream is = null;
 				FileItemFactory factory = new DiskFileItemFactory(); 
 				ServletFileUpload upload = new ServletFileUpload(factory);
@@ -158,8 +143,8 @@ public class MimeTypeServlet extends BaseServlet {
 					Config.loadMimeTypes();
 					
 					// Activity log
-					UserActivity.log(jcrSession.getUserID(), "ADMIN_MIME_TYPE_CREATE", Integer.toString(id), mt.toString());
-					list(jcrSession, request, response);
+					UserActivity.log(userId, "ADMIN_MIME_TYPE_CREATE", Integer.toString(id), mt.toString());
+					list(userId, request, response);
 				} else if (action.equals("edit")) {
 					// Because this servlet is also used for SQL import and in that case I don't
 					// want to waste a b64Encode conversion. Call it a sort of optimization.
@@ -168,27 +153,21 @@ public class MimeTypeServlet extends BaseServlet {
 					Config.loadMimeTypes();
 					
 					// Activity log
-					UserActivity.log(jcrSession.getUserID(), "ADMIN_MIME_TYPE_EDIT", Integer.toString(mt.getId()), mt.toString());
-					list(jcrSession, request, response);
+					UserActivity.log(userId, "ADMIN_MIME_TYPE_EDIT", Integer.toString(mt.getId()), mt.toString());
+					list(userId, request, response);
 				} else if (action.equals("delete")) {
 					MimeTypeDAO.delete(mt.getId());
 					Config.loadMimeTypes();
 					
 					// Activity log
-					UserActivity.log(jcrSession.getUserID(), "ADMIN_MIME_TYPE_DELETE", Integer.toString(mt.getId()), null);
-					list(jcrSession, request, response);
+					UserActivity.log(userId, "ADMIN_MIME_TYPE_DELETE", Integer.toString(mt.getId()), null);
+					list(userId, request, response);
 				} else if (action.equals("import")) {
 					dbSession = HibernateUtil.getSessionFactory().openSession();
-					importMimeTypes(jcrSession, request, response, data, dbSession);
-					list(jcrSession, request, response);
+					importMimeTypes(userId, request, response, data, dbSession);
+					list(userId, request, response);
 				}
 			}
-		} catch (LoginException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request,response, e);
-		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request,response, e);
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
@@ -199,7 +178,6 @@ public class MimeTypeServlet extends BaseServlet {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} finally {
-			JCRUtils.logout(jcrSession);
 			HibernateUtil.close(dbSession);
 		}
 	}
@@ -207,9 +185,9 @@ public class MimeTypeServlet extends BaseServlet {
 	/**
 	 * List registered mime types
 	 */
-	private void list(Session session, HttpServletRequest request, HttpServletResponse response)
+	private void list(String userId, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DatabaseException {
-		log.debug("list({}, {}, {})", new Object[] { session, request, response });
+		log.debug("list({}, {}, {})", new Object[] { userId, request, response });
 		ServletContext sc = getServletContext();
 		sc.setAttribute("mimeTypes", MimeTypeDAO.findAll("mt.name"));
 		sc.getRequestDispatcher("/admin/mime_list.jsp").forward(request, response);
@@ -219,9 +197,9 @@ public class MimeTypeServlet extends BaseServlet {
 	/**
 	 * Delete mime type
 	 */
-	private void delete(Session session, HttpServletRequest request, HttpServletResponse response)
+	private void delete(String userId, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DatabaseException {
-		log.debug("delete({}, {}, {})", new Object[] { session, request, response });
+		log.debug("delete({}, {}, {})", new Object[] { userId, request, response });
 		ServletContext sc = getServletContext();
 		int mtId = WebUtils.getInt(request, "mt_id");
 		MimeType mt = MimeTypeDAO.findByPk(mtId);
@@ -241,9 +219,9 @@ public class MimeTypeServlet extends BaseServlet {
 	/**
 	 * Create mime type
 	 */
-	private void create(Session session, HttpServletRequest request, HttpServletResponse response)
+	private void create(String userId, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DatabaseException {
-		log.debug("create({}, {}, {})", new Object[] { session, request, response });
+		log.debug("create({}, {}, {})", new Object[] { userId, request, response });
 		ServletContext sc = getServletContext();
 		MimeType mt = new MimeType();
 		sc.setAttribute("action", WebUtils.getString(request, "action"));
@@ -256,9 +234,9 @@ public class MimeTypeServlet extends BaseServlet {
 	/**
 	 * Edit mime type
 	 */
-	private void edit(Session session, HttpServletRequest request, HttpServletResponse response)
+	private void edit(String userId, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DatabaseException {
-		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
+		log.debug("edit({}, {}, {})", new Object[] { userId, request, response });
 		ServletContext sc = getServletContext();
 		int mtId = WebUtils.getInt(request, "mt_id");
 		MimeType mt = MimeTypeDAO.findByPk(mtId);
@@ -278,8 +256,8 @@ public class MimeTypeServlet extends BaseServlet {
 	/**
 	 * Export mime types
 	 */
-	private void export(Session session, HttpServletRequest request, HttpServletResponse response) throws DatabaseException, IOException {
-		log.debug("export({}, {}, {})", new Object[] { session, request, response });
+	private void export(String userId, HttpServletRequest request, HttpServletResponse response) throws DatabaseException, IOException {
+		log.debug("export({}, {}, {})", new Object[] { userId, request, response });
 		
 		// Disable browser cache
 		response.setHeader("Expires", "Sat, 6 May 1971 12:00:00 GMT");
@@ -315,10 +293,10 @@ public class MimeTypeServlet extends BaseServlet {
 	/**
 	 * Import mime types into database
 	 */
-	private void importMimeTypes(Session session, HttpServletRequest request, HttpServletResponse response,
+	private void importMimeTypes(String userId, HttpServletRequest request, HttpServletResponse response,
 			byte[] data, org.hibernate.classic.Session dbSession) throws DatabaseException,
 			IOException, SQLException {
-		log.debug("import({}, {}, {}, {}, {})", new Object[] { session, request, response, data, dbSession });
+		log.debug("import({}, {}, {}, {}, {})", new Object[] { userId, request, response, data, dbSession });
 		Connection con = dbSession.connection();
 		Statement stmt = con.createStatement();
 		InputStreamReader is = new InputStreamReader(new ByteArrayInputStream(data));
