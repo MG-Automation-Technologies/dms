@@ -98,7 +98,6 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_PrincipalAdapter), e.getMessage());
 		}
-		
 	}
 
 	@Override
@@ -106,9 +105,11 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 		log.debug("findProposedSubscriptionsUsersFrom()");
 		Map<String,Long> received = new HashMap<String, Long>();
 		updateSessionManager();
+		
 		try {		
 			String user = getThreadLocalRequest().getRemoteUser();
 			Map<String, Long> unreadMap = ProposedSubscriptionDAO.findProposedSubscriptionsUsersFromUnread(user);
+			
 			for (String sender : ProposedSubscriptionDAO.findProposedSubscriptionsUsersFrom(user)) {
 				if (unreadMap.containsKey(sender)) {
 					received.put(sender, unreadMap.get(sender));
@@ -120,6 +121,7 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Database), e.getMessage());
 		} 
+		
 		log.debug("findProposedSubscriptionsUsersFrom: Map"+received);
 		return received;
 	}
@@ -130,6 +132,7 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 		updateSessionManager();
 		List<GWTProposedSubscriptionReceived> proposedQuerySubscriptionList = new ArrayList<GWTProposedSubscriptionReceived>();
 		Session session = null;
+		
 		try {
 			session = JCRUtils.getSession();		
 			for (ProposedSubscriptionReceived proposedSubscriptionReceived : ProposedSubscriptionDAO.findProposedSubscriptionByMeFromUser(session, getThreadLocalRequest().getRemoteUser(), user)) {
@@ -157,12 +160,14 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 	public void markSeen(int msgId) throws OKMException {
 		log.debug("markSeen({})", msgId);
 		updateSessionManager();
+		
 		try {
 			ProposedSubscriptionDAO.markSeen(msgId);
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Database), e.getMessage());
 		}
+		
 		log.debug("markSeen() : void");
 	}
 
@@ -170,12 +175,14 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 	public void markAccepted(int msgId) throws OKMException {
 		log.debug("markAccepted({})", msgId);
 		updateSessionManager();
+		
 		try {
 			ProposedSubscriptionDAO.markAccepted(msgId);
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Database), e.getMessage());
 		}
+		
 		log.debug("markAccepted() : void");
 	}
 
@@ -183,12 +190,14 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 	public void deleteReceived(int msgId) throws OKMException {
 		log.debug("deleteReceived({})", msgId);
 		updateSessionManager();
+		
 		try {
 			ProposedSubscriptionDAO.deleteReceived(msgId);
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Database), e.getMessage());
 		}
+		
 		log.debug("deleteReceived() : void");
 	}
 	
@@ -196,12 +205,14 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 	public void deleteSent(int msgId) throws OKMException {
 		log.debug("deleteSent({})", msgId);
 		updateSessionManager();
+		
 		try {
 			ProposedSubscriptionDAO.deleteSent(msgId);
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Database), e.getMessage());
 		}
+		
 		log.debug("deleteSent() : void");
 	}
 
@@ -211,13 +222,16 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 		updateSessionManager();
 		List<String> IdToDelete = new ArrayList<String>();
 		Session session = null;
+		
 		try {
-			session = JCRUtils.getSession();			
+			session = JCRUtils.getSession();
+			
 			for (ProposedSubscriptionReceived ps : ProposedSubscriptionDAO.findProposedSubscriptionByMeFromUser(session, getThreadLocalRequest().getRemoteUser(), sender)) {
 				if (ps.getFrom().equals(sender)) {
 					IdToDelete.add(String.valueOf(ps.getId()));
 				}
 			}
+			
 			for (String id : IdToDelete) {
 				ProposedSubscriptionDAO.deleteReceived(Integer.valueOf(id));
 			}
@@ -236,6 +250,7 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 		} finally {
 			JCRUtils.logout(session);
 		}
+		
 		log.debug("deleteProposedSubscriptionByMeFromUser: void");
 	}
 }
