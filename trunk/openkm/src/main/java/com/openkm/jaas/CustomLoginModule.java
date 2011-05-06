@@ -60,8 +60,8 @@ public class CustomLoginModule implements LoginModule {
 	
 	@Override
 	public boolean login() throws LoginException {
-		NameCallback ncb = new NameCallback("User name");
-		PasswordCallback pcb = new PasswordCallback("Password", true);
+		NameCallback ncb = new NameCallback("User: ");
+		PasswordCallback pcb = new PasswordCallback("Password: ", true);
 		
 		try {
 			callbackHandler.handle(new Callback[] { ncb, pcb });
