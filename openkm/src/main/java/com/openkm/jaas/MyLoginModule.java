@@ -101,7 +101,7 @@ public class MyLoginModule implements LoginModule {
 			subject.getPrincipals().add(new Role(role));	
 		}
 		
-		log.info("Roles: {}", subject.getPrincipals());
+		log.debug("Roles: {}", subject.getPrincipals());
 	}
 	
 	/**
@@ -110,7 +110,7 @@ public class MyLoginModule implements LoginModule {
 	private void authenticate() throws PrincipalAdapterException, NoSuchAlgorithmException, LoginException {
 		PrincipalAdapter pa = BaseAuthModule.getPrincipalAdapter();
 		String ppass = pa.getPassword(name);
-		log.info("User: {}, Password: {}, DBPassword: {}", new Object[] { name, password, ppass });
+		log.debug("User: {}, Password: {}, DBPassword: {}", new Object[] { name, password, ppass });
 		
 		if (customCallbackHandler || ppass.equals(SecureStore.md5Encode(password.getBytes()))) {
 			subject.getPrincipals().add(new User(name));
@@ -118,6 +118,6 @@ public class MyLoginModule implements LoginModule {
 			throw new LoginException("Password does not match");
 		}
 		
-		log.info("Users: {}", subject.getPrincipals());
+		log.debug("Users: {}", subject.getPrincipals());
 	}
 }
