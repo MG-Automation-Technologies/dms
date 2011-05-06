@@ -538,6 +538,15 @@ public class RepositoryViewServlet extends BaseServlet {
 			al.add(hm);
 		}
 		
+		// Add universal node id
+		HashMap<String, String> hm = new HashMap<String, String>();
+		hm.put("name", "jcr:aid");
+		hm.put("protected", Boolean.toString(true));
+		hm.put("multiple", Boolean.toString(false));
+		hm.put("type", "VIRTUAL");
+		hm.put("value", ((NodeImpl) node).getId().toString());
+		al.add(hm);
+		
 		Collections.sort(al, new PropertyCmp());
 		return al;
 	}
