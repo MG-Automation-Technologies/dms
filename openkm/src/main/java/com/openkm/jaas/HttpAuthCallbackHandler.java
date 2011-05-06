@@ -17,7 +17,7 @@ public class HttpAuthCallbackHandler implements CallbackHandler {
 	
 	public HttpAuthCallbackHandler(HttpServletRequest request) {
 		userName = request.getRemoteUser();
-		log.info("Remote user is: {}", request.getRemoteUser());
+		log.debug("Remote user is: {}", request.getRemoteUser());
 	}
 	
 	@Override
