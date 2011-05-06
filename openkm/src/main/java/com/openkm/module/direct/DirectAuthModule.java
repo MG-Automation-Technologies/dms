@@ -167,6 +167,7 @@ public class DirectAuthModule implements AuthModule {
 	 */
 	private static Node createBase(Session session, Node root) throws 
 			javax.jcr.RepositoryException {
+		log.debug("createBase({}, {})", session, root);
 		Node base = root.addNode(session.getUserID(), Folder.TYPE);
 
 		// Add basic properties
