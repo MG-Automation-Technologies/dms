@@ -431,7 +431,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node trashNode = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
+			Node trashNode = session.getRootNode().getNode(Repository.TRASH + "/" + session.getUserID());
 			trashFolder = BaseFolderModule.getProperties(session, trashNode);
 			
 			// Activity log
@@ -530,7 +530,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node personalNode = session.getRootNode().getNode(Repository.PERSONAL+"/"+session.getUserID());
+			Node personalNode = session.getRootNode().getNode(Repository.PERSONAL + "/" + session.getUserID());
 			personalFolder = BaseFolderModule.getProperties(session, personalNode);
 			
 			// Activity log
@@ -787,7 +787,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			userTrash = session.getRootNode().getNode(Repository.TRASH + "/"+session.getUserID());
+			userTrash = session.getRootNode().getNode(Repository.TRASH + "/" + session.getUserID());
 			
 			for (NodeIterator it = userTrash.getNodes(); it.hasNext(); ) {
 				Node child = it.nextNode();
