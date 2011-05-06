@@ -64,7 +64,7 @@ public class ServerDetector {
 	 * Detect if running in Tomcat
 	 */
 	public static boolean isTomcat() {
-		return System.getProperty(TOMCAT_PROPERTY) != null;
+		return !isJBoss() && System.getProperty(TOMCAT_PROPERTY) != null;
 	}
 	
 	/**
