@@ -20,8 +20,17 @@ import com.openkm.principal.PrincipalAdapter;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.util.SecureStore;
 
-public class MyLoginModule implements LoginModule {
-	private static Logger log = LoggerFactory.getLogger(MyLoginModule.class);
+/**
+ * Used when running on Tomcat. Need to create a file conf/jaas.config with:
+ * 
+ * OpenKM {
+ *   com.openkm.jaas.CustomLoginModule REQUIRED debug=true;
+ * };
+ *
+ * @author pavila
+ */
+public class CustomLoginModule implements LoginModule {
+	private static Logger log = LoggerFactory.getLogger(CustomLoginModule.class);
 	private Subject subject;
 	private CallbackHandler callbackHandler;
 	private String password;
