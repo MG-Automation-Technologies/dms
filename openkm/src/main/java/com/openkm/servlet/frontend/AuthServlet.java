@@ -498,6 +498,7 @@ public class AuthServlet extends OKMRemoteServiceServlet implements OKMAuthServi
 		Session session = null;
 						
 		try {
+			// TODO This JCR Session could be removed
 			session = JCRUtils.getSession();
 			
 			// Activity log
