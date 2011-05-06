@@ -250,6 +250,7 @@ public class DirectNotificationModule implements NotificationModule {
 			try {
 				log.debug("Nodo: {}, Message: {}", nodePath, message);
 				
+				// TODO This JCR Session could be removed
 				if (token == null) {
 					session = JCRUtils.getSession();
 				} else {
