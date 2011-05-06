@@ -294,7 +294,7 @@ public class DirectFolderModule implements FolderModule {
 			newName = FileUtils.escape(newName);
 			
 			if (newName != null && !newName.equals("") && !newName.equals(name)) {
-				String newPath = parent+"/"+newName;
+				String newPath = parent + "/" + newName;
 				session.move(fldPath, newPath);
 				
 				// Set new name
@@ -357,7 +357,7 @@ public class DirectFolderModule implements FolderModule {
 			
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
 			String name = FileUtils.getName(fldPath);
-			session.move(fldPath, dstPath+"/"+name);
+			session.move(fldPath, dstPath + "/" + name);
 			session.save();
 			
 			// Activity log
