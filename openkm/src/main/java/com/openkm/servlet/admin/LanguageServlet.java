@@ -441,7 +441,7 @@ public class LanguageServlet extends BaseServlet {
 			insertTranslation.append("'");
 			insertTranslation.append(translation.getTranslationId().getModule()).append("', '");
 			insertTranslation.append(translation.getTranslationId().getKey()).append("', '");
-			insertTranslation.append(translation.getText()).append("', '");
+			insertTranslation.append(translation.getText().replaceAll("'", "''")).append("', '"); // replace ' to '' in translation text
 			insertTranslation.append(language.getId()).append("');");
 			out.println(insertTranslation);
 		}
