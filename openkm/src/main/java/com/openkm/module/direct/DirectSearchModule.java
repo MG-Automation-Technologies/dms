@@ -502,6 +502,7 @@ public class DirectSearchModule implements SearchModule {
 		}
 		
 		try {
+			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -536,6 +537,7 @@ public class DirectSearchModule implements SearchModule {
 		}
 		
 		try {
+			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -566,6 +568,7 @@ public class DirectSearchModule implements SearchModule {
 		Session session = null;
 		
 		try {
+			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -603,6 +606,7 @@ public class DirectSearchModule implements SearchModule {
 		Session session = null;
 		
 		try {
+			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -644,6 +648,7 @@ public class DirectSearchModule implements SearchModule {
 		}
 		
 		try {
+			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -751,6 +756,7 @@ public class DirectSearchModule implements SearchModule {
 		Session session = null;
 		
 		try {
+			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
