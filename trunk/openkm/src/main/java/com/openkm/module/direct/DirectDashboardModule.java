@@ -635,6 +635,7 @@ public class DirectDashboardModule implements DashboardModule {
 		UserItems usrItems = null;
 		
 		try {
+			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -660,6 +661,7 @@ public class DirectDashboardModule implements DashboardModule {
 		Session session = null;
 		
 		try {
+			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -1105,6 +1107,7 @@ public class DirectDashboardModule implements DashboardModule {
 		Session session = null;
 		
 		try {
+			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
