@@ -91,7 +91,7 @@ public class DirectWikiModule implements WikiModule {
 			
 			// Escape dangerous chars in name
 			name = FileUtils.escape(name);
-			wiki.setPath(parent+"/"+name);
+			wiki.setPath(parent + "/" + name);
 			
 			parentNode = session.getRootNode().getNode(parent.substring(1));
 			Node wikiNode = BaseWikiModule.create(session, parentNode, name, 
@@ -156,7 +156,7 @@ public class DirectWikiModule implements WikiModule {
 			String name = FileUtils.getName(wikiPath);
 			Node wikiNode = session.getRootNode().getNode(wikiPath.substring(1));
 			Node parentNode = wikiNode.getParent();
-			Node userTrash = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
+			Node userTrash = session.getRootNode().getNode(Repository.TRASH + "/" + session.getUserID());
 
 			if (wikiNode.isLocked()) {
 				throw new LockException("Can't delete a locked node");
@@ -1092,7 +1092,7 @@ public class DirectWikiModule implements WikiModule {
 			
 			Node wikiNode = session.getRootNode().getNode(wikiPath.substring(1));
 			String name = FileUtils.getName(wikiPath);
-			session.move(wikiPath, dstPath+"/"+name);
+			session.move(wikiPath, dstPath + "/" + name);
 			session.save();
 
 			// Activity log
