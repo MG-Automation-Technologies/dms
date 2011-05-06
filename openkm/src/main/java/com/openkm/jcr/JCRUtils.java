@@ -23,6 +23,7 @@ package com.openkm.jcr;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,7 +35,6 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.Session;
-import javax.jcr.SimpleCredentials;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 import javax.jcr.Workspace;
@@ -333,34 +333,43 @@ public class JCRUtils {
 	 */
 	public static Session getSession() throws javax.jcr.LoginException, javax.jcr.RepositoryException,
 			DatabaseException {
+		Subject subject = null;
 		Object obj = null;
-
+		
+		// Resolve subject
+		// Subject userSubject=(Subject)PolicyContext.getContext("javax.security.auth.Subject.container");
 		if (ServerDetector.isJBoss()) {
 			try {
 				InitialContext ctx = new InitialContext();
-				Subject subject = (Subject) ctx.lookup("java:/comp/env/security/subject");
-				obj = Subject.doAs(subject, new PrivilegedAction<Object>() {
-					public Object run() {
-						Session s = null;
-						
-						try {
-							s = DirectRepositoryModule.getRepository().login();
-						} catch (javax.jcr.LoginException e) {
-							return e;
-						} catch (javax.jcr.RepositoryException e) {
-							return e;
-						}
-						
-						return s;
-					}
-				});
+				subject = (Subject) ctx.lookup("java:/comp/env/security/subject");
+				ctx.close();
 			} catch (NamingException e) {
 				throw new javax.jcr.LoginException(e.getMessage());
 			}
-		} else {
-			DirectRepositoryModule.getRepository().login(new SimpleCredentials("okmAdmin", "admin".toCharArray()));
+		} else if (ServerDetector.isTomcat()) {
+			subject = Subject.getSubject(AccessController.getContext());
 		}
 		
+		// Obtain JCR session
+		if (subject != null) {
+			obj = Subject.doAs(subject, new PrivilegedAction<Object>() {
+				public Object run() {
+					Session s = null;
+					
+					try {
+						s = DirectRepositoryModule.getRepository().login();
+					} catch (javax.jcr.LoginException e) {
+						return e;
+					} catch (javax.jcr.RepositoryException e) {
+						return e;
+					}
+					
+					return s;
+				}
+			});
+		}
+		
+		// Validate JCR session
 		if (obj instanceof javax.jcr.LoginException) {
 			throw (javax.jcr.LoginException) obj;
 		} else if (obj instanceof javax.jcr.RepositoryException) {
