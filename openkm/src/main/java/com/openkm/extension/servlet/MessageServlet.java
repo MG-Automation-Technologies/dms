@@ -166,6 +166,7 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 		List<GWTMessageSent> messageSentList = new ArrayList<GWTMessageSent>();
 		Session session = null;
 		updateSessionManager();
+		
 		try {
 			session = JCRUtils.getSession();
 			String me = getThreadLocalRequest().getRemoteUser();
@@ -287,12 +288,15 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 		List<String> psId = new ArrayList<String>();
 		Session session = null;
 		updateSessionManager();
+		
 		try {
 			session = JCRUtils.getSession();
 			String me = getThreadLocalRequest().getRemoteUser();
+			
 			for (MessageSent messageSent :MessageDAO.findSentFromMeToUser(me, user)) {
 				msgId.add(String.valueOf(messageSent.getId()));
 			}
+			
 			for (QueryParams queryParams : QueryParamsDAO.findProposedQueryFromMeToUser(me, user)) {
 				for (ProposedQuerySent proposedQuerySent : queryParams.getProposedSent()) {
 					// Only proposed queries sent by me to some specific user
@@ -301,15 +305,19 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 					}
 				}
 			}
+			
 			for (ProposedSubscriptionSent proposedSubscriptionSent : ProposedSubscriptionDAO.findSentProposedSubscriptionFromMeToUser(session, me, user)) {
 				psId.add(String.valueOf(proposedSubscriptionSent.getId()));
 			}
+			
 			for (String id : msgId) {
 				MessageDAO.deleteSent(Integer.valueOf(id));
 			}
+			
 			for (String id : pqId) {
 				ProposedQueryDAO.deleteSent(Integer.valueOf(id));
 			}
+			
 			for (String id : psId) {
 				ProposedSubscriptionDAO.deleteSent(Integer.valueOf(id));
 			}
