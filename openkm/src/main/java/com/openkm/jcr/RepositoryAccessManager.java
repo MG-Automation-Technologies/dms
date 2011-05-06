@@ -91,12 +91,16 @@ public class RepositoryAccessManager implements AccessManager {
 			} else if (obj instanceof java.security.acl.Group) {
 				log.debug("j.s.a.Group: {}", obj);
 				java.security.acl.Group group = (java.security.acl.Group) obj;
-				for (Enumeration<? extends java.security.Principal> groups = group.members(); groups
-						.hasMoreElements();) {
+				
+				for (Enumeration<? extends java.security.Principal> groups = group.members(); groups.hasMoreElements();) {
 					java.security.Principal rol = (java.security.Principal) groups.nextElement();
 					log.debug("Rol: {}", rol.getName());
 					principalRoles.add(rol.getName());
 				}
+			} else if (obj instanceof com.openkm.jaas.Role) {
+				com.openkm.jaas.Role rol = (com.openkm.jaas.Role) obj;
+				log.debug("Rol: {}", rol.getName());
+				principalRoles.add(rol.getName());
 			} else if (obj instanceof java.security.Principal) {
 				log.debug("j.s.Principal: {}", obj);
 				java.security.Principal principal = (java.security.Principal) obj;
@@ -104,7 +108,7 @@ public class RepositoryAccessManager implements AccessManager {
 			}
 		}
 
-		log.debug("PrincipalRoles: " + principalRoles);
+		log.debug("PrincipalRoles: {}", principalRoles);
 		log.debug("init: void");
 	}
 
@@ -320,7 +324,7 @@ public class RepositoryAccessManager implements AccessManager {
 			}
 		}
 
-		log.debug("checkAccess: "+access);
+		log.debug("checkAccess: {}", access);
 		return access;
 	}
 	
