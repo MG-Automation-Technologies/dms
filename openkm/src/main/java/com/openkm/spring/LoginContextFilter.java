@@ -19,7 +19,9 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.core.Config;
 import com.openkm.jaas.HttpAuthCallbackHandler;
+import com.openkm.util.ServerDetector;
 
 public class LoginContextFilter implements Filter {
 	private static Logger log = LoggerFactory.getLogger(LoginContextFilter.class);
@@ -33,26 +35,27 @@ public class LoginContextFilter implements Filter {
 	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) {
 		LoginContext ctx = null;
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
-		HttpSession sess = (HttpSession)(httpRequest).getSession(false);
-		
-		if (sess != null) {
-			ctx = (LoginContext) sess.getAttribute("ctx");
-			log.info("Context: {}", ctx);
-		}
 		
 		try {
-			if (httpRequest.getRemoteUser() != null) {
+			if (ServerDetector.isTomcat() && httpRequest.getRemoteUser() != null) {
+				HttpSession hs = (HttpSession)(httpRequest).getSession(false);
+				
+				if (hs != null) {
+					ctx = (LoginContext) hs.getAttribute("ctx");
+					log.debug("Context: {}", ctx);
+				}
+				
 				LoginContextHolder.set(ctx);
 				Subject s1 = new Subject();
-				LoginContext lc = new LoginContext("OpenKM", s1, new HttpAuthCallbackHandler(httpRequest));
+				LoginContext lc = new LoginContext(Config.CONTEXT, s1, new HttpAuthCallbackHandler(httpRequest));
 				lc.login();
 				s1 = lc.getSubject();
 				
 				Subject.doAs(s1, new PrivilegedAction<Object>() {
 					public Object run() {
 						try {
-							log.info("AccessController: {}", AccessController.getContext());
-							log.info("Subject: {}", Subject.getSubject(AccessController.getContext()));
+							log.debug("AccessController: {}", AccessController.getContext());
+							log.debug("Subject: {}", Subject.getSubject(AccessController.getContext()));
 							chain.doFilter(request, response);
 						} catch (IOException e) {
 							e.printStackTrace();
