@@ -518,6 +518,15 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	}
 	
 	/**
+	 * setKeywordEnabled
+	 * 
+	 * @param enabled
+	 */
+	public void setKeywordEnabled(boolean enabled) {
+		document.setKeywordEnabled(enabled);
+	}
+	
+	/**
 	 * previewDocument
 	 */
 	private void previewDocument(boolean refreshing) {
