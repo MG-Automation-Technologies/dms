@@ -237,8 +237,7 @@ public class Config {
 	 */
 	// Experimental features
 	public static boolean EXPERIMENTAL_TEXT_EXTRACTION = true;
-	public static boolean EXPERIMENTAL_MOBILE_CONTEXT = true;
-	public static String MOBILE_CONTEXT = "mobile-nt";
+	public static String EXPERIMENTAL_MOBILE_CONTEXT = "mobile";
 	
 	public static String REPOSITORY_CONFIG;
 	public static String REPOSITORY_HOME;
@@ -564,13 +563,8 @@ public class Config {
 	public static void reload(String ctx, Properties cfg) {
 		try {
 			// Experimental features
-			EXPERIMENTAL_MOBILE_CONTEXT = ConfigDAO.getBoolean(PROPERTY_EXPERIMENTAL_MOBILE_CONTEXT, EXPERIMENTAL_MOBILE_CONTEXT);
-			values.put(PROPERTY_EXPERIMENTAL_MOBILE_CONTEXT, Boolean.toString(EXPERIMENTAL_MOBILE_CONTEXT));
-			if (EXPERIMENTAL_MOBILE_CONTEXT) {
-				MOBILE_CONTEXT = "mobile-nt";
-			} else {
-				MOBILE_CONTEXT = "mobile";
-			}
+			EXPERIMENTAL_MOBILE_CONTEXT = ConfigDAO.getString(PROPERTY_EXPERIMENTAL_MOBILE_CONTEXT, EXPERIMENTAL_MOBILE_CONTEXT);
+			values.put(PROPERTY_EXPERIMENTAL_MOBILE_CONTEXT, EXPERIMENTAL_MOBILE_CONTEXT);
 			EXPERIMENTAL_TEXT_EXTRACTION = ConfigDAO.getBoolean(PROPERTY_EXPERIMENTAL_TEXT_EXTRACTION, EXPERIMENTAL_TEXT_EXTRACTION);
 			values.put(PROPERTY_EXPERIMENTAL_TEXT_EXTRACTION, Boolean.toString(EXPERIMENTAL_TEXT_EXTRACTION));
 			
