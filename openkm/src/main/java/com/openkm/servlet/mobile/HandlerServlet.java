@@ -105,7 +105,7 @@ public class HandlerServlet extends HttpServlet {
 		sc.setAttribute("documentChilds", docList);
 		sc.setAttribute("userId", userId);
 		sc.setAttribute("path", path);
-		sc.getRequestDispatcher("/" + Config.MOBILE_CONTEXT + "/browse.jsp").forward(request, response);
+		sc.getRequestDispatcher("/" + Config.EXPERIMENTAL_MOBILE_CONTEXT + "/browse.jsp").forward(request, response);
 	}
 	
 	/**
@@ -131,7 +131,7 @@ public class HandlerServlet extends HttpServlet {
 		path = new String(path.getBytes("ISO-8859-1"), "UTF-8");
 		sc.setAttribute("fld", OKMFolder.getInstance().getProperties(null, path));
 		sc.setAttribute("path", path);
-		sc.getRequestDispatcher("/" + Config.MOBILE_CONTEXT + "/fld-properties.jsp").forward(request, response);
+		sc.getRequestDispatcher("/" + Config.EXPERIMENTAL_MOBILE_CONTEXT + "/fld-properties.jsp").forward(request, response);
 	}
 	
 	/**
@@ -165,7 +165,7 @@ public class HandlerServlet extends HttpServlet {
 		sc.setAttribute("doc", doc);
 		sc.setAttribute("path", path);
 		sc.setAttribute("categories", categories);
-		sc.getRequestDispatcher("/" + Config.MOBILE_CONTEXT + "/doc-properties.jsp").forward(request, response);
+		sc.getRequestDispatcher("/" + Config.EXPERIMENTAL_MOBILE_CONTEXT + "/doc-properties.jsp").forward(request, response);
 	}
 	
 	/**
@@ -183,7 +183,7 @@ public class HandlerServlet extends HttpServlet {
 			sc.setAttribute("queryResult", OKMSearch.getInstance().findByContent(null, query));	
 		}
 
-		sc.getRequestDispatcher("/" + Config.MOBILE_CONTEXT + "/search.jsp").forward(request, response);
+		sc.getRequestDispatcher("/" + Config.EXPERIMENTAL_MOBILE_CONTEXT + "/search.jsp").forward(request, response);
 	}
 	
 	/**
