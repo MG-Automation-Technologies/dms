@@ -18,7 +18,7 @@
   <div data-role="page" data-theme="b" id="jkm-home">
     <div data-role="header">
       <h1>Document Properties</h1>
-      <a href="create" data-icon="plus" class="ui-btn-right">Create</a>
+      <!-- <a href="create" data-icon="plus" class="ui-btn-right">Create</a> -->
     </div>
     <div data-role="content">
       <c:url value="/frontend/Download" var="urlDownload">
