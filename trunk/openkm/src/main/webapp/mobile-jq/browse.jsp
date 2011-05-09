@@ -29,7 +29,7 @@
   <div data-role="page" data-theme="b" id="jkm-home">
     <div data-role="header">
       <h1>Repository Browser</h1>
-      <a href="create" data-icon="plus" class="ui-btn-right">Create</a>
+      <!-- <a href="home" data-icon="home" class="ui-btn-right">Home</a> -->
     </div>
     <div data-role="content">
       <ul data-role="listview">
