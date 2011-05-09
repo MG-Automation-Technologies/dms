@@ -8,7 +8,7 @@
 	String docPath = request.getParameter("docPath");
 	
 	if (FormatUtil.isMobile(request)) {
-		url = Config.MOBILE_CONTEXT + "/index.jsp";
+		url = Config.EXPERIMENTAL_MOBILE_CONTEXT + "/index.jsp";
 	} else {
 		url = "frontend/index.jsp";
 	}
