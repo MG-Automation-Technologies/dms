@@ -259,7 +259,7 @@ public class UserPopup extends DialogBox implements ClickHandler {
 		
 		userFlexTable.setCellPadding(0);
 		userFlexTable.setCellSpacing(2);
-		userFlexTable.setWidth("95%");
+		userFlexTable.setWidth("455");
 		
 		userFlexTable.setWidget(0, 0, userName);
 		userFlexTable.setWidget(1, 0, userPassword);
@@ -277,7 +277,7 @@ public class UserPopup extends DialogBox implements ClickHandler {
 		
 		mailFlexTable.setCellPadding(0);
 		mailFlexTable.setCellSpacing(2);
-		mailFlexTable.setWidth("95%");
+		mailFlexTable.setWidth("455");
 		
 		mailFlexTable.setWidget(1, 0, imapHost);
 		mailFlexTable.setWidget(2, 0, imapUser);
@@ -299,10 +299,10 @@ public class UserPopup extends DialogBox implements ClickHandler {
 		userMailText.setWidth("275");
 		hostText.setWidth("275");
 		rolesPanel.setWidth("275");
-		userGroupBoxPanel.setWidth("370px");
-		mailGroupBoxPanel.setWidth("370px");
+		userGroupBoxPanel.setWidth("460px");
+		mailGroupBoxPanel.setWidth("460px");
 		
-		vPanel.setWidth("410px");
+		vPanel.setWidth("470px");
 		vPanel.setHeight("195px");
 		
 		vPanel.add(new HTML("<br>"));
