@@ -23,7 +23,7 @@
         return false;
       });
     });
-  </script>  
+  </script>
 </head>
 <body>
   <div data-role="page" data-theme="b" id="jkm-home">
