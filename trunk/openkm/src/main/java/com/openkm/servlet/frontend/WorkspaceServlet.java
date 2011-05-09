@@ -159,6 +159,9 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 		// Setting web skin
 		workspace.setWebSkin(up.getMisc().getWebSkin());
 		
+		// Only thesaurus keywords are allowed
+		workspace.setKeywordEnabled(up.getMisc().isKeywordsEnabled());
+		
 		// User quota ( limit user repository size )
 		workspace.setUserQuotaEnabled(up.getMisc().getUserQuota() > 0);
 		workspace.setUserQuotaLimit(up.getMisc().getUserQuota());

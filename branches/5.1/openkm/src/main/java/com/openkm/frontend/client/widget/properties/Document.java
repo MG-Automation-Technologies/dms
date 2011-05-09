@@ -851,4 +851,11 @@ public class Document extends Composite {
 	public Collection<String>  getKeywords() {
 		return document.getKeywords();
 	}
+	
+	/**
+	 * @param enabled
+	 */
+	public void setKeywordEnabled(boolean enabled) {
+		suggestKey.getTextBox().setEnabled(enabled);
+	}
 }
