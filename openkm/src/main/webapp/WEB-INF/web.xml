@@ -869,8 +869,9 @@
             
       <!-- JSPs -->
       <url-pattern>/admin/*</url-pattern>
-      <url-pattern>/mobile/*</url-pattern>
-      <url-pattern>/mobile-nt/*</url-pattern>
+      <url-pattern>/mobile-lg/*</url-pattern>
+      <url-pattern>/mobile-jq/*</url-pattern>
+      <url-pattern>/mobile-dj/*</url-pattern>
             
       <!-- Servlets -->
 	  <url-pattern>/RepositoryStartup</url-pattern>
