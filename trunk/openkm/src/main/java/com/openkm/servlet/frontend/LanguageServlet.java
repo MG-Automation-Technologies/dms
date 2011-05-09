@@ -52,17 +52,34 @@ public class LanguageServlet extends OKMRemoteServiceServlet implements OKMLangu
 		Map<String,String> translations = new HashMap<String,String>();
 		
 		try {
+			Language baseLang = LanguageDAO.findByPk("en-GB"); // By default english is used to complete non defined translations
 			Language language = LanguageDAO.findByPk(lang);
+			Map<String,String> keys = new HashMap<String,String>();
 			
-			if (language != null) {
+			// Getting keys
+			if (language!=null) {
 				for (Translation translation : language.getTranslations()) {
+					String key = translation.getTranslationId().getModule()+"."+translation.getTranslationId().getKey();
+					keys.put(key, translation.getText());
+				}
+			}
+			
+			if (baseLang!=null) {
+				for (Translation translation : baseLang.getTranslations()) {
 					if (translation.getTranslationId().getModule().equals(Translation.MODULE_FRONTEND) ||
-							translation.getTranslationId().getModule().equals(Translation.MODULE_EXTENSION)) {
+						translation.getTranslationId().getModule().equals(Translation.MODULE_EXTENSION)) {
 						// Module is added module name as starting translation key
-						translations.put(translation.getTranslationId().getModule() + "."+
-								translation.getTranslationId().getKey(), translation.getText());
+						String key = translation.getTranslationId().getModule()+"."+translation.getTranslationId().getKey();	
+						if (keys.keySet().contains(key)) {
+							translations.put(key, keys.get(key)); 
+						} else {
+							// If translation no exist set english translation
+							translations.put(key, translation.getText()); 
+						}
 					}
 				}
+			} else {
+				throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMGeneralService, ErrorCode.CAUSE_Database), "English traslation is mandatory can not be deleted");
 			}
 		} catch (DatabaseException e) {
 			log.warn(e.getMessage(), e);
