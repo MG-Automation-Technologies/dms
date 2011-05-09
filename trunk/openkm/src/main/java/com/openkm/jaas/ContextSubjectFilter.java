@@ -23,8 +23,8 @@ import com.openkm.core.Config;
 import com.openkm.jaas.HttpAuthCallbackHandler;
 import com.openkm.util.ServerDetector;
 
-public class LoginContextFilter implements Filter {
-	private static Logger log = LoggerFactory.getLogger(LoginContextFilter.class);
+public class ContextSubjectFilter implements Filter {
+	private static Logger log = LoggerFactory.getLogger(ContextSubjectFilter.class);
 	private static final String SESSION_AUTH_SUBJECT = "session.auth.subject";
 	
 	@Override

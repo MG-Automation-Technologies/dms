@@ -28,8 +28,8 @@
   
   <!-- Filters -->
   <filter>
-    <filter-name>LoginContextFilter</filter-name>
-    <filter-class>com.openkm.jaas.LoginContextFilter</filter-class>
+    <filter-name>ContextSubjectFilter</filter-name>
+    <filter-class>com.openkm.jaas.ContextSubjectFilter</filter-class>
   </filter>
   <!--
   <filter>
@@ -44,7 +44,7 @@
   
   <!-- Filter Mappings -->
   <filter-mapping>
-    <filter-name>LoginContextFilter</filter-name>
+    <filter-name>ContextSubjectFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
   <!--
