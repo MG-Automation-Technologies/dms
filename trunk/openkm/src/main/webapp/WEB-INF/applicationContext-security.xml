@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+                                 http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                                 http://www.springframework.org/schema/security
+                                 http://www.springframework.org/schema/security/spring-security-3.0.3.xsd">
+ 
+	<global-method-security secured-annotations="enabled">
+	</global-method-security>
+ 
+    <http auto-config="true">
+        <intercept-url pattern="/login.jsp" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <intercept-url pattern="/frontend/*" access="ROLE_ADMIN, ROLE_USER" />
+        <intercept-url pattern="/extension/*" access="ROLE_ADMIN, ROLE_USER" />
+        <intercept-url pattern="/admin/*" access="ROLE_ADMIN" />
+        <intercept-url pattern="/mobile/*" access="ROLE_ADMIN, ROLE_USER" />
+        <intercept-url pattern="/mobile-nt/*" access="ROLE_ADMIN, ROLE_USER" />
+        <intercept-url pattern="/RepositoryStartup" access="ROLE_ADMIN, ROLE_USER" />
+        <intercept-url pattern="/TextToSpeech" access="ROLE_ADMIN, ROLE_USER" />
+        <intercept-url pattern="/Test" access="ROLE_ADMIN, ROLE_USER" />
+        
+        <!-- Unprotected resources -->
+        <intercept-url pattern="/img/**" filters="none"/>
+        <intercept-url pattern="/css/**" filters="none"/>
+        <intercept-url pattern="/js/**" filters="none"/>
+        <intercept-url pattern="/admin/img/**" filters="none"/>
+        <intercept-url pattern="/admin/css/**" filters="none"/>
+        <intercept-url pattern="/admin/js/**" filters="none"/>
+        <intercept-url pattern="/mobile/img/**" filters="none"/>
+        <intercept-url pattern="/mobile/css/**" filters="none"/>
+        
+        <!-- Login page -->
+        <form-login login-page='/login.jsp'/>
+    </http>
+ 
+    <!--
+    Usernames/Passwords are
+        okmAdmin/admin
+        monkiki/monkiki
+    -->
+    <authentication-manager>
+      <authentication-provider>
+        <password-encoder hash="md5"/>
+        <user-service>
+            <user name="okmAdmin" password="21232f297a57a5a743894a0e4a801fc3" authorities="ROLE_ADMIN, ROLE_USER" />
+            <user name="monkiki" password="4974e904acfc8278a3de6564f90ec5c2" authorities="ROLE_USER" />
+	    </user-service>
+	  </authentication-provider>
+	</authentication-manager>
+</beans:beans>
