@@ -612,11 +612,15 @@
   <!-- Misc servlets mappings -->
   <servlet-mapping>
   	<servlet-name>HandlerServlet</servlet-name>
-  	<url-pattern>/mobile/Handler</url-pattern>
+  	<url-pattern>/mobile-lg/Handler</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
   	<servlet-name>HandlerServlet</servlet-name>
-  	<url-pattern>/mobile-nt/Handler</url-pattern>
+  	<url-pattern>/mobile-jq/Handler</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>HandlerServlet</servlet-name>
+  	<url-pattern>/mobile-dj/Handler</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>SyndicationServlet</servlet-name>
