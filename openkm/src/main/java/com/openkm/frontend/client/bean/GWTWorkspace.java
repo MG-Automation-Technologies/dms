@@ -63,6 +63,7 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean chatAutoLogin;
 	private long userQuotaLimit;
 	private boolean printPreview;
+	private boolean keywordEnabled;
 	private boolean userQuotaEnabled;
 	private boolean webdavFix;
 	private List<GWTPropertyGroup> wizardPropertyGroupsList = new ArrayList<GWTPropertyGroup>();
@@ -293,6 +294,14 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setPrintPreview(boolean printPreview) {
 		this.printPreview = printPreview;
+	}
+	
+	public boolean isKeywordEnabled() {
+		return keywordEnabled;
+	}
+
+	public void setKeywordEnabled(boolean keywordEnabled) {
+		this.keywordEnabled = keywordEnabled;
 	}
 
 	public boolean isUserQuotaEnabled() {
