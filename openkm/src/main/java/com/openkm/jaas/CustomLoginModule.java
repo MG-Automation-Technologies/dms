@@ -1,5 +1,6 @@
 package com.openkm.jaas;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;
+import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.CredentialNotFoundException;
 import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
@@ -38,7 +40,8 @@ public class CustomLoginModule implements LoginModule {
 	private boolean customCallbackHandler = false;
 	
 	@Override
-	public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState, Map<String, ?> options) {
+	public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState,
+			Map<String, ?> options) {
 		this.subject = subject;
 		this.callbackHandler = callbackHandler;
 	}
@@ -67,7 +70,7 @@ public class CustomLoginModule implements LoginModule {
 			callbackHandler.handle(new Callback[] { ncb, pcb });
 			name = ncb.getName();
 			password = new String(pcb.getPassword());
-		} catch (Exception e) {
+		} catch (UnsupportedCallbackException e) {
 			try {
 				callbackHandler.handle(new Callback[] { ncb });
 				name = ncb.getName();
@@ -75,6 +78,8 @@ public class CustomLoginModule implements LoginModule {
 			} catch (Exception e1) {
 				throw new LoginException(e.getMessage());
 			}
+		} catch (IOException e) {
+			log.error(e.getMessage(), e);
 		}
 		
 		if (name == null || name.equals("")) {
