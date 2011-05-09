@@ -29,7 +29,7 @@
   <!-- Filters -->
   <filter>
     <filter-name>LoginContextFilter</filter-name>
-    <filter-class>com.openkm.spring.LoginContextFilter</filter-class>
+    <filter-class>com.openkm.jaas.LoginContextFilter</filter-class>
   </filter>
   <!--
   <filter>
