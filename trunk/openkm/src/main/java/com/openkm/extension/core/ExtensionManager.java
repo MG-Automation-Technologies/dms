@@ -32,23 +32,32 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
 
+/**
+ * Base for implementing core extension managers.
+ * 
+ * @author pavila
+ */
 public class ExtensionManager {
 	private static Logger log = LoggerFactory.getLogger(ExtensionManager.class);
 	protected static URI base = new File(Config.HOME_DIR + File.separator + "plugins").toURI();
-	protected static PluginManager pm = null;
+	private static PluginManager pm = null;
 	
-	public ExtensionManager() {
+	private ExtensionManager() {}
+	
+	protected static synchronized PluginManager getPluginManagerInstance() {
 		if (pm == null) {
-			log.info("Load plugins...");
+			log.info("Initialize and load plugins...");
 			pm = PluginManagerFactory.createPluginManager();
 			pm.addPluginsFrom(base);
 		}
+		
+		return pm;
 	}
 	
 	/**
 	 * Reset the loaded plugins and load them again
 	 */
-	public void reset() {
+	protected synchronized void reset() {
 		log.info("Resetting extensions...");
 		pm.shutdown();
 		pm = PluginManagerFactory.createPluginManager();
@@ -58,7 +67,7 @@ public class ExtensionManager {
 	/**
 	 * Shutdown the extension manager
 	 */
-	public void shutdown() {
+	protected synchronized void shutdown() {
 		pm.shutdown();
 	}
 }

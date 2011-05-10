@@ -21,19 +21,17 @@
 
 package com.openkm.extension.core;
 
-import java.io.File;
-
 import javax.jcr.Node;
 import javax.jcr.Session;
 
-import com.openkm.bean.Document;
-
 import net.xeoh.plugins.base.Plugin;
 
-public interface DocumentExtension extends Plugin {
-	public void preCreate(Session session, Node parent, File content, Document doc)
+import com.openkm.bean.Folder;
+
+public interface FolderExtension extends Plugin {
+	public void preCreate(Session session, Node parent, Folder fld)
 		throws ExtensionException;
 	
-	public void postCreate(Session session, Node parent, Node docNode, Document doc)
+	public void postCreate(Session session, Node parent, Node fldNode, Folder fld)
 		throws ExtensionException;
 }
