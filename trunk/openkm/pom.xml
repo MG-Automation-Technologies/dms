@@ -529,7 +529,14 @@
     </dependency>
  	-->
  	
- 	<!-- Wiki librariess -->
+ 	<!-- Plugin framework -->
+ 	<dependency>
+ 	  <groupId>com.google.code</groupId>
+ 	  <artifactId>jspf</artifactId>
+ 	  <version>1.0.1</version>
+ 	</dependency>
+ 	
+ 	<!-- Wiki libraries -->
     <dependency>
       <groupId>org.apache.maven.doxia</groupId>
       <artifactId>doxia-module-twiki</artifactId>
