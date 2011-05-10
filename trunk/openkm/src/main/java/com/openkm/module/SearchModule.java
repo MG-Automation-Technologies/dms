@@ -186,4 +186,26 @@ public interface SearchModule {
 	 */
 	public List<Document> getCategorizedDocuments(String token, String categoryId) throws
 			RepositoryException, DatabaseException;
+	
+	/**
+	 * Performs a simple search using on GQL language.
+	 * 
+	 * @param statement The simple search in GQL language.
+	 * @return A collection of documents.
+	 * @throws RepositoryException If there is any general repository problem.
+	 */
+	public List<QueryResult> findSimple(String token, String statement) throws RepositoryException, DatabaseException;
+	
+	/**
+	 * Performs a simple search using GQL languahe. Paginated version.
+	 * 
+	 * @param statement The simple search in GQL language.
+	 * @param offset Query result list offset.
+	 * @param limit Query result list limit.
+	 * @return A result set with the total of the results and a collection of document
+	 * from the resulting query statement.
+	 * @throws RepositoryException If there is any general repository problem.
+	 */
+	public ResultSet findSimplePaginated(String token, String statement, int offset, int limit) throws
+			RepositoryException, DatabaseException;
 }
