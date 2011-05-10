@@ -1,8 +1,10 @@
 package com.openkm.jaas;
 
+import java.io.Serializable;
 import java.security.Principal;
 
-public class User implements Principal {
+public class User implements Principal, Serializable {
+	private static final long serialVersionUID = 1L;
 	private final String name;
 	
 	public User(String name) {
