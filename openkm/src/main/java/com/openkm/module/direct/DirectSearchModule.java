@@ -45,6 +45,7 @@ import javax.jcr.query.Row;
 import javax.jcr.query.RowIterator;
 
 import org.apache.jackrabbit.JcrConstants;
+import org.apache.jackrabbit.commons.query.GQL;
 import org.apache.jackrabbit.core.query.QueryImpl;
 import org.apache.jackrabbit.core.query.lucene.QueryResultImpl;
 import org.apache.jackrabbit.util.ISO8601;
@@ -393,7 +394,6 @@ public class DirectSearchModule implements SearchModule {
 		return ret;
 	}
 	
-
 	@Override
 	public ResultSet findByStatementPaginated(String token, String statement, String type, int offset,
 			int limit) throws RepositoryException, DatabaseException {
@@ -435,52 +435,24 @@ public class DirectSearchModule implements SearchModule {
 			RepositoryException {
 		log.debug("executeQuery({}, {}, {}, {})", new Object[] { session, query, offset, limit });
 		ResultSet rs = new ResultSet();
-		ArrayList<QueryResult> al = new ArrayList<QueryResult>();
 		
 		try {
+			ArrayList<QueryResult> al = new ArrayList<QueryResult>();
+			
 			// http://n4.nabble.com/Query-performance-for-large-query-results-td531360.html
 			((QueryImpl) query).setLimit(limit);
 			((QueryImpl) query).setOffset(offset);
 			QueryResultImpl result = (QueryResultImpl) query.execute();
-			RowIterator it = result.getRows();
+			RowIterator rit = result.getRows();
 			rs.setTotal(result.getTotalSize());
 			
-			while (it.hasNext()) {
-				Row row = it.nextRow();
-				
-				try {
-					String path = row.getValue(JcrConstants.JCR_PATH).getString();
-					Node node = session.getRootNode().getNode(path.substring(1));
-					QueryResult qr = new QueryResult();
-					
-					if (node.isNodeType(Document.TYPE)) {
-						Document doc = BaseDocumentModule.getProperties(session, node);
-						
-						try {
-							if (node.getParent().isNodeType(Mail.TYPE)) {
-								qr.setAttachment(doc);
-							} else {
-								qr.setDocument(doc);
-							}
-						} catch (javax.jcr.AccessDeniedException e) {
-							qr.setDocument(doc);
-						}
-					} else if (node.isNodeType(Folder.TYPE)) {
-						Folder fld = BaseFolderModule.getProperties(session, node);
-						qr.setFolder(fld);
-					} else if (node.isNodeType(Mail.TYPE)) {
-						Mail mail = BaseMailModule.getProperties(session, node);
-						qr.setMail(mail);
-					}
-					
-					qr.setScore(row.getValue(JcrConstants.JCR_SCORE).getLong());
-					al.add(qr);
-				} catch (javax.jcr.PathNotFoundException e) {
-					log.error(e.getMessage(), e);
-				}
-				
-				rs.setResults(al);
+			while (rit.hasNext()) {
+				Row row = rit.nextRow();
+				QueryResult qr = queryRowResultDigester(session, row);
+				al.add(qr);
 			}
+			
+			rs.setResults(al);
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
@@ -488,6 +460,76 @@ public class DirectSearchModule implements SearchModule {
 
 		log.debug("executeQuery: {}", rs);
 		return rs;
+	}
+	
+	/**
+	 * Execute simple query
+	 */
+	private ResultSet executeSimpleQuery(Session session, String statement, int offset, int limit) throws 
+			RepositoryException {
+		log.debug("executeSimpleQuery({}, {}, {}, {})", new Object[] { session, statement, offset, limit });
+		ResultSet rs = new ResultSet();
+		
+		if (statement != null && !statement.equals("")) {
+			if (!statement.contains("limit:") && limit < Config.MAX_SEARCH_RESULTS) {
+				StringBuilder sb = new StringBuilder();
+				sb.append("limit:").append(offset).append("..").append(offset + limit); 
+				statement = statement.concat(" ").concat(sb.toString()); 
+			}
+			
+			try {
+				ArrayList<QueryResult> al = new ArrayList<QueryResult>();
+				RowIterator rit = GQL.execute(statement, session);
+				rs.setTotal(rit.getSize());
+				
+				while (rit.hasNext()) {
+					Row row = rit.nextRow();
+					QueryResult qr = queryRowResultDigester(session, row);
+					al.add(qr);
+				}
+				
+				rs.setResults(al);
+			} catch (javax.jcr.RepositoryException e) {
+				log.error(e.getMessage(), e);
+				throw new RepositoryException(e.getMessage(), e);
+			}
+		}
+		
+		log.debug("executeSimpleQuery: {}", rs);
+		return rs;
+	}
+	
+	/**
+	 * Convert Row to QueryResult
+	 */
+	private QueryResult queryRowResultDigester(Session session, Row row) throws javax.jcr.PathNotFoundException,
+			javax.jcr.RepositoryException {
+		String path = row.getValue(JcrConstants.JCR_PATH).getString();
+		Node node = session.getRootNode().getNode(path.substring(1));
+		QueryResult qr = new QueryResult();
+		
+		if (node.isNodeType(Document.TYPE)) {
+			Document doc = BaseDocumentModule.getProperties(session, node);
+			
+			try {
+				if (node.getParent().isNodeType(Mail.TYPE)) {
+					qr.setAttachment(doc);
+				} else {
+					qr.setDocument(doc);
+				}
+			} catch (javax.jcr.AccessDeniedException e) {
+				qr.setDocument(doc);
+			}
+		} else if (node.isNodeType(Folder.TYPE)) {
+			Folder fld = BaseFolderModule.getProperties(session, node);
+			qr.setFolder(fld);
+		} else if (node.isNodeType(Mail.TYPE)) {
+			Mail mail = BaseMailModule.getProperties(session, node);
+			qr.setMail(mail);
+		}
+		
+		qr.setScore(row.getValue(JcrConstants.JCR_SCORE).getLong());
+		return qr;
 	}
 
 	@Override
@@ -823,5 +865,41 @@ public class DirectSearchModule implements SearchModule {
 		
 		log.debug("getCategorizedDocuments: {}", documents);
 		return documents;
+	}
+	
+	@Override
+	public List<QueryResult> findSimple(String token, String statement) throws RepositoryException,
+			DatabaseException {
+		log.debug("findSimple({}, {})", token, statement);
+		List<QueryResult> ret = findSimplePaginated(token, statement, 0, Config.MAX_SEARCH_RESULTS).getResults();
+		log.debug("findSimple: {}", ret);
+		return ret;
+		
+	}
+	
+	@Override
+	public ResultSet findSimplePaginated(String token, String statement, int offset, int limit) throws
+			RepositoryException, DatabaseException {
+		log.debug("findSimplePaginated({}, {}, {}, {})", new Object[] { token, statement, offset, limit });
+		ResultSet rs = new ResultSet();
+		Session session = null;
+		
+		try {
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
+			rs = executeSimpleQuery(session, statement, offset, limit);
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (token == null) JCRUtils.logout(session);
+		}
+		
+		log.debug("findSimplePaginated: {}", rs);
+		return rs;
 	}
 }
