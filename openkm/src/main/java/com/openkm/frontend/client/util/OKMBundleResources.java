@@ -74,6 +74,12 @@ public interface OKMBundleResources extends ClientBundle {
 	@Source("com/openkm/frontend/public/img/icon/actions/folder_find_disabled.gif")
 	public ImageResource findFolderDisabled();
 	
+	@Source("com/openkm/frontend/public/img/icon/actions/document_find.png")
+	public ImageResource findDocument();
+	
+	@Source("com/openkm/frontend/public/img/icon/actions/document_find_disabled.png")
+	public ImageResource findDocumentDisabled();
+	
 	@Source("com/openkm/frontend/public/img/icon/actions/lock.gif")
 	public ImageResource lock();
 	

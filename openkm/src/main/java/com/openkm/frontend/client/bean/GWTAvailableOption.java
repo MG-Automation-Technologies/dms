@@ -32,6 +32,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class GWTAvailableOption implements IsSerializable {
 	public boolean createFolderOption = true;
 	public boolean findFolderOption = true;
+	public boolean findDocumentOption = true;
 	public boolean downloadOption = true;
 	public boolean downloadPdfOption = true;
 	public boolean lockOption = true;
@@ -473,5 +474,13 @@ public class GWTAvailableOption implements IsSerializable {
 
 	public void setPreferencesOption(boolean preferencesOption) {
 		this.preferencesOption = preferencesOption;
+	}
+	
+	public boolean isFindDocumentOption() {
+		return findDocumentOption;
+	}
+
+	public void setFindDocumentOption(boolean findDocumentOption) {
+		this.findDocumentOption = findDocumentOption;
 	}
 }

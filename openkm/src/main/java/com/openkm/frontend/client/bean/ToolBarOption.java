@@ -24,6 +24,7 @@ package com.openkm.frontend.client.bean;
 public class ToolBarOption {
 	public boolean createFolderOption;
 	public boolean findFolderOption;
+	public boolean findDocumentOption;
 	public boolean downloadOption;
 	public boolean downloadPdfOption;
 	public boolean printOption;
