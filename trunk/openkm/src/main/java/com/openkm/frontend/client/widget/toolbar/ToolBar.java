@@ -83,6 +83,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	private HorizontalPanel panel;
 	private ToolBarButton createFolderButton;
 	private ToolBarButton findFolder;
+	private ToolBarButton findDocument;
 	private ToolBarButton lock;
 	private ToolBarButton unLock;
 	private ToolBarButton addDocument;
@@ -156,6 +157,19 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			if (toolBarOption.findFolderOption) {
 				Main.get().findFolderSelectPopup.show();
 				fireEvent(HasToolBarEvent.EXECUTE_FIND_FOLDER);
+			}
+		}
+	};
+	
+	/**
+	 * Find document Handler
+	 */
+	ClickHandler findDocumentHandler = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
+			if (toolBarOption.findDocumentOption) {
+				Main.get().findDocumentSelectPopup.show();
+				fireEvent(HasToolBarEvent.EXECUTE_FIND_DOCUMENT);
 			}
 		}
 	};
@@ -689,6 +703,9 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		
 		findFolder = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.findFolder()), 
 				  					   Main.i18n("tree.menu.directory.find.folder"), findFolderHandler);
+		
+		findDocument = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.findDocument()), 
+				   						 Main.i18n("tree.menu.directory.find.document"), findDocumentHandler);
 			
 		
 		lock = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.lockDisabled()), 
@@ -754,6 +771,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		createFolderButton.addMouseOutHandler(mouseOutHandler);
 		findFolder.addMouseOverHandler(mouseOverHandler);
 		findFolder.addMouseOutHandler(mouseOutHandler);
+		findDocument.addMouseOverHandler(mouseOverHandler);
+		findDocument.addMouseOutHandler(mouseOutHandler);
 		lock.addMouseOverHandler(mouseOverHandler);
 		lock.addMouseOutHandler(mouseOutHandler);
 		unLock.addMouseOverHandler(mouseOverHandler);
@@ -795,6 +814,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		
 		createFolderButton.setStyleName("okm-ToolBar-button");
 		findFolder.setStyleName("okm-ToolBar-button");
+		findDocument.setStyleName("okm-ToolBar-button");
 		lock.setStyleName("okm-ToolBar-button");
 		unLock.setStyleName("okm-ToolBar-button");
 		addDocument.setStyleName("okm-ToolBar-button");
@@ -823,6 +843,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		panel.add(createFolderButton);
 		panel.add(space());
 		panel.add(findFolder);
+		panel.add(space());
+		panel.add(findDocument);
 		panel.add(space());
 		panel.add(download);
 		panel.add(space());
@@ -1000,8 +1022,10 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			// Enables find folder in Desktop view 
 			if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace()==UIDockPanelConstants.DESKTOP){
 				enableFindFolder();
+				enableFindDocument();
 			} else {
 				disableFindFolder();
+				disableFindDocument();
 			}
 			
 			// The remove property group is special case depends on tab property enabled, with this call we force to set false
@@ -1200,8 +1224,10 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			// Enables find folder in Desktop view 
 			if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace()==UIDockPanelConstants.DESKTOP){
 				enableFindFolder();
+				enableFindDocument();
 			} else {
 				disableFindFolder();
+				disableFindDocument();
 			}
 			
 			// ONLY TO DEVELOPMENT TESTINGT
@@ -1347,7 +1373,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Disables create directory
+	 * Disables find folder
 	 */
 	public void disableCreateDirectory() {
 		toolBarOption.createFolderOption = false;
@@ -1367,13 +1393,33 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Disables create directory
+	 * Disables find folder
 	 */
 	public void disableFindFolder() {
 		toolBarOption.findFolderOption = false;
 		findFolder.setStyleName("okm-ToolBar-button-disabled");
 		findFolder.setResource(OKMBundleResources.INSTANCE.findFolderDisabled());
 		findFolder.setTitle(Main.i18n("tree.menu.directory.find.folder"));
+	}
+	
+	/**
+	 * Disables find document
+	 */
+	public void disableFindDocument() {
+		toolBarOption.findDocumentOption = false;
+		findDocument.setStyleName("okm-ToolBar-button-disabled");
+		findDocument.setResource(OKMBundleResources.INSTANCE.findDocumentDisabled());
+		findDocument.setTitle(Main.i18n("tree.menu.directory.find.document"));
+	}
+	
+	/**
+	 * Enables find document
+	 */
+	public void enableFindDocument() {
+		toolBarOption.findDocumentOption = true;
+		findDocument.setStyleName("okm-ToolBar-button");
+		findDocument.setResource(OKMBundleResources.INSTANCE.findDocument());
+		findDocument.setTitle(Main.i18n("tree.menu.directory.find.document"));
 	}
 	
 	/**
@@ -1904,6 +1950,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createFolderOption				= true;
 		tmpToolBarOption.findFolderOption				= true;
+		tmpToolBarOption.findDocumentOption				= true;
 		tmpToolBarOption.addDocumentOption 				= true;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -1941,6 +1988,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createFolderOption				= true;
 		tmpToolBarOption.findFolderOption				= true;
+		tmpToolBarOption.findDocumentOption				= true;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -1978,6 +2026,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createFolderOption				= false;
 		tmpToolBarOption.findFolderOption				= true;
+		tmpToolBarOption.findDocumentOption				= true;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -2015,6 +2064,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createFolderOption				= false;
 		tmpToolBarOption.findFolderOption				= true;
+		tmpToolBarOption.findDocumentOption				= true;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -2052,6 +2102,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createFolderOption				= true;
 		tmpToolBarOption.findFolderOption				= true;
+		tmpToolBarOption.findDocumentOption				= true;
 		tmpToolBarOption.addDocumentOption 				= true;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -2089,6 +2140,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createFolderOption				= true;
 		tmpToolBarOption.findFolderOption				= true;
+		tmpToolBarOption.findDocumentOption				= true;
 		tmpToolBarOption.addDocumentOption 				= true;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -2124,8 +2176,9 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public ToolBarOption getDefaultSearchToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
-		tmpToolBarOption.createFolderOption			= false;
+		tmpToolBarOption.createFolderOption				= false;
 		tmpToolBarOption.findFolderOption				= false;
+		tmpToolBarOption.findDocumentOption				= false;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -2163,6 +2216,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createFolderOption				= false;
 		tmpToolBarOption.findFolderOption				= false;
+		tmpToolBarOption.findDocumentOption				= false;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -2200,6 +2254,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createFolderOption				= false;
 		tmpToolBarOption.findFolderOption				= false;
+		tmpToolBarOption.findDocumentOption				= false;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -2237,6 +2292,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createFolderOption				= false;
 		tmpToolBarOption.findFolderOption				= false;
+		tmpToolBarOption.findDocumentOption				= false;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -2272,6 +2328,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	public void evaluateShowIcons() {
 		if (toolBarOption.createFolderOption) {enableCreateDirectory(); } else {disableCreateDirectory(); }
 		if (toolBarOption.findFolderOption) {enableFindFolder(); } else {disableFindFolder(); }
+		if (toolBarOption.findDocumentOption) {enableFindDocument(); } else {disableFindDocument(); }
 		if (toolBarOption.addDocumentOption) {enableAddDocument(); } else {disableAddDocument(); }
 		if (toolBarOption.checkoutOption) { enableCheckout(); } else { disableCheckout(); }
 		if (toolBarOption.checkinOption) { enableCheckin(); } else { disableCheckin(); }
@@ -2666,71 +2723,73 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		// FIRST
 		createFolderButton.setVisible(option.isCreateFolderOption());
 		panel.getWidget(2).setVisible(option.isCreateFolderOption()); // Hide space
-		findFolder.setVisible(option.isCreateFolderOption());
-		panel.getWidget(4).setVisible(option.isCreateFolderOption()); // Hide space
+		findFolder.setVisible(option.isFindFolderOption());
+		panel.getWidget(4).setVisible(option.isFindFolderOption()); // Hide space
+		findDocument.setVisible(option.isFindFolderOption());
+		panel.getWidget(6).setVisible(option.isFindFolderOption()); // Hide space
 		download.setVisible(option.isDownloadOption());
-		panel.getWidget(6).setVisible(option.isDownloadOption()); // hide space
+		panel.getWidget(8).setVisible(option.isDownloadOption()); // hide space
 		downloadPdf.setVisible(option.isDownloadPdfOption());
-		panel.getWidget(8).setVisible(option.isDownloadPdfOption()); // hide space
+		panel.getWidget(10).setVisible(option.isDownloadPdfOption()); // hide space
 		print.setVisible(Main.get().workspaceUserProperties.getWorkspace().isPrintPreview());
-		panel.getWidget(10).setVisible(Main.get().workspaceUserProperties.getWorkspace().isPrintPreview());
-		panel.getWidget(11).setVisible(option.isCreateFolderOption() || option.isFindFolderOption() ||
+		panel.getWidget(12).setVisible(Main.get().workspaceUserProperties.getWorkspace().isPrintPreview());
+		panel.getWidget(13).setVisible(option.isCreateFolderOption() || option.isFindFolderOption() ||
 					                  option.isDownloadOption() || option.isDownloadPdfOption() ||
 					                  Main.get().workspaceUserProperties.getWorkspace().isPrintPreview()); // hide separator
  
 		
 		// SECOND
 		lock.setVisible(option.isLockOption());
-		panel.getWidget(13).setVisible(option.isLockOption()); // hide space
+		panel.getWidget(15).setVisible(option.isLockOption()); // hide space
 		unLock.setVisible(option.isUnLockOption());
-		panel.getWidget(15).setVisible(option.isUnLockOption()); // hide space
-		panel.getWidget(16).setVisible(option.isLockOption() || option.isUnLockOption()); // hide separator
+		panel.getWidget(17).setVisible(option.isUnLockOption()); // hide space
+		panel.getWidget(18).setVisible(option.isLockOption() || option.isUnLockOption()); // hide separator
 		
 		// THIRD
 		addDocument.setVisible(option.isAddDocumentOption());
-		panel.getWidget(18).setVisible(option.isAddDocumentOption()); // hide space
+		panel.getWidget(20).setVisible(option.isAddDocumentOption()); // hide space
 		edit.setVisible(option.isCheckoutOption());
-		panel.getWidget(20).setVisible(option.isCheckoutOption()); // hide space
+		panel.getWidget(22).setVisible(option.isCheckoutOption()); // hide space
 		checkin.setVisible(option.isCheckinOption());
-		panel.getWidget(22).setVisible(option.isCheckinOption()); // hide space
+		panel.getWidget(24).setVisible(option.isCheckinOption()); // hide space
 		cancelCheckout.setVisible(option.isCancelCheckoutOption());
-		panel.getWidget(24).setVisible(option.isCancelCheckoutOption()); // hide space
+		panel.getWidget(26).setVisible(option.isCancelCheckoutOption()); // hide space
 		delete.setVisible(option.isDeleteOption());
-		panel.getWidget(26).setVisible(option.isDeleteOption()); // hide space
-		panel.getWidget(27).setVisible(option.isAddDocumentOption() || option.isCheckoutOption() || 
+		panel.getWidget(28).setVisible(option.isDeleteOption()); // hide space
+		panel.getWidget(29).setVisible(option.isAddDocumentOption() || option.isCheckoutOption() || 
 									   option.isCheckinOption() || option.isCancelCheckoutOption() || 
 									   option.isDeleteOption()); // hide separator
 		
 		// FOURTH
 		addPropertyGroup.setVisible(option.isAddPropertyGroupOption());
-		panel.getWidget(29).setVisible(option.isAddPropertyGroupOption()); // hide space
+		panel.getWidget(31).setVisible(option.isAddPropertyGroupOption()); // hide space
 		removePropertyGroup.setVisible(option.isRemovePropertyGroupOption());
-		panel.getWidget(31).setVisible(option.isRemovePropertyGroupOption()); // hide space
-		panel.getWidget(32).setVisible(option.isAddPropertyGroupOption() || option.isRemovePropertyGroupOption()); // hide separator
+		panel.getWidget(33).setVisible(option.isRemovePropertyGroupOption()); // hide space
+		panel.getWidget(34).setVisible(option.isAddPropertyGroupOption() || option.isRemovePropertyGroupOption()); // hide separator
 		
 		// FIFTH
 		startWorkflow.setVisible(option.isWorkflowOption());
-		panel.getWidget(34).setVisible(option.isWorkflowOption()); // hide space
-		panel.getWidget(35).setVisible(option.isWorkflowOption()); // hide separator
+		panel.getWidget(36).setVisible(option.isWorkflowOption()); // hide space
+		panel.getWidget(37).setVisible(option.isWorkflowOption()); // hide separator
 		
 		// SIXTH
 		addSubscription.setVisible(option.isAddSubscription());
-		panel.getWidget(37).setVisible(option.isAddSubscription()); // hide space
+		panel.getWidget(39).setVisible(option.isAddSubscription()); // hide space
 		removeSubscription.setVisible(option.isRemoveSubscription());
-		panel.getWidget(39).setVisible(option.isRemoveSubscription()); // hide space
-		panel.getWidget(40).setVisible(option.isAddSubscription() || option.isRemoveSubscription()); // hide separator
+		panel.getWidget(41).setVisible(option.isRemoveSubscription()); // hide space
+		panel.getWidget(42).setVisible(option.isAddSubscription() || option.isRemoveSubscription()); // hide separator
 		
 		// SEVENTH 
 		home.setVisible(option.isHomeOption());
-		panel.getWidget(42).setVisible(option.isHomeOption()); // hide space
+		panel.getWidget(44).setVisible(option.isHomeOption()); // hide space
 		refresh.setVisible(option.isRefreshOption());
-		panel.getWidget(44).setVisible(option.isRefreshOption()); // hide space
-		panel.getWidget(45).setVisible(option.isHomeOption() || option.isRefreshOption()); // hide separator
+		panel.getWidget(46).setVisible(option.isRefreshOption()); // hide space
+		panel.getWidget(47).setVisible(option.isHomeOption() || option.isRefreshOption()); // hide separator
 		
 		scanner.setVisible(option.isScannerOption());
-		panel.getWidget(47).setVisible(option.isScannerOption()); // hide space
+		panel.getWidget(49).setVisible(option.isScannerOption()); // hide space
 		uploader.setVisible(option.isUploaderOption());
-		panel.getWidget(49).setVisible(option.isUploaderOption()); // hide space
+		panel.getWidget(51).setVisible(option.isUploaderOption()); // hide space
 	}
 	
 	/**
