@@ -189,6 +189,7 @@ public interface SearchModule {
 	
 	/**
 	 * Performs a simple search using on GQL language.
+	 * @see http://jackrabbit.apache.org/api/1.6/org/apache/jackrabbit/commons/query/GQL.html
 	 * 
 	 * @param statement The simple search in GQL language.
 	 * @return A collection of documents.
@@ -198,6 +199,7 @@ public interface SearchModule {
 	
 	/**
 	 * Performs a simple search using GQL languahe. Paginated version.
+	 * @see http://jackrabbit.apache.org/api/1.6/org/apache/jackrabbit/commons/query/GQL.html
 	 * 
 	 * @param statement The simple search in GQL language.
 	 * @param offset Query result list offset.
