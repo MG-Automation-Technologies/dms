@@ -175,7 +175,7 @@ public class OKMSearch implements SearchModule {
 	@Override
 	public Map<String, Integer> getKeywordMap(String token, List<String> filter) throws RepositoryException,
 			DatabaseException {
-		log.debug("getKeywordMap({})", token);
+		log.debug("getKeywordMap({}, {})", token, filter);
 		SearchModule sm = ModuleManager.getSearchModule();
 		Map<String, Integer> kmap = sm.getKeywordMap(token, filter);
 		log.debug("getKeywordMap: {}", kmap);
@@ -185,10 +185,30 @@ public class OKMSearch implements SearchModule {
 	@Override
 	public List<Document> getCategorizedDocuments(String token, String categoryId) throws
 			RepositoryException, DatabaseException {
-		log.debug("getCategorizedDocuments({})", token);
+		log.debug("getCategorizedDocuments({}, {})", token, categoryId);
 		SearchModule sm = ModuleManager.getSearchModule();
 		List<Document> col = sm.getCategorizedDocuments(token, categoryId);
 		log.debug("getCategorizedDocuments: {}", col);
 		return col;
+	}
+
+	@Override
+	public List<QueryResult> findSimple(String token, String statement) throws RepositoryException,
+			DatabaseException {
+		log.debug("findSimple({}, {})", token, statement);
+		SearchModule sm = ModuleManager.getSearchModule();
+		List<QueryResult> col = sm.findSimple(token, statement);
+		log.debug("findSimple: {}", col);
+		return col;
+	}
+
+	@Override
+	public ResultSet findSimplePaginated(String token, String statement, int offset, int limit)
+			throws RepositoryException, DatabaseException {
+		log.debug("findSimplePaginated({})", token);
+		SearchModule sm = ModuleManager.getSearchModule();
+		ResultSet ret = sm.findSimplePaginated(token, statement, offset, limit);
+		log.debug("findSimplePaginated: {}", ret);
+		return ret;
 	}
 }
