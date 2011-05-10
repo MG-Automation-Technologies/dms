@@ -21,7 +21,6 @@
 
 package com.openkm.extension.core;
 
-import java.io.File;
 import java.util.ServiceConfigurationError;
 
 import javax.jcr.Node;
@@ -33,31 +32,31 @@ import net.xeoh.plugins.base.util.PluginManagerUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.bean.Document;
+import com.openkm.bean.Folder;
 
-public class DocumentExtensionManager implements DocumentExtension {
-	private static Logger log = LoggerFactory.getLogger(DocumentExtensionManager.class);
-	private static DocumentExtensionManager service = null;
+public class FolderExtensionManager implements FolderExtension {
+	private static Logger log = LoggerFactory.getLogger(FolderExtensionManager.class);
+	private static FolderExtensionManager service = null;
 	
-	private DocumentExtensionManager() {}
+	private FolderExtensionManager() {}
 	
-	public static synchronized DocumentExtensionManager getInstance() {
+	public static synchronized FolderExtensionManager getInstance() {
 		if (service == null) {
-			service = new DocumentExtensionManager();
+			service = new FolderExtensionManager();
 		}
 		
 		return service;
 	}
 	
 	@Override
-	public void preCreate(Session session, Node parent, File content, Document doc) throws ExtensionException {
+	public void preCreate(Session session, Node parent, Folder fld) throws ExtensionException {
 		try {
 			PluginManager pm = ExtensionManager.getPluginManagerInstance();
 			PluginManagerUtil pmu = new PluginManagerUtil(pm);
 			
-			for (DocumentExtension de : pmu.getPlugins(DocumentExtension.class)) {
+			for (FolderExtension de : pmu.getPlugins(FolderExtension.class)) {
 				log.info("Es: {}", de.getClass().getCanonicalName());
-				de.preCreate(session, parent, content, doc);
+				de.preCreate(session, parent, fld);
 			}
 		} catch (ServiceConfigurationError e) {
 			log.error(e.getMessage(), e);
@@ -65,14 +64,14 @@ public class DocumentExtensionManager implements DocumentExtension {
 	}
 	
 	@Override
-	public void postCreate(Session session, Node parent, Node docNode, Document doc) throws ExtensionException {
+	public void postCreate(Session session, Node parent, Node fldNode, Folder fld) throws ExtensionException {
 		try {
 			PluginManager pm = ExtensionManager.getPluginManagerInstance();
 			PluginManagerUtil pmu = new PluginManagerUtil(pm);
 			
-			for (DocumentExtension de : pmu.getPlugins(DocumentExtension.class)) {
+			for (FolderExtension de : pmu.getPlugins(FolderExtension.class)) {
 				log.info("Es: {}", de.getClass().getCanonicalName());
-				de.postCreate(session, parent, docNode, doc);
+				de.postCreate(session, parent, fldNode, fld);
 			}
 		} catch (ServiceConfigurationError e) {
 			log.error(e.getMessage(), e);

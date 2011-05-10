@@ -21,19 +21,22 @@
 
 package com.openkm.extension.core;
 
-import java.io.File;
+public class ExtensionException extends Exception {
+	private static final long serialVersionUID = 1L;
 
-import javax.jcr.Node;
-import javax.jcr.Session;
-
-import com.openkm.bean.Document;
-
-import net.xeoh.plugins.base.Plugin;
-
-public interface DocumentExtension extends Plugin {
-	public void preCreate(Session session, Node parent, File content, Document doc)
-		throws ExtensionException;
+	public ExtensionException() {
+		super();
+	}
 	
-	public void postCreate(Session session, Node parent, Node docNode, Document doc)
-		throws ExtensionException;
+	public ExtensionException(String message) {
+		super(message);
+	}
+
+	public ExtensionException(String message, Throwable cause) {
+		super(message, cause);
+	}
+	
+	public ExtensionException(Throwable arg0) {
+		super(arg0);
+	}
 }
