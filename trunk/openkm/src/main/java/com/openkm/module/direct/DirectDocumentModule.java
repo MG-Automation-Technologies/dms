@@ -66,6 +66,8 @@ import com.openkm.core.VirusDetectedException;
 import com.openkm.core.VirusDetection;
 import com.openkm.dao.LockTokenDAO;
 import com.openkm.dao.MimeTypeDAO;
+import com.openkm.extension.core.DocumentExtensionManager;
+import com.openkm.extension.core.ExtensionException;
 import com.openkm.jcr.JCRUtils;
 import com.openkm.jcr.JcrSessionManager;
 import com.openkm.kea.RDFREpository;
@@ -104,15 +106,13 @@ public class DirectDocumentModule implements DocumentModule {
 			throw new FileSizeExceededException(Integer.toString(size));
 		}
 		
-		File tmpJcr = File.createTempFile("okm", ".jcr");
-		File tmpAvr = File.createTempFile("okm", ".avr");
 		String parent = FileUtils.getParent(doc.getPath());
 		String name = FileUtils.getName(doc.getPath());
 		
 		// Add to kea - must have the same extension
 		int idx = name.lastIndexOf('.');
 		String fileExtension = idx>0?name.substring(idx):".tmp";
-		File tmpKea = File.createTempFile("kea", fileExtension);
+		File tmp = File.createTempFile("okm", fileExtension);
 		
 		try {
 			if (token == null) {
@@ -124,9 +124,11 @@ public class DirectDocumentModule implements DocumentModule {
 			// Escape dangerous chars in name
 			name = FileUtils.escape(name);
 			doc.setPath(parent + "/" + name);
+			parentNode = session.getRootNode().getNode(parent.substring(1));
 			
 			// Check file restrictions
 			String mimeType = Config.mimeTypes.getContentType(name.toLowerCase());
+			doc.setMimeType(mimeType);
 			
 			if (Config.RESTRICT_FILE_MIME && MimeTypeDAO.findByName(mimeType) == null) {
 				throw new UnsupportedMimeTypeException(mimeType);
@@ -134,33 +136,28 @@ public class DirectDocumentModule implements DocumentModule {
 			
 			// Manage temporary files
 			byte[] buff = new byte[4*1024];
-			FileOutputStream fosJcr = new FileOutputStream(tmpJcr);
-			FileOutputStream fosAvr = new FileOutputStream(tmpAvr);
-			FileOutputStream fosKea = new FileOutputStream(tmpKea);
+			FileOutputStream fos = new FileOutputStream(tmp);
 			int read;
 			while ((read = is.read(buff)) != -1) {
-				fosJcr.write(buff, 0, read);
-				if (!Config.SYSTEM_ANTIVIR.equals("")) fosAvr.write(buff, 0, read);
-				if (!Config.KEA_MODEL_FILE.equals("")) fosKea.write(buff, 0, read);
+				fos.write(buff, 0, read);
 			}
-			fosJcr.flush();
-			fosJcr.close();
-			fosAvr.flush();
-			fosAvr.close();
-			fosKea.flush();
-			fosKea.close();
+			fos.flush();
+			fos.close();
 			is.close();
-			is = new FileInputStream(tmpJcr);
+			is = new FileInputStream(tmp);
+			
+			// EP - PRE
+			DocumentExtensionManager.getInstance().preCreate(session, parentNode, tmp, doc);
 			
 			if (!Config.SYSTEM_ANTIVIR.equals("")) {
-				VirusDetection.detect(tmpAvr);
+				VirusDetection.detect(tmp);
 			}
 			
 			// Start KEA
 			Collection<String> keywords = doc.getKeywords() != null ? doc.getKeywords() : new ArrayList<String>(); // Adding submitted keywords
 	        if (!Config.KEA_MODEL_FILE.equals("")) {
 		        MetadataExtractor mdExtractor = new MetadataExtractor(Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER);
-		        MetadataDTO mdDTO = mdExtractor.extract(tmpKea);
+		        MetadataDTO mdDTO = mdExtractor.extract(tmp);
 		        
 		        for (ListIterator<Term> it = mdDTO.getSubjectsAsTerms().listIterator(); it.hasNext();) {
 		        	Term term =  it.next();
@@ -176,7 +173,6 @@ public class DirectDocumentModule implements DocumentModule {
 	        }
 	        // End KEA
 	        
-			parentNode = session.getRootNode().getNode(parent.substring(1));
 			Node documentNode = BaseDocumentModule.create(session, parentNode, name, null /* doc.getTitle() */,
 					mimeType, keywords.toArray(new String[keywords.size()]), is);
 			
@@ -191,6 +187,9 @@ public class DirectDocumentModule implements DocumentModule {
 			
 			// Check scripting
 			BaseScriptingModule.checkScripts(session, parentNode, documentNode, "CREATE_DOCUMENT");
+			
+			// EP - POST
+			DocumentExtensionManager.getInstance().postCreate(session, parentNode, documentNode, doc);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "CREATE_DOCUMENT", documentNode.getUUID(), mimeType+", "+size+", "+doc.getPath());
@@ -218,10 +217,12 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
 			throw new RepositoryException(e.getMessage(), e);
+		} catch (ExtensionException e) {
+			log.error(e.getMessage(), e);
+			JCRUtils.discardsPendingChanges(parentNode);
+			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			org.apache.commons.io.FileUtils.deleteQuietly(tmpJcr);
-			org.apache.commons.io.FileUtils.deleteQuietly(tmpAvr);
-			org.apache.commons.io.FileUtils.deleteQuietly(tmpKea);
+			org.apache.commons.io.FileUtils.deleteQuietly(tmp);
 			if (token == null) JCRUtils.logout(session);
 		}
 

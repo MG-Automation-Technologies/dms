@@ -44,6 +44,8 @@ import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UserQuotaExceededException;
+import com.openkm.extension.core.ExtensionException;
+import com.openkm.extension.core.FolderExtensionManager;
 import com.openkm.jcr.JCRUtils;
 import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.FolderModule;
@@ -82,6 +84,9 @@ public class DirectFolderModule implements FolderModule {
 			name = FileUtils.escape(name);
 			fld.setPath(parent + "/" + name);
 			
+			// EP - PRE
+			FolderExtensionManager.getInstance().preCreate(session, parentNode, fld);
+			
 			// Create node
 			Node folderNode = BaseFolderModule.create(session, parentNode, name);
 						
@@ -90,7 +95,10 @@ public class DirectFolderModule implements FolderModule {
 			
 			// Check scripting
 			BaseScriptingModule.checkScripts(session, parentNode, folderNode, "CREATE_FOLDER");
-
+			
+			// EP - POST
+			FolderExtensionManager.getInstance().postCreate(session, parentNode, folderNode, fld);
+			
 			// Activity log
 			UserActivity.log(session.getUserID(), "CREATE_FOLDER", folderNode.getUUID(), fld.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
@@ -105,6 +113,10 @@ public class DirectFolderModule implements FolderModule {
 			JCRUtils.discardsPendingChanges(parentNode);
 			throw new AccessDeniedException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			JCRUtils.discardsPendingChanges(parentNode);
+			throw new RepositoryException(e.getMessage(), e);
+		} catch (ExtensionException e) {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
 			throw new RepositoryException(e.getMessage(), e);
