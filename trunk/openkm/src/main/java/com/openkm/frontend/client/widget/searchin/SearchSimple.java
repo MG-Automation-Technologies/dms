@@ -34,22 +34,21 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  *
  */
 public class SearchSimple extends Composite {
-	
 	private ScrollPanel scrollPanel;
 	private VerticalPanel vPanel;
 	public TextBox fullText;
+	
 	/**
 	 * SearchSimple
 	 */
 	public SearchSimple() {
 		fullText = new TextBox();
-		fullText.setWidth("500");
+		fullText.setWidth("365");
 		vPanel = new VerticalPanel();
 		vPanel.add(fullText);
 		vPanel.setCellVerticalAlignment(fullText, HasAlignment.ALIGN_MIDDLE);
 		vPanel.setCellHorizontalAlignment(fullText, HasAlignment.ALIGN_CENTER);
 		scrollPanel = new ScrollPanel(vPanel);
-		
 		fullText.setStyleName("okm-Input");
 		
 		initWidget(scrollPanel);
@@ -67,7 +66,5 @@ public class SearchSimple extends Composite {
 	 * langRefresh
 	 */
 	public void langRefresh() {
-
 	}
-
 }
