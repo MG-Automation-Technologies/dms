@@ -291,7 +291,7 @@ public class SearchResult extends Composite {
 				size++;
 			}
 			
-			status.unsetFlag_findPaginated(); // TODO : falta modificar el nombre del flag
+			status.unsetFlag_findPaginated();
 		}
 		
 		public void onFailure(Throwable caught) {
@@ -333,6 +333,16 @@ public class SearchResult extends Composite {
 	public void findPaginated(GWTQueryParams params, int offset, int limit) {
 		status.setFlag_findPaginated();
 		searchService.findPaginated(params, offset, limit, callbackFindPaginated);
+	}
+	
+	/**
+	 * findSimpleQueryPaginated
+	 * 
+	 * @param words The path id
+	 */
+	public void findSimpleQueryPaginated(String statement, int offset, int limit) {
+		status.setFlag_findPaginated();
+		searchService.findSimpleQuery(statement, offset, limit, callbackFindPaginated);
 	}
 	
 	/**
