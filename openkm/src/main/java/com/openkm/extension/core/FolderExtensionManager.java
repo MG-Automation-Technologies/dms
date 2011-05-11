@@ -21,20 +21,25 @@
 
 package com.openkm.extension.core;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.ServiceConfigurationError;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
 
-import net.xeoh.plugins.base.PluginManager;
-import net.xeoh.plugins.base.util.PluginManagerUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Folder;
+import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
+import com.openkm.core.ItemExistsException;
+import com.openkm.core.PathNotFoundException;
+import com.openkm.core.Ref;
+import com.openkm.core.RepositoryException;
 
-public class FolderExtensionManager implements FolderExtension {
+public class FolderExtensionManager {
 	private static Logger log = LoggerFactory.getLogger(FolderExtensionManager.class);
 	private static FolderExtensionManager service = null;
 	
@@ -48,30 +53,40 @@ public class FolderExtensionManager implements FolderExtension {
 		return service;
 	}
 	
-	@Override
-	public void preCreate(Session session, Node parent, Folder fld) throws ExtensionException {
+	/**
+	 * Handle PRE create extensions
+	 */
+	public void preCreate(Session session, Ref<Node> parentNode, Ref<Folder> fld) throws 
+			AccessDeniedException, RepositoryException, PathNotFoundException,
+			ItemExistsException, DatabaseException, ExtensionException {
 		try {
-			PluginManager pm = ExtensionManager.getPluginManagerInstance();
-			PluginManagerUtil pmu = new PluginManagerUtil(pm);
+			ExtensionManager em = ExtensionManager.getInstance();
+			List<FolderExtension> col = em.getPlugins(FolderExtension.class);
+			Collections.sort(col, new OrderComparator<FolderExtension>());
 			
-			for (FolderExtension de : pmu.getPlugins(FolderExtension.class)) {
+			for (FolderExtension de : col) {
 				log.info("Es: {}", de.getClass().getCanonicalName());
-				de.preCreate(session, parent, fld);
+				de.preCreate(session, parentNode, fld);
 			}
 		} catch (ServiceConfigurationError e) {
 			log.error(e.getMessage(), e);
 		}
 	}
 	
-	@Override
-	public void postCreate(Session session, Node parent, Node fldNode, Folder fld) throws ExtensionException {
+	/**
+	 * Handle POST create extensions
+	 */
+	public void postCreate(Session session, Ref<Node> parentNode, Ref<Node> fldNode, Ref<Folder> fld) throws
+			AccessDeniedException, RepositoryException, PathNotFoundException,
+			ItemExistsException, DatabaseException, ExtensionException {
 		try {
-			PluginManager pm = ExtensionManager.getPluginManagerInstance();
-			PluginManagerUtil pmu = new PluginManagerUtil(pm);
+			ExtensionManager em = ExtensionManager.getInstance();
+			List<FolderExtension> col = em.getPlugins(FolderExtension.class);
+			Collections.sort(col, new OrderComparator<FolderExtension>());
 			
-			for (FolderExtension de : pmu.getPlugins(FolderExtension.class)) {
+			for (FolderExtension de : col) {
 				log.info("Es: {}", de.getClass().getCanonicalName());
-				de.postCreate(session, parent, fldNode, fld);
+				de.postCreate(session, parentNode, fldNode, fld);
 			}
 		} catch (ServiceConfigurationError e) {
 			log.error(e.getMessage(), e);

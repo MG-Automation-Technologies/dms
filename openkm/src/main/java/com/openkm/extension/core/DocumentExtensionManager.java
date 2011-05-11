@@ -22,20 +22,30 @@
 package com.openkm.extension.core;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import java.util.ServiceConfigurationError;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
 
-import net.xeoh.plugins.base.PluginManager;
-import net.xeoh.plugins.base.util.PluginManagerUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
+import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
+import com.openkm.core.FileSizeExceededException;
+import com.openkm.core.ItemExistsException;
+import com.openkm.core.PathNotFoundException;
+import com.openkm.core.Ref;
+import com.openkm.core.RepositoryException;
+import com.openkm.core.UnsupportedMimeTypeException;
+import com.openkm.core.UserQuotaExceededException;
+import com.openkm.core.VirusDetectedException;
 
-public class DocumentExtensionManager implements DocumentExtension {
+public class DocumentExtensionManager {
 	private static Logger log = LoggerFactory.getLogger(DocumentExtensionManager.class);
 	private static DocumentExtensionManager service = null;
 	
@@ -49,30 +59,42 @@ public class DocumentExtensionManager implements DocumentExtension {
 		return service;
 	}
 	
-	@Override
-	public void preCreate(Session session, Node parent, File content, Document doc) throws ExtensionException {
+	/**
+	 * Handle PRE create extensions 
+	 */
+	public void preCreate(Session session, Ref<Node> parentNode, Ref<File> content, Ref<Document> doc) throws 
+			UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
+			VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException, 
+			RepositoryException, IOException, DatabaseException, ExtensionException {
 		try {
-			PluginManager pm = ExtensionManager.getPluginManagerInstance();
-			PluginManagerUtil pmu = new PluginManagerUtil(pm);
+			ExtensionManager em = ExtensionManager.getInstance();
+			List<DocumentExtension> col = em.getPlugins(DocumentExtension.class);
+			Collections.sort(col, new OrderComparator<DocumentExtension>());
 			
-			for (DocumentExtension de : pmu.getPlugins(DocumentExtension.class)) {
+			for (DocumentExtension de : col) {
 				log.info("Es: {}", de.getClass().getCanonicalName());
-				de.preCreate(session, parent, content, doc);
+				de.preCreate(session, parentNode, content, doc);
 			}
 		} catch (ServiceConfigurationError e) {
 			log.error(e.getMessage(), e);
 		}
 	}
 	
-	@Override
-	public void postCreate(Session session, Node parent, Node docNode, Document doc) throws ExtensionException {
+	/**
+	 * Handle POST create extensions 
+	 */
+	public void postCreate(Session session, Ref<Node> parentNode, Ref<Node> docNode, Ref<Document> doc) throws 
+			UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
+			VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException, 
+			RepositoryException, IOException, DatabaseException, ExtensionException {
 		try {
-			PluginManager pm = ExtensionManager.getPluginManagerInstance();
-			PluginManagerUtil pmu = new PluginManagerUtil(pm);
+			ExtensionManager em = ExtensionManager.getInstance();
+			List<DocumentExtension> col = em.getPlugins(DocumentExtension.class);
+			Collections.sort(col, new OrderComparator<DocumentExtension>());
 			
-			for (DocumentExtension de : pmu.getPlugins(DocumentExtension.class)) {
+			for (DocumentExtension de : col) {
 				log.info("Es: {}", de.getClass().getCanonicalName());
-				de.postCreate(session, parent, docNode, doc);
+				de.postCreate(session, parentNode, docNode, doc);
 			}
 		} catch (ServiceConfigurationError e) {
 			log.error(e.getMessage(), e);

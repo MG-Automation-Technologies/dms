@@ -23,9 +23,14 @@ package com.openkm.extension.core;
 
 import java.io.File;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
+import net.xeoh.plugins.base.Plugin;
 import net.xeoh.plugins.base.PluginManager;
 import net.xeoh.plugins.base.impl.PluginManagerFactory;
+import net.xeoh.plugins.base.options.addpluginsfrom.OptionReportAfter;
+import net.xeoh.plugins.base.util.PluginManagerUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,34 +45,45 @@ import com.openkm.core.Config;
 public class ExtensionManager {
 	private static Logger log = LoggerFactory.getLogger(ExtensionManager.class);
 	protected static URI base = new File(Config.HOME_DIR + File.separator + "plugins").toURI();
+	private static ExtensionManager em = null;
 	private static PluginManager pm = null;
 	
-	private ExtensionManager() {}
+	private ExtensionManager() {
+		log.info("Initialize and load plugins...");
+		pm = PluginManagerFactory.createPluginManager();
+		pm.addPluginsFrom(base, new OptionReportAfter());
+	}
 	
-	protected static synchronized PluginManager getPluginManagerInstance() {
-		if (pm == null) {
-			log.info("Initialize and load plugins...");
-			pm = PluginManagerFactory.createPluginManager();
-			pm.addPluginsFrom(base);
+	public static synchronized ExtensionManager getInstance() {
+		if (em == null) {
+			em = new ExtensionManager(); 
 		}
 		
-		return pm;
+		return em;
+	}
+	
+	/**
+	 * Get plugins
+	 */
+	public <P extends Plugin> List<P> getPlugins(final Class<P> plugin) {
+		PluginManagerUtil pmu = new PluginManagerUtil(pm);
+		return new ArrayList<P>(pmu.getPlugins(plugin));
 	}
 	
 	/**
 	 * Reset the loaded plugins and load them again
 	 */
-	protected synchronized void reset() {
+	public synchronized void reset() {
 		log.info("Resetting extensions...");
 		pm.shutdown();
 		pm = PluginManagerFactory.createPluginManager();
-		pm.addPluginsFrom(base);
+		pm.addPluginsFrom(base, new OptionReportAfter());
 	}
 	
 	/**
 	 * Shutdown the extension manager
 	 */
-	protected synchronized void shutdown() {
+	public synchronized void shutdown() {
 		pm.shutdown();
 	}
 }

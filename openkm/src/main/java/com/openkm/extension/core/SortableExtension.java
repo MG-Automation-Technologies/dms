@@ -21,29 +21,6 @@
 
 package com.openkm.extension.core;
 
-import javax.jcr.Node;
-import javax.jcr.Session;
-
-import com.openkm.bean.Folder;
-import com.openkm.core.AccessDeniedException;
-import com.openkm.core.DatabaseException;
-import com.openkm.core.ItemExistsException;
-import com.openkm.core.PathNotFoundException;
-import com.openkm.core.Ref;
-import com.openkm.core.RepositoryException;
-
-public interface FolderExtension extends SortableExtension {
-	/**
-	 * Executed BEFORE folder creation.
-	 */
-	public void preCreate(Session session, Ref<Node> parentNode, Ref<Folder> fld)
-		throws AccessDeniedException, RepositoryException, 	PathNotFoundException,
-		ItemExistsException, DatabaseException, ExtensionException;
-
-	/**
-	 * Executed AFTER folder creation.
-	 */
-	public void postCreate(Session session, Ref<Node> parentNode, Ref<Node> fldNode, Ref<Folder> fld)
-		throws AccessDeniedException, RepositoryException, PathNotFoundException,
-		ItemExistsException, DatabaseException, ExtensionException;
+public interface SortableExtension extends Extension {
+	public int getOrder();
 }
