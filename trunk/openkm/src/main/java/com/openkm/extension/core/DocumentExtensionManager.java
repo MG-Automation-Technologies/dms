@@ -66,14 +66,16 @@ public class DocumentExtensionManager {
 			UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
 			VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException, 
 			RepositoryException, IOException, DatabaseException, ExtensionException {
+		log.debug("preCreate({}, {}, {}, {})", new Object[] { session, parentNode, content, doc });
+		
 		try {
 			ExtensionManager em = ExtensionManager.getInstance();
 			List<DocumentExtension> col = em.getPlugins(DocumentExtension.class);
 			Collections.sort(col, new OrderComparator<DocumentExtension>());
 			
-			for (DocumentExtension de : col) {
-				log.info("Es: {}", de.getClass().getCanonicalName());
-				de.preCreate(session, parentNode, content, doc);
+			for (DocumentExtension ext : col) {
+				log.debug("Extension class: {}", ext.getClass().getCanonicalName());
+				ext.preCreate(session, parentNode, content, doc);
 			}
 		} catch (ServiceConfigurationError e) {
 			log.error(e.getMessage(), e);
@@ -87,14 +89,16 @@ public class DocumentExtensionManager {
 			UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
 			VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException, 
 			RepositoryException, IOException, DatabaseException, ExtensionException {
+		log.debug("postCreate({}, {}, {}, {})", new Object[] { session, parentNode, docNode, doc });
+		
 		try {
 			ExtensionManager em = ExtensionManager.getInstance();
 			List<DocumentExtension> col = em.getPlugins(DocumentExtension.class);
 			Collections.sort(col, new OrderComparator<DocumentExtension>());
 			
-			for (DocumentExtension de : col) {
-				log.info("Es: {}", de.getClass().getCanonicalName());
-				de.postCreate(session, parentNode, docNode, doc);
+			for (DocumentExtension ext : col) {
+				log.debug("Extension class: {}", ext.getClass().getCanonicalName());
+				ext.postCreate(session, parentNode, docNode, doc);
 			}
 		} catch (ServiceConfigurationError e) {
 			log.error(e.getMessage(), e);
