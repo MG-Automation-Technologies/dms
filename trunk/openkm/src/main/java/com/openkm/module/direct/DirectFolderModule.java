@@ -42,6 +42,7 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
+import com.openkm.core.Ref;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.extension.core.ExtensionException;
@@ -59,7 +60,7 @@ public class DirectFolderModule implements FolderModule {
 	
 	@Override
 	public Folder create(String token, Folder fld) throws AccessDeniedException, RepositoryException, 
-			PathNotFoundException, ItemExistsException, DatabaseException {
+			PathNotFoundException, ItemExistsException, DatabaseException, ExtensionException {
 		log.debug("create({}, {})", token, fld);
 		Folder newFolder = null;
 		Node parentNode = null;
@@ -85,7 +86,10 @@ public class DirectFolderModule implements FolderModule {
 			fld.setPath(parent + "/" + name);
 			
 			// EP - PRE
-			FolderExtensionManager.getInstance().preCreate(session, parentNode, fld);
+			Ref<Node> refParentNode = new Ref<Node>(parentNode);
+			Ref<Folder> refFld = new Ref<Folder>(fld);
+			FolderExtensionManager.getInstance().preCreate(session, refParentNode, refFld);
+			parentNode = refParentNode.get();
 			
 			// Create node
 			Node folderNode = BaseFolderModule.create(session, parentNode, name);
@@ -97,7 +101,9 @@ public class DirectFolderModule implements FolderModule {
 			BaseScriptingModule.checkScripts(session, parentNode, folderNode, "CREATE_FOLDER");
 			
 			// EP - POST
-			FolderExtensionManager.getInstance().postCreate(session, parentNode, folderNode, fld);
+			Ref<Node> refFolderNode = new Ref<Node>(folderNode);
+			Ref<Folder> refNewFolder = new Ref<Folder>(newFolder);
+			FolderExtensionManager.getInstance().postCreate(session, refParentNode, refFolderNode, refNewFolder);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "CREATE_FOLDER", folderNode.getUUID(), fld.getPath());
@@ -116,10 +122,12 @@ public class DirectFolderModule implements FolderModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
 			throw new RepositoryException(e.getMessage(), e);
-		} catch (ExtensionException e) {
-			log.error(e.getMessage(), e);
+		} catch (DatabaseException e) {
 			JCRUtils.discardsPendingChanges(parentNode);
-			throw new RepositoryException(e.getMessage(), e);
+			throw e;
+		} catch (ExtensionException e) {
+			JCRUtils.discardsPendingChanges(parentNode);
+			throw e;
 		} finally {
 			if (token == null) JCRUtils.logout(session);
 		}
