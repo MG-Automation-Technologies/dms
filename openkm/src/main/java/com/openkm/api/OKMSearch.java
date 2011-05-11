@@ -193,22 +193,22 @@ public class OKMSearch implements SearchModule {
 	}
 
 	@Override
-	public List<QueryResult> findSimple(String token, String statement) throws RepositoryException,
+	public List<QueryResult> findSimpleQuery(String token, String statement) throws RepositoryException,
 			DatabaseException {
-		log.debug("findSimple({}, {})", token, statement);
+		log.debug("findSimpleQuery({}, {})", token, statement);
 		SearchModule sm = ModuleManager.getSearchModule();
-		List<QueryResult> col = sm.findSimple(token, statement);
-		log.debug("findSimple: {}", col);
+		List<QueryResult> col = sm.findSimpleQuery(token, statement);
+		log.debug("findSimpleQuery: {}", col);
 		return col;
 	}
 
 	@Override
-	public ResultSet findSimplePaginated(String token, String statement, int offset, int limit)
+	public ResultSet findSimpleQueryPaginated(String token, String statement, int offset, int limit)
 			throws RepositoryException, DatabaseException {
-		log.debug("findSimplePaginated({})", token);
+		log.debug("findSimpleQueryPaginated({})", token);
 		SearchModule sm = ModuleManager.getSearchModule();
-		ResultSet ret = sm.findSimplePaginated(token, statement, offset, limit);
-		log.debug("findSimplePaginated: {}", ret);
+		ResultSet ret = sm.findSimpleQueryPaginated(token, statement, offset, limit);
+		log.debug("findSimpleQueryPaginated: {}", ret);
 		return ret;
 	}
 }
