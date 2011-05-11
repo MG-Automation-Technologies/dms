@@ -131,6 +131,7 @@ public class Mail extends Composite {
 		dataTable.setStyleName("okm-DisableSelect");
 		table.setStyleName("okm-Mail");
 		menuPopup.setStyleName("okm-Mail-MenuPopup");
+		attachmentsTable.setStyleName("okm-NoWrap");
 		
 		initWidget(scrollPanel);
 	}
