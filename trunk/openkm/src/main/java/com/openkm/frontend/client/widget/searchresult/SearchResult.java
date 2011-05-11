@@ -342,7 +342,7 @@ public class SearchResult extends Composite {
 	 */
 	public void findSimpleQueryPaginated(String statement, int offset, int limit) {
 		status.setFlag_findPaginated();
-		searchService.findSimpleQuery(statement, offset, limit, callbackFindPaginated);
+		searchService.findSimpleQueryPaginated(statement, offset, limit, callbackFindPaginated);
 	}
 	
 	/**

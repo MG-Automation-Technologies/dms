@@ -69,6 +69,7 @@ public class SearchIn extends Composite {
 	private int posPersonal = 0;
 	private int posMail = 0;
 	private int posTrash = 0;
+	private int searchMode = SearchControl.SEARCH_MODE_SIMPLE;
 	
 	/**
 	 * SearchIn
@@ -94,10 +95,8 @@ public class SearchIn extends Composite {
 		searchAdvanced.to.addKeyUpHandler(searchControl.keyUpHandler);
 		searchAdvanced.subject.addKeyUpHandler(searchControl.keyUpHandler);
 		
+		// By default is enabled simple mode
 		tabPanel.add(searchSimple, Main.i18n("search.simple"));
-		tabPanel.add(searchNormal, Main.i18n("search.normal"));
-		tabPanel.add(searchAdvanced, Main.i18n("search.advanced"));
-		tabPanel.add(searchMetadata, Main.i18n("search.metadata"));
 		tabPanel.selectTab(0);
 		
 		Image verticalLine = new Image("img/transparent_pixel.gif");
@@ -160,13 +159,7 @@ public class SearchIn extends Composite {
 		searchMetadata.langRefresh();
 		searchControl.langRefresh();
 		int selectedTab = tabPanel.getSelectedIndex();
-		while (tabPanel.getWidgetCount() > 0) {
-			tabPanel.remove(0);
-		}
-		tabPanel.add(searchSimple, Main.i18n("search.simple"));
-		tabPanel.add(searchNormal, Main.i18n("search.normal"));
-		tabPanel.add(searchAdvanced, Main.i18n("search.advanced"));
-		tabPanel.add(searchMetadata, Main.i18n("search.metadata"));
+		switchSearchMode(searchMode);
 		tabPanel.selectTab(selectedTab);
 	}
 	
@@ -229,6 +222,7 @@ public class SearchIn extends Composite {
 	 * @param gWTParams The params
 	 */
 	public void setSavedSearch(GWTQueryParams gWTParams) {
+		searchControl.switchSearchMode(SearchControl.SEARCH_MODE_ADVANCED);
 		if (gWTParams.getPath().startsWith(Main.get().repositoryContext.getContextTaxonomy())) {
 			searchNormal.context.setSelectedIndex(posTaxonomy);
 		} else if (gWTParams.getPath().startsWith(Main.get().repositoryContext.getContextPersonal())) {
@@ -417,6 +411,33 @@ public class SearchIn extends Composite {
 			return UIDesktopConstants.NAVIGATOR_MAIL;
 		} else {
 			return UIDesktopConstants.NAVIGATOR_TRASH;
+		}
+	}
+	
+	/**
+	 * switchSearchMode
+	 * 
+	 * @param mode
+	 */
+	public void switchSearchMode(int mode) {
+		this.searchMode = mode;
+		switch(searchMode) {
+			case SearchControl.SEARCH_MODE_SIMPLE:
+				while (tabPanel.getWidgetCount() > 0) {
+					tabPanel.remove(0);
+				}
+				tabPanel.add(searchSimple, Main.i18n("search.simple"));
+				tabPanel.selectTab(0);
+				break;
+			case SearchControl.SEARCH_MODE_ADVANCED:
+				while (tabPanel.getWidgetCount() > 0) {
+					tabPanel.remove(0);
+				}
+				tabPanel.add(searchNormal, Main.i18n("search.normal"));
+				tabPanel.add(searchAdvanced, Main.i18n("search.advanced"));
+				tabPanel.add(searchMetadata, Main.i18n("search.metadata"));
+				tabPanel.selectTab(0);
+				break;
 		}
 	}
 }
