@@ -55,6 +55,7 @@ import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VirusDetectedException;
+import com.openkm.extension.core.ExtensionException;
 import com.openkm.jcr.JCRUtils;
 import com.openkm.module.base.BaseFolderModule;
 import com.openkm.util.Benchmark;
@@ -183,6 +184,9 @@ public class BenchmarkServlet extends BaseServlet {
 		} catch (DatabaseException e) {
 			out.println("<div class=\"warn\">DatabaseException: "+e.getMessage()+"</div>");
 			out.flush();
+		} catch (ExtensionException e) {
+			out.println("<div class=\"warn\">ExtensionException: "+e.getMessage()+"</div>");
+			out.flush();
 		}
 		
 		out.println("<hr/>");
@@ -261,6 +265,9 @@ public class BenchmarkServlet extends BaseServlet {
 			out.flush();
 		} catch (UserQuotaExceededException e) {
 			out.println("<div class=\"warn\">UserQuotaExceededException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (ExtensionException e) {
+			out.println("<div class=\"warn\">ExtensionException: "+e.getMessage()+"</div>");
 			out.flush();
 		}
 				
@@ -400,6 +407,9 @@ public class BenchmarkServlet extends BaseServlet {
 			out.flush();
 		} catch (VirusDetectedException e) {
 			out.println("<div class=\"warn\">VirusDetectedException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (ExtensionException e) {
+			out.println("<div class=\"warn\">ExtensionException: "+e.getMessage()+"</div>");
 			out.flush();
 		}
 		
