@@ -43,6 +43,7 @@ import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
+import com.openkm.extension.core.ExtensionException;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.contants.ui.UIFileUploadConstants;
 import com.openkm.jcr.JcrSessionManager;
@@ -157,17 +158,17 @@ public class FileUploadServlet extends OKMHttpServlet {
 							fileName = FilenameUtils.getName(fileName);
 							log.info("Upload file '{}' into '{}'", fileName, path);
 							Document doc = new Document();
-							doc.setPath(path+"/"+fileName);
+							doc.setPath(path + "/" + fileName);
 							OKMDocument.getInstance().create(null, doc, is);
 							uploadedDocPath = doc.getPath();
 							
 							// Case is uploaded a encrypted document
-							if (cipherName!=null && !cipherName.equals("")) {
+							if (cipherName != null && !cipherName.equals("")) {
 								OKMProperty.getInstance().setEncryption(null, doc.getPath(), cipherName);
 							}
 							
 							// Return the path of the inserted document in response
-							out.print(returnOKMessage + " path["+uploadedDocPath+"]path");
+							out.print(returnOKMessage + " path[" + uploadedDocPath + "]path");
 						}
 					}
 				} else if (action == UIFileUploadConstants.ACTION_UPDATE) {
@@ -294,6 +295,9 @@ public class FileUploadServlet extends OKMHttpServlet {
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_Database));
+		} catch (ExtensionException e) {
+			log.error(e.getMessage(), e);
+			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_Extension));
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
 			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_IO));
@@ -319,7 +323,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 	 */
 	private synchronized String importZip(String path, InputStream is) throws 
 			PathNotFoundException, ItemExistsException, AccessDeniedException, 
-			RepositoryException, IOException, DatabaseException {
+			RepositoryException, IOException, DatabaseException, ExtensionException {
 		log.debug("importZip({}, {})", path, is);
         java.io.File tmpIn = null;
         java.io.File tmpOut = null;
@@ -379,7 +383,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 	 */
 	private String importJar(String path, InputStream is) throws 
 			PathNotFoundException, ItemExistsException, AccessDeniedException, 
-			RepositoryException, IOException, DatabaseException {
+			RepositoryException, IOException, DatabaseException, ExtensionException {
 		log.debug("importJar({}, {})", path, is);
         java.io.File tmpIn = null;
         java.io.File tmpOut = null;
