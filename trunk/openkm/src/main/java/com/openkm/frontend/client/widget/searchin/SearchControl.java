@@ -55,8 +55,8 @@ public class SearchControl extends Composite {
 	private static final int MIN_WORD_LENGTH = 3;
 	public static final int SEARCH_MODE_SIMPLE 	= 0;
 	public static final int SEARCH_MODE_ADVANCED 	= 1;
-	private static final int RESULTS_VIEW_NORMAL 	= 0;
-	private static final int RESULTS_VIEW_COMPACT 	= 1;
+	public static final int RESULTS_VIEW_NORMAL 	= 0;
+	public static final int RESULTS_VIEW_COMPACT 	= 1;
 	
 	private ScrollPanel scrollPanel;
 	private FlexTable table;
@@ -560,6 +560,7 @@ public class SearchControl extends Composite {
 	 */
 	private void switchResultsViewMode (int mode) {
 		resultsViewMode = mode;
+		Main.get().mainPanel.search.searchBrowser.searchResult.switchResultsViewMode(resultsViewMode);
 	}
 	
 	/**

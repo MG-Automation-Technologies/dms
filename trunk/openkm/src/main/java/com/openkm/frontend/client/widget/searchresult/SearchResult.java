@@ -24,273 +24,94 @@ package com.openkm.frontend.client.widget.searchresult;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
-import com.google.gwt.gen2.table.client.FixedWidthGrid;
-import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.bean.GWTDocument;
-import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.bean.GWTQueryResult;
 import com.openkm.frontend.client.bean.GWTResultSet;
 import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.service.OKMSearchServiceAsync;
-import com.openkm.frontend.client.util.CommonUI;
 import com.openkm.frontend.client.util.Util;
+import com.openkm.frontend.client.widget.searchin.SearchControl;
 
 /**
- * SearchResult
- * 
  * @author jllort
  *
  */
 public class SearchResult extends Composite {
-	
 	private final OKMSearchServiceAsync searchService = (OKMSearchServiceAsync) GWT.create(OKMSearchService.class);
+	private final static int IE_SIZE_RECTIFICATION = (Util.getUserAgent().startsWith("ie")?2:0);
 	
-	// Number of columns
-	public static final int NUMBER_OF_COLUMNS	= 8;
-	
-	public ExtendedScrollTable table;
-	private FixedWidthFlexTable headerTable;
-	private FixedWidthGrid dataTable;
-	public MenuPopup menuPopup;
+	SimplePanel sp;
+	public SearchCompactResult searchCompactResult;
+	private SearchFullResult searchFullResult;
 	public Status status;
+	private GWTResultSet resultSet = new GWTResultSet();
+	private int resultsViewMode = SearchControl.RESULTS_VIEW_NORMAL;
 	
-	/**
-	 * SearchResult
-	 */
 	public SearchResult() {
-		menuPopup = new MenuPopup();
-		menuPopup.setStyleName("okm-SearchResult-MenuPopup");	
+		sp = new SimplePanel();
+		searchCompactResult = new SearchCompactResult();
+		searchFullResult = new SearchFullResult();
+		sp.add(searchFullResult);
+		
 		status = new Status();
 		status.setStyleName("okm-StatusPopup");
 		
-		ScrollTableImages scrollTableImages = new ScrollTableImages(){
-			public AbstractImagePrototype scrollTableAscending() {
-				return new AbstractImagePrototype() {
-					public void applyTo(Image image) {
-						image.setUrl("img/sort_asc.gif");
-					}
-					public Image createImage() {
-						return  new Image("img/sort_asc.gif");
-					}
-					public String getHTML(){
-						return "<img border=\"0\" src=\"img/sort_asc.gif\"/>";
-					}
-				};
-			}
-			
-			public AbstractImagePrototype scrollTableDescending() {
-				return new AbstractImagePrototype() {
-					public void applyTo(Image image) {
-						image.setUrl("img/sort_desc.gif");
-					}
-					public Image createImage() {
-						return  new Image("img/sort_desc.gif");
-					}
-					public String getHTML(){
-						return "<img border=\"0\" src=\"img/sort_desc.gif\"/>";
-					}
-				};
-			}
-
-			public AbstractImagePrototype scrollTableFillWidth() {
-				return new AbstractImagePrototype() {
-					public void applyTo(Image image) {
-						image.setUrl("img/fill_width.gif");
-					}
-					public Image createImage() {
-						return  new Image("img/fill_width.gif");
-					}
-					public String getHTML(){
-						return "<img border=\"0\" src=\"img/fill_width.gif\"/>";
-					}
-				};
-			}
-		};
-		
-		headerTable = new FixedWidthFlexTable();
-		dataTable = new FixedWidthGrid();
-		table = new ExtendedScrollTable(dataTable,headerTable,scrollTableImages);
-		table.setCellSpacing(0);
-		table.setCellPadding(2);
-		table.setSize("540","140");
-		
-		// Level 1 headers
-	    headerTable.setHTML(0, 0, Main.i18n("search.result.score"));
-	    headerTable.setHTML(0, 1, "&nbsp;");
-	    headerTable.setHTML(0, 2, Main.i18n("search.result.name"));
-	    headerTable.setHTML(0, 3, Main.i18n("search.result.size"));
-	    headerTable.setHTML(0, 4, Main.i18n("search.result.date.update"));
-	    headerTable.setHTML(0, 5, Main.i18n("search.result.author"));
-	    headerTable.setHTML(0, 6, Main.i18n("search.result.version"));
-		
-		// Format    
-	    table.setColumnWidth(0,70);
-	    table.setColumnWidth(1,25);
-	    table.setColumnWidth(2,150);
-	    table.setColumnWidth(3,100);
-	    table.setColumnWidth(4,150);
-	    table.setColumnWidth(5,110);
-	    table.setColumnWidth(6,90);
-	    
-	    table.setPreferredColumnWidth(0, 70);
-		table.setPreferredColumnWidth(1, 25);
-		table.setPreferredColumnWidth(4, 150);
-		
-		table.addStyleName("okm-DisableSelect");
-		table.addStyleName("okm-Input");
-		
-		initWidget(table);
+		initWidget(sp);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.google.gwt.user.client.ui.UIObject#setPixelSize(int, int)
+	 */
+	public void setPixelSize(int width, int height) {
+		sp.setPixelSize(width, height);
+		searchFullResult.setPixelSize(width, height);
+		searchCompactResult.setPixelSize(width+IE_SIZE_RECTIFICATION, height+IE_SIZE_RECTIFICATION);
+		searchCompactResult.fixWidth();
 	}
 	
 	/**
-	 * Refreshing lang
+	 * langRefresh
 	 */
 	public void langRefresh() {
-		headerTable.setHTML(0, 0, Main.i18n("search.result.score"));
-		headerTable.setHTML(0, 2, Main.i18n("search.result.name"));
-		headerTable.setHTML(0, 3, Main.i18n("search.result.size"));
-		headerTable.setHTML(0, 4, Main.i18n("search.result.date.update"));
-		headerTable.setHTML(0, 5, Main.i18n("search.result.author"));
-		headerTable.setHTML(0, 6, Main.i18n("search.result.version"));
-		menuPopup.langRefresh();
+		searchCompactResult.langRefresh();
 	}
 	
 	/**
-	 * Removes all rows except the first
+	 * Get the saved search
+	 * 
+	 * @param params
+	 */
+	public void getSearch(GWTQueryParams params) {
+		Main.get().mainPanel.search.searchBrowser.searchIn.setSavedSearch(params);
+		searchCompactResult.removeAllRows();
+	}
+	
+	/**
+	 * removeAllRows
 	 */
 	public void removeAllRows() {
-		// Purge all rows 
-		while (dataTable.getRowCount() > 0) {
-			dataTable.removeRow(0);
-		}
-		
-		table.reset();
-		table.getDataTable().resize(0, NUMBER_OF_COLUMNS);
-	}
-	
-	/**
-	 * Adds a document to the panel
-	 * 
-	 * @param doc The doc to add
-	 */
-	private void addRow(GWTQueryResult gwtQueryResult) {
-		 table.addRow(gwtQueryResult);
-	 }
-	
-	/**
-	 * Show the browser menu
-	 */
-	public void showMenu() {
-		// The browser menu depends on actual view
-		// Must substract top position from Y Screen Position
-		menuPopup.setPopupPosition(table.getMouseX(), table.getMouseY());
-		menuPopup.show();		
-	}
-	
-	/**
-	 * Download document
-	 */
-	public void downloadDocument() {
-		if (!dataTable.getSelectedRows().isEmpty()) {
-			if (table.isDocumentSelected()) {
-				Util.downloadFile(getDocument().getPath(), "");
-			} else if (table.isAttachmentSelected()) {
-				Util.downloadFile(getAttachment().getPath(), "");
-			}
-		}
-	}
-	
-	/**
-	 * Open all folder path
-	 */
-	public void openAllFolderPath() {
-		String docPath = "";
-		String path = "";
-		if (table.isDocumentSelected() || table.isAttachmentSelected()) {
-			if (table.isAttachmentSelected()) {
-				docPath = getAttachment().getParent();
-			} else {
-				docPath = getDocument().getPath();
-			}
-			path = docPath.substring(0,docPath.lastIndexOf("/"));
+		switch(resultsViewMode) {
+			case SearchControl.RESULTS_VIEW_COMPACT:
+				searchCompactResult.removeAllRows();
+				break;
 			
-		} else if (table.isFolderSelected()) {
-			path = getFolder().getPath();
-			
-		} else if (table.isMailSelected()) {
-			docPath = getMail().getPath();
-			path = docPath.substring(0,docPath.lastIndexOf("/"));
+			case SearchControl.RESULTS_VIEW_NORMAL:
+				searchFullResult.removeAllRows();
+				break;
 		}
-		CommonUI.openAllFolderPath(path, docPath);
-		menuPopup.hide();
 	}
 	
-	/**
-	 * Gets a actual document object row
-	 * 
-	 * @return The Document object value
-	 */
-	public GWTDocument getDocument() {
-		//Row selected must be on table documents
-		return table.getDocument();
-	}
-	
-	/**
-	 * Gets a actual attachment object row
-	 * 
-	 * @return The Attachment object value
-	 */
-	public GWTDocument getAttachment() {
-		//Row selected must be on table documents
-		return table.getAttachment();
-	}
-	
-	/**
-	 * Gets a actual folder object row
-	 * 
-	 * @return The folder object value
-	 */
-	public GWTFolder getFolder() {
-		//Row selected must be on table documents
-		return table.getFolder();
-	}
-	
-	/**
-	 * Gets a actual mail object row
-	 * 
-	 * @return The mail object value
-	 */
-	public GWTMail getMail() {
-		//Row selected must be on table documents
-		return table.getMail();
-	}
-
 	/**
 	 * Call Back find paginated
 	 */
 	final AsyncCallback<GWTResultSet> callbackFindPaginated = new AsyncCallback<GWTResultSet>() {
 		public void onSuccess(GWTResultSet result){
-			GWTResultSet resultSet = result;	
-			Main.get().mainPanel.search.searchBrowser.searchIn.searchControl.controlSearch.refreshControl(resultSet.getTotal());
-			
-			removeAllRows();
-			int size = 0;
-			
-			for (Iterator<GWTQueryResult> it = resultSet.getResults().iterator(); it.hasNext();){
-				GWTQueryResult gwtQueryResult = it.next();
-				
-				addRow(gwtQueryResult);
-				size++;
-			}
-			
+			resultSet = result;	
+			drawResults();
 			status.unsetFlag_findPaginated();
 		}
 		
@@ -301,28 +122,27 @@ public class SearchResult extends Composite {
 	};
 	
 	/**
-	 * Call Back get search
+	 * drawResults
 	 */
-	final AsyncCallback<GWTQueryParams> callbackGetSearch = new AsyncCallback<GWTQueryParams>() {
-		public void onSuccess(GWTQueryParams result){
-			GWTQueryParams gWTParams = result;	
-			Main.get().mainPanel.search.searchBrowser.searchIn.setSavedSearch(gWTParams);
-			removeAllRows();
-		}
+	private void drawResults() {
+		Main.get().mainPanel.search.searchBrowser.searchIn.searchControl.controlSearch.refreshControl(resultSet.getTotal());
 		
-		public void onFailure(Throwable caught) {
-			Main.get().showError("getSearch", caught);
-		}
-	};
-	
-	/**
-	 * Get the saved search
-	 * 
-	 * @param params
-	 */
-	public void getSearch(GWTQueryParams params) {
-		Main.get().mainPanel.search.searchBrowser.searchIn.setSavedSearch(params);
 		removeAllRows();
+		int size = 0;
+		
+		for (Iterator<GWTQueryResult> it = resultSet.getResults().iterator(); it.hasNext();){
+			GWTQueryResult gwtQueryResult = it.next();
+			switch(resultsViewMode) {
+				case SearchControl.RESULTS_VIEW_COMPACT:
+					searchCompactResult.addRow(gwtQueryResult);
+					break;
+				
+				case SearchControl.RESULTS_VIEW_NORMAL:
+					searchFullResult.addRow(gwtQueryResult);
+					break;
+			}
+			size++;
+		}
 	}
 	
 	/**
@@ -346,27 +166,34 @@ public class SearchResult extends Composite {
 	}
 	
 	/**
-	 * Indicates if panel is selected
-	 * 
-	 * @return The value of panel ( selected )
-	 */
-	public boolean isPanelSelected(){
-		return table.isPanelSelected();
-	}
-	
-	/**
 	 * Sets the selected panel value
 	 * 
 	 * @param selected The select panel value
 	 */
 	public void setSelectedPanel(boolean selected) {
-		table.setSelectedPanel(selected);
+		searchCompactResult.setSelectedPanel(selected);
 	}
 	
 	/**
-	 * Fix width
+	 * switchResultsViewMode
+	 * 
+	 * @param mode
 	 */
-	public void fixWidth() {
-		table.fillWidth();
+	public void switchResultsViewMode (int mode) {
+		resultsViewMode = mode;
+		switch(resultsViewMode) {
+			case SearchControl.RESULTS_VIEW_COMPACT:
+				sp.remove(searchFullResult);
+				sp.add(searchCompactResult);
+				break;
+			
+			case SearchControl.RESULTS_VIEW_NORMAL:
+				sp.remove(searchCompactResult);
+				sp.add(searchFullResult);
+				break;
+		}
+		status.setFlag_refreshResults();
+		drawResults();
+		status.unsetFlag_refreshResults();
 	}
 }
