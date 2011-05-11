@@ -39,6 +39,7 @@ import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
+import com.openkm.extension.core.ExtensionException;
 import com.openkm.principal.PrincipalAdapterException;
 
 public interface DocumentModule {
@@ -64,7 +65,7 @@ public interface DocumentModule {
 	public Document create(String token, Document doc, InputStream is) throws UnsupportedMimeTypeException, 
 			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, 
 			ItemExistsException, PathNotFoundException, AccessDeniedException, 
-			RepositoryException, IOException, DatabaseException;
+			RepositoryException, IOException, DatabaseException, ExtensionException;
 	
 	/**
 	 * Deletes a document from the repository. It is a logical delete,
