@@ -306,8 +306,8 @@ public class SearchServlet extends OKMRemoteServiceServlet implements OKMSearchS
 	}
 
 	@Override
-	public GWTResultSet findSimpleQuery(String statement, int offset, int limit) throws OKMException {
-		log.debug("findSimpleQuery({})", statement);
+	public GWTResultSet findSimpleQueryPaginated(String statement, int offset, int limit) throws OKMException {
+		log.debug("findSimpleQueryPaginated({})", statement);
 		List<GWTQueryResult> resultList = new ArrayList<GWTQueryResult>(); 
 		GWTResultSet gwtResultSet = new GWTResultSet();
 		ResultSet results;
@@ -336,7 +336,7 @@ public class SearchServlet extends OKMRemoteServiceServlet implements OKMSearchS
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("findSimpleQuery: {}", resultList);
+		log.debug("findSimpleQueryPaginated: {}", resultList);
 		return gwtResultSet;
 	}
 }
