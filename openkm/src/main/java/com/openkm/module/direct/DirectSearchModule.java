@@ -868,19 +868,19 @@ public class DirectSearchModule implements SearchModule {
 	}
 	
 	@Override
-	public List<QueryResult> findSimple(String token, String statement) throws RepositoryException,
+	public List<QueryResult> findSimpleQuery(String token, String statement) throws RepositoryException,
 			DatabaseException {
-		log.debug("findSimple({}, {})", token, statement);
-		List<QueryResult> ret = findSimplePaginated(token, statement, 0, Config.MAX_SEARCH_RESULTS).getResults();
-		log.debug("findSimple: {}", ret);
+		log.debug("findSimpleQuery({}, {})", token, statement);
+		List<QueryResult> ret = findSimpleQueryPaginated(token, statement, 0, Config.MAX_SEARCH_RESULTS).getResults();
+		log.debug("findSimpleQuery: {}", ret);
 		return ret;
 		
 	}
 	
 	@Override
-	public ResultSet findSimplePaginated(String token, String statement, int offset, int limit) throws
+	public ResultSet findSimpleQueryPaginated(String token, String statement, int offset, int limit) throws
 			RepositoryException, DatabaseException {
-		log.debug("findSimplePaginated({}, {}, {}, {})", new Object[] { token, statement, offset, limit });
+		log.debug("findSimpleQueryPaginated({}, {}, {}, {})", new Object[] { token, statement, offset, limit });
 		ResultSet rs = new ResultSet();
 		Session session = null;
 		
@@ -899,7 +899,7 @@ public class DirectSearchModule implements SearchModule {
 			if (token == null) JCRUtils.logout(session);
 		}
 		
-		log.debug("findSimplePaginated: {}", rs);
+		log.debug("findSimpleQueryPaginated: {}", rs);
 		return rs;
 	}
 }
