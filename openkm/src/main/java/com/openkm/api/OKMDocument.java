@@ -42,6 +42,7 @@ import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
+import com.openkm.extension.core.ExtensionException;
 import com.openkm.module.DocumentModule;
 import com.openkm.module.ModuleManager;
 import com.openkm.principal.PrincipalAdapterException;
@@ -64,7 +65,7 @@ public class OKMDocument implements DocumentModule {
 	public Document create(String token, Document doc, InputStream is) throws UnsupportedMimeTypeException, 
 			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, 
 			ItemExistsException, PathNotFoundException, AccessDeniedException, 
-			RepositoryException, IOException, DatabaseException {
+			RepositoryException, IOException, DatabaseException, ExtensionException {
 		log.debug("create({}, {}, {})", new Object[] { token, doc, is });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Document newDocument = dm.create(token, doc, is);
@@ -75,7 +76,7 @@ public class OKMDocument implements DocumentModule {
 	public Document createSimple(String token, String docPath, InputStream is) throws 
 			UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
 			VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException, 
-			RepositoryException, IOException, DatabaseException {
+			RepositoryException, IOException, DatabaseException, ExtensionException {
 		log.debug("createSimple({}, {}, {})", new Object[] { token, docPath, is});
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Document doc = new Document();
