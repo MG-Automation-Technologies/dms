@@ -39,7 +39,7 @@ import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VirusDetectedException;
 
-public interface DocumentExtension extends SortableExtension {
+public interface DocumentExtension extends Extension  {
 	/**
 	 * Executed BEFORE document creation.
 	 */

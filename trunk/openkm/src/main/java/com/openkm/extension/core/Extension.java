@@ -24,4 +24,5 @@ package com.openkm.extension.core;
 import net.xeoh.plugins.base.Plugin;
 
 public interface Extension extends Plugin {
+	public int getOrder();
 }

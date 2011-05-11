@@ -32,7 +32,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.Ref;
 import com.openkm.core.RepositoryException;
 
-public interface FolderExtension extends SortableExtension {
+public interface FolderExtension extends Extension {
 	/**
 	 * Executed BEFORE folder creation.
 	 */
