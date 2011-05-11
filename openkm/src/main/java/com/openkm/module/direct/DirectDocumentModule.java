@@ -58,6 +58,7 @@ import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
+import com.openkm.core.Ref;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.UserQuotaExceededException;
@@ -91,7 +92,7 @@ public class DirectDocumentModule implements DocumentModule {
 	public Document create(String token, Document doc, InputStream is) throws UnsupportedMimeTypeException, 
 			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, 
 			ItemExistsException, PathNotFoundException, AccessDeniedException, 
-			RepositoryException, IOException, DatabaseException {
+			RepositoryException, IOException, DatabaseException, ExtensionException {
 		log.debug("create({})", doc);
 		Document newDocument = null;
 		Node parentNode = null;
@@ -147,7 +148,11 @@ public class DirectDocumentModule implements DocumentModule {
 			is = new FileInputStream(tmp);
 			
 			// EP - PRE
-			DocumentExtensionManager.getInstance().preCreate(session, parentNode, tmp, doc);
+			Ref<Node> refParentNode = new Ref<Node>(parentNode);
+			Ref<File> refTmp = new Ref<File>(tmp);
+			Ref<Document> refDoc = new Ref<Document>(doc);
+			DocumentExtensionManager.getInstance().preCreate(session, refParentNode, refTmp, refDoc);
+			parentNode = refParentNode.get();
 			
 			if (!Config.SYSTEM_ANTIVIR.equals("")) {
 				VirusDetection.detect(tmp);
@@ -189,7 +194,9 @@ public class DirectDocumentModule implements DocumentModule {
 			BaseScriptingModule.checkScripts(session, parentNode, documentNode, "CREATE_DOCUMENT");
 			
 			// EP - POST
-			DocumentExtensionManager.getInstance().postCreate(session, parentNode, documentNode, doc);
+			Ref<Node> refDocumentNode = new Ref<Node>(documentNode);
+			Ref<Document> refNewDocument = new Ref<Document>(newDocument);
+			DocumentExtensionManager.getInstance().postCreate(session, refParentNode, refDocumentNode, refNewDocument);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "CREATE_DOCUMENT", documentNode.getUUID(), mimeType+", "+size+", "+doc.getPath());
@@ -217,16 +224,21 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
 			throw new RepositoryException(e.getMessage(), e);
-		} catch (ExtensionException e) {
-			log.error(e.getMessage(), e);
+		} catch (VirusDetectedException e) {
 			JCRUtils.discardsPendingChanges(parentNode);
-			throw new RepositoryException(e.getMessage(), e);
+			throw e;
+		} catch (DatabaseException e) {
+			JCRUtils.discardsPendingChanges(parentNode);
+			throw e;
+		} catch (ExtensionException e) {
+			JCRUtils.discardsPendingChanges(parentNode);
+			throw e;
 		} finally {
 			org.apache.commons.io.FileUtils.deleteQuietly(tmp);
 			if (token == null) JCRUtils.logout(session);
 		}
 
-		log.debug("create: {}", newDocument);
+		log.info("create: {}", newDocument);
 		return newDocument;
 	}
 
