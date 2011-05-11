@@ -65,45 +65,46 @@ public class ErrorCode {
 	
 	// Cause code error is XXX digits
 	public static final String CAUSE_Repository 				= "001";
-	public static final String CAUSE_ItemNotFound 				= "002";
+	public static final String CAUSE_ItemNotFound 			= "002";
 	public static final String CAUSE_ItemExists 				= "003";
 	public static final String CAUSE_Lock						= "004";
-	public static final String CAUSE_UnLock						= "005";
+	public static final String CAUSE_UnLock					= "005";
 	public static final String CAUSE_General 					= "006";
-	public static final String CAUSE_OKMGeneral					= "007";
-	public static final String CAUSE_GWTShellEnviroment			= "008";
+	public static final String CAUSE_OKMGeneral				= "007";
+	public static final String CAUSE_GWTShellEnviroment		= "008";
 	public static final String CAUSE_AccessDenied				= "009";
 	public static final String CAUSE_UnsupportedMimeType		= "010";
 	public static final String CAUSE_FileSizeExceeded			= "011";
 	public static final String CAUSE_NoSuchGroup				= "012";
-	public static final String CAUSE_IO							= "013";
-	public static final String CAUSE_NoSuchProperty				= "014";
+	public static final String CAUSE_IO						= "013";
+	public static final String CAUSE_NoSuchProperty			= "014";
 	public static final String CAUSE_PathNotFound				= "015";
 	public static final String CAUSE_Version					= "016";
 	public static final String CAUSE_SessionLost				= "017";
 	public static final String CAUSE_FileNotFound				= "018";
-	public static final String CAUSE_Parse						= "019";
-	public static final String CAUSE_InvalidNodeTypeDef			= "020";
+	public static final String CAUSE_Parse					= "019";
+	public static final String CAUSE_InvalidNodeTypeDef		= "020";
 	public static final String CAUSE_SQL		 				= "021";
-	public static final String CAUSE_Configuration 				= "022";
+	public static final String CAUSE_Configuration 			= "022";
 	public static final String CAUSE_QuotaExceed 				= "023";
 	public static final String CAUSE_Database					= "024";
 	public static final String CAUSE_PrincipalAdapter			= "025";
 	public static final String CAUSE_Workflow					= "026";
 	public static final String CAUSE_DocumentNameMismatch		= "027";
 	public static final String CAUSE_NumberFormat				= "028";
-	public static final String CAUSE_Login						= "029";
+	public static final String CAUSE_Login					= "029";
 	public static final String CAUSE_Document					= "030";
 	public static final String CAUSE_Eval						= "031";
-	public static final String CAUSE_Virus						= "032";
-	public static final String CAUSE_Conversion					= "033";
-	public static final String CAUSE_Authentication				= "034";
-	public static final String CAUSE_Google						= "035";
+	public static final String CAUSE_Virus					= "032";
+	public static final String CAUSE_Conversion				= "033";
+	public static final String CAUSE_Authentication			= "034";
+	public static final String CAUSE_Google					= "035";
 	public static final String CAUSE_UnsupportedEncoding		= "036";
 	public static final String CAUSE_MalformedURL				= "037";
 	public static final String CAUSE_Zoho						= "038";
 	public static final String CAUSE_DocumentTemplate			= "039";
 	public static final String CAUSE_Template					= "040";
+	public static final String CAUSE_Extension				= "041";
 
 	/**
 	 * Gets the error
