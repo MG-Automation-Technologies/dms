@@ -57,6 +57,7 @@ public class SearchIn extends Composite {
 	
 	private HorizontalPanel hPanel;
 	public TabLayoutPanel tabPanel;
+	public SearchSimple searchSimple;
 	public SearchNormal searchNormal;
 	public SearchAdvanced searchAdvanced;
 	public SearchMetadata searchMetadata;
@@ -76,6 +77,7 @@ public class SearchIn extends Composite {
 		futuramaWalking = new FuturamaWalking();
 		hPanel = new HorizontalPanel();
 		tabPanel = new TabLayoutPanel(TAB_HEIGHT, Unit.PX);
+		searchSimple = new SearchSimple();
 		searchNormal = new SearchNormal();
 		searchAdvanced = new SearchAdvanced();
 		searchMetadata = new SearchMetadata();
@@ -84,6 +86,7 @@ public class SearchIn extends Composite {
 		status.setStyleName("okm-StatusPopup");
 
 		// Adding keyword listeners
+		searchSimple.fullText.addKeyUpHandler(searchControl.keyUpHandler);
 		searchNormal.content.addKeyUpHandler(searchControl.keyUpHandler);
 		searchNormal.name.addKeyUpHandler(searchControl.keyUpHandler);
 		searchNormal.keywords.addKeyUpHandler(searchControl.keyUpHandler);		
@@ -91,6 +94,7 @@ public class SearchIn extends Composite {
 		searchAdvanced.to.addKeyUpHandler(searchControl.keyUpHandler);
 		searchAdvanced.subject.addKeyUpHandler(searchControl.keyUpHandler);
 		
+		tabPanel.add(searchSimple, Main.i18n("search.simple"));
 		tabPanel.add(searchNormal, Main.i18n("search.normal"));
 		tabPanel.add(searchAdvanced, Main.i18n("search.advanced"));
 		tabPanel.add(searchMetadata, Main.i18n("search.metadata"));
@@ -139,6 +143,7 @@ public class SearchIn extends Composite {
 		}
 		tabPanel.setWidth(""+(tabWidth-2));
 		tabPanel.setHeight(""+(height-2));
+		searchSimple.setPixelSize(tabWidth-2, height-22); // Substract tab height
 		searchNormal.setPixelSize(tabWidth-2, height-22); // Substract tab height
 		searchAdvanced.setPixelSize(tabWidth-2, height-22); // Substract tab height
 		searchMetadata.setPixelSize(tabWidth-2, height-22); // Substract tab height
@@ -149,6 +154,7 @@ public class SearchIn extends Composite {
 	 * Refreshing lang
 	 */
 	public void langRefresh() {
+		searchSimple.langRefresh();
 		searchNormal.langRefresh();
 		searchAdvanced.langRefresh();
 		searchMetadata.langRefresh();
@@ -157,6 +163,7 @@ public class SearchIn extends Composite {
 		while (tabPanel.getWidgetCount() > 0) {
 			tabPanel.remove(0);
 		}
+		tabPanel.add(searchSimple, Main.i18n("search.simple"));
 		tabPanel.add(searchNormal, Main.i18n("search.normal"));
 		tabPanel.add(searchAdvanced, Main.i18n("search.advanced"));
 		tabPanel.add(searchMetadata, Main.i18n("search.metadata"));
@@ -255,7 +262,7 @@ public class SearchIn extends Composite {
 		searchNormal.content.setText(gWTParams.getContent());
 		searchNormal.name.setText(gWTParams.getName());
 		searchNormal.keywords.setText(gWTParams.getKeywords());
-		searchControl.dashboard.setValue(gWTParams.isDashboard());
+		searchControl.userNews.setValue(gWTParams.isDashboard());
 		
 		searchAdvanced.from.setText(gWTParams.getMailFrom());
 		searchAdvanced.to.setText(gWTParams.getMailTo());

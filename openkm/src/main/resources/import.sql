@@ -703,10 +703,12 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('f
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.date.range', 'Date range between', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.folder', 'Folder', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.folder.filter', 'Filter by folder', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.document.filter', 'Filter by document', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.keywords', 'Keywords', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.metadata', 'Metadata', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.mimetype', 'Mime type', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.name', 'Name', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.simple', 'Fulltext search', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.normal', 'Basic', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.page.results', 'Page results', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.result.author', 'Author', 'en-GB');
@@ -722,6 +724,8 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('f
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.result.status.runsearch', 'Updating saved search', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.result.version', 'Version', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.results', 'Results', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.view.advanced', 'View advanced mode', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.view.compact.results', 'Results compact view', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.save.as.news', 'Save as user news', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.saved.delete', 'Delete', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.saved.run', 'Run', 'en-GB');
@@ -827,6 +831,7 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('f
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'tree.menu.directory.copy', 'Copy', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'tree.menu.directory.create', 'Create folder', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'tree.menu.directory.find.folder', 'Find folder', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'tree.menu.directory.find.document', 'Find document', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'tree.menu.directory.move', 'Move', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'tree.menu.directory.refresh', 'Refresh', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'tree.menu.directory.remove', 'Delete', 'en-GB');
@@ -1571,10 +1576,12 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('f
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.date.range', 'Rango de fechas entre', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.folder', 'Carpeta', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.folder.filter', 'Filtrado por carpeta', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.document.filter', 'Filtrado por documento', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.keywords', 'Palabras clave', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.metadata', 'Metadatos', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.mimetype', 'Tipo documento', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.name', 'Nombre', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.simple', 'Búsqueda por texto libre', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.normal', 'Básico', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.page.results', 'Resultados por página', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.result.author', 'Autor', 'es-ES');
@@ -1590,6 +1597,8 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('f
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.result.status.runsearch', 'Ejecutando búsqueda almacenada', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.result.version', 'Versión', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.results', 'Resultados', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.view.advanced', 'Ver búsqueda avanzada', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.view.compact.results', 'Vista de resultados compacta', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.save.as.news', 'Guardar como novedades de usuario', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.saved.delete', 'Eliminar', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'search.saved.run', 'Ejecutar', 'es-ES');
@@ -1695,6 +1704,7 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('f
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'tree.menu.directory.copy', 'Copiar', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'tree.menu.directory.create', 'Crear carpeta', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'tree.menu.directory.find.folder', 'Buscar carpeta', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'tree.menu.directory.find.document', 'Buscar documento', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'tree.menu.directory.move', 'Mover', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'tree.menu.directory.refresh', 'Refrescar', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'tree.menu.directory.remove', 'Eliminar', 'es-ES');

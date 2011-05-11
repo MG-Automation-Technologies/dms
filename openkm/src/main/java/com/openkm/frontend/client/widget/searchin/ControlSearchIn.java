@@ -47,9 +47,10 @@ public class ControlSearchIn extends Composite {
 	private FlexTable table;
 	private int offset = 0;
 	private int limit = 10;
-	private boolean previousEnabled = false;  	// Indicates if button is enabled
-	private boolean nextEnabled = false; // Indicates if button is enabled
-	private GWTQueryParams gwtParams;		// Actual search values
+	private boolean previousEnabled = false;	// Indicates if button is enabled
+	private boolean nextEnabled = false; 		// Indicates if button is enabled
+	private GWTQueryParams gwtParams;			// Actual search values
+	private String statement;					// Simple search valeu
 	private long total = 0;
 	
 	public ControlSearchIn(){
@@ -64,7 +65,11 @@ public class ControlSearchIn extends Composite {
 			public void onClick(ClickEvent event) {
 				if (previousEnabled) {
 					offset -= limit; 
-					Main.get().mainPanel.search.searchBrowser.searchResult.findPaginated(gwtParams, offset, limit);
+					if (gwtParams!=null) {
+						Main.get().mainPanel.search.searchBrowser.searchResult.findPaginated(gwtParams, offset, limit);
+					} else {
+						Main.get().mainPanel.search.searchBrowser.searchResult.findSimpleQueryPaginated(statement, offset, limit);
+					}
 				}
 			}
 		});
@@ -74,7 +79,11 @@ public class ControlSearchIn extends Composite {
 			public void onClick(ClickEvent event) {
 				if (nextEnabled) {
 					offset += limit; 
-					Main.get().mainPanel.search.searchBrowser.searchResult.findPaginated(gwtParams, offset, limit);
+					if (gwtParams!=null) {
+						Main.get().mainPanel.search.searchBrowser.searchResult.findPaginated(gwtParams, offset, limit);
+					} else {
+						Main.get().mainPanel.search.searchBrowser.searchResult.findSimpleQueryPaginated(statement, offset, limit);
+					}
 				}
 			}
 		});
@@ -98,9 +107,21 @@ public class ControlSearchIn extends Composite {
 	 */
 	public void executeSearch(GWTQueryParams gwtParams, int limit) {		
 		this.gwtParams = gwtParams;
+		this.statement = null;
 		this.limit = limit;
 		offset = 0;
 		Main.get().mainPanel.search.searchBrowser.searchResult.findPaginated(gwtParams, offset, limit);
+	}
+	
+	/**
+	 * Executes the search
+	 */
+	public void executeSearch(String statement, int limit) {	
+		this.gwtParams = null;
+		this.statement = statement;
+		this.limit = limit;
+		offset = 0;
+		Main.get().mainPanel.search.searchBrowser.searchResult.findSimpleQueryPaginated(statement, offset, limit);
 	}
 	
 	/**
