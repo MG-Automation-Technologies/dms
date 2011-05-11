@@ -59,14 +59,16 @@ public class FolderExtensionManager {
 	public void preCreate(Session session, Ref<Node> parentNode, Ref<Folder> fld) throws 
 			AccessDeniedException, RepositoryException, PathNotFoundException,
 			ItemExistsException, DatabaseException, ExtensionException {
+		log.debug("preCreate({}, {}, {})", new Object[] { session, parentNode, fld });
+		
 		try {
 			ExtensionManager em = ExtensionManager.getInstance();
 			List<FolderExtension> col = em.getPlugins(FolderExtension.class);
 			Collections.sort(col, new OrderComparator<FolderExtension>());
 			
-			for (FolderExtension de : col) {
-				log.info("Es: {}", de.getClass().getCanonicalName());
-				de.preCreate(session, parentNode, fld);
+			for (FolderExtension ext : col) {
+				log.debug("Extension class: {}", ext.getClass().getCanonicalName());
+				ext.preCreate(session, parentNode, fld);
 			}
 		} catch (ServiceConfigurationError e) {
 			log.error(e.getMessage(), e);
@@ -79,14 +81,16 @@ public class FolderExtensionManager {
 	public void postCreate(Session session, Ref<Node> parentNode, Ref<Node> fldNode, Ref<Folder> fld) throws
 			AccessDeniedException, RepositoryException, PathNotFoundException,
 			ItemExistsException, DatabaseException, ExtensionException {
+		log.debug("postCreate({}, {}, {}, {})", new Object[] { session, parentNode, fldNode, fld });
+		
 		try {
 			ExtensionManager em = ExtensionManager.getInstance();
 			List<FolderExtension> col = em.getPlugins(FolderExtension.class);
 			Collections.sort(col, new OrderComparator<FolderExtension>());
 			
-			for (FolderExtension de : col) {
-				log.info("Es: {}", de.getClass().getCanonicalName());
-				de.postCreate(session, parentNode, fldNode, fld);
+			for (FolderExtension ext : col) {
+				log.debug("Extension class: {}", ext.getClass().getCanonicalName());
+				ext.postCreate(session, parentNode, fldNode, fld);
 			}
 		} catch (ServiceConfigurationError e) {
 			log.error(e.getMessage(), e);
