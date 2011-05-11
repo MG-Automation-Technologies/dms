@@ -23,11 +23,11 @@ package com.openkm.extension.core;
 
 import java.util.Comparator;
 
-public class OrderComparator<T extends SortableExtension> implements Comparator<T> {
+public class OrderComparator<T extends Extension> implements Comparator<T> {
 	@Override
 	public int compare(T o1, T o2) {
-		int o1i = ((SortableExtension) o1).getOrder();
-		int o2i = ((SortableExtension) o2).getOrder();
+		int o1i = ((Extension) o1).getOrder();
+		int o2i = ((Extension) o2).getOrder();
 		
 		return (o1i > o2i ? -1 : (o1i < o2i ? 1 : 0));
 	}
