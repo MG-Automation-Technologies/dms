@@ -195,7 +195,8 @@ public interface SearchModule {
 	 * @return A collection of documents.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public List<QueryResult> findSimple(String token, String statement) throws RepositoryException, DatabaseException;
+	public List<QueryResult> findSimpleQuery(String token, String statement) throws RepositoryException,
+			DatabaseException;
 	
 	/**
 	 * Performs a simple search using GQL languahe. Paginated version.
@@ -208,6 +209,6 @@ public interface SearchModule {
 	 * from the resulting query statement.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public ResultSet findSimplePaginated(String token, String statement, int offset, int limit) throws
+	public ResultSet findSimpleQueryPaginated(String token, String statement, int offset, int limit) throws
 			RepositoryException, DatabaseException;
 }
