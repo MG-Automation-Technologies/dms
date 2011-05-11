@@ -471,14 +471,19 @@ public class DirectSearchModule implements SearchModule {
 		ResultSet rs = new ResultSet();
 		
 		if (statement != null && !statement.equals("")) {
+			if (!statement.contains("path:")) {
+				statement = "path:\"/okm:root\" " + statement;
+			}
+			
 			if (!statement.contains("limit:") && limit < Config.MAX_SEARCH_RESULTS) {
 				StringBuilder sb = new StringBuilder();
 				sb.append("limit:").append(offset).append("..").append(offset + limit); 
-				statement = statement.concat(" ").concat(sb.toString()); 
+				statement = statement.concat(" ").concat(sb.toString());
 			}
 			
 			try {
 				ArrayList<QueryResult> al = new ArrayList<QueryResult>();
+				log.info("Statement: {}", statement);
 				RowIterator rit = GQL.execute(statement, session);
 				rs.setTotal(rit.getSize());
 				
@@ -505,10 +510,14 @@ public class DirectSearchModule implements SearchModule {
 	private QueryResult queryRowResultDigester(Session session, Row row) throws javax.jcr.PathNotFoundException,
 			javax.jcr.RepositoryException {
 		String path = row.getValue(JcrConstants.JCR_PATH).getString();
+		log.info("queryRowResultDigester: {}", path);
 		Node node = session.getRootNode().getNode(path.substring(1));
 		QueryResult qr = new QueryResult();
 		
-		if (node.isNodeType(Document.TYPE)) {
+		if (node.isNodeType(Document.CONTENT_TYPE)) {
+			Document doc = BaseDocumentModule.getProperties(session, node.getParent());
+			qr.setDocument(doc);
+		} else if (node.isNodeType(Document.TYPE)) {
 			Document doc = BaseDocumentModule.getProperties(session, node);
 			
 			try {
