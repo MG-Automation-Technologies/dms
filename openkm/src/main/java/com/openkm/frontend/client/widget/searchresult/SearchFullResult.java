@@ -21,12 +21,16 @@
 
 package com.openkm.frontend.client.widget.searchresult;
 
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTQueryResult;
 import com.openkm.frontend.client.util.Util;
@@ -50,6 +54,7 @@ public class SearchFullResult extends Composite {
 		scrollPanel = new ScrollPanel(table);
 		
 		scrollPanel.setStyleName("okm-Input");
+		table.setStyleName("okm-NoWrap");
 		
 		initWidget(scrollPanel);
 	}
@@ -59,6 +64,7 @@ public class SearchFullResult extends Composite {
 	 */
 	public void setPixelSize(int width, int height) {
 		scrollPanel.setPixelSize(width, height);
+		table.setWidth(""+width);
 	}
 	
 	/**
@@ -92,6 +98,7 @@ public class SearchFullResult extends Composite {
 			doc = gwtQueryResult.getAttachment();
 		}
 		
+		// First row
 		HorizontalPanel hPanel = new HorizontalPanel();
 		hPanel.add(new HTML(score.getHTML()));
 		hPanel.add(new HTML("&nbsp;"));
@@ -113,13 +120,28 @@ public class SearchFullResult extends Composite {
 		hPanel.add(hLink);
 		hPanel.add(new HTML("&nbsp;"));
 		hPanel.add(new HTML(doc.getActualVersion().getName()));
-		table.setWidget(rows, 0, hPanel);
+		table.setWidget(rows++, 0, hPanel);
 		
-//		dataTable.setHTML(rows, 3, Util.formatSize(doc.getActualVersion().getSize()));
-//		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
-//		dataTable.setHTML(rows, 4, dtf.format(doc.getLastModified()));
-//		dataTable.setHTML(rows, 5, doc.getActualVersion().getAuthor());
+		// Second row
+		HorizontalPanel hPanel2 = new HorizontalPanel();
+		hPanel2.add(new HTML("<b>"+Main.i18n("search.result.author")+"</b>&nbsp;"));
+		hPanel2.add(new HTML(doc.getActualVersion().getAuthor()));
+		hPanel2.add(new HTML("&nbsp;<b>"+Main.i18n("search.result.size")+"</b>&nbsp;"));
+		hPanel2.add(new HTML(Util.formatSize(doc.getActualVersion().getSize())));
+		hPanel2.add(new HTML("&nbsp;<b>"+Main.i18n("search.result.version")+"</b>&nbsp;"));
+		hPanel2.add(new HTML(doc.getActualVersion().getName()));
+		hPanel2.add(new HTML("&nbsp;<b>"+Main.i18n("search.result.date.update")+"</b>&nbsp;"));
+		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
+		hPanel2.add(new HTML(dtf.format(doc.getLastModified())));
+		table.setWidget(rows++, 0, hPanel2);
 		
+		// Final line
+		Image horizontalLine = new Image("img/transparent_pixel.gif");
+		horizontalLine.setStyleName("okm-TopPanel-Line-Border");
+		horizontalLine.setSize("100%", "2px");
+		table.setWidget(rows, 0, horizontalLine);
+		table.getFlexCellFormatter().setVerticalAlignment(rows, 0, HasAlignment.ALIGN_MIDDLE);
+		table.getFlexCellFormatter().setHeight(rows, 0, "10");		
 		
 		for (int i=0; i<1; i++) {
 			table.getCellFormatter().addStyleName(rows, i, "okm-DisableSelect");
