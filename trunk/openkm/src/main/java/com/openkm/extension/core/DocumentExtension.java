@@ -22,18 +22,37 @@
 package com.openkm.extension.core;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
 
 import com.openkm.bean.Document;
+import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
+import com.openkm.core.FileSizeExceededException;
+import com.openkm.core.ItemExistsException;
+import com.openkm.core.PathNotFoundException;
+import com.openkm.core.Ref;
+import com.openkm.core.RepositoryException;
+import com.openkm.core.UnsupportedMimeTypeException;
+import com.openkm.core.UserQuotaExceededException;
+import com.openkm.core.VirusDetectedException;
 
-import net.xeoh.plugins.base.Plugin;
-
-public interface DocumentExtension extends Plugin {
-	public void preCreate(Session session, Node parent, File content, Document doc)
-		throws ExtensionException;
+public interface DocumentExtension extends SortableExtension {
+	/**
+	 * Executed BEFORE document creation.
+	 */
+	public void preCreate(Session session, Ref<Node> parentNode, Ref<File> content, Ref<Document> doc)
+		throws UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
+		VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException, 
+		RepositoryException, IOException, DatabaseException, ExtensionException;
 	
-	public void postCreate(Session session, Node parent, Node docNode, Document doc)
-		throws ExtensionException;
+	/**
+	 * Executed AFTER document creation.
+	 */
+	public void postCreate(Session session, Ref<Node> parentNode, Ref<Node> docNode, Ref<Document> doc)
+		throws UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
+		VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException, 
+		RepositoryException, IOException, DatabaseException, ExtensionException;
 }

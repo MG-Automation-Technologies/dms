@@ -21,29 +21,14 @@
 
 package com.openkm.extension.core;
 
-import javax.jcr.Node;
-import javax.jcr.Session;
+import java.util.Comparator;
 
-import com.openkm.bean.Folder;
-import com.openkm.core.AccessDeniedException;
-import com.openkm.core.DatabaseException;
-import com.openkm.core.ItemExistsException;
-import com.openkm.core.PathNotFoundException;
-import com.openkm.core.Ref;
-import com.openkm.core.RepositoryException;
-
-public interface FolderExtension extends SortableExtension {
-	/**
-	 * Executed BEFORE folder creation.
-	 */
-	public void preCreate(Session session, Ref<Node> parentNode, Ref<Folder> fld)
-		throws AccessDeniedException, RepositoryException, 	PathNotFoundException,
-		ItemExistsException, DatabaseException, ExtensionException;
-
-	/**
-	 * Executed AFTER folder creation.
-	 */
-	public void postCreate(Session session, Ref<Node> parentNode, Ref<Node> fldNode, Ref<Folder> fld)
-		throws AccessDeniedException, RepositoryException, PathNotFoundException,
-		ItemExistsException, DatabaseException, ExtensionException;
+public class OrderComparator<T extends SortableExtension> implements Comparator<T> {
+	@Override
+	public int compare(T o1, T o2) {
+		int o1i = ((SortableExtension) o1).getOrder();
+		int o2i = ((SortableExtension) o2).getOrder();
+		
+		return (o1i > o2i ? -1 : (o1i < o2i ? 1 : 0));
+	}
 }
