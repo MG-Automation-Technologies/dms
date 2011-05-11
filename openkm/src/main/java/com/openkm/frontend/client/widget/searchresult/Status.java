@@ -47,8 +47,9 @@ public class Status extends PopupPanel {
 	private HTML space;
 	private Image image;
 	
-	private boolean flag_findPaginated = false;
+	private boolean flag_findPaginated 	= false;
 	private boolean flag_runSearch 		= false;
+	private boolean flag_refreshResults	= false;
 	
 	/**
 	 * Status
@@ -82,7 +83,7 @@ public class Status extends PopupPanel {
 	 * Refresh
 	 */
 	public void refresh() {
-		if (flag_findPaginated || flag_runSearch ) {
+		if (flag_findPaginated || flag_runSearch || flag_refreshResults) {
 			int left = ((Main.get().mainPanel.search.getRight()-200)/2) + Main.get().mainPanel.search.getLeft() + Search.SPLITTER_WIDTH +
 					   ExtendedDockPanel.VERTICAL_BORDER_PANEL_WIDTH;
 			int top =  ((Main.get().mainPanel.search.searchBrowser.bottomHeight-40)/2) + TopPanel.PANEL_HEIGHT + 
@@ -116,7 +117,7 @@ public class Status extends PopupPanel {
 	/**
 	 * Sets run search flag
 	 */
-	public void setFlag_RunSearch() {
+	public void setFlag_runSearch() {
 		msg.setHTML(Main.i18n("search.result.status.runsearch"));
 		flag_runSearch = true;
 		refresh();
@@ -127,6 +128,23 @@ public class Status extends PopupPanel {
 	 */
 	public void unsetFlag_runSearch() {
 		flag_runSearch = false;
+		refresh();
+	}
+	
+	/**
+	 * Sets resfresh results flag
+	 */
+	public void setFlag_refreshResults() {
+		msg.setHTML(Main.i18n("search.result.status.refresh.results"));
+		flag_refreshResults = true;
+		refresh();
+	}
+	
+	/**
+	 * Unset refresh results flag
+	 */
+	public void unsetFlag_refreshResults() {
+		flag_refreshResults = false;
 		refresh();
 	}
 }
