@@ -124,13 +124,16 @@ public class SearchFullResult extends Composite {
 		
 		// Second row
 		HorizontalPanel hPanel2 = new HorizontalPanel();
-		hPanel2.add(new HTML("<b>"+Main.i18n("search.result.author")+"</b>&nbsp;"));
+		hPanel2.add(new HTML("<b>"+Main.i18n("search.result.author")+":</b>&nbsp;"));
 		hPanel2.add(new HTML(doc.getActualVersion().getAuthor()));
-		hPanel2.add(new HTML("&nbsp;<b>"+Main.i18n("search.result.size")+"</b>&nbsp;"));
+		hPanel2.add(Util.hSpace("33px"));
+		hPanel2.add(new HTML("&nbsp;<b>"+Main.i18n("search.result.size")+":</b>&nbsp;"));
 		hPanel2.add(new HTML(Util.formatSize(doc.getActualVersion().getSize())));
-		hPanel2.add(new HTML("&nbsp;<b>"+Main.i18n("search.result.version")+"</b>&nbsp;"));
+		hPanel2.add(Util.hSpace("33px"));
+		hPanel2.add(new HTML("&nbsp;<b>"+Main.i18n("search.result.version")+":</b>&nbsp;"));
 		hPanel2.add(new HTML(doc.getActualVersion().getName()));
-		hPanel2.add(new HTML("&nbsp;<b>"+Main.i18n("search.result.date.update")+"</b>&nbsp;"));
+		hPanel2.add(Util.hSpace("33px"));
+		hPanel2.add(new HTML("&nbsp;<b>"+Main.i18n("search.result.date.update")+":</b>&nbsp;"));
 		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
 		hPanel2.add(new HTML(dtf.format(doc.getLastModified())));
 		table.setWidget(rows++, 0, hPanel2);
