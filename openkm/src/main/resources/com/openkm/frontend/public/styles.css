@@ -1257,8 +1257,8 @@ iframe {
 /* RichTextArea */
 .RichTextToolbar {
 	background: #E2E2E2;
-	padding:1px;
-	margin:0px;
+	padding: 1px;
+	margin: 0px;
 }
 
 
@@ -1272,8 +1272,8 @@ iframe {
 }
 
 .okm-Mail-Link {
-	cursor:pointer; 
-  	cursor:hand;
+	cursor: pointer; 
+  	cursor: hand;
 }
 
 .okm-Mail-MenuPopup {
@@ -1294,7 +1294,7 @@ iframe {
 	horizontal-align: 50%;
 	border-left: 1px solid #A5A596;
 	border-right: 1px solid #A5A596;
-	width:10px;
+	width: 10px;
 }
 
 .okm-HorizontalSplitPanel .hsplitter { 
@@ -1307,7 +1307,7 @@ iframe {
 	background-color: #E5E5E1;
 	horizontal-align: 50%;
     border: 0px; 
-	width:10px;
+	width: 10px;
 }
 
 /* Vertical split panel */
@@ -1319,7 +1319,7 @@ iframe {
 	font-family: "Small Fonts";
 	font-size: 4px;
 	background-color: #E5E5E1;
-	height:10px;
+	height: 10px;
 	vertical-align: 50%;
 }
 
@@ -1358,32 +1358,32 @@ iframe {
 }
 
 .okm-KeyMap-ImageHover {
-	cursor:pointer; 
-  	cursor:hand;
+	cursor: pointer; 
+  	cursor: hand;
 }
 
 /* Suggest Box */
 .gwt-SuggestBox {
-  padding: 2px;
+	padding: 2px;
 }
 
 .gwt-SuggestBoxPopup {
-  background-color: #EFEBE7;
-  border: 1px solid #999;
+	background-color: #EFEBE7;
+	border: 1px solid #999;
 }
 
 .gwt-SuggestBoxPopup .item {
-  padding: 2px 6px;
-  color: #424242;
-  cursor: default;
+	padding: 2px 6px;
+	color: #424242;
+	cursor: default;
 }
 
 .gwt-SuggestBoxPopup .item-selected {
-  background: #b7d6f6;
+	background: #b7d6f6;
 }
 
 .gwt-SuggestBoxPopup .suggestPopupContent {
-  background: white;
+	background: white;
 }
 
 /* Keyword widget */
@@ -1426,23 +1426,23 @@ iframe {
 
 /* Tag cloud */
 .okm-cloudWrap {
-	text-align : center;
-	margin : auto;
+	text-align: center;
+	margin: auto;
 }
                
 .okm-cloudTags {
-	float : left;
-	padding : 0px 5px;
-	font-size : 5pt;
-	font-family : "Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;   
+	float: left;
+	padding: 0px 5px;
+	font-size: 5pt;
+	font-family: "Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;   
 	height: 30px;
 	text-decoration:none;
 }   
   
 .okm-cloudTags a {
-	color : #000000;
-	text-decoration : none;
-	font-size : 5pt;
+	color: #000000;
+	text-decoration: none;
+	font-size: 5pt;
 	position: relative;
 	text-decoration:none;
 }   
@@ -1524,8 +1524,8 @@ iframe {
 	border-right: 1px solid #666;
 	padding: 2px 7px 2px 7px;
 	background-color: #caccc8;
-	cursor:pointer; 
-  	cursor:hand;
+	cursor: pointer; 
+  	cursor: hand;
   	height: 20px;
 }
 
@@ -1538,8 +1538,8 @@ iframe {
 	border-left: 1px solid #bbb;
 	border-right: 1px solid #666;
 	padding: 2px 7px 2px 7px;
-	cursor:pointer; 
-  	cursor:hand;
+	cursor: pointer; 
+  	cursor: hand;
   	height: 20px;
 }
 
@@ -1549,8 +1549,8 @@ iframe {
 	font-size: 1.2em;
     font-weight: bold;
     text-decoration: none;
-    cursor:pointer; 
-  	cursor:hand;
+    cursor: pointer; 
+  	cursor: hand;
 }
 
 .okm-Forum-User {
