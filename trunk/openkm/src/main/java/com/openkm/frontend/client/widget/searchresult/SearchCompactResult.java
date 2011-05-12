@@ -282,7 +282,7 @@ public class SearchCompactResult extends Composite {
 	 * 
 	 * @return The value of panel ( selected )
 	 */
-	public boolean isPanelSelected(){
+	public boolean isPanelSelected() {
 		return table.isPanelSelected();
 	}
 	
