@@ -136,6 +136,7 @@ public class SearchFullResult extends Composite {
 		hPanel2.add(new HTML("&nbsp;<b>"+Main.i18n("search.result.date.update")+":</b>&nbsp;"));
 		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
 		hPanel2.add(new HTML(dtf.format(doc.getLastModified())));
+		table.getCellFormatter().addStyleName(rows, 0, "okm-BgGrey");
 		table.setWidget(rows++, 0, hPanel2);
 		
 		// Final line
