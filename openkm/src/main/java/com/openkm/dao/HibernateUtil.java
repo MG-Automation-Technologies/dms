@@ -30,6 +30,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.engine.SessionFactoryImplementor;
 import org.hibernate.hql.QueryTranslator;
@@ -68,7 +69,7 @@ public class HibernateUtil {
 	public static SessionFactory getSessionFactory(String hbm2ddl) {
 		if (sessionFactory == null) {
 			try {
-				Configuration cfg = new Configuration().configure();
+				Configuration cfg = new AnnotationConfiguration().configure();
 				cfg.setProperty("hibernate.dialect", Config.HIBERNATE_DIALECT);
 				cfg.setProperty("hibernate.connection.datasource", Config.HIBERNATE_DATASOURCE);
 				cfg.setProperty("hibernate.hbm2ddl.auto", hbm2ddl);
