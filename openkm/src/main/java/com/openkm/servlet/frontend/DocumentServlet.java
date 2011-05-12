@@ -699,6 +699,7 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 	        fis = new FileInputStream(tmp);
 	        Document newDoc = new Document();
 			newDoc.setPath(destinationPath);
+			
 			OKMDocument.getInstance().create(null, newDoc, fis);
 			
 			// Setting property groups ( metadata )
