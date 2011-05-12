@@ -510,7 +510,7 @@ public class DirectSearchModule implements SearchModule {
 	private QueryResult queryRowResultDigester(Session session, Row row) throws javax.jcr.PathNotFoundException,
 			javax.jcr.RepositoryException {
 		String path = row.getValue(JcrConstants.JCR_PATH).getString();
-		log.info("queryRowResultDigester: {}", path);
+		log.debug("queryRowResultDigester: {}", path);
 		Node node = session.getRootNode().getNode(path.substring(1));
 		QueryResult qr = new QueryResult();
 		
