@@ -51,7 +51,12 @@ public class ExtensionManager {
 	private ExtensionManager() {
 		log.info("Initialize and load plugins...");
 		pm = PluginManagerFactory.createPluginManager();
-		pm.addPluginsFrom(base, new OptionReportAfter());
+		
+		if (Config.EXPERIMENTAL_PLUGIN_DEBUG) {
+			pm.addPluginsFrom(base, new OptionReportAfter());
+		} else {
+			pm.addPluginsFrom(base);
+		}
 	}
 	
 	public static synchronized ExtensionManager getInstance() {
@@ -77,7 +82,12 @@ public class ExtensionManager {
 		log.info("Resetting extensions...");
 		pm.shutdown();
 		pm = PluginManagerFactory.createPluginManager();
-		pm.addPluginsFrom(base, new OptionReportAfter());
+		
+		if (Config.EXPERIMENTAL_PLUGIN_DEBUG) {
+			pm.addPluginsFrom(base, new OptionReportAfter());
+		} else {
+			pm.addPluginsFrom(base);
+		}
 	}
 	
 	/**
