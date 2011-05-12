@@ -24,6 +24,7 @@ package com.openkm.frontend.client.util;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.contants.service.RPCService;
@@ -134,17 +135,29 @@ public class Util {
 	}
 	
 	/**
-	   * Creates an HTML fragment that places an image & caption together, for use
-	   * in a group header.
-	   * 
-	   * @param imageUrl the url of the icon image to be used
-	   * @param caption the group caption
-	   * @return the header HTML fragment
-	   */
+	 * Creates an HTML fragment that places an image & caption together, for use
+	 * in a group header.
+	 * 
+	 * @param imageUrl the url of the icon image to be used
+	 * @param caption the group caption
+	 * @return the header HTML fragment
+	 */
 	public static String createHeaderHTML(String imageUrl, String caption) {
 		return "<table align='left'><tr>" + "<td><img src='" + imageUrl + "'></td>"
 	      + "<td style='vertical-align:middle'><b style='white-space:nowrap; cursor: default;'>"
 	      + caption + "</b></td>" + "</tr></table>";
+	}
+	
+	/**
+	 * Creates an horizontal spacer
+	 * 
+	 * @param width The desired width space
+	 * @return an HTML element meaning the with
+	 */
+	public static HTML hSpace(String width) {
+		HTML spacer = new HTML("&nbsp;");
+		spacer.setWidth(width);
+		return spacer;
 	}
 	
 	/**
