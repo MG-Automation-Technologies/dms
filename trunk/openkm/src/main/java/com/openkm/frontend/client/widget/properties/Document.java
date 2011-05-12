@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -43,6 +42,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -52,7 +52,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.openkm.extension.frontend.client.widget.messaging.MessagingToolBarBox;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
@@ -68,6 +67,7 @@ import com.openkm.frontend.client.service.OKMPropertyServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
 import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
+import com.openkm.frontend.client.widget.WidgetUtil;
 import com.openkm.frontend.client.widget.dashboard.ImageHover;
 import com.openkm.frontend.client.widget.dashboard.keymap.TagCloud;
 import com.openkm.frontend.client.widget.thesaurus.ThesaurusSelectPopup;
@@ -422,7 +422,7 @@ public class Document extends Composite {
 			drawCategory(it.next(),remove);
 		}
 		
-		drawTagCloud(doc.getKeywords());
+		WidgetUtil.drawTagCloud(keywordsCloud, doc.getKeywords());
 		
 		// Some preoperties only must be visible on taxonomy or trash view
 		int actualView = Main.get().mainPanel.desktop.navigator.getStackIndex();
@@ -524,7 +524,7 @@ public class Document extends Composite {
 		public void onSuccess(Object result) {	
 			if (keyWordsListPending.isEmpty()) {
 				Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetKeywords();
-				drawTagCloud(document.getKeywords());
+				WidgetUtil.drawTagCloud(keywordsCloud, document.getKeywords());
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.KEYWORD_ADDED);
 			} else {
 				addPendingKeyWordsList();
@@ -535,7 +535,7 @@ public class Document extends Composite {
 		public void onFailure(Throwable caught) {
 			if (keyWordsListPending.isEmpty()) {
 				Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetKeywords();
-				drawTagCloud(document.getKeywords());
+				WidgetUtil.drawTagCloud(keywordsCloud, document.getKeywords());
 			} else {
 				addPendingKeyWordsList();
 			}
@@ -662,7 +662,7 @@ public class Document extends Composite {
 			document.getKeywords().remove(keyword);
 			removeKeyword(keyword);
 			Main.get().mainPanel.dashboard.keyMapDashboard.decreaseKeywordRate(keyword);
-			drawTagCloud(document.getKeywords());
+			WidgetUtil.drawTagCloud(keywordsCloud, document.getKeywords());
 			if (Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_THESAURUS) {
 				GWTFolder folder = ((GWTFolder) Main.get().activeFolderTree.actualItem.getUserObject());
 				// When remove the keyword for which are browsing must refreshing filebrowser view
@@ -706,7 +706,7 @@ public class Document extends Composite {
 				Main.get().mainPanel.dashboard.keyMapDashboard.increaseKeywordRate(keyword);
 			} else if (keyWordsListPending.isEmpty()) {
 				Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetKeywords();
-				drawTagCloud(document.getKeywords());
+				WidgetUtil.drawTagCloud(keywordsCloud, document.getKeywords());
 			}	
 		}
 	}
@@ -745,30 +745,6 @@ public class Document extends Composite {
 		externalPanel.setCellWidth(space1, "6");
 		externalPanel.setStylePrimaryName("okm-cloudTags");  
 		return externalPanel;
-	}
-	
-	/**
-	 * Draws a tag cloud
-	 */
-	private void drawTagCloud(Collection<String> keywords) {
-		// Deletes all tag clouds keys
-		keywordsCloud.clear();
-		keywordsCloud.setMinFrequency(Main.get().mainPanel.dashboard.keyMapDashboard.getTotalMinFrequency());
-		keywordsCloud.setMaxFrequency(Main.get().mainPanel.dashboard.keyMapDashboard.getTotalMaxFrequency());
-		
-		for (Iterator<String> it = keywords.iterator(); it.hasNext();) {
-			String keyword = it.next();
-			HTML tagKey = new HTML(keyword);
-			tagKey.setStyleName("okm-cloudTags");
-			Style linkStyle = tagKey.getElement().getStyle();
-			int fontSize = keywordsCloud.getLabelSize(Main.get().mainPanel.dashboard.keyMapDashboard.getKeywordRate(keyword));
-			linkStyle.setProperty("fontSize", fontSize+"pt");
-			linkStyle.setProperty("color", keywordsCloud.getColor(fontSize));
-			if (fontSize>0) {
-				linkStyle.setProperty("top", (keywordsCloud.getMaxFontSize()-fontSize)/2+"px" );
-			} 
-			keywordsCloud.add(tagKey);
-		}
 	}
 	
 	/**

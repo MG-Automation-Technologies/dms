@@ -78,6 +78,7 @@ public class SearchResult extends Composite {
 	 */
 	public void langRefresh() {
 		searchCompactResult.langRefresh();
+		searchFullResult.langRefresh();
 	}
 	
 	/**

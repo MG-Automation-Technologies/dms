@@ -545,6 +545,7 @@ public class SearchControl extends Composite {
 				break;
 			
 			case SEARCH_MODE_ADVANCED:
+				advancedView.setValue(true); // switch search mode can be done by execute saved query
 				table.getCellFormatter().setVisible(2, 0, true);
 				table.getCellFormatter().setVisible(3, 0, true);
 				table.getCellFormatter().setVisible(3, 1, true);

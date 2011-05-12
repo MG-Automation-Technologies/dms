@@ -21,7 +21,12 @@
 
 package com.openkm.frontend.client.widget.searchresult;
 
+import java.util.Iterator;
+
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -32,8 +37,12 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
+import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTQueryResult;
+import com.openkm.frontend.client.util.CommonUI;
 import com.openkm.frontend.client.util.Util;
+import com.openkm.frontend.client.widget.WidgetUtil;
+import com.openkm.frontend.client.widget.dashboard.keymap.TagCloud;
 
 /**
  * SearchFullResult
@@ -54,7 +63,6 @@ public class SearchFullResult extends Composite {
 		scrollPanel = new ScrollPanel(table);
 		
 		scrollPanel.setStyleName("okm-Input");
-		table.setStyleName("okm-NoWrap");
 		
 		initWidget(scrollPanel);
 	}
@@ -63,8 +71,9 @@ public class SearchFullResult extends Composite {
 	 * @see com.google.gwt.user.client.ui.UIObject#setPixelSize(int, int)
 	 */
 	public void setPixelSize(int width, int height) {
+		super.setPixelSize(width, height);
 		scrollPanel.setPixelSize(width, height);
-		table.setWidth(""+width);
+		table.setWidth(""+(width));
 	}
 	
 	/**
@@ -100,6 +109,7 @@ public class SearchFullResult extends Composite {
 		
 		// First row
 		HorizontalPanel hPanel = new HorizontalPanel();
+		hPanel.setStyleName("okm-NoWrap");
 		hPanel.add(new HTML(score.getHTML()));
 		hPanel.add(new HTML("&nbsp;"));
 		if(doc.isAttachment())  {
@@ -122,34 +132,94 @@ public class SearchFullResult extends Composite {
 		hPanel.add(new HTML(doc.getActualVersion().getName()));
 		table.setWidget(rows++, 0, hPanel);
 		
-		// Second row
+		// Second line
+		table.setHTML(rows++, 0, "<blockquote>"+gwtQueryResult.getExcerpt()+"</blockquote>");
+		
+		// Third row
 		HorizontalPanel hPanel2 = new HorizontalPanel();
-		hPanel2.add(new HTML("<b>"+Main.i18n("search.result.author")+":</b>&nbsp;"));
+		hPanel2.setStyleName("okm-NoWrap");
+		hPanel2.add(new HTML("<b>"+Main.i18n("search.result.author")+":</b>"));
 		hPanel2.add(new HTML(doc.getActualVersion().getAuthor()));
-		hPanel2.add(Util.hSpace("33px"));
-		hPanel2.add(new HTML("&nbsp;<b>"+Main.i18n("search.result.size")+":</b>&nbsp;"));
+		hPanel2.add(Util.hSpace("33"));
+		hPanel2.add(new HTML("<b>"+Main.i18n("search.result.size")+":</b>"));
 		hPanel2.add(new HTML(Util.formatSize(doc.getActualVersion().getSize())));
-		hPanel2.add(Util.hSpace("33px"));
-		hPanel2.add(new HTML("&nbsp;<b>"+Main.i18n("search.result.version")+":</b>&nbsp;"));
+		hPanel2.add(Util.hSpace("33"));
+		hPanel2.add(new HTML("<b>"+Main.i18n("search.result.version")+":</b>"));
 		hPanel2.add(new HTML(doc.getActualVersion().getName()));
-		hPanel2.add(Util.hSpace("33px"));
-		hPanel2.add(new HTML("&nbsp;<b>"+Main.i18n("search.result.date.update")+":</b>&nbsp;"));
+		hPanel2.add(Util.hSpace("33"));
+		hPanel2.add(new HTML("<b>"+Main.i18n("search.result.date.update")+":</b>"));
 		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
 		hPanel2.add(new HTML(dtf.format(doc.getLastModified())));
-		table.getCellFormatter().addStyleName(rows, 0, "okm-BgGrey");
 		table.setWidget(rows++, 0, hPanel2);
+		
+		// Fourth line
+		HorizontalPanel hPanel3 = new HorizontalPanel();
+		hPanel3.setStyleName("okm-NoWrap");
+		// Categories
+		FlexTable tableSubscribedCategories = new FlexTable();
+		tableSubscribedCategories.setStyleName("okm-DisableSelect");
+		// Sets the document categories
+		for (Iterator<GWTFolder> it = doc.getCategories().iterator(); it.hasNext();) {
+			drawCategory(tableSubscribedCategories, it.next());
+		}
+		// Tag cloud
+		TagCloud keywordsCloud = new TagCloud();
+		keywordsCloud.setWidth("350");
+		// Sets keywords
+		WidgetUtil.drawTagCloud(keywordsCloud, doc.getKeywords());
+		hPanel3.add(new HTML("<b>"+Main.i18n("document.categories")+"</b>"));
+		hPanel3.add(Util.hSpace("5"));
+		hPanel3.add(tableSubscribedCategories);
+		hPanel3.add(Util.hSpace("33"));
+		hPanel3.add(new HTML("<b>"+Main.i18n("document.keywords.cloud")+"</b>"));
+		hPanel3.add(Util.hSpace("5"));
+		hPanel3.add(keywordsCloud);
+		table.setWidget(rows++, 0, hPanel3);
 		
 		// Final line
 		Image horizontalLine = new Image("img/transparent_pixel.gif");
 		horizontalLine.setStyleName("okm-TopPanel-Line-Border");
 		horizontalLine.setSize("100%", "2px");
 		table.setWidget(rows, 0, horizontalLine);
-		table.getFlexCellFormatter().setVerticalAlignment(rows, 0, HasAlignment.ALIGN_MIDDLE);
-		table.getFlexCellFormatter().setHeight(rows, 0, "10");		
+		table.getFlexCellFormatter().setVerticalAlignment(rows, 0, HasAlignment.ALIGN_BOTTOM);
+		table.getFlexCellFormatter().setHeight(rows, 0, "30");		
 		
 		for (int i=0; i<1; i++) {
 			table.getCellFormatter().addStyleName(rows, i, "okm-DisableSelect");
 		}
+	}
+	
+	/**
+	 * drawCategory
+	 * 
+	 * @param category
+	 */
+	private void drawCategory(final FlexTable tableSubscribedCategories, final GWTFolder category) {
+		int row = tableSubscribedCategories.getRowCount();
+		Anchor anchor = new Anchor();
+		// Looks if must change icon on parent if now has no childs and properties with user security atention
+		String path = category.getPath().substring(16); // Removes /okm:categories
+		if (category.getHasChilds()) {
+			anchor.setHTML(Util.imageItemHTML("img/menuitem_childs.gif", path, "top"));
+		} else {
+			anchor.setHTML(Util.imageItemHTML("img/menuitem_empty.gif", path, "top"));
+		}
+		
+		anchor.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent arg0) {
+				CommonUI.openAllFolderPath(category.getPath(), null);
+			}
+		});
+		anchor.setStyleName("okm-KeyMap-ImageHover");
+		tableSubscribedCategories.setWidget(row, 0, anchor);
+	}
+	
+	/**
+	 * langRefresh
+	 */
+	public void langRefresh() {
+		
 	}
 	
 	/**
