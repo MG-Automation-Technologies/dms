@@ -191,7 +191,7 @@ public class DirectSearchModule implements SearchModule {
 	 */
 	public String prepareStatement(QueryParams params) throws IOException, ParseException {
 		log.debug("prepareStatement({})", params);
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		
 		// Clean params
 		params.setName(params.getName() != null?params.getName().trim():""); 
@@ -381,7 +381,7 @@ public class DirectSearchModule implements SearchModule {
 			sb.append("] order by @jcr:score descending");
 		}
 		
-		log.debug("prepareStatement: {}", sb.toString());
+		log.info("prepareStatement: {}", sb.toString());
 		return sb.toString();
 	}
 
@@ -538,7 +538,7 @@ public class DirectSearchModule implements SearchModule {
 		}
 		
 		qr.setScore(row.getValue(JcrConstants.JCR_SCORE).getLong());
-		Value excerpt = row.getValue("rep:excerpt()");
+		Value excerpt = row.getValue("rep:excerpt(okm:content)");
 		
 		if (excerpt != null) {
 			qr.setExcerpt(excerpt.getString());
