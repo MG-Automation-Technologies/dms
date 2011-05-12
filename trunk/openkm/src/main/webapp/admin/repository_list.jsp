@@ -133,7 +133,7 @@
             <td>${property.pName}</td>
             <td>${property.pValue}</td>
             <td align="center">
-              <c:if test="${property.pType == 'STRING'}">
+              <c:if test="${property.pType == 'STRING' && !property.pProtected}">
                 <c:url value="RepositoryView" var="urlEdit">
                   <c:param name="path" value="${node.path}"/>
                   <c:param name="property" value="${property.pName}"/>
