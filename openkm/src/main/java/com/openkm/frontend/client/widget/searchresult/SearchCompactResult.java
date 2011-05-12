@@ -60,7 +60,7 @@ public class SearchCompactResult extends Composite {
 		menuPopup = new MenuPopup();
 		menuPopup.setStyleName("okm-SearchResult-MenuPopup");	
 		
-		ScrollTableImages scrollTableImages = new ScrollTableImages(){
+		ScrollTableImages scrollTableImages = new ScrollTableImages() {
 			public AbstractImagePrototype scrollTableAscending() {
 				return new AbstractImagePrototype() {
 					public void applyTo(Image image) {
