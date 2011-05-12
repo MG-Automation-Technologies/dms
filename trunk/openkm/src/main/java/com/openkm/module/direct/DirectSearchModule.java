@@ -538,6 +538,8 @@ public class DirectSearchModule implements SearchModule {
 		}
 		
 		qr.setScore(row.getValue(JcrConstants.JCR_SCORE).getLong());
+		qr.setExcerpt(row.getValue("rep:excerpt()").getString());
+		
 		return qr;
 	}
 
