@@ -953,58 +953,58 @@ iframe {
  * CalendarWidget 
  */
 .CalendarWidget {
-  border: 1px solid #000;
-  background-color: #fff;
-  padding: 2px;
+	border: 1px solid #000;
+	background-color: #fff;
+	padding: 2px;
 }
 
 .CalendarWidget .navbar {
-  width: 100%;
-  background-color: #C3D9FF;
-  vertical-align: middle;
-  border-bottom: 1px solid #ACA899;
+	width: 100%;
+	background-color: #C3D9FF;
+	vertical-align: middle;
+	border-bottom: 1px solid #ACA899;
 }
 
 .CalendarWidget .navbar .gwt-Button {
-  padding-left: 5px;
-  padding-right: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
 }
 
 .CalendarWidget .table {
-  font: 10pt sans-serif;
-  text-align: center;
-  background-color: #DDD;
+	font: 10pt sans-serif;
+	text-align: center;
+	background-color: #DDD;
 }
 
 .CalendarWidget .weekheader {
-  background-color: #ACA899;
+	background-color: #ACA899;
 }
 
 .CalendarWidget .weekheader .days {
-  width: 3em;
+	width: 3em;
 }
 
 .CalendarWidget .cell {
-  cursor:pointer;
+	cursor: pointer;
 }
 
 .CalendarWidget .cell .gwt-HTML {
-  border: 1px solid #ACA899;
-  background-color: #EEE;
+	border: 1px solid #ACA899;
+	background-color: #EEE;
 }
 
 .CalendarWidget .cell .gwt-HTML span {
-  width: 100%;
-  height: 100%;
-  line-height: 2em;
+	width: 100%;
+	height: 100%;
+	line-height: 2em;
 }
 
 .CalendarWidget .today .gwt-HTML {
-  background-color: #C3D9FF;
+	background-color: #C3D9FF;
 }
 
 .CalendarWidget .day .gwt-HTML {
-  border: 1px solid #C3D9FF;
+	border: 1px solid #C3D9FF;
 } 
 
 /**
@@ -1040,8 +1040,8 @@ iframe {
  * Hyperlink 
  */
 .okm-Hyperlink {
-	cursor:pointer; 
-  	cursor:hand;
+	cursor: pointer; 
+  	cursor: hand;
 }
 .okm-Hyperlink a:hover {
 	text-decoration: underline;
@@ -1057,8 +1057,8 @@ iframe {
  * Hyperlink 
  */
 .okm-Hyperlink {
-	cursor:pointer; 
-  	cursor:hand;
+	cursor: pointer; 
+  	cursor: hand;
 }
 .okm-Hyperlink a:hover {
 	text-decoration: underline;
@@ -1080,12 +1080,12 @@ iframe {
 /**
  * Workflow form panel
  */
- .okm-WorkflowFormPanel {
+.okm-WorkflowFormPanel {
  	background-color: #E5E5E1;
  	border-left: 1px solid #A5A596;
  }
  
- .okm-WorkflowFormPanel-Title {
+.okm-WorkflowFormPanel-Title {
 	white-space: nowrap;
 	padding: 2px 7px 2px 7px;
 	background-image: url(img/topCenterHeader.gif);
@@ -1096,7 +1096,7 @@ iframe {
 /**
  * Document Notes
  */
-  .okm-Notes-Line {
+.okm-Notes-Line {
 	background-image: url(img/notes_back.gif);
 	background-repeat: repeat-x;
 }
@@ -1111,64 +1111,64 @@ iframe {
 .gwt-PushButton-down,
 .gwt-PushButton-down-hovering,
 .gwt-PushButton-down-disabled {
-  margin: 0;
-  text-decoration: none;
-  background: url("img/hborder.png") repeat-x 0px -27px;
+	margin: 0;
+	text-decoration: none;
+	background: url("img/hborder.png") repeat-x 0px -27px;
 }
 
 .gwt-PushButton-up,
 .gwt-PushButton-up-hovering,
 .gwt-PushButton-up-disabled {
-  padding: 3px 5px 0px 5px;
-  height: 20px;
+	padding: 3px 5px 0px 5px;
+	height: 20px;
 }
 
 .gwt-PushButton-up {
-  border: 1px outset #ccc;
-  cursor: pointer;
-  cursor: hand;
+	border: 1px outset #ccc;
+	cursor: pointer;
+	cursor: hand;
 }
 
 .gwt-PushButton-up-hovering {
-  border: 1px outset;
-  border-color: #9cf #69e #69e #7af;
-  cursor: pointer;
-  cursor: hand;
+	border: 1px outset;
+	border-color: #9cf #69e #69e #7af;
+	cursor: pointer;
+	cursor: hand;
 }
 
 .gwt-PushButton-up-disabled {
-  border: 1px outset #ccc;
-  cursor: default;
-  opacity: .5;
-  filter: alpha(opacity=40);
-  zoom: 1;
+	border: 1px outset #ccc;
+	cursor: default;
+	opacity: .5;
+	filter: alpha(opacity=40);
+	zoom: 1;
 }
 
 .gwt-PushButton-down,
 .gwt-PushButton-down-hovering,
 .gwt-PushButton-down-disabled {
-  padding: 4px 4px 2px 6px;
+	padding: 4px 4px 2px 6px;
 }
 
 .gwt-PushButton-down {
-  border: 1px inset #666;
-  cursor: pointer;
-  cursor: hand;
+	border: 1px inset #666;
+	cursor: pointer;
+	cursor: hand;
 }
 
 .gwt-PushButton-down-hovering {
-  border: 1px inset;
-  border-color: #9cf #69e #69e #7af;
-  cursor: pointer;
-  cursor: hand;
+	border: 1px inset;
+	border-color: #9cf #69e #69e #7af;
+	cursor: pointer;
+	cursor: hand;
 }
 
 .gwt-PushButton-down-disabled {
-  border: 1px outset #ccc;
-  cursor: default;
-  opacity: 0.5;
-  filter: alpha(opacity=40);
-  zoom: 1;
+	border: 1px outset #ccc;
+	cursor: default;
+	opacity: 0.5;
+	filter: alpha(opacity=40);
+	zoom: 1;
 }
 
 
@@ -1181,66 +1181,66 @@ iframe {
 .gwt-ToggleButton-down,
 .gwt-ToggleButton-down-hovering,
 .gwt-ToggleButton-down-disabled {
-  margin: 0;
-  text-decoration: none;
-  background: url("img/hborder.png") repeat-x 0px -27px;
+	margin: 0;
+	text-decoration: none;
+	background: url("img/hborder.png") repeat-x 0px -27px;
 }
 
 .gwt-ToggleButton-up,
 .gwt-ToggleButton-up-hovering,
 .gwt-ToggleButton-up-disabled {
-  padding: 3px 5px 3px 5px;
+	padding: 3px 5px 3px 5px;
 }
 
 .gwt-ToggleButton-up {
-  border: 1px outset #ccc;
-  cursor: pointer;
-  cursor: hand;
+	border: 1px outset #ccc;
+	cursor: pointer;
+	cursor: hand;
 }
 
 .gwt-ToggleButton-up-hovering {
-  border: 1px outset;
-  border-color: #9cf #69e #69e #7af;
-  cursor: pointer;
-  cursor: hand;
+	border: 1px outset;
+	border-color: #9cf #69e #69e #7af;
+	cursor: pointer;
+	cursor: hand;
 }
 
 .gwt-ToggleButton-up-disabled {
-  border: 1px outset #ccc;
-  cursor: default;
-  opacity: .5;
-  zoom: 1;
-  filter: alpha(opacity=40);
+	border: 1px outset #ccc;
+	cursor: default;
+	opacity: .5;
+	zoom: 1;
+	filter: alpha(opacity=40);
 }
 
 .gwt-ToggleButton-down,
 .gwt-ToggleButton-down-hovering,
 .gwt-ToggleButton-down-disabled {
-  padding: 4px 4px 2px 6px;
+	padding: 4px 4px 2px 6px;
 }
 
 .gwt-ToggleButton-down {
-  background-position: 0 -513px;
-  border: 1px inset #ccc;
-  cursor: pointer;
-  cursor: hand;
+	background-position: 0 -513px;
+	border: 1px inset #ccc;
+	cursor: pointer;
+	cursor: hand;
 }
 
 .gwt-ToggleButton-down-hovering {
-  background-position: 0 -513px;
-  border: 1px inset;
-  border-color: #9cf #69e #69e #7af;
-  cursor: pointer;
-  cursor: hand;
+	background-position: 0 -513px;
+	border: 1px inset;
+	border-color: #9cf #69e #69e #7af;
+	cursor: pointer;
+	cursor: hand;
 }
 
 .gwt-ToggleButton-down-disabled {
-  background-position: 0 -513px;
-  border: 1px inset #ccc;
-  cursor: default;
-  opacity: .5;
-  zoom: 1;
-  filter: alpha(opacity=40);
+	background-position: 0 -513px;
+	border: 1px inset #ccc;
+	cursor: default;
+	opacity: .5;
+	zoom: 1;
+	filter: alpha(opacity=40);
 }
 
 /* RichTextArea */
@@ -1282,7 +1282,7 @@ iframe {
 	horizontal-align: 50%;
 	border-left: 1px solid #A5A596;
 	border-right: 1px solid #A5A596;
-	width:10px;
+	width: 10px;
 }
 
 .okm-HorizontalSplitPanel .hsplitter { 
@@ -1295,7 +1295,7 @@ iframe {
 	background-color: #E5E5E1;
 	horizontal-align: 50%;
     border: 0px; 
-	width:10px;
+	width: 10px;
 }
 
 /* Vertical split panel */
@@ -1307,7 +1307,7 @@ iframe {
 	font-family: "Small Fonts";
 	font-size: 4px;
 	background-color: #E5E5E1;
-	height:10px;
+	height: 10px;
 	vertical-align: 50%;
 }
 
@@ -1351,32 +1351,32 @@ iframe {
 }
 
 .okm-KeyMap-ImageHover {
-	cursor:pointer; 
-  	cursor:hand;
+	cursor: pointer; 
+  	cursor: hand;
 }
 
 /* Suggest Box */
 .gwt-SuggestBox {
-  padding: 2px;
+	padding: 2px;
 }
 
 .gwt-SuggestBoxPopup {
-  background-color: #EFEBE7;
-  border: 1px solid #999;
+	background-color: #EFEBE7;
+	border: 1px solid #999;
 }
 
 .gwt-SuggestBoxPopup .item {
-  padding: 2px 6px;
-  color: #424242;
-  cursor: default;
+	padding: 2px 6px;
+	color: #424242;
+	cursor: default;
 }
 
 .gwt-SuggestBoxPopup .item-selected {
-  background: #b7d6f6;
+	background: #b7d6f6;
 }
 
 .gwt-SuggestBoxPopup .suggestPopupContent {
-  background: white;
+	background: white;
 }
 
 /* Keyword widget */
@@ -1416,17 +1416,17 @@ iframe {
 
 /* Tag cloud */
 .okm-cloudWrap {
-	text-align : center;
-	margin : auto;
+	text-align: center;
+	margin: auto;
 }
                
 .okm-cloudTags {   
-	float : left;   
-	padding : 0px 5px;   
-	font-size : 5pt;
-	font-family : "Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;   
+	float: left;   
+	padding: 0px 5px;   
+	font-size: 5pt;
+	font-family: "Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;   
 	height: 30px;
-	text-decoration:none;
+	text-decoration: none;
 }   
   
 .okm-cloudTags a {   
@@ -1514,8 +1514,8 @@ iframe {
 	border-right: 1px solid #666;
 	padding: 2px 7px 2px 7px;
 	background-color: #caccc8;
-	cursor:pointer; 
-  	cursor:hand;
+	cursor: pointer; 
+  	cursor: hand;
   	height: 20px;
 }
 
@@ -1528,8 +1528,8 @@ iframe {
 	border-left: 1px solid #bbb;
 	border-right: 1px solid #666;
 	padding: 2px 7px 2px 7px;
-	cursor:pointer; 
-  	cursor:hand;
+	cursor: pointer; 
+  	cursor: hand;
   	height: 20px;
 }
 
@@ -1539,8 +1539,8 @@ iframe {
 	font-size: 1.2em;
     font-weight: bold;
     text-decoration: none;
-    cursor:pointer; 
-  	cursor:hand;
+    cursor: pointer; 
+  	cursor: hand;
 }
 
 .okm-Forum-User {
