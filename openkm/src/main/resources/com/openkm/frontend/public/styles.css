@@ -59,6 +59,11 @@ blockquote {
     background-color: #EBEADD;
 }
 
+strong {
+	font-weight: bold;
+	color: #6ca2ff;
+}
+
 /* General use */
 .okm-NoWrap {
 	white-space: nowrap;
@@ -1067,6 +1072,7 @@ iframe {
  * Hyperlink 
  */
 .okm-Hyperlink {
+	text-decoration: underline;
 	cursor: pointer; 
   	cursor: hand;
 }
@@ -1559,9 +1565,4 @@ iframe {
 
 .okm-Forum-Gray {
 	color: #898989;
-}
-
-/* Misc */
-.okm-BgGrey {
-	background-color: #E5E5E1;
 }

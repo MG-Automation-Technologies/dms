@@ -78,7 +78,9 @@ public class SearchResult extends Composite {
 	 */
 	public void langRefresh() {
 		searchCompactResult.langRefresh();
-		searchFullResult.langRefresh();
+		if (resultsViewMode==SearchControl.RESULTS_VIEW_NORMAL) {
+			drawResults();
+		}
 	}
 	
 	/**
