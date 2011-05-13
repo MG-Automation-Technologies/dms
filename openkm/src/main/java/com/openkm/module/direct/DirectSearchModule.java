@@ -237,7 +237,7 @@ public class DirectSearchModule implements SearchModule {
 			 */
 			if (document) {
 				sb.append(" or (@jcr:primaryType eq 'okm:document'");
-
+				
 				if (!params.getContent().equals("")) {
 					sb.append(" "+params.getOperator()+" ");
 					sb.append("jcr:contains(okm:content,'" + params.getContent() + "')");
