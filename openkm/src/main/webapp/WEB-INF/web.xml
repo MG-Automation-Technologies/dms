@@ -65,6 +65,10 @@
   <listener>
     <listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup</listener-class>
   </listener>
+  <listener>
+    <listener-class>com.sun.xml.ws.transport.http.servlet.WSServletContextListener</listener-class>
+  </listener>
+
   <!--
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
@@ -88,7 +92,7 @@
     <servlet-class>com.openkm.servlet.WebdavServlet</servlet-class>
     <init-param>
       <param-name>x-missing-auth-mapping</param-name>
-      <param-value>pavila:ponova</param-value>
+      <param-value>monkiki:ponova</param-value>
     </init-param>
     <init-param>
       <param-name>authenticate-header</param-name>
@@ -103,6 +107,11 @@
       <param-value>/WEB-INF/config.xml</param-value>
     </init-param>
     <load-on-startup>2</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>Webservices</servlet-name>
+    <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
+    <load-on-startup>3</load-on-startup>
   </servlet>
 
   <!-- Frontend Servlets -->
@@ -410,6 +419,7 @@
   </servlet>
     
   <!-- WebServices -->
+  <!--
   <servlet>
     <servlet-name>OKMAuth</servlet-name>
     <servlet-class>com.openkm.ws.endpoint.OKMAuth</servlet-class>
@@ -462,12 +472,21 @@
     <servlet-name>OKMTest</servlet-name>
     <servlet-class>com.openkm.ws.endpoint.OKMTest</servlet-class>
   </servlet>
+  -->
   
   <!-- Test Servlets -->
   <servlet>
     <servlet-name>Test</servlet-name>
     <servlet-class>com.openkm.servlet.TestServlet</servlet-class>
   </servlet>
+  
+  <!-- Startup servlets -->
+  <!--
+  <servlet-mapping>
+    <servlet-name>Webservices</servlet-name>
+    <url-pattern>/ws</url-pattern>
+  </servlet-mapping>
+  -->
   
   <!-- Frontend Servlet Mappings -->
   <servlet-mapping>
@@ -786,6 +805,7 @@
   </servlet-mapping>
 
   <!-- WebServices Servlet Mappings -->
+  <!--
   <servlet-mapping>
     <servlet-name>OKMAuth</servlet-name>
     <url-pattern>/OKMAuth</url-pattern>
@@ -838,7 +858,8 @@
     <servlet-name>OKMTest</servlet-name>
     <url-pattern>/OKMTest</url-pattern>
   </servlet-mapping>
-
+  -->
+  
   <!-- Test Servlet Mapping -->
   <servlet-mapping>
     <servlet-name>Test</servlet-name>
