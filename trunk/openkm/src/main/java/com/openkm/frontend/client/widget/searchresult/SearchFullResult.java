@@ -32,7 +32,6 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.openkm.frontend.client.Main;
@@ -40,6 +39,7 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTQueryResult;
 import com.openkm.frontend.client.util.CommonUI;
+import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.WidgetUtil;
 import com.openkm.frontend.client.widget.dashboard.keymap.TagCloud;
@@ -67,13 +67,12 @@ public class SearchFullResult extends Composite {
 		initWidget(scrollPanel);
 	}
 	
-	/* (non-Javadoc)
+	 /* (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.UIObject#setPixelSize(int, int)
 	 */
 	public void setPixelSize(int width, int height) {
-		super.setPixelSize(width, height);
-		scrollPanel.setPixelSize(width, height);
 		table.setWidth(""+(width));
+		scrollPanel.setPixelSize(width, height);
 	}
 	
 	/**
@@ -107,74 +106,105 @@ public class SearchFullResult extends Composite {
 			doc = gwtQueryResult.getAttachment();
 		}
 		
-		// First row
+		// Document row
 		HorizontalPanel hPanel = new HorizontalPanel();
 		hPanel.setStyleName("okm-NoWrap");
 		hPanel.add(new HTML(score.getHTML()));
-		hPanel.add(new HTML("&nbsp;"));
+		hPanel.add(Util.hSpace("5"));
 		if(doc.isAttachment())  {
 			hPanel.add(new HTML(Util.imageItemHTML("img/email_attach.gif")));
-			hPanel.add(new HTML("&nbsp;"));
+			hPanel.add(Util.hSpace("5"));
 		} 
 		hPanel.add(new HTML(Util.mimeImageHTML(doc.getMimeType())));
-		hPanel.add(new HTML("&nbsp;"));
-		Hyperlink hLink = new Hyperlink();
-		hLink.setHTML(doc.getName());
-		hLink.setStyleName("okm-Hyperlink");
+		hPanel.add(Util.hSpace("5"));
+		Anchor anchor = new Anchor();
+		anchor.setHTML(doc.getName());
+		anchor.setStyleName("okm-Hyperlink");
 		// On attachemt case must remove last folder path, because it's internal usage not for visualization
 		if (doc.isAttachment()) {
-			hLink.setTitle(doc.getParent().substring(0, doc.getParent().lastIndexOf("/")));
+			anchor.setTitle(doc.getParent().substring(0, doc.getParent().lastIndexOf("/")));
 		} else {
-			hLink.setTitle(doc.getParent());
+			anchor.setTitle(doc.getParent());
 		}
-		hPanel.add(hLink);
-		hPanel.add(new HTML("&nbsp;"));
+		final String docPath = doc.getPath();
+		anchor.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				CommonUI.openAllFolderPath(docPath.substring(0,docPath.lastIndexOf("/")), docPath);
+			}
+		});
+		hPanel.add(anchor);
+		hPanel.add(Util.hSpace("5"));
 		hPanel.add(new HTML(doc.getActualVersion().getName()));
-		table.setWidget(rows++, 0, hPanel);
+		hPanel.add(Util.hSpace("5"));
+		// Download
+		Image gotoDocument = new Image(OKMBundleResources.INSTANCE.download());
+		gotoDocument.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
+				Util.downloadFile(docPath, "");
+			}
+			
+		});
+		gotoDocument.setTitle(Main.i18n("dashboard.keyword.goto.document"));
+		gotoDocument.setStyleName("okm-KeyMap-ImageHover");
+		hPanel.add(gotoDocument);
+		table.setWidget(rows++, 0, hPanel);		
 		
-		// Second line
-		table.setHTML(rows++, 0, "<blockquote>"+gwtQueryResult.getExcerpt()+"</blockquote>");
+		// Excerpt row
+		table.setHTML(rows++, 0, gwtQueryResult.getExcerpt());
 		
-		// Third row
+		// Folder row
 		HorizontalPanel hPanel2 = new HorizontalPanel();
 		hPanel2.setStyleName("okm-NoWrap");
-		hPanel2.add(new HTML("<b>"+Main.i18n("search.result.author")+":</b>"));
-		hPanel2.add(new HTML(doc.getActualVersion().getAuthor()));
-		hPanel2.add(Util.hSpace("33"));
-		hPanel2.add(new HTML("<b>"+Main.i18n("search.result.size")+":</b>"));
-		hPanel2.add(new HTML(Util.formatSize(doc.getActualVersion().getSize())));
-		hPanel2.add(Util.hSpace("33"));
-		hPanel2.add(new HTML("<b>"+Main.i18n("search.result.version")+":</b>"));
-		hPanel2.add(new HTML(doc.getActualVersion().getName()));
-		hPanel2.add(Util.hSpace("33"));
-		hPanel2.add(new HTML("<b>"+Main.i18n("search.result.date.update")+":</b>"));
-		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
-		hPanel2.add(new HTML(dtf.format(doc.getLastModified())));
+		hPanel2.add(new HTML("<b>"+Main.i18n("document.folder")+":</b>&nbsp;"));
+		hPanel2.add(drawFolder(doc.getParentId()));
 		table.setWidget(rows++, 0, hPanel2);
 		
-		// Fourth line
-		HorizontalPanel hPanel3 = new HorizontalPanel();
-		hPanel3.setStyleName("okm-NoWrap");
-		// Categories
-		FlexTable tableSubscribedCategories = new FlexTable();
-		tableSubscribedCategories.setStyleName("okm-DisableSelect");
-		// Sets the document categories
-		for (Iterator<GWTFolder> it = doc.getCategories().iterator(); it.hasNext();) {
-			drawCategory(tableSubscribedCategories, it.next());
+		// Document detail
+		HorizontalPanel hPanel4 = new HorizontalPanel();
+		hPanel4.setStyleName("okm-NoWrap");
+		hPanel4.add(new HTML("<b>"+Main.i18n("search.result.author")+":</b>&nbsp;"));
+		hPanel4.add(new HTML(doc.getActualVersion().getAuthor()));
+		hPanel4.add(Util.hSpace("33"));
+		hPanel4.add(new HTML("<b>"+Main.i18n("search.result.size")+":</b>&nbsp;"));
+		hPanel4.add(new HTML(Util.formatSize(doc.getActualVersion().getSize())));
+		hPanel4.add(Util.hSpace("33"));
+		hPanel4.add(new HTML("<b>"+Main.i18n("search.result.version")+":</b>&nbsp;"));
+		hPanel4.add(new HTML(doc.getActualVersion().getName()));
+		hPanel4.add(Util.hSpace("33"));
+		hPanel4.add(new HTML("<b>"+Main.i18n("search.result.date.update")+":&nbsp;</b>"));
+		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
+		hPanel4.add(new HTML(dtf.format(doc.getLastModified())));
+		table.setWidget(rows++, 0, hPanel4);
+		
+		// Categories and tagcloud
+		if (doc.getCategories().size()>0 || doc.getKeywords().size()>0) { 
+			HorizontalPanel hPanel5 = new HorizontalPanel();
+			hPanel5.setStyleName("okm-NoWrap");
+			if (doc.getCategories().size()>0) {
+				FlexTable tableSubscribedCategories = new FlexTable();
+				tableSubscribedCategories.setStyleName("okm-DisableSelect");
+				// Sets the document categories
+				for (Iterator<GWTFolder> it = doc.getCategories().iterator(); it.hasNext();) {
+					drawCategory(tableSubscribedCategories, it.next());
+				}
+				hPanel5.add(new HTML("<b>"+Main.i18n("document.categories")+"</b>"));
+				hPanel5.add(Util.hSpace("5"));
+				hPanel5.add(tableSubscribedCategories);
+				hPanel5.add(Util.hSpace("33"));
+			}
+			if (doc.getKeywords().size()>0) {
+				// Tag cloud
+				TagCloud keywordsCloud = new TagCloud();
+				keywordsCloud.setWidth("350");
+				WidgetUtil.drawTagCloud(keywordsCloud, doc.getKeywords());
+				hPanel5.add(new HTML("<b>"+Main.i18n("document.keywords.cloud")+"</b>"));
+				hPanel5.add(Util.hSpace("5"));
+				hPanel5.add(keywordsCloud);
+			}
+			table.setWidget(rows++, 0, hPanel5);
 		}
-		// Tag cloud
-		TagCloud keywordsCloud = new TagCloud();
-		keywordsCloud.setWidth("350");
-		// Sets keywords
-		WidgetUtil.drawTagCloud(keywordsCloud, doc.getKeywords());
-		hPanel3.add(new HTML("<b>"+Main.i18n("document.categories")+"</b>"));
-		hPanel3.add(Util.hSpace("5"));
-		hPanel3.add(tableSubscribedCategories);
-		hPanel3.add(Util.hSpace("33"));
-		hPanel3.add(new HTML("<b>"+Main.i18n("document.keywords.cloud")+"</b>"));
-		hPanel3.add(Util.hSpace("5"));
-		hPanel3.add(keywordsCloud);
-		table.setWidget(rows++, 0, hPanel3);
 		
 		// Final line
 		Image horizontalLine = new Image("img/transparent_pixel.gif");
@@ -216,10 +246,22 @@ public class SearchFullResult extends Composite {
 	}
 	
 	/**
-	 * langRefresh
+	 * drawFolder
+	 * 
+	 * @param folder
+	 * @return
 	 */
-	public void langRefresh() {
-		
+	private Anchor drawFolder(final String path) {
+		Anchor anchor = new Anchor();
+		anchor.setHTML(Util.imageItemHTML("img/menuitem_childs.gif", path, "top"));	
+		anchor.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent arg0) {
+				CommonUI.openAllFolderPath(path, null);
+			}
+		});
+		anchor.setStyleName("okm-KeyMap-ImageHover");
+		return anchor;
 	}
 	
 	/**
