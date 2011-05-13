@@ -205,14 +205,14 @@ public class DirectSearchModule implements SearchModule {
 		params.setMailFrom(params.getMailFrom() != null?params.getMailFrom().trim():"");
 		params.setMailTo(params.getMailTo() != null?params.getMailTo().trim():"");
 		params.setProperties(params.getProperties() != null?params.getProperties():new HashMap<String, String>());
-
+		
 		// Domains
 		boolean document = (params.getDomain() & QueryParams.DOCUMENT) != 0;
 		boolean folder = (params.getDomain() & QueryParams.FOLDER) != 0;
 		boolean mail = (params.getDomain() & QueryParams.MAIL) != 0;
 		
 		log.debug("doc={}, fld={}, mail={}", new Object[] { document, folder, mail });
-
+		
 		// Escape
 		if (!params.getName().equals("")) {
 			params.setName(escapeContains(params.getName()));
@@ -231,7 +231,7 @@ public class DirectSearchModule implements SearchModule {
 			
 			// Construct the query
 			sb.append("/jcr:root"+ISO9075.encodePath(params.getPath())+"//*[@jcr:primaryType eq 'okm:void'");
-
+			
 			/**
 			 * DOCUMENT
 			 */
@@ -242,7 +242,7 @@ public class DirectSearchModule implements SearchModule {
 					sb.append(" "+params.getOperator()+" ");
 					sb.append("jcr:contains(okm:content,'" + params.getContent() + "')");
 				}
-
+				
 				if (!params.getName().equals("")) {
 					sb.append(" "+params.getOperator()+" ");
 					sb.append("jcr:contains(@okm:name,'" + params.getName() + "')");
@@ -261,17 +261,17 @@ public class DirectSearchModule implements SearchModule {
 						sb.append("@okm:categories='" + it.next() + "'");
 					}
 				}
-
+				
 				if (!params.getMimeType().equals("")) {
 					sb.append(" "+params.getOperator()+" ");
 					sb.append("@okm:content/jcr:mimeType='" + params.getMimeType() + "'");
 				}
-
+				
 				if (!params.getAuthor().equals("")) {
 					sb.append(" "+params.getOperator()+" ");
 					sb.append("@okm:content/okm:author='" + params.getAuthor() + "'");
 				}
-
+				
 				if (params.getLastModifiedFrom() != null && params.getLastModifiedTo() != null) {
 					sb.append(" "+params.getOperator()+" ");
 					sb.append("(");
@@ -280,7 +280,7 @@ public class DirectSearchModule implements SearchModule {
 					sb.append("@okm:content/jcr:lastModified <= xs:dateTime('" + ISO8601.format(params.getLastModifiedTo()) + "')");
 					sb.append(")");
 				}
-
+				
 				if (!params.getProperties().isEmpty()) {
 					Map<PropertyGroup, List<FormElement>> formsElements = FormUtils.parsePropertyGroupsForms(Config.PROPERTY_GROUPS_XML);
 					
@@ -322,10 +322,10 @@ public class DirectSearchModule implements SearchModule {
 					sb.append("@jcr:created <= xs:dateTime('" + ISO8601.format(params.getLastModifiedTo()) +"')");
 					sb.append(")");
 				}
-
+				
 				sb.append(")");
 			}
-
+			
 			/**
 			 * MAIL
 			 */
@@ -345,7 +345,7 @@ public class DirectSearchModule implements SearchModule {
 					sb.append(" "+params.getOperator()+" ");
 					sb.append("jcr:contains(@okm:from,'"+ params.getMailFrom()+ "')");
 				}
-
+				
 				if (!params.getMailTo().equals("")) {
 					sb.append(" "+params.getOperator()+" ");
 					sb.append("jcr:contains(@okm:to,'"+ params.getMailTo()+ "')");
@@ -355,7 +355,7 @@ public class DirectSearchModule implements SearchModule {
 					sb.append(" "+params.getOperator()+" ");
 					sb.append("@okm:content/jcr:mimeType='"+ params.getMimeType()+ "'");
 				}
-
+				
 				if (!params.getProperties().isEmpty()) {
 					Map<PropertyGroup, List<FormElement>> formsElements = FormUtils.parsePropertyGroupsForms(Config.PROPERTY_GROUPS_XML);
 					
