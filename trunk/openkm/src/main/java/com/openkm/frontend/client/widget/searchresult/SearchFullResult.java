@@ -47,6 +47,7 @@ import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.WidgetUtil;
 import com.openkm.frontend.client.widget.dashboard.keymap.TagCloud;
+import com.openkm.frontend.client.widget.searchin.SearchControl;
 
 /**
  * SearchFullResult
@@ -156,7 +157,10 @@ public class SearchFullResult extends Composite {
 		table.setWidget(rows++, 0, hPanel);		
 		
 		// Excerpt row
-		table.setHTML(rows++, 0, gwtQueryResult.getExcerpt());
+		if (Main.get().mainPanel.search.searchBrowser.searchIn.searchControl.getSearchMode()==SearchControl.SEARCH_MODE_SIMPLE ||
+			!Main.get().mainPanel.search.searchBrowser.searchIn.searchNormal.content.getText().equals("")) {
+			table.setHTML(rows++, 0, gwtQueryResult.getExcerpt());
+		}
 		
 		// Folder row
 		HorizontalPanel hPanel2 = new HorizontalPanel();
