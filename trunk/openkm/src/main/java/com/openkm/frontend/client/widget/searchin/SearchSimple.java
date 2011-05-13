@@ -22,10 +22,12 @@
 package com.openkm.frontend.client.widget.searchin;
 
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.openkm.frontend.client.util.Util;
 
 /**
  * SearchSimple
@@ -45,8 +47,11 @@ public class SearchSimple extends Composite {
 		fullText = new TextBox();
 		fullText.setWidth("365");
 		vPanel = new VerticalPanel();
+		HTML spacer = Util.vSpace("70");
+		vPanel.add(spacer);
 		vPanel.add(fullText);
-		vPanel.setCellVerticalAlignment(fullText, HasAlignment.ALIGN_MIDDLE);
+		vPanel.setCellHeight(spacer, "70");
+		vPanel.setCellVerticalAlignment(fullText, HasAlignment.ALIGN_TOP);
 		vPanel.setCellHorizontalAlignment(fullText, HasAlignment.ALIGN_CENTER);
 		scrollPanel = new ScrollPanel(vPanel);
 		fullText.setStyleName("okm-Input");
@@ -60,11 +65,5 @@ public class SearchSimple extends Composite {
 	public void setPixelSize(int width, int height) {
 		scrollPanel.setPixelSize(width, height);
 		vPanel.setPixelSize(width, height);
-	}
-	
-	/**
-	 * langRefresh
-	 */
-	public void langRefresh() {
 	}
 }
