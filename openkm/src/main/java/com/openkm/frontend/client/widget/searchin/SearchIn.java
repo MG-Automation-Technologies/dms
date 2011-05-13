@@ -153,7 +153,6 @@ public class SearchIn extends Composite {
 	 * Refreshing lang
 	 */
 	public void langRefresh() {
-		searchSimple.langRefresh();
 		searchNormal.langRefresh();
 		searchAdvanced.langRefresh();
 		searchMetadata.langRefresh();

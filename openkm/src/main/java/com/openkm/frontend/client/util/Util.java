@@ -155,8 +155,35 @@ public class Util {
 	 * @return an HTML element meaning the with
 	 */
 	public static HTML hSpace(String width) {
-		HTML spacer = new HTML("&nbsp;");
+		HTML spacer = new HTML("");
 		spacer.setWidth(width);
+		return spacer;
+	}
+	
+	/**
+	 * Creates an vertical spacer
+	 * 
+	 * @param height The desired height space
+	 * @return an HTML element meaning the height
+	 */
+	public static HTML vSpace(String height) {
+		HTML spacer = new HTML("");
+		spacer.setHeight(height);
+		return spacer;
+	}
+	
+	/**
+	 * Creates an square spacer
+	 * 
+	 * @param width The desired width space
+	 * @param height The desired height space
+	 * 
+	 * @return an HTML element meaning the with and height
+	 */
+	public static HTML space(String width, String height) {
+		HTML spacer = new HTML("");
+		spacer.setWidth(width);
+		spacer.setHeight(height);
 		return spacer;
 	}
 	
