@@ -76,7 +76,7 @@ public class SearchFullResult extends Composite {
 	 * @see com.google.gwt.user.client.ui.UIObject#setPixelSize(int, int)
 	 */
 	public void setPixelSize(int width, int height) {
-		table.setWidth(""+(width));
+		table.setWidth("100%");
 		scrollPanel.setPixelSize(width, height);
 	}
 	

@@ -598,4 +598,13 @@ public class SearchControl extends Composite {
 		searchAdvanced.subject.setText("");
 		Main.get().mainPanel.search.searchBrowser.searchResult.removeAllRows();
 	}
+	
+	/**
+	 * getSearchMode
+	 * 
+	 * @return
+	 */
+	public int getSearchMode() {
+		return searchMode;
+	}
 }
