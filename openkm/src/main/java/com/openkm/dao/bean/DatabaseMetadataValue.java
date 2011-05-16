@@ -28,8 +28,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Entity(name="OKM_DB_METADATA_VALUE")
+@Entity
+@Table(name="OKM_DB_METADATA_VALUE")
 public class DatabaseMetadataValue implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
