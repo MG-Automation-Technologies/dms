@@ -80,7 +80,7 @@ public class DirectFolderModule implements FolderModule {
 			String parent = FileUtils.getParent(fld.getPath());
 			String name = FileUtils.getName(fld.getPath());
 			parentNode = session.getRootNode().getNode(parent.substring(1));
-
+			
 			// Escape dangerous chars in name
 			name = FileUtils.escape(name);
 			fld.setPath(parent + "/" + name);
@@ -93,7 +93,7 @@ public class DirectFolderModule implements FolderModule {
 			
 			// Create node
 			Node folderNode = BaseFolderModule.create(session, parentNode, name);
-						
+			
 			// Set returned folder properties
 			newFolder = BaseFolderModule.getProperties(session, folderNode);
 			
