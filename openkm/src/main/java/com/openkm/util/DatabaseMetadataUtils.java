@@ -29,12 +29,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
+import com.openkm.dao.DatabaseMetadataDAO;
 import com.openkm.dao.HibernateUtil;
-import com.openkm.extension.dao.ExtensionMetadataDAO;
-import com.openkm.extension.dao.bean.ExtensionMetadataType;
+import com.openkm.dao.bean.DatabaseMetadataType;
 
-public class ExtensionMetadataUtils {
-	private static Logger log = LoggerFactory.getLogger(ExtensionMetadataUtils.class);
+public class DatabaseMetadataUtils {
+	private static Logger log = LoggerFactory.getLogger(DatabaseMetadataUtils.class);
 	
 	/**
 	 * Build a query
@@ -44,7 +44,7 @@ public class ExtensionMetadataUtils {
 		StringBuilder sb = new StringBuilder();
 		String ret = null;
 		
-		sb.append("from ExtensionMetadataValue emv where emv.table='" + table + "'");
+		sb.append("from DatabaseMetadataValue dmv where dmv.table='" + table + "'");
 		
 		if (filter != null && filter.length() > 0) {
 			String repFilter = replaceVirtual(table, filter);				
@@ -68,14 +68,14 @@ public class ExtensionMetadataUtils {
 		StringBuilder sb = new StringBuilder();
 		String ret = null;
 		
-		sb.append("update ExtensionMetadataValue emv");
+		sb.append("update DatabaseMetadataValue dmv");
 		
 		if (filter != null && filter.length() > 0) {
 			String repFilter = replaceVirtual(table, filter);
 			sb.append(" ").append(repFilter).append(" ");
 		}
 		
-		sb.append(" where emv.table=:table");
+		sb.append(" where dmv.table=:table");
 		
 		ret = sb.toString();
 		log.debug("buildUpdate: {}", ret);
@@ -90,7 +90,7 @@ public class ExtensionMetadataUtils {
 		StringBuilder sb = new StringBuilder();
 		String ret = null;
 		
-		sb.append("delete from ExtensionMetadataValue emv where emv.table='" + table + "'");
+		sb.append("delete from DatabaseMetadataValue dmv where dmv.table='" + table + "'");
 		
 		if (filter != null && filter.length() > 0) {
 			String repFilter = replaceVirtual(table, filter);
@@ -113,9 +113,9 @@ public class ExtensionMetadataUtils {
 			session = HibernateUtil.getSessionFactory().openSession();
 			
 			if (filter != null && filter.length() > 0) {
-				List<ExtensionMetadataType> types = ExtensionMetadataDAO.findAllTypes(table);
+				List<DatabaseMetadataType> types = DatabaseMetadataDAO.findAllTypes(table);
 				
-				for (ExtensionMetadataType emt : types) {
+				for (DatabaseMetadataType emt : types) {
 					filter = filter.replace(emt.getVirtualColumn(), emt.getRealColumn());
 				}
 				
