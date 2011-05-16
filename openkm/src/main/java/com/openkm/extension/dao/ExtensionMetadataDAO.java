@@ -48,7 +48,7 @@ public class ExtensionMetadataDAO {
 	/**
 	 * Create
 	 */
-	public static int createValue(ExtensionMetadataValue emv) throws DatabaseException {
+	public static long createValue(ExtensionMetadataValue emv) throws DatabaseException {
 		log.debug("createValue({})", emv);
 		Session session = null;
 		Transaction tx = null;
@@ -56,10 +56,10 @@ public class ExtensionMetadataDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			Integer id = (Integer) session.save(emv);
+			Long id = (Long) session.save(emv);
 			HibernateUtil.commit(tx);
 			log.debug("createValue: {}" + id);
-			return id.intValue();
+			return id.longValue();
 		} catch(HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
