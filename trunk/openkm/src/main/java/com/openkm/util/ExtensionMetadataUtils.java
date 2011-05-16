@@ -75,7 +75,7 @@ public class ExtensionMetadataUtils {
 			sb.append(" ").append(repFilter).append(" ");
 		}
 		
-		sb.append("where emv.table=:table");
+		sb.append(" where emv.table=:table");
 		
 		ret = sb.toString();
 		log.debug("buildUpdate: {}", ret);
