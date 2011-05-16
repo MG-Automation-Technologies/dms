@@ -32,6 +32,11 @@ import javax.persistence.Id;
 @Entity(name="OKM_EXTENSION_MD_TYPE")
 public class ExtensionMetadataType implements Serializable {
 	private static final long serialVersionUID = 1L;
+	public static final String TEXT = "text";
+	public static final String BOOLEAN = "boolean";
+	public static final String INTEGER = "integer";
+	public static final String LONG = "long";
+	public static final String FILE = "file";
 	
 	@Id
 	@Column(name="EMT_ID")
