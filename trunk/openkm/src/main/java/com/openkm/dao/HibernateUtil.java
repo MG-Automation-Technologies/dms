@@ -40,6 +40,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
+import com.openkm.dao.bean.DatabaseMetadataType;
+import com.openkm.dao.bean.DatabaseMetadataValue;
 
 /**
  * Show SQL => Logger.getLogger("org.hibernate.SQL").setThreshold(Level.INFO);
@@ -69,13 +71,20 @@ public class HibernateUtil {
 	public static SessionFactory getSessionFactory(String hbm2ddl) {
 		if (sessionFactory == null) {
 			try {
-				Configuration cfg = new AnnotationConfiguration().configure();
+				AnnotationConfiguration ac = new AnnotationConfiguration();
+				
+				// Add annotated beans
+				ac.addAnnotatedClass(DatabaseMetadataType.class);
+				ac.addAnnotatedClass(DatabaseMetadataValue.class);
+				
+				// Configure Hibernate
+				Configuration cfg = ac.configure();
 				cfg.setProperty("hibernate.dialect", Config.HIBERNATE_DIALECT);
 				cfg.setProperty("hibernate.connection.datasource", Config.HIBERNATE_DATASOURCE);
 				cfg.setProperty("hibernate.hbm2ddl.auto", hbm2ddl);
 				cfg.setProperty("hibernate.show_sql", Config.HIBERNATE_SHOW_SQL);
 				cfg.setProperty("hibernate.generate_statistics", Config.HIBERNATE_STATISTICS);
-				
+								
 				// Show configuration
 				log.info("Hibernate 'hibernate.dialect' = {}", cfg.getProperty("hibernate.dialect"));
 				log.info("Hibernate 'hibernate.connection.datasource' = {}", cfg.getProperty("hibernate.connection.datasource"));
