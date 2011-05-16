@@ -30,7 +30,7 @@
       }
     }
     
-    if (preset == null) {
+    if (preset == null || preset.equals("")) {
       preset = locale.getLanguage()+"-"+locale.getCountry();
     }
   %>
