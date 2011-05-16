@@ -306,7 +306,7 @@
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-core</artifactId>
-      <version>3.3.2.GA</version>
+      <version>3.5.6-Final</version>
       <exclusions>
         <exclusion>
           <groupId>javax.transaction</groupId>
@@ -317,7 +317,7 @@
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-annotations</artifactId>
-      <version>3.3.1.GA</version>
+      <version>3.5.6-Final</version>
       <exclusions>
         <exclusion>
           <groupId>javax.transaction</groupId>
@@ -514,6 +514,12 @@
       <groupId>com.github.dcarter.gdata-java-client</groupId>
       <artifactId>gdata-contacts-3.0</artifactId>
       <version>1.41.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.collections</groupId>
+          <artifactId>google-collections</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     
     <!-- Spring Security -->
