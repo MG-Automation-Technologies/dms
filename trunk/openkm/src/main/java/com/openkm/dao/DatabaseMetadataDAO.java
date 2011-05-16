@@ -262,7 +262,7 @@ public class DatabaseMetadataDAO {
 	@SuppressWarnings("unchecked")
 	public static List<DatabaseMetadataType> findAllTypes(String table) throws DatabaseException {
 		log.debug("findAllTypes({})", table);
-		String qs = "from DatabaseMetadataType dmt where dmt.table=:table order by dmv.id asc";		
+		String qs = "from DatabaseMetadataType dmt where dmt.table=:table order by dmt.id asc";		
 		Session session = null;
 		Transaction tx = null;
 		
