@@ -55,10 +55,10 @@ public class BaseScriptingModule {
 				// Evaluate script
 				Interpreter i = new Interpreter();
 				try {
-					i.set("eventType", eventType);
 					i.set("session", session);
-					i.set("eventNode", eventNode);
 					i.set("scriptNode", scriptNode);
+					i.set("eventNode", eventNode);
+					i.set("eventType", eventType);
 					i.eval(code);
 				} catch (EvalError e) {
 					log.warn(e.getMessage(), e);
