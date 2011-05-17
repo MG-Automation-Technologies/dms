@@ -36,7 +36,7 @@ import com.openkm.frontend.client.bean.GWTDatabaseMetadataValue;
  */
 @RemoteServiceRelativePath("DatabaseMetadata")
 public interface OKMDatabaseMetadataService extends RemoteService {
-	public List<GWTDatabaseMetadataValue> executeValueQuery(String table, String filter, String order,boolean replaceVirtual) throws OKMException;
+	public List<GWTDatabaseMetadataValue> executeValueQuery(String table, String filter, String order) throws OKMException;
 	public void updateValue(GWTDatabaseMetadataValue dmv) throws OKMException;
 	public void createValue(GWTDatabaseMetadataValue dmv) throws OKMException;
 }

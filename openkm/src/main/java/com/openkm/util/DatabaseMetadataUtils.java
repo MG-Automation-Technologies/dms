@@ -25,6 +25,8 @@ import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.DatabaseMetadataDAO;
@@ -39,17 +41,22 @@ import com.openkm.dao.bean.DatabaseMetadataType;
  *
  */
 public class DatabaseMetadataUtils {
+	private static Logger log = LoggerFactory.getLogger(DatabaseMetadataUtils.class);
+	
 	/**
 	 * Build a query
+	 * 
+	 * @throws DatabaseException 
 	 */
-	public static String buildQuery(String table, String filter, String order) {
+	public static String buildQuery(String table, String filter, String order) throws DatabaseException {
+		log.debug("buildQuery({},{},{})", new Object[]{table, filter, order});
 		StringBuilder sb = new StringBuilder();
 		String ret = null;
 		
 		sb.append("from DatabaseMetadataValue dmv where dmv.table='" + table + "'");
 		
 		if (filter != null && filter.length() > 0) {			
-			sb.append(" and ").append(filter);
+			sb.append(" and ").append(replaceVirtual(table, filter));
 		}
 		
 		if (order != null && order.length() > 0) {
@@ -57,49 +64,57 @@ public class DatabaseMetadataUtils {
 		}
 		
 		ret = sb.toString();
+		log.debug("buildQuery: "+ret);
 		return ret;
 	}
 	
 	/**
 	 * Build a query
+	 * @throws DatabaseException 
 	 */
-	public static String buildUpdate(String table, String filter) {
+	public static String buildUpdate(String table, String filter) throws DatabaseException {
+		log.debug("buildUpdate({},{},{})", new Object[]{table, filter});
 		StringBuilder sb = new StringBuilder();
 		String ret = null;
 		
 		sb.append("update DatabaseMetadataValue dmv");
 		
 		if (filter != null && filter.length() > 0) {
-			sb.append(" ").append(filter).append(" ");
+			sb.append(" ").append(replaceVirtual(table, filter)).append(" ");
 		}
 		
 		sb.append(" where dmv.table=:table");
 		
 		ret = sb.toString();
+		log.debug("buildUpdate: "+ret);
 		return ret;
 	}
 	
 	/**
 	 * Build a query
+	 * @throws DatabaseException 
 	 */
-	public static String buildDelete(String table, String filter) {
+	public static String buildDelete(String table, String filter) throws DatabaseException {
+		log.debug("buildDelete({},{},{})", new Object[]{table, filter});
 		StringBuilder sb = new StringBuilder();
 		String ret = null;
 		
 		sb.append("delete from DatabaseMetadataValue dmv where dmv.table='" + table + "'");
 		
 		if (filter != null && filter.length() > 0) {
-			sb.append(" and ").append(filter);
+			sb.append(" and ").append(replaceVirtual(table, filter));
 		}
 		
 		ret = sb.toString();
+		log.debug("buildDelete: "+ret);
 		return ret;
 	}
 	
 	/**
 	 * Replace virtual columns by real ones
 	 */
-	public static String replaceVirtual(String table, String filter) throws DatabaseException {
+	private static String replaceVirtual(String table, String filter) throws DatabaseException {
+		log.debug("replaceVirtual({},{},{})", new Object[]{table, filter});
 		Session session = null;
 		String ret = "";
 		
@@ -121,6 +136,7 @@ public class DatabaseMetadataUtils {
 			HibernateUtil.close(session);
 		}
 		
+		log.debug("replaceVirtual: "+ret);
 		return ret;
 	}
 }
