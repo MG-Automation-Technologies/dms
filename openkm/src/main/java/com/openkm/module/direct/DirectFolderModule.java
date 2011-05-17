@@ -355,16 +355,18 @@ public class DirectFolderModule implements FolderModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
+			//Node fldNode = session.getRootNode().getNode(fldPath.substring(1));
 			String name = FileUtils.getName(fldPath);
-			session.move(fldPath, dstPath + "/" + name);
+			String dstNodePath = dstPath + "/" + name;
+			session.move(fldPath, dstNodePath);
 			session.save();
+			Node dstFldNode = session.getRootNode().getNode(dstNodePath.substring(1));
 			
 			// Check scripting
-			BaseScriptingModule.checkScripts(session, folderNode.getParent(), folderNode, "MOVE_FOLDER");
+			BaseScriptingModule.checkScripts(session, dstFldNode.getParent(), dstFldNode, "MOVE_FOLDER");
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "MOVE_FOLDER", folderNode.getUUID(), dstPath+", "+fldPath);
+			UserActivity.log(session.getUserID(), "MOVE_FOLDER", dstFldNode.getUUID(), dstPath+", "+fldPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
