@@ -27,6 +27,7 @@ import java.util.List;
 
 import com.openkm.extension.frontend.client.widget.activitylog.ActivityLog;
 import com.openkm.extension.frontend.client.widget.client.metromusa.MetromUsa;
+import com.openkm.extension.frontend.client.widget.client.netservices.Netservices;
 import com.openkm.extension.frontend.client.widget.contact.Contact;
 import com.openkm.extension.frontend.client.widget.crypto.Cryptography;
 import com.openkm.extension.frontend.client.widget.digitalsignature.DigitalSignature;
@@ -86,6 +87,9 @@ public class Customization {
 		}
 		if (MetromUsa.isRegistered(uuidList)) {
 			extensions.addAll(new MetromUsa(uuidList).getExtensions());
+		}
+		if (Netservices.isRegistered(uuidList)) {
+			extensions.addAll(new Netservices(uuidList).getExtensions());
 		}
 		if (AutocadPreview.isRegistered(uuidList)) {
 			extensions.add(new AutocadPreview(uuidList));
