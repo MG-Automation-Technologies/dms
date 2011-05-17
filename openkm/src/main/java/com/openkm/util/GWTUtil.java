@@ -74,6 +74,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.Activity;
 import com.openkm.dao.bean.Bookmark;
+import com.openkm.dao.bean.DatabaseMetadataValue;
 import com.openkm.dao.bean.Language;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.UserConfig;
@@ -98,6 +99,7 @@ import com.openkm.frontend.client.bean.GWTComment;
 import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
 import com.openkm.frontend.client.bean.GWTDashboardFolderResult;
 import com.openkm.frontend.client.bean.GWTDashboardMailResult;
+import com.openkm.frontend.client.bean.GWTDatabaseMetadataValue;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTFormElement;
@@ -1549,5 +1551,51 @@ public class GWTUtil {
 		fp.setSubject(post.getSubject());
 		fp.setUser(post.getUser());
 		return fp;
+	}
+	
+	/**
+	 * Copy DatabaseMetadataValue to GWTDatabaseMetadataValue
+	 * 
+	 * @param DatabaseMetadataValue 
+	 * @return
+	 */
+	public static GWTDatabaseMetadataValue copy(DatabaseMetadataValue dmv) {
+		GWTDatabaseMetadataValue gdvm = new GWTDatabaseMetadataValue();
+		gdvm.setId(new Double(dmv.getId()).doubleValue());
+		gdvm.setTable(dmv.getTable());
+		gdvm.setCol00(dmv.getCol00());
+		gdvm.setCol01(dmv.getCol01());
+		gdvm.setCol02(dmv.getCol02());
+		gdvm.setCol03(dmv.getCol03());
+		gdvm.setCol04(dmv.getCol04());
+		gdvm.setCol05(dmv.getCol05());
+		gdvm.setCol06(dmv.getCol06());
+		gdvm.setCol07(dmv.getCol07());
+		gdvm.setCol08(dmv.getCol08());
+		gdvm.setCol09(dmv.getCol09());
+		return gdvm;
+	}
+	
+	/**
+	 * Copy GWTDatabaseMetadataValue to DatabaseMetadataValue
+	 * 
+	 * @param GWTDatabaseMetadataValue 
+	 * @return
+	 */
+	public static DatabaseMetadataValue copy(GWTDatabaseMetadataValue gdmv) {
+		DatabaseMetadataValue dvm = new DatabaseMetadataValue();
+		dvm.setId(new Double(gdmv.getId()).longValue());
+		dvm.setTable(gdmv.getTable());
+		dvm.setCol00(gdmv.getCol00());
+		dvm.setCol01(gdmv.getCol01());
+		dvm.setCol02(gdmv.getCol02());
+		dvm.setCol03(gdmv.getCol03());
+		dvm.setCol04(gdmv.getCol04());
+		dvm.setCol05(gdmv.getCol05());
+		dvm.setCol06(gdmv.getCol06());
+		dvm.setCol07(gdmv.getCol07());
+		dvm.setCol08(gdmv.getCol08());
+		dvm.setCol09(gdmv.getCol09());
+		return dvm;
 	}
 }
