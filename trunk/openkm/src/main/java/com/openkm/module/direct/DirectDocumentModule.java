@@ -82,6 +82,7 @@ import com.openkm.module.base.BaseScriptingModule;
 import com.openkm.principal.PrincipalAdapter;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.util.FileUtils;
+import com.openkm.util.FormatUtil;
 import com.openkm.util.Transaction;
 import com.openkm.util.UserActivity;
 
@@ -104,6 +105,9 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 		
 		if (size > Config.MAX_FILE_SIZE) {
+			log.error("Uploaded file size: {} ({}), Max file size: {} ({})", new Object[] {
+					FormatUtil.formatSize(size), size, FormatUtil.formatSize(Config.MAX_FILE_SIZE),
+					Config.MAX_FILE_SIZE });
 			throw new FileSizeExceededException(Integer.toString(size));
 		}
 		
