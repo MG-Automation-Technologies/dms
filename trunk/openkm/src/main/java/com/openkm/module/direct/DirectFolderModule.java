@@ -380,6 +380,9 @@ public class DirectFolderModule implements FolderModule {
 			session.move(fldPath, dstPath + "/" + name);
 			session.save();
 			
+			// Check scripting
+			BaseScriptingModule.checkScripts(session, folderNode.getParent(), folderNode, "MOVE_FOLDER");
+			
 			// Activity log
 			UserActivity.log(session.getUserID(), "MOVE_FOLDER", folderNode.getUUID(), dstPath+", "+fldPath);
 		} catch (javax.jcr.PathNotFoundException e) {

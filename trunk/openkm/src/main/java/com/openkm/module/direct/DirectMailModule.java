@@ -365,6 +365,9 @@ public class DirectMailModule implements MailModule {
 			session.move(mailPath, dstPath + "/" + name);
 			session.save();
 			
+			// Check scripting
+			BaseScriptingModule.checkScripts(session, mailNode.getParent(), mailNode, "MOVE_MAIL");
+			
 			// Activity log
 			UserActivity.log(session.getUserID(), "MOVE_MAIL", mailNode.getUUID(), dstPath+", "+mailPath);
 		} catch (javax.jcr.PathNotFoundException e) {
