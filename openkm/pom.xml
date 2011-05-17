@@ -309,10 +309,23 @@
       <artifactId>jbpm-jpdl</artifactId>
       <version>3.2.3</version>
     </dependency>
+
+    <!-- Hibernate -->
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-core</artifactId>
-      <version>3.3.2.GA</version>
+      <version>3.5.6-Final</version>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.transaction</groupId>
+          <artifactId>jta</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-annotations</artifactId>
+      <version>3.5.6-Final</version>
       <exclusions>
         <exclusion>
           <groupId>javax.transaction</groupId>
