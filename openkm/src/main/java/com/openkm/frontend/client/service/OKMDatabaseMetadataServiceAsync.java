@@ -34,7 +34,7 @@ import com.openkm.frontend.client.bean.GWTDatabaseMetadataValue;
  *
  */
 public interface OKMDatabaseMetadataServiceAsync {
-	public void executeValueQuery(String table, String filter, String order,boolean replaceVirtual, AsyncCallback<List<GWTDatabaseMetadataValue>> callback);
+	public void executeValueQuery(String table, String filter, String order, AsyncCallback<List<GWTDatabaseMetadataValue>> callback);
 	public void updateValue(GWTDatabaseMetadataValue dmv, AsyncCallback<?> callback);
 	public void createValue(GWTDatabaseMetadataValue dmv, AsyncCallback<?> callback);
 }
