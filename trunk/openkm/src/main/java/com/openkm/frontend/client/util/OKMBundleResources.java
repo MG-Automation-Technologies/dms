@@ -370,4 +370,7 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/icon/editor/removeformat.gif")
 	public ImageResource removeFormat();
+	
+	@Source("com/openkm/frontend/public/img/icon/actions/folder_edit.png")
+	public ImageResource folderEdit();
 }
