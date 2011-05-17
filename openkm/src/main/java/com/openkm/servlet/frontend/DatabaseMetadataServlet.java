@@ -48,14 +48,10 @@ public class DatabaseMetadataServlet extends OKMRemoteServiceServlet implements 
 	private static final long serialVersionUID = -879908904295685769L;
 	
 	@Override
-	public List<GWTDatabaseMetadataValue> executeValueQuery(String table, String filter, String order, 
-															boolean replaceVirtual) throws OKMException {
+	public List<GWTDatabaseMetadataValue> executeValueQuery(String table, String filter, String order) throws OKMException {
+		log.debug("executeValueQuery({},{},{})", new Object[]{table, filter, order});
 		List<GWTDatabaseMetadataValue> metadataValues = new ArrayList<GWTDatabaseMetadataValue>();
 		try {
-			if (replaceVirtual) {
-				filter = DatabaseMetadataUtils.replaceVirtual(table, filter);
-				order = DatabaseMetadataUtils.replaceVirtual(table, order);
-			}
 			for (DatabaseMetadataValue dmv : DatabaseMetadataDAO.executeValueQuery(DatabaseMetadataUtils.buildQuery(table, filter, order))) {
 				metadataValues.add(GWTUtil.copy(dmv));
 			}
@@ -63,11 +59,13 @@ public class DatabaseMetadataServlet extends OKMRemoteServiceServlet implements 
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_Database), e.getMessage());
 		}
+		log.debug("executeValueQuery: " + metadataValues);
 		return metadataValues;
 	}
 	
 	@Override
 	public void updateValue(GWTDatabaseMetadataValue dmv) throws OKMException {
+		log.debug("updateValue()");
 		try {
 			DatabaseMetadataDAO.updateValue(GWTUtil.copy(dmv));
 		} catch (DatabaseException e) {
@@ -78,6 +76,7 @@ public class DatabaseMetadataServlet extends OKMRemoteServiceServlet implements 
 	
 	@Override
 	public void createValue(GWTDatabaseMetadataValue dmv) throws OKMException {
+		log.debug("createValue()");
 		try {			
 			DatabaseMetadataDAO.createValue(GWTUtil.copy(dmv));
 		} catch (DatabaseException e) {
