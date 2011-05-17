@@ -360,16 +360,18 @@ public class DirectMailModule implements MailModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node mailNode = session.getRootNode().getNode(mailPath.substring(1));
+			//Node mailNode = session.getRootNode().getNode(mailPath.substring(1));
 			String name = FileUtils.getName(mailPath);
+			String dstNodePath = dstPath + "/" + name;
 			session.move(mailPath, dstPath + "/" + name);
 			session.save();
+			Node dstMailNode = session.getRootNode().getNode(dstNodePath.substring(1));
 			
 			// Check scripting
-			BaseScriptingModule.checkScripts(session, mailNode.getParent(), mailNode, "MOVE_MAIL");
+			BaseScriptingModule.checkScripts(session, dstMailNode.getParent(), dstMailNode, "MOVE_MAIL");
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "MOVE_MAIL", mailNode.getUUID(), dstPath+", "+mailPath);
+			UserActivity.log(session.getUserID(), "MOVE_MAIL", dstMailNode.getUUID(), dstPath+", "+mailPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
