@@ -56,7 +56,7 @@ public class DatabaseMetadataUtils {
 		}
 		
 		if (order != null && order.length() > 0) {
-			sb.append(" ").append(order);
+			sb.append(" order by ").append(replaceVirtual(table, order));
 		}
 		
 		ret = sb.toString();
