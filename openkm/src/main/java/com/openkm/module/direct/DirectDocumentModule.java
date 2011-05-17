@@ -1394,16 +1394,18 @@ public class DirectDocumentModule implements DocumentModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
+			//Node docNode = session.getRootNode().getNode(docPath.substring(1));
 			String name = FileUtils.getName(docPath);
-			session.move(docPath, dstPath + "/" + name);
+			String dstNodePath = dstPath + "/" + name;
+			session.move(docPath, dstNodePath);
 			session.save();
-			
+			Node dstDocNode = session.getRootNode().getNode(dstNodePath.substring(1));
+						
 			// Check scripting
-			BaseScriptingModule.checkScripts(session, documentNode.getParent(), documentNode, "MOVE_DOCUMENT");
+			BaseScriptingModule.checkScripts(session, dstDocNode.getParent(), dstDocNode, "MOVE_DOCUMENT");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "MOVE_DOCUMENT", documentNode.getUUID(), dstPath+", "+docPath);
+			UserActivity.log(session.getUserID(), "MOVE_DOCUMENT", dstDocNode.getUUID(), dstPath+", "+docPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
