@@ -47,43 +47,6 @@ public class DatabaseMetadataMap {
 	 * @return
 	 */
 	public static String mapIntValue(int value) {
-		String mappedValue = String.valueOf(value);
-		switch (mappedValue.length()) {
-			case 0:
-				mappedValue = "0000000000" + mappedValue; // Never might step into
-				break;
-			case 1:
-				mappedValue = "000000000" + mappedValue;
-				break;
-			case 2:
-				mappedValue = "00000000" + mappedValue;
-				break;
-			case 3:
-				mappedValue = "0000000" + mappedValue;
-				break;
-			case 4:
-				mappedValue = "000000" + mappedValue;
-				break;
-			case 5:
-				mappedValue = "00000" + mappedValue;
-				break;
-			case 6:
-				mappedValue = "0000" + mappedValue;
-				break;
-			case 7:
-				mappedValue = "000" + mappedValue;
-				break;
-			case 8:
-				mappedValue = "00" + mappedValue;
-				break;
-			case 9:
-				mappedValue = "0" + mappedValue;
-				break;
-			case 10:
-				// Never might step into
-				break;
-		}
-
-		return mappedValue;
+		return String.valueOf(value);
 	}
 }
