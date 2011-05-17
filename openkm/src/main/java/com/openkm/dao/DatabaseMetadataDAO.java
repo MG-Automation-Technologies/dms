@@ -168,13 +168,12 @@ public class DatabaseMetadataDAO {
 	@SuppressWarnings("unchecked")
 	public static List<DatabaseMetadataValue> executeValueQuery(String query) throws DatabaseException {
 		log.debug("executeQuery({})", query);
-		StringBuilder sb = new StringBuilder();
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			Query q = session.createQuery(sb.toString());
+			Query q = session.createQuery(query);
 			List<DatabaseMetadataValue> ret = q.list();
 			log.debug("findAll: {}", ret);
 			return ret;
