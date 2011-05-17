@@ -1396,8 +1396,11 @@ public class DirectDocumentModule implements DocumentModule {
 			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			String name = FileUtils.getName(docPath);
-			session.move(docPath, dstPath+"/"+name);
+			session.move(docPath, dstPath + "/" + name);
 			session.save();
+			
+			// Check scripting
+			BaseScriptingModule.checkScripts(session, documentNode.getParent(), documentNode, "MOVE_DOCUMENT");
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "MOVE_DOCUMENT", documentNode.getUUID(), dstPath+", "+docPath);
