@@ -57,7 +57,7 @@ public class DatabaseMetadataDAO {
 			tx = session.beginTransaction();
 			Long id = (Long) session.save(emv);
 			HibernateUtil.commit(tx);
-			log.debug("createValue: {}" + id);
+			log.debug("createValue: {}", id);
 			return id.longValue();
 		} catch(HibernateException e) {
 			HibernateUtil.rollback(tx);
@@ -198,7 +198,7 @@ public class DatabaseMetadataDAO {
 			tx = session.beginTransaction();
 			Integer id = (Integer) session.save(emt);
 			HibernateUtil.commit(tx);
-			log.debug("createType: {}" + id);
+			log.debug("createType: {}", id);
 			return id.intValue();
 		} catch(HibernateException e) {
 			HibernateUtil.rollback(tx);

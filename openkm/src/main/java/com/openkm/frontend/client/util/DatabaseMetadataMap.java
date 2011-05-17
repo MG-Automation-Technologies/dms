@@ -26,15 +26,11 @@ package com.openkm.frontend.client.util;
  * DatabaseMetadataMap
  * 
  * @author jllort
- *
  */
 public class DatabaseMetadataMap {
 	
 	/**
 	 * getIntValue
-	 * 
-	 * @param value
-	 * @return
 	 */
 	public static int getIntValue(String value) {
 		return Integer.parseInt(value);
@@ -42,9 +38,6 @@ public class DatabaseMetadataMap {
 	
 	/**
 	 * mapIntValue
-	 * 
-	 * @param value
-	 * @return
 	 */
 	public static String mapIntValue(int value) {
 		return String.valueOf(value);

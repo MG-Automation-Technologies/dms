@@ -49,7 +49,7 @@ public class DatabaseMetadataServlet extends OKMRemoteServiceServlet implements 
 	
 	@Override
 	public List<GWTDatabaseMetadataValue> executeValueQuery(String table, String filter, String order) throws OKMException {
-		log.debug("executeValueQuery({},{},{})", new Object[]{table, filter, order});
+		log.debug("executeValueQuery({}, {}, {})", new Object[]{ table, filter, order });
 		List<GWTDatabaseMetadataValue> metadataValues = new ArrayList<GWTDatabaseMetadataValue>();
 		try {
 			for (DatabaseMetadataValue dmv : DatabaseMetadataDAO.executeValueQuery(DatabaseMetadataUtils.buildQuery(table, filter, order))) {
@@ -59,13 +59,13 @@ public class DatabaseMetadataServlet extends OKMRemoteServiceServlet implements 
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_Database), e.getMessage());
 		}
-		log.debug("executeValueQuery: " + metadataValues);
+		log.debug("executeValueQuery: {}", metadataValues);
 		return metadataValues;
 	}
 	
 	@Override
 	public void updateValue(GWTDatabaseMetadataValue dmv) throws OKMException {
-		log.debug("updateValue()");
+		log.debug("updateValue({})", dmv);
 		try {
 			DatabaseMetadataDAO.updateValue(GWTUtil.copy(dmv));
 		} catch (DatabaseException e) {
@@ -76,7 +76,7 @@ public class DatabaseMetadataServlet extends OKMRemoteServiceServlet implements 
 	
 	@Override
 	public void createValue(GWTDatabaseMetadataValue dmv) throws OKMException {
-		log.debug("createValue()");
+		log.debug("createValue({})", dmv);
 		try {			
 			DatabaseMetadataDAO.createValue(GWTUtil.copy(dmv));
 		} catch (DatabaseException e) {
