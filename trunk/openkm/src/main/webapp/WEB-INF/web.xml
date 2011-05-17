@@ -203,6 +203,10 @@
     <servlet-name>FrontendLanguageServlet</servlet-name>
     <servlet-class>com.openkm.servlet.frontend.LanguageServlet</servlet-class>
   </servlet>
+   <servlet>
+    <servlet-name>DatabaseMetadataServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.frontend.DatabaseMetadataServlet</servlet-class>
+  </servlet>
   
   <!-- Extension servlets -->
   <servlet>
@@ -580,6 +584,10 @@
   <servlet-mapping>
     <servlet-name>FrontendLanguageServlet</servlet-name>
     <url-pattern>/frontend/Language</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DatabaseMetadataServlet</servlet-name>
+    <url-pattern>/frontend/DatabaseMetadata</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>TestServlet</servlet-name>
