@@ -21,35 +21,31 @@
 
 package com.openkm.util;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
+import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.DatabaseMetadataDAO;
-import com.openkm.dao.HibernateUtil;
 import com.openkm.dao.bean.DatabaseMetadataType;
-
+import com.openkm.dao.bean.DatabaseMetadataValue;
 
 /**
  * DatabaseMetadataUtils
  * 
- * @author jllort
- *
+ * @author pavila
  */
 public class DatabaseMetadataUtils {
 	private static Logger log = LoggerFactory.getLogger(DatabaseMetadataUtils.class);
 	
 	/**
 	 * Build a query
-	 * 
-	 * @throws DatabaseException 
 	 */
 	public static String buildQuery(String table, String filter, String order) throws DatabaseException {
-		log.debug("buildQuery({},{},{})", new Object[]{table, filter, order});
+		log.debug("buildQuery({}, {}, {})", new Object[] { table, filter, order });
 		StringBuilder sb = new StringBuilder();
 		String ret = null;
 		
@@ -64,16 +60,15 @@ public class DatabaseMetadataUtils {
 		}
 		
 		ret = sb.toString();
-		log.debug("buildQuery: "+ret);
+		log.debug("buildQuery: {}", ret);
 		return ret;
 	}
 	
 	/**
 	 * Build a query
-	 * @throws DatabaseException 
 	 */
 	public static String buildUpdate(String table, String filter) throws DatabaseException {
-		log.debug("buildUpdate({},{},{})", new Object[]{table, filter});
+		log.debug("buildUpdate({}, {})", new Object[] { table, filter });
 		StringBuilder sb = new StringBuilder();
 		String ret = null;
 		
@@ -86,16 +81,15 @@ public class DatabaseMetadataUtils {
 		sb.append(" where dmv.table=:table");
 		
 		ret = sb.toString();
-		log.debug("buildUpdate: "+ret);
+		log.debug("buildUpdate: {}", ret);
 		return ret;
 	}
 	
 	/**
 	 * Build a query
-	 * @throws DatabaseException 
 	 */
 	public static String buildDelete(String table, String filter) throws DatabaseException {
-		log.debug("buildDelete({},{},{})", new Object[]{table, filter});
+		log.debug("buildDelete({}, {})", new Object[] { table, filter });
 		StringBuilder sb = new StringBuilder();
 		String ret = null;
 		
@@ -106,37 +100,44 @@ public class DatabaseMetadataUtils {
 		}
 		
 		ret = sb.toString();
-		log.debug("buildDelete: "+ret);
+		log.debug("buildDelete: {}", ret);
 		return ret;
+	}
+	
+	/**
+	 * Get virtual column string value
+	 */
+	public static String getString(DatabaseMetadataValue value, String column) throws DatabaseException,
+			IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+		List<DatabaseMetadataType> types = DatabaseMetadataDAO.findAllTypes(value.getTable());
+		
+		for (DatabaseMetadataType emt : types) {
+			if (emt.getVirtualColumn().equals(column)) {
+				return BeanUtils.getProperty(value, emt.getRealColumn());
+			}
+		}
+		
+		return null;
 	}
 	
 	/**
 	 * Replace virtual columns by real ones
 	 */
 	private static String replaceVirtual(String table, String filter) throws DatabaseException {
-		log.debug("replaceVirtual({},{},{})", new Object[]{table, filter});
-		Session session = null;
+		log.debug("replaceVirtual({}, {})", new Object[] { table, filter });
 		String ret = "";
 		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+		if (filter != null && filter.length() > 0) {
+			List<DatabaseMetadataType> types = DatabaseMetadataDAO.findAllTypes(table);
 			
-			if (filter != null && filter.length() > 0) {
-				List<DatabaseMetadataType> types = DatabaseMetadataDAO.findAllTypes(table);
-				
-				for (DatabaseMetadataType emt : types) {
-					filter = filter.toLowerCase().replaceAll(emt.getVirtualColumn().toLowerCase(), emt.getRealColumn().toLowerCase());
-				}
-				
-				ret = filter;
+			for (DatabaseMetadataType emt : types) {
+				filter = filter.toLowerCase().replaceAll(emt.getVirtualColumn().toLowerCase(), emt.getRealColumn().toLowerCase());
 			}
-		} catch (HibernateException e) {
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
+			
+			ret = filter;
 		}
 		
-		log.debug("replaceVirtual: "+ret);
+		log.debug("replaceVirtual: {}", ret);
 		return ret;
 	}
 }
