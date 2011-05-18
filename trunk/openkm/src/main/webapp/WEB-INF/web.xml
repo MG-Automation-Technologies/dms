@@ -895,13 +895,13 @@
       
       <!-- GWT -->
       <url-pattern>/frontend/*</url-pattern>
-            
+      
       <!-- JSPs -->
       <url-pattern>/admin/*</url-pattern>
       <url-pattern>/mobile-lg/*</url-pattern>
       <url-pattern>/mobile-jq/*</url-pattern>
       <url-pattern>/mobile-dj/*</url-pattern>
-            
+      
       <!-- Servlets -->
 	  <url-pattern>/RepositoryStartup</url-pattern>
 	  <url-pattern>/TextToSpeech</url-pattern>
