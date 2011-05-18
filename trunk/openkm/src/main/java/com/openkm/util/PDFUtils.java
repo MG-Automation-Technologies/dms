@@ -187,18 +187,19 @@ public class PDFUtils {
 	@SuppressWarnings("rawtypes")
 	public static void fillForm(InputStream input, Map<String, Object> values, 
 			OutputStream output) throws FileNotFoundException, DocumentException, IOException {
-		log.info("fillForm({}, {}, {})", new Object[] { input, values, output });
+		log.debug("fillForm({}, {}, {})", new Object[] { input, values, output });
 		PdfReader reader = new PdfReader(input);
 		PdfStamper stamper = new PdfStamper(reader, output);
 		AcroFields form = stamper.getAcroFields();
 		
 		for (Iterator it = reader.getAcroForm().getFields().iterator(); it.hasNext(); ) {
 			PRAcroForm.FieldInformation field = (PRAcroForm.FieldInformation) it.next();
-			log.info("Field: {}", field.getName());
 			String value = (String) values.get(field.getName());
+			log.debug("Field: {}", field.getName());
 			
 			if (value != null) {
 				form.setField(field.getName(), value);
+				stamper.partialFormFlattening(field.getName());
 			}
 		}
 		
@@ -208,7 +209,7 @@ public class PDFUtils {
 	}
 	
 	/**
-	 * Generate sample pdf 
+	 * Generate sample PDF 
 	 */
 	public static void generateSample(int paragraphs, OutputStream os) throws DocumentException {
 		LoremIpsum li = new LoremIpsum();
