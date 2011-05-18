@@ -21,14 +21,12 @@
 
 package com.openkm.frontend.client.widget.security;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -37,12 +35,13 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.user.client.ui.TabBar;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.util.Util;
 
 /**
  * Security popup
@@ -52,13 +51,12 @@ import com.openkm.frontend.client.util.Util;
  */
 public class SecurityPopup extends DialogBox implements ClickHandler {
 	
-	private static final int TAB_HEIGHT = 20;
 	private static final int TAB_USERS 	= 0;
 	private static final int TAB_GROUPS = 1;
 	
 	public Status status;
 	private VerticalPanel vPanel;
-	public TabLayoutPanel tabPanel;
+	private TabPanel tabPanel;
 	public SecurityUser securityUser;
 	public SecurityRole securityRole;
 	public CheckBox recursive;
@@ -83,49 +81,35 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 		vPanel = new VerticalPanel();
 		securityUser = new SecurityUser();
 		securityRole = new SecurityRole();
-		tabPanel = new TabLayoutPanel(TAB_HEIGHT, Unit.PX);
+		tabPanel = new TabPanel();
 		sp = new SimplePanel();
 		recursive = new CheckBox(Main.i18n("security.recursive"));
 		button = new Button(Main.i18n("button.close"), this);
 		
-		vPanel.setWidth("622");
+		vPanel.setWidth("600");
 		vPanel.setHeight("400");
 		sp.setHeight("4");
 				
 		tabPanel.add(securityUser, Main.i18n("security.users"));
 		tabPanel.add(securityRole, Main.i18n("security.groups"));
 		tabPanel.selectTab(TAB_USERS);
-		tabPanel.setWidth("612");
-		tabPanel.setHeight("365");
+		tabPanel.setWidth("100%");
 		
 		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
-				Timer timer;
 				switch (event.getSelectedItem().intValue()) {
 					case TAB_USERS:
 						groupsFilter = filter.getText();
 						filter.setText(usersFilter);
 						filterText.setHTML(Main.i18n("secutiry.filter.by.users"));
-						timer = new Timer() {
-							@Override
-							public void run() {
-								securityUser.fillWidth();
-							}
-						};
-						timer.schedule(50); // Fill width must be done after really it'll be visible
+						securityUser.fillWidth();
 						break;
 					case TAB_GROUPS:
 						usersFilter = filter.getText();
 						filter.setText(groupsFilter);
 						filterText.setHTML(Main.i18n("secutiry.filter.by.groups"));
-						timer = new Timer() {
-							@Override
-							public void run() {
-								securityRole.fillWidth();
-							}
-						};
-						timer.schedule(50); // Fill width must be done after really it'll be visible
+						securityRole.fillWidth();
 						break;
 				}
 			}
@@ -170,7 +154,8 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
 				if (filter.getText().length()>=3) {
-					int selected = tabPanel.getSelectedIndex();
+					TabBar tabBar = tabPanel.getTabBar();
+					int selected = tabBar.getSelectedTab();
 					switch(selected) {
 						case TAB_USERS:
 							securityUser.getFilteredUngrantedUsers(filter.getText());
@@ -206,7 +191,6 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 		button.setStyleName("okm-Button");
 		filter.setStyleName("okm-Input");
 		status.setStyleName("okm-StatusPopup");
-		tabPanel.addStyleName("okm-Border-Bottom");
 
 		super.hide();
 		setWidget(vPanel);
@@ -228,7 +212,8 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 		recursive.setText(Main.i18n("security.recursive"));
 		button.setText(Main.i18n("button.close"));
 
-		int selected = tabPanel.getSelectedIndex();
+		TabBar tabBar = tabPanel.getTabBar();
+		int selected = tabBar.getSelectedTab();
 		
 		while (tabPanel.getWidgetCount() > 0) {
 			tabPanel.remove(0);
@@ -271,14 +256,8 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 		if (!filterView) {
 			securityUser.getUngrantedUsers();
 			securityRole.getUngrantedRoles();
-		}
+		} 
 		super.show();
-		
-		// TODO:Solves minor bug with IE
-		if (Util.getUserAgent().startsWith("ie")) {
-			tabPanel.setWidth("612");
-			tabPanel.setWidth("613");
-		}
 		
 		// Fill width must be done on visible widgets
 		securityUser.fillWidth();

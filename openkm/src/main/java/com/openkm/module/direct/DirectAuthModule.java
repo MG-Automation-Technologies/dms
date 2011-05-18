@@ -43,14 +43,14 @@ import com.openkm.bean.Repository;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.AuthModule;
 import com.openkm.module.base.BaseAuthModule;
 import com.openkm.principal.PrincipalAdapter;
 import com.openkm.principal.PrincipalAdapterException;
+import com.openkm.util.JCRUtils;
 import com.openkm.util.UUIDGenerator;
 import com.openkm.util.UserActivity;
 
@@ -167,7 +167,6 @@ public class DirectAuthModule implements AuthModule {
 	 */
 	private static Node createBase(Session session, Node root) throws 
 			javax.jcr.RepositoryException {
-		log.debug("createBase({}, {})", session, root);
 		Node base = root.addNode(session.getUserID(), Folder.TYPE);
 
 		// Add basic properties

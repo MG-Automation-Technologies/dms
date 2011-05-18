@@ -27,6 +27,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
@@ -40,6 +41,7 @@ import com.openkm.extension.frontend.client.widget.digitalsignature.DigitalSigna
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
@@ -149,6 +151,8 @@ public class WizardPopup extends DialogBox {
 	private void addPropertyGroups() {
 		if (groupsList!=null && groupsList.size()>groupIndex) {
 			status = STATUS_PROPERTY_GROUPS;
+			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
+			endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
 			propertyGroupService.addGroup(docPath, groupsList.get(groupIndex).getName(), callbackAddGroup);
 			
 		} else if(groupsList==null || (groupsList!=null && groupsList.isEmpty() )) {
@@ -277,7 +281,9 @@ public class WizardPopup extends DialogBox {
 				
 			case STATUS_DIGITAL_SIGNATURE:
 				if (Main.get().fileUpload.isDigitalSignature()) {
-					Main.get().fileUpload.hide(); // Ensure fileUpload is hidden	
+					Main.get().fileUpload.hide(); // Ensure fileUpload is hidden
+					ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
+					endPoint.setServiceEntryPoint(RPCService.DocumentService);	
 					documentService.get(docPath, new AsyncCallback<GWTDocument>() {
 						@Override
 						public void onSuccess(GWTDocument result) {

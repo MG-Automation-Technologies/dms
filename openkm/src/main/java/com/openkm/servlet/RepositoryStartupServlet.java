@@ -41,14 +41,13 @@ import com.openkm.cache.UserDocumentKeywordsManager;
 import com.openkm.cache.UserItemsManager;
 import com.openkm.core.Config;
 import com.openkm.core.Cron;
+import com.openkm.core.DataStoreGarbageCollector;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryInfo;
 import com.openkm.core.UpdateInfo;
 import com.openkm.core.UserMailImporter;
 import com.openkm.core.Watchdog;
 import com.openkm.dao.HibernateUtil;
-import com.openkm.extension.core.ExtensionManager;
-import com.openkm.jcr.DataStoreGarbageCollector;
 import com.openkm.kea.RDFREpository;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.DocConverter;
@@ -84,7 +83,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         ServletContext sc = getServletContext();
         
         // Read config file
-        Config.load(sc);
+        Config.load(sc.getContextPath().substring(1));
         
         // Call only once during initialization time of your application
         // @see http://issues.openkm.com/view.php?id=1577
@@ -92,7 +91,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         // Get OpenKM version
         WarUtils.readAppVersion(sc);
-        log.info("*** Application version: {} ***", WarUtils.getAppVersion());
+        log.info("*** Application version: "+WarUtils.getAppVersion()+" ***");
         
         // Initialize DXF cache folder
         File dxfCacheFolder = new File(Config.CACHE_DXF);
@@ -251,9 +250,6 @@ public class RepositoryStartupServlet extends HttpServlet {
         	log.warn(e.getMessage(), e);
         }
         
-        // Initialize plugin framework
-        ExtensionManager.getInstance();
-        
         try {
         	log.info("*** Ejecute start script ***");
         	File script = new File(Config.HOME_DIR + File.separatorChar + Config.START_SCRIPT);
@@ -275,9 +271,6 @@ public class RepositoryStartupServlet extends HttpServlet {
 		if (!running) {
 			throw new IllegalStateException("OpenKM not started");
 		}
-		
-		 // Shutdown plugin framework
-        ExtensionManager.getInstance().shutdown();
 		
 		try {
         	if (!Config.SYSTEM_OPENOFFICE_PATH.equals("")) {

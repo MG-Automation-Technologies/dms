@@ -28,6 +28,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.jcr.LoginException;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -50,6 +53,7 @@ import com.openkm.core.Cron;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.CronTabDAO;
 import com.openkm.dao.bean.CronTab;
+import com.openkm.util.JCRUtils;
 import com.openkm.util.SecureStore;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
@@ -133,11 +137,12 @@ public class CronTabServlet extends BaseServlet {
 		log.debug("doPost({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
 		String action = "";
-		String userId = request.getRemoteUser();
+		Session session = null;
 		updateSessionManager(request);
 		
 		try {
 			if (ServletFileUpload.isMultipartContent(request)) {
+				session = JCRUtils.getSession();
 				InputStream is = null;
 				FileItemFactory factory = new DiskFileItemFactory();
 				ServletFileUpload upload = new ServletFileUpload(factory);
@@ -174,28 +179,36 @@ public class CronTabServlet extends BaseServlet {
 					CronTabDAO.create(ct);
 					
 					// Activity log
-					UserActivity.log(userId, "ADMIN_CRONTAB_CREATE", null, ct.toString());
+					UserActivity.log(session.getUserID(), "ADMIN_CRONTAB_CREATE", null, ct.toString());
 					list(request, response);
 				} else if (action.equals("edit")) {
 					CronTabDAO.update(ct);
 					
 					// Activity log
-					UserActivity.log(userId, "ADMIN_CRONTAB_EDIT", Integer.toString(ct.getId()), ct.toString());
+					UserActivity.log(session.getUserID(), "ADMIN_CRONTAB_EDIT", Integer.toString(ct.getId()), ct.toString());
 					list(request, response);
 				} else if (action.equals("delete")) {
 					CronTabDAO.delete(ct.getId());
 					
 					// Activity log
-					UserActivity.log(userId, "ADMIN_CRONTAB_DELETE", Integer.toString(ct.getId()), null);
+					UserActivity.log(session.getUserID(), "ADMIN_CRONTAB_DELETE", Integer.toString(ct.getId()), null);
 					list(request, response);
 				}
 			}
+		} catch (LoginException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request, response, e);
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request, response, e);
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);
 		} catch (FileUploadException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);
+		} finally {
+			JCRUtils.logout(session);
 		}
 	}
 	

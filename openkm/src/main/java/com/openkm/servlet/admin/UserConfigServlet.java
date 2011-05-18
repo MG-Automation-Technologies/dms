@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.ProfileDAO;
 import com.openkm.dao.UserConfigDAO;
-import com.openkm.jcr.JCRUtils;
+import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
 

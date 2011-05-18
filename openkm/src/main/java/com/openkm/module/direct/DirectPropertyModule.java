@@ -32,16 +32,16 @@ import com.openkm.cache.UserDocumentKeywordsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.VersionException;
-import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.PropertyModule;
 import com.openkm.module.base.BaseNotificationModule;
 import com.openkm.module.base.BasePropertyModule;
 import com.openkm.module.base.BaseScriptingModule;
+import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 
 public class DirectPropertyModule implements PropertyModule {

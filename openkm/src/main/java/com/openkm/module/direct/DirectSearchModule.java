@@ -45,7 +45,6 @@ import javax.jcr.query.Row;
 import javax.jcr.query.RowIterator;
 
 import org.apache.jackrabbit.JcrConstants;
-import org.apache.jackrabbit.commons.query.GQL;
 import org.apache.jackrabbit.core.query.QueryImpl;
 import org.apache.jackrabbit.core.query.lucene.QueryResultImpl;
 import org.apache.jackrabbit.util.ISO8601;
@@ -65,6 +64,7 @@ import com.openkm.cache.UserDocumentKeywordsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
@@ -72,13 +72,12 @@ import com.openkm.dao.DashboardDAO;
 import com.openkm.dao.QueryParamsDAO;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.cache.UserDocumentKeywords;
-import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.SearchModule;
 import com.openkm.module.base.BaseDocumentModule;
 import com.openkm.module.base.BaseFolderModule;
 import com.openkm.module.base.BaseMailModule;
 import com.openkm.util.FormUtils;
+import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 
 public class DirectSearchModule implements SearchModule {
@@ -191,7 +190,7 @@ public class DirectSearchModule implements SearchModule {
 	 */
 	public String prepareStatement(QueryParams params) throws IOException, ParseException {
 		log.debug("prepareStatement({})", params);
-		StringBuilder sb = new StringBuilder();
+		StringBuffer sb = new StringBuffer();
 		
 		// Clean params
 		params.setName(params.getName() != null?params.getName().trim():""); 
@@ -205,14 +204,14 @@ public class DirectSearchModule implements SearchModule {
 		params.setMailFrom(params.getMailFrom() != null?params.getMailFrom().trim():"");
 		params.setMailTo(params.getMailTo() != null?params.getMailTo().trim():"");
 		params.setProperties(params.getProperties() != null?params.getProperties():new HashMap<String, String>());
-		
+
 		// Domains
 		boolean document = (params.getDomain() & QueryParams.DOCUMENT) != 0;
 		boolean folder = (params.getDomain() & QueryParams.FOLDER) != 0;
 		boolean mail = (params.getDomain() & QueryParams.MAIL) != 0;
 		
 		log.debug("doc={}, fld={}, mail={}", new Object[] { document, folder, mail });
-		
+
 		// Escape
 		if (!params.getName().equals("")) {
 			params.setName(escapeContains(params.getName()));
@@ -231,18 +230,18 @@ public class DirectSearchModule implements SearchModule {
 			
 			// Construct the query
 			sb.append("/jcr:root"+ISO9075.encodePath(params.getPath())+"//*[@jcr:primaryType eq 'okm:void'");
-			
+
 			/**
 			 * DOCUMENT
 			 */
 			if (document) {
 				sb.append(" or (@jcr:primaryType eq 'okm:document'");
-				
+
 				if (!params.getContent().equals("")) {
 					sb.append(" "+params.getOperator()+" ");
 					sb.append("jcr:contains(okm:content,'" + params.getContent() + "')");
 				}
-				
+
 				if (!params.getName().equals("")) {
 					sb.append(" "+params.getOperator()+" ");
 					sb.append("jcr:contains(@okm:name,'" + params.getName() + "')");
@@ -261,17 +260,17 @@ public class DirectSearchModule implements SearchModule {
 						sb.append("@okm:categories='" + it.next() + "'");
 					}
 				}
-				
+
 				if (!params.getMimeType().equals("")) {
 					sb.append(" "+params.getOperator()+" ");
 					sb.append("@okm:content/jcr:mimeType='" + params.getMimeType() + "'");
 				}
-				
+
 				if (!params.getAuthor().equals("")) {
 					sb.append(" "+params.getOperator()+" ");
 					sb.append("@okm:content/okm:author='" + params.getAuthor() + "'");
 				}
-				
+
 				if (params.getLastModifiedFrom() != null && params.getLastModifiedTo() != null) {
 					sb.append(" "+params.getOperator()+" ");
 					sb.append("(");
@@ -280,7 +279,7 @@ public class DirectSearchModule implements SearchModule {
 					sb.append("@okm:content/jcr:lastModified <= xs:dateTime('" + ISO8601.format(params.getLastModifiedTo()) + "')");
 					sb.append(")");
 				}
-				
+
 				if (!params.getProperties().isEmpty()) {
 					Map<PropertyGroup, List<FormElement>> formsElements = FormUtils.parsePropertyGroupsForms(Config.PROPERTY_GROUPS_XML);
 					
@@ -322,10 +321,10 @@ public class DirectSearchModule implements SearchModule {
 					sb.append("@jcr:created <= xs:dateTime('" + ISO8601.format(params.getLastModifiedTo()) +"')");
 					sb.append(")");
 				}
-				
+
 				sb.append(")");
 			}
-			
+
 			/**
 			 * MAIL
 			 */
@@ -345,7 +344,7 @@ public class DirectSearchModule implements SearchModule {
 					sb.append(" "+params.getOperator()+" ");
 					sb.append("jcr:contains(@okm:from,'"+ params.getMailFrom()+ "')");
 				}
-				
+
 				if (!params.getMailTo().equals("")) {
 					sb.append(" "+params.getOperator()+" ");
 					sb.append("jcr:contains(@okm:to,'"+ params.getMailTo()+ "')");
@@ -355,7 +354,7 @@ public class DirectSearchModule implements SearchModule {
 					sb.append(" "+params.getOperator()+" ");
 					sb.append("@okm:content/jcr:mimeType='"+ params.getMimeType()+ "'");
 				}
-				
+
 				if (!params.getProperties().isEmpty()) {
 					Map<PropertyGroup, List<FormElement>> formsElements = FormUtils.parsePropertyGroupsForms(Config.PROPERTY_GROUPS_XML);
 					
@@ -381,7 +380,7 @@ public class DirectSearchModule implements SearchModule {
 			sb.append("] order by @jcr:score descending");
 		}
 		
-		log.info("prepareStatement: {}", sb.toString());
+		log.debug("prepareStatement: {}", sb.toString());
 		return sb.toString();
 	}
 
@@ -394,6 +393,7 @@ public class DirectSearchModule implements SearchModule {
 		return ret;
 	}
 	
+
 	@Override
 	public ResultSet findByStatementPaginated(String token, String statement, String type, int offset,
 			int limit) throws RepositoryException, DatabaseException {
@@ -435,24 +435,52 @@ public class DirectSearchModule implements SearchModule {
 			RepositoryException {
 		log.debug("executeQuery({}, {}, {}, {})", new Object[] { session, query, offset, limit });
 		ResultSet rs = new ResultSet();
+		ArrayList<QueryResult> al = new ArrayList<QueryResult>();
 		
 		try {
-			ArrayList<QueryResult> al = new ArrayList<QueryResult>();
-			
 			// http://n4.nabble.com/Query-performance-for-large-query-results-td531360.html
 			((QueryImpl) query).setLimit(limit);
 			((QueryImpl) query).setOffset(offset);
 			QueryResultImpl result = (QueryResultImpl) query.execute();
-			RowIterator rit = result.getRows();
+			RowIterator it = result.getRows();
 			rs.setTotal(result.getTotalSize());
 			
-			while (rit.hasNext()) {
-				Row row = rit.nextRow();
-				QueryResult qr = queryRowResultDigester(session, row);
-				al.add(qr);
+			while (it.hasNext()) {
+				Row row = it.nextRow();
+				
+				try {
+					String path = row.getValue(JcrConstants.JCR_PATH).getString();
+					Node node = session.getRootNode().getNode(path.substring(1));
+					QueryResult qr = new QueryResult();
+					
+					if (node.isNodeType(Document.TYPE)) {
+						Document doc = BaseDocumentModule.getProperties(session, node);
+						
+						try {
+							if (node.getParent().isNodeType(Mail.TYPE)) {
+								qr.setAttachment(doc);
+							} else {
+								qr.setDocument(doc);
+							}
+						} catch (javax.jcr.AccessDeniedException e) {
+							qr.setDocument(doc);
+						}
+					} else if (node.isNodeType(Folder.TYPE)) {
+						Folder fld = BaseFolderModule.getProperties(session, node);
+						qr.setFolder(fld);
+					} else if (node.isNodeType(Mail.TYPE)) {
+						Mail mail = BaseMailModule.getProperties(session, node);
+						qr.setMail(mail);
+					}
+					
+					qr.setScore(row.getValue(JcrConstants.JCR_SCORE).getLong());
+					al.add(qr);
+				} catch (javax.jcr.PathNotFoundException e) {
+					log.error(e.getMessage(), e);
+				}
+				
+				rs.setResults(al);
 			}
-			
-			rs.setResults(al);
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
@@ -460,91 +488,6 @@ public class DirectSearchModule implements SearchModule {
 
 		log.debug("executeQuery: {}", rs);
 		return rs;
-	}
-	
-	/**
-	 * Execute simple query
-	 */
-	private ResultSet executeSimpleQuery(Session session, String statement, int offset, int limit) throws 
-			RepositoryException {
-		log.debug("executeSimpleQuery({}, {}, {}, {})", new Object[] { session, statement, offset, limit });
-		ResultSet rs = new ResultSet();
-		
-		if (statement != null && !statement.equals("")) {
-			if (!statement.contains("path:")) {
-				statement = "path:\"/okm:root\" " + statement;
-			}
-			
-			if (!statement.contains("limit:") && limit < Config.MAX_SEARCH_RESULTS) {
-				StringBuilder sb = new StringBuilder();
-				sb.append("limit:").append(offset).append("..").append(offset + limit); 
-				statement = statement.concat(" ").concat(sb.toString());
-			}
-			
-			try {
-				ArrayList<QueryResult> al = new ArrayList<QueryResult>();
-				log.info("Statement: {}", statement);
-				RowIterator rit = GQL.execute(statement, session);
-				rs.setTotal(rit.getSize());
-				
-				while (rit.hasNext()) {
-					Row row = rit.nextRow();
-					QueryResult qr = queryRowResultDigester(session, row);
-					al.add(qr);
-				}
-				
-				rs.setResults(al);
-			} catch (javax.jcr.RepositoryException e) {
-				log.error(e.getMessage(), e);
-				throw new RepositoryException(e.getMessage(), e);
-			}
-		}
-		
-		log.debug("executeSimpleQuery: {}", rs);
-		return rs;
-	}
-	
-	/**
-	 * Convert Row to QueryResult
-	 */
-	private QueryResult queryRowResultDigester(Session session, Row row) throws javax.jcr.PathNotFoundException,
-			javax.jcr.RepositoryException {
-		String path = row.getValue(JcrConstants.JCR_PATH).getString();
-		log.debug("queryRowResultDigester: {}", path);
-		Node node = session.getRootNode().getNode(path.substring(1));
-		QueryResult qr = new QueryResult();
-		
-		if (node.isNodeType(Document.CONTENT_TYPE)) {
-			Document doc = BaseDocumentModule.getProperties(session, node.getParent());
-			qr.setDocument(doc);
-		} else if (node.isNodeType(Document.TYPE)) {
-			Document doc = BaseDocumentModule.getProperties(session, node);
-			
-			try {
-				if (node.getParent().isNodeType(Mail.TYPE)) {
-					qr.setAttachment(doc);
-				} else {
-					qr.setDocument(doc);
-				}
-			} catch (javax.jcr.AccessDeniedException e) {
-				qr.setDocument(doc);
-			}
-		} else if (node.isNodeType(Folder.TYPE)) {
-			Folder fld = BaseFolderModule.getProperties(session, node);
-			qr.setFolder(fld);
-		} else if (node.isNodeType(Mail.TYPE)) {
-			Mail mail = BaseMailModule.getProperties(session, node);
-			qr.setMail(mail);
-		}
-		
-		qr.setScore(row.getValue(JcrConstants.JCR_SCORE).getLong());
-		Value excerpt = row.getValue("rep:excerpt(okm:content)");
-		
-		if (excerpt != null) {
-			qr.setExcerpt(excerpt.getString());
-		}
-		
-		return qr;
 	}
 
 	@Override
@@ -559,7 +502,6 @@ public class DirectSearchModule implements SearchModule {
 		}
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -594,7 +536,6 @@ public class DirectSearchModule implements SearchModule {
 		}
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -625,7 +566,6 @@ public class DirectSearchModule implements SearchModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -663,7 +603,6 @@ public class DirectSearchModule implements SearchModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -705,7 +644,6 @@ public class DirectSearchModule implements SearchModule {
 		}
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -813,7 +751,6 @@ public class DirectSearchModule implements SearchModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -880,41 +817,5 @@ public class DirectSearchModule implements SearchModule {
 		
 		log.debug("getCategorizedDocuments: {}", documents);
 		return documents;
-	}
-	
-	@Override
-	public List<QueryResult> findSimpleQuery(String token, String statement) throws RepositoryException,
-			DatabaseException {
-		log.debug("findSimpleQuery({}, {})", token, statement);
-		List<QueryResult> ret = findSimpleQueryPaginated(token, statement, 0, Config.MAX_SEARCH_RESULTS).getResults();
-		log.debug("findSimpleQuery: {}", ret);
-		return ret;
-		
-	}
-	
-	@Override
-	public ResultSet findSimpleQueryPaginated(String token, String statement, int offset, int limit) throws
-			RepositoryException, DatabaseException {
-		log.debug("findSimpleQueryPaginated({}, {}, {}, {})", new Object[] { token, statement, offset, limit });
-		ResultSet rs = new ResultSet();
-		Session session = null;
-		
-		try {
-			if (token == null) {
-				session = JCRUtils.getSession();
-			} else {
-				session = JcrSessionManager.getInstance().get(token);
-			}
-			
-			rs = executeSimpleQuery(session, statement, offset, limit);
-		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
-			throw new RepositoryException(e.getMessage(), e);
-		} finally {
-			if (token == null) JCRUtils.logout(session);
-		}
-		
-		log.debug("findSimpleQueryPaginated: {}", rs);
-		return rs;
 	}
 }

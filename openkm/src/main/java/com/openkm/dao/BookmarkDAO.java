@@ -37,7 +37,7 @@ import com.openkm.bean.Repository;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.Bookmark;
-import com.openkm.jcr.JCRUtils;
+import com.openkm.util.JCRUtils;
 
 public class BookmarkDAO {
 	private static Logger log = LoggerFactory.getLogger(BookmarkDAO.class);

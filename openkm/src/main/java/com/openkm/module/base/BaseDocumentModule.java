@@ -68,8 +68,8 @@ import com.openkm.dao.bean.ProfileMisc;
 import com.openkm.dao.bean.UserConfig;
 import com.openkm.dao.bean.cache.UserItems;
 import com.openkm.extractor.RegisteredExtractors;
-import com.openkm.jcr.JCRUtils;
 import com.openkm.util.DocConverter;
+import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 
 public class BaseDocumentModule {

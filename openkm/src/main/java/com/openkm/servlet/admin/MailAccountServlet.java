@@ -43,7 +43,7 @@ import com.openkm.dao.MailAccountDAO;
 import com.openkm.dao.bean.MailAccount;
 import com.openkm.dao.bean.MailFilter;
 import com.openkm.dao.bean.MailFilterRule;
-import com.openkm.jcr.JCRUtils;
+import com.openkm.util.JCRUtils;
 import com.openkm.util.MailUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;

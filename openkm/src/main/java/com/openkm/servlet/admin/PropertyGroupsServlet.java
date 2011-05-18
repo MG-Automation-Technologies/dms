@@ -56,10 +56,10 @@ import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
-import com.openkm.jcr.JCRUtils;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.FileUtils;
 import com.openkm.util.FormUtils;
+import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
 

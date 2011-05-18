@@ -41,7 +41,7 @@ import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
 import com.openkm.frontend.client.bean.GWTTestImap;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.OKMGeneralService;
-import com.openkm.jcr.JCRUtils;
+import com.openkm.util.JCRUtils;
 import com.openkm.util.MailUtils;
 
 /**
@@ -103,8 +103,6 @@ public class GeneralServlet extends OKMRemoteServiceServlet implements OKMGenera
 	
 	@Override
 	public List<String> getEnabledExtensions() throws OKMException {
-		log.debug("getEnabledExtensions()");
-		updateSessionManager();
 		List<String> extensions = new ArrayList<String>();
 		Session session = null;
 		

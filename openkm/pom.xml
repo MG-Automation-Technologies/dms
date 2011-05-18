@@ -4,7 +4,7 @@
   <groupId>com.openkm</groupId>
   <artifactId>openkm</artifactId>
   <packaging>war</packaging>
-  <version>LTE</version>
+  <version>5.1.4</version>
   <name>OpenKM Web Application</name>
   <url>http://www.openkm.com</url>
   <description>OpenKM is powerful scalable Document Management System (DMS). OpenKM uses JBoss + J2EE + Ajax web (GWT) + Jackrabbit (lucene) open source technologies.</description>
@@ -51,9 +51,6 @@
 
     <!-- Using this Jackrabbit version -->
     <jcr.version>1.6.4</jcr.version>
-    
-    <!-- Using this Spring version -->
-    <spring.version>3.0.5.RELEASE</spring.version>
 
     <!-- Tell the compiler we can use 1.6 -->
     <java.compiler>1.6</java.compiler>
@@ -110,11 +107,6 @@
       <id>openkm.com</id>
       <name>OpenKM Maven Reporitory</name>
       <url>http://repository.openkm.com/maven2</url>
-    </repository>
-    <repository>
-      <id>StringTree</id>
-      <name>String Tree</name>
-      <url>http://stringtree.org/repository/</url>
     </repository>
   </repositories>
 
@@ -216,11 +208,10 @@
 
     <!-- Base64 encoding / decoding -->
     <!-- http://www.techiegyan.com/?p=333 -->
-    <!-- Downgraded to 1.3 due to GWT 2.2 dependency -->
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
-      <version>1.2</version>
+      <version>1.4</version>
     </dependency>
 
     <!-- Jackrabbit -->
@@ -239,6 +230,13 @@
           <groupId>poi</groupId>
           <artifactId>poi</artifactId>
         </exclusion>
+        <!-- https://issues.apache.org/jira/browse/JCR-2656 -->
+        <!-- 
+        <exclusion>
+          <groupId>org.apache.derby</groupId>
+          <artifactId>derby</artifactId>
+        </exclusion>
+         -->
       </exclusions>
     </dependency>
     <dependency>
@@ -262,6 +260,14 @@
       <artifactId>jackrabbit-jcr-server</artifactId>
       <version>${jcr.version}</version>
     </dependency>
+    <!-- https://issues.apache.org/jira/browse/JCR-2656 -->
+    <!--
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derby</artifactId>
+      <version>10.5.3.0</version>
+    </dependency>
+     -->
 
     <!-- Twitter4j -->
     <dependency>
@@ -303,7 +309,7 @@
       <artifactId>jbpm-jpdl</artifactId>
       <version>3.2.3</version>
     </dependency>
-    
+
     <!-- Hibernate -->
     <dependency>
       <groupId>org.hibernate</groupId>
@@ -394,13 +400,6 @@
       <version>0.8.6</version>
     </dependency>
     
-    <!-- SIGAR -->
-    <dependency>
-      <groupId>org.hyperic</groupId>
-      <artifactId>sigar</artifactId>
-      <version>1.6.4</version>
-    </dependency>
-    
     <!-- GWT -->
     <dependency>
       <groupId>com.google.gwt</groupId>
@@ -420,7 +419,7 @@
       <artifactId>gwt-dev</artifactId>
       <version>${gwt.version}</version>
       <scope>provided</scope>
-    </dependency> -->
+    </dependency>-->
 	
     <!-- GWT plugins -->
     <dependency>
@@ -508,7 +507,7 @@
     <dependency>
       <groupId>com.openkm</groupId>
       <artifactId>extensions-full</artifactId>
-      <version>LTE</version>
+      <version>5.1</version>
     </dependency>
     
     <!-- Gdata librariess -->
@@ -516,70 +515,6 @@
       <groupId>com.github.dcarter.gdata-java-client</groupId>
       <artifactId>gdata-contacts-3.0</artifactId>
       <version>1.41.1</version>
-      <exclusions>
-        <exclusion>
-          <groupId>com.google.collections</groupId>
-          <artifactId>google-collections</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    
-    <!-- Spring Security -->
-    <!--
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-core</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-config</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-web</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-taglibs</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
- 	-->
- 	
- 	<!-- Plugin framework -->
- 	<dependency>
- 	  <groupId>com.google.code</groupId>
- 	  <artifactId>jspf</artifactId>
- 	  <version>1.0.1</version>
- 	</dependency>
- 	
- 	<!-- Wiki libraries -->
-    <dependency>
-      <groupId>org.apache.maven.doxia</groupId>
-      <artifactId>doxia-module-twiki</artifactId>
-      <version>1.1.4</version>
-      <type>jar</type>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.doxia</groupId>
-      <artifactId>doxia-core</artifactId>
-      <version>1.1.4</version>
-      <type>jar</type>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.doxia</groupId>
-      <artifactId>doxia-core</artifactId>
-      <version>1.1.4</version>
-      <classifier>tests</classifier>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.doxia</groupId>
-      <artifactId>doxia-module-xhtml</artifactId>
-      <version>1.1.4</version>
     </dependency>
   </dependencies>
   
@@ -601,7 +536,7 @@
           </execution>
         </executions>
         <configuration>
-          <runTarget>frontend/index.html</runTarget>
+          <runTarget>com.openkm.frontend.Main/index.html</runTarget>
           <modules>
             <module>com.openkm.frontend.Main</module>
           </modules>

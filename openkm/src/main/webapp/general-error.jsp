@@ -1,6 +1,6 @@
 <%@ page import="java.util.Calendar" %>
 <%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.jcr.JcrSessionManager" %>
+<%@ page import="com.openkm.core.JcrSessionManager" %>
 <%@ page import="com.openkm.bean.JcrSessionInfo" %>
 <%@ page import="com.openkm.util.FormatUtil"%>
 <%@ page isErrorPage="true" %>

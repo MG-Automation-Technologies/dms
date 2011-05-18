@@ -47,7 +47,7 @@ import com.openkm.bean.Permission;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.UserQuotaExceededException;
-import com.openkm.jcr.JCRUtils;
+import com.openkm.util.JCRUtils;
 
 public class BaseMailModule {
 	private static Logger log = LoggerFactory.getLogger(BaseMailModule.class);

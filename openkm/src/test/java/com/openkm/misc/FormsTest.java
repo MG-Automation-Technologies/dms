@@ -113,8 +113,8 @@ public class FormsTest extends TestCase {
 	}
 	
 	public void testPropertyGroups() throws Exception {
-		String pgForm = BASE_DIR + "/PropertyGroups.xml";
-		Map<PropertyGroup, List<FormElement>> pgForms = FormUtils.parsePropertyGroupsForms(pgForm);
+		String pgFile = BASE_DIR + "/PropertyGroups.xml";
+		Map<PropertyGroup, List<FormElement>> pgForms = FormUtils.parsePropertyGroupsForms(pgFile);
 		assertFalse(pgForms.isEmpty());
 		
 		List<FormElement> consulting = FormUtils.getPropertyGroupForms(pgForms, "okg:consulting");

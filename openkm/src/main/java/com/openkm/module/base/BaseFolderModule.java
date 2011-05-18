@@ -59,7 +59,7 @@ import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.UserQuotaExceededException;
-import com.openkm.jcr.JCRUtils;
+import com.openkm.util.JCRUtils;
 
 public class BaseFolderModule {
 	private static Logger log = LoggerFactory.getLogger(BaseFolderModule.class);

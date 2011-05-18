@@ -42,7 +42,6 @@ import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
-import com.openkm.extension.core.ExtensionException;
 import com.openkm.module.DocumentModule;
 import com.openkm.module.ModuleManager;
 import com.openkm.principal.PrincipalAdapterException;
@@ -65,7 +64,7 @@ public class OKMDocument implements DocumentModule {
 	public Document create(String token, Document doc, InputStream is) throws UnsupportedMimeTypeException, 
 			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, 
 			ItemExistsException, PathNotFoundException, AccessDeniedException, 
-			RepositoryException, IOException, DatabaseException, ExtensionException {
+			RepositoryException, IOException, DatabaseException {
 		log.debug("create({}, {}, {})", new Object[] { token, doc, is });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Document newDocument = dm.create(token, doc, is);
@@ -76,7 +75,7 @@ public class OKMDocument implements DocumentModule {
 	public Document createSimple(String token, String docPath, InputStream is) throws 
 			UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
 			VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException, 
-			RepositoryException, IOException, DatabaseException, ExtensionException {
+			RepositoryException, IOException, DatabaseException {
 		log.debug("createSimple({}, {}, {})", new Object[] { token, docPath, is});
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Document doc = new Document();
@@ -138,7 +137,7 @@ public class OKMDocument implements DocumentModule {
 	@Override
 	public Document rename(String token, String docPath, String newName) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("rename({}, {}, {})", new Object[] { token, docPath, newName });
+		log.debug("rename({}, {})", docPath, newName);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Document renamedDocument = dm.rename(token, docPath, newName);
 		log.debug("rename: {}", renamedDocument);
@@ -226,7 +225,7 @@ public class OKMDocument implements DocumentModule {
 	@Override
 	public void lock(String token, String docPath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("lock({}, {})", token, docPath);
+		log.debug("lock({})", docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.lock(token, docPath);
 		log.debug("lock: void");

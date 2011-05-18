@@ -71,8 +71,8 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.dao.LockTokenDAO;
 import com.openkm.extractor.RegisteredExtractors;
-import com.openkm.jcr.JCRUtils;
 import com.openkm.util.FormatUtil;
+import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
 
@@ -508,16 +508,16 @@ public class RepositoryViewServlet extends BaseServlet {
 			Property p = pi.nextProperty();
 			PropertyDefinition pd = p.getDefinition();
 			
-			hm.put("pName", p.getName());
-			hm.put("pProtected", Boolean.toString(pd.isProtected()));
-			hm.put("pMultiple", Boolean.toString(pd.isMultiple()));
-			hm.put("pType", NODE_TYPE[pd.getRequiredType()]);
+			hm.put("name", p.getName());
+			hm.put("protected", Boolean.toString(pd.isProtected()));
+			hm.put("multiple", Boolean.toString(pd.isMultiple()));
+			hm.put("type", NODE_TYPE[pd.getRequiredType()]);
 			
 			if (pd.getRequiredType() == PropertyType.BINARY) {
 				InputStream is = p.getStream();
 				
 				try {
-					hm.put("pValue", "DATA: "+FormatUtil.formatSize(is.available()));
+					hm.put("value", "DATA: "+FormatUtil.formatSize(is.available()));
 				} catch (IOException e) {
 					e.printStackTrace();
 				} finally {
@@ -525,12 +525,12 @@ public class RepositoryViewServlet extends BaseServlet {
 				}
 			} else {
 				if (pd.isMultiple()) {
-					hm.put("pValue", toString(p.getValues(), "<br/>"));
+					hm.put("value", toString(p.getValues(), "<br/>"));
 				} else {
 					if (p.getName().equals(Scripting.SCRIPT_CODE)) {
-						hm.put("pValue", p.getString().replace("\n", "<br>"));	
+						hm.put("value", p.getString().replace("\n", "<br>"));	
 					} else {
-						hm.put("pValue", p.getString());
+						hm.put("value", p.getString());
 					}
 				}
 			}
@@ -540,11 +540,11 @@ public class RepositoryViewServlet extends BaseServlet {
 		
 		// Add universal node id
 		HashMap<String, String> hm = new HashMap<String, String>();
-		hm.put("pName", "jcr:aid");
-		hm.put("pProtected", Boolean.toString(true));
-		hm.put("pMultiple", Boolean.toString(false));
-		hm.put("pType", "VIRTUAL");
-		hm.put("pValue", ((NodeImpl) node).getId().toString());
+		hm.put("name", "jcr:aid");
+		hm.put("protected", Boolean.toString(true));
+		hm.put("multiple", Boolean.toString(false));
+		hm.put("type", "VIRTUAL");
+		hm.put("value", ((NodeImpl) node).getId().toString());
 		al.add(hm);
 		
 		Collections.sort(al, new PropertyCmp());
@@ -557,7 +557,7 @@ public class RepositoryViewServlet extends BaseServlet {
 	protected class PropertyCmp implements Comparator<HashMap<String, String>> {
 		@Override
 		public int compare(HashMap<String, String> arg0, HashMap<String, String> arg1) {
-			return arg0.get("pName").compareTo(arg1.get("pName"));
+			return arg0.get("name").compareTo(arg1.get("name"));
 		}
 	}
 	

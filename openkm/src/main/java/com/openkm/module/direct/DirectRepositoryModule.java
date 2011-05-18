@@ -66,14 +66,14 @@ import com.openkm.bean.Repository;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
+import com.openkm.core.OKMSystemSession;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
-import com.openkm.jcr.SystemSession;
 import com.openkm.module.RepositoryModule;
 import com.openkm.module.base.BaseDocumentModule;
 import com.openkm.module.base.BaseFolderModule;
+import com.openkm.util.JCRUtils;
 import com.openkm.util.MailUtils;
 import com.openkm.util.UUIDGenerator;
 import com.openkm.util.UserActivity;
@@ -123,7 +123,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 		if (systemSession == null) {
 			// System User Session
 			try {
-				systemSession = SystemSession.create((RepositoryImpl)repository, wc);
+				systemSession = OKMSystemSession.create((RepositoryImpl)repository, wc);
 			} catch (LoginException e) {
 				log.error(e.getMessage(), e);
 				throw e;
@@ -431,7 +431,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node trashNode = session.getRootNode().getNode(Repository.TRASH + "/" + session.getUserID());
+			Node trashNode = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
 			trashFolder = BaseFolderModule.getProperties(session, trashNode);
 			
 			// Activity log
@@ -530,7 +530,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node personalNode = session.getRootNode().getNode(Repository.PERSONAL + "/" + session.getUserID());
+			Node personalNode = session.getRootNode().getNode(Repository.PERSONAL+"/"+session.getUserID());
 			personalFolder = BaseFolderModule.getProperties(session, personalNode);
 			
 			// Activity log
@@ -787,7 +787,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			userTrash = session.getRootNode().getNode(Repository.TRASH + "/" + session.getUserID());
+			userTrash = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
 			
 			for (NodeIterator it = userTrash.getNodes(); it.hasNext(); ) {
 				Node child = it.nextNode();

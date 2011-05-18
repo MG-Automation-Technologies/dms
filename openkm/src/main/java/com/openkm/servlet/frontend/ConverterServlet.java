@@ -83,7 +83,7 @@ public class ConverterServlet extends OKMHttpServlet {
 				DocConverter converter = DocConverter.getInstance();
 				
 				// Save content to temporary file
-				tmp = File.createTempFile("okm", "." + FileUtils.getFileExtension(fileName));
+				tmp = File.createTempFile("okm", "."+FileUtils.getFileExtension(fileName));
 				is = OKMDocument.getInstance().getContent(null, path, false);
 				
 				// Convert to DXF
@@ -107,7 +107,7 @@ public class ConverterServlet extends OKMHttpServlet {
 					}
 					
 					mimeType = Config.MIME_DXF;
-					fileName = FileUtils.getFileName(fileName) + ".dxf";
+					fileName = FileUtils.getFileName(fileName)+".dxf";
 				}
 				
 				// Convert to PDF
@@ -147,7 +147,7 @@ public class ConverterServlet extends OKMHttpServlet {
 					}
 					
 					mimeType = Config.MIME_PDF;
-					fileName = FileUtils.getFileName(fileName) + ".pdf";
+					fileName = FileUtils.getFileName(fileName)+".pdf";
 				}
 				
 				// Convert to SWF
@@ -177,7 +177,7 @@ public class ConverterServlet extends OKMHttpServlet {
 					}
 					
 					mimeType = Config.MIME_SWF;
-					fileName = FileUtils.getFileName(fileName) + ".swf";
+					fileName = FileUtils.getFileName(fileName)+".swf";
 				}
 				
 				WebUtils.sendFile(request, response, fileName, mimeType, inline, is);

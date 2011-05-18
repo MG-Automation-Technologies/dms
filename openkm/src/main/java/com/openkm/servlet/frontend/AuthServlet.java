@@ -47,8 +47,8 @@ import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.util.RoleComparator;
 import com.openkm.frontend.client.util.UserComparator;
-import com.openkm.jcr.JCRUtils;
 import com.openkm.principal.PrincipalAdapterException;
+import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 
 /**
@@ -146,7 +146,6 @@ public class AuthServlet extends OKMRemoteServiceServlet implements OKMAuthServi
 	@Override
 	public String getRemoteUser() {
 		log.debug("getRemoteUser()");
-		updateSessionManager();
 		String user = getThreadLocalRequest().getRemoteUser();
 		log.debug("getRemoteUser: {}", user);
 		return user;
@@ -498,7 +497,6 @@ public class AuthServlet extends OKMRemoteServiceServlet implements OKMAuthServi
 		Session session = null;
 						
 		try {
-			// TODO This JCR Session could be removed
 			session = JCRUtils.getSession();
 			
 			// Activity log

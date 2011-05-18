@@ -1,23 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>  
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"> 
   <display-name>OpenKM</display-name>
-  <!-- Tomcat resources -->
-  <!--
-  <resource-ref>
-    <description>OKM Datasource</description>
-    <res-ref-name>jdbc/OpenKMDS</res-ref-name>
-    <res-type>javax.sql.DataSource</res-type>
-    <res-auth>Container</res-auth>
-  </resource-ref>
-  
-  <resource-ref>
-    <res-ref-name>UserDatabase</res-ref-name>
-    <res-type>org.apache.catalina.UserDatabase</res-type>
-    <res-auth>Container</res-auth>
-  </resource-ref>
-  -->
   
   <jsp-config>
     <taglib>
@@ -27,36 +12,15 @@
   </jsp-config>
   
   <!-- Filters -->
-  <filter>
-    <filter-name>ContextSubjectFilter</filter-name>
-    <filter-class>com.openkm.jaas.ContextSubjectFilter</filter-class>
-  </filter>
-  <!--
-  <filter>
+  <!-- <filter>
     <filter-name>HibernateFilter</filter-name>
     <filter-class>com.openkm.servlet.HibernateFilter</filter-class>
-  </filter>
-  <filter>
-    <filter-name>springSecurityFilterChain</filter-name>
-    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-  </filter>
-  -->
-  
+  </filter> -->
   <!-- Filter Mappings -->
-  <filter-mapping>
-    <filter-name>ContextSubjectFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
-  <!--
-  <filter-mapping>
+  <!-- <filter-mapping>
     <filter-name>HibernateFilter</filter-name>
     <url-pattern>/*</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-    <filter-name>springSecurityFilterChain</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
-  -->
+  </filter-mapping> -->
   
   <!-- Listeners -->
   <listener>
@@ -64,22 +28,7 @@
   </listener>
   <listener>
     <listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup</listener-class>
-  </listener>
-  <listener>
-    <listener-class>com.sun.xml.ws.transport.http.servlet.WSServletContextListener</listener-class>
-  </listener>
-
-  <!--
-  <listener>
-    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-  </listener>
-  <context-param>
-    <param-name>contextConfigLocation</param-name>
-    <param-value>
-      /WEB-INF/applicationContext-security.xml
-    </param-value>
-  </context-param>
-  -->
+  </listener>  
 
   <!-- Startup Servlets -->
   <servlet>
@@ -92,7 +41,7 @@
     <servlet-class>com.openkm.servlet.WebdavServlet</servlet-class>
     <init-param>
       <param-name>x-missing-auth-mapping</param-name>
-      <param-value>monkiki:ponova</param-value>
+      <param-value>pavila:ponova</param-value>
     </init-param>
     <init-param>
       <param-name>authenticate-header</param-name>
@@ -107,11 +56,6 @@
       <param-value>/WEB-INF/config.xml</param-value>
     </init-param>
     <load-on-startup>2</load-on-startup>
-  </servlet>
-  <servlet>
-    <servlet-name>Webservices</servlet-name>
-    <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
-    <load-on-startup>3</load-on-startup>
   </servlet>
 
   <!-- Frontend Servlets -->
@@ -241,15 +185,7 @@
     <servlet-name>FrontendActivityLogServlet</servlet-name>
     <servlet-class>com.openkm.extension.servlet.ActivityLogServlet</servlet-class>
   </servlet>
-  <servlet>
-    <servlet-name>ZohoServlet</servlet-name>
-    <servlet-class>com.openkm.extension.servlet.ZohoServlet</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>ZohoFileUploadServlet</servlet-name>
-    <servlet-class>com.openkm.extension.servlet.ZohoFileUploadServlet</servlet-class>
-  </servlet>
-  <servlet>
+    <servlet>
     <servlet-name>ForumServlet</servlet-name>
     <servlet-class>com.openkm.extension.servlet.ForumServlet</servlet-class>
   </servlet>
@@ -389,7 +325,7 @@
     <servlet-name>RepositorySearchServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.RepositorySearchServlet</servlet-class>
   </servlet>
-  <servlet>
+   <servlet>
     <servlet-name>InstallationResetServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.InstallationResetServlet</servlet-class>
   </servlet>
@@ -423,7 +359,6 @@
   </servlet>
     
   <!-- WebServices -->
-  <!--
   <servlet>
     <servlet-name>OKMAuth</servlet-name>
     <servlet-class>com.openkm.ws.endpoint.OKMAuth</servlet-class>
@@ -476,21 +411,12 @@
     <servlet-name>OKMTest</servlet-name>
     <servlet-class>com.openkm.ws.endpoint.OKMTest</servlet-class>
   </servlet>
-  -->
   
   <!-- Test Servlets -->
   <servlet>
     <servlet-name>Test</servlet-name>
     <servlet-class>com.openkm.servlet.TestServlet</servlet-class>
   </servlet>
-  
-  <!-- Startup servlets -->
-  <!--
-  <servlet-mapping>
-    <servlet-name>Webservices</servlet-name>
-    <url-pattern>/ws</url-pattern>
-  </servlet-mapping>
-  -->
   
   <!-- Frontend Servlet Mappings -->
   <servlet-mapping>
@@ -628,10 +554,6 @@
     <url-pattern>/extension/ActivityLog</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>ZohoServlet</servlet-name>
-    <url-pattern>/extension/Zoho</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
     <servlet-name>ForumServlet</servlet-name>
     <url-pattern>/extension/Forum</url-pattern>
   </servlet-mapping>
@@ -639,15 +561,11 @@
   <!-- Misc servlets mappings -->
   <servlet-mapping>
   	<servlet-name>HandlerServlet</servlet-name>
-  	<url-pattern>/mobile-lg/Handler</url-pattern>
+  	<url-pattern>/mobile/Handler</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
   	<servlet-name>HandlerServlet</servlet-name>
-  	<url-pattern>/mobile-jq/Handler</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-  	<servlet-name>HandlerServlet</servlet-name>
-  	<url-pattern>/mobile-dj/Handler</url-pattern>
+  	<url-pattern>/mobile-nt/Handler</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>SyndicationServlet</servlet-name>
@@ -660,10 +578,6 @@
   <servlet-mapping>
     <servlet-name>DownloadServlet</servlet-name>
     <url-pattern>/Download</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ZohoFileUploadServlet</servlet-name>
-    <url-pattern>/ZohoFileUpload</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>MimeIconServlet</servlet-name>
@@ -813,7 +727,6 @@
   </servlet-mapping>
 
   <!-- WebServices Servlet Mappings -->
-  <!--
   <servlet-mapping>
     <servlet-name>OKMAuth</servlet-name>
     <url-pattern>/OKMAuth</url-pattern>
@@ -866,8 +779,7 @@
     <servlet-name>OKMTest</servlet-name>
     <url-pattern>/OKMTest</url-pattern>
   </servlet-mapping>
-  -->
-  
+
   <!-- Test Servlet Mapping -->
   <servlet-mapping>
     <servlet-name>Test</servlet-name>
@@ -898,9 +810,8 @@
             
       <!-- JSPs -->
       <url-pattern>/admin/*</url-pattern>
-      <url-pattern>/mobile-lg/*</url-pattern>
-      <url-pattern>/mobile-jq/*</url-pattern>
-      <url-pattern>/mobile-dj/*</url-pattern>
+      <url-pattern>/mobile/*</url-pattern>
+      <url-pattern>/mobile-nt/*</url-pattern>
             
       <!-- Servlets -->
 	  <url-pattern>/RepositoryStartup</url-pattern>
@@ -936,4 +847,5 @@
     <description>General user access</description>
     <role-name>UserRole</role-name>
   </security-role>
+
 </web-app>
