@@ -807,12 +807,12 @@
       
       <!-- GWT -->
       <url-pattern>/frontend/*</url-pattern>
-            
+      
       <!-- JSPs -->
       <url-pattern>/admin/*</url-pattern>
       <url-pattern>/mobile/*</url-pattern>
       <url-pattern>/mobile-nt/*</url-pattern>
-            
+      
       <!-- Servlets -->
 	  <url-pattern>/RepositoryStartup</url-pattern>
 	  <url-pattern>/TextToSpeech</url-pattern>
