@@ -64,43 +64,47 @@
         </tr>
       </table>
       <br/>
-      <c:if test="${sql != null}">
-        <center><c:out value="${sql}"/></center>
-        <br/>
-      </c:if>
-      <c:choose>
-        <c:when test="${rows != null}">
-          <center>Row Count: ${rows}</center>
-          <c:if test="${not empty errors}">
-            <table class="results" width="100%">
-              <tr><th>Line</th><th>SQL</th><th>Error</th></tr>
-              <c:forEach var="error" items="${errors}" varStatus="row">
-              <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-                <td>${error.ln}</td>
-                <td>${error.sql}</td>
-                <td>${error.msg}</td>
-              </tr>
-            </c:forEach>
-            </table>
-          </c:if>
-        </c:when>
-        <c:otherwise>
-          <table class="results" width="100%">
-            <tr>
-              <c:forEach var="col" items="${columns}">
-                <th>${col}</th>
+      <c:forEach var="gResult" items="${globalResults}">
+        <c:if test="${gResult.sql != null}">
+          <div class="ok"><center><c:out value="${gResult.sql}"/></center></div>
+          <br/>
+        </c:if>
+        <c:choose>
+          <c:when test="${gResult.rows != null}">
+            <center>Row Count: ${gResult.rows}</center>
+            <c:if test="${not empty errors}">
+              <table class="results" width="100%">
+                <tr><th>Line</th><th>SQL</th><th>Error</th></tr>
+                <c:forEach var="error" items="${gResult.errors}" varStatus="row">
+                <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
+                  <td>${error.ln}</td>
+                  <td>${error.sql}</td>
+                  <td>${error.msg}</td>
+                </tr>
               </c:forEach>
-            </tr>
-            <c:forEach var="result" items="${results}" varStatus="row">
-              <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-                <c:forEach var="tp" items="${result}">
-                  <td>${tp}</td>
+              </table>
+            </c:if>
+            <br/>
+          </c:when>
+          <c:otherwise>
+            <table class="results" width="100%">
+              <tr>
+                <c:forEach var="col" items="${gResult.columns}">
+                  <th>${col}</th>
                 </c:forEach>
               </tr>
-            </c:forEach>
-          </table>
-        </c:otherwise>
-      </c:choose>
+              <c:forEach var="result" items="${gResult.results}" varStatus="row">
+                <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
+                  <c:forEach var="tp" items="${result}">
+                  <td>${tp}</td>
+                  </c:forEach>
+                </tr>
+              </c:forEach>
+            </table>
+            <br/>
+          </c:otherwise>
+        </c:choose>
+      </c:forEach>
     </c:when>
     <c:otherwise>
       <div class="error"><h3>Only admin users allowed</h3></div>
