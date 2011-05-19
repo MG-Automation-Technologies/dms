@@ -46,9 +46,8 @@ import netscape.javascript.JSObject;
 import uk.co.mmscomputing.device.scanner.ScannerIOException;
 
 public class MainFrame extends JFrame implements ActionListener, WindowListener {
-
-	private static final long serialVersionUID = 1L;
 	private static Logger log = Logger.getLogger(MainFrame.class.getName());
+	private static final long serialVersionUID = 1L;
 	private JLabel jLabel1;
 	private JLabel jLabel2;
 	private JButton bScan;

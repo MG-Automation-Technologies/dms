@@ -23,6 +23,8 @@ package com.openkm.applet;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -55,6 +57,7 @@ public class ScannerManager implements ScannerListener {
 	private JTextField tfFileName;
 	private JComboBox cbFileType;
 	private JCheckBox cbUI;
+	private List<BufferedImage> images;
 
 	/**
 	 * @param token
@@ -68,6 +71,7 @@ public class ScannerManager implements ScannerListener {
 		this.win = win;
 		scanner = Scanner.getDevice();
 		scanner.addListener(this);
+		images = new ArrayList<BufferedImage>();
 	}
 
 	/**
@@ -104,33 +108,38 @@ public class ScannerManager implements ScannerListener {
 	@Override
 	public void update(Type type, ScannerIOMetadata metadata) {
 		if (type.equals(ScannerIOMetadata.ACQUIRED)) {
-			log.fine("***** ACQUIRED *****");
-			BufferedImage image = metadata.getImage();
-
-			try {
-				String response = Util.createDocument(token, path, fileName, fileType, url, image);
-				if (!response.startsWith("OKM_OK")) {
-					log.log(Level.SEVERE, "Error: " + response);
-					ErrorCode.displayError(response, path+"/"+fileName+"."+fileType);
-				}
-				
-				win.call("refreshFolder", null);
-			} catch (JSException e) {
-				log.log(Level.WARNING, "JSException: " + e.getMessage(), e);
-				
-				// TODO Investigate why occurs but js method is executed
-				if (!"JavaScript error while calling \"refreshFolder\"".equals(e.getMessage())) {
-					JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
-				}
-			} catch (IOException e) {
-				log.log(Level.SEVERE, "IOException: " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			} catch (Throwable e) { // Catch java.lang.OutOfMemeoryException
-				log.log(Level.SEVERE, "Throwable: " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			}
+			log.info("***** ACQUIRED *****");
+			images.add(metadata.getImage());
 		} else if (type.equals(ScannerIOMetadata.STATECHANGE)) {
-			log.fine("***** STATECHANGE: " + metadata.getStateStr() + " *****");
+			log.info("***** STATECHANGE: " + metadata.getStateStr() + " *****");
+			
+			if (metadata.getLastState() == 7 && metadata.getState() == 5) {
+				try {
+					String response = Util.createDocument(token, path, fileName, fileType, url, images);
+					
+					if (!response.startsWith("OKM_OK")) {
+						log.log(Level.SEVERE, "Error: " + response);
+						ErrorCode.displayError(response, path + "/" + fileName + "." + fileType);
+					}
+					
+					images.clear();
+					win.call("refreshFolder", null);
+				} catch (JSException e) {
+					log.log(Level.WARNING, "JSException: " + e.getMessage(), e);
+					
+					// TODO Investigate why occurs but js method is executed
+					if (!"JavaScript error while calling \"refreshFolder\"".equals(e.getMessage())) {
+						JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
+					}
+				} catch (IOException e) {
+					log.log(Level.SEVERE, "IOException: " + e.getMessage(), e);
+					JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				} catch (Throwable e) { // Catch java.lang.OutOfMemeoryException
+					log.log(Level.SEVERE, "Throwable: " + e.getMessage(), e);
+					JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			
 			if (metadata.isFinished()) {
 				bScan.setEnabled(true);
 				tfFileName.setEnabled(true);
@@ -138,7 +147,7 @@ public class ScannerManager implements ScannerListener {
 				cbUI.setEnabled(true);
 			}
 		} else if (type.equals(ScannerIOMetadata.NEGOTIATE)) {
-			log.fine("***** NEGOTIATE *****");
+			log.info("***** NEGOTIATE *****");
 			ScannerDevice device = metadata.getDevice();
 
 			try {
