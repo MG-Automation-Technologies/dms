@@ -1,14 +1,16 @@
 package uk.co.mmscomputing.imageio.pdf;
 
-import java.io.*;
-import java.util.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
-import java.awt.image.*;
-
-import javax.imageio.*;
-import javax.imageio.spi.*;
-import javax.imageio.stream.*;
-import javax.imageio.metadata.*;
+import javax.imageio.IIOImage;
+import javax.imageio.ImageTypeSpecifier;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.metadata.IIOMetadata;
+import javax.imageio.spi.ImageWriterSpi;
+import javax.imageio.stream.ImageOutputStream;
 
 public class PDFImageWriter extends ImageWriter{
 
@@ -70,9 +72,17 @@ public class PDFImageWriter extends ImageWriter{
       throw new IOException(getClass().getName()+".writeToSequence:\n\tCan only write BufferedImage objects");
     }
     BufferedImage image=(BufferedImage)img.getRenderedImage();
-
-    PDFPage       page = pdffile.getNewPage();
-    String        name = "image"+(index++);
+    PDFPage page = pdffile.getNewPage();
+    String name = "image"+(index++);
+    page.addImage(name,image);
+  }
+  
+  /**
+   * New method
+   */
+  public void writeToSequence(BufferedImage image){
+    PDFPage page = pdffile.getNewPage();
+    String name = "image"+(index++);
     page.addImage(name,image);
   }
 
