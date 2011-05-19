@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -89,6 +90,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 		try {
 			ServletContext sc = getServletContext();
 			sc.setAttribute("qs", null);
+			//sc.setAttribute("sql", null);
 			sc.setAttribute("method", null);
 			sc.setAttribute("columns", null);
 			sc.setAttribute("results", null);
@@ -155,6 +157,9 @@ public class DatabaseQueryServlet extends BaseServlet {
 				} else {
 					ServletContext sc = getServletContext();
 					sc.setAttribute("qs", qs);
+					sc.setAttribute("method", null);
+					sc.setAttribute("errors", null);
+					sc.setAttribute("globalResults", new ArrayList<DatabaseQueryServlet.GlobalResult>());
 					sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 				}
 			}
@@ -174,49 +179,70 @@ public class DatabaseQueryServlet extends BaseServlet {
 	private void executeHibernate(Session session, String qs, HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		ServletContext sc = getServletContext();
+		StringTokenizer st = new StringTokenizer(qs, "\n");
+		List<GlobalResult> globalResults = new ArrayList<DatabaseQueryServlet.GlobalResult>();
 		
-		if (qs.toUpperCase().startsWith("SELECT") || qs.toUpperCase().startsWith("FROM")) {
-			Query q = session.createQuery(qs);
-			List<Object> ret = q.list();
-			List<String> columns = new ArrayList<String>();
-			List<List<String>> results = new ArrayList<List<String>>();
-			Type[] rt = q.getReturnTypes();
-			int i = 0;
+		// For each query line
+		while (st.hasMoreTokens()) {
+			String tk = st.nextToken();
 			
-			for (i=0; i<rt.length; i++) {
-				columns.add(rt[i].getName());
-			}
-			
-			for (Iterator<Object> it = ret.iterator(); it.hasNext() && i++ < Config.MAX_SEARCH_RESULTS; ) {
-				List<String> row = new ArrayList<String>();
-				Object obj = it.next();
+			if (tk.toUpperCase().startsWith("SELECT") || tk.toUpperCase().startsWith("FROM")) {
+				Query q = session.createQuery(tk);
+				List<Object> ret = q.list();
+				List<String> columns = new ArrayList<String>();
+				List<List<String>> results = new ArrayList<List<String>>();
+				Type[] rt = q.getReturnTypes();
+				int i = 0;
 				
-				if (obj instanceof Object[]) {
-					Object[] ao = (Object[]) obj;
-					for (int j=0; j<ao.length; j++) {
-						row.add(ao[j].toString());
-					}
-				} else {
-					row.add(obj.toString());	
+				for (i=0; i<rt.length; i++) {
+					columns.add(rt[i].getName());
 				}
 				
-				results.add(row);
+				for (Iterator<Object> it = ret.iterator(); it.hasNext() && i++ < Config.MAX_SEARCH_RESULTS; ) {
+					List<String> row = new ArrayList<String>();
+					Object obj = it.next();
+					
+					if (obj instanceof Object[]) {
+						Object[] ao = (Object[]) obj;
+						for (int j=0; j<ao.length; j++) {
+							row.add(ao[j].toString());
+						}
+					} else {
+						row.add(obj.toString());	
+					}
+					
+					results.add(row);
+				}
+				
+				GlobalResult gr = new GlobalResult();
+				gr.setColumns(columns);
+				gr.setResults(results);
+				gr.setRows(null);
+				gr.setSql(tk);
+				globalResults.add(gr);
+				
+				//sc.setAttribute("columns", columns);
+				//sc.setAttribute("results", results);
+				//sc.setAttribute("rows", null);
+			} else {
+				//sc.setAttribute("columns", null);
+				//sc.setAttribute("results", null);
+				//sc.setAttribute("rows", rows);
+				GlobalResult gr = new GlobalResult();
+				int rows = session.createQuery(qs).executeUpdate();
+				gr.setColumns(null);
+				gr.setResults(null);
+				gr.setRows(rows);
+				gr.setSql(tk);
+				globalResults.add(gr);
 			}
-			
-			sc.setAttribute("columns", columns);
-			sc.setAttribute("results", results);
-			sc.setAttribute("rows", null);
-		} else {
-			int rows = session.createQuery(qs).executeUpdate();
-			sc.setAttribute("columns", null);
-			sc.setAttribute("results", null);
-			sc.setAttribute("rows", rows);
 		}
 		
+		//sc.setAttribute("sql", HibernateUtil.toSql(qs));
 		sc.setAttribute("qs", qs);
-		sc.setAttribute("sql", HibernateUtil.toSql(qs));
 		sc.setAttribute("method", "hibernate");
 		sc.setAttribute("errors", null);
+		sc.setAttribute("globalResults", globalResults);
 		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 	}
 	
@@ -229,37 +255,52 @@ public class DatabaseQueryServlet extends BaseServlet {
 		Connection con = null;
 		Statement stmt = null;
 		ResultSet rs = null;
+		List<GlobalResult> globalResults = new ArrayList<DatabaseQueryServlet.GlobalResult>();
 		
 		try {
 			con = session.connection();
 			stmt = con.createStatement();
+			StringTokenizer st = new StringTokenizer(qs, "\n");
 			
-			if (qs.toUpperCase().startsWith("SELECT")) {
-				rs = stmt.executeQuery(qs);
-				ResultSetMetaData md = rs.getMetaData();
-				List<String> columns = new ArrayList<String>();
-				List<List<String>> results = new ArrayList<List<String>>();
+			// For each query line
+			while (st.hasMoreTokens()) {
+				String tk = st.nextToken();
 				
-				for (int i=1; i<md.getColumnCount()+1; i++) {
-					columns.add(md.getColumnName(i));
-				}
-				
-				for (int i=0; rs.next() && i++ < Config.MAX_SEARCH_RESULTS; ) {
-					List<String> row = new ArrayList<String>();
-					for (int j=1; j<md.getColumnCount()+1; j++) {
-						row.add(rs.getString(j));
+				if (tk.toUpperCase().startsWith("--") || tk.equals("") || tk.equals("\r")) {
+					// Is a comment, so ignore it
+				} else if (tk.toUpperCase().startsWith("SELECT")) {
+					rs = stmt.executeQuery(tk);
+					ResultSetMetaData md = rs.getMetaData();
+					List<String> columns = new ArrayList<String>();
+					List<List<String>> results = new ArrayList<List<String>>();
+										
+					for (int i=1; i<md.getColumnCount()+1; i++) {
+						columns.add(md.getColumnName(i));
 					}
-					results.add(row);
+					
+					for (int i=0; rs.next() && i++ < Config.MAX_SEARCH_RESULTS; ) {
+						List<String> row = new ArrayList<String>();
+						for (int j=1; j<md.getColumnCount()+1; j++) {
+							row.add(rs.getString(j));
+						}
+						results.add(row);
+					}
+					
+					GlobalResult gr = new GlobalResult();
+					gr.setColumns(columns);
+					gr.setResults(results);
+					gr.setRows(null);
+					gr.setSql(tk);
+					globalResults.add(gr);
+				} else {
+					GlobalResult gr = new GlobalResult();
+					int rows = stmt.executeUpdate(tk);
+					gr.setColumns(null);
+					gr.setResults(null);
+					gr.setRows(rows);
+					gr.setSql(tk);
+					globalResults.add(gr);
 				}
-				
-				sc.setAttribute("columns", columns);
-				sc.setAttribute("results", results);
-				sc.setAttribute("rows", null);
-			} else {
-				int rows = stmt.executeUpdate(qs);
-				sc.setAttribute("columns", null);
-				sc.setAttribute("results", null);
-				sc.setAttribute("rows", rows);
 			}
 		} finally {
 			LegacyDAO.close(rs);
@@ -267,10 +308,11 @@ public class DatabaseQueryServlet extends BaseServlet {
 			LegacyDAO.close(con);
 		}
 		
+		//sc.setAttribute("sql", null);
 		sc.setAttribute("qs", qs);
-		sc.setAttribute("sql", null);
 		sc.setAttribute("method", "jdbc");
 		sc.setAttribute("errors", null);
+		sc.setAttribute("globalResults", globalResults);
 		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 	}
 	
@@ -325,5 +367,56 @@ public class DatabaseQueryServlet extends BaseServlet {
 		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 		
 		log.debug("executeUpdate: void");
+	}
+	
+	/**
+	 * Container helper class
+	 */
+	public class GlobalResult {
+		private List<String> columns = new ArrayList<String>();
+		private List<List<String>> results = new ArrayList<List<String>>();
+		private Integer rows = new Integer(0);
+		private String sql = new String();
+		private String error = new String();
+		
+		public List<String> getColumns() {
+			return columns;
+		}
+		
+		public void setColumns(List<String> columns) {
+			this.columns = columns;
+		}
+		
+		public List<List<String>> getResults() {
+			return results;
+		}
+		
+		public void setResults(List<List<String>> results) {
+			this.results = results;
+		}
+		
+		public Integer getRows() {
+			return rows;
+		}
+		
+		public void setRows(Integer rows) {
+			this.rows = rows;
+		}
+
+		public String getSql() {
+			return sql;
+		}
+
+		public void setSql(String sql) {
+			this.sql = sql;
+		}
+
+		public String getError() {
+			return error;
+		}
+
+		public void setError(String error) {
+			this.error = error;
+		}
 	}
 }
