@@ -1,22 +1,29 @@
 package uk.co.mmscomputing.imageio.tiff;
 
-import java.io.*;
-import java.util.*;
+import java.awt.color.ColorSpace;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorConvertOp;
+import java.awt.image.DataBufferByte;
+import java.awt.image.DataBufferInt;
+import java.awt.image.WritableRaster;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.ByteOrder;
 
-import java.awt.*;
-import java.awt.image.*;
-import java.awt.color.*;
+import javax.imageio.IIOImage;
+import javax.imageio.ImageTypeSpecifier;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.metadata.IIOMetadata;
+import javax.imageio.spi.ImageWriterSpi;
+import javax.imageio.stream.ImageOutputStream;
 
-import javax.imageio.*;
-import javax.imageio.spi.*;
-import javax.imageio.stream.*;
-import javax.imageio.metadata.*;
-
+import uk.co.mmscomputing.imageio.jpeg.JPEGConstants;
+import uk.co.mmscomputing.imageio.jpeg.JPEGOutputStream;
 import uk.co.mmscomputing.io.BitSwapOutputStream;
 import uk.co.mmscomputing.io.ModHuffmanOutputStream;
 import uk.co.mmscomputing.io.RLEOutputStream;
-import uk.co.mmscomputing.imageio.jpeg.*;
 
 public class TIFFImageWriter extends ImageWriter implements TIFFConstants{
 
@@ -75,82 +82,90 @@ public class TIFFImageWriter extends ImageWriter implements TIFFConstants{
   }
 
   public void writeToSequence(IIOImage img,ImageWriteParam param)throws IOException{
-    ImageOutputStream out=(ImageOutputStream)getOutput();
     if(!(img.getRenderedImage() instanceof BufferedImage)){
       throw new IOException(getClass().getName()+"writeToSequence:\n\tCan only write BufferedImage objects");
     }
     BufferedImage image=(BufferedImage)img.getRenderedImage();
-/*
-    // Attempt to convert metadata, if present
-    IIOMetadata  imd      = img.getMetadata();
-    TIFFMetadata metadata = null;
-    if(imd!=null){
-      ImageTypeSpecifier type=ImageTypeSpecifier.createFromRenderedImage(image);
-      metadata=(TIFFMetadata)convertImageMetadata(imd,type,null);
-    }
-    // Output metadata if present
-    if(metadata != null){
-      Iterator keywordIter = metadata.keywords.iterator();
-      Iterator valueIter   = metadata.values.iterator();
-      while(keywordIter.hasNext()){
-        String keyword = (String)keywordIter.next();
-        String value   = (String)valueIter.next();
-        System.out.println("9\bKEYWORD: "+keyword);
-        System.out.println("9\bVALUE: "+value);
-      }
-    }
-*/
-    IFD ifd;
-    int pmi=RGB,comp=compNone,tiffComp=NOCOMPRESSION;
+    writeToSequence(image, param);
+  }
+  
+  /**
+   * New method
+   */
+  public void writeToSequence(BufferedImage image, ImageWriteParam param) throws IOException{
+	  ImageOutputStream out=(ImageOutputStream)getOutput();
+	  
+	  /*
+	    // Attempt to convert metadata, if present
+	    IIOMetadata  imd      = img.getMetadata();
+	    TIFFMetadata metadata = null;
+	    if(imd!=null){
+	      ImageTypeSpecifier type=ImageTypeSpecifier.createFromRenderedImage(image);
+	      metadata=(TIFFMetadata)convertImageMetadata(imd,type,null);
+	    }
+	    // Output metadata if present
+	    if(metadata != null){
+	      Iterator keywordIter = metadata.keywords.iterator();
+	      Iterator valueIter   = metadata.values.iterator();
+	      while(keywordIter.hasNext()){
+	        String keyword = (String)keywordIter.next();
+	        String value   = (String)valueIter.next();
+	        System.out.println("9\bKEYWORD: "+keyword);
+	        System.out.println("9\bVALUE: "+value);
+	      }
+	    }
+	*/
+	    IFD ifd;
+	    int pmi=RGB,comp=compNone,tiffComp=NOCOMPRESSION;
 
-    TIFFImageWriteParam p=null;
-    if((param!=null)&&(param instanceof TIFFImageWriteParam)){
-      p=(TIFFImageWriteParam)param;
-      pmi =p.getPhotometricInterpretation();
-      if(p.getCompressionType().equals("none")){           comp=compNone;       tiffComp=NOCOMPRESSION;
-      }else if(p.getCompressionType().equals("mh")){       comp=compBaselineMH; tiffComp=CCITTGROUP3MODHUFFMAN;
-      }else if(p.getCompressionType().equals("t4mh")){     comp=compT4MH;       tiffComp=CCITTFAXT4;
-      }else if(p.getCompressionType().equals("t4mr")){     comp=compT4MR;       tiffComp=CCITTFAXT4;
-      }else if(p.getCompressionType().equals("t6mmr")){    comp=compT6MMR;      tiffComp=CCITTFAXT6;
-      }else if(p.getCompressionType().equals("packbits")){ comp=compPackBits;   tiffComp=PACKBITS;
-      }else if(p.getCompressionType().equals("lzw")){      comp=compLZW;        tiffComp=LZW;
-      }else if(p.getCompressionType().equals("jpeg")){     comp=compJPEG;       tiffComp=JPEG;
-      }
-//      System.out.println("comp = "+p.getCompressionType()+" "+comp);
-    }
-    switch(pmi){
-    case WhiteIsZero: 
-      switch(comp){
-      case compBaselineMH: ifd=writeBModHufImage(out,image,p);break;
-      case compT4MH:
-      case compT4MR:
-      case compT6MMR:      ifd=TIFFClassFFactory.writeImage(out,image,comp,p);break;
-      default:             ifd=writeRGBImage(out,image,NOCOMPRESSION,p);break; // write image data as uncompressed rgb data.
-      }
-      break;
-    case BlackIsZero: 
-      switch(comp){
-      default:             ifd=writeGrayImage(out,image,tiffComp,p);break; 
-      }
-      break;
-    case RGB:                                                  // write image data as uncompressed rgb data.
-      switch(comp){
-      default:             ifd=writeRGBImage(out,image,tiffComp,p);break; 
-      }
-      break;
-    case CMYK:
-      switch(comp){
-      default:             ifd=writeCMYKImage(out,image,p);break;
-      }
-      break;
-    case YCbCr:
-      switch(comp){
-      default:             ifd=writeYCbCrImage(out,image,tiffComp,p);break;
-      }
-      break;
-    default:               ifd=writeRGBImage(out,image,NOCOMPRESSION,p);break; // write image data as uncompressed rgb data.
-    }
-    ifdptr=ifd.write(out,ifdptr);                              // write ifd contents, entries and set ifd linked list pointer
+	    TIFFImageWriteParam p=null;
+	    if((param!=null)&&(param instanceof TIFFImageWriteParam)){
+	      p=(TIFFImageWriteParam)param;
+	      pmi =p.getPhotometricInterpretation();
+	      if(p.getCompressionType().equals("none")){           comp=compNone;       tiffComp=NOCOMPRESSION;
+	      }else if(p.getCompressionType().equals("mh")){       comp=compBaselineMH; tiffComp=CCITTGROUP3MODHUFFMAN;
+	      }else if(p.getCompressionType().equals("t4mh")){     comp=compT4MH;       tiffComp=CCITTFAXT4;
+	      }else if(p.getCompressionType().equals("t4mr")){     comp=compT4MR;       tiffComp=CCITTFAXT4;
+	      }else if(p.getCompressionType().equals("t6mmr")){    comp=compT6MMR;      tiffComp=CCITTFAXT6;
+	      }else if(p.getCompressionType().equals("packbits")){ comp=compPackBits;   tiffComp=PACKBITS;
+	      }else if(p.getCompressionType().equals("lzw")){      comp=compLZW;        tiffComp=LZW;
+	      }else if(p.getCompressionType().equals("jpeg")){     comp=compJPEG;       tiffComp=JPEG;
+	      }
+//	      System.out.println("comp = "+p.getCompressionType()+" "+comp);
+	    }
+	    switch(pmi){
+	    case WhiteIsZero: 
+	      switch(comp){
+	      case compBaselineMH: ifd=writeBModHufImage(out,image,p);break;
+	      case compT4MH:
+	      case compT4MR:
+	      case compT6MMR:      ifd=TIFFClassFFactory.writeImage(out,image,comp,p);break;
+	      default:             ifd=writeRGBImage(out,image,NOCOMPRESSION,p);break; // write image data as uncompressed rgb data.
+	      }
+	      break;
+	    case BlackIsZero: 
+	      switch(comp){
+	      default:             ifd=writeGrayImage(out,image,tiffComp,p);break; 
+	      }
+	      break;
+	    case RGB:                                                  // write image data as uncompressed rgb data.
+	      switch(comp){
+	      default:             ifd=writeRGBImage(out,image,tiffComp,p);break; 
+	      }
+	      break;
+	    case CMYK:
+	      switch(comp){
+	      default:             ifd=writeCMYKImage(out,image,p);break;
+	      }
+	      break;
+	    case YCbCr:
+	      switch(comp){
+	      default:             ifd=writeYCbCrImage(out,image,tiffComp,p);break;
+	      }
+	      break;
+	    default:               ifd=writeRGBImage(out,image,NOCOMPRESSION,p);break; // write image data as uncompressed rgb data.
+	    }
+	    ifdptr=ifd.write(out,ifdptr);                              // write ifd contents, entries and set ifd linked list pointer
   }
 
   public void endWriteSequence()throws IOException{
