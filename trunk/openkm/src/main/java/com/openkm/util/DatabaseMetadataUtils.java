@@ -67,6 +67,25 @@ public class DatabaseMetadataUtils {
 	/**
 	 * Build a query
 	 */
+	public static String buildQuery(String table, String filter) throws DatabaseException {
+		log.debug("buildQuery({}, {})", new Object[] { table, filter });
+		StringBuilder sb = new StringBuilder();
+		String ret = null;
+		
+		sb.append("from DatabaseMetadataValue dmv where dmv.table='" + table + "'");
+		
+		if (filter != null && filter.length() > 0) {			
+			sb.append(" ").append(replaceVirtual(table, filter));
+		}
+		
+		ret = sb.toString();
+		log.debug("buildQuery: {}", ret);
+		return ret;
+	}
+	
+	/**
+	 * Build a query
+	 */
 	public static String buildUpdate(String table, String filter) throws DatabaseException {
 		log.debug("buildUpdate({}, {})", new Object[] { table, filter });
 		StringBuilder sb = new StringBuilder();
@@ -131,7 +150,8 @@ public class DatabaseMetadataUtils {
 			List<DatabaseMetadataType> types = DatabaseMetadataDAO.findAllTypes(table);
 			
 			for (DatabaseMetadataType emt : types) {
-				filter = filter.toLowerCase().replaceAll(emt.getVirtualColumn().toLowerCase(), emt.getRealColumn().toLowerCase());
+				String vcol = "\\$" + emt.getVirtualColumn().toLowerCase();
+				filter = filter.replaceAll(vcol, emt.getRealColumn().toLowerCase());
 			}
 			
 			ret = filter;
