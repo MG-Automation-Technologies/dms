@@ -162,8 +162,6 @@ public class RepositoryExporter {
 				fos = new FileOutputStream(path + ".json");
 				IOUtils.write(json, fos);
 				fos.close();
-				
-				
 			}
 			
 			// Stats
