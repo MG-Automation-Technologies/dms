@@ -92,10 +92,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 			sc.setAttribute("qs", null);
 			//sc.setAttribute("sql", null);
 			sc.setAttribute("method", null);
-			sc.setAttribute("columns", null);
-			sc.setAttribute("results", null);
-			sc.setAttribute("rows", null);
-			sc.setAttribute("errors", null);
+			sc.setAttribute("globalResults", null);
 			sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 		} catch (Exception e) {
 			sendErrorRedirect(request,response, e);
@@ -158,7 +155,6 @@ public class DatabaseQueryServlet extends BaseServlet {
 					ServletContext sc = getServletContext();
 					sc.setAttribute("qs", qs);
 					sc.setAttribute("method", null);
-					sc.setAttribute("errors", null);
 					sc.setAttribute("globalResults", new ArrayList<DatabaseQueryServlet.GlobalResult>());
 					sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 				}
@@ -220,14 +216,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 				gr.setRows(null);
 				gr.setSql(tk);
 				globalResults.add(gr);
-				
-				//sc.setAttribute("columns", columns);
-				//sc.setAttribute("results", results);
-				//sc.setAttribute("rows", null);
 			} else {
-				//sc.setAttribute("columns", null);
-				//sc.setAttribute("results", null);
-				//sc.setAttribute("rows", rows);
 				GlobalResult gr = new GlobalResult();
 				int rows = session.createQuery(qs).executeUpdate();
 				gr.setColumns(null);
@@ -241,7 +230,6 @@ public class DatabaseQueryServlet extends BaseServlet {
 		//sc.setAttribute("sql", HibernateUtil.toSql(qs));
 		sc.setAttribute("qs", qs);
 		sc.setAttribute("method", "hibernate");
-		sc.setAttribute("errors", null);
 		sc.setAttribute("globalResults", globalResults);
 		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 	}
@@ -311,7 +299,6 @@ public class DatabaseQueryServlet extends BaseServlet {
 		//sc.setAttribute("sql", null);
 		sc.setAttribute("qs", qs);
 		sc.setAttribute("method", "jdbc");
-		sc.setAttribute("errors", null);
 		sc.setAttribute("globalResults", globalResults);
 		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 	}
@@ -366,8 +353,8 @@ public class DatabaseQueryServlet extends BaseServlet {
 		gr.setErrors(errors);
 		globalResults.add(gr);
 		
-		sc.setAttribute("qs", "");
-		sc.setAttribute("method", "");
+		sc.setAttribute("qs", null);
+		sc.setAttribute("method", null);
 		sc.setAttribute("globalResults", globalResults);
 		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 		
