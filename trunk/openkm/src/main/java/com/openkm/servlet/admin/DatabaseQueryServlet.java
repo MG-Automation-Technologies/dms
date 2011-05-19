@@ -327,6 +327,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 		Statement stmt = null;
 		ResultSet rs = null;
 		List<HashMap<String, String>> errors = new ArrayList<HashMap<String, String>>();
+		List<GlobalResult> globalResults = new ArrayList<DatabaseQueryServlet.GlobalResult>();
 		int rows = 0;
 		
 		try {
@@ -340,7 +341,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 			while ((sql = br.readLine()) != null) {
 				ln++;
 				
-				if (sql.length() > 0) {
+				if (sql.length() > 0 && !sql.startsWith("--")) {
 					try {
 						rows += stmt.executeUpdate(sql);
 					} catch (SQLException e) {
@@ -358,12 +359,16 @@ public class DatabaseQueryServlet extends BaseServlet {
 			LegacyDAO.close(con);
 		}
 		
+		GlobalResult gr = new GlobalResult();
+		gr.setColumns(null);
+		gr.setResults(null);
+		gr.setRows(rows);
+		gr.setErrors(errors);
+		globalResults.add(gr);
+		
 		sc.setAttribute("qs", "");
 		sc.setAttribute("method", "");
-		sc.setAttribute("columns", null);
-		sc.setAttribute("results", null);
-		sc.setAttribute("rows", rows);
-		sc.setAttribute("errors", errors);
+		sc.setAttribute("globalResults", globalResults);
 		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 		
 		log.debug("executeUpdate: void");
@@ -373,11 +378,11 @@ public class DatabaseQueryServlet extends BaseServlet {
 	 * Container helper class
 	 */
 	public class GlobalResult {
-		private List<String> columns = new ArrayList<String>();
+		private List<HashMap<String, String>> errors = new ArrayList<HashMap<String, String>>();
 		private List<List<String>> results = new ArrayList<List<String>>();
+		private List<String> columns = new ArrayList<String>();
 		private Integer rows = new Integer(0);
 		private String sql = new String();
-		private String error = new String();
 		
 		public List<String> getColumns() {
 			return columns;
@@ -411,12 +416,12 @@ public class DatabaseQueryServlet extends BaseServlet {
 			this.sql = sql;
 		}
 
-		public String getError() {
-			return error;
+		public List<HashMap<String, String>> getErrors() {
+			return errors;
 		}
 
-		public void setError(String error) {
-			this.error = error;
+		public void setErrors(List<HashMap<String, String>> errors) {
+			this.errors = errors;
 		}
 	}
 }

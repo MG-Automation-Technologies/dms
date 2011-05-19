@@ -71,8 +71,9 @@
         </c:if>
         <c:choose>
           <c:when test="${gResult.rows != null}">
-            <center>Row Count: ${gResult.rows}</center>
-            <c:if test="${not empty errors}">
+            <div class="ok"><center>Row Count: ${gResult.rows}</center></div>
+            <br/>
+            <c:if test="${not empty gResult.errors}">
               <table class="results" width="100%">
                 <tr><th>Line</th><th>SQL</th><th>Error</th></tr>
                 <c:forEach var="error" items="${gResult.errors}" varStatus="row">
