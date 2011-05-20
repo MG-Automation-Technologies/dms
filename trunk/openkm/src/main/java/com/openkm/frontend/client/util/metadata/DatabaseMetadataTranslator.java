@@ -19,51 +19,17 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.util;
+package com.openkm.frontend.client.util.metadata;
 
-
+import java.util.Map;
 
 /**
- * DatabaseMetadataMap
+ * DatabaseMetadataTranslator
  * 
  * @author jllort
+ *
  */
-public class DatabaseMetadataMap {	
-	// Metadata virtual column name mapping
-	public static final String MV_NAME_TABLE 	= "table";
-	public static final String MV_NAME_ID		= "id";
-	
-	/**
-	 * getDoubleValue
-	 * 
-	 * @param value
-	 * @return
-	 */
-	public static Double getDoubleValue(String value) {
-		return (value!=null)?new Double(value):null;
-	}
-	
-	/**
-	 * mapDoubleValue
-	 * 
-	 * @param value
-	 * @return
-	 */
-	public static String mapDoubleValue(Double value) {
-		return (value!=null)?String.valueOf(value):null;
-	}
-	
-	/**
-	 * getIntValue
-	 */
-	public static Integer getIntegerValue(String value) {
-		return (value!=null)?new Integer(value): null;
-	}
-	
-	/**
-	 * mapIntValue
-	 */
-	public static String mapIntegerValue(Integer value) {
-		return (value!=null)?String.valueOf(value):null;
-	}
+public interface DatabaseMetadataTranslator {
+	public abstract void loadFromMap(Map<String,String> map);
+	public abstract Map<String,String> restoreToMap();
 }
