@@ -25,6 +25,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
@@ -43,16 +44,6 @@ import com.openkm.frontend.client.util.metadata.DatabaseMetadataMap;
  */
 public class DatabaseMetadataUtils {
 	private static Logger log = LoggerFactory.getLogger(DatabaseMetadataUtils.class);
-	private static final String METADATA_COLUMN_NAME_COL00 = "col00";
-	private static final String METADATA_COLUMN_NAME_COL01 = "col01";
-	private static final String METADATA_COLUMN_NAME_COL02 = "col02";
-	private static final String METADATA_COLUMN_NAME_COL03 = "col03";
-	private static final String METADATA_COLUMN_NAME_COL04 = "col04";
-	private static final String METADATA_COLUMN_NAME_COL05 = "col05";
-	private static final String METADATA_COLUMN_NAME_COL06 = "col06";
-	private static final String METADATA_COLUMN_NAME_COL07 = "col07";
-	private static final String METADATA_COLUMN_NAME_COL08 = "col08";
-	private static final String METADATA_COLUMN_NAME_COL09 = "col09";
 	
 	/**
 	 * Build a query
@@ -180,44 +171,18 @@ public class DatabaseMetadataUtils {
 	 * Obtain a DatabaseMetadataValue from a Map
 	 */
 	public static DatabaseMetadataValue getDatabaseMetadataValueByMap(Map<String, String> map) throws 
-			DatabaseException {
+			DatabaseException, IllegalAccessException, InvocationTargetException {
 		DatabaseMetadataValue dmv = new DatabaseMetadataValue();
 		
 		if (!map.isEmpty() && map.containsKey(DatabaseMetadataMap.MV_NAME_TABLE)) {
 			dmv.setTable(map.get(DatabaseMetadataMap.MV_NAME_TABLE));
-			List<DatabaseMetadataType> types = DatabaseMetadataDAO.findAllTypes(dmv.getTable());
 			
 			if (map.containsKey(DatabaseMetadataMap.MV_NAME_ID)) {
 				dmv.setId(new Double(map.get(DatabaseMetadataMap.MV_NAME_ID)).longValue());
 			}
 			
-			for (String key : map.keySet()) {
-				String value = map.get(key);
-				for (DatabaseMetadataType emt : types) {
-					if (emt.getVirtualColumn().equals(key)) {
-						if (emt.getRealColumn().equals(METADATA_COLUMN_NAME_COL00)) {
-							dmv.setCol00(value);
-						} else if (emt.getRealColumn().equals(METADATA_COLUMN_NAME_COL01)) {
-							dmv.setCol01(value);
-						} else if (emt.getRealColumn().equals(METADATA_COLUMN_NAME_COL02)) {
-							dmv.setCol02(value);
-						} else if (emt.getRealColumn().equals(METADATA_COLUMN_NAME_COL03)) {
-							dmv.setCol03(value);
-						} else if (emt.getRealColumn().equals(METADATA_COLUMN_NAME_COL04)) {
-							dmv.setCol04(value);
-						} else if (emt.getRealColumn().equals(METADATA_COLUMN_NAME_COL05)) {
-							dmv.setCol05(value);
-						} else if (emt.getRealColumn().equals(METADATA_COLUMN_NAME_COL06)) {
-							dmv.setCol06(value);
-						} else if (emt.getRealColumn().equals(METADATA_COLUMN_NAME_COL07)) {
-							dmv.setCol07(value);
-						} else if (emt.getRealColumn().equals(METADATA_COLUMN_NAME_COL08)) {
-							dmv.setCol08(value);
-						} else if (emt.getRealColumn().equals(METADATA_COLUMN_NAME_COL09)) {
-							dmv.setCol09(value);
-						}
-					}
-				}
+			for (Entry<String, String> entry : map.entrySet()) {
+				BeanUtils.setProperty(dmv, entry.getKey(), entry.getValue());
 			}
 		}
 		
