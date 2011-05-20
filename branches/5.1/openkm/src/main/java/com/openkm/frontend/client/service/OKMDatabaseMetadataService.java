@@ -22,11 +22,11 @@
 package com.openkm.frontend.client.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.openkm.frontend.client.OKMException;
-import com.openkm.frontend.client.bean.GWTDatabaseMetadataValue;
 
 /**
  * OKMDatabaseMetadataService
@@ -36,7 +36,7 @@ import com.openkm.frontend.client.bean.GWTDatabaseMetadataValue;
  */
 @RemoteServiceRelativePath("DatabaseMetadata")
 public interface OKMDatabaseMetadataService extends RemoteService {
-	public List<GWTDatabaseMetadataValue> executeValueQuery(String table, String filter, String order) throws OKMException;
-	public void updateValue(GWTDatabaseMetadataValue dmv) throws OKMException;
-	public void createValue(GWTDatabaseMetadataValue dmv) throws OKMException;
+	public List<Map<String,String>> executeValueQuery(String table, String filter, String order) throws OKMException;
+	public void updateValue(Map<String,String> map) throws OKMException;
+	public void createValue(Map<String,String> map) throws OKMException;
 }

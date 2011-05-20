@@ -22,9 +22,9 @@
 package com.openkm.frontend.client.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.openkm.frontend.client.bean.GWTDatabaseMetadataValue;
 
 
 /**
@@ -34,7 +34,7 @@ import com.openkm.frontend.client.bean.GWTDatabaseMetadataValue;
  *
  */
 public interface OKMDatabaseMetadataServiceAsync {
-	public void executeValueQuery(String table, String filter, String order, AsyncCallback<List<GWTDatabaseMetadataValue>> callback);
-	public void updateValue(GWTDatabaseMetadataValue dmv, AsyncCallback<?> callback);
-	public void createValue(GWTDatabaseMetadataValue dmv, AsyncCallback<?> callback);
+	public void executeValueQuery(String table, String filter, String order, AsyncCallback<List<Map<String,String>>> callback);
+	public void updateValue(Map<String,String> map, AsyncCallback<?> callback);
+	public void createValue(Map<String,String> map, AsyncCallback<?> callback);
 }
