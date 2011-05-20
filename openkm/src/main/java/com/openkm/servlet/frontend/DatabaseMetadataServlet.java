@@ -80,6 +80,12 @@ public class DatabaseMetadataServlet extends OKMRemoteServiceServlet implements 
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_Database), e.getMessage());
+		} catch (IllegalAccessException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_IllegalAccess), e.getMessage());
+		} catch (InvocationTargetException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_InvocationTarget), e.getMessage());
 		}
 	}
 	
@@ -91,6 +97,12 @@ public class DatabaseMetadataServlet extends OKMRemoteServiceServlet implements 
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_Database), e.getMessage());
-		} 
+		} catch (IllegalAccessException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_IllegalAccess), e.getMessage());
+		} catch (InvocationTargetException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_InvocationTarget), e.getMessage());
+		}
 	}
 }
