@@ -282,16 +282,20 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 		try {
 			// Setting available UI languages
 			List<GWTLanguage> langs = new ArrayList<GWTLanguage>();
+			
 			for (Language lang : LanguageDAO.findAll()) {
 				langs.add(GWTUtil.copy(lang));
 			}
-			workspace.setLangs(langs);
 			
+			workspace.setLangs(langs);
 			User user = new User();
 			
 			if (Config.PRINCIPAL_ADAPTER.equals(DatabasePrincipalAdapter.class.getCanonicalName())) {
 				user = AuthDAO.findUserByPk(getThreadLocalRequest().getRemoteUser());
-				workspace.setEmail(user.getEmail());
+				
+				if (user != null) {
+					workspace.setEmail(user.getEmail());
+				}
 			} else {
 				user.setId(getThreadLocalRequest().getRemoteUser());
 				user.setName("");
