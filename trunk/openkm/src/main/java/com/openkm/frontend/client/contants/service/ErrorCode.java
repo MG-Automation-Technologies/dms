@@ -106,6 +106,9 @@ public class ErrorCode {
 	public static final String CAUSE_DocumentTemplate		= "039";
 	public static final String CAUSE_Template				= "040";
 	public static final String CAUSE_Extension				= "041";
+	public static final String CAUSE_IllegalAccess			= "042";
+	public static final String CAUSE_InvocationTarget		= "043";
+	public static final String CAUSE_NoSuchMethod			= "044";
 
 	/**
 	 * Gets the error
