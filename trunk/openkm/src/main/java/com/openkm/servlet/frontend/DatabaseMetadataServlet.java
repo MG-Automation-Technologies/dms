@@ -76,7 +76,7 @@ public class DatabaseMetadataServlet extends OKMRemoteServiceServlet implements 
 	public void updateValue(Map<String,String> map) throws OKMException {
 		log.debug("updateValue({})", map);
 		try {
-				DatabaseMetadataDAO.updateValue(DatabaseMetadataUtils.getDatabaseMetadataValueByMap(map)); 
+			DatabaseMetadataDAO.updateValue(DatabaseMetadataUtils.getDatabaseMetadataValueByMap(map)); 
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_Database), e.getMessage());
