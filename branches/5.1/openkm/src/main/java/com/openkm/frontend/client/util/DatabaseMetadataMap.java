@@ -22,24 +22,48 @@
 package com.openkm.frontend.client.util;
 
 
+
 /**
  * DatabaseMetadataMap
  * 
  * @author jllort
  */
-public class DatabaseMetadataMap {
+public class DatabaseMetadataMap {	
+	// Metadata virtual column name mapping
+	public static final String MV_NAME_TABLE 	= "table";
+	public static final String MV_NAME_ID		= "id";
+	
+	/**
+	 * getDoubleValue
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static Double getDoubleValue(String value) {
+		return (value!=null)?new Double(value):null;
+	}
+	
+	/**
+	 * mapDoubleValue
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static String mapDoubleValue(Double value) {
+		return (value!=null)?String.valueOf(value):null;
+	}
 	
 	/**
 	 * getIntValue
 	 */
-	public static int getIntValue(String value) {
-		return Integer.parseInt(value);
+	public static Integer getIntegerValue(String value) {
+		return (value!=null)?new Integer(value): null;
 	}
 	
 	/**
 	 * mapIntValue
 	 */
-	public static String mapIntValue(int value) {
-		return String.valueOf(value);
+	public static String mapIntegerValue(Integer value) {
+		return (value!=null)?String.valueOf(value):null;
 	}
 }
