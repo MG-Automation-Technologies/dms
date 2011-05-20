@@ -21,8 +21,10 @@
 
 package com.openkm.servlet.frontend;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,11 +33,9 @@ import com.openkm.core.DatabaseException;
 import com.openkm.dao.DatabaseMetadataDAO;
 import com.openkm.dao.bean.DatabaseMetadataValue;
 import com.openkm.frontend.client.OKMException;
-import com.openkm.frontend.client.bean.GWTDatabaseMetadataValue;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.OKMDatabaseMetadataService;
 import com.openkm.util.DatabaseMetadataUtils;
-import com.openkm.util.GWTUtil;
 
 /**
  * DatabaseMetadataServlet
@@ -48,26 +48,35 @@ public class DatabaseMetadataServlet extends OKMRemoteServiceServlet implements 
 	private static final long serialVersionUID = -879908904295685769L;
 	
 	@Override
-	public List<GWTDatabaseMetadataValue> executeValueQuery(String table, String filter, String order) throws OKMException {
+	public List<Map<String,String>> executeValueQuery(String table, String filter, String order) throws OKMException {
 		log.debug("executeValueQuery({}, {}, {})", new Object[]{ table, filter, order });
-		List<GWTDatabaseMetadataValue> metadataValues = new ArrayList<GWTDatabaseMetadataValue>();
+		List<Map<String,String>> metadataValues = new ArrayList<Map<String,String>>();
 		try {
 			for (DatabaseMetadataValue dmv : DatabaseMetadataDAO.executeValueQuery(DatabaseMetadataUtils.buildQuery(table, filter, order))) {
-				metadataValues.add(GWTUtil.copy(dmv));
+				metadataValues.add(DatabaseMetadataUtils.getDatabaseMetadataValueMap(dmv));
 			}
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_Database), e.getMessage());
+		} catch (IllegalAccessException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_IllegalAccess), e.getMessage());
+		} catch (InvocationTargetException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_InvocationTarget), e.getMessage());
+		} catch (NoSuchMethodException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_NoSuchMethod), e.getMessage());
 		}
 		log.debug("executeValueQuery: {}", metadataValues);
 		return metadataValues;
 	}
 	
 	@Override
-	public void updateValue(GWTDatabaseMetadataValue dmv) throws OKMException {
-		log.debug("updateValue({})", dmv);
+	public void updateValue(Map<String,String> map) throws OKMException {
+		log.debug("updateValue({})", map);
 		try {
-			DatabaseMetadataDAO.updateValue(GWTUtil.copy(dmv));
+			DatabaseMetadataDAO.updateValue(DatabaseMetadataUtils.getDatabaseMetadataValueByMap(map));
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_Database), e.getMessage());
@@ -75,10 +84,10 @@ public class DatabaseMetadataServlet extends OKMRemoteServiceServlet implements 
 	}
 	
 	@Override
-	public void createValue(GWTDatabaseMetadataValue dmv) throws OKMException {
-		log.debug("createValue({})", dmv);
+	public void createValue(Map<String,String> map) throws OKMException {
+		log.debug("createValue({})", map);
 		try {			
-			DatabaseMetadataDAO.createValue(GWTUtil.copy(dmv));
+			DatabaseMetadataDAO.createValue(DatabaseMetadataUtils.getDatabaseMetadataValueByMap(map));
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_Database), e.getMessage());
