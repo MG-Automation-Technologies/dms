@@ -21,6 +21,7 @@
 
 package com.openkm.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -167,7 +168,7 @@ public class DatabaseMetadataDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<DatabaseMetadataValue> executeValueQuery(String query) throws DatabaseException {
-		log.debug("executeQuery({})", query);
+		log.debug("executeValueQuery({})", query);
 		Session session = null;
 		Transaction tx = null;
 		
@@ -175,7 +176,45 @@ public class DatabaseMetadataDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(query);
 			List<DatabaseMetadataValue> ret = q.list();
-			log.debug("findAll: {}", ret);
+			log.debug("executeValueQuery: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Execute query
+	 */
+	public static List<DatabaseMetadataValue[]> executeMultiValueQuery(String query) throws DatabaseException {
+		log.debug("executeMultiValueQuery({})", query);
+		List<DatabaseMetadataValue[]> ret = new ArrayList<DatabaseMetadataValue[]>();
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(query);
+			
+			for (Object obj : q.list()) {
+				if (obj instanceof Object[]) {
+					Object[] objAry = (Object[]) obj;
+					DatabaseMetadataValue[] tmp = new DatabaseMetadataValue[objAry.length];
+					
+					for (int i = 0; i < objAry.length; i++) {
+						if (objAry[i] instanceof DatabaseMetadataValue) {
+							tmp[i] = (DatabaseMetadataValue) objAry[i];
+						}
+					}
+					
+					ret.add(tmp);
+				}
+			}
+			
+			log.debug("executeMultiValueQuery: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
