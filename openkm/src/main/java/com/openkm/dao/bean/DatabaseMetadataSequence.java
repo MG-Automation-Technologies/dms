@@ -40,8 +40,11 @@ public class DatabaseMetadataSequence implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
-	@Column(name="DMT_TABLE", length=32)
+	@Column(name="DMS_TABLE", length=32)
 	private String table;
+	
+	@Column(name="DMS_VALUE", length=32)
+	private String value;
 
 	public Long getId() {
 		return id;
