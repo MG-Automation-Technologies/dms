@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -50,6 +51,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.jdbc.Work;
 import org.hibernate.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,16 +88,21 @@ public class DatabaseQueryServlet extends BaseServlet {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
 		updateSessionManager(request);
+		Session session = null;
 		
 		try {
+			session = HibernateUtil.getSessionFactory().openSession();
 			ServletContext sc = getServletContext();
 			sc.setAttribute("qs", null);
 			//sc.setAttribute("sql", null);
 			sc.setAttribute("method", null);
 			sc.setAttribute("globalResults", null);
+			sc.setAttribute("tables", listTables(session));
 			sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 		} catch (Exception e) {
 			sendErrorRedirect(request,response, e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}
 	
@@ -155,6 +162,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 					ServletContext sc = getServletContext();
 					sc.setAttribute("qs", qs);
 					sc.setAttribute("method", null);
+					//sc.setAttribute("tables", listTables(session));
 					sc.setAttribute("globalResults", new ArrayList<DatabaseQueryServlet.GlobalResult>());
 					sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 				}
@@ -230,6 +238,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 		//sc.setAttribute("sql", HibernateUtil.toSql(qs));
 		sc.setAttribute("qs", qs);
 		sc.setAttribute("method", "hibernate");
+		//sc.setAttribute("tables", listTables(session));
 		sc.setAttribute("globalResults", globalResults);
 		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 	}
@@ -299,6 +308,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 		//sc.setAttribute("sql", null);
 		sc.setAttribute("qs", qs);
 		sc.setAttribute("method", "jdbc");
+		//sc.setAttribute("tables", listTables(session));
 		sc.setAttribute("globalResults", globalResults);
 		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 	}
@@ -355,10 +365,34 @@ public class DatabaseQueryServlet extends BaseServlet {
 		
 		sc.setAttribute("qs", null);
 		sc.setAttribute("method", null);
+		//sc.setAttribute("tables", listTables(session));
 		sc.setAttribute("globalResults", globalResults);
 		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 		
 		log.debug("executeUpdate: void");
+	}
+	
+	/**
+	 * List tables from database
+	 */
+	private List<String> listTables(Session session) {
+		final List<String> tables = new ArrayList<String>();
+		
+		session.doWork(
+			new Work() {
+				@Override
+				public void execute(Connection con) throws SQLException {
+					DatabaseMetaData md = con.getMetaData();
+					ResultSet rs = md.getTables(null, null, "%", null);
+					
+					while (rs.next()) {
+						tables.add(rs.getString(3));
+					}
+				}
+			}
+		);
+		
+		return tables;
 	}
 	
 	/**
