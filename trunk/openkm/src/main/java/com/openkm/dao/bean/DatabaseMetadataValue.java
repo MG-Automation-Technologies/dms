@@ -72,6 +72,21 @@ public class DatabaseMetadataValue implements Serializable {
 	
 	@Column(name="DMV_COL09")
 	private String col09;
+	
+	@Column(name="DMV_COL10")
+	private String col10;
+	
+	@Column(name="DMV_COL11")
+	private String col11;
+	
+	@Column(name="DMV_COL12")
+	private String col12;
+	
+	@Column(name="DMV_COL13")
+	private String col13;
+	
+	@Column(name="DMV_COL14")
+	private String col14;
 
 	public Long getId() {
 		return id;
@@ -169,6 +184,46 @@ public class DatabaseMetadataValue implements Serializable {
 		this.col09 = col09;
 	}
 	
+	public String getCol10() {
+		return col10;
+	}
+
+	public void setCol10(String col10) {
+		this.col10 = col10;
+	}
+
+	public String getCol11() {
+		return col11;
+	}
+
+	public void setCol11(String col11) {
+		this.col11 = col11;
+	}
+
+	public String getCol12() {
+		return col12;
+	}
+
+	public void setCol12(String col12) {
+		this.col12 = col12;
+	}
+
+	public String getCol13() {
+		return col13;
+	}
+
+	public void setCol13(String col13) {
+		this.col13 = col13;
+	}
+
+	public String getCol14() {
+		return col14;
+	}
+
+	public void setCol14(String col14) {
+		this.col14 = col14;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -184,6 +239,11 @@ public class DatabaseMetadataValue implements Serializable {
 		sb.append(", col07="); sb.append(col07);
 		sb.append(", col08="); sb.append(col08);
 		sb.append(", col09="); sb.append(col09);
+		sb.append(", col10="); sb.append(col10);
+		sb.append(", col11="); sb.append(col11);
+		sb.append(", col12="); sb.append(col12);
+		sb.append(", col13="); sb.append(col13);
+		sb.append(", col14="); sb.append(col14);
 		sb.append("}");
 		return sb.toString();
 	}
