@@ -8,6 +8,32 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="favicon.ico" />
   <link rel="stylesheet" href="css/style.css" type="text/css" />
+  <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      if ($('#method').val() == 'jdbc') {
+        $('#tables').show();
+      } else {
+        $('#tables').hide();
+      }
+      
+      $('#method').change(function() {
+        if ($(this).val() == 'jdbc') {
+          $('#tables').show();
+        } else {
+          $('#tables').hide();
+        }
+      });
+      
+      $('#tables').change(function() {
+        if ($(this).val() == '') {
+        	$('#qs').text('');
+        } else {
+          $('#qs').text('SELECT * FROM ' + $(this).val() + ';');
+        }
+      });
+    });
+  </script>
   <title>Database Query</title>
 </head>
 <body>
@@ -20,10 +46,22 @@
           <td>
             <form action="DatabaseQuery" method="post" enctype="multipart/form-data">
               <table>
-                <tr><td><textarea cols="75" rows="5" name="qs">${qs}</textarea></td></tr>
                 <tr>
+                  <td colspan="2">
+                    <textarea cols="75" rows="5" name="qs" id="qs">${qs}</textarea>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="left">
+                    <select id="tables">
+                      <option></option>
+                      <c:forEach var="table" items="${tables}">
+                        <option value="${table}">${table}</option>
+                      </c:forEach>
+                    </select>
+                  </td>
                   <td align="right">
-                    <select name="method">
+                    <select name="method" id="method">
                       <option></option>
                       <c:choose>
                         <c:when test="${method == 'jdbc'}">
