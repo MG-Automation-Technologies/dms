@@ -173,18 +173,30 @@ public class DatabaseMetadataUtils {
 	/**
 	 * Replace virtual columns by real ones
 	 */
-	private static String replaceVirtual(String table, String filter) throws DatabaseException {
-		log.debug("replaceVirtual({}, {})", new Object[] { table, filter });
+	public static String replaceVirtual(List<String> tables, String query) throws DatabaseException {
+		for (String table : tables) {
+			query = replaceVirtual(table, query);
+		}
+		
+		return query;
+	}
+	
+	/**
+	 * Replace virtual columns by real ones
+	 */
+	private static String replaceVirtual(String table, String query) throws DatabaseException {
+		log.debug("replaceVirtual({}, {})", new Object[] { table, query });
 		String ret = "";
 		
-		if (filter != null && filter.length() > 0) {
+		if (query != null && query.length() > 0) {
 			List<DatabaseMetadataType> types = DatabaseMetadataDAO.findAllTypes(table);
 			
 			for (DatabaseMetadataType emt : types) {
-				filter = filter.toLowerCase().replaceAll(emt.getVirtualColumn().toLowerCase(), emt.getRealColumn().toLowerCase());
+				String vcol = "\\$" + emt.getVirtualColumn().toLowerCase();
+				query = query.replaceAll(vcol, emt.getRealColumn().toLowerCase());
 			}
 			
-			ret = filter;
+			ret = query;
 		}
 		
 		log.debug("replaceVirtual: {}", ret);
