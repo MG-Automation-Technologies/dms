@@ -208,6 +208,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 					
 					if (obj instanceof Object[]) {
 						Object[] ao = (Object[]) obj;
+						
 						for (int j=0; j<ao.length; j++) {
 							row.add(ao[j].toString());
 						}
