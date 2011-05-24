@@ -100,11 +100,11 @@ public class DatabaseMetadataUtils {
 			sb.append(" ").append(replaceVirtual(table, values));
 		}
 		
+		sb.append(" where dmv.table='" + table + "'");
+		
 		if (filter != null && filter.length() > 0) {
 			sb.append(" ").append(replaceVirtual(table, filter));
 		}
-		
-		sb.append(" where dmv.table='" + table + "'");
 		
 		ret = sb.toString();
 		log.debug("buildUpdate: {}", ret);
