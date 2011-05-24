@@ -11,22 +11,27 @@
   <link rel="stylesheet" type="text/css" href="js/codemirror/lib/codemirror.css" />
   <link rel="stylesheet" type="text/css" href="js/codemirror/mode/clike/clike.css" />
   <style type="text/css">
-    .CodeMirror {
-      width: 500px;
-      height: 300px;
-      background-color: #f8f6c2;
-    }
+    .CodeMirror { width: 700px; height: 400px; background-color: #f8f6c2; }
+    .activeline { background: #f0fcff !important; }
   </style>
   <script type="text/javascript" src="js/codemirror/lib/codemirror.js"></script>
   <script type="text/javascript" src="js/codemirror/mode/clike/clike.js"></script>
   <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
+      if ("${property.name}" == "okm:scriptCode")
       var cm = CodeMirror.fromTextArea(document.getElementById('value'), {
-         lineNumbers: true,
-      	 matchBrackets: true,
-         indentUnit: 4,
-         mode: "text/x-java" });
+          lineNumbers: true,
+      	  matchBrackets: true,
+          indentUnit: 4,
+          mode: "text/x-java",
+          onCursorActivity: function() {
+        	cm.setLineClass(hlLine, null);
+            hlLine = cm.setLineClass(cm.getCursor().line, "activeline");
+          }
+        }
+      );
+      var hlLine = cm.setLineClass(0, "activeline");
     });
   </script>
   <title>Repository Edit</title>
