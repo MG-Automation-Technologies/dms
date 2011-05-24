@@ -25,7 +25,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
@@ -181,8 +180,14 @@ public class DatabaseMetadataUtils {
 				dmv.setId(new Double(map.get(DatabaseMetadataMap.MV_NAME_ID)).longValue());
 			}
 			
-			for (Entry<String, String> entry : map.entrySet()) {
-				BeanUtils.setProperty(dmv, entry.getKey(), entry.getValue());
+			List<DatabaseMetadataType> types = DatabaseMetadataDAO.findAllTypes(dmv.getTable());
+			for (DatabaseMetadataType emt : types) {
+				if (!emt.getVirtualColumn().equals(DatabaseMetadataMap.MV_NAME_ID) && 
+					!emt.getVirtualColumn().equals(DatabaseMetadataMap.MV_NAME_TABLE)) {
+					if (map.keySet().contains(emt.getVirtualColumn())) {
+						BeanUtils.setProperty(dmv, emt.getRealColumn(), map.get(emt.getVirtualColumn()));
+					}
+				}
 			}
 		}
 		
