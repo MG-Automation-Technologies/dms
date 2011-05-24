@@ -108,6 +108,27 @@ public class DatabaseMetadataUtils {
 	}
 	
 	/**
+	 * Build a query
+	 */
+	public static String buildInsert(String table, String cols, String values) throws DatabaseException {
+		log.debug("buildInsert({}, {})", new Object[] { table, cols, values });
+		StringBuilder sb = new StringBuilder();
+		String ret = null;
+		
+		sb.append("insert into DatabaseMetadataValue dmv (dmv.table, ");
+		
+		if (cols != null && cols.length() > 0) {
+			sb.append(replaceVirtual(table, cols));
+		}
+		
+		sb.append(") values (").append(table).append(", ").append(values).append(")");
+		
+		ret = sb.toString();
+		log.debug("buildInsert: {}", ret);
+		return ret;
+	}
+	
+	/**
 	 * Get virtual column string value
 	 */
 	public static String getString(DatabaseMetadataValue value, String column) throws DatabaseException,
