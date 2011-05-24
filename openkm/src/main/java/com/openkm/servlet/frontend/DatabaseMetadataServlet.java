@@ -105,4 +105,10 @@ public class DatabaseMetadataServlet extends OKMRemoteServiceServlet implements 
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_InvocationTarget), e.getMessage());
 		}
 	}
+	
+//	public void executeMultiValueQuery(List<String> tables, String query) {
+//		log.debug("executeMultiValueQuery({})", query);
+//		List<Map<String,String>>[] ret;
+//
+//	}	
 }
