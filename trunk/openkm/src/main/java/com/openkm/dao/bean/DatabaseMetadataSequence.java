@@ -43,8 +43,11 @@ public class DatabaseMetadataSequence implements Serializable {
 	@Column(name="DMS_TABLE", length=32)
 	private String table;
 	
-	@Column(name="DMS_VALUE", length=32)
-	private String value;
+	@Column(name="DMS_COLUMN", length=32)
+	private String column;
+	
+	@Column(name="DMS_VALUE")
+	private long value;
 
 	public Long getId() {
 		return id;
@@ -61,12 +64,30 @@ public class DatabaseMetadataSequence implements Serializable {
 	public void setTable(String table) {
 		this.table = table;
 	}
+
+	public String getColumn() {
+		return column;
+	}
+
+	public void setColumn(String column) {
+		this.column = column;
+	}
+
+	public long getValue() {
+		return value;
+	}
+
+	public void setValue(long value) {
+		this.value = value;
+	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("id="); sb.append(id);
 		sb.append(", table="); sb.append(table);
+		sb.append(", column="); sb.append(column);
+		sb.append(", value="); sb.append(value);
 		sb.append("}");
 		return sb.toString();
 	}
