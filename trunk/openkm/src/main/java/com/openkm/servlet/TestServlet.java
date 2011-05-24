@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.core.DataStoreGarbageCollector;
+import com.openkm.jcr.DataStoreGarbageCollector;
 
 /**
  * Only for testing purposes
