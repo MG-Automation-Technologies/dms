@@ -165,6 +165,28 @@ public class DatabaseMetadataDAO {
 	}
 	
 	/**
+	 * Execute update
+	 */
+	public static int executeValueUpdate(String query) throws DatabaseException {
+		log.debug("executeValueUpdate({})", query);
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(query);
+			int ret = q.executeUpdate();
+			log.debug("executeValueUpdate: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
 	 * Execute query
 	 */
 	@SuppressWarnings("unchecked")
