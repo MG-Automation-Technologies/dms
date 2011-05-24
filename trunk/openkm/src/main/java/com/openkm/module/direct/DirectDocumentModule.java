@@ -984,9 +984,7 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 			
 			// Remove pdf & preview from cache
-			new File(Config.CACHE_DXF + File.separator + documentNode.getUUID() + ".dxf").delete();
-			new File(Config.CACHE_PDF + File.separator + documentNode.getUUID() + ".pdf").delete();
-			new File(Config.CACHE_SWF + File.separator + documentNode.getUUID() + ".swf").delete();
+			BaseDocumentModule.cleanPreviewCache(documentNode.getUUID());
 
 			// Check subscriptions
 			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CHECKIN_DOCUMENT", comment);
@@ -1513,6 +1511,9 @@ public class DirectDocumentModule implements DocumentModule {
 				contentNode.restore(versionId, true);
 				contentNode.save();
 			}
+			
+			// Remove pdf & preview from cache
+			BaseDocumentModule.cleanPreviewCache(documentNode.getUUID());
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "RESTORE_DOCUMENT_VERSION", documentNode.getUUID(), versionId+", "+docPath);
