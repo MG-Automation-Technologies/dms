@@ -557,7 +557,7 @@ public class RepositoryViewServlet extends BaseServlet {
 					hm.put("pValue", toString(p.getValues(), "<br/>"));
 				} else {
 					if (p.getName().equals(Scripting.SCRIPT_CODE)) {
-						hm.put("pValue", p.getString().replace("\n", "<br>"));	
+						hm.put("pValue", p.getString());	
 					} else {
 						hm.put("pValue", p.getString());
 					}
