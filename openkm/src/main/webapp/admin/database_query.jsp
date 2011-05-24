@@ -7,7 +7,52 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="favicon.ico" />
-  <link rel="stylesheet" href="css/style.css" type="text/css" />
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <link rel="stylesheet" type="text/css" href="js/codemirror/lib/codemirror.css" />
+  <link rel="stylesheet" type="text/css" href="js/codemirror/mode/plsql/plsql.css" />
+  <style type="text/css">
+    .CodeMirror {
+      width: 400px;
+      height: 125px;
+      background-color: #f8f6c2;
+    }
+  </style>
+  <script type="text/javascript" src="js/codemirror/lib/codemirror.js"></script>
+  <script type="text/javascript" src="js/codemirror/mode/plsql/plsql.js"></script>
+  <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var cm = CodeMirror.fromTextArea(document.getElementById('qs'), {
+         lineNumbers: true,
+      	 matchBrackets: true,
+         indentUnit: 4,
+         mode: "text/x-plsql" });
+      
+      if ($('#method').val() == 'jdbc') {
+        $('#tables').show();
+      } else {
+        $('#tables').hide();
+      }
+      
+      $('#method').change(function() {
+        if ($(this).val() == 'jdbc') {
+          $('#tables').show();
+        } else {
+          $('#tables').hide();
+        }
+      });
+      
+      $('#tables').change(function() {
+        if ($(this).val() == '') {
+          //$('#qs').text('');
+          cm.setValue('');
+        } else {
+          //$('#qs').text('SELECT * FROM ' + $(this).val() + ';');
+          cm.setValue('SELECT * FROM ' + $(this).val() + ';');
+        }
+      });
+    });
+  </script>
   <title>Database Query</title>
 </head>
 <body>
@@ -20,10 +65,22 @@
           <td>
             <form action="DatabaseQuery" method="post" enctype="multipart/form-data">
               <table>
-                <tr><td><textarea cols="75" rows="5" name="qs">${qs}</textarea></td></tr>
                 <tr>
+                  <td colspan="2">
+                    <textarea cols="75" rows="5" name="qs" id="qs">${qs}</textarea>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="left">
+                    <select id="tables">
+                      <option></option>
+                      <c:forEach var="table" items="${tables}">
+                        <option value="${table}">${table}</option>
+                      </c:forEach>
+                    </select>
+                  </td>
                   <td align="right">
-                    <select name="method">
+                    <select name="method" id="method">
                       <option></option>
                       <c:choose>
                         <c:when test="${method == 'jdbc'}">
@@ -64,43 +121,48 @@
         </tr>
       </table>
       <br/>
-      <c:if test="${sql != null}">
-        <center><c:out value="${sql}"/></center>
-        <br/>
-      </c:if>
-      <c:choose>
-        <c:when test="${rows != null}">
-          <center>Row Count: ${rows}</center>
-          <c:if test="${not empty errors}">
-            <table class="results" width="100%">
-              <tr><th>Line</th><th>SQL</th><th>Error</th></tr>
-              <c:forEach var="error" items="${errors}" varStatus="row">
-              <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-                <td>${error.ln}</td>
-                <td>${error.sql}</td>
-                <td>${error.msg}</td>
-              </tr>
-            </c:forEach>
-            </table>
-          </c:if>
-        </c:when>
-        <c:otherwise>
-          <table class="results" width="100%">
-            <tr>
-              <c:forEach var="col" items="${columns}">
-                <th>${col}</th>
+      <c:forEach var="gResult" items="${globalResults}">
+        <c:if test="${gResult.sql != null}">
+          <div class="ok"><center><c:out value="${gResult.sql}"/></center></div>
+          <br/>
+        </c:if>
+        <c:choose>
+          <c:when test="${gResult.rows != null}">
+            <div class="ok"><center>Row Count: ${gResult.rows}</center></div>
+            <br/>
+            <c:if test="${not empty gResult.errors}">
+              <table class="results" width="100%">
+                <tr><th>Line</th><th>SQL</th><th>Error</th></tr>
+                <c:forEach var="error" items="${gResult.errors}" varStatus="row">
+                <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
+                  <td>${error.ln}</td>
+                  <td>${error.sql}</td>
+                  <td>${error.msg}</td>
+                </tr>
               </c:forEach>
-            </tr>
-            <c:forEach var="result" items="${results}" varStatus="row">
-              <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-                <c:forEach var="tp" items="${result}">
-                  <td>${tp}</td>
+              </table>
+            </c:if>
+            <br/>
+          </c:when>
+          <c:otherwise>
+            <table class="results" width="100%">
+              <tr>
+                <c:forEach var="col" items="${gResult.columns}">
+                  <th>${col}</th>
                 </c:forEach>
               </tr>
-            </c:forEach>
-          </table>
-        </c:otherwise>
-      </c:choose>
+              <c:forEach var="result" items="${gResult.results}" varStatus="row">
+                <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
+                  <c:forEach var="tp" items="${result}">
+                  <td>${tp}</td>
+                  </c:forEach>
+                </tr>
+              </c:forEach>
+            </table>
+            <br/>
+          </c:otherwise>
+        </c:choose>
+      </c:forEach>
     </c:when>
     <c:otherwise>
       <div class="error"><h3>Only admin users allowed</h3></div>
