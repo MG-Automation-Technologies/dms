@@ -47,6 +47,7 @@ import com.openkm.core.DatabaseException;
 import com.openkm.dao.DocumentFilterDAO;
 import com.openkm.dao.bean.DocumentFilter;
 import com.openkm.dao.bean.DocumentFilterRule;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.module.base.BasePropertyGroupModule;
 import com.openkm.module.base.BasePropertyModule;
 import com.openkm.module.base.BaseWorkflowModule;
