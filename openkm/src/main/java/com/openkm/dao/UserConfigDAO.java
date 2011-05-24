@@ -35,7 +35,7 @@ import com.openkm.bean.Folder;
 import com.openkm.bean.Repository;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.bean.UserConfig;
-import com.openkm.util.JCRUtils;
+import com.openkm.jcr.JCRUtils;
 
 public class UserConfigDAO {
 	private static Logger log = LoggerFactory.getLogger(UserConfigDAO.class);
