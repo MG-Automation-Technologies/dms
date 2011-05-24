@@ -70,18 +70,22 @@ public class DatabaseMetadataUtils {
 	/**
 	 * Build a query
 	 */
-	public static String buildUpdate(String table, String filter) throws DatabaseException {
-		log.debug("buildUpdate({}, {})", new Object[] { table, filter });
+	public static String buildUpdate(String table, String values, String filter) throws DatabaseException {
+		log.debug("buildUpdate({}, {}, {})", new Object[] { table, values, filter });
 		StringBuilder sb = new StringBuilder();
 		String ret = null;
 		
-		sb.append("update DatabaseMetadataValue dmv");
+		sb.append("update DatabaseMetadataValue dmv set");
 		
-		if (filter != null && filter.length() > 0) {
-			sb.append(" ").append(replaceVirtual(table, filter)).append(" ");
+		if (values != null && values.length() > 0) {
+			sb.append(" ").append(replaceVirtual(table, values));
 		}
 		
-		sb.append(" where dmv.table=:table");
+		if (filter != null && filter.length() > 0) {
+			sb.append(" ").append(replaceVirtual(table, filter));
+		}
+		
+		sb.append(" where dmv.table='" + table + "'");
 		
 		ret = sb.toString();
 		log.debug("buildUpdate: {}", ret);
