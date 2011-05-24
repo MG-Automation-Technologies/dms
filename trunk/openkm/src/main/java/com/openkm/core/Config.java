@@ -528,7 +528,7 @@ public class Config {
 			DEFAULT_SCRIPT = ConfigDAO.getText(PROPERTY_DEFAULT_SCRIPT, "print(\"UserId: \" + session.getUserID());\n" +
 					"print(\"EventType: \" + eventType);\n" +
 					"print(\"EventNode: \" + eventNode.getPath());\n" +
-					"print(\"ScriptNode: \" + scriptNode.getPath());\n");
+					"print(\"ScriptNode: \" + scriptNode.getPath());");
 			values.put(PROPERTY_DEFAULT_SCRIPT, DEFAULT_SCRIPT);
 			
 			// Text extractors
