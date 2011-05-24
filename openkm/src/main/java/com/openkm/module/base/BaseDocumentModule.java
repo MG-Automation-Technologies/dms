@@ -456,4 +456,13 @@ public class BaseDocumentModule {
 		
 		log.debug("copy: void");
 	}
+	
+	/**
+	 * Clean preview cache for this document
+	 */
+	public static void cleanPreviewCache(String uuid) {
+		new File(Config.CACHE_DXF + File.separator + uuid + ".dxf").delete();
+		new File(Config.CACHE_PDF + File.separator + uuid + ".pdf").delete();
+		new File(Config.CACHE_SWF + File.separator + uuid + ".swf").delete();
+	}
 }
