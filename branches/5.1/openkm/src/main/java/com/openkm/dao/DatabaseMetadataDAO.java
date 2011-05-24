@@ -323,8 +323,8 @@ public class DatabaseMetadataDAO {
 	/**
 	 * Get next sequence number
 	 */
-	public static long getNextValue(String table, String column) throws DatabaseException {
-		log.debug("getNextValue({}, {})", table, column);
+	public static long getNextSequenceValue(String table, String column) throws DatabaseException {
+		log.debug("getNextSequenceValue({}, {})", table, column);
 		String qs = "from DatabaseMetadataSequence dms where dms.table=:table and dms.column=:column";	
 		Session session = null;
 		Transaction tx = null;
@@ -347,7 +347,7 @@ public class DatabaseMetadataDAO {
 				dms.setValue(0);
 			}
 			
-			log.debug("getNextValue: {}", dms.getValue());
+			log.debug("getNextSequenceValue: {}", dms.getValue());
 			return dms.getValue();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
