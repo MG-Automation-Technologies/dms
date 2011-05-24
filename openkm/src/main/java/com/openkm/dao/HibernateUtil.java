@@ -40,6 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
+import com.openkm.dao.bean.DatabaseMetadataSequence;
 import com.openkm.dao.bean.DatabaseMetadataType;
 import com.openkm.dao.bean.DatabaseMetadataValue;
 
@@ -76,6 +77,7 @@ public class HibernateUtil {
 				// Add annotated beans
 				ac.addAnnotatedClass(DatabaseMetadataType.class);
 				ac.addAnnotatedClass(DatabaseMetadataValue.class);
+				ac.addAnnotatedClass(DatabaseMetadataSequence.class);
 				
 				// Configure Hibernate
 				Configuration cfg = ac.configure();
