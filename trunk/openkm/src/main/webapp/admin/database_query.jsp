@@ -7,10 +7,27 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="favicon.ico" />
-  <link rel="stylesheet" href="css/style.css" type="text/css" />
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <link rel="stylesheet" type="text/css" href="js/codemirror/lib/codemirror.css" />
+  <link rel="stylesheet" type="text/css" href="js/codemirror/mode/plsql/plsql.css" />
+  <style type="text/css">
+    .CodeMirror {
+      width: 400px;
+      height: 125px;
+      background-color: #f8f6c2;
+    }
+  </style>
+  <script type="text/javascript" src="js/codemirror/lib/codemirror.js"></script>
+  <script type="text/javascript" src="js/codemirror/mode/plsql/plsql.js"></script>
   <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
+      var cm = CodeMirror.fromTextArea(document.getElementById('qs'), {
+         lineNumbers: true,
+      	 matchBrackets: true,
+         indentUnit: 4,
+         mode: "text/x-plsql" });
+      
       if ($('#method').val() == 'jdbc') {
         $('#tables').show();
       } else {
@@ -27,9 +44,11 @@
       
       $('#tables').change(function() {
         if ($(this).val() == '') {
-        	$('#qs').text('');
+          //$('#qs').text('');
+          cm.setValue('');
         } else {
-          $('#qs').text('SELECT * FROM ' + $(this).val() + ';');
+          //$('#qs').text('SELECT * FROM ' + $(this).val() + ';');
+          cm.setValue('SELECT * FROM ' + $(this).val() + ';');
         }
       });
     });
