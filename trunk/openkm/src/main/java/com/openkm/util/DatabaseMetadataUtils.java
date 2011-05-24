@@ -89,18 +89,22 @@ public class DatabaseMetadataUtils {
 	/**
 	 * Build a query
 	 */
-	public static String buildUpdate(String table, String filter) throws DatabaseException {
-		log.debug("buildUpdate({}, {})", new Object[] { table, filter });
+	public static String buildUpdate(String table, String values, String filter) throws DatabaseException {
+		log.debug("buildUpdate({}, {}, {})", new Object[] { table, values, filter });
 		StringBuilder sb = new StringBuilder();
 		String ret = null;
 		
-		sb.append("update DatabaseMetadataValue dmv");
+		sb.append("update DatabaseMetadataValue dmv set");
 		
-		if (filter != null && filter.length() > 0) {
-			sb.append(" ").append(replaceVirtual(table, filter)).append(" ");
+		if (values != null && values.length() > 0) {
+			sb.append(" ").append(replaceVirtual(table, values));
 		}
 		
-		sb.append(" where dmv.table=:table");
+		if (filter != null && filter.length() > 0) {
+			sb.append(" ").append(replaceVirtual(table, filter));
+		}
+		
+		sb.append(" where dmv.table='" + table + "'");
 		
 		ret = sb.toString();
 		log.debug("buildUpdate: {}", ret);
@@ -123,27 +127,6 @@ public class DatabaseMetadataUtils {
 		
 		ret = sb.toString();
 		log.debug("buildDelete: {}", ret);
-		return ret;
-	}
-	
-	/**
-	 * Build a query
-	 */
-	public static String buildInsert(String table, String cols, String values) throws DatabaseException {
-		log.debug("buildInsert({}, {})", new Object[] { table, cols, values });
-		StringBuilder sb = new StringBuilder();
-		String ret = null;
-		
-		sb.append("insert into DatabaseMetadataValue dmv (dmv.table, ");
-		
-		if (cols != null && cols.length() > 0) {
-			sb.append(replaceVirtual(table, cols));
-		}
-		
-		sb.append(") values (").append(table).append(", ").append(values).append(")");
-		
-		ret = sb.toString();
-		log.debug("buildInsert: {}", ret);
 		return ret;
 	}
 	
@@ -198,7 +181,7 @@ public class DatabaseMetadataUtils {
 			dmv.setTable(map.get(DatabaseMetadataMap.MV_NAME_TABLE));
 			
 			if (map.containsKey(DatabaseMetadataMap.MV_NAME_ID)) {
-				dmv.setId(new Double(map.get(DatabaseMetadataMap.MV_NAME_ID)).longValue());
+				dmv.setId(new Long(map.get(DatabaseMetadataMap.MV_NAME_ID)).longValue());
 			}
 			
 			List<DatabaseMetadataType> types = DatabaseMetadataDAO.findAllTypes(dmv.getTable());
