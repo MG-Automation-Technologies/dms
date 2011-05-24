@@ -38,9 +38,9 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.BookmarkDAO;
 import com.openkm.dao.bean.Bookmark;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.module.BookmarkModule;
 import com.openkm.util.FileUtils;
-import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 
 public class DirectBookmarkModule implements BookmarkModule {

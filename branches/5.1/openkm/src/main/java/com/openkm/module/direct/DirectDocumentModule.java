@@ -66,6 +66,7 @@ import com.openkm.core.VirusDetectedException;
 import com.openkm.core.VirusDetection;
 import com.openkm.dao.LockTokenDAO;
 import com.openkm.dao.MimeTypeDAO;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.kea.RDFREpository;
 import com.openkm.kea.metadata.MetadataExtractionException;
 import com.openkm.kea.metadata.MetadataExtractor;
@@ -78,7 +79,6 @@ import com.openkm.principal.PrincipalAdapter;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.util.FileUtils;
 import com.openkm.util.FormatUtil;
-import com.openkm.util.JCRUtils;
 import com.openkm.util.Transaction;
 import com.openkm.util.UserActivity;
 

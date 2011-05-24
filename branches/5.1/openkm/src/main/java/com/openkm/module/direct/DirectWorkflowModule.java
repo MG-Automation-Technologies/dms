@@ -60,11 +60,11 @@ import com.openkm.core.JcrSessionManager;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.WorkflowException;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.module.WorkflowModule;
 import com.openkm.module.base.BaseWorkflowModule;
 import com.openkm.util.FormUtils;
 import com.openkm.util.JBPMUtils;
-import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WorkflowUtils;
 

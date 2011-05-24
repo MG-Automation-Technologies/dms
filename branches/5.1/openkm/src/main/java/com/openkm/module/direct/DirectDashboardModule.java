@@ -62,11 +62,11 @@ import com.openkm.dao.bean.Activity;
 import com.openkm.dao.bean.Dashboard;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.cache.UserItems;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.module.DashboardModule;
 import com.openkm.module.base.BaseDocumentModule;
 import com.openkm.module.base.BaseFolderModule;
 import com.openkm.module.base.BaseMailModule;
-import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 
 public class DirectDashboardModule implements DashboardModule {
