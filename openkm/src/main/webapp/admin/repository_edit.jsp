@@ -36,7 +36,7 @@
   <c:choose>
     <c:when test="${isAdmin}">
       <h1>Repository edit</h1>
-      <form action="RepositoryView">
+      <form action="RepositoryView" method="post">
         <input type="hidden" name="action" value="save"/>
         <input type="hidden" name="path" value="${node.path}"/>
         <input type="hidden" name="property" value="${property.name}"/>
