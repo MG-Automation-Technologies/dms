@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
+import com.openkm.dao.bean.DatabaseMetadataSequence;
 import com.openkm.dao.bean.DatabaseMetadataType;
 import com.openkm.dao.bean.DatabaseMetadataValue;
 
@@ -300,7 +301,7 @@ public class DatabaseMetadataDAO {
 	@SuppressWarnings("unchecked")
 	public static List<DatabaseMetadataType> findAllTypes(String table) throws DatabaseException {
 		log.debug("findAllTypes({})", table);
-		String qs = "from DatabaseMetadataType dmt where dmt.table=:table order by dmt.id asc";		
+		String qs = "from DatabaseMetadataType dmt where dmt.table=:table order by dmt.id asc";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -311,6 +312,43 @@ public class DatabaseMetadataDAO {
 			List<DatabaseMetadataType> ret = q.list();
 			log.debug("findAllTypes: {}", ret);
 			return ret;
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Get next sequence number
+	 */
+	public static long getNextValue(String table, String column) throws DatabaseException {
+		log.debug("getNextValue({}, {})", table, column);
+		String qs = "from DatabaseMetadataSequence dms where dms.table=:table and dms.column=:column";	
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setString("table", table);
+			DatabaseMetadataSequence dms = (DatabaseMetadataSequence) q.setMaxResults(1).uniqueResult();
+			
+			if (dms != null) {
+				// Update already created sequence
+				dms.setValue(dms.getValue() + 1);
+				session.update(dms);	
+			} else {
+				// First sequence use
+				dms = new DatabaseMetadataSequence();
+				dms.setTable(table);
+				dms.setColumn(column);
+				dms.setValue(0);
+			}
+			
+			log.debug("getNextValue: {}", dms.getValue());
+			return dms.getValue();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
