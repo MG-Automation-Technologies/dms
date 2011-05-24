@@ -11,6 +11,25 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="favicon.ico" />
   <link rel="stylesheet" href="css/style.css" type="text/css" />
+  <link rel="stylesheet" type="text/css" href="js/codemirror/lib/codemirror.css" />
+  <link rel="stylesheet" type="text/css" href="js/codemirror/mode/clike/clike.css" />
+  <style type="text/css">
+    .CodeMirror { width: auto; height: auto; background-color: #f8f6c2; }
+  </style>
+  <script type="text/javascript" src="js/codemirror/lib/codemirror.js"></script>
+  <script type="text/javascript" src="js/codemirror/mode/clike/clike.js"></script>
+  <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var cm = CodeMirror.fromTextArea(document.getElementById('value'), {
+    	  lineNumbers: true,
+      	  matchBrackets: true,
+          indentUnit: 4,
+          mode: "text/x-java",
+          readOnly: true
+      });
+    });
+  </script>
   <title>Repository View</title>
 </head>
 <body>
@@ -127,16 +146,23 @@
         <tr><th>Type</th><th>Multiple</th><th>Protected</th><th>Name</th><th>Value</th><th>Action</th></tr>
         <c:forEach var="property" items="${properties}" varStatus="row">
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td>${property.type}</td>
-            <td align="center"><c:if test="${property.multiple}"><img src="img/true.png"/></c:if></td>
-            <td align="center"><c:if test="${property.protected}"><img src="img/true.png"/></c:if></td>
-            <td>${property.name}</td>
-            <td>${property.value}</td>
+            <td>${property.pType}</td>
+            <td align="center"><c:if test="${property.pMultiple}"><img src="img/true.png"/></c:if></td>
+            <td align="center"><c:if test="${property.pProtected}"><img src="img/true.png"/></c:if></td>
+            <td>${property.pName}</td>
+            <td>
+              <c:choose>
+                <c:when test="${property.pName == 'okm:scriptCode'}">
+                  <textarea id="value">${property.pValue}</textarea>
+                </c:when>
+                <c:otherwise>${property.pValue}</c:otherwise>
+              </c:choose>
+            </td>
             <td align="center">
-              <c:if test="${property.type == 'STRING'}">
+              <c:if test="${property.pType == 'STRING' && !property.pProtected}">
                 <c:url value="RepositoryView" var="urlEdit">
                   <c:param name="path" value="${node.path}"/>
-                  <c:param name="property" value="${property.name}"/>
+                  <c:param name="property" value="${property.pName}"/>
                   <c:param name="action" value="edit"/>
                 </c:url>
                 <a href="${urlEdit}"><img src="img/action/edit.png" title="Edit" alt="Edit"/></a>

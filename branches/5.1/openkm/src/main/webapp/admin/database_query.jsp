@@ -11,11 +11,8 @@
   <link rel="stylesheet" type="text/css" href="js/codemirror/lib/codemirror.css" />
   <link rel="stylesheet" type="text/css" href="js/codemirror/mode/plsql/plsql.css" />
   <style type="text/css">
-    .CodeMirror {
-      width: 400px;
-      height: 125px;
-      background-color: #f8f6c2;
-    }
+    .CodeMirror { width: 500px; height: 150px; background-color: #f8f6c2; }
+    .activeline { background: #f0fcff !important; }
   </style>
   <script type="text/javascript" src="js/codemirror/lib/codemirror.js"></script>
   <script type="text/javascript" src="js/codemirror/mode/plsql/plsql.js"></script>
@@ -23,10 +20,17 @@
   <script type="text/javascript">
     $(document).ready(function() {
       var cm = CodeMirror.fromTextArea(document.getElementById('qs'), {
-         lineNumbers: true,
-      	 matchBrackets: true,
-         indentUnit: 4,
-         mode: "text/x-plsql" });
+          lineNumbers: true,
+      	  matchBrackets: true,
+          indentUnit: 4,
+          mode: "text/x-plsql",
+          onCursorActivity: function() {
+        	cm.setLineClass(hlLine, null);
+            hlLine = cm.setLineClass(cm.getCursor().line, "activeline");
+          }
+        }
+      );
+      var hlLine = cm.setLineClass(0, "activeline");
       
       if ($('#method').val() == 'jdbc') {
         $('#tables').show();
