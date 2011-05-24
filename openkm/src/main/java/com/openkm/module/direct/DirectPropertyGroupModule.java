@@ -56,10 +56,10 @@ import com.openkm.core.NoSuchPropertyException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.module.PropertyGroupModule;
 import com.openkm.module.base.BasePropertyGroupModule;
 import com.openkm.util.FormUtils;
-import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 
 public class DirectPropertyGroupModule implements PropertyGroupModule {

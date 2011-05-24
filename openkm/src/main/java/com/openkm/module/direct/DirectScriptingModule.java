@@ -34,8 +34,8 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.JcrSessionManager;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.module.ScriptingModule;
-import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 
 public class DirectScriptingModule implements ScriptingModule {

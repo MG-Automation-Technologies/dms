@@ -45,12 +45,12 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VirusDetectedException;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.module.MailModule;
 import com.openkm.module.base.BaseMailModule;
 import com.openkm.module.base.BaseNotificationModule;
 import com.openkm.module.base.BaseScriptingModule;
 import com.openkm.util.FileUtils;
-import com.openkm.util.JCRUtils;
 import com.openkm.util.Transaction;
 import com.openkm.util.UserActivity;
 
