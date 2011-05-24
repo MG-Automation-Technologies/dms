@@ -105,7 +105,7 @@ public class MimeTypeServlet extends BaseServlet {
 		try {
 			if (ServletFileUpload.isMultipartContent(request)) {
 				InputStream is = null;
-				FileItemFactory factory = new DiskFileItemFactory(); 
+				FileItemFactory factory = new DiskFileItemFactory();
 				ServletFileUpload upload = new ServletFileUpload(factory);
 				List<FileItem> items = upload.parseRequest(request);
 				MimeType mt = new MimeType();
