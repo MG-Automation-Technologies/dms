@@ -47,8 +47,8 @@ import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.util.RoleComparator;
 import com.openkm.frontend.client.util.UserComparator;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.principal.PrincipalAdapterException;
-import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 
 /**
