@@ -99,7 +99,7 @@ public class DatabaseMetadataUtils {
 		sb.append("delete from DatabaseMetadataValue dmv where dmv.table='" + table + "'");
 		
 		if (filter != null && filter.length() > 0) {
-			sb.append(" and ").append(replaceVirtual(table, filter));
+			sb.append(" ").append(replaceVirtual(table, filter));
 		}
 		
 		ret = sb.toString();
