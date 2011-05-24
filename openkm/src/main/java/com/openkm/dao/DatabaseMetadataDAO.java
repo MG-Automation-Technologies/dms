@@ -49,15 +49,15 @@ public class DatabaseMetadataDAO {
 	/**
 	 * Create
 	 */
-	public static long createValue(DatabaseMetadataValue emv) throws DatabaseException {
-		log.debug("createValue({})", emv);
+	public static long createValue(DatabaseMetadataValue dmv) throws DatabaseException {
+		log.debug("createValue({})", dmv);
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			Long id = (Long) session.save(emv);
+			Long id = (Long) session.save(dmv);
 			HibernateUtil.commit(tx);
 			log.debug("createValue: {}", id);
 			return id.longValue();
@@ -72,15 +72,15 @@ public class DatabaseMetadataDAO {
 	/**
 	 * Update
 	 */
-	public static void updateValue(DatabaseMetadataValue emv) throws DatabaseException {
-		log.debug("updateValue({})", emv);
+	public static void updateValue(DatabaseMetadataValue dmv) throws DatabaseException {
+		log.debug("updateValue({})", dmv);
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			session.update(emv);
+			session.update(dmv);
 			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
@@ -95,16 +95,16 @@ public class DatabaseMetadataDAO {
 	/**
 	 * Delete
 	 */
-	public static void deleteValue(int emvId) throws DatabaseException {
-		log.debug("deleteValue({})", emvId);
+	public static void deleteValue(int dmvId) throws DatabaseException {
+		log.debug("deleteValue({})", dmvId);
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			DatabaseMetadataValue emv = (DatabaseMetadataValue) session.load(DatabaseMetadataValue.class, emvId);
-			session.delete(emv);
+			DatabaseMetadataValue dmv = (DatabaseMetadataValue) session.load(DatabaseMetadataValue.class, dmvId);
+			session.delete(dmv);
 			HibernateUtil.commit(tx);
 		} catch(HibernateException e) {
 			HibernateUtil.rollback(tx);
@@ -258,15 +258,15 @@ public class DatabaseMetadataDAO {
 	/**
 	 * Create
 	 */
-	public static int createType(DatabaseMetadataType emt) throws DatabaseException {
-		log.debug("createType({})", emt);
+	public static int createType(DatabaseMetadataType dmt) throws DatabaseException {
+		log.debug("createType({})", dmt);
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			Integer id = (Integer) session.save(emt);
+			Integer id = (Integer) session.save(dmt);
 			HibernateUtil.commit(tx);
 			log.debug("createType: {}", id);
 			return id.intValue();
@@ -281,15 +281,15 @@ public class DatabaseMetadataDAO {
 	/**
 	 * Update
 	 */
-	public static void updateType(DatabaseMetadataType emt) throws DatabaseException {
-		log.debug("updateType({})", emt);
+	public static void updateType(DatabaseMetadataType dmt) throws DatabaseException {
+		log.debug("updateType({})", dmt);
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			session.update(emt);
+			session.update(dmt);
 			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
@@ -304,15 +304,15 @@ public class DatabaseMetadataDAO {
 	/**
 	 * Delete
 	 */
-	public static void deleteType(int emtId) throws DatabaseException {
-		log.debug("deleteType({})", emtId);
+	public static void deleteType(int dmtId) throws DatabaseException {
+		log.debug("deleteType({})", dmtId);
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			DatabaseMetadataType emt = (DatabaseMetadataType) session.load(DatabaseMetadataType.class, emtId);
+			DatabaseMetadataType emt = (DatabaseMetadataType) session.load(DatabaseMetadataType.class, dmtId);
 			session.delete(emt);
 			HibernateUtil.commit(tx);
 		} catch(HibernateException e) {
