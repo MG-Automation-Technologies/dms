@@ -42,10 +42,10 @@ import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.extension.GWTProposedSubscriptionReceived;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.extension.OKMProposedSubscriptionService;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.servlet.frontend.OKMRemoteServiceServlet;
 import com.openkm.util.GWTUtil;
-import com.openkm.util.JCRUtils;
 
 /**
  * ProposedSubscriptionServlet

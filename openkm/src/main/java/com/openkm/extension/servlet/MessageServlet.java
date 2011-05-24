@@ -58,10 +58,10 @@ import com.openkm.frontend.client.bean.extension.GWTTextMessageSent;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.extension.OKMMessageService;
 import com.openkm.frontend.client.util.MessageSentComparator;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.servlet.frontend.OKMRemoteServiceServlet;
 import com.openkm.util.GWTUtil;
-import com.openkm.util.JCRUtils;
 
 /**
  * MessageServlet
