@@ -63,7 +63,7 @@ import com.openkm.dao.LanguageDAO;
 import com.openkm.dao.LegacyDAO;
 import com.openkm.dao.bean.Language;
 import com.openkm.dao.bean.Translation;
-import com.openkm.util.JCRUtils;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.util.SecureStore;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WarUtils;

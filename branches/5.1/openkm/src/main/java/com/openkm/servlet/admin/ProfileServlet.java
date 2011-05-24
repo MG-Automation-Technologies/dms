@@ -44,7 +44,7 @@ import com.openkm.dao.ProfileDAO;
 import com.openkm.dao.ReportDAO;
 import com.openkm.dao.bean.Profile;
 import com.openkm.extension.dao.ExtensionDAO;
-import com.openkm.util.JCRUtils;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
 
