@@ -42,7 +42,7 @@ import com.openkm.core.RepositoryException;
 import com.openkm.dao.HibernateUtil;
 import com.openkm.extension.dao.bean.ProposedSubscriptionReceived;
 import com.openkm.extension.dao.bean.ProposedSubscriptionSent;
-import com.openkm.util.JCRUtils;
+import com.openkm.jcr.JCRUtils;
 
 public class ProposedSubscriptionDAO {
 	private static Logger log = LoggerFactory.getLogger(ProposedSubscriptionDAO.class);
