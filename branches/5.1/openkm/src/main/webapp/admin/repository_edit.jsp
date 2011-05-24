@@ -7,7 +7,28 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="favicon.ico" />
-  <link rel="stylesheet" href="css/style.css" type="text/css" />
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <link rel="stylesheet" type="text/css" href="js/codemirror/lib/codemirror.css" />
+  <link rel="stylesheet" type="text/css" href="js/codemirror/mode/clike/clike.css" />
+  <style type="text/css">
+    .CodeMirror {
+      width: 500px;
+      height: 300px;
+      background-color: #f8f6c2;
+    }
+  </style>
+  <script type="text/javascript" src="js/codemirror/lib/codemirror.js"></script>
+  <script type="text/javascript" src="js/codemirror/mode/clike/clike.js"></script>
+  <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var cm = CodeMirror.fromTextArea(document.getElementById('value'), {
+         lineNumbers: true,
+      	 matchBrackets: true,
+         indentUnit: 4,
+         mode: "text/x-java" });
+    });
+  </script>
   <title>Repository Edit</title>
 </head>
 <body>
@@ -26,7 +47,7 @@
             <c:when test="${multiple}">
               <tr>
                 <td>Value</td>
-                <td><textarea cols="75" rows="15" name="value">${value}</textarea></td>
+                <td><textarea cols="75" rows="15" name="value" id="value">${value}</textarea></td>
               </tr>
             </c:when>
             <c:otherwise>
