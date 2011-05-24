@@ -128,9 +128,11 @@ public class DatabaseMetadataDAO {
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setString("table", table);
 			List<DatabaseMetadataValue> ret = q.list();
+			HibernateUtil.commit(tx);
 			log.debug("findAllValues: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
@@ -174,8 +176,10 @@ public class DatabaseMetadataDAO {
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			Query q = session.createQuery(query);
 			int ret = q.executeUpdate();
+			HibernateUtil.commit(tx);
 			log.debug("executeValueUpdate: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
@@ -197,8 +201,10 @@ public class DatabaseMetadataDAO {
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			Query q = session.createQuery(query);
 			List<DatabaseMetadataValue> ret = q.list();
+			HibernateUtil.commit(tx);
 			log.debug("executeValueQuery: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
@@ -220,6 +226,7 @@ public class DatabaseMetadataDAO {
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			Query q = session.createQuery(query);
 			
 			for (Object obj : q.list()) {
@@ -237,6 +244,7 @@ public class DatabaseMetadataDAO {
 				}
 			}
 			
+			HibernateUtil.commit(tx);
 			log.debug("executeMultiValueQuery: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
@@ -329,9 +337,11 @@ public class DatabaseMetadataDAO {
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setString("table", table);
 			List<DatabaseMetadataType> ret = q.list();
+			HibernateUtil.commit(tx);
 			log.debug("findAllTypes: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
@@ -353,22 +363,26 @@ public class DatabaseMetadataDAO {
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setString("table", table);
+			q.setString("column", column);
 			DatabaseMetadataSequence dms = (DatabaseMetadataSequence) q.setMaxResults(1).uniqueResult();
 			
 			if (dms != null) {
 				// Update already created sequence
 				dms.setValue(dms.getValue() + 1);
-				session.update(dms);	
+				session.update(dms);
 			} else {
 				// First sequence use
 				dms = new DatabaseMetadataSequence();
 				dms.setTable(table);
 				dms.setColumn(column);
 				dms.setValue(0);
+				session.save(dms);
 			}
 			
+			HibernateUtil.commit(tx);
 			log.debug("getNextSequenceValue: {}", dms.getValue());
 			return dms.getValue();
 		} catch (HibernateException e) {
