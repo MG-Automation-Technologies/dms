@@ -124,8 +124,6 @@ public class RepositoryViewServlet extends BaseServlet {
 				removeMixin(session, path, request, response);
 			} else if (action.equals("edit")) {
 				edit(session, path, request, response);
-			} else if (action.equals("save")) {
-				save(session, path, request, response);
 			} else if (action.equals("set_script")) {
 				OKMScripting.getInstance().setScript(null, path, Config.DEFAULT_SCRIPT);
 			} else if (action.equals("remove_script")) {
@@ -150,6 +148,37 @@ public class RepositoryViewServlet extends BaseServlet {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} catch (com.openkm.core.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} finally {
+			JCRUtils.logout(session);
+		}
+	}
+	
+	@Override
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException,
+			ServletException {
+		log.debug("doPost({}, {})", request, response);
+		request.setCharacterEncoding("UTF-8");
+		String action = WebUtils.getString(request, "action");
+		String path = WebUtils.getString(request, "path");
+		Session session = null;
+		updateSessionManager(request);
+		
+		try {
+			session = JCRUtils.getSession();
+			
+			if ("save".equals(action)) {
+				save(session, path, request, response);
+				list(session, path, request, response);
+			}	
+		} catch (LoginException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} catch (DatabaseException e) {
