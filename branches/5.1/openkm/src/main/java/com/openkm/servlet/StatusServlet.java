@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.dao.HibernateUtil;
 import com.openkm.dao.bean.Activity;
-import com.openkm.util.JCRUtils;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.util.UserActivity;
 
 /**
