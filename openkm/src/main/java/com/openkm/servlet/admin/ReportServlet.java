@@ -68,7 +68,7 @@ import com.openkm.dao.LegacyDAO;
 import com.openkm.dao.ReportDAO;
 import com.openkm.dao.bean.Report;
 import com.openkm.dao.bean.ReportParameter;
-import com.openkm.util.JCRUtils;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.util.ReportUtils;
 import com.openkm.util.SecureStore;
 import com.openkm.util.UserActivity;

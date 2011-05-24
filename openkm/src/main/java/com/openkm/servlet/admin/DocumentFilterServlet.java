@@ -43,7 +43,7 @@ import com.openkm.dao.DocumentFilterDAO;
 import com.openkm.dao.MimeTypeDAO;
 import com.openkm.dao.bean.DocumentFilter;
 import com.openkm.dao.bean.DocumentFilterRule;
-import com.openkm.util.JCRUtils;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
 

@@ -52,7 +52,7 @@ import com.openkm.bean.StoredFile;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.ConfigDAO;
 import com.openkm.dao.bean.Config;
-import com.openkm.util.JCRUtils;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.util.SecureStore;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
