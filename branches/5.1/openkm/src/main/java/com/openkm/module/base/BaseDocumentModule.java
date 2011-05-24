@@ -68,8 +68,8 @@ import com.openkm.dao.bean.ProfileMisc;
 import com.openkm.dao.bean.UserConfig;
 import com.openkm.dao.bean.cache.UserItems;
 import com.openkm.extractor.RegisteredExtractors;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.util.DocConverter;
-import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 
 public class BaseDocumentModule {
@@ -455,5 +455,14 @@ public class BaseDocumentModule {
 		is.close();
 		
 		log.debug("copy: void");
+	}
+	
+	/**
+	 * Clean preview cache for this document
+	 */
+	public static void cleanPreviewCache(String uuid) {
+		new File(Config.CACHE_DXF + File.separator + uuid + ".dxf").delete();
+		new File(Config.CACHE_PDF + File.separator + uuid + ".pdf").delete();
+		new File(Config.CACHE_SWF + File.separator + uuid + ".swf").delete();
 	}
 }
