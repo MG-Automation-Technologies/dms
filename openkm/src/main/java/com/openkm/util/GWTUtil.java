@@ -484,7 +484,6 @@ public class GWTUtil {
 			gwtQueryResult.setAttachment(copy(queryResult.getAttachment()));
 			gwtQueryResult.getAttachment().setAttachment(true);
 		}
-		gwtQueryResult.setExcerpt(queryResult.getExcerpt());
 		gwtQueryResult.setScore(queryResult.getScore());
 		
 		return gwtQueryResult;
@@ -1418,7 +1417,7 @@ public class GWTUtil {
 		return gWTActivity;
 	}
 	
-	/**
+	/*
 	 * Copy Forum to GWTForum
 	 * 
 	 * @param Forum 

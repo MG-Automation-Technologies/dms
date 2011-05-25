@@ -39,7 +39,6 @@ import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
-import com.openkm.extension.core.ExtensionException;
 import com.openkm.principal.PrincipalAdapterException;
 
 public interface DocumentModule {
@@ -65,7 +64,7 @@ public interface DocumentModule {
 	public Document create(String token, Document doc, InputStream is) throws UnsupportedMimeTypeException, 
 			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, 
 			ItemExistsException, PathNotFoundException, AccessDeniedException, 
-			RepositoryException, IOException, DatabaseException, ExtensionException;
+			RepositoryException, IOException, DatabaseException;
 	
 	/**
 	 * Deletes a document from the repository. It is a logical delete,
@@ -421,7 +420,7 @@ public interface DocumentModule {
 	 * 
 	 * @param docPath The path that identifies an unique document.
 	 * @throws AccessDeniedException If there is any security problem: 
-	 * you can't access this node because of lack of permissions.
+	 * you can't access this folder because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 * @throws PathNotFoundException If there is no folder in the repository with this path.
 	 */
@@ -434,7 +433,7 @@ public interface DocumentModule {
 	 * @param uuid The unique document id.
 	 * @return The document path
 	 * @throws AccessDeniedException If there is any security problem: 
-	 * you can't access this node because of lack of permissions.
+	 * you can't access this folder because of lack of permissions.
 	 * @throws RepositoryException If there is any problem.
 	 */
 	public String getPath(String token, String uuid) throws AccessDeniedException, RepositoryException,

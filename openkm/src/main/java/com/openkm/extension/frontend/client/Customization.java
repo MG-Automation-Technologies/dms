@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.openkm.extension.frontend.client.widget.activitylog.ActivityLog;
+import com.openkm.extension.frontend.client.widget.client.metromusa.MetromUsa;
 import com.openkm.extension.frontend.client.widget.client.netservices.Netservices;
 import com.openkm.extension.frontend.client.widget.contact.Contact;
 import com.openkm.extension.frontend.client.widget.crypto.Cryptography;
@@ -37,7 +38,6 @@ import com.openkm.extension.frontend.client.widget.stamp.StampToolBarButton;
 import com.openkm.extension.frontend.client.widget.stapling.Stapling;
 import com.openkm.extension.frontend.client.widget.toolbar.downloadButton.DownloadButton;
 import com.openkm.extension.frontend.client.widget.toolbar.downloadPdfButton.DownloadPdfButton;
-import com.openkm.extension.frontend.client.widget.zoho.Zoho;
 
 /**
  * Customization
@@ -85,8 +85,8 @@ public class Customization {
 		if (Stapling.isRegistered(uuidList)) {
 			extensions.addAll(new Stapling(uuidList).getExtensions());
 		}
-		if (Stapling.isRegistered(uuidList)) {
-			extensions.addAll(new Stapling(uuidList).getExtensions());
+		if (MetromUsa.isRegistered(uuidList)) {
+			extensions.addAll(new MetromUsa(uuidList).getExtensions());
 		}
 		if (Netservices.isRegistered(uuidList)) {
 			extensions.addAll(new Netservices(uuidList).getExtensions());
@@ -112,15 +112,9 @@ public class Customization {
 		if (ActivityLog.isRegistered(uuidList)) {
 			extensions.addAll(new ActivityLog(uuidList).getExtensions());
 		}
-		if (Zoho.isRegistered(uuidList)) {
-			extensions.addAll(new Zoho(uuidList).getExtensions());
-		}
 		if (Forum.isRegistered(uuidList)) {
 			extensions.addAll(new Forum(uuidList).getExtensions());
 		}
-//		if (Wiki.isRegistered(uuidList)) {
-//			extensions.addAll(new Wiki(uuidList).getExtensions());
-//		}
 		
 		return extensions;
 	}

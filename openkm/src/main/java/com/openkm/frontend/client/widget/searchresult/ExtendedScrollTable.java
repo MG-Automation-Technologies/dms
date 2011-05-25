@@ -103,7 +103,7 @@ public class ExtendedScrollTable extends ScrollTable {
 			// Tree onCellClicked that produces inconsistence error refreshing
 			DOM.eventCancelBubble(event, true);
 			if ((isDocumentSelected() || isAttachmentSelected()) && Main.get().workspaceUserProperties.getWorkspace().getAvailableOption().isDownloadOption()) {
-				Main.get().mainPanel.search.searchBrowser.searchResult.searchCompactResult.downloadDocument();
+				Main.get().mainPanel.search.searchBrowser.searchResult.downloadDocument();
 			}
 
 		} else if (DOM.eventGetType(event) == Event.ONMOUSEDOWN) {
@@ -111,14 +111,14 @@ public class ExtendedScrollTable extends ScrollTable {
 			case Event.BUTTON_RIGHT:
 				if (!headerFired) {
 					if (isDocumentSelected() || isAttachmentSelected()) {
-						Main.get().mainPanel.search.searchBrowser.searchResult.searchCompactResult.menuPopup.menu.checkMenuOptionPermissions(getDocument());
+						Main.get().mainPanel.search.searchBrowser.searchResult.menuPopup.menu.checkMenuOptionPermissions(getDocument());
 					} else if (isFolderSelected()) {
-						Main.get().mainPanel.search.searchBrowser.searchResult.searchCompactResult.menuPopup.menu.checkMenuOptionPermissions(getFolder());
+						Main.get().mainPanel.search.searchBrowser.searchResult.menuPopup.menu.checkMenuOptionPermissions(getFolder());
 					} else if (isMailSelected()) {
-						Main.get().mainPanel.search.searchBrowser.searchResult.searchCompactResult.menuPopup.menu.checkMenuOptionPermissions(getMail());
+						Main.get().mainPanel.search.searchBrowser.searchResult.menuPopup.menu.checkMenuOptionPermissions(getMail());
 					}
-					Main.get().mainPanel.search.searchBrowser.searchResult.searchCompactResult.menuPopup.menu.evaluateMenuOptions();
-					Main.get().mainPanel.search.searchBrowser.searchResult.searchCompactResult.showMenu();
+					Main.get().mainPanel.search.searchBrowser.searchResult.menuPopup.menu.evaluateMenuOptions();
+					Main.get().mainPanel.search.searchBrowser.searchResult.showMenu();
 					DOM.eventPreventDefault(event); // Prevent to fire event to browser
 				}
 				break;
@@ -137,11 +137,11 @@ public class ExtendedScrollTable extends ScrollTable {
 	 */
 	public void setSelectedPanel(boolean selected) {
 		if (selected){
-			Main.get().mainPanel.search.searchBrowser.searchResult.searchCompactResult.addStyleName("okm-PanelSelected");
+			Main.get().mainPanel.search.searchBrowser.searchResult.addStyleName("okm-PanelSelected");
 			Main.get().mainPanel.search.historySearch.searchSaved.setSelectedPanel(false);
 			Main.get().mainPanel.search.historySearch.userNews.setSelectedPanel(false);
 		} else {
-			Main.get().mainPanel.search.searchBrowser.searchResult.searchCompactResult.removeStyleName("okm-PanelSelected");
+			Main.get().mainPanel.search.searchBrowser.searchResult.removeStyleName("okm-PanelSelected");
 		}
 		panelSelected = selected;
 	}
@@ -246,7 +246,6 @@ public class ExtendedScrollTable extends ScrollTable {
 		dataTable.setHTML(rows, 1, dataTable.getHTML(rows,1) + Util.mimeImageHTML(doc.getMimeType()));
 		Hyperlink hLink = new Hyperlink();
 		hLink.setHTML(doc.getName());
-		hLink.setStyleName("okm-Hyperlink");
 		// On attachemt case must remove last folder path, because it's internal usage not for visualization
 		if (doc.isAttachment()) {
 			hLink.setTitle(doc.getParent().substring(0, doc.getParent().lastIndexOf("/")));
@@ -311,7 +310,6 @@ public class ExtendedScrollTable extends ScrollTable {
 		Hyperlink hLink = new Hyperlink();
 		hLink.setHTML(folder.getName());
 		hLink.setTitle(folder.getParentPath());
-		hLink.setStyleName("okm-Hyperlink");
 		dataTable.setWidget(rows, 2, hLink);
 		dataTable.setHTML(rows, 3, "&nbsp;");
 		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
@@ -361,7 +359,6 @@ public class ExtendedScrollTable extends ScrollTable {
 		Hyperlink hLink = new Hyperlink();
 		hLink.setHTML(mail.getSubject());
 		hLink.setTitle(mail.getParent());
-		hLink.setStyleName("okm-Hyperlink");
 		dataTable.setWidget(rows, 2, hLink);
 		dataTable.setHTML(rows, 3, Util.formatSize(mail.getSize()));
 		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));

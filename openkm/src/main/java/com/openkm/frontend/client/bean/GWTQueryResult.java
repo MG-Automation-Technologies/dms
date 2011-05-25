@@ -35,8 +35,6 @@ public class GWTQueryResult implements IsSerializable {
 	private GWTFolder folder;
 	private GWTMail mail;
 	private GWTDocument attachment;
-	private String excerpt;
-	
 	private long score;
 
 	public GWTDocument getDocument() {
@@ -77,13 +75,5 @@ public class GWTQueryResult implements IsSerializable {
 
 	public void setAttachment(GWTDocument attachment) {
 		this.attachment = attachment;
-	}
-	
-	public String getExcerpt() {
-		return excerpt;
-	}
-
-	public void setExcerpt(String excerpt) {
-		this.excerpt = excerpt;
 	}
 }

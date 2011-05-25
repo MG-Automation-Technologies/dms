@@ -51,7 +51,6 @@ import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
-import com.openkm.extension.core.ExtensionException;
 import com.openkm.extension.dao.StampImageDAO;
 import com.openkm.extension.dao.StampTextDAO;
 import com.openkm.extension.dao.bean.StampImage;
@@ -76,7 +75,6 @@ public class StampServlet extends OKMRemoteServiceServlet implements OKMStampSer
 	@Override
 	public List<GWTStamp> findAll() throws OKMException {
 		log.debug("findAll()");
-		updateSessionManager();
 		List<GWTStamp> stampList = new ArrayList<GWTStamp>();
 		String remoteUser = getThreadLocalRequest().getRemoteUser();
 		try {
@@ -97,7 +95,6 @@ public class StampServlet extends OKMRemoteServiceServlet implements OKMStampSer
 	@Override
 	public void Stamp(int id, int type, String path) throws OKMException {
 		log.debug("Stamp({}, {})", new Object[] {(Object)id , (Object)type});
-		updateSessionManager();
 		File tmp = null; 
 		File tmpPdf= null;
 		File tmpStampPdf = null;
@@ -220,9 +217,6 @@ public class StampServlet extends OKMRemoteServiceServlet implements OKMStampSer
 		} catch (ConversionException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStampService, ErrorCode.CAUSE_Conversion), e.getMessage());
-		} catch (ExtensionException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStampService, ErrorCode.CAUSE_Extension), e.getMessage());
 		} finally {
 			// Cleaning temp files
 			tmp.delete();

@@ -31,6 +31,7 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -48,6 +49,7 @@ import com.openkm.frontend.client.bean.GWTPropertyParams;
 import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.bean.GWTQueryResult;
 import com.openkm.frontend.client.bean.GWTResultSet;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.service.OKMSearchServiceAsync;
@@ -76,8 +78,8 @@ public class FindFolderSelectPopup extends DialogBox  {
 		status.setStyleName("okm-StatusPopup");
 		
 		vPanel = new VerticalPanel();		
-		vPanel.setWidth("700");
-		vPanel.setHeight("350");
+		vPanel.setWidth("400");
+		vPanel.setHeight("200");
 		hPanel = new HorizontalPanel();
 		
 		scrollFolderPanel = new ScrollPanel();
@@ -99,7 +101,7 @@ public class FindFolderSelectPopup extends DialogBox  {
 		});
 		
 		keyword = new TextBox();
-		keyword.setWidth("692");
+		keyword.setWidth("392");
 		keyword.addKeyUpHandler(new KeyUpHandler() {
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
@@ -161,7 +163,7 @@ public class FindFolderSelectPopup extends DialogBox  {
 		});
 		
 		scrollFolderPanel.add(folderTable);
-		scrollFolderPanel.setPixelSize(690,300);
+		scrollFolderPanel.setPixelSize(390,150);
 		
 		vPanel.add(keyword);
 		vPanel.add(scrollFolderPanel);
@@ -179,7 +181,7 @@ public class FindFolderSelectPopup extends DialogBox  {
 		vPanel.setCellHorizontalAlignment(scrollFolderPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHeight(keyword, "25");
-		vPanel.setCellHeight(scrollFolderPanel, "300");
+		vPanel.setCellHeight(scrollFolderPanel, "150");
 
 		cancelButton.setStyleName("okm-Button");
 		actionButton.setStyleName("okm-Button");
@@ -205,8 +207,8 @@ public class FindFolderSelectPopup extends DialogBox  {
 	 */
 	public void show(){
 		initButtons();
-		int left = (Window.getClientWidth()-700) / 2;
-		int top = (Window.getClientHeight()-350) / 2;
+		int left = (Window.getClientWidth()-300) / 2;
+		int top = (Window.getClientHeight()-200) / 2;
 		setPopupPosition(left, top);
 		setText(Main.i18n("search.folder.filter"));
 		
@@ -335,6 +337,8 @@ public class FindFolderSelectPopup extends DialogBox  {
 	 */
 	private void find(GWTQueryParams params) {
 		status.setFlagChilds();
+		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
+		endPoint.setServiceEntryPoint(RPCService.SearchService);
 		searchService.find(params, callbackFind);
 	}
 }

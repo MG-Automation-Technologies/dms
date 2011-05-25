@@ -46,5 +46,4 @@ public interface OKMSearchService extends RemoteService {
 	public GWTResultSet find(GWTQueryParams params) throws OKMException;
 	public void share(int qpId) throws OKMException;
 	public void unshare(int qpId) throws OKMException;
-	public GWTResultSet findSimpleQueryPaginated(String statement, int offset, int limit)  throws OKMException;
 }

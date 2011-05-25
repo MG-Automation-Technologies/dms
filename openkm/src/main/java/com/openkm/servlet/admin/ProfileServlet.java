@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 
+import javax.jcr.Session;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -43,6 +44,7 @@ import com.openkm.dao.ProfileDAO;
 import com.openkm.dao.ReportDAO;
 import com.openkm.dao.bean.Profile;
 import com.openkm.extension.dao.ExtensionDAO;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
 
@@ -58,21 +60,29 @@ public class ProfileServlet extends BaseServlet {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
 		String action = WebUtils.getString(request, "action");
-		String userId = request.getRemoteUser();
+		Session session = null;
 		updateSessionManager(request);
 		
 		try {
+			session = JCRUtils.getSession();
+			
 			if (action.equals("create")) {
-				create(userId, request, response);
+				create(session, request, response);
 			} else if (action.equals("edit")) {
-				edit(userId, request, response);
+				edit(session, request, response);
 			} else if (action.equals("delete")) {
-				delete(userId, request, response);
+				delete(session, request, response);
 			}
 			
 			if (action.equals("") || WebUtils.getBoolean(request, "persist")) {
-				list(userId, request, response);
+				list(session, request, response);
 			}
+		} catch (javax.jcr.LoginException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
@@ -88,23 +98,25 @@ public class ProfileServlet extends BaseServlet {
 		} catch (WorkflowException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
+		} finally {
+			JCRUtils.logout(session);
 		}
 	}
 	
 	/**
 	 * New user
 	 */
-	private void create(String userId, HttpServletRequest request, HttpServletResponse response) 
+	private void create(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, RepositoryException, ParseException,
 			WorkflowException {
-		log.debug("create({}, {}, {})", new Object[] { userId, request, response });
+		log.debug("create({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
 			Profile prf = getUserProfile(request);
 			int id = ProfileDAO.create(prf);
 			
 			// Activity log
-			UserActivity.log(userId, "ADMIN_USER_PROFILE_CREATE", Integer.toString(id), prf.toString());
+			UserActivity.log(session.getUserID(), "ADMIN_USER_PROFILE_CREATE", Integer.toString(id), prf.toString());
 		} else {
 			ServletContext sc = getServletContext();
 			Profile prf = new Profile();
@@ -124,17 +136,17 @@ public class ProfileServlet extends BaseServlet {
 	/**
 	 * Edit user
 	 */
-	private void edit(String userId, HttpServletRequest request, HttpServletResponse response) 
+	private void edit(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException,
 			RepositoryException, ParseException, WorkflowException {
-		log.debug("edit({}, {}, {})", new Object[] { userId, request, response });
+		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
 			Profile prf = getUserProfile(request);
 			ProfileDAO.update(prf);
 			
 			// Activity log
-			UserActivity.log(userId, "ADMIN_USER_PROFILE_EDIT", Integer.toString(prf.getId()), prf.toString());
+			UserActivity.log(session.getUserID(), "ADMIN_USER_PROFILE_EDIT", Integer.toString(prf.getId()), prf.toString());
 		} else {
 			ServletContext sc = getServletContext();
 			int prfId = WebUtils.getInt(request, "prf_id");
@@ -154,17 +166,17 @@ public class ProfileServlet extends BaseServlet {
 	/**
 	 * Update user
 	 */
-	private void delete(String userId, HttpServletRequest request, HttpServletResponse response) 
+	private void delete(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException,
 			RepositoryException, ParseException, WorkflowException {
-		log.debug("delete({}, {}, {})", new Object[] { userId, request, response });
+		log.debug("delete({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
 			int prfId = WebUtils.getInt(request, "prf_id");
 			ProfileDAO.delete(prfId);
 			
 			// Activity log
-			UserActivity.log(userId, "ADMIN_USER_PROFILE_DELETE", Integer.toString(prfId), null);
+			UserActivity.log(session.getUserID(), "ADMIN_USER_PROFILE_DELETE", Integer.toString(prfId), null);
 		} else {
 			ServletContext sc = getServletContext();
 			int prfId = WebUtils.getInt(request, "prf_id");
@@ -184,9 +196,9 @@ public class ProfileServlet extends BaseServlet {
 	/**
 	 * List user profiles
 	 */
-	private void list(String userId, HttpServletRequest request, HttpServletResponse response)
+	private void list(Session session, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DatabaseException {
-		log.debug("list({}, {}, {})", new Object[] { userId, request, response });
+		log.debug("list({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
 		sc.setAttribute("userProfiles", ProfileDAO.findAll(false));
 		sc.getRequestDispatcher("/admin/profile_list.jsp").forward(request, response);

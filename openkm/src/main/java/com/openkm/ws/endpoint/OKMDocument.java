@@ -50,7 +50,6 @@ import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
-import com.openkm.extension.core.ExtensionException;
 import com.openkm.module.DocumentModule;
 import com.openkm.module.ModuleManager;
 import com.openkm.principal.PrincipalAdapterException;
@@ -74,7 +73,7 @@ public class OKMDocument {
 			@WebParam(name = "content") byte[] content) throws IOException, UnsupportedMimeTypeException,
 			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException,
 			ItemExistsException, PathNotFoundException, AccessDeniedException, RepositoryException,
-			DatabaseException, ExtensionException {
+			DatabaseException {
 		log.debug("create({})", doc);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		ByteArrayInputStream bais = new ByteArrayInputStream(content);
@@ -90,7 +89,7 @@ public class OKMDocument {
 			@WebParam(name = "content") byte[] content) throws IOException, UnsupportedMimeTypeException,
 			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, 
 			ItemExistsException, PathNotFoundException, AccessDeniedException, RepositoryException,
-			DatabaseException, ExtensionException {
+			DatabaseException {
 		log.debug("createSimple({})", docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		ByteArrayInputStream bais = new ByteArrayInputStream(content);

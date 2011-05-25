@@ -21,7 +21,6 @@
 
 package com.openkm.frontend.client.widget.notify;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
@@ -33,7 +32,8 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.user.client.ui.TabBar;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -47,11 +47,10 @@ import com.openkm.frontend.client.Main;
  */
 public class NotifyPanel extends Composite {
 	
-	private static final int TAB_HEIGHT = 20;
 	private static final int TAB_USERS 	= 0;
 	private static final int TAB_GROUPS = 1;
 	
-	public TabLayoutPanel tabPanel;
+	private TabPanel tabPanel;
 	private VerticalPanel vPanel;
 	private NotifyUser notifyUser;
 	private NotifyRole notifyRole;
@@ -70,13 +69,12 @@ public class NotifyPanel extends Composite {
 		vPanel = new VerticalPanel();
 		notifyUser = new NotifyUser();
 		notifyRole = new NotifyRole();
-		tabPanel =  new TabLayoutPanel(TAB_HEIGHT, Unit.PX);
+		tabPanel = new TabPanel();
 		
 		tabPanel.add(notifyUser, Main.i18n("fileupload.label.users"));
 		tabPanel.add(notifyRole, Main.i18n("fileupload.label.groups"));
 		tabPanel.selectTab(TAB_USERS);
-		tabPanel.setWidth("374");
-		tabPanel.setHeight("140");
+		tabPanel.setWidth("100%");
 		
 		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 			@Override
@@ -85,12 +83,12 @@ public class NotifyPanel extends Composite {
 					case TAB_USERS:
 						groupsFilter = filter.getText();
 						filter.setText(usersFilter);
-						filterText.setHTML(Main.i18n("security.filter.by.users"));
+						filterText.setHTML(Main.i18n("secutiry.filter.by.users"));
 						break;
 					case TAB_GROUPS:
 						usersFilter = filter.getText();
 						filter.setText(groupsFilter);
-						filterText.setHTML(Main.i18n("security.filter.by.groups"));
+						filterText.setHTML(Main.i18n("secutiry.filter.by.groups"));
 						break;
 				}
 			}
@@ -119,7 +117,7 @@ public class NotifyPanel extends Composite {
 			}
 		});
 		filter = new TextBox();
-		filterText = new HTML(Main.i18n("security.filter.by.users"));
+		filterText = new HTML(Main.i18n("secutiry.filter.by.users"));
 		filterPanel.add(checkBoxFilter);
 		filterPanel.add(new HTML("&nbsp;"));
 		filterPanel.add(filterText);
@@ -134,7 +132,8 @@ public class NotifyPanel extends Composite {
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
 				if (filter.getText().length()>=3) {
-					int selected = tabPanel.getSelectedIndex();
+					TabBar tabBar = tabPanel.getTabBar();
+					int selected = tabBar.getSelectedTab();
 					switch(selected) {
 						case TAB_USERS:
 							notifyUser.resetAvailableUsersTable();
@@ -158,8 +157,7 @@ public class NotifyPanel extends Composite {
 		
 		vPanel.setCellHorizontalAlignment(filterPanel, VerticalPanel.ALIGN_RIGHT);
 		
-		vPanel.addStyleName("okm-DisableSelect");
-		tabPanel.addStyleName("okm-Border-Bottom");
+		tabPanel.addStyleName("okm-DisableSelect");
 		filter.setStyleName("okm-Input");
 		
 		initWidget(vPanel);
@@ -177,7 +175,8 @@ public class NotifyPanel extends Composite {
 	 * langRefresh
 	 */
 	public void langRefresh() {
-		int selected = tabPanel.getSelectedIndex();
+		TabBar tabBar = tabPanel.getTabBar();
+		int selected = tabBar.getSelectedTab();
 		
 		while (tabPanel.getWidgetCount() > 0) {
 			tabPanel.remove(0);
@@ -187,14 +186,12 @@ public class NotifyPanel extends Composite {
 		tabPanel.add(notifyRole, Main.i18n("fileupload.label.groups"));
 		tabPanel.selectTab(selected);
 		
-		filterText.setHTML(Main.i18n("security.filter.by.users"));
-		
 		switch (selected) {
 			case TAB_USERS:
-				filterText.setHTML(Main.i18n("security.filter.by.users"));
+				filterText.setHTML(Main.i18n("secutiry.filter.by.users"));
 				break;
 			case TAB_GROUPS:
-				filterText.setHTML(Main.i18n("security.filter.by.groups"));
+				filterText.setHTML(Main.i18n("secutiry.filter.by.groups"));
 				break;
 		}
 		

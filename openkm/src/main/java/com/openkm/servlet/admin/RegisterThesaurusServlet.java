@@ -61,7 +61,15 @@ public class RegisterThesaurusServlet extends BaseServlet {
 		updateSessionManager(request);
 		PrintWriter out = response.getWriter();
 		response.setContentType("text/html");
-		header(out, "Register thesaurus");
+		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
+		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">");
+		out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
+		out.println("<head>");
+		out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />");
+		out.println("<link rel=\"Shortcut icon\" href=\"favicon.ico\" />");
+		out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"css/style.css\" />");
+		out.println("<body>");
+		out.println("<h1>Register thesaurus</h1>");
 		out.flush();
 
 		if (!Config.KEA_THESAURUS_OWL_FILE.equals("")) {
@@ -75,9 +83,15 @@ public class RegisterThesaurusServlet extends BaseServlet {
 		} else {
 			out.println("<b>Error - there's no thesaurus file defined in OpenKM.cfg</b>");
 		}
-		
-		footer(out);
+
+		try {
+			// Dummy
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		out.println("</body>");
+		out.println("</html>");
 		out.flush();
-		out.close();
 	}
 }

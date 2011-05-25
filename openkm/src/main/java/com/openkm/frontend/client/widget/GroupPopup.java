@@ -31,15 +31,18 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
 
@@ -201,6 +204,8 @@ public class GroupPopup extends DialogBox {
 	private void getAllGroups() {
 		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 		if (gwtDocument!= null) {
+			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
+			endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
 			propertyGroupService.getAllGroups(gwtDocument.getPath(), callbackGetAllGroups);
 		}
 	}
@@ -213,6 +218,8 @@ public class GroupPopup extends DialogBox {
 			String grpName = listBox.getValue(listBox.getSelectedIndex());
 			if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
 				GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
+				ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
+				endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
 				propertyGroupService.addGroup(gwtDocument.getPath(), grpName, callbackAddGroup);
 			}
 		}

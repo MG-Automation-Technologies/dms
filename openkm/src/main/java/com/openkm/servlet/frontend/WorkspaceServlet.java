@@ -77,9 +77,8 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 	
 	@Override
 	public GWTWorkspace getUserWorkspace() throws OKMException {
-		log.debug("getUserWorkspace()");
-		updateSessionManager();
 		GWTWorkspace workspace = new GWTWorkspace();
+		updateSessionManager();
 		workspace.setApplicationURL(Config.APPLICATION_URL);
 		workspace.setUser(getThreadLocalRequest().getRemoteUser());
 		workspace.setAppVersion(WarUtils.getAppVersion().toString());
@@ -101,7 +100,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 			session = JCRUtils.getSession();
 			UserConfig uc = UserConfigDAO.findByPk(session, session.getUserID());
 			up = uc.getProfile();
-						
+			
 			for (String pgroup: up.getWizard().getPropertyGroups()) {
 				for (PropertyGroup pg : OKMPropertyGroup.getInstance().getAllGroups(null)) {
 					if (pg.getName().equals(pgroup) && pg.isVisible()) {
@@ -320,6 +319,9 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 		} catch (PrincipalAdapterException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_PrincipalAdapter), e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}	
 		
 		if (Config.PRINCIPAL_ADAPTER.equals(DatabasePrincipalAdapter.class.getCanonicalName())) {
@@ -333,7 +335,6 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 	
 	@Override
 	public Double getUserDocumentsSize() throws OKMException {
-		log.debug("getUserDocumentsSize()");
 		Double docSize = new Double(0);
 		updateSessionManager();
 		
@@ -352,7 +353,6 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 	
 	@Override
 	public void updateUserWorkspace(GWTWorkspace workspace) throws OKMException {
-		log.debug("updateUserWorkspace()");
 		updateSessionManager();
 		
 		// For updating user
@@ -402,7 +402,6 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 	
 	@Override
 	public void deleteMailAccount(int id)  throws OKMException {
-		log.debug("deleteMailAccount({})",id);
 		updateSessionManager();
 		
 		// Disable user configuration modification in demo
@@ -417,7 +416,6 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 	
 	@Override
 	public String isValidPassword(String password) throws OKMException {
-		log.debug("isValidPassword()");
 		String msg = "";
 		updateSessionManager();
 		

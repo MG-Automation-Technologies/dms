@@ -102,16 +102,15 @@ public class TagCloud extends Composite {
 	public String getColor(int fontSize) {
 		String color = "c3d9ff";
 		
-		if (fontSize > 20) {
+		if (fontSize>20) {
 			color = "488bff";
-		} else if (fontSize > 15) {
+		} else if (fontSize>15) {
 			color = "6ca2ff";
-		} else if (fontSize > 10) {
+		} else if (fontSize>10) {
 			color = "8bb6ff";
-		} else if (fontSize > 5) {
+		} else if (fontSize>5) {
 			color = "a5c6ff";
 		}
-		
 		return color;
 	}
 

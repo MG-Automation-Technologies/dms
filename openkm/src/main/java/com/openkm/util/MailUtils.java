@@ -82,6 +82,7 @@ import com.openkm.core.ConversionException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
@@ -90,8 +91,6 @@ import com.openkm.core.VirusDetectedException;
 import com.openkm.dao.bean.MailAccount;
 import com.openkm.dao.bean.MailFilter;
 import com.openkm.dao.bean.MailFilterRule;
-import com.openkm.extension.core.ExtensionException;
-import com.openkm.jcr.JcrSessionManager;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.pop3.POP3Folder;
 
@@ -328,9 +327,9 @@ public class MailUtils {
 	 * You should create different local uidl list for different email account, because the uidl is only
 	 * unique for the same account. 
 	 */
-	public static void importMessages(String uid, MailAccount ma) throws PathNotFoundException,
-			ItemExistsException, VirusDetectedException, AccessDeniedException, RepositoryException,
-			DatabaseException, UserQuotaExceededException, ExtensionException {
+	public static void importMessages(String uid, MailAccount ma) throws PathNotFoundException, ItemExistsException,
+			VirusDetectedException, AccessDeniedException, RepositoryException, DatabaseException, 
+			UserQuotaExceededException {
 		log.info("importMessages({}, {})", new Object[] { uid, ma });
 		Properties props = System.getProperties();
 		Session session = Session.getDefaultInstance(props);
@@ -440,7 +439,7 @@ public class MailUtils {
 	private static void importMail(String mailPath, boolean grouping, Folder folder, Message msg, 
 			MailAccount ma, com.openkm.bean.Mail mail) throws DatabaseException, RepositoryException,
 			AccessDeniedException, ItemExistsException, PathNotFoundException, MessagingException,
-			VirusDetectedException, UserQuotaExceededException, IOException, ExtensionException {
+			VirusDetectedException, UserQuotaExceededException, IOException {
 		String systemToken = JcrSessionManager.getInstance().getSystemToken();
 		OKMRepository okmRepository = OKMRepository.getInstance();
 		OKMMail okmMail = OKMMail.getInstance();
@@ -523,8 +522,7 @@ public class MailUtils {
 	 * Create mail path
 	 */
 	private static String createGroupPath(String mailPath, Calendar receivedDate) throws DatabaseException,
-			RepositoryException, AccessDeniedException, ItemExistsException, PathNotFoundException,
-			ExtensionException {
+			RepositoryException, AccessDeniedException, ItemExistsException, PathNotFoundException {
 		log.info("createPath({}, {})", new Object[] { mailPath, receivedDate });
 		String systemToken = JcrSessionManager.getInstance().getSystemToken();
 		OKMRepository okmRepository = OKMRepository.getInstance();
@@ -608,7 +606,7 @@ public class MailUtils {
 	private static void addAttachments(com.openkm.bean.Mail mail, Part p) throws MessagingException,
 			IOException, UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
 			VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException, ExtensionException {
+			RepositoryException, DatabaseException {
 		String systemToken = JcrSessionManager.getInstance().getSystemToken();
 		
 		if (p.isMimeType("multipart/*")) {

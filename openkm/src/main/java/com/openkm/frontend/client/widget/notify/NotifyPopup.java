@@ -25,6 +25,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
@@ -34,9 +35,9 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMNotifyService;
 import com.openkm.frontend.client.service.OKMNotifyServiceAsync;
-import com.openkm.frontend.client.util.Util;
 
 /**
  * NotifyPopup
@@ -81,7 +82,7 @@ public class NotifyPopup extends DialogBox  {
 		message = new TextArea();
 		
 		errorNotify = new HTML(Main.i18n("fileupload.label.must.select.users"));
-		errorNotify.setWidth("364");
+		errorNotify.setWidth("365");
 		errorNotify.setVisible(false);
 		errorNotify.setStyleName("fancyfileupload-failed");
 		
@@ -119,7 +120,7 @@ public class NotifyPopup extends DialogBox  {
 		
 		hPanel.setCellWidth(space, "40");
 		
-		message.setSize("374","60");
+		message.setSize("375","60");
 		message.setStyleName("okm-TextArea");
 		// TODO This is a workaround for a Firefox 2 bug
 		// http://code.google.com/p/google-web-toolkit/issues/detail?id=891
@@ -183,11 +184,6 @@ public class NotifyPopup extends DialogBox  {
 			reset(type);
 			doc = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 			super.center();
-			// TODO:Solves minor bug with IE
-			if (Util.getUserAgent().startsWith("ie")) {
-				notifyPanel.tabPanel.setWidth("374");
-				notifyPanel.tabPanel.setWidth("375");
-			}
 		} 
 	}
 	
@@ -206,7 +202,9 @@ public class NotifyPopup extends DialogBox  {
 	/**
 	 * Sens the link notification
 	 */
-	private void sendLinkNotification() {	
+	private void sendLinkNotification() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) notifyService;
+		endPoint.setServiceEntryPoint(RPCService.NotifyService);	
 		switch(type) {
 			case NOTIFY_WITH_LINK:
 				notifyService.notify(doc.getPath(), users, roles, message.getText(), false, callbackNotify);

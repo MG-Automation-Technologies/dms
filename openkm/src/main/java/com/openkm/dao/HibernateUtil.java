@@ -86,7 +86,7 @@ public class HibernateUtil {
 				cfg.setProperty("hibernate.hbm2ddl.auto", hbm2ddl);
 				cfg.setProperty("hibernate.show_sql", Config.HIBERNATE_SHOW_SQL);
 				cfg.setProperty("hibernate.generate_statistics", Config.HIBERNATE_STATISTICS);
-								
+				
 				// Show configuration
 				log.info("Hibernate 'hibernate.dialect' = {}", cfg.getProperty("hibernate.dialect"));
 				log.info("Hibernate 'hibernate.connection.datasource' = {}", cfg.getProperty("hibernate.connection.datasource"));

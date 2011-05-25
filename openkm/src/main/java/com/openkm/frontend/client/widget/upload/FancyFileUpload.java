@@ -11,6 +11,7 @@ import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FileUpload;
@@ -538,7 +539,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		hNotifyPanel.add(notifyToUserText);
 		hNotifyPanel.setCellVerticalAlignment(notifyToUser, VerticalPanel.ALIGN_MIDDLE);
 		hNotifyPanel.setCellVerticalAlignment(notifyToUserText, VerticalPanel.ALIGN_MIDDLE);
-		mainPanel.add(hNotifyPanel);	
+		mainPanel.add(hNotifyPanel);
 		mainPanel.add(new HTML("<br>"));
 		
 		// The notify user tables
@@ -596,7 +597,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 				
 				if (msg.contains(returnOKMessage)) {
 					String docPath = "";
-					if (msg.indexOf("path[")>0 && msg.indexOf("]path")>0) {
+					if (msg.indexOf("path[") > 0 && msg.indexOf("]path") > 0) {
 						docPath = msg.substring(msg.indexOf("path[")+5,msg.indexOf("]path"));
 					}
 					
@@ -802,7 +803,9 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		notifyPanel.getAll();
 	}
 	
-	private void getFileUploadStatus() {	
+	private void getFileUploadStatus() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) generalService;
+		endPoint.setServiceEntryPoint(RPCService.GeneralService);	
 		generalService.getFileUploadStatus(callbackGetFileUploadStatus);
 	}
 	

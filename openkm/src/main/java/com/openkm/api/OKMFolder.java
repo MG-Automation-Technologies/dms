@@ -36,7 +36,6 @@ import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UserQuotaExceededException;
-import com.openkm.extension.core.ExtensionException;
 import com.openkm.module.FolderModule;
 import com.openkm.module.ModuleManager;
 
@@ -56,7 +55,7 @@ public class OKMFolder implements FolderModule {
 	
 	@Override
 	public Folder create(String token, Folder fldPath) throws PathNotFoundException, ItemExistsException, 
-			AccessDeniedException, RepositoryException, DatabaseException, ExtensionException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("create({}, {})", token, fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		Folder newFld = fm.create(token, fldPath);
@@ -65,8 +64,7 @@ public class OKMFolder implements FolderModule {
 	}
 		
 	public Folder createSimple(String token, String fldPath) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException,
-			ExtensionException {
+			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("createSimple({}, {})", token, fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		Folder fld = new Folder();

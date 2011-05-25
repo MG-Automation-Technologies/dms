@@ -24,7 +24,6 @@ package com.openkm.frontend.client.util;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.contants.service.RPCService;
@@ -135,56 +134,17 @@ public class Util {
 	}
 	
 	/**
-	 * Creates an HTML fragment that places an image & caption together, for use
-	 * in a group header.
-	 * 
-	 * @param imageUrl the url of the icon image to be used
-	 * @param caption the group caption
-	 * @return the header HTML fragment
-	 */
+	   * Creates an HTML fragment that places an image & caption together, for use
+	   * in a group header.
+	   * 
+	   * @param imageUrl the url of the icon image to be used
+	   * @param caption the group caption
+	   * @return the header HTML fragment
+	   */
 	public static String createHeaderHTML(String imageUrl, String caption) {
 		return "<table align='left'><tr>" + "<td><img src='" + imageUrl + "'></td>"
 	      + "<td style='vertical-align:middle'><b style='white-space:nowrap; cursor: default;'>"
 	      + caption + "</b></td>" + "</tr></table>";
-	}
-	
-	/**
-	 * Creates an horizontal spacer
-	 * 
-	 * @param width The desired width space
-	 * @return an HTML element meaning the with
-	 */
-	public static HTML hSpace(String width) {
-		HTML spacer = new HTML("");
-		spacer.setWidth(width);
-		return spacer;
-	}
-	
-	/**
-	 * Creates an vertical spacer
-	 * 
-	 * @param height The desired height space
-	 * @return an HTML element meaning the height
-	 */
-	public static HTML vSpace(String height) {
-		HTML spacer = new HTML("");
-		spacer.setHeight(height);
-		return spacer;
-	}
-	
-	/**
-	 * Creates an square spacer
-	 * 
-	 * @param width The desired width space
-	 * @param height The desired height space
-	 * 
-	 * @return an HTML element meaning the with and height
-	 */
-	public static HTML space(String width, String height) {
-		HTML spacer = new HTML("");
-		spacer.setWidth(width);
-		spacer.setHeight(height);
-		return spacer;
 	}
 	
 	/**
@@ -240,18 +200,6 @@ public class Util {
 	}
 	
 	/**
-	 * print file
-	 * 
-	 * @param uuid
-	 */
-	public static void print(String uuid) {
-		final Element printIframe = RootPanel.get("__print").getElement();
-		String url = RPCService.ConverterServlet + "?inline=true&toPdf=true&uuid=" + URL.encodeQueryString(uuid);
-		DOM.setElementAttribute(printIframe, "src", url); 
-		printFile();
-	}
-	
-	/**
 	 * markHTMLTextAsBold
 	 * 
 	 * @param text
@@ -272,13 +220,6 @@ public class Util {
 	 */
 	public static native void changeCss(String title) /*-{
 		new $wnd.changeCss(title);
-	}-*/;
-	
-	/**
-	 * printFile
-	 */
-	public static native void printFile() /*-{
-		new $wnd.printFile();
 	}-*/;
 	
 	/**
