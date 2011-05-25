@@ -259,13 +259,4 @@ public class GeneralComunicator {
 	public static void disableKeyShorcuts() {
 		Main.get().mainPanel.disableKeyShorcuts();
 	}
-	
-	/**
-	 * getContext
-	 * 
-	 * @return
-	 */
-	public static String getContext() {
-		return Main.CONTEXT;
-	}
 }
