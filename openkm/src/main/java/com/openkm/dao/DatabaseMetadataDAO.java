@@ -378,7 +378,7 @@ public class DatabaseMetadataDAO {
 				dms = new DatabaseMetadataSequence();
 				dms.setTable(table);
 				dms.setColumn(column);
-				dms.setValue(0);
+				dms.setValue(1);
 				session.save(dms);
 			}
 			
