@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.openkm.extension.frontend.client.widget.activitylog.ActivityLog;
-import com.openkm.extension.frontend.client.widget.client.dgt.DGT;
+import com.openkm.extension.frontend.client.widget.client.dgt.HEGECO;
 import com.openkm.extension.frontend.client.widget.client.metromusa.MetromUsa;
 import com.openkm.extension.frontend.client.widget.client.netservices.Netservices;
 import com.openkm.extension.frontend.client.widget.contact.Contact;
@@ -126,8 +126,8 @@ public class Customization {
 		if (Netservices.isRegistered(uuidList)) {
 			extensions.addAll(new Netservices(uuidList).getExtensions());
 		}
-		if (DGT.isRegistered(uuidList)) {
-			extensions.addAll(new DGT(uuidList).getExtensions());
+		if (HEGECO.isRegistered(uuidList)) {
+			extensions.addAll(new HEGECO(uuidList).getExtensions());
 		}
 		
 		return extensions;
