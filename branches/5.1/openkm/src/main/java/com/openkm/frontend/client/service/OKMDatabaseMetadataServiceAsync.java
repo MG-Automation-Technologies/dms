@@ -26,7 +26,6 @@ import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-
 /**
  * OKMDatabaseMetadataServiceAsync
  * 
@@ -37,4 +36,7 @@ public interface OKMDatabaseMetadataServiceAsync {
 	public void executeValueQuery(String table, String filter, String order, AsyncCallback<List<Map<String,String>>> callback);
 	public void updateValue(Map<String,String> map, AsyncCallback<?> callback);
 	public void createValue(Map<String,String> map, AsyncCallback<?> callback);
+	public void executeMultiValueQuery(List<String> tables, String query, AsyncCallback<List<List<Map<String, String>>>> callback);
+	public void getNextSequenceValue(String table, String column,AsyncCallback<Double> callback);
+	
 }
