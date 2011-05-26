@@ -39,4 +39,5 @@ public interface OKMRepositoryServiceAsync {
 	public void getThesaurusFolder(AsyncCallback<GWTFolder> callback);
 	public void getCategoriesFolder(AsyncCallback<GWTFolder> callback);
 	public void getPathByUUID(String uuid, AsyncCallback<String> callback);
+	public void hasNode(String path, AsyncCallback<Boolean> callback);
 }
