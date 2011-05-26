@@ -327,4 +327,19 @@ public class RepositoryServlet extends OKMRemoteServiceServlet implements OKMRep
 		
 		return path;
 	}
+	
+	@Override
+	public Boolean hasNode(String path) throws OKMException {
+		log.debug("hasNode({})"+path);
+		updateSessionManager();
+		try {
+			return OKMRepository.getInstance().hasNode(null, path);
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+	}
 }
