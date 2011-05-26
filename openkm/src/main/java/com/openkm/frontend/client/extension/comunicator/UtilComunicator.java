@@ -54,6 +54,18 @@ public class UtilComunicator {
 	}
 	
 	/**
+	 * imageItemHTML
+	 * 
+	 * @param imageUrl
+	 * @param title
+	 * @param align
+	 * @return
+	 */
+	public static String imageItemHTML(String imageUrl, String title, String align) {
+		return Util.imageItemHTML(imageUrl, title, align);
+	}
+	
+	/**
 	 * menuHTML
 	 * 
 	 * @param imageUrl
