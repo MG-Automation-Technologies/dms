@@ -97,7 +97,7 @@ var CodeMirror = (function() {
     connect(wrapper, "dragenter", function(e){e.stop();});
     connect(wrapper, "dragover", function(e){e.stop();});
     connect(wrapper, "drop", operation(onDrop));
-    connect(wrapper, "paste", function(){input.focus(); fastPoll();});
+    connect(wrapper, "paste", function(){focusInput(); fastPoll();});
     connect(input, "paste", function(){fastPoll();});
     connect(input, "cut", function(){fastPoll();});
 
@@ -115,11 +115,12 @@ var CodeMirror = (function() {
       setValue: operation(setValue),
       getSelection: getSelection,
       replaceSelection: operation(replaceSelection),
-      focus: function(){input.focus(); onFocus(); fastPoll();},
+      focus: function(){focusInput(); onFocus(); fastPoll();},
       setOption: function(option, value) {
         options[option] = value;
         if (option == "lineNumbers" || option == "gutter") gutterChanged();
         else if (option == "mode" || option == "indentUnit") loadMode();
+        else if (option == "readOnly" && value == "nocursor") input.blur();
       },
       getOption: function(option) {return options[option];},
       undo: operation(undo),
@@ -223,7 +224,7 @@ var CodeMirror = (function() {
       // And then we have to see if it's a drag event, in which case
       // the dragged-over text must be selected.
       function end() {
-        input.focus();
+        focusInput();
         updateInput = true;
         move(); up();
       }
@@ -324,6 +325,7 @@ var CodeMirror = (function() {
       fastPoll(curKeyId);
     }
     function onKeyUp(e) {
+      if (options.onKeyEvent && options.onKeyEvent(instance, addStop(e.e))) return;
       if (reducedSelection) {
         reducedSelection = null;
         updateInput = true;
@@ -345,6 +347,7 @@ var CodeMirror = (function() {
     }
 
     function onFocus() {
+      if (options.readOnly == "nocursor") return;
       if (!focused && options.onFocus) options.onFocus(instance);
       focused = true;
       slowPoll();
@@ -531,6 +534,7 @@ var CodeMirror = (function() {
     // to the data in the editing variable, and updates the editor
     // content or cursor if something changed.
     function readInput() {
+      if (leaveInputAlone) return;
       var changed = false, text = input.value, sr = selRange(input);
       if (!sr) return false;
       var changed = editing.text != text, rs = reducedSelection;
@@ -613,6 +617,9 @@ var CodeMirror = (function() {
         endch += lineSep.length + lines[i].text.length;
       editing = {text: text, from: from, to: to, start: startch, end: endch};
       setSelRange(input, startch, reducedSelection ? startch : endch);
+    }
+    function focusInput() {
+      if (options.readOnly != "nocursor") input.focus();
     }
 
     function scrollCursorIntoView() {
@@ -1026,8 +1033,10 @@ var CodeMirror = (function() {
         var no = indexOf(lines, line);
         if (no == -1) return null;
       }
-      line.className = className;
-      changes.push({from: no, to: no + 1});
+      if (line.className != className) {
+        line.className = className;
+        changes.push({from: no, to: no + 1});
+      }
       return line;
     }
 
@@ -1104,13 +1113,13 @@ var CodeMirror = (function() {
     function paddingLeft() {return lineSpace.offsetLeft;}
 
     function posFromMouse(e, liberal) {
-      var offW = eltOffset(wrapper), x = e.pageX(), y = e.pageY();
+      var offW = eltOffset(wrapper, true), x = e.e.clientX, y = e.e.clientY;
       // This is a mess of a heuristic to try and determine whether a
       // scroll-bar was clicked or not, and to return null if one was
       // (and !liberal).
       if (!liberal && (x - offW.left > wrapper.clientWidth || y - offW.top > wrapper.clientHeight))
         return null;
-      var offL = eltOffset(lineSpace);
+      var offL = eltOffset(lineSpace, true);
       var line = showingFrom + Math.floor((y - offL.top) / lineHeight());
       return clipPos({line: line, ch: charFromX(clipLine(line), x - offL.left)});
     }
@@ -1125,17 +1134,27 @@ var CodeMirror = (function() {
         "px; left: " + (e.pageX() - 1) + "px; z-index: 1000; background: white; " +
         "border-width: 0; outline: none; overflow: hidden;";
       var val = input.value = getSelection();
-      input.focus();
+      focusInput();
       setSelRange(input, 0, input.value.length);
-      if (gecko) e.stop();
       leaveInputAlone = true;
-      setTimeout(function() {
+      function rehide() {
         if (input.value != val) operation(replaceSelection)(input.value, "end");
         input.style.cssText = oldCSS;
         leaveInputAlone = false;
         prepareInput();
         slowPoll();
-      }, 50);
+      }
+      
+      if (gecko) {
+        e.stop()
+        var mouseup = connect(window, "mouseup", function() {
+          mouseup();
+          setTimeout(rehide, 20);
+        }, true);
+      }
+      else {
+        setTimeout(rehide, 50);
+      }
     }
 
     // Cursor-blinking
@@ -1222,10 +1241,12 @@ var CodeMirror = (function() {
     }
     function highlightWorker() {
       var end = +new Date + options.workTime;
+      var didSomething = false;
       while (work.length) {
         if (!lines[showingFrom].stateAfter) var task = showingFrom;
         else var task = work.pop();
         if (task >= lines.length) continue;
+        didSomething = true;
         var start = findStartLine(task), state = start && lines[start-1].stateAfter;
         if (state) state = copyState(mode, state);
         else state = startState(mode);
@@ -1244,6 +1265,8 @@ var CodeMirror = (function() {
         }
         changes.push({from: task, to: i});
       }
+      if (didSomething && options.onHighlightComplete)
+        options.onHighlightComplete(instance);
     }
     function startWorker(time) {
       if (!work.length) return;
@@ -1416,6 +1439,7 @@ var CodeMirror = (function() {
     onChange: null,
     onCursorActivity: null,
     onGutterClick: null,
+    onHighlightComplete: null,
     onFocus: null, onBlur: null, onScroll: null,
     matchBrackets: false,
     workTime: 100,
@@ -1628,6 +1652,7 @@ var CodeMirror = (function() {
     highlight: function(mode, state) {
       var stream = new StringStream(this.text), st = this.styles, pos = 0;
       var changed = false, curWord = st[0], prevWord;
+      if (this.text == "" && mode.blankLine) mode.blankLine(state);
       while (!stream.eol()) {
         var style = mode.token(stream, state);
         var substr = this.text.slice(stream.start, stream.pos);
@@ -1871,10 +1896,18 @@ var CodeMirror = (function() {
   }
 
   // Find the position of an element by following the offsetParent chain.
-  function eltOffset(node) {
-    var x = 0, y = 0;
-    for (var n = node; n; n = n.offsetParent) {x += n.offsetLeft; y += n.offsetTop;}
-    for (var n = node.parentNode; n != node.ownerDocument.body; n = n.parentNode) {x -= n.scrollLeft; y -= n.scrollTop;}
+  // If screen==true, it returns screen (rather than page) coordinates.
+  function eltOffset(node, screen) {
+    var doc = node.ownerDocument.body;
+    var x = 0, y = 0, hitDoc = false;
+    for (var n = node; n; n = n.offsetParent) {
+      x += n.offsetLeft; y += n.offsetTop;
+      // Fixed-position elements don't have the document in their offset chain
+      if (n == doc) hitDoc = true;
+    }
+    var e = screen && hitDoc ? null : doc;
+    for (var n = node.parentNode; n != e; n = n.parentNode)
+      if (n.scrollLeft != null) { x -= n.scrollLeft; y -= n.scrollTop;}
     return {left: x, top: y};
   }
   // Get a node's text content.
