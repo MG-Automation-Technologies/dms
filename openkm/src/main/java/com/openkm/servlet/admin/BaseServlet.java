@@ -29,6 +29,9 @@ public class BaseServlet extends HttpServlet  {
 		sc.getRequestDispatcher("/error.jsp").forward(request, response);
 	}
 	
+	/**
+	 * Update HTTP session manager
+	 */
 	public void updateSessionManager(HttpServletRequest request) {
 		HttpSessionManager.getInstance().update(request.getSession().getId());
 	}
