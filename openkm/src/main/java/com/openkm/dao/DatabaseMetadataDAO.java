@@ -374,7 +374,7 @@ public class DatabaseMetadataDAO {
 				dms.setValue(dms.getValue() + 1);
 				session.update(dms);
 			} else {
-				// First sequence use
+				// First sequence use: starts with 1
 				dms = new DatabaseMetadataSequence();
 				dms.setTable(table);
 				dms.setColumn(column);
