@@ -183,11 +183,12 @@ public class DatabaseMetadataUtils {
 	 * Replace virtual columns by real ones
 	 */
 	public static String replaceVirtual(List<String> tables, String query) throws DatabaseException {
+		String ret = query;
 		for (String table : tables) {
-			query = replaceVirtual(table, query);
+			ret = replaceVirtual(table, ret);
 		}
 		
-		return query;
+		return ret;
 	}
 	
 	/**
