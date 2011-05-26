@@ -1,6 +1,6 @@
 .CodeMirror {
   overflow: auto;
-  height: 200px;
+  height: 300px;
   line-height: 1em;
   font-family: monospace;
 }
