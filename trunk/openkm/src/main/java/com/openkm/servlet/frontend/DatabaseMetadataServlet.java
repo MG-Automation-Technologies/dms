@@ -41,16 +41,17 @@ import com.openkm.util.DatabaseMetadataUtils;
  * DatabaseMetadataServlet
  * 
  * @author jllort
- *
+ * 
  */
 public class DatabaseMetadataServlet extends OKMRemoteServiceServlet implements OKMDatabaseMetadataService {
 	private static Logger log = LoggerFactory.getLogger(DatabaseMetadataServlet.class);
 	private static final long serialVersionUID = -879908904295685769L;
-	
+
 	@Override
-	public List<Map<String,String>> executeValueQuery(String table, String filter, String order) throws OKMException {
-		log.debug("executeValueQuery({}, {}, {})", new Object[]{ table, filter, order });
-		List<Map<String,String>> metadataValues = new ArrayList<Map<String,String>>();
+	public List<Map<String, String>> executeValueQuery(String table, String filter, String order) throws OKMException {
+		log.debug("executeValueQuery({}, {}, {})", new Object[] { table, filter, order });
+		updateSessionManager();
+		List<Map<String, String>> metadataValues = new ArrayList<Map<String, String>>();
 		try {
 			for (DatabaseMetadataValue dmv : DatabaseMetadataDAO.executeValueQuery(DatabaseMetadataUtils.buildQuery(table, filter, order))) {
 				metadataValues.add(DatabaseMetadataUtils.getDatabaseMetadataValueMap(dmv));
@@ -71,12 +72,13 @@ public class DatabaseMetadataServlet extends OKMRemoteServiceServlet implements 
 		log.debug("executeValueQuery: {}", metadataValues);
 		return metadataValues;
 	}
-	
+
 	@Override
-	public void updateValue(Map<String,String> map) throws OKMException {
+	public void updateValue(Map<String, String> map) throws OKMException {
 		log.debug("updateValue({})", map);
+		updateSessionManager();
 		try {
-			DatabaseMetadataDAO.updateValue(DatabaseMetadataUtils.getDatabaseMetadataValueByMap(map)); 
+			DatabaseMetadataDAO.updateValue(DatabaseMetadataUtils.getDatabaseMetadataValueByMap(map));
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_Database), e.getMessage());
@@ -88,11 +90,12 @@ public class DatabaseMetadataServlet extends OKMRemoteServiceServlet implements 
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_InvocationTarget), e.getMessage());
 		}
 	}
-	
+
 	@Override
-	public void createValue(Map<String,String> map) throws OKMException {
+	public void createValue(Map<String, String> map) throws OKMException {
 		log.debug("createValue({})", map);
-		try {			
+		updateSessionManager();
+		try {
 			DatabaseMetadataDAO.createValue(DatabaseMetadataUtils.getDatabaseMetadataValueByMap(map));
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
@@ -105,10 +108,45 @@ public class DatabaseMetadataServlet extends OKMRemoteServiceServlet implements 
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_InvocationTarget), e.getMessage());
 		}
 	}
+
+	@Override
+	public List<List<Map<String, String>>> executeMultiValueQuery(List<String> tables, String query) throws OKMException {
+		log.debug("executeMultiValueQuery({})", query);
+		updateSessionManager();
+		List<List<Map<String, String>>> ret = new ArrayList<List<Map<String, String>>>();
+		try {
+			for (DatabaseMetadataValue[] dmv : DatabaseMetadataDAO.executeMultiValueQuery(DatabaseMetadataUtils.replaceVirtual(tables, query))) {
+				List<Map<String, String>> dmvRow = new ArrayList<Map<String, String>>();
+				for (int i = 0; i < dmv.length; i++) {
+					dmvRow.add(DatabaseMetadataUtils.getDatabaseMetadataValueMap(dmv[i]));
+				}
+				ret.add(dmvRow);
+			}
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_Database), e.getMessage());
+		} catch (IllegalAccessException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_IllegalAccess), e.getMessage());
+		} catch (InvocationTargetException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_InvocationTarget), e.getMessage());
+		} catch (NoSuchMethodException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_NoSuchMethod), e.getMessage());
+		}
+		return ret;
+	}
 	
-//	public void executeMultiValueQuery(List<String> tables, String query) {
-//		log.debug("executeMultiValueQuery({})", query);
-//		List<Map<String,String>>[] ret;
-//
-//	}	
+	@Override
+	public Double getNextSequenceValue(String table, String column) throws OKMException {
+		log.debug("getNextSequenceValue({},{})", table, column);
+		updateSessionManager();
+		try {
+			return new Double(DatabaseMetadataDAO.getNextSequenceValue(table, column));
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+	}
 }
