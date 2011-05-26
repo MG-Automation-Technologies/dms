@@ -43,4 +43,5 @@ public interface OKMRepositoryService extends RemoteService {
 	public GWTFolder getThesaurusFolder() throws OKMException;
 	public GWTFolder getCategoriesFolder() throws OKMException;
 	public String getPathByUUID(String uuid) throws OKMException;
+	public Boolean hasNode(String path) throws OKMException;
 }
