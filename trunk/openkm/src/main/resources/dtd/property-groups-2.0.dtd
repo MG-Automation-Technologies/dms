@@ -19,6 +19,17 @@
 	readonly (true|false) "false"
 >
 
+<!ELEMENT suggestbox (validator*)>
+<!ATTLIST suggestbox
+	label CDATA #REQUIRED
+	name CDATA #REQUIRED
+	width CDATA #IMPLIED
+	height CDATA #IMPLIED
+	readonly (true|false) "false"
+	filterQuery CDATA #REQUIRED
+	valueQuery CDATA #REQUIRED
+>
+
 <!ELEMENT checkbox (validator*)>
 <!ATTLIST checkbox
 	label CDATA #REQUIRED

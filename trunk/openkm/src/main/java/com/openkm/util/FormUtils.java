@@ -52,6 +52,7 @@ import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Input;
 import com.openkm.bean.form.Option;
 import com.openkm.bean.form.Select;
+import com.openkm.bean.form.SuggestBox;
 import com.openkm.bean.form.TextArea;
 import com.openkm.bean.form.Validator;
 import com.openkm.core.ParseException;
@@ -249,6 +250,26 @@ public class FormUtils {
 					if (item != null) input.setReadonly(Boolean.parseBoolean(item.getNodeValue()));
 					input.setValidators(parseValidators(nField));
 					fe.add(input);
+				} else if (fieldComponent.equals("suggestbox")) {
+					SuggestBox sbox = new SuggestBox();
+					Node item = nField.getAttributes().getNamedItem("label");
+					if (item != null) sbox.setLabel(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("name");
+					if (item != null) sbox.setName(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("value");
+					if (item != null) sbox.setValue(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("width");
+					if (item != null) sbox.setWidth(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("height");
+					if (item != null) sbox.setHeight(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("filterQuery");
+					if (item != null) sbox.setFilterQuery(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("valueQuery");
+					if (item != null) sbox.setValueQuery(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("readonly");
+					if (item != null) sbox.setReadonly(Boolean.parseBoolean(item.getNodeValue()));
+					sbox.setValidators(parseValidators(nField));
+					fe.add(sbox);
 				} else if (fieldComponent.equals("checkbox")) {
 					CheckBox checkBox = new CheckBox();
 					Node item = nField.getAttributes().getNamedItem("label");
