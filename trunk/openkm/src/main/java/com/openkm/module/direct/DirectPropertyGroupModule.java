@@ -45,6 +45,7 @@ import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Input;
 import com.openkm.bean.form.Option;
 import com.openkm.bean.form.Select;
+import com.openkm.bean.form.SuggestBox;
 import com.openkm.bean.form.TextArea;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
@@ -293,6 +294,8 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 								
 								if (fe instanceof Input) {
 									((Input) fe).setValue(value.getString());
+								} else if (fe instanceof SuggestBox) {
+									((SuggestBox) fe).setValue(value.getString());
 								} else if (fe instanceof CheckBox) {
 									((CheckBox) fe).setValue(Boolean.parseBoolean(value.getString()));
 								} else if (fe instanceof TextArea) {
