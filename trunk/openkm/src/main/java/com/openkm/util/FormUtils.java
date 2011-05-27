@@ -144,12 +144,14 @@ public class FormUtils {
 							String pgLabel = nForm.getAttributes().getNamedItem("label").getNodeValue();
 							String pgName = nForm.getAttributes().getNamedItem("name").getNodeValue();
 							String pgVisible = nForm.getAttributes().getNamedItem("visible").getNodeValue();
+							String pgReadonly = nForm.getAttributes().getNamedItem("readonly").getNodeValue();
 							NodeList nlField = nForm.getChildNodes();
 							List<FormElement> fe = parseField(nlField);
 							PropertyGroup pg = new PropertyGroup();
 							pg.setLabel(pgLabel);
 							pg.setName(pgName);
 							pg.setVisible(Boolean.valueOf(pgVisible));
+							pg.setReadonly(Boolean.valueOf(pgReadonly));
 							pGroups.put(pg, fe);
 						}
 					}
