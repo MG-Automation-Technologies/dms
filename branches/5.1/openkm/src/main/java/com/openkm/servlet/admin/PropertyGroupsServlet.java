@@ -50,6 +50,7 @@ import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Input;
 import com.openkm.bean.form.Option;
 import com.openkm.bean.form.Select;
+import com.openkm.bean.form.SuggestBox;
 import com.openkm.bean.form.TextArea;
 import com.openkm.bean.form.Validator;
 import com.openkm.core.Config;
@@ -202,29 +203,55 @@ public class PropertyGroupsServlet extends BaseServlet {
 			Input input = (Input) fe;
 			ret.put("field", "Input");
 			StringBuilder sb = new StringBuilder();
+			sb.append("<i>Readonly:</i> ");
+			sb.append(input.isReadonly());
+			sb.append("<br/>");
 			sb.append("<i>Type:</i> ");
 			sb.append(input.getType());
 			drawValidators(sb, input.getValidators());
+			ret.put("others", sb.toString());
+		} else if (fe instanceof SuggestBox) {
+			SuggestBox suggestBox = (SuggestBox) fe;
+			ret.put("field", "Input");
+			StringBuilder sb = new StringBuilder();
+			sb.append("<i>Readonly:</i> ");
+			sb.append(suggestBox.isReadonly());
+			sb.append("<br/>");
+			sb.append("<i>FilterQuery:</i> ");
+			sb.append(suggestBox.getFilterQuery());
+			sb.append("<br/>");
+			sb.append("<i>ValueQuery:</i> ");
+			sb.append(suggestBox.getValueQuery());
+			drawValidators(sb, suggestBox.getValidators());
 			ret.put("others", sb.toString());
 		} else if (fe instanceof CheckBox) {
 			CheckBox checkBox = new CheckBox();
 			ret.put("field", "CheckBox");
 			StringBuilder sb = new StringBuilder();
+			sb.append("<i>Readonly:</i> ");
+			sb.append(checkBox.isReadonly());
 			drawValidators(sb, checkBox.getValidators());
 			ret.put("others", sb.toString());
 		} else if (fe instanceof TextArea) {
 			TextArea textArea = (TextArea) fe;
 			ret.put("field", "TextArea");
 			StringBuilder sb = new StringBuilder();
+			sb.append("<i>Readonly:</i> ");
+			sb.append(textArea.isReadonly());
 			drawValidators(sb, textArea.getValidators());
 			ret.put("others", sb.toString());
 		} else if (fe instanceof Select) {
 			Select select = (Select) fe;
 			ret.put("field", "Select");
 			StringBuilder sb = new StringBuilder();
+			sb.append("<i>Readonly:</i> ");
+			sb.append(select.isReadonly());
+			sb.append("<br/>");
 			sb.append("<i>Type:</i> ");
 			sb.append(select.getType());
-			sb.append("<br/><i>Options:</i><ul>");
+			sb.append("<br/>");
+			sb.append("<i>Options:</i><ul>");
+			
 			for (Iterator<Option> itOpt = select.getOptions().iterator(); itOpt.hasNext(); ) {
 				Option opt = itOpt.next();
 				sb.append("<li><i>Label:</i> ");
@@ -233,6 +260,7 @@ public class PropertyGroupsServlet extends BaseServlet {
 				sb.append(opt.getValue());
 				sb.append("</li>");
 			}
+			
 			sb.append("</ul>");
 			drawValidators(sb, select.getValidators());
 			ret.put("others", sb.toString());
