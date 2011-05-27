@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!ELEMENT property-groups (property-group+)>
 
-<!ELEMENT property-group (input|checkbox|textarea|select)*>
+<!ELEMENT property-group (input|suggestbox|checkbox|textarea|select)*>
 <!ATTLIST property-group
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
