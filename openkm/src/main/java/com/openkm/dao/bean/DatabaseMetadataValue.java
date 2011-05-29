@@ -34,6 +34,7 @@ import javax.persistence.Table;
 @Table(name="OKM_DB_METADATA_VALUE")
 public class DatabaseMetadataValue implements Serializable {
 	private static final long serialVersionUID = 1L;
+	private static final int MAX_LENGTH = 512;
 	
 	@Id
 	@Column(name="DMV_ID")
@@ -43,49 +44,49 @@ public class DatabaseMetadataValue implements Serializable {
 	@Column(name="DMV_TABLE", length=32)
 	private String table;
 	
-	@Column(name="DMV_COL00", length=512)
+	@Column(name="DMV_COL00", length=MAX_LENGTH)
 	private String col00;
 	
-	@Column(name="DMV_COL01", length=512)
+	@Column(name="DMV_COL01", length=MAX_LENGTH)
 	private String col01;
 	
-	@Column(name="DMV_COL02", length=512)
+	@Column(name="DMV_COL02", length=MAX_LENGTH)
 	private String col02;
 	
-	@Column(name="DMV_COL03", length=512)
+	@Column(name="DMV_COL03", length=MAX_LENGTH)
 	private String col03;
 	
-	@Column(name="DMV_COL04", length=512)
+	@Column(name="DMV_COL04", length=MAX_LENGTH)
 	private String col04;
 	
-	@Column(name="DMV_COL05", length=512)
+	@Column(name="DMV_COL05", length=MAX_LENGTH)
 	private String col05;
 	
-	@Column(name="DMV_COL06", length=512)
+	@Column(name="DMV_COL06", length=MAX_LENGTH)
 	private String col06;
 	
-	@Column(name="DMV_COL07", length=512)
+	@Column(name="DMV_COL07", length=MAX_LENGTH)
 	private String col07;
 	
-	@Column(name="DMV_COL08", length=512)
+	@Column(name="DMV_COL08", length=MAX_LENGTH)
 	private String col08;
 	
-	@Column(name="DMV_COL09", length=512)
+	@Column(name="DMV_COL09", length=MAX_LENGTH)
 	private String col09;
 	
-	@Column(name="DMV_COL10", length=512)
+	@Column(name="DMV_COL10", length=MAX_LENGTH)
 	private String col10;
 	
-	@Column(name="DMV_COL11", length=512)
+	@Column(name="DMV_COL11", length=MAX_LENGTH)
 	private String col11;
 	
-	@Column(name="DMV_COL12", length=512)
+	@Column(name="DMV_COL12", length=MAX_LENGTH)
 	private String col12;
 	
-	@Column(name="DMV_COL13", length=512)
+	@Column(name="DMV_COL13", length=MAX_LENGTH)
 	private String col13;
 	
-	@Column(name="DMV_COL14", length=512)
+	@Column(name="DMV_COL14", length=MAX_LENGTH)
 	private String col14;
 
 	public Long getId() {
