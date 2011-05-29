@@ -40,52 +40,52 @@ public class DatabaseMetadataValue implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
-	@Column(name="DMV_TABLE")
+	@Column(name="DMV_TABLE", length=32)
 	private String table;
 	
-	@Column(name="DMV_COL00")
+	@Column(name="DMV_COL00", length=512)
 	private String col00;
 	
-	@Column(name="DMV_COL01")
+	@Column(name="DMV_COL01", length=512)
 	private String col01;
 	
-	@Column(name="DMV_COL02")
+	@Column(name="DMV_COL02", length=512)
 	private String col02;
 	
-	@Column(name="DMV_COL03")
+	@Column(name="DMV_COL03", length=512)
 	private String col03;
 	
-	@Column(name="DMV_COL04")
+	@Column(name="DMV_COL04", length=512)
 	private String col04;
 	
-	@Column(name="DMV_COL05")
+	@Column(name="DMV_COL05", length=512)
 	private String col05;
 	
-	@Column(name="DMV_COL06")
+	@Column(name="DMV_COL06", length=512)
 	private String col06;
 	
-	@Column(name="DMV_COL07")
+	@Column(name="DMV_COL07", length=512)
 	private String col07;
 	
-	@Column(name="DMV_COL08")
+	@Column(name="DMV_COL08", length=512)
 	private String col08;
 	
-	@Column(name="DMV_COL09")
+	@Column(name="DMV_COL09", length=512)
 	private String col09;
 	
-	@Column(name="DMV_COL10")
+	@Column(name="DMV_COL10", length=512)
 	private String col10;
 	
-	@Column(name="DMV_COL11")
+	@Column(name="DMV_COL11", length=512)
 	private String col11;
 	
-	@Column(name="DMV_COL12")
+	@Column(name="DMV_COL12", length=512)
 	private String col12;
 	
-	@Column(name="DMV_COL13")
+	@Column(name="DMV_COL13", length=512)
 	private String col13;
 	
-	@Column(name="DMV_COL14")
+	@Column(name="DMV_COL14", length=512)
 	private String col14;
 
 	public Long getId() {
