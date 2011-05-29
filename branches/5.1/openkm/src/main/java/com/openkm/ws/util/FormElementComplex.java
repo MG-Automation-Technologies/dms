@@ -34,6 +34,7 @@ import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Input;
 import com.openkm.bean.form.Option;
 import com.openkm.bean.form.Select;
+import com.openkm.bean.form.SuggestBox;
 import com.openkm.bean.form.TextArea;
 import com.openkm.bean.form.Validator;
 
@@ -150,19 +151,28 @@ public class FormElementComplex implements Serializable {
 			Input i = (Input) fe;
 			fec.setType(i.getType());
 			fec.setValue(i.getValue());
+			fec.setReadonly(i.isReadonly());
 			fec.setObjClass(i.getClass().getName());
+		} else if (fe instanceof SuggestBox) {
+			SuggestBox sb = (SuggestBox) fe;
+			fec.setValue(sb.getValue());
+			fec.setReadonly(sb.isReadonly());
+			fec.setObjClass(sb.getClass().getName());
 		} else if (fe instanceof TextArea) {
 			TextArea ta = (TextArea) fe;
 			fec.setValue(ta.getValue());
+			fec.setReadonly(ta.isReadonly());
 			fec.setObjClass(ta.getClass().getName());
 		} else if (fe instanceof CheckBox) {
 			CheckBox cb = (CheckBox) fe;
 			fec.setValue(Boolean.toString(cb.getValue()));
+			fec.setReadonly(cb.isReadonly());
 			fec.setObjClass(cb.getClass().getName());
 		} else if (fe instanceof Select) {
 			Select s = (Select) fe;
 			fec.setType(s.getType());
 			fec.setOptions(s.getOptions());
+			fec.setReadonly(s.isReadonly());
 			fec.setObjClass(s.getClass().getName());
 		} else if (fe instanceof Button) {
 			Button b = (Button) fe;
@@ -186,16 +196,24 @@ public class FormElementComplex implements Serializable {
 			fe = new Input();
 			((Input) fe).setType(fec.getType());
 			((Input) fe).setValue(fec.getValue());
+			((Input) fe).setReadonly(fec.isReadonly());
+		} else if (SuggestBox.class.getName().equals(fec.getObjClass())) {
+			fe = new SuggestBox();
+			((SuggestBox) fe).setValue(fec.getValue());
+			((SuggestBox) fe).setReadonly(fec.isReadonly());
 		} else if (TextArea.class.getName().equals(fec.getObjClass())) {
 			fe = new TextArea();
 			((TextArea) fe).setValue(fec.getValue());
+			((TextArea) fe).setReadonly(fec.isReadonly());
 		} else if (CheckBox.class.getName().equals(fec.getObjClass())) {
 			fe = new CheckBox();
 			((CheckBox) fe).setValue(Boolean.valueOf(fec.getValue()));
+			((CheckBox) fe).setReadonly(fec.isReadonly());
 		} else if (Select.class.getName().equals(fec.getObjClass())) {
 			fe = new Select();
 			((Select) fe).setType(fec.getType());
-			((Select) fe).setOptions(fec.getOptions());			
+			((Select) fe).setOptions(fec.getOptions());
+			((Select) fe).setReadonly(fec.isReadonly());
 		} else if (Button.class.getName().equals(fec.getObjClass())) {
 			fe = new Button();
 			((Button) fe).setType(fec.getType());
