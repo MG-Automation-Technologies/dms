@@ -52,7 +52,11 @@ public class Forum implements Serializable {
 	}
 	
 	public void setName(String name) {
-		this.name = name;
+		if (name.length() > 255) {
+			this.name = name.substring(0, 255);
+		} else {
+			this.name = name;
+		}
 	}
 	
 	public String getDescription() {
