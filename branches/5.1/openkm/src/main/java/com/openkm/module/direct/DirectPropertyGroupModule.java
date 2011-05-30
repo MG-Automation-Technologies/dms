@@ -382,6 +382,8 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 								} else if (!pd[i].isMultiple()) {
 									if (fe instanceof Input) {
 										prop.setValue(((Input) fe).getValue());
+									} else if (fe instanceof SuggestBox) {
+										prop.setValue(((SuggestBox) fe).getValue());
 									} else if (fe instanceof CheckBox) {
 										prop.setValue(Boolean.toString(((CheckBox) fe).getValue()));
 									} else if (fe instanceof TextArea) {
