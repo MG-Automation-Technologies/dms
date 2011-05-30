@@ -217,6 +217,9 @@ public class PropertyGroupsServlet extends BaseServlet {
 			sb.append("<i>Readonly:</i> ");
 			sb.append(suggestBox.isReadonly());
 			sb.append("<br/>");
+			sb.append("<i>Table:</i> ");
+			sb.append(suggestBox.getTable());
+			sb.append("<br/>");
 			sb.append("<i>FilterQuery:</i> ");
 			sb.append(suggestBox.getFilterQuery());
 			sb.append("<br/>");
