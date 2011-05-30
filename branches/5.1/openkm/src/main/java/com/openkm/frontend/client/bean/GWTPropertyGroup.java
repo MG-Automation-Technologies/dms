@@ -37,6 +37,8 @@ public class GWTPropertyGroup implements IsSerializable {
 	
 	private String label = "";
 	private String name = "";
+	private boolean visible = true;
+	private boolean readonly = false;
 	
 	public String getLabel() {
 		return label;
@@ -54,11 +56,29 @@ public class GWTPropertyGroup implements IsSerializable {
 		this.name = name;
 	}
 	
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
+	public boolean isReadonly() {
+		return readonly;
+	}
+
+	public void setReadonly(boolean readonly) {
+		this.readonly = readonly;
+	}
+	
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("{");
 		sb.append("label="); sb.append(label);
 		sb.append(", name="); sb.append(name);
+		sb.append(", visible="); sb.append(visible);
+		sb.append(", readonly="); sb.append(readonly);
 		sb.append("}");
 		return sb.toString();
 	}

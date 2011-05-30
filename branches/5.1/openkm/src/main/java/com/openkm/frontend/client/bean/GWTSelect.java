@@ -27,6 +27,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * GWTSelect
+ * 
+ * @author jllort
+ *
+ */
 public class GWTSelect extends GWTFormElement implements IsSerializable {
 	public static final String TYPE_SIMPLE = "simple";
 	public static final String TYPE_MULTIPLE = "multiple";

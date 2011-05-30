@@ -27,6 +27,12 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
+/**
+ * GWTInput
+ * 
+ * @author jllort
+ *
+ */
 public class GWTInput extends GWTFormElement implements IsSerializable {
 	public static final String TYPE_TEXT = "text";
 	public static final String TYPE_DATE = "date";
