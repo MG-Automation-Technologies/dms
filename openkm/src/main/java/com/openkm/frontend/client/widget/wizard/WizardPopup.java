@@ -174,7 +174,7 @@ public class WizardPopup extends DialogBox {
 		hPanel.add(actualButton);
 		hPanel.add(space);
 		hPanel.setCellWidth(space, "3");
-		propertyGroupWidget = new PropertyGroupWidget(docPath, groupsList.get(groupIndex).getName(), 
+		propertyGroupWidget = new PropertyGroupWidget(docPath, groupsList.get(groupIndex), 
 				   									  new HTML(groupsList.get(groupIndex).getLabel()), vPanelFired );
 		vPanelFired.clear();
 		vPanelFired.add(propertyGroupWidget);
