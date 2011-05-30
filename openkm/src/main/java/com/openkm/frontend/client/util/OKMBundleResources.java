@@ -376,4 +376,7 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/icon/actions/new_record.png")
 	public ImageResource newRecord();
+	
+	@Source("com/openkm/frontend/public/img/icon/actions/database_record.png")
+	public ImageResource databaseRecord();
 }

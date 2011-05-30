@@ -266,6 +266,29 @@ public class Util {
 	}
 	
 	/**
+	 * Get parent item path from path.
+	 * 
+	 * @param path The complete item path.
+	 * @return The parent item path.
+	 */
+	public static String getParent(String path) {
+		int lastSlash = path.lastIndexOf('/');
+		String ret = (lastSlash > 0)?path.substring(0, lastSlash):"";
+		return ret;	
+	}
+
+	/**
+	 * Get item name from path.
+	 * 
+	 * @param path The complete item path.
+	 * @return The name of the item.
+	 */
+	public static String getName(String path) {
+		String ret = path.substring(path.lastIndexOf('/')+1);
+		return ret;
+	}
+	
+	/**
 	 * Change on fly the actual css
 	 * 
 	 * @param title The css name
