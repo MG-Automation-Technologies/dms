@@ -52,7 +52,6 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.openkm.extension.frontend.client.widget.client.dgt.HEGECO;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTCheckBox;
 import com.openkm.frontend.client.bean.GWTFolder;
@@ -744,7 +743,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 					}
 					@Override
 					public void onFailure(Throwable caught) {
-						HEGECO.get().nuevoExpedientePopup.onFailureError("getKeyValues", caught);
+						Main.get().showError("getKeyValues", caught);
 					}
 				});
 			}
