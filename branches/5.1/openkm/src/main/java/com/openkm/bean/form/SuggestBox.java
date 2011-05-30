@@ -9,6 +9,7 @@ public class SuggestBox extends FormElement {
 	private String value = "";
 	private boolean readonly = false;
 	String table = "";
+	String dialogTitle = "";
 	String filterQuery = "";
 	String valueQuery = "";
 
@@ -60,6 +61,14 @@ public class SuggestBox extends FormElement {
 		this.valueQuery = valueQuery;
 	}
 	
+	public String getDialogTitle() {
+		return dialogTitle;
+	}
+
+	public void setDialogTitle(String dialogTitle) {
+		this.dialogTitle = dialogTitle;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -72,6 +81,7 @@ public class SuggestBox extends FormElement {
 		sb.append(", table="); sb.append(table);
 		sb.append(", filterQuery="); sb.append(filterQuery);
 		sb.append(", valueQuery="); sb.append(valueQuery);
+		sb.append(", dialogTitle="); sb.append(dialogTitle);
 		sb.append(", validators="); sb.append(validators);
 		sb.append("}");
 		return sb.toString();

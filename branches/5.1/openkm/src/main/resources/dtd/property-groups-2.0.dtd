@@ -29,6 +29,7 @@
 	table CDATA #IMPLIED
 	filterQuery CDATA #REQUIRED
 	valueQuery CDATA #REQUIRED
+	dialogTitle CDATA #REQUIRED
 >
 
 <!ELEMENT checkbox (validator*)>
