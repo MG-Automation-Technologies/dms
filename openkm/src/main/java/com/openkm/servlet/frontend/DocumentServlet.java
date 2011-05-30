@@ -683,12 +683,14 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 				TemplateUtils.replace(fileName, fis, values, fos);
 				fis.close();
 				fos.close();
+				
 				// Converting to pdf
 				fis = new FileInputStream(tmp);
 				File tmp2 = tmp;
 				tmp = File.createTempFile("okm", ".pdf");
 				DocConverter.getInstance().html2pdf(fis,tmp); // tmp has converted pdf file
 				tmp2.delete(); // deleting html tmp file
+				
 				// Changing fileName after conversion
 				destinationPath = destinationPath.substring(0,destinationPath.lastIndexOf(".")) + ".pdf";
 				fis.close();
@@ -706,12 +708,15 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 			Collection<PropertyGroup> col = OKMPropertyGroup.getInstance().getGroups(null, docPath);
 			for (Iterator<PropertyGroup> it = col.iterator(); it.hasNext();) {	
 				PropertyGroup pg = it.next();
+				
 				// Adding group
 				OKMPropertyGroup.getInstance().addGroup(null, newDoc.getPath(), pg.getName());
+				
 				// Getting group properties
 				List<FormElement> properties = new ArrayList<FormElement>(); // The properties to be saved
 				for (Iterator<FormElement> itx = OKMPropertyGroup.getInstance().getProperties(null, newDoc.getPath(), pg.getName()).iterator(); itx.hasNext();) {
 					FormElement fe = itx.next();
+					
 					// Iterates all properties because can have more than one group
 					for (GWTFormElement fp : formProperties) {
 						if (fe.getName().equals(fp.getName())) {
@@ -719,6 +724,7 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 						}
 					}
 				}
+				
 				// Setting properties
 				OKMPropertyGroup.getInstance().setProperties(null, newDoc.getPath(), pg.getName(), properties); 
 			}
