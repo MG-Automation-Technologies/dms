@@ -58,6 +58,7 @@ import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Input;
 import com.openkm.bean.form.Option;
 import com.openkm.bean.form.Select;
+import com.openkm.bean.form.SuggestBox;
 import com.openkm.bean.form.TextArea;
 import com.openkm.bean.form.Validator;
 import com.openkm.bean.workflow.Comment;
@@ -74,6 +75,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.Activity;
 import com.openkm.dao.bean.Bookmark;
+import com.openkm.dao.bean.KeyValue;
 import com.openkm.dao.bean.Language;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.UserConfig;
@@ -102,6 +104,7 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTInput;
+import com.openkm.frontend.client.bean.GWTKeyValue;
 import com.openkm.frontend.client.bean.GWTLanguage;
 import com.openkm.frontend.client.bean.GWTLock;
 import com.openkm.frontend.client.bean.GWTMail;
@@ -114,6 +117,7 @@ import com.openkm.frontend.client.bean.GWTPropertyParams;
 import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.bean.GWTQueryResult;
 import com.openkm.frontend.client.bean.GWTSelect;
+import com.openkm.frontend.client.bean.GWTSuggestBox;
 import com.openkm.frontend.client.bean.GWTTaskInstance;
 import com.openkm.frontend.client.bean.GWTTextArea;
 import com.openkm.frontend.client.bean.GWTToken;
@@ -811,21 +815,21 @@ public class GWTUtil {
 	public static GWTFormElement copy(FormElement formElement) throws PathNotFoundException, RepositoryException, DatabaseException {
 		if (formElement instanceof Button) {
 			GWTButton gWTButton = new GWTButton();
+			gWTButton.setName(formElement.getName());
 			gWTButton.setLabel(formElement.getLabel());
 			gWTButton.setWidth(formElement.getWidth());
 			gWTButton.setHeight(formElement.getHeight());
 			Button button = (Button) formElement;
-			gWTButton.setName(button.getName());
 			gWTButton.setValue(button.getValue());
 			gWTButton.setType(button.getType());
 			return gWTButton;
 		} else if (formElement instanceof Input) {
 			GWTInput gWTInput = new GWTInput();
+			gWTInput.setName(formElement.getName());
 			gWTInput.setLabel(formElement.getLabel());
 			gWTInput.setWidth(formElement.getWidth());
 			gWTInput.setHeight(formElement.getHeight());
 			Input input = (Input) formElement;
-			gWTInput.setName(input.getName());
 			gWTInput.setReadonly(input.isReadonly());
 			if (input.getType().equals(Input.TYPE_TEXT) || 
 				input.getType().equals(Input.TYPE_LINK) ||
@@ -842,22 +846,37 @@ public class GWTUtil {
 			gWTInput.setType(((Input) formElement).getType());
 			gWTInput.setValidators(copyValidators(input.getValidators()));
 			return gWTInput;
+		} else if (formElement instanceof SuggestBox) {
+			GWTSuggestBox gWTsuggestBox = new GWTSuggestBox();
+			gWTsuggestBox.setName(formElement.getName());
+			gWTsuggestBox.setLabel(formElement.getLabel());
+			gWTsuggestBox.setWidth(formElement.getWidth());
+			gWTsuggestBox.setHeight(formElement.getHeight());
+			SuggestBox suggestBox = (SuggestBox) formElement;
+			gWTsuggestBox.setReadonly(suggestBox.isReadonly());
+			gWTsuggestBox.setValidators(copyValidators(suggestBox.getValidators()));
+			gWTsuggestBox.setValue(suggestBox.getValue());
+			gWTsuggestBox.setDialogTitle(suggestBox.getDialogTitle());
+			gWTsuggestBox.setTable(suggestBox.getTable());
+			gWTsuggestBox.setFilterQuery(suggestBox.getFilterQuery());
+			gWTsuggestBox.setValueQuery(suggestBox.getValueQuery());
+			return gWTsuggestBox;
 		} else if (formElement instanceof CheckBox) {
 			GWTCheckBox gWTCheckbox = new GWTCheckBox();
+			gWTCheckbox.setName(formElement.getName());
 			gWTCheckbox.setLabel(formElement.getLabel());
 			CheckBox checkbox = (CheckBox) formElement;
-			gWTCheckbox.setName(checkbox.getName());
 			gWTCheckbox.setValue(checkbox.getValue());
 			gWTCheckbox.setReadonly(checkbox.isReadonly());
 			gWTCheckbox.setValidators(copyValidators(checkbox.getValidators()));
 			return gWTCheckbox;
 		} else if (formElement instanceof Select) {
 			GWTSelect gWTselect = new GWTSelect();
+			gWTselect.setName(formElement.getName());
 			gWTselect.setLabel(formElement.getLabel());
 			gWTselect.setWidth(formElement.getWidth());
 			gWTselect.setHeight(formElement.getHeight());
 			Select select = (Select) formElement;
-			gWTselect.setName(select.getName());
 			gWTselect.setType(select.getType());
 			gWTselect.setReadonly(select.isReadonly());
 			List<GWTOption> options = new ArrayList<GWTOption>();
@@ -869,11 +888,11 @@ public class GWTUtil {
 			return gWTselect;
 		} else if (formElement instanceof TextArea) {
 			GWTTextArea gWTTextArea= new GWTTextArea();
+			gWTTextArea.setName(formElement.getName());
 			gWTTextArea.setLabel(formElement.getLabel());
 			gWTTextArea.setWidth(formElement.getWidth());
 			gWTTextArea.setHeight(formElement.getHeight());
 			TextArea textArea = (TextArea) formElement;
-			gWTTextArea.setName(textArea.getName());
 			gWTTextArea.setValue(textArea.getValue());
 			gWTTextArea.setReadonly(textArea.isReadonly());
 			gWTTextArea.setValidators(copyValidators(textArea.getValidators()));
@@ -891,13 +910,13 @@ public class GWTUtil {
 	public static FormElement copy(GWTFormElement formElement) {
 		if (formElement instanceof GWTButton) {
 			Button button = new Button();
-			button.setName(((GWTButton) formElement).getName());
+			button.setName(formElement.getName());
 			button.setValue(((GWTButton) formElement).getValue());
 			button.setType(((GWTButton) formElement).getType());
 			return button;
 		} else if (formElement instanceof GWTInput) {
 			Input input = new Input();
-			input.setName(((GWTInput) formElement).getName());
+			input.setName(formElement.getName());
 			input.setReadonly(((GWTInput) formElement).isReadonly());
 			if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_TEXT) || 
 				((GWTInput) formElement).getType().equals(GWTInput.TYPE_LINK) ||
@@ -912,16 +931,24 @@ public class GWTUtil {
 			} 
 			input.setType(((GWTInput) formElement).getType());
 			return input;
+		} else if(formElement instanceof GWTSuggestBox) {
+			SuggestBox suggestBox = new SuggestBox();
+			suggestBox.setName(formElement.getName());
+			suggestBox.setReadonly(((GWTSuggestBox)formElement).isReadonly());
+			suggestBox.setValue(((GWTSuggestBox)formElement).getValue());
+			suggestBox.setFilterQuery(((GWTSuggestBox)formElement).getFilterQuery());
+			suggestBox.setValueQuery(((GWTSuggestBox)formElement).getValueQuery());
+			return suggestBox;
 		} else if (formElement instanceof GWTCheckBox) {
 			CheckBox checkbox = new CheckBox();
 			checkbox.setLabel(formElement.getLabel());
-			checkbox.setName(((GWTCheckBox) formElement).getName());
+			checkbox.setName(formElement.getName());
 			checkbox.setValue(((GWTCheckBox) formElement).getValue());
 			checkbox.setReadonly(((GWTCheckBox) formElement).isReadonly());
 			return checkbox;
 		} else if (formElement instanceof GWTSelect) {
 			Select gWTselect = new Select();
-			gWTselect.setName(((GWTSelect) formElement).getName());
+			gWTselect.setName(formElement.getName());
 			gWTselect.setType(((GWTSelect) formElement).getType());
 			gWTselect.setReadonly(((GWTSelect) formElement).isReadonly());
 			List<Option> options = new ArrayList<Option>();
@@ -932,7 +959,7 @@ public class GWTUtil {
 			return gWTselect;
 		} else if (formElement instanceof GWTTextArea) {
 			TextArea gWTTextArea= new TextArea();
-			gWTTextArea.setName(((GWTTextArea) formElement).getName());
+			gWTTextArea.setName(formElement.getName());
 			gWTTextArea.setValue(((GWTTextArea) formElement).getValue());
 			gWTTextArea.setReadonly(((GWTTextArea) formElement).isReadonly());
 			return gWTTextArea;
@@ -953,6 +980,9 @@ public class GWTUtil {
 			
 		} else if (formElement instanceof GWTInput) {
 			return ((GWTInput) formElement).getValue();
+
+		} else if (formElement instanceof GWTSuggestBox) {
+			return ((GWTSuggestBox) formElement).getValue();
 
 		} else if (formElement instanceof GWTCheckBox) {
 			return ((GWTCheckBox) formElement).getValue()?"true":"false";
@@ -1100,6 +1130,8 @@ public class GWTUtil {
 		
 		gWTPropertyGroup.setLabel(property.getLabel());
 		gWTPropertyGroup.setName(property.getName());
+		gWTPropertyGroup.setVisible(property.isVisible());
+		gWTPropertyGroup.setReadonly(property.isReadonly());
 		
 		return gWTPropertyGroup;
 	}
@@ -1550,5 +1582,18 @@ public class GWTUtil {
 		fp.setSubject(post.getSubject());
 		fp.setUser(post.getUser());
 		return fp;
+	}
+	
+	/**
+	 * Copy KeyValue to GWTKeyValue
+	 * 
+	 * @param keyValue KeyValue
+	 * @return
+	 */
+	public static GWTKeyValue copy(KeyValue keyValue) {
+		GWTKeyValue gWTKeyValue = new GWTKeyValue();
+		gWTKeyValue.setKey(keyValue.getKey());
+		gWTKeyValue.setValue(keyValue.getValue());
+		return gWTKeyValue;
 	}
 }
