@@ -63,6 +63,7 @@ public class ErrorCode {
 	public static final String ORIGIN_OKMZohoService 					= "030";
 	public static final String ORIGIN_OKMForumService 					= "031";
 	public static final String ORIGIN_OKMDatabaseMetadataService		= "032";
+	public static final String ORIGIN_OKMKeyValueService				= "033";
 	
 	// Cause code error is XXX digits
 	public static final String CAUSE_Repository 			= "001";
