@@ -33,6 +33,7 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.extension.event.handler.PropertyGroupHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasPropertyGroupHandlerExtension;
 import com.openkm.frontend.client.widget.ConfirmPopup;
@@ -50,23 +51,21 @@ public class PropertyGroup extends Composite implements HasPropertyGroupHandlerE
 	
 	private ScrollPanel scrollPanel;
 	private PropertyGroupWidget propertyGroupWidget;
-	private String grpName;
-	private String grpLabel;
 	private Button changeButton;
 	private Button removeButton;
 	private Button cancelButton;
 	private boolean editValues = false;
 	private FiredHorizontalPanel hPanelFired;
+	private GWTPropertyGroup propertyGroup;
 	
 	/**
 	 * PropertyGroup
 	 */
-	public PropertyGroup(String grpName, String groupLabel, GWTDocument doc, GWTFolder folder, boolean visible) {	
+	public PropertyGroup(GWTPropertyGroup propertyGroup, GWTDocument doc, GWTFolder folder, boolean visible) {	
 		hPanelFired = new FiredHorizontalPanel();
-		propertyGroupWidget = new PropertyGroupWidget(doc.getPath(), grpName, hPanelFired, hPanelFired);
+		propertyGroupWidget = new PropertyGroupWidget(doc.getPath(), propertyGroup, hPanelFired, hPanelFired);
 		scrollPanel = new ScrollPanel(propertyGroupWidget);
-		this.grpName = grpName;
-		this.grpLabel = groupLabel;
+		this.propertyGroup = propertyGroup;
 		
 		changeButton = new Button(Main.i18n("button.change"), new ClickHandler() { 
 			@Override
@@ -213,7 +212,7 @@ public class PropertyGroup extends Composite implements HasPropertyGroupHandlerE
 	 * @return The group name
 	 */
 	public String getGrpName(){
-		return grpName;
+		return propertyGroup.getName();
 	}
 	
 	/**
@@ -222,7 +221,7 @@ public class PropertyGroup extends Composite implements HasPropertyGroupHandlerE
 	 * @return The group label
 	 */
 	public String getGrpLabel(){
-		return grpLabel;
+		return propertyGroup.getLabel();
 	}
 	
 	/**
