@@ -26,6 +26,7 @@
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
 	readonly (true|false) "false"
+	table CDATA #IMPLIED
 	filterQuery CDATA #REQUIRED
 	valueQuery CDATA #REQUIRED
 >
