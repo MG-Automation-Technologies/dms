@@ -35,13 +35,14 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
+import com.google.gwt.user.client.ui.HTMLTable.RowFormatter;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -51,24 +52,28 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
-import com.google.gwt.user.client.ui.HTMLTable.RowFormatter;
+import com.openkm.extension.frontend.client.widget.client.dgt.HEGECO;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTCheckBox;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTInput;
+import com.openkm.frontend.client.bean.GWTKeyValue;
 import com.openkm.frontend.client.bean.GWTOption;
+import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.GWTSelect;
+import com.openkm.frontend.client.bean.GWTSuggestBox;
 import com.openkm.frontend.client.bean.GWTTextArea;
 import com.openkm.frontend.client.bean.GWTValidator;
-import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.extension.event.HasPropertyGroupEvent;
 import com.openkm.frontend.client.extension.event.handler.PropertyGroupHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasPropertyGroupHandlerExtension;
+import com.openkm.frontend.client.service.OKMKeyValueService;
+import com.openkm.frontend.client.service.OKMKeyValueServiceAsync;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
+import com.openkm.frontend.client.util.MessageFormat;
 import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.util.validator.ValidatorBuilder;
@@ -87,9 +92,9 @@ import eu.maydu.gwt.validation.client.actions.FocusAction;
 public class PropertyGroupWidget extends Composite implements HasPropertyGroupEvent, HasPropertyGroupHandlerExtension  {
 	
 	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT.create(OKMPropertyGroupService.class);
+	private final OKMKeyValueServiceAsync keyValueService = (OKMKeyValueServiceAsync) GWT.create(OKMKeyValueService.class);
 	
 	private FlexTable table;
-	private String grpName;
 	private String docPath;
 	private List<GWTFormElement> formElementList = new ArrayList<GWTFormElement>();
 	private Map<String, Widget> hWidgetProperties = new HashMap<String, Widget>();
@@ -97,22 +102,51 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	private PropertyGroupWidgetToFire propertyGroupWidgetToFire;
 	private List<PropertyGroupHandlerExtension> propertyGroupHandlerExtensionList;
 	private FolderSelectPopup folderSelectPopup;
-	ValidationProcessor validationProcessor;
+	private ValidationProcessor validationProcessor;
+	private Map<String,String> valuesMap = new HashMap<String, String>();
+	private GWTPropertyGroup propertyGroup;
 	
 	/**
 	 * PropertyGroup
 	 * 
 	 * @param docPath The document path
-	 * @param grpName The group name
+	 * @param propertyGroup The group
+	 * @param widget Widget at first row
+	 * @param PropertyGroupWidgetToFire widget with methods to be fired
+	 * @param valuesMap map of initial values
+	 */
+	public PropertyGroupWidget(String docPath, GWTPropertyGroup propertyGroup, Widget widget, PropertyGroupWidgetToFire propertyGroupWidgetToFire, 
+			Map<String,String> valuesMap) {
+		this.valuesMap = valuesMap;
+		start(docPath, propertyGroup, widget, propertyGroupWidgetToFire);
+	}
+	
+	/**
+	 * PropertyGroup
+	 * 
+	 * @param docPath The document path
+	 * @param propertyGroup The group 
 	 * @param widget Widget at first row
 	 * @param PropertyGroupWidgetToFire widget with methods to be fired
 	 */
-	public PropertyGroupWidget(String docPath, String grpName, Widget widget, PropertyGroupWidgetToFire propertyGroupWidgetToFire) {	
+	public PropertyGroupWidget(String docPath, GWTPropertyGroup propertyGroup, Widget widget, PropertyGroupWidgetToFire propertyGroupWidgetToFire) {	
+		start(docPath, propertyGroup, widget, propertyGroupWidgetToFire);
+	}
+	
+	/**
+	 * start
+	 * 
+	 * @param docPath
+	 * @param propertyGroup
+	 * @param widget
+	 * @param propertyGroupWidgetToFire
+	 */
+	private void start(String docPath, GWTPropertyGroup propertyGroup, Widget widget, PropertyGroupWidgetToFire propertyGroupWidgetToFire) {
 		propertyGroupHandlerExtensionList = new ArrayList<PropertyGroupHandlerExtension>();
 		table = new FlexTable();
 		folderSelectPopup = new FolderSelectPopup();
 		this.docPath = docPath;
-		this.grpName = grpName;
+		this.propertyGroup = propertyGroup;
 		this.propertyGroupWidgetToFire = propertyGroupWidgetToFire;
 
 		table.setWidth("100%");
@@ -132,6 +166,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 		// Format borders and margins
 		cellFormatter.addStyleName(0,0,"okm-Security-Title-RightBorder");
 		
+		table.setStyleName("okm-NoWrap");
 		folderSelectPopup.setStyleName("okm-Popup");
 		folderSelectPopup.addStyleName("okm-DisableSelect");
 		
@@ -174,8 +209,23 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 			hWidgetProperties.clear();
 			int rows = 1;
 
-			for (Iterator<GWTFormElement> it = result.iterator(); it.hasNext(); ) {
-				drawFormElement(rows,it.next());
+			for (GWTFormElement formElement : result) {
+				// Loading initial values
+				if (!valuesMap.isEmpty() && valuesMap.containsKey(formElement.getName())) {
+					if (formElement instanceof GWTTextArea) {
+						((GWTTextArea)formElement).setValue(valuesMap.get(formElement.getName()));
+					} else if (formElement instanceof GWTInput) {
+						((GWTInput)formElement).setValue(valuesMap.get(formElement.getName()));
+					} else if (formElement instanceof GWTSuggestBox) {
+						((GWTSuggestBox)formElement).setValue(valuesMap.get(formElement.getName()));
+					} else if (formElement instanceof GWTCheckBox) {
+						((GWTCheckBox)formElement).setValue(new Boolean(valuesMap.get(formElement.getName())));
+					} else if (formElement instanceof GWTSelect) {
+						// Not implemented
+					} 
+				}
+				
+				drawFormElement(rows, formElement);
 				rows++;
 			}
 			
@@ -194,7 +244,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	};
 	
 	/**
-	 * Gets asyncronous to set roperties
+	 * Gets asyncronous to set properties
 	 */
 	final AsyncCallback<Object> callbackSetProperties = new AsyncCallback<Object>() {
 		public void onSuccess(Object result){
@@ -254,7 +304,16 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 					ValidatorBuilder.addValidator(validationProcessor, focusAction, hPanel, "input_"+rows, validator, textBox);
 				}
 				
-			} else if (formField instanceof GWTCheckBox) {
+			} else if (formField instanceof GWTSuggestBox) {
+				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formField.getName());
+				table.setWidget(rows, 1, hPanel);
+				
+				for (GWTValidator validator : ((GWTSuggestBox) formField).getValidators()) {
+					TextBox textBox = (TextBox) hPanel.getWidget(0);
+					ValidatorBuilder.addValidator(validationProcessor, focusAction, hPanel, "suggestbox_"+rows, validator, textBox);
+				}
+				
+			}else if (formField instanceof GWTCheckBox) {
 				CheckBox checkBox = (CheckBox) hWidgetProperties.get(formField.getName());
 				table.setWidget(rows, 1, checkBox);
 				
@@ -323,6 +382,11 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 				} 
 				((GWTInput) formElement).setValue(textBox.getText()); // note that date is added by click handler in drawform method
 
+			} else if (formElement instanceof GWTSuggestBox) {
+				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
+				HTML hiddenKey = (HTML) hPanel.getWidget(1);
+				((GWTSuggestBox) formElement).setValue(hiddenKey.getHTML()); 
+
 			} else if (formElement instanceof GWTCheckBox) {	
 				CheckBox checkbox = (CheckBox) hWidgetProperties.get(formElement.getName());
 				((GWTCheckBox) formElement).setValue(checkbox.getValue());
@@ -372,10 +436,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 			drawFormElement(rows, formElement);
 			rows ++;
 		}
-
-		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
-		propertyGroupService.setProperties(docPath, grpName, formElementList, callbackSetProperties);
+		propertyGroupService.setProperties(docPath, propertyGroup.getName(), formElementList, callbackSetProperties);
 	}
 	
 	/**
@@ -404,6 +465,11 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 					}
 				} 
 				((GWTInput) formElement).setValue(textBox.getText()); // note that date is added by click handler in drawform method
+
+			} else if (formElement instanceof GWTSuggestBox) {
+				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
+				HTML hiddenKey = (HTML) hPanel.getWidget(1);
+				((GWTSuggestBox) formElement).setValue(hiddenKey.getHTML()); 
 
 			} else if (formElement instanceof GWTCheckBox) {	
 				CheckBox checkbox = (CheckBox) hWidgetProperties.get(formElement.getName());
@@ -482,6 +548,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 		if (gwtMetadata instanceof GWTTextArea) {
 			HorizontalPanel hPanel = new HorizontalPanel();
 			TextArea textArea = new TextArea();
+			textArea.setEnabled(!propertyGroup.isReadonly() && !((GWTTextArea) gwtMetadata).isReadonly());
 			hPanel.add(textArea);
 			textArea.setStyleName("okm-TextArea");
 			textArea.setText(((GWTTextArea) gwtMetadata).getValue());
@@ -498,6 +565,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 		} else if (gwtMetadata instanceof GWTInput) {
 			HorizontalPanel hPanel = new HorizontalPanel();
 			final TextBox textBox = new TextBox(); // Create a widget for this property
+			textBox.setEnabled(!propertyGroup.isReadonly() && !((GWTInput) gwtMetadata).isReadonly());
 			hPanel.add(textBox);
 			String value = "";
 			if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_TEXT) || 
@@ -615,8 +683,75 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 			table.getCellFormatter().setVerticalAlignment(row,0,VerticalPanel.ALIGN_TOP);
 			table.getCellFormatter().setWidth(row, 1, "100%");
 				
+		} else if(gwtMetadata instanceof GWTSuggestBox) {
+			HorizontalPanel hPanel = new HorizontalPanel();
+			final GWTSuggestBox suggestBox = (GWTSuggestBox) gwtMetadata;
+			final TextBox textBox = new TextBox(); // Create a widget for this property
+			textBox.setWidth(gwtMetadata.getWidth());
+			textBox.setStyleName("okm-Input");
+			textBox.setReadOnly(true);
+			textBox.setEnabled(!propertyGroup.isReadonly() && !suggestBox.isReadonly());
+			final HTML hiddenKey = new HTML("");
+			hiddenKey.setVisible(false);
+			if (suggestBox.getValue()!=null) {
+				hiddenKey.setHTML(suggestBox.getValue());
+			}
+			hPanel.add(textBox);
+			hPanel.add(hiddenKey);
+			final HTML value = new HTML("");
+			table.setHTML(row, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
+			table.setWidget(row, 1, value);
+			if (textBox.isEnabled()) {
+				final Image databaseRecordImage = new Image(OKMBundleResources.INSTANCE.databaseRecord());
+				databaseRecordImage.addClickHandler(new ClickHandler() {
+					@Override
+					public void onClick(ClickEvent event) {
+						List<String> tables = new ArrayList<String>();
+						if (suggestBox.getTable()!=null) {
+							tables.add(suggestBox.getTable());
+						}
+						DatabaseRecord databaseRecord = new DatabaseRecord(hiddenKey, textBox);
+						DatabaseRecordSelectPopup drsPopup = new DatabaseRecordSelectPopup(suggestBox.getDialogTitle(),
+																					  	   tables, suggestBox.getFilterQuery(),
+																					  	   databaseRecord);
+						drsPopup.setWidth("300");
+						drsPopup.setHeight("220");
+						drsPopup.setStyleName("okm-Popup");
+						drsPopup.setPopupPosition(databaseRecordImage.getAbsoluteLeft(), databaseRecordImage.getAbsoluteTop()-2);
+						drsPopup.show();
+					}
+				});
+				hPanel.add(new HTML("&nbsp;"));
+				hPanel.add(databaseRecordImage);
+			}		
+			
+			hWidgetProperties.put(propertyName, hPanel);
+			if (!suggestBox.getValue().equals("")) {
+				List<String> tables = new ArrayList<String>();
+				if (suggestBox.getTable()!=null) {
+					tables.add(suggestBox.getTable());
+				}
+				String formatedQuery = MessageFormat.format(suggestBox.getValueQuery(), suggestBox.getValue());
+				keyValueService.getKeyValues(tables, formatedQuery, new AsyncCallback<List<GWTKeyValue>>() {
+					@Override
+					public void onSuccess(List<GWTKeyValue> result) {
+						if (!result.isEmpty()) {
+							GWTKeyValue keyValue = result.get(0);
+							textBox.setValue(keyValue.getValue());
+							value.setHTML(keyValue.getValue());
+							hiddenKey.setHTML(keyValue.getKey());
+						}
+					}
+					@Override
+					public void onFailure(Throwable caught) {
+						HEGECO.get().nuevoExpedientePopup.onFailureError("getKeyValues", caught);
+					}
+				});
+			}
+			
 		} else if (gwtMetadata instanceof GWTCheckBox) {
 			CheckBox checkBox = new CheckBox();
+			checkBox.setEnabled(!propertyGroup.isReadonly() && !((GWTCheckBox) gwtMetadata).isReadonly());
 			checkBox.setValue(((GWTCheckBox)gwtMetadata).getValue());
 			hWidgetProperties.put(propertyName,checkBox);
 			table.setHTML(row, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
@@ -635,6 +770,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 				String selectedLabel = "";
 				HorizontalPanel hPanel = new HorizontalPanel();
 				ListBox listBox = new ListBox();
+				listBox.setEnabled(!propertyGroup.isReadonly() && !gwtSelect.isReadonly());
 				hPanel.add(listBox);
 				listBox.setStyleName("okm-Select");
 				listBox.addItem("", ""); // Always we set and empty value
@@ -658,6 +794,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 			} else if (gwtSelect.getType().equals(GWTSelect.TYPE_MULTIPLE)) {
 				final HorizontalPanel hPanel = new HorizontalPanel();
 				ListBox listMulti = new ListBox();
+				listMulti.setEnabled(!propertyGroup.isReadonly() && !((GWTTextArea) gwtMetadata).isReadonly());
 				listMulti.setStyleName("okm-Select");
 				listMulti.addItem("",""); // Always we set and empty value
 				
@@ -723,6 +860,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 						}
 					}
 				});
+				addButton.setEnabled(!propertyGroup.isReadonly() && !gwtSelect.isReadonly());
 				addButton.setStyleName("okm-Button");
 				
 				hPanel.add(tableMulti);
@@ -796,18 +934,14 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	 * Gets all group properties 
 	 */
 	public void getProperties() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
-		propertyGroupService.getProperties(docPath, grpName, callbackGetProperties);
+		propertyGroupService.getProperties(docPath, propertyGroup.getName(), callbackGetProperties);
 	}
 
 	/**
 	 * Remove the document property group
 	 */
 	public void removeGroup() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
-		propertyGroupService.removeGroup(docPath, grpName, callbackRemoveGroup);
+		propertyGroupService.removeGroup(docPath, propertyGroup.getName(), callbackRemoveGroup);
 	}
 	
 	/**
@@ -816,7 +950,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	 * @return The group name
 	 */
 	public String getGrpName(){
-		return grpName;
+		return propertyGroup.getName();
 	}
 	
 	/**
@@ -839,5 +973,33 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	@Override
 	public void addPropertyGroupHandlerExtension(PropertyGroupHandlerExtension handlerExtension) {
 		propertyGroupHandlerExtensionList.add(handlerExtension);
+	}
+	
+	/**
+	 * DatabaseRecord
+	 * 
+	 * @author jllort
+	 *
+	 */
+	class DatabaseRecord implements HasDatabaseRecord {
+		private HTML keyWidget;
+		private TextBox valueWidget;
+		
+		/**
+		 * DatabaseRecord
+		 * 
+		 * @param keyWidget
+		 * @param valueWidget
+		 */
+		public DatabaseRecord(HTML keyWidget, TextBox valueWidget) {
+			this.keyWidget = keyWidget;
+			this.valueWidget = valueWidget;
+		}
+		
+		@Override
+		public void setKeyValue(GWTKeyValue keyValue) {
+			keyWidget.setHTML(keyValue.getKey());
+			valueWidget.setText(keyValue.getValue());
+		}		
 	}
 }
