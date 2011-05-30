@@ -271,6 +271,8 @@ public class FormUtils {
 					if (item != null) sbox.setFilterQuery(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("valueQuery");
 					if (item != null) sbox.setValueQuery(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("dialogTitle");
+					if (item != null) sbox.setDialogTitle(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("readonly");
 					if (item != null) sbox.setReadonly(Boolean.parseBoolean(item.getNodeValue()));
 					sbox.setValidators(parseValidators(nField));
