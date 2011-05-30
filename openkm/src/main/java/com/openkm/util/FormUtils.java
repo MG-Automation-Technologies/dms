@@ -265,6 +265,8 @@ public class FormUtils {
 					if (item != null) sbox.setWidth(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("height");
 					if (item != null) sbox.setHeight(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("table");
+					if (item != null) sbox.setTable(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("filterQuery");
 					if (item != null) sbox.setFilterQuery(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("valueQuery");
