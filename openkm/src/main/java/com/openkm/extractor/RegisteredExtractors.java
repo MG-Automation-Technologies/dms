@@ -69,6 +69,7 @@ public class RegisteredExtractors {
 		log.info("getText({}, {}, {})", new Object[] { mimeType, encoding, is });
 		InputStream ret = null;
 		boolean failure = false;
+		String failureMessage = "Unknown error";
 		
 		try {
 			Reader rd = jte.extractText(is, mimeType, encoding);
@@ -87,13 +88,15 @@ public class RegisteredExtractors {
 			ret = new ReaderInputStream(rd);
 		} catch (Exception e) {
 			log.warn("Text extraction failure: {}", e.getMessage());
+			failureMessage = e.getMessage();
 			failure = true;
 		}
 		
 		if (failure || ret == null) {
 			if (node != null) {
 				log.warn("There was a problem extracting text from '{}'", node.getPath());
-				UserActivity.log(node.getSession().getUserID(), "MISC_TEXT_EXTRACTION_FAILURE", node.getUUID(), node.getPath());
+				UserActivity.log(node.getSession().getUserID(), "MISC_TEXT_EXTRACTION_FAILURE",
+						node.getUUID(), node.getPath() + ", FailureMessage: " + failureMessage);
 			}
 		}
 		
