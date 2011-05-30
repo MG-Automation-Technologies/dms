@@ -8,6 +8,7 @@ public class SuggestBox extends FormElement {
 	private List<Validator> validators = new ArrayList<Validator>();
 	private String value = "";
 	private boolean readonly = false;
+	String table = "";
 	String filterQuery = "";
 	String valueQuery = "";
 
@@ -35,6 +36,14 @@ public class SuggestBox extends FormElement {
 		this.readonly = readonly;
 	}
 	
+	public String getTable() {
+		return table;
+	}
+
+	public void setTable(String table) {
+		this.table = table;
+	}
+	
 	public String getFilterQuery() {
 		return filterQuery;
 	}
@@ -60,6 +69,7 @@ public class SuggestBox extends FormElement {
 		sb.append(", width="); sb.append(width);
 		sb.append(", height="); sb.append(height);
 		sb.append(", readonly="); sb.append(readonly);
+		sb.append(", table="); sb.append(table);
 		sb.append(", filterQuery="); sb.append(filterQuery);
 		sb.append(", valueQuery="); sb.append(valueQuery);
 		sb.append(", validators="); sb.append(validators);
