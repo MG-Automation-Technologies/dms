@@ -342,7 +342,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 			for (Iterator<GWTPropertyGroup> it = result.iterator(); it.hasNext();) {
 				GWTPropertyGroup gwtGroup = it.next();
 				String groupTranslation = gwtGroup.getLabel();
-				PropertyGroup group = new PropertyGroup(gwtGroup, doc, gwtFolder, visibleButton);
+				PropertyGroup group = new PropertyGroup(gwtGroup, doc, gwtFolder, (visibleButton && !gwtGroup.isReadonly()));
 				tabPanel.add(group, groupTranslation);
 				propertyGroup.add(group);
 				// Adds property group handlers
