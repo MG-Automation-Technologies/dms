@@ -312,7 +312,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 					ValidatorBuilder.addValidator(validationProcessor, focusAction, hPanel, "suggestbox_"+rows, validator, textBox);
 				}
 				
-			}else if (formField instanceof GWTCheckBox) {
+			} else if (formField instanceof GWTCheckBox) {
 				CheckBox checkBox = (CheckBox) hWidgetProperties.get(formField.getName());
 				table.setWidget(rows, 1, checkBox);
 				
@@ -380,6 +380,12 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 					}
 				} 
 				((GWTInput) formElement).setValue(textBox.getText()); // note that date is added by click handler in drawform method
+				if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_FOLDER)) {
+					// Must be updated folder in GWTInput because must be drawed
+					GWTFolder folder = new GWTFolder();
+					folder.setPath(textBox.getText());
+					((GWTInput) formElement).setFolder(folder);
+				}
 
 			} else if (formElement instanceof GWTSuggestBox) {
 				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
@@ -608,6 +614,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 				hPanel.add(new HTML("&nbsp;"));
 				hPanel.add(calendarIcon);
 				textBox.setEnabled(false);
+				
 			} else if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_LINK)) {
 				if (!value.equals("")) {
 					HorizontalPanel hLinkPanel = new HorizontalPanel();
@@ -630,6 +637,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 				} else {
 					table.setHTML(row, 1, "");
 				}
+				
 			} else if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_FOLDER)) {
 				if (!value.equals("")) {
 					Anchor anchor = new Anchor();
@@ -794,7 +802,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 			} else if (gwtSelect.getType().equals(GWTSelect.TYPE_MULTIPLE)) {
 				final HorizontalPanel hPanel = new HorizontalPanel();
 				ListBox listMulti = new ListBox();
-				listMulti.setEnabled(!propertyGroup.isReadonly() && !((GWTTextArea) gwtMetadata).isReadonly());
+				listMulti.setEnabled(!propertyGroup.isReadonly() && !gwtSelect.isReadonly());
 				listMulti.setStyleName("okm-Select");
 				listMulti.addItem("",""); // Always we set and empty value
 				
