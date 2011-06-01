@@ -65,6 +65,7 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 	private Map<Integer, GWTKeyValue> rowKeyValueMap;
 	List<String> tables;
 	private String query;
+	private Status status;
 	
 	/**
 	 * DatabaseRecordSelectPopup
@@ -142,6 +143,9 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 		vPanel.setCellHorizontalAlignment(scrollDatabaseRecordPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
 		
+		status = new Status(this);
+		status.setStyleName("okm-StatusPopup");
+		
 		super.hide();
 		setWidget(vPanel);
 	}
@@ -153,10 +157,11 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 		selectedRow = -1;
 		record.setReadOnly(true);
 		acceptBoton.setEnabled(false);
+		status.setGetDatabaseRecords();
 		keyValueService.getKeyValues(tables, MessageFormat.format(query, record.getText()), new AsyncCallback<List<GWTKeyValue>>() {
 			@Override
 			public void onSuccess(List<GWTKeyValue> result) {
-				recordTabla.removeAllRows();
+				removeAllRows();
 				rowKeyValueMap = new HashMap<Integer, GWTKeyValue>();
 				for (GWTKeyValue keyValue : result) {
 					int row = recordTabla.getRowCount();
@@ -164,9 +169,11 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 					recordTabla.setHTML(row, 0, keyValue.getValue());
 				}
 				record.setReadOnly(false);
+				status.unsetGetDatabaseRecords();
 			}
 			@Override
 			public void onFailure(Throwable caught) {
+				status.unsetGetDatabaseRecords();
 				Main.get().showError("getKeyValues", caught);
 			}
 		});
@@ -176,14 +183,21 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 	 * @see com.google.gwt.user.client.ui.DialogBox#show()
 	 */
 	public void show() {
-		selectedRow = -1;
+		removeAllRows();
 		record.setText("");
-		recordTabla.removeAllRows();
-		findFilteredDatabaseRecords();
 		record.setReadOnly(false);
 		acceptBoton.setEnabled(false);
 		rowKeyValueMap = new HashMap<Integer, GWTKeyValue>();
 		super.show();
+		findFilteredDatabaseRecords();
+	}
+	
+	/**
+	 * removeAllRows
+	 */
+	private void removeAllRows() {
+		recordTabla.removeAllRows();
+		selectedRow = -1;
 	}
 	
 	/**

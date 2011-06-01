@@ -720,6 +720,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 						drsPopup.show();
 					}
 				});
+				databaseRecordImage.setStyleName("okm-Hyperlink");
 				hPanel.add(new HTML("&nbsp;"));
 				hPanel.add(databaseRecordImage);
 			}		
