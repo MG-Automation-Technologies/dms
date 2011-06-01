@@ -56,7 +56,7 @@ public abstract class DatabaseMetadataCommon {
 	public Map<String,String> restoreToMap() {
 		Map<String,String> map = new HashMap<String,String>();
 		if (realId!=null) {
-			map.put(DatabaseMetadataMap.MV_NAME_ID, String.valueOf(getRealId()));
+			map.put(DatabaseMetadataMap.MV_NAME_ID, DatabaseMetadataMap.mapDoubleValue(getRealId()));
 		}
 		if (realTable!=null) {
 			map.put(DatabaseMetadataMap.MV_NAME_TABLE, getRealTable());
