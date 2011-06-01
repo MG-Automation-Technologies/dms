@@ -21,6 +21,10 @@
 
 package com.openkm.frontend.client.util.metadata;
 
+import java.util.Date;
+
+import com.google.gwt.i18n.client.DateTimeFormat;
+
 
 
 /**
@@ -32,6 +36,13 @@ public class DatabaseMetadataMap {
 	// Metadata virtual column name mapping
 	public static final String MV_NAME_TABLE 	= "table";
 	public static final String MV_NAME_ID		= "id";
+	
+	// Boolean values mapping
+	public static final String BOOLEAN_TRUE 	= "t";
+	public static final String BOOLEAN_FALSE 	= "f";
+	
+	// Date pattern
+	public static final String ISO8601_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZ";
 	
 	/**
 	 * getDoubleValue
@@ -65,5 +76,71 @@ public class DatabaseMetadataMap {
 	 */
 	public static String mapIntegerValue(Integer value) {
 		return (value!=null)?String.valueOf(value):null;
+	}
+	
+	/**
+	 * getBooleanValue
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static Boolean getBooleanValue(String value) {
+		if (value==null) {
+			return null;
+		} else {
+			if (value.toLowerCase().equals(BOOLEAN_TRUE)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
+	
+	/**
+	 * mapBooleanValue
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static String mapBooleanValue(Boolean value) {
+		if (value==null) {
+			return null;
+		} else {
+			if (value) {
+				return BOOLEAN_TRUE;
+			} else {
+				return BOOLEAN_FALSE;
+			}
+		}
+	}
+	
+	/**
+	 * getDateValue
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static Date getDateValue(String value) {
+		if (value==null) {
+			return null;
+		} else {
+			DateTimeFormat dtf = DateTimeFormat.getFormat(ISO8601_PATTERN);
+			return dtf.parse(value);
+		}
+	}
+	
+	/**
+	 * mapDateValue
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static String mapDateValue(Date value) {
+		if (value==null) {
+			return null;
+		} else {
+			DateTimeFormat dtf = DateTimeFormat.getFormat(ISO8601_PATTERN);
+			return dtf.format(value);
+		}
 	}
 }
