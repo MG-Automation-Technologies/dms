@@ -241,6 +241,10 @@ public class DatabaseMetadataDAO {
 					}
 					
 					ret.add(tmp);
+				} else if (obj instanceof DatabaseMetadataValue) {
+					DatabaseMetadataValue[] tmp = new DatabaseMetadataValue[1];
+					tmp[0] = (DatabaseMetadataValue) obj;
+					ret.add(tmp);
 				}
 			}
 			
