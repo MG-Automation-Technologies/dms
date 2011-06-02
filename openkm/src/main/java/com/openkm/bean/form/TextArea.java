@@ -7,6 +7,7 @@ public class TextArea extends FormElement {
 	private static final long serialVersionUID = 1L;
 	private List<Validator> validators = new ArrayList<Validator>();
 	private String value = "";
+	private String data = "";
 	private boolean readonly = false;
 	
 	public TextArea() {
@@ -38,12 +39,21 @@ public class TextArea extends FormElement {
 		this.readonly = readonly;
 	}
 	
+	public String getData() {
+		return data;
+	}
+
+	public void setData(String data) {
+		this.data = data;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("label="); sb.append(label);
 		sb.append(", name="); sb.append(name);
 		sb.append(", value="); sb.append(value);
+		sb.append(", data="); sb.append(data);
 		sb.append(", width="); sb.append(width);
 		sb.append(", height="); sb.append(height);
 		sb.append(", readonly="); sb.append(readonly);
