@@ -216,6 +216,17 @@ public class SearchIn extends Composite {
 	}
 	
 	/**
+	 * @param gWTParams
+	 */
+	public void setQuickSearch(String query) {
+		searchControl.switchSearchMode(SearchControl.SEARCH_MODE_SIMPLE);
+		searchSimple.fullText.setText(query);
+		searchControl.evaluateSearchButtonVisible();
+		searchControl.searchButton.setEnabled(true);
+		searchControl.executeSearch();
+	}
+	
+	/**
 	 * Sets the saved search
 	 * 
 	 * @param gWTParams The params

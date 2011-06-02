@@ -379,4 +379,10 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/icon/actions/database_record.png")
 	public ImageResource databaseRecord();
+	
+	@Source("com/openkm/frontend/public/img/icon/actions/search.png")
+	public ImageResource search();
+	
+	@Source("com/openkm/frontend/public/img/icon/actions/search_disabled.png")
+	public ImageResource searchDisabled();
 }
