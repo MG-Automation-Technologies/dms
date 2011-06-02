@@ -24,7 +24,6 @@ package com.openkm.servlet.admin;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -41,14 +40,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.api.OKMAuth;
 import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMWorkflow;
-import com.openkm.bean.form.Button;
-import com.openkm.bean.form.CheckBox;
 import com.openkm.bean.form.FormElement;
-import com.openkm.bean.form.Input;
-import com.openkm.bean.form.Option;
-import com.openkm.bean.form.Select;
-import com.openkm.bean.form.TextArea;
-import com.openkm.bean.form.Validator;
 import com.openkm.bean.workflow.ProcessInstance;
 import com.openkm.bean.workflow.TaskInstance;
 import com.openkm.core.AccessDeniedException;
@@ -59,6 +51,7 @@ import com.openkm.core.RepositoryException;
 import com.openkm.core.WorkflowException;
 import com.openkm.jcr.JCRUtils;
 import com.openkm.principal.PrincipalAdapterException;
+import com.openkm.util.FormUtils;
 import com.openkm.util.FormatUtil;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
@@ -230,7 +223,7 @@ public class WorkflowServlet extends BaseServlet {
 			List<Map<String, String>> value = new ArrayList<Map<String, String>>();
 			
 			for (FormElement fe : procDefForms.get(key)) {
-				value.add(getMap(fe));
+				value.add(FormUtils.toString(fe));
 			}
 			
 			pdf.put(key, value);
@@ -410,7 +403,7 @@ public class WorkflowServlet extends BaseServlet {
 		
 		if (fes != null) {
 			for (FormElement fe : fes) {
-				pdf.add(getMap(fe));
+				pdf.add(FormUtils.toString(fe));
 			}
 		}
 		
@@ -620,83 +613,5 @@ public class WorkflowServlet extends BaseServlet {
 		sc.setAttribute("token", OKMWorkflow.getInstance().getToken(null, tid));
 		sc.getRequestDispatcher("/admin/token_view.jsp").forward(request, response);
 		log.debug("tokenView: void");
-	}
-
-	/**
-	 * Get form element type
-	 */
-	private Map<String, String> getMap(FormElement fe) {
-		Map<String, String> ret = new HashMap<String, String>();
-		ret.put("label", fe.getLabel());
-		ret.put("name", fe.getName());
-		ret.put("width", fe.getWidth());
-		ret.put("height", fe.getHeight());
-		
-		if (fe instanceof Input) {
-			Input input = (Input) fe;
-			ret.put("field", "Input");
-			StringBuilder sb = new StringBuilder();
-			sb.append("<i>Type:</i> ");
-			sb.append(input.getType());
-			drawValidators(sb, input.getValidators());
-			ret.put("others", sb.toString());
-		} else if (fe instanceof CheckBox) {
-			CheckBox checkBox = new CheckBox();
-			ret.put("field", "CheckBox");
-			StringBuilder sb = new StringBuilder();
-			drawValidators(sb, checkBox.getValidators());
-			ret.put("others", sb.toString());
-		} else if (fe instanceof TextArea) {
-			TextArea textArea = (TextArea) fe;
-			ret.put("field", "TextArea");
-			StringBuilder sb = new StringBuilder();
-			drawValidators(sb, textArea.getValidators());
-			ret.put("others", sb.toString());
-		} else if (fe instanceof Select) {
-			Select select = (Select) fe;
-			ret.put("field", "Select");
-			StringBuilder sb = new StringBuilder();
-			sb.append("<i>Type:</i> ");
-			sb.append(select.getType());
-			sb.append("<br/><i>Options:</i><ul>");
-			for (Iterator<Option> itOpt = select.getOptions().iterator(); itOpt.hasNext(); ) {
-				Option opt = itOpt.next();
-				sb.append("<li><i>Label:</i> ");
-				sb.append(opt.getLabel());
-				sb.append(", <i>Value:</i> ");
-				sb.append(opt.getValue());
-				sb.append("</li>");
-			}
-			sb.append("</ul>");
-			drawValidators(sb, select.getValidators());
-			ret.put("others", sb.toString());
-		} else if (fe instanceof Button) {
-			Button button = (Button) fe;
-			ret.put("field", "Button");
-			StringBuilder sb = new StringBuilder();
-			sb.append("<i>Type:</i> ");
-			sb.append(button.getType());
-			ret.put("others", sb.toString());
-		}
-		
-		return ret;
-	}
-	
-	/**
-	 * Draw validation configuration
-	 */
-	private void drawValidators(StringBuilder sb, List<Validator> validators) {
-		if (!validators.isEmpty()) {
-			sb.append("<br/><i>Validators:</i><ul>");
-			for (Iterator<Validator> it = validators.iterator(); it.hasNext(); ) {
-				Validator v = it.next();
-				sb.append("<li><i>Type:</i> ");
-				sb.append(v.getType());
-				sb.append(", <i>Parameter:</i> ");
-				sb.append(v.getParameter());
-				sb.append("</li>");
-			}
-			sb.append("</ul>");
-		}
 	}
 }
