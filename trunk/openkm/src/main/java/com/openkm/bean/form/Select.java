@@ -10,6 +10,7 @@ public class Select extends FormElement {
 	private List<Validator> validators = new ArrayList<Validator>();
 	private List<Option> options = new ArrayList<Option>();
 	private String type = TYPE_SIMPLE;
+	private String data = "";
 	private boolean readonly = false;
 	
 	public Select() {
@@ -48,6 +49,14 @@ public class Select extends FormElement {
 		this.readonly = readonly;
 	}
 	
+	public String getData() {
+		return data;
+	}
+
+	public void setData(String data) {
+		this.data = data;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -57,6 +66,7 @@ public class Select extends FormElement {
 		sb.append(", height="); sb.append(height);
 		sb.append(", readonly="); sb.append(readonly);
 		sb.append(", type="); sb.append(type);
+		sb.append(", data="); sb.append(data);
 		sb.append(", options="); sb.append(options);
 		sb.append(", validators="); sb.append(validators);
 		sb.append("}");
