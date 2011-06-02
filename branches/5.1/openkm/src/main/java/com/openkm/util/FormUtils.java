@@ -245,6 +245,8 @@ public class FormUtils {
 					if (item != null) input.setType(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("value");
 					if (item != null) input.setValue(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("data");
+					if (item != null) input.setData(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("width");
 					if (item != null) input.setWidth(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("height");
@@ -261,6 +263,8 @@ public class FormUtils {
 					if (item != null) sbox.setName(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("value");
 					if (item != null) sbox.setValue(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("data");
+					if (item != null) sbox.setData(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("width");
 					if (item != null) sbox.setWidth(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("height");
@@ -285,6 +289,8 @@ public class FormUtils {
 					if (item != null) checkBox.setName(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("value");
 					if (item != null) checkBox.setValue(Boolean.parseBoolean(item.getNodeValue()));
+					item = nField.getAttributes().getNamedItem("data");
+					if (item != null) checkBox.setData(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("width");
 					if (item != null) checkBox.setWidth(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("height");
@@ -301,6 +307,8 @@ public class FormUtils {
 					if (item != null) textArea.setName(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("value");
 					if (item != null) textArea.setValue(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("data");
+					if (item != null) textArea.setData(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("width");
 					if (item != null) textArea.setWidth(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("height");
@@ -333,6 +341,8 @@ public class FormUtils {
 					if (item != null) select.setName(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("type");
 					if (item != null) select.setType(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("data");
+					if (item != null) select.setData(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("width");
 					if (item != null) select.setWidth(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("height");
@@ -427,6 +437,9 @@ public class FormUtils {
 			sb.append("<i>Readonly:</i> ");
 			sb.append(input.isReadonly());
 			sb.append("<br/>");
+			sb.append("<i>Data:</i> ");
+			sb.append(input.getData());
+			sb.append("<br/>");
 			sb.append("<i>Type:</i> ");
 			sb.append(input.getType());
 			drawValidators(sb, input.getValidators());
@@ -437,6 +450,9 @@ public class FormUtils {
 			StringBuilder sb = new StringBuilder();
 			sb.append("<i>Readonly:</i> ");
 			sb.append(suggestBox.isReadonly());
+			sb.append("<br/>");
+			sb.append("<i>Data:</i> ");
+			sb.append(suggestBox.getData());
 			sb.append("<br/>");
 			sb.append("<i>DialogTitle:</i> ");
 			sb.append(suggestBox.getDialogTitle());
@@ -457,6 +473,9 @@ public class FormUtils {
 			StringBuilder sb = new StringBuilder();
 			sb.append("<i>Readonly:</i> ");
 			sb.append(checkBox.isReadonly());
+			sb.append("<br/>");
+			sb.append("<i>Data:</i> ");
+			sb.append(checkBox.getData());
 			drawValidators(sb, checkBox.getValidators());
 			ret.put("others", sb.toString());
 		} else if (fe instanceof TextArea) {
@@ -465,6 +484,9 @@ public class FormUtils {
 			StringBuilder sb = new StringBuilder();
 			sb.append("<i>Readonly:</i> ");
 			sb.append(textArea.isReadonly());
+			sb.append("<br/>");
+			sb.append("<i>Data:</i> ");
+			sb.append(textArea.getData());
 			drawValidators(sb, textArea.getValidators());
 			ret.put("others", sb.toString());
 		} else if (fe instanceof Select) {
@@ -473,6 +495,9 @@ public class FormUtils {
 			StringBuilder sb = new StringBuilder();
 			sb.append("<i>Readonly:</i> ");
 			sb.append(select.isReadonly());
+			sb.append("<br/>");
+			sb.append("<i>Data:</i> ");
+			sb.append(select.getData());
 			sb.append("<br/>");
 			sb.append("<i>Type:</i> ");
 			sb.append(select.getType());
