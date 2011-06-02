@@ -118,10 +118,10 @@ public class TopPanel extends Composite {
 			}
 		});
 		searchImage.setStyleName("okm-Hyperlink");
-		quickSearchPanel.add(searchImage);
-		quickSearchPanel.add(Util.hSpace("5"));
 		quickSearchPanel.add(quickSearch);
-		quickSearchPanel.add(Util.hSpace("10"));
+		quickSearchPanel.add(Util.hSpace("5"));
+		quickSearchPanel.add(searchImage);
+		quickSearchPanel.add(Util.hSpace("25"));
 		quickSearchPanel.setCellVerticalAlignment(searchImage, HasAlignment.ALIGN_MIDDLE);
 		
 		horizontalPanelMenu.add(mainMenu);
