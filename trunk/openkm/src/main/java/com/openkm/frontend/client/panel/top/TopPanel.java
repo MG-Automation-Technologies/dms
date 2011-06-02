@@ -103,6 +103,7 @@ public class TopPanel extends Composite {
 				} else {
 					searchImage.setResource(OKMBundleResources.INSTANCE.searchDisabled());
 				}
+				
 				if ((char)KeyCodes.KEY_ENTER == event.getNativeKeyCode()) {
 					executeQuickSearch();
 				}
