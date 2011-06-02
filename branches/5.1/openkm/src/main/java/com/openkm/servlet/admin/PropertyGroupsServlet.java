@@ -24,8 +24,6 @@ package com.openkm.servlet.admin;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,15 +42,7 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMPropertyGroup;
 import com.openkm.bean.PropertyGroup;
-import com.openkm.bean.form.Button;
-import com.openkm.bean.form.CheckBox;
 import com.openkm.bean.form.FormElement;
-import com.openkm.bean.form.Input;
-import com.openkm.bean.form.Option;
-import com.openkm.bean.form.Select;
-import com.openkm.bean.form.SuggestBox;
-import com.openkm.bean.form.TextArea;
-import com.openkm.bean.form.Validator;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
@@ -174,7 +164,7 @@ public class PropertyGroupsServlet extends BaseServlet {
 			List<Map<String, String>> fMaps = new ArrayList<Map<String,String>>();
 			
 			for (FormElement fe : mData) {
-				fMaps.add(getMap(fe));
+				fMaps.add(FormUtils.toString(fe));
 			}
 			
 			pGroups.put(group, fMaps);
@@ -187,116 +177,5 @@ public class PropertyGroupsServlet extends BaseServlet {
 		// Activity log
 		UserActivity.log(request.getRemoteUser(), "ADMIN_PROPERTY_GROUP_LIST", null, null);
 		log.debug("list: void");
-	}
-	
-	/**
-	 * Get form element type
-	 */
-	private Map<String, String> getMap(FormElement fe) {
-		Map<String, String> ret = new HashMap<String, String>();
-		ret.put("label", fe.getLabel());
-		ret.put("name", fe.getName());
-		ret.put("width", fe.getWidth());
-		ret.put("height", fe.getHeight());
-		
-		if (fe instanceof Input) {
-			Input input = (Input) fe;
-			ret.put("field", "Input");
-			StringBuilder sb = new StringBuilder();
-			sb.append("<i>Readonly:</i> ");
-			sb.append(input.isReadonly());
-			sb.append("<br/>");
-			sb.append("<i>Type:</i> ");
-			sb.append(input.getType());
-			drawValidators(sb, input.getValidators());
-			ret.put("others", sb.toString());
-		} else if (fe instanceof SuggestBox) {
-			SuggestBox suggestBox = (SuggestBox) fe;
-			ret.put("field", "Input");
-			StringBuilder sb = new StringBuilder();
-			sb.append("<i>Readonly:</i> ");
-			sb.append(suggestBox.isReadonly());
-			sb.append("<br/>");
-			sb.append("<i>DialogTitle:</i> ");
-			sb.append(suggestBox.getDialogTitle());
-			sb.append("<br/>");
-			sb.append("<i>Table:</i> ");
-			sb.append(suggestBox.getTable());
-			sb.append("<br/>");
-			sb.append("<i>FilterQuery:</i> ");
-			sb.append(suggestBox.getFilterQuery());
-			sb.append("<br/>");
-			sb.append("<i>ValueQuery:</i> ");
-			sb.append(suggestBox.getValueQuery());
-			drawValidators(sb, suggestBox.getValidators());
-			ret.put("others", sb.toString());
-		} else if (fe instanceof CheckBox) {
-			CheckBox checkBox = new CheckBox();
-			ret.put("field", "CheckBox");
-			StringBuilder sb = new StringBuilder();
-			sb.append("<i>Readonly:</i> ");
-			sb.append(checkBox.isReadonly());
-			drawValidators(sb, checkBox.getValidators());
-			ret.put("others", sb.toString());
-		} else if (fe instanceof TextArea) {
-			TextArea textArea = (TextArea) fe;
-			ret.put("field", "TextArea");
-			StringBuilder sb = new StringBuilder();
-			sb.append("<i>Readonly:</i> ");
-			sb.append(textArea.isReadonly());
-			drawValidators(sb, textArea.getValidators());
-			ret.put("others", sb.toString());
-		} else if (fe instanceof Select) {
-			Select select = (Select) fe;
-			ret.put("field", "Select");
-			StringBuilder sb = new StringBuilder();
-			sb.append("<i>Readonly:</i> ");
-			sb.append(select.isReadonly());
-			sb.append("<br/>");
-			sb.append("<i>Type:</i> ");
-			sb.append(select.getType());
-			sb.append("<br/>");
-			sb.append("<i>Options:</i><ul>");
-			
-			for (Iterator<Option> itOpt = select.getOptions().iterator(); itOpt.hasNext(); ) {
-				Option opt = itOpt.next();
-				sb.append("<li><i>Label:</i> ");
-				sb.append(opt.getLabel());
-				sb.append(", <i>Value:</i> ");
-				sb.append(opt.getValue());
-				sb.append("</li>");
-			}
-			
-			sb.append("</ul>");
-			drawValidators(sb, select.getValidators());
-			ret.put("others", sb.toString());
-		} else if (fe instanceof Button) {
-			Button button = (Button) fe;
-			ret.put("field", "Button");
-			StringBuilder sb = new StringBuilder();
-			sb.append("<i>Type:</i> ");
-			sb.append(button.getType());
-			ret.put("others", sb.toString());
-		}
-		
-		return ret;
-	}
-	
-	/**
-	 * Draw validation configuration
-	 */
-	private void drawValidators(StringBuilder sb, List<Validator> validators) {
-		if (!validators.isEmpty()) {
-			sb.append("<br/><i>Validators:</i><ul>");
-			for (Iterator<Validator> it = validators.iterator(); it.hasNext(); ) {
-				Validator v = it.next();
-				sb.append("<li><i>Type:</i> ");
-				sb.append(v.getType());
-				sb.append(", <i>Parameter:</i> ");
-				sb.append(v.getParameter());
-				sb.append("</li>");
-			}
-			sb.append("</ul>");
-		}
 	}
 }
