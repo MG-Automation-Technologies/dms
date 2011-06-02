@@ -108,7 +108,7 @@ public class TopPanel extends Composite {
 				}
 			}
 		});
-		quickSearch.setWidth("200");
+		quickSearch.setWidth("179");
 		quickSearch.setStyleName("okm-Input");
 		searchImage = new Image(OKMBundleResources.INSTANCE.searchDisabled());
 		searchImage.addClickHandler(new ClickHandler() {
