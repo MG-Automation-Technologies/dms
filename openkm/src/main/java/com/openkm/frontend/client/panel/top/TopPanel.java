@@ -98,7 +98,7 @@ public class TopPanel extends Composite {
 		quickSearch.addKeyUpHandler(new KeyUpHandler() {
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
-				if (quickSearch.getText().length()>=3) {
+				if (quickSearch.getText().length() >= 3) {
 					searchImage.setResource(OKMBundleResources.INSTANCE.search());
 				} else {
 					searchImage.setResource(OKMBundleResources.INSTANCE.searchDisabled());
