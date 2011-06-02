@@ -385,4 +385,10 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/icon/actions/search_disabled.png")
 	public ImageResource searchDisabled();
+	
+	@Source("com/openkm/frontend/public/img/icon/actions/application_side_contract.png")
+	public ImageResource splitterContract();
+	
+	@Source("com/openkm/frontend/public/img/icon/actions/application_side_expand.png")
+	public ImageResource splitterExpand();
 }

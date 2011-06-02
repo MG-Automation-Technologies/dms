@@ -103,6 +103,9 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	private ToolBarButton refresh;
 	private ToolBarButton scanner;
 	private ToolBarButton uploader;
+	private ToolBarButton splitterContract;
+	private Image imageContract;
+	private boolean isContract = false;
 		
 	private boolean enabled = true;  // Indicates if toolbar is enabled or disabled
 	private boolean propertyGroupEnabled = false; // Indicates if property group is enabled, used only on changing language
@@ -765,7 +768,23 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 					 				Main.i18n("general.menu.file.scanner"), scannerHandler); 
 			
 		uploader  = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.uploader()),
- 				Main.i18n("general.menu.file.uploader"), uploaderHandler); 
+ 									  Main.i18n("general.menu.file.uploader"), uploaderHandler); 
+		
+		imageContract = new Image(OKMBundleResources.INSTANCE.splitterContract());
+		splitterContract = new ToolBarButton(imageContract, Main.i18n("general.menu.file.uploader"), new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				if (isContract) {
+					isContract = false;
+					imageContract.setResource(OKMBundleResources.INSTANCE.splitterContract());
+					Main.get().mainPanel.desktop.Expand();
+				} else {
+					isContract = true;
+					imageContract.setResource(OKMBundleResources.INSTANCE.splitterExpand());
+					Main.get().mainPanel.desktop.Contract();
+				}
+			}
+		});
 		
 		createFolderButton.addMouseOverHandler(mouseOverHandler);
 		createFolderButton.addMouseOutHandler(mouseOutHandler);
@@ -811,6 +830,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		scanner.addMouseOutHandler(mouseOutHandler);
 		uploader.addMouseOverHandler(mouseOverHandler);
 		uploader.addMouseOutHandler(mouseOutHandler);
+		splitterContract.addMouseOverHandler(mouseOverHandler);
+		splitterContract.addMouseOutHandler(mouseOutHandler);
 		
 		createFolderButton.setStyleName("okm-ToolBar-button");
 		findFolder.setStyleName("okm-ToolBar-button");
@@ -834,6 +855,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		refresh.setStyleName("okm-ToolBar-button-disabled");
 		scanner.setStyleName("okm-ToolBar-button-disabled");
 		uploader.setStyleName("okm-ToolBar-button-disabled");
+		splitterContract.setStyleName("okm-ToolBar-button-disabled");
 		
 		panel = new HorizontalPanel();
 		panel.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
@@ -890,6 +912,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		panel.add(scanner);
 		panel.add(space());
 		panel.add(uploader);
+		panel.add(space());
+		panel.add(splitterContract);
 		panel.add(space());
 		
 		// Hide all buttons at startup
@@ -2734,8 +2758,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		print.setVisible(Main.get().workspaceUserProperties.getWorkspace().isPrintPreview());
 		panel.getWidget(12).setVisible(Main.get().workspaceUserProperties.getWorkspace().isPrintPreview());
 		panel.getWidget(13).setVisible(option.isCreateFolderOption() || option.isFindFolderOption() ||
-					                  option.isDownloadOption() || option.isDownloadPdfOption() ||
-					                  Main.get().workspaceUserProperties.getWorkspace().isPrintPreview()); // hide separator
+					                   option.isDownloadOption() || option.isDownloadPdfOption() ||
+					                   Main.get().workspaceUserProperties.getWorkspace().isPrintPreview()); // hide separator
  
 		
 		// SECOND
@@ -2790,6 +2814,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		panel.getWidget(49).setVisible(option.isScannerOption()); // hide space
 		uploader.setVisible(option.isUploaderOption());
 		panel.getWidget(51).setVisible(option.isUploaderOption()); // hide space
+		splitterContract.setVisible(true);
+		panel.getWidget(53).setVisible(true); // hide space
 	}
 	
 	/**
