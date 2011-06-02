@@ -137,7 +137,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	 * Gets asyncronous to group properties
 	 */
 	final AsyncCallback<List<GWTFormElement>> callbackGetProperties = new AsyncCallback<List<GWTFormElement>>() {
-		public void onSuccess(List<GWTFormElement> result){			
+		public void onSuccess(List<GWTFormElement> result) {
 			for (GWTFormElement formElement : result) {
 				// Loading initial values
 				if (!valuesMap.isEmpty() && valuesMap.containsKey(formElement.getName())) {
@@ -151,22 +151,24 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 						((GWTCheckBox)formElement).setValue(new Boolean(valuesMap.get(formElement.getName())));
 					} else if (formElement instanceof GWTSelect) {
 						// Not implemented
-					} 
+					}
 				}
 			}
 			
 			manager.setFormElements(result);
 			manager.draw(propertyGroup.isReadonly());
 			
-			if (propertyGroupWidgetToFire!=null) {
+			if (propertyGroupWidgetToFire != null) {
 				propertyGroupWidgetToFire.finishedGetProperties();
 			}
+			
 			fireEvent(HasPropertyGroupEvent.PROPERTYGROUP_GET_PROPERTIES);
 		}
 
 		public void onFailure(Throwable caught) {
 			Main.get().showError("getMetaData", caught);
-			if (propertyGroupWidgetToFire!=null) {
+			
+			if (propertyGroupWidgetToFire != null) {
 				propertyGroupWidgetToFire.finishedGetProperties();
 			}
 		}
