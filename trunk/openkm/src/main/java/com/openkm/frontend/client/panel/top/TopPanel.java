@@ -88,7 +88,7 @@ public class TopPanel extends Composite {
 		toolsPanel.setCellVerticalAlignment(tabWorkspace, HorizontalPanel.ALIGN_BOTTOM);
 		toolsPanel.setCellHorizontalAlignment(tabWorkspace, HorizontalPanel.ALIGN_RIGHT);
 		toolsPanel.setWidth("100%");
-		toolsPanel.setCellWidth(toolBar,"100%");
+		toolsPanel.setCellWidth(toolBar, "100%");
 		
 		horizontalLine = new Image("img/transparent_pixel.gif");
 		horizontalLine.setStyleName("okm-TopPanel-Line-Border");
