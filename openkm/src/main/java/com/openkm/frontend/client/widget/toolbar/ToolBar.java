@@ -86,10 +86,10 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	private ToolBarButton createFolder;
 	private ToolBarButton findFolder;
 	private ToolBarButton lock;
-	private ToolBarButton unLock;
+	private ToolBarButton unlock;
 	private ToolBarButton addDocument;
 	private ToolBarButton delete;
-	private ToolBarButton edit;
+	private ToolBarButton checkout;
 	private ToolBarButton checkin;
 	private ToolBarButton cancelCheckout;
 	private ToolBarButton download;
@@ -680,7 +680,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		lock = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.lockDisabled()), 
 				   				 Main.i18n("general.menu.file.lock"), lockHandler);
 			
-		unLock = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.lockDisabled()), 
+		unlock = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.lockDisabled()), 
   				 				   Main.i18n("general.menu.file.unlock"), unLockHandler);
 			
 		addDocument = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.addDocument()), 
@@ -690,7 +690,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		delete = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.deleteDisabled()), 
 								   Main.i18n("general.menu.file.delete"), deleteHandler);
 			
-		edit = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.checkoutDisabled()), 
+		checkout = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.checkoutDisabled()), 
 				   				 Main.i18n("general.menu.file.checkout"), editHandler);
 			
 		checkin = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.checkinDisabled()), 
@@ -739,14 +739,14 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		findFolder.addMouseOutHandler(mouseOutHandler);
 		lock.addMouseOverHandler(mouseOverHandler);
 		lock.addMouseOutHandler(mouseOutHandler);
-		unLock.addMouseOverHandler(mouseOverHandler);
-		unLock.addMouseOutHandler(mouseOutHandler);
+		unlock.addMouseOverHandler(mouseOverHandler);
+		unlock.addMouseOutHandler(mouseOutHandler);
 		addDocument.addMouseOverHandler(mouseOverHandler);
 		addDocument.addMouseOutHandler(mouseOutHandler);
 		delete.addMouseOverHandler(mouseOverHandler);
 		delete.addMouseOutHandler(mouseOutHandler);
-		edit.addMouseOverHandler(mouseOverHandler);
-		edit.addMouseOutHandler(mouseOutHandler);
+		checkout.addMouseOverHandler(mouseOverHandler);
+		checkout.addMouseOutHandler(mouseOutHandler);
 		checkin.addMouseOverHandler(mouseOverHandler);
 		checkin.addMouseOutHandler(mouseOutHandler);
 		cancelCheckout.addMouseOverHandler(mouseOverHandler);
@@ -777,10 +777,10 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		createFolder.setStyleName("okm-ToolBar-button");
 		findFolder.setStyleName("okm-ToolBar-button");
 		lock.setStyleName("okm-ToolBar-button");
-		unLock.setStyleName("okm-ToolBar-button");
+		unlock.setStyleName("okm-ToolBar-button");
 		addDocument.setStyleName("okm-ToolBar-button");
 		delete.setStyleName("okm-ToolBar-button-disabled");
-		edit.setStyleName("okm-ToolBar-button-disabled");
+		checkout.setStyleName("okm-ToolBar-button-disabled");
 		checkin.setStyleName("okm-ToolBar-button-disabled");
 		cancelCheckout.setStyleName("okm-ToolBar-button-disabled");
 		download.setStyleName("okm-ToolBar-button-disabled");
@@ -811,12 +811,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		panel.add(new Image(OKMBundleResources.INSTANCE.separator())); // pos 9
 		panel.add(lock);
 		panel.add(space());
-		panel.add(unLock);
+		panel.add(unlock);
 		panel.add(space());
 		panel.add(new Image(OKMBundleResources.INSTANCE.separator()));
 		panel.add(addDocument);
 		panel.add(space());
-		panel.add(edit);
+		panel.add(checkout);
 		panel.add(space());
 		panel.add(checkin);
 		panel.add(space());
@@ -1351,9 +1351,9 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public void enableCheckout() {
 		toolBarOption.checkoutOption = true;
-		edit.setStyleName("okm-ToolBar-button");
-		edit.setResource(OKMBundleResources.INSTANCE.checkout());
-		edit.setTitle(Main.i18n("general.menu.file.checkout"));
+		checkout.setStyleName("okm-ToolBar-button");
+		checkout.setResource(OKMBundleResources.INSTANCE.checkout());
+		checkout.setTitle(Main.i18n("general.menu.file.checkout"));
 	}
 	
 	/**
@@ -1361,9 +1361,9 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public void disableCheckout() {
 		toolBarOption.checkoutOption = false;
-		edit.setStyleName("okm-ToolBar-button-disabled");
-		edit.setResource(OKMBundleResources.INSTANCE.checkoutDisabled());
-		edit.setTitle(Main.i18n("general.menu.file.checkout"));
+		checkout.setStyleName("okm-ToolBar-button-disabled");
+		checkout.setResource(OKMBundleResources.INSTANCE.checkoutDisabled());
+		checkout.setTitle(Main.i18n("general.menu.file.checkout"));
 	}
 	
 	/**
@@ -1431,9 +1431,9 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public void disableUnlock() {
 		toolBarOption.unLockOption = false;
-		unLock.setStyleName("okm-ToolBar-button-disabled");
-		unLock.setResource(OKMBundleResources.INSTANCE.unLockDisabled());
-		unLock.setTitle(Main.i18n("general.menu.file.unlock"));
+		unlock.setStyleName("okm-ToolBar-button-disabled");
+		unlock.setResource(OKMBundleResources.INSTANCE.unLockDisabled());
+		unlock.setTitle(Main.i18n("general.menu.file.unlock"));
 	}
 	
 	/**
@@ -1441,9 +1441,9 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public void enableUnlock() {
 		toolBarOption.unLockOption = true;
-		unLock.setStyleName("okm-ToolBar-button");
-		unLock.setResource(OKMBundleResources.INSTANCE.unLock());
-		unLock.setTitle(Main.i18n("general.menu.file.unlock"));
+		unlock.setStyleName("okm-ToolBar-button");
+		unlock.setResource(OKMBundleResources.INSTANCE.unLock());
+		unlock.setTitle(Main.i18n("general.menu.file.unlock"));
 	}
 	
 	/**
@@ -2620,14 +2620,14 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		// SECOND
 		lock.setVisible(option.isLockOption());
 		panel.getWidget(11).setVisible(option.isLockOption()); // hide space
-		unLock.setVisible(option.isUnLockOption());
+		unlock.setVisible(option.isUnLockOption());
 		panel.getWidget(13).setVisible(option.isUnLockOption()); // hide space
 		panel.getWidget(14).setVisible(option.isLockOption() || option.isUnLockOption()); // hide separator
 		
 		// THIRD
 		addDocument.setVisible(option.isAddDocumentOption());
 		panel.getWidget(16).setVisible(option.isAddDocumentOption()); // hide space
-		edit.setVisible(option.isCheckoutOption());
+		checkout.setVisible(option.isCheckoutOption());
 		panel.getWidget(18).setVisible(option.isCheckoutOption()); // hide space
 		checkin.setVisible(option.isCheckinOption());
 		panel.getWidget(20).setVisible(option.isCheckinOption()); // hide space
