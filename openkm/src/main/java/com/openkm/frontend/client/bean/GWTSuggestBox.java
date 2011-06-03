@@ -35,11 +35,12 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class GWTSuggestBox extends GWTFormElement implements IsSerializable  {
 	private List<GWTValidator> validators = new ArrayList<GWTValidator>();
 	private String value = "";
+	private String data = "";
 	private boolean readonly = false;
-	String table = "";
-	String dialogTitle = "";
-	String filterQuery = "";
-	String valueQuery = "";
+	private String table = "";
+	private String dialogTitle = "";
+	private String filterQuery = "";
+	private String valueQuery = "";
 
 	public String getValue() {
 		return value;
@@ -97,6 +98,14 @@ public class GWTSuggestBox extends GWTFormElement implements IsSerializable  {
 		this.dialogTitle = dialogTitle;
 	}
 	
+	public String getData() {
+		return data;
+	}
+
+	public void setData(String data) {
+		this.data = data;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -111,6 +120,7 @@ public class GWTSuggestBox extends GWTFormElement implements IsSerializable  {
 		sb.append(", filterQuery="); sb.append(filterQuery);
 		sb.append(", valueQuery="); sb.append(valueQuery);
 		sb.append(", validators="); sb.append(validators);
+		sb.append(", data="); sb.append(data);
 		sb.append("}");
 		return sb.toString();
 	}
