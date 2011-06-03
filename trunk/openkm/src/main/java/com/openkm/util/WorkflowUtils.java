@@ -100,9 +100,13 @@ public class WorkflowUtils {
 		vo.setKey(pi.getKey());
 		vo.setEnded(pi.hasEnded());
 		vo.setSuspended(pi.isSuspended());
-
+		
 		// TODO https://jira.jboss.org/jira/browse/JBPM-1778
-		vo.setVariables(pi.getContextInstance().getVariables()!=null?pi.getContextInstance().getVariables():new HashMap<String, String>());
+		if (pi.getContextInstance().getVariables() != null) {
+			vo.setVariables(pi.getContextInstance().getVariables());
+		} else {
+			vo.setVariables(new HashMap<String, Object>());
+		}
 		
 		ArrayList<Token> al = new ArrayList<Token>();
 		
