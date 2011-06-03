@@ -35,6 +35,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class GWTCheckBox extends GWTFormElement implements IsSerializable {
 	private List<GWTValidator> validators = new ArrayList<GWTValidator>();
 	private boolean value = false;
+	private String data = "";
 	private boolean readonly = false;
 
 	public boolean getValue() {
@@ -61,6 +62,14 @@ public class GWTCheckBox extends GWTFormElement implements IsSerializable {
 		this.readonly = readonly;
 	}
 	
+	public String getData() {
+		return data;
+	}
+
+	public void setData(String data) {
+		this.data = data;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -71,6 +80,7 @@ public class GWTCheckBox extends GWTFormElement implements IsSerializable {
 		sb.append(", height="); sb.append(height);	
 		sb.append(", readonly="); sb.append(readonly);
 		sb.append(", validators="); sb.append(validators);
+		sb.append(", data="); sb.append(data);
 		sb.append("}");
 		return sb.toString();
 	}
