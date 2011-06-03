@@ -38,8 +38,8 @@ public class DatabaseMetadataMap {
 	public static final String MV_NAME_ID		= "id";
 	
 	// Boolean values mapping
-	public static final String BOOLEAN_TRUE 	= "t";
-	public static final String BOOLEAN_FALSE 	= "f";
+	public static final String BOOLEAN_TRUE 	= "T";
+	public static final String BOOLEAN_FALSE 	= "F";
 	
 	// Date pattern
 	public static final String ISO8601_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZ";
@@ -88,7 +88,7 @@ public class DatabaseMetadataMap {
 		if (value==null) {
 			return null;
 		} else {
-			if (value.toLowerCase().equals(BOOLEAN_TRUE)) {
+			if (value.toUpperCase().equals(BOOLEAN_TRUE)) {
 				return true;
 			} else {
 				return false;
