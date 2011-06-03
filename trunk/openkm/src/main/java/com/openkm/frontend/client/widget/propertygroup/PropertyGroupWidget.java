@@ -74,8 +74,8 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	 * @param PropertyGroupWidgetToFire widget with methods to be fired
 	 * @param valuesMap map of initial values
 	 */
-	public PropertyGroupWidget(String docPath, GWTPropertyGroup propertyGroup, Widget widget, PropertyGroupWidgetToFire propertyGroupWidgetToFire, 
-			Map<String, GWTFormElement> valuesMap) {
+	public PropertyGroupWidget(String docPath, GWTPropertyGroup propertyGroup, Widget widget,
+			PropertyGroupWidgetToFire propertyGroupWidgetToFire, Map<String, GWTFormElement> valuesMap) {
 		this.propertyGroupVariablesMap = valuesMap;
 		start(docPath, propertyGroup, widget, propertyGroupWidgetToFire);
 	}
