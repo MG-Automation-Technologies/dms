@@ -657,13 +657,14 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 			
 			// Save content to temporary file
 			String fileName = FileUtils.getName(docPath);
-			tmp = File.createTempFile("okm", "."+FileUtils.getFileExtension(fileName));
+			tmp = File.createTempFile("okm", "." + FileUtils.getFileExtension(fileName));
 			fos = new FileOutputStream(tmp);
 			
 			// Setting values to document 
 			Map<String, Object> values = new HashMap<String, Object>();
 			for (GWTFormElement formElement : formProperties) {
-				values.put(formElement.getName().replace(".", "_").replace(":", "_"), GWTUtil.getFormElementValue(formElement));
+				values.put(formElement.getName().replace(".", "_").replace(":", "_"),
+						GWTUtil.getFormElementValue(formElement));
 			}
 			
 			// Fill document by mime type
