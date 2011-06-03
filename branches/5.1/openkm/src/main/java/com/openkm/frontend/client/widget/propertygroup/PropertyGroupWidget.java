@@ -36,13 +36,8 @@ import com.google.gwt.user.client.ui.HTMLTable.RowFormatter;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.bean.GWTCheckBox;
 import com.openkm.frontend.client.bean.GWTFormElement;
-import com.openkm.frontend.client.bean.GWTInput;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
-import com.openkm.frontend.client.bean.GWTSelect;
-import com.openkm.frontend.client.bean.GWTSuggestBox;
-import com.openkm.frontend.client.bean.GWTTextArea;
 import com.openkm.frontend.client.extension.event.HasPropertyGroupEvent;
 import com.openkm.frontend.client.extension.event.handler.PropertyGroupHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasPropertyGroupHandlerExtension;
@@ -66,7 +61,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	private CellFormatter cellFormatter;
 	private PropertyGroupWidgetToFire propertyGroupWidgetToFire;
 	private List<PropertyGroupHandlerExtension> propertyGroupHandlerExtensionList;
-	private Map<String,String> valuesMap = new HashMap<String, String>();
+	private Map<String, GWTFormElement> propertyGroupVariablesMap = new HashMap<String, GWTFormElement>();
 	private GWTPropertyGroup propertyGroup;
 	private FormManager manager;
 	
@@ -80,8 +75,8 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	 * @param valuesMap map of initial values
 	 */
 	public PropertyGroupWidget(String docPath, GWTPropertyGroup propertyGroup, Widget widget, PropertyGroupWidgetToFire propertyGroupWidgetToFire, 
-			Map<String,String> valuesMap) {
-		this.valuesMap = valuesMap;
+			Map<String, GWTFormElement> valuesMap) {
+		this.propertyGroupVariablesMap = valuesMap;
 		start(docPath, propertyGroup, widget, propertyGroupWidgetToFire);
 	}
 	
@@ -138,24 +133,10 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	 */
 	final AsyncCallback<List<GWTFormElement>> callbackGetProperties = new AsyncCallback<List<GWTFormElement>>() {
 		public void onSuccess(List<GWTFormElement> result){			
-			for (GWTFormElement formElement : result) {
-				// Loading initial values
-				if (!valuesMap.isEmpty() && valuesMap.containsKey(formElement.getName())) {
-					if (formElement instanceof GWTTextArea) {
-						((GWTTextArea)formElement).setValue(valuesMap.get(formElement.getName()));
-					} else if (formElement instanceof GWTInput) {
-						((GWTInput)formElement).setValue(valuesMap.get(formElement.getName()));
-					} else if (formElement instanceof GWTSuggestBox) {
-						((GWTSuggestBox)formElement).setValue(valuesMap.get(formElement.getName()));
-					} else if (formElement instanceof GWTCheckBox) {
-						((GWTCheckBox)formElement).setValue(new Boolean(valuesMap.get(formElement.getName())));
-					} else if (formElement instanceof GWTSelect) {
-						// Not implemented
-					} 
-				}
-			}
-			
 			manager.setFormElements(result);
+			if (!propertyGroupVariablesMap.isEmpty()) {
+				manager.loadDataFromPropertyGroupVariables(propertyGroupVariablesMap);
+			}
 			manager.draw(propertyGroup.isReadonly());
 			
 			if (propertyGroupWidgetToFire!=null) {
