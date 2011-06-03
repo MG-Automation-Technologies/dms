@@ -191,10 +191,10 @@ public class FormManager {
 				@Override
 				public void onClick(ClickEvent event) {
 					if (validationProcessor.validate()) {
-						if (gWTButton.getType().equals(GWTButton.TYPE_TRANSITION)) {
-							workflow.setTaskInstanceValues(taskInstance.getId(), gWTButton.getValue());
-						} else {
+						if (gWTButton.getTransition().equals("")) {
 							workflow.setTaskInstanceValues(taskInstance.getId(), null);
+						} else {
+							workflow.setTaskInstanceValues(taskInstance.getId(), gWTButton.getTransition());
 						}
 					}
 				}
