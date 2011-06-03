@@ -33,6 +33,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -104,6 +105,11 @@ public class WorkflowUtils {
 		// TODO https://jira.jboss.org/jira/browse/JBPM-1778
 		if (pi.getContextInstance().getVariables() != null) {
 			vo.setVariables(pi.getContextInstance().getVariables());
+			
+			// Workaround for LazyInitializationException
+			for (Entry<String, Object> entry : vo.getVariables().entrySet()) {
+				entry.toString();
+			}
 		} else {
 			vo.setVariables(new HashMap<String, Object>());
 		}
