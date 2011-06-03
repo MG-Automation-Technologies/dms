@@ -25,229 +25,230 @@ import java.io.Serializable;
 
 public class ProfileToolbar implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private boolean createFolder;
-	private boolean findFolder;
-	private boolean findDocument;
-	private boolean download;
-	private boolean downloadPdf;
-	private boolean print;
-	private boolean lock;
-	private boolean unlock;
-	private boolean addDocument;
-	private boolean checkout;
-	private boolean checkin;
-	private boolean cancelCheckout;
-	private boolean delete;
-	private boolean addPropertyGroup;
-	private boolean removePropertyGroup;
-	private boolean startWorkflow;
-	private boolean addSubscription;
-	private boolean removeSubscription;
-	private boolean refresh;
-	private boolean home;
-	private boolean scanner;
-	private boolean uploader;
+	private boolean createFolderVisible;
+	private boolean findFolderVisible;
+	private boolean findDocumentVisible;
+	private boolean downloadVisible;
+	private boolean downloadPdfVisible;
+	private boolean printVisible;
+	private boolean lockVisible;
+	private boolean unlockVisible;
+	private boolean addDocumentVisible;
+	private boolean checkoutVisible;
+	private boolean checkinVisible;
+	private boolean cancelCheckoutVisible;
+	private boolean deleteVisible;
+	private boolean addPropertyGroupVisible;
+	private boolean removePropertyGroupVisible;
+	private boolean startWorkflowVisible;
+	private boolean addSubscriptionVisible;
+	private boolean removeSubscriptionVisible;
+	private boolean refreshVisible;
+	private boolean homeVisible;
+	private boolean scannerVisible;
+	private boolean uploaderVisible;
 
-	public boolean isCreateFolder() {
-		return createFolder;
-	}
-
-	public void setCreateFolder(boolean createFolder) {
-		this.createFolder = createFolder;
+	public boolean isCreateFolderVisible() {
+		return createFolderVisible;
 	}
 
-	public boolean isFindFolder() {
-		return findFolder;
+	public void setCreateFolderVisible(boolean createFolderVisible) {
+		this.createFolderVisible = createFolderVisible;
 	}
 
-	public void setFindFolder(boolean findFolder) {
-		this.findFolder = findFolder;
-	}
-	
-	public boolean isFindDocument() {
-		return findDocument;
+	public boolean isFindFolderVisible() {
+		return findFolderVisible;
 	}
 
-	public void setFindDocument(boolean findDocument) {
-		this.findDocument = findDocument;
+	public void setFindFolderVisible(boolean findFolderVisible) {
+		this.findFolderVisible = findFolderVisible;
 	}
 
-	public boolean isLock() {
-		return lock;
+	public boolean isFindDocumentVisible() {
+		return findDocumentVisible;
 	}
 
-	public void setLock(boolean lock) {
-		this.lock = lock;
+	public void setFindDocumentVisible(boolean findDocumentVisible) {
+		this.findDocumentVisible = findDocumentVisible;
 	}
 
-	public boolean isUnlock() {
-		return unlock;
+	public boolean isDownloadVisible() {
+		return downloadVisible;
 	}
 
-	public void setUnlock(boolean unlock) {
-		this.unlock = unlock;
+	public void setDownloadVisible(boolean downloadVisible) {
+		this.downloadVisible = downloadVisible;
 	}
 
-	public boolean isAddDocument() {
-		return addDocument;
+	public boolean isDownloadPdfVisible() {
+		return downloadPdfVisible;
 	}
 
-	public void setAddDocument(boolean addDocument) {
-		this.addDocument = addDocument;
+	public void setDownloadPdfVisible(boolean downloadPdfVisible) {
+		this.downloadPdfVisible = downloadPdfVisible;
 	}
 
-	public boolean isDelete() {
-		return delete;
+	public boolean isPrintVisible() {
+		return printVisible;
 	}
 
-	public void setDelete(boolean delete) {
-		this.delete = delete;
+	public void setPrintVisible(boolean printVisible) {
+		this.printVisible = printVisible;
 	}
 
-	public boolean isCheckout() {
-		return checkout;
+	public boolean isLockVisible() {
+		return lockVisible;
 	}
 
-	public void setCheckout(boolean checkout) {
-		this.checkout = checkout;
+	public void setLockVisible(boolean lockVisible) {
+		this.lockVisible = lockVisible;
 	}
 
-	public boolean isCheckin() {
-		return checkin;
+	public boolean isUnlockVisible() {
+		return unlockVisible;
 	}
 
-	public void setCheckin(boolean checkin) {
-		this.checkin = checkin;
+	public void setUnlockVisible(boolean unlockVisible) {
+		this.unlockVisible = unlockVisible;
 	}
 
-	public boolean isCancelCheckout() {
-		return cancelCheckout;
+	public boolean isAddDocumentVisible() {
+		return addDocumentVisible;
 	}
 
-	public void setCancelCheckout(boolean cancelCheckout) {
-		this.cancelCheckout = cancelCheckout;
+	public void setAddDocumentVisible(boolean addDocumentVisible) {
+		this.addDocumentVisible = addDocumentVisible;
 	}
 
-	public boolean isDownload() {
-		return download;
+	public boolean isCheckoutVisible() {
+		return checkoutVisible;
 	}
 
-	public void setDownload(boolean download) {
-		this.download = download;
+	public void setCheckoutVisible(boolean checkoutVisible) {
+		this.checkoutVisible = checkoutVisible;
 	}
 
-	public boolean isDownloadPdf() {
-		return downloadPdf;
+	public boolean isCheckinVisible() {
+		return checkinVisible;
 	}
 
-	public void setDownloadPdf(boolean downloadPdf) {
-		this.downloadPdf = downloadPdf;
+	public void setCheckinVisible(boolean checkinVisible) {
+		this.checkinVisible = checkinVisible;
 	}
 
-	public boolean isAddPropertyGroup() {
-		return addPropertyGroup;
+	public boolean isCancelCheckoutVisible() {
+		return cancelCheckoutVisible;
 	}
 
-	public void setAddPropertyGroup(boolean addPropertyGroup) {
-		this.addPropertyGroup = addPropertyGroup;
+	public void setCancelCheckoutVisible(boolean cancelCheckoutVisible) {
+		this.cancelCheckoutVisible = cancelCheckoutVisible;
 	}
 
-	public boolean isRemovePropertyGroup() {
-		return removePropertyGroup;
+	public boolean isDeleteVisible() {
+		return deleteVisible;
 	}
 
-	public void setRemovePropertyGroup(boolean removePropertyGroup) {
-		this.removePropertyGroup = removePropertyGroup;
+	public void setDeleteVisible(boolean deleteVisible) {
+		this.deleteVisible = deleteVisible;
 	}
 
-	public boolean isStartWorkflow() {
-		return startWorkflow;
+	public boolean isAddPropertyGroupVisible() {
+		return addPropertyGroupVisible;
 	}
 
-	public void setStartWorkflow(boolean startWorkflow) {
-		this.startWorkflow = startWorkflow;
+	public void setAddPropertyGroupVisible(boolean addPropertyGroupVisible) {
+		this.addPropertyGroupVisible = addPropertyGroupVisible;
 	}
 
-	public boolean isAddSubscription() {
-		return addSubscription;
+	public boolean isRemovePropertyGroupVisible() {
+		return removePropertyGroupVisible;
 	}
 
-	public void setAddSubscription(boolean addSubscription) {
-		this.addSubscription = addSubscription;
+	public void setRemovePropertyGroupVisible(boolean removePropertyGroupVisible) {
+		this.removePropertyGroupVisible = removePropertyGroupVisible;
 	}
 
-	public boolean isRemoveSubscription() {
-		return removeSubscription;
+	public boolean isStartWorkflowVisible() {
+		return startWorkflowVisible;
 	}
 
-	public void setRemoveSubscription(boolean removeSubscription) {
-		this.removeSubscription = removeSubscription;
+	public void setStartWorkflowVisible(boolean startWorkflowVisible) {
+		this.startWorkflowVisible = startWorkflowVisible;
 	}
 
-	public boolean isHome() {
-		return home;
+	public boolean isAddSubscriptionVisible() {
+		return addSubscriptionVisible;
 	}
 
-	public void setHome(boolean home) {
-		this.home = home;
+	public void setAddSubscriptionVisible(boolean addSubscriptionVisible) {
+		this.addSubscriptionVisible = addSubscriptionVisible;
 	}
 
-	public boolean isRefresh() {
-		return refresh;
+	public boolean isRemoveSubscriptionVisible() {
+		return removeSubscriptionVisible;
 	}
 
-	public void setRefresh(boolean refresh) {
-		this.refresh = refresh;
+	public void setRemoveSubscriptionVisible(boolean removeSubscriptionVisible) {
+		this.removeSubscriptionVisible = removeSubscriptionVisible;
 	}
 
-	public boolean isScanner() {
-		return scanner;
+	public boolean isRefreshVisible() {
+		return refreshVisible;
 	}
 
-	public void setScanner(boolean scanner) {
-		this.scanner = scanner;
+	public void setRefreshVisible(boolean refreshVisible) {
+		this.refreshVisible = refreshVisible;
 	}
 
-	public boolean isUploader() {
-		return uploader;
+	public boolean isHomeVisible() {
+		return homeVisible;
 	}
 
-	public void setUploader(boolean uploader) {
-		this.uploader = uploader;
-	}
-	
-	public boolean isPrint() {
-		return print;
+	public void setHomeVisible(boolean homeVisible) {
+		this.homeVisible = homeVisible;
 	}
 
-	public void setPrint(boolean print) {
-		this.print = print;
+	public boolean isScannerVisible() {
+		return scannerVisible;
+	}
+
+	public void setScannerVisible(boolean scannerVisible) {
+		this.scannerVisible = scannerVisible;
+	}
+
+	public boolean isUploaderVisible() {
+		return uploaderVisible;
+	}
+
+	public void setUploaderVisible(boolean uploaderVisible) {
+		this.uploaderVisible = uploaderVisible;
 	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("createFolder="); sb.append(createFolder);
-		sb.append(", findFolder="); sb.append(findFolder);
-		sb.append(", findDocument="); sb.append(findDocument);
-		sb.append(", download="); sb.append(download);
-		sb.append(", downloadPdf="); sb.append(downloadPdf);
-		sb.append(", print="); sb.append(print);
-		sb.append(", addDocument="); sb.append(addDocument);
-		sb.append(", lock="); sb.append(lock);
-		sb.append(", unlock="); sb.append(unlock);
-		sb.append(", checkout="); sb.append(checkout);
-		sb.append(", cancelCheckout="); sb.append(cancelCheckout);
-		sb.append(", delete="); sb.append(delete);
-		sb.append(", addPropertyGroup="); sb.append(addPropertyGroup);
-		sb.append(", removePropertyGroup="); sb.append(removePropertyGroup);
-		sb.append(", startWorkflow="); sb.append(startWorkflow);
-		sb.append(", addSubscription="); sb.append(addSubscription);
-		sb.append(", removeSubscription="); sb.append(removeSubscription);
-		sb.append(", home="); sb.append(home);
-		sb.append(", refresh="); sb.append(refresh);
-		sb.append(", scanner="); sb.append(scanner);
-		sb.append(", uploader="); sb.append(uploader);
+		sb.append("createFolderVisible="); sb.append(createFolderVisible);
+		sb.append(", findFolderVisible="); sb.append(findFolderVisible);
+		sb.append(", findDocumentVisible="); sb.append(findDocumentVisible);
+		sb.append(", downloadVisible="); sb.append(downloadVisible);
+		sb.append(", downloadPdfVisible="); sb.append(downloadPdfVisible);
+		sb.append(", printVisible="); sb.append(printVisible);
+		sb.append(", addDocumentVisible="); sb.append(addDocumentVisible);
+		sb.append(", lockVisible="); sb.append(lockVisible);
+		sb.append(", unlockVisible="); sb.append(unlockVisible);
+		sb.append(", checkinVisible="); sb.append(checkinVisible);
+		sb.append(", checkoutVisible="); sb.append(checkoutVisible);
+		sb.append(", cancelCheckoutVisible="); sb.append(cancelCheckoutVisible);
+		sb.append(", deleteVisible="); sb.append(deleteVisible);
+		sb.append(", addPropertyGroupVisible="); sb.append(addPropertyGroupVisible);
+		sb.append(", removePropertyGroupVisible="); sb.append(removePropertyGroupVisible);
+		sb.append(", startWorkflowVisible="); sb.append(startWorkflowVisible);
+		sb.append(", addSubscriptionVisible="); sb.append(addSubscriptionVisible);
+		sb.append(", removeSubscriptionVisible="); sb.append(removeSubscriptionVisible);
+		sb.append(", homeVisible="); sb.append(homeVisible);
+		sb.append(", refreshVisible="); sb.append(refreshVisible);
+		sb.append(", scannerVisible="); sb.append(scannerVisible);
+		sb.append(", uploaderVisible="); sb.append(uploaderVisible);
 		sb.append("}");
 		return sb.toString();
 	}
