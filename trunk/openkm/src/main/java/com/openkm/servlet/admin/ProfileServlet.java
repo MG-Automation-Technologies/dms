@@ -325,7 +325,31 @@ public class ProfileServlet extends BaseServlet {
 		prf.getDashboard().setGeneralVisible(WebUtils.getBoolean(request, "prf_dashboard_general_visible"));
 		prf.getDashboard().setWorkflowVisible(WebUtils.getBoolean(request, "prf_dashboard_workflow_visible"));
 		prf.getDashboard().setKeywordsVisible(WebUtils.getBoolean(request, "prf_dashboard_keywords_visible"));
-				
+		
+		// Toolbar
+		prf.getToolbar().setCreateFolderVisible(WebUtils.getBoolean(request, "prf_toolbar_create_folder_visible"));
+		prf.getToolbar().setFindFolderVisible(WebUtils.getBoolean(request, "prf_toolbar_find_folder_visible"));
+		prf.getToolbar().setFindDocumentVisible(WebUtils.getBoolean(request, "prf_toolbar_find_documentr_visible"));
+		prf.getToolbar().setDownloadVisible(WebUtils.getBoolean(request, "prf_toolbar_download_visible"));
+		prf.getToolbar().setDownloadPdfVisible(WebUtils.getBoolean(request, "prf_toolbar_download_pdf_visible"));
+		prf.getToolbar().setPrintVisible(WebUtils.getBoolean(request, "prf_toolbar_print_visible"));
+		prf.getToolbar().setLockVisible(WebUtils.getBoolean(request, "prf_toolbar_lock_visible"));
+		prf.getToolbar().setUnlockVisible(WebUtils.getBoolean(request, "prf_toolbar_unlock_visible"));
+		prf.getToolbar().setAddDocumentVisible(WebUtils.getBoolean(request, "prf_toolbar_add_document_visible"));
+		prf.getToolbar().setCheckoutVisible(WebUtils.getBoolean(request, "prf_toolbar_checkout_visible"));
+		prf.getToolbar().setCheckinVisible(WebUtils.getBoolean(request, "prf_toolbar_checkin_visible"));
+		prf.getToolbar().setCancelCheckoutVisible(WebUtils.getBoolean(request, "prf_toolbar_cancel_checkout_visible"));
+		prf.getToolbar().setDeleteVisible(WebUtils.getBoolean(request, "prf_toolbar_delete_visible"));
+		prf.getToolbar().setAddPropertyGroupVisible(WebUtils.getBoolean(request, "prf_toolbar_add_property_visible"));
+		prf.getToolbar().setRemovePropertyGroupVisible(WebUtils.getBoolean(request, "prf_toolbar_remove_property_visible"));
+		prf.getToolbar().setStartWorkflowVisible(WebUtils.getBoolean(request, "prf_toolbar_start_workflow_visible"));
+		prf.getToolbar().setAddSubscriptionVisible(WebUtils.getBoolean(request, "prf_toolbar_add_subscription_visible"));
+		prf.getToolbar().setRemoveSubscriptionVisible(WebUtils.getBoolean(request, "prf_toolbar_remove_subscription_visible"));
+		prf.getToolbar().setRefreshVisible(WebUtils.getBoolean(request, "prf_toolbar_refresh_visible"));
+		prf.getToolbar().setHomeVisible(WebUtils.getBoolean(request, "prf_toolbar_home_visible"));
+		prf.getToolbar().setScannerVisible(WebUtils.getBoolean(request, "prf_toolbar_scanner_visible"));
+		prf.getToolbar().setUploaderVisible(WebUtils.getBoolean(request, "prf_toolbar_uploader_visible"));
+		
 		return prf;
 	}
 }
