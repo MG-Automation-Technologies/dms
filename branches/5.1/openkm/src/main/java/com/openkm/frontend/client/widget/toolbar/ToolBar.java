@@ -83,7 +83,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT.create(OKMPropertyGroupService.class);
 		
 	private HorizontalPanel panel;
-	private ToolBarButton createFolderButton;
+	private ToolBarButton createFolder;
 	private ToolBarButton findFolder;
 	private ToolBarButton lock;
 	private ToolBarButton unLock;
@@ -670,7 +670,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		
 		// ONLY TO DEVELOPMENT TESTINGT
 		//enableAllToolBarForTestingPurpose();
-		createFolderButton = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.createFolder()), 
+		createFolder = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.createFolder()), 
 											   Main.i18n("tree.menu.directory.create"), createFolderHandler);
 		
 		findFolder = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.findFolder()), 
@@ -733,8 +733,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		uploader  = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.uploader()),
  				Main.i18n("general.menu.file.uploader"), uploaderHandler); 
 		
-		createFolderButton.addMouseOverHandler(mouseOverHandler);
-		createFolderButton.addMouseOutHandler(mouseOutHandler);
+		createFolder.addMouseOverHandler(mouseOverHandler);
+		createFolder.addMouseOutHandler(mouseOutHandler);
 		findFolder.addMouseOverHandler(mouseOverHandler);
 		findFolder.addMouseOutHandler(mouseOutHandler);
 		lock.addMouseOverHandler(mouseOverHandler);
@@ -774,7 +774,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		uploader.addMouseOverHandler(mouseOverHandler);
 		uploader.addMouseOutHandler(mouseOutHandler);
 		
-		createFolderButton.setStyleName("okm-ToolBar-button");
+		createFolder.setStyleName("okm-ToolBar-button");
 		findFolder.setStyleName("okm-ToolBar-button");
 		lock.setStyleName("okm-ToolBar-button");
 		unLock.setStyleName("okm-ToolBar-button");
@@ -800,7 +800,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		panel.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
 		panel.addStyleName("okm-ToolBar");
 		panel.add(space());
-		panel.add(createFolderButton);
+		panel.add(createFolder);
 		panel.add(space());
 		panel.add(findFolder);
 		panel.add(space());
@@ -1311,9 +1311,9 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public void enableCreateDirectory() {
 		toolBarOption.createFolderOption = true;
-		createFolderButton.setStyleName("okm-ToolBar-button");
-		createFolderButton.setResource(OKMBundleResources.INSTANCE.createFolder()); 
-		createFolderButton.setTitle(Main.i18n("tree.menu.directory.create"));
+		createFolder.setStyleName("okm-ToolBar-button");
+		createFolder.setResource(OKMBundleResources.INSTANCE.createFolder()); 
+		createFolder.setTitle(Main.i18n("tree.menu.directory.create"));
 	}
 	
 	/**
@@ -1321,9 +1321,9 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public void disableCreateDirectory() {
 		toolBarOption.createFolderOption = false;
-		createFolderButton.setStyleName("okm-ToolBar-button-disabled");
-		createFolderButton.setResource(OKMBundleResources.INSTANCE.createFolderDisabled()); 
-		createFolderButton.setTitle(Main.i18n("tree.menu.directory.create"));
+		createFolder.setStyleName("okm-ToolBar-button-disabled");
+		createFolder.setResource(OKMBundleResources.INSTANCE.createFolderDisabled()); 
+		createFolder.setTitle(Main.i18n("tree.menu.directory.create"));
 	}
 	
 	/**
@@ -2605,7 +2605,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public void setAvailableOption(GWTAvailableOption option) {
 		// FIRST
-		createFolderButton.setVisible(option.isCreateFolderOption());
+		createFolder.setVisible(option.isCreateFolderOption());
 		panel.getWidget(2).setVisible(option.isCreateFolderOption()); // Hide space
 		findFolder.setVisible(option.isCreateFolderOption());
 		panel.getWidget(4).setVisible(option.isCreateFolderOption()); // Hide space
