@@ -701,74 +701,71 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		
 		// ONLY TO DEVELOPMENT TESTINGT
 		//enableAllToolBarForTestingPurpose();
-		createFolder = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.createFolder()), 
-											   Main.i18n("tree.menu.directory.create"), createFolderHandler);
+		createFolder = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.createFolder()),
+				Main.i18n("tree.menu.directory.create"), createFolderHandler);
 		
-		findFolder = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.findFolder()), 
-				  					   Main.i18n("tree.menu.directory.find.folder"), findFolderHandler);
+		findFolder = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.findFolder()),
+				Main.i18n("tree.menu.directory.find.folder"), findFolderHandler);
 		
-		findDocument = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.findDocument()), 
-				   						 Main.i18n("tree.menu.directory.find.document"), findDocumentHandler);
-			
+		findDocument = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.findDocument()),
+				Main.i18n("tree.menu.directory.find.document"), findDocumentHandler);			
 		
-		lock = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.lockDisabled()), 
-				   				 Main.i18n("general.menu.file.lock"), lockHandler);
-			
-		unlock = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.lockDisabled()), 
-  				 				   Main.i18n("general.menu.file.unlock"), unLockHandler);
-			
-		addDocument = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.addDocument()), 
-				   						Main.i18n("general.menu.file.add.document"), addDocumentHandler);
-			
-			
-		delete = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.deleteDisabled()), 
-								   Main.i18n("general.menu.file.delete"), deleteHandler);
-			
-		checkout = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.checkoutDisabled()), 
-				   				 Main.i18n("general.menu.file.checkout"), editHandler);
-			
-		checkin = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.checkinDisabled()), 
-  				 					Main.i18n("general.menu.file.checkin"), checkinHandler);
-			
-		cancelCheckout = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.cancelCheckoutDisabled()), 
-											Main.i18n("general.menu.file.cancel.checkout"), cancelCheckoutHandler);
-			
+		lock = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.lockDisabled()),
+				Main.i18n("general.menu.file.lock"), lockHandler);
+		
+		unlock = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.lockDisabled()),
+				Main.i18n("general.menu.file.unlock"), unLockHandler);
+		
+		addDocument = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.addDocument()),
+				Main.i18n("general.menu.file.add.document"), addDocumentHandler);
+		
+		delete = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.deleteDisabled()),
+				Main.i18n("general.menu.file.delete"), deleteHandler);
+		
+		checkout = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.checkoutDisabled()),
+				Main.i18n("general.menu.file.checkout"), editHandler);
+		
+		checkin = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.checkinDisabled()),
+				Main.i18n("general.menu.file.checkin"), checkinHandler);
+		
+		cancelCheckout = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.cancelCheckoutDisabled()),
+				Main.i18n("general.menu.file.cancel.checkout"), cancelCheckoutHandler);
+		
 		download = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.downloadDisabled()),
-									  Main.i18n("general.menu.file.download.document"), downloadHandler);
-			
+				Main.i18n("general.menu.file.download.document"), downloadHandler);
+		
 		downloadPdf = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.downloadPdfDisabled()),
-				  						Main.i18n("general.menu.file.download.document.pdf"), downloadPdfHandler);
+				Main.i18n("general.menu.file.download.document.pdf"), downloadPdfHandler);
 		
 		print = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.printDisabled()),
-										Main.i18n("general.menu.file.print"), printHandler); 
-			
+				Main.i18n("general.menu.file.print"), printHandler); 
+		
 		addPropertyGroup = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.addPropertyGroupDisabled()),
-											 Main.i18n("filebrowser.menu.add.property.group"), addPropertyGroupHandler); 
-			
+				Main.i18n("filebrowser.menu.add.property.group"), addPropertyGroupHandler); 
+		
 		removePropertyGroup = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.removePropertyGroupDisabled()),
-				 								Main.i18n("filebrowser.menu.remove.property.group"), removePropertyGroupHandler); 
-			
+				Main.i18n("filebrowser.menu.remove.property.group"), removePropertyGroupHandler); 
+		
 		startWorkflow = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.startWorkflowDisabled()),
-										  Main.i18n("filebrowser.menu.start.workflow"), startWorkflowHandler); 
-			
-
+				Main.i18n("filebrowser.menu.start.workflow"), startWorkflowHandler); 
+		
 		addSubscription = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.addSubscriptionDisabled()),
-				  							Main.i18n("filebrowser.menu.add.subscription"), addSubscriptionHandler); 
-			
+				Main.i18n("filebrowser.menu.add.subscription"), addSubscriptionHandler); 
+		
 		removeSubscription = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.removeSubscriptionDisabled()),
-											   Main.i18n("filebrowser.menu.remove.subscription"), removeSubscriptionHandler); 
-
+				Main.i18n("filebrowser.menu.remove.subscription"), removeSubscriptionHandler); 
+		
 		home = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.home()),
-				   				  Main.i18n("general.menu.bookmark.home"), arrowHomeHandler); 
-			
+				Main.i18n("general.menu.bookmark.home"), arrowHomeHandler); 
+		
 		refresh = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.refresh()),
- 				  					 Main.i18n("general.menu.file.refresh"), arrowRefreshHandler); 
-			
+				Main.i18n("general.menu.file.refresh"), arrowRefreshHandler); 
+		
 		scanner = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.scanner()),
-					 				Main.i18n("general.menu.file.scanner"), scannerHandler); 
-			
+				Main.i18n("general.menu.file.scanner"), scannerHandler); 
+		
 		uploader  = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.uploader()),
- 									  Main.i18n("general.menu.file.uploader"), uploaderHandler); 
+				Main.i18n("general.menu.file.uploader"), uploaderHandler); 
 		
 		imageContract = new Image(OKMBundleResources.INSTANCE.splitterContract());
 		splitterContract = new ToolBarButton(imageContract, Main.i18n("general.menu.file.uploader"), new ClickHandler() {
