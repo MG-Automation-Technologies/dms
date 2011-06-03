@@ -39,6 +39,7 @@ public class GWTSelect extends GWTFormElement implements IsSerializable {
 	private Collection<GWTOption> options = new ArrayList<GWTOption>();
 	private List<GWTValidator> validators = new ArrayList<GWTValidator>();
 	private String type = TYPE_SIMPLE;
+	private String data = "";
 	private boolean readonly = false;
 
 	public Collection<GWTOption> getOptions() {
@@ -73,6 +74,14 @@ public class GWTSelect extends GWTFormElement implements IsSerializable {
 		this.readonly = readonly;
 	}
 	
+	public String getData() {
+		return data;
+	}
+
+	public void setData(String data) {
+		this.data = data;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -84,6 +93,7 @@ public class GWTSelect extends GWTFormElement implements IsSerializable {
 		sb.append(", type="); sb.append(type);
 		sb.append(", options="); sb.append(options);
 		sb.append(", validators="); sb.append(validators);
+		sb.append(", data="); sb.append(data);
 		sb.append("}");
 		return sb.toString();
 	}

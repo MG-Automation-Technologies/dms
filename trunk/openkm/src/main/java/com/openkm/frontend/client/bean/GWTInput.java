@@ -43,6 +43,7 @@ public class GWTInput extends GWTFormElement implements IsSerializable {
 	private String value = "";
 	private Date date;
 	private boolean readonly = false;
+	private String data = "";
 	private GWTFolder folder = new GWTFolder();
 
 	public Date getDate() {
@@ -77,6 +78,14 @@ public class GWTInput extends GWTFormElement implements IsSerializable {
 		this.validators = validators;
 	}
 	
+	public String getData() {
+		return data;
+	}
+
+	public void setData(String data) {
+		this.data = data;
+	}
+	
 	public boolean isReadonly() {
 		return readonly;
 	}
@@ -105,6 +114,7 @@ public class GWTInput extends GWTFormElement implements IsSerializable {
 		sb.append(", type="); sb.append(type);
 		sb.append(", validators="); sb.append(validators);
 		sb.append(", date="); sb.append(date);
+		sb.append(", data="); sb.append(data);
 		sb.append("}");
 		return sb.toString();
 	}
