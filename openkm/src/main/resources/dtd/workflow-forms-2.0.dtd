@@ -68,8 +68,7 @@
 <!ATTLIST button
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
-	value CDATA #IMPLIED
-	type (submit|transition) "submit"
+	transition CDATA #IMPLIED
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
 >
