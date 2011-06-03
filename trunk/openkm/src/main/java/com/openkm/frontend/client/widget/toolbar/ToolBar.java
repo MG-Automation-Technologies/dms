@@ -41,11 +41,11 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.OKMException;
-import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.bean.GWTProfileToolbar;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.ToolBarOption;
 import com.openkm.frontend.client.contants.service.ErrorCode;
@@ -706,7 +706,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		
 		findFolder = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.findFolder()),
 				Main.i18n("tree.menu.directory.find.folder"), findFolderHandler);
-		
+
 		findDocument = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.findDocument()),
 				Main.i18n("tree.menu.directory.find.document"), findDocumentHandler);			
 		
@@ -2740,77 +2740,77 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * 
 	 * @param option
 	 */
-	public void setAvailableOption(GWTAvailableOption option) {
+	public void setAvailableOption(GWTProfileToolbar option) {
 		// FIRST
-		createFolder.setVisible(option.isCreateFolderOption());
-		panel.getWidget(2).setVisible(option.isCreateFolderOption()); // Hide space
-		findFolder.setVisible(option.isFindFolderOption());
-		panel.getWidget(4).setVisible(option.isFindFolderOption()); // Hide space
-		findDocument.setVisible(option.isFindFolderOption());
-		panel.getWidget(6).setVisible(option.isFindFolderOption()); // Hide space
-		download.setVisible(option.isDownloadOption());
-		panel.getWidget(8).setVisible(option.isDownloadOption()); // hide space
-		downloadPdf.setVisible(option.isDownloadPdfOption());
-		panel.getWidget(10).setVisible(option.isDownloadPdfOption()); // hide space
-		print.setVisible(Main.get().workspaceUserProperties.getWorkspace().isPrintPreview());
+		createFolder.setVisible(option.isCreateFolderVisible());
+		panel.getWidget(2).setVisible(option.isCreateFolderVisible()); // Hide space
+		findFolder.setVisible(option.isFindFolderVisible());
+		panel.getWidget(4).setVisible(option.isFindFolderVisible()); // Hide space
+		findDocument.setVisible(option.isFindFolderVisible());
+		panel.getWidget(6).setVisible(option.isFindFolderVisible()); // Hide space
+		download.setVisible(option.isDownloadVisible());
+		panel.getWidget(8).setVisible(option.isDownloadVisible()); // hide space
+		downloadPdf.setVisible(option.isDownloadPdfVisible());
+		panel.getWidget(10).setVisible(option.isDownloadPdfVisible()); // hide space
+		print.setVisible(option.isPrintVisible());
 		panel.getWidget(12).setVisible(Main.get().workspaceUserProperties.getWorkspace().isPrintPreview());
-		panel.getWidget(13).setVisible(option.isCreateFolderOption() || option.isFindFolderOption() ||
-					                   option.isDownloadOption() || option.isDownloadPdfOption() ||
-					                   Main.get().workspaceUserProperties.getWorkspace().isPrintPreview()); // hide separator
+		panel.getWidget(13).setVisible(option.isCreateFolderVisible() || option.isFindFolderVisible() ||
+					                   option.isDownloadVisible() || option.isDownloadPdfVisible() ||
+					                   option.isPrintVisible()); // hide separator
  
 		
 		// SECOND
-		lock.setVisible(option.isLockOption());
-		panel.getWidget(15).setVisible(option.isLockOption()); // hide space
-		unlock.setVisible(option.isUnLockOption());
-		panel.getWidget(17).setVisible(option.isUnLockOption()); // hide space
-		panel.getWidget(18).setVisible(option.isLockOption() || option.isUnLockOption()); // hide separator
+		lock.setVisible(option.isLockVisible());
+		panel.getWidget(15).setVisible(option.isLockVisible()); // hide space
+		unlock.setVisible(option.isUnlockVisible());
+		panel.getWidget(17).setVisible(option.isUnlockVisible()); // hide space
+		panel.getWidget(18).setVisible(option.isLockVisible() || option.isUnlockVisible()); // hide separator
 		
 		// THIRD
-		addDocument.setVisible(option.isAddDocumentOption());
-		panel.getWidget(20).setVisible(option.isAddDocumentOption()); // hide space
-		checkout.setVisible(option.isCheckoutOption());
-		panel.getWidget(22).setVisible(option.isCheckoutOption()); // hide space
-		checkin.setVisible(option.isCheckinOption());
-		panel.getWidget(24).setVisible(option.isCheckinOption()); // hide space
-		cancelCheckout.setVisible(option.isCancelCheckoutOption());
-		panel.getWidget(26).setVisible(option.isCancelCheckoutOption()); // hide space
-		delete.setVisible(option.isDeleteOption());
-		panel.getWidget(28).setVisible(option.isDeleteOption()); // hide space
-		panel.getWidget(29).setVisible(option.isAddDocumentOption() || option.isCheckoutOption() || 
-									   option.isCheckinOption() || option.isCancelCheckoutOption() || 
-									   option.isDeleteOption()); // hide separator
+		addDocument.setVisible(option.isAddDocumentVisible());
+		panel.getWidget(20).setVisible(option.isAddDocumentVisible()); // hide space
+		checkout.setVisible(option.isCheckoutVisible());
+		panel.getWidget(22).setVisible(option.isCheckoutVisible()); // hide space
+		checkin.setVisible(option.isCheckinVisible());
+		panel.getWidget(24).setVisible(option.isCheckinVisible()); // hide space
+		cancelCheckout.setVisible(option.isCancelCheckoutVisible());
+		panel.getWidget(26).setVisible(option.isCancelCheckoutVisible()); // hide space
+		delete.setVisible(option.isDeleteVisible());
+		panel.getWidget(28).setVisible(option.isDeleteVisible()); // hide space
+		panel.getWidget(29).setVisible(option.isAddDocumentVisible() || option.isCheckoutVisible() || 
+									   option.isCheckinVisible() || option.isCancelCheckoutVisible() || 
+									   option.isDeleteVisible()); // hide separator
 		
 		// FOURTH
-		addPropertyGroup.setVisible(option.isAddPropertyGroupOption());
-		panel.getWidget(31).setVisible(option.isAddPropertyGroupOption()); // hide space
-		removePropertyGroup.setVisible(option.isRemovePropertyGroupOption());
-		panel.getWidget(33).setVisible(option.isRemovePropertyGroupOption()); // hide space
-		panel.getWidget(34).setVisible(option.isAddPropertyGroupOption() || option.isRemovePropertyGroupOption()); // hide separator
+		addPropertyGroup.setVisible(option.isAddPropertyGroupVisible());
+		panel.getWidget(31).setVisible(option.isAddPropertyGroupVisible()); // hide space
+		removePropertyGroup.setVisible(option.isRemovePropertyGroupVisible());
+		panel.getWidget(33).setVisible(option.isRemovePropertyGroupVisible()); // hide space
+		panel.getWidget(34).setVisible(option.isAddPropertyGroupVisible() || option.isRemovePropertyGroupVisible()); // hide separator
 		
 		// FIFTH
-		startWorkflow.setVisible(option.isWorkflowOption());
-		panel.getWidget(36).setVisible(option.isWorkflowOption()); // hide space
-		panel.getWidget(37).setVisible(option.isWorkflowOption()); // hide separator
+		startWorkflow.setVisible(option.isStartWorkflowVisible());
+		panel.getWidget(36).setVisible(option.isStartWorkflowVisible()); // hide space
+		panel.getWidget(37).setVisible(option.isStartWorkflowVisible()); // hide separator
 		
 		// SIXTH
-		addSubscription.setVisible(option.isAddSubscription());
-		panel.getWidget(39).setVisible(option.isAddSubscription()); // hide space
-		removeSubscription.setVisible(option.isRemoveSubscription());
-		panel.getWidget(41).setVisible(option.isRemoveSubscription()); // hide space
-		panel.getWidget(42).setVisible(option.isAddSubscription() || option.isRemoveSubscription()); // hide separator
+		addSubscription.setVisible(option.isAddSubscriptionVisible());
+		panel.getWidget(39).setVisible(option.isAddSubscriptionVisible()); // hide space
+		removeSubscription.setVisible(option.isAddSubscriptionVisible());
+		panel.getWidget(41).setVisible(option.isAddSubscriptionVisible()); // hide space
+		panel.getWidget(42).setVisible(option.isAddSubscriptionVisible() || option.isAddSubscriptionVisible()); // hide separator
 		
 		// SEVENTH 
-		home.setVisible(option.isHomeOption());
-		panel.getWidget(44).setVisible(option.isHomeOption()); // hide space
-		refresh.setVisible(option.isRefreshOption());
-		panel.getWidget(46).setVisible(option.isRefreshOption()); // hide space
-		panel.getWidget(47).setVisible(option.isHomeOption() || option.isRefreshOption()); // hide separator
+		home.setVisible(option.isHomeVisible());
+		panel.getWidget(44).setVisible(option.isHomeVisible()); // hide space
+		refresh.setVisible(option.isRefreshVisible());
+		panel.getWidget(46).setVisible(option.isRefreshVisible()); // hide space
+		panel.getWidget(47).setVisible(option.isHomeVisible() || option.isRefreshVisible()); // hide separator
 		
-		scanner.setVisible(option.isScannerOption());
-		panel.getWidget(49).setVisible(option.isScannerOption()); // hide space
-		uploader.setVisible(option.isUploaderOption());
-		panel.getWidget(51).setVisible(option.isUploaderOption()); // hide space
+		scanner.setVisible(option.isScannerVisible());
+		panel.getWidget(49).setVisible(option.isScannerVisible()); // hide space
+		uploader.setVisible(option.isUploaderVisible());
+		panel.getWidget(51).setVisible(option.isUploaderVisible()); // hide space
 		splitterContract.setVisible(true);
 		panel.getWidget(53).setVisible(true); // hide space
 	}

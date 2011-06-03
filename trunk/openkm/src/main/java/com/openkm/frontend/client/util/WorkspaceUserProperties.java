@@ -124,7 +124,7 @@ public class WorkspaceUserProperties {
 			Main.get().mainPanel.topPanel.mainMenu.initAvailableLanguage(workspace.getLangs());
 			
 			// Enabling / disabling some actions
-			Main.get().mainPanel.topPanel.toolBar.setAvailableOption(workspace.getAvailableOption());
+			Main.get().mainPanel.topPanel.toolBar.setAvailableOption(workspace.getProfileToolbar());
 			
 			// Showing tabs
 			boolean refreshTab = false;
