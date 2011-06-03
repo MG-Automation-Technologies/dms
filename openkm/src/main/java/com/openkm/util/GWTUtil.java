@@ -845,6 +845,7 @@ public class GWTUtil {
 			}
 			gWTInput.setType(((Input) formElement).getType());
 			gWTInput.setValidators(copyValidators(input.getValidators()));
+			gWTInput.setData(input.getData());
 			return gWTInput;
 		} else if (formElement instanceof SuggestBox) {
 			GWTSuggestBox gWTsuggestBox = new GWTSuggestBox();
@@ -860,6 +861,7 @@ public class GWTUtil {
 			gWTsuggestBox.setTable(suggestBox.getTable());
 			gWTsuggestBox.setFilterQuery(suggestBox.getFilterQuery());
 			gWTsuggestBox.setValueQuery(suggestBox.getValueQuery());
+			gWTsuggestBox.setData(suggestBox.getData());
 			return gWTsuggestBox;
 		} else if (formElement instanceof CheckBox) {
 			GWTCheckBox gWTCheckbox = new GWTCheckBox();
@@ -869,6 +871,7 @@ public class GWTUtil {
 			gWTCheckbox.setValue(checkbox.getValue());
 			gWTCheckbox.setReadonly(checkbox.isReadonly());
 			gWTCheckbox.setValidators(copyValidators(checkbox.getValidators()));
+			gWTCheckbox.setData(checkbox.getData());
 			return gWTCheckbox;
 		} else if (formElement instanceof Select) {
 			GWTSelect gWTselect = new GWTSelect();
@@ -885,6 +888,7 @@ public class GWTUtil {
 			}
 			gWTselect.setOptions(options);
 			gWTselect.setValidators(copyValidators(select.getValidators()));
+			gWTselect.setData(select.getData());
 			return gWTselect;
 		} else if (formElement instanceof TextArea) {
 			GWTTextArea gWTTextArea= new GWTTextArea();
@@ -896,6 +900,7 @@ public class GWTUtil {
 			gWTTextArea.setValue(textArea.getValue());
 			gWTTextArea.setReadonly(textArea.isReadonly());
 			gWTTextArea.setValidators(copyValidators(textArea.getValidators()));
+			gWTTextArea.setData(textArea.getData());
 			return gWTTextArea;
 		} else {
 			return new GWTFormElement();
@@ -911,58 +916,69 @@ public class GWTUtil {
 		if (formElement instanceof GWTButton) {
 			Button button = new Button();
 			button.setName(formElement.getName());
-			button.setValue(((GWTButton) formElement).getValue());
-			button.setType(((GWTButton) formElement).getType());
+			GWTButton gWTButton = ((GWTButton) formElement);
+			button.setValue(gWTButton.getValue());
+			button.setType(gWTButton.getType());
 			return button;
 		} else if (formElement instanceof GWTInput) {
 			Input input = new Input();
 			input.setName(formElement.getName());
-			input.setReadonly(((GWTInput) formElement).isReadonly());
-			if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_TEXT) || 
-				((GWTInput) formElement).getType().equals(GWTInput.TYPE_LINK) ||
-				((GWTInput) formElement).getType().equals(GWTInput.TYPE_FOLDER) ) {
-				input.setValue(((GWTInput) formElement).getValue());
-			} else if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_DATE)) {
-				if (((GWTInput) formElement).getDate()!=null) {
+			GWTInput gWTInput = ((GWTInput) formElement);
+			input.setReadonly(gWTInput.isReadonly());
+			if (gWTInput.getType().equals(GWTInput.TYPE_TEXT) || 
+				gWTInput.getType().equals(GWTInput.TYPE_LINK) ||
+				gWTInput.getType().equals(GWTInput.TYPE_FOLDER) ) {
+				input.setValue(gWTInput.getValue());
+			} else if (gWTInput.getType().equals(GWTInput.TYPE_DATE)) {
+				if (gWTInput.getDate()!=null) {
 					Calendar cal = Calendar.getInstance();
 					cal.setTime(((GWTInput) formElement).getDate());
 					input.setValue(ISO8601.format(cal));
 				}
 			} 
-			input.setType(((GWTInput) formElement).getType());
+			input.setType(gWTInput.getType());
+			input.setData(gWTInput.getData());
 			return input;
 		} else if(formElement instanceof GWTSuggestBox) {
 			SuggestBox suggestBox = new SuggestBox();
 			suggestBox.setName(formElement.getName());
-			suggestBox.setReadonly(((GWTSuggestBox)formElement).isReadonly());
-			suggestBox.setValue(((GWTSuggestBox)formElement).getValue());
-			suggestBox.setFilterQuery(((GWTSuggestBox)formElement).getFilterQuery());
-			suggestBox.setValueQuery(((GWTSuggestBox)formElement).getValueQuery());
+			GWTSuggestBox gWTSuggestBox = ((GWTSuggestBox)formElement);
+			suggestBox.setReadonly(gWTSuggestBox.isReadonly());
+			suggestBox.setValue(gWTSuggestBox.getValue());
+			suggestBox.setFilterQuery(gWTSuggestBox.getFilterQuery());
+			suggestBox.setValueQuery(gWTSuggestBox.getValueQuery());
+			suggestBox.setData(gWTSuggestBox.getData());
 			return suggestBox;
 		} else if (formElement instanceof GWTCheckBox) {
 			CheckBox checkbox = new CheckBox();
 			checkbox.setLabel(formElement.getLabel());
 			checkbox.setName(formElement.getName());
-			checkbox.setValue(((GWTCheckBox) formElement).getValue());
-			checkbox.setReadonly(((GWTCheckBox) formElement).isReadonly());
+			GWTCheckBox gWTCheckBox = ((GWTCheckBox) formElement);
+			checkbox.setValue(gWTCheckBox.getValue());
+			checkbox.setReadonly(gWTCheckBox.isReadonly());
+			checkbox.setData(gWTCheckBox.getData());
 			return checkbox;
 		} else if (formElement instanceof GWTSelect) {
-			Select gWTselect = new Select();
-			gWTselect.setName(formElement.getName());
-			gWTselect.setType(((GWTSelect) formElement).getType());
-			gWTselect.setReadonly(((GWTSelect) formElement).isReadonly());
+			Select select = new Select();
+			select.setName(formElement.getName());
+			GWTSelect gWTSelect = ((GWTSelect) formElement);
+			select.setType(gWTSelect.getType());
+			select.setReadonly(gWTSelect.isReadonly());
 			List<Option> options = new ArrayList<Option>();
-			for (Iterator<GWTOption> it = ((GWTSelect) formElement).getOptions().iterator(); it.hasNext();) {
-				options.add(copy(it.next()));
+			for (GWTOption option :  gWTSelect.getOptions()) {
+				options.add(copy(option));
 			}
-			gWTselect.setOptions(options);
-			return gWTselect;
+			select.setOptions(options);
+			select.setData(gWTSelect.getData());
+			return select;
 		} else if (formElement instanceof GWTTextArea) {
-			TextArea gWTTextArea= new TextArea();
-			gWTTextArea.setName(formElement.getName());
-			gWTTextArea.setValue(((GWTTextArea) formElement).getValue());
-			gWTTextArea.setReadonly(((GWTTextArea) formElement).isReadonly());
-			return gWTTextArea;
+			TextArea textArea= new TextArea();
+			textArea.setName(formElement.getName());
+			GWTTextArea gWTTextArea = ((GWTTextArea) formElement);
+			textArea.setValue(gWTTextArea.getValue());
+			textArea.setReadonly(gWTTextArea.isReadonly());
+			textArea.setData(gWTTextArea.getData());
+			return textArea;
 		} else {
 			return new FormElement();
 		}
