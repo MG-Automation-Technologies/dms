@@ -79,21 +79,21 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
 	private final OKMFolderServiceAsync folderService = (OKMFolderServiceAsync) GWT.create(OKMFolderService.class);
 	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT.create(OKMPropertyGroupService.class);
-		
+	
 	private HorizontalPanel panel;
 	private ToolBarButton createFolder;
 	private ToolBarButton findFolder;
 	private ToolBarButton findDocument;
-	private ToolBarButton lock;
-	private ToolBarButton unlock;
-	private ToolBarButton addDocument;
-	private ToolBarButton delete;
-	private ToolBarButton checkout;
-	private ToolBarButton checkin;
-	private ToolBarButton cancelCheckout;
 	private ToolBarButton download;
 	private ToolBarButton downloadPdf;
 	private ToolBarButton print;
+	private ToolBarButton lock;
+	private ToolBarButton unlock;
+	private ToolBarButton addDocument;
+	private ToolBarButton checkout;
+	private ToolBarButton checkin;
+	private ToolBarButton cancelCheckout;
+	private ToolBarButton delete;
 	private ToolBarButton addPropertyGroup;
 	private ToolBarButton removePropertyGroup;
 	private ToolBarButton startWorkflow;
