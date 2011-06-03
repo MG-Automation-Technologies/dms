@@ -52,6 +52,7 @@ import com.openkm.dao.bean.UserConfig;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTLanguage;
+import com.openkm.frontend.client.bean.GWTProfileToolbar;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.GWTWorkspace;
 import com.openkm.frontend.client.contants.service.ErrorCode;
@@ -279,6 +280,32 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 		availableOption.setImageViewerOption(true); 
 		
 		workspace.setAvailableOption(availableOption);
+		
+		// Toolbar
+		// Is visible on toolbar && available option too
+		GWTProfileToolbar profileToolbar = new GWTProfileToolbar();
+		profileToolbar.setAddDocumentVisible(up.getToolbar().isAddDocumentVisible() && availableOption.isAddDocumentOption());
+		profileToolbar.setAddPropertyGroupVisible(up.getToolbar().isAddPropertyGroupVisible() && availableOption.isAddPropertyGroupOption());
+		profileToolbar.setAddSubscriptionVisible(up.getToolbar().isAddSubscriptionVisible() && availableOption.isAddSubscription());
+		profileToolbar.setCancelCheckoutVisible(up.getToolbar().isCancelCheckoutVisible() && availableOption.isCancelCheckoutOption());
+		profileToolbar.setCheckinVisible(up.getToolbar().isCheckinVisible() && availableOption.isCheckinOption());
+		profileToolbar.setCreateFolderVisible(up.getToolbar().isCreateFolderVisible() && availableOption.isCreateFolderOption());
+		profileToolbar.setDeleteVisible(up.getToolbar().isDeleteVisible() && availableOption.isDeleteOption());
+		profileToolbar.setDownloadPdfVisible(up.getToolbar().isDeleteVisible() && availableOption.isDeleteOption());
+		profileToolbar.setDownloadVisible(up.getToolbar().isDownloadVisible() && availableOption.isDownloadOption());
+		profileToolbar.setFindDocumentVisible(up.getToolbar().isFindDocumentVisible() && availableOption.isDownloadOption());
+		profileToolbar.setFindFolderVisible(up.getToolbar().isFindFolderVisible() && availableOption.isFindFolderOption());
+		profileToolbar.setHomeVisible(up.getToolbar().isHomeVisible() && availableOption.isHomeOption());
+		profileToolbar.setLockVisible(up.getToolbar().isLockVisible() && availableOption.isLockOption());
+		profileToolbar.setPrintVisible(up.getToolbar().isPrintVisible() && workspace.isPrintPreview());
+		profileToolbar.setRefreshVisible(up.getToolbar().isRefreshVisible() && availableOption.isRefreshOption());
+		profileToolbar.setRemovePropertyGroupVisible(up.getToolbar().isRemovePropertyGroupVisible() && availableOption.isRemovePropertyGroupOption());
+		profileToolbar.setRemoveSubscriptionVisible(up.getToolbar().isRemoveSubscriptionVisible() && availableOption.isRemoveSubscription());
+		profileToolbar.setScannerVisible(up.getToolbar().isScannerVisible() && availableOption.isScannerOption());
+		profileToolbar.setStartWorkflowVisible(up.getToolbar().isStartWorkflowVisible() && availableOption.isWorkflowOption());
+		profileToolbar.setUnlockVisible(up.getToolbar().isUnlockVisible() && availableOption.isUnLockOption());
+		profileToolbar.setUploaderVisible(up.getToolbar().isUploaderVisible() && availableOption.isUploaderOption());
+		workspace.setProfileToolbar(profileToolbar);
 		
 		try {
 			// Setting available UI languages
