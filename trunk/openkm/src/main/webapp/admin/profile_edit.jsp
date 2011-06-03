@@ -65,12 +65,12 @@
           </tr>
           <tr>
             <td valign="top">
-              <!-- MENU -->
-              <jsp:include page="profile_menu.jsp"/>
-              <!-- MENU BOOKMARK -->
-              <jsp:include page="profile_menu_bookmark.jsp"/>
+              <!-- TOOLBAR -->
+              <jsp:include page="profile_toolbar.jsp"/>
             </td>
             <td valign="top">
+              <!-- MENU -->
+              <jsp:include page="profile_menu.jsp"/>
               <!-- MENU TOOL -->
               <jsp:include page="profile_menu_tool.jsp"/>
               <!-- MENU HELP -->
@@ -82,7 +82,9 @@
             </td>
             <td valign="top">
               <!-- MENU EDIT -->
-              <jsp:include page="profile_menu_edit.jsp"/>             
+              <jsp:include page="profile_menu_edit.jsp"/>
+              <!-- MENU BOOKMARK -->
+              <jsp:include page="profile_menu_bookmark.jsp"/>
             </td>
           </tr>
           <tr>
