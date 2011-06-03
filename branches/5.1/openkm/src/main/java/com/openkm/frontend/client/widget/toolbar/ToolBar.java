@@ -857,7 +857,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Checks permissions associated to folder and tool buttom enabled actions
+	 * Checks permissions associated to folder and tool button enabled actions
 	 * 
 	 * @param folder The folder
 	 * @param folderParent the folder parent
@@ -1000,7 +1000,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Checks permissions associated to document and tool buttom enabled actions
+	 * Checks permissions associated to document and tool button enabled actions
 	 * 
 	 * @param doc The document
 	 */
@@ -1194,7 +1194,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Checks permissions associated to document and tool buttom enabled actions
+	 * Checks permissions associated to document and tool button enabled actions
 	 * 
 	 * @param mail The Mail
 	 */
@@ -1347,7 +1347,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Enables edit buttom
+	 * Enables edit button
 	 */
 	public void enableCheckout() {
 		toolBarOption.checkoutOption = true;
@@ -1357,7 +1357,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Disables edit buttom
+	 * Disables edit button
 	 */
 	public void disableCheckout() {
 		toolBarOption.checkoutOption = false;
@@ -1367,7 +1367,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Enables checkin buttom
+	 * Enables checkin button
 	 */
 	public void enableCheckin() {
 		toolBarOption.checkinOption = true;
@@ -1377,7 +1377,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Disables checkin buttom
+	 * Disables checkin button
 	 */
 	public void disableCheckin() {
 		toolBarOption.checkinOption = false;
@@ -1387,7 +1387,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Enables checkout cancel buttom
+	 * Enables checkout cancel button
 	 */
 	public void enableCancelCheckout() {
 		toolBarOption.cancelCheckoutOption = true;
@@ -1397,7 +1397,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Disables checkout cancel buttom
+	 * Disables checkout cancel button
 	 */
 	public void disableCancelCheckout() {
 		toolBarOption.cancelCheckoutOption = false;
@@ -1407,7 +1407,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Disables lock buttom
+	 * Disables lock button
 	 */
 	public void disableLock() {
 		toolBarOption.lockOption = false;
@@ -1417,7 +1417,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Enables lock buttom
+	 * Enables lock button
 	 */
 	public void enableLock() {
 		toolBarOption.lockOption = true;
@@ -1427,7 +1427,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Disables delete lock buttom
+	 * Disables delete lock button
 	 */
 	public void disableUnlock() {
 		toolBarOption.unLockOption = false;
@@ -1437,7 +1437,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Enables delete lock buttom
+	 * Enables delete lock button
 	 */
 	public void enableUnlock() {
 		toolBarOption.unLockOption = true;
@@ -1447,7 +1447,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Disables download buttom
+	 * Disables download button
 	 */
 	public void disableDownload() {
 		toolBarOption.downloadOption = false;
@@ -1457,7 +1457,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Enables download buttom
+	 * Enables download button
 	 */
 	public void enableDownload() {
 		toolBarOption.downloadOption = true;
@@ -1467,7 +1467,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 
 	/**
-	 * Disables download as PDF buttom
+	 * Disables download as PDF button
 	 */
 	public void disableDownloadPdf() {
 		toolBarOption.downloadPdfOption = false;
@@ -1477,7 +1477,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Enables download as PDF buttom
+	 * Enables download as PDF button
 	 */
 	public void enableDownloadPdf() {
 		toolBarOption.downloadPdfOption = true;
@@ -1515,7 +1515,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Disables delete buttom
+	 * Disables delete button
 	 */
 	public void disableDelete() {
 		toolBarOption.deleteOption = false;
@@ -1525,7 +1525,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Enables delete buttom
+	 * Enables delete button
 	 */
 	public void enableDelete() {
 		toolBarOption.deleteOption = true;
