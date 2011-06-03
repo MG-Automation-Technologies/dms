@@ -322,10 +322,8 @@ public class FormUtils {
 					if (item != null) button.setLabel(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("name");
 					if (item != null) button.setName(item.getNodeValue());
-					item = nField.getAttributes().getNamedItem("value");
-					if (item != null) button.setValue(item.getNodeValue());
-					item = nField.getAttributes().getNamedItem("type");
-					if (item != null) button.setType(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("transition");
+					if (item != null) button.setTransition(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("width");
 					if (item != null) button.setWidth(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("height");
@@ -519,8 +517,8 @@ public class FormUtils {
 			Button button = (Button) fe;
 			ret.put("field", "Button");
 			StringBuilder sb = new StringBuilder();
-			sb.append("<i>Type:</i> ");
-			sb.append(button.getType());
+			sb.append("<i>Transition:</i> ");
+			sb.append(button.getTransition());
 			ret.put("others", sb.toString());
 		}
 		
