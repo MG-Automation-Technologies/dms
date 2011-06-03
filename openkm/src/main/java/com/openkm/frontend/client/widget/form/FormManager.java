@@ -22,6 +22,7 @@
 package com.openkm.frontend.client.widget.form;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -83,6 +84,9 @@ import eu.maydu.gwt.validation.client.actions.FocusAction;
  */
 public class FormManager {
 	private final OKMKeyValueServiceAsync keyValueService = (OKMKeyValueServiceAsync) GWT.create(OKMKeyValueService.class);
+	
+	// Boolean contants
+	private String BOOLEAN_TRUE = String.valueOf(Boolean.TRUE);
 	
 	private List<GWTFormElement> formElementList = new ArrayList<GWTFormElement>();
 	private Map<String, Widget> hWidgetProperties = new HashMap<String, Widget>();
@@ -171,7 +175,9 @@ public class FormManager {
 		
 		if (gwtMetadata instanceof GWTButton) {
 			final GWTButton gWTButton = (GWTButton) gwtMetadata;
-			submitForm.setVisible(false); // Always set form unvisible because there's new buttons
+			if (submitForm!=null) {
+				submitForm.setVisible(false); // Always set form unvisible because there's new buttons
+			}
 			
 			Button transButton = new Button(gWTButton.getLabel());
 			transButton.setStyleName("okm-Button");
@@ -809,6 +815,181 @@ public class FormManager {
 		}
 		
 		return formElementList;
+	}
+	
+	/**
+	 * loadDataFromPropertyGroupVariables
+	 * 
+	 * @param map
+	 */
+	public void loadDataFromPropertyGroupVariables(Map<String, GWTFormElement> map) {
+		for (GWTFormElement formElement : formElementList) {
+			if (map.containsKey(formElement.getName())) {
+				if (formElement instanceof GWTTextArea) {
+					GWTTextArea textArea = (GWTTextArea) formElement;
+					textArea.setValue(getStringValueFromVariable(map.get(formElement.getName())));
+				} else if (formElement instanceof GWTInput) {
+					GWTInput input = (GWTInput) formElement;
+					input.setValue(getStringValueFromVariable(map.get(formElement.getName())));
+				} else if (formElement instanceof GWTSuggestBox) {
+					GWTSuggestBox suggestBox = (GWTSuggestBox) formElement;
+					suggestBox.setValue(getStringValueFromVariable(map.get(formElement.getName())));
+				} else if (formElement instanceof GWTCheckBox) {
+					GWTCheckBox checkBox = (GWTCheckBox) formElement;
+					checkBox.setValue(getBooleanValueFromVariable(map.get(formElement.getName())));
+				} else if (formElement instanceof GWTSelect) {
+					GWTSelect select = (GWTSelect) formElement;
+					select.setOptions(getOptionsValueFromVariable(formElement.getName(), select.getOptions())) ;
+				}
+			}
+		}
+	}
+	
+	/**
+	 * @param map
+	 */
+	public void loadDataFromWorkflowVariables(Map<String, Object> map) {
+		for (GWTFormElement formElement : formElementList) {
+			if (formElement instanceof GWTTextArea) {
+				GWTTextArea textArea = (GWTTextArea) formElement;
+				if (!textArea.getData().equals("") && map.keySet().contains(textArea.getData())) {
+					textArea.setValue(getStringValueFromVariable(map.get(textArea.getData())));
+				}
+			} else if (formElement instanceof GWTInput) {
+				GWTInput input = (GWTInput) formElement;
+				if (!input.getData().equals("") && map.keySet().contains(input.getData())) {
+					input.setValue(getStringValueFromVariable(map.get(input.getData())));
+				}
+			} else if (formElement instanceof GWTSuggestBox) {
+				GWTSuggestBox suggestBox = (GWTSuggestBox) formElement;
+				if (!suggestBox.getData().equals("") && map.keySet().contains(suggestBox.getData())) {
+					suggestBox.setValue(getStringValueFromVariable(map.get(suggestBox.getData())));
+				}
+			} else if (formElement instanceof GWTCheckBox) {
+				GWTCheckBox checkBox = (GWTCheckBox) formElement;
+				if (!checkBox.getData().equals("") && map.keySet().contains(checkBox.getData())) {
+					checkBox.setValue(getBooleanValueFromVariable(map.get(checkBox.getData())));
+				}
+			} else if (formElement instanceof GWTSelect) {
+				GWTSelect select = (GWTSelect) formElement;
+				if (!select.getData().equals("") && map.keySet().contains(select.getData())) {
+					select.setOptions(getOptionsValueFromVariable(map.get(select.getData()), select.getOptions())) ;
+				}
+			} 
+		}
+	}
+	
+	/**
+	 * getStringValueFromVariable
+	 * 
+	 * @param obj
+	 * @return
+	 */
+	private String getStringValueFromVariable(Object obj) {
+		if (obj instanceof GWTInput) {
+			return ((GWTInput)obj).getValue();
+		} else if (obj instanceof GWTTextArea) {
+			return ((GWTTextArea)obj).getValue();
+		} else if (obj instanceof GWTSuggestBox) {
+			return ((GWTSuggestBox)obj).getValue();
+		} else if (obj instanceof GWTCheckBox) {
+			return String.valueOf(((GWTCheckBox)obj).getValue());
+		} else if (obj instanceof GWTSelect) {
+			String values = "";
+			GWTSelect select = (GWTSelect) obj;
+			for (GWTOption option : select.getOptions()) {
+				if (option.isSelected()) {
+					if (values.length()>0) {
+						values += "," + option.getValue();
+					} else {
+						values += option.getValue();
+					}
+				}
+			}
+			return values;
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * getBooleanValueFromVariable
+	 * 
+	 * @param obj
+	 * @return
+	 */
+	private boolean getBooleanValueFromVariable(Object obj) {
+		if (obj instanceof GWTInput) {
+			return ((GWTInput)obj).getValue().toLowerCase().equals(BOOLEAN_TRUE);
+		} else if (obj instanceof GWTTextArea) {
+			return ((GWTTextArea)obj).getValue().toLowerCase().equals(BOOLEAN_TRUE);
+		} else if (obj instanceof GWTSuggestBox) {
+			return ((GWTSuggestBox)obj).getValue().toLowerCase().equals(BOOLEAN_TRUE);
+		} else if (obj instanceof GWTCheckBox) {
+			return ((GWTCheckBox)obj).getValue();
+		} else if (obj instanceof GWTSelect) {
+			String values = "";
+			GWTSelect select = (GWTSelect) obj;
+			for (GWTOption option : select.getOptions()) {
+				if (option.isSelected()) {
+					if (values.length()>0) {
+						values += "," + option.getValue();
+					} else {
+						values += option.getValue();
+					}
+				}
+			}
+			return values.toLowerCase().contains(BOOLEAN_TRUE); // test if on chain contains "true"
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * getOptionsValueFromVariable
+	 * 
+	 * @param obj
+	 * @param options
+	 * @return
+	 */
+	private Collection<GWTOption> getOptionsValueFromVariable(Object obj, Collection<GWTOption> options) {
+		for (GWTOption option : options) {
+			if (obj instanceof GWTInput) {
+				if (option.getValue().equals(((GWTInput)obj).getValue())) {
+					option.setSelected(true);
+					return options;
+				}
+			} else if (obj instanceof GWTTextArea) {
+				if (option.getValue().equals(((GWTTextArea)obj).getValue())) {
+					option.setSelected(true);
+					return options;
+				}
+			} else if (obj instanceof GWTSuggestBox) {
+				if (option.getValue().equals(((GWTSuggestBox)obj).getValue())) {
+					option.setSelected(true);
+					return options;
+				}
+			} else if (obj instanceof GWTCheckBox) {
+				if (option.getValue().equals(String.valueOf(((GWTCheckBox)obj).getValue()))) {
+					option.setSelected(true);
+					return options;
+				}
+			} else if (obj instanceof GWTSelect) {
+				// Only doing mapping between values, if not found then is false
+				boolean found = false;
+				GWTSelect select = (GWTSelect) obj;
+				for (GWTOption optionVar : select.getOptions()) {
+					if (option.getValue().equals(optionVar.getValue())) {
+						found = optionVar.isSelected();
+						break;
+					}
+				}
+				option.setSelected(found); // always setting values, if not found
+			} else {
+				return options;
+			}
+		}
+		return options;
 	}
 	
 	/**
