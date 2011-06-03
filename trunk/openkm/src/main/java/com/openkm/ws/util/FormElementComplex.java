@@ -48,6 +48,7 @@ public class FormElementComplex implements Serializable {
 	private String height;
 	private String type;
 	private String value;
+	private String transition;
 	private boolean readonly;
 	private List<Option> options = new ArrayList<Option>();
 	private List<Validator> validators = new ArrayList<Validator>();
@@ -109,6 +110,14 @@ public class FormElementComplex implements Serializable {
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+	
+	public String getTransition() {
+		return transition;
+	}
+
+	public void setTransition(String transition) {
+		this.transition = transition;
 	}
 
 	public boolean isReadonly() {
@@ -176,8 +185,7 @@ public class FormElementComplex implements Serializable {
 			fec.setObjClass(s.getClass().getName());
 		} else if (fe instanceof Button) {
 			Button b = (Button) fe;
-			fec.setType(b.getType());
-			fec.setValue(b.getValue());
+			fec.setTransition(b.getTransition());
 			fec.setObjClass(b.getClass().getName());
 		}
 		
@@ -216,8 +224,7 @@ public class FormElementComplex implements Serializable {
 			((Select) fe).setReadonly(fec.isReadonly());
 		} else if (Button.class.getName().equals(fec.getObjClass())) {
 			fe = new Button();
-			((Button) fe).setType(fec.getType());
-			((Button) fe).setValue(fec.getValue());
+			((Button) fe).setTransition(fec.getTransition());
 		}
 		
 		fe.setHeight(fec.getHeight());
