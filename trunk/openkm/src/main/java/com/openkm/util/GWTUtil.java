@@ -709,23 +709,24 @@ public class GWTUtil {
 		gWTProcessInstance.setProcessDefinition(copy(processInstance.getProcessDefinition()));
 		gWTProcessInstance.setSuspended(processInstance.isSuspended());
 		Map<String, Object> variables = new HashMap<String, Object>();
+		
 		for (Iterator<String> it = processInstance.getVariables().keySet().iterator(); it.hasNext();) {
 			String key = it.next();
 			Object obj = processInstance.getVariables().get(key);
+			
 			if (obj instanceof FormElement ) {
 				variables.put(key, copy((FormElement) obj));
 			} else {
 				variables.put(key, obj);
 			}	
 		}
+		
 		gWTProcessInstance.setVariables(variables);
 		gWTProcessInstance.setVersion(processInstance.getVersion());
 		gWTProcessInstance.setStart(processInstance.getStart().getTime());
 		gWTProcessInstance.setKey(processInstance.getKey());
 		gWTProcessInstance.setRootToken(copy(processInstance.getRootToken()));
 		processInstance.getRootToken();
-		
-
 		
 		return gWTProcessInstance;
 	}
@@ -741,28 +742,36 @@ public class GWTUtil {
 	public static GWTToken copy(Token token) throws PathNotFoundException, RepositoryException, DatabaseException {
 		GWTToken gWTToken = new GWTToken();
 		Collection<GWTTransition> availableTransitions = new ArrayList<GWTTransition>();
+		
 		for (Iterator<Transition> it = token.getAvailableTransitions().iterator(); it.hasNext();) {
 			availableTransitions.add(copy(it.next()));
 		}
+		
 		gWTToken.setAvailableTransitions(availableTransitions);
 		Collection<GWTWorkflowComment> comments = new ArrayList<GWTWorkflowComment>();
+		
 		for (Iterator<Comment> it = token.getComments().iterator(); it.hasNext();) {
 			comments.add(copy(it.next()));
 		}
+		
 		gWTToken.setComments(comments);
-		if (token.getEnd()!=null) {
+		
+		if (token.getEnd() != null) {
 			gWTToken.setEnd(token.getEnd().getTime());
 		}
+		
 		gWTToken.setId(token.getId());
 		gWTToken.setName(token.getName());
 		gWTToken.setNode(token.getNode());
-		if (token.getParent()!=null) {
+		
+		if (token.getParent() != null) {
 			gWTToken.setParent(copy(token.getParent()));
 		} 
 		
-		if (token.getProcessInstance()!=null) {
+		if (token.getProcessInstance() != null) {
 			gWTToken.setProcessInstance(copy(token.getProcessInstance()));
 		}
+		
 		gWTToken.setStart(token.getStart().getTime());
 		gWTToken.setSuspended(token.isSuspended());
 		
@@ -805,6 +814,7 @@ public class GWTUtil {
 	 */
 	public static List<GWTValidator> copyValidators(List<Validator> validators) {
 		List<GWTValidator> gwtValidatorsList = new ArrayList<GWTValidator>();
+		
 		for (Iterator<Validator> it = validators.iterator(); it.hasNext();) {
 			Validator validator = it.next();
 			GWTValidator valid = new GWTValidator();
@@ -842,6 +852,7 @@ public class GWTUtil {
 			gWTInput.setHeight(formElement.getHeight());
 			Input input = (Input) formElement;
 			gWTInput.setReadonly(input.isReadonly());
+			
 			if (input.getType().equals(Input.TYPE_TEXT) || 
 				input.getType().equals(Input.TYPE_LINK) ||
 				input.getType().equals(Input.TYPE_FOLDER )) {
@@ -851,9 +862,11 @@ public class GWTUtil {
 					gWTInput.setDate(ISO8601.parse(input.getValue()).getTime());
 				}
 			}
+			
 			if (input.getType().equals(Input.TYPE_FOLDER) && !gWTInput.getValue().equals("")) {
 				gWTInput.setFolder(copy(OKMFolder.getInstance().getProperties(null, ((Input) formElement).getValue())));
 			}
+			
 			gWTInput.setType(((Input) formElement).getType());
 			gWTInput.setValidators(copyValidators(input.getValidators()));
 			gWTInput.setData(input.getData());
@@ -894,9 +907,11 @@ public class GWTUtil {
 			gWTselect.setType(select.getType());
 			gWTselect.setReadonly(select.isReadonly());
 			List<GWTOption> options = new ArrayList<GWTOption>();
+			
 			for (Iterator<Option> it = select.getOptions().iterator(); it.hasNext();) {
 				options.add(copy(it.next()));
 			}
+			
 			gWTselect.setOptions(options);
 			gWTselect.setValidators(copyValidators(select.getValidators()));
 			gWTselect.setData(select.getData());
@@ -941,7 +956,7 @@ public class GWTUtil {
 				gWTInput.getType().equals(GWTInput.TYPE_FOLDER) ) {
 				input.setValue(gWTInput.getValue());
 			} else if (gWTInput.getType().equals(GWTInput.TYPE_DATE)) {
-				if (gWTInput.getDate()!=null) {
+				if (gWTInput.getDate() != null) {
 					Calendar cal = Calendar.getInstance();
 					cal.setTime(((GWTInput) formElement).getDate());
 					input.setValue(ISO8601.format(cal));
