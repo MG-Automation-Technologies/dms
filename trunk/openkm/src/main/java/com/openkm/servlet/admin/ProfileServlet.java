@@ -329,7 +329,7 @@ public class ProfileServlet extends BaseServlet {
 		// Toolbar
 		prf.getToolbar().setCreateFolderVisible(WebUtils.getBoolean(request, "prf_toolbar_create_folder_visible"));
 		prf.getToolbar().setFindFolderVisible(WebUtils.getBoolean(request, "prf_toolbar_find_folder_visible"));
-		prf.getToolbar().setFindDocumentVisible(WebUtils.getBoolean(request, "prf_toolbar_find_documentr_visible"));
+		prf.getToolbar().setFindDocumentVisible(WebUtils.getBoolean(request, "prf_toolbar_find_document_visible"));
 		prf.getToolbar().setDownloadVisible(WebUtils.getBoolean(request, "prf_toolbar_download_visible"));
 		prf.getToolbar().setDownloadPdfVisible(WebUtils.getBoolean(request, "prf_toolbar_download_pdf_visible"));
 		prf.getToolbar().setPrintVisible(WebUtils.getBoolean(request, "prf_toolbar_print_visible"));
