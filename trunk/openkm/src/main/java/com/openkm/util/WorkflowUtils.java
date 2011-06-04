@@ -33,12 +33,12 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -111,8 +111,8 @@ public class WorkflowUtils {
 			vo.setVariables(pi.getContextInstance().getVariables());
 			
 			// Workaround for LazyInitializationException
-			for (Entry<String, Object> entry : vo.getVariables().entrySet()) {
-				entry.toString();
+			for (String key : vo.getVariables().keySet()) {
+				Hibernate.initialize(vo.getVariables().get(key));
 			}
 		} else {
 			vo.setVariables(new HashMap<String, Object>());
