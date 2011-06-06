@@ -34,6 +34,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.google.gwt.user.client.ui.HTMLTable.RowFormatter;
 import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFormElement;
@@ -107,25 +108,35 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 		this.propertyGroup = propertyGroup;
 		this.propertyGroupWidgetToFire = propertyGroupWidgetToFire;
 		
+		VerticalPanel vPanel = new VerticalPanel();
+		vPanel.setWidth("100%");
+		
 		FlexTable table = manager.getTable();
 		table.setWidth("100%");
-
-		table.setWidget(0, 0, widget);
-		table.getFlexCellFormatter().setColSpan(0,0,2);
+		
+		FlexTable widgetTable = new FlexTable();
+		widgetTable.setCellPadding(0);
+		widgetTable.setCellSpacing(0);
+		widgetTable.setWidth("100%");
+		widgetTable.setWidget(0, 0, widget);
+		widgetTable.getFlexCellFormatter().setColSpan(0,0,2);
 			
 		// Widget format
-		table.getCellFormatter().setHorizontalAlignment(0,0,HasAlignment.ALIGN_CENTER);
-		table.getCellFormatter().setVerticalAlignment(0,0,HasAlignment.ALIGN_MIDDLE);
+		widgetTable.getCellFormatter().setHorizontalAlignment(0,0,HasAlignment.ALIGN_CENTER);
+		widgetTable.getCellFormatter().setVerticalAlignment(0,0,HasAlignment.ALIGN_MIDDLE);
 		
-		RowFormatter rowFormatter = table.getRowFormatter();
+		RowFormatter rowFormatter = widgetTable.getRowFormatter();
 		rowFormatter.setStyleName(0, "okm-Security-Title");
 		
-		cellFormatter = table.getCellFormatter(); // Gets the cell formatter
+		cellFormatter = widgetTable.getCellFormatter(); // Gets the cell formatter
 			
 		// Format borders and margins
 		cellFormatter.addStyleName(0,0,"okm-Security-Title-RightBorder");
 		
-		initWidget(table);
+		vPanel.add(widgetTable);
+		vPanel.add(table);
+		
+		initWidget(vPanel);
 	}
 
 	/**
