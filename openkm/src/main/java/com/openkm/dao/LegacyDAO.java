@@ -95,15 +95,19 @@ public class LegacyDAO {
 		
 		try {
 			while ((sql = br.readLine()) != null) {
-				sql = sql.trim();
+				String trimmedSql = sql.trim();
 				
-				if (sql.length() > 0 && !sql.startsWith("--")) {
+				if (trimmedSql.length() > 0 && !trimmedSql.startsWith("--")) {
 					try {
-						stmt.executeUpdate(sql);
+						if (trimmedSql.endsWith(";")) {
+							trimmedSql = trimmedSql.substring(0, trimmedSql.length() - 1);
+						}
+						
+						stmt.executeUpdate(trimmedSql);
 					} catch (SQLException e) {
 						HashMap<String, String> error = new HashMap<String, String>();
 						error.put("ln", Integer.toString(ln));
-						error.put("sql", sql);
+						error.put("sql", trimmedSql);
 						error.put("msg", e.getMessage());
 						errors.add(error);
 					}
