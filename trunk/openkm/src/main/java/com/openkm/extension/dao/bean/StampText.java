@@ -63,7 +63,11 @@ public class StampText implements Serializable {
 	}
 
 	public void setDescription(String description) {
-		this.description = description;
+		if (description.length() > 512) {
+			this.description = description.substring(0, 512);
+		} else {
+			this.description = description;
+		}
 	}
 
 	public String getText() {
