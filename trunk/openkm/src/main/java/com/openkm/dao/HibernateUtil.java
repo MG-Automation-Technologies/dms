@@ -30,6 +30,8 @@ import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.hibernate.HibernateException;
@@ -226,7 +228,11 @@ public class HibernateUtil {
 						Reader rd = new InputStreamReader(is);
 						
 						try {
-							LegacyDAO.executeScript(con, rd);
+							List<HashMap<String, String>> errors = LegacyDAO.executeScript(con, rd);
+							
+							for (HashMap<String, String> error: errors) {
+								log.error("Error at specific import: {}", error);
+							}
 						} catch (IOException e) {
 							log.error(e.getMessage(), e);
 						} finally {
