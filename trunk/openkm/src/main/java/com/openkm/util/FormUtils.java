@@ -443,7 +443,7 @@ public class FormUtils {
 			ret.put("others", sb.toString());
 		} else if (fe instanceof SuggestBox) {
 			SuggestBox suggestBox = (SuggestBox) fe;
-			ret.put("field", "Input");
+			ret.put("field", "SuggestBox");
 			StringBuilder sb = new StringBuilder();
 			sb.append("<i>Readonly:</i> ");
 			sb.append(suggestBox.isReadonly());
