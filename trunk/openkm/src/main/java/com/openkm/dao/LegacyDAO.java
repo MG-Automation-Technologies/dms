@@ -28,6 +28,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -82,21 +85,35 @@ public class LegacyDAO {
 	/**
 	 * Execute script
 	 */
-	public static void executeScript(Connection con, Reader file) throws IOException, SQLException {
+	public static List<HashMap<String, String>> executeScript(Connection con, Reader file) throws 
+			IOException, SQLException {
+		List<HashMap<String, String>> errors = new ArrayList<HashMap<String, String>>();
 		BufferedReader br = new BufferedReader(file);
 		Statement stmt = con.createStatement();
-		String line = null;
+		String sql = null;
+		int ln = 0;
 		
 		try {
-			while ((line = br.readLine()) != null) {
-				if (!line.trim().equals("")) {
-					log.info("executeScript: {}", line);
-					stmt.execute(line);
+			while ((sql = br.readLine()) != null) {
+				sql = sql.trim();
+				
+				if (sql.length() > 0 && !sql.startsWith("--")) {
+					try {
+						stmt.executeUpdate(sql);
+					} catch (SQLException e) {
+						HashMap<String, String> error = new HashMap<String, String>();
+						error.put("ln", Integer.toString(ln));
+						error.put("sql", sql);
+						error.put("msg", e.getMessage());
+						errors.add(error);
+					}
 				}
 			}
 		} finally {
 			close(stmt);
 		}
+		
+		return errors;
 	}
 	
 	/**
