@@ -22,20 +22,28 @@
 package com.openkm.dao;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.sql.Blob;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Collections;
 
+import org.apache.commons.io.IOUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.dialect.Oracle10gDialect;
 import org.hibernate.engine.SessionFactoryImplementor;
 import org.hibernate.hql.QueryTranslator;
 import org.hibernate.hql.QueryTranslatorFactory;
 import org.hibernate.hql.ast.ASTQueryTranslatorFactory;
+import org.hibernate.jdbc.Work;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +61,7 @@ import com.openkm.dao.bean.DatabaseMetadataValue;
 public class HibernateUtil {
 	private static Logger log = LoggerFactory.getLogger(HibernateUtil.class);
 	private static SessionFactory sessionFactory;
+	public static String HBM2DDL_CREATE = "create";
 	
 	/**
 	 * Disable constructor to guaranty a single instance
@@ -95,7 +104,22 @@ public class HibernateUtil {
 				log.info("Hibernate 'hibernate.generate_statistics' = {}", cfg.getProperty("hibernate.generate_statistics"));
 				
 				sessionFactory = cfg.buildSessionFactory();
+				
+				if (HBM2DDL_CREATE.equals(hbm2ddl)) {
+					String specificImport = "import_default.sql";
+					
+					// Handle specific database imports
+					if (Oracle10gDialect.class.getCanonicalName().equals(Config.HIBERNATE_DIALECT)) {
+						specificImport = "import_oracle10g.sql";
+					}
+					
+					log.info("Executing specific import: {}", specificImport);
+					executeImport(Config.getResourceAsStream(specificImport));
+				}
 			} catch (HibernateException e) {
+				log.error(e.getMessage(), e);
+				throw new ExceptionInInitializerError(e);
+			} catch (IOException e) {
 				log.error(e.getMessage(), e);
 				throw new ExceptionInInitializerError(e);
 			}
@@ -172,15 +196,50 @@ public class HibernateUtil {
 	/**
 	 * HQL to SQL translator
 	 */
-	 public static String toSql(String hql) {
-		 if (hql != null && hql.trim().length() > 0) {
-			 final QueryTranslatorFactory qtf = new ASTQueryTranslatorFactory();
-			 final SessionFactoryImplementor sfi = (SessionFactoryImplementor) sessionFactory;
-			 final QueryTranslator translator = qtf.createQueryTranslator(hql, hql, Collections.EMPTY_MAP, sfi);
-			 translator.compile(Collections.EMPTY_MAP, false);
-			 return translator.getSQLString(); 
-		 }
-		 
-		 return null;
+	public static String toSql(String hql) {
+		if (hql != null && hql.trim().length() > 0) {
+			final QueryTranslatorFactory qtf = new ASTQueryTranslatorFactory();
+			final SessionFactoryImplementor sfi = (SessionFactoryImplementor) sessionFactory;
+			final QueryTranslator translator = qtf.createQueryTranslator(hql, hql, Collections.EMPTY_MAP, sfi);
+			translator.compile(Collections.EMPTY_MAP, false);
+			return translator.getSQLString(); 
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Load specific database import
+	 */
+	private static void executeImport(final InputStream is) {
+		Session session = null;
+		Transaction tx = null;
+			
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			
+			session.doWork(
+				new Work() {
+					@Override
+					public void execute(Connection con) throws SQLException {
+						Reader rd = new InputStreamReader(is);
+						
+						try {
+							LegacyDAO.executeScript(con, rd);
+						} catch (IOException e) {
+							log.error(e.getMessage(), e);
+						} finally {
+							IOUtils.closeQuietly(rd);
+						}
+					}
+				}
+			);
+			
+			commit(tx);
+		} catch (Exception e) {
+			rollback(tx);
+			log.error(e.getMessage(), e);
+		}
 	 }
 }
