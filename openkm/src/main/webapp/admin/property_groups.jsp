@@ -17,21 +17,19 @@
       <h1>Property groups</h1>
         <c:if test="${empty pGroups}">
           <table class="results" width="90%">
-            <tr><th colspan="2">Property group label</th><th colspan="3">Property group name</th><th colspan="1">Property group visible</th></tr>
+            <tr><th colspan="2">Property group label</th><th colspan="3">Property group name</th><th colspan="1">Property info</th></tr>
             <tr><th>Label</th><th>Name</th><th>Value</th><th>Width</th><th>Height</th><th>Field</th><th>Others</th></tr>
           </table>
         </c:if>
         <c:forEach var="pGroup" items="${pGroups}">
           <table class="results" width="80%">
-            <tr><th colspan="2">Property group label</th><th colspan="3">Property group name</th><th colspan="1">Property group visible</th></tr>
+            <tr><th colspan="2">Property group label</th><th colspan="3">Property group name</th><th colspan="1">Property info</th></tr>
             <tr class="fuzzy">
               <td colspan="2" align="center"><b>${pGroup.key.label}</b></td>
               <td colspan="3" align="center"><b>${pGroup.key.name}</b></td>
               <td colspan="1" align="center">
-                <c:choose>
-                  <c:when test="${pGroup.key.visible}"><img src="img/true.png"/></c:when>
-                  <c:otherwise><img src="img/false.png"/></c:otherwise>
-                </c:choose>
+                <i>Visible</i>: ${pGroup.key.visible}<br/>
+                <i>ReadOnly</i>: ${pGroup.key.readonly}
               </td>
             </tr>
             <tr><th>Label</th><th>Name</th><th>Width</th><th>Height</th><th>Field</th><th>Others</th></tr>
