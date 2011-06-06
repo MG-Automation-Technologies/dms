@@ -112,7 +112,7 @@ public class InstallationResetServlet extends BaseServlet {
 			out.flush();
 			JBPMUtils.closeConfig();
 			HibernateUtil.closeSessionFactory();
-			HibernateUtil.getSessionFactory("create");
+			HibernateUtil.getSessionFactory(HibernateUtil.HBM2DDL_CREATE);
 			
 			// Start again
 			out.println("<li>Start repository</li>");
