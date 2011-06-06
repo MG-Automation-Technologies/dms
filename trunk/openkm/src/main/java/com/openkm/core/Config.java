@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -783,5 +784,32 @@ public class Config {
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 		}
+	}
+	
+	/**
+	 * Resource locator helper
+	 */
+	public static InputStream getResourceAsStream(String resource) throws IOException {
+		String stripped = resource.startsWith("/") ? resource.substring(1) : resource;
+		InputStream stream = null;
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		
+		if (classLoader!=null) {
+			stream = classLoader.getResourceAsStream(stripped);
+		}
+		
+		if ( stream == null ) {
+			stream = Config.class.getResourceAsStream(resource);
+		}
+		
+		if ( stream == null ) {
+			stream = Config.class.getClassLoader().getResourceAsStream(stripped);
+		}
+		
+		if ( stream == null ) {
+			throw new IOException(resource + " not found");
+		}
+		
+		return stream;
 	}
 }
