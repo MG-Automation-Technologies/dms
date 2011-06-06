@@ -1936,4 +1936,3 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('e
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'download.button.tittle', 'Descargar documento','es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'download.pdf.button.tittle', 'Descargar documento como pdf','es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'confirm.delete.stapling.group','¿ Está seguro que desea eliminar el grupo de grapado ?','es-ES');
-INSERT INTO OKM_FORUM (FRM_ID, FRM_NAME, FRM_DESCRIPTION, FRM_DATE, FRM_LAST_POST_USER, FRM_LAST_POST_DATE, FRM_NUM_TOPICS, FRM_NUM_POSTS, FRM_ACTIVE) VALUES (1,'Document discussions','system',now(),'',now(), 0, 0, 'T');

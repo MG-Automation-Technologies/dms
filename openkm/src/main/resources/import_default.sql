@@ -1,0 +1,1 @@
+INSERT INTO OKM_FORUM (FRM_ID, FRM_NAME, FRM_DESCRIPTION, FRM_DATE, FRM_LAST_POST_USER, FRM_LAST_POST_DATE, FRM_NUM_TOPICS, FRM_NUM_POSTS, FRM_ACTIVE) VALUES (1, 'Documents discussions', 'Documents discussions general forum', NOW(), 'system', NOW(), 0, 0, 'T');
