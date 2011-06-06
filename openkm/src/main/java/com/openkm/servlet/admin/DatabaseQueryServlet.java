@@ -337,6 +337,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 			int ln = 0;
 			
 			while ((sql = br.readLine()) != null) {
+				sql = sql.trim();
 				ln++;
 				
 				if (sql.length() > 0 && !sql.startsWith("--")) {
