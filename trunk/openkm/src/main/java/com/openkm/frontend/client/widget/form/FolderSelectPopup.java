@@ -36,11 +36,10 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTWorkspace;
 import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
+import com.openkm.frontend.client.widget.searchin.HasSearch;
 
 /**
  * FolderSelectPopup
@@ -61,8 +60,8 @@ public class FolderSelectPopup extends DialogBox  {
 	private FolderSelectTree folderSelectTree;
 	private Button cancelButton;
 	private Button actionButton;
-	TextBox textBox;
-	GWTFolder folder;
+	private TextBox textBox;
+	private HasSearch search;
 	private boolean categoriesVisible = false;
 	private boolean thesaurusVisible = false;
 	private boolean templatesVisible = false;
@@ -125,8 +124,10 @@ public class FolderSelectPopup extends DialogBox  {
 		actionButton = new Button(Main.i18n("button.select"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				folder = folderSelectTree.getActualFolder();
 				textBox.setValue(folderSelectTree.getActualPath());
+				if (search!=null) {
+					search.metadataValueChanged();
+				}
 				hide();
 			}	
 		});
@@ -188,9 +189,9 @@ public class FolderSelectPopup extends DialogBox  {
 	/**
 	 * Shows the popup 
 	 */
-	public void show(TextBox textBox, GWTFolder folder) {
+	public void show(TextBox textBox, HasSearch search) {
 		this.textBox = textBox;
-		this.folder = folder;
+		this.search = search;
 		int left = (Window.getClientWidth()-300) / 2;
 		int top = (Window.getClientHeight()-200) / 2;
 		setPopupPosition(left, top);
