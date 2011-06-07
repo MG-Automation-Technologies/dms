@@ -21,9 +21,10 @@
 
 package com.openkm.frontend.client.widget.searchin;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -31,11 +32,9 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TabPanel;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTPropertyParams;
 import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
@@ -48,7 +47,7 @@ import com.openkm.frontend.client.widget.searchsaved.Status;
  * @author jllort
  *
  */
-public class SearchIn extends Composite {
+public class SearchIn extends Composite implements HasSearch {
 	
 	private static final int CONTROLER_WIDTH = 380;
 	private static final int MINIMUM_TAB_WIDTH = 400;
@@ -76,7 +75,7 @@ public class SearchIn extends Composite {
 		tabPanel = new TabPanel();
 		searchNormal = new SearchNormal();
 		searchAdvanced = new SearchAdvanced();
-		searchMetadata = new SearchMetadata();
+		searchMetadata = new SearchMetadata(this);
 		searchControl = new SearchControl();
 		status = new Status();
 		status.setStyleName("okm-StatusPopup");
