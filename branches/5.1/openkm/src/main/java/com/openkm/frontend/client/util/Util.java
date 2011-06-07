@@ -24,6 +24,7 @@ package com.openkm.frontend.client.util;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.contants.service.RPCService;
@@ -145,6 +146,18 @@ public class Util {
 		return "<table align='left'><tr>" + "<td><img src='" + imageUrl + "'></td>"
 	      + "<td style='vertical-align:middle'><b style='white-space:nowrap; cursor: default;'>"
 	      + caption + "</b></td>" + "</tr></table>";
+	}
+	
+	/**
+	 * Creates an horizontal spacer
+	 * 
+	 * @param width The desired width space
+	 * @return an HTML element meaning the with
+	 */
+	public static HTML hSpace(String width) {
+		HTML spacer = new HTML("");
+		spacer.setWidth(width);
+		return spacer;
 	}
 	
 	/**

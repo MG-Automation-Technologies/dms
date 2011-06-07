@@ -39,7 +39,14 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTCheckBox;
+import com.openkm.frontend.client.bean.GWTFormElement;
+import com.openkm.frontend.client.bean.GWTInput;
+import com.openkm.frontend.client.bean.GWTOption;
 import com.openkm.frontend.client.bean.GWTQueryParams;
+import com.openkm.frontend.client.bean.GWTSelect;
+import com.openkm.frontend.client.bean.GWTSuggestBox;
+import com.openkm.frontend.client.bean.GWTTextArea;
 import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.contants.ui.UISearchConstants;
 import com.openkm.frontend.client.service.OKMSearchService;
@@ -114,33 +121,7 @@ public class SearchControl extends Composite {
 		cleanButton = new Button(Main.i18n("button.clean"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				SearchNormal searchNormal = Main.get().mainPanel.search.searchBrowser.searchIn.searchNormal;
-				SearchAdvanced searchAdvanced = Main.get().mainPanel.search.searchBrowser.searchIn.searchAdvanced;
-				searchNormal.context.setSelectedIndex(Main.get().mainPanel.search.searchBrowser.searchIn.posTaxonomy);
-				searchNormal.content.setText("");
-				searchAdvanced.path.setText("");
-				searchAdvanced.categoryPath.setText("");
-				searchAdvanced.categoryUuid = "";
-				searchNormal.name.setText("");
-				searchNormal.keywords.setText("");
-				searchSavedName.setText("");
-				searchButton.setEnabled(false);
-				saveSearchButton.setEnabled(false);
-				controlSearch.setVisible(false);
-				Main.get().mainPanel.search.searchBrowser.searchIn.removeTablePropertiesRows();
-				searchAdvanced.typeDocument.setValue(true);
-				searchAdvanced.typeFolder.setValue(false);
-				searchAdvanced.typeMail.setValue(false);
-				searchAdvanced.mimeTypes.setSelectedIndex(0);
-				searchNormal.userListBox.setSelectedIndex(0);
-				searchNormal.startDate.setText("");
-				searchNormal.endDate.setText("");
-				searchNormal.modifyDateFrom = null;
-				searchNormal.modifyDateTo = null;
-				searchAdvanced.from.setText("");
-				searchAdvanced.to.setText("");
-				searchAdvanced.subject.setText("");
-				Main.get().mainPanel.search.searchBrowser.searchResult.removeAllRows();
+				clean();
 			}
 		});
 		
@@ -387,17 +368,37 @@ public class SearchControl extends Composite {
 			searchButton.setEnabled(true);
 		}
 		
-		// Evaluates properties to enable button		
-		for (Iterator<String> it = searchMetadata.hWidgetProperties.keySet().iterator(); it.hasNext();){
-			String key = it.next();
-			Object widget = searchMetadata.hWidgetProperties.get(key);
-			if (widget instanceof TextBox) {
-				if (((TextBox) widget).getText().length() >= MIN_WORD_LENGTH) {
+		// Evaluates properties to enable button
+		for (GWTFormElement formElement : searchMetadata.updateFormElementsValuesWithNewer()) {
+			if (formElement instanceof GWTInput) {
+				if (((GWTInput) formElement).getValue().length() >= MIN_WORD_LENGTH) {
 					searchButton.setEnabled(true);
+					break;
 				}
-			} else if (widget instanceof ListBox) {
-				if (((ListBox) widget).getSelectedIndex() > 0) {
+			} else if (formElement instanceof GWTTextArea) {
+				if (((GWTTextArea) formElement).getValue().length() >= MIN_WORD_LENGTH) {
 					searchButton.setEnabled(true);
+					break;
+				}
+			} else if (formElement instanceof GWTSuggestBox) {
+				if (!((GWTSuggestBox) formElement).getValue().equals("")) {
+					searchButton.setEnabled(true);
+					break;
+				}
+			} else if (formElement instanceof GWTCheckBox) {
+				// Checkbox case assume is selected to enable search
+				if (((GWTCheckBox) formElement).getValue()) {
+					searchButton.setEnabled(true);
+					break;
+				}
+			} else if (formElement instanceof GWTSelect) {
+				// Checkbox case assume is selected to enable search
+				GWTSelect select = (GWTSelect) formElement; 
+				for (GWTOption option : select.getOptions()) {
+					if (option.isSelected()) {
+						searchButton.setEnabled(true);
+						break;
+					}
 				}
 			}
 		}
@@ -448,11 +449,11 @@ public class SearchControl extends Composite {
 			params.setId(result.intValue());
 			
 			if (userNews) {
-				Main.get().mainPanel.search.historySearch.userNews.addNewSavedSearch(params);
+				Main.get().mainPanel.search.historySearch.userNews.addNewSavedSearch(params.clone());
 				Main.get().mainPanel.search.historySearch.stackPanel.showStack(UISearchConstants.SEARCH_USER_NEWS);
 				Main.get().mainPanel.dashboard.newsDashboard.getUserSearchs(true);
 			} else {
-				Main.get().mainPanel.search.historySearch.searchSaved.addNewSavedSearch(params);
+				Main.get().mainPanel.search.historySearch.searchSaved.addNewSavedSearch(params.clone());
 				Main.get().mainPanel.search.historySearch.stackPanel.showStack(UISearchConstants.SEARCH_SAVED);
 			}
 			
@@ -465,4 +466,37 @@ public class SearchControl extends Composite {
 			Main.get().showError("SaveSearch", caught);
 		}
 	};
+	
+	/**
+	 * clean
+	 */
+	private void clean() {
+		SearchNormal searchNormal = Main.get().mainPanel.search.searchBrowser.searchIn.searchNormal;
+		SearchAdvanced searchAdvanced = Main.get().mainPanel.search.searchBrowser.searchIn.searchAdvanced;
+		searchNormal.context.setSelectedIndex(Main.get().mainPanel.search.searchBrowser.searchIn.posTaxonomy);
+		searchNormal.content.setText("");
+		searchAdvanced.path.setText("");
+		searchAdvanced.categoryPath.setText("");
+		searchAdvanced.categoryUuid = "";
+		searchNormal.name.setText("");
+		searchNormal.keywords.setText("");
+		searchSavedName.setText("");
+		searchButton.setEnabled(false);
+		saveSearchButton.setEnabled(false);
+		controlSearch.setVisible(false);
+		Main.get().mainPanel.search.searchBrowser.searchIn.resetMetadata();
+		searchAdvanced.typeDocument.setValue(true);
+		searchAdvanced.typeFolder.setValue(false);
+		searchAdvanced.typeMail.setValue(false);
+		searchAdvanced.mimeTypes.setSelectedIndex(0);
+		searchNormal.userListBox.setSelectedIndex(0);
+		searchNormal.startDate.setText("");
+		searchNormal.endDate.setText("");
+		searchNormal.modifyDateFrom = null;
+		searchNormal.modifyDateTo = null;
+		searchAdvanced.from.setText("");
+		searchAdvanced.to.setText("");
+		searchAdvanced.subject.setText("");
+		Main.get().mainPanel.search.searchBrowser.searchResult.removeAllRows();
+	}
 }
