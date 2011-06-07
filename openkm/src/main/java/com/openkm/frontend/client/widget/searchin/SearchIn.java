@@ -166,50 +166,30 @@ public class SearchIn extends Composite {
 	 * @return The properties
 	 */
 	public Map<String, GWTPropertyParams> getProperties() {				
-		for (Iterator<String> it = searchMetadata.hWidgetProperties.keySet().iterator(); it.hasNext();){
-			String key = it.next();
-			Object widget = searchMetadata.hWidgetProperties.get(key);
-			
-			if (widget instanceof TextBox){
-				TextBox textBox = (TextBox) widget;
-				if (!textBox.getText().equals("")) {
-					searchMetadata.hProperties.get(key).setValue(textBox.getText());
-				}
-			} else if (widget instanceof ListBox){
-				ListBox listBox = (ListBox) widget;
-				if (listBox.getSelectedIndex()>0) {
-					searchMetadata.hProperties.get(key).setValue(listBox.getValue(listBox.getSelectedIndex()));
-				}
-			} 
-		}
-		
-		return searchMetadata.hProperties;
+		return searchMetadata.getUpdatedPropertyParamsWithValues();
 	}
 
 	/**
-	 * Gets the actual key properties
+	 * Gets the actual form elements
 	 * 
-	 * @return The actual properties values
+	 * @return The actual form elements values
 	 */
-	public Collection<String> getActualProperties(){
-		return searchMetadata.hWidgetProperties.keySet();
+	public Collection<String> getFormElementsKeys(){
+		List<String> keyList = new ArrayList<String>();
+		for (GWTFormElement formElement : searchMetadata.getFormElements()) {
+			keyList.add(formElement.getName());
+		}
+		return keyList;
 	}
 	
-	/**
-	 * removeProperty
-	 * 
-	 * @param rows The row
-	 * @param propertyName The property name
-	 */
-	public void removeProperty(Widget arg0, String propertyName){
-		for (int i=0; i<searchMetadata.tableProperties.getRowCount(); i++) {
-			if (searchMetadata.tableProperties.getWidget(i,3).equals(arg0)) {
-				searchMetadata.tableProperties.removeRow(i);
-			}
-		}
-		
-		searchMetadata.hProperties.remove(propertyName);
-		searchMetadata.hWidgetProperties.remove(propertyName);
+	@Override
+	public void propertyRemoved() {
+		searchControl.evaluateSearchButtonVisible();
+		searchMetadata.groupPopup.enableAddGroupButton(); // Enables or disables button ( depends exist some item on list to be added )
+	}
+	
+	@Override
+	public void metadataValueChanged() {
 		searchControl.evaluateSearchButtonVisible();
 	}
 	
@@ -323,30 +303,26 @@ public class SearchIn extends Composite {
 			searchNormal.endDate.setText("");
 		}
 		
-		removeTablePropertiesRows();
-		setTableProperties(gWTParams.getProperties());
+		resetMetadata();
+		addPropertyParams(gWTParams.getProperties());
 		searchControl.evaluateSearchButtonVisible();
 		searchControl.searchButton.setEnabled(true);
 		searchControl.executeSearch();
 	}
 	
 	/**
-	 * Remove al table properties rows
+	 * Remove all metadata
 	 */
-	public void removeTablePropertiesRows(){
-		searchMetadata.hProperties = new HashMap<String, GWTPropertyParams>();
-		searchMetadata.hWidgetProperties.clear();
-		while (searchMetadata.tableProperties.getRowCount()>0) {
-			searchMetadata.tableProperties.removeRow(0);
-		}
+	public void resetMetadata(){
+		searchMetadata.reset();
 	}
 	
 	/**
-	 * Sets the table properties
+	 * Add property params
 	 * 
 	 * @param hproperties The table properties map
 	 */
-	private void setTableProperties(Map<String, GWTPropertyParams> hproperties) {		
+	private void addPropertyParams(Map<String, GWTPropertyParams> hproperties) {		
 		for (Iterator<String> it = hproperties.keySet().iterator(); it.hasNext(); ) {
 			searchMetadata.addProperty((GWTPropertyParams) hproperties.get(it.next()));
 		}
