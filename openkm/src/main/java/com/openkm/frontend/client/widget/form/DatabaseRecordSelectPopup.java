@@ -45,6 +45,7 @@ import com.openkm.frontend.client.bean.GWTKeyValue;
 import com.openkm.frontend.client.service.OKMKeyValueService;
 import com.openkm.frontend.client.service.OKMKeyValueServiceAsync;
 import com.openkm.frontend.client.util.MessageFormat;
+import com.openkm.frontend.client.widget.searchin.HasSearch;
 
 /**
  * DatabaseRecordSelectPopup
@@ -70,7 +71,8 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 	/**
 	 * DatabaseRecordSelectPopup
 	 */
-	public DatabaseRecordSelectPopup(String title, List<String> tables, String query, final HasDatabaseRecord databaseRecord) {
+	public DatabaseRecordSelectPopup(String title, List<String> tables, String query, final HasDatabaseRecord databaseRecord, 
+									 final HasSearch search) {
 		// Establishes auto-close when click outside
 		super(false,true);
 		
@@ -119,6 +121,9 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 			public void onClick(ClickEvent event) {
 				if (selectedRow>=0) {
 					databaseRecord.setKeyValue(rowKeyValueMap.get(selectedRow));
+					if (search!=null) {
+						search.metadataValueChanged();
+					}
 				}
 				hide();
 			}
