@@ -23,9 +23,7 @@ package com.openkm.frontend.client.util.metadata;
 
 import java.util.Date;
 
-import com.google.gwt.i18n.client.DateTimeFormat;
-
-
+import com.openkm.frontend.client.util.ISO8601;
 
 /**
  * DatabaseMetadataMap
@@ -40,9 +38,6 @@ public class DatabaseMetadataMap {
 	// Boolean values mapping
 	public static final String BOOLEAN_TRUE 	= "T";
 	public static final String BOOLEAN_FALSE 	= "F";
-	
-	// Date pattern
-	public static final String ISO8601_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZ";
 	
 	/**
 	 * getDoubleValue
@@ -121,12 +116,7 @@ public class DatabaseMetadataMap {
 	 * @return
 	 */
 	public static Date getDateValue(String value) {
-		if (value==null) {
-			return null;
-		} else {
-			DateTimeFormat dtf = DateTimeFormat.getFormat(ISO8601_PATTERN);
-			return dtf.parse(value);
-		}
+		return ISO8601.parse(value);
 	}
 	
 	/**
@@ -136,11 +126,6 @@ public class DatabaseMetadataMap {
 	 * @return
 	 */
 	public static String mapDateValue(Date value) {
-		if (value==null) {
-			return null;
-		} else {
-			DateTimeFormat dtf = DateTimeFormat.getFormat(ISO8601_PATTERN);
-			return dtf.format(value);
-		}
+		return ISO8601.format(value);
 	}
 }
