@@ -288,13 +288,17 @@ public class DirectSearchModule implements SearchModule {
 						Entry<String, String> ent = it.next();
 						FormElement fe = FormUtils.getFormElement(formsElements, ent.getKey());
 						
-						if (fe != null) {
-							sb.append(" "+params.getOperator()+" ");
+						if (ent.getValue() != null) {
+							String valueTrimmed = ent.getValue().trim();
 							
-							if (fe instanceof Select) {
-								sb.append("@"+ent.getKey()+"='"+ escapeXPath(ent.getValue().toString())+ "'");
-							} else {
-								sb.append("jcr:contains(@"+ent.getKey()+",'"+ escapeContains(ent.getValue().toString())+ "')");
+							if (fe != null && !valueTrimmed.equals("")) {
+								sb.append(" "+params.getOperator()+" ");
+								
+								if (fe instanceof Select) {
+									sb.append("@"+ent.getKey()+"='"+ escapeXPath(valueTrimmed)+ "'");
+								} else {
+									sb.append("jcr:contains(@"+ent.getKey()+",'"+ escapeContains(valueTrimmed)+ "')");
+								}
 							}
 						}
 					}
