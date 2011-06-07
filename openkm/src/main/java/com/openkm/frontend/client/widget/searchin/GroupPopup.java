@@ -60,7 +60,7 @@ public class GroupPopup extends DialogBox {
 	
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
-	private Button button;
+	private Button closeButton;
 	private Button addButton;
 	private ListBox groupListBox;
 	private ListBox propertyListBox;
@@ -83,7 +83,7 @@ public class GroupPopup extends DialogBox {
 		propertyLabel = new Label(Main.i18n("group.property.group"));
 		table = new FlexTable();
 		
-		button = new Button(Main.i18n("button.close"), new ClickHandler() { 
+		closeButton = new Button(Main.i18n("button.close"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
 				hide();
@@ -147,15 +147,15 @@ public class GroupPopup extends DialogBox {
 		
 		vPanel.setWidth("300px");
 		vPanel.setHeight("100px");
-		button.setStyleName("okm-Button");
+		closeButton.setStyleName("okm-Button");
 		addButton.setStyleName("okm-Button");
 		addButton.setEnabled(false);
 		
-		hPanel.add(button);
+		hPanel.add(closeButton);
 		hPanel.add(new HTML("&nbsp;&nbsp;"));
 		hPanel.add(addButton);
 		
-		hPanel.setCellHorizontalAlignment(button,VerticalPanel.ALIGN_CENTER);
+		hPanel.setCellHorizontalAlignment(closeButton,VerticalPanel.ALIGN_CENTER);
 		hPanel.setCellHorizontalAlignment(addButton,VerticalPanel.ALIGN_CENTER);
 		
 		table.setWidget(0,0,groupLabel);
@@ -207,7 +207,7 @@ public class GroupPopup extends DialogBox {
 			propertyLabel.setVisible(true);
 			propertyListBox.addItem("",""); // First item is always blank
 			
-			Collection<String> actualProperties = Main.get().mainPanel.search.searchBrowser.searchIn.getActualProperties();
+			Collection<String> actualProperties = Main.get().mainPanel.search.searchBrowser.searchIn.getFormElementsKeys();
 
 			for (Iterator<GWTFormElement> it = result.iterator(); it.hasNext();) {
 				GWTFormElement formElement = it.next();
@@ -229,7 +229,7 @@ public class GroupPopup extends DialogBox {
 		public void onSuccess(List<GWTFormElement> result){
 			formElementList = result;
 			
-			Collection<String> actualProperties = Main.get().mainPanel.search.searchBrowser.searchIn.getActualProperties();
+			Collection<String> actualProperties = Main.get().mainPanel.search.searchBrowser.searchIn.getFormElementsKeys();
 			boolean found = false;
 			
 			for (Iterator<GWTFormElement> it = result.iterator(); it.hasNext();) {
@@ -258,7 +258,7 @@ public class GroupPopup extends DialogBox {
 	 * Enables close button
 	 */
 	public void enableClose() {
-		button.setEnabled(true);
+		closeButton.setEnabled(true);
 		Main.get().mainPanel.setVisible(true); // Shows main panel when all widgets are loaded
 	}
 	
@@ -267,7 +267,7 @@ public class GroupPopup extends DialogBox {
 	 */
 	public void langRefresh() {
 		setText(Main.i18n("group.label"));
-		button.setText(Main.i18n("button.close"));
+		closeButton.setText(Main.i18n("button.close"));
 		addButton.setText(Main.i18n("button.add"));
 		groupLabel.setText(Main.i18n("group.group"));
 		propertyLabel.setText(Main.i18n("group.property.group"));
