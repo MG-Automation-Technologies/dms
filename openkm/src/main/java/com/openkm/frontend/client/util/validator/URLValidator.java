@@ -68,9 +68,17 @@ public class URLValidator extends Validator<URLValidator> {
 			text = suggestBox.getText();
 		else text = textBox.getText();
 		
+		if(text.equals("") && !isRequired())
+			return null;
+		
 		// At least must contains http and some .
-		if(!text.toLowerCase().startsWith("http") || text.indexOf(".")<0)
-			return new ValidationResult(getErrorMessage(messages, messages.getStandardMessages().notEqual()));
+		String regexPattern = "\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+		try {
+			if(!text.matches(regexPattern))
+				return new ValidationResult(messages.getStandardMessages().notEqual());
+		} catch(IllegalArgumentException ex) {
+			return new ValidationResult(messages.getStandardMessages().notARegEx());
+		}
 		
 		return null;
 	}	
