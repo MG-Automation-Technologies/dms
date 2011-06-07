@@ -1093,12 +1093,6 @@ public class FormManager {
 			} else if (formElement instanceof GWTInput) {
 				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
 				TextBox textBox = (TextBox) hPanel.getWidget(0);
-				if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_LINK)) {
-					// Always must start with http://
-					if (!textBox.getText().equals("") && !textBox.getText().startsWith("http://")) {
-						textBox.setText("http://" + textBox.getText());
-					}
-				} 
 				((GWTInput) formElement).setValue(textBox.getText()); // note that date is added by click handler in drawform method
 				if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_FOLDER)) {
 					// Must be updated folder in GWTInput because must be drawed
