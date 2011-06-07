@@ -262,42 +262,50 @@ public class DatabaseQueryServlet extends BaseServlet {
 			
 			// For each query line
 			while (st.hasMoreTokens()) {
-				String tk = st.nextToken();
+				String tk = st.nextToken().trim();
 				
 				if (tk.toUpperCase().startsWith("--") || tk.equals("") || tk.equals("\r")) {
 					// Is a comment, so ignore it
-				} else if (tk.toUpperCase().startsWith("SELECT")) {
-					rs = stmt.executeQuery(tk);
-					ResultSetMetaData md = rs.getMetaData();
-					List<String> columns = new ArrayList<String>();
-					List<List<String>> results = new ArrayList<List<String>>();
-										
-					for (int i=1; i<md.getColumnCount()+1; i++) {
-						columns.add(md.getColumnName(i));
-					}
-					
-					for (int i=0; rs.next() && i++ < Config.MAX_SEARCH_RESULTS; ) {
-						List<String> row = new ArrayList<String>();
-						for (int j=1; j<md.getColumnCount()+1; j++) {
-							row.add(rs.getString(j));
-						}
-						results.add(row);
-					}
-					
-					GlobalResult gr = new GlobalResult();
-					gr.setColumns(columns);
-					gr.setResults(results);
-					gr.setRows(null);
-					gr.setSql(tk);
-					globalResults.add(gr);
 				} else {
-					GlobalResult gr = new GlobalResult();
-					int rows = stmt.executeUpdate(tk);
-					gr.setColumns(null);
-					gr.setResults(null);
-					gr.setRows(rows);
-					gr.setSql(tk);
-					globalResults.add(gr);
+					if (tk.endsWith(";")) {
+						tk = tk.substring(0, tk.length() - 1);
+					}
+					
+					if (tk.toUpperCase().startsWith("SELECT")) {	
+						rs = stmt.executeQuery(tk);
+						ResultSetMetaData md = rs.getMetaData();
+						List<String> columns = new ArrayList<String>();
+						List<List<String>> results = new ArrayList<List<String>>();
+						
+						for (int i=1; i<md.getColumnCount()+1; i++) {
+							columns.add(md.getColumnName(i));
+						}
+						
+						for (int i=0; rs.next() && i++ < Config.MAX_SEARCH_RESULTS; ) {
+							List<String> row = new ArrayList<String>();
+							
+							for (int j=1; j<md.getColumnCount()+1; j++) {
+								row.add(rs.getString(j));
+							}
+							
+							results.add(row);
+						}
+						
+						GlobalResult gr = new GlobalResult();
+						gr.setColumns(columns);
+						gr.setResults(results);
+						gr.setRows(null);
+						gr.setSql(tk);
+						globalResults.add(gr);
+					} else {
+						GlobalResult gr = new GlobalResult();
+						int rows = stmt.executeUpdate(tk);
+						gr.setColumns(null);
+						gr.setResults(null);
+						gr.setRows(rows);
+						gr.setSql(tk);
+						globalResults.add(gr);
+					}
 				}
 			}
 		} finally {
