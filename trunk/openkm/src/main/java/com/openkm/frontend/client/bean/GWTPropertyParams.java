@@ -33,12 +33,8 @@ public class GWTPropertyParams implements IsSerializable {
 	
 	private String grpName;
 	private String grpLabel;
-	
 	private GWTFormElement formElement;
 	private String value;
-	
-	public GWTPropertyParams() {
-	}
 	
 	public String getGrpName() {
 		return grpName;

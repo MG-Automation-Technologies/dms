@@ -42,6 +42,7 @@ public class GWTInput extends GWTFormElement implements IsSerializable {
 	private String type = TYPE_TEXT;
 	private String value = "";
 	private Date date;
+	private Date dateTo; // Used only for search
 	private boolean readonly = false;
 	private String data = "";
 	private GWTFolder folder = new GWTFolder();
@@ -100,6 +101,14 @@ public class GWTInput extends GWTFormElement implements IsSerializable {
 
 	public void setFolder(GWTFolder folder) {
 		this.folder = folder;
+	}
+	
+	public Date getDateTo() {
+		return dateTo;
+	}
+
+	public void setDateTo(Date dateTo) {
+		this.dateTo = dateTo;
 	}
 	
 	public String toString() {

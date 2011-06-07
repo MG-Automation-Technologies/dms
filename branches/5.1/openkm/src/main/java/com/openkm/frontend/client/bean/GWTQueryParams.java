@@ -59,12 +59,42 @@ public class GWTQueryParams implements IsSerializable {
 	private String categoryUuid = "";
 	private String categoryPath = "";
 	private boolean isShared = false;
-
 	private String operator = OPERATOR_AND;
-	
 	private Map<String, GWTPropertyParams> properties = new HashMap<String, GWTPropertyParams>();
-	
 	private String grpName;
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#clone()
+	 */
+	public GWTQueryParams clone() {
+		GWTQueryParams newParans = new GWTQueryParams();
+		newParans.setAuthor(getAuthor());
+		newParans.setCategoryPath(getCategoryPath());
+		newParans.setCategoryUuid(getCategoryUuid());
+		newParans.setContent(getContent());
+		newParans.setDashboard(isDashboard());
+		newParans.setDomain(getDomain());
+		newParans.setGrpName(getGrpName());
+		newParans.setId(getId());
+		newParans.setKeywords(getKeywords());
+		newParans.setLastModifiedFrom(getLastModifiedFrom());
+		newParans.setLastModifiedTo(getLastModifiedTo());
+		newParans.setMailFrom(getMailFrom());
+		newParans.setMailSubject(getMailSubject());
+		newParans.setMailTo(getMailTo());
+		newParans.setMimeType(getMimeType());
+		newParans.setName(getName());
+		newParans.setOperator(getOperator());
+		newParans.setPath(getPath());
+		Map<String, GWTPropertyParams> newProperties = new HashMap<String, GWTPropertyParams>();
+		for (String key : properties.keySet()) {
+			newProperties.put(key, properties.get(key));
+		}
+		newParans.setProperties(newProperties);
+		newParans.setQueryName(getQueryName());
+		newParans.setShared(isShared());
+		return newParans;
+	}
 
 	public String getContent() {
 		return content;
