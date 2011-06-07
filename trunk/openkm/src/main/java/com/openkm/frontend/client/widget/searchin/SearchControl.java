@@ -19,8 +19,6 @@
 
 package com.openkm.frontend.client.widget.searchin;
 
-import java.util.Iterator;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -39,7 +37,14 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTCheckBox;
+import com.openkm.frontend.client.bean.GWTFormElement;
+import com.openkm.frontend.client.bean.GWTInput;
+import com.openkm.frontend.client.bean.GWTOption;
 import com.openkm.frontend.client.bean.GWTQueryParams;
+import com.openkm.frontend.client.bean.GWTSelect;
+import com.openkm.frontend.client.bean.GWTSuggestBox;
+import com.openkm.frontend.client.bean.GWTTextArea;
 import com.openkm.frontend.client.contants.ui.UISearchConstants;
 import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.service.OKMSearchServiceAsync;
@@ -440,18 +445,37 @@ public class SearchControl extends Composite {
 					searchButton.setEnabled(true);
 				}
 				
-				// Evaluates properties to enable button		
-				for (Iterator<String> it = searchMetadata.hWidgetProperties.keySet().iterator(); it.hasNext();) {
-					String key = it.next();
-					Object widget = searchMetadata.hWidgetProperties.get(key);
-					
-					if (widget instanceof TextBox) {
-						if (((TextBox) widget).getText().length() >= MIN_WORD_LENGTH) {
+				// Evaluates properties to enable button
+				for (GWTFormElement formElement : searchMetadata.updateFormElementsValuesWithNewer()) {
+					if (formElement instanceof GWTInput) {
+						if (((GWTInput) formElement).getValue().length() >= MIN_WORD_LENGTH) {
 							searchButton.setEnabled(true);
+							break;
 						}
-					} else if (widget instanceof ListBox) {
-						if (((ListBox) widget).getSelectedIndex() > 0) {
+					} else if (formElement instanceof GWTTextArea) {
+						if (((GWTTextArea) formElement).getValue().length() >= MIN_WORD_LENGTH) {
 							searchButton.setEnabled(true);
+							break;
+						}
+					} else if (formElement instanceof GWTSuggestBox) {
+						if (!((GWTSuggestBox) formElement).getValue().equals("")) {
+							searchButton.setEnabled(true);
+							break;
+						}
+					} else if (formElement instanceof GWTCheckBox) {
+						// Checkbox case assume is selected to enable search
+						if (((GWTCheckBox) formElement).getValue()) {
+							searchButton.setEnabled(true);
+							break;
+						}
+					} else if (formElement instanceof GWTSelect) {
+						// Checkbox case assume is selected to enable search
+						GWTSelect select = (GWTSelect) formElement; 
+						for (GWTOption option : select.getOptions()) {
+							if (option.isSelected()) {
+								searchButton.setEnabled(true);
+								break;
+							}
 						}
 					}
 				}
@@ -512,11 +536,11 @@ public class SearchControl extends Composite {
 			params.setId(result.intValue());
 			
 			if (isUserNews) {
-				Main.get().mainPanel.search.historySearch.userNews.addNewSavedSearch(params);
+				Main.get().mainPanel.search.historySearch.userNews.addNewSavedSearch(params.clone());
 				Main.get().mainPanel.search.historySearch.stackPanel.showStack(UISearchConstants.SEARCH_USER_NEWS);
 				Main.get().mainPanel.dashboard.newsDashboard.getUserSearchs(true);
 			} else {
-				Main.get().mainPanel.search.historySearch.searchSaved.addNewSavedSearch(params);
+				Main.get().mainPanel.search.historySearch.searchSaved.addNewSavedSearch(params.clone());
 				Main.get().mainPanel.search.historySearch.stackPanel.showStack(UISearchConstants.SEARCH_SAVED);
 			}
 			
@@ -583,7 +607,7 @@ public class SearchControl extends Composite {
 		searchButton.setEnabled(false);
 		saveSearchButton.setEnabled(false);
 		controlSearch.setVisible(false);
-		Main.get().mainPanel.search.searchBrowser.searchIn.removeTablePropertiesRows();
+		Main.get().mainPanel.search.searchBrowser.searchIn.resetMetadata();
 		searchAdvanced.typeDocument.setValue(true);
 		searchAdvanced.typeFolder.setValue(false);
 		searchAdvanced.typeMail.setValue(false);
