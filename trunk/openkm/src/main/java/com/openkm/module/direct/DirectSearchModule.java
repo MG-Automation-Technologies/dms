@@ -60,6 +60,7 @@ import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.QueryResult;
 import com.openkm.bean.ResultSet;
 import com.openkm.bean.form.FormElement;
+import com.openkm.bean.form.Input;
 import com.openkm.bean.form.Select;
 import com.openkm.cache.UserDocumentKeywordsManager;
 import com.openkm.core.AccessDeniedException;
@@ -281,29 +282,7 @@ public class DirectSearchModule implements SearchModule {
 					sb.append(")");
 				}
 				
-				if (!params.getProperties().isEmpty()) {
-					Map<PropertyGroup, List<FormElement>> formsElements = FormUtils.parsePropertyGroupsForms(Config.PROPERTY_GROUPS_XML);
-					
-					for (Iterator<Entry<String, String>> it = params.getProperties().entrySet().iterator(); it.hasNext() ; ) {
-						Entry<String, String> ent = it.next();
-						FormElement fe = FormUtils.getFormElement(formsElements, ent.getKey());
-						
-						if (fe != null && ent.getValue() != null) {
-							String valueTrimmed = ent.getValue().trim();
-							
-							if (!valueTrimmed.equals("")) {
-								sb.append(" "+params.getOperator()+" ");
-								
-								if (fe instanceof Select) {
-									sb.append("@"+ent.getKey()+"='"+ escapeXPath(valueTrimmed)+ "'");
-								} else {
-									sb.append("jcr:contains(@"+ent.getKey()+",'"+ escapeContains(valueTrimmed)+ "')");
-								}
-							}
-						}
-					}
-				}
-				
+				sb.append(preparePropertyGroups(params));
 				sb.append(")");
 			} 
 			
@@ -327,6 +306,7 @@ public class DirectSearchModule implements SearchModule {
 					sb.append(")");
 				}
 				
+				sb.append(preparePropertyGroups(params));
 				sb.append(")");
 			}
 			
@@ -360,32 +340,54 @@ public class DirectSearchModule implements SearchModule {
 					sb.append("@okm:content/jcr:mimeType='"+ params.getMimeType()+ "'");
 				}
 				
-				if (!params.getProperties().isEmpty()) {
-					Map<PropertyGroup, List<FormElement>> formsElements = FormUtils.parsePropertyGroupsForms(Config.PROPERTY_GROUPS_XML);
-					
-					for (Iterator<Entry<String, String>> it = params.getProperties().entrySet().iterator(); it.hasNext() ; ) {
-						Entry<String, String> ent = it.next();
-						FormElement fe = FormUtils.getFormElement(formsElements, ent.getKey());
-						
-						if (fe != null) {
-							sb.append(" "+params.getOperator()+" ");
-							
-							if (fe instanceof Select) {
-								sb.append("@"+ent.getKey()+"='"+ escapeXPath(ent.getValue().toString())+ "'");
-							} else {
-								sb.append("jcr:contains(@"+ent.getKey()+",'"+ escapeContains(ent.getValue().toString())+ "')");
-							}
-						}
-					}
-				}
-				
+				sb.append(preparePropertyGroups(params));
 				sb.append(")");
 			}
 			
 			sb.append("] order by @jcr:score descending");
 		}
 		
-		log.info("prepareStatement: {}", sb.toString());
+		log.debug("prepareStatement: {}", sb.toString());
+		return sb.toString();
+	}
+	
+	/**
+	 * Create XPath related to property groups.
+	 */
+	private Object preparePropertyGroups(QueryParams params) throws IOException, ParseException {
+		StringBuilder sb = new StringBuilder();
+		
+		if (!params.getProperties().isEmpty()) {
+			Map<PropertyGroup, List<FormElement>> formsElements = FormUtils.parsePropertyGroupsForms(Config.PROPERTY_GROUPS_XML);
+			
+			for (Iterator<Entry<String, String>> it = params.getProperties().entrySet().iterator(); it.hasNext() ; ) {
+				Entry<String, String> ent = it.next();
+				FormElement fe = FormUtils.getFormElement(formsElements, ent.getKey());
+				
+				if (fe != null && ent.getValue() != null) {
+					String valueTrimmed = ent.getValue().trim();
+					
+					if (!valueTrimmed.equals("")) {
+						sb.append(" "+params.getOperator()+" ");
+						
+						if (fe instanceof Select) {
+							sb.append("@"+ent.getKey()+"='"+ escapeXPath(valueTrimmed)+ "'");
+						} else if (fe instanceof Input && ((Input) fe).getType().equals(Input.TYPE_DATE)) {
+							String[] date = valueTrimmed.split(",");
+							
+							if (date.length == 2) {
+								sb.append("@"+ent.getKey()+" >= '" + date[0] + "'");
+								sb.append(" and ");
+								sb.append("@"+ent.getKey()+" <= '" + date[1] + "'");
+							}
+						} else {
+							sb.append("jcr:contains(@"+ent.getKey()+",'"+ escapeContains(valueTrimmed)+ "')");
+						}
+					}
+				}
+			}
+		}
+		
 		return sb.toString();
 	}
 
