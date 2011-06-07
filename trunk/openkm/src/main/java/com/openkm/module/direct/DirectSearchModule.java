@@ -288,10 +288,10 @@ public class DirectSearchModule implements SearchModule {
 						Entry<String, String> ent = it.next();
 						FormElement fe = FormUtils.getFormElement(formsElements, ent.getKey());
 						
-						if (ent.getValue() != null) {
+						if (fe != null && ent.getValue() != null) {
 							String valueTrimmed = ent.getValue().trim();
 							
-							if (fe != null && !valueTrimmed.equals("")) {
+							if (!valueTrimmed.equals("")) {
 								sb.append(" "+params.getOperator()+" ");
 								
 								if (fe instanceof Select) {
