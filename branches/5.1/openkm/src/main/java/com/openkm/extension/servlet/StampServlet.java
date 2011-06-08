@@ -61,6 +61,7 @@ import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.extension.OKMStampService;
 import com.openkm.servlet.frontend.OKMRemoteServiceServlet;
 import com.openkm.util.DocConverter;
+import com.openkm.util.FileUtils;
 import com.openkm.util.GWTUtil;
 import com.openkm.util.PDFUtils;
 import com.openkm.util.SecureStore;
@@ -156,11 +157,18 @@ public class StampServlet extends OKMRemoteServiceServlet implements OKMStampSer
 			is.close();
 			
 			is = new FileInputStream(tmpStampPdf);
-			// Uploading document to repository if original is pdf we increment version otheside create new file
+			// Upload document to repository if original is PDF we increment version otherwise create new file
 			if (!doc.getMimeType().equals("application/pdf")) {
 				Document newDoc = new Document();
-				path = path.substring(0, path.lastIndexOf(".")+1) + "pdf";
-				newDoc.setPath(path);
+				String parentFld = FileUtils.getParent(path);
+				String docName = FileUtils.getName(path);
+				int idx = docName.lastIndexOf('.'); 
+				
+				if (idx > 0) {
+					docName = docName.substring(0, idx);
+				}
+				
+				newDoc.setPath(parentFld + "/" + docName + ".pdf");
 				OKMDocument.getInstance().create(null, newDoc, is);
 			} else {
 				OKMDocument.getInstance().checkout(null, path);
