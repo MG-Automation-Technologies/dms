@@ -679,7 +679,7 @@ public class MailUtils {
 	 * Test IMAP connection
 	 */
 	public static void testConnection(MailAccount ma) throws IOException {
-		log.info("testConnection({})", ma);
+		log.debug("testConnection({})", ma);
 		Properties props = System.getProperties();
 		Session session = Session.getDefaultInstance(props);
 		Store store = null;
@@ -715,7 +715,7 @@ public class MailUtils {
 			}
 		}
 		
-		log.info("testConnection: void");
+		log.debug("testConnection: void");
 	}
 	
 	/**
