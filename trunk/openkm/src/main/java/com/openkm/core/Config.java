@@ -417,8 +417,6 @@ public class Config {
 	// Registered MIME types
 	public static MimetypesFileTypeMap mimeTypes = new MimetypesFileTypeMap();
 	
-	
-	
 	/**
 	 * Get url base
 	 */
