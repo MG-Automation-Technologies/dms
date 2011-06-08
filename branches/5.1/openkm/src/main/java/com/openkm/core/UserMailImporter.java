@@ -37,45 +37,53 @@ import com.openkm.util.MailUtils;
 
 public class UserMailImporter extends TimerTask {
 	private static Logger log = LoggerFactory.getLogger(UserMailImporter.class);
-
+	private static volatile boolean running = false;
+	
 	@Override
 	public void run() {
-		log.info("*** UserMailImporter activated ***");
-        
-		try {
-			if (!Config.SYSTEM_READONLY) {
-				String systemToken = JcrSessionManager.getInstance().getSystemToken();
-				Collection<String> users = OKMAuth.getInstance().getUsers(systemToken);
-				
-				for (Iterator<String> usrIt = users.iterator(); usrIt.hasNext(); ) {
-					String uid = usrIt.next();
-					List<MailAccount> mailAccounts = MailAccountDAO.findByUser(uid, true);
+		if (running) {
+			log.warn("*** UserMailImporter already running ***");
+		} else {
+			log.info("*** UserMailImporter activated ***");
+			running = true;
+			
+			try {
+				if (!Config.SYSTEM_READONLY) {
+					String systemToken = JcrSessionManager.getInstance().getSystemToken();
+					Collection<String> users = OKMAuth.getInstance().getUsers(systemToken);
 					
-					for (Iterator<MailAccount> maIt = mailAccounts.iterator(); maIt.hasNext(); ) {
-						MailAccount ma = maIt.next();
+					for (Iterator<String> usrIt = users.iterator(); usrIt.hasNext(); ) {
+						String uid = usrIt.next();
+						List<MailAccount> mailAccounts = MailAccountDAO.findByUser(uid, true);
 						
-						if (!Config.SYSTEM_READONLY) {
-							MailUtils.importMessages(uid, ma);
+						for (Iterator<MailAccount> maIt = mailAccounts.iterator(); maIt.hasNext(); ) {
+							MailAccount ma = maIt.next();
+							
+							if (!Config.SYSTEM_READONLY) {
+								MailUtils.importMessages(uid, ma);
+							}
 						}
 					}
 				}
+			} catch (RepositoryException e) {
+				log.error(e.getMessage(), e);
+			} catch (DatabaseException e) {
+				log.error(e.getMessage(), e);
+			} catch (PathNotFoundException e) {
+				log.error(e.getMessage(), e);
+			} catch (ItemExistsException e) {
+				log.error(e.getMessage(), e);
+			} catch (VirusDetectedException e) {
+				log.error(e.getMessage(), e);
+			} catch (AccessDeniedException e) {
+				log.error(e.getMessage(), e);
+			} catch (PrincipalAdapterException e) {
+				log.error(e.getMessage(), e);
+			} catch (UserQuotaExceededException e) {
+				log.error(e.getMessage(), e);
+			} finally {
+				running = false;
 			}
-		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-		} catch (DatabaseException e) {
-			log.error(e.getMessage(), e);
-		} catch (PathNotFoundException e) {
-			log.error(e.getMessage(), e);
-		} catch (ItemExistsException e) {
-			log.error(e.getMessage(), e);
-		} catch (VirusDetectedException e) {
-			log.error(e.getMessage(), e);
-		} catch (AccessDeniedException e) {
-			log.error(e.getMessage(), e);
-		} catch (PrincipalAdapterException e) {
-			log.error(e.getMessage(), e);
-		} catch (UserQuotaExceededException e) {
-			log.error(e.getMessage(), e);
 		}
 	}
 }
