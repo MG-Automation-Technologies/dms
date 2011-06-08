@@ -328,12 +328,13 @@ public class MailUtils {
 	 * You should create different local uidl list for different email account, because the uidl is only
 	 * unique for the same account. 
 	 */
-	public static void importMessages(String uid, MailAccount ma) throws PathNotFoundException,
+	public static String importMessages(String uid, MailAccount ma) throws PathNotFoundException,
 			ItemExistsException, VirusDetectedException, AccessDeniedException, RepositoryException,
 			DatabaseException, UserQuotaExceededException, ExtensionException {
-		log.info("importMessages({}, {})", new Object[] { uid, ma });
+		log.debug("importMessages({}, {})", new Object[] { uid, ma });
 		Properties props = System.getProperties();
 		Session session = Session.getDefaultInstance(props);
+		String exceptionMessage = null;
 		
 		try {
 			// Open connection
@@ -364,7 +365,7 @@ public class MailUtils {
 					sentDate.setTime(msg.getSentDate());
 				}
 				
-				log.info("{} -> {} - {}", new Object[] { i ,msg.getSubject(), msg.getReceivedDate() });
+				log.debug("{} -> {} - {}", new Object[] { i ,msg.getSubject(), msg.getReceivedDate() });
 				com.openkm.bean.Mail mail = new com.openkm.bean.Mail();
 				String body = getText(msg);
 				
@@ -392,12 +393,12 @@ public class MailUtils {
 				mail.setSentDate(sentDate);
 				
 				if (ma.getMailFilters().isEmpty()) {
-					log.info("Import in compatibility mode");
+					log.debug("Import in compatibility mode");
 					String mailPath = getUserMailPath(uid);
 					importMail(mailPath, true, folder, msg, ma, mail);
 				} else {
 					for (MailFilter mf : ma.getMailFilters()) {
-						log.info("MailFilter: {}", mf);
+						log.debug("MailFilter: {}", mf);
 						
 						if (checkRules(mail, mf.getFilterRules())) {
 							String  mailPath = mf.getPath();
@@ -420,18 +421,22 @@ public class MailUtils {
 			}
 			
 			// Close connection
-			log.info("Expunge: {}", ma.isMailMarkDeleted());
+			log.debug("Expunge: {}", ma.isMailMarkDeleted());
 			folder.close(ma.isMailMarkDeleted());
 			store.close();
 		} catch (NoSuchProviderException e) {
 			log.error(e.getMessage(), e);
+			exceptionMessage = e.getMessage();
 		} catch (MessagingException e) {
 			log.error(e.getMessage(), e);
+			exceptionMessage = e.getMessage();
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
+			exceptionMessage = e.getMessage();
 		}
 		
-		log.info("importMessages: void");
+		log.debug("importMessages: {}", exceptionMessage);
+		return exceptionMessage;
 	}
 	
 	/**
