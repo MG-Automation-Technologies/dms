@@ -21,6 +21,7 @@
 
 package com.openkm.core;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -40,6 +41,15 @@ import com.openkm.util.MailUtils;
 public class UserMailImporter extends TimerTask {
 	private static Logger log = LoggerFactory.getLogger(UserMailImporter.class);
 	private static volatile boolean running = false;
+	private List<String> exceptionMessages = new ArrayList<String>(); 
+	
+	public boolean isRunning() {
+		return running;
+	}
+	
+	public List<String> getExceptionMessages() {
+		return exceptionMessages;
+	}
 	
 	@Override
 	public void run() {
@@ -62,29 +72,39 @@ public class UserMailImporter extends TimerTask {
 							MailAccount ma = maIt.next();
 							
 							if (!Config.SYSTEM_READONLY) {
-								MailUtils.importMessages(uid, ma);
+								exceptionMessages.add("Id: " + ma.getId() + ", User: " + ma.getUser() + 
+										", Error: " + MailUtils.importMessages(uid, ma));
 							}
 						}
 					}
 				}
 			} catch (RepositoryException e) {
 				log.error(e.getMessage(), e);
+				exceptionMessages.add(e.getMessage());
 			} catch (DatabaseException e) {
 				log.error(e.getMessage(), e);
+				exceptionMessages.add(e.getMessage());
 			} catch (PathNotFoundException e) {
 				log.error(e.getMessage(), e);
+				exceptionMessages.add(e.getMessage());
 			} catch (ItemExistsException e) {
 				log.error(e.getMessage(), e);
+				exceptionMessages.add(e.getMessage());
 			} catch (VirusDetectedException e) {
 				log.error(e.getMessage(), e);
+				exceptionMessages.add(e.getMessage());
 			} catch (AccessDeniedException e) {
 				log.error(e.getMessage(), e);
+				exceptionMessages.add(e.getMessage());
 			} catch (PrincipalAdapterException e) {
 				log.error(e.getMessage(), e);
+				exceptionMessages.add(e.getMessage());
 			} catch (UserQuotaExceededException e) {
 				log.error(e.getMessage(), e);
+				exceptionMessages.add(e.getMessage());
 			} catch (ExtensionException e) {
 				log.error(e.getMessage(), e);
+				exceptionMessages.add(e.getMessage());
 			} finally {
 				running = false;
 			}
