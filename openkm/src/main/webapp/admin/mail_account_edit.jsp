@@ -13,8 +13,17 @@
   <script type="text/javascript">
     $(document).ready(function(){
       $("#check").click(function(event) {
-        $("#dest").html('Checking....');
-        $("#dest").load('MailAccount', {action: "check", ma_mprotocol: $('[name=ma_mprotocol]').val(), ma_mhost: $('[name=ma_mhost]').val(), ma_muser: $('[name=ma_muser]').val(), ma_mpassword: $('[name=ma_mpassword]').val(), ma_mfolder: $('[name=ma_mfolder]').val()});
+        $("#dest").removeClass('ok').removeClass('error').html('Checking....');
+        $("#dest").load('MailAccount', { action: "check", ma_mprotocol: $('[name=ma_mprotocol]').val(),
+        	ma_mhost: $('[name=ma_mhost]').val(), ma_muser: $('[name=ma_muser]').val(),
+        	ma_mpassword: $('[name=ma_mpassword]').val(), ma_mfolder: $('[name=ma_mfolder]').val() },
+        	function(response, status, xhr) {
+        		if (response == 'Success!') {
+        			$(this).removeClass('error').addClass('ok');
+        		} else {
+        			$(this).removeClass('ok').addClass('error');
+        		}
+        	});
       });
     });
   </script>
@@ -117,7 +126,7 @@
         </table>
       </form>
       <br/>
-      <div class="warn" style="text-align: center;" id="dest"></div>
+      <div style="text-align: center;" id="dest"></div>
     </c:when>
     <c:otherwise>
       <div class="error"><h3>Only admin users allowed</h3></div>
