@@ -41,17 +41,18 @@ import com.openkm.dao.MimeTypeDAO;
 import com.openkm.dao.bean.MimeType;
 import com.openkm.extractor.RegisteredExtractors;
 import com.openkm.principal.DatabasePrincipalAdapter;
+import com.openkm.util.ServerDetector;
 
 public class Config {
 	private static Logger log = LoggerFactory.getLogger(Config.class);
 	public static TreeMap<String, String> values = new TreeMap<String, String>();
 	
 	// Default directories
-	public static final String HOME_DIR = getHomeDir();
-	public static final String OPENKM_HOME = "$OPENKM_HOME";
-	public static final String TMP_DIR = getTempDir();
-	public static final String NULL_DEVICE = getNullDevice();
-	public static final boolean IN_SERVER = inServer();
+	public static final String HOME_DIR = ServerDetector.getHomeDir();
+	public static final String TMP_DIR = ServerDetector.getTempDir();
+	public static final String NULL_DEVICE = ServerDetector.getNullDevice();
+	public static final String JNDI_BASE = ServerDetector.getJndiBase();
+	public static final boolean IN_SERVER = ServerDetector.inServer();
 	
 	// Scripting
 	public static final String START_SCRIPT = "start.bsh";
@@ -411,68 +412,6 @@ public class Config {
 	
 	// Registered MIME types
 	public static MimetypesFileTypeMap mimeTypes = new MimetypesFileTypeMap();
-	
-	/**
-	 * Guess the application server home directory
-	 */
-	private static String getHomeDir() {
-		// Try JBoss
-		String dir = System.getProperty("jboss.home.dir");
-		if (dir != null) {
-			log.info("Using JBoss: " + dir);
-			return dir;
-		}
-		
-		// Try Tomcat
-		dir = System.getProperty("catalina.home");
-		if (dir != null) {
-			log.info("Using Tomcat: " + dir);
-			return dir;
-		}
-		
-		// Otherwise GWT hosted mode
-		dir = System.getProperty("user.dir") + "/src/test/resources";
-		log.info("Using default dir: " + dir);
-		return dir;
-	}
-	
-	/**
-	 * Guess the system wide temporary directory
-	 */
-	private static String getTempDir() {
-		String dir = System.getProperty("java.io.tmpdir");
-		if (dir != null) {
-			return dir;
-		} else {
-			return "";
-		}
-	}
-	
-	/**
-	 * Guess the system null device
-	 */
-	private static String getNullDevice() {
-		String os = System.getProperty("os.name").toLowerCase();
-		
-		if (os.contains("linux") || os.contains("mac os")) {
-			return "/dev/null";
-		} else if (os.contains("windows")) {
-			return "NUL:";
-		} else {
-			return null;
-		}
-	}
-	
-	/**
-	 * Test if is running in application server
-	 */
-	private static boolean inServer() {
-		if (System.getProperty("jboss.home.dir") != null || System.getProperty("catalina.home") != null) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 	
 	/**
 	 * Get url base
