@@ -327,12 +327,13 @@ public class MailUtils {
 	 * You should create different local uidl list for different email account, because the uidl is only
 	 * unique for the same account. 
 	 */
-	public static void importMessages(String uid, MailAccount ma) throws PathNotFoundException, ItemExistsException,
-			VirusDetectedException, AccessDeniedException, RepositoryException, DatabaseException, 
+	public static String importMessages(String uid, MailAccount ma) throws PathNotFoundException, ItemExistsException,
+			VirusDetectedException, AccessDeniedException, RepositoryException, DatabaseException,
 			UserQuotaExceededException {
-		log.info("importMessages({}, {})", new Object[] { uid, ma });
+		log.debug("importMessages({}, {})", new Object[] { uid, ma });
 		Properties props = System.getProperties();
 		Session session = Session.getDefaultInstance(props);
+		String exceptionMessage = null;
 		
 		try {
 			// Open connection
@@ -341,14 +342,15 @@ public class MailUtils {
 			
 			Folder folder = store.getFolder(ma.getMailFolder());
 			folder.open(Folder.READ_WRITE);
-			//Message messages[] = folder.getMessages();
+			// Message messages[] = folder.getMessages();
 			Message messages[] = folder.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
 			
-			for (int i=0; i < messages.length; i++) {
+			for (int i = 0; i < messages.length; i++) {
 				Message msg = messages[i];
-				//log.info(i + ": " + msg.getFrom()[0] + " " + msg.getSubject()+" "+msg.getContentType());
-				//log.info("Received: "+msg.getReceivedDate());
-				//log.info("Sent: "+msg.getSentDate());
+				// log.info(i + ": " + msg.getFrom()[0] + " " +
+				// msg.getSubject()+" "+msg.getContentType());
+				// log.info("Received: "+msg.getReceivedDate());
+				// log.info("Sent: "+msg.getSentDate());
 				
 				Calendar receivedDate = Calendar.getInstance();
 				Calendar sentDate = Calendar.getInstance();
@@ -363,11 +365,11 @@ public class MailUtils {
 					sentDate.setTime(msg.getSentDate());
 				}
 				
-				log.info("{} -> {} - {}", new Object[] { i ,msg.getSubject(), msg.getReceivedDate() });
+				log.debug("{} -> {} - {}", new Object[] { i, msg.getSubject(), msg.getReceivedDate() });
 				com.openkm.bean.Mail mail = new com.openkm.bean.Mail();
 				String body = getText(msg);
 				
-				//	log.info("getText: "+body);
+				// log.info("getText: "+body);
 				if (body.charAt(0) == 'H') {
 					mail.setMimeType("text/html");
 				} else if (body.charAt(0) == 'T') {
@@ -391,16 +393,16 @@ public class MailUtils {
 				mail.setSentDate(sentDate);
 				
 				if (ma.getMailFilters().isEmpty()) {
-					log.info("Import in compatibility mode");
+					log.debug("Import in compatibility mode");
 					String mailPath = getUserMailPath(uid);
 					importMail(mailPath, true, folder, msg, ma, mail);
 				} else {
 					for (MailFilter mf : ma.getMailFilters()) {
-						log.info("MailFilter: {}", mf);
+						log.debug("MailFilter: {}", mf);
 						
 						if (checkRules(mail, mf.getFilterRules())) {
-							String  mailPath = mf.getPath();
-							importMail(mailPath, mf.isGrouping(), folder, msg, ma, mail);		
+							String mailPath = mf.getPath();
+							importMail(mailPath, mf.isGrouping(), folder, msg, ma, mail);
 						}
 					}
 				}
@@ -419,18 +421,22 @@ public class MailUtils {
 			}
 			
 			// Close connection
-			log.info("Expunge: {}", ma.isMailMarkDeleted());
+			log.debug("Expunge: {}", ma.isMailMarkDeleted());
 			folder.close(ma.isMailMarkDeleted());
 			store.close();
 		} catch (NoSuchProviderException e) {
 			log.error(e.getMessage(), e);
+			exceptionMessage = e.getMessage();
 		} catch (MessagingException e) {
 			log.error(e.getMessage(), e);
+			exceptionMessage = e.getMessage();
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
+			exceptionMessage = e.getMessage();
 		}
 		
-		log.info("importMessages: void");
+		log.debug("importMessages: {}", exceptionMessage);
+		return exceptionMessage;
 	}
 	
 	/**
