@@ -28,36 +28,47 @@ import javax.jcr.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.api.OKMAuth;
 import com.openkm.bean.JcrSessionInfo;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.UserActivity;
-import com.openkm.api.OKMAuth;
 
 public class Watchdog extends TimerTask {
 	private static Logger log = LoggerFactory.getLogger(Watchdog.class);
-
+	private static volatile boolean running = false;
+	
 	public void run() {
-		log.debug("*** Watchdog activated ***");
-        JcrSessionManager sm = JcrSessionManager.getInstance();
-        
-        for (Iterator<String> it = sm.getTokens().iterator(); it.hasNext(); ) {
-			String token = it.next();
-			JcrSessionInfo si = sm.getInfo(token);
-			Calendar expiration = (Calendar) si.getLastAccess().clone();
-			expiration.add(Calendar.SECOND, Config.SESSION_EXPIRATION);
-			log.debug(si.getSession().getUserID()+", Expiration: "+expiration.getTime());
+		if (running) {
+			log.warn("*** Watchdog already running ***");
+		} else {
+			log.info("*** Watchdog activated ***");
+			running = true;
 			
-			if (Calendar.getInstance().after(expiration)) {
-				try {
-					// Activity log
-					Session system = DirectRepositoryModule.getSystemSession();
-					UserActivity.log(system.getUserID(), "SESSION_EXPIRATION", si.getSession().getUserID(), token+", IDLE FROM: "+si.getLastAccess().getTime());
-					OKMAuth.getInstance().logout(token);
-				} catch (RepositoryException e) {
-					log.error(e.getMessage(), e);
-				} catch (DatabaseException e) {
-					log.error(e.getMessage(), e);
+			try {
+				JcrSessionManager sm = JcrSessionManager.getInstance();
+				
+				for (Iterator<String> it = sm.getTokens().iterator(); it.hasNext(); ) {
+					String token = it.next();
+					JcrSessionInfo si = sm.getInfo(token);
+					Calendar expiration = (Calendar) si.getLastAccess().clone();
+					expiration.add(Calendar.SECOND, Config.SESSION_EXPIRATION);
+					log.debug(si.getSession().getUserID() + ", Expiration: " + expiration.getTime());
+					
+					if (Calendar.getInstance().after(expiration)) {
+						try {
+							// Activity log
+							Session system = DirectRepositoryModule.getSystemSession();
+							UserActivity.log(system.getUserID(), "SESSION_EXPIRATION", si.getSession().getUserID(), token+", IDLE FROM: "+si.getLastAccess().getTime());
+							OKMAuth.getInstance().logout(token);
+						} catch (RepositoryException e) {
+							log.error(e.getMessage(), e);
+						} catch (DatabaseException e) {
+							log.error(e.getMessage(), e);
+						}
+					}
 				}
+			} finally {
+				running = false;
 			}
 		}
 	}
