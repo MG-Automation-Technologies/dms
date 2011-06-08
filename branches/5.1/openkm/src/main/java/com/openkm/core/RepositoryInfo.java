@@ -34,23 +34,34 @@ public class RepositoryInfo extends TimerTask {
 	private static StatsInfo documentsByContext = new StatsInfo();
 	private static StatsInfo foldersByContext = new StatsInfo();
 	private static StatsInfo documentsSizeByContext = new StatsInfo();
+	private static volatile boolean running = false;
 	
 	public void run() {
-		log.debug("*** Begin repository info ***");
-		String systemToken = JcrSessionManager.getInstance().getSystemToken();
-		OKMStats okmStats = OKMStats.getInstance();
-		
-		try {
-			documentsByContext = okmStats.getDocumentsByContext(systemToken);
-			foldersByContext = okmStats.getFoldersByContext(systemToken);
-			documentsSizeByContext = okmStats.getDocumentsSizeByContext(systemToken);
-		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-		} catch (DatabaseException e) {
-			log.error(e.getMessage(), e);
-		}
+		if (running) {
+			log.warn("*** RepositoryInfo already running ***");
+		} else {
+			running = true;
+			log.debug("*** Begin RepositoryInfo ***");
+			
+			try {
+				String systemToken = JcrSessionManager.getInstance().getSystemToken();
+				OKMStats okmStats = OKMStats.getInstance();
+				
+				try {
+					documentsByContext = okmStats.getDocumentsByContext(systemToken);
+					foldersByContext = okmStats.getFoldersByContext(systemToken);
+					documentsSizeByContext = okmStats.getDocumentsSizeByContext(systemToken);
+				} catch (RepositoryException e) {
+					log.error(e.getMessage(), e);
+				} catch (DatabaseException e) {
+					log.error(e.getMessage(), e);
+				}
+			} finally {
+				running = false;
+			}
 
-		log.debug("*** End repository info ***");
+			log.debug("*** End RepositoryInfo ***");
+		}
 	}
 	
 	/**
