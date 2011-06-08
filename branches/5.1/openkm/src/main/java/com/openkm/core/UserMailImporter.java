@@ -39,7 +39,7 @@ import com.openkm.util.MailUtils;
 public class UserMailImporter extends TimerTask {
 	private static Logger log = LoggerFactory.getLogger(UserMailImporter.class);
 	private static volatile boolean running = false;
-	private List<String> exceptionMessages = new ArrayList<String>(); 
+	private List<String> exceptionMessages = new ArrayList<String>();
 	
 	public boolean isRunning() {
 		return running;
@@ -55,6 +55,7 @@ public class UserMailImporter extends TimerTask {
 			log.warn("*** User mail importer already running ***");
 		} else {
 			running = true;
+			exceptionMessages = new ArrayList<String>();
 			log.info("*** User mail importer activated ***");
 			
 			try {
