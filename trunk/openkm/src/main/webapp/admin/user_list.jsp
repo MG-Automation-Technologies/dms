@@ -14,6 +14,18 @@
   <script type="text/javascript">
     $(document).ready(function() {
     	TABLE.fixHeader('table');
+    	
+    	$('#fumi').click(function() {
+    		$("#dest").removeClass('ok').removeClass('error').html('Checking....');
+            $("#dest").load('MailAccount', { action: "checkAll" },
+            	function(response, status, xhr) {
+            		if (response == 'Success!') {
+            			$(this).removeClass('error').addClass('ok');
+            		} else {
+            			$(this).removeClass('ok').addClass('error');
+            		}
+            	});
+	   	});
 	});
   </script>
   <title>User List</title>
@@ -49,9 +61,16 @@
               </select>
             </td>
           </tr>
-          <tr><td colspan="2" align="right"><input type="submit" value="Seach"/></td></tr>
+          <tr>
+            <td colspan="2" align="right">
+              <input type="button" id="fumi" value="Force user mail import" style="margin-right: 90px"/>
+              <input type="submit" value="Seach"/>
+            </td>
+          </tr>
         </table>
       </form>
+      <br/>
+      <div style="text-align: center;" id="dest"></div>
       <br/>
       <table class="results" width="80%">
         <thead>
