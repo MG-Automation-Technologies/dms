@@ -135,7 +135,7 @@ public class MailAccountServlet extends BaseServlet {
 			
 			if (action.equals("check")) {
 				check(session, request, response);
-				pw.println("Success!");
+				pw.print("Success!");
 			}
 		} catch (LoginException e) {
 			log.error(e.getMessage(), e);
