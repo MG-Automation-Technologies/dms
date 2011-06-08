@@ -91,11 +91,12 @@ public class LegacyDAO {
 		BufferedReader br = new BufferedReader(file);
 		Statement stmt = con.createStatement();
 		String sql = null;
-		int ln = 0;
+		int lineNo = 0;
 		
 		try {
 			while ((sql = br.readLine()) != null) {
 				String trimmedSql = sql.trim();
+				lineNo++;
 				
 				if (trimmedSql.length() > 0 && !trimmedSql.startsWith("--")) {
 					try {
@@ -103,10 +104,10 @@ public class LegacyDAO {
 							trimmedSql = trimmedSql.substring(0, trimmedSql.length() - 1);
 						}
 						
-						stmt.executeUpdate(trimmedSql);
+						stmt.execute(trimmedSql);
 					} catch (SQLException e) {
 						HashMap<String, String> error = new HashMap<String, String>();
-						error.put("ln", Integer.toString(ln));
+						error.put("ln", Integer.toString(lineNo));
 						error.put("sql", trimmedSql);
 						error.put("msg", e.getMessage());
 						errors.add(error);
