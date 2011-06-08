@@ -39,6 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
+import com.openkm.core.UserMailImporter;
 import com.openkm.dao.MailAccountDAO;
 import com.openkm.dao.bean.MailAccount;
 import com.openkm.dao.bean.MailFilter;
@@ -136,6 +137,25 @@ public class MailAccountServlet extends BaseServlet {
 			if (action.equals("check")) {
 				check(session, request, response);
 				pw.print("Success!");
+			} else if (action.equals("checkAll")) {
+				UserMailImporter umi = new UserMailImporter();
+				
+				if (umi.isRunning()) {
+					pw.print("User mail import already running");
+				} else {
+					umi.run();
+					
+					if (umi.getExceptionMessages().isEmpty()) {
+						pw.print("Success!");
+					} else {
+						for (String em : umi.getExceptionMessages()) {
+							pw.print(em + "<br/>");
+						}
+					}
+				}
+				
+				// Activity log
+				UserActivity.log(session.getUserID(), "ADMIN_MAIL_ACCOUNT_CHECK_ALL", null, null);
 			}
 		} catch (LoginException e) {
 			log.error(e.getMessage(), e);
