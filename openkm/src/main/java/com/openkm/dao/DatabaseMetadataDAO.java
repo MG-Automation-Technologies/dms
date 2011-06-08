@@ -218,6 +218,30 @@ public class DatabaseMetadataDAO {
 	/**
 	 * Execute query
 	 */
+	public static DatabaseMetadataValue executeValueQueryUnique(String query) throws DatabaseException {
+		log.debug("executeValueQuery({})", query);
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			Query q = session.createQuery(query);
+			DatabaseMetadataValue ret = (DatabaseMetadataValue) q.uniqueResult();
+			HibernateUtil.commit(tx);
+			log.debug("executeValueQuery: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Execute query
+	 */
 	public static List<DatabaseMetadataValue[]> executeMultiValueQuery(String query) throws DatabaseException {
 		log.debug("executeMultiValueQuery({})", query);
 		List<DatabaseMetadataValue[]> ret = new ArrayList<DatabaseMetadataValue[]>();
