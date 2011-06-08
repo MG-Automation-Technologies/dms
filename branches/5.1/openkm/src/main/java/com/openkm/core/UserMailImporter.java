@@ -42,10 +42,10 @@ public class UserMailImporter extends TimerTask {
 	@Override
 	public void run() {
 		if (running) {
-			log.warn("*** UserMailImporter already running ***");
+			log.warn("*** User mail importer already running ***");
 		} else {
 			running = true;
-			log.info("*** UserMailImporter activated ***");
+			log.info("*** User mail importer activated ***");
 			
 			try {
 				if (!Config.SYSTEM_READONLY) {

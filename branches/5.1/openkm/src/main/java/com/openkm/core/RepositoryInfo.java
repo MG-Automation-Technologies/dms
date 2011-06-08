@@ -38,10 +38,10 @@ public class RepositoryInfo extends TimerTask {
 	
 	public void run() {
 		if (running) {
-			log.warn("*** RepositoryInfo already running ***");
+			log.warn("*** Repository info already running ***");
 		} else {
 			running = true;
-			log.debug("*** Begin RepositoryInfo ***");
+			log.debug("*** Begin repository info ***");
 			
 			try {
 				String systemToken = JcrSessionManager.getInstance().getSystemToken();
@@ -60,7 +60,7 @@ public class RepositoryInfo extends TimerTask {
 				running = false;
 			}
 
-			log.debug("*** End RepositoryInfo ***");
+			log.debug("*** End repository info ***");
 		}
 	}
 	
