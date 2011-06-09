@@ -24,14 +24,13 @@ package com.openkm.dao;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringReader;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.hibernate.HibernateException;
@@ -40,7 +39,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.dialect.Oracle10gDialect;
 import org.hibernate.engine.SessionFactoryImplementor;
 import org.hibernate.hql.QueryTranslator;
 import org.hibernate.hql.QueryTranslatorFactory;
@@ -53,6 +51,7 @@ import com.openkm.core.Config;
 import com.openkm.dao.bean.DatabaseMetadataSequence;
 import com.openkm.dao.bean.DatabaseMetadataType;
 import com.openkm.dao.bean.DatabaseMetadataValue;
+import com.openkm.util.DatabaseDialectAdapter;
 
 /**
  * Show SQL => Logger.getLogger("org.hibernate.SQL").setThreshold(Level.INFO);
@@ -97,7 +96,7 @@ public class HibernateUtil {
 				cfg.setProperty("hibernate.hbm2ddl.auto", hbm2ddl);
 				cfg.setProperty("hibernate.show_sql", Config.HIBERNATE_SHOW_SQL);
 				cfg.setProperty("hibernate.generate_statistics", Config.HIBERNATE_STATISTICS);
-								
+				
 				// Show configuration
 				log.info("Hibernate 'hibernate.dialect' = {}", cfg.getProperty("hibernate.dialect"));
 				log.info("Hibernate 'hibernate.connection.datasource' = {}", cfg.getProperty("hibernate.connection.datasource"));
@@ -108,15 +107,10 @@ public class HibernateUtil {
 				sessionFactory = cfg.buildSessionFactory();
 				
 				if (HBM2DDL_CREATE.equals(hbm2ddl)) {
-					String specificImport = "import_default.sql";
-					
-					// Handle specific database imports
-					if (Oracle10gDialect.class.getCanonicalName().equals(Config.HIBERNATE_DIALECT)) {
-						specificImport = "import_oracle10g.sql";
-					}
-					
-					log.info("Executing specific import: {}", specificImport);
-					executeImport(Config.getResourceAsStream(specificImport));
+					log.info("Executing specific import for: {}", Config.HIBERNATE_DIALECT);
+					InputStream is = Config.getResourceAsStream("default.sql");
+					String adapted = DatabaseDialectAdapter.dialectAdapter(is, Config.HIBERNATE_DIALECT);
+					executeImport(new StringReader(adapted));
 				}
 			} catch (HibernateException e) {
 				log.error(e.getMessage(), e);
@@ -213,7 +207,7 @@ public class HibernateUtil {
 	/**
 	 * Load specific database import
 	 */
-	private static void executeImport(final InputStream is) {
+	private static void executeImport(final Reader rd) {
 		Session session = null;
 		Transaction tx = null;
 			
@@ -225,13 +219,10 @@ public class HibernateUtil {
 				new Work() {
 					@Override
 					public void execute(Connection con) throws SQLException {
-						Reader rd = new InputStreamReader(is);
-						
 						try {
-							List<HashMap<String, String>> errors = LegacyDAO.executeScript(con, rd);
-							
-							for (HashMap<String, String> error: errors) {
-								log.error("Error at specific import: {}", error);
+							for (HashMap<String, String> error: LegacyDAO.executeScript(con, rd)) {
+								log.error("Error during import script execution at line {}: {} [ {} ]",
+										new Object[] { error.get("ln"), error.get("msg"), error.get("sql") });
 							}
 						} catch (IOException e) {
 							log.error(e.getMessage(), e);
@@ -247,5 +238,5 @@ public class HibernateUtil {
 			rollback(tx);
 			log.error(e.getMessage(), e);
 		}
-	 }
+	}
 }
