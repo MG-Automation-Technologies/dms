@@ -114,7 +114,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 	}
 	
 	/**
-	 * Add buttom listener
+	 * Add button listener
 	 */
 	ClickHandler addButtomListener = new ClickHandler() { 
 		@Override
@@ -127,7 +127,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 	};
 	
 	/**
-	 * Remove buttom listener
+	 * Remove button listener
 	 */
 	ClickHandler removeButtomListener = new ClickHandler() { 
 		@Override
