@@ -66,8 +66,8 @@ public class SecurityUser extends Composite implements HasWidgets {
 	private VerticalPanel buttonPanel;
 	private SimplePanel spRight;
 	private SimplePanel spHeight;
-	private Image addButtom;
-	private Image removeButtom;
+	private Image addButton;
+	private Image removeButton;
 	private String path = "";
 	private String tmpUser = "";
 		
@@ -84,15 +84,15 @@ public class SecurityUser extends Composite implements HasWidgets {
 		spRight.setWidth("1");
 		spHeight.setHeight("30");
 		
-		addButtom = new Image(OKMBundleResources.INSTANCE.add());
-		removeButtom = new Image(OKMBundleResources.INSTANCE.remove());
+		addButton = new Image(OKMBundleResources.INSTANCE.add());
+		removeButton = new Image(OKMBundleResources.INSTANCE.remove());
 		
-		buttonPanel.add(addButtom);
+		buttonPanel.add(addButton);
 		buttonPanel.add(spHeight); // separator
-		buttonPanel.add(removeButtom);
+		buttonPanel.add(removeButton);
 		
-		addButtom.addClickHandler(addButtomHandler);
-		removeButtom.addClickHandler(removeButtomHandler);
+		addButton.addClickHandler(addButtonHandler);
+		removeButton.addClickHandler(removeButtonHandler);
 		
 		panel.add(assignedUser);
 		panel.add(buttonPanel);
@@ -116,7 +116,7 @@ public class SecurityUser extends Composite implements HasWidgets {
 	/**
 	 * Add button listener
 	 */
-	ClickHandler addButtomHandler = new ClickHandler() { 
+	ClickHandler addButtonHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (unassignedUser.getUser() != null) {
@@ -129,7 +129,7 @@ public class SecurityUser extends Composite implements HasWidgets {
 	/**
 	 * Remove button listener
 	 */
-	ClickHandler removeButtomHandler = new ClickHandler() { 
+	ClickHandler removeButtonHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (assignedUser.getUser() != null) {
