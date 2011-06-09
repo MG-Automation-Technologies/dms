@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!ELEMENT workflow-forms (workflow-form+)>
 
-<!ELEMENT workflow-form (input|suggestbox|checkbox|textarea|select|button)*>
+<!ELEMENT workflow-form (input|suggestbox|upload|checkbox|textarea|select|button)*>
 <!ATTLIST workflow-form
 	task CDATA #REQUIRED
 >
@@ -30,6 +30,17 @@
 	valueQuery CDATA #REQUIRED
 	dialogTitle CDATA #REQUIRED
 	filterMinLen CDATA #IMPLIED
+>
+
+<!ELEMENT upload (validator*)>
+<!ATTLIST upload
+	label CDATA #REQUIRED
+	name CDATA #REQUIRED
+	width CDATA #IMPLIED
+	height CDATA #IMPLIED
+	folderPath CDATA #REQUIRED
+	documentName CDATA #IMPLIED
+	uploadUuid CDATA #IMPLIED
 >
 
 <!ELEMENT checkbox (validator*)>
