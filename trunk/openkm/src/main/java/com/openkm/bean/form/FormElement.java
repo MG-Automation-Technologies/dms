@@ -1,7 +1,3 @@
-package com.openkm.bean.form;
-
-import java.io.Serializable;
-
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
  *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
@@ -22,6 +18,10 @@ import java.io.Serializable;
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
+package com.openkm.bean.form;
+
+import java.io.Serializable;
 
 public class FormElement implements Serializable {
 	private static final long serialVersionUID = 1L;
