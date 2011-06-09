@@ -54,8 +54,8 @@ public class NotifyRole extends Composite {
 	private RoleScrollTable notifyRolesTable;
 	private RoleScrollTable rolesTable;
 	private VerticalPanel buttonPanel;
-	private Image addButtom;
-	private Image removeButtom;
+	private Image addButton;
+	private Image removeButton;
 	
 	/**
 	 * NotifyUser
@@ -66,18 +66,18 @@ public class NotifyRole extends Composite {
 		rolesTable = new RoleScrollTable(false);
 		
 		buttonPanel = new VerticalPanel();
-		addButtom = new Image(OKMBundleResources.INSTANCE.add());
-		removeButtom = new Image(OKMBundleResources.INSTANCE.remove());
+		addButton = new Image(OKMBundleResources.INSTANCE.add());
+		removeButton = new Image(OKMBundleResources.INSTANCE.remove());
 		
 		HTML space = new HTML("");
-		buttonPanel.add(addButtom);
+		buttonPanel.add(addButton);
 		buttonPanel.add(space); // separator
-		buttonPanel.add(removeButtom);
+		buttonPanel.add(removeButton);
 		
 		buttonPanel.setCellHeight(space, "40");
 		
-		addButtom.addClickHandler(addButtomHandler);
-		removeButtom.addClickHandler(removeButtomHandler);
+		addButton.addClickHandler(addButtonHandler);
+		removeButton.addClickHandler(removeButtonHandler);
 		
 		hPanel.setSize("375","140");
 		hPanel.add(notifyRolesTable);
@@ -121,7 +121,7 @@ public class NotifyRole extends Composite {
 	/**
 	 * Add button handler
 	 */
-	ClickHandler addButtomHandler = new ClickHandler() { 
+	ClickHandler addButtonHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (rolesTable.getRole() != null) {
@@ -137,7 +137,7 @@ public class NotifyRole extends Composite {
 	/**
 	 * Remove button handler
 	 */
-	ClickHandler removeButtomHandler = new ClickHandler() { 
+	ClickHandler removeButtonHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (notifyRolesTable.getRole() != null) {
