@@ -101,7 +101,7 @@ public class BaseDocumentModule {
 		ProfileMisc pm = uc.getProfile().getMisc();
 		
 		// System user don't care quotas
-		if (!Config.SYSTEM_USER.equals(session.getUserID())) {
+		if (!Config.SYSTEM_USER.equals(session.getUserID()) && pm.getUserQuota() > 0) {
 			long currentQuota = 0;
 			
 			if (Config.USER_ITEM_CACHE) {
@@ -111,7 +111,7 @@ public class BaseDocumentModule {
 				currentQuota = JCRUtils.calculateQuota(session);
 			}
 			
-			if (pm.getUserQuota() > 0 && currentQuota + size > pm.getUserQuota()) {
+			if (currentQuota + size > pm.getUserQuota()) {
 				throw new UserQuotaExceededException(Long.toString(currentQuota + size));
 			}
 		}
