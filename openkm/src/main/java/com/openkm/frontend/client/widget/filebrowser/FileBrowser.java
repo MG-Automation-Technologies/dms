@@ -474,21 +474,21 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 				// Every time refreshing document properties can be changed ( multi user activity for example )
 				Main.get().mainPanel.desktop.browser.tabMultiple.enableTabDocument();
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.setProperties(doc);
-				Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(doc,Main.get().activeFolderTree.getFolder());
+				Main.get().mainPanel.topPanel.toolBar.checkToolButtonPermissions(doc,Main.get().activeFolderTree.getFolder());
 			} else {
 				GWTMail mail = table.getMail();
 				if (mail!=null) {
 					// Every time refreshing document properties can be changed ( multi user activity for example )
 					Main.get().mainPanel.desktop.browser.tabMultiple.enableTabMail();
 					Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.setProperties(mail);
-					Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(mail,Main.get().activeFolderTree.getFolder());
+					Main.get().mainPanel.topPanel.toolBar.checkToolButtonPermissions(mail,Main.get().activeFolderTree.getFolder());
 				} else {
 				GWTFolder folder = table.getFolder();
 					if (folder != null) {
 						// Every time refreshing folder properties can be changed ( multi user activity for example )
 						Main.get().mainPanel.desktop.browser.tabMultiple.enableTabFolder();
 						Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.setProperties(folder);
-						Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(folder,
+						Main.get().mainPanel.topPanel.toolBar.checkToolButtonPermissions(folder,
 																						 Main.get().activeFolderTree.getFolder(),
 																						 FILE_BROWSER);
 					}
@@ -830,7 +830,7 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 				GWTDocument gWTDocument = result;
 				table.setDocument(gWTDocument);
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.setProperties(gWTDocument);
-				Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(gWTDocument,
+				Main.get().mainPanel.topPanel.toolBar.checkToolButtonPermissions(gWTDocument,
 																				 Main.get().activeFolderTree.getFolder());
 				Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagGetDocument();
 				fileBrowserAction = ACTION_NONE;
@@ -853,7 +853,7 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 				GWTMail gWTMail = result;
 				table.setMail(gWTMail);
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.setProperties(gWTMail);
-				Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(gWTMail,
+				Main.get().mainPanel.topPanel.toolBar.checkToolButtonPermissions(gWTMail,
 																				 Main.get().activeFolderTree.getFolder());
 				Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagMailProperties();
 				fileBrowserAction = ACTION_NONE;

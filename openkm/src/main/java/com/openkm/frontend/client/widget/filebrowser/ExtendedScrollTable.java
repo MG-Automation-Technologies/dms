@@ -395,20 +395,19 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 							Main.get().mainPanel.desktop.browser.tabMultiple.enableTabFolder();
 							GWTFolder folder = getFolder();
 							Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.setProperties(folder);
-							Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(folder,
-									 														 Main.get().activeFolderTree.getFolder(),
-																							 FILE_BROWSER);
+							Main.get().mainPanel.topPanel.toolBar.checkToolButtonPermissions(folder,
+									Main.get().activeFolderTree.getFolder(), FILE_BROWSER);
 						} else if (isMailSelected()) {				
 							Main.get().mainPanel.desktop.browser.tabMultiple.enableTabMail();
 							GWTMail mail = getMail();
 							Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.setProperties(mail);
-							Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(mail,
-									 														 Main.get().activeFolderTree.getFolder());
+							Main.get().mainPanel.topPanel.toolBar.checkToolButtonPermissions(mail,
+									 Main.get().activeFolderTree.getFolder());
 						} else {
 							Main.get().mainPanel.desktop.browser.tabMultiple.enableTabDocument();
 							GWTDocument doc = getDocument();
 							Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.setProperties(doc);
-							Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(doc,Main.get().activeFolderTree.getFolder());
+							Main.get().mainPanel.topPanel.toolBar.checkToolButtonPermissions(doc,Main.get().activeFolderTree.getFolder());
 						}
 					} 
 				}
@@ -434,12 +433,12 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 						if (getSelectedRow() != selectedRow) { // Must not refresh properties on double click if row is yet selected
 							Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.setProperties(mail);
 						}
-						Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(mail,
-								 														 Main.get().activeFolderTree.getFolder());
+						Main.get().mainPanel.topPanel.toolBar.checkToolButtonPermissions(mail,
+								Main.get().activeFolderTree.getFolder());
 					} else {
 						Main.get().mainPanel.desktop.browser.tabMultiple.enableTabDocument();
 						GWTDocument doc = getDocument();
-						Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(doc,Main.get().activeFolderTree.getFolder());
+						Main.get().mainPanel.topPanel.toolBar.checkToolButtonPermissions(doc,Main.get().activeFolderTree.getFolder());
 						// We come here before executing click ( click is always executed ) 
 						if (enableOpen) {
 							if (Main.get().workspaceUserProperties.getWorkspace().getAvailableOption().isDownloadOption()) {
