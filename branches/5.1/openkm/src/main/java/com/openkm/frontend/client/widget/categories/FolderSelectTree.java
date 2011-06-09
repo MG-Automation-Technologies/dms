@@ -73,7 +73,7 @@ public class FolderSelectTree extends Composite {
 				boolean refresh = true;
 				TreeItem item = event.getSelectedItem();
 				
-				// Enables or disables move buttom ( evalues security to move to folder with permissions )
+				// Enables or disables move button ( evalues security to move to folder with permissions )
 				if (rootItem.equals(item)) {
 					Main.get().mainPanel.desktop.navigator.categoriesTree.categoriesSelectPopup.enable(false);
 				} else {
