@@ -715,7 +715,7 @@ public class FolderSelectPopup extends DialogBox  {
 	}
 	
 	/**
-	 * Enables or disables move buttom
+	 * Enables or disables move button
 	 * 
 	 * @param enable
 	 */
