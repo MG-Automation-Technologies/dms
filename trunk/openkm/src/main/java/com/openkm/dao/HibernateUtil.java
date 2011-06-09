@@ -210,7 +210,7 @@ public class HibernateUtil {
 	private static void executeImport(final Reader rd) {
 		Session session = null;
 		Transaction tx = null;
-			
+		
 		try {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
