@@ -278,6 +278,8 @@ public class FormUtils {
 					if (item != null) sbox.setDialogTitle(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("readonly");
 					if (item != null) sbox.setReadonly(Boolean.parseBoolean(item.getNodeValue()));
+					item = nField.getAttributes().getNamedItem("filterMinLen");
+					if (item != null) sbox.setFilterMinLen(Integer.parseInt(item.getNodeValue()));
 					sbox.setValidators(parseValidators(nField));
 					fe.add(sbox);
 				} else if (fieldComponent.equals("checkbox")) {
