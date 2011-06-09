@@ -1888,3 +1888,4 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('e
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'signature.actual', 'Firma', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'signature.not.signed', 'Sin firma', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'group.properties.status.get.database.records', 'Obteniendo registros', 'es-ES');
+INSERT INTO OKM_FORUM (FRM_ID, FRM_NAME, FRM_DESCRIPTION, FRM_DATE, FRM_LAST_POST_USER, FRM_LAST_POST_DATE, FRM_NUM_TOPICS, FRM_NUM_POSTS, FRM_ACTIVE) VALUES (1, 'Documents discussions', 'Documents discussions general forum', NOW(), 'system', NOW(), 0, 0, 'T');
