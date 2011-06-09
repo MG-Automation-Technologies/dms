@@ -219,7 +219,7 @@ public class FindDocumentSelectPopup extends DialogBox  {
 	}
 	
 	/**
-	 * Enables or disables move buttom
+	 * Enables or disables move button
 	 * 
 	 * @param enable
 	 */
