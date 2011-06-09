@@ -13,6 +13,7 @@ public class SuggestBox extends FormElement {
 	String dialogTitle = "";
 	String filterQuery = "";
 	String valueQuery = "";
+	int filterMinLen = 0;
 
 	public String getValue() {
 		return value;
@@ -78,6 +79,14 @@ public class SuggestBox extends FormElement {
 		this.data = data;
 	}
 	
+	public int getFilterMinLen() {
+		return filterMinLen;
+	}
+
+	public void setFilterMinLen(int filterMinLen) {
+		this.filterMinLen = filterMinLen;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -92,6 +101,7 @@ public class SuggestBox extends FormElement {
 		sb.append(", filterQuery="); sb.append(filterQuery);
 		sb.append(", valueQuery="); sb.append(valueQuery);
 		sb.append(", dialogTitle="); sb.append(dialogTitle);
+		sb.append(", filterMinLen="); sb.append(filterMinLen);
 		sb.append(", validators="); sb.append(validators);
 		sb.append("}");
 		return sb.toString();
