@@ -30,6 +30,7 @@
 	filterQuery CDATA #REQUIRED
 	valueQuery CDATA #REQUIRED
 	dialogTitle CDATA #REQUIRED
+	filterMinLen CDATA #IMPLIED
 >
 
 <!ELEMENT checkbox (validator*)>
