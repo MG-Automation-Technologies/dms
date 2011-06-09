@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!ELEMENT workflow-forms (workflow-form+)>
 
-<!ELEMENT workflow-form (input|suggestbox|upload|checkbox|textarea|select|button)*>
+<!ELEMENT workflow-form (input|suggestbox|upload|checkbox|textarea|select|button|separator|text)*>
 <!ATTLIST workflow-form
 	task CDATA #REQUIRED
 >
@@ -40,7 +40,6 @@
 	height CDATA #IMPLIED
 	folderPath CDATA #REQUIRED
 	documentName CDATA #IMPLIED
-	uploadUuid CDATA #IMPLIED
 >
 
 <!ELEMENT checkbox (validator*)>
@@ -93,8 +92,22 @@
 <!ATTLIST button
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
-	value CDATA #IMPLIED
-	type (submit|transition) "submit"
+	transition CDATA #IMPLIED
+	width CDATA #IMPLIED
+	height CDATA #IMPLIED
+>
+
+<!ELEMENT separator EMPTY>
+<!ATTLIST separator
+	label CDATA #REQUIRED
+	name CDATA #REQUIRED
+	width CDATA #IMPLIED
+>
+
+<!ELEMENT text EMPTY>
+<!ATTLIST text
+	label CDATA #REQUIRED
+	name CDATA #REQUIRED
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
 >
