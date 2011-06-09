@@ -229,7 +229,7 @@ public class FolderSelectPopup extends DialogBox  {
 
 	
 	/**
-	 * Enables or disables move buttom
+	 * Enables or disables move button
 	 * 
 	 * @param enable
 	 */
@@ -241,7 +241,7 @@ public class FolderSelectPopup extends DialogBox  {
 	 * removeAllContextListItems
 	 */
 	private void removeAllContextListItems() {
-		while (contextListBox.getItemCount()>0) {
+		while (contextListBox.getItemCount() > 0) {
 			contextListBox.removeItem(0);
 		}
 	}
