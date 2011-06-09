@@ -52,7 +52,9 @@ import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Input;
 import com.openkm.bean.form.Option;
 import com.openkm.bean.form.Select;
+import com.openkm.bean.form.Separator;
 import com.openkm.bean.form.SuggestBox;
+import com.openkm.bean.form.Text;
 import com.openkm.bean.form.TextArea;
 import com.openkm.bean.form.Upload;
 import com.openkm.bean.form.Validator;
@@ -350,6 +352,26 @@ public class FormUtils {
 					item = nField.getAttributes().getNamedItem("height");
 					if (item != null) button.setHeight(item.getNodeValue());
 					fe.add(button);
+				} else if (fieldComponent.equals("text")) {
+					Text txt = new Text();
+					Node item = nField.getAttributes().getNamedItem("label");
+					if (item != null) txt.setLabel(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("name");
+					if (item != null) txt.setName(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("width");
+					if (item != null) txt.setWidth(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("height");
+					if (item != null) txt.setHeight(item.getNodeValue());
+					fe.add(txt);
+				} else if (fieldComponent.equals("separator")) {
+					Separator sep = new Separator();
+					Node item = nField.getAttributes().getNamedItem("label");
+					if (item != null) sep.setLabel(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("name");
+					if (item != null) sep.setName(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("width");
+					if (item != null) sep.setWidth(item.getNodeValue());
+					fe.add(sep);
 				} else if (fieldComponent.equals("select")) {
 					Select select = new Select();
 					ArrayList<Option> options = new ArrayList<Option>();
