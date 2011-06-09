@@ -47,7 +47,7 @@ public class Config {
 	private static Logger log = LoggerFactory.getLogger(Config.class);
 	public static TreeMap<String, String> values = new TreeMap<String, String>();
 	
-	// Default directories
+	// Server specific configuration
 	public static final String HOME_DIR = ServerDetector.getHomeDir();
 	public static final String TMP_DIR = ServerDetector.getTempDir();
 	public static final String NULL_DEVICE = ServerDetector.getNullDevice();
