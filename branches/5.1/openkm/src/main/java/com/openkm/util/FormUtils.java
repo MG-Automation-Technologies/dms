@@ -54,6 +54,7 @@ import com.openkm.bean.form.Option;
 import com.openkm.bean.form.Select;
 import com.openkm.bean.form.SuggestBox;
 import com.openkm.bean.form.TextArea;
+import com.openkm.bean.form.Upload;
 import com.openkm.bean.form.Validator;
 import com.openkm.core.ParseException;
 
@@ -283,6 +284,24 @@ public class FormUtils {
 					if (item != null) sbox.setFilterMinLen(Integer.parseInt(item.getNodeValue()));
 					sbox.setValidators(parseValidators(nField));
 					fe.add(sbox);
+				} else if (fieldComponent.equals("upload")) {
+					Upload up = new Upload();
+					Node item = nField.getAttributes().getNamedItem("label");
+					if (item != null) up.setLabel(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("name");
+					if (item != null) up.setName(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("width");
+					if (item != null) up.setWidth(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("height");
+					if (item != null) up.setHeight(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("folderPath");
+					if (item != null) up.setFolderPath(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("documentName");
+					if (item != null) up.setDocumentName(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("uploadUuid");
+					if (item != null) up.setUploadUuid(item.getNodeValue());
+					up.setValidators(parseValidators(nField));
+					fe.add(up);
 				} else if (fieldComponent.equals("checkbox")) {
 					CheckBox checkBox = new CheckBox();
 					Node item = nField.getAttributes().getNamedItem("label");
