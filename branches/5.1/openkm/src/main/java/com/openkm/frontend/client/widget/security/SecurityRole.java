@@ -69,8 +69,8 @@ public class SecurityRole extends Composite implements HasWidgets {
 	private SimplePanel spLeft;
 	private SimplePanel spRight;
 	private SimplePanel spHeight;
-	private HTML addButtom;
-	private HTML removeButtom;
+	private HTML addButton;
+	private HTML removeButton;
 	private String path = "";
 	private String tmpRole = "";
 	
@@ -88,15 +88,15 @@ public class SecurityRole extends Composite implements HasWidgets {
 		spLeft.setWidth("4");
 		spRight.setWidth("1");
 		spHeight.setHeight("30");
-		addButtom = new HTML(Util.imageHTML("img/icon/security/add.gif"));
-		removeButtom = new HTML(Util.imageHTML("img/icon/security/remove.gif"));
+		addButton = new HTML(Util.imageHTML("img/icon/security/add.gif"));
+		removeButton = new HTML(Util.imageHTML("img/icon/security/remove.gif"));
 		
-		buttonPanel.add(addButtom);
+		buttonPanel.add(addButton);
 		buttonPanel.add(spHeight); // separator
-		buttonPanel.add(removeButtom);
+		buttonPanel.add(removeButton);
 		
-		addButtom.addClickHandler(addButtomListener);
-		removeButtom.addClickHandler(removeButtomListener);
+		addButton.addClickHandler(addButtonListener);
+		removeButton.addClickHandler(removeButtonListener);
 		
 		panel.add(spLeft);
 		panel.add(assignedRole);
@@ -116,7 +116,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 	/**
 	 * Add button listener
 	 */
-	ClickHandler addButtomListener = new ClickHandler() { 
+	ClickHandler addButtonListener = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (unassignedRole.getRole() != null) {
@@ -129,7 +129,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 	/**
 	 * Remove button listener
 	 */
-	ClickHandler removeButtomListener = new ClickHandler() { 
+	ClickHandler removeButtonListener = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (assignedRole.getRole() != null) {
