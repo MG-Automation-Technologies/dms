@@ -83,12 +83,12 @@ public class NotifyPanel extends Composite {
 					case TAB_USERS:
 						groupsFilter = filter.getText();
 						filter.setText(usersFilter);
-						filterText.setHTML(Main.i18n("secutiry.filter.by.users"));
+						filterText.setHTML(Main.i18n("security.filter.by.users"));
 						break;
 					case TAB_GROUPS:
 						usersFilter = filter.getText();
 						filter.setText(groupsFilter);
-						filterText.setHTML(Main.i18n("secutiry.filter.by.groups"));
+						filterText.setHTML(Main.i18n("security.filter.by.groups"));
 						break;
 				}
 			}
@@ -117,7 +117,7 @@ public class NotifyPanel extends Composite {
 			}
 		});
 		filter = new TextBox();
-		filterText = new HTML(Main.i18n("secutiry.filter.by.users"));
+		filterText = new HTML(Main.i18n("security.filter.by.users"));
 		filterPanel.add(checkBoxFilter);
 		filterPanel.add(new HTML("&nbsp;"));
 		filterPanel.add(filterText);
@@ -188,10 +188,10 @@ public class NotifyPanel extends Composite {
 		
 		switch (selected) {
 			case TAB_USERS:
-				filterText.setHTML(Main.i18n("secutiry.filter.by.users"));
+				filterText.setHTML(Main.i18n("security.filter.by.users"));
 				break;
 			case TAB_GROUPS:
-				filterText.setHTML(Main.i18n("secutiry.filter.by.groups"));
+				filterText.setHTML(Main.i18n("security.filter.by.groups"));
 				break;
 		}
 		
