@@ -76,7 +76,7 @@ public class FolderSelectTree extends Composite {
 				boolean refresh = true;
 				TreeItem item = event.getSelectedItem();
 				
-				// Enables or disables move buttom ( evalues security to move to folder with permissions )
+				// Enables or disables move button ( evalues security to move to folder with permissions )
 				evaluateSecurityToAction(item);
 				
 				// Case that not refreshing tree and file browser ( right click )
@@ -256,7 +256,7 @@ public class FolderSelectTree extends Composite {
 			actualItem.setState(true);
 			actualItem.setSelected(true);
 			
-			// Enables or disables move buttom ( evalues security to move to folder with permissions )
+			// Enables or disables move button ( evalues security to move to folder with permissions )
 			evaluateSecurityToAction(actualItem);
 			
 			getChilds(result.getPath());
@@ -303,7 +303,7 @@ public class FolderSelectTree extends Composite {
 			actualItem.setState(true);
 			actualItem.setSelected(true);
 			
-			// Enables or disables move buttom ( evalues security to move to folder with permissions )
+			// Enables or disables move button ( evalues security to move to folder with permissions )
 			evaluateSecurityToAction(actualItem);
 			
 			getChilds(((GWTFolder) result).getPath());
@@ -330,7 +330,7 @@ public class FolderSelectTree extends Composite {
 			actualItem.setState(true);
 			actualItem.setSelected(true);
 			
-			// Enables or disables move buttom ( evalues security to move to folder with permissions )
+			// Enables or disables move button ( evalues security to move to folder with permissions )
 			evaluateSecurityToAction(actualItem);
 			
 			getChilds(((GWTFolder) result).getPath());
@@ -356,7 +356,7 @@ public class FolderSelectTree extends Composite {
 			actualItem.setState(true);
 			actualItem.setSelected(true);
 			
-			// Enables or disables move buttom ( evalues security to move to folder with permissions )
+			// Enables or disables move button ( evalues security to move to folder with permissions )
 			evaluateSecurityToAction(actualItem);
 			
 			getChilds(((GWTFolder) result).getPath());
@@ -382,7 +382,7 @@ public class FolderSelectTree extends Composite {
 			actualItem.setState(true);
 			actualItem.setSelected(true);
 			
-			// Enables or disables move buttom ( evalues security to move to folder with permissions )
+			// Enables or disables move button ( evalues security to move to folder with permissions )
 			evaluateSecurityToAction(actualItem);
 			
 			getChilds(((GWTFolder) result).getPath());
@@ -537,12 +537,12 @@ public class FolderSelectTree extends Composite {
 	}	
 	
 	/**
-	 * Evalues secutiry to action ( to prevent not permission access to folder destination )
+	 * Evaluates security to action ( to prevent not permission access to folder destination )
 	 * 
 	 * @param item The tree item
 	 */
 	public void evaluateSecurityToAction(TreeItem item) {
-		// Enables or disables move buttom
+		// Enables or disables move button
 		if ( ( ((GWTFolder) item.getUserObject()).getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
 			Main.get().activeFolderTree.folderSelectPopup.enable(true);
 		} else {
