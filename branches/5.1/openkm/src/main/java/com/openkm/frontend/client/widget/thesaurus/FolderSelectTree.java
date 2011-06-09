@@ -86,7 +86,7 @@ public class FolderSelectTree extends Composite {
 					}
 				}
 				
-				// Enables or disables move buttom ( evalues security to move to folder with permissions )
+				// Enables or disables move button ( evalues security to move to folder with permissions )
 				if (rootItem.equals(actualItem)) {
 					Main.get().mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.enable(false);
 				} else {
