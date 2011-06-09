@@ -149,7 +149,7 @@ public class CategoriesWidget extends Composite {
 	}
 	
 	/**
-	 * Enables or disables move buttom
+	 * Enables or disables move button
 	 * 
 	 * @param enable
 	 */
