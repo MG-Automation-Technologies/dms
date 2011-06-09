@@ -119,7 +119,7 @@ public class NotifyRole extends Composite {
 	}
 	
 	/**
-	 * Add buttom handler
+	 * Add button handler
 	 */
 	ClickHandler addButtomHandler = new ClickHandler() { 
 		@Override
@@ -135,7 +135,7 @@ public class NotifyRole extends Composite {
 	};
 	
 	/**
-	 * Remove buttom handler
+	 * Remove button handler
 	 */
 	ClickHandler removeButtomHandler = new ClickHandler() { 
 		@Override
