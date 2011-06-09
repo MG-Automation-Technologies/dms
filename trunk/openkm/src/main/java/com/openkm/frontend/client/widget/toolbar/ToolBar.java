@@ -928,7 +928,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * @param folderParent the folder parent
 	 * @param origin The Origin panel 
 	 */
-	public void checkToolButtomPermissions(GWTFolder folder, GWTFolder folderParent, int originPanel) {
+	public void checkToolButtonPermissions(GWTFolder folder, GWTFolder folderParent, int originPanel) {
 		// Only if toolbar is enabled must change tools icons values
 		if (isEnabled()) {			
 			disableDownload();
@@ -1072,7 +1072,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * 
 	 * @param doc The document
 	 */
-	public void checkToolButtomPermissions(GWTDocument doc, GWTFolder folder) {
+	public void checkToolButtonPermissions(GWTDocument doc, GWTFolder folder) {
 		// Only if toolbar is enabled must change tools icons values
 		if (isEnabled()) {
 			boolean disable = false;
@@ -1274,7 +1274,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * 
 	 * @param mail The Mail
 	 */
-	public void checkToolButtomPermissions(GWTMail mail, GWTFolder folder) {
+	public void checkToolButtonPermissions(GWTMail mail, GWTFolder folder) {
 		// Only if toolbar is enabled must change tools icons values
 		if (isEnabled()) {
 			
