@@ -32,7 +32,8 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name="OKM_DB_METADATA_TYPE", uniqueConstraints={@UniqueConstraint(columnNames={"DMT_TABLE", "DMT_REAL_COLUMN"})})
+@Table(name="OKM_DB_METADATA_TYPE", uniqueConstraints={
+		@UniqueConstraint(columnNames={"DMT_TABLE", "DMT_REAL_COLUMN"})})
 public class DatabaseMetadataType implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public static final String TEXT = "text";

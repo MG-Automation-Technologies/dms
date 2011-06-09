@@ -30,6 +30,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Index;
+
 @Entity
 @Table(name="OKM_DB_METADATA_VALUE")
 public class DatabaseMetadataValue implements Serializable {
@@ -41,51 +43,67 @@ public class DatabaseMetadataValue implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
+	@Index(name="IDX_TABLE")
 	@Column(name="DMV_TABLE", length=32)
 	private String table;
 	
+	@Index(name="IDX_COL00")
 	@Column(name="DMV_COL00", length=MAX_LENGTH)
 	private String col00;
 	
+	@Index(name="IDX_COL01")
 	@Column(name="DMV_COL01", length=MAX_LENGTH)
 	private String col01;
 	
+	@Index(name="IDX_COL02")
 	@Column(name="DMV_COL02", length=MAX_LENGTH)
 	private String col02;
 	
+	@Index(name="IDX_COL03")
 	@Column(name="DMV_COL03", length=MAX_LENGTH)
 	private String col03;
 	
+	@Index(name="IDX_COL04")
 	@Column(name="DMV_COL04", length=MAX_LENGTH)
 	private String col04;
 	
+	@Index(name="IDX_COL05")
 	@Column(name="DMV_COL05", length=MAX_LENGTH)
 	private String col05;
 	
+	@Index(name="IDX_COL06")
 	@Column(name="DMV_COL06", length=MAX_LENGTH)
 	private String col06;
 	
+	@Index(name="IDX_COL07")
 	@Column(name="DMV_COL07", length=MAX_LENGTH)
 	private String col07;
 	
+	@Index(name="IDX_COL08")
 	@Column(name="DMV_COL08", length=MAX_LENGTH)
 	private String col08;
 	
+	@Index(name="IDX_COL09")
 	@Column(name="DMV_COL09", length=MAX_LENGTH)
 	private String col09;
 	
+	@Index(name="IDX_COL10")
 	@Column(name="DMV_COL10", length=MAX_LENGTH)
 	private String col10;
 	
+	@Index(name="IDX_COL11")
 	@Column(name="DMV_COL11", length=MAX_LENGTH)
 	private String col11;
 	
+	@Index(name="IDX_COL12")
 	@Column(name="DMV_COL12", length=MAX_LENGTH)
 	private String col12;
 	
+	@Index(name="IDX_COL13")
 	@Column(name="DMV_COL13", length=MAX_LENGTH)
 	private String col13;
 	
+	@Index(name="IDX_COL14")
 	@Column(name="DMV_COL14", length=MAX_LENGTH)
 	private String col14;
 
