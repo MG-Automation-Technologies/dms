@@ -52,8 +52,8 @@ public class NotifyUser extends Composite {
 	private UserScrollTable notifyUsersTable;
 	private UserScrollTable userTable;
 	private VerticalPanel buttonPanel;
-	private Image addButtom;
-	private Image removeButtom;
+	private Image addButton;
+	private Image removeButton;
 	
 	/**
 	 * NotifyUser
@@ -64,18 +64,18 @@ public class NotifyUser extends Composite {
 		userTable = new UserScrollTable(false);
 		
 		buttonPanel = new VerticalPanel();
-		addButtom = new Image(OKMBundleResources.INSTANCE.add());
-		removeButtom = new Image(OKMBundleResources.INSTANCE.remove());
+		addButton = new Image(OKMBundleResources.INSTANCE.add());
+		removeButton = new Image(OKMBundleResources.INSTANCE.remove());
 		
 		HTML space = new HTML("");
-		buttonPanel.add(addButtom);
+		buttonPanel.add(addButton);
 		buttonPanel.add(space); // separator
-		buttonPanel.add(removeButtom);
+		buttonPanel.add(removeButton);
 		
 		buttonPanel.setCellHeight(space, "40");
 		
-		addButtom.addClickHandler(addButtomHandler);
-		removeButtom.addClickHandler(removeButtomHandler);
+		addButton.addClickHandler(addButtonHandler);
+		removeButton.addClickHandler(removeButtonHandler);
 		
 		hPanel.setSize("374","140");
 		hPanel.add(notifyUsersTable);
@@ -123,7 +123,7 @@ public class NotifyUser extends Composite {
 	/**
 	 * Add button handler
 	 */
-	ClickHandler addButtomHandler = new ClickHandler() { 
+	ClickHandler addButtonHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (userTable.getUser() != null) {
@@ -139,7 +139,7 @@ public class NotifyUser extends Composite {
 	/**
 	 * Remove button handler
 	 */
-	ClickHandler removeButtomHandler = new ClickHandler() { 
+	ClickHandler removeButtonHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (notifyUsersTable.getUser() != null) {
