@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!ELEMENT property-groups (property-group+)>
 
-<!ELEMENT property-group (input|suggestbox|checkbox|textarea|select)*>
+<!ELEMENT property-group (input|suggestbox|checkbox|textarea|select|separator|text)*>
 <!ATTLIST property-group
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
@@ -72,4 +72,19 @@
 <!ATTLIST validator
 	type (req | alpha | dec | num | email | url | maxlen | minlen | lt | gt | min | max | regexp) "req"
 	parameter CDATA #IMPLIED
+>
+
+<!ELEMENT separator EMPTY>
+<!ATTLIST separator
+	label CDATA #REQUIRED
+	name CDATA #REQUIRED
+	width CDATA #IMPLIED
+>
+
+<!ELEMENT text EMPTY>
+<!ATTLIST text
+	label CDATA #REQUIRED
+	name CDATA #REQUIRED
+	width CDATA #IMPLIED
+	height CDATA #IMPLIED
 >
