@@ -223,7 +223,7 @@ public class FolderTree extends Composite implements OriginPanel {
 			} else {
 				folderParent = (GWTFolder) actualItem.getParentItem().getUserObject();
 			}
-			Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions((GWTFolder) actualItem
+			Main.get().mainPanel.topPanel.toolBar.checkToolButtonPermissions((GWTFolder) actualItem
 					.getUserObject(), folderParent, TREE_ROOT);
 
 			Main.get().mainPanel.desktop.navigator.status.unsetFlagChilds();
@@ -429,7 +429,7 @@ public class FolderTree extends Composite implements OriginPanel {
 			} else {
 				folderParent = (GWTFolder) actualItem.getParentItem().getUserObject();
 			}
-			Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions((GWTFolder) actualItem
+			Main.get().mainPanel.topPanel.toolBar.checkToolButtonPermissions((GWTFolder) actualItem
 					.getUserObject(), folderParent, TREE_ROOT);
 			evaluesFolderIcon(actualItem);
 			Main.get().mainPanel.desktop.navigator.status.unsetFlagAddSubscription();
@@ -462,7 +462,7 @@ public class FolderTree extends Composite implements OriginPanel {
 			} else {
 				folderParent = (GWTFolder) actualItem.getParentItem().getUserObject();
 			}
-			Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions((GWTFolder) actualItem
+			Main.get().mainPanel.topPanel.toolBar.checkToolButtonPermissions((GWTFolder) actualItem
 					.getUserObject(), folderParent, TREE_ROOT);
 			evaluesFolderIcon(actualItem);
 			Main.get().mainPanel.desktop.navigator.status.unsetFlagRemoveSubscription();
@@ -920,10 +920,10 @@ public class FolderTree extends Composite implements OriginPanel {
 					refresh = false;
 					if (!isActualItemRoot()) {
 						GWTFolder folderParent = (GWTFolder) actualItem.getParentItem().getUserObject();
-						Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(
+						Main.get().mainPanel.topPanel.toolBar.checkToolButtonPermissions(
 								(GWTFolder) actualItem.getUserObject(), folderParent, TREE_ROOT);
 					} else {
-						Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(
+						Main.get().mainPanel.topPanel.toolBar.checkToolButtonPermissions(
 								(GWTFolder) actualItem.getUserObject(), folderRoot, TREE_ROOT);
 					}
 					showTabFolderProperties(); // On this special case
