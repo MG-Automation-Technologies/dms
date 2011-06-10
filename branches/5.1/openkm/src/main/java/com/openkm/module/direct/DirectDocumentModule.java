@@ -90,6 +90,17 @@ public class DirectDocumentModule implements DocumentModule {
 			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, 
 			ItemExistsException, PathNotFoundException, AccessDeniedException, 
 			RepositoryException, IOException, DatabaseException {
+		log.debug("create({}, {}, {})", new Object[] { token, doc, is });
+		return create(token, doc, is, null);
+	}
+	
+	/**
+	 * Used when importing mail with attachments
+	 */
+	public Document create(String token, Document doc, InputStream is, String userId) throws 
+			UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
+			VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException, 
+			RepositoryException, IOException, DatabaseException {
 		log.debug("create({})", doc);
 		Document newDocument = null;
 		Node parentNode = null;
@@ -184,19 +195,30 @@ public class DirectDocumentModule implements DocumentModule {
 					mimeType, keywords.toArray(new String[keywords.size()]), is);
 			
 			// Check document filters
-			//DocumentUtils.checkFilters(session, documentNode, mimeType);
+			// DocumentUtils.checkFilters(session, documentNode, mimeType);
 			
 			// Set returned document properties
 			newDocument = BaseDocumentModule.getProperties(session, documentNode);
 			
-			// Check subscriptions
-			BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CREATE_DOCUMENT", null);
-			
-			// Check scripting
-			BaseScriptingModule.checkScripts(session, parentNode, documentNode, "CREATE_DOCUMENT");
-			
-			// Activity log
-			UserActivity.log(session.getUserID(), "CREATE_DOCUMENT", documentNode.getUUID(), mimeType+", "+size+", "+doc.getPath());
+			if (userId == null) {	
+				// Check subscriptions
+				BaseNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CREATE_DOCUMENT", null);
+				
+				// Check scripting
+				BaseScriptingModule.checkScripts(session, parentNode, documentNode, "CREATE_DOCUMENT");
+				
+				// Activity log
+				UserActivity.log(session.getUserID(), "CREATE_DOCUMENT", documentNode.getUUID(), mimeType+", "+size+", "+doc.getPath());
+			} else {
+				// Check subscriptions
+				BaseNotificationModule.checkSubscriptions(documentNode, userId, "CREATE_MAIL_ATTACHMENT", null);
+				
+				// Check scripting
+				BaseScriptingModule.checkScripts(session, parentNode, documentNode, "CREATE_MAIL_ATTACHMENT");
+				
+				// Activity log
+				UserActivity.log(userId, "CREATE_MAIL_ATTACHMENT", documentNode.getUUID(), mimeType+", "+size+", "+doc.getPath());
+			}
 		} catch (javax.jcr.ItemExistsException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
