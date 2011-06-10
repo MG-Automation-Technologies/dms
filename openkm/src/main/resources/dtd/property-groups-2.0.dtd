@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!ELEMENT property-groups (property-group+)>
 
-<!ELEMENT property-group (input|suggestbox|checkbox|textarea|select|separator|text)*>
+<!ELEMENT property-group (input | suggestbox | checkbox | textarea | select | separator | text)*>
 <!ATTLIST property-group
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
-	visible (true|false) "true"
-	readonly (true|false) "false"
+	visible (true | false) "true"
+	readonly (true | false) "false"
 >
 
 <!ELEMENT input (validator*)>
@@ -16,7 +16,7 @@
 	type (text | date | link | folder) "text"
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
-	readonly (true|false) "false"
+	readonly (true | false) "false"
 >
 
 <!ELEMENT suggestbox (validator*)>
@@ -25,7 +25,7 @@
 	name CDATA #REQUIRED
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
-	readonly (true|false) "false"
+	readonly (true | false) "false"
 	table CDATA #IMPLIED
 	filterQuery CDATA #REQUIRED
 	valueQuery CDATA #REQUIRED
@@ -39,7 +39,7 @@
 	name CDATA #REQUIRED
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
-	readonly (true|false) "false"
+	readonly (true | false) "false"
 >
 
 <!ELEMENT textarea (validator*)>
@@ -48,24 +48,24 @@
 	name CDATA #REQUIRED
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
-	readonly (true|false) "false"
+	readonly (true | false) "false"
 >
 
 <!ELEMENT select (option+, validator*)>
 <!ATTLIST select
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
-	type (simple|multiple) "simple"
+	type (simple | multiple) "simple"
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
-	readonly (true|false) "false"
+	readonly (true | false) "false"
 >
 
 <!ELEMENT option EMPTY>
 <!ATTLIST option
 	label CDATA #REQUIRED
 	value CDATA #REQUIRED
-	selected (true|false) "false"
+	selected (true | false) "false"
 >
 
 <!ELEMENT validator EMPTY>
