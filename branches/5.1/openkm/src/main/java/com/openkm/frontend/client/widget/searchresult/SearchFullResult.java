@@ -151,17 +151,17 @@ public class SearchFullResult extends Composite {
 		hPanel.add(new HTML(doc.getActualVersion().getName()));
 		hPanel.add(Util.hSpace("5"));
 		// Download
-		Image gotoDocument = new Image(OKMBundleResources.INSTANCE.download());
-		gotoDocument.addClickHandler(new ClickHandler() { 
+		Image downloadDocument = new Image(OKMBundleResources.INSTANCE.download());
+		downloadDocument.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
 				Util.downloadFile(docPath, "");
 			}
 			
 		});
-		gotoDocument.setTitle(Main.i18n("dashboard.keyword.goto.document"));
-		gotoDocument.setStyleName("okm-KeyMap-ImageHover");
-		hPanel.add(gotoDocument);
+		downloadDocument.setTitle(Main.i18n("general.menu.file.download.document"));
+		downloadDocument.setStyleName("okm-KeyMap-ImageHover");
+		hPanel.add(downloadDocument);
 		table.setWidget(rows++, 0, hPanel);		
 		
 		// Folder row
