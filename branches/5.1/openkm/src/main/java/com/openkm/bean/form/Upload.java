@@ -26,17 +26,21 @@ import java.util.List;
 
 public class Upload extends FormElement {
 	private static final long serialVersionUID = 1L;
+	public static final String TYPE_CREATE = "create";
+	public static final String TYPE_UPDATE = "update";
 	private List<Validator> validators = new ArrayList<Validator>();
+	private String type = TYPE_CREATE;
 	private String folderPath = "";
+	private String folderUuid = "";
 	private String documentName = "";
-	private String uploadUuid = "";
-	
-	public List<Validator> getValidators() {
-		return validators;
+	private String documentUuid = "";
+
+	public String getType() {
+		return type;
 	}
 
-	public void setValidators(List<Validator> validators) {
-		this.validators = validators;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public String getFolderPath() {
@@ -47,6 +51,14 @@ public class Upload extends FormElement {
 		this.folderPath = folderPath;
 	}
 
+	public String getFolderUuid() {
+		return folderUuid;
+	}
+
+	public void setFolderUuid(String folderUuid) {
+		this.folderUuid = folderUuid;
+	}
+
 	public String getDocumentName() {
 		return documentName;
 	}
@@ -54,13 +66,21 @@ public class Upload extends FormElement {
 	public void setDocumentName(String documentName) {
 		this.documentName = documentName;
 	}
-	
-	public String getUploadUuid() {
-		return uploadUuid;
+
+	public String getDocumentUuid() {
+		return documentUuid;
 	}
 
-	public void setUploadUuid(String uploadUuid) {
-		this.uploadUuid = uploadUuid;
+	public void setDocumentUuid(String documentUuid) {
+		this.documentUuid = documentUuid;
+	}
+	
+	public List<Validator> getValidators() {
+		return validators;
+	}
+
+	public void setValidators(List<Validator> validators) {
+		this.validators = validators;
 	}
 	
 	public String toString() {
@@ -71,8 +91,10 @@ public class Upload extends FormElement {
 		sb.append(", width="); sb.append(width);
 		sb.append(", height="); sb.append(height);
 		sb.append(", folderPath="); sb.append(folderPath);
+		sb.append(", folderUuid="); sb.append(folderUuid);
 		sb.append(", documentName="); sb.append(documentName);
-		sb.append(", uploadUuid="); sb.append(uploadUuid);
+		sb.append(", documentUuid="); sb.append(documentUuid);
+		sb.append(", type="); sb.append(type);
 		sb.append(", validators="); sb.append(validators);
 		sb.append("}");
 		return sb.toString();
