@@ -90,6 +90,7 @@ import com.openkm.core.VirusDetectedException;
 import com.openkm.dao.bean.MailAccount;
 import com.openkm.dao.bean.MailFilter;
 import com.openkm.dao.bean.MailFilterRule;
+import com.openkm.module.direct.DirectDocumentModule;
 import com.openkm.module.direct.DirectMailModule;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.pop3.POP3Folder;
@@ -462,7 +463,7 @@ public class MailUtils {
 			new DirectMailModule().create(systemToken, mail, ma.getUser());
 			
 			try {
-				addAttachments(mail, msg);
+				addAttachments(mail, msg, ma.getUser());
 			} catch (UnsupportedMimeTypeException e) {
 				log.warn(e.getMessage(), e);
 			} catch (FileSizeExceededException e) {
@@ -607,7 +608,7 @@ public class MailUtils {
 	/**
 	 * Add attachments to an imported mail.
 	 */
-	private static void addAttachments(com.openkm.bean.Mail mail, Part p) throws MessagingException,
+	private static void addAttachments(com.openkm.bean.Mail mail, Part p, String userId) throws MessagingException,
 			IOException, UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
 			VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException,
 			RepositoryException, DatabaseException {
@@ -616,7 +617,6 @@ public class MailUtils {
 		if (p.isMimeType("multipart/*")) {
 			Multipart mp = (Multipart)p.getContent();
 			int count = mp.getCount();
-			OKMDocument okmDocument = OKMDocument.getInstance();
 			
 			for (int i = 1; i < count; i++) {
 				BodyPart bp = mp.getBodyPart(i);
@@ -625,9 +625,9 @@ public class MailUtils {
 					Document attachment = new Document();
 					String mimeType = Config.mimeTypes.getContentType(bp.getFileName().toLowerCase());
 					attachment.setMimeType(mimeType);
-					attachment.setPath(mail.getPath()+"/"+bp.getFileName());
+					attachment.setPath(mail.getPath() + "/" + bp.getFileName());
 					InputStream is = bp.getInputStream();
-					okmDocument.create(systemToken, attachment, is);
+					new DirectDocumentModule().create(systemToken, attachment, is, userId);
 					is.close();
 				}
 			}
