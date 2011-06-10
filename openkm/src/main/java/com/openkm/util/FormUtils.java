@@ -567,6 +567,32 @@ public class FormUtils {
 			sb.append("<i>Transition:</i> ");
 			sb.append(button.getTransition());
 			ret.put("others", sb.toString());
+		} else if (fe instanceof Upload) {
+			Upload up = (Upload) fe;
+			ret.put("field", "Upload");
+			StringBuilder sb = new StringBuilder();
+			sb.append("<i>Type:</i> ");
+			sb.append(up.getType());
+			sb.append("<br/>");
+			sb.append("<i>FolderPath:</i> ");
+			sb.append(up.getFolderPath());
+			sb.append("<br/>");
+			sb.append("<i>FolderUuid:</i> ");
+			sb.append(up.getFolderUuid());
+			sb.append("<br/>");
+			sb.append("<i>DocumentName:</i> ");
+			sb.append(up.getDocumentName());
+			sb.append("<br/>");
+			sb.append("<i>DocumentUuid:</i> ");
+			sb.append(up.getDocumentUuid());
+			drawValidators(sb, up.getValidators());
+			ret.put("others", sb.toString());
+		} else if (fe instanceof Separator) {
+			ret.put("field", "Separator");
+			ret.put("others", "");
+		} else if (fe instanceof Text) {
+			ret.put("field", "Text");
+			ret.put("others", "");
 		}
 		
 		return ret;
