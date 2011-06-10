@@ -22,11 +22,14 @@
 package com.openkm.frontend.client.widget.searchresult;
 
 import java.util.Iterator;
+import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -39,14 +42,19 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
+import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.GWTQueryResult;
+import com.openkm.frontend.client.service.OKMPropertyGroupService;
+import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
 import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.WidgetUtil;
 import com.openkm.frontend.client.widget.dashboard.keymap.TagCloud;
+import com.openkm.frontend.client.widget.form.FormManager;
 
 /**
  * SearchFullResult
@@ -55,6 +63,7 @@ import com.openkm.frontend.client.widget.dashboard.keymap.TagCloud;
  *
  */
 public class SearchFullResult extends Composite {
+	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT.create(OKMPropertyGroupService.class);
 	
 	private ScrollPanel scrollPanel;
 	private FlexTable table;
@@ -207,6 +216,22 @@ public class SearchFullResult extends Composite {
 			table.setWidget(rows++, 0, hPanel5);
 		}
 		
+		// PropertyGroups
+		if (Main.get().mainPanel.search.searchBrowser.searchIn.searchControl.showPropertyGroups.getValue()) {
+			final HorizontalPanel propertyGroupsPanel = new HorizontalPanel();
+			table.setWidget(rows++, 0, propertyGroupsPanel);
+			propertyGroupService.getGroups(doc.getPath(), new AsyncCallback<List<GWTPropertyGroup>>() {
+				@Override
+				public void onSuccess(List<GWTPropertyGroup> result) {
+					drawPropertyGroups(docPath, result, propertyGroupsPanel);
+				}
+				@Override
+				public void onFailure(Throwable caught) {
+					Main.get().showError("getGroups", caught);
+				}
+			});
+		}
+		
 		// Separator end line
 		Image horizontalLine = new Image("img/transparent_pixel.gif");
 		horizontalLine.setStyleName("okm-TopPanel-Line-Border");
@@ -214,6 +239,71 @@ public class SearchFullResult extends Composite {
 		table.setWidget(rows, 0, horizontalLine);
 		table.getFlexCellFormatter().setVerticalAlignment(rows, 0, HasAlignment.ALIGN_BOTTOM);
 		table.getFlexCellFormatter().setHeight(rows, 0, "30");		
+	}
+	
+	/**
+	 * drawPropertyGroups
+	 * 
+	 * @param docPath
+	 * @param propertyGroups
+	 * @param propertyGroupsPanel
+	 */
+	private void drawPropertyGroups(final String docPath, final List<GWTPropertyGroup> propertyGroups, 
+									final HorizontalPanel propertyGroupsPanel) {
+		if (propertyGroups.size()>0) {
+			Status status = Main.get().mainPanel.search.searchBrowser.searchResult.status;
+			status.setFlag_refreshPropertyGroups();
+			final GWTPropertyGroup propertyGroup = propertyGroups.remove(0);
+			propertyGroupService.getProperties(docPath, propertyGroup.getName(), new AsyncCallback<List<GWTFormElement>>() {
+				@Override
+				public void onSuccess(List<GWTFormElement> result) {
+					if (propertyGroupsPanel.getWidgetCount()==0) {
+						HTML label = new HTML("");
+						label.setStyleName("okm-Security-Title");
+						label.setHeight("15");
+						Image verticalLine = new Image("img/transparent_pixel.gif");
+						verticalLine.setStyleName("okm-Vertical-Line-Border");
+						verticalLine.setSize("2","100%");
+						VerticalPanel vlPanel = new VerticalPanel();						
+						vlPanel.add(label);
+						vlPanel.add(verticalLine);
+						vlPanel.setCellWidth(verticalLine, "7");
+						vlPanel.setCellHeight(verticalLine, "100%");
+						vlPanel.setHeight("100%");
+						propertyGroupsPanel.add(vlPanel);
+						propertyGroupsPanel.setCellHorizontalAlignment(vlPanel, HasAlignment.ALIGN_LEFT);
+						propertyGroupsPanel.setCellWidth(vlPanel, "7");
+						propertyGroupsPanel.setCellHeight(vlPanel, "100%");
+					}
+					Image verticalLine = new Image("img/transparent_pixel.gif");
+					verticalLine.setStyleName("okm-Vertical-Line-Border");
+					verticalLine.setSize("2","100%");
+					FormManager manager = new FormManager();
+					manager.setFormElements(result);
+					manager.draw(true); // read only !
+					VerticalPanel vPanel = new VerticalPanel();
+					HTML label = new HTML(propertyGroup.getLabel());
+					label.setStyleName("okm-Security-Title");
+					label.setHeight("15");
+					vPanel.add(label);
+					vPanel.add(manager.getTable());
+					propertyGroupsPanel.add(vPanel);
+					propertyGroupsPanel.add(verticalLine);
+					propertyGroupsPanel.setCellVerticalAlignment(vPanel, HasAlignment.ALIGN_TOP);
+					propertyGroupsPanel.setCellHorizontalAlignment(verticalLine, HasAlignment.ALIGN_CENTER);
+					propertyGroupsPanel.setCellWidth(verticalLine, "12");
+					propertyGroupsPanel.setCellHeight(verticalLine, "100%");
+					drawPropertyGroups(docPath, propertyGroups, propertyGroupsPanel);
+				}
+				@Override
+				public void onFailure(Throwable caught) {
+					Main.get().showError("drawPropertyGroups", caught);
+				}
+			});
+		} else {
+			Status status = Main.get().mainPanel.search.searchBrowser.searchResult.status;
+			status.unsetFlag_refreshPropertyGroups();
+		}
 	}
 	
 	/**
