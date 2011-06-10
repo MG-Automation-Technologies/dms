@@ -28,25 +28,14 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  *
  */
 public class GWTButton extends GWTFormElement implements IsSerializable {
-	public static final String TYPE_SUBMIT = "submit";
-	public static final String TYPE_TRANSITION = "transition";
-	private String type = TYPE_SUBMIT;
-	private String value = "";
+	private String transition = "";
 	
-	public String getType() {
-		return type;
+	public String getTransition() {
+		return transition;
 	}
 
-	public void setType(String type) {
-		this.type = type;
-	}
-	
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
+	public void setTransition(String transition) {
+		this.transition = transition;
 	}
 	
 	public String toString() {
@@ -54,10 +43,9 @@ public class GWTButton extends GWTFormElement implements IsSerializable {
 		sb.append("{");
 		sb.append("label="); sb.append(label);
 		sb.append(", name="); sb.append(name);
-		sb.append(", value="); sb.append(value);
+		sb.append(", transition="); sb.append(transition);
 		sb.append(", width="); sb.append(width);
 		sb.append(", height="); sb.append(height);
-		sb.append(", type="); sb.append(type);
 		sb.append("}");
 		return sb.toString();
 	}
