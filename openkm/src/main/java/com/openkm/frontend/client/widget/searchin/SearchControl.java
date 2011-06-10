@@ -78,8 +78,10 @@ public class SearchControl extends Composite {
 	HorizontalPanel searchTypePanel;
 	public final CheckBox searchTypeAnd;
 	public final CheckBox searchTypeOr;
+	public CheckBox showPropertyGroups;
 	private CheckBox compactResultsView;
 	private HTML compactResultsViewText;
+	private HTML showPropertyGroupsText;
 	public CheckBox dashboard;
 	private HTML saveUserNewsText;
 	private HTML resultsPageText;
@@ -100,11 +102,22 @@ public class SearchControl extends Composite {
 			public void onClick(ClickEvent event) {
 				if(compactResultsView.getValue()) {
 					switchResultsViewMode(RESULTS_VIEW_COMPACT);
+					table.getCellFormatter().setVisible(1, 0, false); // hide view property groups
 				} else {
 					switchResultsViewMode(RESULTS_VIEW_NORMAL);
+					table.getCellFormatter().setVisible(1, 0, true);  // show view property groups
 				}
 			}
 		});
+		showPropertyGroups = new CheckBox();
+		showPropertyGroups.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				if (searchButton.isEnabled()) {
+					executeSearch();
+				}
+			}
+		});	
 		dashboard = new CheckBox();
 		searchSavedName = new TextBox();
 		searchSavedName.setWidth("200");
@@ -251,13 +264,22 @@ public class SearchControl extends Composite {
 		searchTypePanel.setCellWidth(space1, "10");
 		
 		compactResultsViewText = new HTML(Main.i18n("search.view.compact.results"));
+		HorizontalPanel hPanel3 = new HorizontalPanel();
+		hPanel3.add(compactResultsView);
+		hPanel3.add(new HTML("&nbsp;"));
+		hPanel3.add(compactResultsViewText);
+		hPanel3.setCellVerticalAlignment(compactResultsView, HasAlignment.ALIGN_MIDDLE);
+		hPanel3.setCellVerticalAlignment(compactResultsViewText, HasAlignment.ALIGN_MIDDLE);
+		table.setWidget(0, 0, hPanel3);
+		
+		compactResultsViewText = new HTML(Main.i18n("search.view.compact.results"));
 		HorizontalPanel hPanel2 = new HorizontalPanel();
 		hPanel2.add(compactResultsView);
 		hPanel2.add(new HTML("&nbsp;"));
 		hPanel2.add(compactResultsViewText);
 		hPanel2.setCellVerticalAlignment(compactResultsView, HasAlignment.ALIGN_MIDDLE);
 		hPanel2.setCellVerticalAlignment(compactResultsViewText, HasAlignment.ALIGN_MIDDLE);
-		table.setWidget(0, 0, hPanel2);
+		table.setWidget(1, 0, hPanel2);
 		
 		saveUserNewsText = new HTML(Main.i18n("search.save.as.news"));
 		HorizontalPanel hPanel = new HorizontalPanel();
@@ -266,30 +288,31 @@ public class SearchControl extends Composite {
 		hPanel.add(saveUserNewsText);
 		hPanel.setCellVerticalAlignment(dashboard, HasAlignment.ALIGN_MIDDLE);
 		hPanel.setCellVerticalAlignment(saveUserNewsText, HasAlignment.ALIGN_MIDDLE);
-		table.setWidget(1, 0, hPanel);
+		table.setWidget(2, 0, hPanel);
 		
-		table.setWidget(2, 0, saveSearchButton);
-		table.setWidget(2, 1, searchSavedName);
+		table.setWidget(3, 0, saveSearchButton);
+		table.setWidget(3, 1, searchSavedName);
 		
 		resultsPageText = new HTML(Main.i18n("search.page.results"));
-		table.setWidget(3, 0, resultsPageText);
-		table.setWidget(3, 1, resultPage);
+		table.setWidget(4, 0, resultsPageText);
+		table.setWidget(4, 1, resultPage);
 		
 		searchTypeText = new HTML(Main.i18n("search.type"));
-		table.setHTML(4, 0, Main.i18n("search.type"));
-		table.setWidget(4, 1, searchTypePanel);
+		table.setHTML(5, 0, Main.i18n("search.type"));
+		table.setWidget(5, 1, searchTypePanel);
 		
-		table.setWidget(5, 0, cleanButton);
-		table.setWidget(5, 1, searchButton);
+		table.setWidget(6, 0, cleanButton);
+		table.setWidget(6, 1, searchButton);
 		
-		table.setWidget(6, 0, controlSearch);
+		table.setWidget(7, 0, controlSearch);
 		
-		table.getCellFormatter().setHorizontalAlignment(3, 0, HasAlignment.ALIGN_RIGHT);
 		table.getCellFormatter().setHorizontalAlignment(4, 0, HasAlignment.ALIGN_RIGHT);
 		table.getCellFormatter().setHorizontalAlignment(5, 0, HasAlignment.ALIGN_RIGHT);
+		table.getCellFormatter().setHorizontalAlignment(6, 0, HasAlignment.ALIGN_RIGHT);
 		table.getFlexCellFormatter().setColSpan(0, 0, 2);
 		table.getFlexCellFormatter().setColSpan(1, 0, 2);
-		table.getFlexCellFormatter().setColSpan(6, 0, 2);
+		table.getFlexCellFormatter().setColSpan(2, 0, 2);
+		table.getFlexCellFormatter().setColSpan(7, 0, 2);
 		
 		searchButton.setStyleName("okm-Button");
 		saveSearchButton.setStyleName("okm-Button");
@@ -452,6 +475,7 @@ public class SearchControl extends Composite {
 		cleanButton.setHTML(Main.i18n("button.clean"));
 		saveSearchButton.setHTML(Main.i18n("button.save.search"));
 		compactResultsViewText.setHTML(Main.i18n("search.view.compact.results"));
+		showPropertyGroupsText.setHTML(Main.i18n("search.view.propety.groups"));
 		saveUserNewsText.setHTML(Main.i18n("search.save.as.news"));
 		resultsPageText.setHTML(Main.i18n("search.page.results"));
 		searchTypeText.setHTML(Main.i18n("search.type"));
