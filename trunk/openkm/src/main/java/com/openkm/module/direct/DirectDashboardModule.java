@@ -499,7 +499,6 @@ public class DirectDashboardModule implements DashboardModule {
 		return al;
 	}
 	
-	
 	/**
 	 * Get documents from statement
 	 */
