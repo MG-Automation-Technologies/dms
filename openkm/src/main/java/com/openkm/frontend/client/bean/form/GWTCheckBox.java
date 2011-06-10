@@ -19,45 +19,68 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.bean;
+package com.openkm.frontend.client.bean.form;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class GWTOption implements IsSerializable {
-	private String label = "";
-	private String value = "";
-	private boolean selected = false;
-	
-	public boolean isSelected() {
-		return selected;
-	}
+/**
+ * GWTCheckBox
+ * 
+ * @author jllort
+ *
+ */
+public class GWTCheckBox extends GWTFormElement implements IsSerializable {
+	private List<GWTValidator> validators = new ArrayList<GWTValidator>();
+	private boolean value = false;
+	private String data = "";
+	private boolean readonly = false;
 
-	public void setSelected(boolean selected) {
-		this.selected = selected;
-	}
-
-	public String getLabel() {
-		return label;
-	}
-	
-	public void setLabel(String label) {
-		this.label = label;
-	}
-	
-	public String getValue() {
+	public boolean getValue() {
 		return value;
 	}
-	
-	public void setValue(String value) {
+
+	public void setValue(boolean value) {
 		this.value = value;
+	}
+	
+	public List<GWTValidator> getValidators() {
+		return validators;
+	}
+
+	public void setValidators(List<GWTValidator> validators) {
+		this.validators = validators;
+	}
+	
+	public boolean isReadonly() {
+		return readonly;
+	}
+
+	public void setReadonly(boolean readonly) {
+		this.readonly = readonly;
+	}
+	
+	public String getData() {
+		return data;
+	}
+
+	public void setData(String data) {
+		this.data = data;
 	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("label="); sb.append(label);
+		sb.append(", name="); sb.append(name);
 		sb.append(", value="); sb.append(value);
-		sb.append(", seected="); sb.append(selected);
+		sb.append(", width="); sb.append(width);
+		sb.append(", height="); sb.append(height);	
+		sb.append(", readonly="); sb.append(readonly);
+		sb.append(", validators="); sb.append(validators);
+		sb.append(", data="); sb.append(data);
 		sb.append("}");
 		return sb.toString();
 	}

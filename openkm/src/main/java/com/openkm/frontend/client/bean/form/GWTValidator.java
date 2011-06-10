@@ -19,53 +19,43 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.bean;
+package com.openkm.frontend.client.bean.form;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
-import com.openkm.frontend.client.bean.form.GWTFormElement;
 
 /**
- * Query params
+ * GWTValidator
  * 
  * @author jllort
  *
  */
-public class GWTPropertyParams implements IsSerializable {
+public class GWTValidator  implements IsSerializable  {
+	private String type = "";
+	private String parameter = "";
 	
-	private String grpName;
-	private String grpLabel;
-	private GWTFormElement formElement;
-	private String value;
-	
-	public String getGrpName() {
-		return grpName;
-	}
- 
-	public void setGrpName(String grpName) {
-		this.grpName = grpName;
-	}
- 
-	public GWTFormElement getFormElement() {
-		return formElement;
-	}
- 
-	public void setFormElement(GWTFormElement formElement) {
-		this.formElement = formElement;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
+	public String getType() {
+		return type;
 	}
 	
-	public String getGrpLabel() {
-		return grpLabel;
+	public void setType(String type) {
+		this.type = type;
 	}
-
-	public void setGrpLabel(String grpLabel) {
-		this.grpLabel = grpLabel;
+	
+	public String getParameter() {
+		return parameter;
+	}
+	
+	public void setParameter(String parameter) {
+		this.parameter = parameter;
+	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append("type="); sb.append(type);
+		sb.append(", parameter="); sb.append(parameter);
+		sb.append("}");
+		return sb.toString();
 	}
 }
+

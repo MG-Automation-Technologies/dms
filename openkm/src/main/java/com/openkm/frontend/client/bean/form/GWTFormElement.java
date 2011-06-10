@@ -19,34 +19,51 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.bean;
+package com.openkm.frontend.client.bean.form;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
+ * GWTFormElement
+ * 
  * @author jllort
- *
+ * 
  */
-public class GWTButton extends GWTFormElement implements IsSerializable {
-	private String transition = "";
-	
-	public String getTransition() {
-		return transition;
+public class GWTFormElement implements IsSerializable {
+	protected String label = "";
+	protected String name = "";
+	protected String width = "100px";
+	protected String height = "25px";
+
+	public String getWidth() {
+		return width;
 	}
 
-	public void setTransition(String transition) {
-		this.transition = transition;
+	public void setWidth(String width) {
+		this.width = width;
+	}
+
+	public String getHeight() {
+		return height;
+	}
+
+	public void setHeight(String height) {
+		this.height = height;
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
 	}
 	
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("{");
-		sb.append("label="); sb.append(label);
-		sb.append(", name="); sb.append(name);
-		sb.append(", transition="); sb.append(transition);
-		sb.append(", width="); sb.append(width);
-		sb.append(", height="); sb.append(height);
-		sb.append("}");
-		return sb.toString();
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

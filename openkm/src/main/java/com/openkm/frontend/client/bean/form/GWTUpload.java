@@ -19,26 +19,24 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.bean;
+package com.openkm.frontend.client.bean.form;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class GWTTextArea extends GWTFormElement implements IsSerializable {
+/**
+ * GWTUpload
+ * 
+ * @author jllort
+ *
+ */
+public class GWTUpload extends GWTFormElement implements IsSerializable {
 	private List<GWTValidator> validators = new ArrayList<GWTValidator>();
-	private String value = "";
-	private String data = "";
-	private boolean readonly = false;
-	
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
+	private String folderPath = "";
+	private String documentName = "";
+	private String uploadUuid = "";
 	
 	public List<GWTValidator> getValidators() {
 		return validators;
@@ -47,21 +45,29 @@ public class GWTTextArea extends GWTFormElement implements IsSerializable {
 	public void setValidators(List<GWTValidator> validators) {
 		this.validators = validators;
 	}
-	
-	public boolean isReadonly() {
-		return readonly;
+
+	public String getFolderPath() {
+		return folderPath;
 	}
 
-	public void setReadonly(boolean readonly) {
-		this.readonly = readonly;
-	}
-	
-	public String getData() {
-		return data;
+	public void setFolderPath(String folderPath) {
+		this.folderPath = folderPath;
 	}
 
-	public void setData(String data) {
-		this.data = data;
+	public String getDocumentName() {
+		return documentName;
+	}
+
+	public void setDocumentName(String documentName) {
+		this.documentName = documentName;
+	}
+	
+	public String getUploadUuid() {
+		return uploadUuid;
+	}
+
+	public void setUploadUuid(String uploadUuid) {
+		this.uploadUuid = uploadUuid;
 	}
 	
 	public String toString() {
@@ -69,12 +75,12 @@ public class GWTTextArea extends GWTFormElement implements IsSerializable {
 		sb.append("{");
 		sb.append("label="); sb.append(label);
 		sb.append(", name="); sb.append(name);
-		sb.append(", value="); sb.append(value);
 		sb.append(", width="); sb.append(width);
 		sb.append(", height="); sb.append(height);
-		sb.append(", readonly="); sb.append(readonly);
+		sb.append(", folderPath="); sb.append(folderPath);
+		sb.append(", documentName="); sb.append(documentName);
+		sb.append(", uploadUuid="); sb.append(uploadUuid);
 		sb.append(", validators="); sb.append(validators);
-		sb.append(", data="); sb.append(data);
 		sb.append("}");
 		return sb.toString();
 	}
