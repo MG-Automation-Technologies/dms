@@ -65,6 +65,9 @@ public class DirectMailModule implements MailModule {
 		return create(token, mail, null);
 	}
 	
+	/**
+	 * Used when importing mail from scheduler
+	 */
 	public Mail create(String token, Mail mail, String userId) throws AccessDeniedException, RepositoryException,
 			PathNotFoundException, ItemExistsException, VirusDetectedException, DatabaseException,
 			UserQuotaExceededException {
