@@ -19,43 +19,46 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.bean;
+package com.openkm.frontend.client.bean.form;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
- * GWTValidator
- * 
  * @author jllort
  *
  */
-public class GWTValidator  implements IsSerializable  {
-	private String type = "";
-	private String parameter = "";
+public class GWTButton extends GWTFormElement implements IsSerializable {
+	public static final String TYPE_SUBMIT = "submit";
+	public static final String TYPE_TRANSITION = "transition";
+	private String type = TYPE_SUBMIT;
+	private String value = "";
 	
 	public String getType() {
 		return type;
 	}
-	
+
 	public void setType(String type) {
 		this.type = type;
 	}
 	
-	public String getParameter() {
-		return parameter;
+	public String getValue() {
+		return value;
 	}
-	
-	public void setParameter(String parameter) {
-		this.parameter = parameter;
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("type="); sb.append(type);
-		sb.append(", parameter="); sb.append(parameter);
+		sb.append("label="); sb.append(label);
+		sb.append(", name="); sb.append(name);
+		sb.append(", value="); sb.append(value);
+		sb.append(", width="); sb.append(width);
+		sb.append(", height="); sb.append(height);
+		sb.append(", type="); sb.append(type);
 		sb.append("}");
 		return sb.toString();
 	}
 }
-

@@ -33,8 +33,8 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTPropertyParams;
+import com.openkm.frontend.client.bean.form.GWTFormElement;
 import com.openkm.frontend.client.widget.form.FormManager;
 
 /**
