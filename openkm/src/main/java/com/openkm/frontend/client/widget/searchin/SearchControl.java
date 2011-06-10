@@ -79,9 +79,11 @@ public class SearchControl extends Composite {
 	public final CheckBox searchTypeOr;
 	private CheckBox advancedView;
 	private CheckBox compactResultsView;
+	public CheckBox showPropertyGroups;
 	public CheckBox userNews;
 	private HTML advancedViewText;
 	private HTML compactResultsViewText;
+	private HTML showPropertyGroupsText;
 	private HTML saveUserNewsText;
 	private HTML resultsPageText;
 	private HTML searchTypeText;
@@ -115,11 +117,22 @@ public class SearchControl extends Composite {
 			public void onClick(ClickEvent event) {
 				if(compactResultsView.getValue()) {
 					switchResultsViewMode(RESULTS_VIEW_COMPACT);
+					table.getCellFormatter().setVisible(2, 0, false); // hide view property groups
 				} else {
 					switchResultsViewMode(RESULTS_VIEW_NORMAL);
+					table.getCellFormatter().setVisible(2, 0, true);  // show view property groups
 				}
 			}
-		});
+		});		
+		showPropertyGroups = new CheckBox();
+		showPropertyGroups.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				if (searchButton.isEnabled()) {
+					executeSearch();
+				}
+			}
+		});		
 		userNews = new CheckBox();
 		searchSavedName = new TextBox();
 		searchSavedName.setWidth("200");
@@ -283,43 +296,53 @@ public class SearchControl extends Composite {
 		hPanel2.setCellVerticalAlignment(compactResultsViewText, HasAlignment.ALIGN_MIDDLE);
 		table.setWidget(1, 0, hPanel2);
 		
-		saveUserNewsText = new HTML(Main.i18n("search.save.as.news"));
+		showPropertyGroupsText = new HTML(Main.i18n("search.view.propety.groups"));
 		HorizontalPanel hPanel3 = new HorizontalPanel();
-		hPanel3.add(userNews);
+		hPanel3.add(showPropertyGroups);
 		hPanel3.add(new HTML("&nbsp;"));
-		hPanel3.add(saveUserNewsText);
-		hPanel3.setCellVerticalAlignment(userNews, HasAlignment.ALIGN_MIDDLE);
-		hPanel3.setCellVerticalAlignment(saveUserNewsText, HasAlignment.ALIGN_MIDDLE);
+		hPanel3.add(showPropertyGroupsText);
+		hPanel3.setCellVerticalAlignment(compactResultsView, HasAlignment.ALIGN_MIDDLE);
+		hPanel3.setCellVerticalAlignment(showPropertyGroupsText, HasAlignment.ALIGN_MIDDLE);
 		table.setWidget(2, 0, hPanel3);
 		
-		table.setWidget(3, 0, saveSearchButton);
-		table.setWidget(3, 1, searchSavedName);
+		saveUserNewsText = new HTML(Main.i18n("search.save.as.news"));
+		HorizontalPanel hPanel4 = new HorizontalPanel();
+		hPanel4.add(userNews);
+		hPanel4.add(new HTML("&nbsp;"));
+		hPanel4.add(saveUserNewsText);
+		hPanel4.setCellVerticalAlignment(userNews, HasAlignment.ALIGN_MIDDLE);
+		hPanel4.setCellVerticalAlignment(saveUserNewsText, HasAlignment.ALIGN_MIDDLE);
+		table.setWidget(3, 0, hPanel4);
+		
+		table.setWidget(4, 0, saveSearchButton);
+		table.setWidget(4, 1, searchSavedName);
 		
 		resultsPageText = new HTML(Main.i18n("search.page.results"));
-		table.setWidget(4, 0, resultsPageText);
-		table.setWidget(4, 1, resultPage);
+		table.setWidget(5, 0, resultsPageText);
+		table.setWidget(5, 1, resultPage);
 		
 		searchTypeText = new HTML(Main.i18n("search.type"));
-		table.setHTML(5, 0, Main.i18n("search.type"));
-		table.setWidget(5, 1, searchTypePanel);
+		table.setHTML(6, 0, Main.i18n("search.type"));
+		table.setWidget(6, 1, searchTypePanel);
 		
-		table.setWidget(5, 0, cleanButton);
-		table.setWidget(5, 1, searchButton);
+		table.setWidget(6, 0, cleanButton);
+		table.setWidget(6, 1, searchButton);
 		
-		table.setWidget(6, 0, controlSearch);
+		table.setWidget(7, 0, controlSearch);
 		
-		table.getCellFormatter().setHorizontalAlignment(3, 0, HasAlignment.ALIGN_RIGHT);
 		table.getCellFormatter().setHorizontalAlignment(4, 0, HasAlignment.ALIGN_RIGHT);
 		table.getCellFormatter().setHorizontalAlignment(5, 0, HasAlignment.ALIGN_RIGHT);
+		table.getCellFormatter().setHorizontalAlignment(6, 0, HasAlignment.ALIGN_RIGHT);
 		table.getFlexCellFormatter().setColSpan(0, 0, 2);
 		table.getFlexCellFormatter().setColSpan(1, 0, 2);
 		table.getFlexCellFormatter().setColSpan(2, 0, 2);
-		table.getFlexCellFormatter().setColSpan(6, 0, 2);
+		table.getFlexCellFormatter().setColSpan(3, 0, 2);
+		table.getFlexCellFormatter().setColSpan(7, 0, 2);
 		
 		// By default is enabled search mode simple
-		table.getCellFormatter().setVisible(2, 0, false);
 		table.getCellFormatter().setVisible(3, 0, false);
-		table.getCellFormatter().setVisible(3, 1, false);
+		table.getCellFormatter().setVisible(4, 0, false);
+		table.getCellFormatter().setVisible(4, 1, false);
 		
 		searchButton.setStyleName("okm-Button");
 		saveSearchButton.setStyleName("okm-Button");
@@ -514,6 +537,7 @@ public class SearchControl extends Composite {
 		saveSearchButton.setHTML(Main.i18n("button.save.search"));
 		advancedViewText.setHTML(Main.i18n("search.view.advanced"));
 		compactResultsViewText.setHTML(Main.i18n("search.view.compact.results"));
+		showPropertyGroupsText.setHTML(Main.i18n("search.view.propety.groups"));
 		saveUserNewsText.setHTML(Main.i18n("search.save.as.news"));
 		resultsPageText.setHTML(Main.i18n("search.page.results"));
 		searchTypeText.setHTML(Main.i18n("search.type"));
@@ -563,16 +587,16 @@ public class SearchControl extends Composite {
 		searchMode = mode;
 		switch (searchMode) {
 			case SEARCH_MODE_SIMPLE:
-				table.getCellFormatter().setVisible(2, 0, false);
 				table.getCellFormatter().setVisible(3, 0, false);
-				table.getCellFormatter().setVisible(3, 1, false);
+				table.getCellFormatter().setVisible(4, 0, false);
+				table.getCellFormatter().setVisible(4, 1, false);
 				break;
 			
 			case SEARCH_MODE_ADVANCED:
 				advancedView.setValue(true); // switch search mode can be done by execute saved query
-				table.getCellFormatter().setVisible(2, 0, true);
 				table.getCellFormatter().setVisible(3, 0, true);
-				table.getCellFormatter().setVisible(3, 1, true);
+				table.getCellFormatter().setVisible(4, 0, true);
+				table.getCellFormatter().setVisible(4, 1, true);
 				break;
 		}
 		Main.get().mainPanel.search.searchBrowser.searchIn.switchSearchMode(searchMode);
