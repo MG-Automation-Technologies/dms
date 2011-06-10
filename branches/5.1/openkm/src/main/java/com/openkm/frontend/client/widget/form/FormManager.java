@@ -193,7 +193,7 @@ public class FormManager {
 		if (gwtMetadata instanceof GWTButton) {
 			final GWTButton gWTButton = (GWTButton) gwtMetadata;
 			if (submitForm!=null) {
-				submitForm.setVisible(false); // Always set form unvisible because there's new buttons
+				submitForm.setVisible(false); // Always set form hidden because there's new buttons
 			}
 			
 			Button transButton = new Button(gWTButton.getLabel());
