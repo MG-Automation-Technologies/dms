@@ -19,35 +19,43 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.bean;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.openkm.frontend.client.bean.form;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 /**
- * GWTSuggestBox
+ * GWTSelect
  * 
  * @author jllort
  *
  */
-public class GWTSuggestBox extends GWTFormElement implements IsSerializable  {
+public class GWTSelect extends GWTFormElement implements IsSerializable {
+	public static final String TYPE_SIMPLE = "simple";
+	public static final String TYPE_MULTIPLE = "multiple";
+	private Collection<GWTOption> options = new ArrayList<GWTOption>();
 	private List<GWTValidator> validators = new ArrayList<GWTValidator>();
-	private String value = "";
+	private String type = TYPE_SIMPLE;
 	private String data = "";
 	private boolean readonly = false;
-	private String table = "";
-	private String dialogTitle = "";
-	private String filterQuery = "";
-	private String valueQuery = "";
 
-	public String getValue() {
-		return value;
+	public Collection<GWTOption> getOptions() {
+		return options;
 	}
 
-	public void setValue(String value) {
-		this.value = value;
+	public void setOptions(Collection<GWTOption> options) {
+		this.options = options;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	public List<GWTValidator> getValidators() {
@@ -66,38 +74,6 @@ public class GWTSuggestBox extends GWTFormElement implements IsSerializable  {
 		this.readonly = readonly;
 	}
 	
-	public String getFilterQuery() {
-		return filterQuery;
-	}
-
-	public void setFilterQuery(String filterQuery) {
-		this.filterQuery = filterQuery;
-	}
-
-	public String getValueQuery() {
-		return valueQuery;
-	}
-
-	public void setValueQuery(String valueQuery) {
-		this.valueQuery = valueQuery;
-	}
-	
-	public String getTable() {
-		return table;
-	}
-
-	public void setTable(String table) {
-		this.table = table;
-	}
-	
-	public String getDialogTitle() {
-		return dialogTitle;
-	}
-
-	public void setDialogTitle(String dialogTitle) {
-		this.dialogTitle = dialogTitle;
-	}
-	
 	public String getData() {
 		return data;
 	}
@@ -111,14 +87,11 @@ public class GWTSuggestBox extends GWTFormElement implements IsSerializable  {
 		sb.append("{");
 		sb.append("label="); sb.append(label);
 		sb.append(", name="); sb.append(name);
-		sb.append(", value="); sb.append(value);
 		sb.append(", width="); sb.append(width);
 		sb.append(", height="); sb.append(height);
 		sb.append(", readonly="); sb.append(readonly);
-		sb.append(", table="); sb.append(table);
-		sb.append(", dialogTitle="); sb.append(dialogTitle);
-		sb.append(", filterQuery="); sb.append(filterQuery);
-		sb.append(", valueQuery="); sb.append(valueQuery);
+		sb.append(", type="); sb.append(type);
+		sb.append(", options="); sb.append(options);
 		sb.append(", validators="); sb.append(validators);
 		sb.append(", data="); sb.append(data);
 		sb.append("}");

@@ -19,30 +19,56 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.bean;
+package com.openkm.frontend.client.bean.form;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
+import com.openkm.frontend.client.bean.GWTFolder;
 
 /**
- * GWTCheckBox
+ * GWTInput
  * 
  * @author jllort
  *
  */
-public class GWTCheckBox extends GWTFormElement implements IsSerializable {
+public class GWTInput extends GWTFormElement implements IsSerializable {
+	public static final String TYPE_TEXT = "text";
+	public static final String TYPE_DATE = "date";
+	public static final String TYPE_LINK = "link";
+	public static final String TYPE_FOLDER = "folder";
 	private List<GWTValidator> validators = new ArrayList<GWTValidator>();
-	private boolean value = false;
-	private String data = "";
+	private String type = TYPE_TEXT;
+	private String value = "";
+	private Date date;
+	private Date dateTo; // Used only for search
 	private boolean readonly = false;
+	private String data = "";
+	private GWTFolder folder = new GWTFolder();
 
-	public boolean getValue() {
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+	
+	public String getValue() {
 		return value;
 	}
 
-	public void setValue(boolean value) {
+	public void setValue(String value) {
 		this.value = value;
 	}
 	
@@ -54,6 +80,14 @@ public class GWTCheckBox extends GWTFormElement implements IsSerializable {
 		this.validators = validators;
 	}
 	
+	public String getData() {
+		return data;
+	}
+
+	public void setData(String data) {
+		this.data = data;
+	}
+	
 	public boolean isReadonly() {
 		return readonly;
 	}
@@ -62,12 +96,20 @@ public class GWTCheckBox extends GWTFormElement implements IsSerializable {
 		this.readonly = readonly;
 	}
 	
-	public String getData() {
-		return data;
+	public GWTFolder getFolder() {
+		return folder;
 	}
 
-	public void setData(String data) {
-		this.data = data;
+	public void setFolder(GWTFolder folder) {
+		this.folder = folder;
+	}
+	
+	public Date getDateTo() {
+		return dateTo;
+	}
+
+	public void setDateTo(Date dateTo) {
+		this.dateTo = dateTo;
 	}
 	
 	public String toString() {
@@ -77,9 +119,11 @@ public class GWTCheckBox extends GWTFormElement implements IsSerializable {
 		sb.append(", name="); sb.append(name);
 		sb.append(", value="); sb.append(value);
 		sb.append(", width="); sb.append(width);
-		sb.append(", height="); sb.append(height);	
+		sb.append(", height="); sb.append(height);
 		sb.append(", readonly="); sb.append(readonly);
+		sb.append(", type="); sb.append(type);
 		sb.append(", validators="); sb.append(validators);
+		sb.append(", date="); sb.append(date);
 		sb.append(", data="); sb.append(data);
 		sb.append("}");
 		return sb.toString();

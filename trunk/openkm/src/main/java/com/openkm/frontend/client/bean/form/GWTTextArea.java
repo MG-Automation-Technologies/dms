@@ -19,49 +19,18 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.bean;
+package com.openkm.frontend.client.bean.form;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-/**
- * GWTInput
- * 
- * @author jllort
- *
- */
-public class GWTInput extends GWTFormElement implements IsSerializable {
-	public static final String TYPE_TEXT = "text";
-	public static final String TYPE_DATE = "date";
-	public static final String TYPE_LINK = "link";
-	public static final String TYPE_FOLDER = "folder";
+public class GWTTextArea extends GWTFormElement implements IsSerializable {
 	private List<GWTValidator> validators = new ArrayList<GWTValidator>();
-	private String type = TYPE_TEXT;
 	private String value = "";
-	private Date date;
-	private Date dateTo; // Used only for search
-	private boolean readonly = false;
 	private String data = "";
-	private GWTFolder folder = new GWTFolder();
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
+	private boolean readonly = false;
 	
 	public String getValue() {
 		return value;
@@ -79,14 +48,6 @@ public class GWTInput extends GWTFormElement implements IsSerializable {
 		this.validators = validators;
 	}
 	
-	public String getData() {
-		return data;
-	}
-
-	public void setData(String data) {
-		this.data = data;
-	}
-	
 	public boolean isReadonly() {
 		return readonly;
 	}
@@ -95,20 +56,12 @@ public class GWTInput extends GWTFormElement implements IsSerializable {
 		this.readonly = readonly;
 	}
 	
-	public GWTFolder getFolder() {
-		return folder;
+	public String getData() {
+		return data;
 	}
 
-	public void setFolder(GWTFolder folder) {
-		this.folder = folder;
-	}
-	
-	public Date getDateTo() {
-		return dateTo;
-	}
-
-	public void setDateTo(Date dateTo) {
-		this.dateTo = dateTo;
+	public void setData(String data) {
+		this.data = data;
 	}
 	
 	public String toString() {
@@ -120,9 +73,7 @@ public class GWTInput extends GWTFormElement implements IsSerializable {
 		sb.append(", width="); sb.append(width);
 		sb.append(", height="); sb.append(height);
 		sb.append(", readonly="); sb.append(readonly);
-		sb.append(", type="); sb.append(type);
 		sb.append(", validators="); sb.append(validators);
-		sb.append(", date="); sb.append(date);
 		sb.append(", data="); sb.append(data);
 		sb.append("}");
 		return sb.toString();
