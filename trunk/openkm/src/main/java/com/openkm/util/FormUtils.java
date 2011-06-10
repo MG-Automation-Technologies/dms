@@ -297,10 +297,14 @@ public class FormUtils {
 					if (item != null) up.setHeight(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("folderPath");
 					if (item != null) up.setFolderPath(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("folderUuid");
+					if (item != null) up.setFolderUuid(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("documentName");
 					if (item != null) up.setDocumentName(item.getNodeValue());
-					item = nField.getAttributes().getNamedItem("uploadUuid");
-					if (item != null) up.setUploadUuid(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("documentUuid");
+					if (item != null) up.setDocumentUuid(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("type");
+					if (item != null) up.setType(item.getNodeValue());
 					up.setValidators(parseValidators(nField));
 					fe.add(up);
 				} else if (fieldComponent.equals("checkbox")) {

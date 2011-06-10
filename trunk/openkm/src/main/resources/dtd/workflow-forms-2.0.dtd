@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!ELEMENT workflow-forms (workflow-form+)>
 
-<!ELEMENT workflow-form (input|suggestbox|upload|checkbox|textarea|select|button|separator|text)*>
+<!ELEMENT workflow-form (input | suggestbox | upload | checkbox | textarea | select | button | separator | text)*>
 <!ATTLIST workflow-form
 	task CDATA #REQUIRED
 >
@@ -15,7 +15,7 @@
 	type (text | date | link | folder) "text"
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
-	readonly (true|false) "false"
+	readonly (true | false) "false"
 >
 
 <!ELEMENT suggestbox (validator*)>
@@ -24,7 +24,7 @@
 	name CDATA #REQUIRED
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
-	readonly (true|false) "false"
+	readonly (true | false) "false"
 	table CDATA #IMPLIED
 	filterQuery CDATA #REQUIRED
 	valueQuery CDATA #REQUIRED
@@ -38,19 +38,22 @@
 	name CDATA #REQUIRED
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
-	folderPath CDATA #REQUIRED
+	folderPath CDATA #IMPLIED
+	folderUuid CDATA #IMPLIED
 	documentName CDATA #IMPLIED
+	documentUuid CDATA #IMPLIED
+	type (create | update) "create"
 >
 
 <!ELEMENT checkbox (validator*)>
 <!ATTLIST checkbox
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
-	value (true|false) "false"
+	value (true | false) "false"
 	data CDATA #IMPLIED
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
-	readonly (true|false) "false"
+	readonly (true | false) "false"
 >
 
 <!ELEMENT textarea (validator*)>
@@ -61,25 +64,25 @@
 	data CDATA #IMPLIED
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
-	readonly (true|false) "false"
+	readonly (true | false) "false"
 >
 
 <!ELEMENT select (option+, validator*)>
 <!ATTLIST select
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
-	type (simple|multiple) "simple"
+	type (simple | multiple) "simple"
 	data CDATA #IMPLIED
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
-	readonly (true|false) "false"
+	readonly (true | false) "false"
 >
 
 <!ELEMENT option EMPTY>
 <!ATTLIST option
 	label CDATA #REQUIRED
 	value CDATA #REQUIRED
-	selected (true|false) "false"
+	selected (true | false) "false"
 >
 
 <!ELEMENT validator EMPTY>
