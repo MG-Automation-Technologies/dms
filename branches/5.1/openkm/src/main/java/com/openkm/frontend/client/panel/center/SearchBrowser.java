@@ -40,7 +40,7 @@ import com.openkm.frontend.client.widget.searchresult.SearchResult;
  */
 public class SearchBrowser extends Composite {
 	
-	private final static int PANEL_TOP_HEIGHT 	= 200;
+	private final static int PANEL_TOP_HEIGHT 	= 210;
 	public final static int SPLITTER_HEIGHT 	= 10;
 	
 	private VerticalSplitPanelExtended verticalSplitPanel;
