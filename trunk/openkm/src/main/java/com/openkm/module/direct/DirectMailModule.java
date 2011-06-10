@@ -62,6 +62,13 @@ public class DirectMailModule implements MailModule {
 			PathNotFoundException, ItemExistsException, VirusDetectedException, DatabaseException,
 			UserQuotaExceededException {
 		log.debug("create({}, {})", token, mail);
+		return create(token, mail, null);
+	}
+	
+	public Mail create(String token, Mail mail, String userId) throws AccessDeniedException, RepositoryException,
+			PathNotFoundException, ItemExistsException, VirusDetectedException, DatabaseException,
+			UserQuotaExceededException {
+		log.debug("create({}, {}, {})", new Object[] { token, mail, userId });
 		Mail newMail = null;
 		Transaction t = null;
 		XASession session = null;
@@ -76,7 +83,7 @@ public class DirectMailModule implements MailModule {
 			} else {
 				session = (XASession) JcrSessionManager.getInstance().get(token);
 			}
-			
+						
 			String parent = FileUtils.getParent(mail.getPath());
 			String name = FileUtils.getName(mail.getPath());
 			Node parentNode = session.getRootNode().getNode(parent.substring(1));
@@ -100,14 +107,18 @@ public class DirectMailModule implements MailModule {
 			t.end();
 			t.commit();
 			
+			if (userId == null) {
+				userId = session.getUserID();
+			}
+			
 			// Check subscriptions
-			BaseNotificationModule.checkSubscriptions(mailNode, session.getUserID(), "CREATE_MAIL", null);
+			BaseNotificationModule.checkSubscriptions(mailNode, userId, "CREATE_MAIL", null);
 			
 			// Check scripting
 			BaseScriptingModule.checkScripts(session, parentNode, mailNode, "CREATE_MAIL");
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "CREATE_MAIL", mailNode.getUUID(), mail.getPath());
+			UserActivity.log(userId, "CREATE_MAIL", mailNode.getUUID(), mail.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);

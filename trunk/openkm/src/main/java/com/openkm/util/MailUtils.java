@@ -71,7 +71,6 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
-import com.openkm.api.OKMMail;
 import com.openkm.api.OKMRepository;
 import com.openkm.bean.Document;
 import com.openkm.bean.Mail;
@@ -92,6 +91,7 @@ import com.openkm.dao.bean.MailFilter;
 import com.openkm.dao.bean.MailFilterRule;
 import com.openkm.extension.core.ExtensionException;
 import com.openkm.jcr.JcrSessionManager;
+import com.openkm.module.direct.DirectMailModule;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.pop3.POP3Folder;
 
@@ -448,7 +448,6 @@ public class MailUtils {
 			VirusDetectedException, UserQuotaExceededException, IOException, ExtensionException {
 		String systemToken = JcrSessionManager.getInstance().getSystemToken();
 		OKMRepository okmRepository = OKMRepository.getInstance();
-		OKMMail okmMail = OKMMail.getInstance();
 		String path = grouping ? createGroupPath(mailPath, mail.getReceivedDate()) : mailPath;
 		
 		if (ma.getMailProtocol().equals(MailAccount.PROTOCOL_POP3)) {
@@ -461,7 +460,7 @@ public class MailUtils {
 		log.debug("newMailPath: {}", newMailPath);
 		
 		if (!okmRepository.hasNode(systemToken, newMailPath)) {
-			okmMail.create(systemToken, mail);
+			new DirectMailModule().create(systemToken, mail, ma.getUser());
 			
 			try {
 				addAttachments(mail, msg);
