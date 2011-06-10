@@ -422,6 +422,9 @@ public class FormUtils {
 		return fe;
 	}
 	
+	/**
+	 * Parse form element validators
+	 */
 	private static List<Validator> parseValidators(Node nField) {
 		List<Validator> validators = new ArrayList<Validator>();
 		NodeList nlValidators = nField.getChildNodes();
