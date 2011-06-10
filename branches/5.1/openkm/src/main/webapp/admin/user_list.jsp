@@ -63,14 +63,15 @@
           </tr>
           <tr>
             <td colspan="2" align="right">
-              <input type="button" id="fumi" value="Force user mail import" style="margin-right: 90px"/>
               <input type="submit" value="Seach"/>
             </td>
           </tr>
         </table>
       </form>
       <br/>
-      <div style="text-align: center;" id="dest"></div>
+      <div style="text-align: center;" id="dest">
+        <input type="button" id="fumi" value="Force user mail import"/>
+      </div>
       <br/>
       <table class="results" width="80%">
         <thead>
