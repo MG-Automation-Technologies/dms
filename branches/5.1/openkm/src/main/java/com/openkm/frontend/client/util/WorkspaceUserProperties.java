@@ -411,7 +411,7 @@ public class WorkspaceUserProperties {
 		Main.get().mainPanel.desktop.browser.fileBrowser.personalMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
 		Main.get().mainPanel.desktop.browser.fileBrowser.mailMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
 		Main.get().mainPanel.desktop.browser.fileBrowser.trashMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
-		Main.get().mainPanel.search.searchBrowser.searchResult.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.search.searchBrowser.searchResult.searchCompactResult.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
 		Main.get().mainPanel.topPanel.mainMenu.setAvailableOption(workspace.getAvailableOption());
 	}
 }

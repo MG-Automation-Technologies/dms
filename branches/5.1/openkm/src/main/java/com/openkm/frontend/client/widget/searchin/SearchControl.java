@@ -61,6 +61,8 @@ import com.openkm.frontend.client.service.OKMSearchServiceAsync;
 public class SearchControl extends Composite {
 	private final OKMSearchServiceAsync searchService = (OKMSearchServiceAsync) GWT.create(OKMSearchService.class);
 	private static final int MIN_WORD_LENGTH = 3;
+	public static final int RESULTS_VIEW_NORMAL 	= 0;
+	public static final int RESULTS_VIEW_COMPACT 	= 1;
 	
 	private ScrollPanel scrollPanel;
 	private FlexTable table;
@@ -76,10 +78,13 @@ public class SearchControl extends Composite {
 	HorizontalPanel searchTypePanel;
 	public final CheckBox searchTypeAnd;
 	public final CheckBox searchTypeOr;
+	private CheckBox compactResultsView;
+	private HTML compactResultsViewText;
 	public CheckBox dashboard;
 	private HTML saveUserNewsText;
 	private HTML resultsPageText;
 	private HTML searchTypeText;
+	private int resultsViewMode = RESULTS_VIEW_COMPACT;
 	
 	/**
 	 * SearchControl
@@ -89,6 +94,17 @@ public class SearchControl extends Composite {
 		table.setCellPadding(2);
 		table.setCellSpacing(2);
 		scrollPanel = new ScrollPanel(table);
+		compactResultsView = new CheckBox();
+		compactResultsView.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				if(compactResultsView.getValue()) {
+					switchResultsViewMode(RESULTS_VIEW_COMPACT);
+				} else {
+					switchResultsViewMode(RESULTS_VIEW_NORMAL);
+				}
+			}
+		});
 		dashboard = new CheckBox();
 		searchSavedName = new TextBox();
 		searchSavedName.setWidth("200");
@@ -234,6 +250,15 @@ public class SearchControl extends Composite {
 		searchTypePanel.add(searchTypeOr);
 		searchTypePanel.setCellWidth(space1, "10");
 		
+		compactResultsViewText = new HTML(Main.i18n("search.view.compact.results"));
+		HorizontalPanel hPanel2 = new HorizontalPanel();
+		hPanel2.add(compactResultsView);
+		hPanel2.add(new HTML("&nbsp;"));
+		hPanel2.add(compactResultsViewText);
+		hPanel2.setCellVerticalAlignment(compactResultsView, HasAlignment.ALIGN_MIDDLE);
+		hPanel2.setCellVerticalAlignment(compactResultsViewText, HasAlignment.ALIGN_MIDDLE);
+		table.setWidget(0, 0, hPanel2);
+		
 		saveUserNewsText = new HTML(Main.i18n("search.save.as.news"));
 		HorizontalPanel hPanel = new HorizontalPanel();
 		hPanel.add(dashboard);
@@ -241,29 +266,30 @@ public class SearchControl extends Composite {
 		hPanel.add(saveUserNewsText);
 		hPanel.setCellVerticalAlignment(dashboard, HasAlignment.ALIGN_MIDDLE);
 		hPanel.setCellVerticalAlignment(saveUserNewsText, HasAlignment.ALIGN_MIDDLE);
-		table.setWidget(0, 0, hPanel);
+		table.setWidget(1, 0, hPanel);
 		
-		table.setWidget(1, 0, saveSearchButton);
-		table.setWidget(1, 1, searchSavedName);
+		table.setWidget(2, 0, saveSearchButton);
+		table.setWidget(2, 1, searchSavedName);
 		
 		resultsPageText = new HTML(Main.i18n("search.page.results"));
-		table.setWidget(2, 0, resultsPageText);
-		table.setWidget(2, 1, resultPage);
+		table.setWidget(3, 0, resultsPageText);
+		table.setWidget(3, 1, resultPage);
 		
 		searchTypeText = new HTML(Main.i18n("search.type"));
-		table.setHTML(3, 0, Main.i18n("search.type"));
-		table.setWidget(3, 1, searchTypePanel);
+		table.setHTML(4, 0, Main.i18n("search.type"));
+		table.setWidget(4, 1, searchTypePanel);
 		
-		table.setWidget(4, 0, cleanButton);
-		table.setWidget(4, 1, searchButton);
+		table.setWidget(5, 0, cleanButton);
+		table.setWidget(5, 1, searchButton);
 		
-		table.setWidget(5, 0, controlSearch);
+		table.setWidget(6, 0, controlSearch);
 		
-		table.getCellFormatter().setHorizontalAlignment(2, 0, HasAlignment.ALIGN_RIGHT);
 		table.getCellFormatter().setHorizontalAlignment(3, 0, HasAlignment.ALIGN_RIGHT);
 		table.getCellFormatter().setHorizontalAlignment(4, 0, HasAlignment.ALIGN_RIGHT);
+		table.getCellFormatter().setHorizontalAlignment(5, 0, HasAlignment.ALIGN_RIGHT);
 		table.getFlexCellFormatter().setColSpan(0, 0, 2);
-		table.getFlexCellFormatter().setColSpan(5, 0, 2);
+		table.getFlexCellFormatter().setColSpan(1, 0, 2);
+		table.getFlexCellFormatter().setColSpan(6, 0, 2);
 		
 		searchButton.setStyleName("okm-Button");
 		saveSearchButton.setStyleName("okm-Button");
@@ -425,6 +451,7 @@ public class SearchControl extends Composite {
 		searchButton.setHTML(Main.i18n("button.search"));
 		cleanButton.setHTML(Main.i18n("button.clean"));
 		saveSearchButton.setHTML(Main.i18n("button.save.search"));
+		compactResultsViewText.setHTML(Main.i18n("search.view.compact.results"));
 		saveUserNewsText.setHTML(Main.i18n("search.save.as.news"));
 		resultsPageText.setHTML(Main.i18n("search.page.results"));
 		searchTypeText.setHTML(Main.i18n("search.type"));
@@ -466,6 +493,16 @@ public class SearchControl extends Composite {
 			Main.get().showError("SaveSearch", caught);
 		}
 	};
+	
+	/**
+	 * switchResultsViewMode
+	 * 
+	 * @param mode
+	 */
+	private void switchResultsViewMode (int mode) {
+		resultsViewMode = mode;
+		Main.get().mainPanel.search.searchBrowser.searchResult.switchResultsViewMode(resultsViewMode);
+	}
 	
 	/**
 	 * clean
