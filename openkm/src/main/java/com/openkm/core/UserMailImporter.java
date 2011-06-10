@@ -61,7 +61,10 @@ public class UserMailImporter extends TimerTask {
 			log.info("*** User mail importer activated ***");
 			
 			try {
-				if (!Config.SYSTEM_READONLY) {
+				if (Config.SYSTEM_READONLY) {
+					exceptionMessages.add("Warning: System in read-only mode");
+					log.warn("*** System in read-only mode ***");
+				} else {
 					String systemToken = JcrSessionManager.getInstance().getSystemToken();
 					Collection<String> users = OKMAuth.getInstance().getUsers(systemToken);
 					
@@ -72,9 +75,16 @@ public class UserMailImporter extends TimerTask {
 						for (Iterator<MailAccount> maIt = mailAccounts.iterator(); maIt.hasNext(); ) {
 							MailAccount ma = maIt.next();
 							
-							if (!Config.SYSTEM_READONLY) {
-								exceptionMessages.add("Id: " + ma.getId() + ", User: " + ma.getUser() + 
-										", Error: " + MailUtils.importMessages(uid, ma));
+							if (Config.SYSTEM_READONLY) {
+								exceptionMessages.add("Warning: System in read-only mode");
+								log.warn("*** System in read-only mode ***");
+							} else {
+								String exceptionMessage = MailUtils.importMessages(uid, ma);
+								
+								if (exceptionMessage != null) {
+									exceptionMessages.add("Id: " + ma.getId() + ", User: " + ma.getUser() + 
+										", Error: " + exceptionMessage);
+								}
 							}
 						}
 					}
