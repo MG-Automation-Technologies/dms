@@ -264,22 +264,22 @@ public class SearchControl extends Composite {
 		searchTypePanel.setCellWidth(space1, "10");
 		
 		compactResultsViewText = new HTML(Main.i18n("search.view.compact.results"));
-		HorizontalPanel hPanel3 = new HorizontalPanel();
-		hPanel3.add(compactResultsView);
-		hPanel3.add(new HTML("&nbsp;"));
-		hPanel3.add(compactResultsViewText);
-		hPanel3.setCellVerticalAlignment(compactResultsView, HasAlignment.ALIGN_MIDDLE);
-		hPanel3.setCellVerticalAlignment(compactResultsViewText, HasAlignment.ALIGN_MIDDLE);
-		table.setWidget(0, 0, hPanel3);
-		
-		compactResultsViewText = new HTML(Main.i18n("search.view.compact.results"));
 		HorizontalPanel hPanel2 = new HorizontalPanel();
 		hPanel2.add(compactResultsView);
 		hPanel2.add(new HTML("&nbsp;"));
 		hPanel2.add(compactResultsViewText);
 		hPanel2.setCellVerticalAlignment(compactResultsView, HasAlignment.ALIGN_MIDDLE);
 		hPanel2.setCellVerticalAlignment(compactResultsViewText, HasAlignment.ALIGN_MIDDLE);
-		table.setWidget(1, 0, hPanel2);
+		table.setWidget(0, 0, hPanel2);
+		
+		showPropertyGroupsText = new HTML(Main.i18n("search.view.propety.groups"));
+		HorizontalPanel hPanel3 = new HorizontalPanel();
+		hPanel3.add(showPropertyGroups);
+		hPanel3.add(new HTML("&nbsp;"));
+		hPanel3.add(showPropertyGroupsText);
+		hPanel3.setCellVerticalAlignment(compactResultsView, HasAlignment.ALIGN_MIDDLE);
+		hPanel3.setCellVerticalAlignment(showPropertyGroupsText, HasAlignment.ALIGN_MIDDLE);
+		table.setWidget(1, 0, hPanel3);
 		
 		saveUserNewsText = new HTML(Main.i18n("search.save.as.news"));
 		HorizontalPanel hPanel = new HorizontalPanel();
