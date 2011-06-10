@@ -350,10 +350,8 @@ public class FormUtils {
 					if (item != null) button.setLabel(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("name");
 					if (item != null) button.setName(item.getNodeValue());
-					item = nField.getAttributes().getNamedItem("value");
-					if (item != null) button.setValue(item.getNodeValue());
-					item = nField.getAttributes().getNamedItem("type");
-					if (item != null) button.setType(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("transition");
+					if (item != null) button.setTransition(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("width");
 					if (item != null) button.setWidth(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("height");
@@ -425,6 +423,9 @@ public class FormUtils {
 		return fe;
 	}
 	
+	/**
+	 * Parse form elements validators
+	 */
 	private static List<Validator> parseValidators(Node nField) {
 		List<Validator> validators = new ArrayList<Validator>();
 		NodeList nlValidators = nField.getChildNodes();
@@ -567,9 +568,35 @@ public class FormUtils {
 			Button button = (Button) fe;
 			ret.put("field", "Button");
 			StringBuilder sb = new StringBuilder();
-			sb.append("<i>Type:</i> ");
-			sb.append(button.getType());
+			sb.append("<i>Transition:</i> ");
+			sb.append(button.getTransition());
 			ret.put("others", sb.toString());
+		} else if (fe instanceof Upload) {
+			Upload up = (Upload) fe;
+			ret.put("field", "Upload");
+			StringBuilder sb = new StringBuilder();
+			sb.append("<i>Type:</i> ");
+			sb.append(up.getType());
+			sb.append("<br/>");
+			sb.append("<i>FolderPath:</i> ");
+			sb.append(up.getFolderPath());
+			sb.append("<br/>");
+			sb.append("<i>FolderUuid:</i> ");
+			sb.append(up.getFolderUuid());
+			sb.append("<br/>");
+			sb.append("<i>DocumentName:</i> ");
+			sb.append(up.getDocumentName());
+			sb.append("<br/>");
+			sb.append("<i>DocumentUuid:</i> ");
+			sb.append(up.getDocumentUuid());
+			drawValidators(sb, up.getValidators());
+			ret.put("others", sb.toString());
+		} else if (fe instanceof Separator) {
+			ret.put("field", "Separator");
+			ret.put("others", "");
+		} else if (fe instanceof Text) {
+			ret.put("field", "Text");
+			ret.put("others", "");
 		}
 		
 		return ret;
