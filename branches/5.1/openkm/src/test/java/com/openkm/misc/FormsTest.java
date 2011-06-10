@@ -100,21 +100,19 @@ public class FormsTest extends TestCase {
 		userInputFe = formUserInfoIt.next();
 		assertTrue(userInputFe instanceof Button);
 		assertEquals(((Button) userInputFe).getLabel(), "Goto 1");
-		assertEquals(((Button) userInputFe).getValue(), "route 1");
-		assertEquals(((Button) userInputFe).getType(), "transition");
+		assertEquals(((Button) userInputFe).getTransition(), "route 1");
 				
 		userInputFe = formUserInfoIt.next();
 		assertTrue(userInputFe instanceof Button);
 		assertEquals(((Button) userInputFe).getLabel(), "Goto 2");
-		assertEquals(((Button) userInputFe).getValue(), "route 2");
-		assertEquals(((Button) userInputFe).getType(), "transition");
+		assertEquals(((Button) userInputFe).getTransition(), "route 2");
 		
 		assertFalse(formUserInfoIt.hasNext());
 	}
 	
 	public void testPropertyGroups() throws Exception {
-		String pgFile = BASE_DIR + "/PropertyGroups.xml";
-		Map<PropertyGroup, List<FormElement>> pgForms = FormUtils.parsePropertyGroupsForms(pgFile);
+		String pgForm = BASE_DIR + "/PropertyGroups.xml";
+		Map<PropertyGroup, List<FormElement>> pgForms = FormUtils.parsePropertyGroupsForms(pgForm);
 		assertFalse(pgForms.isEmpty());
 		
 		List<FormElement> consulting = FormUtils.getPropertyGroupForms(pgForms, "okg:consulting");
