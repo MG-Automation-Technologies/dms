@@ -343,14 +343,14 @@ public class MailUtils {
 			
 			Folder folder = store.getFolder(ma.getMailFolder());
 			folder.open(Folder.READ_WRITE);
-			//Message messages[] = folder.getMessages();
+			// Message messages[] = folder.getMessages();
 			Message messages[] = folder.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
 			
 			for (int i=0; i < messages.length; i++) {
 				Message msg = messages[i];
-				//log.info(i + ": " + msg.getFrom()[0] + " " + msg.getSubject()+" "+msg.getContentType());
-				//log.info("Received: "+msg.getReceivedDate());
-				//log.info("Sent: "+msg.getSentDate());
+				// log.info(i + ": " + msg.getFrom()[0] + " " + msg.getSubject()+" "+msg.getContentType());
+				// log.info("Received: "+msg.getReceivedDate());
+				// log.info("Sent: "+msg.getSentDate());
 				
 				Calendar receivedDate = Calendar.getInstance();
 				Calendar sentDate = Calendar.getInstance();
@@ -369,7 +369,7 @@ public class MailUtils {
 				com.openkm.bean.Mail mail = new com.openkm.bean.Mail();
 				String body = getText(msg);
 				
-				//	log.info("getText: "+body);
+				// log.info("getText: "+body);
 				if (body.charAt(0) == 'H') {
 					mail.setMimeType("text/html");
 				} else if (body.charAt(0) == 'T') {
@@ -452,13 +452,13 @@ public class MailUtils {
 		String path = grouping ? createGroupPath(mailPath, mail.getReceivedDate()) : mailPath;
 		
 		if (ma.getMailProtocol().equals(MailAccount.PROTOCOL_POP3)) {
-			mail.setPath(path+"/"+((POP3Folder)folder).getUID(msg)+"-"+FileUtils.escape(msg.getSubject()));
+			mail.setPath(path + "/" + ((POP3Folder)folder).getUID(msg) + "-" + FileUtils.escape(msg.getSubject()));
 		} else {
-			mail.setPath(path+"/"+((IMAPFolder)folder).getUID(msg)+"-"+FileUtils.escape(msg.getSubject()));
+			mail.setPath(path + "/" + ((IMAPFolder)folder).getUID(msg) + "-" + FileUtils.escape(msg.getSubject()));
 		}
 		
-		String newMailPath = FileUtils.getParent(mail.getPath())+"/"+FileUtils.escape(FileUtils.getName(mail.getPath())); 
-		log.info("newMailPath: {}", newMailPath);
+		String newMailPath = FileUtils.getParent(mail.getPath()) + "/" + FileUtils.escape(FileUtils.getName(mail.getPath())); 
+		log.debug("newMailPath: {}", newMailPath);
 		
 		if (!okmRepository.hasNode(systemToken, newMailPath)) {
 			okmMail.create(systemToken, mail);
@@ -530,10 +530,10 @@ public class MailUtils {
 	private static String createGroupPath(String mailPath, Calendar receivedDate) throws DatabaseException,
 			RepositoryException, AccessDeniedException, ItemExistsException, PathNotFoundException,
 			ExtensionException {
-		log.info("createPath({}, {})", new Object[] { mailPath, receivedDate });
+		log.debug("createGroupPath({}, {})", new Object[] { mailPath, receivedDate });
 		String systemToken = JcrSessionManager.getInstance().getSystemToken();
 		OKMRepository okmRepository = OKMRepository.getInstance();
-		String path = mailPath+"/"+receivedDate.get(Calendar.YEAR);
+		String path = mailPath + "/" + receivedDate.get(Calendar.YEAR);
 		OKMFolder okmFolder = OKMFolder.getInstance();
 		
 		if (!okmRepository.hasNode(systemToken, path)) {
@@ -542,7 +542,7 @@ public class MailUtils {
 			okmFolder.create(systemToken, fld);
 		}
 		
-		path += "/"+(receivedDate.get(Calendar.MONTH)+1);
+		path += "/" + (receivedDate.get(Calendar.MONTH) + 1);
 		
 		if (!okmRepository.hasNode(systemToken, path)) {
 			com.openkm.bean.Folder fld = new com.openkm.bean.Folder();
@@ -550,7 +550,7 @@ public class MailUtils {
 			okmFolder.create(systemToken, fld);
 		}
 		
-		path += "/"+receivedDate.get(Calendar.DAY_OF_MONTH);
+		path += "/" + receivedDate.get(Calendar.DAY_OF_MONTH);
 		
 		if (!okmRepository.hasNode(systemToken, path)) {
 			com.openkm.bean.Folder fld = new com.openkm.bean.Folder();
@@ -558,7 +558,7 @@ public class MailUtils {
 			okmFolder.create(systemToken, fld);
 		}
 		
-		log.info("createPath: {}", path);
+		log.debug("createGroupPath: {}", path);
 		return path;
 	}
 	
