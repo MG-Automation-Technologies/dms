@@ -28,8 +28,8 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTDocument;
-import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTVersion;
+import com.openkm.frontend.client.bean.form.GWTFormElement;
 
 /**
  * @author jllort
