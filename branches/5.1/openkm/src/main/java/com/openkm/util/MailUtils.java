@@ -327,9 +327,9 @@ public class MailUtils {
 	 * You should create different local uidl list for different email account, because the uidl is only
 	 * unique for the same account. 
 	 */
-	public static String importMessages(String uid, MailAccount ma) throws PathNotFoundException, ItemExistsException,
-			VirusDetectedException, AccessDeniedException, RepositoryException, DatabaseException,
-			UserQuotaExceededException {
+	public static String importMessages(String uid, MailAccount ma) throws PathNotFoundException,
+			ItemExistsException, VirusDetectedException, AccessDeniedException, RepositoryException,
+			DatabaseException, UserQuotaExceededException {
 		log.debug("importMessages({}, {})", new Object[] { uid, ma });
 		Properties props = System.getProperties();
 		Session session = Session.getDefaultInstance(props);
@@ -345,10 +345,9 @@ public class MailUtils {
 			// Message messages[] = folder.getMessages();
 			Message messages[] = folder.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
 			
-			for (int i = 0; i < messages.length; i++) {
+			for (int i=0; i < messages.length; i++) {
 				Message msg = messages[i];
-				// log.info(i + ": " + msg.getFrom()[0] + " " +
-				// msg.getSubject()+" "+msg.getContentType());
+				// log.info(i + ": " + msg.getFrom()[0] + " " + msg.getSubject()+" "+msg.getContentType());
 				// log.info("Received: "+msg.getReceivedDate());
 				// log.info("Sent: "+msg.getSentDate());
 				
@@ -365,7 +364,7 @@ public class MailUtils {
 					sentDate.setTime(msg.getSentDate());
 				}
 				
-				log.debug("{} -> {} - {}", new Object[] { i, msg.getSubject(), msg.getReceivedDate() });
+				log.debug("{} -> {} - {}", new Object[] { i ,msg.getSubject(), msg.getReceivedDate() });
 				com.openkm.bean.Mail mail = new com.openkm.bean.Mail();
 				String body = getText(msg);
 				
@@ -402,7 +401,7 @@ public class MailUtils {
 						
 						if (checkRules(mail, mf.getFilterRules())) {
 							String mailPath = mf.getPath();
-							importMail(mailPath, mf.isGrouping(), folder, msg, ma, mail);
+							importMail(mailPath, mf.isGrouping(), folder, msg, ma, mail);		
 						}
 					}
 				}
@@ -414,7 +413,7 @@ public class MailUtils {
 					msg.setFlag(Flags.Flag.SEEN, false);
 				}
 				
-				// Delete readed mail if requested
+				// Delete read mail if requested
 				if (ma.isMailMarkDeleted()) {
 					msg.setFlag(Flags.Flag.DELETED, true);
 				}
@@ -452,13 +451,13 @@ public class MailUtils {
 		String path = grouping ? createGroupPath(mailPath, mail.getReceivedDate()) : mailPath;
 		
 		if (ma.getMailProtocol().equals(MailAccount.PROTOCOL_POP3)) {
-			mail.setPath(path+"/"+((POP3Folder)folder).getUID(msg)+"-"+FileUtils.escape(msg.getSubject()));
+			mail.setPath(path + "/" + ((POP3Folder)folder).getUID(msg) + "-" + FileUtils.escape(msg.getSubject()));
 		} else {
-			mail.setPath(path+"/"+((IMAPFolder)folder).getUID(msg)+"-"+FileUtils.escape(msg.getSubject()));
+			mail.setPath(path + "/" + ((IMAPFolder)folder).getUID(msg) + "-" + FileUtils.escape(msg.getSubject()));
 		}
 		
-		String newMailPath = FileUtils.getParent(mail.getPath())+"/"+FileUtils.escape(FileUtils.getName(mail.getPath())); 
-		log.info("newMailPath: {}", newMailPath);
+		String newMailPath = FileUtils.getParent(mail.getPath()) + "/" + FileUtils.escape(FileUtils.getName(mail.getPath())); 
+		log.debug("newMailPath: {}", newMailPath);
 		
 		if (!okmRepository.hasNode(systemToken, newMailPath)) {
 			okmMail.create(systemToken, mail);
@@ -529,10 +528,10 @@ public class MailUtils {
 	 */
 	private static String createGroupPath(String mailPath, Calendar receivedDate) throws DatabaseException,
 			RepositoryException, AccessDeniedException, ItemExistsException, PathNotFoundException {
-		log.info("createPath({}, {})", new Object[] { mailPath, receivedDate });
+		log.debug("createGroupPath({}, {})", new Object[] { mailPath, receivedDate });
 		String systemToken = JcrSessionManager.getInstance().getSystemToken();
 		OKMRepository okmRepository = OKMRepository.getInstance();
-		String path = mailPath+"/"+receivedDate.get(Calendar.YEAR);
+		String path = mailPath + "/" + receivedDate.get(Calendar.YEAR);
 		OKMFolder okmFolder = OKMFolder.getInstance();
 		
 		if (!okmRepository.hasNode(systemToken, path)) {
@@ -541,7 +540,7 @@ public class MailUtils {
 			okmFolder.create(systemToken, fld);
 		}
 		
-		path += "/"+(receivedDate.get(Calendar.MONTH)+1);
+		path += "/" + (receivedDate.get(Calendar.MONTH) + 1);
 		
 		if (!okmRepository.hasNode(systemToken, path)) {
 			com.openkm.bean.Folder fld = new com.openkm.bean.Folder();
@@ -549,7 +548,7 @@ public class MailUtils {
 			okmFolder.create(systemToken, fld);
 		}
 		
-		path += "/"+receivedDate.get(Calendar.DAY_OF_MONTH);
+		path += "/" + receivedDate.get(Calendar.DAY_OF_MONTH);
 		
 		if (!okmRepository.hasNode(systemToken, path)) {
 			com.openkm.bean.Folder fld = new com.openkm.bean.Folder();
@@ -557,7 +556,7 @@ public class MailUtils {
 			okmFolder.create(systemToken, fld);
 		}
 		
-		log.info("createPath: {}", path);
+		log.debug("createGroupPath: {}", path);
 		return path;
 	}
 	
