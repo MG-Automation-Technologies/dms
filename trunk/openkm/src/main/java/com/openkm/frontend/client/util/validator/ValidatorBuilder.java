@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.bean.GWTValidator;
+import com.openkm.frontend.client.bean.form.GWTValidator;
 
 import eu.maydu.gwt.validation.client.ValidationProcessor;
 import eu.maydu.gwt.validation.client.actions.FocusAction;
