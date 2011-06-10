@@ -25,8 +25,8 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.openkm.frontend.client.bean.GWTDocument;
-import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTVersion;
+import com.openkm.frontend.client.bean.form.GWTFormElement;
 
 /**
  * @author jllort
