@@ -101,7 +101,7 @@ public class DirectMailModule implements MailModule {
 			t.commit();
 			
 			// Check subscriptions
-			BaseNotificationModule.checkSubscriptions(mailNode, session.getUserID(), "CREATE", null);
+			BaseNotificationModule.checkSubscriptions(mailNode, session.getUserID(), "CREATE_MAIL", null);
 			
 			// Check scripting
 			BaseScriptingModule.checkScripts(session, parentNode, mailNode, "CREATE_MAIL");
