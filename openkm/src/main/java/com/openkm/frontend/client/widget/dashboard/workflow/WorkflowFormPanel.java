@@ -21,6 +21,7 @@
 package com.openkm.frontend.client.widget.dashboard.workflow;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -47,6 +48,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.FileToUpload;
 import com.openkm.frontend.client.bean.GWTProcessDefinition;
 import com.openkm.frontend.client.bean.GWTProcessInstance;
 import com.openkm.frontend.client.bean.GWTTaskInstance;
@@ -461,10 +463,10 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 	 */
 	final AsyncCallback<Object> callbackSetTaskInstanceValues = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
+			Main.get().mainPanel.dashboard.workflowDashboard.setProcessToExecuteNextTask(taskInstance.getProcessInstance().getId());
 			Main.get().mainPanel.dashboard.workflowDashboard.findUserTaskInstances();
 			clearPanel();
 		}
-
 		public void onFailure(Throwable caught) {
 			Main.get().showError("setTaskInstanceValues", caught);
 		}
@@ -472,6 +474,16 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 	
 	@Override
 	public void setTaskInstanceValues(double id, String transitionName) {
+		if (manager.hasFileUploadFormElement()) {
+			Main.get().fileUpload.enqueueFileToUpload(manager.getFilesToUpload(transitionName));
+		} else {
+			workflowService.setTaskInstanceValues(id, transitionName, manager.updateFormElementsValuesWithNewer(), callbackSetTaskInstanceValues);
+		}
+	}
+	
+	@Override
+	public void setTaskInstanceValues(double id, String transitionName, Collection<FileToUpload> filesToUpload) {
+		manager.updateFilesToUpload(filesToUpload);
 		workflowService.setTaskInstanceValues(id, transitionName, manager.updateFormElementsValuesWithNewer(), callbackSetTaskInstanceValues);
 	}
 	
