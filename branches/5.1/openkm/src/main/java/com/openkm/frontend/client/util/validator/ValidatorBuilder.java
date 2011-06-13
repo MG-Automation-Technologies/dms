@@ -21,6 +21,7 @@
 
 package com.openkm.frontend.client.util.validator;
 
+import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -90,7 +91,16 @@ public class ValidatorBuilder {
 						.addActionForFailure(new StyleAction("okm-validationFailedBorder"))
 						.addActionForFailure(new ErrorMsgLabelTextAction(errorLabel))
 				);
-			}
+				
+			} else if (widget instanceof FileUpload) {
+				hPanel.setCellVerticalAlignment(errorLabel, HasAlignment.ALIGN_TOP);
+				validationProcessor.addValidators(name+"_req", 
+						new NotEmptyFileUploadValidator((FileUpload) widget)
+						.addActionForFailure(new StyleAction("okm-validationFailedBorder"))
+						.addActionForFailure(new ErrorMsgLabelTextAction(errorLabel))
+				);
+				
+			} 
 			
 		} else if (type.equals("email")) {
 			HTML space = new HTML("");
