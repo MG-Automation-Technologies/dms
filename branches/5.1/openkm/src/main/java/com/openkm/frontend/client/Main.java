@@ -72,7 +72,7 @@ import com.openkm.frontend.client.widget.security.SecurityPopup;
 import com.openkm.frontend.client.widget.startup.StartUp;
 import com.openkm.frontend.client.widget.startup.StartUpPopup;
 import com.openkm.frontend.client.widget.test.TestPopup;
-import com.openkm.frontend.client.widget.upload.FileUpload;
+import com.openkm.frontend.client.widget.upload.FileUploadPopup;
 import com.openkm.frontend.client.widget.wizard.TemplateWizardPopup;
 import com.openkm.frontend.client.widget.wizard.WizardPopup;
 
@@ -100,7 +100,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	
 	// Other panel declaration
 	public StartUpPopup startUpPopup;
-	public FileUpload fileUpload;
+	public FileUploadPopup fileUpload;
 	public ErrorPopup errorPopup;
 	public ErrorPopup errorPopupLogout;
 	public MsgPopup msgPopup;
@@ -240,7 +240,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		startUpPopup.addStyleName("okm-DisableSelect");
 		
 		// Initialize general panels
-		fileUpload = new FileUpload();
+		fileUpload = new FileUploadPopup();
 		fileUpload.setStyleName("okm-Popup");
 		errorPopup = new ErrorPopup(false);
 		errorPopup.setStyleName("okm-Popup-Error");

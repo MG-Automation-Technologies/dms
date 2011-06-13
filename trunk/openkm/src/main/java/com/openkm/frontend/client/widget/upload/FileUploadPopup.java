@@ -21,18 +21,23 @@
 
 package com.openkm.frontend.client.widget.upload;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.OKMException;
+import com.openkm.frontend.client.bean.FileToUpload;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.contants.ui.UIFileUploadConstants;
@@ -43,7 +48,7 @@ import com.openkm.frontend.client.contants.ui.UIFileUploadConstants;
  * @author jllort
  *
  */
-public class FileUpload extends DialogBox {
+public class FileUploadPopup extends DialogBox {
 	
 	private Button closeButton;
 	private Button addButton;
@@ -60,7 +65,7 @@ public class FileUpload extends DialogBox {
 	/**
 	 * File upload
 	 */
-	public FileUpload() {
+	public FileUploadPopup() {
 		super(false,true);
 		ffUpload = new FancyFileUpload();
 		vPanel = new VerticalPanel();
@@ -69,8 +74,7 @@ public class FileUpload extends DialogBox {
 		closeButton = new Button(Main.i18n("fileupload.button.close"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-					hide();
-					addButton.setVisible(false);
+					executeCancel();
 				}
 			}
 		);
@@ -81,6 +85,11 @@ public class FileUpload extends DialogBox {
 					ffUpload.reset(enableImport);
 					addButton.setVisible(false); // Add new file button must be unvisible after clicking
 					sendButton.setVisible(true);
+					FileToUpload fileToUpload = new FileToUpload();
+					fileToUpload.setFileUpload(new FileUpload());
+					fileToUpload.setPath((String) Main.get().activeFolderTree.getActualPath());
+					fileToUpload.setAction(UIFileUploadConstants.ACTION_INSERT);
+					enqueueFileToUpload(new ArrayList<FileToUpload>(Arrays.asList(fileToUpload)));
 				}
 			}
 		);
@@ -93,18 +102,7 @@ public class FileUpload extends DialogBox {
 		sendButton.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				if (Main.get().mainPanel.bottomPanel.userInfo.isQuotaExceed()) {
-					Main.get().showError("UserQuotaExceed", 
-				             			 new OKMException("OKM-"+ErrorCode.ORIGIN_OKMBrowser + ErrorCode.CAUSE_QuotaExceed, ""));
-				} else {
-					ffUpload.users.setText(ffUpload.notifyPanel.getUsersToNotify());
-					ffUpload.roles.setText(ffUpload.notifyPanel.getRolesToNotify());
-					if (ffUpload.notifyToUser.getValue() && ffUpload.users.getText().equals("") && ffUpload.roles.getText().equals("")) {
-						ffUpload.errorNotify.setVisible(true);
-					} else if (ffUpload.getFilename() != null && !ffUpload.getFilename().equals("")) {
-						ffUpload.pendingUpload();
-					}
-				}
+				executeSend();
 			}
 		});
 		
@@ -163,6 +161,33 @@ public class FileUpload extends DialogBox {
 		setWidget(vPanel);
 	}
 	
+	/**
+	 * executeCancel
+	 */
+	protected void executeCancel() {
+		hide();
+		addButton.setVisible(false);
+		ffUpload.cancel();
+	}
+	
+	/**
+	 * executeSend
+	 */
+	protected void executeSend() {
+		if (Main.get().mainPanel.bottomPanel.userInfo.isQuotaExceed()) {
+			Main.get().showError("UserQuotaExceed", 
+		             			 new OKMException("OKM-"+ErrorCode.ORIGIN_OKMBrowser + ErrorCode.CAUSE_QuotaExceed, ""));
+		} else {
+			ffUpload.users.setText(ffUpload.notifyPanel.getUsersToNotify());
+			ffUpload.roles.setText(ffUpload.notifyPanel.getRolesToNotify());
+			if (ffUpload.notifyToUser.getValue() && ffUpload.users.getText().equals("") && ffUpload.roles.getText().equals("")) {
+				ffUpload.errorNotify.setVisible(true);
+			} else if (ffUpload.getFilename() != null && !ffUpload.getFilename().equals("")) {
+				ffUpload.pendingUpload();
+			}
+		}
+	}
+	
 	
 	/**
 	 * Language refresh
@@ -184,7 +209,7 @@ public class FileUpload extends DialogBox {
 	/**
 	 * Show file upload popup
 	 */
-	public void showPopup(boolean enableAddButton, boolean enableImport) {
+	protected void showPopup(boolean enableAddButton, boolean enableImport) {
 		this.enableAddButton = enableAddButton;
 		this.enableImport = enableImport;
 		setWidth(""+popupWidth);
@@ -267,5 +292,12 @@ public class FileUpload extends DialogBox {
 	 */
 	public boolean isDigitalSignature() {
 		return ffUpload.isDigitalSignature();
+	}
+	
+	/**
+	 * @param filesToUpload
+	 */
+	public void enqueueFileToUpload(Collection<FileToUpload> filesToUpload) {
+		ffUpload.enqueueFileToUpload(filesToUpload);
 	}
 }
