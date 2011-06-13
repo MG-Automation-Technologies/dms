@@ -21,6 +21,7 @@
 package com.openkm.frontend.client.widget.toolbar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -34,6 +35,7 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -41,6 +43,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.OKMException;
+import com.openkm.frontend.client.bean.FileToUpload;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
@@ -244,9 +247,11 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Execute adds documents
 	 */
 	public void executeAddDocument() {
-		Main.get().fileUpload.setPath((String) Main.get().activeFolderTree.getActualPath());
-		Main.get().fileUpload.setAction(UIFileUploadConstants.ACTION_INSERT);
-		Main.get().fileUpload.showPopup(true,true);
+		FileToUpload fileToUpload = new FileToUpload();
+		fileToUpload.setFileUpload(new FileUpload());
+		fileToUpload.setPath((String) Main.get().activeFolderTree.getActualPath());
+		fileToUpload.setAction(UIFileUploadConstants.ACTION_INSERT);
+		Main.get().fileUpload.enqueueFileToUpload(new ArrayList<FileToUpload>(Arrays.asList(fileToUpload)));
 		fireEvent(HasToolBarEvent.EXECUTE_ADD_DOCUMENT);
 	}
 	
@@ -351,9 +356,13 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Execute checkin
 	 */
 	public void exectuteCheckin() {
-		Main.get().fileUpload.setPath(Main.get().mainPanel.desktop.browser.fileBrowser.getPath());
-		Main.get().fileUpload.setAction(UIFileUploadConstants.ACTION_UPDATE);
-		Main.get().fileUpload.showPopup(false,false);
+		FileToUpload fileToUpload = new FileToUpload();
+		fileToUpload.setFileUpload(new FileUpload());
+		fileToUpload.setPath(Main.get().mainPanel.desktop.browser.fileBrowser.getPath());
+		fileToUpload.setAction(UIFileUploadConstants.ACTION_UPDATE);
+		fileToUpload.setEnableAddButton(false);
+		fileToUpload.setEnableImport(false);
+		Main.get().fileUpload.enqueueFileToUpload(new ArrayList<FileToUpload>(Arrays.asList(fileToUpload)));
 		fireEvent(HasToolBarEvent.EXECUTE_CHECKIN);
 	}
 	
