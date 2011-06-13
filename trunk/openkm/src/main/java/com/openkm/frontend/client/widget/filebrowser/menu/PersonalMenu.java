@@ -21,10 +21,15 @@
 
 package com.openkm.frontend.client.widget.filebrowser.menu;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.FileToUpload;
 import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
@@ -137,9 +142,13 @@ public class PersonalMenu extends MenuBase {
 	Command checkinFile = new Command() {
 		public void execute() {
 			if (checkinOption) {
-				Main.get().fileUpload.setPath(Main.get().mainPanel.desktop.browser.fileBrowser.getPath());
-				Main.get().fileUpload.setAction(UIFileUploadConstants.ACTION_UPDATE);
-				Main.get().fileUpload.showPopup(false,false);
+				FileToUpload fileToUpload = new FileToUpload();
+				fileToUpload.setFileUpload(new FileUpload());
+				fileToUpload.setPath(Main.get().mainPanel.desktop.browser.fileBrowser.getPath());
+				fileToUpload.setAction(UIFileUploadConstants.ACTION_UPDATE);
+				fileToUpload.setEnableAddButton(false);
+				fileToUpload.setEnableImport(false);
+				Main.get().fileUpload.enqueueFileToUpload(new ArrayList<FileToUpload>(Arrays.asList(fileToUpload)));
 				hide();
 			}
 		}
