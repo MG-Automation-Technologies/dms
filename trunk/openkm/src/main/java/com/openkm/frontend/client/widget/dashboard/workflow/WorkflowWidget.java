@@ -75,6 +75,7 @@ public class WorkflowWidget extends Composite {
 	private String headerTextKey;
 	private int widgetType = TYPE_PENDING_TASK;
 	private GWTTaskInstance taskInstancePooled = null;
+	private double processToExecuteNextTask = -1;
 	
 	/**
 	 * WorkflowWidget
@@ -178,14 +179,16 @@ public class WorkflowWidget extends Composite {
 		for (ListIterator<GWTTaskInstance> it = taskIntanceList.listIterator(); it.hasNext();) {
 			int row = table.getRowCount();
 			final GWTTaskInstance taskInstanceResult = it.next();
+			if (taskInstanceResult.getProcessInstance().getId()==processToExecuteNextTask) {
+				processToExecuteNextTask = -1;
+				Main.get().mainPanel.dashboard.workflowDashboard.workflowFormPanel.setTaskInstance(taskInstanceResult);
+			}
 			Anchor taskName = new Anchor();
 			taskName.setText(taskInstanceResult.getName());
 			taskName.setTitle(taskInstanceResult.getProcessInstance().getProcessDefinition().getName());
 			switch (widgetType) {
-			
 				case TYPE_PENDING_TASK:
 					taskName.addClickHandler(new ClickHandler() {
-						
 						@Override
 						public void onClick(ClickEvent event) {
 							Main.get().mainPanel.dashboard.workflowDashboard.workflowFormPanel.setTaskInstance(taskInstanceResult);
@@ -446,5 +449,12 @@ public class WorkflowWidget extends Composite {
 	 */
 	public void resetPooledTaskInstance() {
 		taskInstancePooled = null;
+	}
+	
+	/**
+	 * @param processToExecuteNextTask
+	 */
+	public void setProcessToExecuteNextTask(double processToExecuteNextTask) {
+		this.processToExecuteNextTask = processToExecuteNextTask;
 	}
 }
