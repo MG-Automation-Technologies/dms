@@ -41,6 +41,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -53,6 +54,8 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.FileToUpload;
+import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTKeyValue;
 import com.openkm.frontend.client.bean.GWTPropertyParams;
@@ -65,9 +68,15 @@ import com.openkm.frontend.client.bean.form.GWTOption;
 import com.openkm.frontend.client.bean.form.GWTSelect;
 import com.openkm.frontend.client.bean.form.GWTSuggestBox;
 import com.openkm.frontend.client.bean.form.GWTTextArea;
+import com.openkm.frontend.client.bean.form.GWTUpload;
 import com.openkm.frontend.client.bean.form.GWTValidator;
+import com.openkm.frontend.client.contants.ui.UIFileUploadConstants;
+import com.openkm.frontend.client.service.OKMDocumentService;
+import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import com.openkm.frontend.client.service.OKMKeyValueService;
 import com.openkm.frontend.client.service.OKMKeyValueServiceAsync;
+import com.openkm.frontend.client.service.OKMRepositoryService;
+import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
 import com.openkm.frontend.client.util.ISO8601;
 import com.openkm.frontend.client.util.MessageFormat;
@@ -89,6 +98,8 @@ import eu.maydu.gwt.validation.client.actions.FocusAction;
  */
 public class FormManager {
 	private final OKMKeyValueServiceAsync keyValueService = (OKMKeyValueServiceAsync) GWT.create(OKMKeyValueService.class);
+	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
+	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
 	
 	// Boolean contants
 	private String BOOLEAN_TRUE = String.valueOf(Boolean.TRUE);
@@ -328,6 +339,7 @@ public class FormManager {
 							Window.open(url, url, "");
 						}
 					});
+					anchor.setStyleName("okm-Hyperlink");
 					String containerName = ((GWTInput) gwtMetadata).getName() + "ContainerName";
 					hLinkPanel.add(new HTML("<div id=\""+containerName+"\"></div>\n"));
 					HTML space = new HTML("");
@@ -868,6 +880,67 @@ public class FormManager {
 					setRowWordWarp(row, 2, true);
 				}
 			}
+		} else if (gwtMetadata instanceof GWTUpload) {
+			final GWTUpload upload = (GWTUpload) gwtMetadata;
+			HorizontalPanel hPanel = new HorizontalPanel();
+			FileUpload fileUpload = new FileUpload();
+			fileUpload.setStyleName("okm-Input");
+			fileUpload.getElement().setAttribute("size", ""+upload.getWidth());
+			final Anchor documentLink = new Anchor();
+			// Setting document link by uuid
+			if (upload.getDocumentUuid()!=null && !upload.getDocumentUuid().equals("")) {
+				repositoryService.getPathByUUID(upload.getDocumentUuid(), new AsyncCallback<String>() {
+					@Override
+					public void onSuccess(String result) {
+						documentService.get(result, new AsyncCallback<GWTDocument>() {
+							@Override
+							public void onSuccess(GWTDocument result) {
+								final String docPath = result.getPath();
+								documentLink.setText(result.getName());
+								documentLink.addClickHandler(new ClickHandler() { 
+									@Override
+									public void onClick(ClickEvent event) {
+										String path = docPath.substring(0,docPath.lastIndexOf("/"));
+										CommonUI.openAllFolderPath(path, docPath);
+									}
+								});
+							}
+							@Override
+							public void onFailure(Throwable caught) {
+								Main.get().showError("get", caught);
+							}
+						});
+					}
+					@Override
+					public void onFailure(Throwable caught) {
+						Main.get().showError("getPathByUUID", caught);
+					}
+				});
+			} 
+			documentLink.setStyleName("okm-Hyperlink");
+			hPanel.add(documentLink);
+			hPanel.add(fileUpload);
+			hWidgetProperties.put(propertyName,hPanel);
+			table.setHTML(row, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
+			table.setWidget(row, 1, new HTML(""));
+			table.getCellFormatter().setVerticalAlignment(row,0,VerticalPanel.ALIGN_TOP);
+			table.getCellFormatter().setWidth(row, 1, "100%");		
+			setRowWordWarp(row, 2, true);
+			
+			// If folderPath is null must initialize value
+			if (upload.getFolderPath()==null || upload.getFolderPath().equals("") && 
+				upload.getFolderUuid()!=null && !upload.getFolderUuid().equals("")) {
+				repositoryService.getPathByUUID(upload.getFolderUuid(), new AsyncCallback<String>() {
+					@Override
+					public void onSuccess(String result) {
+						upload.setFolderPath(result);
+					}
+					@Override
+					public void onFailure(Throwable caught) {
+						Main.get().showError("getPathByUUID", caught);
+					}
+				});
+			}
 		}
 	}
 	
@@ -947,6 +1020,14 @@ public class FormManager {
 						ValidatorBuilder.addValidator(validationProcessor, focusAction, hPanel, "select_"+rows, validator, tableMulti);
 					}
 				}
+			} else if (formField instanceof GWTUpload) {
+				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formField.getName());
+				table.setWidget(rows, 1, hPanel);
+				
+				for (GWTValidator validator : ((GWTUpload) formField).getValidators()) {
+					FileUpload fileUpload = (FileUpload) hPanel.getWidget(1);
+					ValidatorBuilder.addValidator(validationProcessor, focusAction, hPanel, "fileupload_"+rows, validator, fileUpload);
+				}
 			}
 			rows++;
 		}
@@ -1023,6 +1104,8 @@ public class FormManager {
 							}
 						}
 					}
+				} else if (formElement instanceof GWTUpload) {
+					// Not aplicable to property groups
 				}
 			}
 		}
@@ -1100,6 +1183,8 @@ public class FormManager {
 						value += option.getValue();
 					}
 				}
+			} else if (formElement instanceof GWTUpload) {
+				// Not aplicable to property groups
 			}
 			
 			hPropertyParams.get(formElement.getName()).setValue(value);
@@ -1178,12 +1263,100 @@ public class FormManager {
 						}
 					} 
 				}
+			} else if (formElement instanceof GWTUpload) {
+				// Nothing to be done here, upload files are updated in file upload widget
 			}
 			
 			rows ++;
 		}
 		
 		return formElementList;
+	}
+	
+	/**
+	 * hasFileUploadFormElement
+	 * 
+	 * @return
+	 */
+	public boolean hasFileUploadFormElement() {
+		boolean found = false;
+		int rows = 0;
+		for (GWTFormElement formElement : formElementList) {
+			if (formElement instanceof GWTUpload) {
+				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
+				FileUpload fileUpload = (FileUpload) hPanel.getWidget(1);
+				if (!fileUpload.getFilename().equals("")) {
+					found  = true;
+				}
+				break;
+			}
+			rows++;
+		}
+		return found;
+	}
+	
+	/**
+	 * getFilesToUpload
+	 * 
+	 * @return
+	 */
+	public Collection<FileToUpload> getFilesToUpload(String transition) {
+		List<FileToUpload> filesToUpload= new ArrayList<FileToUpload>();
+		int rows = 0;
+		for (GWTFormElement formElement : formElementList) {
+			if (formElement instanceof GWTUpload) {
+				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
+				table.setWidget(rows, 1, hPanel);
+				FileUpload fileUpload = (FileUpload) hPanel.getWidget(1);
+				if (!fileUpload.getFilename().equals("")) {
+					hPanel.remove(fileUpload);
+					hPanel.add(new HTML(fileUpload.getFilename())); // replace uploadfile widget to text file
+					FileToUpload fileToUpload = new FileToUpload();
+					GWTUpload upload = (GWTUpload) formElement;
+					if (upload.getType().equals(GWTUpload.TYPE_CREATE)) {
+						fileToUpload.setAction(UIFileUploadConstants.ACTION_INSERT);
+					} else if (upload.getType().equals(GWTUpload.TYPE_UPDATE)) {
+						fileToUpload.setAction(UIFileUploadConstants.ACTION_UPDATE);
+					} 
+					fileToUpload.setName(formElement.getName());
+					fileToUpload.setFileUpload(fileUpload);
+					fileToUpload.setSize(upload.getWidth());
+					fileToUpload.setFireEvent(false);
+					fileToUpload.setPath(upload.getFolderPath());
+					fileToUpload.setDesiredDocumentName(upload.getDocumentName());
+					fileToUpload.setWorkflow(workflow);
+					fileToUpload.setLastToBeUploaded(false);
+					fileToUpload.setEnableAddButton(false);
+					fileToUpload.setEnableImport(false);
+					fileToUpload.setWorkflowTaskId(taskInstance.getId());
+					fileToUpload.setWorkflowTransition(transition);
+					filesToUpload.add(fileToUpload);
+				}
+			}
+			rows++;
+		}
+		// Indicates is the last file to be upload in the cycle
+		if (filesToUpload.size()>0) {
+			filesToUpload.get(filesToUpload.size()-1).setLastToBeUploaded(true);
+		}
+		return filesToUpload;
+	}
+
+	
+	/**
+	 * updateFilesToUpload
+	 * 
+	 * @param filesToUpload
+	 */
+	public void updateFilesToUpload(Collection<FileToUpload> filesToUpload) {
+		for (FileToUpload fileToUpload : filesToUpload) {
+			for (GWTFormElement formElement : formElementList) {
+				if (formElement.getName().equals(fileToUpload.getName())) {
+					GWTUpload upload = (GWTUpload) formElement;
+					upload.setDocumentUuid(fileToUpload.getDocumentUUID());
+				}
+			}
+		}
 	}
 	
 	/**
@@ -1209,6 +1382,8 @@ public class FormManager {
 				} else if (formElement instanceof GWTSelect) {
 					GWTSelect select = (GWTSelect) formElement;
 					select.setOptions(getOptionsValueFromVariable(formElement.getName(), select.getOptions())) ;
+				} else if (formElement instanceof GWTUpload) {
+					// No aplicable to property groups
 				}
 			}
 		}
@@ -1244,7 +1419,27 @@ public class FormManager {
 				if (!select.getData().equals("") && map.keySet().contains(select.getData())) {
 					select.setOptions(getOptionsValueFromVariable(map.get(select.getData()), select.getOptions())) ;
 				}
-			} 
+			} else if (formElement instanceof GWTUpload) {
+				GWTUpload upload = (GWTUpload) formElement;
+				if (!upload.getData().equals("") && map.keySet().contains(upload.getData())) {
+					GWTUpload uploadData = (GWTUpload) map.get(upload.getData());
+					if (!uploadData.getDocumentName().equals("")) {
+						upload.setDocumentName(uploadData.getDocumentName());
+					}
+					if (!uploadData.getDocumentUuid().equals("")) {
+						upload.setDocumentUuid(uploadData.getDocumentUuid());
+					}
+					if (!uploadData.getFolderPath().equals("")) {
+						upload.setFolderPath(uploadData.getFolderPath());
+					}
+					if (!uploadData.getFolderUuid().equals("")) {
+						upload.setFolderUuid(uploadData.getFolderUuid());
+					}
+					if (uploadData.getValidators().size()>0) {
+						upload.setValidators(uploadData.getValidators());
+					}
+				}
+			}
 		}
 	}
 	
@@ -1277,9 +1472,11 @@ public class FormManager {
 				}
 			}
 			return values;
+		} else if (obj instanceof GWTUpload) {
+			return null;
 		} else {
 			return null;
-		}
+		} 
 	}
 	
 	/**
@@ -1310,8 +1507,9 @@ public class FormManager {
 					}
 				}
 			}
-			
 			return values.toLowerCase().contains(BOOLEAN_TRUE); // test if on chain contains "true"
+		} else if (obj instanceof GWTUpload) {
+			return false;
 		} else {
 			return false;
 		}
@@ -1357,6 +1555,8 @@ public class FormManager {
 					}
 				}
 				option.setSelected(found); // always setting values, if not found
+			} else if (obj instanceof GWTUpload) {
+				return options;
 			} else {
 				return options;
 			}
