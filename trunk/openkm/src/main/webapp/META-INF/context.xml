@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<Context path="/OpenKM" docBase="OpenKM" reloadable="true" crossContext="true">
+<Context path="/OpenKM" docBase="OpenKM" reloadable="true" crossContext="true" allowLinking="true">
 
     <!-- maxActive: Maximum number of dB connections in pool. Make sure you
          configure your mysqld max_connections large enough to handle
