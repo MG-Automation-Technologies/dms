@@ -155,7 +155,7 @@ public class LanguageServlet extends BaseServlet {
 				ServletFileUpload upload = new ServletFileUpload(factory);
 				List<FileItem> items = upload.parseRequest(request);
 				String lgId = "";
-				String name = "";
+				String lgName = "";
 				String mimeType = "";
 				byte data[] = null;
 				
@@ -168,7 +168,7 @@ public class LanguageServlet extends BaseServlet {
 						} else if (item.getFieldName().equals("lg_id")) {
 							lgId = item.getString("UTF-8");
 						} else if (item.getFieldName().equals("lg_name")) {
-							name = item.getString("UTF-8");
+							lgName = item.getString("UTF-8");
 						} else if (item.getFieldName().equals("persist")) {
 							persist = true;
 						}
@@ -184,7 +184,8 @@ public class LanguageServlet extends BaseServlet {
 
 				if (action.equals("create")) {
 					Language lang = new Language();
-					lang.setName(name);
+					lang.setId(lgId);
+					lang.setName(lgName);
 					lang.setImageMime(mimeType);
 					
 					if (data != null && data.length > 0) {
@@ -197,7 +198,7 @@ public class LanguageServlet extends BaseServlet {
 					UserActivity.log(request.getRemoteUser(), "ADMIN_LANGUAGE_CREATE", lang.getId(), lang.toString());
 				} else if (action.equals("edit")) {
 					Language lang = LanguageDAO.findByPk(lgId);
-					lang.setName(name);
+					lang.setName(lgName);
 					lang.setImageMime(mimeType);
 					
 					if (data != null && data.length > 0) {
