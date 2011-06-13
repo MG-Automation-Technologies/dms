@@ -306,6 +306,8 @@ public class FormUtils {
 					if (item != null) up.setDocumentUuid(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("type");
 					if (item != null) up.setType(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("data");
+					if (item != null) up.setData(item.getNodeValue());
 					up.setValidators(parseValidators(nField));
 					fe.add(up);
 				} else if (fieldComponent.equals("checkbox")) {
