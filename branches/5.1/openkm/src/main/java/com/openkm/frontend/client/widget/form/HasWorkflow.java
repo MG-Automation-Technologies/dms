@@ -21,6 +21,10 @@
 
 package com.openkm.frontend.client.widget.form;
 
+import java.util.Collection;
+
+import com.openkm.frontend.client.bean.FileToUpload;
+
 /**
  * HasWorkflow
  * 
@@ -29,4 +33,5 @@ package com.openkm.frontend.client.widget.form;
  */
 public interface HasWorkflow {
 	public abstract void setTaskInstanceValues(double id, String transitionName);
+	public abstract void setTaskInstanceValues(double id, String transitionName, Collection<FileToUpload> filesToUpload);
 }
