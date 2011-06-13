@@ -34,6 +34,7 @@ public class Upload extends FormElement {
 	private String folderUuid = "";
 	private String documentName = "";
 	private String documentUuid = "";
+	private String data = "";
 
 	public String getType() {
 		return type;
@@ -83,6 +84,14 @@ public class Upload extends FormElement {
 		this.validators = validators;
 	}
 	
+	public String getData() {
+		return data;
+	}
+
+	public void setData(String data) {
+		this.data = data;
+	}
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -95,6 +104,7 @@ public class Upload extends FormElement {
 		sb.append(", documentName="); sb.append(documentName);
 		sb.append(", documentUuid="); sb.append(documentUuid);
 		sb.append(", type="); sb.append(type);
+		sb.append(", data="); sb.append(data);
 		sb.append(", validators="); sb.append(validators);
 		sb.append("}");
 		return sb.toString();
