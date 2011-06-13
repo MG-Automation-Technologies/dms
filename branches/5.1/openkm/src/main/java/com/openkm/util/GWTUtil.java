@@ -60,6 +60,7 @@ import com.openkm.bean.form.Option;
 import com.openkm.bean.form.Select;
 import com.openkm.bean.form.SuggestBox;
 import com.openkm.bean.form.TextArea;
+import com.openkm.bean.form.Upload;
 import com.openkm.bean.form.Validator;
 import com.openkm.bean.workflow.Comment;
 import com.openkm.bean.workflow.ProcessDefinition;
@@ -139,6 +140,7 @@ import com.openkm.frontend.client.bean.form.GWTOption;
 import com.openkm.frontend.client.bean.form.GWTSelect;
 import com.openkm.frontend.client.bean.form.GWTSuggestBox;
 import com.openkm.frontend.client.bean.form.GWTTextArea;
+import com.openkm.frontend.client.bean.form.GWTUpload;
 import com.openkm.frontend.client.bean.form.GWTValidator;
 
 public class GWTUtil {
@@ -927,6 +929,21 @@ public class GWTUtil {
 			gWTTextArea.setValidators(copyValidators(textArea.getValidators()));
 			gWTTextArea.setData(textArea.getData());
 			return gWTTextArea;
+		} else if (formElement instanceof Upload) {
+			GWTUpload gWTUpload= new GWTUpload();
+			gWTUpload.setName(formElement.getName());
+			gWTUpload.setLabel(formElement.getLabel());
+			gWTUpload.setWidth(formElement.getWidth());
+			gWTUpload.setHeight(formElement.getHeight());
+			Upload upload = (Upload) formElement;
+			gWTUpload.setFolderPath(upload.getFolderPath());
+			gWTUpload.setFolderUuid(upload.getFolderUuid());
+			gWTUpload.setDocumentName(upload.getDocumentName());
+			gWTUpload.setDocumentUuid(upload.getDocumentUuid());
+			gWTUpload.setType(upload.getType());
+			gWTUpload.setData(upload.getData());
+			gWTUpload.setValidators(copyValidators(upload.getValidators()));
+			return gWTUpload;
 		} else {
 			return new GWTFormElement();
 		}
@@ -1007,7 +1024,18 @@ public class GWTUtil {
 			textArea.setReadonly(gWTTextArea.isReadonly());
 			textArea.setData(gWTTextArea.getData());
 			return textArea;
-		} else {
+		} else if (formElement instanceof GWTUpload) {
+			Upload upload= new Upload();
+			upload.setName(formElement.getName());
+			GWTUpload gWTUpload = ((GWTUpload) formElement);
+			upload.setDocumentName(gWTUpload.getDocumentName());
+			upload.setDocumentUuid(gWTUpload.getDocumentUuid());
+			upload.setFolderPath(gWTUpload.getFolderPath());
+			upload.setFolderUuid(gWTUpload.getFolderUuid());
+			upload.setType(gWTUpload.getType());
+			upload.setData(gWTUpload.getData());
+			return upload;
+		}else {
 			return new FormElement();
 		}
 	}
@@ -1040,7 +1068,9 @@ public class GWTUtil {
 			return value;
 		} else if (formElement instanceof GWTTextArea) {
 			return ((GWTTextArea) formElement).getValue();
-		} 
+		} else if (formElement instanceof GWTUpload) {
+			return ((GWTButton) formElement).getLabel();
+		}
 		
 		return "";
 	}
