@@ -329,6 +329,28 @@ public class RepositoryServlet extends OKMRemoteServiceServlet implements OKMRep
 	}
 	
 	@Override
+	public String getUUIDByPath(String path) throws OKMException {
+		log.debug("getUUIDByPath()");
+		String uuid = "";
+		updateSessionManager();
+		
+		try {
+			path = OKMRepository.getInstance().getNodeUuid(null, path);
+		} catch (PathNotFoundException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryService, ErrorCode.CAUSE_Database), e.getMessage());
+		}
+		
+		return uuid;
+	}
+	
+	@Override
 	public Boolean hasNode(String path) throws OKMException {
 		log.debug("hasNode({})"+path);
 		updateSessionManager();

@@ -85,6 +85,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 		String comment = null;
 		String folder = null;
 		String cipherName = null;
+		String rename = null;
 		PrintWriter out = null;
 		String uploadedDocPath = null;
 		java.io.File tmp = null;
@@ -125,9 +126,23 @@ public class FileUploadServlet extends OKMHttpServlet {
 						if (item.getFieldName().equals("comment")) { comment = item.getString("UTF-8"); }
 						if (item.getFieldName().equals("folder")) { folder = item.getString("UTF-8"); }
 						if (item.getFieldName().equals("cipherName")) { cipherName = item.getString("UTF-8"); }
+						if (item.getFieldName().equals("rename")) { rename = item.getString("UTF-8"); }
 					} else {
 						fileName = item.getName();
 						is = item.getInputStream();
+					}
+				}
+				
+				// Save document with different name than uploading
+				if (rename!=null && !rename.equals("")) {
+					if (rename.contains(".")) {
+						fileName = rename;
+					} else {
+						// here rename not contains .
+						if (fileName.contains(".")) {
+							fileName = fileName.substring(fileName.indexOf("."));
+							fileName = rename + fileName;
+						}
 					}
 				}
 
