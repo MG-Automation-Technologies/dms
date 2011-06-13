@@ -248,8 +248,8 @@ public class Dashboard extends Composite implements HasDashboardHandlerExtension
 		userDashboard.refreshAll();
 		mailDashboard.refreshAll();
 		newsDashboard.refreshAllSearchs();
-		generalDashboard.refreshAll();
-		workflowDashboard.findUserTaskInstances();
+		generalDashboard.refreshAll();	
+		workflowDashboard.refreshAll();
 		keyMapDashboard.refreshAll();
 		fireEvent(HasDashboardEvent.DASHBOARD_REFRESH);
 	}
