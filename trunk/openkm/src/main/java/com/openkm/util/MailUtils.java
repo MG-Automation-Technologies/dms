@@ -107,7 +107,7 @@ public class MailUtils {
 	 * 
 	 * @param toAddress Destination addresses.
 	 * @param subject The mail subject.
-	 * @param anchor The mail body.
+	 * @param content The mail body.
 	 * @throws MessagingException If there is any error.
 	 */
 	public static void sendMessage(List<String> toAddress, String subject, String content) throws 
@@ -130,7 +130,7 @@ public class MailUtils {
 	 * 
 	 * @param toAddress Destination addresses.
 	 * @param subject The mail subject.
-	 * @param anchor The mail body.
+	 * @param content The mail body.
 	 * @throws MessagingException If there is any error.
 	 */
 	public static void sendMessage(String toAddress, String subject, String content) throws 
@@ -155,7 +155,7 @@ public class MailUtils {
 	 * 
 	 * @param toAddress Destination addresses.
 	 * @param subject The mail subject.
-	 * @param anchor The mail body.
+	 * @param content The mail body.
 	 * @throws MessagingException If there is any error.
 	 */
 	public static void sendMessage(String fromAddress, List<String> toAddress, String subject, String content) throws 
@@ -178,7 +178,7 @@ public class MailUtils {
 	 * 
 	 * @param toAddress Destination addresses.
 	 * @param subject The mail subject.
-	 * @param anchor The mail body.
+	 * @param content The mail body.
 	 * @throws MessagingException If there is any error.
 	 */
 	public static void sendMessage(String fromAddress, String toAddress, String subject, String content) throws 
