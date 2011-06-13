@@ -199,4 +199,13 @@ public class WorkflowDashboard extends Composite {
 			workflowService.setTaskInstanceActorId(taskInstance.getId(), callbackSetTaskInstanceActorId);
 		}
 	}
+	
+	/**
+	 * setProcessToExecuteNextTask
+	 * 
+	 * @param processToExecuteNextTask
+	 */
+	public void setProcessToExecuteNextTask(double processToExecuteNextTask) {
+		pendingTasks.setProcessToExecuteNextTask(processToExecuteNextTask);
+	}
 }
