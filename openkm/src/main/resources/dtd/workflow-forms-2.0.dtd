@@ -43,6 +43,7 @@
 	documentName CDATA #IMPLIED
 	documentUuid CDATA #IMPLIED
 	type (create | update) "create"
+	data CDATA #IMPLIED
 >
 
 <!ELEMENT checkbox (validator*)>
