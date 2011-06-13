@@ -33,10 +33,15 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  *
  */
 public class GWTUpload extends GWTFormElement implements IsSerializable {
+	public static final String TYPE_CREATE = "create";
+	public static final String TYPE_UPDATE = "update";
 	private List<GWTValidator> validators = new ArrayList<GWTValidator>();
+	private String type = TYPE_CREATE;
 	private String folderPath = "";
+	private String folderUuid = "";
 	private String documentName = "";
-	private String uploadUuid = "";
+	private String documentUuid = "";
+	private String data = "";
 	
 	public List<GWTValidator> getValidators() {
 		return validators;
@@ -44,6 +49,30 @@ public class GWTUpload extends GWTFormElement implements IsSerializable {
 
 	public void setValidators(List<GWTValidator> validators) {
 		this.validators = validators;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getFolderUuid() {
+		return folderUuid;
+	}
+
+	public void setFolderUuid(String folderUuid) {
+		this.folderUuid = folderUuid;
+	}
+
+	public String getDocumentUuid() {
+		return documentUuid;
+	}
+
+	public void setDocumentUuid(String documentUuid) {
+		this.documentUuid = documentUuid;
 	}
 
 	public String getFolderPath() {
@@ -62,14 +91,14 @@ public class GWTUpload extends GWTFormElement implements IsSerializable {
 		this.documentName = documentName;
 	}
 	
-	public String getUploadUuid() {
-		return uploadUuid;
+	public String getData() {
+		return data;
 	}
 
-	public void setUploadUuid(String uploadUuid) {
-		this.uploadUuid = uploadUuid;
+	public void setData(String data) {
+		this.data = data;
 	}
-	
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -78,8 +107,11 @@ public class GWTUpload extends GWTFormElement implements IsSerializable {
 		sb.append(", width="); sb.append(width);
 		sb.append(", height="); sb.append(height);
 		sb.append(", folderPath="); sb.append(folderPath);
+		sb.append(", folderUuid="); sb.append(folderUuid);
 		sb.append(", documentName="); sb.append(documentName);
-		sb.append(", uploadUuid="); sb.append(uploadUuid);
+		sb.append(", documentUuid="); sb.append(documentUuid);
+		sb.append(", type="); sb.append(type);
+		sb.append(", data="); sb.append(data);
 		sb.append(", validators="); sb.append(validators);
 		sb.append("}");
 		return sb.toString();
