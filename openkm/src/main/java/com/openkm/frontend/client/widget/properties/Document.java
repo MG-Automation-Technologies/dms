@@ -793,6 +793,7 @@ public class Document extends Composite {
 		delete.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				document.getCategories().remove(category);
 				removeCategory(category.getUuid());
 				tableSubscribedCategories.removeRow(tableSubscribedCategories.getCellForEvent(event).getRowIndex());
 			}
