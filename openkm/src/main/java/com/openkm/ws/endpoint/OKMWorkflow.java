@@ -22,6 +22,7 @@
 package com.openkm.ws.endpoint;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -63,7 +64,7 @@ public class OKMWorkflow {
 	@WebMethod
 	public void registerProcessDefinition(@WebParam(name = "token") String token,
 			@WebParam(name = "pda") byte[] pda) throws ParseException, RepositoryException,
-			DatabaseException, WorkflowException {
+			DatabaseException, WorkflowException, IOException {
 		log.debug("registerProcessDefinition({}, {})", token, pda);
 		ByteArrayInputStream bais = new ByteArrayInputStream(pda);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();

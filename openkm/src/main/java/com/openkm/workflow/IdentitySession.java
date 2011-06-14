@@ -21,28 +21,29 @@
 
 package com.openkm.workflow;
 
-import org.jbpm.mail.AddressResolver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jbpm.identity.Group;
+import org.jbpm.identity.User;
+import org.jbpm.identity.assignment.ExpressionSession;
 
-import com.openkm.module.direct.DirectAuthModule;
-import com.openkm.principal.PrincipalAdapterException;
+public class IdentitySession implements ExpressionSession {
 
-public class OKMAddressResolver implements AddressResolver {
-	private static Logger log = LoggerFactory.getLogger(OKMAddressResolver.class);
-	private static final long serialVersionUID = 1L;
-
-	public Object resolveAddress(String actorId) {
-		log.info("resolveAddress({})", actorId);
-		String mail = null;
-		
-		try {
-			mail = new DirectAuthModule().getMail(null, actorId);
-		} catch (PrincipalAdapterException e) {
-			log.warn(e.getMessage());
-		}
-		
-		log.info("resolveAddress: {}", mail);
-		return mail;
+	@Override
+	public Group getGroupByName(String name) {
+		Group grp = new Group(name);
+		return grp;
 	}
+
+	@Override
+	public User getUserByGroupAndRole(String group, String role) {
+		User usr = new User();
+		return usr;
+	}
+
+	@Override
+	public User getUserByName(String name) {
+		User usr = new User(name);
+		usr.setEmail("noreply@openkm.com");
+		return usr;
+	}
+	
 }

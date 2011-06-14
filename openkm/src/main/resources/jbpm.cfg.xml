@@ -26,6 +26,6 @@
   <string name="jbpm.mail.debug" value="true" />
   -->
     
-  <bean name="jbpm.mail.address.resolver" class="com.openkm.workflow.OKMAddressResolver" singleton="true"/>
+  <bean name="jbpm.mail.address.resolver" class="com.openkm.workflow.AddressResolver" singleton="true"/>
   
 </jbpm-configuration>
