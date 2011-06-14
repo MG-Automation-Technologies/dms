@@ -229,7 +229,8 @@ public class MailUtils {
 
 		try {
 			InitialContext initialContext = new InitialContext();
-			mailSession = (Session) PortableRemoteObject.narrow(initialContext.lookup("java:/mail/OpenKM"), Session.class);
+			Object obj = initialContext.lookup(Config.JNDI_BASE + "mail/OpenKM");
+			mailSession = (Session) PortableRemoteObject.narrow(obj, Session.class);
 		} catch (javax.naming.NamingException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
