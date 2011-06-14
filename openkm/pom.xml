@@ -135,7 +135,7 @@
       <scope>test</scope>
     </dependency>
 
-    <!--  Provided libraries -->
+    <!-- Provided libraries -->
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
@@ -143,10 +143,10 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-	  <groupId>javax.servlet</groupId>
-	  <artifactId>jstl</artifactId>
-	  <version>1.2</version>
-	  <scope>provided</scope>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jstl</artifactId>
+      <version>1.2</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>javax.servlet.jsp</groupId>
@@ -299,9 +299,24 @@
 
     <!-- Workflow library from JBoss -->
     <dependency>
-      <groupId>org.jbpm</groupId>
+      <groupId>org.jbpm.jbpm3</groupId>
       <artifactId>jbpm-jpdl</artifactId>
-      <version>3.2.3</version>
+      <version>3.3.1.GA</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.hibernate</groupId>
+          <artifactId>hibernate</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>bsh</groupId>
+          <artifactId>bsh</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.jbpm.jbpm3</groupId>
+      <artifactId>jbpm-identity</artifactId>
+      <version>3.3.1.GA</version>
     </dependency>
     
     <!-- Hibernate -->
@@ -376,6 +391,7 @@
     </dependency>
     
     <!-- Spell checking -->
+    <!-- http://kenai.com/projects/jmyspell -->
     <dependency>
       <groupId>org.dts</groupId>
       <artifactId>jmyspell-core</artifactId>
@@ -414,14 +430,16 @@
       <version>${gwt.version}</version>
       <scope>provided</scope>
     </dependency>
-    <!-- Only for development 
-    <dependency> 
+    <!-- Only for development -->
+    <!--
+    <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-dev</artifactId>
       <version>${gwt.version}</version>
       <scope>provided</scope>
-    </dependency> -->
-	
+    </dependency>
+    -->
+    
     <!-- GWT plugins -->
     <dependency>
       <groupId>com.google.code.gwt-log</groupId>
@@ -483,7 +501,7 @@
       <version>2.6.2</version>
     </dependency>
     
-    <!--  Gson: Java to Json conversion -->
+    <!-- Gson: Java to Json conversion -->
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
@@ -497,7 +515,7 @@
       <version>1.0.1</version>
     </dependency>
     
-    <!--  Lorem Ipsu for Java -->
+    <!-- Lorem Ipsu for Java -->
     <dependency>
       <groupId>de.sven-jacobs</groupId>
       <artifactId>loremipsum</artifactId>
@@ -547,15 +565,15 @@
       <version>${spring.version}</version>
     </dependency>
  	-->
- 	
- 	<!-- Plugin framework -->
- 	<dependency>
- 	  <groupId>com.google.code</groupId>
- 	  <artifactId>jspf</artifactId>
- 	  <version>1.0.1</version>
- 	</dependency>
- 	
- 	<!-- Wiki libraries -->
+    
+    <!-- Plugin framework -->
+    <dependency>
+      <groupId>com.google.code</groupId>
+      <artifactId>jspf</artifactId>
+      <version>1.0.1</version>
+    </dependency>
+    
+    <!-- Wiki libraries -->
     <dependency>
       <groupId>org.apache.maven.doxia</groupId>
       <artifactId>doxia-module-twiki</artifactId>
