@@ -305,9 +305,24 @@
 
     <!-- Workflow library from JBoss -->
     <dependency>
-      <groupId>org.jbpm</groupId>
+      <groupId>org.jbpm.jbpm3</groupId>
       <artifactId>jbpm-jpdl</artifactId>
-      <version>3.2.3</version>
+      <version>3.3.1.GA</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.hibernate</groupId>
+          <artifactId>hibernate</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>bsh</groupId>
+          <artifactId>bsh</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.jbpm.jbpm3</groupId>
+      <artifactId>jbpm-identity</artifactId>
+      <version>3.3.1.GA</version>
     </dependency>
 
     <!-- Hibernate -->
