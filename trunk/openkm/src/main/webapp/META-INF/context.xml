@@ -29,7 +29,10 @@
   <Resource name="jdbc/OpenKMDS" auth="Container" type="javax.sql.DataSource"
             maxActive="100" maxIdle="30" maxWait="10000"
             username="openkm" password="openkm" driverClassName="com.mysql.jdbc.Driver"
-            url="jdbc:mysql://localhost:3306/okm_app?autoReconnect=true"/>
+            url="jdbc:mysql://localhost:3306/okm_app?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF8"/>
+  
+  <Resource name="mail/OpenKM" auth="Container" type="javax.mail.Session"
+            mail.smtp.host="localhost"/>
   
   <!--
   <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
