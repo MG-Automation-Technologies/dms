@@ -35,6 +35,10 @@ public class Upload extends FormElement {
 	private String documentName = "";
 	private String documentUuid = "";
 	private String data = "";
+	
+	public Upload() {
+		width = "33";
+	}
 
 	public String getType() {
 		return type;
