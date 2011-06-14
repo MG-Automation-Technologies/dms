@@ -24,7 +24,6 @@ package com.openkm.servlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.Iterator;
 import java.util.List;
 import java.util.zip.ZipInputStream;
 
@@ -65,29 +64,36 @@ public class WorkflowRegisterServlet extends BasicSecuredServlet {
 	 */
 	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
+		log.debug("service({}, {}", request, response);
 		request.setCharacterEncoding("UTF-8");
 		String action = request.getPathInfo();
+		PrintWriter out = response.getWriter();
 		Session session = null;
+		log.debug("action: {}", action);
 		
 		try {
 			if (action != null && action.length() > 1 && action.indexOf(':') > 0) {
 				String[] usrpass = action.substring(1).split(":");
+				log.info("UserPass: {}, Pass: {}", usrpass[0], usrpass[1]);
 				
 				if (Config.ADMIN_USER.equals(usrpass[0])) {
 					session = getSession(usrpass[0], usrpass[1]);
 				}
+			} else {
+				session = getSession(request);
 			}
 						
 			if (session != null) {
-				handleRequest(request);
+				String msg = handleRequest(request);
+				log.info("Status: {}", msg);
+				out.print(msg);
+				out.flush();
 			} else {
-				response.setContentType("text/plain; charset=UTF-8");
-				PrintWriter out = response.getWriter();
-				out.println("Missing user credentials");
-				out.close();
+				log.warn("Missing user credentials");
+				response.setHeader("WWW-Authenticate", "Basic realm=\"OpenKM Worflow Register Server\"");
+				response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 			}
 		} catch (LoginException e) {
-			log.warn(e.getMessage(), e);
 			response.setHeader("WWW-Authenticate", "Basic realm=\"OpenKM Worflow Register Server\"");
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
 		} catch (ItemNotFoundException e) {
@@ -109,6 +115,8 @@ public class WorkflowRegisterServlet extends BasicSecuredServlet {
 			log.warn(e.getMessage(), e);
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 		} finally {
+			IOUtils.closeQuietly(out);
+			
 			if (session != null) {
 				session.logout();
 			}
@@ -116,15 +124,22 @@ public class WorkflowRegisterServlet extends BasicSecuredServlet {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void handleRequest(HttpServletRequest request) throws FileUploadException, IOException, Exception {
+	private String handleRequest(HttpServletRequest request) throws FileUploadException, IOException, Exception {
+		log.warn("handleRequest({})", request);
+		
 		if (ServletFileUpload.isMultipartContent(request)) {
 			FileItemFactory factory = new DiskFileItemFactory();
 			ServletFileUpload upload = new ServletFileUpload(factory);
 			List<FileItem> items = upload.parseRequest(request);
 			
-			for (Iterator<FileItem> it = items.iterator(); it.hasNext();) {
-				FileItem fileItem = (FileItem) it.next();
+			if (items.isEmpty()) {
+				log.warn("No process file in the request");
+		        return "No process file in the request";
+			} else {
+				FileItem fileItem = (FileItem) items.get(0);
+				
 				if (fileItem.getContentType().indexOf("application/x-zip-compressed") == -1) {
+					log.warn("Not a process archive");
 					throw new Exception("Not a process archive");
 				} else {
 					log.debug("Deploying process archive: {}", fileItem.getName());
@@ -136,14 +151,14 @@ public class WorkflowRegisterServlet extends BasicSecuredServlet {
 						zis = new ZipInputStream(fileItem.getInputStream());
 						ProcessDefinition processDefinition = ProcessDefinition.parseParZipInputStream(zis);
 						
-						// Check xml form definition  
+						// Check XML form definition
 						FileDefinition fileDef = processDefinition.getFileDefinition();
 						isForms = fileDef.getInputStream("forms.xml");
 						FormUtils.parseWorkflowForms(isForms);
 						
 						log.debug("Created a processdefinition: {}", processDefinition.getName());
 						jbpmContext.deployProcessDefinition(processDefinition);
-						zis.close();
+						return "Deployed process " + processDefinition.getName() + " successfully";
 					} finally {
 						IOUtils.closeQuietly(isForms);
 						IOUtils.closeQuietly(zis);
@@ -151,6 +166,9 @@ public class WorkflowRegisterServlet extends BasicSecuredServlet {
 					}
 				}
 			}
+		} else {
+			log.warn("Not a multipart request");
+			return "Not a multipart request";
 		}
 	}
 }
