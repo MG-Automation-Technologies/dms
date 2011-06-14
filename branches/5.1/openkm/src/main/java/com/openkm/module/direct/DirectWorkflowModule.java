@@ -73,7 +73,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 
 	@Override
 	public void registerProcessDefinition(String token, InputStream is) throws ParseException, 
-			RepositoryException, WorkflowException, DatabaseException {
+			RepositoryException, WorkflowException, DatabaseException, IOException {
 		log.debug("registerProcessDefinition({}, {})", token, is);
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
 		InputStream isForms = null;

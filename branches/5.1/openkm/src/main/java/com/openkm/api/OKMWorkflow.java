@@ -21,6 +21,7 @@
 
 package com.openkm.api;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +57,7 @@ public class OKMWorkflow implements WorkflowModule {
 
 	@Override
 	public void registerProcessDefinition(String token, InputStream is) throws ParseException,
-			RepositoryException, DatabaseException, WorkflowException {
+			RepositoryException, DatabaseException, WorkflowException, IOException {
 		log.debug("registerProcessDefinition({}, {})", token, is);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
 		wm.registerProcessDefinition(token, is);
