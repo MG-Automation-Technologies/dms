@@ -21,6 +21,7 @@
 
 package com.openkm.module;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +49,7 @@ public interface WorkflowModule {
 	 * @throws WorkflowException If there is any workflow engine error.
 	 */
 	public void registerProcessDefinition(String token, InputStream is) throws ParseException,
-			RepositoryException, DatabaseException, WorkflowException;
+			RepositoryException, DatabaseException, WorkflowException, IOException;
 
 	/**
 	 * Delete a previously registered process definition.
