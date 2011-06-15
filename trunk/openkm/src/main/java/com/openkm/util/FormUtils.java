@@ -509,6 +509,9 @@ public class FormUtils {
 			sb.append("<i>Table:</i> ");
 			sb.append(suggestBox.getTable());
 			sb.append("<br/>");
+			sb.append("<i>FilterMinLen:</i> ");
+			sb.append(suggestBox.getFilterMinLen());
+			sb.append("<br/>");
 			sb.append("<i>FilterQuery:</i> ");
 			sb.append(suggestBox.getFilterQuery());
 			sb.append("<br/>");
