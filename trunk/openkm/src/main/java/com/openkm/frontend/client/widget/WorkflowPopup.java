@@ -21,10 +21,8 @@
 
 package com.openkm.frontend.client.widget;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -38,13 +36,14 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTProcessDefinition;
-import com.openkm.frontend.client.bean.form.GWTFormElement;
 import com.openkm.frontend.client.service.OKMWorkflowService;
 import com.openkm.frontend.client.service.OKMWorkflowServiceAsync;
-import com.openkm.frontend.client.widget.form.FormManager;
+import com.openkm.frontend.client.widget.wizard.WorkflowWidget;
+import com.openkm.frontend.client.widget.wizard.WorkflowWidgetToFire;
 
 /**
  * WorkflowPopup popup
@@ -52,7 +51,7 @@ import com.openkm.frontend.client.widget.form.FormManager;
  * @author jllort
  *
  */
-public class WorkflowPopup extends DialogBox {
+public class WorkflowPopup extends DialogBox implements WorkflowWidgetToFire {
 	
 	private final OKMWorkflowServiceAsync workflowService = (OKMWorkflowServiceAsync) GWT.create(OKMWorkflowService.class);
 	
@@ -61,8 +60,9 @@ public class WorkflowPopup extends DialogBox {
 	private Button button;
 	private Button addButton;
 	private ListBox listBox;
-	private boolean drawed = false;
-	private FormManager manager;
+	private SimplePanel sp;
+	private WorkflowWidget workflowWidget= null;
+	private String uuid = "";
 	
 	/**
 	 * WorkflowPopup popup
@@ -73,7 +73,7 @@ public class WorkflowPopup extends DialogBox {
 
 		vPanel = new VerticalPanel();
 		hPanel = new HorizontalPanel();
-		manager = new FormManager();
+		sp = new SimplePanel();
 		
 		button = new Button(Main.i18n("button.close"), new ClickHandler() { 
 			@Override
@@ -85,6 +85,7 @@ public class WorkflowPopup extends DialogBox {
 		addButton = new Button(Main.i18n("button.start"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
+				addButton.setEnabled(false);
 				runProcessDefinition();
 			}
 		});
@@ -95,13 +96,11 @@ public class WorkflowPopup extends DialogBox {
 			public void onChange(ChangeEvent event) {
 				if (listBox.getSelectedIndex()>0) {
 					addButton.setEnabled(true);
-					drawed=false;
-					manager.getTable().setVisible(false);
 				} else {
 					addButton.setEnabled(false);
-					drawed=false;
-					manager.getTable().setVisible(false);
 				}
+				sp.setVisible(false);
+				sp.clear();
 			}
 		});
 		listBox.setStyleName("okm-Select");
@@ -122,7 +121,7 @@ public class WorkflowPopup extends DialogBox {
 		vPanel.add(new HTML("<br>"));
 		vPanel.add(listBox);
 		vPanel.add(new HTML("<br>"));
-		vPanel.add(manager.getTable());
+		vPanel.add(sp);
 		vPanel.add(new HTML("<br>"));
 		vPanel.add(hPanel);
 		vPanel.add(new HTML("<br>"));
@@ -192,8 +191,9 @@ public class WorkflowPopup extends DialogBox {
 		findLatestProcessDefinitions(); // Gets all groups
 		listBox.setVisible(true);
 		addButton.setEnabled(false);
-		drawed = false;
-		manager.getTable().setVisible(false);
+		workflowWidget = null;
+		sp.setVisible(false);
+		sp.clear();
 		int left = (Window.getClientWidth()-300)/2;
 		int top = (Window.getClientHeight()-100)/2;
 		setPopupPosition(left,top);
@@ -211,75 +211,35 @@ public class WorkflowPopup extends DialogBox {
 	 * Run process definition
 	 */
 	private void runProcessDefinition() {
-		if (listBox.getSelectedIndex()>0) {
-			if (drawed) {
-				if (manager.getValidationProcessor().validate()) {
-					runProcessDefinitionWithValues();
-				}
+		if (workflowWidget!=null) {
+			workflowWidget.runProcessDefinition(); // Here has some forms to be filled
+		} else if (listBox.getSelectedIndex()>0) {
+			if (Main.get().activeFolderTree.isPanelSelected()) {
+				uuid = Main.get().activeFolderTree.getFolder().getUuid();
 			} else {
-				addButton.setEnabled(false);
-				getProcessDefinitionForms(new Double(listBox.getValue(listBox.getSelectedIndex())).doubleValue());
+				if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
+					uuid = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument().getUuid();
+				} else if(Main.get().mainPanel.desktop.browser.fileBrowser.isFolderSelected()) {
+					uuid = Main.get().mainPanel.desktop.browser.fileBrowser.getFolder().getUuid();
+				} else if(Main.get().mainPanel.desktop.browser.fileBrowser.isMailSelected()) {
+					uuid = Main.get().mainPanel.desktop.browser.fileBrowser.getMail().getUuid();
+				}
 			}
+			workflowWidget = new WorkflowWidget(new Double(listBox.getValue(listBox.getSelectedIndex())).doubleValue(), uuid, this);
+			sp.add(workflowWidget);
+			workflowWidget.runProcessDefinition();
 		}
 	}
-	
-	/**
-	 * runProcessDefinition with values
-	 */
-	private void runProcessDefinitionWithValues() {
-		String uuid = "";
-		if (Main.get().activeFolderTree.isPanelSelected()) {
-			uuid = Main.get().activeFolderTree.getFolder().getUuid();
-		} else {
-			if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
-				uuid = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument().getUuid();
-			} else if(Main.get().mainPanel.desktop.browser.fileBrowser.isFolderSelected()) {
-				uuid = Main.get().mainPanel.desktop.browser.fileBrowser.getFolder().getUuid();
-			} else if(Main.get().mainPanel.desktop.browser.fileBrowser.isMailSelected()) {
-				uuid = Main.get().mainPanel.desktop.browser.fileBrowser.getMail().getUuid();
-			}
-		}
-		workflowService.runProcessDefinition(uuid,new Double(listBox.getValue(listBox.getSelectedIndex())).doubleValue(),
-											 manager.updateFormElementsValuesWithNewer(), callbackRunProcessDefinition);
+
+	@Override
+	public void finishedRunProcessDefinition() {
+		workflowWidget = null;
 		hide();
 	}
-	
-	/**
-	 * Get process definitions callback
-	 */
-	final AsyncCallback<Map<String, List<GWTFormElement>>> callbackGetProcessDefinitionForms = new AsyncCallback<Map<String, List<GWTFormElement>>>() {
-		public void onSuccess(Map<String, List<GWTFormElement>> result) {
-			// Initial task is always called start
-			manager.setFormElements(result.get(Main.get().workspaceUserProperties.getWorkspace().getWorkflowRunConfigForm()));
-			manager.getTable().setVisible(true);
-			if (manager.getFormElements()!=null) {
-				drawForm();
-			} else {
-				manager.setFormElements(new ArrayList<GWTFormElement>());
-				runProcessDefinitionWithValues();
-			}
-			addButton.setEnabled(true);
-		}
 
-		public void onFailure(Throwable caught) {
-			Main.get().showError("getProcessDefinitionForms", caught);
-		}
-	};
-	
-	/**
-	 * getProcessDefinitionForms
-	 * 
-	 * @param id
-	 */
-	public void getProcessDefinitionForms(double id) {	
-		workflowService.getProcessDefinitionForms(id, callbackGetProcessDefinitionForms);
+	@Override
+	public void hasPendingProcessDefinitionForms() {
+		sp.setVisible(true);
+		addButton.setEnabled(true);
 	}
-	
-	/**
-	 * drawForm
-	 */
-	private void drawForm() {
-		manager.edit();
-		drawed = true; 
-	}	
 }

@@ -39,7 +39,6 @@ import com.openkm.frontend.client.extension.event.hashandler.HasPropertyGroupHan
 import com.openkm.frontend.client.widget.ConfirmPopup;
 import com.openkm.frontend.client.widget.propertygroup.PropertyGroupWidget;
 import com.openkm.frontend.client.widget.propertygroup.PropertyGroupWidgetToFire;
-import com.openkm.frontend.client.widget.propertygroup.WidgetToFire;
 
 /**
  * PropertyGroup
@@ -225,18 +224,17 @@ public class PropertyGroup extends Composite implements HasPropertyGroupHandlerE
 	}
 	
 	/**
-	 * FiredVerticalPanel
+	 * FiredHorizontalPanel
 	 * 
 	 * @author jllort
 	 *
 	 */
-	private class FiredHorizontalPanel extends PropertyGroupWidgetToFire implements WidgetToFire {
+	private class FiredHorizontalPanel extends Composite implements PropertyGroupWidgetToFire {
 		private HorizontalPanel hPanel;
 		
 		public FiredHorizontalPanel() {
 			hPanel = new HorizontalPanel();
 			initWidget(hPanel);
-			
 		}
 		
 		@Override
