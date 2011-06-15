@@ -21,19 +21,15 @@
 
 package com.openkm.frontend.client.widget.propertygroup;
 
-import com.google.gwt.user.client.ui.Composite;
-
 /**
+ * PropertyGroupWidgetToFire
+ * 
  * @author jllort
  *
  */
-public class PropertyGroupWidgetToFire extends Composite implements WidgetToFire {
-	
-	@Override
-	public void finishedGetProperties() {
-	}
+public interface PropertyGroupWidgetToFire {
 
-	@Override
-	public void finishedSetProperties() {
-	}
+	public abstract void finishedGetProperties();
+	public abstract void finishedSetProperties();
+	
 }
