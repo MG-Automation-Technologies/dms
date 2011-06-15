@@ -231,7 +231,7 @@ public class FormManager {
 		} else if (gwtMetadata instanceof GWTTextArea) {
 			HorizontalPanel hPanel = new HorizontalPanel();
 			TextArea textArea = new TextArea();
-			textArea.setEnabled(!readOnly && !((GWTTextArea) gwtMetadata).isReadonly());
+			textArea.setEnabled((!readOnly && !((GWTTextArea) gwtMetadata).isReadonly()) || isSearchView);
 			hPanel.add(textArea);
 			textArea.setStyleName("okm-TextArea");
 			textArea.setText(((GWTTextArea) gwtMetadata).getValue());
@@ -279,7 +279,7 @@ public class FormManager {
 		} else if (gwtMetadata instanceof GWTInput) {
 			HorizontalPanel hPanel = new HorizontalPanel();
 			final TextBox textBox = new TextBox(); // Create a widget for this property
-			textBox.setEnabled(!readOnly && !((GWTInput) gwtMetadata).isReadonly());
+			textBox.setEnabled((!readOnly && !((GWTInput) gwtMetadata).isReadonly()) || isSearchView);
 			hPanel.add(textBox);
 			String value = "";
 			if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_TEXT) || 
@@ -492,7 +492,7 @@ public class FormManager {
 			textBox.setWidth(gwtMetadata.getWidth());
 			textBox.setStyleName("okm-Input");
 			textBox.setReadOnly(true);
-			textBox.setEnabled(!readOnly && !suggestBox.isReadonly());
+			textBox.setEnabled((!readOnly && !suggestBox.isReadonly()) || isSearchView);
 			final HTML hiddenKey = new HTML("");
 			hiddenKey.setVisible(false);
 			
@@ -519,7 +519,9 @@ public class FormManager {
 						DatabaseRecord databaseRecord = new DatabaseRecord(hiddenKey, textBox);
 						// when any changes is done is fired search.metadataValueChanged();
 						DatabaseRecordSelectPopup drsPopup = new DatabaseRecordSelectPopup(suggestBox.getDialogTitle(),
-								tables, suggestBox.getFilterQuery(), databaseRecord, search);
+																						   tables, suggestBox.getFilterQuery(), 
+																						   databaseRecord, search,
+																						   suggestBox.getFilterMinLen());
 						drsPopup.setWidth("300");
 						drsPopup.setHeight("220");
 						drsPopup.setStyleName("okm-Popup");
@@ -589,7 +591,7 @@ public class FormManager {
 			}
 		} else if (gwtMetadata instanceof GWTCheckBox) {
 			CheckBox checkBox = new CheckBox();
-			checkBox.setEnabled(!readOnly && !((GWTCheckBox) gwtMetadata).isReadonly());
+			checkBox.setEnabled((!readOnly && !((GWTCheckBox) gwtMetadata).isReadonly()) || isSearchView);
 			checkBox.setValue(((GWTCheckBox)gwtMetadata).getValue());
 			hWidgetProperties.put(propertyName,checkBox);
 			table.setHTML(row, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
@@ -645,7 +647,7 @@ public class FormManager {
 				String selectedLabel = "";
 				HorizontalPanel hPanel = new HorizontalPanel();
 				ListBox listBox = new ListBox();
-				listBox.setEnabled(!readOnly && !gwtSelect.isReadonly());
+				listBox.setEnabled((!readOnly && !gwtSelect.isReadonly()) || isSearchView);
 				hPanel.add(listBox);
 				listBox.setStyleName("okm-Select");
 				listBox.addItem("", ""); // Always we set and empty value
@@ -705,7 +707,7 @@ public class FormManager {
 			} else if (gwtSelect.getType().equals(GWTSelect.TYPE_MULTIPLE)) {
 				final HorizontalPanel hPanel = new HorizontalPanel();
 				ListBox listMulti = new ListBox();
-				listMulti.setEnabled(!readOnly && !gwtSelect.isReadonly());
+				listMulti.setEnabled((!readOnly && !gwtSelect.isReadonly()) || isSearchView);
 				listMulti.setStyleName("okm-Select");
 				listMulti.addItem("",""); // Always we set and empty value
 				
@@ -780,7 +782,7 @@ public class FormManager {
 						}
 					}
 				});
-				addButton.setEnabled(!readOnly && !gwtSelect.isReadonly());
+				addButton.setEnabled((!readOnly && !gwtSelect.isReadonly()) || isSearchView);
 				addButton.setStyleName("okm-Button");
 				
 				hPanel.add(tableMulti);

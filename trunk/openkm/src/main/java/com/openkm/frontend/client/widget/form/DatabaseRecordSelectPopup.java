@@ -45,6 +45,7 @@ import com.openkm.frontend.client.bean.GWTKeyValue;
 import com.openkm.frontend.client.service.OKMKeyValueService;
 import com.openkm.frontend.client.service.OKMKeyValueServiceAsync;
 import com.openkm.frontend.client.util.MessageFormat;
+import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.searchin.HasSearch;
 
 /**
@@ -67,17 +68,19 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 	List<String> tables;
 	private String query;
 	private Status status;
+	private int filterMinLength = 0;
 	
 	/**
 	 * DatabaseRecordSelectPopup
 	 */
 	public DatabaseRecordSelectPopup(String title, List<String> tables, String query, final HasDatabaseRecord databaseRecord, 
-									 final HasSearch search) {
+									 final HasSearch search, final int filterMinLength) {
 		// Establishes auto-close when click outside
 		super(false,true);
 		
 		this.tables = tables;
 		this.query = query;
+		this.filterMinLength = filterMinLength;
 		setText(title);
 
 		vPanel = new VerticalPanel();		
@@ -89,7 +92,11 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 		record.addKeyUpHandler(new KeyUpHandler() {
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
-				findFilteredDatabaseRecords();
+				if (record.getText().length()>=filterMinLength) {
+					findFilteredDatabaseRecords();
+				} else {
+					removeAllRows();
+				}
 			}
 		});
 		record.setStyleName("okm-Input");
@@ -136,6 +143,16 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 		hPanel.add(new HTML("&nbsp;"));
 		hPanel.add(acceptBoton);
 		
+		if (filterMinLength>0) {
+			HorizontalPanel hInfoPanel = new HorizontalPanel();
+			HTML filterInfo = new HTML(MessageFormat.format(Main.i18n("form.manager.suggestbox.min.filter"), filterMinLength));
+			HTML space = Util.hSpace("5");
+			hInfoPanel.add(filterInfo);
+			hInfoPanel.add(space);
+			vPanel.add(hInfoPanel);
+			vPanel.setCellHorizontalAlignment(hInfoPanel, HasAlignment.ALIGN_RIGHT);
+		}
+		
 		vPanel.add(record);
 		vPanel.add(scrollDatabaseRecordPanel);
 		vPanel.add(hPanel);
@@ -159,6 +176,7 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 	 * findFilteredDatabaseRecords
 	 */
 	private void findFilteredDatabaseRecords() {
+		removeAllRows();
 		selectedRow = -1;
 		record.setReadOnly(true);
 		acceptBoton.setEnabled(false);
@@ -166,7 +184,6 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 		keyValueService.getKeyValues(tables, MessageFormat.format(query, record.getText()), new AsyncCallback<List<GWTKeyValue>>() {
 			@Override
 			public void onSuccess(List<GWTKeyValue> result) {
-				removeAllRows();
 				rowKeyValueMap = new HashMap<Integer, GWTKeyValue>();
 				for (GWTKeyValue keyValue : result) {
 					int row = recordTabla.getRowCount();
@@ -194,7 +211,10 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 		acceptBoton.setEnabled(false);
 		rowKeyValueMap = new HashMap<Integer, GWTKeyValue>();
 		super.show();
-		findFilteredDatabaseRecords();
+		// Case must show by default all values
+		if (filterMinLength==0) {
+			findFilteredDatabaseRecords();
+		}
 	}
 	
 	/**

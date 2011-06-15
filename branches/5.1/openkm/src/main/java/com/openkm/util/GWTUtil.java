@@ -886,6 +886,7 @@ public class GWTUtil {
 			gWTsuggestBox.setTable(suggestBox.getTable());
 			gWTsuggestBox.setFilterQuery(suggestBox.getFilterQuery());
 			gWTsuggestBox.setValueQuery(suggestBox.getValueQuery());
+			gWTsuggestBox.setFilterMinLen(suggestBox.getFilterMinLen());
 			gWTsuggestBox.setData(suggestBox.getData());
 			return gWTsuggestBox;
 		} else if (formElement instanceof CheckBox) {
@@ -990,6 +991,7 @@ public class GWTUtil {
 			suggestBox.setValue(gWTSuggestBox.getValue());
 			suggestBox.setFilterQuery(gWTSuggestBox.getFilterQuery());
 			suggestBox.setValueQuery(gWTSuggestBox.getValueQuery());
+			suggestBox.setFilterMinLen(gWTSuggestBox.getFilterMinLen());
 			suggestBox.setData(gWTSuggestBox.getData());
 			return suggestBox;
 		} else if (formElement instanceof GWTCheckBox) {
