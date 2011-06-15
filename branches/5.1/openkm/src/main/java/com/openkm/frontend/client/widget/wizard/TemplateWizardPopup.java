@@ -29,14 +29,15 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
+import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
-import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.form.GWTFormElement;
@@ -47,7 +48,6 @@ import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
 import com.openkm.frontend.client.widget.propertygroup.PropertyGroupWidget;
 import com.openkm.frontend.client.widget.propertygroup.PropertyGroupWidgetToFire;
-import com.openkm.frontend.client.widget.propertygroup.WidgetToFire;
 
 /**
  * TemplateWizardPopup
@@ -274,13 +274,12 @@ public class TemplateWizardPopup extends DialogBox {
 	 * @author jllort
 	 *
 	 */
-	private class FiredVerticalPanel extends PropertyGroupWidgetToFire implements WidgetToFire {
+	private class FiredVerticalPanel extends Composite implements PropertyGroupWidgetToFire {
 		private VerticalPanel vPanel;
 		
 		public FiredVerticalPanel() {
 			vPanel = new VerticalPanel();
 			initWidget(vPanel);
-			
 		}
 		
 		@Override

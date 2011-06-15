@@ -28,6 +28,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -46,7 +47,6 @@ import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
 import com.openkm.frontend.client.widget.propertygroup.PropertyGroupWidget;
 import com.openkm.frontend.client.widget.propertygroup.PropertyGroupWidgetToFire;
-import com.openkm.frontend.client.widget.propertygroup.WidgetToFire;
 
 /**
  * WizardPopup
@@ -81,6 +81,7 @@ public class WizardPopup extends DialogBox {
 	public KeywordsWidget keywordsWidget;
 	public CategoriesWidget categoriesWidget;
 	public GWTDocument docToSign = null;
+	public String uuid = "";
 	
 	/**
 	 * WizardPopup
@@ -121,7 +122,18 @@ public class WizardPopup extends DialogBox {
 		workflowIndex = 0;
 		workflowsList = Main.get().workspaceUserProperties.getWorkspace().getWizardWorkflowsList();
 		
-		addPropertyGroups();
+		// getting uuid
+		documentService.get(docPath, new AsyncCallback<GWTDocument>() {
+			@Override
+			public void onSuccess(GWTDocument result) {
+				uuid = result.getUuid();
+				addPropertyGroups(); // Continue adding property groups
+			}
+			@Override
+			public void onFailure(Throwable caught) {
+				Main.get().showError("get", caught);
+			}
+		});
 	}
 	
 	/**
@@ -183,13 +195,16 @@ public class WizardPopup extends DialogBox {
 		propertyGroupWidget.getProperties();
 	}
 	
+	/**
+	 * getWorkflows
+	 */
 	public void getWorkflows() {
 		HorizontalPanel hPanel = new HorizontalPanel();
 		HTML space = new HTML("");
 		hPanel.add(actualButton);
 		hPanel.add(space);
 		hPanel.setCellWidth(space, "3");
-		workflowWidget = new WorkflowWidget(workflowsList.get(workflowIndex).doubleValue(), docPath);
+		workflowWidget = new WorkflowWidget(workflowsList.get(workflowIndex).doubleValue(), uuid, vPanelFired);
 		vPanelFired.clear();
 		vPanelFired.add(workflowWidget);
 		vPanelFired.add(hPanel);
@@ -430,9 +445,12 @@ public class WizardPopup extends DialogBox {
 	 * @author jllort
 	 *
 	 */
-	private class FiredVerticalPanel extends PropertyGroupWidgetToFire implements WidgetToFire {
+	private class FiredVerticalPanel extends Composite implements PropertyGroupWidgetToFire, WorkflowWidgetToFire {
 		private VerticalPanel vPanel;
 		
+		/**
+		 * FiredVerticalPanel
+		 */
 		public FiredVerticalPanel() {
 			vPanel = new VerticalPanel();
 			initWidget(vPanel);
@@ -451,6 +469,17 @@ public class WizardPopup extends DialogBox {
 		@Override
 		public void finishedSetProperties() {
 			showNextWizard();
+		}
+		
+		@Override
+		public void finishedRunProcessDefinition() {
+			showNextWizard();
+		}
+		
+		@Override
+		public void hasPendingProcessDefinitionForms() {
+			changeView();
+			actualButton.setEnabled(true);
 		}
 		
 		/**

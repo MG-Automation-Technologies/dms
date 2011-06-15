@@ -32,10 +32,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.form.GWTFormElement;
-import com.openkm.frontend.client.service.OKMDocumentService;
-import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import com.openkm.frontend.client.service.OKMWorkflowService;
 import com.openkm.frontend.client.service.OKMWorkflowServiceAsync;
 import com.openkm.frontend.client.widget.form.FormManager;
@@ -49,21 +46,22 @@ import com.openkm.frontend.client.widget.form.FormManager;
 public class WorkflowWidget extends Composite {
 	
 	private final OKMWorkflowServiceAsync workflowService = (OKMWorkflowServiceAsync) GWT.create(OKMWorkflowService.class);
-	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
 	
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
 	private boolean drawed = false;
 	double id; 
-	String docPath;
+	private String uuid;
 	private FormManager manager;
+	private WorkflowWidgetToFire workflowWidgetToFire;
 	
 	/**
 	 * WorkflowWidget
 	 */
-	public WorkflowWidget(double id, String docPath) {
+	public WorkflowWidget(double id, String uuid, WorkflowWidgetToFire workflowWidgetToFire) {
 		this.id = id;
-		this.docPath = docPath;
+		this.uuid = uuid;
+		this.workflowWidgetToFire = workflowWidgetToFire;
 		drawed = false;
 
 		vPanel = new VerticalPanel();
@@ -87,6 +85,7 @@ public class WorkflowWidget extends Composite {
 	 */
 	final AsyncCallback<Object> callbackRunProcessDefinition = new AsyncCallback<Object>() {
 		public void onSuccess(Object result){
+			workflowWidgetToFire.finishedRunProcessDefinition();
 			Main.get().mainPanel.dashboard.workflowDashboard.findUserTaskInstances();
 		}
 
@@ -112,19 +111,7 @@ public class WorkflowWidget extends Composite {
 	 * runProcessDefinition with values
 	 */
 	private void runProcessDefinitionWithValues() {		
-		documentService.get(docPath, new AsyncCallback<GWTDocument>() {
-			@Override
-			public void onSuccess(GWTDocument result) {
-				workflowService.runProcessDefinition(result.getUuid(), id, manager.updateFormElementsValuesWithNewer(), 
-													 callbackRunProcessDefinition);
-				Main.get().wizardPopup.showNextWizard();
-			}
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				Main.get().showError("get", caught);
-			}
-		});
+		workflowService.runProcessDefinition(uuid, id, manager.updateFormElementsValuesWithNewer(), callbackRunProcessDefinition);
 	}
 	
 	/**
@@ -136,8 +123,7 @@ public class WorkflowWidget extends Composite {
 			manager.setFormElements(result.get(Main.get().workspaceUserProperties.getWorkspace().getWorkflowRunConfigForm()));
 			if (manager.getFormElements()!=null) {
 				drawForm();
-				Main.get().wizardPopup.changeView();
-				Main.get().wizardPopup.actualButton.setEnabled(true);
+				workflowWidgetToFire.hasPendingProcessDefinitionForms();				
 			} else {
 				manager.setFormElements(new ArrayList<GWTFormElement>());
 				runProcessDefinitionWithValues();
