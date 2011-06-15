@@ -41,6 +41,7 @@ public class GWTSuggestBox extends GWTFormElement implements IsSerializable  {
 	private String dialogTitle = "";
 	private String filterQuery = "";
 	private String valueQuery = "";
+	private int filterMinLen = 0;
 
 	public String getValue() {
 		return value;
@@ -106,6 +107,14 @@ public class GWTSuggestBox extends GWTFormElement implements IsSerializable  {
 		this.data = data;
 	}
 	
+	public int getFilterMinLen() {
+		return filterMinLen;
+	}
+
+	public void setFilterMinLen(int filterMinLen) {
+		this.filterMinLen = filterMinLen;
+	}
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
