@@ -30,23 +30,6 @@
             <td><input class=":required :only_on_blur" name="rp_name" value="${rp.name}"/></td>
           </tr>
           <tr>
-            <td>Type</td>
-            <td>
-              <select name="rp_type">
-                <c:forEach var="type" items="${types}">
-                  <c:choose>
-                    <c:when test="${rp.type == type.key}">
-                      <option value="${type.key}" selected="selected">${type.value}</option>
-                    </c:when>
-                    <c:otherwise>
-                      <option value="${type.key}">${type.value}</option>
-                    </c:otherwise>
-                  </c:choose>
-                </c:forEach>
-              </select>
-            </td>
-          </tr>
-          <tr>
             <td>Active</td>
             <td>
               <c:choose>

@@ -20,31 +20,16 @@
       <h1>Report parameters <span style="font-size: 10px;">(<a href="${urlReportList}">Reports</a>)</span></h1>
       <table class="results" width="60%">
         <tr>
-          <th>Label</th><th>Name</th><th>Type</th>
-          <th width="50px">
-            <c:url value="Report" var="urlCreate">
-              <c:param name="action" value="paramCreate"/>
-              <c:param name="rp_id" value="${rp_id}"/>
-            </c:url>
-            <a href="${urlCreate}"><img src="img/action/new.png" alt="New parameter" title="New parameter"/></a>
-          </th>
+          <th>Label</th><th>Name</th><th>Width</th><th>Height</th><th>Field</th><th>Others</th>
         </tr>
-        <c:forEach var="rpp" items="${params}" varStatus="row">
-          <c:url value="Report" var="urlEdit">
-            <c:param name="action" value="paramEdit"/>
-            <c:param name="rpp_id" value="${rpp.id}"/>
-          </c:url>
-          <c:url value="Report" var="urlDelete">
-            <c:param name="action" value="paramDelete"/>
-            <c:param name="rpp_id" value="${rpp.id}"/>
-          </c:url>
+        <c:forEach var="fe" items="${params}" varStatus="row">
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td>${rpp.label}</td><td>${rpp.name}</td><td>${rpp.type}</td>
-            <td align="center">
-              <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
-              &nbsp;
-              <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
-            </td>
+            <td>${fe.label}</td>
+            <td>${fe.name}</td>
+            <td>${fe.width}</td>
+            <td>${fe.height}</td>
+            <td>${fe.field}</td>
+            <td>${fe.others}</td>
           </tr>
         </c:forEach>
       </table>

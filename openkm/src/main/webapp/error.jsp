@@ -1,6 +1,7 @@
 <%@ page isErrorPage="true" %>
 <%@ page import="com.openkm.frontend.client.OKMException" %>
 <%@ page import="com.openkm.util.FormatUtil"%>
+<%@ page import="bsh.TargetError" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -24,7 +25,11 @@
       	<h2>Application error</h2>
       </td>
     </tr>
-     <% if (exception instanceof OKMException) { %>
+    <tr>
+      <td><b>Class:</b></td>
+      <td><%=exception.getClass().getName() %></td>
+    </tr>
+    <% if (exception instanceof OKMException) { %>
     <tr>
       <td><b>Code:</b></td>
       <td><%=((OKMException) exception).getCode() %></td>
@@ -33,11 +38,20 @@
       <td><b>Message:</b></td>
       <td><%=((OKMException) exception).getMessage() %></td>
     </tr>
-    <% } else { %>
+    <% } else if (exception instanceof TargetError) { %>
     <tr>
-      <td><b>Class:</b></td>
-      <td><%=exception.getClass().getName() %></td>
+      <td><b>Text:</b></td>
+      <td><%=((TargetError) exception).getErrorText() %></td>
     </tr>
+    <tr>
+      <td><b>Source:</b></td>
+      <td><%=((TargetError) exception).getErrorSourceFile() %></td>
+    </tr>
+    <tr>
+      <td><b>Line:</b></td>
+      <td><%=((TargetError) exception).getErrorLineNumber() %></td>
+    </tr>
+    <% } else { %>
     <tr>
       <td><b>Message:</b></td>
       <td><%=exception.getMessage() %></td>
