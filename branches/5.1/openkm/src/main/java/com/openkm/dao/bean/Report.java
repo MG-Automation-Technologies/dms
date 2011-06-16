@@ -22,25 +22,15 @@
 package com.openkm.dao.bean;
 
 import java.io.Serializable;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 public class Report implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	public static final String SQL = "sql";
-	public static final String HIBERNATE = "hibernate";
-	public static final String XPATH = "xpath";
-	public static final String COLLECTION = "collection";
-	public static final String SCRIPT = "script";
-	
 	private int id;
 	private String name;
-	private String type;
 	private String fileContent;
 	private String fileMime;
 	private String fileName;
-	private Set<ReportParameter> params = new LinkedHashSet<ReportParameter>();
 	private boolean active;
 	
 	public int getId() {
@@ -57,14 +47,6 @@ public class Report implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-	
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
 	}
 	
 	public String getFileContent() {
@@ -98,26 +80,16 @@ public class Report implements Serializable {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-	
-	public Set<ReportParameter> getParams() {
-		return params;
-	}
-
-	public void setParams(Set<ReportParameter> params) {
-		this.params = params;
-	}
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("id="); sb.append(id);
 		sb.append(", name="); sb.append(name);
-		sb.append(", type="); sb.append(type);
 		sb.append(", fileName="); sb.append(fileName);
 		sb.append(", fileMime="); sb.append(fileMime);
 		sb.append(", fileContent="); sb.append("[BIG]");
 		sb.append(", active="); sb.append(active);
-		sb.append(", params="); sb.append(params);
 		sb.append("}");
 		return sb.toString();
 	}
