@@ -272,6 +272,7 @@ public class ExtensionManager {
 	 */
 	private static void addPropertyGroupHandlerExtension(PropertyGroupHandlerExtension handlerExtension) {
 		Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.addPropertyGroupHandlerExtension(handlerExtension);
+		Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.addPropertyGroupHandlerExtension(handlerExtension);
 	}
 	
 	/**
