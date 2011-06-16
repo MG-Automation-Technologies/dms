@@ -32,7 +32,6 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.bean.Report;
-import com.openkm.dao.bean.ReportParameter;
 
 public class ReportDAO {
 	private static Logger log = LoggerFactory.getLogger(ReportDAO.class);
@@ -156,75 +155,6 @@ public class ReportDAO {
 			Query q = session.createQuery(qs);
 			List<Report> ret = q.list();
 			log.debug("findAll: {}", ret);
-			return ret;
-		} catch (HibernateException e) {
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-	}
-	
-	/**
-	 * Update
-	 */
-	public static void updateParam(ReportParameter rpp) throws DatabaseException {
-		log.debug("updateParam({})", rpp);
-		Session session = null;
-		Transaction tx = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-			session.update(rpp);
-			HibernateUtil.commit(tx);
-		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-		
-		log.debug("updateParam: void");
-	}
-	
-	/**
-	 * Delete
-	 */
-	public static void deleteParam(int rppId) throws DatabaseException {
-		log.debug("deleteParam({})", rppId);
-		Session session = null;
-		Transaction tx = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-			ReportParameter rpp = (ReportParameter) session.load(ReportParameter.class, rppId);
-			session.delete(rpp);
-			HibernateUtil.commit(tx);
-		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-		
-		log.debug("deleteParam: void");
-	}
-	
-	/**
-	 * Find by pk
-	 */
-	public static ReportParameter findParamByPk(int rppId) throws DatabaseException {
-		log.debug("findParamByPk({})", rppId);
-		String qs = "from ReportParameter rpp where rpp.id=:id";
-		Session session = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			Query q = session.createQuery(qs);
-			q.setInteger("id", rppId);
-			ReportParameter ret = (ReportParameter) q.setMaxResults(1).uniqueResult();
-			log.debug("findParamByPk: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);

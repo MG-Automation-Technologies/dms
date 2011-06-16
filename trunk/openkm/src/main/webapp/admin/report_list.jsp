@@ -18,7 +18,7 @@
       <h1>Reports</h1>
       <table class="results" width="70%">
         <tr>
-          <th>Name</th><th>Type</th><th>File Name</th><th>Active</th>
+          <th>Name</th><th>File Name</th><th>Active</th>
           <th width="100px">
             <c:url value="Report" var="urlCreate">
               <c:param name="action" value="create"/>
@@ -39,12 +39,12 @@
             <c:param name="action" value="paramList"/>
             <c:param name="rp_id" value="${rp.id}"/>
           </c:url>
-          <c:url value="Report" var="urlExecParams">
-            <c:param name="action" value="execParams"/>
+          <c:url value="Report" var="urlGetParams">
+            <c:param name="action" value="getParams"/>
             <c:param name="rp_id" value="${rp.id}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td>${rp.name}</td><td>${rp.type}</td><td>${rp.fileName}</td>
+            <td>${rp.name}</td><td>${rp.fileName}</td>
             <td align="center">
               <c:choose>
                 <c:when test="${rp.active}">
@@ -60,9 +60,16 @@
               &nbsp;
               <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
               &nbsp;
-              <a href="${urlParams}"><img src="img/action/params.png" alt="Parameters" title="Parameters"/></a>
+              <c:choose>
+                <c:when test="${rp.fileMime == 'application/x-report'}">
+                  <a href="${urlParams}"><img src="img/action/params.png" alt="Parameters" title="Parameters"/></a>
+                </c:when>
+                <c:otherwise>
+                  <img src="img/action/params_disabled.png" alt="Parameters" title="Parameters"/>
+                </c:otherwise>
+              </c:choose>
               &nbsp;
-              <a href="${urlExecParams}"><img src="img/action/signal.png" alt="Execute" title="Execute"/></a>
+              <a href="${urlGetParams}"><img src="img/action/signal.png" alt="Execute" title="Execute"/></a>
             </td>
           </tr>
         </c:forEach>

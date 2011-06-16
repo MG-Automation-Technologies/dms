@@ -24,7 +24,10 @@ package com.openkm.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import org.apache.commons.compress.archivers.jar.JarArchiveEntry;
 import org.apache.commons.compress.archivers.jar.JarArchiveOutputStream;
@@ -156,5 +159,39 @@ public class ArchiveUtils {
 		}
 		
 		log.debug("createJarHelper: void");
+	}
+	
+	/**
+	 * Read file from ZIP
+	 */
+	public static byte[] readFileFromZip(ZipInputStream zis, String filename) throws IOException {
+		ZipEntry zi = null;
+		byte content[] = null;
+		
+		while ((zi = zis.getNextEntry()) != null) {
+			if (filename.equals(zi.getName())) {
+				IOUtils.toByteArray(zis);
+				break;
+			}
+		}
+		
+		return content;
+	}
+	
+	/**
+	 * Read file from ZIP
+	 */
+	public static InputStream getInputStreamFromZip(ZipInputStream zis, String filename) throws IOException {
+		ZipEntry zi = null;
+		InputStream is = null;
+		
+		while ((zi = zis.getNextEntry()) != null) {
+			if (filename.equals(zi.getName())) {
+				is = zis;
+				break;
+			}
+		}
+		
+		return is;
 	}
 }
