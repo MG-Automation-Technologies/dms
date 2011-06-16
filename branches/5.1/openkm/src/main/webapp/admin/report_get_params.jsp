@@ -21,7 +21,7 @@
       <form action="Report">
         <input type="hidden" name="action" value="execute"/>
         <input type="hidden" name="rp_id" value="${rp_id}"/>
-        <input type="hidden" name="out" id="out" value=""/>
+        <input type="hidden" name="format" id="format" value=""/>
         <table class="results" width="50%">
           <tr>
             <th>Label</th><th>Name</th><th>Type</th><th>Value</th>
@@ -41,11 +41,11 @@
           </c:choose>
           <tr class="fuzzy">
             <td colspan="4" align="right">
-              <button onclick="$('#out').val('<c:out value="${ReportUtils.OUTPUT_PDF}"/>')"><img src="img/action/pdf.png" alt="Generate PDF" title="Generate PDF"/></button>
+              <button onclick="$('#format').val('<c:out value="${ReportUtils.OUTPUT_PDF}"/>')"><img src="img/action/pdf.png" alt="Generate PDF" title="Generate PDF"/></button>
               &nbsp;
-              <button onclick="$('#out').val('<c:out value="${ReportUtils.OUTPUT_RTF}"/>')"><img src="img/action/rtf.png" alt="Generate RTF" title="Generate RTF"/></button>
+              <button onclick="$('#format').val('<c:out value="${ReportUtils.OUTPUT_RTF}"/>')"><img src="img/action/rtf.png" alt="Generate RTF" title="Generate RTF"/></button>
               &nbsp;
-              <button onclick="$('#out').val('<c:out value="${ReportUtils.OUTPUT_CSV}"/>')"><img src="img/action/csv.png" alt="Generate CSV" title="Generate CSV"/></button>
+              <button onclick="$('#format').val('<c:out value="${ReportUtils.OUTPUT_CSV}"/>')"><img src="img/action/csv.png" alt="Generate CSV" title="Generate CSV"/></button>
             </td>
           </tr>
         </table>
