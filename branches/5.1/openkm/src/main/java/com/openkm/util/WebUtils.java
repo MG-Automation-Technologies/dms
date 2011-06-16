@@ -233,18 +233,19 @@ public class WebUtils {
 	 * Send file to client browser
 	 * @throws IOException If there is a communication error.
 	 */
-	public static void sendFile(HttpServletRequest req, HttpServletResponse resp, 
+	public static void sendFile(HttpServletRequest request, HttpServletResponse response, 
 			String fileName, String mimeType, boolean inline, InputStream is) throws IOException {
-		log.debug("sendFile({}, {}, {}, {}, {}, {})", new Object[] {req, resp, fileName, mimeType, inline, is});
-		String agent = req.getHeader("USER-AGENT");
+		log.debug("sendFile({}, {}, {}, {}, {}, {})", new Object[] {request, response, fileName, mimeType, inline, is});
+		String agent = request.getHeader("USER-AGENT");
 		
 		// Disable browser cache
-		resp.setHeader("Expires", "Sat, 6 May 1971 12:00:00 GMT");
-		resp.setHeader("Cache-Control", "max-age=0, must-revalidate");
-		resp.addHeader("Cache-Control", "post-check=0, pre-check=0");
+		response.setHeader("Expires", "Sat, 6 May 1971 12:00:00 GMT");
+		response.setHeader("Cache-Control", "max-age=0, must-revalidate");
+		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+		response.setHeader("Pragma", "no-cache");
 		
 		// Set MIME type
-		resp.setContentType(mimeType);
+		response.setContentType(mimeType);
 		
 		if (null != agent && -1 != agent.indexOf("MSIE")) {
 			log.debug("Agent: Explorer");
@@ -257,16 +258,16 @@ public class WebUtils {
 		}
 		
 		if (inline) {
-			resp.setHeader("Content-disposition", "inline; filename=\""+fileName+"\"");
+			response.setHeader("Content-disposition", "inline; filename=\""+fileName+"\"");
 		} else {
-			resp.setHeader("Content-disposition", "attachment; filename=\""+fileName+"\"");
+			response.setHeader("Content-disposition", "attachment; filename=\""+fileName+"\"");
 		}
 
 		// Set length
-		resp.setContentLength(is.available());
+		response.setContentLength(is.available());
 		log.debug("File: {}, Length: {}", fileName, is.available());
 		
-		ServletOutputStream sos = resp.getOutputStream();
+		ServletOutputStream sos = response.getOutputStream();
 		IOUtils.copy(is, sos);
 		sos.flush();
 		sos.close();

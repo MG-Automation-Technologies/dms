@@ -21,12 +21,19 @@
 
 package com.openkm.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
@@ -45,12 +52,23 @@ import net.sf.jasperreports.engine.export.JRTextExporter;
 import net.sf.jasperreports.engine.export.JRTextExporterParameter;
 import net.sf.jasperreports.engine.export.oasis.JROdtExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
+import net.sf.jasperreports.engine.util.JRLoader;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import bsh.EvalError;
 import bsh.Interpreter;
+
+import com.openkm.bean.form.FormElement;
+import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
+import com.openkm.core.ParseException;
+import com.openkm.dao.HibernateUtil;
+import com.openkm.dao.LegacyDAO;
+import com.openkm.dao.ReportDAO;
+import com.openkm.dao.bean.Report;
 
 /**
  * Utilidades para jasper reports
@@ -58,7 +76,6 @@ import bsh.Interpreter;
  * http://www.javalobby.org/articles/hibernatequery103/
  */
 public class ReportUtils {
-	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(ReportUtils.class);
 	public static Map<String, JasperReport> JasperCharged = new HashMap<String, JasperReport>();
 	
@@ -72,6 +89,7 @@ public class ReportUtils {
 	
 	public static final String MIME_JASPER = "application/x-jasper";
 	public static final String MIME_JRXML = "application/x-jrxml";
+	public static final String MIME_REPORT = "application/x-report";
 	
 	public static final String MIME_TEXT = "text/plain"; 
 	public static final String MIME_HTML = "text/html";
@@ -88,8 +106,8 @@ public class ReportUtils {
 	 * Generates a report based on a map collection (from file)
 	 */
 	public static OutputStream generateReport(OutputStream out, String fileReport, 
-			Map<String, String> parameters, int outputType,
-			Collection<Map<String, String>> list) throws Exception {
+			Map<String, String> parameters, int outputType, Collection<Map<String, String>> list)
+			throws Exception {
 		if (!JasperCharged.containsKey(fileReport)) {
 			ClassLoader cl = Thread.currentThread().getContextClassLoader();
 			try {
@@ -116,8 +134,8 @@ public class ReportUtils {
 	 * Generates a report based on a map collection (from stream)
 	 */
 	public static OutputStream generateReport(OutputStream out, InputStream report, 
-			Map<String, String> parameters, int outputType, 
-			Collection<Map<String, String>> list) throws JRException {
+			Map<String, String> parameters, int outputType, Collection<Map<String, String>> list)
+			throws JRException {
 		JasperReport jasperReport = JasperCompileManager.compileReport(report);
 		JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, 
 				new JRMapCollectionDataSource(list));
@@ -250,6 +268,113 @@ public class ReportUtils {
 			docxExp.setParameter(JRExporterParameter.OUTPUT_STREAM, out);
 			docxExp.exportReport();
 			break;
+		}
+	}
+	
+	/**
+	 * Get report parameters
+	 */
+	public static List<FormElement> getReportParameters(int rpId) throws ParseException, DatabaseException,
+			IOException {
+		log.debug("getReportParameters({})", rpId);
+		//long begin = Calendar.getInstance().getTimeInMillis();
+		List<FormElement> params = null;
+		ByteArrayInputStream bais = null;
+		ZipInputStream zis = null;
+		
+		try {
+			Report rp = ReportDAO.findByPk(rpId);
+			bais = new ByteArrayInputStream(SecureStore.b64Decode(rp.getFileContent()));
+			zis = new ZipInputStream(bais);
+			ZipEntry zi = null;
+			
+			while ((zi = zis.getNextEntry()) != null) {
+				if ("params.xml".equals(zi.getName())) {
+					params = FormUtils.parseReportParameters(zis);
+					break;
+				}
+			}
+			
+			if (params == null) {
+				params = new ArrayList<FormElement>();
+				log.warn("Report '{}' has no params.xml file", rpId);
+			}
+			
+			// Activity log
+			// UserActivity.log(session.getUserID(), "GET_REPORT_PARAMETERS", rpId+"", null);
+		} catch (IOException e) {
+			throw e;
+		} finally {
+			IOUtils.closeQuietly(zis);
+			IOUtils.closeQuietly(bais);
+		}
+		
+		log.debug("getReportParameters: {}", params);
+		//log.info("Time: "+(Calendar.getInstance().getTimeInMillis()-begin)+" ms");
+		return params;
+	}
+	
+	/**
+	 * Execute report
+	 */
+	public static ByteArrayOutputStream execute(Report rp, Map<String, String> params, int format) throws
+			JRException, IOException, EvalError {
+		ByteArrayOutputStream baos = null;
+		ByteArrayInputStream bais = null;
+		ZipInputStream zis = null;
+		org.hibernate.Session dbSession = null;
+		Connection con = null;
+		
+		try {
+			baos = new ByteArrayOutputStream();
+			bais = new ByteArrayInputStream(SecureStore.b64Decode(rp.getFileContent()));
+			JasperReport jr = null;
+			
+			// Obtain or compile report
+			if (ReportUtils.MIME_JRXML.equals(rp.getFileMime())) {
+				jr = JasperCompileManager.compileReport(bais);
+			} else if (ReportUtils.MIME_JASPER.equals(rp.getFileMime())) {
+				jr = (JasperReport) JRLoader.loadObject(bais);
+			} else if (ReportUtils.MIME_REPORT.equals(rp.getFileMime())) {
+				zis = new ZipInputStream(bais);
+				ZipEntry zi = null;
+				
+				while ((zi = zis.getNextEntry()) != null) {
+					if (!zi.isDirectory()) {
+						String mimeType = Config.mimeTypes.getContentType(zi.getName());
+						
+						if (ReportUtils.MIME_JRXML.equals(mimeType)) {
+							jr = JasperCompileManager.compileReport(zis);
+							break;
+						} else if (ReportUtils.MIME_JASPER.equals(mimeType)) {
+							jr = (JasperReport) JRLoader.loadObject(zis);
+							break;
+						}
+					}
+				}
+			}
+			
+			// Guess if SQL or BSH
+			if (jr != null) {
+				JRQuery query = jr.getQuery();
+				String tq = query.getText().trim();
+					
+				if (tq.toUpperCase().startsWith("SELECT")) {
+					dbSession = HibernateUtil.getSessionFactory().openSession();
+					con = dbSession.connection();
+					ReportUtils.generateReport(baos, jr, params, format, con);
+				} else {
+					ReportUtils.generateReport(baos, jr, params, format);
+				}
+			}
+			
+			return baos;
+		} finally {
+			LegacyDAO.close(con);
+			HibernateUtil.close(dbSession);
+			IOUtils.closeQuietly(bais);
+			IOUtils.closeQuietly(baos);
+			IOUtils.closeQuietly(zis);
 		}
 	}
 }
