@@ -54,14 +54,16 @@ public class WorkflowWidget extends Composite {
 	private String uuid;
 	private FormManager manager;
 	private WorkflowWidgetToFire workflowWidgetToFire;
+	private Map<String, Object> workflowVariables;
 	
 	/**
 	 * WorkflowWidget
 	 */
-	public WorkflowWidget(double id, String uuid, WorkflowWidgetToFire workflowWidgetToFire) {
+	public WorkflowWidget(double id, String uuid, WorkflowWidgetToFire workflowWidgetToFire, Map<String, Object> workflowVariables) {
 		this.id = id;
 		this.uuid = uuid;
 		this.workflowWidgetToFire = workflowWidgetToFire;
+		this.workflowVariables = workflowVariables;
 		drawed = false;
 
 		vPanel = new VerticalPanel();
@@ -122,6 +124,7 @@ public class WorkflowWidget extends Composite {
 			// Initial task is always called start
 			manager.setFormElements(result.get(Main.get().workspaceUserProperties.getWorkspace().getWorkflowRunConfigForm()));
 			if (manager.getFormElements()!=null) {
+				manager.loadDataFromWorkflowVariables(workflowVariables);
 				drawForm();
 				workflowWidgetToFire.hasPendingProcessDefinitionForms();				
 			} else {

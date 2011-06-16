@@ -251,7 +251,7 @@ public class TemplateWizardPopup extends DialogBox {
 		switch (status) {
 			case STATUS_PROPERTY_GROUPS:
 				if (propertyGroupWidget!=null) {
-					formElementList = propertyGroupWidget.updateFormElementsValuesWithNewer();
+					formElementList.addAll(propertyGroupWidget.updateFormElementsValuesWithNewer());
 					showNextWizard();
 				}
 				break;

@@ -21,6 +21,7 @@
 
 package com.openkm.frontend.client.widget;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -225,7 +226,7 @@ public class WorkflowPopup extends DialogBox implements WorkflowWidgetToFire {
 					uuid = Main.get().mainPanel.desktop.browser.fileBrowser.getMail().getUuid();
 				}
 			}
-			workflowWidget = new WorkflowWidget(new Double(listBox.getValue(listBox.getSelectedIndex())).doubleValue(), uuid, this);
+			workflowWidget = new WorkflowWidget(new Double(listBox.getValue(listBox.getSelectedIndex())).doubleValue(), uuid, this, new HashMap<String, Object>());
 			sp.add(workflowWidget);
 			workflowWidget.runProcessDefinition();
 		}

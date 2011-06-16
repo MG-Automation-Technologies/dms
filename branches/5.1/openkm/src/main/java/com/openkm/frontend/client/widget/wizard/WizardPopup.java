@@ -21,6 +21,7 @@
 
 package com.openkm.frontend.client.widget.wizard;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -33,11 +34,11 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
+import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
-import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
 import com.openkm.extension.frontend.client.widget.digitalsignature.DigitalSignature;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
@@ -208,7 +209,7 @@ public class WizardPopup extends DialogBox {
 		hPanel.add(actualButton);
 		hPanel.add(space);
 		hPanel.setCellWidth(space, "3");
-		workflowWidget = new WorkflowWidget(workflowsList.get(workflowIndex).doubleValue(), uuid, vPanelFired);
+		workflowWidget = new WorkflowWidget(workflowsList.get(workflowIndex).doubleValue(), uuid, vPanelFired, new HashMap<String, Object>());
 		vPanelFired.clear();
 		vPanelFired.add(workflowWidget);
 		vPanelFired.add(hPanel);

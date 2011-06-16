@@ -1367,25 +1367,28 @@ public class FormManager {
 	 * @param map
 	 */
 	public void loadDataFromPropertyGroupVariables(Map<String, GWTFormElement> map) {
-		for (GWTFormElement formElement : formElementList) {
-			if (map.containsKey(formElement.getName())) {
-				if (formElement instanceof GWTTextArea) {
-					GWTTextArea textArea = (GWTTextArea) formElement;
-					textArea.setValue(getStringValueFromVariable(map.get(formElement.getName())));
-				} else if (formElement instanceof GWTInput) {
-					GWTInput input = (GWTInput) formElement;
-					input.setValue(getStringValueFromVariable(map.get(formElement.getName())));
-				} else if (formElement instanceof GWTSuggestBox) {
-					GWTSuggestBox suggestBox = (GWTSuggestBox) formElement;
-					suggestBox.setValue(getStringValueFromVariable(map.get(formElement.getName())));
-				} else if (formElement instanceof GWTCheckBox) {
-					GWTCheckBox checkBox = (GWTCheckBox) formElement;
-					checkBox.setValue(getBooleanValueFromVariable(map.get(formElement.getName())));
-				} else if (formElement instanceof GWTSelect) {
-					GWTSelect select = (GWTSelect) formElement;
-					select.setOptions(getOptionsValueFromVariable(formElement.getName(), select.getOptions())) ;
-				} else if (formElement instanceof GWTUpload) {
-					// No aplicable to property groups
+		// Only iterate if really there's some variable to be mapped 
+		if (!map.isEmpty()) {
+			for (GWTFormElement formElement : formElementList) {
+				if (map.containsKey(formElement.getName())) {
+					if (formElement instanceof GWTTextArea) {
+						GWTTextArea textArea = (GWTTextArea) formElement;
+						textArea.setValue(getStringValueFromVariable(map.get(formElement.getName())));
+					} else if (formElement instanceof GWTInput) {
+						GWTInput input = (GWTInput) formElement;
+						input.setValue(getStringValueFromVariable(map.get(formElement.getName())));
+					} else if (formElement instanceof GWTSuggestBox) {
+						GWTSuggestBox suggestBox = (GWTSuggestBox) formElement;
+						suggestBox.setValue(getStringValueFromVariable(map.get(formElement.getName())));
+					} else if (formElement instanceof GWTCheckBox) {
+						GWTCheckBox checkBox = (GWTCheckBox) formElement;
+						checkBox.setValue(getBooleanValueFromVariable(map.get(formElement.getName())));
+					} else if (formElement instanceof GWTSelect) {
+						GWTSelect select = (GWTSelect) formElement;
+						select.setOptions(getOptionsValueFromVariable(formElement.getName(), select.getOptions())) ;
+					} else if (formElement instanceof GWTUpload) {
+						// No aplicable to property groups
+					}
 				}
 			}
 		}
@@ -1395,50 +1398,53 @@ public class FormManager {
 	 * @param map
 	 */
 	public void loadDataFromWorkflowVariables(Map<String, Object> map) {
-		for (GWTFormElement formElement : formElementList) {
-			if (formElement instanceof GWTTextArea) {
-				GWTTextArea textArea = (GWTTextArea) formElement;
-				if (!textArea.getData().equals("") && map.keySet().contains(textArea.getData())) {
-					textArea.setValue(getStringValueFromVariable(map.get(textArea.getData())));
-				}
-			} else if (formElement instanceof GWTInput) {
-				GWTInput input = (GWTInput) formElement;
-				if (!input.getData().equals("") && map.keySet().contains(input.getData())) {
-					input.setValue(getStringValueFromVariable(map.get(input.getData())));
-				}
-			} else if (formElement instanceof GWTSuggestBox) {
-				GWTSuggestBox suggestBox = (GWTSuggestBox) formElement;
-				if (!suggestBox.getData().equals("") && map.keySet().contains(suggestBox.getData())) {
-					suggestBox.setValue(getStringValueFromVariable(map.get(suggestBox.getData())));
-				}
-			} else if (formElement instanceof GWTCheckBox) {
-				GWTCheckBox checkBox = (GWTCheckBox) formElement;
-				if (!checkBox.getData().equals("") && map.keySet().contains(checkBox.getData())) {
-					checkBox.setValue(getBooleanValueFromVariable(map.get(checkBox.getData())));
-				}
-			} else if (formElement instanceof GWTSelect) {
-				GWTSelect select = (GWTSelect) formElement;
-				if (!select.getData().equals("") && map.keySet().contains(select.getData())) {
-					select.setOptions(getOptionsValueFromVariable(map.get(select.getData()), select.getOptions())) ;
-				}
-			} else if (formElement instanceof GWTUpload) {
-				GWTUpload upload = (GWTUpload) formElement;
-				if (!upload.getData().equals("") && map.keySet().contains(upload.getData())) {
-					GWTUpload uploadData = (GWTUpload) map.get(upload.getData());
-					if (!uploadData.getDocumentName().equals("")) {
-						upload.setDocumentName(uploadData.getDocumentName());
+		// Only iterate if really there's some variable to be mapped 
+		if (!map.isEmpty()) {
+			for (GWTFormElement formElement : formElementList) {
+				if (formElement instanceof GWTTextArea) {
+					GWTTextArea textArea = (GWTTextArea) formElement;
+					if (!textArea.getData().equals("") && map.keySet().contains(textArea.getData())) {
+						textArea.setValue(getStringValueFromVariable(map.get(textArea.getData())));
 					}
-					if (!uploadData.getDocumentUuid().equals("")) {
-						upload.setDocumentUuid(uploadData.getDocumentUuid());
+				} else if (formElement instanceof GWTInput) {
+					GWTInput input = (GWTInput) formElement;
+					if (!input.getData().equals("") && map.keySet().contains(input.getData())) {
+						input.setValue(getStringValueFromVariable(map.get(input.getData())));
 					}
-					if (!uploadData.getFolderPath().equals("")) {
-						upload.setFolderPath(uploadData.getFolderPath());
+				} else if (formElement instanceof GWTSuggestBox) {
+					GWTSuggestBox suggestBox = (GWTSuggestBox) formElement;
+					if (!suggestBox.getData().equals("") && map.keySet().contains(suggestBox.getData())) {
+						suggestBox.setValue(getStringValueFromVariable(map.get(suggestBox.getData())));
 					}
-					if (!uploadData.getFolderUuid().equals("")) {
-						upload.setFolderUuid(uploadData.getFolderUuid());
+				} else if (formElement instanceof GWTCheckBox) {
+					GWTCheckBox checkBox = (GWTCheckBox) formElement;
+					if (!checkBox.getData().equals("") && map.keySet().contains(checkBox.getData())) {
+						checkBox.setValue(getBooleanValueFromVariable(map.get(checkBox.getData())));
 					}
-					if (uploadData.getValidators().size()>0) {
-						upload.setValidators(uploadData.getValidators());
+				} else if (formElement instanceof GWTSelect) {
+					GWTSelect select = (GWTSelect) formElement;
+					if (!select.getData().equals("") && map.keySet().contains(select.getData())) {
+						select.setOptions(getOptionsValueFromVariable(map.get(select.getData()), select.getOptions())) ;
+					}
+				} else if (formElement instanceof GWTUpload) {
+					GWTUpload upload = (GWTUpload) formElement;
+					if (!upload.getData().equals("") && map.keySet().contains(upload.getData())) {
+						GWTUpload uploadData = (GWTUpload) map.get(upload.getData());
+						if (!uploadData.getDocumentName().equals("")) {
+							upload.setDocumentName(uploadData.getDocumentName());
+						}
+						if (!uploadData.getDocumentUuid().equals("")) {
+							upload.setDocumentUuid(uploadData.getDocumentUuid());
+						}
+						if (!uploadData.getFolderPath().equals("")) {
+							upload.setFolderPath(uploadData.getFolderPath());
+						}
+						if (!uploadData.getFolderUuid().equals("")) {
+							upload.setFolderUuid(uploadData.getFolderUuid());
+						}
+						if (uploadData.getValidators().size()>0) {
+							upload.setValidators(uploadData.getValidators());
+						}
 					}
 				}
 			}
