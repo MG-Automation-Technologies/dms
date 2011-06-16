@@ -97,8 +97,6 @@ public class FormUtils {
 						forms.put(taskName, fe);
 					}
 				}
-
-				is.close();
 			}
 		} catch (ParserConfigurationException e) {
 			throw new ParseException(e.getMessage(), e);
@@ -111,6 +109,51 @@ public class FormUtils {
 		log.debug("parseWorkflowForms: {}", forms);
 		// log.info("Time: "+(Calendar.getInstance().getTimeInMillis()-begin)+" ms");
 		return forms;
+	}
+	
+	/**
+	 * Parse params.xml definitions
+	 * 
+	 * @return A List parameter elements.
+	 */
+	public static List<FormElement> parseReportParameters(InputStream is) throws ParseException {
+		log.debug("parseReportParameters({})", is);
+		// long begin = Calendar.getInstance().getTimeInMillis();
+		List<FormElement> params = new ArrayList<FormElement>();
+
+		try {
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			dbf.setNamespaceAware(true);
+			dbf.setValidating(true);
+			ErrorHandler handler = new ErrorHandler();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			db.setErrorHandler(handler);
+
+			if (is != null) {
+				Document doc = db.parse(is);
+				doc.getDocumentElement().normalize();
+				NodeList nlForm = doc.getElementsByTagName("report-parameters");
+				
+				for (int i = 0; i < nlForm.getLength(); i++) {
+					Node nForm = nlForm.item(i);
+					
+					if (nForm.getNodeType() == Node.ELEMENT_NODE) {
+						NodeList nlField = nForm.getChildNodes();
+						params = parseField(nlField);
+					}
+				}
+			}
+		} catch (ParserConfigurationException e) {
+			throw new ParseException(e.getMessage(), e);
+		} catch (SAXException e) {
+			throw new ParseException(e.getMessage(), e);
+		} catch (IOException e) {
+			throw new ParseException(e.getMessage(), e);
+		}
+
+		log.debug("parseReportParameters: {}", params);
+		// log.info("Time: "+(Calendar.getInstance().getTimeInMillis()-begin)+" ms");
+		return params;
 	}
 
 	/**
