@@ -144,17 +144,19 @@ public class FormUtils {
 						Node nForm = nlForm.item(i);
 						
 						if (nForm.getNodeType() == Node.ELEMENT_NODE) {
-							String pgLabel = nForm.getAttributes().getNamedItem("label").getNodeValue();
-							String pgName = nForm.getAttributes().getNamedItem("name").getNodeValue();
-							String pgVisible = nForm.getAttributes().getNamedItem("visible").getNodeValue();
-							String pgReadonly = nForm.getAttributes().getNamedItem("readonly").getNodeValue();
+							PropertyGroup pg = new PropertyGroup();
+							
+							Node item = nForm.getAttributes().getNamedItem("label");
+							if (item != null) pg.setLabel(item.getNodeValue());
+							item = nForm.getAttributes().getNamedItem("name");
+							if (item != null) pg.setName(item.getNodeValue());
+							item = nForm.getAttributes().getNamedItem("visible");
+							if (item != null) pg.setVisible(Boolean.valueOf(item.getNodeValue()));
+							item = nForm.getAttributes().getNamedItem("readonly");
+							if (item != null) pg.setReadonly(Boolean.valueOf(item.getNodeValue()));
+							
 							NodeList nlField = nForm.getChildNodes();
 							List<FormElement> fe = parseField(nlField);
-							PropertyGroup pg = new PropertyGroup();
-							pg.setLabel(pgLabel);
-							pg.setName(pgName);
-							pg.setVisible(Boolean.valueOf(pgVisible));
-							pg.setReadonly(Boolean.valueOf(pgReadonly));
 							pGroups.put(pg, fe);
 						}
 					}
