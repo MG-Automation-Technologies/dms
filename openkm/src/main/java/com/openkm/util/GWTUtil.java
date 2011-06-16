@@ -59,6 +59,7 @@ import com.openkm.bean.form.Input;
 import com.openkm.bean.form.Option;
 import com.openkm.bean.form.Select;
 import com.openkm.bean.form.SuggestBox;
+import com.openkm.bean.form.Text;
 import com.openkm.bean.form.TextArea;
 import com.openkm.bean.form.Upload;
 import com.openkm.bean.form.Validator;
@@ -139,6 +140,7 @@ import com.openkm.frontend.client.bean.form.GWTInput;
 import com.openkm.frontend.client.bean.form.GWTOption;
 import com.openkm.frontend.client.bean.form.GWTSelect;
 import com.openkm.frontend.client.bean.form.GWTSuggestBox;
+import com.openkm.frontend.client.bean.form.GWTText;
 import com.openkm.frontend.client.bean.form.GWTTextArea;
 import com.openkm.frontend.client.bean.form.GWTUpload;
 import com.openkm.frontend.client.bean.form.GWTValidator;
@@ -945,6 +947,13 @@ public class GWTUtil {
 			gWTUpload.setData(upload.getData());
 			gWTUpload.setValidators(copyValidators(upload.getValidators()));
 			return gWTUpload;
+		} else if (formElement instanceof Text) {
+			GWTText text = new GWTText();
+			text.setName(formElement.getName());
+			text.setLabel(formElement.getLabel());
+			text.setHeight(formElement.getHeight());
+			text.setWidth(formElement.getWidth());
+			return text;
 		} else {
 			return new GWTFormElement();
 		}
@@ -1037,7 +1046,15 @@ public class GWTUtil {
 			upload.setType(gWTUpload.getType());
 			upload.setData(gWTUpload.getData());
 			return upload;
-		}else {
+		} else if (formElement instanceof GWTText) {
+			Text text = new Text();
+			GWTText gWTText = (GWTText) formElement;
+			text.setName(gWTText.getName());
+			text.setLabel(gWTText.getLabel());
+			text.setHeight(gWTText.getHeight());
+			text.setWidth(gWTText.getWidth());
+			return text;
+		} else {
 			return new FormElement();
 		}
 	}
@@ -1071,6 +1088,8 @@ public class GWTUtil {
 		} else if (formElement instanceof GWTTextArea) {
 			return ((GWTTextArea) formElement).getValue();
 		} else if (formElement instanceof GWTUpload) {
+			return ((GWTButton) formElement).getLabel();
+		} else if (formElement instanceof GWTText) {
 			return ((GWTButton) formElement).getLabel();
 		}
 		
