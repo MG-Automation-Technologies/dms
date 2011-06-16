@@ -818,12 +818,10 @@ public class FolderTree extends Composite implements OriginPanel {
 		if (refreshFileBrowser && docPath != null && !docPath.equals("")) {
 			Main.get().mainPanel.desktop.browser.fileBrowser.setSelectedRowId(docPath);
 		} else {
-			Main.get().mainPanel.desktop.browser.fileBrowser.setSelectedRowId(""); // We
-			// remove
-			// the
-			// selectedRowID
-			setTabFolderAfterRefresh = true; // We must set tab folder
-			// properties on the last node
+			Main.get().mainPanel.desktop.browser.fileBrowser.setSelectedRowId(""); // We remove the selectedRowID
+			if (!rootPath.equals(actualPath)) {  // Only if rootPath != actualPath ( case must open folders )
+				setTabFolderAfterRefresh = true; // We must set tab folder properties on the last node
+			}
 		}
 
 		while (!rootPath.equals(actualPath)) {
@@ -1410,6 +1408,19 @@ public class FolderTree extends Composite implements OriginPanel {
 	 */
 	public GWTFolder getFolder() {
 		return (GWTFolder) actualItem.getUserObject();
+	}
+	
+	/**
+	 * getParentFolder
+	 * 
+	 * @return
+	 */
+	public GWTFolder getParentFolder() {
+		if (actualItem!=rootItem) {
+			return (GWTFolder) actualItem.getParentItem().getUserObject();
+		} else {
+			return (GWTFolder) actualItem.getUserObject();
+		}
 	}
 
 	/**
