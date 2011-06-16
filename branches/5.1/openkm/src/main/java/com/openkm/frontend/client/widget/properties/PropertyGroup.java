@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
+import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPermission;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.extension.event.handler.PropertyGroupHandlerExtension;
@@ -60,9 +61,21 @@ public class PropertyGroup extends Composite implements HasPropertyGroupHandlerE
 	/**
 	 * PropertyGroup
 	 */
-	public PropertyGroup(GWTPropertyGroup propertyGroup, GWTDocument doc, GWTFolder folder, boolean visible) {	
+	public PropertyGroup(GWTPropertyGroup propertyGroup, Object node, GWTFolder parentFolder, boolean visible) {
+		String path = "";
+		byte permissions = 0;
+		if (node instanceof GWTDocument) {
+			path = ((GWTDocument) node).getPath();
+			permissions = ((GWTDocument) node).getPermissions();
+		} else if (node instanceof GWTFolder) {
+			path = ((GWTFolder) node).getPath();
+			permissions = ((GWTFolder) node).getPermissions();
+		} else if (node instanceof GWTMail) {
+			path = ((GWTMail) node).getPath();
+			permissions = ((GWTMail) node).getPermissions();
+		}
 		hPanelFired = new FiredHorizontalPanel();
-		propertyGroupWidget = new PropertyGroupWidget(doc.getPath(), propertyGroup, hPanelFired, hPanelFired);
+		propertyGroupWidget = new PropertyGroupWidget(path, propertyGroup, hPanelFired, hPanelFired);
 		scrollPanel = new ScrollPanel(propertyGroupWidget);
 		this.propertyGroup = propertyGroup;
 		
@@ -93,7 +106,7 @@ public class PropertyGroup extends Composite implements HasPropertyGroupHandlerE
 			@Override
 			public void onClick(ClickEvent event) {
 				if (!editValues) {
-					Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_DELETE_DOCUMENT_PROPERTY_GROUP);
+					Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_DELETE_PROPERTY_GROUP);
 					Main.get().confirmPopup.show();
 				} 
 			}
@@ -118,8 +131,8 @@ public class PropertyGroup extends Composite implements HasPropertyGroupHandlerE
 			changeButton.setVisible(visible);
 			removeButton.setVisible(visible);
 			
-		} else if ( ((doc.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) &&
-			     ((folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE))  {
+		} else if ( ((permissions & GWTPermission.WRITE) == GWTPermission.WRITE) &&
+			     ((parentFolder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE))  {
 	    	 		changeButton.setVisible(true);
 	    	 		removeButton.setVisible(true);
 	    	 		
@@ -158,51 +171,36 @@ public class PropertyGroup extends Composite implements HasPropertyGroupHandlerE
 	 * Gets all group properties 
 	 */
 	private void getProperties() {
-		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
-		if (gwtDocument!= null) {
-			propertyGroupWidget.getProperties();
-		}
+		propertyGroupWidget.getProperties();
 	}
 
 	/**
 	 * Remove the document property group
 	 */
 	public void removeGroup() {
-		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
-		if (gwtDocument!= null) {
-			propertyGroupWidget.removeGroup();
-		}
+		propertyGroupWidget.removeGroup();
 	}
 	
 	/**
 	 * set document property group
 	 */
 	public void setProperties() {
-		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
-		if (gwtDocument!= null) {
-			Main.get().mainPanel.desktop.browser.tabMultiple.status.setGroupProperties();
-			propertyGroupWidget.setProperties();
-		}
+		Main.get().mainPanel.desktop.browser.tabMultiple.status.setGroupProperties();
+		propertyGroupWidget.setProperties();
 	}
 	
 	/**
 	 * edit document property group
 	 */
 	public void edit() {
-		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
-		if (gwtDocument!= null) {
-			propertyGroupWidget.edit();
-		}
+		propertyGroupWidget.edit();
 	}
 	
 	/**
 	 * edit document property group
 	 */
 	public void cancelEdit() {
-		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
-		if (gwtDocument!= null) {
-			propertyGroupWidget.cancelEdit();
-		}
+		propertyGroupWidget.cancelEdit();
 	}
 	
 	/**

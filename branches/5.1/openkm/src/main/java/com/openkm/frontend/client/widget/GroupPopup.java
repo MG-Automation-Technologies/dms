@@ -38,9 +38,10 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
+import com.openkm.frontend.client.bean.GWTFolder;
+import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
@@ -150,14 +151,23 @@ public class GroupPopup extends DialogBox {
 	 */
 	final AsyncCallback<Object> callbackAddGroup = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
-			if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected() ){
-				GWTDocument doc = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
-				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.setProperties(doc);
-			}
-			// Case there's only two items (white and other) and this is added, then
-			// there's no item to be added and must disable addPropertyGroup
-			if (listBox.getItemCount()==2) {
-				Main.get().mainPanel.topPanel.toolBar.disableAddPropertyGroup();
+			Object node = Main.get().mainPanel.topPanel.toolBar.getActualNode();
+			if (node!=null) {
+				if (Main.get().mainPanel.topPanel.toolBar.isNodeDocument()){
+					GWTDocument doc = (GWTDocument) Main.get().mainPanel.topPanel.toolBar.getActualNode();
+					Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.setProperties(doc);
+				} else if (Main.get().mainPanel.topPanel.toolBar.isNodeFolder()){
+					GWTFolder folder = (GWTFolder) Main.get().mainPanel.topPanel.toolBar.getActualNode();
+					Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.setProperties(folder);
+				} else if (Main.get().mainPanel.topPanel.toolBar.isNodeMail()){
+					GWTMail mail = (GWTMail) Main.get().mainPanel.topPanel.toolBar.getActualNode();
+					Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.setProperties(mail);
+				}
+				// Case there's only two items (white and other) and this is added, then
+				// there's no item to be added and must disable addPropertyGroup
+				if (listBox.getItemCount()==2) {
+					Main.get().mainPanel.topPanel.toolBar.disableAddPropertyGroup();
+				}
 			}
 		}
 
