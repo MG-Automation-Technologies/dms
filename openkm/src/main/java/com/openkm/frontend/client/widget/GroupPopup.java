@@ -39,6 +39,8 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
+import com.openkm.frontend.client.bean.GWTFolder;
+import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
@@ -58,6 +60,7 @@ public class GroupPopup extends DialogBox {
 	private Button button;
 	private Button addButton;
 	private ListBox listBox;
+	private String path;
 	
 	/**
 	 * About popup
@@ -147,14 +150,23 @@ public class GroupPopup extends DialogBox {
 	 */
 	final AsyncCallback<Object> callbackAddGroup = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
-			if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected() ){
-				GWTDocument doc = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
-				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.setProperties(doc);
-			}
-			// Case there's only two items (white and other) and this is added, then
-			// there's no item to be added and must disable addPropertyGroup
-			if (listBox.getItemCount()==2) {
-				Main.get().mainPanel.topPanel.toolBar.disableAddPropertyGroup();
+			Object node = Main.get().mainPanel.topPanel.toolBar.getActualNode();
+			if (node!=null) {
+				if (Main.get().mainPanel.topPanel.toolBar.isNodeDocument()){
+					GWTDocument doc = (GWTDocument) Main.get().mainPanel.topPanel.toolBar.getActualNode();
+					Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.setProperties(doc);
+				} else if (Main.get().mainPanel.topPanel.toolBar.isNodeFolder()){
+					GWTFolder folder = (GWTFolder) Main.get().mainPanel.topPanel.toolBar.getActualNode();
+					Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.setProperties(folder);
+				} else if (Main.get().mainPanel.topPanel.toolBar.isNodeMail()){
+					GWTMail mail = (GWTMail) Main.get().mainPanel.topPanel.toolBar.getActualNode();
+					Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.setProperties(mail);
+				}
+				// Case there's only two items (white and other) and this is added, then
+				// there's no item to be added and must disable addPropertyGroup
+				if (listBox.getItemCount()==2) {
+					Main.get().mainPanel.topPanel.toolBar.disableAddPropertyGroup();
+				}
 			}
 		}
 
@@ -199,9 +211,9 @@ public class GroupPopup extends DialogBox {
 	 * Gets all property groups
 	 */
 	private void getAllGroups() {
-		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
-		if (gwtDocument!= null) {
-			propertyGroupService.getAllGroups(gwtDocument.getPath(), callbackGetAllGroups);
+		path = Main.get().mainPanel.topPanel.toolBar.getActualNodePath();
+		if (!path.equals("")) {
+			propertyGroupService.getAllGroups(path, callbackGetAllGroups);
 		}
 	}
 	
@@ -211,9 +223,8 @@ public class GroupPopup extends DialogBox {
 	private void addGroup() {
 		if (listBox.getSelectedIndex()>0) {
 			String grpName = listBox.getValue(listBox.getSelectedIndex());
-			if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
-				GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
-				propertyGroupService.addGroup(gwtDocument.getPath(), grpName, callbackAddGroup);
+			if (path!=null && !path.equals("")) {
+				propertyGroupService.addGroup(path, grpName, callbackAddGroup);
 			}
 		}
 	}

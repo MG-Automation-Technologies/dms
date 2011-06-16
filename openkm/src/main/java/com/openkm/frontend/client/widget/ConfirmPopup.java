@@ -47,7 +47,7 @@ public class ConfirmPopup extends DialogBox {
 	public static final int CONFIRM_EMPTY_TRASH 					= 3;
 	public static final int CONFIRM_PURGE_FOLDER 					= 4;
 	public static final int CONFIRM_PURGE_DOCUMENT  				= 5;
-	public static final int CONFIRM_DELETE_DOCUMENT_PROPERTY_GROUP	= 6;
+	public static final int CONFIRM_DELETE_PROPERTY_GROUP			= 6;
 	public static final int CONFIRM_PURGE_VERSION_HISTORY_DOCUMENT	= 7;
 	public static final int CONFIRM_RESTORE_HISTORY_DOCUMENT		= 8;
 	public static final int CONFIRM_SET_DEFAULT_HOME				= 9;
@@ -166,8 +166,12 @@ public class ConfirmPopup extends DialogBox {
 				}
 				break;
 			
-			case CONFIRM_DELETE_DOCUMENT_PROPERTY_GROUP:
-				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.removePropertyGroup();
+			case CONFIRM_DELETE_PROPERTY_GROUP:
+				if (Main.get().mainPanel.topPanel.toolBar.isNodeDocument()) {
+					Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.removePropertyGroup();
+				} else if (Main.get().mainPanel.topPanel.toolBar.isNodeFolder()) {
+					Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.removePropertyGroup();
+				}
 				// Always if a property group is deleted add property button on tool bar must be enabled, we execute to ensure this
 				Main.get().mainPanel.topPanel.toolBar.enableAddPropertyGroup();
 				break;
@@ -251,7 +255,7 @@ public class ConfirmPopup extends DialogBox {
 				text.setHTML(Main.i18n("confirm.purge.document"));
 				break;
 			
-			case CONFIRM_DELETE_DOCUMENT_PROPERTY_GROUP:
+			case CONFIRM_DELETE_PROPERTY_GROUP:
 				text.setHTML(Main.i18n("confirm.delete.propety.group"));
 				break;
 			
