@@ -58,7 +58,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	
 	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT.create(OKMPropertyGroupService.class);
 	
-	private String docPath;
+	private String path;
 	private CellFormatter cellFormatter;
 	private PropertyGroupWidgetToFire propertyGroupWidgetToFire;
 	private List<PropertyGroupHandlerExtension> propertyGroupHandlerExtensionList;
@@ -69,42 +69,42 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	/**
 	 * PropertyGroup
 	 * 
-	 * @param docPath The document path
+	 * @param path The document path
 	 * @param propertyGroup The group
 	 * @param widget Widget at first row
 	 * @param PropertyGroupWidgetToFire widget with methods to be fired
 	 * @param valuesMap map of initial values
 	 */
-	public PropertyGroupWidget(String docPath, GWTPropertyGroup propertyGroup, Widget widget,
+	public PropertyGroupWidget(String path, GWTPropertyGroup propertyGroup, Widget widget,
 			PropertyGroupWidgetToFire propertyGroupWidgetToFire, Map<String, GWTFormElement> valuesMap) {
 		this.propertyGroupVariablesMap = valuesMap;
-		start(docPath, propertyGroup, widget, propertyGroupWidgetToFire);
+		start(path, propertyGroup, widget, propertyGroupWidgetToFire);
 	}
 	
 	/**
 	 * PropertyGroup
 	 * 
-	 * @param docPath The document path
+	 * @param path The document path
 	 * @param propertyGroup The group 
 	 * @param widget Widget at first row
 	 * @param PropertyGroupWidgetToFire widget with methods to be fired
 	 */
-	public PropertyGroupWidget(String docPath, GWTPropertyGroup propertyGroup, Widget widget, PropertyGroupWidgetToFire propertyGroupWidgetToFire) {	
-		start(docPath, propertyGroup, widget, propertyGroupWidgetToFire);
+	public PropertyGroupWidget(String path, GWTPropertyGroup propertyGroup, Widget widget, PropertyGroupWidgetToFire propertyGroupWidgetToFire) {	
+		start(path, propertyGroup, widget, propertyGroupWidgetToFire);
 	}
 	
 	/**
 	 * start
 	 * 
-	 * @param docPath
+	 * @param path
 	 * @param propertyGroup
 	 * @param widget
 	 * @param propertyGroupWidgetToFire
 	 */
-	private void start(String docPath, GWTPropertyGroup propertyGroup, Widget widget, PropertyGroupWidgetToFire propertyGroupWidgetToFire) {
+	private void start(String path, GWTPropertyGroup propertyGroup, Widget widget, PropertyGroupWidgetToFire propertyGroupWidgetToFire) {
 		propertyGroupHandlerExtensionList = new ArrayList<PropertyGroupHandlerExtension>();
 		manager = new FormManager();
-		this.docPath = docPath;
+		this.path = path;
 		this.propertyGroup = propertyGroup;
 		this.propertyGroupWidgetToFire = propertyGroupWidgetToFire;
 		
@@ -222,7 +222,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	public void setProperties() {
 		manager.updateFormElementsValuesWithNewer();
 		manager.draw(propertyGroup.isReadonly());
-		propertyGroupService.setProperties(docPath, propertyGroup.getName(), manager.updateFormElementsValuesWithNewer(), callbackSetProperties);
+		propertyGroupService.setProperties(path, propertyGroup.getName(), manager.updateFormElementsValuesWithNewer(), callbackSetProperties);
 	}
 	
 	/**
@@ -237,14 +237,14 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	 * Gets all group properties 
 	 */
 	public void getProperties() {
-		propertyGroupService.getProperties(docPath, propertyGroup.getName(), callbackGetProperties);
+		propertyGroupService.getProperties(path, propertyGroup.getName(), callbackGetProperties);
 	}
 
 	/**
 	 * Remove the document property group
 	 */
 	public void removeGroup() {
-		propertyGroupService.removeGroup(docPath, propertyGroup.getName(), callbackRemoveGroup);
+		propertyGroupService.removeGroup(path, propertyGroup.getName(), callbackRemoveGroup);
 	}
 	
 	/**

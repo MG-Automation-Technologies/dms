@@ -106,6 +106,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	private ToolBarButton refresh;
 	private ToolBarButton scanner;
 	private ToolBarButton uploader;
+	private Object node;
 		
 	private boolean enabled = true;  // Indicates if toolbar is enabled or disabled
 	private boolean propertyGroupEnabled = false; // Indicates if property group is enabled, used only on changing language
@@ -472,7 +473,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Execute remove property group
 	 */
 	public void executeRemovePropertyGroup() {
-		Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_DELETE_DOCUMENT_PROPERTY_GROUP);
+		Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_DELETE_PROPERTY_GROUP);
 		Main.get().confirmPopup.show();
 		fireEvent(HasToolBarEvent.EXECUTE_REMOVE_PROPERTY_GROUP);
 	}
@@ -884,10 +885,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			disableCheckin();
 			disableCancelCheckout();
 			disableUnlock();
-			disableAddPropertyGroup();
-			disableRemovePropertyGroup();
 			disableWorkflow();
-			disableFiredRemovePropertyGroup();
 			disableRename();
 			disableCopy();
 			disableMove();
@@ -926,7 +924,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				disableDelete();
 			}
 			
-			if ( (folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
+			if ((folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
 				if (originPanel != FILE_BROWSER) {
 					enableAddDocument();
 					enableCreateDirectory();
@@ -953,21 +951,44 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 					enableWorkflow();
 				}
 				
+				// Enable property groups
+				if ((folderParent.getPermissions() & GWTPermission.WRITE)==GWTPermission.WRITE && 
+					(folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
+					enableRemovePropertyGroup(); // Always enable it ( not controls button, only boolean value )
+					if (Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_CATEGORIES &&
+						Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_THESAURUS &&
+						Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_PERSONAL &&
+						Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_TRASH && 
+						Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_MAIL) {
+						getAllGroups(folder); // Evaluates enable or disable property group buttons
+					}
+				} else {
+					disableAddPropertyGroup();
+					disableRemovePropertyGroup();
+				}
+				
 			} else {
 				if (originPanel != FILE_BROWSER) {
 					disableCreateDirectory();
 					disableAddDocument();
 				}
+				disableAddPropertyGroup();
+				disableRemovePropertyGroup();
 			}
 			
-			// Except taxonomy and thesaurus stack panels always disabling 
-			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TEMPLATES ||
-				Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_PERSONAL || 
+			// Except taxonomy categories and thesaurus stack panels always disabling 
+			if 	(Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_PERSONAL || 
 				Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TRASH || 
 				Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_MAIL) {
 				disableAddPropertyGroup();
 				disableRemovePropertyGroup();
 				disableFiredRemovePropertyGroup();
+				disableAddSubscription();
+				disableRemoveSubscription();
+			}
+			
+			// On templates disables subscription, but property group are enabled
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TEMPLATES) {
 				disableAddSubscription();
 				disableRemoveSubscription();
 			}
@@ -1085,7 +1106,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 							Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_PERSONAL &&
 							Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_TRASH && 
 							Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_MAIL) {
-							getAllGroups(); // Evaluates enable or disable property group buttons
+							getAllGroups(doc); // Evaluates enable or disable property group buttons
 						}
 					} else {
 						disableAddPropertyGroup();
@@ -2511,13 +2532,64 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	/**
 	 * Gets all property groups
 	 */
-	private void getAllGroups() {
-		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
-		if (gwtDocument!= null) {
-			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-			endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
-			propertyGroupService.getAllGroups(gwtDocument.getPath(), callbackGetAllGroups);
+	private void getAllGroups(Object node) {
+		this.node = node;
+		String path = getActualNodePath();
+		
+		if (!path.equals("")) {
+			propertyGroupService.getAllGroups(path, callbackGetAllGroups);
 		}
+	}
+	
+	/**
+	 * @return
+	 */
+	public String getActualNodePath() {
+		String path = "";
+		if (node instanceof GWTDocument) {
+			path = ((GWTDocument) node).getPath();
+		} else if (node instanceof GWTFolder) {
+			path = ((GWTFolder) node).getPath();
+		} else if (node instanceof GWTMail) {
+			path = ((GWTMail) node).getPath();
+		} 
+		return path;
+	}
+	
+	/**
+	 * getActualNode
+	 * 
+	 * @return
+	 */
+	public Object getActualNode() {
+		return node;
+	}
+	
+	/**
+	 * isNodeDocument
+	 * 
+	 * @return
+	 */
+	public boolean isNodeDocument() {
+		return (node!=null && node instanceof GWTDocument);
+	}
+	
+	/**
+	 * isNodeFolder
+	 * 
+	 * @return
+	 */
+	public boolean isNodeFolder() {
+		return (node!=null && node instanceof GWTFolder);
+	}
+	
+	/**
+	 * isNodeMail
+	 * 
+	 * @return
+	 */
+	public boolean isNodeMail() {
+		return (node!=null && node instanceof GWTMail);
 	}
 	
 	/**
