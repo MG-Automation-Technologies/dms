@@ -48,14 +48,7 @@ import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.util.GWTUtil;
 
 /**
- * Servlet Class
- * 
- * @web.servlet              name="PropertyGroupServlet"
- *                           display-name="Directory tree service"
- *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/PropertyGroupServlet"
- * @web.servlet-init-param   name="A parameter"
- *                           value="A value"
+ * PropertyGroup Servlet Class
  */
 public class PropertyGroupServlet extends OKMRemoteServiceServlet implements OKMPropertyGroupService {
 	private static Logger log = LoggerFactory.getLogger(PropertyGroupServlet.class);
