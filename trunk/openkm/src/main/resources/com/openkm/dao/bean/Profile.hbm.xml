@@ -30,7 +30,7 @@
       </set>
       <set name="reports" table="OKM_PROFILE_MSC_REPORT" lazy="false">
         <key column="PRP_ID" not-null="true"/>
-        <element column="PRP_REPORT" type="string"/>
+        <element column="PRP_REPORT" type="integer"/>
       </set>
     </component>
     

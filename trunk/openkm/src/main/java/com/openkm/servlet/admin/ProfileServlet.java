@@ -210,7 +210,7 @@ public class ProfileServlet extends BaseServlet {
 		prf.getMisc().setPrintPreview(WebUtils.getBoolean(request, "prf_misc_print_preview"));
 		prf.getMisc().setKeywordsEnabled(WebUtils.getBoolean(request, "prf_misc_keywords_enabled"));
 		prf.getMisc().setExtensions(new HashSet<String>(WebUtils.getStringList(request, "prf_misc_extensions")));
-		prf.getMisc().setReports(new HashSet<String>(WebUtils.getStringList(request, "prf_misc_reports")));
+		prf.getMisc().setReports(new HashSet<Integer>(WebUtils.getIntList(request, "prf_misc_reports")));
 		
 		// Wizard
 		prf.getWizard().setKeywordsEnabled(WebUtils.getBoolean(request, "prf_wizard_keywords"));
