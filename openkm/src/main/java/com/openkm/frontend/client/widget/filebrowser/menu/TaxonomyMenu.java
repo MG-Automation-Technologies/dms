@@ -239,7 +239,7 @@ public class TaxonomyMenu extends MenuBase {
 	Command addPropertyGroup = new Command() {
 		public void execute() {
 			if (addPropertyGroupOption) {
-				Main.get().groupPopup.show();
+				Main.get().propertyGroupPopup.show();
 				hide();
 			}
 		}

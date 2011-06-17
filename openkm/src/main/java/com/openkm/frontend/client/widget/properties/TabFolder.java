@@ -101,7 +101,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
 				int tabIndex = event.getSelectedItem().intValue();
-				Main.get().mainPanel.topPanel.toolBar.evaluateRemoveGroupProperty(isSelectedTabGroupProperty(tabIndex));
+				Main.get().mainPanel.topPanel.toolBar.evaluateRemoveGroupProperty(isRemoveGroupPropertyEnabled(tabIndex));
 				selectedTab = tabIndex;
 				if (tabIndex==SECURITY_TAB) {
 					Timer timer = new Timer() {
@@ -373,14 +373,17 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	}
 	
 	/**
-	 * Return if actual tab selected is group property
+	 * Return if actual tab selected is group property and can be removed
 	 * 
 	 * @return
 	 */
-	private boolean isSelectedTabGroupProperty(int tabIndex){
-		return (tabPanel.getWidget(tabIndex) instanceof PropertyGroup);
+	private boolean isRemoveGroupPropertyEnabled(int tabIndex) {
+		if ((tabPanel.getWidget(tabIndex) instanceof PropertyGroup)) {
+			return ((PropertyGroup) (tabPanel.getWidget(tabIndex))).isButtonsVisible();
+		} else {
+			return false;
+		}
 	}
-
 	
 	/**
 	 * resizingIncubatorWidgets 
