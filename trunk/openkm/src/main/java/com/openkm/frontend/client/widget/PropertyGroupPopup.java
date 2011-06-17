@@ -51,7 +51,7 @@ import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
  * @author jllort
  *
  */
-public class GroupPopup extends DialogBox {
+public class PropertyGroupPopup extends DialogBox {
 	
 	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT.create(OKMPropertyGroupService.class);
 	
@@ -65,7 +65,7 @@ public class GroupPopup extends DialogBox {
 	/**
 	 * About popup
 	 */
-	public GroupPopup() {
+	public PropertyGroupPopup() {
 		// Establishes auto-close when click outside
 		super(false,true);
 

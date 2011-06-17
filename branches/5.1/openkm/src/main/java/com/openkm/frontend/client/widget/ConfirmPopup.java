@@ -171,6 +171,8 @@ public class ConfirmPopup extends DialogBox {
 					Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.removePropertyGroup();
 				} else if (Main.get().mainPanel.topPanel.toolBar.isNodeFolder()) {
 					Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.removePropertyGroup();
+				} else if (Main.get().mainPanel.topPanel.toolBar.isNodeMail()) {
+					Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.removePropertyGroup();
 				}
 				// Always if a property group is deleted add property button on tool bar must be enabled, we execute to ensure this
 				Main.get().mainPanel.topPanel.toolBar.enableAddPropertyGroup();
