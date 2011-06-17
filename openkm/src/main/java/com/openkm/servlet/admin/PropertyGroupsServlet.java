@@ -148,7 +148,6 @@ public class PropertyGroupsServlet extends BaseServlet {
 
 	/**
 	 * List property groups
-
 	 */
 	private void list(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException, ParseException, RepositoryException, DatabaseException {
