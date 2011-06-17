@@ -31,7 +31,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
@@ -43,7 +42,6 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
-import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
 
@@ -53,7 +51,7 @@ import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
  * @author jllort
  *
  */
-public class GroupPopup extends DialogBox {
+public class PropertyGroupPopup extends DialogBox {
 	
 	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT.create(OKMPropertyGroupService.class);
 	
@@ -62,11 +60,12 @@ public class GroupPopup extends DialogBox {
 	private Button button;
 	private Button addButton;
 	private ListBox listBox;
+	private String path;
 	
 	/**
 	 * About popup
 	 */
-	public GroupPopup() {
+	public PropertyGroupPopup() {
 		// Establishes auto-close when click outside
 		super(false,true);
 
@@ -212,11 +211,9 @@ public class GroupPopup extends DialogBox {
 	 * Gets all property groups
 	 */
 	private void getAllGroups() {
-		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
-		if (gwtDocument!= null) {
-			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-			endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
-			propertyGroupService.getAllGroups(gwtDocument.getPath(), callbackGetAllGroups);
+		path = Main.get().mainPanel.topPanel.toolBar.getActualNodePath();
+		if (!path.equals("")) {
+			propertyGroupService.getAllGroups(path, callbackGetAllGroups);
 		}
 	}
 	
@@ -226,11 +223,8 @@ public class GroupPopup extends DialogBox {
 	private void addGroup() {
 		if (listBox.getSelectedIndex()>0) {
 			String grpName = listBox.getValue(listBox.getSelectedIndex());
-			if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
-				GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
-				ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-				endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
-				propertyGroupService.addGroup(gwtDocument.getPath(), grpName, callbackAddGroup);
+			if (path!=null && !path.equals("")) {
+				propertyGroupService.addGroup(path, grpName, callbackAddGroup);
 			}
 		}
 	}

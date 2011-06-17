@@ -235,6 +235,7 @@ public class WorkspaceUserProperties {
 			if (workspace.isTabDocumentPropertyGroupsVisible()) {
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.showPropertyGroups();
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.showPropertyGroups();
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.showPropertyGroups();
 			}
 			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.setKeywordEnabled(workspace.isKeywordEnabled());
 			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.showExtensions();
