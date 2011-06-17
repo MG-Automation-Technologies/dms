@@ -20,7 +20,9 @@
 
 package com.openkm.frontend.client.widget.mainmenu;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
@@ -30,6 +32,8 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTLanguage;
+import com.openkm.frontend.client.bean.GWTReport;
+import com.openkm.frontend.client.bean.GWTWorkspace;
 import com.openkm.frontend.client.bean.ToolBarOption;
 import com.openkm.frontend.client.contants.ui.UIMenuConstants;
 import com.openkm.frontend.client.extension.widget.menu.MenuItemExtension;
@@ -45,6 +49,10 @@ import com.openkm.frontend.client.widget.notify.NotifyPopup;
  */
 public class MainMenu extends Composite {
 	
+	private static final int OUTPUT_PDF = 2;
+	private static final int OUTPUT_RTF = 3;
+	private static final int OUTPUT_CSV = 4;
+	
 	// URI CONSTANTS
 	public static final String URI_HELP = "http://www.openkm.com";
 	public static final String URI_BUG_REPORT = "http://issues.openkm.com";
@@ -58,6 +66,7 @@ public class MainMenu extends Composite {
 	public Bookmark bookmark;
 	public BookmarkPopup bookmarkPopup;
 	public ManageBookmarkPopup manageBookmarkPopup;
+	public int reportOutput = OUTPUT_PDF;
 	
 	private MenuBar MainMenu;
 	private MenuItem menuFile;
@@ -99,15 +108,22 @@ public class MainMenu extends Composite {
 			private MenuItem skin;
 			private MenuItem debugConsole;
 			public MenuItem administration;
-			private MenuBar subMenuPreferences;
-				private MenuItem userPreferences;
 			private MenuItem preferences;
+				private MenuBar subMenuPreferences;
+					private MenuItem userPreferences;
 	private MenuItem menuBookmark;
 		public MenuBar subMenuBookmark;
 		private MenuItem home;
 		private MenuItem defaultHome;
 		private MenuItem manageBookmark;
 		private MenuItem horizontalLineBookmark1;
+	private MenuItem menuReports;
+		private MenuItem reportFormat;
+			private MenuBar subMenuReportFormat;
+				private MenuItem reportFormatPdf;
+				private MenuItem reportFormatRtf;
+				private MenuItem reportFormatCsv;
+		private MenuBar subMenuReports;
 	private MenuItem menuHelp;
 		private MenuBar subMenuHelp;
 			private MenuItem help;
@@ -336,6 +352,38 @@ public class MainMenu extends Composite {
 				projectWeb.addStyleName("okm-MainMenuItem");
 				about = new MenuItem(Util.menuHTML("img/icon/menu/about.gif", Main.i18n("general.menu.about")), true, aboutOKM);
 				about.addStyleName("okm-MainMenuItem");
+			
+			// Submenu preferences
+			preferences = new MenuItem(Util.menuHTML("img/icon/menu/preferences.gif", Main.i18n("general.menu.tools.preferences")), true, subMenuPreferences);
+			preferences.addStyleName("okm-MainMenuItem");
+				
+				// Submenu report format
+				subMenuReportFormat = new MenuBar(true);
+				subMenuReportFormat.setStyleName("okm-SubMenuBar");
+					reportFormatPdf = new MenuItem(Util.menuHTML("img/icon/menu/pdf.png", Main.i18n("general.menu.report.format.pdf")), true, enablePdfReporFormat);
+					reportFormatPdf.addStyleName("okm-MainMenuItem");
+					reportFormatRtf = new MenuItem(Util.menuHTML("img/icon/menu/rtf.png", Main.i18n("general.menu.report.format.text")), true, enableTextReporFormat);
+					reportFormatRtf.addStyleName("okm-MainMenuItem");
+					reportFormatRtf.addStyleName("okm-MenuItem-strike");
+					reportFormatCsv = new MenuItem(Util.menuHTML("img/icon/menu/csv.png", Main.i18n("general.menu.report.format.csv")), true, enableCsvReporFormat);
+					reportFormatCsv.addStyleName("okm-MainMenuItem");
+					reportFormatCsv.addStyleName("okm-MenuItem-strike");
+				subMenuReportFormat.addItem(reportFormatPdf);
+				subMenuReportFormat.addItem(reportFormatRtf);
+				subMenuReportFormat.addItem(reportFormatCsv);
+				
+			reportFormat = new MenuItem(Util.menuHTML("img/icon/menu/preferences.gif", Main.i18n("general.menu.report.format")), true, subMenuReportFormat);
+			reportFormat.addStyleName("okm-MainMenuItem");
+				
+			// Submenu tools
+			subMenuReports = new MenuBar(true);
+			subMenuReports.setStyleName("okm-SubMenuBar");
+			subMenuReports.setAutoOpen(true);
+			subMenuReports.addItem(reportFormat);
+				
+		// Menu bookmark
+		menuReports = new MenuItem(Main.i18n("general.menu.report"), subMenuReports);
+		menuReports.addStyleName("okm-MainMenuBar");
 				
 			// Submenu help
 			subMenuHelp = new MenuBar(true);
@@ -359,6 +407,7 @@ public class MainMenu extends Composite {
 		MainMenu.addItem(menuEdit);
 		MainMenu.addItem(menuTools);
 		MainMenu.addItem(menuBookmark);
+		MainMenu.addItem(menuReports);
 		MainMenu.addItem(menuHelp);
 		MainMenu.setAutoOpen(false);
 		
@@ -367,6 +416,7 @@ public class MainMenu extends Composite {
 		menuEdit.setVisible(false);
 		menuTools.setVisible(false);
 		menuBookmark.setVisible(false);
+		menuReports.setVisible(false);
 		menuHelp.setVisible(false);
 		
 		initWidget(MainMenu);
@@ -414,6 +464,11 @@ public class MainMenu extends Composite {
 			home.setHTML(Util.menuHTML("img/icon/actions/bookmark_go.gif", Main.i18n("general.menu.bookmark.home")));
 			defaultHome.setHTML(Util.menuHTML("img/icon/actions/bookmark.gif", Main.i18n("general.menu.bookmark.default.home")));
 			manageBookmark.setHTML(Util.menuHTML("img/icon/actions/bookmark_edit.gif", Main.i18n("general.menu.bookmark.edit")));
+		menuReports.setText(Main.i18n("general.menu.report"));
+			reportFormat.setHTML(Util.menuHTML("img/icon/menu/preferences.gif", Main.i18n("general.menu.report.format")));
+				reportFormatPdf.setHTML(Util.menuHTML("img/icon/menu/pdf.png", Main.i18n("general.menu.report.format.pdf")));
+				reportFormatRtf.setHTML(Util.menuHTML("img/icon/menu/rtf.png", Main.i18n("general.menu.report.format.text")));
+				reportFormatCsv.setHTML(Util.menuHTML("img/icon/menu/csv.png", Main.i18n("general.menu.report.format.csv")));
 		menuHelp.setText(Main.i18n("general.menu.help"));
 			help.setHTML(Util.menuHTML("img/icon/menu/help.gif", Util.windowOpen(Main.i18n("general.menu.help"), URI_HELP)));
 			documentation.setHTML(Util.menuHTML("img/icon/menu/documentation.gif", Util.windowOpen(Main.i18n("general.menu.documentation"), URI_DOCUMENTATION)));
@@ -727,6 +782,36 @@ public class MainMenu extends Composite {
 		}
 	};
 	
+	// Command enable pdf report format
+	Command enablePdfReporFormat = new Command() {
+		public void execute() {
+			reportOutput = OUTPUT_PDF;
+			enable(reportFormatPdf);
+			disable(reportFormatRtf);
+			disable(reportFormatCsv);
+		}
+	};
+	
+	// Command enable text report format
+	Command enableTextReporFormat = new Command() {
+		public void execute() {
+			reportOutput = OUTPUT_RTF;
+			disable(reportFormatPdf);
+			enable(reportFormatRtf);
+			disable(reportFormatCsv);
+		}
+	};
+	
+	// Command enable CSV report format
+	Command enableCsvReporFormat = new Command() {
+		public void execute() {
+			reportOutput = OUTPUT_CSV;
+			disable(reportFormatPdf);
+			enable(reportFormatRtf);
+			enable(reportFormatCsv);
+		}
+	};
+	
 	// Command menu to go to user home
 	Command goToUserHome = new Command() {
 		public void execute() {
@@ -779,7 +864,9 @@ public class MainMenu extends Composite {
 	 * 
 	 * @param option
 	 */
-	public void setAvailableOption(GWTAvailableOption option) {
+	public void setAvailableOption(GWTWorkspace workspace) {
+		GWTAvailableOption option = workspace.getAvailableOption();
+		
 		// FILE MENU
 		createDirectory.setVisible(option.isCreateFolderOption());
 		addDocument.setVisible(option.isAddDocumentOption());
@@ -827,6 +914,27 @@ public class MainMenu extends Composite {
 		manageBookmark.setVisible(option.isManageBookmarkOption());
 		horizontalLineBookmark1.setVisible(option.isHomeOption() || option.isAddBookmarkOption() || option.isAddBookmarkOption());
 		
+		// MENU REPORTS
+		if (workspace.getReports().size()>0) {
+			menuReports.setVisible(true);
+			for (final GWTReport report : workspace.getReports()) {
+				MenuItem reportMenuItem = new MenuItem(Util.menuHTML("img/icon/menu/pdf.png", report.getName()), true, new Command() {
+					@Override
+					public void execute() {
+						if (report.getFormElements().size()>0) {
+							Main.get().reportPopup.setReport(report);
+							Main.get().reportPopup.center();
+						} else {
+							Map<String,String> parameters = new HashMap<String, String>();
+							parameters.put("format", String.valueOf(reportOutput));
+							Util.executeReport(report.getId(), parameters);
+						}
+					}
+				});
+				reportMenuItem.addStyleName("okm-MainMenuItem");
+				subMenuReports.addItem(reportMenuItem);
+			}
+		} 		
 		// MENU HELP
 		help.setVisible(option.isHelpOption());
 		documentation.setVisible(option.isDocumentationOption());
@@ -905,11 +1013,22 @@ public class MainMenu extends Composite {
 			case UIMenuConstants.MAIN_MENU_BOOKMARS:
 				subMenuBookmark.addItem(extension);
 				break;
+			case UIMenuConstants.MAIN_MENU_REPORTS:
+				subMenuReports.addItem(extension);
+				menuReports.setVisible(true);
+				break;
 			case UIMenuConstants.MAIN_MENU_HELP:
 				subMenuHelp.addItem(extension);
 				break;
 		}
 		
+	}
+	
+	/**
+	 * getReportOutput
+	 */
+	public int getReportOutput() {
+		return reportOutput;
 	}
 	
 	/**
