@@ -81,6 +81,7 @@ import com.openkm.dao.bean.Bookmark;
 import com.openkm.dao.bean.KeyValue;
 import com.openkm.dao.bean.Language;
 import com.openkm.dao.bean.QueryParams;
+import com.openkm.dao.bean.Report;
 import com.openkm.dao.bean.UserConfig;
 import com.openkm.extension.dao.bean.Contact;
 import com.openkm.extension.dao.bean.Forum;
@@ -114,6 +115,7 @@ import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.GWTPropertyParams;
 import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.bean.GWTQueryResult;
+import com.openkm.frontend.client.bean.GWTReport;
 import com.openkm.frontend.client.bean.GWTTaskInstance;
 import com.openkm.frontend.client.bean.GWTToken;
 import com.openkm.frontend.client.bean.GWTTransition;
@@ -1723,5 +1725,30 @@ public class GWTUtil {
 		gWTKeyValue.setKey(keyValue.getKey());
 		gWTKeyValue.setValue(keyValue.getValue());
 		return gWTKeyValue;
+	}
+	
+	/**
+	 * Copy Report to GWTReport
+	 * 
+	 * @param report
+	 * @return
+	 * @throws DatabaseException 
+	 * @throws RepositoryException 
+	 * @throws PathNotFoundException 
+	 */
+	public static GWTReport copy(Report report, List<FormElement> formElements) throws PathNotFoundException, RepositoryException, DatabaseException {
+		GWTReport gWTReport = new GWTReport();
+		gWTReport.setActive(report.isActive());
+		gWTReport.setFileContent(report.getFileContent());
+		gWTReport.setFileMime(report.getFileMime());
+		gWTReport.setFileName(report.getFileName());
+		gWTReport.setId(report.getId());
+		gWTReport.setName(report.getName());
+		List<GWTFormElement> gWTFormElemets = new ArrayList<GWTFormElement>();
+		for (FormElement formElement : formElements) {
+			gWTFormElemets.add(copy(formElement));
+		}
+		gWTReport.setFormElements(gWTFormElemets);
+		return gWTReport;
 	}
 }
