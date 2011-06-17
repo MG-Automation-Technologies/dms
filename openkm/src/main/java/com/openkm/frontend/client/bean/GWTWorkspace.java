@@ -48,6 +48,7 @@ public class GWTWorkspace implements IsSerializable {
 	private String webSkin = "";
 	private boolean adminRole = false;
 	private String previewer = "";
+	private List<GWTReport> reports = new ArrayList<GWTReport>();
 
 	// System wide
 	private String appVersion = "";
@@ -678,5 +679,13 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setLangs(List<GWTLanguage> langs) {
 		this.langs = langs;
+	}
+	
+	public List<GWTReport> getReports() {
+		return reports;
+	}
+
+	public void setReports(List<GWTReport> reports) {
+		this.reports = reports;
 	}
 }
