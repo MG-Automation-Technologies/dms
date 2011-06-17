@@ -57,11 +57,13 @@ public class PropertyGroup extends Composite implements HasPropertyGroupHandlerE
 	private boolean editValues = false;
 	private FiredHorizontalPanel hPanelFired;
 	private GWTPropertyGroup propertyGroup;
+	private boolean visible;
 	
 	/**
 	 * PropertyGroup
 	 */
 	public PropertyGroup(GWTPropertyGroup propertyGroup, Object node, GWTFolder parentFolder, boolean visible) {
+		this.visible = visible;
 		String path = "";
 		byte permissions = 0;
 		if (node instanceof GWTDocument) {
@@ -157,6 +159,15 @@ public class PropertyGroup extends Composite implements HasPropertyGroupHandlerE
 		getProperties();
 		
 		initWidget(scrollPanel);
+	}
+	
+	/**
+	 * isButtonsVisible
+	 * 
+	 * @return
+	 */
+	public boolean isButtonsVisible() {
+		return visible;
 	}
 	
 	/**
