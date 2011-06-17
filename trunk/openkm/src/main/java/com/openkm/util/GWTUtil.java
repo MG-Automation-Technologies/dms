@@ -58,6 +58,7 @@ import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Input;
 import com.openkm.bean.form.Option;
 import com.openkm.bean.form.Select;
+import com.openkm.bean.form.Separator;
 import com.openkm.bean.form.SuggestBox;
 import com.openkm.bean.form.Text;
 import com.openkm.bean.form.TextArea;
@@ -139,6 +140,7 @@ import com.openkm.frontend.client.bean.form.GWTFormElement;
 import com.openkm.frontend.client.bean.form.GWTInput;
 import com.openkm.frontend.client.bean.form.GWTOption;
 import com.openkm.frontend.client.bean.form.GWTSelect;
+import com.openkm.frontend.client.bean.form.GWTSeparator;
 import com.openkm.frontend.client.bean.form.GWTSuggestBox;
 import com.openkm.frontend.client.bean.form.GWTText;
 import com.openkm.frontend.client.bean.form.GWTTextArea;
@@ -955,7 +957,14 @@ public class GWTUtil {
 			text.setHeight(formElement.getHeight());
 			text.setWidth(formElement.getWidth());
 			return text;
-		} else {
+		} else if (formElement instanceof Separator) {
+			GWTSeparator separator = new GWTSeparator();
+			separator.setName(formElement.getName());
+			separator.setLabel(formElement.getLabel());
+			separator.setHeight(formElement.getHeight());
+			separator.setWidth(formElement.getWidth());
+			return separator;
+		}else {
 			return new GWTFormElement();
 		}
 	}
@@ -1055,6 +1064,14 @@ public class GWTUtil {
 			text.setHeight(gWTText.getHeight());
 			text.setWidth(gWTText.getWidth());
 			return text;
+		} else if (formElement instanceof GWTSeparator) {
+			Separator separator = new Separator();
+			GWTSeparator gWTText = (GWTSeparator) formElement;
+			separator.setName(gWTText.getName());
+			separator.setLabel(gWTText.getLabel());
+			separator.setHeight(gWTText.getHeight());
+			separator.setWidth(gWTText.getWidth());
+			return separator;
 		} else {
 			return new FormElement();
 		}
@@ -1091,7 +1108,9 @@ public class GWTUtil {
 		} else if (formElement instanceof GWTUpload) {
 			return ((GWTButton) formElement).getLabel();
 		} else if (formElement instanceof GWTText) {
-			return ((GWTButton) formElement).getLabel();
+			return ((GWTText) formElement).getLabel();
+		} else if (formElement instanceof GWTSeparator) {
+			return ((GWTSeparator) formElement).getLabel();
 		}
 		
 		return "";
