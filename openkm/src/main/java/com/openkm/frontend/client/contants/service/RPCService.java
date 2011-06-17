@@ -63,4 +63,5 @@ public class RPCService {
 	public static String ContactService = Main.CONTEXT + "/extension/Contact";
 	public static String ActivityLogService = Main.CONTEXT + "/extension/ActivityLog";
 	public static String TestService = Main.CONTEXT + "/frontend/Test";
+	public static String ReportServlet = Main.CONTEXT + "/frontend/ExecuteReport";
 }
