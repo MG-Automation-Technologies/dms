@@ -50,7 +50,7 @@ public class ExecuteReportServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		int id = WebUtils.getInt(request, "id");
 		int format = WebUtils.getInt(request, "format",  ReportUtils.OUTPUT_PDF);
-		ByteArrayOutputStream baos = null;	
+		ByteArrayOutputStream baos = null;
 		ByteArrayInputStream bais = null;
 		Session session = null;
 		
