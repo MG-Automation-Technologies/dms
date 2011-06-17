@@ -235,6 +235,10 @@
     <servlet-name>WorkflowRegisterServlet</servlet-name>
     <servlet-class>com.openkm.servlet.WorkflowRegisterServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>ExecuteReportServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.ExecuteReportServlet</servlet-class>
+  </servlet>
   
   <!-- Admin servlets -->
   <servlet>
@@ -607,6 +611,10 @@
     <servlet-name>WorkflowRegisterServlet</servlet-name>
     <url-pattern>/workflow-register/*</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ExecuteReportServlet</servlet-name>
+    <url-pattern>/ExecuteReport</url-pattern>
+  </servlet-mapping>
   
   <!-- Admin Servlet Mappings -->
   <servlet-mapping>
@@ -823,6 +831,7 @@
       
       <!-- Servlets -->
 	  <url-pattern>/RepositoryStartup</url-pattern>
+	  <url-pattern>/ExecuteReport</url-pattern>
 	  <url-pattern>/TextToSpeech</url-pattern>
 	  <url-pattern>/Test</url-pattern>
 	  <url-pattern>/frontend/*</url-pattern>
