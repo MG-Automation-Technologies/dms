@@ -40,7 +40,7 @@ nodeIterator(Node node) {
 List al = new ArrayList ();
 Session jcrSession = DirectRepositoryModule.getSystemSession();
 System.out.println("Parameter 'path': " + path);
-Node root = jcrSession.getRootNode().getNode(path);
+Node root = jcrSession.getRootNode().getNode(path.substring(1));
 nodeIterator(root);
 
 return al;]]>
