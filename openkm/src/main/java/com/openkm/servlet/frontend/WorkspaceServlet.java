@@ -39,14 +39,17 @@ import com.openkm.bean.PropertyGroup;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
+import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.AuthDAO;
 import com.openkm.dao.LanguageDAO;
 import com.openkm.dao.MailAccountDAO;
+import com.openkm.dao.ReportDAO;
 import com.openkm.dao.UserConfigDAO;
 import com.openkm.dao.bean.Language;
 import com.openkm.dao.bean.MailAccount;
 import com.openkm.dao.bean.Profile;
+import com.openkm.dao.bean.Report;
 import com.openkm.dao.bean.User;
 import com.openkm.dao.bean.UserConfig;
 import com.openkm.frontend.client.OKMException;
@@ -60,6 +63,7 @@ import com.openkm.jcr.JCRUtils;
 import com.openkm.principal.DatabasePrincipalAdapter;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.util.GWTUtil;
+import com.openkm.util.ReportUtils;
 import com.openkm.util.WarUtils;
 import com.openkm.validator.ValidatorException;
 import com.openkm.validator.ValidatorFactory;
@@ -79,6 +83,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 	public GWTWorkspace getUserWorkspace() throws OKMException {
 		GWTWorkspace workspace = new GWTWorkspace();
 		updateSessionManager();
+		
 		workspace.setApplicationURL(Config.APPLICATION_URL);
 		workspace.setUser(getThreadLocalRequest().getRemoteUser());
 		workspace.setAppVersion(WarUtils.getAppVersion().toString());
@@ -96,7 +101,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 		Profile up = new Profile();
 		Session session = null;
 		
-		try {
+			try {
 			session = JCRUtils.getSession();
 			UserConfig uc = UserConfigDAO.findByPk(session, session.getUserID());
 			up = uc.getProfile();
@@ -112,174 +117,160 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 			for (String workflow : up.getWizard().getWorkflows()) {			
 				wizardWorkflowLst.add(new Double(workflow));
 			}
-		} catch (LoginException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Repository), e.getMessage());
-		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Repository), e.getMessage());
-		} catch (DatabaseException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Database), e.getMessage());
-		} catch (IOException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_IO), e.getMessage());
-		} catch (ParseException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Parse), e.getMessage());
-		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Repository), e.getMessage());
-		} finally {
-			JCRUtils.logout(session);
-		}
 		
-		// Previewer
-		workspace.setPreviewer(Config.SYSTEM_PREVIEWER);
-		
-		// Advanced filters ( used when there a lot of users and groups )
-		workspace.setAdvancedFilters(up.getMisc().isAdvancedFilters());
-		
-		// Is a wizard to uploading documents
-		workspace.setWizardPropertyGroups(!up.getWizard().getPropertyGroups().isEmpty());
-		workspace.setWizardPropertyGroupsList(wizardPropGrpLst);
-		workspace.setWizardWorkflows(!up.getWizard().getWorkflows().isEmpty());
-		workspace.setWizardWorkflowsList(wizardWorkflowLst);
-		workspace.setWizardCategories(up.getWizard().isCategoriesEnabled());
-		workspace.setWizardKeywords(up.getWizard().isKeywordsEnabled());
-		
-		// Is chat enabled and autologin
-		workspace.setChatEnabled(up.getChat().isChatEnabled());
-		workspace.setChatAutoLogin(up.getChat().isAutoLoginEnabled());
-		
-		// Is admin
-		workspace.setAdminRole(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
-		
-		// Setting web skin
-		workspace.setWebSkin(up.getMisc().getWebSkin());
-		
-		// Only thesaurus keywords are allowed
-		workspace.setKeywordEnabled(up.getMisc().isKeywordsEnabled());
-		
-		// User quota ( limit user repository size )
-		workspace.setUserQuotaEnabled(up.getMisc().getUserQuota() > 0);
-		workspace.setUserQuotaLimit(up.getMisc().getUserQuota());
-		workspace.setPrintPreview(up.getMisc().isPrintPreview());
-		workspace.setWebdavFix(Config.SYSTEM_WEBDAV_FIX);
-		
-		// Stack visibility
-		workspace.setStackTaxonomy(up.getStack().isTaxonomyVisible());
-		workspace.setStackCategoriesVisible(up.getStack().isCategoriesVisible());
-		workspace.setStackThesaurusVisible(up.getStack().isThesaurusVisible());
-		workspace.setStackTemplatesVisible(up.getStack().isTemplatesVisible());
-		workspace.setStackPersonalVisible(up.getStack().isPersonalVisible());
-		workspace.setStackMailVisible(up.getStack().isMailVisible());
-		workspace.setStackTrashVisible(up.getStack().isTrashVisible());
-		
-		// Menus visibility
-		workspace.setMenuFileVisible(up.getMenu().isFileVisible());
-		workspace.setMenuEditVisible(up.getMenu().isEditVisible());
-		workspace.setMenuBookmarksVisible(up.getMenu().isBookmarksVisible());
-		workspace.setMenuToolsVisible(up.getMenu().isToolsVisible());
-		workspace.setMenuHelpVisible(up.getMenu().isHelpVisible());
-				
-		// Tab visibility
-		workspace.setTabDesktopVisible(up.getTab().isDesktopVisible());
-		workspace.setTabSearchVisible(up.getTab().isSearchVisible());
-		workspace.setTabDashboardVisible(up.getTab().isDashboardVisible());
-		workspace.setTabAdminVisible(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE) && up.getTab().isAdministrationVisible());
-		
-		// Tab document visibility
-		workspace.setTabDocumentPropertiesVisible(up.getTab().getDocument().isPropertiesVisible());
-		workspace.setTabDocumentSecurityVisible(up.getTab().getDocument().isSecurityVisible());
-		workspace.setTabDocumentNotesVisible(up.getTab().getDocument().isNotesVisible());
-		workspace.setTabDocumentVersionVisible(up.getTab().getDocument().isVersionsVisible());
-		workspace.setTabDocumentPreviewVisible(up.getTab().getDocument().isPreviewVisible());
-		workspace.setTabDocumentPropertyGroupsVisible(up.getTab().getDocument().isPropertyGroupsVisible());
-		
-		// Tab folder visibility
-		workspace.setTabFolderPropertiesVisible(up.getTab().getFolder().isPropertiesVisible());
-		workspace.setTabFolderSecurityVisible(up.getTab().getFolder().isSecurityVisible());
-		workspace.setTabFolderNotesVisible(up.getTab().getFolder().isNotesVisible());
-		
-		// Tab mail visibility
-		workspace.setTabMailPropertiesVisible(up.getTab().getMail().isPropertiesVisible());
-		workspace.setTabMailSecurityVisible(up.getTab().getMail().isSecurityVisible());
-		
-		// Dashboard visibility
-		workspace.setDashboardUserVisible(up.getDashboard().isUserVisible());
-		workspace.setDashboardMailVisible(up.getDashboard().isMailVisible());
-		workspace.setDashboardNewsVisible(up.getDashboard().isNewsVisible());
-		workspace.setDashboardGeneralVisible(up.getDashboard().isGeneralVisible());
-		workspace.setDashboardWorkflowVisible(up.getDashboard().isWorkflowVisible());
-		workspace.setDashboardKeywordsVisible(up.getDashboard().isKeywordsVisible());
-		
-		// Available options
-		GWTAvailableOption availableOption = new GWTAvailableOption();
-		
-		// Menu File
-		availableOption.setCreateFolderOption(up.getMenu().getFile().isCreateFolderVisible());
-		availableOption.setFindFolderOption(up.getMenu().getFile().isFindFolderVisible());
-		availableOption.setGotoFolderOption(up.getMenu().getFile().isGoFolderVisible());
-		availableOption.setDownloadOption(up.getMenu().getFile().isDownloadVisible());
-		availableOption.setDownloadPdfOption(up.getMenu().getFile().isDownloadPdfVisible());
-		availableOption.setAddDocumentOption(up.getMenu().getFile().isAddDocumentVisible());
-		availableOption.setWorkflowOption(up.getMenu().getFile().isStartWorkflowVisible());
-		availableOption.setRefreshOption(up.getMenu().getFile().isRefreshVisible());
-		availableOption.setScannerOption(up.getMenu().getFile().isScannerVisible());
-		availableOption.setUploaderOption(up.getMenu().getFile().isUploaderVisible());
-		availableOption.setExportOption(up.getMenu().getFile().isExportVisible());
-		availableOption.setCreateFromTemplateOption(up.getMenu().getFile().isCreateFromTemplateVisible());
-		availableOption.setPurgeOption(up.getMenu().getFile().isPurgeVisible());
-		availableOption.setRestoreOption(up.getMenu().getFile().isRestoreVisible());
-		availableOption.setPurgeTrashOption(up.getMenu().getFile().isPurgeTrashVisible());
-		availableOption.setSendDocumentLinkOption(up.getMenu().getFile().isSendDocumentLinkVisible());
-		availableOption.setSendDocumentAttachmentOption(up.getMenu().getFile().isSendDocumentAttachmentVisible());
-				
-		// Menu Edit
-		availableOption.setLockOption(up.getMenu().getEdit().isLockVisible());
-		availableOption.setUnLockOption(up.getMenu().getEdit().isUnlockVisible());
-		availableOption.setRenameOption(up.getMenu().getEdit().isRenameVisible());
-		availableOption.setCopyOption(up.getMenu().getEdit().isCopyVisible());
-		availableOption.setMoveOption(up.getMenu().getEdit().isMoveVisible());
-		availableOption.setCheckinOption(up.getMenu().getEdit().isCheckInVisible());
-		availableOption.setCheckoutOption(up.getMenu().getEdit().isCheckOutVisible());
-		availableOption.setCancelCheckoutOption(up.getMenu().getEdit().isCancelCheckOutVisible());
-		availableOption.setDeleteOption(up.getMenu().getEdit().isDeleteVisible());
-		availableOption.setAddPropertyGroupOption(up.getMenu().getEdit().isAddPropertyGroupVisible());
-		availableOption.setRemovePropertyGroupOption(up.getMenu().getEdit().isRemovePropertyGroupVisible());
-		availableOption.setAddSubscription(up.getMenu().getEdit().isAddSubscriptionVisible());
-		availableOption.setRemoveSubscription(up.getMenu().getEdit().isRemoveSubscriptionVisible());
-		
-		// Menu Bookmark
-		availableOption.setManageBookmarkOption(up.getMenu().getBookmark().isManageBookmarksVisible());
-		availableOption.setAddBookmarkOption(up.getMenu().getBookmark().isAddBookmarkVisible());
-		availableOption.setHomeOption(up.getMenu().getBookmark().isGoHomeVisible());
-		availableOption.setSetHomeOption(up.getMenu().getBookmark().isSetHomeVisible());
-		
-		// Menu Tool
-		availableOption.setLanguagesOption(up.getMenu().getTool().isLanguagesVisible());
-		availableOption.setSkinOption(up.getMenu().getTool().isSkinVisible());
-		availableOption.setDebugOption(up.getMenu().getTool().isDebugVisible());
-		availableOption.setAdministrationOption(up.getMenu().getTool().isAdministrationVisible() && getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
-		availableOption.setPreferencesOption(up.getMenu().getTool().isPreferencesVisible());
-		
-		// Menu Help
-		availableOption.setHelpOption(up.getMenu().getHelp().isHelpVisible());
-		availableOption.setDocumentationOption(up.getMenu().getHelp().isDocumentationVisible());
-		availableOption.setBugReportOption(up.getMenu().getHelp().isBugTrackingVisible());
-		availableOption.setSupportRequestOption(up.getMenu().getHelp().isSupportVisible());
-		availableOption.setPublicForumOption(up.getMenu().getHelp().isForumVisible());
-		availableOption.setVersionChangesOption(up.getMenu().getHelp().isChangelogVisible());
-		availableOption.setProjectWebOption(up.getMenu().getHelp().isWebSiteVisible());
-		availableOption.setAboutOption(up.getMenu().getHelp().isAboutVisible());
-		
-		availableOption.setMediaPlayerOption(true);
-		availableOption.setImageViewerOption(true); 
-		
-		workspace.setAvailableOption(availableOption);
-		
-		try {
+			// Previewer
+			workspace.setPreviewer(Config.SYSTEM_PREVIEWER);
+			
+			// Advanced filters ( used when there a lot of users and groups )
+			workspace.setAdvancedFilters(up.getMisc().isAdvancedFilters());
+			
+			// Is a wizard to uploading documents
+			workspace.setWizardPropertyGroups(!up.getWizard().getPropertyGroups().isEmpty());
+			workspace.setWizardPropertyGroupsList(wizardPropGrpLst);
+			workspace.setWizardWorkflows(!up.getWizard().getWorkflows().isEmpty());
+			workspace.setWizardWorkflowsList(wizardWorkflowLst);
+			workspace.setWizardCategories(up.getWizard().isCategoriesEnabled());
+			workspace.setWizardKeywords(up.getWizard().isKeywordsEnabled());
+			
+			// Is chat enabled and autologin
+			workspace.setChatEnabled(up.getChat().isChatEnabled());
+			workspace.setChatAutoLogin(up.getChat().isAutoLoginEnabled());
+			
+			// Is admin
+			workspace.setAdminRole(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
+			
+			// Setting web skin
+			workspace.setWebSkin(up.getMisc().getWebSkin());
+			
+			// Only thesaurus keywords are allowed
+			workspace.setKeywordEnabled(up.getMisc().isKeywordsEnabled());
+			
+			// User quota ( limit user repository size )
+			workspace.setUserQuotaEnabled(up.getMisc().getUserQuota() > 0);
+			workspace.setUserQuotaLimit(up.getMisc().getUserQuota());
+			workspace.setPrintPreview(up.getMisc().isPrintPreview());
+			workspace.setWebdavFix(Config.SYSTEM_WEBDAV_FIX);
+			
+			// Stack visibility
+			workspace.setStackTaxonomy(up.getStack().isTaxonomyVisible());
+			workspace.setStackCategoriesVisible(up.getStack().isCategoriesVisible());
+			workspace.setStackThesaurusVisible(up.getStack().isThesaurusVisible());
+			workspace.setStackTemplatesVisible(up.getStack().isTemplatesVisible());
+			workspace.setStackPersonalVisible(up.getStack().isPersonalVisible());
+			workspace.setStackMailVisible(up.getStack().isMailVisible());
+			workspace.setStackTrashVisible(up.getStack().isTrashVisible());
+			
+			// Menus visibility
+			workspace.setMenuFileVisible(up.getMenu().isFileVisible());
+			workspace.setMenuEditVisible(up.getMenu().isEditVisible());
+			workspace.setMenuBookmarksVisible(up.getMenu().isBookmarksVisible());
+			workspace.setMenuToolsVisible(up.getMenu().isToolsVisible());
+			workspace.setMenuHelpVisible(up.getMenu().isHelpVisible());
+					
+			// Tab visibility
+			workspace.setTabDesktopVisible(up.getTab().isDesktopVisible());
+			workspace.setTabSearchVisible(up.getTab().isSearchVisible());
+			workspace.setTabDashboardVisible(up.getTab().isDashboardVisible());
+			workspace.setTabAdminVisible(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE) && up.getTab().isAdministrationVisible());
+			
+			// Tab document visibility
+			workspace.setTabDocumentPropertiesVisible(up.getTab().getDocument().isPropertiesVisible());
+			workspace.setTabDocumentSecurityVisible(up.getTab().getDocument().isSecurityVisible());
+			workspace.setTabDocumentNotesVisible(up.getTab().getDocument().isNotesVisible());
+			workspace.setTabDocumentVersionVisible(up.getTab().getDocument().isVersionsVisible());
+			workspace.setTabDocumentPreviewVisible(up.getTab().getDocument().isPreviewVisible());
+			workspace.setTabDocumentPropertyGroupsVisible(up.getTab().getDocument().isPropertyGroupsVisible());
+			
+			// Tab folder visibility
+			workspace.setTabFolderPropertiesVisible(up.getTab().getFolder().isPropertiesVisible());
+			workspace.setTabFolderSecurityVisible(up.getTab().getFolder().isSecurityVisible());
+			workspace.setTabFolderNotesVisible(up.getTab().getFolder().isNotesVisible());
+			
+			// Tab mail visibility
+			workspace.setTabMailPropertiesVisible(up.getTab().getMail().isPropertiesVisible());
+			workspace.setTabMailSecurityVisible(up.getTab().getMail().isSecurityVisible());
+			
+			// Dashboard visibility
+			workspace.setDashboardUserVisible(up.getDashboard().isUserVisible());
+			workspace.setDashboardMailVisible(up.getDashboard().isMailVisible());
+			workspace.setDashboardNewsVisible(up.getDashboard().isNewsVisible());
+			workspace.setDashboardGeneralVisible(up.getDashboard().isGeneralVisible());
+			workspace.setDashboardWorkflowVisible(up.getDashboard().isWorkflowVisible());
+			workspace.setDashboardKeywordsVisible(up.getDashboard().isKeywordsVisible());
+			
+			// Available options
+			GWTAvailableOption availableOption = new GWTAvailableOption();
+			
+			// Menu File
+			availableOption.setCreateFolderOption(up.getMenu().getFile().isCreateFolderVisible());
+			availableOption.setFindFolderOption(up.getMenu().getFile().isFindFolderVisible());
+			availableOption.setGotoFolderOption(up.getMenu().getFile().isGoFolderVisible());
+			availableOption.setDownloadOption(up.getMenu().getFile().isDownloadVisible());
+			availableOption.setDownloadPdfOption(up.getMenu().getFile().isDownloadPdfVisible());
+			availableOption.setAddDocumentOption(up.getMenu().getFile().isAddDocumentVisible());
+			availableOption.setWorkflowOption(up.getMenu().getFile().isStartWorkflowVisible());
+			availableOption.setRefreshOption(up.getMenu().getFile().isRefreshVisible());
+			availableOption.setScannerOption(up.getMenu().getFile().isScannerVisible());
+			availableOption.setUploaderOption(up.getMenu().getFile().isUploaderVisible());
+			availableOption.setExportOption(up.getMenu().getFile().isExportVisible());
+			availableOption.setCreateFromTemplateOption(up.getMenu().getFile().isCreateFromTemplateVisible());
+			availableOption.setPurgeOption(up.getMenu().getFile().isPurgeVisible());
+			availableOption.setRestoreOption(up.getMenu().getFile().isRestoreVisible());
+			availableOption.setPurgeTrashOption(up.getMenu().getFile().isPurgeTrashVisible());
+			availableOption.setSendDocumentLinkOption(up.getMenu().getFile().isSendDocumentLinkVisible());
+			availableOption.setSendDocumentAttachmentOption(up.getMenu().getFile().isSendDocumentAttachmentVisible());
+					
+			// Menu Edit
+			availableOption.setLockOption(up.getMenu().getEdit().isLockVisible());
+			availableOption.setUnLockOption(up.getMenu().getEdit().isUnlockVisible());
+			availableOption.setRenameOption(up.getMenu().getEdit().isRenameVisible());
+			availableOption.setCopyOption(up.getMenu().getEdit().isCopyVisible());
+			availableOption.setMoveOption(up.getMenu().getEdit().isMoveVisible());
+			availableOption.setCheckinOption(up.getMenu().getEdit().isCheckInVisible());
+			availableOption.setCheckoutOption(up.getMenu().getEdit().isCheckOutVisible());
+			availableOption.setCancelCheckoutOption(up.getMenu().getEdit().isCancelCheckOutVisible());
+			availableOption.setDeleteOption(up.getMenu().getEdit().isDeleteVisible());
+			availableOption.setAddPropertyGroupOption(up.getMenu().getEdit().isAddPropertyGroupVisible());
+			availableOption.setRemovePropertyGroupOption(up.getMenu().getEdit().isRemovePropertyGroupVisible());
+			availableOption.setAddSubscription(up.getMenu().getEdit().isAddSubscriptionVisible());
+			availableOption.setRemoveSubscription(up.getMenu().getEdit().isRemoveSubscriptionVisible());
+			
+			// Menu Bookmark
+			availableOption.setManageBookmarkOption(up.getMenu().getBookmark().isManageBookmarksVisible());
+			availableOption.setAddBookmarkOption(up.getMenu().getBookmark().isAddBookmarkVisible());
+			availableOption.setHomeOption(up.getMenu().getBookmark().isGoHomeVisible());
+			availableOption.setSetHomeOption(up.getMenu().getBookmark().isSetHomeVisible());
+			
+			// Menu Tool
+			availableOption.setLanguagesOption(up.getMenu().getTool().isLanguagesVisible());
+			availableOption.setSkinOption(up.getMenu().getTool().isSkinVisible());
+			availableOption.setDebugOption(up.getMenu().getTool().isDebugVisible());
+			availableOption.setAdministrationOption(up.getMenu().getTool().isAdministrationVisible() && getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
+			availableOption.setPreferencesOption(up.getMenu().getTool().isPreferencesVisible());
+			
+			// Menu Help
+			availableOption.setHelpOption(up.getMenu().getHelp().isHelpVisible());
+			availableOption.setDocumentationOption(up.getMenu().getHelp().isDocumentationVisible());
+			availableOption.setBugReportOption(up.getMenu().getHelp().isBugTrackingVisible());
+			availableOption.setSupportRequestOption(up.getMenu().getHelp().isSupportVisible());
+			availableOption.setPublicForumOption(up.getMenu().getHelp().isForumVisible());
+			availableOption.setVersionChangesOption(up.getMenu().getHelp().isChangelogVisible());
+			availableOption.setProjectWebOption(up.getMenu().getHelp().isWebSiteVisible());
+			availableOption.setAboutOption(up.getMenu().getHelp().isAboutVisible());
+			
+			availableOption.setMediaPlayerOption(true);
+			availableOption.setImageViewerOption(true); 
+			
+			workspace.setAvailableOption(availableOption);
+			
+			// Reports
+			for (Integer rpId : up.getMisc().getReports()) {
+				Report report = ReportDAO.findByPk(rpId);			
+				if (report.isActive()) {
+					workspace.getReports().add(GWTUtil.copy(report, ReportUtils.getReportParameters(rpId)));
+				}
+			}	
+					
 			// Setting available UI languages
 			List<GWTLanguage> langs = new ArrayList<GWTLanguage>();
 			
@@ -313,23 +304,40 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 			}
 			
 			workspace.setRoleList(OKMAuth.getInstance().getRolesByUser(null, user.getId()));
+			
+			if (Config.PRINCIPAL_ADAPTER.equals(DatabasePrincipalAdapter.class.getCanonicalName())) {
+				workspace.setChangePassword(true);
+			} else {
+				workspace.setChangePassword(false);
+			}
+		
+		} catch (LoginException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQL), e.getMessage());
-		} catch (PrincipalAdapterException e) {
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Database), e.getMessage());
+		} catch (IOException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_PrincipalAdapter), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_IO), e.getMessage());
+		} catch (ParseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Parse), e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Repository), e.getMessage());
-		}	
-		
-		if (Config.PRINCIPAL_ADAPTER.equals(DatabasePrincipalAdapter.class.getCanonicalName())) {
-			workspace.setChangePassword(true);
-		} else {
-			workspace.setChangePassword(false);
+		} catch (PrincipalAdapterException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_PrincipalAdapter), e.getMessage());
+		} catch (PathNotFoundException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+		} finally {
+			JCRUtils.logout(session);
 		}
-		
 		return workspace;
 	}
 	
