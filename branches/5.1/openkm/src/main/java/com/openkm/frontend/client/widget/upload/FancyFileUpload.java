@@ -828,7 +828,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		
 		if (!filesToUpload.isEmpty()) {
 			actualFileToUpload = filesToUpload.remove(0);
-			uploadForm = new FileUploadForm(actualFileToUpload.getFileUpload(), actualFileToUpload.getSize());
+			uploadForm = new FileUploadForm(actualFileToUpload.getFileUpload(), FileToUpload.DEFAULT_SIZE); // Here always with default size
 			uploadItem.hFileUpload.clear(); // removes all previous fileUpload widgets
 			uploadItem.hFileUpload.add(uploadForm);
 			setPath(actualFileToUpload.getPath());
