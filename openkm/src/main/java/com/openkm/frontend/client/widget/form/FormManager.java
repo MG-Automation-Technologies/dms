@@ -66,6 +66,7 @@ import com.openkm.frontend.client.bean.form.GWTFormElement;
 import com.openkm.frontend.client.bean.form.GWTInput;
 import com.openkm.frontend.client.bean.form.GWTOption;
 import com.openkm.frontend.client.bean.form.GWTSelect;
+import com.openkm.frontend.client.bean.form.GWTSeparator;
 import com.openkm.frontend.client.bean.form.GWTSuggestBox;
 import com.openkm.frontend.client.bean.form.GWTText;
 import com.openkm.frontend.client.bean.form.GWTTextArea;
@@ -946,20 +947,30 @@ public class FormManager {
 			}
 		} else if (gwtMetadata instanceof GWTText) {
 			HorizontalPanel hPanel = new HorizontalPanel();
+			HTML tittle = new HTML("&nbsp;"+"<b>"+((GWTText)gwtMetadata).getLabel()+"</b>"+"&nbsp;");
+			tittle.setStyleName("okm-NoWrap");
+			hPanel.add(Util.hSpace("10"));			
+			hPanel.add(tittle);
+			hPanel.setCellWidth(tittle, ((GWTText)gwtMetadata).getWidth());
+			hWidgetProperties.put(propertyName,hPanel);
+			table.setWidget(row, 0, hPanel);
+			table.getFlexCellFormatter().setColSpan(row, 0, 2);
+		} else if (gwtMetadata instanceof GWTSeparator) {
+			HorizontalPanel hPanel = new HorizontalPanel();
 			Image horizontalLine = new Image("img/transparent_pixel.gif");
 			horizontalLine.setStyleName("okm-TopPanel-Line-Border");
 			horizontalLine.setSize("10", "2px");
 			Image horizontalLine2 = new Image("img/transparent_pixel.gif");
 			horizontalLine2.setStyleName("okm-TopPanel-Line-Border");
 			horizontalLine2.setSize("100%", "2px");
-			HTML tittle = new HTML("&nbsp;"+"<b>"+((GWTText)gwtMetadata).getLabel()+"</b>"+"&nbsp;");
+			HTML tittle = new HTML("&nbsp;"+"<b>"+((GWTSeparator)gwtMetadata).getLabel()+"</b>"+"&nbsp;");
 			tittle.setStyleName("okm-NoWrap");
 			hPanel.add(horizontalLine);			
 			hPanel.add(tittle);
 			hPanel.add(horizontalLine2);
 			hPanel.setCellVerticalAlignment(horizontalLine, HasAlignment.ALIGN_MIDDLE);
 			hPanel.setCellVerticalAlignment(horizontalLine2, HasAlignment.ALIGN_MIDDLE);
-			hPanel.setCellWidth(horizontalLine2, ((GWTText)gwtMetadata).getWidth());
+			hPanel.setCellWidth(horizontalLine2, ((GWTSeparator)gwtMetadata).getWidth());
 			hWidgetProperties.put(propertyName,hPanel);
 			table.setWidget(row, 0, hPanel);
 			table.getFlexCellFormatter().setColSpan(row, 0, 2);
@@ -1052,6 +1063,8 @@ public class FormManager {
 				}
 			} else if (formField instanceof GWTText) {
 				// Nothing to be done here
+			} else if (formField instanceof GWTSeparator) {
+				// Nothing to be done here
 			}
 			rows++;
 		}
@@ -1131,6 +1144,8 @@ public class FormManager {
 				} else if (formElement instanceof GWTUpload) {
 					// Not aplicable to property groups
 				} else if (formElement instanceof GWTText) {
+					// Nothing to be done here
+				} else if (formElement instanceof GWTSeparator) {
 					// Nothing to be done here
 				}
 			}
@@ -1213,6 +1228,8 @@ public class FormManager {
 				// Not aplicable to property groups
 			} else if (formElement instanceof GWTText) {
 				// Nothing to be done here
+			} else if (formElement instanceof GWTSeparator) {
+				// Nothing to be done here
 			}
 			
 			hPropertyParams.get(formElement.getName()).setValue(value);
@@ -1294,6 +1311,8 @@ public class FormManager {
 			} else if (formElement instanceof GWTUpload) {
 				// Nothing to be done here, upload files are updated in file upload widget
 			} else if (formElement instanceof GWTText) {
+				// Nothing to be done here
+			} else if (formElement instanceof GWTSeparator) {
 				// Nothing to be done here
 			}
 			
@@ -1418,6 +1437,8 @@ public class FormManager {
 						// No aplicable to property groups
 					} else if (formElement instanceof GWTText) {
 						// Nothing to be done here
+					} else if (formElement instanceof GWTSeparator) {
+						// Nothing to be done here
 					}
 				}
 			}
@@ -1478,6 +1499,8 @@ public class FormManager {
 					}
 				} else if (formElement instanceof GWTText) {
 					// Nothing to be done here
+				} else if (formElement instanceof GWTSeparator) {
+					// Nothing to be done here
 				}
 			}
 		}
@@ -1516,6 +1539,8 @@ public class FormManager {
 			return null;
 		} else if (obj instanceof GWTText) {
 			return null;
+		} else if (obj instanceof GWTSeparator) {
+			return null;
 		} else {
 			return null;
 		} 
@@ -1553,6 +1578,8 @@ public class FormManager {
 		} else if (obj instanceof GWTUpload) {
 			return false;
 		} else if (obj instanceof GWTText) {
+			return false;
+		} else if (obj instanceof GWTSeparator) {
 			return false;
 		} else {
 			return false;
@@ -1602,6 +1629,8 @@ public class FormManager {
 			} else if (obj instanceof GWTUpload) {
 				return options;
 			} else if (obj instanceof GWTText) {
+				return options;
+			} else if (obj instanceof GWTSeparator) {
 				return options;
 			} else {
 				return options;
