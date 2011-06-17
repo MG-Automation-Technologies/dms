@@ -1,4 +1,4 @@
-package com.openkm.servlet;
+package com.openkm.servlet.frontend;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
