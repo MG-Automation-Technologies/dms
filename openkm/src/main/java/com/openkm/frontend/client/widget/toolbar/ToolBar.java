@@ -433,7 +433,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Execute add property group
 	 */
 	public void executeAddPropertyGroup(){
-		Main.get().groupPopup.show();
+		Main.get().propertyGroupPopup.show();
 		fireEvent(HasToolBarEvent.EXECUTE_ADD_PROPERTY_GROUP);
 	}
 	
@@ -1243,8 +1243,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			disableCheckout();
 			disableLock();
 			disableUnlock();
-			disableAddPropertyGroup();
-			disableRemovePropertyGroup();
 			disableCheckout();
 			disableCheckin();
 			disableCancelCheckout();
@@ -1285,11 +1283,21 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				enableCopy();
 				enableMove();
 				enableRemovePropertyGroup(); // Always enable it ( not controls button, only boolean value )
+				if (Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_CATEGORIES &&
+					Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_THESAURUS &&
+					Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_PERSONAL &&
+					Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_TRASH && 
+					Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_MAIL) {
+					getAllGroups(mail); // Evaluates enable or disable property group buttons
+				}
 				// On mail panel is not able to uploading files
 				if (Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_MAIL ) {
 					enableAddDocument();
 				} 		
-			} 
+			} else {
+				disableAddPropertyGroup();
+				disableRemovePropertyGroup();
+			}
 			
 			// Onnly on taxonomy enables to send document link by mail 
 			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TAXONOMY) {
@@ -1300,14 +1308,19 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				disableSendDocumentAttachment();
 			}
 			
-			// Excepts on taxonomy and thesaurus panel always disabling 
-			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TEMPLATES ||
-				Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_PERSONAL || 
+			// Excepts on taxonomy categories and thesaurus panel always disabling 
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_PERSONAL || 
 				Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TRASH || 
 				Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_MAIL) {
 				disableAddPropertyGroup();
 				disableRemovePropertyGroup();
 				disableFiredRemovePropertyGroup();
+				disableAddSubscription();
+				disableRemoveSubscription();
+			}
+			
+			// On templates disables subscription, but property group are enabled
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TEMPLATES) {
 				disableAddSubscription();
 				disableRemoveSubscription();
 			}
