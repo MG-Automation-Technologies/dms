@@ -33,5 +33,6 @@ public class UIMenuConstants {
 	public static final int MAIN_MENU_EDIT 		= 1;
 	public static final int MAIN_MENU_TOOLS 	= 2;
 	public static final int MAIN_MENU_BOOKMARS 	= 3;
-	public static final int MAIN_MENU_HELP 		= 4;
+	public static final int MAIN_MENU_REPORTS 	= 4;
+	public static final int MAIN_MENU_HELP 		= 5;
 }
