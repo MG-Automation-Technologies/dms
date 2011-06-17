@@ -158,6 +158,30 @@ public class WebUtils {
 		
 		return intValue;
 	}
+	
+	/**
+	 * Extrae un parámetro de tipo Integer del request. Si el parámetro no existe devuelve
+	 * un Integer vacio.
+	 * @param request Petición de la que extraer el parámetro.
+	 * @param name Nombre del parámetro
+	 * @return El valor String del parámetro o un String vacio si no existe.
+	 */
+	public static final List<Integer> getIntList(HttpServletRequest request, String name) {
+		String[] value = request.getParameterValues(name);
+		List<Integer> intValue = new ArrayList<Integer>();
+		
+		if (value != null) {
+			try {
+				for (int i=0; i<value.length; i++) {
+					intValue.add(Integer.parseInt(value[i]));
+				}
+			} catch (Throwable e) {
+				// Ignore
+			}
+		}
+		
+		return intValue;
+	}
 
 	/**
 	 * Extrae un parámetro de tipo long del request. 

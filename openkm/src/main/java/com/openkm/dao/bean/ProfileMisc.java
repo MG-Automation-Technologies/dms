@@ -33,7 +33,7 @@ public class ProfileMisc implements Serializable {
 	private boolean printPreview;
 	private boolean keywordsEnabled;
 	private Set<String> extensions = new HashSet<String>();
-	private Set<String> reports = new HashSet<String>();
+	private Set<Integer> reports = new HashSet<Integer>();
 
 	public boolean isAdvancedFilters() {
 		return advancedFilters;
@@ -83,11 +83,11 @@ public class ProfileMisc implements Serializable {
 		this.extensions = extensions;
 	}
 	
-	public Set<String> getReports() {
+	public Set<Integer> getReports() {
 		return reports;
 	}
 
-	public void setReports(Set<String> reports) {
+	public void setReports(Set<Integer> reports) {
 		this.reports = reports;
 	}
 	
