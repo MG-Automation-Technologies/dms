@@ -33,6 +33,7 @@ public class RPCService {
 	public static String DownloadServlet = Main.CONTEXT + "/frontend/Download";
 	public static String ConverterServlet = Main.CONTEXT + "/frontend/Converter";
 	public static String FileUploadService = Main.CONTEXT + "/frontend/FileUpload";
+	public static String ReportServlet = Main.CONTEXT + "/frontend/ExecuteReport";
 	public static String StaplingDownloadService = Main.CONTEXT + "/extension/StaplingDownload";
 	public static String FeedService = Main.CONTEXT + "/feed/";
 }
