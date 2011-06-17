@@ -1640,6 +1640,35 @@ public class FormManager {
 	}
 	
 	/**
+	 * Gets a string map values
+	 * 
+	 * @return
+	 */
+	public Map<String, String> getStringMapValues() {
+		Map<String, String> values = new HashMap<String, String>();
+		for (GWTFormElement formElement : formElementList) {
+			if (formElement instanceof GWTTextArea) {
+				values.put(formElement.getName(), getStringValueFromVariable(formElement));
+			} else if (formElement instanceof GWTInput) {
+				values.put(formElement.getName(), getStringValueFromVariable(formElement));
+			} else if (formElement instanceof GWTSuggestBox) {
+				values.put(formElement.getName(), getStringValueFromVariable(formElement));
+			} else if (formElement instanceof GWTCheckBox) {
+				values.put(formElement.getName(), getStringValueFromVariable(formElement));
+			} else if (formElement instanceof GWTSelect) {
+				values.put(formElement.getName(), getStringValueFromVariable(formElement));
+			} else if (formElement instanceof GWTUpload) {
+				// No aplicable to property groups
+			} else if (formElement instanceof GWTText) {
+				// Nothing to be done here
+			} else if (formElement instanceof GWTSeparator) {
+				// Nothing to be done here
+			}
+		}
+		return values;
+	}
+	
+	/**
 	 * setSubmitFormButton
 	 * 
 	 * @param submitForm
