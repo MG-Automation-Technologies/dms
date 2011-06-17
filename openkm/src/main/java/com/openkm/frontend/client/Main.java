@@ -62,6 +62,7 @@ import com.openkm.frontend.client.widget.ExternalURLPopup;
 import com.openkm.frontend.client.widget.PropertyGroupPopup;
 import com.openkm.frontend.client.widget.LogoutPopup;
 import com.openkm.frontend.client.widget.MsgPopup;
+import com.openkm.frontend.client.widget.ReportPopup;
 import com.openkm.frontend.client.widget.UserPopup;
 import com.openkm.frontend.client.widget.WorkflowPopup;
 import com.openkm.frontend.client.widget.chat.OnlineUsersPopup;
@@ -117,6 +118,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	public DebugConsolePopup debugConsolePopup;
 	public FindFolderSelectPopup findFolderSelectPopup;
 	public WizardPopup wizardPopup;
+	public ReportPopup reportPopup;
 	public TemplateWizardPopup templateWizardPopup;
 	public OnlineUsersPopup onlineUsersPopup;
 	public TestPopup testPopup;
@@ -311,6 +313,11 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		wizardPopup.setHeight("40px");
 		wizardPopup.setStyleName("okm-Popup");
 		wizardPopup.addStyleName("okm-DisableSelect");
+		reportPopup = new ReportPopup();
+		reportPopup.setWidth("250px");
+		reportPopup.setHeight("40px");
+		reportPopup.setStyleName("okm-Popup");
+		reportPopup.addStyleName("okm-DisableSelect");
 		templateWizardPopup = new TemplateWizardPopup();
 		templateWizardPopup.setWidth("400px");
 		templateWizardPopup.setHeight("40px");
@@ -392,7 +399,8 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 				debugConsolePopup.langRefresh();
 				findFolderSelectPopup.langRefresh();
 				wizardPopup.langRefresh();
-				templateWizardPopup.langRefresh();
+				wizardPopup.langRefresh();
+				reportPopup.langRefresh();
 				onlineUsersPopup.langRefresh();
 				// Refreshing all menus on tabs not only the active
 				mainPanel.desktop.navigator.taxonomyTree.langRefresh();
