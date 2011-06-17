@@ -21,6 +21,8 @@
 
 package com.openkm.frontend.client.util;
 
+import java.util.Map;
+
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
@@ -209,6 +211,25 @@ public class Util {
 	public static void downloadFilePdf(String uuid) {
 		final Element downloadIframe = RootPanel.get("__download").getElement(); 
 		String url = RPCService.ConverterServlet + "?inline=false&toPdf=true&uuid=" + URL.encodeQueryString(uuid);
+		DOM.setElementAttribute(downloadIframe, "src", url); 
+	}
+	
+	/**
+	 * executeReport
+	 * 
+	 * @param id
+	 * @param params
+	 */
+	public static void executeReport(int id, Map<String,String> params) {
+		String parameters = "";
+		if (!params.isEmpty()) {
+			for (String key : params.keySet()) {
+				parameters += "&" + key + "=" + params.get(key);
+			}
+		}
+		
+		final Element downloadIframe = RootPanel.get("__download").getElement(); 
+		String url = RPCService.ReportServlet + "?" + "id=" + id + parameters;
 		DOM.setElementAttribute(downloadIframe, "src", url); 
 	}
 	
