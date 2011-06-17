@@ -163,6 +163,33 @@ public class Util {
 	}
 	
 	/**
+	 * Creates an vertical spacer
+	 * 
+	 * @param height The desired height space
+	 * @return an HTML element meaning the height
+	 */
+	public static HTML vSpace(String height) {
+		HTML spacer = new HTML("");
+		spacer.setHeight(height);
+		return spacer;
+	}
+	
+	/**
+	 * Creates an square spacer
+	 * 
+	 * @param width The desired width space
+	 * @param height The desired height space
+	 * 
+	 * @return an HTML element meaning the with and height
+	 */
+	public static HTML space(String width, String height) {
+		HTML spacer = new HTML("");
+		spacer.setWidth(width);
+		spacer.setHeight(height);
+		return spacer;
+	}
+	
+	/**
 	 * Creates an HTML to opens a url with text on a new window
 	 * 
 	 * @param text The text url description
