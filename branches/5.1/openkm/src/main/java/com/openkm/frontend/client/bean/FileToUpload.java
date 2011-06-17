@@ -31,9 +31,11 @@ import com.openkm.frontend.client.widget.form.HasWorkflow;
  *
  */
 public class FileToUpload {
+	public static final String DEFAULT_SIZE = "45";
+	
 	private FileUpload fileUpload;
 	private int action;
-	private String size = "45";
+	private String size = DEFAULT_SIZE;
 	private boolean fireEvent = false;
 	private String path = "";
 	private boolean enableAddButton = true;
