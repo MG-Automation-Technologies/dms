@@ -48,7 +48,7 @@ public class ExecuteReportServlet extends HttpServlet {
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		int rpId = WebUtils.getInt(request, "rp_id");
+		int id = WebUtils.getInt(request, "id");
 		int format = WebUtils.getInt(request, "format",  ReportUtils.OUTPUT_PDF);
 		ByteArrayOutputStream baos = null;	
 		ByteArrayInputStream bais = null;
@@ -59,8 +59,8 @@ public class ExecuteReportServlet extends HttpServlet {
 			UserConfig uc = UserConfigDAO.findByPk(session, request.getRemoteUser());
 			Profile up = uc.getProfile();
 			
-			if (up.getMisc().getReports().contains(rpId)) {
-				Report rp = ReportDAO.findByPk(rpId);
+			if (up.getMisc().getReports().contains(id)) {
+				Report rp = ReportDAO.findByPk(id);
 				
 				// Set file name
 				String fileName = rp.getFileName().substring(0, rp.getFileName().indexOf('.')) + ReportUtils.FILE_EXTENSION[format];
@@ -70,7 +70,7 @@ public class ExecuteReportServlet extends HttpServlet {
 				String host = com.openkm.core.Config.APPLICATION_URL;
 				params.put("host", host.substring(0, host.lastIndexOf("/") + 1));
 				
-				for (FormElement fe : ReportUtils.getReportParameters(rpId)) {
+				for (FormElement fe : ReportUtils.getReportParameters(id)) {
 					params.put(fe.getName(), WebUtils.getString(request, fe.getName()));
 				}
 				
@@ -79,10 +79,10 @@ public class ExecuteReportServlet extends HttpServlet {
 				WebUtils.sendFile(request, response, fileName, ReportUtils.FILE_MIME[format], false, bais);
 				
 				// Activity log
-				UserActivity.log(session.getUserID(), "EXECUTE_REPORT", Integer.toString(rpId), "OK");
+				UserActivity.log(session.getUserID(), "EXECUTE_REPORT", Integer.toString(id), "OK");
 			} else {
 				// Activity log
-				UserActivity.log(session.getUserID(), "EXECUTE_REPORT", Integer.toString(rpId), "FAILURE");
+				UserActivity.log(session.getUserID(), "EXECUTE_REPORT", Integer.toString(id), "FAILURE");
 			}
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
