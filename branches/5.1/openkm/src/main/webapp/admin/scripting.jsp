@@ -9,7 +9,32 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="favicon.ico" />
-  <link rel="stylesheet" href="css/style.css" type="text/css" />
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <link rel="stylesheet" type="text/css" href="js/codemirror/lib/codemirror.css" />
+  <link rel="stylesheet" type="text/css" href="js/codemirror/mode/clike/clike.css" />
+  <style type="text/css">
+    .CodeMirror { width: 550px; height: 250px; background-color: #f8f6c2; }
+    .activeline { background: #f0fcff !important; }
+  </style>
+  <script type="text/javascript" src="js/codemirror/lib/codemirror.js"></script>
+  <script type="text/javascript" src="js/codemirror/mode/clike/clike.js"></script>
+  <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var cm = CodeMirror.fromTextArea(document.getElementById('script'), {
+          lineNumbers: true,
+      	  matchBrackets: true,
+          indentUnit: 4,
+          mode: "text/x-java",
+          onCursorActivity: function() {
+        	cm.setLineClass(hlLine, null);
+            hlLine = cm.setLineClass(cm.getCursor().line, "activeline");
+          }
+        }
+      );
+      var hlLine = cm.setLineClass(0, "activeline");
+    });
+  </script>
   <title>Scripting</title>
 </head>
 <body>
@@ -53,7 +78,7 @@
 		out.println("<hr>");
 		out.println("<form action=\"scripting.jsp\" method=\"post\">");
 		out.println("<table class=\"form\" align=\"center\">");
-		out.println("<tr><td><textarea cols=\"75\" rows=\"15\" name=\"script\">"+script+"</textarea></td></tr>");
+		out.println("<tr><td><textarea cols=\"80\" rows=\"25\" name=\"script\" id=\"script\">"+script+"</textarea></td></tr>");
 		out.println("<tr><td align=\"right\"><input type=\"submit\" value=\"Evaluate\"></td></tr>");
 		out.println("</table>");
 		out.println("</form>");
