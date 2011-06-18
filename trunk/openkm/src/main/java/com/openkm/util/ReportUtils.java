@@ -332,8 +332,10 @@ public class ReportUtils {
 			
 			// Obtain or compile report
 			if (ReportUtils.MIME_JRXML.equals(rp.getFileMime())) {
+				log.debug("Report type: JRXML");
 				jr = JasperCompileManager.compileReport(bais);
 			} else if (ReportUtils.MIME_JASPER.equals(rp.getFileMime())) {
+				log.debug("Report type: JASPER");
 				jr = (JasperReport) JRLoader.loadObject(bais);
 			} else if (ReportUtils.MIME_REPORT.equals(rp.getFileMime())) {
 				zis = new ZipInputStream(bais);
@@ -344,9 +346,11 @@ public class ReportUtils {
 						String mimeType = Config.mimeTypes.getContentType(zi.getName());
 						
 						if (ReportUtils.MIME_JRXML.equals(mimeType)) {
+							log.debug("Report type: JRXML inside ARCHIVE");
 							jr = JasperCompileManager.compileReport(zis);
 							break;
 						} else if (ReportUtils.MIME_JASPER.equals(mimeType)) {
+							log.debug("Report type: JASPER inside ARCHIVE");
 							jr = (JasperReport) JRLoader.loadObject(zis);
 							break;
 						}
@@ -360,10 +364,12 @@ public class ReportUtils {
 				String tq = query.getText().trim();
 					
 				if (tq.toUpperCase().startsWith("SELECT")) {
+					log.debug("Report type: DATABASE");
 					dbSession = HibernateUtil.getSessionFactory().openSession();
 					con = dbSession.connection();
 					ReportUtils.generateReport(baos, jr, params, format, con);
 				} else {
+					log.debug("Report type: SCRIPTING");
 					ReportUtils.generateReport(baos, jr, params, format);
 				}
 			}
