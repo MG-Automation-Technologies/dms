@@ -354,7 +354,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		/**
 		 * Reset the display
 		 */
-		private void reset(boolean enableImport) {
+		private void reset(boolean enableImport, boolean enableNotifyButton) {
 			widgetState = EMPTY_STATE;
 			fireChange();
 			
@@ -373,9 +373,9 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			// On on root stack panel enabled must be enabled notify to user
 			// option
 			if (Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_TAXONOMY) {
-				hNotifyPanel.setVisible(false);
+				hNotifyPanel.setVisible(enableNotifyButton);
 			} else {
-				hNotifyPanel.setVisible(true);
+				hNotifyPanel.setVisible(enableNotifyButton);
 			}
 			
 			errorNotify.setVisible(false);
@@ -385,12 +385,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			digitalSignature.setValue(false);
 			hFileUpload.setVisible(true);
 			pendingPanel.setVisible(false);
-			
-			if (enableImport) {
-				hUnzipPanel.setVisible(true);
-			} else {
-				hUnzipPanel.setVisible(false);
-			}
+			hUnzipPanel.setVisible(enableImport);
 			hDigitalSignaturePanel.setVisible(true);
 			
 			resetProgressBar();
@@ -578,8 +573,8 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	/**
 	 * Reset he upload
 	 */
-	public void reset(boolean enableImport) {
-		uploadItem.reset(enableImport);
+	public void reset(boolean enableImport, boolean enableNotifyButton) {
+		uploadItem.reset(enableImport, enableNotifyButton);
 	}
 	
 	/**
@@ -835,7 +830,9 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			setAction(actualFileToUpload.getAction());
 			setRename(actualFileToUpload.getDesiredDocumentName());
 			addSubmitCompleteHandler();
-			Main.get().fileUpload.showPopup(actualFileToUpload.isEnableAddButton(), actualFileToUpload.isEnableImport());
+			// Case fileupload is workflow notify to users must be disabled
+			Main.get().fileUpload.showPopup(actualFileToUpload.isEnableAddButton(), actualFileToUpload.isEnableImport(),
+											(actualFileToUpload.getWorkflow()==null));
 			if (actualFileToUpload.getWorkflow()!=null) {
 				Main.get().fileUpload.executeSend();
 			}

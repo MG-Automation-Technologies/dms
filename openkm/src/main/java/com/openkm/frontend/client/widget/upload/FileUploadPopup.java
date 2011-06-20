@@ -61,6 +61,7 @@ public class FileUploadPopup extends DialogBox {
 	private int doAction = 0;
 	private boolean enableAddButton = false;
 	private boolean enableImport = true;
+	private boolean enableNotifyButton = true;
 	
 	/**
 	 * File upload
@@ -82,7 +83,7 @@ public class FileUploadPopup extends DialogBox {
 		addButton = new Button(Main.i18n("fileupload.button.add.other.file"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-					ffUpload.reset(enableImport);
+					ffUpload.reset(enableImport, enableNotifyButton);
 					addButton.setVisible(false); // Add new file button must be unvisible after clicking
 					sendButton.setVisible(true);
 					FileToUpload fileToUpload = new FileToUpload();
@@ -209,7 +210,8 @@ public class FileUploadPopup extends DialogBox {
 	/**
 	 * Show file upload popup
 	 */
-	protected void showPopup(boolean enableAddButton, boolean enableImport) {
+	protected void showPopup(boolean enableAddButton, boolean enableImport, boolean enableNotifyButton) {
+		this.enableNotifyButton = enableNotifyButton;
 		this.enableAddButton = enableAddButton;
 		this.enableImport = enableImport;
 		setWidth(""+popupWidth);
@@ -219,7 +221,7 @@ public class FileUploadPopup extends DialogBox {
 
 		// Allways must initilize htmlForm for tree path initialization
 		langRefresh();
-		ffUpload.reset(enableImport);
+		ffUpload.reset(enableImport, enableNotifyButton);
 	}
 	
 	/**
