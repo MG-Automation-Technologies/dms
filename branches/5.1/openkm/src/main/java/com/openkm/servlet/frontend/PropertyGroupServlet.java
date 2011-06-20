@@ -87,14 +87,14 @@ public class PropertyGroupServlet extends OKMRemoteServiceServlet implements OKM
 	}
 	
 	@Override
-	public List<GWTPropertyGroup> getAllGroups(String docPath) throws OKMException {
-		log.debug("getAllGroups({})", docPath);
+	public List<GWTPropertyGroup> getAllGroups(String path) throws OKMException {
+		log.debug("getAllGroups({})", path);
 		List<GWTPropertyGroup> groupList = new ArrayList<GWTPropertyGroup>();
 		updateSessionManager();
 
 		try {
 			Collection<PropertyGroup> col = OKMPropertyGroup.getInstance().getAllGroups(null);
-			List<GWTPropertyGroup> actualGroupsList = getGroups(docPath);
+			List<GWTPropertyGroup> actualGroupsList = getGroups(path);
 			
 			for (Iterator<PropertyGroup> it = col.iterator(); it.hasNext();) {	
 				PropertyGroup pg = it.next();
@@ -138,12 +138,12 @@ public class PropertyGroupServlet extends OKMRemoteServiceServlet implements OKM
 	}
 	
 	@Override
-	public void addGroup(String docPath, String grpName) throws OKMException {
-		log.debug("addGroup({}, {})", docPath, grpName);
+	public void addGroup(String path, String grpName) throws OKMException {
+		log.debug("addGroup({}, {})", path, grpName);
 		updateSessionManager();
 		
 		try {
-			OKMPropertyGroup.getInstance().addGroup(null, docPath, grpName);
+			OKMPropertyGroup.getInstance().addGroup(null, path, grpName);
 		} catch (NoSuchGroupException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyGroupService, ErrorCode.CAUSE_NoSuchGroup), e.getMessage());
@@ -171,13 +171,13 @@ public class PropertyGroupServlet extends OKMRemoteServiceServlet implements OKM
 	}
 	
 	@Override
-	public List<GWTPropertyGroup> getGroups(String docPath) throws OKMException {
-		log.debug("getGroups({})", docPath);
+	public List<GWTPropertyGroup> getGroups(String path) throws OKMException {
+		log.debug("getGroups({})", path);
 		List<GWTPropertyGroup> groupList = new ArrayList<GWTPropertyGroup>();
 		updateSessionManager();
 
 		try {
-			Collection<PropertyGroup> col = OKMPropertyGroup.getInstance().getGroups(null, docPath);
+			Collection<PropertyGroup> col = OKMPropertyGroup.getInstance().getGroups(null, path);
 			
 			for (Iterator<PropertyGroup> it = col.iterator(); it.hasNext();) {	
 				PropertyGroup pg = it.next();
@@ -206,13 +206,13 @@ public class PropertyGroupServlet extends OKMRemoteServiceServlet implements OKM
 	}
 	
 	@Override
-	public List<GWTFormElement> getProperties(String docPath, String grpName) throws OKMException {
-		log.debug("getProperties({}, {})", docPath, grpName);
+	public List<GWTFormElement> getProperties(String path, String grpName) throws OKMException {
+		log.debug("getProperties({}, {})", path, grpName);
 		List<GWTFormElement> properties = new ArrayList<GWTFormElement>();
 		updateSessionManager();
 
 		try {
-			for (Iterator<FormElement> it = OKMPropertyGroup.getInstance().getProperties(null, docPath, grpName).iterator(); it.hasNext();) {
+			for (Iterator<FormElement> it = OKMPropertyGroup.getInstance().getProperties(null, path, grpName).iterator(); it.hasNext();) {
 				properties.add(GWTUtil.copy(it.next()));
 			}
 		} catch (NoSuchGroupException e) {
@@ -268,8 +268,8 @@ public class PropertyGroupServlet extends OKMRemoteServiceServlet implements OKM
 	}
 	
 	@Override
-	public void setProperties(String docPath, String grpName, List<GWTFormElement> formProperties) throws OKMException {
-		log.debug("setProperties({}, {}, {})", new Object[] { docPath, grpName, formProperties });
+	public void setProperties(String path, String grpName, List<GWTFormElement> formProperties) throws OKMException {
+		log.debug("setProperties({}, {}, {})", new Object[] { path, grpName, formProperties });
 		updateSessionManager();
 		
 		try {
@@ -277,7 +277,7 @@ public class PropertyGroupServlet extends OKMRemoteServiceServlet implements OKM
 			for (Iterator<GWTFormElement> it = formProperties.iterator(); it.hasNext(); ) {
 				properties.add(GWTUtil.copy(it.next()));
 			}
-			OKMPropertyGroup.getInstance().setProperties(null, docPath, grpName, properties);
+			OKMPropertyGroup.getInstance().setProperties(null, path, grpName, properties);
 		} catch (NoSuchPropertyException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyGroupService, ErrorCode.CAUSE_NoSuchProperty), e.getMessage());
@@ -308,12 +308,12 @@ public class PropertyGroupServlet extends OKMRemoteServiceServlet implements OKM
 	}
 	
 	@Override
-	public void removeGroup(String docPath, String grpName) throws OKMException  {
-		log.debug("removeGroup({}, {})", docPath, grpName);
+	public void removeGroup(String path, String grpName) throws OKMException  {
+		log.debug("removeGroup({}, {})", path, grpName);
 		updateSessionManager();
 		
 		try {
-			OKMPropertyGroup.getInstance().removeGroup(null, docPath, grpName);
+			OKMPropertyGroup.getInstance().removeGroup(null, path, grpName);
 		} catch (NoSuchGroupException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyGroupService, ErrorCode.CAUSE_NoSuchGroup), e.getMessage());

@@ -33,11 +33,11 @@ import com.openkm.frontend.client.bean.form.GWTFormElement;
  */
 public interface OKMPropertyGroupServiceAsync {
 	public void getAllGroups(AsyncCallback<List<GWTPropertyGroup>> callback);
-	public void getAllGroups(String docPath, AsyncCallback<List<GWTPropertyGroup>> callback);
-	public void addGroup(String docPath, String grpName, AsyncCallback<?> callback);
-	public void getGroups(String docPath, AsyncCallback<List<GWTPropertyGroup>> callback);
-	public void getProperties(String docPath, String grpName, AsyncCallback<List<GWTFormElement>> callback);
-	public void setProperties(String docPath, String grpName, List<GWTFormElement> formProperties, AsyncCallback<?> callback);
-	public void removeGroup( String docPath, String grpName, AsyncCallback<?> callback);
+	public void getAllGroups(String path, AsyncCallback<List<GWTPropertyGroup>> callback);
+	public void addGroup(String path, String grpName, AsyncCallback<?> callback);
+	public void getGroups(String path, AsyncCallback<List<GWTPropertyGroup>> callback);
+	public void getProperties(String path, String grpName, AsyncCallback<List<GWTFormElement>> callback);
+	public void setProperties(String path, String grpName, List<GWTFormElement> formProperties, AsyncCallback<?> callback);
+	public void removeGroup( String path, String grpName, AsyncCallback<?> callback);
 	public void getPropertyGroupForm(String grpName, AsyncCallback<List<GWTFormElement>> callback);
 }
