@@ -360,12 +360,12 @@ public class MainMenu extends Composite {
 				// Submenu report format
 				subMenuReportFormat = new MenuBar(true);
 				subMenuReportFormat.setStyleName("okm-SubMenuBar");
-					reportFormatPdf = new MenuItem(Util.menuHTML("img/icon/menu/pdf.png", Main.i18n("general.menu.report.format.pdf")), true, enablePdfReporFormat);
+					reportFormatPdf = new MenuItem(Util.menuHTML("img/icon/security/yes.gif", Main.i18n("general.menu.report.format.pdf")), true, enablePdfReporFormat);
 					reportFormatPdf.addStyleName("okm-MainMenuItem");
-					reportFormatRtf = new MenuItem(Util.menuHTML("img/icon/menu/rtf.png", Main.i18n("general.menu.report.format.rtf")), true, enableTextReporFormat);
+					reportFormatRtf = new MenuItem(Util.menuHTML("img/icon/security/no.gif", Main.i18n("general.menu.report.format.rtf")), true, enableTextReporFormat);
 					reportFormatRtf.addStyleName("okm-MainMenuItem");
 					reportFormatRtf.addStyleName("okm-MenuItem-strike");
-					reportFormatCsv = new MenuItem(Util.menuHTML("img/icon/menu/csv.png", Main.i18n("general.menu.report.format.csv")), true, enableCsvReporFormat);
+					reportFormatCsv = new MenuItem(Util.menuHTML("img/icon/security/no.gif", Main.i18n("general.menu.report.format.csv")), true, enableCsvReporFormat);
 					reportFormatCsv.addStyleName("okm-MainMenuItem");
 					reportFormatCsv.addStyleName("okm-MenuItem-strike");
 				subMenuReportFormat.addItem(reportFormatPdf);
@@ -466,9 +466,7 @@ public class MainMenu extends Composite {
 			manageBookmark.setHTML(Util.menuHTML("img/icon/actions/bookmark_edit.gif", Main.i18n("general.menu.bookmark.edit")));
 		menuReports.setText(Main.i18n("general.menu.report"));
 			reportFormat.setHTML(Util.menuHTML("img/icon/menu/preferences.gif", Main.i18n("general.menu.report.format")));
-				reportFormatPdf.setHTML(Util.menuHTML("img/icon/menu/pdf.png", Main.i18n("general.menu.report.format.pdf")));
-				reportFormatRtf.setHTML(Util.menuHTML("img/icon/menu/rtf.png", Main.i18n("general.menu.report.format.rtf")));
-				reportFormatCsv.setHTML(Util.menuHTML("img/icon/menu/csv.png", Main.i18n("general.menu.report.format.csv")));
+			refreshReportFormatMenu();
 		menuHelp.setText(Main.i18n("general.menu.help"));
 			help.setHTML(Util.menuHTML("img/icon/menu/help.gif", Util.windowOpen(Main.i18n("general.menu.help"), URI_HELP)));
 			documentation.setHTML(Util.menuHTML("img/icon/menu/documentation.gif", Util.windowOpen(Main.i18n("general.menu.documentation"), URI_DOCUMENTATION)));
@@ -478,6 +476,40 @@ public class MainMenu extends Composite {
 			versionChanges.setHTML(Util.menuHTML("img/icon/menu/brick.gif", Util.windowOpen(Main.i18n("general.menu.version.changes"), URI_VERSION_CHANGES)));
 			projectWeb.setHTML(Util.menuHTML("img/icon/menu/home.gif", Util.windowOpen(Main.i18n("general.menu.project.web"), URI_PROJECT_WEB)));
 			about.setHTML(Util.menuHTML("img/icon/menu/about.gif", Main.i18n("general.menu.about")));
+	}
+	
+	/**
+	 * refreshReportFormatMenu
+	 */
+	private void refreshReportFormatMenu() {
+		switch (reportOutput) {
+			case OUTPUT_PDF:
+				reportFormatPdf.setHTML(Util.menuHTML("img/icon/security/yes.gif", Main.i18n("general.menu.report.format.pdf")));
+				reportFormatRtf.setHTML(Util.menuHTML("img/icon/security/no.gif", Main.i18n("general.menu.report.format.rtf")));
+				reportFormatCsv.setHTML(Util.menuHTML("img/icon/security/no.gif", Main.i18n("general.menu.report.format.csv")));
+				enable(reportFormatPdf);
+				disable(reportFormatRtf);
+				disable(reportFormatCsv);
+				break;
+			
+			case OUTPUT_RTF:
+				reportFormatPdf.setHTML(Util.menuHTML("img/icon/security/no.gif", Main.i18n("general.menu.report.format.pdf")));
+				reportFormatRtf.setHTML(Util.menuHTML("img/icon/security/yes.gif", Main.i18n("general.menu.report.format.rtf")));
+				reportFormatCsv.setHTML(Util.menuHTML("img/icon/security/no.gif", Main.i18n("general.menu.report.format.csv")));
+				disable(reportFormatPdf);
+				enable(reportFormatRtf);
+				disable(reportFormatCsv);
+				break;
+				
+			case OUTPUT_CSV:
+				reportFormatPdf.setHTML(Util.menuHTML("img/icon/security/no.gif", Main.i18n("general.menu.report.format.pdf")));
+				reportFormatRtf.setHTML(Util.menuHTML("img/icon/security/no.gif", Main.i18n("general.menu.report.format.rtf")));
+				reportFormatCsv.setHTML(Util.menuHTML("img/icon/security/yes.gif", Main.i18n("general.menu.report.format.csv")));
+				disable(reportFormatPdf);
+				disable(reportFormatRtf);
+				enable(reportFormatCsv);
+				break;
+		}
 	}
 	
 	/**
@@ -786,9 +818,7 @@ public class MainMenu extends Composite {
 	Command enablePdfReporFormat = new Command() {
 		public void execute() {
 			reportOutput = OUTPUT_PDF;
-			enable(reportFormatPdf);
-			disable(reportFormatRtf);
-			disable(reportFormatCsv);
+			refreshReportFormatMenu();
 		}
 	};
 	
@@ -796,9 +826,7 @@ public class MainMenu extends Composite {
 	Command enableTextReporFormat = new Command() {
 		public void execute() {
 			reportOutput = OUTPUT_RTF;
-			disable(reportFormatPdf);
-			enable(reportFormatRtf);
-			disable(reportFormatCsv);
+			refreshReportFormatMenu();
 		}
 	};
 	
@@ -806,9 +834,7 @@ public class MainMenu extends Composite {
 	Command enableCsvReporFormat = new Command() {
 		public void execute() {
 			reportOutput = OUTPUT_CSV;
-			disable(reportFormatPdf);
-			enable(reportFormatRtf);
-			enable(reportFormatCsv);
+			refreshReportFormatMenu();
 		}
 	};
 	
@@ -918,7 +944,7 @@ public class MainMenu extends Composite {
 		if (workspace.getReports().size()>0) {
 			menuReports.setVisible(true);
 			for (final GWTReport report : workspace.getReports()) {
-				MenuItem reportMenuItem = new MenuItem(Util.menuHTML("img/icon/menu/pdf.png", report.getName()), true, new Command() {
+				MenuItem reportMenuItem = new MenuItem(Util.menuHTML("img/icon/menu/report.png", report.getName()), true, new Command() {
 					@Override
 					public void execute() {
 						if (report.getFormElements().size()>0) {
