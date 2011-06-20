@@ -37,7 +37,7 @@
             url="jdbc:mysql://localhost:3306/okm_app?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF8"/>
   
   <Resource name="mail/OpenKM" auth="Container" type="javax.mail.Session"
-            mail.smtp.host="localhost"/>
+            mail.smtp.host="localhost" mail.from="testing@openkm.com"/>
   
   <!--
   <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
