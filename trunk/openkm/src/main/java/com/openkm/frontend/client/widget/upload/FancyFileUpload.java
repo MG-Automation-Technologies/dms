@@ -416,6 +416,13 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	 */
 	private void uploadFiles() {
 		fileName = uploadForm.getFileName();
+		// Store some values to uploadForm
+		uploadForm.setImportZip(importZip.getValue());
+		uploadForm.setDigitalSignature(digitalSignature.getValue());
+		uploadForm.setVersionCommnent(versionComment.getText());
+		uploadForm.setUsers(users.getText());
+		uploadForm.setRoles(roles.getText());
+		uploadForm.setMessage(message.getText());
 		uploadItem.setLoading();
 		uploadForm.submit();
 	}
@@ -779,7 +786,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	 * @return
 	 */
 	public boolean isDigitalSignature() {
-		return digitalSignature.getValue();
+		return uploadForm.isDigitalSignature();
 	}
 	
 	/**
@@ -899,18 +906,18 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 					// Normal case document uploaded is not a workflow
 					if (actualFileToUpload.getWorkflow()==null) {
 						// Case is not importing a zip and wizard is enabled
-						if (!importZip.getValue()
-								&& action == UIFileUploadConstants.ACTION_INSERT
-								&& (Main.get().workspaceUserProperties.getWorkspace().isWizardPropertyGroups()
-										|| Main.get().workspaceUserProperties.getWorkspace().isWizardWorkflows()
-										|| Main.get().workspaceUserProperties.getWorkspace().isWizardCategories() || Main
-										.get().workspaceUserProperties.getWorkspace().isWizardKeywords())) {
+						if (!uploadForm.isImportZip()
+							 && action == UIFileUploadConstants.ACTION_INSERT
+							 && (Main.get().workspaceUserProperties.getWorkspace().isWizardPropertyGroups()
+								 || Main.get().workspaceUserProperties.getWorkspace().isWizardWorkflows()
+								 || Main.get().workspaceUserProperties.getWorkspace().isWizardCategories() 
+								 || Main.get().workspaceUserProperties.getWorkspace().isWizardKeywords())) {
 							
 							wizard = true;
 						} else {
 							// wizard only it'll be enable in case digital signature
 							// be true
-							wizard = digitalSignature.getValue();
+							wizard = uploadForm.isDigitalSignature();
 						}
 						
 						if (wizard) {
