@@ -19,10 +19,12 @@
  */
 package com.openkm.frontend.client.widget.upload;
 
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.contants.service.RPCService;
@@ -36,11 +38,17 @@ import com.openkm.frontend.client.contants.service.RPCService;
 public class FileUploadForm extends Composite {
 	
 	private FormPanel uploadForm;
-	private VerticalPanel mainPanel;
+	private VerticalPanel vPanel;
 	private TextBox inputPath;
 	private TextBox inputAction;
 	private TextBox inputRenameDocument;
+	private CheckBox importZip;
+	private CheckBox digitalSignature;
+	private TextArea versionComment;
+	private TextBox users;
+	private TextBox roles;
 	private FileUpload fileUpload;
+	private TextArea message;
 	
 	/**
 	 * FileUploadForm
@@ -53,10 +61,16 @@ public class FileUploadForm extends Composite {
 		fileUpload.setName("uploadFormElement");
 		
 		uploadForm = new FormPanel();
-		mainPanel = new VerticalPanel();
+		vPanel = new VerticalPanel();
 		inputPath = new TextBox();
 		inputAction = new TextBox();
 		inputRenameDocument = new TextBox();
+		importZip = new CheckBox();
+		digitalSignature = new CheckBox();
+		versionComment = new TextArea();
+		users = new TextBox();
+		roles = new TextBox();
+		message = new TextArea();
 		
 		// Set Form details
 		// Set the action to call on submit
@@ -68,19 +82,43 @@ public class FileUploadForm extends Composite {
 		
 		inputPath.setName("path");
 		inputPath.setVisible(false);
-		mainPanel.add(inputPath);
+		vPanel.add(inputPath);
 		
 		inputAction.setName("action");
 		inputAction.setVisible(false);
-		mainPanel.add(inputAction);
+		vPanel.add(inputAction);
 		
 		inputRenameDocument.setName("rename");
 		inputRenameDocument.setVisible(false);
-		mainPanel.add(inputRenameDocument);
+		vPanel.add(inputRenameDocument);
 		
-		mainPanel.add(fileUpload);
+		importZip.setName("importZip");
+		importZip.setVisible(false);
+		vPanel.add(importZip);
 		
-		uploadForm.setWidget(mainPanel);
+		digitalSignature.setName("digitalSignature");
+		digitalSignature.setVisible(false);
+		vPanel.add(digitalSignature);
+		
+		versionComment.setName("comment");
+		versionComment.setVisible(false);
+		vPanel.add(versionComment);
+		
+		users.setName("users");
+		users.setVisible(false);
+		vPanel.add(users);
+		
+		roles.setName("roles");
+		roles.setVisible(false);
+		vPanel.add(roles);
+		
+		message.setName("message");
+		message.setVisible(false);
+		vPanel.add(message);
+		
+		vPanel.add(fileUpload);
+		
+		uploadForm.setWidget(vPanel);
 		
 		initWidget(uploadForm);
 	}
@@ -129,6 +167,78 @@ public class FileUploadForm extends Composite {
 		if (rename!=null && !rename.equals("")) {
 			inputRenameDocument.setText(rename);
 		}
+	}
+
+	/**
+	 * setImportZip
+	 * 
+	 * @param value
+	 */
+	public void setImportZip(boolean value) {
+		importZip.setValue(value);
+	}
+	
+	/**
+	 * isImportZip
+	 * 
+	 * @return
+	 */
+	public boolean isImportZip() {
+		return importZip.getValue();
+	}
+	
+	/**
+	 * setDigitalSignature
+	 * 
+	 * @param value
+	 */
+	public void setDigitalSignature(boolean value) {
+		digitalSignature.setValue(value);
+	}
+	
+	/**
+	 * isDigitalSignature
+	 * 
+	 * @return
+	 */
+	public boolean isDigitalSignature() {
+		return digitalSignature.getValue();
+	}
+	
+	/**
+	 * setVersionCommnent
+	 * 
+	 * @param comment
+	 */
+	public void setVersionCommnent(String comment) {
+		versionComment.setText(comment);
+	}
+	
+	/**
+	 * setUsers
+	 * 
+	 * @param users
+	 */
+	public void setUsers(String users) {
+		this.users.setText(users);
+	}
+	
+	/**
+	 * setRoles
+	 * 
+	 * @param roles
+	 */
+	public void setRoles(String roles) {
+		this.roles.setText(roles);
+	}
+	
+	/**
+	 * setMessage
+	 * 
+	 * @param message
+	 */
+	public void setMessage(String message) {
+		this.message.setText(message);
 	}
 	
 	/**
