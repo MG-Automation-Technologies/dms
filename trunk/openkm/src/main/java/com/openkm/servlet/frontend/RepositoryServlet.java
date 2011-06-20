@@ -335,7 +335,7 @@ public class RepositoryServlet extends OKMRemoteServiceServlet implements OKMRep
 		updateSessionManager();
 		
 		try {
-			path = OKMRepository.getInstance().getNodeUuid(null, path);
+			uuid = OKMRepository.getInstance().getNodeUuid(null, path);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
