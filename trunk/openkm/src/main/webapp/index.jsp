@@ -7,7 +7,7 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 	String url = null;
-	String docPath = WebUtils.getString(request, "docPath");
+	String docPath = WebUtils.getString(request, "docPath", null);
 	
 	if (FormatUtil.isMobile(request)) {
 		url = Config.EXPERIMENTAL_MOBILE_CONTEXT + "/index.jsp";
