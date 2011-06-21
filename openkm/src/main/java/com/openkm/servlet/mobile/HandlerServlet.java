@@ -96,7 +96,6 @@ public class HandlerServlet extends HttpServlet {
 			path = "/okm:root";
 		}
 		
-		path = new String(path.getBytes("ISO-8859-1"), "UTF-8");
 		List<Folder> fldList = OKMFolder.getInstance().getChilds(null, path);
 		Collections.sort(fldList, FolderComparator.getInstance());
 		List<Document> docList = OKMDocument.getInstance().getChilds(null, path);
@@ -128,7 +127,6 @@ public class HandlerServlet extends HttpServlet {
 			path = "/okm:root";
 		}
 		
-		path = new String(path.getBytes("ISO-8859-1"), "UTF-8");
 		sc.setAttribute("fld", OKMFolder.getInstance().getProperties(null, path));
 		sc.setAttribute("path", path);
 		sc.getRequestDispatcher("/" + Config.EXPERIMENTAL_MOBILE_CONTEXT + "/fld-properties.jsp").forward(request, response);
@@ -149,12 +147,11 @@ public class HandlerServlet extends HttpServlet {
 		if (uuid != null) {
 			path = OKMDocument.getInstance().getPath(null, uuid);
 		}
-				
+		
 		if (path == null || path.equals("")) {
 			path = "/okm:root";
 		}
 		
-		path = new String(path.getBytes("ISO-8859-1"), "UTF-8");
 		Document doc = OKMDocument.getInstance().getProperties(null, path);
 		List<String> categories = new ArrayList<String>();
 		
@@ -176,13 +173,12 @@ public class HandlerServlet extends HttpServlet {
 			ServletException, DatabaseException {
 		log.debug("search({}, {})", request, response);
 		ServletContext sc = getServletContext();
-		String query = request.getParameter("query");
-						
+		String query = WebUtils.getString(request, "query");
+		
 		if (query != null && !query.equals("")) {
-			query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
 			sc.setAttribute("queryResult", OKMSearch.getInstance().findByContent(null, query));	
 		}
-
+		
 		sc.getRequestDispatcher("/" + Config.EXPERIMENTAL_MOBILE_CONTEXT + "/search.jsp").forward(request, response);
 	}
 	
