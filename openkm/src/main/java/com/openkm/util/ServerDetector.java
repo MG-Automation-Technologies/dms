@@ -36,20 +36,20 @@ public class ServerDetector {
 		// Try JBoss
 		String dir = System.getProperty(JBOSS_PROPERTY);
 		if (isJBoss()) {
-			log.info("Using JBoss: " + dir);
+			log.debug("Using JBoss: " + dir);
 			return dir;
 		}
 		
 		// Try Tomcat
 		dir = System.getProperty(TOMCAT_PROPERTY);
 		if (dir != null) {
-			log.info("Using Tomcat: " + dir);
+			log.debug("Using Tomcat: " + dir);
 			return dir;
 		}
 		
 		// Otherwise GWT hosted mode
 		dir = System.getProperty("user.dir") + "/src/test/resources";
-		log.info("Using default dir: " + dir);
+		log.debug("Using default dir: " + dir);
 		return dir;
 	}
 	
