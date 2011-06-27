@@ -12,7 +12,7 @@ public class Test {
 	public static void main(String[] args) throws Exception {
 		Configuration cfg = new Configuration();
 		cfg.configure(new File("/path/to/openkm/src/main/resources/hibernate.cfg.xml"));
-		cfg.setProperty("hibernate.dialect", "org.hibernate.dialect.OracleDialect");
+		cfg.setProperty("hibernate.dialect", "org.hibernate.dialect.Oracle10gDialect");
 		SchemaExport se = new SchemaExport(cfg);
 		se.setOutputFile("/tmp/schema.sql");
 		se.setFormat(true);
