@@ -190,16 +190,19 @@ public class PDFUtils {
 		log.debug("fillForm({}, {}, {})", new Object[] { input, values, output });
 		PdfReader reader = new PdfReader(input);
 		PdfStamper stamper = new PdfStamper(reader, output);
-		AcroFields form = stamper.getAcroFields();
+		AcroFields fields = stamper.getAcroFields();
+		PRAcroForm form = reader.getAcroForm();
 		
-		for (Iterator it = reader.getAcroForm().getFields().iterator(); it.hasNext(); ) {
-			PRAcroForm.FieldInformation field = (PRAcroForm.FieldInformation) it.next();
-			String value = (String) values.get(field.getName());
-			log.debug("Field: {}", field.getName());
-			
-			if (value != null) {
-				form.setField(field.getName(), value);
-				stamper.partialFormFlattening(field.getName());
+		if (form != null) {
+			for (Iterator it = form.getFields().iterator(); it.hasNext(); ) {
+				PRAcroForm.FieldInformation field = (PRAcroForm.FieldInformation) it.next();
+				String value = (String) values.get(field.getName());
+				log.debug("Field: {}", field.getName());
+				
+				if (value != null) {
+					fields.setField(field.getName(), value);
+					stamper.partialFormFlattening(field.getName());
+				}
 			}
 		}
 		
