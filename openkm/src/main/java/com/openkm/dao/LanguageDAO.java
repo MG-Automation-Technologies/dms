@@ -22,7 +22,6 @@
 package com.openkm.dao;
 
 import java.util.List;
-import java.util.Set;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -32,8 +31,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
+import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.Language;
-import com.openkm.dao.bean.Translation;
 
 /**
  * LanguageDAO
@@ -72,7 +71,7 @@ public class LanguageDAO {
 	 * Find all languages
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<Language> findAll() throws DatabaseException {
+	public static List<Language> findAll() throws DatabaseException, RepositoryException {
 		log.debug("findAll({})");
 		String qs = "from Language lg order by lg.name asc";		
 		Session session = null;
@@ -158,29 +157,5 @@ public class LanguageDAO {
 			HibernateUtil.close(session);
 		}
 		log.debug("create: void");
-	}
-	
-	/**
-	 * Get all language translations
-	 */
-	public static Set<Translation> findTransAll(String langId) throws DatabaseException {
-		log.debug("findTransAll({})", langId);
-		Session session = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			Language lang = (Language) session.load(Language.class, langId);
-			Set<Translation> trans = lang.getTranslations();
-			
-			// Disable object lazy loading
-			for (Translation tr : trans) { tr.getText(); }
-			
-			log.debug("findTransAll: {}", trans);
-			return trans;
-		} catch (HibernateException e) {
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
 	}
 }

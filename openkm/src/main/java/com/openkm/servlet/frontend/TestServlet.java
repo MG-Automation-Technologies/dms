@@ -48,7 +48,6 @@ public class TestServlet extends OKMRemoteServiceServlet implements OKMTestServi
 	@Override
 	public String StringTest(int size) {
 		log.debug("size:"+size);
-		updateSessionManager();
 		String text = "";
 		while (text.length()<size) {
 			Random randomGenerator = new Random();
@@ -61,8 +60,6 @@ public class TestServlet extends OKMRemoteServiceServlet implements OKMTestServi
 	
 	@Override
 	public List<GWTFolder> folderText(int size) {
-		log.debug("folderText({})",size);
-		updateSessionManager();
 		List<GWTFolder> folderList = new ArrayList<GWTFolder>();
 		for (int i = 0; i<size; i++) {
 			GWTFolder folder = new GWTFolder();
@@ -83,8 +80,6 @@ public class TestServlet extends OKMRemoteServiceServlet implements OKMTestServi
 	
 	@Override
 	public List<GWTDocument> documentText(int size) {
-		log.debug("documentText({})",size);
-		updateSessionManager();
 		List<GWTDocument> documentList = new ArrayList<GWTDocument>();
 		for (int i = 0; i<size; i++) {
 			GWTDocument doc = new GWTDocument();

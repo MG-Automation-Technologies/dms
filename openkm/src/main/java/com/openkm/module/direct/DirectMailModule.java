@@ -39,13 +39,13 @@ import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VirusDetectedException;
 import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.MailModule;
 import com.openkm.module.base.BaseMailModule;
 import com.openkm.module.base.BaseNotificationModule;
@@ -86,7 +86,7 @@ public class DirectMailModule implements MailModule {
 			} else {
 				session = (XASession) JcrSessionManager.getInstance().get(token);
 			}
-						
+			
 			String parent = FileUtils.getParent(mail.getPath());
 			String name = FileUtils.getName(mail.getPath());
 			Node parentNode = session.getRootNode().getNode(parent.substring(1));
@@ -202,14 +202,14 @@ public class DirectMailModule implements MailModule {
 			String name = FileUtils.getName(mailPath);
 			Node mailNode = session.getRootNode().getNode(mailPath.substring(1));
 			Node parentNode = mailNode.getParent();
-			Node userTrash = session.getRootNode().getNode(Repository.TRASH + "/" + session.getUserID());
+			Node userTrash = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
 			
 			// Test if already exists a mail with the same name in the trash
-			String destPath = userTrash.getPath() + "/";
+			String destPath = userTrash.getPath()+"/";
 			String testName = name;
 			
 			for (int i=1; session.itemExists(destPath+testName); i++) {
-				testName = name + " (" + i + ")";
+				testName = name+" ("+i+")";
 			}
 			
 			session.move(mailNode.getPath(), destPath+testName);
@@ -313,7 +313,7 @@ public class DirectMailModule implements MailModule {
 			newName = FileUtils.escape(newName);
 			
 			if (newName != null && !newName.equals("") && !newName.equals(name)) {
-				String newPath = parent + "/" + newName;
+				String newPath = parent+"/"+newName;
 				session.move(mailPath, newPath);
 				
 				// Set new name

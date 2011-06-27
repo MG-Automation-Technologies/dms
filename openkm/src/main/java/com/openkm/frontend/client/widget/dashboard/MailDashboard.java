@@ -25,12 +25,15 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
 import com.openkm.frontend.client.bean.GWTDashboardMailResult;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMDashboardService;
 import com.openkm.frontend.client.service.OKMDashboardServiceAsync;
 
@@ -142,6 +145,8 @@ public class MailDashboard extends Composite {
 		if (!firstTime) {
 			userLastImportedMails.setRefreshing();
 		}
+		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
+		endPoint.setServiceEntryPoint(RPCService.DashboardService);		
 		dashboardService.getUserLastImportedMails(callbackGetUserLastImportedMails);
 	}
 	
@@ -151,7 +156,9 @@ public class MailDashboard extends Composite {
 	public void getUserLastImportedMailAttachments() {
 		if (!firstTime) {
 			userLastImportedAttachments.setRefreshing();
-		}	
+		}
+		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
+		endPoint.setServiceEntryPoint(RPCService.DashboardService);		
 		dashboardService.getUserLastImportedMailAttachments(callbackGetUserLastImportedMailAttachments);
 	}
 	

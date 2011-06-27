@@ -30,7 +30,6 @@ public class QueryResult implements Serializable {
 	private Folder folder;
 	private Mail mail;
 	private Document attachment;
-	private String excerpt;
 	private long score;
 
 	public Document getDocument() {
@@ -65,14 +64,6 @@ public class QueryResult implements Serializable {
 		this.attachment = attachment;
 	}
 	
-	public String getExcerpt() {
-		return excerpt;
-	}
-
-	public void setExcerpt(String excerpt) {
-		this.excerpt = excerpt;
-	}
-	
 	public long getScore() {
 		return score;
 	}
@@ -88,7 +79,6 @@ public class QueryResult implements Serializable {
 		sb.append(", folder="); sb.append(folder);
 		sb.append(", mail="); sb.append(mail);
 		sb.append(", attachment="); sb.append(attachment);
-		sb.append(", excerpt="); sb.append(excerpt);
 		sb.append(", score="); sb.append(score);
 		sb.append("}");
 		return sb.toString();

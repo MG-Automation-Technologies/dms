@@ -51,6 +51,7 @@ import com.openkm.bean.Mail;
 import com.openkm.cache.UserItemsManager;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.ActivityDAO;
@@ -62,7 +63,6 @@ import com.openkm.dao.bean.Dashboard;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.cache.UserItems;
 import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.DashboardModule;
 import com.openkm.module.base.BaseDocumentModule;
 import com.openkm.module.base.BaseFolderModule;
@@ -499,6 +499,7 @@ public class DirectDashboardModule implements DashboardModule {
 		return al;
 	}
 	
+	
 	/**
 	 * Get documents from statement
 	 */
@@ -634,7 +635,6 @@ public class DirectDashboardModule implements DashboardModule {
 		UserItems usrItems = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -660,7 +660,6 @@ public class DirectDashboardModule implements DashboardModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -1106,7 +1105,6 @@ public class DirectDashboardModule implements DashboardModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {

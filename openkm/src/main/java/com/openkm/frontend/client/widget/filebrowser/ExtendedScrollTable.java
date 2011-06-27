@@ -396,7 +396,8 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 							GWTFolder folder = getFolder();
 							Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.setProperties(folder);
 							Main.get().mainPanel.topPanel.toolBar.checkToolButtonPermissions(folder,
-									Main.get().activeFolderTree.getFolder(), FILE_BROWSER);
+									Main.get().activeFolderTree.getFolder(),
+																							 FILE_BROWSER);
 						} else if (isMailSelected()) {				
 							Main.get().mainPanel.desktop.browser.tabMultiple.enableTabMail();
 							GWTMail mail = getMail();
@@ -434,7 +435,7 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 							Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.setProperties(mail);
 						}
 						Main.get().mainPanel.topPanel.toolBar.checkToolButtonPermissions(mail,
-								Main.get().activeFolderTree.getFolder());
+								 														 Main.get().activeFolderTree.getFolder());
 					} else {
 						Main.get().mainPanel.desktop.browser.tabMultiple.enableTabDocument();
 						GWTDocument doc = getDocument();
@@ -885,18 +886,6 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 			Util.downloadFilePdf(getDocument().getUuid());
 		}
 		Log.debug("downloadDocumentPdf: void");
-	}
-	
-	/**
-	 * print
-	 */
-	public void print() {
-		Log.debug("print()");
-		if (isDocumentSelected()) {
-			Log.debug("jump to download");
-			Util.print(getDocument().getUuid());
-		}
-		Log.debug("print: void");
 	}
 	
 	/**

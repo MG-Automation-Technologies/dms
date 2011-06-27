@@ -68,7 +68,6 @@ import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VirusDetectedException;
 import com.openkm.dao.bean.QueryParams;
-import com.openkm.extension.core.ExtensionException;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTVersion;
@@ -645,8 +644,6 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 	
 	@Override
 	public String createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties) throws OKMException  {
-		log.debug("createFromTemplate({},{})", docPath, destinationPath);
-		updateSessionManager();
 		File tmp = null;
 		InputStream fis = null;
 		FileOutputStream fos = null;
@@ -657,14 +654,13 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 			
 			// Save content to temporary file
 			String fileName = FileUtils.getName(docPath);
-			tmp = File.createTempFile("okm", "." + FileUtils.getFileExtension(fileName));
+			tmp = File.createTempFile("okm", "."+FileUtils.getFileExtension(fileName));
 			fos = new FileOutputStream(tmp);
 			
 			// Setting values to document 
 			Map<String, Object> values = new HashMap<String, Object>();
 			for (GWTFormElement formElement : formProperties) {
-				values.put(formElement.getName().replace(".", "_").replace(":", "_"),
-						GWTUtil.getFormElementValue(formElement));
+				values.put(formElement.getName().replace(".", "_").replace(":", "_"), GWTUtil.getFormElementValue(formElement));
 			}
 			
 			// Fill document by mime type
@@ -702,7 +698,6 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 	        fis = new FileInputStream(tmp);
 	        Document newDoc = new Document();
 			newDoc.setPath(destinationPath);
-			
 			OKMDocument.getInstance().create(null, newDoc, fis);
 			
 			// Setting property groups ( metadata )
@@ -783,9 +778,6 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 		} catch (NoSuchPropertyException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_NoSuchProperty), e.getMessage());
-		} catch (ExtensionException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Extension), e.getMessage());
 		} finally {
 			FileUtils.deleteQuietly(tmp);
 			IOUtils.closeQuietly(fis);

@@ -481,7 +481,7 @@ public class MainMenu extends Composite {
 	/**
 	 * refreshReportFormatMenu
 	 */
-	private void refreshReportFormatMenu() {
+	private void refreshReportFormatMenu(){
 		switch (reportOutput) {
 			case OUTPUT_PDF:
 				reportFormatPdf.setHTML(Util.menuHTML("img/icon/security/yes.gif", Main.i18n("general.menu.report.format.pdf")));

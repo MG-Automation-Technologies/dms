@@ -42,7 +42,6 @@ import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VirusDetectedException;
-import com.openkm.extension.core.ExtensionException;
 import com.openkm.module.DocumentModule;
 import com.openkm.module.ModuleManager;
 
@@ -56,8 +55,7 @@ public class RepositoryImporter {
 	 */
 	public static ImpExpStats importDocuments(String token, File fs, String fldPath, boolean metadata,
 			Writer out, InfoDecorator deco) throws PathNotFoundException, ItemExistsException,
-			AccessDeniedException, RepositoryException, FileNotFoundException, IOException,
-			DatabaseException, ExtensionException {
+			AccessDeniedException, RepositoryException, FileNotFoundException, IOException, DatabaseException {
 		log.debug("importDocuments({}, {}, {}, {}, {}, {})", new Object[] { token, fs, fldPath, metadata, out, deco });
 		ImpExpStats stats;
 		
@@ -96,7 +94,7 @@ public class RepositoryImporter {
 	 */
 	private static ImpExpStats importDocumentsHelper(String token, File fs, String fldPath, boolean metadata,
 			Writer out, InfoDecorator deco) throws FileNotFoundException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException, ExtensionException {
+			AccessDeniedException, RepositoryException, IOException, DatabaseException {
 		log.debug("importDocumentsHelper({}, {}, {}, {}, {}, {})", new Object[] { token, fs, fldPath, metadata, out, deco });
 		File[] files = fs.listFiles();
 		ImpExpStats stats = new ImpExpStats();

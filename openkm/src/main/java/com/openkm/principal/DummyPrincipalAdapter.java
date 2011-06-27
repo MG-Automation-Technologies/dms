@@ -27,18 +27,15 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.core.Config;
-
 public class DummyPrincipalAdapter implements PrincipalAdapter {
 	private static Logger log = LoggerFactory.getLogger(DummyPrincipalAdapter.class);
-	private static final String TEST_USER = "monkiki";
 	
 	@Override
 	public List<String> getUsers() throws PrincipalAdapterException {
 		log.debug("getUsers()");
 		List<String> list = new ArrayList<String>();
-		list.add(Config.ADMIN_USER);
-		list.add(TEST_USER);
+		list.add("okmAdmin");
+		list.add("monkiki");
 		log.debug("getUsers: {}", list);
 		return list;
 	}
@@ -47,8 +44,8 @@ public class DummyPrincipalAdapter implements PrincipalAdapter {
 	public List<String> getRoles() throws PrincipalAdapterException {
 		log.debug("getRoles()");
 		List<String> list = new ArrayList<String>();
-		list.add(Config.DEFAULT_ADMIN_ROLE);
-		list.add(Config.DEFAULT_USER_ROLE);
+		list.add("AdminRole");
+		list.add("UserRole");
 		log.debug("getRoles: {}", list);
 		return list;
 	}
@@ -57,11 +54,11 @@ public class DummyPrincipalAdapter implements PrincipalAdapter {
 	public List<String> getUsersByRole(String role) throws PrincipalAdapterException {
 		List<String> list = new ArrayList<String>();
 		
-		if (role.equals(Config.DEFAULT_ADMIN_ROLE)) {
-			list.add(Config.ADMIN_USER);
-		} else if (role.equals(Config.DEFAULT_USER_ROLE)) {
-			list.add(Config.ADMIN_USER);
-			list.add(TEST_USER);
+		if (role.equals("AdminRole")) {
+			list.add("okmAdmin");
+		} else if (role.equals("UserRole")) {
+			list.add("okmAdmin");
+			list.add("monkiki");
 		}
 		
 		return list;
@@ -71,11 +68,11 @@ public class DummyPrincipalAdapter implements PrincipalAdapter {
 	public List<String> getRolesByUser(String user) throws PrincipalAdapterException {
 		List<String> list = new ArrayList<String>();
 		
-		if (user.equals(Config.ADMIN_USER)) {
-			list.add(Config.DEFAULT_ADMIN_ROLE);
-			list.add(Config.DEFAULT_USER_ROLE);
-		} else if (user.equals(TEST_USER)) {
-			list.add(Config.DEFAULT_USER_ROLE);
+		if (user.equals("okmAdmin")) {
+			list.add("AdminRole");
+			list.add("UserRole");
+		} else if (user.equals("monkiki")) {
+			list.add("UserRole");
 		}
 		
 		return list;
@@ -85,10 +82,8 @@ public class DummyPrincipalAdapter implements PrincipalAdapter {
 	public String getMail(String user) throws PrincipalAdapterException {
 		String mail = null;
 		
-		if (user.equals(Config.ADMIN_USER)) {
+		if (user.equals("okmAdmin")) {
 			mail = "admin@openkm.com";
-		} else if (user.equals(TEST_USER)) {
-			mail = "monkiki@openkm.com";
 		}
 		
 		return mail;
@@ -98,25 +93,10 @@ public class DummyPrincipalAdapter implements PrincipalAdapter {
 	public String getName(String user) throws PrincipalAdapterException {
 		String name = null;
 		
-		if (user.equals(Config.ADMIN_USER)) {
+		if (user.equals("okmAdmin")) {
 			name = "Administrator";
-		} else if (user.equals(TEST_USER)) {
-			name = "Monkiki";
 		}
 		
 		return name;
-	}
-
-	@Override
-	public String getPassword(String user) throws PrincipalAdapterException {
-		String password = null;
-		
-		if (user.equals(Config.ADMIN_USER)) {
-			password = "admin";
-		} else if (user.equals(TEST_USER)) {
-			password = "monkiki";
-		}
-		
-		return password;
 	}
 }

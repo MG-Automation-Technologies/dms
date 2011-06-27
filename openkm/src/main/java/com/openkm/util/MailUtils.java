@@ -81,6 +81,7 @@ import com.openkm.core.ConversionException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
@@ -89,8 +90,6 @@ import com.openkm.core.VirusDetectedException;
 import com.openkm.dao.bean.MailAccount;
 import com.openkm.dao.bean.MailFilter;
 import com.openkm.dao.bean.MailFilterRule;
-import com.openkm.extension.core.ExtensionException;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.direct.DirectDocumentModule;
 import com.openkm.module.direct.DirectMailModule;
 import com.sun.mail.imap.IMAPFolder;
@@ -229,8 +228,7 @@ public class MailUtils {
 
 		try {
 			InitialContext initialContext = new InitialContext();
-			Object obj = initialContext.lookup(Config.JNDI_BASE + "mail/OpenKM");
-			mailSession = (Session) PortableRemoteObject.narrow(obj, Session.class);
+			mailSession = (Session) PortableRemoteObject.narrow(initialContext.lookup("java:/mail/OpenKM"), Session.class);
 		} catch (javax.naming.NamingException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -332,7 +330,7 @@ public class MailUtils {
 	 */
 	public static String importMessages(String uid, MailAccount ma) throws PathNotFoundException,
 			ItemExistsException, VirusDetectedException, AccessDeniedException, RepositoryException,
-			DatabaseException, UserQuotaExceededException, ExtensionException {
+			DatabaseException, UserQuotaExceededException {
 		log.debug("importMessages({}, {})", new Object[] { uid, ma });
 		Properties props = System.getProperties();
 		Session session = Session.getDefaultInstance(props);
@@ -403,7 +401,7 @@ public class MailUtils {
 						log.debug("MailFilter: {}", mf);
 						
 						if (checkRules(mail, mf.getFilterRules())) {
-							String  mailPath = mf.getPath();
+							String mailPath = mf.getPath();
 							importMail(mailPath, mf.isGrouping(), folder, msg, ma, mail);		
 						}
 					}
@@ -416,7 +414,7 @@ public class MailUtils {
 					msg.setFlag(Flags.Flag.SEEN, false);
 				}
 				
-				// Delete readed mail if requested
+				// Delete read mail if requested
 				if (ma.isMailMarkDeleted()) {
 					msg.setFlag(Flags.Flag.DELETED, true);
 				}
@@ -447,7 +445,7 @@ public class MailUtils {
 	private static void importMail(String mailPath, boolean grouping, Folder folder, Message msg, 
 			MailAccount ma, com.openkm.bean.Mail mail) throws DatabaseException, RepositoryException,
 			AccessDeniedException, ItemExistsException, PathNotFoundException, MessagingException,
-			VirusDetectedException, UserQuotaExceededException, IOException, ExtensionException {
+			VirusDetectedException, UserQuotaExceededException, IOException {
 		String systemToken = JcrSessionManager.getInstance().getSystemToken();
 		OKMRepository okmRepository = OKMRepository.getInstance();
 		String path = grouping ? createGroupPath(mailPath, mail.getReceivedDate()) : mailPath;
@@ -529,8 +527,7 @@ public class MailUtils {
 	 * Create mail path
 	 */
 	private static String createGroupPath(String mailPath, Calendar receivedDate) throws DatabaseException,
-			RepositoryException, AccessDeniedException, ItemExistsException, PathNotFoundException,
-			ExtensionException {
+			RepositoryException, AccessDeniedException, ItemExistsException, PathNotFoundException {
 		log.debug("createGroupPath({}, {})", new Object[] { mailPath, receivedDate });
 		String systemToken = JcrSessionManager.getInstance().getSystemToken();
 		OKMRepository okmRepository = OKMRepository.getInstance();
@@ -614,7 +611,7 @@ public class MailUtils {
 	private static void addAttachments(com.openkm.bean.Mail mail, Part p, String userId) throws MessagingException,
 			IOException, UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
 			VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException, ExtensionException {
+			RepositoryException, DatabaseException {
 		String systemToken = JcrSessionManager.getInstance().getSystemToken();
 		
 		if (p.isMimeType("multipart/*")) {

@@ -37,20 +37,20 @@ public class SimpleTest extends TestCase {
 	@Override
 	protected void setUp() {
 		log.info("setUp()");
-		log.info("Delete repository: {}", TestConfig.REPOSITORY_HOME);
-		FileUtils.deleteQuietly(new File(TestConfig.REPOSITORY_HOME));
+		log.info("Delete repository: {}", Config.REPOSITORY_HOME);
+		FileUtils.deleteQuietly(new File(Config.REPOSITORY_HOME));
 	}
 
 	@Override
 	protected void tearDown() {
 		log.info("tearDown()");
-		log.info("Delete repository: {}", TestConfig.REPOSITORY_HOME);
-		FileUtils.deleteQuietly(new File(TestConfig.REPOSITORY_HOME));
+		log.info("Delete repository: {}", Config.REPOSITORY_HOME);
+		FileUtils.deleteQuietly(new File(Config.REPOSITORY_HOME));
 	}
 
 	public void testBasic() throws IOException, LoginException, RepositoryException {
 		log.info("testBasic()");
-		Repository repository = new TransientRepository(TestConfig.REPOSITORY_CONFIG, TestConfig.REPOSITORY_HOME);
+		Repository repository = new TransientRepository(Config.REPOSITORY_CONFIG, Config.REPOSITORY_HOME);
 		Session session = repository.login(new SimpleCredentials("admin", "admin".toCharArray()));
 		Node rootNode = session.getRootNode();
 		Node newNode = rootNode.addNode("new node");
@@ -62,7 +62,7 @@ public class SimpleTest extends TestCase {
 	
 	public void testSimple() throws IOException, LoginException, RepositoryException {
 		log.info("testSimple()");
-		RepositoryConfig config = RepositoryConfig.create(TestConfig.REPOSITORY_CONFIG, TestConfig.REPOSITORY_HOME);
+		RepositoryConfig config = RepositoryConfig.create(Config.REPOSITORY_CONFIG, Config.REPOSITORY_HOME);
 		Repository repository = RepositoryImpl.create(config);
 		Session session = repository.login(new SimpleCredentials("admin", "admin".toCharArray())); 
 		Node rootNode = session.getRootNode();

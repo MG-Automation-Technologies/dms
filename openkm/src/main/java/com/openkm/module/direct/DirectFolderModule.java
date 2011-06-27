@@ -40,15 +40,12 @@ import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
-import com.openkm.core.Ref;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UserQuotaExceededException;
-import com.openkm.extension.core.ExtensionException;
-import com.openkm.extension.core.FolderExtensionManager;
 import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.FolderModule;
 import com.openkm.module.base.BaseFolderModule;
 import com.openkm.module.base.BaseScriptingModule;
@@ -60,7 +57,7 @@ public class DirectFolderModule implements FolderModule {
 	
 	@Override
 	public Folder create(String token, Folder fld) throws AccessDeniedException, RepositoryException, 
-			PathNotFoundException, ItemExistsException, DatabaseException, ExtensionException {
+			PathNotFoundException, ItemExistsException, DatabaseException {
 		log.debug("create({}, {})", token, fld);
 		Folder newFolder = null;
 		Node parentNode = null;
@@ -80,31 +77,20 @@ public class DirectFolderModule implements FolderModule {
 			String parent = FileUtils.getParent(fld.getPath());
 			String name = FileUtils.getName(fld.getPath());
 			parentNode = session.getRootNode().getNode(parent.substring(1));
-			
+
 			// Escape dangerous chars in name
 			name = FileUtils.escape(name);
 			fld.setPath(parent + "/" + name);
 			
-			// EP - PRE
-			Ref<Node> refParentNode = new Ref<Node>(parentNode);
-			Ref<Folder> refFld = new Ref<Folder>(fld);
-			FolderExtensionManager.getInstance().preCreate(session, refParentNode, refFld);
-			parentNode = refParentNode.get();
-			
 			// Create node
 			Node folderNode = BaseFolderModule.create(session, parentNode, name);
-			
+						
 			// Set returned folder properties
 			newFolder = BaseFolderModule.getProperties(session, folderNode);
 			
 			// Check scripting
 			BaseScriptingModule.checkScripts(session, parentNode, folderNode, "CREATE_FOLDER");
-			
-			// EP - POST
-			Ref<Node> refFolderNode = new Ref<Node>(folderNode);
-			Ref<Folder> refNewFolder = new Ref<Folder>(newFolder);
-			FolderExtensionManager.getInstance().postCreate(session, refParentNode, refFolderNode, refNewFolder);
-			
+
 			// Activity log
 			UserActivity.log(session.getUserID(), "CREATE_FOLDER", folderNode.getUUID(), fld.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
@@ -122,12 +108,6 @@ public class DirectFolderModule implements FolderModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
 			throw new RepositoryException(e.getMessage(), e);
-		} catch (DatabaseException e) {
-			JCRUtils.discardsPendingChanges(parentNode);
-			throw e;
-		} catch (ExtensionException e) {
-			JCRUtils.discardsPendingChanges(parentNode);
-			throw e;
 		} finally {
 			if (token == null) JCRUtils.logout(session);
 		}
@@ -314,7 +294,7 @@ public class DirectFolderModule implements FolderModule {
 			newName = FileUtils.escape(newName);
 			
 			if (newName != null && !newName.equals("") && !newName.equals(name)) {
-				String newPath = parent + "/" + newName;
+				String newPath = parent+"/"+newName;
 				session.move(fldPath, newPath);
 				
 				// Set new name

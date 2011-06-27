@@ -505,7 +505,6 @@ public class GWTUtil {
 			gwtQueryResult.getAttachment().setAttachment(true);
 		}
 		
-		gwtQueryResult.setExcerpt(queryResult.getExcerpt());
 		gwtQueryResult.setScore(queryResult.getScore());
 		
 		return gwtQueryResult;

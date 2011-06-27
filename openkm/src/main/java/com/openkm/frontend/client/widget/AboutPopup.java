@@ -66,7 +66,7 @@ public class AboutPopup extends DialogBox implements ClickHandler {
 	public AboutPopup() {
 		
 		// Establishes auto-close when click outside
-		super(false, true);
+		super(false,true);
 		futurama = new Futurama();
 		int left = (Window.getClientWidth()-300)/2;
 		int top = (Window.getClientHeight()-280)/2;

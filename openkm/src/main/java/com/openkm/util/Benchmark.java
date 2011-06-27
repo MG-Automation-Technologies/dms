@@ -32,7 +32,6 @@ import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VirusDetectedException;
-import com.openkm.extension.core.ExtensionException;
 import com.openkm.module.base.BaseDocumentModule;
 import com.openkm.module.base.BaseFolderModule;
 import com.openkm.module.direct.DirectDocumentModule;
@@ -175,7 +174,7 @@ public class Benchmark {
 	public void okmApiHighPopulate(String token, Folder root, PrintWriter out, PrintWriter res) throws IOException,
 			InputMismatchException, ItemExistsException, PathNotFoundException, UserQuotaExceededException, 
 			AccessDeniedException, UnsupportedMimeTypeException, FileSizeExceededException,
-			VirusDetectedException, RepositoryException, DatabaseException, ExtensionException {
+			VirusDetectedException, RepositoryException, DatabaseException {
 		long begin = System.currentTimeMillis();
 		okmApiHighPopulateHelper(token, root, out, res, gen, 0);
 		long end = System.currentTimeMillis();
@@ -190,8 +189,7 @@ public class Benchmark {
 			Generator gen, int depth) throws 
 			InputMismatchException, IOException, ItemExistsException, PathNotFoundException,
 			UserQuotaExceededException,	AccessDeniedException, UnsupportedMimeTypeException, 
-			FileSizeExceededException, VirusDetectedException, RepositoryException, DatabaseException,
-			ExtensionException {
+			FileSizeExceededException, VirusDetectedException, RepositoryException, DatabaseException {
 		log.debug("okmApiHighPopulateHelper({}, {}, {}, {})", new Object[] { token, root, gen, depth });
 		
 		if (depth < maxDepth) {
