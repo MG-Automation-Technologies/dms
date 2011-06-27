@@ -215,7 +215,6 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 		return manager.updateFormElementsValuesWithNewer();
 	}
 	
-	
 	/**
 	 * Sets the properties values
 	 */
