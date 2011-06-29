@@ -219,7 +219,7 @@ public class DatabaseMetadataDAO {
 	 * Execute query
 	 */
 	public static DatabaseMetadataValue executeValueQueryUnique(String query) throws DatabaseException {
-		log.debug("executeValueQuery({})", query);
+		log.debug("executeValueQueryUnique({})", query);
 		Session session = null;
 		Transaction tx = null;
 		
@@ -229,7 +229,7 @@ public class DatabaseMetadataDAO {
 			Query q = session.createQuery(query);
 			DatabaseMetadataValue ret = (DatabaseMetadataValue) q.uniqueResult();
 			HibernateUtil.commit(tx);
-			log.debug("executeValueQuery: {}", ret);
+			log.debug("executeValueQueryUnique: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
