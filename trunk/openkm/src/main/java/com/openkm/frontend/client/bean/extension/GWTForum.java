@@ -1,9 +1,10 @@
 package com.openkm.frontend.client.bean.extension;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * GWTForum
@@ -11,7 +12,7 @@ import java.util.Set;
  * @author jllort
  *
  */
-public class GWTForum implements Serializable {
+public class GWTForum implements IsSerializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private String name;
