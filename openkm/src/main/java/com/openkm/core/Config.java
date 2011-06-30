@@ -43,18 +43,18 @@ import com.openkm.dao.MimeTypeDAO;
 import com.openkm.dao.bean.MimeType;
 import com.openkm.extractor.RegisteredExtractors;
 import com.openkm.principal.DatabasePrincipalAdapter;
-import com.openkm.util.ServerDetector;
+import com.openkm.util.EnvironmentDetector;
 
 public class Config {
 	private static Logger log = LoggerFactory.getLogger(Config.class);
 	public static TreeMap<String, String> values = new TreeMap<String, String>();
 	
 	// Server specific configuration
-	public static final String HOME_DIR = ServerDetector.getHomeDir();
-	public static final String TMP_DIR = ServerDetector.getTempDir();
-	public static final String NULL_DEVICE = ServerDetector.getNullDevice();
-	public static final String JNDI_BASE = ServerDetector.getJndiBase();
-	public static final boolean IN_SERVER = ServerDetector.inServer();
+	public static final String HOME_DIR = EnvironmentDetector.getServerHomeDir();
+	public static final String TMP_DIR = EnvironmentDetector.getTempDir();
+	public static final String NULL_DEVICE = EnvironmentDetector.getNullDevice();
+	public static final String JNDI_BASE = EnvironmentDetector.getServerJndiBase();
+	public static final boolean IN_SERVER = EnvironmentDetector.inServer();
 	
 	// Scripting
 	public static final String START_SCRIPT = "start.bsh";

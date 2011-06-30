@@ -24,18 +24,18 @@ package com.openkm.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ServerDetector {
-	private static Logger log = LoggerFactory.getLogger(ServerDetector.class);
+public class EnvironmentDetector {
+	private static Logger log = LoggerFactory.getLogger(EnvironmentDetector.class);
 	private static final String JBOSS_PROPERTY = "jboss.home.dir";
 	private static final String TOMCAT_PROPERTY = "catalina.home";
 	
 	/**
 	 * Guess the application server home directory
 	 */
-	public static String getHomeDir() {
+	public static String getServerHomeDir() {
 		// Try JBoss
 		String dir = System.getProperty(JBOSS_PROPERTY);
-		if (isJBoss()) {
+		if (isServerJBoss()) {
 			log.debug("Using JBoss: " + dir);
 			return dir;
 		}
@@ -56,23 +56,23 @@ public class ServerDetector {
 	/**
 	 * Detect if running in JBoss 
 	 */
-	public static boolean isJBoss() {
+	public static boolean isServerJBoss() {
 		return System.getProperty(JBOSS_PROPERTY) != null;
 	}
 	
 	/**
 	 * Detect if running in Tomcat
 	 */
-	public static boolean isTomcat() {
-		return !isJBoss() && System.getProperty(TOMCAT_PROPERTY) != null;
+	public static boolean isServerTomcat() {
+		return !isServerJBoss() && System.getProperty(TOMCAT_PROPERTY) != null;
 	}
 	
 	/**
 	 * Guess JNDI base
 	 */
-	public static String getJndiBase() {
-		if (isJBoss()) return "java:/";
-		else if (isTomcat()) return "java:/comp/env/";
+	public static String getServerJndiBase() {
+		if (isServerJBoss()) return "java:/";
+		else if (isServerTomcat()) return "java:/comp/env/";
 		else return "";
 	}
 	
@@ -107,6 +107,13 @@ public class ServerDetector {
 	 * Test if is running in application server
 	 */
 	public static boolean inServer() {
-		return isJBoss() || isTomcat();
+		return isServerJBoss() || isServerTomcat();
+	}
+	
+	/**
+	 * Get user home
+	 */
+	public static String getUserHome() {
+		return System.getProperty("user.home");
 	}
 }

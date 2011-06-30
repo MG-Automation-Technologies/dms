@@ -41,8 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
-import com.openkm.jaas.HttpAuthCallbackHandler;
-import com.openkm.util.ServerDetector;
+import com.openkm.util.EnvironmentDetector;
 
 public class ContextSubjectFilter implements Filter {
 	private static Logger log = LoggerFactory.getLogger(ContextSubjectFilter.class);
@@ -58,7 +57,7 @@ public class ContextSubjectFilter implements Filter {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		
 		try {
-			if (ServerDetector.isTomcat() && httpRequest.getRemoteUser() != null) {
+			if (EnvironmentDetector.isServerTomcat() && httpRequest.getRemoteUser() != null) {
 				HttpSession hs = (HttpSession)(httpRequest).getSession(false);
 				Subject sub = (Subject) hs.getAttribute(SESSION_AUTH_SUBJECT);
 				

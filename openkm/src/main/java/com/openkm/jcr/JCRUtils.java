@@ -73,7 +73,7 @@ import com.openkm.dao.LockTokenDAO;
 import com.openkm.dao.bean.LockToken;
 import com.openkm.module.direct.DirectAuthModule;
 import com.openkm.module.direct.DirectRepositoryModule;
-import com.openkm.util.ServerDetector;
+import com.openkm.util.EnvironmentDetector;
 import com.openkm.util.StackTraceUtils;
 
 public class JCRUtils {
@@ -338,7 +338,7 @@ public class JCRUtils {
 		
 		// Resolve subject
 		// Subject userSubject=(Subject)PolicyContext.getContext("javax.security.auth.Subject.container");
-		if (ServerDetector.isJBoss()) {
+		if (EnvironmentDetector.isServerJBoss()) {
 			try {
 				InitialContext ctx = new InitialContext();
 				subject = (Subject) ctx.lookup("java:/comp/env/security/subject");
@@ -346,7 +346,7 @@ public class JCRUtils {
 			} catch (NamingException e) {
 				throw new javax.jcr.LoginException(e.getMessage());
 			}
-		} else if (ServerDetector.isTomcat()) {
+		} else if (EnvironmentDetector.isServerTomcat()) {
 			subject = Subject.getSubject(AccessController.getContext());
 		}
 		

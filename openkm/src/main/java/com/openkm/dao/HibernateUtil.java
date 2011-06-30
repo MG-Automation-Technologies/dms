@@ -22,6 +22,9 @@
 package com.openkm.dao;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -44,6 +47,7 @@ import org.hibernate.hql.QueryTranslator;
 import org.hibernate.hql.QueryTranslatorFactory;
 import org.hibernate.hql.ast.ASTQueryTranslatorFactory;
 import org.hibernate.jdbc.Work;
+import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +56,7 @@ import com.openkm.dao.bean.DatabaseMetadataSequence;
 import com.openkm.dao.bean.DatabaseMetadataType;
 import com.openkm.dao.bean.DatabaseMetadataValue;
 import com.openkm.util.DatabaseDialectAdapter;
+import com.openkm.util.EnvironmentDetector;
 
 /**
  * Show SQL => Logger.getLogger("org.hibernate.SQL").setThreshold(Level.INFO);
@@ -238,5 +243,40 @@ public class HibernateUtil {
 			rollback(tx);
 			log.error(e.getMessage(), e);
 		}
+	}
+	
+	/**
+	 * Generate database schema and initial data for a defined dialect
+	 */
+	public static void generateDatabase(String dialect) throws IOException {
+		AnnotationConfiguration ac = new AnnotationConfiguration();
+        
+        // Add annotated beans
+        ac.addAnnotatedClass(DatabaseMetadataType.class);
+        ac.addAnnotatedClass(DatabaseMetadataValue.class);
+        ac.addAnnotatedClass(DatabaseMetadataSequence.class);
+        
+        // Configure Hibernate
+        log.info("Exporting Database Schema...");
+        String dbSchema = EnvironmentDetector.getUserHome() + "/schema.sql";
+        Configuration cfg = ac.configure();
+        cfg.setProperty("hibernate.dialect", dialect);
+        SchemaExport se = new SchemaExport(cfg);
+        se.setOutputFile(dbSchema);
+        se.setDelimiter(";");
+        se.setFormat(false);
+        se.create(false, false);
+        log.info("Database Schema exported to {}", dbSchema);
+        
+        String initialData = new File("").getAbsolutePath() + "/src/main/resources/default.sql";
+        log.info("Exporting Initial Data from '{}'...", initialData);
+        String initData = EnvironmentDetector.getUserHome() + "/data.sql";
+        FileInputStream fis = new FileInputStream(initialData);
+        String ret = DatabaseDialectAdapter.dialectAdapter(fis, dialect);
+        FileWriter fw = new FileWriter(initData);
+        IOUtils.write(ret, fw);
+        fw.flush();
+        fw.close();
+        log.info("Initial Data exported to {}", initData);
 	}
 }
