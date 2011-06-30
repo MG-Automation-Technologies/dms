@@ -161,6 +161,9 @@ public class ConfigDAO  {
 				ret.setType(type);
 				ret.setValue(value);
 				session.save(ret);
+			} else if (ret.getValue() == null) {
+				// For Oracle '' are like NULL
+				ret.setValue("");
 			}
 			
 			HibernateUtil.commit(tx);
