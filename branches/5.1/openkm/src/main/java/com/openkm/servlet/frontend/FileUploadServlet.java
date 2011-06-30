@@ -44,6 +44,7 @@ import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
+import com.openkm.extension.core.ExtensionException;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.contants.ui.UIFileUploadConstants;
 import com.openkm.util.FileUtils;
@@ -316,7 +317,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 			log.error(e.getMessage(), e);
 			out.print(e.toString());
 		} finally {
-			if (tmp!=null) {
+			if (tmp != null) {
 				tmp.delete();
 			}
 			IOUtils.closeQuietly(is);
@@ -332,9 +333,9 @@ public class FileUploadServlet extends OKMHttpServlet {
 	 * @param path Where import into the repository.
 	 * @param is The zip file to import.
 	 */
-	private synchronized String importZip(String path, InputStream is) throws 
-			PathNotFoundException, ItemExistsException, AccessDeniedException, 
-			RepositoryException, IOException, DatabaseException {
+	private synchronized String importZip(String path, InputStream is) throws PathNotFoundException,
+			ItemExistsException, AccessDeniedException, RepositoryException, IOException,
+			DatabaseException, ExtensionException {
 		log.debug("importZip({}, {})", path, is);
         java.io.File tmpIn = null;
         java.io.File tmpOut = null;
@@ -392,9 +393,9 @@ public class FileUploadServlet extends OKMHttpServlet {
 	 * @param path Where import into the repository.
 	 * @param is The jar file to import.
 	 */
-	private String importJar(String path, InputStream is) throws 
-			PathNotFoundException, ItemExistsException, AccessDeniedException, 
-			RepositoryException, IOException, DatabaseException {
+	private String importJar(String path, InputStream is) throws PathNotFoundException,
+			ItemExistsException, AccessDeniedException, RepositoryException, IOException,
+			DatabaseException, ExtensionException {
 		log.debug("importJar({}, {})", path, is);
         java.io.File tmpIn = null;
         java.io.File tmpOut = null;
