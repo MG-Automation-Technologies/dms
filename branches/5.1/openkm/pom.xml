@@ -497,7 +497,7 @@
       <version>2.6.2</version>
     </dependency>
     
-    <!--  Gson: Java to Json conversion -->
+    <!-- Gson: Java to Json conversion -->
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
@@ -511,7 +511,7 @@
       <version>1.0.1</version>
     </dependency>
     
-    <!--  Lorem Ipsu for Java -->
+    <!-- Lorem Ipsu for Java -->
     <dependency>
       <groupId>de.sven-jacobs</groupId>
       <artifactId>loremipsum</artifactId>
@@ -530,6 +530,13 @@
       <groupId>com.github.dcarter.gdata-java-client</groupId>
       <artifactId>gdata-contacts-3.0</artifactId>
       <version>1.41.1</version>
+    </dependency>
+    
+    <!-- Plugin framework -->
+    <dependency>
+      <groupId>com.google.code</groupId>
+      <artifactId>jspf</artifactId>
+      <version>1.0.1</version>
     </dependency>
   </dependencies>
   
