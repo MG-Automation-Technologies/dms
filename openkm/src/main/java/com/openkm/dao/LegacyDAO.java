@@ -37,10 +37,15 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 
 public class LegacyDAO {
 	private static Logger log = LoggerFactory.getLogger(LegacyDAO.class);
@@ -158,5 +163,54 @@ public class LegacyDAO {
 				log.warn("Error closing statement: " + e.getMessage(), e);
 			}
 		}	
+	}
+	
+	/**
+	 * Execute query
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<Object> executeQuery(String query) throws DatabaseException {
+		log.debug("executeValueQuery({})", query);
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			Query q = session.createQuery(query);
+			List<Object> ret = q.list();
+			HibernateUtil.commit(tx);
+			log.debug("executeValueQuery: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Execute query
+	 */
+	public static Object executeQueryUnique(String query) throws DatabaseException {
+		log.debug("executeQueryUnique({})", query);
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			Query q = session.createQuery(query);
+			Object ret = q.uniqueResult();
+			HibernateUtil.commit(tx);
+			log.debug("executeQueryUnique: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
 	}
 }
