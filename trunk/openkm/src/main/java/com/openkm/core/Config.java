@@ -81,9 +81,9 @@ public class Config {
 	public static String CACHE_SWF;
 	
 	// Experimental features
+	public static String PROPERTY_EXPERIMENTAL_TEXT_EXTRACTION = "experimental.text.extraction";
 	public static String PROPERTY_EXPERIMENTAL_MOBILE_CONTEXT = "experimental.mobile.context";
 	public static String PROPERTY_EXPERIMENTAL_PLUGIN_DEBUG = "experimental.plugin.debug";
-	public static String PROPERTY_EXPERIMENTAL_TEXT_EXTRACTION = "experimental.text.extraction";
 	
 	// Configuration properties
 	public static final String PROPERTY_REPOSITORY_CONFIG = "repository.config";
@@ -241,9 +241,9 @@ public class Config {
 	 *  Default values
 	 */
 	// Experimental features
+	public static String EXPERIMENTAL_MOBILE_CONTEXT = "mobile-lg";
 	public static boolean EXPERIMENTAL_TEXT_EXTRACTION = true;
 	public static boolean EXPERIMENTAL_PLUGIN_DEBUG = false;
-	public static String EXPERIMENTAL_MOBILE_CONTEXT = "mobile-lg";
 	
 	public static String REPOSITORY_CONFIG;
 	public static String REPOSITORY_HOME;
