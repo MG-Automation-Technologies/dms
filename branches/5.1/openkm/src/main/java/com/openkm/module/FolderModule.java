@@ -33,6 +33,7 @@ import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UserQuotaExceededException;
+import com.openkm.extension.core.ExtensionException;
 
 public interface FolderModule {
 
@@ -49,7 +50,7 @@ public interface FolderModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Folder create(String token, Folder fld) throws PathNotFoundException, ItemExistsException, 
-			AccessDeniedException, RepositoryException, DatabaseException;
+			AccessDeniedException, RepositoryException, DatabaseException, ExtensionException;
 
 	/**
 	 * Obtains properties from a previously created folder.
