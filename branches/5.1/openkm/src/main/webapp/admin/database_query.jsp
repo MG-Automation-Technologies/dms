@@ -34,15 +34,25 @@
       
       if ($('#method').val() == 'jdbc') {
         $('#tables').show();
-      } else {
+        $('#vtables').hide();
+      } else if ($('#method').val() == 'metadata') {
         $('#tables').hide();
+        $('#vtables').show();
+      } else {
+    	$('#tables').hide();
+        $('#vtables').hide();
       }
       
       $('#method').change(function() {
         if ($(this).val() == 'jdbc') {
           $('#tables').show();
+          $('#vtables').hide();
+        } else if ($(this).val() == 'metadata') {
+          $('#tables').hide();
+          $('#vtables').show();
         } else {
           $('#tables').hide();
+          $('#vtables').hide();
         }
       });
       
@@ -55,6 +65,16 @@
           cm.setValue('SELECT * FROM ' + $(this).val() + ';');
         }
       });
+      
+      $('#vtables').change(function() {
+          if ($(this).val() == '') {
+            //$('#qs').text('');
+            cm.setValue('');
+          } else {
+            //$('#qs').text('SELECT * FROM ' + $(this).val() + ';');
+            cm.setValue('SELECT|' + $(this).val());
+          }
+        });
     });
   </script>
   <title>Database Query</title>
@@ -80,6 +100,12 @@
                       <option></option>
                       <c:forEach var="table" items="${tables}">
                         <option value="${table}">${table}</option>
+                      </c:forEach>
+                    </select>
+                    <select id="vtables">
+                      <option></option>
+                      <c:forEach var="vtable" items="${vtables}">
+                        <option value="${vtable}">${vtable}</option>
                       </c:forEach>
                     </select>
                   </td>
