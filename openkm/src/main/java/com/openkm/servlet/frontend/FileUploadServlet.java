@@ -320,7 +320,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 			log.error(e.getMessage(), e);
 			out.print(e.toString());
 		} finally {
-			if (tmp!=null) {
+			if (tmp != null) {
 				tmp.delete();
 			}
 			IOUtils.closeQuietly(is);
@@ -336,9 +336,9 @@ public class FileUploadServlet extends OKMHttpServlet {
 	 * @param path Where import into the repository.
 	 * @param is The zip file to import.
 	 */
-	private synchronized String importZip(String path, InputStream is) throws 
-			PathNotFoundException, ItemExistsException, AccessDeniedException, 
-			RepositoryException, IOException, DatabaseException, ExtensionException {
+	private synchronized String importZip(String path, InputStream is) throws PathNotFoundException,
+			ItemExistsException, AccessDeniedException, RepositoryException, IOException,
+			DatabaseException, ExtensionException {
 		log.debug("importZip({}, {})", path, is);
         java.io.File tmpIn = null;
         java.io.File tmpOut = null;
@@ -396,9 +396,9 @@ public class FileUploadServlet extends OKMHttpServlet {
 	 * @param path Where import into the repository.
 	 * @param is The jar file to import.
 	 */
-	private String importJar(String path, InputStream is) throws 
-			PathNotFoundException, ItemExistsException, AccessDeniedException, 
-			RepositoryException, IOException, DatabaseException, ExtensionException {
+	private String importJar(String path, InputStream is) throws PathNotFoundException,
+			ItemExistsException, AccessDeniedException, RepositoryException, IOException,
+			DatabaseException, ExtensionException {
 		log.debug("importJar({}, {})", path, is);
         java.io.File tmpIn = null;
         java.io.File tmpOut = null;
