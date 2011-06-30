@@ -105,7 +105,7 @@ public class DirectDocumentModule implements DocumentModule {
 			UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
 			VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException, 
 			RepositoryException, IOException, DatabaseException, ExtensionException {
-		log.debug("create({})", doc);
+		log.debug("create({}, {}, {}, {})", new Object[] { token, doc, is, userId });
 		Document newDocument = null;
 		Node parentNode = null;
 		Session session = null;
