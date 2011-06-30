@@ -1,21 +1,18 @@
 package com.openkm.test;
 
-import java.io.File;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.hibernate.cfg.Configuration;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
+import com.openkm.dao.HibernateUtil;
 
 public class Test {
+	private static Logger log = LoggerFactory.getLogger(Test.class);
+	
 	/**
 	 * Only for testing purposes
 	 */
 	public static void main(String[] args) throws Exception {
-		Configuration cfg = new Configuration();
-		cfg.configure(new File("/path/to/openkm/src/main/resources/hibernate.cfg.xml"));
-		cfg.setProperty("hibernate.dialect", "org.hibernate.dialect.Oracle10gDialect");
-		SchemaExport se = new SchemaExport(cfg);
-		se.setOutputFile("/tmp/schema.sql");
-		se.setFormat(true);
-		se.create(false, false);
+		log.info("Generate database schema & initial data");
+        HibernateUtil.generateDatabase("org.hibernate.dialect.Oracle10gDialect");
 	}
 }
