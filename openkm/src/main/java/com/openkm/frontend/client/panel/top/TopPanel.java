@@ -131,7 +131,7 @@ public class TopPanel extends Composite {
 		separator.setWidth("100%");
 		horizontalPanelMenu.add(separator);
 		horizontalPanelMenu.add(quickSearchPanel);
-		Image logo = new Image(OKMBundleResources.INSTANCE.logoOpenKM());
+		Image logo = new Image("img/logo_openkm_tiny.gif");
 		horizontalPanelMenu.add(logo);
 		horizontalPanelMenu.setCellHorizontalAlignment(quickSearchPanel, HasAlignment.ALIGN_RIGHT);
 		horizontalPanelMenu.setCellVerticalAlignment(quickSearchPanel, HasAlignment.ALIGN_MIDDLE);
