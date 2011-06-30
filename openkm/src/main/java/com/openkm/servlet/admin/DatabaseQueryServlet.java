@@ -224,7 +224,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 					}
 					
 					log.info("Metadata SELECT: {}", hql);
-					globalResults.add(executeHQL(session, hql, true));
+					globalResults.add(executeHQL(session, hql, parts[1]));
 				} else if (parts[0].toUpperCase().equals("UPDATE")) {
 					if (parts.length > 3) {
 						hql = DatabaseMetadataUtils.buildUpdate(parts[1], parts[2], parts[3]);
@@ -237,7 +237,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 					}
 					
 					log.info("Metadata UPDATE: {}", hql);
-					globalResults.add(executeHQL(session, hql, true));
+					globalResults.add(executeHQL(session, hql, parts[1]));
 				} else if (parts[0].toUpperCase().equals("DELETE")) {
 					if (parts.length > 2) {
 						hql = DatabaseMetadataUtils.buildDelete(parts[1], parts[2]);
@@ -247,7 +247,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 					}
 					
 					log.info("Metadata DELETE: {}", hql);
-					globalResults.add(executeHQL(session, hql, true));
+					globalResults.add(executeHQL(session, hql, parts[1]));
 				} else {
 					throw new DatabaseException("Error in metadata action");
 				}
@@ -274,7 +274,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 		// For each query line
 		while (st.hasMoreTokens()) {
 			String hql = st.nextToken();
-			globalResults.add(executeHQL(session, hql, false));
+			globalResults.add(executeHQL(session, hql, null));
 		}
 		
 		//sc.setAttribute("sql", HibernateUtil.toSql(qs));
@@ -287,7 +287,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 	 * Execute hibernate sentence
 	 */
 	@SuppressWarnings("unchecked")
-	private GlobalResult executeHQL(Session session, String hql, boolean md) throws HibernateException, 
+	private GlobalResult executeHQL(Session session, String hql, String vtable) throws HibernateException, 
 			DatabaseException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		if (hql.toUpperCase().startsWith("SELECT") || hql.toUpperCase().startsWith("FROM")) {
 			Query q = session.createQuery(hql);
@@ -297,15 +297,15 @@ public class DatabaseQueryServlet extends BaseServlet {
 			Type[] rt = q.getReturnTypes();
 			int i = 0;
 			
-			if (md) {
-				List<Object> tmp = LegacyDAO.executeQuery("select dmt.virtualColumn from DatabaseMetadataType dmt where dmt.table='tipo_contacto'");
+			if (vtable == null) {
+				for (i=0; i<rt.length; i++) {
+					columns.add(rt[i].getName());
+				}
+			} else {
+				List<Object> tmp = LegacyDAO.executeQuery("select dmt.virtualColumn from DatabaseMetadataType dmt where dmt.table='"+vtable+"'");
 				
 				for (Object obj : tmp) {
 					columns.add(String.valueOf(obj));
-				}
-			} else {
-				for (i=0; i<rt.length; i++) {
-					columns.add(rt[i].getName());
 				}
 			}
 			
@@ -313,15 +313,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 				List<String> row = new ArrayList<String>();
 				Object obj = it.next();
 				
-				if (md) {
-					for (String column : columns) {
-						if (obj instanceof DatabaseMetadataValue) {
-							row.add(DatabaseMetadataUtils.getString((DatabaseMetadataValue) obj, column));
-						} else {
-							row.add("Query result should be instance of DatabaseMetadataValue");
-						}
-					}
-				} else {
+				if (vtable == null) {
 					if (obj instanceof Object[]) {
 						Object[] ao = (Object[]) obj;
 						
@@ -330,6 +322,14 @@ public class DatabaseQueryServlet extends BaseServlet {
 						}
 					} else {
 						row.add(obj.toString());	
+					}
+				} else {
+					for (String column : columns) {
+						if (obj instanceof DatabaseMetadataValue) {
+							row.add(DatabaseMetadataUtils.getString((DatabaseMetadataValue) obj, column));
+						} else {
+							row.add("Query result should be instance of DatabaseMetadataValue");
+						}
 					}
 				}
 				
