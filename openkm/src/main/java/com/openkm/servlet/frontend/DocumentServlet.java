@@ -68,6 +68,7 @@ import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VirusDetectedException;
 import com.openkm.dao.bean.QueryParams;
+import com.openkm.extension.core.ExtensionException;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTVersion;
@@ -643,7 +644,7 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 	}
 	
 	@Override
-	public String createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties) throws OKMException  {
+	public String createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties) throws OKMException {
 		File tmp = null;
 		InputStream fis = null;
 		FileOutputStream fos = null;
@@ -778,6 +779,9 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 		} catch (NoSuchPropertyException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_NoSuchProperty), e.getMessage());
+		} catch (ExtensionException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Extension), e.getMessage());
 		} finally {
 			FileUtils.deleteQuietly(tmp);
 			IOUtils.closeQuietly(fis);
