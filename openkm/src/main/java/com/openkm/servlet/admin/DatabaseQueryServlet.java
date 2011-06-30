@@ -102,6 +102,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 			sc.setAttribute("exception", null);
 			sc.setAttribute("globalResults", null);
 			sc.setAttribute("tables", listTables(session));
+			sc.setAttribute("vtables", listVirtualTables());
 			sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 		} catch (Exception e) {
 			sendError(sc, request,response, e);
@@ -162,6 +163,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 					// Activity log
 					UserActivity.log(request.getRemoteUser(), "ADMIN_DATABASE_QUERY", null, qs);
 				} else if (data != null && data.length > 0) {
+					sc.setAttribute("exception", null);
 					session = HibernateUtil.getSessionFactory().openSession();
 					executeUpdate(session, data, sc, request, response);
 					
@@ -201,17 +203,40 @@ public class DatabaseQueryServlet extends BaseServlet {
 			String mds = st.nextToken();
 			String[] parts = mds.split("\\|");
 			
-			if (parts.length > 2) {
-				if (parts[0].toUpperCase().equals("SELECT")) {
-					String hql = DatabaseMetadataUtils.buildQuery(parts[1], parts[2]);
+			if (parts.length > 1) {
+				String hql = null;
+				
+				if (parts[0].toUpperCase().equals("SELECT")) {	
+					if (parts.length > 2) {
+						hql = DatabaseMetadataUtils.buildQuery(parts[1], parts[2]);
+					} else {
+						// Filter parameter is optional
+						hql = DatabaseMetadataUtils.buildQuery(parts[1], null);
+					}
+					
 					log.info("Metadata SELECT: {}", hql);
 					globalResults.add(executeHQL(session, hql));
 				} else if (parts[0].toUpperCase().equals("UPDATE")) {
-					String hql = DatabaseMetadataUtils.buildUpdate(parts[1], parts[2], parts[3]);
+					if (parts.length > 3) {
+						hql = DatabaseMetadataUtils.buildUpdate(parts[1], parts[2], parts[3]);
+					} else if (parts.length > 2) {
+						// Filter parameter is optional
+						hql = DatabaseMetadataUtils.buildUpdate(parts[1], parts[2], null);
+					} else {
+						// Filter parameter is optional
+						hql = DatabaseMetadataUtils.buildUpdate(parts[1], null, null);
+					}
+					
 					log.info("Metadata UPDATE: {}", hql);
 					globalResults.add(executeHQL(session, hql));
 				} else if (parts[0].toUpperCase().equals("DELETE")) {
-					String hql = DatabaseMetadataUtils.buildDelete(parts[1], parts[2]);
+					if (parts.length > 2) {
+						hql = DatabaseMetadataUtils.buildDelete(parts[1], parts[2]);
+					} else {
+						// Filter parameter is optional
+						hql = DatabaseMetadataUtils.buildDelete(parts[1], null);
+					}
+					
 					log.info("Metadata DELETE: {}", hql);
 					globalResults.add(executeHQL(session, hql));
 				} else {
@@ -430,7 +455,6 @@ public class DatabaseQueryServlet extends BaseServlet {
 		
 		sc.setAttribute("qs", null);
 		sc.setAttribute("method", null);
-		//sc.setAttribute("tables", listTables(session));
 		sc.setAttribute("globalResults", globalResults);
 		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 		
@@ -456,6 +480,21 @@ public class DatabaseQueryServlet extends BaseServlet {
 				}
 			}
 		);
+		
+		return tables;
+	}
+	
+	/**
+	 * List virtual tables from database
+	 */
+	private List<String> listVirtualTables() throws DatabaseException {
+		String query = "select distinct(dmv.table) from DatabaseMetadataType dmv order by dmv.table";
+		List<Object> tmp = LegacyDAO.executeQuery(query);
+		List<String> tables = new ArrayList<String>();
+		
+		for (Object obj : tmp) {
+			tables.add(String.valueOf(obj));
+		}
 		
 		return tables;
 	}
