@@ -49,6 +49,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
@@ -57,8 +58,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.dao.HibernateUtil;
 import com.openkm.dao.LegacyDAO;
+import com.openkm.util.DatabaseMetadataUtils;
 import com.openkm.util.UserActivity;
 
 /**
@@ -88,19 +91,20 @@ public class DatabaseQueryServlet extends BaseServlet {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
 		updateSessionManager(request);
+		ServletContext sc = getServletContext();
 		Session session = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			ServletContext sc = getServletContext();
 			sc.setAttribute("qs", null);
 			//sc.setAttribute("sql", null);
 			sc.setAttribute("method", null);
+			sc.setAttribute("exception", null);
 			sc.setAttribute("globalResults", null);
 			sc.setAttribute("tables", listTables(session));
 			sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 		} catch (Exception e) {
-			sendErrorRedirect(request,response, e);
+			sendError(sc, request,response, e);
 		} finally {
 			HibernateUtil.close(session);
 		}
@@ -112,8 +116,9 @@ public class DatabaseQueryServlet extends BaseServlet {
 			ServletException {
 		log.debug("doPost({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		Session session = null;
 		updateSessionManager(request);
+		ServletContext sc = getServletContext();
+		Session session = null;
 		
 		try {
 			if (ServletFileUpload.isMultipartContent(request)) {
@@ -143,113 +148,162 @@ public class DatabaseQueryServlet extends BaseServlet {
 				
 				if (!qs.equals("") && !method.equals("")) {
 					session = HibernateUtil.getSessionFactory().openSession();
+					sc.setAttribute("qs", qs);
+					sc.setAttribute("method", method);
 					
 					if (method.equals("jdbc")) {
-						executeJdbc(session, qs, request, response);
+						executeJdbc(session, qs, sc, request, response);
 					} else if (method.equals("hibernate")) {
-						executeHibernate(session, qs, request, response);
+						executeHibernate(session, qs, sc, request, response);
+					} else if (method.equals("metadata")) {
+						executeMetadata(session, qs, sc, request, response);
 					}
 					
 					// Activity log
 					UserActivity.log(request.getRemoteUser(), "ADMIN_DATABASE_QUERY", null, qs);
 				} else if (data != null && data.length > 0) {
 					session = HibernateUtil.getSessionFactory().openSession();
-					executeUpdate(session, data, request, response);
+					executeUpdate(session, data, sc, request, response);
 					
 					// Activity log
 					UserActivity.log(request.getRemoteUser(), "ADMIN_DATABASE_UPDATE", null, new String(data));
 				} else {
-					ServletContext sc = getServletContext();
 					sc.setAttribute("qs", qs);
-					sc.setAttribute("method", null);
-					//sc.setAttribute("tables", listTables(session));
+					sc.setAttribute("method", method);
+					sc.setAttribute("exception", null);
 					sc.setAttribute("globalResults", new ArrayList<DatabaseQueryServlet.GlobalResult>());
 					sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 				}
 			}
 		} catch (FileUploadException e) {
-			sendErrorRedirect(request,response, e);
+			sendError(sc, request,response, e);
 		} catch (SQLException e) {
-			sendErrorRedirect(request,response, e);
+			sendError(sc, request,response, e);
+		} catch (HibernateException e) {
+			sendError(sc, request,response, e);
+		} catch (DatabaseException e) {
+			sendError(sc, request,response, e);
 		} finally {
 			HibernateUtil.close(session);
 		}
 	}
 	
 	/**
-	 * Execute Hibernate query
+	 * Execute metadata query
 	 */
-	@SuppressWarnings("unchecked")
-	private void executeHibernate(Session session, String qs, HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		ServletContext sc = getServletContext();
+	private void executeMetadata(Session session, String qs, ServletContext sc, HttpServletRequest request,
+			HttpServletResponse response) throws DatabaseException, ServletException, IOException {
 		StringTokenizer st = new StringTokenizer(qs, "\n");
 		List<GlobalResult> globalResults = new ArrayList<DatabaseQueryServlet.GlobalResult>();
 		
 		// For each query line
 		while (st.hasMoreTokens()) {
-			String tk = st.nextToken();
+			String mds = st.nextToken();
+			String[] parts = mds.split("\\|");
 			
-			if (tk.toUpperCase().startsWith("SELECT") || tk.toUpperCase().startsWith("FROM")) {
-				Query q = session.createQuery(tk);
-				List<Object> ret = q.list();
-				List<String> columns = new ArrayList<String>();
-				List<List<String>> results = new ArrayList<List<String>>();
-				Type[] rt = q.getReturnTypes();
-				int i = 0;
-				
-				for (i=0; i<rt.length; i++) {
-					columns.add(rt[i].getName());
+			if (parts.length > 2) {
+				if (parts[0].toUpperCase().equals("SELECT")) {
+					String hql = DatabaseMetadataUtils.buildQuery(parts[1], parts[2]);
+					log.info("Metadata SELECT: {}", hql);
+					globalResults.add(executeHQL(session, hql));
+				} else if (parts[0].toUpperCase().equals("UPDATE")) {
+					String hql = DatabaseMetadataUtils.buildUpdate(parts[1], parts[2], parts[3]);
+					log.info("Metadata UPDATE: {}", hql);
+					globalResults.add(executeHQL(session, hql));
+				} else if (parts[0].toUpperCase().equals("DELETE")) {
+					String hql = DatabaseMetadataUtils.buildDelete(parts[1], parts[2]);
+					log.info("Metadata DELETE: {}", hql);
+					globalResults.add(executeHQL(session, hql));
+				} else {
+					throw new DatabaseException("Error in metadata action");
 				}
-				
-				for (Iterator<Object> it = ret.iterator(); it.hasNext() && i++ < Config.MAX_SEARCH_RESULTS; ) {
-					List<String> row = new ArrayList<String>();
-					Object obj = it.next();
-					
-					if (obj instanceof Object[]) {
-						Object[] ao = (Object[]) obj;
-						
-						for (int j=0; j<ao.length; j++) {
-							row.add(ao[j].toString());
-						}
-					} else {
-						row.add(obj.toString());	
-					}
-					
-					results.add(row);
-				}
-				
-				GlobalResult gr = new GlobalResult();
-				gr.setColumns(columns);
-				gr.setResults(results);
-				gr.setRows(null);
-				gr.setSql(tk);
-				globalResults.add(gr);
 			} else {
-				GlobalResult gr = new GlobalResult();
-				int rows = session.createQuery(qs).executeUpdate();
-				gr.setColumns(null);
-				gr.setResults(null);
-				gr.setRows(rows);
-				gr.setSql(tk);
-				globalResults.add(gr);
+				throw new DatabaseException("Error in metadata sentence parameters");
 			}
 		}
 		
 		//sc.setAttribute("sql", HibernateUtil.toSql(qs));
-		sc.setAttribute("qs", qs);
-		sc.setAttribute("method", "hibernate");
-		//sc.setAttribute("tables", listTables(session));
+		sc.setAttribute("exception", null);
+		sc.setAttribute("globalResults", globalResults);
+		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
+	}
+
+	/**
+	 * Execute Hibernate query
+	 */
+	private void executeHibernate(Session session, String qs, ServletContext sc, HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		StringTokenizer st = new StringTokenizer(qs, "\n");
+		List<GlobalResult> globalResults = new ArrayList<DatabaseQueryServlet.GlobalResult>();
+		
+		// For each query line
+		while (st.hasMoreTokens()) {
+			String hql = st.nextToken();
+			globalResults.add(executeHQL(session, hql));
+		}
+		
+		//sc.setAttribute("sql", HibernateUtil.toSql(qs));
+		sc.setAttribute("exception", null);
 		sc.setAttribute("globalResults", globalResults);
 		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 	}
 	
 	/**
+	 * Execute hibernate sentence
+	 */
+	@SuppressWarnings("unchecked")
+	private GlobalResult executeHQL(Session session, String hql) throws HibernateException {
+		if (hql.toUpperCase().startsWith("SELECT") || hql.toUpperCase().startsWith("FROM")) {
+			Query q = session.createQuery(hql);
+			List<Object> ret = q.list();
+			List<String> columns = new ArrayList<String>();
+			List<List<String>> results = new ArrayList<List<String>>();
+			Type[] rt = q.getReturnTypes();
+			int i = 0;
+			
+			for (i=0; i<rt.length; i++) {
+				columns.add(rt[i].getName());
+			}
+			
+			for (Iterator<Object> it = ret.iterator(); it.hasNext() && i++ < Config.MAX_SEARCH_RESULTS; ) {
+				List<String> row = new ArrayList<String>();
+				Object obj = it.next();
+				
+				if (obj instanceof Object[]) {
+					Object[] ao = (Object[]) obj;
+					
+					for (int j=0; j<ao.length; j++) {
+						row.add(ao[j].toString());
+					}
+				} else {
+					row.add(obj.toString());	
+				}
+				
+				results.add(row);
+			}
+			
+			GlobalResult gr = new GlobalResult();
+			gr.setColumns(columns);
+			gr.setResults(results);
+			gr.setRows(null);
+			gr.setSql(hql);
+			return gr;
+		} else {
+			GlobalResult gr = new GlobalResult();
+			int rows = session.createQuery(hql).executeUpdate();
+			gr.setColumns(null);
+			gr.setResults(null);
+			gr.setRows(rows);
+			gr.setSql(hql);
+			return gr;
+		}
+	}
+	
+	/**
 	 * Execute JDBC query
 	 */
-	private void executeJdbc(Session session, String qs, HttpServletRequest request, 
+	private void executeJdbc(Session session, String qs, ServletContext sc, HttpServletRequest request, 
 			HttpServletResponse response) throws SQLException, ServletException, IOException {
-		ServletContext sc = getServletContext();
 		Connection con = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -271,7 +325,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 						tk = tk.substring(0, tk.length() - 1);
 					}
 					
-					if (tk.toUpperCase().startsWith("SELECT")) {	
+					if (tk.toUpperCase().startsWith("SELECT")) {
 						rs = stmt.executeQuery(tk);
 						ResultSetMetaData md = rs.getMetaData();
 						List<String> columns = new ArrayList<String>();
@@ -315,9 +369,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 		}
 		
 		//sc.setAttribute("sql", null);
-		sc.setAttribute("qs", qs);
-		sc.setAttribute("method", "jdbc");
-		//sc.setAttribute("tables", listTables(session));
+		sc.setAttribute("exception", null);
 		sc.setAttribute("globalResults", globalResults);
 		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 	}
@@ -325,10 +377,9 @@ public class DatabaseQueryServlet extends BaseServlet {
 	/**
 	 * Import into database
 	 */
-	private void executeUpdate(Session session, byte[] data, HttpServletRequest request, 
+	private void executeUpdate(Session session, byte[] data, ServletContext sc, HttpServletRequest request, 
 			HttpServletResponse response) throws SQLException, ServletException, IOException {
 		log.debug("executeUpdate({}, {}, {})", new Object[] { session, request, response });
-		ServletContext sc = getServletContext();
 		Connection con = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -407,6 +458,16 @@ public class DatabaseQueryServlet extends BaseServlet {
 		);
 		
 		return tables;
+	}
+	
+	/**
+	 * Send error to be displayed inline
+	 */
+	protected void sendError(ServletContext sc, HttpServletRequest request, HttpServletResponse response, 
+			Exception e) throws ServletException, IOException {
+		sc.setAttribute("exception", e);
+		sc.setAttribute("globalResults", null);
+		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 	}
 	
 	/**
