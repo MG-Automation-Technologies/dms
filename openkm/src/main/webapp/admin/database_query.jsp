@@ -11,7 +11,7 @@
   <link rel="stylesheet" type="text/css" href="js/codemirror/lib/codemirror.css" />
   <link rel="stylesheet" type="text/css" href="js/codemirror/mode/plsql/plsql.css" />
   <style type="text/css">
-    .CodeMirror { width: 500px; height: 150px; background-color: #f8f6c2; }
+    .CodeMirror { width: 550px; height: 175px; background-color: #f8f6c2; }
     .activeline { background: #f0fcff !important; }
   </style>
   <script type="text/javascript" src="js/codemirror/lib/codemirror.js"></script>
@@ -71,7 +71,7 @@
               <table>
                 <tr>
                   <td colspan="2">
-                    <textarea cols="75" rows="5" name="qs" id="qs">${qs}</textarea>
+                    <textarea cols="100" rows="7" name="qs" id="qs">${qs}</textarea>
                   </td>
                 </tr>
                 <tr>
@@ -102,6 +102,14 @@
                           <option value="hibernate">Hibernate</option>
                         </c:otherwise>
                       </c:choose>
+                      <c:choose>
+                        <c:when test="${method == 'metadata'}">
+                          <option value="metadata" selected="selected">Metadata</option>
+                        </c:when>
+                        <c:otherwise>
+                          <option value="metadata">Metadata</option>
+                        </c:otherwise>
+                      </c:choose>
                     </select>
                     <input type="submit" value="Send"/>
                   </td>
@@ -124,6 +132,27 @@
           </td>
         </tr>
       </table>
+      <br/>
+      <c:if test="${exception != null}">
+        <div class="error">
+          <table align="center">
+            <tr>
+              <td><b>Class:</b></td>
+              <td>${exception.class.name}</td>
+            </tr>
+            <tr>
+              <td><b>Message:</b></td>
+              <td>${exception.message}</td>
+            </tr>
+            <c:if test="${exception.cause != null}">
+              <tr>
+                <td><b>Cause:</b></td>
+                <td>${exception.cause.message}</td>
+              </tr>
+            </c:if>
+          </table>
+        </div>
+      </c:if>
       <br/>
       <c:forEach var="gResult" items="${globalResults}">
         <c:if test="${gResult.sql != null}">
