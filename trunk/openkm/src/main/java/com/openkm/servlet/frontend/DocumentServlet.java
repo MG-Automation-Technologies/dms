@@ -644,7 +644,7 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 	}
 	
 	@Override
-	public String createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties) throws OKMException  {
+	public String createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties) throws OKMException {
 		log.debug("createFromTemplate({},{})", docPath, destinationPath);
 		updateSessionManager();
 		File tmp = null;
