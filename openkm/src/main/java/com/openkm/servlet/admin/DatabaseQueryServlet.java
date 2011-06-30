@@ -26,6 +26,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -61,6 +62,7 @@ import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.HibernateUtil;
 import com.openkm.dao.LegacyDAO;
+import com.openkm.dao.bean.DatabaseMetadataValue;
 import com.openkm.util.DatabaseMetadataUtils;
 import com.openkm.util.UserActivity;
 
@@ -185,6 +187,12 @@ public class DatabaseQueryServlet extends BaseServlet {
 			sendError(sc, request,response, e);
 		} catch (DatabaseException e) {
 			sendError(sc, request,response, e);
+		} catch (IllegalAccessException e) {
+			sendError(sc, request,response, e);
+		} catch (InvocationTargetException e) {
+			sendError(sc, request,response, e);
+		} catch (NoSuchMethodException e) {
+			sendError(sc, request,response, e);
 		} finally {
 			HibernateUtil.close(session);
 		}
@@ -194,7 +202,8 @@ public class DatabaseQueryServlet extends BaseServlet {
 	 * Execute metadata query
 	 */
 	private void executeMetadata(Session session, String qs, ServletContext sc, HttpServletRequest request,
-			HttpServletResponse response) throws DatabaseException, ServletException, IOException {
+			HttpServletResponse response) throws DatabaseException, ServletException, IOException,
+			HibernateException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		StringTokenizer st = new StringTokenizer(qs, "\n");
 		List<GlobalResult> globalResults = new ArrayList<DatabaseQueryServlet.GlobalResult>();
 		
@@ -215,7 +224,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 					}
 					
 					log.info("Metadata SELECT: {}", hql);
-					globalResults.add(executeHQL(session, hql));
+					globalResults.add(executeHQL(session, hql, true));
 				} else if (parts[0].toUpperCase().equals("UPDATE")) {
 					if (parts.length > 3) {
 						hql = DatabaseMetadataUtils.buildUpdate(parts[1], parts[2], parts[3]);
@@ -228,7 +237,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 					}
 					
 					log.info("Metadata UPDATE: {}", hql);
-					globalResults.add(executeHQL(session, hql));
+					globalResults.add(executeHQL(session, hql, true));
 				} else if (parts[0].toUpperCase().equals("DELETE")) {
 					if (parts.length > 2) {
 						hql = DatabaseMetadataUtils.buildDelete(parts[1], parts[2]);
@@ -238,7 +247,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 					}
 					
 					log.info("Metadata DELETE: {}", hql);
-					globalResults.add(executeHQL(session, hql));
+					globalResults.add(executeHQL(session, hql, true));
 				} else {
 					throw new DatabaseException("Error in metadata action");
 				}
@@ -257,14 +266,15 @@ public class DatabaseQueryServlet extends BaseServlet {
 	 * Execute Hibernate query
 	 */
 	private void executeHibernate(Session session, String qs, ServletContext sc, HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+			HttpServletResponse response) throws ServletException, IOException, HibernateException,
+			DatabaseException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		StringTokenizer st = new StringTokenizer(qs, "\n");
 		List<GlobalResult> globalResults = new ArrayList<DatabaseQueryServlet.GlobalResult>();
 		
 		// For each query line
 		while (st.hasMoreTokens()) {
 			String hql = st.nextToken();
-			globalResults.add(executeHQL(session, hql));
+			globalResults.add(executeHQL(session, hql, false));
 		}
 		
 		//sc.setAttribute("sql", HibernateUtil.toSql(qs));
@@ -277,7 +287,8 @@ public class DatabaseQueryServlet extends BaseServlet {
 	 * Execute hibernate sentence
 	 */
 	@SuppressWarnings("unchecked")
-	private GlobalResult executeHQL(Session session, String hql) throws HibernateException {
+	private GlobalResult executeHQL(Session session, String hql, boolean md) throws HibernateException, 
+			DatabaseException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		if (hql.toUpperCase().startsWith("SELECT") || hql.toUpperCase().startsWith("FROM")) {
 			Query q = session.createQuery(hql);
 			List<Object> ret = q.list();
@@ -286,22 +297,40 @@ public class DatabaseQueryServlet extends BaseServlet {
 			Type[] rt = q.getReturnTypes();
 			int i = 0;
 			
-			for (i=0; i<rt.length; i++) {
-				columns.add(rt[i].getName());
+			if (md) {
+				List<Object> tmp = LegacyDAO.executeQuery("select dmt.virtualColumn from DatabaseMetadataType dmt where dmt.table='tipo_contacto'");
+				
+				for (Object obj : tmp) {
+					columns.add(String.valueOf(obj));
+				}
+			} else {
+				for (i=0; i<rt.length; i++) {
+					columns.add(rt[i].getName());
+				}
 			}
 			
 			for (Iterator<Object> it = ret.iterator(); it.hasNext() && i++ < Config.MAX_SEARCH_RESULTS; ) {
 				List<String> row = new ArrayList<String>();
 				Object obj = it.next();
 				
-				if (obj instanceof Object[]) {
-					Object[] ao = (Object[]) obj;
-					
-					for (int j=0; j<ao.length; j++) {
-						row.add(ao[j].toString());
+				if (md) {
+					for (String column : columns) {
+						if (obj instanceof DatabaseMetadataValue) {
+							row.add(DatabaseMetadataUtils.getString((DatabaseMetadataValue) obj, column));
+						} else {
+							row.add("Query result should be instance of DatabaseMetadataValue");
+						}
 					}
 				} else {
-					row.add(obj.toString());	
+					if (obj instanceof Object[]) {
+						Object[] ao = (Object[]) obj;
+						
+						for (int j=0; j<ao.length; j++) {
+							row.add(ao[j].toString());
+						}
+					} else {
+						row.add(obj.toString());	
+					}
 				}
 				
 				results.add(row);
