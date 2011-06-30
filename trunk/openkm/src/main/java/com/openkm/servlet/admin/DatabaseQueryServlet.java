@@ -293,6 +293,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 			Query q = session.createQuery(hql);
 			List<Object> ret = q.list();
 			List<String> columns = new ArrayList<String>();
+			List<String> vcolumns = new ArrayList<String>();
 			List<List<String>> results = new ArrayList<List<String>>();
 			Type[] rt = q.getReturnTypes();
 			int i = 0;
@@ -302,10 +303,13 @@ public class DatabaseQueryServlet extends BaseServlet {
 					columns.add(rt[i].getName());
 				}
 			} else {
-				List<Object> tmp = LegacyDAO.executeQuery("select dmt.virtualColumn from DatabaseMetadataType dmt where dmt.table='"+vtable+"'");
+				String query = "select dmt.virtualColumn, dmt.realColumn from DatabaseMetadataType dmt where dmt.table='"+vtable+"'";
+				List<Object> tmp = LegacyDAO.executeQuery(query);
 				
 				for (Object obj : tmp) {
-					columns.add(String.valueOf(obj));
+					Object[] dt = (Object[]) obj;
+					vcolumns.add(String.valueOf(dt[0]));
+					columns.add(String.valueOf(dt[0]).concat(" (").concat(String.valueOf(dt[1])).concat(")"));
 				}
 			}
 			
@@ -324,7 +328,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 						row.add(obj.toString());	
 					}
 				} else {
-					for (String column : columns) {
+					for (String column : vcolumns) {
 						if (obj instanceof DatabaseMetadataValue) {
 							row.add(DatabaseMetadataUtils.getString((DatabaseMetadataValue) obj, column));
 						} else {
