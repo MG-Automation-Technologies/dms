@@ -79,8 +79,9 @@ public class Config {
 	public static String CACHE_SWF;
 	
 	// Experimental features
-	public static String PROPERTY_EXPERIMENTAL_MOBILE_CONTEXT = "experimental.mobile.context";
 	public static String PROPERTY_EXPERIMENTAL_TEXT_EXTRACTION = "experimental.text.extraction";
+	public static String PROPERTY_EXPERIMENTAL_MOBILE_CONTEXT = "experimental.mobile.context";
+	public static String PROPERTY_EXPERIMENTAL_PLUGIN_DEBUG = "experimental.plugin.debug";
 	
 	// Configuration properties
 	public static final String PROPERTY_REPOSITORY_CONFIG = "repository.config";
@@ -238,8 +239,9 @@ public class Config {
 	 *  Default values
 	 */
 	// Experimental features
-	public static boolean EXPERIMENTAL_TEXT_EXTRACTION = true;
 	public static String EXPERIMENTAL_MOBILE_CONTEXT = "mobile";
+	public static boolean EXPERIMENTAL_TEXT_EXTRACTION = true;
+	public static boolean EXPERIMENTAL_PLUGIN_DEBUG = false;
 	
 	public static String REPOSITORY_CONFIG;
 	public static String REPOSITORY_HOME;
@@ -505,6 +507,8 @@ public class Config {
 			// Experimental features
 			EXPERIMENTAL_MOBILE_CONTEXT = ConfigDAO.getString(PROPERTY_EXPERIMENTAL_MOBILE_CONTEXT, EXPERIMENTAL_MOBILE_CONTEXT);
 			values.put(PROPERTY_EXPERIMENTAL_MOBILE_CONTEXT, EXPERIMENTAL_MOBILE_CONTEXT);
+			EXPERIMENTAL_PLUGIN_DEBUG = ConfigDAO.getBoolean(PROPERTY_EXPERIMENTAL_PLUGIN_DEBUG, EXPERIMENTAL_PLUGIN_DEBUG);
+			values.put(PROPERTY_EXPERIMENTAL_PLUGIN_DEBUG, Boolean.toString(EXPERIMENTAL_PLUGIN_DEBUG));
 			EXPERIMENTAL_TEXT_EXTRACTION = ConfigDAO.getBoolean(PROPERTY_EXPERIMENTAL_TEXT_EXTRACTION, EXPERIMENTAL_TEXT_EXTRACTION);
 			values.put(PROPERTY_EXPERIMENTAL_TEXT_EXTRACTION, Boolean.toString(EXPERIMENTAL_TEXT_EXTRACTION));
 			
