@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.api.OKMAuth;
 import com.openkm.dao.MailAccountDAO;
 import com.openkm.dao.bean.MailAccount;
+import com.openkm.extension.core.ExtensionException;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.util.MailUtils;
 
@@ -109,6 +110,9 @@ public class UserMailImporter extends TimerTask {
 				log.error(e.getMessage(), e);
 				exceptionMessages.add(e.getMessage());
 			} catch (UserQuotaExceededException e) {
+				log.error(e.getMessage(), e);
+				exceptionMessages.add(e.getMessage());
+			} catch (ExtensionException e) {
 				log.error(e.getMessage(), e);
 				exceptionMessages.add(e.getMessage());
 			} finally {
