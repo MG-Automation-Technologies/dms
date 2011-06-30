@@ -28,7 +28,6 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.TabWorkspace;
 import com.openkm.frontend.client.widget.mainmenu.MainMenu;
@@ -86,7 +85,7 @@ public class TopPanel extends Composite {
 		SimplePanel separator = new SimplePanel();
 		separator.setWidth("100%");
 		horizontalPanelMenu.add(separator);
-		Image logo = new Image(OKMBundleResources.INSTANCE.logoOpenKM());
+		Image logo = new Image("img/logon_openkm_tiny.gif");
 		horizontalPanelMenu.add(logo);
 		horizontalPanelMenu.setCellHorizontalAlignment(logo, HasAlignment.ALIGN_RIGHT);
 		horizontalPanelMenu.setCellVerticalAlignment(logo, HasAlignment.ALIGN_MIDDLE);
