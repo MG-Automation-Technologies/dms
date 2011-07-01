@@ -85,7 +85,7 @@ public class TopPanel extends Composite {
 		SimplePanel separator = new SimplePanel();
 		separator.setWidth("100%");
 		horizontalPanelMenu.add(separator);
-		Image logo = new Image("img/logon_openkm_tiny.gif");
+		Image logo = new Image("img/logo_openkm_tiny.gif");
 		horizontalPanelMenu.add(logo);
 		horizontalPanelMenu.setCellHorizontalAlignment(logo, HasAlignment.ALIGN_RIGHT);
 		horizontalPanelMenu.setCellVerticalAlignment(logo, HasAlignment.ALIGN_MIDDLE);
