@@ -22,7 +22,9 @@
 package com.openkm.util;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
@@ -76,6 +78,7 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.dao.KeyValueDAO;
 import com.openkm.dao.bean.Activity;
 import com.openkm.dao.bean.Bookmark;
 import com.openkm.dao.bean.KeyValue;
@@ -1083,14 +1086,24 @@ public class GWTUtil {
 	 * 
 	 * @param formElement
 	 * @return
+	 * @throws DatabaseException 
 	 */
-	public static String getFormElementValue(GWTFormElement formElement) {
+	public static String getFormElementValue(GWTFormElement formElement) throws DatabaseException {
 		if (formElement instanceof GWTButton) {
 			return ((GWTButton) formElement).getLabel();
 		} else if (formElement instanceof GWTInput) {
 			return ((GWTInput) formElement).getValue();
 		} else if (formElement instanceof GWTSuggestBox) {
-			return ((GWTSuggestBox) formElement).getValue();
+			GWTSuggestBox suggestBox = (GWTSuggestBox) formElement;
+			// The ' character must be replaced to \" to be correctly parsed
+			// and after it must change all " characters to '
+			String formatedQuery =  MessageFormat.format(suggestBox.getValueQuery().replaceAll("'", "\\\""), suggestBox.getValue()).replaceAll("\"", "'");
+			List<KeyValue> keyValues = KeyValueDAO.getKeyValues(Arrays.asList(suggestBox.getTable()), formatedQuery);
+			if (!keyValues.isEmpty()) {
+				return keyValues.get(0).getValue();
+			} else {
+				return "";
+			}
 		} else if (formElement instanceof GWTCheckBox) {
 			return ((GWTCheckBox) formElement).getValue()?"true":"false";
 		} else if (formElement instanceof GWTSelect) {
