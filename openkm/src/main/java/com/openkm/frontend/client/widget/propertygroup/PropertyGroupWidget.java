@@ -65,7 +65,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	private Map<String, GWTFormElement> propertyGroupVariablesMap = new HashMap<String, GWTFormElement>();
 	private GWTPropertyGroup propertyGroup;
 	private FormManager manager;
-	
+
 	/**
 	 * PropertyGroup
 	 * 
@@ -262,6 +262,15 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	 */
 	public ValidationProcessor getValidationProcessor() {
 		return manager.getValidationProcessor();
+	}
+	
+	/**
+	 * getManager
+	 * 
+	 * @return
+	 */
+	public FormManager getManager() {
+		return manager;
 	}
 	
 
