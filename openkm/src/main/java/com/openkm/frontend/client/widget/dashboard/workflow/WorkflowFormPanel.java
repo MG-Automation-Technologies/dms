@@ -316,11 +316,9 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 		table.setHTML(9, 1, ""+processInstance.getVersion());
 		
 		documentLink = null;
-		
 		// Print variables
 		for (Iterator<String> it = processInstance.getVariables().keySet().iterator(); it.hasNext();) {
 			String key = it.next();
-			
 			if (processInstance.getVariables().get(key) instanceof String) {
 				final String value = (String) processInstance.getVariables().get(key);
 				int row = parameterTable.getRowCount();
@@ -331,7 +329,7 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 					parameterTable.setHTML(documentRow, 0, "<b>"+ 
 							               Main.get().workspaceUserProperties.getWorkspace().getWorkflowProcessIntanceVariablePath() + 
 							               "</b>");
-					
+						
 					repositoryService.getPathByUUID(value, new AsyncCallback<String>() {
 						@Override
 						public void onSuccess(final String docPath) {

@@ -27,12 +27,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.TreeMap;
 
 import javax.activation.MimetypesFileTypeMap;
-import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -241,7 +239,7 @@ public class Config {
 	 *  Default values
 	 */
 	// Experimental features
-	public static String EXPERIMENTAL_MOBILE_CONTEXT = "mobile-lg";
+	public static String EXPERIMENTAL_MOBILE_CONTEXT = "mobile";
 	public static boolean EXPERIMENTAL_TEXT_EXTRACTION = true;
 	public static boolean EXPERIMENTAL_PLUGIN_DEBUG = false;
 	
@@ -394,7 +392,7 @@ public class Config {
 	
 	// Hibernate
 	public static String HIBERNATE_DIALECT = "org.hibernate.dialect.HSQLDialect";
-	public static String HIBERNATE_DATASOURCE = JNDI_BASE + "jdbc/OpenKMDS";
+	public static String HIBERNATE_DATASOURCE = "java:/OpenKMDS";
 	public static String HIBERNATE_HBM2DDL = "create";
 	public static String HIBERNATE_SHOW_SQL = "false";
 	public static String HIBERNATE_STATISTICS = "false";
@@ -434,10 +432,10 @@ public class Config {
 	/**
 	 * Load OpenKM configuration from OpenKM.cfg 
 	 */
-	public static void load(ServletContext sc) {
+	public static void load(String ctx) {
 		Properties config = new Properties();
-		String configFile = HOME_DIR + "/" + OPENKM_CONFIG;
-		CONTEXT = sc.getContextPath().substring(1);
+		String configFile = HOME_DIR+"/"+OPENKM_CONFIG;
+		CONTEXT = ctx;
 		
 		// Read config
 		try {
@@ -448,7 +446,7 @@ public class Config {
 			// Hibernate
 			HIBERNATE_DIALECT = config.getProperty(PROPERTY_HIBERNATE_DIALECT, HIBERNATE_DIALECT);
 			values.put(PROPERTY_HIBERNATE_DIALECT, HIBERNATE_DIALECT);
-			HIBERNATE_DATASOURCE = config.getProperty(PROPERTY_HIBERNATE_DATASOURCE, JNDI_BASE + "jdbc/" + CONTEXT + "DS");
+			HIBERNATE_DATASOURCE = config.getProperty(PROPERTY_HIBERNATE_DATASOURCE, "java:/" + CONTEXT + "DS");
 			values.put(PROPERTY_HIBERNATE_DATASOURCE, HIBERNATE_DATASOURCE);
 			HIBERNATE_HBM2DDL = config.getProperty(PROPERTY_HIBERNATE_HBM2DDL, HIBERNATE_HBM2DDL);
 			values.put(PROPERTY_HIBERNATE_HBM2DDL, HIBERNATE_HBM2DDL);
@@ -493,7 +491,7 @@ public class Config {
 			values.put("property.groups.cnd", PROPERTY_GROUPS_CND);
 			
 			// Load or reload database configuration
-			reload(sc, config);
+			reload(CONTEXT, config);
 		} catch (FileNotFoundException e) {
 			log.warn("** No {} file found, set default config **", OPENKM_CONFIG);
 		} catch (IOException e) {
@@ -504,7 +502,7 @@ public class Config {
 	/**
 	 * Reload OpenKM configuration from database
 	 */
-	public static void reload(ServletContext sc, Properties cfg) {
+	public static void reload(String ctx, Properties cfg) {
 		try {
 			// Experimental features
 			EXPERIMENTAL_MOBILE_CONTEXT = ConfigDAO.getString(PROPERTY_EXPERIMENTAL_MOBILE_CONTEXT, EXPERIMENTAL_MOBILE_CONTEXT);
@@ -524,10 +522,10 @@ public class Config {
 			DEFAULT_ADMIN_ROLE = ConfigDAO.getString(PROPERTY_DEFAULT_ADMIN_ROLE, "AdminRole");
 			values.put(PROPERTY_DEFAULT_ADMIN_ROLE, DEFAULT_ADMIN_ROLE);
 			
-			DEFAULT_SCRIPT = ConfigDAO.getText(PROPERTY_DEFAULT_SCRIPT, "print(\"UserId: \" + session.getUserID());\n" +
-					"print(\"EventType: \" + eventType);\n" +
-					"print(\"EventNode: \" + eventNode.getPath());\n" +
-					"print(\"ScriptNode: \" + scriptNode.getPath());");
+			DEFAULT_SCRIPT = ConfigDAO.getText(PROPERTY_DEFAULT_SCRIPT, "print(\"UserId: \"+session.getUserID());\n" +
+					"print(\"EventType: \"+eventType);\n" +
+					"print(\"EventNode: \"+eventNode.getPath());\n" +
+					"print(\"ScriptNode: \"+scriptNode.getPath());");
 			values.put(PROPERTY_DEFAULT_SCRIPT, DEFAULT_SCRIPT);
 			
 			// Text extractors
@@ -671,7 +669,7 @@ public class Config {
 			
 			UPDATE_INFO = ConfigDAO.getBoolean(PROPERTY_UPDATE_INFO, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_UPDATE_INFO, "on")));
 			values.put(PROPERTY_UPDATE_INFO, Boolean.toString(UPDATE_INFO));
-			APPLICATION_URL = ConfigDAO.getString(PROPERTY_APPLICATION_URL, "http://localhost:8080/" + Config.CONTEXT + "/index.jsp");
+			APPLICATION_URL = ConfigDAO.getString(PROPERTY_APPLICATION_URL, "http://localhost:8080/"+ctx+"/index.jsp");
 			APPLICATION_BASE = getBase(APPLICATION_URL); 
 			values.put(PROPERTY_APPLICATION_URL, APPLICATION_URL);
 			DEFAULT_LANG = ConfigDAO.getString(PROPERTY_DEFAULT_LANG, "");
@@ -734,13 +732,13 @@ public class Config {
 			values.put(PROPERTY_VALIDATOR_PASSWORD_MIN_SPECIAL, Integer.toString(VALIDATOR_PASSWORD_MIN_SPECIAL));
 			
 			// Logo icons
-			LOGO_LOGIN = ConfigDAO.getFile(PROPERTY_LOGO_LOGIN, "/img/logo_login.gif", sc);
+			LOGO_LOGIN = ConfigDAO.getFile(PROPERTY_LOGO_LOGIN, "/img/logo_login.gif");
 			values.put(PROPERTY_LOGO_LOGIN, LOGO_LOGIN.getName());
 			LOGO_TEXT = ConfigDAO.getString(PROPERTY_LOGO_TEXT, "&nbsp;");
 			values.put(PROPERTY_LOGO_TEXT, LOGO_TEXT);
-			LOGO_MOBILE = ConfigDAO.getFile(PROPERTY_LOGO_MOBILE, "/img/logo_mobile.gif", sc);
+			LOGO_MOBILE = ConfigDAO.getFile(PROPERTY_LOGO_MOBILE, "/img/logo_mobile.gif");
 			values.put(PROPERTY_LOGO_MOBILE, LOGO_MOBILE.getName());
-			LOGO_REPORT = ConfigDAO.getFile(PROPERTY_LOGO_REPORT, "/img/logo_report.gif", sc);
+			LOGO_REPORT = ConfigDAO.getFile(PROPERTY_LOGO_REPORT, "/img/logo_report.gif");
 			values.put(PROPERTY_LOGO_REPORT, LOGO_REPORT.getName());
 			
 			// Zoho
@@ -752,10 +750,6 @@ public class Config {
 			values.put(PROPERTY_ZOHO_API_KEY, ZOHO_API_KEY);
 			ZOHO_SECRET_KEY = ConfigDAO.getString(PROPERTY_ZOHO_SECRET_KEY, cfg.getProperty(PROPERTY_ZOHO_SECRET_KEY, ""));
 			values.put(PROPERTY_ZOHO_SECRET_KEY, ZOHO_SECRET_KEY);
-			
-			for (Entry<String, String> entry : values.entrySet()) {
-				log.info("{}={}", entry.getKey(), entry.getValue());
-			}
 		} catch (DatabaseException e) {
 			log.error("** Error reading configuration table **");
 		} catch (IOException e) {

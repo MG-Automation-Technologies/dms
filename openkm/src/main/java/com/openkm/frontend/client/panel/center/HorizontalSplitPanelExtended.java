@@ -37,7 +37,6 @@ import com.google.gwt.user.client.ui.HorizontalSplitPanel;
  * @author jllort
  *
  */
-@SuppressWarnings("deprecation")
 public class HorizontalSplitPanelExtended extends Composite implements HasMouseMoveHandlers, HasMouseUpHandlers {
 	
     private HorizontalSplitPanel horizontalSplitPanel;

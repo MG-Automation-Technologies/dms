@@ -195,10 +195,6 @@ public class Navigator extends Composite {
 		this.height = height;
 		int hiddenStacks = stackPanel.getHiddenStacks();
 		stackPanel.setSize(""+width, ""+height);
-		// To prevent negative resizing
-		if (width<2) {
-			width=2;
-		}
 		// Substract 2 pixels for borders on stackPanel
 		if (stackPanel.isTaxonomyVisible()) {
 			scrollTaxonomyPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * UIDesktopConstants.STACK_HEIGHT)));

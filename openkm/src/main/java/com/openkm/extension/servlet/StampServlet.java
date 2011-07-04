@@ -77,7 +77,6 @@ public class StampServlet extends OKMRemoteServiceServlet implements OKMStampSer
 	@Override
 	public List<GWTStamp> findAll() throws OKMException {
 		log.debug("findAll()");
-		updateSessionManager();
 		List<GWTStamp> stampList = new ArrayList<GWTStamp>();
 		String remoteUser = getThreadLocalRequest().getRemoteUser();
 		try {

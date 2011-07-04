@@ -42,10 +42,10 @@ import com.openkm.bean.Notification;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.NotificationModule;
 import com.openkm.util.FileUtils;
 import com.openkm.util.MailUtils;
@@ -250,7 +250,6 @@ public class DirectNotificationModule implements NotificationModule {
 			try {
 				log.debug("Nodo: {}, Message: {}", nodePath, message);
 				
-				// TODO This JCR Session could be removed
 				if (token == null) {
 					session = JCRUtils.getSession();
 				} else {

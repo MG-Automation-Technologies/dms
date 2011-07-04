@@ -40,23 +40,20 @@ import com.openkm.frontend.client.util.Util;
 public class Desktop extends Composite {
 	
 	private final static int PANEL_LEFT_WIDTH 	= 225;
-	public final static int SPLITTER_WIDTH 		= 10;
+	public final static int SPLITTER_WIDTH 	= 10;
 	
 	private HorizontalSplitPanelExtended horizontalSplitPanel;
 	public Navigator navigator;
 	public Browser browser;
 	private boolean isResizeInProgress = false;
-	private int totalWidthSize = 0;
 	private int width = 0;
 	private int height = 0; 
 	private int left = 0;
 	private int right = 0;
-	private int contractPreviousLeft = 0;
 	
 	/**
 	 * Desktop
 	 */
-	@SuppressWarnings("deprecation")
 	public Desktop() {
 		horizontalSplitPanel = new HorizontalSplitPanelExtended();
 		navigator = new Navigator();
@@ -97,7 +94,6 @@ public class Desktop extends Composite {
 	 * @param height The max height of the widget
 	 */
 	public void setSize(int width, int height) {
-		totalWidthSize = width;
 		this.width = width;
 		this.height = height;
 		left = PANEL_LEFT_WIDTH;
@@ -139,39 +135,17 @@ public class Desktop extends Composite {
 	}
 	
 	/**
-	 * Contract
-	 */
-	@SuppressWarnings("deprecation")
-	public void Contract() {
-		contractPreviousLeft = left;
-		left = 0;
-		right = totalWidthSize-SPLITTER_WIDTH;
-		horizontalSplitPanel.getSplitPanel().setSplitPosition(""+left);
-		navigator.setSize(left, height);
-		browser.setSize(right, height);
-	}
-	
-	/**
-	 * Expand
-	 */
-	@SuppressWarnings("deprecation")
-	public void Expand() {
-		left = contractPreviousLeft;
-		right = totalWidthSize-(left+SPLITTER_WIDTH);
-		horizontalSplitPanel.getSplitPanel().setSplitPosition(""+left);
-		navigator.setSize(left, height);
-		browser.setSize(right, height);
-	}
-	
-	/**
 	 * Sets the panel width on resizing
 	 * 
 	 * @param left
 	 * @param right
 	 */
 	private void resizePanels() {
-		int total = horizontalSplitPanel.getOffsetWidth();
-		String value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(horizontalSplitPanel.getSplitPanel().getElement(),0), 0), "width");
+		int total = 0;
+		String value = DOM.getStyleAttribute (horizontalSplitPanel.getSplitPanel().getElement(), "width");
+		if (value.contains("px")) { value = value.substring(0,value.indexOf("px")); }
+		total = Integer.parseInt(value);
+		value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(horizontalSplitPanel.getSplitPanel().getElement(),0), 0), "width");
 		if (value.contains("px")) { value = value.substring(0,value.indexOf("px")); }
 		left = Integer.parseInt(value);
 		value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(horizontalSplitPanel.getSplitPanel().getElement(),0), 2), "left");
@@ -193,7 +167,6 @@ public class Desktop extends Composite {
 	/**
 	 * refreshSpliterAfterAdded
 	 */
-	@SuppressWarnings("deprecation")
 	public void refreshSpliterAfterAdded() {
 		horizontalSplitPanel.getSplitPanel().setSplitPosition(""+left);
 		browser.refreshSpliterAfterAdded();

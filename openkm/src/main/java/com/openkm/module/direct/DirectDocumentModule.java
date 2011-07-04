@@ -27,7 +27,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -56,6 +55,7 @@ import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.Ref;
@@ -70,7 +70,6 @@ import com.openkm.dao.MimeTypeDAO;
 import com.openkm.extension.core.DocumentExtensionManager;
 import com.openkm.extension.core.ExtensionException;
 import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.kea.RDFREpository;
 import com.openkm.kea.metadata.MetadataExtractionException;
 import com.openkm.kea.metadata.MetadataExtractor;
@@ -856,26 +855,17 @@ public class DirectDocumentModule implements DocumentModule {
 			t = new Transaction(session);
 			t.start();
 			
+			JCRUtils.loadLockTokens(session);
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			Node contentNode = documentNode.getNode(Document.CONTENT);
 			javax.jcr.lock.Lock lock = documentNode.getLock();
-			String lt = JCRUtils.getLockToken(documentNode.getUUID());
 			
 			if (lock.getLockOwner().equals(session.getUserID())) {
-				JCRUtils.loadLockTokens(session);
-				
-				// If the session contains the lock token of this locked node
-				if (Arrays.asList(session.getLockTokens()).contains(lt)) {
-					contentNode.restore(contentNode.getBaseVersion(), true);
-					documentNode.unlock();
-					JCRUtils.removeLockToken(session, documentNode);
-				} else {
-					session.addLockToken(lt);
-					contentNode.restore(contentNode.getBaseVersion(), true);
-					documentNode.unlock();
-					LockTokenDAO.remove(lock.getLockOwner(), lt);
-				}
+				contentNode.restore(contentNode.getBaseVersion(), true);
+				documentNode.unlock();
+				JCRUtils.removeLockToken(session, documentNode);
 			} else {
+				String lt = JCRUtils.getLockToken(documentNode.getUUID());
 				session.addLockToken(lt);
 				contentNode.restore(contentNode.getBaseVersion(), true);
 				documentNode.unlock();
@@ -1241,21 +1231,13 @@ public class DirectDocumentModule implements DocumentModule {
 			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			javax.jcr.lock.Lock lock = documentNode.getLock();
-			String lt = JCRUtils.getLockToken(documentNode.getUUID());
 			
 			if (lock.getLockOwner().equals(session.getUserID())) {
 				JCRUtils.loadLockTokens(session);
-				
-				// If the session contains the lock token of this locked node
-				if (Arrays.asList(session.getLockTokens()).contains(lt)) {
-					documentNode.unlock();
-					JCRUtils.removeLockToken(session, documentNode);
-				} else {
-					session.addLockToken(lt);
-					documentNode.unlock();
-					LockTokenDAO.remove(lock.getLockOwner(), lt);
-				}
+				documentNode.unlock();
+				JCRUtils.removeLockToken(session, documentNode);
 			} else {
+				String lt = JCRUtils.getLockToken(documentNode.getUUID());
 				session.addLockToken(lt);
 				documentNode.unlock();
 				LockTokenDAO.remove(lock.getLockOwner(), lt);

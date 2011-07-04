@@ -38,6 +38,7 @@ import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
@@ -46,7 +47,6 @@ import com.openkm.core.VirusDetectedException;
 import com.openkm.extension.core.ExtensionException;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.contants.ui.UIFileUploadConstants;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.util.FileUtils;
 import com.openkm.util.SecureStore;
 import com.openkm.util.impexp.ImpExpStats;
@@ -178,12 +178,12 @@ public class FileUploadServlet extends OKMHttpServlet {
 							uploadedDocPath = doc.getPath();
 							
 							// Case is uploaded a encrypted document
-							if (cipherName != null && !cipherName.equals("")) {
+							if (cipherName!=null && !cipherName.equals("")) {
 								OKMProperty.getInstance().setEncryption(null, doc.getPath(), cipherName);
 							}
 							
 							// Return the path of the inserted document in response
-							out.print(returnOKMessage + " path[" + uploadedDocPath + "]path");
+							out.print(returnOKMessage + " path["+uploadedDocPath+"]path");
 						}
 					}
 				} else if (action == UIFileUploadConstants.ACTION_UPDATE) {
@@ -310,9 +310,6 @@ public class FileUploadServlet extends OKMHttpServlet {
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_Database));
-		} catch (ExtensionException e) {
-			log.error(e.getMessage(), e);
-			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_Extension));
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
 			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_IO));

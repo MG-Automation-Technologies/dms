@@ -49,8 +49,6 @@ public class StaplingServlet extends OKMRemoteServiceServlet implements OKMStapl
 	
 	@Override
 	public String create(String user, String uuid, String type, String uuid2, String type2) throws OKMException {
-		log.debug("create({},{})",user,uuid);
-		updateSessionManager();
 		StapleGroup stapleGroup = new StapleGroup();
 		stapleGroup.setUser(user);
 		
@@ -78,8 +76,6 @@ public class StaplingServlet extends OKMRemoteServiceServlet implements OKMStapl
 	
 	@Override
 	public void add(String id, String uuid, String type) throws OKMException {
-		log.debug("add({},{})",id,uuid);
-		updateSessionManager();
 		try {
 			StapleGroup stapleGroup = StapleGroupDAO.findByPk(Integer.valueOf(id));
 			boolean found = false;
@@ -110,8 +106,6 @@ public class StaplingServlet extends OKMRemoteServiceServlet implements OKMStapl
 	
 	@Override
 	public List<GWTStapleGroup> getAll(String uuid) throws OKMException {
-		log.debug("getAll({})",uuid);
-		updateSessionManager();
 		List<GWTStapleGroup> stapList = new ArrayList<GWTStapleGroup>();
 		
 		try {
@@ -134,8 +128,6 @@ public class StaplingServlet extends OKMRemoteServiceServlet implements OKMStapl
 	
 	@Override
 	public void removeAllStapleByUuid(String uuid) throws OKMException {
-		log.debug("removeAllStapleByUuid({})",uuid);
-		updateSessionManager();
 		try {
 			List<String> idToDelete = new ArrayList<String>();
 			
@@ -161,8 +153,6 @@ public class StaplingServlet extends OKMRemoteServiceServlet implements OKMStapl
 	
 	@Override
 	public void remove(String id) throws OKMException {
-		log.debug("remove({})",id);
-		updateSessionManager();
 		try {
 			StapleGroupDAO.delete(Integer.parseInt(id));
 		} catch (NumberFormatException e) {
@@ -176,8 +166,6 @@ public class StaplingServlet extends OKMRemoteServiceServlet implements OKMStapl
 	
 	@Override
 	public void removeStaple(String id) throws OKMException {
-		log.debug("removeStaple({})",id);
-		updateSessionManager();
 		try {
 			StapleGroupDAO.deleteStaple(Integer.parseInt(id));
 		} catch (NumberFormatException e) {

@@ -40,6 +40,7 @@ import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.Ref;
@@ -48,7 +49,6 @@ import com.openkm.core.UserQuotaExceededException;
 import com.openkm.extension.core.ExtensionException;
 import com.openkm.extension.core.FolderExtensionManager;
 import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.FolderModule;
 import com.openkm.module.base.BaseFolderModule;
 import com.openkm.module.base.BaseScriptingModule;
@@ -314,7 +314,7 @@ public class DirectFolderModule implements FolderModule {
 			newName = FileUtils.escape(newName);
 			
 			if (newName != null && !newName.equals("") && !newName.equals(name)) {
-				String newPath = parent + "/" + newName;
+				String newPath = parent+"/"+newName;
 				session.move(fldPath, newPath);
 				
 				// Set new name

@@ -156,7 +156,7 @@ public class DatabaseMetadataUtils {
 		
 		for (DatabaseMetadataType emt : types) {
 			if (emt.getVirtualColumn().equals(DatabaseMetadataMap.MV_NAME_ID) || 
-				emt.getVirtualColumn().equals(DatabaseMetadataMap.MV_NAME_TABLE)) {
+					emt.getVirtualColumn().equals(DatabaseMetadataMap.MV_NAME_TABLE)) {
 				throw new DatabaseException("Virtual column name restriction violated " + 
 						DatabaseMetadataMap.MV_NAME_ID + " or " + DatabaseMetadataMap.MV_NAME_TABLE);
 			}
@@ -181,7 +181,7 @@ public class DatabaseMetadataUtils {
 			dmv.setTable(map.get(DatabaseMetadataMap.MV_NAME_TABLE));
 			
 			if (map.containsKey(DatabaseMetadataMap.MV_NAME_ID)) {
-				dmv.setId(new Long(map.get(DatabaseMetadataMap.MV_NAME_ID)).longValue());
+				dmv.setId(new Double(map.get(DatabaseMetadataMap.MV_NAME_ID)).longValue());
 			}
 			
 			List<DatabaseMetadataType> types = DatabaseMetadataDAO.findAllTypes(dmv.getTable());

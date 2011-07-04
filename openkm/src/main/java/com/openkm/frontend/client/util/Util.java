@@ -137,13 +137,13 @@ public class Util {
 	}
 	
 	/**
-	 * Creates an HTML fragment that places an image & caption together, for use
-	 * in a group header.
-	 * 
-	 * @param imageUrl the url of the icon image to be used
-	 * @param caption the group caption
-	 * @return the header HTML fragment
-	 */
+	   * Creates an HTML fragment that places an image & caption together, for use
+	   * in a group header.
+	   * 
+	   * @param imageUrl the url of the icon image to be used
+	   * @param caption the group caption
+	   * @return the header HTML fragment
+	   */
 	public static String createHeaderHTML(String imageUrl, String caption) {
 		return "<table align='left'><tr>" + "<td><img src='" + imageUrl + "'></td>"
 	      + "<td style='vertical-align:middle'><b style='white-space:nowrap; cursor: default;'>"
@@ -261,18 +261,6 @@ public class Util {
 	}
 	
 	/**
-	 * print file
-	 * 
-	 * @param uuid
-	 */
-	public static void print(String uuid) {
-		final Element printIframe = RootPanel.get("__print").getElement();
-		String url = RPCService.ConverterServlet + "?inline=true&toPdf=true&uuid=" + URL.encodeQueryString(uuid);
-		DOM.setElementAttribute(printIframe, "src", url); 
-		printFile();
-	}
-	
-	/**
 	 * markHTMLTextAsBold
 	 * 
 	 * @param text
@@ -316,13 +304,6 @@ public class Util {
 	 */
 	public static native void changeCss(String title) /*-{
 		new $wnd.changeCss(title);
-	}-*/;
-	
-	/**
-	 * printFile
-	 */
-	public static native void printFile() /*-{
-		new $wnd.printFile();
 	}-*/;
 	
 	/**

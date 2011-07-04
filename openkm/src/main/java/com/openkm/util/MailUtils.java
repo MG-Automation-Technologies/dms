@@ -81,6 +81,7 @@ import com.openkm.core.ConversionException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
@@ -90,7 +91,6 @@ import com.openkm.dao.bean.MailAccount;
 import com.openkm.dao.bean.MailFilter;
 import com.openkm.dao.bean.MailFilterRule;
 import com.openkm.extension.core.ExtensionException;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.direct.DirectDocumentModule;
 import com.openkm.module.direct.DirectMailModule;
 import com.sun.mail.imap.IMAPFolder;
@@ -229,8 +229,7 @@ public class MailUtils {
 
 		try {
 			InitialContext initialContext = new InitialContext();
-			Object obj = initialContext.lookup(Config.JNDI_BASE + "mail/OpenKM");
-			mailSession = (Session) PortableRemoteObject.narrow(obj, Session.class);
+			mailSession = (Session) PortableRemoteObject.narrow(initialContext.lookup("java:/mail/OpenKM"), Session.class);
 		} catch (javax.naming.NamingException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -403,7 +402,7 @@ public class MailUtils {
 						log.debug("MailFilter: {}", mf);
 						
 						if (checkRules(mail, mf.getFilterRules())) {
-							String  mailPath = mf.getPath();
+							String mailPath = mf.getPath();
 							importMail(mailPath, mf.isGrouping(), folder, msg, ma, mail);		
 						}
 					}
@@ -416,7 +415,7 @@ public class MailUtils {
 					msg.setFlag(Flags.Flag.SEEN, false);
 				}
 				
-				// Delete readed mail if requested
+				// Delete read mail if requested
 				if (ma.isMailMarkDeleted()) {
 					msg.setFlag(Flags.Flag.DELETED, true);
 				}

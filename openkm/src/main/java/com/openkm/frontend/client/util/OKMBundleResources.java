@@ -74,12 +74,6 @@ public interface OKMBundleResources extends ClientBundle {
 	@Source("com/openkm/frontend/public/img/icon/actions/folder_find_disabled.gif")
 	public ImageResource findFolderDisabled();
 	
-	@Source("com/openkm/frontend/public/img/icon/actions/document_find.png")
-	public ImageResource findDocument();
-	
-	@Source("com/openkm/frontend/public/img/icon/actions/document_find_disabled.png")
-	public ImageResource findDocumentDisabled();
-	
 	@Source("com/openkm/frontend/public/img/icon/actions/lock.gif")
 	public ImageResource lock();
 	
@@ -305,12 +299,6 @@ public interface OKMBundleResources extends ClientBundle {
 	@Source("com/openkm/frontend/public/img/icon/actions/share_query.gif")
 	public ImageResource sharedQuery();
 	
-	@Source("com/openkm/frontend/public/img/icon/actions/printer.png")
-	public ImageResource print();
-	
-	@Source("com/openkm/frontend/public/img/icon/actions/printer_disabled.png")
-	public ImageResource printDisabled();
-	
 	@Source("com/openkm/frontend/public/img/icon/editor/justifyCenter.gif")
 	public ImageResource justifyCenter();
 	
@@ -379,16 +367,4 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/icon/actions/database_record.png")
 	public ImageResource databaseRecord();
-	
-	@Source("com/openkm/frontend/public/img/icon/actions/search.png")
-	public ImageResource search();
-	
-	@Source("com/openkm/frontend/public/img/icon/actions/search_disabled.png")
-	public ImageResource searchDisabled();
-	
-	@Source("com/openkm/frontend/public/img/icon/actions/application_side_contract.png")
-	public ImageResource splitterContract();
-	
-	@Source("com/openkm/frontend/public/img/icon/actions/application_side_expand.png")
-	public ImageResource splitterExpand();
 }
