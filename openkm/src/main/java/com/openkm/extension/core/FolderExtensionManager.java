@@ -78,10 +78,10 @@ public class FolderExtensionManager {
 	/**
 	 * Handle POST create extensions
 	 */
-	public void postCreate(Session session, Ref<Node> parentNode, Ref<Node> fldNode, Ref<Folder> fld) throws
+	public void postCreate(Session session, Ref<Node> parentNode, Ref<Node> fldNode) throws
 			AccessDeniedException, RepositoryException, PathNotFoundException,
 			ItemExistsException, DatabaseException, ExtensionException {
-		log.debug("postCreate({}, {}, {}, {})", new Object[] { session, parentNode, fldNode, fld });
+		log.debug("postCreate({}, {}, {})", new Object[] { session, parentNode, fldNode });
 		
 		try {
 			ExtensionManager em = ExtensionManager.getInstance();
@@ -90,7 +90,7 @@ public class FolderExtensionManager {
 			
 			for (FolderExtension ext : col) {
 				log.debug("Extension class: {}", ext.getClass().getCanonicalName());
-				ext.postCreate(session, parentNode, fldNode, fld);
+				ext.postCreate(session, parentNode, fldNode);
 			}
 		} catch (ServiceConfigurationError e) {
 			log.error(e.getMessage(), e);

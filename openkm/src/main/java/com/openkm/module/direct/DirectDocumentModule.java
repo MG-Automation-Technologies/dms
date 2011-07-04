@@ -125,9 +125,9 @@ public class DirectDocumentModule implements DocumentModule {
 		String parent = FileUtils.getParent(doc.getPath());
 		String name = FileUtils.getName(doc.getPath());
 		
-		// Add to kea - must have the same extension
+		// Add to KEA - must have the same extension
 		int idx = name.lastIndexOf('.');
-		String fileExtension = idx>0?name.substring(idx):".tmp";
+		String fileExtension = idx>0 ? name.substring(idx) : ".tmp";
 		File tmp = File.createTempFile("okm", fileExtension);
 		
 		try {
@@ -162,13 +162,6 @@ public class DirectDocumentModule implements DocumentModule {
 			is.close();
 			is = new FileInputStream(tmp);
 			
-			// EP - PRE
-			Ref<Node> refParentNode = new Ref<Node>(parentNode);
-			Ref<File> refTmp = new Ref<File>(tmp);
-			Ref<Document> refDoc = new Ref<Document>(doc);
-			DocumentExtensionManager.getInstance().preCreate(session, refParentNode, refTmp, refDoc);
-			parentNode = refParentNode.get();
-			
 			if (!Config.SYSTEM_ANTIVIR.equals("")) {
 				VirusDetection.detect(tmp);
 			}
@@ -193,8 +186,22 @@ public class DirectDocumentModule implements DocumentModule {
 	        }
 	        // End KEA
 	        
+	        // EP - PRE
+			Ref<Node> refParentNode = new Ref<Node>(parentNode);
+			Ref<File> refTmp = new Ref<File>(tmp);
+			Ref<Document> refDoc = new Ref<Document>(doc);
+			DocumentExtensionManager.getInstance().preCreate(session, refParentNode, refTmp, refDoc);
+			parentNode = refParentNode.get();
+			name = FileUtils.getName(refDoc.get().getPath());
+			mimeType = refDoc.get().getMimeType();
+			keywords = refDoc.get().getKeywords();
+			
 			Node documentNode = BaseDocumentModule.create(session, parentNode, name, null /* doc.getTitle() */,
 					mimeType, keywords.toArray(new String[keywords.size()]), is);
+			
+			// EP - POST
+			Ref<Node> refDocumentNode = new Ref<Node>(documentNode);
+			DocumentExtensionManager.getInstance().postCreate(session, refParentNode, refDocumentNode);
 			
 			// Check document filters
 			// DocumentUtils.checkFilters(session, documentNode, mimeType);
@@ -209,11 +216,6 @@ public class DirectDocumentModule implements DocumentModule {
 				// Check scripting
 				BaseScriptingModule.checkScripts(session, parentNode, documentNode, "CREATE_DOCUMENT");
 				
-				// EP - POST
-				Ref<Node> refDocumentNode = new Ref<Node>(documentNode);
-				Ref<Document> refNewDocument = new Ref<Document>(newDocument);
-				DocumentExtensionManager.getInstance().postCreate(session, refParentNode, refDocumentNode, refNewDocument);
-				
 				// Activity log
 				UserActivity.log(session.getUserID(), "CREATE_DOCUMENT", documentNode.getUUID(), mimeType+", "+size+", "+doc.getPath());
 			} else {
@@ -222,11 +224,6 @@ public class DirectDocumentModule implements DocumentModule {
 				
 				// Check scripting
 				BaseScriptingModule.checkScripts(session, parentNode, documentNode, "CREATE_MAIL_ATTACHMENT");
-				
-				// EP - POST
-				Ref<Node> refDocumentNode = new Ref<Node>(documentNode);
-				Ref<Document> refNewDocument = new Ref<Document>(newDocument);
-				DocumentExtensionManager.getInstance().postCreate(session, refParentNode, refDocumentNode, refNewDocument);
 				
 				// Activity log
 				UserActivity.log(userId, "CREATE_MAIL_ATTACHMENT", documentNode.getUUID(), mimeType+", "+size+", "+doc.getPath());
