@@ -60,7 +60,7 @@ public class DocumentExtensionManager {
 	}
 	
 	/**
-	 * Handle PRE create extensions 
+	 * Handle PRE create extensions
 	 */
 	public void preCreate(Session session, Ref<Node> parentNode, Ref<File> content, Ref<Document> doc) throws 
 			UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
@@ -83,11 +83,11 @@ public class DocumentExtensionManager {
 	}
 	
 	/**
-	 * Handle POST create extensions 
+	 * Handle POST create extensions
 	 */
 	public void postCreate(Session session, Ref<Node> parentNode, Ref<Node> docNode) throws 
 			UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
-			VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException, 
+			VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException,
 			RepositoryException, IOException, DatabaseException, ExtensionException {
 		log.debug("postCreate({}, {}, {})", new Object[] { session, parentNode, docNode });
 		
@@ -99,6 +99,50 @@ public class DocumentExtensionManager {
 			for (DocumentExtension ext : col) {
 				log.debug("Extension class: {}", ext.getClass().getCanonicalName());
 				ext.postCreate(session, parentNode, docNode);
+			}
+		} catch (ServiceConfigurationError e) {
+			log.error(e.getMessage(), e);
+		}
+	}
+	
+	/**
+	 * Handle PRE move extensions
+	 */
+	public void preMove(Session session, Ref<Node> srcDocNode, Ref<Node> dstFldNode) throws 
+			PathNotFoundException, ItemExistsException, AccessDeniedException, RepositoryException,
+			DatabaseException, ExtensionException {
+		log.debug("preMove({}, {}, {})", new Object[] { session, srcDocNode, dstFldNode });
+		
+		try {
+			ExtensionManager em = ExtensionManager.getInstance();
+			List<DocumentExtension> col = em.getPlugins(DocumentExtension.class);
+			Collections.sort(col, new OrderComparator<DocumentExtension>());
+			
+			for (DocumentExtension ext : col) {
+				log.debug("Extension class: {}", ext.getClass().getCanonicalName());
+				ext.preMove(session, srcDocNode, dstFldNode);
+			}
+		} catch (ServiceConfigurationError e) {
+			log.error(e.getMessage(), e);
+		}
+	}
+	
+	/**
+	 * Handle POST move extensions
+	 */
+	public void postMove(Session session, Ref<Node> parentNode, Ref<Node> docNode) throws 
+			PathNotFoundException, ItemExistsException, AccessDeniedException, RepositoryException,
+			DatabaseException, ExtensionException {
+		log.debug("postMove({}, {}, {})", new Object[] { session, parentNode, docNode });
+		
+		try {
+			ExtensionManager em = ExtensionManager.getInstance();
+			List<DocumentExtension> col = em.getPlugins(DocumentExtension.class);
+			Collections.sort(col, new OrderComparator<DocumentExtension>());
+			
+			for (DocumentExtension ext : col) {
+				log.debug("Extension class: {}", ext.getClass().getCanonicalName());
+				ext.postMove(session, parentNode, docNode);
 			}
 		} catch (ServiceConfigurationError e) {
 			log.error(e.getMessage(), e);

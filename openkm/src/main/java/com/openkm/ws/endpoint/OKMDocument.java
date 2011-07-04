@@ -300,7 +300,8 @@ public class OKMDocument {
 	public void move(@WebParam(name = "token") String token,
 			@WebParam(name = "docPath") String docPath, 
 			@WebParam(name = "fldPath") String fldPath) throws LockException, PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
+			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException,
+			ExtensionException {
 		log.debug("move({}, {}, {})", new Object[] { token, docPath, fldPath });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.move(token, docPath, fldPath);
