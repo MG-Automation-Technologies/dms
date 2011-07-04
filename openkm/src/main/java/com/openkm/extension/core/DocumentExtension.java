@@ -55,4 +55,18 @@ public interface DocumentExtension extends Extension {
 		throws UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
 		VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException, 
 		RepositoryException, IOException, DatabaseException, ExtensionException;
+	
+	/**
+	 * Executed BEFORE document move.
+	 */
+	public void preMove(Session session, Ref<Node> srcDocNode, Ref<Node> dstFldNode)
+		throws PathNotFoundException, ItemExistsException, AccessDeniedException, RepositoryException,
+		DatabaseException, ExtensionException;
+	
+	/**
+	 * Executed AFTER document move.
+	 */
+	public void postMove(Session session, Ref<Node> parentNode, Ref<Node> docNode)
+		throws PathNotFoundException, ItemExistsException, AccessDeniedException, RepositoryException,
+		DatabaseException, ExtensionException;
 }
