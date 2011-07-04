@@ -43,7 +43,7 @@ public interface FolderExtension extends Extension {
 	/**
 	 * Executed AFTER folder creation.
 	 */
-	public void postCreate(Session session, Ref<Node> parentNode, Ref<Node> fldNode, Ref<Folder> fld)
+	public void postCreate(Session session, Ref<Node> parentNode, Ref<Node> fldNode)
 		throws AccessDeniedException, RepositoryException, PathNotFoundException,
 		ItemExistsException, DatabaseException, ExtensionException;
 }
