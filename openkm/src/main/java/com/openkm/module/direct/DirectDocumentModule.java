@@ -192,7 +192,7 @@ public class DirectDocumentModule implements DocumentModule {
 			Ref<Document> refDoc = new Ref<Document>(doc);
 			DocumentExtensionManager.getInstance().preCreate(session, refParentNode, refTmp, refDoc);
 			parentNode = refParentNode.get();
-			name = FileUtils.getName(refDoc.get().getPath());
+			name = FileUtils.escape(FileUtils.getName(refDoc.get().getPath()));
 			mimeType = refDoc.get().getMimeType();
 			keywords = refDoc.get().getKeywords();
 			
