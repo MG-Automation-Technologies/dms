@@ -276,8 +276,8 @@ public class RepositoryStartupServlet extends HttpServlet {
 			throw new IllegalStateException("OpenKM not started");
 		}
 		
-		 // Shutdown plugin framework
-        ExtensionManager.getInstance().shutdown();
+		// Shutdown plugin framework
+		ExtensionManager.getInstance().shutdown();
 		
 		try {
         	if (!Config.SYSTEM_OPENOFFICE_PATH.equals("")) {
