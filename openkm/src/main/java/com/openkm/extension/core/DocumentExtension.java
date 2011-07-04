@@ -41,7 +41,7 @@ import com.openkm.core.VirusDetectedException;
 
 public interface DocumentExtension extends Extension {
 	/**
-	 * Executed BEFORE document creation.
+	 * Executed BEFORE document CREATE.
 	 */
 	public void preCreate(Session session, Ref<Node> parentNode, Ref<File> content, Ref<Document> doc)
 		throws UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
@@ -49,7 +49,7 @@ public interface DocumentExtension extends Extension {
 		RepositoryException, IOException, DatabaseException, ExtensionException;
 	
 	/**
-	 * Executed AFTER document creation.
+	 * Executed AFTER document CREATE.
 	 */
 	public void postCreate(Session session, Ref<Node> parentNode, Ref<Node> docNode)
 		throws UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
@@ -57,14 +57,14 @@ public interface DocumentExtension extends Extension {
 		RepositoryException, IOException, DatabaseException, ExtensionException;
 	
 	/**
-	 * Executed BEFORE document move.
+	 * Executed BEFORE document MOVE.
 	 */
 	public void preMove(Session session, Ref<Node> srcDocNode, Ref<Node> dstFldNode)
 		throws PathNotFoundException, ItemExistsException, AccessDeniedException, RepositoryException,
 		DatabaseException, ExtensionException;
 	
 	/**
-	 * Executed AFTER document move.
+	 * Executed AFTER document MOVE.
 	 */
 	public void postMove(Session session, Ref<Node> srcFldNode, Ref<Node> dstDocNode)
 		throws PathNotFoundException, ItemExistsException, AccessDeniedException, RepositoryException,
