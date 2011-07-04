@@ -1421,7 +1421,7 @@ public class DirectDocumentModule implements DocumentModule {
 			
 			// EP - POST
 			String srcDocParent = FileUtils.getParent(docPath);
-			Node srcFldNode = rootNode.getNode(srcDocParent);
+			Node srcFldNode = rootNode.getNode(srcDocParent.substring(1));
 			Node dstDocNode = rootNode.getNode(dstNodePath.substring(1));
 			Ref<Node> refSrcFolderNode = new Ref<Node>(srcFldNode);
 			Ref<Node> refDstDocumentNode = new Ref<Node>(dstDocNode);
