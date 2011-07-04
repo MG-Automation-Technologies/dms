@@ -48,6 +48,7 @@ import com.openkm.core.UpdateInfo;
 import com.openkm.core.UserMailImporter;
 import com.openkm.core.Watchdog;
 import com.openkm.dao.HibernateUtil;
+import com.openkm.extension.core.ExtensionManager;
 import com.openkm.kea.RDFREpository;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.DocConverter;
@@ -250,6 +251,9 @@ public class RepositoryStartupServlet extends HttpServlet {
         	log.warn(e.getMessage(), e);
         }
         
+        // Initialize plugin framework
+        ExtensionManager.getInstance();
+        
         try {
         	log.info("*** Ejecute start script ***");
         	File script = new File(Config.HOME_DIR + File.separatorChar + Config.START_SCRIPT);
@@ -271,6 +275,9 @@ public class RepositoryStartupServlet extends HttpServlet {
 		if (!running) {
 			throw new IllegalStateException("OpenKM not started");
 		}
+		
+		// Shutdown plugin framework
+		ExtensionManager.getInstance().shutdown();
 		
 		try {
         	if (!Config.SYSTEM_OPENOFFICE_PATH.equals("")) {
