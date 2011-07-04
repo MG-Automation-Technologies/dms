@@ -51,7 +51,7 @@ public interface DocumentExtension extends Extension {
 	/**
 	 * Executed AFTER document creation.
 	 */
-	public void postCreate(Session session, Ref<Node> parentNode, Ref<Node> docNode, Ref<Document> doc)
+	public void postCreate(Session session, Ref<Node> parentNode, Ref<Node> docNode)
 		throws UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
 		VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException, 
 		RepositoryException, IOException, DatabaseException, ExtensionException;

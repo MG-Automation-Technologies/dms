@@ -90,20 +90,20 @@ public class DirectFolderModule implements FolderModule {
 			Ref<Folder> refFld = new Ref<Folder>(fld);
 			FolderExtensionManager.getInstance().preCreate(session, refParentNode, refFld);
 			parentNode = refParentNode.get();
+			name = FileUtils.getName(refFld.get().getPath());
 			
 			// Create node
 			Node folderNode = BaseFolderModule.create(session, parentNode, name);
+			
+			// EP - POST
+			Ref<Node> refFolderNode = new Ref<Node>(folderNode);
+			FolderExtensionManager.getInstance().postCreate(session, refParentNode, refFolderNode);
 			
 			// Set returned folder properties
 			newFolder = BaseFolderModule.getProperties(session, folderNode);
 			
 			// Check scripting
 			BaseScriptingModule.checkScripts(session, parentNode, folderNode, "CREATE_FOLDER");
-			
-			// EP - POST
-			Ref<Node> refFolderNode = new Ref<Node>(folderNode);
-			Ref<Folder> refNewFolder = new Ref<Folder>(newFolder);
-			FolderExtensionManager.getInstance().postCreate(session, refParentNode, refFolderNode, refNewFolder);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "CREATE_FOLDER", folderNode.getUUID(), fld.getPath());

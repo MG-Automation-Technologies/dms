@@ -85,11 +85,11 @@ public class DocumentExtensionManager {
 	/**
 	 * Handle POST create extensions 
 	 */
-	public void postCreate(Session session, Ref<Node> parentNode, Ref<Node> docNode, Ref<Document> doc) throws 
+	public void postCreate(Session session, Ref<Node> parentNode, Ref<Node> docNode) throws 
 			UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
 			VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException, 
 			RepositoryException, IOException, DatabaseException, ExtensionException {
-		log.debug("postCreate({}, {}, {}, {})", new Object[] { session, parentNode, docNode, doc });
+		log.debug("postCreate({}, {}, {})", new Object[] { session, parentNode, docNode });
 		
 		try {
 			ExtensionManager em = ExtensionManager.getInstance();
@@ -98,7 +98,7 @@ public class DocumentExtensionManager {
 			
 			for (DocumentExtension ext : col) {
 				log.debug("Extension class: {}", ext.getClass().getCanonicalName());
-				ext.postCreate(session, parentNode, docNode, doc);
+				ext.postCreate(session, parentNode, docNode);
 			}
 		} catch (ServiceConfigurationError e) {
 			log.error(e.getMessage(), e);
