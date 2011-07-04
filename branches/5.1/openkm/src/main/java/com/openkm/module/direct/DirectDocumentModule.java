@@ -1387,7 +1387,8 @@ public class DirectDocumentModule implements DocumentModule {
 
 	@Override
 	public void move(String token, String docPath, String dstPath) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
+			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException,
+			ExtensionException {
 		log.debug("move({}, {}, {})", new Object[] { token, docPath, dstPath });
 		Session session = null;
 		
@@ -1402,13 +1403,27 @@ public class DirectDocumentModule implements DocumentModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			//Node docNode = session.getRootNode().getNode(docPath.substring(1));
 			String name = FileUtils.getName(docPath);
 			String dstNodePath = dstPath + "/" + name;
+			
+			// EP - PRE
+			Node rootNode = session.getRootNode();
+			Node srcDocNode = rootNode.getNode(docPath.substring(1));
+			Node dstFldPath = rootNode.getNode(dstPath.substring(1));
+			Ref<Node> refSrcDocumentNode = new Ref<Node>(srcDocNode);
+			Ref<Node> refDstFolderNode = new Ref<Node>(dstFldPath);
+			DocumentExtensionManager.getInstance().preMove(session, refSrcDocumentNode, refDstFolderNode);
+			docPath = refSrcDocumentNode.get().getPath();
+			dstNodePath = refDstFolderNode.get().getPath() + "/" + name;
+			
 			session.move(docPath, dstNodePath);
 			session.save();
-			Node dstDocNode = session.getRootNode().getNode(dstNodePath.substring(1));
-						
+			
+			// EP - POST
+			Node dstDocNode = rootNode.getNode(dstNodePath.substring(1));
+			Ref<Node> refDstDocumentNode = new Ref<Node>(dstDocNode);
+			DocumentExtensionManager.getInstance().postMove(session, refSrcDocumentNode, refDstDocumentNode);
+			
 			// Check scripting
 			BaseScriptingModule.checkScripts(session, dstDocNode.getParent(), dstDocNode, "MOVE_DOCUMENT");
 
