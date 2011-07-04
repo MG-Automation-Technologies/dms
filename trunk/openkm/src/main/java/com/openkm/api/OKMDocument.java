@@ -281,7 +281,8 @@ public class OKMDocument implements DocumentModule {
 
 	@Override
 	public void move(String token, String docPath, String destPath) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
+			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException,
+			ExtensionException {
 		log.debug("move({}, {}, {})", new Object[] { token, docPath, destPath });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.move(token, docPath, destPath);
