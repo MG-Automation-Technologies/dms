@@ -1438,9 +1438,12 @@ public class DirectDocumentModule implements DocumentModule {
 			session.save();
 			
 			// EP - POST
+			String srcDocParent = FileUtils.getParent(docPath);
+			Node srcFldNode = rootNode.getNode(srcDocParent);
 			Node dstDocNode = rootNode.getNode(dstNodePath.substring(1));
+			Ref<Node> refSrcFolderNode = new Ref<Node>(srcFldNode);
 			Ref<Node> refDstDocumentNode = new Ref<Node>(dstDocNode);
-			DocumentExtensionManager.getInstance().postMove(session, refSrcDocumentNode, refDstDocumentNode);
+			DocumentExtensionManager.getInstance().postMove(session, refSrcFolderNode, refDstDocumentNode);
 			
 			// Check scripting
 			BaseScriptingModule.checkScripts(session, dstDocNode.getParent(), dstDocNode, "MOVE_DOCUMENT");

@@ -66,7 +66,7 @@ public interface DocumentExtension extends Extension {
 	/**
 	 * Executed AFTER document move.
 	 */
-	public void postMove(Session session, Ref<Node> parentNode, Ref<Node> docNode)
+	public void postMove(Session session, Ref<Node> srcFldNode, Ref<Node> dstDocNode)
 		throws PathNotFoundException, ItemExistsException, AccessDeniedException, RepositoryException,
 		DatabaseException, ExtensionException;
 }
