@@ -130,10 +130,10 @@ public class DocumentExtensionManager {
 	/**
 	 * Handle POST move extensions
 	 */
-	public void postMove(Session session, Ref<Node> parentNode, Ref<Node> docNode) throws 
+	public void postMove(Session session, Ref<Node> srcFldNode, Ref<Node> dstDocNode) throws 
 			PathNotFoundException, ItemExistsException, AccessDeniedException, RepositoryException,
 			DatabaseException, ExtensionException {
-		log.debug("postMove({}, {}, {})", new Object[] { session, parentNode, docNode });
+		log.debug("postMove({}, {}, {})", new Object[] { session, srcFldNode, dstDocNode });
 		
 		try {
 			ExtensionManager em = ExtensionManager.getInstance();
@@ -142,7 +142,7 @@ public class DocumentExtensionManager {
 			
 			for (DocumentExtension ext : col) {
 				log.debug("Extension class: {}", ext.getClass().getCanonicalName());
-				ext.postMove(session, parentNode, docNode);
+				ext.postMove(session, srcFldNode, dstDocNode);
 			}
 		} catch (ServiceConfigurationError e) {
 			log.error(e.getMessage(), e);
