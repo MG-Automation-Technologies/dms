@@ -204,7 +204,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 	private void executeMetadata(Session session, String qs, ServletContext sc, HttpServletRequest request,
 			HttpServletResponse response) throws DatabaseException, ServletException, IOException,
 			HibernateException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-		StringTokenizer st = new StringTokenizer(qs, "\n");
+		StringTokenizer st = new StringTokenizer(qs, "\n\r");
 		List<GlobalResult> globalResults = new ArrayList<DatabaseQueryServlet.GlobalResult>();
 		
 		// For each query line
