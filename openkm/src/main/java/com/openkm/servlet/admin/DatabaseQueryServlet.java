@@ -268,7 +268,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 	private void executeHibernate(Session session, String qs, ServletContext sc, HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException, HibernateException,
 			DatabaseException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-		StringTokenizer st = new StringTokenizer(qs, "\n");
+		StringTokenizer st = new StringTokenizer(qs, "\n\r");
 		List<GlobalResult> globalResults = new ArrayList<DatabaseQueryServlet.GlobalResult>();
 		
 		// For each query line
@@ -370,7 +370,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 		try {
 			con = session.connection();
 			stmt = con.createStatement();
-			StringTokenizer st = new StringTokenizer(qs, "\n");
+			StringTokenizer st = new StringTokenizer(qs, "\n\r");
 			
 			// For each query line
 			while (st.hasMoreTokens()) {
