@@ -34,6 +34,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -44,6 +45,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
@@ -60,8 +62,10 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.dao.DatabaseMetadataDAO;
 import com.openkm.dao.HibernateUtil;
 import com.openkm.dao.LegacyDAO;
+import com.openkm.dao.bean.DatabaseMetadataType;
 import com.openkm.dao.bean.DatabaseMetadataValue;
 import com.openkm.util.DatabaseMetadataUtils;
 import com.openkm.util.UserActivity;
@@ -215,7 +219,14 @@ public class DatabaseQueryServlet extends BaseServlet {
 			if (parts.length > 1) {
 				String hql = null;
 				
-				if (parts[0].toUpperCase().equals("SELECT")) {	
+				if (parts[0].toUpperCase().equals("SENTENCE")) {
+					if (parts.length > 2) {
+						List<String> tables = Arrays.asList(parts[1].split(","));
+						hql = DatabaseMetadataUtils.replaceVirtual(tables, parts[2]);
+						log.info("Metadata SENTENCE: {}", hql);
+						globalResults.add(executeHQL(session, hql, tables));
+					}
+				} else if (parts[0].toUpperCase().equals("SELECT")) {	
 					if (parts.length > 2) {
 						hql = DatabaseMetadataUtils.buildQuery(parts[1], parts[2]);
 					} else {
@@ -224,7 +235,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 					}
 					
 					log.info("Metadata SELECT: {}", hql);
-					globalResults.add(executeHQL(session, hql, parts[1]));
+					globalResults.add(executeHQL(session, hql, Arrays.asList(parts[1])));
 				} else if (parts[0].toUpperCase().equals("UPDATE")) {
 					if (parts.length > 3) {
 						hql = DatabaseMetadataUtils.buildUpdate(parts[1], parts[2], parts[3]);
@@ -237,7 +248,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 					}
 					
 					log.info("Metadata UPDATE: {}", hql);
-					globalResults.add(executeHQL(session, hql, parts[1]));
+					globalResults.add(executeHQL(session, hql, Arrays.asList(parts[1])));
 				} else if (parts[0].toUpperCase().equals("DELETE")) {
 					if (parts.length > 2) {
 						hql = DatabaseMetadataUtils.buildDelete(parts[1], parts[2]);
@@ -247,7 +258,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 					}
 					
 					log.info("Metadata DELETE: {}", hql);
-					globalResults.add(executeHQL(session, hql, parts[1]));
+					globalResults.add(executeHQL(session, hql, Arrays.asList(parts[1])));
 				} else {
 					throw new DatabaseException("Error in metadata action");
 				}
@@ -287,7 +298,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 	 * Execute hibernate sentence
 	 */
 	@SuppressWarnings("unchecked")
-	private GlobalResult executeHQL(Session session, String hql, String vtable) throws HibernateException, 
+	private GlobalResult executeHQL(Session session, String hql, List<String> vtables) throws HibernateException, 
 			DatabaseException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		if (hql.toUpperCase().startsWith("SELECT") || hql.toUpperCase().startsWith("FROM")) {
 			Query q = session.createQuery(hql);
@@ -298,18 +309,20 @@ public class DatabaseQueryServlet extends BaseServlet {
 			Type[] rt = q.getReturnTypes();
 			int i = 0;
 			
-			if (vtable == null) {
+			if (vtables == null) {
 				for (i=0; i<rt.length; i++) {
 					columns.add(rt[i].getName());
 				}
 			} else {
-				String query = "select dmt.virtualColumn, dmt.realColumn from DatabaseMetadataType dmt where dmt.table='"+vtable+"'";
-				List<Object> tmp = LegacyDAO.executeQuery(query);
-				
-				for (Object obj : tmp) {
-					Object[] dt = (Object[]) obj;
-					vcolumns.add(String.valueOf(dt[0]));
-					columns.add(String.valueOf(dt[0]).concat(" (").concat(String.valueOf(dt[1])).concat(")"));
+				for (String vtable : vtables) {
+					String query = "select dmt.virtualColumn, dmt.realColumn from DatabaseMetadataType dmt where dmt.table='"+vtable+"'";
+					List<Object> tmp = LegacyDAO.executeQuery(query);
+					
+					for (Object obj : tmp) {
+						Object[] dt = (Object[]) obj;
+						vcolumns.add(String.valueOf(dt[0]));
+						columns.add(String.valueOf(dt[0]).concat(" (").concat(String.valueOf(dt[1])).concat(")"));
+					}
 				}
 			}
 			
@@ -317,7 +330,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 				List<String> row = new ArrayList<String>();
 				Object obj = it.next();
 				
-				if (vtable == null) {
+				if (vtables == null) {
 					if (obj instanceof Object[]) {
 						Object[] ao = (Object[]) obj;
 						
@@ -331,6 +344,19 @@ public class DatabaseQueryServlet extends BaseServlet {
 					for (String column : vcolumns) {
 						if (obj instanceof DatabaseMetadataValue) {
 							row.add(DatabaseMetadataUtils.getString((DatabaseMetadataValue) obj, column));
+						} else if (obj instanceof Object[]) {
+							for (Object objChild : (Object[]) obj) {
+								if (objChild instanceof DatabaseMetadataValue) {
+									DatabaseMetadataValue dmvChild = (DatabaseMetadataValue) objChild;
+									List<DatabaseMetadataType> types = DatabaseMetadataDAO.findAllTypes(dmvChild.getTable());
+									
+									for (DatabaseMetadataType emt : types) {
+										if (emt.getVirtualColumn().equals(column)) {
+											row.add(BeanUtils.getProperty(dmvChild, emt.getRealColumn()));
+										}
+									}
+								}
+							}
 						} else {
 							row.add("Query result should be instance of DatabaseMetadataValue");
 						}
