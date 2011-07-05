@@ -25,8 +25,7 @@ import java.util.Collection;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class GWTMetaData implements IsSerializable {
-
+public class GWTMetadata implements IsSerializable {
 	public static final int INPUT = 1;
 	public static final int TEXT_AREA = 2;
 	public static final int SELECT = 3;
@@ -60,5 +59,4 @@ public class GWTMetaData implements IsSerializable {
 	public void setOrder(int order) {
 		this.order = order;
 	}
-
 }
