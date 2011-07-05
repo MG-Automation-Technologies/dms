@@ -36,13 +36,12 @@ public abstract class DatabaseMetadataCommon {
 	
 	/**
 	 * loadFromMap
-	 * 
-	 * @param map
 	 */
 	public void loadFromMap(Map<String,String> map) {
 		if (map.containsKey(DatabaseMetadataMap.MV_NAME_ID)) {
 			setRealId(DatabaseMetadataMap.getDoubleValue(map.get(DatabaseMetadataMap.MV_NAME_ID)));
 		}
+		
 		if (map.containsKey(DatabaseMetadataMap.MV_NAME_TABLE)) {
 			setRealTable(map.get(DatabaseMetadataMap.MV_NAME_TABLE));
 		}
@@ -50,17 +49,18 @@ public abstract class DatabaseMetadataCommon {
 	
 	/**
 	 * restoreToMap
-	 * 
-	 * @return
 	 */
 	public Map<String,String> restoreToMap() {
 		Map<String,String> map = new HashMap<String,String>();
-		if (realId!=null) {
+		
+		if (realId != null) {
 			map.put(DatabaseMetadataMap.MV_NAME_ID, DatabaseMetadataMap.mapDoubleValue(getRealId()));
 		}
-		if (realTable!=null) {
+		
+		if (realTable != null) {
 			map.put(DatabaseMetadataMap.MV_NAME_TABLE, getRealTable());
 		}
+		
 		return map;
 	}
 	
