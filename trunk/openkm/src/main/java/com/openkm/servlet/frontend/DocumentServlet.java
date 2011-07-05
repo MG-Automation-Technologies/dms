@@ -644,7 +644,8 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 	}
 	
 	@Override
-	public String createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties) throws OKMException {
+	public String createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties,
+									 Map<String, List<Map<String, String>>> tableProperties) throws OKMException  {
 		log.debug("createFromTemplate({},{})", docPath, destinationPath);
 		updateSessionManager();
 		File tmp = null;
@@ -665,6 +666,9 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 			for (GWTFormElement formElement : formProperties) {
 				values.put(formElement.getName().replace(".", "_").replace(":", "_"),
 						GWTUtil.getFormElementValue(formElement));
+			}
+			for (String key : tableProperties.keySet()) {
+				values.put(key, tableProperties.get(key));
 			}
 			
 			// Fill document by mime type
