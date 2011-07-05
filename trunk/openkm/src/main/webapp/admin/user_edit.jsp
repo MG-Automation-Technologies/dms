@@ -80,7 +80,7 @@
           <tr>
             <td>Roles</td>
             <td>
-              <select multiple="multiple" name="usr_roles">
+              <select multiple="multiple" name="usr_roles" size="7">
                 <c:forEach var="role" items="${roles}">
                   <c:choose>
                     <c:when test="${fn:contains(usr.roles, role)}">
