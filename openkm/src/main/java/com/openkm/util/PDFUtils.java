@@ -200,6 +200,7 @@ public class PDFUtils {
 				log.debug("Field: {}", field.getName());
 				
 				if (value != null) {
+					log.debug("Set to '{}'", value);
 					fields.setField(field.getName(), value);
 					stamper.partialFormFlattening(field.getName());
 				}
