@@ -42,6 +42,24 @@ public class GWTSuggestBox extends GWTFormElement implements IsSerializable  {
 	private String filterQuery = "";
 	private String valueQuery = "";
 	private int filterMinLen = 0;
+	
+	public GWTSuggestBox clone() {
+		GWTSuggestBox newSuggestBox = new GWTSuggestBox();
+		newSuggestBox.setData(data);
+		newSuggestBox.setDialogTitle(dialogTitle);
+		newSuggestBox.setFilterMinLen(filterMinLen);
+		newSuggestBox.setFilterQuery(filterQuery);
+		newSuggestBox.setHeight(height);
+		newSuggestBox.setLabel(label);
+		newSuggestBox.setName(name);
+		newSuggestBox.setReadonly(readonly);
+		newSuggestBox.setTable(table);
+		newSuggestBox.setValidators(validators);
+		newSuggestBox.setValue(value);
+		newSuggestBox.setValueQuery(valueQuery);
+		newSuggestBox.setWidth(width);
+		return newSuggestBox;
+	}
 
 	public String getValue() {
 		return value;
