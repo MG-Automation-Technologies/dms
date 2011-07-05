@@ -78,7 +78,7 @@ public class DatabaseMetadataUtils {
 		sb.append("from DatabaseMetadataValue dmv where dmv.table='" + table + "'");
 		
 		if (filter != null && filter.length() > 0) {			
-			sb.append(" ").append(replaceVirtual(table, filter));
+			sb.append(" and ").append(replaceVirtual(table, filter));
 		}
 		
 		ret = sb.toString();
@@ -103,7 +103,7 @@ public class DatabaseMetadataUtils {
 		sb.append(" where dmv.table='" + table + "'");
 		
 		if (filter != null && filter.length() > 0) {
-			sb.append(" ").append(replaceVirtual(table, filter));
+			sb.append(" and ").append(replaceVirtual(table, filter));
 		}
 		
 		ret = sb.toString();
@@ -122,7 +122,7 @@ public class DatabaseMetadataUtils {
 		sb.append("delete from DatabaseMetadataValue dmv where dmv.table='" + table + "'");
 		
 		if (filter != null && filter.length() > 0) {
-			sb.append(" ").append(replaceVirtual(table, filter));
+			sb.append(" and ").append(replaceVirtual(table, filter));
 		}
 		
 		ret = sb.toString();
