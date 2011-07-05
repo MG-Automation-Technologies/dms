@@ -22,7 +22,9 @@
 package com.openkm.frontend.client.widget.wizard;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -69,6 +71,7 @@ public class TemplateWizardPopup extends DialogBox {
 	private String destinationPath = "";
 	private List<GWTPropertyGroup> groupsList = null;
 	private List<GWTFormElement> formElementList = null;
+	private Map<String, List<Map<String,String>>> tableProperties = new HashMap<String, List<Map<String,String>>>();
 	private int groupIndex = 0;
 	private PropertyGroupWidget propertyGroupWidget = null;
 	private int status = STATUS_NONE;
@@ -100,6 +103,7 @@ public class TemplateWizardPopup extends DialogBox {
 	public void start(String docPath, String destinationPath) {
 		groupsList = new ArrayList<GWTPropertyGroup>();
 		formElementList = new ArrayList<GWTFormElement>();
+		tableProperties = new HashMap<String, List<Map<String,String>>>();
 		vPanelFired.clear();
 		actualButton = new Button("");
 		actualButton.setEnabled(false);
@@ -161,7 +165,7 @@ public class TemplateWizardPopup extends DialogBox {
 					getProperties();
 					groupIndex++;
 				} else {
-					documentService.createFromTemplate(docPath, destinationPath, formElementList, new AsyncCallback<String>() {
+					documentService.createFromTemplate(docPath, destinationPath, formElementList, tableProperties, new AsyncCallback<String>() {
 						@Override
 						public void onSuccess(String result) {
 							destinationPath = result; // path could be changed ( for example html is converted to pdf )
