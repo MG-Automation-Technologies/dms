@@ -22,6 +22,7 @@
 package com.openkm.frontend.client.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -55,5 +56,5 @@ public interface OKMDocumentService extends RemoteService {
 	public void purgeVersionHistory(String docPath) throws OKMException;
 	public void forceUnlock(String docPath) throws OKMException;
 	public void forceCancelCheckout(String docPath) throws OKMException;
-	public String createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties) throws OKMException;
+	public String createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties, Map<String, List<Map<String,String>>> tableProperties) throws OKMException;
 }
