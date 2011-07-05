@@ -32,55 +32,46 @@ import com.openkm.frontend.client.util.ISO8601;
  */
 public class DatabaseMetadataMap {	
 	// Metadata virtual column name mapping
-	public static final String MV_NAME_TABLE 	= "table";
-	public static final String MV_NAME_ID		= "id";
+	public static final String MV_NAME_TABLE = "table";
+	public static final String MV_NAME_ID = "id";
 	
 	// Boolean values mapping
-	public static final String BOOLEAN_TRUE 	= "T";
-	public static final String BOOLEAN_FALSE 	= "F";
+	public static final String BOOLEAN_TRUE = "T";
+	public static final String BOOLEAN_FALSE = "F";
 	
 	/**
 	 * getDoubleValue
-	 * 
-	 * @param value
-	 * @return
 	 */
 	public static Double getDoubleValue(String value) {
-		return (value!=null)?new Double(value):null;
+		return (value != null) ? new Double(value) : null;
 	}
 	
 	/**
 	 * mapDoubleValue
-	 * 
-	 * @param value
-	 * @return
 	 */
 	public static String mapDoubleValue(Double value) {
-		return (value!=null)?String.valueOf(value):null;
+		return (value != null) ? String.valueOf(value) : null;
 	}
 	
 	/**
 	 * getIntValue
 	 */
 	public static Integer getIntegerValue(String value) {
-		return (value!=null)?new Integer(value): null;
+		return (value != null) ? new Integer(value) : null;
 	}
 	
 	/**
 	 * mapIntValue
 	 */
 	public static String mapIntegerValue(Integer value) {
-		return (value!=null)?String.valueOf(value):null;
+		return (value != null) ? String.valueOf(value) : null;
 	}
 	
 	/**
 	 * getBooleanValue
-	 * 
-	 * @param value
-	 * @return
 	 */
 	public static Boolean getBooleanValue(String value) {
-		if (value==null) {
+		if (value == null) {
 			return null;
 		} else {
 			if (value.toUpperCase().equals(BOOLEAN_TRUE)) {
@@ -93,12 +84,9 @@ public class DatabaseMetadataMap {
 	
 	/**
 	 * mapBooleanValue
-	 * 
-	 * @param value
-	 * @return
 	 */
 	public static String mapBooleanValue(Boolean value) {
-		if (value==null) {
+		if (value == null) {
 			return null;
 		} else {
 			if (value) {
@@ -111,9 +99,6 @@ public class DatabaseMetadataMap {
 	
 	/**
 	 * getDateValue
-	 * 
-	 * @param value
-	 * @return
 	 */
 	public static Date getDateValue(String value) {
 		return ISO8601.parse(value);
@@ -121,9 +106,6 @@ public class DatabaseMetadataMap {
 	
 	/**
 	 * mapDateValue
-	 * 
-	 * @param value
-	 * @return
 	 */
 	public static String mapDateValue(Date value) {
 		return ISO8601.format(value);
