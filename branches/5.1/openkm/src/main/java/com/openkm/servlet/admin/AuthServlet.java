@@ -40,6 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMAuth;
+import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.AuthDAO;
@@ -156,38 +157,46 @@ public class AuthServlet extends BaseServlet {
 	private void userEdit(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
 		log.debug("userEdit({}, {}, {})", new Object[] { session, request, response });
+		String usrId = WebUtils.getString(request, "usr_id");
 		
-		if (WebUtils.getBoolean(request, "persist")) {
-			String password = WebUtils.getString(request, "usr_password");
-			User usr = new User();
-			usr.setId(WebUtils.getString(request, "usr_id"));
-			usr.setName(WebUtils.getString(request, "usr_name"));
-			usr.setEmail(WebUtils.getString(request, "usr_email"));
-			usr.setActive(WebUtils.getBoolean(request, "usr_active"));
-			List<String> usrRoles = WebUtils.getStringList(request, "usr_roles");
-			
-			for (String rolId : usrRoles) {
-				usr.getRoles().add(AuthDAO.findRoleByPk(rolId));
-			}
-			
-			AuthDAO.updateUser(usr);
-			
-			if (!password.equals("")) {
-				AuthDAO.updateUserPassword(usr.getId(), password);
-			}
-			
-			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_USER_EDIT", usr.getId(), usr.toString());
+		if (isMultipleInstancesAdmin(request) || !usrId.equals(Config.ADMIN_USER)) {
+			if (WebUtils.getBoolean(request, "persist")) {
+				String password = WebUtils.getString(request, "usr_password");
+				User usr = new User();
+				usr.setId(usrId);
+				usr.setName(WebUtils.getString(request, "usr_name"));
+				usr.setEmail(WebUtils.getString(request, "usr_email"));
+				usr.setActive(WebUtils.getBoolean(request, "usr_active"));
+				List<String> usrRoles = WebUtils.getStringList(request, "usr_roles");
+				
+				for (String rolId : usrRoles) {
+					usr.getRoles().add(AuthDAO.findRoleByPk(rolId));
+				}
+				
+				AuthDAO.updateUser(usr);
+				
+				if (!password.equals("")) {
+					AuthDAO.updateUserPassword(usr.getId(), password);
+				}
+				
+				// Activity log
+				UserActivity.log(session.getUserID(), "ADMIN_USER_EDIT", usr.getId(), usr.toString());
+			} else {
+				ServletContext sc = getServletContext();
+				sc.setAttribute("action", WebUtils.getString(request, "action"));
+				sc.setAttribute("persist", true);
+				sc.setAttribute("roles", AuthDAO.findAllRoles());
+				sc.setAttribute("usr", AuthDAO.findUserByPk(usrId));
+				sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
+			}	
 		} else {
-			ServletContext sc = getServletContext();
-			String usrId = WebUtils.getString(request, "usr_id");
-			sc.setAttribute("action", WebUtils.getString(request, "action"));
-			sc.setAttribute("persist", true);
-			sc.setAttribute("roles", AuthDAO.findAllRoles());
-			sc.setAttribute("usr", AuthDAO.findUserByPk(usrId));
-			sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
+			// Activity log
+			UserActivity.log(request.getRemoteUser(), "ADMIN_ACCESS_DENIED", request.getRequestURI(), request.getQueryString());
+			
+			AccessDeniedException ade = new AccessDeniedException("You should not access this resource");
+			sendErrorRedirect(request, response, ade);
 		}
-		
+			
 		log.debug("userEdit: void");
 	}
 	
@@ -197,21 +206,28 @@ public class AuthServlet extends BaseServlet {
 	private void userDelete(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
 		log.debug("userDelete({}, {}, {})", new Object[] { session, request, response });
+		String usrId = WebUtils.getString(request, "usr_id");
 		
-		if (WebUtils.getBoolean(request, "persist")) {
-			String usrId = WebUtils.getString(request, "usr_id");
-			AuthDAO.deleteUser(usrId);
-			
-			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_USER_DELETE", usrId, null);
+		if (isMultipleInstancesAdmin(request) || !usrId.equals(Config.ADMIN_USER)) {
+			if (WebUtils.getBoolean(request, "persist")) {
+				AuthDAO.deleteUser(usrId);
+				
+				// Activity log
+				UserActivity.log(session.getUserID(), "ADMIN_USER_DELETE", usrId, null);
+			} else {
+				ServletContext sc = getServletContext();
+				sc.setAttribute("action", WebUtils.getString(request, "action"));
+				sc.setAttribute("persist", true);
+				sc.setAttribute("roles", AuthDAO.findAllRoles());
+				sc.setAttribute("usr", AuthDAO.findUserByPk(usrId));
+				sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
+			}
 		} else {
-			ServletContext sc = getServletContext();
-			String usrId = WebUtils.getString(request, "usr_id");
-			sc.setAttribute("action", WebUtils.getString(request, "action"));
-			sc.setAttribute("persist", true);
-			sc.setAttribute("roles", AuthDAO.findAllRoles());
-			sc.setAttribute("usr", AuthDAO.findUserByPk(usrId));
-			sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
+			// Activity log
+			UserActivity.log(request.getRemoteUser(), "ADMIN_ACCESS_DENIED", request.getRequestURI(), request.getQueryString());
+			
+			AccessDeniedException ade = new AccessDeniedException("You should not access this resource");
+			sendErrorRedirect(request, response, ade);
 		}
 		
 		log.debug("userDelete: void");
@@ -224,11 +240,21 @@ public class AuthServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
 		log.debug("userActive({}, {}, {})", new Object[] { session, request, response });
 		String usrId = WebUtils.getString(request, "usr_id");
-		boolean active = WebUtils.getBoolean(request, "usr_active");
-		AuthDAO.activeUser(usrId, active);
+		
+		if (isMultipleInstancesAdmin(request) || !usrId.equals(Config.ADMIN_USER)) {
+			boolean active = WebUtils.getBoolean(request, "usr_active");
+			AuthDAO.activeUser(usrId, active);
 			
-		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_USER_ACTIVE", usrId, Boolean.toString(active));
+			// Activity log
+			UserActivity.log(session.getUserID(), "ADMIN_USER_ACTIVE", usrId, Boolean.toString(active));
+		} else {
+			// Activity log
+			UserActivity.log(request.getRemoteUser(), "ADMIN_ACCESS_DENIED", request.getRequestURI(), request.getQueryString());
+			
+			AccessDeniedException ade = new AccessDeniedException("You should not access this resource");
+			sendErrorRedirect(request, response, ade);
+		}
+		
 		log.debug("userActive: void");
 	}
 
@@ -261,6 +287,7 @@ public class AuthServlet extends BaseServlet {
 		}
 		
 		sc.setAttribute("db", db);
+		sc.setAttribute("multInstAdmin", isMultipleInstancesAdmin(request));
 		sc.getRequestDispatcher("/admin/user_list.jsp").forward(request, response);
 		log.debug("userList: void");
 	}

@@ -29,6 +29,9 @@ public class BaseServlet extends HttpServlet  {
 		sc.getRequestDispatcher("/error.jsp").forward(request, response);
 	}
 	
+	/**
+	 * Update HTTP active sessions
+	 */
 	public void updateSessionManager(HttpServletRequest request) {
 		HttpSessionManager.getInstance().update(request.getSession().getId());
 	}
@@ -41,7 +44,11 @@ public class BaseServlet extends HttpServlet  {
 	}
 	
 	/**
-	 * Test if an user can access to administration when configured as SaaS
+	 * Test if an user can access to administration when configured as SaaS: An user can
+	 * access if:
+	 * 
+	 * - Multiple Instances is active AND user id okmAdmin
+	 * - Multiple Instances is inactive AND user has AdminRole role
 	 */
 	public static boolean isMultipleInstancesAdmin(HttpServletRequest request) {
 		return Config.SYSTEM_MULTIPLE_INSTANCES && request.getRemoteUser().equals(Config.ADMIN_USER) ||
