@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.openkm.servlet.admin.BaseServlet" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -32,6 +33,7 @@
 </head>
 <body>
   <c:set var="isAdmin"><%=BaseServlet.isAdmin(request)%></c:set>
+  <u:constantsMap className="com.openkm.core.Config" var="Config"/>
   <c:choose>
     <c:when test="${isAdmin}">
       <c:url value="Auth" var="urlRoleList">
@@ -120,27 +122,31 @@
                 </c:forEach>
               </td>
               <td align="center">
-                <c:choose>
-                  <c:when test="${user.active}">
-                    <a href="${urlActive}"><img src="img/true.png" alt="Active" title="Active"/></a>
-                  </c:when>
-                  <c:otherwise>
-                    <a href="${urlActive}"><img src="img/false.png" alt="Inactive" title="Inactive"/></a>
-                  </c:otherwise>
-                </c:choose>
+                <c:if test="${multInstAdmin || user.id != Config.ADMIN_USER}">
+                  <c:choose>
+                    <c:when test="${user.active}">
+                      <a href="${urlActive}"><img src="img/true.png" alt="Active" title="Active"/></a>
+                    </c:when>
+                    <c:otherwise>
+                      <a href="${urlActive}"><img src="img/false.png" alt="Inactive" title="Inactive"/></a>
+                    </c:otherwise>
+                  </c:choose>
+                </c:if>
               </td>
               <td align="center">
-                <c:if test="${db}">
-                  <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
+                <c:if test="${multInstAdmin || user.id != Config.ADMIN_USER}">
+                  <c:if test="${db}">
+                    <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
+                    &nbsp;
+                    <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+                    &nbsp;
+                  </c:if>
+                  <a href="${urlConfig}"><img src="img/action/config.png" alt="User config" title="User config"/></a>
                   &nbsp;
-                  <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+                  <a href="${urlMail}"><img src="img/action/email.png" alt="Mail accounts" title="Mail accounts"/></a>
                   &nbsp;
+                  <a href="${urlTwitter}"><img src="img/action/twitter.png" alt="Twitter accounts" title="Twitter accounts"/></a>
                 </c:if>
-                <a href="${urlConfig}"><img src="img/action/config.png" alt="User config" title="User config"/></a>
-                &nbsp;
-                <a href="${urlMail}"><img src="img/action/email.png" alt="Mail accounts" title="Mail accounts"/></a>
-                &nbsp;
-                <a href="${urlTwitter}"><img src="img/action/twitter.png" alt="Twitter accounts" title="Twitter accounts"/></a>
               </td>
             </tr>
           </c:forEach>
