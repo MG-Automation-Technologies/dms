@@ -48,8 +48,8 @@ public class ConstantsMapTag extends SimpleTagSupport {
             
             for (int n = 0; n < fields.length; n++ ) {
                 if (Modifier.isPublic( fields[n].getModifiers() ) &&
-                    Modifier.isStatic( fields[n].getModifiers() ) &&
-                    Modifier.isFinal( fields[n].getModifiers() ) ) {
+                    Modifier.isStatic( fields[n].getModifiers() ) /*&&
+                    Modifier.isFinal( fields[n].getModifiers() )*/ ) {
                     constantsMap.put( fields[n].getName(), fields[n].get(null));
                 }
             }
