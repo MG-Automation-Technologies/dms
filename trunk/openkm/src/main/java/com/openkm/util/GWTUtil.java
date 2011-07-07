@@ -729,7 +729,7 @@ public class GWTUtil {
 				variables.put(key, copy((FormElement) obj));
 			} else {
 				variables.put(key, obj);
-			}	
+			}
 		}
 		
 		gWTProcessInstance.setVariables(variables);
