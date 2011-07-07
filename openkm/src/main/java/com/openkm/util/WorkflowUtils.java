@@ -312,8 +312,10 @@ public class WorkflowUtils {
 	            final List<DiagramNodeInfo> diagramNodeInfoList = new ArrayList<DiagramNodeInfo>();
 	            final NodeList nodeNodeList = processDiagramElement.getElementsByTagName("node");
 	            final int nodeNodeListLength = nodeNodeList.getLength();
+	            
 	            for (int i = 0; i < nodeNodeListLength; i ++) {
 	                final Node nodeNode = nodeNodeList.item(i);
+	                
 	                if (nodeNode instanceof Node && nodeNode.getParentNode() == processDiagramElement) {
 	                    final Element nodeElement = (Element) nodeNode;
 	                    final String nodeName = nodeElement.getAttribute("name");
@@ -426,6 +428,18 @@ public class WorkflowUtils {
 
         public int getY() {
             return y;
+        }
+        
+        public String toString() {
+        	StringBuilder sb = new StringBuilder();
+    		sb.append("{");
+    		sb.append("name="); sb.append(name);
+    		sb.append(", x="); sb.append(x);
+    		sb.append(", y="); sb.append(y);
+    		sb.append(", width="); sb.append(width);
+    		sb.append(", height="); sb.append(height);
+    		sb.append("}");
+    		return sb.toString();
         }
     }
 }

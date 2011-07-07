@@ -198,7 +198,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			org.jbpm.graph.def.ProcessDefinition pd = graphSession.getProcessDefinition(processDefinitionId);
 			FileDefinition fileDef = pd.getFileDefinition();
-			//image = fileDef.getBytes("processimage.jpg");
 			
 			WorkflowUtils.DiagramInfo dInfo = WorkflowUtils.getDiagramInfo(fileDef.getInputStream("gpd.xml"));
 			WorkflowUtils.DiagramNodeInfo dNodeInfo = dInfo.getNodeMap().get(node);
@@ -206,13 +205,13 @@ public class DirectWorkflowModule implements WorkflowModule {
 			
 			if (dNodeInfo != null) {
 				// Select node
+				log.info("DiagramNodeInfo: {}", dNodeInfo);
 				Graphics g = img.getGraphics();
 				Graphics2D g2d = (Graphics2D) g;
 				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25F));
 				g2d.setColor(Color.blue);
-				g2d.fillRect(dNodeInfo.getX(), dNodeInfo.getY(), dNodeInfo.getWidth(), dNodeInfo.getHeight());
+				g2d.fillRect(dNodeInfo.getX(), dNodeInfo.getY() + 64, dNodeInfo.getWidth(), dNodeInfo.getHeight());
 				g.dispose();
-				
 			}
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -772,7 +771,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.close();
 		}
 		
-		log.debug("findUserTaskInstances: {}", al);
+		log.info("findUserTaskInstances: {}", al);
 		return al;
 	}
 
