@@ -36,14 +36,7 @@ import com.openkm.frontend.client.service.OKMNoteService;
 import com.openkm.util.GWTUtil;
 
 /**
- * Servlet Class
- * 
- * @web.servlet              name="NoteServlet"
- *                           display-name="Directory tree service"
- *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/NoteServlet"
- * @web.servlet-init-param   name="A parameter"
- *                           value="A value"
+ * Note handling sevlet
  */
 public class NoteServlet extends OKMRemoteServiceServlet implements OKMNoteService {
 	private static Logger log = LoggerFactory.getLogger(DocumentServlet.class);
