@@ -410,6 +410,8 @@ public class FormUtils {
 					if (item != null) txt.setLabel(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("name");
 					if (item != null) txt.setName(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("data");
+					if (item != null) txt.setData(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("width");
 					if (item != null) txt.setWidth(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("height");
