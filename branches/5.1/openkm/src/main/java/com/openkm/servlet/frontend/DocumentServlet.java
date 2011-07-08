@@ -77,6 +77,7 @@ import com.openkm.frontend.client.bean.form.GWTFormElement;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.util.DocumentComparator;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.util.DocConverter;
 import com.openkm.util.FileUtils;
 import com.openkm.util.GWTUtil;
@@ -87,14 +88,7 @@ import com.openkm.util.TemplateUtils;
 import freemarker.template.TemplateException;
 
 /**
- * Servlet Class
- * 
- * @web.servlet              name="DocumentServlet"
- *                           display-name="Directory tree service"
- *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/DocumentServlet"
- * @web.servlet-init-param   name="A parameter"
- *                           value="A value"
+ * Directory tree service
  */
 public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocumentService {
 	private static Logger log = LoggerFactory.getLogger(DocumentServlet.class);
@@ -658,7 +652,7 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 			fis = OKMDocument.getInstance().getContent(null, docPath, false);
 			
 			// Save content to temporary file
-			String fileName = FileUtils.getName(docPath);
+			String fileName = JCRUtils.getName(docPath);
 			tmp = File.createTempFile("okm", "."+FileUtils.getFileExtension(fileName));
 			fos = new FileOutputStream(tmp);
 			
