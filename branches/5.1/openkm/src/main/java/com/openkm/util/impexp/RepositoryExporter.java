@@ -40,10 +40,10 @@ import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.module.DocumentModule;
 import com.openkm.module.FolderModule;
 import com.openkm.module.ModuleManager;
-import com.openkm.util.FileUtils;
 
 public class RepositoryExporter {
 	private static Logger log = LoggerFactory.getLogger(RepositoryExporter.class);
@@ -106,7 +106,7 @@ public class RepositoryExporter {
 			firstTime = false;
 		} else {
 			// Repository path needs to be "corrected" under Windoze
-			path = fs.getPath() + File.separator + FileUtils.getName(fldPath).replace(':', '_');
+			path = fs.getPath() + File.separator + JCRUtils.getName(fldPath).replace(':', '_');
 		}
 		
 		File fsPath = new File(path);
@@ -115,7 +115,7 @@ public class RepositoryExporter {
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		for (Iterator<Document> it = dm.getChilds(token, fldPath).iterator(); it.hasNext();) {
 			Document docChild = it.next();
-			path = fsPath.getPath() + File.separator+ FileUtils.getName(docChild.getPath()).replace(':', '_');
+			path = fsPath.getPath() + File.separator+ JCRUtils.getName(docChild.getPath()).replace(':', '_');
 			FileOutputStream fos = new FileOutputStream(path);
 			InputStream is = dm.getContent(token, docChild.getPath(), false);
 			IOUtils.copy(is, fos);
