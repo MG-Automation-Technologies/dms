@@ -52,7 +52,6 @@ import com.openkm.jcr.JCRUtils;
 import com.openkm.module.FolderModule;
 import com.openkm.module.base.BaseFolderModule;
 import com.openkm.module.base.BaseScriptingModule;
-import com.openkm.util.FileUtils;
 import com.openkm.util.UserActivity;
 
 public class DirectFolderModule implements FolderModule {
@@ -77,12 +76,12 @@ public class DirectFolderModule implements FolderModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			String parent = FileUtils.getParent(fld.getPath());
-			String name = FileUtils.getName(fld.getPath());
+			String parent = JCRUtils.getParent(fld.getPath());
+			String name = JCRUtils.getName(fld.getPath());
 			parentNode = session.getRootNode().getNode(parent.substring(1));
 			
 			// Escape dangerous chars in name
-			name = FileUtils.escape(name);
+			name = JCRUtils.escape(name);
 			fld.setPath(parent + "/" + name);
 			
 			// EP - PRE
@@ -90,7 +89,7 @@ public class DirectFolderModule implements FolderModule {
 			Ref<Folder> refFld = new Ref<Folder>(fld);
 			FolderExtensionManager.getInstance().preCreate(session, refParentNode, refFld);
 			parentNode = refParentNode.get();
-			name = FileUtils.escape(FileUtils.getName(refFld.get().getPath()));
+			name = JCRUtils.escape(JCRUtils.getName(refFld.get().getPath()));
 			
 			// Create node
 			Node folderNode = BaseFolderModule.create(session, parentNode, name);
@@ -182,7 +181,7 @@ public class DirectFolderModule implements FolderModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			String name = FileUtils.getName(fldPath);
+			String name = JCRUtils.getName(fldPath);
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
 			Node parentNode = folderNode.getParent();
 			Node userTrash = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
@@ -307,11 +306,11 @@ public class DirectFolderModule implements FolderModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			String parent = FileUtils.getParent(fldPath);
-			String name = FileUtils.getName(fldPath);
+			String parent = JCRUtils.getParent(fldPath);
+			String name = JCRUtils.getName(fldPath);
 							
 			// Escape dangerous chars in name
-			newName = FileUtils.escape(newName);
+			newName = JCRUtils.escape(newName);
 			
 			if (newName != null && !newName.equals("") && !newName.equals(name)) {
 				String newPath = parent+"/"+newName;
@@ -376,7 +375,7 @@ public class DirectFolderModule implements FolderModule {
 			}
 			
 			//Node fldNode = session.getRootNode().getNode(fldPath.substring(1));
-			String name = FileUtils.getName(fldPath);
+			String name = JCRUtils.getName(fldPath);
 			String dstNodePath = dstPath + "/" + name;
 			session.move(fldPath, dstNodePath);
 			session.save();
@@ -429,7 +428,7 @@ public class DirectFolderModule implements FolderModule {
 				session = (XASession) JcrSessionManager.getInstance().get(token);
 			}
 			
-			String name = FileUtils.getName(fldPath);
+			String name = JCRUtils.getName(fldPath);
 			//t = new Transaction(session);
 			//t.start();
 			
