@@ -223,7 +223,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 					if (parts.length > 2) {
 						List<String> tables = Arrays.asList(parts[1].split(","));
 						hql = DatabaseMetadataUtils.replaceVirtual(tables, parts[2]);
-						log.info("Metadata SENTENCE: {}", hql);
+						log.debug("Metadata SENTENCE: {}", hql);
 						globalResults.add(executeHQL(session, hql, tables));
 					}
 				} else if (parts[0].toUpperCase().equals("SELECT")) {	
@@ -234,7 +234,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 						hql = DatabaseMetadataUtils.buildQuery(parts[1], null);
 					}
 					
-					log.info("Metadata SELECT: {}", hql);
+					log.debug("Metadata SELECT: {}", hql);
 					globalResults.add(executeHQL(session, hql, Arrays.asList(parts[1])));
 				} else if (parts[0].toUpperCase().equals("UPDATE")) {
 					if (parts.length > 3) {
@@ -247,7 +247,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 						hql = DatabaseMetadataUtils.buildUpdate(parts[1], null, null);
 					}
 					
-					log.info("Metadata UPDATE: {}", hql);
+					log.debug("Metadata UPDATE: {}", hql);
 					globalResults.add(executeHQL(session, hql, Arrays.asList(parts[1])));
 				} else if (parts[0].toUpperCase().equals("DELETE")) {
 					if (parts.length > 2) {
@@ -257,7 +257,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 						hql = DatabaseMetadataUtils.buildDelete(parts[1], null);
 					}
 					
-					log.info("Metadata DELETE: {}", hql);
+					log.debug("Metadata DELETE: {}", hql);
 					globalResults.add(executeHQL(session, hql, Arrays.asList(parts[1])));
 				} else {
 					throw new DatabaseException("Error in metadata action");
