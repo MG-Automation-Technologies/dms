@@ -26,7 +26,7 @@ import java.io.IOException;
 import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import com.openkm.util.FileUtils;
+import com.openkm.jcr.JCRUtils;
 
 @SuppressWarnings("serial")
 public class GetNameTag extends TagSupport {
@@ -34,7 +34,7 @@ public class GetNameTag extends TagSupport {
 	
 	@Override
 	public int doStartTag() {
-		String ret = FileUtils.getName(path);
+		String ret = JCRUtils.getName(path);
 		
 		try {
 			pageContext.getOut().write(ret);
