@@ -49,7 +49,6 @@ import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.jcr.JCRUtils;
 import com.openkm.module.direct.DirectRepositoryModule;
-import com.openkm.util.FileUtils;
 import com.openkm.util.FormUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
@@ -169,7 +168,7 @@ public class PropertyGroupsServlet extends BaseServlet {
 			pGroups.put(group, fMaps);
 		}
 		
-		sc.setAttribute("pgCnd", FileUtils.getName(Config.PROPERTY_GROUPS_CND));
+		sc.setAttribute("pgCnd", JCRUtils.getName(Config.PROPERTY_GROUPS_CND));
 		sc.setAttribute("pGroups", pGroups);
 		sc.getRequestDispatcher("/admin/property_groups.jsp").forward(request, response);
 		
