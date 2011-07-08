@@ -80,6 +80,46 @@ public class JCRUtils {
 	private static long sessionDestroyCount = 0;
 	
 	/**
+	 * Get parent node.
+	 */
+	public static String getParent(String path) {
+		log.debug("getParent({})", path);
+		int lastSlash = path.lastIndexOf('/');
+		String ret = (lastSlash > 0)?path.substring(0, lastSlash):"";
+		log.debug("getParent: {}", ret);
+		return ret;	
+	}
+
+	/**
+	 * Get node name.
+	 */
+	public static String getName(String path) {
+		log.debug("getName({})", path);
+		String ret = path.substring(path.lastIndexOf('/') + 1);
+		log.debug("getName: {}", ret);
+		return ret;
+	}
+	
+	/**
+	 * Eliminate dangerous chars in node name.
+	 * TODO Keep on sync with uploader:com.openkm.applet.Util.escape(String)
+	 */
+	public static String escape(String name) {
+		log.debug("escape({})", name);
+		String ret = name.replace('/', ' ');
+		ret = ret.replace(':', ' ');
+		ret = ret.replace('[', ' ');
+		ret = ret.replace(']', ' ');
+		ret = ret.replace('*', ' ');
+		ret = ret.replace('\'', ' ');
+		ret = ret.replace('"', ' ');
+		ret = ret.replace('|', ' ');
+		ret = ret.trim();
+		log.debug("escape: {}", ret);
+		return ret;
+	}
+	
+	/**
 	 * Convert a Value array to String array and add a user id.
 	 */
 	public static String[] usrValue2String(Value[] values, String usrId) throws ValueFormatException, IllegalStateException, javax.jcr.RepositoryException {
