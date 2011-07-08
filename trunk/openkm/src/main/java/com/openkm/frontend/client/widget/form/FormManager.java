@@ -1144,7 +1144,7 @@ public class FormManager {
 				} else if (formElement instanceof GWTUpload) {
 					// Not aplicable to property groups
 				} else if (formElement instanceof GWTText) {
-					// Nothing to be done here
+					((GWTText) formElement).setLabel(propertyParam.getValue());
 				} else if (formElement instanceof GWTSeparator) {
 					// Nothing to be done here
 				}
@@ -1436,7 +1436,8 @@ public class FormManager {
 					} else if (formElement instanceof GWTUpload) {
 						// No aplicable to property groups
 					} else if (formElement instanceof GWTText) {
-						// Nothing to be done here
+						GWTText text = (GWTText) formElement;
+						text.setLabel(getStringValueFromVariable(map.get(formElement.getName())));
 					} else if (formElement instanceof GWTSeparator) {
 						// Nothing to be done here
 					}
@@ -1498,7 +1499,10 @@ public class FormManager {
 						}
 					}
 				} else if (formElement instanceof GWTText) {
-					// Nothing to be done here
+					GWTText text = (GWTText) formElement;
+					if (!text.getData().equals("") && map.keySet().contains(text.getData())) {
+						text.setLabel(getStringValueFromVariable(map.get(text.getData())));
+					}
 				} else if (formElement instanceof GWTSeparator) {
 					// Nothing to be done here
 				}
@@ -1538,7 +1542,7 @@ public class FormManager {
 		} else if (obj instanceof GWTUpload) {
 			return null;
 		} else if (obj instanceof GWTText) {
-			return null;
+			return ((GWTText)obj).getLabel();
 		} else if (obj instanceof GWTSeparator) {
 			return null;
 		} else {
