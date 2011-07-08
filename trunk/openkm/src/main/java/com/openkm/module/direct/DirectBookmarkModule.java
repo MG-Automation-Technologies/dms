@@ -40,7 +40,6 @@ import com.openkm.dao.bean.Bookmark;
 import com.openkm.jcr.JCRUtils;
 import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.BookmarkModule;
-import com.openkm.util.FileUtils;
 import com.openkm.util.UserActivity;
 
 public class DirectBookmarkModule implements BookmarkModule {
@@ -68,7 +67,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 			Node node = rootNode.getNode(nodePath.substring(1));
 			
 			// Escape dangerous chars in name
-			name = FileUtils.escape(name);
+			name = JCRUtils.escape(name);
 
 			newBookmark = new Bookmark();
 			newBookmark.setUser(session.getUserID());

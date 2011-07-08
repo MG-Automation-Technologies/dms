@@ -122,8 +122,8 @@ public class DirectDocumentModule implements DocumentModule {
 			throw new FileSizeExceededException(Integer.toString(size));
 		}
 		
-		String parent = FileUtils.getParent(doc.getPath());
-		String name = FileUtils.getName(doc.getPath());
+		String parent = JCRUtils.getParent(doc.getPath());
+		String name = JCRUtils.getName(doc.getPath());
 		
 		// Add to KEA - must have the same extension
 		int idx = name.lastIndexOf('.');
@@ -138,7 +138,7 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 			
 			// Escape dangerous chars in name
-			name = FileUtils.escape(name);
+			name = JCRUtils.escape(name);
 			doc.setPath(parent + "/" + name);
 			parentNode = session.getRootNode().getNode(parent.substring(1));
 			
@@ -192,7 +192,7 @@ public class DirectDocumentModule implements DocumentModule {
 			Ref<Document> refDoc = new Ref<Document>(doc);
 			DocumentExtensionManager.getInstance().preCreate(session, refParentNode, refTmp, refDoc);
 			parentNode = refParentNode.get();
-			name = FileUtils.escape(FileUtils.getName(refDoc.get().getPath()));
+			name = JCRUtils.escape(JCRUtils.getName(refDoc.get().getPath()));
 			mimeType = refDoc.get().getMimeType();
 			keywords = refDoc.get().getKeywords();
 			
@@ -287,7 +287,7 @@ public class DirectDocumentModule implements DocumentModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			String name = FileUtils.getName(docPath);
+			String name = JCRUtils.getName(docPath);
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			Node parentNode = documentNode.getParent();
 			Node userTrash = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
@@ -585,11 +585,11 @@ public class DirectDocumentModule implements DocumentModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			String parent = FileUtils.getParent(docPath);
-			String name = FileUtils.getName(docPath);
+			String parent = JCRUtils.getParent(docPath);
+			String name = JCRUtils.getName(docPath);
 			
 			// Escape dangerous chars in name
-			newName = FileUtils.escape(newName);
+			newName = JCRUtils.escape(newName);
 
 			if (newName != null && !newName.equals("") && !newName.equals(name)) {
 				String newPath = parent + "/" + newName;
@@ -1421,7 +1421,7 @@ public class DirectDocumentModule implements DocumentModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			String name = FileUtils.getName(docPath);
+			String name = JCRUtils.getName(docPath);
 			String dstNodePath = dstPath + "/" + name;
 			
 			// EP - PRE
@@ -1438,7 +1438,7 @@ public class DirectDocumentModule implements DocumentModule {
 			session.save();
 			
 			// EP - POST
-			String srcDocParent = FileUtils.getParent(docPath);
+			String srcDocParent = JCRUtils.getParent(docPath);
 			Node srcFldNode = rootNode.getNode(srcDocParent.substring(1));
 			Node dstDocNode = rootNode.getNode(dstNodePath.substring(1));
 			Ref<Node> refSrcFolderNode = new Ref<Node>(srcFldNode);

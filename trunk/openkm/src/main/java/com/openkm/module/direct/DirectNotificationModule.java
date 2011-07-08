@@ -47,7 +47,6 @@ import com.openkm.core.RepositoryException;
 import com.openkm.jcr.JCRUtils;
 import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.NotificationModule;
-import com.openkm.util.FileUtils;
 import com.openkm.util.MailUtils;
 import com.openkm.util.TemplateUtils;
 import com.openkm.util.UserActivity;
@@ -276,7 +275,7 @@ public class DirectNotificationModule implements NotificationModule {
 					Map<String, String> model = new HashMap<String, String>();
 					model.put("documentUrl", Config.APPLICATION_URL+"?docPath=" + URLEncoder.encode(nodePath, "UTF-8"));
 					model.put("documentPath", nodePath);
-					model.put("documentName", FileUtils.getName(nodePath));
+					model.put("documentName", JCRUtils.getName(nodePath));
 					model.put("userId", session.getUserID());
 					model.put("notificationMessage", message);
 					

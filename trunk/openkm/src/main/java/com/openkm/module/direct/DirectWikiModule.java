@@ -79,8 +79,8 @@ public class DirectWikiModule implements WikiModule {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
-		String parent = FileUtils.getParent(wiki.getPath());
-		String name = FileUtils.getName(wiki.getPath());
+		String parent = JCRUtils.getParent(wiki.getPath());
+		String name = JCRUtils.getName(wiki.getPath());
 				
 		try {
 			if (token == null) {
@@ -90,7 +90,7 @@ public class DirectWikiModule implements WikiModule {
 			}
 			
 			// Escape dangerous chars in name
-			name = FileUtils.escape(name);
+			name = JCRUtils.escape(name);
 			wiki.setPath(parent + "/" + name);
 			
 			parentNode = session.getRootNode().getNode(parent.substring(1));
@@ -153,7 +153,7 @@ public class DirectWikiModule implements WikiModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			String name = FileUtils.getName(wikiPath);
+			String name = JCRUtils.getName(wikiPath);
 			Node wikiNode = session.getRootNode().getNode(wikiPath.substring(1));
 			Node parentNode = wikiNode.getParent();
 			Node userTrash = session.getRootNode().getNode(Repository.TRASH + "/" + session.getUserID());
@@ -420,11 +420,11 @@ public class DirectWikiModule implements WikiModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			String parent = FileUtils.getParent(wikiPath);
-			String name = FileUtils.getName(wikiPath);
+			String parent = JCRUtils.getParent(wikiPath);
+			String name = JCRUtils.getName(wikiPath);
 			
 			// Escape dangerous chars in name
-			newName = FileUtils.escape(newName);
+			newName = JCRUtils.escape(newName);
 
 			if (newName != null && !newName.equals("") && !newName.equals(name)) {
 				String newPath = parent + "/" + newName;
@@ -1091,7 +1091,7 @@ public class DirectWikiModule implements WikiModule {
 			}
 			
 			Node wikiNode = session.getRootNode().getNode(wikiPath.substring(1));
-			String name = FileUtils.getName(wikiPath);
+			String name = JCRUtils.getName(wikiPath);
 			session.move(wikiPath, dstPath + "/" + name);
 			session.save();
 
