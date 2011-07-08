@@ -3,7 +3,7 @@ package com.openkm.servlet.mobile;
 import java.util.Comparator;
 
 import com.openkm.bean.Folder;
-import com.openkm.util.FileUtils;
+import com.openkm.jcr.JCRUtils;
 
 public class FolderComparator implements Comparator<Folder> {
 	private static final Comparator<Folder> INSTANCE  = new FolderComparator();
@@ -14,8 +14,8 @@ public class FolderComparator implements Comparator<Folder> {
 	
 	@Override
 	public int compare(Folder arg0, Folder arg1) {
-		String first = FileUtils.getName(arg0.getPath());
-		String second = FileUtils.getName(arg1.getPath());
+		String first = JCRUtils.getName(arg0.getPath());
+		String second = JCRUtils.getName(arg1.getPath());
 		return first.compareTo(second);
 	}
 }
