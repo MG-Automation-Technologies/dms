@@ -3,7 +3,7 @@ package com.openkm.servlet.mobile;
 import java.util.Comparator;
 
 import com.openkm.bean.Document;
-import com.openkm.util.FileUtils;
+import com.openkm.jcr.JCRUtils;
 
 public class DocumentComparator implements Comparator<Document> {
 	private static final Comparator<Document> INSTANCE  = new DocumentComparator();
@@ -14,8 +14,8 @@ public class DocumentComparator implements Comparator<Document> {
 	
 	@Override
 	public int compare(Document arg0, Document arg1) {
-		String first = FileUtils.getName(arg0.getPath());
-		String second = FileUtils.getName(arg1.getPath());
+		String first = JCRUtils.getName(arg0.getPath());
+		String second = JCRUtils.getName(arg1.getPath());
 		return first.compareTo(second);
 	}
 }
