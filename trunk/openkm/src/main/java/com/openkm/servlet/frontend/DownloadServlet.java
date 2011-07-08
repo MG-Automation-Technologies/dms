@@ -47,6 +47,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.contants.service.ErrorCode;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.util.ArchiveUtils;
 import com.openkm.util.FileUtils;
 import com.openkm.util.WebUtils;
@@ -54,14 +55,7 @@ import com.openkm.util.impexp.RepositoryExporter;
 import com.openkm.util.impexp.TextInfoDecorator;
 
 /**
- * Servlet Class
- * 
- * @web.servlet              name="DownloadServlet"
- *                           display-name="Name for DownloadDocument"
- *                           description="Description for Download Servlet"
- * @web.servlet-mapping      url-pattern="/DownloadServlet"
- * @web.servlet-init-param   name="A parameter"
- *                           value="A value"
+ * Documento download servlet
  */
 public class DownloadServlet extends OKMHttpServlet {
 	private static Logger log = LoggerFactory.getLogger(DownloadServlet.class);
@@ -101,7 +95,7 @@ public class DownloadServlet extends OKMHttpServlet {
 					is = new FileInputStream(tmp);
 					
 					// Send document
-					String fileName = FileUtils.getName(path)+".zip";
+					String fileName = JCRUtils.getName(path)+".zip";
 					WebUtils.sendFile(request, response, fileName, "application/zip", inline, is);
 				} else if (exportJar) {
 					// Get document
@@ -112,7 +106,7 @@ public class DownloadServlet extends OKMHttpServlet {
 					is = new FileInputStream(tmp);
 					
 					// Send document
-					String fileName = FileUtils.getName(path)+".jar";
+					String fileName = JCRUtils.getName(path)+".jar";
 					WebUtils.sendFile(request, response, fileName, "application/x-java-archive", inline, is);
 
 				}
@@ -127,7 +121,7 @@ public class DownloadServlet extends OKMHttpServlet {
 				}
 				
 				// Send document
-				String fileName = FileUtils.getName(doc.getPath());
+				String fileName = JCRUtils.getName(doc.getPath());
 				WebUtils.sendFile(request, response, fileName, doc.getMimeType(), inline, is);
 			}
 		} catch (PathNotFoundException e) {
@@ -170,7 +164,7 @@ public class DownloadServlet extends OKMHttpServlet {
 			out.close();
 			
 			// Zip files
-			ArchiveUtils.createZip(tmp, FileUtils.getName(path), os);
+			ArchiveUtils.createZip(tmp, JCRUtils.getName(path), os);
 		} catch (IOException e) {
 			log.error("Error exporting zip", e);
 			throw e;
@@ -205,7 +199,7 @@ public class DownloadServlet extends OKMHttpServlet {
 			out.close();
 			
 			// Jar files
-			ArchiveUtils.createJar(tmp, FileUtils.getName(path), os);
+			ArchiveUtils.createJar(tmp, JCRUtils.getName(path), os);
 		} catch (IOException e) {
 			log.error("Error exporting jar", e);
 			throw e;
