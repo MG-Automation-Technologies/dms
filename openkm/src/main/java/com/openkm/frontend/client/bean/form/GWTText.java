@@ -28,6 +28,18 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  *
  */
 public class GWTText extends GWTFormElement  implements IsSerializable {
+	
+	private String data = "";
+	
+	public String getData() {
+		return data;
+	}
+
+
+	public void setData(String data) {
+		this.data = data;
+	}
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -35,6 +47,7 @@ public class GWTText extends GWTFormElement  implements IsSerializable {
 		sb.append(", name="); sb.append(name);
 		sb.append(", width="); sb.append(width);
 		sb.append(", height="); sb.append(height);
+		sb.append(", data="); sb.append(data);
 		sb.append("}");
 		return sb.toString();
 	}

@@ -956,12 +956,14 @@ public class GWTUtil {
 			gWTUpload.setValidators(copyValidators(upload.getValidators()));
 			return gWTUpload;
 		} else if (formElement instanceof Text) {
-			GWTText text = new GWTText();
-			text.setName(formElement.getName());
-			text.setLabel(formElement.getLabel());
-			text.setHeight(formElement.getHeight());
-			text.setWidth(formElement.getWidth());
-			return text;
+			GWTText gWTtext = new GWTText();
+			gWTtext.setName(formElement.getName());
+			gWTtext.setLabel(formElement.getLabel());
+			gWTtext.setHeight(formElement.getHeight());
+			gWTtext.setWidth(formElement.getWidth());
+			Text text = (Text) formElement;
+			gWTtext.setData(text.getData());
+			return gWTtext;
 		} else if (formElement instanceof Separator) {
 			GWTSeparator separator = new GWTSeparator();
 			separator.setName(formElement.getName());
@@ -1068,6 +1070,7 @@ public class GWTUtil {
 			text.setLabel(gWTText.getLabel());
 			text.setHeight(gWTText.getHeight());
 			text.setWidth(gWTText.getWidth());
+			text.setData(gWTText.getData());
 			return text;
 		} else if (formElement instanceof GWTSeparator) {
 			Separator separator = new Separator();
