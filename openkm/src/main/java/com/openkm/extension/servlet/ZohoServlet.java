@@ -57,8 +57,8 @@ import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.extension.OKMZohoService;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.servlet.frontend.OKMRemoteServiceServlet;
-import com.openkm.util.FileUtils;
 
 /**
  * ZohoServlet
@@ -117,7 +117,7 @@ public class ZohoServlet extends OKMRemoteServiceServlet implements OKMZohoServi
 		File tmp = null;
 		try {
 			String path = OKMRepository.getInstance().getNodePath(null, uuid);
-			String fileName = FileUtils.getName(path);
+			String fileName = JCRUtils.getName(path);
 			tmp = File.createTempFile("okm", ".tmp");
 			InputStream is = OKMDocument.getInstance().getContent(null, path, false); // Checkouts
 			Document doc = OKMDocument.getInstance().getProperties(null, path);
@@ -196,7 +196,7 @@ public class ZohoServlet extends OKMRemoteServiceServlet implements OKMZohoServi
 		File tmp = null;
 		try {
 			String path = OKMRepository.getInstance().getNodePath(null, uuid);
-			String fileName = FileUtils.getName(path);
+			String fileName = JCRUtils.getName(path);
 			tmp = File.createTempFile("okm", ".tmp");
 			InputStream is = OKMDocument.getInstance().getContent(null, path, false); // Checkouts
 			Document doc = OKMDocument.getInstance().getProperties(null, path);
