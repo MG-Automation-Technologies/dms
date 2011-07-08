@@ -50,7 +50,6 @@ import com.openkm.module.MailModule;
 import com.openkm.module.base.BaseMailModule;
 import com.openkm.module.base.BaseNotificationModule;
 import com.openkm.module.base.BaseScriptingModule;
-import com.openkm.util.FileUtils;
 import com.openkm.util.Transaction;
 import com.openkm.util.UserActivity;
 
@@ -87,12 +86,12 @@ public class DirectMailModule implements MailModule {
 				session = (XASession) JcrSessionManager.getInstance().get(token);
 			}
 			
-			String parent = FileUtils.getParent(mail.getPath());
-			String name = FileUtils.getName(mail.getPath());
+			String parent = JCRUtils.getParent(mail.getPath());
+			String name = JCRUtils.getName(mail.getPath());
 			Node parentNode = session.getRootNode().getNode(parent.substring(1));
 			
 			// Escape dangerous chars in name
-			name = FileUtils.escape(name);
+			name = JCRUtils.escape(name);
 			mail.setPath(parent + "/" + name);
 			
 			t = new Transaction(session);
@@ -199,7 +198,7 @@ public class DirectMailModule implements MailModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			String name = FileUtils.getName(mailPath);
+			String name = JCRUtils.getName(mailPath);
 			Node mailNode = session.getRootNode().getNode(mailPath.substring(1));
 			Node parentNode = mailNode.getParent();
 			Node userTrash = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
@@ -306,11 +305,11 @@ public class DirectMailModule implements MailModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			String parent = FileUtils.getParent(mailPath);
-			String name = FileUtils.getName(mailPath);
+			String parent = JCRUtils.getParent(mailPath);
+			String name = JCRUtils.getName(mailPath);
 							
 			// Escape dangerous chars in name
-			newName = FileUtils.escape(newName);
+			newName = JCRUtils.escape(newName);
 			
 			if (newName != null && !newName.equals("") && !newName.equals(name)) {
 				String newPath = parent+"/"+newName;
@@ -375,7 +374,7 @@ public class DirectMailModule implements MailModule {
 			}
 			
 			//Node mailNode = session.getRootNode().getNode(mailPath.substring(1));
-			String name = FileUtils.getName(mailPath);
+			String name = JCRUtils.getName(mailPath);
 			String dstNodePath = dstPath + "/" + name;
 			session.move(mailPath, dstPath + "/" + name);
 			session.save();
