@@ -46,6 +46,7 @@ import com.openkm.core.VirusDetectedException;
 import com.openkm.extension.core.ExtensionException;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.contants.ui.UIFileUploadConstants;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.jcr.JcrSessionManager;
 import com.openkm.util.FileUtils;
 import com.openkm.util.SecureStore;
@@ -189,7 +190,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 					log.info("File updated: {}", path);
 					
 					// http://en.wikipedia.org/wiki/Truth_table#Applications => ¬p ∨ q
-					if (!Config.SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK || FileUtils.getName(path).equals(fileName)) {
+					if (!Config.SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK || JCRUtils.getName(path).equals(fileName)) {
 						OKMDocument document = OKMDocument.getInstance();
 						Document doc = document.getProperties(null, path);
 						document.setContent(null, path, is);
