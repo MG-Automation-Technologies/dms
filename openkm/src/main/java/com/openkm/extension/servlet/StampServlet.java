@@ -60,9 +60,9 @@ import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.extension.GWTStamp;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.extension.OKMStampService;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.servlet.frontend.OKMRemoteServiceServlet;
 import com.openkm.util.DocConverter;
-import com.openkm.util.FileUtils;
 import com.openkm.util.GWTUtil;
 import com.openkm.util.PDFUtils;
 import com.openkm.util.SecureStore;
@@ -162,8 +162,8 @@ public class StampServlet extends OKMRemoteServiceServlet implements OKMStampSer
 			// Upload document to repository if original is PDF we increment version otherwise create new file
 			if (!doc.getMimeType().equals("application/pdf")) {
 				Document newDoc = new Document();
-				String parentFld = FileUtils.getParent(path);
-				String docName = FileUtils.getName(path);
+				String parentFld = JCRUtils.getParent(path);
+				String docName = JCRUtils.getName(path);
 				int idx = docName.lastIndexOf('.'); 
 				
 				if (idx > 0) {
