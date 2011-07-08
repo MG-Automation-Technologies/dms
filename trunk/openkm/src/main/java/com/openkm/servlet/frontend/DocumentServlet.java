@@ -109,7 +109,7 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 			if (fldPath.startsWith("/okm:thesaurus")){
 				QueryParams queryParams = new QueryParams();
 				Set<String> keywords = new HashSet<String>();
-				keywords.add(fldPath.substring(fldPath.lastIndexOf("/")+1).replace(" ", "_"));
+				keywords.add(fldPath.substring(fldPath.lastIndexOf("/") + 1).replace(" ", "_"));
 				queryParams.setKeywords(keywords);
 				Collection<QueryResult> results = OKMSearch.getInstance().find(null, queryParams);
 				for (Iterator<QueryResult> it = results.iterator(); it.hasNext();) {		
@@ -828,7 +828,7 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 				
 				// creating new document
 				doc = new Document();
-				doc.setPath(FileUtils.getParent(docPath) + "/" + FileUtils.getFileName(FileUtils.getName(docPath)) + ".pdf");
+				doc.setPath(JCRUtils.getParent(docPath) + "/" + FileUtils.getFileName(JCRUtils.getName(docPath)) + ".pdf");
 				
 				destinationPath =  OKMDocument.getInstance().create(null, doc, is).getPath();
 				is.close();
