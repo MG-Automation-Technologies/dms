@@ -90,6 +90,7 @@ import com.openkm.dao.bean.MailAccount;
 import com.openkm.dao.bean.MailFilter;
 import com.openkm.dao.bean.MailFilterRule;
 import com.openkm.extension.core.ExtensionException;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.direct.DirectDocumentModule;
 import com.openkm.module.direct.DirectMailModule;
@@ -283,7 +284,7 @@ public class MailUtils {
 		if (docPath != null) {
 			InputStream is = null;
 			FileOutputStream fos = null;
-			String docName = FileUtils.getName(docPath);
+			String docName = JCRUtils.getName(docPath);
 				
 			try {
 				is = OKMDocument.getInstance().getContent(null, docPath, false);
@@ -453,12 +454,12 @@ public class MailUtils {
 		String path = grouping ? createGroupPath(mailPath, mail.getReceivedDate()) : mailPath;
 		
 		if (ma.getMailProtocol().equals(MailAccount.PROTOCOL_POP3)) {
-			mail.setPath(path + "/" + ((POP3Folder)folder).getUID(msg) + "-" + FileUtils.escape(msg.getSubject()));
+			mail.setPath(path + "/" + ((POP3Folder)folder).getUID(msg) + "-" + JCRUtils.escape(msg.getSubject()));
 		} else {
-			mail.setPath(path + "/" + ((IMAPFolder)folder).getUID(msg) + "-" + FileUtils.escape(msg.getSubject()));
+			mail.setPath(path + "/" + ((IMAPFolder)folder).getUID(msg) + "-" + JCRUtils.escape(msg.getSubject()));
 		}
 		
-		String newMailPath = FileUtils.getParent(mail.getPath()) + "/" + FileUtils.escape(FileUtils.getName(mail.getPath())); 
+		String newMailPath = JCRUtils.getParent(mail.getPath()) + "/" + JCRUtils.escape(JCRUtils.getName(mail.getPath())); 
 		log.debug("newMailPath: {}", newMailPath);
 		
 		if (!okmRepository.hasNode(systemToken, newMailPath)) {
