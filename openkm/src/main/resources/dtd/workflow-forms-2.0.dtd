@@ -112,6 +112,7 @@
 <!ATTLIST text
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
+	data CDATA #IMPLIED
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
 >
