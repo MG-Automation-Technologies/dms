@@ -174,8 +174,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 							log.info("Upload file '{}' into '{}'", fileName, path);
 							Document doc = new Document();
 							doc.setPath(path + "/" + fileName);
-							Document uploadedDoc = OKMDocument.getInstance().create(null, doc, is);
-							uploadedDocPath = uploadedDoc.getPath();
+							uploadedDocPath = OKMDocument.getInstance().create(null, doc, is).getPath();
 							
 							// Case is uploaded a encrypted document
 							if (cipherName != null && !cipherName.equals("")) {

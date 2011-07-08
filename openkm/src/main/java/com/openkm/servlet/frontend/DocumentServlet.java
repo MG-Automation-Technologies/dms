@@ -54,6 +54,7 @@ import com.openkm.bean.QueryResult;
 import com.openkm.bean.Version;
 import com.openkm.bean.form.FormElement;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.Config;
 import com.openkm.core.ConversionException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
@@ -796,6 +797,107 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 			IOUtils.closeQuietly(fos);
 		}
 		
+		return destinationPath;
+	}
+	
+	@Override
+	public String convertToPdf(String docPath) throws OKMException {
+		log.debug("convertToPdf({})", docPath);
+		updateSessionManager();
+		String destinationPath = "";
+		InputStream is = null;
+		
+		try {
+			String uuid = OKMRepository.getInstance().getNodeUuid(null, docPath);
+			// Now an document can be located by UUID
+			if (!uuid.equals("")) {
+				File pdfCache = new File(Config.CACHE_PDF + File.separator + uuid + ".pdf");
+				Document doc = OKMDocument.getInstance().getProperties(null, docPath);
+				DocConverter converter = DocConverter.getInstance();
+				
+				// Getting content
+				is = OKMDocument.getInstance().getContent(null, docPath, false);
+				
+				// Converting to pdf
+				if (!pdfCache.exists()) {
+					try {
+						converter.doc2pdf(is, doc.getMimeType(), pdfCache);
+					} catch (ConversionException e) {
+						pdfCache.delete();
+						log.error(e.getMessage(), e);
+						throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Conversion), e.getMessage());
+					}
+				}
+				
+				is.close();
+				is = new FileInputStream(pdfCache);
+				
+				// creating new document
+				doc = new Document();
+				doc.setPath(FileUtils.getParent(docPath) + "/" + FileUtils.getFileName(FileUtils.getName(docPath)) + ".pdf");
+				
+				destinationPath =  OKMDocument.getInstance().create(null, doc, is).getPath();
+				is.close();
+				
+				// Setting property groups ( metadata ) from original documento to converted
+				for (PropertyGroup pg : OKMPropertyGroup.getInstance().getGroups(null, docPath)) {	
+					// Adding group
+					OKMPropertyGroup.getInstance().addGroup(null, destinationPath, pg.getName());
+					// Properties to be saved from original document
+					List<FormElement> properties = OKMPropertyGroup.getInstance().getProperties(null, docPath, pg.getName()); 
+					// Setting properties
+					OKMPropertyGroup.getInstance().setProperties(null, destinationPath, pg.getName(), properties); 
+				}
+				
+			}
+		} catch (PathNotFoundException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Database), e.getMessage());
+		} catch (IOException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_IO), e.getMessage());
+		} catch (UnsupportedMimeTypeException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_UnsupportedMimeType), e.getMessage());
+		} catch (FileSizeExceededException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_FileSizeExceeded), e.getMessage());
+		} catch (UserQuotaExceededException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_QuotaExceed), e.getMessage());
+		} catch (VirusDetectedException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Virus), e.getMessage());
+		} catch (ItemExistsException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_ItemExists), e.getMessage());
+		} catch (AccessDeniedException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_AccessDenied), e.getMessage());
+		} catch (ExtensionException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Extension), e.getMessage());
+		} catch (ParseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Parse), e.getMessage());
+		} catch (NoSuchPropertyException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_NoSuchProperty), e.getMessage());
+		} catch (NoSuchGroupException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_NoSuchGroup), e.getMessage());
+		} catch (LockException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Lock), e.getMessage());
+		} 
+		
+		log.debug("convertToPdf: {}", destinationPath);
 		return destinationPath;
 	}
 }

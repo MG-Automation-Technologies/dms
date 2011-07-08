@@ -53,4 +53,5 @@ public interface OKMDocumentServiceAsync {
 	public void forceUnlock(String docPath, AsyncCallback<?> callback);
 	public void forceCancelCheckout(String docPath, AsyncCallback<?> callback);
 	public void createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties, Map<String, List<Map<String,String>>> tableProperties, AsyncCallback<String> callback);
+	public void convertToPdf(String docPath, AsyncCallback<String> callback);
 }
