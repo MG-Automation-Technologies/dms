@@ -26,7 +26,7 @@ import java.io.IOException;
 import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import com.openkm.util.FileUtils;
+import com.openkm.jcr.JCRUtils;
 
 @SuppressWarnings("serial")
 public class GetParentTag extends TagSupport {
@@ -34,7 +34,7 @@ public class GetParentTag extends TagSupport {
 	
 	@Override
 	public int doStartTag() {
-		String ret = FileUtils.getParent(path);
+		String ret = JCRUtils.getParent(path);
 		
 		try {
 			pageContext.getOut().write(ret);
