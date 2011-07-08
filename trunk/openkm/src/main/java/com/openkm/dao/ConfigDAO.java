@@ -39,7 +39,7 @@ import com.google.gson.Gson;
 import com.openkm.bean.StoredFile;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.bean.Config;
-import com.openkm.util.FileUtils;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.util.SecureStore;
 
 public class ConfigDAO  {
@@ -222,7 +222,7 @@ public class ConfigDAO  {
 			is = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
 			StoredFile stFile = new StoredFile();
 			stFile.setContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
-			stFile.setName(FileUtils.getName(path));
+			stFile.setName(JCRUtils.getName(path));
 			stFile.setMime(com.openkm.core.Config.mimeTypes.getContentType(stFile.getName()));
 			String value = getProperty(key, new Gson().toJson(stFile), Config.FILE);
 			return new Gson().fromJson(value, StoredFile.class);
@@ -242,7 +242,7 @@ public class ConfigDAO  {
 			is = sc.getResourceAsStream(path);
 			StoredFile stFile = new StoredFile();
 			stFile.setContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
-			stFile.setName(FileUtils.getName(path));
+			stFile.setName(JCRUtils.getName(path));
 			stFile.setMime(com.openkm.core.Config.mimeTypes.getContentType(stFile.getName()));
 			String value = getProperty(key, new Gson().toJson(stFile), Config.FILE);
 			return new Gson().fromJson(value, StoredFile.class);
