@@ -45,6 +45,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.contants.service.ErrorCode;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.util.DocConverter;
 import com.openkm.util.FileUtils;
 import com.openkm.util.WebUtils;
@@ -78,7 +79,7 @@ public class ConverterServlet extends OKMHttpServlet {
 			if (!uuid.equals("")) {
 				String path = OKMRepository.getInstance().getNodePath(null, uuid);
 				Document doc = OKMDocument.getInstance().getProperties(null, path);
-				String fileName = FileUtils.getName(doc.getPath());
+				String fileName = JCRUtils.getName(doc.getPath());
 				String mimeType = null;
 				DocConverter converter = DocConverter.getInstance();
 				
