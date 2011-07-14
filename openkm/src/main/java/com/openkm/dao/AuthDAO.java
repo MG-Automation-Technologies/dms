@@ -462,7 +462,7 @@ public class AuthDAO {
 	@SuppressWarnings("unchecked")
 	public static List<Role> findAllRoles() throws DatabaseException {
 		log.debug("findAllRoles()");
-		String qs = "from Role";
+		String qs = "from Role r order by r.id";
 		Session session = null;
 		
 		try {
