@@ -245,12 +245,12 @@ public class QueryParamsDAO {
 	}
 	
 	/**
-	 * Find all proposed receibed from some user
+	 * Find all proposed received from some user
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<QueryParams> findProposedQueryByMeFromUser(String me, String user) throws DatabaseException {
 		log.debug("findProposedQueryByMeFromUser({}, {})", me);
-		String qs = "select distinct(qp) from QueryParams qp, ProposedQueryReceived pr where pr.user=:me and pr.from=:user and pr in elements(qp.proposedReceived)";		
+		String qs = "select qp from QueryParams qp, ProposedQueryReceived pr where pr.user=:me and pr.from=:user and pr in elements(qp.proposedReceived)";		
 		Session session = null;
 		Transaction tx = null;
 		
@@ -277,7 +277,7 @@ public class QueryParamsDAO {
 	@SuppressWarnings("unchecked")
 	public static List<QueryParams> findProposedQueryFromMeToUser(String me, String user) throws DatabaseException {
 		log.debug("findProposedQueryFromMeToUser({}, {})", me);
-		String qs = "select distinct(qp) from QueryParams qp, ProposedQuerySent pr where pr.user=:user and pr.from=:me and pr in elements(qp.proposedSent)";		
+		String qs = "select qp from QueryParams qp, ProposedQuerySent pr where pr.user=:user and pr.from=:me and pr in elements(qp.proposedSent)";		
 		Session session = null;
 		Transaction tx = null;
 		
