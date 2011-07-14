@@ -13,6 +13,6 @@ public class Test {
 	 */
 	public static void main(String[] args) throws Exception {
 		log.info("Generate database schema & initial data");
-        HibernateUtil.generateDatabase("org.hibernate.dialect.Oracle10gDialect");
+		HibernateUtil.generateDatabase("org.hibernate.dialect.Oracle10gDialect");
 	}
 }
