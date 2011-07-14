@@ -525,16 +525,22 @@ public class DatabaseQueryServlet extends BaseServlet {
 	 */
 	private List<String> listTables(Session session) {
 		final List<String> tables = new ArrayList<String>();
+		final String[] groups = new String[] { "JBPM_%", "OKM_%", "DEFAULT_%", "VERSION_%" };
 		
 		session.doWork(
 			new Work() {
 				@Override
 				public void execute(Connection con) throws SQLException {
 					DatabaseMetaData md = con.getMetaData();
-					ResultSet rs = md.getTables(null, null, "%", null);
 					
-					while (rs.next()) {
-						tables.add(rs.getString(3));
+					for (String group : groups) {
+						ResultSet rs = md.getTables(null, null, group, null);
+						
+						while (rs.next()) {
+							tables.add(rs.getString(3));
+						}
+						
+						rs.close();
 					}
 				}
 			}
