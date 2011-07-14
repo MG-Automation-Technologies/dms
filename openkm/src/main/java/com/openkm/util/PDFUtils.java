@@ -218,7 +218,8 @@ public class PDFUtils {
 	 * List form fields
 	 */
 	@SuppressWarnings("rawtypes")
-	public static void listFormFields(String input) throws FileNotFoundException, DocumentException, IOException {
+	public static List<String> listFormFields(String input) throws FileNotFoundException, DocumentException,
+			IOException {
 		log.debug("listFormFields({})", input);
 		List<String> formFields = new ArrayList<String>();
 		PdfReader reader = new PdfReader(input);
@@ -233,6 +234,7 @@ public class PDFUtils {
 		
 		reader.close();
 		log.debug("listFormFields: {}", formFields);
+		return formFields;
 	}
 	
 	/**
