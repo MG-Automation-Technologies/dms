@@ -26,7 +26,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -210,6 +212,27 @@ public class PDFUtils {
 		stamper.setFormFlattening(true);
 		stamper.close();
 		reader.close();
+	}
+	
+	/**
+	 * List form fields
+	 */
+	@SuppressWarnings("rawtypes")
+	public static void listFormFields(String input) throws FileNotFoundException, DocumentException, IOException {
+		log.debug("listFormFields({})", input);
+		List<String> formFields = new ArrayList<String>();
+		PdfReader reader = new PdfReader(input);
+		PRAcroForm form = reader.getAcroForm();
+		
+		if (form != null) {
+			for (Iterator it = form.getFields().iterator(); it.hasNext(); ) {
+				PRAcroForm.FieldInformation field = (PRAcroForm.FieldInformation) it.next();
+				formFields.add(field.getName());
+			}
+		}
+		
+		reader.close();
+		log.debug("listFormFields: {}", formFields);
 	}
 	
 	/**
