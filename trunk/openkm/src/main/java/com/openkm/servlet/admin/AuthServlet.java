@@ -24,6 +24,8 @@ package com.openkm.servlet.admin;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -418,6 +420,7 @@ public class AuthServlet extends BaseServlet {
 			usrList.add(usr);
 		}
 		
+		Collections.sort(usrList, new UserComparator());
 		return usrList;
 	}
 	
@@ -425,15 +428,44 @@ public class AuthServlet extends BaseServlet {
 	 * Convenient conversion method 
 	 */
 	private List<Role> str2role(List<String> strList) {
-		List<Role> rolList = new ArrayList<Role>();
+		List<Role> roleList = new ArrayList<Role>();
 		
 		for (String id : strList) {
 			Role rol = new Role();
 			rol.setId(id);
 			rol.setActive(true);
-			rolList.add(rol);
+			roleList.add(rol);
 		}
 		
-		return rolList;
+		Collections.sort(roleList, new RoleComparator());
+		return roleList;
+	}
+	
+	/**
+	 * User comparator
+	 */
+	private class UserComparator implements Comparator<User> {
+		@Override
+		public int compare(User arg0, User arg1) {
+			if (arg0 != null && arg1 != null) {
+				return arg0.getId().compareTo(arg1.getId());
+			} else {
+				return 0;
+			}
+		}	
+	}
+	
+	/**
+	 * Role comparator
+	 */
+	private class RoleComparator implements Comparator<Role> {
+		@Override
+		public int compare(Role arg0, Role arg1) {
+			if (arg0 != null && arg1 != null) {
+				return arg0.getId().compareTo(arg1.getId());
+			} else {
+				return 0;
+			}
+		}	
 	}
 }
