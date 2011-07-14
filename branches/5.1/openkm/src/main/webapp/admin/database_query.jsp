@@ -110,6 +110,7 @@
                     </select>
                   </td>
                   <td align="right">
+                    Method
                     <select name="method" id="method">
                       <option></option>
                       <c:choose>
