@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -53,8 +54,8 @@ public class FileLogger {
 	 * @param message Message to write.
 	 * @throws IOException If there is an exception when writing.
 	 */
-	public void write(String message) throws IOException {
-		cLogger.write(logDate.format(new Date()) + " " + message + "\n");
+	public void write(String message, Object... params) throws IOException {
+		cLogger.write(getEntry(message, params));
 		cLogger.flush();
 	}
 	
@@ -69,11 +70,27 @@ public class FileLogger {
 	 * Static file logger.
 	 * @throws IOException If there is an exception when writing.
 	 */
-	public static void write(String baseName, String message) throws IOException {
+	public static void write(String baseName, String message, Object... params) throws IOException {
 		String fileDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
 		Writer sLogger = new FileWriter(Config.HOME_DIR + File.separator + baseName + "_" + fileDate + ".log", true);
-		sLogger.write(logDate.format(new Date()) + " " + message + "\n");
+		sLogger.write(getEntry(message, params));
 		sLogger.flush();
 		sLogger.close();
+	}
+	
+	/**
+	 * Build a long entry.
+	 * 
+	 * @param message Message to log.
+	 * @param params Optional menssage params.
+	 * @return An String with the long entry.
+	 */
+	private static String getEntry(String message, Object... params) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(logDate.format(new Date()));
+		sb.append(" ");
+		sb.append(MessageFormat.format(message, params));
+		sb.append("\n");
+		return sb.toString();
 	}
 }
