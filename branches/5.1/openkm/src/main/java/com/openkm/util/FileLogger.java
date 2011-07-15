@@ -54,7 +54,7 @@ public class FileLogger {
 	 * @throws IOException If there is an exception when writing.
 	 */
 	public void write(String message) throws IOException {
-		cLogger.write(logDate.format(new Date()) + " " + message);
+		cLogger.write(logDate.format(new Date()) + " " + message + "\n");
 		cLogger.flush();
 	}
 	
@@ -72,7 +72,7 @@ public class FileLogger {
 	public static void write(String baseName, String message) throws IOException {
 		String fileDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
 		Writer sLogger = new FileWriter(Config.HOME_DIR + File.separator + baseName + "_" + fileDate + ".log", true);
-		sLogger.write(logDate.format(new Date()) + " " + message);
+		sLogger.write(logDate.format(new Date()) + " " + message + "\n");
 		sLogger.flush();
 		sLogger.close();
 	}
