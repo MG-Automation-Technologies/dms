@@ -217,6 +217,7 @@ public class FindFolderSelectPopup extends DialogBox  {
 		keyword.setText("");
 		evaluateEnableAction();
 		super.show();
+		keyword.setFocus(true);
 	}
 	
 	/**
