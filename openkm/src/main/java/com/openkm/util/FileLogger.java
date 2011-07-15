@@ -43,7 +43,7 @@ public class FileLogger {
 	 * @throws IOException If there is an exception when creating.
 	 */
 	public FileLogger(String baseName) throws IOException {
-		String fileDate = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+		String fileDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
 		cLogger = new FileWriter(Config.HOME_DIR + File.separator + baseName + "_" + fileDate + ".log");
 	}
 	
@@ -70,7 +70,7 @@ public class FileLogger {
 	 * @throws IOException If there is an exception when writing.
 	 */
 	public static void write(String baseName, String message) throws IOException {
-		String fileDate = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+		String fileDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
 		Writer sLogger = new FileWriter(Config.HOME_DIR + File.separator + baseName + "_" + fileDate + ".log", true);
 		sLogger.write(logDate.format(new Date()) + " " + message);
 		sLogger.flush();
