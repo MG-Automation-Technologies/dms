@@ -211,6 +211,7 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 		acceptBoton.setEnabled(false);
 		rowKeyValueMap = new HashMap<Integer, GWTKeyValue>();
 		super.show();
+		record.setFocus(true);
 		// Case must show by default all values
 		if (filterMinLength==0) {
 			findFilteredDatabaseRecords();
