@@ -32,46 +32,42 @@
       );
       var hlLine = cm.setLineClass(0, "activeline");
       
-      if ($('#method').val() == 'jdbc') {
-        $('#tables').show();
-        $('#vtables').hide();
-      } else if ($('#method').val() == 'metadata') {
-        $('#tables').hide();
-        $('#vtables').show();
+      if ($('#type').val() == 'jdbc') {
+        $('#divTables').show();
+        $('#divVTables').hide();
+      } else if ($('#type').val() == 'metadata') {
+        $('#divTables').hide();
+        $('#divVTables').show();
       } else {
-    	$('#tables').hide();
-        $('#vtables').hide();
+    	$('#divTables').hide();
+        $('#divVTables').hide();
       }
       
-      $('#method').change(function() {
+      $('#type').change(function() {
         if ($(this).val() == 'jdbc') {
-          $('#tables').show();
-          $('#vtables').hide();
+          $('#divTables').show();
+          $('#divVTables').hide();
         } else if ($(this).val() == 'metadata') {
-          $('#tables').hide();
-          $('#vtables').show();
+          $('#divTables').hide();
+          $('#divVTables').show();
         } else {
-          $('#tables').hide();
-          $('#vtables').hide();
+          $('#divTables').hide();
+          $('#divVTables').hide();
         }
       });
       
       $('#tables').change(function() {
         if ($(this).val() == '') {
-          //$('#qs').text('');
           cm.setValue('');
         } else {
-          //$('#qs').text('SELECT * FROM ' + $(this).val() + ';');
           cm.setValue('SELECT * FROM ' + $(this).val() + ';');
         }
       });
       
       $('#vtables').change(function() {
           if ($(this).val() == '') {
-            //$('#qs').text('');
             cm.setValue('');
           } else {
-            //$('#qs').text('SELECT * FROM ' + $(this).val() + ';');
             cm.setValue('SELECT|' + $(this).val());
           }
         });
@@ -96,25 +92,31 @@
                 </tr>
                 <tr>
                   <td align="left">
-                    <select id="tables">
-                      <option></option>
-                      <c:forEach var="table" items="${tables}">
-                        <option value="${table}">${table}</option>
-                      </c:forEach>
-                    </select>
-                    <select id="vtables">
-                      <option></option>
-                      <c:forEach var="vtable" items="${vtables}">
-                        <option value="${vtable}">${vtable}</option>
-                      </c:forEach>
-                    </select>
+                    <div id="divTables">
+                      Tables
+                      <select id="tables">
+                        <option></option>
+                        <c:forEach var="table" items="${tables}">
+                          <option value="${table}">${table}</option>
+                        </c:forEach>
+                      </select>
+                    </div>
+                    <div id="divVTables">
+                      Tables
+                      <select id="vtables">
+                        <option></option>
+                        <c:forEach var="vtable" items="${vtables}">
+                          <option value="${vtable}">${vtable}</option>
+                        </c:forEach>
+                      </select>
+                    </div>
                   </td>
                   <td align="right">
-                    Method
-                    <select name="method" id="method">
+                    Type
+                    <select name="type" id="type">
                       <option></option>
                       <c:choose>
-                        <c:when test="${method == 'jdbc'}">
+                        <c:when test="${type == 'jdbc'}">
                           <option value="jdbc" selected="selected">JDBC</option>
                         </c:when>
                         <c:otherwise>
@@ -122,7 +124,7 @@
                         </c:otherwise>
                       </c:choose>
                       <c:choose>
-                        <c:when test="${method == 'hibernate'}">
+                        <c:when test="${type == 'hibernate'}">
                           <option value="hibernate" selected="selected">Hibernate</option>
                         </c:when>
                         <c:otherwise>
@@ -130,7 +132,7 @@
                         </c:otherwise>
                       </c:choose>
                       <c:choose>
-                        <c:when test="${method == 'metadata'}">
+                        <c:when test="${type == 'metadata'}">
                           <option value="metadata" selected="selected">Metadata</option>
                         </c:when>
                         <c:otherwise>
