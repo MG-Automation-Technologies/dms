@@ -45,10 +45,11 @@ import com.openkm.core.VirusDetectedException;
 import com.openkm.extension.core.ExtensionException;
 import com.openkm.module.DocumentModule;
 import com.openkm.module.ModuleManager;
+import com.openkm.util.FileLogger;
 
 public class RepositoryImporter {
 	private static Logger log = LoggerFactory.getLogger(RepositoryImporter.class);
-		
+	private static final String baseName = RepositoryImporter.class.getName();
 	private RepositoryImporter() {}
 
 	/**
@@ -63,7 +64,9 @@ public class RepositoryImporter {
 		
 		try {
 			if (fs.exists()) {
+				FileLogger.info(baseName, "Start repository import from '{0}' to '{1}'", fs.getPath(), fldPath);
 				stats = importDocumentsHelper(token, fs, fldPath, metadata, out, deco);
+				FileLogger.info(baseName, "Repository import finalized");
 			} else  {
 				throw new FileNotFoundException(fs.getPath());
 			}
@@ -108,11 +111,13 @@ public class RepositoryImporter {
 				
 				try {
 					ModuleManager.getFolderModule().create(token, fld);
+					FileLogger.info(baseName, "Created folder '{0}'", fld.getPath());
 				} catch (ItemExistsException e) {
 					log.warn("ItemExistsException: {}", e.getMessage());
 					out.write(deco.print(files[i].getPath(), files[i].length(), "ItemExists"));
 					out.flush();
 					stats.setOk(false);
+					FileLogger.error(baseName, "ItemExistsException '{0}'", fld.getPath());
 				}
 				
 				ImpExpStats tmp = importDocumentsHelper(token, files[i], fld.getPath(), metadata, out, deco);
@@ -132,6 +137,7 @@ public class RepositoryImporter {
 				try {
 					DocumentModule dm = ModuleManager.getDocumentModule();
 					dm.create(token, doc, fisContent);
+					FileLogger.info(baseName, "Created document '{0}'", doc.getPath());
 					
 					// Metadata
 					//Gson gson = new Gson();
@@ -152,26 +158,31 @@ public class RepositoryImporter {
 					out.write(deco.print(files[i].getPath(), files[i].length(), "UnsupportedMimeType"));
 					out.flush();
 					stats.setOk(docOk = false);
+					FileLogger.error(baseName, "UnsupportedMimeTypeException '{0}'", doc.getPath());
 				} catch (FileSizeExceededException e) {
 					log.warn("FileSizeExceededException: {}", e.getMessage());
 					out.write(deco.print(files[i].getPath(), files[i].length(), "FileSizeExceeded"));
 					out.flush();
 					stats.setOk(docOk = false);
+					FileLogger.error(baseName, "FileSizeExceededException '{0}'", doc.getPath());
 				} catch (UserQuotaExceededException e) {
 					log.warn("UserQuotaExceededException: {}", e.getMessage());
 					out.write(deco.print(files[i].getPath(), files[i].length(), "UserQuotaExceeded"));
 					out.flush();
 					stats.setOk(docOk = false);
+					FileLogger.error(baseName, "UserQuotaExceededException '{0}'", doc.getPath());
 				} catch (VirusDetectedException e) {
 					log.warn("VirusWarningException: {}", e.getMessage());
 					out.write(deco.print(files[i].getPath(), files[i].length(), "VirusWarningException"));
 					out.flush();
 					stats.setOk(docOk = false);
+					FileLogger.error(baseName, "VirusWarningException '{0}'", doc.getPath());
 				} catch (ItemExistsException e) {
 					log.warn("ItemExistsException: {}", e.getMessage());
 					out.write(deco.print(files[i].getPath(), files[i].length(), "ItemExists"));
 					out.flush();
 					stats.setOk(docOk = false);
+					FileLogger.error(baseName, "ItemExistsException '{0}'", doc.getPath());
 				} finally {
 					fisContent.close();					
 				}
