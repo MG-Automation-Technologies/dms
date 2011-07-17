@@ -49,7 +49,7 @@ import com.openkm.util.FileLogger;
 
 public class RepositoryImporter {
 	private static Logger log = LoggerFactory.getLogger(RepositoryImporter.class);
-	private static final String baseName = "RepositoryImporter";
+	private static final String baseName = RepositoryImporter.class.getName();
 	private RepositoryImporter() {}
 
 	/**
