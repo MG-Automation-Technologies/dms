@@ -34,7 +34,11 @@ import org.apache.commons.io.IOUtils;
 import com.openkm.core.Config;
 
 public class FileLogger {
-	private static SimpleDateFormat logDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static SimpleDateFormat logEntryDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static final String LEVEL_INFO  = "INFO ";
+	private static final String LEVEL_WARN  = "WARN ";
+	private static final String LEVEL_ERROR = "ERROR";
+	
 	private Writer cLogger = null;
 	
 	/**
@@ -44,8 +48,7 @@ public class FileLogger {
 	 * @throws IOException If there is an exception when creating.
 	 */
 	public FileLogger(String baseName) throws IOException {
-		String fileDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
-		cLogger = new FileWriter(Config.HOME_DIR + File.separator + baseName + "_" + fileDate + ".log");
+		cLogger = new FileWriter(getLogFile(baseName), true);
 	}
 	
 	/**
@@ -54,8 +57,30 @@ public class FileLogger {
 	 * @param message Message to write.
 	 * @throws IOException If there is an exception when writing.
 	 */
-	public void write(String message, Object... params) throws IOException {
-		cLogger.write(getEntry(message, params));
+	public void info(String message, Object... params) throws IOException {
+		cLogger.write(getLogEntry(LEVEL_INFO, message, params));
+		cLogger.flush();
+	}
+	
+	/**
+	 * Write message to log file.
+	 * 
+	 * @param message Message to write.
+	 * @throws IOException If there is an exception when writing.
+	 */
+	public void warn(String message, Object... params) throws IOException {
+		cLogger.write(getLogEntry(LEVEL_WARN, message, params));
+		cLogger.flush();
+	}
+	
+	/**
+	 * Write message to log file.
+	 * 
+	 * @param message Message to write.
+	 * @throws IOException If there is an exception when writing.
+	 */
+	public void error(String message, Object... params) throws IOException {
+		cLogger.write(getLogEntry(LEVEL_ERROR, message, params));
 		cLogger.flush();
 	}
 	
@@ -68,14 +93,49 @@ public class FileLogger {
 	
 	/**
 	 * Static file logger.
+	 * 
 	 * @throws IOException If there is an exception when writing.
 	 */
-	public static void write(String baseName, String message, Object... params) throws IOException {
-		String fileDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
-		Writer sLogger = new FileWriter(Config.HOME_DIR + File.separator + baseName + "_" + fileDate + ".log", true);
-		sLogger.write(getEntry(message, params));
+	public static void info(String baseName, String message, Object... params) throws IOException {
+		Writer sLogger = new FileWriter(getLogFile(baseName), true);
+		sLogger.write(getLogEntry(LEVEL_INFO, message, params));
 		sLogger.flush();
 		sLogger.close();
+	}
+	
+	/**
+	 * Static file logger.
+	 * 
+	 * @throws IOException If there is an exception when writing.
+	 */
+	public static void warn(String baseName, String message, Object... params) throws IOException {
+		Writer sLogger = new FileWriter(getLogFile(baseName), true);
+		sLogger.write(getLogEntry(LEVEL_WARN, message, params));
+		sLogger.flush();
+		sLogger.close();
+	}
+	
+	/**
+	 * Static file logger.
+	 * 
+	 * @throws IOException If there is an exception when writing.
+	 */
+	public static void error(String baseName, String message, Object... params) throws IOException {
+		Writer sLogger = new FileWriter(getLogFile(baseName), true);
+		sLogger.write(getLogEntry(LEVEL_ERROR, message, params));
+		sLogger.flush();
+		sLogger.close();
+	}
+	
+	/**
+	 * Create a log file name from a base name.
+	 * 
+	 * @param baseName The base name to construct the file name.
+	 * @return The result file name.
+	 */
+	private static String getLogFile(String baseName) {
+		String fileDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
+		return Config.HOME_DIR + File.separator + baseName + "_" + fileDate + ".log";
 	}
 	
 	/**
@@ -85,9 +145,11 @@ public class FileLogger {
 	 * @param params Optional menssage params.
 	 * @return An String with the long entry.
 	 */
-	private static String getEntry(String message, Object... params) {
+	private static String getLogEntry(String level, String message, Object... params) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(logDate.format(new Date()));
+		sb.append(logEntryDate.format(new Date()));
+		sb.append(" ");
+		sb.append(level);
 		sb.append(" ");
 		sb.append(MessageFormat.format(message, params));
 		sb.append("\n");
