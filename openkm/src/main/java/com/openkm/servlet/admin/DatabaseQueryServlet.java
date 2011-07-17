@@ -104,7 +104,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 			session = HibernateUtil.getSessionFactory().openSession();
 			sc.setAttribute("qs", null);
 			//sc.setAttribute("sql", null);
-			sc.setAttribute("method", null);
+			sc.setAttribute("type", null);
 			sc.setAttribute("exception", null);
 			sc.setAttribute("globalResults", null);
 			sc.setAttribute("tables", listTables(session));
@@ -133,7 +133,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 				ServletFileUpload upload = new ServletFileUpload(factory);
 				List<FileItem> items = upload.parseRequest(request);
 				InputStream is = null;
-				String method = "";
+				String type = "";
 				String qs = "";
 				byte[] data = null;
 				
@@ -143,8 +143,8 @@ public class DatabaseQueryServlet extends BaseServlet {
 					if (item.isFormField()) {
 						if (item.getFieldName().equals("qs")) {
 							qs = item.getString("UTF-8");
-						} else if (item.getFieldName().equals("method")) {
-							method = item.getString("UTF-8");
+						} else if (item.getFieldName().equals("type")) {
+							type = item.getString("UTF-8");
 						}
 					} else {
 						is = item.getInputStream();
@@ -153,16 +153,16 @@ public class DatabaseQueryServlet extends BaseServlet {
 					}
 				}
 				
-				if (!qs.equals("") && !method.equals("")) {
+				if (!qs.equals("") && !type.equals("")) {
 					session = HibernateUtil.getSessionFactory().openSession();
 					sc.setAttribute("qs", qs);
-					sc.setAttribute("method", method);
+					sc.setAttribute("type", type);
 					
-					if (method.equals("jdbc")) {
+					if (type.equals("jdbc")) {
 						executeJdbc(session, qs, sc, request, response);
-					} else if (method.equals("hibernate")) {
+					} else if (type.equals("hibernate")) {
 						executeHibernate(session, qs, sc, request, response);
-					} else if (method.equals("metadata")) {
+					} else if (type.equals("metadata")) {
 						executeMetadata(session, qs, sc, request, response);
 					}
 					
@@ -177,7 +177,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 					UserActivity.log(request.getRemoteUser(), "ADMIN_DATABASE_UPDATE", null, new String(data));
 				} else {
 					sc.setAttribute("qs", qs);
-					sc.setAttribute("method", method);
+					sc.setAttribute("type", type);
 					sc.setAttribute("exception", null);
 					sc.setAttribute("globalResults", new ArrayList<DatabaseQueryServlet.GlobalResult>());
 					sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
@@ -513,7 +513,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 		globalResults.add(gr);
 		
 		sc.setAttribute("qs", null);
-		sc.setAttribute("method", null);
+		sc.setAttribute("type", null);
 		sc.setAttribute("globalResults", globalResults);
 		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 		
