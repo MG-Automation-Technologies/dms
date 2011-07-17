@@ -34,7 +34,7 @@ import org.apache.commons.io.IOUtils;
 import com.openkm.core.Config;
 
 public class FileLogger {
-	private static SimpleDateFormat logDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static SimpleDateFormat logEntryDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private static final String LEVEL_INFO  = "INFO ";
 	private static final String LEVEL_WARN  = "WARN ";
 	private static final String LEVEL_ERROR = "ERROR";
@@ -48,7 +48,7 @@ public class FileLogger {
 	 * @throws IOException If there is an exception when creating.
 	 */
 	public FileLogger(String baseName) throws IOException {
-		cLogger = new FileWriter(getLogFile(baseName));
+		cLogger = new FileWriter(getLogFile(baseName), true);
 	}
 	
 	/**
@@ -147,7 +147,7 @@ public class FileLogger {
 	 */
 	private static String getLogEntry(String level, String message, Object... params) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(logDate.format(new Date()));
+		sb.append(logEntryDate.format(new Date()));
 		sb.append(" ");
 		sb.append(level);
 		sb.append(" ");
