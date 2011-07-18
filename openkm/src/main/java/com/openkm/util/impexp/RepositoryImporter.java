@@ -63,30 +63,38 @@ public class RepositoryImporter {
 		ImpExpStats stats;
 		
 		try {
+			FileLogger.info(baseName, "Start repository import from ''{0}'' to ''{1}''", fs.getPath(), fldPath);
+			
 			if (fs.exists()) {
-				FileLogger.info(baseName, "Start repository import from ''{0}'' to ''{1}''", fs.getPath(), fldPath);
 				stats = importDocumentsHelper(token, fs, fldPath, metadata, out, deco);
-				FileLogger.info(baseName, "Repository import finalized");
 			} else  {
 				throw new FileNotFoundException(fs.getPath());
 			}
+			
+			FileLogger.info(baseName, "Repository import finalized");
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
+			FileLogger.error(baseName, "PathNotFoundException ''{0}''", e.getMessage());
 			throw e;
 		} catch (AccessDeniedException e) {
 			log.error(e.getMessage(), e);
+			FileLogger.error(baseName, "AccessDeniedException ''{0}''", e.getMessage());
 			throw e;
 		} catch (FileNotFoundException e) {
 			log.error(e.getMessage(), e);
+			FileLogger.error(baseName, "FileNotFoundException ''{0}''", e.getMessage());
 			throw e;
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
+			FileLogger.error(baseName, "RepositoryException ''{0}''", e.getMessage());
 			throw e;
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
+			FileLogger.error(baseName, "IOException ''{0}''", e.getMessage());
 			throw e;
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
+			FileLogger.error(baseName, "DatabaseException ''{0}''", e.getMessage());
 			throw e;
 		}
 				
@@ -184,7 +192,7 @@ public class RepositoryImporter {
 					stats.setOk(docOk = false);
 					FileLogger.error(baseName, "ItemExistsException ''{0}''", doc.getPath());
 				} finally {
-					fisContent.close();					
+					fisContent.close();
 				}
 
 				if (docOk) {
