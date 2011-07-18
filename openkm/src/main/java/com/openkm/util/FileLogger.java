@@ -34,7 +34,7 @@ import org.apache.commons.io.IOUtils;
 import com.openkm.core.Config;
 
 public class FileLogger {
-	private static SimpleDateFormat logEntryDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static SimpleDateFormat logEntryDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SSS");
 	private static final String LEVEL_INFO  = "INFO ";
 	private static final String LEVEL_WARN  = "WARN ";
 	private static final String LEVEL_ERROR = "ERROR";
@@ -97,10 +97,7 @@ public class FileLogger {
 	 * @throws IOException If there is an exception when writing.
 	 */
 	public static void info(String baseName, String message, Object... params) throws IOException {
-		Writer sLogger = new FileWriter(getLogFile(baseName), true);
-		sLogger.write(getLogEntry(LEVEL_INFO, message, params));
-		sLogger.flush();
-		sLogger.close();
+		logWrite(baseName, LEVEL_INFO, message, params);
 	}
 	
 	/**
@@ -109,10 +106,7 @@ public class FileLogger {
 	 * @throws IOException If there is an exception when writing.
 	 */
 	public static void warn(String baseName, String message, Object... params) throws IOException {
-		Writer sLogger = new FileWriter(getLogFile(baseName), true);
-		sLogger.write(getLogEntry(LEVEL_WARN, message, params));
-		sLogger.flush();
-		sLogger.close();
+		logWrite(baseName, LEVEL_WARN, message, params);
 	}
 	
 	/**
@@ -121,8 +115,17 @@ public class FileLogger {
 	 * @throws IOException If there is an exception when writing.
 	 */
 	public static void error(String baseName, String message, Object... params) throws IOException {
+		logWrite(baseName, LEVEL_ERROR, message, params);
+	}
+	
+	/**
+	 * Write to log file
+	 * 
+	 * @throws IOException If there is an exception when writing.
+	 */
+	private static void logWrite(String baseName, String level, String message, Object... params) throws IOException {
 		Writer sLogger = new FileWriter(getLogFile(baseName), true);
-		sLogger.write(getLogEntry(LEVEL_ERROR, message, params));
+		sLogger.write(getLogEntry(baseName, message, params));
 		sLogger.flush();
 		sLogger.close();
 	}
