@@ -125,7 +125,7 @@ public class FileLogger {
 	 */
 	private static void logWrite(String baseName, String level, String message, Object... params) throws IOException {
 		Writer sLogger = new FileWriter(getLogFile(baseName), true);
-		sLogger.write(getLogEntry(baseName, message, params));
+		sLogger.write(getLogEntry(level, message, params));
 		sLogger.flush();
 		sLogger.close();
 	}
