@@ -990,7 +990,6 @@ public class DirectDocumentModule implements DocumentModule {
 			t.end();
 			t.commit();
 			
-			
 			if (Config.USER_ITEM_CACHE) {
 				// Update user items
 				long size = contentNode.getProperty(Document.SIZE).getLong();
