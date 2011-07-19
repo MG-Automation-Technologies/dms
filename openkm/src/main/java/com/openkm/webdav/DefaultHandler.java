@@ -180,9 +180,10 @@ public class DefaultHandler implements IOHandler, PropertyHandler {
         		log.error(e.getMessage(), e);
         		return false;
         	}
-        		
+        	
        		// Restrict for extension
        		StringTokenizer st = new StringTokenizer(Config.RESTRICT_FILE_EXTENSION, ",");
+       		
        		while (st.hasMoreTokens()) {
        			String wc = st.nextToken();
        			String re = wildcard2regexp(wc);
@@ -270,32 +271,27 @@ public class DefaultHandler implements IOHandler, PropertyHandler {
             }
             
             if (contentNode.isNodeType(Document.CONTENT_TYPE)) {
-    			// Esta línea vale millones!! Resuelve la incidencia del isCkechedOut.
-        		// Por lo visto un nuevo nodo se añade con el isCheckedOut a true :/
             	contentNode.getParent().getParent().save();
-        		contentNode.checkin();
-        		
+            	
         		// Check document filters
     			//DocumentUtils.checkFilters(session, mainNode, mimeType);
     		}
             
             if (contentNode.isNodeType("mix:versionable")) {
             	log.debug("CHECKIN");
+            	// Esta línea vale millones!! Resuelve la incidencia del isCkechedOut.
+        		// Por lo visto un nuevo nodo se añade con el isCheckedOut a true :/
             	javax.jcr.version.Version ver = contentNode.checkin();
             	
                 if (Config.USER_ITEM_CACHE) {
-    				// Get previous version document size
-    				for (javax.jcr.version.Version pred : ver.getPredecessors()) {
-    					Node frozenNode = pred.getNode(JcrConstants.JCR_FROZENNODE);
-    					String author = frozenNode.getProperty(Document.AUTHOR).getString();
-    					long size = frozenNode.getProperty(Document.SIZE).getLong();
-    					UserItemsManager.decSize(author, size);
-    					log.info("Version: " + pred.getName() + "Author: "+author+", Size: " + size);
-    				}
-    				
     				// Update user items
+                	String user = contentNode.getSession().getUserID();
     				long size = contentNode.getProperty(Document.SIZE).getLong();
-    				UserItemsManager.incSize(contentNode.getSession().getUserID(), size);
+    				UserItemsManager.incSize(user, size);
+    				
+    				if (ver.getName().equals("1.0")) {
+    					UserItemsManager.incDocuments(user, 1);
+    				}
     			}
             }
             
