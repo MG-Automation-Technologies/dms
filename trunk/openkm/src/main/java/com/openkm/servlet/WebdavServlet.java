@@ -40,13 +40,10 @@ import com.openkm.webdav.LocatorFactoryImplEx;
 /**
  * Servlet Class
  * 
- * @web.servlet name="Webdav" display-name="Name for Webdav"
- *              description="Description for Webdav" load-on-startup = "2"
- * @web.servlet-mapping url-pattern="/repository/*"
- * @web.servlet-init-param name="x-missing-auth-mapping" value="pavila:quickly5"
- * @web.servlet-init-param name="authenticate-header" value="Basic realm=\"OpenKM Webdav Server\""
- * @web.servlet-init-param name="resource-path-prefix" value="/repository"
- * @web.servlet-init-param name="resource-config" value="/WEB-INF/config.xml"
+ * @param name="x-missing-auth-mapping" value="pavila:quickly5"
+ * @param name="authenticate-header" value="Basic realm=\"OpenKM Webdav Server\""
+ * @param name="resource-path-prefix" value="/repository"
+ * @param name="resource-config" value="/WEB-INF/config.xml"
  */
 public class WebdavServlet extends SimpleWebdavServlet {
 	private static Logger log = LoggerFactory.getLogger(WebdavServlet.class);
