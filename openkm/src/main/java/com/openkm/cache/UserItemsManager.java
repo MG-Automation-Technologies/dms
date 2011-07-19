@@ -25,7 +25,7 @@ public class UserItemsManager {
 	private static Map<String, UserItems> userItemsMgr = new HashMap<String, UserItems>();
 	
 	/**
-	 * 
+	 * Get stored user item
 	 */
 	public static UserItems get(String uid) {
 		UserItems userItems = userItemsMgr.get(uid);
@@ -40,7 +40,7 @@ public class UserItemsManager {
 	}
 	
 	/**
-	 * 
+	 * Increment document number
 	 */
 	public static synchronized void incDocuments(String uid, int value) {
 		log.debug("incDocuments({}, {})", uid, value);
@@ -49,7 +49,7 @@ public class UserItemsManager {
 	}
 
 	/**
-	 * 
+	 * Decrement document number
 	 */
 	public static synchronized void decDocuments(String uid, int value) {
 		log.debug("decDocuments({}, {})", uid, value);
@@ -58,7 +58,7 @@ public class UserItemsManager {
 	}
 	
 	/**
-	 * 
+	 * Increment folder number 
 	 */
 	public static synchronized void incFolders(String uid, int value) {
 		log.debug("incFolders({}, {})", uid, value);
@@ -67,7 +67,7 @@ public class UserItemsManager {
 	}
 
 	/**
-	 * 
+	 * Decrement folder number
 	 */
 	public static synchronized void decFolders(String uid, int value) {
 		log.debug("decFolders({}, {})", uid, value);
@@ -76,7 +76,7 @@ public class UserItemsManager {
 	}
 
 	/**
-	 * 
+	 * Increment document size
 	 */
 	public static synchronized void incSize(String uid, long value) {
 		log.debug("incSize({}, {})", uid, value);
@@ -85,7 +85,7 @@ public class UserItemsManager {
 	}
 
 	/**
-	 * 
+	 * Decrement document size
 	 */
 	public static synchronized void decSize(String uid, long value) {
 		log.debug("decSize({}, {})", uid, value);
@@ -124,7 +124,7 @@ public class UserItemsManager {
 	}
 
 	/**
-	 * 
+	 * Store data in database
 	 */
 	public static synchronized void serialize() throws DatabaseException {
 		for (String user : userItemsMgr.keySet()) {
@@ -133,7 +133,7 @@ public class UserItemsManager {
 	}
 	
 	/**
-	 * 
+	 * Read data from database
 	 */
 	public static synchronized void deserialize() throws DatabaseException {
 		for (UserItems ui : UserItemsDAO.findAll()) {
