@@ -87,7 +87,7 @@ public class BaseDocumentModule {
 		log.debug("create({}, {}, {}, {}, {}, {}, {})", new Object[] { session, parentNode, name, title,
 				mimeType, keywords, is });
 
-				// Create and add a new file node
+		// Create and add a new file node
 		Node documentNode = parentNode.addNode(name, Document.TYPE);
 		documentNode.setProperty(Property.KEYWORDS, keywords);
 		documentNode.setProperty(Property.CATEGORIES, new String[]{}, PropertyType.REFERENCE);
