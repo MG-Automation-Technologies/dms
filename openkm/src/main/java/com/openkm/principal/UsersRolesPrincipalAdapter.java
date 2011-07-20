@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,12 +94,12 @@ public class UsersRolesPrincipalAdapter implements PrincipalAdapter {
 	
 	@Override
 	public List<String> getUsersByRole(String role) throws PrincipalAdapterException {
-		throw new UnsupportedOperationException("Not implemented");
+		throw new NotImplementedException("getUsersByRole");
 	}
 	
 	@Override
 	public List<String> getRolesByUser(String user) throws PrincipalAdapterException {
-		throw new UnsupportedOperationException("Not implemented");
+		throw new NotImplementedException("getRolesByUser");
 	}
 
 	@Override
