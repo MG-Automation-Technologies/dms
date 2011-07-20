@@ -240,7 +240,7 @@ public class Config {
 	 */
 	// Experimental features
 	public static String EXPERIMENTAL_MOBILE_CONTEXT = "mobile";
-	public static boolean EXPERIMENTAL_TEXT_EXTRACTION = true;
+	public static boolean EXPERIMENTAL_TEXT_EXTRACTION = false;
 	public static boolean EXPERIMENTAL_PLUGIN_DEBUG = false;
 	
 	public static String REPOSITORY_CONFIG;
