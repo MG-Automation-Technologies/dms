@@ -97,7 +97,6 @@ public class UserNews extends Composite {
 	public void showMenu() {
 		// The browser menu depends on actual view
 		// Must substract top position from Y Screen Position
-		menuPopup.evaluateMenuOptions();
 		menuPopup.setPopupPosition(table.getMouseX(), table.getMouseY());
 		menuPopup.show();		
 	}

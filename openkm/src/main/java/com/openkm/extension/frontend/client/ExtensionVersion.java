@@ -19,35 +19,19 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.widget.searchsaved;
 
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+package com.openkm.extension.frontend.client;
+
 
 /**
- * Search results menu popup
+ * ExtensionVersion
  * 
  * @author jllort
  *
  */
-public class MenuPopup extends PopupPanel {
-	
-	private VerticalPanel panel;
-	private Menu menu;
-	
-	public MenuPopup() {
-		// Establishes auto-close when click outside
-		super(true,true);
-		panel = new VerticalPanel();
-		menu = new Menu();
-		panel.add(menu);	
-		setWidget(panel);
-	}
-	
-	/**
-	 * Refresh language values
-	 */
-	public void langRefresh() {
-		menu.langRefresh();
+
+public class ExtensionVersion {
+	public static String get() {
+		return "With Community Extension 5.1";
 	}
 }

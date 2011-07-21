@@ -44,6 +44,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -53,8 +54,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
-import com.openkm.extension.frontend.client.widget.messaging.MessagingToolBarBox;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
@@ -101,7 +100,6 @@ public class Document extends Composite {
 	private boolean visible = true;
 	private HTML subcribedUsersText;
 	private HTML keywordsCloudText;
-	private Image proposeSubscribeImage;
 	private Image categoriesImage;
 	private Image thesaurusImage;
 	private HTML categoriesText;
@@ -213,13 +211,6 @@ public class Document extends Composite {
 		
 		hPanelSubscribedUsers = new HorizontalPanel();
 		subcribedUsersText = new HTML("<b>"+Main.i18n("document.subscribed.users")+"<b>");
-		proposeSubscribeImage = new Image(OKMBundleResources.INSTANCE.proposeSubscription());
-		proposeSubscribeImage.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				MessagingToolBarBox.get().executeProposeSubscription(document.getUuid());
-			}
-		});
 		hPanelSubscribedUsers.add(subcribedUsersText);
 		hPanelSubscribedUsers.add(new HTML("&nbsp;"));
 		hPanelSubscribedUsers.setCellVerticalAlignment(subcribedUsersText, HasAlignment.ALIGN_MIDDLE);
@@ -280,7 +271,6 @@ public class Document extends Composite {
 		suggestKey.addStyleName("okm-Input");
 		hKeyPanel.setStylePrimaryName("okm-cloudWrap");
 		keywordsCloud.setStylePrimaryName("okm-cloudWrap");
-		proposeSubscribeImage.addStyleName("okm-Hyperlink");
 		categoriesImage.addStyleName("okm-Hyperlink");
 		thesaurusImage.addStyleName("okm-Hyperlink");
 		
@@ -385,16 +375,6 @@ public class Document extends Composite {
 			suggestKey.setVisible(false);
 			categoriesImage.setVisible(false);
 			thesaurusImage.setVisible(false);
-		}
-		
-		// Propose subscription only must be enabled in taxonomy, categories, thesaurus and templates with
-		if (Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TAXONOMY || 
-			Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_CATEGORIES ||
-			Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_THESAURUS ||
-			Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TEMPLATES) {
-			proposeSubscribeImage.setVisible(true);
-		} else {
-			proposeSubscribeImage.setVisible(false);
 		}
 		
 		getVersionHistorySize();
@@ -653,14 +633,6 @@ public class Document extends Composite {
 		suggestKey.setVisible(visible);
 		categoriesImage.setVisible(visible);
 		thesaurusImage.setVisible(visible);
-	}
-	
-	/**
-	 * showProposedSusbcription
-	 */
-	public void showProposedSusbcription() {
-		// Adds to panel
-		hPanelSubscribedUsers.add(proposeSubscribeImage);
 	}
 	
 	/**
