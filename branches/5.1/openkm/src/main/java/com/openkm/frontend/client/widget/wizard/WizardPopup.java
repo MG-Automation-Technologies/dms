@@ -39,7 +39,6 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConst
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.openkm.extension.frontend.client.widget.digitalsignature.DigitalSignature;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
@@ -68,8 +67,7 @@ public class WizardPopup extends DialogBox {
 	private static final int STATUS_WORKFLOWS 			= 2;
 	private static final int STATUS_CATEGORIES 			= 3;
 	private static final int STATUS_KEYWORDS 			= 4;
-	private static final int STATUS_DIGITAL_SIGNATURE 	= 5;
-	private static final int STATUS_FINISH 				= 6;
+	private static final int STATUS_FINISH 				= 5;
 	
 	private FiredVerticalPanel vPanelFired;
 	private String docPath = "";
@@ -289,29 +287,6 @@ public class WizardPopup extends DialogBox {
 				if (Main.get().workspaceUserProperties.getWorkspace().isWizardKeywords()) {
 					actualButton = acceptButton();
 					setKeywords();
-				} else {
-					status = STATUS_DIGITAL_SIGNATURE;
-					showNextWizard();
-				}
-				break;
-				
-			case STATUS_DIGITAL_SIGNATURE:
-				if (Main.get().fileUpload.isDigitalSignature()) {
-					Main.get().fileUpload.hide(); // Ensure fileUpload is hidden
-					ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
-					endPoint.setServiceEntryPoint(RPCService.DocumentService);	
-					documentService.get(docPath, new AsyncCallback<GWTDocument>() {
-						@Override
-						public void onSuccess(GWTDocument result) {
-							docToSign = result;
-							DigitalSignature.get().sign();
-						}
-						@Override
-						public void onFailure(Throwable caught) {
-							Main.get().showError("get", caught);
-						}
-					});
-					status = STATUS_FINISH;
 				} else {
 					status = STATUS_FINISH;
 					showNextWizard();
