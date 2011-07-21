@@ -434,7 +434,7 @@
       <artifactId>gwt-dev</artifactId>
       <version>${gwt.version}</version>
       <scope>provided</scope>
-    </dependency>-->
+    </dependency> -->
 	
     <!-- GWT plugins -->
     <dependency>
@@ -516,13 +516,6 @@
       <groupId>de.sven-jacobs</groupId>
       <artifactId>loremipsum</artifactId>
       <version>1.0</version>
-    </dependency>
-    
-    <!-- OpenKM extensions -->
-    <dependency>
-      <groupId>com.openkm</groupId>
-      <artifactId>extensions-full</artifactId>
-      <version>5.1</version>
     </dependency>
     
     <!-- Gdata librariess -->
