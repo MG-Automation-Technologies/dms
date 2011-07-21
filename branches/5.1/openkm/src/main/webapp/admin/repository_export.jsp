@@ -25,6 +25,7 @@
       $('.ds').openDOMWindow({
         height:200, width:300,
         eventType:'click',
+        overlayOpacity: '57',
         windowSource:'iframe', windowPadding:0
       }); 
 	});
