@@ -342,7 +342,7 @@ public class Util {
 	}-*/;
 	
 	/**
-	 *  returns 'opera', 'safari', 'ie6', 'ie7', 'gecko' or 'unknown'.
+	 *  returns 'opera', 'safari', 'ie6', 'ie7', 'ie8', 'ie9', 'gecko' or 'unknown'.
 	 */
     public static native String getUserAgent() /*-{
         try {
@@ -353,6 +353,7 @@ public class Util {
             if ( ua.indexOf('msie 6.0') != -1 ) return 'ie6';
             if ( ua.indexOf('msie 7.0') != -1 ) return 'ie7';
             if ( ua.indexOf('msie 8.0') != -1 ) return 'ie8';
+            if ( ua.indexOf('msie 9.0') != -1 ) return 'ie9';
             if ( ua.indexOf('gecko') != -1 ) return 'gecko';
             if ( ua.indexOf('opera') != -1 ) return 'opera';
             return 'unknown';
