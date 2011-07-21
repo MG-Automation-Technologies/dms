@@ -417,6 +417,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	private void uploadFiles() {
 		fileName = uploadForm.getFileName();
 		// Store some values to uploadForm
+		uploadForm.setNotifyToUser(notifyToUser.getValue());
 		uploadForm.setImportZip(importZip.getValue());
 		uploadForm.setDigitalSignature(digitalSignature.getValue());
 		uploadForm.setVersionCommnent(versionComment.getText());
