@@ -204,13 +204,19 @@ public class DirectWorkflowModule implements WorkflowModule {
 			BufferedImage img = ImageIO.read(fileDef.getInputStream("processimage.jpg"));
 			
 			if (dNodeInfo != null) {
+				int fix = 0;
+				
+				if (dInfo.getHeight() > 1000) {
+					fix = 64;
+				}
+				
 				// Select node
 				log.info("DiagramNodeInfo: {}", dNodeInfo);
 				Graphics g = img.getGraphics();
 				Graphics2D g2d = (Graphics2D) g;
 				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25F));
 				g2d.setColor(Color.blue);
-				g2d.fillRect(dNodeInfo.getX(), dNodeInfo.getY() + 64, dNodeInfo.getWidth(), dNodeInfo.getHeight());
+				g2d.fillRect(dNodeInfo.getX(), dNodeInfo.getY() + fix, dNodeInfo.getWidth(), dNodeInfo.getHeight());
 				g.dispose();
 			}
 
