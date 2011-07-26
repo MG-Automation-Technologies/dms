@@ -56,6 +56,7 @@ import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
 import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfWriter;
@@ -71,8 +72,8 @@ public class DocConverter {
 	private static Logger log = LoggerFactory.getLogger(DocConverter.class);
 	public static ArrayList<String> validOpenOffice = new ArrayList<String>();
 	public static ArrayList<String> validImageMagick = new ArrayList<String>();
-	private static ArrayList<String> validGhoscript = new ArrayList<String>();
 	public static ArrayList<String> validAutoCad = new ArrayList<String>();
+	private static ArrayList<String> validGhoscript = new ArrayList<String>();
 	private static ArrayList<String> validInternal = new ArrayList<String>();
 	private static DocConverter instance = null;
 	private static OfficeManager officeManager = null;
@@ -190,7 +191,7 @@ public class DocConverter {
 			ret = true;
 		} else if (validInternal.contains(from)) {
 			ret = true;
-		}		
+		}
 		
 		log.debug("convertibleToPdf: {}", ret);
 		return ret;
@@ -467,6 +468,36 @@ public class DocConverter {
 	}
 	
 	/**
+	 * Convert TXT to PDF
+	 */
+	public void txt2pdf(InputStream is, File output) throws ConversionException,
+			DatabaseException, IOException {
+		log.debug("** Convert from TXT to PDF **");
+		FileOutputStream fos = null;
+		String line = null;
+		
+	    try {			
+	    	fos = new FileOutputStream(output);
+	    	
+	    	// Make conversion
+	    	BufferedReader br = new BufferedReader(new InputStreamReader(is));
+	    	Document doc = new Document(PageSize.A4);
+			PdfWriter.getInstance(doc, fos);
+			doc.open();
+			
+			while ((line = br.readLine()) != null) {
+				doc.add(new Paragraph(12F, line));
+			}
+						
+			doc.close();
+		} catch (DocumentException e) {
+			throw new ConversionException("Exception in conversion: " + e.getMessage(), e);
+		} finally {
+			IOUtils.closeQuietly(fos);
+		}
+	}
+	
+	/**
 	 * Convert PDF to SWF (for document preview feature).
 	 */
 	public void pdf2swf(File input, File output) throws ConversionException, DatabaseException,
@@ -548,6 +579,7 @@ public class DocConverter {
 	private class FileOrderComparator implements Comparator<File> {
 		@Override
 		public int compare(File o1, File o2) {
+			// Filenames are out-1.jpg, out-2.jpg, ..., out-10.jpg, ... 
 			int o1Ord = Integer.parseInt((o1.getName().split("\\.")[0]).split("-")[1]);
 			int o2Ord = Integer.parseInt((o2.getName().split("\\.")[0]).split("-")[1]);
 			
@@ -616,7 +648,7 @@ public class DocConverter {
 	
 	/**
 	 * Convert DWG to DXF (for document preview feature).
-	 * Actually only works with Acme CAD Converter 2010 v8.1.4
+	 * Actually only tested with Acme CAD Converter 2011 v8.2.2
 	 */
 	public void dwg2dxf(File input, File output) throws ConversionException, DatabaseException,
 			IOException {
