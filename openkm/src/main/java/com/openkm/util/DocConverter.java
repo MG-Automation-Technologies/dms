@@ -69,10 +69,10 @@ import freemarker.template.TemplateException;
 
 public class DocConverter {
 	private static Logger log = LoggerFactory.getLogger(DocConverter.class);
-	private static ArrayList<String> validOpenOffice = new ArrayList<String>();
-	private static ArrayList<String> validImageMagick = new ArrayList<String>();
+	public static ArrayList<String> validOpenOffice = new ArrayList<String>();
+	public static ArrayList<String> validImageMagick = new ArrayList<String>();
 	private static ArrayList<String> validGhoscript = new ArrayList<String>();
-	private static ArrayList<String> validAutoCad = new ArrayList<String>();
+	public static ArrayList<String> validAutoCad = new ArrayList<String>();
 	private static ArrayList<String> validInternal = new ArrayList<String>();
 	private static DocConverter instance = null;
 	private static OfficeManager officeManager = null;
@@ -186,12 +186,11 @@ public class DocConverter {
 			ret = true;
 		} else if (!Config.SYSTEM_GHOSTSCRIPT_PS2PDF.equals("") && validGhoscript.contains(from)) {
 			ret = true;
+		} else if (!Config.SYSTEM_DWG2DXF.equals("") && validAutoCad.contains(from)) {
+			ret = true;
 		} else if (validInternal.contains(from)) {
 			ret = true;
-		}
-		//} else if (!Config.SYSTEM_DWG2DXF.equals("") && validAutoCad.contains(from)) {
-		//	return true;
-		
+		}		
 		
 		log.debug("convertibleToPdf: {}", ret);
 		return ret;
@@ -297,26 +296,19 @@ public class DocConverter {
 	/**
 	 * Convert document to PDF.
 	 */
-	public void doc2pdf(InputStream is, String mimeType, File output) throws ConversionException,
+	public void doc2pdf(File input, String mimeType, File output) throws ConversionException,
 			DatabaseException, IOException {
 		log.debug("** Convert from {} to PDF **", mimeType);
-		File tmp = FileUtils.createTempFileFromMime(mimeType);
 		FileOutputStream fos = null;
 		
 		try {
-			long start = System.currentTimeMillis();
-			fos = new FileOutputStream(tmp);
-			IOUtils.copy(is, fos);
-			fos.flush();
-			fos.close();
-			
-			convert(tmp, mimeType, output);
+			long start = System.currentTimeMillis();		
+			convert(input, mimeType, output);
 			log.debug("Elapse doc2pdf time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
 		} catch (Exception e) {
 			throw new ConversionException("Error in "+mimeType+" to PDF conversion", e);
 		} finally {
 			IOUtils.closeQuietly(fos);
-			tmp.delete();
 		}
 	}
 	
@@ -356,22 +348,20 @@ public class DocConverter {
 	/**
 	 * Convert PS to PDF (for document preview feature). 
 	 */
-	public void ps2pdf(InputStream is, File output) throws ConversionException,
+	public void ps2pdf(File input, File output) throws ConversionException,
 			DatabaseException, IOException {
 		log.debug("** Convert from PS to PDF **");
-		File tmpFileIn = File.createTempFile("okm", ".ps");
 		FileOutputStream fos = null;
 		String cmd = null;
 	    
+		if (!input.getName().toLowerCase().endsWith(".ps")) {
+			log.warn("ps2pdf conversion needs *.ps as input file");
+		}
+		
 		try {
-			fos = new FileOutputStream(tmpFileIn);
-			IOUtils.copy(is, fos);
-			fos.flush();
-			fos.close();
-			
 			// Performs conversion
 			HashMap<String, Object> hm = new HashMap<String, Object>();
-			hm.put("fileIn", tmpFileIn.getPath());
+			hm.put("fileIn", input.getPath());
 			hm.put("fileOut", output.getPath());
 			String tpl = Config.SYSTEM_GHOSTSCRIPT_PS2PDF + " ${fileIn} ${fileOut}";
 			cmd = TemplateUtils.replace("SYSTEM_GHOSTSCRIPT_PS2PDF", tpl, hm);
@@ -386,7 +376,6 @@ public class DocConverter {
 			throw new ConversionException("Template exception", e);
 		} finally {
 			IOUtils.closeQuietly(fos);
-			tmpFileIn.delete();
 		}
 	}
 	
@@ -395,22 +384,16 @@ public class DocConverter {
 	 * 
 	 * [0] => http://www.rubblewebs.co.uk/imagemagick/psd.php 
 	 */
-	public void img2pdf(InputStream is, String mimeType, File output) throws ConversionException,
+	public void img2pdf(File input, String mimeType, File output) throws ConversionException,
 			DatabaseException, IOException {
 		log.debug("** Convert from {} to PDF **", mimeType);
-		File tmpFileIn = FileUtils.createTempFileFromMime(mimeType);
 		FileOutputStream fos = null;
 		String cmd = null;
 	    
-		try {
-			fos = new FileOutputStream(tmpFileIn);
-			IOUtils.copy(is, fos);
-			fos.flush();
-			fos.close();
-			
+		try {			
 			// Performs conversion
 			HashMap<String, Object> hm = new HashMap<String, Object>();
-			hm.put("fileIn", tmpFileIn.getPath());
+			hm.put("fileIn", input.getPath());
 			hm.put("fileOut", output.getPath());
 			String tpl = Config.SYSTEM_IMAGEMAGICK_CONVERT + " ${fileIn}[0] ${fileOut}";
 			cmd = TemplateUtils.replace("SYSTEM_OCR", tpl, hm);
@@ -425,31 +408,24 @@ public class DocConverter {
 			throw new ConversionException("Template exception", e);
 		} finally {
 			IOUtils.closeQuietly(fos);
-			tmpFileIn.delete();
 		}
 	}
 	
 	/**
 	 * Convert CAD files to PDF
 	 */
-	public void cad2pdf(InputStream is, String mimeType, File output) throws ConversionException,
+	public void cad2pdf(File input, String mimeType, File output) throws ConversionException,
 			DatabaseException, IOException {
 		log.debug("** Convert from {} to PDF **", mimeType);
-		File tmpFileIn = File.createTempFile("okm", ".cad");
 		FileOutputStream fos = null;
 		String cmd = null;
 		
 	    try {
-			fos = new FileOutputStream(tmpFileIn);
-			IOUtils.copy(is, fos);
-			fos.flush();
-			fos.close();
-			
 			// Performs conversion
 			HashMap<String, Object> hm = new HashMap<String, Object>();
-			hm.put("fileIn", tmpFileIn.getPath());
+			hm.put("fileIn", input.getPath());
 			hm.put("fileOut", output.getPath());
-			String tpl = "wine " + Config.SYSTEM_DWG2DXF + " /r /ad /lw 1 /f 104 ${fileIn} ${fileOut}"; 
+			String tpl = "wine " + Config.SYSTEM_DWG2DXF + " /r /ad /lw 1 /f 105 /d ${fileOut} ${fileIn}"; 
 			cmd = TemplateUtils.replace("SYSTEM_DWG2DXF", tpl, hm);
 			ExecutionUtils.runCmd(cmd);
 	    } catch (SecurityException e) {
@@ -462,7 +438,6 @@ public class DocConverter {
 			throw new ConversionException("Template exception", e);
 		} finally {
 			IOUtils.closeQuietly(fos);
-			tmpFileIn.delete();
 		}
 	}
 	
@@ -585,7 +560,7 @@ public class DocConverter {
 	/**
 	 * TIFF to PDF conversion
 	 */
-	public void tiff2pdf(InputStream input, File output) throws ConversionException {
+	public void tiff2pdf(File input, File output) throws ConversionException {
 		RandomAccessFileOrArray ra = null;
 		Document doc = null;
 		
@@ -598,7 +573,7 @@ public class DocConverter {
 			int pages = 0;
 			
 			// Open TIFF
-			ra = new RandomAccessFileOrArray(input);
+			ra = new RandomAccessFileOrArray(input.getPath());
 			int comps = TiffImage.getNumberOfPages(ra);
 			
 			for (int c = 0; c < comps; ++c) {

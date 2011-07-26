@@ -22,8 +22,6 @@
 package com.openkm.servlet.frontend;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -31,7 +29,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,117 +69,33 @@ public class ConverterServlet extends OKMHttpServlet {
 		updateSessionManager(request);
 		
 		try {
-			File dxfCache = new File(Config.CACHE_DXF + File.separator + uuid + ".dxf");
-			File pdfCache = new File(Config.CACHE_PDF + File.separator + uuid + ".pdf");
-			File swfCache = new File(Config.CACHE_SWF + File.separator + uuid + ".swf");
-			
 			// Now an document can be located by UUID
 			if (!uuid.equals("")) {
 				String path = OKMRepository.getInstance().getNodePath(null, uuid);
 				Document doc = OKMDocument.getInstance().getProperties(null, path);
 				String fileName = JCRUtils.getName(doc.getPath());
-				String mimeType = null;
-				DocConverter converter = DocConverter.getInstance();
 				
 				// Save content to temporary file
-				tmp = File.createTempFile("okm", "."+FileUtils.getFileExtension(fileName));
+				tmp = File.createTempFile("okm", "." + FileUtils.getFileExtension(fileName));
 				is = OKMDocument.getInstance().getContent(null, path, false);
+				FileUtils.copy(is, tmp);
 				
-				// Convert to DXF
-				if (toDxf && !Config.SYSTEM_DWG2DXF.equals("")) {
-					if (!doc.getMimeType().equals(Config.MIME_DXF)) {
-						try {
-							if (!dxfCache.exists() && doc.getMimeType().equals(Config.MIME_DWG)) {
-								FileOutputStream fos = new FileOutputStream(tmp);
-								IOUtils.copy(is, fos);
-								fos.flush();
-								fos.close();
-								converter.dwg2dxf(tmp, dxfCache);
-							}
-							
-							is.close();
-							is = new FileInputStream(dxfCache);
-						} catch (ConversionException e) {
-							dxfCache.delete();
-							log.error(e.getMessage(), e);
-						}
-					}
-					
-					mimeType = Config.MIME_DXF;
-					fileName = FileUtils.getFileName(fileName)+".dxf";
+				// Prepare conversion
+				ConversionData cd = new ConversionData();
+				cd.uuid = uuid;
+				cd.fileName = fileName;
+				cd.mimeType = doc.getMimeType();
+				cd.file = tmp;
+				
+				if (toDxf) {
+					toDXF(cd);
+				} else if (toPdf) {
+					toPDF(cd);
+				} else if (toSwf) {
+					toSWF(cd);
 				}
 				
-				// Convert to PDF
-				if (toPdf || toSwf && !Config.SYSTEM_SWFTOOLS_PDF2SWF.equals("")) {
-					if (doc.getMimeType().equals(Config.MIME_POSTSCRIPT)) {
-						try {
-							if (!pdfCache.exists()) {
-								converter.ps2pdf(is, pdfCache);
-							}
-							
-							is.close();
-							is = new FileInputStream(pdfCache);
-						} catch (ConversionException e) {
-							pdfCache.delete();
-							log.error(e.getMessage(), e);
-							is = ConverterServlet.class.getResourceAsStream("conversion_problem.pdf");
-						}
-					} else if (!doc.getMimeType().equals(Config.MIME_PDF)) {
-						try {
-							if (!pdfCache.exists()) {
-								if (doc.getMimeType().equals(Config.MIME_TIFF)) {
-									converter.tiff2pdf(is, pdfCache);
-								} else if (doc.getMimeType().startsWith("image/")) {
-									converter.img2pdf(is, doc.getMimeType(), pdfCache);
-								} else {
-									converter.doc2pdf(is, doc.getMimeType(), pdfCache);
-								}
-							}
-							
-							is.close();
-							is = new FileInputStream(pdfCache);
-						} catch (ConversionException e) {
-							pdfCache.delete();
-							log.error(e.getMessage(), e);
-							is = ConverterServlet.class.getResourceAsStream("conversion_problem.pdf");
-						}
-					}
-					
-					mimeType = Config.MIME_PDF;
-					fileName = FileUtils.getFileName(fileName)+".pdf";
-				}
-				
-				// Convert to SWF
-				if (toSwf && !Config.SYSTEM_SWFTOOLS_PDF2SWF.equals("")) {
-					if (!swfCache.exists()) {
-						try {
-							if (doc.getMimeType().equals(Config.MIME_PDF)) {
-								FileOutputStream fos = new FileOutputStream(tmp);
-								IOUtils.copy(is, fos);
-								fos.flush();
-								fos.close();
-								converter.pdf2swf(tmp, swfCache);
-							} else {
-								converter.pdf2swf(pdfCache, swfCache);
-							}
-							
-							is.close();
-							is = new FileInputStream(swfCache);
-						} catch (ConversionException e) {
-							swfCache.delete();
-							log.error(e.getMessage(), e);
-							is = ConverterServlet.class.getResourceAsStream("conversion_problem.swf");
-						}
-					} else {
-						is.close();
-						is = new FileInputStream(swfCache);
-					}
-					
-					mimeType = Config.MIME_SWF;
-					fileName = FileUtils.getFileName(fileName)+".swf";
-				}
-				
-				WebUtils.sendFile(request, response, fileName, mimeType, inline, is);
+				WebUtils.sendFile(request, response, cd.fileName, cd.mimeType, inline, cd.file);
 				is.close();
 			}
 		} catch (PathNotFoundException e) {
@@ -204,5 +118,131 @@ public class ConverterServlet extends OKMHttpServlet {
 		}
 		
 		log.debug("service: void");
+	}
+	
+	/**
+	 * Handles DXF conversion
+	 */
+	private void toDXF(ConversionData cd) throws DatabaseException, IOException {
+		File dxfCache = new File(Config.CACHE_DXF + File.separator + cd.uuid + ".dxf");
+		
+		if (DocConverter.getInstance().convertibleToDxf(cd.mimeType)) {
+			if (!dxfCache.exists()) {
+				try {
+					if (cd.mimeType.equals(Config.MIME_DWG)) {
+						DocConverter.getInstance().dwg2dxf(cd.file, dxfCache);
+					} else if (cd.mimeType.equals(Config.MIME_DXF)) {
+						// Document already in DXF format
+					} else {
+						throw new NotImplementedException("Conversion from '" + cd.mimeType + "' to DXF not available");
+					}
+				} catch (ConversionException e) {
+					dxfCache.delete();
+					log.error(e.getMessage(), e);
+				}
+			}
+			
+			cd.file = dxfCache;
+			cd.mimeType = Config.MIME_DXF;
+			cd.fileName = FileUtils.getFileName(cd.fileName) + ".dxf";
+		} else {
+			throw new NotImplementedException("Conversion from '" + cd.mimeType + "' to DXF not available");
+		}
+	}
+	
+	/**
+	 * Handles PDF conversion
+	 */
+	private void toPDF(ConversionData cd) throws DatabaseException, IOException {
+		File pdfCache = new File(Config.CACHE_PDF + File.separator + cd.uuid + ".pdf");
+		
+		if (DocConverter.getInstance().convertibleToPdf(cd.mimeType)) {
+			if (!pdfCache.exists()) {
+				try {
+					if (cd.mimeType.equals(Config.MIME_POSTSCRIPT)) {
+						DocConverter.getInstance().ps2pdf(cd.file, pdfCache);
+					} else if (cd.mimeType.equals(Config.MIME_TIFF)) {
+						DocConverter.getInstance().tiff2pdf(cd.file, pdfCache);
+					} else if (DocConverter.validImageMagick.contains(cd.mimeType)) {
+						DocConverter.getInstance().img2pdf(cd.file, cd.mimeType, pdfCache);
+					} else if (DocConverter.validOpenOffice.contains(cd.mimeType)) {
+						DocConverter.getInstance().doc2pdf(cd.file, cd.mimeType, pdfCache);
+					} else if (DocConverter.validAutoCad.contains(cd.mimeType)) {
+						DocConverter.getInstance().cad2pdf(cd.file, cd.mimeType, pdfCache);
+					} else if (cd.mimeType.equals(Config.MIME_PDF)) {
+						// Document already in PDF format
+					} else {
+						throw new NotImplementedException("Conversion from '" + cd.mimeType + "' to PDF not available");
+					}
+				} catch (ConversionException e) {
+					pdfCache.delete();
+					log.error(e.getMessage(), e);
+					InputStream is = ConverterServlet.class.getResourceAsStream("conversion_problem.pdf");
+					FileUtils.copy(is, cd.file);
+				}
+			}
+			
+			if (pdfCache.exists()) cd.file = pdfCache;
+			cd.mimeType = Config.MIME_PDF;
+			cd.fileName = FileUtils.getFileName(cd.fileName) + ".pdf";
+		} else {
+			throw new NotImplementedException("Conversion from '" + cd.mimeType + "' to PDF not available");
+		}
+	}
+	
+	/**
+	 * Handles SWF conversion
+	 */
+	private void toSWF(ConversionData cd) throws DatabaseException, IOException {
+		File swfCache = new File(Config.CACHE_SWF + File.separator + cd.uuid + ".swf");
+		
+		if (DocConverter.getInstance().convertibleToSwf(cd.mimeType)) {
+			if (!swfCache.exists()) {
+				try {
+					if (cd.mimeType.equals(Config.MIME_PDF)) {
+						DocConverter.getInstance().pdf2swf(cd.file, swfCache);
+					} else if (DocConverter.getInstance().convertibleToPdf(cd.mimeType)) {
+						toPDF(cd);
+						DocConverter.getInstance().pdf2swf(cd.file, swfCache);
+					} else if (cd.mimeType.equals(Config.MIME_SWF)) {
+						// Document already in SWF format
+					} else {
+						throw new NotImplementedException("Conversion from '" + cd.mimeType + "' to SWF not available");
+					}
+				} catch (ConversionException e) {
+					swfCache.delete();
+					log.error(e.getMessage(), e);
+					InputStream is = ConverterServlet.class.getResourceAsStream("conversion_problem.swf");
+					FileUtils.copy(is, cd.file);
+				}
+			}
+			
+			if (swfCache.exists()) cd.file = swfCache;
+			cd.mimeType = Config.MIME_SWF;
+			cd.fileName = FileUtils.getFileName(cd.fileName) + ".swf";
+		} else {
+			throw new NotImplementedException("Conversion from '" + cd.mimeType + "' to SWF not available");
+		}
+	}
+	
+	/**
+	 * For internal use only.
+	 */
+	private class ConversionData {
+		private String uuid;
+		private String fileName;
+		private String mimeType;
+		private File file;
+		
+		public String toString() {
+			StringBuilder sb = new StringBuilder();
+			sb.append("{");
+			sb.append("uuid="); sb.append(uuid);
+			sb.append(", fileName="); sb.append(fileName);
+			sb.append(", mimeType="); sb.append(mimeType);
+			sb.append(", file="); sb.append(file);
+			sb.append("}");
+			return sb.toString();
+		}
 	}
 }
