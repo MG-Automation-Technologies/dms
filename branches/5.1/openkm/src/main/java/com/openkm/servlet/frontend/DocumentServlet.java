@@ -797,6 +797,7 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 		
 		try {
 			String uuid = OKMRepository.getInstance().getNodeUuid(null, docPath);
+			
 			// Now an document can be located by UUID
 			if (!uuid.equals("")) {
 				File pdfCache = new File(Config.CACHE_PDF + File.separator + uuid + ".pdf");
@@ -806,10 +807,13 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 				// Getting content
 				is = OKMDocument.getInstance().getContent(null, docPath, false);
 				
-				// Converting to pdf
+				// Convert to PDF
 				if (!pdfCache.exists()) {
 					try {
-						converter.doc2pdf(is, doc.getMimeType(), pdfCache);
+						File tmp = FileUtils.createTempFileFromMime(doc.getMimeType());
+						FileUtils.copy(is, tmp);
+						converter.doc2pdf(tmp, doc.getMimeType(), pdfCache);
+						tmp.delete();
 					} catch (ConversionException e) {
 						pdfCache.delete();
 						log.error(e.getMessage(), e);
@@ -820,23 +824,23 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 				is.close();
 				is = new FileInputStream(pdfCache);
 				
-				// creating new document
+				// create new document
 				doc = new Document();
 				doc.setPath(JCRUtils.getParent(docPath) + "/" + FileUtils.getFileName(JCRUtils.getName(docPath)) + ".pdf");
-				
-				destinationPath =  OKMDocument.getInstance().create(null, doc, is).getPath();
+				destinationPath = OKMDocument.getInstance().create(null, doc, is).getPath();
 				is.close();
 				
-				// Setting property groups ( metadata ) from original documento to converted
+				// Set property groups ( metadata ) from original document to converted
 				for (PropertyGroup pg : OKMPropertyGroup.getInstance().getGroups(null, docPath)) {	
-					// Adding group
+					// Add group
 					OKMPropertyGroup.getInstance().addGroup(null, destinationPath, pg.getName());
+					
 					// Properties to be saved from original document
 					List<FormElement> properties = OKMPropertyGroup.getInstance().getProperties(null, docPath, pg.getName()); 
-					// Setting properties
+					
+					// Set properties
 					OKMPropertyGroup.getInstance().setProperties(null, destinationPath, pg.getName(), properties); 
 				}
-				
 			}
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);

@@ -22,8 +22,13 @@
 package com.openkm.util;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,5 +110,24 @@ public class FileUtils {
 		}
 		
 		return ret;
+	}
+	
+	/**
+	 * Copy InputStream to File.
+	 */
+	public static void copy(InputStream input, File output) throws IOException {
+		FileOutputStream fos = new FileOutputStream(output);
+		IOUtils.copy(input, fos);
+		fos.flush();
+		fos.close();
+	}
+	
+	/**
+	 * Copy File to OutputStream
+	 */
+	public static void copy(File input, OutputStream output) throws IOException {
+		FileInputStream fis = new FileInputStream(input);
+		IOUtils.copy(fis, output);
+		fis.close();
 	}
 }
