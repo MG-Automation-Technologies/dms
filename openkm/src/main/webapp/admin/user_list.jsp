@@ -124,11 +124,18 @@
               <td align="center">
                 <c:if test="${multInstAdmin || user.id != Config.ADMIN_USER}">
                   <c:choose>
-                    <c:when test="${user.active}">
-                      <a href="${urlActive}"><img src="img/true.png" alt="Active" title="Active"/></a>
+                    <c:when test="${db}">
+                      <c:choose>
+                        <c:when test="${user.active}">
+                          <a href="${urlActive}"><img src="img/true.png" alt="Active" title="Active"/></a>
+                        </c:when>
+                        <c:otherwise>
+                          <a href="${urlActive}"><img src="img/false.png" alt="Inactive" title="Inactive"/></a>
+                        </c:otherwise>
+                      </c:choose>
                     </c:when>
                     <c:otherwise>
-                      <a href="${urlActive}"><img src="img/false.png" alt="Inactive" title="Inactive"/></a>
+                      <img src="img/true.png" alt="Active" title="Active"/>
                     </c:otherwise>
                   </c:choose>
                 </c:if>
