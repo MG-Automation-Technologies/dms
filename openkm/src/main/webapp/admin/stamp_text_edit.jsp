@@ -98,7 +98,7 @@
                   </c:if>
                 </td>
                 <td>
-                  <input class=":required :only_on_submit" name="st_color" id="st_color" readonly="readonly" size="6" value="${stamp.color}"/>
+                  <input class=":required :only_on_submit" name="st_color" id="st_color" readonly="readonly" size="7" value="${stamp.color}"/>
                 </td>
               </tr></table>
             </td>
