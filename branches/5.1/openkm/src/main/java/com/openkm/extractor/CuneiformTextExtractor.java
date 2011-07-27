@@ -60,6 +60,13 @@ public class CuneiformTextExtractor extends AbstractTextExtractor {
         super(new String[] { "image/tiff", "image/gif", "image/jpg", "image/png" });
     }
     
+    /**
+     * Use in AbbyTextExtractor subclass
+     */
+    public CuneiformTextExtractor(String[] contentTypes) {
+    	super(contentTypes);
+    }
+    
     //-------------------------------------------------------< TextExtractor >
 
     /**
@@ -109,8 +116,7 @@ public class CuneiformTextExtractor extends AbstractTextExtractor {
     			HashMap<String, Object> hm = new HashMap<String, Object>();
     			hm.put("fileIn", tmpFileIn.getPath());
     			hm.put("fileOut", tmpFileOut.getPath());
-    			String tpl = Config.SYSTEM_OCR + " ${fileIn} -o ${fileOut}";
-    			cmd = TemplateUtils.replace("SYSTEM_OCR", tpl, hm);
+    			cmd = TemplateUtils.replace("SYSTEM_OCR", Config.SYSTEM_OCR, hm);
     			ExecutionUtils.runCmd(cmd);
     			
     			// Read result
