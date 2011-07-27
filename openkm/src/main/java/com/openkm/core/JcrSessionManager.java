@@ -74,6 +74,13 @@ public class JcrSessionManager {
 	}
 	
 	/**
+	 * Get system session
+	 */
+	public Session getSystemSession() {
+		return get(getSystemToken());
+	}
+	
+	/**
 	 * Add a new session
 	 */
 	public synchronized void add(String token, Session session) {
