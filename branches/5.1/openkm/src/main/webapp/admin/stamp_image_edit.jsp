@@ -104,7 +104,7 @@
           <tr>
             <td>Users</td>
             <td>
-              <select multiple="multiple" name="st_users" size="7">
+              <select multiple="multiple" name="si_users" size="10">
                 <c:forEach var="user" items="${users}">
                   <c:choose>
                     <c:when test="${fn:contains(stamp.users, user.id)}">
