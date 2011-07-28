@@ -69,7 +69,7 @@
 				out.println("<hr/>");
 				File dir = new File(Config.INSTANCE_CHROOT_PATH + fsPath);
 				int files = FileUtils.countFiles(dir);
-				out.println("<b>Files to import:</b> "+files+"<br/>");
+				out.println("<b>Files & directories to import:</b> "+files+"<br/>");
 				long begin = System.currentTimeMillis();
 				ImpExpStats stats = RepositoryImporter.importDocuments(null, dir, repoPath, metadata, out, 
 						new HTMLInfoDecorator(files));

@@ -71,7 +71,7 @@
 				ContentInfo cInfo = OKMFolder.getInstance().getContentInfo(null, repoPath);
 				long begin = System.currentTimeMillis();
 				ImpExpStats stats = RepositoryExporter.exportDocuments(null, repoPath, dir, metadata, out,
-						new HTMLInfoDecorator((int)cInfo.getDocuments()));
+						new HTMLInfoDecorator((int) cInfo.getDocuments() + (int) cInfo.getFolders()));
 				long end = System.currentTimeMillis();
 				out.println("<hr/>");
 				out.println("<div class=\"ok\">Folder '"+repoPath+"' exported to '"+new File(fsPath).getAbsolutePath()+"'</div>");
