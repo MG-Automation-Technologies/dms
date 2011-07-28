@@ -22,13 +22,17 @@
   <script type="text/javascript" src="js/jquery.DOMWindow.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
-      $('.ds').openDOMWindow({
+      $dm = $('.ds').openDOMWindow({
         height:200, width:300,
         eventType:'click',
         overlayOpacity: '57',
         windowSource:'iframe', windowPadding:0
-      }); 
+      });
 	});
+    
+    function dialogClose() {
+    	$dm.closeDOMWindow();
+    }
   </script>
   <title>Repository Export</title>
 </head>
