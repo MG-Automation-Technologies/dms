@@ -229,7 +229,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			for (NodeTypeIterator nti = ntm.getMixinNodeTypes(); nti.hasNext();) {
 				NodeType nt = nti.nextNodeType();
 				
-				if (nt.getName().startsWith(PropertyGroup.GROUP+":")) {
+				if (nt.getName().startsWith(PropertyGroup.GROUP + ":")) {
 					for (Iterator<PropertyGroup> it = pgf.keySet().iterator(); it.hasNext(); ) {
 						PropertyGroup pg = it.next();
 						
@@ -270,7 +270,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			NodeTypeManager ntm = session.getWorkspace().getNodeTypeManager();
 			NodeType nt = ntm.getNodeType(grpName);
 			PropertyDefinition[] pd = nt.getDeclaredPropertyDefinitions();
-						
+			
 			for (FormElement fe : pgf) {
 				for (int i=0; i < pd.length; i++) {
 					// Only return registered property definitions
