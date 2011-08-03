@@ -273,26 +273,26 @@ public class ExtendedDockPanel extends Composite {
 								}
 								break;
 							
-							case Keyboard.KEY_SUPR:
-								if (actualView == DESKTOP && Main.get().activeFolderTree.isPanelSelected() && 
-									Main.get().mainPanel.topPanel.toolBar.getToolBarOption().deleteOption &&
-									(Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TAXONOMY ||
-									 Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_CATEGORIES || 	
-									 Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_PERSONAL || 		
-									 Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TEMPLATES ||
-									 Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_MAIL)) {
-										
-									Main.get().mainPanel.topPanel.toolBar.executeDelete();
-									propagate = false;
-								} else if (Main.get().mainPanel.topPanel.toolBar.getToolBarOption().deleteOption && (
-										   Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected() || 
-										   Main.get().mainPanel.desktop.browser.fileBrowser.isFolderSelected() ||
-										   Main.get().mainPanel.desktop.browser.fileBrowser.isMailSelected())) {
-									
-									Main.get().mainPanel.topPanel.toolBar.executeDelete();
-									propagate = false;
-								}
-								break;
+//							case Keyboard.KEY_SUPR:
+//								if (actualView == DESKTOP && Main.get().activeFolderTree.isPanelSelected() && 
+//									Main.get().mainPanel.topPanel.toolBar.getToolBarOption().deleteOption &&
+//									(Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TAXONOMY ||
+//									 Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_CATEGORIES || 	
+//									 Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_PERSONAL || 		
+//									 Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TEMPLATES ||
+//									 Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_MAIL)) {
+//										
+//									Main.get().mainPanel.topPanel.toolBar.executeDelete();
+//									propagate = false;
+//								} else if (Main.get().mainPanel.topPanel.toolBar.getToolBarOption().deleteOption && (
+//										   Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected() || 
+//										   Main.get().mainPanel.desktop.browser.fileBrowser.isFolderSelected() ||
+//										   Main.get().mainPanel.desktop.browser.fileBrowser.isMailSelected())) {
+//									
+//									Main.get().mainPanel.topPanel.toolBar.executeDelete();
+//									propagate = false;
+//								}
+//								break;
 							
 							case Keyboard.KEY_C:
 							case Keyboard.KEY_X:
