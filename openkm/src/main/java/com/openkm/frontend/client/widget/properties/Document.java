@@ -310,7 +310,6 @@ public class Document extends Composite {
 		
 		// Webdav button
 		String webdavUrl = Main.get().workspaceUserProperties.getApplicationURL();
-		int idx = webdavUrl.lastIndexOf('/');
 		String webdavPath = document.getPath();
 		// Replace only in case webdav fix is enabled
 		if (Main.get().workspaceUserProperties.getWorkspace().isWebdavFix()) {
