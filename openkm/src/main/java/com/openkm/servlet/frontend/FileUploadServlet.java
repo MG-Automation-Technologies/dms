@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -183,7 +184,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 							}
 							
 							// Return the path of the inserted document in response
-							out.print(returnOKMessage + " path["+uploadedDocPath+"]path");
+							out.print(returnOKMessage + " path["+URLEncoder.encode(uploadedDocPath,"UTF-8")+"]path");
 						}
 					}
 				} else if (action == UIFileUploadConstants.ACTION_UPDATE) {
@@ -220,7 +221,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 						OKMNote.getInstance().add(sysToken, path, text);
 						
 						// Return the path of the inserted document in response
-						out.print(returnOKMessage + " path["+uploadedDocPath+"]path");
+						out.print(returnOKMessage + " path["+URLEncoder.encode(uploadedDocPath,"UTF-8")+"]path");
 					} else {
 						out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_DocumentNameMismatch));
 					}
