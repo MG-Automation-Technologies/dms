@@ -28,18 +28,15 @@ import org.slf4j.LoggerFactory;
 import com.openkm.api.OKMAuth;
 import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
-import com.openkm.api.OKMNote;
 import com.openkm.api.OKMNotification;
 import com.openkm.api.OKMProperty;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
-import com.openkm.bean.Version;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
-import com.openkm.core.JcrSessionManager;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
@@ -195,7 +192,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 						OKMDocument document = OKMDocument.getInstance();
 						Document doc = document.getProperties(null, path);
 						document.setContent(null, path, is);
-						Version ver = document.checkin(null, path, comment);
+						document.checkin(null, path, comment);
 						uploadedDocPath = path;
 						
 						// Case is uploaded a encrypted document
@@ -214,11 +211,6 @@ public class FileUploadServlet extends OKMHttpServlet {
 								document.purgeVersionHistory(null, path);
 							} 
 						}
-						
-						// Add comment (as system user)
-						String text = "New version "+ver.getName()+" by "+request.getRemoteUser()+": "+ver.getComment();
-						String sysToken = JcrSessionManager.getInstance().getSystemToken();
-						OKMNote.getInstance().add(sysToken, path, text);
 						
 						// Return the path of the inserted document in response
 						out.print(returnOKMessage + " path["+URLEncoder.encode(uploadedDocPath,"UTF-8")+"]path");

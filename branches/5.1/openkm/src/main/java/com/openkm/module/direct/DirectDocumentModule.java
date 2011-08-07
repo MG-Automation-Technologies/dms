@@ -76,6 +76,7 @@ import com.openkm.kea.metadata.MetadataExtractor;
 import com.openkm.module.DocumentModule;
 import com.openkm.module.base.BaseAuthModule;
 import com.openkm.module.base.BaseDocumentModule;
+import com.openkm.module.base.BaseNoteModule;
 import com.openkm.module.base.BaseNotificationModule;
 import com.openkm.module.base.BaseScriptingModule;
 import com.openkm.principal.PrincipalAdapter;
@@ -985,6 +986,11 @@ public class DirectDocumentModule implements DocumentModule {
 				version.setActual(true);
 				documentNode.unlock();
 				JCRUtils.removeLockToken(session, documentNode);
+				
+				// Add comment (as system user)
+				String text = "New version " + ver.getName() + " by " + session.getUserID() + ": " + comment;
+				Session sysSession = JcrSessionManager.getInstance().getSystemSession();
+				BaseNoteModule.add(sysSession, documentNode, text);
 			}
 			
 			t.end();
