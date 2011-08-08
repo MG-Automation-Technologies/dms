@@ -178,10 +178,10 @@ public class DirectAuthModule implements AuthModule {
 		base.setProperty(Permission.USERS_WRITE, new String[] { session.getUserID() });
 		base.setProperty(Permission.USERS_DELETE, new String[] { session.getUserID() });
 		base.setProperty(Permission.USERS_SECURITY, new String[] { session.getUserID() });
-		base.setProperty(Permission.ROLES_READ, new String[] { Config.DEFAULT_USER_ROLE });
-		base.setProperty(Permission.ROLES_WRITE, new String[] { Config.DEFAULT_USER_ROLE });
-		base.setProperty(Permission.ROLES_DELETE, new String[] { Config.DEFAULT_USER_ROLE });
-		base.setProperty(Permission.ROLES_SECURITY, new String[] { Config.DEFAULT_USER_ROLE });
+		base.setProperty(Permission.ROLES_READ, new String[] {});
+		base.setProperty(Permission.ROLES_WRITE, new String[] {});
+		base.setProperty(Permission.ROLES_DELETE, new String[] {});
+		base.setProperty(Permission.ROLES_SECURITY, new String[] {});
 		
 		return base;
 	}
