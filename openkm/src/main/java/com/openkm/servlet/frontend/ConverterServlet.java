@@ -142,7 +142,7 @@ public class ConverterServlet extends OKMHttpServlet {
 				}
 			}
 			
-			cd.file = dxfCache;
+			if (dxfCache.exists()) cd.file = dxfCache;
 			cd.mimeType = Config.MIME_DXF;
 			cd.fileName = FileUtils.getFileName(cd.fileName) + ".dxf";
 		} else {
