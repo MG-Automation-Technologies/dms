@@ -130,4 +130,11 @@ public class FileUtils {
 		IOUtils.copy(fis, output);
 		fis.close();
 	}
+	
+	/**
+	 * Copy File to File
+	 */
+	public static void copy(File input, File output) throws IOException {
+		org.apache.commons.io.FileUtils.copyFile(input, output);
+	}
 }
