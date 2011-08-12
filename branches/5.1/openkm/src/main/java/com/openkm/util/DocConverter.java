@@ -62,6 +62,7 @@ import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.pdf.RandomAccessFileOrArray;
 import com.lowagie.text.pdf.codec.TiffImage;
+import com.openkm.bean.ExecutionResult;
 import com.openkm.core.Config;
 import com.openkm.core.ConversionException;
 import com.openkm.core.DatabaseException;
@@ -366,7 +367,11 @@ public class DocConverter {
 			hm.put("fileOut", output.getPath());
 			String tpl = Config.SYSTEM_GHOSTSCRIPT_PS2PDF + " ${fileIn} ${fileOut}";
 			cmd = TemplateUtils.replace("SYSTEM_GHOSTSCRIPT_PS2PDF", tpl, hm);
-			ExecutionUtils.runCmd(cmd);
+			ExecutionResult er = ExecutionUtils.runCmd(cmd);
+			
+			if (er.getExitValue() != 0) {
+				throw new ConversionException(er.getStderr());
+			}
 		} catch (SecurityException e) {
 			throw new ConversionException("Security exception executing command: " + cmd, e);
     	} catch (InterruptedException e) {
@@ -398,7 +403,11 @@ public class DocConverter {
 			hm.put("fileOut", output.getPath());
 			String tpl = Config.SYSTEM_IMAGEMAGICK_CONVERT + " ${fileIn}[0] ${fileOut}";
 			cmd = TemplateUtils.replace("SYSTEM_OCR", tpl, hm);
-			ExecutionUtils.runCmd(cmd);
+			ExecutionResult er = ExecutionUtils.runCmd(cmd);
+			
+			if (er.getExitValue() != 0) {
+				throw new ConversionException(er.getStderr());
+			}
 		} catch (SecurityException e) {
 			throw new ConversionException("Security exception executing command: " + cmd, e);
     	} catch (InterruptedException e) {
@@ -418,7 +427,6 @@ public class DocConverter {
 	public void cad2pdf(File input, String mimeType, File output) throws ConversionException,
 			DatabaseException, IOException {
 		log.debug("** Convert from {} to PDF **", mimeType);
-		FileOutputStream fos = null;
 		String cmd = null;
 		
 	    try {
@@ -428,7 +436,11 @@ public class DocConverter {
 			hm.put("fileOut", output.getPath());
 			String tpl = "wine " + Config.SYSTEM_DWG2DXF + " /r /ad /lw 1 /f 105 /d ${fileOut} ${fileIn}"; 
 			cmd = TemplateUtils.replace("SYSTEM_DWG2DXF", tpl, hm);
-			ExecutionUtils.runCmd(cmd);
+			ExecutionResult er = ExecutionUtils.runCmd(cmd);
+			
+			if (er.getExitValue() != 0) {
+				throw new ConversionException(er.getStderr());
+			}
 	    } catch (SecurityException e) {
 			throw new ConversionException("Security exception executing command: " + cmd, e);
     	} catch (InterruptedException e) {
@@ -437,8 +449,6 @@ public class DocConverter {
 			throw new ConversionException("IO exception executing command: " + cmd, e);
 		} catch (TemplateException e) {
 			throw new ConversionException("Template exception", e);
-		} finally {
-			IOUtils.closeQuietly(fos);
 		}
 	}
 	
@@ -513,7 +523,11 @@ public class DocConverter {
 			hm.put("fileOut", output.getPath());
 			String tpl = Config.SYSTEM_SWFTOOLS_PDF2SWF + " -T 9 ${fileIn} -o ${fileOut}";
 			cmd = TemplateUtils.replace("SYSTEM_PDF2SWF", tpl, hm);
-			ExecutionUtils.runCmd(cmd);
+			ExecutionResult er = ExecutionUtils.runCmd(cmd);
+			
+			if (er.getExitValue() != 0) {
+				throw new ConversionException(er.getStderr());
+			}
 		} catch (SecurityException e) {
 			throw new ConversionException("Security exception executing command: " + cmd, e);
     	} catch (InterruptedException e) {
@@ -543,7 +557,11 @@ public class DocConverter {
 			hm.put("fileOut", tmpDir + File.separator + "out.jpg");
 			String tpl = Config.SYSTEM_IMAGEMAGICK_CONVERT + " -bordercolor #666 -border 2x2 ${fileIn} ${fileOut}";
 			cmd = TemplateUtils.replace("SYSTEM_IMG2PDF", tpl, hm);
-			ExecutionUtils.runCmd(cmd);
+			ExecutionResult er = ExecutionUtils.runCmd(cmd);
+			
+			if (er.getExitValue() != 0) {
+				throw new ConversionException(er.getStderr());
+			}
 			
 			// Performs step 2: join split images into a big one
 			hm = new HashMap<String, Object>();
@@ -559,7 +577,11 @@ public class DocConverter {
 			hm.put("fileOut", output.getPath());
 			tpl = Config.SYSTEM_IMAGEMAGICK_CONVERT + " ${fileIn}-append ${fileOut}";
 			cmd = TemplateUtils.replace("SYSTEM_IMG2PDF", tpl, hm);
-			ExecutionUtils.runCmd(cmd);
+			er = ExecutionUtils.runCmd(cmd);
+			
+			if (er.getExitValue() != 0) {
+				throw new ConversionException(er.getStderr());
+			}
 		} catch (SecurityException e) {
 			throw new ConversionException("Security exception executing command: " + cmd, e);
     	} catch (InterruptedException e) {
@@ -602,7 +624,7 @@ public class DocConverter {
 			PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream(output));
 			doc.open();
 			PdfContentByte cb = writer.getDirectContent();
-			int pages = 0;
+			//int pages = 0;
 			
 			// Open TIFF
 			ra = new RandomAccessFileOrArray(input.getPath());
@@ -622,7 +644,7 @@ public class DocConverter {
 					//doc.add(new Paragraph("page " + (c + 1)));
 					cb.addImage(img);
 					doc.newPage();
-					++pages;
+					//++pages;
 				}
 			}
 		} catch (FileNotFoundException e) {
@@ -663,7 +685,11 @@ public class DocConverter {
 			hm.put("fileOut", output.getPath());
 			String tpl = "wine " + Config.SYSTEM_DWG2DXF + " /r /ad /x14 ${fileIn} ${fileOut}";
 			cmd = TemplateUtils.replace("SYSTEM_DWG2DXF", tpl, hm);
-			ExecutionUtils.runCmd(cmd);
+			ExecutionResult er = ExecutionUtils.runCmd(cmd);
+			
+			if (er.getExitValue() != 0) {
+				throw new ConversionException(er.getStderr());
+			}
 		} catch (SecurityException e) {
 			throw new ConversionException("Security exception executing command: " + cmd, e);
     	} catch (InterruptedException e) {
