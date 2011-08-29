@@ -303,9 +303,9 @@ public class WebUtils {
 		
 		// Disable browser cache
 		response.setHeader("Expires", "Sat, 6 May 1971 12:00:00 GMT");
-		response.setHeader("Cache-Control", "max-age=0, must-revalidate");
+		response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
 		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-		response.setHeader("Pragma", "no-cache");
+		//response.setHeader("Pragma", "no-cache");
 		
 		// Set MIME type
 		response.setContentType(mimeType);
