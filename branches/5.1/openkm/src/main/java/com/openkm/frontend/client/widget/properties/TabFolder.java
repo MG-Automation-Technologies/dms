@@ -307,7 +307,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	}
 	
 	/**
-	 * Gets asyncronous to get all groups assigned to a document
+	 * Gets asynchronous to get all groups assigned to a document
 	 */
 	final AsyncCallback<List<GWTPropertyGroup>> callbackGetGroups = new AsyncCallback<List<GWTPropertyGroup>>() {
 		public void onSuccess(List<GWTPropertyGroup> result){
@@ -319,11 +319,13 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 				PropertyGroup group = new PropertyGroup(gwtGroup, folder.get(), gwtFolder, (visibleButton && !gwtGroup.isReadonly()));
 				tabPanel.add(group, groupTranslation);
 				propertyGroup.add(group);
+				
 				// Adds property group handlers
 				for (Iterator<PropertyGroupHandlerExtension> itx = propertyGroupHandlerExtensionList.iterator(); itx.hasNext();) {
 					group.addPropertyGroupHandlerExtension(itx.next());
 				}
 			}
+			
 			// To prevent change on document that has minor tabs than previous the new selected tab it'll be the max - 1 on that cases
 			if (tabPanel.getWidgetCount()-1<selectedTab) {
 				tabPanel.selectTab(tabPanel.getWidgetCount()-1);
@@ -331,12 +333,13 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 				tabPanel.selectTab(selectedTab); // Always enable selected tab because on document change tab group are removed
 												 // and on remove loses selectedTab
 			}
+			
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetGroupProperties();
 		}
 
 		public void onFailure(Throwable caught) {
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetGroupProperties();
-			Main.get().showError("GetAllGroups", caught);
+			Main.get().showError("GetGroups", caught);
 		}
 	};
 	

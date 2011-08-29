@@ -332,7 +332,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	}
 	
 	/**
-	 * Gets asyncronous to get all groups assigned to a document
+	 * Gets asynchronous to get all groups assigned to a document
 	 */
 	final AsyncCallback<List<GWTPropertyGroup>> callbackGetGroups = new AsyncCallback<List<GWTPropertyGroup>>() {
 		public void onSuccess(List<GWTPropertyGroup> result){
@@ -361,7 +361,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 
 		public void onFailure(Throwable caught) {
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetGroupProperties();
-			Main.get().showError("GetAllGroups", caught);
+			Main.get().showError("GetGroups", caught);
 		}
 	};
 	
