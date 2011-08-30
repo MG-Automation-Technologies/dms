@@ -407,22 +407,19 @@ public class Document extends Composite {
 		
 		// Some preoperties only must be visible on taxonomy or trash view
 		int actualView = Main.get().mainPanel.desktop.navigator.getStackIndex();
-		if (actualView==UIDesktopConstants.NAVIGATOR_TAXONOMY || actualView==UIDesktopConstants.NAVIGATOR_TRASH ||
-			actualView==UIDesktopConstants.NAVIGATOR_THESAURUS || actualView==UIDesktopConstants.NAVIGATOR_CATEGORIES){
-			tableProperties.getCellFormatter().setVisible(7,0,true);
-			tableProperties.getCellFormatter().setVisible(7,1,true);
-			tableProperties.getCellFormatter().setVisible(9,0,true);
-			tableProperties.getCellFormatter().setVisible(9,1,true);
-			keywordsCloudText.setVisible(true);
-			keywordsCloud.setVisible(true);
-		} else {
+		if (actualView==UIDesktopConstants.NAVIGATOR_TRASH) {
 			tableProperties.getCellFormatter().setVisible(7,0,false);
 			tableProperties.getCellFormatter().setVisible(7,1,false);
 			tableProperties.getCellFormatter().setVisible(9,0,false);
 			tableProperties.getCellFormatter().setVisible(9,1,false);
-			keywordsCloudText.setVisible(false);
-			keywordsCloud.setVisible(false);
+		} else {
+			tableProperties.getCellFormatter().setVisible(7,0,true);
+			tableProperties.getCellFormatter().setVisible(7,1,true);
+			tableProperties.getCellFormatter().setVisible(9,0,true);
+			tableProperties.getCellFormatter().setVisible(9,1,true);
 		}
+		keywordsCloudText.setVisible(true);
+		keywordsCloud.setVisible(true);
 		
 		// Some data must not be visible on personal view
 		if (actualView==UIDesktopConstants.NAVIGATOR_PERSONAL) {
