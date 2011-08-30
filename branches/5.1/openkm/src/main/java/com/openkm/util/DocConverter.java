@@ -434,7 +434,7 @@ public class DocConverter {
 			HashMap<String, Object> hm = new HashMap<String, Object>();
 			hm.put("fileIn", input.getPath());
 			hm.put("fileOut", output.getPath());
-			String tpl = "wine " + Config.SYSTEM_DWG2DXF + " /r /ad /lw 1 /f 105 /d ${fileOut} ${fileIn}"; 
+			String tpl = Config.SYSTEM_DWG2DXF + " /r /ad /lw 1 /f 105 /d ${fileOut} ${fileIn}"; 
 			cmd = TemplateUtils.replace("SYSTEM_DWG2DXF", tpl, hm);
 			ExecutionResult er = ExecutionUtils.runCmd(cmd);
 			
@@ -683,7 +683,7 @@ public class DocConverter {
 			HashMap<String, Object> hm = new HashMap<String, Object>();
 			hm.put("fileIn", input.getPath());
 			hm.put("fileOut", output.getPath());
-			String tpl = "wine " + Config.SYSTEM_DWG2DXF + " /r /ad /x14 ${fileIn} ${fileOut}";
+			String tpl = Config.SYSTEM_DWG2DXF + " /r /ad /x14 ${fileIn} ${fileOut}";
 			cmd = TemplateUtils.replace("SYSTEM_DWG2DXF", tpl, hm);
 			ExecutionResult er = ExecutionUtils.runCmd(cmd);
 			
