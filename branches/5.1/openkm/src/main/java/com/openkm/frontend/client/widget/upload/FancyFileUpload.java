@@ -664,6 +664,15 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		return addDomHandler(handler, ChangeEvent.getType());
 	}
 	
+	/**
+	 * getAction
+	 * 
+	 * @return
+	 */
+	public int getAction() {
+		return action;
+	}
+	
 	public void setAction(int action) {
 		this.action = action;
 		switch (action) {
