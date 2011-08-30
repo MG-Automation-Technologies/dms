@@ -653,8 +653,8 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('e
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'forum.user.by', 'by', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'forum.views', 'Views', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.connected', 'Connected as', 'en-GB');
-INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.date.pattern', 'dd-MM-yyyy hh:mm:ss', 'en-GB');
-INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'general.date.pattern', 'dd-MM-yyyy hh:mm:ss', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.date.pattern', 'dd-MM-yyyy HH:mm:ss', 'en-GB');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'general.date.pattern', 'dd-MM-yyyy HH:mm:ss', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.day.pattern', 'dd-MM-yyyy', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.decimal.pattern', '.', 'en-GB');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.hour.pattern', 'HH:mm:ss', 'en-GB');
@@ -1462,7 +1462,7 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('f
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'folder.uuid', 'UUID', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'folder.webdav', 'WebDAV', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.connected', 'Conectado como', 'es-ES');
-INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'general.date.pattern', 'dd-MM-yyyy hh:mm:ss', 'es-ES');
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'general.date.pattern', 'dd/MM/yyyy HH:mm:ss', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.date.pattern', 'dd/MM/yyyy HH:mm:ss', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.day.pattern', 'dd/MM/yyyy', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('frontend', 'general.decimal.pattern', ',', 'es-ES');
