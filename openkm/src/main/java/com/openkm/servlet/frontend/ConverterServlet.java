@@ -88,11 +88,27 @@ public class ConverterServlet extends OKMHttpServlet {
 				cd.file = tmp;
 				
 				if (toDxf) {
-					toDXF(cd);
+					try {
+						toDXF(cd);
+					} catch (ConversionException e) {
+						log.error(e.getMessage(), e);
+					}
 				} else if (toPdf) {
-					toPDF(cd);
+					try {
+						toPDF(cd);
+					} catch (ConversionException e) {
+						log.error(e.getMessage(), e);
+						InputStream tis = ConverterServlet.class.getResourceAsStream("conversion_problem.pdf");
+						FileUtils.copy(tis, cd.file);
+					}
 				} else if (toSwf) {
-					toSWF(cd);
+					try {
+						toSWF(cd);
+					} catch (ConversionException e) {
+						log.error(e.getMessage(), e);
+						InputStream tis = ConverterServlet.class.getResourceAsStream("conversion_problem.swf");
+						FileUtils.copy(tis, cd.file);
+					}
 				}
 				
 				WebUtils.sendFile(request, response, cd.fileName, cd.mimeType, inline, cd.file);
@@ -123,7 +139,7 @@ public class ConverterServlet extends OKMHttpServlet {
 	/**
 	 * Handles DXF conversion
 	 */
-	private void toDXF(ConversionData cd) throws DatabaseException, IOException {
+	private void toDXF(ConversionData cd) throws ConversionException, DatabaseException, IOException {
 		File dxfCache = new File(Config.CACHE_DXF + File.separator + cd.uuid + ".dxf");
 		
 		if (DocConverter.getInstance().convertibleToDxf(cd.mimeType)) {
@@ -138,13 +154,14 @@ public class ConverterServlet extends OKMHttpServlet {
 					}
 				} catch (ConversionException e) {
 					dxfCache.delete();
-					log.error(e.getMessage(), e);
+					throw e;
+				} finally {
+					cd.mimeType = Config.MIME_DXF;
+					cd.fileName = FileUtils.getFileName(cd.fileName) + ".dxf";
 				}
 			}
 			
 			if (dxfCache.exists()) cd.file = dxfCache;
-			cd.mimeType = Config.MIME_DXF;
-			cd.fileName = FileUtils.getFileName(cd.fileName) + ".dxf";
 		} else {
 			throw new NotImplementedException("Conversion from '" + cd.mimeType + "' to DXF not available");
 		}
@@ -153,7 +170,7 @@ public class ConverterServlet extends OKMHttpServlet {
 	/**
 	 * Handles PDF conversion
 	 */
-	private void toPDF(ConversionData cd) throws DatabaseException, IOException {
+	private void toPDF(ConversionData cd) throws ConversionException, DatabaseException, IOException {
 		File pdfCache = new File(Config.CACHE_PDF + File.separator + cd.uuid + ".pdf");
 		
 		if (DocConverter.getInstance().convertibleToPdf(cd.mimeType)) {
@@ -176,24 +193,23 @@ public class ConverterServlet extends OKMHttpServlet {
 					}
 				} catch (ConversionException e) {
 					pdfCache.delete();
-					log.error(e.getMessage(), e);
-					InputStream is = ConverterServlet.class.getResourceAsStream("conversion_problem.pdf");
-					FileUtils.copy(is, cd.file);
+					throw e;
+				} finally {
+					cd.mimeType = Config.MIME_PDF;
+					cd.fileName = FileUtils.getFileName(cd.fileName) + ".pdf";
 				}
 			}
 			
 			if (pdfCache.exists()) cd.file = pdfCache;
-			cd.mimeType = Config.MIME_PDF;
-			cd.fileName = FileUtils.getFileName(cd.fileName) + ".pdf";
 		} else {
 			throw new NotImplementedException("Conversion from '" + cd.mimeType + "' to PDF not available");
 		}
 	}
 	
 	/**
-	 * Handles SWF conversion
+	 * Handles SWF conversion 
 	 */
-	private void toSWF(ConversionData cd) throws DatabaseException, IOException {
+	private void toSWF(ConversionData cd) throws ConversionException, DatabaseException, IOException {
 		File swfCache = new File(Config.CACHE_SWF + File.separator + cd.uuid + ".swf");
 		
 		if (DocConverter.getInstance().convertibleToSwf(cd.mimeType)) {
@@ -211,15 +227,14 @@ public class ConverterServlet extends OKMHttpServlet {
 					}
 				} catch (ConversionException e) {
 					swfCache.delete();
-					log.error(e.getMessage(), e);
-					InputStream is = ConverterServlet.class.getResourceAsStream("conversion_problem.swf");
-					FileUtils.copy(is, cd.file);
+					throw e;
+				} finally {
+					cd.mimeType = Config.MIME_SWF;
+					cd.fileName = FileUtils.getFileName(cd.fileName) + ".swf";
 				}
 			}
 			
 			if (swfCache.exists()) cd.file = swfCache;
-			cd.mimeType = Config.MIME_SWF;
-			cd.fileName = FileUtils.getFileName(cd.fileName) + ".swf";
 		} else {
 			throw new NotImplementedException("Conversion from '" + cd.mimeType + "' to SWF not available");
 		}
