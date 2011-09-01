@@ -26,9 +26,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.jcr.LoginException;
 import javax.jcr.RepositoryException;
@@ -272,7 +272,7 @@ public class AuthServlet extends BaseServlet {
 		
 		if (roleFilter.equals("")) {
 			if (db) {
-				sc.setAttribute("users", AuthDAO.findAllUsers(false));
+				sc.setAttribute("users", sortRoles(AuthDAO.findAllUsers(false)));
 				sc.setAttribute("roles", AuthDAO.findAllRoles());
 			} else {
 				sc.setAttribute("users", str2user(OKMAuth.getInstance().getUsers(null)));
@@ -280,7 +280,7 @@ public class AuthServlet extends BaseServlet {
 			}
 		} else {
 			if (db) {
-				sc.setAttribute("users", AuthDAO.findUsersByRole(roleFilter, false));
+				sc.setAttribute("users", sortRoles(AuthDAO.findUsersByRole(roleFilter, false)));
 				sc.setAttribute("roles", AuthDAO.findAllRoles());
 			} else {
 				sc.setAttribute("users", str2user(OKMAuth.getInstance().getUsersByRole(null, roleFilter)));
@@ -293,7 +293,7 @@ public class AuthServlet extends BaseServlet {
 		sc.getRequestDispatcher("/admin/user_list.jsp").forward(request, response);
 		log.debug("userList: void");
 	}
-	
+
 	/**
 	 * New role
 	 */
@@ -421,13 +421,15 @@ public class AuthServlet extends BaseServlet {
 			usr.setEmail(OKMAuth.getInstance().getMail(null, usrId));
 			
 			if (!roleList.isEmpty()) {
-				Set<Role> roles = new HashSet<Role>();
+				Set<Role> roles = new TreeSet<Role>(new RoleComparator());
+				
 				for (String rolId : roleList) {
 					Role rol = new Role();
 					rol.setId(rolId);
 					rol.setActive(true);
 					roles.add(rol);
 				}
+				
 				usr.setRoles(roles);
 			}
 			
@@ -481,5 +483,21 @@ public class AuthServlet extends BaseServlet {
 				return 0;
 			}
 		}	
+	}
+	
+	/**
+	 * Sort roles from user
+	 */
+	private List<User> sortRoles(List<User> users) {
+		List<User> ret = new ArrayList<User>();
+		
+		for (User user : users) {
+			Set<Role> sortedRoles = new TreeSet<Role>(new RoleComparator());
+			sortedRoles.addAll(user.getRoles());
+			user.setRoles(sortedRoles);
+			ret.add(user);
+		}
+		
+		return ret;
 	}
 }
