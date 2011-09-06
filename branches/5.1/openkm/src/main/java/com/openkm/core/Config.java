@@ -74,6 +74,7 @@ public class Config {
 	public static final String PROPERTY_DEFAULT_SCRIPT = "default.script";
 	
 	// Preview cache
+	public static String CONVERSION_CACHE_HOME;
 	public static String CACHE_DXF;
 	public static String CACHE_PDF;
 	public static String CACHE_SWF;
@@ -86,6 +87,7 @@ public class Config {
 	// Configuration properties
 	public static final String PROPERTY_REPOSITORY_CONFIG = "repository.config";
 	public static final String PROPERTY_REPOSITORY_HOME = "repository.home";
+	public static final String PROPERTY_CONVERSION_CACHE_HOME = "conversion.cache.home";
 	
 	public static final String PROPERTY_DEFAULT_USER_ROLE = "default.user.role";
 	public static final String PROPERTY_DEFAULT_ADMIN_ROLE = "default.admin.role";
@@ -474,17 +476,16 @@ public class Config {
 			}
 			
 			REPOSITORY_CONFIG = INSTANCE + File.separator + "repository.xml";
-			values.put("repository.config", REPOSITORY_CONFIG);
+			values.put(PROPERTY_REPOSITORY_CONFIG, REPOSITORY_CONFIG);
 			REPOSITORY_HOME = INSTANCE + File.separator + "repository";
-			values.put("repository.home", REPOSITORY_HOME);
-			CACHE_DXF = INSTANCE + File.separator + "cache" + File.separator + "dxf";
-			values.put("cache.dxf", CACHE_DXF);
-			CACHE_PDF = INSTANCE + File.separator + "cache" + File.separator + "pdf";
-			values.put("cache.pdf", CACHE_PDF);
-			CACHE_SWF = INSTANCE + File.separator + "cache" + File.separator + "swf";
-			values.put("cache.swf", CACHE_SWF);
+			values.put(PROPERTY_REPOSITORY_HOME, REPOSITORY_HOME);
+			
+			CONVERSION_CACHE_HOME = INSTANCE + File.separator + "cache";
+			values.put(PROPERTY_CONVERSION_CACHE_HOME, CONVERSION_CACHE_HOME);
+			
 			JBPM_CONFIG = INSTANCE + File.separator + "jbpm.xml";
 			values.put("jbpm.config", JBPM_CONFIG);
+			
 			PROPERTY_GROUPS_XML = INSTANCE + File.separator + "PropertyGroups.xml";
 			values.put("property.groups.xml", PROPERTY_GROUPS_XML);
 			PROPERTY_GROUPS_CND = INSTANCE + File.separator + "PropertyGroups.cnd";
@@ -516,6 +517,15 @@ public class Config {
 			values.put(PROPERTY_REPOSITORY_CONFIG, REPOSITORY_CONFIG);
 			REPOSITORY_HOME = ConfigDAO.getString(PROPERTY_REPOSITORY_HOME, REPOSITORY_HOME);
 			values.put(PROPERTY_REPOSITORY_HOME, REPOSITORY_HOME);
+			
+			CONVERSION_CACHE_HOME = ConfigDAO.getString(PROPERTY_CONVERSION_CACHE_HOME, CONVERSION_CACHE_HOME);
+			values.put(PROPERTY_CONVERSION_CACHE_HOME, CONVERSION_CACHE_HOME);
+			CACHE_DXF = CONVERSION_CACHE_HOME + File.separator + "dxf";
+			values.put("cache.dxf", CACHE_DXF);
+			CACHE_PDF = CONVERSION_CACHE_HOME + File.separator + "pdf";
+			values.put("cache.pdf", CACHE_PDF);
+			CACHE_SWF = CONVERSION_CACHE_HOME + File.separator + "swf";
+			values.put("cache.swf", CACHE_SWF);
 			
 			DEFAULT_USER_ROLE = ConfigDAO.getString(PROPERTY_DEFAULT_USER_ROLE, "UserRole");
 			values.put(PROPERTY_DEFAULT_USER_ROLE, DEFAULT_USER_ROLE);
