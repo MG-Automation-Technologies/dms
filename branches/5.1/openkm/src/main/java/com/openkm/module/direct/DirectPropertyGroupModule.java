@@ -361,45 +361,27 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
 			
 			synchronized (documentNode) {
+				// Maybe the property is not found because was added after the assignment,
+				// so we check if there are any missing node property, and then will remove
+				// and add the mixing again
+				for (FormElement fe : properties) {
+					for (int i=0; i < pd.length; i++) {
+						if (fe.getName().equals(pd[i].getName())) {
+							if (!documentNode.hasProperty(pd[i].getName())) {
+								documentNode.removeMixin(grpName);
+								documentNode.addMixin(grpName);
+							}
+						}
+					}
+				}
+				
+				// Now we can safely set all property values.
 				for (FormElement fe : properties) {
 					for (int i=0; i < pd.length; i++) {
 						// Only return registered property definitions
 						if (fe.getName().equals(pd[i].getName())) {
 							try {
-								Property prop = documentNode.getProperty(pd[i].getName());
-			 					
-								if (fe instanceof Select && ((Select) fe).getType().equals(Select.TYPE_MULTIPLE) 
-										&& pd[i].isMultiple()) {
-									List<String> tmp = new ArrayList<String>();
-									
-									for (Option opt : ((Select) fe).getOptions()) {
-										if (opt.isSelected()) {
-											tmp.add(opt.getValue());
-										}
-									}
-									
-									prop.setValue(tmp.toArray(new String[tmp.size()]));
-								} else if (!pd[i].isMultiple()) {
-									if (fe instanceof Input) {
-										prop.setValue(((Input) fe).getValue());
-									} else if (fe instanceof SuggestBox) {
-										prop.setValue(((SuggestBox) fe).getValue());
-									} else if (fe instanceof CheckBox) {
-										prop.setValue(Boolean.toString(((CheckBox) fe).getValue()));
-									} else if (fe instanceof TextArea) {
-										prop.setValue(((TextArea) fe).getValue());
-									} else if (fe instanceof Select) {
-										for (Option opt : ((Select) fe).getOptions()) {
-											if (opt.isSelected()) {
-												prop.setValue(opt.getValue());
-											}
-										}
-									} else {
-										throw new ParseException("Unknown property definition: " + pd[i].getName());
-									}
-								} else {
-									throw new ParseException("Inconsistent property definition: " + pd[i].getName());
-								}
+								BasePropertyGroupModule.setPropertyValue(documentNode, pd[i], fe);
 							} catch (javax.jcr.PathNotFoundException e) {
 								throw new RepositoryException("Requested property not found: "+e.getMessage());
 							}
@@ -438,7 +420,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		
 		log.debug("setProperties: void");
 	}
-
+	
 	@Override
 	public List<FormElement> getPropertyGroupForm(String token, String grpName) throws IOException,
 			ParseException, RepositoryException, DatabaseException {
