@@ -278,6 +278,9 @@ public interface OKMBundleResources extends ClientBundle {
 	@Source("com/openkm/frontend/public/img/icon/search/calendar.gif")
 	public ImageResource calendar();
 	
+	@Source("com/openkm/frontend/public/img/icon/search/calendar_disabled.gif")
+	public ImageResource calendarDisabled();
+	
 	@Source("com/openkm/frontend/public/img/icon/security/yes.gif")
 	public ImageResource yes();
 	
