@@ -869,7 +869,11 @@ public class GWTUtil {
 				gWTInput.setValue(input.getValue());
 			} else if (input.getType().equals(Input.TYPE_DATE)) {
 				if (!input.getValue().equals("")) {
-					gWTInput.setDate(ISO8601.parse(input.getValue()).getTime());
+					Calendar date = ISO8601.parse(input.getValue());
+					
+					if (date != null) {
+						gWTInput.setDate(date.getTime());
+					}
 				}
 			}
 			
