@@ -862,12 +862,9 @@ public class GWTUtil {
 			gWTInput.setHeight(formElement.getHeight());
 			Input input = (Input) formElement;
 			gWTInput.setReadonly(input.isReadonly());
+			gWTInput.setValue(input.getValue());
 			
-			if (input.getType().equals(Input.TYPE_TEXT) || 
-				input.getType().equals(Input.TYPE_LINK) ||
-				input.getType().equals(Input.TYPE_FOLDER )) {
-				gWTInput.setValue(input.getValue());
-			} else if (input.getType().equals(Input.TYPE_DATE)) {
+			if (input.getType().equals(Input.TYPE_DATE)) {
 				if (!input.getValue().equals("")) {
 					Calendar date = ISO8601.parse(input.getValue());
 					
