@@ -1461,59 +1461,76 @@ public class FormManager {
 			for (GWTFormElement formElement : formElementList) {
 				if (formElement instanceof GWTTextArea) {
 					GWTTextArea textArea = (GWTTextArea) formElement;
+					
 					if (!textArea.getData().equals("") && map.keySet().contains(textArea.getData())) {
 						textArea.setValue(getStringValueFromVariable(map.get(textArea.getData())));
 					}
 				} else if (formElement instanceof GWTInput) {
 					GWTInput input = (GWTInput) formElement;
+					
 					if (!input.getData().equals("") && map.keySet().contains(input.getData())) {
-						input.setValue(getStringValueFromVariable(map.get(input.getData())));
+						Object var = map.get(input.getData());
+						input.setValue(getStringValueFromVariable(var));
+						
 						if (input.getType().equals(GWTInput.TYPE_DATE)) {
-							Date date = ISO8601.parse(input.getValue());
-							if (date != null) {
-								input.setDate(date);
-							} else {
-								Log.warn("Input '"+input.getName()+"' value should be in ISO8601 format: {"+input.getValue()+"}");
+							if (!"".equals(input.getValue())) {
+								Date date = ISO8601.parse(input.getValue());
+								
+								if (date != null) {
+									input.setDate(date);
+								} else {
+									Log.warn("Input '" + input.getName() + "' value should be in ISO8601 format: " + input.getValue());
+								}
 							}
 						}
 					}
 				} else if (formElement instanceof GWTSuggestBox) {
 					GWTSuggestBox suggestBox = (GWTSuggestBox) formElement;
+					
 					if (!suggestBox.getData().equals("") && map.keySet().contains(suggestBox.getData())) {
 						suggestBox.setValue(getStringValueFromVariable(map.get(suggestBox.getData())));
 					}
 				} else if (formElement instanceof GWTCheckBox) {
 					GWTCheckBox checkBox = (GWTCheckBox) formElement;
+					
 					if (!checkBox.getData().equals("") && map.keySet().contains(checkBox.getData())) {
 						checkBox.setValue(getBooleanValueFromVariable(map.get(checkBox.getData())));
 					}
 				} else if (formElement instanceof GWTSelect) {
 					GWTSelect select = (GWTSelect) formElement;
+					
 					if (!select.getData().equals("") && map.keySet().contains(select.getData())) {
 						select.setOptions(getOptionsValueFromVariable(map.get(select.getData()), select.getOptions())) ;
 					}
 				} else if (formElement instanceof GWTUpload) {
 					GWTUpload upload = (GWTUpload) formElement;
+					
 					if (!upload.getData().equals("") && map.keySet().contains(upload.getData())) {
 						GWTUpload uploadData = (GWTUpload) map.get(upload.getData());
+						
 						if (!uploadData.getDocumentName().equals("")) {
 							upload.setDocumentName(uploadData.getDocumentName());
 						}
+						
 						if (!uploadData.getDocumentUuid().equals("")) {
 							upload.setDocumentUuid(uploadData.getDocumentUuid());
 						}
+						
 						if (!uploadData.getFolderPath().equals("")) {
 							upload.setFolderPath(uploadData.getFolderPath());
 						}
+						
 						if (!uploadData.getFolderUuid().equals("")) {
 							upload.setFolderUuid(uploadData.getFolderUuid());
 						}
+						
 						if (uploadData.getValidators().size()>0) {
 							upload.setValidators(uploadData.getValidators());
 						}
 					}
 				} else if (formElement instanceof GWTText) {
 					GWTText text = (GWTText) formElement;
+					
 					if (!text.getData().equals("") && map.keySet().contains(text.getData())) {
 						text.setLabel(getStringValueFromVariable(map.get(text.getData())));
 					}
