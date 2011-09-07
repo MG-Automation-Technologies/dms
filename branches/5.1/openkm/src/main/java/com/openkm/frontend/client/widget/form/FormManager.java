@@ -320,13 +320,17 @@ public class FormManager {
 				});
 				calendarPopup.add(calendar);
 				final Image calendarIcon = new Image(OKMBundleResources.INSTANCE.calendar());
-				calendarIcon.addClickHandler(new ClickHandler() {
-					@Override
-					public void onClick(ClickEvent event) {
-						calendarPopup.setPopupPosition(calendarIcon.getAbsoluteLeft(), calendarIcon.getAbsoluteTop()-2);
-						calendarPopup.show();
-					}
-				});
+				if (readOnly || ((GWTInput) gwtMetadata).isReadonly()) {
+					calendarIcon.setResource(OKMBundleResources.INSTANCE.calendarDisabled());
+				} else {
+					calendarIcon.addClickHandler(new ClickHandler() {
+						@Override
+						public void onClick(ClickEvent event) {
+							calendarPopup.setPopupPosition(calendarIcon.getAbsoluteLeft(), calendarIcon.getAbsoluteTop()-2);
+							calendarPopup.show();
+						}
+					});
+				}
 				calendarIcon.setStyleName("okm-Hyperlink");
 				hPanel.add(Util.hSpace("5"));
 				hPanel.add(calendarIcon);
