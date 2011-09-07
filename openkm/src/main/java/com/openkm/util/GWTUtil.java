@@ -873,6 +873,8 @@ public class GWTUtil {
 					
 					if (date != null) {
 						gWTInput.setDate(date.getTime());
+					} else {
+						log.warn("Input '{}' value should be in ISO8601 format: {}", input.getName(), input.getValue());
 					}
 				}
 			}
