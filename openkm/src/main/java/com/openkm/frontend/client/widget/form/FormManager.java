@@ -23,11 +23,13 @@ package com.openkm.frontend.client.widget.form;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -1462,6 +1464,14 @@ public class FormManager {
 					GWTInput input = (GWTInput) formElement;
 					if (!input.getData().equals("") && map.keySet().contains(input.getData())) {
 						input.setValue(getStringValueFromVariable(map.get(input.getData())));
+						if (input.getType().equals(GWTInput.TYPE_DATE)) {
+							Date date = ISO8601.parse(input.getValue());
+							if (date != null) {
+								input.setDate(date);
+							} else {
+								Log.warn("Input '"+input.getName()+"' value should be in ISO8601 format: {"+input.getValue()+"}");
+							}
+						}
 					}
 				} else if (formElement instanceof GWTSuggestBox) {
 					GWTSuggestBox suggestBox = (GWTSuggestBox) formElement;
