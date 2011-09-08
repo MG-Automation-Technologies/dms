@@ -660,8 +660,9 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 			Map<String, Object> values = new HashMap<String, Object>();
 			
 			for (GWTFormElement formElement : formProperties) {
-				values.put(formElement.getName().replace(".", "_").replace(":", "_"),
-						GWTUtil.getFormElementValue(formElement));
+				String key = formElement.getName().replace(".", "_").replace(":", "_");
+				String value = GWTUtil.getFormElementValue(formElement);
+				values.put(key, value);
 			}
 			
 			for (String key : tableProperties.keySet()) {
