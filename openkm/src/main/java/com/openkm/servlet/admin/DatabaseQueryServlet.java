@@ -372,7 +372,6 @@ public class DatabaseQueryServlet extends BaseServlet {
 					}
 				}
 				
-				log.info("ROW: {}", row);
 				results.add(row);
 			}
 			
