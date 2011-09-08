@@ -103,6 +103,8 @@
     <mapping resource="org/jbpm/graph/def/Action.hbm.xml"/>
     <mapping resource="org/jbpm/graph/def/SuperState.hbm.xml"/>
     <mapping resource="org/jbpm/graph/def/ExceptionHandler.hbm.xml"/>
+    
+    <!-- instantiation mapping files -->
     <mapping resource="org/jbpm/instantiation/Delegation.hbm.xml"/>
 
     <!-- ############################################ -->
