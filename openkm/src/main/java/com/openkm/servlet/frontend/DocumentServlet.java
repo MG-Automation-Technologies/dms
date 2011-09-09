@@ -639,8 +639,8 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 	}
 	
 	@Override
-	public String createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties, 
-									 Map<String, List<Map<String, String>>> tableProperties) throws OKMException {
+	public String createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties,
+			Map<String, List<Map<String, String>>> tableProperties) throws OKMException {
 		log.debug("createFromTemplate({},{})", docPath, destinationPath);
 		updateSessionManager();
 		File tmp = null;
@@ -661,7 +661,7 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 			
 			for (GWTFormElement formElement : formProperties) {
 				String key = formElement.getName().replace(".", "_").replace(":", "_");
-				String value = GWTUtil.getFormElementValue(formElement);
+				Object value = GWTUtil.getFormElementValue(formElement);
 				values.put(key, value);
 			}
 			
@@ -709,13 +709,16 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 			destinationPath = newDoc.getPath();
 			
 			// Setting property groups ( metadata )
-			for (PropertyGroup pg : OKMPropertyGroup.getInstance().getGroups(null, docPath)) {	
+			for (PropertyGroup pg : OKMPropertyGroup.getInstance().getGroups(null, docPath)) {
 				// Adding group
 				OKMPropertyGroup.getInstance().addGroup(null, newDoc.getPath(), pg.getName());
+				
 				// Getting group properties
 				List<FormElement> properties = new ArrayList<FormElement>(); // The properties to be saved
+				
 				for (Iterator<FormElement> itx = OKMPropertyGroup.getInstance().getProperties(null, newDoc.getPath(), pg.getName()).iterator(); itx.hasNext();) {
 					FormElement fe = itx.next();
+					
 					// Iterates all properties because can have more than one group
 					for (GWTFormElement fp : formProperties) {
 						if (fe.getName().equals(fp.getName())) {
@@ -723,6 +726,7 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 						}
 					}
 				}
+				
 				// Setting properties
 				OKMPropertyGroup.getInstance().setProperties(null, newDoc.getPath(), pg.getName(), properties); 
 			}
