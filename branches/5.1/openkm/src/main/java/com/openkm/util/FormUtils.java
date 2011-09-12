@@ -48,6 +48,8 @@ import org.xml.sax.helpers.DefaultHandler;
 import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.Button;
 import com.openkm.bean.form.CheckBox;
+import com.openkm.bean.form.Download;
+import com.openkm.bean.form.DownloadItem;
 import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Input;
 import com.openkm.bean.form.Option;
@@ -355,6 +357,41 @@ public class FormUtils {
 					if (item != null) up.setData(item.getNodeValue());
 					up.setValidators(parseValidators(nField));
 					fe.add(up);
+				} else if (fieldComponent.equals("download")) {
+					Download down = new Download();
+					ArrayList<DownloadItem> downItems = new ArrayList<DownloadItem>();
+					Node item = nField.getAttributes().getNamedItem("label");
+					if (item != null) down.setLabel(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("name");
+					if (item != null) down.setName(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("width");
+					if (item != null) down.setWidth(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("height");
+					if (item != null) down.setHeight(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("data");
+					if (item != null) down.setData(item.getNodeValue());
+					
+					NodeList nlDownItems = nField.getChildNodes();
+					for (int k = 0; k < nlDownItems.getLength(); k++) {
+						Node nDownItem = nlDownItems.item(k);
+						
+						if (nDownItem.getNodeType() == Node.ELEMENT_NODE) {
+							if (nDownItem.getNodeName().equals("downloadItem")) {
+								DownloadItem downItem = new DownloadItem();
+								item = nDownItem.getAttributes().getNamedItem("label");
+								if (item != null) downItem.setLabel(item.getNodeValue());
+								item = nDownItem.getAttributes().getNamedItem("nodePath");
+								if (item != null) downItem.setNodePath(item.getNodeValue());
+								item = nDownItem.getAttributes().getNamedItem("nodeUuid");
+								if (item != null) downItem.setNodeUuid(item.getNodeValue());
+								downItems.add(downItem);
+							}
+						}
+					}
+					
+					down.setDownloadItems(downItems);
+					down.setValidators(parseValidators(nField));
+					fe.add(down);
 				} else if (fieldComponent.equals("checkbox")) {
 					CheckBox checkBox = new CheckBox();
 					Node item = nField.getAttributes().getNamedItem("label");
