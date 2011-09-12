@@ -46,7 +46,7 @@
 	data CDATA #IMPLIED
 >
 
-<!ELEMENT download (downloadItem+, validator*)>
+<!ELEMENT download (node+, validator*)>
 <!ATTLIST download
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
@@ -55,11 +55,11 @@
 	data CDATA #IMPLIED
 >
 
-<!ELEMENT downloadItem EMPTY>
-<!ATTLIST downloadItem
+<!ELEMENT node EMPTY>
+<!ATTLIST node
 	label CDATA #REQUIRED
-	nodePath CDATA #IMPLIED
-	nodeUuid CDATA #IMPLIED
+	path CDATA #IMPLIED
+	uuid CDATA #IMPLIED
 >
 
 <!ELEMENT checkbox (validator*)>

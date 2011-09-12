@@ -23,11 +23,11 @@ package com.openkm.bean.form;
 
 import java.io.Serializable;
 
-public class DownloadItem implements Serializable {
+public class Node implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String label = "";
-	private String nodePath = "";
-	private String nodeUuid = "";
+	private String path = "";
+	private String uuid = "";
 
 	public String getLabel() {
 		return label;
@@ -37,28 +37,28 @@ public class DownloadItem implements Serializable {
 		this.label = label;
 	}
 
-	public String getNodePath() {
-		return nodePath;
+	public String getPath() {
+		return path;
 	}
 
-	public void setNodePath(String nodePath) {
-		this.nodePath = nodePath;
+	public void setPath(String path) {
+		this.path = path;
 	}
 
-	public String getNodeUuid() {
-		return nodeUuid;
+	public String getUuid() {
+		return uuid;
 	}
 
-	public void setNodeUuid(String nodeUuid) {
-		this.nodeUuid = nodeUuid;
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("label="); sb.append(label);
-		sb.append(", nodePath="); sb.append(nodePath);
-		sb.append(", nodeUuid="); sb.append(nodeUuid);
+		sb.append(", path="); sb.append(path);
+		sb.append(", uuid="); sb.append(uuid);
 		sb.append("}");
 		return sb.toString();
 	}
