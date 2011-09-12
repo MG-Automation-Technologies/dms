@@ -49,7 +49,6 @@ import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.Button;
 import com.openkm.bean.form.CheckBox;
 import com.openkm.bean.form.Download;
-import com.openkm.bean.form.DownloadItem;
 import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Input;
 import com.openkm.bean.form.Option;
@@ -359,7 +358,7 @@ public class FormUtils {
 					fe.add(up);
 				} else if (fieldComponent.equals("download")) {
 					Download down = new Download();
-					ArrayList<DownloadItem> downItems = new ArrayList<DownloadItem>();
+					ArrayList<com.openkm.bean.form.Node> nodes = new ArrayList<com.openkm.bean.form.Node>();
 					Node item = nField.getAttributes().getNamedItem("label");
 					if (item != null) down.setLabel(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("name");
@@ -371,25 +370,25 @@ public class FormUtils {
 					item = nField.getAttributes().getNamedItem("data");
 					if (item != null) down.setData(item.getNodeValue());
 					
-					NodeList nlDownItems = nField.getChildNodes();
-					for (int k = 0; k < nlDownItems.getLength(); k++) {
-						Node nDownItem = nlDownItems.item(k);
+					NodeList nlNodes = nField.getChildNodes();
+					for (int k = 0; k < nlNodes.getLength(); k++) {
+						Node nNode = nlNodes.item(k);
 						
-						if (nDownItem.getNodeType() == Node.ELEMENT_NODE) {
-							if (nDownItem.getNodeName().equals("downloadItem")) {
-								DownloadItem downItem = new DownloadItem();
-								item = nDownItem.getAttributes().getNamedItem("label");
-								if (item != null) downItem.setLabel(item.getNodeValue());
-								item = nDownItem.getAttributes().getNamedItem("nodePath");
-								if (item != null) downItem.setNodePath(item.getNodeValue());
-								item = nDownItem.getAttributes().getNamedItem("nodeUuid");
-								if (item != null) downItem.setNodeUuid(item.getNodeValue());
-								downItems.add(downItem);
+						if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+							if (nNode.getNodeName().equals("node")) {
+								com.openkm.bean.form.Node node = new com.openkm.bean.form.Node();
+								item = nNode.getAttributes().getNamedItem("label");
+								if (item != null) node.setLabel(item.getNodeValue());
+								item = nNode.getAttributes().getNamedItem("path");
+								if (item != null) node.setPath(item.getNodeValue());
+								item = nNode.getAttributes().getNamedItem("uuid");
+								if (item != null) node.setUuid(item.getNodeValue());
+								nodes.add(node);
 							}
 						}
 					}
 					
-					down.setDownloadItems(downItems);
+					down.setNodes(nodes);
 					down.setValidators(parseValidators(nField));
 					fe.add(down);
 				} else if (fieldComponent.equals("checkbox")) {

@@ -27,7 +27,7 @@ import java.util.List;
 public class Download extends FormElement {
 	private static final long serialVersionUID = 1L;
 	private List<Validator> validators = new ArrayList<Validator>();
-	private List<DownloadItem> downloadItems = new ArrayList<DownloadItem>();
+	private List<Node> nodes = new ArrayList<Node>();
 	private String data = "";
 	
 	public Download() {
@@ -42,12 +42,12 @@ public class Download extends FormElement {
 		this.validators = validators;
 	}
 
-	public List<DownloadItem> getDownloadItems() {
-		return downloadItems;
+	public List<Node> getNodes() {
+		return nodes;
 	}
 
-	public void setDownloadItems(List<DownloadItem> downloadItems) {
-		this.downloadItems = downloadItems;
+	public void setNodes(List<Node> nodes) {
+		this.nodes = nodes;
 	}
 
 	public String getData() {
@@ -66,7 +66,7 @@ public class Download extends FormElement {
 		sb.append(", width="); sb.append(width);
 		sb.append(", height="); sb.append(height);
 		sb.append(", data="); sb.append(data);
-		sb.append(", downloadItems="); sb.append(downloadItems);
+		sb.append(", nodes="); sb.append(nodes);
 		sb.append(", validators="); sb.append(validators);
 		sb.append("}");
 		return sb.toString();
