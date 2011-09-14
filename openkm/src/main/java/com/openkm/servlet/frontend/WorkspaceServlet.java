@@ -303,7 +303,12 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 				workspace.setImapID(mailAccount.getId());
 			}
 			
-			workspace.setRoleList(OKMAuth.getInstance().getRolesByUser(null, user.getId()));
+			if (user != null) {
+				workspace.setRoleList(OKMAuth.getInstance().getRolesByUser(null, user.getId()));
+			} else {
+				log.warn("User is null!!!");
+				log.warn("Please, check configuration principal.adapter={}", Config.PRINCIPAL_ADAPTER);
+			}
 			
 			if (Config.PRINCIPAL_ADAPTER.equals(DatabasePrincipalAdapter.class.getCanonicalName())) {
 				workspace.setChangePassword(true);
