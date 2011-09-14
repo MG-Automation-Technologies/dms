@@ -64,8 +64,10 @@ import com.openkm.frontend.client.bean.GWTPropertyParams;
 import com.openkm.frontend.client.bean.GWTTaskInstance;
 import com.openkm.frontend.client.bean.form.GWTButton;
 import com.openkm.frontend.client.bean.form.GWTCheckBox;
+import com.openkm.frontend.client.bean.form.GWTDownload;
 import com.openkm.frontend.client.bean.form.GWTFormElement;
 import com.openkm.frontend.client.bean.form.GWTInput;
+import com.openkm.frontend.client.bean.form.GWTNode;
 import com.openkm.frontend.client.bean.form.GWTOption;
 import com.openkm.frontend.client.bean.form.GWTSelect;
 import com.openkm.frontend.client.bean.form.GWTSeparator;
@@ -980,6 +982,31 @@ public class FormManager {
 			hWidgetProperties.put(propertyName,hPanel);
 			table.setWidget(row, 0, hPanel);
 			table.getFlexCellFormatter().setColSpan(row, 0, 2);
+		} else if (gwtMetadata instanceof GWTDownload) {
+			HorizontalPanel hPanel = new HorizontalPanel();
+			hWidgetProperties.put(propertyName, hPanel);
+			table.setWidget(row, 0, hPanel);
+			table.getFlexCellFormatter().setColSpan(row, 0, 2);
+			GWTDownload download = (GWTDownload) gwtMetadata;
+			FlexTable downloadTable = new FlexTable();
+			for (final GWTNode node : download.getNodes()) {
+				int downloadTableRow = downloadTable.getRowCount();
+				Anchor anchor = new Anchor("<b>" + node.getLabel() + "</b>", true);
+				anchor.addClickHandler(new ClickHandler() {
+					@Override
+					public void onClick(ClickEvent event) {
+						if (!node.getUuid().equals("")) {
+							Util.downloadFileByUUID(node.getUuid(), "");
+						} else if (!node.getPath().equals("")) {
+							Util.downloadFile(node.getPath(), "");
+						}
+					}
+				});
+				anchor.setStyleName("okm-Hyperlink");
+				downloadTable.setWidget(downloadTableRow, 0, anchor);
+			}
+			hPanel.add(new HTML("<b>" + gwtMetadata.getLabel() + "</b>"));
+			hPanel.add(downloadTable);
 		}
 	}
 	
@@ -1071,6 +1098,8 @@ public class FormManager {
 				// Nothing to be done here
 			} else if (formField instanceof GWTSeparator) {
 				// Nothing to be done here
+			} else if (formField instanceof GWTDownload) {
+				// Nothing to be done here
 			}
 			rows++;
 		}
@@ -1152,6 +1181,8 @@ public class FormManager {
 				} else if (formElement instanceof GWTText) {
 					((GWTText) formElement).setLabel(propertyParam.getValue());
 				} else if (formElement instanceof GWTSeparator) {
+					// Nothing to be done here
+				} else if (formElement instanceof GWTDownload) {
 					// Nothing to be done here
 				}
 			}
@@ -1236,6 +1267,8 @@ public class FormManager {
 				// Nothing to be done here
 			} else if (formElement instanceof GWTSeparator) {
 				// Nothing to be done here
+			} else if (formElement instanceof GWTDownload) {
+				// Nothing to be done here
 			}
 			
 			hPropertyParams.get(formElement.getName()).setValue(value);
@@ -1319,6 +1352,8 @@ public class FormManager {
 			} else if (formElement instanceof GWTText) {
 				// Nothing to be done here
 			} else if (formElement instanceof GWTSeparator) {
+				// Nothing to be done here
+			} else if (formElement instanceof GWTDownload) {
 				// Nothing to be done here
 			}
 			
@@ -1446,6 +1481,8 @@ public class FormManager {
 						text.setLabel(getStringValueFromVariable(map.get(formElement.getName())));
 					} else if (formElement instanceof GWTSeparator) {
 						// Nothing to be done here
+					} else if (formElement instanceof GWTDownload) {
+						// Nothing to be done here
 					}
 				}
 			}
@@ -1530,15 +1567,50 @@ public class FormManager {
 					}
 				} else if (formElement instanceof GWTText) {
 					GWTText text = (GWTText) formElement;
-					
 					if (!text.getData().equals("") && map.keySet().contains(text.getData())) {
 						text.setLabel(getStringValueFromVariable(map.get(text.getData())));
 					}
 				} else if (formElement instanceof GWTSeparator) {
 					// Nothing to be done here
+				} else if (formElement instanceof GWTDownload) {
+					GWTDownload download = (GWTDownload) formElement;
+					if (!download.getData().equals("") && map.keySet().contains(download.getData())) {
+						download.setNodes(getNodesValueFromVariable(map.get(download.getData())));
+					}
 				}
 			}
 		}
+	}
+	
+	/**
+	 * getNodesValueFromVariable
+	 * 
+	 * @param obj
+	 * @return
+	 */
+	private List<GWTNode> getNodesValueFromVariable(Object obj) {
+		if (obj instanceof GWTInput) {
+			return new ArrayList<GWTNode>();
+		} else if (obj instanceof GWTTextArea) {
+			return new ArrayList<GWTNode>();
+		} else if (obj instanceof GWTSuggestBox) {
+			return new ArrayList<GWTNode>();
+		} else if (obj instanceof GWTCheckBox) {
+			return new ArrayList<GWTNode>();
+		} else if (obj instanceof GWTSelect) {
+			return new ArrayList<GWTNode>();
+		} else if (obj instanceof GWTUpload) {
+			return new ArrayList<GWTNode>();
+		} else if (obj instanceof GWTText) {
+			return new ArrayList<GWTNode>();
+		} else if (obj instanceof GWTSeparator) {
+			return new ArrayList<GWTNode>();
+		} else if (obj instanceof GWTDownload) {
+			GWTDownload download = (GWTDownload) obj;
+			return download.getNodes();
+		} else {
+			return new ArrayList<GWTNode>();
+		} 
 	}
 	
 	/**
@@ -1575,6 +1647,8 @@ public class FormManager {
 		} else if (obj instanceof GWTText) {
 			return ((GWTText)obj).getLabel();
 		} else if (obj instanceof GWTSeparator) {
+			return null;
+		} else if (obj instanceof GWTDownload) {
 			return null;
 		} else {
 			return null;
@@ -1615,6 +1689,8 @@ public class FormManager {
 		} else if (obj instanceof GWTText) {
 			return false;
 		} else if (obj instanceof GWTSeparator) {
+			return false;
+		} else if (obj instanceof GWTDownload) {
 			return false;
 		} else {
 			return false;
@@ -1667,6 +1743,8 @@ public class FormManager {
 				return options;
 			} else if (obj instanceof GWTSeparator) {
 				return options;
+			} else if (obj instanceof GWTDownload) {
+				return null;
 			} else {
 				return options;
 			}
@@ -1698,7 +1776,9 @@ public class FormManager {
 				// Nothing to be done here
 			} else if (formElement instanceof GWTSeparator) {
 				// Nothing to be done here
-			}
+			} else if (formElement instanceof GWTDownload) {
+				// Nothing to be done here
+			} 
 		}
 		return values;
 	}
