@@ -186,6 +186,7 @@ public class PDFUtils {
 	
 	/**
 	 * Fill PDF form
+	 * @throws  
 	 */
 	@SuppressWarnings("rawtypes")
 	public static void fillForm(InputStream input, Map<String, Object> values, 
@@ -196,6 +197,7 @@ public class PDFUtils {
 		PdfStamper stamper = new PdfStamper(reader, output);
 		AcroFields fields = stamper.getAcroFields();
 		PRAcroForm form = reader.getAcroForm();
+		boolean formFlattening = false;
 		
 		if (form != null) {
 			for (Iterator it = form.getFields().iterator(); it.hasNext(); ) {
@@ -204,10 +206,13 @@ public class PDFUtils {
 				log.debug("Field: {}, Value: {}", field.getName(), fieldValue);
 				
 				if (fieldValue != null && !fieldValue.equals("")) {
-					String result = TemplateUtils.replace("PDF_FILL_FORM", fieldValue, values);
-					log.debug("Set to '{}'", result);
-					fields.setField(field.getName(), result);
-					stamper.partialFormFlattening(field.getName());
+					if (values.containsKey(field.getName())) {
+						String result = TemplateUtils.replace("PDF_FILL_FORM", fieldValue, values);
+						log.debug("Set to '{}'", result);
+						fields.setField(field.getName(), result);
+						stamper.partialFormFlattening(field.getName());
+						formFlattening = true;
+					}
 				} else {
 					Object value = values.get(field.getName());
 					
@@ -215,12 +220,13 @@ public class PDFUtils {
 						log.debug("Set to '{}'", value);
 						fields.setField(field.getName(), value.toString());
 						stamper.partialFormFlattening(field.getName());
+						formFlattening = true;
 					}
 				}
 			}
 		}
 		
-		stamper.setFormFlattening(true);
+		stamper.setFormFlattening(formFlattening);
 		stamper.close();
 		reader.close();
 	}
