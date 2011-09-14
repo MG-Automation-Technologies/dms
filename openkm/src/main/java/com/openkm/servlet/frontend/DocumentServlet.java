@@ -67,6 +67,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.UserQuotaExceededException;
+import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.extension.core.ExtensionException;
@@ -639,86 +640,37 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 	}
 	
 	@Override
-	public String createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties,
+	public String createFromTemplate(String tplPath, String destinationPath, List<GWTFormElement> formProperties,
 			Map<String, List<Map<String, String>>> tableProperties) throws OKMException {
-		log.debug("createFromTemplate({},{})", docPath, destinationPath);
+		log.debug("createFromTemplate({},{})", tplPath, destinationPath);
 		updateSessionManager();
 		File tmp = null;
 		InputStream fis = null;
-		FileOutputStream fos = null;
 		
 		try {
-			// Reading original document
-			fis = OKMDocument.getInstance().getContent(null, docPath, false);
+			Document docTpl = OKMDocument.getInstance().getProperties(null, tplPath);
+			tmp = tmpFromTemplate(docTpl, formProperties, tableProperties);
 			
-			// Save content to temporary file
-			String fileName = JCRUtils.getName(docPath);
-			tmp = File.createTempFile("okm", "." + FileUtils.getFileExtension(fileName));
-			fos = new FileOutputStream(tmp);
-			
-			// Setting values to document
-			Map<String, Object> values = new HashMap<String, Object>();
-			
-			for (GWTFormElement formElement : formProperties) {
-				String key = formElement.getName().replace(".", "_").replace(":", "_");
-				Object value = GWTUtil.getFormElementValue(formElement);
-				values.put(key, value);
+			// Change fileName after conversion
+			if (docTpl.getMimeType().equals("text/html")) {
+				destinationPath = destinationPath.substring(0, destinationPath.lastIndexOf(".")) + ".pdf";
 			}
 			
-			for (String key : tableProperties.keySet()) {
-				values.put(key, tableProperties.get(key));
-			}
-			
-			// Fill document by mime type
-			Document doc = OKMDocument.getInstance().getProperties(null, docPath);
-			
-			if (doc.getMimeType().equals("application/pdf")) {
-				// Fill form
-				PDFUtils.fillForm(fis, values, fos);
-				fis.close();
-				fos.close();
-			} else if (doc.getMimeType().equals("application/vnd.oasis.opendocument.text")) {
-				// Fill template
-				OOUtils.fillTemplate(fis, values, fos);
-				fis.close();
-				fos.close();
-			} else if (doc.getMimeType().equals("text/html")) {
-				//Fill template
-				TemplateUtils.replace(fileName, fis, values, fos);
-				fis.close();
-				fos.close();
-				
-				// Converting to pdf
-				fis = new FileInputStream(tmp);
-				File tmp2 = tmp;
-				tmp = File.createTempFile("okm", ".pdf");
-				DocConverter.getInstance().html2pdf(fis,tmp); // tmp has converted pdf file
-				tmp2.delete(); // deleting html tmp file
-				
-				// Changing fileName after conversion
-				destinationPath = destinationPath.substring(0,destinationPath.lastIndexOf(".")) + ".pdf";
-				fis.close();
-				fos.close();
-			}
-			
-	        // Creating document
+	        // Create document
 	        fis = new FileInputStream(tmp);
 	        Document newDoc = new Document();
 			newDoc.setPath(destinationPath);
-			newDoc = OKMDocument.getInstance().create(null, newDoc, fis); // Must refreshing newDoc values here
+			newDoc = OKMDocument.getInstance().create(null, newDoc, fis);
 			destinationPath = newDoc.getPath();
 			
-			// Setting property groups ( metadata )
-			for (PropertyGroup pg : OKMPropertyGroup.getInstance().getGroups(null, docPath)) {
-				// Adding group
+			// Set property groups ( metadata )
+			for (PropertyGroup pg : OKMPropertyGroup.getInstance().getGroups(null, tplPath)) {
 				OKMPropertyGroup.getInstance().addGroup(null, newDoc.getPath(), pg.getName());
 				
-				// Getting group properties
-				List<FormElement> properties = new ArrayList<FormElement>(); // The properties to be saved
+				// Get group properties
+				List<FormElement> properties = new ArrayList<FormElement>();
 				
-				for (Iterator<FormElement> itx = OKMPropertyGroup.getInstance().getProperties(null, newDoc.getPath(), pg.getName()).iterator(); itx.hasNext();) {
-					FormElement fe = itx.next();
-					
+				for (FormElement fe : OKMPropertyGroup.getInstance().getProperties(null, newDoc.getPath(), pg.getName())) {
 					// Iterates all properties because can have more than one group
 					for (GWTFormElement fp : formProperties) {
 						if (fe.getName().equals(fp.getName())) {
@@ -727,7 +679,6 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 					}
 				}
 				
-				// Setting properties
 				OKMPropertyGroup.getInstance().setProperties(null, newDoc.getPath(), pg.getName(), properties); 
 			}
 		} catch (IOException e) {
@@ -790,11 +741,164 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 		} finally {
 			FileUtils.deleteQuietly(tmp);
 			IOUtils.closeQuietly(fis);
-			IOUtils.closeQuietly(fos);
 		}
 		
 		log.debug("createFromTemplate: {}", destinationPath);
 		return destinationPath;
+	}
+	
+	@Override
+	public String updateFromTemplate(String tplPath, String destinationPath, List<GWTFormElement> formProperties,
+			Map<String, List<Map<String, String>>> tableProperties) throws OKMException {
+		log.debug("updateFromTemplate({},{})", tplPath, destinationPath);
+		updateSessionManager();
+		InputStream fis = null;
+		File tmp = null;
+		
+		try {
+			Document docTpl = OKMDocument.getInstance().getProperties(null, tplPath);
+			tmp = tmpFromTemplate(docTpl, formProperties, tableProperties);
+			
+	        // Update document
+	        fis = new FileInputStream(tmp);
+	        OKMDocument.getInstance().checkout(null, destinationPath);
+	        OKMDocument.getInstance().setContent(null, destinationPath, fis);
+	        OKMDocument.getInstance().checkin(null, destinationPath, "Updated from template");
+	        
+			// Set property groups ( metadata )
+			for (PropertyGroup pg : OKMPropertyGroup.getInstance().getGroups(null, destinationPath)) {
+				List<FormElement> properties = new ArrayList<FormElement>();
+				
+				for (FormElement fe : OKMPropertyGroup.getInstance().getProperties(null, destinationPath, pg.getName())) {
+					// Iterates all properties because can have more than one group
+					for (GWTFormElement fp : formProperties) {
+						if (fe.getName().equals(fp.getName())) {
+							properties.add(GWTUtil.copy(fp));
+						}
+					}
+				}
+				
+				OKMPropertyGroup.getInstance().setProperties(null, destinationPath, pg.getName(), properties); 
+			}
+		} catch (IOException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_IO), e.getMessage());
+		} catch (PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Database), e.getMessage());
+		} catch (DocumentException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Document), e.getMessage());
+		} catch (FileSizeExceededException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_FileSizeExceeded), e.getMessage());
+		} catch (UserQuotaExceededException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_QuotaExceed), e.getMessage());
+		} catch (VirusDetectedException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Virus), e.getMessage());
+		} catch (AccessDeniedException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_AccessDenied), e.getMessage());
+		} catch (DocumentTemplateException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_DocumentTemplate), e.getMessage());
+		} catch (ConversionException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Conversion), e.getMessage());
+		} catch (TemplateException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Template), e.getMessage());
+		} catch (ParseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Parse), e.getMessage());
+		} catch (NoSuchGroupException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_NoSuchGroup), e.getMessage());
+		} catch (LockException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Lock), e.getMessage());
+		} catch (NoSuchPropertyException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_NoSuchProperty), e.getMessage());
+		} catch (VersionException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Version), e.getMessage());
+		} finally {
+			FileUtils.deleteQuietly(tmp);
+			IOUtils.closeQuietly(fis);
+		}
+		
+		log.debug("updateFromTemplate: {}", destinationPath);
+		return destinationPath;
+	}
+	
+	/**
+	 * Create a document from a template and store it in a temporal file. 
+	 */
+	private File tmpFromTemplate(Document docTpl, List<GWTFormElement> formProperties,
+			Map<String, List<Map<String, String>>> tableProperties) throws PathNotFoundException,
+			RepositoryException, IOException, DatabaseException, DocumentException, TemplateException,
+			DocumentTemplateException, ConversionException {
+		FileOutputStream fos = null;
+		InputStream fis = null;
+		File tmp = null;
+		
+		try {
+			// Reading original document
+			fis = OKMDocument.getInstance().getContent(null, docTpl.getPath(), false);
+			
+			// Save content to temporary file
+			String fileName = JCRUtils.getName(docTpl.getPath());
+			tmp = File.createTempFile("okm", "." + FileUtils.getFileExtension(fileName));
+			fos = new FileOutputStream(tmp);
+			
+			// Setting values to document
+			Map<String, Object> values = new HashMap<String, Object>();
+			
+			for (GWTFormElement formElement : formProperties) {
+				String key = formElement.getName().replace(".", "_").replace(":", "_");
+				Object value = GWTUtil.getFormElementValue(formElement);
+				values.put(key, value);
+			}
+			
+			for (String key : tableProperties.keySet()) {
+				values.put(key, tableProperties.get(key));
+			}
+			
+			// Fill document by mime type
+			if (docTpl.getMimeType().equals("application/pdf")) {
+				// Fill form
+				PDFUtils.fillForm(fis, values, fos);
+			} else if (docTpl.getMimeType().equals("application/vnd.oasis.opendocument.text")) {
+				// Fill template
+				OOUtils.fillTemplate(fis, values, fos);
+			} else if (docTpl.getMimeType().equals("text/html")) {
+				//Fill template
+				TemplateUtils.replace(fileName, fis, values, fos);
+				fis.close();
+				fos.close();
+				
+				// Converting to PDF
+				fis = new FileInputStream(tmp);
+				File tmp2 = tmp;
+				tmp = File.createTempFile("okm", ".pdf");
+				DocConverter.getInstance().html2pdf(fis, tmp); // tmp has converted pdf file
+				tmp2.delete(); // deleting html tmp file
+			}
+		} finally {
+			IOUtils.closeQuietly(fis);
+			IOUtils.closeQuietly(fos);
+		}
+		
+		return tmp;
 	}
 	
 	@Override
