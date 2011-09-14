@@ -56,8 +56,10 @@ import com.openkm.bean.QueryResult;
 import com.openkm.bean.Version;
 import com.openkm.bean.form.Button;
 import com.openkm.bean.form.CheckBox;
+import com.openkm.bean.form.Download;
 import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Input;
+import com.openkm.bean.form.Node;
 import com.openkm.bean.form.Option;
 import com.openkm.bean.form.Select;
 import com.openkm.bean.form.Separator;
@@ -141,8 +143,10 @@ import com.openkm.frontend.client.bean.extension.GWTStapleGroup;
 import com.openkm.frontend.client.bean.extension.GWTTextMessageSent;
 import com.openkm.frontend.client.bean.form.GWTButton;
 import com.openkm.frontend.client.bean.form.GWTCheckBox;
+import com.openkm.frontend.client.bean.form.GWTDownload;
 import com.openkm.frontend.client.bean.form.GWTFormElement;
 import com.openkm.frontend.client.bean.form.GWTInput;
+import com.openkm.frontend.client.bean.form.GWTNode;
 import com.openkm.frontend.client.bean.form.GWTOption;
 import com.openkm.frontend.client.bean.form.GWTSelect;
 import com.openkm.frontend.client.bean.form.GWTSeparator;
@@ -824,16 +828,24 @@ public class GWTUtil {
 	 */
 	public static List<GWTValidator> copyValidators(List<Validator> validators) {
 		List<GWTValidator> gwtValidatorsList = new ArrayList<GWTValidator>();
-		
-		for (Iterator<Validator> it = validators.iterator(); it.hasNext();) {
-			Validator validator = it.next();
-			GWTValidator valid = new GWTValidator();
-			valid.setParameter(validator.getParameter());
-			valid.setType(validator.getType());
-			gwtValidatorsList.add(valid);
+		for (Validator validator : validators) {
+			gwtValidatorsList.add(copy(validator));
 		}
-		
 		return gwtValidatorsList;
+	}
+	
+	/**
+	 * copyNodes
+	 * 
+	 * @param nodes
+	 * @return
+	 */
+	public static List<GWTNode> copyNodes(List<Node> nodes) {
+		List<GWTNode> gwtNodesList = new ArrayList<GWTNode>();
+		for (Node node : nodes) {
+			gwtNodesList.add(copy(node));
+		}
+		return gwtNodesList;
 	}
 	
 	/**
@@ -973,7 +985,18 @@ public class GWTUtil {
 			separator.setHeight(formElement.getHeight());
 			separator.setWidth(formElement.getWidth());
 			return separator;
-		}else {
+		} else if (formElement instanceof Download) {
+			GWTDownload gWTdownload = new GWTDownload();
+			gWTdownload.setName(formElement.getName());
+			gWTdownload.setLabel(formElement.getLabel());
+			gWTdownload.setHeight(formElement.getHeight());
+			gWTdownload.setWidth(formElement.getWidth());
+			Download download = (Download) formElement;
+			gWTdownload.setData(download.getData());
+			gWTdownload.setValidators(copyValidators(download.getValidators()));
+			gWTdownload.setNodes(copyNodes(download.getNodes()));
+			return gWTdownload;
+		} else {
 			return new GWTFormElement();
 		}
 	}
@@ -1082,7 +1105,20 @@ public class GWTUtil {
 			separator.setHeight(gWTText.getHeight());
 			separator.setWidth(gWTText.getWidth());
 			return separator;
-		} else {
+		} else if (formElement instanceof GWTDownload) {
+			Download download = new Download();
+			GWTDownload gWTDownload = (GWTDownload) formElement;
+			download.setName(gWTDownload.getName());
+			download.setLabel(gWTDownload.getLabel());
+			download.setHeight(gWTDownload.getHeight());
+			download.setWidth(gWTDownload.getWidth());
+			download.setData(gWTDownload.getData());
+			List<Node> nodes = new ArrayList<Node>();
+			for (GWTNode gWTNode : gWTDownload.getNodes()) {
+				nodes.add(copy(gWTNode));
+			}
+			return download;
+		}else {
 			return new FormElement();
 		}
 	}
@@ -1131,9 +1167,61 @@ public class GWTUtil {
 			return ((GWTText) formElement).getLabel();
 		} else if (formElement instanceof GWTSeparator) {
 			return ((GWTSeparator) formElement).getLabel();
+		} else if (formElement instanceof GWTDownload) {
+			GWTDownload download = ((GWTDownload) formElement);
+			String value = "";
+			for (GWTNode node : download.getNodes()) {
+				if (!value.equals("")) {
+					value += ",";
+				}
+				if (!node.getUuid().equals("")) {
+					value += node.getUuid();
+				} else {
+					value += node.getPath();
+				}
+			}
+			return value;
 		}
 		
 		return "";
+	}
+	
+	/**
+	 * Copy to Validator data to  GWTValidator
+	 * @param Validator the original data
+	 * @return The GWTValidator object with data values from original Validator
+	 */
+	public static GWTValidator copy(Validator validator) {
+		GWTValidator gWTValidator = new GWTValidator();
+		gWTValidator.setParameter(validator.getParameter());
+		gWTValidator.setType(validator.getType());
+		return gWTValidator;
+	}
+	
+	/**
+	 * Copy to Node data to  GWTNode
+	 * @param Node the original data
+	 * @return The GWTNode object with data values from original Node
+	 */
+	public static GWTNode copy(Node node) {
+		GWTNode gWTNode = new GWTNode();
+		gWTNode.setLabel(node.getLabel());
+		gWTNode.setPath(node.getPath());
+		gWTNode.setUuid(node.getUuid());
+		return gWTNode;
+	}
+	
+	/**
+	 * Copy to GWTNode data to Node
+	 * @param GWTNode the original data
+	 * @return The Node object with data values from original GWTNode
+	 */
+	public static Node copy(GWTNode gWTNode) {
+		Node node = new Node();
+		node.setLabel(gWTNode.getLabel());
+		node.setPath(gWTNode.getPath());
+		node.setUuid(gWTNode.getUuid());
+		return node;
 	}
 	
 	/**
