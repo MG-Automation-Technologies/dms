@@ -186,7 +186,6 @@ public class PDFUtils {
 	
 	/**
 	 * Fill PDF form
-	 * @throws  
 	 */
 	@SuppressWarnings("rawtypes")
 	public static void fillForm(InputStream input, Map<String, Object> values, 
@@ -208,7 +207,7 @@ public class PDFUtils {
 					String result = TemplateUtils.replace("PDF_FILL_FORM", fieldValue, values);
 					log.debug("Set to '{}'", result);
 					fields.setField(field.getName(), result);
-					stamper.partialFormFlattening(field.getName());	
+					stamper.partialFormFlattening(field.getName());
 				} else {
 					Object value = values.get(field.getName());
 					
