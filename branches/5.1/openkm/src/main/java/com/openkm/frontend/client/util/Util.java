@@ -215,6 +215,22 @@ public class Util {
 	}
 	
 	/**
+	 * Download file by UUID
+	 * 
+	 * @param uuid
+	 * @param params
+	 */
+	public static void downloadFileByUUID(String uuid, String params) {
+		if (!params.equals("") && !params.endsWith("&")) {
+			params += "&";
+		}
+		
+		final Element downloadIframe = RootPanel.get("__download").getElement(); 
+		String url = RPCService.DownloadServlet + "?" + params + "uuid=" + URL.encodeQueryString(uuid);
+		DOM.setElementAttribute(downloadIframe, "src", url); 
+	}
+	
+	/**
 	 * Download file
 	 * 
 	 * @param path
