@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!ELEMENT workflow-forms (workflow-form+)>
 
-<!ELEMENT workflow-form (input | suggestbox | upload | download | checkbox | textarea | select | button | separator | text)*>
+<!ELEMENT workflow-form (input | suggestbox | upload | download | print | checkbox | textarea | select | button | separator | text)*>
 <!ATTLIST workflow-form
 	task CDATA #REQUIRED
 >
@@ -48,6 +48,15 @@
 
 <!ELEMENT download (node+, validator*)>
 <!ATTLIST download
+	label CDATA #REQUIRED
+	name CDATA #REQUIRED
+	width CDATA #IMPLIED
+	height CDATA #IMPLIED
+	data CDATA #IMPLIED
+>
+
+<!ELEMENT print (node+, validator*)>
+<!ATTLIST print
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
 	width CDATA #IMPLIED
