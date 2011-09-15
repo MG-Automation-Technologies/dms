@@ -235,11 +235,11 @@ public class CronTabServlet extends BaseServlet {
 		CronTab ct = CronTabDAO.findByPk(ctId);
 		
 		if (CronTab.BSH.equals(ct.getFileMime())) {
-			Cron.RunnerBsh runner = new Cron.RunnerBsh(ct.getId(), ct.getMail(),  
+			Cron.RunnerBsh runner = new Cron.RunnerBsh(ct.getId(), ct.getName(), ct.getMail(),  
 					new String(SecureStore.b64Decode(ct.getFileContent())));
 			runner.run();
 		} else if (CronTab.JAR.equals(ct.getFileMime())) {
-			Cron.RunnerJar runner = new Cron.RunnerJar(ct.getId(), ct.getMail(), 
+			Cron.RunnerJar runner = new Cron.RunnerJar(ct.getId(), ct.getName(), ct.getMail(), 
 					SecureStore.b64Decode(ct.getFileContent()));
 			runner.run();
 		}
