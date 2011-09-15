@@ -79,6 +79,8 @@ import com.openkm.frontend.client.bean.form.GWTValidator;
 import com.openkm.frontend.client.contants.ui.UIFileUploadConstants;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
+import com.openkm.frontend.client.service.OKMFolderService;
+import com.openkm.frontend.client.service.OKMFolderServiceAsync;
 import com.openkm.frontend.client.service.OKMKeyValueService;
 import com.openkm.frontend.client.service.OKMKeyValueServiceAsync;
 import com.openkm.frontend.client.service.OKMRepositoryService;
@@ -106,6 +108,7 @@ public class FormManager {
 	private final OKMKeyValueServiceAsync keyValueService = (OKMKeyValueServiceAsync) GWT.create(OKMKeyValueService.class);
 	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
+	private final OKMFolderServiceAsync folderService = (OKMFolderServiceAsync) GWT.create(OKMFolderService.class);
 	
 	// Boolean contants
 	private String BOOLEAN_TRUE = String.valueOf(Boolean.TRUE);
@@ -989,23 +992,76 @@ public class FormManager {
 			table.getFlexCellFormatter().setColSpan(row, 0, 2);
 			GWTDownload download = (GWTDownload) gwtMetadata;
 			FlexTable downloadTable = new FlexTable();
+			HTML description = new HTML("<b>" + gwtMetadata.getLabel() + "</b>");
+			downloadTable.setWidget(0, 0, description);
+			downloadTable.getFlexCellFormatter().setColSpan(0, 0, 2);
 			for (final GWTNode node : download.getNodes()) {
 				int downloadTableRow = downloadTable.getRowCount();
-				Anchor anchor = new Anchor("<b>" + node.getLabel() + "</b>", true);
-				anchor.addClickHandler(new ClickHandler() {
-					@Override
-					public void onClick(ClickEvent event) {
-						if (!node.getUuid().equals("")) {
-							Util.downloadFileByUUID(node.getUuid(), "");
-						} else if (!node.getPath().equals("")) {
-							Util.downloadFile(node.getPath(), "");
+				final Anchor anchor = new Anchor("<b>" + node.getLabel() + "</b>", true);
+				
+				if (!node.getUuid().equals("")) {
+					repositoryService.getPathByUUID(node.getUuid(), new AsyncCallback<String>() {
+						@Override
+						public void onSuccess(String result) {
+							final String path = result;
+							folderService.isValid(result, new AsyncCallback<Boolean>() {
+								@Override
+								public void onSuccess(Boolean result) {
+									if (result.booleanValue()) {
+										Util.downloadFile(path, "export");
+									} else {
+										anchor.addClickHandler(new ClickHandler() {
+											@Override
+											public void onClick(ClickEvent event) {
+												if (!node.getUuid().equals("")) {
+													Util.downloadFileByUUID(node.getUuid(), "");
+												} else if (!node.getPath().equals("")) {
+													Util.downloadFile(node.getPath(), "");
+												}
+											}
+										});
+									}
+								}
+								@Override
+								public void onFailure(Throwable caught) {
+									Main.get().showError("getPathByUUID", caught);
+								}
+							});
 						}
-					}
-				});
+						@Override
+						public void onFailure(Throwable caught) {
+							Main.get().showError("getPathByUUID", caught);
+						}
+					});
+				} else if (!node.getPath().equals("")) {
+					folderService.isValid(node.getPath(), new AsyncCallback<Boolean>() {
+						@Override
+						public void onSuccess(Boolean result) {
+							if (result.booleanValue()) {
+								Util.downloadFile(node.getPath(), "export");
+							} else {
+								anchor.addClickHandler(new ClickHandler() {
+									@Override
+									public void onClick(ClickEvent event) {
+										if (!node.getUuid().equals("")) {
+											Util.downloadFileByUUID(node.getUuid(), "");
+										} else if (!node.getPath().equals("")) {
+											Util.downloadFile(node.getPath(), "");
+										}
+									}
+								});
+							}
+						}
+						@Override
+						public void onFailure(Throwable caught) {
+							Main.get().showError("getPathByUUID", caught);
+						}
+					});
+				}
 				anchor.setStyleName("okm-Hyperlink");
-				downloadTable.setWidget(downloadTableRow, 0, anchor);
+				downloadTable.setWidget(downloadTableRow, 0,new HTML("&nbsp;&nbsp;&nbsp;"));
+				downloadTable.setWidget(downloadTableRow, 1, anchor);
 			}
-			hPanel.add(new HTML("<b>" + gwtMetadata.getLabel() + "</b>"));
 			hPanel.add(downloadTable);
 		}
 	}
