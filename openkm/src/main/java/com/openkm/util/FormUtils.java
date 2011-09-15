@@ -52,6 +52,7 @@ import com.openkm.bean.form.Download;
 import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Input;
 import com.openkm.bean.form.Option;
+import com.openkm.bean.form.Print;
 import com.openkm.bean.form.Select;
 import com.openkm.bean.form.Separator;
 import com.openkm.bean.form.SuggestBox;
@@ -358,7 +359,6 @@ public class FormUtils {
 					fe.add(up);
 				} else if (fieldComponent.equals("download")) {
 					Download down = new Download();
-					ArrayList<com.openkm.bean.form.Node> nodes = new ArrayList<com.openkm.bean.form.Node>();
 					Node item = nField.getAttributes().getNamedItem("label");
 					if (item != null) down.setLabel(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("name");
@@ -369,28 +369,24 @@ public class FormUtils {
 					if (item != null) down.setHeight(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("data");
 					if (item != null) down.setData(item.getNodeValue());
-					
-					NodeList nlNodes = nField.getChildNodes();
-					for (int k = 0; k < nlNodes.getLength(); k++) {
-						Node nNode = nlNodes.item(k);
-						
-						if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-							if (nNode.getNodeName().equals("node")) {
-								com.openkm.bean.form.Node node = new com.openkm.bean.form.Node();
-								item = nNode.getAttributes().getNamedItem("label");
-								if (item != null) node.setLabel(item.getNodeValue());
-								item = nNode.getAttributes().getNamedItem("path");
-								if (item != null) node.setPath(item.getNodeValue());
-								item = nNode.getAttributes().getNamedItem("uuid");
-								if (item != null) node.setUuid(item.getNodeValue());
-								nodes.add(node);
-							}
-						}
-					}
-					
-					down.setNodes(nodes);
+					down.setNodes(parseNodes(nField));
 					down.setValidators(parseValidators(nField));
 					fe.add(down);
+				} else if (fieldComponent.equals("print")) {
+					Print print = new Print();
+					Node item = nField.getAttributes().getNamedItem("label");
+					if (item != null) print.setLabel(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("name");
+					if (item != null) print.setName(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("width");
+					if (item != null) print.setWidth(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("height");
+					if (item != null) print.setHeight(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("data");
+					if (item != null) print.setData(item.getNodeValue());
+					print.setNodes(parseNodes(nField));
+					print.setValidators(parseValidators(nField));
+					fe.add(print);
 				} else if (fieldComponent.equals("checkbox")) {
 					CheckBox checkBox = new CheckBox();
 					Node item = nField.getAttributes().getNamedItem("label");
@@ -506,6 +502,33 @@ public class FormUtils {
 		}
 		
 		return fe;
+	}
+	
+	/**
+	 * Parse form elements nodes
+	 */
+	private static List<com.openkm.bean.form.Node> parseNodes(Node nField) {
+		List<com.openkm.bean.form.Node> nodes = new ArrayList<com.openkm.bean.form.Node>();
+		NodeList nlNodes = nField.getChildNodes();
+		
+		for (int k = 0; k < nlNodes.getLength(); k++) {
+			Node nNode = nlNodes.item(k);
+			
+			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+				if (nNode.getNodeName().equals("node")) {
+					com.openkm.bean.form.Node node = new com.openkm.bean.form.Node();
+					Node item = nNode.getAttributes().getNamedItem("label");
+					if (item != null) node.setLabel(item.getNodeValue());
+					item = nNode.getAttributes().getNamedItem("path");
+					if (item != null) node.setPath(item.getNodeValue());
+					item = nNode.getAttributes().getNamedItem("uuid");
+					if (item != null) node.setUuid(item.getNodeValue());
+					nodes.add(node);
+				}
+			}
+		}
+		
+		return nodes;
 	}
 	
 	/**
