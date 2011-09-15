@@ -122,7 +122,7 @@ public class ExecutionUtils {
     			
     			if (mainClass != null) {
     				Class<?> c = jcl.loadClass(jcl.getMainClassName());
-    				ret = ClassLoaderUtils.invokeClass(c, new String[] {});
+    				ret = ClassLoaderUtils.invokeMainMethodFromClass(c, new String[] {});
     			} else {
     				log.error("Main class not defined at: {}", jar.getPath());
     			}
@@ -150,7 +150,32 @@ public class ExecutionUtils {
    			
    			if (mainClass != null) {
    				Class<?> c = jcl.loadClass(jcl.getMainClassName());
-   				ret = ClassLoaderUtils.invokeClass(c, new String[] {});
+   				ret = ClassLoaderUtils.invokeMainMethodFromClass(c, new String[] {});
+   			} else {
+   				log.error("Main class not defined at jar");
+   			}
+    	} catch (Exception e) {
+    		log.warn(e.getMessage(), e);
+    	}
+    	
+    	log.debug("runJar: {}", ret!=null?ret.toString():"null");
+        return ret;
+	}
+    
+    /**
+     * Execute jar
+     */
+    public static Object runJar(byte[] jar, String methodName) {
+    	Object ret = null;
+    	
+    	try {
+   			ClassLoader cl = ExecutionUtils.class.getClass().getClassLoader();
+   			BinaryClassLoader jcl = new BinaryClassLoader(jar, cl);
+   			String mainClass = jcl.getMainClassName();
+   			
+   			if (mainClass != null) {
+   				Class<?> c = jcl.loadClass(jcl.getMainClassName());
+   				ret = ClassLoaderUtils.invokeMethodFromClass(c, methodName);
    			} else {
    				log.error("Main class not defined at jar");
    			}
