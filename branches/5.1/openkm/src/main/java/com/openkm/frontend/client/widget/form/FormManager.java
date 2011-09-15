@@ -127,6 +127,7 @@ public class FormManager {
 	private HorizontalPanel submitButtonPanel;
 	private boolean isSearchView = false;
 	private HasSearch search;
+	private List<Button> buttonControlList;
 	
 	/**
 	 * FormManager used in workflow mode
@@ -163,6 +164,7 @@ public class FormManager {
 		folderSelectPopup.setStyleName("okm-Popup");
 		folderSelectPopup.addStyleName("okm-DisableSelect");
 		submitButtonPanel = new HorizontalPanel();
+		buttonControlList = new ArrayList<Button>();
 	}
 
 	/**
@@ -233,9 +235,14 @@ public class FormManager {
 						} else {
 							workflow.setTaskInstanceValues(taskInstance.getId(), gWTButton.getTransition());
 						}
+						disableAllButtonList();
 					}
 				}
 			});
+			// Adding button to control list
+			if (!buttonControlList.contains(transButton)) {
+				buttonControlList.add(transButton);
+			}
 			
 		} else if (gwtMetadata instanceof GWTTextArea) {
 			HorizontalPanel hPanel = new HorizontalPanel();
@@ -1183,6 +1190,26 @@ public class FormManager {
 		hWidgetProperties.clear();
 		hPropertyParams.clear();
 		this.formElementList = formElementList;
+		
+	}
+	
+	/**
+	 * initButtonControlList
+	 */
+	private void initButtonControlList() {
+		buttonControlList = new ArrayList<Button>(); // Ensure button list is empty
+		if (submitForm!=null) {
+			buttonControlList.add(submitForm);
+		}
+	}
+	
+	/**
+	 * disableAllButtonList
+	 */
+	private void disableAllButtonList() {
+		for (Button button : buttonControlList) {
+			button.setEnabled(false);
+		}
 	}
 	
 	/**
@@ -1262,6 +1289,7 @@ public class FormManager {
 		this.readOnly = readOnly;
 		table.removeAllRows();
 		submitButtonPanel.clear();
+		initButtonControlList();
 		int rows = 0;
 		
 		for (GWTFormElement formElement : formElementList) {
