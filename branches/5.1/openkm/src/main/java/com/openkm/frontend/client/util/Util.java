@@ -277,6 +277,15 @@ public class Util {
 	}
 	
 	/**
+	 * print file
+	 * 
+	 * @param uuid
+	 */
+	public static void print(String uuid) {
+		// Not implemented
+	}
+	
+	/**
 	 * markHTMLTextAsBold
 	 * 
 	 * @param text
