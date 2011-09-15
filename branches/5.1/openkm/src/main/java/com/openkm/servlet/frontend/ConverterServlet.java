@@ -87,13 +87,13 @@ public class ConverterServlet extends OKMHttpServlet {
 				cd.mimeType = doc.getMimeType();
 				cd.file = tmp;
 				
-				if (toDxf) {
+				if (toDxf && !cd.mimeType.equals(Config.MIME_DXF)) {
 					try {
 						toDXF(cd);
 					} catch (ConversionException e) {
 						log.error(e.getMessage(), e);
 					}
-				} else if (toPdf) {
+				} else if (toPdf && !cd.mimeType.equals(Config.MIME_PDF)) {
 					try {
 						toPDF(cd);
 					} catch (ConversionException e) {
@@ -101,7 +101,7 @@ public class ConverterServlet extends OKMHttpServlet {
 						InputStream tis = ConverterServlet.class.getResourceAsStream("conversion_problem.pdf");
 						FileUtils.copy(tis, cd.file);
 					}
-				} else if (toSwf) {
+				} else if (toSwf && !cd.mimeType.equals(Config.MIME_SWF)) {
 					try {
 						toSWF(cd);
 					} catch (ConversionException e) {
