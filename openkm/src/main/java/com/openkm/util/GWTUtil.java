@@ -61,6 +61,7 @@ import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Input;
 import com.openkm.bean.form.Node;
 import com.openkm.bean.form.Option;
+import com.openkm.bean.form.Print;
 import com.openkm.bean.form.Select;
 import com.openkm.bean.form.Separator;
 import com.openkm.bean.form.SuggestBox;
@@ -148,6 +149,7 @@ import com.openkm.frontend.client.bean.form.GWTFormElement;
 import com.openkm.frontend.client.bean.form.GWTInput;
 import com.openkm.frontend.client.bean.form.GWTNode;
 import com.openkm.frontend.client.bean.form.GWTOption;
+import com.openkm.frontend.client.bean.form.GWTPrint;
 import com.openkm.frontend.client.bean.form.GWTSelect;
 import com.openkm.frontend.client.bean.form.GWTSeparator;
 import com.openkm.frontend.client.bean.form.GWTSuggestBox;
@@ -996,6 +998,17 @@ public class GWTUtil {
 			gWTdownload.setValidators(copyValidators(download.getValidators()));
 			gWTdownload.setNodes(copyNodes(download.getNodes()));
 			return gWTdownload;
+		} else if (formElement instanceof Print) {
+			GWTPrint gWTprint = new GWTPrint();
+			gWTprint.setName(formElement.getName());
+			gWTprint.setLabel(formElement.getLabel());
+			gWTprint.setHeight(formElement.getHeight());
+			gWTprint.setWidth(formElement.getWidth());
+			Print download = (Print) formElement;
+			gWTprint.setData(download.getData());
+			gWTprint.setValidators(copyValidators(download.getValidators()));
+			gWTprint.setNodes(copyNodes(download.getNodes()));
+			return gWTprint;
 		} else {
 			return new GWTFormElement();
 		}
@@ -1118,7 +1131,20 @@ public class GWTUtil {
 				nodes.add(copy(gWTNode));
 			}
 			return download;
-		}else {
+		} else if (formElement instanceof GWTPrint) {
+			Print print = new Print();
+			GWTPrint gWTprint = (GWTPrint) formElement;
+			print.setName(gWTprint.getName());
+			print.setLabel(gWTprint.getLabel());
+			print.setHeight(gWTprint.getHeight());
+			print.setWidth(gWTprint.getWidth());
+			print.setData(gWTprint.getData());
+			List<Node> nodes = new ArrayList<Node>();
+			for (GWTNode gWTNode : gWTprint.getNodes()) {
+				nodes.add(copy(gWTNode));
+			}
+			return print;
+		} else {
 			return new FormElement();
 		}
 	}
@@ -1181,7 +1207,21 @@ public class GWTUtil {
 				}
 			}
 			return value;
-		}
+		} else if (formElement instanceof GWTPrint) {
+			GWTPrint print = ((GWTPrint) formElement);
+			String value = "";
+			for (GWTNode node : print.getNodes()) {
+				if (!value.equals("")) {
+					value += ",";
+				}
+				if (!node.getUuid().equals("")) {
+					value += node.getUuid();
+				} else {
+					value += node.getPath();
+				}
+			}
+			return value;
+		} 
 		
 		return "";
 	}
