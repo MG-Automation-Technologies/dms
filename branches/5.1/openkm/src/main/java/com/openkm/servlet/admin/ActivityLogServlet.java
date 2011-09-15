@@ -73,6 +73,10 @@ public class ActivityLogServlet extends BaseServlet {
 			"MOVE_MAIL", "COPY_MAIL", "GET_CHILD_MAILS",
 			
 			//---------------------------------
+			"Repository",
+			"PURGE_TRASH",
+			
+			//---------------------------------
 			"Admin",
 			"ADMIN_ACTIVITY_LOG", "ADMIN_ACTIVE_SESSIONS",
 			"ADMIN_USER_CREATE", "ADMIN_USER_EDIT", "ADMIN_USER_DELETE", "ADMIN_USER_ACTIVE",
