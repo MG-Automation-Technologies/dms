@@ -137,6 +137,7 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 			public void onClick(ClickEvent event) {
 				if (manager.getValidationProcessor().validate()) {
 					setTaskInstanceValues(taskInstance.getId(), null);
+					submitForm.setEnabled(false);
 				}
 			}
 		});
