@@ -69,6 +69,7 @@ import com.openkm.frontend.client.bean.form.GWTFormElement;
 import com.openkm.frontend.client.bean.form.GWTInput;
 import com.openkm.frontend.client.bean.form.GWTNode;
 import com.openkm.frontend.client.bean.form.GWTOption;
+import com.openkm.frontend.client.bean.form.GWTPrint;
 import com.openkm.frontend.client.bean.form.GWTSelect;
 import com.openkm.frontend.client.bean.form.GWTSeparator;
 import com.openkm.frontend.client.bean.form.GWTSuggestBox;
@@ -1066,10 +1067,54 @@ public class FormManager {
 					});
 				}
 				anchor.setStyleName("okm-Hyperlink");
-				downloadTable.setWidget(downloadTableRow, 0,new HTML("&nbsp;&nbsp;&nbsp;"));
+				downloadTable.setWidget(downloadTableRow, 0, new HTML("&nbsp;&nbsp;&nbsp;"));
 				downloadTable.setWidget(downloadTableRow, 1, anchor);
 			}
 			hPanel.add(downloadTable);
+		} else if (gwtMetadata instanceof GWTPrint) {
+			HorizontalPanel hPanel = new HorizontalPanel();
+			hWidgetProperties.put(propertyName, hPanel);
+			table.setWidget(row, 0, hPanel);
+			table.getFlexCellFormatter().setColSpan(row, 0, 2);
+			GWTPrint print = (GWTPrint) gwtMetadata;
+			FlexTable printTable = new FlexTable();
+			HTML description = new HTML("<b>" + gwtMetadata.getLabel() + "</b>");
+			printTable.setWidget(0, 0, description);
+			printTable.getFlexCellFormatter().setColSpan(0, 0, 2);
+			for (final GWTNode node : print.getNodes()) {
+				int downloadTableRow = printTable.getRowCount();
+				// 
+				final Button downloadButton = new Button(Main.i18n("button.print"));
+				if (!node.getUuid().equals("")) {
+					downloadButton.addClickHandler(new ClickHandler() {
+						@Override
+						public void onClick(ClickEvent event) {
+							Util.print(node.getUuid());
+						}
+					});
+				} else if (!node.getPath().equals("")) {
+					repositoryService.getUUIDByPath(node.getPath(), new AsyncCallback<String>() {
+						@Override
+						public void onSuccess(String result) {
+							final String uuid = result;
+							downloadButton.addClickHandler(new ClickHandler() {
+								@Override
+								public void onClick(ClickEvent event) {
+									Util.print(uuid);
+								}
+							});
+						}
+						@Override
+						public void onFailure(Throwable caught) {
+							Main.get().showError("getUUIDByPath", caught);
+						}
+					});
+				}
+				downloadButton.setStyleName("okm-Button");
+				printTable.setWidget(downloadTableRow, 0, new HTML("&nbsp;&nbsp;&nbsp;" + node.getLabel() + "&nbsp;&nbsp;"));
+				printTable.setWidget(downloadTableRow, 1, downloadButton);
+			}
+			hPanel.add(printTable);
 		}
 	}
 	
@@ -1162,6 +1207,8 @@ public class FormManager {
 			} else if (formField instanceof GWTSeparator) {
 				// Nothing to be done here
 			} else if (formField instanceof GWTDownload) {
+				// Nothing to be done here
+			} else if (formField instanceof GWTPrint) {
 				// Nothing to be done here
 			}
 			rows++;
@@ -1267,6 +1314,8 @@ public class FormManager {
 					// Nothing to be done here
 				} else if (formElement instanceof GWTDownload) {
 					// Nothing to be done here
+				} else if (formElement instanceof GWTPrint) {
+					// Nothing to be done here
 				}
 			}
 		}
@@ -1353,6 +1402,8 @@ public class FormManager {
 				// Nothing to be done here
 			} else if (formElement instanceof GWTDownload) {
 				// Nothing to be done here
+			} else if (formElement instanceof GWTPrint) {
+				// Nothing to be done here
 			}
 			
 			hPropertyParams.get(formElement.getName()).setValue(value);
@@ -1438,6 +1489,8 @@ public class FormManager {
 			} else if (formElement instanceof GWTSeparator) {
 				// Nothing to be done here
 			} else if (formElement instanceof GWTDownload) {
+				// Nothing to be done here
+			} else if (formElement instanceof GWTPrint) {
 				// Nothing to be done here
 			}
 			
@@ -1567,6 +1620,8 @@ public class FormManager {
 						// Nothing to be done here
 					} else if (formElement instanceof GWTDownload) {
 						// Nothing to be done here
+					} else if (formElement instanceof GWTPrint) {
+						// Nothing to be done here
 					}
 				}
 			}
@@ -1661,6 +1716,11 @@ public class FormManager {
 					if (!download.getData().equals("") && map.keySet().contains(download.getData())) {
 						download.setNodes(getNodesValueFromVariable(map.get(download.getData())));
 					}
+				} else if (formElement instanceof GWTPrint) {
+					GWTPrint print = (GWTPrint) formElement;
+					if (!print.getData().equals("") && map.keySet().contains(print.getData())) {
+						print.setNodes(getNodesValueFromVariable(map.get(print.getData())));
+					}
 				}
 			}
 		}
@@ -1692,6 +1752,9 @@ public class FormManager {
 		} else if (obj instanceof GWTDownload) {
 			GWTDownload download = (GWTDownload) obj;
 			return download.getNodes();
+		} else if (obj instanceof GWTPrint) {
+			GWTPrint print = (GWTPrint) obj;
+			return print.getNodes();
 		} else {
 			return new ArrayList<GWTNode>();
 		} 
@@ -1734,6 +1797,8 @@ public class FormManager {
 			return null;
 		} else if (obj instanceof GWTDownload) {
 			return null;
+		} else if (obj instanceof GWTPrint) {
+			return null;
 		} else {
 			return null;
 		} 
@@ -1775,6 +1840,8 @@ public class FormManager {
 		} else if (obj instanceof GWTSeparator) {
 			return false;
 		} else if (obj instanceof GWTDownload) {
+			return false;
+		} else if (obj instanceof GWTPrint) {
 			return false;
 		} else {
 			return false;
@@ -1829,6 +1896,8 @@ public class FormManager {
 				return options;
 			} else if (obj instanceof GWTDownload) {
 				return null;
+			} else if (obj instanceof GWTPrint) {
+				return null;
 			} else {
 				return options;
 			}
@@ -1861,6 +1930,8 @@ public class FormManager {
 			} else if (formElement instanceof GWTSeparator) {
 				// Nothing to be done here
 			} else if (formElement instanceof GWTDownload) {
+				// Nothing to be done here
+			} else if (formElement instanceof GWTPrint) {
 				// Nothing to be done here
 			} 
 		}
