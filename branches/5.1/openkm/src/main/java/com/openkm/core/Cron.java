@@ -39,7 +39,7 @@ import com.openkm.util.SecureStore;
 
 public class Cron extends TimerTask {
 	private static Logger log = LoggerFactory.getLogger(Cron.class);
-	private static final String CRON_TASK = "cronTask";
+	public static final String CRON_TASK = "cronTask";
 	
 	public void run() {
 		log.debug("*** Cron activated ***");

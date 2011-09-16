@@ -138,6 +138,35 @@ public class ExecutionUtils {
 	}
     
     /**
+     * Execute jar from file
+     */
+    public static Object runJar(File jar, String methodName) {
+    	Object ret = null;
+    	
+    	try {
+    		if (jar.exists() && jar.canRead()) {
+    			ClassLoader cl = ExecutionUtils.class.getClass().getClassLoader();
+    			JarClassLoader jcl = new JarClassLoader(jar.toURI().toURL(), cl);
+    			String mainClass = jcl.getMainClassName();
+    			
+    			if (mainClass != null) {
+    				Class<?> c = jcl.loadClass(jcl.getMainClassName());
+    				ret = ClassLoaderUtils.invokeMethodFromClass(c, methodName);
+    			} else {
+    				log.error("Main class not defined at: {}", jar.getPath());
+    			}
+    		} else {
+    			log.warn("Unable to read jar: {}", jar.getPath());
+    		}
+    	} catch (Exception e) {
+    		log.warn(e.getMessage(), e);
+    	}
+    	
+    	log.debug("runJar: {}", ret!=null?ret.toString():"null");
+        return ret;
+	}
+    
+    /**
      * Execute jar
      */
     public static Object runJar(byte[] jar) {
