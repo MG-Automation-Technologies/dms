@@ -534,7 +534,8 @@ public class DatabaseQueryServlet extends BaseServlet {
 	 */
 	private List<String> listTables(Session session) {
 		final List<String> tables = new ArrayList<String>();
-		final String[] groups = new String[] { "JBPM_%", "OKM_%", "DEFAULT_%", "VERSION_%" };
+		final String[] groups = new String[] { "JBPM_%", "OKM_%", "DEFAULT_%", "VERSION_%",
+				"jbpm_%", "okm_%", "default_%", "version_%"};
 		
 		session.doWork(
 			new Work() {
