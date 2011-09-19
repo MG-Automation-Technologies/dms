@@ -162,6 +162,8 @@ public class ConverterServlet extends OKMHttpServlet {
 			}
 			
 			if (dxfCache.exists()) cd.file = dxfCache;
+			cd.mimeType = Config.MIME_DXF;
+			cd.fileName = FileUtils.getFileName(cd.fileName) + ".dxf";
 		} else {
 			throw new NotImplementedException("Conversion from '" + cd.mimeType + "' to DXF not available");
 		}
@@ -201,6 +203,8 @@ public class ConverterServlet extends OKMHttpServlet {
 			}
 			
 			if (pdfCache.exists()) cd.file = pdfCache;
+			cd.mimeType = Config.MIME_PDF;
+			cd.fileName = FileUtils.getFileName(cd.fileName) + ".pdf";
 		} else {
 			throw new NotImplementedException("Conversion from '" + cd.mimeType + "' to PDF not available");
 		}
@@ -235,6 +239,8 @@ public class ConverterServlet extends OKMHttpServlet {
 			}
 			
 			if (swfCache.exists()) cd.file = swfCache;
+			cd.mimeType = Config.MIME_SWF;
+			cd.fileName = FileUtils.getFileName(cd.fileName) + ".swf";
 		} else {
 			throw new NotImplementedException("Conversion from '" + cd.mimeType + "' to SWF not available");
 		}
