@@ -385,7 +385,7 @@ public class DirectFolderModule implements FolderModule {
 			BaseScriptingModule.checkScripts(session, dstFldNode.getParent(), dstFldNode, "MOVE_FOLDER");
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "MOVE_FOLDER", dstFldNode.getUUID(), dstPath+", "+fldPath);
+			UserActivity.log(session.getUserID(), "MOVE_FOLDER", dstFldNode.getUUID(), fldPath + ", " + dstPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
@@ -443,7 +443,7 @@ public class DirectFolderModule implements FolderModule {
 			//t.commit();
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "COPY_FOLDER", srcFolderNode.getUUID(), dstPath+", "+fldPath);
+			UserActivity.log(session.getUserID(), "COPY_FOLDER", dstFolderNode.getUUID(), fldPath + ", " + dstPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			//t.rollback();
