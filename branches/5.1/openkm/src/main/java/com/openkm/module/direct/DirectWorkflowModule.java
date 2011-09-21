@@ -207,7 +207,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 				int fix = 0;
 				
 				if (dInfo.getHeight() > 1000) {
-					fix = 28;
+					fix = 124;
 				}
 				
 				// Select node
