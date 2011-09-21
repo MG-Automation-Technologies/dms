@@ -441,7 +441,7 @@ public class BaseDocumentModule {
 	/**
 	 * Is invoked from DirectDocumentNode and DirectFolderNode.
 	 */
-	public static void copy(Session session, Node srcDocumentNode, Node dstFolderNode) throws
+	public static Node copy(Session session, Node srcDocumentNode, Node dstFolderNode) throws
 			ValueFormatException, javax.jcr.PathNotFoundException, javax.jcr.RepositoryException,
 			IOException, DatabaseException, UserQuotaExceededException {
 		log.debug("copy({}, {}, {})", new Object[] { session, srcDocumentNode, dstFolderNode });
@@ -450,11 +450,12 @@ public class BaseDocumentModule {
 		String mimeType = srcDocumentContentNode.getProperty("jcr:mimeType").getString();
 		// String title = srcDocumentContentNode.getProperty(Document.TITLE).getString();
 		InputStream is = srcDocumentContentNode.getProperty("jcr:data").getStream();
-		BaseDocumentModule.create(session, dstFolderNode, srcDocumentNode.getName(), null /* title */,
-				mimeType, new String[]{}, is);
+		Node newDocument = BaseDocumentModule.create(session, dstFolderNode, srcDocumentNode.getName(),
+				null /* title */, mimeType, new String[]{}, is);
 		is.close();
 		
-		log.debug("copy: void");
+		log.debug("copy: {}", newDocument);
+		return newDocument;
 	}
 	
 	/**

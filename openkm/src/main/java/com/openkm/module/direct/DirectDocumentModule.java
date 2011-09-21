@@ -1436,7 +1436,7 @@ public class DirectDocumentModule implements DocumentModule {
 			BaseScriptingModule.checkScripts(session, dstDocNode.getParent(), dstDocNode, "MOVE_DOCUMENT");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "MOVE_DOCUMENT", dstDocNode.getUUID(), dstPath+", "+docPath);
+			UserActivity.log(session.getUserID(), "MOVE_DOCUMENT", dstDocNode.getUUID(), docPath + ", " + dstPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
@@ -1479,15 +1479,16 @@ public class DirectDocumentModule implements DocumentModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node srcDocumentNode = session.getRootNode().getNode(docPath.substring(1));
-			dstFolderNode = session.getRootNode().getNode(dstPath.substring(1));
-			BaseDocumentModule.copy(session, srcDocumentNode, dstFolderNode);
-
+			Node rootNode = session.getRootNode();
+			Node srcDocumentNode = rootNode.getNode(docPath.substring(1));
+			dstFolderNode = rootNode.getNode(dstPath.substring(1));
+			Node newDocument = BaseDocumentModule.copy(session, srcDocumentNode, dstFolderNode);
+			
 			// Check subscriptions
 			BaseNotificationModule.checkSubscriptions(dstFolderNode, session.getUserID(), "COPY_DOCUMENT", null);
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "COPY_DOCUMENT", srcDocumentNode.getUUID(), dstPath+", "+docPath);
+			UserActivity.log(session.getUserID(), "COPY_DOCUMENT", newDocument.getUUID(), docPath + ", " + dstPath);
 		} catch (javax.jcr.ItemExistsException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(dstFolderNode);
