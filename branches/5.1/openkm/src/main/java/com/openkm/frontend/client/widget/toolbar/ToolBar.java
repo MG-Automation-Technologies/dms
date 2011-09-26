@@ -874,6 +874,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * @param origin The Origin panel 
 	 */
 	public void checkToolButtonPermissions(GWTFolder folder, GWTFolder folderParent, int originPanel) {
+		//folderParent.setPermissions((byte)(GWTPermission.DELETE | GWTPermission.READ | GWTPermission.SECURITY | GWTPermission.WRITE));
 		// Only if toolbar is enabled must change tools icons values
 		if (isEnabled()) {			
 			disableDownload();
