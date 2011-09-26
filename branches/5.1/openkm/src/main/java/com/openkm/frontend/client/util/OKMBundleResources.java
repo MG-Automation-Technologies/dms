@@ -212,17 +212,17 @@ public interface OKMBundleResources extends ClientBundle {
 	@Source("com/openkm/frontend/public/img/icon/news.gif")
 	public ImageResource news();
 	
-	@Source("com/openkm/frontend/public/img/icon/workflow_alert.gif")
-	public ImageResource workflowAlert();
+	@Source("com/openkm/frontend/public/img/icon/workflow_tasks.gif")
+	public ImageResource workflowTasks();
 	
-	@Source("com/openkm/frontend/public/img/icon/workflow.gif")
-	public ImageResource workflow();
+	@Source("com/openkm/frontend/public/img/icon/workflow_tasks_alert.gif")
+	public ImageResource workflowTasksAlert();
 	
-	@Source("com/openkm/frontend/public/img/icon/workflow.gif")
-	public ImageResource pooledTaskInstances();
+	@Source("com/openkm/frontend/public/img/icon/workflow_pooled_tasks.gif")
+	public ImageResource workflowPooledTasks();
 	
-	@Source("com/openkm/frontend/public/img/icon/workflow.gif")
-	public ImageResource pooledTaskInstancesAlert();
+	@Source("com/openkm/frontend/public/img/icon/workflow_pooled_tasks_alert.gif")
+	public ImageResource workflowPooledTasksAlert();
 	
 	@Source("com/openkm/frontend/public/img/icon/actions/warning.gif")
 	public ImageResource warning();
