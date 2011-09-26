@@ -288,7 +288,7 @@ public class MainMenu extends Composite {
 					// Submenu preferences opions
 					subMenuPreferences = new MenuBar(true);
 					subMenuPreferences.setStyleName("okm-SubMenuBar");
-						userPreferences = new MenuItem(Util.menuHTML("img/icon/menu/skin_default.gif", Main.i18n("general.menu.tools.user.preferences")), true, setUserPreferences);
+						userPreferences = new MenuItem(Util.menuHTML("img/icon/menu/user_preferences.gif", Main.i18n("general.menu.tools.user.preferences")), true, setUserPreferences);
 						userPreferences.addStyleName("okm-MainMenuItem");
 					subMenuPreferences.addItem(userPreferences);
 				
@@ -459,7 +459,7 @@ public class MainMenu extends Composite {
 			debugConsole.setHTML(Util.menuHTML("img/icon/menu/console.gif", Main.i18n("general.menu.debug.console")));
 			administration.setHTML(Util.menuHTML("img/icon/menu/administration.gif", Main.i18n("general.menu.administration")));
 			preferences.setHTML(Util.menuHTML("img/icon/menu/preferences.gif", Main.i18n("general.menu.tools.preferences")));
-				userPreferences.setHTML(Util.menuHTML("img/icon/menu/skin_default.gif", Main.i18n("general.menu.tools.user.preferences")));
+				userPreferences.setHTML(Util.menuHTML("img/icon/menu/user_preferences.gif", Main.i18n("general.menu.tools.user.preferences")));
 		menuBookmark.setText(Main.i18n("general.menu.bookmark"));
 			home.setHTML(Util.menuHTML("img/icon/actions/bookmark_go.gif", Main.i18n("general.menu.bookmark.home")));
 			defaultHome.setHTML(Util.menuHTML("img/icon/actions/bookmark.gif", Main.i18n("general.menu.bookmark.default.home")));

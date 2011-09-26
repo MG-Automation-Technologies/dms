@@ -98,8 +98,8 @@ public class UserInfo extends Composite {
 		imgCheckoutDocuments = new Image(OKMBundleResources.INSTANCE.checkout());
 		imgSubscriptions = new Image(OKMBundleResources.INSTANCE.subscribed());
 		imgNewsDocuments = new Image(OKMBundleResources.INSTANCE.news());
-		imgWorkflowTasks = new Image(OKMBundleResources.INSTANCE.workflow());
-		imgWorkflowPooledTasks = new Image(OKMBundleResources.INSTANCE.pooledTaskInstances());
+		imgWorkflowTasks = new Image(OKMBundleResources.INSTANCE.workflowTasks());
+		imgWorkflowPooledTasks = new Image(OKMBundleResources.INSTANCE.workflowPooledTasks());
 		imgRepositorySize.setVisible(false);
 		imgUserQuota.setVisible(false);
 		imgChat.setVisible(false);
@@ -366,11 +366,12 @@ public class UserInfo extends Composite {
 	 */
 	public void setNewsWorkflows(int value) {
 		imgWorkflowTasks.setVisible(true);
-		newWorkflowTasks.setHTML("&nbsp;"+value+ "&nbsp;");
-		if (value>0) {
-			imgWorkflowTasks.setResource(OKMBundleResources.INSTANCE.workflowAlert());
+		newWorkflowTasks.setHTML("&nbsp;" + value + "&nbsp;");
+		
+		if (value > 0) {
+			imgWorkflowTasks.setResource(OKMBundleResources.INSTANCE.workflowTasksAlert());
 		} else {
-			imgWorkflowTasks.setResource(OKMBundleResources.INSTANCE.workflow());
+			imgWorkflowTasks.setResource(OKMBundleResources.INSTANCE.workflowTasks());
 		}
 	}
 	
@@ -381,11 +382,12 @@ public class UserInfo extends Composite {
 	 */
 	public void setPooledTaskInstances(int value) {
 		imgWorkflowPooledTasks.setVisible(true);
-		newWorkflowPooledTasks.setHTML("&nbsp;"+value+ "&nbsp;");
-		if (value>0) {
-			imgWorkflowPooledTasks.setResource(OKMBundleResources.INSTANCE.pooledTaskInstances());
+		newWorkflowPooledTasks.setHTML("&nbsp;" + value + "&nbsp;");
+		
+		if (value > 0) {
+			imgWorkflowPooledTasks.setResource(OKMBundleResources.INSTANCE.workflowPooledTasksAlert());
 		} else {
-			imgWorkflowPooledTasks.setResource(OKMBundleResources.INSTANCE.pooledTaskInstancesAlert());
+			imgWorkflowPooledTasks.setResource(OKMBundleResources.INSTANCE.workflowPooledTasks());
 		}
 	}
 	
