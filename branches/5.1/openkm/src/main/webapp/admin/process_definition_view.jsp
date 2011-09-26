@@ -19,6 +19,7 @@
       <c:url value="Workflow" var="urlProcessDefinitionView">
         <c:param name="action" value="processDefinitionView"/>
         <c:param name="pdid" value="${processDefinition.id}"/>
+        <c:param name="statusFilter" value="${statusFilter}"/>
       </c:url>
       <table>
         <tr>
