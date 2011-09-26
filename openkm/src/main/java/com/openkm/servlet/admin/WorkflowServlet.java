@@ -24,6 +24,7 @@ package com.openkm.servlet.admin;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -62,7 +63,14 @@ import com.openkm.util.WebUtils;
 public class WorkflowServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(WorkflowServlet.class);
-		
+	private static Map<String, String> statusFilterValues = new LinkedHashMap<String, String>();
+	
+	static {
+		statusFilterValues.put("0", "All");
+		statusFilterValues.put("1", "Running");
+		statusFilterValues.put("2", "Ended");
+	}
+	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
@@ -216,6 +224,7 @@ public class WorkflowServlet extends BaseServlet {
 		log.debug("viewProcessDefinition({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
 		long pdid = WebUtils.getLong(request, "pdid");
+		int statusFilter = WebUtils.getInt(request, "statusFilter");
 		Map<String, List<FormElement>> procDefForms = OKMWorkflow.getInstance().getProcessDefinitionForms(null, pdid);
 		Map<String, List<Map<String, String>>> pdf = new HashMap<String, List<Map<String,String>>>();
 		
@@ -229,9 +238,28 @@ public class WorkflowServlet extends BaseServlet {
 			pdf.put(key, value);
 		}
 		
+		// Filter process instances by status
+		List<ProcessInstance> processInstances = new ArrayList<ProcessInstance>();
+		
+		for (ProcessInstance pi : OKMWorkflow.getInstance().findProcessInstances(null, pdid)) {
+			if (statusFilter == 1) {
+				if (pi.getEnd() == null && !pi.isSuspended()) {
+					processInstances.add(pi);
+				}
+			} else if (statusFilter == 2) {
+				if (pi.getEnd() != null && !pi.isSuspended()) {
+					processInstances.add(pi);
+				}
+			} else {
+				processInstances.add(pi);
+			}
+		}
+		
 		sc.setAttribute("processDefinition", OKMWorkflow.getInstance().getProcessDefinition(null, pdid));
-		sc.setAttribute("processInstances", OKMWorkflow.getInstance().findProcessInstances(null, pdid));
+		sc.setAttribute("processInstances", processInstances);
 		sc.setAttribute("processDefinitionForms", pdf);
+		sc.setAttribute("statusFilterValues", statusFilterValues);
+		sc.setAttribute("statusFilter", statusFilter);
 		sc.getRequestDispatcher("/admin/process_definition_view.jsp").forward(request, response);
 		log.debug("viewProcessDefinition: void");
 	}
