@@ -46,12 +46,12 @@ public class UserInfo extends Composite {
 	private Image imgCheckoutDocuments;
 	private HTML subscriptions;
 	private Image imgSubscriptions;
-	private HTML newsDocuments;
+	private HTML newDocuments;
 	private Image imgNewsDocuments;
-	private HTML newsWorkflows;	
-	private Image imgWorkflows;
-	private Image imgPooledTaskInstances;
-	private HTML newPooledTaskInstances;
+	private HTML newWorkflowTasks;	
+	private Image imgWorkflowTasks;
+	private HTML newWorkflowPooledTasks;
+	private Image imgWorkflowPooledTasks;
 	private Image imgChat;
 	private Image imgNewChatRoom;
 	private Image imgChatSeparator;
@@ -84,9 +84,9 @@ public class UserInfo extends Composite {
 		lockedDocuments = new HTML("");
 		checkoutDocuments = new HTML("");
 		subscriptions = new HTML("");
-		newsDocuments = new HTML("");
-		newsWorkflows = new HTML("");
-		newPooledTaskInstances = new HTML("");
+		newDocuments = new HTML("");
+		newWorkflowTasks = new HTML("");
+		newWorkflowPooledTasks = new HTML("");
 		quotaUsed = new HTML("");
 		quotaUsed.setVisible(false);
 		imgRepositorySize = new Image(OKMBundleResources.INSTANCE.repositorySize());
@@ -98,8 +98,8 @@ public class UserInfo extends Composite {
 		imgCheckoutDocuments = new Image(OKMBundleResources.INSTANCE.checkout());
 		imgSubscriptions = new Image(OKMBundleResources.INSTANCE.subscribed());
 		imgNewsDocuments = new Image(OKMBundleResources.INSTANCE.news());
-		imgWorkflows = new Image(OKMBundleResources.INSTANCE.workflow());
-		imgPooledTaskInstances = new Image(OKMBundleResources.INSTANCE.pooledTaskInstances());
+		imgWorkflowTasks = new Image(OKMBundleResources.INSTANCE.workflow());
+		imgWorkflowPooledTasks = new Image(OKMBundleResources.INSTANCE.pooledTaskInstances());
 		imgRepositorySize.setVisible(false);
 		imgUserQuota.setVisible(false);
 		imgChat.setVisible(false);
@@ -110,8 +110,8 @@ public class UserInfo extends Composite {
 		imgCheckoutDocuments.setVisible(false);
 		imgSubscriptions.setVisible(false);
 		imgNewsDocuments.setVisible(false);
-		imgWorkflows.setVisible(false);
-		imgPooledTaskInstances.setVisible(false);
+		imgWorkflowTasks.setVisible(false);
+		imgWorkflowPooledTasks.setVisible(false);
 		imgChat.setTitle(Main.i18n("user.info.chat.connect"));
 		imgUserQuota.setTitle(Main.i18n("user.info.user.quota"));
 		imgNewChatRoom.setTitle(Main.i18n("user.info.chat.new.room"));
@@ -119,8 +119,8 @@ public class UserInfo extends Composite {
 		imgCheckoutDocuments.setTitle(Main.i18n("user.info.checkout.actual"));
 		imgSubscriptions.setTitle(Main.i18n("user.info.subscription.actual"));
 		imgNewsDocuments.setTitle(Main.i18n("user.info.news.new"));
-		imgWorkflows.setTitle(Main.i18n("user.info.workflow.pending"));
-		imgPooledTaskInstances.setTitle(Main.i18n("user.info.pooled.task.instances"));
+		imgWorkflowTasks.setTitle(Main.i18n("user.info.workflow.pending.tasks"));
+		imgWorkflowPooledTasks.setTitle(Main.i18n("user.info.workflow.pending.pooled.tasks"));
 		
 		imgLockedDocuments.addClickHandler(new ClickHandler() { 
 			@Override
@@ -154,7 +154,7 @@ public class UserInfo extends Composite {
 			}
 		});
 		
-		imgWorkflows.addClickHandler(new ClickHandler() { 
+		imgWorkflowTasks.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
 				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(UIDockPanelConstants.DASHBOARD);
@@ -162,7 +162,7 @@ public class UserInfo extends Composite {
 			}
 		});
 		
-		imgPooledTaskInstances.addClickHandler(new ClickHandler() { 
+		imgWorkflowPooledTasks.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
 				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(UIDockPanelConstants.DASHBOARD);
@@ -239,21 +239,21 @@ public class UserInfo extends Composite {
 		panel.add(subscriptions);
 		panel.add(new HTML("&nbsp;"));
 		panel.add(imgNewsDocuments);
-		panel.add(newsDocuments);
+		panel.add(newDocuments);
 		panel.add(new HTML("&nbsp;"));
-		panel.add(imgWorkflows);
-		panel.add(newsWorkflows);
+		panel.add(imgWorkflowTasks);
+		panel.add(newWorkflowTasks);
 		panel.add(new HTML("&nbsp;"));
-		panel.add(imgPooledTaskInstances);
-		panel.add(newPooledTaskInstances);
+		panel.add(imgWorkflowPooledTasks);
+		panel.add(newWorkflowPooledTasks);
 		panel.add(new HTML("&nbsp;"));
 		
 		imgLockedDocuments.setStyleName("okm-Hyperlink");
 		imgCheckoutDocuments.setStyleName("okm-Hyperlink");
 		imgSubscriptions.setStyleName("okm-Hyperlink");
 		imgNewsDocuments.setStyleName("okm-Hyperlink");
-		imgWorkflows.setStyleName("okm-Hyperlink");
-		imgPooledTaskInstances.setStyleName("okm-Hyperlink");
+		imgWorkflowTasks.setStyleName("okm-Hyperlink");
+		imgWorkflowPooledTasks.setStyleName("okm-Hyperlink");
 		imgChat.setStyleName("okm-Hyperlink");
 		imgNewChatRoom.setStyleName("okm-Hyperlink");
 		
@@ -351,7 +351,7 @@ public class UserInfo extends Composite {
 	 */
 	public void setNewsDocuments(int value) {
 		imgNewsDocuments.setVisible(true);
-		newsDocuments.setHTML("&nbsp;"+value+ "&nbsp;");
+		newDocuments.setHTML("&nbsp;"+value+ "&nbsp;");
 		if (value>0) {
 			imgNewsDocuments.setResource(OKMBundleResources.INSTANCE.newsAlert());
 		} else {
@@ -365,12 +365,12 @@ public class UserInfo extends Composite {
 	 * @param value
 	 */
 	public void setNewsWorkflows(int value) {
-		imgWorkflows.setVisible(true);
-		newsWorkflows.setHTML("&nbsp;"+value+ "&nbsp;");
+		imgWorkflowTasks.setVisible(true);
+		newWorkflowTasks.setHTML("&nbsp;"+value+ "&nbsp;");
 		if (value>0) {
-			imgWorkflows.setResource(OKMBundleResources.INSTANCE.workflowAlert());
+			imgWorkflowTasks.setResource(OKMBundleResources.INSTANCE.workflowAlert());
 		} else {
-			imgWorkflows.setResource(OKMBundleResources.INSTANCE.workflow());
+			imgWorkflowTasks.setResource(OKMBundleResources.INSTANCE.workflow());
 		}
 	}
 	
@@ -380,12 +380,12 @@ public class UserInfo extends Composite {
 	 * @param value
 	 */
 	public void setPooledTaskInstances(int value) {
-		imgPooledTaskInstances.setVisible(true);
-		newPooledTaskInstances.setHTML("&nbsp;"+value+ "&nbsp;");
+		imgWorkflowPooledTasks.setVisible(true);
+		newWorkflowPooledTasks.setHTML("&nbsp;"+value+ "&nbsp;");
 		if (value>0) {
-			imgPooledTaskInstances.setResource(OKMBundleResources.INSTANCE.pooledTaskInstances());
+			imgWorkflowPooledTasks.setResource(OKMBundleResources.INSTANCE.pooledTaskInstances());
 		} else {
-			imgPooledTaskInstances.setResource(OKMBundleResources.INSTANCE.pooledTaskInstancesAlert());
+			imgWorkflowPooledTasks.setResource(OKMBundleResources.INSTANCE.pooledTaskInstancesAlert());
 		}
 	}
 	
@@ -419,8 +419,8 @@ public class UserInfo extends Composite {
 		imgCheckoutDocuments.setTitle(Main.i18n("user.info.checkout.actual"));
 		imgSubscriptions.setTitle(Main.i18n("user.info.subscription.actual"));
 		imgNewsDocuments.setTitle(Main.i18n("user.info.news.new"));
-		imgWorkflows.setTitle(Main.i18n("user.info.workflow.pending"));
-		imgPooledTaskInstances.setTitle(Main.i18n("user.info.pooled.task.instances"));
+		imgWorkflowTasks.setTitle(Main.i18n("user.info.workflow.pending.tasks"));
+		imgWorkflowPooledTasks.setTitle(Main.i18n("user.info.workflow.pending.pooled.tasks"));
 		quotaUsed.setHTML(percent + "%");
 		
 		// Resfreshing actual chatrooms
