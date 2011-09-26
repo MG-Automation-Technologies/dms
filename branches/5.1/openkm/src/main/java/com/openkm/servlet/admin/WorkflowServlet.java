@@ -224,7 +224,7 @@ public class WorkflowServlet extends BaseServlet {
 		log.debug("viewProcessDefinition({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
 		long pdid = WebUtils.getLong(request, "pdid");
-		int statusFilter = WebUtils.getInt(request, "statusFilter");
+		int statusFilter = WebUtils.getInt(request, "statusFilter", 1);
 		Map<String, List<FormElement>> procDefForms = OKMWorkflow.getInstance().getProcessDefinitionForms(null, pdid);
 		Map<String, List<Map<String, String>>> pdf = new HashMap<String, List<Map<String,String>>>();
 		
