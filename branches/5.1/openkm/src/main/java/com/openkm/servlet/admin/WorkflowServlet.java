@@ -242,15 +242,15 @@ public class WorkflowServlet extends BaseServlet {
 		List<ProcessInstance> processInstances = new ArrayList<ProcessInstance>();
 		
 		for (ProcessInstance pi : OKMWorkflow.getInstance().findProcessInstances(null, pdid)) {
-			if (statusFilter == 1) {
+			if (statusFilter == 1) { // Running
 				if (pi.getEnd() == null && !pi.isSuspended()) {
 					processInstances.add(pi);
 				}
-			} else if (statusFilter == 2) {
+			} else if (statusFilter == 2) { // Ended
 				if (pi.getEnd() != null && !pi.isSuspended()) {
 					processInstances.add(pi);
 				}
-			} else {
+			} else { // All
 				processInstances.add(pi);
 			}
 		}
