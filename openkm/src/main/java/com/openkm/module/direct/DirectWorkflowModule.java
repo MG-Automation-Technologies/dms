@@ -203,20 +203,25 @@ public class DirectWorkflowModule implements WorkflowModule {
 			WorkflowUtils.DiagramNodeInfo dNodeInfo = dInfo.getNodeMap().get(node);
 			BufferedImage img = ImageIO.read(fileDef.getInputStream("processimage.jpg"));
 			
+			// Obtain all nodes Y
+			List<Integer> ordenadas = new ArrayList<Integer>();
+			
+			for (WorkflowUtils.DiagramNodeInfo nodeInfo : dInfo.getNodeMap().values()) {
+				ordenadas.add(nodeInfo.getY());
+			}
+			
+			// Calculate minimal Y
+			Collections.sort(ordenadas);
+			int fix = ordenadas.get(0);
+			
 			if (dNodeInfo != null) {
-				int fix = 0;
-				
-				if (dInfo.getHeight() > 1000) {
-					fix = 124;
-				}
-				
 				// Select node
 				log.info("DiagramNodeInfo: {}", dNodeInfo);
 				Graphics g = img.getGraphics();
 				Graphics2D g2d = (Graphics2D) g;
 				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25F));
 				g2d.setColor(Color.blue);
-				g2d.fillRect(dNodeInfo.getX(), dNodeInfo.getY() + fix, dNodeInfo.getWidth(), dNodeInfo.getHeight());
+				g2d.fillRect(dNodeInfo.getX(), dNodeInfo.getY() - fix, dNodeInfo.getWidth(), dNodeInfo.getHeight());
 				g.dispose();
 			}
 
