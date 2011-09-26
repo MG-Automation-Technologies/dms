@@ -139,6 +139,7 @@ public class WorkflowDashboard extends Composite {
 	final AsyncCallback<List<GWTTaskInstance>> callbackPooledTaskInstances = new AsyncCallback<List<GWTTaskInstance>>() {
 		public void onSuccess(List<GWTTaskInstance> result){
 			pendingPooledTasks.setTasks(result);
+			Main.get().mainPanel.bottomPanel.userInfo.setPooledTaskInstances(result.size());
 			pendingPooledTasks.unsetRefreshing();
 		}
 
