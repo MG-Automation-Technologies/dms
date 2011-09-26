@@ -367,7 +367,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 				for (FormElement fe : properties) {
 					for (int i=0; i < pd.length; i++) {
 						if (fe.getName().equals(pd[i].getName())) {
-							if (!documentNode.hasProperty(pd[i].getName())) {
+							if (documentNode.isNodeType(grpName) && !documentNode.hasProperty(pd[i].getName())) {
 								documentNode.removeMixin(grpName);
 								documentNode.addMixin(grpName);
 							}
