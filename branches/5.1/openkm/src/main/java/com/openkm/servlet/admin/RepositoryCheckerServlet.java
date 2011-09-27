@@ -105,7 +105,7 @@ public class RepositoryCheckerServlet extends BaseServlet {
 						", Time: " + FormatUtil.formatSeconds(end - begin));
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		} finally {
 			out.println("</body>");
 			out.println("</html>");
