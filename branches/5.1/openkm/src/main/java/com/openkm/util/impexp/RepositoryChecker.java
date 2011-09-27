@@ -62,7 +62,7 @@ public class RepositoryChecker {
 			IOException, DatabaseException {
 		log.debug("checkDocuments({}, {}, {}, {}, {})", new Object[] { token, fldPath, versions, out, deco });
 		Session session = null;
-		ImpExpStats stats;
+		ImpExpStats stats = new ImpExpStats();
 		
 		try {
 			if (token == null) {
@@ -75,24 +75,31 @@ public class RepositoryChecker {
 			stats = checkDocumentsHelper(token, baseNode, versions, out, deco);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
+			stats.setOk(false);
 			throw e;
 		} catch (AccessDeniedException e) {
 			log.error(e.getMessage(), e);
+			stats.setOk(false);
 			throw e;
 		} catch (FileNotFoundException e) {
 			log.error(e.getMessage(), e);
+			stats.setOk(false);
 			throw e;
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
+			stats.setOk(false);
 			throw e;
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
+			stats.setOk(false);
 			throw e;
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
+			stats.setOk(false);
 			throw e;
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
+			stats.setOk(false);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
 			if (token == null) JCRUtils.logout(session);
