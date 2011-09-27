@@ -27,7 +27,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
-import java.util.Iterator;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -35,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
+import com.openkm.bean.Mail;
 import com.openkm.bean.Version;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
@@ -43,9 +43,8 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.DocumentModule;
 import com.openkm.module.FolderModule;
+import com.openkm.module.MailModule;
 import com.openkm.module.ModuleManager;
-import com.openkm.util.impexp.ImpExpStats;
-import com.openkm.util.impexp.InfoDecorator;
 
 public class RepositoryChecker {
 	private static Logger log = LoggerFactory.getLogger(RepositoryChecker.class);
@@ -96,10 +95,11 @@ public class RepositoryChecker {
 		ImpExpStats stats = new ImpExpStats();
 		File fsPath = new File(Config.NULL_DEVICE);
 		DocumentModule dm = ModuleManager.getDocumentModule();
+		FolderModule fm = ModuleManager.getFolderModule();
+		MailModule mm = ModuleManager.getMailModule();
 		
-		for (Iterator<Document> it = dm.getChilds(token, fldPath).iterator(); it.hasNext();) {
-			Document docChild = it.next();
-			
+		// Iterate through document childs
+		for (Document docChild : dm.getChilds(token, fldPath)) {
 			try {
 				FileOutputStream fos = new FileOutputStream(fsPath);
 				InputStream is = dm.getContent(token, docChild.getPath(), false);
@@ -127,10 +127,20 @@ public class RepositoryChecker {
 				out.flush();
 			}
 		}
-
-		FolderModule fm = ModuleManager.getFolderModule();
-		for (Iterator<Folder> it = fm.getChilds(token, fldPath).iterator(); it.hasNext();) {
-			Folder fldChild = it.next();
+		
+		// Iterate through mail childs
+		for (Mail mailChild : mm.getChilds(token, fldPath)) {
+			ImpExpStats tmp = checkDocumentsHelper(token, mailChild.getPath(), versions, out, deco);
+			
+			// Stats
+			stats.setSize(stats.getSize() + tmp.getSize());
+			stats.setDocuments(stats.getDocuments() + tmp.getDocuments());
+			stats.setFolders(stats.getFolders() + tmp.getFolders() + 1);
+			stats.setOk(stats.isOk() && tmp.isOk());
+		}
+		
+		// Iterate through folder childs
+		for (Folder fldChild : fm.getChilds(token, fldPath)) {
 			ImpExpStats tmp = checkDocumentsHelper(token, fldChild.getPath(), versions, out, deco);
 			
 			// Stats
@@ -139,7 +149,7 @@ public class RepositoryChecker {
 			stats.setFolders(stats.getFolders() + tmp.getFolders() + 1);
 			stats.setOk(stats.isOk() && tmp.isOk());
 		}
-
+		
 		log.debug("checkDocumentsHelper: {}", stats);
 		return stats;
 	}
