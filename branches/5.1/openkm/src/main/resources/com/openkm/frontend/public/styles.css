@@ -817,11 +817,19 @@ iframe {
 
 .okm-Input-Error {
 	color : red;
+	font-weight: bold;
 }
 
 .okm-Input-Ok {
 	color : green;
+	font-weight: bold;
 }
+
+.okm-Input-Warning {
+	color : #306aff;
+	font-weight: bold;
+}
+
 
 /* TextArea */
 .okm-TextArea {
