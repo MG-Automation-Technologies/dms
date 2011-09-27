@@ -290,7 +290,8 @@ public class BaseFolderModule {
 			} else if (child.isNodeType(Mail.TYPE)) {
 				// Mail nodes can't be locked
 			} else {
-				throw new javax.jcr.RepositoryException("Unknown node type");
+				throw new javax.jcr.RepositoryException("Unknown node type: " + 
+						child.getPrimaryNodeType().getName() + "(" + child.getPath() + ")");
 			}
 		}
 		
@@ -320,7 +321,8 @@ public class BaseFolderModule {
 			} else if (child.isNodeType(Mail.TYPE)) {
 				canWrite &= am.isGranted(path, REMOVE_NODE);
 			} else {
-				throw new javax.jcr.RepositoryException("Unknown node type");
+				throw new javax.jcr.RepositoryException("Unknown node type: " + 
+						child.getPrimaryNodeType().getName() + "(" + child.getPath() + ")");
 			}
 		}
 		

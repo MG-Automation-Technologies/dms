@@ -184,7 +184,7 @@ public class DirectFolderModule implements FolderModule {
 			String name = JCRUtils.getName(fldPath);
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
 			Node parentNode = folderNode.getParent();
-			Node userTrash = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
+			Node userTrash = session.getRootNode().getNode(Repository.TRASH + "/" + session.getUserID());
 			
 			if (BaseFolderModule.hasLockedNodes(folderNode)) {
 				throw new LockException("Can't delete a folder with child locked nodes");
@@ -202,11 +202,11 @@ public class DirectFolderModule implements FolderModule {
 			}
 			
 			// Test if already exists a folder whith the same name in the trash
-			String destPath = userTrash.getPath()+"/";
+			String destPath = userTrash.getPath() + "/";
 			String testName = name;
 			
 			for (int i=1; session.itemExists(destPath+testName); i++) {
-				testName = name+" ("+i+")";
+				testName = name + " (" + i + ")";
 			}
 			
 			session.move(folderNode.getPath(), destPath+testName);
