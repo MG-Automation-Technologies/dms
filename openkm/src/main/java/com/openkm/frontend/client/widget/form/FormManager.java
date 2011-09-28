@@ -92,6 +92,7 @@ import com.openkm.frontend.client.util.MessageFormat;
 import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.util.validator.ValidatorBuilder;
+import com.openkm.frontend.client.widget.ConfirmPopup;
 import com.openkm.frontend.client.widget.searchin.CalendarWidget;
 import com.openkm.frontend.client.widget.searchin.HasSearch;
 
@@ -129,11 +130,13 @@ public class FormManager {
 	private boolean isSearchView = false;
 	private HasSearch search;
 	private List<Button> buttonControlList;
+	private FormManager singleton;
 	
 	/**
 	 * FormManager used in workflow mode
 	 */
 	public FormManager(HasWorkflow workflow) {
+		singleton = this;
 		this.workflow = workflow;
 		init();
 	}
@@ -142,6 +145,7 @@ public class FormManager {
 	 * FormManager used in search mode
 	 */
 	public FormManager(HasSearch search) {
+		singleton = this;
 		this.search = search;
 		isSearchView = true;
 		init();
@@ -151,6 +155,7 @@ public class FormManager {
 	 * FormManager used in property group mode
 	 */
 	public FormManager() {
+		singleton = this;
 		init();
 	}
 	
@@ -230,13 +235,21 @@ public class FormManager {
 			transButton.addClickHandler(new ClickHandler() { 
 				@Override
 				public void onClick(ClickEvent event) {
-					if (validationProcessor.validate()) {
-						if (gWTButton.getTransition().equals("")) {
-							workflow.setTaskInstanceValues(taskInstance.getId(), null);
-						} else {
-							workflow.setTaskInstanceValues(taskInstance.getId(), gWTButton.getTransition());
+					if (gWTButton.getConfirmation()!=null && !gWTButton.getConfirmation().equals("")) {
+						Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_WORKFLOW_ACTION);
+						Main.get().confirmPopup.setConfirmationText(gWTButton.getConfirmation());
+						ValidationButton validationButton = new ValidationButton(gWTButton, singleton);
+						Main.get().confirmPopup.setValue(validationButton);
+						Main.get().confirmPopup.center();
+					} else {
+						if (validationProcessor.validate()) {
+							if (gWTButton.getTransition().equals("")) {
+								workflow.setTaskInstanceValues(taskInstance.getId(), null);
+							} else {
+								workflow.setTaskInstanceValues(taskInstance.getId(), gWTButton.getTransition());
+							}
+							disableAllButtonList();
 						}
-						disableAllButtonList();
 					}
 				}
 			});
@@ -1989,5 +2002,68 @@ public class FormManager {
 			keyWidget.setHTML(keyValue.getKey());
 			valueWidget.setText(keyValue.getValue());
 		}		
+	}
+	
+	/**
+	 * ButtonValidation
+	 * 
+	 * @author jllort
+	 *
+	 */
+	public class ValidationButton {
+		private GWTButton gWTButton;
+		private FormManager formManager;
+		
+		/**
+		 * ValidationButton
+		 * 
+		 * @param gWTButton
+		 * @param formManager
+		 */
+		public ValidationButton(GWTButton gWTButton, FormManager formManager) {
+			this.gWTButton = gWTButton;
+			this.formManager = formManager;
+		}
+		
+		/**
+		 * getWorkflow
+		 * 
+		 * @return
+		 */
+		public HasWorkflow getWorkflow() {
+			return formManager.workflow;
+		}
+		
+		/**
+		 * @return
+		 */
+		public GWTButton getButton() {
+			return gWTButton;
+		}
+		
+		/**
+		 * getValidationProcessor
+		 * 
+		 * @return
+		 */
+		public ValidationProcessor getValidationProcessor() {
+			return formManager.validationProcessor;
+		}
+		
+		/**
+		 * getTaskInstance
+		 * 
+		 * @return
+		 */
+		public GWTTaskInstance getTaskInstance() {
+			return taskInstance;
+		}
+		
+		/**
+		 * disableAllButtonList
+		 */
+		public void disableAllButtonList() {
+			formManager.disableAllButtonList();
+		}
 	}
 }
