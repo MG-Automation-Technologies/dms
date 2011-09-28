@@ -37,10 +37,10 @@
     <!-- CHAT -->
     <component name="chat" class="com.openkm.dao.bean.ProfileChat">
       <property name="chatEnabled" type="true_false" not-null="true">
-        <column name="PRF_CHT_CHAT_EN" default="'F'"/>
+        <column name="PRF_CHT_CHAT_EN" default="'T'"/>
       </property>
       <property name="autoLoginEnabled" type="true_false" not-null="true">
-        <column name="PRF_CHT_AUTO_LOGIN_EN" default="'F'"/>
+        <column name="PRF_CHT_AUTO_LOGIN_EN" default="'T'"/>
       </property>
     </component>
     
