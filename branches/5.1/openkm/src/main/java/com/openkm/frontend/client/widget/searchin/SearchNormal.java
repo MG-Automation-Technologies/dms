@@ -134,7 +134,8 @@ public class SearchNormal extends Composite {
 		context.addChangeHandler(new ChangeHandler() {
 			@Override
 			public void onChange(ChangeEvent event) {
-				Main.get().mainPanel.search.searchBrowser.searchIn.searchAdvanced.path.setText(""); // each time list is changed must clean folder
+				// each time list is changed must clean folder
+				Main.get().mainPanel.search.searchBrowser.searchIn.searchAdvanced.path.setText("");
 			}
 		});
 		
