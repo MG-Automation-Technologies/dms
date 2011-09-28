@@ -122,6 +122,7 @@
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
 	transition CDATA #IMPLIED
+	confirmation CDATA #IMPLIED
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
 >
