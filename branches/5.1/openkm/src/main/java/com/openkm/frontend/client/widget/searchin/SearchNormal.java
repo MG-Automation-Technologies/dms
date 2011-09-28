@@ -107,21 +107,21 @@ public class SearchNormal extends Composite {
 		context.setStyleName("okm-Select");
 		int count = 0;
 		posTaxonomy = count++;
-		context.addItem(Main.i18n("leftpanel.label.taxonomy"),"");
+		context.addItem(Main.i18n("leftpanel.label.taxonomy"), "");
 		
 		if (templatesVisible) {
 			posTemplates = count++;
-			context.addItem(Main.i18n("leftpanel.label.templates"),"");
+			context.addItem(Main.i18n("leftpanel.label.templates"), "");
 		}
 		
 		if (personalVisible) {
 			posPersonal = count++;
-			context.addItem(Main.i18n("leftpanel.label.my.documents"),"");
+			context.addItem(Main.i18n("leftpanel.label.my.documents"), "");
 		}
 		
 		if (mailVisible) {
 			posMail = count ++;
-			context.addItem(Main.i18n("leftpanel.label.mail"),"");
+			context.addItem(Main.i18n("leftpanel.label.mail"), "");
 		}
 		
 		if (trashVisible) {
