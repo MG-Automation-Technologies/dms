@@ -108,30 +108,36 @@ public class SearchNormal extends Composite {
 		int count = 0;
 		posTaxonomy = count++;
 		context.addItem(Main.i18n("leftpanel.label.taxonomy"),"");
+		
 		if (templatesVisible) {
 			posTemplates = count++;
 			context.addItem(Main.i18n("leftpanel.label.templates"),"");
 		}
+		
 		if (personalVisible) {
 			posPersonal = count++;
 			context.addItem(Main.i18n("leftpanel.label.my.documents"),"");
 		}
+		
 		if (mailVisible) {
 			posMail = count ++;
 			context.addItem(Main.i18n("leftpanel.label.mail"),"");
 		}
+		
 		if (trashVisible) {
 			posTrash = count ++;
 			context.addItem(Main.i18n("leftpanel.label.trash"),"");
 		}
+		
 		context.setSelectedIndex(posTaxonomy);
 		
-		context.addChangeHandler(new ChangeHandler(){
+		context.addChangeHandler(new ChangeHandler() {
 			@Override
 			public void onChange(ChangeEvent event) {
 				Main.get().mainPanel.search.searchBrowser.searchIn.searchAdvanced.path.setText(""); // each time list is changed must clean folder
 			}
 		});
+		
 		content = new TextBox();
 		name = new TextBox();
 		keywords = new TextBox();
@@ -145,7 +151,7 @@ public class SearchNormal extends Composite {
 		endCalendarIcon =  new Image(OKMBundleResources.INSTANCE.calendar());
 		dateBetween = new HTML("&nbsp;&nbsp;"+Main.i18n("search.date.and")+"&nbsp;&nbsp;");
 		
-		userListBox.addChangeHandler(new ChangeHandler(){
+		userListBox.addChangeHandler(new ChangeHandler() {
 			@Override
 			public void onChange(ChangeEvent event) {
 				Main.get().mainPanel.search.searchBrowser.searchIn.searchControl.evaluateSearchButtonVisible();							
