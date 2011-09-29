@@ -292,7 +292,13 @@ public class WorkflowServlet extends OKMRemoteServiceServlet implements OKMWorkf
 		updateSessionManager();
 		
 		try {
-			OKMWorkflow.getInstance().startTaskInstance(null, new Double(id).longValue());
+			OKMWorkflow okmWorkflow= OKMWorkflow.getInstance();
+			long taskInstanceId = new Double(id).longValue();
+			TaskInstance ti = okmWorkflow.getTaskInstance(null, taskInstanceId);
+			
+			if (ti.getStart() == null) {
+				okmWorkflow.startTaskInstance(null, taskInstanceId);
+			}
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
