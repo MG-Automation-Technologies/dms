@@ -48,13 +48,6 @@ import com.openkm.util.GWTUtil;
 
 /**
  * Servlet Class
- * 
- * @web.servlet              name="WorkflowServlet"
- *                           display-name="Directory tree service"
- *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/WorkflowServlet"
- * @web.servlet-init-param   name="A parameter"
- *                           value="A value"
  */
 public class WorkflowServlet extends OKMRemoteServiceServlet implements OKMWorkflowService {
 	private static Logger log = LoggerFactory.getLogger(WorkflowServlet.class);
@@ -95,9 +88,11 @@ public class WorkflowServlet extends OKMRemoteServiceServlet implements OKMWorkf
 		
 		try {
 			List<FormElement> formElementList = new ArrayList<FormElement>();
+			
 			for (Iterator<GWTFormElement> it = formElements.iterator(); it.hasNext();) {
 				formElementList.add(GWTUtil.copy(it.next()));
 			}
+			
 			OKMWorkflow.getInstance().runProcessDefinition(null, new Double(id).longValue(), UUID, formElementList);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
@@ -185,9 +180,11 @@ public class WorkflowServlet extends OKMRemoteServiceServlet implements OKMWorkf
 				String key = it.next();
 				List<FormElement> col = list.get(key);
 				List<GWTFormElement> gwtCol = new ArrayList<GWTFormElement>();
+				
 				for (Iterator<FormElement> itf= col.iterator(); itf.hasNext();) {
 					gwtCol.add(GWTUtil.copy(itf.next()));
 				}
+				
 				formElementList.put(key, gwtCol);
 			}
 		} catch (ParseException e) {
@@ -218,9 +215,11 @@ public class WorkflowServlet extends OKMRemoteServiceServlet implements OKMWorkf
 		
 		try {
 			List<FormElement> formElementList = new ArrayList<FormElement>();
+			
 			for (Iterator<GWTFormElement> it = formElements.iterator(); it.hasNext();) {
 				formElementList.add(GWTUtil.copy(it.next()));
 			}
+			
 			OKMWorkflow.getInstance().setTaskInstanceValues(null, new Double(id).longValue(), transitionName, formElementList);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
