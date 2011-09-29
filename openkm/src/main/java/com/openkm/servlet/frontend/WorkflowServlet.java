@@ -285,4 +285,28 @@ public class WorkflowServlet extends OKMRemoteServiceServlet implements OKMWorkf
 		
 		log.debug("setTaskInstanceActorId: void");
 	}
+
+	@Override
+	public void startTaskInstance(double id) throws OKMException {
+		log.debug("startTaskInstance({})", id);
+		updateSessionManager();
+		
+		try {
+			OKMWorkflow.getInstance().startTaskInstance(null, new Double(id).longValue());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Database), e.getMessage());
+		} catch (WorkflowException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Workflow), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_General), e.getMessage());
+		}
+		
+		log.debug("startTaskInstance: void");
+	}
 }
