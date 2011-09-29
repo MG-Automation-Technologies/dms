@@ -216,7 +216,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			
 			if (dNodeInfo != null) {
 				// Select node
-				log.info("DiagramNodeInfo: {}", dNodeInfo);
+				log.debug("DiagramNodeInfo: {}", dNodeInfo);
 				Graphics g = img.getGraphics();
 				Graphics2D g2d = (Graphics2D) g;
 				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25F));
@@ -299,7 +299,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	@Override
 	public ProcessInstance runProcessDefinition(String token, long processDefinitionId, String uuid, 
 			List<FormElement> variables) throws RepositoryException, DatabaseException, WorkflowException {
-		log.info("runProcessDefinition({}, {}, {})", new Object[] { token, processDefinitionId, variables });
+		log.debug("runProcessDefinition({}, {}, {})", new Object[] { token, processDefinitionId, variables });
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
 		ProcessInstance vo = new ProcessInstance();
 		Session session = null;
@@ -324,7 +324,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.close();
 		}
 		
-		log.info("runProcessDefinition: {}", vo);
+		log.debug("runProcessDefinition: {}", vo);
 		return vo;
 	}
 
@@ -782,7 +782,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.close();
 		}
 		
-		log.info("findUserTaskInstances: {}", al);
+		log.debug("findUserTaskInstances: {}", al);
 		return al;
 	}
 
