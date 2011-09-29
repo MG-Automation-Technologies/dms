@@ -283,8 +283,6 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 	
 	/**
 	 * Sets a TaskInstance
-	 * 
-	 * @param taskInstance
 	 */
 	public void setTaskInstance(GWTTaskInstance taskInstance) {
 		this.taskInstance = taskInstance;
@@ -310,16 +308,18 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 		}
 		
 		if (taskInstance.getDescription() != null) {
-			table.setHTML(6, 1, ""+taskInstance.getDescription());
+			table.setHTML(6, 1, taskInstance.getDescription());
 		}
 		
 		table.setHTML(8, 1, ""+processInstance.getId());
 		table.setHTML(9, 1, ""+processInstance.getVersion());
 		
 		documentLink = null;
+		
 		// Print variables
 		for (Iterator<String> it = processInstance.getVariables().keySet().iterator(); it.hasNext();) {
 			String key = it.next();
+			
 			if (processInstance.getVariables().get(key) instanceof String) {
 				final String value = (String) processInstance.getVariables().get(key);
 				int row = parameterTable.getRowCount();
@@ -327,9 +327,9 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 				// Special case path
 				if (key.equals(Main.get().workspaceUserProperties.getWorkspace().getWorkflowProcessIntanceVariableUUID())) {
 					final int documentRow = row;
-					parameterTable.setHTML(documentRow, 0, "<b>"+ 
-							               Main.get().workspaceUserProperties.getWorkspace().getWorkflowProcessIntanceVariablePath() + 
-							               "</b>");
+					parameterTable.setHTML(documentRow, 0, "<b>" +
+							Main.get().workspaceUserProperties.getWorkspace().getWorkflowProcessIntanceVariablePath() + 
+							"</b>");
 						
 					repositoryService.getPathByUUID(value, new AsyncCallback<String>() {
 						@Override
@@ -372,7 +372,6 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 					});
 					
 				}  else {
-					
 					parameterTable.setHTML(row, 0, "<b>" + key + "</b>");
 					parameterTable.setHTML(row, 1, value);
 				}
@@ -383,6 +382,7 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 		for (Iterator<GWTWorkflowComment> it = processInstance.getRootToken().getComments().iterator(); it.hasNext();) {
 			writeComment(it.next());
 		}
+		
 		writeAddComment();
 		
 		table.setHTML(12, 1, ""+processDefinition.getId());
@@ -392,7 +392,7 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 		if (processDefinition.getDescription()!=null) {
 			table.setHTML(16, 1, ""+processDefinition.getDescription());
 		}
-
+		
 		getProcessDefinitionForms(processDefinition.getId());
 	}
 	
@@ -443,8 +443,6 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 	
 	/**
 	 * getProcessDefinitionForms
-	 * 
-	 * @param id
 	 */
 	public void getProcessDefinitionForms(double id) {	
 		workflowService.getProcessDefinitionForms(id, callbackGetProcessDefinitionForms);
@@ -468,6 +466,7 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 			Main.get().mainPanel.dashboard.workflowDashboard.findUserTaskInstances();
 			clearPanel();
 		}
+		
 		public void onFailure(Throwable caught) {
 			Main.get().showError("setTaskInstanceValues", caught);
 		}
@@ -493,7 +492,7 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 	 */
 	private void removeAllParametersTableRows() {
 		// Deletes all table rows
-		while (parameterTable.getRowCount()>0) {
+		while (parameterTable.getRowCount() > 0) {
 			parameterTable.removeRow(0);
 		}
 	}
@@ -502,15 +501,13 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 	 * removeAllCommentsTableRows
 	 */
 	private void removeAllCommentsTableRows() {
-		while (tableNotes.getRowCount()>0) {
+		while (tableNotes.getRowCount() > 0) {
 			tableNotes.removeRow(0);
 		}
 	}
 	
 	/**
-	 * Writes the note 
-	 * 
-	 * @param comment
+	 * Writes the note
 	 */
 	private void writeComment(GWTWorkflowComment comment) {
 		int row = tableNotes.getRowCount();
@@ -569,16 +566,13 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 	 */
 	private void addComment() {
 		if (!textArea.getText().equals("")) {
-			workflowService.addComment(taskInstance.getProcessInstance().getRootToken().getId(), textArea.getText(), callbackAddComment);
+			workflowService.addComment(taskInstance.getProcessInstance().getRootToken().getId(),
+					textArea.getText(), callbackAddComment);
 		}
 	}
 	
 	/**
 	 * writePath
-	 * 
-	 * @param row
-	 * @param docPath
-	 * @param isFolder
 	 */
 	private void writePath(int row, final String docPath, final boolean isFolder) {
 		Anchor link = new Anchor();
@@ -595,6 +589,7 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 				}
 			}
 		});
+		
 		link.setStyleName("okm-Hyperlink");
 		
 		// Clones link
@@ -611,18 +606,15 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 				}
 			}
 		});
+		
 		documentLink.setStyleName("okm-Hyperlink");
 		parameterTable.setWidget(row, 1, documentLink);
 	}
 	
 	/**
 	 * TitleWidget
-	 * 
-	 * @author jllort
-	 *
 	 */
 	class TitleWidget extends HorizontalPanel implements HasClickHandlers   {
-		
 		HTML title;
 		Image zoomImage;
 		boolean zoom = false;
@@ -644,6 +636,7 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 			} else {
 				zoomImage = new Image(OKMBundleResources.INSTANCE.zoomIn());
 			}
+			
 			zoomImage.setStyleName("okm-Hyperlink");
 			
 			addClickHandler(new ClickHandler() {
@@ -676,6 +669,7 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 		public void setVisibleRows(boolean zoom) {
 			this.zoom = zoom;
 			showRelatedRows(zoom);
+			
 			if (zoom) {
 				zoomImage.setResource(OKMBundleResources.INSTANCE.zoomOut());
 			} else {
