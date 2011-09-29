@@ -386,14 +386,15 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 		writeAddComment();
 		
 		table.setHTML(12, 1, ""+processDefinition.getId());
-		table.setHTML(13, 1, ""+processDefinition.getName());
+		table.setHTML(13, 1, processDefinition.getName());
 		table.setHTML(14, 1, ""+processDefinition.getVersion());
 		
-		if (processDefinition.getDescription()!=null) {
-			table.setHTML(16, 1, ""+processDefinition.getDescription());
+		if (processDefinition.getDescription() != null) {
+			table.setHTML(16, 1, processDefinition.getDescription());
 		}
 		
 		getProcessDefinitionForms(processDefinition.getId());
+		startTaskInstance(taskInstance.getId());
 	}
 	
 	/**
@@ -442,10 +443,32 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 	};
 	
 	/**
+	 * Start task instance callback
+	 */
+	final AsyncCallback<Object> callbackStartTaskInstance = new AsyncCallback<Object>() {
+		@Override
+		public void onSuccess(Object result) {
+		}
+		
+		@Override
+		public void onFailure(Throwable caught) {
+			Main.get().showError("startTaskInstance", caught);
+		}
+	};
+	
+	
+	/**
 	 * getProcessDefinitionForms
 	 */
 	public void getProcessDefinitionForms(double id) {	
 		workflowService.getProcessDefinitionForms(id, callbackGetProcessDefinitionForms);
+	}
+	
+	/**
+	 * Start user task instance 
+	 */
+	public void startTaskInstance(double id) {
+		workflowService.startTaskInstance(id, callbackStartTaskInstance);
 	}
 	
 	/**
