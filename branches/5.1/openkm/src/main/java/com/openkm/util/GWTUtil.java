@@ -1218,7 +1218,7 @@ public class GWTUtil {
 			}
 			
 			return value;
-		} 
+		}
 		
 		return "";
 	}
