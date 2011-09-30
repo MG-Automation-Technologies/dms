@@ -659,6 +659,7 @@ public class GWTUtil {
 	
 	/**
 	 * Copy to ProcessDefinition data to  GWTProcessDefinition
+	 * 
 	 * @param ProcessDefinition the original data
 	 * @return The GWTProcessDefinition object with data values from original ProcessDefinition
 	 */
@@ -675,6 +676,7 @@ public class GWTUtil {
 	
 	/**
 	 * Copy to TaskInstance data to  GWTTaskInstance
+	 * 
 	 * @param TaskInstance the original data
 	 * @return The GWTTaskInstance object with data values from original TaskInstance
 	 */
@@ -703,6 +705,7 @@ public class GWTUtil {
 	
 	/**
 	 * Copy to ProcessInstance data to  GWTProcessInstance
+	 * 
 	 * @param ProcessInstance the original data
 	 * @return The GWTProcessInstance object with data values from original ProcessInstance
 	 */
@@ -739,6 +742,7 @@ public class GWTUtil {
 	
 	/**
 	 * Copy to Token data to GWTToken
+	 * 
 	 * @param FormElement the original data
 	 * @return The GWTToken object with data values from original Token
 	 */
@@ -783,6 +787,7 @@ public class GWTUtil {
 	
 	/**
 	 * Copy to Token data to GWTTransition
+	 * 
 	 * @param Transition the original data
 	 * @return The GWTTransition object with data values from original Transition
 	 */
@@ -812,6 +817,7 @@ public class GWTUtil {
 	
 	/**
 	 * Copy to Validator data to GWTValidator
+	 * 
 	 * @param Validator the original data
 	 * @return The GWTValidator object with data values from original Validator
 	 */
@@ -836,6 +842,7 @@ public class GWTUtil {
 	
 	/**
 	 * Copy to FormElement data to GWTFormElemen
+	 * 
 	 * @param FormElement the original data
 	 * @return The GWTFormElement object with data values from original FormElement
 	 */
@@ -999,6 +1006,7 @@ public class GWTUtil {
 	
 	/**
 	 * Copy to GWTFormElement data to FormElement
+	 * 
 	 * @param GWTFormElement the original data
 	 * @return The FormElement object with data values from original GWTFormElement
 	 */
@@ -1061,6 +1069,18 @@ public class GWTUtil {
 			
 			for (GWTOption option : gWTSelect.getOptions()) {
 				options.add(copy(option));
+				
+				if (option.isSelected()) {
+					if (Select.TYPE_SIMPLE.equals(select.getType())) {
+						select.setValue(option.getValue());
+					} else {
+						if ("".equals(select.getValue())) {
+							select.setValue(option.getValue());
+						} else {
+							select.setValue(select.getValue().concat(",").concat(option.getValue()));
+						}
+					}
+				}
 			}
 			
 			select.setOptions(options);
