@@ -169,7 +169,7 @@ public class GWTUtil {
 	 * the original Document.
 	 */
 	public static GWTDocument copy(Document doc) {
-		log.debug("copy("+doc+")");
+		log.debug("copy({})", doc);
 		GWTDocument gWTDoc = new GWTDocument();
 		
 		gWTDoc.setKeywords(doc.getKeywords());
@@ -209,7 +209,7 @@ public class GWTUtil {
 		}
 		
 		gWTDoc.setCategories(categories);
-		log.debug("copy: "+gWTDoc);
+		log.debug("copy: {}", gWTDoc);
 		return gWTDoc;
 	}
 	
@@ -220,7 +220,7 @@ public class GWTUtil {
 	 * @return A Document object with the data form de original GWTDocument
 	 */
 	public static Document copy(GWTDocument gWTDoc) {
-		log.debug("copy("+gWTDoc+")");
+		log.debug("copy({})", gWTDoc);
 		Document doc = new Document();
 		Calendar cal = Calendar.getInstance();
 		
@@ -247,7 +247,7 @@ public class GWTUtil {
 		doc.setCategories(categories);
 		gWTDoc.setActualVersion(copy(doc.getActualVersion()));
 		
-		log.debug("copy: "+gWTDoc);
+		log.debug("copy: {}", gWTDoc);
 		return doc;
 	}
 
@@ -259,7 +259,7 @@ public class GWTUtil {
 	 * the original Document.
 	 */
 	public static GWTFolder copy(Folder fld) {
-		log.debug("copy("+fld+")");
+		log.debug("copy({})", fld);
 		GWTFolder gWTFolder = new GWTFolder();
 		
 		gWTFolder.setUuid(fld.getUuid());
@@ -281,7 +281,7 @@ public class GWTUtil {
 			}
 		}
 		
-		log.debug("copy: "+gWTFolder);
+		log.debug("copy: {}", gWTFolder);
 		return gWTFolder;
 	}	
 	
@@ -293,7 +293,7 @@ public class GWTUtil {
 	 * the original Document.
 	 */
 	public static Folder copy(GWTFolder fld) {
-		log.debug("copy("+fld+")");
+		log.debug("copy({})", fld);
 		Folder folder = new Folder();
 		
 		folder.setUuid(fld.getUuid());
@@ -307,7 +307,7 @@ public class GWTUtil {
 		folder.setSubscribed(fld.isSubscribed());
 		folder.setSubscriptors(fld.getSubscriptors());
 		
-		log.debug("copy: "+folder);
+		log.debug("copy: {}", folder);
 		return folder;
 	}
 	
@@ -319,7 +319,7 @@ public class GWTUtil {
 	 * the original Document.
 	 */
 	public static GWTVersion copy(Version version) {
-		log.debug("copy("+version+")");
+		log.debug("copy({})", version);
 		GWTVersion gWTVersion = new GWTVersion();
 		
 		gWTVersion.setCreated(version.getCreated().getTime());
@@ -329,7 +329,7 @@ public class GWTUtil {
 		gWTVersion.setActual(version.isActual());
 		gWTVersion.setComment(version.getComment());
 		
-		log.debug("copy: "+gWTVersion);
+		log.debug("copy: {}", gWTVersion);
 		return gWTVersion;
 	}
 	
@@ -340,7 +340,7 @@ public class GWTUtil {
 	 * @return A Version object with the data from the original GWTVersion
 	 */
 	public static Version copy(GWTVersion gWTVersion) {
-		log.debug("copy("+gWTVersion+")");
+		log.debug("copy({})", gWTVersion);
 		Version version = new Version();
 		Calendar cal = Calendar.getInstance();
 		
@@ -352,7 +352,7 @@ public class GWTUtil {
 		version.setCreated(cal);
 		version.setComment(gWTVersion.getComment());
 		
-		log.debug("copy: "+version);
+		log.debug("copy: {}", version);
 		return version;
 	}
 	
@@ -364,7 +364,7 @@ public class GWTUtil {
 	 * the original Lock.
 	 */
 	public static GWTLock copy(Lock lock) {
-		log.debug("copy("+lock+")");
+		log.debug("copy({})", lock);
 		GWTLock gWTLock = new GWTLock();
 		
 		if (lock != null) {
@@ -373,7 +373,7 @@ public class GWTUtil {
 			gWTLock.setToken(lock.getToken());
 		}
 		
-		log.debug("copy: "+gWTLock);
+		log.debug("copy: {}", gWTLock);
 		return gWTLock;
 	}
 	
@@ -396,7 +396,7 @@ public class GWTUtil {
 			gWTBookmark.setType(bookmark.getType());
 		}
 		
-		log.debug("copy: "+gWTBookmark);
+		log.debug("copy: {}", gWTBookmark);
 		return gWTBookmark;
 	}
 	
@@ -524,10 +524,6 @@ public class GWTUtil {
 	 * 
 	 * @param GWTQueryParams The original QueryParams
 	 * @return The GWTQueryParams object with the data from de original QueryParams 
-	 * @throws RepositoryException 
-	 * @throws IOException 
-	 * @throws PathNotFoundException 
-	 * @throws ParseException 
 	 */
 	public static GWTQueryParams copy(QueryParams params) throws RepositoryException, 
 			IOException, PathNotFoundException, ParseException, DatabaseException {
@@ -605,7 +601,6 @@ public class GWTUtil {
 		}
 		
 		gWTParams.setProperties(finalProperties);
-		
 		return gWTParams;
 	}
 
@@ -682,11 +677,9 @@ public class GWTUtil {
 	 * Copy to TaskInstance data to  GWTTaskInstance
 	 * @param TaskInstance the original data
 	 * @return The GWTTaskInstance object with data values from original TaskInstance
-	 * @throws DatabaseException 
-	 * @throws RepositoryException 
-	 * @throws PathNotFoundException 
 	 */
-	public static GWTTaskInstance copy(TaskInstance taskInstance) throws PathNotFoundException, RepositoryException, DatabaseException {
+	public static GWTTaskInstance copy(TaskInstance taskInstance) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
 		GWTTaskInstance gWTTaskInstance = new GWTTaskInstance();
 		
 		gWTTaskInstance.setActorId(taskInstance.getActorId());
@@ -705,7 +698,6 @@ public class GWTUtil {
 		}
 		
 		gWTTaskInstance.setComments(copyComments(taskInstance.getComments()));
-		
 		return gWTTaskInstance;
 	}
 	
@@ -713,11 +705,9 @@ public class GWTUtil {
 	 * Copy to ProcessInstance data to  GWTProcessInstance
 	 * @param ProcessInstance the original data
 	 * @return The GWTProcessInstance object with data values from original ProcessInstance
-	 * @throws DatabaseException 
-	 * @throws RepositoryException 
-	 * @throws PathNotFoundException 
 	 */
-	public static GWTProcessInstance copy(ProcessInstance processInstance) throws PathNotFoundException, RepositoryException, DatabaseException {
+	public static GWTProcessInstance copy(ProcessInstance processInstance) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
 		GWTProcessInstance gWTProcessInstance = new GWTProcessInstance();
 		
 		gWTProcessInstance.setEnded(processInstance.isEnded());
@@ -751,9 +741,6 @@ public class GWTUtil {
 	 * Copy to Token data to GWTToken
 	 * @param FormElement the original data
 	 * @return The GWTToken object with data values from original Token
-	 * @throws DatabaseException 
-	 * @throws RepositoryException 
-	 * @throws PathNotFoundException 
 	 */
 	public static GWTToken copy(Token token) throws PathNotFoundException, RepositoryException, DatabaseException {
 		GWTToken gWTToken = new GWTToken();
@@ -838,9 +825,6 @@ public class GWTUtil {
 	
 	/**
 	 * copyNodes
-	 * 
-	 * @param nodes
-	 * @return
 	 */
 	public static List<GWTNode> copyNodes(List<Node> nodes) {
 		List<GWTNode> gwtNodesList = new ArrayList<GWTNode>();
@@ -854,11 +838,9 @@ public class GWTUtil {
 	 * Copy to FormElement data to GWTFormElemen
 	 * @param FormElement the original data
 	 * @return The GWTFormElement object with data values from original FormElement
-	 * @throws DatabaseException 
-	 * @throws RepositoryException 
-	 * @throws PathNotFoundException 
 	 */
-	public static GWTFormElement copy(FormElement formElement) throws PathNotFoundException, RepositoryException, DatabaseException {
+	public static GWTFormElement copy(FormElement formElement) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
 		if (formElement instanceof Button) {
 			GWTButton gWTButton = new GWTButton();
 			gWTButton.setName(formElement.getName());
@@ -1076,11 +1058,9 @@ public class GWTUtil {
 			select.setType(gWTSelect.getType());
 			select.setReadonly(gWTSelect.isReadonly());
 			List<Option> options = new ArrayList<Option>();
-			
 			for (GWTOption option :  gWTSelect.getOptions()) {
 				options.add(copy(option));
 			}
-			
 			select.setOptions(options);
 			select.setData(gWTSelect.getData());
 			return select;
@@ -1114,11 +1094,11 @@ public class GWTUtil {
 			return text;
 		} else if (formElement instanceof GWTSeparator) {
 			Separator separator = new Separator();
-			GWTSeparator gWTText = (GWTSeparator) formElement;
-			separator.setName(gWTText.getName());
-			separator.setLabel(gWTText.getLabel());
-			separator.setHeight(gWTText.getHeight());
-			separator.setWidth(gWTText.getWidth());
+			GWTSeparator gWTSeparator = (GWTSeparator) formElement;
+			separator.setName(gWTSeparator.getName());
+			separator.setLabel(gWTSeparator.getLabel());
+			separator.setHeight(gWTSeparator.getHeight());
+			separator.setWidth(gWTSeparator.getWidth());
 			return separator;
 		} else if (formElement instanceof GWTDownload) {
 			Download download = new Download();
@@ -1129,9 +1109,11 @@ public class GWTUtil {
 			download.setWidth(gWTDownload.getWidth());
 			download.setData(gWTDownload.getData());
 			List<Node> nodes = new ArrayList<Node>();
+			
 			for (GWTNode gWTNode : gWTDownload.getNodes()) {
 				nodes.add(copy(gWTNode));
 			}
+			
 			return download;
 		} else if (formElement instanceof GWTPrint) {
 			Print print = new Print();
@@ -1142,9 +1124,11 @@ public class GWTUtil {
 			print.setWidth(gWTprint.getWidth());
 			print.setData(gWTprint.getData());
 			List<Node> nodes = new ArrayList<Node>();
+			
 			for (GWTNode gWTNode : gWTprint.getNodes()) {
 				nodes.add(copy(gWTNode));
 			}
+			
 			return print;
 		} else {
 			return new FormElement();
@@ -1153,22 +1137,26 @@ public class GWTUtil {
 	
 	/**
 	 * getFormElementValue
-	 * 
-	 * @param formElement
-	 * @return
-	 * @throws DatabaseException 
 	 */
-	public static String getFormElementValue(GWTFormElement formElement) throws DatabaseException {
+	public static Object getFormElementValue(GWTFormElement formElement) throws DatabaseException {
 		if (formElement instanceof GWTButton) {
 			return ((GWTButton) formElement).getLabel();
 		} else if (formElement instanceof GWTInput) {
-			return ((GWTInput) formElement).getValue();
+			GWTInput input = (GWTInput) formElement;
+			
+			if (GWTInput.TYPE_DATE.equals(input.getType())) {
+				return input.getDate();
+			} else {
+				return input.getValue();
+			}
 		} else if (formElement instanceof GWTSuggestBox) {
 			GWTSuggestBox suggestBox = (GWTSuggestBox) formElement;
+			
 			// The ' character must be replaced to \" to be correctly parsed
 			// and after it must change all " characters to '
 			String formatedQuery =  MessageFormat.format(suggestBox.getValueQuery().replaceAll("'", "\\\""), suggestBox.getValue()).replaceAll("\"", "'");
 			List<KeyValue> keyValues = KeyValueDAO.getKeyValues(Arrays.asList(suggestBox.getTable()), formatedQuery);
+			
 			if (!keyValues.isEmpty()) {
 				return keyValues.get(0).getValue();
 			} else {
@@ -1181,6 +1169,7 @@ public class GWTUtil {
 			
 			for (Iterator<GWTOption> it = ((GWTSelect) formElement).getOptions().iterator(); it.hasNext();) {
 				GWTOption option = it.next();
+				
 				if (option.isSelected()) {
 					value += option.getLabel() + " ";
 				}
@@ -1198,30 +1187,36 @@ public class GWTUtil {
 		} else if (formElement instanceof GWTDownload) {
 			GWTDownload download = ((GWTDownload) formElement);
 			String value = "";
+			
 			for (GWTNode node : download.getNodes()) {
 				if (!value.equals("")) {
 					value += ",";
 				}
+				
 				if (!node.getUuid().equals("")) {
 					value += node.getUuid();
 				} else {
 					value += node.getPath();
 				}
 			}
+			
 			return value;
 		} else if (formElement instanceof GWTPrint) {
 			GWTPrint print = ((GWTPrint) formElement);
 			String value = "";
+			
 			for (GWTNode node : print.getNodes()) {
 				if (!value.equals("")) {
 					value += ",";
 				}
+				
 				if (!node.getUuid().equals("")) {
 					value += node.getUuid();
 				} else {
 					value += node.getPath();
 				}
 			}
+			
 			return value;
 		} 
 		
@@ -1230,6 +1225,7 @@ public class GWTUtil {
 	
 	/**
 	 * Copy to Validator data to  GWTValidator
+	 * 
 	 * @param Validator the original data
 	 * @return The GWTValidator object with data values from original Validator
 	 */
@@ -1242,6 +1238,7 @@ public class GWTUtil {
 	
 	/**
 	 * Copy to Node data to  GWTNode
+	 * 
 	 * @param Node the original data
 	 * @return The GWTNode object with data values from original Node
 	 */
@@ -1255,6 +1252,7 @@ public class GWTUtil {
 	
 	/**
 	 * Copy to GWTNode data to Node
+	 * 
 	 * @param GWTNode the original data
 	 * @return The Node object with data values from original GWTNode
 	 */
@@ -1268,6 +1266,7 @@ public class GWTUtil {
 	
 	/**
 	 * Copy to GWTOption data to  Option
+	 * 
 	 * @param GWTOption the original data
 	 * @return The Option object with data values from original GWTOption
 	 */
@@ -1281,6 +1280,7 @@ public class GWTUtil {
 	
 	/**
 	 * Copy to Option data to  GWTOption
+	 * 
 	 * @param Option the original data
 	 * @return The GWTOption object with data values from original Option
 	 */
@@ -1294,6 +1294,7 @@ public class GWTUtil {
 	
 	/**
 	 * Copy to Comment data to  GWTComment
+	 * 
 	 * @param Comment the original data
 	 * @return The GWTTaskInstanceComment object with data values from original TaskInstanceComment
 	 */
@@ -1316,6 +1317,7 @@ public class GWTUtil {
 	
 	/**
 	 * Copy Note data to GWTNote
+	 * 
 	 * @param Note the original data
 	 * @return The GWTNote object with data values from original Note
 	 */
@@ -1331,6 +1333,7 @@ public class GWTUtil {
 	
 	/**
 	 * Copy Note data to GWTNote
+	 * 
 	 * @param Note the original data
 	 * @return The GWTNote object with data values from original Note
 	 */
@@ -1352,7 +1355,7 @@ public class GWTUtil {
 	 * the original Mail.
 	 */
 	public static GWTMail copy(Mail mail) {
-		log.debug("copy("+mail+")");
+		log.debug("copy({})", mail);
 		GWTMail gWTMail = new GWTMail();
 		List<GWTDocument> attachList = new ArrayList<GWTDocument>();
 		
@@ -1377,7 +1380,7 @@ public class GWTUtil {
 		gWTMail.setParent(GWTUtil.getParent(mail.getPath()));
 		gWTMail.setMimeType(mail.getMimeType());
 		
-		log.debug("copy: "+gWTMail);
+		log.debug("copy: {}", gWTMail);
 		return gWTMail;
 	}
 	
@@ -1423,11 +1426,6 @@ public class GWTUtil {
 	 * @param doc The original StaplingGroup object.
 	 * @return A GWTStaplingGroup object with the data from 
 	 * the original StaplingGroup.
-	 * 
-	 * @throws DatabaseException 
-	 * @throws RepositoryException 
-	 * @throws AccessDeniedException 
-	 * @throws PathNotFoundException 
 	 */
 	public static GWTStapleGroup copy(StapleGroup sg) throws RepositoryException, DatabaseException, 
 			PathNotFoundException {
@@ -1463,9 +1461,6 @@ public class GWTUtil {
 	
 	/**
 	 * Copy Language to GWTLanguage
-	 * 
-	 * @param language
-	 * @return
 	 */
 	public static GWTLanguage copy(Language language) {
 		GWTLanguage gWTlang = new GWTLanguage();
@@ -1476,9 +1471,6 @@ public class GWTUtil {
 	
 	/**
 	 * Copy GWTProposedSubscriptionReceived to GWTProposedSubscription
-	 * 
-	 * @param ps
-	 * @return
 	 */
 	public static GWTProposedSubscriptionReceived copy(ProposedSubscriptionReceived ps) {
 		GWTProposedSubscriptionReceived gWTProposedSubscription = new GWTProposedSubscriptionReceived();
@@ -1501,9 +1493,6 @@ public class GWTUtil {
 	
 	/**
 	 * Copy ProposedSubscriptionSent to GWTProposedSubscriptionSent
-	 * 
-	 * @param ps
-	 * @return
 	 */
 	public static GWTProposedSubscriptionSent copy(ProposedSubscriptionSent ps) {
 		GWTProposedSubscriptionSent gWTProposedSubscription = new GWTProposedSubscriptionSent();
@@ -1521,14 +1510,6 @@ public class GWTUtil {
 	
 	/**
 	 * Copy ProposedQuery to GWTProposedQuery
-	 * 
-	 * @param pq
-	 * @return
-	 * @throws DatabaseException 
-	 * @throws ParseException 
-	 * @throws PathNotFoundException 
-	 * @throws IOException 
-	 * @throws RepositoryException 
 	 */
 	public static GWTProposedQueryReceived copy(ProposedQueryReceived pq, QueryParams params) 
 			throws RepositoryException, IOException, PathNotFoundException, ParseException,
@@ -1552,14 +1533,6 @@ public class GWTUtil {
 	
 	/**
 	 * Copy ProposedQuery to GWTProposedQuery
-	 * 
-	 * @param pq
-	 * @return
-	 * @throws DatabaseException 
-	 * @throws ParseException 
-	 * @throws PathNotFoundException 
-	 * @throws IOException 
-	 * @throws RepositoryException 
 	 */
 	public static GWTProposedQuerySent copy(ProposedQuerySent pq, QueryParams params) 
 			throws RepositoryException, IOException, PathNotFoundException, ParseException,
@@ -1577,9 +1550,6 @@ public class GWTUtil {
 	
 	/**
 	 * Copy MessageSent to GWTMessageSent
-	 * 
-	 * @param ms
-	 * @return
 	 */
 	public static GWTTextMessageSent copy(MessageSent ms) {
 		GWTTextMessageSent gWTMessageSent  = new GWTTextMessageSent();
@@ -1596,9 +1566,6 @@ public class GWTUtil {
 	
 	/**
 	 * Copy MessageReceived to GWTMessageReceived
-	 * 
-	 * @param mr
-	 * @return
 	 */
 	public static GWTMessageReceived copy(MessageReceived mr) {
 		GWTMessageReceived gWTMessageReceived = new GWTMessageReceived();
@@ -1620,9 +1587,6 @@ public class GWTUtil {
 	
 	/**
 	 * Copy StampText to GWTStamp
-	 * 
-	 * @param st
-	 * @return
 	 */
 	public static GWTStamp copy(StampText st) {
 		GWTStamp gst = new GWTStamp();
@@ -1636,9 +1600,6 @@ public class GWTUtil {
 	
 	/**
 	 * Copy StampText to StampImage
-	 * 
-	 * @param st
-	 * @return
 	 */
 	public static GWTStamp copy(StampImage st) {
 		GWTStamp gst = new GWTStamp();
@@ -1652,9 +1613,6 @@ public class GWTUtil {
 	
 	/**
 	 * Copy GWTContact to  Contact
-	 * 
-	 * @param gWTContact
-	 * @return
 	 */
 	public static Contact copy(GWTContact gWTContact) {
 		Contact contact = new Contact();
@@ -1679,9 +1637,6 @@ public class GWTUtil {
 	
 	/**
 	 * Copy Contact to GWTContact
-	 * 
-	 * @param contact
-	 * @return
 	 */
 	public static GWTContact copy(Contact contact, String uuid) {
 		GWTContact gwtContact = new GWTContact();
@@ -1704,9 +1659,6 @@ public class GWTUtil {
 	
 	/**
 	 * Copy Activity to GWTActivity
-	 * 
-	 * @param activity
-	 * @return
 	 */
 	public static GWTActivity copy(Activity activity) {
 		GWTActivity gWTActivity = new GWTActivity();
@@ -1722,9 +1674,6 @@ public class GWTUtil {
 	
 	/**
 	 * Copy Forum to GWTForum
-	 * 
-	 * @param Forum 
-	 * @return
 	 */
 	public static GWTForum copy(Forum forum) {
 		GWTForum f = new GWTForum();
@@ -1747,9 +1696,6 @@ public class GWTUtil {
 	
 	/**
 	 * Copy ForumTopic to GWTForumTopic
-	 * 
-	 * @param ForumTopic 
-	 * @return
 	 */
 	public static GWTForumTopic copy(ForumTopic topic) {
 		GWTForumTopic ft = new GWTForumTopic();
@@ -1772,9 +1718,6 @@ public class GWTUtil {
 	
 	/**
 	 * Copy ForumPost to GWTForumPost
-	 * 
-	 * @param ForumPost 
-	 * @return
 	 */
 	public static GWTForumPost copy(ForumPost post) {
 		GWTForumPost fp = new GWTForumPost();
@@ -1788,9 +1731,6 @@ public class GWTUtil {
 	
 	/**
 	 * Copy GWTForum to Forum
-	 * 
-	 * @param forum 
-	 * @return
 	 */
 	public static Forum copy(GWTForum forum) {
 		Forum f = new Forum();
@@ -1817,9 +1757,6 @@ public class GWTUtil {
 	
 	/**
 	 * Copy GWTForumTopic to ForumTopic
-	 * 
-	 * @param GWTForumTopic 
-	 * @return
 	 */
 	public static ForumTopic copy(GWTForumTopic topic) {
 		ForumTopic ft = new ForumTopic();
@@ -1846,9 +1783,6 @@ public class GWTUtil {
 	
 	/**
 	 * Copy ForumPost to GWTForumPost
-	 * 
-	 * @param ForumPost 
-	 * @return
 	 */
 	public static ForumPost copy(GWTForumPost post) {
 		ForumPost fp = new ForumPost();
@@ -1864,9 +1798,6 @@ public class GWTUtil {
 	
 	/**
 	 * Copy KeyValue to GWTKeyValue
-	 * 
-	 * @param keyValue KeyValue
-	 * @return
 	 */
 	public static GWTKeyValue copy(KeyValue keyValue) {
 		GWTKeyValue gWTKeyValue = new GWTKeyValue();
@@ -1877,14 +1808,9 @@ public class GWTUtil {
 	
 	/**
 	 * Copy Report to GWTReport
-	 * 
-	 * @param report
-	 * @return
-	 * @throws DatabaseException 
-	 * @throws RepositoryException 
-	 * @throws PathNotFoundException 
 	 */
-	public static GWTReport copy(Report report, List<FormElement> formElements) throws PathNotFoundException, RepositoryException, DatabaseException {
+	public static GWTReport copy(Report report, List<FormElement> formElements) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
 		GWTReport gWTReport = new GWTReport();
 		gWTReport.setActive(report.isActive());
 		gWTReport.setFileContent(report.getFileContent());
@@ -1893,9 +1819,11 @@ public class GWTUtil {
 		gWTReport.setId(report.getId());
 		gWTReport.setName(report.getName());
 		List<GWTFormElement> gWTFormElemets = new ArrayList<GWTFormElement>();
+		
 		for (FormElement formElement : formElements) {
 			gWTFormElemets.add(copy(formElement));
 		}
+		
 		gWTReport.setFormElements(gWTFormElemets);
 		return gWTReport;
 	}
