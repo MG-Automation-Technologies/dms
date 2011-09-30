@@ -1059,7 +1059,7 @@ public class GWTUtil {
 			select.setReadonly(gWTSelect.isReadonly());
 			List<Option> options = new ArrayList<Option>();
 			
-			for (GWTOption option :  gWTSelect.getOptions()) {
+			for (GWTOption option : gWTSelect.getOptions()) {
 				options.add(copy(option));
 			}
 			
