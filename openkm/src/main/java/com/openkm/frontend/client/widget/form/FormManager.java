@@ -770,11 +770,11 @@ public class FormManager {
 						ListBox listMulti = (ListBox) hPanel.getWidget(2);
 						Button addButton = (Button) hPanel.getWidget(4);
 						
-						if (listMulti.getSelectedIndex()>0) {
+						if (listMulti.getSelectedIndex() > 0) {
 							final HTML htmlValue = new HTML(listMulti.getValue(listMulti.getSelectedIndex()));
 							int rowTableMulti  = tableMulti.getRowCount();
-							
 							Image removeImage = new Image(OKMBundleResources.INSTANCE.deleteIcon());
+							
 							removeImage.addClickHandler(new ClickHandler() { 
 								@Override
 								public void onClick(ClickEvent event) {
@@ -784,8 +784,8 @@ public class FormManager {
 									ListBox listMulti = (ListBox) hPanel.getWidget(2);
 									Button addButton = (Button) hPanel.getWidget(4);
 									String value = htmlValue.getText();
-									
 									String optionLabel = "";
+									
 									for (Iterator<GWTOption> itOptions = gwtSelect.getOptions().iterator(); itOptions.hasNext();) {
 										GWTOption option = itOptions.next();
 										if (option.getValue().equals(htmlValue.getText())) {
@@ -824,12 +824,13 @@ public class FormManager {
 								addButton.setVisible(false);
 							}
 							
-							if (search!=null) {
+							if (search != null) {
 								search.metadataValueChanged();
 							}
 						}
 					}
 				});
+				
 				addButton.setEnabled((!readOnly && !gwtSelect.isReadonly()) || isSearchView);
 				addButton.setStyleName("okm-Button");
 				
