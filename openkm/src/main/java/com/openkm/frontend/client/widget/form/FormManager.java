@@ -432,7 +432,7 @@ public class FormManager {
 					}
 				});
 				
-				Image cleanPathExplorer = new Image(OKMBundleResources.INSTANCE.deleteIcon());
+				Image cleanPathExplorer = new Image(OKMBundleResources.INSTANCE.cleanIcon());
 				cleanPathExplorer.addClickHandler(new ClickHandler() {
 					@Override
 					public void onClick(ClickEvent event) {

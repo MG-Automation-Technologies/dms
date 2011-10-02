@@ -37,6 +37,9 @@ public interface OKMBundleResources extends ClientBundle {
 	@Source("com/openkm/frontend/public/img/icon/actions/delete.gif")
 	public ImageResource deleteIcon();
 	
+	@Source("com/openkm/frontend/public/img/icon/actions/clean.png")
+	public ImageResource cleanIcon();
+	
 	@Source("com/openkm/frontend/public/img/icon/stackpanel/book_open.gif")
 	public ImageResource bookOpenIcon();
 	
