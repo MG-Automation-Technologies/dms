@@ -1471,9 +1471,11 @@ public class FormManager {
 			} else if (formElement instanceof GWTInput) {
 				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
 				TextBox textBox = (TextBox) hPanel.getWidget(0);
-				((GWTInput) formElement).setValue(textBox.getText()); // note that date is added by click handler in drawform method
+				((GWTInput) formElement).setValue(textBox.getText());
+				
+				// note that date is added by click handler in drawform method
 				if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_FOLDER)) {
-					// Must be updated folder in GWTInput because must be drawed
+					// Must be updated folder in GWTInput because must be drawn
 					GWTFolder folder = new GWTFolder();
 					folder.setPath(textBox.getText());
 					((GWTInput) formElement).setFolder(folder);
@@ -1492,7 +1494,7 @@ public class FormManager {
 					ListBox listBox = (ListBox) hPanel.getWidget(0);
 					String selectedValue = "";
 					
-					if (listBox.getSelectedIndex()>0) {
+					if (listBox.getSelectedIndex() > 0) {
 						selectedValue = listBox.getValue(listBox.getSelectedIndex());
 					}
 					
