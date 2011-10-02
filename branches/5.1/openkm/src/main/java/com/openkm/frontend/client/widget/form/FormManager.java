@@ -302,11 +302,11 @@ public class FormManager {
 						}
 					});
 				}
+				
 				setRowWordWarp(row, 3, true);
 			} else {
 				setRowWordWarp(row, 2, true);
 			}
-			
 		} else if (gwtMetadata instanceof GWTInput) {
 			HorizontalPanel hPanel = new HorizontalPanel();
 			final TextBox textBox = new TextBox(); // Create a widget for this property
@@ -344,7 +344,8 @@ public class FormManager {
 						DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.day.pattern"));
 						textBox.setText(dtf.format(calendar.getDate()));
 						((GWTInput) gwtMetadata).setDate(calendar.getDate());
-						if (search!=null) {
+						
+						if (search != null) {
 							search.metadataValueChanged();
 						}
 					}
@@ -394,7 +395,6 @@ public class FormManager {
 				} else {
 					table.setHTML(row, 1, "");
 				}
-				
 			} else if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_FOLDER)) {
 				if (!value.equals("")) {
 					Anchor anchor = new Anchor();
@@ -475,7 +475,8 @@ public class FormManager {
 							DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.day.pattern"));
 							textBoxTo.setText(dtf.format(calendar.getDate()));
 							((GWTInput) gwtMetadata).setDateTo(calendar.getDate());
-							if (search!=null) {
+							
+							if (search != null) {
 								search.metadataValueChanged();
 							}
 						}
