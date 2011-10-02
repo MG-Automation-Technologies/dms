@@ -1789,9 +1789,6 @@ public class FormManager {
 	
 	/**
 	 * getStringValueFromVariable
-	 * 
-	 * @param obj
-	 * @return
 	 */
 	private String getStringValueFromVariable(Object obj) {
 		if (obj instanceof GWTInput) {
@@ -1815,6 +1812,7 @@ public class FormManager {
 					}
 				}
 			}
+			
 			return values;
 		} else if (obj instanceof GWTUpload) {
 			return null;
@@ -1833,9 +1831,6 @@ public class FormManager {
 	
 	/**
 	 * getBooleanValueFromVariable
-	 * 
-	 * @param obj
-	 * @return
 	 */
 	private boolean getBooleanValueFromVariable(Object obj) {
 		if (obj instanceof GWTInput) {
@@ -1859,6 +1854,7 @@ public class FormManager {
 					}
 				}
 			}
+			
 			return values.toLowerCase().contains(BOOLEAN_TRUE); // test if on chain contains "true"
 		} else if (obj instanceof GWTUpload) {
 			return false;
@@ -1877,10 +1873,6 @@ public class FormManager {
 	
 	/**
 	 * getOptionsValueFromVariable
-	 * 
-	 * @param obj
-	 * @param options
-	 * @return
 	 */
 	private Collection<GWTOption> getOptionsValueFromVariable(Object obj, Collection<GWTOption> options) {
 		for (GWTOption option : options) {
@@ -1908,12 +1900,14 @@ public class FormManager {
 				// Only doing mapping between values, if not found then is false
 				boolean found = false;
 				GWTSelect select = (GWTSelect) obj;
+				
 				for (GWTOption optionVar : select.getOptions()) {
 					if (option.getValue().equals(optionVar.getValue())) {
 						found = optionVar.isSelected();
 						break;
 					}
 				}
+				
 				option.setSelected(found); // always setting values, if not found
 			} else if (obj instanceof GWTUpload) {
 				return options;
@@ -1929,16 +1923,16 @@ public class FormManager {
 				return options;
 			}
 		}
+		
 		return options;
 	}
 	
 	/**
 	 * Gets a string map values
-	 * 
-	 * @return
 	 */
 	public Map<String, String> getStringMapValues() {
 		Map<String, String> values = new HashMap<String, String>();
+		
 		for (GWTFormElement formElement : formElementList) {
 			if (formElement instanceof GWTTextArea) {
 				values.put(formElement.getName(), getStringValueFromVariable(formElement));
@@ -1962,29 +1956,26 @@ public class FormManager {
 				// Nothing to be done here
 			} 
 		}
+		
 		return values;
 	}
 	
 	/**
-	 * setSubmitFormButton
 	 * 
-	 * @param submitForm
 	 */
 	public void setSubmitFormButton(Button submitForm) {
 		this.submitForm = submitForm;
 	}
 	
 	/**
-	 * setTaskInstance
+	 * 
 	 */
 	public void setTaskInstance(GWTTaskInstance taskInstance) {
 		this.taskInstance = taskInstance;
 	}
 	
 	/**
-	 * getValidationProcessor
 	 * 
-	 * @return
 	 */
 	public ValidationProcessor getValidationProcessor() {
 		return validationProcessor;
@@ -1992,9 +1983,6 @@ public class FormManager {
 	
 	/**
 	 * DatabaseRecord
-	 * 
-	 * @author jllort
-	 *
 	 */
 	class DatabaseRecord implements HasDatabaseRecord {
 		private HTML keyWidget;
@@ -2002,9 +1990,6 @@ public class FormManager {
 		
 		/**
 		 * DatabaseRecord
-		 * 
-		 * @param keyWidget
-		 * @param valueWidget
 		 */
 		public DatabaseRecord(HTML keyWidget, TextBox valueWidget) {
 			this.keyWidget = keyWidget;
@@ -2020,9 +2005,6 @@ public class FormManager {
 	
 	/**
 	 * ButtonValidation
-	 * 
-	 * @author jllort
-	 *
 	 */
 	public class ValidationButton {
 		private GWTButton gWTButton;
@@ -2030,9 +2012,6 @@ public class FormManager {
 		
 		/**
 		 * ValidationButton
-		 * 
-		 * @param gWTButton
-		 * @param formManager
 		 */
 		public ValidationButton(GWTButton gWTButton, FormManager formManager) {
 			this.gWTButton = gWTButton;
@@ -2040,41 +2019,35 @@ public class FormManager {
 		}
 		
 		/**
-		 * getWorkflow
 		 * 
-		 * @return
 		 */
 		public HasWorkflow getWorkflow() {
 			return formManager.workflow;
 		}
 		
 		/**
-		 * @return
+		 * 
 		 */
 		public GWTButton getButton() {
 			return gWTButton;
 		}
 		
 		/**
-		 * getValidationProcessor
 		 * 
-		 * @return
 		 */
 		public ValidationProcessor getValidationProcessor() {
 			return formManager.validationProcessor;
 		}
 		
 		/**
-		 * getTaskInstance
 		 * 
-		 * @return
 		 */
 		public GWTTaskInstance getTaskInstance() {
 			return taskInstance;
 		}
 		
 		/**
-		 * disableAllButtonList
+		 * 
 		 */
 		public void disableAllButtonList() {
 			formManager.disableAllButtonList();
