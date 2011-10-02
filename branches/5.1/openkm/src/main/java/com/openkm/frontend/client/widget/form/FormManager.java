@@ -211,9 +211,6 @@ public class FormManager {
 	
 	/**
 	 * drawFormElement
-	 * 
-	 * @param row
-	 * @param gwtMetadata
 	 */
 	private void drawFormElement(int row, final GWTFormElement gwtMetadata, boolean readOnly, boolean searchView) {
 		final String propertyName = gwtMetadata.getName();
@@ -253,11 +250,11 @@ public class FormManager {
 					}
 				}
 			});
+			
 			// Adding button to control list
 			if (!buttonControlList.contains(transButton)) {
 				buttonControlList.add(transButton);
 			}
-			
 		} else if (gwtMetadata instanceof GWTTextArea) {
 			HorizontalPanel hPanel = new HorizontalPanel();
 			TextArea textArea = new TextArea();
@@ -272,7 +269,8 @@ public class FormManager {
 			table.setHTML(row, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
 			table.setWidget(row, 1, text);
 			table.getCellFormatter().setVerticalAlignment(row,0,VerticalPanel.ALIGN_TOP);
-			table.getCellFormatter().setWidth(row, 1, "100%");		
+			table.getCellFormatter().setWidth(row, 1, "100%");
+			
 			if (searchView) {
 				final Image removeImage = new Image(OKMBundleResources.INSTANCE.deleteIcon());
 				removeImage.addClickHandler(new ClickHandler() { 
@@ -284,16 +282,19 @@ public class FormManager {
 								break;
 							}
 						}
+						
 						hWidgetProperties.remove(propertyName);
 						hPropertyParams.remove(propertyName);
 						formElementList.remove(gwtMetadata);
 						search.propertyRemoved();
 					}
 				});
+				
 				removeImage.addStyleName("okm-Hyperlink");
 				table.setWidget(row, 2, removeImage);
 				table.getCellFormatter().setVerticalAlignment(row, 2, HasAlignment.ALIGN_TOP);
-				if (search!=null) {
+				
+				if (search != null) {
 					textArea.addKeyUpHandler(new KeyUpHandler() {
 						@Override
 						public void onKeyUp(KeyUpEvent event) {
@@ -312,6 +313,7 @@ public class FormManager {
 			textBox.setEnabled((!readOnly && !((GWTInput) gwtMetadata).isReadonly()) || isSearchView);
 			hPanel.add(textBox);
 			String value = "";
+			
 			if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_TEXT) || 
 				((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_LINK) ||
 				((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_FOLDER)) {
@@ -323,15 +325,18 @@ public class FormManager {
 					textBox.setText(dtf.format(((GWTInput) gwtMetadata).getDate()));
 					value = dtf.format(((GWTInput) gwtMetadata).getDate());
 				}
-			} 
+			}
+			
 			textBox.setWidth(gwtMetadata.getWidth());
 			textBox.setStyleName("okm-Input");
 			hWidgetProperties.put(propertyName,hPanel);
 			table.setHTML(row, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
 			table.setHTML(row, 1, value);
+			
 			if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_DATE)) {
 				final PopupPanel calendarPopup = new PopupPanel(true);
 				final CalendarWidget calendar = new CalendarWidget();
+				
 				calendar.addChangeHandler(new ChangeHandler(){
 					@Override
 					public void onChange(ChangeEvent event) {
@@ -344,8 +349,10 @@ public class FormManager {
 						}
 					}
 				});
+				
 				calendarPopup.add(calendar);
 				final Image calendarIcon = new Image(OKMBundleResources.INSTANCE.calendar());
+				
 				if (readOnly || ((GWTInput) gwtMetadata).isReadonly()) {
 					calendarIcon.setResource(OKMBundleResources.INSTANCE.calendarDisabled());
 				} else {
@@ -357,22 +364,24 @@ public class FormManager {
 						}
 					});
 				}
+				
 				calendarIcon.setStyleName("okm-Hyperlink");
 				hPanel.add(Util.hSpace("5"));
 				hPanel.add(calendarIcon);
 				textBox.setEnabled(false);
-				
 			} else if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_LINK)) {
 				if (!value.equals("")) {
 					HorizontalPanel hLinkPanel = new HorizontalPanel();
 					Anchor anchor = new Anchor(value, true);
 					final String url = value;
+					
 					anchor.addClickHandler(new ClickHandler() {
 						@Override
 						public void onClick(ClickEvent event) {
 							Window.open(url, url, "");
 						}
 					});
+					
 					anchor.setStyleName("okm-Hyperlink");
 					String containerName = ((GWTInput) gwtMetadata).getName() + "ContainerName";
 					hLinkPanel.add(new HTML("<div id=\""+containerName+"\"></div>\n"));
@@ -391,6 +400,7 @@ public class FormManager {
 					Anchor anchor = new Anchor();
 					final GWTFolder folder = ((GWTInput) gwtMetadata).getFolder();
 					String path = value.substring(value.indexOf("/",1)+1); // removes first ocurrence
+					
 					// Looks if must change icon on parent if now has no childs and properties with user security atention
 					if (folder.getHasChilds()) {
 						anchor.setHTML(Util.imageItemHTML("img/menuitem_childs.gif", path, "top"));
@@ -404,11 +414,13 @@ public class FormManager {
 							CommonUI.openAllFolderPath(folder.getPath(), null);
 						}
 					});
+					
 					anchor.setStyleName("okm-KeyMap-ImageHover");
 					table.setWidget(row, 1, anchor);
 				} else {
 					table.setHTML(row, 1, "");
 				}
+				
 				Image pathExplorer = new Image(OKMBundleResources.INSTANCE.folderExplorer());
 				pathExplorer.addClickHandler(new ClickHandler() { 
 					@Override
@@ -416,6 +428,7 @@ public class FormManager {
 						folderSelectPopup.show(textBox, search); // when any changes is done is fired search.metadataValueChanged();
 					}
 				});
+				
 				Image cleanPathExplorer = new Image(OKMBundleResources.INSTANCE.deleteIcon());
 				cleanPathExplorer.addClickHandler(new ClickHandler() {
 					@Override
@@ -424,6 +437,7 @@ public class FormManager {
 						((GWTInput) gwtMetadata).setFolder(new GWTFolder());
 					}
 				});
+				
 				pathExplorer.setStyleName("okm-KeyMap-ImageHover");
 				cleanPathExplorer.setStyleName("okm-KeyMap-ImageHover");
 				hPanel.add(new HTML("&nbsp;"));
@@ -552,10 +566,9 @@ public class FormManager {
 						
 						DatabaseRecord databaseRecord = new DatabaseRecord(hiddenKey, textBox);
 						// when any changes is done is fired search.metadataValueChanged();
-						DatabaseRecordSelectPopup drsPopup = new DatabaseRecordSelectPopup(suggestBox.getDialogTitle(),
-																						   tables, suggestBox.getFilterQuery(), 
-																						   databaseRecord, search,
-																						   suggestBox.getFilterMinLen());
+						DatabaseRecordSelectPopup drsPopup = new DatabaseRecordSelectPopup(
+								suggestBox.getDialogTitle(), tables, suggestBox.getFilterQuery(),
+								databaseRecord, search, suggestBox.getFilterMinLen());
 						drsPopup.setWidth("300");
 						drsPopup.setHeight("220");
 						drsPopup.setStyleName("okm-Popup");
