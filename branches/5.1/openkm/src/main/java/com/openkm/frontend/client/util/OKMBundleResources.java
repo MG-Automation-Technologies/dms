@@ -32,7 +32,6 @@ import com.google.gwt.resources.client.ImageResource;
  *
  */
 public interface OKMBundleResources extends ClientBundle {
-	
 	public static final OKMBundleResources INSTANCE =  GWT.create(OKMBundleResources.class);
 	
 	@Source("com/openkm/frontend/public/img/icon/actions/delete.gif")
