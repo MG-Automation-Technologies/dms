@@ -1288,8 +1288,6 @@ public class FormManager {
 	
 	/**
 	 * addPropertyParam
-	 * 
-	 * @param propertyParam
 	 */
 	public void addPropertyParam(GWTPropertyParams propertyParam) {
 		updateFormElementsValuesWithNewer(); // save values
@@ -1303,11 +1301,13 @@ public class FormManager {
 			if (propertyParam.getValue() != null) {
 				if (formElement instanceof GWTInput) {
 					GWTInput input = (GWTInput) formElement;
+					
 					if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_DATE)) {
 						if (!propertyParam.getValue().equals("")) {
 							String date[] = propertyParam.getValue().split(",");
 							input.setDate(ISO8601.parse(date[0]));
-							if (date.length==2) {
+							
+							if (date.length == 2) {
 								input.setDateTo(ISO8601.parse(date[1]));
 							}
 						}
@@ -1350,7 +1350,6 @@ public class FormManager {
 	
 	/**
 	 * draw
-	 * 
 	 */
 	public void draw() {
 		draw(false);
@@ -1358,8 +1357,6 @@ public class FormManager {
 	
 	/**
 	 * draw
-	 * 
-	 * @param readOnly
 	 */
 	public void draw(boolean readOnly) {
 		this.readOnly = readOnly;
@@ -1378,8 +1375,6 @@ public class FormManager {
 	
 	/**
 	 * updateFormElements
-	 * 
-	 * @return
 	 */
 	public List<GWTFormElement> getFormElements() {
 		return formElementList;
@@ -1387,12 +1382,11 @@ public class FormManager {
 	
 	/**
 	 * getPropertyParams
-	 * 
-	 * @return
 	 */
 	public Map<String, GWTPropertyParams> getPropertyParams() {
 		for (GWTFormElement formElement : updateFormElementsValuesWithNewer()) {
 			String value = "";
+			
 			if (formElement instanceof GWTInput) {
 				if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_DATE)) {
 					GWTInput input = (GWTInput) formElement;
@@ -1413,6 +1407,7 @@ public class FormManager {
 				value = String.valueOf(((GWTCheckBox) formElement).getValue());
 			} else if (formElement instanceof GWTSelect) {
 				GWTSelect select = (GWTSelect) formElement;
+				
 				for (GWTOption option : select.getOptions()) {
 					if (option.isSelected()) {
 						if (!value.equals("")) {
@@ -1435,13 +1430,12 @@ public class FormManager {
 			
 			hPropertyParams.get(formElement.getName()).setValue(value);
 		}
+		
 		return hPropertyParams;
 	}
 	
 	/**
 	 * updateFormElementsWithNewer
-	 * 
-	 * @return
 	 */
 	public List<GWTFormElement> updateFormElementsValuesWithNewer() {
 		int rows = 0;
@@ -1529,49 +1523,54 @@ public class FormManager {
 	
 	/**
 	 * hasFileUploadFormElement
-	 * 
-	 * @return
 	 */
 	public boolean hasFileUploadFormElement() {
 		boolean found = false;
 		int rows = 0;
+		
 		for (GWTFormElement formElement : formElementList) {
 			if (formElement instanceof GWTUpload) {
 				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
 				FileUpload fileUpload = (FileUpload) hPanel.getWidget(1);
+				
 				if (!fileUpload.getFilename().equals("")) {
 					found  = true;
 				}
+				
 				break;
 			}
+			
 			rows++;
 		}
+		
 		return found;
 	}
 	
 	/**
 	 * getFilesToUpload
-	 * 
-	 * @return
 	 */
 	public Collection<FileToUpload> getFilesToUpload(String transition) {
 		List<FileToUpload> filesToUpload= new ArrayList<FileToUpload>();
 		int rows = 0;
+		
 		for (GWTFormElement formElement : formElementList) {
 			if (formElement instanceof GWTUpload) {
 				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
 				table.setWidget(rows, 1, hPanel);
 				FileUpload fileUpload = (FileUpload) hPanel.getWidget(1);
+				
 				if (!fileUpload.getFilename().equals("")) {
 					hPanel.remove(fileUpload);
 					hPanel.add(new HTML(fileUpload.getFilename())); // replace uploadfile widget to text file
 					FileToUpload fileToUpload = new FileToUpload();
 					GWTUpload upload = (GWTUpload) formElement;
+					
 					if (upload.getType().equals(GWTUpload.TYPE_CREATE)) {
 						fileToUpload.setAction(UIFileUploadConstants.ACTION_INSERT);
 					} else if (upload.getType().equals(GWTUpload.TYPE_UPDATE)) {
 						fileToUpload.setAction(UIFileUploadConstants.ACTION_UPDATE);
-					} 
+					}
+					
 					fileToUpload.setName(formElement.getName());
 					fileToUpload.setFileUpload(fileUpload);
 					fileToUpload.setSize(upload.getWidth());
@@ -1587,12 +1586,15 @@ public class FormManager {
 					filesToUpload.add(fileToUpload);
 				}
 			}
+			
 			rows++;
 		}
+		
 		// Indicates is the last file to be upload in the cycle
 		if (filesToUpload.size()>0) {
 			filesToUpload.get(filesToUpload.size()-1).setLastToBeUploaded(true);
 		}
+		
 		return filesToUpload;
 	}
 
