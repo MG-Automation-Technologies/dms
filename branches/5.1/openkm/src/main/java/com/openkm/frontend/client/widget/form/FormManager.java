@@ -886,6 +886,7 @@ public class FormManager {
 								}
 							}
 						});
+						
 						removeImage.setStyleName("okm-KeyMap-ImageHover");
 						
 						tableMulti.setWidget(rowTableMulti, 0, htmlValue);
@@ -899,7 +900,8 @@ public class FormManager {
 					}
 				}
 				
-				hWidgetProperties.put(propertyName,hPanel); 							// Saves panel
+				// Save panel
+				hWidgetProperties.put(propertyName, hPanel);
 				
 				if (searchView) {
 					final Image removeImage = new Image(OKMBundleResources.INSTANCE.deleteIcon());
@@ -923,6 +925,7 @@ public class FormManager {
 					removeImage.addStyleName("okm-Hyperlink");
 					table.setWidget(row, 2, removeImage);
 					table.getCellFormatter().setVerticalAlignment(row, 2, HasAlignment.ALIGN_TOP);
+					
 					//not implemented
 					//textBox.addKeyUpHandler(Main.get().mainPanel.search.searchBrowser.searchIn.searchControl.keyUpHandler);
 					setRowWordWarp(row, 3, true);
@@ -937,6 +940,7 @@ public class FormManager {
 			fileUpload.setStyleName("okm-Input");
 			fileUpload.getElement().setAttribute("size", ""+upload.getWidth());
 			final Anchor documentLink = new Anchor();
+			
 			// Setting document link by uuid
 			if (upload.getDocumentUuid()!=null && !upload.getDocumentUuid().equals("")) {
 				repositoryService.getPathByUUID(upload.getDocumentUuid(), new AsyncCallback<String>() {
@@ -955,18 +959,21 @@ public class FormManager {
 									}
 								});
 							}
+							
 							@Override
 							public void onFailure(Throwable caught) {
 								Main.get().showError("get", caught);
 							}
 						});
 					}
+					
 					@Override
 					public void onFailure(Throwable caught) {
 						Main.get().showError("getPathByUUID", caught);
 					}
 				});
-			} 
+			}
+			
 			documentLink.setStyleName("okm-Hyperlink");
 			hPanel.add(documentLink);
 			hPanel.add(fileUpload);
@@ -985,6 +992,7 @@ public class FormManager {
 					public void onSuccess(String result) {
 						upload.setFolderPath(result);
 					}
+					
 					@Override
 					public void onFailure(Throwable caught) {
 						Main.get().showError("getPathByUUID", caught);
@@ -1030,6 +1038,7 @@ public class FormManager {
 			HTML description = new HTML("<b>" + gwtMetadata.getLabel() + "</b>");
 			downloadTable.setWidget(0, 0, description);
 			downloadTable.getFlexCellFormatter().setColSpan(0, 0, 2);
+			
 			for (final GWTNode node : download.getNodes()) {
 				int downloadTableRow = downloadTable.getRowCount();
 				final Anchor anchor = new Anchor("<b>" + node.getLabel() + "</b>", true);
@@ -1057,12 +1066,14 @@ public class FormManager {
 										});
 									}
 								}
+								
 								@Override
 								public void onFailure(Throwable caught) {
 									Main.get().showError("getPathByUUID", caught);
 								}
 							});
 						}
+						
 						@Override
 						public void onFailure(Throwable caught) {
 							Main.get().showError("getPathByUUID", caught);
@@ -1087,16 +1098,19 @@ public class FormManager {
 								});
 							}
 						}
+						
 						@Override
 						public void onFailure(Throwable caught) {
 							Main.get().showError("getPathByUUID", caught);
 						}
 					});
 				}
+				
 				anchor.setStyleName("okm-Hyperlink");
 				downloadTable.setWidget(downloadTableRow, 0, new HTML("&nbsp;&nbsp;&nbsp;"));
 				downloadTable.setWidget(downloadTableRow, 1, anchor);
 			}
+			
 			hPanel.add(downloadTable);
 		} else if (gwtMetadata instanceof GWTPrint) {
 			HorizontalPanel hPanel = new HorizontalPanel();
@@ -1108,10 +1122,11 @@ public class FormManager {
 			HTML description = new HTML("<b>" + gwtMetadata.getLabel() + "</b>");
 			printTable.setWidget(0, 0, description);
 			printTable.getFlexCellFormatter().setColSpan(0, 0, 2);
+			
 			for (final GWTNode node : print.getNodes()) {
 				int downloadTableRow = printTable.getRowCount();
-				// 
 				final Button downloadButton = new Button(Main.i18n("button.print"));
+				
 				if (!node.getUuid().equals("")) {
 					downloadButton.addClickHandler(new ClickHandler() {
 						@Override
@@ -1131,16 +1146,19 @@ public class FormManager {
 								}
 							});
 						}
+						
 						@Override
 						public void onFailure(Throwable caught) {
 							Main.get().showError("getUUIDByPath", caught);
 						}
 					});
 				}
+				
 				downloadButton.setStyleName("okm-Button");
 				printTable.setWidget(downloadTableRow, 0, new HTML("&nbsp;&nbsp;&nbsp;" + node.getLabel() + "&nbsp;&nbsp;"));
 				printTable.setWidget(downloadTableRow, 1, downloadButton);
 			}
+			
 			hPanel.add(printTable);
 		}
 	}
@@ -1190,6 +1208,7 @@ public class FormManager {
 				table.setWidget(rows, 1, checkBox);
 			} else if (formField instanceof GWTSelect) {
 				GWTSelect gwtSelect = (GWTSelect) formField;
+				
 				if (gwtSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
 					HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formField.getName());
 					ListBox listBox = (ListBox) hPanel.getWidget(0);
@@ -1238,6 +1257,7 @@ public class FormManager {
 			} else if (formField instanceof GWTPrint) {
 				// Nothing to be done here
 			}
+			
 			rows++;
 		}
 		
