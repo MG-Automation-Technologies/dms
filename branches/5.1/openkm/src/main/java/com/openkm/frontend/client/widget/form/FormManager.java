@@ -1599,8 +1599,6 @@ public class FormManager {
 	
 	/**
 	 * updateFilesToUpload
-	 * 
-	 * @param filesToUpload
 	 */
 	public void updateFilesToUpload(Collection<FileToUpload> filesToUpload) {
 		for (FileToUpload fileToUpload : filesToUpload) {
@@ -1615,8 +1613,6 @@ public class FormManager {
 	
 	/**
 	 * loadDataFromPropertyGroupVariables
-	 * 
-	 * @param map
 	 */
 	public void loadDataFromPropertyGroupVariables(Map<String, GWTFormElement> map) {
 		// Only iterate if really there's some variable to be mapped 
@@ -1656,7 +1652,7 @@ public class FormManager {
 	}
 	
 	/**
-	 * @param map
+	 * 
 	 */
 	public void loadDataFromWorkflowVariables(Map<String, Object> map) {
 		// Only iterate if really there's some variable to be mapped 
@@ -1755,9 +1751,6 @@ public class FormManager {
 	
 	/**
 	 * getNodesValueFromVariable
-	 * 
-	 * @param obj
-	 * @return
 	 */
 	private List<GWTNode> getNodesValueFromVariable(Object obj) {
 		if (obj instanceof GWTInput) {
