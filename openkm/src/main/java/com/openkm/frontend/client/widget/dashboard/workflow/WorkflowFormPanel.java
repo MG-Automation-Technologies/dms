@@ -74,7 +74,6 @@ import com.openkm.frontend.client.widget.form.HasWorkflow;
  *
  */
 public class WorkflowFormPanel extends Composite implements HasWorkflow {
-	
 	private final OKMWorkflowServiceAsync workflowService = (OKMWorkflowServiceAsync) GWT.create(OKMWorkflowService.class);
 	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
@@ -130,6 +129,7 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 				addComment();
 			}
 		});
+		
 		add.setEnabled(false);
 	    
 		submitForm = new Button(Main.i18n("button.accept"), new ClickHandler() { 
@@ -155,7 +155,6 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 		newNotePanel.setCellHorizontalAlignment(addComment, HasAlignment.ALIGN_CENTER);
 		newNotePanel.setCellHorizontalAlignment(add, HasAlignment.ALIGN_CENTER);
 	    
-		
 		int[] taskRow = {1, 2, 3, 4, 5, 6 };
 		int[] processInstanceRow = {8, 9, 10};
 		int[] processDefinitionRow = {12, 13, 14, 15 };
@@ -475,8 +474,11 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 	 * drawForm
 	 */
 	private void drawForm() {
-		submitForm.setVisible(true); // always set form visible
-		manager.setSubmitFormButton(submitForm); // submitForm is hidden into manager if manager has button definitions
+		// always set form visible
+		submitForm.setVisible(true);
+		
+		// submitForm is hidden into manager if manager has button definitions
+		manager.setSubmitFormButton(submitForm);
 		manager.edit();
 	}
 	
