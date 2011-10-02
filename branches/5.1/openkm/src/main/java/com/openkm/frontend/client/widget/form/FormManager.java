@@ -212,12 +212,13 @@ public class FormManager {
 	/**
 	 * drawFormElement
 	 */
-	private void drawFormElement(int row, final GWTFormElement gwtMetadata, boolean readOnly, boolean searchView) {
-		final String propertyName = gwtMetadata.getName();
+	private void drawFormElement(int row, final GWTFormElement gwtFormElement, boolean readOnly, boolean searchView) {
+		final String propertyName = gwtFormElement.getName();
 		
-		if (gwtMetadata instanceof GWTButton) {
-			final GWTButton gWTButton = (GWTButton) gwtMetadata;
-			if (submitForm!=null) {
+		if (gwtFormElement instanceof GWTButton) {
+			final GWTButton gWTButton = (GWTButton) gwtFormElement;
+			
+			if (submitForm != null) {
 				submitForm.setVisible(false); // Always set form hidden because there's new buttons
 			}
 			
@@ -255,18 +256,18 @@ public class FormManager {
 			if (!buttonControlList.contains(transButton)) {
 				buttonControlList.add(transButton);
 			}
-		} else if (gwtMetadata instanceof GWTTextArea) {
+		} else if (gwtFormElement instanceof GWTTextArea) {
 			HorizontalPanel hPanel = new HorizontalPanel();
 			TextArea textArea = new TextArea();
-			textArea.setEnabled((!readOnly && !((GWTTextArea) gwtMetadata).isReadonly()) || isSearchView);
+			textArea.setEnabled((!readOnly && !((GWTTextArea) gwtFormElement).isReadonly()) || isSearchView);
 			hPanel.add(textArea);
 			textArea.setStyleName("okm-TextArea");
-			textArea.setText(((GWTTextArea) gwtMetadata).getValue());
-			textArea.setSize(gwtMetadata.getWidth(), gwtMetadata.getHeight());
+			textArea.setText(((GWTTextArea) gwtFormElement).getValue());
+			textArea.setSize(gwtFormElement.getWidth(), gwtFormElement.getHeight());
 			HTML text = new HTML(); // Create a widget for this property
-			text.setHTML(((GWTTextArea) gwtMetadata).getValue().replaceAll("\n", "<br>"));
+			text.setHTML(((GWTTextArea) gwtFormElement).getValue().replaceAll("\n", "<br>"));
 			hWidgetProperties.put(propertyName,hPanel);
-			table.setHTML(row, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
+			table.setHTML(row, 0, "<b>" + gwtFormElement.getLabel() + "</b>");
 			table.setWidget(row, 1, text);
 			table.getCellFormatter().setVerticalAlignment(row,0,VerticalPanel.ALIGN_TOP);
 			table.getCellFormatter().setWidth(row, 1, "100%");
@@ -285,7 +286,7 @@ public class FormManager {
 						
 						hWidgetProperties.remove(propertyName);
 						hPropertyParams.remove(propertyName);
-						formElementList.remove(gwtMetadata);
+						formElementList.remove(gwtFormElement);
 						search.propertyRemoved();
 					}
 				});
@@ -307,33 +308,33 @@ public class FormManager {
 			} else {
 				setRowWordWarp(row, 2, true);
 			}
-		} else if (gwtMetadata instanceof GWTInput) {
+		} else if (gwtFormElement instanceof GWTInput) {
 			HorizontalPanel hPanel = new HorizontalPanel();
 			final TextBox textBox = new TextBox(); // Create a widget for this property
-			textBox.setEnabled((!readOnly && !((GWTInput) gwtMetadata).isReadonly()) || isSearchView);
+			textBox.setEnabled((!readOnly && !((GWTInput) gwtFormElement).isReadonly()) || isSearchView);
 			hPanel.add(textBox);
 			String value = "";
 			
-			if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_TEXT) || 
-				((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_LINK) ||
-				((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_FOLDER)) {
-				textBox.setText(((GWTInput) gwtMetadata).getValue());
-				value = ((GWTInput) gwtMetadata).getValue();
-			} else if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_DATE)) {
-				if (((GWTInput) gwtMetadata).getDate() != null) {
+			if (((GWTInput) gwtFormElement).getType().equals(GWTInput.TYPE_TEXT) || 
+				((GWTInput) gwtFormElement).getType().equals(GWTInput.TYPE_LINK) ||
+				((GWTInput) gwtFormElement).getType().equals(GWTInput.TYPE_FOLDER)) {
+				textBox.setText(((GWTInput) gwtFormElement).getValue());
+				value = ((GWTInput) gwtFormElement).getValue();
+			} else if (((GWTInput) gwtFormElement).getType().equals(GWTInput.TYPE_DATE)) {
+				if (((GWTInput) gwtFormElement).getDate() != null) {
 					DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.day.pattern"));
-					textBox.setText(dtf.format(((GWTInput) gwtMetadata).getDate()));
-					value = dtf.format(((GWTInput) gwtMetadata).getDate());
+					textBox.setText(dtf.format(((GWTInput) gwtFormElement).getDate()));
+					value = dtf.format(((GWTInput) gwtFormElement).getDate());
 				}
 			}
 			
-			textBox.setWidth(gwtMetadata.getWidth());
+			textBox.setWidth(gwtFormElement.getWidth());
 			textBox.setStyleName("okm-Input");
 			hWidgetProperties.put(propertyName,hPanel);
-			table.setHTML(row, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
+			table.setHTML(row, 0, "<b>" + gwtFormElement.getLabel() + "</b>");
 			table.setHTML(row, 1, value);
 			
-			if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_DATE)) {
+			if (((GWTInput) gwtFormElement).getType().equals(GWTInput.TYPE_DATE)) {
 				final PopupPanel calendarPopup = new PopupPanel(true);
 				final CalendarWidget calendar = new CalendarWidget();
 				
@@ -343,7 +344,7 @@ public class FormManager {
 						calendarPopup.hide();
 						DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.day.pattern"));
 						textBox.setText(dtf.format(calendar.getDate()));
-						((GWTInput) gwtMetadata).setDate(calendar.getDate());
+						((GWTInput) gwtFormElement).setDate(calendar.getDate());
 						
 						if (search != null) {
 							search.metadataValueChanged();
@@ -354,7 +355,7 @@ public class FormManager {
 				calendarPopup.add(calendar);
 				final Image calendarIcon = new Image(OKMBundleResources.INSTANCE.calendar());
 				
-				if (readOnly || ((GWTInput) gwtMetadata).isReadonly()) {
+				if (readOnly || ((GWTInput) gwtFormElement).isReadonly()) {
 					calendarIcon.setResource(OKMBundleResources.INSTANCE.calendarDisabled());
 				} else {
 					calendarIcon.addClickHandler(new ClickHandler() {
@@ -370,7 +371,7 @@ public class FormManager {
 				hPanel.add(Util.hSpace("5"));
 				hPanel.add(calendarIcon);
 				textBox.setEnabled(false);
-			} else if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_LINK)) {
+			} else if (((GWTInput) gwtFormElement).getType().equals(GWTInput.TYPE_LINK)) {
 				if (!value.equals("")) {
 					HorizontalPanel hLinkPanel = new HorizontalPanel();
 					Anchor anchor = new Anchor(value, true);
@@ -384,7 +385,7 @@ public class FormManager {
 					});
 					
 					anchor.setStyleName("okm-Hyperlink");
-					String containerName = ((GWTInput) gwtMetadata).getName() + "ContainerName";
+					String containerName = ((GWTInput) gwtFormElement).getName() + "ContainerName";
 					hLinkPanel.add(new HTML("<div id=\"" + containerName + "\"></div>\n"));
 					HTML space = new HTML("");
 					hLinkPanel.add(space);
@@ -395,10 +396,10 @@ public class FormManager {
 				} else {
 					table.setHTML(row, 1, "");
 				}
-			} else if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_FOLDER)) {
+			} else if (((GWTInput) gwtFormElement).getType().equals(GWTInput.TYPE_FOLDER)) {
 				if (!value.equals("")) {
 					Anchor anchor = new Anchor();
-					final GWTFolder folder = ((GWTInput) gwtMetadata).getFolder();
+					final GWTFolder folder = ((GWTInput) gwtFormElement).getFolder();
 					
 					// remove first ocurrence
 					String path = value.substring(value.indexOf("/", 1) + 1);
@@ -436,7 +437,7 @@ public class FormManager {
 					@Override
 					public void onClick(ClickEvent event) {
 						textBox.setValue("");
-						((GWTInput) gwtMetadata).setFolder(new GWTFolder());
+						((GWTInput) gwtFormElement).setFolder(new GWTFolder());
 					}
 				});
 				
@@ -456,16 +457,16 @@ public class FormManager {
 			
 			if (searchView) {
 				// Second date input
-				if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_DATE)) {
+				if (((GWTInput) gwtFormElement).getType().equals(GWTInput.TYPE_DATE)) {
 					final TextBox textBoxTo = new TextBox();
-					textBoxTo.setWidth(gwtMetadata.getWidth());
+					textBoxTo.setWidth(gwtFormElement.getWidth());
 					textBoxTo.setStyleName("okm-Input");
 					hPanel.add(new HTML("&nbsp;&harr;&nbsp;"));
 					hPanel.add(textBoxTo);
 					
-					if (((GWTInput) gwtMetadata).getDateTo() != null) {
+					if (((GWTInput) gwtFormElement).getDateTo() != null) {
 						DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.day.pattern"));
-						textBoxTo.setText(dtf.format(((GWTInput) gwtMetadata).getDateTo()));
+						textBoxTo.setText(dtf.format(((GWTInput) gwtFormElement).getDateTo()));
 					}
 					
 					final PopupPanel calendarPopup = new PopupPanel(true);
@@ -476,7 +477,7 @@ public class FormManager {
 							calendarPopup.hide();
 							DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.day.pattern"));
 							textBoxTo.setText(dtf.format(calendar.getDate()));
-							((GWTInput) gwtMetadata).setDateTo(calendar.getDate());
+							((GWTInput) gwtFormElement).setDateTo(calendar.getDate());
 							
 							if (search != null) {
 								search.metadataValueChanged();
@@ -514,7 +515,7 @@ public class FormManager {
 						
 						hWidgetProperties.remove(propertyName);
 						hPropertyParams.remove(propertyName);
-						formElementList.remove(gwtMetadata);
+						formElementList.remove(gwtFormElement);
 						search.propertyRemoved();
 					}
 				});
@@ -536,11 +537,11 @@ public class FormManager {
 				setRowWordWarp(row, 2, true);
 			}
 				
-		} else if(gwtMetadata instanceof GWTSuggestBox) {
+		} else if(gwtFormElement instanceof GWTSuggestBox) {
 			HorizontalPanel hPanel = new HorizontalPanel();
-			final GWTSuggestBox suggestBox = (GWTSuggestBox) gwtMetadata;
+			final GWTSuggestBox suggestBox = (GWTSuggestBox) gwtFormElement;
 			final TextBox textBox = new TextBox(); // Create a widget for this property
-			textBox.setWidth(gwtMetadata.getWidth());
+			textBox.setWidth(gwtFormElement.getWidth());
 			textBox.setStyleName("okm-Input");
 			textBox.setReadOnly(true);
 			textBox.setEnabled((!readOnly && !suggestBox.isReadonly()) || isSearchView);
@@ -554,7 +555,7 @@ public class FormManager {
 			hPanel.add(textBox);
 			hPanel.add(hiddenKey);
 			final HTML value = new HTML("");
-			table.setHTML(row, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
+			table.setHTML(row, 0, "<b>" + gwtFormElement.getLabel() + "</b>");
 			table.setWidget(row, 1, value);
 			
 			if (textBox.isEnabled()) {
@@ -626,7 +627,7 @@ public class FormManager {
 						
 						hWidgetProperties.remove(propertyName);
 						hPropertyParams.remove(propertyName);
-						formElementList.remove(gwtMetadata);
+						formElementList.remove(gwtFormElement);
 						search.propertyRemoved();
 					}
 				});
@@ -639,12 +640,12 @@ public class FormManager {
 			} else {
 				setRowWordWarp(row, 2, true);
 			}
-		} else if (gwtMetadata instanceof GWTCheckBox) {
+		} else if (gwtFormElement instanceof GWTCheckBox) {
 			CheckBox checkBox = new CheckBox();
-			checkBox.setEnabled((!readOnly && !((GWTCheckBox) gwtMetadata).isReadonly()) || isSearchView);
-			checkBox.setValue(((GWTCheckBox)gwtMetadata).getValue());
+			checkBox.setEnabled((!readOnly && !((GWTCheckBox) gwtFormElement).isReadonly()) || isSearchView);
+			checkBox.setValue(((GWTCheckBox)gwtFormElement).getValue());
 			hWidgetProperties.put(propertyName,checkBox);
-			table.setHTML(row, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
+			table.setHTML(row, 0, "<b>" + gwtFormElement.getLabel() + "</b>");
 			
 			if (checkBox.getValue()) {
 				table.setWidget(row, 1, new Image(OKMBundleResources.INSTANCE.yes()));
@@ -669,7 +670,7 @@ public class FormManager {
 						
 						hWidgetProperties.remove(propertyName);
 						hPropertyParams.remove(propertyName);
-						formElementList.remove(gwtMetadata);
+						formElementList.remove(gwtFormElement);
 						search.propertyRemoved();
 					}
 				});
@@ -691,8 +692,8 @@ public class FormManager {
 			} else {
 				setRowWordWarp(row, 2, true);
 			}
-		} else if (gwtMetadata instanceof GWTSelect) {
-			final GWTSelect gwtSelect = (GWTSelect) gwtMetadata;
+		} else if (gwtFormElement instanceof GWTSelect) {
+			final GWTSelect gwtSelect = (GWTSelect) gwtFormElement;
 			if (gwtSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
 				String selectedLabel = "";
 				HorizontalPanel hPanel = new HorizontalPanel();
@@ -713,7 +714,7 @@ public class FormManager {
 				
 				hWidgetProperties.put(propertyName,hPanel);
 				
-				table.setHTML(row, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
+				table.setHTML(row, 0, "<b>" + gwtFormElement.getLabel() + "</b>");
 				table.setHTML(row, 1, selectedLabel);
 				table.getCellFormatter().setWidth(row, 1, "100%");
 				
@@ -731,7 +732,7 @@ public class FormManager {
 							
 							hWidgetProperties.remove(propertyName);
 							hPropertyParams.remove(propertyName);
-							formElementList.remove(gwtMetadata);
+							formElementList.remove(gwtFormElement);
 							search.propertyRemoved();
 						}
 					});
@@ -849,7 +850,7 @@ public class FormManager {
 				hPanel.setCellVerticalAlignment(addButton,VerticalPanel.ALIGN_TOP);
 				hPanel.setHeight("100%");
 
-				table.setHTML(row, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
+				table.setHTML(row, 0, "<b>" + gwtFormElement.getLabel() + "</b>");
 				table.setWidget(row, 1, hPanel);
 				table.getCellFormatter().setVerticalAlignment(row,0,VerticalPanel.ALIGN_TOP);
 				table.getCellFormatter().setVerticalAlignment(row,1,VerticalPanel.ALIGN_TOP);
@@ -920,7 +921,7 @@ public class FormManager {
 							
 							hWidgetProperties.remove(propertyName);
 							hPropertyParams.remove(propertyName);
-							formElementList.remove(gwtMetadata);
+							formElementList.remove(gwtFormElement);
 							search.propertyRemoved();
 						}
 					});
@@ -936,8 +937,8 @@ public class FormManager {
 					setRowWordWarp(row, 2, true);
 				}
 			}
-		} else if (gwtMetadata instanceof GWTUpload) {
-			final GWTUpload upload = (GWTUpload) gwtMetadata;
+		} else if (gwtFormElement instanceof GWTUpload) {
+			final GWTUpload upload = (GWTUpload) gwtFormElement;
 			HorizontalPanel hPanel = new HorizontalPanel();
 			FileUpload fileUpload = new FileUpload();
 			fileUpload.setStyleName("okm-Input");
@@ -981,7 +982,7 @@ public class FormManager {
 			hPanel.add(documentLink);
 			hPanel.add(fileUpload);
 			hWidgetProperties.put(propertyName,hPanel);
-			table.setHTML(row, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
+			table.setHTML(row, 0, "<b>" + gwtFormElement.getLabel() + "</b>");
 			table.setWidget(row, 1, new HTML(""));
 			table.getCellFormatter().setVerticalAlignment(row,0,VerticalPanel.ALIGN_TOP);
 			table.getCellFormatter().setWidth(row, 1, "100%");		
@@ -1002,17 +1003,17 @@ public class FormManager {
 					}
 				});
 			}
-		} else if (gwtMetadata instanceof GWTText) {
+		} else if (gwtFormElement instanceof GWTText) {
 			HorizontalPanel hPanel = new HorizontalPanel();
-			HTML tittle = new HTML("&nbsp;"+"<b>"+((GWTText)gwtMetadata).getLabel()+"</b>"+"&nbsp;");
+			HTML tittle = new HTML("&nbsp;"+"<b>"+((GWTText)gwtFormElement).getLabel()+"</b>"+"&nbsp;");
 			tittle.setStyleName("okm-NoWrap");
 			hPanel.add(Util.hSpace("10"));			
 			hPanel.add(tittle);
-			hPanel.setCellWidth(tittle, ((GWTText)gwtMetadata).getWidth());
+			hPanel.setCellWidth(tittle, ((GWTText)gwtFormElement).getWidth());
 			hWidgetProperties.put(propertyName,hPanel);
 			table.setWidget(row, 0, hPanel);
 			table.getFlexCellFormatter().setColSpan(row, 0, 2);
-		} else if (gwtMetadata instanceof GWTSeparator) {
+		} else if (gwtFormElement instanceof GWTSeparator) {
 			HorizontalPanel hPanel = new HorizontalPanel();
 			Image horizontalLine = new Image("img/transparent_pixel.gif");
 			horizontalLine.setStyleName("okm-TopPanel-Line-Border");
@@ -1020,25 +1021,25 @@ public class FormManager {
 			Image horizontalLine2 = new Image("img/transparent_pixel.gif");
 			horizontalLine2.setStyleName("okm-TopPanel-Line-Border");
 			horizontalLine2.setSize("100%", "2px");
-			HTML tittle = new HTML("&nbsp;"+"<b>"+((GWTSeparator)gwtMetadata).getLabel()+"</b>"+"&nbsp;");
+			HTML tittle = new HTML("&nbsp;"+"<b>"+((GWTSeparator)gwtFormElement).getLabel()+"</b>"+"&nbsp;");
 			tittle.setStyleName("okm-NoWrap");
 			hPanel.add(horizontalLine);			
 			hPanel.add(tittle);
 			hPanel.add(horizontalLine2);
 			hPanel.setCellVerticalAlignment(horizontalLine, HasAlignment.ALIGN_MIDDLE);
 			hPanel.setCellVerticalAlignment(horizontalLine2, HasAlignment.ALIGN_MIDDLE);
-			hPanel.setCellWidth(horizontalLine2, ((GWTSeparator)gwtMetadata).getWidth());
+			hPanel.setCellWidth(horizontalLine2, ((GWTSeparator)gwtFormElement).getWidth());
 			hWidgetProperties.put(propertyName,hPanel);
 			table.setWidget(row, 0, hPanel);
 			table.getFlexCellFormatter().setColSpan(row, 0, 2);
-		} else if (gwtMetadata instanceof GWTDownload) {
+		} else if (gwtFormElement instanceof GWTDownload) {
 			HorizontalPanel hPanel = new HorizontalPanel();
 			hWidgetProperties.put(propertyName, hPanel);
 			table.setWidget(row, 0, hPanel);
 			table.getFlexCellFormatter().setColSpan(row, 0, 2);
-			GWTDownload download = (GWTDownload) gwtMetadata;
+			GWTDownload download = (GWTDownload) gwtFormElement;
 			FlexTable downloadTable = new FlexTable();
-			HTML description = new HTML("<b>" + gwtMetadata.getLabel() + "</b>");
+			HTML description = new HTML("<b>" + gwtFormElement.getLabel() + "</b>");
 			downloadTable.setWidget(0, 0, description);
 			downloadTable.getFlexCellFormatter().setColSpan(0, 0, 2);
 			
@@ -1115,14 +1116,14 @@ public class FormManager {
 			}
 			
 			hPanel.add(downloadTable);
-		} else if (gwtMetadata instanceof GWTPrint) {
+		} else if (gwtFormElement instanceof GWTPrint) {
 			HorizontalPanel hPanel = new HorizontalPanel();
 			hWidgetProperties.put(propertyName, hPanel);
 			table.setWidget(row, 0, hPanel);
 			table.getFlexCellFormatter().setColSpan(row, 0, 2);
-			GWTPrint print = (GWTPrint) gwtMetadata;
+			GWTPrint print = (GWTPrint) gwtFormElement;
 			FlexTable printTable = new FlexTable();
-			HTML description = new HTML("<b>" + gwtMetadata.getLabel() + "</b>");
+			HTML description = new HTML("<b>" + gwtFormElement.getLabel() + "</b>");
 			printTable.setWidget(0, 0, description);
 			printTable.getFlexCellFormatter().setColSpan(0, 0, 2);
 			
