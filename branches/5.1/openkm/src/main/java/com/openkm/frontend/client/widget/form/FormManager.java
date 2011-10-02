@@ -320,7 +320,7 @@ public class FormManager {
 				textBox.setText(((GWTInput) gwtMetadata).getValue());
 				value = ((GWTInput) gwtMetadata).getValue();
 			} else if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_DATE)) {
-				if (((GWTInput) gwtMetadata).getDate()!=null) {
+				if (((GWTInput) gwtMetadata).getDate() != null) {
 					DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.day.pattern"));
 					textBox.setText(dtf.format(((GWTInput) gwtMetadata).getDate()));
 					value = dtf.format(((GWTInput) gwtMetadata).getDate());
@@ -385,7 +385,7 @@ public class FormManager {
 					
 					anchor.setStyleName("okm-Hyperlink");
 					String containerName = ((GWTInput) gwtMetadata).getName() + "ContainerName";
-					hLinkPanel.add(new HTML("<div id=\""+containerName+"\"></div>\n"));
+					hLinkPanel.add(new HTML("<div id=\"" + containerName + "\"></div>\n"));
 					HTML space = new HTML("");
 					hLinkPanel.add(space);
 					hLinkPanel.add(anchor);
@@ -399,7 +399,9 @@ public class FormManager {
 				if (!value.equals("")) {
 					Anchor anchor = new Anchor();
 					final GWTFolder folder = ((GWTInput) gwtMetadata).getFolder();
-					String path = value.substring(value.indexOf("/",1)+1); // removes first ocurrence
+					
+					// remove first ocurrence
+					String path = value.substring(value.indexOf("/", 1) + 1);
 					
 					// Looks if must change icon on parent if now has no childs and properties with user security atention
 					if (folder.getHasChilds()) {
