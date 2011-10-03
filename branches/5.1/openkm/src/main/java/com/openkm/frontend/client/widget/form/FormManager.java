@@ -532,6 +532,7 @@ public class FormManager {
 						}
 					});
 				}
+				
 				setRowWordWarp(row, 3, true);
 			} else {
 				setRowWordWarp(row, 2, true);
