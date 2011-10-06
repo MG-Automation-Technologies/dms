@@ -316,8 +316,9 @@ public class WebUtils {
 			fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", " ");
 			
 			if (request.getServerPort() == 443) {
-				log.info("HTTPS detected! Apply IE workaround...");
-				response.setHeader("Pragma", "private");
+				log.debug("HTTPS detected! Apply IE workaround...");
+				response.setHeader("Cache-Control", "max-age=1");
+				response.setHeader("Pragma", "public");
 			}
 		} else if (null != agent && -1 != agent.indexOf("Mozilla"))	{
 			log.debug("Agent: Mozilla");
