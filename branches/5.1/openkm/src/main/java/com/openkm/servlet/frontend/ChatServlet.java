@@ -28,22 +28,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
 import com.openkm.frontend.client.service.OKMChatService;
-import com.openkm.util.UUIDGenerator;
 
 /**
  * Servlet Class
- * 
- * @web.servlet              name="ChatServlet"
- *                           display-name="Directory tree service"
- *                           description="Directory tree service"
- * @web.servlet-mapping      url-pattern="/ChatServlet"
- * @web.servlet-init-param   name="A parameter"
- *                           value="A value"
  */
 public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatService {
 	private static final long serialVersionUID = 3780857624687394918L;
@@ -92,7 +85,7 @@ public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatServi
     @Override
     public String createNewChatRoom(String user) {
     	updateSessionManager();
-    	String room = UUIDGenerator.generate(""); // Used to unique identifying room
+    	String room = UUID.randomUUID().toString(); // Used to unique identifying room
     	String actualUser = getThreadLocalRequest().getRemoteUser();
     	// Add users to rooms
     	usersRoomAction(room, user, ACTION_ADD_ROOM_TO_USER);
