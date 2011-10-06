@@ -303,9 +303,10 @@ public class WebUtils {
 		
 		// Disable browser cache
 		response.setHeader("Expires", "Sat, 6 May 1971 12:00:00 GMT");
-		response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+		response.setHeader("Cache-Control", "must-revalidate");
+		response.addHeader("Cache-Control", "no-store, no-cache, must-revalidate");
 		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-		//response.setHeader("Pragma", "no-cache");
+		response.setHeader("Pragma", "no-cache");
 		
 		// Set MIME type
 		response.setContentType(mimeType);
@@ -313,6 +314,11 @@ public class WebUtils {
 		if (null != agent && -1 != agent.indexOf("MSIE")) {
 			log.debug("Agent: Explorer");
 			fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", " ");
+			
+			if (request.getServerPort() == 443) {
+				log.info("HTTPS detected! Apply IE workaround...");
+				response.setHeader("Pragma", "private");
+			}
 		} else if (null != agent && -1 != agent.indexOf("Mozilla"))	{
 			log.debug("Agent: Mozilla");
 			fileName = MimeUtility.encodeText(fileName, "UTF-8", "B");
