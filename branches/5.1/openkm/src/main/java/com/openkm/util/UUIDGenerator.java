@@ -28,6 +28,7 @@ import java.net.InetAddress;
  *
  * Very simple UUID generator based in Hibernate implementation
  */
+@Deprecated
 public class UUIDGenerator {
 	private static final int IP;
 	static {
