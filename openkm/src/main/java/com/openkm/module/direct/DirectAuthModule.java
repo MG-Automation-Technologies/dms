@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.jcr.LoginException;
 import javax.jcr.Node;
@@ -51,7 +52,6 @@ import com.openkm.module.AuthModule;
 import com.openkm.module.base.BaseAuthModule;
 import com.openkm.principal.PrincipalAdapter;
 import com.openkm.principal.PrincipalAdapterException;
-import com.openkm.util.UUIDGenerator;
 import com.openkm.util.UserActivity;
 
 public class DirectAuthModule implements AuthModule {
@@ -86,7 +86,7 @@ public class DirectAuthModule implements AuthModule {
 			} else {
 				javax.jcr.Repository r = DirectRepositoryModule.getRepository();
 				Session session = r.login(new SimpleCredentials(user, password.toCharArray()), null);
-				token = UUIDGenerator.generate(this);
+				token = UUID.randomUUID().toString();
 				JcrSessionManager.getInstance().add(token, session);
 				
 				// Activity log

@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import javax.jcr.ItemExistsException;
 import javax.jcr.LoginException;
@@ -75,7 +76,6 @@ import com.openkm.module.RepositoryModule;
 import com.openkm.module.base.BaseDocumentModule;
 import com.openkm.module.base.BaseFolderModule;
 import com.openkm.util.MailUtils;
-import com.openkm.util.UUIDGenerator;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WarUtils;
 
@@ -287,7 +287,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				Node okmConfig = root.addNode(Repository.SYS_CONFIG, Repository.SYS_CONFIG_TYPE);
 
 				// Generate installation UUID
-				String uuid = UUIDGenerator.generate(okmConfig);
+				String uuid = UUID.randomUUID().toString();
 				okmConfig.setProperty(Repository.SYS_CONFIG_UUID, uuid);
 				Repository.setUuid(uuid);
 				
