@@ -1006,11 +1006,11 @@ public class FormManager {
 			}
 		} else if (gwtFormElement instanceof GWTText) {
 			HorizontalPanel hPanel = new HorizontalPanel();
-			HTML tittle = new HTML("&nbsp;"+"<b>"+((GWTText)gwtFormElement).getLabel()+"</b>"+"&nbsp;");
-			tittle.setStyleName("okm-NoWrap");
+			HTML title = new HTML("&nbsp;"+"<b>"+((GWTText)gwtFormElement).getLabel()+"</b>"+"&nbsp;");
+			title.setStyleName("okm-NoWrap");
 			hPanel.add(Util.hSpace("10"));			
-			hPanel.add(tittle);
-			hPanel.setCellWidth(tittle, ((GWTText)gwtFormElement).getWidth());
+			hPanel.add(title);
+			hPanel.setCellWidth(title, ((GWTText)gwtFormElement).getWidth());
 			hWidgetProperties.put(propertyName,hPanel);
 			table.setWidget(row, 0, hPanel);
 			table.getFlexCellFormatter().setColSpan(row, 0, 2);
@@ -1022,10 +1022,10 @@ public class FormManager {
 			Image horizontalLine2 = new Image("img/transparent_pixel.gif");
 			horizontalLine2.setStyleName("okm-TopPanel-Line-Border");
 			horizontalLine2.setSize("100%", "2px");
-			HTML tittle = new HTML("&nbsp;"+"<b>"+((GWTSeparator)gwtFormElement).getLabel()+"</b>"+"&nbsp;");
-			tittle.setStyleName("okm-NoWrap");
+			HTML title = new HTML("&nbsp;"+"<b>"+((GWTSeparator)gwtFormElement).getLabel()+"</b>"+"&nbsp;");
+			title.setStyleName("okm-NoWrap");
 			hPanel.add(horizontalLine);			
-			hPanel.add(tittle);
+			hPanel.add(title);
 			hPanel.add(horizontalLine2);
 			hPanel.setCellVerticalAlignment(horizontalLine, HasAlignment.ALIGN_MIDDLE);
 			hPanel.setCellVerticalAlignment(horizontalLine2, HasAlignment.ALIGN_MIDDLE);
