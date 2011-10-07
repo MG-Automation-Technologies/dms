@@ -222,7 +222,7 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 		pw.println("<html>");
 		pw.println("<header>");
 		pw.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />");
-		pw.println("<link rel=\"Shortcut icon\" href=\"favicon.ico\" />");
+		pw.println("<link rel=\"Shortcut icon\" href=\"/" + this.path.getFirst() + "/favicon.ico\" />");
 		pw.println("<link rel=\"stylesheet\" href=\"/" + this.path.getFirst() + "/css/style.css\" type=\"text/css\" />");
 		pw.println("<title>OpenKM WebDAV</title>");
 		pw.println("</header>");
