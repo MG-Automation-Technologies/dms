@@ -312,7 +312,7 @@ public class WebUtils {
 		response.setContentType(mimeType);
 		
 		if (null != agent && -1 != agent.indexOf("MSIE")) {
-			log.debug("Agent: Explorer");
+			log.debug("Agent: Explorer ({})", request.getServerPort());
 			fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", " ");
 			
 			if (request.getServerPort() == 443) {
