@@ -452,7 +452,7 @@ public class MailUtils {
 		OKMRepository okmRepository = OKMRepository.getInstance();
 		String path = grouping ? createGroupPath(mailPath, mail.getReceivedDate()) : mailPath;
 		
-		if (ma.getMailProtocol().equals(MailAccount.PROTOCOL_POP3)) {
+		if (ma.getMailProtocol().equals(MailAccount.PROTOCOL_POP3) || ma.getMailProtocol().equals(MailAccount.PROTOCOL_POP3S)) {
 			mail.setPath(path + "/" + ((POP3Folder)folder).getUID(msg) + "-" + JCRUtils.escape(msg.getSubject()));
 		} else {
 			mail.setPath(path + "/" + ((IMAPFolder)folder).getUID(msg) + "-" + JCRUtils.escape(msg.getSubject()));
