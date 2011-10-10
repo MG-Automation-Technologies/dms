@@ -60,9 +60,9 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 	private Document doc;
 	
 	public DocumentResource(Document doc) {
-		this.doc = doc;
+		this.doc = ResourceUtils.fixResourcePath(doc);
 	}
-		
+	
 	@Override
 	public String getUniqueId() {
 		return doc.getUuid();
@@ -128,7 +128,8 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 		
 		try {
 			String token = JcrSessionTokenHolder.get();
-			is = OKMDocument.getInstance().getContent(token, doc.getPath(), false);
+			String fixedDocPath = ResourceUtils.fixRepositoryPath(doc.getPath());
+			is = OKMDocument.getInstance().getContent(token, fixedDocPath, false);
 			IOUtils.copy(is, out);
 			out.flush();
 		} catch (PathNotFoundException e) {
@@ -147,8 +148,9 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 		log.info("delete()");
 		
 		try {
-			String token = JcrSessionTokenHolder.get();	
-			OKMDocument.getInstance().delete(token, doc.getPath());
+			String token = JcrSessionTokenHolder.get();
+			String fixedDocPath = ResourceUtils.fixRepositoryPath(doc.getPath());
+			OKMDocument.getInstance().delete(token, fixedDocPath);
 		} catch (Exception e) {
 			throw new ConflictException(this);
 		}
@@ -170,7 +172,8 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 			
 			try {
 				String token = JcrSessionTokenHolder.get();
-				doc = OKMDocument.getInstance().rename(token, doc.getPath(), newName);
+				String fixedDocPath = ResourceUtils.fixRepositoryPath(doc.getPath());
+				doc = OKMDocument.getInstance().rename(token, fixedDocPath, newName);
 			} catch (Exception e) {
 				throw new RuntimeException("Failed to move to: " + dstPath);
 			}
@@ -191,7 +194,8 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 			
 			try {
 				String token = JcrSessionTokenHolder.get();
-				OKMDocument.getInstance().copy(token, doc.getPath(), dstPath);
+				String fixedDocPath = ResourceUtils.fixRepositoryPath(doc.getPath());
+				OKMDocument.getInstance().copy(token, fixedDocPath, dstPath);
 			} catch (Exception e) {
 				throw new RuntimeException("Failed to copy to:" + dstPath, e);
 			}

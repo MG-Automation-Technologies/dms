@@ -51,13 +51,11 @@ import com.openkm.webdav.JcrSessionTokenHolder;
 
 public class RootResource implements PropFindableResource, GetableResource, CollectionResource {
 	private final Logger log = LoggerFactory.getLogger(RootResource.class);
-	private final ResourceFactoryImpl factory;
 	private final List<Folder> fldChilds = new ArrayList<Folder>();
 	private Folder fld;
 	private final Path path;
 	
-	public RootResource(ResourceFactoryImpl rf, Path path) {
-		this.factory = rf;
+	public RootResource(Path path) {
 		this.path = path;
 		this.fld = new Folder();
 		this.fld.setPath("/");
@@ -67,14 +65,14 @@ public class RootResource implements PropFindableResource, GetableResource, Coll
 			String token = JcrSessionTokenHolder.get();
 			
 			Folder okmRoot= OKMRepository.getInstance().getRootFolder(token);
-			fldChilds.add(okmRoot);
+			fldChilds.add(ResourceUtils.fixResourcePath(okmRoot));
 			this.fld.setCreated(okmRoot.getCreated());
 			
 			Folder okmPersonal = OKMRepository.getInstance().getPersonalFolderBase(token);
-			fldChilds.add(okmPersonal);
+			fldChilds.add(ResourceUtils.fixResourcePath(okmPersonal));
 			
 			Folder okmTemplates = OKMRepository.getInstance().getTemplatesFolder(token);
-			fldChilds.add(okmTemplates);
+			fldChilds.add(ResourceUtils.fixResourcePath(okmTemplates));
 		} catch (PathNotFoundException e) {
 			log.error("PathNotFoundException: " + e.getMessage());
 		} catch (Exception e) {
@@ -134,7 +132,7 @@ public class RootResource implements PropFindableResource, GetableResource, Coll
 		log.info("child({})", childName);
 		
 		try {
-			return factory.getNode(path, Path.path(fld.getPath()).getStripFirst() + "/" + childName);
+			return ResourceUtils.getNode(path, Path.path(fld.getPath()).getStripFirst() + "/" + childName);
 		} catch (PathNotFoundException e) {
 			log.error("PathNotFoundException: " + e.getMessage());
 		} catch (Exception e) {
@@ -151,7 +149,7 @@ public class RootResource implements PropFindableResource, GetableResource, Coll
 		
 		if (fldChilds != null) {
 			for (Folder fld : fldChilds) {
-				resources.add(new FolderResource(factory, fld));
+				resources.add(new FolderResource(fld));
 			}
 		}
 		

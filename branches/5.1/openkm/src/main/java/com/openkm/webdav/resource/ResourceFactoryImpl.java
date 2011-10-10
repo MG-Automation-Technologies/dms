@@ -21,23 +21,16 @@
 
 package com.openkm.webdav.resource;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bradmcevoy.common.Path;
 import com.bradmcevoy.http.Resource;
 import com.bradmcevoy.http.ResourceFactory;
-import com.openkm.api.OKMDocument;
-import com.openkm.api.OKMFolder;
-import com.openkm.bean.Document;
-import com.openkm.bean.Folder;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.webdav.JcrSessionTokenHolder;
 
 /**
  * You should generally avoid using any request information other then that
@@ -50,7 +43,6 @@ import com.openkm.webdav.JcrSessionTokenHolder;
 public class ResourceFactoryImpl implements ResourceFactory {
 	private static final Logger log = LoggerFactory.getLogger(ResourceFactoryImpl.class);
 	public static final String REALM = "OpenKM";
-	private static RootResource rootResource = null; 
 	
 	@Override
 	public Resource getResource(String host, String url) {
@@ -63,14 +55,9 @@ public class ResourceFactoryImpl implements ResourceFactory {
 		try {
 			if (path.isRoot()) {
 				log.info("ROOT");
-				
-				if (rootResource == null) {
-					rootResource = new RootResource(this, srcPath);
-				}
-				
-				return rootResource;
+				return new RootResource(srcPath);
 			} else {
-				return getNode(srcPath, path.toPath());
+				return ResourceUtils.getNode(srcPath, path.toPath());
 			}
 		} catch (PathNotFoundException e) {
 			log.error("PathNotFoundException: " + e.getMessage());
@@ -82,53 +69,6 @@ public class ResourceFactoryImpl implements ResourceFactory {
 			log.error("DatabaseException: " + e.getMessage());
 		}
 		
-		return null;
-	}
-	
-	/**
-	 * 
-	 */
-	public Resource getFolder(Path path, String fldPath) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
-		String token = JcrSessionTokenHolder.get();
-		Folder fld = OKMFolder.getInstance().getProperties(token, fldPath);
-		List<Folder> fldChilds = OKMFolder.getInstance().getChilds(token, fldPath);
-		List<Document> docChilds = OKMDocument.getInstance().getChilds(token, fldPath);
-		Resource fldResource = new FolderResource(this, path, fld, fldChilds, docChilds);
-		return fldResource;
-	}
-	
-	/**
-	 * 
-	 */
-	public Resource getDocument(String docPath) throws PathNotFoundException, RepositoryException, DatabaseException {
-		String token = JcrSessionTokenHolder.get();
-		Document doc = OKMDocument.getInstance().getProperties(token, docPath);
-		Resource docResource = new DocumentResource(doc);
-		return docResource;
-	}
-	
-	/**
-	 * 
-	 */
-	public Resource getNode(Path srcPath, String path) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
-		log.info("getNode({}, {})", srcPath, path);
-		
-		String repoPath = path;
-		String token = JcrSessionTokenHolder.get();
-		
-		if (OKMFolder.getInstance().isValid(token, repoPath)) {
-			Resource res = getFolder(srcPath, repoPath);
-			log.info("getNode: {}", res);
-			return res;
-		} else if (OKMDocument.getInstance().isValid(token, repoPath)) {
-			Resource res = getDocument(repoPath);
-			log.info("getNode: {}", res);
-			return res;
-		}
-		
-		log.info("getNode: null");
 		return null;
 	}
 }
