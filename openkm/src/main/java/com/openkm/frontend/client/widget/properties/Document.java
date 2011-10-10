@@ -318,7 +318,7 @@ public class Document extends Composite {
 		
 		// Replace only in case webdav fix is enabled
 		if (Main.get().workspaceUserProperties.getWorkspace().isWebdavFix()) {
-			webdavPath.replace("okm:", "okm_");
+			webdavPath = webdavPath.replace("okm:", "okm_");
 		}
 		
 		webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/')) + "/webdav" + webdavPath;
