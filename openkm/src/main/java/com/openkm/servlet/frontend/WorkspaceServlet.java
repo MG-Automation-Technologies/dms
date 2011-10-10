@@ -81,9 +81,9 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 	
 	@Override
 	public GWTWorkspace getUserWorkspace() throws OKMException {
-		GWTWorkspace workspace = new GWTWorkspace();
+		log.debug("getUserWorkspace()");
 		updateSessionManager();
-		
+		GWTWorkspace workspace = new GWTWorkspace();
 		workspace.setApplicationURL(Config.APPLICATION_URL);
 		workspace.setUser(getThreadLocalRequest().getRemoteUser());
 		workspace.setAppVersion(WarUtils.getAppVersion().toString());
@@ -114,6 +114,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 					}
 				}
 			}
+			
 			for (String workflow : up.getWizard().getWorkflows()) {			
 				wizardWorkflowLst.add(new Double(workflow));
 			}
