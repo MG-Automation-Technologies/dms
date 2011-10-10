@@ -208,28 +208,6 @@ public class ResourceUtils {
 	}
 	
 	/**
-	 * Correct repository folder path
-	 */
-	//public static Folder fixRepositoryPath(Folder fld) {
-		//if (Config.SYSTEM_WEBDAV_FIX) {
-		//	fld.setPath(fixRepositoryPath(fld.getPath()));
-		//}
-		
-		//return fld;
-	//}
-	
-	/**
-	 * Correct repository document path
-	 */
-	//public static Document fixRepositoryPath(Document doc) {
-		//if (Config.SYSTEM_WEBDAV_FIX) {
-		//	doc.setPath(fixRepositoryPath(doc.getPath()));
-		//}
-		
-		//return doc;
-	//}
-	
-	/**
 	 * 
 	 */
 	public static String fixRepositoryPath(String path) {
