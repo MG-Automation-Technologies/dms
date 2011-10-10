@@ -50,24 +50,26 @@ import com.openkm.webdav.JcrSessionTokenHolder;
 public class ResourceFactoryImpl implements ResourceFactory {
 	private static final Logger log = LoggerFactory.getLogger(ResourceFactoryImpl.class);
 	public static final String REALM = "OpenKM";
+	private static RootResource rootResource = null; 
 	
 	@Override
 	public Resource getResource(String host, String url) {
-		log.info("getResource: host: " + host + " - url:" + url);
+		log.info("getResource({}, {})", host, url);
 		Path srcPath = Path.path(url);
-		// log.info("path: {}", srcPath);
 		
 		// STRIP PRECEEDING PATH
 		Path path = srcPath.getStripFirst().getStripFirst();
-		// log.info("path: {}", path);
 		
 		try {
 			if (path.isRoot()) {
 				log.info("ROOT");
-				Resource res = getFolder(srcPath, "/okm:root");
-				return res;
+				
+				if (rootResource == null) {
+					rootResource = new RootResource(this, srcPath);
+				}
+				
+				return rootResource;
 			} else {
-				// log.info("Path: {}", path.toPath());
 				return getNode(srcPath, path.toPath());
 			}
 		} catch (PathNotFoundException e) {
@@ -113,7 +115,7 @@ public class ResourceFactoryImpl implements ResourceFactory {
 			RepositoryException, DatabaseException {
 		log.info("getNode({}, {})", srcPath, path);
 		
-		String repoPath = "/okm:root" + path;
+		String repoPath = path;
 		String token = JcrSessionTokenHolder.get();
 		
 		if (OKMFolder.getInstance().isValid(token, repoPath)) {

@@ -22,6 +22,7 @@
 package com.openkm.webdav;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.UUID;
 
 import javax.jcr.LoginException;
@@ -36,6 +37,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.openkm.core.Config;
 import com.openkm.core.JcrSessionManager;
 import com.openkm.servlet.BasicSecuredServlet;
 
@@ -49,6 +51,20 @@ public class WebDAVFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
 			ServletException {
+		if (Config.SYSTEM_WEBDAV_SERVER) {
+			handleRequest(request, response);
+		} else {
+			PrintWriter out = response.getWriter();
+			out.println("WebDAV is disabled. Contact with your administrator.");
+			out.flush();
+			out.close();
+		}
+	}
+	
+	/**
+	 * Handle WebDAV requests.
+	 */
+	private void handleRequest(ServletRequest request, ServletResponse response) throws IOException, ServletException {
 		Session session = null;
 		
 		try {
@@ -58,7 +74,7 @@ public class WebDAVFilter implements Filter {
 			JcrSessionTokenHolder.set(uid);
 			WebDavService.get().handleRequest((HttpServletRequest) request, (HttpServletResponse) response);
 		} catch (LoginException e) {
-			((HttpServletResponse) response).setHeader("WWW-Authenticate", "Basic realm=\"OpenKM Syndication Server\"");
+			((HttpServletResponse) response).setHeader("WWW-Authenticate", "Basic realm=\"OpenKM WebDAV Server\"");
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
 		} catch (RepositoryException e) {
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());

@@ -24,7 +24,6 @@ package com.openkm.webdav.resource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -137,7 +136,7 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 		log.info("child({})", childName);
 		
 		try {
-			return factory.getNode(path, Path.path(fld.getPath()).getStripFirst() + "/" + childName);
+			return factory.getNode(path, fld.getPath() + "/" + childName);
 		} catch (PathNotFoundException e) {
 			log.error("PathNotFoundException: " + e.getMessage());
 		} catch (Exception e) {
@@ -210,7 +209,7 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 			newFld = OKMFolder.getInstance().create(token, newFld);
 			return new FolderResource(factory, newFld);
 		} catch (Exception e) {
-			throw new RuntimeException("Failed to create: " + e.getMessage(), e);
+			throw new ConflictException(this);
 		}
 	}
 	
@@ -218,53 +217,7 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 	public void sendContent(OutputStream out, Range range, Map<String, String> params, String contentType)
 			throws IOException, NotAuthorizedException, BadRequestException {
 		log.info("sendContent({}, {})", params, contentType);
-		PrintWriter pw = new PrintWriter(out);
-		pw.println("<html>");
-		pw.println("<header>");
-		pw.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />");
-		pw.println("<link rel=\"Shortcut icon\" href=\"/" + this.path.getFirst() + "/favicon.ico\" />");
-		pw.println("<link rel=\"stylesheet\" href=\"/" + this.path.getFirst() + "/css/style.css\" type=\"text/css\" />");
-		pw.println("<title>OpenKM WebDAV</title>");
-		pw.println("</header>");
-		pw.println("<body>");
-		pw.println("<h1>OpenKM WebDAV</h1>");
-		pw.println("<table>");
-		
-		if (!this.path.getStripFirst().getStripFirst().isRoot()) {
-			String url = this.path.getParent().toPath();
-			pw.print("<tr>");
-			pw.print("<td><img src='/" + this.path.getFirst() + "/img/folder.png'/></td>");
-			pw.print("<td><a href='" + url + "'>..</a></td>");
-			pw.println("<tr>");
-		}
-		
-		if (fldChilds != null) {
-			for (Folder fld : fldChilds) {
-				Path path = Path.path(fld.getPath());
-				String url = this.path.toPath().concat("/").concat(path.getName());
-				pw.print("<tr>");
-				pw.print("<td><img src='/" + this.path.getFirst() + "/img/folder.png'/></td>");
-				pw.print("<td><a href='" + url + "'>" + path.getName() + "</a></td>");
-				pw.println("<tr>");
-			}
-		}
-		
-		if (docChilds != null) {
-			for (Document doc : docChilds) {
-				Path path = Path.path(doc.getPath());
-				String url = this.path.toPath().concat("/").concat(path.getName());
-				pw.print("<tr>");
-				pw.print("<td><img src='/" + this.path.getFirst() + "/mime/" + doc.getMimeType() + "'/></td>");
-				pw.print("<td><a href='" + url + "'>" + path.getName() + "</a></td>");
-				pw.println("<tr>");
-			}
-		}
-		
-		pw.println("</table>");
-		pw.println("</body>");
-		pw.println("</html>");
-		pw.flush();
-		pw.close();
+		ResourceUtils.createContent(out, path, fldChilds, docChilds);
 	}
 	
 	@Override
