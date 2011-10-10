@@ -87,14 +87,14 @@ public class Folder extends Composite {
 		tableSubscribedUsers.setWidget(0, 0, hPanelSubscribedUsers);
 				
 		table.setWidget(0, 0, tableProperties);
-		table.setHTML(0,1, "");
-		table.setWidget(0,2,tableSubscribedUsers);
+		table.setHTML(0, 1, "");
+		table.setWidget(0, 2, tableSubscribedUsers);
 
 		// The hidden column extends table to 100% width
 		CellFormatter cellFormatter = table.getCellFormatter();
 		cellFormatter.setWidth(0, 1, "25");
-		cellFormatter.setVerticalAlignment(0,0, HasAlignment.ALIGN_TOP);
-		cellFormatter.setVerticalAlignment(0,2, HasAlignment.ALIGN_TOP);
+		cellFormatter.setVerticalAlignment(0, 0, HasAlignment.ALIGN_TOP);
+		cellFormatter.setVerticalAlignment(0, 2, HasAlignment.ALIGN_TOP);
 		
 		// Sets wordWrap for al rows
 		setRowWordWarp(0, 0, true, tableProperties);
@@ -123,15 +123,14 @@ public class Folder extends Composite {
 	 */
 	private void setRowWordWarp(int row, int columns, boolean warp, FlexTable table) {
 		CellFormatter cellFormatter = table.getCellFormatter();
+		
 		for (int i=0; i<columns; i++) {
 			cellFormatter.setWordWrap(row, i, false);
 		}
 	}
 	
 	/**
-	 * get
 	 * 
-	 * @return
 	 */
 	public GWTFolder get() {
 		return folder;
@@ -145,26 +144,24 @@ public class Folder extends Composite {
 	public void set(GWTFolder folder) {
 		this.folder = folder;
 		
-		// url
+		// URL clipboard button
 		String url = Main.get().workspaceUserProperties.getApplicationURL();
-		url += "?fldPath=" + URL.encodeComponent(folder.getPath());
+		url += "?fldPath=" + URL.encodeQueryString(folder.getPath());
 		tableProperties.setWidget(8, 1, new HTML("<div id=\"folderurlclipboardcontainer\"></div>\n"));
 		Util.createFolderURLClipboardButton(url);
 		
 		// Webdav
 		String webdavUrl = Main.get().workspaceUserProperties.getApplicationURL();
-		if (webdavUrl.lastIndexOf('/')>0) {
-			int idx = webdavUrl.lastIndexOf('/');
-			String webdavPath = folder.getPath();
-			// Replace only in case webdav fix is enabled
-			if (Main.get().workspaceUserProperties.getWorkspace().isWebdavFix()) {
-				webdavPath.replace("okm:", "okm_");
-			}
-			
-			webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/', idx-1)) + "/repository/default" + webdavPath;
-			tableProperties.setWidget(9, 1, new HTML("<div id=\"folderwebdavclipboardcontainer\"></div>\n"));
-			Util.createFolderWebDavClipboardButton(webdavUrl);
+		String webdavPath = folder.getPath();
+		
+		// Replace only in case webdav fix is enabled
+		if (Main.get().workspaceUserProperties.getWorkspace().isWebdavFix()) {
+			webdavPath.replace("okm:", "okm_");
 		}
+		
+		webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/')) + "/webdav" + webdavPath;
+		tableProperties.setWidget(9, 1, new HTML("<div id=\"folderwebdavclipboardcontainer\"></div>\n"));
+		Util.createFolderWebDavClipboardButton(webdavUrl);
 		
 		tableProperties.setHTML(0, 1, folder.getUuid());
 		tableProperties.setHTML(1, 1, folder.getName());
