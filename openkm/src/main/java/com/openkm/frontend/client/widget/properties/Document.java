@@ -132,20 +132,24 @@ public class Document extends Composite {
 				if ((char)KeyCodes.KEY_ENTER == event.getNativeKeyCode() && keyWordsListPending.isEmpty()) {
 					Main.get().mainPanel.enableKeyShorcuts(); 			// Enables general keys applications
 					String keys[] = suggestKey.getText().split(" "); 	// Separates keywords by space
+					
 					for (int i=0;i<keys.length;i++) {
 						keyWordsListPending.add(keys[i]);
 					}
+					
 					addPendingKeyWordsList();
 					suggestKey.setText("");
 				}
 			}
 		});
+		
 		suggestKey.getTextBox().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				if (suggestKey.getText().equals(Main.i18n("dashboard.keyword.suggest"))) {
 					suggestKey.setText("");
 				}
+				
 				Main.get().mainPanel.disableKeyShorcuts(); // Disables key shortcuts while updating
 			}
 		});
@@ -311,12 +315,13 @@ public class Document extends Composite {
 		// Webdav button
 		String webdavUrl = Main.get().workspaceUserProperties.getApplicationURL();
 		String webdavPath = document.getPath();
+		
 		// Replace only in case webdav fix is enabled
 		if (Main.get().workspaceUserProperties.getWorkspace().isWebdavFix()) {
 			webdavPath.replace("okm:", "okm_");
 		}
 		
-		webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/')) + "/repository/default" + webdavPath;
+		webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/')) + "/webdav" + webdavPath;
 		tableProperties.setWidget(12, 1, new HTML("<div id=\"webdavclipboardcontainer\"></div>\n"));
 		Util.createWebDavClipboardButton(webdavUrl);
 		
