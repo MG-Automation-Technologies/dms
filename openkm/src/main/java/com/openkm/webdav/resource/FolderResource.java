@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +56,7 @@ import com.openkm.api.OKMFolder;
 import com.openkm.api.OKMRepository;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
+import com.openkm.core.Config;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.jcr.JCRUtils;
 import com.openkm.webdav.JcrSessionTokenHolder;
@@ -61,27 +64,23 @@ import com.openkm.webdav.JcrSessionTokenHolder;
 public class FolderResource implements MakeCollectionableResource, PutableResource, CopyableResource,
 		DeletableResource, MoveableResource, PropFindableResource, GetableResource {
 	private final Logger log = LoggerFactory.getLogger(FolderResource.class);
-	private final ResourceFactoryImpl factory;
 	private final List<Document> docChilds;
 	private final List<Folder> fldChilds;
 	private Folder fld;
 	private final Path path;
 	
-	public FolderResource(ResourceFactoryImpl rf, Folder fld) {
-		this.factory = rf;
+	public FolderResource(Folder fld) {
 		this.fldChilds = null;
 		this.docChilds = null;
 		this.path = null;
-		this.fld = fld;
+		this.fld = ResourceUtils.fixResourcePath(fld);
 	}
 	
-	public FolderResource(ResourceFactoryImpl rf, Path path, Folder fld, List<Folder> fldChilds,
-			List<Document> docChilds) {
-		this.factory = rf;
+	public FolderResource(Path path, Folder fld, List<Folder> fldChilds, List<Document> docChilds) {
 		this.fldChilds = fldChilds;
 		this.docChilds = docChilds;
 		this.path = path;
-		this.fld = fld;
+		this.fld = ResourceUtils.fixResourcePath(fld);
 	}
 	
 	public Folder getFolder() {
@@ -136,7 +135,7 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 		log.info("child({})", childName);
 		
 		try {
-			return factory.getNode(path, fld.getPath() + "/" + childName);
+			return ResourceUtils.getNode(path, fld.getPath() + "/" + childName);
 		} catch (PathNotFoundException e) {
 			log.error("PathNotFoundException: " + e.getMessage());
 		} catch (Exception e) {
@@ -153,7 +152,7 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 		
 		if (fldChilds != null) {
 			for (Folder fld : fldChilds) {
-				resources.add(new FolderResource(factory, fld));
+				resources.add(new FolderResource(fld));
 			}
 		}
 		
@@ -172,7 +171,8 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 		log.info("createNew({}, {}, {})", new Object[] { newName, length, contentType });
 		OKMDocument okmDocument = OKMDocument.getInstance();
 		Document newDoc = new Document();
-		newDoc.setPath(fld.getPath() + "/" + newName);
+		String fixedDocPath = ResourceUtils.fixRepositoryPath(fld.getPath());
+		newDoc.setPath(fixedDocPath + "/" + newName);
 		
 		try {
 			String token = JcrSessionTokenHolder.get();
@@ -183,8 +183,21 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 				okmDocument.setContent(token, newDoc.getPath(), inputStream);
 				okmDocument.checkin(token, newDoc.getPath(), "Modified from WebDAV");
 			} else {
-				// Create a new one
-				newDoc = okmDocument.create(token, newDoc, inputStream);
+				// Restrict for extension
+	       		StringTokenizer st = new StringTokenizer(Config.RESTRICT_FILE_EXTENSION, ",");
+				
+	       		while (st.hasMoreTokens()) {
+	       			String wc = st.nextToken().trim();
+	       			String re = ResourceUtils.wildcard2regexp(wc);
+	       			
+	       			if (Pattern.matches(re, newName)) {
+	        			log.warn("Filename BAD -> {} ({})", re, wc);
+	        			return null;
+	        		} else {
+	        			// Create a new one
+	    				newDoc = okmDocument.create(token, newDoc, inputStream);
+	        		}
+	        	}
 			}
 			
 			return new DocumentResource(newDoc);
@@ -202,12 +215,13 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 			BadRequestException {
 		log.info("createCollection({})", newName);
 		Folder newFld = new Folder();
-		newFld.setPath(fld.getPath() + "/" + newName);
+		String fixedFldPath = ResourceUtils.fixRepositoryPath(fld.getPath());
+		newFld.setPath(fixedFldPath + "/" + newName);
 		
 		try {
 			String token = JcrSessionTokenHolder.get();
 			newFld = OKMFolder.getInstance().create(token, newFld);
-			return new FolderResource(factory, newFld);
+			return new FolderResource(newFld);
 		} catch (Exception e) {
 			throw new ConflictException(this);
 		}
@@ -241,7 +255,8 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 		
 		try {
 			String token = JcrSessionTokenHolder.get();
-			OKMFolder.getInstance().delete(token, fld.getPath());
+			String fixedFldPath = ResourceUtils.fixRepositoryPath(fld.getPath());
+			OKMFolder.getInstance().delete(token, fixedFldPath);
 		} catch (Exception e) {
 			throw new ConflictException(this);
 		}
@@ -258,7 +273,8 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 			
 			try {
 				String token = JcrSessionTokenHolder.get();
-				fld = OKMFolder.getInstance().rename(token, fld.getPath(), newName);
+				String fixedFldPath = ResourceUtils.fixRepositoryPath(fld.getPath());
+				fld = OKMFolder.getInstance().rename(token, fixedFldPath, newName);
 			} catch (Exception e) {
 				throw new RuntimeException("Failed to move to: " + dstPath, e);
 			}
@@ -279,7 +295,8 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 			
 			try {
 				String token = JcrSessionTokenHolder.get();
-				OKMFolder.getInstance().copy(token, fld.getPath(), dstPath);
+				String fixedFldPath = ResourceUtils.fixRepositoryPath(fld.getPath());
+				OKMFolder.getInstance().copy(token, fixedFldPath, dstPath);
 			} catch (Exception e) {
 				throw new RuntimeException("Failed to copy to:" + dstPath, e);
 			}

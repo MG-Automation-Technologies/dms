@@ -29,11 +29,69 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bradmcevoy.common.Path;
+import com.bradmcevoy.http.Resource;
+import com.openkm.api.OKMDocument;
+import com.openkm.api.OKMFolder;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
+import com.openkm.core.AccessDeniedException;
+import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
+import com.openkm.core.PathNotFoundException;
+import com.openkm.core.RepositoryException;
+import com.openkm.webdav.JcrSessionTokenHolder;
 
 public class ResourceUtils {
 	private static final Logger log = LoggerFactory.getLogger(ResourceUtils.class);
+	
+	/**
+	 * Resolve folder resource.
+	 */
+	public static Resource getFolder(Path path, String fldPath) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		String token = JcrSessionTokenHolder.get();
+		String fixedFldPath = fixRepositoryPath(fldPath);
+		Folder fld = OKMFolder.getInstance().getProperties(token, fixedFldPath);
+		List<Folder> fldChilds = OKMFolder.getInstance().getChilds(token, fixedFldPath);
+		List<Document> docChilds = OKMDocument.getInstance().getChilds(token, fixedFldPath);
+		Resource fldResource = new FolderResource(path, fld, fldChilds, docChilds);
+		return fldResource;
+	}
+	
+	/**
+	 * Resolve document resource.
+	 */
+	public static Resource getDocument(String docPath) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		String token = JcrSessionTokenHolder.get();
+		String fixedDocPath = fixRepositoryPath(docPath);
+		Document doc = OKMDocument.getInstance().getProperties(token, fixedDocPath);
+		Resource docResource = new DocumentResource(doc);
+		return docResource;
+	}
+	
+	/**
+	 * Resolve node resource (may be folder or document)
+	 */
+	public static Resource getNode(Path srcPath, String path) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
+		log.info("getNode({}, {})", srcPath, path);
+		String token = JcrSessionTokenHolder.get();
+		String fixedPath = ResourceUtils.fixRepositoryPath(path);
+		
+		if (OKMFolder.getInstance().isValid(token, fixedPath)) {
+			Resource res = getFolder(srcPath, path);
+			log.info("getNode: {}", res);
+			return res;
+		} else if (OKMDocument.getInstance().isValid(token, fixedPath)) {
+			Resource res = getDocument(path);
+			log.info("getNode: {}", res);
+			return res;
+		}
+		
+		log.info("getNode: null");
+		return null;
+	}
 	
 	/**
 	 * Create HTML content.
@@ -87,5 +145,98 @@ public class ResourceUtils {
 		pw.println("</html>");
 		pw.flush();
 		pw.close();
+	}
+	
+	/**
+	 * Compile wildcard to regexp
+	 */
+	public static String wildcard2regexp(String wildcard) {
+		StringBuffer sb = new StringBuffer("^");
+		
+		for (int i = 0; i < wildcard.length(); i++) {
+			char c = wildcard.charAt(i);
+			
+			switch (c) {
+				case '.':
+					sb.append("\\.");
+					break;
+				
+				case '*':
+					sb.append(".*");
+					break;
+				
+				case '?':
+					sb.append(".");
+					break;
+				
+				default:
+					sb.append(c);
+					break;
+			}
+		}
+		
+		return sb.toString();
+	}
+	
+	/**
+	 * Correct webdav folder path
+	 */
+	public static Folder fixResourcePath(Folder fld) {
+		if (Config.SYSTEM_WEBDAV_FIX) {
+			fld.setPath(fixResourcePath(fld.getPath()));
+		}
+		
+		return fld;
+	}
+	
+	/**
+	 * Correct webdav document path
+	 */
+	public static Document fixResourcePath(Document doc) {
+		if (Config.SYSTEM_WEBDAV_FIX) {
+			doc.setPath(fixResourcePath(doc.getPath()));
+		}
+		
+		return doc;
+	}
+	
+	/**
+	 * 
+	 */
+	private static String fixResourcePath(String path) {
+		return path.replace("okm:", "okm_");
+	}
+	
+	/**
+	 * Correct repository folder path
+	 */
+	//public static Folder fixRepositoryPath(Folder fld) {
+		//if (Config.SYSTEM_WEBDAV_FIX) {
+		//	fld.setPath(fixRepositoryPath(fld.getPath()));
+		//}
+		
+		//return fld;
+	//}
+	
+	/**
+	 * Correct repository document path
+	 */
+	//public static Document fixRepositoryPath(Document doc) {
+		//if (Config.SYSTEM_WEBDAV_FIX) {
+		//	doc.setPath(fixRepositoryPath(doc.getPath()));
+		//}
+		
+		//return doc;
+	//}
+	
+	/**
+	 * 
+	 */
+	public static String fixRepositoryPath(String path) {
+		if (Config.SYSTEM_WEBDAV_FIX) {
+			return path.replace("okm_", "okm:");
+		} else {
+			return path;
+		}
 	}
 }
