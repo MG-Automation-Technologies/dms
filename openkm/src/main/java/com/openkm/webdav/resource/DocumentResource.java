@@ -36,6 +36,11 @@ import com.bradmcevoy.http.CollectionResource;
 import com.bradmcevoy.http.CopyableResource;
 import com.bradmcevoy.http.DeletableResource;
 import com.bradmcevoy.http.GetableResource;
+import com.bradmcevoy.http.LockInfo;
+import com.bradmcevoy.http.LockResult;
+import com.bradmcevoy.http.LockTimeout;
+import com.bradmcevoy.http.LockToken;
+import com.bradmcevoy.http.LockableResource;
 import com.bradmcevoy.http.MoveableResource;
 import com.bradmcevoy.http.PropFindableResource;
 import com.bradmcevoy.http.PropPatchableResource;
@@ -44,20 +49,25 @@ import com.bradmcevoy.http.Request;
 import com.bradmcevoy.http.Request.Method;
 import com.bradmcevoy.http.exceptions.BadRequestException;
 import com.bradmcevoy.http.exceptions.ConflictException;
+import com.bradmcevoy.http.exceptions.LockedException;
 import com.bradmcevoy.http.exceptions.NotAuthorizedException;
+import com.bradmcevoy.http.exceptions.PreConditionFailedException;
 import com.bradmcevoy.http.webdav.PropPatchHandler.Fields;
 import com.openkm.api.OKMDocument;
 import com.openkm.bean.Document;
+import com.openkm.bean.Lock;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.jcr.JCRUtils;
 import com.openkm.webdav.JcrSessionTokenHolder;
 
 public class DocumentResource implements CopyableResource, DeletableResource, GetableResource,
-		MoveableResource, PropFindableResource, PropPatchableResource {
+		MoveableResource, PropFindableResource, PropPatchableResource, LockableResource {
 	private static final Logger log = LoggerFactory.getLogger(DocumentResource.class);
 	private Document doc;
+	private LockToken lt;
 	
 	public DocumentResource(Document doc) {
 		this.doc = ResourceUtils.fixResourcePath(doc);
@@ -212,5 +222,37 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 		sb.append("doc="); sb.append(doc);
 		sb.append("}");
 		return sb.toString();
+	}
+
+	@Override
+	public LockResult lock(LockTimeout timeout, LockInfo lockInfo) throws NotAuthorizedException,
+			PreConditionFailedException, LockedException {
+		String fixedDocPath = ResourceUtils.fixRepositoryPath(doc.getPath());
+		
+		try {
+			String token = JcrSessionTokenHolder.get();	
+			Lock lock = OKMDocument.getInstance().lock(token, fixedDocPath);
+			lt = new LockToken();
+			lt.tokenId = lock.getToken();
+			return LockResult.success(lt);
+		} catch (LockException e) {
+			throw new LockedException(this);
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to lock: " + fixedDocPath);
+		}
+	}
+
+	@Override
+	public LockResult refreshLock(String token) throws NotAuthorizedException, PreConditionFailedException {
+		return LockResult.success(lt);
+	}
+
+	@Override
+	public void unlock(String tokenId) throws NotAuthorizedException, PreConditionFailedException {
+	}
+
+	@Override
+	public LockToken getCurrentLock() {
+		return lt;
 	}
 }
