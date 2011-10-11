@@ -40,6 +40,11 @@ import com.bradmcevoy.http.CollectionResource;
 import com.bradmcevoy.http.CopyableResource;
 import com.bradmcevoy.http.DeletableResource;
 import com.bradmcevoy.http.GetableResource;
+import com.bradmcevoy.http.LockInfo;
+import com.bradmcevoy.http.LockResult;
+import com.bradmcevoy.http.LockTimeout;
+import com.bradmcevoy.http.LockToken;
+import com.bradmcevoy.http.LockableResource;
 import com.bradmcevoy.http.MakeCollectionableResource;
 import com.bradmcevoy.http.MoveableResource;
 import com.bradmcevoy.http.PropFindableResource;
@@ -50,7 +55,9 @@ import com.bradmcevoy.http.Request.Method;
 import com.bradmcevoy.http.Resource;
 import com.bradmcevoy.http.exceptions.BadRequestException;
 import com.bradmcevoy.http.exceptions.ConflictException;
+import com.bradmcevoy.http.exceptions.LockedException;
 import com.bradmcevoy.http.exceptions.NotAuthorizedException;
+import com.bradmcevoy.http.exceptions.PreConditionFailedException;
 import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
 import com.openkm.api.OKMRepository;
@@ -62,7 +69,7 @@ import com.openkm.jcr.JCRUtils;
 import com.openkm.webdav.JcrSessionTokenHolder;
 
 public class FolderResource implements MakeCollectionableResource, PutableResource, CopyableResource,
-		DeletableResource, MoveableResource, PropFindableResource, GetableResource {
+		DeletableResource, MoveableResource, PropFindableResource, GetableResource, LockableResource {
 	private final Logger log = LoggerFactory.getLogger(FolderResource.class);
 	private final List<Document> docChilds;
 	private final List<Folder> fldChilds;
@@ -313,5 +320,25 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 		sb.append("fld="); sb.append(fld);
 		sb.append("}");
 		return sb.toString();
+	}
+
+	@Override
+	public LockResult lock(LockTimeout timeout, LockInfo lockInfo) throws NotAuthorizedException,
+			PreConditionFailedException, LockedException {
+		return null;
+	}
+
+	@Override
+	public LockResult refreshLock(String token) throws NotAuthorizedException, PreConditionFailedException {
+		return null;
+	}
+
+	@Override
+	public void unlock(String tokenId) throws NotAuthorizedException, PreConditionFailedException {
+	}
+
+	@Override
+	public LockToken getCurrentLock() {
+		return null;
 	}
 }
