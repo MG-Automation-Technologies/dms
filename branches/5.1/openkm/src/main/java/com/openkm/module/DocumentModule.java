@@ -275,7 +275,7 @@ public interface DocumentModule {
 	 * the document because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void lock(String token, String docPath) throws LockException, PathNotFoundException, 
+	public Lock lock(String token, String docPath) throws LockException, PathNotFoundException, 
 			AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
