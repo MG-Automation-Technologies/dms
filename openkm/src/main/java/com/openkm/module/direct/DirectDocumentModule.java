@@ -1108,10 +1108,11 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void lock(String token, String docPath) throws AccessDeniedException, RepositoryException, 
+	public Lock lock(String token, String docPath) throws AccessDeniedException, RepositoryException, 
 			PathNotFoundException, LockException, DatabaseException {
 		log.debug("lock({})", docPath);
 		Session session = null;
+		Lock lock = new Lock();
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
@@ -1126,6 +1127,9 @@ public class DirectDocumentModule implements DocumentModule {
 			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			javax.jcr.lock.Lock lck = documentNode.lock(true, false);
+			lock.setOwner(lck.getLockOwner());
+			lock.setNodePath(lck.getNode().getPath());
+			lock.setToken(lck.getLockToken());
 			JCRUtils.addLockToken(session, documentNode);
 			
 			// Check subscriptions
@@ -1155,7 +1159,8 @@ public class DirectDocumentModule implements DocumentModule {
 			if (token == null) JCRUtils.logout(session);
 		}
 		
-		log.debug("lock: void");
+		log.debug("lock: {}", lock);
+		return lock;
 	}
 
 	@Override

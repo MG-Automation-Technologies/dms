@@ -127,8 +127,9 @@ public class EJBDocumentModule implements com.openkm.module.DocumentModule {
 	}
 
 	@Override
-	public void lock(String token, String docPath) throws LockException, PathNotFoundException,
+	public Lock lock(String token, String docPath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
+		return null;
 	}
 
 	@Override
