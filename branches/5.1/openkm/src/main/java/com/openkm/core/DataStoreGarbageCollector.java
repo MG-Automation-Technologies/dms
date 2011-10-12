@@ -80,14 +80,14 @@ public class DataStoreGarbageCollector extends TimerTask implements ScanEventLis
 				
 				Iterator<DataIdentifier> it = gc.getDataStore().getAllIdentifiers();
 				while (it.hasNext()) {
-					log.info("DataIdent: "+it.next());
+					log.info("DataIdent: {}", it.next());
 				}
 				
 				gc.stopScan();
 				
 				// delete old data
 				int deleted = gc.deleteUnused();
-				log.info("Deleted garbage documents: "+deleted);
+				log.info("Deleted garbage documents: {}", deleted);
 			} catch (IOException e) {
 				log.error(e.getMessage(), e);
 			} catch (IllegalStateException e) {
