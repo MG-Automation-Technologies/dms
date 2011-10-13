@@ -32,6 +32,9 @@ import java.util.List;
 public class Mail implements Serializable {
 	private static final long serialVersionUID = -2127459738076624036L;
 	
+	public static final String MIME_TEXT = "text/plain";
+	public static final String MIME_HTML = "text/html";
+	
 	public static final String TYPE = "okm:mail";
 	public static final String SIZE = "okm:size";
 	public static final String FROM = "okm:from";
