@@ -226,17 +226,25 @@ public class MailUtils {
 			String docPath)	throws MessagingException, PathNotFoundException, RepositoryException,
 			IOException, DatabaseException {
 		log.debug("send({}, {}, {}, {}, {})", new Object[] { fromAddress, toAddress, subject, text, docPath });
-		Session mailSession = null;
-
-		try {
-			InitialContext initialContext = new InitialContext();
-			mailSession = (Session) PortableRemoteObject.narrow(initialContext.lookup("java:/mail/OpenKM"), Session.class);
-		} catch (javax.naming.NamingException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+		MimeMessage m = create(fromAddress, toAddress, subject, text, docPath);
+		Transport.send(m);
+		log.debug("send: void");
+	}
+	
+	/**
+	 * Create a mail.
+	 * 
+	 * @param fromAddress Origin address.
+	 * @param toAddress Destination addresses.
+	 * @param subject The mail subject.
+	 * @param text The mail body.
+	 * @throws MessagingException If there is any error.
+	 */
+	private static MimeMessage create(String fromAddress, List<String> toAddress, String subject, String text, 
+			String docPath)	throws MessagingException, PathNotFoundException, RepositoryException,
+			IOException, DatabaseException {
+		log.debug("create({}, {}, {}, {}, {})", new Object[] { fromAddress, toAddress, subject, text, docPath });
+		Session mailSession = getMailSession();
 		MimeMessage m = new MimeMessage(mailSession);
 
 		if (fromAddress != null) {
@@ -305,10 +313,130 @@ public class MailUtils {
 		}
         
         m.setContent(content);
-		Transport.send(m);
-		log.debug("send: void");
+		log.debug("create: {}", m);
+		return m;
 	}
+	
+	/**
+	 * Create a mail from a Mail object
+	 */
+	public static MimeMessage create(String token, Mail mail) throws MessagingException, PathNotFoundException, RepositoryException,
+			IOException, DatabaseException {
+		log.debug("create({})", mail);
+		Session mailSession = getMailSession();
+		MimeMessage m = new MimeMessage(mailSession);
+
+		if (mail.getFrom() != null) {
+			InternetAddress from = new InternetAddress(mail.getFrom());
+			m.setFrom(from);
+		} else {
+			m.setFrom();
+		}
 		
+		InternetAddress[] to = new InternetAddress[mail.getTo().length];
+		int i = 0;
+		
+		for (String strTo : mail.getTo()) {
+			to[i++] = new InternetAddress(strTo);
+		}
+		
+		m.addHeader("charset", "UTF-8");
+		m.setRecipients(Message.RecipientType.TO, to);
+		m.setSubject(mail.getSubject(), "UTF-8");
+		m.setSentDate(new Date());
+		
+		// Build a multiparted mail with HTML and text content for better SPAM behaviour
+		MimeMultipart content = new MimeMultipart("alternative");
+		
+		if (Mail.MIME_TEXT.equals(mail.getMimeType())) {
+			// Text part
+			MimeBodyPart textPart = new MimeBodyPart();
+			textPart.setText(mail.getContent());
+			textPart.setHeader("Content-Type", "text/plain");
+			content.addBodyPart(textPart);
+			
+			// HTML Part
+			MimeBodyPart htmlPart = new MimeBodyPart();
+			StringBuilder htmlContent = new StringBuilder();
+			htmlContent.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n");
+			htmlContent.append("<html>\n<head>\n");
+			htmlContent.append("<meta content=\"text/html;charset=UTF-8\" http-equiv=\"Content-Type\"/>\n");
+			htmlContent.append("</head>\n<body>\n");
+			htmlContent.append(mail.getContent());
+			htmlContent.append("\n</body>\n</html>");
+			htmlPart.setContent(htmlContent.toString(), "text/html; charset=UTF-8");
+			htmlPart.setHeader("Content-Type", "text/html");
+			content.addBodyPart(htmlPart);
+		} else if (Mail.MIME_HTML.equals(mail.getMimeType())) {
+			// Text part
+			MimeBodyPart textPart = new MimeBodyPart();
+			textPart.setText(mail.getContent().replaceAll("<br/?>", "\n").replaceAll("<[^>]*>", ""));
+			textPart.setHeader("Content-Type", "text/plain");
+			content.addBodyPart(textPart);
+			
+			// HTML Part
+			MimeBodyPart htmlPart = new MimeBodyPart();
+			htmlPart.setContent(mail.getContent(), "text/html; charset=UTF-8");
+			htmlPart.setHeader("Content-Type", "text/html");
+			content.addBodyPart(htmlPart);
+		} else {
+			log.warn("Email does not specify content MIME type");
+			
+			// Text part
+			MimeBodyPart textPart = new MimeBodyPart();
+			textPart.setText(mail.getContent());
+			textPart.setHeader("Content-Type", "text/plain");
+			content.addBodyPart(textPart);
+		}
+		
+		for (Document doc : mail.getAttachments()) {
+			InputStream is = null;
+			FileOutputStream fos = null;
+			String docName = JCRUtils.getName(doc.getPath());
+				
+			try {
+				is = OKMDocument.getInstance().getContent(token, doc.getPath(), false);
+				File tmp = File.createTempFile("okm", ".tmp");
+				fos = new FileOutputStream(tmp);
+				IOUtils.copy(is, fos);
+				fos.flush();
+				
+				// Document attachment part
+				MimeBodyPart docPart = new MimeBodyPart();
+				DataSource source = new FileDataSource(tmp.getPath());
+				docPart.setDataHandler(new DataHandler(source));
+				docPart.setFileName(docName);
+				content.addBodyPart(docPart);
+			} finally {
+				IOUtils.closeQuietly(is);
+				IOUtils.closeQuietly(fos);
+			}
+		}
+        
+        m.setContent(content);		
+		log.debug("create: {}", m);
+		return m;
+	}
+	
+	/**
+	 * 
+	 */
+	private static Session getMailSession() {
+		Session mailSession = null;
+
+		try {
+			InitialContext initialContext = new InitialContext();
+			Object obj = initialContext.lookup(Config.JNDI_BASE + "mail/OpenKM");
+			mailSession = (Session) PortableRemoteObject.narrow(obj, Session.class);
+		} catch (javax.naming.NamingException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return mailSession;
+	}
+	
 	/**
 	 * Import messages
 	 * http://www.jguru.com/faq/view.jsp?EID=26898
@@ -403,7 +531,7 @@ public class MailUtils {
 						log.debug("MailFilter: {}", mf);
 						
 						if (checkRules(mail, mf.getFilterRules())) {
-							String mailPath = mf.getPath();
+							String  mailPath = mf.getPath();
 							importMail(mailPath, mf.isGrouping(), folder, msg, ma, mail);		
 						}
 					}
@@ -416,7 +544,7 @@ public class MailUtils {
 					msg.setFlag(Flags.Flag.SEEN, false);
 				}
 				
-				// Delete read mail if requested
+				// Delete readed mail if requested
 				if (ma.isMailMarkDeleted()) {
 					msg.setFlag(Flags.Flag.DELETED, true);
 				}

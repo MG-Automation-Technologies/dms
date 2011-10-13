@@ -22,10 +22,12 @@
 package com.openkm.webdav.resource;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.Map;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -59,6 +61,7 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.jcr.JCRUtils;
+import com.openkm.util.MailUtils;
 import com.openkm.webdav.JcrSessionTokenHolder;
 
 public class MailResource implements CopyableResource, DeletableResource, GetableResource,
@@ -119,7 +122,11 @@ public class MailResource implements CopyableResource, DeletableResource, Getabl
 	
 	@Override
 	public String getContentType(String accepts) {
-		return mail.getMimeType();
+		if (mail.getAttachments().isEmpty()) {
+			return mail.getMimeType();
+		} else {
+			return "message/rfc822";
+		}
 	}
 	
 	@Override
@@ -131,22 +138,27 @@ public class MailResource implements CopyableResource, DeletableResource, Getabl
 	public void sendContent(OutputStream out, Range range, Map<String, String> params, String contentType)
 			throws IOException, NotAuthorizedException, BadRequestException {
 		log.info("sendContent({}, {})", params, contentType);
-		InputStream is = null;
 		
 		try {
 			String token = JcrSessionTokenHolder.get();
 			String fixedMailPath = ResourceUtils.fixRepositoryPath(mail.getPath());
 			Mail mail = OKMMail.getInstance().getProperties(token, fixedMailPath);
-			IOUtils.write(mail.getContent(), out);
-			out.flush();
+			
+			if (mail.getAttachments().isEmpty()) {
+				IOUtils.write(mail.getContent(), out);
+			} else {
+				MimeMessage m = MailUtils.create(token, mail);
+				m.writeTo(out);
+				out.flush();
+			}
 		} catch (PathNotFoundException e) {
-			e.printStackTrace();
+			log.error("PathNotFoundException: " + e.getMessage(), e);
 		} catch (RepositoryException e) {
-			e.printStackTrace();
+			log.error("RepositoryException: " + e.getMessage(), e);
 		} catch (DatabaseException e) {
-			e.printStackTrace();
-		} finally {
-			IOUtils.closeQuietly(is);
+			log.error("DatabaseException: " + e.getMessage(), e);
+		} catch (MessagingException e) {
+			log.error("MessagingException: " + e.getMessage(), e);
 		}
 	}
 
