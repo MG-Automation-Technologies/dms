@@ -32,8 +32,10 @@ import com.bradmcevoy.common.Path;
 import com.bradmcevoy.http.Resource;
 import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
+import com.openkm.api.OKMMail;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
+import com.openkm.bean.Mail;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
@@ -54,7 +56,8 @@ public class ResourceUtils {
 		Folder fld = OKMFolder.getInstance().getProperties(token, fixedFldPath);
 		List<Folder> fldChilds = OKMFolder.getInstance().getChilds(token, fixedFldPath);
 		List<Document> docChilds = OKMDocument.getInstance().getChilds(token, fixedFldPath);
-		Resource fldResource = new FolderResource(path, fld, fldChilds, docChilds);
+		List<Mail> mailChilds = OKMMail.getInstance().getChilds(token, fixedFldPath);
+		Resource fldResource = new FolderResource(path, fld, fldChilds, docChilds, mailChilds);
 		return fldResource;
 	}
 	
@@ -67,6 +70,18 @@ public class ResourceUtils {
 		String fixedDocPath = fixRepositoryPath(docPath);
 		Document doc = OKMDocument.getInstance().getProperties(token, fixedDocPath);
 		Resource docResource = new DocumentResource(doc);
+		return docResource;
+	}
+	
+	/**
+	 * Resolve mail resource.
+	 */
+	public static Resource getMail(String mailPath) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		String token = JcrSessionTokenHolder.get();
+		String fixedMailPath = fixRepositoryPath(mailPath);
+		Mail mail = OKMMail.getInstance().getProperties(token, fixedMailPath);
+		Resource docResource = new MailResource(mail);
 		return docResource;
 	}
 	
@@ -87,6 +102,10 @@ public class ResourceUtils {
 			Resource res = getDocument(path);
 			log.info("getNode: {}", res);
 			return res;
+		} else if (OKMMail.getInstance().isValid(token, fixedPath)) {
+			Resource res = getMail(path);
+			log.info("getNode: {}", res);
+			return res;
 		}
 		
 		log.info("getNode: null");
@@ -96,8 +115,9 @@ public class ResourceUtils {
 	/**
 	 * Create HTML content.
 	 */
-	public static void createContent(OutputStream out, Path path, List<Folder> fldChilds, List<Document> docChilds) {
-		log.info("createContent({}, {}, {}, {})", new Object[] { out, path, fldChilds, docChilds });
+	public static void createContent(OutputStream out, Path path, List<Folder> fldChilds, List<Document> docChilds,
+			List<Mail> mailChilds) {
+		log.info("createContent({}, {}, {}, {}, {})", new Object[] { out, path, fldChilds, docChilds, mailChilds });
 		PrintWriter pw = new PrintWriter(out);
 		pw.println("<html>");
 		pw.println("<header>");
@@ -123,7 +143,7 @@ public class ResourceUtils {
 				Path fldPath = Path.path(fld.getPath());
 				String url = path.toPath().concat("/").concat(fldPath.getName());
 				pw.print("<tr>");
-				pw.print("<td><img src='/" + path.getFirst() + "/img/folder.png'/></td>");
+				pw.print("<td><img src='/" + path.getFirst() + "/img/webdav/folder.png'/></td>");
 				pw.print("<td><a href='" + url + "'>" + fldPath.getName() + "</a></td>");
 				pw.println("<tr>");
 			}
@@ -136,6 +156,17 @@ public class ResourceUtils {
 				pw.print("<tr>");
 				pw.print("<td><img src='/" + path.getFirst() + "/mime/" + doc.getMimeType() + "'/></td>");
 				pw.print("<td><a href='" + url + "'>" + docPath.getName() + "</a></td>");
+				pw.println("<tr>");
+			}
+		}
+		
+		if (mailChilds != null) {
+			for (Mail mail : mailChilds) {
+				Path mailPath = Path.path(mail.getPath());
+				String url = path.toPath().concat("/").concat(mailPath.getName());
+				pw.print("<tr>");
+				pw.print("<td><img src='/" + path.getFirst() + "/img/webdav/email.png'/></td>");
+				pw.print("<td><a href='" + url + "'>" + mailPath.getName() + "</a></td>");
 				pw.println("<tr>");
 			}
 		}
@@ -198,6 +229,17 @@ public class ResourceUtils {
 		}
 		
 		return doc;
+	}
+	
+	/**
+	 * Correct webdav mail path
+	 */
+	public static Mail fixResourcePath(Mail mail) {
+		if (Config.SYSTEM_WEBDAV_FIX) {
+			mail.setPath(fixResourcePath(mail.getPath()));
+		}
+		
+		return mail;
 	}
 	
 	/**
