@@ -73,6 +73,9 @@ public class RootResource implements PropFindableResource, GetableResource, Coll
 			
 			Folder okmTemplates = OKMRepository.getInstance().getTemplatesFolder(token);
 			fldChilds.add(ResourceUtils.fixResourcePath(okmTemplates));
+			
+			Folder okmMail = OKMRepository.getInstance().getMailFolderBase(token);
+			fldChilds.add(ResourceUtils.fixResourcePath(okmMail));
 		} catch (PathNotFoundException e) {
 			log.error("PathNotFoundException: " + e.getMessage());
 		} catch (Exception e) {
