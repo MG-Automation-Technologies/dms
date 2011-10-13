@@ -85,13 +85,13 @@ public class MailResource implements CopyableResource, DeletableResource, Getabl
 	
 	@Override
 	public Object authenticate(String user, String password) {
-		//log.info("authenticate({}, {})", new Object[] { user, password });
+		//log.debug("authenticate({}, {})", new Object[] { user, password });
 		return "OpenKM";
 	}
 	
 	@Override
 	public boolean authorise(Request request, Method method, Auth auth) {
-		//log.info("authorise({}, {}, {})", new Object[] { request.getAbsolutePath(), method.toString(), auth.getUser() });
+		//log.debug("authorise({}, {}, {})", new Object[] { request.getAbsolutePath(), method.toString(), auth.getUser() });
 		return true;
 	}
 	
@@ -137,7 +137,7 @@ public class MailResource implements CopyableResource, DeletableResource, Getabl
 	@Override
 	public void sendContent(OutputStream out, Range range, Map<String, String> params, String contentType)
 			throws IOException, NotAuthorizedException, BadRequestException {
-		log.info("sendContent({}, {})", params, contentType);
+		log.debug("sendContent({}, {})", params, contentType);
 		
 		try {
 			String token = JcrSessionTokenHolder.get();
@@ -164,7 +164,7 @@ public class MailResource implements CopyableResource, DeletableResource, Getabl
 
 	@Override
 	public void delete() throws NotAuthorizedException, ConflictException, BadRequestException {
-		log.info("delete()");
+		log.debug("delete()");
 		
 		try {
 			String token = JcrSessionTokenHolder.get();
@@ -183,7 +183,7 @@ public class MailResource implements CopyableResource, DeletableResource, Getabl
 	@Override
 	public void moveTo(CollectionResource newParent, String newName) throws ConflictException, NotAuthorizedException,
 			BadRequestException {
-		log.info("moveTo({}, {})", newParent, newName);
+		log.debug("moveTo({}, {})", newParent, newName);
 		
 		if (newParent instanceof FolderResource) {
 			FolderResource newFldParent = (FolderResource) newParent;
@@ -205,7 +205,7 @@ public class MailResource implements CopyableResource, DeletableResource, Getabl
 	@Override
 	public void copyTo(CollectionResource newParent, String newName) throws NotAuthorizedException,
 			BadRequestException, ConflictException {
-		log.info("copyTo({}, {})", newParent, newName);
+		log.debug("copyTo({}, {})", newParent, newName);
 		
 		if (newParent instanceof FolderResource) {
 			FolderResource newFldParent = (FolderResource) newParent;
