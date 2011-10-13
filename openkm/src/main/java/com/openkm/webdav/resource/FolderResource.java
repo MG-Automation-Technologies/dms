@@ -111,13 +111,13 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 	
 	@Override
 	public Object authenticate(String user, String password) {
-		// log.info("authenticate({}, {})", new Object[] { user, password });
+		// log.debug("authenticate({}, {})", new Object[] { user, password });
 		return ResourceFactoryImpl.REALM;
 	}
 	
 	@Override
 	public boolean authorise(Request request, Method method, Auth auth) {
-		// log.info("authorise({}, {}, {})", new Object[] {
+		// log.debug("authorise({}, {}, {})", new Object[] {
 		// request.getAbsolutePath(), method, auth });
 		return true;
 	}
@@ -144,7 +144,7 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 	
 	@Override
 	public Resource child(String childName) {
-		log.info("child({})", childName);
+		log.debug("child({})", childName);
 		
 		try {
 			return ResourceUtils.getNode(path, fld.getPath() + "/" + childName);
@@ -159,7 +159,7 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 	
 	@Override
 	public List<? extends Resource> getChildren() {
-		log.info("getChildren()");
+		log.debug("getChildren()");
 		List<Resource> resources = new ArrayList<Resource>();
 		
 		if (fldChilds != null) {
@@ -186,7 +186,7 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 	@Override
 	public Resource createNew(String newName, InputStream inputStream, Long length, String contentType)
 			throws IOException, ConflictException, NotAuthorizedException, BadRequestException {
-		log.info("createNew({}, {}, {})", new Object[] { newName, length, contentType });
+		log.debug("createNew({}, {}, {})", new Object[] { newName, length, contentType });
 		OKMDocument okmDocument = OKMDocument.getInstance();
 		Document newDoc = new Document();
 		String fixedDocPath = ResourceUtils.fixRepositoryPath(fld.getPath());
@@ -231,7 +231,7 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 	@Override
 	public CollectionResource createCollection(String newName) throws NotAuthorizedException, ConflictException,
 			BadRequestException {
-		log.info("createCollection({})", newName);
+		log.debug("createCollection({})", newName);
 		Folder newFld = new Folder();
 		String fixedFldPath = ResourceUtils.fixRepositoryPath(fld.getPath());
 		newFld.setPath(fixedFldPath + "/" + newName);
@@ -248,7 +248,7 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 	@Override
 	public void sendContent(OutputStream out, Range range, Map<String, String> params, String contentType)
 			throws IOException, NotAuthorizedException, BadRequestException {
-		log.info("sendContent({}, {})", params, contentType);
+		log.debug("sendContent({}, {})", params, contentType);
 		ResourceUtils.createContent(out, path, fldChilds, docChilds, mailChilds);
 	}
 	
@@ -269,7 +269,7 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 	
 	@Override
 	public void delete() throws NotAuthorizedException, ConflictException, BadRequestException {
-		log.info("delete()");
+		log.debug("delete()");
 		
 		try {
 			String token = JcrSessionTokenHolder.get();
@@ -283,7 +283,7 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 	@Override
 	public void moveTo(CollectionResource newParent, String newName) throws ConflictException, NotAuthorizedException,
 			BadRequestException {
-		log.info("moveTo({}, {})", newParent, newName);
+		log.debug("moveTo({}, {})", newParent, newName);
 		
 		if (newParent instanceof FolderResource) {
 			FolderResource newFldParent = (FolderResource) newParent;
@@ -305,7 +305,7 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 	@Override
 	public void copyTo(CollectionResource newParent, String newName) throws NotAuthorizedException,
 			BadRequestException, ConflictException {
-		log.info("copyTo({}, {})", newParent, newName);
+		log.debug("copyTo({}, {})", newParent, newName);
 		
 		if (newParent instanceof FolderResource) {
 			FolderResource newFldParent = (FolderResource) newParent;

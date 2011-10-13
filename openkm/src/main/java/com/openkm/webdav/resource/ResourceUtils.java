@@ -90,25 +90,25 @@ public class ResourceUtils {
 	 */
 	public static Resource getNode(Path srcPath, String path) throws PathNotFoundException, AccessDeniedException,
 			RepositoryException, DatabaseException {
-		log.info("getNode({}, {})", srcPath, path);
+		log.debug("getNode({}, {})", srcPath, path);
 		String token = JcrSessionTokenHolder.get();
 		String fixedPath = ResourceUtils.fixRepositoryPath(path);
 		
 		if (OKMFolder.getInstance().isValid(token, fixedPath)) {
 			Resource res = getFolder(srcPath, path);
-			log.info("getNode: {}", res);
+			log.debug("getNode: {}", res);
 			return res;
 		} else if (OKMDocument.getInstance().isValid(token, fixedPath)) {
 			Resource res = getDocument(path);
-			log.info("getNode: {}", res);
+			log.debug("getNode: {}", res);
 			return res;
 		} else if (OKMMail.getInstance().isValid(token, fixedPath)) {
 			Resource res = getMail(path);
-			log.info("getNode: {}", res);
+			log.debug("getNode: {}", res);
 			return res;
 		}
 		
-		log.info("getNode: null");
+		log.debug("getNode: null");
 		return null;
 	}
 	
@@ -117,7 +117,7 @@ public class ResourceUtils {
 	 */
 	public static void createContent(OutputStream out, Path path, List<Folder> fldChilds, List<Document> docChilds,
 			List<Mail> mailChilds) {
-		log.info("createContent({}, {}, {}, {}, {})", new Object[] { out, path, fldChilds, docChilds, mailChilds });
+		log.debug("createContent({}, {}, {}, {}, {})", new Object[] { out, path, fldChilds, docChilds, mailChilds });
 		PrintWriter pw = new PrintWriter(out);
 		pw.println("<html>");
 		pw.println("<header>");

@@ -99,13 +99,13 @@ public class RootResource implements PropFindableResource, GetableResource, Coll
 	
 	@Override
 	public Object authenticate(String user, String password) {
-		// log.info("authenticate({}, {})", new Object[] { user, password });
+		// log.debug("authenticate({}, {})", new Object[] { user, password });
 		return ResourceFactoryImpl.REALM;
 	}
 	
 	@Override
 	public boolean authorise(Request request, Method method, Auth auth) {
-		// log.info("authorise({}, {}, {})", new Object[] {
+		// log.debug("authorise({}, {}, {})", new Object[] {
 		// request.getAbsolutePath(), method, auth });
 		return true;
 	}
@@ -132,7 +132,7 @@ public class RootResource implements PropFindableResource, GetableResource, Coll
 	
 	@Override
 	public Resource child(String childName) {
-		log.info("child({})", childName);
+		log.debug("child({})", childName);
 		
 		try {
 			return ResourceUtils.getNode(path, Path.path(fld.getPath()).getStripFirst() + "/" + childName);
@@ -147,7 +147,7 @@ public class RootResource implements PropFindableResource, GetableResource, Coll
 	
 	@Override
 	public List<? extends Resource> getChildren() {
-		log.info("getChildren()");
+		log.debug("getChildren()");
 		List<Resource> resources = new ArrayList<Resource>();
 		
 		if (fldChilds != null) {
@@ -162,7 +162,7 @@ public class RootResource implements PropFindableResource, GetableResource, Coll
 	@Override
 	public void sendContent(OutputStream out, Range range, Map<String, String> params, String contentType)
 			throws IOException, NotAuthorizedException, BadRequestException {
-		log.info("sendContent({}, {})", params, contentType);
+		log.debug("sendContent({}, {})", params, contentType);
 		ResourceUtils.createContent(out, path, fldChilds, null, null);
 	}
 	

@@ -46,7 +46,7 @@ public class ResourceFactoryImpl implements ResourceFactory {
 	
 	@Override
 	public Resource getResource(String host, String url) {
-		log.info("getResource({}, {})", host, url);
+		log.debug("getResource({}, {})", host, url);
 		Path srcPath = Path.path(url);
 		
 		// STRIP PRECEEDING PATH
@@ -54,7 +54,7 @@ public class ResourceFactoryImpl implements ResourceFactory {
 		
 		try {
 			if (path.isRoot()) {
-				log.info("ROOT");
+				log.debug("ROOT");
 				return new RootResource(srcPath);
 			} else {
 				return ResourceUtils.getNode(srcPath, path.toPath());
