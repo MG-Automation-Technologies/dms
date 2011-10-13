@@ -59,6 +59,7 @@ public class Mail implements Serializable {
 	private String content;
 	private String mimeType;
 	private long size;
+	private Calendar created;
 	private List<Document> attachments;
 
 	public String getPath() {
@@ -173,6 +174,14 @@ public class Mail implements Serializable {
 		this.size = size;
 	}
 	
+	public Calendar getCreated() {
+		return created;
+	}
+
+	public void setCreated(Calendar created) {
+		this.created = created;
+	}
+	
 	public List<Document> getAttachments() {
 		return attachments;
 	}
@@ -195,6 +204,7 @@ public class Mail implements Serializable {
 		sb.append(", receivedDate="); sb.append(receivedDate==null?null:receivedDate.getTime());
 		sb.append(", subject="); sb.append(subject);
 		//sb.append(", content="); sb.append(content);
+		sb.append(", created="); sb.append(created==null?null:created.getTime());
 		sb.append(", mimeType="); sb.append(mimeType);
 		sb.append(", attachments="); sb.append(attachments);
 		sb.append("}");

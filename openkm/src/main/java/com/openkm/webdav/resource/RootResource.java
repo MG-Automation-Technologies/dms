@@ -160,7 +160,7 @@ public class RootResource implements PropFindableResource, GetableResource, Coll
 	public void sendContent(OutputStream out, Range range, Map<String, String> params, String contentType)
 			throws IOException, NotAuthorizedException, BadRequestException {
 		log.info("sendContent({}, {})", params, contentType);
-		ResourceUtils.createContent(out, path, fldChilds, null);
+		ResourceUtils.createContent(out, path, fldChilds, null, null);
 	}
 	
 	@Override

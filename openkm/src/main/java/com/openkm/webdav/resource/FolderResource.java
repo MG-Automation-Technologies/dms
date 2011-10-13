@@ -63,6 +63,7 @@ import com.openkm.api.OKMFolder;
 import com.openkm.api.OKMRepository;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
+import com.openkm.bean.Mail;
 import com.openkm.core.Config;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.jcr.JCRUtils;
@@ -73,19 +74,23 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 	private final Logger log = LoggerFactory.getLogger(FolderResource.class);
 	private final List<Document> docChilds;
 	private final List<Folder> fldChilds;
+	private final List<Mail> mailChilds;
 	private Folder fld;
 	private final Path path;
 	
 	public FolderResource(Folder fld) {
 		this.fldChilds = null;
 		this.docChilds = null;
+		this.mailChilds = null;
 		this.path = null;
 		this.fld = ResourceUtils.fixResourcePath(fld);
 	}
 	
-	public FolderResource(Path path, Folder fld, List<Folder> fldChilds, List<Document> docChilds) {
+	public FolderResource(Path path, Folder fld, List<Folder> fldChilds, List<Document> docChilds,
+			List<Mail> mailChilds) {
 		this.fldChilds = fldChilds;
 		this.docChilds = docChilds;
+		this.mailChilds = mailChilds;
 		this.path = path;
 		this.fld = ResourceUtils.fixResourcePath(fld);
 	}
@@ -169,6 +174,12 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 			}
 		}
 		
+		if (mailChilds != null) {
+			for (Mail mail : mailChilds) {
+				resources.add(new MailResource(mail));
+			}
+		}
+		
 		return resources;
 	}
 	
@@ -238,7 +249,7 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 	public void sendContent(OutputStream out, Range range, Map<String, String> params, String contentType)
 			throws IOException, NotAuthorizedException, BadRequestException {
 		log.info("sendContent({}, {})", params, contentType);
-		ResourceUtils.createContent(out, path, fldChilds, docChilds);
+		ResourceUtils.createContent(out, path, fldChilds, docChilds, mailChilds);
 	}
 	
 	@Override
@@ -312,15 +323,6 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 					+ newParent.getClass());
 		}
 	}
-	
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("{");
-		sb.append("fld="); sb.append(fld);
-		sb.append("}");
-		return sb.toString();
-	}
 
 	@Override
 	public LockResult lock(LockTimeout timeout, LockInfo lockInfo) throws NotAuthorizedException,
@@ -340,5 +342,14 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 	@Override
 	public LockToken getCurrentLock() {
 		return null;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append("fld="); sb.append(fld);
+		sb.append("}");
+		return sb.toString();
 	}
 }

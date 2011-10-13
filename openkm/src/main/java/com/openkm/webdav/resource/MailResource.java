@@ -53,34 +53,31 @@ import com.bradmcevoy.http.exceptions.LockedException;
 import com.bradmcevoy.http.exceptions.NotAuthorizedException;
 import com.bradmcevoy.http.exceptions.PreConditionFailedException;
 import com.bradmcevoy.http.webdav.PropPatchHandler.Fields;
-import com.openkm.api.OKMDocument;
-import com.openkm.bean.Document;
-import com.openkm.bean.Lock;
+import com.openkm.api.OKMMail;
+import com.openkm.bean.Mail;
 import com.openkm.core.DatabaseException;
-import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.jcr.JCRUtils;
 import com.openkm.webdav.JcrSessionTokenHolder;
 
-public class DocumentResource implements CopyableResource, DeletableResource, GetableResource,
+public class MailResource implements CopyableResource, DeletableResource, GetableResource,
 		MoveableResource, PropFindableResource, PropPatchableResource, LockableResource {
-	private static final Logger log = LoggerFactory.getLogger(DocumentResource.class);
-	private Document doc;
-	private LockToken lt;
+	private static final Logger log = LoggerFactory.getLogger(MailResource.class);
+	private Mail mail;
 	
-	public DocumentResource(Document doc) {
-		this.doc = ResourceUtils.fixResourcePath(doc);
+	public MailResource(Mail mail) {
+		this.mail = ResourceUtils.fixResourcePath(mail);
 	}
 	
 	@Override
 	public String getUniqueId() {
-		return doc.getUuid();
+		return mail.getUuid();
 	}
 	
 	@Override
 	public String getName() {
-		return JCRUtils.getName(doc.getPath());
+		return JCRUtils.getName(mail.getPath());
 	}
 	
 	@Override
@@ -102,12 +99,12 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 	
 	@Override
 	public Date getCreateDate() {
-		return doc.getCreated().getTime();
+		return mail.getCreated().getTime();
 	}
 	
 	@Override
 	public Date getModifiedDate() {
-		return doc.getLastModified().getTime();
+		return mail.getCreated().getTime();
 	}
 	
 	@Override
@@ -122,12 +119,12 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 	
 	@Override
 	public String getContentType(String accepts) {
-		return doc.getMimeType();
+		return mail.getMimeType();
 	}
 	
 	@Override
 	public Long getContentLength() {
-		return doc.getActualVersion().getSize();
+		return null;
 	}
 	
 	@Override
@@ -138,9 +135,9 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 		
 		try {
 			String token = JcrSessionTokenHolder.get();
-			String fixedDocPath = ResourceUtils.fixRepositoryPath(doc.getPath());
-			is = OKMDocument.getInstance().getContent(token, fixedDocPath, false);
-			IOUtils.copy(is, out);
+			String fixedMailPath = ResourceUtils.fixRepositoryPath(mail.getPath());
+			Mail mail = OKMMail.getInstance().getProperties(token, fixedMailPath);
+			IOUtils.write(mail.getContent(), out);
 			out.flush();
 		} catch (PathNotFoundException e) {
 			e.printStackTrace();
@@ -159,8 +156,8 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 		
 		try {
 			String token = JcrSessionTokenHolder.get();
-			String fixedDocPath = ResourceUtils.fixRepositoryPath(doc.getPath());
-			OKMDocument.getInstance().delete(token, fixedDocPath);
+			String fixedMailPath = ResourceUtils.fixRepositoryPath(mail.getPath());
+			OKMMail.getInstance().delete(token, fixedMailPath);
 		} catch (Exception e) {
 			throw new ConflictException(this);
 		}
@@ -182,8 +179,8 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 			
 			try {
 				String token = JcrSessionTokenHolder.get();
-				String fixedDocPath = ResourceUtils.fixRepositoryPath(doc.getPath());
-				doc = OKMDocument.getInstance().rename(token, fixedDocPath, newName);
+				String fixedMailPath = ResourceUtils.fixRepositoryPath(mail.getPath());
+				mail = OKMMail.getInstance().rename(token, fixedMailPath, newName);
 			} catch (Exception e) {
 				throw new RuntimeException("Failed to move to: " + dstPath);
 			}
@@ -204,8 +201,8 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 			
 			try {
 				String token = JcrSessionTokenHolder.get();
-				String fixedDocPath = ResourceUtils.fixRepositoryPath(doc.getPath());
-				OKMDocument.getInstance().copy(token, fixedDocPath, dstPath);
+				String fixedMailPath = ResourceUtils.fixRepositoryPath(mail.getPath());
+				OKMMail.getInstance().copy(token, fixedMailPath, dstPath);
 			} catch (Exception e) {
 				throw new RuntimeException("Failed to copy to:" + dstPath, e);
 			}
@@ -218,24 +215,12 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 	@Override
 	public LockResult lock(LockTimeout timeout, LockInfo lockInfo) throws NotAuthorizedException,
 			PreConditionFailedException, LockedException {
-		String fixedDocPath = ResourceUtils.fixRepositoryPath(doc.getPath());
-		
-		try {
-			String token = JcrSessionTokenHolder.get();	
-			Lock lock = OKMDocument.getInstance().lock(token, fixedDocPath);
-			lt = new LockToken();
-			lt.tokenId = lock.getToken();
-			return LockResult.success(lt);
-		} catch (LockException e) {
-			throw new LockedException(this);
-		} catch (Exception e) {
-			throw new RuntimeException("Failed to lock: " + fixedDocPath);
-		}
+		return null;
 	}
 
 	@Override
 	public LockResult refreshLock(String token) throws NotAuthorizedException, PreConditionFailedException {
-		return LockResult.success(lt);
+		return null;
 	}
 
 	@Override
@@ -244,14 +229,14 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 
 	@Override
 	public LockToken getCurrentLock() {
-		return lt;
+		return null;
 	}
 	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("doc="); sb.append(doc);
+		sb.append("mail="); sb.append(mail);
 		sb.append("}");
 		return sb.toString();
 	}
