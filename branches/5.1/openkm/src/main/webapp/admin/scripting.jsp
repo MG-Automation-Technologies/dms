@@ -17,7 +17,7 @@
   <link rel="stylesheet" type="text/css" href="js/codemirror/lib/codemirror.css" />
   <link rel="stylesheet" type="text/css" href="js/codemirror/mode/clike/clike.css" />
   <style type="text/css">
-    .CodeMirror { width: 550px; height: 250px; background-color: #f8f6c2; }
+    .CodeMirror { width: 600px; height: 300px; background-color: #f8f6c2; }
     .activeline { background: #f0fcff !important; }
   </style>
   <script type="text/javascript" src="js/codemirror/lib/codemirror.js"></script>
