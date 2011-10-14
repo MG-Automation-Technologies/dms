@@ -677,13 +677,20 @@ public class Config {
 				ADMIN_USER = ADMIN_USER.toLowerCase();
 			}
 			
-			UPDATE_INFO = ConfigDAO.getBoolean(PROPERTY_UPDATE_INFO, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_UPDATE_INFO, "on")));
-			values.put(PROPERTY_UPDATE_INFO, Boolean.toString(UPDATE_INFO));
-			APPLICATION_URL = ConfigDAO.getString(PROPERTY_APPLICATION_URL, "http://localhost:8080/"+ctx+"/index.jsp");
+			// Guess default application URL
+			String defaultApplicationUrl = cfg.getProperty(PROPERTY_APPLICATION_URL);
+			
+			if (defaultApplicationUrl == null || defaultApplicationUrl.isEmpty()) {
+				defaultApplicationUrl = "http://localhost:8080/" + ctx + "/index.jsp";
+			}
+			
+			APPLICATION_URL = ConfigDAO.getString(PROPERTY_APPLICATION_URL, defaultApplicationUrl);
 			APPLICATION_BASE = getBase(APPLICATION_URL); 
 			values.put(PROPERTY_APPLICATION_URL, APPLICATION_URL);
 			DEFAULT_LANG = ConfigDAO.getString(PROPERTY_DEFAULT_LANG, "");
 			values.put(PROPERTY_DEFAULT_LANG, DEFAULT_LANG);
+			UPDATE_INFO = ConfigDAO.getBoolean(PROPERTY_UPDATE_INFO, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_UPDATE_INFO, "on")));
+			values.put(PROPERTY_UPDATE_INFO, Boolean.toString(UPDATE_INFO));
 			
 			USER_ASSIGN_DOCUMENT_CREATION = ConfigDAO.getBoolean(PROPERTY_USER_ASSIGN_DOCUMENT_CREATION, true);
 			values.put(PROPERTY_USER_ASSIGN_DOCUMENT_CREATION, Boolean.toString(USER_ASSIGN_DOCUMENT_CREATION));
