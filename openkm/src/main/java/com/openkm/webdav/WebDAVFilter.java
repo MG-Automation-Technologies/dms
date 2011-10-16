@@ -79,6 +79,9 @@ public class WebDAVFilter implements Filter {
 		} catch (RepositoryException e) {
 			((HttpServletResponse) response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 		} finally {
+			response.getOutputStream().flush();
+			response.flushBuffer();
+			
 			if (session != null) {
 				JcrSessionManager.getInstance().remove(JcrSessionTokenHolder.get());
 				session.logout();
