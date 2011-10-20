@@ -876,13 +876,10 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 			
 			// Fill document by mime type
 			if (docTpl.getMimeType().equals("application/pdf")) {
-				// Fill form
 				PDFUtils.fillForm(fis, values, fos);
 			} else if (docTpl.getMimeType().equals("application/vnd.oasis.opendocument.text")) {
-				// Fill template
 				OOUtils.fillTemplate(fis, values, fos);
 			} else if (docTpl.getMimeType().equals("text/html")) {
-				//Fill template
 				TemplateUtils.replace(fileName, fis, values, fos);
 				fis.close();
 				fos.close();
@@ -891,7 +888,7 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 				fis = new FileInputStream(tmp);
 				File tmp2 = tmp;
 				tmp = File.createTempFile("okm", ".pdf");
-				DocConverter.getInstance().html2pdf(fis, tmp); // tmp has converted pdf file
+				DocConverter.getInstance().html2pdf(fis, tmp); // tmp has been converted to PDF
 				tmp2.delete(); // deleting html tmp file
 			}
 		} finally {
