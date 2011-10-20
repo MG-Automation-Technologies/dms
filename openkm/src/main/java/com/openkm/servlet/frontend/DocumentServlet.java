@@ -642,7 +642,7 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 	@Override
 	public String createFromTemplate(String tplPath, String destinationPath, List<GWTFormElement> formProperties,
 			Map<String, List<Map<String, String>>> tableProperties) throws OKMException {
-		log.debug("createFromTemplate({},{})", tplPath, destinationPath);
+		log.debug("createFromTemplate({}, {}, {})", new Object[] { tplPath, destinationPath, formProperties, tableProperties });
 		updateSessionManager();
 		File tmp = null;
 		InputStream fis = null;
@@ -750,7 +750,7 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 	@Override
 	public String updateFromTemplate(String tplPath, String destinationPath, List<GWTFormElement> formProperties,
 			Map<String, List<Map<String, String>>> tableProperties) throws OKMException {
-		log.debug("updateFromTemplate({},{})", tplPath, destinationPath);
+		log.debug("updateFromTemplate({}, {}, {}, {})", new Object[] { tplPath, destinationPath, formProperties, tableProperties });
 		updateSessionManager();
 		InputStream fis = null;
 		File tmp = null;
@@ -847,6 +847,7 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 			Map<String, List<Map<String, String>>> tableProperties) throws PathNotFoundException,
 			RepositoryException, IOException, DatabaseException, DocumentException, TemplateException,
 			DocumentTemplateException, ConversionException {
+		log.debug("tmpFromTemplate({}, {}, {})", new Object[] { docTpl, formProperties, tableProperties });
 		FileOutputStream fos = null;
 		InputStream fis = null;
 		File tmp = null;
@@ -898,6 +899,7 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 			IOUtils.closeQuietly(fos);
 		}
 		
+		log.debug("tmpFromTemplate: {}", tmp);
 		return tmp;
 	}
 	
