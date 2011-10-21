@@ -103,7 +103,7 @@ public class OKMAccessManager implements AccessManager {
 			}
 		}
 
-		log.debug("PrincipalRoles: " + principalRoles);
+		log.debug("PrincipalRoles: {}", principalRoles);
 		log.debug("init: void");
 	}
 
@@ -195,7 +195,15 @@ public class OKMAccessManager implements AccessManager {
 			access = true;
 		} else {
 			log.debug("{} Path: {}", subject.getPrincipals(), absPath);
-			NodeId nodeId = context.getHierarchyManager().resolveNodePath(absPath);
+			NodeId nodeId = null;
+			
+			// When creating a new node, the path references the node to be created.
+			// In this moment, it does not exists so need to check the parent node permissions.
+			if ((permissions & Permission.ADD_NODE) != 0) {
+				nodeId = context.getHierarchyManager().resolveNodePath(absPath.getAncestor(1));
+			} else {
+				nodeId = context.getHierarchyManager().resolveNodePath(absPath);
+			}
 			
 			if (nodeId != null) {
 				log.debug("{} This is a NODE", subject.getPrincipals());
@@ -225,9 +233,8 @@ public class OKMAccessManager implements AccessManager {
 						access = true;
 					} else {
 						log.debug("{} Node Name: {}", subject.getPrincipals(), node.getPath());
-						log.debug("{} Node Type: {}", subject.getPrincipals(), node.getPrimaryNodeType()
-								.getName());
-
+						log.debug("{} Node Type: {}", subject.getPrincipals(), node.getPrimaryNodeType().getName());
+						
 						if (node.isNodeType(Document.CONTENT_TYPE)) {
 							log.debug("{} Node is CONTENT_TYPE", subject.getPrincipals());
 							node = node.getParent();
@@ -319,7 +326,7 @@ public class OKMAccessManager implements AccessManager {
 			}
 		}
 
-		log.debug("checkAccess: "+access);
+		log.debug("checkAccess: {}", access);
 		return access;
 	}
 	
@@ -328,7 +335,7 @@ public class OKMAccessManager implements AccessManager {
 	 */
 	private boolean checkProperties(Node node, String userProperty, String roleProperty) throws 
 			ValueFormatException, RepositoryException, PathNotFoundException {
-		log.debug("checkWrite({})", node);
+		log.debug("checkProperties({})", node);
 		// Propiedad no definida en nt:versionHistory, nt:version y okm:resource
 		Value[] users = node.getProperty(userProperty).getValues();
 		boolean access = false;
@@ -357,7 +364,7 @@ public class OKMAccessManager implements AccessManager {
 			}
 		}
 
-		log.debug("checkWrite: {}", access);
+		log.debug("checkProperties: {}", access);
 		return access;
 	}
 
