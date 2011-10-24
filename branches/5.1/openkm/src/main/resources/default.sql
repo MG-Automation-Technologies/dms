@@ -1956,5 +1956,5 @@ INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('e
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'stapling.get.stapling.groups', 'Obteniendo grupos de grapado', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'stapling.deleting.stapling.group', 'Eliminando grupo de grapado', 'es-ES');
 INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'stapling.add.stapling', 'Añadiendo grapa', 'es-ES');
-INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'stapling.document.title', 'Grapar', 'es-ES')
+INSERT INTO OKM_TRANSLATION (TR_MODULE, TR_KEY, TR_TEXT, TR_LANGUAGE) VALUES ('extension', 'stapling.document.title', 'Grapar', 'es-ES');
 INSERT INTO OKM_FORUM (FRM_ID, FRM_NAME, FRM_DESCRIPTION, FRM_DATE, FRM_LAST_POST_USER, FRM_LAST_POST_DATE, FRM_NUM_TOPICS, FRM_NUM_POSTS, FRM_ACTIVE) VALUES (1, 'Documents discussions', 'Documents discussions general forum', NOW(), 'system', NOW(), 0, 0, 'T');
