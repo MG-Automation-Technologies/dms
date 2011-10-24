@@ -78,7 +78,7 @@
       <table class="results" width="80%">
         <thead>
           <tr>
-            <th>Id</th><th>Name</th><th>Mail</th><th>Roles</th><th width="25px">Active</th>
+            <th>Id</th><th>Name</th><th>Mail</th><th>Roles</th><th>Profile</th><th width="25px">Active</th>
             <th width="130px">
               <c:url value="Auth" var="urlCreate">
                 <c:param name="action" value="userCreate"/>
@@ -121,6 +121,7 @@
                   ${role.id}
                 </c:forEach>
               </td>
+              <td>${user.profile}</td>
               <td align="center">
                 <c:if test="${multInstAdmin || user.id != Config.ADMIN_USER}">
                   <c:choose>

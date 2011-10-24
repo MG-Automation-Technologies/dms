@@ -26,7 +26,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -46,6 +48,8 @@ import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.AuthDAO;
+import com.openkm.dao.ProfileDAO;
+import com.openkm.dao.bean.Profile;
 import com.openkm.dao.bean.Role;
 import com.openkm.dao.bean.User;
 import com.openkm.jcr.JCRUtils;
@@ -272,18 +276,22 @@ public class AuthServlet extends BaseServlet {
 		
 		if (roleFilter.equals("")) {
 			if (db) {
-				sc.setAttribute("users", sortRoles(AuthDAO.findAllUsers(false)));
+				List<User> users = sortRoles(AuthDAO.findAllUsers(false));
+				sc.setAttribute("users", toMapSetProfile(users));
 				sc.setAttribute("roles", AuthDAO.findAllRoles());
 			} else {
-				sc.setAttribute("users", str2user(OKMAuth.getInstance().getUsers(null)));
+				List<User> users = str2user(OKMAuth.getInstance().getUsers(null));
+				sc.setAttribute("users", toMapSetProfile(users));
 				sc.setAttribute("roles", str2role(OKMAuth.getInstance().getRoles(null)));
 			}
 		} else {
 			if (db) {
-				sc.setAttribute("users", sortRoles(AuthDAO.findUsersByRole(roleFilter, false)));
+				List<User> users = sortRoles(AuthDAO.findUsersByRole(roleFilter, false));
+				sc.setAttribute("users", toMapSetProfile(users));
 				sc.setAttribute("roles", AuthDAO.findAllRoles());
 			} else {
-				sc.setAttribute("users", str2user(OKMAuth.getInstance().getUsersByRole(null, roleFilter)));
+				List<User> users = str2user(OKMAuth.getInstance().getUsersByRole(null, roleFilter)); 
+				sc.setAttribute("users", toMapSetProfile(users));
 				sc.setAttribute("roles", str2role(OKMAuth.getInstance().getRoles(null)));
 			}
 		}
@@ -468,7 +476,7 @@ public class AuthServlet extends BaseServlet {
 			} else {
 				return 0;
 			}
-		}	
+		}
 	}
 	
 	/**
@@ -482,7 +490,7 @@ public class AuthServlet extends BaseServlet {
 			} else {
 				return 0;
 			}
-		}	
+		}
 	}
 	
 	/**
@@ -496,6 +504,26 @@ public class AuthServlet extends BaseServlet {
 			sortedRoles.addAll(user.getRoles());
 			user.setRoles(sortedRoles);
 			ret.add(user);
+		}
+		
+		return ret;
+	}
+	
+	/**
+	 * Convert to Map and set Profile 
+	 */
+	private List<Map<String, Object>> toMapSetProfile(List<User> users) throws DatabaseException {
+		List<Map<String, Object>> ret = new ArrayList<Map<String, Object>>();
+		
+		for (User user : users) {
+			Map<String, Object> usrMap = new HashMap<String, Object>();
+			Profile prf = ProfileDAO.findByUser(user.getId());
+			usrMap.put("profile", prf.getName());
+			usrMap.put("id", user.getId());
+			usrMap.put("name", user.getName());
+			usrMap.put("email", user.getEmail());
+			usrMap.put("roles", user.getRoles());
+			ret.add(usrMap);
 		}
 		
 		return ret;
