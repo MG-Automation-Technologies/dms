@@ -518,7 +518,13 @@ public class AuthServlet extends BaseServlet {
 		for (User user : users) {
 			Map<String, Object> usrMap = new HashMap<String, Object>();
 			Profile prf = ProfileDAO.findByUser(user.getId());
-			usrMap.put("profile", prf.getName());
+			
+			if (prf != null) {
+				usrMap.put("profile", prf.getName());
+			} else {
+				usrMap.put("profile", "");
+			}
+			
 			usrMap.put("id", user.getId());
 			usrMap.put("name", user.getName());
 			usrMap.put("email", user.getEmail());
