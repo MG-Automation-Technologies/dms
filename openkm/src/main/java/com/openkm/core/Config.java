@@ -107,6 +107,7 @@ public class Config {
 	public static final String PROPERTY_PRINCIPAL_LDAP_SERVER = "principal.ldap.server";
 	public static final String PROPERTY_PRINCIPAL_LDAP_SECURITY_PRINCIPAL = "principal.ldap.security.principal";
 	public static final String PROPERTY_PRINCIPAL_LDAP_SECURITY_CREDENTIALS = "principal.ldap.security.credentials";
+	public static final String PROPERTY_PRINCIPAL_LDAP_REFERRAL = "principal.ldap.referral";
 	
 	public static final String PROPERTY_PRINCIPAL_LDAP_USER_SEARCH_BASE = "principal.ldap.user.search.base";
 	public static final String PROPERTY_PRINCIPAL_LDAP_USER_SEARCH_FILTER = "principal.ldap.user.search.filter";
@@ -288,6 +289,7 @@ public class Config {
 	public static String PRINCIPAL_LDAP_SERVER; // ldap://phoenix.server:389
 	public static String PRINCIPAL_LDAP_SECURITY_PRINCIPAL; //"cn=Administrator,cn=Users,dc=openkm,dc=com"
 	public static String PRINCIPAL_LDAP_SECURITY_CREDENTIALS; // "xxxxxx"
+	public static String PRINCIPAL_LDAP_REFERRAL;
 	
 	public static String PRINCIPAL_LDAP_USER_SEARCH_BASE; // ou=people,dc=openkm,dc=com
 	public static String PRINCIPAL_LDAP_USER_SEARCH_FILTER; // (&(objectClass=posixAccount)(!(objectClass=gosaUserTemplate)))
@@ -562,6 +564,8 @@ public class Config {
 			values.put(PROPERTY_PRINCIPAL_LDAP_SECURITY_PRINCIPAL, PRINCIPAL_LDAP_SECURITY_PRINCIPAL);
 			PRINCIPAL_LDAP_SECURITY_CREDENTIALS = ConfigDAO.getString(PROPERTY_PRINCIPAL_LDAP_SECURITY_CREDENTIALS, "");
 			values.put(PROPERTY_PRINCIPAL_LDAP_SECURITY_CREDENTIALS, PRINCIPAL_LDAP_SECURITY_CREDENTIALS);
+			PRINCIPAL_LDAP_REFERRAL = ConfigDAO.getString(PROPERTY_PRINCIPAL_LDAP_REFERRAL, "");
+			values.put(PROPERTY_PRINCIPAL_LDAP_REFERRAL, PRINCIPAL_LDAP_REFERRAL);
 			
 			PRINCIPAL_LDAP_USER_SEARCH_BASE = ConfigDAO.getString(PROPERTY_PRINCIPAL_LDAP_USER_SEARCH_BASE, "");
 			values.put(PROPERTY_PRINCIPAL_LDAP_USER_SEARCH_BASE, PRINCIPAL_LDAP_USER_SEARCH_BASE);

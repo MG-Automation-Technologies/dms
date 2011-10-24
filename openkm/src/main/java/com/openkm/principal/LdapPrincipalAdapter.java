@@ -182,10 +182,16 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 				url, principal, credentials, searchBase, searchFilter, attribute } );
 		List<String> al = new ArrayList<String>();
 		Hashtable<String, String> env = new Hashtable<String, String>();
-
+		
 		env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
 		env.put(Context.SECURITY_AUTHENTICATION, "simple");
 		env.put(Context.PROVIDER_URL, url);
+		
+		// @see http://download.oracle.com/javase/jndi/tutorial/ldap/referral/jndi.html
+		// @see http://java.sun.com/products/jndi/jndi-ldap-gl.html
+		if (!"".equals(Config.PRINCIPAL_LDAP_REFERRAL)) {
+			env.put(Context.REFERRAL, Config.PRINCIPAL_LDAP_REFERRAL);
+		}
 		
 		// Optional is some cases (Max OS/X)
 		if (!principal.equals(""))
