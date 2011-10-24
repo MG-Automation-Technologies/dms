@@ -1,9 +1,11 @@
 <%@ page import="java.io.File" %>
 <%@ page import="java.util.Vector" %>
-<%@ page import="com.openkm.core.Config" %>
+<%@ page import="org.apache.commons.lang.StringEscapeUtils" %>
 <%@ page import="com.openkm.servlet.admin.BaseServlet" %>
+<%@ page import="com.openkm.core.Config" %>
 <%@ page import="com.openkm.core.HttpSessionManager" %>
 <%@ page import="com.openkm.kea.tree.KEATree" %>
+<%@ page import="com.openkm.bean.Repository"%>
 <%@ page import="com.openkm.util.FormatUtil" %>
 <%@ page import="com.openkm.util.impexp.RepositoryImporter" %>
 <%@ page import="com.openkm.util.impexp.HTMLInfoDecorator" %>
@@ -11,8 +13,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<%@page import="com.openkm.bean.Repository"%><html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="favicon.ico" />
@@ -32,7 +33,7 @@
 		out.println("Show level <select name=\"level\">");
 		
 		for (int i=1; i<6; i++) {
-			out.println("<option value=\""+i+"\" "+(String.valueOf(i).equals(strLevel)?"selected":"")+">"+i+"</option>");
+			out.println("<option value=\"" + i + "\" " + (String.valueOf(i).equals(strLevel) ? "selected" : "") + ">" + i + "</option>");
 		}
 		
 		out.println("</select>");
@@ -45,16 +46,56 @@
 		out.println("<br/>");
 		out.println("<table class=\"results\" width=\"100%\">");
 		out.println("<tr><th>Parameter</th><th>Value</th></tr>");
-		out.println("<tr class=\"odd\"><td><b>"+Config.PROPERTY_KEA_THESAURUS_SKOS_FILE+"</b></td><td>"+Config.KEA_THESAURUS_SKOS_FILE+"</td></tr>");
-		out.println("<tr class=\"even\"><td><b>"+Config.PROPERTY_KEA_THESAURUS_OWL_FILE+"</b></td><td>"+Config.KEA_THESAURUS_OWL_FILE+"</td></tr>");
-		out.println("<tr class=\"odd\"><td><b>"+Config.PROPERTY_KEA_THESAURUS_VOCABULARY_SERQL+"</b></td><td>"+Config.KEA_THESAURUS_VOCABULARY_SERQL+"</td></tr>");
-		out.println("<tr class=\"even\"><td><b>"+Config.PROPERTY_KEA_THESAURUS_BASE_URL+"</b></td><td>"+Config.KEA_THESAURUS_BASE_URL+"</td></tr>");
-		out.println("<tr class=\"odd\"><td><b>"+Config.PROPERTY_KEA_THESAURUS_TREE_ROOT+"</b></td><td>"+Config.KEA_THESAURUS_TREE_ROOT+"</td></tr>");
-		out.println("<tr class=\"even\"><td><b>"+Config.PROPERTY_KEA_THESAURUS_TREE_CHILDS+"</b></td><td>"+Config.KEA_THESAURUS_TREE_CHILDS+"</td></tr>");
-		out.println("<tr class=\"odd\"><td><b>"+Config.PROPERTY_KEA_MODEL_FILE+"</b></td><td>"+Config.KEA_MODEL_FILE+"</td></tr>");
-		out.println("<tr class=\"even\"><td><b>"+Config.PROPERTY_KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER+"</b></td><td>"+Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER+"</td></tr>");
-		out.println("<tr class=\"odd\"><td><b>"+Config.PROPERTY_KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION+"</b></td><td>"+Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION+"</td></tr>");
-		out.println("<tr class=\"even\"><td><b>"+Config.PROPERTY_KEA_STOPWORDS_FILE+"</b></td><td>"+Config.KEA_STOPWORDS_FILE+"</td></tr>");
+		
+		out.println("<tr class=\"odd\">");
+		out.println("<td><b>" + Config.PROPERTY_KEA_THESAURUS_SKOS_FILE + "</b></td>");
+		out.println("<td>" + Config.KEA_THESAURUS_SKOS_FILE + "</td>");
+		out.println("</tr>");
+		
+		out.println("<tr class=\"even\">");
+		out.println("<td><b>" + Config.PROPERTY_KEA_THESAURUS_OWL_FILE + "</b></td>");
+		out.println("<td>" + Config.KEA_THESAURUS_OWL_FILE + "</td>");
+		out.println("</tr>");
+		
+		out.println("<tr class=\"odd\">");
+		out.println("<td><b>" + Config.PROPERTY_KEA_THESAURUS_VOCABULARY_SERQL + "</b></td>");
+		out.println("<td>" + StringEscapeUtils.escapeHtml(Config.KEA_THESAURUS_VOCABULARY_SERQL) + "</td>");
+		out.println("</tr>");
+		
+		out.println("<tr class=\"even\">");
+		out.println("<td><b>" + Config.PROPERTY_KEA_THESAURUS_BASE_URL + "</b></td>");
+		out.println("<td>" + Config.KEA_THESAURUS_BASE_URL + "</td>");
+		out.println("</tr>");
+		
+		out.println("<tr class=\"odd\">");
+		out.println("<td><b>" + Config.PROPERTY_KEA_THESAURUS_TREE_ROOT + "</b></td>");
+		out.println("<td>" + StringEscapeUtils.escapeHtml(Config.KEA_THESAURUS_TREE_ROOT) + "</td>");
+		out.println("</tr>");
+		
+		out.println("<tr class=\"even\">");
+		out.println("<td><b>" + Config.PROPERTY_KEA_THESAURUS_TREE_CHILDS + "</b></td>");
+		out.println("<td>" + StringEscapeUtils.escapeHtml(Config.KEA_THESAURUS_TREE_CHILDS) + "</td>");
+		out.println("</tr>");
+		
+		out.println("<tr class=\"odd\">");
+		out.println("<td><b>" + Config.PROPERTY_KEA_MODEL_FILE + "</b></td>");
+		out.println("<td>" + Config.KEA_MODEL_FILE + "</td>");
+		out.println("</tr>");
+		
+		out.println("<tr class=\"even\">");
+		out.println("<td><b>" + Config.PROPERTY_KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER + "</b></td>");
+		out.println("<td>" + Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER + "</td>");
+		out.println("</tr>");
+		
+		out.println("<tr class=\"odd\">");
+		out.println("<td><b>" + Config.PROPERTY_KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION + "</b></td>");
+		out.println("<td>" + Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION + "</td>");
+		out.println("</tr>");
+		
+		out.println("<tr class=\"even\">");
+		out.println("<td><b>" + Config.PROPERTY_KEA_STOPWORDS_FILE + "</b></td>");
+		out.println("<td>" + Config.KEA_STOPWORDS_FILE + "</td>");
+		out.println("</tr>");
 		out.println("</table>");
 
 		try {
@@ -63,17 +104,17 @@
 					out.println("<hr/>");
 					int level = Integer.parseInt(strLevel);
 					long begin = System.currentTimeMillis();
-					KEATree.generateTree(level, "/"+Repository.THESAURUS, new Vector<String>(), out);
+					KEATree.generateTree(level, "/" + Repository.THESAURUS, new Vector<String>(), out);
 					long end = System.currentTimeMillis();
 					out.println("<hr/>");
-					out.println("<div class=\"ok\">Level '"+level+"'</div>");
+					out.println("<div class=\"ok\">Level '" + level + "'</div>");
 				}
 			} else {
 				out.println("<hr/>");
-				out.println("<div class=\"warn\">Warning: "+Config.PROPERTY_KEA_THESAURUS_OWL_FILE+" is empty</div>");
+				out.println("<div class=\"warn\">Warning: " + Config.PROPERTY_KEA_THESAURUS_OWL_FILE + " is empty</div>");
 			}
 		} catch (Exception e) {
-			out.println("<div class=\"error\">"+e.getMessage()+"<div>");
+			out.println("<div class=\"error\">" + e.getMessage() + "<div>");
 		}
 	} else {
 		out.println("<div class=\"error\"><h3>Only admin users allowed</h3></div>");
