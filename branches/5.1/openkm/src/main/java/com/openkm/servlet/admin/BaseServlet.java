@@ -30,6 +30,14 @@ public class BaseServlet extends HttpServlet  {
 	}
 	
 	/**
+	 * Dispatch errors 
+	 */
+	protected void sendError(PrintWriter out, String msg) throws ServletException, IOException {
+		out.println("<div class=\"error\">" + msg + "</div>");
+		out.flush();
+	}
+	
+	/**
 	 * Update HTTP active sessions
 	 */
 	public void updateSessionManager(HttpServletRequest request) {
