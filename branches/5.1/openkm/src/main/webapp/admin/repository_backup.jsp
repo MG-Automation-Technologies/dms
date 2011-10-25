@@ -19,6 +19,10 @@
       <h1>Repository backup</h1>
       <form action="RepositoryBackup">
         <table class="form" align="center">
+          <tr>
+            <td>Download archive</td>
+            <td><input type="checkbox" name="downZip"/></td>
+          </tr>
           <tr><td colspan="2" align="right"><input type="submit" value="Send"/></td></tr>
         </table>
       </form>

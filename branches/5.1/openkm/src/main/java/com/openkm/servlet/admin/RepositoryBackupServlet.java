@@ -24,6 +24,7 @@ package com.openkm.servlet.admin;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -32,9 +33,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.core.Config;
 import com.openkm.jcr.JCRUtils;
 import com.openkm.util.ArchiveUtils;
 import com.openkm.util.FileUtils;
+import com.openkm.util.WebUtils;
 
 /**
  * Repository backup servlet
@@ -61,23 +64,36 @@ public class RepositoryBackupServlet extends BaseServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
-		File backup = null;
 		updateSessionManager(request);
+		boolean downZip = WebUtils.getBoolean(request, "downZip");
 		
 		try {
-			backup = JCRUtils.hotBackup();
+			File backup = JCRUtils.hotBackup();
 			String archive = backup.getName() + ".zip";
 			log.info("FileName: {}", archive);
-			response.setHeader("Content-disposition", "attachment; filename=\""+archive+"\"");
-			response.setContentType("application/zip");
-			OutputStream out = response.getOutputStream();
-			ArchiveUtils.createZip(backup, "", out);
-			out.flush();
-			out.close();
+			
+			if (downZip) {
+				response.setHeader("Content-disposition", "attachment; filename=\""+archive+"\"");
+				response.setContentType("application/zip");
+				OutputStream out = response.getOutputStream();
+				ArchiveUtils.createZip(backup, "", out);
+				out.flush();
+				out.close();
+				
+				// After downloaded, delete the backup
+				FileUtils.deleteQuietly(backup);
+			} else {
+				PrintWriter out = response.getWriter();
+				response.setContentType(Config.MIME_HTML);
+				header(out, "Repository backup");
+				out.flush();
+				out.println("<h1>Repository backup</h1>");
+				out.println("Backup stored at: " + backup.getAbsolutePath());
+				out.flush();
+				out.close();
+			}			
 		} catch (Exception e) {
 			sendErrorRedirect(request,response, e);
-		} finally {
-			FileUtils.deleteQuietly(backup);
 		}
 	}
 }
