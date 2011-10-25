@@ -75,7 +75,7 @@ public class RepositoryBackupServlet extends BaseServlet {
 			out.flush();
 			out.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			sendErrorRedirect(request,response, e);
 		} finally {
 			FileUtils.deleteQuietly(backup);
 		}
