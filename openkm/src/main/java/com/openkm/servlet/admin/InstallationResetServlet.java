@@ -119,12 +119,12 @@ public class InstallationResetServlet extends BaseServlet {
 			out.flush();
 			RepositoryStartupServlet.start();
 			
-			// Finalized
-			out.println("<li>Installation reset completed!</li>");
-			out.flush();
-			
 			Config.SYSTEM_MAINTENANCE = false;
 			out.println("<li>System out of maintenance mode</li>");
+			out.flush();
+			
+			// Finalized
+			out.println("<li>Installation reset completed!</li>");
 			out.println("</ul>");
 			out.flush();
 			
