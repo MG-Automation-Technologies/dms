@@ -115,7 +115,7 @@ public class RepositoryBackupServlet extends BaseServlet {
 			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			sendErrorRedirect(request,response, e);
+			sendError(out, e.getMessage());
 		} finally {
 			if (up != null) up.cancel();
 			if (timer != null) timer.cancel();
