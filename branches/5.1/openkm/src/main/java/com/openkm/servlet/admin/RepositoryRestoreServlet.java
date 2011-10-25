@@ -34,8 +34,10 @@ import org.apache.jackrabbit.core.config.RepositoryConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.core.Config;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.servlet.RepositoryStartupServlet;
+import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
 
 /**
@@ -66,6 +68,15 @@ public class RepositoryRestoreServlet extends BaseServlet {
 		updateSessionManager(request);
 		String fsPath = WebUtils.getString(request, "fsPath");
 		PrintWriter out = response.getWriter();
+		response.setContentType(Config.MIME_HTML);
+		header(out, "Repository restore");
+		out.flush();
+		out.println("<h1>Repository restore</h1>");
+		out.println("<ul>");
+		out.flush();
+		
+		Config.SYSTEM_MAINTENANCE = true;
+		out.println("<li>System into maintenance mode</li>");
 		
 		try {
 			if (fsPath != null && !fsPath.equals("")) {
@@ -86,6 +97,18 @@ public class RepositoryRestoreServlet extends BaseServlet {
 					out.println("<li>Start repository</li>");
 					out.flush();
 					RepositoryStartupServlet.start();
+					
+					Config.SYSTEM_MAINTENANCE = false;
+					out.println("<li>System out of maintenance mode</li>");
+					out.flush();
+					
+					// Finalized
+					out.println("<li>Repository restore completed!</li>");
+					out.println("</ul>");
+					out.flush();
+					
+					// Activity log
+					UserActivity.log(request.getRemoteUser(), "ADMIN_REPOSITORY_RESTORE", null, null);
 				} else {
 					throw new IOException("Source path does not exists or not is a directory");
 				}
