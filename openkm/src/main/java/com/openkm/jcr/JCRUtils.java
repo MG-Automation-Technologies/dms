@@ -342,11 +342,18 @@ public class JCRUtils {
 	/**
 	 * Repository Hot-Backup 
 	 */
-	public static File hotBackup() throws RepositoryException, IOException {
-		log.debug("hotBackup()");
+	public static File hotBackup(String base) throws RepositoryException, IOException {
+		log.debug("hotBackup({})", base);
 		String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 		String backDirName = Config.CONTEXT + "_" + date; 
-		File backDir = new File(System.getProperty("java.io.tmpdir") + File.separator + backDirName);
+		File backDir = null;
+		
+		if (base == null || base.equals("")) {
+			backDir = new File(System.getProperty("java.io.tmpdir") + File.separator + backDirName);
+		} else {
+			backDir  = new File(base, backDirName);
+		}
+		
 		FileUtils.deleteQuietly(backDir);
 		backDir.mkdir();
 		boolean oldSystemReadonly = Config.SYSTEM_READONLY; 
