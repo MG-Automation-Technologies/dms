@@ -89,9 +89,11 @@ public class RepositoryRestoreServlet extends BaseServlet {
 				} else {
 					throw new IOException("Source path does not exists or not is a directory");
 				}
+			} else {
+				throw new IOException("Missing source path");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			sendErrorRedirect(request,response, e);
 		} finally {
 			out.close();
 		}
