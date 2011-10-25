@@ -89,6 +89,8 @@ public class RepositoryRestoreServlet extends BaseServlet {
 					RepositoryStartupServlet.stop(null);
 					
 					// Restore backup
+					out.println("<li>Restoring repository</li>");
+					out.flush();
 					RepositoryConfig source = RepositoryConfig.create(dirSource);
 					RepositoryConfig target = DirectRepositoryModule.getRepositoryConfig();
 					RepositoryCopier.copy(source, target);
