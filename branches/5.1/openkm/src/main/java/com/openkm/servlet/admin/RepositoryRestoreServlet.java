@@ -24,6 +24,8 @@ package com.openkm.servlet.admin;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -74,6 +76,8 @@ public class RepositoryRestoreServlet extends BaseServlet {
 		out.println("<h1>Repository restore</h1>");
 		out.println("<ul>");
 		out.flush();
+		Timer timer = null;
+		UpdateProgress up = null;
 		
 		Config.SYSTEM_MAINTENANCE = true;
 		out.println("<li>System into maintenance mode</li>");
@@ -91,9 +95,14 @@ public class RepositoryRestoreServlet extends BaseServlet {
 					// Restore backup
 					out.println("<li>Restoring repository</li>");
 					out.flush();
+					timer = new Timer();
+					up = new UpdateProgress(out);
+					timer.schedule(up, 1000, 5*1000);
 					RepositoryConfig source = RepositoryConfig.create(dirSource);
 					RepositoryConfig target = DirectRepositoryModule.getRepositoryConfig();
 					RepositoryCopier.copy(source, target);
+					up.cancel();
+					timer.cancel();
 					
 					// Start again
 					out.println("<li>Start repository</li>");
@@ -120,7 +129,25 @@ public class RepositoryRestoreServlet extends BaseServlet {
 		} catch (Exception e) {
 			sendErrorRedirect(request,response, e);
 		} finally {
+			if (up != null) up.cancel();
+			if (timer != null) timer.cancel();
 			out.close();
+		}
+	}
+	
+	/**
+	 * Keep alive the HTTP session
+	 */
+	class UpdateProgress extends TimerTask {
+		PrintWriter pw;
+		
+		public UpdateProgress(PrintWriter pw) {
+			this.pw = pw;
+		}
+		
+		public void run() {
+			pw.print(".");
+			pw.flush();
 		}
 	}
 }
