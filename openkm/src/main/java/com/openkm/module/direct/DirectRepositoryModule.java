@@ -93,21 +93,12 @@ public class DirectRepositoryModule implements RepositoryModule {
 	 */
 	public synchronized static javax.jcr.Repository getRepository() throws javax.jcr.RepositoryException {
 		log.debug("getRepository()");
-		String repConfig = Config.REPOSITORY_CONFIG;
-		String repHome = null;
 		WorkspaceConfig wc = null;
 		
 		if (repository == null) {
-			// Allow absolute repository path
-			if ((new File(Config.REPOSITORY_HOME)).isAbsolute()) {
-				repHome = Config.REPOSITORY_HOME;
-			} else {
-				repHome = Config.HOME_DIR + File.separator + Config.REPOSITORY_HOME;
-			}
-			
 			// Repository configuration
 			try {
-				RepositoryConfig config = RepositoryConfig.create(repConfig, repHome);
+				RepositoryConfig config = getRepositoryConfig();
 				wc = config.getWorkspaceConfig(config.getDefaultWorkspaceName());
 				repository = RepositoryImpl.create(config);
 			} catch (ConfigurationException e) {
@@ -138,6 +129,23 @@ public class DirectRepositoryModule implements RepositoryModule {
 
 		log.debug("getRepository: " + repository);
 		return repository;
+	}
+	
+	/**
+	 * Obtain repository configuration
+	 */
+	public static RepositoryConfig getRepositoryConfig() throws ConfigurationException {
+		String repConfig = Config.REPOSITORY_CONFIG;
+		String repHome = null;
+		
+		// Allow absolute repository path
+		if ((new File(Config.REPOSITORY_HOME)).isAbsolute()) {
+			repHome = Config.REPOSITORY_HOME;
+		} else {
+			repHome = Config.HOME_DIR + File.separator + Config.REPOSITORY_HOME;
+		}
+		
+		return RepositoryConfig.create(repConfig, repHome);
 	}
 	
 	/**
