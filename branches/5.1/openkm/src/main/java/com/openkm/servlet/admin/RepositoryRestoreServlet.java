@@ -127,6 +127,7 @@ public class RepositoryRestoreServlet extends BaseServlet {
 				throw new IOException("Missing source path");
 			}
 		} catch (Exception e) {
+			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} finally {
 			if (up != null) up.cancel();
