@@ -79,20 +79,23 @@ public class RepositoryRestoreServlet extends BaseServlet {
 		Timer timer = null;
 		UpdateProgress up = null;
 		
-		Config.SYSTEM_MAINTENANCE = true;
-		out.println("<li>System into maintenance mode</li>");
-		
 		try {
 			if (fsPath != null && !fsPath.equals("")) {
 				File dirSource = new File(fsPath);
 				
 				if (dirSource.exists() && dirSource.canRead() && dirSource.isDirectory()) {
+					Config.SYSTEM_MAINTENANCE = true;
+					log.info("System into maintenance mode");
+					out.println("<li>System into maintenance mode</li>");
+					
 					// Stop repository
+					log.info("Stop repository");
 					out.println("<li>Stop repository</li>");
 					out.flush();
 					RepositoryStartupServlet.stop(null);
 					
 					// Restore backup
+					log.info("Restoring repository");
 					out.println("<li>Restoring repository</li>");
 					out.flush();
 					timer = new Timer();
@@ -105,15 +108,18 @@ public class RepositoryRestoreServlet extends BaseServlet {
 					timer.cancel();
 					
 					// Start again
+					log.info("Start repository");
 					out.println("<li>Start repository</li>");
 					out.flush();
 					RepositoryStartupServlet.start();
 					
 					Config.SYSTEM_MAINTENANCE = false;
+					log.info("System out of maintenance mode");
 					out.println("<li>System out of maintenance mode</li>");
 					out.flush();
 					
 					// Finalized
+					log.info("Repository restore completed!");
 					out.println("<li>Repository restore completed!</li>");
 					out.println("</ul>");
 					out.flush();
