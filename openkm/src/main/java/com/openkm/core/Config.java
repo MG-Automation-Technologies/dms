@@ -64,7 +64,7 @@ public class Config {
 	public static final String OPENKM_CONFIG = "OpenKM.cfg";
 	public static final String NODE_DEFINITIONS = "CustomNodes.cnd";
 	public static String CONTEXT;
-	public static String INSTANCE;
+	public static String INSTANCE_HOME;
 	public static String INSTANCE_CHROOT_PATH;
 	public static String JBPM_CONFIG;
 	public static String PROPERTY_GROUPS_XML;
@@ -439,7 +439,7 @@ public class Config {
 	 */
 	public static void load(String ctx) {
 		Properties config = new Properties();
-		String configFile = HOME_DIR+"/"+OPENKM_CONFIG;
+		String configFile = HOME_DIR + "/" + OPENKM_CONFIG;
 		CONTEXT = ctx;
 		
 		// Read config
@@ -467,31 +467,31 @@ public class Config {
 			fis.close();
 			
 			if (SYSTEM_MULTIPLE_INSTANCES) {
-				INSTANCE = HOME_DIR + File.separator + "instances" + File.separator + CONTEXT;
-				values.put("instance", INSTANCE);
-				INSTANCE_CHROOT_PATH = INSTANCE + File.separator + "root" + File.separator;
+				INSTANCE_HOME = HOME_DIR + File.separator + "instances" + File.separator + CONTEXT;
+				values.put("instance.home", INSTANCE_HOME);
+				INSTANCE_CHROOT_PATH = INSTANCE_HOME + File.separator + "root" + File.separator;
 				values.put("instance.chroot.path", INSTANCE_CHROOT_PATH);
 			} else {
-				INSTANCE = HOME_DIR;
-				values.put("instance", INSTANCE);
+				INSTANCE_HOME = HOME_DIR;
+				values.put("instance.home", INSTANCE_HOME);
 				INSTANCE_CHROOT_PATH = "";
 				values.put("instance.chroot.path", INSTANCE_CHROOT_PATH);
 			}
 			
-			REPOSITORY_CONFIG = INSTANCE + File.separator + "repository.xml";
+			REPOSITORY_CONFIG = INSTANCE_HOME + File.separator + "repository.xml";
 			values.put(PROPERTY_REPOSITORY_CONFIG, REPOSITORY_CONFIG);
-			REPOSITORY_HOME = INSTANCE + File.separator + "repository";
+			REPOSITORY_HOME = INSTANCE_HOME + File.separator + "repository";
 			values.put(PROPERTY_REPOSITORY_HOME, REPOSITORY_HOME);
 			
-			CACHE_HOME = INSTANCE + File.separator + "cache";
+			CACHE_HOME = INSTANCE_HOME + File.separator + "cache";
 			values.put(PROPERTY_CACHE_HOME, CACHE_HOME);
 			
-			JBPM_CONFIG = INSTANCE + File.separator + "jbpm.xml";
+			JBPM_CONFIG = INSTANCE_HOME + File.separator + "jbpm.xml";
 			values.put("jbpm.config", JBPM_CONFIG);
 			
-			PROPERTY_GROUPS_XML = INSTANCE + File.separator + "PropertyGroups.xml";
+			PROPERTY_GROUPS_XML = INSTANCE_HOME + File.separator + "PropertyGroups.xml";
 			values.put("property.groups.xml", PROPERTY_GROUPS_XML);
-			PROPERTY_GROUPS_CND = INSTANCE + File.separator + "PropertyGroups.cnd";
+			PROPERTY_GROUPS_CND = INSTANCE_HOME + File.separator + "PropertyGroups.cnd";
 			values.put("property.groups.cnd", PROPERTY_GROUPS_CND);
 			
 			// Load or reload database configuration
@@ -516,9 +516,9 @@ public class Config {
 			EXPERIMENTAL_TEXT_EXTRACTION = ConfigDAO.getBoolean(PROPERTY_EXPERIMENTAL_TEXT_EXTRACTION, EXPERIMENTAL_TEXT_EXTRACTION);
 			values.put(PROPERTY_EXPERIMENTAL_TEXT_EXTRACTION, Boolean.toString(EXPERIMENTAL_TEXT_EXTRACTION));
 			
-			REPOSITORY_CONFIG = ConfigDAO.getString(PROPERTY_REPOSITORY_CONFIG, REPOSITORY_CONFIG);
+			REPOSITORY_CONFIG = ConfigDAO.getString(PROPERTY_REPOSITORY_CONFIG, cfg.getProperty(PROPERTY_REPOSITORY_CONFIG, REPOSITORY_CONFIG));
 			values.put(PROPERTY_REPOSITORY_CONFIG, REPOSITORY_CONFIG);
-			REPOSITORY_HOME = ConfigDAO.getString(PROPERTY_REPOSITORY_HOME, REPOSITORY_HOME);
+			REPOSITORY_HOME = ConfigDAO.getString(PROPERTY_REPOSITORY_HOME, cfg.getProperty(PROPERTY_REPOSITORY_HOME, REPOSITORY_HOME));
 			values.put(PROPERTY_REPOSITORY_HOME, REPOSITORY_HOME);
 			
 			CACHE_HOME = ConfigDAO.getString(PROPERTY_CACHE_HOME, CACHE_HOME);
