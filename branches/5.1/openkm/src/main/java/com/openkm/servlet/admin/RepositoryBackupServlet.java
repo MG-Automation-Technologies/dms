@@ -81,10 +81,12 @@ public class RepositoryBackupServlet extends BaseServlet {
 				File dirSource = new File(fsPath);
 				
 				if (dirSource.exists() && dirSource.canRead() && dirSource.isDirectory()) {
+					log.info("System into maintenance mode");
 					out.println("<li>System into maintenance mode</li>");
 					out.flush();
 					
 					// Repository backup
+					log.info("Backuping repository");
 					out.println("<li>Backuping repository</li>");
 					out.flush();
 					timer = new Timer();
@@ -94,10 +96,12 @@ public class RepositoryBackupServlet extends BaseServlet {
 					up.cancel();
 					timer.cancel();
 					
+					log.info("System out of maintenance mode");
 					out.println("<li>System out of maintenance mode</li>");
 					out.flush();
 					
 					// Finalized
+					log.info("Repository backup completed!");
 					out.println("<li>Repository backup completed!</li>");
 					out.println("</ul>");
 					out.flush();
