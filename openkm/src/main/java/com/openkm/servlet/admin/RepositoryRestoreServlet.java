@@ -98,6 +98,7 @@ public class RepositoryRestoreServlet extends BaseServlet {
 					log.info("Restoring repository");
 					out.println("<li>Restoring repository</li>");
 					out.flush();
+					
 					timer = new Timer();
 					up = new UpdateProgress(out);
 					timer.schedule(up, 1000, 5*1000);
@@ -111,7 +112,13 @@ public class RepositoryRestoreServlet extends BaseServlet {
 					log.info("Start repository");
 					out.println("<li>Start repository</li>");
 					out.flush();
+					
+					timer = new Timer();
+					up = new UpdateProgress(out);
+					timer.schedule(up, 1000, 5*1000);
 					RepositoryStartupServlet.start();
+					up.cancel();
+					timer.cancel();
 					
 					Config.SYSTEM_MAINTENANCE = false;
 					log.info("System out of maintenance mode");
