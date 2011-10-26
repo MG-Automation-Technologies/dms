@@ -139,8 +139,16 @@ public class RepositoryBackupServlet extends BaseServlet {
 		}
 		
 		public void run() {
-			pw.print(".");
-			if (cont++ % 200 == 0) pw.println("<br/>");
+			if (cont % 2 == 0) {
+				pw.print(".");
+			} else {
+				pw.print("o");
+			}
+			
+			if (cont++ % 200 == 0) {
+				pw.println("<br/>");
+			}
+			
 			pw.flush();
 		}
 	}
