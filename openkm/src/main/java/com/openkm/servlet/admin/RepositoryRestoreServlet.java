@@ -147,6 +147,7 @@ public class RepositoryRestoreServlet extends BaseServlet {
 	 */
 	class UpdateProgress extends TimerTask {
 		PrintWriter pw;
+		int cont = 0;
 		
 		public UpdateProgress(PrintWriter pw) {
 			this.pw = pw;
@@ -154,6 +155,7 @@ public class RepositoryRestoreServlet extends BaseServlet {
 		
 		public void run() {
 			pw.print(".");
+			if (cont++ % 200 == 0) pw.println("<br/>");
 			pw.flush();
 		}
 	}
