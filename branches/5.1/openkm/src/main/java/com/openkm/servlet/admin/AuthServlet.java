@@ -528,6 +528,7 @@ public class AuthServlet extends BaseServlet {
 			usrMap.put("id", user.getId());
 			usrMap.put("name", user.getName());
 			usrMap.put("email", user.getEmail());
+			usrMap.put("active", user.isActive());
 			usrMap.put("roles", user.getRoles());
 			ret.add(usrMap);
 		}
