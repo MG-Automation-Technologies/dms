@@ -404,7 +404,7 @@ public class JCRUtils {
 		if (obj instanceof javax.jcr.LoginException) {
 			throw (javax.jcr.LoginException) obj;
 		} else if (obj instanceof javax.jcr.RepositoryException) {
-			throw (javax.jcr.LoginException) obj;
+			throw (javax.jcr.RepositoryException) obj;
 		} else if (obj instanceof javax.jcr.Session) {
 			Session session = (javax.jcr.Session) obj;
 			log.debug("#{} - {} Create session {} from {}", new Object[] { ++sessionCreationCount, ++activeSessions, session, StackTraceUtils.whoCalledMe() });
