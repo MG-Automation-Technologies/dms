@@ -195,15 +195,7 @@ public class OKMAccessManager implements AccessManager {
 			access = true;
 		} else {
 			log.debug("{} Path: {}", subject.getPrincipals(), absPath);
-			NodeId nodeId = null;
-			
-			// When creating a new node, the path references the node to be created.
-			// In this moment, it does not exists so need to check the parent node permissions.
-			if ((permissions & Permission.ADD_NODE) != 0) {
-				nodeId = context.getHierarchyManager().resolveNodePath(absPath.getAncestor(1));
-			} else {
-				nodeId = context.getHierarchyManager().resolveNodePath(absPath);
-			}
+			NodeId nodeId = context.getHierarchyManager().resolveNodePath(absPath);
 			
 			if (nodeId != null) {
 				log.debug("{} This is a NODE", subject.getPrincipals());
@@ -226,102 +218,109 @@ public class OKMAccessManager implements AccessManager {
 				// Root node has full access
 				access = true;
 			} else {
+				Node node = null;
+				
 				try {
-					Node node = ((SessionImpl) systemSession).getNodeById(nodeId);
-
-					if (node == null) {
-						access = true;
+					node = ((SessionImpl) systemSession).getNodeById(nodeId);
+				} catch (ItemNotFoundException e) {
+					// When creating a new node, the path references the node to be created.
+					// In this moment, it does not exists so need to check the parent node permissions.
+					if ((permissions & Permission.ADD_NODE) != 0) {
+						nodeId = context.getHierarchyManager().resolveNodePath(absPath.getAncestor(1));
+						node = ((SessionImpl) systemSession).getNodeById(nodeId);
 					} else {
-						log.debug("{} Node Name: {}", subject.getPrincipals(), node.getPath());
-						log.debug("{} Node Type: {}", subject.getPrincipals(), node.getPrimaryNodeType().getName());
+						access = true;
+					}
+				}
+				
+				if (node == null) {
+					access = true;
+				} else {
+					log.debug("{} Node Name: {}", subject.getPrincipals(), node.getPath());
+					log.debug("{} Node Type: {}", subject.getPrincipals(), node.getPrimaryNodeType().getName());
 						
-						if (node.isNodeType(Document.CONTENT_TYPE)) {
-							log.debug("{} Node is CONTENT_TYPE", subject.getPrincipals());
-							node = node.getParent();
-							log.debug("{} Real -> {}", subject.getPrincipals(), node.getPath());
-						} else if (node.isNodeType(Note.LIST_TYPE)) {
-							log.debug("{} Node is NOTE_LIST_TYPE", subject.getPrincipals());
-							node = node.getParent();
-							log.debug("{} Real -> {}", subject.getPrincipals(), node.getPath());
-						} else if (node.isNodeType(Note.TYPE)) {
-							log.debug("{} Node is NOTE_TYPE", subject.getPrincipals());
-							node = node.getParent().getParent();
-							log.debug("{} Real -> {}", subject.getPrincipals(), node.getPath());
-						} else if (node.isNodeType("nt:frozenNode")) {
-							log.debug("{} Node is FROZEN_NODE", subject.getPrincipals());
-							String realNodeId = node.getProperty("jcr:frozenUuid").getString();
-							node = systemSession.getNodeByUUID(realNodeId).getParent();
-							log.debug("{} Real -> {}", subject.getPrincipals(), node.getPath());
-						} else if (node.isNodeType("nt:version")) {
-							log.debug("{} Node is VERSION", subject.getPrincipals());
-							Node frozenNode = node.getNode("jcr:frozenNode");
-							log.debug("{} Frozen node -> {}", subject.getPrincipals(), frozenNode.getPath());
-							String realNodeId = frozenNode.getProperty("jcr:frozenUuid").getString();
-							node = systemSession.getNodeByUUID(realNodeId).getParent();
-							log.debug("{} Real -> {}", subject.getPrincipals(), node.getPath());
-						} else if (node.isNodeType("nt:versionHistory")) {
-							log.debug("{} Node is VERSION_HISTORY", subject.getPrincipals());
-							String realNodeId = node.getProperty("jcr:versionableUuid").getString();
-							node = systemSession.getNodeByUUID(realNodeId).getParent();
-							log.debug("{} Real -> {}", subject.getPrincipals(), node.getPath());
+					if (node.isNodeType(Document.CONTENT_TYPE)) {
+						log.debug("{} Node is CONTENT_TYPE", subject.getPrincipals());
+						node = node.getParent();
+						log.debug("{} Real -> {}", subject.getPrincipals(), node.getPath());
+					} else if (node.isNodeType(Note.LIST_TYPE)) {
+						log.debug("{} Node is NOTE_LIST_TYPE", subject.getPrincipals());
+						node = node.getParent();
+						log.debug("{} Real -> {}", subject.getPrincipals(), node.getPath());
+					} else if (node.isNodeType(Note.TYPE)) {
+						log.debug("{} Node is NOTE_TYPE", subject.getPrincipals());
+						node = node.getParent().getParent();
+						log.debug("{} Real -> {}", subject.getPrincipals(), node.getPath());
+					} else if (node.isNodeType("nt:frozenNode")) {
+						log.debug("{} Node is FROZEN_NODE", subject.getPrincipals());
+						String realNodeId = node.getProperty("jcr:frozenUuid").getString();
+						node = systemSession.getNodeByUUID(realNodeId).getParent();
+						log.debug("{} Real -> {}", subject.getPrincipals(), node.getPath());
+					} else if (node.isNodeType("nt:version")) {
+						log.debug("{} Node is VERSION", subject.getPrincipals());
+						Node frozenNode = node.getNode("jcr:frozenNode");
+						log.debug("{} Frozen node -> {}", subject.getPrincipals(), frozenNode.getPath());
+						String realNodeId = frozenNode.getProperty("jcr:frozenUuid").getString();
+						node = systemSession.getNodeByUUID(realNodeId).getParent();
+						log.debug("{} Real -> {}", subject.getPrincipals(), node.getPath());
+					} else if (node.isNodeType("nt:versionHistory")) {
+						log.debug("{} Node is VERSION_HISTORY", subject.getPrincipals());
+						String realNodeId = node.getProperty("jcr:versionableUuid").getString();
+						node = systemSession.getNodeByUUID(realNodeId).getParent();
+						log.debug("{} Real -> {}", subject.getPrincipals(), node.getPath());
+					}
+					
+					if ((permissions & Permission.READ) != 0) {
+						// Check for READ permissions
+						try {
+							access = checkProperties(node, 
+									com.openkm.bean.Permission.USERS_READ,
+									com.openkm.bean.Permission.ROLES_READ);
+						} catch (PathNotFoundException e) {
+							log.warn("{} PathNotFoundException({}) in {}", new Object[] {
+									subject.getPrincipals(), e.getMessage(),
+									node.getPrimaryNodeType().getName() });
+							access = true;
 						}
-
-						if ((permissions & Permission.READ) != 0) {
-							// Check for READ permissions
-							try {
-								access = checkProperties(node, 
-										com.openkm.bean.Permission.USERS_READ,
-										com.openkm.bean.Permission.ROLES_READ);
-							} catch (PathNotFoundException e) {
-								log.warn("{} PathNotFoundException({}) in {}", new Object[] {
-										subject.getPrincipals(), e.getMessage(),
-										node.getPrimaryNodeType().getName() });
-								access = true;
-							}
-						} else if ((permissions & Permission.ADD_NODE) != 0 || 
-								(permissions & Permission.SET_PROPERTY) != 0) {
-							// Check for WRITE permissions
-							try {
-								access = checkProperties(node, 
-										com.openkm.bean.Permission.USERS_WRITE,
-										com.openkm.bean.Permission.ROLES_WRITE);
-							} catch (PathNotFoundException e) {
-								log.debug("{} PropertyNotFoundException({}) in {}", new Object[] {
-										subject.getPrincipals(), e.getMessage(),
-										node.getPrimaryNodeType().getName() });
-								access = true;
-							}
-						} else if ((permissions & Permission.REMOVE_NODE) != 0 ||
-								(permissions & Permission.REMOVE_PROPERTY) != 0) {
-							// Check for DELETE permissions
-							try {
-								access = checkProperties(node, 
-										com.openkm.bean.Permission.USERS_DELETE,
-										com.openkm.bean.Permission.ROLES_DELETE);
-							} catch (PathNotFoundException e) {
-								log.debug("{} PropertyNotFoundException({}) in {}", new Object[] {
-										subject.getPrincipals(), e.getMessage(),
-										node.getPrimaryNodeType().getName() });
-								access = true;
-							}
-						} else if ((permissions & Permission.MODIFY_AC) != 0) {
-							// Check for PERMISSION permissions
-							try {
-								access = checkProperties(node, 
-										com.openkm.bean.Permission.USERS_SECURITY,
-										com.openkm.bean.Permission.ROLES_SECURITY);
-							} catch (PathNotFoundException e) {
-								log.debug("{} PropertyNotFoundException({}) in {}", new Object[] {
-										subject.getPrincipals(), e.getMessage(),
-										node.getPrimaryNodeType().getName() });
-								access = true;
-							}
+					} else if ((permissions & Permission.ADD_NODE) != 0 || 
+							(permissions & Permission.SET_PROPERTY) != 0) {
+						// Check for WRITE permissions
+						try {
+							access = checkProperties(node, 
+									com.openkm.bean.Permission.USERS_WRITE,
+									com.openkm.bean.Permission.ROLES_WRITE);
+						} catch (PathNotFoundException e) {
+							log.debug("{} PropertyNotFoundException({}) in {}", new Object[] {
+									subject.getPrincipals(), e.getMessage(),
+									node.getPrimaryNodeType().getName() });
+							access = true;
+						}
+					} else if ((permissions & Permission.REMOVE_NODE) != 0 ||
+							(permissions & Permission.REMOVE_PROPERTY) != 0) {
+						// Check for DELETE permissions
+						try {
+							access = checkProperties(node, 
+									com.openkm.bean.Permission.USERS_DELETE,
+									com.openkm.bean.Permission.ROLES_DELETE);
+						} catch (PathNotFoundException e) {
+							log.debug("{} PropertyNotFoundException({}) in {}", new Object[] {
+									subject.getPrincipals(), e.getMessage(),
+									node.getPrimaryNodeType().getName() });
+							access = true;
+						}
+					} else if ((permissions & Permission.MODIFY_AC) != 0) {
+						// Check for PERMISSION permissions
+						try {
+							access = checkProperties(node, 
+									com.openkm.bean.Permission.USERS_SECURITY,
+									com.openkm.bean.Permission.ROLES_SECURITY);
+						} catch (PathNotFoundException e) {
+							log.debug("{} PropertyNotFoundException({}) in {}", new Object[] {
+									subject.getPrincipals(), e.getMessage(),
+									node.getPrimaryNodeType().getName() });
+							access = true;
 						}
 					}
-				} catch (ItemNotFoundException e) {
-					log.debug("{} systemSession.getNodeById() > ItemNotFoundException: {}", subject
-							.getPrincipals(), e.getMessage());
-					access = true;
 				}
 			}
 		}
