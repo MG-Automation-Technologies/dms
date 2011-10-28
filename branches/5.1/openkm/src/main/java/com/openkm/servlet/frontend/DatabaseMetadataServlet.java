@@ -94,12 +94,31 @@ public class DatabaseMetadataServlet extends OKMRemoteServiceServlet implements 
 	}
 
 	@Override
-	public void createValue(Map<String, String> map) throws OKMException {
+	public Double createValue(Map<String, String> map) throws OKMException {
 		log.debug("createValue({})", map);
 		updateSessionManager();
 		
 		try {
-			DatabaseMetadataDAO.createValue(DatabaseMetadataUtils.getDatabaseMetadataValueByMap(map));
+			return new Double(DatabaseMetadataDAO.createValue(DatabaseMetadataUtils.getDatabaseMetadataValueByMap(map)));
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_Database), e.getMessage());
+		} catch (IllegalAccessException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_IllegalAccess), e.getMessage());
+		} catch (InvocationTargetException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_InvocationTarget), e.getMessage());
+		}
+	}
+	
+	@Override
+	public void deleteValue(Map<String, String> map) throws OKMException {
+		log.debug("deleteValue({})", map);
+		updateSessionManager();
+		
+		try {
+			DatabaseMetadataDAO.deleteValue(DatabaseMetadataUtils.getDatabaseMetadataValueByMap(map).getId().intValue());
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_Database), e.getMessage());
