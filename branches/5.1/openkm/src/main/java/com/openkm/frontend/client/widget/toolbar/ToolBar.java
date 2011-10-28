@@ -1,5 +1,5 @@
 /**
-*  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -2691,6 +2691,15 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public ToolBarOption getToolBarOption() {
 		return toolBarOption;
+	}
+	
+	/**
+	 * setToolBarOption
+	 * 
+	 * @param toolBarOption
+	 */
+	public void setToolBarOption(ToolBarOption toolBarOption) {
+		this.toolBarOption = toolBarOption;
 	}
 	
 	/**
