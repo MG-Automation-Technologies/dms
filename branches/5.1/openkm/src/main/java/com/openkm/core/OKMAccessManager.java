@@ -227,7 +227,18 @@ public class OKMAccessManager implements AccessManager {
 					// In this moment, it does not exists so need to check the parent node permissions.
 					if ((permissions & Permission.ADD_NODE) != 0) {
 						nodeId = context.getHierarchyManager().resolveNodePath(absPath.getAncestor(1));
-						node = ((SessionImpl) systemSession).getNodeById(nodeId);
+						
+						try {
+							node = ((SessionImpl) systemSession).getNodeById(nodeId);
+						} catch (ItemNotFoundException e2) {
+							//log.info("Nodo: {}", absPath);
+							//log.info("Ancestor: {}", absPath.getAncestor(1));
+							//Element elt = absPath.getNameElement();
+							//Name eltName = elt.getName();
+							//if ("content".equals(eltName.getLocalName()) && "http://www.openkm.org/1.0".equals(eltName.getNamespaceURI())) {
+							//}
+							access = true;
+						}
 					} else {
 						access = true;
 					}
