@@ -57,10 +57,12 @@ public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatServi
 	private static final int ACTION_GET_USERS_IN_MESSAGE_ROOM	 	= 12;
 	
 	private static List<String> usersLogged = new ArrayList<String>();
-	private static Map<String, List<String>> usersRooms= new HashMap<String, List<String>>(); // user is the key
-	private static Map<String, List<String>> pendingUsersRooms= new HashMap<String, List<String>>(); // user is the key
-	private static Map<String, HashMap<String,List<String>>> msgUsersRooms= new HashMap<String, HashMap<String,List<String>>>(); // room is the key
-															// user is the subkey, messages are copied to each user
+	// user is the key
+	private static Map<String, List<String>> usersRooms= new HashMap<String, List<String>>();
+	// user is the key
+	private static Map<String, List<String>> pendingUsersRooms= new HashMap<String, List<String>>();
+	// room is the key, user is the subkey, messages are copied to each user
+	private static Map<String, HashMap<String,List<String>>> msgUsersRooms = new HashMap<String, HashMap<String,List<String>>>();
 	
     @Override
     public void init(final ServletConfig config) throws ServletException {
@@ -87,6 +89,7 @@ public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatServi
     	updateSessionManager();
     	String room = UUID.randomUUID().toString(); // Used to unique identifying room
     	String actualUser = getThreadLocalRequest().getRemoteUser();
+    	
     	// Add users to rooms
     	usersRoomAction(room, user, ACTION_ADD_ROOM_TO_USER);
     	pendingRoomAction(room, user, ACTION_ADD_PENDING_ROOM_TO_USER);
@@ -109,6 +112,7 @@ public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatServi
     	do  {
     		pendingMessages = messageUserRoomAction(room, user, "", ACTION_GET_PENDING_USER_ROOM_MESSAGE); 
 			countCycle++;
+			
     		try {
 				Thread.sleep(DELAY);
 			} catch (InterruptedException e) {
@@ -131,6 +135,7 @@ public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatServi
     	do  {
     		pendingRooms = pendingRoomAction("", user, ACTION_GET_PENDING_USER_ROOM); 
 			countCycle++;
+			
     		try {
 				Thread.sleep(DELAY);
 			} catch (InterruptedException e) {
@@ -196,13 +201,17 @@ public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatServi
     			if (usersLogged.contains(user)) {
     	    		usersLogged.remove(user);
     	    	}
+    			
     	    	if (pendingUsersRooms.containsKey(user)) {
     	    		pendingUsersRooms.remove(user);
     	    	}
+    	    	
     	    	if (usersRooms.containsKey(user)) {
     	    		List<String> rooms = usersRooms.get(user);
+    	    		
     	    		for (Iterator<String> it = rooms.iterator(); it.hasNext();) {
     	    			String room = it.next();
+    	    			
     	    			if (msgUsersRooms.containsKey(room)) {
     	    				Map<String, List<String>> roomMessages = msgUsersRooms.get(room);
     	    				if (roomMessages.containsKey(user)) {
@@ -211,6 +220,7 @@ public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatServi
     	    			}
     	    		}
     	    	}
+    	    	
     			break;
     	}
     }
@@ -233,6 +243,7 @@ public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatServi
     	    			userRoomList.add(room);
     	    		}
     	    	}
+    			
     			break;
     		
     		case ACTION_REMOVE_USER_ROOM:
@@ -242,6 +253,7 @@ public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatServi
     	    			userRoomList.remove(room);
     	    		}
     	    	}
+    	    	
     			break;
     	}
     }
@@ -264,6 +276,7 @@ public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatServi
     	    			userPendingRoomList.add(room);
     	    		}
     	    	}
+    			
     			return new ArrayList<String>();
     		
     		case ACTION_GET_PENDING_USER_ROOM:
@@ -298,22 +311,27 @@ public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatServi
     	   
     		case ACTION_ADD_USER_MESSAGE_TO_ROOM:
     			String message =  user + ": " + msg;
+    			
     	    	if (msgUsersRooms.containsKey(room)) {
     	    		Map<String, List<String>> roomMap = msgUsersRooms.get(room);
+    	    		
     	    		for (Iterator<String> it = roomMap.keySet().iterator(); it.hasNext();) {
     	    			String roomUser = it.next();
+    	    			
     	    			// Pending message is not added to himself ( that's done by UI )
     	    			if (!roomUser.equals(user)) {
     	    				roomMap.get(roomUser).add(message); // Adding message for each user available
     	    			}
     	    		}
     	    	}
+    	    	
     	    	return new ArrayList<String>();
     	    	
     		case ACTION_CREATE_MESSAGE_ROOM:
     			if (!msgUsersRooms.containsKey(room)) {
     	    		msgUsersRooms.put(room, new HashMap<String, List<String>>());
     	    	}
+    			
     			return new ArrayList<String>();
     			
     		case ACTION_CREATE_MESSAGE_USER_ROOM:
@@ -322,6 +340,7 @@ public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatServi
     	    			msgUsersRooms.get(room).put(user, new ArrayList<String>());
     	    		}
     	    	}
+    			
     			return new ArrayList<String>();
     			
     		case ACTION_REMOVE_USER_MESSAGE_ROOM:
@@ -335,10 +354,11 @@ public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatServi
     		case ACTION_DELETE_EMPTY_MESSAGE_ROOM:
     			// Room message without users must be deleted
     	    	if (msgUsersRooms.containsKey(room)) {
-    	    		if (msgUsersRooms.get(room).keySet().size()==0) {
+    	    		if (msgUsersRooms.get(room).keySet().size() == 0) {
     	    			msgUsersRooms.remove(room);
     	    		}
     	    	}
+    	    	
     			return new ArrayList<String>();
     			
     		case ACTION_GET_USERS_IN_MESSAGE_ROOM:
