@@ -21,6 +21,11 @@
 
 package com.openkm.util;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
+import org.apache.commons.io.IOUtils;
+
 public class StackTraceUtils {
 	
 	/**
@@ -57,5 +62,17 @@ public class StackTraceUtils {
 		}
 		
 		return sb.toString();
+	}
+	
+	/**
+	 * Convert stack trace to String
+	 */
+	public static String toString(Throwable t) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		t.printStackTrace(pw);
+		IOUtils.closeQuietly(pw);
+		IOUtils.closeQuietly(sw);
+		return sw.toString();
 	}
 }
