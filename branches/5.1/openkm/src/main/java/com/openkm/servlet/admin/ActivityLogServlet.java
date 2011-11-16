@@ -139,6 +139,7 @@ public class ActivityLogServlet extends BaseServlet {
 				filter.setBegin(begin);
 				Calendar end = Calendar.getInstance();
 				end.setTime(sdf.parse(dend));
+				end.add(Calendar.DAY_OF_MONTH, 1);
 				filter.setEnd(end);
 				filter.setUser(user);
 				filter.setAction(action);
