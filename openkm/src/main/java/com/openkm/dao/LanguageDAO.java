@@ -120,12 +120,22 @@ public class LanguageDAO {
 	 */
 	public static void update(Language lang) throws DatabaseException {
 		log.debug("update({})", lang);
+		String qs = "select lg.imageContent, lg.imageMime from Language lg where lg.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
+			
+			if (lang.getImageContent() == null || lang.getImageContent().length() == 0) {
+				Query q = session.createQuery(qs);
+				q.setParameter("id", lang.getId());
+				Object[] data = (Object[]) q.setMaxResults(1).uniqueResult();
+				lang.setImageContent((String) data[0]);
+				lang.setImageMime((String) data[1]);
+			}
+			
 			session.update(lang);
 			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {

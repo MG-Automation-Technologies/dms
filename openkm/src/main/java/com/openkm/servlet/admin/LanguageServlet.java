@@ -154,9 +154,7 @@ public class LanguageServlet extends BaseServlet {
 				FileItemFactory factory = new DiskFileItemFactory(); 
 				ServletFileUpload upload = new ServletFileUpload(factory);
 				List<FileItem> items = upload.parseRequest(request);
-				String lgId = "";
-				String lgName = "";
-				String mimeType = "";
+				Language lang = new Language();
 				byte data[] = null;
 				
 				for (Iterator<FileItem> it = items.iterator(); it.hasNext();) {
@@ -166,54 +164,37 @@ public class LanguageServlet extends BaseServlet {
 						if (item.getFieldName().equals("action")) {
 							action = item.getString("UTF-8");
 						} else if (item.getFieldName().equals("lg_id")) {
-							lgId = item.getString("UTF-8");
+							lang.setId(item.getString("UTF-8"));
 						} else if (item.getFieldName().equals("lg_name")) {
-							lgName = item.getString("UTF-8");
+							lang.setName(item.getString("UTF-8"));
 						} else if (item.getFieldName().equals("persist")) {
 							persist = true;
 						}
 					} else {
-						if (item.getSize() > 0) {
-							mimeType = Config.mimeTypes.getContentType(item.getName());
-							is = item.getInputStream();
-							data = IOUtils.toByteArray(is);
-							is.close();
-						}
+						is = item.getInputStream();
+						data = IOUtils.toByteArray(is);
+						lang.setImageMime(Config.mimeTypes.getContentType(item.getName()));
+						is.close();
 					}
 				}
 
 				if (action.equals("create")) {
-					Language lang = new Language();
-					lang.setId(lgId);
-					lang.setName(lgName);
-					lang.setImageMime(mimeType);
-					
-					if (data != null && data.length > 0) {
-						lang.setImageContent(SecureStore.b64Encode(data));
-					}
-					
+					lang.setImageContent(SecureStore.b64Encode(data));
 					LanguageDAO.create(lang);
 					
 					// Activity log
 					UserActivity.log(request.getRemoteUser(), "ADMIN_LANGUAGE_CREATE", lang.getId(), lang.toString());
 				} else if (action.equals("edit")) {
-					Language lang = LanguageDAO.findByPk(lgId);
-					lang.setName(lgName);
-					lang.setImageMime(mimeType);
-					
-					if (data != null && data.length > 0) {
-						lang.setImageContent(SecureStore.b64Encode(data));
-					}
-					
+					lang.setImageContent(SecureStore.b64Encode(data));
 					LanguageDAO.update(lang);
 					
 					// Activity log
 					UserActivity.log(request.getRemoteUser(), "ADMIN_LANGUAGE_EDIT", lang.getId(), lang.toString());
 				} else  if (action.equals("delete")) {
-					LanguageDAO.delete(lgId);
+					LanguageDAO.delete(lang.getId());
 					
 					// Activity log
-					UserActivity.log(request.getRemoteUser(), "ADMIN_LANGUAGE_DELETE", lgId, null);
+					UserActivity.log(request.getRemoteUser(), "ADMIN_LANGUAGE_DELETE", lang.getId(), null);
 				} else if (action.equals("import")) {
 					dbSession = HibernateUtil.getSessionFactory().openSession();
 					importLanguage(jcrSession, request, response, data, dbSession);
