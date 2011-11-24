@@ -289,6 +289,8 @@ public class BaseFolderModule {
 				hasLock |= hasLockedNodes(child);
 			} else if (child.isNodeType(Mail.TYPE)) {
 				// Mail nodes can't be locked
+			} else if (child.isNodeType(Note.LIST)) {
+				// Note nodes can't be locked
 			} else {
 				throw new javax.jcr.RepositoryException("Unknown node type: " + 
 						child.getPrimaryNodeType().getName() + "(" + child.getPath() + ")");
@@ -320,6 +322,8 @@ public class BaseFolderModule {
 				canWrite &= hasWriteAccess(child);
 			} else if (child.isNodeType(Mail.TYPE)) {
 				canWrite &= am.isGranted(path, REMOVE_NODE);
+			} else if (child.isNodeType(Note.LIST)) {
+				// Note nodes has no security
 			} else {
 				throw new javax.jcr.RepositoryException("Unknown node type: " + 
 						child.getPrimaryNodeType().getName() + "(" + child.getPath() + ")");
