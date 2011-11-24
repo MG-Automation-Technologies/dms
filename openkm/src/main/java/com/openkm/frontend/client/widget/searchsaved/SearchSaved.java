@@ -29,12 +29,14 @@ import java.util.Map;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTQueryParams;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.service.OKMSearchServiceAsync;
 import com.openkm.frontend.client.util.OKMBundleResources;
@@ -92,7 +94,6 @@ public class SearchSaved extends Composite {
 	public void showMenu() {
 		// The browser menu depends on actual view
 		// Must substract top position from Y Screen Position
-		menuPopup.evaluateMenuOptions();
 		menuPopup.setPopupPosition(table.getMouseX(), table.getMouseY());
 		menuPopup.show();		
 	}
@@ -216,6 +217,8 @@ public class SearchSaved extends Composite {
 		if (!firstTime) {
 			status.setFlag_getSearchs();
 		}
+		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
+		endPoint.setServiceEntryPoint(RPCService.SearchService);
 		searchService.getAllSearchs(callbackGetSearchs);
 	}
 	
@@ -250,6 +253,8 @@ public class SearchSaved extends Composite {
 		if (getSelectedRow() >= 0) {
 			status.setFlag_deleteSearch();
 			searchIdToDelete = Integer.parseInt(table.getText(getSelectedRow(),2));
+			ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
+			endPoint.setServiceEntryPoint(RPCService.SearchService);
 			if (!getSavedSearch().isShared()) {
 				searchService.deleteSearch(data.get(new Integer(searchIdToDelete)).getId(), callbackDeleteSearch);
 			} else {

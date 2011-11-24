@@ -25,8 +25,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import javax.servlet.ServletContext;
-
 import org.apache.commons.io.IOUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -219,7 +217,7 @@ public class ConfigDAO  {
 		InputStream is = null;
 		
 		try {
-			is = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
+			is = Config.class.getResourceAsStream(path);
 			StoredFile stFile = new StoredFile();
 			stFile.setContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
 			stFile.setName(JCRUtils.getName(path));
@@ -230,27 +228,7 @@ public class ConfigDAO  {
 			IOUtils.closeQuietly(is);
 		}
 	}
-
-	/**
-	 * Find by pk with a default value
-	 */
-	public static StoredFile getFile(String key, String path, ServletContext sc) throws DatabaseException,
-			IOException {
-		InputStream is = null;
-		
-		try {
-			is = sc.getResourceAsStream(path);
-			StoredFile stFile = new StoredFile();
-			stFile.setContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
-			stFile.setName(JCRUtils.getName(path));
-			stFile.setMime(com.openkm.core.Config.mimeTypes.getContentType(stFile.getName()));
-			String value = getProperty(key, new Gson().toJson(stFile), Config.FILE);
-			return new Gson().fromJson(value, StoredFile.class);
-		} finally {
-			IOUtils.closeQuietly(is);
-		}
-	}
-
+	
 	/**
 	 * Find by pk
 	 */

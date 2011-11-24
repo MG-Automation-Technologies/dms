@@ -25,6 +25,7 @@
         <a href="populate.jsp">Populate</a><br/>
         <a href="ActiveSessions">Active sessions</a><br/>
         <a href="repository_backup.jsp">Repository backup</a><br/>
+        <a href="repository_restore.jsp">Repository restore</a><br/>
         <a href="repository_checker.jsp">Repository checker</a><br/>
         <a href="installation_reset.jsp">Installation reset</a><br/>
         <a href="config.jsp">Configuration</a><br/>

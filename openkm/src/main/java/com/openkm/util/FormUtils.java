@@ -48,9 +48,11 @@ import org.xml.sax.helpers.DefaultHandler;
 import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.Button;
 import com.openkm.bean.form.CheckBox;
+import com.openkm.bean.form.Download;
 import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Input;
 import com.openkm.bean.form.Option;
+import com.openkm.bean.form.Print;
 import com.openkm.bean.form.Select;
 import com.openkm.bean.form.Separator;
 import com.openkm.bean.form.SuggestBox;
@@ -161,11 +163,12 @@ public class FormUtils {
 	 * 
 	 * @return A Map with all the forms and its form elements.
 	 */
-	public static synchronized Map<PropertyGroup, List<FormElement>> parsePropertyGroupsForms(String pgForm) 
+	public static synchronized Map<PropertyGroup, List<FormElement>> parsePropertyGroupsForms(String pgFile) 
 			throws IOException,	ParseException {
-		log.debug("parseMetadataForms({})", pgForm);
+		log.debug("parseMetadataForms()");
 		// long begin = Calendar.getInstance().getTimeInMillis();
 		if (pGroups == null) {
+			log.debug("PropertyGroupForms: {}", pgFile);
 			pGroups = new HashMap<PropertyGroup, List<FormElement>>();
 			FileInputStream fis = null;
 			
@@ -176,7 +179,7 @@ public class FormUtils {
 				ErrorHandler handler = new ErrorHandler();
 				DocumentBuilder db = dbf.newDocumentBuilder();
 				db.setErrorHandler(handler);
-				fis = new FileInputStream(pgForm);
+				fis = new FileInputStream(pgFile);
 				
 				if (fis != null) {
 					Document doc = db.parse(fis);
@@ -354,6 +357,36 @@ public class FormUtils {
 					if (item != null) up.setData(item.getNodeValue());
 					up.setValidators(parseValidators(nField));
 					fe.add(up);
+				} else if (fieldComponent.equals("download")) {
+					Download down = new Download();
+					Node item = nField.getAttributes().getNamedItem("label");
+					if (item != null) down.setLabel(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("name");
+					if (item != null) down.setName(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("width");
+					if (item != null) down.setWidth(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("height");
+					if (item != null) down.setHeight(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("data");
+					if (item != null) down.setData(item.getNodeValue());
+					down.setNodes(parseNodes(nField));
+					down.setValidators(parseValidators(nField));
+					fe.add(down);
+				} else if (fieldComponent.equals("print")) {
+					Print print = new Print();
+					Node item = nField.getAttributes().getNamedItem("label");
+					if (item != null) print.setLabel(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("name");
+					if (item != null) print.setName(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("width");
+					if (item != null) print.setWidth(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("height");
+					if (item != null) print.setHeight(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("data");
+					if (item != null) print.setData(item.getNodeValue());
+					print.setNodes(parseNodes(nField));
+					print.setValidators(parseValidators(nField));
+					fe.add(print);
 				} else if (fieldComponent.equals("checkbox")) {
 					CheckBox checkBox = new CheckBox();
 					Node item = nField.getAttributes().getNamedItem("label");
@@ -398,6 +431,8 @@ public class FormUtils {
 					if (item != null) button.setName(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("transition");
 					if (item != null) button.setTransition(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("confirmation");
+					if (item != null) button.setConfirmation(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("width");
 					if (item != null) button.setWidth(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("height");
@@ -472,7 +507,34 @@ public class FormUtils {
 	}
 	
 	/**
-	 * Parse form element validators
+	 * Parse form elements nodes
+	 */
+	private static List<com.openkm.bean.form.Node> parseNodes(Node nField) {
+		List<com.openkm.bean.form.Node> nodes = new ArrayList<com.openkm.bean.form.Node>();
+		NodeList nlNodes = nField.getChildNodes();
+		
+		for (int k = 0; k < nlNodes.getLength(); k++) {
+			Node nNode = nlNodes.item(k);
+			
+			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+				if (nNode.getNodeName().equals("node")) {
+					com.openkm.bean.form.Node node = new com.openkm.bean.form.Node();
+					Node item = nNode.getAttributes().getNamedItem("label");
+					if (item != null) node.setLabel(item.getNodeValue());
+					item = nNode.getAttributes().getNamedItem("path");
+					if (item != null) node.setPath(item.getNodeValue());
+					item = nNode.getAttributes().getNamedItem("uuid");
+					if (item != null) node.setUuid(item.getNodeValue());
+					nodes.add(node);
+				}
+			}
+		}
+		
+		return nodes;
+	}
+	
+	/**
+	 * Parse form elements validators
 	 */
 	private static List<Validator> parseValidators(Node nField) {
 		List<Validator> validators = new ArrayList<Validator>();

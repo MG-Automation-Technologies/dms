@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE property-groups PUBLIC "-//OpenKM//DTD Property Groups 1.0//EN"
-                                 "http://www.openkm.com/dtd/property-groups-1.1.dtd">
+<!DOCTYPE property-groups PUBLIC "-//OpenKM//DTD Property Groups 2.0//EN"
+                                 "http://www.openkm.com/dtd/property-groups-2.0.dtd">
 <property-groups>
   <property-group label="Sample Template" name="okg:tpl">
     <input label="Name" name="okp:tpl.name"/>

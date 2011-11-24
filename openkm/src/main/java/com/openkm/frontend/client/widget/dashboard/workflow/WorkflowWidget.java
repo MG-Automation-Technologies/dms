@@ -179,13 +179,16 @@ public class WorkflowWidget extends Composite {
 		for (ListIterator<GWTTaskInstance> it = taskIntanceList.listIterator(); it.hasNext();) {
 			int row = table.getRowCount();
 			final GWTTaskInstance taskInstanceResult = it.next();
-			if (taskInstanceResult.getProcessInstance().getId()==processToExecuteNextTask) {
+			
+			if (taskInstanceResult.getProcessInstance().getId() == processToExecuteNextTask) {
 				processToExecuteNextTask = -1;
 				Main.get().mainPanel.dashboard.workflowDashboard.workflowFormPanel.setTaskInstance(taskInstanceResult);
 			}
+			
 			Anchor taskName = new Anchor();
 			taskName.setText(taskInstanceResult.getName());
 			taskName.setTitle(taskInstanceResult.getProcessInstance().getProcessDefinition().getName());
+			
 			switch (widgetType) {
 				case TYPE_PENDING_TASK:
 					taskName.addClickHandler(new ClickHandler() {

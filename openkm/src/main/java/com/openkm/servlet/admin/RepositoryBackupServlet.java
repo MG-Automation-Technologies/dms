@@ -23,7 +23,9 @@ package com.openkm.servlet.admin;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -32,9 +34,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.core.Config;
 import com.openkm.jcr.JCRUtils;
-import com.openkm.util.ArchiveUtils;
-import com.openkm.util.FileUtils;
+import com.openkm.util.UserActivity;
+import com.openkm.util.WebUtils;
 
 /**
  * Repository backup servlet
@@ -61,23 +64,92 @@ public class RepositoryBackupServlet extends BaseServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
-		File backup = null;
 		updateSessionManager(request);
+		String fsPath = WebUtils.getString(request, "fsPath");
+		PrintWriter out = response.getWriter();
+		response.setContentType(Config.MIME_HTML);
+		header(out, "Repository backup");
+		out.flush();
+		out.println("<h1>Repository backup</h1>");
+		out.println("<ul>");
+		out.flush();
+		Timer timer = null;
+		UpdateProgress up = null;
 		
 		try {
-			backup = JCRUtils.hotBackup();
-			String archive = backup.getName() + ".zip";
-			log.info("FileName: {}", archive);
-			response.setHeader("Content-disposition", "attachment; filename=\""+archive+"\"");
-			response.setContentType("application/zip");
-			OutputStream out = response.getOutputStream();
-			ArchiveUtils.createZip(backup, "", out);
-			out.flush();
-			out.close();
+			if (fsPath != null && !fsPath.equals("")) {
+				File dirSource = new File(fsPath);
+				
+				if (dirSource.exists() && dirSource.canRead() && dirSource.isDirectory()) {
+					log.info("System into maintenance mode");
+					out.println("<li>System into maintenance mode</li>");
+					out.flush();
+					
+					// Repository backup
+					log.info("Backuping repository");
+					out.println("<li>Backuping repository</li>");
+					out.flush();
+					timer = new Timer();
+					up = new UpdateProgress(out);
+					timer.schedule(up, 1000, 5*1000);
+					File backup = JCRUtils.hotBackup(fsPath);
+					up.cancel();
+					timer.cancel();
+					
+					log.info("System out of maintenance mode");
+					out.println("<li>System out of maintenance mode</li>");
+					out.flush();
+					
+					// Finalized
+					log.info("Repository backup completed!");
+					out.println("<li>Repository backup completed!</li>");
+					out.println("</ul>");
+					out.flush();
+					
+					out.println("Backup stored at: " + backup.getAbsolutePath());
+					out.flush();
+					
+					// Activity log
+					UserActivity.log(request.getRemoteUser(), "ADMIN_REPOSITORY_BACKUP", null, null);		
+				} else {
+					throw new IOException("Source path does not exists or not is a directory");
+				}
+			} else {
+				throw new IOException("Missing source path");
+			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
+			sendError(out, e.getMessage());
 		} finally {
-			FileUtils.deleteQuietly(backup);
+			if (up != null) up.cancel();
+			if (timer != null) timer.cancel();
+			out.close();
+		}
+	}
+	
+	/**
+	 * Keep alive the HTTP session
+	 */
+	class UpdateProgress extends TimerTask {
+		PrintWriter pw;
+		int cont = 0;
+		
+		public UpdateProgress(PrintWriter pw) {
+			this.pw = pw;
+		}
+		
+		public void run() {
+			if (cont++ % 2 == 0) {
+				pw.print(".");
+			} else {
+				pw.print("o");
+			}
+			
+			if (cont % 200 == 0) {
+				pw.println("<br/>");
+			}
+			
+			pw.flush();
 		}
 	}
 }

@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.Button;
+import com.openkm.bean.form.Download;
 import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Input;
 import com.openkm.bean.form.Option;
@@ -41,11 +42,10 @@ public class FormsTest extends TestCase {
 		Map<String, List<FormElement>> forms = FormUtils.parseWorkflowForms(fis);
 		assertFalse(forms.isEmpty());
 		fis.close();
-
+		
+		// Task "start"
 		List<FormElement> formStart = forms.get("start");
 		assertNotNull(formStart);
-		List<FormElement> formUserInfo = forms.get("user_info");
-		assertNotNull(formUserInfo);
 		
 		Iterator<FormElement> formStartIt = formStart.iterator();
 		FormElement startFe = formStartIt.next();
@@ -57,6 +57,10 @@ public class FormsTest extends TestCase {
 		assertEquals(((Button) startFe).getLabel(), "Save");
 		
 		assertFalse(formStartIt.hasNext());
+		
+		// Task "user_info"
+		List<FormElement> formUserInfo = forms.get("user_info");
+		assertNotNull(formUserInfo);
 		
 		Iterator<FormElement> formUserInfoIt = formUserInfo.iterator();
 		FormElement userInputFe = formUserInfoIt.next();
@@ -108,6 +112,25 @@ public class FormsTest extends TestCase {
 		assertEquals(((Button) userInputFe).getTransition(), "route 2");
 		
 		assertFalse(formUserInfoIt.hasNext());
+		
+		// Task "download"
+		List<FormElement> formDownload = forms.get("download");
+		assertNotNull(formDownload);
+		
+		Iterator<FormElement> formDownloadIt = formDownload.iterator();
+		FormElement downloadFe = formDownloadIt.next();
+		assertTrue(downloadFe instanceof Download);
+		assertEquals(((Download) downloadFe).getLabel(), "Download");
+		
+		Download download = (Download) downloadFe;
+		assertNotNull(download.getNodes());
+		assertFalse(download.getNodes().isEmpty());
+		
+		downloadFe = formDownloadIt.next();
+		assertTrue(downloadFe instanceof Button);
+		assertEquals(((Button) downloadFe).getLabel(), "Next");
+		
+		assertFalse(formDownloadIt.hasNext());
 	}
 	
 	public void testPropertyGroups() throws Exception {

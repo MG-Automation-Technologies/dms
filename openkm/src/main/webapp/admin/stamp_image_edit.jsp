@@ -82,11 +82,11 @@
           </tr>
           <tr>
             <td>Expr. X</td>
-            <td><input class=":required :only_on_blur" name="si_expr_x" size="30" value="${stamp.exprX}"/></td>
+            <td><input class=":required :only_on_blur" name="si_expr_x" size="36" value="${stamp.exprX}"/></td>
           </tr>
           <tr>
             <td>Expr. Y</td>
-            <td><input class=":required :only_on_blur" name="si_expr_y" size="30" value="${stamp.exprY}"/></td>
+            <td><input class=":required :only_on_blur" name="si_expr_y" size="36" value="${stamp.exprY}"/></td>
           </tr>
           <tr>
             <td>Active</td>
@@ -104,7 +104,7 @@
           <tr>
             <td>Users</td>
             <td>
-              <select multiple="multiple" name="st_users" size="7">
+              <select multiple="multiple" name="si_users" size="10">
                 <c:forEach var="user" items="${users}">
                   <c:choose>
                     <c:when test="${fn:contains(stamp.users, user.id)}">

@@ -35,7 +35,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.openkm.extension.frontend.client.widget.preview.AutocadPreview;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
@@ -333,7 +332,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	}
 	
 	/**
-	 * Gets asyncronous to get all groups assigned to a document
+	 * Gets asynchronous to get all groups assigned to a document
 	 */
 	final AsyncCallback<List<GWTPropertyGroup>> callbackGetGroups = new AsyncCallback<List<GWTPropertyGroup>>() {
 		public void onSuccess(List<GWTPropertyGroup> result){
@@ -362,7 +361,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 
 		public void onFailure(Throwable caught) {
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetGroupProperties();
-			Main.get().showError("GetAllGroups", caught);
+			Main.get().showError("GetGroups", caught);
 		}
 	};
 	
@@ -540,22 +539,6 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 			if (!refreshing) {
 				preview.showMediaFile(RPCService.DownloadServlet +"?uuid=" + URL.encodeQueryString(getDocument().getUuid()), getDocument().getMimeType());
 			}
-		} else if (doc.isConvertibleToDxf()) {
-			PreviewExtension previewExtension = null;
-			for (PreviewExtension preview : widgetPreviewExtensionList) {
-				if (preview instanceof AutocadPreview) {
-					previewExtension = preview;
-					break;
-				}
-			}
-			if (previewExtension!=null) {
-				preview.showPreviewExtension(previewExtension, RPCService.DownloadServlet +"?uuid=" + URL.encodeQueryString(getDocument().getUuid()));
-			} else {
-				// There's no preview
-				preview.setPreviewAvailable(false);
-				preview.showEmbedSWF(doc.getUuid());
-			}
-			
 		} else {
 			preview.showEmbedSWF(doc.getUuid());
 		}

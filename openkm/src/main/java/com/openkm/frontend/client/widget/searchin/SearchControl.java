@@ -1,4 +1,5 @@
 /**
+ *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -26,6 +27,7 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
@@ -45,6 +47,7 @@ import com.openkm.frontend.client.bean.form.GWTOption;
 import com.openkm.frontend.client.bean.form.GWTSelect;
 import com.openkm.frontend.client.bean.form.GWTSuggestBox;
 import com.openkm.frontend.client.bean.form.GWTTextArea;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.contants.ui.UISearchConstants;
 import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.service.OKMSearchServiceAsync;
@@ -58,8 +61,6 @@ import com.openkm.frontend.client.service.OKMSearchServiceAsync;
 public class SearchControl extends Composite {
 	private final OKMSearchServiceAsync searchService = (OKMSearchServiceAsync) GWT.create(OKMSearchService.class);
 	private static final int MIN_WORD_LENGTH = 3;
-	public static final int SEARCH_MODE_SIMPLE 	= 0;
-	public static final int SEARCH_MODE_ADVANCED 	= 1;
 	public static final int RESULTS_VIEW_NORMAL 	= 0;
 	public static final int RESULTS_VIEW_COMPACT 	= 1;
 	
@@ -71,23 +72,20 @@ public class SearchControl extends Composite {
 	private TextBox searchSavedName;
 	private GWTQueryParams params;
 	public KeyUpHandler keyUpHandler;
-	private boolean isUserNews = false;
+	private boolean userNews = false;
 	public ControlSearchIn controlSearch;
 	private ListBox resultPage;
 	HorizontalPanel searchTypePanel;
 	public final CheckBox searchTypeAnd;
 	public final CheckBox searchTypeOr;
-	private CheckBox advancedView;
-	private CheckBox compactResultsView;
 	public CheckBox showPropertyGroups;
-	public CheckBox userNews;
-	private HTML advancedViewText;
+	private CheckBox compactResultsView;
 	private HTML compactResultsViewText;
 	private HTML showPropertyGroupsText;
+	public CheckBox dashboard;
 	private HTML saveUserNewsText;
 	private HTML resultsPageText;
 	private HTML searchTypeText;
-	private int searchMode = SEARCH_MODE_SIMPLE;
 	private int resultsViewMode = RESULTS_VIEW_COMPACT;
 	
 	/**
@@ -98,32 +96,19 @@ public class SearchControl extends Composite {
 		table.setCellPadding(2);
 		table.setCellSpacing(2);
 		scrollPanel = new ScrollPanel(table);
-		advancedView = new CheckBox();
-		advancedView.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				if (advancedView.getValue()) {
-					clean();
-					switchSearchMode(SEARCH_MODE_ADVANCED);
-				} else {
-					clean();
-					switchSearchMode(SEARCH_MODE_SIMPLE);
-				}
-			}
-		});
 		compactResultsView = new CheckBox();
 		compactResultsView.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				if(compactResultsView.getValue()) {
 					switchResultsViewMode(RESULTS_VIEW_COMPACT);
-					table.getCellFormatter().setVisible(2, 0, false); // hide view property groups
+					table.getCellFormatter().setVisible(1, 0, false); // hide view property groups
 				} else {
 					switchResultsViewMode(RESULTS_VIEW_NORMAL);
-					table.getCellFormatter().setVisible(2, 0, true);  // show view property groups
+					table.getCellFormatter().setVisible(1, 0, true);  // show view property groups
 				}
 			}
-		});		
+		});
 		showPropertyGroups = new CheckBox();
 		showPropertyGroups.addClickHandler(new ClickHandler() {
 			@Override
@@ -132,8 +117,8 @@ public class SearchControl extends Composite {
 					executeSearch();
 				}
 			}
-		});		
-		userNews = new CheckBox();
+		});	
+		dashboard = new CheckBox();
 		searchSavedName = new TextBox();
 		searchSavedName.setWidth("200");
 		controlSearch = new ControlSearchIn();
@@ -196,7 +181,7 @@ public class SearchControl extends Composite {
 				params.setAuthor(searchNormal.userListBox.getValue(searchNormal.userListBox.getSelectedIndex()));
 				params.setLastModifiedFrom(searchNormal.modifyDateFrom);
 				params.setLastModifiedTo(searchNormal.modifyDateTo);
-				params.setDashboard(userNews.getValue());
+				params.setDashboard(dashboard.getValue());
 				params.setMailFrom(searchAdvanced.from.getText());
 				params.setMailTo(searchAdvanced.to.getText());
 				params.setMailSubject(searchAdvanced.subject.getText());
@@ -224,7 +209,7 @@ public class SearchControl extends Composite {
 				params.setOperator(operator);
 				
 				// Removes dates if dashboard is checked
-				if (userNews.getValue()) {
+				if (dashboard.getValue()) {
 					params.setLastModifiedFrom(null);
 					params.setLastModifiedTo(null);
 				}
@@ -234,7 +219,7 @@ public class SearchControl extends Composite {
 				if (!searchSavedName.getText().equals("")) {
 					saveSearchButton.setEnabled(false);
 					params.setQueryName(searchSavedName.getText());
-					isUserNews = params.isDashboard();
+					userNews = params.isDashboard();
 					saveSearch(params,"sql");
 				}
 			}
@@ -278,15 +263,6 @@ public class SearchControl extends Composite {
 		searchTypePanel.add(searchTypeOr);
 		searchTypePanel.setCellWidth(space1, "10");
 		
-		advancedViewText = new HTML(Main.i18n("search.view.advanced"));
-		HorizontalPanel hPanel = new HorizontalPanel();
-		hPanel.add(advancedView);
-		hPanel.add(new HTML("&nbsp;"));
-		hPanel.add(advancedViewText);
-		hPanel.setCellVerticalAlignment(advancedView, HasAlignment.ALIGN_MIDDLE);
-		hPanel.setCellVerticalAlignment(advancedViewText, HasAlignment.ALIGN_MIDDLE);
-		table.setWidget(0, 0, hPanel);
-		
 		compactResultsViewText = new HTML(Main.i18n("search.view.compact.results"));
 		HorizontalPanel hPanel2 = new HorizontalPanel();
 		hPanel2.add(compactResultsView);
@@ -294,7 +270,7 @@ public class SearchControl extends Composite {
 		hPanel2.add(compactResultsViewText);
 		hPanel2.setCellVerticalAlignment(compactResultsView, HasAlignment.ALIGN_MIDDLE);
 		hPanel2.setCellVerticalAlignment(compactResultsViewText, HasAlignment.ALIGN_MIDDLE);
-		table.setWidget(1, 0, hPanel2);
+		table.setWidget(0, 0, hPanel2);
 		
 		showPropertyGroupsText = new HTML(Main.i18n("search.view.propety.groups"));
 		HorizontalPanel hPanel3 = new HorizontalPanel();
@@ -303,27 +279,27 @@ public class SearchControl extends Composite {
 		hPanel3.add(showPropertyGroupsText);
 		hPanel3.setCellVerticalAlignment(compactResultsView, HasAlignment.ALIGN_MIDDLE);
 		hPanel3.setCellVerticalAlignment(showPropertyGroupsText, HasAlignment.ALIGN_MIDDLE);
-		table.setWidget(2, 0, hPanel3);
+		table.setWidget(1, 0, hPanel3);
 		
 		saveUserNewsText = new HTML(Main.i18n("search.save.as.news"));
-		HorizontalPanel hPanel4 = new HorizontalPanel();
-		hPanel4.add(userNews);
-		hPanel4.add(new HTML("&nbsp;"));
-		hPanel4.add(saveUserNewsText);
-		hPanel4.setCellVerticalAlignment(userNews, HasAlignment.ALIGN_MIDDLE);
-		hPanel4.setCellVerticalAlignment(saveUserNewsText, HasAlignment.ALIGN_MIDDLE);
-		table.setWidget(3, 0, hPanel4);
+		HorizontalPanel hPanel = new HorizontalPanel();
+		hPanel.add(dashboard);
+		hPanel.add(new HTML("&nbsp;"));
+		hPanel.add(saveUserNewsText);
+		hPanel.setCellVerticalAlignment(dashboard, HasAlignment.ALIGN_MIDDLE);
+		hPanel.setCellVerticalAlignment(saveUserNewsText, HasAlignment.ALIGN_MIDDLE);
+		table.setWidget(2, 0, hPanel);
 		
-		table.setWidget(4, 0, saveSearchButton);
-		table.setWidget(4, 1, searchSavedName);
+		table.setWidget(3, 0, saveSearchButton);
+		table.setWidget(3, 1, searchSavedName);
 		
 		resultsPageText = new HTML(Main.i18n("search.page.results"));
-		table.setWidget(5, 0, resultsPageText);
-		table.setWidget(5, 1, resultPage);
+		table.setWidget(4, 0, resultsPageText);
+		table.setWidget(4, 1, resultPage);
 		
 		searchTypeText = new HTML(Main.i18n("search.type"));
-		table.setHTML(6, 0, Main.i18n("search.type"));
-		table.setWidget(6, 1, searchTypePanel);
+		table.setHTML(5, 0, Main.i18n("search.type"));
+		table.setWidget(5, 1, searchTypePanel);
 		
 		table.setWidget(6, 0, cleanButton);
 		table.setWidget(6, 1, searchButton);
@@ -336,13 +312,7 @@ public class SearchControl extends Composite {
 		table.getFlexCellFormatter().setColSpan(0, 0, 2);
 		table.getFlexCellFormatter().setColSpan(1, 0, 2);
 		table.getFlexCellFormatter().setColSpan(2, 0, 2);
-		table.getFlexCellFormatter().setColSpan(3, 0, 2);
 		table.getFlexCellFormatter().setColSpan(7, 0, 2);
-		
-		// By default is enabled search mode simple
-		table.getCellFormatter().setVisible(3, 0, false);
-		table.getCellFormatter().setVisible(4, 0, false);
-		table.getCellFormatter().setVisible(4, 1, false);
 		
 		searchButton.setStyleName("okm-Button");
 		saveSearchButton.setStyleName("okm-Button");
@@ -358,151 +328,128 @@ public class SearchControl extends Composite {
 	 * Executes the search
 	 */
 	public void executeSearch() {
-		switch(searchMode) {
-			case SEARCH_MODE_SIMPLE:
-				SearchSimple searchSimple = Main.get().mainPanel.search.searchBrowser.searchIn.searchSimple;
-				Main.get().mainPanel.search.searchBrowser.searchIn.futuramaWalking.evaluate(searchSimple.fullText.getText());
-				controlSearch.executeSearch(searchSimple.fullText.getText(), Integer.parseInt(resultPage.getItemText(resultPage.getSelectedIndex())));
-				break;
-			
-			case SEARCH_MODE_ADVANCED:
-				long domain = 0;
-				SearchNormal searchNormal = Main.get().mainPanel.search.searchBrowser.searchIn.searchNormal;
-				SearchAdvanced searchAdvanced = Main.get().mainPanel.search.searchBrowser.searchIn.searchAdvanced;
-				GWTQueryParams gwtParams = new GWTQueryParams();
-				gwtParams.setContent(searchNormal.content.getText());
-				
-				if (!searchAdvanced.path.getText().equals("")) {
-					gwtParams.setPath(searchAdvanced.path.getText());
-				} else {
-					gwtParams.setPath(searchNormal.context.getValue(searchNormal.context.getSelectedIndex()));
-				}
-				
-				if (!searchAdvanced.categoryUuid.equals("")) {
-					gwtParams.setCategoryUuid(searchAdvanced.categoryUuid);
-				}
-				
-				gwtParams.setKeywords(searchNormal.keywords.getText());
-				gwtParams.setMimeType("");
-				gwtParams.setName(searchNormal.name.getText());
-				gwtParams.setAuthor(searchNormal.userListBox.getValue(searchNormal.userListBox.getSelectedIndex()));
-				
-				gwtParams.setMailFrom(searchAdvanced.from.getText());
-				gwtParams.setMailTo(searchAdvanced.to.getText());
-				gwtParams.setMailSubject(searchAdvanced.subject.getText());
-				
-				if (searchTypeAnd.getValue()) {
-					gwtParams.setOperator(GWTQueryParams.OPERATOR_AND);
-				} else {
-					gwtParams.setOperator(GWTQueryParams.OPERATOR_OR);
-				}
-				
-				if (searchNormal.modifyDateFrom != null && searchNormal.modifyDateTo != null) {
-					gwtParams.setLastModifiedFrom(searchNormal.modifyDateFrom);
-					gwtParams.setLastModifiedTo(searchNormal.modifyDateTo);
-				} else {
-					gwtParams.setLastModifiedFrom(null);
-					gwtParams.setLastModifiedTo(null);
-				}
-				
-				if (searchAdvanced.typeDocument.getValue()) {
-					domain += GWTQueryParams.DOCUMENT;
-				}
-				
-				if (searchAdvanced.typeFolder.getValue()) {
-					domain += GWTQueryParams.FOLDER;
-				}
-				
-				if (searchAdvanced.typeMail.getValue()) {
-					domain += GWTQueryParams.MAIL;
-				}
-				
-				gwtParams.setDomain(domain);
-				gwtParams.setProperties(Main.get().mainPanel.search.searchBrowser.searchIn.getProperties());
-				gwtParams.setMimeType(searchAdvanced.mimeTypes.getValue(searchAdvanced.mimeTypes.getSelectedIndex()));
-				Main.get().mainPanel.search.searchBrowser.searchIn.futuramaWalking.evaluate(searchNormal.content.getText());
-				controlSearch.executeSearch(gwtParams, Integer.parseInt(resultPage.getItemText(resultPage.getSelectedIndex())));
-				break;
+		long domain = 0;
+		SearchNormal searchNormal = Main.get().mainPanel.search.searchBrowser.searchIn.searchNormal;
+		SearchAdvanced searchAdvanced = Main.get().mainPanel.search.searchBrowser.searchIn.searchAdvanced;
+		GWTQueryParams gwtParams = new GWTQueryParams();
+		gwtParams.setContent(searchNormal.content.getText());
+		
+		if (!searchAdvanced.path.getText().equals("")) {
+			gwtParams.setPath(searchAdvanced.path.getText());
+		} else {
+			gwtParams.setPath(searchNormal.context.getValue(searchNormal.context.getSelectedIndex()));
 		}
+		
+		if (!searchAdvanced.categoryUuid.equals("")) {
+			gwtParams.setCategoryUuid(searchAdvanced.categoryUuid);
+		}
+		
+		gwtParams.setKeywords(searchNormal.keywords.getText());
+		gwtParams.setMimeType("");
+		gwtParams.setName(searchNormal.name.getText());
+		gwtParams.setAuthor(searchNormal.userListBox.getValue(searchNormal.userListBox.getSelectedIndex()));
+		
+		gwtParams.setMailFrom(searchAdvanced.from.getText());
+		gwtParams.setMailTo(searchAdvanced.to.getText());
+		gwtParams.setMailSubject(searchAdvanced.subject.getText());
+		
+		if (searchTypeAnd.getValue()) {
+			gwtParams.setOperator(GWTQueryParams.OPERATOR_AND);
+		} else {
+			gwtParams.setOperator(GWTQueryParams.OPERATOR_OR);
+		}
+		
+		if (searchNormal.modifyDateFrom!=null && searchNormal.modifyDateTo!=null) {
+			gwtParams.setLastModifiedFrom(searchNormal.modifyDateFrom);
+			gwtParams.setLastModifiedTo(searchNormal.modifyDateTo);
+		} else {
+			gwtParams.setLastModifiedFrom(null);
+			gwtParams.setLastModifiedTo(null);
+		}
+		
+		if (searchAdvanced.typeDocument.getValue()) {
+			domain += GWTQueryParams.DOCUMENT;
+		}
+		
+		if (searchAdvanced.typeFolder.getValue()) {
+			domain += GWTQueryParams.FOLDER;
+		}
+		
+		if (searchAdvanced.typeMail.getValue()) {
+			domain += GWTQueryParams.MAIL;
+		}
+		
+		gwtParams.setDomain(domain);
+		gwtParams.setProperties(Main.get().mainPanel.search.searchBrowser.searchIn.getProperties());
+		gwtParams.setMimeType(searchAdvanced.mimeTypes.getValue(searchAdvanced.mimeTypes.getSelectedIndex()));
+		Main.get().mainPanel.search.searchBrowser.searchIn.futuramaWalking.evaluate(searchNormal.content.getText());
+		controlSearch.executeSearch(gwtParams, Integer.parseInt(resultPage.getItemText(resultPage.getSelectedIndex())));
 	}
 	
 	/**
 	 * Evalues seach button visibility
 	 */
 	public void evaluateSearchButtonVisible() {
-		switch (searchMode) {
-			case SEARCH_MODE_SIMPLE:
-				SearchSimple searchSimple = Main.get().mainPanel.search.searchBrowser.searchIn.searchSimple;
-				if (searchSimple.fullText.getText().length() >= MIN_WORD_LENGTH) {
+		SearchNormal searchNormal = Main.get().mainPanel.search.searchBrowser.searchIn.searchNormal;
+		SearchAdvanced searchAdvanced = Main.get().mainPanel.search.searchBrowser.searchIn.searchAdvanced;
+		SearchMetadata searchMetadata = Main.get().mainPanel.search.searchBrowser.searchIn.searchMetadata;
+		
+		if (searchNormal.content.getText().length() >= MIN_WORD_LENGTH || searchNormal.name.getText().length() >= MIN_WORD_LENGTH ||
+			searchNormal.keywords.getText().length() >= MIN_WORD_LENGTH || searchAdvanced.from.getText().length() >= MIN_WORD_LENGTH ||
+			searchAdvanced.to.getText().length() >= MIN_WORD_LENGTH || searchAdvanced.subject.getText().length() >= MIN_WORD_LENGTH) {
+			searchButton.setEnabled(true);
+		} else {
+			searchButton.setEnabled(false);
+		}
+		
+		// Evaluates Mime Types
+		if (searchAdvanced.mimeTypes.getSelectedIndex() > 0) {
+			searchButton.setEnabled(true);
+		}
+		
+		// Evaluates user list
+		if (searchNormal.userListBox.getSelectedIndex() > 0) {
+			searchButton.setEnabled(true);
+		}
+		
+		// Evaluates date range
+		if (searchNormal.modifyDateFrom!=null && searchNormal.modifyDateTo!=null) {
+			searchButton.setEnabled(true);
+		}
+		
+		// Evaluates properties to enable button
+		for (GWTFormElement formElement : searchMetadata.updateFormElementsValuesWithNewer()) {
+			if (formElement instanceof GWTInput) {
+				if (((GWTInput) formElement).getValue().length() >= MIN_WORD_LENGTH) {
 					searchButton.setEnabled(true);
-				} else {
-					searchButton.setEnabled(false);
+					break;
 				}
-				break;
-				
-			case SEARCH_MODE_ADVANCED:
-				SearchNormal searchNormal = Main.get().mainPanel.search.searchBrowser.searchIn.searchNormal;
-				SearchAdvanced searchAdvanced = Main.get().mainPanel.search.searchBrowser.searchIn.searchAdvanced;
-				SearchMetadata searchMetadata = Main.get().mainPanel.search.searchBrowser.searchIn.searchMetadata;
-				
-				if (searchNormal.content.getText().length() >= MIN_WORD_LENGTH || searchNormal.name.getText().length() >= MIN_WORD_LENGTH ||
-					searchNormal.keywords.getText().length() >= MIN_WORD_LENGTH || searchAdvanced.from.getText().length() >= MIN_WORD_LENGTH ||
-					searchAdvanced.to.getText().length() >= MIN_WORD_LENGTH || searchAdvanced.subject.getText().length() >= MIN_WORD_LENGTH) {
+			} else if (formElement instanceof GWTTextArea) {
+				if (((GWTTextArea) formElement).getValue().length() >= MIN_WORD_LENGTH) {
 					searchButton.setEnabled(true);
-				} else {
-					searchButton.setEnabled(false);
+					break;
 				}
-				
-				// Evaluates Mime Types
-				if (searchAdvanced.mimeTypes.getSelectedIndex() > 0) {
+			} else if (formElement instanceof GWTSuggestBox) {
+				if (!((GWTSuggestBox) formElement).getValue().equals("")) {
 					searchButton.setEnabled(true);
+					break;
 				}
-				
-				// Evaluates user list
-				if (searchNormal.userListBox.getSelectedIndex() > 0) {
+			} else if (formElement instanceof GWTCheckBox) {
+				// Checkbox case assume is selected to enable search
+				if (((GWTCheckBox) formElement).getValue()) {
 					searchButton.setEnabled(true);
+					break;
 				}
-				
-				// Evaluates date range
-				if (searchNormal.modifyDateFrom != null && searchNormal.modifyDateTo != null) {
-					searchButton.setEnabled(true);
-				}
-				
-				// Evaluates properties to enable button
-				for (GWTFormElement formElement : searchMetadata.updateFormElementsValuesWithNewer()) {
-					if (formElement instanceof GWTInput) {
-						if (((GWTInput) formElement).getValue().length() >= MIN_WORD_LENGTH) {
-							searchButton.setEnabled(true);
-							break;
-						}
-					} else if (formElement instanceof GWTTextArea) {
-						if (((GWTTextArea) formElement).getValue().length() >= MIN_WORD_LENGTH) {
-							searchButton.setEnabled(true);
-							break;
-						}
-					} else if (formElement instanceof GWTSuggestBox) {
-						if (!((GWTSuggestBox) formElement).getValue().equals("")) {
-							searchButton.setEnabled(true);
-							break;
-						}
-					} else if (formElement instanceof GWTCheckBox) {
-						// Checkbox case assume is selected to enable search
-						if (((GWTCheckBox) formElement).getValue()) {
-							searchButton.setEnabled(true);
-							break;
-						}
-					} else if (formElement instanceof GWTSelect) {
-						// Checkbox case assume is selected to enable search
-						GWTSelect select = (GWTSelect) formElement; 
-						for (GWTOption option : select.getOptions()) {
-							if (option.isSelected()) {
-								searchButton.setEnabled(true);
-								break;
-							}
-						}
+			} else if (formElement instanceof GWTSelect) {
+				// Checkbox case assume is selected to enable search
+				GWTSelect select = (GWTSelect) formElement; 
+				for (GWTOption option : select.getOptions()) {
+					if (option.isSelected()) {
+						searchButton.setEnabled(true);
+						break;
 					}
 				}
-				break;
+			}
 		}
 		
 		// After evaluating search button, must evaluate save search too
@@ -513,18 +460,10 @@ public class SearchControl extends Composite {
 	 * Evalues Save Search button visibility
 	 */
 	public void evalueSaveSearchButtonVisible() {
-		switch (searchMode) {
-			case SEARCH_MODE_SIMPLE:
-				saveSearchButton.setEnabled(false);
-				break;
-			
-			case SEARCH_MODE_ADVANCED:
-				if (searchSavedName.getText().length() > 0 && searchButton.isEnabled()) {
-					saveSearchButton.setEnabled(true);
-				} else {
-					saveSearchButton.setEnabled(false);
-				}
-				break;
+		if (searchSavedName.getText().length()>0 && searchButton.isEnabled()) {
+			saveSearchButton.setEnabled(true);
+		} else {
+			saveSearchButton.setEnabled(false);
 		}
 	}
 	
@@ -535,7 +474,6 @@ public class SearchControl extends Composite {
 		searchButton.setHTML(Main.i18n("button.search"));
 		cleanButton.setHTML(Main.i18n("button.clean"));
 		saveSearchButton.setHTML(Main.i18n("button.save.search"));
-		advancedViewText.setHTML(Main.i18n("search.view.advanced"));
 		compactResultsViewText.setHTML(Main.i18n("search.view.compact.results"));
 		showPropertyGroupsText.setHTML(Main.i18n("search.view.propety.groups"));
 		saveUserNewsText.setHTML(Main.i18n("search.save.as.news"));
@@ -549,6 +487,8 @@ public class SearchControl extends Composite {
 	 */
 	public void saveSearch(GWTQueryParams params, String type) {
 		Main.get().mainPanel.search.searchBrowser.searchIn.status.setFlag_saveSearch();
+		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
+		endPoint.setServiceEntryPoint(RPCService.SearchService);
 		searchService.saveSearch(params, type, callbackSaveSearch);
 	}	
 	
@@ -559,7 +499,7 @@ public class SearchControl extends Composite {
 		public void onSuccess(Integer result) {
 			params.setId(result.intValue());
 			
-			if (isUserNews) {
+			if (userNews) {
 				Main.get().mainPanel.search.historySearch.userNews.addNewSavedSearch(params.clone());
 				Main.get().mainPanel.search.historySearch.stackPanel.showStack(UISearchConstants.SEARCH_USER_NEWS);
 				Main.get().mainPanel.dashboard.newsDashboard.getUserSearchs(true);
@@ -579,30 +519,6 @@ public class SearchControl extends Composite {
 	};
 	
 	/**
-	 * switchSearchMode
-	 * 
-	 * @param mode
-	 */
-	public void switchSearchMode (int mode) {
-		searchMode = mode;
-		switch (searchMode) {
-			case SEARCH_MODE_SIMPLE:
-				table.getCellFormatter().setVisible(3, 0, false);
-				table.getCellFormatter().setVisible(4, 0, false);
-				table.getCellFormatter().setVisible(4, 1, false);
-				break;
-			
-			case SEARCH_MODE_ADVANCED:
-				advancedView.setValue(true); // switch search mode can be done by execute saved query
-				table.getCellFormatter().setVisible(3, 0, true);
-				table.getCellFormatter().setVisible(4, 0, true);
-				table.getCellFormatter().setVisible(4, 1, true);
-				break;
-		}
-		Main.get().mainPanel.search.searchBrowser.searchIn.switchSearchMode(searchMode);
-	}
-	
-	/**
 	 * switchResultsViewMode
 	 * 
 	 * @param mode
@@ -616,10 +532,8 @@ public class SearchControl extends Composite {
 	 * clean
 	 */
 	private void clean() {
-		SearchSimple searchSimple = Main.get().mainPanel.search.searchBrowser.searchIn.searchSimple;
 		SearchNormal searchNormal = Main.get().mainPanel.search.searchBrowser.searchIn.searchNormal;
 		SearchAdvanced searchAdvanced = Main.get().mainPanel.search.searchBrowser.searchIn.searchAdvanced;
-		searchSimple.fullText.setText("");
 		searchNormal.context.setSelectedIndex(Main.get().mainPanel.search.searchBrowser.searchIn.posTaxonomy);
 		searchNormal.content.setText("");
 		searchAdvanced.path.setText("");
@@ -645,14 +559,5 @@ public class SearchControl extends Composite {
 		searchAdvanced.to.setText("");
 		searchAdvanced.subject.setText("");
 		Main.get().mainPanel.search.searchBrowser.searchResult.removeAllRows();
-	}
-	
-	/**
-	 * getSearchMode
-	 * 
-	 * @return
-	 */
-	public int getSearchMode() {
-		return searchMode;
 	}
 }

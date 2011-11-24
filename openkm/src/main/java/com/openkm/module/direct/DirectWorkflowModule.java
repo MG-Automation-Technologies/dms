@@ -56,11 +56,11 @@ import com.openkm.bean.workflow.ProcessInstance;
 import com.openkm.bean.workflow.TaskInstance;
 import com.openkm.bean.workflow.Token;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.WorkflowException;
 import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.WorkflowModule;
 import com.openkm.module.base.BaseWorkflowModule;
 import com.openkm.util.FormUtils;
@@ -81,7 +81,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -123,7 +122,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -157,7 +155,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -192,7 +189,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -207,14 +203,25 @@ public class DirectWorkflowModule implements WorkflowModule {
 			WorkflowUtils.DiagramNodeInfo dNodeInfo = dInfo.getNodeMap().get(node);
 			BufferedImage img = ImageIO.read(fileDef.getInputStream("processimage.jpg"));
 			
+			// Obtain all nodes Y
+			List<Integer> ordenadas = new ArrayList<Integer>();
+			
+			for (WorkflowUtils.DiagramNodeInfo nodeInfo : dInfo.getNodeMap().values()) {
+				ordenadas.add(nodeInfo.getY());
+			}
+			
+			// Calculate minimal Y
+			Collections.sort(ordenadas);
+			int fix = ordenadas.get(0);
+			
 			if (dNodeInfo != null) {
 				// Select node
-				log.info("DiagramNodeInfo: {}", dNodeInfo);
+				log.debug("DiagramNodeInfo: {}", dNodeInfo);
 				Graphics g = img.getGraphics();
 				Graphics2D g2d = (Graphics2D) g;
 				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25F));
 				g2d.setColor(Color.blue);
-				g2d.fillRect(dNodeInfo.getX(), dNodeInfo.getY() + 64, dNodeInfo.getWidth(), dNodeInfo.getHeight());
+				g2d.fillRect(dNodeInfo.getX(), dNodeInfo.getY() - fix, dNodeInfo.getWidth(), dNodeInfo.getHeight());
 				g.dispose();
 			}
 
@@ -252,7 +259,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -293,13 +299,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 	@Override
 	public ProcessInstance runProcessDefinition(String token, long processDefinitionId, String uuid, 
 			List<FormElement> variables) throws RepositoryException, DatabaseException, WorkflowException {
-		log.info("runProcessDefinition({}, {}, {})", new Object[] { token, processDefinitionId, variables });
+		log.debug("runProcessDefinition({}, {}, {})", new Object[] { token, processDefinitionId, variables });
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
 		ProcessInstance vo = new ProcessInstance();
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -319,7 +324,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.close();
 		}
 		
-		log.info("runProcessDefinition: {}", vo);
+		log.debug("runProcessDefinition: {}", vo);
 		return vo;
 	}
 
@@ -332,7 +337,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -375,7 +379,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -408,7 +411,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -443,7 +445,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -481,7 +482,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -519,7 +519,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -557,7 +556,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -594,7 +592,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -628,7 +625,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -661,7 +657,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -694,7 +689,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -727,7 +721,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -762,7 +755,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -790,7 +782,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.close();
 		}
 		
-		log.info("findUserTaskInstances: {}", al);
+		log.debug("findUserTaskInstances: {}", al);
 		return al;
 	}
 
@@ -804,7 +796,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -846,7 +837,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -890,7 +880,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -943,7 +932,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -978,7 +966,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -1012,7 +999,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -1046,7 +1032,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -1079,7 +1064,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -1112,7 +1096,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -1146,7 +1129,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -1194,7 +1176,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -1228,7 +1209,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -1263,7 +1243,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -1297,7 +1276,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -1330,7 +1308,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -1363,7 +1340,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -1397,7 +1373,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -1439,7 +1414,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
@@ -1473,7 +1447,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			// TODO This JCR Session could be removed
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {

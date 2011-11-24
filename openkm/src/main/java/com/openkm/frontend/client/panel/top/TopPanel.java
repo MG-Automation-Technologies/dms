@@ -21,22 +21,13 @@
 
 package com.openkm.frontend.client.panel.top;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.contants.ui.UIDockPanelConstants;
-import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.TabWorkspace;
 import com.openkm.frontend.client.widget.mainmenu.MainMenu;
@@ -56,16 +47,12 @@ public class TopPanel extends Composite {
 	private HorizontalPanel toolsPanel;
 	private HorizontalPanel horizontalPanel;
 	private HorizontalPanel horizontalPanelMenu;
-	private HorizontalPanel quickSearchPanel;
 	public MainMenu mainMenu;
 	public ToolBar toolBar;
 	public TabWorkspace tabWorkspace;
 	private Label leftLabel;
 	private Label rightLabel;
 	private Image horizontalLine;
-	private TextBox quickSearch;
-	private Image searchImage;
-	
 	
 	/**
 	 * Top panel
@@ -75,7 +62,6 @@ public class TopPanel extends Composite {
 		panel = new VerticalPanel();
 		horizontalPanel = new HorizontalPanel();
 		horizontalPanelMenu = new HorizontalPanel();
-		quickSearchPanel = new HorizontalPanel();
 		toolsPanel = new HorizontalPanel();
 		mainMenu = new MainMenu();
 		toolBar = new ToolBar();
@@ -88,56 +74,21 @@ public class TopPanel extends Composite {
 		toolsPanel.setCellVerticalAlignment(tabWorkspace, HorizontalPanel.ALIGN_BOTTOM);
 		toolsPanel.setCellHorizontalAlignment(tabWorkspace, HorizontalPanel.ALIGN_RIGHT);
 		toolsPanel.setWidth("100%");
-		toolsPanel.setCellWidth(toolBar, "100%");
+		toolsPanel.setCellWidth(toolBar,"100%");
 		
 		horizontalLine = new Image("img/transparent_pixel.gif");
 		horizontalLine.setStyleName("okm-TopPanel-Line-Border");
 		horizontalLine.setSize("100%", "2px");
-		
-		quickSearch = new TextBox();
-		quickSearch.addKeyUpHandler(new KeyUpHandler() {
-			@Override
-			public void onKeyUp(KeyUpEvent event) {
-				if (quickSearch.getText().length() >= 3) {
-					searchImage.setResource(OKMBundleResources.INSTANCE.search());
-				} else {
-					searchImage.setResource(OKMBundleResources.INSTANCE.searchDisabled());
-				}
-				
-				if ((char)KeyCodes.KEY_ENTER == event.getNativeKeyCode()) {
-					executeQuickSearch();
-				}
-			}
-		});
-		quickSearch.setWidth("179");
-		quickSearch.setStyleName("okm-Input");
-		searchImage = new Image(OKMBundleResources.INSTANCE.searchDisabled());
-		searchImage.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				executeQuickSearch();
-			}
-		});
-		searchImage.setStyleName("okm-Hyperlink");
-		quickSearchPanel.add(quickSearch);
-		quickSearchPanel.add(Util.hSpace("5"));
-		quickSearchPanel.add(searchImage);
-		quickSearchPanel.add(Util.hSpace("25"));
-		quickSearchPanel.setCellVerticalAlignment(searchImage, HasAlignment.ALIGN_MIDDLE);
 		
 		horizontalPanelMenu.add(mainMenu);
 		horizontalPanelMenu.setWidth("100%");
 		SimplePanel separator = new SimplePanel();
 		separator.setWidth("100%");
 		horizontalPanelMenu.add(separator);
-		horizontalPanelMenu.add(quickSearchPanel);
 		Image logo = new Image("img/logo_openkm_tiny.gif");
 		horizontalPanelMenu.add(logo);
-		horizontalPanelMenu.setCellHorizontalAlignment(quickSearchPanel, HasAlignment.ALIGN_RIGHT);
-		horizontalPanelMenu.setCellVerticalAlignment(quickSearchPanel, HasAlignment.ALIGN_MIDDLE);
 		horizontalPanelMenu.setCellHorizontalAlignment(logo, HasAlignment.ALIGN_RIGHT);
 		horizontalPanelMenu.setCellVerticalAlignment(logo, HasAlignment.ALIGN_MIDDLE);
-		horizontalPanelMenu.setCellWidth(logo, "40");
 		panel.setStyleName("okm-TopPanel");
 		panel.addStyleName("okm-DisableSelect");
 		panel.setHorizontalAlignment(VerticalPanel.ALIGN_LEFT);
@@ -164,18 +115,6 @@ public class TopPanel extends Composite {
 		horizontalPanel.setHeight(""+PANEL_HEIGHT);
 		
 		initWidget(horizontalPanel);
-	}
-	
-	/**
-	 * executeQuickSearch
-	 */
-	private void executeQuickSearch() {
-		if (quickSearch.getText().length()>=3) {
-			Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(UIDockPanelConstants.SEARCH);
-			Main.get().mainPanel.search.searchBrowser.searchIn.setQuickSearch(quickSearch.getText());
-			quickSearch.setText("");
-			searchImage.setResource(OKMBundleResources.INSTANCE.searchDisabled());
-		}
 	}
 	
 	/**

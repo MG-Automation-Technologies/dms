@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -27,12 +28,10 @@ import org.slf4j.LoggerFactory;
 import com.openkm.api.OKMAuth;
 import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
-import com.openkm.api.OKMNote;
 import com.openkm.api.OKMNotification;
 import com.openkm.api.OKMProperty;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
-import com.openkm.bean.Version;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
@@ -47,7 +46,6 @@ import com.openkm.extension.core.ExtensionException;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.contants.ui.UIFileUploadConstants;
 import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.util.FileUtils;
 import com.openkm.util.SecureStore;
 import com.openkm.util.impexp.ImpExpStats;
@@ -178,12 +176,12 @@ public class FileUploadServlet extends OKMHttpServlet {
 							uploadedDocPath = OKMDocument.getInstance().create(null, doc, is).getPath();
 							
 							// Case is uploaded a encrypted document
-							if (cipherName != null && !cipherName.equals("")) {
+							if (cipherName!=null && !cipherName.equals("")) {
 								OKMProperty.getInstance().setEncryption(null, doc.getPath(), cipherName);
 							}
 							
 							// Return the path of the inserted document in response
-							out.print(returnOKMessage + " path[" + uploadedDocPath + "]path");
+							out.print(returnOKMessage + " path["+URLEncoder.encode(uploadedDocPath,"UTF-8")+"]path");
 						}
 					}
 				} else if (action == UIFileUploadConstants.ACTION_UPDATE) {
@@ -194,7 +192,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 						OKMDocument document = OKMDocument.getInstance();
 						Document doc = document.getProperties(null, path);
 						document.setContent(null, path, is);
-						Version ver = document.checkin(null, path, comment);
+						document.checkin(null, path, comment);
 						uploadedDocPath = path;
 						
 						// Case is uploaded a encrypted document
@@ -214,13 +212,8 @@ public class FileUploadServlet extends OKMHttpServlet {
 							} 
 						}
 						
-						// Add comment (as system user)
-						String text = "New version "+ver.getName()+" by "+request.getRemoteUser()+": "+ver.getComment();
-						String sysToken = JcrSessionManager.getInstance().getSystemToken();
-						OKMNote.getInstance().add(sysToken, path, text);
-						
 						// Return the path of the inserted document in response
-						out.print(returnOKMessage + " path["+uploadedDocPath+"]path");
+						out.print(returnOKMessage + " path["+URLEncoder.encode(uploadedDocPath,"UTF-8")+"]path");
 					} else {
 						out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_DocumentNameMismatch));
 					}
@@ -310,9 +303,6 @@ public class FileUploadServlet extends OKMHttpServlet {
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_Database));
-		} catch (ExtensionException e) {
-			log.error(e.getMessage(), e);
-			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_Extension));
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
 			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_IO));

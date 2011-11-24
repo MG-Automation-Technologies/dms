@@ -27,13 +27,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTPropertyParams;
 import com.openkm.frontend.client.bean.GWTQueryParams;
@@ -50,13 +49,11 @@ import com.openkm.frontend.client.widget.searchsaved.Status;
  */
 public class SearchIn extends Composite implements HasSearch {
 	
-	private static final int TAB_HEIGHT = 20;
 	private static final int CONTROLER_WIDTH = 380;
 	private static final int MINIMUM_TAB_WIDTH = 400;
 	
 	private HorizontalPanel hPanel;
-	public TabLayoutPanel tabPanel;
-	public SearchSimple searchSimple;
+	private TabPanel tabPanel;
 	public SearchNormal searchNormal;
 	public SearchAdvanced searchAdvanced;
 	public SearchMetadata searchMetadata;
@@ -68,7 +65,6 @@ public class SearchIn extends Composite implements HasSearch {
 	private int posPersonal = 0;
 	private int posMail = 0;
 	private int posTrash = 0;
-	private int searchMode = SearchControl.SEARCH_MODE_SIMPLE;
 	
 	/**
 	 * SearchIn
@@ -76,8 +72,7 @@ public class SearchIn extends Composite implements HasSearch {
 	public SearchIn() {
 		futuramaWalking = new FuturamaWalking();
 		hPanel = new HorizontalPanel();
-		tabPanel = new TabLayoutPanel(TAB_HEIGHT, Unit.PX);
-		searchSimple = new SearchSimple();
+		tabPanel = new TabPanel();
 		searchNormal = new SearchNormal();
 		searchAdvanced = new SearchAdvanced();
 		searchMetadata = new SearchMetadata(this);
@@ -86,7 +81,6 @@ public class SearchIn extends Composite implements HasSearch {
 		status.setStyleName("okm-StatusPopup");
 
 		// Adding keyword listeners
-		searchSimple.fullText.addKeyUpHandler(searchControl.keyUpHandler);
 		searchNormal.content.addKeyUpHandler(searchControl.keyUpHandler);
 		searchNormal.name.addKeyUpHandler(searchControl.keyUpHandler);
 		searchNormal.keywords.addKeyUpHandler(searchControl.keyUpHandler);		
@@ -94,8 +88,9 @@ public class SearchIn extends Composite implements HasSearch {
 		searchAdvanced.to.addKeyUpHandler(searchControl.keyUpHandler);
 		searchAdvanced.subject.addKeyUpHandler(searchControl.keyUpHandler);
 		
-		// By default is enabled simple mode
-		tabPanel.add(searchSimple, Main.i18n("search.simple"));
+		tabPanel.add(searchNormal, Main.i18n("search.normal"));
+		tabPanel.add(searchAdvanced, Main.i18n("search.advanced"));
+		tabPanel.add(searchMetadata, Main.i18n("search.metadata"));
 		tabPanel.selectTab(0);
 		
 		Image verticalLine = new Image("img/transparent_pixel.gif");
@@ -140,12 +135,10 @@ public class SearchIn extends Composite implements HasSearch {
 			tabWidth = width-CONTROLER_WIDTH; // Always trying expand tab panel
 		}
 		tabPanel.setWidth(""+(tabWidth-2));
-		tabPanel.setHeight(""+(height-2));
-		searchSimple.setPixelSize(tabWidth-2, height-22); // Substract tab height
 		searchNormal.setPixelSize(tabWidth-2, height-22); // Substract tab height
 		searchAdvanced.setPixelSize(tabWidth-2, height-22); // Substract tab height
 		searchMetadata.setPixelSize(tabWidth-2, height-22); // Substract tab height
-		searchControl.setPixelSize(controlWidth-2, height-2); // Substract tab height -2 pixels for vertical line too
+		searchControl.setPixelSize(controlWidth-4, height-2); // Substract tab height -2 pixels for vertical line too
 	}
 	
 	/**
@@ -156,8 +149,13 @@ public class SearchIn extends Composite implements HasSearch {
 		searchAdvanced.langRefresh();
 		searchMetadata.langRefresh();
 		searchControl.langRefresh();
-		int selectedTab = tabPanel.getSelectedIndex();
-		switchSearchMode(searchMode);
+		int selectedTab = tabPanel.getTabBar().getSelectedTab();
+		while (tabPanel.getWidgetCount() > 0) {
+			tabPanel.remove(0);
+		}
+		tabPanel.add(searchNormal, Main.i18n("search.normal"));
+		tabPanel.add(searchAdvanced, Main.i18n("search.advanced"));
+		tabPanel.add(searchMetadata, Main.i18n("search.metadata"));
 		tabPanel.selectTab(selectedTab);
 	}
 	
@@ -195,23 +193,11 @@ public class SearchIn extends Composite implements HasSearch {
 	}
 	
 	/**
-	 * @param gWTParams
-	 */
-	public void setQuickSearch(String query) {
-		searchControl.switchSearchMode(SearchControl.SEARCH_MODE_SIMPLE);
-		searchSimple.fullText.setText(query);
-		searchControl.evaluateSearchButtonVisible();
-		searchControl.searchButton.setEnabled(true);
-		searchControl.executeSearch();
-	}
-	
-	/**
 	 * Sets the saved search
 	 * 
 	 * @param gWTParams The params
 	 */
 	public void setSavedSearch(GWTQueryParams gWTParams) {
-		searchControl.switchSearchMode(SearchControl.SEARCH_MODE_ADVANCED);
 		if (gWTParams.getPath().startsWith(Main.get().repositoryContext.getContextTaxonomy())) {
 			searchNormal.context.setSelectedIndex(posTaxonomy);
 		} else if (gWTParams.getPath().startsWith(Main.get().repositoryContext.getContextPersonal())) {
@@ -245,7 +231,7 @@ public class SearchIn extends Composite implements HasSearch {
 		searchNormal.content.setText(gWTParams.getContent());
 		searchNormal.name.setText(gWTParams.getName());
 		searchNormal.keywords.setText(gWTParams.getKeywords());
-		searchControl.userNews.setValue(gWTParams.isDashboard());
+		searchControl.dashboard.setValue(gWTParams.isDashboard());
 		
 		searchAdvanced.from.setText(gWTParams.getMailFrom());
 		searchAdvanced.to.setText(gWTParams.getMailTo());
@@ -396,33 +382,6 @@ public class SearchIn extends Composite implements HasSearch {
 			return UIDesktopConstants.NAVIGATOR_MAIL;
 		} else {
 			return UIDesktopConstants.NAVIGATOR_TRASH;
-		}
-	}
-	
-	/**
-	 * switchSearchMode
-	 * 
-	 * @param mode
-	 */
-	public void switchSearchMode(int mode) {
-		this.searchMode = mode;
-		switch(searchMode) {
-			case SearchControl.SEARCH_MODE_SIMPLE:
-				while (tabPanel.getWidgetCount() > 0) {
-					tabPanel.remove(0);
-				}
-				tabPanel.add(searchSimple, Main.i18n("search.simple"));
-				tabPanel.selectTab(0);
-				break;
-			case SearchControl.SEARCH_MODE_ADVANCED:
-				while (tabPanel.getWidgetCount() > 0) {
-					tabPanel.remove(0);
-				}
-				tabPanel.add(searchNormal, Main.i18n("search.normal"));
-				tabPanel.add(searchAdvanced, Main.i18n("search.advanced"));
-				tabPanel.add(searchMetadata, Main.i18n("search.metadata"));
-				tabPanel.selectTab(0);
-				break;
 		}
 	}
 }

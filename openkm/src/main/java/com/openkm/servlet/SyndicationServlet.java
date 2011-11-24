@@ -133,7 +133,7 @@ public class SyndicationServlet extends BasicSecuredServlet {
 				SyndFeedOutput output = new SyndFeedOutput();
 				SyndImage img = new SyndImageImpl();
 				img.setTitle(feed.getTitle());
-				img.setUrl(Config.APPLICATION_BASE+"/img/logo_short.gif");
+				img.setUrl(Config.APPLICATION_BASE + "/img/logo_short.gif");
 				img.setLink(Config.APPLICATION_BASE);
 				feed.setImage(img);
 				feed.setLanguage("en");

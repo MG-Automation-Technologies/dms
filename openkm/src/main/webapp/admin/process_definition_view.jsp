@@ -2,6 +2,7 @@
 <%@ page import="com.openkm.servlet.admin.BaseServlet" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -18,6 +19,7 @@
       <c:url value="Workflow" var="urlProcessDefinitionView">
         <c:param name="action" value="processDefinitionView"/>
         <c:param name="pdid" value="${processDefinition.id}"/>
+        <c:param name="statusFilter" value="${statusFilter}"/>
       </c:url>
       <table>
         <tr>
@@ -33,7 +35,29 @@
           <td>${processDefinition.description}</td><td>${processDefinition.version}</td>
         </tr>
       </table>
-      <h2>Process Instances</h2>
+      <table>
+        <tr>
+          <td><h2>Process Instances</h2></td>
+          <td>
+            <form id="filter" action="Workflow">
+                <input type="hidden" name="action" value="processDefinitionView"/>
+                <input type="hidden" name="pdid" value="${processDefinition.id}"/>
+              - Status: <select name="statusFilter" onchange="document.getElementById('filter').submit()">
+                <c:forEach var="statusFilterValue" items="${statusFilterValues}">
+                  <c:choose>
+                    <c:when test="${fn:contains(statusFilterValue.key, statusFilter)}">
+                      <option value="${statusFilterValue.key}" selected="selected">${statusFilterValue.value}</option>
+                    </c:when>
+                    <c:otherwise>
+                      <option value="${statusFilterValue.key}">${statusFilterValue.value}</option>
+                    </c:otherwise>
+                  </c:choose>
+                </c:forEach>
+              </select>
+            </form>
+          </td>
+        </tr>
+      </table>
       <table class="results" width="90%">
         <tr><th>Instance ID</th><th>Key</th><th>Status</th><th>Start Date</th><th>End Date</th><th width="100px">Actions</th></tr>
         <c:forEach var="pi" items="${processInstances}" varStatus="row">

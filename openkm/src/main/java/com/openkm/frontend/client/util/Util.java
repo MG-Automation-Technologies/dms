@@ -137,13 +137,13 @@ public class Util {
 	}
 	
 	/**
-	 * Creates an HTML fragment that places an image & caption together, for use
-	 * in a group header.
-	 * 
-	 * @param imageUrl the url of the icon image to be used
-	 * @param caption the group caption
-	 * @return the header HTML fragment
-	 */
+	   * Creates an HTML fragment that places an image & caption together, for use
+	   * in a group header.
+	   * 
+	   * @param imageUrl the url of the icon image to be used
+	   * @param caption the group caption
+	   * @return the header HTML fragment
+	   */
 	public static String createHeaderHTML(String imageUrl, String caption) {
 		return "<table align='left'><tr>" + "<td><img src='" + imageUrl + "'></td>"
 	      + "<td style='vertical-align:middle'><b style='white-space:nowrap; cursor: default;'>"
@@ -215,6 +215,22 @@ public class Util {
 	}
 	
 	/**
+	 * Download file by UUID
+	 * 
+	 * @param uuid
+	 * @param params
+	 */
+	public static void downloadFileByUUID(String uuid, String params) {
+		if (!params.equals("") && !params.endsWith("&")) {
+			params += "&";
+		}
+		
+		final Element downloadIframe = RootPanel.get("__download").getElement(); 
+		String url = RPCService.DownloadServlet + "?" + params + "uuid=" + URL.encodeQueryString(uuid);
+		DOM.setElementAttribute(downloadIframe, "src", url); 
+	}
+	
+	/**
 	 * Download file
 	 * 
 	 * @param path
@@ -266,10 +282,7 @@ public class Util {
 	 * @param uuid
 	 */
 	public static void print(String uuid) {
-		final Element printIframe = RootPanel.get("__print").getElement();
-		String url = RPCService.ConverterServlet + "?inline=true&toPdf=true&uuid=" + URL.encodeQueryString(uuid);
-		DOM.setElementAttribute(printIframe, "src", url); 
-		printFile();
+		// Not implemented
 	}
 	
 	/**
@@ -319,13 +332,6 @@ public class Util {
 	}-*/;
 	
 	/**
-	 * printFile
-	 */
-	public static native void printFile() /*-{
-		new $wnd.printFile();
-	}-*/;
-	
-	/**
 	 * Format file size in Bytes, KBytes or MBytes. 
 	 * @param size The file size in bytes.
 	 * @return The formated file size.
@@ -361,7 +367,7 @@ public class Util {
 	}-*/;
 	
 	/**
-	 *  returns 'opera', 'safari', 'ie6', 'ie7', 'gecko' or 'unknown'.
+	 *  returns 'opera', 'safari', 'ie6', 'ie7', 'ie8', 'ie9', 'gecko' or 'unknown'.
 	 */
     public static native String getUserAgent() /*-{
         try {
@@ -372,6 +378,7 @@ public class Util {
             if ( ua.indexOf('msie 6.0') != -1 ) return 'ie6';
             if ( ua.indexOf('msie 7.0') != -1 ) return 'ie7';
             if ( ua.indexOf('msie 8.0') != -1 ) return 'ie8';
+            if ( ua.indexOf('msie 9.0') != -1 ) return 'ie9';
             if ( ua.indexOf('gecko') != -1 ) return 'gecko';
             if ( ua.indexOf('opera') != -1 ) return 'opera';
             return 'unknown';

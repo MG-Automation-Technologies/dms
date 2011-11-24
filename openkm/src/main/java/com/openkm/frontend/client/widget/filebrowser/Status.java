@@ -102,7 +102,7 @@ public class Status extends PopupPanel {
 				|| flag_Folder_purge || flag_GetFolder || flag_GetDocument
 				|| flag_AddSubscription || flag_RemoveSubscription || flag_Mail_getChilds 
 				|| flag_Mail_delete || flag_Mail_purge || flag_Mail_getProperties
-				|| flag_Mail_rename ) {
+				|| flag_Mail_rename) {
 			int left = ((Main.get().mainPanel.desktop.getRight()-200)/2) + Main.get().mainPanel.desktop.getLeft();
 			int top = ((Main.get().mainPanel.desktop.browser.topHeight)/2) + TopPanel.PANEL_HEIGHT;
 			setPopupPosition(left,top);

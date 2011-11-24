@@ -58,7 +58,6 @@ public class FileUploadPopup extends DialogBox {
 	private FancyFileUpload ffUpload;
 	private int popupWidth = 415;
 	private int popupHeight = 125;
-	private int doAction = 0;
 	private boolean enableAddButton = false;
 	private boolean enableImport = true;
 	private boolean enableNotifyButton = true;
@@ -138,7 +137,12 @@ public class FileUploadPopup extends DialogBox {
             			}
             		} else {
             			// on failed or empty state
-            			sendButton.setVisible(true);
+            			if (ffUpload.getAction() == UIFileUploadConstants.ACTION_UPDATE && 
+            				ffUpload.getUploadState() != FancyFileUpload.EMPTY_STATE) {
+            				sendButton.setVisible(false); // checkin case
+            			} else {
+            				sendButton.setVisible(true);
+            			}
             		}
                }
             }
@@ -198,7 +202,7 @@ public class FileUploadPopup extends DialogBox {
 		addButton.setHTML(Main.i18n("fileupload.button.add.other.file"));
 		sendButton.setText(Main.i18n("fileupload.send"));	
 		
-		if (doAction == UIFileUploadConstants.ACTION_INSERT) {
+		if (ffUpload.getAction() == UIFileUploadConstants.ACTION_INSERT) {
 			setText(Main.i18n("fileupload.label.insert"));
 		} else {
 			setText(Main.i18n("fileupload.label.update"));
@@ -228,7 +232,7 @@ public class FileUploadPopup extends DialogBox {
 	 * Hide file upload 
 	 */
 	public void hide() {
-		if (doAction == UIFileUploadConstants.ACTION_UPDATE) {
+		if (ffUpload.getAction() == UIFileUploadConstants.ACTION_UPDATE) {
 			if (Main.get().mainPanel.desktop.browser.fileBrowser.table.isDocumentSelected()) {
 				GWTDocument doc = Main.get().mainPanel.desktop.browser.fileBrowser.table.getDocument();
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.setProperties(doc);
@@ -245,16 +249,6 @@ public class FileUploadPopup extends DialogBox {
 		closeButton.setVisible(true);
 		addButton.setVisible(true);
 		super.show();
-	}
-	
-	/**
-	 * Sets the action to do on upload ( create new file or update and existing )
-	 * 
-	 * @param action Action to do on upload 
-	 */
-	public void setAction(int action) {
-		doAction = action;
-		ffUpload.setAction(action);
 	}
 	
 	/**

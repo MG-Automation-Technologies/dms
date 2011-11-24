@@ -23,7 +23,6 @@ package com.openkm.jcr;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,7 +32,6 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.Property;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
@@ -73,7 +71,6 @@ import com.openkm.dao.LockTokenDAO;
 import com.openkm.dao.bean.LockToken;
 import com.openkm.module.direct.DirectAuthModule;
 import com.openkm.module.direct.DirectRepositoryModule;
-import com.openkm.util.EnvironmentDetector;
 import com.openkm.util.StackTraceUtils;
 
 public class JCRUtils {
@@ -345,11 +342,18 @@ public class JCRUtils {
 	/**
 	 * Repository Hot-Backup 
 	 */
-	public static File hotBackup() throws RepositoryException, IOException {
-		log.debug("hotBackup()");
+	public static File hotBackup(String base) throws RepositoryException, IOException {
+		log.debug("hotBackup({})", base);
 		String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 		String backDirName = Config.CONTEXT + "_" + date; 
-		File backDir = new File(System.getProperty("java.io.tmpdir") + File.separator + backDirName);
+		File backDir = null;
+		
+		if (base == null || base.equals("")) {
+			backDir = new File(System.getProperty("java.io.tmpdir") + File.separator + backDirName);
+		} else {
+			backDir  = new File(base, backDirName);
+		}
+		
 		FileUtils.deleteQuietly(backDir);
 		backDir.mkdir();
 		boolean oldSystemReadonly = Config.SYSTEM_READONLY; 
@@ -373,29 +377,15 @@ public class JCRUtils {
 	 */
 	public static Session getSession() throws javax.jcr.LoginException, javax.jcr.RepositoryException,
 			DatabaseException {
-		Subject subject = null;
 		Object obj = null;
 		
-		// Resolve subject
-		// Subject userSubject=(Subject)PolicyContext.getContext("javax.security.auth.Subject.container");
-		if (EnvironmentDetector.isServerJBoss()) {
-			try {
-				InitialContext ctx = new InitialContext();
-				subject = (Subject) ctx.lookup("java:/comp/env/security/subject");
-				ctx.close();
-			} catch (NamingException e) {
-				throw new javax.jcr.LoginException(e.getMessage());
-			}
-		} else if (EnvironmentDetector.isServerTomcat()) {
-			subject = Subject.getSubject(AccessController.getContext());
-		}
-		
-		// Obtain JCR session
-		if (subject != null) {
+		try {
+			InitialContext ctx = new InitialContext();
+			Subject subject = (Subject) ctx.lookup("java:comp/env/security/subject");
 			obj = Subject.doAs(subject, new PrivilegedAction<Object>() {
 				public Object run() {
 					Session s = null;
-					
+
 					try {
 						s = DirectRepositoryModule.getRepository().login();
 					} catch (javax.jcr.LoginException e) {
@@ -403,17 +393,18 @@ public class JCRUtils {
 					} catch (javax.jcr.RepositoryException e) {
 						return e;
 					}
-					
+
 					return s;
 				}
 			});
+		} catch (NamingException e) {
+			throw new javax.jcr.LoginException(e.getMessage());
 		}
 		
-		// Validate JCR session
 		if (obj instanceof javax.jcr.LoginException) {
 			throw (javax.jcr.LoginException) obj;
 		} else if (obj instanceof javax.jcr.RepositoryException) {
-			throw (javax.jcr.LoginException) obj;
+			throw (javax.jcr.RepositoryException) obj;
 		} else if (obj instanceof javax.jcr.Session) {
 			Session session = (javax.jcr.Session) obj;
 			log.debug("#{} - {} Create session {} from {}", new Object[] { ++sessionCreationCount, ++activeSessions, session, StackTraceUtils.whoCalledMe() });
@@ -456,28 +447,6 @@ public class JCRUtils {
 	public static String getPath(Session session, String uuid) throws javax.jcr.RepositoryException {
 		Node node = session.getNodeByUUID(uuid);
 		return node.getPath();
-	}
-	
-	/**
-	 * Get property from node
-	 */
-	public static Property getProperty(Node node, String name) throws javax.jcr.RepositoryException {
-		if (node.hasProperty(name)) {
-			return node.getProperty(name);
-		} else {
-			return null;
-		}
-	}
-	
-	/**
-	 * Get property from node
-	 */
-	public static String getStringProperty(Node node, String name) throws javax.jcr.RepositoryException {
-		if (node.hasProperty(name)) {
-			return node.getProperty(name).getString();
-		} else {
-			return null;
-		}
 	}
 	
 	/**

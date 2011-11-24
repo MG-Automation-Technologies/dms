@@ -53,6 +53,7 @@ import com.lowagie.text.pdf.PdfStamper;
 import com.lowagie.text.pdf.PdfWriter;
 
 import de.svenjacobs.loremipsum.LoremIpsum;
+import freemarker.template.TemplateException;
 
 /**
  * http://itextpdf.sourceforge.net/howtosign.html
@@ -185,31 +186,47 @@ public class PDFUtils {
 	
 	/**
 	 * Fill PDF form
+	 * @throws  
 	 */
 	@SuppressWarnings("rawtypes")
 	public static void fillForm(InputStream input, Map<String, Object> values, 
-			OutputStream output) throws FileNotFoundException, DocumentException, IOException {
+			OutputStream output) throws FileNotFoundException, DocumentException, TemplateException,
+			IOException  {
 		log.debug("fillForm({}, {}, {})", new Object[] { input, values, output });
 		PdfReader reader = new PdfReader(input);
 		PdfStamper stamper = new PdfStamper(reader, output);
 		AcroFields fields = stamper.getAcroFields();
 		PRAcroForm form = reader.getAcroForm();
+		boolean formFlattening = false;
 		
 		if (form != null) {
 			for (Iterator it = form.getFields().iterator(); it.hasNext(); ) {
 				PRAcroForm.FieldInformation field = (PRAcroForm.FieldInformation) it.next();
-				String value = (String) values.get(field.getName());
-				log.debug("Field: {}", field.getName());
+				String fieldValue = fields.getField(field.getName());
+				log.debug("Field: {}, Value: {}", field.getName(), fieldValue);
 				
-				if (value != null) {
-					log.debug("Set to '{}'", value);
-					fields.setField(field.getName(), value);
-					stamper.partialFormFlattening(field.getName());
+				if (fieldValue != null && !fieldValue.equals("")) {
+					if (values.containsKey(field.getName())) {
+						String result = TemplateUtils.replace("PDF_FILL_FORM", fieldValue, values);
+						log.debug("Set to '{}'", result);
+						fields.setField(field.getName(), result);
+						stamper.partialFormFlattening(field.getName());
+						formFlattening = true;
+					}
+				} else {
+					Object value = values.get(field.getName());
+					
+					if (value != null) {
+						log.debug("Set to '{}'", value);
+						fields.setField(field.getName(), value.toString());
+						stamper.partialFormFlattening(field.getName());
+						formFlattening = true;
+					}
 				}
 			}
 		}
 		
-		stamper.setFormFlattening(true);
+		stamper.setFormFlattening(formFlattening);
 		stamper.close();
 		reader.close();
 	}

@@ -1,8 +1,6 @@
 <%@ page import="com.openkm.servlet.admin.BaseServlet" %>
 <%@ page import="com.openkm.extension.dao.ExtensionDAO"%>
-<%@ page import="com.openkm.extension.frontend.client.widget.stamp.StampToolBarButton"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<c:set var="isStampRegistered"><%=StampToolBarButton.isRegistered(ExtensionDAO.findAllUuids())%></c:set>
 <c:set var="isMultipleInstancesAdmin"><%=BaseServlet.isMultipleInstancesAdmin(request)%></c:set>
 <table width="100%" border="0">
   <tr>
@@ -47,10 +45,6 @@
   &nbsp;
   <a target="frame" href="Workflow"><img src="img/toolbar/workflow.png" title="Workflow"></a>
   &nbsp;
-  <c:if test="${isStampRegistered}">
-    <a target="frame" href="Stamp"><img src="img/toolbar/stamp.png" title="Stamp"></a>
-    &nbsp;
-  </c:if>
   <c:if test="${isMultipleInstancesAdmin}">
     <a target="frame" href="CronTab"><img src="img/toolbar/crontab.png" title="Crontab"></a>
     &nbsp;

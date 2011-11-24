@@ -58,8 +58,9 @@ public class OKMFolder {
 
 	@WebMethod
 	public Folder create(@WebParam(name = "token") String token,
-			@WebParam(name = "fld") Folder fld) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, ItemExistsException, DatabaseException, ExtensionException {
+			@WebParam(name = "fld") Folder fld) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, ItemExistsException, DatabaseException,
+			ExtensionException {
 		log.debug("create({}, {})", token, fld);
 		FolderModule fm = ModuleManager.getFolderModule();
 		Folder newFolder = fm.create(token, fld);
