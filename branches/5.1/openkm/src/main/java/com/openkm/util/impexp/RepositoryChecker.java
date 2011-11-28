@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Mail;
+import com.openkm.bean.Note;
 import com.openkm.bean.Version;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
@@ -140,6 +141,8 @@ public class RepositoryChecker {
 				stats.setFolders(stats.getFolders() + tmp.getFolders());
 				stats.setSize(stats.getSize() + tmp.getSize());
 				stats.setOk(stats.isOk() && tmp.isOk());
+			} else if (child.isNodeType(Note.LIST_TYPE)) {
+				// Note nodes has no check procedure
 			} else {
 				log.error("Unknown node type: {} ({})", child.getPrimaryNodeType().getName(), child.getPath());
 				stats.setOk(false);
