@@ -133,7 +133,7 @@ public class ResourceUtils {
 		if (!path.getStripFirst().getStripFirst().isRoot()) {
 			String url = path.getParent().toPath();
 			pw.print("<tr>");
-			pw.print("<td><img src='/" + path.getFirst() + "/img/folder.png'/></td>");
+			pw.print("<td><img src='/" + path.getFirst() + "/img/webdav/folder.png'/></td>");
 			pw.print("<td><a href='" + url + "'>..</a></td>");
 			pw.println("<tr>");
 		}
