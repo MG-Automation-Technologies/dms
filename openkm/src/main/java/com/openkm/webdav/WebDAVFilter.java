@@ -52,8 +52,10 @@ public class WebDAVFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
 			ServletException {
 		if (Config.SYSTEM_WEBDAV_SERVER) {
+			response.setContentType(Config.MIME_HTML);
 			handleRequest(request, response);
 		} else {
+			response.setContentType(Config.MIME_TEXT);
 			PrintWriter out = response.getWriter();
 			out.println("WebDAV is disabled. Contact with your administrator.");
 			out.flush();

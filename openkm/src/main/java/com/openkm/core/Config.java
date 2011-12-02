@@ -238,6 +238,7 @@ public class Config {
 	public static String MIME_DWG = "image/vnd.dwg";
 	public static String MIME_TIFF = "image/tiff";
 	public static String MIME_HTML = "text/html";
+	public static String MIME_TEXT = "text/plain";
 	
 	/**
 	 *  Default values
