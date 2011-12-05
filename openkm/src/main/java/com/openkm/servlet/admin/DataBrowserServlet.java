@@ -25,6 +25,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -135,6 +137,10 @@ public class DataBrowserServlet extends BaseServlet {
 			}
 		}
 		
+		// Sort
+		Collections.sort(folders, new MapComparator());
+		Collections.sort(documents, new MapComparator());
+		
 		ServletContext sc = getServletContext();
 		sc.setAttribute("action", "fs");
 		sc.setAttribute("path", path);
@@ -189,6 +195,10 @@ public class DataBrowserServlet extends BaseServlet {
 			}
 		}
 		
+		// Sort
+		Collections.sort(folders, new MapComparator());
+		Collections.sort(documents, new MapComparator());
+		
 		ServletContext sc = getServletContext();
 		sc.setAttribute("action", "repo");
 		sc.setAttribute("path", path);
@@ -200,5 +210,16 @@ public class DataBrowserServlet extends BaseServlet {
 		// Activity log
 		UserActivity.log(request.getRemoteUser(), "ADMIN_REPOSITORY_LIST", path, null);
 		log.debug("repositoryList: void");
+	}
+	
+	/**
+	 * Specialized comparator.
+	 */
+	private class MapComparator implements Comparator<Map<String, String>> {
+
+		@Override
+		public int compare(Map<String, String> o1, Map<String, String> o2) {
+			return o1.get("name").compareToIgnoreCase(o2.get("name"));
+		}
 	}
 }
