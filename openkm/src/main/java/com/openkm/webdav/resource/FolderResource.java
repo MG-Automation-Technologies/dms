@@ -202,20 +202,20 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 				okmDocument.checkin(token, newDoc.getPath(), "Modified from WebDAV");
 			} else {
 				// Restrict for extension
-	       		StringTokenizer st = new StringTokenizer(Config.RESTRICT_FILE_EXTENSION, ",");
+				StringTokenizer st = new StringTokenizer(Config.RESTRICT_FILE_EXTENSION, ",");
 				
-	       		while (st.hasMoreTokens()) {
-	       			String wc = st.nextToken().trim();
-	       			String re = ResourceUtils.wildcard2regexp(wc);
-	       			
-	       			if (Pattern.matches(re, newName)) {
-	        			log.warn("Filename BAD -> {} ({})", re, wc);
-	        			return null;
-	        		} else {
-	        			// Create a new one
-	    				newDoc = okmDocument.create(token, newDoc, inputStream);
-	        		}
-	        	}
+				while (st.hasMoreTokens()) {
+					String wc = st.nextToken().trim();
+					String re = ResourceUtils.wildcard2regexp(wc);
+					
+					if (Pattern.matches(re, newName)) {
+						log.warn("Filename BAD -> {} ({})", re, wc);
+						return null;
+					}
+				}
+				
+				// Create a new one
+				newDoc = okmDocument.create(token, newDoc, inputStream);
 			}
 			
 			return new DocumentResource(newDoc);
