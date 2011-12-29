@@ -36,6 +36,7 @@ import com.bradmcevoy.http.Auth;
 import com.bradmcevoy.http.CollectionResource;
 import com.bradmcevoy.http.GetableResource;
 import com.bradmcevoy.http.PropFindableResource;
+import com.bradmcevoy.http.QuotaResource;
 import com.bradmcevoy.http.Range;
 import com.bradmcevoy.http.Request;
 import com.bradmcevoy.http.Request.Method;
@@ -49,7 +50,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.jcr.JCRUtils;
 import com.openkm.webdav.JcrSessionTokenHolder;
 
-public class RootResource implements PropFindableResource, GetableResource, CollectionResource {
+public class RootResource implements PropFindableResource, GetableResource, CollectionResource, QuotaResource {
 	private final Logger log = LoggerFactory.getLogger(RootResource.class);
 	private final List<Folder> fldChilds = new ArrayList<Folder>();
 	private Folder fld;
@@ -64,7 +65,7 @@ public class RootResource implements PropFindableResource, GetableResource, Coll
 		try {
 			String token = JcrSessionTokenHolder.get();
 			
-			Folder okmRoot= OKMRepository.getInstance().getRootFolder(token);
+			Folder okmRoot = OKMRepository.getInstance().getRootFolder(token);
 			fldChilds.add(ResourceUtils.fixResourcePath(okmRoot));
 			this.fld.setCreated(okmRoot.getCreated());
 			
@@ -82,7 +83,7 @@ public class RootResource implements PropFindableResource, GetableResource, Coll
 			log.error("Exception: " + e.getMessage());
 		}
 	}
-		
+	
 	public Folder getFolder() {
 		return fld;
 	}
@@ -182,10 +183,20 @@ public class RootResource implements PropFindableResource, GetableResource, Coll
 	}
 	
 	@Override
+	public Long getQuotaUsed() {
+		return new Long(0);
+	}
+	
+	@Override
+	public Long getQuotaAvailable() {
+		return Long.MAX_VALUE;
+	}
+	
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("fld="); sb.append(fld);
+		sb.append("fld=").append(fld);
 		sb.append("}");
 		return sb.toString();
 	}

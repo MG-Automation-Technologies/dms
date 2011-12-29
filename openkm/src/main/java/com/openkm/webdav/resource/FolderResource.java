@@ -49,6 +49,7 @@ import com.bradmcevoy.http.MakeCollectionableResource;
 import com.bradmcevoy.http.MoveableResource;
 import com.bradmcevoy.http.PropFindableResource;
 import com.bradmcevoy.http.PutableResource;
+import com.bradmcevoy.http.QuotaResource;
 import com.bradmcevoy.http.Range;
 import com.bradmcevoy.http.Request;
 import com.bradmcevoy.http.Request.Method;
@@ -70,7 +71,7 @@ import com.openkm.jcr.JCRUtils;
 import com.openkm.webdav.JcrSessionTokenHolder;
 
 public class FolderResource implements MakeCollectionableResource, PutableResource, CopyableResource,
-		DeletableResource, MoveableResource, PropFindableResource, GetableResource, LockableResource {
+		DeletableResource, MoveableResource, PropFindableResource, GetableResource, LockableResource, QuotaResource {
 	private final Logger log = LoggerFactory.getLogger(FolderResource.class);
 	private final List<Document> docChilds;
 	private final List<Folder> fldChilds;
@@ -86,8 +87,7 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 		this.fld = ResourceUtils.fixResourcePath(fld);
 	}
 	
-	public FolderResource(Path path, Folder fld, List<Folder> fldChilds, List<Document> docChilds,
-			List<Mail> mailChilds) {
+	public FolderResource(Path path, Folder fld, List<Folder> fldChilds, List<Document> docChilds, List<Mail> mailChilds) {
 		this.fldChilds = fldChilds;
 		this.docChilds = docChilds;
 		this.mailChilds = mailChilds;
@@ -323,32 +323,42 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 					+ newParent.getClass());
 		}
 	}
-
+	
 	@Override
 	public LockResult lock(LockTimeout timeout, LockInfo lockInfo) throws NotAuthorizedException,
 			PreConditionFailedException, LockedException {
 		return null;
 	}
-
+	
 	@Override
 	public LockResult refreshLock(String token) throws NotAuthorizedException, PreConditionFailedException {
 		return null;
 	}
-
+	
 	@Override
 	public void unlock(String tokenId) throws NotAuthorizedException, PreConditionFailedException {
 	}
-
+	
 	@Override
 	public LockToken getCurrentLock() {
 		return null;
 	}
 	
 	@Override
+	public Long getQuotaUsed() {
+		return new Long(0);
+	}
+	
+	@Override
+	public Long getQuotaAvailable() {
+		return Long.MAX_VALUE;
+	}
+	
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("fld="); sb.append(fld);
+		sb.append("fld=").append(fld);
 		sb.append("}");
 		return sb.toString();
 	}
