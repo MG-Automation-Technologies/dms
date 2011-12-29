@@ -51,7 +51,10 @@
 
     <!-- Using this Jackrabbit version -->
     <jcr.version>1.6.5</jcr.version>
-
+	
+	<!-- Milton WebDAV -->
+    <milton.version>1.6.8</milton.version>
+    
     <!-- Tell the compiler we can use 1.6 -->
     <java.compiler>1.6</java.compiler>
     
@@ -538,12 +541,12 @@
     <dependency>
       <groupId>com.ettrema</groupId>
       <artifactId>milton-api</artifactId>
-      <version>1.6.4</version>
+      <version>${milton.version}</version>
     </dependency>
     <dependency>
       <groupId>com.ettrema</groupId>
       <artifactId>milton-servlet</artifactId>
-      <version>1.6.4</version>
+      <version>${milton.version}</version>
     </dependency>
   </dependencies>
   
