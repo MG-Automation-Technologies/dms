@@ -94,18 +94,22 @@ public class ResourceUtils {
 		String token = JcrSessionTokenHolder.get();
 		String fixedPath = ResourceUtils.fixRepositoryPath(path);
 		
-		if (OKMFolder.getInstance().isValid(token, fixedPath)) {
-			Resource res = getFolder(srcPath, path);
-			log.debug("getNode: {}", res);
-			return res;
-		} else if (OKMDocument.getInstance().isValid(token, fixedPath)) {
-			Resource res = getDocument(path);
-			log.debug("getNode: {}", res);
-			return res;
-		} else if (OKMMail.getInstance().isValid(token, fixedPath)) {
-			Resource res = getMail(path);
-			log.debug("getNode: {}", res);
-			return res;
+		try {
+			if (OKMFolder.getInstance().isValid(token, fixedPath)) {
+				Resource res = getFolder(srcPath, path);
+				log.debug("getNode: {}", res);
+				return res;
+			} else if (OKMDocument.getInstance().isValid(token, fixedPath)) {
+				Resource res = getDocument(path);
+				log.debug("getNode: {}", res);
+				return res;
+			} else if (OKMMail.getInstance().isValid(token, fixedPath)) {
+				Resource res = getMail(path);
+				log.debug("getNode: {}", res);
+				return res;
+			}
+		} catch (PathNotFoundException e) {
+			log.warn("PathNotFoundException: {}", e.getMessage());
 		}
 		
 		log.debug("getNode: null");
