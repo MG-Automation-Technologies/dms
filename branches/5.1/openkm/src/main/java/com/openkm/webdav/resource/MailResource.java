@@ -46,6 +46,7 @@ import com.bradmcevoy.http.LockableResource;
 import com.bradmcevoy.http.MoveableResource;
 import com.bradmcevoy.http.PropFindableResource;
 import com.bradmcevoy.http.PropPatchableResource;
+import com.bradmcevoy.http.QuotaResource;
 import com.bradmcevoy.http.Range;
 import com.bradmcevoy.http.Request;
 import com.bradmcevoy.http.Request.Method;
@@ -64,8 +65,8 @@ import com.openkm.jcr.JCRUtils;
 import com.openkm.util.MailUtils;
 import com.openkm.webdav.JcrSessionTokenHolder;
 
-public class MailResource implements CopyableResource, DeletableResource, GetableResource,
-		MoveableResource, PropFindableResource, PropPatchableResource, LockableResource {
+public class MailResource implements CopyableResource, DeletableResource, GetableResource, MoveableResource,
+		PropFindableResource, PropPatchableResource, LockableResource, QuotaResource {
 	private static final Logger log = LoggerFactory.getLogger(MailResource.class);
 	private Mail mail;
 	
@@ -85,13 +86,14 @@ public class MailResource implements CopyableResource, DeletableResource, Getabl
 	
 	@Override
 	public Object authenticate(String user, String password) {
-		//log.debug("authenticate({}, {})", new Object[] { user, password });
+		// log.debug("authenticate({}, {})", new Object[] { user, password });
 		return "OpenKM";
 	}
 	
 	@Override
 	public boolean authorise(Request request, Method method, Auth auth) {
-		//log.debug("authorise({}, {}, {})", new Object[] { request.getAbsolutePath(), method.toString(), auth.getUser() });
+		// log.debug("authorise({}, {}, {})", new Object[] { request.getAbsolutePath(), method.toString(),
+		// auth.getUser() });
 		return true;
 	}
 	
@@ -161,7 +163,7 @@ public class MailResource implements CopyableResource, DeletableResource, Getabl
 			log.error("MessagingException: " + e.getMessage(), e);
 		}
 	}
-
+	
 	@Override
 	public void delete() throws NotAuthorizedException, ConflictException, BadRequestException {
 		log.debug("delete()");
@@ -174,12 +176,12 @@ public class MailResource implements CopyableResource, DeletableResource, Getabl
 			throw new ConflictException(this);
 		}
 	}
-
+	
 	@Override
 	public void setProperties(Fields fields) {
 		// MIL-50: not implemented. Just to keep MS Office sweet
 	}
-
+	
 	@Override
 	public void moveTo(CollectionResource newParent, String newName) throws ConflictException, NotAuthorizedException,
 			BadRequestException {
@@ -223,32 +225,42 @@ public class MailResource implements CopyableResource, DeletableResource, Getabl
 					+ newParent.getClass());
 		}
 	}
-
+	
 	@Override
 	public LockResult lock(LockTimeout timeout, LockInfo lockInfo) throws NotAuthorizedException,
 			PreConditionFailedException, LockedException {
 		return null;
 	}
-
+	
 	@Override
 	public LockResult refreshLock(String token) throws NotAuthorizedException, PreConditionFailedException {
 		return null;
 	}
-
+	
 	@Override
 	public void unlock(String tokenId) throws NotAuthorizedException, PreConditionFailedException {
 	}
-
+	
 	@Override
 	public LockToken getCurrentLock() {
 		return null;
 	}
 	
 	@Override
+	public Long getQuotaUsed() {
+		return new Long(0);
+	}
+	
+	@Override
+	public Long getQuotaAvailable() {
+		return Long.MAX_VALUE;
+	}
+	
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("mail="); sb.append(mail);
+		sb.append("mail=").append(mail);
 		sb.append("}");
 		return sb.toString();
 	}

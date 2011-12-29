@@ -44,6 +44,7 @@ import com.bradmcevoy.http.LockableResource;
 import com.bradmcevoy.http.MoveableResource;
 import com.bradmcevoy.http.PropFindableResource;
 import com.bradmcevoy.http.PropPatchableResource;
+import com.bradmcevoy.http.QuotaResource;
 import com.bradmcevoy.http.Range;
 import com.bradmcevoy.http.Request;
 import com.bradmcevoy.http.Request.Method;
@@ -63,8 +64,8 @@ import com.openkm.core.RepositoryException;
 import com.openkm.jcr.JCRUtils;
 import com.openkm.webdav.JcrSessionTokenHolder;
 
-public class DocumentResource implements CopyableResource, DeletableResource, GetableResource,
-		MoveableResource, PropFindableResource, PropPatchableResource, LockableResource {
+public class DocumentResource implements CopyableResource, DeletableResource, GetableResource, MoveableResource,
+		PropFindableResource, PropPatchableResource, LockableResource, QuotaResource {
 	private static final Logger log = LoggerFactory.getLogger(DocumentResource.class);
 	private Document doc;
 	private LockToken lt;
@@ -85,13 +86,14 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 	
 	@Override
 	public Object authenticate(String user, String password) {
-		//log.debug("authenticate({}, {})", new Object[] { user, password });
+		// log.debug("authenticate({}, {})", new Object[] { user, password });
 		return "OpenKM";
 	}
 	
 	@Override
 	public boolean authorise(Request request, Method method, Auth auth) {
-		//log.debug("authorise({}, {}, {})", new Object[] { request.getAbsolutePath(), method.toString(), auth.getUser() });
+		// log.debug("authorise({}, {}, {})", new Object[] { request.getAbsolutePath(), method.toString(),
+		// auth.getUser() });
 		return true;
 	}
 	
@@ -152,7 +154,7 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 			IOUtils.closeQuietly(is);
 		}
 	}
-
+	
 	@Override
 	public void delete() throws NotAuthorizedException, ConflictException, BadRequestException {
 		log.debug("delete()");
@@ -165,12 +167,12 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 			throw new ConflictException(this);
 		}
 	}
-
+	
 	@Override
 	public void setProperties(Fields fields) {
 		// MIL-50: not implemented. Just to keep MS Office sweet
 	}
-
+	
 	@Override
 	public void moveTo(CollectionResource newParent, String newName) throws ConflictException, NotAuthorizedException,
 			BadRequestException {
@@ -214,14 +216,14 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 					+ newParent.getClass());
 		}
 	}
-
+	
 	@Override
 	public LockResult lock(LockTimeout timeout, LockInfo lockInfo) throws NotAuthorizedException,
 			PreConditionFailedException, LockedException {
 		String fixedDocPath = ResourceUtils.fixRepositoryPath(doc.getPath());
 		
 		try {
-			String token = JcrSessionTokenHolder.get();	
+			String token = JcrSessionTokenHolder.get();
 			Lock lock = OKMDocument.getInstance().lock(token, fixedDocPath);
 			lt = new LockToken();
 			lt.tokenId = lock.getToken();
@@ -232,26 +234,36 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 			throw new RuntimeException("Failed to lock: " + fixedDocPath);
 		}
 	}
-
+	
 	@Override
 	public LockResult refreshLock(String token) throws NotAuthorizedException, PreConditionFailedException {
 		return LockResult.success(lt);
 	}
-
+	
 	@Override
 	public void unlock(String tokenId) throws NotAuthorizedException, PreConditionFailedException {
 	}
-
+	
 	@Override
 	public LockToken getCurrentLock() {
 		return lt;
 	}
 	
 	@Override
+	public Long getQuotaUsed() {
+		return new Long(0);
+	}
+	
+	@Override
+	public Long getQuotaAvailable() {
+		return Long.MAX_VALUE;
+	}
+	
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("doc="); sb.append(doc);
+		sb.append("doc=").append(doc);
 		sb.append("}");
 		return sb.toString();
 	}
