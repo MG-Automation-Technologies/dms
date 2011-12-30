@@ -301,9 +301,14 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 								} else if (fe instanceof TextArea) {
 									((TextArea) fe).setValue(value.getString());
 								} else if (fe instanceof Select) {
-									for (Option opt : ((Select) fe).getOptions()) {
-										if (opt.getValue().equals(value.getString())) {
-											opt.setSelected(true);
+									if (!value.getString().equals("")) {
+										// If has stored value, prioritize over defaults  
+										for (Option opt : ((Select) fe).getOptions()) {
+											if (opt.getValue().equals(value.getString())) {
+												opt.setSelected(true);
+											} else {
+												opt.setSelected(false);
+											}
 										}
 									}
 								} else {
