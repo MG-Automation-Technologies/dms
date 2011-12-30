@@ -567,13 +567,10 @@ public class DirectFolderModule implements FolderModule {
 				valid = true;
 			}
 		} catch (javax.jcr.PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
 		} catch (javax.jcr.AccessDeniedException e) {
-			log.warn(e.getMessage(), e);
 			throw new AccessDeniedException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
 			if (token == null) JCRUtils.logout(session);
