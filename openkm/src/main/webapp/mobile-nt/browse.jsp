@@ -5,13 +5,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8" />  
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />  
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
   <title>OpenKM Mobile</title>
   <link rel="apple-touch-icon" href="img/condor.jpg" />
-  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0b1/jquery.mobile-1.0b1.min.css" />
-  <script src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
-  <script src="http://code.jquery.com/mobile/1.0b1/jquery.mobile-1.0b1.min.js"></script>
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
+  <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+  <script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
   <script type="text/javascript">
     $(function() {
       $('li').bind('taphold', function(e) {
@@ -48,7 +49,7 @@
               <c:otherwise><c:set var="fldImg" value="menuitem_empty.gif"/></c:otherwise>
             </c:choose>
             <img src="../frontend/img/${fldImg}" class="ui-li-icon"/>
-            <a href="${urlBrowse}" data-transition="slide"><u:getName path="${fld.path}"/></a>
+            <a href="${urlBrowse}" data-transition="slide" style="padding-left: 30px;"><u:getName path="${fld.path}"/></a>
             <a href="${urlProperties}" data-role="button"></a>
           </li>
         </c:forEach>
@@ -68,7 +69,7 @@
             <c:url value="/mime/${doc.mimeType}" var="urlIcon"></c:url>
             <c:set var="size"><u:formatSize size="${doc.actualVersion.size}"/></c:set>
             <img src="${urlIcon}" class="ui-li-icon"/>
-            <a href="${urlDownload}" data-ajax="false"><u:getName path="${doc.path}"/></a>
+            <a href="${urlDownload}" data-ajax="false" style="padding-left: 30px;"><u:getName path="${doc.path}"/></a>
             <span class="ui-li-count">${size}</span>
             <a href="${urlProperties}" data-role="button"></a>
           </li>
