@@ -96,7 +96,7 @@ public class NotifyPopup extends DialogBox  {
 			}
 		});
 		
-		sendButton = new Button(Main.i18n("fileupload.send"), new ClickHandler() { 
+		sendButton = new Button(Main.i18n("button.send"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
 				// Only sends if there's some user selected
@@ -168,7 +168,7 @@ public class NotifyPopup extends DialogBox  {
 				break;
 		}
 		closeButton.setHTML(Main.i18n("button.close")); 
-		sendButton.setHTML(Main.i18n("fileupload.send"));
+		sendButton.setHTML(Main.i18n("button.send"));
 		commentTXT = new HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + Main.i18n("fileupload.label.notify.comment"));
 		errorNotify.setHTML(Main.i18n("fileupload.label.must.select.users"));
 		notifyPanel.langRefresh();

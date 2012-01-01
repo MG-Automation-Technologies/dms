@@ -133,7 +133,7 @@ public class Bookmark {
 				bookmarks.add(tmpBookmark); // Save menuItem to list to refreshing management
 			}
 			
-			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_TAXONOMY); // Sets the next status to loading
+			Main.get().startUp.nextStatus(StartUp.STARTUP_INIT_TREE_NODES); // Sets the next status to loading
 		}
 
 		public void onFailure(Throwable caught) {

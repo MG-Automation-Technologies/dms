@@ -564,6 +564,49 @@ public class MainMenu extends Composite {
 	}
 	
 	/**
+	 * disableAllOptions
+	 */
+	public void disableAllOptions() {
+		mainMenuOption.createFolderOption = false;
+		mainMenuOption.findFolderOption = false;
+		mainMenuOption.findDocumentOption = false;
+		mainMenuOption.downloadOption = false;
+		mainMenuOption.downloadPdfOption = false;
+		mainMenuOption.lockOption = false;
+		mainMenuOption.unLockOption = false;
+		mainMenuOption.addDocumentOption = false;
+		mainMenuOption.checkoutOption = false;
+		mainMenuOption.checkinOption = false;
+		mainMenuOption.cancelCheckoutOption = false;
+		mainMenuOption.deleteOption = false;
+		mainMenuOption.addPropertyGroupOption = false;
+		mainMenuOption.removePropertyGroupOption = false;
+		mainMenuOption.firedRemovePropertyGroupOption = false;
+		mainMenuOption.addSubscription = false;
+		mainMenuOption.removeSubscription = false;
+		mainMenuOption.homeOption = false;
+		mainMenuOption.refreshOption = false;
+		mainMenuOption.renameOption = false;
+		mainMenuOption.copyOption = false;
+		mainMenuOption.sendDocumentLinkOption = false;
+		mainMenuOption.sendDocumentAttachmentOption = false;
+		mainMenuOption.moveOption = false;
+		mainMenuOption.exportOption = false;
+		mainMenuOption.workflowOption = false;
+		mainMenuOption.addNoteOption = false;
+		mainMenuOption.scannerOption = false;
+		mainMenuOption.uploaderOption = false;
+		mainMenuOption.splitterResizeOption = false;
+		mainMenuOption.bookmarkOption = false;
+		mainMenuOption.goOption = false;
+		mainMenuOption.createFromTemplateOption = false;
+		mainMenuOption.restore = false;
+		mainMenuOption.purge = false;
+		mainMenuOption.purgeTrash = false;
+		evaluateMenuOptions();
+	}
+
+	/**
 	 * Sets the main menu options
 	 * 
 	 * @param mainMenuOption The manin Menu options
@@ -1047,7 +1090,6 @@ public class MainMenu extends Composite {
 				subMenuHelp.addItem(extension);
 				break;
 		}
-		
 	}
 	
 	/**
