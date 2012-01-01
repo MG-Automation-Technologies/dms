@@ -185,6 +185,7 @@ public class GroupPopup extends DialogBox {
 		public void onSuccess(List<GWTPropertyGroup> result){
 			groupListBox.clear();
 			groupListBox.addItem("",""); // Adds empty value
+			
 			for (Iterator<GWTPropertyGroup> it = result.iterator(); it.hasNext();) {
 				GWTPropertyGroup group = it.next();
 				groupListBox.addItem(group.getLabel() ,group.getName());

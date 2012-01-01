@@ -78,6 +78,7 @@ public class SearchNormal extends Composite {
 	public CalendarWidget calendar;
 	public Image startCalendarIcon;
 	public Image endCalendarIcon;
+	public Image cleanIcon;
 	public HTML dateBetween;
 	public int calendarFired = CALENDAR_FIRED_NONE;
 	public Date modifyDateFrom;
@@ -136,6 +137,11 @@ public class SearchNormal extends Composite {
 			public void onChange(ChangeEvent event) {
 				// each time list is changed must clean folder
 				Main.get().mainPanel.search.searchBrowser.searchIn.searchAdvanced.path.setText("");
+				
+				// Always enable mail search in mail view
+				if (mailVisible && context.getSelectedIndex()==posMail) {
+					Main.get().mainPanel.search.searchBrowser.searchIn.searchAdvanced.enableMailSearch();
+				}
 			}
 		});
 		
@@ -150,7 +156,8 @@ public class SearchNormal extends Composite {
 		calendarPopup = new PopupPanel(true);
 		startCalendarIcon = new Image(OKMBundleResources.INSTANCE.calendar());
 		endCalendarIcon =  new Image(OKMBundleResources.INSTANCE.calendar());
-		dateBetween = new HTML("&nbsp;&nbsp;" + Main.i18n("search.date.and") + "&nbsp;&nbsp;");
+		cleanIcon = new Image(OKMBundleResources.INSTANCE.cleanIcon());
+		dateBetween = new HTML("&nbsp;&harr;&nbsp;");
 		
 		userListBox.addChangeHandler(new ChangeHandler() {
 			@Override
@@ -189,19 +196,42 @@ public class SearchNormal extends Composite {
 			@Override
 			public void onClick(ClickEvent event) {
 				calendarFired = CALENDAR_FIRED_START;
+				if (modifyDateFrom!=null) {
+					calendar.setNow((Date)modifyDateFrom.clone());
+				} else {
+					calendar.setNow(null);
+				}
 				calendarPopup.setPopupPosition(startCalendarIcon.getAbsoluteLeft(), startCalendarIcon.getAbsoluteTop()-2);
 				calendarPopup.show();
 			}
 		});
+		startCalendarIcon.setStyleName("okm-Hyperlink");
 		
 		endCalendarIcon.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
 				calendarFired = CALENDAR_FIRED_END;
+				if (modifyDateTo!=null) {
+					calendar.setNow((Date)modifyDateTo.clone());
+				} else {
+					calendar.setNow(null);
+				}
 				calendarPopup.setPopupPosition(endCalendarIcon.getAbsoluteLeft(), endCalendarIcon.getAbsoluteTop()-2);
 				calendarPopup.show();
 			}
 		});
+		endCalendarIcon.setStyleName("okm-Hyperlink");
+		
+		cleanIcon.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				startDate.setText("");
+				modifyDateFrom = null;
+				endDate.setText("");
+				modifyDateTo = null;
+			}
+		});
+		cleanIcon.setStyleName("okm-Hyperlink");
 		
 		// Date range panel
 		dateRange.add(startDate);
@@ -209,6 +239,7 @@ public class SearchNormal extends Composite {
 		dateRange.add(dateBetween);
 		dateRange.add(endDate);
 		dateRange.add(endCalendarIcon);
+		dateRange.add(cleanIcon);
 		startDate.setWidth("70");
 		endDate.setWidth("70");
 		startDate.setMaxLength(10);
@@ -217,6 +248,9 @@ public class SearchNormal extends Composite {
 		endDate.setReadOnly(true);
 		dateRange.setCellVerticalAlignment(startCalendarIcon,HasAlignment.ALIGN_MIDDLE);
 		dateRange.setCellVerticalAlignment(endCalendarIcon,HasAlignment.ALIGN_MIDDLE);
+		dateRange.setCellVerticalAlignment(cleanIcon,HasAlignment.ALIGN_MIDDLE);
+		dateRange.setCellWidth(cleanIcon, "25");
+		dateRange.setCellHorizontalAlignment(cleanIcon, HasAlignment.ALIGN_RIGHT);
 		dateBetween.addStyleName("okm-NoWrap");
 		
 		table.setHTML(0, 0, Main.i18n("search.context"));
@@ -326,7 +360,6 @@ public class SearchNormal extends Composite {
 			context.setItemText(posTrash, Main.i18n("leftpanel.label.trash"));
 		}
 		
-		dateBetween.setHTML("&nbsp;&nbsp;" + Main.i18n("search.date.and") + "&nbsp;&nbsp;");
 		calendar.langRefresh();
 	}
 	

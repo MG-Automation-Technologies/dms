@@ -222,6 +222,15 @@ public class SearchAdvanced extends Composite {
 	}
 	
 	/**
+	 * enableMailSearch
+	 */
+	public void enableMailSearch() {
+		typeMail.setValue(true);
+		mailText.setVisible(true);
+		tableMail.setVisible(true);
+	}
+	
+	/**
 	 * langRefresh
 	 */
 	public void langRefresh() {

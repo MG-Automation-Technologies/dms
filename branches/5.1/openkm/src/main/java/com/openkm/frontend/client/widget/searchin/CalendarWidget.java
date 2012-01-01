@@ -33,37 +33,57 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.openkm.frontend.client.Main;
 
 /**
  * CalendarWidget
  */
 public class CalendarWidget extends Composite implements ClickHandler, HasChangeHandlers {
-
+	
+	private Date date = new Date();
+	private Date now = new Date(); 
+	private String[] days = new String[] { "", "", "", "", "", "", "" };	
+	private String[] months = new String[] { "", "", "", "", "", "", "", "", "", "", "", "" };
+	private final NavBar navbar = new NavBar(this);
+	private final VerticalPanel calendarPanel = new VerticalPanel();
+	private final Grid grid = new Grid(7, 7) {
+		public boolean clearCell(int row, int column) {
+			boolean retValue = super.clearCell(row, column);
+			Element td = getCellFormatter().getElement(row, column);
+			DOM.setInnerHTML(td, "");
+			return retValue;
+		}
+	};
+	private int firstDayOfWeek = 0;
+	
+	/**
+	 * NavBar
+	 * 
+	 * @author jllort
+	 *
+	 */
 	private class NavBar extends Composite implements ClickHandler {
 	
-		public final DockPanel bar = new DockPanel();
-		public final Button prevMonth = new Button("&lt;", this);
-		public final Button prevYear = new Button("&lt;&lt;", this);
-		public final Button nextYear = new Button("&gt;&gt;", this);
-		public final Button nextMonth = new Button("&gt;", this);
-		public final HTML title = new HTML();
-		
+		private final HorizontalPanel hPanel = new HorizontalPanel();
+		private final Button prevMonth = new Button("&lt;", this);
+		private final Button prevYear = new Button("&lt;&lt;", this);
+		private final Button nextYear = new Button("&gt;&gt;", this);
+		private final Button nextMonth = new Button("&gt;", this);
+		private final HTML title = new HTML();
 		private final CalendarWidget calendar;
 		
 		public NavBar(CalendarWidget calendar) {
-			initWidget(bar);
+			initWidget(hPanel);
 			
 			this.calendar = calendar;
 
-			bar.setStyleName("navbar");
+			hPanel.setStyleName("navbar");
 			title.setStyleName("header");
 		
 			HorizontalPanel prevButtons = new HorizontalPanel();
@@ -79,15 +99,17 @@ public class CalendarWidget extends Composite implements ClickHandler, HasChange
 			nextYear.addStyleName("okm-Input");
 			nextMonth.addStyleName("okm-Input");
 		
-			bar.add(prevButtons, DockPanel.WEST);
-			bar.setCellHorizontalAlignment(prevButtons, DockPanel.ALIGN_LEFT);
-			bar.add(nextButtons, DockPanel.EAST);
-			bar.setCellHorizontalAlignment(nextButtons, DockPanel.ALIGN_RIGHT);
-		  	bar.add(title, DockPanel.CENTER);
-		  	bar.setVerticalAlignment(DockPanel.ALIGN_MIDDLE);
-		  	bar.setCellHorizontalAlignment(title, HasAlignment.ALIGN_CENTER);
-		  	bar.setCellVerticalAlignment(title, HasAlignment.ALIGN_MIDDLE);
-		  	bar.setCellWidth(title, "100%");
+			hPanel.add(prevButtons);
+			hPanel.add(title);
+			hPanel.add(nextButtons);
+			hPanel.setCellWidth(prevButtons, "60");
+			hPanel.setCellWidth(nextButtons, "60");
+			hPanel.setCellHeight(prevButtons, "18");
+			hPanel.setCellHeight(nextButtons, "18");
+			hPanel.setCellHorizontalAlignment(prevButtons, HasAlignment.ALIGN_LEFT);
+			hPanel.setCellHorizontalAlignment(title, HasAlignment.ALIGN_CENTER);
+			hPanel.setCellHorizontalAlignment(nextButtons, HasAlignment.ALIGN_RIGHT);
+
 		}
 		
 		/* (non-Javadoc)
@@ -121,36 +143,17 @@ public class CalendarWidget extends Composite implements ClickHandler, HasChange
 		}
 	}
 	
-	private final NavBar navbar = new NavBar(this);
-	private final DockPanel outer = new DockPanel();
-	
-	private final Grid grid = new Grid(7, 7) {
-		public boolean clearCell(int row, int column) {
-			boolean retValue = super.clearCell(row, column);
-		       
-			Element td = getCellFormatter().getElement(row, column);
-			DOM.setInnerHTML(td, "");
-			return retValue;
-		}
-	};
-	
-	private Date date = new Date();
-	
-	private String[] days = new String[] { "", "", "", "", "", "", "" };
-	
-	private String[] months = new String[] { "", "", "", "", "", "", "", "", "", "", "", "" };
-	
 	/**
 	 * CalendarWidget
 	 */
 	public CalendarWidget() {
-		initWidget(outer);
+		initWidget(calendarPanel);
 		grid.setStyleName("table");
 		grid.setCellSpacing(0);
-		outer.add(navbar, DockPanel.NORTH);
-		outer.add(grid, DockPanel.CENTER);
+		calendarPanel.add(navbar);
+		calendarPanel.add(grid);
+		calendarPanel.setWidth("230");
 		langRefresh(); // Sets language translations
-		drawCalendar();
 		setStyleName("CalendarWidget");
 	}
 	
@@ -163,16 +166,25 @@ public class CalendarWidget extends Composite implements ClickHandler, HasChange
 		int month = getMonth();
 		setHeaderText(year, month);
 		grid.getRowFormatter().setStyleName(0, "weekheader");
+		
+		// Draw days of week column
 		for (int i = 0; i < days.length; i++) {
 			grid.getCellFormatter().setStyleName(0, i, "days");
-			grid.setText(0, i, days[i].substring(0, 3));
+			int pos = i-firstDayOfWeek; // make day of week rectification while drawing
+			if (pos<0) {
+				pos = pos +7;
+			}
+			grid.setText(0, pos, days[i].substring(0, 3));
 		}
-	
-		Date now = new Date();
+		
 		int sameDay = now.getDate();
 		int today = (now.getMonth() == month && now.getYear()+1900 == year) ? sameDay : 0;
 		   
 		int firstDay = new Date(year - 1900, month, 1).getDay();
+		firstDay = firstDay - firstDayOfWeek; // make day of week rectification at stating drawing
+		if (firstDay<0) {
+			firstDay = firstDay +7;
+		}
 		int numOfDays = getDaysInMonth(year, month);
 	
 		int j = 0;
@@ -275,6 +287,22 @@ public class CalendarWidget extends Composite implements ClickHandler, HasChange
 	 */
 	public void nextYear() {
 		setYear(getYear() + 1);
+		drawCalendar();
+	}
+	
+	/**
+	 * setNow
+	 * 
+	 * @param now
+	 */
+	@SuppressWarnings("deprecation")
+	public void setNow(Date now) {
+		if (now==null) {
+			now = new Date();
+		}
+		setYear(now.getYear()+1900);
+		setMonth(now.getMonth());
+		this.now = now;
 		drawCalendar();
 	}
 	
@@ -383,6 +411,7 @@ public class CalendarWidget extends Composite implements ClickHandler, HasChange
 	 * langRefresh
 	 */
 	public void langRefresh() {
+		firstDayOfWeek = Integer.parseInt(Main.i18n("calendar.first.day.of.week"));
 		days[0] = Main.i18n("calendar.day.sunday");
 		days[1] = Main.i18n("calendar.day.monday");
 		days[2] = Main.i18n("calendar.day.tuesday");
@@ -402,5 +431,6 @@ public class CalendarWidget extends Composite implements ClickHandler, HasChange
 		months[9] = Main.i18n("calendar.month.october");
 		months[10] = Main.i18n("calendar.month.november");
 		months[11] = Main.i18n("calendar.month.december");
+		drawCalendar();
 	}	
 }  
