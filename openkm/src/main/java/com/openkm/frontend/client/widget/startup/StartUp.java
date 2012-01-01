@@ -36,12 +36,18 @@ import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.extension.ExtensionManager;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
+import com.openkm.frontend.client.service.OKMDocumentService;
+import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
+import com.openkm.frontend.client.service.OKMFolderService;
+import com.openkm.frontend.client.service.OKMFolderServiceAsync;
 import com.openkm.frontend.client.service.OKMGeneralService;
 import com.openkm.frontend.client.service.OKMGeneralServiceAsync;
 import com.openkm.frontend.client.service.OKMRepositoryService;
 import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
 import com.openkm.frontend.client.service.OKMUserConfigService;
 import com.openkm.frontend.client.service.OKMUserConfigServiceAsync;
+import com.openkm.frontend.client.util.CommonUI;
+import com.openkm.frontend.client.widget.mainmenu.Bookmark;
 
 /**
  * @author jllort
@@ -60,29 +66,23 @@ public class StartUp {
 	public static final int STARTUP_GET_TRASH 	 	  						= 8;
 	public static final int STARTUP_GET_USER_HOME 	  						= 9;
 	public static final int STARTUP_GET_BOOKMARKS							= 10;
-	public static final int STARTUP_LOADING_TAXONOMY						= 11;
-	public static final int STARTUP_LOADING_TAXONOMY_FOLDERS				= 12;
+	public static final int STARTUP_INIT_TREE_NODES							= 11;
+	public static final int STARTUP_LOADING_HISTORY_SEARCH					= 12;
 	public static final int STARTUP_LOADING_TAXONOMY_EVAL_PARAMS			= 13;
 	public static final int STARTUP_LOADING_OPEN_PATH						= 14;
-	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_FOLDERS	= 15;
-	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_DOCUMENTS	= 16;
-	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS		= 17;
-	public static final int STARTUP_LOADING_CATEGORIES						= 18;
-	public static final int STARTUP_LOADING_THESAURUS						= 19;
-	public static final int STARTUP_LOADING_TEMPLATES						= 20;
-	public static final int STARTUP_LOADING_PERSONAL						= 21;
-	public static final int STARTUP_LOADING_MAIL							= 22;	
-	public static final int STARTUP_LOADING_TRASH							= 23;
-	public static final int STARTUP_LOADING_HISTORY_SEARCH					= 24;
 	
 	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
 	private final OKMAuthServiceAsync authService = (OKMAuthServiceAsync) GWT.create(OKMAuthService.class);
 	private final OKMUserConfigServiceAsync userConfigService = (OKMUserConfigServiceAsync) GWT.create(OKMUserConfigService.class);
 	private final OKMGeneralServiceAsync generalService = (OKMGeneralServiceAsync) GWT.create(OKMGeneralService.class);
+	private final OKMFolderServiceAsync folderService = (OKMFolderServiceAsync) GWT.create(OKMFolderService.class);
+	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
 	
 	private boolean enabled = true;
 	private boolean error = false;
 	private int status = -1;
+	private String docPath = null;
+	private String fldPath = null;	
 	public Timer keepAlive;
 	
 	/**
@@ -337,6 +337,74 @@ public class StartUp {
 	}
 	
 	/**
+	 * Call back opens document passed by url param
+	 */
+	final AsyncCallback<Boolean> callbackIsValidDocument = new AsyncCallback<Boolean>() {
+		public void onSuccess(Boolean result) {
+			if (result.booleanValue()) {
+				// Opens folder passed by parameter
+				CommonUI.openAllFolderPath(fldPath, docPath);
+			}
+			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_OPEN_PATH);
+		}
+
+		public void onFailure(Throwable caught) {
+			Main.get().showError("isValid", caught);
+			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_OPEN_PATH);
+		}
+	};
+
+	/**
+	 * Call back opens folder passed by url param
+	 */
+	final AsyncCallback<Boolean> callbackIsValidFolder = new AsyncCallback<Boolean>() {
+		public void onSuccess(Boolean result) {
+			if (result.booleanValue()) {
+				// Opens folder passed by parameter
+				CommonUI.openAllFolderPath(fldPath, "");
+			}
+			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_OPEN_PATH);
+		}
+
+		public void onFailure(Throwable caught) {
+			Main.get().showError("isValid", caught);
+			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_OPEN_PATH);
+		}
+	};
+	
+	/**
+	 * Opens a document destination passed by url parameter
+	 */
+	private void openDocumentByBrowserURLParam() {
+		Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_TAXONOMY_EVAL_PARAMS);
+		fldPath = Main.get().fldPath;
+		docPath = Main.get().docPath;
+		// Always reset variables
+		Main.get().docPath = null;
+		Main.get().fldPath = null;
+		
+		// Simulate we pass params by broser ( take a look really are not passed )
+		// to show user home on loading
+		if (fldPath==null || fldPath.equals("")) {
+			if (Main.get().userHome.getHomeType().equals(Bookmark.BOOKMARK_DOCUMENT)) {
+				docPath = Main.get().userHome.getHomePath();
+				fldPath = Main.get().userHome.getHomePath().substring(0,Main.get().userHome.getHomePath().lastIndexOf("/"));
+			} else if (Main.get().userHome.getHomeType().equals(Bookmark.BOOKMARK_FOLDER)) {
+				fldPath = Main.get().userHome.getHomePath();
+			}
+		}		
+		
+		// Opens folder passed by parameter
+		if (docPath != null && !docPath.equals("")) {
+			documentService.isValid(docPath, callbackIsValidDocument);
+		} else if (fldPath != null && !fldPath.equals("")) {
+			folderService.isValid(fldPath, callbackIsValidFolder);
+		} else { 
+			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_OPEN_PATH);
+		}
+	}
+	
+	/**
 	 * Sets the next status
 	 * 
 	 * @param status The new status 
@@ -404,66 +472,16 @@ public class StartUp {
 						Main.get().mainPanel.desktop.browser.tabMultiple.init();			// Initialize tab multiple
 						break;
 					
-					case STARTUP_LOADING_TAXONOMY:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.taxonomy"), STARTUP_LOADING_TAXONOMY);
-						Main.get().mainPanel.desktop.navigator.taxonomyTree.init();			// Initialize folder tree
-						break;
-					
-					case STARTUP_LOADING_TAXONOMY_FOLDERS:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.taxonomy.getting.folders"), STARTUP_LOADING_TAXONOMY_FOLDERS);
-						break;
-					
-					case STARTUP_LOADING_TAXONOMY_EVAL_PARAMS:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.taxonomy.eval.params"), STARTUP_LOADING_TAXONOMY_EVAL_PARAMS);
-						break;
-					
-					case STARTUP_LOADING_OPEN_PATH:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.taxonomy.open.path"), STARTUP_LOADING_OPEN_PATH);
-						break;
-					
-					case STARTUP_LOADING_TAXONOMY_FILEBROWSER_FOLDERS:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.taxonomy.getting.filebrowser.folders"),
-														  STARTUP_LOADING_TAXONOMY_FILEBROWSER_FOLDERS);
-						break;
-					
-					case STARTUP_LOADING_TAXONOMY_FILEBROWSER_DOCUMENTS:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.taxonomy.getting.filebrowser.documents"),
-														  STARTUP_LOADING_TAXONOMY_FILEBROWSER_DOCUMENTS);
-						break;
-					
-					case STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.taxonomy.getting.filebrowser.mails"),
-														  STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS);
-						break;
-						
-					case STARTUP_LOADING_CATEGORIES:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.categories"), STARTUP_LOADING_CATEGORIES);
-						Main.get().mainPanel.desktop.navigator.categoriesTree.init();	  	// Initialize thesaurus
-						break;
-						
-					case STARTUP_LOADING_THESAURUS:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.thesaurus"), STARTUP_LOADING_THESAURUS);
-						Main.get().mainPanel.desktop.navigator.thesaurusTree.init();	  	// Initialize thesaurus
-						break;
-						
-					case STARTUP_LOADING_TEMPLATES:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.templates"), STARTUP_LOADING_TEMPLATES);
-						Main.get().mainPanel.desktop.navigator.templateTree.init();	   		// Initialize templates
-						break;
-					
-					case STARTUP_LOADING_PERSONAL:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.personal"), STARTUP_LOADING_PERSONAL);
-						Main.get().mainPanel.desktop.navigator.personalTree.init();			// Initialize my documents
-						break;
-
-					case STARTUP_LOADING_MAIL:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.mail"), STARTUP_LOADING_MAIL);
-						Main.get().mainPanel.desktop.navigator.mailTree.init();				// Initialize mail
-						break;
-
-					case STARTUP_LOADING_TRASH:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.trash"), STARTUP_LOADING_TRASH);
-						Main.get().mainPanel.desktop.navigator.trashTree.init();			// Initialize trash folder
+					case STARTUP_INIT_TREE_NODES:
+						Main.get().startUpPopup.addStatus(Main.i18n("startup.init.tree.nodes"), STARTUP_INIT_TREE_NODES);
+						Main.get().mainPanel.desktop.navigator.taxonomyTree.init();
+						Main.get().mainPanel.desktop.navigator.categoriesTree.init();
+						Main.get().mainPanel.desktop.navigator.thesaurusTree.init();
+						Main.get().mainPanel.desktop.navigator.templateTree.init();
+						Main.get().mainPanel.desktop.navigator.personalTree.init();
+						Main.get().mainPanel.desktop.navigator.mailTree.init();
+						Main.get().mainPanel.desktop.navigator.trashTree.init();
+						Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_HISTORY_SEARCH);
 						break;
 					
 					case STARTUP_LOADING_HISTORY_SEARCH:
@@ -473,10 +491,22 @@ public class StartUp {
 						Main.get().mainPanel.setVisible(true);
 						Main.get().workspaceUserProperties.setAvailableAction(); // Some actions ( menus / etc ... ) must be set at ends startup
 						  														 // After init widget methods ares all yet finished
+						
+						Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_TAXONOMY_EVAL_PARAMS);
+						break;
+						
+					case STARTUP_LOADING_TAXONOMY_EVAL_PARAMS:
+						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.taxonomy.eval.params"), STARTUP_LOADING_TAXONOMY_EVAL_PARAMS);
+						openDocumentByBrowserURLParam();
+						break;
+					
+					case STARTUP_LOADING_OPEN_PATH:
+						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.taxonomy.open.path"), STARTUP_LOADING_OPEN_PATH);
 						enabled = false;
+						
 						if (!error) {
 							Main.get().startUpPopup.hide();
-						} 
+						}
 						break;
 				}			
 			}
@@ -497,16 +527,10 @@ public class StartUp {
 		error = true;
 		Main.get().startUpPopup.button.setVisible(true);
 		
-		if (status<STARTUP_LOADING_HISTORY_SEARCH) {	
+		if (status<STARTUP_LOADING_OPEN_PATH) {	
 			// This range are sequential calls
-			if (status<STARTUP_LOADING_TAXONOMY) {
+			if (status<STARTUP_INIT_TREE_NODES) {
 				nextStatus(status+1); // Tries to execute next initializing
-			
-			// This range must start with loading personal ( sequential in this range is break )
-			} else if (status<STARTUP_LOADING_CATEGORIES) {
-				nextStatus(STARTUP_LOADING_CATEGORIES); // Tries to execute next initializing
-			
-            // This range are sequential calls
 			} else {
 				nextStatus(status+1); // Tries to execute next initializing
 			}
@@ -564,14 +588,14 @@ public class StartUp {
 				msg = Main.i18n("startup.bookmarks");
 				break;
 			
-			case STARTUP_LOADING_TAXONOMY:
+			case STARTUP_INIT_TREE_NODES:
 				msg = Main.i18n("startup.loading.taxonomy");
 				break;
 			
-			case STARTUP_LOADING_TAXONOMY_FOLDERS:
-				msg = Main.i18n("startup.loading.taxonomy.getting.folders");
-				break;
-			
+			case STARTUP_LOADING_HISTORY_SEARCH:
+				msg = Main.i18n("startup.loading.history.search");
+				break;	
+				
 			case STARTUP_LOADING_TAXONOMY_EVAL_PARAMS:
 				msg = Main.i18n("startup.loading.taxonomy.eval.params");
 				break;
@@ -579,49 +603,18 @@ public class StartUp {
 			case STARTUP_LOADING_OPEN_PATH:
 				msg = Main.i18n("startup.loading.taxonomy.open.path");
 				break;
-			
-			case STARTUP_LOADING_TAXONOMY_FILEBROWSER_FOLDERS:
-				msg = Main.i18n("startup.loading.taxonomy.getting.filebrowser.folders");
-				break;
-			
-			case STARTUP_LOADING_TAXONOMY_FILEBROWSER_DOCUMENTS:
-				msg = Main.i18n("startup.loading.taxonomy.getting.filebrowser.documents");
-				break;
-			
-			case STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS:
-				msg = Main.i18n("startup.loading.taxonomy.getting.filebrowser.mails");
-				break;
-				
-			case STARTUP_LOADING_CATEGORIES:
-				msg = Main.i18n("startup.loading.categories");
-				break;
-				
-			case STARTUP_LOADING_THESAURUS:
-				msg = Main.i18n("startup.loading.thesaurus");
-				break;
-				
-			case STARTUP_LOADING_TEMPLATES:
-				msg = Main.i18n("startup.loading.templates");
-				break;
-			
-			case STARTUP_LOADING_PERSONAL:
-				msg = Main.i18n("startup.loading.personal");
-				break;
-				
-			case STARTUP_LOADING_MAIL:
-				msg = Main.i18n("startup.loading.mail");
-				break;
-			
-			case STARTUP_LOADING_TRASH:
-				msg = Main.i18n("startup.loading.trash");
-				break;
-			
-			case STARTUP_LOADING_HISTORY_SEARCH:
-				msg = Main.i18n("startup.loading.history.search");
-				break;			
 		}			
 		
 		return msg;
+	}
+	
+	/**
+	 * getStatus
+	 * 
+	 * @return
+	 */
+	public int getStatus() {
+		return status;
 	}
 	
 }

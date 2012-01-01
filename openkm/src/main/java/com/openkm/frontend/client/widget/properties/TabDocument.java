@@ -250,6 +250,17 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	}
 	
 	/**
+	 * refreshPreviewDocument
+	 * 
+	 * Used by extended previewers
+	 */
+	public void refreshPreviewDocument() {
+		if (selectedTab == PREVIEW_TAB) {
+			previewDocument(false);
+		}
+	}
+	
+	/**
 	 * Refresh security values
 	 */
 	public void securityRefresh() {

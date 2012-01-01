@@ -133,13 +133,16 @@ public class SearchFullResult extends Composite {
 		Anchor anchor = new Anchor();
 		anchor.setHTML(doc.getName());
 		anchor.setStyleName("okm-Hyperlink");
+		String path = "";
 		// On attachemt case must remove last folder path, because it's internal usage not for visualization
 		if (doc.isAttachment()) {
 			anchor.setTitle(doc.getParent().substring(0, doc.getParent().lastIndexOf("/")));
+			path = doc.getParent();
 		} else {
 			anchor.setTitle(doc.getParent());
+			path = doc.getPath();
 		}
-		final String docPath = doc.getPath();
+		final String docPath = path;
 		anchor.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
