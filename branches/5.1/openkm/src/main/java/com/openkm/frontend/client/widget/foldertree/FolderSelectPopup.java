@@ -357,20 +357,23 @@ public class FolderSelectPopup extends DialogBox  {
 				break;
 				
 			case ENTRYPOINT_CATEGORIES:
-				contextListBox.setItemText(0,Main.i18n("leftpanel.label.categories"));
+				contextListBox.setItemText(0, Main.i18n("leftpanel.label.categories"));
 				break;
 				
 			default:
 				int count = 0;
-				contextListBox.setItemText(count++,Main.i18n("leftpanel.label.taxonomy"));
+				contextListBox.setItemText(count++, Main.i18n("leftpanel.label.taxonomy"));
+				
 				if (templatesVisible) {
-					contextListBox.setItemText(count++,Main.i18n("leftpanel.label.templates"));
+					contextListBox.setItemText(count++, Main.i18n("leftpanel.label.templates"));
 				}
+				
 				if (personalVisible) {
-					contextListBox.setItemText(count++,Main.i18n("leftpanel.label.my.documents"));
+					contextListBox.setItemText(count++, Main.i18n("leftpanel.label.my.documents"));
 				}
+				
 				if (mailVisible) {
-					contextListBox.setItemText(count++,Main.i18n("leftpanel.label.mail"));
+					contextListBox.setItemText(count++, Main.i18n("leftpanel.label.mail"));
 				}
 				break;
 		}

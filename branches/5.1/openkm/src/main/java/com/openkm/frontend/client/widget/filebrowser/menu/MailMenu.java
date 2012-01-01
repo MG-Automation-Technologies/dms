@@ -24,13 +24,9 @@ package com.openkm.frontend.client.widget.filebrowser.menu;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTAvailableOption;
-import com.openkm.frontend.client.bean.GWTDocument;
-import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.bean.GWTMail;
-import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.bean.ToolBarOption;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.MenuBase;
 
@@ -42,12 +38,7 @@ import com.openkm.frontend.client.widget.MenuBase;
  */
 public class MailMenu extends MenuBase {
 	
-	private boolean deleteOption 			= false;
-	private boolean moveOption 				= false;
-	private boolean copyOption				= false;
-	private boolean renameOption 			= false;
-
-	
+	private ToolBarOption toolBarOption;
 	private MenuBar dirMenu;
 	private MenuItem delete;
 	private MenuItem rename;
@@ -55,9 +46,10 @@ public class MailMenu extends MenuBase {
 	private MenuItem copy;
 	
 	/**
-	 * Browser menu
+	 * MailMenu
 	 */
 	public MailMenu() {
+		toolBarOption = new ToolBarOption();
 		// The item selected must be called on style.css : .okm-MenuBar .gwt-MenuItem-selected
 		
 		// First initialize language values
@@ -82,7 +74,7 @@ public class MailMenu extends MenuBase {
 	// Command menu to lock file
 	Command deleteFile = new Command() {
 		public void execute() {
-			if (deleteOption) {
+			if (toolBarOption.deleteOption) {
 				Main.get().mainPanel.desktop.browser.fileBrowser.confirmDelete();
 				hide();
 			}
@@ -92,7 +84,7 @@ public class MailMenu extends MenuBase {
 	// Command menu to rename file
 	Command renameFile = new Command() {
 		public void execute() {
-			if (renameOption) {
+			if (toolBarOption.renameOption) {
 				Main.get().mainPanel.desktop.browser.fileBrowser.rename();
 				hide();
 			}
@@ -102,7 +94,7 @@ public class MailMenu extends MenuBase {
 	// Command menu to rename file
 	Command moveFile = new Command() {
 		public void execute() {
-			if (moveOption) {
+			if (toolBarOption.moveOption) {
 				Main.get().mainPanel.desktop.browser.fileBrowser.move();
 				hide();
 			}
@@ -112,112 +104,41 @@ public class MailMenu extends MenuBase {
 	// Command menu to rename file
 	Command copyFile = new Command() {
 		public void execute() {
-			if (copyOption) {
+			if (toolBarOption.copyOption) {
 				Main.get().mainPanel.desktop.browser.fileBrowser.copy();
 				hide();
 			}
 		}
 	};
 	
-	
-	/**
-	 *  Refresh language values
-	 */
+	@Override
 	public void langRefresh() {
 		delete.setHTML(Util.menuHTML("img/icon/actions/delete.gif", Main.i18n("filebrowser.menu.delete")));
 		rename.setHTML(Util.menuHTML("img/icon/actions/rename.gif", Main.i18n("filebrowser.menu.rename")));
 		move.setHTML(Util.menuHTML("img/icon/actions/move_document.gif", Main.i18n("filebrowser.menu.move")));
 		copy.setHTML(Util.menuHTML("img/icon/actions/copy.gif", Main.i18n("filebrowser.menu.copy")));
 	}
-	
-	/**
-	 * Checks permissions associated to folder and menu options enabled actions
-	 * 
-	 * @param folder The folder
-	 */
-	public void checkMenuOptionPermissions(GWTFolder folder, GWTFolder folderParent) {
-		copyOption 				= true;
-		
-		if ( (folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE && 
-			 (folderParent.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE )  {
-			deleteOption 		= true;
-			renameOption 		= true;
-			moveOption 			= true;
-		} else {
-			deleteOption 		= false;
-			renameOption 		= false;
-			moveOption 			= false;
-		}
+	@Override
+	public void setOptions(ToolBarOption toolBarOption) {
+		this.toolBarOption = toolBarOption;
+		toolBarOption.bookmarkOption = true;
+		evaluateMenuOptions();
 	}
 	
-	/**
-	 * Checks permissions associated to document and menu options enabled actions
-	 * 
-	 * @param doc The document
-	 */
-	public void checkMenuOptionPermissions(GWTDocument doc, GWTFolder folder) {	
-		copyOption 				= true;
-		
-		if ( (doc.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE)  {
-			if ( (folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE)  {
-				deleteOption 			= true;
-				renameOption 			= true;
-				moveOption 				= true;
-			} else {
-				deleteOption 			= false;
-				renameOption 			= false;
-				moveOption 				= false;
-			}
-		} else {
-			deleteOption 			= false;
-			renameOption 			= false;
-			moveOption 				= false;
-		}
-	}
-	
-	/**
-	 * Checks permissions associated to mail and menu options enabled actions
-	 * 
-	 * @param mail The document
-	 */
-	public void checkMenuOptionPermissions(GWTMail mail, GWTFolder folder) {			
-		copyOption 				= true;
-		renameOption 			= false;
-		
-		if ( (mail.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE)  {
-			if ( (folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE)  {
-				renameOption 			= true;
-				deleteOption 			= true;
-				moveOption 				= true;
-			} else {
-				renameOption 			= false;
-				deleteOption 			= false;
-				moveOption 				= false;
-			}
-		} else {
-			deleteOption 			= false;
-			renameOption 			= false;
-			moveOption 				= false;
-		}
-	}
-	
-	/**
-	 * Disables all menu options
-	 */
-	public void disableAllMenuOption() {
-		deleteOption 		 	= false; 
-		renameOption 			= false;
-		moveOption 			 	= false;
+	@Override
+	public void disableAllOptions() {
+		toolBarOption = new ToolBarOption();
+		evaluateMenuOptions();
 	}
 	
 	/**
 	 * Evaluates menu options
 	 */
 	public void evaluateMenuOptions(){
-		if (deleteOption){enable(delete);} else {disable(delete);}
-		if (renameOption){enable(rename);} else {disable(rename);}
-		if (moveOption){enable(move);} else {disable(move);}
-		if (copyOption){enable(copy);} else {disable(copy);}
+		if (toolBarOption.deleteOption){enable(delete);} else {disable(delete);}
+		if (toolBarOption.renameOption){enable(rename);} else {disable(rename);}
+		if (toolBarOption.moveOption){enable(move);} else {disable(move);}
+		if (toolBarOption.copyOption){enable(copy);} else {disable(copy);}
 	}
 	
 	/**
@@ -229,21 +150,17 @@ public class MailMenu extends MenuBase {
 	
 	@Override
 	public void setAvailableOption(GWTAvailableOption option) {
-		delete.setVisible(option.isDeleteOption());
-		rename.setVisible(option.isRenameOption());
-		move.setVisible(option.isMoveOption());
-		copy.setVisible(option.isCopyOption());		
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.widget.MenuBase#enableAllMenuOptions()
-	 */
-	public void enableAllMenuOptions(){
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.widget.MenuBase#enableRootMenuOptions()
-	 */
-	public void enableRootMenuOptions(){
+		if (!option.isDeleteOption()) {
+			dirMenu.removeItem(delete);
+		}
+		if (!option.isRenameOption()) {
+			dirMenu.removeItem(rename);
+		}
+		if (!option.isMoveOption()) {
+			dirMenu.removeItem(move);
+		}
+		if (!option.isCopyOption()) {
+			dirMenu.removeItem(copy);
+		}	
 	}
 }

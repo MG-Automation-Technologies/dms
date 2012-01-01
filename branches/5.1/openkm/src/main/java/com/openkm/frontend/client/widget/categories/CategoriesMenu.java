@@ -24,13 +24,9 @@ package com.openkm.frontend.client.widget.categories;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTAvailableOption;
-import com.openkm.frontend.client.bean.GWTDocument;
-import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.bean.GWTMail;
-import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.bean.ToolBarOption;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.MenuBase;
 
@@ -42,19 +38,14 @@ import com.openkm.frontend.client.widget.MenuBase;
  */
 public class CategoriesMenu extends MenuBase {
 	
-	private boolean createOption 		= true;
-	private boolean renameOption 		= false;
-	private boolean moveOption 			= false;
-	
-	private boolean rootNode 			= true;  // Indicates root node selected ( option menu are specific on this case ).
-	
+	private ToolBarOption toolBarOption;
 	private MenuBar dirMenu;
-	
 	private MenuItem create;
 	private MenuItem rename;
 	private MenuItem move;
 	
 	public CategoriesMenu() {
+		toolBarOption = new ToolBarOption();
 		// The item selected must be called on style.css : .okm-MenuBar .gwt-MenuItem-selected
 		
 		// First initialize language values
@@ -75,7 +66,7 @@ public class CategoriesMenu extends MenuBase {
 	// Command menu to add a new Directory
 	Command addFolder = new Command() {
 		public void execute() {
-			if (createOption) {
+			if (toolBarOption.createFolderOption) {
 				Main.get().activeFolderTree.addTmpFolderCreate();
 				Main.get().activeFolderTree.hideMenuPopup();
 			}
@@ -85,7 +76,7 @@ public class CategoriesMenu extends MenuBase {
 	// Command menu to rename a new Directory
 	Command renFolder = new Command() {
 		public void execute() {
-			if (renameOption) {
+			if (toolBarOption.renameOption) {
 				Main.get().activeFolderTree.rename();
 				Main.get().activeFolderTree.hideMenuPopup();
 			}
@@ -95,7 +86,7 @@ public class CategoriesMenu extends MenuBase {
 	// Command menu to refresh actual Directory
 	Command moveFolder = new Command() {
 		public void execute() {
-			if (moveOption) {
+			if (toolBarOption.moveOption) {
 				Main.get().activeFolderTree.move();
 				Main.get().activeFolderTree.hideMenuPopup();
 			}
@@ -111,67 +102,33 @@ public class CategoriesMenu extends MenuBase {
 	
 	@Override
 	public void evaluateMenuOptions() {
-		if (createOption) {enable(create);} else {disable(create);}
-		if (renameOption) {enable(rename);} else {disable(rename);}
-		if (moveOption) {enable(move);} else {disable(move);}
-	}
-	
-	@Override
-	public void enableRootMenuOptions() {
-		rootNode	 = true;
-		createOption = true;
-		renameOption = false;
-		moveOption	 = false;
-	}
-	
-	@Override
-	public void enableAllMenuOptions() {
-		rootNode		= false;
-		createOption 	= true;
-		renameOption 	= true;
-		moveOption		= true;
-	}
-	
-	@Override
-	public void disableAllMenuOption() {
-		createOption 	= false;
-		renameOption 	= false;
-		moveOption		= false;
-	}
-	
-	@Override
-	public void checkMenuOptionPermissions(GWTFolder folder, GWTFolder folderParent) {
-		if ( (folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE)  {	
-			createOption = true;
-			
-			// Evaluates root node case
-			if (rootNode) {
-				renameOption = false;
-				moveOption	 = false;
-			} else if ((folderParent.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE){
-				renameOption = true;
-				moveOption	 = true;
-			} else {
-				renameOption = false;
-				moveOption	 = false;
-			}
-		} else {
-			createOption = false;
-			renameOption = false;
-			moveOption	 = false;
-		}
+		if (toolBarOption.createFolderOption) {enable(create);} else {disable(create);}
+		if (toolBarOption.renameOption) {enable(rename);} else {disable(rename);}
+		if (toolBarOption.moveOption) {enable(move);} else {disable(move);}
 	}
 	
 	@Override
 	public void setAvailableOption(GWTAvailableOption option) {
-		create.setVisible(option.isCreateFolderOption());
-		rename.setVisible(option.isRenameOption());
-		move.setVisible(option.isMoveOption());
+		if (!option.isCreateFolderOption()) {
+			dirMenu.removeItem(create);
+		}
+		if (!option.isRenameOption()) {
+			dirMenu.removeItem(rename);
+		}
+		if (!option.isMoveOption()) {
+			dirMenu.removeItem(move);
+		}
+	}
+
+	@Override
+	public void setOptions(ToolBarOption toolBarOption) {
+		this.toolBarOption = toolBarOption;
+		evaluateMenuOptions();
 	}
 	
 	@Override
-	public void checkMenuOptionPermissions(GWTMail mail, GWTFolder folder) {}
-	
-	@Override
-	public void checkMenuOptionPermissions(GWTDocument doc, GWTFolder folder) {}
+	public void disableAllOptions() {
+		toolBarOption = new ToolBarOption();
+		evaluateMenuOptions();
+	}
 }

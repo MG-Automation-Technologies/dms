@@ -24,12 +24,9 @@ package com.openkm.frontend.client.widget.filebrowser.menu;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTAvailableOption;
-import com.openkm.frontend.client.bean.GWTDocument;
-import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.bean.GWTMail;
+import com.openkm.frontend.client.bean.ToolBarOption;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.MenuBase;
 
@@ -41,11 +38,13 @@ import com.openkm.frontend.client.widget.MenuBase;
  */
 public class TrashMenu extends MenuBase {
 	
+	private ToolBarOption toolBarOption;
 	private MenuBar dirMenu;
 	private MenuItem restoreItem;
 	private MenuItem purgeItem;
 	
 	public TrashMenu() {
+		toolBarOption = new ToolBarOption();
 		// The item selected must be called on style.css : .okm-MenuBar .gwt-MenuItem-selected
 		
 		// First initialize language values
@@ -63,23 +62,25 @@ public class TrashMenu extends MenuBase {
 	// Command menu to restore Directory or Document
 	Command restore = new Command() {
 		public void execute() {
-			Main.get().mainPanel.desktop.browser.fileBrowser.trashMenuPopup.hide();
-			Main.get().mainPanel.desktop.browser.fileBrowser.restore();
+			if (toolBarOption.restore) {
+				Main.get().mainPanel.desktop.browser.fileBrowser.trashMenuPopup.hide();
+				Main.get().mainPanel.desktop.browser.fileBrowser.restore();
+			}
 		}
 	};
 	
 	// Command menu to remove a Directory or Document
 	Command purge = new Command() {
 		public void execute() {
-			Main.get().mainPanel.desktop.browser.fileBrowser.trashMenuPopup.hide();
-			Main.get().mainPanel.desktop.browser.fileBrowser.confirmPurge();
+			if (toolBarOption.purge) {
+				Main.get().mainPanel.desktop.browser.fileBrowser.trashMenuPopup.hide();
+				Main.get().mainPanel.desktop.browser.fileBrowser.confirmPurge();
+			}
 		}
 	};
 	
 	
-	/**
-	 *  Refresh language values
-	 */
+	@Override
 	public void langRefresh() {
 		restoreItem.setHTML(Util.menuHTML("img/icon/actions/restore.gif", Main.i18n("trash.menu.directory.restore")));
 		purgeItem.setHTML(Util.menuHTML("img/icon/actions/purge.gif", Main.i18n("trash.menu.directory.purge")));
@@ -87,49 +88,29 @@ public class TrashMenu extends MenuBase {
 	
 	@Override
 	public void setAvailableOption(GWTAvailableOption option) {
-		restoreItem.setVisible(option.isRestoreOption());
-		purgeItem.setVisible(option.isPurgeOption());
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.widget.MenuBase#checkMenuOptionPermissions(com.openkm.frontend.client.bean.GWTFolder, com.openkm.frontend.client.bean.GWTFolder)
-	 */
-	public void checkMenuOptionPermissions(GWTFolder folder, GWTFolder folderParent) {
+		if (!option.isRestoreOption()) {
+			dirMenu.removeItem(restoreItem);
+		}
+		if (!option.isPurgeOption()) {
+			dirMenu.removeItem(purgeItem);
+		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.widget.MenuBase#enableAllMenuOptions()
-	 */
-	public void enableAllMenuOptions() {
-	}
-
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.widget.MenuBase#enableRootMenuOptions()
-	 */
-	public void enableRootMenuOptions() {
-	}
-
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.widget.MenuBase#evaluateMenuOptions()
-	 */
+	@Override
 	public void evaluateMenuOptions() {
+		if (toolBarOption.restore){enable(restoreItem);} else {disable(restoreItem);}
+		if (toolBarOption.purge){enable(purgeItem);} else {disable(purgeItem);}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.widget.MenuBase#disableAllMenuOption()
-	 */
-	public void disableAllMenuOption() {
-	}
-
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.widget.MenuBase#checkMenuOptionPermissions(com.openkm.frontend.client.bean.GWTDocument, com.openkm.frontend.client.bean.GWTFolder)
-	 */
-	public void checkMenuOptionPermissions(GWTDocument doc, GWTFolder folder) {
+	@Override
+	public void setOptions(ToolBarOption toolBarOption) {
+		this.toolBarOption = toolBarOption;
+		evaluateMenuOptions();
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.widget.MenuBase#checkMenuOptionPermissions(com.openkm.frontend.client.bean.GWTMail, com.openkm.frontend.client.bean.GWTFolder)
-	 */
-	public void checkMenuOptionPermissions(GWTMail mail, GWTFolder folder) {
+	@Override
+	public void disableAllOptions() {
+		toolBarOption = new ToolBarOption();
+		evaluateMenuOptions();
 	}
 }

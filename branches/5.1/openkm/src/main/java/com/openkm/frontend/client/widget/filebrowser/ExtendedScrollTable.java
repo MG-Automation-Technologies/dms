@@ -58,6 +58,9 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 	// Special event case
 	private static final int EVENT_ONMOUSEDOWN_RIGHT = -2;
 	
+	// Drag pixels sensibility
+	private static final int DRAG_PIXELS_SENSIBILITY = 3;
+	
 	// Holds the data rows of the table this is a list of RowData Object
 	public Map<Integer, Object> data = new HashMap<Integer, Object>();
 	private FixedWidthGrid dataTable;
@@ -68,6 +71,8 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 	private int mouseY = 0;
 	private int dataIndexValue = 0;
 	private int rowAction = ACTION_NONE;
+	private int mouseDownX = 0;
+	private int mouseDownY = 0;
 	
 	private boolean dragged = false;
 	
@@ -427,7 +432,7 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 						if (getSelectedRow() != selectedRow) { // Must not refresh properties on double click if row is yet selected
 							Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.setProperties(getFolder());
 						}
-						Main.get().activeFolderTree.setActiveNode(getFolder().getPath(),true);
+						Main.get().activeFolderTree.setActiveNode(getFolder().getPath(), false, true);
 					} else if (isMailSelected()) {				
 						Main.get().mainPanel.desktop.browser.tabMultiple.enableTabMail();
 						GWTMail mail = getMail();
@@ -451,7 +456,7 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 				break;
 			
 			case Event.ONMOUSEMOVE:
-				if (isDragged()) {
+				if (isDragged() && mouseDownX>0 && mouseDownY>0 && evalDragPixelSensibility()) {
 		            
 		            // Implements drag & drop
 		            int noAction = FileBrowser.ACTION_NONE;
@@ -472,6 +477,9 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 				break;
 				
 			case Event.ONMOUSEDOWN:
+				// saves initial mouse positions
+				mouseDownX = mouseX;
+				mouseDownY = mouseY;
 				dragged = true;
 				break;
 				
@@ -481,6 +489,25 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 		}
 		
 		super.onBrowserEvent(event);
+	}
+	
+	/**
+	 * evalDragPixelSensibility
+	 * 
+	 * @return
+	 */
+	private boolean evalDragPixelSensibility() {
+		if (mouseDownX-mouseX>=DRAG_PIXELS_SENSIBILITY) {
+			return true;
+		} else if (mouseX-mouseDownX>=DRAG_PIXELS_SENSIBILITY) {
+			return true;
+		} else if (mouseDownY-mouseY>=DRAG_PIXELS_SENSIBILITY) {
+			return true;
+		} else if (mouseY-mouseDownY>=DRAG_PIXELS_SENSIBILITY) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	/**
@@ -889,6 +916,18 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 	}
 	
 	/**
+	 * print
+	 */
+	public void print() {
+		Log.debug("print()");
+		if (isDocumentSelected()) {
+			Log.debug("jump to download");
+			Util.print(getDocument().getUuid());
+		}
+		Log.debug("print: void");
+	}
+	
+	/**
 	 * Gets the checkout flag
 	 * 
 	 * @return Checkout state
@@ -937,7 +976,7 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 	 * 
 	 * @return Return dragged value
 	 */
-	public boolean isDragged() {
+	private boolean isDragged() {
 		return dragged;
 	}
 	
@@ -946,8 +985,10 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 	 * 
 	 * Sets dragged flag to false;
 	 */
-	public void unsetDraged() {
+	private void unsetDraged() {
 		this.dragged = false;
+		mouseDownX = 0;
+		mouseDownY = 0;
 	}
 	
 	/**

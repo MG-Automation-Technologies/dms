@@ -28,9 +28,9 @@ import java.util.List;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
 import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
 import com.google.gwt.gen2.table.client.FixedWidthGrid;
-import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
@@ -42,6 +42,7 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
+import com.openkm.frontend.client.bean.ToolBarOption;
 import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.extension.event.HasDocumentEvent;
@@ -73,7 +74,6 @@ import com.openkm.frontend.client.widget.filebrowser.menu.TemplatesMenu;
 import com.openkm.frontend.client.widget.filebrowser.menu.ThesaurusMenu;
 import com.openkm.frontend.client.widget.filebrowser.menu.TrashMenu;
 import com.openkm.frontend.client.widget.foldertree.FolderSelectPopup;
-import com.openkm.frontend.client.widget.startup.StartUp;
 
 /**
  * File browser panel
@@ -298,7 +298,6 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 	 * @param fldId The path id
 	 */
 	public void refresh(String fldId) {
-		Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_TAXONOMY_FILEBROWSER_FOLDERS);
 		Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.resetNumericFolderValues();
 		numberOfFolders = 0;
 		numberOfDocuments = 0;
@@ -380,7 +379,6 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 			}
 			
 			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagFolderChilds();
-			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_TAXONOMY_FILEBROWSER_DOCUMENTS);
 			getDocumentChilds(fldId);
 		}
 
@@ -406,7 +404,6 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 			
 			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagDocumentChilds();
 			
-			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS);
 			if (Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_THESAURUS &&
 				Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_CATEGORIES) {
 				getMailChilds(fldId);
@@ -444,7 +441,6 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 			}
 			
 			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagMailChilds();
-			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_CATEGORIES);
 		}
 		public void onFailure(Throwable caught) {
 			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagMailChilds();
@@ -994,7 +990,48 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 	 * Show the browser menu
 	 */
 	public void showMenu() {
+		MenuPopup menuPopup = getActualMenuPopup();
+		
+		// For all menus except trash
+		if (menuPopup!=null) {
+			menuPopup.setPopupPosition(table.getMouseX(), table.getMouseY());
+			if (!table.isDocumentSelected() && !table.isFolderSelected() && !table.isMailSelected()) {
+				menuPopup.disableAllOptions();
+			}
+			menuPopup.show();
+		}
+	}
+	
+	/**
+	 * setOptions
+	 * 
+	 * @param toolBarOption
+	 */
+	public void setOptions(ToolBarOption toolBarOption) {
+		MenuPopup menuPopup = getActualMenuPopup();
+		if (menuPopup!=null) {
+			menuPopup.setOptions(toolBarOption);
+		}
+	}
+	
+	/**
+	 * disableAllOptions
+	 */
+	public void disableAllOptions() {
+		MenuPopup menuPopup = getActualMenuPopup();
+		if (menuPopup!=null) {
+			menuPopup.disableAllOptions();
+		}
+	}
+	
+	/**
+	 * getActualMenuPopup
+	 * 
+	 * @return
+	 */
+	private MenuPopup getActualMenuPopup() {
 		MenuPopup menuPopup = null;
+
 		// The browser menu depends on actual view
 		switch(actualView){
 			case UIDesktopConstants.NAVIGATOR_TAXONOMY:
@@ -1009,10 +1046,8 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 				menuPopup = thesaurusMenuPopup;
 				break;
 				
-			case UIDesktopConstants.NAVIGATOR_TRASH:
-				// Must substract top position from Y Screen Position
-				trashMenuPopup.setPopupPosition(table.getMouseX(), table.getMouseY());
-				trashMenuPopup.show();
+			case UIDesktopConstants.NAVIGATOR_TRASH:				
+				menuPopup = trashMenuPopup;
 				break;
 				
 			case UIDesktopConstants.NAVIGATOR_TEMPLATES:
@@ -1028,22 +1063,7 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 				break;
 		}
 		
-		// For all menus except trash
-		if (menuPopup!=null) {
-			menuPopup.setPopupPosition(table.getMouseX(), table.getMouseY());
-			if (table.isDocumentSelected()) {
-				menuPopup.checkMenuOptionPermissions(table.getDocument(), Main.get().activeFolderTree.getFolder());
-			} else if (table.isFolderSelected()) {
-				menuPopup.checkMenuOptionPermissions(table.getFolder(), Main.get().activeFolderTree.getFolder());
-			} else if (table.isMailSelected()) {
-				menuPopup.checkMenuOptionPermissions(table.getMail(), Main.get().activeFolderTree.getFolder());
-			} else {
-				menuPopup.disableAllMenuOption();
-			}
-			menuPopup.evaluateMenuOptions();
-			menuPopup.show();
-		}
-		
+		return menuPopup;
 	}
 	
 	/**
