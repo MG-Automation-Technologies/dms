@@ -332,6 +332,13 @@ public class Util {
 	}-*/;
 	
 	/**
+	 * printFile
+	 */
+	public static native void printFile() /*-{
+		new $wnd.printFile();
+	}-*/;
+	
+	/**
 	 * Format file size in Bytes, KBytes or MBytes. 
 	 * @param size The file size in bytes.
 	 * @return The formated file size.
@@ -456,5 +463,9 @@ public class Util {
     
     public static native void createFolderWebDavClipboardButton(String textToCopy) /*-{
 		$wnd.swfobject.embedSWF("../clippy.swf", "folderwebdavclipboardcontainer", 14, 14, "9.0.0", "../clippy.swf", {text:textToCopy}, {quality:"high",scale:"noscale",bgcolor:"#FFFFFF"}, {id:"clippy",name:"clippy"});
+	}-*/;
+    
+    public static native String escape(String text) /*-{
+		return escape(text);
 	}-*/;
 }
