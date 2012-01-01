@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,6 +35,7 @@ import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
+import com.openkm.core.ConversionException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
@@ -46,6 +48,7 @@ import com.openkm.extension.core.ExtensionException;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.contants.ui.UIFileUploadConstants;
 import com.openkm.jcr.JCRUtils;
+import com.openkm.util.DocConverter;
 import com.openkm.util.FileUtils;
 import com.openkm.util.SecureStore;
 import com.openkm.util.impexp.ImpExpStats;
@@ -87,7 +90,12 @@ public class FileUploadServlet extends OKMHttpServlet {
 		String rename = null;
 		PrintWriter out = null;
 		String uploadedDocPath = null;
+		String uploadedUuid = null;
 		java.io.File tmp = null;
+		boolean redirect = false;
+		boolean convertToPdf = false;
+		String redirectURL = "";
+		String mimeType = "";
 		updateSessionManager(request);
 		
 		try {
@@ -126,23 +134,38 @@ public class FileUploadServlet extends OKMHttpServlet {
 						if (item.getFieldName().equals("folder")) { folder = item.getString("UTF-8"); }
 						if (item.getFieldName().equals("cipherName")) { cipherName = item.getString("UTF-8"); }
 						if (item.getFieldName().equals("rename")) { rename = item.getString("UTF-8"); }
+						if (item.getFieldName().equals("redirect")) { 
+							redirect = true; 
+							redirectURL = item.getString("UTF-8"); 
+						}
+						if (item.getFieldName().equals("convertToPdf")) { convertToPdf = true; }
 					} else {
 						fileName = item.getName();
 						is = item.getInputStream();
+						mimeType = item.getContentType();
 					}
 				}
 				
-				// Save document with different name than uploading
-				if (rename!=null && !rename.equals("")) {
-					if (rename.contains(".")) {
+				// Save document with different name than uploaded
+				log.info("Filename: '{}'", fileName);
+				if (rename != null && !rename.equals("")) {
+					log.info("Rename: '{}'", rename);
+					
+					if (FilenameUtils.indexOfExtension(rename) > -1) {
+						// The rename contains filename + extension
 						fileName = rename;
 					} else {
-						// here rename not contains .
-						if (fileName.contains(".")) {
-							fileName = fileName.substring(fileName.indexOf("."));
-							fileName = rename + fileName;
+						// The rename only contains filename, so get extension from uploaded file
+						String ext = FilenameUtils.getExtension(fileName);
+						
+						if (ext.equals("")) {
+							fileName = rename;
+						} else {
+							fileName = rename + "." + ext;
 						}
 					}
+					
+					log.info("Filename: '{}'", fileName);
 				}
 
 				// Now, we have read all parameters and the uploaded file
@@ -173,7 +196,36 @@ public class FileUploadServlet extends OKMHttpServlet {
 							log.info("Upload file '{}' into '{}'", fileName, path);
 							Document doc = new Document();
 							doc.setPath(path + "/" + fileName);
-							uploadedDocPath = OKMDocument.getInstance().create(null, doc, is).getPath();
+							if (convertToPdf && !mimeType.equals("application/pdf")) {
+								DocConverter converter = DocConverter.getInstance();
+								if (converter.convertibleToPdf(mimeType)) {
+									// Changing path name
+									if (fileName.contains(".")) {
+										fileName = fileName.substring(0,fileName.lastIndexOf(".")+1) + "pdf";
+									} else {
+										fileName += ".pdf";
+									}
+									doc.setPath(path + "/" + fileName);
+									tmp = File.createTempFile("okm", ".tmp");
+									java.io.File tmpPdf = File.createTempFile("okm", ".pdf");
+									FileOutputStream fos = new FileOutputStream(tmp);
+									IOUtils.copy(is, fos);
+									converter.doc2pdf(tmp, mimeType, tmpPdf);
+									is = new FileInputStream(tmpPdf);
+									doc = OKMDocument.getInstance().create(null, doc, is);
+									uploadedDocPath = doc.getPath();
+									uploadedUuid = doc.getUuid();
+									tmp.delete();
+									tmpPdf.delete();
+									tmp = null;
+								} else {
+									throw new ConversionException("Not convertible to pdf");
+								}
+							} else {
+								doc = OKMDocument.getInstance().create(null, doc, is);
+								uploadedDocPath = doc.getPath();
+								uploadedUuid = doc.getUuid();
+							}
 							
 							// Case is uploaded a encrypted document
 							if (cipherName!=null && !cipherName.equals("")) {
@@ -181,7 +233,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 							}
 							
 							// Return the path of the inserted document in response
-							out.print(returnOKMessage + " path["+URLEncoder.encode(uploadedDocPath,"UTF-8")+"]path");
+							out.print(returnOKMessage + " path["+URLEncoder.encode(uploadedDocPath,"UTF-8")+"]path uuid["+uploadedUuid+"]uuid");
 						}
 					}
 				} else if (action == UIFileUploadConstants.ACTION_UPDATE) {
@@ -194,6 +246,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 						document.setContent(null, path, is);
 						document.checkin(null, path, comment);
 						uploadedDocPath = path;
+						uploadedUuid = doc.getUuid();
 						
 						// Case is uploaded a encrypted document
 						if (cipherName != null && !cipherName.equals("")) {
@@ -213,7 +266,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 						}
 						
 						// Return the path of the inserted document in response
-						out.print(returnOKMessage + " path["+URLEncoder.encode(uploadedDocPath,"UTF-8")+"]path");
+						out.print(returnOKMessage + " path["+URLEncoder.encode(uploadedDocPath,"UTF-8")+"]path uuid["+uploadedUuid+"]uuid");
 					} else {
 						out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_DocumentNameMismatch));
 					}
@@ -244,8 +297,18 @@ public class FileUploadServlet extends OKMHttpServlet {
 					
 					OKMNotification.getInstance().notify(null, uploadedDocPath, userNames, message, false);
 				}
+				
+				// After uploading redirects to some URL
+				if (redirect) {
+					ServletContext sc = getServletContext();
+					request.setAttribute("docPath", uploadedDocPath);
+					request.setAttribute("uuid", uploadedUuid);
+					sc.setAttribute("docPath", uploadedDocPath);
+					sc.setAttribute("uuid", uploadedUuid);
+					sc.getRequestDispatcher(redirectURL).forward(request, response);
+				}
 			} else {
-				// Used only when document is digital signed ( form in that case is not multiplart it's a normal post )
+				// Used only when document is digital signed ( form in that case is not multipart it's a normal post )
 				action = (request.getParameter("action")!=null?Integer.parseInt(request.getParameter("action")):-1);
 				if (action == UIFileUploadConstants.ACTION_DIGITAL_SIGNATURE_INSERT || 
 					action == UIFileUploadConstants.ACTION_DIGITAL_SIGNATURE_UPDATE) {
@@ -306,6 +369,9 @@ public class FileUploadServlet extends OKMHttpServlet {
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
 			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_IO));
+		} catch (ConversionException e) {
+			log.error(e.getMessage(), e);
+			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_Conversion));
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			out.print(e.toString());

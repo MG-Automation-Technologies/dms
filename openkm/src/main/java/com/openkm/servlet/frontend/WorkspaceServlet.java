@@ -55,6 +55,7 @@ import com.openkm.dao.bean.UserConfig;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTLanguage;
+import com.openkm.frontend.client.bean.GWTProfileToolbar;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.GWTWorkspace;
 import com.openkm.frontend.client.contants.service.ErrorCode;
@@ -271,6 +272,32 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 					workspace.getReports().add(GWTUtil.copy(report, ReportUtils.getReportParameters(rpId)));
 				}
 			}	
+			
+			// Toolbar
+			// Is visible on toolbar && available option too
+			GWTProfileToolbar profileToolbar = new GWTProfileToolbar();
+			profileToolbar.setAddDocumentVisible(availableOption.isAddDocumentOption());
+			profileToolbar.setAddPropertyGroupVisible(availableOption.isAddPropertyGroupOption());
+			profileToolbar.setAddSubscriptionVisible(availableOption.isAddSubscription());
+			profileToolbar.setCancelCheckoutVisible(availableOption.isCancelCheckoutOption());
+			profileToolbar.setCheckoutVisible(availableOption.isCheckoutOption());
+			profileToolbar.setCheckinVisible(availableOption.isCheckinOption());
+			profileToolbar.setCreateFolderVisible(availableOption.isCreateFolderOption());
+			profileToolbar.setDeleteVisible(availableOption.isDeleteOption());
+			profileToolbar.setDownloadPdfVisible(availableOption.isDeleteOption());
+			profileToolbar.setDownloadVisible(availableOption.isDownloadOption());
+			profileToolbar.setFindDocumentVisible(availableOption.isDownloadOption());
+			profileToolbar.setFindFolderVisible(availableOption.isFindFolderOption());
+			profileToolbar.setHomeVisible(availableOption.isHomeOption());
+			profileToolbar.setLockVisible(availableOption.isLockOption());
+			profileToolbar.setRefreshVisible(availableOption.isRefreshOption());
+			profileToolbar.setRemovePropertyGroupVisible(availableOption.isRemovePropertyGroupOption());
+			profileToolbar.setRemoveSubscriptionVisible(availableOption.isRemoveSubscription());
+			profileToolbar.setScannerVisible(availableOption.isScannerOption());
+			profileToolbar.setStartWorkflowVisible(availableOption.isWorkflowOption());
+			profileToolbar.setUnlockVisible(availableOption.isUnLockOption());
+			profileToolbar.setUploaderVisible(availableOption.isUploaderOption());
+			workspace.setProfileToolbar(profileToolbar);
 					
 			// Setting available UI languages
 			List<GWTLanguage> langs = new ArrayList<GWTLanguage>();
