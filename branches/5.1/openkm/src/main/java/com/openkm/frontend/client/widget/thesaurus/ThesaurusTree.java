@@ -24,7 +24,6 @@ package com.openkm.frontend.client.widget.thesaurus;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.widget.MenuPopup;
 import com.openkm.frontend.client.widget.foldertree.FolderTree;
-import com.openkm.frontend.client.widget.startup.StartUp;
 
 /**
  * Thesaurus tree
@@ -58,10 +57,6 @@ public class ThesaurusTree extends FolderTree {
 		evaluesFolderIcon(actualItem);			
 		actualItem.setState(true);
 		rootItem = actualItem;  // Preserves actualItem value
-		getOnlyChilds(folderRoot.getPath());  	// Special load for firsTime loading ( not refresh file browser )
-												// needed to solve that if this stack panel is not showed by user
-												// before making a search, can't jump to document folder.
-		Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_TEMPLATES);
 	}
 	
 	/**

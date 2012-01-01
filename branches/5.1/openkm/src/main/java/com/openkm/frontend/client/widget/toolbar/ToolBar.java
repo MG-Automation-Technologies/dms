@@ -45,11 +45,11 @@ import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.FileToUpload;
-import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.bean.GWTProfileToolbar;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.ToolBarOption;
 import com.openkm.frontend.client.contants.service.ErrorCode;
@@ -714,6 +714,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			
 		downloadPdf = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.downloadPdfDisabled()),
 				  						Main.i18n("general.menu.file.download.document.pdf"), downloadPdfHandler); 
+		
 			
 		addPropertyGroup = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.addPropertyGroupDisabled()),
 											 Main.i18n("filebrowser.menu.add.property.group"), addPropertyGroupHandler); 
@@ -874,6 +875,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * @param origin The Origin panel 
 	 */
 	public void checkToolButtonPermissions(GWTFolder folder, GWTFolder folderParent, int originPanel) {
+		node = folder; // saves actual node
+		// Disable all menu options
+		Main.get().mainPanel.topPanel.mainMenu.disableAllOptions();
+		Main.get().mainPanel.desktop.browser.fileBrowser.disableAllOptions();
+		Main.get().activeFolderTree.menuPopup.disableAllOptions();
+		
 		//folderParent.setPermissions((byte)(GWTPermission.DELETE | GWTPermission.READ | GWTPermission.SECURITY | GWTPermission.WRITE));
 		// Only if toolbar is enabled must change tools icons values
 		if (isEnabled()) {			
@@ -961,7 +968,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 						Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_PERSONAL &&
 						Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_TRASH && 
 						Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_MAIL) {
-						getAllGroups(folder); // Evaluates enable or disable property group buttons
+						getAllGroups(); // Evaluates enable or disable property group buttons
 					}
 				} else {
 					disableAddPropertyGroup();
@@ -1015,11 +1022,25 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			// The remove property group is special case depends on tab property enabled, with this call we force to set false
 			evaluateRemoveGroupProperty(false);
 			
+			// Trash case
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TRASH) {
+				enablePurgeTrash();
+				if (isRoot) {
+					disablePurge();
+					disableRestore();
+				} else {
+					enablePurge();
+					enableRestore();
+				}
+			}
+			
 			// ONLY TO DEVELOPMENT TESTINGT
 			//enableAllToolBarForTestingPurpose();
 			
-			// Sets the permission to main menu
+			// Sets the permission to menus
 			Main.get().mainPanel.topPanel.mainMenu.setOptions(toolBarOption);
+			Main.get().mainPanel.desktop.browser.fileBrowser.setOptions(toolBarOption);
+			Main.get().activeFolderTree.menuPopup.setOptions(toolBarOption);
 			
 			// Checking extension button 
 			for (Iterator<ToolBarButtonExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
@@ -1036,6 +1057,11 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * @param doc The document
 	 */
 	public void checkToolButtonPermissions(GWTDocument doc, GWTFolder folder) {
+		node = doc; // saves actual node
+		// Disable all menu options
+		Main.get().mainPanel.topPanel.mainMenu.disableAllOptions();
+		Main.get().mainPanel.desktop.browser.fileBrowser.disableAllOptions();
+		Main.get().activeFolderTree.menuPopup.disableAllOptions();
 		// Only if toolbar is enabled must change tools icons values
 		if (isEnabled()) {
 			boolean disable = false;
@@ -1107,7 +1133,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 							Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_PERSONAL &&
 							Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_TRASH && 
 							Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_MAIL) {
-							getAllGroups(doc); // Evaluates enable or disable property group buttons
+							getAllGroups(); // Evaluates enable or disable property group buttons
 						}
 					} else {
 						disableAddPropertyGroup();
@@ -1206,11 +1232,20 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				disableFindFolder();
 			}
 			
+			// Trash
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TRASH) {
+				enablePurgeTrash();
+				enablePurge();
+				enableRestore();
+			}
+			
 			// ONLY TO DEVELOPMENT TESTINGT
 			//enableAllToolBarForTestingPurpose();
 			
-			// Sets the permission to main menu
+			// Sets the permission to menus
 			Main.get().mainPanel.topPanel.mainMenu.setOptions(toolBarOption);
+			Main.get().mainPanel.desktop.browser.fileBrowser.setOptions(toolBarOption);
+			Main.get().activeFolderTree.menuPopup.setOptions(toolBarOption);
 			
 			// Sets the visible values to note tab
 			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.notes.setVisibleAddNote(toolBarOption.addNoteOption);
@@ -1230,6 +1265,11 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * @param mail The Mail
 	 */
 	public void checkToolButtonPermissions(GWTMail mail, GWTFolder folder) {
+		node = mail; // saves actual node
+		// Disable all menu options
+		Main.get().mainPanel.topPanel.mainMenu.disableAllOptions();
+		Main.get().mainPanel.desktop.browser.fileBrowser.disableAllOptions();
+		Main.get().activeFolderTree.menuPopup.disableAllOptions();
 		// Only if toolbar is enabled must change tools icons values
 		if (isEnabled()) {
 			
@@ -1289,7 +1329,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 					Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_PERSONAL &&
 					Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_TRASH && 
 					Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_MAIL) {
-					getAllGroups(mail); // Evaluates enable or disable property group buttons
+					getAllGroups(); // Evaluates enable or disable property group buttons
 				}
 				// On mail panel is not able to uploading files
 				if (Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_MAIL ) {
@@ -1326,11 +1366,20 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				disableRemoveSubscription();
 			}
 			
+			// Trash
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TRASH) {
+				enablePurgeTrash();
+				enablePurge();
+				enableRestore();
+			}
+			
 			// ONLY TO DEVELOPMENT TESTINGT
 			//enableAllToolBarForTestingPurpose();
 			
-			// Sets the permission to main menu
+			// Sets the permission to menus
 			Main.get().mainPanel.topPanel.mainMenu.setOptions(toolBarOption);
+			Main.get().mainPanel.desktop.browser.fileBrowser.setOptions(toolBarOption);
+			Main.get().activeFolderTree.menuPopup.setOptions(toolBarOption);
 			
 			// Checking extension button 
 			for (Iterator<ToolBarButtonExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
@@ -1699,6 +1748,48 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
+	 * enableRestore
+	 */
+	public void enableRestore() {
+		toolBarOption.restore = true;
+	}
+	
+	/**
+	 * disableRestore
+	 */
+	public void disableRestore() {
+		toolBarOption.restore = false;
+	}
+	
+	/**
+	 * enablePurge
+	 */
+	public void enablePurge() {
+		toolBarOption.purge = true;
+	}
+	
+	/**
+	 * disablePurge
+	 */
+	public void disablePurge() {
+		toolBarOption.purge = false;
+	}
+	
+	/**
+	 * enablePurgeTrash
+	 */
+	public void enablePurgeTrash() {
+		toolBarOption.purgeTrash = true;
+	}
+	
+	/**
+	 * disablePurgeTrash
+	 */
+	public void disablePurgeTrash() {
+		toolBarOption.purgeTrash = false;
+	}
+	
+	/**
 	 * Disables remove property group 
 	 */
 	public void disableRemovePropertyGroup() {
@@ -1922,6 +2013,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= true;
 		tmpToolBarOption.uploaderOption					= true;
+		tmpToolBarOption.bookmarkOption 				= true; 
+		tmpToolBarOption.goOption 						= false;
+		tmpToolBarOption.createFromTemplateOption 		= false;
+		tmpToolBarOption.restore 						= false;
+		tmpToolBarOption.purge 							= false;
+		tmpToolBarOption.purgeTrash 					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -1958,6 +2055,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= false;
 		tmpToolBarOption.uploaderOption					= false;
+		tmpToolBarOption.bookmarkOption 				= false; 
+		tmpToolBarOption.goOption 						= false;
+		tmpToolBarOption.createFromTemplateOption 		= false;
+		tmpToolBarOption.restore 						= false;
+		tmpToolBarOption.purge 							= false;
+		tmpToolBarOption.purgeTrash 					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -1994,6 +2097,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= false;
 		tmpToolBarOption.uploaderOption					= false;
+		tmpToolBarOption.bookmarkOption 				= false; 
+		tmpToolBarOption.goOption 						= false;
+		tmpToolBarOption.createFromTemplateOption 		= false;
+		tmpToolBarOption.restore 						= false;
+		tmpToolBarOption.purge 							= false;
+		tmpToolBarOption.purgeTrash 					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -2030,6 +2139,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= false;
 		tmpToolBarOption.uploaderOption					= false;
+		tmpToolBarOption.bookmarkOption 				= false; 
+		tmpToolBarOption.goOption 						= false;
+		tmpToolBarOption.createFromTemplateOption 		= false;
+		tmpToolBarOption.restore 						= false;
+		tmpToolBarOption.purge 							= false;
+		tmpToolBarOption.purgeTrash 					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -2066,6 +2181,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= false;
 		tmpToolBarOption.uploaderOption					= false;
+		tmpToolBarOption.bookmarkOption 				= false; 
+		tmpToolBarOption.goOption 						= false;
+		tmpToolBarOption.createFromTemplateOption 		= false;
+		tmpToolBarOption.restore 						= false;
+		tmpToolBarOption.purge 							= false;
+		tmpToolBarOption.purgeTrash 					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -2102,6 +2223,54 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= true;
 		tmpToolBarOption.uploaderOption					= true;
+		tmpToolBarOption.bookmarkOption 				= false; 
+		tmpToolBarOption.goOption 						= false;
+		tmpToolBarOption.createFromTemplateOption 		= false;
+		tmpToolBarOption.restore 						= false;
+		tmpToolBarOption.purge 							= false;
+		tmpToolBarOption.purgeTrash 					= true;
+		return tmpToolBarOption;
+	}
+	
+	/**
+	 * Gets the defatul Tool Bar object values for mail
+	 * 
+	 * @return The default toolBarOption for mail
+	 */
+	public ToolBarOption getDefaultMailToolBar() {
+		ToolBarOption tmpToolBarOption = new ToolBarOption();
+		tmpToolBarOption.createFolderOption				= true;
+		tmpToolBarOption.findFolderOption				= true;
+		tmpToolBarOption.addDocumentOption 				= true;
+		tmpToolBarOption.checkoutOption 				= false;
+		tmpToolBarOption.checkinOption 					= false;
+		tmpToolBarOption.cancelCheckoutOption 			= false;
+		tmpToolBarOption.lockOption						= false;
+		tmpToolBarOption.unLockOption 					= false;
+		tmpToolBarOption.downloadOption					= false;
+		tmpToolBarOption.downloadPdfOption				= false;
+		tmpToolBarOption.deleteOption					= false;
+		tmpToolBarOption.addPropertyGroupOption 		= false;
+		tmpToolBarOption.removePropertyGroupOption  	= false;
+		tmpToolBarOption.addSubscription  				= false;
+		tmpToolBarOption.removeSubscription 		 	= false;
+		tmpToolBarOption.firedRemovePropertyGroupOption = false;
+		tmpToolBarOption.homeOption						= true;
+		tmpToolBarOption.refreshOption					= true;
+		tmpToolBarOption.renameOption 					= false;
+		tmpToolBarOption.copyOption 					= false;
+		tmpToolBarOption.moveOption 					= false;
+		tmpToolBarOption.exportOption					= false;
+		tmpToolBarOption.workflowOption					= false;
+		tmpToolBarOption.addNoteOption					= false;
+		tmpToolBarOption.scannerOption					= true;
+		tmpToolBarOption.uploaderOption					= true;
+		tmpToolBarOption.bookmarkOption 				= false; 
+		tmpToolBarOption.goOption 						= false;
+		tmpToolBarOption.createFromTemplateOption 		= false;
+		tmpToolBarOption.restore 						= false;
+		tmpToolBarOption.purge 							= false;
+		tmpToolBarOption.purgeTrash 					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -2138,6 +2307,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= false;
 		tmpToolBarOption.uploaderOption					= false;
+		tmpToolBarOption.bookmarkOption 				= false; 
+		tmpToolBarOption.goOption 						= false;
+		tmpToolBarOption.createFromTemplateOption 		= false;
+		tmpToolBarOption.restore 						= false;
+		tmpToolBarOption.purge 							= false;
+		tmpToolBarOption.purgeTrash 					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -2174,6 +2349,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= false;
 		tmpToolBarOption.uploaderOption					= false;
+		tmpToolBarOption.bookmarkOption 				= false; 
+		tmpToolBarOption.goOption 						= false;
+		tmpToolBarOption.createFromTemplateOption 		= false;
+		tmpToolBarOption.restore 						= false;
+		tmpToolBarOption.purge 							= false;
+		tmpToolBarOption.purgeTrash 					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -2210,6 +2391,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= false;
 		tmpToolBarOption.uploaderOption					= false;
+		tmpToolBarOption.bookmarkOption 				= false; 
+		tmpToolBarOption.goOption 						= false;
+		tmpToolBarOption.createFromTemplateOption 		= false;
+		tmpToolBarOption.restore 						= false;
+		tmpToolBarOption.purge 							= false;
+		tmpToolBarOption.purgeTrash 					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -2246,6 +2433,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= false;
 		tmpToolBarOption.uploaderOption					= false;
+		tmpToolBarOption.bookmarkOption 				= false; 
+		tmpToolBarOption.goOption 						= false;
+		tmpToolBarOption.createFromTemplateOption 		= false;
+		tmpToolBarOption.restore 						= false;
+		tmpToolBarOption.purge 							= false;
+		tmpToolBarOption.purgeTrash 					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -2435,6 +2628,15 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 						}
 						toolBarEnabled = true;
 						break;
+						
+					case UIDesktopConstants.NAVIGATOR_MAIL:
+						if (viewValues.containsKey("view_mail:option")){
+							toolBarOption = (ToolBarOption) viewValues.get("view_mail:option");
+						} else {
+							toolBarOption = getDefaultMailToolBar();
+						}
+						toolBarEnabled = true;
+						break;
 				}
 				break;
 				
@@ -2546,10 +2748,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	/**
 	 * Gets all property groups
 	 */
-	private void getAllGroups(Object node) {
-		this.node = node;
+	private void getAllGroups() {
 		String path = getActualNodePath();
-		
 		if (!path.equals("")) {
 			propertyGroupService.getAllGroups(path, callbackGetAllGroups);
 		}
@@ -2707,72 +2907,72 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * 
 	 * @param option
 	 */
-	public void setAvailableOption(GWTAvailableOption option) {
+	public void setAvailableOption(GWTProfileToolbar option) {
 		// FIRST
-		createFolder.setVisible(option.isCreateFolderOption());
-		panel.getWidget(2).setVisible(option.isCreateFolderOption()); // Hide space
-		findFolder.setVisible(option.isCreateFolderOption());
-		panel.getWidget(4).setVisible(option.isCreateFolderOption()); // Hide space
-		download.setVisible(option.isDownloadOption());
-		panel.getWidget(6).setVisible(option.isDownloadOption()); // hide space
-		downloadPdf.setVisible(option.isDownloadPdfOption());
-		panel.getWidget(8).setVisible(option.isDownloadPdfOption()); // hide space
-		panel.getWidget(9).setVisible(option.isCreateFolderOption() || option.isFindFolderOption() ||
-					                  option.isDownloadOption() || option.isDownloadPdfOption()); // hide separator
+		createFolder.setVisible(option.isCreateFolderVisible());
+		panel.getWidget(2).setVisible(option.isCreateFolderVisible()); // Hide space
+		findFolder.setVisible(option.isCreateFolderVisible());
+		panel.getWidget(4).setVisible(option.isCreateFolderVisible()); // Hide space
+		download.setVisible(option.isDownloadVisible());
+		panel.getWidget(6).setVisible(option.isDownloadVisible()); // hide space
+		downloadPdf.setVisible(option.isDownloadPdfVisible());
+		panel.getWidget(8).setVisible(option.isDownloadPdfVisible()); // hide space
+		panel.getWidget(9).setVisible(option.isCreateFolderVisible() || option.isFindFolderVisible() ||
+					                  option.isDownloadVisible() || option.isDownloadPdfVisible()); // hide separator
  
 		
 		// SECOND
-		lock.setVisible(option.isLockOption());
-		panel.getWidget(11).setVisible(option.isLockOption()); // hide space
-		unlock.setVisible(option.isUnLockOption());
-		panel.getWidget(13).setVisible(option.isUnLockOption()); // hide space
-		panel.getWidget(14).setVisible(option.isLockOption() || option.isUnLockOption()); // hide separator
+		lock.setVisible(option.isLockVisible());
+		panel.getWidget(11).setVisible(option.isLockVisible()); // hide space
+		unlock.setVisible(option.isUnlockVisible());
+		panel.getWidget(13).setVisible(option.isUnlockVisible()); // hide space
+		panel.getWidget(14).setVisible(option.isLockVisible() || option.isUnlockVisible()); // hide separator
 		
 		// THIRD
-		addDocument.setVisible(option.isAddDocumentOption());
-		panel.getWidget(16).setVisible(option.isAddDocumentOption()); // hide space
-		checkout.setVisible(option.isCheckoutOption());
-		panel.getWidget(18).setVisible(option.isCheckoutOption()); // hide space
-		checkin.setVisible(option.isCheckinOption());
-		panel.getWidget(20).setVisible(option.isCheckinOption()); // hide space
-		cancelCheckout.setVisible(option.isCancelCheckoutOption());
-		panel.getWidget(22).setVisible(option.isCancelCheckoutOption()); // hide space
-		delete.setVisible(option.isDeleteOption());
-		panel.getWidget(24).setVisible(option.isDeleteOption()); // hide space
-		panel.getWidget(25).setVisible(option.isAddDocumentOption() || option.isCheckoutOption() || 
-									   option.isCheckinOption() || option.isCancelCheckoutOption() || 
-									   option.isDeleteOption()); // hide separator
+		addDocument.setVisible(option.isAddDocumentVisible());
+		panel.getWidget(16).setVisible(option.isAddDocumentVisible()); // hide space
+		checkout.setVisible(option.isCheckoutVisible());
+		panel.getWidget(18).setVisible(option.isCheckoutVisible()); // hide space
+		checkin.setVisible(option.isCheckinVisible());
+		panel.getWidget(20).setVisible(option.isCheckinVisible()); // hide space
+		cancelCheckout.setVisible(option.isCancelCheckoutVisible());
+		panel.getWidget(22).setVisible(option.isCancelCheckoutVisible()); // hide space
+		delete.setVisible(option.isDeleteVisible());
+		panel.getWidget(24).setVisible(option.isDeleteVisible()); // hide space
+		panel.getWidget(25).setVisible(option.isAddDocumentVisible() || option.isCheckoutVisible() || 
+									   option.isCheckinVisible() || option.isCancelCheckoutVisible() || 
+									   option.isDeleteVisible()); // hide separator
 		
 		// FOURTH
-		addPropertyGroup.setVisible(option.isAddPropertyGroupOption());
-		panel.getWidget(27).setVisible(option.isAddPropertyGroupOption()); // hide space
-		removePropertyGroup.setVisible(option.isRemovePropertyGroupOption());
-		panel.getWidget(29).setVisible(option.isRemovePropertyGroupOption()); // hide space
-		panel.getWidget(30).setVisible(option.isAddPropertyGroupOption() || option.isRemovePropertyGroupOption()); // hide separator
+		addPropertyGroup.setVisible(option.isAddPropertyGroupVisible());
+		panel.getWidget(27).setVisible(option.isAddPropertyGroupVisible()); // hide space
+		removePropertyGroup.setVisible(option.isRemovePropertyGroupVisible());
+		panel.getWidget(29).setVisible(option.isRemovePropertyGroupVisible()); // hide space
+		panel.getWidget(30).setVisible(option.isAddPropertyGroupVisible() || option.isRemovePropertyGroupVisible()); // hide separator
 		
 		// FIFTH
-		startWorkflow.setVisible(option.isWorkflowOption());
-		panel.getWidget(32).setVisible(option.isWorkflowOption()); // hide space
-		panel.getWidget(33).setVisible(option.isWorkflowOption()); // hide separator
+		startWorkflow.setVisible(option.isStartWorkflowVisible());
+		panel.getWidget(32).setVisible(option.isStartWorkflowVisible()); // hide space
+		panel.getWidget(33).setVisible(option.isStartWorkflowVisible()); // hide separator
 		
 		// SIXTH
-		addSubscription.setVisible(option.isAddSubscription());
-		panel.getWidget(35).setVisible(option.isAddSubscription()); // hide space
-		removeSubscription.setVisible(option.isRemoveSubscription());
-		panel.getWidget(37).setVisible(option.isRemoveSubscription()); // hide space
-		panel.getWidget(38).setVisible(option.isAddSubscription() || option.isRemoveSubscription()); // hide separator
+		addSubscription.setVisible(option.isAddSubscriptionVisible());
+		panel.getWidget(35).setVisible(option.isAddSubscriptionVisible()); // hide space
+		removeSubscription.setVisible(option.isRemoveSubscriptionVisible());
+		panel.getWidget(37).setVisible(option.isRemoveSubscriptionVisible()); // hide space
+		panel.getWidget(38).setVisible(option.isAddSubscriptionVisible() || option.isRemoveSubscriptionVisible()); // hide separator
 		
 		// SEVENTH 
-		home.setVisible(option.isHomeOption());
-		panel.getWidget(40).setVisible(option.isHomeOption()); // hide space
-		refresh.setVisible(option.isRefreshOption());
-		panel.getWidget(42).setVisible(option.isRefreshOption()); // hide space
-		panel.getWidget(43).setVisible(option.isHomeOption() || option.isRefreshOption()); // hide separator
+		home.setVisible(option.isHomeVisible());
+		panel.getWidget(40).setVisible(option.isHomeVisible()); // hide space
+		refresh.setVisible(option.isRefreshVisible());
+		panel.getWidget(42).setVisible(option.isRefreshVisible()); // hide space
+		panel.getWidget(43).setVisible(option.isHomeVisible() || option.isRefreshVisible()); // hide separator
 		
-		scanner.setVisible(option.isScannerOption());
-		panel.getWidget(45).setVisible(option.isScannerOption()); // hide space
-		uploader.setVisible(option.isUploaderOption());
-		panel.getWidget(47).setVisible(option.isUploaderOption()); // hide space
+		scanner.setVisible(option.isScannerVisible());
+		panel.getWidget(45).setVisible(option.isScannerVisible()); // hide space
+		uploader.setVisible(option.isUploaderVisible());
+		panel.getWidget(47).setVisible(option.isUploaderVisible()); // hide space
 	}
 	
 	/**
