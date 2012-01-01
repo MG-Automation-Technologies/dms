@@ -104,12 +104,14 @@ import eu.maydu.gwt.validation.client.actions.FocusAction;
  * FormManager
  * 
  * @author jllort
- *
  */
 public class FormManager {
-	private final OKMKeyValueServiceAsync keyValueService = (OKMKeyValueServiceAsync) GWT.create(OKMKeyValueService.class);
-	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
-	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
+	private final OKMKeyValueServiceAsync keyValueService = (OKMKeyValueServiceAsync) GWT
+			.create(OKMKeyValueService.class);
+	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT
+			.create(OKMRepositoryService.class);
+	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT
+			.create(OKMDocumentService.class);
 	private final OKMFolderServiceAsync folderService = (OKMFolderServiceAsync) GWT.create(OKMFolderService.class);
 	
 	// Boolean contants
@@ -172,7 +174,7 @@ public class FormManager {
 		submitButtonPanel = new HorizontalPanel();
 		buttonControlList = new ArrayList<Button>();
 	}
-
+	
 	/**
 	 * getTable
 	 * 
@@ -190,7 +192,7 @@ public class FormManager {
 	 * @param warp
 	 */
 	private void setRowWordWarp(int row, int columns, boolean warp) {
-		for (int i=0; i<columns; i++){
+		for (int i = 0; i < columns; i++) {
 			table.getCellFormatter().setWordWrap(row, i, false);
 		}
 	}
@@ -204,7 +206,7 @@ public class FormManager {
 	 * @param warp
 	 */
 	private void setRowWordWarp(FlexTable table, int row, int columns, boolean warp) {
-		for (int i=0; i<columns; i++){
+		for (int i = 0; i < columns; i++) {
 			table.getCellFormatter().setWordWrap(row, i, false);
 		}
 	}
@@ -230,10 +232,10 @@ public class FormManager {
 			submitButtonPanel.setCellWidth(space, "5px");
 			
 			// Setting submit button
-			transButton.addClickHandler(new ClickHandler() { 
+			transButton.addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
-					if (gWTButton.getConfirmation()!=null && !gWTButton.getConfirmation().equals("")) {
+					if (gWTButton.getConfirmation() != null && !gWTButton.getConfirmation().equals("")) {
 						Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_WORKFLOW_ACTION);
 						Main.get().confirmPopup.setConfirmationText(gWTButton.getConfirmation());
 						ValidationButton validationButton = new ValidationButton(gWTButton, singleton);
@@ -266,18 +268,18 @@ public class FormManager {
 			textArea.setSize(gwtFormElement.getWidth(), gwtFormElement.getHeight());
 			HTML text = new HTML(); // Create a widget for this property
 			text.setHTML(((GWTTextArea) gwtFormElement).getValue().replaceAll("\n", "<br>"));
-			hWidgetProperties.put(propertyName,hPanel);
+			hWidgetProperties.put(propertyName, hPanel);
 			table.setHTML(row, 0, "<b>" + gwtFormElement.getLabel() + "</b>");
 			table.setWidget(row, 1, text);
-			table.getCellFormatter().setVerticalAlignment(row,0,VerticalPanel.ALIGN_TOP);
+			table.getCellFormatter().setVerticalAlignment(row, 0, VerticalPanel.ALIGN_TOP);
 			table.getCellFormatter().setWidth(row, 1, "100%");
 			
 			if (searchView) {
 				final Image removeImage = new Image(OKMBundleResources.INSTANCE.deleteIcon());
-				removeImage.addClickHandler(new ClickHandler() { 
+				removeImage.addClickHandler(new ClickHandler() {
 					@Override
 					public void onClick(ClickEvent event) {
-						for (int row=0; row<table.getRowCount(); row++) {
+						for (int row = 0; row < table.getRowCount(); row++) {
 							if (table.getWidget(row, 2).equals(removeImage)) {
 								table.removeRow(row);
 								break;
@@ -309,15 +311,15 @@ public class FormManager {
 				setRowWordWarp(row, 2, true);
 			}
 		} else if (gwtFormElement instanceof GWTInput) {
-			HorizontalPanel hPanel = new HorizontalPanel();
+			final HorizontalPanel hPanel = new HorizontalPanel();
 			final TextBox textBox = new TextBox(); // Create a widget for this property
 			textBox.setEnabled((!readOnly && !((GWTInput) gwtFormElement).isReadonly()) || isSearchView);
 			hPanel.add(textBox);
 			String value = "";
 			
-			if (((GWTInput) gwtFormElement).getType().equals(GWTInput.TYPE_TEXT) || 
-				((GWTInput) gwtFormElement).getType().equals(GWTInput.TYPE_LINK) ||
-				((GWTInput) gwtFormElement).getType().equals(GWTInput.TYPE_FOLDER)) {
+			if (((GWTInput) gwtFormElement).getType().equals(GWTInput.TYPE_TEXT)
+					|| ((GWTInput) gwtFormElement).getType().equals(GWTInput.TYPE_LINK)
+					|| ((GWTInput) gwtFormElement).getType().equals(GWTInput.TYPE_FOLDER)) {
 				textBox.setText(((GWTInput) gwtFormElement).getValue());
 				value = ((GWTInput) gwtFormElement).getValue();
 			} else if (((GWTInput) gwtFormElement).getType().equals(GWTInput.TYPE_DATE)) {
@@ -330,7 +332,7 @@ public class FormManager {
 			
 			textBox.setWidth(gwtFormElement.getWidth());
 			textBox.setStyleName("okm-Input");
-			hWidgetProperties.put(propertyName,hPanel);
+			hWidgetProperties.put(propertyName, hPanel);
 			table.setHTML(row, 0, "<b>" + gwtFormElement.getLabel() + "</b>");
 			table.setHTML(row, 1, value);
 			
@@ -338,7 +340,7 @@ public class FormManager {
 				final PopupPanel calendarPopup = new PopupPanel(true);
 				final CalendarWidget calendar = new CalendarWidget();
 				
-				calendar.addChangeHandler(new ChangeHandler(){
+				calendar.addChangeHandler(new ChangeHandler() {
 					@Override
 					public void onChange(ChangeEvent event) {
 						calendarPopup.hide();
@@ -361,7 +363,12 @@ public class FormManager {
 					calendarIcon.addClickHandler(new ClickHandler() {
 						@Override
 						public void onClick(ClickEvent event) {
-							calendarPopup.setPopupPosition(calendarIcon.getAbsoluteLeft(), calendarIcon.getAbsoluteTop()-2);
+							calendarPopup.setPopupPosition(calendarIcon.getAbsoluteLeft(),calendarIcon.getAbsoluteTop() - 2);
+							if (calendar.getDate()!=null) {
+								calendar.setNow((Date)calendar.getDate().clone());
+							} else {
+								calendar.setNow(null);
+							}
 							calendarPopup.show();
 						}
 					});
@@ -404,7 +411,8 @@ public class FormManager {
 					// remove first ocurrence
 					String path = value.substring(value.indexOf("/", 1) + 1);
 					
-					// Looks if must change icon on parent if now has no childs and properties with user security atention
+					// Looks if must change icon on parent if now has no childs and properties with user security
+					// atention
 					if (folder.getHasChilds()) {
 						anchor.setHTML(Util.imageItemHTML("img/menuitem_childs.gif", path, "top"));
 					} else {
@@ -425,10 +433,11 @@ public class FormManager {
 				}
 				
 				Image pathExplorer = new Image(OKMBundleResources.INSTANCE.folderExplorer());
-				pathExplorer.addClickHandler(new ClickHandler() { 
+				pathExplorer.addClickHandler(new ClickHandler() {
 					@Override
 					public void onClick(ClickEvent event) {
-						folderSelectPopup.show(textBox, search); // when any changes is done is fired search.metadataValueChanged();
+						folderSelectPopup.show(textBox, search); // when any changes is done is fired
+																	// search.metadataValueChanged();
 					}
 				});
 				
@@ -452,7 +461,7 @@ public class FormManager {
 				textBox.setEnabled(false);
 			}
 			
-			table.getCellFormatter().setVerticalAlignment(row,0,VerticalPanel.ALIGN_TOP);
+			table.getCellFormatter().setVerticalAlignment(row, 0, VerticalPanel.ALIGN_TOP);
 			table.getCellFormatter().setWidth(row, 1, "100%");
 			
 			if (searchView) {
@@ -490,7 +499,8 @@ public class FormManager {
 					calendarIcon.addClickHandler(new ClickHandler() {
 						@Override
 						public void onClick(ClickEvent event) {
-							calendarPopup.setPopupPosition(calendarIcon.getAbsoluteLeft(), calendarIcon.getAbsoluteTop()-2);
+							calendarPopup.setPopupPosition(calendarIcon.getAbsoluteLeft(),
+									calendarIcon.getAbsoluteTop() - 2);
 							calendarPopup.show();
 						}
 					});
@@ -499,14 +509,29 @@ public class FormManager {
 					hPanel.add(Util.hSpace("5"));
 					hPanel.add(calendarIcon);
 					textBoxTo.setEnabled(false);
+					
+					// Clean
+					final Image cleanIcon = new Image(OKMBundleResources.INSTANCE.cleanIcon());
+					cleanIcon.addClickHandler(new ClickHandler() {
+						@Override
+						public void onClick(ClickEvent event) {
+							TextBox textBox = (TextBox) hPanel.getWidget(0);
+							textBox.setText("");
+							textBoxTo.setText("");
+							((GWTInput) gwtFormElement).setDate(null);
+							((GWTInput) gwtFormElement).setDateTo(null);
+						}
+					});
+					hPanel.add(Util.hSpace("5"));
+					hPanel.add(cleanIcon);
 				}
 				
 				// Delete
 				final Image removeImage = new Image(OKMBundleResources.INSTANCE.deleteIcon());
-				removeImage.addClickHandler(new ClickHandler() { 
+				removeImage.addClickHandler(new ClickHandler() {
 					@Override
 					public void onClick(ClickEvent event) {
-						for (int row=0; row<table.getRowCount(); row++) {
+						for (int row = 0; row < table.getRowCount(); row++) {
 							if (table.getWidget(row, 2).equals(removeImage)) {
 								table.removeRow(row);
 								break;
@@ -535,10 +560,23 @@ public class FormManager {
 				
 				setRowWordWarp(row, 3, true);
 			} else {
+				// Clean
+				final Image cleanIcon = new Image(OKMBundleResources.INSTANCE.cleanIcon());
+				cleanIcon.addClickHandler(new ClickHandler() {
+					@Override
+					public void onClick(ClickEvent event) {
+						TextBox textBox = (TextBox) hPanel.getWidget(0);
+						textBox.setText("");
+						((GWTInput) gwtFormElement).setDate(null);
+					}
+				});
+				hPanel.add(Util.hSpace("5"));
+				hPanel.add(cleanIcon);
+				
 				setRowWordWarp(row, 2, true);
 			}
-				
-		} else if(gwtFormElement instanceof GWTSuggestBox) {
+			
+		} else if (gwtFormElement instanceof GWTSuggestBox) {
 			HorizontalPanel hPanel = new HorizontalPanel();
 			final GWTSuggestBox suggestBox = (GWTSuggestBox) gwtFormElement;
 			final TextBox textBox = new TextBox(); // Create a widget for this property
@@ -549,7 +587,7 @@ public class FormManager {
 			final HTML hiddenKey = new HTML("");
 			hiddenKey.setVisible(false);
 			
-			if (suggestBox.getValue()!=null) {
+			if (suggestBox.getValue() != null) {
 				hiddenKey.setHTML(suggestBox.getValue());
 			}
 			
@@ -558,6 +596,8 @@ public class FormManager {
 			final HTML value = new HTML("");
 			table.setHTML(row, 0, "<b>" + gwtFormElement.getLabel() + "</b>");
 			table.setWidget(row, 1, value);
+			table.getCellFormatter().setVerticalAlignment(row, 0, VerticalPanel.ALIGN_TOP);
+			table.getCellFormatter().setWidth(row, 1, "100%");
 			
 			if (textBox.isEnabled()) {
 				final Image databaseRecordImage = new Image(OKMBundleResources.INSTANCE.databaseRecord());
@@ -565,19 +605,20 @@ public class FormManager {
 					@Override
 					public void onClick(ClickEvent event) {
 						List<String> tables = new ArrayList<String>();
-						if (suggestBox.getTable()!=null) {
+						if (suggestBox.getTable() != null) {
 							tables.add(suggestBox.getTable());
 						}
 						
 						DatabaseRecord databaseRecord = new DatabaseRecord(hiddenKey, textBox);
 						// when any changes is done is fired search.metadataValueChanged();
-						DatabaseRecordSelectPopup drsPopup = new DatabaseRecordSelectPopup(
-								suggestBox.getDialogTitle(), tables, suggestBox.getFilterQuery(),
-								databaseRecord, search, suggestBox.getFilterMinLen());
+						DatabaseRecordSelectPopup drsPopup = new DatabaseRecordSelectPopup(suggestBox.getDialogTitle(),
+								tables, suggestBox.getFilterQuery(), databaseRecord, search, suggestBox
+										.getFilterMinLen());
 						drsPopup.setWidth("300");
 						drsPopup.setHeight("220");
 						drsPopup.setStyleName("okm-Popup");
-						drsPopup.setPopupPosition(databaseRecordImage.getAbsoluteLeft(), databaseRecordImage.getAbsoluteTop()-2);
+						drsPopup.setPopupPosition(databaseRecordImage.getAbsoluteLeft(),
+								databaseRecordImage.getAbsoluteTop() - 2);
 						drsPopup.show();
 					}
 				});
@@ -585,13 +626,13 @@ public class FormManager {
 				databaseRecordImage.setStyleName("okm-Hyperlink");
 				hPanel.add(new HTML("&nbsp;"));
 				hPanel.add(databaseRecordImage);
-			}		
+			}
 			
 			hWidgetProperties.put(propertyName, hPanel);
 			if (!suggestBox.getValue().equals("")) {
 				List<String> tables = new ArrayList<String>();
 				
-				if (suggestBox.getTable()!=null) {
+				if (suggestBox.getTable() != null) {
 					tables.add(suggestBox.getTable());
 				}
 				
@@ -616,10 +657,10 @@ public class FormManager {
 			
 			if (searchView) {
 				final Image removeImage = new Image(OKMBundleResources.INSTANCE.deleteIcon());
-				removeImage.addClickHandler(new ClickHandler() { 
+				removeImage.addClickHandler(new ClickHandler() {
 					@Override
 					public void onClick(ClickEvent event) {
-						for (int row=0; row<table.getRowCount(); row++) {
+						for (int row = 0; row < table.getRowCount(); row++) {
 							if (table.getWidget(row, 2).equals(removeImage)) {
 								table.removeRow(row);
 								break;
@@ -644,8 +685,8 @@ public class FormManager {
 		} else if (gwtFormElement instanceof GWTCheckBox) {
 			CheckBox checkBox = new CheckBox();
 			checkBox.setEnabled((!readOnly && !((GWTCheckBox) gwtFormElement).isReadonly()) || isSearchView);
-			checkBox.setValue(((GWTCheckBox)gwtFormElement).getValue());
-			hWidgetProperties.put(propertyName,checkBox);
+			checkBox.setValue(((GWTCheckBox) gwtFormElement).getValue());
+			hWidgetProperties.put(propertyName, checkBox);
 			table.setHTML(row, 0, "<b>" + gwtFormElement.getLabel() + "</b>");
 			
 			if (checkBox.getValue()) {
@@ -654,15 +695,15 @@ public class FormManager {
 				table.setWidget(row, 1, new Image(OKMBundleResources.INSTANCE.no()));
 			}
 			
-			table.getCellFormatter().setVerticalAlignment(row,0,VerticalPanel.ALIGN_TOP);
+			table.getCellFormatter().setVerticalAlignment(row, 0, VerticalPanel.ALIGN_TOP);
 			table.getCellFormatter().setWidth(row, 1, "100%");
 			
 			if (searchView) {
 				final Image removeImage = new Image(OKMBundleResources.INSTANCE.deleteIcon());
-				removeImage.addClickHandler(new ClickHandler() { 
+				removeImage.addClickHandler(new ClickHandler() {
 					@Override
 					public void onClick(ClickEvent event) {
-						for (int row=0; row<table.getRowCount(); row++) {
+						for (int row = 0; row < table.getRowCount(); row++) {
 							if (table.getWidget(row, 2).equals(removeImage)) {
 								table.removeRow(row);
 								break;
@@ -704,16 +745,16 @@ public class FormManager {
 				listBox.setStyleName("okm-Select");
 				listBox.addItem("", ""); // Always we set and empty value
 				
-				for (Iterator<GWTOption> itData = gwtSelect.getOptions().iterator(); itData.hasNext(); ){
+				for (Iterator<GWTOption> itData = gwtSelect.getOptions().iterator(); itData.hasNext();) {
 					GWTOption option = itData.next();
-					listBox.addItem(option.getLabel(), option.getValue()); 
+					listBox.addItem(option.getLabel(), option.getValue());
 					if (option.isSelected()) {
-						listBox.setItemSelected(listBox.getItemCount()-1, true);
+						listBox.setItemSelected(listBox.getItemCount() - 1, true);
 						selectedLabel = option.getLabel();
 					}
 				}
 				
-				hWidgetProperties.put(propertyName,hPanel);
+				hWidgetProperties.put(propertyName, hPanel);
 				
 				table.setHTML(row, 0, "<b>" + gwtFormElement.getLabel() + "</b>");
 				table.setHTML(row, 1, selectedLabel);
@@ -721,10 +762,10 @@ public class FormManager {
 				
 				if (searchView) {
 					final Image removeImage = new Image(OKMBundleResources.INSTANCE.deleteIcon());
-					removeImage.addClickHandler(new ClickHandler() { 
+					removeImage.addClickHandler(new ClickHandler() {
 						@Override
 						public void onClick(ClickEvent event) {
-							for (int row=0; row<table.getRowCount(); row++) {
+							for (int row = 0; row < table.getRowCount(); row++) {
 								if (table.getWidget(row, 2).equals(removeImage)) {
 									table.removeRow(row);
 									break;
@@ -761,12 +802,12 @@ public class FormManager {
 				ListBox listMulti = new ListBox();
 				listMulti.setEnabled((!readOnly && !gwtSelect.isReadonly()) || isSearchView);
 				listMulti.setStyleName("okm-Select");
-				listMulti.addItem("",""); // Always we set and empty value
+				listMulti.addItem("", ""); // Always we set and empty value
 				
 				// Table for values
 				FlexTable tableMulti = new FlexTable();
 				
-				Button addButton = new Button(Main.i18n("button.add"),new ClickHandler() { 
+				Button addButton = new Button(Main.i18n("button.add"), new ClickHandler() {
 					@Override
 					public void onClick(ClickEvent event) {
 						HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(propertyName);
@@ -776,10 +817,10 @@ public class FormManager {
 						
 						if (listMulti.getSelectedIndex() > 0) {
 							final HTML htmlValue = new HTML(listMulti.getValue(listMulti.getSelectedIndex()));
-							int rowTableMulti  = tableMulti.getRowCount();
+							int rowTableMulti = tableMulti.getRowCount();
 							Image removeImage = new Image(OKMBundleResources.INSTANCE.deleteIcon());
 							
-							removeImage.addClickHandler(new ClickHandler() { 
+							removeImage.addClickHandler(new ClickHandler() {
 								@Override
 								public void onClick(ClickEvent event) {
 									Widget sender = (Widget) event.getSource();
@@ -790,36 +831,37 @@ public class FormManager {
 									String value = htmlValue.getText();
 									String optionLabel = "";
 									
-									for (Iterator<GWTOption> itOptions = gwtSelect.getOptions().iterator(); itOptions.hasNext();) {
+									for (Iterator<GWTOption> itOptions = gwtSelect.getOptions().iterator(); itOptions
+											.hasNext();) {
 										GWTOption option = itOptions.next();
 										if (option.getValue().equals(htmlValue.getText())) {
 											optionLabel = option.getLabel();
 											break;
-										} 
-									} 
+										}
+									}
 									
 									listMulti.addItem(optionLabel, value);
 									listMulti.setVisible(true);
 									addButton.setVisible(true);
 									
-									// Looking for row to delete 
-									for (int i=0; i<tableMulti.getRowCount(); i++){
-										if (tableMulti.getWidget(i,1).equals(sender)) {
+									// Looking for row to delete
+									for (int i = 0; i < tableMulti.getRowCount(); i++) {
+										if (tableMulti.getWidget(i, 1).equals(sender)) {
 											tableMulti.removeRow(i);
 										}
 									}
 									
-									if (search!=null) {
+									if (search != null) {
 										search.metadataValueChanged();
 									}
 								}
 							});
 							
-							tableMulti.setWidget(rowTableMulti,0,htmlValue);
-							tableMulti.setWidget(rowTableMulti,1,removeImage);
-							tableMulti.setHTML(rowTableMulti,2, listMulti.getItemText(listMulti.getSelectedIndex()));
+							tableMulti.setWidget(rowTableMulti, 0, htmlValue);
+							tableMulti.setWidget(rowTableMulti, 1, removeImage);
+							tableMulti.setHTML(rowTableMulti, 2, listMulti.getItemText(listMulti.getSelectedIndex()));
 							
-							setRowWordWarp(tableMulti,rowTableMulti, 2, true);
+							setRowWordWarp(tableMulti, rowTableMulti, 2, true);
 							listMulti.removeItem(listMulti.getSelectedIndex());
 							htmlValue.setVisible(false);
 							
@@ -846,18 +888,18 @@ public class FormManager {
 				hPanel.setVisible(true);
 				listMulti.setVisible(false);
 				addButton.setVisible(false);
-				hPanel.setCellVerticalAlignment(tableMulti,VerticalPanel.ALIGN_TOP);
-				hPanel.setCellVerticalAlignment(listMulti,VerticalPanel.ALIGN_TOP);
-				hPanel.setCellVerticalAlignment(addButton,VerticalPanel.ALIGN_TOP);
+				hPanel.setCellVerticalAlignment(tableMulti, VerticalPanel.ALIGN_TOP);
+				hPanel.setCellVerticalAlignment(listMulti, VerticalPanel.ALIGN_TOP);
+				hPanel.setCellVerticalAlignment(addButton, VerticalPanel.ALIGN_TOP);
 				hPanel.setHeight("100%");
-
+				
 				table.setHTML(row, 0, "<b>" + gwtFormElement.getLabel() + "</b>");
 				table.setWidget(row, 1, hPanel);
-				table.getCellFormatter().setVerticalAlignment(row,0,VerticalPanel.ALIGN_TOP);
-				table.getCellFormatter().setVerticalAlignment(row,1,VerticalPanel.ALIGN_TOP);
+				table.getCellFormatter().setVerticalAlignment(row, 0, VerticalPanel.ALIGN_TOP);
+				table.getCellFormatter().setVerticalAlignment(row, 1, VerticalPanel.ALIGN_TOP);
 				table.getCellFormatter().setWidth(row, 1, "100%");
 				
-				for (Iterator<GWTOption> itData = gwtSelect.getOptions().iterator(); itData.hasNext(); ) {
+				for (Iterator<GWTOption> itData = gwtSelect.getOptions().iterator(); itData.hasNext();) {
 					final GWTOption option = itData.next();
 					
 					// Looks if there's some selected value
@@ -866,7 +908,7 @@ public class FormManager {
 						HTML htmlValue = new HTML(option.getValue());
 						
 						Image removeImage = new Image(OKMBundleResources.INSTANCE.deleteIcon());
-						removeImage.addClickHandler(new ClickHandler() { 
+						removeImage.addClickHandler(new ClickHandler() {
 							@Override
 							public void onClick(ClickEvent event) {
 								Widget sender = (Widget) event.getSource();
@@ -879,9 +921,9 @@ public class FormManager {
 								listMulti.setVisible(true);
 								addButton.setVisible(true);
 								
-								// Looking for row to delete 
-								for (int i=0; i<tableMulti.getRowCount(); i++) {
-									if (tableMulti.getWidget(i,1).equals(sender)) {
+								// Looking for row to delete
+								for (int i = 0; i < tableMulti.getRowCount(); i++) {
+									if (tableMulti.getWidget(i, 1).equals(sender)) {
 										tableMulti.removeRow(i);
 									}
 								}
@@ -901,7 +943,7 @@ public class FormManager {
 						htmlValue.setVisible(false);
 						removeImage.setVisible(false);
 					} else {
-						listMulti.addItem(option.getLabel(), option.getValue()); 
+						listMulti.addItem(option.getLabel(), option.getValue());
 					}
 				}
 				
@@ -910,10 +952,10 @@ public class FormManager {
 				
 				if (searchView) {
 					final Image removeImage = new Image(OKMBundleResources.INSTANCE.deleteIcon());
-					removeImage.addClickHandler(new ClickHandler() { 
+					removeImage.addClickHandler(new ClickHandler() {
 						@Override
 						public void onClick(ClickEvent event) {
-							for (int row=0; row<table.getRowCount(); row++) {
+							for (int row = 0; row < table.getRowCount(); row++) {
 								if (table.getWidget(row, 2).equals(removeImage)) {
 									table.removeRow(row);
 									break;
@@ -931,8 +973,8 @@ public class FormManager {
 					table.setWidget(row, 2, removeImage);
 					table.getCellFormatter().setVerticalAlignment(row, 2, HasAlignment.ALIGN_TOP);
 					
-					//not implemented
-					//textBox.addKeyUpHandler(Main.get().mainPanel.search.searchBrowser.searchIn.searchControl.keyUpHandler);
+					// not implemented
+					// textBox.addKeyUpHandler(Main.get().mainPanel.search.searchBrowser.searchIn.searchControl.keyUpHandler);
 					setRowWordWarp(row, 3, true);
 				} else {
 					setRowWordWarp(row, 2, true);
@@ -943,11 +985,11 @@ public class FormManager {
 			HorizontalPanel hPanel = new HorizontalPanel();
 			FileUpload fileUpload = new FileUpload();
 			fileUpload.setStyleName("okm-Input");
-			fileUpload.getElement().setAttribute("size", ""+upload.getWidth());
+			fileUpload.getElement().setAttribute("size", "" + upload.getWidth());
 			final Anchor documentLink = new Anchor();
 			
 			// Setting document link by uuid
-			if (upload.getDocumentUuid()!=null && !upload.getDocumentUuid().equals("")) {
+			if (upload.getDocumentUuid() != null && !upload.getDocumentUuid().equals("")) {
 				repositoryService.getPathByUUID(upload.getDocumentUuid(), new AsyncCallback<String>() {
 					@Override
 					public void onSuccess(String result) {
@@ -956,10 +998,10 @@ public class FormManager {
 							public void onSuccess(GWTDocument result) {
 								final String docPath = result.getPath();
 								documentLink.setText(result.getName());
-								documentLink.addClickHandler(new ClickHandler() { 
+								documentLink.addClickHandler(new ClickHandler() {
 									@Override
 									public void onClick(ClickEvent event) {
-										String path = docPath.substring(0,docPath.lastIndexOf("/"));
+										String path = docPath.substring(0, docPath.lastIndexOf("/"));
 										CommonUI.openAllFolderPath(path, docPath);
 									}
 								});
@@ -982,16 +1024,16 @@ public class FormManager {
 			documentLink.setStyleName("okm-Hyperlink");
 			hPanel.add(documentLink);
 			hPanel.add(fileUpload);
-			hWidgetProperties.put(propertyName,hPanel);
+			hWidgetProperties.put(propertyName, hPanel);
 			table.setHTML(row, 0, "<b>" + gwtFormElement.getLabel() + "</b>");
 			table.setWidget(row, 1, new HTML(""));
-			table.getCellFormatter().setVerticalAlignment(row,0,VerticalPanel.ALIGN_TOP);
-			table.getCellFormatter().setWidth(row, 1, "100%");		
+			table.getCellFormatter().setVerticalAlignment(row, 0, VerticalPanel.ALIGN_TOP);
+			table.getCellFormatter().setWidth(row, 1, "100%");
 			setRowWordWarp(row, 2, true);
 			
 			// If folderPath is null must initialize value
-			if (upload.getFolderPath()==null || upload.getFolderPath().equals("") && 
-				upload.getFolderUuid()!=null && !upload.getFolderUuid().equals("")) {
+			if (upload.getFolderPath() == null || upload.getFolderPath().equals("") && upload.getFolderUuid() != null
+					&& !upload.getFolderUuid().equals("")) {
 				repositoryService.getPathByUUID(upload.getFolderUuid(), new AsyncCallback<String>() {
 					@Override
 					public void onSuccess(String result) {
@@ -1006,12 +1048,12 @@ public class FormManager {
 			}
 		} else if (gwtFormElement instanceof GWTText) {
 			HorizontalPanel hPanel = new HorizontalPanel();
-			HTML title = new HTML("&nbsp;"+"<b>"+((GWTText)gwtFormElement).getLabel()+"</b>"+"&nbsp;");
+			HTML title = new HTML("&nbsp;" + "<b>" + ((GWTText) gwtFormElement).getLabel() + "</b>" + "&nbsp;");
 			title.setStyleName("okm-NoWrap");
-			hPanel.add(Util.hSpace("10"));			
+			hPanel.add(Util.hSpace("10"));
 			hPanel.add(title);
-			hPanel.setCellWidth(title, ((GWTText)gwtFormElement).getWidth());
-			hWidgetProperties.put(propertyName,hPanel);
+			hPanel.setCellWidth(title, ((GWTText) gwtFormElement).getWidth());
+			hWidgetProperties.put(propertyName, hPanel);
 			table.setWidget(row, 0, hPanel);
 			table.getFlexCellFormatter().setColSpan(row, 0, 2);
 		} else if (gwtFormElement instanceof GWTSeparator) {
@@ -1022,15 +1064,15 @@ public class FormManager {
 			Image horizontalLine2 = new Image("img/transparent_pixel.gif");
 			horizontalLine2.setStyleName("okm-TopPanel-Line-Border");
 			horizontalLine2.setSize("100%", "2px");
-			HTML title = new HTML("&nbsp;"+"<b>"+((GWTSeparator)gwtFormElement).getLabel()+"</b>"+"&nbsp;");
+			HTML title = new HTML("&nbsp;" + "<b>" + ((GWTSeparator) gwtFormElement).getLabel() + "</b>" + "&nbsp;");
 			title.setStyleName("okm-NoWrap");
-			hPanel.add(horizontalLine);			
+			hPanel.add(horizontalLine);
 			hPanel.add(title);
 			hPanel.add(horizontalLine2);
 			hPanel.setCellVerticalAlignment(horizontalLine, HasAlignment.ALIGN_MIDDLE);
 			hPanel.setCellVerticalAlignment(horizontalLine2, HasAlignment.ALIGN_MIDDLE);
-			hPanel.setCellWidth(horizontalLine2, ((GWTSeparator)gwtFormElement).getWidth());
-			hWidgetProperties.put(propertyName,hPanel);
+			hPanel.setCellWidth(horizontalLine2, ((GWTSeparator) gwtFormElement).getWidth());
+			hWidgetProperties.put(propertyName, hPanel);
 			table.setWidget(row, 0, hPanel);
 			table.getFlexCellFormatter().setColSpan(row, 0, 2);
 		} else if (gwtFormElement instanceof GWTDownload) {
@@ -1160,7 +1202,8 @@ public class FormManager {
 				}
 				
 				downloadButton.setStyleName("okm-Button");
-				printTable.setWidget(downloadTableRow, 0, new HTML("&nbsp;&nbsp;&nbsp;" + node.getLabel() + "&nbsp;&nbsp;"));
+				printTable.setWidget(downloadTableRow, 0, new HTML("&nbsp;&nbsp;&nbsp;" + node.getLabel()
+						+ "&nbsp;&nbsp;"));
 				printTable.setWidget(downloadTableRow, 1, downloadButton);
 			}
 			
@@ -1180,7 +1223,7 @@ public class FormManager {
 		int rows = 0;
 		validationProcessor = new DefaultValidationProcessor();
 		FocusAction focusAction = new FocusAction();
-
+		
 		for (Iterator<GWTFormElement> it = formElementList.iterator(); it.hasNext();) {
 			GWTFormElement formField = it.next();
 			
@@ -1190,7 +1233,8 @@ public class FormManager {
 				
 				for (GWTValidator validator : ((GWTTextArea) formField).getValidators()) {
 					TextArea textArea = (TextArea) hPanel.getWidget(0);
-					ValidatorBuilder.addValidator(validationProcessor, focusAction, hPanel, "textarea_"+rows, validator, textArea);
+					ValidatorBuilder.addValidator(validationProcessor, focusAction, hPanel, "textarea_" + rows,
+							validator, textArea);
 				}
 			} else if (formField instanceof GWTInput) {
 				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formField.getName());
@@ -1198,7 +1242,8 @@ public class FormManager {
 				
 				for (GWTValidator validator : ((GWTInput) formField).getValidators()) {
 					TextBox textBox = (TextBox) hPanel.getWidget(0);
-					ValidatorBuilder.addValidator(validationProcessor, focusAction, hPanel, "input_"+rows, validator, textBox);
+					ValidatorBuilder.addValidator(validationProcessor, focusAction, hPanel, "input_" + rows, validator,
+							textBox);
 				}
 			} else if (formField instanceof GWTSuggestBox) {
 				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formField.getName());
@@ -1206,7 +1251,8 @@ public class FormManager {
 				
 				for (GWTValidator validator : ((GWTSuggestBox) formField).getValidators()) {
 					TextBox textBox = (TextBox) hPanel.getWidget(0);
-					ValidatorBuilder.addValidator(validationProcessor, focusAction, hPanel, "suggestbox_"+rows, validator, textBox);
+					ValidatorBuilder.addValidator(validationProcessor, focusAction, hPanel, "suggestbox_" + rows,
+							validator, textBox);
 				}
 			} else if (formField instanceof GWTCheckBox) {
 				CheckBox checkBox = (CheckBox) hWidgetProperties.get(formField.getName());
@@ -1220,7 +1266,8 @@ public class FormManager {
 					table.setWidget(rows, 1, hPanel);
 					
 					for (GWTValidator validator : ((GWTSelect) formField).getValidators()) {
-						ValidatorBuilder.addValidator(validationProcessor, focusAction, hPanel, "select_"+rows, validator, listBox);
+						ValidatorBuilder.addValidator(validationProcessor, focusAction, hPanel, "select_" + rows,
+								validator, listBox);
 					}
 				} else if (gwtSelect.getType().equals(GWTSelect.TYPE_MULTIPLE)) {
 					HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formField.getName());
@@ -1229,20 +1276,21 @@ public class FormManager {
 					Button addButton = (Button) hPanel.getWidget(4);
 					
 					// Only it there's some element to assign must set it visible.
-					if (listMulti.getItemCount()>1) {
+					if (listMulti.getItemCount() > 1) {
 						listMulti.setVisible(true);
 						addButton.setVisible(true);
 					}
 					
-					// Enables deleting  option
-					for (int i=0; i<tableMulti.getRowCount(); i++) {
-						((Image) tableMulti.getWidget(i,1)).setVisible(true);
+					// Enables deleting option
+					for (int i = 0; i < tableMulti.getRowCount(); i++) {
+						((Image) tableMulti.getWidget(i, 1)).setVisible(true);
 					}
 					
 					table.setWidget(rows, 1, hPanel);
 					
 					for (GWTValidator validator : ((GWTSelect) formField).getValidators()) {
-						ValidatorBuilder.addValidator(validationProcessor, focusAction, hPanel, "select_"+rows, validator, tableMulti);
+						ValidatorBuilder.addValidator(validationProcessor, focusAction, hPanel, "select_" + rows,
+								validator, tableMulti);
 					}
 				}
 			} else if (formField instanceof GWTUpload) {
@@ -1251,7 +1299,8 @@ public class FormManager {
 				
 				for (GWTValidator validator : ((GWTUpload) formField).getValidators()) {
 					FileUpload fileUpload = (FileUpload) hPanel.getWidget(1);
-					ValidatorBuilder.addValidator(validationProcessor, focusAction, hPanel, "fileupload_"+rows, validator, fileUpload);
+					ValidatorBuilder.addValidator(validationProcessor, focusAction, hPanel, "fileupload_" + rows,
+							validator, fileUpload);
 				}
 			} else if (formField instanceof GWTText) {
 				// Nothing to be done here
@@ -1297,7 +1346,7 @@ public class FormManager {
 	 */
 	private void initButtonControlList() {
 		buttonControlList = new ArrayList<Button>(); // Ensure button list is empty
-		if (submitForm!=null) {
+		if (submitForm != null) {
 			buttonControlList.add(submitForm);
 		}
 	}
@@ -1350,7 +1399,7 @@ public class FormManager {
 					GWTSelect select = (GWTSelect) formElement;
 					
 					for (GWTOption option : select.getOptions()) {
-						for (int i=0; i<value.length; i++) {
+						for (int i = 0; i < value.length; i++) {
 							if (option.getValue().equals(value[i])) {
 								option.setSelected(true);
 							} else {
@@ -1392,7 +1441,7 @@ public class FormManager {
 		
 		for (GWTFormElement formElement : formElementList) {
 			drawFormElement(rows, formElement, readOnly, isSearchView);
-			rows ++;
+			rows++;
 		}
 		
 		drawed = true;
@@ -1416,8 +1465,8 @@ public class FormManager {
 				if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_DATE)) {
 					GWTInput input = (GWTInput) formElement;
 					value = ISO8601.format(input.getDate());
-					if (input.getDateTo()!=null) {
-						value += ","+ ISO8601.format(input.getDateTo());
+					if (input.getDateTo() != null) {
+						value += "," + ISO8601.format(input.getDateTo());
 					} else {
 						value += "," + value;
 					}
@@ -1485,8 +1534,8 @@ public class FormManager {
 			} else if (formElement instanceof GWTSuggestBox) {
 				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
 				HTML hiddenKey = (HTML) hPanel.getWidget(1);
-				((GWTSuggestBox) formElement).setValue(hiddenKey.getHTML()); 
-			} else if (formElement instanceof GWTCheckBox) {	
+				((GWTSuggestBox) formElement).setValue(hiddenKey.getHTML());
+			} else if (formElement instanceof GWTCheckBox) {
 				CheckBox checkbox = (CheckBox) hWidgetProperties.get(formElement.getName());
 				((GWTCheckBox) formElement).setValue(checkbox.getValue());
 			} else if (formElement instanceof GWTSelect) {
@@ -1510,7 +1559,7 @@ public class FormManager {
 					}
 				} else if (gwtSelect.getType().equals(GWTSelect.TYPE_MULTIPLE)) {
 					HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
-					FlexTable tableMulti = (FlexTable) hPanel.getWidget(0);		
+					FlexTable tableMulti = (FlexTable) hPanel.getWidget(0);
 					
 					// Disables all options
 					for (Iterator<GWTOption> itOptions = gwtSelect.getOptions().iterator(); itOptions.hasNext();) {
@@ -1518,17 +1567,17 @@ public class FormManager {
 					}
 					
 					// Enables options
-					if (tableMulti.getRowCount()>0) {
-						for (int i=0; i<tableMulti.getRowCount(); i++) {
-							String selectedValue = tableMulti.getText(i,0);
+					if (tableMulti.getRowCount() > 0) {
+						for (int i = 0; i < tableMulti.getRowCount(); i++) {
+							String selectedValue = tableMulti.getText(i, 0);
 							for (Iterator<GWTOption> itOptions = gwtSelect.getOptions().iterator(); itOptions.hasNext();) {
 								GWTOption option = itOptions.next();
 								if (option.getValue().equals(selectedValue)) {
 									option.setSelected(true);
-								} 
+								}
 							}
 						}
-					} 
+					}
 				}
 			} else if (formElement instanceof GWTUpload) {
 				// Nothing to be done here, upload files are updated in file upload widget
@@ -1542,7 +1591,7 @@ public class FormManager {
 				// Nothing to be done here
 			}
 			
-			rows ++;
+			rows++;
 		}
 		
 		return formElementList;
@@ -1561,7 +1610,7 @@ public class FormManager {
 				FileUpload fileUpload = (FileUpload) hPanel.getWidget(1);
 				
 				if (!fileUpload.getFilename().equals("")) {
-					found  = true;
+					found = true;
 				}
 				
 				break;
@@ -1577,7 +1626,7 @@ public class FormManager {
 	 * getFilesToUpload
 	 */
 	public Collection<FileToUpload> getFilesToUpload(String transition) {
-		List<FileToUpload> filesToUpload= new ArrayList<FileToUpload>();
+		List<FileToUpload> filesToUpload = new ArrayList<FileToUpload>();
 		int rows = 0;
 		
 		for (GWTFormElement formElement : formElementList) {
@@ -1618,13 +1667,12 @@ public class FormManager {
 		}
 		
 		// Indicates is the last file to be upload in the cycle
-		if (filesToUpload.size()>0) {
-			filesToUpload.get(filesToUpload.size()-1).setLastToBeUploaded(true);
+		if (filesToUpload.size() > 0) {
+			filesToUpload.get(filesToUpload.size() - 1).setLastToBeUploaded(true);
 		}
 		
 		return filesToUpload;
 	}
-
 	
 	/**
 	 * updateFilesToUpload
@@ -1644,7 +1692,7 @@ public class FormManager {
 	 * loadDataFromPropertyGroupVariables
 	 */
 	public void loadDataFromPropertyGroupVariables(Map<String, GWTFormElement> map) {
-		// Only iterate if really there's some variable to be mapped 
+		// Only iterate if really there's some variable to be mapped
 		if (!map.isEmpty()) {
 			for (GWTFormElement formElement : formElementList) {
 				if (map.containsKey(formElement.getName())) {
@@ -1662,7 +1710,7 @@ public class FormManager {
 						checkBox.setValue(getBooleanValueFromVariable(map.get(formElement.getName())));
 					} else if (formElement instanceof GWTSelect) {
 						GWTSelect select = (GWTSelect) formElement;
-						select.setOptions(getOptionsValueFromVariable(formElement.getName(), select.getOptions())) ;
+						select.setOptions(getOptionsValueFromVariable(formElement.getName(), select.getOptions()));
 					} else if (formElement instanceof GWTUpload) {
 						// No aplicable to property groups
 					} else if (formElement instanceof GWTText) {
@@ -1684,7 +1732,7 @@ public class FormManager {
 	 * 
 	 */
 	public void loadDataFromWorkflowVariables(Map<String, Object> map) {
-		// Only iterate if really there's some variable to be mapped 
+		// Only iterate if really there's some variable to be mapped
 		if (!map.isEmpty()) {
 			for (GWTFormElement formElement : formElementList) {
 				if (formElement instanceof GWTTextArea) {
@@ -1707,7 +1755,8 @@ public class FormManager {
 								if (date != null) {
 									input.setDate(date);
 								} else {
-									Log.warn("Input '" + input.getName() + "' value should be in ISO8601 format: " + input.getValue());
+									Log.warn("Input '" + input.getName() + "' value should be in ISO8601 format: "
+											+ input.getValue());
 								}
 							}
 						}
@@ -1728,7 +1777,7 @@ public class FormManager {
 					GWTSelect select = (GWTSelect) formElement;
 					
 					if (!select.getData().equals("") && map.keySet().contains(select.getData())) {
-						select.setOptions(getOptionsValueFromVariable(map.get(select.getData()), select.getOptions())) ;
+						select.setOptions(getOptionsValueFromVariable(map.get(select.getData()), select.getOptions()));
 					}
 				} else if (formElement instanceof GWTUpload) {
 					GWTUpload upload = (GWTUpload) formElement;
@@ -1752,7 +1801,7 @@ public class FormManager {
 							upload.setFolderUuid(uploadData.getFolderUuid());
 						}
 						
-						if (uploadData.getValidators().size()>0) {
+						if (uploadData.getValidators().size() > 0) {
 							upload.setValidators(uploadData.getValidators());
 						}
 					}
@@ -1806,7 +1855,7 @@ public class FormManager {
 			return print.getNodes();
 		} else {
 			return new ArrayList<GWTNode>();
-		} 
+		}
 	}
 	
 	/**
@@ -1814,13 +1863,13 @@ public class FormManager {
 	 */
 	private String getStringValueFromVariable(Object obj) {
 		if (obj instanceof GWTInput) {
-			return ((GWTInput)obj).getValue();
+			return ((GWTInput) obj).getValue();
 		} else if (obj instanceof GWTTextArea) {
-			return ((GWTTextArea)obj).getValue();
+			return ((GWTTextArea) obj).getValue();
 		} else if (obj instanceof GWTSuggestBox) {
-			return ((GWTSuggestBox)obj).getValue();
+			return ((GWTSuggestBox) obj).getValue();
 		} else if (obj instanceof GWTCheckBox) {
-			return String.valueOf(((GWTCheckBox)obj).getValue());
+			return String.valueOf(((GWTCheckBox) obj).getValue());
 		} else if (obj instanceof GWTSelect) {
 			String values = "";
 			GWTSelect select = (GWTSelect) obj;
@@ -1839,7 +1888,7 @@ public class FormManager {
 		} else if (obj instanceof GWTUpload) {
 			return null;
 		} else if (obj instanceof GWTText) {
-			return ((GWTText)obj).getLabel();
+			return ((GWTText) obj).getLabel();
 		} else if (obj instanceof GWTSeparator) {
 			return null;
 		} else if (obj instanceof GWTDownload) {
@@ -1848,7 +1897,7 @@ public class FormManager {
 			return null;
 		} else {
 			return null;
-		} 
+		}
 	}
 	
 	/**
@@ -1856,13 +1905,13 @@ public class FormManager {
 	 */
 	private boolean getBooleanValueFromVariable(Object obj) {
 		if (obj instanceof GWTInput) {
-			return ((GWTInput)obj).getValue().toLowerCase().equals(BOOLEAN_TRUE);
+			return ((GWTInput) obj).getValue().toLowerCase().equals(BOOLEAN_TRUE);
 		} else if (obj instanceof GWTTextArea) {
-			return ((GWTTextArea)obj).getValue().toLowerCase().equals(BOOLEAN_TRUE);
+			return ((GWTTextArea) obj).getValue().toLowerCase().equals(BOOLEAN_TRUE);
 		} else if (obj instanceof GWTSuggestBox) {
-			return ((GWTSuggestBox)obj).getValue().toLowerCase().equals(BOOLEAN_TRUE);
+			return ((GWTSuggestBox) obj).getValue().toLowerCase().equals(BOOLEAN_TRUE);
 		} else if (obj instanceof GWTCheckBox) {
-			return ((GWTCheckBox)obj).getValue();
+			return ((GWTCheckBox) obj).getValue();
 		} else if (obj instanceof GWTSelect) {
 			String values = "";
 			GWTSelect select = (GWTSelect) obj;
@@ -1899,22 +1948,22 @@ public class FormManager {
 	private Collection<GWTOption> getOptionsValueFromVariable(Object obj, Collection<GWTOption> options) {
 		for (GWTOption option : options) {
 			if (obj instanceof GWTInput) {
-				if (option.getValue().equals(((GWTInput)obj).getValue())) {
+				if (option.getValue().equals(((GWTInput) obj).getValue())) {
 					option.setSelected(true);
 					return options;
 				}
 			} else if (obj instanceof GWTTextArea) {
-				if (option.getValue().equals(((GWTTextArea)obj).getValue())) {
+				if (option.getValue().equals(((GWTTextArea) obj).getValue())) {
 					option.setSelected(true);
 					return options;
 				}
 			} else if (obj instanceof GWTSuggestBox) {
-				if (option.getValue().equals(((GWTSuggestBox)obj).getValue())) {
+				if (option.getValue().equals(((GWTSuggestBox) obj).getValue())) {
 					option.setSelected(true);
 					return options;
 				}
 			} else if (obj instanceof GWTCheckBox) {
-				if (option.getValue().equals(String.valueOf(((GWTCheckBox)obj).getValue()))) {
+				if (option.getValue().equals(String.valueOf(((GWTCheckBox) obj).getValue()))) {
 					option.setSelected(true);
 					return options;
 				}
@@ -1976,7 +2025,7 @@ public class FormManager {
 				// Nothing to be done here
 			} else if (formElement instanceof GWTPrint) {
 				// Nothing to be done here
-			} 
+			}
 		}
 		
 		return values;
@@ -2022,7 +2071,7 @@ public class FormManager {
 		public void setKeyValue(GWTKeyValue keyValue) {
 			keyWidget.setHTML(keyValue.getKey());
 			valueWidget.setText(keyValue.getValue());
-		}		
+		}
 	}
 	
 	/**
