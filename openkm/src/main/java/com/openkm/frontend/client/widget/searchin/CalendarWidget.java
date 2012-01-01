@@ -411,7 +411,11 @@ public class CalendarWidget extends Composite implements ClickHandler, HasChange
 	 * langRefresh
 	 */
 	public void langRefresh() {
-		firstDayOfWeek = Integer.parseInt(Main.i18n("calendar.first.day.of.week"));
+		try {
+			firstDayOfWeek = Integer.parseInt(Main.i18n("calendar.first.day.of.week"));
+		} catch (Exception e) {
+			// Nothing to do here in case number exception error firstDayOfWeek = 0
+		}
 		days[0] = Main.i18n("calendar.day.sunday");
 		days[1] = Main.i18n("calendar.day.monday");
 		days[2] = Main.i18n("calendar.day.tuesday");
