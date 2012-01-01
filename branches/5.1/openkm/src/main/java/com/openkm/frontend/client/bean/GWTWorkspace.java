@@ -108,6 +108,7 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean tabMailSecurityVisible;
 	private GWTAvailableOption availableOption = new GWTAvailableOption();
 	private List<GWTLanguage> langs = new ArrayList<GWTLanguage>();
+	private GWTProfileToolbar profileToolbar = new GWTProfileToolbar();
 
 	/**
 	 * GWTWorkspace
@@ -687,5 +688,13 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setReports(List<GWTReport> reports) {
 		this.reports = reports;
+	}
+	
+	public GWTProfileToolbar getProfileToolbar() {
+		return profileToolbar;
+	}
+
+	public void setProfileToolbar(GWTProfileToolbar profileToolbar) {
+		this.profileToolbar = profileToolbar;
 	}
 }

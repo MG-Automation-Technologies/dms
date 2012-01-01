@@ -21,9 +21,16 @@
 
 package com.openkm.frontend.client.bean;
 
+/**
+ * ToolBarOption
+ * 
+ * @author jllort
+ *
+ */
 public class ToolBarOption {
 	public boolean createFolderOption;
 	public boolean findFolderOption;
+	public boolean findDocumentOption;
 	public boolean downloadOption;
 	public boolean downloadPdfOption;
 	public boolean lockOption;
@@ -50,4 +57,53 @@ public class ToolBarOption {
 	public boolean addNoteOption;
 	public boolean scannerOption;
 	public boolean uploaderOption;
+	public boolean splitterResizeOption;
+	public boolean bookmarkOption;
+	public boolean goOption;
+	public boolean createFromTemplateOption;
+	public boolean restore;
+	public boolean purge;
+	public boolean purgeTrash;
+	
+	/**
+	 * ToolBarOption
+	 */
+	public ToolBarOption() {
+		createFolderOption = false;
+		findFolderOption = false;
+		findDocumentOption = false;
+		downloadOption = false;
+		downloadPdfOption = false;
+		lockOption = false;
+		unLockOption = false;
+		addDocumentOption = false;
+		checkoutOption = false;
+		checkinOption = false;
+		cancelCheckoutOption = false;
+		deleteOption = false;
+		addPropertyGroupOption = false;
+		removePropertyGroupOption = false;
+		firedRemovePropertyGroupOption = false;
+		addSubscription = false;
+		removeSubscription = false;
+		homeOption = false;
+		refreshOption = false;
+		renameOption = false;
+		copyOption = false;
+		sendDocumentLinkOption = false;
+		sendDocumentAttachmentOption = false;
+		moveOption = false;
+		exportOption = false;
+		workflowOption = false;
+		addNoteOption = false;
+		scannerOption = false;
+		uploaderOption = false;
+		splitterResizeOption = false;
+		bookmarkOption = false; 
+		goOption = false;
+		createFromTemplateOption = false;
+		restore = false;
+		purge = false;
+		purgeTrash = false;
+	}
 }
