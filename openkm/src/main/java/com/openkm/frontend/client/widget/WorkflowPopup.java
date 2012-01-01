@@ -121,7 +121,6 @@ public class WorkflowPopup extends DialogBox implements WorkflowWidgetToFire {
 		
 		vPanel.add(new HTML("<br>"));
 		vPanel.add(listBox);
-		vPanel.add(new HTML("<br>"));
 		vPanel.add(sp);
 		vPanel.add(new HTML("<br>"));
 		vPanel.add(hPanel);
@@ -193,6 +192,7 @@ public class WorkflowPopup extends DialogBox implements WorkflowWidgetToFire {
 		listBox.setVisible(true);
 		addButton.setEnabled(false);
 		workflowWidget = null;
+		listBox.setVisible(true);
 		sp.setVisible(false);
 		sp.clear();
 		int left = (Window.getClientWidth()-300)/2;
@@ -227,6 +227,7 @@ public class WorkflowPopup extends DialogBox implements WorkflowWidgetToFire {
 				}
 			}
 			workflowWidget = new WorkflowWidget(new Double(listBox.getValue(listBox.getSelectedIndex())).doubleValue(), uuid, this, new HashMap<String, Object>());
+			listBox.setVisible(false);
 			sp.add(workflowWidget);
 			workflowWidget.runProcessDefinition();
 		}

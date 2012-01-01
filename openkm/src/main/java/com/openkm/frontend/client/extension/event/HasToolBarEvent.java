@@ -33,7 +33,7 @@ package com.openkm.frontend.client.extension.event;
 public interface HasToolBarEvent {
 	
 	/**
-	 * DocumentEventConstant
+	 * ToolBarEventConstant
 	 * 
 	 * @author jllort
 	 *
