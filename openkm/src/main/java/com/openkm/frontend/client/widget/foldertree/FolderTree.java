@@ -1580,4 +1580,11 @@ public class FolderTree extends Composite implements OriginPanel {
 	public void exportFolderToFile() {
 		Util.downloadFile(getFolder().getPath(), "export");
 	}
+	
+	/**
+	 * disableDragged
+	 */
+	public void disableDragged() {
+		tree.disableDragged();
+	}
 }
