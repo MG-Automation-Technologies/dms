@@ -25,13 +25,12 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.PopupPanel;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.panel.ExtendedDockPanel;
 import com.openkm.frontend.client.panel.center.Desktop;
 import com.openkm.frontend.client.panel.top.TopPanel;
 import com.openkm.frontend.client.util.OKMBundleResources;
+import com.openkm.frontend.client.widget.foldertree.ExtendedPopupPanel;
 
 /**
  * Status
@@ -39,7 +38,7 @@ import com.openkm.frontend.client.util.OKMBundleResources;
  * @author jllort
  *
  */
-public class Status extends PopupPanel {
+public class Status extends ExtendedPopupPanel {
 	
 	private HorizontalPanel hPanel;
 	private HTML msg;
