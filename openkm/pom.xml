@@ -52,7 +52,7 @@
     <!-- Using this Jackrabbit version -->
     <jcr.version>1.6.5</jcr.version>
 	
-	<!-- Milton WebDAV -->
+    <!-- Milton WebDAV -->
     <milton.version>1.6.8</milton.version>
     
     <!-- Tell the compiler we can use 1.6 -->
