@@ -155,11 +155,14 @@ public class Folder extends Composite {
 		String webdavPath = folder.getPath();
 		
 		// Replace only in case webdav fix is enabled
-		if (Main.get().workspaceUserProperties.getWorkspace().isWebdavFix()) {
+		if (Main.get().workspaceUserProperties.getWorkspace()!=null && Main.get().workspaceUserProperties.getWorkspace().isWebdavFix()) {
 			webdavPath = webdavPath.replace("okm:", "okm_");
 		}
 		
-		webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/')) + "/webdav" + webdavPath;
+		// Login case write empty folder
+		if (!webdavUrl.equals("")) {
+			webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/')) + "/webdav" + webdavPath;
+		}
 		tableProperties.setWidget(9, 1, new HTML("<div id=\"folderwebdavclipboardcontainer\"></div>\n"));
 		Util.createFolderWebDavClipboardButton(webdavUrl);
 		
