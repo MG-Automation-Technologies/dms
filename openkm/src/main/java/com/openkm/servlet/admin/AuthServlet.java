@@ -137,6 +137,7 @@ public class AuthServlet extends BaseServlet {
 			usr.setEmail(WebUtils.getString(request, "usr_email"));
 			usr.setActive(WebUtils.getBoolean(request, "usr_active"));
 			List<String> usrRoles = WebUtils.getStringList(request, "usr_roles");
+			
 			for (String rolId : usrRoles) {
 				usr.getRoles().add(AuthDAO.findRoleByPk(rolId));
 			}
