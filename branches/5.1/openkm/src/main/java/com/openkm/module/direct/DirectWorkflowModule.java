@@ -212,7 +212,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			
 			// Calculate minimal Y
 			Collections.sort(ordenadas);
-			int fix = ordenadas.get(0);
+			int fix = ordenadas.get(0) < 0 ? ordenadas.get(0) : 0;
 			
 			if (dNodeInfo != null) {
 				// Select node
