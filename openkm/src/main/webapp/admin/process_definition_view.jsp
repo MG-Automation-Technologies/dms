@@ -2,7 +2,6 @@
 <%@ page import="com.openkm.servlet.admin.BaseServlet" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -45,7 +44,7 @@
               - Status: <select name="statusFilter" onchange="document.getElementById('filter').submit()">
                 <c:forEach var="statusFilterValue" items="${statusFilterValues}">
                   <c:choose>
-                    <c:when test="${fn:contains(statusFilterValue.key, statusFilter)}">
+                    <c:when test="${statusFilterValue.key eq statusFilter}">
                       <option value="${statusFilterValue.key}" selected="selected">${statusFilterValue.value}</option>
                     </c:when>
                     <c:otherwise>
