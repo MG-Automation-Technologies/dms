@@ -175,26 +175,28 @@ public class AuthServlet extends BaseServlet {
 		String usrId = WebUtils.getString(request, "usr_id");
 		
 		if (WebUtils.getBoolean(request, "persist")) {
-			String password = WebUtils.getString(request, "usr_password");
-			User usr = new User();
-			usr.setId(usrId);
-			usr.setName(WebUtils.getString(request, "usr_name"));
-			usr.setEmail(WebUtils.getString(request, "usr_email"));
-			usr.setActive(WebUtils.getBoolean(request, "usr_active"));
-			List<String> usrRoles = WebUtils.getStringList(request, "usr_roles");
-			
-			for (String rolId : usrRoles) {
-				usr.getRoles().add(AuthDAO.findRoleByPk(rolId));
+			if (isMultipleInstancesAdmin(request) || !usrId.equals(Config.ADMIN_USER)) {
+				String password = WebUtils.getString(request, "usr_password");
+				User usr = new User();
+				usr.setId(usrId);
+				usr.setName(WebUtils.getString(request, "usr_name"));
+				usr.setEmail(WebUtils.getString(request, "usr_email"));
+				usr.setActive(WebUtils.getBoolean(request, "usr_active"));
+				List<String> usrRoles = WebUtils.getStringList(request, "usr_roles");
+				
+				for (String rolId : usrRoles) {
+					usr.getRoles().add(AuthDAO.findRoleByPk(rolId));
+				}
+				
+				AuthDAO.updateUser(usr);
+				
+				if (!password.equals("")) {
+					AuthDAO.updateUserPassword(usr.getId(), password);
+				}
+				
+				// Activity log
+				UserActivity.log(session.getUserID(), "ADMIN_USER_EDIT", usr.getId(), usr.toString());
 			}
-			
-			AuthDAO.updateUser(usr);
-			
-			if (!password.equals("")) {
-				AuthDAO.updateUserPassword(usr.getId(), password);
-			}
-			
-			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_USER_EDIT", usr.getId(), usr.toString());
 		} else {
 			ServletContext sc = getServletContext();
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
@@ -216,10 +218,12 @@ public class AuthServlet extends BaseServlet {
 		String usrId = WebUtils.getString(request, "usr_id");
 		
 		if (WebUtils.getBoolean(request, "persist")) {
-			AuthDAO.deleteUser(usrId);
-			
-			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_USER_DELETE", usrId, null);
+			if (isMultipleInstancesAdmin(request) || !usrId.equals(Config.ADMIN_USER)) {
+				AuthDAO.deleteUser(usrId);
+				
+				// Activity log
+				UserActivity.log(session.getUserID(), "ADMIN_USER_DELETE", usrId, null);
+			}
 		} else {
 			ServletContext sc = getServletContext();
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
@@ -240,10 +244,14 @@ public class AuthServlet extends BaseServlet {
 		log.debug("userActive({}, {}, {})", new Object[] { session, request, response });
 		boolean active = WebUtils.getBoolean(request, "usr_active");
 		String usrId = WebUtils.getString(request, "usr_id");
-		AuthDAO.activeUser(usrId, active);
 		
-		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_USER_ACTIVE", usrId, Boolean.toString(active));
+		if (isMultipleInstancesAdmin(request) || !usrId.equals(Config.ADMIN_USER)) {
+			AuthDAO.activeUser(usrId, active);
+		
+			// Activity log
+			UserActivity.log(session.getUserID(), "ADMIN_USER_ACTIVE", usrId, Boolean.toString(active));
+		}
+		
 		log.debug("userActive: void");
 	}
 
