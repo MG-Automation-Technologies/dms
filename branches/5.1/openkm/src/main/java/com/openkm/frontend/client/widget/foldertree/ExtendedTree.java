@@ -43,7 +43,7 @@ import com.openkm.frontend.client.widget.OriginPanel;
  */
 public class ExtendedTree extends Tree implements HasSelectionHandlers<TreeItem> {
 	// Drag pixels sensibility
-	private static final int DRAG_PIXELS_SENSIBILITY = 15;
+	private static final int DRAG_PIXELS_SENSIBILITY = 3;
 
 	private boolean flagPopup = false;
 	public int mouseX = 0;
