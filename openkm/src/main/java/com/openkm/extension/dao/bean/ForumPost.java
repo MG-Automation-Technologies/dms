@@ -53,7 +53,7 @@ public class ForumPost implements Serializable {
 	}
 	
 	public void setSubject(String subject) {
-		if (subject.length() > 255) {
+		if (subject != null && subject.length() > 255) {
 			this.subject = subject.substring(0, 255);
 		} else {
 			this.subject = subject;
