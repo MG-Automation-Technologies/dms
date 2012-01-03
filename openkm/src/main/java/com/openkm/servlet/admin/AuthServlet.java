@@ -74,7 +74,7 @@ public class AuthServlet extends BaseServlet {
 		Session session = null;
 		updateSessionManager(request);
 		
-		if (isMultipleInstancesAdmin(request)) {
+		if (isMultipleInstancesAdmin(request) || request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
 			try {
 				session = JCRUtils.getSession();
 				
