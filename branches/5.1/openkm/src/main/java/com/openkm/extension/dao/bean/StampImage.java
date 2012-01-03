@@ -60,7 +60,7 @@ public class StampImage implements Serializable {
 	}
 
 	public void setDescription(String description) {
-		if (description.length() > 512) {
+		if (description != null && description.length() > 512) {
 			this.description = description.substring(0, 512);
 		} else {
 			this.description = description;
