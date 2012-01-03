@@ -165,11 +165,11 @@
               <select multiple="multiple" name="st_users" size="7">
                 <c:forEach var="user" items="${users}">
                   <c:choose>
-                    <c:when test="${u:contains(stamp.users, user.id)}">
-                      <option value="${user.id}" selected="selected">${user.id}</option>
+                    <c:when test="${u:contains(stamp.users, user)}">
+                      <option value="${user}" selected="selected">${user}</option>
                     </c:when>
                     <c:otherwise>
-                      <option value="${user.id}">${user.id}</option>
+                      <option value="${user}">${user}</option>
                     </c:otherwise>
                   </c:choose>
                 </c:forEach>
