@@ -949,6 +949,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TAXONOMY ||
 					Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TEMPLATES ||
 					Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_PERSONAL ) {
+					enableAddDocument();
 					enableScanner();
 					enableUploader();
 				}

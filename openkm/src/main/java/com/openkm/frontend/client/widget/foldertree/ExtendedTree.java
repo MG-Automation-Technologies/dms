@@ -123,7 +123,6 @@ public class ExtendedTree extends Tree implements HasSelectionHandlers<TreeItem>
 				mouseDownY = 0;
 				dragged = false;
 			}
-			System.out.println("ONMOUSEMOVE:"+dragged);
 		} else if (DOM.eventGetType(event) == Event.ONMOUSEUP || DOM.eventGetType(event) == Event.ONCLICK || 
 				   DOM.eventGetType(event) == Event.ONDBLCLICK) {
 			mouseDownX = 0;
