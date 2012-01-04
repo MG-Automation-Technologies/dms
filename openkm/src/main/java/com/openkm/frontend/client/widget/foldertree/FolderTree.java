@@ -250,15 +250,15 @@ public class FolderTree extends Composite implements OriginPanel {
 				setTabFolderAfterRefresh = false;
 			}
 
-			GWTFolder folderParent;
-
-			// Case actualItem is root then folder parent is actualItem folder
-			if (actualItem == rootItem) {
-				folderParent = (GWTFolder) actualItem.getUserObject();
-			} else {
-				folderParent = (GWTFolder) actualItem.getParentItem().getUserObject();
-			}
-			Main.get().mainPanel.topPanel.toolBar.checkToolButtonPermissions((GWTFolder) actualItem.getUserObject(), folderParent, TREE_ROOT);
+//			GWTFolder folderParent;
+//
+//			// Case actualItem is root then folder parent is actualItem folder
+//			if (actualItem == rootItem) {
+//				folderParent = (GWTFolder) actualItem.getUserObject();
+//			} else {
+//				folderParent = (GWTFolder) actualItem.getParentItem().getUserObject();
+//			}
+//			Main.get().mainPanel.topPanel.toolBar.checkToolButtonPermissions((GWTFolder) actualItem.getUserObject(), folderParent, TREE_ROOT);
 
 			Main.get().mainPanel.desktop.navigator.status.unsetFlagChilds();
 		}
