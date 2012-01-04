@@ -32,6 +32,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -44,6 +45,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
@@ -105,31 +107,38 @@ public class SearchNormal extends Composite {
 		context.setStyleName("okm-Select");
 		int count = 0;
 		posTaxonomy = count++;
-		context.addItem(Main.i18n("leftpanel.label.taxonomy"),"");
+		context.addItem(Main.i18n("leftpanel.label.taxonomy"), "");
+		
 		if (templatesVisible) {
 			posTemplates = count++;
-			context.addItem(Main.i18n("leftpanel.label.templates"),"");
+			context.addItem(Main.i18n("leftpanel.label.templates"), "");
 		}
+		
 		if (personalVisible) {
 			posPersonal = count++;
-			context.addItem(Main.i18n("leftpanel.label.my.documents"),"");
+			context.addItem(Main.i18n("leftpanel.label.my.documents"), "");
 		}
+		
 		if (mailVisible) {
 			posMail = count ++;
-			context.addItem(Main.i18n("leftpanel.label.mail"),"");
+			context.addItem(Main.i18n("leftpanel.label.mail"), "");
 		}
+		
 		if (trashVisible) {
 			posTrash = count ++;
 			context.addItem(Main.i18n("leftpanel.label.trash"),"");
 		}
+		
 		context.setSelectedIndex(posTaxonomy);
 		
-		context.addChangeHandler(new ChangeHandler(){
+		context.addChangeHandler(new ChangeHandler() {
 			@Override
 			public void onChange(ChangeEvent event) {
-				Main.get().mainPanel.search.searchBrowser.searchIn.searchAdvanced.path.setText(""); // each time list is changed must clean folder
+				// each time list is changed must clean folder
+				Main.get().mainPanel.search.searchBrowser.searchIn.searchAdvanced.path.setText("");
 			}
 		});
+		
 		content = new TextBox();
 		name = new TextBox();
 		keywords = new TextBox();
@@ -141,9 +150,9 @@ public class SearchNormal extends Composite {
 		calendarPopup = new PopupPanel(true);
 		startCalendarIcon = new Image(OKMBundleResources.INSTANCE.calendar());
 		endCalendarIcon =  new Image(OKMBundleResources.INSTANCE.calendar());
-		dateBetween = new HTML("&nbsp;&nbsp;"+Main.i18n("search.date.and")+"&nbsp;&nbsp;");
+		dateBetween = new HTML("&nbsp;&nbsp;" + Main.i18n("search.date.and") + "&nbsp;&nbsp;");
 		
-		userListBox.addChangeHandler(new ChangeHandler(){
+		userListBox.addChangeHandler(new ChangeHandler() {
 			@Override
 			public void onChange(ChangeEvent event) {
 				Main.get().mainPanel.search.searchBrowser.searchIn.searchControl.evaluateSearchButtonVisible();							
@@ -153,7 +162,7 @@ public class SearchNormal extends Composite {
 		// Calendar widget
 		calendarPopup.setWidget(calendar);
 
-		calendar.addChangeHandler(new ChangeHandler(){
+		calendar.addChangeHandler(new ChangeHandler() {
 			@Override
 			public void onChange(ChangeEvent event) {
 				calendarPopup.hide();
@@ -170,6 +179,7 @@ public class SearchNormal extends Composite {
 						modifyDateTo = (Date)calendar.getDate().clone();
 						break;
 				}
+				
 				calendarFired = CALENDAR_FIRED_NONE;
 				Main.get().mainPanel.search.searchBrowser.searchIn.searchControl.evaluateSearchButtonVisible();	
 			}
@@ -182,7 +192,6 @@ public class SearchNormal extends Composite {
 				calendarPopup.setPopupPosition(startCalendarIcon.getAbsoluteLeft(), startCalendarIcon.getAbsoluteTop()-2);
 				calendarPopup.show();
 			}
-			
 		});
 		
 		endCalendarIcon.addClickHandler(new ClickHandler() { 
@@ -192,7 +201,6 @@ public class SearchNormal extends Composite {
 				calendarPopup.setPopupPosition(endCalendarIcon.getAbsoluteLeft(), endCalendarIcon.getAbsoluteTop()-2);
 				calendarPopup.show();
 			}
-			
 		});
 		
 		// Date range panel
@@ -259,6 +267,7 @@ public class SearchNormal extends Composite {
 	 */
 	private void setRowWordWarp(FlexTable table, int row, int columns, boolean wrap) {
 		CellFormatter cellFormatter = table.getCellFormatter();
+		
 		for (int i=0; i<columns; i++) {
 			cellFormatter.setWordWrap(row, i, wrap);
 		}
@@ -268,10 +277,12 @@ public class SearchNormal extends Composite {
 	 * Gets all users
 	 */
 	public void getAllUsers() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+		endPoint.setServiceEntryPoint(RPCService.AuthService);
+		
 		authService.getAllUsers(new AsyncCallback<List<String>>() {
 			public void onSuccess(List<String> result) {
 				List<String> users = (List<String>) result;
-				
 				userListBox.addItem("",""); // Add first value empty
 				
 				for (Iterator<String> it = users.iterator(); it.hasNext(); ) {
@@ -297,21 +308,25 @@ public class SearchNormal extends Composite {
 		table.setHTML(4, 0, Main.i18n("search.user"));
 		table.setHTML(5, 0, Main.i18n("search.date.range"));
 		
-		context.setItemText(posTaxonomy,Main.i18n("leftpanel.label.taxonomy"));
+		context.setItemText(posTaxonomy, Main.i18n("leftpanel.label.taxonomy"));
+		
 		if (templatesVisible) {
-			context.setItemText(posTemplates,Main.i18n("leftpanel.label.templates"));
-		}
-		if (personalVisible) {
-			context.setItemText(posPersonal,Main.i18n("leftpanel.label.my.documents"));
-		}
-		if (mailVisible) {
-			context.setItemText(posMail,Main.i18n("leftpanel.label.mail"));
-		}
-		if (trashVisible) {
-			context.setItemText(posTrash,Main.i18n("leftpanel.label.trash"));
+			context.setItemText(posTemplates, Main.i18n("leftpanel.label.templates"));
 		}
 		
-		dateBetween.setHTML("&nbsp;&nbsp;"+Main.i18n("search.date.and")+"&nbsp;&nbsp;");
+		if (personalVisible) {
+			context.setItemText(posPersonal, Main.i18n("leftpanel.label.my.documents"));
+		}
+		
+		if (mailVisible) {
+			context.setItemText(posMail, Main.i18n("leftpanel.label.mail"));
+		}
+		
+		if (trashVisible) {
+			context.setItemText(posTrash, Main.i18n("leftpanel.label.trash"));
+		}
+		
+		dateBetween.setHTML("&nbsp;&nbsp;" + Main.i18n("search.date.and") + "&nbsp;&nbsp;");
 		calendar.langRefresh();
 	}
 	
@@ -321,7 +336,7 @@ public class SearchNormal extends Composite {
 	 * @param contextValue The context value
 	 * @param stackView The stack view
 	 */
-	public void setContextValue(String contextValue, int stackView){
+	public void setContextValue(String contextValue, int stackView) {
 		switch (stackView) {
 		 	case UIDesktopConstants.NAVIGATOR_TAXONOMY:
 		 		context.setValue(posTaxonomy,contextValue);
@@ -329,6 +344,7 @@ public class SearchNormal extends Composite {
 		 	
 		 	case UIDesktopConstants.NAVIGATOR_TEMPLATES:
 		 		templatesContextValue = contextValue;
+		 		
 		 		if (templatesVisible) {
 		 			posTemplates = context.getItemCount(); // Item count by default is good id, 0 is first item, etc...
 		 			context.addItem(Main.i18n("leftpanel.label.templates"), templatesContextValue);
@@ -337,6 +353,7 @@ public class SearchNormal extends Composite {
 		 		
 		 	case UIDesktopConstants.NAVIGATOR_PERSONAL:
 		 		personalContextValue = contextValue;
+		 		
 		 		if (personalVisible) {
 		 			posPersonal = context.getItemCount(); 
 		 			context.addItem(Main.i18n("leftpanel.label.my.documents"), personalContextValue);
@@ -345,6 +362,7 @@ public class SearchNormal extends Composite {
 		 		
 		 	case UIDesktopConstants.NAVIGATOR_MAIL:
 		 		mailContextValue = contextValue;
+		 		
 		 		if (mailVisible) {
 		 			posMail = context.getItemCount(); 
 		 			context.addItem(Main.i18n("leftpanel.label.mail"), mailContextValue);
@@ -353,6 +371,7 @@ public class SearchNormal extends Composite {
 		 		
 		 	case UIDesktopConstants.NAVIGATOR_TRASH:
 		 		trashContextValue = contextValue;
+		 		
 		 		if (trashVisible) {
 		 			posTrash = context.getItemCount(); 
 		 			context.addItem(Main.i18n("leftpanel.label.trash"), trashContextValue);

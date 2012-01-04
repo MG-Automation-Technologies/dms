@@ -32,6 +32,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -417,6 +418,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	private void uploadFiles() {
 		fileName = uploadForm.getFileName();
 		// Store some values to uploadForm
+		uploadForm.setNotifyToUser(notifyToUser.getValue());
 		uploadForm.setImportZip(importZip.getValue());
 		uploadForm.setDigitalSignature(digitalSignature.getValue());
 		uploadForm.setVersionCommnent(versionComment.getText());
@@ -662,6 +664,15 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		return addDomHandler(handler, ChangeEvent.getType());
 	}
 	
+	/**
+	 * getAction
+	 * 
+	 * @return
+	 */
+	public int getAction() {
+		return action;
+	}
+	
 	public void setAction(int action) {
 		this.action = action;
 		switch (action) {
@@ -901,6 +912,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 					String docPath = "";
 					if (msg.indexOf("path[") > 0 && msg.indexOf("]path") > 0) {
 						docPath = msg.substring(msg.indexOf("path[") + 5, msg.indexOf("]path"));
+						docPath = URL.decodeQueryString(docPath);
 					}
 					
 					// Normal case document uploaded is not a workflow

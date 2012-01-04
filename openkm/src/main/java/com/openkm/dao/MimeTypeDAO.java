@@ -188,7 +188,7 @@ public class MimeTypeDAO {
 	@SuppressWarnings("unchecked")
 	public static List<MimeType> findAll(String sort) throws DatabaseException {
 		log.debug("findAll()");
-		String qs = "from MimeType mt order by "+sort;
+		String qs = "from MimeType mt order by " + sort;
 		Session session = null;
 		Transaction tx = null;
 		

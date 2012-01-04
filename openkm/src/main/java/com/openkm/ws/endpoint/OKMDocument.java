@@ -38,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
+import com.openkm.bean.Lock;
 import com.openkm.bean.Version;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
@@ -257,13 +258,14 @@ public class OKMDocument {
 	}
 
 	@WebMethod
-	public void lock(@WebParam(name = "token") String token,
+	public Lock lock(@WebParam(name = "token") String token,
 			@WebParam(name = "docPath") String docPath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("lock({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.lock(token, docPath);
-		log.debug("lock: void");
+		Lock lock = dm.lock(token, docPath);
+		log.debug("lock: {}", lock);
+		return lock;
 	}
 
 	@WebMethod

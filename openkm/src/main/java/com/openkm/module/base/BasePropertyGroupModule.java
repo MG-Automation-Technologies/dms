@@ -21,16 +21,30 @@
 
 package com.openkm.module.base;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.jcr.Node;
+import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NoSuchNodeTypeException;
+import javax.jcr.nodetype.PropertyDefinition;
 import javax.jcr.version.VersionException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.openkm.bean.form.CheckBox;
+import com.openkm.bean.form.FormElement;
+import com.openkm.bean.form.Input;
+import com.openkm.bean.form.Option;
+import com.openkm.bean.form.Select;
+import com.openkm.bean.form.SuggestBox;
+import com.openkm.bean.form.TextArea;
+import com.openkm.core.ParseException;
 
 public class BasePropertyGroupModule {
 	private static Logger log = LoggerFactory.getLogger(BasePropertyGroupModule.class);
@@ -41,6 +55,47 @@ public class BasePropertyGroupModule {
 		synchronized (node) {
 			node.addMixin(grpName);
 			node.save();
+		}
+	}
+	
+	/**
+	 * Set node property value
+	 */
+	public static void setPropertyValue(Node node, PropertyDefinition pd, FormElement fe) throws
+			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException, ParseException {
+		Property prop = node.getProperty(pd.getName());
+			
+		if (fe instanceof Select && ((Select) fe).getType().equals(Select.TYPE_MULTIPLE) 
+				&& pd.isMultiple()) {
+			List<String> tmp = new ArrayList<String>();
+			
+			for (Option opt : ((Select) fe).getOptions()) {
+				if (opt.isSelected()) {
+					tmp.add(opt.getValue());
+				}
+			}
+			
+			prop.setValue(tmp.toArray(new String[tmp.size()]));
+		} else if (!pd.isMultiple()) {
+			if (fe instanceof Input) {
+				prop.setValue(((Input) fe).getValue());
+			} else if (fe instanceof SuggestBox) {
+				prop.setValue(((SuggestBox) fe).getValue());
+			} else if (fe instanceof CheckBox) {
+				prop.setValue(Boolean.toString(((CheckBox) fe).getValue()));
+			} else if (fe instanceof TextArea) {
+				prop.setValue(((TextArea) fe).getValue());
+			} else if (fe instanceof Select) {
+				for (Option opt : ((Select) fe).getOptions()) {
+					if (opt.isSelected()) {
+						prop.setValue(opt.getValue());
+					}
+				}
+			} else {
+				throw new ParseException("Unknown property definition: " + pd.getName());
+			}
+		} else {
+			throw new ParseException("Inconsistent property definition: " + pd.getName());
 		}
 	}
 }

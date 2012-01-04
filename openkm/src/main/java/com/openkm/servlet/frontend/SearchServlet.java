@@ -304,39 +304,4 @@ public class SearchServlet extends OKMRemoteServiceServlet implements OKMSearchS
 		}
 		log.debug("share: void");
 	}
-
-	@Override
-	public GWTResultSet findSimpleQueryPaginated(String statement, int offset, int limit) throws OKMException {
-		log.debug("findSimpleQueryPaginated({})", statement);
-		List<GWTQueryResult> resultList = new ArrayList<GWTQueryResult>(); 
-		GWTResultSet gwtResultSet = new GWTResultSet();
-		ResultSet results;
-		updateSessionManager();
-		
-		try {
-			results = OKMSearch.getInstance().findSimpleQueryPaginated(null, statement, offset, limit);
-			
-			for (Iterator<QueryResult> it = results.getResults().iterator(); it.hasNext();) {		
-				QueryResult queryResult = it.next();
-				GWTQueryResult gwtQueryResult = GWTUtil.copy(queryResult);
-				
-				resultList.add(gwtQueryResult);
-			}
-			
-			gwtResultSet.setTotal(results.getTotal());
-			gwtResultSet.setResults(resultList);
-		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
-		} catch (DatabaseException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Database), e.getMessage());
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
-		}
-		
-		log.debug("findSimpleQueryPaginated: {}", resultList);
-		return gwtResultSet;
-	}
 }

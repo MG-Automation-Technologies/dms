@@ -22,13 +22,17 @@
   <script type="text/javascript" src="js/jquery.DOMWindow.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
-      $('.ds').openDOMWindow({
+      $dm = $('.ds').openDOMWindow({
         height:200, width:300,
         eventType:'click',
         overlayOpacity: '57',
         windowSource:'iframe', windowPadding:0
-      }); 
+      });
 	});
+    
+    function dialogClose() {
+    	$dm.closeDOMWindow();
+    }
   </script>
   <title>Repository Import</title>
 </head>
@@ -65,7 +69,7 @@
 				out.println("<hr/>");
 				File dir = new File(Config.INSTANCE_CHROOT_PATH + fsPath);
 				int files = FileUtils.countFiles(dir);
-				out.println("<b>Files to import:</b> "+files+"<br/>");
+				out.println("<b>Files & directories to import:</b> "+files+"<br/>");
 				long begin = System.currentTimeMillis();
 				ImpExpStats stats = RepositoryImporter.importDocuments(null, dir, repoPath, metadata, out, 
 						new HTMLInfoDecorator(files));

@@ -98,7 +98,7 @@
                   </c:if>
                 </td>
                 <td>
-                  <input class=":required :only_on_submit" name="st_color" id="st_color" readonly="readonly" size="6" value="${stamp.color}"/>
+                  <input class=":required :only_on_submit" name="st_color" id="st_color" readonly="readonly" size="7" value="${stamp.color}"/>
                 </td>
               </tr></table>
             </td>
@@ -140,11 +140,11 @@
           </tr>
           <tr>
             <td>Expr. X</td>
-            <td><input class=":required :only_on_blur" name="st_expr_x" size="30" value="${stamp.exprX}"/></td>
+            <td><input class=":required :only_on_blur" name="st_expr_x" size="36" value="${stamp.exprX}"/></td>
           </tr>
           <tr>
             <td>Expr. Y</td>
-            <td><input class=":required :only_on_blur" name="st_expr_y" size="30" value="${stamp.exprY}"/></td>
+            <td><input class=":required :only_on_blur" name="st_expr_y" size="36" value="${stamp.exprY}"/></td>
           </tr>
           <tr>
             <td>Active</td>

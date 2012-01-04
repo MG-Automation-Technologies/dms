@@ -21,6 +21,7 @@
 
 package com.openkm.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -254,17 +255,56 @@ public class WebUtils {
 	}
 	
 	/**
-	 * Send file to client browser
+	 * Send file to client browser.
+	 * 
 	 * @throws IOException If there is a communication error.
 	 */
 	public static void sendFile(HttpServletRequest request, HttpServletResponse response, 
 			String fileName, String mimeType, boolean inline, InputStream is) throws IOException {
 		log.debug("sendFile({}, {}, {}, {}, {}, {})", new Object[] {request, response, fileName, mimeType, inline, is});
+		prepareSendFile(request, response, fileName, mimeType, inline);
+
+		// Set length
+		response.setContentLength(is.available());
+		log.debug("File: {}, Length: {}", fileName, is.available());
+		
+		ServletOutputStream sos = response.getOutputStream();
+		IOUtils.copy(is, sos);
+		sos.flush();
+		sos.close();
+	}
+	
+	/**
+	 * Send file to client browser.
+	 * 
+	 * @throws IOException If there is a communication error.
+	 */
+	public static void sendFile(HttpServletRequest request, HttpServletResponse response, 
+			String fileName, String mimeType, boolean inline, File input) throws IOException {
+		log.debug("sendFile({}, {}, {}, {}, {}, {})", new Object[] {request, response, fileName, mimeType, inline, input});
+		prepareSendFile(request, response, fileName, mimeType, inline);
+		
+		// Set length
+		response.setContentLength((int) input.length());
+		log.debug("File: {}, Length: {}", fileName, input.length());
+		
+		ServletOutputStream sos = response.getOutputStream();
+		FileUtils.copy(input, sos);
+		sos.flush();
+		sos.close();
+	}
+	
+	/**
+	 * Prepare to send the file.
+	 */
+	private static void prepareSendFile(HttpServletRequest request, HttpServletResponse response,
+			String fileName, String mimeType, boolean inline) throws UnsupportedEncodingException {
 		String agent = request.getHeader("USER-AGENT");
 		
 		// Disable browser cache
 		response.setHeader("Expires", "Sat, 6 May 1971 12:00:00 GMT");
-		response.setHeader("Cache-Control", "max-age=0, must-revalidate");
+		response.setHeader("Cache-Control", "must-revalidate");
+		response.addHeader("Cache-Control", "no-store, no-cache, must-revalidate");
 		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
 		response.setHeader("Pragma", "no-cache");
 		
@@ -272,8 +312,14 @@ public class WebUtils {
 		response.setContentType(mimeType);
 		
 		if (null != agent && -1 != agent.indexOf("MSIE")) {
-			log.debug("Agent: Explorer");
+			log.debug("Agent: Explorer ({})", request.getServerPort());
 			fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", " ");
+			
+			if (request.getServerPort() == 443) {
+				log.debug("HTTPS detected! Apply IE workaround...");
+				response.setHeader("Cache-Control", "max-age=1");
+				response.setHeader("Pragma", "public");
+			}
 		} else if (null != agent && -1 != agent.indexOf("Mozilla"))	{
 			log.debug("Agent: Mozilla");
 			fileName = MimeUtility.encodeText(fileName, "UTF-8", "B");
@@ -286,14 +332,5 @@ public class WebUtils {
 		} else {
 			response.setHeader("Content-disposition", "attachment; filename=\""+fileName+"\"");
 		}
-
-		// Set length
-		response.setContentLength(is.available());
-		log.debug("File: {}, Length: {}", fileName, is.available());
-		
-		ServletOutputStream sos = response.getOutputStream();
-		IOUtils.copy(is, sos);
-		sos.flush();
-		sos.close();
 	}
 }

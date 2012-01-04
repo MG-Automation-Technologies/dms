@@ -152,22 +152,4 @@ public class DatabasePrincipalAdapter implements PrincipalAdapter {
 		log.debug("getName: {}", name);
 		return name;
 	}
-
-	@Override
-	public String getPassword(String user) throws PrincipalAdapterException {
-		log.debug("getPassword({})", user);
-		String password = null;
-
-		try {
-			com.openkm.dao.bean.User usr = AuthDAO.findUserByPk(user);
-			if (usr != null && !usr.getName().equals("")) {
-				password = usr.getPassword();
-			}
-		} catch (DatabaseException e) {
-			throw new PrincipalAdapterException(e.getMessage(), e);
-		}
-
-		log.debug("getPassword: {}", password);
-		return password;
-	}
 }

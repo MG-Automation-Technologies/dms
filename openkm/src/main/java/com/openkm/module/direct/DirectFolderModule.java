@@ -40,6 +40,7 @@ import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.Ref;
@@ -48,7 +49,6 @@ import com.openkm.core.UserQuotaExceededException;
 import com.openkm.extension.core.ExtensionException;
 import com.openkm.extension.core.FolderExtensionManager;
 import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.FolderModule;
 import com.openkm.module.base.BaseFolderModule;
 import com.openkm.module.base.BaseScriptingModule;
@@ -184,7 +184,7 @@ public class DirectFolderModule implements FolderModule {
 			String name = JCRUtils.getName(fldPath);
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
 			Node parentNode = folderNode.getParent();
-			Node userTrash = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
+			Node userTrash = session.getRootNode().getNode(Repository.TRASH + "/" + session.getUserID());
 			
 			if (BaseFolderModule.hasLockedNodes(folderNode)) {
 				throw new LockException("Can't delete a folder with child locked nodes");
@@ -202,11 +202,11 @@ public class DirectFolderModule implements FolderModule {
 			}
 			
 			// Test if already exists a folder whith the same name in the trash
-			String destPath = userTrash.getPath()+"/";
+			String destPath = userTrash.getPath() + "/";
 			String testName = name;
 			
 			for (int i=1; session.itemExists(destPath+testName); i++) {
-				testName = name+" ("+i+")";
+				testName = name + " (" + i + ")";
 			}
 			
 			session.move(folderNode.getPath(), destPath+testName);
@@ -313,7 +313,7 @@ public class DirectFolderModule implements FolderModule {
 			newName = JCRUtils.escape(newName);
 			
 			if (newName != null && !newName.equals("") && !newName.equals(name)) {
-				String newPath = parent + "/" + newName;
+				String newPath = parent+"/"+newName;
 				session.move(fldPath, newPath);
 				
 				// Set new name
@@ -385,7 +385,7 @@ public class DirectFolderModule implements FolderModule {
 			BaseScriptingModule.checkScripts(session, dstFldNode.getParent(), dstFldNode, "MOVE_FOLDER");
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "MOVE_FOLDER", dstFldNode.getUUID(), dstPath+", "+fldPath);
+			UserActivity.log(session.getUserID(), "MOVE_FOLDER", dstFldNode.getUUID(), fldPath + ", " + dstPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
@@ -443,7 +443,7 @@ public class DirectFolderModule implements FolderModule {
 			//t.commit();
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "COPY_FOLDER", srcFolderNode.getUUID(), dstPath+", "+fldPath);
+			UserActivity.log(session.getUserID(), "COPY_FOLDER", dstFolderNode.getUUID(), fldPath + ", " + dstPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			//t.rollback();

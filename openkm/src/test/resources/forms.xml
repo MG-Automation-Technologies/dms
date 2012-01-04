@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE workflow-forms PUBLIC "-//OpenKM//DTD Workflow Forms 2.0//EN"
-                                "http://www.openkm.com/dtd/workflow-forms-2.0.dtd">
+<!DOCTYPE workflow-forms PUBLIC "-//OpenKM//DTD Workflow Forms 2.1//EN"
+                                "http://www.openkm.com/dtd/workflow-forms-2.1.dtd">
 <workflow-forms>
   <workflow-form task="start">
   	<input label="Quantity" name="quantity" value="10"/>
@@ -17,5 +17,11 @@
     </select>
     <button name="goto_1" label="Goto 1" transition="route 1" />
     <button name="goto_2" label="Goto 2" transition="route 2" />
+  </workflow-form>
+  <workflow-form task="download">
+    <download name="download" label="Download">
+      <node label="Document" path="/okm:root/test.txt"/>
+    </download>
+    <button name="next" label="Next"/>
   </workflow-form>
 </workflow-forms>

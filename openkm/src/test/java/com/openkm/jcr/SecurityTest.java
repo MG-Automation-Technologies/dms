@@ -46,15 +46,15 @@ public class SecurityTest extends TestCase {
 	@Override
 	protected void setUp() {
 		log.debug("setUp()");
-		log.debug("Delete repository: {}", TestConfig.REPOSITORY_HOME);
-		FileUtils.deleteQuietly(new File(TestConfig.REPOSITORY_HOME));
+		log.debug("Delete repository: {}", Config.REPOSITORY_HOME);
+		FileUtils.deleteQuietly(new File(Config.REPOSITORY_HOME));
 	}
 
 	@Override
 	protected void tearDown() {
 		log.debug("tearDown()");
-		log.debug("Delete repository: {}", TestConfig.REPOSITORY_HOME);
-		FileUtils.deleteQuietly(new File(TestConfig.REPOSITORY_HOME));
+		log.debug("Delete repository: {}", Config.REPOSITORY_HOME);
+		FileUtils.deleteQuietly(new File(Config.REPOSITORY_HOME));
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class SecurityTest extends TestCase {
 	 */
 	public void testGrant() throws IOException, LoginException, RepositoryException {
 		log.info("testGrant()");
-		Repository repository = new TransientRepository(TestConfig.REPOSITORY_CONFIG, TestConfig.REPOSITORY_HOME);
+		Repository repository = new TransientRepository(Config.REPOSITORY_CONFIG, Config.REPOSITORY_HOME);
 		Session sAdmin = repository.login(new SimpleCredentials("admin", "admin".toCharArray()));
 		Node rootNode = sAdmin.getRootNode();
 		Node grantedNode = rootNode.addNode("granted");
@@ -114,7 +114,7 @@ public class SecurityTest extends TestCase {
 	 */
 	public void testRevoke() throws IOException, LoginException, RepositoryException {
 		log.info("testRevoke()");
-		Repository repository = new TransientRepository(TestConfig.REPOSITORY_CONFIG, TestConfig.REPOSITORY_HOME);
+		Repository repository = new TransientRepository(Config.REPOSITORY_CONFIG, Config.REPOSITORY_HOME);
 		Session sAdmin = repository.login(new SimpleCredentials("admin", "admin".toCharArray()));
 		Node rootNode = sAdmin.getRootNode();
 		Node revokedNode = rootNode.addNode("revoked");

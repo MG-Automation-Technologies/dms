@@ -45,4 +45,5 @@ public interface OKMWorkflowService extends RemoteService {
 	public void addComment(double tokenId, String message) throws OKMException;
 	public List<GWTTaskInstance> findPooledTaskInstances() throws OKMException;
 	public void setTaskInstanceActorId(double id) throws OKMException;
+	public void startTaskInstance(double id) throws OKMException;
 }

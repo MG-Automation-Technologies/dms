@@ -33,12 +33,12 @@ import org.slf4j.LoggerFactory;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.BookmarkDAO;
 import com.openkm.dao.bean.Bookmark;
 import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.BookmarkModule;
 import com.openkm.util.UserActivity;
 

@@ -37,10 +37,10 @@
     <!-- CHAT -->
     <component name="chat" class="com.openkm.dao.bean.ProfileChat">
       <property name="chatEnabled" type="true_false" not-null="true">
-        <column name="PRF_CHT_CHAT_EN" default="'F'"/>
+        <column name="PRF_CHT_CHAT_EN" default="'T'"/>
       </property>
       <property name="autoLoginEnabled" type="true_false" not-null="true">
-        <column name="PRF_CHT_AUTO_LOGIN_EN" default="'F'"/>
+        <column name="PRF_CHT_AUTO_LOGIN_EN" default="'T'"/>
       </property>
     </component>
     
@@ -347,74 +347,5 @@
       </component>
     </component>
     
-    <!-- TOOLBAR BUTTONS -->
-    <component name="toolbar" class="com.openkm.dao.bean.ProfileToolbar">
-	  <property name="createFolderVisible" type="true_false" not-null="true">
-	    <column name="PRF_TB_CREATE_FLD_VIS" default="'T'"/>
-	  </property>
-	  <property name="findFolderVisible" type="true_false" not-null="true">
-	    <column name="PRF_TB_FIND_FLD_VIS" default="'T'"/>
-	  </property>
-	  <property name="findDocumentVisible" type="true_false" not-null="true">
-	    <column name="PRF_TB_FIND_DOC_VIS" default="'T'"/>
-	  </property>
-	  <property name="downloadVisible" type="true_false" not-null="true">
-	    <column name="PRF_TB_DOWNLOAD_VIS" default="'T'"/>
-	  </property>
-	  <property name="downloadPdfVisible" type="true_false" not-null="true">
-	    <column name="PRF_TB_DOWNLOAD_PDF_VIS" default="'T'"/>
-	  </property>
-	  <property name="printVisible" type="true_false" not-null="true">
-	    <column name="PRF_TB_PRINT_VIS" default="'T'"/>
-	  </property>
-	  <property name="lockVisible" type="true_false" not-null="true">
-	    <column name="PRF_TB_LOCK_VIS" default="'T'"/>
-	  </property>
-	  <property name="unlockVisible" type="true_false" not-null="true">
-	    <column name="PRF_TB_UNLOCK_VIS" default="'T'"/>
-	  </property>
-	  <property name="addDocumentVisible" type="true_false" not-null="true">
-	    <column name="PRF_TB_ADD_DOC_VIS" default="'T'"/>
-	  </property>
-	  <property name="checkoutVisible" type="true_false" not-null="true">
-	    <column name="PRF_TB_COUT_VIS" default="'T'"/>
-	  </property>
-	  <property name="checkinVisible" type="true_false" not-null="true">
-	    <column name="PRF_TB_CIN_VIS" default="'T'"/>
-	  </property>
-	  <property name="cancelCheckoutVisible" type="true_false" not-null="true">
-	    <column name="PRF_TB_CANCEL_COUT_VIS" default="'T'"/>
-	  </property>
-	  <property name="deleteVisible" type="true_false" not-null="true">
-	    <column name="PRF_TB_DELETE_VIS" default="'T'"/>
-	  </property>
-	  <property name="addPropertyGroupVisible" type="true_false" not-null="true">
-	    <column name="PRF_TB_ADD_PROP_GRP_VIS" default="'T'"/>
-	  </property>
-	  <property name="removePropertyGroupVisible" type="true_false" not-null="true">
-	    <column name="PRF_TB_REM_PROP_GRP_VIS" default="'T'"/>
-	  </property>
-	  <property name="startWorkflowVisible" type="true_false" not-null="true">
-	    <column name="PRF_TB_START_WORKFLOW_VIS" default="'T'"/>
-	  </property>
-	  <property name="addSubscriptionVisible" type="true_false" not-null="true">
-	    <column name="PRF_TB_ADD_SUBS_VIS" default="'T'"/>
-	  </property>
-	  <property name="removeSubscriptionVisible" type="true_false" not-null="true">
-	    <column name="PRF_TB_REM_SUBS_VIS" default="'T'"/>
-	  </property>
-	  <property name="refreshVisible" type="true_false" not-null="true">
-	    <column name="PRF_TB_REFRESH_VIS" default="'T'"/>
-	  </property>
-	  <property name="homeVisible" type="true_false" not-null="true">
-	    <column name="PRF_TB_HOME_VIS" default="'T'"/>
-	  </property>
-	  <property name="scannerVisible" type="true_false" not-null="true">
-	    <column name="PRF_TB_SCANNER_VIS" default="'T'"/>
-	  </property>
-	  <property name="uploaderVisible" type="true_false" not-null="true">
-	    <column name="PRF_TB_UPLOADER_VIS" default="'T'"/>
-	  </property>
-    </component>
   </class>
 </hibernate-mapping>

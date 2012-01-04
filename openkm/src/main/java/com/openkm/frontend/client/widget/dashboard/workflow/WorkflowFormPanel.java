@@ -74,7 +74,6 @@ import com.openkm.frontend.client.widget.form.HasWorkflow;
  *
  */
 public class WorkflowFormPanel extends Composite implements HasWorkflow {
-	
 	private final OKMWorkflowServiceAsync workflowService = (OKMWorkflowServiceAsync) GWT.create(OKMWorkflowService.class);
 	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
@@ -85,10 +84,10 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 	private FlexTable table;
 	private FlexTable parameterTable;
 	private Button submitForm;
-	private TitleWidget taskTittle;
-	private TitleWidget processInstanceTittle;
-	private TitleWidget processDefinitionTittle;
-	private TitleWidget parametersTittle;
+	private TitleWidget taskTitle;
+	private TitleWidget processInstanceTitle;
+	private TitleWidget processDefinitionTitle;
+	private TitleWidget parametersTitle;
 	private TitleWidget commentsTitle;
 	private TitleWidget formsTitle;
 	private Anchor documentLink;
@@ -130,6 +129,7 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 				addComment();
 			}
 		});
+		
 		add.setEnabled(false);
 	    
 		submitForm = new Button(Main.i18n("button.accept"), new ClickHandler() { 
@@ -137,6 +137,7 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 			public void onClick(ClickEvent event) {
 				if (manager.getValidationProcessor().validate()) {
 					setTaskInstanceValues(taskInstance.getId(), null);
+					submitForm.setEnabled(false);
 				}
 			}
 		});
@@ -154,27 +155,26 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 		newNotePanel.setCellHorizontalAlignment(addComment, HasAlignment.ALIGN_CENTER);
 		newNotePanel.setCellHorizontalAlignment(add, HasAlignment.ALIGN_CENTER);
 	    
-		
 		int[] taskRow = {1, 2, 3, 4, 5, 6 };
 		int[] processInstanceRow = {8, 9, 10};
 		int[] processDefinitionRow = {12, 13, 14, 15 };
 		int[] dataTitle = {17};
 		int[] commentTitle = {19};
 		int[] formTitle = {};
-		taskTittle = new TitleWidget(Main.i18n("dashboard.workflow.task"), taskRow);
-		processInstanceTittle = new TitleWidget(Main.i18n("dashboard.workflow.task.process.instance"), processInstanceRow);
-		processDefinitionTittle = new TitleWidget(Main.i18n("dashboard.workflow.task.process.definition"), processDefinitionRow);
-		parametersTittle = new TitleWidget(Main.i18n("dashboard.workflow.task.process.data"), dataTitle);
+		taskTitle = new TitleWidget(Main.i18n("dashboard.workflow.task"), taskRow);
+		processInstanceTitle = new TitleWidget(Main.i18n("dashboard.workflow.task.process.instance"), processInstanceRow);
+		processDefinitionTitle = new TitleWidget(Main.i18n("dashboard.workflow.task.process.definition"), processDefinitionRow);
+		parametersTitle = new TitleWidget(Main.i18n("dashboard.workflow.task.process.data"), dataTitle);
 		commentsTitle = new TitleWidget(Main.i18n("dashboard.workflow.comments"), commentTitle);
 		formsTitle  = new TitleWidget(Main.i18n("dashboard.workflow.task.process.forms"), formTitle);
-		taskTittle.setWidth("100%");
-		processInstanceTittle.setWidth("100%");
-		processDefinitionTittle.setWidth("100%");
-		parametersTittle.setWidth("100%");
+		taskTitle.setWidth("100%");
+		processInstanceTitle.setWidth("100%");
+		processDefinitionTitle.setWidth("100%");
+		parametersTitle.setWidth("100%");
 		commentsTitle.setWidth("100%");
 		formsTitle.setWidth("100%");
 		
-		table.setWidget(0, 0, taskTittle);
+		table.setWidget(0, 0, taskTitle);
 		table.setHTML(1, 0, "<b>"+ Main.i18n("dashboard.workflow.task.id") + "</b>");
 		table.setHTML(2, 0, "<b>"+ Main.i18n("dashboard.workflow.task.name") + "</b>");
 		table.setHTML(3, 0, "<b>"+ Main.i18n("dashboard.workflow.task.created") + "</b>");
@@ -182,16 +182,16 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 		table.setHTML(5, 0, "<b>"+ Main.i18n("dashboard.workflow.task.duedate") + "</b>");
 		//table.setHTML(6, 0, "<b>"+ Main.i18n("dashboard.workflow.task.end") + "</b>");
 		table.setHTML(6, 0, "<b>"+ Main.i18n("dashboard.workflow.task.description") + "</b>");
-		table.setWidget(7, 0, processInstanceTittle);
+		table.setWidget(7, 0, processInstanceTitle);
 		table.setHTML(8, 0, "<b>"+ Main.i18n("dashboard.workflow.task.process.id") + "</b>");
 		table.setHTML(9, 0, "<b>"+ Main.i18n("dashboard.workflow.task.process.version") + "</b>");
 		table.setHTML(10, 0, "<b>"+ Main.i18n("dashboard.workflow.task.process.path") + "</b>");
-		table.setWidget(11, 0, processDefinitionTittle);
+		table.setWidget(11, 0, processDefinitionTitle);
 		table.setHTML(12, 0, "<b>"+ Main.i18n("dashboard.workflow.task.process.id") + "</b>");
 		table.setHTML(13, 0, "<b>"+ Main.i18n("dashboard.workflow.task.process.name") + "</b>");
 		table.setHTML(14, 0, "<b>"+ Main.i18n("dashboard.workflow.task.process.version") + "</b>");
 		table.setHTML(15, 0, "<b>"+ Main.i18n("dashboard.workflow.task.process.description") + "</b>");
-		table.setWidget(16, 0, parametersTittle);
+		table.setWidget(16, 0, parametersTitle);
 		table.setWidget(17, 0, parameterTable);
 		table.setWidget(18, 0, 	commentsTitle);
 		table.setWidget(19, 0, tableNotes);
@@ -210,10 +210,10 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 		table.setHTML(14, 2, "");
 		
 		// Setting visibleRows
-		taskTittle.setVisibleRows(false);
-		processInstanceTittle.setVisibleRows(false);
-		processDefinitionTittle.setVisibleRows(false);
-		parametersTittle.setVisibleRows(true);
+		taskTitle.setVisibleRows(false);
+		processInstanceTitle.setVisibleRows(false);
+		processDefinitionTitle.setVisibleRows(false);
+		parametersTitle.setVisibleRows(true);
 		commentsTitle.setVisibleRows(false);
 		formsTitle.setVisibleRows(true);
 		
@@ -256,23 +256,23 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 	 * Refreshing language
 	 */
 	public void langRefresh() {
-		taskTittle.setTitle(Main.i18n("dashboard.workflow.task"));
+		taskTitle.setTitle(Main.i18n("dashboard.workflow.task"));
 		table.setHTML(1, 0, "<b>"+ Main.i18n("dashboard.workflow.task.id") + "</b>");
 		table.setHTML(2, 0, "<b>"+ Main.i18n("dashboard.workflow.task.name") + "</b>");
 		table.setHTML(3, 0, "<b>"+ Main.i18n("dashboard.workflow.task.created") + "</b>");
 		table.setHTML(4, 0, "<b>"+ Main.i18n("dashboard.workflow.task.start") + "</b>");
 		table.setHTML(5, 0, "<b>"+ Main.i18n("dashboard.workflow.task.duedate") + "</b>");
 		table.setHTML(6, 0, "<b>"+ Main.i18n("dashboard.workflow.task.description") + "</b>");
-		processInstanceTittle.setTitle(Main.i18n("dashboard.workflow.task.process.instance"));
+		processInstanceTitle.setTitle(Main.i18n("dashboard.workflow.task.process.instance"));
 		table.setHTML(8, 0, "<b>"+ Main.i18n("dashboard.workflow.task.process.id") + "</b>");
 		table.setHTML(9, 0, "<b>"+ Main.i18n("dashboard.workflow.task.process.version") + "</b>");
 		table.setHTML(10, 0, "<b>"+ Main.i18n("dashboard.workflow.task.process.path") + "</b>");
-		processDefinitionTittle.setTitle(Main.i18n("dashboard.workflow.task.process.definition"));
+		processDefinitionTitle.setTitle(Main.i18n("dashboard.workflow.task.process.definition"));
 		table.setHTML(12, 0, "<b>"+ Main.i18n("dashboard.workflow.task.process.id") + "</b>");
 		table.setHTML(13, 0, "<b>"+ Main.i18n("dashboard.workflow.task.process.name") + "</b>");
 		table.setHTML(14, 0, "<b>"+ Main.i18n("dashboard.workflow.task.process.version") + "</b>");
 		table.setHTML(15, 0, "<b>"+ Main.i18n("dashboard.workflow.task.process.description") + "</b>");
-		parametersTittle.setTitle(Main.i18n("dashboard.workflow.task.process.data"));
+		parametersTitle.setTitle(Main.i18n("dashboard.workflow.task.process.data"));
 		commentsTitle.setTitle(Main.i18n("dashboard.workflow.comments"));
 		formsTitle.setTitle(Main.i18n("dashboard.workflow.task.process.forms"));
 		submitForm.setHTML(Main.i18n("button.accept"));
@@ -282,8 +282,6 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 	
 	/**
 	 * Sets a TaskInstance
-	 * 
-	 * @param taskInstance
 	 */
 	public void setTaskInstance(GWTTaskInstance taskInstance) {
 		this.taskInstance = taskInstance;
@@ -309,7 +307,7 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 		}
 		
 		if (taskInstance.getDescription() != null) {
-			table.setHTML(6, 1, ""+taskInstance.getDescription());
+			table.setHTML(6, 1, taskInstance.getDescription());
 		}
 		
 		table.setHTML(8, 1, ""+processInstance.getId());
@@ -328,10 +326,10 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 				// Special case path
 				if (key.equals(Main.get().workspaceUserProperties.getWorkspace().getWorkflowProcessIntanceVariableUUID())) {
 					final int documentRow = row;
-					parameterTable.setHTML(documentRow, 0, "<b>"+ 
-							               Main.get().workspaceUserProperties.getWorkspace().getWorkflowProcessIntanceVariablePath() + 
-							               "</b>");
-					
+					parameterTable.setHTML(documentRow, 0, "<b>" +
+							Main.get().workspaceUserProperties.getWorkspace().getWorkflowProcessIntanceVariablePath() + 
+							"</b>");
+						
 					repositoryService.getPathByUUID(value, new AsyncCallback<String>() {
 						@Override
 						public void onSuccess(final String docPath) {
@@ -373,7 +371,6 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 					});
 					
 				}  else {
-					
 					parameterTable.setHTML(row, 0, "<b>" + key + "</b>");
 					parameterTable.setHTML(row, 1, value);
 				}
@@ -384,17 +381,19 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 		for (Iterator<GWTWorkflowComment> it = processInstance.getRootToken().getComments().iterator(); it.hasNext();) {
 			writeComment(it.next());
 		}
+		
 		writeAddComment();
 		
 		table.setHTML(12, 1, ""+processDefinition.getId());
-		table.setHTML(13, 1, ""+processDefinition.getName());
+		table.setHTML(13, 1, processDefinition.getName());
 		table.setHTML(14, 1, ""+processDefinition.getVersion());
 		
-		if (processDefinition.getDescription()!=null) {
-			table.setHTML(16, 1, ""+processDefinition.getDescription());
+		if (processDefinition.getDescription() != null) {
+			table.setHTML(16, 1, processDefinition.getDescription());
 		}
-
+		
 		getProcessDefinitionForms(processDefinition.getId());
+		startTaskInstance(taskInstance.getId());
 	}
 	
 	/**
@@ -443,20 +442,43 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 	};
 	
 	/**
+	 * Start task instance callback
+	 */
+	final AsyncCallback<Object> callbackStartTaskInstance = new AsyncCallback<Object>() {
+		@Override
+		public void onSuccess(Object result) {
+		}
+		
+		@Override
+		public void onFailure(Throwable caught) {
+			Main.get().showError("startTaskInstance", caught);
+		}
+	};
+	
+	
+	/**
 	 * getProcessDefinitionForms
-	 * 
-	 * @param id
 	 */
 	public void getProcessDefinitionForms(double id) {	
 		workflowService.getProcessDefinitionForms(id, callbackGetProcessDefinitionForms);
 	}
 	
 	/**
+	 * Start user task instance 
+	 */
+	public void startTaskInstance(double id) {
+		workflowService.startTaskInstance(id, callbackStartTaskInstance);
+	}
+	
+	/**
 	 * drawForm
 	 */
 	private void drawForm() {
-		submitForm.setVisible(true); // always set form visible
-		manager.setSubmitFormButton(submitForm); // submitForm is hidden into manager if manager has button definitions
+		// always set form visible
+		submitForm.setVisible(true);
+		
+		// submitForm is hidden into manager if manager has button definitions
+		manager.setSubmitFormButton(submitForm);
 		manager.edit();
 	}
 	
@@ -469,6 +491,7 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 			Main.get().mainPanel.dashboard.workflowDashboard.findUserTaskInstances();
 			clearPanel();
 		}
+		
 		public void onFailure(Throwable caught) {
 			Main.get().showError("setTaskInstanceValues", caught);
 		}
@@ -494,7 +517,7 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 	 */
 	private void removeAllParametersTableRows() {
 		// Deletes all table rows
-		while (parameterTable.getRowCount()>0) {
+		while (parameterTable.getRowCount() > 0) {
 			parameterTable.removeRow(0);
 		}
 	}
@@ -503,15 +526,13 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 	 * removeAllCommentsTableRows
 	 */
 	private void removeAllCommentsTableRows() {
-		while (tableNotes.getRowCount()>0) {
+		while (tableNotes.getRowCount() > 0) {
 			tableNotes.removeRow(0);
 		}
 	}
 	
 	/**
-	 * Writes the note 
-	 * 
-	 * @param comment
+	 * Writes the note
 	 */
 	private void writeComment(GWTWorkflowComment comment) {
 		int row = tableNotes.getRowCount();
@@ -570,16 +591,13 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 	 */
 	private void addComment() {
 		if (!textArea.getText().equals("")) {
-			workflowService.addComment(taskInstance.getProcessInstance().getRootToken().getId(), textArea.getText(), callbackAddComment);
+			workflowService.addComment(taskInstance.getProcessInstance().getRootToken().getId(),
+					textArea.getText(), callbackAddComment);
 		}
 	}
 	
 	/**
 	 * writePath
-	 * 
-	 * @param row
-	 * @param docPath
-	 * @param isFolder
 	 */
 	private void writePath(int row, final String docPath, final boolean isFolder) {
 		Anchor link = new Anchor();
@@ -596,6 +614,7 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 				}
 			}
 		});
+		
 		link.setStyleName("okm-Hyperlink");
 		
 		// Clones link
@@ -612,18 +631,15 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 				}
 			}
 		});
+		
 		documentLink.setStyleName("okm-Hyperlink");
 		parameterTable.setWidget(row, 1, documentLink);
 	}
 	
 	/**
 	 * TitleWidget
-	 * 
-	 * @author jllort
-	 *
 	 */
 	class TitleWidget extends HorizontalPanel implements HasClickHandlers   {
-		
 		HTML title;
 		Image zoomImage;
 		boolean zoom = false;
@@ -645,6 +661,7 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 			} else {
 				zoomImage = new Image(OKMBundleResources.INSTANCE.zoomIn());
 			}
+			
 			zoomImage.setStyleName("okm-Hyperlink");
 			
 			addClickHandler(new ClickHandler() {
@@ -677,6 +694,7 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 		public void setVisibleRows(boolean zoom) {
 			this.zoom = zoom;
 			showRelatedRows(zoom);
+			
 			if (zoom) {
 				zoomImage.setResource(OKMBundleResources.INSTANCE.zoomOut());
 			} else {

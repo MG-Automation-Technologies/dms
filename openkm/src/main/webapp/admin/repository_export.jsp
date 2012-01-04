@@ -22,12 +22,17 @@
   <script type="text/javascript" src="js/jquery.DOMWindow.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
-      $('.ds').openDOMWindow({
+      $dm = $('.ds').openDOMWindow({
         height:200, width:300,
         eventType:'click',
+        overlayOpacity: '57',
         windowSource:'iframe', windowPadding:0
-      }); 
+      });
 	});
+    
+    function dialogClose() {
+    	$dm.closeDOMWindow();
+    }
   </script>
   <title>Repository Export</title>
 </head>
@@ -66,7 +71,7 @@
 				ContentInfo cInfo = OKMFolder.getInstance().getContentInfo(null, repoPath);
 				long begin = System.currentTimeMillis();
 				ImpExpStats stats = RepositoryExporter.exportDocuments(null, repoPath, dir, metadata, out,
-						new HTMLInfoDecorator((int)cInfo.getDocuments()));
+						new HTMLInfoDecorator((int) cInfo.getDocuments() + (int) cInfo.getFolders()));
 				long end = System.currentTimeMillis();
 				out.println("<hr/>");
 				out.println("<div class=\"ok\">Folder '"+repoPath+"' exported to '"+new File(fsPath).getAbsolutePath()+"'</div>");

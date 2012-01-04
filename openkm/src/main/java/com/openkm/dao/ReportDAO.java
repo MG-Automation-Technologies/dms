@@ -66,7 +66,7 @@ public class ReportDAO {
 	 */
 	public static void update(Report rp) throws DatabaseException {
 		log.debug("update({})", rp);
-		String qs = "select rp.fileContent, rp.fileName, rp.fileMime from Report rp where rp.id=:id";
+		String qs = "select rp.fileContent, rp.fileName from Report rp where rp.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -80,7 +80,6 @@ public class ReportDAO {
 				Object[] data = (Object[]) q.setMaxResults(1).uniqueResult();
 				rp.setFileContent((String) data[0]);
 				rp.setFileName((String) data[1]);
-				rp.setFileMime((String) data[2]);
 			}
 			
 			session.update(rp);

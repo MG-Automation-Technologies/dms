@@ -44,7 +44,7 @@
     <div id="text">
       <center><img src="<%=request.getContextPath() %>/img/lock.png"/></center>
       <p>Welcome to OpenKM !</p>
-      <p>Use a valid user and password to access to OpenKM user Desktop.</p>
+      <p>Use a valid username and password to access to OpenKM user Desktop.</p>
     </div>
     <div id="form">
       <form name="login" method="post" action="j_security_check" onsubmit="setCookie()">

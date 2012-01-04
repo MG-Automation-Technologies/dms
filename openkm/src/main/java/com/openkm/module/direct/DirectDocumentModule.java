@@ -27,7 +27,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -56,6 +55,7 @@ import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.Ref;
@@ -70,13 +70,13 @@ import com.openkm.dao.MimeTypeDAO;
 import com.openkm.extension.core.DocumentExtensionManager;
 import com.openkm.extension.core.ExtensionException;
 import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.kea.RDFREpository;
 import com.openkm.kea.metadata.MetadataExtractionException;
 import com.openkm.kea.metadata.MetadataExtractor;
 import com.openkm.module.DocumentModule;
 import com.openkm.module.base.BaseAuthModule;
 import com.openkm.module.base.BaseDocumentModule;
+import com.openkm.module.base.BaseNoteModule;
 import com.openkm.module.base.BaseNotificationModule;
 import com.openkm.module.base.BaseScriptingModule;
 import com.openkm.principal.PrincipalAdapter;
@@ -856,26 +856,17 @@ public class DirectDocumentModule implements DocumentModule {
 			t = new Transaction(session);
 			t.start();
 			
+			JCRUtils.loadLockTokens(session);
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			Node contentNode = documentNode.getNode(Document.CONTENT);
 			javax.jcr.lock.Lock lock = documentNode.getLock();
-			String lt = JCRUtils.getLockToken(documentNode.getUUID());
 			
 			if (lock.getLockOwner().equals(session.getUserID())) {
-				JCRUtils.loadLockTokens(session);
-				
-				// If the session contains the lock token of this locked node
-				if (Arrays.asList(session.getLockTokens()).contains(lt)) {
-					contentNode.restore(contentNode.getBaseVersion(), true);
-					documentNode.unlock();
-					JCRUtils.removeLockToken(session, documentNode);
-				} else {
-					session.addLockToken(lt);
-					contentNode.restore(contentNode.getBaseVersion(), true);
-					documentNode.unlock();
-					LockTokenDAO.remove(lock.getLockOwner(), lt);
-				}
+				contentNode.restore(contentNode.getBaseVersion(), true);
+				documentNode.unlock();
+				JCRUtils.removeLockToken(session, documentNode);
 			} else {
+				String lt = JCRUtils.getLockToken(documentNode.getUUID());
 				session.addLockToken(lt);
 				contentNode.restore(contentNode.getBaseVersion(), true);
 				documentNode.unlock();
@@ -995,6 +986,11 @@ public class DirectDocumentModule implements DocumentModule {
 				version.setActual(true);
 				documentNode.unlock();
 				JCRUtils.removeLockToken(session, documentNode);
+				
+				// Add comment (as system user)
+				String text = "New version " + ver.getName() + " by " + session.getUserID() + ": " + comment;
+				Session sysSession = JcrSessionManager.getInstance().getSystemSession();
+				BaseNoteModule.add(sysSession, documentNode, text);
 			}
 			
 			t.end();
@@ -1112,10 +1108,11 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void lock(String token, String docPath) throws AccessDeniedException, RepositoryException, 
+	public Lock lock(String token, String docPath) throws AccessDeniedException, RepositoryException, 
 			PathNotFoundException, LockException, DatabaseException {
 		log.debug("lock({})", docPath);
 		Session session = null;
+		Lock lock = new Lock();
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
@@ -1130,6 +1127,9 @@ public class DirectDocumentModule implements DocumentModule {
 			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			javax.jcr.lock.Lock lck = documentNode.lock(true, false);
+			lock.setOwner(lck.getLockOwner());
+			lock.setNodePath(lck.getNode().getPath());
+			lock.setToken(lck.getLockToken());
 			JCRUtils.addLockToken(session, documentNode);
 			
 			// Check subscriptions
@@ -1159,7 +1159,8 @@ public class DirectDocumentModule implements DocumentModule {
 			if (token == null) JCRUtils.logout(session);
 		}
 		
-		log.debug("lock: void");
+		log.debug("lock: {}", lock);
+		return lock;
 	}
 
 	@Override
@@ -1240,21 +1241,13 @@ public class DirectDocumentModule implements DocumentModule {
 			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			javax.jcr.lock.Lock lock = documentNode.getLock();
-			String lt = JCRUtils.getLockToken(documentNode.getUUID());
 			
 			if (lock.getLockOwner().equals(session.getUserID())) {
 				JCRUtils.loadLockTokens(session);
-				
-				// If the session contains the lock token of this locked node
-				if (Arrays.asList(session.getLockTokens()).contains(lt)) {
-					documentNode.unlock();
-					JCRUtils.removeLockToken(session, documentNode);
-				} else {
-					session.addLockToken(lt);
-					documentNode.unlock();
-					LockTokenDAO.remove(lock.getLockOwner(), lt);
-				}
+				documentNode.unlock();
+				JCRUtils.removeLockToken(session, documentNode);
 			} else {
+				String lt = JCRUtils.getLockToken(documentNode.getUUID());
 				session.addLockToken(lt);
 				documentNode.unlock();
 				LockTokenDAO.remove(lock.getLockOwner(), lt);
@@ -1448,7 +1441,7 @@ public class DirectDocumentModule implements DocumentModule {
 			BaseScriptingModule.checkScripts(session, dstDocNode.getParent(), dstDocNode, "MOVE_DOCUMENT");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "MOVE_DOCUMENT", dstDocNode.getUUID(), dstPath+", "+docPath);
+			UserActivity.log(session.getUserID(), "MOVE_DOCUMENT", dstDocNode.getUUID(), docPath + ", " + dstPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
@@ -1491,15 +1484,16 @@ public class DirectDocumentModule implements DocumentModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node srcDocumentNode = session.getRootNode().getNode(docPath.substring(1));
-			dstFolderNode = session.getRootNode().getNode(dstPath.substring(1));
-			BaseDocumentModule.copy(session, srcDocumentNode, dstFolderNode);
-
+			Node rootNode = session.getRootNode();
+			Node srcDocumentNode = rootNode.getNode(docPath.substring(1));
+			dstFolderNode = rootNode.getNode(dstPath.substring(1));
+			Node newDocument = BaseDocumentModule.copy(session, srcDocumentNode, dstFolderNode);
+			
 			// Check subscriptions
 			BaseNotificationModule.checkSubscriptions(dstFolderNode, session.getUserID(), "COPY_DOCUMENT", null);
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "COPY_DOCUMENT", srcDocumentNode.getUUID(), dstPath+", "+docPath);
+			UserActivity.log(session.getUserID(), "COPY_DOCUMENT", newDocument.getUUID(), docPath + ", " + dstPath);
 		} catch (javax.jcr.ItemExistsException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(dstFolderNode);

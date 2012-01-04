@@ -9,11 +9,13 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.contants.ui.UIDockPanelConstants;
 import com.openkm.frontend.client.extension.widget.userinfo.UserInfoExtension;
 import com.openkm.frontend.client.service.OKMChatService;
@@ -44,10 +46,12 @@ public class UserInfo extends Composite {
 	private Image imgCheckoutDocuments;
 	private HTML subscriptions;
 	private Image imgSubscriptions;
-	private HTML newsDocuments;
+	private HTML newDocuments;
 	private Image imgNewsDocuments;
-	private HTML newsWorkflows;	
-	private Image imgWorkflows;
+	private HTML newWorkflowTasks;	
+	private Image imgWorkflowTasks;
+	private HTML newWorkflowPooledTasks;
+	private Image imgWorkflowPooledTasks;
 	private Image imgChat;
 	private Image imgNewChatRoom;
 	private Image imgChatSeparator;
@@ -80,8 +84,9 @@ public class UserInfo extends Composite {
 		lockedDocuments = new HTML("");
 		checkoutDocuments = new HTML("");
 		subscriptions = new HTML("");
-		newsDocuments = new HTML("");
-		newsWorkflows = new HTML("");
+		newDocuments = new HTML("");
+		newWorkflowTasks = new HTML("");
+		newWorkflowPooledTasks = new HTML("");
 		quotaUsed = new HTML("");
 		quotaUsed.setVisible(false);
 		imgRepositorySize = new Image(OKMBundleResources.INSTANCE.repositorySize());
@@ -93,7 +98,8 @@ public class UserInfo extends Composite {
 		imgCheckoutDocuments = new Image(OKMBundleResources.INSTANCE.checkout());
 		imgSubscriptions = new Image(OKMBundleResources.INSTANCE.subscribed());
 		imgNewsDocuments = new Image(OKMBundleResources.INSTANCE.news());
-		imgWorkflows = new Image(OKMBundleResources.INSTANCE.workflow());
+		imgWorkflowTasks = new Image(OKMBundleResources.INSTANCE.workflowTasks());
+		imgWorkflowPooledTasks = new Image(OKMBundleResources.INSTANCE.workflowPooledTasks());
 		imgRepositorySize.setVisible(false);
 		imgUserQuota.setVisible(false);
 		imgChat.setVisible(false);
@@ -104,7 +110,8 @@ public class UserInfo extends Composite {
 		imgCheckoutDocuments.setVisible(false);
 		imgSubscriptions.setVisible(false);
 		imgNewsDocuments.setVisible(false);
-		imgWorkflows.setVisible(false);
+		imgWorkflowTasks.setVisible(false);
+		imgWorkflowPooledTasks.setVisible(false);
 		imgChat.setTitle(Main.i18n("user.info.chat.connect"));
 		imgUserQuota.setTitle(Main.i18n("user.info.user.quota"));
 		imgNewChatRoom.setTitle(Main.i18n("user.info.chat.new.room"));
@@ -112,7 +119,8 @@ public class UserInfo extends Composite {
 		imgCheckoutDocuments.setTitle(Main.i18n("user.info.checkout.actual"));
 		imgSubscriptions.setTitle(Main.i18n("user.info.subscription.actual"));
 		imgNewsDocuments.setTitle(Main.i18n("user.info.news.new"));
-		imgWorkflows.setTitle(Main.i18n("user.info.workflow.pending"));
+		imgWorkflowTasks.setTitle(Main.i18n("user.info.workflow.pending.tasks"));
+		imgWorkflowPooledTasks.setTitle(Main.i18n("user.info.workflow.pending.pooled.tasks"));
 		
 		imgLockedDocuments.addClickHandler(new ClickHandler() { 
 			@Override
@@ -146,7 +154,15 @@ public class UserInfo extends Composite {
 			}
 		});
 		
-		imgWorkflows.addClickHandler(new ClickHandler() { 
+		imgWorkflowTasks.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
+				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(UIDockPanelConstants.DASHBOARD);
+				Main.get().mainPanel.dashboard.horizontalToolBar.showWorkflowView();
+			}
+		});
+		
+		imgWorkflowPooledTasks.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
 				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(UIDockPanelConstants.DASHBOARD);
@@ -223,17 +239,21 @@ public class UserInfo extends Composite {
 		panel.add(subscriptions);
 		panel.add(new HTML("&nbsp;"));
 		panel.add(imgNewsDocuments);
-		panel.add(newsDocuments);
+		panel.add(newDocuments);
 		panel.add(new HTML("&nbsp;"));
-		panel.add(imgWorkflows);
-		panel.add(newsWorkflows);
+		panel.add(imgWorkflowTasks);
+		panel.add(newWorkflowTasks);
+		panel.add(new HTML("&nbsp;"));
+		panel.add(imgWorkflowPooledTasks);
+		panel.add(newWorkflowPooledTasks);
 		panel.add(new HTML("&nbsp;"));
 		
 		imgLockedDocuments.setStyleName("okm-Hyperlink");
 		imgCheckoutDocuments.setStyleName("okm-Hyperlink");
 		imgSubscriptions.setStyleName("okm-Hyperlink");
 		imgNewsDocuments.setStyleName("okm-Hyperlink");
-		imgWorkflows.setStyleName("okm-Hyperlink");
+		imgWorkflowTasks.setStyleName("okm-Hyperlink");
+		imgWorkflowPooledTasks.setStyleName("okm-Hyperlink");
 		imgChat.setStyleName("okm-Hyperlink");
 		imgNewChatRoom.setStyleName("okm-Hyperlink");
 		
@@ -331,7 +351,7 @@ public class UserInfo extends Composite {
 	 */
 	public void setNewsDocuments(int value) {
 		imgNewsDocuments.setVisible(true);
-		newsDocuments.setHTML("&nbsp;"+value+ "&nbsp;");
+		newDocuments.setHTML("&nbsp;"+value+ "&nbsp;");
 		if (value>0) {
 			imgNewsDocuments.setResource(OKMBundleResources.INSTANCE.newsAlert());
 		} else {
@@ -345,12 +365,29 @@ public class UserInfo extends Composite {
 	 * @param value
 	 */
 	public void setNewsWorkflows(int value) {
-		imgWorkflows.setVisible(true);
-		newsWorkflows.setHTML("&nbsp;"+value+ "&nbsp;");
-		if (value>0) {
-			imgWorkflows.setResource(OKMBundleResources.INSTANCE.workflowAlert());
+		imgWorkflowTasks.setVisible(true);
+		newWorkflowTasks.setHTML("&nbsp;" + value + "&nbsp;");
+		
+		if (value > 0) {
+			imgWorkflowTasks.setResource(OKMBundleResources.INSTANCE.workflowTasksAlert());
 		} else {
-			imgWorkflows.setResource(OKMBundleResources.INSTANCE.workflow());
+			imgWorkflowTasks.setResource(OKMBundleResources.INSTANCE.workflowTasks());
+		}
+	}
+	
+	/**
+	 * Sets the pooled task instances
+	 * 
+	 * @param value
+	 */
+	public void setPooledTaskInstances(int value) {
+		imgWorkflowPooledTasks.setVisible(true);
+		newWorkflowPooledTasks.setHTML("&nbsp;" + value + "&nbsp;");
+		
+		if (value > 0) {
+			imgWorkflowPooledTasks.setResource(OKMBundleResources.INSTANCE.workflowPooledTasksAlert());
+		} else {
+			imgWorkflowPooledTasks.setResource(OKMBundleResources.INSTANCE.workflowPooledTasks());
 		}
 	}
 	
@@ -384,7 +421,8 @@ public class UserInfo extends Composite {
 		imgCheckoutDocuments.setTitle(Main.i18n("user.info.checkout.actual"));
 		imgSubscriptions.setTitle(Main.i18n("user.info.subscription.actual"));
 		imgNewsDocuments.setTitle(Main.i18n("user.info.news.new"));
-		imgWorkflows.setTitle(Main.i18n("user.info.workflow.pending"));
+		imgWorkflowTasks.setTitle(Main.i18n("user.info.workflow.pending.tasks"));
+		imgWorkflowPooledTasks.setTitle(Main.i18n("user.info.workflow.pending.pooled.tasks"));
 		quotaUsed.setHTML(percent + "%");
 		
 		// Resfreshing actual chatrooms
@@ -398,6 +436,8 @@ public class UserInfo extends Composite {
 	 */
 	private void refreshConnectedUsers() {
 		if (chatConnected) {
+			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+			endPoint.setServiceEntryPoint(RPCService.ChatService);
 			chatService.getLoggedUsers(new AsyncCallback<List<String>>() {
 				@Override
 				public void onSuccess(List<String> result) {
@@ -425,6 +465,8 @@ public class UserInfo extends Composite {
 	 */
 	private void getPendingChatRoomUser() {
 		if (chatConnected) {
+			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+			endPoint.setServiceEntryPoint(RPCService.ChatService);
 			chatService.getPendingChatRoomUser(new AsyncCallback<List<String>>() {
 				
 				@Override
@@ -527,6 +569,8 @@ public class UserInfo extends Composite {
 		if (getChatRoomList().size()>0) {
 			final ChatRoomDialogBox chatRoom = getChatRoomList().get(0);
 			chatRoom.setChatRoomActive(false);
+			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+			endPoint.setServiceEntryPoint(RPCService.ChatService);
 			chatService.closeRoom(chatRoom.getRoom(),new AsyncCallback<Object>() {
 				@Override
 				public void onSuccess(Object arg0) {
@@ -545,6 +589,8 @@ public class UserInfo extends Composite {
 		} else {
 			// Disconnect chat
 			disconnectChat(); // Only used to change view and disabling some RPC
+			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+			endPoint.setServiceEntryPoint(RPCService.ChatService);
 			chatService.logout(new AsyncCallback<Object>() {
 				@Override
 				public void onSuccess(Object result) {
@@ -579,6 +625,8 @@ public class UserInfo extends Composite {
 	 * loginChat
 	 */
 	public void loginChat() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+		endPoint.setServiceEntryPoint(RPCService.ChatService);
 		chatService.login(new AsyncCallback<Object>() {
 			@Override
 			public void onSuccess(Object result) {

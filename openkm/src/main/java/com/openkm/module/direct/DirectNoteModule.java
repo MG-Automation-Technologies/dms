@@ -22,7 +22,6 @@
 package com.openkm.module.direct;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -37,31 +36,18 @@ import com.openkm.bean.Note;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.NoteModule;
+import com.openkm.module.base.BaseNoteModule;
 import com.openkm.module.base.BaseNotificationModule;
 import com.openkm.util.UserActivity;
 
 public class DirectNoteModule implements NoteModule {
 	private static Logger log = LoggerFactory.getLogger(DirectNoteModule.class);
-	
-	/**
-	 * Read note values
-	 */
-	private Note get(Node noteNode) throws javax.jcr.PathNotFoundException, javax.jcr.RepositoryException {
-		Note note = new Note();
-		
-		note.setDate(noteNode.getProperty(Note.DATE).getDate());
-		note.setUser(noteNode.getProperty(Note.USER).getString());
-		note.setText(noteNode.getProperty(Note.TEXT).getString());
-		note.setPath(noteNode.getPath());
-		
-		return note;
-	}
 	
 	@Override
 	public Note add(String token, String nodePath, String text) throws LockException, 
@@ -83,23 +69,7 @@ public class DirectNoteModule implements NoteModule {
 			}
 			
 			node = session.getRootNode().getNode(nodePath.substring(1));
-			
-			if (!node.isNodeType(Note.MIX_TYPE)) {
-				log.debug("Adding mixing '{}' to {}", Note.MIX_TYPE, node.getPath());
-				node.addMixin(Note.MIX_TYPE);
-				node.save();
-			}
-			
-			Node notesNode = node.getNode(Note.LIST);
-			Calendar cal = Calendar.getInstance();
-			Node noteNode = notesNode.addNode(cal.getTimeInMillis()+"", Note.TYPE);
-			noteNode.setProperty(Note.DATE, cal);
-			noteNode.setProperty(Note.USER, session.getUserID());
-			noteNode.setProperty(Note.TEXT, text);
-			notesNode.save();
-			
-			// Retrieve stored values
-			newNote = get(noteNode);
+			newNote = BaseNoteModule.add(session, node, text);
 						
 			// Check subscriptions
 			BaseNotificationModule.checkSubscriptions(node, session.getUserID(), "ADD_NOTE", text);
@@ -211,7 +181,7 @@ public class DirectNoteModule implements NoteModule {
 			}
 			
 			Node noteNode = session.getRootNode().getNode(notePath.substring(1));
-			note = get(noteNode);
+			note = BaseNoteModule.get(noteNode);
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "GET_NOTE", ((NodeImpl) noteNode).getIdentifier(), notePath);

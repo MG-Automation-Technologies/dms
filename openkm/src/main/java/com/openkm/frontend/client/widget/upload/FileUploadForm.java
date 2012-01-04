@@ -42,6 +42,7 @@ public class FileUploadForm extends Composite {
 	private TextBox inputPath;
 	private TextBox inputAction;
 	private TextBox inputRenameDocument;
+	private CheckBox notifyToUser;
 	private CheckBox importZip;
 	private CheckBox digitalSignature;
 	private TextArea versionComment;
@@ -65,6 +66,7 @@ public class FileUploadForm extends Composite {
 		inputPath = new TextBox();
 		inputAction = new TextBox();
 		inputRenameDocument = new TextBox();
+		notifyToUser = new CheckBox();
 		importZip = new CheckBox();
 		digitalSignature = new CheckBox();
 		versionComment = new TextArea();
@@ -91,6 +93,10 @@ public class FileUploadForm extends Composite {
 		inputRenameDocument.setName("rename");
 		inputRenameDocument.setVisible(false);
 		vPanel.add(inputRenameDocument);
+		
+		notifyToUser.setName("notify");
+		notifyToUser.setVisible(false);
+		vPanel.add(notifyToUser);
 		
 		importZip.setName("importZip");
 		importZip.setVisible(false);
@@ -167,6 +173,24 @@ public class FileUploadForm extends Composite {
 		if (rename!=null && !rename.equals("")) {
 			inputRenameDocument.setText(rename);
 		}
+	}
+	
+	/**
+	 * setNotifyToUser
+	 * 
+	 * @param value
+	 */
+	public void setNotifyToUser(boolean value) {
+		notifyToUser.setValue(value);
+	}
+	
+	/**
+	 * isNotifyToUser
+	 * 
+	 * @return
+	 */
+	public boolean isNotifyToUser() {
+		return notifyToUser.getValue();
 	}
 
 	/**

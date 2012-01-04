@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMAuth;
 import com.openkm.bean.JcrSessionInfo;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.UserActivity;
 

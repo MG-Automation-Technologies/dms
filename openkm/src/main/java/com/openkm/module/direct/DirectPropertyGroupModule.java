@@ -50,6 +50,7 @@ import com.openkm.bean.form.TextArea;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.LockException;
 import com.openkm.core.NoSuchGroupException;
 import com.openkm.core.NoSuchPropertyException;
@@ -57,7 +58,6 @@ import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.PropertyGroupModule;
 import com.openkm.module.base.BasePropertyGroupModule;
 import com.openkm.util.FormUtils;
@@ -229,7 +229,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			for (NodeTypeIterator nti = ntm.getMixinNodeTypes(); nti.hasNext();) {
 				NodeType nt = nti.nextNodeType();
 				
-				if (nt.getName().startsWith(PropertyGroup.GROUP+":")) {
+				if (nt.getName().startsWith(PropertyGroup.GROUP + ":")) {
 					for (Iterator<PropertyGroup> it = pgf.keySet().iterator(); it.hasNext(); ) {
 						PropertyGroup pg = it.next();
 						
@@ -270,7 +270,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			NodeTypeManager ntm = session.getWorkspace().getNodeTypeManager();
 			NodeType nt = ntm.getNodeType(grpName);
 			PropertyDefinition[] pd = nt.getDeclaredPropertyDefinitions();
-						
+			
 			for (FormElement fe : pgf) {
 				for (int i=0; i < pd.length; i++) {
 					// Only return registered property definitions
@@ -361,45 +361,27 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
 			
 			synchronized (documentNode) {
+				// Maybe the property is not found because was added after the assignment,
+				// so we check if there are any missing node property, and then will remove
+				// and add the mixing again
+				for (FormElement fe : properties) {
+					for (int i=0; i < pd.length; i++) {
+						if (fe.getName().equals(pd[i].getName())) {
+							if (documentNode.isNodeType(grpName) && !documentNode.hasProperty(pd[i].getName())) {
+								documentNode.removeMixin(grpName);
+								documentNode.addMixin(grpName);
+							}
+						}
+					}
+				}
+				
+				// Now we can safely set all property values.
 				for (FormElement fe : properties) {
 					for (int i=0; i < pd.length; i++) {
 						// Only return registered property definitions
 						if (fe.getName().equals(pd[i].getName())) {
 							try {
-								Property prop = documentNode.getProperty(pd[i].getName());
-			 					
-								if (fe instanceof Select && ((Select) fe).getType().equals(Select.TYPE_MULTIPLE) 
-										&& pd[i].isMultiple()) {
-									List<String> tmp = new ArrayList<String>();
-									
-									for (Option opt : ((Select) fe).getOptions()) {
-										if (opt.isSelected()) {
-											tmp.add(opt.getValue());
-										}
-									}
-									
-									prop.setValue(tmp.toArray(new String[tmp.size()]));
-								} else if (!pd[i].isMultiple()) {
-									if (fe instanceof Input) {
-										prop.setValue(((Input) fe).getValue());
-									} else if (fe instanceof SuggestBox) {
-										prop.setValue(((SuggestBox) fe).getValue());
-									} else if (fe instanceof CheckBox) {
-										prop.setValue(Boolean.toString(((CheckBox) fe).getValue()));
-									} else if (fe instanceof TextArea) {
-										prop.setValue(((TextArea) fe).getValue());
-									} else if (fe instanceof Select) {
-										for (Option opt : ((Select) fe).getOptions()) {
-											if (opt.isSelected()) {
-												prop.setValue(opt.getValue());
-											}
-										}
-									} else {
-										throw new ParseException("Unknown property definition: " + pd[i].getName());
-									}
-								} else {
-									throw new ParseException("Inconsistent property definition: " + pd[i].getName());
-								}
+								BasePropertyGroupModule.setPropertyValue(documentNode, pd[i], fe);
 							} catch (javax.jcr.PathNotFoundException e) {
 								throw new RepositoryException("Requested property not found: "+e.getMessage());
 							}
@@ -438,7 +420,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		
 		log.debug("setProperties: void");
 	}
-
+	
 	@Override
 	public List<FormElement> getPropertyGroupForm(String token, String grpName) throws IOException,
 			ParseException, RepositoryException, DatabaseException {
