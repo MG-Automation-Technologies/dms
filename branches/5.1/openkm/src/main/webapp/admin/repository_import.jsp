@@ -43,22 +43,31 @@
 		String repoPath = WebUtils.getString(request, "repoPath", "/okm:root");
 		String fsPath = WebUtils.getString(request, "fsPath");
 		boolean metadata = WebUtils.getBoolean(request, "metadata");
+		boolean uuid = WebUtils.getBoolean(request, "uuid");
 		
 		out.println("<h1>Repository import</h1>");
 		out.println("<form action=\"repository_import.jsp\">");
 		out.println("<table class=\"form\" align=\"center\">");
 		out.println("<tr>");
 		out.println("<td>Filesystem path</td>");
-		out.println("<td><input type=\"text\" size=\"50\" name=\"fsPath\" id=\"fsPath\" value=\""+fsPath+"\" ></td>");
+		out.println("<td colspan=\"2\"><input type=\"text\" size=\"50\" name=\"fsPath\" id=\"fsPath\" value=\""+fsPath+"\" ></td>");
 		out.println("<td><a class=\"ds\" href=\"DataBrowser?action=fs&dst=fsPath\"><img src=\"img/action/browse_fs.png\"/></a></td>");
 		out.println("</tr>");
 		out.println("<tr>");
 		out.println("<td>Repository path</td>");
-		out.println("<td><input type=\"text\" size=\"50\" name=\"repoPath\" id=\"repoPath\" value=\""+repoPath+"\" ></td>");
+		out.println("<td colspan=\"2\"><input type=\"text\" size=\"50\" name=\"repoPath\" id=\"repoPath\" value=\""+repoPath+"\" ></td>");
 		out.println("<td><a class=\"ds\" href=\"DataBrowser?action=repo&dst=repoPath\"><img src=\"img/action/browse_repo.png\"/></a></td>");
 		out.println("</tr>");
-		out.println("<tr><td>Metadata</td><td><input type=\"checkbox\" name=\"metadata\"/></td></tr>");
-		out.println("<tr><td colspan=\"3\" align=\"right\">");
+		out.println("<tr>");
+		out.println("<td>Metadata</td>");
+		out.println("<td colspan=\"2\"><input type=\"checkbox\" name=\"metadata\" "+(metadata?"checked":"")+"/></td>");
+		out.println("</tr>");
+		out.println("<tr>");
+		out.println("<td>Restore UUIDs</td>");
+		out.println("<td width=\"23px\"><input type=\"checkbox\" name=\"uuid\" "+(uuid?"checked":"")+"/></td>");
+		out.println("<td><span style=\"color: red;\">(use with caution)</span></td>");
+		out.println("</tr>");
+		out.println("<tr><td colspan=\"4\" align=\"right\">");
 		out.println("<input type=\"submit\" value=\"Send\">");
 		out.println("</td></tr>");
 		out.println("</table>");
@@ -68,10 +77,10 @@
 			if (repoPath != null && !repoPath.equals("") && fsPath != null && !fsPath.equals("")) {
 				out.println("<hr/>");
 				File dir = new File(Config.INSTANCE_CHROOT_PATH + fsPath);
-				int files = FileUtils.countFiles(dir);
+				int files = FileUtils.countImportFiles(dir);
 				out.println("<b>Files & directories to import:</b> "+files+"<br/>");
 				long begin = System.currentTimeMillis();
-				ImpExpStats stats = RepositoryImporter.importDocuments(null, dir, repoPath, metadata, out, 
+				ImpExpStats stats = RepositoryImporter.importDocuments(null, dir, repoPath, metadata, uuid, out, 
 						new HTMLInfoDecorator(files));
 				long end = System.currentTimeMillis();
 				out.println("<hr/>");

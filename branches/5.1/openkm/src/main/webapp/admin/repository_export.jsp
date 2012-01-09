@@ -57,7 +57,7 @@
 		out.println("<td><input type=\"text\" size=\"50\" name=\"fsPath\" id=\"fsPath\" value=\""+fsPath+"\" ></td>");
 		out.println("<td><a class=\"ds\" href=\"DataBrowser?action=fs&dst=fsPath\"><img src=\"img/action/browse_fs.png\"/></a></td>");
 		out.println("</tr>");
-		out.println("<tr><td>Metadata</td><td><input type=\"checkbox\" name=\"metadata\"/></td></tr>");
+		out.println("<tr><td>Metadata</td><td><input type=\"checkbox\" name=\"metadata\" "+(metadata?"checked":"")+"/></td></tr>");
 		out.println("<tr><td colspan=\"3\" align=\"right\">");
 		out.println("<input type=\"submit\" value=\"Send\">");
 		out.println("</td></tr>");
@@ -69,6 +69,7 @@
 				out.println("<hr/>");
 				File dir = new File(Config.INSTANCE_CHROOT_PATH + fsPath);
 				ContentInfo cInfo = OKMFolder.getInstance().getContentInfo(null, repoPath);
+				out.println("<b>Files & directories to export:</b> "+(cInfo.getDocuments() + cInfo.getFolders())+"<br/>");
 				long begin = System.currentTimeMillis();
 				ImpExpStats stats = RepositoryExporter.exportDocuments(null, repoPath, dir, metadata, out,
 						new HTMLInfoDecorator((int) cInfo.getDocuments() + (int) cInfo.getFolders()));

@@ -32,6 +32,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.MimeTypeDAO;
 import com.openkm.dao.bean.MimeType;
@@ -106,6 +107,32 @@ public class FileUtils {
 				}
 				
 				ret++;
+			}
+		}
+		
+		return ret;
+	}
+	
+	/**
+	 * Count files and directories from a selected directory.
+	 * This version exclude .okm files
+	 */
+	public static int countImportFiles(File dir) {
+		File[] found = dir.listFiles();
+		int ret = 0;
+		
+		if (found != null) {
+			for (int i = 0; i < found.length; i++) {
+				//log.info("File: {}", found[i].getPath());
+				
+				if (found[i].isDirectory()) {
+					ret += countImportFiles(found[i]);
+				}
+				
+				// NAND
+				if (!(found[i].isFile() && found[i].getName().toLowerCase().endsWith(Config.EXPORT_METADATA_EXT))) {
+					ret++;
+				}
 			}
 		}
 		

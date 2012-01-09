@@ -152,7 +152,7 @@ public class BenchmarkServlet extends BaseServlet {
 				long begin = System.currentTimeMillis();
 				fld.setPath(rootFld.getPath() + "/" + base + "/" + i);
 				OKMFolder.getInstance().create(null, fld);
-				ImpExpStats stats = RepositoryImporter.importDocuments(null, dir, fld.getPath(), false, out, 
+				ImpExpStats stats = RepositoryImporter.importDocuments(null, dir, fld.getPath(), false, false, out, 
 						new HTMLInfoDecorator(docs));
 				long end = System.currentTimeMillis();
 				tStats.setSize(tStats.getSize() + stats.getSize());
