@@ -70,6 +70,9 @@ public class Config {
 	public static String PROPERTY_GROUPS_XML;
 	public static String PROPERTY_GROUPS_CND;
 	
+	// General configuration
+	public static String EXPORT_METADATA_EXT = ".okm";
+	
 	// Default script
 	public static final String PROPERTY_DEFAULT_SCRIPT = "default.script";
 	
