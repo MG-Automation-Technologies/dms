@@ -521,8 +521,7 @@ public class DocConverter {
 			HashMap<String, Object> hm = new HashMap<String, Object>();
 			hm.put("fileIn", input.getPath());
 			hm.put("fileOut", output.getPath());
-			String tpl = Config.SYSTEM_SWFTOOLS_PDF2SWF + " -T 9 ${fileIn} -o ${fileOut}";
-			cmd = TemplateUtils.replace("SYSTEM_PDF2SWF", tpl, hm);
+			cmd = TemplateUtils.replace("SYSTEM_PDF2SWF", Config.SYSTEM_SWFTOOLS_PDF2SWF, hm);
 			ExecutionResult er = ExecutionUtils.runCmd(cmd);
 			
 			if (er.getExitValue() != 0) {
