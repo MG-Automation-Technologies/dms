@@ -232,7 +232,10 @@ public class WorkflowUtils {
 			
 			vo.setComments(alC);
 			vo.setParent(copy(t.getParent()));
-			vo.setNode(t.getNode().getName());
+			
+			if (t.getNode() != null) {
+				vo.setNode(t.getNode().getName());
+			}
 			
 			if (t.getStart() != null) {
 				Calendar start = Calendar.getInstance();
