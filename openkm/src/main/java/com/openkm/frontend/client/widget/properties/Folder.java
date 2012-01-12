@@ -38,7 +38,6 @@ import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.util.Util;
 
 public class Folder extends Composite {
-	
 	private ScrollPanel scrollPanel;
 	private FlexTable tableProperties;
 	private FlexTable tableSubscribedUsers;
@@ -146,7 +145,7 @@ public class Folder extends Composite {
 		
 		// URL clipboard button
 		String url = Main.get().workspaceUserProperties.getApplicationURL();
-		url += "?fldPath=" + URL.encodeQueryString(folder.getPath());
+		url += "?fldPath=" + Util.escape(URL.encodeQueryString(folder.getPath()));
 		tableProperties.setWidget(8, 1, new HTML("<div id=\"folderurlclipboardcontainer\"></div>\n"));
 		Util.createFolderURLClipboardButton(url);
 		
