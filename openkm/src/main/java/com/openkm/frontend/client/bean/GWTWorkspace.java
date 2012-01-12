@@ -47,6 +47,7 @@ public class GWTWorkspace implements IsSerializable {
 	private String email = "";
 	private String webSkin = "";
 	private boolean adminRole = false;
+	private boolean adminUser = false;
 	private String previewer = "";
 	private List<GWTReport> reports = new ArrayList<GWTReport>();
 
@@ -664,6 +665,14 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setAdminRole(boolean adminRole) {
 		this.adminRole = adminRole;
+	}
+	
+	public boolean isAdminUser() {
+		return adminUser;
+	}
+
+	public void setAdminUser(boolean adminUser) {
+		this.adminUser = adminUser;
 	}
 	
 	public String getPreviewer() {

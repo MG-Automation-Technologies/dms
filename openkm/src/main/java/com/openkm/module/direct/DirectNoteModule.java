@@ -70,7 +70,7 @@ public class DirectNoteModule implements NoteModule {
 			
 			node = session.getRootNode().getNode(nodePath.substring(1));
 			newNote = BaseNoteModule.add(session, node, text);
-						
+			
 			// Check subscriptions
 			BaseNotificationModule.checkSubscriptions(node, session.getUserID(), "ADD_NOTE", text);
 
@@ -123,7 +123,8 @@ public class DirectNoteModule implements NoteModule {
 			nid = ((NodeImpl) noteNode).getIdentifier();
 			parentNode = noteNode.getParent();
 			
-			if (session.getUserID().equals(noteNode.getProperty(Note.USER).getString())) {
+			if (session.getUserID().equals(noteNode.getProperty(Note.USER).getString()) 
+					|| session.getUserID().equals(Config.ADMIN_USER)) {
 				noteNode.remove();
 				parentNode.save();
 				
@@ -134,7 +135,7 @@ public class DirectNoteModule implements NoteModule {
 					primary.save();
 				}
 			} else {
-				throw new AccessDeniedException("Note can only be removed by its creator");
+				throw new AccessDeniedException("Note can only be removed by its creator or " + Config.ADMIN_USER);
 			}
 						
 			// Activity log
