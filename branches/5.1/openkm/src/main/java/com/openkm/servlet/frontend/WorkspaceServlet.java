@@ -140,6 +140,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 			
 			// Is admin
 			workspace.setAdminRole(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
+			workspace.setAdminUser(Config.ADMIN_USER.equals(workspace.getUser()));
 			
 			// Setting web skin
 			workspace.setWebSkin(up.getMisc().getWebSkin());

@@ -244,18 +244,28 @@ public class Notes extends Composite {
 		hPanel.add(date);
 		hPanel.setCellWidth(space, "5");
 		hPanel.setCellWidth(space2, "5");
+		
 		if (note.getUser().equals(Main.get().workspaceUserProperties.getUser())) {
 			if (visibleButtons || addNoteOption) {
 				editNote.setVisible(true);
-				deleteNote.setVisible(true);
 			} else {
 				editNote.setVisible(false);
-				deleteNote.setVisible(false);
 			}
 		} else {
 			editNote.setVisible(false);
+		}
+		
+		if (note.getUser().equals(Main.get().workspaceUserProperties.getUser())
+				|| Main.get().workspaceUserProperties.getWorkspace().isAdminUser()) {
+			if (visibleButtons || addNoteOption) {
+				deleteNote.setVisible(true);
+			} else {
+				deleteNote.setVisible(false);
+			}
+		} else {
 			deleteNote.setVisible(false);
 		}
+		
 		tableNotes.setWidget(row, 1, hPanel);
 		tableNotes.getCellFormatter().setHorizontalAlignment(row, 1, HasAlignment.ALIGN_RIGHT);
 		tableNotes.getRowFormatter().setStyleName(row, "okm-Notes-Title");
