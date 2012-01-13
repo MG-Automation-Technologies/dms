@@ -36,6 +36,7 @@ import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.contants.ui.UIDockPanelConstants;
 import com.openkm.frontend.client.widget.form.FormManager.ValidationButton;
 import com.openkm.frontend.client.widget.form.HasWorkflow;
+import com.openkm.frontend.client.widget.properties.Notes.NoteToDelete;
 
 import eu.maydu.gwt.validation.client.ValidationProcessor;
 
@@ -65,6 +66,9 @@ public class ConfirmPopup extends DialogBox {
 	public static final int CONFIRM_FORCE_UNLOCK					= 15;
 	public static final int CONFIRM_FORCE_CANCEL_CHECKOUT			= 16;
 	public static final int CONFIRM_WORKFLOW_ACTION					= 17;
+	public static final int CONFIRM_DELETE_NOTE_DOCUMENT			= 18;
+	public static final int CONFIRM_DELETE_NOTE_FOLDER				= 19;
+	public static final int CONFIRM_DELETE_NOTE_MAIL				= 20;
 	
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
@@ -248,6 +252,20 @@ public class ConfirmPopup extends DialogBox {
 					}
 				}
 				break;
+				
+			case CONFIRM_DELETE_NOTE_DOCUMENT:
+				if (object!=null && object instanceof NoteToDelete) {
+					NoteToDelete noteToDelete = (NoteToDelete) object;
+					Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.notes.removeNote(noteToDelete.getNotePath(), noteToDelete.getRow());
+				}
+				break;
+			
+			case CONFIRM_DELETE_NOTE_FOLDER:
+				if (object!=null && object instanceof NoteToDelete) {
+					NoteToDelete noteToDelete = (NoteToDelete) object;
+					Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.notes.removeNote(noteToDelete.getNotePath(), noteToDelete.getRow());
+				}
+				break;
 		}
 		
 		action = NO_ACTION; // Resets action value
@@ -323,6 +341,18 @@ public class ConfirmPopup extends DialogBox {
 				break;
 				
 			case CONFIRM_WORKFLOW_ACTION:
+				break;
+				
+			case CONFIRM_DELETE_NOTE_DOCUMENT:
+				text.setHTML(Main.i18n("confirm.delete.note"));
+				break;
+			
+			case CONFIRM_DELETE_NOTE_FOLDER:
+				text.setHTML(Main.i18n("confirm.delete.note"));
+				break;
+				
+			case CONFIRM_DELETE_NOTE_MAIL:
+				text.setHTML(Main.i18n("confirm.delete.note"));
 				break;
 		}
 	}

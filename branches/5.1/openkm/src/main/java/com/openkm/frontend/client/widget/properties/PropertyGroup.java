@@ -57,13 +57,11 @@ public class PropertyGroup extends Composite implements HasPropertyGroupHandlerE
 	private boolean editValues = false;
 	private FiredHorizontalPanel hPanelFired;
 	private GWTPropertyGroup propertyGroup;
-	private boolean visible;
 	
 	/**
 	 * PropertyGroup
 	 */
-	public PropertyGroup(GWTPropertyGroup propertyGroup, Object node, GWTFolder parentFolder, boolean visible) {
-		this.visible = visible;
+	public PropertyGroup(GWTPropertyGroup propertyGroup, Object node, GWTFolder parentFolder, boolean visible, boolean readOnly) {
 		String path = "";
 		byte permissions = 0;
 		if (node instanceof GWTDocument) {
@@ -135,7 +133,7 @@ public class PropertyGroup extends Composite implements HasPropertyGroupHandlerE
 			
 		} else if ( ((permissions & GWTPermission.WRITE) == GWTPermission.WRITE) &&
 			     ((parentFolder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE))  {
-	    	 		changeButton.setVisible(true);
+	    	 		changeButton.setVisible(!readOnly);
 	    	 		removeButton.setVisible(true);
 	    	 		
 		} else {
@@ -162,12 +160,12 @@ public class PropertyGroup extends Composite implements HasPropertyGroupHandlerE
 	}
 	
 	/**
-	 * isButtonsVisible
+	 * isRemovePropertyGroupEnabled
 	 * 
 	 * @return
 	 */
-	public boolean isButtonsVisible() {
-		return visible;
+	public boolean isRemovePropertyGroupEnabled() {
+		return removeButton.isVisible();
 	}
 	
 	/**

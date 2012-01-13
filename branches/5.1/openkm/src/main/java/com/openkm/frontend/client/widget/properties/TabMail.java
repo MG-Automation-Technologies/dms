@@ -95,7 +95,7 @@ public class TabMail extends Composite implements HasMailEvent, HasMailHandlerEx
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
 				int tabIndex = event.getSelectedItem().intValue();
-				Main.get().mainPanel.topPanel.toolBar.evaluateRemoveGroupProperty(isRemoveGroupPropertyEnabled(tabIndex));
+				Main.get().mainPanel.topPanel.toolBar.evaluateRemovePropertyGroup(isRemovePropertyGroupEnabled(tabIndex));
 				selectedTab = tabIndex;
 				if (tabIndex==SECURITY_TAB) {
 					Timer timer = new Timer() {
@@ -274,7 +274,7 @@ public class TabMail extends Composite implements HasMailEvent, HasMailHandlerEx
 			for (Iterator<GWTPropertyGroup> it = result.iterator(); it.hasNext();) {
 				GWTPropertyGroup gwtGroup = it.next();
 				String groupTranslation = gwtGroup.getLabel();
-				PropertyGroup group = new PropertyGroup(gwtGroup, mail.get(), gwtFolder, (visibleButton && !gwtGroup.isReadonly()));
+				PropertyGroup group = new PropertyGroup(gwtGroup, mail.get(), gwtFolder, visibleButton, gwtGroup.isReadonly());
 				tabPanel.add(group, groupTranslation);
 				propertyGroup.add(group);
 				
@@ -338,9 +338,9 @@ public class TabMail extends Composite implements HasMailEvent, HasMailHandlerEx
 	 * 
 	 * @return
 	 */
-	private boolean isRemoveGroupPropertyEnabled(int tabIndex) {
+	private boolean isRemovePropertyGroupEnabled(int tabIndex) {
 		if ((tabPanel.getWidget(tabIndex) instanceof PropertyGroup)) {
-			return ((PropertyGroup) (tabPanel.getWidget(tabIndex))).isButtonsVisible();
+			return ((PropertyGroup) (tabPanel.getWidget(tabIndex))).isRemovePropertyGroupEnabled();
 		} else {
 			return false;
 		}

@@ -1021,7 +1021,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			}
 			
 			// The remove property group is special case depends on tab property enabled, with this call we force to set false
-			evaluateRemoveGroupProperty(false);
+			evaluateRemovePropertyGroup(false);
 			
 			// Trash case
 			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TRASH) {
@@ -1117,7 +1117,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 					
 					if (doc.isSubscribed()) {
 						enableRemoveSubscription();
-					} else {
+					} else if(!doc.isLocked()) {
 						enableAddSubscription();
 					} 
 					
@@ -1176,7 +1176,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 							
 							if (doc.isSubscribed()) {
 								enableRemoveSubscription();
-							} else {
+							} else if(!doc.isLocked()) {
 								enableAddSubscription();
 							} 
 						} else {
@@ -1308,6 +1308,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				 (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TAXONOMY ||
 				  Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TEMPLATES ||
 				  Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_PERSONAL) ) {
+				enableAddDocument();
 				enableScanner();
 				enableUploader();
 			}
@@ -2489,7 +2490,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * 
 	 * @param propertyGroupEnabled
 	 */
-	public void evaluateRemoveGroupProperty(boolean propertyGroupEnabled) {
+	public void evaluateRemovePropertyGroup(boolean propertyGroupEnabled) {
 		// Show or hide removeGroupProperty depends on two cases, the property is enabled by security user and
 		// must be one tab group selected
 		
@@ -2883,7 +2884,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public void langRefresh() {
 		evaluateShowIcons();
-		evaluateRemoveGroupProperty(propertyGroupEnabled);
+		evaluateRemovePropertyGroup(propertyGroupEnabled);
 	}
 	
 	/**
