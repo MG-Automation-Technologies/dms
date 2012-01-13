@@ -93,7 +93,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 		tabPanel = new TabLayoutPanel(TAB_HEIGHT, Unit.PX);
 		folder = new Folder();
 		security = new SecurityScrollTable();
-		notes = new Notes();
+		notes = new Notes(Notes.FOLDER_NOTE);
 		panel = new VerticalPanel();
 		propertyGroup = new ArrayList<PropertyGroup>();
 		
@@ -101,7 +101,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
 				int tabIndex = event.getSelectedItem().intValue();
-				Main.get().mainPanel.topPanel.toolBar.evaluateRemoveGroupProperty(isRemoveGroupPropertyEnabled(tabIndex));
+				Main.get().mainPanel.topPanel.toolBar.evaluateRemovePropertyGroup(isRemovePropertyGroupEnabled(tabIndex));
 				selectedTab = tabIndex;
 				if (tabIndex==SECURITY_TAB) {
 					Timer timer = new Timer() {
@@ -316,7 +316,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 			for (Iterator<GWTPropertyGroup> it = result.iterator(); it.hasNext();) {
 				GWTPropertyGroup gwtGroup = it.next();
 				String groupTranslation = gwtGroup.getLabel();
-				PropertyGroup group = new PropertyGroup(gwtGroup, folder.get(), gwtFolder, (visibleButton && !gwtGroup.isReadonly()));
+				PropertyGroup group = new PropertyGroup(gwtGroup, folder.get(), gwtFolder, visibleButton, gwtGroup.isReadonly());
 				tabPanel.add(group, groupTranslation);
 				propertyGroup.add(group);
 				
@@ -380,9 +380,9 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	 * 
 	 * @return
 	 */
-	private boolean isRemoveGroupPropertyEnabled(int tabIndex) {
+	private boolean isRemovePropertyGroupEnabled(int tabIndex) {
 		if ((tabPanel.getWidget(tabIndex) instanceof PropertyGroup)) {
-			return ((PropertyGroup) (tabPanel.getWidget(tabIndex))).isButtonsVisible();
+			return ((PropertyGroup) (tabPanel.getWidget(tabIndex))).isRemovePropertyGroupEnabled();
 		} else {
 			return false;
 		}

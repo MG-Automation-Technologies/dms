@@ -51,6 +51,7 @@ import com.openkm.frontend.client.extension.event.HasFolderEvent;
 import com.openkm.frontend.client.service.OKMNoteService;
 import com.openkm.frontend.client.service.OKMNoteServiceAsync;
 import com.openkm.frontend.client.util.OKMBundleResources;
+import com.openkm.frontend.client.widget.ConfirmPopup;
 import com.openkm.frontend.client.widget.richtext.RichTextToolbar;
 
 /**
@@ -61,6 +62,9 @@ import com.openkm.frontend.client.widget.richtext.RichTextToolbar;
  */
 public class Notes extends Composite {
 	private final OKMNoteServiceAsync noteService = (OKMNoteServiceAsync) GWT.create(OKMNoteService.class);
+	public static final int DOCUMENT_NOTE 	= 1;
+	public static final int FOLDER_NOTE 	= 2;
+	public static final int MAIL_NOTE		= 3;
 	
 	private FlexTable tableNotes;
 	private GWTDocument document;
@@ -77,10 +81,17 @@ public class Notes extends Composite {
 	boolean visibleButtons = true;
 	boolean addNoteOption = false;
 	boolean isEditingNote = false;
-	String editedNotePath = "";
-	int editedNoteRow = 0;
+	private String editedNotePath = "";
+	private int editedNoteRow = 0;
+	private int type = 0;
 	
-	public Notes () {
+	/**
+	 * Notes
+	 * 
+	 * @param type
+	 */
+	public Notes(int type) {
+		this.type = type;
 		tableNotes = new FlexTable();
 		scrollPanel = new ScrollPanel(tableNotes);
 		newNotePanel = new VerticalPanel(); 
@@ -226,7 +237,20 @@ public class Notes extends Composite {
 		deleteNote.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				removeNote(note.getPath(), tableNotes.getCellForEvent(event).getRowIndex());
+				switch (type) {
+					case DOCUMENT_NOTE:
+						Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_DELETE_NOTE_DOCUMENT);
+						break;
+					case FOLDER_NOTE:
+						Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_DELETE_NOTE_FOLDER);
+						break;
+					case MAIL_NOTE:
+						Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_DELETE_NOTE_MAIL);
+						break;
+				}
+				NoteToDelete noteToDelete = new NoteToDelete(note.getPath(), tableNotes.getCellForEvent(event).getRowIndex());
+				Main.get().confirmPopup.setValue(noteToDelete);
+				Main.get().confirmPopup.show();
 			}
 		});
 		editNote.setStyleName("okm-Hyperlink");
@@ -402,7 +426,7 @@ public class Notes extends Composite {
 	 * 
 	 * @param notePath
 	 */
-	private void removeNote(final String notePath, final int row) {
+	public void removeNote(final String notePath, final int row) {
 		noteService.remove(notePath, new AsyncCallback<Object>() {
 			@Override
 			public void onSuccess(Object result) {
@@ -492,6 +516,46 @@ public class Notes extends Composite {
 			return folder.getNotes();
 		} else {
 			return null;
+		}
+	}
+	
+	/**
+	 * NoteToDelete
+	 * 
+	 * @author jllort
+	 *
+	 */
+	public class NoteToDelete {
+		private String notePath = "";
+		private int row = 0;
+		
+		/**
+		 * NoteToDelete
+		 * 
+		 * @param notePath
+		 * @param row
+		 */
+		public NoteToDelete(String notePath, int row) {
+			this.notePath = notePath;
+			this.row = row;
+		}
+
+		/**
+		 * getNotePath
+		 * 
+		 * @return
+		 */
+		public String getNotePath() {
+			return notePath;
+		}
+
+		/**
+		 * getRow
+		 * 
+		 * @return
+		 */
+		public int getRow() {
+			return row;
 		}
 	}
 }

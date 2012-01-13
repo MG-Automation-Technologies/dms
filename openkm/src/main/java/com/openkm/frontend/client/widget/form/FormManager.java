@@ -1048,7 +1048,7 @@ public class FormManager {
 			}
 		} else if (gwtFormElement instanceof GWTText) {
 			HorizontalPanel hPanel = new HorizontalPanel();
-			HTML title = new HTML("&nbsp;" + "<b>" + ((GWTText) gwtFormElement).getLabel() + "</b>" + "&nbsp;");
+			HTML title = new HTML("&nbsp;" + ((GWTText) gwtFormElement).getLabel() + "&nbsp;");
 			title.setStyleName("okm-NoWrap");
 			hPanel.add(Util.hSpace("10"));
 			hPanel.add(title);
@@ -1064,7 +1064,7 @@ public class FormManager {
 			Image horizontalLine2 = new Image("img/transparent_pixel.gif");
 			horizontalLine2.setStyleName("okm-TopPanel-Line-Border");
 			horizontalLine2.setSize("100%", "2px");
-			HTML title = new HTML("&nbsp;" + "<b>" + ((GWTSeparator) gwtFormElement).getLabel() + "</b>" + "&nbsp;");
+			HTML title = new HTML("&nbsp;" + ((GWTSeparator) gwtFormElement).getLabel() + "&nbsp;");
 			title.setStyleName("okm-NoWrap");
 			hPanel.add(horizontalLine);
 			hPanel.add(title);
