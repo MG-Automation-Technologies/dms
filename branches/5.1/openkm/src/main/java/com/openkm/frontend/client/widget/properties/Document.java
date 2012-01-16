@@ -308,7 +308,7 @@ public class Document extends Composite {
 		
 		// URL clipboard button
 		String url = Main.get().workspaceUserProperties.getApplicationURL();
-		url += "?docPath=" + Util.escape(URL.encodeQueryString(document.getPath()));
+		url += "?docPath=" + URL.encodeQueryString(URL.encodeQueryString(document.getPath()));
 		tableProperties.setWidget(11, 1, new HTML("<div id=\"urlclipboardcontainer\"></div>\n"));
 		Util.createURLClipboardButton(url);
 		
@@ -321,7 +321,12 @@ public class Document extends Composite {
 			webdavPath = webdavPath.replace("okm:", "okm_");
 		}
 		
-		webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/')) + "/webdav" + webdavPath;
+		// Login case write empty folder
+		if (!webdavUrl.equals("")) {
+			webdavPath = Util.escape(webdavPath);
+			webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/')) + "/webdav" + webdavPath;
+		}
+		
 		tableProperties.setWidget(12, 1, new HTML("<div id=\"webdavclipboardcontainer\"></div>\n"));
 		Util.createWebDavClipboardButton(webdavUrl);
 		

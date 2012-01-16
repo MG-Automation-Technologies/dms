@@ -145,7 +145,7 @@ public class Folder extends Composite {
 		
 		// URL clipboard button
 		String url = Main.get().workspaceUserProperties.getApplicationURL();
-		url += "?fldPath=" + Util.escape(URL.encodeQueryString(folder.getPath()));
+		url += "?fldPath=" + URL.encodeQueryString(URL.encodeQueryString(folder.getPath()));
 		tableProperties.setWidget(8, 1, new HTML("<div id=\"folderurlclipboardcontainer\"></div>\n"));
 		Util.createFolderURLClipboardButton(url);
 		
@@ -160,8 +160,10 @@ public class Folder extends Composite {
 		
 		// Login case write empty folder
 		if (!webdavUrl.equals("")) {
+			webdavPath = Util.escape(webdavPath);
 			webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/')) + "/webdav" + webdavPath;
 		}
+		
 		tableProperties.setWidget(9, 1, new HTML("<div id=\"folderwebdavclipboardcontainer\"></div>\n"));
 		Util.createFolderWebDavClipboardButton(webdavUrl);
 		
