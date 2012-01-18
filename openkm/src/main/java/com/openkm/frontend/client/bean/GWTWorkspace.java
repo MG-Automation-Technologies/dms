@@ -66,6 +66,7 @@ public class GWTWorkspace implements IsSerializable {
 	private long userQuotaLimit;
 	private boolean printPreview;
 	private boolean keywordEnabled;
+	private boolean uploadNotifyUsers;
 	private boolean userQuotaEnabled;
 	private boolean webdavFix;
 	private List<GWTPropertyGroup> wizardPropertyGroupsList = new ArrayList<GWTPropertyGroup>();
@@ -305,6 +306,14 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setKeywordEnabled(boolean keywordEnabled) {
 		this.keywordEnabled = keywordEnabled;
+	}
+	
+	public boolean isUploadNotifyUsers() {
+		return uploadNotifyUsers;
+	}
+
+	public void setUploadNotifyUsers(boolean uploadNotifyUsers) {
+		this.uploadNotifyUsers = uploadNotifyUsers;
 	}
 
 	public boolean isUserQuotaEnabled() {
