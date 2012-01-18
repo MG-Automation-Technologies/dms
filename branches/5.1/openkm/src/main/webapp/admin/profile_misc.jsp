@@ -78,6 +78,19 @@
       </td>
     </tr>
     <tr>
+      <td>Upload notify users</td>
+      <td>
+        <c:choose>
+          <c:when test="${prf.misc.uploadNotifyUsers}">
+            <input name="prf_misc_upload_notify_users" type="checkbox" checked="checked"/>
+          </c:when>
+          <c:otherwise>
+            <input name="prf_misc_upload_notify_users" type="checkbox"/>
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
+    <tr>
       <td>Extensions</td>
       <td>
         <select multiple="multiple" name="prf_misc_extensions" size="4">
