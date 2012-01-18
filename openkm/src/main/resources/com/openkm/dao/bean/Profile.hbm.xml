@@ -24,6 +24,9 @@
       <property name="keywordsEnabled" type="true_false" not-null="true">
         <column name="PRF_MSC_KEYWORDS_EN" default="'T'"/>
       </property>
+      <property name="uploadNotifyUsers" type="true_false" not-null="true">
+        <column name="PRF_MSC_UPLD_NOTI_USR" default="'T'"/>
+      </property>
       <set name="extensions" table="OKM_PROFILE_MSC_EXTENSION" lazy="false">
         <key column="PEX_ID" not-null="true"/>
         <element column="PEX_EXTENSION" type="string"/>
