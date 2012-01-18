@@ -944,4 +944,15 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			}
 		});
 	}
+	
+	/**
+	 * setUploadNotifyUsers
+	 * 
+	 * @param visible
+	 */
+	public void setUploadNotifyUsers(boolean visible) {
+		if (!visible) {
+			mainPanel.remove(hNotifyPanel);
+		}
+	}
 }

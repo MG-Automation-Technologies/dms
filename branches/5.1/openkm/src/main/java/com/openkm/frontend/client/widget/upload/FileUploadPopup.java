@@ -296,4 +296,13 @@ public class FileUploadPopup extends DialogBox {
 	public void enqueueFileToUpload(Collection<FileToUpload> filesToUpload) {
 		ffUpload.enqueueFileToUpload(filesToUpload);
 	}
+	
+	/**
+	 * setUploadNotifyUsers
+	 * 
+	 * @param visible
+	 */
+	public void setUploadNotifyUsers(boolean visible) {
+		ffUpload.setUploadNotifyUsers(visible);
+	}
 }

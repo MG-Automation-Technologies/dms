@@ -281,6 +281,7 @@ public class WorkspaceUserProperties {
 			if (workspace.isDashboardKeywordsVisible()) {
 				Main.get().mainPanel.dashboard.showKeywords();
 			}
+			Main.get().fileUpload.setUploadNotifyUsers(workspace.isUploadNotifyUsers());
 			Main.get().mainPanel.dashboard.init();
 			
 			Main.get().startUp.nextStatus(StartUp.STARTUP_GET_TAXONOMY_ROOT);
