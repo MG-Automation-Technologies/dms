@@ -174,7 +174,7 @@ public class UserInfo extends Composite {
 			@Override
 			public void onClick(ClickEvent event) {
 				if (!chatConnected) {
-					loginChat();
+					loginChat(false);
 				} else {
 					chatConnected = false; // Trying disable other RPC calls
 					logoutChat();
@@ -623,24 +623,39 @@ public class UserInfo extends Composite {
 	
 	/**
 	 * loginChat
+	 * 
+	 * @param autologin
 	 */
-	public void loginChat() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-		endPoint.setServiceEntryPoint(RPCService.ChatService);
-		chatService.login(new AsyncCallback<Object>() {
+	public void loginChat(final boolean autologin) {
+		chatService.getLoggedUsers(new AsyncCallback<List<String>>() {
 			@Override
-			public void onSuccess(Object result) {
-				chatConnected = true;
-				imgChat.setResource(OKMBundleResources.INSTANCE.chatConnected());
-				imgChat.setTitle(Main.i18n("user.info.chat.disconnect"));
-				usersConnected.setVisible(true);
-				imgNewChatRoom.setVisible(true);
-				refreshConnectedUsers();
-				getPendingChatRoomUser();
+			public void onSuccess(List<String> result) {
+				if (result.contains(Main.get().workspaceUserProperties.getUser())) {
+					if (!autologin) {
+						Main.get().showError("GetLoginChat", new Throwable(Main.i18n("user.info.chat.user.yet.logged")));
+					}
+				} else {
+					chatService.login(new AsyncCallback<Object>() {
+						@Override
+						public void onSuccess(Object result) {
+							chatConnected = true;
+							imgChat.setResource(OKMBundleResources.INSTANCE.chatConnected());
+							imgChat.setTitle(Main.i18n("user.info.chat.disconnect"));
+							usersConnected.setVisible(true);
+							imgNewChatRoom.setVisible(true);
+							refreshConnectedUsers();
+							getPendingChatRoomUser();
+						}
+						@Override
+						public void onFailure(Throwable caught) {
+							Main.get().showError("GetLoginChat", caught);
+						}
+					});
+				}
 			}
 			@Override
 			public void onFailure(Throwable caught) {
-				Main.get().showError("GetLoginChat", caught);
+				Main.get().showError("getLoggedUsers", caught);
 			}
 		});
 	}

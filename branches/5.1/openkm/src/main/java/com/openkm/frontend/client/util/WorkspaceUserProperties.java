@@ -92,7 +92,7 @@ public class WorkspaceUserProperties {
 			if (result.isChatEnabled()) {
 				Main.get().mainPanel.bottomPanel.userInfo.enableChat();
 				if (result.isChatAutoLogin()) {
-					Main.get().mainPanel.bottomPanel.userInfo.loginChat();
+					Main.get().mainPanel.bottomPanel.userInfo.loginChat(true);
 				}
 			}
 			if (result.isUserQuotaEnabled() && result.getUserQuotaLimit() > 0) {

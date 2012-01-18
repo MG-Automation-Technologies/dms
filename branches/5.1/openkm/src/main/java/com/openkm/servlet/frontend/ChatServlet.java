@@ -28,6 +28,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
 import com.openkm.core.ChatManager;
+import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.service.OKMChatService;
 
 /**
@@ -44,14 +45,14 @@ public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatServi
 	}
 	
 	@Override
-	public void login() {
+	public void login() throws OKMException {
 		updateSessionManager();
 		String user = getThreadLocalRequest().getRemoteUser();
 		manager.login(user);
 	}
 	
 	@Override
-	public void logout() {
+	public void logout() throws OKMException {
 		updateSessionManager();
 		String user = getThreadLocalRequest().getRemoteUser();
 		manager.logout(user);

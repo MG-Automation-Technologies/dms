@@ -64,6 +64,7 @@ public class ErrorCode {
 	public static final String ORIGIN_OKMForumService 					= "031";
 	public static final String ORIGIN_OKMDatabaseMetadataService		= "032";
 	public static final String ORIGIN_OKMKeyValueService				= "033";
+	public static final String ORIGIN_OKMChatService					= "034";
 	
 	// Cause code error is XXX digits
 	public static final String CAUSE_Repository 				= "001";
@@ -110,6 +111,7 @@ public class ErrorCode {
 	public static final String CAUSE_IllegalAccess				= "042";
 	public static final String CAUSE_InvocationTarget			= "043";
 	public static final String CAUSE_NoSuchMethod				= "044";
+	public static final String CAUSE_UserYetLogged			= "045";
 
 	/**
 	 * Gets the error

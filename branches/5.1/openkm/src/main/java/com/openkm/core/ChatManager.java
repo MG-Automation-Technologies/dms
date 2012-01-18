@@ -30,6 +30,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.openkm.frontend.client.OKMException;
+import com.openkm.frontend.client.contants.service.ErrorCode;
+
 public class ChatManager {
 	private static final int ACTION_LOGIN = 0;
 	private static final int ACTION_LOGOUT = 1;
@@ -56,11 +59,11 @@ public class ChatManager {
 	// room is the key, user is the subkey, messages are copied to each user
 	private static Map<String, HashMap<String, List<String>>> msgUsersRooms = new HashMap<String, HashMap<String, List<String>>>();
 	
-	public void login(String user) {
+	public void login(String user) throws OKMException {
 		usersLoggedAction(user, ACTION_LOGIN);
 	}
 	
-	public void logout(String user) {
+	public void logout(String user) throws OKMException {
 		usersLoggedAction(user, ACTION_LOGOUT);
 	}
 	
@@ -117,12 +120,15 @@ public class ChatManager {
 	
 	/**
 	 * Synchronized users logged actions
+	 * @throws OKMException 
 	 */
-	private synchronized void usersLoggedAction(String user, int action) {
+	private synchronized void usersLoggedAction(String user, int action) throws OKMException {
 		switch (action) {
 			case ACTION_LOGIN:
 				if (!loggedUsers.contains(user)) {
 					loggedUsers.add(user);
+				} else {
+					throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMChatService, ErrorCode.CAUSE_UserYetLogged), "User yet logged");
 				}
 				
 				Collections.sort(loggedUsers);
