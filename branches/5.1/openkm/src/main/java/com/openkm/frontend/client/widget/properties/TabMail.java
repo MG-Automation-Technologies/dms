@@ -72,6 +72,7 @@ public class TabMail extends Composite implements HasMailEvent, HasMailHandlerEx
 	private boolean visibleButton = true; // Sets visibleButtons enabled to default view 
 	private int selectedTab = 0; // Used to determine selected tab to mantain on change document, because not all documents
 								 // have the same numeber of tabs ( document group properties are variable ) 
+	private int latestSelectedTab = 0;
 	private boolean propertiesVisible = false;
 	private boolean securityVisible = false;
 	private int height = 0;
@@ -155,9 +156,10 @@ public class TabMail extends Composite implements HasMailEvent, HasMailHandlerEx
 	 * @param doc The document object
 	 */
 	public void setProperties(GWTMail gWTMail) {	
-		selectedTab = tabPanel.getSelectedIndex(); // Sets the actual selected Tab
-		
 		mail.set(gWTMail);
+		
+		selectedTab = tabPanel.getSelectedIndex(); 	// Sets the actual selected Tab
+		latestSelectedTab = selectedTab; 			// stores latest selected tab
 		
 		if (securityVisible) {
 			security.setPath(gWTMail.getPath());
@@ -285,10 +287,10 @@ public class TabMail extends Composite implements HasMailEvent, HasMailHandlerEx
 			}
 			
 			// To prevent change on document that has minor tabs than previous the new selected tab it'll be the max - 1 on that cases
-			if (tabPanel.getWidgetCount()-1<selectedTab) {
+			if (tabPanel.getWidgetCount()-1<latestSelectedTab) {
 				tabPanel.selectTab(tabPanel.getWidgetCount()-1);
 			} else {
-				tabPanel.selectTab(selectedTab); // Always enable selected tab because on document change tab group are removed
+				tabPanel.selectTab(latestSelectedTab); // Always enable selected tab because on document change tab group are removed
 												 // and on remove loses selectedTab
 			}
 			
