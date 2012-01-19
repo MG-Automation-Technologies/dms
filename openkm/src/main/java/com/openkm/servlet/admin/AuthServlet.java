@@ -52,9 +52,11 @@ import com.openkm.dao.ProfileDAO;
 import com.openkm.dao.bean.Profile;
 import com.openkm.dao.bean.Role;
 import com.openkm.dao.bean.User;
+import com.openkm.frontend.client.OKMException;
 import com.openkm.jcr.JCRUtils;
 import com.openkm.principal.DatabasePrincipalAdapter;
 import com.openkm.principal.PrincipalAdapterException;
+import com.openkm.servlet.frontend.ChatServlet;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
 
@@ -94,9 +96,11 @@ public class AuthServlet extends BaseServlet {
 					userActive(session, request, response);
 				} else if (action.equals("roleActive")) {
 					roleActive(session, request, response);
+				} else if (action.equals("userChatDisconnect")) {
+					userChatDisconnect(request, response);
 				}
 				
-				if (action.equals("") || action.equals("userActive") ||
+				if (action.equals("") || action.equals("userActive") || action.equals("userChatDisconnect") ||
 						(action.startsWith("user") && WebUtils.getBoolean(request, "persist"))) {
 					userList(session, request, response);
 				} else if (action.equals("roleList") || action.equals("roleActive") ||
@@ -384,6 +388,21 @@ public class AuthServlet extends BaseServlet {
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_ROLE_ACTIVE", rolId, Boolean.toString(active));
 		log.debug("roleActive: void");
+	}
+	
+	/**
+	 * Diconnect user chat
+	 */
+	private void userChatDisconnect(HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
+		log.debug("userChatDisconnect({}, {})", new Object[] { request, response });
+		try {
+			String userId = WebUtils.getString(request, "usr_id");
+			ChatServlet.getChatManager().logout(userId);
+		} catch (OKMException e) {
+			throw new ServletException(e.getMessage());
+		}
+		log.debug("userChatDisconnect: void");
 	}
 
 	/**

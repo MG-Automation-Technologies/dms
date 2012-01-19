@@ -37,7 +37,7 @@ import com.openkm.frontend.client.service.OKMChatService;
 public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatService {
 	private static final long serialVersionUID = 3780857624687394918L;
 	private static final int DELAY = 100; // mseg
-	private ChatManager manager = new ChatManager();
+	private static final ChatManager manager = new ChatManager();
 	
 	@Override
 	public void init(final ServletConfig config) throws ServletException {
@@ -147,5 +147,14 @@ public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatServi
 	public List<String> getUsersInRoom(String room) {
 		updateSessionManager();
 		return manager.getUsersInRoom(room);
+	}
+	
+	/**
+	 * getChatManager
+	 * 
+	 * @return
+	 */
+	public static ChatManager getChatManager() {
+		return manager;
 	}
 }
