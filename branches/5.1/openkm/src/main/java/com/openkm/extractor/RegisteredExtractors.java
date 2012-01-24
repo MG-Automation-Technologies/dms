@@ -24,6 +24,7 @@ package com.openkm.extractor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.util.StringTokenizer;
 
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
@@ -32,12 +33,17 @@ import javax.jcr.ValueFormatException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.jackrabbit.JcrConstants;
+import org.apache.jackrabbit.core.config.ConfigurationException;
+import org.apache.jackrabbit.core.config.RepositoryConfig;
+import org.apache.jackrabbit.core.config.SearchConfig;
+import org.apache.jackrabbit.core.config.WorkspaceConfig;
 import org.apache.jackrabbit.core.query.lucene.JackrabbitTextExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
 import com.openkm.core.Config;
+import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.ReaderInputStream;
 import com.openkm.util.UserActivity;
 
@@ -59,6 +65,41 @@ public class RegisteredExtractors {
 	 */
 	public static String[] getContentTypes() {
 		return jte.getContentTypes();
+	}
+	
+	/**
+	 * Check for registered text extractor
+	 */
+	public static boolean isRegistered(String className) {
+		String classes = "";
+		
+		if (Config.EXPERIMENTAL_TEXT_EXTRACTION) {
+			classes = Config.REGISTERED_TEXT_EXTRACTORS;
+		} else {
+			try {
+				RepositoryConfig rc = DirectRepositoryModule.getRepositoryConfig();
+				WorkspaceConfig wc = rc.getWorkspaceConfig(rc.getDefaultWorkspaceName());
+				SearchConfig sc = wc.getSearchConfig();
+				
+				if (sc != null) {
+					classes = (String) sc.getParameters().get("textFilterClasses");
+				}
+			} catch (ConfigurationException e) {
+				log.warn(e.getMessage(), e);
+			}
+		}
+		
+		StringTokenizer tokenizer = new StringTokenizer(classes, ", \t\n\r\f");
+		
+		while (tokenizer.hasMoreTokens()) {
+			String name = tokenizer.nextToken();
+			
+			if (name.equals(className)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	/**
