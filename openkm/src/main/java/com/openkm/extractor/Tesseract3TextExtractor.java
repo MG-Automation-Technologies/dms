@@ -66,19 +66,44 @@ public class Tesseract3TextExtractor extends AbstractTextExtractor {
      * {@inheritDoc}
      */ 
     public Reader extractText(InputStream stream, String type, String encoding) throws IOException {
-    	BufferedReader stdout = null;
     	File tmpFileIn = null;
-    	File tmpFileOut = null;
-    	String cmd = null;
     	
 		if (!Config.SYSTEM_OCR.equals("")) {
 			try {
     			// Create temp file
     			tmpFileIn = FileUtils.createTempFileFromMime(type);
-    			tmpFileOut = File.createTempFile("okm", "");
     			FileOutputStream fos = new FileOutputStream(tmpFileIn);
     			IOUtils.copy(stream, fos);
     			fos.close();
+    			
+    			// Read result
+    			String text = doOcr(tmpFileIn);
+    			return new StringReader(text);
+			} catch (Exception e) {
+				log.warn("Failed to extract OCR text", e);
+				return new StringReader("");
+			} finally {
+				IOUtils.closeQuietly(stream);
+				FileUtils.deleteQuietly(tmpFileIn);
+			}
+		} else {
+			log.warn("Undefined OCR application");
+			return new StringReader("");
+		}
+    }
+    
+    /**
+     * Performs OCR on image file
+     */
+    public String doOcr(File tmpFileIn) throws Exception {
+    	BufferedReader stdout = null;
+    	File tmpFileOut = null;
+    	String cmd = null;
+    	
+    	if (!Config.SYSTEM_OCR.equals("")) {
+    		try {
+    			// Create temp file
+    			tmpFileOut = File.createTempFile("okm", "");
     			
     			// Performs OCR
     			HashMap<String, Object> hm = new HashMap<String, Object>();
@@ -88,39 +113,37 @@ public class Tesseract3TextExtractor extends AbstractTextExtractor {
     			ExecutionUtils.runCmd(cmd);
     			
     			// Read result
-    			String text = IOUtils.toString(new FileInputStream(tmpFileOut.getPath()+".txt"));
+    			String text = IOUtils.toString(new FileInputStream(tmpFileOut.getPath() + ".txt"));
     			
     			// Spellchecker
     			if (Config.SYSTEM_OPENOFFICE_DICTIONARY.equals("")) {
     				log.info("TEXT: {}", text);
-    				return new StringReader(text);
+    				return text;
     			} else {
     				text = DocumentUtils.spellChecker(text);
-        			log.info("TEXT: {}", text);
-        			return new StringReader(text);
+    				log.info("TEXT: {}", text);
+    				return text;
     			}
-			} catch (SecurityException e) {
+    		} catch (SecurityException e) {
 				log.warn("Security exception executing command: " + cmd, e);
-				return new StringReader("");
+				return "";
 	    	} catch (IOException e) {
 				log.warn("IO exception executing command: " + cmd, e);
-				return new StringReader("");
+				return "";
 	    	} catch (InterruptedException e) {
 				log.warn("Interrupted exception executing command: " + cmd, e);
-				return new StringReader("");
+				return "";
 			} catch (Exception e) {
 				log.warn("Failed to extract OCR text", e);
-				return new StringReader("");
+				return "";
 			} finally {
-				IOUtils.closeQuietly(stream);
 				IOUtils.closeQuietly(stdout);
-				FileUtils.deleteQuietly(tmpFileIn);
 				FileUtils.deleteQuietly(tmpFileOut);
-				FileUtils.deleteQuietly(new File(tmpFileOut.getPath()+".txt"));
+				FileUtils.deleteQuietly(new File(tmpFileOut.getPath() + ".txt"));
 			}
-		} else {
-			log.warn("Undefined OCR application");
-			return new StringReader("");
-		}
+    	} else {
+    		log.warn("Undefined OCR application");
+			return "";
+    	}
     }
 }

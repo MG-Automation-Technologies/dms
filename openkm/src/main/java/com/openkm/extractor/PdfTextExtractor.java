@@ -89,7 +89,7 @@ public class PdfTextExtractor extends AbstractTextExtractor {
                                  File pdfImg = File.createTempFile(key, "." + image.getSuffix());
                                  log.debug("Writing image: {}", pdfImg.getPath());
                                  image.write2file(pdfImg);
-                                 String txt = new CuneiformTextExtractor().doOcr(pdfImg);
+                                 String txt = doOcr(pdfImg);
                                  sb.append(txt).append(" ");
                                  log.debug("OCR Extracted: {}", txt);
                                  FileUtils.deleteQuietly(pdfImg);
@@ -120,5 +120,23 @@ public class PdfTextExtractor extends AbstractTextExtractor {
             stream.close();
         }
     }
+    
+    /**
+     * Guess the active OCR engine and use it to extract text from image.
+     */
+    private String doOcr(File pdfImg) throws Exception {
+    	String text = "";
+    	
+    	if (RegisteredExtractors.isRegistered(CuneiformTextExtractor.class.getCanonicalName())) {
+    		text = new CuneiformTextExtractor().doOcr(pdfImg);
+    	} else if (RegisteredExtractors.isRegistered(Tesseract3TextExtractor.class.getCanonicalName())) {
+    		text = new Tesseract3TextExtractor().doOcr(pdfImg);
+    	} else if (RegisteredExtractors.isRegistered(AbbyTextExtractor.class.getCanonicalName())) {
+    		text = new AbbyTextExtractor().doOcr(pdfImg);
+    	} else {
+    		log.warn("No OCR engine configured");
+    	}
+    	
+    	return text;
+    }
 }
-
