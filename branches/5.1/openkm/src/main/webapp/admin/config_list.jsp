@@ -23,7 +23,10 @@
   <c:set var="isAdmin"><%=BaseServlet.isMultipleInstancesAdmin(request)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
-      <h1>Configuration</h1>
+      <c:url value="Config" var="urlCheck">
+        <c:param name="action" value="check"/>
+      </c:url>
+      <h1>Configuration <span style="font-size: 10px;">(<a href="${urlCheck}">Check</a>)</span></h1>
       <table class="results" width="70%">
         <thead>
           <tr>

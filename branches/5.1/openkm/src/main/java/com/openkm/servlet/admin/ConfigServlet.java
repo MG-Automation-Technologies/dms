@@ -22,8 +22,10 @@
 package com.openkm.servlet.admin;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -44,6 +46,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
+import org.artofsolving.jodconverter.office.OfficeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,6 +108,8 @@ public class ConfigServlet extends BaseServlet {
 				delete(session, types, request, response);
 			} else if (action.equals("view")) {
 				view(session, request, response);
+			} else if (action.equals("check")) {
+				check(session, request, response);
 			} else {
 				list(session, request, response);
 			}
@@ -308,5 +313,103 @@ public class ConfigServlet extends BaseServlet {
 		}
 		
 		log.debug("view: void");
+	}
+	
+	/**
+	 * Check configuration
+	 */
+	private void check(Session session, HttpServletRequest request, HttpServletResponse response) throws
+			ServletException, IOException, DatabaseException {
+		log.debug("check({}, {}, {})", new Object[] { session, request, response });
+		PrintWriter out = response.getWriter();
+		response.setContentType("text/html");
+		header(out, "Configuration check");
+		out.flush();
+		out.println("<h1>Configuration check</h1>");
+		out.println("<ul>");
+		out.flush();
+		
+		try {
+			out.print("<li>");
+			out.print("<b>" + com.openkm.core.Config.PROPERTY_SYSTEM_SWFTOOLS_PDF2SWF + "</b>");
+			checkExecutable(out, com.openkm.core.Config.SYSTEM_SWFTOOLS_PDF2SWF);
+			out.print("</li>");
+			
+			out.print("<li>");
+			out.print("<b>" + com.openkm.core.Config.PROPERTY_SYSTEM_IMAGEMAGICK_CONVERT + "</b>");
+			checkExecutable(out, com.openkm.core.Config.SYSTEM_IMAGEMAGICK_CONVERT);
+			out.print("</li>");
+			
+			out.print("<li>");
+			out.print("<b>" + com.openkm.core.Config.PROPERTY_SYSTEM_OCR + "</b>");
+			checkExecutable(out, com.openkm.core.Config.SYSTEM_OCR);
+			out.print("</li>");
+			
+			out.print("<li>");
+			out.print("<b>" + com.openkm.core.Config.PROPERTY_SYSTEM_OPENOFFICE_PATH + "</b>");
+			checkOpenOffice(out, com.openkm.core.Config.SYSTEM_OPENOFFICE_PATH);
+			out.print("</li>");
+			
+			out.println("</ul>");
+			out.flush();
+		} catch (Exception e) {
+			out.println("<div class=\"warn\">Exception: "+e.getMessage()+"</div>");
+			out.flush();
+		} finally {
+			footer(out);
+			out.flush();
+			out.close();
+		}
+		
+		log.debug("check: void");
+	}
+	
+	/**
+	 * File existence and if can be executed
+	 */
+	private void checkExecutable(PrintWriter out, String cmd) {
+		if (cmd.equals("")) {
+			warn(out, "Not configured");
+		} else {
+			int idx = cmd.indexOf(" ");
+			String exec = null;
+			
+			if (idx > -1) {
+				exec = cmd.substring(0, idx);
+			} else {
+				exec = cmd;
+			}
+			
+			File prg = new File(exec);
+			
+			if (prg.exists() && prg.canRead() && prg.canExecute()) {
+				ok(out, "OK");
+			} else {
+				warn(out, "Can't read or execute" + prg.getPath());
+			}
+		}
+	}
+	
+	/**
+	 * File existence and if can be executed
+	 */
+	private void checkOpenOffice(PrintWriter out, String path) {
+		if (path.equals("")) {
+			warn(out, "Not configured");
+		} else {
+			File prg = new File(path);
+			
+			if (prg.exists() && prg.canRead()) {
+				File offExec = OfficeUtils.getOfficeExecutable(prg);
+				
+				if (offExec.exists() && offExec.canRead() && offExec.canExecute()) {
+					ok(out, "OK");
+				} else {
+					warn(out, "Can't read or execute: " + offExec.getPath());
+				}
+			} else {
+				warn(out, "Can't read: " + prg.getPath());
+			}
+		}
 	}
 }

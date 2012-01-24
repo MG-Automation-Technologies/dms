@@ -105,4 +105,18 @@ public class BaseServlet extends HttpServlet  {
 		out.println("</body>");
 		out.println("</html>");
 	}
+	
+	/**
+	 * Print ok messages
+	 */
+	public void ok(PrintWriter out, String msg) {
+		out.print("<div class=\"ok\">" + msg + "</div>");
+	}
+	
+	/**
+	 * Print warn messages
+	 */
+	public void warn(PrintWriter out, String msg) {
+		out.print("<div class=\"warn\">" + msg + "</div>");
+	}
 }
