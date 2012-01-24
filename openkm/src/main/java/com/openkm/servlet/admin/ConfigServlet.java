@@ -383,9 +383,9 @@ public class ConfigServlet extends BaseServlet {
 			File prg = new File(exec);
 			
 			if (prg.exists() && prg.canRead() && prg.canExecute()) {
-				ok(out, "OK");
+				ok(out, "OK - " + prg.getPath());
 			} else {
-				warn(out, "Can't read or execute" + prg.getPath());
+				warn(out, "Can't read or execute: " + prg.getPath());
 			}
 		}
 	}
@@ -403,7 +403,7 @@ public class ConfigServlet extends BaseServlet {
 				File offExec = OfficeUtils.getOfficeExecutable(prg);
 				
 				if (offExec.exists() && offExec.canRead() && offExec.canExecute()) {
-					ok(out, "OK");
+					ok(out, "OK - " + offExec.getPath());
 				} else {
 					warn(out, "Can't read or execute: " + offExec.getPath());
 				}
