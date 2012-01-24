@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.jackrabbit.extractor.AbstractTextExtractor;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -86,6 +87,11 @@ public class PdfTextExtractor extends AbstractTextExtractor {
                         	for (Iterator itImg = images.keySet().iterator(); itImg.hasNext(); ) {
                         		 String key = (String) itImg.next();
                                  PDXObjectImage image = (PDXObjectImage) images.get(key);
+                                 
+                                 if (key.length() < 3) {
+                                	 key = key.concat(RandomStringUtils.randomAlphabetic(2));
+                                 }
+                                 
                                  File pdfImg = File.createTempFile(key, "." + image.getSuffix());
                                  log.debug("Writing image: {}", pdfImg.getPath());
                                  image.write2file(pdfImg);
