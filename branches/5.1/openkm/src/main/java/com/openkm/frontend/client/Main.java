@@ -345,7 +345,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 			@Override
 			public void onWindowClosing(ClosingEvent event) {
 				startUp.keepAlive.cancel();
-				logoutPopup.logout();
+				// logoutPopup.logout();
 			}
 		});
 		
