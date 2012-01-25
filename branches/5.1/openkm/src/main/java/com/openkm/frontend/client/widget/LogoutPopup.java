@@ -47,7 +47,6 @@ import com.openkm.frontend.client.widget.chat.ChatRoomDialogBox;
  *
  */
 public class LogoutPopup extends DialogBox implements ClickHandler {
-	
 	private VerticalPanel vPanel;
 	private HTML text;
 	private Button button;
@@ -127,6 +126,7 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 		setText(Main.i18n("logout.label"));
 		show();
 		Log.debug("Logout()");
+		
 		if (Main.get().mainPanel.bottomPanel.userInfo.isConnectedToChat()) {
 			disconnectChat();
 		} else {
@@ -141,7 +141,6 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 	 * disconnectChat
 	 * 
 	 * Recursivelly disconnecting chat rooms and chat before login out
-	 *
 	 */
 	private void disconnectChat() {
 		// Disconnect rooms
@@ -179,6 +178,7 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 					authService.logout(callbackLogout);
 					Log.debug("Logout: void");
 				}
+				
 				@Override
 				public void onFailure(Throwable caught) {
 					Main.get().showError("GetLogoutChat", caught);
