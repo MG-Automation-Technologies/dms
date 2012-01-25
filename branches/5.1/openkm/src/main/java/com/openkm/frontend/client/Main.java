@@ -157,6 +157,9 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	// Repository context
 	public RepositoryContext repositoryContext;
 	
+	// Logout trick
+	public boolean logout = false;
+	
 	// Lnaguage widget handlers
 	List<LanguageHandlerExtension> langHandlerExtensionList;
 	
@@ -344,6 +347,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	    Window.addWindowClosingHandler(new ClosingHandler() {
 			@Override
 			public void onWindowClosing(ClosingEvent event) {
+				Main.get().logout = true;
 				startUp.keepAlive.cancel();
 				Main.get().mainPanel.bottomPanel.userInfo.logoutChat();
 			}
@@ -446,6 +450,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	 */
 	public void showError(String callback, Throwable caught) {
 		startUp.recoverFromError();
+		
 		if (caught instanceof OKMException) {
 			OKMException okme = (OKMException) caught;
 			Log.error("OKMException("+callback+"): "+okme.getCode());
@@ -453,16 +458,16 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		} else if (caught instanceof InvocationException) {
 			InvocationException ie = (InvocationException) caught;
 			Log.error("InvocationException("+callback+"): "+ie);
-			//errorPopupLogout.show(Main.i18n("error.invocation")+" ("+callback+")");
-			errorPopup.show(Main.i18n("error.invocation")+" ("+callback+")");
+			
+			if (!Main.get().logout) {
+				errorPopup.show(Main.i18n("error.invocation")+" ("+callback+")");
+			}
 		} else if (caught instanceof StatusCodeException) {
 			StatusCodeException ie = (StatusCodeException) caught;
 			Log.error("StatusCodeException("+callback+"): "+ie + " <br>HTTP status code error:"+ie.getStatusCode());
-			//errorPopupLogout.show(Main.i18n("error.invocation")+" ("+callback+")");
 			mainPanel.bottomPanel.setStatus("status.network.error.detected", true, ie.getStatusCode());
 		} else {
 			Log.error("UnknownException("+callback+"): "+caught.getMessage());
-			//errorPopupLogout.show(callback+": "+caught.getMessage());
 			errorPopup.show(callback+": "+caught.getMessage());
 		}
 	}
