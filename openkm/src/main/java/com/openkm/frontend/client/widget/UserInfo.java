@@ -564,7 +564,7 @@ public class UserInfo extends Composite {
 	 * Recursivelly disconnecting chat rooms and chat before login out
 	 *
 	 */
-	private void logoutChat() {
+	public void logoutChat() {
 		// Disconnect rooms
 		if (getChatRoomList().size()>0) {
 			final ChatRoomDialogBox chatRoom = getChatRoomList().get(0);
