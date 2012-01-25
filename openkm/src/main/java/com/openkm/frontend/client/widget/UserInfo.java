@@ -581,6 +581,7 @@ public class UserInfo extends Composite {
 				@Override
 				public void onFailure(Throwable caught) {
 					Main.get().showError("CloseRoom", caught);
+					
 					// If happens some problem always we try continue disconnecting chat rooms
 					removeChatRoom(chatRoom);
 					logoutChat(); // Recursive call
@@ -595,6 +596,7 @@ public class UserInfo extends Composite {
 				@Override
 				public void onSuccess(Object result) {
 				}
+				
 				@Override
 				public void onFailure(Throwable caught) {
 					Main.get().showError("GetLogoutChat", caught);
