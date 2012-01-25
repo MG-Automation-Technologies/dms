@@ -1,22 +1,22 @@
 /**
- *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
- *
- *  No bytes were intentionally harmed during the development of this application.
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * OpenKM, Open Document Management System (http://www.openkm.com)
+ * Copyright (c) 2006-2011 Paco Avila & Josep Llort
+ * 
+ * No bytes were intentionally harmed during the development of this application.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 package com.openkm.frontend.client.widget;
@@ -44,7 +44,7 @@ import com.openkm.frontend.client.widget.chat.ChatRoomDialogBox;
  * Logout
  * 
  * @author jllort
- *
+ * 
  */
 public class LogoutPopup extends DialogBox implements ClickHandler {
 	private VerticalPanel vPanel;
@@ -59,7 +59,7 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 	 */
 	public LogoutPopup() {
 		// Establishes auto-close when click outside
-		super(false,true);
+		super(false, true);
 		
 		vPanel = new VerticalPanel();
 		text = new HTML(Main.i18n("logout.logout"));
@@ -76,9 +76,9 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 		
 		vPanel.setCellHorizontalAlignment(text, VerticalPanel.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(button, VerticalPanel.ALIGN_CENTER);
-
+		
 		button.setStyleName("okm-Button");
-
+		
 		super.hide();
 		setWidget(vPanel);
 	}
@@ -91,14 +91,15 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 			text.setText(Main.i18n("logout.closed"));
 			button.setEnabled(true);
 		}
-
+		
 		public void onFailure(Throwable caught) {
-			Log.debug("callbackLogout.onFailure("+caught+")");
+			Log.debug("callbackLogout.onFailure(" + caught + ")");
 			Main.get().showError("Logout", caught);
 		}
 	};
 	
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 * @see com.google.gwt.event.dom.client.ClickHandler#onClick(com.google.gwt.event.dom.client.ClickEvent)
 	 */
 	public void onClick(ClickEvent event) {
@@ -120,8 +121,8 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 	 */
 	public void logout() {
 		button.setEnabled(false);
-		int left = (Window.getClientWidth()-300)/2;
-		int top = (Window.getClientHeight()-200)/2;
+		int left = (Window.getClientWidth() - 300) / 2;
+		int top = (Window.getClientHeight() - 200) / 2;
 		setPopupPosition(left, top);
 		setText(Main.i18n("logout.label"));
 		show();
@@ -131,7 +132,7 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 			disconnectChat();
 		} else {
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-			endPoint.setServiceEntryPoint(RPCService.AuthService);	
+			endPoint.setServiceEntryPoint(RPCService.AuthService);
 			authService.logout(callbackLogout);
 			Log.debug("Logout: void");
 		}
@@ -144,12 +145,12 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 	 */
 	private void disconnectChat() {
 		// Disconnect rooms
-		if (Main.get().mainPanel.bottomPanel.userInfo.getChatRoomList().size()>0) {
+		if (Main.get().mainPanel.bottomPanel.userInfo.getChatRoomList().size() > 0) {
 			final ChatRoomDialogBox chatRoom = Main.get().mainPanel.bottomPanel.userInfo.getChatRoomList().get(0);
 			chatRoom.setChatRoomActive(false);
 			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
 			endPoint.setServiceEntryPoint(RPCService.ChatService);
-			chatService.closeRoom(chatRoom.getRoom(),new AsyncCallback<Object>() {
+			chatService.closeRoom(chatRoom.getRoom(), new AsyncCallback<Object>() {
 				@Override
 				public void onSuccess(Object arg0) {
 					Main.get().mainPanel.bottomPanel.userInfo.removeChatRoom(chatRoom);
@@ -166,7 +167,8 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 			});
 		} else {
 			// Disconnect chat
-			Main.get().mainPanel.bottomPanel.userInfo.disconnectChat(); // Only used to change view and disabling some RPC
+			// Only used to change view and disabling some RPC
+			Main.get().mainPanel.bottomPanel.userInfo.disconnectChat();
 			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
 			endPoint.setServiceEntryPoint(RPCService.ChatService);
 			chatService.logout(new AsyncCallback<Object>() {
@@ -174,7 +176,7 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 				public void onSuccess(Object result) {
 					// Logout
 					ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-					endPoint.setServiceEntryPoint(RPCService.AuthService);	
+					endPoint.setServiceEntryPoint(RPCService.AuthService);
 					authService.logout(callbackLogout);
 					Log.debug("Logout: void");
 				}
@@ -185,7 +187,7 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 					
 					// If happens some problem always we try logout
 					ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-					endPoint.setServiceEntryPoint(RPCService.AuthService);	
+					endPoint.setServiceEntryPoint(RPCService.AuthService);
 					authService.logout(callbackLogout);
 					Log.debug("Logout: void");
 				}
