@@ -182,6 +182,7 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 				@Override
 				public void onFailure(Throwable caught) {
 					Main.get().showError("GetLogoutChat", caught);
+					
 					// If happens some problem always we try logout
 					ServiceDefTarget endPoint = (ServiceDefTarget) authService;
 					endPoint.setServiceEntryPoint(RPCService.AuthService);	
