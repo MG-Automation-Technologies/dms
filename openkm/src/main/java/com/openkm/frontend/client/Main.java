@@ -81,7 +81,6 @@ import com.openkm.frontend.client.widget.wizard.WizardPopup;
  * Main entry point application
  * 
  * @author jllort
- *
  */
 public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasLanguageEvent {
 	public static String CONTEXT = "/OpenKM";
@@ -158,7 +157,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	public RepositoryContext repositoryContext;
 	
 	// Logout trick
-	public boolean logout = false;
+	public boolean windowClosing = false;
 	
 	// Lnaguage widget handlers
 	List<LanguageHandlerExtension> langHandlerExtensionList;
@@ -347,7 +346,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	    Window.addWindowClosingHandler(new ClosingHandler() {
 			@Override
 			public void onWindowClosing(ClosingEvent event) {
-				Main.get().logout = true;
+				Main.get().windowClosing = true;
 				startUp.keepAlive.cancel();
 				Main.get().mainPanel.bottomPanel.userInfo.logoutChat();
 			}
@@ -459,7 +458,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 			InvocationException ie = (InvocationException) caught;
 			Log.error("InvocationException("+callback+"): "+ie);
 			
-			if (!Main.get().logout) {
+			if (!Main.get().windowClosing) {
 				errorPopup.show(Main.i18n("error.invocation")+" ("+callback+")");
 			}
 		} else if (caught instanceof StatusCodeException) {
