@@ -70,6 +70,10 @@ public class Config {
 	public static String PROPERTY_GROUPS_XML;
 	public static String PROPERTY_GROUPS_CND;
 	
+	// Default users
+	public static String PROPERTY_SYSTEM_USER = "user.system";
+	public static String PROPERTY_ADMIN_USER = "user.admin";
+	
 	// General configuration
 	public static String EXPORT_METADATA_EXT = ".okm";
 	
@@ -685,6 +689,9 @@ public class Config {
 			if (SYSTEM_LOGIN_LOWERCASE) {
 				ADMIN_USER = ADMIN_USER.toLowerCase();
 			}
+			
+			values.put(PROPERTY_ADMIN_USER, ADMIN_USER);
+			values.put(PROPERTY_SYSTEM_USER, SYSTEM_USER);
 			
 			// Guess default application URL
 			String defaultApplicationUrl = cfg.getProperty(PROPERTY_APPLICATION_URL);
