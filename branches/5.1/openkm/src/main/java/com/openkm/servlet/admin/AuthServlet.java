@@ -268,6 +268,7 @@ public class AuthServlet extends BaseServlet {
 		String roleFilter = WebUtils.getString(request, "roleFilter");
 		ServletContext sc = getServletContext();
 		sc.setAttribute("roleFilter", roleFilter);
+		sc.setAttribute("chatUsers", ChatServlet.getChatManager().getLoggedUsers());
 		
 		if (roleFilter.equals("")) {
 			if (db) {
