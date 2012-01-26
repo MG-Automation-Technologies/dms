@@ -148,12 +148,14 @@
                 </c:if>
               </td>
               <td align="center">
-	              <c:if test="${chatUsers.contains(user.id)}">
-	              	<a href="${urlChatDisconnect}"><img src="img/action/chat_connected.png" alt="Disconnect user" title="Disconnect user"/></a>
-	              </c:if>
-	              <c:if test="${not chatUsers.contains(user.id)}">
-	              	<img src="img/action/chat_disconnected.png" alt="User disconnected" title="User disconnected"/>
-	              </c:if>
+                <c:choose>
+                  <c:when test="${u:contains(chatUsers, user.id)}">
+                    <a href="${urlChatDisconnect}"><img src="img/action/chat_connected.png" alt="Disconnect user" title="Disconnect user"/></a>
+                  </c:when>
+                  <c:otherwise>
+                    <img src="img/action/chat_disconnected.png" alt="User disconnected" title="User disconnected"/>
+                  </c:otherwise>
+                </c:choose>
               </td>
               <td align="center">
                 <c:if test="${multInstAdmin || user.id != Config.ADMIN_USER}">
