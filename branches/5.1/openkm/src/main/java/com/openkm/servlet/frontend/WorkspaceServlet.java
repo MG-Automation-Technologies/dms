@@ -150,7 +150,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 			
 			// User quota ( limit user repository size )
 			workspace.setUserQuotaEnabled(up.getMisc().getUserQuota() > 0);
-			workspace.setUserQuotaLimit(up.getMisc().getUserQuota());
+			workspace.setUserQuotaLimit(up.getMisc().getUserQuota() * 1024 * 1024);
 			workspace.setPrintPreview(up.getMisc().isPrintPreview());
 			workspace.setUploadNotifyUsers(up.getMisc().isUploadNotifyUsers()); // pending to be done
 			workspace.setWebdavFix(Config.SYSTEM_WEBDAV_FIX);
