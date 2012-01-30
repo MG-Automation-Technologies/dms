@@ -111,7 +111,7 @@ public class BaseDocumentModule {
 				currentQuota = JCRUtils.calculateQuota(session);
 			}
 			
-			if (currentQuota + size > pm.getUserQuota()) {
+			if (currentQuota + size > pm.getUserQuota() * 1024 * 1024) {
 				throw new UserQuotaExceededException(Long.toString(currentQuota + size));
 			}
 		}

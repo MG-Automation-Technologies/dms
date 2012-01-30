@@ -4,8 +4,8 @@
   <legend>Misc</legend>
   <table>
     <tr>
-      <td>Quota limit</td>
-      <td><input class=":integer :only_on_blur" name="prf_misc_user_quota" value="${prf.misc.userQuota}"/></td>
+      <td>Quota limit (MB)</td>
+      <td><input class=":integer :only_on_blur" name="prf_misc_user_quota" value="${prf.misc.userQuota}" size="10"/></td>
     </tr>
     <tr>
       <td>Advanced filters</td>
