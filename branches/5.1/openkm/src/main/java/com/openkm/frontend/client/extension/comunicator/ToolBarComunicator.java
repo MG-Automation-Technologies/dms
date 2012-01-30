@@ -56,4 +56,11 @@ public class ToolBarComunicator {
 	public static void evaluateShowIcons() {
 		Main.get().mainPanel.topPanel.toolBar.evaluateShowIcons();
 	}
+	
+	/**
+	 * getActualNode
+	 */
+	public static Object getActualNode() {
+		return Main.get().mainPanel.topPanel.toolBar.getActualNode();
+	}
 }
