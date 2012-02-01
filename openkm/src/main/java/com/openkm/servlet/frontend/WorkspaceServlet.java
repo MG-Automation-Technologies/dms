@@ -102,11 +102,11 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 		Profile up = new Profile();
 		Session session = null;
 		
-		try {
+			try {
 			session = JCRUtils.getSession();
 			UserConfig uc = UserConfigDAO.findByPk(session, session.getUserID());
 			up = uc.getProfile();
-						
+			
 			for (String pgroup: up.getWizard().getPropertyGroups()) {
 				for (PropertyGroup pg : OKMPropertyGroup.getInstance().getAllGroups(null)) {
 					if (pg.getName().equals(pgroup) && pg.isVisible()) {
@@ -115,6 +115,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 					}
 				}
 			}
+			
 			for (String workflow : up.getWizard().getWorkflows()) {			
 				wizardWorkflowLst.add(new Double(workflow));
 			}
@@ -139,6 +140,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 			
 			// Is admin
 			workspace.setAdminRole(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
+			workspace.setAdminUser(Config.ADMIN_USER.equals(workspace.getUser()));
 			
 			// Setting web skin
 			workspace.setWebSkin(up.getMisc().getWebSkin());
@@ -148,8 +150,9 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 			
 			// User quota ( limit user repository size )
 			workspace.setUserQuotaEnabled(up.getMisc().getUserQuota() > 0);
-			workspace.setUserQuotaLimit(up.getMisc().getUserQuota());
+			workspace.setUserQuotaLimit(up.getMisc().getUserQuota() * 1024 * 1024);
 			workspace.setPrintPreview(up.getMisc().isPrintPreview());
+			workspace.setUploadNotifyUsers(up.getMisc().isUploadNotifyUsers()); // pending to be done
 			workspace.setWebdavFix(Config.SYSTEM_WEBDAV_FIX);
 			
 			// Stack visibility
@@ -266,46 +269,45 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 			
 			// Reports
 			for (Integer rpId : up.getMisc().getReports()) {
-				Report report = ReportDAO.findByPk(rpId);
+				Report report = ReportDAO.findByPk(rpId);			
 				if (report.isActive()) {
 					workspace.getReports().add(GWTUtil.copy(report, ReportUtils.getReportParameters(rpId)));
 				}
-			}
+			}	
 			
 			// Toolbar
 			// Is visible on toolbar && available option too
 			GWTProfileToolbar profileToolbar = new GWTProfileToolbar();
-			profileToolbar.setAddDocumentVisible(up.getToolbar().isAddDocumentVisible() && availableOption.isAddDocumentOption());
-			profileToolbar.setAddPropertyGroupVisible(up.getToolbar().isAddPropertyGroupVisible() && availableOption.isAddPropertyGroupOption());
-			profileToolbar.setAddSubscriptionVisible(up.getToolbar().isAddSubscriptionVisible() && availableOption.isAddSubscription());
-			profileToolbar.setCancelCheckoutVisible(up.getToolbar().isCancelCheckoutVisible() && availableOption.isCancelCheckoutOption());
-			profileToolbar.setCheckinVisible(up.getToolbar().isCheckinVisible() && availableOption.isCheckinOption());
-			profileToolbar.setCreateFolderVisible(up.getToolbar().isCreateFolderVisible() && availableOption.isCreateFolderOption());
-			profileToolbar.setDeleteVisible(up.getToolbar().isDeleteVisible() && availableOption.isDeleteOption());
-			profileToolbar.setDownloadPdfVisible(up.getToolbar().isDeleteVisible() && availableOption.isDeleteOption());
-			profileToolbar.setDownloadVisible(up.getToolbar().isDownloadVisible() && availableOption.isDownloadOption());
-			profileToolbar.setFindDocumentVisible(up.getToolbar().isFindDocumentVisible() && availableOption.isDownloadOption());
-			profileToolbar.setFindFolderVisible(up.getToolbar().isFindFolderVisible() && availableOption.isFindFolderOption());
-			profileToolbar.setHomeVisible(up.getToolbar().isHomeVisible() && availableOption.isHomeOption());
-			profileToolbar.setLockVisible(up.getToolbar().isLockVisible() && availableOption.isLockOption());
-			profileToolbar.setPrintVisible(up.getToolbar().isPrintVisible() && workspace.isPrintPreview());
-			profileToolbar.setRefreshVisible(up.getToolbar().isRefreshVisible() && availableOption.isRefreshOption());
-			profileToolbar.setRemovePropertyGroupVisible(up.getToolbar().isRemovePropertyGroupVisible() && availableOption.isRemovePropertyGroupOption());
-			profileToolbar.setRemoveSubscriptionVisible(up.getToolbar().isRemoveSubscriptionVisible() && availableOption.isRemoveSubscription());
-			profileToolbar.setScannerVisible(up.getToolbar().isScannerVisible() && availableOption.isScannerOption());
-			profileToolbar.setStartWorkflowVisible(up.getToolbar().isStartWorkflowVisible() && availableOption.isWorkflowOption());
-			profileToolbar.setUnlockVisible(up.getToolbar().isUnlockVisible() && availableOption.isUnLockOption());
-			profileToolbar.setUploaderVisible(up.getToolbar().isUploaderVisible() && availableOption.isUploaderOption());
+			profileToolbar.setAddDocumentVisible(availableOption.isAddDocumentOption());
+			profileToolbar.setAddPropertyGroupVisible(availableOption.isAddPropertyGroupOption());
+			profileToolbar.setAddSubscriptionVisible(availableOption.isAddSubscription());
+			profileToolbar.setCancelCheckoutVisible(availableOption.isCancelCheckoutOption());
+			profileToolbar.setCheckoutVisible(availableOption.isCheckoutOption());
+			profileToolbar.setCheckinVisible(availableOption.isCheckinOption());
+			profileToolbar.setCreateFolderVisible(availableOption.isCreateFolderOption());
+			profileToolbar.setDeleteVisible(availableOption.isDeleteOption());
+			profileToolbar.setDownloadPdfVisible(availableOption.isDeleteOption());
+			profileToolbar.setDownloadVisible(availableOption.isDownloadOption());
+			profileToolbar.setFindDocumentVisible(availableOption.isDownloadOption());
+			profileToolbar.setFindFolderVisible(availableOption.isFindFolderOption());
+			profileToolbar.setHomeVisible(availableOption.isHomeOption());
+			profileToolbar.setLockVisible(availableOption.isLockOption());
+			profileToolbar.setRefreshVisible(availableOption.isRefreshOption());
+			profileToolbar.setRemovePropertyGroupVisible(availableOption.isRemovePropertyGroupOption());
+			profileToolbar.setRemoveSubscriptionVisible(availableOption.isRemoveSubscription());
+			profileToolbar.setScannerVisible(availableOption.isScannerOption());
+			profileToolbar.setStartWorkflowVisible(availableOption.isWorkflowOption());
+			profileToolbar.setUnlockVisible(availableOption.isUnLockOption());
+			profileToolbar.setUploaderVisible(availableOption.isUploaderOption());
 			workspace.setProfileToolbar(profileToolbar);
-			
-			
+					
 			// Setting available UI languages
 			List<GWTLanguage> langs = new ArrayList<GWTLanguage>();
 			
 			for (Language lang : LanguageDAO.findAll()) {
 				langs.add(GWTUtil.copy(lang));
 			}
-				
+			
 			workspace.setLangs(langs);
 			User user = new User();
 			
@@ -331,9 +333,12 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 				workspace.setImapID(mailAccount.getId());
 			}
 			
-			workspace.setRoleList(OKMAuth.getInstance().getRolesByUser(null, user.getId()));
-		
-		
+			if (user != null) {
+				workspace.setRoleList(OKMAuth.getInstance().getRolesByUser(null, user.getId()));
+			} else {
+				log.warn("User is null! Please, check principal.adapter={}", Config.PRINCIPAL_ADAPTER);
+			}
+			
 			if (Config.PRINCIPAL_ADAPTER.equals(DatabasePrincipalAdapter.class.getCanonicalName())) {
 				workspace.setChangePassword(true);
 			} else {
@@ -366,14 +371,12 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
 		} finally {
 			JCRUtils.logout(session);
-		} 
-		
+		}
 		return workspace;
 	}
 	
 	@Override
 	public Double getUserDocumentsSize() throws OKMException {
-		log.debug("getUserDocumentsSize()");
 		Double docSize = new Double(0);
 		updateSessionManager();
 		
@@ -392,7 +395,6 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 	
 	@Override
 	public void updateUserWorkspace(GWTWorkspace workspace) throws OKMException {
-		log.debug("updateUserWorkspace()");
 		updateSessionManager();
 		
 		// For updating user
@@ -442,7 +444,6 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 	
 	@Override
 	public void deleteMailAccount(int id)  throws OKMException {
-		log.debug("deleteMailAccount({})",id);
 		updateSessionManager();
 		
 		// Disable user configuration modification in demo
@@ -457,7 +458,6 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 	
 	@Override
 	public String isValidPassword(String password) throws OKMException {
-		log.debug("isValidPassword()");
 		String msg = "";
 		updateSessionManager();
 		

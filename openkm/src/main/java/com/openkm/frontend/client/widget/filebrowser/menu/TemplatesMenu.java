@@ -31,10 +31,7 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.FileToUpload;
 import com.openkm.frontend.client.bean.GWTAvailableOption;
-import com.openkm.frontend.client.bean.GWTDocument;
-import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.bean.GWTMail;
-import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.bean.ToolBarOption;
 import com.openkm.frontend.client.contants.ui.UIFileUploadConstants;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.MenuBase;
@@ -47,19 +44,7 @@ import com.openkm.frontend.client.widget.MenuBase;
  */
 public class TemplatesMenu extends MenuBase {
 	
-	private boolean checkoutOption 			= false;
-	private boolean checkinOption 			= false;
-	private boolean deleteOption 			= false;
-	private boolean renameOption 			= false;
-	private boolean cancelCheckoutOption	= false;
-	private boolean downloadOption 			= false;
-	private boolean lockOption 				= false;
-	private boolean unlockOption 			= false;
-	private boolean moveOption 				= false;
-	private boolean copyOption				= false;
-	private boolean createFromTemplateOption= false;
-	private boolean exportOption			= false;
-	
+	private ToolBarOption toolBarOption;
 	private MenuBar dirMenu;
 	private MenuItem checkout;
 	private MenuItem checkin;
@@ -78,6 +63,7 @@ public class TemplatesMenu extends MenuBase {
 	 * MenuTemplates
 	 */
 	public TemplatesMenu() {
+		toolBarOption = new ToolBarOption();
 		// The item selected must be called on style.css : .okm-MenuBar .gwt-MenuItem-selected
 		
 		// First initialize language values
@@ -125,7 +111,7 @@ public class TemplatesMenu extends MenuBase {
 	// Command menu to download file
 	Command downloadFile = new Command() {
 		public void execute() {		
-			if (downloadOption) {
+			if (toolBarOption.downloadOption) {
 				Main.get().mainPanel.desktop.browser.fileBrowser.table.downloadDocument(false);
 				hide();
 			}
@@ -135,7 +121,7 @@ public class TemplatesMenu extends MenuBase {
 	// Command menu to checkout file
 	Command checkoutFile = new Command() {
 		public void execute() {
-			if (checkoutOption) {
+			if (toolBarOption.checkoutOption) {
 				Main.get().mainPanel.desktop.browser.fileBrowser.checkout();
 				hide();
 			}
@@ -145,7 +131,7 @@ public class TemplatesMenu extends MenuBase {
 	// Command menu to checkin file
 	Command checkinFile = new Command() {
 		public void execute() {
-			if (checkinOption) {
+			if (toolBarOption.checkinOption) {
 				FileToUpload fileToUpload = new FileToUpload();
 				fileToUpload.setFileUpload(new FileUpload());
 				fileToUpload.setPath(Main.get().mainPanel.desktop.browser.fileBrowser.getPath());
@@ -161,7 +147,7 @@ public class TemplatesMenu extends MenuBase {
 	// Command menu to cancel checkin file
 	Command cancelCheckinFile = new Command() {
 		public void execute() {
-			if (cancelCheckoutOption) {
+			if (toolBarOption.cancelCheckoutOption) {
 				Main.get().mainPanel.desktop.browser.fileBrowser.cancelCheckout();
 				hide();
 			}
@@ -171,7 +157,7 @@ public class TemplatesMenu extends MenuBase {
 	// Command menu to lock file
 	Command lockFile = new Command() {
 		public void execute() {
-			if (lockOption) {
+			if (toolBarOption.lockOption) {
 				Main.get().mainPanel.desktop.browser.fileBrowser.lock();
 				hide();
 			}
@@ -181,7 +167,7 @@ public class TemplatesMenu extends MenuBase {
 	// Command menu to unlock file
 	Command unlockFile = new Command() {
 		public void execute() {
-			if (unlockOption) {
+			if (toolBarOption.unLockOption) {
 				Main.get().mainPanel.desktop.browser.fileBrowser.unlock();
 				hide();
 			}
@@ -191,7 +177,7 @@ public class TemplatesMenu extends MenuBase {
 	// Command menu to lock file
 	Command deleteFile = new Command() {
 		public void execute() {
-			if (deleteOption) {
+			if (toolBarOption.deleteOption) {
 				Main.get().mainPanel.desktop.browser.fileBrowser.confirmDelete();
 				hide();
 			}
@@ -201,7 +187,7 @@ public class TemplatesMenu extends MenuBase {
 	// Command menu to rename file
 	Command renameFile = new Command() {
 		public void execute() {
-			if (renameOption) {
+			if (toolBarOption.renameOption) {
 				Main.get().mainPanel.desktop.browser.fileBrowser.rename();
 				hide();
 			}
@@ -211,7 +197,7 @@ public class TemplatesMenu extends MenuBase {
 	// Command menu to rename file
 	Command moveFile = new Command() {
 		public void execute() {
-			if (moveOption) {
+			if (toolBarOption.moveOption) {
 				Main.get().mainPanel.desktop.browser.fileBrowser.move();
 				hide();
 			}
@@ -221,7 +207,7 @@ public class TemplatesMenu extends MenuBase {
 	// Command menu to rename file
 	Command copyFile = new Command() {
 		public void execute() {
-			if (copyOption) {
+			if (toolBarOption.copyOption) {
 				Main.get().mainPanel.desktop.browser.fileBrowser.copy();
 				hide();
 			}
@@ -231,7 +217,7 @@ public class TemplatesMenu extends MenuBase {
 	// Command menu to set default home
 	Command exportToFile = new Command() {
 		public void execute() {
-			if (exportOption) {				
+			if (toolBarOption.exportOption) {				
 				Main.get().mainPanel.desktop.browser.fileBrowser.exportFolderToFile();
 				hide();
 			}
@@ -241,16 +227,14 @@ public class TemplatesMenu extends MenuBase {
 	// Command menu to create file from template
 	Command createFileFromTemplate = new Command() {
 		public void execute() {
-			if (createFromTemplateOption) {
+			if (toolBarOption.createFromTemplateOption) {
 				Main.get().mainPanel.desktop.browser.fileBrowser.createFromTemplate();
 				hide();
 			}
 		}
 	};
 
-	/**
-	 *  Refresh language values
-	 */
+	@Override
 	public void langRefresh() {
 		checkout.setHTML(Util.menuHTML("img/icon/actions/checkout.gif", Main.i18n("filebrowser.menu.checkout")));
 		checkin.setHTML(Util.menuHTML("img/icon/actions/checkin.gif", Main.i18n("filebrowser.menu.checkin")));
@@ -266,188 +250,75 @@ public class TemplatesMenu extends MenuBase {
 		createFromTemplate.setHTML(Util.menuHTML("img/icon/actions/copy.gif", Main.i18n("filebrowser.menu.create.from.template")));
 	}
 	
-	/**
-	 * Checks permissions associated to folder and menu options enabled actions
-	 * 
-	 * @param folder The folder
-	 */
-	public void checkMenuOptionPermissions(GWTFolder folder, GWTFolder folderParent) {
-		downloadOption 			 	= false;
-		checkoutOption 		 		= false;
-		checkinOption 		 		= false;
-		cancelCheckoutOption 		= false;
-		lockOption 			 		= false;
-		unlockOption 		 		= false;
-		createFromTemplateOption 	= false;
-		copyOption 					= true;
-		exportOption				= true;
-		
-		if ( (folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE && 
-			 (folderParent.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE )  {
-			deleteOption 		= true;
-			renameOption 		= true;
-			moveOption 			= true;
-		} else {
-			deleteOption 		= false;
-			renameOption 		= false;
-			moveOption 			= false;
-		}
+	@Override
+	public void setOptions(ToolBarOption toolBarOption) {
+		this.toolBarOption = toolBarOption;
+		toolBarOption.createFromTemplateOption = true;
+		evaluateMenuOptions();
 	}
 	
-	/**
-	 * Checks permissions associated to document and menu options enabled actions
-	 * 
-	 * @param doc The document
-	 */
-	public void checkMenuOptionPermissions(GWTDocument doc, GWTFolder folder) {	
-		String user = Main.get().workspaceUserProperties.getUser();
-		
-		downloadOption		     	= true;
-		checkinOption 	     		= false;
-		cancelCheckoutOption 		= false;
-		unlockOption 		 		= false;
-		createFromTemplateOption 	= true;
-		copyOption 					= true;
-		exportOption				= false;
-		
-		if ( (doc.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE)  {
-			lockOption				= true;
-			checkoutOption 			= true;
-			
-			if ( (folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE)  {
-				renameOption 			= true;
-				deleteOption 			= true;
-				moveOption 				= true;
-			} else {
-				renameOption 			= false;
-				deleteOption 			= false;
-				moveOption 				= false;
-			}
-		} else {
-			lockOption				= false;
-			deleteOption 			= false;
-			renameOption 			= false;
-			checkoutOption 			= false;
-			moveOption 				= false;
-		}
-		
-		if (doc.isCheckedOut()){
-			lockOption 			= false;
-			unlockOption		= false;
-			checkoutOption		= false;
-			if (doc.getLockInfo().getOwner().equals(user)) {
-				checkinOption		 	= true;
-				cancelCheckoutOption 	= true;
-			} else {
-				checkinOption		 	= false;
-				cancelCheckoutOption 	= false;
-			}
-			deleteOption		= false;
-			renameOption		= false;
-			moveOption			= false;
-			
-		} else if (doc.isLocked()){
-			lockOption			= false;
-			if (doc.getLockInfo().getOwner().equals(user)) {
-				unlockOption	= true;
-			} else {
-				unlockOption	= false;
-			}
-			checkoutOption	 	 	= false;
-			checkinOption		 	= false;
-			cancelCheckoutOption 	= false;
-			deleteOption		 	= false;
-			renameOption		 	= false;
-			moveOption			 	= false;
-		} else {
-			unlockOption			= false;
-			checkinOption			= false;
-			cancelCheckoutOption	= false;
-		}
-		
-	}
-	
-	/**
-	 * Checks permissions associated to mail and menu options enabled actions
-	 * 
-	 * @param mail The mail
-	 */
-	public void checkMenuOptionPermissions(GWTMail mail, GWTFolder folder) {			
-		downloadOption		     	= false;
-		checkinOption 	     		= false;
-		cancelCheckoutOption 		= false;
-		unlockOption 		 		= false;
-		createFromTemplateOption 	= false;
-		copyOption 					= true;
-		exportOption				= false;
-		lockOption					= false;
-		checkoutOption 				= false;
-		lockOption 					= false;
-		renameOption 				= false;
-		
-		if ( (mail.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE)  {	
-			if ( (folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE)  {
-				deleteOption 			= true;
-				moveOption 				= true;
-			} else {
-				deleteOption 			= false;
-				moveOption 				= false;
-			}
-		} else {
-			deleteOption 			= false;
-			moveOption 				= false;
-		}
-	}
-	
-	/**
-	 * Disables all menu options
-	 */
-	public void disableAllMenuOption() {
-		downloadOption 			 	= false;
-		deleteOption 		 		= false; 
-		renameOption 		 		= false; 
-		checkoutOption 		 		= false;
-		checkinOption 				= false;
-		cancelCheckoutOption 		= false;
-		lockOption 			 		= false;
-		unlockOption 		 		= false;
-		moveOption 			 		= false;
-		createFromTemplateOption 	= false;
-		exportOption				= false;
+	@Override
+	public void disableAllOptions() {
+		toolBarOption = new ToolBarOption();
+		evaluateMenuOptions();
 	}
 	
 	/**
 	 * Evaluates menu options
 	 */
 	public void evaluateMenuOptions(){
-		if (downloadOption){enable(download);} else {disable(download);}
-		if (deleteOption){enable(delete);} else {disable(delete);}
-		if (renameOption){enable(rename);} else {disable(rename);}
-		if (checkoutOption){enable(checkout);} else {disable(checkout);}
-		if (checkinOption){enable(checkin);} else {disable(checkin);}
-		if (cancelCheckoutOption){enable(cancelCheckout);} else {disable(cancelCheckout);}
-		if (lockOption){enable(lock);} else {disable(lock);}
-		if (unlockOption){enable(unlock);} else {disable(unlock);}
-		if (moveOption){enable(move);} else {disable(move);}
-		if (copyOption){enable(copy);} else {disable(copy);}
-		if (exportOption){enable(export);} else {disable(export);}
-		if (createFromTemplateOption){enable(createFromTemplate);} else {disable(createFromTemplate);}
+		if (toolBarOption.downloadOption){enable(download);} else {disable(download);}
+		if (toolBarOption.deleteOption){enable(delete);} else {disable(delete);}
+		if (toolBarOption.renameOption){enable(rename);} else {disable(rename);}
+		if (toolBarOption.checkoutOption){enable(checkout);} else {disable(checkout);}
+		if (toolBarOption.checkinOption){enable(checkin);} else {disable(checkin);}
+		if (toolBarOption.cancelCheckoutOption){enable(cancelCheckout);} else {disable(cancelCheckout);}
+		if (toolBarOption.lockOption){enable(lock);} else {disable(lock);}
+		if (toolBarOption.unLockOption){enable(unlock);} else {disable(unlock);}
+		if (toolBarOption.moveOption){enable(move);} else {disable(move);}
+		if (toolBarOption.copyOption){enable(copy);} else {disable(copy);}
+		if (toolBarOption.exportOption){enable(export);} else {disable(export);}
+		if (toolBarOption.createFromTemplateOption){enable(createFromTemplate);} else {disable(createFromTemplate);}
 	}
 	
 	@Override
 	public void setAvailableOption(GWTAvailableOption option) {
-		download.setVisible(option.isDownloadOption());
-		delete.setVisible(option.isDeleteOption());
-		rename.setVisible(option.isRenameOption());
-		checkout.setVisible(option.isCheckoutOption());
-		checkin.setVisible(option.isCheckinOption());
-		cancelCheckout.setVisible(option.isCancelCheckoutOption());
-		lock.setVisible(option.isLockOption());
-		unlock.setVisible(option.isUnLockOption());
-		move.setVisible(option.isMoveOption());
-		copy.setVisible(option.isCopyOption());
-		export.setVisible(option.isExportOption());
-		createFromTemplate.setVisible(option.isCreateFromTemplateOption());
+		if (!option.isDownloadOption()) {
+			dirMenu.removeItem(download);
+		}
+		if (!option.isDeleteOption()) {
+			dirMenu.removeItem(delete);
+		}
+		if (!option.isRenameOption()) {
+			dirMenu.removeItem(rename);
+		}
+		if (!option.isCheckoutOption()) {
+			dirMenu.removeItem(checkout);
+		}
+		if (!option.isCheckinOption()) {
+			dirMenu.removeItem(checkin);
+		}
+		if (!option.isCancelCheckoutOption()) {
+			dirMenu.removeItem(cancelCheckout);
+		}
+		if (!option.isLockOption()) {
+			dirMenu.removeItem(lock);
+		}
+		if (!option.isUnLockOption()) {
+			dirMenu.removeItem(unlock);
+		}
+		if (!option.isMoveOption()) {
+			dirMenu.removeItem(move);
+		}
+		if (!option.isCopyOption()) {
+			dirMenu.removeItem(copy);
+		}
+		if (!option.isExportOption()) {
+			dirMenu.removeItem(export);
+		}
+		if (!option.isCreateFromTemplateOption()) {
+			dirMenu.removeItem(createFromTemplate);
+		}
 	}
 	
 	/**
@@ -455,17 +326,5 @@ public class TemplatesMenu extends MenuBase {
 	 */
 	public void hide() {
 		Main.get().mainPanel.desktop.browser.fileBrowser.templatesMenuPopup.hide();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.widget.MenuBase#enableAllMenuOptions()
-	 */
-	public void enableAllMenuOptions() {
-	}
-
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.widget.MenuBase#enableRootMenuOptions()
-	 */
-	public void enableRootMenuOptions() {
 	}
 }

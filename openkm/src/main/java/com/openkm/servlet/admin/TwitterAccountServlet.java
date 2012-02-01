@@ -24,6 +24,9 @@ package com.openkm.servlet.admin;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
+import javax.jcr.LoginException;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.TwitterAccountDAO;
 import com.openkm.dao.bean.TwitterAccount;
+import com.openkm.jcr.JCRUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
 
@@ -50,36 +54,46 @@ public class TwitterAccountServlet extends BaseServlet {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
 		String action = WebUtils.getString(request, "action");
-		String userId = request.getRemoteUser();
+		Session session = null;
 		updateSessionManager(request);
 		
 		try {
+			session = JCRUtils.getSession();
+			
 			if (action.equals("create")) {
-				create(userId, request, response);
+				create(session, request, response);
 			} else if (action.equals("edit")) {
-				edit(userId, request, response);
+				edit(session, request, response);
 			} else if (action.equals("delete")) {
-				delete(userId, request, response);
+				delete(session, request, response);
 			}
 			
 			if (action.equals("") || WebUtils.getBoolean(request, "persist")) {
-				list(userId, request, response);
+				list(session, request, response);
 			}
+		} catch (LoginException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} catch (NoSuchAlgorithmException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
+		} finally {
+			JCRUtils.logout(session);
 		}
 	}
 	
 	/**
 	 * New twitter account
 	 */
-	private void create(String userId, HttpServletRequest request, HttpServletResponse response) 
+	private void create(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException {
-		log.info("create({}, {}, {})", new Object[] { userId, request, response });
+		log.info("create({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
 			TwitterAccount ta = new TwitterAccount();
@@ -89,7 +103,7 @@ public class TwitterAccountServlet extends BaseServlet {
 			TwitterAccountDAO.create(ta);
 			
 			// Activity log
-			UserActivity.log(userId, "ADMIN_TWITTER_ACCOUNT_CREATE", ta.getUser(), ta.toString());
+			UserActivity.log(session.getUserID(), "ADMIN_TWITTER_ACCOUNT_CREATE", ta.getUser(), ta.toString());
 		} else {
 			ServletContext sc = getServletContext();
 			TwitterAccount ta = new TwitterAccount();
@@ -106,9 +120,9 @@ public class TwitterAccountServlet extends BaseServlet {
 	/**
 	 * Edit twitter account
 	 */
-	private void edit(String userId, HttpServletRequest request, HttpServletResponse response) 
+	private void edit(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
-		log.debug("edit({}, {}, {})", new Object[] { userId, request, response });
+		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
 			TwitterAccount ta = new TwitterAccount();
@@ -119,7 +133,7 @@ public class TwitterAccountServlet extends BaseServlet {
 			TwitterAccountDAO.update(ta);
 			
 			// Activity log
-			UserActivity.log(userId, "ADMIN_TWITTER_ACCOUNT_EDIT", Integer.toString(ta.getId()), ta.toString());
+			UserActivity.log(session.getUserID(), "ADMIN_TWITTER_ACCOUNT_EDIT", Integer.toString(ta.getId()), ta.toString());
 		} else {
 			ServletContext sc = getServletContext();
 			int taId = WebUtils.getInt(request, "ta_id");
@@ -135,16 +149,16 @@ public class TwitterAccountServlet extends BaseServlet {
 	/**
 	 * Update twitter account
 	 */
-	private void delete(String userId, HttpServletRequest request, HttpServletResponse response) 
+	private void delete(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
-		log.debug("delete({}, {}, {})", new Object[] { userId, request, response });
+		log.debug("delete({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
 			int taId = WebUtils.getInt(request, "ta_id");
 			TwitterAccountDAO.delete(taId);
 			
 			// Activity log
-			UserActivity.log(userId, "ADMIN_TWITTER_ACCOUNT_DELETE", Integer.toString(taId), null);
+			UserActivity.log(session.getUserID(), "ADMIN_TWITTER_ACCOUNT_DELETE", Integer.toString(taId), null);
 		} else {
 			ServletContext sc = getServletContext();
 			int taId = WebUtils.getInt(request, "ta_id");
@@ -160,9 +174,9 @@ public class TwitterAccountServlet extends BaseServlet {
 	/**
 	 * List twitter accounts
 	 */
-	private void list(String userId, HttpServletRequest request, HttpServletResponse response)
+	private void list(Session session, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DatabaseException {
-		log.debug("list({}, {}, {})", new Object[] { userId, request, response });
+		log.debug("list({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
 		String usrId = WebUtils.getString(request, "ta_user");
 		sc.setAttribute("ta_user", usrId);

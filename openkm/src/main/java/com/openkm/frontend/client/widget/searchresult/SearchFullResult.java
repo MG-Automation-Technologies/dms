@@ -55,7 +55,6 @@ import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.WidgetUtil;
 import com.openkm.frontend.client.widget.dashboard.keymap.TagCloud;
 import com.openkm.frontend.client.widget.form.FormManager;
-import com.openkm.frontend.client.widget.searchin.SearchControl;
 
 /**
  * SearchFullResult
@@ -134,13 +133,16 @@ public class SearchFullResult extends Composite {
 		Anchor anchor = new Anchor();
 		anchor.setHTML(doc.getName());
 		anchor.setStyleName("okm-Hyperlink");
+		String path = "";
 		// On attachemt case must remove last folder path, because it's internal usage not for visualization
 		if (doc.isAttachment()) {
 			anchor.setTitle(doc.getParent().substring(0, doc.getParent().lastIndexOf("/")));
+			path = doc.getParent();
 		} else {
 			anchor.setTitle(doc.getParent());
+			path = doc.getPath();
 		}
-		final String docPath = doc.getPath();
+		final String docPath = path;
 		anchor.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -164,12 +166,6 @@ public class SearchFullResult extends Composite {
 		downloadDocument.setStyleName("okm-KeyMap-ImageHover");
 		hPanel.add(downloadDocument);
 		table.setWidget(rows++, 0, hPanel);		
-		
-		// Excerpt row
-		if (Main.get().mainPanel.search.searchBrowser.searchIn.searchControl.getSearchMode()==SearchControl.SEARCH_MODE_SIMPLE ||
-			!Main.get().mainPanel.search.searchBrowser.searchIn.searchNormal.content.getText().equals("")) {
-			table.setHTML(rows++, 0, gwtQueryResult.getExcerpt());
-		}
 		
 		// Folder row
 		HorizontalPanel hPanel2 = new HorizontalPanel();

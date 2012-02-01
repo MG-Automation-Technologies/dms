@@ -32,6 +32,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -69,7 +70,8 @@ import com.openkm.frontend.client.widget.notify.NotifyPanel;
  */
 public class FancyFileUpload extends Composite implements HasText, HasChangeHandlers {
 	private final OKMGeneralServiceAsync generalService = (OKMGeneralServiceAsync) GWT.create(OKMGeneralService.class);
-	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
+	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT
+			.create(OKMRepositoryService.class);
 	
 	/**
 	 * State definitions
@@ -81,21 +83,21 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	public static final int FAILED_STATE = 5;
 	
 	/**
-	 * OK message expected from file upload servlet to indicate successful
-	 * upload.
+	 * OK message expected from file upload servlet to indicate successful upload.
 	 */
 	private static final String returnOKMessage = "OKM_OK";
 	private static final String returnErrorMessage = "OKM-";
 	
 	/**
+	 * Default delay for pending state, when delay over the form is submitted.
+	 */
+	private static final int PENDING_UPDATE_DELAY = 1000;
+	private static final int REFRESH_STATUS_DELAY = 250;
+	
+	/**
 	 * Initial State of the widget.
 	 */
 	private int widgetState = EMPTY_STATE;
-	
-	/**
-	 * Default delay for pending state, when delay over the form is submitted.
-	 */
-	private int pendingUpdateDelay = 1000;
 	
 	private VerticalPanel mainPanel = new VerticalPanel();
 	public CheckBox notifyToUser = new CheckBox();
@@ -152,8 +154,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	private boolean fileUplodingStartedFlag = false;
 	
 	/**
-	 * Class used for the display of filename to be uploaded, and handling the
-	 * update of the display states.
+	 * Class used for the display of filename to be uploaded, and handling the update of the display states.
 	 */
 	protected class UploadDisplay extends Composite {
 		
@@ -227,13 +228,8 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			HorizontalPanel hPBPanel = new HorizontalPanel();
 			hPBPanel.add(progressBar);
 			hPBPanel.setCellVerticalAlignment(progressBar, HasAlignment.ALIGN_MIDDLE);
-			hPBPanel.setCellHorizontalAlignment(progressBar, HasAlignment.ALIGN_LEFT); // Corrects
-																						// some
-																						// problem
-																						// with
-																						// centering
-																						// progress
-																						// status
+			// Corrects some problem with centering progress status
+			hPBPanel.setCellHorizontalAlignment(progressBar, HasAlignment.ALIGN_LEFT);
 			progressBar.setSize("360", "20");
 			
 			pendingPanel.setWidth("375");
@@ -251,9 +247,8 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		}
 		
 		/**
-		 * Set the widget into pending mode by altering style of pending panel
-		 * and displaying it. Hide the FileUpload widget and finally set the
-		 * state to Pending.
+		 * Set the widget into pending mode by altering style of pending panel and displaying it. Hide the FileUpload
+		 * widget and finally set the state to Pending.
 		 */
 		private void setPending() {
 			status.setHTML(Main.i18n("fileupload.status.sending"));
@@ -263,37 +258,32 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		}
 		
 		/**
-		 * Set the widget into Loading mode by changing the style name and
-		 * updating the widget State to Uploading.
+		 * Set the widget into Loading mode by changing the style name and updating the widget State to Uploading.
 		 */
 		public void setLoading() {
 			pendingPanel.setStyleName("fancyfileupload-loading");
 			hFileUpload.setVisible(false);
 			pendingPanel.setVisible(true);
 			widgetState = UPLOADING_STATE;
-			fileUplodingStartedFlag = true; // Activates flash uploading is
-											// started
+			fileUplodingStartedFlag = true; // Active flash uploading is started
 			getFileUploadStatus();
 			fireChange();
 		}
 		
 		/**
-		 * Set the widget into pending mode by altering style of pending panel
-		 * and displaying it. Hide the FileUpload widget and finally set the
-		 * state to Pending.
+		 * Set the widget into pending mode by altering style of pending panel and displaying it. Hide the FileUpload
+		 * widget and finally set the state to Pending.
 		 */
 		private void setIndexing() {
 			status.setHTML(Main.i18n("fileupload.status.indexing"));
 		}
 		
 		/**
-		 * Set the widget to Loaded mode by changing the style name and updating
-		 * the widget State to Loaded.
+		 * Set the widget to Loaded mode by changing the style name and updating the widget State to Loaded.
 		 */
 		private void setLoaded() {
-			// Sometimes if upload is fast, has no time to getting file
-			// uploading status information
-			// on this cases must be setting it directly ( simulating )
+			// Sometimes if upload is fast, has no time to getting file uploading status
+			// information on this cases must be setting it directly ( simulating )
 			if (fileUploadingStatus.getContentLength() == 0) {
 				progressBar.setTextFormatter(finalFormater);
 				progressBar.setMaxProgress(100);
@@ -306,7 +296,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			fileUplodingStartedFlag = false;
 			
 			// normal case is not a workflow
-			if (!wizard && actualFileToUpload.getWorkflow()==null) {
+			if (!wizard && actualFileToUpload.getWorkflow() == null) {
 				refresh();
 			}
 			
@@ -319,14 +309,12 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		}
 		
 		/**
-		 * Set the widget to Failed mode by changing the style name and updating
-		 * the widget State to Failed. Additionally, hide the pending panel and
-		 * display the FileUpload widget.
+		 * Set the widget to Failed mode by changing the style name and updating the widget State to Failed.
+		 * Additionally, hide the pending panel and display the FileUpload widget.
 		 */
 		private void setFailed(String msg) {
-			// Sometimes if upload is fast, has no time to getting file
-			// uploading status information
-			// on this cases must be setting it directly ( simulating )
+			// Sometimes if upload is fast, has no time to getting file uploading status
+			// information on this cases must be setting it directly ( simulating )
 			if (fileUploadingStatus.getContentLength() == 0) {
 				progressBar.setTextFormatter(finalFormater);
 				progressBar.setMaxProgress(100);
@@ -370,8 +358,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			notifyPanel.reset();
 			getAllUsers();
 			
-			// On on root stack panel enabled must be enabled notify to user
-			// option
+			// On on root stack panel enabled must be enabled notify to user option
 			if (Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_TAXONOMY) {
 				hNotifyPanel.setVisible(enableNotifyButton);
 			} else {
@@ -411,12 +398,12 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	}
 	
 	/**
-	 * Perform the uploading of a file by changing state of display widget and
-	 * then calling form.submit() method.
+	 * Perform the uploading of a file by changing state of display widget and then calling form.submit() method.
 	 */
 	private void uploadFiles() {
 		fileName = uploadForm.getFileName();
 		// Store some values to uploadForm
+		uploadForm.setNotifyToUser(notifyToUser.getValue());
 		uploadForm.setImportZip(importZip.getValue());
 		uploadForm.setDigitalSignature(digitalSignature.getValue());
 		uploadForm.setVersionCommnent(versionComment.getText());
@@ -428,8 +415,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	}
 	
 	/**
-	 * Put the widget into a Pending state, set the Pending delay timer to call
-	 * the upload file method when ran out.
+	 * Put the widget into a Pending state, set the Pending delay timer to call the upload file method when ran out.
 	 */
 	public void pendingUpload() {
 		// Fire an onChange event to anyone who is listening
@@ -439,7 +425,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 				uploadFiles();
 			}
 		};
-		p.schedule(pendingUpdateDelay);
+		p.schedule(PENDING_UPDATE_DELAY);
 	}
 	
 	/**
@@ -467,6 +453,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		versionComment.setName("comment");
 		versionComment.setStyleName("okm-TextArea");
 		versionCommentText = new HTML(Main.i18n("fileupload.label.comment"));
+		
 		// TODO This is a workaround for a Firefox 2 bug
 		// http://code.google.com/p/google-web-toolkit/issues/detail?id=891
 		// Table for solve some visualization problems
@@ -592,8 +579,8 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	}
 	
 	/**
-	 * Get the text from the widget - which in reality will be retrieving any
-	 * value set in the Label element of the display widget.
+	 * Get the text from the widget - which in reality will be retrieving any value set in the Label element of the
+	 * display widget.
 	 */
 	public String getText() {
 		return uploadItem.status.getText();
@@ -625,25 +612,6 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	}
 	
 	/**
-	 * Set the delay value indicating how long a file will remain in pending
-	 * mode prior to the upload action taking place.
-	 * 
-	 * @param newDelay
-	 */
-	public void setPendingDelay(int newDelay) {
-		pendingUpdateDelay = newDelay;
-	}
-	
-	/**
-	 * Return value set for pending delay.
-	 * 
-	 * @return
-	 */
-	public int getPendingDelay() {
-		return pendingUpdateDelay;
-	}
-	
-	/**
 	 * fire a change event
 	 */
 	private void fireChange() {
@@ -653,8 +621,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	
 	/*
 	 * (non-Javadoc)
-	 * @see
-	 * com.google.gwt.event.dom.client.HasChangeHandlers#addChangeHandler(com
+	 * @see com.google.gwt.event.dom.client.HasChangeHandlers#addChangeHandler(com
 	 * .google.gwt.event.dom.client.ChangeHandler)
 	 */
 	@Override
@@ -662,6 +629,20 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		return addDomHandler(handler, ChangeEvent.getType());
 	}
 	
+	/**
+	 * getAction
+	 * 
+	 * @return
+	 */
+	public int getAction() {
+		return action;
+	}
+	
+	/**
+	 * setAction
+	 * 
+	 * @param action
+	 */
 	public void setAction(int action) {
 		this.action = action;
 		switch (action) {
@@ -691,7 +672,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	
 	/**
 	 * setRename
-	 *  
+	 * 
 	 * @param rename
 	 */
 	public void setRename(String rename) {
@@ -733,15 +714,28 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 				}
 				
 				if (!result.isUploadFinish()) {
-					getFileUploadStatus();
+					refreshStatus();
 				}
 			}
 		}
 		
 		public void onFailure(Throwable caught) {
-			Main.get().showError("getFileUploadStatus", caught);
+			// Main.get().showError("getFileUploadStatus", caught);
+			// Silent error ( if bandwidth is full used by uploading treat could cause RPC error while updating, that's
+			// more visible when uploading file is bigger ).
+			refreshStatus();
 		}
 	};
+	
+	private void refreshStatus() {
+		Timer refreshStatus = new Timer() {
+			@Override
+			public void run() {
+				getFileUploadStatus();
+			}
+		};
+		refreshStatus.schedule(REFRESH_STATUS_DELAY);
+	}
 	
 	/**
 	 * Resets the progress bar and all related values
@@ -786,7 +780,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	 * @return
 	 */
 	public boolean isDigitalSignature() {
-		return uploadForm.isDigitalSignature();
+		return (uploadForm != null ? uploadForm.isDigitalSignature() : false);
 	}
 	
 	/**
@@ -823,32 +817,35 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	 */
 	public void uploadNewPendingFile() {
 		// Execute pending workflows
-		if (actualFileToUpload!=null && actualFileToUpload.getWorkflow()!=null && actualFileToUpload.isLastToBeUploaded()) {
-			uploadedWorkflowFiles.add(actualFileToUpload.clone()) ;
+		if (actualFileToUpload != null && actualFileToUpload.getWorkflow() != null
+				&& actualFileToUpload.isLastToBeUploaded()) {
+			uploadedWorkflowFiles.add(actualFileToUpload.clone());
 			executeWorkflow(actualFileToUpload.getWorkflowTaskId());
 		}
 		
 		if (!filesToUpload.isEmpty()) {
 			actualFileToUpload = filesToUpload.remove(0);
-			uploadForm = new FileUploadForm(actualFileToUpload.getFileUpload(), FileToUpload.DEFAULT_SIZE); // Here always with default size
+			// Here always with default size
+			uploadForm = new FileUploadForm(actualFileToUpload.getFileUpload(), FileToUpload.DEFAULT_SIZE);
 			uploadItem.hFileUpload.clear(); // removes all previous fileUpload widgets
 			uploadItem.hFileUpload.add(uploadForm);
 			setPath(actualFileToUpload.getPath());
 			setAction(actualFileToUpload.getAction());
 			setRename(actualFileToUpload.getDesiredDocumentName());
 			addSubmitCompleteHandler();
+			
 			// Case fileupload is workflow notify to users must be disabled
-			Main.get().fileUpload.showPopup(actualFileToUpload.isEnableAddButton(), actualFileToUpload.isEnableImport(),
-											(actualFileToUpload.getWorkflow()==null));
-			if (actualFileToUpload.getWorkflow()!=null) {
+			Main.get().fileUpload.showPopup(actualFileToUpload.isEnableAddButton(),
+					actualFileToUpload.isEnableImport(), (actualFileToUpload.getWorkflow() == null));
+			if (actualFileToUpload.getWorkflow() != null) {
 				Main.get().fileUpload.executeSend();
 			}
 		} else {
-			if (actualFileToUpload!=null && actualFileToUpload.getWorkflow()!=null) {
+			if (actualFileToUpload != null && actualFileToUpload.getWorkflow() != null) {
 				Main.get().fileUpload.executeCancel();
-			} 
+			}
 			actualFileToUpload = null;
-		} 
+		}
 	}
 	
 	/**
@@ -858,14 +855,13 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	 */
 	private void executeWorkflow(double taskId) {
 		List<FileToUpload> uploadedFiles = new ArrayList<FileToUpload>();
-		for (FileToUpload uploaded :uploadedWorkflowFiles) {
-			if (uploaded.getWorkflowTaskId()==taskId) {
+		for (FileToUpload uploaded : uploadedWorkflowFiles) {
+			if (uploaded.getWorkflowTaskId() == taskId) {
 				uploadedFiles.add(uploaded);
 			}
 		}
-		actualFileToUpload.getWorkflow().setTaskInstanceValues(actualFileToUpload.getWorkflowTaskId(), 
-															   actualFileToUpload.getWorkflowTransition(),
-															   uploadedFiles);
+		actualFileToUpload.getWorkflow().setTaskInstanceValues(actualFileToUpload.getWorkflowTaskId(),
+				actualFileToUpload.getWorkflowTransition(), uploadedFiles);
 	}
 	
 	/**
@@ -890,33 +886,31 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 				p.cancel();
 				// Ensure that the form encoding is set correctly.
 				uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
-				// Check the result to see if an OK message is returned from the
-				// server.
+				// Check the result to see if an OK message is returned from the server.
 				
-				// Return params could be <pre> or <pre style=""> with some IE
-				// and chrome
+				// Return params could be <pre> or <pre style=""> with some IE and chrome
 				String msg = event.getResults();
 				
 				if (msg.contains(returnOKMessage)) {
 					String docPath = "";
 					if (msg.indexOf("path[") > 0 && msg.indexOf("]path") > 0) {
 						docPath = msg.substring(msg.indexOf("path[") + 5, msg.indexOf("]path"));
+						docPath = URL.decodeQueryString(docPath);
 					}
 					
 					// Normal case document uploaded is not a workflow
-					if (actualFileToUpload.getWorkflow()==null) {
+					if (actualFileToUpload.getWorkflow() == null) {
 						// Case is not importing a zip and wizard is enabled
 						if (!uploadForm.isImportZip()
-							 && action == UIFileUploadConstants.ACTION_INSERT
-							 && (Main.get().workspaceUserProperties.getWorkspace().isWizardPropertyGroups()
-								 || Main.get().workspaceUserProperties.getWorkspace().isWizardWorkflows()
-								 || Main.get().workspaceUserProperties.getWorkspace().isWizardCategories() 
-								 || Main.get().workspaceUserProperties.getWorkspace().isWizardKeywords())) {
+								&& action == UIFileUploadConstants.ACTION_INSERT
+								&& (Main.get().workspaceUserProperties.getWorkspace().isWizardPropertyGroups()
+										|| Main.get().workspaceUserProperties.getWorkspace().isWizardWorkflows()
+										|| Main.get().workspaceUserProperties.getWorkspace().isWizardCategories() || Main
+										.get().workspaceUserProperties.getWorkspace().isWizardKeywords())) {
 							
 							wizard = true;
 						} else {
-							// wizard only it'll be enable in case digital signature
-							// be true
+							// wizard only it'll be enable in case digital signature be true
 							wizard = uploadForm.isDigitalSignature();
 						}
 						
@@ -937,6 +931,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 								actualFileToUpload.setDocumentUUID(result);
 								uploadItem.setLoaded();
 							}
+							
 							@Override
 							public void onFailure(Throwable caught) {
 								Main.get().showError("getUUIDByPath", caught);
@@ -948,5 +943,16 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 				}
 			}
 		});
+	}
+	
+	/**
+	 * setUploadNotifyUsers
+	 * 
+	 * @param visible
+	 */
+	public void setUploadNotifyUsers(boolean visible) {
+		if (!visible) {
+			mainPanel.remove(hNotifyPanel);
+		}
 	}
 }

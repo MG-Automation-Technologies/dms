@@ -34,7 +34,6 @@ import com.openkm.api.OKMAuth;
 import com.openkm.dao.MailAccountDAO;
 import com.openkm.dao.bean.MailAccount;
 import com.openkm.extension.core.ExtensionException;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.util.MailUtils;
 

@@ -130,4 +130,11 @@ public class TabDocumentComunicator {
 	public static void unsetRefreshingStyle() {
 		Main.get().mainPanel.desktop.browser.tabMultiple.removeStyleName("okm-PanelRefreshing");
 	}
+	
+	/**
+	 * refreshPreviewDocument
+	 */
+	public static void refreshPreviewDocument() {
+		Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.refreshPreviewDocument();
+	}
 }

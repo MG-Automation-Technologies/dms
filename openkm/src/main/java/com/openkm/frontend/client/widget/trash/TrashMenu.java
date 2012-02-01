@@ -24,12 +24,9 @@ package com.openkm.frontend.client.widget.trash;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTAvailableOption;
-import com.openkm.frontend.client.bean.GWTDocument;
-import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.bean.GWTMail;
+import com.openkm.frontend.client.bean.ToolBarOption;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.MenuBase;
 
@@ -41,16 +38,14 @@ import com.openkm.frontend.client.widget.MenuBase;
  */
 public class TrashMenu extends MenuBase {
 	
-	private boolean restoreFolderOption 	= false; 
-	private boolean purgeFolderOption 		= false;
-	private boolean purgeTrashFolderOption 	= true;
-	
+	private ToolBarOption toolBarOption;
 	private MenuBar dirMenu;
 	private MenuItem restore;
 	private MenuItem purge;
 	private MenuItem purgeTrash;
 	
 	public TrashMenu() {
+		toolBarOption = new ToolBarOption();
 		// The item selected must be called on style.css : .okm-MenuBar .gwt-MenuItem-selected
 		
 		// First initialize language values
@@ -71,7 +66,7 @@ public class TrashMenu extends MenuBase {
 	// Command menu to restore Directory
 	Command restoreFolder = new Command() {
 		public void execute() {
-			if(restoreFolderOption) {
+			if(toolBarOption.restore) {
 				Main.get().activeFolderTree.restore();
 				Main.get().activeFolderTree.hideMenuPopup();
 			}
@@ -81,7 +76,7 @@ public class TrashMenu extends MenuBase {
 	// Command menu to remove a Directory
 	Command purgeFolder = new Command() {
 		public void execute() {
-			if (purgeFolderOption) {
+			if (toolBarOption.purge) {
 				Main.get().activeFolderTree.confirmPurge();
 				Main.get().activeFolderTree.hideMenuPopup();
 			}
@@ -91,75 +86,49 @@ public class TrashMenu extends MenuBase {
 	// Command menu to remove all trash folder
 	Command purgeTrashFolder = new Command() {
 		public void execute() {
-			if (purgeTrashFolderOption) {
+			if (toolBarOption.purgeTrash) {
 				Main.get().activeFolderTree.confirmPurgeTrash();
 				Main.get().activeFolderTree.hideMenuPopup();
 			}
 		}
 	};
 	
-	/**
-	 *  Refresh language values
-	 */
+	@Override
 	public void langRefresh() {
 		restore.setHTML(Util.menuHTML("img/icon/actions/restore.gif", Main.i18n("trash.menu.directory.restore")));
 		purge.setHTML(Util.menuHTML("img/icon/actions/purge.gif", Main.i18n("trash.menu.directory.purge")));
 		purgeTrash.setHTML(Util.menuHTML("img/icon/actions/purge_trash.gif", Main.i18n("trash.menu.directory.purge.trash")));
 	}
 	
-	/**
-	 * Set enabled all menu options
-	 */
-	public void enableAllMenuOptions(){
-		restoreFolderOption		= true; 
-		purgeFolderOption		= true;
-		purgeTrashFolderOption 	= true;
-	}
-	
-	/**
-	 * Set enabled root menu options
-	 */
-	public void enableRootMenuOptions(){
-		restoreFolderOption		= false; 
-		purgeFolderOption		= false;
-		purgeTrashFolderOption 	= true;
-	}
-	
-	/**
-	 * Evaluates menu options
-	 */
+	@Override
 	public void evaluateMenuOptions(){
-		if (restoreFolderOption) {enable(restore);} else {disable(restore);}
-		if (purgeFolderOption) {enable(purge);} else {disable(purge);}
-		if (purgeTrashFolderOption) {enable(purgeTrash);} else {disable(purgeTrash);}
+		if (toolBarOption.restore) {enable(restore);} else {disable(restore);}
+		if (toolBarOption.purge) {enable(purge);} else {disable(purge);}
+		if (toolBarOption.purgeTrash) {enable(purgeTrash);} else {disable(purgeTrash);}
 	}
 	
 	@Override
 	public void setAvailableOption(GWTAvailableOption option) {
-		restore.setVisible(option.isRestoreOption());
-		purge.setVisible(option.isPurgeOption());
-		purgeTrash.setVisible(option.isPurgeTrashOption());
-	}
-
-	public void checkMenuOptionPermissions(GWTFolder folder, GWTFolder folderParent) {
-		// TODO Auto-generated method stub	
-	}
-
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.widget.MenuBase#disableAllMenuOption()
-	 */
-	public void disableAllMenuOption() {
-	}
-
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.widget.MenuBase#checkMenuOptionPermissions(com.openkm.frontend.client.bean.GWTDocument, com.openkm.frontend.client.bean.GWTFolder)
-	 */
-	public void checkMenuOptionPermissions(GWTDocument doc, GWTFolder folder) {
+		if (!option.isRestoreOption()) {
+			dirMenu.removeItem(restore);
+		}
+		if (!option.isPurgeOption()) {
+			dirMenu.removeItem(purge);
+		}
+		if (!option.isPurgeTrashOption()) {
+			dirMenu.removeItem(purgeTrash);
+		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.widget.MenuBase#checkMenuOptionPermissions(com.openkm.frontend.client.bean.GWTMail, com.openkm.frontend.client.bean.GWTFolder)
-	 */
-	public void checkMenuOptionPermissions(GWTMail mail, GWTFolder folder) {
+	@Override
+	public void setOptions(ToolBarOption toolBarOption) {
+		this.toolBarOption = toolBarOption;
+		evaluateMenuOptions();
+	}
+	
+	@Override
+	public void disableAllOptions() {
+		toolBarOption = new ToolBarOption();
+		evaluateMenuOptions();
 	}
 }

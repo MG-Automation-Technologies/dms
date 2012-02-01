@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.jcr.LoginException;
 import javax.jcr.Node;
@@ -43,15 +44,14 @@ import com.openkm.bean.Repository;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.AuthModule;
 import com.openkm.module.base.BaseAuthModule;
 import com.openkm.principal.PrincipalAdapter;
 import com.openkm.principal.PrincipalAdapterException;
-import com.openkm.util.UUIDGenerator;
 import com.openkm.util.UserActivity;
 
 public class DirectAuthModule implements AuthModule {
@@ -86,7 +86,7 @@ public class DirectAuthModule implements AuthModule {
 			} else {
 				javax.jcr.Repository r = DirectRepositoryModule.getRepository();
 				Session session = r.login(new SimpleCredentials(user, password.toCharArray()), null);
-				token = UUIDGenerator.generate(this);
+				token = UUID.randomUUID().toString();
 				JcrSessionManager.getInstance().add(token, session);
 				
 				// Activity log
@@ -167,7 +167,6 @@ public class DirectAuthModule implements AuthModule {
 	 */
 	private static Node createBase(Session session, Node root) throws 
 			javax.jcr.RepositoryException {
-		log.debug("createBase({}, {})", session, root);
 		Node base = root.addNode(session.getUserID(), Folder.TYPE);
 
 		// Add basic properties
@@ -179,10 +178,10 @@ public class DirectAuthModule implements AuthModule {
 		base.setProperty(Permission.USERS_WRITE, new String[] { session.getUserID() });
 		base.setProperty(Permission.USERS_DELETE, new String[] { session.getUserID() });
 		base.setProperty(Permission.USERS_SECURITY, new String[] { session.getUserID() });
-		base.setProperty(Permission.ROLES_READ, new String[] { Config.DEFAULT_USER_ROLE });
-		base.setProperty(Permission.ROLES_WRITE, new String[] { Config.DEFAULT_USER_ROLE });
-		base.setProperty(Permission.ROLES_DELETE, new String[] { Config.DEFAULT_USER_ROLE });
-		base.setProperty(Permission.ROLES_SECURITY, new String[] { Config.DEFAULT_USER_ROLE });
+		base.setProperty(Permission.ROLES_READ, new String[] {});
+		base.setProperty(Permission.ROLES_WRITE, new String[] {});
+		base.setProperty(Permission.ROLES_DELETE, new String[] {});
+		base.setProperty(Permission.ROLES_SECURITY, new String[] {});
 		
 		return base;
 	}

@@ -288,7 +288,7 @@ public class MainMenu extends Composite {
 					// Submenu preferences opions
 					subMenuPreferences = new MenuBar(true);
 					subMenuPreferences.setStyleName("okm-SubMenuBar");
-						userPreferences = new MenuItem(Util.menuHTML("img/icon/menu/skin_default.gif", Main.i18n("general.menu.tools.user.preferences")), true, setUserPreferences);
+						userPreferences = new MenuItem(Util.menuHTML("img/icon/menu/user_preferences.gif", Main.i18n("general.menu.tools.user.preferences")), true, setUserPreferences);
 						userPreferences.addStyleName("okm-MainMenuItem");
 					subMenuPreferences.addItem(userPreferences);
 				
@@ -459,7 +459,7 @@ public class MainMenu extends Composite {
 			debugConsole.setHTML(Util.menuHTML("img/icon/menu/console.gif", Main.i18n("general.menu.debug.console")));
 			administration.setHTML(Util.menuHTML("img/icon/menu/administration.gif", Main.i18n("general.menu.administration")));
 			preferences.setHTML(Util.menuHTML("img/icon/menu/preferences.gif", Main.i18n("general.menu.tools.preferences")));
-				userPreferences.setHTML(Util.menuHTML("img/icon/menu/skin_default.gif", Main.i18n("general.menu.tools.user.preferences")));
+				userPreferences.setHTML(Util.menuHTML("img/icon/menu/user_preferences.gif", Main.i18n("general.menu.tools.user.preferences")));
 		menuBookmark.setText(Main.i18n("general.menu.bookmark"));
 			home.setHTML(Util.menuHTML("img/icon/actions/bookmark_go.gif", Main.i18n("general.menu.bookmark.home")));
 			defaultHome.setHTML(Util.menuHTML("img/icon/actions/bookmark.gif", Main.i18n("general.menu.bookmark.default.home")));
@@ -481,7 +481,7 @@ public class MainMenu extends Composite {
 	/**
 	 * refreshReportFormatMenu
 	 */
-	private void refreshReportFormatMenu() {
+	private void refreshReportFormatMenu(){
 		switch (reportOutput) {
 			case OUTPUT_PDF:
 				reportFormatPdf.setHTML(Util.menuHTML("img/icon/security/yes.gif", Main.i18n("general.menu.report.format.pdf")));
@@ -563,6 +563,49 @@ public class MainMenu extends Composite {
 		}
 	}
 	
+	/**
+	 * disableAllOptions
+	 */
+	public void disableAllOptions() {
+		mainMenuOption.createFolderOption = false;
+		mainMenuOption.findFolderOption = false;
+		mainMenuOption.findDocumentOption = false;
+		mainMenuOption.downloadOption = false;
+		mainMenuOption.downloadPdfOption = false;
+		mainMenuOption.lockOption = false;
+		mainMenuOption.unLockOption = false;
+		mainMenuOption.addDocumentOption = false;
+		mainMenuOption.checkoutOption = false;
+		mainMenuOption.checkinOption = false;
+		mainMenuOption.cancelCheckoutOption = false;
+		mainMenuOption.deleteOption = false;
+		mainMenuOption.addPropertyGroupOption = false;
+		mainMenuOption.removePropertyGroupOption = false;
+		mainMenuOption.firedRemovePropertyGroupOption = false;
+		mainMenuOption.addSubscription = false;
+		mainMenuOption.removeSubscription = false;
+		mainMenuOption.homeOption = false;
+		mainMenuOption.refreshOption = false;
+		mainMenuOption.renameOption = false;
+		mainMenuOption.copyOption = false;
+		mainMenuOption.sendDocumentLinkOption = false;
+		mainMenuOption.sendDocumentAttachmentOption = false;
+		mainMenuOption.moveOption = false;
+		mainMenuOption.exportOption = false;
+		mainMenuOption.workflowOption = false;
+		mainMenuOption.addNoteOption = false;
+		mainMenuOption.scannerOption = false;
+		mainMenuOption.uploaderOption = false;
+		mainMenuOption.splitterResizeOption = false;
+		mainMenuOption.bookmarkOption = false;
+		mainMenuOption.goOption = false;
+		mainMenuOption.createFromTemplateOption = false;
+		mainMenuOption.restore = false;
+		mainMenuOption.purge = false;
+		mainMenuOption.purgeTrash = false;
+		evaluateMenuOptions();
+	}
+
 	/**
 	 * Sets the main menu options
 	 * 
@@ -1047,7 +1090,6 @@ public class MainMenu extends Composite {
 				subMenuHelp.addItem(extension);
 				break;
 		}
-		
 	}
 	
 	/**

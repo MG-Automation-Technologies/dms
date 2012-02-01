@@ -36,11 +36,13 @@ import com.google.gwt.user.client.Window.ClosingEvent;
 import com.google.gwt.user.client.Window.ClosingHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.InvocationException;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTUserConfig;
 import com.openkm.frontend.client.bean.RepositoryContext;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.extension.event.HasLanguageEvent;
 import com.openkm.frontend.client.extension.event.handler.LanguageHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasLanguageHandlerExtension;
@@ -64,7 +66,6 @@ import com.openkm.frontend.client.widget.ReportPopup;
 import com.openkm.frontend.client.widget.UserPopup;
 import com.openkm.frontend.client.widget.WorkflowPopup;
 import com.openkm.frontend.client.widget.chat.OnlineUsersPopup;
-import com.openkm.frontend.client.widget.finddocument.FindDocumentSelectPopup;
 import com.openkm.frontend.client.widget.findfolder.FindFolderSelectPopup;
 import com.openkm.frontend.client.widget.foldertree.FolderTree;
 import com.openkm.frontend.client.widget.notify.NotifyPopup;
@@ -80,7 +81,6 @@ import com.openkm.frontend.client.widget.wizard.WizardPopup;
  * Main entry point application
  * 
  * @author jllort
- *
  */
 public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasLanguageEvent {
 	public static String CONTEXT = "/OpenKM";
@@ -116,7 +116,6 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	public NotifyPopup notifyPopup;
 	public DebugConsolePopup debugConsolePopup;
 	public FindFolderSelectPopup findFolderSelectPopup;
-	public FindDocumentSelectPopup findDocumentSelectPopup;
 	public WizardPopup wizardPopup;
 	public ReportPopup reportPopup;
 	public TemplateWizardPopup templateWizardPopup;
@@ -156,6 +155,9 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	
 	// Repository context
 	public RepositoryContext repositoryContext;
+	
+	// Logout trick
+	public boolean windowClosing = false;
 	
 	// Lnaguage widget handlers
 	List<LanguageHandlerExtension> langHandlerExtensionList;
@@ -205,6 +207,8 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		}
 		
 		// Getting language
+		ServiceDefTarget endPoint = (ServiceDefTarget) languageService;
+		endPoint.setServiceEntryPoint(RPCService.LanguageService);
 		languageService.getFrontEndTranslations(Main.get().getLang(), new AsyncCallback<Map<String,String>>() {
 			@Override
 			public void onSuccess(Map<String, String> result) {
@@ -272,7 +276,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		aboutPopup.setStyleName("okm-Popup");
 		aboutPopup.addStyleName("okm-DisableSelect");
 		userPopup = new UserPopup();
-		userPopup.setWidth("470px");
+		userPopup.setWidth("400px");
 		userPopup.setHeight("220px");
 		userPopup.setStyleName("okm-Popup");
 		//userPopup.addStyleName("okm-DisableSelect");
@@ -302,15 +306,10 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		debugConsolePopup.setStyleName("okm-Popup");
 		debugConsolePopup.addStyleName("okm-DisableSelect");
 		findFolderSelectPopup = new FindFolderSelectPopup();
-		findFolderSelectPopup.setWidth("700px");
-		findFolderSelectPopup.setHeight("390px");
+		findFolderSelectPopup.setWidth("400px");
+		findFolderSelectPopup.setHeight("240px");
 		findFolderSelectPopup.setStyleName("okm-Popup");
 		findFolderSelectPopup.addStyleName("okm-DisableSelect");
-		findDocumentSelectPopup = new FindDocumentSelectPopup();
-		findDocumentSelectPopup.setWidth("700px");
-		findDocumentSelectPopup.setHeight("390px");
-		findDocumentSelectPopup.setStyleName("okm-Popup");
-		findDocumentSelectPopup.addStyleName("okm-DisableSelect");
 		wizardPopup = new WizardPopup();
 		wizardPopup.setWidth("400px");
 		wizardPopup.setHeight("40px");
@@ -347,7 +346,9 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	    Window.addWindowClosingHandler(new ClosingHandler() {
 			@Override
 			public void onWindowClosing(ClosingEvent event) {
+				Main.get().windowClosing = true;
 				startUp.keepAlive.cancel();
+				Main.get().mainPanel.bottomPanel.userInfo.logoutChat();
 			}
 		});
 		
@@ -372,6 +373,8 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	 */
 	public void refreshLang(String lang) {
 		this.lang = lang;
+		ServiceDefTarget endPoint = (ServiceDefTarget) languageService;
+		endPoint.setServiceEntryPoint(RPCService.LanguageService);
 		languageService.getFrontEndTranslations(lang, new AsyncCallback<Map<String,String>>() {
 			@Override
 			public void onSuccess(Map<String, String> result) {
@@ -400,8 +403,8 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 				debugConsolePopup.langRefresh();
 				findFolderSelectPopup.langRefresh();
 				wizardPopup.langRefresh();
+				wizardPopup.langRefresh();
 				reportPopup.langRefresh();
-				templateWizardPopup.langRefresh();
 				onlineUsersPopup.langRefresh();
 				// Refreshing all menus on tabs not only the active
 				mainPanel.desktop.navigator.taxonomyTree.langRefresh();
@@ -446,6 +449,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	 */
 	public void showError(String callback, Throwable caught) {
 		startUp.recoverFromError();
+		
 		if (caught instanceof OKMException) {
 			OKMException okme = (OKMException) caught;
 			Log.error("OKMException("+callback+"): "+okme.getCode());
@@ -453,16 +457,16 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		} else if (caught instanceof InvocationException) {
 			InvocationException ie = (InvocationException) caught;
 			Log.error("InvocationException("+callback+"): "+ie);
-			//errorPopupLogout.show(Main.i18n("error.invocation")+" ("+callback+")");
-			errorPopup.show(Main.i18n("error.invocation")+" ("+callback+")");
+			
+			if (!Main.get().windowClosing) {
+				errorPopup.show(Main.i18n("error.invocation")+" ("+callback+")");
+			}
 		} else if (caught instanceof StatusCodeException) {
 			StatusCodeException ie = (StatusCodeException) caught;
 			Log.error("StatusCodeException("+callback+"): "+ie + " <br>HTTP status code error:"+ie.getStatusCode());
-			//errorPopupLogout.show(Main.i18n("error.invocation")+" ("+callback+")");
 			mainPanel.bottomPanel.setStatus("status.network.error.detected", true, ie.getStatusCode());
 		} else {
 			Log.error("UnknownException("+callback+"): "+caught.getMessage());
-			//errorPopupLogout.show(callback+": "+caught.getMessage());
 			errorPopup.show(callback+": "+caught.getMessage());
 		}
 	}

@@ -27,12 +27,7 @@
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
             <td><b>${value.key}</b></td>
             <td>
-              <c:choose>
-                <c:when test="${value.key == 'notification.message.body' || value.key == 'subscription.message.body'}">
-                  <u:escapeHtml string="${value.value}"/> 
-                </c:when>
-                <c:otherwise>${value.value}</c:otherwise>
-              </c:choose>
+              <u:escapeHtml string="${value.value}"/> 
             </td>
           </tr>
         </c:forEach>

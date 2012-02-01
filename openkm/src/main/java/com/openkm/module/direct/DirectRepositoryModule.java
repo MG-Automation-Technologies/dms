@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import javax.jcr.ItemExistsException;
 import javax.jcr.LoginException;
@@ -66,16 +67,15 @@ import com.openkm.bean.Repository;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
+import com.openkm.core.OKMSystemSession;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
-import com.openkm.jcr.SystemSession;
 import com.openkm.module.RepositoryModule;
 import com.openkm.module.base.BaseDocumentModule;
 import com.openkm.module.base.BaseFolderModule;
 import com.openkm.util.MailUtils;
-import com.openkm.util.UUIDGenerator;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WarUtils;
 
@@ -93,21 +93,12 @@ public class DirectRepositoryModule implements RepositoryModule {
 	 */
 	public synchronized static javax.jcr.Repository getRepository() throws javax.jcr.RepositoryException {
 		log.debug("getRepository()");
-		String repConfig = Config.REPOSITORY_CONFIG;
-		String repHome = null;
 		WorkspaceConfig wc = null;
 		
 		if (repository == null) {
-			// Allow absolute repository path
-			if ((new File(Config.REPOSITORY_HOME)).isAbsolute()) {
-				repHome = Config.REPOSITORY_HOME;
-			} else {
-				repHome = Config.HOME_DIR + File.separator + Config.REPOSITORY_HOME;
-			}
-			
 			// Repository configuration
 			try {
-				RepositoryConfig config = RepositoryConfig.create(repConfig, repHome);
+				RepositoryConfig config = getRepositoryConfig();
 				wc = config.getWorkspaceConfig(config.getDefaultWorkspaceName());
 				repository = RepositoryImpl.create(config);
 			} catch (ConfigurationException e) {
@@ -123,7 +114,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 		if (systemSession == null) {
 			// System User Session
 			try {
-				systemSession = SystemSession.create((RepositoryImpl)repository, wc);
+				systemSession = OKMSystemSession.create((RepositoryImpl)repository, wc);
 			} catch (LoginException e) {
 				log.error(e.getMessage(), e);
 				throw e;
@@ -138,6 +129,23 @@ public class DirectRepositoryModule implements RepositoryModule {
 
 		log.debug("getRepository: " + repository);
 		return repository;
+	}
+	
+	/**
+	 * Obtain repository configuration
+	 */
+	public static RepositoryConfig getRepositoryConfig() throws ConfigurationException {
+		String repConfig = Config.REPOSITORY_CONFIG;
+		String repHome = null;
+		
+		// Allow absolute repository path
+		if ((new File(Config.REPOSITORY_HOME)).isAbsolute()) {
+			repHome = Config.REPOSITORY_HOME;
+		} else {
+			repHome = Config.HOME_DIR + File.separator + Config.REPOSITORY_HOME;
+		}
+		
+		return RepositoryConfig.create(repConfig, repHome);
 	}
 	
 	/**
@@ -287,7 +295,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				Node okmConfig = root.addNode(Repository.SYS_CONFIG, Repository.SYS_CONFIG_TYPE);
 
 				// Generate installation UUID
-				String uuid = UUIDGenerator.generate(okmConfig);
+				String uuid = UUID.randomUUID().toString();
 				okmConfig.setProperty(Repository.SYS_CONFIG_UUID, uuid);
 				Repository.setUuid(uuid);
 				
@@ -431,7 +439,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node trashNode = session.getRootNode().getNode(Repository.TRASH + "/" + session.getUserID());
+			Node trashNode = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
 			trashFolder = BaseFolderModule.getProperties(session, trashNode);
 			
 			// Activity log
@@ -530,7 +538,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node personalNode = session.getRootNode().getNode(Repository.PERSONAL + "/" + session.getUserID());
+			Node personalNode = session.getRootNode().getNode(Repository.PERSONAL+"/"+session.getUserID());
 			personalFolder = BaseFolderModule.getProperties(session, personalNode);
 			
 			// Activity log
@@ -787,7 +795,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			userTrash = session.getRootNode().getNode(Repository.TRASH + "/" + session.getUserID());
+			userTrash = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
 			
 			for (NodeIterator it = userTrash.getNodes(); it.hasNext(); ) {
 				Node child = it.nextNode();

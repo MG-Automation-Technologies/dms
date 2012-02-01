@@ -29,7 +29,6 @@
       <%-- <h2>System</h2> --%>
       <table align="center">
         <tr>
-          <td><img src="StatsGraph?t=5"/></td>
           <td><img src="StatsGraph?t=3"/></td>
           <td><img src="StatsGraph?t=4"/></td>
         </tr>

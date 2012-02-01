@@ -76,6 +76,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	private List<PropertyGroupHandlerExtension> propertyGroupHandlerExtensionList;
 	private boolean visibleButton = true; // Sets visibleButtons enabled to default view 
 	private int selectedTab = 0; 
+	private int latestSelectedTab = 0;
 	private int height = 0;
 	private int width = 0;
 	private boolean propertiesVisible = false;
@@ -93,7 +94,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 		tabPanel = new TabLayoutPanel(TAB_HEIGHT, Unit.PX);
 		folder = new Folder();
 		security = new SecurityScrollTable();
-		notes = new Notes();
+		notes = new Notes(Notes.FOLDER_NOTE);
 		panel = new VerticalPanel();
 		propertyGroup = new ArrayList<PropertyGroup>();
 		
@@ -101,7 +102,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
 				int tabIndex = event.getSelectedItem().intValue();
-				Main.get().mainPanel.topPanel.toolBar.evaluateRemoveGroupProperty(isRemoveGroupPropertyEnabled(tabIndex));
+				Main.get().mainPanel.topPanel.toolBar.evaluateRemovePropertyGroup(isRemovePropertyGroupEnabled(tabIndex));
 				selectedTab = tabIndex;
 				if (tabIndex==SECURITY_TAB) {
 					Timer timer = new Timer() {
@@ -168,6 +169,9 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	public void setProperties(GWTFolder folder) {
 		this.folder.set(folder); // Used by tabFolderCommunicator
 		notes.set(folder);	   	 // Used by TabFolderCommunicator
+		
+		selectedTab = tabPanel.getSelectedIndex(); 	// Sets the actual selected Tab
+		latestSelectedTab = selectedTab; 			// stores latest selected tab
 		
 		if (securityVisible) {
 			security.setPath(folder.getPath());
@@ -307,7 +311,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	}
 	
 	/**
-	 * Gets asyncronous to get all groups assigned to a document
+	 * Gets asynchronous to get all groups assigned to a document
 	 */
 	final AsyncCallback<List<GWTPropertyGroup>> callbackGetGroups = new AsyncCallback<List<GWTPropertyGroup>>() {
 		public void onSuccess(List<GWTPropertyGroup> result){
@@ -316,27 +320,30 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 			for (Iterator<GWTPropertyGroup> it = result.iterator(); it.hasNext();) {
 				GWTPropertyGroup gwtGroup = it.next();
 				String groupTranslation = gwtGroup.getLabel();
-				PropertyGroup group = new PropertyGroup(gwtGroup, folder.get(), gwtFolder, (visibleButton && !gwtGroup.isReadonly()));
+				PropertyGroup group = new PropertyGroup(gwtGroup, folder.get(), gwtFolder, visibleButton, gwtGroup.isReadonly());
 				tabPanel.add(group, groupTranslation);
 				propertyGroup.add(group);
+				
 				// Adds property group handlers
 				for (Iterator<PropertyGroupHandlerExtension> itx = propertyGroupHandlerExtensionList.iterator(); itx.hasNext();) {
 					group.addPropertyGroupHandlerExtension(itx.next());
 				}
 			}
+			
 			// To prevent change on document that has minor tabs than previous the new selected tab it'll be the max - 1 on that cases
-			if (tabPanel.getWidgetCount()-1<selectedTab) {
+			if (tabPanel.getWidgetCount()-1<latestSelectedTab) {
 				tabPanel.selectTab(tabPanel.getWidgetCount()-1);
 			} else {
-				tabPanel.selectTab(selectedTab); // Always enable selected tab because on document change tab group are removed
+				tabPanel.selectTab(latestSelectedTab); // Always enable selected tab because on document change tab group are removed
 												 // and on remove loses selectedTab
 			}
+			
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetGroupProperties();
 		}
 
 		public void onFailure(Throwable caught) {
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetGroupProperties();
-			Main.get().showError("GetAllGroups", caught);
+			Main.get().showError("GetGroups", caught);
 		}
 	};
 	
@@ -377,9 +384,9 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	 * 
 	 * @return
 	 */
-	private boolean isRemoveGroupPropertyEnabled(int tabIndex) {
+	private boolean isRemovePropertyGroupEnabled(int tabIndex) {
 		if ((tabPanel.getWidget(tabIndex) instanceof PropertyGroup)) {
-			return ((PropertyGroup) (tabPanel.getWidget(tabIndex))).isButtonsVisible();
+			return ((PropertyGroup) (tabPanel.getWidget(tabIndex))).isRemovePropertyGroupEnabled();
 		} else {
 			return false;
 		}

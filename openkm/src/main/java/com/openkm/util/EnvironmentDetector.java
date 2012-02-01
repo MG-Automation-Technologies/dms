@@ -28,28 +28,39 @@ public class EnvironmentDetector {
 	private static Logger log = LoggerFactory.getLogger(EnvironmentDetector.class);
 	private static final String JBOSS_PROPERTY = "jboss.home.dir";
 	private static final String TOMCAT_PROPERTY = "catalina.home";
+	private static final String CUSTOM_HOME_PROPERTY = "openkm.custom.home";
 	
 	/**
 	 * Guess the application server home directory
 	 */
 	public static String getServerHomeDir() {
+		// Try custom environment variable
+		String dir = System.getProperty(CUSTOM_HOME_PROPERTY);
+		
+		if (dir != null) {
+			log.debug("Using custom home: {}", dir);
+			return dir;
+		}
+		
 		// Try JBoss
-		String dir = System.getProperty(JBOSS_PROPERTY);
-		if (isServerJBoss()) {
-			log.debug("Using JBoss: " + dir);
+		dir = System.getProperty(JBOSS_PROPERTY);
+		
+		if (dir != null) {
+			log.debug("Using JBoss: {}", dir);
 			return dir;
 		}
 		
 		// Try Tomcat
 		dir = System.getProperty(TOMCAT_PROPERTY);
+		
 		if (dir != null) {
-			log.debug("Using Tomcat: " + dir);
+			log.debug("Using Tomcat: {}", dir);
 			return dir;
 		}
 		
 		// Otherwise GWT hosted mode
 		dir = System.getProperty("user.dir") + "/src/test/resources";
-		log.debug("Using default dir: " + dir);
+		log.debug("Using default dir: {}", dir);
 		return dir;
 	}
 	

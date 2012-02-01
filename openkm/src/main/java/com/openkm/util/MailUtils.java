@@ -81,6 +81,7 @@ import com.openkm.core.ConversionException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
@@ -91,7 +92,6 @@ import com.openkm.dao.bean.MailFilter;
 import com.openkm.dao.bean.MailFilterRule;
 import com.openkm.extension.core.ExtensionException;
 import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.direct.DirectDocumentModule;
 import com.openkm.module.direct.DirectMailModule;
 import com.sun.mail.imap.IMAPFolder;
@@ -226,18 +226,25 @@ public class MailUtils {
 			String docPath)	throws MessagingException, PathNotFoundException, RepositoryException,
 			IOException, DatabaseException {
 		log.debug("send({}, {}, {}, {}, {})", new Object[] { fromAddress, toAddress, subject, text, docPath });
-		Session mailSession = null;
-
-		try {
-			InitialContext initialContext = new InitialContext();
-			Object obj = initialContext.lookup(Config.JNDI_BASE + "mail/OpenKM");
-			mailSession = (Session) PortableRemoteObject.narrow(obj, Session.class);
-		} catch (javax.naming.NamingException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+		MimeMessage m = create(fromAddress, toAddress, subject, text, docPath);
+		Transport.send(m);
+		log.debug("send: void");
+	}
+	
+	/**
+	 * Create a mail.
+	 * 
+	 * @param fromAddress Origin address.
+	 * @param toAddress Destination addresses.
+	 * @param subject The mail subject.
+	 * @param text The mail body.
+	 * @throws MessagingException If there is any error.
+	 */
+	private static MimeMessage create(String fromAddress, List<String> toAddress, String subject, String text, 
+			String docPath)	throws MessagingException, PathNotFoundException, RepositoryException,
+			IOException, DatabaseException {
+		log.debug("create({}, {}, {}, {}, {})", new Object[] { fromAddress, toAddress, subject, text, docPath });
+		Session mailSession = getMailSession();
 		MimeMessage m = new MimeMessage(mailSession);
 
 		if (fromAddress != null) {
@@ -306,10 +313,130 @@ public class MailUtils {
 		}
         
         m.setContent(content);
-		Transport.send(m);
-		log.debug("send: void");
+		log.debug("create: {}", m);
+		return m;
 	}
+	
+	/**
+	 * Create a mail from a Mail object
+	 */
+	public static MimeMessage create(String token, Mail mail) throws MessagingException, PathNotFoundException, RepositoryException,
+			IOException, DatabaseException {
+		log.debug("create({})", mail);
+		Session mailSession = getMailSession();
+		MimeMessage m = new MimeMessage(mailSession);
+
+		if (mail.getFrom() != null) {
+			InternetAddress from = new InternetAddress(mail.getFrom());
+			m.setFrom(from);
+		} else {
+			m.setFrom();
+		}
 		
+		InternetAddress[] to = new InternetAddress[mail.getTo().length];
+		int i = 0;
+		
+		for (String strTo : mail.getTo()) {
+			to[i++] = new InternetAddress(strTo);
+		}
+		
+		m.addHeader("charset", "UTF-8");
+		m.setRecipients(Message.RecipientType.TO, to);
+		m.setSubject(mail.getSubject(), "UTF-8");
+		m.setSentDate(new Date());
+		
+		// Build a multiparted mail with HTML and text content for better SPAM behaviour
+		MimeMultipart content = new MimeMultipart("alternative");
+		
+		if (Mail.MIME_TEXT.equals(mail.getMimeType())) {
+			// Text part
+			MimeBodyPart textPart = new MimeBodyPart();
+			textPart.setText(mail.getContent());
+			textPart.setHeader("Content-Type", "text/plain");
+			content.addBodyPart(textPart);
+			
+			// HTML Part
+			MimeBodyPart htmlPart = new MimeBodyPart();
+			StringBuilder htmlContent = new StringBuilder();
+			htmlContent.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n");
+			htmlContent.append("<html>\n<head>\n");
+			htmlContent.append("<meta content=\"text/html;charset=UTF-8\" http-equiv=\"Content-Type\"/>\n");
+			htmlContent.append("</head>\n<body>\n");
+			htmlContent.append(mail.getContent());
+			htmlContent.append("\n</body>\n</html>");
+			htmlPart.setContent(htmlContent.toString(), "text/html; charset=UTF-8");
+			htmlPart.setHeader("Content-Type", "text/html");
+			content.addBodyPart(htmlPart);
+		} else if (Mail.MIME_HTML.equals(mail.getMimeType())) {
+			// Text part
+			MimeBodyPart textPart = new MimeBodyPart();
+			textPart.setText(mail.getContent().replaceAll("<br/?>", "\n").replaceAll("<[^>]*>", ""));
+			textPart.setHeader("Content-Type", "text/plain");
+			content.addBodyPart(textPart);
+			
+			// HTML Part
+			MimeBodyPart htmlPart = new MimeBodyPart();
+			htmlPart.setContent(mail.getContent(), "text/html; charset=UTF-8");
+			htmlPart.setHeader("Content-Type", "text/html");
+			content.addBodyPart(htmlPart);
+		} else {
+			log.warn("Email does not specify content MIME type");
+			
+			// Text part
+			MimeBodyPart textPart = new MimeBodyPart();
+			textPart.setText(mail.getContent());
+			textPart.setHeader("Content-Type", "text/plain");
+			content.addBodyPart(textPart);
+		}
+		
+		for (Document doc : mail.getAttachments()) {
+			InputStream is = null;
+			FileOutputStream fos = null;
+			String docName = JCRUtils.getName(doc.getPath());
+				
+			try {
+				is = OKMDocument.getInstance().getContent(token, doc.getPath(), false);
+				File tmp = File.createTempFile("okm", ".tmp");
+				fos = new FileOutputStream(tmp);
+				IOUtils.copy(is, fos);
+				fos.flush();
+				
+				// Document attachment part
+				MimeBodyPart docPart = new MimeBodyPart();
+				DataSource source = new FileDataSource(tmp.getPath());
+				docPart.setDataHandler(new DataHandler(source));
+				docPart.setFileName(docName);
+				content.addBodyPart(docPart);
+			} finally {
+				IOUtils.closeQuietly(is);
+				IOUtils.closeQuietly(fos);
+			}
+		}
+        
+        m.setContent(content);		
+		log.debug("create: {}", m);
+		return m;
+	}
+	
+	/**
+	 * 
+	 */
+	private static Session getMailSession() {
+		Session mailSession = null;
+
+		try {
+			InitialContext initialContext = new InitialContext();
+			Object obj = initialContext.lookup(Config.JNDI_BASE + "mail/OpenKM");
+			mailSession = (Session) PortableRemoteObject.narrow(obj, Session.class);
+		} catch (javax.naming.NamingException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return mailSession;
+	}
+	
 	/**
 	 * Import messages
 	 * http://www.jguru.com/faq/view.jsp?EID=26898
@@ -453,7 +580,7 @@ public class MailUtils {
 		OKMRepository okmRepository = OKMRepository.getInstance();
 		String path = grouping ? createGroupPath(mailPath, mail.getReceivedDate()) : mailPath;
 		
-		if (ma.getMailProtocol().equals(MailAccount.PROTOCOL_POP3)) {
+		if (ma.getMailProtocol().equals(MailAccount.PROTOCOL_POP3) || ma.getMailProtocol().equals(MailAccount.PROTOCOL_POP3S)) {
 			mail.setPath(path + "/" + ((POP3Folder)folder).getUID(msg) + "-" + JCRUtils.escape(msg.getSubject()));
 		} else {
 			mail.setPath(path + "/" + ((IMAPFolder)folder).getUID(msg) + "-" + JCRUtils.escape(msg.getSubject()));

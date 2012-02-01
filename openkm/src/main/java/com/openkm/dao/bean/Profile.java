@@ -35,7 +35,6 @@ public class Profile implements Serializable {
 	private ProfileStack stack = new ProfileStack();
 	private ProfileTab tab = new ProfileTab();
 	private ProfileWizard wizard = new ProfileWizard();
-	private ProfileToolbar toolbar = new ProfileToolbar();
 	
 	public int getId() {
 		return id;
@@ -117,14 +116,6 @@ public class Profile implements Serializable {
 		this.wizard = wizard;
 	}
 	
-	public ProfileToolbar getToolbar() {
-		return toolbar;
-	}
-
-	public void setToolbar(ProfileToolbar toolbar) {
-		this.toolbar = toolbar;
-	}
-	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -138,7 +129,6 @@ public class Profile implements Serializable {
 		sb.append(", stack="); sb.append(stack);
 		sb.append(", tab="); sb.append(tab);
 		sb.append(", wizard="); sb.append(wizard);
-		sb.append(", toolbar="); sb.append(toolbar);
 		sb.append("}");
 		return sb.toString();
 	}

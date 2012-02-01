@@ -1,5 +1,5 @@
 /**
-*  Copyright (c) 2006-2011  Paco Avila & Josep Llort
+ *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -34,6 +34,7 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.HTML;
@@ -52,6 +53,7 @@ import com.openkm.frontend.client.bean.GWTProfileToolbar;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.ToolBarOption;
 import com.openkm.frontend.client.contants.service.ErrorCode;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.contants.ui.UIDockPanelConstants;
 import com.openkm.frontend.client.contants.ui.UIFileUploadConstants;
@@ -82,21 +84,19 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
 	private final OKMFolderServiceAsync folderService = (OKMFolderServiceAsync) GWT.create(OKMFolderService.class);
 	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT.create(OKMPropertyGroupService.class);
-	
+		
 	private HorizontalPanel panel;
 	private ToolBarButton createFolder;
 	private ToolBarButton findFolder;
-	private ToolBarButton findDocument;
-	private ToolBarButton download;
-	private ToolBarButton downloadPdf;
-	private ToolBarButton print;
 	private ToolBarButton lock;
 	private ToolBarButton unlock;
 	private ToolBarButton addDocument;
+	private ToolBarButton delete;
 	private ToolBarButton checkout;
 	private ToolBarButton checkin;
 	private ToolBarButton cancelCheckout;
-	private ToolBarButton delete;
+	private ToolBarButton download;
+	private ToolBarButton downloadPdf;
 	private ToolBarButton addPropertyGroup;
 	private ToolBarButton removePropertyGroup;
 	private ToolBarButton startWorkflow;
@@ -106,9 +106,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	private ToolBarButton refresh;
 	private ToolBarButton scanner;
 	private ToolBarButton uploader;
-	private ToolBarButton splitterContract;
-	private Image imageContract;
-	private boolean isContract = false;
 	private Object node;
 		
 	private boolean enabled = true;  // Indicates if toolbar is enabled or disabled
@@ -164,19 +161,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			if (toolBarOption.findFolderOption) {
 				Main.get().findFolderSelectPopup.show();
 				fireEvent(HasToolBarEvent.EXECUTE_FIND_FOLDER);
-			}
-		}
-	};
-	
-	/**
-	 * Find document Handler
-	 */
-	ClickHandler findDocumentHandler = new ClickHandler() { 
-		@Override
-		public void onClick(ClickEvent event) {
-			if (toolBarOption.findDocumentOption) {
-				Main.get().findDocumentSelectPopup.show();
-				fireEvent(HasToolBarEvent.EXECUTE_FIND_DOCUMENT);
 			}
 		}
 	};
@@ -418,18 +402,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	};
 	
 	/**
-	 * Print as PDF Handler
-	 */
-	ClickHandler printHandler = new ClickHandler() { 
-		@Override
-		public void onClick(ClickEvent event) {
-			if (toolBarOption.printOption) {
-				executePrint();
-			}
-		}
-	};
-	
-	/**
 	 * Download document
 	 */
 	public void executeDownload() {
@@ -443,13 +415,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	public void executeDownloadPdf() {
 		Main.get().mainPanel.desktop.browser.fileBrowser.table.downloadDocumentPdf();
 		fireEvent(HasToolBarEvent.EXECUTE_DOWNLOAD_PDF_DOCUMENT);
-	}
-	
-	/**
-	 * executePrint
-	 */
-	public void executePrint() {
-		Main.get().mainPanel.desktop.browser.fileBrowser.table.print();
 	}
 
 	/**
@@ -668,8 +633,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		// First must validate path is correct
 		if (Main.get().userHome!=null && !Main.get().userHome.getHomePath().equals("")) {
 			if (Main.get().userHome.getHomeType().equals(Bookmark.BOOKMARK_DOCUMENT)) {
+				ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
+				endPoint.setServiceEntryPoint(RPCService.DocumentService);
 				documentService.isValid( Main.get().userHome.getHomePath() ,callbackIsValidDocument);
 			} else if (Main.get().userHome.getHomeType().equals(Bookmark.BOOKMARK_FOLDER)) {
+				ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
+				endPoint.setServiceEntryPoint(RPCService.FolderService);	
 				folderService.isValid(Main.get().userHome.getHomePath(), callbackIsValidFolder);
 			}
 		}
@@ -711,94 +680,74 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		
 		// ONLY TO DEVELOPMENT TESTINGT
 		//enableAllToolBarForTestingPurpose();
-		createFolder = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.createFolder()),
-				Main.i18n("tree.menu.directory.create"), createFolderHandler);
+		createFolder = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.createFolder()), 
+											   Main.i18n("tree.menu.directory.create"), createFolderHandler);
 		
-		findFolder = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.findFolder()),
-				Main.i18n("tree.menu.directory.find.folder"), findFolderHandler);
-
-		findDocument = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.findDocument()),
-				Main.i18n("tree.menu.directory.find.document"), findDocumentHandler);			
+		findFolder = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.findFolder()), 
+				  					   Main.i18n("tree.menu.directory.find.folder"), findFolderHandler);
+			
 		
-		lock = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.lockDisabled()),
-				Main.i18n("general.menu.file.lock"), lockHandler);
-		
-		unlock = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.lockDisabled()),
-				Main.i18n("general.menu.file.unlock"), unLockHandler);
-		
-		addDocument = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.addDocument()),
-				Main.i18n("general.menu.file.add.document"), addDocumentHandler);
-		
-		delete = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.deleteDisabled()),
-				Main.i18n("general.menu.file.delete"), deleteHandler);
-		
-		checkout = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.checkoutDisabled()),
-				Main.i18n("general.menu.file.checkout"), editHandler);
-		
-		checkin = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.checkinDisabled()),
-				Main.i18n("general.menu.file.checkin"), checkinHandler);
-		
-		cancelCheckout = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.cancelCheckoutDisabled()),
-				Main.i18n("general.menu.file.cancel.checkout"), cancelCheckoutHandler);
-		
+		lock = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.lockDisabled()), 
+				   				 Main.i18n("general.menu.file.lock"), lockHandler);
+			
+		unlock = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.lockDisabled()), 
+  				 				   Main.i18n("general.menu.file.unlock"), unLockHandler);
+			
+		addDocument = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.addDocument()), 
+				   						Main.i18n("general.menu.file.add.document"), addDocumentHandler);
+			
+			
+		delete = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.deleteDisabled()), 
+								   Main.i18n("general.menu.file.delete"), deleteHandler);
+			
+		checkout = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.checkoutDisabled()), 
+				   				 Main.i18n("general.menu.file.checkout"), editHandler);
+			
+		checkin = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.checkinDisabled()), 
+  				 					Main.i18n("general.menu.file.checkin"), checkinHandler);
+			
+		cancelCheckout = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.cancelCheckoutDisabled()), 
+											Main.i18n("general.menu.file.cancel.checkout"), cancelCheckoutHandler);
+			
 		download = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.downloadDisabled()),
-				Main.i18n("general.menu.file.download.document"), downloadHandler);
-		
+									  Main.i18n("general.menu.file.download.document"), downloadHandler);
+			
 		downloadPdf = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.downloadPdfDisabled()),
-				Main.i18n("general.menu.file.download.document.pdf"), downloadPdfHandler);
+				  						Main.i18n("general.menu.file.download.document.pdf"), downloadPdfHandler); 
 		
-		print = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.printDisabled()),
-				Main.i18n("general.menu.file.print"), printHandler); 
-		
+			
 		addPropertyGroup = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.addPropertyGroupDisabled()),
-				Main.i18n("filebrowser.menu.add.property.group"), addPropertyGroupHandler); 
-		
+											 Main.i18n("filebrowser.menu.add.property.group"), addPropertyGroupHandler); 
+			
 		removePropertyGroup = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.removePropertyGroupDisabled()),
-				Main.i18n("filebrowser.menu.remove.property.group"), removePropertyGroupHandler); 
-		
+				 								Main.i18n("filebrowser.menu.remove.property.group"), removePropertyGroupHandler); 
+			
 		startWorkflow = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.startWorkflowDisabled()),
-				Main.i18n("filebrowser.menu.start.workflow"), startWorkflowHandler); 
-		
+										  Main.i18n("filebrowser.menu.start.workflow"), startWorkflowHandler); 
+			
+
 		addSubscription = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.addSubscriptionDisabled()),
-				Main.i18n("filebrowser.menu.add.subscription"), addSubscriptionHandler); 
-		
+				  							Main.i18n("filebrowser.menu.add.subscription"), addSubscriptionHandler); 
+			
 		removeSubscription = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.removeSubscriptionDisabled()),
-				Main.i18n("filebrowser.menu.remove.subscription"), removeSubscriptionHandler); 
-		
+											   Main.i18n("filebrowser.menu.remove.subscription"), removeSubscriptionHandler); 
+
 		home = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.home()),
-				Main.i18n("general.menu.bookmark.home"), arrowHomeHandler); 
-		
+				   				  Main.i18n("general.menu.bookmark.home"), arrowHomeHandler); 
+			
 		refresh = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.refresh()),
-				Main.i18n("general.menu.file.refresh"), arrowRefreshHandler); 
-		
+ 				  					 Main.i18n("general.menu.file.refresh"), arrowRefreshHandler); 
+			
 		scanner = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.scanner()),
-				Main.i18n("general.menu.file.scanner"), scannerHandler); 
-		
+					 				Main.i18n("general.menu.file.scanner"), scannerHandler); 
+			
 		uploader  = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.uploader()),
-				Main.i18n("general.menu.file.uploader"), uploaderHandler); 
-		
-		imageContract = new Image(OKMBundleResources.INSTANCE.splitterContract());
-		splitterContract = new ToolBarButton(imageContract, Main.i18n("general.menu.file.uploader"), new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				if (isContract) {
-					isContract = false;
-					imageContract.setResource(OKMBundleResources.INSTANCE.splitterContract());
-					Main.get().mainPanel.desktop.Expand();
-				} else {
-					isContract = true;
-					imageContract.setResource(OKMBundleResources.INSTANCE.splitterExpand());
-					Main.get().mainPanel.desktop.Contract();
-				}
-			}
-		});
+ 				Main.i18n("general.menu.file.uploader"), uploaderHandler); 
 		
 		createFolder.addMouseOverHandler(mouseOverHandler);
 		createFolder.addMouseOutHandler(mouseOutHandler);
 		findFolder.addMouseOverHandler(mouseOverHandler);
 		findFolder.addMouseOutHandler(mouseOutHandler);
-		findDocument.addMouseOverHandler(mouseOverHandler);
-		findDocument.addMouseOutHandler(mouseOutHandler);
 		lock.addMouseOverHandler(mouseOverHandler);
 		lock.addMouseOutHandler(mouseOutHandler);
 		unlock.addMouseOverHandler(mouseOverHandler);
@@ -817,8 +766,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		download.addMouseOutHandler(mouseOutHandler);
 		downloadPdf.addMouseOverHandler(mouseOverHandler);
 		downloadPdf.addMouseOutHandler(mouseOutHandler);
-		print.addMouseOverHandler(mouseOverHandler);
-		print.addMouseOutHandler(mouseOutHandler);
 		addPropertyGroup.addMouseOverHandler(mouseOverHandler);
 		addPropertyGroup.addMouseOutHandler(mouseOutHandler);
 		removePropertyGroup.addMouseOverHandler(mouseOverHandler);
@@ -837,12 +784,9 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		scanner.addMouseOutHandler(mouseOutHandler);
 		uploader.addMouseOverHandler(mouseOverHandler);
 		uploader.addMouseOutHandler(mouseOutHandler);
-		splitterContract.addMouseOverHandler(mouseOverHandler);
-		splitterContract.addMouseOutHandler(mouseOutHandler);
 		
 		createFolder.setStyleName("okm-ToolBar-button");
 		findFolder.setStyleName("okm-ToolBar-button");
-		findDocument.setStyleName("okm-ToolBar-button");
 		lock.setStyleName("okm-ToolBar-button");
 		unlock.setStyleName("okm-ToolBar-button");
 		addDocument.setStyleName("okm-ToolBar-button");
@@ -852,7 +796,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		cancelCheckout.setStyleName("okm-ToolBar-button-disabled");
 		download.setStyleName("okm-ToolBar-button-disabled");
 		downloadPdf.setStyleName("okm-ToolBar-button-disabled");
-		print.setStyleName("okm-ToolBar-button-disabled");
 		addPropertyGroup.setStyleName("okm-ToolBar-button-disabled");
 		removePropertyGroup.setStyleName("okm-ToolBar-button-disabled");
 		startWorkflow.setStyleName("okm-ToolBar-button-disabled");
@@ -862,7 +805,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		refresh.setStyleName("okm-ToolBar-button-disabled");
 		scanner.setStyleName("okm-ToolBar-button-disabled");
 		uploader.setStyleName("okm-ToolBar-button-disabled");
-		splitterContract.setStyleName("okm-ToolBar-button-disabled");
 		
 		panel = new HorizontalPanel();
 		panel.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
@@ -873,13 +815,9 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		panel.add(space());
 		panel.add(findFolder);
 		panel.add(space());
-		panel.add(findDocument);
-		panel.add(space());
 		panel.add(download);
 		panel.add(space());
 		panel.add(downloadPdf);
-		panel.add(space());
-		panel.add(print);
 		panel.add(space());
 		panel.add(new Image(OKMBundleResources.INSTANCE.separator())); // pos 9
 		panel.add(lock);
@@ -920,8 +858,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		panel.add(space());
 		panel.add(uploader);
 		panel.add(space());
-		panel.add(splitterContract);
-		panel.add(space());
 		
 		// Hide all buttons at startup
 		for (int i=0; i<panel.getWidgetCount(); i++) {
@@ -939,11 +875,17 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * @param origin The Origin panel 
 	 */
 	public void checkToolButtonPermissions(GWTFolder folder, GWTFolder folderParent, int originPanel) {
+		node = folder; // saves actual node
+		// Disable all menu options
+		Main.get().mainPanel.topPanel.mainMenu.disableAllOptions();
+		Main.get().mainPanel.desktop.browser.fileBrowser.disableAllOptions();
+		Main.get().activeFolderTree.menuPopup.disableAllOptions();
+		
+		//folderParent.setPermissions((byte)(GWTPermission.DELETE | GWTPermission.READ | GWTPermission.SECURITY | GWTPermission.WRITE));
 		// Only if toolbar is enabled must change tools icons values
 		if (isEnabled()) {			
 			disableDownload();
 			disableDownloadPdf();
-			disablePrint();
 			disableSendDocumentLink();
 			disableSendDocumentAttachment();
 			disableCheckout();
@@ -1007,6 +949,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TAXONOMY ||
 					Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TEMPLATES ||
 					Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_PERSONAL ) {
+					enableAddDocument();
 					enableScanner();
 					enableUploader();
 				}
@@ -1026,7 +969,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 						Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_PERSONAL &&
 						Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_TRASH && 
 						Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_MAIL) {
-						getAllGroups(folder); // Evaluates enable or disable property group buttons
+						getAllGroups(); // Evaluates enable or disable property group buttons
 					}
 				} else {
 					disableAddPropertyGroup();
@@ -1073,20 +1016,32 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			// Enables find folder in Desktop view 
 			if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace()==UIDockPanelConstants.DESKTOP){
 				enableFindFolder();
-				enableFindDocument();
 			} else {
 				disableFindFolder();
-				disableFindDocument();
 			}
 			
 			// The remove property group is special case depends on tab property enabled, with this call we force to set false
-			evaluateRemoveGroupProperty(false);
+			evaluateRemovePropertyGroup(false);
+			
+			// Trash case
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TRASH) {
+				enablePurgeTrash();
+				if (isRoot) {
+					disablePurge();
+					disableRestore();
+				} else {
+					enablePurge();
+					enableRestore();
+				}
+			}
 			
 			// ONLY TO DEVELOPMENT TESTINGT
 			//enableAllToolBarForTestingPurpose();
 			
-			// Sets the permission to main menu
+			// Sets the permission to menus
 			Main.get().mainPanel.topPanel.mainMenu.setOptions(toolBarOption);
+			Main.get().mainPanel.desktop.browser.fileBrowser.setOptions(toolBarOption);
+			Main.get().activeFolderTree.menuPopup.setOptions(toolBarOption);
 			
 			// Checking extension button 
 			for (Iterator<ToolBarButtonExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
@@ -1103,6 +1058,11 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * @param doc The document
 	 */
 	public void checkToolButtonPermissions(GWTDocument doc, GWTFolder folder) {
+		node = doc; // saves actual node
+		// Disable all menu options
+		Main.get().mainPanel.topPanel.mainMenu.disableAllOptions();
+		Main.get().mainPanel.desktop.browser.fileBrowser.disableAllOptions();
+		Main.get().activeFolderTree.menuPopup.disableAllOptions();
 		// Only if toolbar is enabled must change tools icons values
 		if (isEnabled()) {
 			boolean disable = false;
@@ -1121,14 +1081,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 
 			if (doc.isConvertibleToPdf()) {
 				enableDownloadPdf();
-				enablePrint();
 			} else {
 				disableDownloadPdf();
-				if (doc.getMimeType().equals("application/pdf")) {
-					enablePrint(); // pdf files are printable
-				} else {
-					disablePrint();
-				}
 			}
 			
 			// Checking delete permissions
@@ -1147,6 +1101,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				 (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TAXONOMY ||
 				  Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TEMPLATES ||
 				  Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_PERSONAL) ) {
+				enableAddDocument();
 				enableScanner();
 				enableUploader();
 			}
@@ -1162,7 +1117,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 					
 					if (doc.isSubscribed()) {
 						enableRemoveSubscription();
-					} else {
+					} else if(!doc.isLocked()) {
 						enableAddSubscription();
 					} 
 					
@@ -1180,7 +1135,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 							Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_PERSONAL &&
 							Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_TRASH && 
 							Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_MAIL) {
-							getAllGroups(doc); // Evaluates enable or disable property group buttons
+							getAllGroups(); // Evaluates enable or disable property group buttons
 						}
 					} else {
 						disableAddPropertyGroup();
@@ -1221,7 +1176,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 							
 							if (doc.isSubscribed()) {
 								enableRemoveSubscription();
-							} else {
+							} else if(!doc.isLocked()) {
 								enableAddSubscription();
 							} 
 						} else {
@@ -1275,17 +1230,24 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			// Enables find folder in Desktop view 
 			if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace()==UIDockPanelConstants.DESKTOP){
 				enableFindFolder();
-				enableFindDocument();
 			} else {
 				disableFindFolder();
-				disableFindDocument();
+			}
+			
+			// Trash
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TRASH) {
+				enablePurgeTrash();
+				enablePurge();
+				enableRestore();
 			}
 			
 			// ONLY TO DEVELOPMENT TESTINGT
 			//enableAllToolBarForTestingPurpose();
 			
-			// Sets the permission to main menu
+			// Sets the permission to menus
 			Main.get().mainPanel.topPanel.mainMenu.setOptions(toolBarOption);
+			Main.get().mainPanel.desktop.browser.fileBrowser.setOptions(toolBarOption);
+			Main.get().activeFolderTree.menuPopup.setOptions(toolBarOption);
 			
 			// Sets the visible values to note tab
 			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.notes.setVisibleAddNote(toolBarOption.addNoteOption);
@@ -1305,6 +1267,11 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * @param mail The Mail
 	 */
 	public void checkToolButtonPermissions(GWTMail mail, GWTFolder folder) {
+		node = mail; // saves actual node
+		// Disable all menu options
+		Main.get().mainPanel.topPanel.mainMenu.disableAllOptions();
+		Main.get().mainPanel.desktop.browser.fileBrowser.disableAllOptions();
+		Main.get().activeFolderTree.menuPopup.disableAllOptions();
 		// Only if toolbar is enabled must change tools icons values
 		if (isEnabled()) {
 			
@@ -1314,7 +1281,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			disableMove();
 			disableExport();
 			disableDownloadPdf();
-			disablePrint();
 			disableAddSubscription();
 			disableRemoveSubscription();
 			disableCheckout();
@@ -1342,6 +1308,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				 (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TAXONOMY ||
 				  Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TEMPLATES ||
 				  Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_PERSONAL) ) {
+				enableAddDocument();
 				enableScanner();
 				enableUploader();
 			}
@@ -1365,7 +1332,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 					Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_PERSONAL &&
 					Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_TRASH && 
 					Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_MAIL) {
-					getAllGroups(mail); // Evaluates enable or disable property group buttons
+					getAllGroups(); // Evaluates enable or disable property group buttons
 				}
 				// On mail panel is not able to uploading files
 				if (Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_MAIL ) {
@@ -1402,11 +1369,20 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				disableRemoveSubscription();
 			}
 			
+			// Trash
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TRASH) {
+				enablePurgeTrash();
+				enablePurge();
+				enableRestore();
+			}
+			
 			// ONLY TO DEVELOPMENT TESTINGT
 			//enableAllToolBarForTestingPurpose();
 			
-			// Sets the permission to main menu
+			// Sets the permission to menus
 			Main.get().mainPanel.topPanel.mainMenu.setOptions(toolBarOption);
+			Main.get().mainPanel.desktop.browser.fileBrowser.setOptions(toolBarOption);
+			Main.get().activeFolderTree.menuPopup.setOptions(toolBarOption);
 			
 			// Checking extension button 
 			for (Iterator<ToolBarButtonExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
@@ -1437,7 +1413,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Disables find folder
+	 * Disables create directory
 	 */
 	public void disableCreateDirectory() {
 		toolBarOption.createFolderOption = false;
@@ -1457,33 +1433,13 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Disables find folder
+	 * Disables create directory
 	 */
 	public void disableFindFolder() {
 		toolBarOption.findFolderOption = false;
 		findFolder.setStyleName("okm-ToolBar-button-disabled");
 		findFolder.setResource(OKMBundleResources.INSTANCE.findFolderDisabled());
 		findFolder.setTitle(Main.i18n("tree.menu.directory.find.folder"));
-	}
-	
-	/**
-	 * Disables find document
-	 */
-	public void disableFindDocument() {
-		toolBarOption.findDocumentOption = false;
-		findDocument.setStyleName("okm-ToolBar-button-disabled");
-		findDocument.setResource(OKMBundleResources.INSTANCE.findDocumentDisabled());
-		findDocument.setTitle(Main.i18n("tree.menu.directory.find.document"));
-	}
-	
-	/**
-	 * Enables find document
-	 */
-	public void enableFindDocument() {
-		toolBarOption.findDocumentOption = true;
-		findDocument.setStyleName("okm-ToolBar-button");
-		findDocument.setResource(OKMBundleResources.INSTANCE.findDocument());
-		findDocument.setTitle(Main.i18n("tree.menu.directory.find.document"));
 	}
 	
 	/**
@@ -1624,26 +1580,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		downloadPdf.setStyleName("okm-ToolBar-button");
 		downloadPdf.setResource(OKMBundleResources.INSTANCE.downloadPdf());
 		downloadPdf.setTitle(Main.i18n("general.menu.file.download.document.pdf"));
-	}
-	
-	/**
-	 * Disables print button
-	 */
-	public void disablePrint() {
-		toolBarOption.printOption = false;
-		print.setStyleName("okm-ToolBar-button-disabled");
-		print.setResource(OKMBundleResources.INSTANCE.printDisabled());
-		print.setTitle(Main.i18n("general.menu.file.print"));
-	}
-	
-	/**
-	 * Enables print button
-	 */
-	public void enablePrint() {
-		toolBarOption.printOption = true;
-		print.setStyleName("okm-ToolBar-button");
-		print.setResource(OKMBundleResources.INSTANCE.print());
-		print.setTitle(Main.i18n("general.menu.file.print"));
 	}
 
 	/**
@@ -1812,6 +1748,48 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		home.setStyleName("okm-ToolBar-button");
 		home.setResource(OKMBundleResources.INSTANCE.home());
 		home.setTitle(Main.i18n("general.menu.bookmark.home"));
+	}
+	
+	/**
+	 * enableRestore
+	 */
+	public void enableRestore() {
+		toolBarOption.restore = true;
+	}
+	
+	/**
+	 * disableRestore
+	 */
+	public void disableRestore() {
+		toolBarOption.restore = false;
+	}
+	
+	/**
+	 * enablePurge
+	 */
+	public void enablePurge() {
+		toolBarOption.purge = true;
+	}
+	
+	/**
+	 * disablePurge
+	 */
+	public void disablePurge() {
+		toolBarOption.purge = false;
+	}
+	
+	/**
+	 * enablePurgeTrash
+	 */
+	public void enablePurgeTrash() {
+		toolBarOption.purgeTrash = true;
+	}
+	
+	/**
+	 * disablePurgeTrash
+	 */
+	public void disablePurgeTrash() {
+		toolBarOption.purgeTrash = false;
 	}
 	
 	/**
@@ -2014,7 +1992,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createFolderOption				= true;
 		tmpToolBarOption.findFolderOption				= true;
-		tmpToolBarOption.findDocumentOption				= true;
 		tmpToolBarOption.addDocumentOption 				= true;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -2023,7 +2000,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.unLockOption 					= false;
 		tmpToolBarOption.downloadOption					= false;
 		tmpToolBarOption.downloadPdfOption				= false;
-		tmpToolBarOption.printOption					= false;
 		tmpToolBarOption.deleteOption					= false;
 		tmpToolBarOption.addPropertyGroupOption 		= false;
 		tmpToolBarOption.removePropertyGroupOption  	= false;
@@ -2040,6 +2016,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= true;
 		tmpToolBarOption.uploaderOption					= true;
+		tmpToolBarOption.bookmarkOption 				= true; 
+		tmpToolBarOption.goOption 						= false;
+		tmpToolBarOption.createFromTemplateOption 		= false;
+		tmpToolBarOption.restore 						= false;
+		tmpToolBarOption.purge 							= false;
+		tmpToolBarOption.purgeTrash 					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -2052,7 +2034,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createFolderOption				= true;
 		tmpToolBarOption.findFolderOption				= true;
-		tmpToolBarOption.findDocumentOption				= true;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -2061,7 +2042,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.unLockOption 					= false;
 		tmpToolBarOption.downloadOption					= false;
 		tmpToolBarOption.downloadPdfOption				= false;
-		tmpToolBarOption.printOption					= false;
 		tmpToolBarOption.deleteOption					= false;
 		tmpToolBarOption.addPropertyGroupOption 		= false;
 		tmpToolBarOption.removePropertyGroupOption  	= false;
@@ -2078,6 +2058,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= false;
 		tmpToolBarOption.uploaderOption					= false;
+		tmpToolBarOption.bookmarkOption 				= false; 
+		tmpToolBarOption.goOption 						= false;
+		tmpToolBarOption.createFromTemplateOption 		= false;
+		tmpToolBarOption.restore 						= false;
+		tmpToolBarOption.purge 							= false;
+		tmpToolBarOption.purgeTrash 					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -2090,7 +2076,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createFolderOption				= false;
 		tmpToolBarOption.findFolderOption				= true;
-		tmpToolBarOption.findDocumentOption				= true;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -2099,7 +2084,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.unLockOption 					= false;
 		tmpToolBarOption.downloadOption					= false;
 		tmpToolBarOption.downloadPdfOption				= false;
-		tmpToolBarOption.printOption					= false;
 		tmpToolBarOption.deleteOption					= false;
 		tmpToolBarOption.addPropertyGroupOption 		= false;
 		tmpToolBarOption.removePropertyGroupOption  	= false;
@@ -2116,6 +2100,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= false;
 		tmpToolBarOption.uploaderOption					= false;
+		tmpToolBarOption.bookmarkOption 				= false; 
+		tmpToolBarOption.goOption 						= false;
+		tmpToolBarOption.createFromTemplateOption 		= false;
+		tmpToolBarOption.restore 						= false;
+		tmpToolBarOption.purge 							= false;
+		tmpToolBarOption.purgeTrash 					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -2128,7 +2118,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createFolderOption				= false;
 		tmpToolBarOption.findFolderOption				= true;
-		tmpToolBarOption.findDocumentOption				= true;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -2137,7 +2126,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.unLockOption 					= false;
 		tmpToolBarOption.downloadOption					= false;
 		tmpToolBarOption.downloadPdfOption				= false;
-		tmpToolBarOption.printOption					= false;
 		tmpToolBarOption.deleteOption					= false;
 		tmpToolBarOption.addPropertyGroupOption 		= false;
 		tmpToolBarOption.removePropertyGroupOption  	= false;
@@ -2154,6 +2142,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= false;
 		tmpToolBarOption.uploaderOption					= false;
+		tmpToolBarOption.bookmarkOption 				= false; 
+		tmpToolBarOption.goOption 						= false;
+		tmpToolBarOption.createFromTemplateOption 		= false;
+		tmpToolBarOption.restore 						= false;
+		tmpToolBarOption.purge 							= false;
+		tmpToolBarOption.purgeTrash 					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -2166,7 +2160,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createFolderOption				= true;
 		tmpToolBarOption.findFolderOption				= true;
-		tmpToolBarOption.findDocumentOption				= true;
 		tmpToolBarOption.addDocumentOption 				= true;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -2175,7 +2168,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.unLockOption 					= false;
 		tmpToolBarOption.downloadOption					= false;
 		tmpToolBarOption.downloadPdfOption				= false;
-		tmpToolBarOption.printOption					= false;
 		tmpToolBarOption.deleteOption					= false;
 		tmpToolBarOption.addPropertyGroupOption 		= false;
 		tmpToolBarOption.removePropertyGroupOption  	= false;
@@ -2192,6 +2184,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= false;
 		tmpToolBarOption.uploaderOption					= false;
+		tmpToolBarOption.bookmarkOption 				= false; 
+		tmpToolBarOption.goOption 						= false;
+		tmpToolBarOption.createFromTemplateOption 		= false;
+		tmpToolBarOption.restore 						= false;
+		tmpToolBarOption.purge 							= false;
+		tmpToolBarOption.purgeTrash 					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -2204,7 +2202,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createFolderOption				= true;
 		tmpToolBarOption.findFolderOption				= true;
-		tmpToolBarOption.findDocumentOption				= true;
 		tmpToolBarOption.addDocumentOption 				= true;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -2213,7 +2210,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.unLockOption 					= false;
 		tmpToolBarOption.downloadOption					= false;
 		tmpToolBarOption.downloadPdfOption				= false;
-		tmpToolBarOption.printOption					= false;
 		tmpToolBarOption.deleteOption					= false;
 		tmpToolBarOption.addPropertyGroupOption 		= false;
 		tmpToolBarOption.removePropertyGroupOption  	= false;
@@ -2230,6 +2226,54 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= true;
 		tmpToolBarOption.uploaderOption					= true;
+		tmpToolBarOption.bookmarkOption 				= false; 
+		tmpToolBarOption.goOption 						= false;
+		tmpToolBarOption.createFromTemplateOption 		= false;
+		tmpToolBarOption.restore 						= false;
+		tmpToolBarOption.purge 							= false;
+		tmpToolBarOption.purgeTrash 					= true;
+		return tmpToolBarOption;
+	}
+	
+	/**
+	 * Gets the defatul Tool Bar object values for mail
+	 * 
+	 * @return The default toolBarOption for mail
+	 */
+	public ToolBarOption getDefaultMailToolBar() {
+		ToolBarOption tmpToolBarOption = new ToolBarOption();
+		tmpToolBarOption.createFolderOption				= true;
+		tmpToolBarOption.findFolderOption				= true;
+		tmpToolBarOption.addDocumentOption 				= true;
+		tmpToolBarOption.checkoutOption 				= false;
+		tmpToolBarOption.checkinOption 					= false;
+		tmpToolBarOption.cancelCheckoutOption 			= false;
+		tmpToolBarOption.lockOption						= false;
+		tmpToolBarOption.unLockOption 					= false;
+		tmpToolBarOption.downloadOption					= false;
+		tmpToolBarOption.downloadPdfOption				= false;
+		tmpToolBarOption.deleteOption					= false;
+		tmpToolBarOption.addPropertyGroupOption 		= false;
+		tmpToolBarOption.removePropertyGroupOption  	= false;
+		tmpToolBarOption.addSubscription  				= false;
+		tmpToolBarOption.removeSubscription 		 	= false;
+		tmpToolBarOption.firedRemovePropertyGroupOption = false;
+		tmpToolBarOption.homeOption						= true;
+		tmpToolBarOption.refreshOption					= true;
+		tmpToolBarOption.renameOption 					= false;
+		tmpToolBarOption.copyOption 					= false;
+		tmpToolBarOption.moveOption 					= false;
+		tmpToolBarOption.exportOption					= false;
+		tmpToolBarOption.workflowOption					= false;
+		tmpToolBarOption.addNoteOption					= false;
+		tmpToolBarOption.scannerOption					= true;
+		tmpToolBarOption.uploaderOption					= true;
+		tmpToolBarOption.bookmarkOption 				= false; 
+		tmpToolBarOption.goOption 						= false;
+		tmpToolBarOption.createFromTemplateOption 		= false;
+		tmpToolBarOption.restore 						= false;
+		tmpToolBarOption.purge 							= false;
+		tmpToolBarOption.purgeTrash 					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -2240,9 +2284,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public ToolBarOption getDefaultSearchToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
-		tmpToolBarOption.createFolderOption				= false;
+		tmpToolBarOption.createFolderOption			= false;
 		tmpToolBarOption.findFolderOption				= false;
-		tmpToolBarOption.findDocumentOption				= false;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -2251,7 +2294,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.unLockOption 					= false;
 		tmpToolBarOption.downloadOption					= false;
 		tmpToolBarOption.downloadPdfOption				= false;
-		tmpToolBarOption.printOption					= false;
 		tmpToolBarOption.deleteOption					= false;
 		tmpToolBarOption.addPropertyGroupOption 		= false;
 		tmpToolBarOption.removePropertyGroupOption  	= false;
@@ -2268,6 +2310,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= false;
 		tmpToolBarOption.uploaderOption					= false;
+		tmpToolBarOption.bookmarkOption 				= false; 
+		tmpToolBarOption.goOption 						= false;
+		tmpToolBarOption.createFromTemplateOption 		= false;
+		tmpToolBarOption.restore 						= false;
+		tmpToolBarOption.purge 							= false;
+		tmpToolBarOption.purgeTrash 					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -2280,7 +2328,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createFolderOption				= false;
 		tmpToolBarOption.findFolderOption				= false;
-		tmpToolBarOption.findDocumentOption				= false;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -2289,7 +2336,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.unLockOption 					= false;
 		tmpToolBarOption.downloadOption					= false;
 		tmpToolBarOption.downloadPdfOption				= false;
-		tmpToolBarOption.printOption					= false;
 		tmpToolBarOption.deleteOption					= false;
 		tmpToolBarOption.addPropertyGroupOption 		= false;
 		tmpToolBarOption.removePropertyGroupOption  	= false;
@@ -2306,6 +2352,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= false;
 		tmpToolBarOption.uploaderOption					= false;
+		tmpToolBarOption.bookmarkOption 				= false; 
+		tmpToolBarOption.goOption 						= false;
+		tmpToolBarOption.createFromTemplateOption 		= false;
+		tmpToolBarOption.restore 						= false;
+		tmpToolBarOption.purge 							= false;
+		tmpToolBarOption.purgeTrash 					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -2318,7 +2370,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createFolderOption				= false;
 		tmpToolBarOption.findFolderOption				= false;
-		tmpToolBarOption.findDocumentOption				= false;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -2327,7 +2378,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.unLockOption 					= false;
 		tmpToolBarOption.downloadOption					= false;
 		tmpToolBarOption.downloadPdfOption				= false;
-		tmpToolBarOption.printOption					= false;
 		tmpToolBarOption.deleteOption					= false;
 		tmpToolBarOption.addPropertyGroupOption 		= false;
 		tmpToolBarOption.removePropertyGroupOption  	= false;
@@ -2344,6 +2394,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= false;
 		tmpToolBarOption.uploaderOption					= false;
+		tmpToolBarOption.bookmarkOption 				= false; 
+		tmpToolBarOption.goOption 						= false;
+		tmpToolBarOption.createFromTemplateOption 		= false;
+		tmpToolBarOption.restore 						= false;
+		tmpToolBarOption.purge 							= false;
+		tmpToolBarOption.purgeTrash 					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -2356,7 +2412,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createFolderOption				= false;
 		tmpToolBarOption.findFolderOption				= false;
-		tmpToolBarOption.findDocumentOption				= false;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -2365,7 +2420,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.unLockOption 					= false;
 		tmpToolBarOption.downloadOption					= false;
 		tmpToolBarOption.downloadPdfOption				= false;
-		tmpToolBarOption.printOption					= false;
 		tmpToolBarOption.deleteOption					= false;
 		tmpToolBarOption.addPropertyGroupOption 		= false;
 		tmpToolBarOption.removePropertyGroupOption  	= false;
@@ -2382,6 +2436,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= false;
 		tmpToolBarOption.uploaderOption					= false;
+		tmpToolBarOption.bookmarkOption 				= false; 
+		tmpToolBarOption.goOption 						= false;
+		tmpToolBarOption.createFromTemplateOption 		= false;
+		tmpToolBarOption.restore 						= false;
+		tmpToolBarOption.purge 							= false;
+		tmpToolBarOption.purgeTrash 					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -2392,7 +2452,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	public void evaluateShowIcons() {
 		if (toolBarOption.createFolderOption) {enableCreateDirectory(); } else {disableCreateDirectory(); }
 		if (toolBarOption.findFolderOption) {enableFindFolder(); } else {disableFindFolder(); }
-		if (toolBarOption.findDocumentOption) {enableFindDocument(); } else {disableFindDocument(); }
 		if (toolBarOption.addDocumentOption) {enableAddDocument(); } else {disableAddDocument(); }
 		if (toolBarOption.checkoutOption) { enableCheckout(); } else { disableCheckout(); }
 		if (toolBarOption.checkinOption) { enableCheckin(); } else { disableCheckin(); }
@@ -2401,12 +2460,10 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		if (toolBarOption.unLockOption) { enableUnlock(); } else { disableUnlock(); }
 		if (toolBarOption.downloadOption) { enableDownload(); } else { disableDownload(); }
 		if (toolBarOption.downloadPdfOption) { enableDownloadPdf(); } else { disableDownloadPdf(); }
-		if (toolBarOption.printOption) { enablePrint(); } else { disablePrint(); }
 		if (toolBarOption.deleteOption) { enableDelete(); } else { disableDelete(); }
 		if (toolBarOption.addPropertyGroupOption) { enableAddPropertyGroup(); } else { disableAddPropertyGroup(); }
 		
-		// Special case removePropertyGroupOption is only evaluated on TabDocument and TabFolder tab 
-		// changing by evaluateRemoveGroupProperty method
+		// Special case removePropertyGroupOption is only evaluated on TabDocument tab changing by evaluateRemoveGroupProperty method
 		if (!toolBarOption.removePropertyGroupOption) { // We evaluate for changing panel desktop / search ( only disable option )
 			removePropertyGroup.setStyleName("okm-ToolBar-button-disabled");
 			removePropertyGroup.setResource(OKMBundleResources.INSTANCE.removePropertyGroupDisabled());
@@ -2433,7 +2490,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * 
 	 * @param propertyGroupEnabled
 	 */
-	public void evaluateRemoveGroupProperty(boolean propertyGroupEnabled) {
+	public void evaluateRemovePropertyGroup(boolean propertyGroupEnabled) {
 		// Show or hide removeGroupProperty depends on two cases, the property is enabled by security user and
 		// must be one tab group selected
 		
@@ -2574,6 +2631,15 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 						}
 						toolBarEnabled = true;
 						break;
+						
+					case UIDesktopConstants.NAVIGATOR_MAIL:
+						if (viewValues.containsKey("view_mail:option")){
+							toolBarOption = (ToolBarOption) viewValues.get("view_mail:option");
+						} else {
+							toolBarOption = getDefaultMailToolBar();
+						}
+						toolBarEnabled = true;
+						break;
 				}
 				break;
 				
@@ -2685,10 +2751,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	/**
 	 * Gets all property groups
 	 */
-	private void getAllGroups(Object node) {
-		this.node = node;
+	private void getAllGroups() {
 		String path = getActualNodePath();
-		
 		if (!path.equals("")) {
 			propertyGroupService.getAllGroups(path, callbackGetAllGroups);
 		}
@@ -2820,7 +2884,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public void langRefresh() {
 		evaluateShowIcons();
-		evaluateRemoveGroupProperty(propertyGroupEnabled);
+		evaluateRemovePropertyGroup(propertyGroupEnabled);
 	}
 	
 	/**
@@ -2833,6 +2897,15 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
+	 * setToolBarOption
+	 * 
+	 * @param toolBarOption
+	 */
+	public void setToolBarOption(ToolBarOption toolBarOption) {
+		this.toolBarOption = toolBarOption;
+	}
+	
+	/**
 	 * setAvailableOption
 	 * 
 	 * @param option
@@ -2841,75 +2914,68 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		// FIRST
 		createFolder.setVisible(option.isCreateFolderVisible());
 		panel.getWidget(2).setVisible(option.isCreateFolderVisible()); // Hide space
-		findFolder.setVisible(option.isFindFolderVisible());
-		panel.getWidget(4).setVisible(option.isFindFolderVisible()); // Hide space
-		findDocument.setVisible(option.isFindFolderVisible());
-		panel.getWidget(6).setVisible(option.isFindFolderVisible()); // Hide space
+		findFolder.setVisible(option.isCreateFolderVisible());
+		panel.getWidget(4).setVisible(option.isCreateFolderVisible()); // Hide space
 		download.setVisible(option.isDownloadVisible());
-		panel.getWidget(8).setVisible(option.isDownloadVisible()); // hide space
+		panel.getWidget(6).setVisible(option.isDownloadVisible()); // hide space
 		downloadPdf.setVisible(option.isDownloadPdfVisible());
-		panel.getWidget(10).setVisible(option.isDownloadPdfVisible()); // hide space
-		print.setVisible(option.isPrintVisible());
-		panel.getWidget(12).setVisible(Main.get().workspaceUserProperties.getWorkspace().isPrintPreview());
-		panel.getWidget(13).setVisible(option.isCreateFolderVisible() || option.isFindFolderVisible() ||
-					                   option.isDownloadVisible() || option.isDownloadPdfVisible() ||
-					                   option.isPrintVisible()); // hide separator
+		panel.getWidget(8).setVisible(option.isDownloadPdfVisible()); // hide space
+		panel.getWidget(9).setVisible(option.isCreateFolderVisible() || option.isFindFolderVisible() ||
+					                  option.isDownloadVisible() || option.isDownloadPdfVisible()); // hide separator
  
 		
 		// SECOND
 		lock.setVisible(option.isLockVisible());
-		panel.getWidget(15).setVisible(option.isLockVisible()); // hide space
+		panel.getWidget(11).setVisible(option.isLockVisible()); // hide space
 		unlock.setVisible(option.isUnlockVisible());
-		panel.getWidget(17).setVisible(option.isUnlockVisible()); // hide space
-		panel.getWidget(18).setVisible(option.isLockVisible() || option.isUnlockVisible()); // hide separator
+		panel.getWidget(13).setVisible(option.isUnlockVisible()); // hide space
+		panel.getWidget(14).setVisible(option.isLockVisible() || option.isUnlockVisible()); // hide separator
 		
 		// THIRD
 		addDocument.setVisible(option.isAddDocumentVisible());
-		panel.getWidget(20).setVisible(option.isAddDocumentVisible()); // hide space
+		panel.getWidget(16).setVisible(option.isAddDocumentVisible()); // hide space
 		checkout.setVisible(option.isCheckoutVisible());
-		panel.getWidget(22).setVisible(option.isCheckoutVisible()); // hide space
+		panel.getWidget(18).setVisible(option.isCheckoutVisible()); // hide space
 		checkin.setVisible(option.isCheckinVisible());
-		panel.getWidget(24).setVisible(option.isCheckinVisible()); // hide space
+		panel.getWidget(20).setVisible(option.isCheckinVisible()); // hide space
 		cancelCheckout.setVisible(option.isCancelCheckoutVisible());
-		panel.getWidget(26).setVisible(option.isCancelCheckoutVisible()); // hide space
+		panel.getWidget(22).setVisible(option.isCancelCheckoutVisible()); // hide space
 		delete.setVisible(option.isDeleteVisible());
-		panel.getWidget(28).setVisible(option.isDeleteVisible()); // hide space
-		panel.getWidget(29).setVisible(option.isAddDocumentVisible() || option.isCheckoutVisible() || 
+		panel.getWidget(24).setVisible(option.isDeleteVisible()); // hide space
+		panel.getWidget(25).setVisible(option.isAddDocumentVisible() || option.isCheckoutVisible() || 
 									   option.isCheckinVisible() || option.isCancelCheckoutVisible() || 
 									   option.isDeleteVisible()); // hide separator
 		
 		// FOURTH
 		addPropertyGroup.setVisible(option.isAddPropertyGroupVisible());
-		panel.getWidget(31).setVisible(option.isAddPropertyGroupVisible()); // hide space
+		panel.getWidget(27).setVisible(option.isAddPropertyGroupVisible()); // hide space
 		removePropertyGroup.setVisible(option.isRemovePropertyGroupVisible());
-		panel.getWidget(33).setVisible(option.isRemovePropertyGroupVisible()); // hide space
-		panel.getWidget(34).setVisible(option.isAddPropertyGroupVisible() || option.isRemovePropertyGroupVisible()); // hide separator
+		panel.getWidget(29).setVisible(option.isRemovePropertyGroupVisible()); // hide space
+		panel.getWidget(30).setVisible(option.isAddPropertyGroupVisible() || option.isRemovePropertyGroupVisible()); // hide separator
 		
 		// FIFTH
 		startWorkflow.setVisible(option.isStartWorkflowVisible());
-		panel.getWidget(36).setVisible(option.isStartWorkflowVisible()); // hide space
-		panel.getWidget(37).setVisible(option.isStartWorkflowVisible()); // hide separator
+		panel.getWidget(32).setVisible(option.isStartWorkflowVisible()); // hide space
+		panel.getWidget(33).setVisible(option.isStartWorkflowVisible()); // hide separator
 		
 		// SIXTH
 		addSubscription.setVisible(option.isAddSubscriptionVisible());
-		panel.getWidget(39).setVisible(option.isAddSubscriptionVisible()); // hide space
-		removeSubscription.setVisible(option.isAddSubscriptionVisible());
-		panel.getWidget(41).setVisible(option.isAddSubscriptionVisible()); // hide space
-		panel.getWidget(42).setVisible(option.isAddSubscriptionVisible() || option.isAddSubscriptionVisible()); // hide separator
+		panel.getWidget(35).setVisible(option.isAddSubscriptionVisible()); // hide space
+		removeSubscription.setVisible(option.isRemoveSubscriptionVisible());
+		panel.getWidget(37).setVisible(option.isRemoveSubscriptionVisible()); // hide space
+		panel.getWidget(38).setVisible(option.isAddSubscriptionVisible() || option.isRemoveSubscriptionVisible()); // hide separator
 		
 		// SEVENTH 
 		home.setVisible(option.isHomeVisible());
-		panel.getWidget(44).setVisible(option.isHomeVisible()); // hide space
+		panel.getWidget(40).setVisible(option.isHomeVisible()); // hide space
 		refresh.setVisible(option.isRefreshVisible());
-		panel.getWidget(46).setVisible(option.isRefreshVisible()); // hide space
-		panel.getWidget(47).setVisible(option.isHomeVisible() || option.isRefreshVisible()); // hide separator
+		panel.getWidget(42).setVisible(option.isRefreshVisible()); // hide space
+		panel.getWidget(43).setVisible(option.isHomeVisible() || option.isRefreshVisible()); // hide separator
 		
 		scanner.setVisible(option.isScannerVisible());
-		panel.getWidget(49).setVisible(option.isScannerVisible()); // hide space
+		panel.getWidget(45).setVisible(option.isScannerVisible()); // hide space
 		uploader.setVisible(option.isUploaderVisible());
-		panel.getWidget(51).setVisible(option.isUploaderVisible()); // hide space
-		splitterContract.setVisible(true);
-		panel.getWidget(53).setVisible(true); // hide space
+		panel.getWidget(47).setVisible(option.isUploaderVisible()); // hide space
 	}
 	
 	/**

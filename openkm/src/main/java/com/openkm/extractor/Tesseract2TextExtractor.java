@@ -92,8 +92,7 @@ public class Tesseract2TextExtractor extends AbstractTextExtractor {
     			hm = new HashMap<String, Object>();
     			hm.put("fileIn", tmpFilePre.getPath());
     			hm.put("fileOut", tmpFileOut.getPath());
-    			tpl = Config.SYSTEM_OCR + " ${fileIn} ${fileOut}";
-    			cmd = TemplateUtils.replace("SYSTEM_OCR", tpl, hm);
+    			cmd = TemplateUtils.replace("SYSTEM_OCR", Config.SYSTEM_OCR, hm);
     			ExecutionUtils.runCmd(cmd);
     			
     			// Read result

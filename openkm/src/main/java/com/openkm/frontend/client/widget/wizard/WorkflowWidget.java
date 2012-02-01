@@ -44,9 +44,7 @@ import com.openkm.frontend.client.widget.form.FormManager;
  *
  */
 public class WorkflowWidget extends Composite {
-	
 	private final OKMWorkflowServiceAsync workflowService = (OKMWorkflowServiceAsync) GWT.create(OKMWorkflowService.class);
-	
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
 	private boolean drawed = false;
@@ -123,7 +121,8 @@ public class WorkflowWidget extends Composite {
 		public void onSuccess(Map<String, List<GWTFormElement>> result) {
 			// Initial task is always called start
 			manager.setFormElements(result.get(Main.get().workspaceUserProperties.getWorkspace().getWorkflowRunConfigForm()));
-			if (manager.getFormElements()!=null) {
+			
+			if (manager.getFormElements() != null) {
 				manager.loadDataFromWorkflowVariables(workflowVariables);
 				drawForm();
 				workflowWidgetToFire.hasPendingProcessDefinitionForms();				
@@ -140,8 +139,6 @@ public class WorkflowWidget extends Composite {
 	
 	/**
 	 * getProcessDefinitionForms
-	 * 
-	 * @param id
 	 */
 	public void getProcessDefinitionForms(double id) {	
 		workflowService.getProcessDefinitionForms(id, callbackGetProcessDefinitionForms);

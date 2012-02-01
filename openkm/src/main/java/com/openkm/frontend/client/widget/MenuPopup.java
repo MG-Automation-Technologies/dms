@@ -23,10 +23,7 @@ package com.openkm.frontend.client.widget;
 
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
-import com.openkm.frontend.client.bean.GWTDocument;
-import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.bean.GWTMail;
+import com.openkm.frontend.client.bean.ToolBarOption;
 
 /**
  * Root menu popup
@@ -57,57 +54,18 @@ public class MenuPopup extends PopupPanel {
 	}
 	
 	/**
-	 * Set enabled all menu options
-	 */
-	public void enableAllMenuOptions() {
-		menu.enableAllMenuOptions();
-	}
-	
-	/**
-	 * Set enabled root menu options
-	 */
-	public void enableRootMenuOptions() {
-		menu.enableRootMenuOptions();
-	}
-	
-	/**
-	 * Checks permissions associated to folder and menu options enabled actions
+	 * setOptions
 	 * 
-	 * @param folder The folder
+	 * @param toolBarOption
 	 */
-	public void checkMenuOptionPermissions(GWTFolder folder, GWTFolder folderParent) {
-		menu.checkMenuOptionPermissions(folder, folderParent);
-	}
-	
-	/**
-	 * Evaluates menu options
-	 */
-	public void evaluateMenuOptions() {
-		menu.evaluateMenuOptions();
+	public void setOptions(ToolBarOption toolBarOption) {
+		menu.setOptions(toolBarOption);
 	}
 	
 	/**
 	 * Disables all menu options
 	 */
-	public void disableAllMenuOption(){
-		menu.disableAllMenuOption();
-	}
-	
-	/**
-	 * Checks permissions associated to document and menu options enabled actions
-	 * 
-	 * @param doc The document
-	 */
-	public void checkMenuOptionPermissions(GWTDocument doc, GWTFolder folder ) {
-		menu.checkMenuOptionPermissions(doc, folder);
-	}
-	
-	/**
-	 * Checks permissions associated to mail and menu options enabled actions
-	 * 
-	 * @param mail The mail
-	 */
-	public void checkMenuOptionPermissions(GWTMail mail, GWTFolder folder ) {
-		menu.checkMenuOptionPermissions(mail, folder);
+	public void disableAllOptions(){
+		menu.disableAllOptions();
 	}
 }

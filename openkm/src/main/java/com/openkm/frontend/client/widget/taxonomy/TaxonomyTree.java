@@ -27,8 +27,6 @@ import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.widget.MenuPopup;
 import com.openkm.frontend.client.widget.foldertree.FolderSelectPopup;
 import com.openkm.frontend.client.widget.foldertree.FolderTree;
-import com.openkm.frontend.client.widget.mainmenu.Bookmark;
-import com.openkm.frontend.client.widget.startup.StartUp;
 
 /**
  * TaxonomyTree
@@ -55,20 +53,6 @@ public class TaxonomyTree extends FolderTree {
 		evaluesFolderIcon(actualItem);			
 		actualItem.setState(true);
 		rootItem = actualItem;  // Preserves actualItem value
-		
-		// Simulate we pass params by broser ( take a look really are not passed )
-		// to show user home on loading
-		if (Main.get().fldPath==null || Main.get().fldPath.equals("")) {
-			if (Main.get().userHome.getHomeType().equals(Bookmark.BOOKMARK_DOCUMENT)) {
-				Main.get().docPath = Main.get().userHome.getHomePath();
-				Main.get().fldPath = Main.get().userHome.getHomePath().substring(0,Main.get().userHome.getHomePath().lastIndexOf("/"));
-			} else if (Main.get().userHome.getHomeType().equals(Bookmark.BOOKMARK_FOLDER)) {
-				Main.get().fldPath = Main.get().userHome.getHomePath();
-			}
-		}
-		
-		Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_TAXONOMY_FOLDERS);
-		getChilds(folderRoot.getPath()); // Normal refreshing
 	}
 	
 	/**

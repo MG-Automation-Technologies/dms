@@ -23,11 +23,8 @@ package com.openkm.frontend.client.widget;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.MenuItem;
-
 import com.openkm.frontend.client.bean.GWTAvailableOption;
-import com.openkm.frontend.client.bean.GWTDocument;
-import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.bean.GWTMail;
+import com.openkm.frontend.client.bean.ToolBarOption;
 
 
 /**
@@ -39,13 +36,9 @@ import com.openkm.frontend.client.bean.GWTMail;
 public abstract class MenuBase extends Composite {
 	
 	public abstract void langRefresh();
-	public abstract void enableAllMenuOptions();
-	public abstract void enableRootMenuOptions();	
-	public abstract void checkMenuOptionPermissions(GWTFolder folder, GWTFolder folderParent);
+	public abstract void setOptions(ToolBarOption toolBarOption);
 	public abstract void evaluateMenuOptions();
-	public abstract void disableAllMenuOption();
-	public abstract void checkMenuOptionPermissions(GWTDocument doc, GWTFolder folder );
-	public abstract void checkMenuOptionPermissions(GWTMail mail, GWTFolder folder );
+	public abstract void disableAllOptions();
 	public abstract void setAvailableOption(GWTAvailableOption option);
 	
 	/**

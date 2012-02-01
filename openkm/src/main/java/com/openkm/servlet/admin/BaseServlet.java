@@ -30,7 +30,15 @@ public class BaseServlet extends HttpServlet  {
 	}
 	
 	/**
-	 * Update HTTP session manager
+	 * Dispatch errors 
+	 */
+	protected void sendError(PrintWriter out, String msg) throws ServletException, IOException {
+		out.println("<div class=\"error\">" + msg + "</div>");
+		out.flush();
+	}
+	
+	/**
+	 * Update HTTP active sessions
 	 */
 	public void updateSessionManager(HttpServletRequest request) {
 		HttpSessionManager.getInstance().update(request.getSession().getId());
@@ -96,5 +104,19 @@ public class BaseServlet extends HttpServlet  {
 	public void footer(PrintWriter out) {
 		out.println("</body>");
 		out.println("</html>");
+	}
+	
+	/**
+	 * Print ok messages
+	 */
+	public void ok(PrintWriter out, String msg) {
+		out.print("<div class=\"ok\">" + msg + "</div>");
+	}
+	
+	/**
+	 * Print warn messages
+	 */
+	public void warn(PrintWriter out, String msg) {
+		out.print("<div class=\"warn\">" + msg + "</div>");
 	}
 }

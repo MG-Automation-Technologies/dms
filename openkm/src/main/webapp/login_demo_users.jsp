@@ -35,7 +35,7 @@
 
   out.println("</td></tr>");
   out.println("<tr><td class=\"demo_title\">- AVAILABLE DEMO USERS -</td></tr>");
-  out.println("<tr><td><b>If you need you own user, please <a href=\"http://www.openkm.com/Contact/\">contact us</a>.</b></td></tr>");
+  out.println("<tr><td><b>If you need you own user, please <a href=\"http://www.openkm.com/en/Contact?asunto=Online demo user request\">contact us</a>.</b></td></tr>");
   out.println("<tr><td>");
   out.println("<table class=\"demo_list\" align=\"center\">");
   out.println("<tr><th>User</th><th>Password</th></tr>");

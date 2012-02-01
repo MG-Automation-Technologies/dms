@@ -33,9 +33,6 @@ public class ChatRoomDialogBox extends DialogBox implements HasTranslations, Has
 	
 	/**
 	 * ChatRoomDialogBox
-	 * 
-	 * @param autoHide
-	 * @param modal
 	 */
 	public ChatRoomDialogBox(boolean autoHide, boolean modal) {
 		super(autoHide, modal);

@@ -45,16 +45,37 @@ import com.openkm.frontend.client.Main;
  * CalendarWidget
  */
 public class CalendarWidget extends Composite implements ClickHandler, HasChangeHandlers {
-
+	
+	private Date date = new Date();
+	private Date now = new Date(); 
+	private String[] days = new String[] { "", "", "", "", "", "", "" };	
+	private String[] months = new String[] { "", "", "", "", "", "", "", "", "", "", "", "" };
+	private final NavBar navbar = new NavBar(this);
+	private final VerticalPanel calendarPanel = new VerticalPanel();
+	private final Grid grid = new Grid(7, 7) {
+		public boolean clearCell(int row, int column) {
+			boolean retValue = super.clearCell(row, column);
+			Element td = getCellFormatter().getElement(row, column);
+			DOM.setInnerHTML(td, "");
+			return retValue;
+		}
+	};
+	private int firstDayOfWeek = 0;
+	
+	/**
+	 * NavBar
+	 * 
+	 * @author jllort
+	 *
+	 */
 	private class NavBar extends Composite implements ClickHandler {
 	
-		public final HorizontalPanel hPanel = new HorizontalPanel();
-		public final Button prevMonth = new Button("&lt;", this);
-		public final Button prevYear = new Button("&lt;&lt;", this);
-		public final Button nextYear = new Button("&gt;&gt;", this);
-		public final Button nextMonth = new Button("&gt;", this);
-		public final HTML title = new HTML();
-		
+		private final HorizontalPanel hPanel = new HorizontalPanel();
+		private final Button prevMonth = new Button("&lt;", this);
+		private final Button prevYear = new Button("&lt;&lt;", this);
+		private final Button nextYear = new Button("&gt;&gt;", this);
+		private final Button nextMonth = new Button("&gt;", this);
+		private final HTML title = new HTML();
 		private final CalendarWidget calendar;
 		
 		public NavBar(CalendarWidget calendar) {
@@ -122,25 +143,6 @@ public class CalendarWidget extends Composite implements ClickHandler, HasChange
 		}
 	}
 	
-	private final NavBar navbar = new NavBar(this);
-	private final VerticalPanel calendarPanel = new VerticalPanel();
-	
-	private final Grid grid = new Grid(7, 7) {
-		public boolean clearCell(int row, int column) {
-			boolean retValue = super.clearCell(row, column);
-		       
-			Element td = getCellFormatter().getElement(row, column);
-			DOM.setInnerHTML(td, "");
-			return retValue;
-		}
-	};
-	
-	private Date date = new Date();
-	
-	private String[] days = new String[] { "", "", "", "", "", "", "" };
-	
-	private String[] months = new String[] { "", "", "", "", "", "", "", "", "", "", "", "" };
-	
 	/**
 	 * CalendarWidget
 	 */
@@ -152,7 +154,6 @@ public class CalendarWidget extends Composite implements ClickHandler, HasChange
 		calendarPanel.add(grid);
 		calendarPanel.setWidth("230");
 		langRefresh(); // Sets language translations
-		drawCalendar();
 		setStyleName("CalendarWidget");
 	}
 	
@@ -165,16 +166,25 @@ public class CalendarWidget extends Composite implements ClickHandler, HasChange
 		int month = getMonth();
 		setHeaderText(year, month);
 		grid.getRowFormatter().setStyleName(0, "weekheader");
+		
+		// Draw days of week column
 		for (int i = 0; i < days.length; i++) {
 			grid.getCellFormatter().setStyleName(0, i, "days");
-			grid.setText(0, i, days[i].substring(0, 3));
+			int pos = i-firstDayOfWeek; // make day of week rectification while drawing
+			if (pos<0) {
+				pos = pos +7;
+			}
+			grid.setText(0, pos, days[i].substring(0, 3));
 		}
-	
-		Date now = new Date();
+		
 		int sameDay = now.getDate();
 		int today = (now.getMonth() == month && now.getYear()+1900 == year) ? sameDay : 0;
 		   
 		int firstDay = new Date(year - 1900, month, 1).getDay();
+		firstDay = firstDay - firstDayOfWeek; // make day of week rectification at stating drawing
+		if (firstDay<0) {
+			firstDay = firstDay +7;
+		}
 		int numOfDays = getDaysInMonth(year, month);
 	
 		int j = 0;
@@ -277,6 +287,22 @@ public class CalendarWidget extends Composite implements ClickHandler, HasChange
 	 */
 	public void nextYear() {
 		setYear(getYear() + 1);
+		drawCalendar();
+	}
+	
+	/**
+	 * setNow
+	 * 
+	 * @param now
+	 */
+	@SuppressWarnings("deprecation")
+	public void setNow(Date now) {
+		if (now==null) {
+			now = new Date();
+		}
+		setYear(now.getYear()+1900);
+		setMonth(now.getMonth());
+		this.now = now;
 		drawCalendar();
 	}
 	
@@ -385,6 +411,11 @@ public class CalendarWidget extends Composite implements ClickHandler, HasChange
 	 * langRefresh
 	 */
 	public void langRefresh() {
+		try {
+			firstDayOfWeek = Integer.parseInt(Main.i18n("calendar.first.day.of.week"));
+		} catch (Exception e) {
+			// Nothing to do here in case number exception error firstDayOfWeek = 0
+		}
 		days[0] = Main.i18n("calendar.day.sunday");
 		days[1] = Main.i18n("calendar.day.monday");
 		days[2] = Main.i18n("calendar.day.tuesday");
@@ -404,5 +435,6 @@ public class CalendarWidget extends Composite implements ClickHandler, HasChange
 		months[9] = Main.i18n("calendar.month.october");
 		months[10] = Main.i18n("calendar.month.november");
 		months[11] = Main.i18n("calendar.month.december");
+		drawCalendar();
 	}	
 }  

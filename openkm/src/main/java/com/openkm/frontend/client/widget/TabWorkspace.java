@@ -182,6 +182,9 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 		if (!dashboardVisible && corrected>=UIDockPanelConstants.DASHBOARD) {
 			corrected++;
 		}
+		if (!adminitrationVisible && corrected>=UIDockPanelConstants.ADMINISTRATION) {
+			corrected++;
+		}
 		return corrected;
 	}
 	
@@ -222,10 +225,27 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 	 * showExtensionTabs
 	 */
 	public boolean showExtensionTabs() {
-		for (Iterator<TabWorkspaceExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
-			tabBar.addTab(it.next().getTabText());
+		for (TabWorkspaceExtension tabExtension : widgetExtensionList) {
+			tabBar.addTab(tabExtension.getTabText());
 		}
 		return !widgetExtensionList.isEmpty();
+	}
+	
+	/**
+	 * getTabExtensionIndex
+	 * 
+	 * @param widget
+	 * @return
+	 */
+	public int getTabExtensionIndex(TabWorkspaceExtension widget) {
+		int count = 0;
+		for (TabWorkspaceExtension tabExtension : widgetExtensionList) {
+			if (tabExtension.equals(widget)) {
+				return (NUMBER_OF_TABS+count);
+			}
+			count ++;
+		}
+		return -1;
 	}
 	
 	/**

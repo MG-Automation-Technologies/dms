@@ -69,7 +69,7 @@ public class WorkflowRegisterServlet extends BasicSecuredServlet {
 		String action = request.getPathInfo();
 		PrintWriter out = response.getWriter();
 		Session session = null;
-		log.debug("action: {}", action);
+		log.info("action: {}", action);
 		
 		try {
 			if (action != null && action.length() > 1 && action.indexOf(':') > 0) {
@@ -82,7 +82,7 @@ public class WorkflowRegisterServlet extends BasicSecuredServlet {
 			} else {
 				session = getSession(request);
 			}
-						
+			
 			if (session != null) {
 				String msg = handleRequest(request);
 				log.info("Status: {}", msg);
@@ -94,6 +94,7 @@ public class WorkflowRegisterServlet extends BasicSecuredServlet {
 				response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 			}
 		} catch (LoginException e) {
+			log.warn("LoginException", e);
 			response.setHeader("WWW-Authenticate", "Basic realm=\"OpenKM Worflow Register Server\"");
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
 		} catch (ItemNotFoundException e) {

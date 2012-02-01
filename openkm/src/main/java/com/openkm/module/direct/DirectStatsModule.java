@@ -36,9 +36,9 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.Document;
 import com.openkm.bean.StatsInfo;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.RepositoryException;
 import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.StatsModule;
 
 public class DirectStatsModule implements StatsModule {
@@ -73,7 +73,7 @@ public class DirectStatsModule implements StatsModule {
 			long taxonomyDocuments = getCount(queryManager, TAXONOMY_DOCUMENTS);
 			long personalDocuments = getCount(queryManager, PERSONAL_DOCUMENTS);
 			long templatesDocuments = getCount(queryManager, TEMPLATES_DOCUMENTS);
-			long trashDocuments = getCount(queryManager, TRASH_DOCUMENTS); 
+			long trashDocuments = getCount(queryManager, TRASH_DOCUMENTS);
 			long totalDocuments =  taxonomyDocuments + personalDocuments + templatesDocuments + trashDocuments; 
 			
 			// Fill sizes
@@ -120,7 +120,7 @@ public class DirectStatsModule implements StatsModule {
 			long taxonomyFolders = getCount(queryManager, TAXONOMY_FOLDERS);
 			long personalFolders = getCount(queryManager, PERSONAL_FOLDERS);
 			long templatesFolders = getCount(queryManager, TEMPLATES_FOLDERS);
-			long trashFolders = getCount(queryManager, TRASH_FOLDERS); 
+			long trashFolders = getCount(queryManager, TRASH_FOLDERS);
 			long totalFolders =  taxonomyFolders + personalFolders + templatesFolders + trashFolders; 
 			
 			// Fill sizes
@@ -177,7 +177,7 @@ public class DirectStatsModule implements StatsModule {
 			long taxonomyDocumentSize = getSize(queryManager, TAXONOMY_DOCUMENTS);
 			long personalDocumentSize = getSize(queryManager, PERSONAL_DOCUMENTS);
 			long templatesDocumentSize = getSize(queryManager, TEMPLATES_DOCUMENTS);
-			long trashDocumentSize = getSize(queryManager, TRASH_DOCUMENTS); 
+			long trashDocumentSize = getSize(queryManager, TRASH_DOCUMENTS);
 			long totalDocumentSize =  taxonomyDocumentSize + personalDocumentSize + templatesDocumentSize + trashDocumentSize; 
 			
 			// Fill sizes

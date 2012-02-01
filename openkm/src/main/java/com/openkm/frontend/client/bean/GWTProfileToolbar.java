@@ -35,7 +35,6 @@ public class GWTProfileToolbar implements IsSerializable {
 	private boolean findDocumentVisible;
 	private boolean downloadVisible;
 	private boolean downloadPdfVisible;
-	private boolean printVisible;
 	private boolean lockVisible;
 	private boolean unlockVisible;
 	private boolean addDocumentVisible;
@@ -91,14 +90,6 @@ public class GWTProfileToolbar implements IsSerializable {
 
 	public void setDownloadPdfVisible(boolean downloadPdfVisible) {
 		this.downloadPdfVisible = downloadPdfVisible;
-	}
-
-	public boolean isPrintVisible() {
-		return printVisible;
-	}
-
-	public void setPrintVisible(boolean printVisible) {
-		this.printVisible = printVisible;
 	}
 
 	public boolean isLockVisible() {
@@ -237,7 +228,6 @@ public class GWTProfileToolbar implements IsSerializable {
 		sb.append(", findDocumentVisible="); sb.append(findDocumentVisible);
 		sb.append(", downloadVisible="); sb.append(downloadVisible);
 		sb.append(", downloadPdfVisible="); sb.append(downloadPdfVisible);
-		sb.append(", printVisible="); sb.append(printVisible);
 		sb.append(", addDocumentVisible="); sb.append(addDocumentVisible);
 		sb.append(", lockVisible="); sb.append(lockVisible);
 		sb.append(", unlockVisible="); sb.append(unlockVisible);

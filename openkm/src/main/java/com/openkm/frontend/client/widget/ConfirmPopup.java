@@ -30,8 +30,15 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTTaskInstance;
+import com.openkm.frontend.client.bean.form.GWTButton;
 import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.contants.ui.UIDockPanelConstants;
+import com.openkm.frontend.client.widget.form.FormManager.ValidationButton;
+import com.openkm.frontend.client.widget.form.HasWorkflow;
+import com.openkm.frontend.client.widget.properties.Notes.NoteToDelete;
+
+import eu.maydu.gwt.validation.client.ValidationProcessor;
 
 /**
  * Confirm panel
@@ -58,6 +65,10 @@ public class ConfirmPopup extends DialogBox {
 	public static final int CONFIRM_GET_POOLED_WORKFLOW_TASK		= 14;
 	public static final int CONFIRM_FORCE_UNLOCK					= 15;
 	public static final int CONFIRM_FORCE_CANCEL_CHECKOUT			= 16;
+	public static final int CONFIRM_WORKFLOW_ACTION					= 17;
+	public static final int CONFIRM_DELETE_NOTE_DOCUMENT			= 18;
+	public static final int CONFIRM_DELETE_NOTE_FOLDER				= 19;
+	public static final int CONFIRM_DELETE_NOTE_MAIL				= 20;
 	
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
@@ -223,6 +234,38 @@ public class ConfirmPopup extends DialogBox {
 			case CONFIRM_FORCE_CANCEL_CHECKOUT:
 				Main.get().mainPanel.desktop.browser.fileBrowser.forceCancelCheckout();
 				break;
+				
+			case CONFIRM_WORKFLOW_ACTION:
+				if (object!=null && object instanceof ValidationButton ) {
+					ValidationButton validationButton = (ValidationButton) object;
+					GWTButton gWTButton = validationButton.getButton();
+					ValidationProcessor validationProcessor = validationButton.getValidationProcessor();
+					HasWorkflow workflow = validationButton.getWorkflow();
+					GWTTaskInstance taskInstance = validationButton.getTaskInstance();
+					if (validationProcessor.validate()) {
+						if (gWTButton.getTransition().equals("")) {
+							workflow.setTaskInstanceValues(taskInstance.getId(), null);
+						} else {
+							workflow.setTaskInstanceValues(taskInstance.getId(), gWTButton.getTransition());
+						}
+						validationButton.disableAllButtonList();
+					}
+				}
+				break;
+				
+			case CONFIRM_DELETE_NOTE_DOCUMENT:
+				if (object!=null && object instanceof NoteToDelete) {
+					NoteToDelete noteToDelete = (NoteToDelete) object;
+					Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.notes.removeNote(noteToDelete.getNotePath(), noteToDelete.getRow());
+				}
+				break;
+			
+			case CONFIRM_DELETE_NOTE_FOLDER:
+				if (object!=null && object instanceof NoteToDelete) {
+					NoteToDelete noteToDelete = (NoteToDelete) object;
+					Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.notes.removeNote(noteToDelete.getNotePath(), noteToDelete.getRow());
+				}
+				break;
 		}
 		
 		action = NO_ACTION; // Resets action value
@@ -296,7 +339,31 @@ public class ConfirmPopup extends DialogBox {
 			case CONFIRM_FORCE_CANCEL_CHECKOUT:
 				text.setHTML(Main.i18n("confirm.force.cancel.checkout"));
 				break;
+				
+			case CONFIRM_WORKFLOW_ACTION:
+				break;
+				
+			case CONFIRM_DELETE_NOTE_DOCUMENT:
+				text.setHTML(Main.i18n("confirm.delete.note"));
+				break;
+			
+			case CONFIRM_DELETE_NOTE_FOLDER:
+				text.setHTML(Main.i18n("confirm.delete.note"));
+				break;
+				
+			case CONFIRM_DELETE_NOTE_MAIL:
+				text.setHTML(Main.i18n("confirm.delete.note"));
+				break;
 		}
+	}
+	
+	/**
+	 * setConfirmationText
+	 * 
+	 * @param text
+	 */
+	public void setConfirmationText(String text) {
+		this.text.setHTML(text);
 	}
 	
 	/**

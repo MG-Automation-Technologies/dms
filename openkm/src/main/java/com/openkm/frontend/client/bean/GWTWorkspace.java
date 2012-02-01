@@ -47,6 +47,7 @@ public class GWTWorkspace implements IsSerializable {
 	private String email = "";
 	private String webSkin = "";
 	private boolean adminRole = false;
+	private boolean adminUser = false;
 	private String previewer = "";
 	private List<GWTReport> reports = new ArrayList<GWTReport>();
 
@@ -65,6 +66,7 @@ public class GWTWorkspace implements IsSerializable {
 	private long userQuotaLimit;
 	private boolean printPreview;
 	private boolean keywordEnabled;
+	private boolean uploadNotifyUsers;
 	private boolean userQuotaEnabled;
 	private boolean webdavFix;
 	private List<GWTPropertyGroup> wizardPropertyGroupsList = new ArrayList<GWTPropertyGroup>();
@@ -304,6 +306,14 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setKeywordEnabled(boolean keywordEnabled) {
 		this.keywordEnabled = keywordEnabled;
+	}
+	
+	public boolean isUploadNotifyUsers() {
+		return uploadNotifyUsers;
+	}
+
+	public void setUploadNotifyUsers(boolean uploadNotifyUsers) {
+		this.uploadNotifyUsers = uploadNotifyUsers;
 	}
 
 	public boolean isUserQuotaEnabled() {
@@ -666,6 +676,14 @@ public class GWTWorkspace implements IsSerializable {
 		this.adminRole = adminRole;
 	}
 	
+	public boolean isAdminUser() {
+		return adminUser;
+	}
+
+	public void setAdminUser(boolean adminUser) {
+		this.adminUser = adminUser;
+	}
+	
 	public String getPreviewer() {
 		return previewer;
 	}
@@ -682,19 +700,19 @@ public class GWTWorkspace implements IsSerializable {
 		this.langs = langs;
 	}
 	
-	public GWTProfileToolbar getProfileToolbar() {
-		return profileToolbar;
-	}
-
-	public void setProfileToolbar(GWTProfileToolbar profileToolbar) {
-		this.profileToolbar = profileToolbar;
-	}
-
 	public List<GWTReport> getReports() {
 		return reports;
 	}
 
 	public void setReports(List<GWTReport> reports) {
 		this.reports = reports;
+	}
+	
+	public GWTProfileToolbar getProfileToolbar() {
+		return profileToolbar;
+	}
+
+	public void setProfileToolbar(GWTProfileToolbar profileToolbar) {
+		this.profileToolbar = profileToolbar;
 	}
 }

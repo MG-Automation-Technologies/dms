@@ -27,12 +27,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.TreeMap;
 
 import javax.activation.MimetypesFileTypeMap;
-import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,16 +64,24 @@ public class Config {
 	public static final String OPENKM_CONFIG = "OpenKM.cfg";
 	public static final String NODE_DEFINITIONS = "CustomNodes.cnd";
 	public static String CONTEXT;
-	public static String INSTANCE;
+	public static String INSTANCE_HOME;
 	public static String INSTANCE_CHROOT_PATH;
 	public static String JBPM_CONFIG;
 	public static String PROPERTY_GROUPS_XML;
 	public static String PROPERTY_GROUPS_CND;
 	
+	// Default users
+	public static String PROPERTY_SYSTEM_USER = "user.system";
+	public static String PROPERTY_ADMIN_USER = "user.admin";
+	
+	// General configuration
+	public static String EXPORT_METADATA_EXT = ".okm";
+	
 	// Default script
 	public static final String PROPERTY_DEFAULT_SCRIPT = "default.script";
 	
 	// Preview cache
+	public static String CACHE_HOME;
 	public static String CACHE_DXF;
 	public static String CACHE_PDF;
 	public static String CACHE_SWF;
@@ -88,6 +94,7 @@ public class Config {
 	// Configuration properties
 	public static final String PROPERTY_REPOSITORY_CONFIG = "repository.config";
 	public static final String PROPERTY_REPOSITORY_HOME = "repository.home";
+	public static final String PROPERTY_CACHE_HOME = "cache.home";
 	
 	public static final String PROPERTY_DEFAULT_USER_ROLE = "default.user.role";
 	public static final String PROPERTY_DEFAULT_ADMIN_ROLE = "default.admin.role";
@@ -107,6 +114,7 @@ public class Config {
 	public static final String PROPERTY_PRINCIPAL_LDAP_SERVER = "principal.ldap.server";
 	public static final String PROPERTY_PRINCIPAL_LDAP_SECURITY_PRINCIPAL = "principal.ldap.security.principal";
 	public static final String PROPERTY_PRINCIPAL_LDAP_SECURITY_CREDENTIALS = "principal.ldap.security.credentials";
+	public static final String PROPERTY_PRINCIPAL_LDAP_REFERRAL = "principal.ldap.referral";
 	
 	public static final String PROPERTY_PRINCIPAL_LDAP_USER_SEARCH_BASE = "principal.ldap.user.search.base";
 	public static final String PROPERTY_PRINCIPAL_LDAP_USER_SEARCH_FILTER = "principal.ldap.user.search.filter";
@@ -236,12 +244,14 @@ public class Config {
 	public static String MIME_DXF = "image/vnd.dxf";
 	public static String MIME_DWG = "image/vnd.dwg";
 	public static String MIME_TIFF = "image/tiff";
+	public static String MIME_HTML = "text/html";
+	public static String MIME_TEXT = "text/plain";
 	
 	/**
 	 *  Default values
 	 */
 	// Experimental features
-	public static String EXPERIMENTAL_MOBILE_CONTEXT = "mobile-lg";
+	public static String EXPERIMENTAL_MOBILE_CONTEXT = "mobile";
 	public static boolean EXPERIMENTAL_TEXT_EXTRACTION = false;
 	public static boolean EXPERIMENTAL_PLUGIN_DEBUG = false;
 	
@@ -288,6 +298,7 @@ public class Config {
 	public static String PRINCIPAL_LDAP_SERVER; // ldap://phoenix.server:389
 	public static String PRINCIPAL_LDAP_SECURITY_PRINCIPAL; //"cn=Administrator,cn=Users,dc=openkm,dc=com"
 	public static String PRINCIPAL_LDAP_SECURITY_CREDENTIALS; // "xxxxxx"
+	public static String PRINCIPAL_LDAP_REFERRAL;
 	
 	public static String PRINCIPAL_LDAP_USER_SEARCH_BASE; // ou=people,dc=openkm,dc=com
 	public static String PRINCIPAL_LDAP_USER_SEARCH_FILTER; // (&(objectClass=posixAccount)(!(objectClass=gosaUserTemplate)))
@@ -394,7 +405,7 @@ public class Config {
 	
 	// Hibernate
 	public static String HIBERNATE_DIALECT = "org.hibernate.dialect.HSQLDialect";
-	public static String HIBERNATE_DATASOURCE = JNDI_BASE + "jdbc/OpenKMDS";
+	public static String HIBERNATE_DATASOURCE = "java:/OpenKMDS";
 	public static String HIBERNATE_HBM2DDL = "create";
 	public static String HIBERNATE_SHOW_SQL = "false";
 	public static String HIBERNATE_STATISTICS = "false";
@@ -434,10 +445,10 @@ public class Config {
 	/**
 	 * Load OpenKM configuration from OpenKM.cfg 
 	 */
-	public static void load(ServletContext sc) {
+	public static void load(String ctx) {
 		Properties config = new Properties();
 		String configFile = HOME_DIR + "/" + OPENKM_CONFIG;
-		CONTEXT = sc.getContextPath().substring(1);
+		CONTEXT = ctx;
 		
 		// Read config
 		try {
@@ -448,7 +459,7 @@ public class Config {
 			// Hibernate
 			HIBERNATE_DIALECT = config.getProperty(PROPERTY_HIBERNATE_DIALECT, HIBERNATE_DIALECT);
 			values.put(PROPERTY_HIBERNATE_DIALECT, HIBERNATE_DIALECT);
-			HIBERNATE_DATASOURCE = config.getProperty(PROPERTY_HIBERNATE_DATASOURCE, JNDI_BASE + "jdbc/" + CONTEXT + "DS");
+			HIBERNATE_DATASOURCE = config.getProperty(PROPERTY_HIBERNATE_DATASOURCE, "java:/" + CONTEXT + "DS");
 			values.put(PROPERTY_HIBERNATE_DATASOURCE, HIBERNATE_DATASOURCE);
 			HIBERNATE_HBM2DDL = config.getProperty(PROPERTY_HIBERNATE_HBM2DDL, HIBERNATE_HBM2DDL);
 			values.put(PROPERTY_HIBERNATE_HBM2DDL, HIBERNATE_HBM2DDL);
@@ -464,36 +475,35 @@ public class Config {
 			fis.close();
 			
 			if (SYSTEM_MULTIPLE_INSTANCES) {
-				INSTANCE = HOME_DIR + File.separator + "instances" + File.separator + CONTEXT;
-				values.put("instance", INSTANCE);
-				INSTANCE_CHROOT_PATH = INSTANCE + File.separator + "root" + File.separator;
+				INSTANCE_HOME = HOME_DIR + File.separator + "instances" + File.separator + CONTEXT;
+				values.put("instance.home", INSTANCE_HOME);
+				INSTANCE_CHROOT_PATH = INSTANCE_HOME + File.separator + "root" + File.separator;
 				values.put("instance.chroot.path", INSTANCE_CHROOT_PATH);
 			} else {
-				INSTANCE = HOME_DIR;
-				values.put("instance", INSTANCE);
+				INSTANCE_HOME = HOME_DIR;
+				values.put("instance.home", INSTANCE_HOME);
 				INSTANCE_CHROOT_PATH = "";
 				values.put("instance.chroot.path", INSTANCE_CHROOT_PATH);
 			}
 			
-			REPOSITORY_CONFIG = INSTANCE + File.separator + "repository.xml";
-			values.put("repository.config", REPOSITORY_CONFIG);
-			REPOSITORY_HOME = INSTANCE + File.separator + "repository";
-			values.put("repository.home", REPOSITORY_HOME);
-			CACHE_DXF = INSTANCE + File.separator + "cache" + File.separator + "dxf";
-			values.put("cache.dxf", CACHE_DXF);
-			CACHE_PDF = INSTANCE + File.separator + "cache" + File.separator + "pdf";
-			values.put("cache.pdf", CACHE_PDF);
-			CACHE_SWF = INSTANCE + File.separator + "cache" + File.separator + "swf";
-			values.put("cache.swf", CACHE_SWF);
-			JBPM_CONFIG = INSTANCE + File.separator + "jbpm.xml";
+			REPOSITORY_CONFIG = INSTANCE_HOME + File.separator + "repository.xml";
+			values.put(PROPERTY_REPOSITORY_CONFIG, REPOSITORY_CONFIG);
+			REPOSITORY_HOME = INSTANCE_HOME + File.separator + "repository";
+			values.put(PROPERTY_REPOSITORY_HOME, REPOSITORY_HOME);
+			
+			CACHE_HOME = INSTANCE_HOME + File.separator + "cache";
+			values.put(PROPERTY_CACHE_HOME, CACHE_HOME);
+			
+			JBPM_CONFIG = INSTANCE_HOME + File.separator + "jbpm.xml";
 			values.put("jbpm.config", JBPM_CONFIG);
-			PROPERTY_GROUPS_XML = INSTANCE + File.separator + "PropertyGroups.xml";
+			
+			PROPERTY_GROUPS_XML = INSTANCE_HOME + File.separator + "PropertyGroups.xml";
 			values.put("property.groups.xml", PROPERTY_GROUPS_XML);
-			PROPERTY_GROUPS_CND = INSTANCE + File.separator + "PropertyGroups.cnd";
+			PROPERTY_GROUPS_CND = INSTANCE_HOME + File.separator + "PropertyGroups.cnd";
 			values.put("property.groups.cnd", PROPERTY_GROUPS_CND);
 			
 			// Load or reload database configuration
-			reload(sc, config);
+			reload(CONTEXT, config);
 		} catch (FileNotFoundException e) {
 			log.warn("** No {} file found, set default config **", OPENKM_CONFIG);
 		} catch (IOException e) {
@@ -504,7 +514,7 @@ public class Config {
 	/**
 	 * Reload OpenKM configuration from database
 	 */
-	public static void reload(ServletContext sc, Properties cfg) {
+	public static void reload(String ctx, Properties cfg) {
 		try {
 			// Experimental features
 			EXPERIMENTAL_MOBILE_CONTEXT = ConfigDAO.getString(PROPERTY_EXPERIMENTAL_MOBILE_CONTEXT, EXPERIMENTAL_MOBILE_CONTEXT);
@@ -514,20 +524,29 @@ public class Config {
 			EXPERIMENTAL_TEXT_EXTRACTION = ConfigDAO.getBoolean(PROPERTY_EXPERIMENTAL_TEXT_EXTRACTION, EXPERIMENTAL_TEXT_EXTRACTION);
 			values.put(PROPERTY_EXPERIMENTAL_TEXT_EXTRACTION, Boolean.toString(EXPERIMENTAL_TEXT_EXTRACTION));
 			
-			REPOSITORY_CONFIG = ConfigDAO.getString(PROPERTY_REPOSITORY_CONFIG, REPOSITORY_CONFIG);
+			REPOSITORY_CONFIG = ConfigDAO.getString(PROPERTY_REPOSITORY_CONFIG, cfg.getProperty(PROPERTY_REPOSITORY_CONFIG, REPOSITORY_CONFIG));
 			values.put(PROPERTY_REPOSITORY_CONFIG, REPOSITORY_CONFIG);
-			REPOSITORY_HOME = ConfigDAO.getString(PROPERTY_REPOSITORY_HOME, REPOSITORY_HOME);
+			REPOSITORY_HOME = ConfigDAO.getString(PROPERTY_REPOSITORY_HOME, cfg.getProperty(PROPERTY_REPOSITORY_HOME, REPOSITORY_HOME));
 			values.put(PROPERTY_REPOSITORY_HOME, REPOSITORY_HOME);
+			
+			CACHE_HOME = ConfigDAO.getString(PROPERTY_CACHE_HOME, CACHE_HOME);
+			values.put(PROPERTY_CACHE_HOME, CACHE_HOME);
+			CACHE_DXF = CACHE_HOME + File.separator + "dxf";
+			values.put("cache.dxf", CACHE_DXF);
+			CACHE_PDF = CACHE_HOME + File.separator + "pdf";
+			values.put("cache.pdf", CACHE_PDF);
+			CACHE_SWF = CACHE_HOME + File.separator + "swf";
+			values.put("cache.swf", CACHE_SWF);
 			
 			DEFAULT_USER_ROLE = ConfigDAO.getString(PROPERTY_DEFAULT_USER_ROLE, "UserRole");
 			values.put(PROPERTY_DEFAULT_USER_ROLE, DEFAULT_USER_ROLE);
 			DEFAULT_ADMIN_ROLE = ConfigDAO.getString(PROPERTY_DEFAULT_ADMIN_ROLE, "AdminRole");
 			values.put(PROPERTY_DEFAULT_ADMIN_ROLE, DEFAULT_ADMIN_ROLE);
 			
-			DEFAULT_SCRIPT = ConfigDAO.getText(PROPERTY_DEFAULT_SCRIPT, "print(\"UserId: \" + session.getUserID());\n" +
-					"print(\"EventType: \" + eventType);\n" +
-					"print(\"EventNode: \" + eventNode.getPath());\n" +
-					"print(\"ScriptNode: \" + scriptNode.getPath());");
+			DEFAULT_SCRIPT = ConfigDAO.getText(PROPERTY_DEFAULT_SCRIPT, "print(\"UserId: \"+session.getUserID());\n" +
+					"print(\"EventType: \"+eventType);\n" +
+					"print(\"EventNode: \"+eventNode.getPath());\n" +
+					"print(\"ScriptNode: \"+scriptNode.getPath());");
 			values.put(PROPERTY_DEFAULT_SCRIPT, DEFAULT_SCRIPT);
 			
 			// Text extractors
@@ -538,7 +557,7 @@ public class Config {
 			// Workflow
 			WORKFLOW_RUN_CONFIG_FORM = ConfigDAO.getString(PROPERTY_WORKFLOW_RUN_CONFIG_FORM, "run_config");
 			values.put(PROPERTY_WORKFLOW_RUN_CONFIG_FORM, WORKFLOW_RUN_CONFIG_FORM);
-			WORKFLOW_START_TASK_AUTO_RUN = ConfigDAO.getBoolean(PROPERTY_WORKFLOW_START_TASK_AUTO_RUN, false);			
+			WORKFLOW_START_TASK_AUTO_RUN = ConfigDAO.getBoolean(PROPERTY_WORKFLOW_START_TASK_AUTO_RUN, true);			
 			values.put(PROPERTY_WORKFLOW_START_TASK_AUTO_RUN, Boolean.toString(WORKFLOW_START_TASK_AUTO_RUN));
 			
 			// Principal
@@ -554,6 +573,8 @@ public class Config {
 			values.put(PROPERTY_PRINCIPAL_LDAP_SECURITY_PRINCIPAL, PRINCIPAL_LDAP_SECURITY_PRINCIPAL);
 			PRINCIPAL_LDAP_SECURITY_CREDENTIALS = ConfigDAO.getString(PROPERTY_PRINCIPAL_LDAP_SECURITY_CREDENTIALS, "");
 			values.put(PROPERTY_PRINCIPAL_LDAP_SECURITY_CREDENTIALS, PRINCIPAL_LDAP_SECURITY_CREDENTIALS);
+			PRINCIPAL_LDAP_REFERRAL = ConfigDAO.getString(PROPERTY_PRINCIPAL_LDAP_REFERRAL, "");
+			values.put(PROPERTY_PRINCIPAL_LDAP_REFERRAL, PRINCIPAL_LDAP_REFERRAL);
 			
 			PRINCIPAL_LDAP_USER_SEARCH_BASE = ConfigDAO.getString(PROPERTY_PRINCIPAL_LDAP_USER_SEARCH_BASE, "");
 			values.put(PROPERTY_PRINCIPAL_LDAP_USER_SEARCH_BASE, PRINCIPAL_LDAP_USER_SEARCH_BASE);
@@ -669,13 +690,23 @@ public class Config {
 				ADMIN_USER = ADMIN_USER.toLowerCase();
 			}
 			
-			UPDATE_INFO = ConfigDAO.getBoolean(PROPERTY_UPDATE_INFO, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_UPDATE_INFO, "on")));
-			values.put(PROPERTY_UPDATE_INFO, Boolean.toString(UPDATE_INFO));
-			APPLICATION_URL = ConfigDAO.getString(PROPERTY_APPLICATION_URL, "http://localhost:8080/" + Config.CONTEXT + "/index.jsp");
+			values.put(PROPERTY_ADMIN_USER, ADMIN_USER);
+			values.put(PROPERTY_SYSTEM_USER, SYSTEM_USER);
+			
+			// Guess default application URL
+			String defaultApplicationUrl = cfg.getProperty(PROPERTY_APPLICATION_URL);
+			
+			if (defaultApplicationUrl == null || defaultApplicationUrl.isEmpty()) {
+				defaultApplicationUrl = "http://localhost:8080/" + ctx + "/index.jsp";
+			}
+			
+			APPLICATION_URL = ConfigDAO.getString(PROPERTY_APPLICATION_URL, defaultApplicationUrl);
 			APPLICATION_BASE = getBase(APPLICATION_URL); 
 			values.put(PROPERTY_APPLICATION_URL, APPLICATION_URL);
 			DEFAULT_LANG = ConfigDAO.getString(PROPERTY_DEFAULT_LANG, "");
 			values.put(PROPERTY_DEFAULT_LANG, DEFAULT_LANG);
+			UPDATE_INFO = ConfigDAO.getBoolean(PROPERTY_UPDATE_INFO, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_UPDATE_INFO, "on")));
+			values.put(PROPERTY_UPDATE_INFO, Boolean.toString(UPDATE_INFO));
 			
 			USER_ASSIGN_DOCUMENT_CREATION = ConfigDAO.getBoolean(PROPERTY_USER_ASSIGN_DOCUMENT_CREATION, true);
 			values.put(PROPERTY_USER_ASSIGN_DOCUMENT_CREATION, Boolean.toString(USER_ASSIGN_DOCUMENT_CREATION));
@@ -734,13 +765,13 @@ public class Config {
 			values.put(PROPERTY_VALIDATOR_PASSWORD_MIN_SPECIAL, Integer.toString(VALIDATOR_PASSWORD_MIN_SPECIAL));
 			
 			// Logo icons
-			LOGO_LOGIN = ConfigDAO.getFile(PROPERTY_LOGO_LOGIN, "/img/logo_login.gif", sc);
+			LOGO_LOGIN = ConfigDAO.getFile(PROPERTY_LOGO_LOGIN, "/img/logo_login.gif");
 			values.put(PROPERTY_LOGO_LOGIN, LOGO_LOGIN.getName());
 			LOGO_TEXT = ConfigDAO.getString(PROPERTY_LOGO_TEXT, "&nbsp;");
 			values.put(PROPERTY_LOGO_TEXT, LOGO_TEXT);
-			LOGO_MOBILE = ConfigDAO.getFile(PROPERTY_LOGO_MOBILE, "/img/logo_mobile.gif", sc);
+			LOGO_MOBILE = ConfigDAO.getFile(PROPERTY_LOGO_MOBILE, "/img/logo_mobile.gif");
 			values.put(PROPERTY_LOGO_MOBILE, LOGO_MOBILE.getName());
-			LOGO_REPORT = ConfigDAO.getFile(PROPERTY_LOGO_REPORT, "/img/logo_report.gif", sc);
+			LOGO_REPORT = ConfigDAO.getFile(PROPERTY_LOGO_REPORT, "/img/logo_report.gif");
 			values.put(PROPERTY_LOGO_REPORT, LOGO_REPORT.getName());
 			
 			// Zoho
@@ -752,10 +783,6 @@ public class Config {
 			values.put(PROPERTY_ZOHO_API_KEY, ZOHO_API_KEY);
 			ZOHO_SECRET_KEY = ConfigDAO.getString(PROPERTY_ZOHO_SECRET_KEY, cfg.getProperty(PROPERTY_ZOHO_SECRET_KEY, ""));
 			values.put(PROPERTY_ZOHO_SECRET_KEY, ZOHO_SECRET_KEY);
-			
-			for (Entry<String, String> entry : values.entrySet()) {
-				log.info("{}={}", entry.getKey(), entry.getValue());
-			}
 		} catch (DatabaseException e) {
 			log.error("** Error reading configuration table **");
 		} catch (IOException e) {

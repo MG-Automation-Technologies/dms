@@ -95,7 +95,7 @@ public class DownloadServlet extends OKMHttpServlet {
 					is = new FileInputStream(tmp);
 					
 					// Send document
-					String fileName = JCRUtils.getName(path)+".zip";
+					String fileName = JCRUtils.getName(path) + ".zip";
 					WebUtils.sendFile(request, response, fileName, "application/zip", inline, is);
 				} else if (exportJar) {
 					// Get document
@@ -106,7 +106,7 @@ public class DownloadServlet extends OKMHttpServlet {
 					is = new FileInputStream(tmp);
 					
 					// Send document
-					String fileName = JCRUtils.getName(path)+".jar";
+					String fileName = JCRUtils.getName(path) + ".jar";
 					WebUtils.sendFile(request, response, fileName, "application/x-java-archive", inline, is);
 
 				}

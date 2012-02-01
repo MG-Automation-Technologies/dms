@@ -52,12 +52,6 @@ public class LocatorFactoryImplEx extends AbstractLocatorFactory {
         
         if (resourcePath.equals(wspPath) || startsWithWorkspace(resourcePath, wspPath)) {
             String repositoryPath = resourcePath.substring(wspPath.length());
-            //String name = Text.getName(repositoryPath);
-            //String parent = Text.getRelativeParent(repositoryPath, 1);
-            
-            //if (!name.startsWith("okm:")) {
-            	//repositoryPath = parent + "/" + FileUtils.escape(name);
-            //}
             
             if (Config.SYSTEM_WEBDAV_FIX) {
             	repositoryPath = repositoryPath.replace("okm_", "okm:");

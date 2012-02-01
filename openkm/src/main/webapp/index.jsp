@@ -8,6 +8,7 @@
 	request.setCharacterEncoding("UTF-8");
 	String url = null;
 	String docPath = WebUtils.getString(request, "docPath", null);
+	String fldPath = WebUtils.getString(request, "fldPath", null);
 	
 	if (FormatUtil.isMobile(request)) {
 		url = Config.EXPERIMENTAL_MOBILE_CONTEXT + "/index.jsp";
@@ -17,10 +18,12 @@
 	
 	if (docPath != null) {
 		url += "?docPath=" + URLEncoder.encode(docPath, "UTF-8");
+	} else if (fldPath != null) {
+		url += "?fldPath=" + URLEncoder.encode(fldPath, "UTF-8");
 	}
 	
 	if (!Config.DEFAULT_LANG.equals("")) {
-		if (docPath != null) {
+		if (docPath != null || fldPath != null) {
 			url += "&lang=" + Config.DEFAULT_LANG;
 		} else {
 			url += "?lang=" + Config.DEFAULT_LANG;

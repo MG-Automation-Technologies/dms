@@ -66,62 +66,84 @@ public class Tesseract3TextExtractor extends AbstractTextExtractor {
      * {@inheritDoc}
      */ 
     public Reader extractText(InputStream stream, String type, String encoding) throws IOException {
-    	BufferedReader stdout = null;
     	File tmpFileIn = null;
-    	File tmpFileOut = null;
-    	String cmd = null;
     	
 		if (!Config.SYSTEM_OCR.equals("")) {
 			try {
     			// Create temp file
     			tmpFileIn = FileUtils.createTempFileFromMime(type);
-    			tmpFileOut = File.createTempFile("okm", "");
     			FileOutputStream fos = new FileOutputStream(tmpFileIn);
     			IOUtils.copy(stream, fos);
     			fos.close();
     			
-    			// Performs OCR
-    			HashMap<String, Object> hm = new HashMap<String, Object>();
-    			hm.put("fileIn", tmpFileIn.getPath());
-    			hm.put("fileOut", tmpFileOut.getPath());
-    			String tpl = Config.SYSTEM_OCR + " ${fileIn} ${fileOut}";
-    			cmd = TemplateUtils.replace("SYSTEM_OCR", tpl, hm);
-    			ExecutionUtils.runCmd(cmd);
-    			
     			// Read result
-    			String text = IOUtils.toString(new FileInputStream(tmpFileOut.getPath()+".txt"));
-    			
-    			// Spellchecker
-    			if (Config.SYSTEM_OPENOFFICE_DICTIONARY.equals("")) {
-    				log.info("TEXT: {}", text);
-    				return new StringReader(text);
-    			} else {
-    				text = DocumentUtils.spellChecker(text);
-        			log.info("TEXT: {}", text);
-        			return new StringReader(text);
-    			}
-			} catch (SecurityException e) {
-				log.warn("Security exception executing command: " + cmd, e);
-				return new StringReader("");
-	    	} catch (IOException e) {
-				log.warn("IO exception executing command: " + cmd, e);
-				return new StringReader("");
-	    	} catch (InterruptedException e) {
-				log.warn("Interrupted exception executing command: " + cmd, e);
-				return new StringReader("");
+    			String text = doOcr(tmpFileIn);
+    			return new StringReader(text);
 			} catch (Exception e) {
 				log.warn("Failed to extract OCR text", e);
 				return new StringReader("");
 			} finally {
 				IOUtils.closeQuietly(stream);
-				IOUtils.closeQuietly(stdout);
 				FileUtils.deleteQuietly(tmpFileIn);
-				FileUtils.deleteQuietly(tmpFileOut);
-				FileUtils.deleteQuietly(new File(tmpFileOut.getPath()+".txt"));
 			}
 		} else {
 			log.warn("Undefined OCR application");
 			return new StringReader("");
 		}
+    }
+    
+    /**
+     * Performs OCR on image file
+     */
+    public String doOcr(File tmpFileIn) throws Exception {
+    	BufferedReader stdout = null;
+    	File tmpFileOut = null;
+    	String cmd = null;
+    	
+    	if (!Config.SYSTEM_OCR.equals("")) {
+    		try {
+    			// Create temp file
+    			tmpFileOut = File.createTempFile("okm", "");
+    			
+    			// Performs OCR
+    			HashMap<String, Object> hm = new HashMap<String, Object>();
+    			hm.put("fileIn", tmpFileIn.getPath());
+    			hm.put("fileOut", tmpFileOut.getPath());
+    			cmd = TemplateUtils.replace("SYSTEM_OCR", Config.SYSTEM_OCR, hm);
+    			ExecutionUtils.runCmd(cmd);
+    			
+    			// Read result
+    			String text = IOUtils.toString(new FileInputStream(tmpFileOut.getPath() + ".txt"));
+    			
+    			// Spellchecker
+    			if (Config.SYSTEM_OPENOFFICE_DICTIONARY.equals("")) {
+    				log.info("TEXT: {}", text);
+    				return text;
+    			} else {
+    				text = DocumentUtils.spellChecker(text);
+    				log.info("TEXT: {}", text);
+    				return text;
+    			}
+    		} catch (SecurityException e) {
+				log.warn("Security exception executing command: " + cmd, e);
+				return "";
+	    	} catch (IOException e) {
+				log.warn("IO exception executing command: " + cmd, e);
+				return "";
+	    	} catch (InterruptedException e) {
+				log.warn("Interrupted exception executing command: " + cmd, e);
+				return "";
+			} catch (Exception e) {
+				log.warn("Failed to extract OCR text", e);
+				return "";
+			} finally {
+				IOUtils.closeQuietly(stdout);
+				FileUtils.deleteQuietly(tmpFileOut);
+				FileUtils.deleteQuietly(new File(tmpFileOut.getPath() + ".txt"));
+			}
+    	} else {
+    		log.warn("Undefined OCR application");
+			return "";
+    	}
     }
 }

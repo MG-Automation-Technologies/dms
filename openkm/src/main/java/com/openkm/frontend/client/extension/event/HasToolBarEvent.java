@@ -33,7 +33,7 @@ package com.openkm.frontend.client.extension.event;
 public interface HasToolBarEvent {
 	
 	/**
-	 * DocumentEventConstant
+	 * ToolBarEventConstant
 	 * 
 	 * @author jllort
 	 *
@@ -69,7 +69,6 @@ public interface HasToolBarEvent {
 		static final int EVENT_GO_HOME						= 27;
 		static final int EVENT_EXPORT_TO_ZIP				= 28;
 		static final int EVENT_SET_USER_HOME				= 29;
-		static final int EVENT_EXECUTE_FIND_DOCUMENT		= 30;
 		
 		private int type = 0;
 		
@@ -93,7 +92,6 @@ public interface HasToolBarEvent {
 	ToolBarEventConstant EXECUTE_CHANGED_VIEW = new ToolBarEventConstant(ToolBarEventConstant.EVENT_CHANGED_VIEW);
 	ToolBarEventConstant EXECUTE_CREATE_FOLDER = new ToolBarEventConstant(ToolBarEventConstant.EVENT_EXECUTE_CREATE_FOLDER);
 	ToolBarEventConstant EXECUTE_FIND_FOLDER = new ToolBarEventConstant(ToolBarEventConstant.EVENT_EXECUTE_FIND_FOLDER);
-	ToolBarEventConstant EXECUTE_FIND_DOCUMENT = new ToolBarEventConstant(ToolBarEventConstant.EVENT_EXECUTE_FIND_DOCUMENT);
 	ToolBarEventConstant EXECUTE_LOCK = new ToolBarEventConstant(ToolBarEventConstant.EVENT_EXECUTE_LOCK);
 	ToolBarEventConstant EXECUTE_UNLOCK = new ToolBarEventConstant(ToolBarEventConstant.EVENT_EXECUTE_UNLOCK);
 	ToolBarEventConstant EXECUTE_ADD_DOCUMENT = new ToolBarEventConstant(ToolBarEventConstant.EVENT_ADD_DOCUMENT);

@@ -32,7 +32,6 @@ import com.google.gwt.gen2.table.client.SortableGrid;
 import com.google.gwt.gen2.table.client.SortableGrid.ColumnSorter;
 import com.google.gwt.gen2.table.client.SortableGrid.ColumnSorterCallback;
 import com.google.gwt.gen2.table.client.TableModelHelper.ColumnSortList;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
@@ -83,7 +82,6 @@ public class ExtendedColumnSorter extends ColumnSorter {
 		    	case 1 :
 		    	case 2 :
 		    	case 5 :
-		    	case 6 :
 			    		// Text
 				    	rowToOrder.setObject(rowI[column].toLowerCase());		// Lower case solves problem with sort ordering
 				    	rowToOrder.setDataId(""+ i);							// Actual position value
@@ -123,6 +121,39 @@ public class ExtendedColumnSorter extends ColumnSorter {
 				    	elementToOrder.add(rowToOrder);
 		    		}
 		    		break;
+		    		
+		    	case 6:
+		    		// Version
+		    		if (data.get(Integer.parseInt(rowI[7])) instanceof GWTFolder || 
+		    			data.get(Integer.parseInt(rowI[7])) instanceof GWTMail) {
+		    			rowToOrder.setObject(new Double(0));		
+			    		rowToOrder.setDataId(""+ i);							
+			    		elementToOrder.add(rowToOrder);
+		    		} else if (data.get(Integer.parseInt(rowI[7])) instanceof GWTDocument) { 
+		    			String version = ((GWTDocument) data.get(Integer.parseInt(rowI[7]))).getActualVersion().getName();
+		    			String numberParts[] = version.split("\\.");
+		    			version = "";
+		    			for (int x=0; x<numberParts.length; x++) {
+		    				switch(numberParts[x].length()) {
+		    					case 1:
+		    						version = version + "00" + numberParts[x];
+		    						break;
+		    					case 2:
+		    						version = version + "0" + numberParts[x];
+		    						break;
+		    				}
+		    			}
+		    			if (numberParts.length==2) {
+		    				version = version + "000000";
+		    			}
+		    			if (numberParts.length==3) {
+		    				version = version + "000";
+		    			}
+		    			rowToOrder.setObject(new Double(version));
+		    			rowToOrder.setDataId(""+ i);							
+			    		elementToOrder.add(rowToOrder);
+		    		}		    		
+		    		break;
 	    	}
 	    	
 	    	// Saves the selected row
@@ -136,12 +167,12 @@ public class ExtendedColumnSorter extends ColumnSorter {
 	    	case 1 :
 	    	case 2 :
 	    	case 5 :
-	    	case 6 :
 	    		// Text
 	    		Collections.sort(elementToOrder, ColumnComparatorText.getInstance());
 	    		break;
 	    	
 	    	case 3 :
+	    	case 6 :
 	    		// Bytes
 	    		Collections.sort(elementToOrder, ColumnComparatorDouble.getInstance());
 	    		break;
