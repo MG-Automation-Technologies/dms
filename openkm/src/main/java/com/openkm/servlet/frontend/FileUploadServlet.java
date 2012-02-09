@@ -121,7 +121,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 				// Parse the request and get all parameters and the uploaded file
 				for (Iterator<FileItem> it = items.iterator(); it.hasNext();) {
 					FileItem item = it.next();
-									
+					
 					if (item.isFormField()) {
 						if (item.getFieldName().equals("path")) { path = item.getString("UTF-8"); }
 						if (item.getFieldName().equals("action")) { action = Integer.parseInt(item.getString("UTF-8")); }
