@@ -115,7 +115,7 @@ public class DirectDocumentModule implements DocumentModule {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
-		if (size > Config.MAX_FILE_SIZE) {
+		if (Config.MAX_FILE_SIZE > 0 && size > Config.MAX_FILE_SIZE) {
 			log.error("Uploaded file size: {} ({}), Max file size: {} ({})", new Object[] {
 					FormatUtil.formatSize(size), size, FormatUtil.formatSize(Config.MAX_FILE_SIZE),
 					Config.MAX_FILE_SIZE });
@@ -449,8 +449,11 @@ public class DirectDocumentModule implements DocumentModule {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
-		if (size > Config.MAX_FILE_SIZE) {
-			throw new FileSizeExceededException(""+size);
+		if (Config.MAX_FILE_SIZE > 0 && size > Config.MAX_FILE_SIZE) {
+			log.error("Uploaded file size: {} ({}), Max file size: {} ({})", new Object[] {
+					FormatUtil.formatSize(size), size, FormatUtil.formatSize(Config.MAX_FILE_SIZE),
+					Config.MAX_FILE_SIZE });
+			throw new FileSizeExceededException(Integer.toString(size));
 		}
 		
 		File tmpJcr = File.createTempFile("okm", ".jcr");
