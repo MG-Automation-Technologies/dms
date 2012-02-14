@@ -42,7 +42,7 @@ public class Watchdog extends TimerTask {
 			log.warn("*** Watchdog already running ***");
 		} else {
 			running = true;
-			log.info("*** Watchdog activated ***");
+			log.debug("*** Watchdog activated ***");
 			
 			try {
 				JcrSessionManager sm = JcrSessionManager.getInstance();
