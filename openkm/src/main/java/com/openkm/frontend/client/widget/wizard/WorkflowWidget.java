@@ -101,6 +101,8 @@ public class WorkflowWidget extends Composite {
 		if (drawed) {
 			if (manager.getValidationProcessor().validate()) {
 				runProcessDefinitionWithValues();
+			} else {
+			    workflowWidgetToFire.hasPendingProcessDefinitionForms();
 			}
 		} else {
 			getProcessDefinitionForms(id);
