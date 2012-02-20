@@ -430,6 +430,11 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 				manager.loadDataFromWorkflowVariables(taskInstance.getProcessInstance().getVariables());
 				manager.getTable().setVisible(true);
 				drawForm();
+			} else if (taskInstance.getName().contains(":") && result.containsKey(taskInstance.getName().split(":")[0])) {
+				manager.setFormElements(result.get(taskInstance.getName().split(":")[0]));
+				manager.loadDataFromWorkflowVariables(taskInstance.getProcessInstance().getVariables());
+				manager.getTable().setVisible(true);
+				drawForm();
 			} else {
 				manager.setFormElements(new ArrayList<GWTFormElement>());
 				manager.getTable().setVisible(false);
