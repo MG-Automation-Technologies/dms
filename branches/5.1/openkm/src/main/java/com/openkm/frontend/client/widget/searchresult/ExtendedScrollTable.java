@@ -258,7 +258,7 @@ public class ExtendedScrollTable extends ScrollTable {
 		dataTable.setHTML(rows, 3, Util.formatSize(doc.getActualVersion().getSize()));
 		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
 		dataTable.setHTML(rows, 4, dtf.format(doc.getLastModified()));
-		dataTable.setHTML(rows, 5, doc.getActualVersion().getAuthor());
+		dataTable.setHTML(rows, 5, Main.get().getUserName(doc.getActualVersion().getAuthor()));
 		dataTable.setHTML(rows, 6, doc.getActualVersion().getName());
 		dataTable.setHTML(rows, 7, ""+(dataIndexValue++));
 		
@@ -316,7 +316,7 @@ public class ExtendedScrollTable extends ScrollTable {
 		dataTable.setHTML(rows, 3, "&nbsp;");
 		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
 		dataTable.setHTML(rows, 4, dtf.format(folder.getCreated()));
-		dataTable.setHTML(rows, 5, folder.getAuthor());
+		dataTable.setHTML(rows, 5, Main.get().getUserName(folder.getAuthor()));
 		dataTable.setHTML(rows, 6, "&nbsp;");
 		dataTable.setHTML(rows, 7, ""+(dataIndexValue++));
 		

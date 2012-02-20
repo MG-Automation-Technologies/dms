@@ -170,7 +170,7 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 		dataTable.setHTML(row, 3, "&nbsp;");
 		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
 		dataTable.setHTML(row, 4, dtf.format(folder.getCreated()));
-		dataTable.setHTML(row, 5, folder.getAuthor());
+		dataTable.setHTML(row, 5, Main.get().getUserName(folder.getAuthor()));
 		dataTable.setHTML(row, 6, "&nbsp;");
 		dataTable.setHTML(row, 7, ""+(dataIndexValue++));
 		
@@ -257,7 +257,7 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 		dataTable.setHTML(row, 3, Util.formatSize(doc.getActualVersion().getSize()));
 		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
 		dataTable.setHTML(row, 4, dtf.format(doc.getLastModified()));
-		dataTable.setHTML(row, 5, doc.getActualVersion().getAuthor());
+		dataTable.setHTML(row, 5, Main.get().getUserName(doc.getActualVersion().getAuthor()));
 		Hyperlink hLink = new Hyperlink();
 		hLink.setText(doc.getActualVersion().getName());
 		hLink.setTitle(doc.getActualVersion().getComment());

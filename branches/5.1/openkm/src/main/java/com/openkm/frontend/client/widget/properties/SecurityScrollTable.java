@@ -230,7 +230,7 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 			dataTable.insertRow(rows);
 		}
 		
-		dataTable.setHTML(rows, 6, userName);
+		dataTable.setHTML(rows, 6, Main.get().getUserName(userName));
 		
 		if ((permission.byteValue() & GWTPermission.READ) == GWTPermission.READ) {
 			dataTable.setHTML(rows, 7, Util.imageItemHTML(withPermission,""));

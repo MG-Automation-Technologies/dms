@@ -266,7 +266,8 @@ public class UserInfo extends Composite {
 	 * @param user The user value
 	 */
 	public void setUser(String user, boolean isAdmin) {
-		this.user.setHTML("&nbsp;"+Main.i18n("general.connected")+" "+user+ "&nbsp;");
+	    this.user.setHTML("&nbsp;"+Main.i18n("general.connected")+" "+Main.get().getUserName(user)+ "&nbsp;");
+	    
 		if (isAdmin) {
 			this.user.addStyleName("okm-Input-System");
 		} 
@@ -407,7 +408,8 @@ public class UserInfo extends Composite {
 	 * langRefresh
 	 */
 	public void langRefresh() {
-		user.setHTML("&nbsp;"+ Main.i18n("general.connected")+" "+Main.get().workspaceUserProperties.getUser() + "&nbsp;");
+	    user.setHTML("&nbsp;"+ Main.i18n("general.connected")+" "+Main.get().getUserName(Main.get().workspaceUserProperties.getUser()) + "&nbsp;");
+	    
 		if (chatConnected) {
 			imgChat.setTitle(Main.i18n("user.info.chat.disconnect"));
 			usersConnected.setHTML(connectUsersList.size() + "");
@@ -415,6 +417,7 @@ public class UserInfo extends Composite {
 			imgChat.setTitle(Main.i18n("user.info.chat.connect"));
 			usersConnected.setHTML("");
 		}
+		
 		imgUserQuota.setTitle(Main.i18n("user.info.user.quota"));
 		imgNewChatRoom.setTitle(Main.i18n("user.info.chat.new.room"));
 		imgLockedDocuments.setTitle(Main.i18n("user.info.locked.actual"));

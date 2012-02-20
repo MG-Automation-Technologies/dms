@@ -523,6 +523,20 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		this.extensionUuidList = extensionUuidList;
 	}
 	
+	/**
+	 * getUserName
+	 */
+	public String getUserName(String user) {
+	    String userName = user;
+	    
+	    if (this.workspaceUserProperties.getWorkspace() != null) {
+	    	String un = this.workspaceUserProperties.getWorkspace().getUserNames().get(user);
+	    	userName = un != null && !un.contentEquals("") ? un : user;
+	    }
+	    
+	    return userName;
+	}
+	
 	@Override
 	public void addLanguageHandlerExtension(LanguageHandlerExtension handlerExtension) {
 		langHandlerExtensionList.add(handlerExtension);

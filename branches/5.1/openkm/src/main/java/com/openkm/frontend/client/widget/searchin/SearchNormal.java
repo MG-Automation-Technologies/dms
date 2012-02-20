@@ -321,7 +321,7 @@ public class SearchNormal extends Composite {
 				
 				for (Iterator<String> it = users.iterator(); it.hasNext(); ) {
 					String userName = it.next();
-					userListBox.addItem(userName, userName);
+					userListBox.addItem(Main.get().getUserName(userName), userName);
 				}
 			}
 

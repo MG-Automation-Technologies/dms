@@ -171,7 +171,8 @@ public class Folder extends Composite {
 		tableProperties.setHTML(1, 1, folder.getName());
 		tableProperties.setHTML(2, 1, folder.getParentPath());
 		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
-		tableProperties.setHTML(3, 1, dtf.format(folder.getCreated())+" "+Main.i18n("folder.by")+" "+folder.getAuthor());
+		tableProperties.setHTML(3, 1, dtf.format(folder.getCreated())+" "+Main.i18n("folder.by")+" " + Main.get().getUserName(folder.getAuthor()));
+		
 		if (folder.isSubscribed()) {
 			tableProperties.setHTML(4, 1, Main.i18n("folder.subscribed.yes"));
 		} else {
@@ -194,7 +195,8 @@ public class Folder extends Composite {
 		
 		// Sets the folder subscribers
 		for (Iterator<String> it = folder.getSubscriptors().iterator(); it.hasNext(); ) {
-			tableSubscribedUsers.setHTML(tableSubscribedUsers.getRowCount(), 0, it.next());
+			String sub = Main.get().getUserName(it.next());
+			tableSubscribedUsers.setHTML(tableSubscribedUsers.getRowCount(), 0, sub);
 			setRowWordWarp(tableSubscribedUsers.getRowCount()-1, 0, true, tableSubscribedUsers);
 		}
 		
