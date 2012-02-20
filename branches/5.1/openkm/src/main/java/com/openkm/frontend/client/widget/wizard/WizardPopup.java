@@ -57,7 +57,6 @@ import com.openkm.frontend.client.widget.propertygroup.PropertyGroupWidgetToFire
  *
  */
 public class WizardPopup extends DialogBox {
-	
 	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT.create(OKMPropertyGroupService.class);
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
 	
@@ -117,11 +116,11 @@ public class WizardPopup extends DialogBox {
 		
 		// Wizard
 		groupIndex = 0;
-		groupsList = Main.get().workspaceUserProperties.getWorkspace().getWizardPropertyGroupsList();
+		groupsList = Main.get().workspaceUserProperties.getWorkspace().getWizardPropertyGroupList();
 		
 		// workflow 
 		workflowIndex = 0;
-		workflowsList = Main.get().workspaceUserProperties.getWorkspace().getWizardWorkflowsList();
+		workflowsList = Main.get().workspaceUserProperties.getWorkspace().getWizardWorkflowList();
 		
 		// getting uuid
 		documentService.get(docPath, new AsyncCallback<GWTDocument>() {

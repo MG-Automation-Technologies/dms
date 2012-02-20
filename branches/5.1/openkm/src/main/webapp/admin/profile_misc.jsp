@@ -124,5 +124,22 @@
         </select>
       </td>
     </tr>
+    <tr>
+      <td>Available process</td>
+      <td>
+        <select multiple="multiple" name="prf_misc_workflows" size="4">
+          <c:forEach var="pd" items="${wflows}">
+            <c:choose>
+              <c:when test="${u:contains(prf.misc.workflows, pd.id)}">
+                <option value="${pd.id}" selected="selected">${pd.name} - ${pd.version}</option>
+              </c:when>
+              <c:otherwise>
+                <option value="${pd.id}">${pd.name} - ${pd.version}</option>
+              </c:otherwise>
+            </c:choose>
+          </c:forEach>
+        </select>
+      </td>
+    </tr>
   </table>
 </fieldset>

@@ -101,6 +101,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 		
 		List<GWTPropertyGroup> wizardPropGrpLst = new ArrayList<GWTPropertyGroup>();
 		List<Double> wizardWorkflowLst = new ArrayList<Double>();
+		List<Double> miscWorkflowLst = new ArrayList<Double>();
 		Profile up = new Profile();
 		Session session = null;
 		
@@ -118,17 +119,23 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 				}
 			}
 			
-			for (String workflow : up.getWizard().getWorkflows()) {			
+			for (String workflow : up.getWizard().getWorkflows()) {
 				wizardWorkflowLst.add(new Double(workflow));
 			}
-		
+			
+			for (String workflow : up.getMisc().getWorkflows()) {
+				miscWorkflowLst.add(new Double(workflow));
+			}
+			
 			// Set user names map
 			Map<String, String> userNames = new HashMap<String, String>();
 			List<String> users = OKMAuth.getInstance().getUsers(null);
+			
 			for (Iterator<String> iterator = users.iterator(); iterator.hasNext();) {
 			    String key = iterator.next();
 			    if (!key.contentEquals("")) userNames.put(key, OKMAuth.getInstance().getName(null, key));
 			}
+			
 			workspace.setUserNames(userNames);
 			
 			// Previewer
@@ -141,9 +148,12 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 			workspace.setWizardPropertyGroups(!up.getWizard().getPropertyGroups().isEmpty());
 			workspace.setWizardPropertyGroupsList(wizardPropGrpLst);
 			workspace.setWizardWorkflows(!up.getWizard().getWorkflows().isEmpty());
-			workspace.setWizardWorkflowsList(wizardWorkflowLst);
+			workspace.setWizardWorkflowList(wizardWorkflowLst);
 			workspace.setWizardCategories(up.getWizard().isCategoriesEnabled());
 			workspace.setWizardKeywords(up.getWizard().isKeywordsEnabled());
+			
+			// Is a misc workflow list available
+			workspace.setMiscWorkflowList(miscWorkflowLst);
 			
 			// Is chat enabled and autologin
 			workspace.setChatEnabled(up.getChat().isChatEnabled());

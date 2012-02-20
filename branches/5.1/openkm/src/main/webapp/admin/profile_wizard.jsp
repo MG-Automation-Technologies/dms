@@ -27,10 +27,10 @@
           <c:forEach var="wf" items="${wflows}">
             <c:choose>
               <c:when test="${u:contains(prf.wizard.workflows, wf.id)}">
-                <option value="${wf.id}" selected="selected">${wf.name}</option>
+                <option value="${wf.id}" selected="selected">${wf.name} - ${wf.version}</option>
               </c:when>
               <c:otherwise>
-                <option value="${wf.id}">${wf.name}</option>
+                <option value="${wf.id}">${wf.name} - ${wf.version}</option>
               </c:otherwise>
             </c:choose>
           </c:forEach>
