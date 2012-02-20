@@ -72,8 +72,9 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean uploadNotifyUsers;
 	private boolean userQuotaEnabled;
 	private boolean webdavFix;
-	private List<GWTPropertyGroup> wizardPropertyGroupsList = new ArrayList<GWTPropertyGroup>();
-	private List<Double> wizardWorkflowsList = new ArrayList<Double>();
+	private List<GWTPropertyGroup> wizardPropertyGroupList = new ArrayList<GWTPropertyGroup>();
+	private List<Double> wizardWorkflowList = new ArrayList<Double>();
+	private List<Double> miscWorkflowList = new ArrayList<Double>();
 	private boolean wizardPropertyGroups;
 	private boolean wizardWorkflows;
 	private boolean wizardKeywords;
@@ -351,20 +352,20 @@ public class GWTWorkspace implements IsSerializable {
 		this.wizardPropertyGroups = wizardPropertyGroups;
 	}
 	
-	public List<GWTPropertyGroup> getWizardPropertyGroupsList() {
-		return wizardPropertyGroupsList;
+	public List<GWTPropertyGroup> getWizardPropertyGroupList() {
+		return wizardPropertyGroupList;
 	}
 
-	public void setWizardPropertyGroupsList(List<GWTPropertyGroup> wizardPropertyGroupsList) {
-		this.wizardPropertyGroupsList = wizardPropertyGroupsList;
+	public void setWizardPropertyGroupsList(List<GWTPropertyGroup> wizardPropertyGroupList) {
+		this.wizardPropertyGroupList = wizardPropertyGroupList;
 	}
 	
-	public List<Double> getWizardWorkflowsList() {
-		return wizardWorkflowsList;
+	public List<Double> getWizardWorkflowList() {
+		return wizardWorkflowList;
 	}
 
-	public void setWizardWorkflowsList(List<Double> wizardWorkflowsList) {
-		this.wizardWorkflowsList = wizardWorkflowsList;
+	public void setWizardWorkflowList(List<Double> wizardWorkflowsList) {
+		this.wizardWorkflowList = wizardWorkflowsList;
 	}
 
 	public boolean isWizardWorkflows() {
@@ -725,5 +726,17 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setProfileToolbar(GWTProfileToolbar profileToolbar) {
 		this.profileToolbar = profileToolbar;
+	}
+
+	public List<Double> getMiscWorkflowList() {
+		return miscWorkflowList;
+	}
+
+	public void setMiscWorkflowList(List<Double> miscWorkflowList) {
+		this.miscWorkflowList = miscWorkflowList;
+	}
+
+	public void setWizardPropertyGroupList(List<GWTPropertyGroup> wizardPropertyGroupList) {
+		this.wizardPropertyGroupList = wizardPropertyGroupList;
 	}
 }

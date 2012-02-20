@@ -35,6 +35,10 @@
         <key column="PRP_ID" not-null="true"/>
         <element column="PRP_REPORT" type="integer"/>
       </set>
+      <set name="workflows" table="OKM_PROFILE_MSC_WORKFLOW" lazy="false">
+        <key column="PMW_ID" not-null="true"/>
+        <element column="PMW_WORKFLOW" type="string"/>
+      </set>
     </component>
     
     <!-- CHAT -->

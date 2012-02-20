@@ -224,6 +224,7 @@ public class ProfileServlet extends BaseServlet {
 		prf.getMisc().setUploadNotifyUsers(WebUtils.getBoolean(request, "prf_misc_upload_notify_users"));
 		prf.getMisc().setExtensions(new HashSet<String>(WebUtils.getStringList(request, "prf_misc_extensions")));
 		prf.getMisc().setReports(new HashSet<Integer>(WebUtils.getIntList(request, "prf_misc_reports")));
+		prf.getMisc().setWorkflows(new HashSet<String>(WebUtils.getStringList(request, "prf_misc_workflows")));
 		
 		// Wizard
 		prf.getWizard().setKeywordsEnabled(WebUtils.getBoolean(request, "prf_wizard_keywords"));

@@ -53,7 +53,6 @@ import com.openkm.frontend.client.widget.wizard.WorkflowWidgetToFire;
  *
  */
 public class WorkflowPopup extends DialogBox implements WorkflowWidgetToFire {
-	
 	private final OKMWorkflowServiceAsync workflowService = (OKMWorkflowServiceAsync) GWT.create(OKMWorkflowService.class);
 	
 	private VerticalPanel vPanel;
@@ -140,9 +139,13 @@ public class WorkflowPopup extends DialogBox implements WorkflowWidgetToFire {
 		public void onSuccess(List<GWTProcessDefinition> result){
 			listBox.clear();
 			listBox.addItem("",""); // Adds empty value
+			
 			for (Iterator<GWTProcessDefinition> it = result.iterator(); it.hasNext();) {
 				GWTProcessDefinition processDefinition = it.next();
-				listBox.addItem(processDefinition.getName(),""+processDefinition.getId());
+				
+				if (Main.get().workspaceUserProperties.getWorkspace().getMiscWorkflowList().contains(processDefinition.getId())) {
+					listBox.addItem(processDefinition.getName(), "" + processDefinition.getId());
+				}
 			}
 		}
 
@@ -226,6 +229,7 @@ public class WorkflowPopup extends DialogBox implements WorkflowWidgetToFire {
 					uuid = Main.get().mainPanel.desktop.browser.fileBrowser.getMail().getUuid();
 				}
 			}
+			
 			workflowWidget = new WorkflowWidget(new Double(listBox.getValue(listBox.getSelectedIndex())).doubleValue(), uuid, this, new HashMap<String, Object>());
 			listBox.setVisible(false);
 			sp.add(workflowWidget);
