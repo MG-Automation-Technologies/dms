@@ -23,8 +23,10 @@ package com.openkm.servlet.frontend;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.LoginException;
 import javax.jcr.Session;
@@ -120,6 +122,15 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 				wizardWorkflowLst.add(new Double(workflow));
 			}
 		
+			// Set user names map
+			Map<String, String> userNames = new HashMap<String, String>();
+			List<String> users = OKMAuth.getInstance().getUsers(null);
+			for (Iterator<String> iterator = users.iterator(); iterator.hasNext();) {
+			    String key = iterator.next();
+			    if (!key.contentEquals("")) userNames.put(key, OKMAuth.getInstance().getName(null, key));
+			}
+			workspace.setUserNames(userNames);
+			
 			// Previewer
 			workspace.setPreviewer(Config.SYSTEM_PREVIEWER);
 			

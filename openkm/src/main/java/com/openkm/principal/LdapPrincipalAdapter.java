@@ -121,7 +121,23 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 	
 	@Override
 	public String getName(String user) throws PrincipalAdapterException {
-		return LdapPrincipalAdapter.class.getCanonicalName();
+		log.debug("getName({})", user);
+		String name = null;
+		
+		List<String> ldap = ldapSearch(
+				Config.PRINCIPAL_LDAP_SERVER,
+				Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
+				Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
+				MessageFormat.format(Config.PRINCIPAL_LDAP_USERNAME_SEARCH_BASE, user),
+				MessageFormat.format(Config.PRINCIPAL_LDAP_USERNAME_SEARCH_FILTER, user),
+				Config.PRINCIPAL_LDAP_USERNAME_ATTRIBUTE);
+		
+		if (!ldap.isEmpty()) {
+			name = ldap.get(0);
+		}
+		
+		log.debug("getName: {}", name);
+		return name;
 	}
 	
 	@Override

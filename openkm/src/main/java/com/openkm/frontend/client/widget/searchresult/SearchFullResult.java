@@ -178,7 +178,7 @@ public class SearchFullResult extends Composite {
 		HorizontalPanel hPanel4 = new HorizontalPanel();
 		hPanel4.setStyleName("okm-NoWrap");
 		hPanel4.add(new HTML("<b>"+Main.i18n("search.result.author")+":</b>&nbsp;"));
-		hPanel4.add(new HTML(doc.getActualVersion().getAuthor()));
+		hPanel4.add(new HTML(Main.get().getUserName(doc.getActualVersion().getAuthor())));
 		hPanel4.add(Util.hSpace("33"));
 		hPanel4.add(new HTML("<b>"+Main.i18n("search.result.size")+":</b>&nbsp;"));
 		hPanel4.add(new HTML(Util.formatSize(doc.getActualVersion().getSize())));
@@ -363,7 +363,7 @@ public class SearchFullResult extends Composite {
 		HorizontalPanel hPanel3 = new HorizontalPanel();
 		hPanel3.setStyleName("okm-NoWrap");
 		hPanel3.add(new HTML("<b>"+Main.i18n("search.result.author")+":</b>&nbsp;"));
-		hPanel3.add(new HTML(folder.getAuthor()));
+		hPanel3.add(new HTML(Main.get().getUserName(folder.getAuthor())));
 		hPanel3.add(Util.hSpace("33"));
 		hPanel3.add(new HTML("<b>"+Main.i18n("folder.created")+":&nbsp;</b>"));
 		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));

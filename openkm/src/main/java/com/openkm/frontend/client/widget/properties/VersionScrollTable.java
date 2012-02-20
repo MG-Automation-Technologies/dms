@@ -234,7 +234,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 		dataTable.setHTML(rows, 0, version.getName());
 		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
 		dataTable.setHTML(rows, 1, dtf.format(version.getCreated()));
-		dataTable.setHTML(rows, 2, version.getAuthor());
+		dataTable.setHTML(rows, 2, Main.get().getUserName(version.getAuthor()));
 		dataTable.setHTML(rows, 3, Util.formatSize(version.getSize()));
 		dataTable.setHTML(rows, 6, version.getComment());
 		versions.add(version.getName());

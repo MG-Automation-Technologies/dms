@@ -218,7 +218,7 @@ public class Notes extends Composite {
 	 */
 	private void writeNote(final GWTNote note) {
 		int row = tableNotes.getRowCount();
-		tableNotes.setHTML(row, 0, "<b>" + note.getUser() + "</b>");
+		tableNotes.setHTML(row, 0, "<b>" + Main.get().getUserName(note.getUser()) + "</b>");
 		Image editNote = new Image(OKMBundleResources.INSTANCE.noteEdit());
 		Image deleteNote = new Image(OKMBundleResources.INSTANCE.noteDelete());
 		editNote.addClickHandler(new ClickHandler() {

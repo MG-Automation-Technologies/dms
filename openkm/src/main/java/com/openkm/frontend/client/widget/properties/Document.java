@@ -335,8 +335,8 @@ public class Document extends Composite {
 		tableProperties.setHTML(2, 1, doc.getParentId());
 		tableProperties.setHTML(3, 1, Util.formatSize(doc.getActualVersion().getSize()));
 		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
-		tableProperties.setHTML(4, 1, dtf.format(doc.getCreated())+" "+Main.i18n("document.by")+" "+doc.getAuthor());
-		tableProperties.setHTML(5, 1, dtf.format(doc.getLastModified())+" "+Main.i18n("document.by")+" "+doc.getActualVersion().getAuthor());
+		tableProperties.setHTML(4, 1, dtf.format(doc.getCreated())+" "+Main.i18n("document.by")+" " + Main.get().getUserName(document.getAuthor()));
+		tableProperties.setHTML(5, 1, dtf.format(doc.getLastModified())+" "+Main.i18n("document.by")+" " + Main.get().getUserName(doc.getActualVersion().getAuthor()));
 		tableProperties.setHTML(6, 1, doc.getMimeType());
 		tableProperties.setWidget(7, 1, keywordPanel);
 		hKeyPanel.clear();
@@ -362,9 +362,9 @@ public class Document extends Composite {
 		}
 		
 		if (doc.isCheckedOut()) {
-			tableProperties.setHTML(8, 1, Main.i18n("document.status.checkout")+" "+doc.getLockInfo().getOwner());
+		    tableProperties.setHTML(8, 1, Main.i18n("document.status.checkout")+" " + Main.get().getUserName(doc.getLockInfo().getOwner()));
 		} else if (doc.isLocked()) {
-			tableProperties.setHTML(8, 1, Main.i18n("document.status.locked")+" "+doc.getLockInfo().getOwner());
+			tableProperties.setHTML(8, 1, Main.i18n("document.status.locked")+" " + Main.get().getUserName(doc.getLockInfo().getOwner()));
 		} else {
 			tableProperties.setHTML(8, 1, Main.i18n("document.status.normal"));
 		}
@@ -404,7 +404,8 @@ public class Document extends Composite {
 		
 		// Sets the document subscribers
 		for (Iterator<String> it= doc.getSubscriptors().iterator(); it.hasNext(); ) {
-			tableSubscribedUsers.setHTML(tableSubscribedUsers.getRowCount(), 0, it.next());
+			String sub = Main.get().getUserName(it.next());
+			tableSubscribedUsers.setHTML(tableSubscribedUsers.getRowCount(), 0, sub);
 			setRowWordWarp(tableSubscribedUsers.getRowCount()-1, 0, true, tableSubscribedUsers);
 		}
 		
@@ -466,18 +467,19 @@ public class Document extends Composite {
 		
 		if (document != null) {
 			DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
+			
 			if (document.getCreated() != null) {
-				tableProperties.setHTML(4, 1, dtf.format(document.getCreated())+" "+Main.i18n("document.by")+" "+document.getAuthor());
+				tableProperties.setHTML(4, 1, dtf.format(document.getCreated())+" "+Main.i18n("document.by")+" " + Main.get().getUserName(document.getAuthor()));
 			}
 			
 			if (document.getLastModified() != null) {
-				tableProperties.setHTML(5, 1, dtf.format(document.getLastModified())+" "+Main.i18n("document.by")+" "+document.getActualVersion().getAuthor());
+				tableProperties.setHTML(5, 1, dtf.format(document.getLastModified())+" "+Main.i18n("document.by")+" " + Main.get().getUserName(document.getActualVersion().getAuthor()));
 			}
 
 			if (document.isCheckedOut()) {
-				tableProperties.setHTML(8, 1, Main.i18n("document.status.checkout")+" "+document.getLockInfo().getOwner());
+				tableProperties.setHTML(8, 1, Main.i18n("document.status.checkout")+" " + Main.get().getUserName(document.getLockInfo().getOwner()));
 			} else if (document.isLocked()) {
-				tableProperties.setHTML(8, 1, Main.i18n("document.status.locked")+" "+document.getLockInfo().getOwner());
+				tableProperties.setHTML(8, 1, Main.i18n("document.status.locked")+" " + Main.get().getUserName(document.getLockInfo().getOwner()));
 			} else {
 				tableProperties.setHTML(8, 1, Main.i18n("document.status.normal"));
 			}

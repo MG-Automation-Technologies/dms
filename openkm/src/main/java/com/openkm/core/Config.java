@@ -124,6 +124,10 @@ public class Config {
 	public static final String PROPERTY_PRINCIPAL_LDAP_ROLE_SEARCH_FILTER = "principal.ldap.role.search.filter";
 	public static final String PROPERTY_PRINCIPAL_LDAP_ROLE_ATTRIBUTE = "principal.ldap.role.attribute";
 	
+	public static final String PROPERTY_PRINCIPAL_LDAP_USERNAME_SEARCH_BASE = "principal.ldap.username.search.base";
+	public static final String PROPERTY_PRINCIPAL_LDAP_USERNAME_SEARCH_FILTER = "principal.ldap.username.search.filter";
+	public static final String PROPERTY_PRINCIPAL_LDAP_USERNAME_ATTRIBUTE = "principal.ldap.username.attribute";
+	
 	public static final String PROPERTY_PRINCIPAL_LDAP_MAIL_SEARCH_BASE = "principal.ldap.mail.search.base";
 	public static final String PROPERTY_PRINCIPAL_LDAP_MAIL_SEARCH_FILTER = "principal.ldap.mail.search.filter";
 	public static final String PROPERTY_PRINCIPAL_LDAP_MAIL_ATTRIBUTE = "principal.ldap.mail.attribute";
@@ -307,6 +311,10 @@ public class Config {
 	public static String PRINCIPAL_LDAP_ROLE_SEARCH_BASE; // ou=groups,dc=openkm,dc=com
 	public static String PRINCIPAL_LDAP_ROLE_SEARCH_FILTER; // (&(objectClass=posixGroup)(cn=*)(|(description=*OpenKM*)(cn=users)))
 	public static String PRINCIPAL_LDAP_ROLE_ATTRIBUTE; // cn
+	
+	public static String PRINCIPAL_LDAP_USERNAME_SEARCH_BASE; // ou=people,dc=openkm,dc=com
+	public static String PRINCIPAL_LDAP_USERNAME_SEARCH_FILTER; // (&(objectClass=posixAccount)(!(objectClass=gosaUserTemplate)))
+	public static String PRINCIPAL_LDAP_USERNAME_ATTRIBUTE; // displayName
 	
 	public static String PRINCIPAL_LDAP_MAIL_SEARCH_BASE; // uid={0},ou=people,dc=openkm,dc=com
 	public static String PRINCIPAL_LDAP_MAIL_SEARCH_FILTER; // (&(objectClass=inetOrgPerson)(mail=*))
@@ -589,6 +597,13 @@ public class Config {
 			values.put(PROPERTY_PRINCIPAL_LDAP_ROLE_SEARCH_FILTER, PRINCIPAL_LDAP_ROLE_SEARCH_FILTER);
 			PRINCIPAL_LDAP_ROLE_ATTRIBUTE = ConfigDAO.getString(PROPERTY_PRINCIPAL_LDAP_ROLE_ATTRIBUTE, "");
 			values.put(PROPERTY_PRINCIPAL_LDAP_ROLE_ATTRIBUTE, PRINCIPAL_LDAP_ROLE_ATTRIBUTE);
+			
+			PRINCIPAL_LDAP_USERNAME_SEARCH_BASE = ConfigDAO.getString(PROPERTY_PRINCIPAL_LDAP_USERNAME_SEARCH_BASE, "");
+			values.put(PROPERTY_PRINCIPAL_LDAP_USERNAME_SEARCH_BASE, PRINCIPAL_LDAP_USERNAME_SEARCH_BASE);
+			PRINCIPAL_LDAP_USERNAME_SEARCH_FILTER = ConfigDAO.getString(PROPERTY_PRINCIPAL_LDAP_USERNAME_SEARCH_FILTER, "");
+			values.put(PROPERTY_PRINCIPAL_LDAP_USERNAME_SEARCH_FILTER, PRINCIPAL_LDAP_USERNAME_SEARCH_FILTER);
+			PRINCIPAL_LDAP_USERNAME_ATTRIBUTE = ConfigDAO.getString(PROPERTY_PRINCIPAL_LDAP_USERNAME_ATTRIBUTE, "");
+			values.put(PROPERTY_PRINCIPAL_LDAP_USERNAME_ATTRIBUTE, PRINCIPAL_LDAP_USERNAME_ATTRIBUTE);
 			
 			PRINCIPAL_LDAP_MAIL_SEARCH_BASE = ConfigDAO.getString(PROPERTY_PRINCIPAL_LDAP_MAIL_SEARCH_BASE, "");
 			values.put(PROPERTY_PRINCIPAL_LDAP_MAIL_SEARCH_BASE, PRINCIPAL_LDAP_MAIL_SEARCH_BASE);

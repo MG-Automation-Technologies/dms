@@ -22,7 +22,9 @@
 package com.openkm.frontend.client.bean;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -35,6 +37,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class GWTWorkspace implements IsSerializable {
 	private String token = "";
 	private String user = "";
+	private Map<String, String> userNames = new HashMap<String, String>();
 	private List<String> roleList = new ArrayList<String>();
 	private String applicationURL = "";
 	private String imapHost = "";
@@ -132,6 +135,14 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setUser(String user) {
 		this.user = user;
+	}
+	
+	public Map<String, String> getUserNames() {
+		return userNames;
+	}
+
+	public void setUserNames(Map<String, String> userNames) {
+		this.userNames = userNames;
 	}
 
 	public String getApplicationURL() {
