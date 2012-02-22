@@ -159,7 +159,7 @@ public class WorkflowRegisterServlet extends BasicSecuredServlet {
 						
 						log.debug("Created a processdefinition: {}", processDefinition.getName());
 						jbpmContext.deployProcessDefinition(processDefinition);
-						return "Deployed process " + processDefinition.getName() + " successfully";
+						return "Process " + processDefinition.getName() + " deployed successfully";
 					} finally {
 						IOUtils.closeQuietly(isForms);
 						IOUtils.closeQuietly(zis);
