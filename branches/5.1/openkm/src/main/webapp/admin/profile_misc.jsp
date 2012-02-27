@@ -125,16 +125,16 @@
       </td>
     </tr>
     <tr>
-      <td>Available process</td>
+      <td>Workflows</td>
       <td>
         <select multiple="multiple" name="prf_misc_workflows" size="4">
-          <c:forEach var="pd" items="${wflows}">
+          <c:forEach var="wf" items="${wflows}">
             <c:choose>
-              <c:when test="${u:contains(prf.misc.workflows, pd.id)}">
-                <option value="${pd.id}" selected="selected">${pd.name} - ${pd.version}</option>
+              <c:when test="${u:contains(prf.misc.workflows, wf.id)}">
+                <option value="${wf.id}" selected="selected">${wf.id} - ${wf.version}</option>
               </c:when>
               <c:otherwise>
-                <option value="${pd.id}">${pd.name} - ${pd.version}</option>
+                <option value="${wf.id}">${wf.id} - ${wf.version}</option>
               </c:otherwise>
             </c:choose>
           </c:forEach>
