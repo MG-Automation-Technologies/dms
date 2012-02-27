@@ -23,6 +23,7 @@ package com.openkm.ws.endpoint;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.jws.WebMethod;
@@ -35,7 +36,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.PropertyGroup;
+import com.openkm.bean.form.CheckBox;
 import com.openkm.bean.form.FormElement;
+import com.openkm.bean.form.Input;
+import com.openkm.bean.form.Option;
+import com.openkm.bean.form.Select;
+import com.openkm.bean.form.SuggestBox;
+import com.openkm.bean.form.TextArea;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.LockException;
@@ -142,6 +149,49 @@ public class OKMPropertyGroup {
 		
 		cm.setProperties(token, nodePath, grpName, al);
 		log.debug("setProperties: void");
+	}
+	
+	@WebMethod
+	public void setPropertiesSimple(@WebParam(name = "token") String token,
+			@WebParam(name = "nodePath") String nodePath,
+			@WebParam(name = "grpName") String grpName,
+			@WebParam(name = "properties") HashMap<String, String> properties) throws IOException, ParseException,
+			NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("setPropertiesSimple({}, {}, {}, {})", new Object[] { token, nodePath, grpName, properties });
+		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
+		List<FormElement> al = new ArrayList<FormElement>();
+		
+		for (FormElement fe : cm.getProperties(token, nodePath, grpName)) {
+			String value = properties.get(fe.getName());
+			
+			if (value != null) {
+				if (fe instanceof Input) {
+					((Input) fe).setValue(value);
+				} else if (fe instanceof SuggestBox) {
+					((SuggestBox) fe).setValue(value);
+				} else if (fe instanceof TextArea) {
+					((TextArea) fe).setValue(value);
+				} else if (fe instanceof CheckBox) {
+					((CheckBox) fe).setValue(Boolean.valueOf(value));
+				} else if (fe instanceof Select) {
+					Select sel = (Select) fe;
+					
+					for (Option opt : sel.getOptions()) {
+						if (opt.equals(value)) {
+							opt.setSelected(true);
+						} else {
+							opt.setSelected(false);
+						}
+					}
+				}
+				
+				al.add(fe);
+			}
+		}
+		
+		cm.setProperties(token, nodePath, grpName, al);
+		log.debug("setPropertiesSimple: void");
 	}
 	
 	@WebMethod
