@@ -130,11 +130,11 @@
         <select multiple="multiple" name="prf_misc_workflows" size="4">
           <c:forEach var="wf" items="${wflows}">
             <c:choose>
-              <c:when test="${u:contains(prf.misc.workflows, wf.id)}">
-                <option value="${wf.id}" selected="selected">${wf.id} - ${wf.version}</option>
+              <c:when test="${u:contains(prf.misc.workflows, wf.name)}">
+                <option value="${wf.name}" selected="selected">${wf.name}</option>
               </c:when>
               <c:otherwise>
-                <option value="${wf.id}">${wf.id} - ${wf.version}</option>
+                <option value="${wf.name}">${wf.name}</option>
               </c:otherwise>
             </c:choose>
           </c:forEach>
