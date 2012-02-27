@@ -48,7 +48,7 @@ public class WorkflowWidget extends Composite {
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
 	private boolean drawed = false;
-	double id; 
+	private String name; 
 	private String uuid;
 	private FormManager manager;
 	private WorkflowWidgetToFire workflowWidgetToFire;
@@ -57,8 +57,8 @@ public class WorkflowWidget extends Composite {
 	/**
 	 * WorkflowWidget
 	 */
-	public WorkflowWidget(double id, String uuid, WorkflowWidgetToFire workflowWidgetToFire, Map<String, Object> workflowVariables) {
-		this.id = id;
+	public WorkflowWidget(String name, String uuid, WorkflowWidgetToFire workflowWidgetToFire, Map<String, Object> workflowVariables) {
+		this.name = name;
 		this.uuid = uuid;
 		this.workflowWidgetToFire = workflowWidgetToFire;
 		this.workflowVariables = workflowVariables;
@@ -105,15 +105,15 @@ public class WorkflowWidget extends Composite {
 			    workflowWidgetToFire.hasPendingProcessDefinitionForms();
 			}
 		} else {
-			getProcessDefinitionForms(id);
+			getProcessDefinitionForms(name);
 		}
 	}
 	
 	/**
 	 * runProcessDefinition with values
 	 */
-	private void runProcessDefinitionWithValues() {		
-		workflowService.runProcessDefinition(uuid, id, manager.updateFormElementsValuesWithNewer(), callbackRunProcessDefinition);
+	private void runProcessDefinitionWithValues() {
+		workflowService.runProcessDefinition(uuid, name, manager.updateFormElementsValuesWithNewer(), callbackRunProcessDefinition);
 	}
 	
 	/**
@@ -142,8 +142,8 @@ public class WorkflowWidget extends Composite {
 	/**
 	 * getProcessDefinitionForms
 	 */
-	public void getProcessDefinitionForms(double id) {	
-		workflowService.getProcessDefinitionForms(id, callbackGetProcessDefinitionForms);
+	public void getProcessDefinitionForms(String name) {
+		workflowService.getProcessDefinitionFormsByName(name, callbackGetProcessDefinitionForms);
 	}
 	
 	/**

@@ -71,7 +71,7 @@ public class WizardPopup extends DialogBox {
 	private FiredVerticalPanel vPanelFired;
 	private String docPath = "";
 	private List<GWTPropertyGroup> groupsList = null;
-	private List<Double> workflowsList = null;
+	private List<String> workflowsList = null;
 	private int groupIndex = 0;
 	private int workflowIndex = 0;
 	private PropertyGroupWidget propertyGroupWidget = null;
@@ -206,7 +206,7 @@ public class WizardPopup extends DialogBox {
 		hPanel.add(actualButton);
 		hPanel.add(space);
 		hPanel.setCellWidth(space, "3");
-		workflowWidget = new WorkflowWidget(workflowsList.get(workflowIndex).doubleValue(), uuid, vPanelFired, new HashMap<String, Object>());
+		workflowWidget = new WorkflowWidget(workflowsList.get(workflowIndex), uuid, vPanelFired, new HashMap<String, Object>());
 		vPanelFired.clear();
 		vPanelFired.add(workflowWidget);
 		vPanelFired.add(hPanel);

@@ -100,8 +100,8 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 		workspace.setDashboardSchedule(Config.SCHEDULE_DASHBOARD_REFRESH);
 		
 		List<GWTPropertyGroup> wizardPropGrpLst = new ArrayList<GWTPropertyGroup>();
-		List<Double> wizardWorkflowLst = new ArrayList<Double>();
-		List<Double> miscWorkflowLst = new ArrayList<Double>();
+		List<String> wizardWorkflowLst = new ArrayList<String>();
+		List<String> miscWorkflowLst = new ArrayList<String>();
 		Profile up = new Profile();
 		Session session = null;
 		
@@ -120,11 +120,11 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 			}
 			
 			for (String workflow : up.getWizard().getWorkflows()) {
-				wizardWorkflowLst.add(new Double(workflow));
+				wizardWorkflowLst.add(workflow);
 			}
 			
 			for (String workflow : up.getMisc().getWorkflows()) {
-				miscWorkflowLst.add(new Double(workflow));
+				miscWorkflowLst.add(workflow);
 			}
 			
 			// Set user names map

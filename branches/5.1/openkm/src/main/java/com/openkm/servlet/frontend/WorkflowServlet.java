@@ -82,7 +82,7 @@ public class WorkflowServlet extends OKMRemoteServiceServlet implements OKMWorkf
 	}
 	
 	@Override
-	public void runProcessDefinition(String UUID, double id, List<GWTFormElement> formElements) throws OKMException  {
+	public void runProcessDefinition(String UUID, String name, List<GWTFormElement> formElements) throws OKMException  {
 		log.debug("runProcessDefinition()");
 		updateSessionManager();
 		
@@ -93,7 +93,8 @@ public class WorkflowServlet extends OKMRemoteServiceServlet implements OKMWorkf
 				formElementList.add(GWTUtil.copy(it.next()));
 			}
 			
-			OKMWorkflow.getInstance().runProcessDefinition(null, new Double(id).longValue(), UUID, formElementList);
+			ProcessDefinition pd = OKMWorkflow.getInstance().findLastProcessDefinition(null, name);
+			OKMWorkflow.getInstance().runProcessDefinition(null, pd.getId(), UUID, formElementList);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
@@ -205,6 +206,48 @@ public class WorkflowServlet extends OKMRemoteServiceServlet implements OKMWorkf
 		}
 		
 		log.debug("getProcessDefinitionForms: {}", formElementList);
+		return formElementList;
+	}
+	
+	@Override
+	public Map<String, List<GWTFormElement>> getProcessDefinitionFormsByName(String name) throws OKMException {
+		log.debug("getProcessDefinitionFormsByName()");
+		Map<String, List<GWTFormElement>> formElementList = new HashMap<String, List<GWTFormElement>>();
+		updateSessionManager();
+		
+		try {
+			ProcessDefinition pd = OKMWorkflow.getInstance().findLastProcessDefinition(null, name);
+			Map<String, List<FormElement>> list = OKMWorkflow.getInstance().getProcessDefinitionForms(null, pd.getId());
+			
+			for (Iterator<String> it= list.keySet().iterator(); it.hasNext();) {
+				String key = it.next();
+				List<FormElement> col = list.get(key);
+				List<GWTFormElement> gwtCol = new ArrayList<GWTFormElement>();
+				
+				for (Iterator<FormElement> itf= col.iterator(); itf.hasNext();) {
+					gwtCol.add(GWTUtil.copy(itf.next()));
+				}
+				
+				formElementList.put(key, gwtCol);
+			}
+		} catch (ParseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Parse), e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Database), e.getMessage());
+		} catch (WorkflowException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Workflow), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_General), e.getMessage());
+		}
+		
+		log.debug("getProcessDefinitionFormsByName: {}", formElementList);
 		return formElementList;
 	}
 	
