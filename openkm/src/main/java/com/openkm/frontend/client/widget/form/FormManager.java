@@ -1777,7 +1777,8 @@ public class FormManager {
 					GWTSelect select = (GWTSelect) formElement;
 					
 					if (!select.getData().equals("") && map.keySet().contains(select.getData())) {
-						select.setOptions(getOptionsValueFromVariable(map.get(select.getData()), select.getOptions()));
+						Collection<GWTOption> opts = getOptionsValueFromVariable(map.get(select.getData()), select.getOptions());
+						select.setOptions(opts);
 					}
 				} else if (formElement instanceof GWTUpload) {
 					GWTUpload upload = (GWTUpload) formElement;
