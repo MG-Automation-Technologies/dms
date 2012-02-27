@@ -285,10 +285,13 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 								for (int j=0; j<values.length; j++) {
 									for (Option opt : ((Select) fe).getOptions()) {
 										if (opt.getValue().equals(values[j].getString())) {
+											((Select) fe).setValue(((Select) fe).getValue().concat(",").concat(opt.getValue()));
 											opt.setSelected(true);
+										} else {
+											opt.setSelected(false);
 										}
 									}
-								}						
+								}
 							} else if (!pd[i].isMultiple()) {
 								Value value = prop.getValue();
 								
@@ -305,6 +308,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 										// If has stored value, prioritize over defaults  
 										for (Option opt : ((Select) fe).getOptions()) {
 											if (opt.getValue().equals(value.getString())) {
+												((Select) fe).setValue(opt.getValue());
 												opt.setSelected(true);
 											} else {
 												opt.setSelected(false);
