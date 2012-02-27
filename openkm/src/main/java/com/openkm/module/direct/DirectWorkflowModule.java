@@ -545,6 +545,47 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("findLatestProcessDefinitions: {}", al);
 		return al;
 	}
+	
+	@Override
+	@SuppressWarnings("rawtypes")
+	public ProcessDefinition findLastProcessDefinition(String token, String name) throws RepositoryException,
+			DatabaseException, WorkflowException {
+		log.debug("findLastProcessDefinition({})", token);
+		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
+		ProcessDefinition pd = new ProcessDefinition();
+		Session session = null;
+		
+		try {
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
+			GraphSession graphSession = jbpmContext.getGraphSession();
+			
+			for (Iterator it = graphSession.findLatestProcessDefinitions().iterator(); it.hasNext(); ) {
+				org.jbpm.graph.def.ProcessDefinition procDef = (org.jbpm.graph.def.ProcessDefinition) it.next();
+				
+				if (procDef.getName().equals(name)) {
+					pd = WorkflowUtils.copy(procDef);
+				}
+			}
+			
+			// Activity log
+			UserActivity.log(session.getUserID(), "FIND_LAST_PROCESS_DEFINITION", name, null);
+		} catch (javax.jcr.RepositoryException e) {
+			throw new RepositoryException(e.getMessage(), e);
+		} catch (JbpmException e) {
+			throw new WorkflowException(e.getMessage(), e);
+		} finally {
+			if (token == null) JCRUtils.logout(session);
+			jbpmContext.close();
+		}
+		
+		log.debug("findLastProcessDefinition: {}", pd);
+		return pd;
+	}
 
 	@Override
 	@SuppressWarnings("rawtypes")

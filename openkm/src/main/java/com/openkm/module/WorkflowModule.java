@@ -147,12 +147,17 @@ public interface WorkflowModule {
 			DatabaseException, WorkflowException;
 
 	/**
-	 * Get list of registered process definitions. Only last version for each
-	 * process
+	 * Get list of registered process definitions. Only last version for each process
 	 */
 	public List<ProcessDefinition> findLatestProcessDefinitions(String token) throws RepositoryException,
 			DatabaseException, WorkflowException;
-
+	
+	/**
+	 * Get last version of a given process definition.
+	 */
+	public ProcessDefinition findLastProcessDefinition(String token, String name) throws RepositoryException,
+			DatabaseException, WorkflowException;
+	
 	/**
 	 * Get list of registered process definitions versions
 	 */

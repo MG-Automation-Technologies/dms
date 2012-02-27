@@ -73,8 +73,8 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean userQuotaEnabled;
 	private boolean webdavFix;
 	private List<GWTPropertyGroup> wizardPropertyGroupList = new ArrayList<GWTPropertyGroup>();
-	private List<Double> wizardWorkflowList = new ArrayList<Double>();
-	private List<Double> miscWorkflowList = new ArrayList<Double>();
+	private List<String> wizardWorkflowList = new ArrayList<String>();
+	private List<String> miscWorkflowList = new ArrayList<String>();
 	private boolean wizardPropertyGroups;
 	private boolean wizardWorkflows;
 	private boolean wizardKeywords;
@@ -360,11 +360,11 @@ public class GWTWorkspace implements IsSerializable {
 		this.wizardPropertyGroupList = wizardPropertyGroupList;
 	}
 	
-	public List<Double> getWizardWorkflowList() {
+	public List<String> getWizardWorkflowList() {
 		return wizardWorkflowList;
 	}
 
-	public void setWizardWorkflowList(List<Double> wizardWorkflowsList) {
+	public void setWizardWorkflowList(List<String> wizardWorkflowsList) {
 		this.wizardWorkflowList = wizardWorkflowsList;
 	}
 
@@ -728,11 +728,11 @@ public class GWTWorkspace implements IsSerializable {
 		this.profileToolbar = profileToolbar;
 	}
 
-	public List<Double> getMiscWorkflowList() {
+	public List<String> getMiscWorkflowList() {
 		return miscWorkflowList;
 	}
 
-	public void setMiscWorkflowList(List<Double> miscWorkflowList) {
+	public void setMiscWorkflowList(List<String> miscWorkflowList) {
 		this.miscWorkflowList = miscWorkflowList;
 	}
 

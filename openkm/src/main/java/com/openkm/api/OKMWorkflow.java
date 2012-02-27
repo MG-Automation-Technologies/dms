@@ -170,6 +170,16 @@ public class OKMWorkflow implements WorkflowModule {
 		log.debug("findLatestProcessDefinitions: {}", result);
 		return result;
 	}
+	
+	@Override
+	public ProcessDefinition findLastProcessDefinition(String token, String name) throws RepositoryException,
+			DatabaseException, WorkflowException {
+		log.debug("findLastProcessDefinition({})", token);
+		WorkflowModule wm = ModuleManager.getWorkflowModule();
+		ProcessDefinition result = wm.findLastProcessDefinition(token, name);
+		log.debug("findLastProcessDefinition: {}", result);
+		return result;
+	}
 
 	@Override
 	public List<ProcessDefinition> findAllProcessDefinitionVersions(String token, String name) throws
