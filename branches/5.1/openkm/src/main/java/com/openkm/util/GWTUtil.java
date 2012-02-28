@@ -933,6 +933,7 @@ public class GWTUtil {
 			gWTselect.setOptions(options);
 			gWTselect.setValidators(copyValidators(select.getValidators()));
 			gWTselect.setData(select.getData());
+			gWTselect.setOptionsData(select.getOptionsData());
 			return gWTselect;
 		} else if (formElement instanceof TextArea) {
 			GWTTextArea gWTTextArea= new GWTTextArea();
@@ -1085,6 +1086,7 @@ public class GWTUtil {
 			
 			select.setOptions(options);
 			select.setData(gWTSelect.getData());
+			select.setOptionsData(gWTSelect.getOptionsData());
 			return select;
 		} else if (formElement instanceof GWTTextArea) {
 			TextArea textArea= new TextArea();

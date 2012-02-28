@@ -132,6 +132,7 @@ public class FormManager {
 	private boolean isSearchView = false;
 	private HasSearch search;
 	private List<Button> buttonControlList;
+	private Map<String, Object> workflowVarMap = new HashMap<String, Object>();
 	private FormManager singleton;
 	
 	/**
@@ -736,6 +737,11 @@ public class FormManager {
 			}
 		} else if (gwtFormElement instanceof GWTSelect) {
 			final GWTSelect gwtSelect = (GWTSelect) gwtFormElement;
+			
+			if (!gwtSelect.getOptionsData().equals("") && workflowVarMap.keySet().contains(gwtSelect.getOptionsData())) {
+				gwtSelect.setOptions(getOptionsFromVariable(workflowVarMap.get(gwtSelect.getOptionsData())));
+			} 
+			
 			if (gwtSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
 				String selectedLabel = "";
 				HorizontalPanel hPanel = new HorizontalPanel();
@@ -1732,6 +1738,7 @@ public class FormManager {
 	 * 
 	 */
 	public void loadDataFromWorkflowVariables(Map<String, Object> map) {
+		workflowVarMap = map;
 		// Only iterate if really there's some variable to be mapped
 		if (!map.isEmpty()) {
 			for (GWTFormElement formElement : formElementList) {
@@ -1997,6 +2004,36 @@ public class FormManager {
 		}
 		
 		return options;
+	}
+	
+	/**
+	 * getOptionsValueFromVariable
+	 */
+	private Collection<GWTOption> getOptionsFromVariable(Object obj) {
+		if (obj instanceof GWTInput) {
+			return null;
+		} else if (obj instanceof GWTTextArea) {
+			return null;
+		} else if (obj instanceof GWTSuggestBox) {
+			return null;
+		} else if (obj instanceof GWTCheckBox) {
+			return null;
+		} else if (obj instanceof GWTSelect) {
+			GWTSelect select = (GWTSelect) obj;
+			return select.getOptions();
+		} else if (obj instanceof GWTUpload) {
+			return null;
+		} else if (obj instanceof GWTText) {
+			return null;
+		} else if (obj instanceof GWTSeparator) {
+			return null;
+		} else if (obj instanceof GWTDownload) {
+			return null;
+		} else if (obj instanceof GWTPrint) {
+			return null;
+		} else {
+			return null;
+		}
 	}
 	
 	/**
