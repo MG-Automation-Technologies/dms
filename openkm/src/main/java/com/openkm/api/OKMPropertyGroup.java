@@ -23,8 +23,8 @@ package com.openkm.api;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,7 +121,7 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 		log.debug("setProperties: void");
 	}
 	
-	public void setPropertiesSimple(String token, String nodePath, String grpName, HashMap<String, String> properties)
+	public void setPropertiesSimple(String token, String nodePath, String grpName, Map<String, String> properties)
 			throws IOException, ParseException, NoSuchPropertyException, NoSuchGroupException, LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("setPropertiesSimple({}, {}, {}, {})", new Object[] { token, nodePath, grpName, properties });
