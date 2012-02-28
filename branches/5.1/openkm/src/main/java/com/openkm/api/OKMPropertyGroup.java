@@ -144,7 +144,7 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 					Select sel = (Select) fe;
 					
 					for (Option opt : sel.getOptions()) {
-						if (opt.equals(value)) {
+						if (opt.getValue().equals(value)) {
 							opt.setSelected(true);
 						} else {
 							opt.setSelected(false);
