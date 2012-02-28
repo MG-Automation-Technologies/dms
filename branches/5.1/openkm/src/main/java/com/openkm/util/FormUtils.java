@@ -471,6 +471,8 @@ public class FormUtils {
 					if (item != null) select.setType(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("data");
 					if (item != null) select.setData(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("optionsData");
+					if (item != null) select.setOptionsData(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("width");
 					if (item != null) select.setWidth(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("height");

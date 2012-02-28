@@ -33,6 +33,7 @@ public class Select extends FormElement {
 	private String type = TYPE_SIMPLE;
 	private String value = "";
 	private String data = "";
+	private String optionsData = "";
 	private boolean readonly = false;
 	
 	public Select() {
@@ -87,19 +88,28 @@ public class Select extends FormElement {
 		this.data = data;
 	}
 	
+	public String getOptionsData() {
+		return optionsData;
+	}
+
+	public void setOptionsData(String optionsData) {
+		this.optionsData = optionsData;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("label="); sb.append(label);
-		sb.append(", name="); sb.append(name);
-		sb.append(", width="); sb.append(width);
-		sb.append(", height="); sb.append(height);
-		sb.append(", readonly="); sb.append(readonly);
-		sb.append(", type="); sb.append(type);
-		sb.append(", value="); sb.append(value);
-		sb.append(", data="); sb.append(data);
-		sb.append(", options="); sb.append(options);
-		sb.append(", validators="); sb.append(validators);
+		sb.append("label=").append(label);
+		sb.append(", name=").append(name);
+		sb.append(", width=").append(width);
+		sb.append(", height=").append(height);
+		sb.append(", readonly=").append(readonly);
+		sb.append(", type=").append(type);
+		sb.append(", value=").append(value);
+		sb.append(", data=").append(data);
+		sb.append(", optionsData=").append(optionsData);
+		sb.append(", options=").append(options);
+		sb.append(", validators=").append(validators);
 		sb.append("}");
 		return sb.toString();
 	}
