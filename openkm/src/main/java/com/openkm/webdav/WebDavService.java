@@ -62,6 +62,7 @@ public final class WebDavService {
 	public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		Request miltonRequest = new com.bradmcevoy.http.ServletRequest(request);
 		Response miltonResponse = new com.bradmcevoy.http.ServletResponse(response);
+		httpManager.setEnableExpectContinue(false);
 		httpManager.process(miltonRequest, miltonResponse);
 	}
 	
