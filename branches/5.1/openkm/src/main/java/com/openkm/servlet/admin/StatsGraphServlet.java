@@ -179,7 +179,7 @@ public class StatsGraphServlet extends BaseServlet {
 	 */
 	public JFreeChart repoStats(String type) throws IOException, ServletException {
 		String title = null;
-		String[] sizes = null;
+		long[] sizes = null;
 		double[] percents = null;
 		DefaultPieDataset dataset = new DefaultPieDataset();
 		
@@ -191,12 +191,7 @@ public class StatsGraphServlet extends BaseServlet {
 		} else if (DOCUMENTS_SIZE.equals(type)) {
 			StatsInfo si = RepositoryInfo.getDocumentsSizeByContext();
 			percents = si.getPercents();
-			sizes = si.getSizes().clone();
-
-			for (int i = 0; i < sizes.length; i++) {
-				sizes[i] = FormatUtil.formatSize(Long.parseLong(sizes[i]));
-			}
-
+			sizes = si.getSizes();
 			title = "Documents size by context";
 		} else if (FOLDERS.equals(type)) {
 			StatsInfo si = RepositoryInfo.getFoldersByContext();
@@ -206,10 +201,10 @@ public class StatsGraphServlet extends BaseServlet {
 		}
 		
 		if (title != null && sizes.length > 0 && percents.length > 0) {
-			dataset.setValue("Taxonomy (" + sizes[0] + ")", percents[0]);
-			dataset.setValue("Personal (" + sizes[1] + ")", percents[1]);
-			dataset.setValue("Template (" + sizes[2] + ")", percents[2]);
-			dataset.setValue("Trash (" + sizes[3] + ")", percents[3]);
+			dataset.setValue("Taxonomy (" + FormatUtil.formatSize(sizes[0]) + ")", percents[0]);
+			dataset.setValue("Personal (" + FormatUtil.formatSize(sizes[1]) + ")", percents[1]);
+			dataset.setValue("Template (" + FormatUtil.formatSize(sizes[2]) + ")", percents[2]);
+			dataset.setValue("Trash (" + FormatUtil.formatSize(sizes[3]) + ")", percents[3]);
 		}
 		
 		return ChartFactory.createPieChart(title, dataset, true, false, false);
