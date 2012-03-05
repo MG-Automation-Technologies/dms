@@ -323,6 +323,20 @@ public class Util {
 	}
 	
 	/**
+	 * Encode path elements
+	 */
+	public static String encodePathElements(String path) {
+		String[] eltos = path.split("\\/");
+		String ret = "";
+		
+		for (int i=1; i<eltos.length; i++) {
+			ret = ret.concat("/").concat(URL.encodeQueryString(URL.encodeQueryString(eltos[i])));
+		}
+		
+		return ret;
+	}
+	
+	/**
 	 * Change on fly the actual css
 	 * 
 	 * @param title The css name

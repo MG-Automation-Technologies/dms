@@ -323,7 +323,7 @@ public class Document extends Composite {
 		
 		// Login case write empty folder
 		if (!webdavUrl.equals("")) {
-			webdavPath = Util.escape(webdavPath);
+			// webdavPath = Util.encodePathElements(webdavPath);
 			webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/')) + "/webdav" + webdavPath;
 		}
 		
