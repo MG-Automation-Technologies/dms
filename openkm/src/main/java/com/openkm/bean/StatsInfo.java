@@ -30,8 +30,8 @@ import java.io.Serializable;
 public class StatsInfo implements Serializable {
 	private static final long serialVersionUID = -6769199508952083208L;
 	
-	private double[] percents = new double[]{};
-	private String[] sizes = new String[]{};
+	private double[] percents = new double[] {};
+	private long[] sizes = new long[] {};
 
 	public double[] getPercents() {
 		return percents;
@@ -41,19 +41,31 @@ public class StatsInfo implements Serializable {
 		this.percents = percents;
 	}
 
-	public String[] getSizes() {
+	public long[] getSizes() {
 		return sizes;
 	}
 
-	public void setSizes(String[] sizes) {
+	public void setSizes(long[] sizes) {
 		this.sizes = sizes;
 	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("sizes=["); for (int i=0; i<sizes.length-1; i++) sb.append(sizes[i]+","); sb.append(sizes[sizes.length-1]+"]");
-		sb.append(", percents=["); for (int i=0; i<percents.length-1; i++) sb.append(percents[i]+","); sb.append(percents[percents.length-1]+"]");
+		sb.append("sizes=[");
+		
+		for (int i=0; i<sizes.length-1; i++) {
+			sb.append(sizes[i] + ", ");
+		}
+		
+		sb.append(sizes[sizes.length-1] + "]");
+		sb.append(", percents=[");
+		
+		for (int i=0; i<percents.length-1; i++) {
+			sb.append(percents[i] + ", ");
+		}
+		
+		sb.append(percents[percents.length-1] + "]");
 		sb.append("}");
 		return sb.toString();
 	}
