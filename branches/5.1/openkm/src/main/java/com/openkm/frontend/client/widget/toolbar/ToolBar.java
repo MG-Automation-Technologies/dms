@@ -80,7 +80,6 @@ import com.openkm.frontend.client.widget.mainmenu.Bookmark;
  *
  */
 public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, HasToolBarHandlerExtension {
-	
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
 	private final OKMFolderServiceAsync folderService = (OKMFolderServiceAsync) GWT.create(OKMFolderService.class);
 	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT.create(OKMPropertyGroupService.class);
@@ -940,7 +939,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			if ((folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
 				if (originPanel != FILE_BROWSER) {
 					enableAddDocument();
-					enableCreateDirectory();
+					enableCreateFolder();
 				}
 				// Evaluates special case root node that must not be deleted;
 				if (!isRoot) {
@@ -955,6 +954,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 					Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TEMPLATES ||
 					Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_PERSONAL ) {
 					enableAddDocument();
+					enableCreateFolder();
 					enableScanner();
 					enableUploader();
 				}
@@ -984,7 +984,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				
 			} else {
 				if (originPanel != FILE_BROWSER) {
-					disableCreateDirectory();
+					disableCreateFolder();
 					disableAddDocument();
 				}
 				
@@ -1016,7 +1016,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				disableAddSubscription();
 				
 				if (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_THESAURUS) {
-					disableCreateDirectory();
+					disableCreateFolder();
 					disableDelete();
 				}
 			}
@@ -1118,6 +1118,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				  Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TEMPLATES ||
 				  Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_PERSONAL) ) {
 				enableAddDocument();
+				enableCreateFolder();
 				enableScanner();
 				enableUploader();
 			}
@@ -1330,6 +1331,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				  Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TEMPLATES ||
 				  Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_PERSONAL) ) {
 				enableAddDocument();
+				enableCreateFolder();
 				enableScanner();
 				enableUploader();
 			}
@@ -1428,9 +1430,9 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Enables create directory
+	 * Enables create folder
 	 */
-	public void enableCreateDirectory() {
+	public void enableCreateFolder() {
 		toolBarOption.createFolderOption = true;
 		createFolder.setStyleName("okm-ToolBar-button");
 		createFolder.setResource(OKMBundleResources.INSTANCE.createFolder()); 
@@ -1438,9 +1440,9 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
-	 * Disables create directory
+	 * Disables create folder
 	 */
-	public void disableCreateDirectory() {
+	public void disableCreateFolder() {
 		toolBarOption.createFolderOption = false;
 		createFolder.setStyleName("okm-ToolBar-button-disabled");
 		createFolder.setResource(OKMBundleResources.INSTANCE.createFolderDisabled()); 
@@ -2442,9 +2444,9 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * 
 	 */
 	public void evaluateShowIcons() {
-		if (toolBarOption.createFolderOption) {enableCreateDirectory(); } else {disableCreateDirectory(); }
-		if (toolBarOption.findFolderOption) {enableFindFolder(); } else {disableFindFolder(); }
-		if (toolBarOption.addDocumentOption) {enableAddDocument(); } else {disableAddDocument(); }
+		if (toolBarOption.createFolderOption) { enableCreateFolder(); } else { disableCreateFolder(); }
+		if (toolBarOption.findFolderOption) { enableFindFolder(); } else { disableFindFolder(); }
+		if (toolBarOption.addDocumentOption) { enableAddDocument(); } else { disableAddDocument(); }
 		if (toolBarOption.checkoutOption) { enableCheckout(); } else { disableCheckout(); }
 		if (toolBarOption.checkinOption) { enableCheckin(); } else { disableCheckin(); }
 		if (toolBarOption.cancelCheckoutOption) { enableCancelCheckout(); } else { disableCancelCheckout(); }
