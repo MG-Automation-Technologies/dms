@@ -898,7 +898,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		
 		//folderParent.setPermissions((byte)(GWTPermission.DELETE | GWTPermission.READ | GWTPermission.SECURITY | GWTPermission.WRITE));
 		// Only if toolbar is enabled must change tools icons values
-		if (isEnabled()) {			
+		if (isEnabled()) {
 			disableDownload();
 			disableDownloadPdf();
 			disableSendDocumentLink();
