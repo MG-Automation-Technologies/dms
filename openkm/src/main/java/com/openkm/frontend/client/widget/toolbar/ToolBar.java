@@ -969,6 +969,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				if ((folderParent.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE && 
 					(folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
 					enableRemovePropertyGroup(); // Always enable it ( not controls button, only boolean value )
+					
 					if (Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_CATEGORIES &&
 						Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_THESAURUS &&
 						Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_PERSONAL &&
@@ -1013,6 +1014,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_CATEGORIES ) {
 				disableAddDocument();
 				disableAddSubscription();
+				
 				if (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_THESAURUS) {
 					disableCreateDirectory();
 					disableDelete();
@@ -1038,6 +1040,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 
 		} else if (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TRASH) {
 			enablePurgeTrash();
+			
 			if (isRoot) {
 				disablePurge();
 				disableRestore();
@@ -1075,6 +1078,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		Main.get().mainPanel.topPanel.mainMenu.disableAllOptions();
 		Main.get().mainPanel.desktop.browser.fileBrowser.disableAllOptions();
 		Main.get().activeFolderTree.menuPopup.disableAllOptions();
+		
 		// Only if toolbar is enabled must change tools icons values
 		if (isEnabled()) {
 			boolean disable = false;
@@ -1142,6 +1146,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 						enableMove();
 						enableRemovePropertyGroup(); // Always enable it ( not controls button, only boolean value )
 						enableWorkflow();
+						
 						if (Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_CATEGORIES &&
 							Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_THESAURUS &&
 							Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_PERSONAL &&
@@ -1167,11 +1172,11 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 								disableRemovePropertyGroup();
 								disableAddNote();
 							}
+							
 							enableCancelCheckout();
 							disableCheckout();
 							disableLock();
 							disableUnlock();
-							
 						} else {
 							disable = true;
 						}
@@ -1287,6 +1292,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		Main.get().mainPanel.topPanel.mainMenu.disableAllOptions();
 		Main.get().mainPanel.desktop.browser.fileBrowser.disableAllOptions();
 		Main.get().activeFolderTree.menuPopup.disableAllOptions();
+		
 		// Only if toolbar is enabled must change tools icons values
 		if (isEnabled()) {
 			
@@ -1342,6 +1348,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				enableCopy();
 				enableMove();
 				enableRemovePropertyGroup(); // Always enable it ( not controls button, only boolean value )
+				
 				if (Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_CATEGORIES &&
 					Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_THESAURUS &&
 					Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_PERSONAL &&
@@ -1349,6 +1356,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 					Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_MAIL) {
 					getAllGroups(); // Evaluates enable or disable property group buttons
 				}
+				
 				// On mail panel is not able to uploading files
 				if (Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_MAIL ) {
 					enableAddDocument();
