@@ -120,6 +120,7 @@ public class DataBrowserServlet extends BaseServlet {
 			File parent = dir.getParentFile();
 			item.put("name", "&lt;PARENT FOLDER&gt;");
 			item.put("path", parent.getPath());
+			item.put("sel", "false");
 			folders.add(item);
 		}
 		
@@ -129,10 +130,12 @@ public class DataBrowserServlet extends BaseServlet {
 			if (f.isDirectory() && !f.isHidden()) {
 				item.put("name", f.getName());
 				item.put("path", f.getPath());
+				item.put("sel", "true");
 				folders.add(item);
 			} else if (f.isFile() && !f.isHidden()) {
 				item.put("name", f.getName());
 				item.put("path", f.getPath());
+				item.put("sel", "true");
 				documents.add(item);
 			}
 		}
@@ -176,6 +179,7 @@ public class DataBrowserServlet extends BaseServlet {
 			Map<String, String> item = new HashMap<String, String>();
 			item.put("name", "&lt;PARENT FOLDER&gt;");
 			item.put("path", base.getParent().getPath());
+			item.put("sel", "false");
 			folders.add(item);
 		}
 		
@@ -186,11 +190,13 @@ public class DataBrowserServlet extends BaseServlet {
 				Map<String, String> item = new HashMap<String, String>();
 				item.put("name", child.getName());
 				item.put("path", child.getPath());
+				item.put("sel", "true");
 				folders.add(item);
 			} else if (child.isNodeType(Document.TYPE)) {
 				Map<String, String> item = new HashMap<String, String>();
 				item.put("name", child.getName());
 				item.put("path", child.getPath());
+				item.put("sel", "true");
 				documents.add(item);
 			}
 		}
