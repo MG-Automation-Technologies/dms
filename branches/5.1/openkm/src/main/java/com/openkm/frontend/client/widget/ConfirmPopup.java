@@ -36,6 +36,8 @@ import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.contants.ui.UIDockPanelConstants;
 import com.openkm.frontend.client.widget.form.FormManager.ValidationButton;
 import com.openkm.frontend.client.widget.form.HasWorkflow;
+import com.openkm.frontend.client.widget.properties.Document.CategoryToRemove;
+import com.openkm.frontend.client.widget.properties.Document.KeywordToRemove;
 import com.openkm.frontend.client.widget.properties.Notes.NoteToDelete;
 
 import eu.maydu.gwt.validation.client.ValidationProcessor;
@@ -69,6 +71,8 @@ public class ConfirmPopup extends DialogBox {
 	public static final int CONFIRM_DELETE_NOTE_DOCUMENT			= 18;
 	public static final int CONFIRM_DELETE_NOTE_FOLDER				= 19;
 	public static final int CONFIRM_DELETE_NOTE_MAIL				= 20;
+	public static final int CONFIRM_DELETE_CATEGORY_DOCUMENT			= 25;
+	public static final int CONFIRM_DELETE_KEYWORD_DOCUMENT				= 26;
 	
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
@@ -266,6 +270,14 @@ public class ConfirmPopup extends DialogBox {
 					Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.notes.removeNote(noteToDelete.getNotePath(), noteToDelete.getRow());
 				}
 				break;
+				
+			case CONFIRM_DELETE_CATEGORY_DOCUMENT:
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.document.removeCategory((CategoryToRemove)object);
+				break;
+				
+			case CONFIRM_DELETE_KEYWORD_DOCUMENT:
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.document.removeKeyword((KeywordToRemove)object);
+				break;
 		}
 		
 		action = NO_ACTION; // Resets action value
@@ -353,6 +365,14 @@ public class ConfirmPopup extends DialogBox {
 				
 			case CONFIRM_DELETE_NOTE_MAIL:
 				text.setHTML(Main.i18n("confirm.delete.note"));
+				break;
+			
+			case CONFIRM_DELETE_CATEGORY_DOCUMENT:
+				text.setHTML(Main.i18n("confirm.category.delete"));
+				break;
+				
+			case CONFIRM_DELETE_KEYWORD_DOCUMENT:
+				text.setHTML(Main.i18n("confirm.keyword.delete"));
 				break;
 		}
 	}

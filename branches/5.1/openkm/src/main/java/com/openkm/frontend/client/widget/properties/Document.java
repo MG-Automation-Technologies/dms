@@ -69,6 +69,7 @@ import com.openkm.frontend.client.service.OKMPropertyServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
 import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
+import com.openkm.frontend.client.widget.ConfirmPopup;
 import com.openkm.frontend.client.widget.dashboard.ImageHover;
 import com.openkm.frontend.client.widget.dashboard.keymap.TagCloud;
 import com.openkm.frontend.client.widget.thesaurus.ThesaurusSelectPopup;
@@ -632,6 +633,17 @@ public class Document extends Composite {
 	}
 	
 	/**
+	 * removeCategory
+	 * 
+	 * @param category
+	 */
+	public void removeCategory(CategoryToRemove obj) {
+		document.getCategories().remove(obj.getCategory());
+		removeCategory(obj.getCategory().getUuid());
+		tableSubscribedCategories.removeRow(obj.getRow());
+	}
+	
+	/**
 	 * Sets visibility to buttons ( true / false )
 	 * 
 	 * @param visible The visible value
@@ -663,6 +675,16 @@ public class Document extends Composite {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * removeKeyword
+	 * 
+	 * @param ktr
+	 */
+	public void removeKeyword(KeywordToRemove ktr) {
+		removeKey(ktr.getKeyword());
+		hKeyPanel.remove(ktr.getExternalPanel());
 	}
 	
 	/**
@@ -719,8 +741,10 @@ public class Document extends Composite {
 		delete.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.document.removeKey(keyword);
-				hKeyPanel.remove(externalPanel);
+				KeywordToRemove ktr = new KeywordToRemove(externalPanel, keyword);
+				Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_DELETE_KEYWORD_DOCUMENT);
+				Main.get().confirmPopup.setValue(ktr);
+				Main.get().confirmPopup.show();
 			}
 		});
 		delete.setStyleName("okm-KeyMap-ImageHover");
@@ -809,9 +833,10 @@ public class Document extends Composite {
 		delete.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				document.getCategories().remove(category);
-				removeCategory(category.getUuid());
-				tableSubscribedCategories.removeRow(tableSubscribedCategories.getCellForEvent(event).getRowIndex());
+				Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_DELETE_CATEGORY_DOCUMENT);
+				CategoryToRemove ctr = new CategoryToRemove(category, tableSubscribedCategories.getCellForEvent(event).getRowIndex());
+				Main.get().confirmPopup.setValue(ctr);
+				Main.get().confirmPopup.show();
 			}
 		});
 		
@@ -838,5 +863,69 @@ public class Document extends Composite {
 	 */
 	public void setKeywordEnabled(boolean enabled) {
 		suggestKey.getTextBox().setEnabled(enabled);
+	}
+	
+	/**
+	 * CategoryToRemove
+	 * 
+	 * @author jllort
+	 *
+	 */
+	public class CategoryToRemove {
+		private GWTFolder category;
+		private int row;
+		
+		public CategoryToRemove(GWTFolder category, int row) {
+			this.category = category;
+			this.row = row;
+		}
+
+		public GWTFolder getCategory() {
+			return category;
+		}
+
+		public void setCategory(GWTFolder category) {
+			this.category = category;
+		}
+
+		public int getRow() {
+			return row;
+		}
+
+		public void setRow(int row) {
+			this.row = row;
+		}
+	}
+	
+	/**
+	 * KeywordToRemove
+	 * 
+	 * @author jllort
+	 *
+	 */
+	public class KeywordToRemove {
+		private HorizontalPanel externalPanel;
+		private String keyword;
+		
+		public KeywordToRemove(HorizontalPanel externalPanel, String keyword) {
+			this.externalPanel = externalPanel;
+			this.keyword = keyword;
+		}
+
+		public HorizontalPanel getExternalPanel() {
+			return externalPanel;
+		}
+
+		public void setExternalPanel(HorizontalPanel externalPanel) {
+			this.externalPanel = externalPanel;
+		}
+
+		public String getKeyword() {
+			return keyword;
+		}
+
+		public void setKeyword(String keyword) {
+			this.keyword = keyword;
+		}
 	}
 }
