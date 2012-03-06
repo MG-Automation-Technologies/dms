@@ -400,7 +400,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			}
 		}
 	};
-	
+		
 	/**
 	 * Download document
 	 */
@@ -415,6 +415,13 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	public void executeDownloadPdf() {
 		Main.get().mainPanel.desktop.browser.fileBrowser.table.downloadDocumentPdf();
 		fireEvent(HasToolBarEvent.EXECUTE_DOWNLOAD_PDF_DOCUMENT);
+	}
+	
+	/**
+	 * executePrint
+	 */
+	public void executePrint() {
+		Main.get().mainPanel.desktop.browser.fileBrowser.table.print();
 	}
 
 	/**
@@ -714,7 +721,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			
 		downloadPdf = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.downloadPdfDisabled()),
 				  						Main.i18n("general.menu.file.download.document.pdf"), downloadPdfHandler); 
-		
 			
 		addPropertyGroup = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.addPropertyGroupDisabled()),
 											 Main.i18n("filebrowser.menu.add.property.group"), addPropertyGroupHandler); 
@@ -876,10 +882,19 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public void checkToolButtonPermissions(GWTFolder folder, GWTFolder folderParent, int originPanel) {
 		node = folder; // saves actual node
+		
 		// Disable all menu options
 		Main.get().mainPanel.topPanel.mainMenu.disableAllOptions();
 		Main.get().mainPanel.desktop.browser.fileBrowser.disableAllOptions();
 		Main.get().activeFolderTree.menuPopup.disableAllOptions();
+		
+		boolean isRoot = Main.get().taxonomyRootFolder.getPath().equals(folder.getPath()) || 
+		 				 Main.get().thesaurusRootFolder.getPath().equals(folder.getPath()) ||
+		 				 Main.get().categoriesRootFolder.getPath().equals(folder.getPath()) ||
+		 				 Main.get().templatesRootFolder.getPath().equals(folder.getPath()) ||
+		 				 Main.get().personalRootFolder.getPath().equals(folder.getPath()) || 
+		 				 Main.get().trashRootFolder.getPath().equals(folder.getPath()) ||
+		 				 Main.get().mailRootFolder.getPath().equals(folder.getPath());
 		
 		//folderParent.setPermissions((byte)(GWTPermission.DELETE | GWTPermission.READ | GWTPermission.SECURITY | GWTPermission.WRITE));
 		// Only if toolbar is enabled must change tools icons values
@@ -901,24 +916,14 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			disableScanner();
 			disableUploader();
 			
-			boolean isRoot = Main.get().taxonomyRootFolder.getPath().equals(folder.getPath()) || 
-							 Main.get().thesaurusRootFolder.getPath().equals(folder.getPath()) ||
-							 Main.get().categoriesRootFolder.getPath().equals(folder.getPath()) ||
-							 Main.get().templatesRootFolder.getPath().equals(folder.getPath()) ||
-							 Main.get().personalRootFolder.getPath().equals(folder.getPath()) || 
-							 Main.get().trashRootFolder.getPath().equals(folder.getPath()) ||
-							 Main.get().mailRootFolder.getPath().equals(folder.getPath());
-			
 			// On folder parent don't enables subscription
 			if (isRoot) {
 				disableAddSubscription();
 				disableRemoveSubscription();
 				disableExport();
-				
 			} else if (folder.isSubscribed()) {
 				disableAddSubscription();
 				enableRemoveSubscription();
-				
 			} else {
 				enableAddSubscription();
 				disableRemoveSubscription();
@@ -981,14 +986,15 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 					disableCreateDirectory();
 					disableAddDocument();
 				}
+				
 				disableAddPropertyGroup();
 				disableRemovePropertyGroup();
 			}
 			
 			// Except taxonomy categories and thesaurus stack panels always disabling 
-			if 	(Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_PERSONAL || 
-				Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TRASH || 
-				Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_MAIL) {
+			if 	(Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_PERSONAL || 
+				Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TRASH || 
+				Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_MAIL) {
 				disableAddPropertyGroup();
 				disableRemovePropertyGroup();
 				disableFiredRemovePropertyGroup();
@@ -997,24 +1003,24 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			}
 			
 			// On templates disables subscription, but property group are enabled
-			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TEMPLATES) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TEMPLATES) {
 				disableAddSubscription();
 				disableRemoveSubscription();
 			}
 			
 			// Disables add document, delete and create directory from thesaurus view
-			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_THESAURUS || 
-				Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_CATEGORIES ) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_THESAURUS || 
+				Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_CATEGORIES ) {
 				disableAddDocument();
 				disableAddSubscription();
-				if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_THESAURUS) {
+				if (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_THESAURUS) {
 					disableCreateDirectory();
 					disableDelete();
 				}
 			}
 			
 			// Enables find folder in Desktop view 
-			if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace()==UIDockPanelConstants.DESKTOP){
+			if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace() == UIDockPanelConstants.DESKTOP){
 				enableFindFolder();
 			} else {
 				disableFindFolder();
@@ -1023,33 +1029,38 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			// The remove property group is special case depends on tab property enabled, with this call we force to set false
 			evaluateRemovePropertyGroup(false);
 			
-			// Trash case
-			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TRASH) {
-				enablePurgeTrash();
-				if (isRoot) {
-					disablePurge();
-					disableRestore();
-				} else {
-					enablePurge();
-					enableRestore();
-				}
+			if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace() == UIDockPanelConstants.DESKTOP) {
+				enableRefresh();
+				enableHome();
+			} else if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace() == UIDockPanelConstants.DASHBOARD) {
+				enableRefresh();
 			}
-			
-			// ONLY TO DEVELOPMENT TESTINGT
-			//enableAllToolBarForTestingPurpose();
-			
-			// Sets the permission to menus
-			Main.get().mainPanel.topPanel.mainMenu.setOptions(toolBarOption);
-			Main.get().mainPanel.desktop.browser.fileBrowser.setOptions(toolBarOption);
-			Main.get().activeFolderTree.menuPopup.setOptions(toolBarOption);
-			
-			// Checking extension button 
-			for (Iterator<ToolBarButtonExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
-				it.next().checkPermissions(folder, folderParent, originPanel);
+
+		} else if (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TRASH) {
+			enablePurgeTrash();
+			if (isRoot) {
+				disablePurge();
+				disableRestore();
+			} else {
+				enablePurge();
+				enableRestore();
 			}
-			
-			fireEvent(HasToolBarEvent.EXECUTE_CHECK_FOLDER_PERMISSION);
 		}
+		
+		// Checking extension button 
+		for (Iterator<ToolBarButtonExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
+			it.next().checkPermissions(folder, folderParent, originPanel);
+		}
+		
+		fireEvent(HasToolBarEvent.EXECUTE_CHECK_FOLDER_PERMISSION);
+		
+		// Sets the visible values to note tab
+		Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.notes.setVisibleAddNote(toolBarOption.addNoteOption);
+		
+		// Sets the permission to menus
+		Main.get().mainPanel.topPanel.mainMenu.setOptions(toolBarOption);
+		Main.get().mainPanel.desktop.browser.fileBrowser.setOptions(toolBarOption);
+		Main.get().activeFolderTree.menuPopup.setOptions(toolBarOption);
 	}
 	
 	/**
@@ -1089,8 +1100,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			if (((doc.getPermissions() & GWTPermission.DELETE) == GWTPermission.DELETE) && 
 				((folder.getPermissions() & GWTPermission.DELETE) == GWTPermission.DELETE ) &&
 				!doc.isCheckedOut() && !doc.isLocked() &&
-				Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_THESAURUS &&
-				Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_CATEGORIES) {
+				Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_THESAURUS &&
+				Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_CATEGORIES) {
 				enableDelete();
 			} else {
 				disableDelete();
@@ -1098,9 +1109,9 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			
 			// Enable scanner button
 			if (((folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE ) && 
-				 (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TAXONOMY ||
-				  Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TEMPLATES ||
-				  Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_PERSONAL) ) {
+				 (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TAXONOMY ||
+				  Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TEMPLATES ||
+				  Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_PERSONAL) ) {
 				enableAddDocument();
 				enableScanner();
 				enableUploader();
@@ -1117,24 +1128,24 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 					
 					if (doc.isSubscribed()) {
 						enableRemoveSubscription();
-					} else if(!doc.isLocked()) {
+					} else if (!doc.isLocked()) {
 						enableAddSubscription();
 					} 
 					
 					// In thesaurus and categories view must not evaluate write folder permissions
 					if ((folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE ||
-						 Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_THESAURUS ||
-						 Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_CATEGORIES) {
+						 Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_THESAURUS ||
+						 Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_CATEGORIES) {
 						enableRename();
 						enableCopy();
 						enableMove();
 						enableRemovePropertyGroup(); // Always enable it ( not controls button, only boolean value )
 						enableWorkflow();
-						if (Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_CATEGORIES &&
-							Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_THESAURUS &&
-							Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_PERSONAL &&
-							Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_TRASH && 
-							Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_MAIL) {
+						if (Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_CATEGORIES &&
+							Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_THESAURUS &&
+							Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_PERSONAL &&
+							Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_TRASH && 
+							Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_MAIL) {
 							getAllGroups(); // Evaluates enable or disable property group buttons
 						}
 					} else {
@@ -1176,7 +1187,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 							
 							if (doc.isSubscribed()) {
 								enableRemoveSubscription();
-							} else if(!doc.isLocked()) {
+							} else if (!doc.isLocked()) {
 								enableAddSubscription();
 							} 
 						} else {
@@ -1200,9 +1211,9 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			} 
 			
 			// Only on taxonomy, categories, and thesaurus enables to send document link by mail 
-			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TAXONOMY ||
-				Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_THESAURUS ||
-				Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_CATEGORIES) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TAXONOMY ||
+				Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_THESAURUS ||
+				Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_CATEGORIES) {
 				enableSendDocumentLink();
 				enableSendDocumentAttachment();
 			} else {
@@ -1211,9 +1222,9 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			}
 			
 			// Excepts on taxonomy, categories and thesaurus panel always disabling 
-			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_PERSONAL || 
-				Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TRASH || 
-				Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_MAIL) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_PERSONAL || 
+				Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TRASH || 
+				Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_MAIL) {
 				disableAddPropertyGroup();
 				disableRemovePropertyGroup();
 				disableFiredRemovePropertyGroup();
@@ -1222,43 +1233,45 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			}
 			
 			// On templates disables subscription, but property group are enabled
-			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TEMPLATES) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TEMPLATES) {
 				disableAddSubscription();
 				disableRemoveSubscription();
 			}
 			
 			// Enables find folder in Desktop view 
-			if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace()==UIDockPanelConstants.DESKTOP){
+			if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace() == UIDockPanelConstants.DESKTOP){
 				enableFindFolder();
 			} else {
 				disableFindFolder();
 			}
 			
-			// Trash
-			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TRASH) {
-				enablePurgeTrash();
-				enablePurge();
-				enableRestore();
+			if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace() == UIDockPanelConstants.DESKTOP) {
+				enableRefresh();
+				enableHome();
+			} else if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace() == UIDockPanelConstants.DASHBOARD) {
+				enableRefresh();
 			}
 			
-			// ONLY TO DEVELOPMENT TESTINGT
-			//enableAllToolBarForTestingPurpose();
-			
-			// Sets the permission to menus
-			Main.get().mainPanel.topPanel.mainMenu.setOptions(toolBarOption);
-			Main.get().mainPanel.desktop.browser.fileBrowser.setOptions(toolBarOption);
-			Main.get().activeFolderTree.menuPopup.setOptions(toolBarOption);
-			
-			// Sets the visible values to note tab
-			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.notes.setVisibleAddNote(toolBarOption.addNoteOption);
-			
-			// Checking extension button 
-			for (Iterator<ToolBarButtonExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
-				it.next().checkPermissions(doc, folder);
-			}
-			
-			fireEvent(HasToolBarEvent.EXECUTE_CHECK_DOCUMENT_PERMISSION);
+		} else if (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TRASH) {
+			enablePurgeTrash();
+			enablePurge();
+			enableRestore();
 		}
+		
+		// Checking extension button 
+		for (Iterator<ToolBarButtonExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
+			it.next().checkPermissions(doc, folder);
+		}
+		
+		fireEvent(HasToolBarEvent.EXECUTE_CHECK_DOCUMENT_PERMISSION);
+		
+		// Sets the visible values to note tab
+		Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.notes.setVisibleAddNote(toolBarOption.addNoteOption);
+		
+		// Sets the permission to menus
+		Main.get().mainPanel.topPanel.mainMenu.setOptions(toolBarOption);
+		Main.get().mainPanel.desktop.browser.fileBrowser.setOptions(toolBarOption);
+		Main.get().activeFolderTree.menuPopup.setOptions(toolBarOption);
 	}
 	
 	/**
@@ -1305,9 +1318,9 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			
 			// Enable scanner button
 			if (((folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE ) && 
-				 (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TAXONOMY ||
-				  Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TEMPLATES ||
-				  Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_PERSONAL) ) {
+				 (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TAXONOMY ||
+				  Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TEMPLATES ||
+				  Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_PERSONAL) ) {
 				enableAddDocument();
 				enableScanner();
 				enableUploader();
@@ -1318,8 +1331,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				
 				// In thesaurus and categories view must not evaluate write folder permissions
 				if ((folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE ||
-					 Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_THESAURUS ||
-					 Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_CATEGORIES) {
+					 Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_THESAURUS ||
+					 Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_CATEGORIES) {
 					enableWorkflow();
 				}
 				
@@ -1327,15 +1340,15 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				enableCopy();
 				enableMove();
 				enableRemovePropertyGroup(); // Always enable it ( not controls button, only boolean value )
-				if (Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_CATEGORIES &&
-					Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_THESAURUS &&
-					Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_PERSONAL &&
-					Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_TRASH && 
-					Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_MAIL) {
+				if (Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_CATEGORIES &&
+					Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_THESAURUS &&
+					Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_PERSONAL &&
+					Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_TRASH && 
+					Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_MAIL) {
 					getAllGroups(); // Evaluates enable or disable property group buttons
 				}
 				// On mail panel is not able to uploading files
-				if (Main.get().mainPanel.desktop.navigator.getStackIndex()!= UIDesktopConstants.NAVIGATOR_MAIL ) {
+				if (Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_MAIL ) {
 					enableAddDocument();
 				} 		
 			} else {
@@ -1344,7 +1357,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			}
 			
 			// Onnly on taxonomy enables to send document link by mail 
-			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TAXONOMY) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TAXONOMY) {
 				enableSendDocumentLink();
 				enableSendDocumentAttachment();
 			} else {
@@ -1353,9 +1366,9 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			}
 			
 			// Excepts on taxonomy categories and thesaurus panel always disabling 
-			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_PERSONAL || 
-				Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TRASH || 
-				Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_MAIL) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_PERSONAL || 
+				Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TRASH || 
+				Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_MAIL) {
 				disableAddPropertyGroup();
 				disableRemovePropertyGroup();
 				disableFiredRemovePropertyGroup();
@@ -1364,33 +1377,35 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			}
 			
 			// On templates disables subscription, but property group are enabled
-			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TEMPLATES) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TEMPLATES) {
 				disableAddSubscription();
 				disableRemoveSubscription();
 			}
 			
-			// Trash
-			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== UIDesktopConstants.NAVIGATOR_TRASH) {
-				enablePurgeTrash();
-				enablePurge();
-				enableRestore();
+			if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace() == UIDockPanelConstants.DESKTOP) {
+				enableRefresh();
+				enableHome();
+			} else if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace() == UIDockPanelConstants.DASHBOARD) {
+				enableRefresh();
 			}
 			
-			// ONLY TO DEVELOPMENT TESTINGT
-			//enableAllToolBarForTestingPurpose();
-			
-			// Sets the permission to menus
-			Main.get().mainPanel.topPanel.mainMenu.setOptions(toolBarOption);
-			Main.get().mainPanel.desktop.browser.fileBrowser.setOptions(toolBarOption);
-			Main.get().activeFolderTree.menuPopup.setOptions(toolBarOption);
-			
-			// Checking extension button 
-			for (Iterator<ToolBarButtonExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
-				it.next().checkPermissions(mail, folder);
-			}
-			
-			fireEvent(HasToolBarEvent.EXECUTE_CHECK_MAIL_PERMISSION);
+		} else if (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TRASH) {
+			enablePurgeTrash();
+			enablePurge();
+			enableRestore();
 		}
+		
+		// Checking extension button 
+		for (Iterator<ToolBarButtonExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
+			it.next().checkPermissions(mail, folder);
+		}
+		
+		fireEvent(HasToolBarEvent.EXECUTE_CHECK_MAIL_PERMISSION);
+		
+		// Sets the permission to menus
+		Main.get().mainPanel.topPanel.mainMenu.setOptions(toolBarOption);
+		Main.get().mainPanel.desktop.browser.fileBrowser.setOptions(toolBarOption);
+		Main.get().activeFolderTree.menuPopup.setOptions(toolBarOption);
 	}
 	
 	/**
@@ -1949,39 +1964,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	public void disableAddNote() {
 		toolBarOption.addNoteOption = false;
 	}
-	
-	
-	/**
-	 * Only used on developement to testing purposes
-	 */
-/*	private void enableAllToolBarForTestingPurpose() {
-		enableCreateDirectory();
-		enableFindFolder();
-		enableAddDocument();
-		enableCheckout();
-		enableCheckin();
-		enableCancelCheckout();
-		enableLock();
-		enableUnlock();
-		enableDownload();
-		enableDownloadPdf();
-		enableDelete();
-		enableAddPropertyGroup();
-		enableRemovePropertyGroup();
-		enableAddSubscription();
-		enableRemoveSubscription();
-		enableFiredRemovePropertyGroup();
-		enableHome();
-		enableRefresh();
-		enableRename();
-		enableCopy();
-		enableMove();
-		enableExport();
-		enableWorkflow();
-		enableAddNote();
-		enableScanner();
-		enableUploader();
-	} */
 
 	/**
 	 * Gets the defatul Tool Bar object values for root
@@ -2284,7 +2266,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public ToolBarOption getDefaultSearchToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
-		tmpToolBarOption.createFolderOption			= false;
+		tmpToolBarOption.createFolderOption				= false;
 		tmpToolBarOption.findFolderOption				= false;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
@@ -2727,8 +2709,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		}
 	};
 	
-	
-	
 	/**
 	 * Gets asyncronous to get all groups
 	 */
@@ -2903,6 +2883,23 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public void setToolBarOption(ToolBarOption toolBarOption) {
 		this.toolBarOption = toolBarOption;
+		propagateToolBarOptions(); // Always must propagate tool bar options
+	}
+	
+	/**
+	 * propagateToolBarOptions
+	 */
+	private void propagateToolBarOptions() {
+		Main.get().mainPanel.topPanel.mainMenu.setOptions(toolBarOption);
+		Main.get().mainPanel.desktop.browser.fileBrowser.setOptions(toolBarOption);
+		Main.get().activeFolderTree.menuPopup.setOptions(toolBarOption);
+		if (node instanceof GWTFolder) {
+			// Sets the visible values to note tab
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.notes.setVisibleAddNote(toolBarOption.addNoteOption);
+		} else if (node instanceof GWTDocument) {
+			// Sets the visible values to note tab
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.notes.setVisibleAddNote(toolBarOption.addNoteOption);
+		} 
 	}
 	
 	/**
@@ -2923,7 +2920,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		panel.getWidget(9).setVisible(option.isCreateFolderVisible() || option.isFindFolderVisible() ||
 					                  option.isDownloadVisible() || option.isDownloadPdfVisible()); // hide separator
  
-		
 		// SECOND
 		lock.setVisible(option.isLockVisible());
 		panel.getWidget(11).setVisible(option.isLockVisible()); // hide space
