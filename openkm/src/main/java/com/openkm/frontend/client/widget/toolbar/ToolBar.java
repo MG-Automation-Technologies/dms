@@ -1070,6 +1070,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public void checkToolButtonPermissions(GWTDocument doc, GWTFolder folder) {
 		node = doc; // saves actual node
+		
 		// Disable all menu options
 		Main.get().mainPanel.topPanel.mainMenu.disableAllOptions();
 		Main.get().mainPanel.desktop.browser.fileBrowser.disableAllOptions();
@@ -1281,6 +1282,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public void checkToolButtonPermissions(GWTMail mail, GWTFolder folder) {
 		node = mail; // saves actual node
+		
 		// Disable all menu options
 		Main.get().mainPanel.topPanel.mainMenu.disableAllOptions();
 		Main.get().mainPanel.desktop.browser.fileBrowser.disableAllOptions();
