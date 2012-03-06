@@ -42,7 +42,9 @@
             <tr class="${row % 2 == 0 ? 'even' : 'odd'}">
               <td><a href="${urlBrowse}">${fld.name}</a></td>
               <td align="center">
-                <a href="javascript:void(0)" onclick="$('#${dst}', window.parent.document).val('${fld.path}'); window.parent.dialogClose();"><img src="img/true.png" alt="Select" title="Select"/></a>
+                <c:if test="${fld.sel == 'true'}">
+                  <a href="javascript:void(0)" onclick="$('#${dst}', window.parent.document).val('${fld.path}'); window.parent.dialogClose();"><img src="img/true.png" alt="Select" title="Select"/></a>
+                </c:if>
               </td>
             </tr>
           </c:forEach>
@@ -56,7 +58,9 @@
             <tr class="${row % 2 == 0 ? 'even' : 'odd'}">
               <td>${doc.name}</td>
               <td align="center">
-                <a href="javascript:void(0)" onclick="$('#${dst}', window.parent.document).val('${doc.path}'); window.parent.dialogClose();"><img src="img/true.png" alt="Select" title="Select"/></a>
+                <c:if test="${doc.sel == 'true'}">
+                  <a href="javascript:void(0)" onclick="$('#${dst}', window.parent.document).val('${doc.path}'); window.parent.dialogClose();"><img src="img/true.png" alt="Select" title="Select"/></a>
+                </c:if>
               </td>
             </tr>
           </c:forEach>
