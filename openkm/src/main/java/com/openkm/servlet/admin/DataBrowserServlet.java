@@ -57,6 +57,9 @@ import com.openkm.util.WebUtils;
 public class DataBrowserServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(DataBrowserServlet.class);
+	private static final String SEL_BOTH = "both";
+	private static final String SEL_FOLDER = "fld";
+	private static final String SEL_DOCUMENT = "doc";
 	
 	@Override
 	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException,
@@ -109,6 +112,7 @@ public class DataBrowserServlet extends BaseServlet {
 			ServletException {
 		log.debug("fileSystemList({}, {})", request, response);
 		String path = WebUtils.getString(request, "path", System.getProperty("user.home"));
+		String sel = WebUtils.getString(request, "sel", SEL_BOTH);
 		String dst = WebUtils.getString(request, "dst");
 		File dir = new File(path);
 		List<Map<String, String>> folders = new ArrayList<Map<String, String>>();
@@ -130,9 +134,15 @@ public class DataBrowserServlet extends BaseServlet {
 			if (f.isDirectory() && !f.isHidden()) {
 				item.put("name", f.getName());
 				item.put("path", f.getPath());
-				item.put("sel", "true");
+				
+				if (sel.equals(SEL_BOTH) || sel.equals(SEL_FOLDER)) {
+					item.put("sel", "true");
+				} else {
+					item.put("sel", "false");
+				}
+				
 				folders.add(item);
-			} else if (f.isFile() && !f.isHidden()) {
+			} else if (f.isFile() && !f.isHidden() && (sel.equals(SEL_BOTH) || sel.equals(SEL_DOCUMENT))) {
 				item.put("name", f.getName());
 				item.put("path", f.getPath());
 				item.put("sel", "true");
@@ -148,6 +158,7 @@ public class DataBrowserServlet extends BaseServlet {
 		sc.setAttribute("action", "fs");
 		sc.setAttribute("path", path);
 		sc.setAttribute("dst", dst);
+		sc.setAttribute("sel", sel);
 		sc.setAttribute("folders", folders);
 		sc.setAttribute("documents", documents);
 		sc.getRequestDispatcher("/admin/data_browser.jsp").forward(request, response);
@@ -165,6 +176,7 @@ public class DataBrowserServlet extends BaseServlet {
 		log.debug("repositoryList({}, {})", request, response);
 		Node root = session.getRootNode();
 		String path = WebUtils.getString(request, "path", root.getNode(Repository.ROOT).getPath());
+		String sel = WebUtils.getString(request, "sel", SEL_BOTH);
 		String dst = WebUtils.getString(request, "dst");
 		List<Map<String, String>> folders = new ArrayList<Map<String, String>>();
 		List<Map<String, String>> documents = new ArrayList<Map<String, String>>();
@@ -190,9 +202,15 @@ public class DataBrowserServlet extends BaseServlet {
 				Map<String, String> item = new HashMap<String, String>();
 				item.put("name", child.getName());
 				item.put("path", child.getPath());
-				item.put("sel", "true");
+				
+				if (sel.equals(SEL_BOTH) || sel.equals(SEL_FOLDER)) {
+					item.put("sel", "true");
+				} else {
+					item.put("sel", "false");
+				}
+				
 				folders.add(item);
-			} else if (child.isNodeType(Document.TYPE)) {
+			} else if (child.isNodeType(Document.TYPE) && (sel.equals(SEL_BOTH) || sel.equals(SEL_DOCUMENT))) {
 				Map<String, String> item = new HashMap<String, String>();
 				item.put("name", child.getName());
 				item.put("path", child.getPath());
@@ -209,6 +227,7 @@ public class DataBrowserServlet extends BaseServlet {
 		sc.setAttribute("action", "repo");
 		sc.setAttribute("path", path);
 		sc.setAttribute("dst", dst);
+		sc.setAttribute("sel", sel);
 		sc.setAttribute("folders", folders);
 		sc.setAttribute("documents", documents);
 		sc.getRequestDispatcher("/admin/data_browser.jsp").forward(request, response);

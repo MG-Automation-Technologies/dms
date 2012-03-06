@@ -36,6 +36,7 @@
             <c:url value="DataBrowser" var="urlBrowse">
               <c:param name="action" value="${action}"/>
               <c:param name="dst" value="${dst}"/>
+              <c:param name="sel" value="${sel}"/>
               <c:param name="path" value="${fld.path}"/>
             </c:url>
             <c:set var="row">${row + 1}</c:set>
@@ -52,6 +53,7 @@
             <c:url value="DataBrowser" var="urlBrowse">
               <c:param name="action" value="${action}"/>
               <c:param name="dst" value="${dst}"/>
+              <c:param name="sel" value="${sel}"/>
               <c:param name="path" value="${doc.path}"/>
             </c:url>
             <c:set var="row">${row + 1}</c:set>
