@@ -37,6 +37,9 @@ import com.bradmcevoy.http.CopyableResource;
 import com.bradmcevoy.http.DeletableResource;
 import com.bradmcevoy.http.GetableResource;
 import com.bradmcevoy.http.LockInfo;
+import com.bradmcevoy.http.LockInfo.LockDepth;
+import com.bradmcevoy.http.LockInfo.LockScope;
+import com.bradmcevoy.http.LockInfo.LockType;
 import com.bradmcevoy.http.LockResult;
 import com.bradmcevoy.http.LockTimeout;
 import com.bradmcevoy.http.LockToken;
@@ -227,6 +230,8 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 			Lock lock = OKMDocument.getInstance().lock(token, fixedDocPath);
 			lt = new LockToken();
 			lt.tokenId = lock.getToken();
+			lt.info = new LockInfo(LockScope.EXCLUSIVE, LockType.WRITE, lock.getOwner(), LockDepth.INFINITY);
+			lt.timeout = new LockTimeout(Long.MAX_VALUE);
 			return LockResult.success(lt);
 		} catch (LockException e) {
 			throw new LockedException(this);
@@ -242,6 +247,16 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 	
 	@Override
 	public void unlock(String tokenId) throws NotAuthorizedException, PreConditionFailedException {
+		String fixedDocPath = ResourceUtils.fixRepositoryPath(doc.getPath());
+		
+		try {
+			String token = JcrSessionTokenHolder.get();
+			OKMDocument.getInstance().unlock(token, fixedDocPath);
+		} catch (LockException e) {
+			throw new PreConditionFailedException(this);
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to lock: " + fixedDocPath);
+		}
 	}
 	
 	@Override
