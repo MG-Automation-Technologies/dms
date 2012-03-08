@@ -10,6 +10,21 @@
   <link rel="stylesheet" type="text/css" href="css/style.css" />
   <script src="js/jquery-1.3.2.min.js" type="text/javascript"></script>
   <script src="js/vanadium-min.js" type="text/javascript"></script>
+  <script type="text/javascript" src="js/jquery.DOMWindow.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+		$dm = $('.ds').openDOMWindow({
+			height:200, width:300,
+			eventType:'click',
+			overlayOpacity:'57',
+			windowSource:'iframe', windowPadding:0
+		});
+	});
+    
+    function dialogClose() {
+		$dm.closeDOMWindow();
+    }
+  </script>
   <title>Mail filter</title>
 </head>
 <body>
@@ -30,7 +45,8 @@
         <table class="form" width="345px" align="center">
           <tr>
             <td nowrap="nowrap">Folder</td>
-            <td><input name="mf_path" value="${mf.path}" size="48"/></td>
+            <td><input name="mf_path" id="mf_path" value="${mf.path}" size="48"/></td>
+            <td><a class="ds" href="../extension/DataBrowser?action=repo&sel=fld&dst=mf_path"><img src="img/action/browse_repo.png"/></a></td>
           </tr>
           <tr>
             <td>Grouping</td>
@@ -59,7 +75,7 @@
             </td>
           </tr>
           <tr>
-            <td colspan="2" align="right">
+            <td colspan="3" align="right">
               <input type="button" onclick="javascript:window.history.back()" value="Cancel"/>
               <input type="submit" value="Send"/>
             </td>
