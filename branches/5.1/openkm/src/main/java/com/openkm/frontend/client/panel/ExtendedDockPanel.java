@@ -25,9 +25,9 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.TreeItem;
@@ -85,6 +85,7 @@ public class ExtendedDockPanel extends Composite {
 	
 	int centerWidth = 0;
 	int centerHeight = 0;
+	int usableHeight = 0;
 	
 	/**
 	 * Extended dock panel
@@ -112,15 +113,18 @@ public class ExtendedDockPanel extends Composite {
 		// Administration panel initialization
 		administration = new Administration();
 		
+		// Calculating real height
+		usableHeight = Window.getClientHeight();
+		
 		// Initialize dockPanel size
-		dockPanel.setSize(""+Window.getClientWidth(), ""+Window.getClientHeight());
+		dockPanel.setSize(""+Window.getClientWidth(), ""+usableHeight);
 
 		// The active panel must be the last on initalization because establishes coordenates
-		leftBorderPanel.setSize(VERTICAL_BORDER_PANEL_WIDTH, Window.getClientHeight()-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT));
-		rightBorderPanel.setSize(VERTICAL_BORDER_PANEL_WIDTH, Window.getClientHeight()-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT));
+		leftBorderPanel.setSize(VERTICAL_BORDER_PANEL_WIDTH, usableHeight-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT));
+		rightBorderPanel.setSize(VERTICAL_BORDER_PANEL_WIDTH, usableHeight-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT));
 		
 		centerWidth = Window.getClientWidth()-(2*VERTICAL_BORDER_PANEL_WIDTH);
-		centerHeight = Window.getClientHeight()-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT);
+		centerHeight = usableHeight-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT);
 		
 		topPanel.setWidth(""+Window.getClientWidth());
 		desktop.setSize(centerWidth, centerHeight);
