@@ -14,9 +14,7 @@
   <script type="text/javascript" src="js/fixedTableHeader.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
-    	TABLE.fixHeader('table');
-    	
-    	$('#fumi').click(function() {
+    	$('#fumi').click(function(event) {
     		$("#dest").removeClass('ok').removeClass('error').html('Checking....');
             $("#dest").load('MailAccount', { action: "checkAll" },
             	function(response, status, xhr) {
@@ -27,6 +25,8 @@
             		}
             	});
 	   	});
+
+    	TABLE.fixHeader('table.results');
 	});
   </script>
   <title>User List</title>
