@@ -429,6 +429,8 @@ public class FormUtils {
 					if (item != null) button.setLabel(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("name");
 					if (item != null) button.setName(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("validate");
+					if (item != null) button.setValidate(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("transition");
 					if (item != null) button.setTransition(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("confirmation");
