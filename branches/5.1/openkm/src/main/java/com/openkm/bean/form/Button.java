@@ -25,7 +25,7 @@ public class Button extends FormElement {
 	private static final long serialVersionUID = 1L;
 	private String transition = "";
 	private String confirmation = "";
-	private String validate = "";
+	private boolean validate = true;
 	
 	public String getTransition() {
 		return transition;
@@ -43,11 +43,11 @@ public class Button extends FormElement {
 		this.confirmation = confirmation;
 	}
 	
-	public String getValidate() {
+	public boolean isValidate() {
 		return validate;
 	}
 
-	public void setValidate(String validate) {
+	public void setValidate(boolean validate) {
 		this.validate = validate;
 	}
 	
