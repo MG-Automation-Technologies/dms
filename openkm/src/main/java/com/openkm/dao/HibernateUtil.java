@@ -27,8 +27,10 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.net.URISyntaxException;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -40,7 +42,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.engine.SessionFactoryImplementor;
 import org.hibernate.hql.QueryTranslator;
@@ -82,20 +83,27 @@ public class HibernateUtil {
 	}
 	
 	/**
+	 * Construct annotation configuration
+	 */
+	private static Configuration getConfiguration() {
+		Configuration cfg = new Configuration();
+		
+		// Add annotated beans
+		cfg.addAnnotatedClass(DatabaseMetadataType.class);
+		cfg.addAnnotatedClass(DatabaseMetadataValue.class);
+		cfg.addAnnotatedClass(DatabaseMetadataSequence.class);
+		
+		return cfg;
+	}
+	
+	/**
 	 * Get instance
 	 */
 	public static SessionFactory getSessionFactory(String hbm2ddl) {
 		if (sessionFactory == null) {
 			try {
-				AnnotationConfiguration ac = new AnnotationConfiguration();
-				
-				// Add annotated beans
-				ac.addAnnotatedClass(DatabaseMetadataType.class);
-				ac.addAnnotatedClass(DatabaseMetadataValue.class);
-				ac.addAnnotatedClass(DatabaseMetadataSequence.class);
-				
 				// Configure Hibernate
-				Configuration cfg = ac.configure();
+				Configuration cfg = getConfiguration().configure();
 				cfg.setProperty("hibernate.dialect", Config.HIBERNATE_DIALECT);
 				cfg.setProperty("hibernate.connection.datasource", Config.HIBERNATE_DATASOURCE);
 				cfg.setProperty("hibernate.hbm2ddl.auto", hbm2ddl);
@@ -116,8 +124,19 @@ public class HibernateUtil {
 					InputStream is = Config.getResourceAsStream("default.sql");
 					String adapted = DatabaseDialectAdapter.dialectAdapter(is, Config.HIBERNATE_DIALECT);
 					executeImport(new StringReader(adapted));
+					IOUtils.closeQuietly(is);
+					
+					for (String res : Config.getResources("i18n")) {
+						InputStream isLang = Config.getResourceAsStream("i18n/" + res);
+						log.info("Importing language definition: {}", res);
+						executeImport(new InputStreamReader(isLang));
+						IOUtils.closeQuietly(isLang);
+					}
 				}
 			} catch (HibernateException e) {
+				log.error(e.getMessage(), e);
+				throw new ExceptionInInitializerError(e);
+			} catch (URISyntaxException e) {
 				log.error(e.getMessage(), e);
 				throw new ExceptionInInitializerError(e);
 			} catch (IOException e) {
@@ -249,17 +268,10 @@ public class HibernateUtil {
 	 * Generate database schema and initial data for a defined dialect
 	 */
 	public static void generateDatabase(String dialect) throws IOException {
-		AnnotationConfiguration ac = new AnnotationConfiguration();
-        
-        // Add annotated beans
-        ac.addAnnotatedClass(DatabaseMetadataType.class);
-        ac.addAnnotatedClass(DatabaseMetadataValue.class);
-        ac.addAnnotatedClass(DatabaseMetadataSequence.class);
-        
         // Configure Hibernate
         log.info("Exporting Database Schema...");
         String dbSchema = EnvironmentDetector.getUserHome() + "/schema.sql";
-        Configuration cfg = ac.configure();
+        Configuration cfg = getConfiguration().configure();
         cfg.setProperty("hibernate.dialect", dialect);
         SchemaExport se = new SchemaExport(cfg);
         se.setOutputFile(dbSchema);
