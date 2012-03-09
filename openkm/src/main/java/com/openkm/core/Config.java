@@ -831,8 +831,8 @@ public class Config {
 	 */
 	public static InputStream getResourceAsStream(String resource) throws IOException {
 		String stripped = resource.startsWith("/") ? resource.substring(1) : resource;
-		InputStream stream = null;
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		InputStream stream = null;
 		
 		if (classLoader != null) {
 			stream = classLoader.getResourceAsStream(stripped);
