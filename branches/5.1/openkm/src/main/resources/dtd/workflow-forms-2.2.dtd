@@ -124,6 +124,7 @@
 	name CDATA #REQUIRED
 	transition CDATA #IMPLIED
 	confirmation CDATA #IMPLIED
+	validate (true | false) "true"
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
 >
