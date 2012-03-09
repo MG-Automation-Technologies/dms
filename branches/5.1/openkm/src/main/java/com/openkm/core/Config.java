@@ -834,19 +834,19 @@ public class Config {
 		InputStream stream = null;
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		
-		if (classLoader!=null) {
+		if (classLoader != null) {
 			stream = classLoader.getResourceAsStream(stripped);
 		}
 		
-		if ( stream == null ) {
+		if (stream == null) {
 			stream = Config.class.getResourceAsStream(resource);
 		}
 		
-		if ( stream == null ) {
+		if (stream == null) {
 			stream = Config.class.getClassLoader().getResourceAsStream(stripped);
 		}
 		
-		if ( stream == null ) {
+		if (stream == null) {
 			throw new IOException(resource + " not found");
 		}
 		
