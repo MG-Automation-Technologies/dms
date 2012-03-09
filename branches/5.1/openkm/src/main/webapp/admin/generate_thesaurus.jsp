@@ -25,7 +25,7 @@
 	if (BaseServlet.isMultipleInstancesAdmin(request)) {
 		request.setCharacterEncoding("UTF-8");
 		String strLevel = request.getParameter("level");
-				
+		
 		out.println("<h1>Generate thesaurus</h1>");
 		out.println("<form action=\"generate_thesaurus.jsp\">");
 		out.println("<table class=\"form\">");
