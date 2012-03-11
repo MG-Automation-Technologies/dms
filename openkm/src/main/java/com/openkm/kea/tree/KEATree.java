@@ -1,22 +1,22 @@
 /**
- *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
- *
- *  No bytes were intentionally harmed during the development of this application.
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * OpenKM, Open Document Management System (http://www.openkm.com)
+ * Copyright (c) 2006-2011 Paco Avila & Josep Llort
+ * 
+ * No bytes were intentionally harmed during the development of this application.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 package com.openkm.kea.tree;
@@ -57,17 +57,17 @@ import com.openkm.kea.RDFREpository;
  */
 public class KEATree {
 	private static Logger log = LoggerFactory.getLogger(KEATree.class);
-
+	
 	/**
 	 * Generate tree
 	 */
-	public static void generateTree(int levelToDraw, String parentPath, Vector<String> parentUIDs,
+	public static void generateTree(String token, int levelToDraw, String parentPath, Vector<String> parentUIDs,
 			Writer out) throws IOException {
-		gnerateTreeHelper(null, 0, levelToDraw, parentPath, parentUIDs, out);
+		gnerateTreeHelper(token, null, 0, levelToDraw, parentPath, parentUIDs, out);
 	}
-
+	
 	@SuppressWarnings("unchecked")
-	private static void gnerateTreeHelper(String termID, int level, int levelToDraw, String parentPath,
+	private static void gnerateTreeHelper(String token, String termID, int level, int levelToDraw, String parentPath,
 			Vector<String> parentUIDs, Writer out) throws IOException {
 		List<Term> lisTerms = getParentTerms(termID);
 		
@@ -89,14 +89,14 @@ public class KEATree {
 				path += "/" + term.getText();
 				Folder folder = new Folder();
 				folder.setPath(path);
-				OKMFolder.getInstance().create(null, folder);
+				OKMFolder.getInstance().create(token, folder);
 				
 				// To solve infinite loop (nodes must not be in a infinite cycle)
 				if (!newParentUIDs.contains(term.getUid())) {
 					newParentUIDs.add(term.getUid());
 					
 					// Recursive generation
-					gnerateTreeHelper(term.getUid(), level + 1, levelToDraw, path, newParentUIDs, out);
+					gnerateTreeHelper(token, term.getUid(), level + 1, levelToDraw, path, newParentUIDs, out);
 				}
 			} catch (PathNotFoundException e) {
 				log.error("path not found", e);
@@ -113,7 +113,7 @@ public class KEATree {
 			}
 		}
 	}
-
+	
 	/**
 	 * drawTerm
 	 * 
@@ -133,7 +133,7 @@ public class KEATree {
 				+ "] - with uid:" + term.getUid() + "<br>");
 		out.flush();
 	}
-
+	
 	/**
 	 * getParentTerms
 	 * 
@@ -144,20 +144,20 @@ public class KEATree {
 		List<Term> childTerms = new ArrayList<Term>();
 		RepositoryConnection con = null;
 		TupleQuery query;
-
+		
 		try {
 			con = RDFREpository.getInstance().getOWLConnection();
-
+			
 			if (termID == null) {
 				query = QueryBank.getInstance().getTreeTopQuery(con);
 			} else {
 				query = QueryBank.getInstance().getTreeNextLayerQuery(termID, con);
 			}
-
+			
 			TupleQueryResult result = query.evaluate();
-
+			
 			while (result.hasNext()) {
-
+				
 				BindingSet bindingSet = result.next();
 				Term term = new Term(bindingSet.getValue("UID").stringValue(), bindingSet.getValue("TEXT")
 						.stringValue());
@@ -174,7 +174,7 @@ public class KEATree {
 		}
 		
 		Collections.sort(childTerms, new TermComparator());
-
+		
 		return childTerms;
 	}
 }

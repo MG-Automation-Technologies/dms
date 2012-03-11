@@ -78,7 +78,7 @@ public class RegisterThesaurusServlet extends BaseServlet {
 			out.println("It'll be displayed creation information while creating nodes until level "
 					+ (level + 1) + ", please be patient because tree deep level could be big.<br><br>");
 			out.flush();
-			KEATree.generateTree(level, "/okm:thesaurus", new Vector<String>(), out);
+			KEATree.generateTree(null, level, "/okm:thesaurus", new Vector<String>(), out);
 			out.println("<br><b>Finished thesaurus creation.</b><br>");
 		} else {
 			out.println("<b>Error - there's no thesaurus file defined in OpenKM.cfg</b>");
