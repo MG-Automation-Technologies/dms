@@ -857,6 +857,7 @@ public class GWTUtil {
 			Button button = (Button) formElement;
 			gWTButton.setTransition(button.getTransition());
 			gWTButton.setConfirmation(button.getConfirmation());
+			gWTButton.setValidate(button.isValidate());
 			return gWTButton;
 		} else if (formElement instanceof Input) {
 			GWTInput gWTInput = new GWTInput();
@@ -1018,6 +1019,7 @@ public class GWTUtil {
 			GWTButton gWTButton = ((GWTButton) formElement);
 			button.setTransition(gWTButton.getTransition());
 			button.setConfirmation(gWTButton.getConfirmation());
+			button.setValidate(gWTButton.isValidate());
 			return button;
 		} else if (formElement instanceof GWTInput) {
 			Input input = new Input();

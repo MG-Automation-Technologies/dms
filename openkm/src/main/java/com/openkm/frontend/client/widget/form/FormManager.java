@@ -243,7 +243,16 @@ public class FormManager {
 						Main.get().confirmPopup.setValue(validationButton);
 						Main.get().confirmPopup.center();
 					} else {
-						if (validationProcessor.validate()) {
+						if (gWTButton.isValidate()) {
+							if (validationProcessor.validate()) {
+								if (gWTButton.getTransition().equals("")) {
+									workflow.setTaskInstanceValues(taskInstance.getId(), null);
+								} else {
+									workflow.setTaskInstanceValues(taskInstance.getId(), gWTButton.getTransition());
+								}
+								disableAllButtonList();
+							}
+						} else {
 							if (gWTButton.getTransition().equals("")) {
 								workflow.setTaskInstanceValues(taskInstance.getId(), null);
 							} else {

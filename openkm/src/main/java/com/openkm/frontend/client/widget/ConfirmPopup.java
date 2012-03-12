@@ -246,7 +246,16 @@ public class ConfirmPopup extends DialogBox {
 					ValidationProcessor validationProcessor = validationButton.getValidationProcessor();
 					HasWorkflow workflow = validationButton.getWorkflow();
 					GWTTaskInstance taskInstance = validationButton.getTaskInstance();
-					if (validationProcessor.validate()) {
+					if (gWTButton.isValidate()) {
+						if (validationProcessor.validate()) {
+							if (gWTButton.getTransition().equals("")) {
+								workflow.setTaskInstanceValues(taskInstance.getId(), null);
+							} else {
+								workflow.setTaskInstanceValues(taskInstance.getId(), gWTButton.getTransition());
+							}
+							validationButton.disableAllButtonList();
+						}
+					} else {
 						if (gWTButton.getTransition().equals("")) {
 							workflow.setTaskInstanceValues(taskInstance.getId(), null);
 						} else {
