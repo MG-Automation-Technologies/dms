@@ -30,6 +30,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class GWTButton extends GWTFormElement implements IsSerializable {
 	private String transition = "";
 	private String confirmation = "";
+	private boolean validate = true;
 	
 	public String getConfirmation() {
 		return confirmation;
@@ -47,6 +48,14 @@ public class GWTButton extends GWTFormElement implements IsSerializable {
 		this.transition = transition;
 	}
 	
+	public boolean isValidate() {
+		return validate;
+	}
+
+	public void setValidate(boolean validate) {
+		this.validate = validate;
+	}
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
