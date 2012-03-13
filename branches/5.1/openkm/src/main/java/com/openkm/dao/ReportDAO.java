@@ -90,7 +90,7 @@ public class ReportDAO {
 			
 			Integer id = (Integer) session.save(rp);
 			HibernateUtil.commit(tx);
-			log.debug("create: {}", id);
+			log.debug("createFromFile: {}", id);
 			return id.intValue();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
