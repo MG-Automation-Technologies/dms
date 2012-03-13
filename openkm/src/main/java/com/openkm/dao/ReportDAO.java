@@ -79,6 +79,7 @@ public class ReportDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
+			fis = new FileInputStream(repFile);
 			
 			// Fill bean
 			Report rp = new Report();
