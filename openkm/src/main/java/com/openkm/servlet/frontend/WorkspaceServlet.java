@@ -290,8 +290,9 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 			
 			// Reports
 			for (Integer rpId : up.getMisc().getReports()) {
-				Report report = ReportDAO.findByPk(rpId);			
-				if (report.isActive()) {
+				Report report = ReportDAO.findByPk(rpId);
+				
+				if (report != null && report.isActive()) {
 					workspace.getReports().add(GWTUtil.copy(report, ReportUtils.getReportParameters(rpId)));
 				}
 			}	
