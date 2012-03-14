@@ -59,7 +59,7 @@ import com.bradmcevoy.http.exceptions.PreConditionFailedException;
 import com.bradmcevoy.http.webdav.PropPatchHandler.Fields;
 import com.openkm.api.OKMDocument;
 import com.openkm.bean.Document;
-import com.openkm.bean.Lock;
+import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
@@ -227,16 +227,27 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 		
 		try {
 			String token = JcrSessionTokenHolder.get();
-			Lock lock = OKMDocument.getInstance().lock(token, fixedDocPath);
-			lt = new LockToken();
-			lt.tokenId = lock.getToken();
-			lt.info = new LockInfo(LockScope.EXCLUSIVE, LockType.WRITE, lock.getOwner(), LockDepth.INFINITY);
-			lt.timeout = new LockTimeout(Long.MAX_VALUE);
-			return LockResult.success(lt);
+			
+			if (OKMDocument.getInstance().isLocked(token, fixedDocPath)) {
+				throw new LockedException(this);
+			} else {
+				com.openkm.bean.Lock lock = OKMDocument.getInstance().lock(token, fixedDocPath);
+				lt = new LockToken();
+				lt.tokenId = lock.getToken();
+				lt.info = new LockInfo(LockScope.EXCLUSIVE, LockType.WRITE, lock.getOwner(), LockDepth.INFINITY);
+				lt.timeout = new LockTimeout(Long.MAX_VALUE);
+				return LockResult.success(lt);
+			}
 		} catch (LockException e) {
-			throw new LockedException(this);
-		} catch (Exception e) {
 			throw new RuntimeException("Failed to lock: " + fixedDocPath);
+		} catch (PathNotFoundException e) {
+			throw new RuntimeException("Failed to lock: " + fixedDocPath);
+		} catch (AccessDeniedException e) {
+			throw new RuntimeException("Failed to lock: " + fixedDocPath);
+		} catch (RepositoryException e) {
+			throw new RuntimeException("Failed to lock: " + fixedDocPath);
+		} catch (DatabaseException e) {
+			throw new RuntimeException("Failed to lock: " + fixedDocPath);	
 		}
 	}
 	
