@@ -53,7 +53,7 @@
     <jcr.version>1.6.5</jcr.version>
 	
     <!-- Milton WebDAV -->
-    <milton.version>1.6.8</milton.version>
+    <milton.version>1.7.1</milton.version>
     
     <!-- Tell the compiler we can use 1.6 -->
     <java.compiler>1.6</java.compiler>
@@ -103,6 +103,13 @@
       <id>java-crontab-syntax-parser-repo</id>
       <name>Java CronTab Syntax Parser</name>
       <url>http://kenai.com/projects/crontab-parser/sources/maven-repo/content/</url>
+    </repository>
+    
+    <!-- Needed for Milton -->
+    <repository>
+      <id>ettrema-repo</id>
+      <name>Milto WebDAV</name>
+      <url>http://www.ettrema.com/maven2</url>
     </repository>
     
     <!-- OpenKM repository -->
