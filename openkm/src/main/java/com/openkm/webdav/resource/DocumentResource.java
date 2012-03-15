@@ -272,7 +272,30 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 	
 	@Override
 	public LockToken getCurrentLock() {
-		return lt;
+		String fixedDocPath = ResourceUtils.fixRepositoryPath(doc.getPath());
+		
+		try {
+			String token = JcrSessionTokenHolder.get();
+			
+			if (OKMDocument.getInstance().isLocked(token, fixedDocPath)) {
+				com.openkm.bean.Lock lock = OKMDocument.getInstance().getLock(token, fixedDocPath);
+				lt = new LockToken();
+				lt.tokenId = lock.getToken();
+				lt.info = new LockInfo(LockScope.EXCLUSIVE, LockType.WRITE, lock.getOwner(), LockDepth.INFINITY);
+				lt.timeout = new LockTimeout(Long.MAX_VALUE);
+				return lt;
+			} else {
+				return null;
+			}
+		} catch (LockException e) {
+			throw new RuntimeException("Failed to lock: " + fixedDocPath);
+		} catch (PathNotFoundException e) {
+			throw new RuntimeException("Failed to lock: " + fixedDocPath);
+		} catch (RepositoryException e) {
+			throw new RuntimeException("Failed to lock: " + fixedDocPath);
+		} catch (DatabaseException e) {
+			throw new RuntimeException("Failed to lock: " + fixedDocPath);	
+		}
 	}
 	
 	@Override
