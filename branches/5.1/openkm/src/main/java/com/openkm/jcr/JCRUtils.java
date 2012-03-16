@@ -41,7 +41,6 @@ import javax.jcr.lock.LockException;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.security.auth.Subject;
 
@@ -71,6 +70,7 @@ import com.openkm.dao.LockTokenDAO;
 import com.openkm.dao.bean.LockToken;
 import com.openkm.module.direct.DirectAuthModule;
 import com.openkm.module.direct.DirectRepositoryModule;
+import com.openkm.util.PrincipalUtils;
 import com.openkm.util.StackTraceUtils;
 
 public class JCRUtils {
@@ -380,8 +380,8 @@ public class JCRUtils {
 		Object obj = null;
 		
 		try {
-			InitialContext ctx = new InitialContext();
-			Subject subject = (Subject) ctx.lookup("java:comp/env/security/subject");
+			Subject subject = PrincipalUtils.getSubject();
+			
 			obj = Subject.doAs(subject, new PrivilegedAction<Object>() {
 				public Object run() {
 					Session s = null;
