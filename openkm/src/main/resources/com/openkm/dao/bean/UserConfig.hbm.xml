@@ -3,6 +3,7 @@
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
   <class name="com.openkm.dao.bean.UserConfig" table="OKM_USER_CONFIG">
+    <cache usage="nonstrict-read-write"/>
     <id name="user" column="UC_USER" length="127"><generator class="assigned"/></id>
     <property name="homePath" column="UC_HOME_PATH" not-null="true"/>
     <property name="homeUuid" column="UC_HOME_UUID" not-null="true"/>

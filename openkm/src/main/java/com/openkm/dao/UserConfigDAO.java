@@ -175,16 +175,13 @@ public class UserConfigDAO {
 	public static UserConfig findByPk(javax.jcr.Session jcrSession, String user) throws DatabaseException,
 			RepositoryException {
 		log.debug("findByPk({}, {})", jcrSession, user);
-		String qs = "from UserConfig uc where uc.user=:user";
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			Query q = session.createQuery(qs);
-			q.setString("user", user);
-			UserConfig ret = (UserConfig) q.setMaxResults(1).uniqueResult();
+			UserConfig ret = (UserConfig) session.get(UserConfig.class, user);
 			
 			if (ret == null) {
 				Node okmRoot = jcrSession.getRootNode().getNode(Repository.ROOT);
