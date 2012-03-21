@@ -259,7 +259,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         	File script = new File(Config.HOME_DIR + File.separatorChar + Config.START_SCRIPT);
         	ExecutionUtils.runScript(script);
         	File jar = new File(Config.HOME_DIR + File.separatorChar + Config.START_JAR);
-        	ExecutionUtils.runJar(jar);
+        	ExecutionUtils.getInstance().runJar(jar);
         } catch (Throwable e) {
         	log.warn(e.getMessage(), e);
         }
@@ -363,7 +363,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         	File script = new File(Config.HOME_DIR + File.separatorChar + Config.STOP_SCRIPT);
         	ExecutionUtils.runScript(script);
         	File jar = new File(Config.HOME_DIR + File.separatorChar + Config.STOP_JAR);
-        	ExecutionUtils.runJar(jar);
+        	ExecutionUtils.getInstance().runJar(jar);
         } catch (Throwable e) {
         	log.warn(e.getMessage(), e);
         }

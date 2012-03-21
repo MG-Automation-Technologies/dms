@@ -40,7 +40,7 @@ public class ExecutionTest extends TestCase {
 	public void testJar() throws Exception {
 		log.debug("testJar()");
 		File jar = new File(BASE_DIR + "/JarSample.jar");
-		Object result = ExecutionUtils.runJar(jar, Cron.CRON_TASK);
+		Object result = ExecutionUtils.getInstance().runJar(jar, Cron.CRON_TASK);
 		assertEquals(RESULT, result);
 	}
 }
