@@ -254,6 +254,7 @@ public class ExecutionUtils {
     	// Check return code
     	if (ret.getExitValue() != 0) {
     		log.warn("Abnormal program termination: {}", ret.getExitValue());
+    		log.warn("CommandLine: {}", Arrays.toString(cmd));
     		log.warn("STDERR: {}", ret.getStderr());
     	} else {
     		log.debug("Normal program termination");
