@@ -166,7 +166,7 @@ public class Cron extends TimerTask {
 				}
 				
 				try {
-					Object ret = ExecutionUtils.runJar(content, CRON_TASK);
+					Object ret = ExecutionUtils.getInstance().runJar(content, CRON_TASK);
 					
 					try {
 						String msg = (ret == null ? "" : ret.toString());
