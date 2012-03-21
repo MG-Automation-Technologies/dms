@@ -266,7 +266,7 @@ public class DirectDocumentModule implements DocumentModule {
 			if (token == null) JCRUtils.logout(session);
 		}
 
-		log.info("create: {}", newDocument);
+		log.debug("create: {}", newDocument);
 		return newDocument;
 	}
 
