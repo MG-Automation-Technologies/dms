@@ -113,7 +113,7 @@ public class Tesseract3TextExtractor extends AbstractTextExtractor {
     			ExecutionUtils.runCmd(cmd);
     			
     			// Read result
-    			String text = IOUtils.toString(new FileInputStream(tmpFileOut.getPath() + ".txt"));
+    			String text = IOUtils.toString(new FileInputStream(tmpFileOut.getPath() + ".txt"), "UTF-8");
     			
     			// Spellchecker
     			if (Config.SYSTEM_OPENOFFICE_DICTIONARY.equals("")) {
