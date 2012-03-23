@@ -898,7 +898,9 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		//folderParent.setPermissions((byte)(GWTPermission.DELETE | GWTPermission.READ | GWTPermission.SECURITY | GWTPermission.WRITE));
 		// Only if toolbar is enabled must change tools icons values
 		if (isEnabled()) {
+			disableCreateFolder();
 			disableAddNote();
+			disableAddDocument();
 			disableDownload();
 			disableDownloadPdf();
 			disableSendDocumentLink();
@@ -985,11 +987,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				}
 				
 			} else {
-				if (originPanel != FILE_BROWSER) {
-					disableCreateFolder();
-					disableAddDocument();
-				}
-				
 				disableAddPropertyGroup();
 				disableRemovePropertyGroup();
 			}
