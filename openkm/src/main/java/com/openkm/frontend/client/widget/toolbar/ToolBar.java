@@ -898,6 +898,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		//folderParent.setPermissions((byte)(GWTPermission.DELETE | GWTPermission.READ | GWTPermission.SECURITY | GWTPermission.WRITE));
 		// Only if toolbar is enabled must change tools icons values
 		if (isEnabled()) {
+			disableAddNote();
 			disableDownload();
 			disableDownloadPdf();
 			disableSendDocumentLink();
@@ -937,6 +938,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			}
 			
 			if ((folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
+				enableAddNote();
 				if (originPanel != FILE_BROWSER) {
 					enableAddDocument();
 					enableCreateFolder();
@@ -1084,6 +1086,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			boolean disable = false;
 			String user = Main.get().workspaceUserProperties.getUser();
 			
+			disableAddNote();
 			enableDownload();
 			disableRename(); 
 			disableCopy();
@@ -1297,6 +1300,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		// Only if toolbar is enabled must change tools icons values
 		if (isEnabled()) {
 			
+			disableAddNote();
 			disableDownload();
 			disableRename(); 
 			disableCopy();
@@ -1346,6 +1350,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 					enableWorkflow();
 				}
 				
+				enableAddNote();
 				enableRename();
 				enableCopy();
 				enableMove();
