@@ -74,15 +74,14 @@ import com.openkm.kea.RDFREpository;
 import com.openkm.kea.metadata.MetadataExtractionException;
 import com.openkm.kea.metadata.MetadataExtractor;
 import com.openkm.module.DocumentModule;
-import com.openkm.module.base.BaseAuthModule;
 import com.openkm.module.base.BaseDocumentModule;
 import com.openkm.module.base.BaseNoteModule;
 import com.openkm.module.base.BaseNotificationModule;
 import com.openkm.module.base.BaseScriptingModule;
-import com.openkm.principal.PrincipalAdapter;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.util.FileUtils;
 import com.openkm.util.FormatUtil;
+import com.openkm.util.PrincipalUtils;
 import com.openkm.util.Transaction;
 import com.openkm.util.UserActivity;
 
@@ -849,10 +848,7 @@ public class DirectDocumentModule implements DocumentModule {
 				session = (XASession) JcrSessionManager.getInstance().get(token);
 			}
 			
-			PrincipalAdapter pa = BaseAuthModule.getPrincipalAdapter();
-			List<String> userRoles = pa.getRolesByUser(session.getUserID());
-			
-			if (!userRoles.contains(Config.DEFAULT_ADMIN_ROLE)) {
+			if (!PrincipalUtils.hasRole(Config.DEFAULT_ADMIN_ROLE)) {
 				throw new AccessDeniedException("Only administrator use allowed");
 			}
 			
@@ -1235,10 +1231,7 @@ public class DirectDocumentModule implements DocumentModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			PrincipalAdapter pa = BaseAuthModule.getPrincipalAdapter();
-			List<String> userRoles = pa.getRolesByUser(session.getUserID());
-			
-			if (!userRoles.contains(Config.DEFAULT_ADMIN_ROLE)) {
+			if (!PrincipalUtils.hasRole(Config.DEFAULT_ADMIN_ROLE)) {
 				throw new AccessDeniedException("Only administrator use allowed");
 			}
 			
