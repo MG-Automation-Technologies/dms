@@ -370,9 +370,9 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 						}
 					});
 					
-				}  else {
-					parameterTable.setHTML(row, 0, "<b>" + key + "</b>");
-					parameterTable.setHTML(row, 1, value);
+				} else {
+					// parameterTable.setHTML(row, 0, "<b>" + key + "</b>");
+					// parameterTable.setHTML(row, 1, value);
 				}
 			}
 		}
