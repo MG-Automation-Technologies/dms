@@ -36,7 +36,7 @@ import com.openkm.frontend.client.service.OKMChatService;
  */
 public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatService {
 	private static final long serialVersionUID = 3780857624687394918L;
-	private static final int DELAY = 100; // mseg
+	private static final int DELAY = 1000; // mseg
 	private static final ChatManager manager = new ChatManager();
 	
 	@Override
@@ -48,14 +48,20 @@ public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatServi
 	public void login() throws OKMException {
 		updateSessionManager();
 		String user = getThreadLocalRequest().getRemoteUser();
-		manager.login(user);
+		
+		if (user != null) {
+			manager.login(user);
+		}
 	}
 	
 	@Override
 	public void logout() throws OKMException {
 		updateSessionManager();
 		String user = getThreadLocalRequest().getRemoteUser();
-		manager.logout(user);
+		
+		if (user != null) {
+			manager.logout(user);
+		}
 	}
 	
 	@Override
@@ -76,20 +82,23 @@ public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatServi
 		updateSessionManager();
 		String user = getThreadLocalRequest().getRemoteUser();
 		List<String> pendingMessages = new ArrayList<String>();
-		int countCycle = 0;
 		
-		// 10 * Delay = 1000 = 1 second ( we want a 10 seconds waiting
-		// mantaining RPC comunication) that's 10*10=100 cycles
-		do {
-			pendingMessages = manager.getPendingMessage(user, room);
-			countCycle++;
+		if (user != null) {
+			int countCycle = 0;
 			
-			try {
-				Thread.sleep(DELAY);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		} while (pendingMessages.isEmpty() && (countCycle < 100) && manager.getLoggedUsers().contains(user));
+			// 10 * Delay = 1000 = 1 second ( we want a 10 seconds waiting
+			// mantaining RPC comunication) that's 10*10=100 cycles
+			do {
+				pendingMessages = manager.getPendingMessage(user, room);
+				countCycle++;
+				
+				try {
+					Thread.sleep(DELAY);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			} while (pendingMessages.isEmpty() && (countCycle < 100) && manager.getLoggedUsers().contains(user));
+		}
 		
 		return pendingMessages;
 	}
@@ -99,20 +108,23 @@ public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatServi
 		updateSessionManager();
 		String user = getThreadLocalRequest().getRemoteUser();
 		List<String> pendingRooms = new ArrayList<String>();
-		int countCycle = 0;
 		
-		// 10 * Delay = 1000 = 1 second ( we want a 10 seconds waiting
-		// mantaining RPC comunication) that's 10*10=100 cycles
-		do {
-			pendingRooms = manager.getPendingChatRoomUser(user);
-			countCycle++;
+		if (user != null) {
+			int countCycle = 0;
 			
-			try {
-				Thread.sleep(DELAY);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		} while (pendingRooms.isEmpty() && (countCycle < 100) && manager.getLoggedUsers().contains(user));
+			// 10 * Delay = 1000 = 1 second ( we want a 10 seconds waiting
+			// mantaining RPC comunication) that's 10*10=100 cycles
+			do {
+				pendingRooms = manager.getPendingChatRoomUser(user);
+				countCycle++;
+				
+				try {
+					Thread.sleep(DELAY);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			} while (pendingRooms.isEmpty() && (countCycle < 100) && manager.getLoggedUsers().contains(user));
+		}
 		
 		return pendingRooms;
 	}
@@ -121,14 +133,20 @@ public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatServi
 	public void addMessageToRoom(String room, String msg) {
 		updateSessionManager();
 		String user = getThreadLocalRequest().getRemoteUser();
-		manager.addMessageToRoom(user, room, msg);
+		
+		if (user != null) {
+			manager.addMessageToRoom(user, room, msg);
+		}
 	}
 	
 	@Override
 	public void closeRoom(String room) {
 		updateSessionManager();
 		String user = getThreadLocalRequest().getRemoteUser();
-		manager.closeRoom(user, room);
+		
+		if (user != null) {
+			manager.closeRoom(user, room);
+		}
 	}
 	
 	@Override
@@ -151,8 +169,6 @@ public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatServi
 	
 	/**
 	 * getChatManager
-	 * 
-	 * @return
 	 */
 	public static ChatManager getChatManager() {
 		return manager;
