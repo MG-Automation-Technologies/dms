@@ -651,6 +651,7 @@ public class UserInfo extends Composite {
 							refreshConnectedUsers();
 							getPendingChatRoomUser();
 						}
+						
 						@Override
 						public void onFailure(Throwable caught) {
 							Main.get().showError("GetLoginChat", caught);
@@ -658,6 +659,7 @@ public class UserInfo extends Composite {
 					});
 				}
 			}
+			
 			@Override
 			public void onFailure(Throwable caught) {
 				Main.get().showError("getLoggedUsers", caught);
