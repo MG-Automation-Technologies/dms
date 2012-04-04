@@ -25,6 +25,7 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
@@ -145,6 +146,7 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 	 */
 	private void disconnectChat() {
 		// Disconnect rooms
+		Main.get().mainPanel.bottomPanel.userInfo.disconnectChat();
 		if (Main.get().mainPanel.bottomPanel.userInfo.getChatRoomList().size() > 0) {
 			final ChatRoomDialogBox chatRoom = Main.get().mainPanel.bottomPanel.userInfo.getChatRoomList().get(0);
 			chatRoom.setChatRoomActive(false);
@@ -175,23 +177,34 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 				@Override
 				public void onSuccess(Object result) {
 					// Logout
-					ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-					endPoint.setServiceEntryPoint(RPCService.AuthService);
-					authService.logout(callbackLogout);
+					logoutAfterChat();
 					Log.debug("Logout: void");
 				}
 				
 				@Override
 				public void onFailure(Throwable caught) {
 					Main.get().showError("GetLogoutChat", caught);
-					
 					// If happens some problem always we try logout
-					ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-					endPoint.setServiceEntryPoint(RPCService.AuthService);
-					authService.logout(callbackLogout);
+					logoutAfterChat();
 					Log.debug("Logout: void");
 				}
 			});
 		}
+	}
+	
+	/**
+	 * logoutAfterChat();
+	 */
+	private void logoutAfterChat() {
+		Timer timer = new Timer() {
+			@Override
+			public void run() {
+				ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+				endPoint.setServiceEntryPoint(RPCService.AuthService);
+				authService.logout(callbackLogout);
+			}
+		};
+		timer.schedule(UserInfo.USERS_IN_ROOM_REFRESHING_TIME+100); // Each minute seconds refreshing connected users
+		Log.debug("Logout: void");
 	}
 }

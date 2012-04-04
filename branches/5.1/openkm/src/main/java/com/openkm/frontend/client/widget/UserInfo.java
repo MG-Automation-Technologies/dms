@@ -30,7 +30,7 @@ public class UserInfo extends Composite {
 	
 	private final OKMChatServiceAsync chatService = (OKMChatServiceAsync) GWT.create(OKMChatService.class);
 	
-	private static final int USERS_IN_ROOM_REFRESHING_TIME = 1000;
+	public static final int USERS_IN_ROOM_REFRESHING_TIME = 1000;
 	private static final int NEW_ROOM_REFRESHING_TIME = 200;
 	
 	private HorizontalPanel panel;
