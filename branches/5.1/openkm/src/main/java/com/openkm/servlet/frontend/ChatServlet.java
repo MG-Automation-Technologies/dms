@@ -95,7 +95,7 @@ public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatServi
 				try {
 					Thread.sleep(DELAY);
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					// Ignore
 				}
 			} while (pendingMessages.isEmpty() && (countCycle < 100) && manager.getLoggedUsers().contains(user));
 		}
@@ -121,7 +121,7 @@ public class ChatServlet extends OKMRemoteServiceServlet implements OKMChatServi
 				try {
 					Thread.sleep(DELAY);
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					// Ignore
 				}
 			} while (pendingRooms.isEmpty() && (countCycle < 100) && manager.getLoggedUsers().contains(user));
 		}
