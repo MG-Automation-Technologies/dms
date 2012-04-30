@@ -434,7 +434,7 @@ public class AuthServlet extends OKMRemoteServiceServlet implements OKMAuthServi
 		updateSessionManager();
 		
 		try {
-			if (!(Config.SYSTEM_DEMO && path.equals("/okm:root"))) {
+			if (!path.equals("/okm:root")) {
 				OKMAuth oKMAuth = OKMAuth.getInstance();
 				oKMAuth.revokeRole(null, path, role, Permission.READ, recursive);
 				oKMAuth.revokeRole(null, path, role, Permission.WRITE, recursive);
@@ -467,7 +467,7 @@ public class AuthServlet extends OKMRemoteServiceServlet implements OKMAuthServi
 		updateSessionManager();
 		
 		try {
-			if (!(Config.SYSTEM_DEMO && path.equals("/okm:root"))) {
+			if (!path.equals("/okm:root")) {
 				OKMAuth.getInstance().revokeRole(null, path, role, permissions, recursive);
 			}
 		} catch (PathNotFoundException e) {

@@ -106,12 +106,6 @@ public class RepositoryStartupServlet extends HttpServlet {
         File previewCacheFolder = new File(Config.CACHE_SWF);
         if (!previewCacheFolder.exists()) previewCacheFolder.mkdirs();
         
-        // Initialize chroot folder
-        if (Config.SYSTEM_MULTIPLE_INSTANCES) {
-        	File chrootFolder = new File(Config.INSTANCE_CHROOT_PATH);
-        	if (!chrootFolder.exists()) chrootFolder.mkdirs();
-        }
-        
         // Invoke start
         start();
         
