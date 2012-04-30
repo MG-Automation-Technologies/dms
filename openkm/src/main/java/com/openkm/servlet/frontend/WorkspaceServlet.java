@@ -435,32 +435,29 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 		mailAccount.setUser(workspace.getUser());
 		mailAccount.setId(workspace.getImapID());
 		
-		// Disable user configuration modification in demo
-		if (!Config.SYSTEM_DEMO) {
-			try {
-				// Can change password
-				if (Config.PRINCIPAL_ADAPTER.equals(DatabasePrincipalAdapter.class.getCanonicalName())) {
-					AuthDAO.updateUserPassword(workspace.getUser(), workspace.getPassword());
-					
-					if (!user.getEmail().equals("")) {
-						AuthDAO.updateUserEmail(workspace.getUser(), workspace.getEmail());
-					}
-				}
+		try {
+			// Can change password
+			if (Config.PRINCIPAL_ADAPTER.equals(DatabasePrincipalAdapter.class.getCanonicalName())) {
+				AuthDAO.updateUserPassword(workspace.getUser(), workspace.getPassword());
 				
-				if (MailAccountDAO.findByUser(workspace.getUser(), false).size() > 0) {
-					MailAccountDAO.update(mailAccount);
-					
-					if (!mailAccount.getMailPassword().equals("")) {
-						MailAccountDAO.updatePassword(mailAccount.getId(), mailAccount.getMailPassword());
-					}
-				} else if (mailAccount.getMailHost().length()>0 && mailAccount.getMailFolder().length()>0 && mailAccount.getMailUser().length()>0 &&
-						   !mailAccount.getMailPassword().equals("")) {
-					MailAccountDAO.create(mailAccount);
+				if (!user.getEmail().equals("")) {
+					AuthDAO.updateUserEmail(workspace.getUser(), workspace.getEmail());
 				}
-			} catch (DatabaseException e) {
-				log.error(e.getMessage(), e);
-				throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQL), e.getMessage());
 			}
+			
+			if (MailAccountDAO.findByUser(workspace.getUser(), false).size() > 0) {
+				MailAccountDAO.update(mailAccount);
+				
+				if (!mailAccount.getMailPassword().equals("")) {
+					MailAccountDAO.updatePassword(mailAccount.getId(), mailAccount.getMailPassword());
+				}
+			} else if (mailAccount.getMailHost().length()>0 && mailAccount.getMailFolder().length()>0 && mailAccount.getMailUser().length()>0 &&
+					   !mailAccount.getMailPassword().equals("")) {
+				MailAccountDAO.create(mailAccount);
+			}
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQL), e.getMessage());
 		}
 	}
 	
@@ -468,13 +465,10 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 	public void deleteMailAccount(int id)  throws OKMException {
 		updateSessionManager();
 		
-		// Disable user configuration modification in demo
-		if (!Config.SYSTEM_DEMO) {
-			try {
-				MailAccountDAO.delete(id);
-			} catch (DatabaseException e) {
-				throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQL), e.getMessage());
-			}
+		try {
+			MailAccountDAO.delete(id);
+		} catch (DatabaseException e) {
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQL), e.getMessage());
 		}
 	}
 	

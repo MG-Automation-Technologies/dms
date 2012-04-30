@@ -74,8 +74,6 @@ public class Config {
 	public static final String OPENKM_CONFIG = "OpenKM.cfg";
 	public static final String NODE_DEFINITIONS = "CustomNodes.cnd";
 	public static String CONTEXT;
-	public static String INSTANCE_HOME;
-	public static String INSTANCE_CHROOT_PATH;
 	public static String JBPM_CONFIG;
 	public static String PROPERTY_GROUPS_XML;
 	public static String PROPERTY_GROUPS_CND;
@@ -166,8 +164,6 @@ public class Config {
 	public static final String PROPERTY_SUBSCRIPTION_TWITTER_PASSWORD = "notify.twitter.password";
 	public static final String PROPERTY_SUBSCRIPTION_TWITTER_STATUS = "notify.twitter.status";
 	
-	public static final String PROPERTY_SYSTEM_DEMO = "system.demo";
-	public static final String PROPERTY_SYSTEM_MULTIPLE_INSTANCES = "system.multiple.instances";
 	public static final String PROPERTY_SYSTEM_APACHE_REQUEST_HEADER_FIX = "system.apache.request.header.fix";
 	public static final String PROPERTY_SYSTEM_WEBDAV_SERVER = "system.webdav.server";
 	public static final String PROPERTY_SYSTEM_WEBDAV_FIX = "system.webdav.fix";
@@ -354,8 +350,6 @@ public class Config {
 	public static String SUBSCRIPTION_TWITTER_PASSWORD;
 	public static String SUBSCRIPTION_TWITTER_STATUS;
 	
-	public static boolean SYSTEM_DEMO;
-	public static boolean SYSTEM_MULTIPLE_INSTANCES;
 	public static boolean SYSTEM_APACHE_REQUEST_HEADER_FIX;
 	public static boolean SYSTEM_WEBDAV_SERVER;
 	public static boolean SYSTEM_WEBDAV_FIX;
@@ -486,38 +480,22 @@ public class Config {
 			HIBERNATE_STATISTICS = config.getProperty(PROPERTY_HIBERNATE_STATISTICS, HIBERNATE_STATISTICS);
 			values.put(PROPERTY_HIBERNATE_STATISTICS, HIBERNATE_STATISTICS);
 			
-			// Misc
-			SYSTEM_MULTIPLE_INSTANCES = "on".equalsIgnoreCase(config.getProperty(PROPERTY_SYSTEM_MULTIPLE_INSTANCES, "off"));
-			values.put(PROPERTY_SYSTEM_MULTIPLE_INSTANCES, Boolean.toString(SYSTEM_MULTIPLE_INSTANCES));
-			
 			fis.close();
 			
-			if (SYSTEM_MULTIPLE_INSTANCES) {
-				INSTANCE_HOME = HOME_DIR + File.separator + "instances" + File.separator + CONTEXT;
-				values.put("instance.home", INSTANCE_HOME);
-				INSTANCE_CHROOT_PATH = INSTANCE_HOME + File.separator + "root" + File.separator;
-				values.put("instance.chroot.path", INSTANCE_CHROOT_PATH);
-			} else {
-				INSTANCE_HOME = HOME_DIR;
-				values.put("instance.home", INSTANCE_HOME);
-				INSTANCE_CHROOT_PATH = "";
-				values.put("instance.chroot.path", INSTANCE_CHROOT_PATH);
-			}
-			
-			REPOSITORY_CONFIG = INSTANCE_HOME + File.separator + "repository.xml";
+			REPOSITORY_CONFIG = HOME_DIR + File.separator + "repository.xml";
 			values.put(PROPERTY_REPOSITORY_CONFIG, REPOSITORY_CONFIG);
-			REPOSITORY_HOME = INSTANCE_HOME + File.separator + "repository";
+			REPOSITORY_HOME = HOME_DIR + File.separator + "repository";
 			values.put(PROPERTY_REPOSITORY_HOME, REPOSITORY_HOME);
 			
-			CACHE_HOME = INSTANCE_HOME + File.separator + "cache";
+			CACHE_HOME = HOME_DIR + File.separator + "cache";
 			values.put(PROPERTY_CACHE_HOME, CACHE_HOME);
 			
-			JBPM_CONFIG = INSTANCE_HOME + File.separator + "jbpm.xml";
+			JBPM_CONFIG = HOME_DIR + File.separator + "jbpm.xml";
 			values.put("jbpm.config", JBPM_CONFIG);
 			
-			PROPERTY_GROUPS_XML = INSTANCE_HOME + File.separator + "PropertyGroups.xml";
+			PROPERTY_GROUPS_XML = HOME_DIR + File.separator + "PropertyGroups.xml";
 			values.put("property.groups.xml", PROPERTY_GROUPS_XML);
-			PROPERTY_GROUPS_CND = INSTANCE_HOME + File.separator + "PropertyGroups.cnd";
+			PROPERTY_GROUPS_CND = HOME_DIR + File.separator + "PropertyGroups.cnd";
 			values.put("property.groups.cnd", PROPERTY_GROUPS_CND);
 			
 			// Load or reload database configuration
@@ -663,8 +641,6 @@ public class Config {
 			SUBSCRIPTION_TWITTER_STATUS = ConfigDAO.getText(PROPERTY_SUBSCRIPTION_TWITTER_STATUS, "OpenKM - ${documentUrl} - ${documentPath} - ${userId} - ${eventType}");
 			values.put(PROPERTY_SUBSCRIPTION_TWITTER_STATUS, SUBSCRIPTION_TWITTER_STATUS);
 			
-			SYSTEM_DEMO = ConfigDAO.getBoolean(PROPERTY_SYSTEM_DEMO, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_SYSTEM_DEMO, "off")));
-			values.put(PROPERTY_SYSTEM_DEMO, Boolean.toString(SYSTEM_DEMO));
 			SYSTEM_APACHE_REQUEST_HEADER_FIX = ConfigDAO.getBoolean(PROPERTY_SYSTEM_APACHE_REQUEST_HEADER_FIX, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_SYSTEM_APACHE_REQUEST_HEADER_FIX, "off")));
 			values.put(PROPERTY_SYSTEM_APACHE_REQUEST_HEADER_FIX, Boolean.toString(SYSTEM_APACHE_REQUEST_HEADER_FIX));
 			SYSTEM_WEBDAV_SERVER = ConfigDAO.getBoolean(PROPERTY_SYSTEM_WEBDAV_SERVER, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_SYSTEM_WEBDAV_SERVER, "off")));
