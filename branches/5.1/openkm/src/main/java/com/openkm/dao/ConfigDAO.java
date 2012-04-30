@@ -222,8 +222,8 @@ public class ConfigDAO  {
 			stFile.setContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
 			stFile.setName(JCRUtils.getName(path));
 			stFile.setMime(com.openkm.core.Config.mimeTypes.getContentType(stFile.getName()));
-			String value = getProperty(key, new Gson().toJson(stFile), Config.FILE);
-			return new Gson().fromJson(value, StoredFile.class);
+			getProperty(key, new Gson().toJson(stFile), Config.FILE);
+			return stFile;
 		} finally {
 			IOUtils.closeQuietly(is);
 		}
