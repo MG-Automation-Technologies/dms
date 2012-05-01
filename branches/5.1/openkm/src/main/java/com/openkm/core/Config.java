@@ -420,7 +420,7 @@ public class Config {
 	public static String HIBERNATE_DATASOURCE = "java:/OpenKMDS";
 	public static String HIBERNATE_HBM2DDL = "create";
 	public static String HIBERNATE_SHOW_SQL = "false";
-	public static String HIBERNATE_STATISTICS = "false";
+	public static String HIBERNATE_STATISTICS = "true";
 	
 	// Logo icons
 	public static StoredFile LOGO_LOGIN;
