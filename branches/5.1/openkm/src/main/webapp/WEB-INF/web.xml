@@ -238,10 +238,6 @@
     <servlet-class>com.openkm.servlet.ImageLogoServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>TextToSpeechServlet</servlet-name>
-    <servlet-class>com.openkm.servlet.TextToSpeechServlet</servlet-class>
-  </servlet>
-  <servlet>
     <servlet-name>FlagIconServlet</servlet-name>
     <servlet-class>com.openkm.servlet.FlagIconServlet</servlet-class>
   </servlet>
@@ -592,10 +588,6 @@
     <url-pattern>/logo/*</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>TextToSpeechServlet</servlet-name>
-    <url-pattern>/TextToSpeech</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
     <servlet-name>WorkflowRegisterServlet</servlet-name>
     <url-pattern>/workflow-register/*</url-pattern>
   </servlet-mapping>
@@ -787,7 +779,6 @@
       
       <!-- Servlets -->
 	  <url-pattern>/RepositoryStartup</url-pattern>
-	  <url-pattern>/TextToSpeech</url-pattern>
 	  <url-pattern>/Test</url-pattern>
 	  <url-pattern>/frontend/*</url-pattern>
 	  <url-pattern>/extension/*</url-pattern>
