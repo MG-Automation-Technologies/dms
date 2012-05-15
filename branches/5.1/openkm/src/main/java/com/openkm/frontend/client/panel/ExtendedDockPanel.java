@@ -404,6 +404,7 @@ public class ExtendedDockPanel extends Composite {
 											folderSelectPopup.executeAction(folder.getPath(), true);
 										}
 									}
+									propagate = false;
 								}
 								break;
 							
