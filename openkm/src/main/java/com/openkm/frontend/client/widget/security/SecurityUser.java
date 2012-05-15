@@ -59,8 +59,8 @@ public class SecurityUser extends Composite implements HasWidgets {
 	private final OKMAuthServiceAsync authService = (OKMAuthServiceAsync) GWT.create(OKMAuthService.class);
 	
 	// Number of columns
-	public static final int ASSIGNED_USER_NUMBER_OF_COLUMNS		= 5;
-	public static final int UNASSIGNED_USER_NUMBER_OF_COLUMNS	= 1;
+	public static final int ASSIGNED_USER_NUMBER_OF_COLUMNS		= 6;
+	public static final int UNASSIGNED_USER_NUMBER_OF_COLUMNS	= 2;
 	
 	public UserScrollTable assignedUser;
 	public UserScrollTable unassignedUser;
