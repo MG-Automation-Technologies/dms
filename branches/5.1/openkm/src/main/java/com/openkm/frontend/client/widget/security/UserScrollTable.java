@@ -142,15 +142,19 @@ public class UserScrollTable extends Composite {
 			headerTable.setHTML(0, 2, Main.i18n("security.user.permission.write"));
 			headerTable.setHTML(0, 3, Main.i18n("security.user.permission.delete"));
 			headerTable.setHTML(0, 4, Main.i18n("security.user.permission.security"));
+			headerTable.setHTML(0, 5, "");
 			table.setColumnWidth(0, 175);
 			table.setColumnWidth(1, 55);
 			table.setColumnWidth(2, 55);
 			table.setColumnWidth(3, 55);
 			table.setColumnWidth(4, 55);
+			table.setColumnWidth(5, 0);
 		} else {
 			table.setSize("185", "365");
 			headerTable.setHTML(0, 0, Main.i18n("security.user.name"));
+			headerTable.setHTML(0, 1, "");
 			table.setColumnWidth(0, 167);
+			table.setColumnWidth(1, 0);
 		}
 		
 		// Table data
@@ -185,7 +189,7 @@ public class UserScrollTable extends Composite {
 	public void addRow(String userName, Byte permission) {		
 		final int rows = dataTable.getRowCount();
 		dataTable.insertRow(rows);
-		dataTable.setHTML(rows, 0, userName);
+		dataTable.setHTML(rows, 0, Main.get().getUserName(userName));
 		
 		CheckBox checkReadPermission = new CheckBox();
 		CheckBox checkWritePermission = new CheckBox();
@@ -201,9 +205,9 @@ public class UserScrollTable extends Composite {
 				// Actions are inverse to check value because before user perform check on checkbox
 				// it has inverse value
 				if (((CheckBox) sender).getValue()) {
-					grant(dataTable.getText(rows, 0), GWTPermission.READ, Main.get().securityPopup.recursive.getValue());
+					grant(dataTable.getText(rows, 5), GWTPermission.READ, Main.get().securityPopup.recursive.getValue());
 				} else {
-					revoke(dataTable.getText(rows, 0), GWTPermission.READ, Main.get().securityPopup.recursive.getValue());
+					revoke(dataTable.getText(rows, 5), GWTPermission.READ, Main.get().securityPopup.recursive.getValue());
 				}
 			}
 		};
@@ -217,9 +221,9 @@ public class UserScrollTable extends Composite {
 				// Actions are inverse to check value because before user perform check on checkbox
 				// it has inverse value
 				if (((CheckBox) sender).getValue()) {
-					grant(dataTable.getText(rows, 0), GWTPermission.WRITE, Main.get().securityPopup.recursive.getValue());
+					grant(dataTable.getText(rows, 5), GWTPermission.WRITE, Main.get().securityPopup.recursive.getValue());
 				} else {
-					revoke(dataTable.getText(rows, 0), GWTPermission.WRITE, Main.get().securityPopup.recursive.getValue());
+					revoke(dataTable.getText(rows, 5), GWTPermission.WRITE, Main.get().securityPopup.recursive.getValue());
 				}
 			}
 		};
@@ -233,9 +237,9 @@ public class UserScrollTable extends Composite {
 				// Actions are inverse to check value because before user perform check on checkbox
 				// it has inverse value
 				if (((CheckBox) sender).getValue()) {
-					grant(dataTable.getText(rows, 0), GWTPermission.DELETE, Main.get().securityPopup.recursive.getValue());
+					grant(dataTable.getText(rows, 5), GWTPermission.DELETE, Main.get().securityPopup.recursive.getValue());
 				} else {
-					revoke(dataTable.getText(rows, 0), GWTPermission.DELETE, Main.get().securityPopup.recursive.getValue());
+					revoke(dataTable.getText(rows, 5), GWTPermission.DELETE, Main.get().securityPopup.recursive.getValue());
 				}
 			}
 		};
@@ -249,9 +253,9 @@ public class UserScrollTable extends Composite {
 				// Actions are inverse to check value because before user perform check on checkbox
 				// it has inverse value
 				if (((CheckBox) sender).getValue()) {
-					grant(dataTable.getText(rows, 0), GWTPermission.SECURITY, Main.get().securityPopup.recursive.getValue());
+					grant(dataTable.getText(rows, 5), GWTPermission.SECURITY, Main.get().securityPopup.recursive.getValue());
 				} else {
-					revoke(dataTable.getText(rows, 0), GWTPermission.SECURITY, Main.get().securityPopup.recursive.getValue());
+					revoke(dataTable.getText(rows, 5), GWTPermission.SECURITY, Main.get().securityPopup.recursive.getValue());
 				}
 			}
 		};
@@ -303,6 +307,9 @@ public class UserScrollTable extends Composite {
 			dataTable.setWidget(rows, 4, checkSecurityPermission);
 			dataTable.getCellFormatter().setHorizontalAlignment(rows, 4, HasAlignment.ALIGN_CENTER);
 		}
+		
+		dataTable.setHTML(rows, 5, userName);
+		dataTable.getCellFormatter().setVisible(rows, 5, false);
 	}
 	
 	/**
@@ -313,7 +320,10 @@ public class UserScrollTable extends Composite {
 	public void addRow(String userName) {
 		int rows = dataTable.getRowCount();
 		dataTable.insertRow(rows);
-		dataTable.setHTML(rows, 0, userName);
+		dataTable.setHTML(rows, 0, Main.get().getUserName(userName));
+		
+		dataTable.setHTML(rows, 1, userName);
+		dataTable.getCellFormatter().setVisible(rows, 1, false);
 	}
 	
 	/**
@@ -353,7 +363,11 @@ public class UserScrollTable extends Composite {
 		if (!dataTable.getSelectedRows().isEmpty()) {
 			int selectedRow = ((Integer) dataTable.getSelectedRows().iterator().next()).intValue();
 			if (dataTable.isRowSelected(selectedRow)) {
-				user = dataTable.getHTML(((Integer) dataTable.getSelectedRows().iterator().next()).intValue(), 0);
+				if (isAssigned) {
+					user = dataTable.getHTML(((Integer) dataTable.getSelectedRows().iterator().next()).intValue(), 5);
+				} else {
+					user = dataTable.getHTML(((Integer) dataTable.getSelectedRows().iterator().next()).intValue(), 1);
+				}
 			}
 		}
 		
