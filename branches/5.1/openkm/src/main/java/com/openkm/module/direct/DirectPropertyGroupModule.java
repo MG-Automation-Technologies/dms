@@ -288,7 +288,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 										if (opt.getValue().equals(values[j].getString())) {
 											select.setValue(select.getValue().concat(opt.getValue()).concat(","));
 											opt.setSelected(true);
-											log.info("Option: {}, TRUE", opt.getLabel());
+											// log.info("Option: {}, TRUE", opt.getLabel());
 										} else {
 											// opt.setSelected(false);
 											// log.info("Option: {}, FALSE", opt.getLabel());
