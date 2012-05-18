@@ -281,16 +281,23 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 							if (fe instanceof Select && ((Select) fe).getType().equals(Select.TYPE_MULTIPLE) 
 									&& pd[i].isMultiple()) {
 								Value[] values = prop.getValues();
+								Select select = ((Select) fe);
 								
-								for (int j=0; j<values.length; j++) {
-									for (Option opt : ((Select) fe).getOptions()) {
+								for (Option opt : select.getOptions()) {
+									for (int j=0; j < values.length; j++) {
 										if (opt.getValue().equals(values[j].getString())) {
-											((Select) fe).setValue(((Select) fe).getValue().concat(",").concat(opt.getValue()));
+											select.setValue(select.getValue().concat(opt.getValue()).concat(","));
 											opt.setSelected(true);
+											log.info("Option: {}, TRUE", opt.getLabel());
 										} else {
-											opt.setSelected(false);
+											// opt.setSelected(false);
+											// log.info("Option: {}, FALSE", opt.getLabel());
 										}
 									}
+								}
+								
+								if (select.getValue().endsWith(",")) {
+									select.setValue(select.getValue().substring(0, select.getValue().length() - 1));
 								}
 							} else if (!pd[i].isMultiple()) {
 								Value value = prop.getValue();
