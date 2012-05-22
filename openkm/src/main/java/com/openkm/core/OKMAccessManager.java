@@ -272,8 +272,14 @@ public class OKMAccessManager implements AccessManager {
 						Node frozenNode = node.getNode("jcr:frozenNode");
 						log.debug("{} Frozen node -> {}", subject.getPrincipals(), frozenNode.getPath());
 						String realNodeId = frozenNode.getProperty("jcr:frozenUuid").getString();
-						node = systemSession.getNodeByUUID(realNodeId).getParent();
-						log.debug("{} Real -> {}", subject.getPrincipals(), node.getPath());
+						
+						try {
+							node = systemSession.getNodeByUUID(realNodeId).getParent();
+							log.debug("{} Real -> {}", subject.getPrincipals(), node.getPath());
+						} catch (ItemNotFoundException e) {
+							log.warn("Real node not found, so we are purging: {}", realNodeId);
+							access = true;
+						}
 					} else if (node.isNodeType("nt:versionHistory")) {
 						log.debug("{} Node is VERSION_HISTORY", subject.getPrincipals());
 						String realNodeId = node.getProperty("jcr:versionableUuid").getString();
@@ -281,55 +287,57 @@ public class OKMAccessManager implements AccessManager {
 						log.debug("{} Real -> {}", subject.getPrincipals(), node.getPath());
 					}
 					
-					if ((permissions & Permission.READ) != 0) {
-						// Check for READ permissions
-						try {
-							access = checkProperties(node, 
-									com.openkm.bean.Permission.USERS_READ,
-									com.openkm.bean.Permission.ROLES_READ);
-						} catch (PathNotFoundException e) {
-							log.warn("{} PathNotFoundException({}) in {}", new Object[] {
-									subject.getPrincipals(), e.getMessage(),
-									node.getPrimaryNodeType().getName() });
-							access = true;
-						}
-					} else if ((permissions & Permission.ADD_NODE) != 0 || 
-							(permissions & Permission.SET_PROPERTY) != 0) {
-						// Check for WRITE permissions
-						try {
-							access = checkProperties(node, 
-									com.openkm.bean.Permission.USERS_WRITE,
-									com.openkm.bean.Permission.ROLES_WRITE);
-						} catch (PathNotFoundException e) {
-							log.debug("{} PropertyNotFoundException({}) in {}", new Object[] {
-									subject.getPrincipals(), e.getMessage(),
-									node.getPrimaryNodeType().getName() });
-							access = true;
-						}
-					} else if ((permissions & Permission.REMOVE_NODE) != 0 ||
-							(permissions & Permission.REMOVE_PROPERTY) != 0) {
-						// Check for DELETE permissions
-						try {
-							access = checkProperties(node, 
-									com.openkm.bean.Permission.USERS_DELETE,
-									com.openkm.bean.Permission.ROLES_DELETE);
-						} catch (PathNotFoundException e) {
-							log.debug("{} PropertyNotFoundException({}) in {}", new Object[] {
-									subject.getPrincipals(), e.getMessage(),
-									node.getPrimaryNodeType().getName() });
-							access = true;
-						}
-					} else if ((permissions & Permission.MODIFY_AC) != 0) {
-						// Check for PERMISSION permissions
-						try {
-							access = checkProperties(node, 
-									com.openkm.bean.Permission.USERS_SECURITY,
-									com.openkm.bean.Permission.ROLES_SECURITY);
-						} catch (PathNotFoundException e) {
-							log.debug("{} PropertyNotFoundException({}) in {}", new Object[] {
-									subject.getPrincipals(), e.getMessage(),
-									node.getPrimaryNodeType().getName() });
-							access = true;
+					if (!access) {
+						if ((permissions & Permission.READ) != 0) {
+							// Check for READ permissions
+							try {
+								access = checkProperties(node, 
+										com.openkm.bean.Permission.USERS_READ,
+										com.openkm.bean.Permission.ROLES_READ);
+							} catch (PathNotFoundException e) {
+								log.warn("{} PathNotFoundException({}) in {}", new Object[] {
+										subject.getPrincipals(), e.getMessage(),
+										node.getPrimaryNodeType().getName() });
+								access = true;
+							}
+						} else if ((permissions & Permission.ADD_NODE) != 0 || 
+								(permissions & Permission.SET_PROPERTY) != 0) {
+							// Check for WRITE permissions
+							try {
+								access = checkProperties(node, 
+										com.openkm.bean.Permission.USERS_WRITE,
+										com.openkm.bean.Permission.ROLES_WRITE);
+							} catch (PathNotFoundException e) {
+								log.debug("{} PropertyNotFoundException({}) in {}", new Object[] {
+										subject.getPrincipals(), e.getMessage(),
+										node.getPrimaryNodeType().getName() });
+								access = true;
+							}
+						} else if ((permissions & Permission.REMOVE_NODE) != 0 ||
+								(permissions & Permission.REMOVE_PROPERTY) != 0) {
+							// Check for DELETE permissions
+							try {
+								access = checkProperties(node, 
+										com.openkm.bean.Permission.USERS_DELETE,
+										com.openkm.bean.Permission.ROLES_DELETE);
+							} catch (PathNotFoundException e) {
+								log.debug("{} PropertyNotFoundException({}) in {}", new Object[] {
+										subject.getPrincipals(), e.getMessage(),
+										node.getPrimaryNodeType().getName() });
+								access = true;
+							}
+						} else if ((permissions & Permission.MODIFY_AC) != 0) {
+							// Check for PERMISSION permissions
+							try {
+								access = checkProperties(node, 
+										com.openkm.bean.Permission.USERS_SECURITY,
+										com.openkm.bean.Permission.ROLES_SECURITY);
+							} catch (PathNotFoundException e) {
+								log.debug("{} PropertyNotFoundException({}) in {}", new Object[] {
+										subject.getPrincipals(), e.getMessage(),
+										node.getPrimaryNodeType().getName() });
+								access = true;
+							}
 						}
 					}
 				}
