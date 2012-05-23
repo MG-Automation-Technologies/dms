@@ -76,7 +76,7 @@
 		try {
 			if (repoPath != null && !repoPath.equals("") && fsPath != null && !fsPath.equals("")) {
 				out.println("<hr/>");
-				File dir = new File(Config.INSTANCE_CHROOT_PATH + fsPath);
+				File dir = new File(fsPath);
 				int files = FileUtils.countImportFiles(dir);
 				out.println("<b>Files & directories to import:</b> "+files+"<br/>");
 				long begin = System.currentTimeMillis();

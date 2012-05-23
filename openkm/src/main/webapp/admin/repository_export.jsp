@@ -67,7 +67,7 @@
 		try {
 			if (repoPath != null && !repoPath.equals("") && fsPath != null && !fsPath.equals("")) {
 				out.println("<hr/>");
-				File dir = new File(Config.INSTANCE_CHROOT_PATH + fsPath);
+				File dir = new File(fsPath);
 				ContentInfo cInfo = OKMFolder.getInstance().getContentInfo(null, repoPath);
 				out.println("<b>Files & directories to export:</b> "+(cInfo.getDocuments() + cInfo.getFolders())+"<br/>");
 				long begin = System.currentTimeMillis();
