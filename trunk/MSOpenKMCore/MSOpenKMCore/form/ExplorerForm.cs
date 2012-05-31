@@ -100,6 +100,7 @@ namespace MSOpenKMCore.form
         {
             try
             {
+                SSL.init(configXML.getHost());
                 authService = new OKMAuthService(configXML.getHost());
                 repositoryService = new OKMRepositoryService(configXML.getHost());
                 folderService = new OKMFolderService(configXML.getHost());

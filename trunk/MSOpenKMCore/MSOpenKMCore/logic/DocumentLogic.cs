@@ -22,6 +22,7 @@ namespace MSOpenKMCore.logic
             try
             {
                 // Init services
+                SSL.init(host);
                 authService = new OKMAuthService(host);
                 documentService = new OKMDocumentService(host);
 
@@ -75,6 +76,7 @@ namespace MSOpenKMCore.logic
             try
             {
                 // Init services
+                SSL.init(host);
                 authService = new OKMAuthService(host);
                 documentService = new OKMDocumentService(host);
 
@@ -111,6 +113,7 @@ namespace MSOpenKMCore.logic
             try
             {
                 // Init services
+                SSL.init(host);
                 authService = new OKMAuthService(host);
                 documentService = new OKMDocumentService(host);
 
@@ -148,6 +151,7 @@ namespace MSOpenKMCore.logic
             try
             {
                 // Init services
+                SSL.init(host);
                 authService = new OKMAuthService(host);
                 documentService = new OKMDocumentService(host);
 
