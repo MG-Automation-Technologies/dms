@@ -14,8 +14,6 @@
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>MSOpenKMCore.snk.pfx</AssemblyOriginatorKeyFile>
-    <TargetFrameworkSubset>
-    </TargetFrameworkSubset>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -85,16 +83,13 @@
     <Compile Include="util\ApplicationWatcher.cs" />
     <Compile Include="util\Crypt.cs" />
     <Compile Include="util\FileUtil.cs" />
-    <Compile Include="util\ImageLargeToolbar.cs" />
     <Compile Include="util\ImageToolBar.cs" />
     <Compile Include="util\ImageToPictureConverter.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="util\ImageUtil.cs" />
     <Compile Include="util\RegistryUtil.cs" />
-    <Compile Include="util\SSL.cs" />
     <Compile Include="util\Util.cs" />
-    <Compile Include="ws\Bean.cs" />
     <Compile Include="ws\OKMAuthService.cs" />
     <Compile Include="ws\OKMDocumentService.cs" />
     <Compile Include="ws\OKMFolderService.cs" />
@@ -365,6 +360,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
+<<<<<<< .mine
   <ItemGroup>
     <EmbeddedResource Include="images\mime\video\mp4.gif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -380,7 +376,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="MSOpenKMCore.snk.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -414,20 +409,25 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
+=======
   <ItemGroup>
-    <EmbeddedResource Include="form\ConfigurationForm.pl-PL.resx">
-      <DependentUpon>ConfigurationForm.cs</DependentUpon>
+    <EmbeddedResource Include="images\mime\video\mp4.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="form\ExplorerForm.pl-PL.resx">
-      <DependentUpon>ExplorerForm.cs</DependentUpon>
+    <EmbeddedResource Include="images\mime\video\mpeg.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="form\TreeForm.pl-PL.resx">
-      <DependentUpon>TreeForm.cs</DependentUpon>
+    <EmbeddedResource Include="images\mime\video\x-ms-wmv.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\toolbar\logo.gif">
+    <EmbeddedResource Include="images\mime\video\x-msvideo.gif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="MSOpenKMCore.snk.pfx" />
+  </ItemGroup>
+>>>>>>> .r2833
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

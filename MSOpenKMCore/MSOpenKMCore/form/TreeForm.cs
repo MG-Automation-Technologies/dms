@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using MSOpenKMCore.config;
 using MSOpenKMCore.ws;
-using MSOpenKMCore.bean;
 using MSOpenKMCore.logic;
 using Word = Microsoft.Office.Interop.Word;
 using Excel = Microsoft.Office.Interop.Excel;
 using PowerPoint = Microsoft.Office.Interop.PowerPoint;
 using Visio = Microsoft.Office.Interop.Visio;
 using MSOpenKMCore.util;
+using System.Net.Security;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace MSOpenKMCore.form
 {
@@ -34,6 +31,11 @@ namespace MSOpenKMCore.form
 
         private Object application = null;
         ComponentResourceManager resources = null;
+
+        public static bool ValidateServerCertificate(Object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {
+            return true;
+        }
 
         public TreeForm(Object application, ConfigXML configXML)
         {
@@ -84,6 +86,7 @@ namespace MSOpenKMCore.form
         {
             try
             {
+                SSL.init(configXML.getHost());
                 authService = new OKMAuthService(configXML.getHost());
                 repositoryService = new OKMRepositoryService(configXML.getHost());
                 folderService = new OKMFolderService(configXML.getHost());
@@ -295,10 +298,11 @@ namespace MSOpenKMCore.form
                     activeDocument.Save(); // Saves the document
                     localFileName = activeDocument.FullName;
                 }
-                else if (application is String ) {
+                else if (application is String)
+                {
                     localFileName = (String)application;
                 }
-                     
+
                 String docPath = Util.getOpenKMPath(localFileName, (folder)actualNode.Tag);
                 // Must save a temporary file to be uploaded
                 File.Copy(localFileName, localFileName + "_TEMP");
