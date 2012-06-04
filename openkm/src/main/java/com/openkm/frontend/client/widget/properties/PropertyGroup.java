@@ -145,7 +145,10 @@ public class PropertyGroup extends Composite implements HasPropertyGroupHandlerE
 		hPanelFired.add(new HTML("&nbsp;&nbsp;"));
 		hPanelFired.add(cancelButton);
 		hPanelFired.add(new HTML("&nbsp;&nbsp;"));
-		hPanelFired.add(removeButton);
+
+		if (Main.get().workspaceUserProperties.getWorkspace().getProfileToolbar().isRemovePropertyGroupVisible()) {
+			hPanelFired.add(removeButton);
+		}
 		
 		cancelButton.setVisible(false);  // Not shows cancel button
 		
