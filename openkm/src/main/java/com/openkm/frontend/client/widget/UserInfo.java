@@ -89,6 +89,12 @@ public class UserInfo extends Composite {
 		newWorkflowPooledTasks = new HTML("");
 		quotaUsed = new HTML("");
 		quotaUsed.setVisible(false);
+		lockedDocuments.setVisible(false);
+		checkoutDocuments.setVisible(false);
+		subscriptions.setVisible(false);
+		newDocuments.setVisible(false);
+		newWorkflowTasks.setVisible(false);
+		newWorkflowPooledTasks.setVisible(false);
 		imgRepositorySize = new Image(OKMBundleResources.INSTANCE.repositorySize());
 		imgUserQuota = new Image(OKMBundleResources.INSTANCE.quota1());
 		imgChat = new Image(OKMBundleResources.INSTANCE.chatDisconnected());
@@ -321,7 +327,6 @@ public class UserInfo extends Composite {
 	 * @param value
 	 */
 	public void setLockedDocuments(int value) {
-		imgLockedDocuments.setVisible(true);
 		lockedDocuments.setHTML("&nbsp;"+value+ "&nbsp;");
 	}
 	
@@ -331,7 +336,6 @@ public class UserInfo extends Composite {
 	 * @param value
 	 */
 	public void setCheckoutDocuments(int value) {
-		imgCheckoutDocuments.setVisible(true);
 		checkoutDocuments.setHTML("&nbsp;"+value+ "&nbsp;");
 	}
 	
@@ -341,7 +345,6 @@ public class UserInfo extends Composite {
 	 * @param value
 	 */
 	public void setSubscriptions(int value) {
-		imgSubscriptions.setVisible(true);
 		subscriptions.setHTML("&nbsp;"+value+ "&nbsp;");
 	}
 	
@@ -351,7 +354,6 @@ public class UserInfo extends Composite {
 	 * @param value
 	 */
 	public void setNewsDocuments(int value) {
-		imgNewsDocuments.setVisible(true);
 		newDocuments.setHTML("&nbsp;"+value+ "&nbsp;");
 		if (value>0) {
 			imgNewsDocuments.setResource(OKMBundleResources.INSTANCE.newsAlert());
@@ -366,7 +368,6 @@ public class UserInfo extends Composite {
 	 * @param value
 	 */
 	public void setNewsWorkflows(int value) {
-		imgWorkflowTasks.setVisible(true);
 		newWorkflowTasks.setHTML("&nbsp;" + value + "&nbsp;");
 		
 		if (value > 0) {
@@ -382,7 +383,6 @@ public class UserInfo extends Composite {
 	 * @param value
 	 */
 	public void setPooledTaskInstances(int value) {
-		imgWorkflowPooledTasks.setVisible(true);
 		newWorkflowPooledTasks.setHTML("&nbsp;" + value + "&nbsp;");
 		
 		if (value > 0) {
@@ -674,6 +674,36 @@ public class UserInfo extends Composite {
 	 */
 	public boolean isQuotaExceed() {
 		return quotaExceeded;
+	}
+	
+	/**
+	 * showDashboardUser
+	 */
+	public void showDashboardUserIcons() {
+		imgLockedDocuments.setVisible(true);
+		imgCheckoutDocuments.setVisible(true);
+		imgSubscriptions.setVisible(true);
+		lockedDocuments.setVisible(true);
+		checkoutDocuments.setVisible(true);
+		subscriptions.setVisible(true);
+	}
+	
+	/**
+	 * showNews
+	 */
+	public void showDashboardNewsIcons() {
+		imgNewsDocuments.setVisible(true);
+		newDocuments.setVisible(true);
+	}
+	
+	/**
+	 * showWorkflow
+	 */
+	public void showDashboardWorkflowIcons() {
+		imgWorkflowTasks.setVisible(true);
+		imgWorkflowPooledTasks.setVisible(true);
+		newWorkflowTasks.setVisible(true);
+		newWorkflowPooledTasks.setVisible(true);
 	}
 	
 	/**

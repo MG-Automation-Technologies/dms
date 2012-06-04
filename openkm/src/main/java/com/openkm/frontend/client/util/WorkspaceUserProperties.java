@@ -265,18 +265,21 @@ public class WorkspaceUserProperties {
 			// Show / hide dashboard tools
 			if (workspace.isDashboardUserVisible()) {
 				Main.get().mainPanel.dashboard.showUser();
+				Main.get().mainPanel.bottomPanel.userInfo.showDashboardUserIcons();
 			}
 			if (workspace.isDashboardMailVisible()) {
 				Main.get().mainPanel.dashboard.showMail();
 			}
 			if (workspace.isDashboardNewsVisible()) {
 				Main.get().mainPanel.dashboard.showNews();
+				Main.get().mainPanel.bottomPanel.userInfo.showDashboardNewsIcons();
 			}
 			if (workspace.isDashboardGeneralVisible()) {
 				Main.get().mainPanel.dashboard.showGeneral();
 			}
 			if (workspace.isDashboardWorkflowVisible()) {
 				Main.get().mainPanel.dashboard.showWorkflow();
+				Main.get().mainPanel.bottomPanel.userInfo.showDashboardWorkflowIcons();
 			}
 			if (workspace.isDashboardKeywordsVisible()) {
 				Main.get().mainPanel.dashboard.showKeywords();
