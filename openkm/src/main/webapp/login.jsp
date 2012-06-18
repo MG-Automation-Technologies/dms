@@ -44,7 +44,7 @@
     <div id="text">
       <center><img src="<%=request.getContextPath() %>/img/lock.png"/></center>
       <p>Welcome to OpenKM !</p>
-      <p>Use a valid user and password to access to OpenKM user Desktop.</p>
+      <p>Use a valid username and password to access to OpenKM user Desktop.</p>
     </div>
     <div id="form">
       <form name="login" method="post" action="j_security_check" onsubmit="setCookie()">
@@ -101,9 +101,7 @@
     </div>
   </div>
   
-  <% if (Config.SYSTEM_DEMO) { %>
-    <jsp:include flush="true" page="login_demo_users.jsp"/>
-  <% } else if (!Config.HIBERNATE_HBM2DDL.equals("none")) { %>
+  <% if (!Config.HIBERNATE_HBM2DDL.equals("none")) { %>
     <table border="0" cellpadding="2" cellspacing="0" align="center" class="demo">
       <tr><td class="demo_title">WARNING</td></tr>
       <tr><td class="demo_alert"><%=Config.PROPERTY_HIBERNATE_HBM2DDL%> = <%=Config.HIBERNATE_HBM2DDL%></td></tr>

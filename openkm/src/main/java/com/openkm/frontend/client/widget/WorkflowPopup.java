@@ -48,12 +48,10 @@ import com.openkm.frontend.client.widget.wizard.WorkflowWidgetToFire;
 
 /**
  * WorkflowPopup popup
- * s
+ * 
  * @author jllort
- *
  */
 public class WorkflowPopup extends DialogBox implements WorkflowWidgetToFire {
-	
 	private final OKMWorkflowServiceAsync workflowService = (OKMWorkflowServiceAsync) GWT.create(OKMWorkflowService.class);
 	
 	private VerticalPanel vPanel;
@@ -92,14 +90,15 @@ public class WorkflowPopup extends DialogBox implements WorkflowWidgetToFire {
 		});
 
 		listBox = new ListBox();
-		listBox.addChangeHandler(new ChangeHandler(){
+		listBox.addChangeHandler(new ChangeHandler() {
 			@Override
 			public void onChange(ChangeEvent event) {
-				if (listBox.getSelectedIndex()>0) {
+				if (listBox.getSelectedIndex() > 0) {
 					addButton.setEnabled(true);
 				} else {
 					addButton.setEnabled(false);
 				}
+				
 				sp.setVisible(false);
 				sp.clear();
 			}
@@ -121,7 +120,6 @@ public class WorkflowPopup extends DialogBox implements WorkflowWidgetToFire {
 		
 		vPanel.add(new HTML("<br>"));
 		vPanel.add(listBox);
-		vPanel.add(new HTML("<br>"));
 		vPanel.add(sp);
 		vPanel.add(new HTML("<br>"));
 		vPanel.add(hPanel);
@@ -140,10 +138,14 @@ public class WorkflowPopup extends DialogBox implements WorkflowWidgetToFire {
 	final AsyncCallback<List<GWTProcessDefinition>> callbackFindLatestProcessDefinitions = new AsyncCallback<List<GWTProcessDefinition>>() {
 		public void onSuccess(List<GWTProcessDefinition> result){
 			listBox.clear();
-			listBox.addItem("",""); // Adds empty value
+			listBox.addItem("", ""); // Adds empty value
+			
 			for (Iterator<GWTProcessDefinition> it = result.iterator(); it.hasNext();) {
 				GWTProcessDefinition processDefinition = it.next();
-				listBox.addItem(processDefinition.getName(),""+processDefinition.getId());
+				
+				if (Main.get().workspaceUserProperties.getWorkspace().getMiscWorkflowList().contains(processDefinition.getName())) {
+					listBox.addItem(processDefinition.getName(), processDefinition.getName());
+				}
 			}
 		}
 
@@ -193,10 +195,11 @@ public class WorkflowPopup extends DialogBox implements WorkflowWidgetToFire {
 		listBox.setVisible(true);
 		addButton.setEnabled(false);
 		workflowWidget = null;
+		listBox.setVisible(true);
 		sp.setVisible(false);
 		sp.clear();
-		int left = (Window.getClientWidth()-300)/2;
-		int top = (Window.getClientHeight()-100)/2;
+		int left = (Window.getClientWidth()-300) / 2;
+		int top = (Window.getClientHeight()-100) / 2;
 		setPopupPosition(left,top);
 		super.show();
 	}
@@ -212,9 +215,9 @@ public class WorkflowPopup extends DialogBox implements WorkflowWidgetToFire {
 	 * Run process definition
 	 */
 	private void runProcessDefinition() {
-		if (workflowWidget!=null) {
+		if (workflowWidget != null) {
 			workflowWidget.runProcessDefinition(); // Here has some forms to be filled
-		} else if (listBox.getSelectedIndex()>0) {
+		} else if (listBox.getSelectedIndex() > 0) {
 			if (Main.get().activeFolderTree.isPanelSelected()) {
 				uuid = Main.get().activeFolderTree.getFolder().getUuid();
 			} else {
@@ -226,7 +229,9 @@ public class WorkflowPopup extends DialogBox implements WorkflowWidgetToFire {
 					uuid = Main.get().mainPanel.desktop.browser.fileBrowser.getMail().getUuid();
 				}
 			}
-			workflowWidget = new WorkflowWidget(new Double(listBox.getValue(listBox.getSelectedIndex())).doubleValue(), uuid, this, new HashMap<String, Object>());
+			
+			workflowWidget = new WorkflowWidget(listBox.getValue(listBox.getSelectedIndex()), uuid, this, new HashMap<String, Object>());
+			listBox.setVisible(false);
 			sp.add(workflowWidget);
 			workflowWidget.runProcessDefinition();
 		}

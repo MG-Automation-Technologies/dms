@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.openkm.servlet.admin.BaseServlet" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -98,7 +98,7 @@
                   </c:if>
                 </td>
                 <td>
-                  <input class=":required :only_on_submit" name="st_color" id="st_color" readonly="readonly" size="6" value="${stamp.color}"/>
+                  <input class=":required :only_on_submit" name="st_color" id="st_color" readonly="readonly" size="7" value="${stamp.color}"/>
                 </td>
               </tr></table>
             </td>
@@ -140,11 +140,11 @@
           </tr>
           <tr>
             <td>Expr. X</td>
-            <td><input class=":required :only_on_blur" name="st_expr_x" size="30" value="${stamp.exprX}"/></td>
+            <td><input class=":required :only_on_blur" name="st_expr_x" size="36" value="${stamp.exprX}"/></td>
           </tr>
           <tr>
             <td>Expr. Y</td>
-            <td><input class=":required :only_on_blur" name="st_expr_y" size="30" value="${stamp.exprY}"/></td>
+            <td><input class=":required :only_on_blur" name="st_expr_y" size="36" value="${stamp.exprY}"/></td>
           </tr>
           <tr>
             <td>Active</td>
@@ -165,11 +165,11 @@
               <select multiple="multiple" name="st_users" size="7">
                 <c:forEach var="user" items="${users}">
                   <c:choose>
-                    <c:when test="${fn:contains(stamp.users, user.id)}">
-                      <option value="${user.id}" selected="selected">${user.id}</option>
+                    <c:when test="${u:contains(stamp.users, user)}">
+                      <option value="${user}" selected="selected">${user}</option>
                     </c:when>
                     <c:otherwise>
-                      <option value="${user.id}">${user.id}</option>
+                      <option value="${user}">${user}</option>
                     </c:otherwise>
                   </c:choose>
                 </c:forEach>

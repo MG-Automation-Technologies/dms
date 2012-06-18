@@ -28,6 +28,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -38,10 +39,10 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConst
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.openkm.extension.frontend.client.widget.digitalsignature.DigitalSignature;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
@@ -56,7 +57,6 @@ import com.openkm.frontend.client.widget.propertygroup.PropertyGroupWidgetToFire
  *
  */
 public class WizardPopup extends DialogBox {
-	
 	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT.create(OKMPropertyGroupService.class);
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
 	
@@ -66,13 +66,12 @@ public class WizardPopup extends DialogBox {
 	private static final int STATUS_WORKFLOWS 			= 2;
 	private static final int STATUS_CATEGORIES 			= 3;
 	private static final int STATUS_KEYWORDS 			= 4;
-	private static final int STATUS_DIGITAL_SIGNATURE 	= 5;
-	private static final int STATUS_FINISH 				= 6;
+	private static final int STATUS_FINISH 				= 5;
 	
 	private FiredVerticalPanel vPanelFired;
 	private String docPath = "";
 	private List<GWTPropertyGroup> groupsList = null;
-	private List<Double> workflowsList = null;
+	private List<String> workflowsList = null;
 	private int groupIndex = 0;
 	private int workflowIndex = 0;
 	private PropertyGroupWidget propertyGroupWidget = null;
@@ -117,11 +116,11 @@ public class WizardPopup extends DialogBox {
 		
 		// Wizard
 		groupIndex = 0;
-		groupsList = Main.get().workspaceUserProperties.getWorkspace().getWizardPropertyGroupsList();
+		groupsList = Main.get().workspaceUserProperties.getWorkspace().getWizardPropertyGroupList();
 		
 		// workflow 
 		workflowIndex = 0;
-		workflowsList = Main.get().workspaceUserProperties.getWorkspace().getWizardWorkflowsList();
+		workflowsList = Main.get().workspaceUserProperties.getWorkspace().getWizardWorkflowList();
 		
 		// getting uuid
 		documentService.get(docPath, new AsyncCallback<GWTDocument>() {
@@ -162,6 +161,8 @@ public class WizardPopup extends DialogBox {
 	private void addPropertyGroups() {
 		if (groupsList!=null && groupsList.size()>groupIndex) {
 			status = STATUS_PROPERTY_GROUPS;
+			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
+			endPoint.setServiceEntryPoint(RPCService.PropertyGroupService);	
 			propertyGroupService.addGroup(docPath, groupsList.get(groupIndex).getName(), callbackAddGroup);
 			
 		} else if(groupsList==null || (groupsList!=null && groupsList.isEmpty() )) {
@@ -205,7 +206,7 @@ public class WizardPopup extends DialogBox {
 		hPanel.add(actualButton);
 		hPanel.add(space);
 		hPanel.setCellWidth(space, "3");
-		workflowWidget = new WorkflowWidget(workflowsList.get(workflowIndex).doubleValue(), uuid, vPanelFired, new HashMap<String, Object>());
+		workflowWidget = new WorkflowWidget(workflowsList.get(workflowIndex), uuid, vPanelFired, new HashMap<String, Object>());
 		vPanelFired.clear();
 		vPanelFired.add(workflowWidget);
 		vPanelFired.add(hPanel);
@@ -285,27 +286,6 @@ public class WizardPopup extends DialogBox {
 				if (Main.get().workspaceUserProperties.getWorkspace().isWizardKeywords()) {
 					actualButton = acceptButton();
 					setKeywords();
-				} else {
-					status = STATUS_DIGITAL_SIGNATURE;
-					showNextWizard();
-				}
-				break;
-				
-			case STATUS_DIGITAL_SIGNATURE:
-				if (Main.get().fileUpload.isDigitalSignature()) {
-					Main.get().fileUpload.hide(); // Ensure fileUpload is hidden	
-					documentService.get(docPath, new AsyncCallback<GWTDocument>() {
-						@Override
-						public void onSuccess(GWTDocument result) {
-							docToSign = result;
-							DigitalSignature.get().sign();
-						}
-						@Override
-						public void onFailure(Throwable caught) {
-							Main.get().showError("get", caught);
-						}
-					});
-					status = STATUS_FINISH;
 				} else {
 					status = STATUS_FINISH;
 					showNextWizard();

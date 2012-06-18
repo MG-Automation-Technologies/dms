@@ -35,7 +35,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.openkm.extension.frontend.client.widget.preview.AutocadPreview;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
@@ -78,6 +77,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	private Preview preview;
 	private int selectedTab = 0; // Used to determine selected tab to mantain on change document, because not all documents
 								 // have the same number of tabs ( document group properties are variable ) 
+	private int latestSelectedTab = 0;
 	private boolean visibleButton = true; // Sets visibleButtons enabled to default view 
 	private List<TabDocumentExtension> widgetExtensionList;
 	private List<DocumentHandlerExtension> docHandlerExtensionList;
@@ -99,7 +99,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		propertyGroupHandlerExtensionList = new ArrayList<PropertyGroupHandlerExtension>();
 		tabPanel = new TabLayoutPanel(TAB_HEIGHT, Unit.PX);
 		document = new Document();
-		notes = new Notes();
+		notes = new Notes(Notes.DOCUMENT_NOTE);
 		version = new VersionScrollTable();
 		security = new SecurityScrollTable();
 		preview = new Preview();
@@ -113,7 +113,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
 				final int tabIndex = event.getSelectedItem().intValue();
-				Main.get().mainPanel.topPanel.toolBar.evaluateRemoveGroupProperty(isRemoveGroupPropertyEnabled(tabIndex));
+				Main.get().mainPanel.topPanel.toolBar.evaluateRemovePropertyGroup(isRemovePropertyGroupEnabled(tabIndex));
 				selectedTab = tabIndex;
 				if (tabIndex==SECURITY_TAB) {
 					Timer timer = new Timer() {
@@ -204,7 +204,8 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		}
 		
 		this.doc = doc;
-		selectedTab = tabPanel.getSelectedIndex(); // Sets the actual selected Tab
+		selectedTab = tabPanel.getSelectedIndex(); 	// Sets the actual selected Tab
+		latestSelectedTab = selectedTab; 			// stores latest selected tab
 		
 		document.set(doc); // Used by TabDocumentCommunicator
 		notes.set(doc);	   // Used by TabDocumentCommunicator
@@ -248,6 +249,17 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		}
 		
 		fireEvent(HasDocumentEvent.DOCUMENT_CHANGED);
+	}
+	
+	/**
+	 * refreshPreviewDocument
+	 * 
+	 * Used by extended previewers
+	 */
+	public void refreshPreviewDocument() {
+		if (selectedTab == PREVIEW_TAB) {
+			previewDocument(false);
+		}
 	}
 	
 	/**
@@ -333,7 +345,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	}
 	
 	/**
-	 * Gets asyncronous to get all groups assigned to a document
+	 * Gets asynchronous to get all groups assigned to a document
 	 */
 	final AsyncCallback<List<GWTPropertyGroup>> callbackGetGroups = new AsyncCallback<List<GWTPropertyGroup>>() {
 		public void onSuccess(List<GWTPropertyGroup> result){
@@ -342,7 +354,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 			for (Iterator<GWTPropertyGroup> it = result.iterator(); it.hasNext();) {
 				GWTPropertyGroup gwtGroup = it.next();
 				String groupTranslation = gwtGroup.getLabel();
-				PropertyGroup group = new PropertyGroup(gwtGroup, doc, gwtFolder, (visibleButton && !gwtGroup.isReadonly()));
+				PropertyGroup group = new PropertyGroup(gwtGroup, doc, gwtFolder, visibleButton, gwtGroup.isReadonly());
 				tabPanel.add(group, groupTranslation);
 				propertyGroup.add(group);
 				// Adds property group handlers
@@ -351,10 +363,10 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 				}
 			}
 			// To prevent change on document that has minor tabs than previous the new selected tab it'll be the max - 1 on that cases
-			if (tabPanel.getWidgetCount()-1<selectedTab) {
+			if (tabPanel.getWidgetCount()-1<latestSelectedTab) {
 				tabPanel.selectTab(tabPanel.getWidgetCount()-1);
 			} else {
-				tabPanel.selectTab(selectedTab); // Always enable selected tab because on document change tab group are removed
+				tabPanel.selectTab(latestSelectedTab); // Always enable selected tab because on document change tab group are removed
 												 // and on remove loses selectedTab
 			}
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetGroupProperties();
@@ -362,7 +374,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 
 		public void onFailure(Throwable caught) {
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetGroupProperties();
-			Main.get().showError("GetAllGroups", caught);
+			Main.get().showError("GetGroups", caught);
 		}
 	};
 	
@@ -403,9 +415,9 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	 * 
 	 * @return
 	 */
-	private boolean isRemoveGroupPropertyEnabled(int tabIndex) {
+	private boolean isRemovePropertyGroupEnabled(int tabIndex) {
 		if ((tabPanel.getWidget(tabIndex) instanceof PropertyGroup)) {
-			return ((PropertyGroup) (tabPanel.getWidget(tabIndex))).isButtonsVisible();
+			return ((PropertyGroup) (tabPanel.getWidget(tabIndex))).isRemovePropertyGroupEnabled();
 		} else {
 			return false;
 		}
@@ -540,22 +552,6 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 			if (!refreshing) {
 				preview.showMediaFile(RPCService.DownloadServlet +"?uuid=" + URL.encodeQueryString(getDocument().getUuid()), getDocument().getMimeType());
 			}
-		} else if (doc.isConvertibleToDxf()) {
-			PreviewExtension previewExtension = null;
-			for (PreviewExtension preview : widgetPreviewExtensionList) {
-				if (preview instanceof AutocadPreview) {
-					previewExtension = preview;
-					break;
-				}
-			}
-			if (previewExtension!=null) {
-				preview.showPreviewExtension(previewExtension, RPCService.DownloadServlet +"?uuid=" + URL.encodeQueryString(getDocument().getUuid()));
-			} else {
-				// There's no preview
-				preview.setPreviewAvailable(false);
-				preview.showEmbedSWF(doc.getUuid());
-			}
-			
 		} else {
 			preview.showEmbedSWF(doc.getUuid());
 		}

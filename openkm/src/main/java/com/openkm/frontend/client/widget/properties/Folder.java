@@ -23,27 +23,21 @@ package com.openkm.frontend.client.widget.properties;
 
 import java.util.Iterator;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
-import com.openkm.extension.frontend.client.widget.messaging.MessagingToolBarBox;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
-import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
 
 public class Folder extends Composite {
-	
 	private ScrollPanel scrollPanel;
 	private FlexTable tableProperties;
 	private FlexTable tableSubscribedUsers;
@@ -51,7 +45,6 @@ public class Folder extends Composite {
 	private GWTFolder folder;
 	HorizontalPanel hPanelSubscribedUsers;
 	private HTML subcribedUsersText;
-	private Image proposeSubscribeImage;
 	
 	/**
 	 * The folder
@@ -86,13 +79,6 @@ public class Folder extends Composite {
 		
 		hPanelSubscribedUsers = new HorizontalPanel();
 		subcribedUsersText = new HTML("<b>"+Main.i18n("folder.subscribed.users")+"<b>");
-		proposeSubscribeImage = new Image(OKMBundleResources.INSTANCE.proposeSubscription());
-		proposeSubscribeImage.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				MessagingToolBarBox.get().executeProposeSubscription(folder.getUuid());
-			}
-		});
 		hPanelSubscribedUsers.add(subcribedUsersText);
 		hPanelSubscribedUsers.add(new HTML("&nbsp;"));
 		hPanelSubscribedUsers.setCellVerticalAlignment(subcribedUsersText, HasAlignment.ALIGN_MIDDLE);
@@ -100,14 +86,14 @@ public class Folder extends Composite {
 		tableSubscribedUsers.setWidget(0, 0, hPanelSubscribedUsers);
 				
 		table.setWidget(0, 0, tableProperties);
-		table.setHTML(0,1, "");
-		table.setWidget(0,2,tableSubscribedUsers);
+		table.setHTML(0, 1, "");
+		table.setWidget(0, 2, tableSubscribedUsers);
 
 		// The hidden column extends table to 100% width
 		CellFormatter cellFormatter = table.getCellFormatter();
 		cellFormatter.setWidth(0, 1, "25");
-		cellFormatter.setVerticalAlignment(0,0, HasAlignment.ALIGN_TOP);
-		cellFormatter.setVerticalAlignment(0,2, HasAlignment.ALIGN_TOP);
+		cellFormatter.setVerticalAlignment(0, 0, HasAlignment.ALIGN_TOP);
+		cellFormatter.setVerticalAlignment(0, 2, HasAlignment.ALIGN_TOP);
 		
 		// Sets wordWrap for al rows
 		setRowWordWarp(0, 0, true, tableProperties);
@@ -122,7 +108,6 @@ public class Folder extends Composite {
 		
 		tableProperties.setStyleName("okm-DisableSelect");
 		tableSubscribedUsers.setStyleName("okm-DisableSelect");
-		proposeSubscribeImage.addStyleName("okm-Hyperlink");
 		
 		initWidget(scrollPanel);
 	}
@@ -137,15 +122,14 @@ public class Folder extends Composite {
 	 */
 	private void setRowWordWarp(int row, int columns, boolean warp, FlexTable table) {
 		CellFormatter cellFormatter = table.getCellFormatter();
+		
 		for (int i=0; i<columns; i++) {
 			cellFormatter.setWordWrap(row, i, false);
 		}
 	}
 	
 	/**
-	 * get
 	 * 
-	 * @return
 	 */
 	public GWTFolder get() {
 		return folder;
@@ -159,32 +143,36 @@ public class Folder extends Composite {
 	public void set(GWTFolder folder) {
 		this.folder = folder;
 		
-		// url
+		// URL clipboard button
 		String url = Main.get().workspaceUserProperties.getApplicationURL();
-		url += "?fldPath=" + URL.encodeQueryString(folder.getPath());
+		url += "?fldPath=" + URL.encodeQueryString(URL.encodeQueryString(folder.getPath()));
 		tableProperties.setWidget(8, 1, new HTML("<div id=\"folderurlclipboardcontainer\"></div>\n"));
 		Util.createFolderURLClipboardButton(url);
 		
 		// Webdav
 		String webdavUrl = Main.get().workspaceUserProperties.getApplicationURL();
-		if (webdavUrl.lastIndexOf('/')>0) {
-			int idx = webdavUrl.lastIndexOf('/');
-			String webdavPath = folder.getPath();
-			// Replace only in case webdav fix is enabled
-			if (Main.get().workspaceUserProperties.getWorkspace().isWebdavFix()) {
-				webdavPath.replace("okm:", "okm_");
-			}
-			
-			webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/', idx-1)) + "/repository/default" + webdavPath;
-			tableProperties.setWidget(9, 1, new HTML("<div id=\"folderwebdavclipboardcontainer\"></div>\n"));
-			Util.createFolderWebDavClipboardButton(webdavUrl);
+		String webdavPath = folder.getPath();
+		
+		// Replace only in case webdav fix is enabled
+		if (Main.get().workspaceUserProperties.getWorkspace().isWebdavFix()) {
+			webdavPath = webdavPath.replace("okm:", "okm_");
 		}
+		
+		// Login case write empty folder
+		if (!webdavUrl.equals("")) {
+			// webdavPath = Util.encodePathElements(webdavPath);
+			webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/')) + "/webdav" + webdavPath;
+		}
+		
+		tableProperties.setWidget(9, 1, new HTML("<div id=\"folderwebdavclipboardcontainer\"></div>\n"));
+		Util.createFolderWebDavClipboardButton(webdavUrl);
 		
 		tableProperties.setHTML(0, 1, folder.getUuid());
 		tableProperties.setHTML(1, 1, folder.getName());
 		tableProperties.setHTML(2, 1, folder.getParentPath());
 		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
-		tableProperties.setHTML(3, 1, dtf.format(folder.getCreated())+" "+Main.i18n("folder.by")+" "+folder.getAuthor());
+		tableProperties.setHTML(3, 1, dtf.format(folder.getCreated())+" "+Main.i18n("folder.by")+" " + Main.get().getUserName(folder.getAuthor()));
+		
 		if (folder.isSubscribed()) {
 			tableProperties.setHTML(4, 1, Main.i18n("folder.subscribed.yes"));
 		} else {
@@ -207,7 +195,8 @@ public class Folder extends Composite {
 		
 		// Sets the folder subscribers
 		for (Iterator<String> it = folder.getSubscriptors().iterator(); it.hasNext(); ) {
-			tableSubscribedUsers.setHTML(tableSubscribedUsers.getRowCount(), 0, it.next());
+			String sub = Main.get().getUserName(it.next());
+			tableSubscribedUsers.setHTML(tableSubscribedUsers.getRowCount(), 0, sub);
 			setRowWordWarp(tableSubscribedUsers.getRowCount()-1, 0, true, tableSubscribedUsers);
 		}
 		
@@ -246,14 +235,6 @@ public class Folder extends Composite {
 				tableProperties.getRowFormatter().setVisible(6, true); // Number of documents
 				tableProperties.getRowFormatter().setVisible(7, true); // Number of e-mails
 				break;
-		}
-		
-		// Propose subscription only must be enabled in taxonomy, categories, thesaurus and templates with
-		if (Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TAXONOMY || 
-			Main.get().mainPanel.desktop.navigator.getStackIndex()==UIDesktopConstants.NAVIGATOR_TEMPLATES) {
-			proposeSubscribeImage.setVisible(true);
-		} else {
-			proposeSubscribeImage.setVisible(false);
 		}
 	}
 
@@ -311,13 +292,5 @@ public class Folder extends Composite {
 		}
 		
 		subcribedUsersText.setHTML("<b>"+Main.i18n("folder.subscribed.users")+"<b>");
-	}
-	
-	/**
-	 * showProposedSusbcription
-	 */
-	public void showProposedSusbcription() {
-		// Adds to panel
-		hPanelSubscribedUsers.add(proposeSubscribeImage);
 	}
 }

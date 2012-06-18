@@ -146,7 +146,6 @@ public class AuthServlet extends OKMRemoteServiceServlet implements OKMAuthServi
 	@Override
 	public String getRemoteUser() {
 		log.debug("getRemoteUser()");
-		updateSessionManager();
 		String user = getThreadLocalRequest().getRemoteUser();
 		log.debug("getRemoteUser: {}", user);
 		return user;
@@ -435,7 +434,7 @@ public class AuthServlet extends OKMRemoteServiceServlet implements OKMAuthServi
 		updateSessionManager();
 		
 		try {
-			if (!(Config.SYSTEM_DEMO && path.equals("/okm:root"))) {
+			if (!path.equals("/okm:root")) {
 				OKMAuth oKMAuth = OKMAuth.getInstance();
 				oKMAuth.revokeRole(null, path, role, Permission.READ, recursive);
 				oKMAuth.revokeRole(null, path, role, Permission.WRITE, recursive);
@@ -468,7 +467,7 @@ public class AuthServlet extends OKMRemoteServiceServlet implements OKMAuthServi
 		updateSessionManager();
 		
 		try {
-			if (!(Config.SYSTEM_DEMO && path.equals("/okm:root"))) {
+			if (!path.equals("/okm:root")) {
 				OKMAuth.getInstance().revokeRole(null, path, role, permissions, recursive);
 			}
 		} catch (PathNotFoundException e) {
@@ -498,7 +497,6 @@ public class AuthServlet extends OKMRemoteServiceServlet implements OKMAuthServi
 		Session session = null;
 						
 		try {
-			// TODO This JCR Session could be removed
 			session = JCRUtils.getSession();
 			
 			// Activity log

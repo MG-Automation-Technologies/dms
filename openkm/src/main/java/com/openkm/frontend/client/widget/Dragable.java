@@ -31,9 +31,9 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -44,6 +44,7 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import com.openkm.frontend.client.service.OKMFolderService;
@@ -62,11 +63,9 @@ public class Dragable extends Composite implements OriginPanel {
 	private final OKMMailServiceAsync mailService = (OKMMailServiceAsync) GWT.create(OKMMailService.class);
 	
 	private boolean dragged = false;
-	private boolean dropEnabled = false; // Used to eliminate user drag & drop too much faster ( timer to enable drop )
 	private HTML floater = new HTML();
 
 	private int originPanel = NONE; 
-	private Timer timer;
 	private TreeItem selectedTreeItem;
 	private TreeItem lastSelectedTreeItem;
 	private Element selectedElement;
@@ -86,24 +85,13 @@ public class Dragable extends Composite implements OriginPanel {
 		
 		floater.addMouseUpHandler(new MouseUpHandler(){
 			@Override
-			public void onMouseUp(MouseUpEvent event) {
-				if (timer!=null) {
-            		timer.cancel(); // Cancel timer
-            		timer = null;
-            	}
-            	
+			public void onMouseUp(MouseUpEvent event) {          	
             	DOM.releaseCapture(floater.getElement());
                 floater.setHTML("");
         		floater.setVisible(false);
         		
-        		// Cancelling the timer
-        		if (timer!=null) {
-                	timer.cancel(); // Cancelling timer
-                	timer = null;
-            	}
-            	
             	// Only move if dragged has been enabled by timer
-	            if (dragged && dropEnabled) {
+	            if (dragged) {
 
 	        		// Action depends on origin dragable
 	        		switch(originPanel) {
@@ -136,6 +124,8 @@ public class Dragable extends Composite implements OriginPanel {
 	                                Main.get().activeFolderTree.evaluesFolderIcon(clickedTreeItem);
 	                                
 	                                // Move the folder
+	                                ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
+									endPoint.setServiceEntryPoint(RPCService.FolderService);
 	                                folderService.move( fldPath, dstPath, new AsyncCallback<Object>() {
 		                            		public void onSuccess(Object result) {		
 		                            			// Sets the folder new path itself and childs
@@ -201,6 +191,8 @@ public class Dragable extends Composite implements OriginPanel {
 		                                    Main.get().activeFolderTree.evaluesFolderIcon(clickedTreeItem);
 		                                    
 		                            		// Move the folder
+		                                    ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
+		    								endPoint.setServiceEntryPoint(RPCService.FolderService);
 		                                    folderService.move( fldPath, dstPath, new AsyncCallback<Object>() {
 				                            		public void onSuccess(Object result) {		
 				                            			// Sets the folder new path ( parent and itself ) recursive for itself and childs
@@ -229,6 +221,8 @@ public class Dragable extends Composite implements OriginPanel {
 		                        		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument(); // The dragged document
 		                        		
 		                        		// Move the document
+		                        		ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
+		    							endPoint.setServiceEntryPoint(RPCService.DocumentService);
 		    							documentService.move( gwtDocument.getPath(),dstPath, callbackMove);
 		    							
 		    							// refresh file browser
@@ -239,6 +233,8 @@ public class Dragable extends Composite implements OriginPanel {
 		                        		GWTMail gwtMail = Main.get().mainPanel.desktop.browser.fileBrowser.getMail(); // The dragged document
 		                        		
 		                        		// Move the document
+		                        		ServiceDefTarget endPoint = (ServiceDefTarget) mailService;
+		    							endPoint.setServiceEntryPoint(RPCService.MailService);
 		    							mailService.move( gwtMail.getPath(),dstPath, callbackMove);
 		    							
 		    							// refresh file browser
@@ -251,7 +247,6 @@ public class Dragable extends Composite implements OriginPanel {
             	}
 	            
 	            dragged=false; 			// Sets always dragged to false
-	            dropEnabled = false;	// Sets always dragged to false
 	            
         		// Always we destroy possible timers to automatic up / down scroll
         		Main.get().mainPanel.desktop.navigator.scrollTaxonomyPanel.destroyTimer();
@@ -265,12 +260,6 @@ public class Dragable extends Composite implements OriginPanel {
 				if (dragged && event!=null) {
                 	
                 	floater.setVisible(true); // Sets the floater visible
-                	
-                	// Cancels the timer if dropEnabled is true
-                	if (dropEnabled && timer!=null) {
-	                	timer.cancel(); // Cancelling timer
-	                	timer = null;
-                	}
 
                     int posX = event.getClientX();
                     int posY = event.getClientY();
@@ -325,14 +314,6 @@ public class Dragable extends Composite implements OriginPanel {
 		dragged=true;
 		selectedTreeItem = null;
 		lastSelectedTreeItem = null;
-
-		timer = new Timer() {
-			public void run() {
-				dropEnabled=true;
-			}
-		};
-		
-		timer.scheduleRepeating(1500); // 1,5 seconds
 	}
 	
 	/**

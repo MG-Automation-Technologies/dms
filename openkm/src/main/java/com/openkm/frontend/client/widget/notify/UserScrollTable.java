@@ -44,7 +44,7 @@ import com.openkm.frontend.client.Main;
  */
 public class UserScrollTable extends Composite {
 	// Number of columns
-	public static final int NUMBER_OF_COLUMNS = 1;
+	public static final int NUMBER_OF_COLUMNS = 2;
 	
 	private ScrollTable table;
 	private boolean isUserToNofity = false;
@@ -117,8 +117,10 @@ public class UserScrollTable extends Composite {
 		} else {
 			headerTable.setHTML(0, 0, Main.i18n("fileupload.label.users"));
 		}
+	    headerTable.setHTML(0, 1, "");
 	    
 	    table.setColumnWidth(0,167);
+	    table.setColumnWidth(1, 0);
 	    
 	    // Table data
 	    dataTable.setSelectionPolicy(SelectionGrid.SelectionPolicy.ONE_ROW);
@@ -136,7 +138,9 @@ public class UserScrollTable extends Composite {
 	public void addRow(String userName) {
 		int rows = dataTable.getRowCount();
 		dataTable.insertRow(rows);
-		dataTable.setHTML(rows, 0, userName);
+		dataTable.setHTML(rows, 0, Main.get().getUserName(userName));
+		dataTable.setHTML(rows, 1, userName);
+		dataTable.getCellFormatter().setVisible(rows, 1, false);
 	}
 	
 	/**
@@ -150,7 +154,7 @@ public class UserScrollTable extends Composite {
 		if (!dataTable.getSelectedRows().isEmpty()) {
 			int selectedRow = ((Integer) dataTable.getSelectedRows().iterator().next()).intValue();
 			if (dataTable.isRowSelected(selectedRow)) {
-				user = dataTable.getHTML(((Integer) dataTable.getSelectedRows().iterator().next()).intValue(),0);
+				user = dataTable.getHTML(((Integer) dataTable.getSelectedRows().iterator().next()).intValue(), 1);
 			}
 		}
 		
@@ -193,7 +197,7 @@ public class UserScrollTable extends Composite {
 		
 		if (dataTable.getRowCount()>0) {
 			for (int i = 0; i<dataTable.getRowCount(); i++){
-				users += dataTable.getText(i,0) + ",";
+				users += dataTable.getText(i, 1) + ",";
 			}
 		}
 		
@@ -215,7 +219,7 @@ public class UserScrollTable extends Composite {
 		
 		if (dataTable.getRowCount()>0) {
 			for (int i = 0; i<dataTable.getRowCount(); i++){
-				usersList.add(dataTable.getText(i,0));
+				usersList.add(dataTable.getText(i, 1));
 			}
 		}
 		

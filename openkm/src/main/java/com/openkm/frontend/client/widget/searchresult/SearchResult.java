@@ -159,16 +159,6 @@ public class SearchResult extends Composite {
 	}
 	
 	/**
-	 * findSimpleQueryPaginated
-	 * 
-	 * @param words The path id
-	 */
-	public void findSimpleQueryPaginated(String statement, int offset, int limit) {
-		status.setFlag_findPaginated();
-		searchService.findSimpleQueryPaginated(statement, offset, limit, callbackFindPaginated);
-	}
-	
-	/**
 	 * Sets the selected panel value
 	 * 
 	 * @param selected The select panel value

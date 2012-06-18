@@ -22,11 +22,17 @@
 package com.openkm.util;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.MimeTypeDAO;
 import com.openkm.dao.bean.MimeType;
@@ -105,5 +111,57 @@ public class FileUtils {
 		}
 		
 		return ret;
+	}
+	
+	/**
+	 * Count files and directories from a selected directory.
+	 * This version exclude .okm files
+	 */
+	public static int countImportFiles(File dir) {
+		File[] found = dir.listFiles();
+		int ret = 0;
+		
+		if (found != null) {
+			for (int i = 0; i < found.length; i++) {
+				//log.info("File: {}", found[i].getPath());
+				
+				if (found[i].isDirectory()) {
+					ret += countImportFiles(found[i]);
+				}
+				
+				// NAND
+				if (!(found[i].isFile() && found[i].getName().toLowerCase().endsWith(Config.EXPORT_METADATA_EXT))) {
+					ret++;
+				}
+			}
+		}
+		
+		return ret;
+	}
+	
+	/**
+	 * Copy InputStream to File.
+	 */
+	public static void copy(InputStream input, File output) throws IOException {
+		FileOutputStream fos = new FileOutputStream(output);
+		IOUtils.copy(input, fos);
+		fos.flush();
+		fos.close();
+	}
+	
+	/**
+	 * Copy File to OutputStream
+	 */
+	public static void copy(File input, OutputStream output) throws IOException {
+		FileInputStream fis = new FileInputStream(input);
+		IOUtils.copy(fis, output);
+		fis.close();
+	}
+	
+	/**
+	 * Copy File to File
+	 */
+	public static void copy(File input, File output) throws IOException {
+		org.apache.commons.io.FileUtils.copyFile(input, output);
 	}
 }

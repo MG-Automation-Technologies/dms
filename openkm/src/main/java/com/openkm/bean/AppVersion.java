@@ -39,18 +39,10 @@ public class AppVersion {
 	}
 	
 	public String getVersion() {
-		if (maintenance != null && !maintenance.equals("") && !maintenance.equals("0")) {
-			return major+"."+minor+"."+maintenance;
-		} else {
-			return major+"."+minor;
-		}
+		return major + "." + minor + "." + maintenance;
 	}
 	
 	public String toString() {
-		if (maintenance != null && !maintenance.equals("") && !maintenance.equals("0")) {
-			return major+"."+minor+"."+maintenance+" (build: "+build+")";	
-		} else {
-			return major+"."+minor+" (build: "+build+")";
-		}
+		return major + "." + minor + "." + maintenance + " (build: " + build + ")";
 	}
 }

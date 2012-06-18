@@ -31,11 +31,12 @@ import com.openkm.bean.Scripting;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.ScriptingModule;
+import com.openkm.util.PrincipalUtils;
 import com.openkm.util.UserActivity;
 
 public class DirectScriptingModule implements ScriptingModule {
@@ -60,7 +61,7 @@ public class DirectScriptingModule implements ScriptingModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 
-			if (Config.ADMIN_USER.equals(session.getUserID())) {
+			if (PrincipalUtils.hasRole(Config.DEFAULT_ADMIN_ROLE)) {
 				Session systemSession = DirectRepositoryModule.getSystemSession();
 				node = session.getRootNode().getNode(nodePath.substring(1));
 				sNode = systemSession.getNodeByUUID(node.getUUID());
@@ -113,7 +114,7 @@ public class DirectScriptingModule implements ScriptingModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 
-			if (Config.ADMIN_USER.equals(session.getUserID())) {
+			if (PrincipalUtils.hasRole(Config.DEFAULT_ADMIN_ROLE)) {
 				Session systemSession = DirectRepositoryModule.getSystemSession();
 				node = session.getRootNode().getNode(nodePath.substring(1));
 				sNode = systemSession.getNodeByUUID(node.getUUID());
@@ -162,7 +163,7 @@ public class DirectScriptingModule implements ScriptingModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 
-			if (Config.ADMIN_USER.equals(session.getUserID())) {
+			if (PrincipalUtils.hasRole(Config.DEFAULT_ADMIN_ROLE)) {
 				Node node = session.getRootNode().getNode(nodePath.substring(1));
 
 				if (node.isNodeType(Scripting.TYPE)) {

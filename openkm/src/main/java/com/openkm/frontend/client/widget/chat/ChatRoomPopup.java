@@ -32,6 +32,7 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -42,6 +43,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.service.OKMChatService;
 import com.openkm.frontend.client.service.OKMChatServiceAsync;
 import com.openkm.frontend.client.util.OKMBundleResources;
@@ -53,7 +55,6 @@ import com.openkm.frontend.client.util.OKMBundleResources;
  *
  */
 public class ChatRoomPopup extends ChatRoomDialogBox {
-	
 	private final OKMChatServiceAsync chatService = (OKMChatServiceAsync) GWT.create(OKMChatService.class);
 	
 	private final static int DELAY_PENDING_MESSAGE  = 200; // mseg
@@ -81,12 +82,13 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 		singleton = this;
 		chatRoomActive = true;
 		connectedRoom = room;
-		
 		usersInRoomText = new HTML("");
 		addUserToChatRoom = new Image(OKMBundleResources.INSTANCE.addUserToChatRoom());
 		addUserToChatRoom.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+				endPoint.setServiceEntryPoint(RPCService.ChatService);
 				chatService.getUsersInRoom(room, new AsyncCallback<List<String>>() {
 					
 					@Override
@@ -109,6 +111,9 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 			@Override
 			public void onClick(ClickEvent event) {
 				chatRoomActive = false;
+				ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+				endPoint.setServiceEntryPoint(RPCService.ChatService);
+				
 				chatService.closeRoom(room,new AsyncCallback<Object>() {
 					@Override
 					public void onSuccess(Object arg0) {
@@ -120,6 +125,7 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 						Main.get().showError("Logout", caught);
 					}
 				});
+				
 				hide();
 			}
 		});
@@ -156,15 +162,18 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 		textArea.addKeyUpHandler(new KeyUpHandler() {
 			@Override
 			public void onKeyUp(KeyUpEvent event) {		
-				if ((char)KeyCodes.KEY_ENTER == event.getNativeKeyCode() && textArea.getText().length()==1) {
+				if (KeyCodes.KEY_ENTER == event.getNativeKeyCode() && textArea.getText().length() == 1) {
 					// Case only has typewrite a enter character, reset textArea values
 					textArea.setText("");
-				} else 	if ((char)KeyCodes.KEY_ENTER == event.getNativeKeyCode() && textArea.getText().length()>1) {
+				} else 	if (KeyCodes.KEY_ENTER == event.getNativeKeyCode() && textArea.getText().length() > 1) {
 					textArea.setEnabled(false);
+					ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+					endPoint.setServiceEntryPoint(RPCService.ChatService);
+					
 					chatService.addMessageToRoom(room, formatingMessage(textArea.getText()), new AsyncCallback<Object>() {
 						@Override
 						public void onSuccess(Object result) {
-							addMessage(Main.get().workspaceUserProperties.getUser() +": " + formatingMessage(textArea.getText()));
+							addMessage("<b>" + Main.get().workspaceUserProperties.getUser() + "</b>: " + formatingMessage(textArea.getText()));
 							textArea.setText("");
 							textArea.setEnabled(true);
 						}
@@ -234,6 +243,8 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 	 */
 	private void refreshUsersInRoom(final String room) {
 		if (chatRoomActive) {
+			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+			endPoint.setServiceEntryPoint(RPCService.ChatService);
 			chatService.usersInRoom(room, new AsyncCallback<String>() {
 				
 				@Override
@@ -245,6 +256,7 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 							refreshUsersInRoom(room);
 						}
 					};
+					
 					timer.schedule(DELAY_USERS_IN_ROOM);
 				}
 				
@@ -258,11 +270,11 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 	
 	/**
 	 * getPendingMessage
-	 * 
-	 * @param room
 	 */
 	public void getPendingMessage(final String room) {
 		if (chatRoomActive) {
+			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+			endPoint.setServiceEntryPoint(RPCService.ChatService);
 			chatService.getPendingMessage(room, new AsyncCallback<List<String>>() {
 				
 				@Override
@@ -270,12 +282,14 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 					for (Iterator<String> it = result.iterator(); it.hasNext();) {
 						addMessage(it.next());
 					}
+					
 					Timer timer = new Timer() {
 						@Override
 						public void run() {
 							getPendingMessage(room);
 						}
 					};
+					
 					timer.schedule(DELAY_PENDING_MESSAGE);
 				}
 				
@@ -289,18 +303,13 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 	
 	/**
 	 * addMessage
-	 * 
-	 * @param msg
 	 */
 	private void addMessage(String msg) {
-		table.setHTML(table.getRowCount(),0,msg);
+		table.setHTML(table.getRowCount(), 0, msg);
 	}
 	
 	/**
 	 * formatingMessage
-	 * 
-	 * @param msg
-	 * @return
 	 */
 	private String formatingMessage(String msg) {
 		return msg.replaceAll("\\n", "</br>");
@@ -308,8 +317,6 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 	
 	/**
 	 * getRoom
-	 * 
-	 * @param room
 	 */
 	public String getRoom() {
 		return connectedRoom;
@@ -317,8 +324,6 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 	
 	/**
 	 * setChatRoomActive
-	 * 
-	 * @param active
 	 */
 	public void setChatRoomActive(boolean active) {
 		hide();

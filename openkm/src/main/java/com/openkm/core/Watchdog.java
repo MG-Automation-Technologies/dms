@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMAuth;
 import com.openkm.bean.JcrSessionInfo;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.UserActivity;
 
@@ -43,7 +42,7 @@ public class Watchdog extends TimerTask {
 			log.warn("*** Watchdog already running ***");
 		} else {
 			running = true;
-			log.info("*** Watchdog activated ***");
+			log.debug("*** Watchdog activated ***");
 			
 			try {
 				JcrSessionManager sm = JcrSessionManager.getInstance();

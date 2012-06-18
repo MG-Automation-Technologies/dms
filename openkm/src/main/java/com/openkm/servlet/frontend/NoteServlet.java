@@ -71,7 +71,6 @@ public class NoteServlet extends OKMRemoteServiceServlet implements OKMNoteServi
 	@Override
 	public void remove(String notePath) throws OKMException {
 		log.debug("remove({})", notePath);
-		updateSessionManager();
 		
 		try {
 			OKMNote.getInstance().remove(null, notePath);
@@ -98,7 +97,6 @@ public class NoteServlet extends OKMRemoteServiceServlet implements OKMNoteServi
 	@Override
 	public void set(String notePath, String text) throws OKMException {
 		log.debug("set({}, {})", notePath, text);
-		updateSessionManager();
 		
 		try {
 			OKMNote.getInstance().set(null, notePath, text);

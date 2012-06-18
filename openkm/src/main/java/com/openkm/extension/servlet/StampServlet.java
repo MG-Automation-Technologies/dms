@@ -77,7 +77,6 @@ public class StampServlet extends OKMRemoteServiceServlet implements OKMStampSer
 	@Override
 	public List<GWTStamp> findAll() throws OKMException {
 		log.debug("findAll()");
-		updateSessionManager();
 		List<GWTStamp> stampList = new ArrayList<GWTStamp>();
 		String remoteUser = getThreadLocalRequest().getRemoteUser();
 		try {
@@ -111,10 +110,10 @@ public class StampServlet extends OKMRemoteServiceServlet implements OKMStampSer
 			FileOutputStream fos = null;
 			
 			// Copying from repository to temporal file
-			if (!doc.getMimeType().equals("application/pdf")) {
-				fos = new FileOutputStream(tmp);
-			} else {
+			if (doc.getMimeType().equals("application/pdf")) {
 				fos = new FileOutputStream(tmpPdf);
+			} else {
+				fos = new FileOutputStream(tmp);
 			}
 			
 			InputStream is = OKMDocument.getInstance().getContent(null, path, false);
@@ -123,18 +122,15 @@ public class StampServlet extends OKMRemoteServiceServlet implements OKMStampSer
 			fos.close();
 			is.close();
 			
-			// Convert from temporal file to temporal pdf if it's needed
+			// Convert from temporal file to temporal PDF (if needed)
 			if (!doc.getMimeType().equals("application/pdf")) {
-				is = new FileInputStream(tmp);
 				DocConverter converter = DocConverter.getInstance();
 				
 				if (doc.getMimeType().startsWith("image/")) {
-					converter.img2pdf(is, doc.getMimeType(), tmpPdf);
+					converter.img2pdf(tmp, doc.getMimeType(), tmpPdf);
 				} else {
-					converter.doc2pdf(is, doc.getMimeType(), tmpPdf);
+					converter.doc2pdf(tmp, doc.getMimeType(), tmpPdf);
 				}
-				
-				is.close();
 			}
 			
 			// Stamping pdf file

@@ -14,9 +14,7 @@
   <script type="text/javascript" src="js/fixedTableHeader.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
-    	TABLE.fixHeader('table');
-    	
-    	$('#fumi').click(function() {
+    	$('#fumi').click(function(event) {
     		$("#dest").removeClass('ok').removeClass('error').html('Checking....');
             $("#dest").load('MailAccount', { action: "checkAll" },
             	function(response, status, xhr) {
@@ -27,6 +25,8 @@
             		}
             	});
 	   	});
+
+    	TABLE.fixHeader('table.results');
 	});
   </script>
   <title>User List</title>
@@ -78,7 +78,7 @@
       <table class="results" width="80%">
         <thead>
           <tr>
-            <th>Id</th><th>Name</th><th>Mail</th><th>Roles</th><th width="25px">Active</th>
+            <th>Id</th><th>Name</th><th>Mail</th><th>Roles</th><th>Profile</th><th width="25px">Active</th><th width="25px">Chat</th>
             <th width="130px">
               <c:url value="Auth" var="urlCreate">
                 <c:param name="action" value="userCreate"/>
@@ -105,6 +105,12 @@
               <c:param name="roleFilter" value="${roleFilter}"/>
               <c:param name="usr_active" value="${!user.active}"/>
             </c:url>
+            <c:url value="Auth" var="urlChatDisconnect">
+              <c:param name="action" value="userChatDisconnect"/>
+              <c:param name="usr_id" value="${user.id}"/>
+              <c:param name="roleFilter" value="${roleFilter}"/>
+              <c:param name="usr_active" value="${!user.active}"/>
+            </c:url>
             <c:url value="UserConfig" var="urlConfig">
               <c:param name="uc_user" value="${user.id}"/>
             </c:url>
@@ -121,17 +127,35 @@
                   ${role.id}
                 </c:forEach>
               </td>
+              <td>${user.profile}</td>
               <td align="center">
                 <c:if test="${multInstAdmin || user.id != Config.ADMIN_USER}">
                   <c:choose>
-                    <c:when test="${user.active}">
-                      <a href="${urlActive}"><img src="img/true.png" alt="Active" title="Active"/></a>
+                    <c:when test="${db}">
+                      <c:choose>
+                        <c:when test="${user.active}">
+                          <a href="${urlActive}"><img src="img/true.png" alt="Active" title="Active"/></a>
+                        </c:when>
+                        <c:otherwise>
+                          <a href="${urlActive}"><img src="img/false.png" alt="Inactive" title="Inactive"/></a>
+                        </c:otherwise>
+                      </c:choose>
                     </c:when>
                     <c:otherwise>
-                      <a href="${urlActive}"><img src="img/false.png" alt="Inactive" title="Inactive"/></a>
+                      <img src="img/true.png" alt="Active" title="Active"/>
                     </c:otherwise>
                   </c:choose>
                 </c:if>
+              </td>
+              <td align="center">
+                <c:choose>
+                  <c:when test="${u:contains(chatUsers, user.id)}">
+                    <a href="${urlChatDisconnect}"><img src="img/action/chat_connected.png" alt="Disconnect user" title="Disconnect user"/></a>
+                  </c:when>
+                  <c:otherwise>
+                    <img src="img/action/chat_disconnected.png" alt="User disconnected" title="User disconnected"/>
+                  </c:otherwise>
+                </c:choose>
               </td>
               <td align="center">
                 <c:if test="${multInstAdmin || user.id != Config.ADMIN_USER}">

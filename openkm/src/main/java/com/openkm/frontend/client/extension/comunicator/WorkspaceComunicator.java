@@ -23,6 +23,7 @@ package com.openkm.frontend.client.extension.comunicator;
 
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTWorkspace;
+import com.openkm.frontend.client.extension.widget.tabworkspace.TabWorkspaceExtension;
 
 /**
  * WorkspaceComunicator
@@ -63,5 +64,23 @@ public class WorkspaceComunicator {
 	public static GWTWorkspace getWorkspace() {
 		return Main.get().workspaceUserProperties.getWorkspace();
 	}
-
+	
+	/**
+	 * getTabExtensionIndex
+	 * 
+	 * @param widget
+	 * @return
+	 */
+	public static int getTabExtensionIndex(TabWorkspaceExtension widget) {
+		return Main.get().mainPanel.topPanel.tabWorkspace.getTabExtensionIndex(widget);
+	}
+	
+	/**
+	 * getAppVersion
+	 * 
+	 * @return
+	 */
+	public static String getAppVersion() {
+		return Main.get().workspaceUserProperties.getWorkspace().getAppVersion();
+	}
 }

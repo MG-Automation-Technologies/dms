@@ -34,10 +34,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
-import com.openkm.api.OKMAuth;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
@@ -45,6 +45,9 @@ import com.openkm.jcr.JCRUtils;
 import com.openkm.module.DocumentModule;
 import com.openkm.module.FolderModule;
 import com.openkm.module.ModuleManager;
+import com.openkm.util.impexp.metadata.DocumentMetadata;
+import com.openkm.util.impexp.metadata.FolderMetadata;
+import com.openkm.util.impexp.metadata.MetadataAdapter;
 
 public class RepositoryExporter {
 	private static Logger log = LoggerFactory.getLogger(RepositoryExporter.class);
@@ -100,21 +103,26 @@ public class RepositoryExporter {
 			AccessDeniedException, RepositoryException, IOException, DatabaseException {
 		log.debug("exportDocumentsHelper({}, {}, {}, {}, {}, {})", new Object[] { token, fldPath, fs, metadata, out, deco });
 		ImpExpStats stats = new ImpExpStats();
-		OKMAuth okmAuth = OKMAuth.getInstance();
+		DocumentModule dm = ModuleManager.getDocumentModule();
+		FolderModule fm = ModuleManager.getFolderModule();
+		MetadataAdapter ma = MetadataAdapter.getInstance(token);
+		Gson gson = new Gson();
 		String path = null;
+		File fsPath = null;
 		
 		if (firstTime) {
 			path = fs.getPath();
+			fsPath = new File(path);
 			firstTime = false;
 		} else {
 			// Repository path needs to be "corrected" under Windoze
 			path = fs.getPath() + File.separator + JCRUtils.getName(fldPath).replace(':', '_');
+			fsPath = new File(path);
+			fsPath.mkdirs();
+			out.write(deco.print(fldPath, 0, null));
+			out.flush();
 		}
 		
-		File fsPath = new File(path);
-		fsPath.mkdirs();
-
-		DocumentModule dm = ModuleManager.getDocumentModule();
 		for (Iterator<Document> it = dm.getChilds(token, fldPath).iterator(); it.hasNext();) {
 			Document docChild = it.next();
 			path = fsPath.getPath() + File.separator + JCRUtils.getName(docChild.getPath()).replace(':', '_');
@@ -128,13 +136,9 @@ public class RepositoryExporter {
 			
 			// Metadata
 			if (metadata) {
-				DocumentMetadata dmd = new DocumentMetadata();
-				dmd.setDocument(docChild);
-				dmd.setUsers(okmAuth.getGrantedUsers(token, docChild.getPath()));
-				dmd.setRoles(okmAuth.getGrantedRoles(token, docChild.getPath()));
-				Gson gson = new Gson();
+				DocumentMetadata dmd = ma.getMetadata(docChild);
 				String json = gson.toJson(dmd);
-				fos = new FileOutputStream(path + ".json");
+				fos = new FileOutputStream(path + Config.EXPORT_METADATA_EXT);
 				IOUtils.write(json, fos);
 				fos.close();
 			}
@@ -143,23 +147,17 @@ public class RepositoryExporter {
 			stats.setSize(stats.getSize() + docChild.getActualVersion().getSize());
 			stats.setDocuments(stats.getDocuments() + 1);
 		}
-
-		FolderModule fm = ModuleManager.getFolderModule();
+		
 		for (Iterator<Folder> it = fm.getChilds(token, fldPath).iterator(); it.hasNext();) {
 			Folder fldChild = it.next();
 			ImpExpStats tmp = exportDocumentsHelper(token, fldChild.getPath(), fsPath, metadata, out, deco);
 			path = fsPath.getPath() + File.separator + JCRUtils.getName(fldChild.getPath()).replace(':', '_');
-			FileOutputStream fos = null;
 			
 			// Metadata
 			if (metadata) {
-				FolderMetadata fmd = new FolderMetadata();
-				fmd.setFolder(fldChild);
-				fmd.setUsers(okmAuth.getGrantedUsers(token, fldChild.getPath()));
-				fmd.setRoles(okmAuth.getGrantedRoles(token, fldChild.getPath()));
-				Gson gson = new Gson();
+				FolderMetadata fmd = ma.getMetadata(fldChild);
 				String json = gson.toJson(fmd);
-				fos = new FileOutputStream(path + ".json");
+				FileOutputStream fos = new FileOutputStream(path + Config.EXPORT_METADATA_EXT);
 				IOUtils.write(json, fos);
 				fos.close();
 			}

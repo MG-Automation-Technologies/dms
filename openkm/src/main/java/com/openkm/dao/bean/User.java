@@ -81,6 +81,21 @@ public class User implements Serializable {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this.getClass() == obj.getClass()) {
+			User other = (User) obj;
+			
+			if (this.getId().equals(other.getId())) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

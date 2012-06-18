@@ -9,11 +9,13 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.contants.service.RPCService;
 import com.openkm.frontend.client.contants.ui.UIDockPanelConstants;
 import com.openkm.frontend.client.extension.widget.userinfo.UserInfoExtension;
 import com.openkm.frontend.client.service.OKMChatService;
@@ -28,7 +30,7 @@ public class UserInfo extends Composite {
 	
 	private final OKMChatServiceAsync chatService = (OKMChatServiceAsync) GWT.create(OKMChatService.class);
 	
-	private static final int USERS_IN_ROOM_REFRESHING_TIME = 1000;
+	public static final int USERS_IN_ROOM_REFRESHING_TIME = 1000;
 	private static final int NEW_ROOM_REFRESHING_TIME = 200;
 	
 	private HorizontalPanel panel;
@@ -44,10 +46,12 @@ public class UserInfo extends Composite {
 	private Image imgCheckoutDocuments;
 	private HTML subscriptions;
 	private Image imgSubscriptions;
-	private HTML newsDocuments;
+	private HTML newDocuments;
 	private Image imgNewsDocuments;
-	private HTML newsWorkflows;	
-	private Image imgWorkflows;
+	private HTML newWorkflowTasks;	
+	private Image imgWorkflowTasks;
+	private HTML newWorkflowPooledTasks;
+	private Image imgWorkflowPooledTasks;
 	private Image imgChat;
 	private Image imgNewChatRoom;
 	private Image imgChatSeparator;
@@ -80,10 +84,17 @@ public class UserInfo extends Composite {
 		lockedDocuments = new HTML("");
 		checkoutDocuments = new HTML("");
 		subscriptions = new HTML("");
-		newsDocuments = new HTML("");
-		newsWorkflows = new HTML("");
+		newDocuments = new HTML("");
+		newWorkflowTasks = new HTML("");
+		newWorkflowPooledTasks = new HTML("");
 		quotaUsed = new HTML("");
 		quotaUsed.setVisible(false);
+		lockedDocuments.setVisible(false);
+		checkoutDocuments.setVisible(false);
+		subscriptions.setVisible(false);
+		newDocuments.setVisible(false);
+		newWorkflowTasks.setVisible(false);
+		newWorkflowPooledTasks.setVisible(false);
 		imgRepositorySize = new Image(OKMBundleResources.INSTANCE.repositorySize());
 		imgUserQuota = new Image(OKMBundleResources.INSTANCE.quota1());
 		imgChat = new Image(OKMBundleResources.INSTANCE.chatDisconnected());
@@ -93,7 +104,8 @@ public class UserInfo extends Composite {
 		imgCheckoutDocuments = new Image(OKMBundleResources.INSTANCE.checkout());
 		imgSubscriptions = new Image(OKMBundleResources.INSTANCE.subscribed());
 		imgNewsDocuments = new Image(OKMBundleResources.INSTANCE.news());
-		imgWorkflows = new Image(OKMBundleResources.INSTANCE.workflow());
+		imgWorkflowTasks = new Image(OKMBundleResources.INSTANCE.workflowTasks());
+		imgWorkflowPooledTasks = new Image(OKMBundleResources.INSTANCE.workflowPooledTasks());
 		imgRepositorySize.setVisible(false);
 		imgUserQuota.setVisible(false);
 		imgChat.setVisible(false);
@@ -104,7 +116,8 @@ public class UserInfo extends Composite {
 		imgCheckoutDocuments.setVisible(false);
 		imgSubscriptions.setVisible(false);
 		imgNewsDocuments.setVisible(false);
-		imgWorkflows.setVisible(false);
+		imgWorkflowTasks.setVisible(false);
+		imgWorkflowPooledTasks.setVisible(false);
 		imgChat.setTitle(Main.i18n("user.info.chat.connect"));
 		imgUserQuota.setTitle(Main.i18n("user.info.user.quota"));
 		imgNewChatRoom.setTitle(Main.i18n("user.info.chat.new.room"));
@@ -112,7 +125,8 @@ public class UserInfo extends Composite {
 		imgCheckoutDocuments.setTitle(Main.i18n("user.info.checkout.actual"));
 		imgSubscriptions.setTitle(Main.i18n("user.info.subscription.actual"));
 		imgNewsDocuments.setTitle(Main.i18n("user.info.news.new"));
-		imgWorkflows.setTitle(Main.i18n("user.info.workflow.pending"));
+		imgWorkflowTasks.setTitle(Main.i18n("user.info.workflow.pending.tasks"));
+		imgWorkflowPooledTasks.setTitle(Main.i18n("user.info.workflow.pending.pooled.tasks"));
 		
 		imgLockedDocuments.addClickHandler(new ClickHandler() { 
 			@Override
@@ -146,7 +160,15 @@ public class UserInfo extends Composite {
 			}
 		});
 		
-		imgWorkflows.addClickHandler(new ClickHandler() { 
+		imgWorkflowTasks.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
+				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(UIDockPanelConstants.DASHBOARD);
+				Main.get().mainPanel.dashboard.horizontalToolBar.showWorkflowView();
+			}
+		});
+		
+		imgWorkflowPooledTasks.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
 				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(UIDockPanelConstants.DASHBOARD);
@@ -158,7 +180,7 @@ public class UserInfo extends Composite {
 			@Override
 			public void onClick(ClickEvent event) {
 				if (!chatConnected) {
-					loginChat();
+					loginChat(false);
 				} else {
 					chatConnected = false; // Trying disable other RPC calls
 					logoutChat();
@@ -223,17 +245,21 @@ public class UserInfo extends Composite {
 		panel.add(subscriptions);
 		panel.add(new HTML("&nbsp;"));
 		panel.add(imgNewsDocuments);
-		panel.add(newsDocuments);
+		panel.add(newDocuments);
 		panel.add(new HTML("&nbsp;"));
-		panel.add(imgWorkflows);
-		panel.add(newsWorkflows);
+		panel.add(imgWorkflowTasks);
+		panel.add(newWorkflowTasks);
+		panel.add(new HTML("&nbsp;"));
+		panel.add(imgWorkflowPooledTasks);
+		panel.add(newWorkflowPooledTasks);
 		panel.add(new HTML("&nbsp;"));
 		
 		imgLockedDocuments.setStyleName("okm-Hyperlink");
 		imgCheckoutDocuments.setStyleName("okm-Hyperlink");
 		imgSubscriptions.setStyleName("okm-Hyperlink");
 		imgNewsDocuments.setStyleName("okm-Hyperlink");
-		imgWorkflows.setStyleName("okm-Hyperlink");
+		imgWorkflowTasks.setStyleName("okm-Hyperlink");
+		imgWorkflowPooledTasks.setStyleName("okm-Hyperlink");
 		imgChat.setStyleName("okm-Hyperlink");
 		imgNewChatRoom.setStyleName("okm-Hyperlink");
 		
@@ -246,7 +272,8 @@ public class UserInfo extends Composite {
 	 * @param user The user value
 	 */
 	public void setUser(String user, boolean isAdmin) {
-		this.user.setHTML("&nbsp;"+Main.i18n("general.connected")+" "+user+ "&nbsp;");
+	    this.user.setHTML("&nbsp;"+Main.i18n("general.connected")+" "+Main.get().getUserName(user)+ "&nbsp;");
+	    
 		if (isAdmin) {
 			this.user.addStyleName("okm-Input-System");
 		} 
@@ -300,7 +327,6 @@ public class UserInfo extends Composite {
 	 * @param value
 	 */
 	public void setLockedDocuments(int value) {
-		imgLockedDocuments.setVisible(true);
 		lockedDocuments.setHTML("&nbsp;"+value+ "&nbsp;");
 	}
 	
@@ -310,7 +336,6 @@ public class UserInfo extends Composite {
 	 * @param value
 	 */
 	public void setCheckoutDocuments(int value) {
-		imgCheckoutDocuments.setVisible(true);
 		checkoutDocuments.setHTML("&nbsp;"+value+ "&nbsp;");
 	}
 	
@@ -320,7 +345,6 @@ public class UserInfo extends Composite {
 	 * @param value
 	 */
 	public void setSubscriptions(int value) {
-		imgSubscriptions.setVisible(true);
 		subscriptions.setHTML("&nbsp;"+value+ "&nbsp;");
 	}
 	
@@ -330,8 +354,7 @@ public class UserInfo extends Composite {
 	 * @param value
 	 */
 	public void setNewsDocuments(int value) {
-		imgNewsDocuments.setVisible(true);
-		newsDocuments.setHTML("&nbsp;"+value+ "&nbsp;");
+		newDocuments.setHTML("&nbsp;"+value+ "&nbsp;");
 		if (value>0) {
 			imgNewsDocuments.setResource(OKMBundleResources.INSTANCE.newsAlert());
 		} else {
@@ -345,12 +368,27 @@ public class UserInfo extends Composite {
 	 * @param value
 	 */
 	public void setNewsWorkflows(int value) {
-		imgWorkflows.setVisible(true);
-		newsWorkflows.setHTML("&nbsp;"+value+ "&nbsp;");
-		if (value>0) {
-			imgWorkflows.setResource(OKMBundleResources.INSTANCE.workflowAlert());
+		newWorkflowTasks.setHTML("&nbsp;" + value + "&nbsp;");
+		
+		if (value > 0) {
+			imgWorkflowTasks.setResource(OKMBundleResources.INSTANCE.workflowTasksAlert());
 		} else {
-			imgWorkflows.setResource(OKMBundleResources.INSTANCE.workflow());
+			imgWorkflowTasks.setResource(OKMBundleResources.INSTANCE.workflowTasks());
+		}
+	}
+	
+	/**
+	 * Sets the pooled task instances
+	 * 
+	 * @param value
+	 */
+	public void setPooledTaskInstances(int value) {
+		newWorkflowPooledTasks.setHTML("&nbsp;" + value + "&nbsp;");
+		
+		if (value > 0) {
+			imgWorkflowPooledTasks.setResource(OKMBundleResources.INSTANCE.workflowPooledTasksAlert());
+		} else {
+			imgWorkflowPooledTasks.setResource(OKMBundleResources.INSTANCE.workflowPooledTasks());
 		}
 	}
 	
@@ -370,7 +408,8 @@ public class UserInfo extends Composite {
 	 * langRefresh
 	 */
 	public void langRefresh() {
-		user.setHTML("&nbsp;"+ Main.i18n("general.connected")+" "+Main.get().workspaceUserProperties.getUser() + "&nbsp;");
+	    user.setHTML("&nbsp;"+ Main.i18n("general.connected")+" "+Main.get().getUserName(Main.get().workspaceUserProperties.getUser()) + "&nbsp;");
+	    
 		if (chatConnected) {
 			imgChat.setTitle(Main.i18n("user.info.chat.disconnect"));
 			usersConnected.setHTML(connectUsersList.size() + "");
@@ -378,13 +417,15 @@ public class UserInfo extends Composite {
 			imgChat.setTitle(Main.i18n("user.info.chat.connect"));
 			usersConnected.setHTML("");
 		}
+		
 		imgUserQuota.setTitle(Main.i18n("user.info.user.quota"));
 		imgNewChatRoom.setTitle(Main.i18n("user.info.chat.new.room"));
 		imgLockedDocuments.setTitle(Main.i18n("user.info.locked.actual"));
 		imgCheckoutDocuments.setTitle(Main.i18n("user.info.checkout.actual"));
 		imgSubscriptions.setTitle(Main.i18n("user.info.subscription.actual"));
 		imgNewsDocuments.setTitle(Main.i18n("user.info.news.new"));
-		imgWorkflows.setTitle(Main.i18n("user.info.workflow.pending"));
+		imgWorkflowTasks.setTitle(Main.i18n("user.info.workflow.pending.tasks"));
+		imgWorkflowPooledTasks.setTitle(Main.i18n("user.info.workflow.pending.pooled.tasks"));
 		quotaUsed.setHTML(percent + "%");
 		
 		// Resfreshing actual chatrooms
@@ -398,6 +439,8 @@ public class UserInfo extends Composite {
 	 */
 	private void refreshConnectedUsers() {
 		if (chatConnected) {
+			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+			endPoint.setServiceEntryPoint(RPCService.ChatService);
 			chatService.getLoggedUsers(new AsyncCallback<List<String>>() {
 				@Override
 				public void onSuccess(List<String> result) {
@@ -425,6 +468,8 @@ public class UserInfo extends Composite {
 	 */
 	private void getPendingChatRoomUser() {
 		if (chatConnected) {
+			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+			endPoint.setServiceEntryPoint(RPCService.ChatService);
 			chatService.getPendingChatRoomUser(new AsyncCallback<List<String>>() {
 				
 				@Override
@@ -522,11 +567,13 @@ public class UserInfo extends Composite {
 	 * Recursivelly disconnecting chat rooms and chat before login out
 	 *
 	 */
-	private void logoutChat() {
+	public void logoutChat() {
 		// Disconnect rooms
 		if (getChatRoomList().size()>0) {
 			final ChatRoomDialogBox chatRoom = getChatRoomList().get(0);
 			chatRoom.setChatRoomActive(false);
+			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+			endPoint.setServiceEntryPoint(RPCService.ChatService);
 			chatService.closeRoom(chatRoom.getRoom(),new AsyncCallback<Object>() {
 				@Override
 				public void onSuccess(Object arg0) {
@@ -537,6 +584,7 @@ public class UserInfo extends Composite {
 				@Override
 				public void onFailure(Throwable caught) {
 					Main.get().showError("CloseRoom", caught);
+					
 					// If happens some problem always we try continue disconnecting chat rooms
 					removeChatRoom(chatRoom);
 					logoutChat(); // Recursive call
@@ -545,10 +593,13 @@ public class UserInfo extends Composite {
 		} else {
 			// Disconnect chat
 			disconnectChat(); // Only used to change view and disabling some RPC
+			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+			endPoint.setServiceEntryPoint(RPCService.ChatService);
 			chatService.logout(new AsyncCallback<Object>() {
 				@Override
 				public void onSuccess(Object result) {
 				}
+				
 				@Override
 				public void onFailure(Throwable caught) {
 					Main.get().showError("GetLogoutChat", caught);
@@ -577,22 +628,41 @@ public class UserInfo extends Composite {
 	
 	/**
 	 * loginChat
+	 * 
+	 * @param autologin
 	 */
-	public void loginChat() {
-		chatService.login(new AsyncCallback<Object>() {
+	public void loginChat(final boolean autologin) {
+		chatService.getLoggedUsers(new AsyncCallback<List<String>>() {
 			@Override
-			public void onSuccess(Object result) {
-				chatConnected = true;
-				imgChat.setResource(OKMBundleResources.INSTANCE.chatConnected());
-				imgChat.setTitle(Main.i18n("user.info.chat.disconnect"));
-				usersConnected.setVisible(true);
-				imgNewChatRoom.setVisible(true);
-				refreshConnectedUsers();
-				getPendingChatRoomUser();
+			public void onSuccess(List<String> result) {
+				if (result.contains(Main.get().workspaceUserProperties.getUser())) {
+					if (!autologin) {
+						Main.get().showError("GetLoginChat", new Throwable(Main.i18n("user.info.chat.user.yet.logged")));
+					}
+				} else {
+					chatService.login(new AsyncCallback<Object>() {
+						@Override
+						public void onSuccess(Object result) {
+							chatConnected = true;
+							imgChat.setResource(OKMBundleResources.INSTANCE.chatConnected());
+							imgChat.setTitle(Main.i18n("user.info.chat.disconnect"));
+							usersConnected.setVisible(true);
+							imgNewChatRoom.setVisible(true);
+							refreshConnectedUsers();
+							getPendingChatRoomUser();
+						}
+						
+						@Override
+						public void onFailure(Throwable caught) {
+							Main.get().showError("GetLoginChat", caught);
+						}
+					});
+				}
 			}
+			
 			@Override
 			public void onFailure(Throwable caught) {
-				Main.get().showError("GetLoginChat", caught);
+				Main.get().showError("getLoggedUsers", caught);
 			}
 		});
 	}
@@ -604,6 +674,36 @@ public class UserInfo extends Composite {
 	 */
 	public boolean isQuotaExceed() {
 		return quotaExceeded;
+	}
+	
+	/**
+	 * showDashboardUser
+	 */
+	public void showDashboardUserIcons() {
+		imgLockedDocuments.setVisible(true);
+		imgCheckoutDocuments.setVisible(true);
+		imgSubscriptions.setVisible(true);
+		lockedDocuments.setVisible(true);
+		checkoutDocuments.setVisible(true);
+		subscriptions.setVisible(true);
+	}
+	
+	/**
+	 * showNews
+	 */
+	public void showDashboardNewsIcons() {
+		imgNewsDocuments.setVisible(true);
+		newDocuments.setVisible(true);
+	}
+	
+	/**
+	 * showWorkflow
+	 */
+	public void showDashboardWorkflowIcons() {
+		imgWorkflowTasks.setVisible(true);
+		imgWorkflowPooledTasks.setVisible(true);
+		newWorkflowTasks.setVisible(true);
+		newWorkflowPooledTasks.setVisible(true);
 	}
 	
 	/**

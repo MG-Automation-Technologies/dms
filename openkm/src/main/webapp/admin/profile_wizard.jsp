@@ -1,5 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <fieldset>
   <legend>Wizard</legend>
   <table>
@@ -9,7 +9,7 @@
         <select multiple="multiple" name="prf_wizard_property_groups" size="4">
           <c:forEach var="pg" items="${pgroups}">
             <c:choose>
-              <c:when test="${fn:contains(prf.wizard.propertyGroups, pg.name)}">
+              <c:when test="${u:contains(prf.wizard.propertyGroups, pg.name)}">
                 <option value="${pg.name}" selected="selected">${pg.label}</option>
               </c:when>
               <c:otherwise>
@@ -26,11 +26,11 @@
         <select multiple="multiple" name="prf_wizard_workflows" size="4">
           <c:forEach var="wf" items="${wflows}">
             <c:choose>
-              <c:when test="${fn:contains(prf.wizard.workflows, wf.id)}">
-                <option value="${wf.id}" selected="selected">${wf.name}</option>
+              <c:when test="${u:contains(prf.wizard.workflows, wf.name)}">
+                <option value="${wf.name}" selected="selected">${wf.name}</option>
               </c:when>
               <c:otherwise>
-                <option value="${wf.id}">${wf.name}</option>
+                <option value="${wf.name}">${wf.name}</option>
               </c:otherwise>
             </c:choose>
           </c:forEach>

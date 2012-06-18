@@ -24,7 +24,9 @@ package com.openkm.bean.form;
 public class Button extends FormElement {
 	private static final long serialVersionUID = 1L;
 	private String transition = "";
-
+	private String confirmation = "";
+	private boolean validate = true;
+	
 	public String getTransition() {
 		return transition;
 	}
@@ -33,12 +35,30 @@ public class Button extends FormElement {
 		this.transition = transition;
 	}
 	
+	public String getConfirmation() {
+		return confirmation;
+	}
+
+	public void setConfirmation(String confirmation) {
+		this.confirmation = confirmation;
+	}
+	
+	public boolean isValidate() {
+		return validate;
+	}
+
+	public void setValidate(boolean validate) {
+		this.validate = validate;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("label="); sb.append(label);
 		sb.append(", name="); sb.append(name);
+		sb.append(", validate="); sb.append(validate);
 		sb.append(", transition="); sb.append(transition);
+		sb.append(", confirmation="); sb.append(confirmation);
 		sb.append(", width="); sb.append(width);
 		sb.append(", height="); sb.append(height);
 		sb.append("}");

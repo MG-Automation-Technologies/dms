@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import com.openkm.frontend.client.OKMException;
 
 /**
  * @author jllort
@@ -32,8 +33,8 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  */
 @RemoteServiceRelativePath("Chat")
 public interface OKMChatService extends RemoteService {
-	public void login();
-	public void logout();
+	public void login() throws OKMException;
+	public void logout() throws OKMException;
 	public List<String> getLoggedUsers();
 	public String createNewChatRoom(String user);
 	public List<String> getPendingChatRoomUser();

@@ -21,8 +21,12 @@
 
 package com.openkm.dao;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -30,8 +34,10 @@ import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.bean.Report;
+import com.openkm.util.SecureStore;
 
 public class ReportDAO {
 	private static Logger log = LoggerFactory.getLogger(ReportDAO.class);
@@ -62,11 +68,49 @@ public class ReportDAO {
 	}
 	
 	/**
+	 * Create report from file
+	 */
+	public static int createFromFile(File repFile, String name, boolean active) throws DatabaseException, IOException {
+		log.debug("createFromFile({}, {}, {})", new Object[] { repFile, name, active });
+		Session session = null;
+		Transaction tx = null;
+		FileInputStream fis = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			fis = new FileInputStream(repFile);
+			
+			// Fill bean
+			Report rp = new Report();
+			rp.setName(name);
+			rp.setFileName(repFile.getName());
+			rp.setFileMime(Config.mimeTypes.getContentType(repFile.getName()));
+			rp.setFileContent(SecureStore.b64Encode(IOUtils.toByteArray(fis)));
+			rp.setActive(active);
+			
+			Integer id = (Integer) session.save(rp);
+			HibernateUtil.commit(tx);
+			log.debug("createFromFile: {}", id);
+			return id.intValue();
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} catch (IOException e) {
+			HibernateUtil.rollback(tx);
+			throw e;
+		} finally {
+			IOUtils.closeQuietly(fis);
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
 	 * Update
 	 */
 	public static void update(Report rp) throws DatabaseException {
 		log.debug("update({})", rp);
-		String qs = "select rp.fileContent, rp.fileName, rp.fileMime from Report rp where rp.id=:id";
+		String qs = "select rp.fileContent, rp.fileName from Report rp where rp.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -80,7 +124,6 @@ public class ReportDAO {
 				Object[] data = (Object[]) q.setMaxResults(1).uniqueResult();
 				rp.setFileContent((String) data[0]);
 				rp.setFileName((String) data[1]);
-				rp.setFileMime((String) data[2]);
 			}
 			
 			session.update(rp);

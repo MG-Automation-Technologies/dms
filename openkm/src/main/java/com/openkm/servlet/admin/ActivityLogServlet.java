@@ -73,6 +73,10 @@ public class ActivityLogServlet extends BaseServlet {
 			"MOVE_MAIL", "COPY_MAIL", "GET_CHILD_MAILS",
 			
 			//---------------------------------
+			"Repository",
+			"PURGE_TRASH",
+			
+			//---------------------------------
 			"Admin",
 			"ADMIN_ACTIVITY_LOG", "ADMIN_ACTIVE_SESSIONS",
 			"ADMIN_USER_CREATE", "ADMIN_USER_EDIT", "ADMIN_USER_DELETE", "ADMIN_USER_ACTIVE",
@@ -135,6 +139,7 @@ public class ActivityLogServlet extends BaseServlet {
 				filter.setBegin(begin);
 				Calendar end = Calendar.getInstance();
 				end.setTime(sdf.parse(dend));
+				end.add(Calendar.DAY_OF_MONTH, 1);
 				filter.setEnd(end);
 				filter.setUser(user);
 				filter.setAction(action);

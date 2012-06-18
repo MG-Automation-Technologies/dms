@@ -39,8 +39,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.hibernate.Hibernate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -55,8 +53,6 @@ import com.openkm.bean.workflow.Token;
 import com.openkm.bean.workflow.Transition;
 
 public class WorkflowUtils {
-	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(WorkflowUtils.class);
 	
 	/**
 	 * Copy process definition
@@ -105,7 +101,7 @@ public class WorkflowUtils {
 		vo.setKey(pi.getKey());
 		vo.setEnded(pi.hasEnded());
 		vo.setSuspended(pi.isSuspended());
-		
+
 		// TODO https://jira.jboss.org/jira/browse/JBPM-1778
 		if (pi.getContextInstance().getVariables() != null) {
 			vo.setVariables(pi.getContextInstance().getVariables());
@@ -236,7 +232,10 @@ public class WorkflowUtils {
 			
 			vo.setComments(alC);
 			vo.setParent(copy(t.getParent()));
-			vo.setNode(t.getNode().getName());
+			
+			if (t.getNode() != null) {
+				vo.setNode(t.getNode().getName());
+			}
 			
 			if (t.getStart() != null) {
 				Calendar start = Calendar.getInstance();

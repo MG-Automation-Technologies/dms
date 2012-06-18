@@ -59,7 +59,6 @@ public class ProposedQueryServlet extends OKMRemoteServiceServlet implements OKM
 	public void create(int qpId, String users, String roles, String comment) throws OKMException {
 		Object obj[] = {(Object)qpId, (Object)users, (Object)roles, (Object)comment};
 		log.debug("create({}, {}, {}, {})", obj);
-		updateSessionManager();
 		
 		try {
 			String remoteUser = getThreadLocalRequest().getRemoteUser();

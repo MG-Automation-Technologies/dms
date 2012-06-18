@@ -17,9 +17,9 @@
   <c:choose>
     <c:when test="${isAdmin}">
       <h1>OpenKM Administration</h1>
-      <table width="215px" class="form" style="margin-top: 25px">
+      <table width="234px" class="form" style="margin-top: 25px">
         <tr><td><b>OpenKM - Knowledge Management</b></td></tr>
-        <tr><td>Version: <%=WarUtils.getAppVersion() %></td></tr>
+        <tr><td nowrap="nowrap">Version: <%=WarUtils.getAppVersion() %></td></tr>
         <tr><td>&nbsp;</td></tr>
         <tr><td>&copy; 2006-2011  OpenKM</td></tr>
         <tr><td>&nbsp;</td></tr>
@@ -27,7 +27,7 @@
         <tr><td><a href="mailto:support@openkm.com">support@openkm.com</a></td></tr>
         <tr><td>&nbsp;</td></tr>
         <tr><td><b>Installation ID</b></td></tr>
-        <tr><td><%=OKMRepository.getInstance().getRepositoryUuid(null)%></td></tr>
+        <tr><td nowrap="nowrap"><%=OKMRepository.getInstance().getRepositoryUuid(null)%></td></tr>
       </table>
     </c:when>
     <c:otherwise>

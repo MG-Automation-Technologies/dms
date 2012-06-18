@@ -32,6 +32,9 @@ import java.util.List;
 public class Mail implements Serializable {
 	private static final long serialVersionUID = -2127459738076624036L;
 	
+	public static final String MIME_TEXT = "text/plain";
+	public static final String MIME_HTML = "text/html";
+	
 	public static final String TYPE = "okm:mail";
 	public static final String SIZE = "okm:size";
 	public static final String FROM = "okm:from";
@@ -59,6 +62,7 @@ public class Mail implements Serializable {
 	private String content;
 	private String mimeType;
 	private long size;
+	private Calendar created;
 	private List<Document> attachments;
 
 	public String getPath() {
@@ -173,6 +177,14 @@ public class Mail implements Serializable {
 		this.size = size;
 	}
 	
+	public Calendar getCreated() {
+		return created;
+	}
+
+	public void setCreated(Calendar created) {
+		this.created = created;
+	}
+	
 	public List<Document> getAttachments() {
 		return attachments;
 	}
@@ -195,6 +207,7 @@ public class Mail implements Serializable {
 		sb.append(", receivedDate="); sb.append(receivedDate==null?null:receivedDate.getTime());
 		sb.append(", subject="); sb.append(subject);
 		//sb.append(", content="); sb.append(content);
+		sb.append(", created="); sb.append(created==null?null:created.getTime());
 		sb.append(", mimeType="); sb.append(mimeType);
 		sb.append(", attachments="); sb.append(attachments);
 		sb.append("}");

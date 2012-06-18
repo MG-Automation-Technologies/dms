@@ -22,7 +22,9 @@
 package com.openkm.frontend.client.bean;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -35,6 +37,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class GWTWorkspace implements IsSerializable {
 	private String token = "";
 	private String user = "";
+	private Map<String, String> userNames = new HashMap<String, String>();
 	private List<String> roleList = new ArrayList<String>();
 	private String applicationURL = "";
 	private String imapHost = "";
@@ -47,6 +50,7 @@ public class GWTWorkspace implements IsSerializable {
 	private String email = "";
 	private String webSkin = "";
 	private boolean adminRole = false;
+	private boolean adminUser = false;
 	private String previewer = "";
 	private List<GWTReport> reports = new ArrayList<GWTReport>();
 
@@ -65,10 +69,12 @@ public class GWTWorkspace implements IsSerializable {
 	private long userQuotaLimit;
 	private boolean printPreview;
 	private boolean keywordEnabled;
+	private boolean uploadNotifyUsers;
 	private boolean userQuotaEnabled;
 	private boolean webdavFix;
-	private List<GWTPropertyGroup> wizardPropertyGroupsList = new ArrayList<GWTPropertyGroup>();
-	private List<Double> wizardWorkflowsList = new ArrayList<Double>();
+	private List<GWTPropertyGroup> wizardPropertyGroupList = new ArrayList<GWTPropertyGroup>();
+	private List<String> wizardWorkflowList = new ArrayList<String>();
+	private List<String> miscWorkflowList = new ArrayList<String>();
 	private boolean wizardPropertyGroups;
 	private boolean wizardWorkflows;
 	private boolean wizardKeywords;
@@ -130,6 +136,14 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setUser(String user) {
 		this.user = user;
+	}
+	
+	public Map<String, String> getUserNames() {
+		return userNames;
+	}
+
+	public void setUserNames(Map<String, String> userNames) {
+		this.userNames = userNames;
 	}
 
 	public String getApplicationURL() {
@@ -305,6 +319,14 @@ public class GWTWorkspace implements IsSerializable {
 	public void setKeywordEnabled(boolean keywordEnabled) {
 		this.keywordEnabled = keywordEnabled;
 	}
+	
+	public boolean isUploadNotifyUsers() {
+		return uploadNotifyUsers;
+	}
+
+	public void setUploadNotifyUsers(boolean uploadNotifyUsers) {
+		this.uploadNotifyUsers = uploadNotifyUsers;
+	}
 
 	public boolean isUserQuotaEnabled() {
 		return userQuotaEnabled;
@@ -330,20 +352,20 @@ public class GWTWorkspace implements IsSerializable {
 		this.wizardPropertyGroups = wizardPropertyGroups;
 	}
 	
-	public List<GWTPropertyGroup> getWizardPropertyGroupsList() {
-		return wizardPropertyGroupsList;
+	public List<GWTPropertyGroup> getWizardPropertyGroupList() {
+		return wizardPropertyGroupList;
 	}
 
-	public void setWizardPropertyGroupsList(List<GWTPropertyGroup> wizardPropertyGroupsList) {
-		this.wizardPropertyGroupsList = wizardPropertyGroupsList;
+	public void setWizardPropertyGroupsList(List<GWTPropertyGroup> wizardPropertyGroupList) {
+		this.wizardPropertyGroupList = wizardPropertyGroupList;
 	}
 	
-	public List<Double> getWizardWorkflowsList() {
-		return wizardWorkflowsList;
+	public List<String> getWizardWorkflowList() {
+		return wizardWorkflowList;
 	}
 
-	public void setWizardWorkflowsList(List<Double> wizardWorkflowsList) {
-		this.wizardWorkflowsList = wizardWorkflowsList;
+	public void setWizardWorkflowList(List<String> wizardWorkflowsList) {
+		this.wizardWorkflowList = wizardWorkflowsList;
 	}
 
 	public boolean isWizardWorkflows() {
@@ -666,6 +688,14 @@ public class GWTWorkspace implements IsSerializable {
 		this.adminRole = adminRole;
 	}
 	
+	public boolean isAdminUser() {
+		return adminUser;
+	}
+
+	public void setAdminUser(boolean adminUser) {
+		this.adminUser = adminUser;
+	}
+	
 	public String getPreviewer() {
 		return previewer;
 	}
@@ -682,6 +712,14 @@ public class GWTWorkspace implements IsSerializable {
 		this.langs = langs;
 	}
 	
+	public List<GWTReport> getReports() {
+		return reports;
+	}
+
+	public void setReports(List<GWTReport> reports) {
+		this.reports = reports;
+	}
+	
 	public GWTProfileToolbar getProfileToolbar() {
 		return profileToolbar;
 	}
@@ -690,11 +728,15 @@ public class GWTWorkspace implements IsSerializable {
 		this.profileToolbar = profileToolbar;
 	}
 
-	public List<GWTReport> getReports() {
-		return reports;
+	public List<String> getMiscWorkflowList() {
+		return miscWorkflowList;
 	}
 
-	public void setReports(List<GWTReport> reports) {
-		this.reports = reports;
+	public void setMiscWorkflowList(List<String> miscWorkflowList) {
+		this.miscWorkflowList = miscWorkflowList;
+	}
+
+	public void setWizardPropertyGroupList(List<GWTPropertyGroup> wizardPropertyGroupList) {
+		this.wizardPropertyGroupList = wizardPropertyGroupList;
 	}
 }

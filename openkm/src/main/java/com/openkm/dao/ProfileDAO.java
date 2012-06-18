@@ -156,4 +156,26 @@ public class ProfileDAO {
 			HibernateUtil.close(session);
 		}
 	}
+	
+	/**
+	 * Find by user
+	 */
+	public static Profile findByUser(String user) throws DatabaseException {
+		log.debug("findByUser({})", user);
+		String qs = "select profile from UserConfig uc where uc.user=:user";
+		Session session = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setString("user", user);
+			Profile ret = (Profile) q.setMaxResults(1).uniqueResult();
+			log.debug("findByUser: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
 }

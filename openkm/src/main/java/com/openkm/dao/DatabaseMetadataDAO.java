@@ -95,7 +95,7 @@ public class DatabaseMetadataDAO {
 	/**
 	 * Delete
 	 */
-	public static void deleteValue(int dmvId) throws DatabaseException {
+	public static void deleteValue(long dmvId) throws DatabaseException {
 		log.debug("deleteValue({})", dmvId);
 		Session session = null;
 		Transaction tx = null;

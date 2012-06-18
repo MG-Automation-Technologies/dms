@@ -137,13 +137,13 @@ public class Util {
 	}
 	
 	/**
-	 * Creates an HTML fragment that places an image & caption together, for use
-	 * in a group header.
-	 * 
-	 * @param imageUrl the url of the icon image to be used
-	 * @param caption the group caption
-	 * @return the header HTML fragment
-	 */
+	   * Creates an HTML fragment that places an image & caption together, for use
+	   * in a group header.
+	   * 
+	   * @param imageUrl the url of the icon image to be used
+	   * @param caption the group caption
+	   * @return the header HTML fragment
+	   */
 	public static String createHeaderHTML(String imageUrl, String caption) {
 		return "<table align='left'><tr>" + "<td><img src='" + imageUrl + "'></td>"
 	      + "<td style='vertical-align:middle'><b style='white-space:nowrap; cursor: default;'>"
@@ -215,6 +215,22 @@ public class Util {
 	}
 	
 	/**
+	 * Download file by UUID
+	 * 
+	 * @param uuid
+	 * @param params
+	 */
+	public static void downloadFileByUUID(String uuid, String params) {
+		if (!params.equals("") && !params.endsWith("&")) {
+			params += "&";
+		}
+		
+		final Element downloadIframe = RootPanel.get("__download").getElement(); 
+		String url = RPCService.DownloadServlet + "?" + params + "uuid=" + URL.encodeQueryString(uuid);
+		DOM.setElementAttribute(downloadIframe, "src", url); 
+	}
+	
+	/**
 	 * Download file
 	 * 
 	 * @param path
@@ -266,10 +282,7 @@ public class Util {
 	 * @param uuid
 	 */
 	public static void print(String uuid) {
-		final Element printIframe = RootPanel.get("__print").getElement();
-		String url = RPCService.ConverterServlet + "?inline=true&toPdf=true&uuid=" + URL.encodeQueryString(uuid);
-		DOM.setElementAttribute(printIframe, "src", url); 
-		printFile();
+		// Not implemented
 	}
 	
 	/**
@@ -306,6 +319,20 @@ public class Util {
 	 */
 	public static String getName(String path) {
 		String ret = path.substring(path.lastIndexOf('/')+1);
+		return ret;
+	}
+	
+	/**
+	 * Encode path elements
+	 */
+	public static String encodePathElements(String path) {
+		String[] eltos = path.split("\\/");
+		String ret = "";
+		
+		for (int i=1; i<eltos.length; i++) {
+			ret = ret.concat("/").concat(URL.encodeQueryString(URL.encodeQueryString(eltos[i])));
+		}
+		
 		return ret;
 	}
 	
@@ -361,7 +388,7 @@ public class Util {
 	}-*/;
 	
 	/**
-	 *  returns 'opera', 'safari', 'ie6', 'ie7', 'gecko' or 'unknown'.
+	 *  returns 'opera', 'safari', 'ie6', 'ie7', 'ie8', 'ie9', 'gecko' or 'unknown'.
 	 */
     public static native String getUserAgent() /*-{
         try {
@@ -372,6 +399,7 @@ public class Util {
             if ( ua.indexOf('msie 6.0') != -1 ) return 'ie6';
             if ( ua.indexOf('msie 7.0') != -1 ) return 'ie7';
             if ( ua.indexOf('msie 8.0') != -1 ) return 'ie8';
+            if ( ua.indexOf('msie 9.0') != -1 ) return 'ie9';
             if ( ua.indexOf('gecko') != -1 ) return 'gecko';
             if ( ua.indexOf('opera') != -1 ) return 'opera';
             return 'unknown';
@@ -449,5 +477,9 @@ public class Util {
     
     public static native void createFolderWebDavClipboardButton(String textToCopy) /*-{
 		$wnd.swfobject.embedSWF("../clippy.swf", "folderwebdavclipboardcontainer", 14, 14, "9.0.0", "../clippy.swf", {text:textToCopy}, {quality:"high",scale:"noscale",bgcolor:"#FFFFFF"}, {id:"clippy",name:"clippy"});
+	}-*/;
+    
+    public static native String escape(String text) /*-{
+		return escape(text);
 	}-*/;
 }

@@ -39,7 +39,8 @@ import com.openkm.util.SecureStore;
 
 public class Cron extends TimerTask {
 	private static Logger log = LoggerFactory.getLogger(Cron.class);
-
+	public static final String CRON_TASK = "cronTask";
+	
 	public void run() {
 		log.debug("*** Cron activated ***");
 		Calendar cal = Calendar.getInstance();
@@ -55,11 +56,11 @@ public class Cron extends TimerTask {
 									ct.getFileMime()});
 							
 							if (CronTab.BSH.equals(ct.getFileMime())) {
-								RunnerBsh runner = new RunnerBsh(ct.getId(), ct.getMail(),  
+								RunnerBsh runner = new RunnerBsh(ct.getId(),ct.getName(), ct.getMail(),  
 										new String(SecureStore.b64Decode(ct.getFileContent())));
 								new Thread(runner).start();
 							} else if (CronTab.JAR.equals(ct.getFileMime())) {
-								RunnerJar runner = new RunnerJar(ct.getId(), ct.getMail(), 
+								RunnerJar runner = new RunnerJar(ct.getId(), ct.getName(), ct.getMail(), 
 										SecureStore.b64Decode(ct.getFileContent()));
 								new Thread(runner).start();
 							}
@@ -79,11 +80,13 @@ public class Cron extends TimerTask {
 	 */
 	public static class RunnerBsh implements Runnable {
 		private String script;
+		private String name;
 		private String mail;
 		private int ctId;
 		
-		public RunnerBsh(int ctId, String mail, String script) {
+		public RunnerBsh(int ctId, String name, String mail, String script) {
 			this.script = script;
+			this.name = name;
 			this.mail = mail;
 			this.ctId = ctId;
 		}
@@ -100,12 +103,17 @@ public class Cron extends TimerTask {
 					Object[] ret = ExecutionUtils.runScript(script);
 					
 					try {
-						String msg = "Return: "+ret[0]+"\n\nStdOut: "+ret[1]+"\n\nStdErr: "+ret[2];
+						StringBuilder msg = new StringBuilder();
+						msg.append("Return: ").append(ret[0]);
+						msg.append("\n<hr/>\n");
+						msg.append("StdOut: ").append(ret[1]);
+						msg.append("\n<hr/>\n");
+						msg.append("StdErr: ").append(ret[2]);
 						
-						if (mail.equals("")) {
-							log.info(msg);
+						if (!mail.equals("")) {
+							MailUtils.sendMessage(mail, "Cron task '" + name + "' executed - Ok", msg.toString());
 						} else {
-							MailUtils.sendMessage(mail, "Cron task executed - Ok", msg);
+							log.warn("Crontab task email is empty: {}", msg);
 						}
 					} catch (MessagingException e) {
 						log.warn("Error sending mail: {}", e.getMessage());
@@ -117,7 +125,7 @@ public class Cron extends TimerTask {
 						if (mail.equals("")) {
 							log.info(msg);
 						} else {
-							MailUtils.sendMessage(mail, "Cron task executed - Error", msg);
+							MailUtils.sendMessage(mail, "Cron task '" + name + "' executed - Error", msg);
 						}
 					} catch (MessagingException e1) {
 						log.warn("Error sending mail: {}", e.getMessage());
@@ -138,11 +146,13 @@ public class Cron extends TimerTask {
 	 */
 	public static class RunnerJar implements Runnable {
 		private byte[] content;
+		private String name;
 		private String mail;
 		private int ctId;
 		
-		public RunnerJar(int ctId, String mail, byte[] content) {
+		public RunnerJar(int ctId, String name, String mail, byte[] content) {
 			this.content = content;
+			this.name = name;
 			this.mail = mail;
 			this.ctId = ctId;
 		}
@@ -156,15 +166,15 @@ public class Cron extends TimerTask {
 				}
 				
 				try {
-					Object ret = ExecutionUtils.runJar(content);
+					Object ret = ExecutionUtils.getInstance().runJar(content, CRON_TASK);
 					
 					try {
 						String msg = (ret == null ? "" : ret.toString());
 						
-						if (mail.equals("")) {
-							log.info(msg);
+						if (!mail.equals("")) {
+							MailUtils.sendMessage(mail, "Cron task '" + name + "' executed - Ok", msg);
 						} else {
-							MailUtils.sendMessage(mail, "Cron task executed - Ok", msg);
+							log.warn("Crontab task email is empty: {}", msg);
 						}
 					} catch (MessagingException e) {
 						log.warn("Error sending mail: {}", e.getMessage());
@@ -176,7 +186,7 @@ public class Cron extends TimerTask {
 						if (mail.equals("")) {
 							log.info(msg);
 						} else {
-							MailUtils.sendMessage(mail, "Cron task executed - Error", msg);
+							MailUtils.sendMessage(mail, "Cron task '" + name + "' executed - Error", msg);
 						}
 					} catch (MessagingException e1) {
 						log.warn("Error sending mail: {}", e.getMessage());

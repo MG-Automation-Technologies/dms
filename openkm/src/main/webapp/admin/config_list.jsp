@@ -23,7 +23,10 @@
   <c:set var="isAdmin"><%=BaseServlet.isMultipleInstancesAdmin(request)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
-      <h1>Configuration</h1>
+      <c:url value="Config" var="urlCheck">
+        <c:param name="action" value="check"/>
+      </c:url>
+      <h1>Configuration <span style="font-size: 10px;">(<a href="${urlCheck}">Check</a>)</span></h1>
       <table class="results" width="70%">
         <thead>
           <tr>
@@ -63,9 +66,6 @@
                       </c:otherwise>
                     </c:choose>
                   </c:when>
-                  <c:when test="${cfg.key == 'notification.message.body' || cfg.key == 'subscription.message.body'}">
-                    <u:escapeHtml string="${cfg.value}"/> 
-                  </c:when>
                   <c:when test="${cfg.type == 'File'}">
                     <c:url value="Config" var="urlView">
                       <c:param name="action" value="view"/>
@@ -73,7 +73,9 @@
                     </c:url>
                     <img src="${urlView}"/>
                   </c:when>
-                  <c:otherwise>${cfg.value}</c:otherwise>
+                  <c:otherwise>
+                    <u:escapeHtml string="${cfg.value}"/>
+                  </c:otherwise>
                 </c:choose>
               </td>
               <td>

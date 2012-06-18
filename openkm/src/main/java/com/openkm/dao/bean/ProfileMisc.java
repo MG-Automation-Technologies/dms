@@ -32,8 +32,10 @@ public class ProfileMisc implements Serializable {
 	private String webSkin;
 	private boolean printPreview;
 	private boolean keywordsEnabled;
+	private boolean uploadNotifyUsers;
 	private Set<String> extensions = new HashSet<String>();
 	private Set<Integer> reports = new HashSet<Integer>();
+	private Set<String> workflows = new HashSet<String>();
 
 	public boolean isAdvancedFilters() {
 		return advancedFilters;
@@ -75,6 +77,14 @@ public class ProfileMisc implements Serializable {
 		this.keywordsEnabled = keywordsEnabled;
 	}
 	
+	public boolean isUploadNotifyUsers() {
+		return uploadNotifyUsers;
+	}
+
+	public void setUploadNotifyUsers(boolean uploadNotifyUsers) {
+		this.uploadNotifyUsers = uploadNotifyUsers;
+	}
+	
 	public Set<String> getExtensions() {
 		return extensions;
 	}
@@ -91,6 +101,14 @@ public class ProfileMisc implements Serializable {
 		this.reports = reports;
 	}
 	
+	public Set<String> getWorkflows() {
+		return workflows;
+	}
+
+	public void setWorkflows(Set<String> workflows) {
+		this.workflows = workflows;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -99,8 +117,10 @@ public class ProfileMisc implements Serializable {
 		sb.append(", webSkin="); sb.append(webSkin);
 		sb.append(", printPreview="); sb.append(printPreview);
 		sb.append(", keywordsEnabled="); sb.append(keywordsEnabled);
+		sb.append(", uploadNotifyUsers="); sb.append(uploadNotifyUsers);
 		sb.append(", extensions="); sb.append(extensions);
 		sb.append(", reports="); sb.append(reports);
+		sb.append(", workflows="); sb.append(workflows);
 		sb.append("}");
 		return sb.toString();
 	}

@@ -41,6 +41,7 @@ import com.openkm.cache.UserDocumentKeywordsManager;
 import com.openkm.cache.UserItemsManager;
 import com.openkm.core.Config;
 import com.openkm.core.Cron;
+import com.openkm.core.DataStoreGarbageCollector;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryInfo;
 import com.openkm.core.UpdateInfo;
@@ -48,7 +49,6 @@ import com.openkm.core.UserMailImporter;
 import com.openkm.core.Watchdog;
 import com.openkm.dao.HibernateUtil;
 import com.openkm.extension.core.ExtensionManager;
-import com.openkm.jcr.DataStoreGarbageCollector;
 import com.openkm.kea.RDFREpository;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.DocConverter;
@@ -84,7 +84,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         ServletContext sc = getServletContext();
         
         // Read config file
-        Config.load(sc);
+        Config.load(sc.getContextPath().substring(1));
         
         // Call only once during initialization time of your application
         // @see http://issues.openkm.com/view.php?id=1577
@@ -92,7 +92,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         // Get OpenKM version
         WarUtils.readAppVersion(sc);
-        log.info("*** Application version: {} ***", WarUtils.getAppVersion());
+        log.info("*** Application version: "+WarUtils.getAppVersion()+" ***");
         
         // Initialize DXF cache folder
         File dxfCacheFolder = new File(Config.CACHE_DXF);
@@ -105,12 +105,6 @@ public class RepositoryStartupServlet extends HttpServlet {
         // Initialize SWF cache folder
         File previewCacheFolder = new File(Config.CACHE_SWF);
         if (!previewCacheFolder.exists()) previewCacheFolder.mkdirs();
-        
-        // Initialize chroot folder
-        if (Config.SYSTEM_MULTIPLE_INSTANCES) {
-        	File chrootFolder = new File(Config.INSTANCE_CHROOT_PATH);
-        	if (!chrootFolder.exists()) chrootFolder.mkdirs();
-        }
         
         // Invoke start
         start();
@@ -259,7 +253,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         	File script = new File(Config.HOME_DIR + File.separatorChar + Config.START_SCRIPT);
         	ExecutionUtils.runScript(script);
         	File jar = new File(Config.HOME_DIR + File.separatorChar + Config.START_JAR);
-        	ExecutionUtils.runJar(jar);
+        	ExecutionUtils.getInstance().runJar(jar);
         } catch (Throwable e) {
         	log.warn(e.getMessage(), e);
         }
@@ -363,7 +357,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         	File script = new File(Config.HOME_DIR + File.separatorChar + Config.STOP_SCRIPT);
         	ExecutionUtils.runScript(script);
         	File jar = new File(Config.HOME_DIR + File.separatorChar + Config.STOP_JAR);
-        	ExecutionUtils.runJar(jar);
+        	ExecutionUtils.getInstance().runJar(jar);
         } catch (Throwable e) {
         	log.warn(e.getMessage(), e);
         }

@@ -34,9 +34,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.hyperic.sigar.Mem;
-import org.hyperic.sigar.Sigar;
-import org.hyperic.sigar.SigarException;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -64,9 +61,8 @@ public class StatsGraphServlet extends BaseServlet {
 	private static final String DOCUMENTS = "0";
 	private static final String DOCUMENTS_SIZE = "1";
 	private static final String FOLDERS = "2";
-	private static final String JVM_MEMORY = "3";
+	private static final String MEMORY = "3";
 	private static final String DISK = "4";
-	private static final String OS_MEMORY = "5";
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
@@ -82,10 +78,8 @@ public class StatsGraphServlet extends BaseServlet {
 				chart = repoStats(type);
 			} else if (DISK.equals(type)) {
 				chart = diskStats();
-			} else if (JVM_MEMORY.equals(type)) {
-				chart = jvmMemStats();
-			} else if (OS_MEMORY.equals(type)) {
-				chart = osMemStats();
+			} else if (MEMORY.equals(type)) {
+				chart = memStats();
 			}
 
 			if (chart != null) {
@@ -110,7 +104,7 @@ public class StatsGraphServlet extends BaseServlet {
 				chart.removeLegend();
 				chart.addLegend(legend);
 
-				if (DISK.equals(type) || JVM_MEMORY.equals(type) || OS_MEMORY.equals(type)) {
+				if (DISK.equals(type) || MEMORY.equals(type)) {
 					ChartUtilities.writeChartAsPNG(out, chart, 225, 225);
 				} else {
 					ChartUtilities.writeChartAsPNG(out, chart, 250, 250);
@@ -128,6 +122,7 @@ public class StatsGraphServlet extends BaseServlet {
 	 * Generate disk statistics
 	 */
 	public JFreeChart diskStats() throws IOException, ServletException {
+		String title = "Disk usage";
 		String repHome = null;
 		
 		// Allow absolute repository path
@@ -141,7 +136,6 @@ public class StatsGraphServlet extends BaseServlet {
 		long total = df.getTotalSpace();
 		long usable = df.getUsableSpace();
 		long used = total - usable;
-		String title = "Disk: " + FormatUtil.formatSize(total);
 		
 		log.debug("Total space: {}", FormatUtil.formatSize(total));
 		log.debug("Usable space: {}", FormatUtil.formatSize(usable));
@@ -158,60 +152,25 @@ public class StatsGraphServlet extends BaseServlet {
 	 * Generate memory statistics
 	 * http://blog.codebeach.com/2008/02/determine-available-memory-in-java.html
 	 */
-	public JFreeChart jvmMemStats() throws IOException, ServletException {
+	public JFreeChart memStats() throws IOException, ServletException {
+		String title = "Memory usage";
 		Runtime runtime = Runtime.getRuntime();
 		long max = runtime.maxMemory(); // maximum amount of memory that the JVM will attempt to use
 		long available = runtime.totalMemory(); // total amount of memory in the JVM
 		long free = runtime.freeMemory(); // amount of free memory in the JVM
 		long used = max - available;
 		long total = free + used;
-		String title = "JVM memory: " + FormatUtil.formatSize(total);
 		
-		log.debug("JVM maximun memory: {}", FormatUtil.formatSize(max));
-		log.debug("JVM available memory: {}", FormatUtil.formatSize(available));
-		log.debug("JVM free memory: {}", FormatUtil.formatSize(free));
-		log.debug("JVM used memory: {}", FormatUtil.formatSize(used));
-		log.debug("JVM total memory: {}", FormatUtil.formatSize(total));
+		log.debug("Maximun memory: {}", FormatUtil.formatSize(max));
+		log.debug("Available memory: {}", FormatUtil.formatSize(available));
+		log.debug("Free memory: {}", FormatUtil.formatSize(free));
+		log.debug("Used memory: {}", FormatUtil.formatSize(used));
+		log.debug("Total memory: {}", FormatUtil.formatSize(total));
 		
 		DefaultPieDataset dataset = new DefaultPieDataset();
 		dataset.setValue("Available (" + FormatUtil.formatSize(free) + ")", free * 100 / total);
 		dataset.setValue("Used (" + FormatUtil.formatSize(used) + ")", used * 100 / total);
 
-		return ChartFactory.createPieChart(title, dataset, true, false, false);
-	}
-	
-	/**
-	 * Generate memory statistics
-	 * http://casidiablo.net/capturar-informacion-sistema-operativo-java/
-	 */
-	public JFreeChart osMemStats() throws IOException, ServletException {
-		DefaultPieDataset dataset = new DefaultPieDataset();
-		Sigar sigar = new Sigar();
-		String title = null;
-		
-		try {
-			Mem mem = sigar.getMem();
-			long max = mem.getRam();
-			long available = mem.getFree();
-			long total = mem.getTotal();
-			long used = mem.getUsed();
-			long free = mem.getFree();
-			title = "OS memory: " + FormatUtil.formatSize(total);
-			
-			log.debug("OS maximun memory: {}", FormatUtil.formatSize(max));
-			log.debug("OS available memory: {}", FormatUtil.formatSize(available));
-			log.debug("OS free memory: {}", FormatUtil.formatSize(free));
-			log.debug("OS used memory: {}", FormatUtil.formatSize(used));
-			log.debug("OS total memory: {}", FormatUtil.formatSize(total));
-			
-			dataset.setValue("Available (" + FormatUtil.formatSize(free) + ")", free * 100 / total);
-			dataset.setValue("Used (" + FormatUtil.formatSize(used) + ")", used * 100 / total);
-		} catch (SigarException se) {
-			title = "OS memory: " + se.getMessage();
-		} catch (UnsatisfiedLinkError ule) {
-			title = "OS memory: (missing native libraries)";
-		}
-		
 		return ChartFactory.createPieChart(title, dataset, true, false, false);
 	}
 
@@ -220,7 +179,7 @@ public class StatsGraphServlet extends BaseServlet {
 	 */
 	public JFreeChart repoStats(String type) throws IOException, ServletException {
 		String title = null;
-		String[] sizes = null;
+		long[] sizes = null;
 		double[] percents = null;
 		DefaultPieDataset dataset = new DefaultPieDataset();
 		
@@ -232,12 +191,7 @@ public class StatsGraphServlet extends BaseServlet {
 		} else if (DOCUMENTS_SIZE.equals(type)) {
 			StatsInfo si = RepositoryInfo.getDocumentsSizeByContext();
 			percents = si.getPercents();
-			sizes = si.getSizes().clone();
-
-			for (int i = 0; i < sizes.length; i++) {
-				sizes[i] = FormatUtil.formatSize(Long.parseLong(sizes[i]));
-			}
-
+			sizes = si.getSizes();
 			title = "Documents size by context";
 		} else if (FOLDERS.equals(type)) {
 			StatsInfo si = RepositoryInfo.getFoldersByContext();
@@ -247,10 +201,10 @@ public class StatsGraphServlet extends BaseServlet {
 		}
 		
 		if (title != null && sizes.length > 0 && percents.length > 0) {
-			dataset.setValue("Taxonomy (" + sizes[0] + ")", percents[0]);
-			dataset.setValue("Personal (" + sizes[1] + ")", percents[1]);
-			dataset.setValue("Template (" + sizes[2] + ")", percents[2]);
-			dataset.setValue("Trash (" + sizes[3] + ")", percents[3]);
+			dataset.setValue("Taxonomy (" + FormatUtil.formatSize(sizes[0]) + ")", percents[0]);
+			dataset.setValue("Personal (" + FormatUtil.formatSize(sizes[1]) + ")", percents[1]);
+			dataset.setValue("Template (" + FormatUtil.formatSize(sizes[2]) + ")", percents[2]);
+			dataset.setValue("Trash (" + FormatUtil.formatSize(sizes[3]) + ")", percents[3]);
 		}
 		
 		return ChartFactory.createPieChart(title, dataset, true, false, false);

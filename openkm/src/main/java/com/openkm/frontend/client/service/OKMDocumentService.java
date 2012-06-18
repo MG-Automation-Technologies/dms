@@ -56,6 +56,9 @@ public interface OKMDocumentService extends RemoteService {
 	public void purgeVersionHistory(String docPath) throws OKMException;
 	public void forceUnlock(String docPath) throws OKMException;
 	public void forceCancelCheckout(String docPath) throws OKMException;
-	public String createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties, Map<String, List<Map<String,String>>> tableProperties) throws OKMException;
+	public String createFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties,
+			Map<String, List<Map<String,String>>> tableProperties) throws OKMException;
+	public String updateFromTemplate(String docPath, String destinationPath, List<GWTFormElement> formProperties,
+			Map<String, List<Map<String,String>>> tableProperties) throws OKMException;
 	public String convertToPdf(String docPath) throws OKMException;
 }

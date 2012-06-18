@@ -44,13 +44,11 @@ import com.openkm.frontend.client.widget.form.FormManager;
  *
  */
 public class WorkflowWidget extends Composite {
-	
 	private final OKMWorkflowServiceAsync workflowService = (OKMWorkflowServiceAsync) GWT.create(OKMWorkflowService.class);
-	
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
 	private boolean drawed = false;
-	double id; 
+	private String name; 
 	private String uuid;
 	private FormManager manager;
 	private WorkflowWidgetToFire workflowWidgetToFire;
@@ -59,8 +57,8 @@ public class WorkflowWidget extends Composite {
 	/**
 	 * WorkflowWidget
 	 */
-	public WorkflowWidget(double id, String uuid, WorkflowWidgetToFire workflowWidgetToFire, Map<String, Object> workflowVariables) {
-		this.id = id;
+	public WorkflowWidget(String name, String uuid, WorkflowWidgetToFire workflowWidgetToFire, Map<String, Object> workflowVariables) {
+		this.name = name;
 		this.uuid = uuid;
 		this.workflowWidgetToFire = workflowWidgetToFire;
 		this.workflowVariables = workflowVariables;
@@ -103,17 +101,19 @@ public class WorkflowWidget extends Composite {
 		if (drawed) {
 			if (manager.getValidationProcessor().validate()) {
 				runProcessDefinitionWithValues();
+			} else {
+			    workflowWidgetToFire.hasPendingProcessDefinitionForms();
 			}
 		} else {
-			getProcessDefinitionForms(id);
+			getProcessDefinitionForms(name);
 		}
 	}
 	
 	/**
 	 * runProcessDefinition with values
 	 */
-	private void runProcessDefinitionWithValues() {		
-		workflowService.runProcessDefinition(uuid, id, manager.updateFormElementsValuesWithNewer(), callbackRunProcessDefinition);
+	private void runProcessDefinitionWithValues() {
+		workflowService.runProcessDefinition(uuid, name, manager.updateFormElementsValuesWithNewer(), callbackRunProcessDefinition);
 	}
 	
 	/**
@@ -123,7 +123,8 @@ public class WorkflowWidget extends Composite {
 		public void onSuccess(Map<String, List<GWTFormElement>> result) {
 			// Initial task is always called start
 			manager.setFormElements(result.get(Main.get().workspaceUserProperties.getWorkspace().getWorkflowRunConfigForm()));
-			if (manager.getFormElements()!=null) {
+			
+			if (manager.getFormElements() != null) {
 				manager.loadDataFromWorkflowVariables(workflowVariables);
 				drawForm();
 				workflowWidgetToFire.hasPendingProcessDefinitionForms();				
@@ -140,11 +141,9 @@ public class WorkflowWidget extends Composite {
 	
 	/**
 	 * getProcessDefinitionForms
-	 * 
-	 * @param id
 	 */
-	public void getProcessDefinitionForms(double id) {	
-		workflowService.getProcessDefinitionForms(id, callbackGetProcessDefinitionForms);
+	public void getProcessDefinitionForms(String name) {
+		workflowService.getProcessDefinitionFormsByName(name, callbackGetProcessDefinitionForms);
 	}
 	
 	/**

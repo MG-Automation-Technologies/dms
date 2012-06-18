@@ -28,7 +28,6 @@ import com.openkm.frontend.client.widget.ConfirmPopup;
 import com.openkm.frontend.client.widget.MenuPopup;
 import com.openkm.frontend.client.widget.foldertree.FolderSelectPopup;
 import com.openkm.frontend.client.widget.foldertree.FolderTree;
-import com.openkm.frontend.client.widget.startup.StartUp;
 
 public class TrashTree extends FolderTree {
 	
@@ -49,8 +48,6 @@ public class TrashTree extends FolderTree {
 		actualItem.setUserObject(folderRoot);
 		evaluesFolderIcon(actualItem);			
 		actualItem.setState(true);
-		getOnlyChilds(folderRoot.getPath()); 
-		Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_HISTORY_SEARCH);
 	}
 	
 	/**

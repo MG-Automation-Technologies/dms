@@ -284,8 +284,13 @@ public class DatabaseQueryServlet extends BaseServlet {
 		
 		// For each query line
 		while (st.hasMoreTokens()) {
-			String hql = st.nextToken();
-			globalResults.add(executeHQL(session, hql, null));
+			String tk = st.nextToken().trim();
+			
+			if (tk.toUpperCase().startsWith("--") || tk.equals("") || tk.equals("\r")) {
+				// Is a comment, so ignore it
+			} else {
+				globalResults.add(executeHQL(session, tk, null));
+			}
 		}
 		
 		//sc.setAttribute("sql", HibernateUtil.toSql(qs));
@@ -335,31 +340,35 @@ public class DatabaseQueryServlet extends BaseServlet {
 						Object[] ao = (Object[]) obj;
 						
 						for (int j=0; j<ao.length; j++) {
-							row.add(ao[j].toString());
+							row.add(String.valueOf(ao[j]));
 						}
 					} else {
-						row.add(obj.toString());	
+						row.add(String.valueOf(obj));
 					}
 				} else {
-					for (String column : vcolumns) {
-						if (obj instanceof DatabaseMetadataValue) {
+					if (obj instanceof DatabaseMetadataValue) {
+						for (String column : vcolumns) {
 							row.add(DatabaseMetadataUtils.getString((DatabaseMetadataValue) obj, column));
-						} else if (obj instanceof Object[]) {
-							for (Object objChild : (Object[]) obj) {
-								if (objChild instanceof DatabaseMetadataValue) {
-									DatabaseMetadataValue dmvChild = (DatabaseMetadataValue) objChild;
-									List<DatabaseMetadataType> types = DatabaseMetadataDAO.findAllTypes(dmvChild.getTable());
-									
-									for (DatabaseMetadataType emt : types) {
+						}
+					} else if (obj instanceof Object[]) {
+						for (Object objChild : (Object[]) obj) {
+							if (objChild instanceof DatabaseMetadataValue) {
+								DatabaseMetadataValue dmvChild = (DatabaseMetadataValue) objChild;
+								List<DatabaseMetadataType> types = DatabaseMetadataDAO.findAllTypes(dmvChild.getTable());
+								
+								for (DatabaseMetadataType emt : types) {
+									for (String column : vcolumns) {
 										if (emt.getVirtualColumn().equals(column)) {
 											row.add(BeanUtils.getProperty(dmvChild, emt.getRealColumn()));
 										}
 									}
 								}
+							} else {
+								row.add(String.valueOf(objChild));
 							}
-						} else {
-							row.add("Query result should be instance of DatabaseMetadataValue");
 						}
+					} else {
+						row.add("Query result should be instance of DatabaseMetadataValue");
 					}
 				}
 				
@@ -525,7 +534,10 @@ public class DatabaseQueryServlet extends BaseServlet {
 	 */
 	private List<String> listTables(Session session) {
 		final List<String> tables = new ArrayList<String>();
-		final String[] groups = new String[] { "JBPM_%", "OKM_%", "DEFAULT_%", "VERSION_%" };
+		final String[] tableTypes = { "TABLE" };
+		final String[] tablePatterns = new String[] {
+				"JBPM_%", "OKM_%", "DEFAULT_%", "VERSION_%",
+				"jbpm_%", "okm_%", "default_%", "version_%" };
 		
 		session.doWork(
 			new Work() {
@@ -533,8 +545,8 @@ public class DatabaseQueryServlet extends BaseServlet {
 				public void execute(Connection con) throws SQLException {
 					DatabaseMetaData md = con.getMetaData();
 					
-					for (String group : groups) {
-						ResultSet rs = md.getTables(null, null, group, null);
+					for (String table : tablePatterns) {
+						ResultSet rs = md.getTables(null, null, table, tableTypes);
 						
 						while (rs.next()) {
 							tables.add(rs.getString(3));

@@ -75,8 +75,8 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	 * @param PropertyGroupWidgetToFire widget with methods to be fired
 	 * @param valuesMap map of initial values
 	 */
-	public PropertyGroupWidget(String path, GWTPropertyGroup propertyGroup, Widget widget,
-			PropertyGroupWidgetToFire propertyGroupWidgetToFire, Map<String, GWTFormElement> valuesMap) {
+	public PropertyGroupWidget(String path, GWTPropertyGroup propertyGroup, Widget widget, PropertyGroupWidgetToFire propertyGroupWidgetToFire, 
+			Map<String, GWTFormElement> valuesMap) {
 		this.propertyGroupVariablesMap = valuesMap;
 		start(path, propertyGroup, widget, propertyGroupWidgetToFire);
 	}
@@ -143,24 +143,22 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	 * Gets asyncronous to group properties
 	 */
 	final AsyncCallback<List<GWTFormElement>> callbackGetProperties = new AsyncCallback<List<GWTFormElement>>() {
-		public void onSuccess(List<GWTFormElement> result) {		
+		public void onSuccess(List<GWTFormElement> result){			
 			manager.setFormElements(result);
 			if (!propertyGroupVariablesMap.isEmpty()) {
 				manager.loadDataFromPropertyGroupVariables(propertyGroupVariablesMap);
 			}
 			manager.draw(propertyGroup.isReadonly());
 			
-			if (propertyGroupWidgetToFire != null) {
+			if (propertyGroupWidgetToFire!=null) {
 				propertyGroupWidgetToFire.finishedGetProperties();
 			}
-			
 			fireEvent(HasPropertyGroupEvent.PROPERTYGROUP_GET_PROPERTIES);
 		}
 
 		public void onFailure(Throwable caught) {
 			Main.get().showError("getMetaData", caught);
-			
-			if (propertyGroupWidgetToFire != null) {
+			if (propertyGroupWidgetToFire!=null) {
 				propertyGroupWidgetToFire.finishedGetProperties();
 			}
 		}

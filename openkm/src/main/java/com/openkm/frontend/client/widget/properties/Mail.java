@@ -51,7 +51,6 @@ import com.openkm.frontend.client.widget.properties.attachment.MenuPopup;
  *
  */
 public class Mail extends Composite {
-	
 	private FlexTable table;
 	private FlexTable dataTable;
 	private ExtendedFlexTable attachmentsTable;
@@ -146,6 +145,7 @@ public class Mail extends Composite {
 	 */
 	private void setRowWordWarp(int row, int columns, boolean warp, FlexTable table) {
 		CellFormatter cellFormatter = table.getCellFormatter();
+		
 		for (int i=0; i<columns; i++) {
 			cellFormatter.setWordWrap(row, i, warp);
 		}

@@ -33,8 +33,8 @@ import java.util.Set;
  */
 public class Language implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String id = "";
-	private String name = "";
+	private String id;
+	private String name;
 	private String imageContent;
 	private String imageMime;
 	private Set<Translation> translations = new HashSet<Translation>();

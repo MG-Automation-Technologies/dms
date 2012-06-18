@@ -24,13 +24,9 @@ package com.openkm.frontend.client.widget.personal;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTAvailableOption;
-import com.openkm.frontend.client.bean.GWTDocument;
-import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.bean.GWTMail;
-import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.bean.ToolBarOption;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.MenuBase;
 
@@ -42,14 +38,7 @@ import com.openkm.frontend.client.widget.MenuBase;
  */
 public class PersonalMenu extends MenuBase {
 	
-	private boolean createOption 	= true;
-	private boolean removeOption 	= false;
-	private boolean renameOption 	= false;
-	private boolean moveOption 		= false;
-	private boolean copyOption 	= false;
-	private boolean exportOption	= false;
-	
-	private boolean rootNode 		= true;  // Indicates root node selected ( option menu are specific on this case ).
+	private ToolBarOption toolBarOption;
 	private MenuBar dirMenu;
 	private MenuItem create;
 	private MenuItem remove;
@@ -58,7 +47,11 @@ public class PersonalMenu extends MenuBase {
 	private MenuItem copy;
 	private MenuItem export;
 	
+	/**
+	 * PersonalMenu
+	 */
 	public PersonalMenu() {
+		toolBarOption = new ToolBarOption();
 		// The item selected must be called on style.css : .okm-MenuBar .gwt-MenuItem-selected
 		
 		// First initialize language values
@@ -88,7 +81,7 @@ public class PersonalMenu extends MenuBase {
 	// Command menu to add a new Directory
 	Command addFolder = new Command() {
 		public void execute() {
-			if (createOption) {
+			if (toolBarOption.createFolderOption) {
 				Main.get().activeFolderTree.addTmpFolderCreate();
 				Main.get().activeFolderTree.hideMenuPopup();
 			}
@@ -98,7 +91,7 @@ public class PersonalMenu extends MenuBase {
 	// Command menu to delete a new Directory
 	Command delFolder = new Command() {
 		public void execute() {
-			if (removeOption){
+			if (toolBarOption.deleteOption){
 				Main.get().activeFolderTree.confirmDelete();
 				Main.get().activeFolderTree.hideMenuPopup();
 			}
@@ -108,7 +101,7 @@ public class PersonalMenu extends MenuBase {
 	// Command menu to delete a new Directory
 	Command renFolder = new Command() {
 		public void execute() {
-			if (renameOption) {
+			if (toolBarOption.renameOption) {
 				Main.get().activeFolderTree.rename();
 				Main.get().activeFolderTree.hideMenuPopup();
 			}
@@ -118,7 +111,7 @@ public class PersonalMenu extends MenuBase {
 	// Command menu to refresh actual Directory
 	Command moveFolder = new Command() {
 		public void execute() {
-			if (moveOption) {
+			if (toolBarOption.moveOption) {
 				Main.get().activeFolderTree.move();
 				Main.get().activeFolderTree.hideMenuPopup();
 			}
@@ -128,7 +121,7 @@ public class PersonalMenu extends MenuBase {
 	// Command menu to refresh actual Directory
 	Command copyFolder = new Command() {
 		public void execute() {
-			if (copyOption) {
+			if (toolBarOption.copyOption) {
 				Main.get().activeFolderTree.copy();
 				Main.get().activeFolderTree.hideMenuPopup();
 			}
@@ -138,98 +131,27 @@ public class PersonalMenu extends MenuBase {
 	// Command menu to set default home
 	Command exportToFile = new Command() {
 		public void execute() {
-			if (exportOption) {				
+			if (toolBarOption.exportOption) {				
 				Main.get().activeFolderTree.exportFolderToFile();
 				Main.get().activeFolderTree.hideMenuPopup();
 			}
 		}
 	};
 	
-	/**
-	 * Set enabled all menu options
-	 */
-	public void enableAllMenuOptions(){
-		rootNode			= false;
-		createOption 		= true;
-		removeOption 		= true;
-		renameOption 		= true;
-		moveOption			= true;
-		copyOption			= true;
-		exportOption		= true;
-	}
-	
-	/**
-	 * Set enabled root menu options
-	 */
-	public void enableRootMenuOptions(){
-		rootNode			= true;
-		createOption 		= true;
-		removeOption 		= false;
-		renameOption 		= false;
-		moveOption			= false;
-		copyOption			= false;
-		exportOption		= false;
-	}
-	
-	/**
-	 * Checks permissions associated to folder and menu options enabled actions
-	 * 
-	 * @param folder The folder
-	 */
-	public void checkMenuOptionPermissions(GWTFolder folder, GWTFolder folderParent) {
-		if ( (folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE)  {
-			
-			createOption 		= true;
-			copyOption 			= true;
-			exportOption		= true;
-			
-			// Evaluates root node case
-			if (rootNode) {
-				removeOption 		= false;
-				renameOption 		= false;
-				moveOption			= false;
-				copyOption			= false;
-				copyOption 			= false;
-				exportOption		= false;
-			} else if ((folderParent.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE){
-				removeOption 		= true;
-				renameOption 		= true;
-				moveOption			= true;
-			} else {
-				removeOption 		= false;
-				renameOption 		= false;
-				moveOption			= false;
-			}
-		} else {
-			createOption 		= false;
-			removeOption 		= false;
-			renameOption 		= false;
-			moveOption			= false;
-			if(rootNode) {
-				copyOption 		= false;
-				exportOption	= false;
-			} else {
-				copyOption 		= true;
-				exportOption	= true;
-			}
-		}
-	}
 	
 	/**
 	 * Evaluates menu options
 	 */
 	public void evaluateMenuOptions(){
-		if (createOption) {enable(create);} else {disable(create);}
-		if (removeOption) {enable(remove);} else {disable(remove);}
-		if (renameOption) {enable(rename);} else {disable(rename);}
-		if (moveOption) {enable(move);} else {disable(move);}
-		if (copyOption) {enable(copy);} else {disable(copy);}
-		if (exportOption) {enable(export);} else {disable(export);}
+		if (toolBarOption.createFolderOption) {enable(create);} else {disable(create);}
+		if (toolBarOption.deleteOption) {enable(remove);} else {disable(remove);}
+		if (toolBarOption.renameOption) {enable(rename);} else {disable(rename);}
+		if (toolBarOption.moveOption) {enable(move);} else {disable(move);}
+		if (toolBarOption.copyOption) {enable(copy);} else {disable(copy);}
+		if (toolBarOption.exportOption) {enable(export);} else {disable(export);}
 	}
 	
-	/**
-	 *  Refresh language values
-	 */
+	@Override
 	public void langRefresh() {
 		create.setHTML(Util.menuHTML("img/icon/actions/add_folder.gif", Main.i18n("tree.menu.directory.create")));
 		remove.setHTML(Util.menuHTML("img/icon/actions/delete.gif", Main.i18n("tree.menu.directory.remove")));
@@ -241,29 +163,33 @@ public class PersonalMenu extends MenuBase {
 	
 	@Override
 	public void setAvailableOption(GWTAvailableOption option) {
-		create.setVisible(option.isCreateFolderOption());
-		remove.setVisible(option.isDeleteOption());
-		rename.setVisible(option.isRenameOption());
-		move.setVisible(option.isMoveOption());
-		copy.setVisible(option.isCopyOption());
-		export.setVisible(option.isExportOption());
+		if (!option.isCreateFolderOption()) {
+			dirMenu.removeItem(create);
+		}
+		if (!option.isDeleteOption()) {
+			dirMenu.removeItem(remove);
+		}
+		if (!option.isRenameOption()) {
+			dirMenu.removeItem(rename);
+		}
+		if (!option.isMoveOption()) {
+			dirMenu.removeItem(move);
+		}
+		if (!option.isCopyOption()) {
+			dirMenu.removeItem(copy);
+		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.widget.MenuBase#disableAllMenuOption()
-	 */
-	public void disableAllMenuOption() {
-	}
-
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.widget.MenuBase#checkMenuOptionPermissions(com.openkm.frontend.client.bean.GWTDocument, com.openkm.frontend.client.bean.GWTFolder)
-	 */
-	public void checkMenuOptionPermissions(GWTDocument doc, GWTFolder folder) {
+	@Override
+	public void setOptions(ToolBarOption toolBarOption) {
+		this.toolBarOption = toolBarOption;
+		toolBarOption.bookmarkOption = true;
+		evaluateMenuOptions();
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.widget.MenuBase#checkMenuOptionPermissions(com.openkm.frontend.client.bean.GWTMail, com.openkm.frontend.client.bean.GWTFolder)
-	 */
-	public void checkMenuOptionPermissions(GWTMail mail, GWTFolder folder) {
+	@Override
+	public void disableAllOptions() {
+		toolBarOption = new ToolBarOption();
+		evaluateMenuOptions();
 	}
 }

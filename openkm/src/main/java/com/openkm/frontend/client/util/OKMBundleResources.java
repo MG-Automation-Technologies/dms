@@ -32,11 +32,13 @@ import com.google.gwt.resources.client.ImageResource;
  *
  */
 public interface OKMBundleResources extends ClientBundle {
-	
 	public static final OKMBundleResources INSTANCE =  GWT.create(OKMBundleResources.class);
 	
 	@Source("com/openkm/frontend/public/img/icon/actions/delete.gif")
 	public ImageResource deleteIcon();
+	
+	@Source("com/openkm/frontend/public/img/icon/actions/clean.png")
+	public ImageResource cleanIcon();
 	
 	@Source("com/openkm/frontend/public/img/icon/stackpanel/book_open.gif")
 	public ImageResource bookOpenIcon();
@@ -73,12 +75,6 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/icon/actions/folder_find_disabled.gif")
 	public ImageResource findFolderDisabled();
-	
-	@Source("com/openkm/frontend/public/img/icon/actions/document_find.png")
-	public ImageResource findDocument();
-	
-	@Source("com/openkm/frontend/public/img/icon/actions/document_find_disabled.png")
-	public ImageResource findDocumentDisabled();
 	
 	@Source("com/openkm/frontend/public/img/icon/actions/lock.gif")
 	public ImageResource lock();
@@ -218,11 +214,17 @@ public interface OKMBundleResources extends ClientBundle {
 	@Source("com/openkm/frontend/public/img/icon/news.gif")
 	public ImageResource news();
 	
-	@Source("com/openkm/frontend/public/img/icon/workflow_alert.gif")
-	public ImageResource workflowAlert();
+	@Source("com/openkm/frontend/public/img/icon/workflow_tasks.gif")
+	public ImageResource workflowTasks();
 	
-	@Source("com/openkm/frontend/public/img/icon/workflow.gif")
-	public ImageResource workflow();
+	@Source("com/openkm/frontend/public/img/icon/workflow_tasks_alert.gif")
+	public ImageResource workflowTasksAlert();
+	
+	@Source("com/openkm/frontend/public/img/icon/workflow_pooled_tasks.gif")
+	public ImageResource workflowPooledTasks();
+	
+	@Source("com/openkm/frontend/public/img/icon/workflow_pooled_tasks_alert.gif")
+	public ImageResource workflowPooledTasksAlert();
 	
 	@Source("com/openkm/frontend/public/img/icon/actions/warning.gif")
 	public ImageResource warning();
@@ -284,6 +286,9 @@ public interface OKMBundleResources extends ClientBundle {
 	@Source("com/openkm/frontend/public/img/icon/search/calendar.gif")
 	public ImageResource calendar();
 	
+	@Source("com/openkm/frontend/public/img/icon/search/calendar_disabled.gif")
+	public ImageResource calendarDisabled();
+	
 	@Source("com/openkm/frontend/public/img/icon/security/yes.gif")
 	public ImageResource yes();
 	
@@ -304,12 +309,6 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/icon/actions/share_query.gif")
 	public ImageResource sharedQuery();
-	
-	@Source("com/openkm/frontend/public/img/icon/actions/printer.png")
-	public ImageResource print();
-	
-	@Source("com/openkm/frontend/public/img/icon/actions/printer_disabled.png")
-	public ImageResource printDisabled();
 	
 	@Source("com/openkm/frontend/public/img/icon/editor/justifyCenter.gif")
 	public ImageResource justifyCenter();
@@ -379,16 +378,4 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/icon/actions/database_record.png")
 	public ImageResource databaseRecord();
-	
-	@Source("com/openkm/frontend/public/img/icon/actions/search.png")
-	public ImageResource search();
-	
-	@Source("com/openkm/frontend/public/img/icon/actions/search_disabled.png")
-	public ImageResource searchDisabled();
-	
-	@Source("com/openkm/frontend/public/img/icon/actions/application_side_contract.png")
-	public ImageResource splitterContract();
-	
-	@Source("com/openkm/frontend/public/img/icon/actions/application_side_expand.png")
-	public ImageResource splitterExpand();
 }

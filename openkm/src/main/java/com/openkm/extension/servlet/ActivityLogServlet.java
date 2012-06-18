@@ -50,8 +50,6 @@ public class ActivityLogServlet extends OKMRemoteServiceServlet implements OKMAc
 	
 	@Override
 	public List<GWTActivity> findByFilterByItem(String item, String action, boolean getChilds) throws OKMException {
-		log.debug("findByFilterByItem({},{})",item,action);
-		updateSessionManager();
 		List<GWTActivity> activityList = new ArrayList<GWTActivity>();
 		ActivityFilter filter = new ActivityFilter();
 		filter.setItem(item);

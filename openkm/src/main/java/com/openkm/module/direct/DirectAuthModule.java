@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.jcr.LoginException;
 import javax.jcr.Node;
@@ -37,21 +38,23 @@ import javax.jcr.ValueFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
+import com.openkm.bean.Mail;
+import com.openkm.bean.Note;
 import com.openkm.bean.Permission;
 import com.openkm.bean.Repository;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.AuthModule;
 import com.openkm.module.base.BaseAuthModule;
 import com.openkm.principal.PrincipalAdapter;
 import com.openkm.principal.PrincipalAdapterException;
-import com.openkm.util.UUIDGenerator;
 import com.openkm.util.UserActivity;
 
 public class DirectAuthModule implements AuthModule {
@@ -86,7 +89,7 @@ public class DirectAuthModule implements AuthModule {
 			} else {
 				javax.jcr.Repository r = DirectRepositoryModule.getRepository();
 				Session session = r.login(new SimpleCredentials(user, password.toCharArray()), null);
-				token = UUIDGenerator.generate(this);
+				token = UUID.randomUUID().toString();
 				JcrSessionManager.getInstance().add(token, session);
 				
 				// Activity log
@@ -167,7 +170,6 @@ public class DirectAuthModule implements AuthModule {
 	 */
 	private static Node createBase(Session session, Node root) throws 
 			javax.jcr.RepositoryException {
-		log.debug("createBase({}, {})", session, root);
 		Node base = root.addNode(session.getUserID(), Folder.TYPE);
 
 		// Add basic properties
@@ -179,10 +181,10 @@ public class DirectAuthModule implements AuthModule {
 		base.setProperty(Permission.USERS_WRITE, new String[] { session.getUserID() });
 		base.setProperty(Permission.USERS_DELETE, new String[] { session.getUserID() });
 		base.setProperty(Permission.USERS_SECURITY, new String[] { session.getUserID() });
-		base.setProperty(Permission.ROLES_READ, new String[] { Config.DEFAULT_USER_ROLE });
-		base.setProperty(Permission.ROLES_WRITE, new String[] { Config.DEFAULT_USER_ROLE });
-		base.setProperty(Permission.ROLES_DELETE, new String[] { Config.DEFAULT_USER_ROLE });
-		base.setProperty(Permission.ROLES_SECURITY, new String[] { Config.DEFAULT_USER_ROLE });
+		base.setProperty(Permission.ROLES_READ, new String[] {});
+		base.setProperty(Permission.ROLES_WRITE, new String[] {});
+		base.setProperty(Permission.ROLES_DELETE, new String[] {});
+		base.setProperty(Permission.ROLES_SECURITY, new String[] {});
 		
 		return base;
 	}
@@ -277,13 +279,19 @@ public class DirectAuthModule implements AuthModule {
 	 */
 	private void grantUserInDepth(Node node, String user, String property) throws ValueFormatException,
 			PathNotFoundException, javax.jcr.RepositoryException {
-		grantUser(node, user, property);
-
-		if (node.isNodeType(Folder.TYPE)) {
+		if (node.isNodeType(Document.TYPE)) {
+			grantUser(node, user, property);
+		} else if (node.isNodeType(Folder.TYPE)) {
+			grantUser(node, user, property);
+			
 			for (NodeIterator it = node.getNodes(); it.hasNext(); ) {
 				Node child = it.nextNode();
 				grantUserInDepth(child, user, property);
 			}
+		} else if (node.isNodeType(Mail.TYPE)) {
+			grantUser(node, user, property);
+		} else if (node.isNodeType(Note.LIST_TYPE)) {
+			// Note nodes has no security
 		}
 	}
 
@@ -374,13 +382,19 @@ public class DirectAuthModule implements AuthModule {
 	 */
 	private void revokeUserInDepth(Node node, String user, String property) throws ValueFormatException,
 			PathNotFoundException, javax.jcr.RepositoryException {
-		revokeUser(node, user, property);
-
-		if (node.isNodeType(Folder.TYPE)) {
+		if (node.isNodeType(Document.TYPE)) {
+			revokeUser(node, user, property);
+		} else if (node.isNodeType(Folder.TYPE)) {
+			revokeUser(node, user, property);
+			
 			for (NodeIterator it = node.getNodes(); it.hasNext(); ) {
 				Node child = it.nextNode();
 				revokeUserInDepth(child, user, property);
 			}
+		} else if (node.isNodeType(Mail.TYPE)) {
+			revokeUser(node, user, property);
+		} else if (node.isNodeType(Note.LIST_TYPE)) {
+			// Note nodes has no security
 		}
 	}
 
@@ -474,13 +488,19 @@ public class DirectAuthModule implements AuthModule {
 	 */
 	private void grantRoleInDepth(Node node, String role, String property) throws ValueFormatException,
 			PathNotFoundException, javax.jcr.RepositoryException {
-		grantRole(node, role, property);
-
-		if (node.isNodeType(Folder.TYPE)) {
+		if (node.isNodeType(Document.TYPE)) {
+			grantRole(node, role, property);
+		} else if (node.isNodeType(Folder.TYPE)) {
+			grantRole(node, role, property);
+			
 			for (NodeIterator it = node.getNodes(); it.hasNext(); ) {
 				Node child = it.nextNode();
 				grantRoleInDepth(child, role, property);
 			}
+		} else if (node.isNodeType(Mail.TYPE)) {
+			grantRole(node, role, property);
+		} else if (node.isNodeType(Note.LIST_TYPE)) {
+			// Note nodes has no security
 		}
 	}
 
@@ -571,13 +591,19 @@ public class DirectAuthModule implements AuthModule {
 	 */
 	private void revokeRoleInDepth(Node node, String role, String property) throws ValueFormatException, 
 			PathNotFoundException, javax.jcr.RepositoryException {
-		revokeRole(node, role, property);
-
-		if (node.isNodeType(Folder.TYPE)) {
+		if (node.isNodeType(Document.TYPE)) {
+			revokeRole(node, role, property);
+		} else if (node.isNodeType(Folder.TYPE)) {
+			revokeRole(node, role, property);
+			
 			for (NodeIterator it = node.getNodes(); it.hasNext(); ) {
 				Node child = it.nextNode();
 				revokeRoleInDepth(child, role, property);
 			}
+		} else if (node.isNodeType(Mail.TYPE)) {
+			revokeRole(node, role, property);
+		} else if (node.isNodeType(Note.LIST_TYPE)) {
+			// Note nodes has no security
 		}
 	}
 

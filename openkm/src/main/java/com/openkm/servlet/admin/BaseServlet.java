@@ -30,7 +30,15 @@ public class BaseServlet extends HttpServlet  {
 	}
 	
 	/**
-	 * Update HTTP session manager
+	 * Dispatch errors 
+	 */
+	protected void sendError(PrintWriter out, String msg) throws ServletException, IOException {
+		out.println("<div class=\"error\">" + msg + "</div>");
+		out.flush();
+	}
+	
+	/**
+	 * Update HTTP active sessions
 	 */
 	public void updateSessionManager(HttpServletRequest request) {
 		HttpSessionManager.getInstance().update(request.getSession().getId());
@@ -44,15 +52,10 @@ public class BaseServlet extends HttpServlet  {
 	}
 	
 	/**
-	 * Test if an user can access to administration when configured as SaaS: An user can
-	 * access if:
-	 * 
-	 * - Multiple Instances is active AND user id okmAdmin
-	 * - Multiple Instances is inactive AND user has AdminRole role
+	 * Test if an user can access to administration
 	 */
 	public static boolean isMultipleInstancesAdmin(HttpServletRequest request) {
-		return Config.SYSTEM_MULTIPLE_INSTANCES && request.getRemoteUser().equals(Config.ADMIN_USER) ||
-			!Config.SYSTEM_MULTIPLE_INSTANCES && request.isUserInRole(Config.DEFAULT_ADMIN_ROLE);
+		return request.getRemoteUser().equals(Config.ADMIN_USER) ||	request.isUserInRole(Config.DEFAULT_ADMIN_ROLE);
 	}
 	
 	/**
@@ -96,5 +99,19 @@ public class BaseServlet extends HttpServlet  {
 	public void footer(PrintWriter out) {
 		out.println("</body>");
 		out.println("</html>");
+	}
+	
+	/**
+	 * Print ok messages
+	 */
+	public void ok(PrintWriter out, String msg) {
+		out.print("<div class=\"ok\">" + msg + "</div>");
+	}
+	
+	/**
+	 * Print warn messages
+	 */
+	public void warn(PrintWriter out, String msg) {
+		out.print("<div class=\"warn\">" + msg + "</div>");
 	}
 }

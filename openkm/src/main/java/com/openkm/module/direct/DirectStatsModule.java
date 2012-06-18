@@ -36,9 +36,9 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.Document;
 import com.openkm.bean.StatsInfo;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.RepositoryException;
 import com.openkm.jcr.JCRUtils;
-import com.openkm.jcr.JcrSessionManager;
 import com.openkm.module.StatsModule;
 
 public class DirectStatsModule implements StatsModule {
@@ -58,7 +58,7 @@ public class DirectStatsModule implements StatsModule {
 		log.debug("getDocumentsByContext({})", token);
 		StatsInfo si = new StatsInfo();
 		double[] percents = new double[4];
-		String[] sizes = new String[4];
+		long[] sizes = new long[4];
 		Session session = null;
 		
 		try {
@@ -73,14 +73,14 @@ public class DirectStatsModule implements StatsModule {
 			long taxonomyDocuments = getCount(queryManager, TAXONOMY_DOCUMENTS);
 			long personalDocuments = getCount(queryManager, PERSONAL_DOCUMENTS);
 			long templatesDocuments = getCount(queryManager, TEMPLATES_DOCUMENTS);
-			long trashDocuments = getCount(queryManager, TRASH_DOCUMENTS); 
+			long trashDocuments = getCount(queryManager, TRASH_DOCUMENTS);
 			long totalDocuments =  taxonomyDocuments + personalDocuments + templatesDocuments + trashDocuments; 
 			
 			// Fill sizes
-			sizes[0] = Long.toString(taxonomyDocuments);
-			sizes[1] = Long.toString(personalDocuments);
-			sizes[2] = Long.toString(templatesDocuments);
-			sizes[3] = Long.toString(trashDocuments);
+			sizes[0] = taxonomyDocuments;
+			sizes[1] = personalDocuments;
+			sizes[2] = templatesDocuments;
+			sizes[3] = trashDocuments;
 			si.setSizes(sizes);
 			
 			// Compute percents
@@ -105,7 +105,7 @@ public class DirectStatsModule implements StatsModule {
 		log.debug("getFoldersByContext({})", token);
 		StatsInfo si = new StatsInfo();
 		double[] percents = new double[4];
-		String[] sizes = new String[4];
+		long[] sizes = new long[4];
 		Session session = null;
 		
 		try {
@@ -120,14 +120,14 @@ public class DirectStatsModule implements StatsModule {
 			long taxonomyFolders = getCount(queryManager, TAXONOMY_FOLDERS);
 			long personalFolders = getCount(queryManager, PERSONAL_FOLDERS);
 			long templatesFolders = getCount(queryManager, TEMPLATES_FOLDERS);
-			long trashFolders = getCount(queryManager, TRASH_FOLDERS); 
+			long trashFolders = getCount(queryManager, TRASH_FOLDERS);
 			long totalFolders =  taxonomyFolders + personalFolders + templatesFolders + trashFolders; 
 			
 			// Fill sizes
-			sizes[0] = Long.toString(taxonomyFolders);
-			sizes[1] = Long.toString(personalFolders);
-			sizes[2] = Long.toString(templatesFolders);
-			sizes[3] = Long.toString(trashFolders);
+			sizes[0] = taxonomyFolders;
+			sizes[1] = personalFolders;
+			sizes[2] = templatesFolders;
+			sizes[3] = trashFolders;
 			si.setSizes(sizes);
 			
 			// Compute percents
@@ -162,7 +162,7 @@ public class DirectStatsModule implements StatsModule {
 		log.debug("getDocumentsSizeByContext({})", token);
 		StatsInfo si = new StatsInfo();
 		double[] percents = new double[4];
-		String[] sizes = new String[4];
+		long[] sizes = new long[4];
 		Session session = null;
 		
 		try {
@@ -177,14 +177,14 @@ public class DirectStatsModule implements StatsModule {
 			long taxonomyDocumentSize = getSize(queryManager, TAXONOMY_DOCUMENTS);
 			long personalDocumentSize = getSize(queryManager, PERSONAL_DOCUMENTS);
 			long templatesDocumentSize = getSize(queryManager, TEMPLATES_DOCUMENTS);
-			long trashDocumentSize = getSize(queryManager, TRASH_DOCUMENTS); 
+			long trashDocumentSize = getSize(queryManager, TRASH_DOCUMENTS);
 			long totalDocumentSize =  taxonomyDocumentSize + personalDocumentSize + templatesDocumentSize + trashDocumentSize; 
 			
 			// Fill sizes
-			sizes[0] = Long.toString(taxonomyDocumentSize);
-			sizes[1] = Long.toString(personalDocumentSize);
-			sizes[2] = Long.toString(templatesDocumentSize);
-			sizes[3] = Long.toString(trashDocumentSize);
+			sizes[0] = taxonomyDocumentSize;
+			sizes[1] = personalDocumentSize;
+			sizes[2] = templatesDocumentSize;
+			sizes[3] = trashDocumentSize;
 			si.setSizes(sizes);
 			
 			// Compute percents

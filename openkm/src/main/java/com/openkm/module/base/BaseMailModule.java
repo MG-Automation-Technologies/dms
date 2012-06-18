@@ -34,6 +34,7 @@ import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.version.VersionException;
 
+import org.apache.jackrabbit.JcrConstants;
 import org.apache.jackrabbit.core.NodeImpl;
 import org.apache.jackrabbit.core.SessionImpl;
 import org.apache.jackrabbit.core.security.AccessManager;
@@ -140,6 +141,7 @@ public class BaseMailModule {
 		mail.setSubject(mailNode.getProperty(Mail.SUBJECT).getString());
 		mail.setContent(mailNode.getProperty(Mail.CONTENT).getString());
 		mail.setMimeType(mailNode.getProperty(Mail.MIME_TYPE).getString());
+		mail.setCreated(mailNode.getProperty(JcrConstants.JCR_CREATED).getDate());
 		
 		// Get attachments
 		ArrayList<Document> attachments = new ArrayList<Document>();

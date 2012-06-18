@@ -121,12 +121,63 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 	
 	@Override
 	public String getName(String user) throws PrincipalAdapterException {
-		return LdapPrincipalAdapter.class.getCanonicalName();
+		log.debug("getName({})", user);
+		String name = null;
+		
+		List<String> ldap = ldapSearch(
+				Config.PRINCIPAL_LDAP_SERVER,
+				Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
+				Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
+				MessageFormat.format(Config.PRINCIPAL_LDAP_USERNAME_SEARCH_BASE, user),
+				MessageFormat.format(Config.PRINCIPAL_LDAP_USERNAME_SEARCH_FILTER, user),
+				Config.PRINCIPAL_LDAP_USERNAME_ATTRIBUTE);
+		
+		if (!ldap.isEmpty()) {
+			name = ldap.get(0);
+		}
+		
+		log.debug("getName: {}", name);
+		return name;
 	}
-	
-	@Override
-	public String getPassword(String user) throws PrincipalAdapterException {
-		throw new UnsupportedOperationException("Not implemented");
+
+	private String getUserByDN(String dn) throws PrincipalAdapterException {
+		log.debug("getUserByDN({})", dn);
+		String user = null;
+		
+		List<String> ldap = ldapSearch(
+				Config.PRINCIPAL_LDAP_SERVER,
+				Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
+				Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
+				dn,
+				Config.PRINCIPAL_LDAP_USER_SEARCH_FILTER,
+				Config.PRINCIPAL_LDAP_USER_ATTRIBUTE);
+		
+		if (!ldap.isEmpty()) {
+			user = ldap.get(0);
+		}
+		
+		log.debug("getUserByDN: {}", user);
+		return user;
+	}
+
+	private String getDN(String user) throws PrincipalAdapterException {
+		log.debug("getDN({})", user);
+		String dn = null;
+		
+		List<String> ldap = ldapSearch(
+				Config.PRINCIPAL_LDAP_SERVER,
+				Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
+				Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
+				MessageFormat.format(Config.PRINCIPAL_LDAP_USERNAME_SEARCH_BASE, user),
+				MessageFormat.format(Config.PRINCIPAL_LDAP_USERNAME_SEARCH_FILTER, user),
+				"dn");
+		
+		if (!ldap.isEmpty()) {
+			dn = ldap.get(0);
+		}
+		
+		log.debug("getDN: {}", dn);
+		return dn;
 	}
 	
 	@Override
@@ -140,9 +191,25 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 				MessageFormat.format(Config.PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_BASE, role), 
 				MessageFormat.format(Config.PRINCIPAL_LDAP_USERS_BY_ROLE_SEARCH_FILTER, role),
 				Config.PRINCIPAL_LDAP_USERS_BY_ROLE_ATTRIBUTE);
-		
+	
+		boolean usePosixGroups = true;
+		// usePosixGroups
+		// If true, then the group member field contains the user's username.
+		// If false, then the group member field contains the user's DN.
+		if ("uniqueMember".equals(Config.PRINCIPAL_LDAP_USERS_BY_ROLE_ATTRIBUTE)) {
+		    usePosixGroups = false;	
+		}
 		for (Iterator<String> it = ldap.iterator(); it.hasNext(); ) {
-			String user = it.next();
+			String user = null;
+			if (!usePosixGroups) {
+			    String dn = it.next();
+			    user = getUserByDN(dn);
+			} else {
+			    user = it.next();
+			}
+			if (user == null) {
+			    continue;
+			}
 			
 			if (!Config.SYSTEM_USER.equals(user)) {
 				if (Config.SYSTEM_LOGIN_LOWERCASE) {
@@ -161,12 +228,16 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 	public List<String> getRolesByUser(String user) throws PrincipalAdapterException {
 		log.debug("getRolesByUser({})", user);
 		List<String> list = new ArrayList<String>();
+		String dn = "";
+		if (Config.PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_FILTER.contains("{1}")) {
+		    dn = getDN(user);
+		}
 		List<String> ldap = ldapSearch(
 				Config.PRINCIPAL_LDAP_SERVER,
 				Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
 				Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
-				MessageFormat.format(Config.PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_BASE, user),
-				MessageFormat.format(Config.PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_FILTER, user),
+				MessageFormat.format(Config.PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_BASE, user, dn),
+				MessageFormat.format(Config.PRINCIPAL_LDAP_ROLES_BY_USER_SEARCH_FILTER, user, dn),
 				Config.PRINCIPAL_LDAP_ROLES_BY_USER_ATTRIBUTE);
 		
 		for (Iterator<String> it = ldap.iterator(); it.hasNext(); ) {
@@ -187,10 +258,16 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 				url, principal, credentials, searchBase, searchFilter, attribute } );
 		List<String> al = new ArrayList<String>();
 		Hashtable<String, String> env = new Hashtable<String, String>();
-
+		
 		env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
 		env.put(Context.SECURITY_AUTHENTICATION, "simple");
 		env.put(Context.PROVIDER_URL, url);
+		
+		// @see http://download.oracle.com/javase/jndi/tutorial/ldap/referral/jndi.html
+		// @see http://java.sun.com/products/jndi/jndi-ldap-gl.html
+		if (!"".equals(Config.PRINCIPAL_LDAP_REFERRAL)) {
+			env.put(Context.REFERRAL, Config.PRINCIPAL_LDAP_REFERRAL);
+		}
 		
 		// Optional is some cases (Max OS/X)
 		if (!principal.equals(""))
@@ -218,6 +295,8 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 					}
 					
 					al.add(sb.toString());
+				} else if (attribute.equals("dn")) {
+					al.add(searchResult.getNameInNamespace());
 				} else {
 					Attribute attrib = attributes.get(attribute);
 					

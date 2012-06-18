@@ -22,11 +22,8 @@
 package com.openkm.frontend.client.widget.thesaurus;
 
 import com.google.gwt.user.client.ui.MenuBar;
-
 import com.openkm.frontend.client.bean.GWTAvailableOption;
-import com.openkm.frontend.client.bean.GWTDocument;
-import com.openkm.frontend.client.bean.GWTFolder;
-import com.openkm.frontend.client.bean.GWTMail;
+import com.openkm.frontend.client.bean.ToolBarOption;
 import com.openkm.frontend.client.widget.MenuBase;
 
 /**
@@ -55,18 +52,10 @@ public class ThesaurusMenu extends MenuBase {
 	public void langRefresh() {}
 	@Override
 	public void evaluateMenuOptions() {}
-	@Override
-	public void enableRootMenuOptions() {}
-	@Override
-	public void enableAllMenuOptions() {}
-	@Override
-	public void disableAllMenuOption() {}
-	@Override
-	public void checkMenuOptionPermissions(GWTMail mail, GWTFolder folder) {}
-	@Override
-	public void checkMenuOptionPermissions(GWTDocument doc, GWTFolder folder) {}
-	@Override
-	public void checkMenuOptionPermissions(GWTFolder folder, GWTFolder folderParent) {}
 	public void hide() {}
 	public void show() {}
+	@Override
+	public void setOptions(ToolBarOption toolBarOption) {}
+	@Override
+	public void disableAllOptions() {}
 }

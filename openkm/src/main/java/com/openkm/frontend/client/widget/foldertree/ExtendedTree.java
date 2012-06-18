@@ -23,8 +23,6 @@ package com.openkm.frontend.client.widget.foldertree;
 
 import java.util.Vector;
 
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
@@ -35,6 +33,7 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.widget.OriginPanel;
 
 /**
  * ExtendedTree captures right button and marks a popup flag
@@ -43,26 +42,41 @@ import com.openkm.frontend.client.Main;
  * 
  */
 public class ExtendedTree extends Tree implements HasSelectionHandlers<TreeItem> {
+	// Drag pixels sensibility
+	private static final int DRAG_PIXELS_SENSIBILITY = 3;
 
 	private boolean flagPopup = false;
 	public int mouseX = 0;
 	public int mouseY = 0;
 	private boolean dragged = false;
+	private int mouseDownX = 0;
+	private int mouseDownY = 0;
 	
 	/**
 	 * ExtendedTree
 	 */
 	public ExtendedTree() {
 		super();
-		
-		sinkEvents(Event.MOUSEEVENTS);
-		
-		addMouseDownHandler(new MouseDownHandler(){
-			@Override
-			public void onMouseDown(MouseDownEvent event) {
-				dragged = true;
-			}
-		});
+		sinkEvents(Event.MOUSEEVENTS | Event.ONCLICK | Event.ONDBLCLICK);		
+	}
+	
+	/**
+	 * evalDragPixelSensibility
+	 * 
+	 * @return
+	 */
+	private boolean evalDragPixelSensibility() {
+		if (mouseDownX-mouseX>=DRAG_PIXELS_SENSIBILITY) {
+			return true;
+		} else if (mouseX-mouseDownX>=DRAG_PIXELS_SENSIBILITY) {
+			return true;
+		} else if (mouseDownY-mouseY>=DRAG_PIXELS_SENSIBILITY) {
+			return true;
+		} else if (mouseY-mouseDownY>=DRAG_PIXELS_SENSIBILITY) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	/**
@@ -74,9 +88,7 @@ public class ExtendedTree extends Tree implements HasSelectionHandlers<TreeItem>
 		return flagPopup;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.EventListener#onBrowserEvent(com.google.gwt.user.client.Event)
-	 */
+	@Override
 	public void onBrowserEvent(Event event) {
 		
 		// When de button mouse is released
@@ -89,11 +101,33 @@ public class ExtendedTree extends Tree implements HasSelectionHandlers<TreeItem>
 				case Event.BUTTON_RIGHT:
 					DOM.eventPreventDefault(event); // Prevent to fire event to browser
 					flagPopup = true;
+					mouseDownX = 0;
+					mouseDownY = 0;
+					dragged = false;
+					Main.get().activeFolderTree.menuPopup.disableAllOptions(); 
 					fireSelection(elementClicked(DOM.eventGetTarget(event)));
 					break;
 				default:
 					flagPopup = false;
+					dragged = true;
+					mouseDownX = event.getScreenX();
+					mouseDownY = event.getClientY();
 			}
+		} else if (DOM.eventGetType(event) == Event.ONMOUSEMOVE) {
+			mouseX = DOM.eventGetClientX(event);
+			mouseY = DOM.eventGetClientY(event);
+			if (Main.get().activeFolderTree.canDrag() && dragged && mouseDownX>0 && mouseDownY>0 && evalDragPixelSensibility()) {
+				TreeItem actualItem = Main.get().activeFolderTree.getActualItem();
+				Main.get().dragable.show(actualItem.getHTML(), OriginPanel.TREE_ROOT);
+				mouseDownX = 0;
+				mouseDownY = 0;
+				dragged = false;
+			}
+		} else if (DOM.eventGetType(event) == Event.ONMOUSEUP || DOM.eventGetType(event) == Event.ONCLICK || 
+				   DOM.eventGetType(event) == Event.ONDBLCLICK) {
+			mouseDownX = 0;
+			mouseDownY = 0;
+			dragged = false; // Always disabling the popup flag
 		}
 		
 		// Prevent folder creation or renaming propagate actions to other tree nodes
@@ -104,34 +138,23 @@ public class ExtendedTree extends Tree implements HasSelectionHandlers<TreeItem>
 	} 
 	
 	/**
+	 * disableDragged
+	 */
+	public void disableDragged() {
+		dragged = false;
+	}
+	
+	/**
 	 * fire a change event
 	 */
 	private void fireSelection(TreeItem treeItem) {
 //		 SelectElement nativeEvent = Document.get().createSelectElement();
 		 SelectionEvent.fire(this, treeItem);
-		 setSelectedItem(treeItem);
+		 //setSelectedItem(treeItem); // Now is not necessary select treeItem here is done by capturing events
 	}
 	
 	public HandlerRegistration addSelectionHandler(SelectionHandler<TreeItem> handler) {
 		return addHandler(handler, SelectionEvent.getType());
-	}
-	
-	/**
-	 * isDragged Returns true or false if is dragged
-	 * 
-	 * @return Return dragged value
-	 */
-	public boolean isDragged() {
-		return dragged;
-	}
-	
-	/**
-	 * unsetDraged
-	 * 
-	 * Sets dragged flag to false;
-	 */
-	public void unsetDraged() {
-		this.dragged = false;
 	}
 	
 	/**
@@ -201,5 +224,5 @@ public class ExtendedTree extends Tree implements HasSelectionHandlers<TreeItem>
         }
 
         return findItemByChain(chain, idx + 1, root);
-}
+	}
 }
