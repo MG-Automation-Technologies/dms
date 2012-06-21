@@ -1717,6 +1717,19 @@ public class FormManager {
 					} else if (formElement instanceof GWTInput) {
 						GWTInput input = (GWTInput) formElement;
 						input.setValue(getStringValueFromVariable(map.get(formElement.getName())));
+						
+						if (input.getType().equals(GWTInput.TYPE_DATE)) {
+							if (!"".equals(input.getValue())) {
+								Date date = ISO8601.parse(input.getValue());
+								
+								if (date != null) {
+									input.setDate(date);
+								} else {
+									Log.warn("Input '" + input.getName() + "' value should be in ISO8601 format: "
+											+ input.getValue());
+								}
+							}
+						}
 					} else if (formElement instanceof GWTSuggestBox) {
 						GWTSuggestBox suggestBox = (GWTSuggestBox) formElement;
 						suggestBox.setValue(getStringValueFromVariable(map.get(formElement.getName())));
@@ -2055,7 +2068,18 @@ public class FormManager {
 			if (formElement instanceof GWTTextArea) {
 				values.put(formElement.getName(), getStringValueFromVariable(formElement));
 			} else if (formElement instanceof GWTInput) {
-				values.put(formElement.getName(), getStringValueFromVariable(formElement));
+				if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_DATE)) {
+					GWTInput input = (GWTInput) formElement;
+					String value = ISO8601.format(input.getDate());
+					if (input.getDateTo() != null) {
+						value += "," + ISO8601.format(input.getDateTo());
+					} else {
+						value += "," + value;
+					}					
+					values.put(formElement.getName(), value);
+				} else {
+					values.put(formElement.getName(), getStringValueFromVariable(formElement));
+				}
 			} else if (formElement instanceof GWTSuggestBox) {
 				values.put(formElement.getName(), getStringValueFromVariable(formElement));
 			} else if (formElement instanceof GWTCheckBox) {
