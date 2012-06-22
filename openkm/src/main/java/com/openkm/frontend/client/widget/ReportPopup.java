@@ -60,7 +60,7 @@ public class ReportPopup extends DialogBox {
 		
 		manager = new FormManager();
 		
-		cancelbutton =  new Button(Main.i18n("button.execute"));
+		cancelbutton =  new Button(Main.i18n("button.cancel"));
 		cancelbutton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -114,7 +114,7 @@ public class ReportPopup extends DialogBox {
 	 */
 	public void langRefresh() {
 		setText(Main.i18n("report.parameters"));
-		cancelbutton.setHTML(Main.i18n("button.execute"));
+		cancelbutton.setHTML(Main.i18n("button.cancel"));
 		executeButton.setHTML(Main.i18n("button.execute"));
 	}
 }
