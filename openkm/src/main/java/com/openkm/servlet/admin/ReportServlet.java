@@ -271,7 +271,7 @@ public class ReportServlet extends BaseServlet {
 		String fileName = rp.getFileName().substring(0, rp.getFileName().indexOf('.')) + ReportUtils.FILE_EXTENSION[format];
 		
 		// Set default report parameters
-		Map<String, String> params = new HashMap<String, String>();
+		Map<String, Object> params = new HashMap<String, Object>();
 		String host = com.openkm.core.Config.APPLICATION_URL;
 		params.put("host", host.substring(0, host.lastIndexOf("/") + 1));
 		

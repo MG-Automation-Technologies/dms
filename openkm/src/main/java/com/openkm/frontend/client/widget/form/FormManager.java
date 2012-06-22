@@ -1394,10 +1394,10 @@ public class FormManager {
 					if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_DATE)) {
 						if (!propertyParam.getValue().equals("")) {
 							String date[] = propertyParam.getValue().split(",");
-							input.setDate(ISO8601.parse(date[0]));
+							input.setDate(ISO8601.parseBasic(date[0]));
 							
 							if (date.length == 2) {
-								input.setDateTo(ISO8601.parse(date[1]));
+								input.setDateTo(ISO8601.parseBasic(date[1]));
 							}
 						}
 					} else {
@@ -1479,9 +1479,9 @@ public class FormManager {
 			if (formElement instanceof GWTInput) {
 				if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_DATE)) {
 					GWTInput input = (GWTInput) formElement;
-					value = ISO8601.format(input.getDate());
+					value = ISO8601.formatBasic(input.getDate());
 					if (input.getDateTo() != null) {
-						value += "," + ISO8601.format(input.getDateTo());
+						value += "," + ISO8601.formatBasic(input.getDateTo());
 					} else {
 						value += "," + value;
 					}
@@ -1720,7 +1720,7 @@ public class FormManager {
 						
 						if (input.getType().equals(GWTInput.TYPE_DATE)) {
 							if (!"".equals(input.getValue())) {
-								Date date = ISO8601.parse(input.getValue());
+								Date date = ISO8601.parseBasic(input.getValue());
 								
 								if (date != null) {
 									input.setDate(date);
@@ -1779,7 +1779,7 @@ public class FormManager {
 						
 						if (input.getType().equals(GWTInput.TYPE_DATE)) {
 							if (!"".equals(input.getValue())) {
-								Date date = ISO8601.parse(input.getValue());
+								Date date = ISO8601.parseBasic(input.getValue());
 								
 								if (date != null) {
 									input.setDate(date);
@@ -2070,9 +2070,9 @@ public class FormManager {
 			} else if (formElement instanceof GWTInput) {
 				if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_DATE)) {
 					GWTInput input = (GWTInput) formElement;
-					String value = ISO8601.format(input.getDate());
+					String value = ISO8601.formatBasic(input.getDate());
 					if (input.getDateTo() != null) {
-						value += "," + ISO8601.format(input.getDateTo());
+						value += "," + ISO8601.formatBasic(input.getDateTo());
 					} else {
 						value += "," + value;
 					}					
