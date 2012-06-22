@@ -73,11 +73,13 @@ public class ReportPopup extends DialogBox {
 		executeButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				manager.updateFormElementsValuesWithNewer(); // Updates form element values
-				Map<String, String> parameters = manager.getStringMapValues();
-				parameters.put("format", String.valueOf(Main.get().mainPanel.topPanel.mainMenu.getReportOutput()));
-				Util.executeReport(report.getId(), parameters);
-				hide();
+				if (manager.getValidationProcessor().validate()) {
+					manager.updateFormElementsValuesWithNewer(); // Updates form element values
+					Map<String, String> parameters = manager.getStringMapValues();
+					parameters.put("format", String.valueOf(Main.get().mainPanel.topPanel.mainMenu.getReportOutput()));
+					Util.executeReport(report.getId(), parameters);
+					hide();
+				}
 			}
 		});
 		executeButton.setStyleName("okm-Button");
