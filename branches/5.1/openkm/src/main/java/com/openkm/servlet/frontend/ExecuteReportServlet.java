@@ -22,7 +22,9 @@ import org.slf4j.LoggerFactory;
 
 import bsh.EvalError;
 
+import com.ibm.icu.text.SimpleDateFormat;
 import com.openkm.bean.form.FormElement;
+import com.openkm.bean.form.Input;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.dao.ReportDAO;
@@ -66,12 +68,19 @@ public class ExecuteReportServlet extends HttpServlet {
 				String fileName = rp.getFileName().substring(0, rp.getFileName().indexOf('.')) + ReportUtils.FILE_EXTENSION[format];
 				
 				// Set default report parameters
-				Map<String, String> params = new HashMap<String, String>();
+				Map<String, Object> params = new HashMap<String, Object>();
 				String host = com.openkm.core.Config.APPLICATION_URL;
 				params.put("host", host.substring(0, host.lastIndexOf("/") + 1));
 				
 				for (FormElement fe : ReportUtils.getReportParameters(id)) {
-					params.put(fe.getName(), WebUtils.getString(request, fe.getName()));
+					if (fe instanceof Input && ((Input) fe).getType().equals(Input.TYPE_DATE)) {
+						// format "yyyy-MM-dd'T'HH:mm:ss.SSSZZZ" then capture only yyyy-MM-dd
+						String value = WebUtils.getString(request, fe.getName()).substring(0,10);
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+						params.put(fe.getName(), sdf.parse(value));
+					} else {
+						params.put(fe.getName(), WebUtils.getString(request, fe.getName()));
+					}
 				}
 				
 				baos = ReportUtils.execute(rp, params, format);
@@ -100,6 +109,9 @@ public class ExecuteReportServlet extends HttpServlet {
 			log.error(e.getMessage(), e);
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		} catch (java.text.ParseException e) {
 			log.error(e.getMessage(), e);
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 		} finally {

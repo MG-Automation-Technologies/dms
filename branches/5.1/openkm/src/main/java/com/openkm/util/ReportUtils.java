@@ -106,7 +106,7 @@ public class ReportUtils {
 	 * Generates a report based on a map collection (from file)
 	 */
 	public static OutputStream generateReport(OutputStream out, String fileReport, 
-			Map<String, String> parameters, int outputType, Collection<Map<String, String>> list)
+			Map<String, Object> parameters, int outputType, Collection<Map<String, Object>> list)
 			throws Exception {
 		if (!JasperCharged.containsKey(fileReport)) {
 			ClassLoader cl = Thread.currentThread().getContextClassLoader();
@@ -134,7 +134,7 @@ public class ReportUtils {
 	 * Generates a report based on a map collection (from stream)
 	 */
 	public static OutputStream generateReport(OutputStream out, InputStream report, 
-			Map<String, String> parameters, int outputType, Collection<Map<String, String>> list)
+			Map<String, Object> parameters, int outputType, Collection<Map<String, String>> list)
 			throws JRException {
 		JasperReport jasperReport = JasperCompileManager.compileReport(report);
 		JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, 
@@ -147,14 +147,14 @@ public class ReportUtils {
 	 * Generates a report based on a map collection (from stream)
 	 */
 	public static OutputStream generateReport(OutputStream out, JasperReport jr, 
-			Map<String, String> parameters, int outputType) throws JRException, EvalError {
+			Map<String, Object> parameters, int outputType) throws JRException, EvalError {
 		JRQuery query = jr.getQuery();
 		
 		if (query != null) {
 			Interpreter bsh = new Interpreter(null, System.out, System.err, false);
 			
 			// Set parameters
-			for (Map.Entry<String, String> entry : parameters.entrySet()) {
+			for (Map.Entry<String, Object> entry : parameters.entrySet()) {
 				bsh.set(entry.getKey(), entry.getValue());
 			}
 			
@@ -175,7 +175,7 @@ public class ReportUtils {
 	 * Generates a report based on a JDBC connection (from file)
 	 */
 	public static OutputStream generateReport(OutputStream out, String fileReport, 
-			Map<String, String> parameters, int outputType,	Connection con) throws Exception {
+			Map<String, Object> parameters, int outputType,	Connection con) throws Exception {
 		if (!JasperCharged.containsKey(fileReport)) {
 			ClassLoader cl = Thread.currentThread().getContextClassLoader();
 			try {
@@ -201,7 +201,7 @@ public class ReportUtils {
 	 * Generates a report based on a JDBC connection (from stream)
 	 */
 	public static OutputStream generateReport(OutputStream out, JasperReport jr, 
-			Map<String, String> parameters, int outputType,	Connection con) throws JRException {
+			Map<String, Object> parameters, int outputType,	Connection con) throws JRException {
 		JasperPrint print = JasperFillManager.fillReport(jr, parameters, con);
 		export(out, outputType, print);
 		return out;
@@ -317,7 +317,7 @@ public class ReportUtils {
 	/**
 	 * Execute report
 	 */
-	public static ByteArrayOutputStream execute(Report rp, Map<String, String> params, int format) throws
+	public static ByteArrayOutputStream execute(Report rp, Map<String, Object> params, int format) throws
 			JRException, IOException, EvalError {
 		ByteArrayOutputStream baos = null;
 		ByteArrayInputStream bais = null;
