@@ -101,13 +101,13 @@ public class DatabaseMetadataMap {
 	 * getDateValue
 	 */
 	public static Date getDateValue(String value) {
-		return ISO8601.parse(value);
+		return ISO8601.parseBasic(value);
 	}
 	
 	/**
 	 * mapDateValue
 	 */
 	public static String mapDateValue(Date value) {
-		return ISO8601.format(value);
+		return ISO8601.formatBasic(value);
 	}
 }

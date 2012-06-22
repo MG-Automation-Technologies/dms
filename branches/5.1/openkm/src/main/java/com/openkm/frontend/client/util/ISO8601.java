@@ -41,7 +41,7 @@ public class ISO8601 {
 	 * @param value
 	 * @return
 	 */
-	public static Date parse(String value) {
+	public static Date parseBasic(String value) {
 		if (value==null) {
 			return null;
 		} else {
@@ -56,7 +56,7 @@ public class ISO8601 {
 	 * @param value
 	 * @return
 	 */
-	public static String format(Date value) {
+	public static String formatBasic(Date value) {
 		if (value==null) {
 			return null;
 		} else {
