@@ -73,7 +73,7 @@ public class Notes extends Composite {
 	private Button update;
 	private Button cancel;
 	private ScrollPanel scrollPanel;
-	private RichTextArea richTextArea;
+	public RichTextArea richTextArea;
 	private RichTextToolbar richTextToolbar;
 	private VerticalPanel newNotePanel;
 	private HTML addNote;
@@ -157,6 +157,13 @@ public class Notes extends Composite {
 		tableNotes.setWidth("100%");
 		
 		initWidget(scrollPanel);
+	}
+	
+	/**
+	 * UI_safariBug
+	 */
+	public void UI_safariBug() {
+		
 	}
 	
 	/**
