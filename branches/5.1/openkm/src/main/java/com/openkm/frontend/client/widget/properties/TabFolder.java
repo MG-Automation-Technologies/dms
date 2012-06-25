@@ -64,6 +64,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	
 	private static final int TAB_HEIGHT = 20;
 	private int SECURITY_TAB = -1;
+	private int NOTES_TAB = -1;
 	
 	public TabLayoutPanel tabPanel;
 	public Folder folder;
@@ -109,6 +110,16 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 						@Override
 						public void run() {
 							security.fillWidth(); // Always when shows fires fill width
+						}
+					};
+					timer.schedule(50); // Fill width must be done after really it'll be visible
+				}
+				// Solves chrome bugt
+				if (tabIndex==NOTES_TAB && Util.getUserAgent().startsWith("safari")) {
+					Timer timer = new Timer() {
+						@Override
+						public void run() {
+							notes.richTextArea.setFocus(true);
 						}
 					};
 					timer.schedule(50); // Fill width must be done after really it'll be visible
@@ -486,6 +497,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	public void showNotes() {
 		tabPanel.add(notes, Main.i18n("tab.document.notes"));
 		notesVisible = true;
+		NOTES_TAB = tabPanel.getWidgetCount()-1; // Starts at 0
 	}
 	
 	/**
