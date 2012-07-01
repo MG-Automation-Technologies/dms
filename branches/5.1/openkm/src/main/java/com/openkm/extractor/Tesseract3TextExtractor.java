@@ -57,7 +57,7 @@ public class Tesseract3TextExtractor extends AbstractTextExtractor {
      * Creates a new <code>TextExtractor</code> instance.
      */
     public Tesseract3TextExtractor() {
-    	 super(new String[] { "image/tiff", "image/gif", "image/jpg", "image/png" });
+    	super(new String[] { "image/tiff", "image/gif", "image/jpeg", "image/png" });
     }
     
     //-------------------------------------------------------< TextExtractor >
