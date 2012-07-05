@@ -53,7 +53,7 @@
     <jcr.version>1.6.5</jcr.version>
 	
     <!-- Milton WebDAV -->
-    <milton.version>1.7.1</milton.version>
+    <milton.version>1.7.2</milton.version>
     
     <!-- Tell the compiler we can use 1.6 -->
     <java.compiler>1.6</java.compiler>
