@@ -17,7 +17,10 @@
     <tr><th colspan="4">Query: <span style="font-weight: normal">${query}</span></th></tr>
     <tr><th></th><th>Name</th><th></th><th>Size</th></tr>
     <c:forEach var="qr" items="${queryResult}" varStatus="row">
-      <c:url value="../OKMDownloadServlet" var="urlDownload">
+      <c:set var="size"><u:formatSize size="${qr.document.actualVersion.size}"/></c:set>
+      <c:url value="/mime/${qr.document.mimeType}" var="urlIcon">
+      </c:url>
+      <c:url value="/frontend/Download" var="urlDownload">
         <c:if test="${qr.document.convertibleToPdf}">
             <c:param name="toPdf"/>
         </c:if>
@@ -27,7 +30,7 @@
         <c:param name="path" value="${qr.document.path}"/>
       </c:url>
       <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-        <td width="18px"><img src="../frontend/img/icon/mime/${qr.document.mimeType}.gif"/></td>
+        <td width="18px"><img src="${urlIcon}"/></td>
         <td width="100%" onclick="if (confirm('Download ${size} document?')) { document.location='${urlDownload}'; }">
           <u:getName path="${qr.document.path}"/>
         </td>

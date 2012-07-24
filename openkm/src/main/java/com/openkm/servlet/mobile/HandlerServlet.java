@@ -109,7 +109,6 @@ public class HandlerServlet extends HttpServlet {
 	
 	/**
 	 * Folder properties
-	 * @throws AccessDeniedException 
 	 */
 	private void fldProperties(HttpServletRequest request, HttpServletResponse response) throws
 			PathNotFoundException, AccessDeniedException, RepositoryException, IOException,
@@ -134,7 +133,6 @@ public class HandlerServlet extends HttpServlet {
 	
 	/**
 	 * Document properties
-	 * @throws AccessDeniedException 
 	 */
 	private void docProperties(HttpServletRequest request, HttpServletResponse response) throws
 			PathNotFoundException, AccessDeniedException, RepositoryException, IOException,
