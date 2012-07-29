@@ -226,8 +226,15 @@ public class MailUtils {
 			String docPath)	throws MessagingException, PathNotFoundException, RepositoryException,
 			IOException, DatabaseException {
 		log.debug("send({}, {}, {}, {}, {})", new Object[] { fromAddress, toAddress, subject, text, docPath });
-		MimeMessage m = create(fromAddress, toAddress, subject, text, docPath);
-		Transport.send(m);
+		File tmpAttachment = File.createTempFile("okm", ".tmp");
+		
+		try {
+			MimeMessage m = create(fromAddress, toAddress, subject, text, docPath, tmpAttachment);
+			Transport.send(m);
+		} finally {
+			FileUtils.deleteQuietly(tmpAttachment);
+		}
+		
 		log.debug("send: void");
 	}
 	
@@ -241,8 +248,8 @@ public class MailUtils {
 	 * @throws MessagingException If there is any error.
 	 */
 	private static MimeMessage create(String fromAddress, List<String> toAddress, String subject, String text, 
-			String docPath)	throws MessagingException, PathNotFoundException, RepositoryException,
-			IOException, DatabaseException {
+			String docPath, File tmpAttachment)	throws MessagingException, PathNotFoundException, 
+			RepositoryException, IOException, DatabaseException {
 		log.debug("create({}, {}, {}, {}, {})", new Object[] { fromAddress, toAddress, subject, text, docPath });
 		Session mailSession = getMailSession();
 		MimeMessage m = new MimeMessage(mailSession);
@@ -287,22 +294,27 @@ public class MailUtils {
 		htmlPart.setContent(htmlContent.toString(), "text/html; charset=UTF-8");
 		htmlPart.setHeader("Content-Type", "text/html");
 		content.addBodyPart(htmlPart);
-
+		
 		if (docPath != null) {
 			InputStream is = null;
 			FileOutputStream fos = null;
 			String docName = JCRUtils.getName(docPath);
-				
+			
 			try {
+				final Document doc = OKMDocument.getInstance().getProperties(null, docPath);
 				is = OKMDocument.getInstance().getContent(null, docPath, false);
-				File tmp = File.createTempFile("okm", ".tmp");
-				fos = new FileOutputStream(tmp);
+				fos = new FileOutputStream(tmpAttachment);
 				IOUtils.copy(is, fos);
 				fos.flush();
 				
 				// Document attachment part
 				MimeBodyPart docPart = new MimeBodyPart();
-				DataSource source = new FileDataSource(tmp.getPath());
+				DataSource source = new FileDataSource(tmpAttachment.getPath()) {
+					public String getContentType() {
+						return doc.getMimeType();
+					}
+				};
+				
 				docPart.setDataHandler(new DataHandler(source));
 				docPart.setFileName(docName);
 				content.addBodyPart(docPart);
