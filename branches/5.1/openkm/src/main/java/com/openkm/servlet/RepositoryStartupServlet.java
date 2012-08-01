@@ -77,14 +77,14 @@ public class RepositoryStartupServlet extends HttpServlet {
 	private static DataStoreGarbageCollector dsgc;
 	private static boolean hasConfiguredDataStore;
 	private static boolean running = false;
-	
-    @Override
+
+	@Override
     public void init() throws ServletException {
         super.init();
         ServletContext sc = getServletContext();
         
         // Read config file
-        Config.load(sc.getContextPath().substring(1));
+        Config.load(sc);
         
         // Call only once during initialization time of your application
         // @see http://issues.openkm.com/view.php?id=1577

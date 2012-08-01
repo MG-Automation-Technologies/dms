@@ -21,11 +21,13 @@
 
 package com.openkm.util;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +43,8 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -60,12 +64,104 @@ import com.openkm.bean.form.Text;
 import com.openkm.bean.form.TextArea;
 import com.openkm.bean.form.Upload;
 import com.openkm.bean.form.Validator;
+import com.openkm.core.Config;
 import com.openkm.core.ParseException;
 
 public class FormUtils {
 	private static Logger log = LoggerFactory.getLogger(FormUtils.class);
 	private static Map<PropertyGroup, List<FormElement>> pGroups = null;
 	
+	static class LocalResolver implements EntityResolver {
+		private static Logger log = LoggerFactory.getLogger(LocalResolver.class);
+		private Hashtable<String, String> dtds = new Hashtable<String, String>();
+		private boolean hasDTD = false;
+
+		public LocalResolver(String dtdBase) {
+			log.info("new LocalResolver({})", dtdBase);
+			File folder = new File(dtdBase);
+			File[] files = folder.listFiles();
+			
+			for (File f : files) {
+				if (!f.isFile()) {
+					continue;
+				}
+				
+				String fileName = f.getName();
+				
+				if (!fileName.endsWith(".dtd")) {
+					continue;
+				}
+				
+				String fpi = "-//OpenKM//DTD ";
+				
+				// transform fileName to fpi;
+				// example: property-groups-2.0.dtd -> Property Groups 2.0
+				fileName = fileName.replaceAll("\\.dtd", "");
+				boolean isFirst = true;
+				
+				for(String token : fileName.split("-")) {
+					char capLetter = Character.toUpperCase(token.charAt(0));
+					String toBeCapped =  capLetter + token.substring(1, token.length());
+					
+					if (isFirst) {
+						isFirst = false;
+					} else {
+						fpi += " ";
+					}
+					
+					fpi += toBeCapped;
+				}
+				
+				fpi += "//EN";
+				registerDTD(fpi, f.getPath());
+			}
+		}
+
+		/**
+		 * Registers available DTDs
+		 * @param String publicId    - Public ID of DTD
+		 * @param String dtdFileName - the file name of DTD
+		 */
+		public void registerDTD(String publicId, String dtdFileName) {
+			log.info("registerDTD({}, {})", publicId, dtdFileName);
+			dtds.put(publicId, dtdFileName);
+		}
+
+		/**
+		 * Returns DTD inputSource. Is DTD was found in the hashtable and inputSource was created
+		 * flad hasDTD is ser to true.
+		 * @param String publicId    - Public ID of DTD
+		 * @param String dtdFileName - the file name of DTD
+		 * @return InputSource of DTD
+		 */
+		public InputSource resolveEntity(String publicId, String systemId) {
+			hasDTD = false;
+			String dtd = (String)dtds.get(publicId);
+			log.info("resolveEntity(publicId={}, systemId={}) => {}", new Object[] { publicId, systemId, ((dtd == null) ? "NULL" : dtd) });
+
+			if (dtd != null) {
+				hasDTD = true;
+				
+				try	{
+					InputSource aInputSource = new InputSource(dtd);
+					return aInputSource;
+				} catch (Exception ex)	{
+					// ignore
+				}
+			}
+			
+			return null;
+		}
+
+		/**
+		 * Returns the boolean value to inform id DTD was found in the XML file or not
+		 * @return boolean - true if DTD was found in XML
+		 */
+		public boolean hasDTD() {
+			return hasDTD;
+		}
+	}
+
 	/**
 	 * Parse form.xml definitions
 	 * 
@@ -83,7 +179,9 @@ public class FormUtils {
 			ErrorHandler handler = new ErrorHandler();
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			db.setErrorHandler(handler);
-
+			EntityResolver resolver = new LocalResolver(Config.DTD_BASE);
+			db.setEntityResolver(resolver);
+			
 			if (is != null) {
 				Document doc = db.parse(is);
 				doc.getDocumentElement().normalize();
@@ -130,6 +228,8 @@ public class FormUtils {
 			ErrorHandler handler = new ErrorHandler();
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			db.setErrorHandler(handler);
+			EntityResolver resolver = new LocalResolver(Config.DTD_BASE);
+			db.setEntityResolver(resolver);
 
 			if (is != null) {
 				Document doc = db.parse(is);
@@ -178,6 +278,8 @@ public class FormUtils {
 				dbf.setValidating(true);
 				ErrorHandler handler = new ErrorHandler();
 				DocumentBuilder db = dbf.newDocumentBuilder();
+				EntityResolver resolver = new LocalResolver(Config.DTD_BASE);
+				db.setEntityResolver(resolver);
 				db.setErrorHandler(handler);
 				fis = new FileInputStream(pgFile);
 				
