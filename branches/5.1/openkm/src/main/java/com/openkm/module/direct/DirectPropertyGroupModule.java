@@ -500,7 +500,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 					for (Iterator<PropertyGroup> it = pgf.keySet().iterator(); it.hasNext(); ) {
 						PropertyGroup pg = it.next();
 						
-						if (pg.getName().equals(nt[i].getName())) {
+						if (pg.getName().equals(nt[i].getName()) && pg.getName().equals(grpName)) {
 							ret = true;
 							break;
 						}
