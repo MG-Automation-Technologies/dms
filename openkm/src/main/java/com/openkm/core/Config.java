@@ -41,6 +41,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import javax.activation.MimetypesFileTypeMap;
+import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,6 +78,7 @@ public class Config {
 	public static String JBPM_CONFIG;
 	public static String PROPERTY_GROUPS_XML;
 	public static String PROPERTY_GROUPS_CND;
+	public static String DTD_BASE;
 	
 	// Default users
 	public static String PROPERTY_SYSTEM_USER = "user.system";
@@ -457,13 +459,17 @@ public class Config {
 	/**
 	 * Load OpenKM configuration from OpenKM.cfg 
 	 */
-	public static void load(String ctx) {
+	public static void load(ServletContext sc) {
 		Properties config = new Properties();
 		String configFile = HOME_DIR + "/" + OPENKM_CONFIG;
-		CONTEXT = ctx;
+		CONTEXT = sc.getContextPath().substring(1);
+		
+		// Initialize DTD location
+		DTD_BASE = sc.getRealPath("WEB-INF/classes/dtd");
+		log.info("** Application {} has DTDs at {}", sc.getServletContextName(), DTD_BASE);
 		
 		// Read config
-		try {
+		try {	
 			log.info("** Reading config file " + configFile + " **");
 			FileInputStream fis = new FileInputStream(configFile);
 			config.load(fis);
