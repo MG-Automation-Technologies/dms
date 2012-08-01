@@ -70,97 +70,6 @@ import com.openkm.core.ParseException;
 public class FormUtils {
 	private static Logger log = LoggerFactory.getLogger(FormUtils.class);
 	private static Map<PropertyGroup, List<FormElement>> pGroups = null;
-	
-	static class LocalResolver implements EntityResolver {
-		private static Logger log = LoggerFactory.getLogger(LocalResolver.class);
-		private Hashtable<String, String> dtds = new Hashtable<String, String>();
-		private boolean hasDTD = false;
-
-		public LocalResolver(String dtdBase) {
-			log.info("new LocalResolver({})", dtdBase);
-			File folder = new File(dtdBase);
-			File[] files = folder.listFiles();
-			
-			for (File f : files) {
-				if (!f.isFile()) {
-					continue;
-				}
-				
-				String fileName = f.getName();
-				
-				if (!fileName.endsWith(".dtd")) {
-					continue;
-				}
-				
-				String fpi = "-//OpenKM//DTD ";
-				
-				// transform fileName to fpi;
-				// example: property-groups-2.0.dtd -> Property Groups 2.0
-				fileName = fileName.replaceAll("\\.dtd", "");
-				boolean isFirst = true;
-				
-				for(String token : fileName.split("-")) {
-					char capLetter = Character.toUpperCase(token.charAt(0));
-					String toBeCapped =  capLetter + token.substring(1, token.length());
-					
-					if (isFirst) {
-						isFirst = false;
-					} else {
-						fpi += " ";
-					}
-					
-					fpi += toBeCapped;
-				}
-				
-				fpi += "//EN";
-				registerDTD(fpi, f.getPath());
-			}
-		}
-
-		/**
-		 * Registers available DTDs
-		 * @param String publicId    - Public ID of DTD
-		 * @param String dtdFileName - the file name of DTD
-		 */
-		public void registerDTD(String publicId, String dtdFileName) {
-			log.info("registerDTD({}, {})", publicId, dtdFileName);
-			dtds.put(publicId, dtdFileName);
-		}
-
-		/**
-		 * Returns DTD inputSource. Is DTD was found in the hashtable and inputSource was created
-		 * flad hasDTD is ser to true.
-		 * @param String publicId    - Public ID of DTD
-		 * @param String dtdFileName - the file name of DTD
-		 * @return InputSource of DTD
-		 */
-		public InputSource resolveEntity(String publicId, String systemId) {
-			hasDTD = false;
-			String dtd = (String)dtds.get(publicId);
-			log.info("resolveEntity(publicId={}, systemId={}) => {}", new Object[] { publicId, systemId, ((dtd == null) ? "NULL" : dtd) });
-
-			if (dtd != null) {
-				hasDTD = true;
-				
-				try	{
-					InputSource aInputSource = new InputSource(dtd);
-					return aInputSource;
-				} catch (Exception ex)	{
-					// ignore
-				}
-			}
-			
-			return null;
-		}
-
-		/**
-		 * Returns the boolean value to inform id DTD was found in the XML file or not
-		 * @return boolean - true if DTD was found in XML
-		 */
-		public boolean hasDTD() {
-			return hasDTD;
-		}
-	}
 
 	/**
 	 * Parse form.xml definitions
@@ -177,9 +86,9 @@ public class FormUtils {
 			dbf.setNamespaceAware(true);
 			dbf.setValidating(true);
 			ErrorHandler handler = new ErrorHandler();
+			EntityResolver resolver = new LocalResolver(Config.DTD_BASE);
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			db.setErrorHandler(handler);
-			EntityResolver resolver = new LocalResolver(Config.DTD_BASE);
 			db.setEntityResolver(resolver);
 			
 			if (is != null) {
@@ -226,9 +135,9 @@ public class FormUtils {
 			dbf.setNamespaceAware(true);
 			dbf.setValidating(true);
 			ErrorHandler handler = new ErrorHandler();
+			EntityResolver resolver = new LocalResolver(Config.DTD_BASE);
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			db.setErrorHandler(handler);
-			EntityResolver resolver = new LocalResolver(Config.DTD_BASE);
 			db.setEntityResolver(resolver);
 
 			if (is != null) {
@@ -279,8 +188,8 @@ public class FormUtils {
 				ErrorHandler handler = new ErrorHandler();
 				DocumentBuilder db = dbf.newDocumentBuilder();
 				EntityResolver resolver = new LocalResolver(Config.DTD_BASE);
-				db.setEntityResolver(resolver);
 				db.setErrorHandler(handler);
+				db.setEntityResolver(resolver);
 				fis = new FileInputStream(pgFile);
 				
 				if (fis != null) {
@@ -350,6 +259,7 @@ public class FormUtils {
 	public static List<FormElement> getPropertyGroupForms(Map<PropertyGroup, List<FormElement>> formsElements, String groupName) {
 		for (Iterator<Entry<PropertyGroup, List<FormElement>>> it1 = formsElements.entrySet().iterator(); it1.hasNext(); ) {
 			Entry<PropertyGroup, List<FormElement>> entry = it1.next();
+			
 			if (entry.getKey().getName().equals(groupName)) {
 				return entry.getValue();
 			}
@@ -364,8 +274,10 @@ public class FormUtils {
 	public static FormElement getFormElement(Map<PropertyGroup, List<FormElement>> formsElements, String propertyName) {
 		for (Iterator<Entry<PropertyGroup, List<FormElement>>> it1 = formsElements.entrySet().iterator(); it1.hasNext(); ) {
 			Entry<PropertyGroup, List<FormElement>> entry = it1.next();
+			
 			for (Iterator<FormElement> it2 = entry.getValue().iterator(); it2.hasNext(); ) {
 				FormElement fe = it2.next();
+				
 				if (fe.getName().equals(propertyName)) {
 					return fe;
 				}
@@ -836,6 +748,103 @@ public class FormUtils {
 				sb.append("</li>");
 			}
 			sb.append("</ul>");
+		}
+	}
+	
+	/*
+	 * Local Entity Resolver
+	 */
+	static class LocalResolver implements EntityResolver {
+		private static Logger log = LoggerFactory.getLogger(LocalResolver.class);
+		private Hashtable<String, String> dtds = new Hashtable<String, String>();
+		private boolean hasDTD = false;
+
+		public LocalResolver(String dtdBase) {
+			log.info("new LocalResolver({})", dtdBase);
+			File folder = new File(dtdBase);
+			File[] files = folder.listFiles();
+			
+			for (File f : files) {
+				if (!f.isFile()) {
+					continue;
+				}
+				
+				String fileName = f.getName();
+				
+				if (!fileName.endsWith(".dtd")) {
+					continue;
+				}
+				
+				String fpi = "-//OpenKM//DTD ";
+				
+				// transform fileName to fpi;
+				// example: property-groups-2.0.dtd -> Property Groups 2.0
+				fileName = fileName.replaceAll("\\.dtd", "");
+				boolean isFirst = true;
+				
+				for(String token : fileName.split("-")) {
+					char capLetter = Character.toUpperCase(token.charAt(0));
+					String toBeCapped =  capLetter + token.substring(1, token.length());
+					
+					if (isFirst) {
+						isFirst = false;
+					} else {
+						fpi += " ";
+					}
+					
+					fpi += toBeCapped;
+				}
+				
+				fpi += "//EN";
+				registerDTD(fpi, f.getPath());
+			}
+		}
+
+		/**
+		 * Registers available DTDs.
+		 * 
+		 * @param String publicId    - Public ID of DTD
+		 * @param String dtdFileName - the file name of DTD
+		 */
+		public void registerDTD(String publicId, String dtdFileName) {
+			log.info("registerDTD({}, {})", publicId, dtdFileName);
+			dtds.put(publicId, dtdFileName);
+		}
+
+		/**
+		 * Returns DTD inputSource. Is DTD was found in the hashtable and inputSource was created
+		 * flad hasDTD is ser to true.
+		 * 
+		 * @param String publicId    - Public ID of DTD
+		 * @param String dtdFileName - the file name of DTD
+		 * @return InputSource of DTD
+		 */
+		public InputSource resolveEntity(String publicId, String systemId) {
+			hasDTD = false;
+			String dtd = (String)dtds.get(publicId);
+			log.info("resolveEntity(publicId={}, systemId={}) => {}", new Object[] { publicId, systemId, ((dtd == null) ? "NULL" : dtd) });
+
+			if (dtd != null) {
+				hasDTD = true;
+				
+				try	{
+					InputSource aInputSource = new InputSource(dtd);
+					return aInputSource;
+				} catch (Exception ex)	{
+					// ignore
+				}
+			}
+			
+			return null;
+		}
+
+		/**
+		 * Returns the boolean value to inform id DTD was found in the XML file or not.
+		 * 
+		 * @return boolean - true if DTD was found in XML
+		 */
+		public boolean hasDTD() {
+			return hasDTD;
 		}
 	}
 }
