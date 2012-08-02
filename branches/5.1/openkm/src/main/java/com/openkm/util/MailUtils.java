@@ -95,6 +95,7 @@ import com.openkm.jcr.JCRUtils;
 import com.openkm.module.direct.DirectDocumentModule;
 import com.openkm.module.direct.DirectMailModule;
 import com.sun.mail.imap.IMAPFolder;
+import com.sun.mail.imap.IMAPInputStream;
 import com.sun.mail.pop3.POP3Folder;
 
 import freemarker.template.Template;
@@ -708,21 +709,33 @@ public class MailUtils {
 	 */
 	private static String getText(Part p) throws MessagingException, IOException {
 		if (p.isMimeType("text/*")) {
-			String s = (String)p.getContent();
+			Object obj = p.getContent();
+			String str = null;
+			
+			if (obj instanceof IMAPInputStream) {
+				IMAPInputStream is  = (IMAPInputStream) obj;
+				StringWriter writer = new StringWriter();
+				IOUtils.copy(is, writer, "UTF-8");
+				str = writer.toString();
+			} else {
+				str = (String) obj;
+			}
 
 			if (p.isMimeType("text/html")) {
-				return "H"+s;
+				return "H" + str;
 			} else if (p.isMimeType("text/plain")) {
-				return "T"+s;
+				return "T" + str;
 			} else {
-				return "X"+s;
+				return "X" + str;
 			}
 		} else if (p.isMimeType("multipart/alternative")) {
 			// prefer plain text over html
-			Multipart mp = (Multipart)p.getContent();
+			Multipart mp = (Multipart) p.getContent();
 			String text = null;
+			
 			for (int i = 0; i < mp.getCount(); i++) {
 				Part bp = mp.getBodyPart(i);
+				
 				if (bp.isMimeType("text/plain")) {
 					String s = getText(bp);
 					if (s != null)
@@ -737,14 +750,15 @@ public class MailUtils {
 			}
 			return text;
 		} else if (p.isMimeType("multipart/*")) {
-			Multipart mp = (Multipart)p.getContent();
+			Multipart mp = (Multipart) p.getContent();
+			
 			for (int i = 0; i < mp.getCount(); i++) {
 				String s = getText(mp.getBodyPart(i));
 				if (s != null)
 					return s;
 			}
 		}
-
+		
 		return null;
 	}
 	
