@@ -1,133 +1,211 @@
 /**
- *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
- *
- *  No bytes were intentionally harmed during the development of this application.
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * OpenKM, Open Document Management System (http://www.openkm.com)
+ * Copyright (c) 2006-2011 Paco Avila & Josep Llort
+ * 
+ * No bytes were intentionally harmed during the development of this application.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 package com.openkm.util;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 import java.io.Reader;
 
+/**
+ * Adapts a <code>Reader</code> as an <code>InputStream</code>.
+ * Adapted from <CODE>StringInputStream</CODE>.
+ * 
+ */
 public class ReaderInputStream extends InputStream {
-	/** Input Reader class. */
-	private Reader reader;
-	private PipedOutputStream pos;
-	private PipedInputStream pis;
-	private OutputStreamWriter osw;
-
+	
+	/** Source Reader */
+	private Reader in;
+	private String encoding = "UTF-8";
+	private byte[] slack;
+	private int begin;
+	
 	/**
-	 * Creates new input stream from the given reader. Uses the platform default
-	 * encoding.
+	 * Construct a <CODE>ReaderInputStream</CODE> for the specified <CODE>Reader</CODE>.
 	 * 
-	 * @param reader
-	 *            Input reader
+	 * @param reader <CODE>Reader</CODE>. Must not be <code>null</code>.
 	 */
-	public ReaderInputStream(Reader reader) throws IOException {
-		this.reader = reader;
-		pos = new PipedOutputStream();
-		pis = new PipedInputStream(pos);
-		osw = new OutputStreamWriter(pos);
+	public ReaderInputStream(Reader reader) {
+		in = reader;
 	}
-
+	
 	/**
-	 * Creates new input stream from the given reader and encoding.
+	 * Construct a <CODE>ReaderInputStream</CODE> for the specified <CODE>Reader</CODE>,
+	 * with the specified encoding.
 	 * 
-	 * @param reader
-	 *            Input reader
-	 * @param encoding
+	 * @param reader non-null <CODE>Reader</CODE>.
+	 * @param encoding non-null <CODE>String</CODE> encoding.
 	 */
-	public ReaderInputStream(Reader reader, String encoding) throws IOException {
-		this.reader = reader;
-		pos = new PipedOutputStream();
-		pis = new PipedInputStream(pos);
-		osw = new OutputStreamWriter(pos, encoding);
+	public ReaderInputStream(Reader reader, String encoding) {
+		this(reader);
+		
+		if (encoding == null) {
+			throw new IllegalArgumentException("encoding must not be null");
+		} else {
+			this.encoding = encoding;
+		}
 	}
-
-	public int read() throws IOException {
-		if (pis.available() > 0) {
-			return pis.read();
+	
+	/**
+	 * Reads from the <CODE>Reader</CODE>, returning the same value.
+	 * 
+	 * @return the value of the next character in the <CODE>Reader</CODE>.
+	 * 
+	 * @exception IOException if the original <code>Reader</code> fails to be read
+	 */
+	public synchronized int read() throws IOException {
+		if (in == null) {
+			throw new IOException("Stream Closed");
 		}
-
-		int c = reader.read();
-
-		if (c == -1) {
-			return c;
-		}
-
-		osw.write(c);
-		osw.flush();
-		pos.flush();
-
-		return pis.read();
-	}
-
-	public int read(byte[] b, int off, int len) throws IOException {
-		if (len == 0) {
-			return 0;
-		}
-
-		int c = read();
-
-		if (c == -1) {
-			return -1;
-		}
-
-		b[off] = (byte) c;
-
-		int i = 1;
-
-		// Don't try to fill up the buffer if the reader is waiting.
-		for (; (i < len) && reader.ready(); i++) {
-			c = read();
-
-			if (c == -1) {
-				return i;
+		
+		byte result;
+		
+		if (slack != null && begin < slack.length) {
+			result = slack[begin];
+			
+			if (++begin == slack.length) {
+				slack = null;
 			}
-
-			b[off + i] = (byte) c;
+		} else {
+			byte[] buf = new byte[1];
+			
+			if (read(buf, 0, 1) <= 0) {
+				result = -1;
+			}
+			result = buf[0];
 		}
-
-		return i;
+		
+		if (result < -1) {
+			result += 256;
+		}
+		
+		return result;
 	}
-
-	public int available() throws IOException {
-		int i = pis.available();
-
-		if (i > 0) {
-			return i;
+	
+	/**
+	 * Reads from the <code>Reader</code> into a byte array
+	 * 
+	 * @param b the byte array to read into
+	 * @param off the offset in the byte array
+	 * @param len the length in the byte array to fill
+	 * @return the actual number read into the byte array, -1 at the end of the stream
+	 * @exception IOException if an error occurs
+	 */
+	public synchronized int read(byte[] b, int off, int len) throws IOException {
+		if (in == null) {
+			throw new IOException("Stream Closed");
 		}
-
-		if (reader.ready()) {
-			// Char must produce at least one byte.
+		
+		while (slack == null) {
+			char[] buf = new char[len]; // might read too much
+			int n = in.read(buf);
+			
+			if (n == -1) {
+				return -1;
+			}
+			
+			if (n > 0) {
+				slack = new String(buf, 0, n).getBytes(encoding);
+				begin = 0;
+			}
+		}
+		
+		if (len > slack.length - begin) {
+			len = slack.length - begin;
+		}
+		
+		System.arraycopy(slack, begin, b, off, len);
+		
+		if ((begin += len) >= slack.length) {
+			slack = null;
+		}
+		
+		return len;
+	}
+	
+	/**
+	 * Marks the read limit of the StringReader.
+	 * 
+	 * @param limit the maximum limit of bytes that can be read before the
+	 *        mark position becomes invalid
+	 */
+	public synchronized void mark(final int limit) {
+		try {
+			in.mark(limit);
+		} catch (IOException ioe) {
+			throw new RuntimeException(ioe.getMessage());
+		}
+	}
+	
+	/**
+	 * @return the current number of bytes ready for reading
+	 * @exception IOException if an error occurs
+	 */
+	public synchronized int available() throws IOException {
+		if (in == null) {
+			throw new IOException("Stream Closed");
+		}
+		
+		if (slack != null) {
+			return slack.length - begin;
+		}
+		
+		if (in.ready()) {
 			return 1;
 		} else {
 			return 0;
 		}
 	}
-
-	public void close() throws IOException {
-		reader.close();
-		osw.close();
-		pis.close();
+	
+	/**
+	 * @return false - mark is not supported
+	 */
+	public boolean markSupported() {
+		return false; // would be imprecise
+	}
+	
+	/**
+	 * Resets the StringReader.
+	 * 
+	 * @exception IOException if the StringReader fails to be reset
+	 */
+	public synchronized void reset() throws IOException {
+		if (in == null) {
+			throw new IOException("Stream Closed");
+		}
+		
+		slack = null;
+		in.reset();
+	}
+	
+	/**
+	 * Closes the StringReader.
+	 * 
+	 * @exception IOException if the original StringReader fails to be closed
+	 */
+	public synchronized void close() throws IOException {
+		if (in != null) {
+			in.close();
+			slack = null;
+			in = null;
+		}
 	}
 }
