@@ -95,7 +95,6 @@ import com.openkm.jcr.JCRUtils;
 import com.openkm.module.direct.DirectDocumentModule;
 import com.openkm.module.direct.DirectMailModule;
 import com.sun.mail.imap.IMAPFolder;
-import com.sun.mail.imap.IMAPInputStream;
 import com.sun.mail.pop3.POP3Folder;
 
 import freemarker.template.Template;
@@ -712,8 +711,8 @@ public class MailUtils {
 			Object obj = p.getContent();
 			String str = null;
 			
-			if (obj instanceof IMAPInputStream) {
-				IMAPInputStream is  = (IMAPInputStream) obj;
+			if (obj instanceof InputStream) {
+				InputStream is  = (InputStream) obj;
 				StringWriter writer = new StringWriter();
 				IOUtils.copy(is, writer, "UTF-8");
 				str = writer.toString();
