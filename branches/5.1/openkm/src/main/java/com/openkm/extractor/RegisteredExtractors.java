@@ -156,7 +156,12 @@ public class RegisteredExtractors {
 		try {
 			in = contNode.getProperty(JcrConstants.JCR_DATA).getStream();
 			out = RegisteredExtractors.getText(docNode, mimeType, "UTF-8", in);
-			contNode.setProperty(Document.TEXT, out);
+			
+			try {
+				contNode.setProperty(Document.TEXT, out);
+			} catch (Exception e) {
+				log.warn("Text extraction failure - {}: {}", e.getClass().getName(), e.getMessage());
+			}
 		} finally {
 			IOUtils.closeQuietly(out);
 			IOUtils.closeQuietly(in);
