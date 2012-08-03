@@ -34,6 +34,7 @@ import com.openkm.core.NoSuchPropertyException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.extension.core.ExtensionException;
 
 public interface PropertyGroupModule {
 
@@ -53,7 +54,7 @@ public interface PropertyGroupModule {
 	 */
 	public void addGroup(String token, String nodePath, String grpName) throws NoSuchGroupException,
 			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
-			DatabaseException;
+			DatabaseException, ExtensionException;
 
 	/**
 	 * Removes a property group from a document.
@@ -69,7 +70,7 @@ public interface PropertyGroupModule {
 	 */
 	public void removeGroup(String token, String nodePath, String grpName) throws AccessDeniedException, 
 			NoSuchGroupException, LockException, PathNotFoundException, RepositoryException,
-			DatabaseException;
+			DatabaseException, ExtensionException;
 
 	/**
 	 * Get groups assigned to a document.
@@ -128,7 +129,7 @@ public interface PropertyGroupModule {
 	 */
 	public void setProperties(String token, String nodePath, String grpName, List<FormElement> properties)
 			throws IOException, ParseException, NoSuchPropertyException, NoSuchGroupException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, ExtensionException;
 
 	/**
 	 * Get all possible values which can have a property.
