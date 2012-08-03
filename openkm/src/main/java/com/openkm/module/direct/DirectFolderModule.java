@@ -209,8 +209,15 @@ public class DirectFolderModule implements FolderModule {
 				testName = name + " (" + i + ")";
 			}
 			
+			// PRE
+			Ref<Node> refFolderNode = new Ref<Node>(folderNode);
+			FolderExtensionManager.getInstance().preDelete(session, fldPath, refFolderNode);
+			
 			session.move(folderNode.getPath(), destPath+testName);
 			session.getRootNode().save();
+			
+			// POST
+			FolderExtensionManager.getInstance().postDelete(session, fldPath, refFolderNode);
 			
 			// Check scripting
 			BaseScriptingModule.checkScripts(session, parentNode, folderNode, "DELETE_FOLDER");
@@ -257,11 +264,18 @@ public class DirectFolderModule implements FolderModule {
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
 			String fldUuid = folderNode.getUUID();
 			
+			// PRE
+			Ref<Node> refFolderNode = new Ref<Node>(folderNode);
+			FolderExtensionManager.getInstance().prePurge(session, fldPath, refFolderNode);
+
 			synchronized (folderNode) {
 				parentNode = folderNode.getParent();
 				BaseFolderModule.purge(session, folderNode);
 				parentNode.save();
 			}
+
+			// POST
+			FolderExtensionManager.getInstance().postPurge(session, fldPath);
 			
 			// Check scripting
 			BaseScriptingModule.checkScripts(session, parentNode, folderNode, "PURGE_FOLDER");
@@ -314,6 +328,11 @@ public class DirectFolderModule implements FolderModule {
 			
 			if (newName != null && !newName.equals("") && !newName.equals(name)) {
 				String newPath = parent+"/"+newName;
+				
+				// PRE
+				Ref<Node> refFolderNode = new Ref<Node>(folderNode);
+				FolderExtensionManager.getInstance().preRename(session, fldPath, newPath, refFolderNode);
+				
 				session.move(fldPath, newPath);
 				
 				// Set new name
@@ -325,6 +344,10 @@ public class DirectFolderModule implements FolderModule {
 			
 				// Set returned document properties
 				renamedFolder = BaseFolderModule.getProperties(session, folderNode);
+				
+				// POST
+				refFolderNode = new Ref<Node>(folderNode);
+				FolderExtensionManager.getInstance().postRename(session, fldPath, newPath, refFolderNode);
 			} else {
 				// Don't change anything
 				folderNode = session.getRootNode().getNode(fldPath.substring(1));
@@ -377,9 +400,17 @@ public class DirectFolderModule implements FolderModule {
 			//Node fldNode = session.getRootNode().getNode(fldPath.substring(1));
 			String name = JCRUtils.getName(fldPath);
 			String dstNodePath = dstPath + "/" + name;
+			
+			// PRE
+			FolderExtensionManager.getInstance().preMove(session, fldPath, dstNodePath);
+			
 			session.move(fldPath, dstNodePath);
 			session.save();
 			Node dstFldNode = session.getRootNode().getNode(dstNodePath.substring(1));
+			
+			// POST
+			Ref<Node> refDstFldNode = new Ref<Node>(dstFldNode);
+			FolderExtensionManager.getInstance().postMove(session, fldPath, dstNodePath, refDstFldNode);
 			
 			// Check scripting
 			BaseScriptingModule.checkScripts(session, dstFldNode.getParent(), dstFldNode, "MOVE_FOLDER");
@@ -435,12 +466,22 @@ public class DirectFolderModule implements FolderModule {
 			// Make some work
 			Node srcFolderNode = session.getRootNode().getNode(fldPath.substring(1)); 
 			Node dstFolderNode = session.getRootNode().getNode(dstPath.substring(1));
+			
+			// PRE
+			Ref<Node> refSrcFolderNode = new Ref<Node>(srcFolderNode);
+			Ref<Node> refDstFolderNode = new Ref<Node>(dstFolderNode);
+			FolderExtensionManager.getInstance().preCopy(session, refSrcFolderNode, refDstFolderNode);
+			
 			Node newFolder = BaseFolderModule.create(session, dstFolderNode, name);
 			dstFolderNode.save();
 			BaseFolderModule.copy(session, srcFolderNode, newFolder);
 			
 			//t.end();
 			//t.commit();
+			
+			// POST
+			Ref<Node> refNewFolderNode = new Ref<Node>(newFolder);
+			FolderExtensionManager.getInstance().postCopy(session, refSrcFolderNode, refNewFolderNode);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "COPY_FOLDER", dstFolderNode.getUUID(), fldPath + ", " + dstPath);
