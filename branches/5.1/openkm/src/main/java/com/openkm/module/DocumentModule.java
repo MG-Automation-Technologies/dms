@@ -80,7 +80,7 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void delete(String token, String docPath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException;
+			AccessDeniedException, RepositoryException, DatabaseException, ExtensionException;
 	
 	/**
 	 * Rename a document in the repository.
@@ -96,7 +96,7 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Document rename(String token, String docPath, String newName) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException;
+			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException, ExtensionException;
 	
 	/**
 	 * Obtain document properties from the repository.
@@ -172,7 +172,7 @@ public interface DocumentModule {
 	 */
 	public void setContent(String token, String docPath, InputStream is) throws FileSizeExceededException,
 			UserQuotaExceededException, VirusDetectedException, VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException;
+			AccessDeniedException, RepositoryException, IOException, DatabaseException, ExtensionException;
 	
 	/**
 	 * Retrieve a list of child documents from an existing folder.
@@ -250,7 +250,7 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Version checkin(String token, String docPath, String comment) throws LockException, VersionException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, ExtensionException;
 	
 	/**
 	 * Get the document version history.
@@ -341,7 +341,7 @@ public interface DocumentModule {
 	 * @throws PathNotFoundException If there is no document in the repository with this path.
 	 */
 	public void purge(String token, String docPath) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, DatabaseException;
+			PathNotFoundException, DatabaseException, ExtensionException;
 	
 	/**
 	 * Move a document to another location in the repository.
@@ -373,7 +373,8 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void copy(String token, String docPath, String fldPath) throws ItemExistsException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException, UserQuotaExceededException;
+			AccessDeniedException, RepositoryException, IOException, DatabaseException, UserQuotaExceededException,
+			ExtensionException;
 	
 	/**
 	 * Revert the document to an specific previous version.
@@ -386,7 +387,7 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void restoreVersion(String token, String docPath, String versionId) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException;
+			AccessDeniedException, RepositoryException, DatabaseException, ExtensionException;
 	
 	/**
 	 * Purge a Document version history, so delete all previous versions but last one.
