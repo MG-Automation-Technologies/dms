@@ -51,6 +51,7 @@ import com.openkm.core.NoSuchPropertyException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.extension.core.ExtensionException;
 import com.openkm.module.ModuleManager;
 import com.openkm.module.PropertyGroupModule;
 import com.openkm.ws.util.FormElementComplex;
@@ -72,7 +73,7 @@ public class OKMPropertyGroup {
 	public void addGroup(@WebParam(name = "token") String token,
 			@WebParam(name = "nodePath") String nodePath,
 			@WebParam(name = "grpName") String grpName) throws NoSuchGroupException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, ExtensionException {
 		log.debug("addGroup({}, {}, {})", new Object[] { token, nodePath, grpName });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		cm.addGroup(token, nodePath, grpName);
@@ -84,7 +85,7 @@ public class OKMPropertyGroup {
 			@WebParam(name = "nodePath") String nodePath,
 			@WebParam(name = "grpName") String grpName) throws AccessDeniedException, 
 			NoSuchGroupException, LockException, PathNotFoundException, RepositoryException,
-			DatabaseException {
+			DatabaseException, ExtensionException {
 		log.debug("removeGroup({}, {}, {})", new Object[] { token, nodePath, grpName });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		cm.removeGroup(token, nodePath, grpName);
@@ -138,7 +139,7 @@ public class OKMPropertyGroup {
 			@WebParam(name = "grpName") String grpName,
 			@WebParam(name = "properties") FormElementComplex[] properties) throws IOException, ParseException,
 			NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
+			AccessDeniedException, RepositoryException, DatabaseException, ExtensionException {
 		log.debug("setProperties({}, {}, {}, {})", new Object[] { token, nodePath, grpName, properties });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		List<FormElement> al = new ArrayList<FormElement>();
@@ -157,7 +158,7 @@ public class OKMPropertyGroup {
 			@WebParam(name = "grpName") String grpName,
 			@WebParam(name = "properties") HashMap<String, String> properties) throws IOException, ParseException,
 			NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
+			AccessDeniedException, RepositoryException, DatabaseException, ExtensionException {
 		log.debug("setPropertiesSimple({}, {}, {}, {})", new Object[] { token, nodePath, grpName, properties });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		List<FormElement> al = new ArrayList<FormElement>();
