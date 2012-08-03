@@ -57,9 +57,13 @@ import com.openkm.core.NoSuchPropertyException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.core.Ref;
+import com.openkm.extension.core.PropertyGroupExtensionManager;
+import com.openkm.extension.core.ExtensionException;
 import com.openkm.jcr.JCRUtils;
 import com.openkm.module.PropertyGroupModule;
 import com.openkm.module.base.BasePropertyGroupModule;
+import com.openkm.module.base.BaseScriptingModule;
 import com.openkm.util.FormUtils;
 import com.openkm.util.UserActivity;
 
@@ -69,7 +73,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	@Override
 	public void addGroup(String token, String nodePath, String grpName) throws NoSuchGroupException,
 			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
-			DatabaseException {
+			DatabaseException, ExtensionException {
 		log.debug("addGroup({}, {}, {})", new Object[] { token, nodePath, grpName });
 		Node documentNode = null;
 		Session session = null;
@@ -86,7 +90,19 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			}
 			
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
+			
+			// PRE
+			Ref<Node> refDocumentNode = new Ref<Node>(documentNode);
+			PropertyGroupExtensionManager.getInstance().preAddGroup(session, refDocumentNode, grpName);
+			
 			BasePropertyGroupModule.addGroup(session, documentNode, grpName);
+			
+			// POST
+			PropertyGroupExtensionManager.getInstance().postAddGroup(session, refDocumentNode, grpName);
+
+			// Check scripting
+			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "ADD_GROUP");
+
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "ADD_PROPERTY_GROUP", documentNode.getUUID(), grpName+", "+nodePath);
@@ -120,7 +136,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	@Override
 	public void removeGroup(String token, String nodePath, String grpName) throws AccessDeniedException, 
 			NoSuchGroupException, LockException, PathNotFoundException, RepositoryException, 
-			DatabaseException {
+			DatabaseException, ExtensionException {
 		log.debug("removeGroup({}, {}, {})", new Object[] { token, nodePath, grpName });
 		Node documentNode = null;
 		Session session = null;
@@ -138,11 +154,21 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
 			
+			// PRE
+			Ref<Node> refDocumentNode = new Ref<Node>(documentNode);
+			PropertyGroupExtensionManager.getInstance().preRemoveGroup(session, refDocumentNode, grpName);
+			
 			synchronized (documentNode) {
 				documentNode.removeMixin(grpName);
 				documentNode.save();				
 			}
 			
+			// POST
+			PropertyGroupExtensionManager.getInstance().postRemoveGroup(session, refDocumentNode, grpName);
+
+			// Check scripting
+			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "REMOVE_GROUP");
+
 			// Activity log
 			UserActivity.log(session.getUserID(), "REMOVE_PROPERTY_GROUP", documentNode.getUUID(), grpName+", "+nodePath);
 		} catch (javax.jcr.nodetype.NoSuchNodeTypeException e) {
@@ -355,7 +381,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	@Override
 	public void setProperties(String token, String nodePath, String grpName, List<FormElement> properties)
 			throws IOException, ParseException, NoSuchPropertyException, NoSuchGroupException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, ExtensionException {
 		log.debug("setProperties({}, {}, {}, {})", new Object[] { token, nodePath, grpName, properties });
 		Node documentNode = null;
 		Session session = null;
@@ -375,6 +401,10 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			NodeType nt = ntm.getNodeType(grpName);
 			PropertyDefinition[] pd = nt.getDeclaredPropertyDefinitions();
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
+			
+			// PRE
+			Ref<Node> refDocumentNode = new Ref<Node>(documentNode);
+			PropertyGroupExtensionManager.getInstance().preSetProperties(session, refDocumentNode, grpName, properties);
 			
 			synchronized (documentNode) {
 				// Maybe the property is not found because was added after the assignment,
@@ -407,6 +437,12 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			}
 			
 			documentNode.save();
+			
+			// POST
+			PropertyGroupExtensionManager.getInstance().postSetProperties(session, refDocumentNode, grpName, properties);
+
+			// Check scripting
+			BaseScriptingModule.checkScripts(session, documentNode, documentNode, "SET_PROPERTIES");
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "SET_PROPERTY_GROUP_PROPERTIES", documentNode.getUUID(), grpName+", "+properties+", "+nodePath);
