@@ -106,7 +106,7 @@ public class OKMDocument {
 	@WebMethod
 	public void delete(@WebParam(name = "token") String token,
 			@WebParam(name = "docPath") String docPath) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, LockException, DatabaseException {
+			PathNotFoundException, LockException, DatabaseException, ExtensionException {
 		log.debug("delete({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.delete(token, docPath);
@@ -170,7 +170,7 @@ public class OKMDocument {
 	public Document rename(@WebParam(name = "token") String token,
 			@WebParam(name = "docPath") String docPath,
 			@WebParam(name = "newName") String newName) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, ItemExistsException, DatabaseException {
+			PathNotFoundException, ItemExistsException, DatabaseException, ExtensionException {
 		log.debug("rename({}, {}, {})", new Object[] { token, docPath, newName });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Document renamedDocument = dm.rename(token, docPath, newName);
@@ -222,7 +222,7 @@ public class OKMDocument {
 	public Version checkin(@WebParam(name = "token") String token,
 			@WebParam(name = "docPath") String docPath,
 			@WebParam(name = "comment") String comment) throws LockException, VersionException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, ExtensionException {
 		log.debug("checkin({}, {} ,{})", new Object[] { token, docPath, comment });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Version version = dm.checkin(token, docPath, comment);
@@ -248,7 +248,7 @@ public class OKMDocument {
 			@WebParam(name = "content") byte[] content) throws FileSizeExceededException, 
 			UserQuotaExceededException, VirusDetectedException, VersionException, LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, IOException, 
-			DatabaseException {
+			DatabaseException, ExtensionException {
 		log.debug("setContent({}, {}, {})", new Object[] { token, docPath, content });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		ByteArrayInputStream bais = new ByteArrayInputStream(content);
@@ -291,7 +291,7 @@ public class OKMDocument {
 	@WebMethod
 	public void purge(@WebParam(name = "token") String token,
 			@WebParam(name = "docPath") String docPath) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, DatabaseException {
+			PathNotFoundException, DatabaseException, ExtensionException {
 		log.debug("purge({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.purge(token, docPath);
@@ -314,7 +314,7 @@ public class OKMDocument {
 	public void restoreVersion(@WebParam(name = "token") String token,
 			@WebParam(name = "docPath") String docPath,
 			@WebParam(name = "versionId") String versionId) throws AccessDeniedException, 
-			RepositoryException, PathNotFoundException, DatabaseException {
+			RepositoryException, PathNotFoundException, DatabaseException, ExtensionException {
 		log.debug("restoreVersion({}, {}, {})", new Object[] { token, docPath, versionId });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.restoreVersion(token, docPath, versionId);

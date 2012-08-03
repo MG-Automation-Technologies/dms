@@ -807,6 +807,9 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 		} catch (AccessDeniedException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_AccessDenied), e.getMessage());
+		} catch (ExtensionException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Extension), e.getMessage());
 		} catch (DocumentTemplateException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_DocumentTemplate), e.getMessage());
