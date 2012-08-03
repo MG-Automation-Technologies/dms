@@ -80,89 +80,91 @@ public interface DocumentExtension extends Extension {
 	 * Executed BEFORE document DELETE.
 	 */
 	public void preDelete(Session session, Ref<Node> refDocumentNode) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, LockException, DatabaseException;
+			RepositoryException, PathNotFoundException, LockException, DatabaseException, ExtensionException;
 	
 	/**
 	 * Executed POST document DELETE.
 	 */
 	public void postDelete(Session session, String fileName) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, LockException, DatabaseException;
+			PathNotFoundException, LockException, DatabaseException, ExtensionException;
 	
 	/**
 	 * Executed BEFORE document SET CONTENT.
 	 */
 	public void preSetContent(Session session, Ref<Node> refDocumentNode) throws FileSizeExceededException,
 			UserQuotaExceededException, VirusDetectedException, VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException;
+			AccessDeniedException, RepositoryException, IOException, DatabaseException, ExtensionException;
 	
 	/**
 	 * Executed POST document SET CONTENT.
 	 */
 	public void postSetContent(Session session, Ref<Node> refDocumentNode) throws FileSizeExceededException,
 			UserQuotaExceededException, VirusDetectedException, VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException;
+			AccessDeniedException, RepositoryException, IOException, DatabaseException, ExtensionException;
 	
 	/**
 	 * Executed BEFORE document RENAME.
 	 */
 	public void preRename(Session session, String docPath, String newPath, Ref<Node> refDocumentNode)
 			throws AccessDeniedException, RepositoryException, PathNotFoundException, ItemExistsException,
-			DatabaseException;
+			DatabaseException, ExtensionException;
 	
 	/**
 	 * Executed POST document RENAME.
 	 */
 	public void postRename(Session session, String docPath, String newPath, Ref<Node> refDocumentNode)
 			throws AccessDeniedException, RepositoryException, PathNotFoundException, ItemExistsException,
-			DatabaseException;
+			DatabaseException, ExtensionException;
 	
 	/**
 	 * Executed BEFORE document CHECK IN.
 	 */
 	public void preCheckin(XASession session, Ref<Node> refDocumentNode) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, LockException, VersionException, DatabaseException;
+			RepositoryException, PathNotFoundException, LockException, VersionException, DatabaseException,
+			ExtensionException;
 	
 	/**
 	 * Executed POST document CHECK IN.
 	 */
 	public void postCheckin(Session session, Ref<Node> docNode, Ref<Version> version) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, LockException, VersionException, DatabaseException;
+			RepositoryException, PathNotFoundException, LockException, VersionException, DatabaseException,
+			ExtensionException;
 	
 	/**
 	 * Executed BEFORE document PURGE.
 	 */
 	public void prePurge(Session session, Ref<Node> refDocumentNode) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, DatabaseException;
+			PathNotFoundException, DatabaseException, ExtensionException;
 	
 	/**
 	 * Executed POST document PURGE.
 	 */
 	public void postPurge(Session session, String docPath) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, DatabaseException;
+			PathNotFoundException, DatabaseException, ExtensionException;
 	
 	/**
 	 * Executed BEFORE document COPY.
 	 */
 	public void preCopy(Session session, Ref<Node> refSrcNode, Ref<Node> refDstFolderNode) throws ItemExistsException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, IOException, DatabaseException,
-			UserQuotaExceededException;
+			UserQuotaExceededException, ExtensionException;
 	
 	/**
 	 * Executed POST document COPY.
 	 */
 	public void postCopy(Session session, Ref<Node> refSrcNode, Ref<Node> refNewDocument, Ref<Node> refDstFolderNode)
 			throws ItemExistsException, PathNotFoundException, AccessDeniedException, RepositoryException, IOException,
-			DatabaseException, UserQuotaExceededException;
+			DatabaseException, UserQuotaExceededException, ExtensionException;
 	
 	/**
 	 * Executed BEFPRE document RESTORE VERSION.
 	 */
 	public void preRestoreVersion(Session session, Ref<Node> refDocumentNode) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, DatabaseException;
+			RepositoryException, PathNotFoundException, DatabaseException, ExtensionException;
 	
 	/**
 	 * Executed POST document RESTORE VERSION.
 	 */
 	public void postRestoreVersion(Session session, Ref<Node> refDocumentNode) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, DatabaseException;
+			RepositoryException, PathNotFoundException, DatabaseException, ExtensionException;
 }

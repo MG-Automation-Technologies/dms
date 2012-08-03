@@ -156,7 +156,7 @@ public class DocumentExtensionManager {
 	}
 	
 	public void preDelete(Session session, Ref<Node> refDocumentNode) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, LockException, DatabaseException {
+			RepositoryException, PathNotFoundException, LockException, DatabaseException, ExtensionException {
 		log.debug("preDelete({}, {})", new Object[] { session, refDocumentNode });
 		
 		try {
@@ -174,7 +174,7 @@ public class DocumentExtensionManager {
 	}
 	
 	public void postDelete(Session session, String fileName) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, LockException, DatabaseException {
+			PathNotFoundException, LockException, DatabaseException, ExtensionException {
 		log.debug("postDelete({}, {})", new Object[] { session, fileName });
 		
 		try {
@@ -193,7 +193,7 @@ public class DocumentExtensionManager {
 	
 	public void preSetContent(Session session, Ref<Node> refDocumentNode) throws FileSizeExceededException,
 			UserQuotaExceededException, VirusDetectedException, VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException {
+			AccessDeniedException, RepositoryException, IOException, DatabaseException, ExtensionException {
 		log.debug("preSetContent({}, {})", new Object[] { session, refDocumentNode });
 		
 		try {
@@ -212,7 +212,7 @@ public class DocumentExtensionManager {
 	
 	public void postSetContent(Session session, Ref<Node> refDocumentNode) throws FileSizeExceededException,
 			UserQuotaExceededException, VirusDetectedException, VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException {
+			AccessDeniedException, RepositoryException, IOException, DatabaseException, ExtensionException {
 		log.debug("postSetContent({}, {})", new Object[] { session, refDocumentNode });
 		
 		try {
@@ -231,7 +231,7 @@ public class DocumentExtensionManager {
 	
 	public void preRename(Session session, String docPath, String newPath, Ref<Node> refDocumentNode)
 			throws AccessDeniedException, RepositoryException, PathNotFoundException, ItemExistsException,
-			DatabaseException {
+			DatabaseException, ExtensionException {
 		log.debug("preRename({}, {}, {}, {})", new Object[] { session, docPath, newPath, refDocumentNode });
 		
 		try {
@@ -250,7 +250,7 @@ public class DocumentExtensionManager {
 	
 	public void postRename(Session session, String docPath, String newPath, Ref<Node> refDocumentNode)
 			throws AccessDeniedException, RepositoryException, PathNotFoundException, ItemExistsException,
-			DatabaseException {
+			DatabaseException, ExtensionException {
 		log.debug("postRename({}, {}, {}, {})", new Object[] { session, docPath, newPath, refDocumentNode });
 		
 		try {
@@ -268,7 +268,8 @@ public class DocumentExtensionManager {
 	}
 	
 	public void preCheckin(XASession session, Ref<Node> refDocumentNode) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, LockException, VersionException, DatabaseException {
+			RepositoryException, PathNotFoundException, LockException, VersionException, DatabaseException,
+			ExtensionException {
 		log.debug("preCheckin({}, {})", new Object[] { session, refDocumentNode });
 		
 		try {
@@ -287,7 +288,7 @@ public class DocumentExtensionManager {
 	
 	public void postCheckin(XASession session, Ref<Node> refDocumentNode, Ref<Version> refVersion)
 			throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException, VersionException,
-			DatabaseException {
+			DatabaseException, ExtensionException {
 		log.debug("postCheckin({}, {})", new Object[] { session, refDocumentNode });
 		
 		try {
@@ -305,7 +306,7 @@ public class DocumentExtensionManager {
 	}
 	
 	public void prePurge(Session session, Ref<Node> refDocumentNode) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, DatabaseException {
+			PathNotFoundException, DatabaseException, ExtensionException {
 		log.debug("prePurge({}, {})", new Object[] { session, refDocumentNode });
 		
 		try {
@@ -323,7 +324,7 @@ public class DocumentExtensionManager {
 	}
 	
 	public void postPurge(Session session, String docPath) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, DatabaseException {
+			PathNotFoundException, DatabaseException, ExtensionException {
 		log.debug("postPurge({}, {})", new Object[] { session, docPath });
 		
 		try {
@@ -342,7 +343,7 @@ public class DocumentExtensionManager {
 	
 	public void preCopy(Session session, Ref<Node> refSrcNode, Ref<Node> refDstFolderNode) throws ItemExistsException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, IOException, DatabaseException,
-			UserQuotaExceededException {
+			UserQuotaExceededException, ExtensionException {
 		log.debug("preCopy({}, {}, {})", new Object[] { session, refSrcNode, refDstFolderNode });
 		
 		try {
@@ -361,7 +362,7 @@ public class DocumentExtensionManager {
 	
 	public void postCopy(Session session, Ref<Node> refSrcNode, Ref<Node> refNewDocument, Ref<Node> refDstFolderNode)
 			throws ItemExistsException, PathNotFoundException, AccessDeniedException, RepositoryException, IOException,
-			DatabaseException, UserQuotaExceededException {
+			DatabaseException, UserQuotaExceededException, ExtensionException {
 		log.debug("postCopy({}, {}, {}, {})", new Object[] { session, refSrcNode, refNewDocument, refDstFolderNode });
 		
 		try {
@@ -379,7 +380,7 @@ public class DocumentExtensionManager {
 	}
 	
 	public void preRestoreVersion(Session session, Ref<Node> refDocumentNode) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, DatabaseException {
+			RepositoryException, PathNotFoundException, DatabaseException, ExtensionException {
 		log.debug("preRestoreVersion({}, {})", new Object[] { session, refDocumentNode });
 		
 		try {
@@ -397,7 +398,7 @@ public class DocumentExtensionManager {
 	}
 	
 	public void postRestoreVersion(Session session, Ref<Node> refDocumentNode) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, DatabaseException {
+			RepositoryException, PathNotFoundException, DatabaseException, ExtensionException {
 		log.debug("postRestoreVersion({}, {})", new Object[] { session, refDocumentNode });
 		
 		try {
