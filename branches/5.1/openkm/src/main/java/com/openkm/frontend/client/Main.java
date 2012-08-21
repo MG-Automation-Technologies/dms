@@ -557,5 +557,9 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		$wnd.i18n = function(s) {
 		 	return @com.openkm.frontend.client.Main::i18n(Ljava/lang/String;)(s);
 		};
-	}-*/;
+		$wnd.openFolderPath = function(folderPath, docPath) {
+			@com.openkm.frontend.client.util.CommonUI::openAllFolderPath(Ljava/lang/String;Ljava/lang/String;)(folderPath, docPath);
+			return true;
+		};
+	}-*/;	
 }
