@@ -24,14 +24,20 @@
       trick = '0';
       window.addEventListener("load", function() { setTimeout(loaded, 100); }, true);
     }
+
+    window.onresize = function() {
+      loaded();
+    };
+      
     function loaded() {
       var frame = document.getElementById('frame');
       var menu = document.getElementById('menu');
-      var height = Math.max(
-              Math.max(document.body.scrollHeight, document.documentElement.scrollHeight),
-              Math.max(document.body.offsetHeight, document.documentElement.offsetHeight),
-              Math.max(document.body.clientHeight, document.documentElement.clientHeight)
-          );
+      //var height = Math.max(
+      //        Math.max(document.body.scrollHeight, document.documentElement.scrollHeight),
+      //        Math.max(document.body.offsetHeight, document.documentElement.offsetHeight),
+      //        Math.max(document.body.clientHeight, document.documentElement.clientHeight)
+      //    );
+      var height = document.documentElement.clientHeight;
       frame.style.height=(height-menu.offsetHeight-trick)+'px';
       frame.style.visibility='visible';
     }
