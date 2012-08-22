@@ -22,6 +22,8 @@
 package com.openkm.frontend.client.panel;
 
 import com.allen_sauer.gwt.log.client.Log;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -90,7 +92,7 @@ public class ExtendedDockPanel extends Composite {
 	/**
 	 * Extended dock panel
 	 */
-	public ExtendedDockPanel() {
+	public ExtendedDockPanel() {	
 		dockPanel = new DockPanel();
 		folderSelectPopup = new FolderSelectPopup();
 		enableKeyShorcuts();
@@ -112,26 +114,10 @@ public class ExtendedDockPanel extends Composite {
 		
 		// Administration panel initialization
 		administration = new Administration();
-		
-		// Calculating real height
-		usableHeight = Window.getClientHeight();
-		
-		// Initialize dockPanel size
-		dockPanel.setSize(""+Window.getClientWidth(), ""+usableHeight);
 
-		// The active panel must be the last on initalization because establishes coordenates
-		leftBorderPanel.setSize(VERTICAL_BORDER_PANEL_WIDTH, usableHeight-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT));
-		rightBorderPanel.setSize(VERTICAL_BORDER_PANEL_WIDTH, usableHeight-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT));
-		
-		centerWidth = Window.getClientWidth()-(2*VERTICAL_BORDER_PANEL_WIDTH);
-		centerHeight = usableHeight-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT);
-		
-		topPanel.setWidth(""+Window.getClientWidth());
-		desktop.setSize(centerWidth, centerHeight);
-		search.setSize(centerWidth, centerHeight);
-		dashboard.setSize(centerWidth, centerHeight);
-		administration.setSize(centerWidth, centerHeight);
-		
+		// set inner component's size
+		SetWidgetsSize();
+
 		actualView = UIDockPanelConstants.DESKTOP;	
 		
 		// Creates the dockPanel
@@ -143,6 +129,13 @@ public class ExtendedDockPanel extends Composite {
 		
 		dockPanel.setHorizontalAlignment(DockPanel.ALIGN_LEFT);
 		dockPanel.setVerticalAlignment(DockPanel.ALIGN_TOP);
+		
+		Window.addResizeHandler(new ResizeHandler() {
+		    @Override
+		    public void onResize(ResizeEvent event) {
+		    	SetWidgetsSize();
+		    }
+		});
 		
 		//dockPanel.setVisible(false);
 		initWidget(dockPanel);
@@ -522,5 +515,26 @@ public class ExtendedDockPanel extends Composite {
 	 */
 	public int getCenterHeight() {
 		return centerHeight;
+	}
+	
+	private void SetWidgetsSize() {
+		// Calculating real height
+		usableHeight = Window.getClientHeight();
+		
+		// Initialize dockPanel size
+		dockPanel.setSize(""+Window.getClientWidth(), ""+usableHeight);
+		
+		// The active panel must be the last on initalization because establishes coordenates
+		leftBorderPanel.setSize(VERTICAL_BORDER_PANEL_WIDTH, usableHeight-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT));
+		rightBorderPanel.setSize(VERTICAL_BORDER_PANEL_WIDTH, usableHeight-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT));
+		
+		centerWidth = Window.getClientWidth()-(2*VERTICAL_BORDER_PANEL_WIDTH);
+		centerHeight = usableHeight-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT);
+
+		topPanel.setWidth(""+Window.getClientWidth());
+		desktop.setSize(centerWidth, centerHeight);
+		search.setSize(centerWidth, centerHeight);
+		dashboard.setSize(centerWidth, centerHeight);
+		administration.setSize(centerWidth, centerHeight);
 	}
 }

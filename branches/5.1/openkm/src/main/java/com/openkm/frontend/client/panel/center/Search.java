@@ -48,12 +48,13 @@ public class Search extends Composite {
 	private boolean isResizeInProgress = false;
 	private int width = 0;
 	private int height = 0;
-	private int left = 0;
+	private int left = PANEL_LEFT_WIDTH;
 	private int right = 0;
 
 	/**
 	 * Desktop
 	 */
+	@SuppressWarnings("deprecation")
 	public Search() {
 		horizontalSplitPanel = new HorizontalSplitPanelExtended();
 		historySearch = new HistorySearch();
@@ -93,16 +94,17 @@ public class Search extends Composite {
 	 * @param width The max width of the widget
 	 * @param height The max height of the widget
 	 */
+	@SuppressWarnings("deprecation")
 	public void setSize(int width, int height) {
 		this.width = width;
 		this.height = height;
-		left = PANEL_LEFT_WIDTH;
-		right = width-(PANEL_LEFT_WIDTH+SPLITTER_WIDTH);
-		this.width = width;
-		this.height = height;
+		left = (int)(width*0.2);
+		left = left < PANEL_LEFT_WIDTH ? PANEL_LEFT_WIDTH : left;
+		right = width-(left+SPLITTER_WIDTH);
 		horizontalSplitPanel.setPixelSize(width, height);
 		historySearch.setSize(left, height);
 		searchBrowser.setSize(right, height);
+		horizontalSplitPanel.getSplitPanel().setSplitPosition(""+left);
 	}
 	
 	/**
@@ -166,6 +168,7 @@ public class Search extends Composite {
 	/**
 	 * refreshSpliterAfterAdded
 	 */
+	@SuppressWarnings("deprecation")
 	public void refreshSpliterAfterAdded() {
 		horizontalSplitPanel.getSplitPanel().setSplitPosition(""+left);
 		searchBrowser.refreshSpliterAfterAdded();
