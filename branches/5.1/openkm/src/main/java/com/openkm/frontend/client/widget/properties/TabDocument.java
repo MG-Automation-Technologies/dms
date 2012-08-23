@@ -65,6 +65,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	private static final int TAB_HEIGHT = 20;
 	public int PREVIEW_TAB = -1;
 	private int SECURITY_TAB = -1;
+	private int NOTES_TAB = -1;
 	
 	public TabLayoutPanel tabPanel;
 	public Document document;
@@ -120,6 +121,16 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 						@Override
 						public void run() {
 							security.fillWidth(); // Always when shows fires fill width
+						}
+					};
+					timer.schedule(50); // Fill width must be done after really it'll be visible
+				}
+				// Solves chrome bug
+				if (tabIndex==NOTES_TAB && (Util.getUserAgent().startsWith("safari") || Util.getUserAgent().startsWith("chrome"))) {
+					Timer timer = new Timer() {
+						@Override
+						public void run() {
+							notes.richTextArea.setFocus(true);
 						}
 					};
 					timer.schedule(50); // Fill width must be done after really it'll be visible
@@ -488,6 +499,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	public void showNotes() {
 		tabPanel.add(notes, Main.i18n("tab.document.notes"));
 		notesVisible = true;
+		NOTES_TAB = tabPanel.getWidgetCount()-1; // Starts at 0
 	}
 	
 	/**

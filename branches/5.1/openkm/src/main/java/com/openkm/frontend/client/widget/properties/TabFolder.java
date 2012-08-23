@@ -115,7 +115,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 					timer.schedule(50); // Fill width must be done after really it'll be visible
 				}
 				// Solves chrome bugt
-				if (tabIndex==NOTES_TAB && Util.getUserAgent().startsWith("safari")) {
+				if (tabIndex==NOTES_TAB && (Util.getUserAgent().startsWith("safari") || Util.getUserAgent().startsWith("chrome"))) {
 					Timer timer = new Timer() {
 						@Override
 						public void run() {
