@@ -144,7 +144,9 @@ public class FolderTree extends Composite implements OriginPanel {
 							}
 						}
 					};
-					openIfNotClosed.schedule(50);
+					if (treeItem!=null) {
+						openIfNotClosed.schedule(50);
+					}
 				}
 			}
 		});
