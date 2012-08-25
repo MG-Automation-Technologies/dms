@@ -564,8 +564,8 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 			@com.openkm.frontend.client.util.CommonUI::openAllFolderPath(Ljava/lang/String;Ljava/lang/String;)(folderPath, docPath);
 			return true;
 		};
-		$wnd.jsOpenTaskInstance = function(taskInstanceId) {
-			@com.openkm.frontend.client.util.CommonUI::openTaskInstance(Ljava/lang/String;)(taskInstanceId);
+		$wnd.jsOpenUserTaskInstance = function(taskInstanceId) {
+			@com.openkm.frontend.client.util.CommonUI::openUserTaskInstance(Ljava/lang/String;)(taskInstanceId);
 			return true;
 		};
 	}-*/;	

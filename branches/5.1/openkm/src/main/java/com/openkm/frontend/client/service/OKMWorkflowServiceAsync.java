@@ -45,5 +45,5 @@ public interface OKMWorkflowServiceAsync {
 	public void findPooledTaskInstances(AsyncCallback<List<GWTTaskInstance>> callback);
 	public void setTaskInstanceActorId(double id, AsyncCallback<?> callback);
 	public void startTaskInstance(double id, AsyncCallback<?> callback);
-	public void getTaskInstance(long taskInstanceId, AsyncCallback<GWTTaskInstance> callback);
+	public void getUserTaskInstance(long taskInstanceId, AsyncCallback<GWTTaskInstance> callback);
 }

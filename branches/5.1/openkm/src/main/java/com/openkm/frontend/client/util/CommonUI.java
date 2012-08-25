@@ -88,13 +88,13 @@ public class CommonUI {
 	 * 
 	 * @param taskInstanceId ID of required task instance
 	 */
-	public static void openTaskInstance(String taskInstanceId) {
+	public static void openUserTaskInstance(String taskInstanceId) {
 		if (Main.get().workspaceUserProperties.getWorkspace().isTabDashboardVisible() && 
 			Main.get().workspaceUserProperties.getWorkspace().isDashboardWorkflowVisible() && 
 			taskInstanceId != null && !taskInstanceId.equals("")) {
 			Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(UIDockPanelConstants.DASHBOARD);
 			Main.get().mainPanel.dashboard.horizontalToolBar.showWorkflowView();
-			workflowService.getTaskInstance(new Long(taskInstanceId).longValue(), new AsyncCallback<GWTTaskInstance>() {
+			workflowService.getUserTaskInstance(new Long(taskInstanceId).longValue(), new AsyncCallback<GWTTaskInstance>() {
 				@Override
 				public void onSuccess(GWTTaskInstance taskInstance) {
 					// Taskintance = null indicates is not valid user task instance
