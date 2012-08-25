@@ -355,7 +355,7 @@ public class StartUp {
 		
 		// Simulate we pass params by browser ( take a look really are not passed )
 		// to show user home on loading
-		if ((docPath==null && fldPath == null) || (fldPath.equals("") && docPath.equals(""))) {
+		if (fldPath == null || fldPath.equals("")) {
 			if (Main.get().userHome.getHomeType().equals(Bookmark.BOOKMARK_DOCUMENT)) {
 				docPath = Main.get().userHome.getHomePath();
 				fldPath = Util.getParent(Main.get().userHome.getHomePath());
