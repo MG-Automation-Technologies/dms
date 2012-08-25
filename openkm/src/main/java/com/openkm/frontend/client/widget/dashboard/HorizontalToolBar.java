@@ -214,7 +214,7 @@ public class HorizontalToolBar extends Composite {
 	public void showWorkflowView() {
 		enabledWidget.removeStyleName("okm-ToolBar-Big-selected");
 		workflow.setStyleName("okm-ToolBar-Big-selected");
-		enabledWidget = news;
+		enabledWidget = workflow;
 		Main.get().mainPanel.dashboard.changeView(Dashboard.DASHBOARD_WORKFLOW);
 	}
 	
