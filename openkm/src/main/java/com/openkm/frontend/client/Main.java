@@ -191,8 +191,8 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		}
 		
 		if (loc.getParameter("docPath") != null && !loc.getParameter("docPath").equals("")) {
-			fldPath = loc.getParameter("docPath").substring(0, loc.getParameter("docPath").lastIndexOf("/")); 
 			docPath = loc.getParameter("docPath"); 
+			fldPath = Util.getParent(docPath);
 		} else if (loc.getParameter("fldPath") != null && !loc.getParameter("fldPath").equals("")) {
 			fldPath = loc.getParameter("fldPath"); 
 		} else if (loc.getParameter("taskInstanceId") != null && !loc.getParameter("taskInstanceId").equals("")) {
