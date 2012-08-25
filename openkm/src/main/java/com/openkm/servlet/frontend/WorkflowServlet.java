@@ -360,14 +360,14 @@ public class WorkflowServlet extends OKMRemoteServiceServlet implements OKMWorkf
 	}
 	
 	@Override
-	public GWTTaskInstance getTaskInstance(long taskInstanceId) throws OKMException {
-		log.debug("getTaskInstance(taskInstanceId={})", taskInstanceId);
+	public GWTTaskInstance getUserTaskInstance(long taskInstanceId) throws OKMException {
+		log.debug("getUserTaskInstance(taskInstanceId={})", taskInstanceId);
 		updateSessionManager();
 		
 		try {
 			for (TaskInstance taskInstance : OKMWorkflow.getInstance().findUserTaskInstances(null)) {
 				if (taskInstance.getId()==taskInstanceId) {
-					log.debug("getTaskInstance: "+taskInstance);
+					log.debug("getUserTaskInstance: "+taskInstance);
 					return GWTUtil.copy(OKMWorkflow.getInstance().getTaskInstance(null, taskInstanceId));
 				}
 			}
@@ -385,7 +385,7 @@ public class WorkflowServlet extends OKMRemoteServiceServlet implements OKMWorkf
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("getTaskInstance: null");
+		log.debug("getUserTaskInstance: null");
 		return null;
 	}
 }

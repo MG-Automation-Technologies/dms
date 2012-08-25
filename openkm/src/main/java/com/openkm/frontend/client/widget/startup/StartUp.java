@@ -373,7 +373,7 @@ public class StartUp {
 						// Opens folder passed by parameter
 						CommonUI.openAllFolderPath(fldPath, docPath);
 					}
-					CommonUI.openTaskInstance(taskInstanceId); // Always trying opening taskInstance
+					CommonUI.openUserTaskInstance(taskInstanceId); // Always trying opening taskInstance
 					Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_OPEN_PATH);
 				}
 				@Override
@@ -390,7 +390,7 @@ public class StartUp {
 						// Opens folder passed by parameter
 						CommonUI.openAllFolderPath(fldPath, "");
 					}
-					CommonUI.openTaskInstance(taskInstanceId); // Always trying opening taskInstance
+					CommonUI.openUserTaskInstance(taskInstanceId); // Always trying opening taskInstance
 					Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_OPEN_PATH);
 				}
 				@Override
