@@ -21,15 +21,22 @@
 
 package com.openkm.frontend.client.util;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTTaskInstance;
+import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.contants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.contants.ui.UIDockPanelConstants;
+import com.openkm.frontend.client.service.OKMWorkflowService;
+import com.openkm.frontend.client.service.OKMWorkflowServiceAsync;
 
 /**
  * @author jllort
  *
  */
 public class CommonUI {
+	private static final OKMWorkflowServiceAsync workflowService = (OKMWorkflowServiceAsync) GWT.create(OKMWorkflowService.class);
 	
 	/**
 	 * Opens all folder path
@@ -74,5 +81,35 @@ public class CommonUI {
 				Main.get().activeFolderTree.openAllPathFolder(path, docPath);
 			}
 		}
+	}
+	
+	/**
+	 * Opens workflow dashboard workspace with required pending user task instance.
+	 * 
+	 * @param taskInstanceId ID of required task instance
+	 */
+	public static void openTaskInstance(String taskInstanceId) {
+		if (Main.get().workspaceUserProperties.getWorkspace().isTabDashboardVisible() && 
+			Main.get().workspaceUserProperties.getWorkspace().isDashboardWorkflowVisible() && 
+			taskInstanceId != null && !taskInstanceId.equals("")) {
+			Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(UIDockPanelConstants.DASHBOARD);
+			Main.get().mainPanel.dashboard.horizontalToolBar.showWorkflowView();
+			workflowService.getTaskInstance(new Long(taskInstanceId).longValue(), new AsyncCallback<GWTTaskInstance>() {
+				@Override
+				public void onSuccess(GWTTaskInstance taskInstance) {
+					// Taskintance = null indicates is not valid user task instance
+					if (taskInstance != null) {
+						// Opens pending user task
+						Main.get().mainPanel.dashboard.workflowDashboard.workflowFormPanel.setTaskInstance(taskInstance);
+					} else {
+						Main.get().showError("getTaskInstance (taskInstance==null)", new Throwable(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_General)));
+					}
+				}
+				@Override
+				public void onFailure(Throwable caught) {
+					Main.get().showError("isValidUserPendingTask", caught);
+				}
+			});
+		} 
 	}
 }
