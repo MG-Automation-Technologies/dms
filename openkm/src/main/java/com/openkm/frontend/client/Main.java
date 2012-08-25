@@ -131,10 +131,11 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	public Map<String,String> hPropertyGroupI18n;
 	
 	// The nodePath parameter
-	public String fldPath = "";  // Used for folderTree because docPath is set to null by filebroeser on this case the refreshing
-									// panels are not sincronized ( loading )
-	public String docPath = "";  // Used for folderTree because docPath is set to null by filebroeser on this case the refreshing
-									// panels are not sincronized ( loading )
+	public String fldPath = "";  // Used for folderTree because docPath is set to null by filebrowser on this case the refreshing
+									// panels are not synchronized ( loading )
+	public String docPath = "";  // Used for folderTree because docPath is set to null by filebrowser on this case the refreshing
+									// panels are not synchronized ( loading )
+	public String taskInstanceId = ""; // Used for workflowDashboard for set pending user task
 	
 	// Main root folders and user home general values for all app
 	public GWTFolder taxonomyRootFolder;
@@ -194,6 +195,8 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 			docPath = loc.getParameter("docPath"); 
 		} else if (loc.getParameter("fldPath") != null && !loc.getParameter("fldPath").equals("")) {
 			fldPath = loc.getParameter("fldPath"); 
+		} else if (loc.getParameter("taskInstanceId") != null && !loc.getParameter("taskInstanceId").equals("")) {
+			taskInstanceId = loc.getParameter("taskInstanceId");
 		}
 		
 		// Try to capture lang parameter
@@ -559,6 +562,10 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		};
 		$wnd.openFolderPath = function(folderPath, docPath) {
 			@com.openkm.frontend.client.util.CommonUI::openAllFolderPath(Ljava/lang/String;Ljava/lang/String;)(folderPath, docPath);
+			return true;
+		};
+		$wnd.jsOpenTaskInstance = function(taskInstanceId) {
+			@com.openkm.frontend.client.util.CommonUI::openTaskInstance(Ljava/lang/String;)(taskInstanceId);
 			return true;
 		};
 	}-*/;	
