@@ -119,8 +119,8 @@ public class WorkflowServlet extends OKMRemoteServiceServlet implements OKMWorkf
 		updateSessionManager();
 		
 		try {
-			for (Iterator<TaskInstance> it= OKMWorkflow.getInstance().findUserTaskInstances(null).iterator(); it.hasNext();) {
-				taskInstances.add(GWTUtil.copy(it.next()));
+			for (TaskInstance taskInstance : OKMWorkflow.getInstance().findUserTaskInstances(null)) {
+				taskInstances.add(GWTUtil.copy(taskInstance));
 			}
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
@@ -357,5 +357,35 @@ public class WorkflowServlet extends OKMRemoteServiceServlet implements OKMWorkf
 		}
 		
 		log.debug("startTaskInstance: void");
+	}
+	
+	@Override
+	public GWTTaskInstance getTaskInstance(long taskInstanceId) throws OKMException {
+		log.debug("getTaskInstance(taskInstanceId={})", taskInstanceId);
+		updateSessionManager();
+		
+		try {
+			for (TaskInstance taskInstance : OKMWorkflow.getInstance().findUserTaskInstances(null)) {
+				if (taskInstance.getId()==taskInstanceId) {
+					log.debug("getTaskInstance: "+taskInstance);
+					return GWTUtil.copy(OKMWorkflow.getInstance().getTaskInstance(null, taskInstanceId));
+				}
+			}
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Database), e.getMessage());
+		} catch (WorkflowException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Workflow), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_General), e.getMessage());
+		}
+		
+		log.debug("getTaskInstance: null");
+		return null;
 	}
 }
