@@ -47,4 +47,5 @@ public interface OKMWorkflowService extends RemoteService {
 	public List<GWTTaskInstance> findPooledTaskInstances() throws OKMException;
 	public void setTaskInstanceActorId(double id) throws OKMException;
 	public void startTaskInstance(double id) throws OKMException;
+	public GWTTaskInstance getTaskInstance(long taskInstanceId) throws OKMException;
 }
