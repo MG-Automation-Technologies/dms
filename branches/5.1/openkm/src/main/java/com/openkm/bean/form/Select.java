@@ -22,9 +22,17 @@
 package com.openkm.bean.form;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.openkm.dao.KeyValueDAO;
+import com.openkm.dao.bean.KeyValue;
+
 public class Select extends FormElement {
+	private static Logger log = LoggerFactory.getLogger(Select.class);
 	private static final long serialVersionUID = 1L;
 	public static final String TYPE_SIMPLE = "simple";
 	public static final String TYPE_MULTIPLE = "multiple";
@@ -35,17 +43,19 @@ public class Select extends FormElement {
 	private String data = "";
 	private String optionsData = "";
 	private boolean readonly = false;
+	private String table = "";
+	private String filterQuery = "";
 	
 	public Select() {
 		super.width = "150px";
 	}
 
 	public List<Option> getOptions() {
-		return options;
+		return handleDbOptions(options);
 	}
 
 	public void setOptions(List<Option> options) {
-		this.options = options;
+		handleDbOptions(options);
 	}
 
 	public String getType() {
@@ -96,6 +106,22 @@ public class Select extends FormElement {
 		this.optionsData = optionsData;
 	}
 	
+	public String getTable() {
+		return table;
+	}
+
+	public void setTable(String table) {
+		this.table = table;
+	}
+	
+	public String getFilterQuery() {
+		return filterQuery;
+	}
+
+	public void setFilterQuery(String filterQuery) {
+		this.filterQuery = filterQuery;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -110,7 +136,79 @@ public class Select extends FormElement {
 		sb.append(", optionsData=").append(optionsData);
 		sb.append(", options=").append(options);
 		sb.append(", validators=").append(validators);
+		sb.append(", table=").append(table);
+		sb.append(", filterQuery=").append(filterQuery);
 		sb.append("}");
 		return sb.toString();
+	}
+	
+	/**
+	 * If Select reads options from DB, it gets options from DB and set into internal list {@see Select#options}.
+	 * It is assumed that each option in list has different Value. New options are matched by Value with old
+	 * options (by temporal hash) and selected if old option is also selected.
+	 * 
+	 * If {@see Select#filterQuery} is not specified, it replace internal list of options with parameter options.
+	 * 
+	 * @param options list of options
+	 */
+	private List<Option> handleDbOptions(List<Option> options) {
+		// read options from DB?
+		if (filterQuery == null || filterQuery.isEmpty()) {
+			// no -> set options from parameter
+			this.options = options;
+		} else {
+			// read options from DB:
+			List<Option> dbOptions = getOptionsFromDb();
+			
+			// creates hashed options (key is value) from internal option list
+			HashMap<String, Option> hashedOptions = new HashMap<String, Option>();
+			
+			if (this.options != null) {
+				for (Option option : this.options) {
+					hashedOptions.put(option.getValue(), option);
+				}
+			}
+			
+			// iterates DB options and set option if value is matched
+			for (Option dbOption : dbOptions) {
+				if (dbOption == null) {
+					continue;
+				}
+				
+				Option option = hashedOptions.get(dbOption.getValue());
+				dbOption.setSelected(option != null ? option.isSelected() : false);
+			}
+			
+			this.options = dbOptions;
+		}
+		
+		return this.options;
+	}
+	
+	/**
+	 * Return list of Select's Options from meta table according to query.
+	 * 
+	 * @return list of options from meta table, empty list on error.
+	 */
+	private List<Option> getOptionsFromDb() {
+		List<Option> dbOptions = new ArrayList<Option>();
+		
+		try {
+			log.debug("Getting options from DB (table={}, query={})", new Object[] { table, filterQuery });
+			List<KeyValue> keyValues = KeyValueDAO.getKeyValues(table, filterQuery);
+			
+			for (KeyValue keyValue : keyValues) {
+				Option option = new Option();
+				option.setValue(keyValue.getKey());
+				option.setLabel(keyValue.getValue());
+				dbOptions.add(option);
+			}
+			
+			log.debug("Got {} options from DB", dbOptions.size());
+		} catch (Throwable t) {
+			log.error("Unable to get key values for Select", t);
+		}
+		
+		return dbOptions; 
 	}
 }

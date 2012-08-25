@@ -495,6 +495,10 @@ public class FormUtils {
 					if (item != null) select.setHeight(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("readonly");
 					if (item != null) select.setReadonly(Boolean.parseBoolean(item.getNodeValue()));
+					item = nField.getAttributes().getNamedItem("table");
+					if (item != null) select.setTable(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("filterQuery");
+					if (item != null) select.setFilterQuery(item.getNodeValue());
 					
 					NodeList nlOptions = nField.getChildNodes();
 					for (int k = 0; k < nlOptions.getLength(); k++) {
