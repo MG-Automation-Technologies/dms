@@ -335,7 +335,7 @@ public class Dragable extends Composite implements OriginPanel {
 	 * @param element
 	 * @return
 	 */
-	public Element getSelectedElement(Element element){
+	public static Element getSelectedElement(Element element){
 		if (DOM.getFirstChild(element).getClassName().contains("gwt-TreeItem")) {
 			// Case node without childs
 			return DOM.getFirstChild(element);
@@ -372,6 +372,12 @@ public class Dragable extends Composite implements OriginPanel {
 	 * @see com.google.gwt.user.client.ui.HasWidgets#clear()
 	 */
 	public void clear() {
+		// disable dragging:
+		DOM.releaseCapture(floater.getElement());
+		floater.setHTML("");
+		floater.setVisible(false);
+		dragged=false;   
+		Main.get().mainPanel.desktop.navigator.scrollTaxonomyPanel.destroyTimer();
 	}
 	
 	/* (non-Javadoc)

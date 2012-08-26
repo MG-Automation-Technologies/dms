@@ -154,6 +154,7 @@ public class FolderTree extends Composite implements OriginPanel {
 		tree.addCloseHandler(new CloseHandler<TreeItem>() {
 			@Override
 			public void onClose(CloseEvent<TreeItem> event) {
+				Main.get().dragable.clear();
 				treeItemHasBeenClosed = true;
 			}
 		});
