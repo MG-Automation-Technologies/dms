@@ -43,7 +43,7 @@
 >
 
 <!ELEMENT textarea (validator*)>
-<!ATTLIST textarea 
+<!ATTLIST textarea
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
 	width CDATA #IMPLIED
@@ -51,7 +51,7 @@
 	readonly (true | false) "false"
 >
 
-<!ELEMENT select (option+, validator*)>
+<!ELEMENT select (option*, validator*)>
 <!ATTLIST select
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
@@ -60,7 +60,7 @@
 	height CDATA #IMPLIED
 	readonly (true | false) "false"
 	table CDATA #IMPLIED
-	filterQuery CDATA #IMPLIED
+	optionsQuery CDATA #IMPLIED
 >
 
 <!ELEMENT option EMPTY>

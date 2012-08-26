@@ -42,9 +42,9 @@ public class Select extends FormElement {
 	private String value = "";
 	private String data = "";
 	private String optionsData = "";
-	private boolean readonly = false;
 	private String table = "";
-	private String filterQuery = "";
+	private String optionsQuery = "";
+	private boolean readonly = false;
 	
 	public Select() {
 		super.width = "150px";
@@ -82,14 +82,6 @@ public class Select extends FormElement {
 		this.validators = validators;
 	}
 	
-	public boolean isReadonly() {
-		return readonly;
-	}
-
-	public void setReadonly(boolean readonly) {
-		this.readonly = readonly;
-	}
-	
 	public String getData() {
 		return data;
 	}
@@ -114,12 +106,20 @@ public class Select extends FormElement {
 		this.table = table;
 	}
 	
-	public String getFilterQuery() {
-		return filterQuery;
+	public String getOptionsQuery() {
+		return optionsQuery;
 	}
 
-	public void setFilterQuery(String filterQuery) {
-		this.filterQuery = filterQuery;
+	public void setOptionsQuery(String optionsQuery) {
+		this.optionsQuery = optionsQuery;
+	}
+	
+	public boolean isReadonly() {
+		return readonly;
+	}
+
+	public void setReadonly(boolean readonly) {
+		this.readonly = readonly;
 	}
 	
 	public String toString() {
@@ -137,7 +137,7 @@ public class Select extends FormElement {
 		sb.append(", options=").append(options);
 		sb.append(", validators=").append(validators);
 		sb.append(", table=").append(table);
-		sb.append(", filterQuery=").append(filterQuery);
+		sb.append(", optionsQuery=").append(optionsQuery);
 		sb.append("}");
 		return sb.toString();
 	}
@@ -153,7 +153,7 @@ public class Select extends FormElement {
 	 */
 	private List<Option> handleDbOptions(List<Option> options) {
 		// read options from DB?
-		if (filterQuery == null || filterQuery.isEmpty()) {
+		if (optionsQuery == null || optionsQuery.isEmpty()) {
 			// no -> set options from parameter
 			this.options = options;
 		} else {
@@ -194,8 +194,8 @@ public class Select extends FormElement {
 		List<Option> dbOptions = new ArrayList<Option>();
 		
 		try {
-			log.debug("Getting options from DB (table={}, query={})", new Object[] { table, filterQuery });
-			List<KeyValue> keyValues = KeyValueDAO.getKeyValues(table, filterQuery);
+			log.debug("Getting options from DB (table={}, query={})", new Object[] { table, optionsQuery });
+			List<KeyValue> keyValues = KeyValueDAO.getKeyValues(table, optionsQuery);
 			
 			for (KeyValue keyValue : keyValues) {
 				Option option = new Option();
