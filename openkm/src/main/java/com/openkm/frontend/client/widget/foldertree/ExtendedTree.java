@@ -113,7 +113,7 @@ public class ExtendedTree extends Tree implements HasSelectionHandlers<TreeItem>
 					break;
 				default:
 					flagPopup = false;
-					dragged = isCursorInsideActualItem(); // dragging is enable only if cursor is inside actual item
+					dragged = isCursorInsideActualItem(elementClicked(DOM.eventGetTarget(event))); // dragging is enable only if cursor is inside actual item
 					mouseDownX = event.getScreenX();
 					mouseDownY = event.getClientY();					
 			}
@@ -235,12 +235,11 @@ public class ExtendedTree extends Tree implements HasSelectionHandlers<TreeItem>
 	 * 
 	 * @return	returns true if mouse cursor is inside actual item
 	 */
-	private boolean isCursorInsideActualItem() {
-		TreeItem actualItem = Main.get().activeFolderTree.getActualItem();
-		if (actualItem == null) {
+	private boolean isCursorInsideActualItem(TreeItem clickedItem) {
+		if (clickedItem == null) {
 			return false;
 		}
-		Element selectedElement = Dragable.getSelectedElement(actualItem.getElement());
+		Element selectedElement = Dragable.getSelectedElement(clickedItem.getElement());
 		if (selectedElement == null) {
 			return false; 
 		}
