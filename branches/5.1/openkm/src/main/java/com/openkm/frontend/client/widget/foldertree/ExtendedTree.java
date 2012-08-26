@@ -33,6 +33,7 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.widget.Dragable;
 import com.openkm.frontend.client.widget.OriginPanel;
 
 /**
@@ -97,6 +98,9 @@ public class ExtendedTree extends Tree implements HasSelectionHandlers<TreeItem>
 			mouseX = DOM.eventGetClientX(event);
 			mouseY = DOM.eventGetClientY(event);
 			
+			// remove dragable item
+			Main.get().dragable.clear();
+			
 			switch (DOM.eventGetButton(event)){
 				case Event.BUTTON_RIGHT:
 					DOM.eventPreventDefault(event); // Prevent to fire event to browser
@@ -109,13 +113,13 @@ public class ExtendedTree extends Tree implements HasSelectionHandlers<TreeItem>
 					break;
 				default:
 					flagPopup = false;
-					dragged = true;
+					dragged = isCursorInsideActualItem(); // dragging is enable only if cursor is inside actual item
 					mouseDownX = event.getScreenX();
-					mouseDownY = event.getClientY();
+					mouseDownY = event.getClientY();					
 			}
-		} else if (DOM.eventGetType(event) == Event.ONMOUSEMOVE) {
+		} else if (DOM.eventGetType(event) == Event.ONMOUSEMOVE) {		
 			mouseX = DOM.eventGetClientX(event);
-			mouseY = DOM.eventGetClientY(event);
+			mouseY = DOM.eventGetClientY(event);			
 			if (Main.get().activeFolderTree.canDrag() && dragged && mouseDownX>0 && mouseDownY>0 && evalDragPixelSensibility()) {
 				TreeItem actualItem = Main.get().activeFolderTree.getActualItem();
 				Main.get().dragable.show(actualItem.getHTML(), OriginPanel.TREE_ROOT);
@@ -224,5 +228,24 @@ public class ExtendedTree extends Tree implements HasSelectionHandlers<TreeItem>
         }
 
         return findItemByChain(chain, idx + 1, root);
+	}
+	
+	/**
+	 * Detects whether mouse cursor is inside actual item. 
+	 * 
+	 * @return	returns true if mouse cursor is inside actual item
+	 */
+	private boolean isCursorInsideActualItem() {
+		TreeItem actualItem = Main.get().activeFolderTree.getActualItem();
+		if (actualItem == null) {
+			return false;
+		}
+		Element selectedElement = Dragable.getSelectedElement(actualItem.getElement());
+		if (selectedElement == null) {
+			return false; 
+		}
+		
+		return mouseX >= selectedElement.getAbsoluteLeft() && mouseX <= selectedElement.getAbsoluteRight() &&
+			   mouseY >= selectedElement.getAbsoluteTop() && mouseY <= selectedElement.getAbsoluteBottom();
 	}
 }
