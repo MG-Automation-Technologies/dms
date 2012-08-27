@@ -42,16 +42,20 @@ public class Ref<T> {
 
 	@Override
 	public String toString() {
-		return value.toString();
+		return value == null ? "null": value.toString();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
+		if (value == null) {
+			return obj == null;
+		}
+		
 		return value.equals(obj);
 	}
 
 	@Override
 	public int hashCode() {
-		return value.hashCode();
+		return value == null ? 0 : value.hashCode();
 	}
 }
