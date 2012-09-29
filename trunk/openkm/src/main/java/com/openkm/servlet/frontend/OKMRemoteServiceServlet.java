@@ -71,4 +71,28 @@ public class OKMRemoteServiceServlet extends RemoteServiceServlet {
 	public void updateSessionManager() {
 		HttpSessionManager.getInstance().update(getThreadLocalRequest().getSession().getId());
 	}
+	
+	
+	/**
+	 * Gets language from HTTP session.
+	 * @return
+	 */
+	protected String getLanguage() {
+		HttpServletRequest request = this.getThreadLocalRequest();
+		Object obj = request.getSession().getAttribute("lang");
+		if (obj instanceof String) {
+			return (String) obj;
+		}
+		return null;
+	}
+	
+	/**
+	 * Stores language into HTTP session.
+	 * @param language
+	 */
+	protected void setLanguage(String language) {
+		// store current language into session
+		HttpServletRequest request = this.getThreadLocalRequest();
+		request.getSession().setAttribute("lang", language);
+	}
 }

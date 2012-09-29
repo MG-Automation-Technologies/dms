@@ -76,7 +76,7 @@ import com.openkm.frontend.client.bean.GWTVersion;
 import com.openkm.frontend.client.bean.form.GWTFormElement;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.OKMDocumentService;
-import com.openkm.frontend.client.util.DocumentComparator;
+import com.openkm.servlet.frontend.util.DocumentComparator;
 import com.openkm.jcr.JCRUtils;
 import com.openkm.util.DocConverter;
 import com.openkm.util.FileUtils;
@@ -139,7 +139,7 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 				}
 			}
 			
-			Collections.sort(docList, DocumentComparator.getInstance());
+			Collections.sort(docList, DocumentComparator.getInstance(getLanguage()));
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());

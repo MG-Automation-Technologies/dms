@@ -6,8 +6,11 @@ import com.openkm.frontend.client.bean.GWTDocument;
 
 /**
  * @author jllort
+ * 
+ * @deprecated this class has been substituted by @see com.openkm.servlet.frontend.util.DocumentComparator
  *
  */
+@Deprecated
 public class DocumentComparator implements Comparator<GWTDocument> {
 	private static final Comparator<GWTDocument> INSTANCE  = new DocumentComparator();
 	
