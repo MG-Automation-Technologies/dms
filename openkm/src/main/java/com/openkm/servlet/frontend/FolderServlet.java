@@ -42,7 +42,7 @@ import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.contants.service.ErrorCode;
 import com.openkm.frontend.client.service.OKMFolderService;
-import com.openkm.frontend.client.util.FolderComparator;
+import com.openkm.servlet.frontend.util.FolderComparator;
 import com.openkm.util.GWTUtil;
 
 /**
@@ -138,7 +138,7 @@ public class FolderServlet extends OKMRemoteServiceServlet implements OKMFolderS
 				folderList.add(gWTFolder);
 			}
 			
-			Collections.sort(folderList, FolderComparator.getInstance());
+			Collections.sort(folderList, FolderComparator.getInstance(getLanguage()));
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_Repository), e.getMessage());

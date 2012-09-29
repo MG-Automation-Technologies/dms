@@ -25,6 +25,12 @@ import java.util.Comparator;
 
 import com.openkm.frontend.client.bean.GWTFolder;
 
+/**
+ * 
+ * @deprecated this class has been substituted by @see com.openkm.servlet.frontend.util.FolderComparator
+ * 
+ */
+@Deprecated
 public class FolderComparator implements Comparator<GWTFolder> {
 	private static final Comparator<GWTFolder> INSTANCE  = new FolderComparator();
 	

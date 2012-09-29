@@ -410,6 +410,9 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 				mainPanel.desktop.navigator.templateTree.langRefresh();
 				mainPanel.desktop.navigator.trashTree.langRefresh();
 				mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.langRefresh();
+				
+				// execute refresh when changing language
+				mainPanel.topPanel.toolBar.executeRefresh();
 			}
 			
 			@Override

@@ -1,5 +1,4 @@
 /**
- *  OpenKM, Open Document Management System (http://www.openkm.com)
  *  Copyright (c) 2006-2011  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
@@ -150,16 +149,10 @@ public class FolderTree extends Composite implements OriginPanel {
 	 */
 	final AsyncCallback<List<GWTFolder>> callbackGetChilds = new AsyncCallback<List<GWTFolder>>() {
 		public void onSuccess(List<GWTFolder> result) {
-			boolean directAdd = true;
 			List<GWTFolder> folderList = result;
 
-			// If has no childs directly add values is permited
-			if (actualItem.getChildCount() > 0) {
-				directAdd = false;
-				// to prevent remote folder remove it disables all tree
-				// branch items and after sequentially activate
-				hideAllBranch(actualItem);
-			}
+			// Removes all items
+			actualItem.removeItems();
 
 			// On refreshing not refreshed the actual item values but must
 			// ensure that has childs value is consistent
@@ -176,16 +169,9 @@ public class FolderTree extends Composite implements OriginPanel {
 				folderItem.setUserObject(folder);
 				folderItem.setStyleName("okm-TreeItem");
 
-				// If has no childs directly add values is permited, else
-				// evalues
-				// each node to refresh, remove or add
-				if (directAdd) {
-					evaluesFolderIcon(folderItem);
-					actualItem.addItem(folderItem);
-				} else {
-					// sequentially activate items and refreshes values
-					addFolder(actualItem, folderItem);
-				}
+				// add values 
+				evaluesFolderIcon(folderItem);
+				actualItem.addItem(folderItem);
 			}
 
 			actualItem.setState(true);
@@ -241,16 +227,10 @@ public class FolderTree extends Composite implements OriginPanel {
 	 */
 	final AsyncCallback<List<GWTFolder>> callbackGetOnlyChilds = new AsyncCallback<List<GWTFolder>>() {
 		public void onSuccess(List<GWTFolder> result) {
-			boolean directAdd = true;
 			List<GWTFolder> folderList = result;
 
-			// If has no childs directly add values is permited
-			if (actualItem.getChildCount() > 0) {
-				directAdd = false;
-				// to prevent remote folder remove it disables all tree
-				// branch items and after sequentially activate
-				hideAllBranch(actualItem);
-			}
+			// Remove all items
+			actualItem.removeItems();
 
 			// On refreshing not refreshed the actual item values but must
 			// ensure that has childs value is consistent
@@ -267,16 +247,9 @@ public class FolderTree extends Composite implements OriginPanel {
 				folderItem.setUserObject(folder);
 				folderItem.setStyleName("okm-TreeItem");
 
-				// If has no childs directly add values is permited, else
-				// evalues
-				// each node to refresh, remove or add
-				if (directAdd) {
-					evaluesFolderIcon(folderItem);
-					actualItem.addItem(folderItem);
-				} else {
-					// sequentially activate items and refreshes values
-					addFolder(actualItem, folderItem);
-				}
+				// add values
+				evaluesFolderIcon(folderItem);
+				actualItem.addItem(folderItem);
 			}
 
 			actualItem.setState(true);
@@ -1061,54 +1034,6 @@ public class FolderTree extends Composite implements OriginPanel {
 		if (otherTreeItemSelected != null) {
 			onTreeItemSelected(otherTreeItemSelected);
 			otherTreeItemSelected = null;
-		}
-	}
-
-	/**
-	 * Hides all items on a brach
-	 * 
-	 * @param actualItem
-	 *            The actual item active
-	 */
-	public void hideAllBranch(TreeItem actualItem) {
-		int i = 0;
-		int count = actualItem.getChildCount();
-
-		for (i = 0; i < count; i++) {
-			actualItem.getChild(i).setVisible(false);
-		}
-	}
-
-	/**
-	 * Adds folders to actual item if not exists or refreshes it values
-	 * 
-	 * @param actualItem
-	 *            The actual item active
-	 * @param newItem
-	 *            New item to be added, or refreshed
-	 */
-	public void addFolder(TreeItem actualItem, TreeItem newItem) {
-		int i = 0;
-		boolean found = false;
-		int count = actualItem.getChildCount();
-		GWTFolder folder;
-		GWTFolder newFolder = (GWTFolder) newItem.getUserObject();
-		String folderPath = newFolder.getPath();
-
-		for (i = 0; i < count; i++) {
-			folder = (GWTFolder) actualItem.getChild(i).getUserObject();
-			// If item is found actualizate values
-			if ((folder).getPath().equals(folderPath)) {
-				found = true;
-				actualItem.getChild(i).setVisible(true);
-				actualItem.getChild(i).setUserObject(newFolder);
-				evaluesFolderIcon(actualItem.getChild(i));
-			}
-		}
-
-		if (!found) {
-			evaluesFolderIcon(newItem);
-			actualItem.addItem(newItem);
 		}
 	}
 

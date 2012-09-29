@@ -51,6 +51,9 @@ public class LanguageServlet extends OKMRemoteServiceServlet implements OKMLangu
 		updateSessionManager();
 		Map<String,String> translations = new HashMap<String,String>();
 		
+		// store current language into session
+		setLanguage(lang);
+		
 		try {
 			Language baseLang = LanguageDAO.findByPk("en-GB"); // By default english is used to complete non defined translations
 			Language language = LanguageDAO.findByPk(lang);
