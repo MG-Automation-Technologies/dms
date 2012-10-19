@@ -318,6 +318,38 @@ public class Util {
 	}
 	
 	/**
+	 * isRoot
+	 * 
+	 * @param fldPath
+	 * @return
+	 */
+	public static boolean isRoot(String fldPath) {
+		boolean isRoot = false;
+		if (Main.get().workspaceUserProperties.getWorkspace().isStackTaxonomy()) {
+			isRoot = isRoot || Main.get().taxonomyRootFolder.getPath().equals(fldPath);
+		}
+		if (Main.get().workspaceUserProperties.getWorkspace().isStackCategoriesVisible()) {
+			isRoot = isRoot || Main.get().categoriesRootFolder.getPath().equals(fldPath);
+		}
+		if (Main.get().workspaceUserProperties.getWorkspace().isStackThesaurusVisible()) {
+			isRoot = isRoot || Main.get().thesaurusRootFolder.getPath().equals(fldPath);
+		}
+		if (Main.get().workspaceUserProperties.getWorkspace().isStackTemplatesVisible()) {
+			isRoot = isRoot || Main.get().templatesRootFolder.getPath().equals(fldPath);
+		}
+		if (Main.get().workspaceUserProperties.getWorkspace().isStackPersonalVisible()) {
+			isRoot = isRoot || Main.get().personalRootFolder.getPath().equals(fldPath);
+		}
+		if (Main.get().workspaceUserProperties.getWorkspace().isStackMailVisible()) {
+			isRoot = isRoot || Main.get().mailRootFolder.getPath().equals(fldPath);
+		}
+		if (Main.get().workspaceUserProperties.getWorkspace().isStackTrashVisible()) {
+			isRoot = isRoot || Main.get().trashRootFolder.getPath().equals(fldPath);
+		}
+		return isRoot;
+	}
+	
+	/**
 	 * Change on fly the actual css
 	 * 
 	 * @param title The css name

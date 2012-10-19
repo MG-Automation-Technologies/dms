@@ -25,6 +25,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTTaskInstance;
+import com.openkm.frontend.client.constants.GWTRepository;
 import com.openkm.frontend.client.constants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.constants.ui.UIDockPanelConstants;
 import com.openkm.frontend.client.constants.service.ErrorCode;
@@ -69,42 +70,53 @@ public class CommonUI {
 		
 		// Open folder path if only possible desktop and stack are visible in profiles
 		if (Main.get().mainPanel.topPanel.tabWorkspace.isDesktopVisible() && visibleByProfile) {
-			if (path.startsWith(Main.get().mainPanel.desktop.navigator.taxonomyTree.folderRoot.getPath())
-					|| path.startsWith(Main.get().mainPanel.desktop.navigator.categoriesTree.folderRoot.getPath())
-					|| path.startsWith(Main.get().mainPanel.desktop.navigator.thesaurusTree.folderRoot.getPath())
-					|| path.startsWith(Main.get().mainPanel.desktop.navigator.personalTree.folderRoot.getPath())
-					|| path.startsWith(Main.get().mainPanel.desktop.navigator.templateTree.folderRoot.getPath())
-					|| path.startsWith(Main.get().mainPanel.desktop.navigator.trashTree.folderRoot.getPath())
-					|| path.startsWith(Main.get().mainPanel.desktop.navigator.mailTree.folderRoot.getPath())) {
-				found = true;
+			int stack = 0;
+			if (Main.get().workspaceUserProperties.getWorkspace().isStackTaxonomy()) {
+				if (path.startsWith(Main.get().taxonomyRootFolder.getPath())) {
+					found = true;
+					stack = UIDesktopConstants.NAVIGATOR_TAXONOMY;
+				}
+			}
+			if (Main.get().workspaceUserProperties.getWorkspace().isStackCategoriesVisible()) {
+				if (path.startsWith(Main.get().categoriesRootFolder.getPath())) {
+					found = true;
+					stack = UIDesktopConstants.NAVIGATOR_CATEGORIES;
+				}
+			}
+			if (Main.get().workspaceUserProperties.getWorkspace().isStackThesaurusVisible()) {
+				if (path.startsWith(Main.get().thesaurusRootFolder.getPath())) {
+					found = true;
+					stack = UIDesktopConstants.NAVIGATOR_THESAURUS;
+				}
+			}
+			if (Main.get().workspaceUserProperties.getWorkspace().isStackTemplatesVisible()) {
+				if (path.startsWith(Main.get().templatesRootFolder.getPath())) {
+					found = true;
+					stack = UIDesktopConstants.NAVIGATOR_TEMPLATES;
+				}
+			}
+			if (Main.get().workspaceUserProperties.getWorkspace().isStackPersonalVisible()) {
+				if (path.startsWith(Main.get().personalRootFolder.getPath())) {
+					found = true;
+					stack = UIDesktopConstants.NAVIGATOR_PERSONAL;
+				}
+			}
+			if (Main.get().workspaceUserProperties.getWorkspace().isStackMailVisible()) {
+				if (path.startsWith(Main.get().mailRootFolder.getPath())) {
+					found = true;
+					stack = UIDesktopConstants.NAVIGATOR_MAIL;
+				}
+			}
+			if (Main.get().workspaceUserProperties.getWorkspace().isStackTrashVisible()) {
+				if (path.startsWith(Main.get().trashRootFolder.getPath())) {
+					found = true;
+					stack = UIDesktopConstants.NAVIGATOR_TRASH;
+				}
 			}
 			
 			if (found) {
 				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(UIDockPanelConstants.DESKTOP);
-				
-				if (path.startsWith(Main.get().mainPanel.desktop.navigator.taxonomyTree.folderRoot.getPath())) {
-					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(UIDesktopConstants.NAVIGATOR_TAXONOMY,
-							false);
-				} else if (path.startsWith(Main.get().mainPanel.desktop.navigator.categoriesTree.folderRoot.getPath())) {
-					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(
-							UIDesktopConstants.NAVIGATOR_CATEGORIES, false);
-				} else if (path.startsWith(Main.get().mainPanel.desktop.navigator.thesaurusTree.folderRoot.getPath())) {
-					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(UIDesktopConstants.NAVIGATOR_THESAURUS,
-							false);
-				} else if (path.startsWith(Main.get().mainPanel.desktop.navigator.personalTree.folderRoot.getPath())) {
-					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(UIDesktopConstants.NAVIGATOR_PERSONAL,
-							false);
-				} else if (path.startsWith(Main.get().mainPanel.desktop.navigator.templateTree.folderRoot.getPath())) {
-					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(UIDesktopConstants.NAVIGATOR_TEMPLATES,
-							false);
-				} else if (path.startsWith(Main.get().mainPanel.desktop.navigator.trashTree.folderRoot.getPath())) {
-					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(UIDesktopConstants.NAVIGATOR_TRASH,
-							false);
-				} else if (path.startsWith(Main.get().mainPanel.desktop.navigator.mailTree.folderRoot.getPath())) {
-					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(UIDesktopConstants.NAVIGATOR_MAIL,
-							false);
-				}
-				
+				Main.get().mainPanel.desktop.navigator.stackPanel.showStack(stack,false);				
 				Main.get().activeFolderTree.openAllPathFolder(path, docPath);
 			}
 		}
@@ -212,25 +224,25 @@ public class CommonUI {
 	 */
 	public static boolean isVisiblePathByProfile(String path) {
 		if (!Main.get().workspaceUserProperties.getWorkspace().isStackTaxonomy()
-				&& path.startsWith(Main.get().taxonomyRootFolder.getPath())) {
+				&& path.startsWith("/"+GWTRepository.ROOT)) {
 			return false;
 		} else if (!Main.get().workspaceUserProperties.getWorkspace().isStackCategoriesVisible()
-				&& path.startsWith(Main.get().categoriesRootFolder.getPath())) {
+				&& path.startsWith("/"+GWTRepository.CATEGORIES)) {
 			return false;
 		} else if (!Main.get().workspaceUserProperties.getWorkspace().isStackThesaurusVisible()
-				&& path.startsWith(Main.get().thesaurusRootFolder.getPath())) {
+				&& path.startsWith("/"+GWTRepository.THESAURUS)) {
 			return false;
 		} else if (!Main.get().workspaceUserProperties.getWorkspace().isStackTemplatesVisible()
-				&& path.startsWith(Main.get().templatesRootFolder.getPath())) {
+				&& path.startsWith("/"+GWTRepository.TEMPLATES)) {
 			return false;
 		} else if (!Main.get().workspaceUserProperties.getWorkspace().isStackPersonalVisible()
-				&& path.startsWith(Main.get().personalRootFolder.getPath())) {
+				&& path.startsWith("/"+GWTRepository.PERSONAL)) {
 			return false;
 		} else if (!Main.get().workspaceUserProperties.getWorkspace().isStackMailVisible()
-				&& path.startsWith(Main.get().mailRootFolder.getPath())) {
+				&& path.startsWith("/"+GWTRepository.MAIL)) {
 			return false;
 		} else if (!Main.get().workspaceUserProperties.getWorkspace().isStackTrashVisible()
-				&& path.startsWith(Main.get().trashRootFolder.getPath())) {
+				&& path.startsWith("/"+GWTRepository.TRASH)) {
 			return false;
 		}
 		return true; // if none stack is visible has no relevance the path returned

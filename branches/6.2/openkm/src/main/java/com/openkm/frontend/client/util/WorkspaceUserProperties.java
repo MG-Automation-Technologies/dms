@@ -273,7 +273,6 @@ public class WorkspaceUserProperties {
 			Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.setKeywordEnabled(workspace.isKeywordEnabled());
 			Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.setKeywordEnabled(workspace.isKeywordEnabled());
 			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.showExtensions();
-			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.init();
 			
 			// Folder tabs
 			if (workspace.isTabFolderPropertiesVisible()) {
@@ -286,7 +285,6 @@ public class WorkspaceUserProperties {
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.showSecurity();
 			}
 			Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.showExtensions();
-			Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.init();
 			
 			// Mail tabs
 			if (workspace.isTabMailPropertiesVisible()) {
@@ -302,7 +300,6 @@ public class WorkspaceUserProperties {
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.showSecurity();
 			}
 			Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.showExtensions();
-			Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.init();
 			
 			// Show / hide dashboard tools
 			if (workspace.isDashboardUserVisible()) {
@@ -469,34 +466,48 @@ public class WorkspaceUserProperties {
 	 * Some actions must be enabled at ends because some objects are not created since end startp up
 	 */
 	public void setAvailableAction() {
-		Main.get().mainPanel.desktop.navigator.taxonomyTree.menuPopup.menu.setAvailableOption(workspace
-				.getAvailableOption());
-		Main.get().mainPanel.desktop.navigator.categoriesTree.menuPopup.menu.setAvailableOption(workspace
-				.getAvailableOption());
-		Main.get().mainPanel.desktop.navigator.thesaurusTree.menuPopup.menu.setAvailableOption(workspace
-				.getAvailableOption());
-		Main.get().mainPanel.desktop.navigator.templateTree.menuPopup.menu.setAvailableOption(workspace
-				.getAvailableOption());
-		Main.get().mainPanel.desktop.navigator.personalTree.menuPopup.menu.setAvailableOption(workspace
-				.getAvailableOption());
-		Main.get().mainPanel.desktop.navigator.mailTree.menuPopup.menu.setAvailableOption(workspace
-				.getAvailableOption());
-		Main.get().mainPanel.desktop.navigator.trashTree.menuPopup.menu.setAvailableOption(workspace
-				.getAvailableOption());
-		Main.get().mainPanel.desktop.browser.fileBrowser.taxonomyMenuPopup.menu.setAvailableOption(workspace
-				.getAvailableOption());
-		Main.get().mainPanel.desktop.browser.fileBrowser.categoriesMenuPopup.menu.setAvailableOption(workspace
-				.getAvailableOption());
-		Main.get().mainPanel.desktop.browser.fileBrowser.thesaurusMenuPopup.menu.setAvailableOption(workspace
-				.getAvailableOption());
-		Main.get().mainPanel.desktop.browser.fileBrowser.templatesMenuPopup.menu.setAvailableOption(workspace
-				.getAvailableOption());
-		Main.get().mainPanel.desktop.browser.fileBrowser.personalMenuPopup.menu.setAvailableOption(workspace
-				.getAvailableOption());
-		Main.get().mainPanel.desktop.browser.fileBrowser.mailMenuPopup.menu.setAvailableOption(workspace
-				.getAvailableOption());
-		Main.get().mainPanel.desktop.browser.fileBrowser.trashMenuPopup.menu.setAvailableOption(workspace
-				.getAvailableOption());
+		if (Main.get().workspaceUserProperties.getWorkspace().isStackTaxonomy()) {
+			Main.get().mainPanel.desktop.navigator.taxonomyTree.menuPopup.menu.setAvailableOption(workspace
+					.getAvailableOption());
+			Main.get().mainPanel.desktop.browser.fileBrowser.taxonomyMenuPopup.menu.setAvailableOption(workspace
+					.getAvailableOption());
+		}
+		if (Main.get().workspaceUserProperties.getWorkspace().isStackCategoriesVisible()) {
+			Main.get().mainPanel.desktop.navigator.categoriesTree.menuPopup.menu.setAvailableOption(workspace
+					.getAvailableOption());
+			Main.get().mainPanel.desktop.browser.fileBrowser.categoriesMenuPopup.menu.setAvailableOption(workspace
+					.getAvailableOption());
+		}
+		if (Main.get().workspaceUserProperties.getWorkspace().isStackThesaurusVisible()) {
+			Main.get().mainPanel.desktop.navigator.thesaurusTree.menuPopup.menu.setAvailableOption(workspace
+					.getAvailableOption());
+			Main.get().mainPanel.desktop.browser.fileBrowser.thesaurusMenuPopup.menu.setAvailableOption(workspace
+					.getAvailableOption());
+		}
+		if (Main.get().workspaceUserProperties.getWorkspace().isStackTemplatesVisible()) {
+			Main.get().mainPanel.desktop.navigator.templateTree.menuPopup.menu.setAvailableOption(workspace
+					.getAvailableOption());
+			Main.get().mainPanel.desktop.browser.fileBrowser.templatesMenuPopup.menu.setAvailableOption(workspace
+					.getAvailableOption());
+		}
+		if (Main.get().workspaceUserProperties.getWorkspace().isStackPersonalVisible()) {
+			Main.get().mainPanel.desktop.navigator.personalTree.menuPopup.menu.setAvailableOption(workspace
+					.getAvailableOption());
+			Main.get().mainPanel.desktop.browser.fileBrowser.personalMenuPopup.menu.setAvailableOption(workspace
+					.getAvailableOption());
+		}
+		if (Main.get().workspaceUserProperties.getWorkspace().isStackMailVisible()) {
+			Main.get().mainPanel.desktop.navigator.mailTree.menuPopup.menu.setAvailableOption(workspace
+					.getAvailableOption());
+			Main.get().mainPanel.desktop.browser.fileBrowser.mailMenuPopup.menu.setAvailableOption(workspace
+					.getAvailableOption());
+		}
+		if (Main.get().workspaceUserProperties.getWorkspace().isStackTrashVisible()) {
+			Main.get().mainPanel.desktop.navigator.trashTree.menuPopup.menu.setAvailableOption(workspace
+					.getAvailableOption());
+			Main.get().mainPanel.desktop.browser.fileBrowser.trashMenuPopup.menu.setAvailableOption(workspace
+					.getAvailableOption());
+		}
 		Main.get().mainPanel.search.searchBrowser.searchResult.searchCompactResult.menuPopup.menu
 				.setAvailableOption(workspace.getAvailableOption());
 		Main.get().mainPanel.topPanel.mainMenu.setAvailableOption(workspace);

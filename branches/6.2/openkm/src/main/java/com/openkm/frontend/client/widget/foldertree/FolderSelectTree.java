@@ -119,7 +119,7 @@ public class FolderSelectTree extends Composite {
 			
 			case UIDesktopConstants.NAVIGATOR_CATEGORIES :
 				Main.get().activeFolderTree.folderSelectPopup.enableCategories();
-				getCategoriesFolder();
+				getCategories();
 				break;
 				
 			case UIDesktopConstants.NAVIGATOR_TEMPLATES :
@@ -393,9 +393,9 @@ public class FolderSelectTree extends Composite {
 	}
 	
 	/**
-	 * Gets the categories documents
+	 * Gets the categories
 	 */
-	public void getCategoriesFolder() {
+	public void getCategories() {
 		repositoryService.getCategoriesFolder(callbackGetCategoriesFolder);
 	}				
 	

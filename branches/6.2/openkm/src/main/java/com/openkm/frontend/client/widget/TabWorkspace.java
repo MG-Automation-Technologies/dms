@@ -69,7 +69,9 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 				switch (index) {
 					case UIDockPanelConstants.DESKTOP :
 						Main.get().mainPanel.setView(UIDockPanelConstants.DESKTOP);
-						Main.get().activeFolderTree.centerActulItemOnScroll(); // Center the actual item every time
+						if (Main.get().activeFolderTree!=null) { // On start up is null
+							Main.get().activeFolderTree.centerActulItemOnScroll(); // Center the actual item every time
+						}
 						break;
 						
 					case UIDockPanelConstants.SEARCH :
