@@ -1009,13 +1009,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		// folderParent.setPermissions((byte)(GWTPermission.DELETE | GWTPermission.READ | GWTPermission.SECURITY |
 		// GWTPermission.WRITE));
 		// Only if toolbar is enabled must change tools icons values
-		boolean isRoot = Main.get().taxonomyRootFolder.getPath().equals(folder.getPath())
-				|| Main.get().thesaurusRootFolder.getPath().equals(folder.getPath())
-				|| Main.get().categoriesRootFolder.getPath().equals(folder.getPath())
-				|| Main.get().templatesRootFolder.getPath().equals(folder.getPath())
-				|| Main.get().personalRootFolder.getPath().equals(folder.getPath())
-				|| Main.get().trashRootFolder.getPath().equals(folder.getPath())
-				|| Main.get().mailRootFolder.getPath().equals(folder.getPath());
+		boolean isRoot = Util.isRoot(folder.getPath());
 		
 		if (isEnabled()) {
 			// Enable quick search
