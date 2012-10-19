@@ -129,7 +129,6 @@ public class StartUp implements HasWidgetHandlerExtension, HasWidgetEvent {
 		public void onSuccess(GWTFolder result) {
 			// Only executes on initialization and evaluate root Node permissions
 			Main.get().taxonomyRootFolder = result;
-			Main.get().mainPanel.desktop.browser.fileBrowser.table.fillWidth(); // Sets de columns size
 			nextStatus(STARTUP_GET_CATEGORIES_ROOT);
 		}
 		
@@ -433,14 +432,7 @@ public class StartUp implements HasWidgetHandlerExtension, HasWidgetEvent {
 				@Override
 				public void onSuccess(Boolean result) {
 					if (result.booleanValue()) {
-						boolean isRoot = Main.get().taxonomyRootFolder.getPath().equals(fldPath)
-								|| Main.get().thesaurusRootFolder.getPath().equals(fldPath)
-								|| Main.get().categoriesRootFolder.getPath().equals(fldPath)
-								|| Main.get().templatesRootFolder.getPath().equals(fldPath)
-								|| Main.get().personalRootFolder.getPath().equals(fldPath)
-								|| Main.get().trashRootFolder.getPath().equals(fldPath)
-								|| Main.get().mailRootFolder.getPath().equals(fldPath);
-						
+						boolean isRoot = Util.isRoot(fldPath);
 						if (!isRoot) {
 							// Opens folder passed by parameter ( if is not root then opening fldPaht will refreshing toolbar and other panel values )
 							CommonUI.openPath(fldPath, "");
@@ -516,41 +508,99 @@ public class StartUp implements HasWidgetHandlerExtension, HasWidgetEvent {
 						break;
 					
 					case STARTUP_GET_TAXONOMY_ROOT:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.taxonomy"), STARTUP_GET_TAXONOMY_ROOT);
-						getRoot();
+						if (Main.get().workspaceUserProperties.getWorkspace().isStackTaxonomy()) {
+							Main.get().startUpPopup.addStatus(Main.i18n("startup.taxonomy"), STARTUP_GET_TAXONOMY_ROOT);
+							getRoot();
+						} else {
+							Main.get().startUpPopup.jumpActual();
+							nextStatus(STARTUP_GET_CATEGORIES_ROOT);
+						}
 						break;
 					
 					case STARTUP_GET_CATEGORIES_ROOT:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.categories"), STARTUP_GET_CATEGORIES_ROOT);
-						getCategories();
+						if (Main.get().workspaceUserProperties.getWorkspace().isStackCategoriesVisible()) {
+							Main.get().startUpPopup.addStatus(Main.i18n("startup.categories"), STARTUP_GET_CATEGORIES_ROOT);
+							getCategories();
+						} else {
+							Main.get().startUpPopup.jumpActual();
+							nextStatus(STARTUP_GET_THESAURUS_ROOT);
+						}
 						break;
 					
 					case STARTUP_GET_THESAURUS_ROOT:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.thesaurus"), STARTUP_GET_THESAURUS_ROOT);
-						getThesaurus();
+						if (Main.get().workspaceUserProperties.getWorkspace().isStackThesaurusVisible()) {
+							Main.get().startUpPopup.addStatus(Main.i18n("startup.thesaurus"), STARTUP_GET_THESAURUS_ROOT);
+							if (Main.get().activeFolderTree==null) {
+								Main.get().activeFolderTree = Main.get().mainPanel.desktop.navigator.thesaurusTree;
+							}
+							getThesaurus();
+						} else {
+							Main.get().startUpPopup.jumpActual();
+							nextStatus(STARTUP_GET_TEMPLATE_ROOT);
+						}
 						break;
 					
 					case STARTUP_GET_TEMPLATE_ROOT:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.template"), STARTUP_GET_TEMPLATE_ROOT);
-						getTemplate();
+						if (Main.get().workspaceUserProperties.getWorkspace().isStackTemplatesVisible()) {
+							Main.get().startUpPopup.addStatus(Main.i18n("startup.template"), STARTUP_GET_TEMPLATE_ROOT);
+							getTemplate();
+						} else {
+							Main.get().startUpPopup.jumpActual();
+							nextStatus(STARTUP_GET_PERSONAL);
+						}
 						break;
 					
 					case STARTUP_GET_PERSONAL:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.personal"), STARTUP_GET_PERSONAL);
-						getPersonal();
+						if (Main.get().workspaceUserProperties.getWorkspace().isStackPersonalVisible()) {
+							Main.get().startUpPopup.addStatus(Main.i18n("startup.personal"), STARTUP_GET_PERSONAL);
+							getPersonal();
+						} else {
+							Main.get().startUpPopup.jumpActual();
+							nextStatus(STARTUP_GET_MAIL);
+						}
 						break;
 					
 					case STARTUP_GET_MAIL:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.mail"), STARTUP_GET_MAIL);
-						getMail();
+						if (Main.get().workspaceUserProperties.getWorkspace().isStackMailVisible()) {
+							Main.get().startUpPopup.addStatus(Main.i18n("startup.mail"), STARTUP_GET_MAIL);
+							getMail();
+						} else {
+							Main.get().startUpPopup.jumpActual();
+							nextStatus(STARTUP_GET_TRASH);
+						}
 						break;
 					
 					case STARTUP_GET_TRASH:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.trash"), STARTUP_GET_TRASH);
-						getTrash();
+						if (Main.get().workspaceUserProperties.getWorkspace().isStackTrashVisible()) {
+							Main.get().startUpPopup.addStatus(Main.i18n("startup.trash"), STARTUP_GET_TRASH);
+							getTrash();
+						} else {
+							Main.get().startUpPopup.jumpActual();
+							nextStatus(STARTUP_GET_USER_HOME);
+						}
 						break;
 					
 					case STARTUP_GET_USER_HOME:
+						// Operations to be done after loading stacks
+						if (Main.get().workspaceUserProperties.getWorkspace().isStackTaxonomy()) {
+							Main.get().activeFolderTree = Main.get().mainPanel.desktop.navigator.taxonomyTree;
+						} else if (Main.get().workspaceUserProperties.getWorkspace().isStackCategoriesVisible()) {
+							Main.get().activeFolderTree = Main.get().mainPanel.desktop.navigator.categoriesTree;
+						} else if (Main.get().workspaceUserProperties.getWorkspace().isStackThesaurusVisible()) {
+							Main.get().activeFolderTree = Main.get().mainPanel.desktop.navigator.thesaurusTree;
+						} else if (Main.get().workspaceUserProperties.getWorkspace().isStackTemplatesVisible()) {
+							Main.get().activeFolderTree = Main.get().mainPanel.desktop.navigator.templateTree;
+						} else if (Main.get().workspaceUserProperties.getWorkspace().isStackPersonalVisible()) {
+							Main.get().activeFolderTree = Main.get().mainPanel.desktop.navigator.personalTree;
+						} else if (Main.get().workspaceUserProperties.getWorkspace().isStackMailVisible()) {
+							Main.get().activeFolderTree = Main.get().mainPanel.desktop.navigator.mailTree;
+						} else if (Main.get().workspaceUserProperties.getWorkspace().isStackTrashVisible()) {
+							Main.get().activeFolderTree = Main.get().mainPanel.desktop.navigator.trashTree;
+						}
+						Main.get().mainPanel.desktop.browser.fileBrowser.table.fillWidth(); // Sets de columns size
+						Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.init();
+						Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.init();
+						Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.init();
 						Main.get().startUpPopup.addStatus(Main.i18n("startup.user.home"), STARTUP_GET_USER_HOME);
 						getUserHome();
 						break;
@@ -566,15 +616,28 @@ public class StartUp implements HasWidgetHandlerExtension, HasWidgetEvent {
 						break;
 					
 					case STARTUP_INIT_TREE_NODES:
-						Main.get().startUpPopup
-								.addStatus(Main.i18n("startup.init.tree.nodes"), STARTUP_INIT_TREE_NODES);
-						Main.get().mainPanel.desktop.navigator.taxonomyTree.init();
-						Main.get().mainPanel.desktop.navigator.categoriesTree.init();
-						Main.get().mainPanel.desktop.navigator.thesaurusTree.init();
-						Main.get().mainPanel.desktop.navigator.templateTree.init();
-						Main.get().mainPanel.desktop.navigator.personalTree.init();
-						Main.get().mainPanel.desktop.navigator.mailTree.init();
-						Main.get().mainPanel.desktop.navigator.trashTree.init();
+						Main.get().startUpPopup.addStatus(Main.i18n("startup.init.tree.nodes"), STARTUP_INIT_TREE_NODES);
+						if (Main.get().workspaceUserProperties.getWorkspace().isStackTaxonomy()) {
+							Main.get().mainPanel.desktop.navigator.taxonomyTree.init();
+						}
+						if (Main.get().workspaceUserProperties.getWorkspace().isStackCategoriesVisible()) {
+							Main.get().mainPanel.desktop.navigator.categoriesTree.init();
+						}
+						if (Main.get().workspaceUserProperties.getWorkspace().isStackThesaurusVisible()) {
+							Main.get().mainPanel.desktop.navigator.thesaurusTree.init();
+						}
+						if (Main.get().workspaceUserProperties.getWorkspace().isStackTemplatesVisible()) {
+							Main.get().mainPanel.desktop.navigator.templateTree.init();
+						}
+						if (Main.get().workspaceUserProperties.getWorkspace().isStackPersonalVisible()) {
+							Main.get().mainPanel.desktop.navigator.personalTree.init();
+						}
+						if (Main.get().workspaceUserProperties.getWorkspace().isStackMailVisible()) {
+							Main.get().mainPanel.desktop.navigator.mailTree.init();
+						}
+						if (Main.get().workspaceUserProperties.getWorkspace().isStackTrashVisible()) {
+							Main.get().mainPanel.desktop.navigator.trashTree.init();
+						}
 						Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_HISTORY_SEARCH);
 						break;
 					

@@ -135,6 +135,13 @@ public class StartUpPopup extends DialogBox implements ClickHandler {
 	}
 	
 	/**
+	 * jumpActual
+	 */
+	public void jumpActual() {
+		actual++;
+	}
+	
+	/**
 	 * addError
 	 */
 	public void addError(String error) {
