@@ -203,6 +203,10 @@
   
   <!-- Extension servlets -->
   <servlet>
+    <servlet-name>DataBrowserServlet</servlet-name>
+    <servlet-class>com.openkm.extension.servlet.DataBrowserServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>MacrosServlet</servlet-name>
     <servlet-class>com.openkm.extension.servlet.MacrosServlet</servlet-class>
   </servlet>
@@ -468,7 +472,10 @@
   </servlet-mapping>
   
   <!-- Extensions Servlet Mappings -->
-  
+  <servlet-mapping>
+    <servlet-name>DataBrowserServlet</servlet-name>
+    <url-pattern>/extension/DataBrowser</url-pattern>
+  </servlet-mapping>
   <servlet-mapping>
     <servlet-name>MacrosServlet</servlet-name>
     <url-pattern>/extension/Macros</url-pattern>
