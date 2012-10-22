@@ -530,9 +530,6 @@ public class StartUp implements HasWidgetHandlerExtension, HasWidgetEvent {
 					case STARTUP_GET_THESAURUS_ROOT:
 						if (Main.get().workspaceUserProperties.getWorkspace().isStackThesaurusVisible()) {
 							Main.get().startUpPopup.addStatus(Main.i18n("startup.thesaurus"), STARTUP_GET_THESAURUS_ROOT);
-							if (Main.get().activeFolderTree==null) {
-								Main.get().activeFolderTree = Main.get().mainPanel.desktop.navigator.thesaurusTree;
-							}
 							getThesaurus();
 						} else {
 							Main.get().startUpPopup.jumpActual();
