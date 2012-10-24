@@ -11,6 +11,22 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="favicon.ico" />
   <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
+  <script type="text/javascript" src="js/jquery.DOMWindow.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+		$dm = $('.ds').openDOMWindow({
+			height:200, width:300,
+			eventType:'click',
+			overlayOpacity:'57',
+			windowSource:'iframe', windowPadding:0
+		});
+	});
+    
+    function dialogClose() {
+		$dm.closeDOMWindow();
+    }
+  </script>
   <title>Repository Checker</title>
 </head>
 <body>
@@ -26,9 +42,13 @@
       <br/>
       <form action="RepositoryChecker">
         <table class="form" align="center">
-          <tr><td>Path</td><td><input name="repoPath" value="/<%=Repository.ROOT%>"/></td></tr>
-          <tr><td>Versions</td><td><input name="versions" type="checkbox"/></td></tr>
-          <tr><td colspan="2" align="right"><input type="submit" value="Send"/></td></tr>
+          <tr>
+            <td>Path</td>
+            <td><input name="repoPath" id="repoPath" value="/<%=Repository.ROOT%>"/></td>
+            <td><a class="ds" href="../extension/DataBrowser?action=repo&sel=fld&dst=repoPath&path=/<%=Repository.ROOT%>"><img src="img/action/browse_repo.png"/></a></td>
+          </tr>
+          <tr><td>Versions</td><td colspan="2"><input name="versions" type="checkbox"/></td></tr>
+          <tr><td colspan="3" align="right"><input type="submit" value="Send"/></td></tr>
         </table>
       </form>
     </c:when>
