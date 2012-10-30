@@ -304,4 +304,18 @@ public class SearchCompactResult extends Composite {
 	public void fixWidth() {
 		table.fillWidth();
 	}
+	
+	/**
+	 * isSorted
+	 */
+	public boolean isSorted() {
+		return table.isSorted();
+	}
+	
+	/**
+	 * refreshSort
+	 */
+	public void refreshSort() {
+		table.refreshSort();
+	}
 }
