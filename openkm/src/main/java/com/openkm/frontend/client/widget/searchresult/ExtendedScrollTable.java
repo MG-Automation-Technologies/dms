@@ -59,6 +59,7 @@ public class ExtendedScrollTable extends ScrollTable {
 	private boolean panelSelected = false; // Indicates if panel is selected
 	private FixedWidthGrid dataTable;
 	private FixedWidthFlexTable headerTable;
+	private ExtendedColumnSorter columnSorter;
 	
 	/**
 	 * ExtendedScrollTable
@@ -72,10 +73,27 @@ public class ExtendedScrollTable extends ScrollTable {
 		setResizePolicy(ResizePolicy.UNCONSTRAINED);
 		setScrollPolicy(ScrollPolicy.BOTH);
 		
-		dataTable.setColumnSorter(new ExtendedColumnSorter());
+		columnSorter = new ExtendedColumnSorter();
+		dataTable.setColumnSorter(columnSorter);
 		
 		// Sets some events
 		DOM.sinkEvents(getDataWrapper(),Event.ONDBLCLICK | Event.ONMOUSEDOWN );
+	}
+	
+	/**
+	 * isSorted
+	 * 
+	 * @return
+	 */
+	public boolean isSorted() {
+		return columnSorter.isSorted();
+	}
+	
+	/**
+	 * refreshSort
+	 */
+	public void refreshSort() {
+		columnSorter.refreshSort();
 	}
 	
 	/* (non-Javadoc)

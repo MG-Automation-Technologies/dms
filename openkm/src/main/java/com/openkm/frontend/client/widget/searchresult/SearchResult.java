@@ -144,6 +144,10 @@ public class SearchResult extends Composite {
 			}
 			size++;
 		}
+		
+		if (resultsViewMode==SearchControl.RESULTS_VIEW_COMPACT && searchCompactResult.isSorted()) {
+			searchCompactResult.refreshSort();
+		}
 	}
 	
 	/**

@@ -49,6 +49,8 @@ import com.openkm.frontend.client.util.ColumnComparatorText;
 public class ExtendedColumnSorter extends ColumnSorter {
 	
 	private String selectedRowDataID = "";
+	private int column = -1;
+	boolean ascending = false;
 
 	/* (non-Javadoc)
 	 * @see com.google.gwt.widgetideas.table.client.SortableGrid$ColumnSorter#onSortColumn(com.google.gwt.widgetideas.table.client.SortableGrid, com.google.gwt.widgetideas.table.client.TableModel.ColumnSortList, com.google.gwt.widgetideas.table.client.SortableGrid.ColumnSorterCallback)
@@ -57,9 +59,38 @@ public class ExtendedColumnSorter extends ColumnSorter {
 			ColumnSortList sortList, ColumnSorterCallback callback) {
 		
 		// Get the primary column, sort order, number of rows, number of columns
-		int column = sortList.getPrimaryColumn();
-	    boolean ascending = sortList.isPrimaryAscending();
-	    int rows = Main.get().mainPanel.search.searchBrowser.searchResult.searchCompactResult.table.getDataTable().getRowCount();
+		column = sortList.getPrimaryColumn();
+	    ascending = sortList.isPrimaryAscending();
+	    sort(column, ascending);
+	    callback.onSortingComplete();
+	}
+	
+	/**
+	 * refreshSort
+	 */
+	public void refreshSort() {
+		if (isSorted()) {
+			sort(column, ascending);
+		}
+	}
+	
+	/**
+	 * isSorted
+	 * 
+	 * @return
+	 */
+	public boolean isSorted() {
+		return column>=0;
+	}
+	
+	/**
+	 * prepareDataToSort
+	 * 
+	 * @param column
+	 * @param ascending
+	 */
+	private void sort(int column, boolean ascending) {
+		int rows = Main.get().mainPanel.search.searchBrowser.searchResult.searchCompactResult.table.getDataTable().getRowCount();
 	    int columns = Main.get().mainPanel.search.searchBrowser.searchResult.searchCompactResult.table.getDataTable().getColumnCount();
 	    int selectedRow = Main.get().mainPanel.search.searchBrowser.searchResult.searchCompactResult.table.getSelectedRow();
 	    Map<Integer,GWTQueryResult> data = new HashMap<Integer,GWTQueryResult>(Main.get().mainPanel.search.searchBrowser.searchResult.searchCompactResult.table.data);
@@ -152,8 +183,6 @@ public class ExtendedColumnSorter extends ColumnSorter {
 		}
 	    
 	    applySort(elementList, elementToOrder);
-	    
-	    callback.onSortingComplete();
 	}
     
 	/**
