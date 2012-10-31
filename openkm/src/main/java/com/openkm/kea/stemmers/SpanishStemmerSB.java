@@ -30,9 +30,6 @@ import org.tartarus.snowball.SnowballProgram;
  * Generated class implementing code defined by a snowball script.
  */
 public class SpanishStemmerSB extends SnowballProgram {
-
-	private static final long serialVersionUID = 1L;
-
 		private Among a_0[] = {
             new Among ( "", -1, 6, "", this),
             new Among ( "\u00E1", 0, 1, "", this),
@@ -1198,4 +1195,3 @@ public class SpanishStemmerSB extends SnowballProgram {
         }
 
 }
-
