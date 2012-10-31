@@ -1636,8 +1636,6 @@ public class FormManager {
 	 * updateFormElementsWithNewer
 	 */
 	public List<GWTFormElement> updateFormElementsValuesWithNewer() {
-		int rows = 0;
-		
 		for (GWTFormElement formElement : formElementList) {
 			if (formElement instanceof GWTTextArea) {
 				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
@@ -1666,6 +1664,7 @@ public class FormManager {
 				((GWTCheckBox) formElement).setValue(checkbox.getValue());
 			} else if (formElement instanceof GWTSelect) {
 				GWTSelect gwtSelect = (GWTSelect) formElement;
+				
 				if (gwtSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
 					HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
 					ListBox listBox = (ListBox) hPanel.getWidget(0);
@@ -1716,8 +1715,6 @@ public class FormManager {
 			} else if (formElement instanceof GWTPrint) {
 				// Nothing to be done here
 			}
-			
-			rows++;
 		}
 		
 		return formElementList;
@@ -1728,7 +1725,6 @@ public class FormManager {
 	 */
 	public boolean hasFileUploadFormElement() {
 		boolean found = false;
-		int rows = 0;
 		
 		for (GWTFormElement formElement : formElementList) {
 			if (formElement instanceof GWTUpload) {
@@ -1741,8 +1737,6 @@ public class FormManager {
 				
 				break;
 			}
-			
-			rows++;
 		}
 		
 		return found;

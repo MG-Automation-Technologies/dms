@@ -297,11 +297,11 @@ public class FindFolderSelectPopup extends DialogBox  {
 		public void onSuccess(GWTResultSet result){
 			GWTResultSet resultSet = result;	
 			removeAllRows();
-			int size = 0;
 			
 			for (Iterator<GWTQueryResult> it = resultSet.getResults().iterator(); it.hasNext();){
 				GWTQueryResult gwtQueryResult = it.next();
-				if (gwtQueryResult.getFolder()!=null) {
+				
+				if (gwtQueryResult.getFolder() != null) {
 					GWTFolder folder = gwtQueryResult.getFolder();
 					int rows = folderTable.getRowCount();
 					
@@ -324,7 +324,6 @@ public class FindFolderSelectPopup extends DialogBox  {
 					folderTable.getCellFormatter().setWidth(rows, 0, "30");
 					folderTable.getCellFormatter().setHorizontalAlignment(rows, 0, HasHorizontalAlignment.ALIGN_CENTER);
 				}
-				size++;
 			}
 			
 			status.unsetFlagChilds();
@@ -338,8 +337,6 @@ public class FindFolderSelectPopup extends DialogBox  {
 	
 	/**
 	 * Find
-	 * 
-	 * @param params
 	 */
 	private void find(GWTQueryParams params) {
 		status.setFlagChilds();
