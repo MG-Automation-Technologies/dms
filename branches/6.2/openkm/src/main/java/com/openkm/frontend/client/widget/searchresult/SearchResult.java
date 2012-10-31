@@ -127,12 +127,11 @@ public class SearchResult extends Composite {
 	 */
 	private void drawResults() {
 		Main.get().mainPanel.search.searchBrowser.searchIn.searchControl.controlSearch.refreshControl(resultSet.getTotal());
-		
 		removeAllRows();
-		int size = 0;
 		
 		for (Iterator<GWTQueryResult> it = resultSet.getResults().iterator(); it.hasNext();){
 			GWTQueryResult gwtQueryResult = it.next();
+			
 			switch(resultsViewMode) {
 				case SearchControl.RESULTS_VIEW_COMPACT:
 					searchCompactResult.addRow(gwtQueryResult);
@@ -142,7 +141,6 @@ public class SearchResult extends Composite {
 					searchFullResult.addRow(gwtQueryResult);
 					break;
 			}
-			size++;
 		}
 		
 		if (resultsViewMode==SearchControl.RESULTS_VIEW_COMPACT && searchCompactResult.isSorted()) {

@@ -34,8 +34,6 @@ import javax.security.auth.Subject;
  * @author pavila
  */
 public class PrincipalUtils {
-	private static final long serialVersionUID = 1L;
-	
 	/**
 	 * Obtain current authenticated subject
 	 */
