@@ -33,7 +33,6 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  *
  */
 public class GWTDownload extends GWTFormElement implements IsSerializable {
-	private static final long serialVersionUID = 1L;
 	private List<GWTValidator> validators = new ArrayList<GWTValidator>();
 	private List<GWTNode> nodes = new ArrayList<GWTNode>();
 	private String data = "";
