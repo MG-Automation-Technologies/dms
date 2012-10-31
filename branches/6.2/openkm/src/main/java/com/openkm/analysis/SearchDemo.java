@@ -120,5 +120,7 @@ public class SearchDemo {
 			Document d = searcher.doc(docId);
 			System.out.println((i + 1) + ". " + d.get(DOC_FIELD));
 		}
+		
+		searcher.close();
 	}
 }

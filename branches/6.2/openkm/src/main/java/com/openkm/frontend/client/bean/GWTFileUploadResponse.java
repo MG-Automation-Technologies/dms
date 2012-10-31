@@ -38,8 +38,6 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * 
  */
 public class GWTFileUploadResponse implements IsSerializable {
-	private static final long serialVersionUID = 1L;
-	
 	private boolean hasAutomation = false;
 	private String path = "";
 	private List<String> groupsList = new ArrayList<String>();

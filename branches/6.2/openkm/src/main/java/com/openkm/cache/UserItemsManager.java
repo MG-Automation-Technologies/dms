@@ -114,6 +114,7 @@ public class UserItemsManager {
 				size += contentNode.getProperty(Document.SIZE).getLong();
 			}
 			
+			log.info("Size: {}", size);
 			UserItems userItems = new UserItems();
 			userItemsMgr.put(session.getUserID(), userItems);
  		} catch (javax.jcr.RepositoryException e) {

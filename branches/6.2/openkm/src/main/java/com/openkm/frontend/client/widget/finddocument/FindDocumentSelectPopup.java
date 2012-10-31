@@ -309,10 +309,10 @@ public class FindDocumentSelectPopup extends DialogBox  {
 		public void onSuccess(GWTResultSet result){
 			GWTResultSet resultSet = result;	
 			removeAllRows();
-			int size = 0;
 			
 			for (Iterator<GWTQueryResult> it = resultSet.getResults().iterator(); it.hasNext();){
 				GWTQueryResult gwtQueryResult = it.next();
+				
 				if (gwtQueryResult.getDocument()!=null) {
 					GWTDocument doc = gwtQueryResult.getDocument();
 					int rows = documentTable.getRowCount();
@@ -321,7 +321,6 @@ public class FindDocumentSelectPopup extends DialogBox  {
 					documentTable.getCellFormatter().setWidth(rows, 0, "30");
 					documentTable.getCellFormatter().setHorizontalAlignment(rows, 0, HasHorizontalAlignment.ALIGN_CENTER);
 				}
-				size++;
 			}
 			
 			status.unsetFlagChilds();
