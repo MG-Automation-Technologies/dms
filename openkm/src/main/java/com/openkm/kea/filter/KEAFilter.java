@@ -548,7 +548,6 @@ public class KEAFilter extends Filter implements OptionHandler {
 		}
 	}
 	
-	
 	/**
 	 * Parses a given list of options controlling the behaviour of this object.
 	 * Valid options are:<p>
@@ -1708,7 +1707,6 @@ public class KEAFilter extends Filter implements OptionHandler {
 		return hash;
 	}
 	
-	
 	/**
 	 * Expects an empty hashtable. Fills the hashtable
 	 * with the stemmed n-grams occuring in the given string
@@ -1874,7 +1872,6 @@ public class KEAFilter extends Filter implements OptionHandler {
 		return pos;
 	}
 	
-	
 	/** 
 	 * Splits a string at given character into an array (ALY)
 	 */
@@ -1956,8 +1953,6 @@ public class KEAFilter extends Filter implements OptionHandler {
 		}
 	}
 	
-	
-	
 	/** 
 	 * Generates the preudo phrase from a string.
 	 * A pseudo phrase is a version of a phrase
@@ -1970,7 +1965,6 @@ public class KEAFilter extends Filter implements OptionHandler {
 		String[] words;
 		String str_nostop;
 		String stemmed;
-		
 		
 		str = str.toLowerCase();
 		
@@ -2001,12 +1995,10 @@ public class KEAFilter extends Filter implements OptionHandler {
 		str = str.replace('-', ' ');
 		str = str.replace('&', ' ');
 		
-		
 		str = str.replaceAll("\\*", "");
 		str = str.replaceAll("\\, "," ");
 		str = str.replaceAll("\\. "," ");
 		str = str.replaceAll("\\:","");
-		
 		
 		str = str.trim();
 		
@@ -2045,8 +2037,6 @@ public class KEAFilter extends Filter implements OptionHandler {
 		return result;
 	}	
 	
-	
-	
 	/** 
 	 * overloaded swap method: exchange 2 locations in an array of Strings.
 	 */
@@ -2055,7 +2045,6 @@ public class KEAFilter extends Filter implements OptionHandler {
 		a [loc1] = a [loc2];
 		a [loc2] = temp;
 	} // end swap
-	
 	
 	/**
 	 * Sorts an array of Strings into alphabetic order
@@ -2091,10 +2080,7 @@ public class KEAFilter extends Filter implements OptionHandler {
 		}
 		return a;
 	} // end method selectionSort
-	
-	
-	
-	
+		
 	/**
 	 * Main method for testing this class.
 	 *
@@ -2113,14 +2099,3 @@ public class KEAFilter extends Filter implements OptionHandler {
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
