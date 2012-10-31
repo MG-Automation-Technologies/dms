@@ -41,7 +41,6 @@ import com.openkm.module.db.stuff.DbSessionManager;
 public class PrincipalUtils {
 	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(PrincipalUtils.class);
-	private static final long serialVersionUID = 1L;
 	
 	/**
 	 * Obtain the logged user.
