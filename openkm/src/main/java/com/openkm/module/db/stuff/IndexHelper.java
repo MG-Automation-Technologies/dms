@@ -128,6 +128,7 @@ public class IndexHelper {
 						dir = FSDirectory.open(new File("lucene_index/spellcheck"));
 						SpellChecker spell = new SpellChecker(dir);
 						spell.indexDictionary(dictionary);
+						spell.close();
 						log.info("Successfully updated the spell checker index after Document added/updated.");
 					} catch (Exception exc) {
 						log.error("Failed to update the spell checker index!", exc);
@@ -185,6 +186,7 @@ public class IndexHelper {
 			SpellChecker spell = new SpellChecker(dir);
 			spell.clearIndex();
 			spell.indexDictionary(new LuceneDictionary(reader, NodeDocument.TEXT_FIELD));
+			spell.close();
 			dir.close();
 			dir = null;
 			long _exit = System.currentTimeMillis();
