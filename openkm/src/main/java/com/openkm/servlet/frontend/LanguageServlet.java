@@ -21,19 +21,17 @@
 
 package com.openkm.servlet.frontend;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
-import com.openkm.dao.LanguageDAO;
-import com.openkm.dao.bean.Language;
 import com.openkm.dao.bean.Translation;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.constants.service.ErrorCode;
 import com.openkm.frontend.client.service.OKMLanguageService;
+import com.openkm.util.LanguageUtils;
 
 /**
  * LanguageServlet
@@ -49,49 +47,15 @@ public class LanguageServlet extends OKMRemoteServiceServlet implements OKMLangu
 	public Map<String, String> getFrontEndTranslations(String lang) throws OKMException {	
 		log.debug("getTranslations({})", lang);
 		updateSessionManager();
-		Map<String,String> translations = new HashMap<String,String>();
 		
 		// store current language into session
 		setLanguage(lang);
 		
 		try {
-			// By default english is used to complete non defined translations
-			Language baseLang = LanguageDAO.findByPk(Language.DEFAULT);
-			Language language = LanguageDAO.findByPk(lang);
-			Map<String,String> keys = new HashMap<String,String>();
-			
-			// Getting keys
-			if (language != null) {
-				for (Translation translation : language.getTranslations()) {
-					String key = translation.getTranslationId().getModule() + "." + translation.getTranslationId().getKey();
-					keys.put(key, translation.getText());
-				}
-			}
-			
-			if (baseLang != null) {
-				for (Translation translation : baseLang.getTranslations()) {
-					if (translation.getTranslationId().getModule().equals(Translation.MODULE_FRONTEND) ||
-						translation.getTranslationId().getModule().equals(Translation.MODULE_EXTENSION)) {
-						// Module is added module name as starting translation key
-						String key = translation.getTranslationId().getModule() + "." + translation.getTranslationId().getKey();
-						
-						if (keys.keySet().contains(key)) {
-							translations.put(key, keys.get(key)); 
-						} else {
-							// If translation no exist set english translation
-							translations.put(key, translation.getText()); 
-						}
-					}
-				}
-			} else {
-				throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMGeneralService, ErrorCode.CAUSE_Database), "English traslation is mandatory can not be deleted");
-			}
+			return LanguageUtils.getTranslations(lang, new String[]{Translation.MODULE_FRONTEND,Translation.MODULE_EXTENSION});
 		} catch (DatabaseException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMGeneralService, ErrorCode.CAUSE_Database), e.getMessage());
 		}
-		
-		log.debug("getTranslations: {}", translations);
-		return translations;
 	}
 }
