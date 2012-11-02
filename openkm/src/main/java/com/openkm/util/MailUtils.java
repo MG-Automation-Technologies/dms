@@ -807,10 +807,21 @@ public class MailUtils {
 				BodyPart bp = mp.getBodyPart(i);
 				
 				if (bp.getFileName() != null) {
+					String name = MimeUtility.decodeText(bp.getFileName());
+					String fileName = FileUtils.getFileName(name);
+					String fileExtension = FileUtils.getFileExtension(name);
+					String testName = name;
+					
+					// Test if already exists a document with the same name in the mail
+					for (int j = 1; OKMRepository.getInstance().hasNode(token, mail.getPath() + "/" + testName); j++) {
+						// log.info("Trying with: {}", testName);
+						testName = fileName + " (" + j + ")." + fileExtension;
+					}
+					
 					Document attachment = new Document();
 					String mimeType = MimeTypeConfig.mimeTypes.getContentType(bp.getFileName().toLowerCase());
 					attachment.setMimeType(mimeType);
-					attachment.setPath(mail.getPath() + "/" + bp.getFileName());
+					attachment.setPath(mail.getPath() + "/" + testName);
 					InputStream is = bp.getInputStream();
 					
 					if (Config.REPOSITORY_NATIVE) {
