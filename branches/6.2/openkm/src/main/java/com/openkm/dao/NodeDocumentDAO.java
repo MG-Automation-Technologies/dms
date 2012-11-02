@@ -548,8 +548,12 @@ public class NodeDocumentDAO {
 				NodeBaseDAO.getInstance().checkItemExistence(session, dstUuid, nDoc.getName());
 			}
 			
+			// Check if context changes
+			if (!nDstFld.getContext().equals(nDoc.getContext())) {
+				nDoc.setContext(nDstFld.getContext());
+			}
+			
 			nDoc.setParent(dstUuid);
-			nDoc.setContext(nDstFld.getContext());
 			session.update(nDoc);
 			HibernateUtil.commit(tx);
 			log.debug("move: void");
