@@ -55,6 +55,8 @@ public class ExtendedColumnSorter extends ColumnSorter {
 	private String selectedRowDataID = "";
 	private int colDataIndex = 0;
 	private GWTProfileFileBrowser profileFileBrowser;
+	private int column = -1;
+	boolean ascending = false;
 
 	/* (non-Javadoc)
 	 * @see com.google.gwt.widgetideas.table.client.SortableGrid$ColumnSorter#onSortColumn(com.google.gwt.widgetideas.table.client.SortableGrid, com.google.gwt.widgetideas.table.client.TableModel.ColumnSortList, com.google.gwt.widgetideas.table.client.SortableGrid.ColumnSorterCallback)
@@ -63,9 +65,35 @@ public class ExtendedColumnSorter extends ColumnSorter {
 			ColumnSortList sortList, ColumnSorterCallback callback) {
 		
 		// Get the primary column, sort order, number of rows, number of columns
+		column = sortList.getPrimaryColumn();
+	    ascending = sortList.isPrimaryAscending();
+	    sort(column, ascending);
+	    callback.onSortingComplete();
+	}
+	
+	/**
+	 * refreshSort
+	 */
+	public void refreshSort() {
+		if (isSorted()) {
+			sort(column, ascending);
+		}
+	}
+	
+	/**
+	 * isSorted
+	 * 
+	 * @return
+	 */
+	public boolean isSorted() {
+		return column>=0;
+	}
+	
+	/**
+	 * sort
+	 */
+	public void sort(int column, boolean ascending) {
 		Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagOrdering();
-		int column = sortList.getPrimaryColumn();
-	    boolean ascending = sortList.isPrimaryAscending();
 	    int rows = Main.get().mainPanel.desktop.browser.fileBrowser.table.getDataTable().getRowCount();
 	    int columns = Main.get().mainPanel.desktop.browser.fileBrowser.table.getDataTable().getColumnCount();
 	    int selectedRow = Main.get().mainPanel.desktop.browser.fileBrowser.table.getSelectedRow();
@@ -208,7 +236,6 @@ public class ExtendedColumnSorter extends ColumnSorter {
 	    
 	    applySort(elementList, elementToOrder);
 	    Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagOrdering();
-	    callback.onSortingComplete();
 	}
     
 	/**

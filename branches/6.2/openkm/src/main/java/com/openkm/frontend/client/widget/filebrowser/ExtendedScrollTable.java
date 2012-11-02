@@ -118,6 +118,22 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 	}
 	
 	/**
+	 * isSorted
+	 * 
+	 * @return
+	 */
+	public boolean isSorted() {
+		return columnSorter.isSorted();
+	}
+	
+	/**
+	 * refreshSort
+	 */
+	public void refreshSort() {
+		columnSorter.refreshSort();
+	}
+	
+	/**
 	 * Resets the values
 	 */
 	public void reset() {
