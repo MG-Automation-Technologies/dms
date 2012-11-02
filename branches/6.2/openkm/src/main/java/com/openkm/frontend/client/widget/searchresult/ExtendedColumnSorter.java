@@ -110,13 +110,28 @@ public class ExtendedColumnSorter extends ColumnSorter {
 	    	switch(column) {
 		    	case 0 :
 		    	case 1 :
-		    	case 2 :
 		    	case 5 :
 		    	case 6 :
 			    		// Text
 				    	rowToOrder.setObject(rowI[column].toLowerCase());		// Lower case solves problem with sort ordering
 				    	rowToOrder.setDataId(""+ i);							// Actual position value
 				    	elementToOrder.add(rowToOrder);
+		    		break;
+		    		
+		    	case 2:
+		    		// Text
+		    		// Name in table is anchor, lower case solves problem with sort ordering
+		    		if (((GWTQueryResult) data.get(Integer.parseInt(rowI[7]))).getDocument()!=null) {
+		    			rowToOrder.setObject(((GWTQueryResult) data.get(Integer.parseInt(rowI[7]))).getDocument().getName().toLowerCase());
+		    		} else if (((GWTQueryResult) data.get(Integer.parseInt(rowI[7]))).getAttachment()!=null) {
+		    			rowToOrder.setObject(((GWTQueryResult) data.get(Integer.parseInt(rowI[7]))).getAttachment().getName().toLowerCase());
+		    		} else if (((GWTQueryResult) data.get(Integer.parseInt(rowI[7]))).getFolder()!=null) {
+		    			rowToOrder.setObject(((GWTQueryResult) data.get(Integer.parseInt(rowI[7]))).getFolder().getName().toLowerCase());
+		    		} else if (((GWTQueryResult) data.get(Integer.parseInt(rowI[7]))).getMail()!=null) {
+		    			rowToOrder.setObject(((GWTQueryResult) data.get(Integer.parseInt(rowI[7]))).getMail().getSubject().toLowerCase());
+		    		}
+				    rowToOrder.setDataId(""+ i);												// Actual position value
+				    elementToOrder.add(rowToOrder);
 		    		break;
 		    	
 		    	case 3 :
