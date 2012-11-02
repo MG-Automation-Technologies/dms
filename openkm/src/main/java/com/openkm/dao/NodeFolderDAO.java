@@ -44,6 +44,7 @@ import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.dao.bean.NodeBase;
 import com.openkm.dao.bean.NodeFolder;
+import com.openkm.dao.bean.NodeMail;
 import com.openkm.module.db.stuff.DbAccessManager;
 import com.openkm.module.db.stuff.SecurityHelper;
 import com.openkm.spring.PrincipalUtils;
@@ -439,8 +440,15 @@ public class NodeFolderDAO {
 				NodeBaseDAO.getInstance().checkItemExistence(session, dstUuid, nFld.getName());
 			}
 			
+			// Check if context changes
+			if (!nDstFld.getContext().equals(nFld.getContext())) {
+				nFld.setContext(nDstFld.getContext());
+				
+				// Need recursive context changes
+				moveHelper(session, uuid, nDstFld.getContext());
+			}
+			
 			nFld.setParent(dstUuid);
-			nFld.setContext(nDstFld.getContext());
 			session.update(nFld);
 			HibernateUtil.commit(tx);
 			log.debug("move: void");
@@ -461,6 +469,21 @@ public class NodeFolderDAO {
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void moveHelper(Session session, String parentUuid, String newContext) throws HibernateException {
+		String qs = "from NodeBase nf where nf.parent=:parent";
+		Query q = session.createQuery(qs);
+		q.setString("parent", parentUuid);
+		
+		for (NodeBase nBase : (List<NodeBase>) q.list()) {
+			nBase.setContext(newContext);
+			
+			if (nBase instanceof NodeFolder || nBase instanceof NodeMail) {
+				moveHelper(session, nBase.getUuid(), newContext);
+			}
 		}
 	}
 	

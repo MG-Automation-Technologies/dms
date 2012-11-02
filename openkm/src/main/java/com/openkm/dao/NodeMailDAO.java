@@ -412,8 +412,15 @@ public class NodeMailDAO {
 				NodeBaseDAO.getInstance().checkItemExistence(session, dstUuid, nMail.getName());
 			}
 			
+			// Check if context changes
+			if (!nDstFld.getContext().equals(nMail.getContext())) {
+				nMail.setContext(nDstFld.getContext());
+				
+				// Need recursive context changes
+				moveHelper(session, uuid, nDstFld.getContext());
+			}
+			
 			nMail.setParent(dstUuid);
-			nMail.setContext(nDstFld.getContext());
 			session.update(nMail);
 			HibernateUtil.commit(tx);
 			log.debug("move: void");
@@ -434,6 +441,17 @@ public class NodeMailDAO {
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void moveHelper(Session session, String parentUuid, String newContext) throws HibernateException {
+		String qs = "from NodeBase nf where nf.parent=:parent";
+		Query q = session.createQuery(qs);
+		q.setString("parent", parentUuid);
+		
+		for (NodeBase nBase : (List<NodeBase>) q.list()) {
+			nBase.setContext(newContext);
 		}
 	}
 	
