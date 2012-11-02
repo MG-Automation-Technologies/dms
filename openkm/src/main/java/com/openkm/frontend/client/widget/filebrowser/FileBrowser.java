@@ -382,6 +382,9 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 			
 			case GET_ENDS:
 				selectSelectedRowInTable();
+				if (table.isSorted()) {
+					table.refreshSort();
+				}
 				nextRefresh = GET_NONE;
 				break;
 		}
