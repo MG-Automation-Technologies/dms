@@ -6,6 +6,7 @@
 <%@ page import="com.openkm.dao.bean.Language"%>
 <%@ page import="com.openkm.dao.HibernateUtil"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -33,11 +34,16 @@
   <title>OpenKM Login</title>
 </head>
 <body onload="document.forms[0].elements[0].focus()">
-  <center style="margin-top: 40px;">&nbsp;</center>
+  <u:constantsMap className="com.openkm.core.Config" var="Config"/>
   <div id="box">
     <div id="logo"></div>
     <div id="error">
-      <c:if test="${not empty param.error}">Authentication error</c:if>
+      <c:if test="${not empty param.error}">
+        Authentication error
+        <c:if test="${Config.PRINCIPAL_ADAPTER == 'com.openkm.principal.DatabasePrincipalAdapter'}">
+          (<a href="password_reset.jsp">Forgot your password?</a>)
+        </c:if>
+      </c:if>
     </div>
     <div id="text">
       <center><img src="<%=request.getContextPath() %>/img/lock.png"/></center>
