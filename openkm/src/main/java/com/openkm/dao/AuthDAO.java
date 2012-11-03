@@ -247,6 +247,8 @@ public class AuthDAO {
 	
 	/**
 	 * Get all users in database
+	 * 
+	 * @param filterByActive If only active user2 should be included.
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<User> findAllUsers(boolean filterByActive) throws DatabaseException {
