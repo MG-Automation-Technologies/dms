@@ -65,9 +65,11 @@ public class MimeTypeConfig {
 			
 			for (MimeType mt : mimeTypeList) {
 				String entry = mt.getName();
+				
 				for (String ext : mt.getExtensions()) {
 					entry += " " + ext;
 				}
+				
 				log.debug("loadMimeTypes => Add Entry: {}", entry);
 				MimeTypeConfig.mimeTypes.addMimeTypes(entry);
 			}
