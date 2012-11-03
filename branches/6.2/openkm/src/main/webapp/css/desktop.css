@@ -13,10 +13,25 @@ body, td, a, div, p {
   font-family: verdana, arial, sans-serif;
 }
 
-textarea, input, select {
+textarea, input, select, button {
   border: 1px solid #A5A596;
   font-size: 10px;
   font-family: verdana, arial, sans-serif
+}
+
+a:link, .w, .w a:link {
+	color: #0000cc;
+	text-decoration: none;
+}
+
+a:visited {
+	color: #551a8b;
+	text-decoration: none;
+}
+
+a:active {
+	color: #ff0000;
+	text-decoration: none;
 }
 
 label {
@@ -47,7 +62,16 @@ div#text {
 }
 
 div#error {
-  color: #F00;
+  color: red;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+  height: 18px;
+  margin-bottom: 5px;
+}
+
+div#ok {
+  color: green;
   font-weight: bold;
   font-size: 14px;
   text-align: center;

@@ -217,6 +217,10 @@
     <servlet-class>com.openkm.servlet.SyndicationServlet</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>PasswordResetServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.PasswordResetServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>StatusServlet</servlet-name>
     <servlet-class>com.openkm.servlet.StatusServlet</servlet-class>
   </servlet>
@@ -485,6 +489,10 @@
   <servlet-mapping>
     <servlet-name>SyndicationServlet</servlet-name>
     <url-pattern>/feed/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PasswordResetServlet</servlet-name>
+    <url-pattern>/PasswordReset</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>StatusServlet</servlet-name>
