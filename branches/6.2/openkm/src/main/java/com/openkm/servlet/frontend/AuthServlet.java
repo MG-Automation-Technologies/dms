@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMAuth;
 import com.openkm.bean.Permission;
-import com.openkm.bean.Repository;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
@@ -505,13 +504,10 @@ public class AuthServlet extends OKMRemoteServiceServlet implements OKMAuthServi
 		updateSessionManager();
 		
 		try {
-			if (!(path.equals("/" + Repository.ROOT) || path.equals("/" + Repository.CATEGORIES) || path
-					.equals("/" + Repository.TEMPLATES))) {
-				OKMAuth oKMAuth = OKMAuth.getInstance();
-				int allGrants = Permission.ALL_GRANTS;
-				
-				oKMAuth.revokeRole(null, path, role, allGrants, recursive);
-			}
+			OKMAuth oKMAuth = OKMAuth.getInstance();
+			int allGrants = Permission.ALL_GRANTS;
+			
+			oKMAuth.revokeRole(null, path, role, allGrants, recursive);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_PathNotFound),
@@ -543,10 +539,7 @@ public class AuthServlet extends OKMRemoteServiceServlet implements OKMAuthServi
 		updateSessionManager();
 		
 		try {
-			if (!(path.equals("/" + Repository.ROOT) || path.equals("/" + Repository.CATEGORIES) || path
-					.equals("/" + Repository.TEMPLATES))) {
-				OKMAuth.getInstance().revokeRole(null, path, role, permissions, recursive);
-			}
+			OKMAuth.getInstance().revokeRole(null, path, role, permissions, recursive);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_PathNotFound),
