@@ -30,9 +30,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "OKM_AUTO_METADATA")
+@Table(name = "OKM_AUTO_METADATA", uniqueConstraints={
+		// ALTER TABLE OKM_AUTO_METADATA ADD CONSTRAINT IDX_AUTO_MD_ATCLS UNIQUE (AMD_AT, AMD_CLASS_NAME)
+		@UniqueConstraint(name="IDX_AUTO_MD_ATCLS", columnNames={"AMD_AT", "AMD_CLASS_NAME"})})
 public class AutomationMetadata implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
