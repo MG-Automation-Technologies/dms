@@ -57,7 +57,7 @@ public class ExecuteReportServlet extends HttpServlet {
 			UserConfig uc = UserConfigDAO.findByPk(request.getRemoteUser());
 			Profile up = uc.getProfile();
 			
-			if (up.getPrfMisc().getReports().contains(id)) {
+			if (up.getPrfMisc().getReports().contains(new Long(id).longValue())) {
 				Report rp = ReportDAO.findByPk(id);
 				
 				// Set file name
