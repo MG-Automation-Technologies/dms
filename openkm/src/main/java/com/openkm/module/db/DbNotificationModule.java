@@ -166,6 +166,8 @@ public class DbNotificationModule implements NotificationModule {
 				
 				if (!to.isEmpty() && from != null && !from.isEmpty()) {
 					CommonNotificationModule.sendNotification(auth.getName(), nodePath, from, to, message, attachment);
+				} else {
+					log.warn("Can't send notification because 'from' or 'to' is empty");
 				}
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
