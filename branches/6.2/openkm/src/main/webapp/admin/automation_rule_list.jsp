@@ -22,7 +22,7 @@
       <br/>
       <table class="results" width="70%">
         <tr>
-      	  <th>Order</th><th>Name</th><th>Event</th><th>At</th><th>Validations</th>
+      	  <th>#</th><th>Order</th><th>Name</th><th>Event</th><th>At</th><th>Validations</th>
       	  <th>Actions</th><th>Exclusive</th><th>Active</th>
 		  <th width="80px">
             <c:url value="Automation" var="urlCreate">
@@ -48,6 +48,7 @@
               <c:param name="ar_id" value="${ar.id}"/>
             </c:url>
             <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
+              <td width="20px">${row.index + 1}</td>
               <td>${ar.order}</td><td>${ar.name}</td>
               <td>${ar.event}</td><td>${ar.at}</td>
               <td align="center">${ar.validations.size()}</td><td align="center">${ar.actions.size()}</td>
