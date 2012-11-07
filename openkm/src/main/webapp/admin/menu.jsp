@@ -35,25 +35,11 @@
         <img src="img/toolbar/properties.png">
       </a>
     </li>
-    <!--
-    <li>
-      <a target="frame" href="LoggedUsers" title="Logged">
-        <img src="img/toolbar/logged.png">
-      </a>
-    </li>
-    -->
     <li>
       <a target="frame" href="Auth" title="Users">
         <img src="img/toolbar/users.png">
       </a>
     </li>
-    <!--
-    <li>
-      <a target="frame" href="Auth?action=roleList" title="Roles">
-        <img src="img/toolbar/roles.png">
-      </a>
-    </li>
-    -->
     <li>
       <a target="frame" href="Profile"  title="Profiles">
         <img src="img/toolbar/profile.png">
