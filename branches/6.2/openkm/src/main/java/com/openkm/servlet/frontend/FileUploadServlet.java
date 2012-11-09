@@ -41,6 +41,7 @@ import com.openkm.core.ConversionException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
+import com.openkm.core.LockException;
 import com.openkm.core.MimeTypeConfig;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.Ref;
@@ -87,6 +88,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 		long size = 0;
 		boolean notify = false;
 		boolean importZip = false;
+		boolean autoCheckOut = false;
 		String users = null;
 		String roles = null;
 		String message = null;
@@ -152,6 +154,10 @@ public class FileUploadServlet extends OKMHttpServlet {
 						
 						if (item.getFieldName().equals("importZip")) {
 							importZip = true;
+						}
+						
+						if (item.getFieldName().equals("autoCheckOut")) {
+							autoCheckOut = true;
 						}
 						
 						if (item.getFieldName().equals("message")) {
@@ -292,6 +298,10 @@ public class FileUploadServlet extends OKMHttpServlet {
 					if (!Config.SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK || PathUtils.getName(path).equals(fileName)) {
 						Document doc = OKMDocument.getInstance().getProperties(null, path);
 						
+						if (autoCheckOut) {
+							OKMDocument.getInstance().checkout(null, path);
+						}
+						
 						if (Config.REPOSITORY_NATIVE) {
 							new DbDocumentModule().checkin(null, path, is, size, comment, null);
 							fuResponse.get().setPath(path);
@@ -396,6 +406,9 @@ public class FileUploadServlet extends OKMHttpServlet {
 			sendErrorResponse(out, action, fuResponse.get(), request, response, redirect, redirectURL);
 		} catch (FileSizeExceededException e) {
 			fuResponse.get().setError(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_FileSizeExceeded));
+			sendErrorResponse(out, action, fuResponse.get(), request, response, redirect, redirectURL);
+		} catch (LockException e) {
+			fuResponse.get().setError(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_Lock));
 			sendErrorResponse(out, action, fuResponse.get(), request, response, redirect, redirectURL);
 		} catch (VirusDetectedException e) {
 			fuResponse.get().setError(VirusDetectedException.class.getSimpleName() + " : " + e.getMessage());
