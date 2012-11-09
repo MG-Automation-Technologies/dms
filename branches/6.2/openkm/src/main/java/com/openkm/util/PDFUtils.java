@@ -66,24 +66,28 @@ public class PDFUtils {
 			for (Iterator it = form.getFields().iterator(); it.hasNext();) {
 				PRAcroForm.FieldInformation field = (PRAcroForm.FieldInformation) it.next();
 				String fieldValue = fields.getField(field.getName());
-				log.debug("Field: {}, Value: {}", field.getName(), fieldValue);
+				log.debug("Field: {}, Value: '{}'", field.getName(), fieldValue);
 				
 				if (fieldValue != null && !fieldValue.equals("")) {
-					if (values.containsKey(field.getName())) {
+					// if (values.containsKey(field.getName())) {
 						String result = TemplateUtils.replace("PDF_FILL_FORM", fieldValue, values);
-						log.debug("Set to '{}'", result);
+						log.debug("Field '{}' set to '{}' (by expression)", field.getName(), result);
 						fields.setField(field.getName(), result);
 						stamper.partialFormFlattening(field.getName());
 						formFlattening = true;
-					}
+					//} else {
+						//log.warn("Field '{}' (expression ignored because not included in map)", field.getName());
+					//}
 				} else {
 					Object value = values.get(field.getName());
 					
 					if (value != null) {
-						log.debug("Set to '{}'", value);
+						log.debug("Field '{}' set to '{}' (by field name)", field.getName(), value);
 						fields.setField(field.getName(), value.toString());
 						stamper.partialFormFlattening(field.getName());
 						formFlattening = true;
+					} else {
+						log.warn("Field '{}' (value ignored because not included in map)", field.getName());
 					}
 				}
 			}
