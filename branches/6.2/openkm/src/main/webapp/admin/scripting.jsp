@@ -42,6 +42,10 @@
 		});
       	
 		hlLine = cm.setLineClass(0, "activeline");
+		var width = ($(this).width() - 60);
+	    var height = ($(this).height() - 230);
+	    $('.CodeMirror').css({"width": width});
+	    $('.CodeMirror').css({"height": height});
 		
 		$dm = $('.ds').openDOMWindow({
 			height:200, width:300,
