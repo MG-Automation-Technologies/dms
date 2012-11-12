@@ -21,12 +21,9 @@
 
 package com.openkm.dao;
 
-import java.util.List;
-
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,134 +36,21 @@ import com.openkm.dao.bean.Css;
  * @author jllort
  * 
  */
-public class CssDAO {
+public class CssDAO extends GenericDAO<Css, Long>{
 	private static Logger log = LoggerFactory.getLogger(CssDAO.class);
+	private static CssDAO single = new CssDAO();
 	
 	private CssDAO() {
 	}
 	
-	/**
-	 * Find all styles
-	 * 
-	 * @param cacheMode Execute styles query with the designed cache mode.
-	 */
-	@SuppressWarnings("unchecked")
-	public static List<Css> findAll() throws DatabaseException {
-		log.debug("findAll({})");
-		String qs = "from Css style order by style.context, style.name asc";
-		Session session = null;
-		Transaction tx = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			Query q = session.createQuery(qs).setCacheable(true);
-			List<Css> ret = q.list();
-			log.debug("findAll: {}", ret);
-			return ret;
-		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
+	public static CssDAO getInstance() {
+		return single;
 	}
 	
 	/**
-	 * Create css in database
+	 * Find by name and type
 	 */
-	public static long create(Css css) throws DatabaseException {
-		log.debug("create({})", css);
-		Session session = null;
-		Transaction tx = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-			session.save(css);
-			HibernateUtil.commit(tx);
-		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-		log.debug("create: void");
-		return css.getId();
-	}
-	
-	/**
-	 * Delete
-	 */
-	public static void delete(long id) throws DatabaseException {
-		log.debug("delete({})", id);
-		Session session = null;
-		Transaction tx = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-			Css css = (Css) session.load(Css.class, id);
-			session.delete(css);
-			HibernateUtil.commit(tx);
-		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-		
-		log.debug("delete: void");
-	}
-	
-	/**
-	 * Update
-	 */
-	public static void update(Css css) throws DatabaseException {
-		log.debug("update({})", css);
-		Session session = null;
-		Transaction tx = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-			session.update(css);
-			HibernateUtil.commit(tx);
-		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-		
-		log.debug("update: void");
-	}
-	
-	/**
-	 * Find by pk
-	 */
-	public static Css findByPk(long id) throws DatabaseException {
-		log.debug("findByPk({})", id);
-		String qs = "from Css style where style.id=:id";
-		Session session = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			Query q = session.createQuery(qs);
-			q.setLong("id", id);
-			Css ret = (Css) q.setMaxResults(1).uniqueResult();
-			log.debug("findByPk: {}", ret);
-			return ret;
-		} catch (HibernateException e) {
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-	}
-	
-	/**
-	 * Find by pk
-	 */
-	public static Css findByNameAndType(String name, String context) throws DatabaseException {
+	public Css findByNameAndType(String name, String context) throws DatabaseException {
 		log.debug("findByPk({},{})", name, context);
 		String qs = "from Css style where style.name=:name and style.context=:context";
 		Session session = null;

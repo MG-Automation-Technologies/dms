@@ -115,6 +115,7 @@ public class CssServlet extends BaseServlet {
 		String userId = request.getRemoteUser();
 		Session dbSession = null;
 		updateSessionManager(request);
+		
 		try {
 			if (ServletFileUpload.isMultipartContent(request)) {
 				InputStream is = null;
@@ -132,7 +133,9 @@ public class CssServlet extends BaseServlet {
 						if (item.getFieldName().equals("action")) {
 							action = item.getString("UTF-8");
 						} else if (item.getFieldName().equals("css_id")) {
-							css.setId(new Long(item.getString("UTF-8")).longValue());
+							if (!item.getString("UTF-8").isEmpty()) {
+								css.setId(new Long(item.getString("UTF-8")).longValue());
+							}
 						} else if (item.getFieldName().equals("css_name")) {
 							css.setName(item.getString("UTF-8"));
 						} else if (item.getFieldName().equals("css_context")) {
@@ -151,20 +154,23 @@ public class CssServlet extends BaseServlet {
 				
 				if (action.equals("import")) {
 					dbSession = HibernateUtil.getSessionFactory().openSession();
-					importCss(userId, request, response, data, dbSession);					
+					importCss(userId, request, response, data, dbSession);
 					// Activity log
 					UserActivity.log(request.getRemoteUser(), "ADMIN_CSS_IMPORT", null, null, null);
 				} else if (action.equals("edit")) {
-					CssDAO.update(css);
+					CssDAO.getInstance().update(css);
+					
 					// Activity log
 					UserActivity.log(userId, "ADMIN_CSS_UPDATE", String.valueOf(css.getId()), null, css.getName());
 				} else if (action.equals("delete")) {
 					String name = WebUtils.getString(request, "css_name");
-					CssDAO.delete(css.getId());
+					CssDAO.getInstance().delete(css.getId());
+					
 					// Activity log
 					UserActivity.log(userId, "ADMIN_CSS_DELETE", String.valueOf(css.getId()), null, name);
 				} else if (action.equals("create")) {
-					long id = CssDAO.create(css);
+					long id = CssDAO.getInstance().create(css);
+					
 					// Activity log
 					UserActivity.log(userId, "ADMIN_CSS_CREATE", String.valueOf(id), null, css.getName());
 				}
@@ -184,13 +190,12 @@ public class CssServlet extends BaseServlet {
 	}
 	
 	/**
-	 * Import a new language into database
+	 * Import a new CSS into database
 	 */
 	private void importCss(String userId, HttpServletRequest request, HttpServletResponse response,
 			final byte[] data, Session dbSession) throws DatabaseException,
 			IOException, SQLException {
 		log.debug("importCss({}, {}, {}, {}, {})", new Object[] { userId, request, response, data, dbSession });
-		
 		dbSession.doWork(new Work() {
 			@Override
 			public void execute(Connection con) throws SQLException {
@@ -210,6 +215,7 @@ public class CssServlet extends BaseServlet {
 				LegacyDAO.close(stmt);
 			}
 		});
+		
 		log.debug("importLanguage: void");
 	}
 	
@@ -219,8 +225,9 @@ public class CssServlet extends BaseServlet {
 	private void export(String userId, HttpServletRequest request, HttpServletResponse response) throws DatabaseException, IOException {
 		log.debug("export({}, {}, {})", new Object[] { userId, request, response });
 		long id = WebUtils.getLong(request, "css_id");
-		Css css = CssDAO.findByPk(id);
+		Css css = CssDAO.getInstance().findByPk(id);
 		String fileName = "OpenKM_" + WarUtils.getAppVersion().getVersion() + "_" +css.getName() + "_" + css.getContext() + ".sql";
+		
 		// Prepare file headers
 		WebUtils.prepareSendFile(request, response, fileName, MimeTypeConfig.MIME_SQL, false);
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(response.getOutputStream(), "UTF8"), true);
@@ -246,7 +253,7 @@ public class CssServlet extends BaseServlet {
 		
 		sc.setAttribute("action", WebUtils.getString(request, "action"));
 		sc.setAttribute("persist", true);
-		sc.setAttribute("css", CssDAO.findByPk(id));
+		sc.setAttribute("css", CssDAO.getInstance().findByPk(id));
 		sc.getRequestDispatcher("/admin/css_edit.jsp").forward(request, response);
 		
 		log.debug("edit: void");
@@ -263,7 +270,7 @@ public class CssServlet extends BaseServlet {
 		
 		sc.setAttribute("action", WebUtils.getString(request, "action"));
 		sc.setAttribute("persist", true);
-		sc.setAttribute("css", CssDAO.findByPk(id));
+		sc.setAttribute("css", CssDAO.getInstance().findByPk(id));
 		sc.getRequestDispatcher("/admin/css_edit.jsp").forward(request, response);		
 		
 		log.debug("edit: void");
@@ -292,9 +299,8 @@ public class CssServlet extends BaseServlet {
 			IOException, DatabaseException {
 		log.debug("list({}, {}, {})", new Object[] { userId, request, response });
 		ServletContext sc = getServletContext();
-		sc.setAttribute("cssList", CssDAO.findAll());
+		sc.setAttribute("cssList", CssDAO.getInstance().findAll());
 		sc.getRequestDispatcher("/admin/css_list.jsp").forward(request, response);
 		log.debug("list: void");
 	}
-	
 }
