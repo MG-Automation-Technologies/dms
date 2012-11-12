@@ -34,116 +34,104 @@
 	        }
 	      );
 	      var hlLine = cm.setLineClass(0, "activeline");
-	      var width = ($(this).width() - 60);
-	      var height = ($(this).height() - 230);
+	      var width = $(this).width() - 60;
+	      var height = $(this).height() - 230;
 	      $('.CodeMirror').css({"width": width});
 	      $('.CodeMirror').css({"height": height});
 	  });
-
   </script>
   <title>Edit css</title>
 </head>
 <body>
-	<c:set var="isAdmin"><%=BaseServlet.isAdmin(request)%></c:set>
-	<c:choose>
-		<c:when test="${isAdmin}">
-		  <ul id="breadcrumb">
-		  	<li class="path">
-          		<a href="utilities.jsp">Utilities</a>
-        	</li>
-	        <li class="path">
-	          <a href="Css">Css list</a>
-	        </li>
-	        <li class="path">
-	          <c:choose>
-	            <c:when test="${action == 'create'}">Create css</c:when>
-	            <c:when test="${action == 'edit'}">Edit css</c:when>
-	            <c:when test="${action == 'delete'}">Delete css</c:when>
-	          </c:choose>
-	        </li>
-	      </ul>
-	      <br/>
-	      <form action="Css" method="post" enctype="multipart/form-data">
-	        <input type="hidden" name="action" value="${action}"/>
-	        <input type="hidden" name="persist" value="${persist}"/>
-	        <table class="form" width="372px">
-			  <tr>
-	            <td>Id</td>
-	            <td width="100%">
-	              <c:choose>
-	                <c:when test="${action != 'create'}">
-	                  <input class=":required :only_on_blur" name="css_id" value="${css.id}" readonly="readonly"/>
-	                </c:when>
-	              </c:choose>
-	            </td>
-	          </tr>
-	          <tr>
-	            <td>Name</td>
-	            <td><input class=":required :only_on_blur" name="css_name" value="${css.name}"/></td>
-	          </tr>
-	          <tr>
-	            <td>Context</td>
-	            <td>
-	            	<c:set var="frontend"><%=Css.CONTEXT_FRONTEND%></c:set>
-	            	<c:set var="mobile"><%=Css.CONTEXT_MOBILE%></c:set>
-	            	<c:set var="administration"><%=Css.CONTEXT_ADMINISTRATION%></c:set>
-	            	<c:set var="extension"><%=Css.CONTEXT_EXTENSION%></c:set>
-	            	<select name="css_context">
-			          <c:choose>
-			            <c:when test="${css.context == frontend}">
-			              <option value="<%=Css.CONTEXT_FRONTEND%>" selected="selected"><%=Css.CONTEXT_FRONTEND%></option>
-			            </c:when>
-			            <c:otherwise><option value="<%=Css.CONTEXT_FRONTEND%>"><%=Css.CONTEXT_FRONTEND%></option></c:otherwise>
-			          </c:choose>
-			          <c:choose>
-			            <c:when test="${css.context == mobile}">
-			              <option value="<%=Css.CONTEXT_MOBILE%>" selected="selected"><%=Css.CONTEXT_MOBILE%></option>
-			            </c:when>
-			            <c:otherwise><option value="<%=Css.CONTEXT_MOBILE%>"><%=Css.CONTEXT_MOBILE%></option></c:otherwise>
-			          </c:choose>
-					  <c:choose>
-			            <c:when test="${css.context == administration}">
-			              <option value="<%=Css.CONTEXT_ADMINISTRATION%>" selected="selected"><%=Css.CONTEXT_ADMINISTRATION%></option>
-			            </c:when>
-			            <c:otherwise><option value="<%=Css.CONTEXT_ADMINISTRATION%>"><%=Css.CONTEXT_ADMINISTRATION%></option></c:otherwise>
-			          </c:choose>
-			          <c:choose>
-			            <c:when test="${css.context == extension}">
-			              <option value="<%=Css.CONTEXT_EXTENSION%>" selected="selected"><%=Css.CONTEXT_EXTENSION%></option>
-			            </c:when>
-			            <c:otherwise><option value="<%=Css.CONTEXT_EXTENSION%>"><%=Css.CONTEXT_EXTENSION%></option></c:otherwise>
-			          </c:choose>
-			        </select>
-	            </td>
-	          </tr>
-	          <tr>
-	            <td>Active</td>
-	            <td>
-	              <c:choose>
-	                <c:when test="${css.active}">
-	                  <input name="css_active" type="checkbox" checked="checked"/>
-	                </c:when>
-	                <c:otherwise>
-	                  <input name="css_active" type="checkbox"/>
-	                </c:otherwise>
-	              </c:choose>
-	            </td>
-	          </tr>
-	          <tr>
-	          	<td colspan="2">
-	          		<textarea cols="80" rows="25" name="css_content" id="css_content">${css.content}</textarea>
-	          	</td>
-	          </tr>
-	          <tr>
-	          	<td colspan="2" align="right">
-	          		<input type="button" onclick="javascript:window.history.back()" value="Cancel"/>
-	          		<input type="submit" value="Send"/>
-	          	</td>
-	          </tr>
-	        </table>
-	     </form>
-	      
-		</c:when>
+  <c:set var="isAdmin"><%=BaseServlet.isAdmin(request)%></c:set>
+  <c:choose>
+    <c:when test="${isAdmin}">
+      <ul id="breadcrumb">
+        <li class="path">
+          <a href="utilities.jsp">Utilities</a>
+        </li>
+        <li class="path">
+          <a href="Css">CSS list</a>
+        </li>
+        <li class="path">
+          <c:choose>
+            <c:when test="${action == 'create'}">Create CSS</c:when>
+            <c:when test="${action == 'edit'}">Edit CSS</c:when>
+            <c:when test="${action == 'delete'}">Delete CSS</c:when>
+          </c:choose>
+        </li>
+        </ul>
+        <br/>
+        <form action="Css" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="action" value="${action}"/>
+          <input type="hidden" name="persist" value="${persist}"/>
+          <input type="hidden" name="css_id" value="${css.id}"/>
+          <table class="form" width="372px">
+            <tr>
+              <td>Name</td>
+              <td width="95%"><input class=":required :only_on_blur" name="css_name" value="${css.name}"/></td>
+            </tr>
+            <tr>
+              <td>Context</td>
+              <td width="95%">
+                <c:set var="frontend"><%=Css.CONTEXT_FRONTEND%></c:set>
+                <c:set var="administration"><%=Css.CONTEXT_ADMINISTRATION%></c:set>
+                <c:set var="extension"><%=Css.CONTEXT_EXTENSION%></c:set>
+                <select name="css_context">
+                  <c:choose>
+                    <c:when test="${css.context == frontend}">
+                      <option value="<%=Css.CONTEXT_FRONTEND%>" selected="selected"><%=Css.CONTEXT_FRONTEND%></option>
+                    </c:when>
+                    <c:otherwise>
+                      <option value="<%=Css.CONTEXT_FRONTEND%>"><%=Css.CONTEXT_FRONTEND%></option>
+                    </c:otherwise>
+                  </c:choose>
+                  <c:choose>
+                    <c:when test="${css.context == administration}">
+                      <option value="<%=Css.CONTEXT_ADMINISTRATION%>" selected="selected"><%=Css.CONTEXT_ADMINISTRATION%></option>
+                    </c:when>
+                    <c:otherwise>
+                      <option value="<%=Css.CONTEXT_ADMINISTRATION%>"><%=Css.CONTEXT_ADMINISTRATION%></option>
+                    </c:otherwise>
+                  </c:choose>
+                  <c:choose>
+                    <c:when test="${css.context == extension}">
+                      <option value="<%=Css.CONTEXT_EXTENSION%>" selected="selected"><%=Css.CONTEXT_EXTENSION%></option>
+                    </c:when>
+                    <c:otherwise>
+                      <option value="<%=Css.CONTEXT_EXTENSION%>"><%=Css.CONTEXT_EXTENSION%></option>
+                    </c:otherwise>
+                  </c:choose>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>Active</td>
+              <td width="95%">
+                <c:choose>
+                  <c:when test="${css.active}">
+                    <input name="css_active" type="checkbox" checked="checked"/>
+                  </c:when>
+                  <c:otherwise>
+                    <input name="css_active" type="checkbox"/>
+                  </c:otherwise>
+                </c:choose>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <textarea cols="80" rows="25" name="css_content" id="css_content">${css.content}</textarea>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" align="right">
+                <input type="button" onclick="javascript:window.history.back()" value="Cancel"/>
+                <input type="submit" value="Send"/>
+              </td>
+            </tr>
+          </table>
+        </form>
+      </c:when>
     <c:otherwise>
       <div class="error"><h3>Only admin users allowed</h3></div>
     </c:otherwise>

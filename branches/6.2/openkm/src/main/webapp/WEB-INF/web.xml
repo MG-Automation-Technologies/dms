@@ -245,12 +245,12 @@
     <servlet-class>com.openkm.servlet.FlagIconServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>WorkflowRegisterServlet</servlet-name>
-    <servlet-class>com.openkm.servlet.WorkflowRegisterServlet</servlet-class>
+    <servlet-name>StyleCssServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.CssServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>FrontendCssServlet</servlet-name>
-    <servlet-class>com.openkm.servlet.CssServlet</servlet-class>
+    <servlet-name>WorkflowRegisterServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.WorkflowRegisterServlet</servlet-class>
   </servlet>
   
   <!-- Admin servlets -->
@@ -476,10 +476,6 @@
     <servlet-name>MassiveServlet</servlet-name>
     <url-pattern>/frontend/Massive</url-pattern>
   </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>FrontendCssServlet</servlet-name>
-    <url-pattern>/frontend/css/*</url-pattern>
-  </servlet-mapping>
   
   <!-- Test Servlets -->
   <servlet-mapping>
@@ -525,6 +521,10 @@
   <servlet-mapping>
     <servlet-name>ImageLogoServlet</servlet-name>
     <url-pattern>/logo/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>StyleCssServlet</servlet-name>
+    <url-pattern>/style/*</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>TextToSpeechServlet</servlet-name>
