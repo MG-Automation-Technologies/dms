@@ -42,8 +42,8 @@
             <c:param name="action" value="delete"/>
             <c:param name="css_id" value="${css.id}"/>
           </c:url>
-          <c:url value="Css" var="urlExport">
-            <c:param name="action" value="export"/>
+          <c:url value="Css" var="urlDownload">
+            <c:param name="action" value="download"/>
             <c:param name="css_id" value="${css.id}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
@@ -64,24 +64,11 @@
               <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
               &nbsp;
               <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
-              &nbsp;
-              <a href="${urlExport}"><img src="img/action/export_sql.png" alt="SQL export" title="SQL export"/></a>
+               &nbsp;
+              <a href="${urlDownload}"><img src="img/action/download.png" alt="Download" title="Download"/></a>
             </td>
           </tr>
         </c:forEach>
-        <tr class="fuzzy">
-          <td colspan="5" align="right">
-            <form action="Css" method="post" enctype="multipart/form-data">
-              <input type="hidden" name="action" value="import"/>
-              <table>
-                <tr>
-                  <td><input class=":required :only_on_blur" type="file" name="sql-file"/></td>
-                  <td><input type="submit" value="Add new CSS"/></td>
-                </tr>
-              </table>
-            </form>
-          </td>
-        </tr>
       </table>
     </c:when>
     <c:otherwise>

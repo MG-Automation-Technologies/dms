@@ -21,16 +21,8 @@
 
 package com.openkm.servlet.admin;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Iterator;
 import java.util.List;
 
@@ -45,19 +37,14 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
-import org.hibernate.Session;
-import org.hibernate.jdbc.Work;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
 import com.openkm.core.MimeTypeConfig;
 import com.openkm.dao.CssDAO;
-import com.openkm.dao.HibernateUtil;
-import com.openkm.dao.LegacyDAO;
 import com.openkm.dao.bean.Css;
 import com.openkm.util.UserActivity;
-import com.openkm.util.WarUtils;
 import com.openkm.util.WebUtils;
 
 /**
@@ -93,8 +80,8 @@ public class CssServlet extends BaseServlet {
 				edit(userId, request, response);
 			} else if (action.equals("delete")) {
 				delete(userId, request, response);
-			} else if (action.equals("export")) {
-				export(userId, request, response);
+			} else if (action.equals("download")) {
+				download(userId, request, response);
 			}
 			
 			if (action.equals("") || WebUtils.getBoolean(request, "persist")) {
@@ -113,18 +100,15 @@ public class CssServlet extends BaseServlet {
 		request.setCharacterEncoding("UTF-8");
 		String action = WebUtils.getString(request, "action");
 		String userId = request.getRemoteUser();
-		Session dbSession = null;
 		updateSessionManager(request);
 		
 		try {
 			if (ServletFileUpload.isMultipartContent(request)) {
-				InputStream is = null;
 				FileItemFactory factory = new DiskFileItemFactory();
 				ServletFileUpload upload = new ServletFileUpload(factory);
 				List<FileItem> items = upload.parseRequest(request);
 				Css css = new Css();
 				css.setActive(false);
-				byte data[] = null;
 				
 				for (Iterator<FileItem> it = items.iterator(); it.hasNext();) {
 					FileItem item = it.next();
@@ -145,19 +129,10 @@ public class CssServlet extends BaseServlet {
 						} else if (item.getFieldName().equals("css_active")) {
 							css.setActive(true);
 						}
-					} else {
-						is = item.getInputStream();
-						data = IOUtils.toByteArray(is);
-						is.close();
 					}
 				}
 				
-				if (action.equals("import")) {
-					dbSession = HibernateUtil.getSessionFactory().openSession();
-					importCss(userId, request, response, data, dbSession);
-					// Activity log
-					UserActivity.log(request.getRemoteUser(), "ADMIN_CSS_IMPORT", null, null, null);
-				} else if (action.equals("edit")) {
+				if (action.equals("edit")) {
 					CssDAO.getInstance().update(css);
 					
 					// Activity log
@@ -183,67 +158,30 @@ public class CssServlet extends BaseServlet {
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
-		} catch (SQLException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request,response, e);
 		}
 	}
 	
 	/**
-	 * Import a new CSS into database
+	 * Download CSS
 	 */
-	private void importCss(String userId, HttpServletRequest request, HttpServletResponse response,
-			final byte[] data, Session dbSession) throws DatabaseException,
-			IOException, SQLException {
-		log.debug("importCss({}, {}, {}, {}, {})", new Object[] { userId, request, response, data, dbSession });
-		dbSession.doWork(new Work() {
-			@Override
-			public void execute(Connection con) throws SQLException {
-				Statement stmt = con.createStatement();
-				InputStreamReader is = new InputStreamReader(new ByteArrayInputStream(data));
-				BufferedReader br = new BufferedReader(is);
-				String query;
-				
-				try {
-					while ((query = br.readLine()) != null) {
-						stmt.executeUpdate(query);
-					}
-				} catch (IOException e) {
-					throw new SQLException(e.getMessage(), e);
-				}
-				
-				LegacyDAO.close(stmt);
-			}
-		});
-		
-		log.debug("importLanguage: void");
-	}
-	
-	/**
-	 * export
-	 */
-	private void export(String userId, HttpServletRequest request, HttpServletResponse response) throws DatabaseException, IOException {
-		log.debug("export({}, {}, {})", new Object[] { userId, request, response });
+	private void download(String userId, HttpServletRequest request, HttpServletResponse response) throws DatabaseException, IOException {
+		log.debug("download({}, {}, {})", new Object[] { userId, request, response });
 		long id = WebUtils.getLong(request, "css_id");
 		Css css = CssDAO.getInstance().findByPk(id);
-		String fileName = "OpenKM_" + WarUtils.getAppVersion().getVersion() + "_" +css.getName() + "_" + css.getContext() + ".sql";
+		ByteArrayInputStream bais = null;
 		
-		// Prepare file headers
-		WebUtils.prepareSendFile(request, response, fileName, MimeTypeConfig.MIME_SQL, false);
-		PrintWriter out = new PrintWriter(new OutputStreamWriter(response.getOutputStream(), "UTF8"), true);
-		StringBuffer insertCss = new StringBuffer("INSERT INTO OKM_CSS (CSS_NAME, CSS_CONTEXT, CSS_CONTENT, CSS_ACTIVE) VALUES ('");
-		insertCss.append(css.getName()).append("', '");
-		insertCss.append(css.getContext()).append("', '");
-		insertCss.append(css.getContent().replaceAll("'", "''")).append("', '");
-		insertCss.append("T").append("');");
-		out.println(insertCss);
+		try {
+			bais = new ByteArrayInputStream(css.getContent().getBytes("UTF-8"));
+			WebUtils.sendFile(request, response, css.getName() + ".css", MimeTypeConfig.MIME_CSS, false, bais);
+		} finally {
+			IOUtils.closeQuietly(bais);	
+		}
 		
-		out.flush();
-		log.debug("export: void");
+		log.debug("download: void");
 	}
 	
 	/**
-	 * Delete css
+	 * Delete CSS
 	 */
 	private void delete(String userId, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DatabaseException {
@@ -260,7 +198,7 @@ public class CssServlet extends BaseServlet {
 	}
 	
 	/**
-	 * Edit css
+	 * Edit CSS
 	 */
 	private void edit(String userId, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DatabaseException {
@@ -277,7 +215,7 @@ public class CssServlet extends BaseServlet {
 	}
 	
 	/**
-	 * Create css
+	 * Create CSS
 	 */
 	private void create(String userId, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DatabaseException {
@@ -293,7 +231,7 @@ public class CssServlet extends BaseServlet {
 	}
 	
 	/**
-	 * Css list
+	 * List CSS
 	 */
 	private void list(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException, DatabaseException {
