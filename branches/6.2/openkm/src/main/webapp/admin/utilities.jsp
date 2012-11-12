@@ -24,6 +24,7 @@
         <a class="button" href="CheckEmail">Check email</a><br/><br/>
         <a class="button" href="rebuild_indexes.jsp">Rebuild indexes</a><br/><br/>
         <a class="button" href="repository_checker.jsp">Repository checker</a><br/><br/>
+        <a class="button" href="Css">Css</a><br/><br/>
       </center>
     </c:when>
     <c:otherwise>

@@ -62,6 +62,7 @@ import com.openkm.dao.bean.AutomationMetadata;
 import com.openkm.dao.bean.AutomationRule;
 import com.openkm.dao.bean.AutomationValidation;
 import com.openkm.dao.bean.Bookmark;
+import com.openkm.dao.bean.Css;
 import com.openkm.dao.bean.DatabaseMetadataSequence;
 import com.openkm.dao.bean.DatabaseMetadataType;
 import com.openkm.dao.bean.DatabaseMetadataValue;
@@ -123,6 +124,7 @@ public class HibernateUtil {
 		cfg.addAnnotatedClass(DatabaseMetadataValue.class);
 		cfg.addAnnotatedClass(DatabaseMetadataSequence.class);
 		cfg.addAnnotatedClass(com.openkm.dao.bean.Config.class);
+		cfg.addAnnotatedClass(Css.class);
 		
 		// Cache
 		cfg.addAnnotatedClass(UserItems.class);

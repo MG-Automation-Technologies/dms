@@ -321,7 +321,7 @@ public class WebUtils {
 	/**
 	 * Prepare to send the file.
 	 */
-	private static void prepareSendFile(HttpServletRequest request, HttpServletResponse response,
+	public static void prepareSendFile(HttpServletRequest request, HttpServletResponse response,
 			String fileName, String mimeType, boolean inline) throws UnsupportedEncodingException {
 		String agent = request.getHeader("USER-AGENT");
 		
