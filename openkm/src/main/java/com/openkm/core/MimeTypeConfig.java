@@ -51,6 +51,8 @@ public class MimeTypeConfig {
 	public static String MIME_GIF = "image/gif";
 	public static String MIME_HTML = "text/html";
 	public static String MIME_TEXT = "text/plain";
+	public static String MIME_CSS = "text/css";
+	public static String MIME_SQL = "text/x-sql";
 	
 	// Registered MIME types
 	public static MimetypesFileTypeMap mimeTypes = new MimetypesFileTypeMap();

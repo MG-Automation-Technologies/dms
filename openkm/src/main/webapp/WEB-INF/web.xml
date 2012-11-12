@@ -248,6 +248,10 @@
     <servlet-name>WorkflowRegisterServlet</servlet-name>
     <servlet-class>com.openkm.servlet.WorkflowRegisterServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>FrontendCssServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.CssServlet</servlet-class>
+  </servlet>
   
   <!-- Admin servlets -->
   <servlet>
@@ -345,6 +349,10 @@
   <servlet>
     <servlet-name>AutomationServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.AutomationServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>CssServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.CssServlet</servlet-class>
   </servlet>
   
   <!-- Test Servlets -->
@@ -467,6 +475,10 @@
   <servlet-mapping>
     <servlet-name>MassiveServlet</servlet-name>
     <url-pattern>/frontend/Massive</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FrontendCssServlet</servlet-name>
+    <url-pattern>/frontend/css/*</url-pattern>
   </servlet-mapping>
   
   <!-- Test Servlets -->
@@ -619,6 +631,10 @@
   <servlet-mapping>
     <servlet-name>AutomationServlet</servlet-name>
     <url-pattern>/admin/Automation</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CssServlet</servlet-name>
+    <url-pattern>/admin/Css</url-pattern>
   </servlet-mapping>
 
   <!-- Test Servlet Mapping -->
