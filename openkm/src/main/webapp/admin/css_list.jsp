@@ -26,7 +26,7 @@
       <table class="results" width="60%">
         <tr>
           <th>#</th><th>Name</th><th>Context</th><th>Active</th>
-          <th width="100px">
+          <th width="75px">
             <c:url value="Css" var="urlCreate">
               <c:param name="action" value="create"/>
             </c:url>
