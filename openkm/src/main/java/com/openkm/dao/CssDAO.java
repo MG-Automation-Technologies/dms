@@ -21,9 +21,12 @@
 
 package com.openkm.dao;
 
+import java.util.List;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,11 +51,40 @@ public class CssDAO extends GenericDAO<Css, Long>{
 	}
 	
 	/**
+	 * Find all styles
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Css> findAll(boolean filterByActive) throws DatabaseException {
+		log.debug("findAll({})", filterByActive);
+		String qs = "from Css c " + (filterByActive?"where c.active=:active":"") + " order by c.context, c.name asc";
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs).setCacheable(true);
+			
+			if (filterByActive) {
+				q.setBoolean("active", true);
+			}
+			
+			List<Css> ret = q.list();
+			log.debug("findAll: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
 	 * Find by content and name
 	 */
 	public Css findByContextAndName(String context, String name) throws DatabaseException {
 		log.debug("findByContextAndName({},{})", context, name);
-		String qs = "from Css style where style.context=:context and style.name=:name";
+		String qs = "from Css c where c.context=:context and c.name=:name and c.active=:active";
 		Session session = null;
 		
 		try {
@@ -60,6 +92,7 @@ public class CssDAO extends GenericDAO<Css, Long>{
 			Query q = session.createQuery(qs);
 			q.setString("context", context);
 			q.setString("name", name);
+			q.setBoolean("active", true);
 			Css ret = (Css) q.setMaxResults(1).uniqueResult();
 			log.debug("findByContextAndName: {}", ret);
 			return ret;
