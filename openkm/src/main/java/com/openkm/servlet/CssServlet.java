@@ -22,6 +22,7 @@
 package com.openkm.servlet;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -53,27 +54,47 @@ public class CssServlet extends HttpServlet {
 	 */
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		String path = request.getPathInfo();
-		String uri = request.getRequestURI();
 		OutputStream os = null;
 		
 		try {
 			if (path.length() > 1) {
-				String context = Css.CONTEXT_FRONTEND;
-				if (uri.contains("/frontend/")) {
-					context = Css.CONTEXT_FRONTEND;
-				} else if (uri.contains("/admin/")) {
-					context = Css.CONTEXT_ADMINISTRATION;
-				} else if (uri.contains("/extension/")) {
-					context = Css.CONTEXT_EXTENSION;
+				String[] foo = path.substring(1).split("/");
+				
+				if (foo.length > 1) {
+					String context = foo[0];
+					String name = foo[1];
+					Css css = CssDAO.getInstance().findByContextAndName(context, name);
+					
+					if (css == null) {
+						InputStream is = null;
+						
+						try {
+							if (Css.CONTEXT_FRONTEND.equals(context)) {
+								
+							} else if (Css.CONTEXT_EXTENSION.equals(context)) {
+								
+							}
+							
+							if (is != null) {
+								css = new Css();
+								css.setContent(IOUtils.toString(is));
+								css.setContext(context);
+								css.setName(name);
+								css.setActive(true);
+							}
+						} finally {
+							IOUtils.closeQuietly(is);	
+						}
+					}
+					
+					if (css != null) {
+						// Prepare file headers
+						WebUtils.prepareSendFile(request, response, css.getName() + ".css", MimeTypeConfig.MIME_CSS, false);
+						PrintWriter out = new PrintWriter(new OutputStreamWriter(response.getOutputStream(), "UTF8"), true);
+						out.append(css.getContent());
+						out.flush();
+					}
 				}
-				
-				Css css = CssDAO.getInstance().findByNameAndType(path.substring(1), context);
-				
-				// Prepare file headers
-				WebUtils.prepareSendFile(request, response, css.getName() + ".css", MimeTypeConfig.MIME_CSS, false);
-				PrintWriter out = new PrintWriter(new OutputStreamWriter(response.getOutputStream(), "UTF8"), true);
-				out.append(css.getContent());
-				out.flush();
 			}
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);

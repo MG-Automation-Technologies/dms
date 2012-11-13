@@ -48,20 +48,20 @@ public class CssDAO extends GenericDAO<Css, Long>{
 	}
 	
 	/**
-	 * Find by name and type
+	 * Find by content and name
 	 */
-	public Css findByNameAndType(String name, String context) throws DatabaseException {
-		log.debug("findByPk({},{})", name, context);
-		String qs = "from Css style where style.name=:name and style.context=:context";
+	public Css findByContextAndName(String context, String name) throws DatabaseException {
+		log.debug("findByContextAndName({},{})", context, name);
+		String qs = "from Css style where style.context=:context and style.name=:name";
 		Session session = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
-			q.setString("name", name);
 			q.setString("context", context);
+			q.setString("name", name);
 			Css ret = (Css) q.setMaxResults(1).uniqueResult();
-			log.debug("findByNameAndType: {}", ret);
+			log.debug("findByContextAndName: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
