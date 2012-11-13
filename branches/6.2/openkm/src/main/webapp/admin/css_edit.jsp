@@ -86,6 +86,7 @@
                       <option value="<%=Css.CONTEXT_FRONTEND%>"><%=Css.CONTEXT_FRONTEND%></option>
                     </c:otherwise>
                   </c:choose>
+                  <%--
                   <c:choose>
                     <c:when test="${css.context == administration}">
                       <option value="<%=Css.CONTEXT_ADMINISTRATION%>" selected="selected"><%=Css.CONTEXT_ADMINISTRATION%></option>
@@ -94,6 +95,7 @@
                       <option value="<%=Css.CONTEXT_ADMINISTRATION%>"><%=Css.CONTEXT_ADMINISTRATION%></option>
                     </c:otherwise>
                   </c:choose>
+                  --%>
                   <c:choose>
                     <c:when test="${css.context == extension}">
                       <option value="<%=Css.CONTEXT_EXTENSION%>" selected="selected"><%=Css.CONTEXT_EXTENSION%></option>
