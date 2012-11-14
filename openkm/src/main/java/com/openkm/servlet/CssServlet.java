@@ -74,7 +74,7 @@ public class CssServlet extends HttpServlet {
 							} else if (Css.CONTEXT_EXTENSION.equals(context)) {
 								
 							}
-							
+							/*
 							if (is != null) {
 								css = new Css();
 								css.setContent(IOUtils.toString(is));
@@ -82,6 +82,7 @@ public class CssServlet extends HttpServlet {
 								css.setName(name);
 								css.setActive(true);
 							}
+							*/
 						} finally {
 							IOUtils.closeQuietly(is);	
 						}
