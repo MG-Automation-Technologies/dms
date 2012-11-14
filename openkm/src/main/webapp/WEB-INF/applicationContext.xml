@@ -86,6 +86,12 @@
         <security:http-basic />
     </security:http>
     
+    <!-- Download -->
+    <security:http pattern="/Download" create-session="stateless">
+        <security:intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" />
+        <security:http-basic />
+    </security:http>
+    
     <!-- Workflow deploy -->
     <security:http pattern="/workflow-register" create-session="stateless">
         <security:intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" />
