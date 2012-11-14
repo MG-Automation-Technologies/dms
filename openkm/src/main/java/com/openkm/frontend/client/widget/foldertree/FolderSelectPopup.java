@@ -121,8 +121,8 @@ public class FolderSelectPopup extends DialogBox  {
 		super(false,true);
 		
 		vPanel = new VerticalPanel();		
-		vPanel.setWidth("300");
-		vPanel.setHeight("200");
+		vPanel.setWidth("450");
+		vPanel.setHeight("400");
 		hPanel = new HorizontalPanel();
 		hListPanel  = new HorizontalPanel();
 		hContextPanel = new HorizontalPanel();
@@ -144,10 +144,10 @@ public class FolderSelectPopup extends DialogBox  {
 		hContextPanel.setCellVerticalAlignment(contextTxt, HasVerticalAlignment.ALIGN_MIDDLE);
 		
 		hListPanel.add(hContextPanel);
-		hListPanel.setWidth("290");
+		hListPanel.setWidth("440");
 		
 		scrollDirectoryPanel = new ScrollPanel();
-		scrollDirectoryPanel.setSize("290", "150");
+		scrollDirectoryPanel.setSize("440", "350");
 		scrollDirectoryPanel.setStyleName("okm-Popup-text");
 		verticalDirectoryPanel = new VerticalPanel();
 		verticalDirectoryPanel.setSize("100%", "100%");
@@ -172,7 +172,7 @@ public class FolderSelectPopup extends DialogBox  {
 			}
 		});
 		
-		status.setWidth("280");
+		status.setWidth("430");
 		status.setWordWrap(true);
 		status.setStyleName("fancyfileupload-pending");
 		status.setVisible(false);
@@ -195,7 +195,7 @@ public class FolderSelectPopup extends DialogBox  {
 		vPanel.setCellHorizontalAlignment(scrollDirectoryPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(status, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
-		vPanel.setCellHeight(scrollDirectoryPanel, "150");
+		vPanel.setCellHeight(scrollDirectoryPanel, "350");
 
 		cancelButton.setStyleName("okm-Button");
 		actionButton.setStyleName("okm-Button");
@@ -425,8 +425,8 @@ public class FolderSelectPopup extends DialogBox  {
 	public void show(){
 		initButtons();
 		status.setVisible(false);
-		int left = (Window.getClientWidth()-300) / 2;
-		int top = (Window.getClientHeight()-200) / 2;
+		int left = (Window.getClientWidth()-450) / 2;
+		int top = (Window.getClientHeight()-440) / 2;
 		setPopupPosition(left, top);
 		setText(Main.i18n("trash.directory.select.label"));
 		

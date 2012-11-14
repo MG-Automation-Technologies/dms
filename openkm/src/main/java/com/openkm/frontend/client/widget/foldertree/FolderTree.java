@@ -103,8 +103,8 @@ public class FolderTree extends Composite implements OriginPanel {
 		tmpFolder = new TreeItem("");
 		tmpFolder.setStyleName("okm-TreeItem");
 		folderSelectPopup = new FolderSelectPopup();
-		folderSelectPopup.setWidth("300");
-		folderSelectPopup.setHeight("240");
+		folderSelectPopup.setWidth("450");
+		folderSelectPopup.setHeight("440");
 		folderSelectPopup.setStyleName("okm-Popup");
 		TreeItem rootItem = new TreeItem(Util.imageItemHTML("img/menuitem_childs.gif", "root_schema", "top"));
 		rootItem.setStyleName("okm-TreeItem");
