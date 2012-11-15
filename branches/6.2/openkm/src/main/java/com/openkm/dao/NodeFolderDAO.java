@@ -435,6 +435,12 @@ public class NodeFolderDAO {
 			SecurityHelper.checkRead(nFld);
 			SecurityHelper.checkWrite(nFld);
 			
+			// Check if move to itself
+			if (uuid.equals(dstUuid)) {
+				String dstPath = NodeBaseDAO.getInstance().getPathFromUuid(dstUuid);
+				throw new ItemExistsException(dstPath);
+			}
+			
 			if (checkItemExistence) {
 				// Check for same folder name in same parent
 				NodeBaseDAO.getInstance().checkItemExistence(session, dstUuid, nFld.getName());
