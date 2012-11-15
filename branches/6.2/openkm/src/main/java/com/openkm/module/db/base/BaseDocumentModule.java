@@ -116,6 +116,11 @@ public class BaseDocumentModule {
 		Map<String, Integer> userPerms = parentNode.getUserPermissions();
 		Map<String, Integer> rolePerms = parentNode.getRolePermissions();
 		
+		// Always assign all grants to creator
+		if (Config.USER_ASSIGN_DOCUMENT_CREATION) {
+			userPerms.put(user, Permission.ALL_GRANTS);
+		}
+		
 		// Set auth info
 		// NOTICE: Pay attention to the need of cloning
 		documentNode.setUserPermissions(CloneUtils.clone(userPerms));
