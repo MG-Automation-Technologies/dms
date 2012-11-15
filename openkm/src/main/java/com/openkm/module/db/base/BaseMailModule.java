@@ -93,6 +93,11 @@ public class BaseMailModule {
 		Map<String, Integer> userPerms = parentFolder.getUserPermissions();
 		Map<String, Integer> rolePerms = parentFolder.getRolePermissions();
 		
+		// Always assign all grants to creator
+		if (Config.USER_ASSIGN_DOCUMENT_CREATION) {
+			userPerms.put(user, Permission.ALL_GRANTS);
+		}
+		
 		// Set auth info
 		// NOTICE: Pay attention to the need of cloning
 		mailNode.setUserPermissions(CloneUtils.clone(userPerms));
