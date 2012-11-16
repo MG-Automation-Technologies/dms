@@ -42,8 +42,8 @@
 		});
       	
 		hlLine = cm.setLineClass(0, "activeline");
-		var width = $(this).width() - 60;
-	    var height = $(this).height() - 230;
+		var width = $(window).width() - 60;
+	    var height = $(window).height() - 230;
 	    $('.CodeMirror').css({"width": width});
 	    $('.CodeMirror').css({"height": height});
 		
