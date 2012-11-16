@@ -35,7 +35,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import com.openkm.api.OKMRepository;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.PathNotFoundException;
+import com.openkm.core.RepositoryException;
 import com.openkm.dao.AutomationDAO;
 import com.openkm.dao.bean.AutomationAction;
 import com.openkm.dao.bean.AutomationMetadata;
@@ -92,12 +95,17 @@ public class AutomationServlet extends BaseServlet {
 			
 			if (action.equals("") || WebUtils.getBoolean(request, "persist")) {
 				ruleList(userId, request, response);
-			} else if (action.equals("createAction") || action.equals("createValidation")
-					|| action.equals("deleteAction") || action.equals("editAction")
-					|| action.equals("deleteValidation") || action.equals("editValidation")) {
+			} else if (action.equals("createAction") || action.equals("createValidation") || action.equals("deleteAction")
+					|| action.equals("editAction") || action.equals("deleteValidation") || action.equals("editValidation")) {
 				definitionList(userId, request, response);
 			}
 		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request, response, e);
+		} catch (PathNotFoundException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request, response, e);
+		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);
 		}
@@ -106,8 +114,8 @@ public class AutomationServlet extends BaseServlet {
 	/**
 	 * List rules
 	 */
-	private void ruleList(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
+	private void ruleList(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
 		log.debug("ruleList({}, {}, {})", new Object[] { userId, request, response });
 		ServletContext sc = getServletContext();
 		sc.setAttribute("automationRules", AutomationDAO.getInstance().findAll());
@@ -122,11 +130,18 @@ public class AutomationServlet extends BaseServlet {
 	 * List rules
 	 */
 	private void definitionList(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
+			throws ServletException, IOException, DatabaseException, PathNotFoundException, RepositoryException {
 		log.debug("definitionList({}, {}, {})", new Object[] { userId, request, response });
 		ServletContext sc = getServletContext();
 		long arId = WebUtils.getLong(request, "ar_id");
 		AutomationRule aRule = AutomationDAO.getInstance().findByPk(arId);
+		
+		for (AutomationValidation av : aRule.getValidations()) {
+			for (int i = 0; i < av.getParams().size(); i++) {
+				av.getParams().set(i, convertToHumanValue(av.getParams().get(i), av.getType(), i));
+			}
+		}
+		
 		sc.setAttribute("ar", aRule);
 		sc.setAttribute("metadaActions", AutomationDAO.getInstance().findMetadataActionsByAt(aRule.getAt()));
 		sc.setAttribute("metadaValidations", AutomationDAO.getInstance().findMetadataValidationsByAt(aRule.getAt()));
@@ -140,8 +155,8 @@ public class AutomationServlet extends BaseServlet {
 	/**
 	 * getMetadataAction
 	 */
-	private void getMetadata(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
+	private void getMetadata(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
 		long amId = WebUtils.getLong(request, "amId");
 		Gson son = new Gson();
 		AutomationMetadata am = AutomationDAO.getInstance().findMetadataByPk(amId);
@@ -157,8 +172,8 @@ public class AutomationServlet extends BaseServlet {
 	/**
 	 * New automation
 	 */
-	private void create(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
+	private void create(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
 		log.debug("create({}, {}, {})", new Object[] { userId, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
@@ -190,8 +205,8 @@ public class AutomationServlet extends BaseServlet {
 	/**
 	 * New metadata action
 	 */
-	private void createAction(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
+	private void createAction(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
 		long arId = WebUtils.getLong(request, "ar_id");
 		AutomationAction aa = new AutomationAction();
 		aa.setType(WebUtils.getLong(request, "am_id"));
@@ -222,19 +237,22 @@ public class AutomationServlet extends BaseServlet {
 	/**
 	 * Delete action
 	 */
-	private void deleteAction(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
+	private void deleteAction(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
 		long aaId = WebUtils.getLong(request, "aa_id");
 		long arId = WebUtils.getLong(request, "ar_id");
 		AutomationRule ar = AutomationDAO.getInstance().findByPk(arId);
+		
 		for (AutomationAction action : ar.getActions()) {
 			if (action.getId() == aaId) {
 				ar.getActions().remove(action);
 				break;
 			}
 		}
+		
 		AutomationDAO.getInstance().update(ar);
 		AutomationDAO.getInstance().deleteAction(aaId);
+		
 		// Activity log
 		UserActivity.log(userId, "ADMIN_AUTOMATION_DELETE_ACTION", Long.toString(ar.getId()), null, ar.toString());
 	}
@@ -242,8 +260,8 @@ public class AutomationServlet extends BaseServlet {
 	/**
 	 * Edit action
 	 */
-	private void editAction(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
+	private void editAction(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
 		long aaId = WebUtils.getLong(request, "aa_id");
 		AutomationAction aa = AutomationDAO.getInstance().findActionByPk(aaId);
 		aa.setOrder(WebUtils.getInt(request, "am_order"));
@@ -271,7 +289,7 @@ public class AutomationServlet extends BaseServlet {
 	 * Edit validation
 	 */
 	private void editValidation(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
+			throws ServletException, IOException, DatabaseException, PathNotFoundException, RepositoryException {
 		long avId = WebUtils.getLong(request, "av_id");
 		AutomationValidation av = AutomationDAO.getInstance().findValidationByPk(avId);
 		av.setOrder(WebUtils.getInt(request, "am_order"));
@@ -281,11 +299,11 @@ public class AutomationServlet extends BaseServlet {
 		String am_param01 = WebUtils.getString(request, "am_param01");
 		
 		if (!am_param00.equals("")) {
-			params.add(am_param00);
+			params.add(convertToInternalValue(am_param00, av.getType(), 0));
 		}
 		
 		if (!am_param01.equals("")) {
-			params.add(am_param01);
+			params.add(convertToInternalValue(am_param01, av.getType(), 1));
 		}
 		
 		av.setParams(params);
@@ -299,7 +317,7 @@ public class AutomationServlet extends BaseServlet {
 	 * New metadata validation
 	 */
 	private void createValidation(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
+			throws ServletException, IOException, DatabaseException, PathNotFoundException, RepositoryException {
 		long arId = WebUtils.getLong(request, "ar_id");
 		AutomationValidation av = new AutomationValidation();
 		av.setType(WebUtils.getLong(request, "am_id"));
@@ -310,11 +328,11 @@ public class AutomationServlet extends BaseServlet {
 		String am_param01 = WebUtils.getString(request, "am_param01");
 		
 		if (!am_param00.equals("")) {
-			params.add(am_param00);
+			params.add(convertToInternalValue(am_param00, av.getType(), 0));
 		}
 		
 		if (!am_param01.equals("")) {
-			params.add(am_param01);
+			params.add(convertToInternalValue(am_param01, av.getType(), 1));
 		}
 		
 		av.setParams(params);
@@ -335,14 +353,17 @@ public class AutomationServlet extends BaseServlet {
 		long avId = WebUtils.getLong(request, "av_id");
 		long arId = WebUtils.getLong(request, "ar_id");
 		AutomationRule ar = AutomationDAO.getInstance().findByPk(arId);
+		
 		for (AutomationValidation validation : ar.getValidations()) {
 			if (validation.getId() == avId) {
 				ar.getValidations().remove(validation);
 				break;
 			}
 		}
+		
 		AutomationDAO.getInstance().update(ar);
 		AutomationDAO.getInstance().deleteValidation(avId);
+		
 		// Activity log
 		UserActivity.log(userId, "ADMIN_AUTOMATION_DELETE_VALIDATION", Long.toString(ar.getId()), null, ar.toString());
 	}
@@ -384,7 +405,7 @@ public class AutomationServlet extends BaseServlet {
 	 * Load Metadata form
 	 */
 	private void loadMetadataForm(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
+			throws ServletException, IOException, DatabaseException, PathNotFoundException, RepositoryException {
 		ServletContext sc = getServletContext();
 		String action = WebUtils.getString(request, "newAction");
 		sc.setAttribute("action", action);
@@ -430,10 +451,10 @@ public class AutomationServlet extends BaseServlet {
 			for (int i = 0; i < av.getParams().size(); i++) {
 				switch (i) {
 					case 0:
-						sc.setAttribute("am_param00", av.getParams().get(0));
+						sc.setAttribute("am_param00", convertToHumanValue(av.getParams().get(0), av.getType(), 0));
 						break;
 					case 1:
-						sc.setAttribute("am_param01", av.getParams().get(1));
+						sc.setAttribute("am_param01", convertToHumanValue(av.getParams().get(1), av.getType(), 1));
 						break;
 				}
 			}
@@ -449,8 +470,8 @@ public class AutomationServlet extends BaseServlet {
 	/**
 	 * Delete automation
 	 */
-	private void delete(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
+	private void delete(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
 		log.debug("delete({}, {}, {})", new Object[] { userId, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
@@ -471,5 +492,49 @@ public class AutomationServlet extends BaseServlet {
 		}
 		
 		log.debug("edit: void");
+	}
+	
+	/**
+	 * convertToInternalValue
+	 */
+	private String convertToInternalValue(String value, long amId, int param) throws DatabaseException, PathNotFoundException,
+			RepositoryException {
+		AutomationMetadata am = AutomationDAO.getInstance().findMetadataByPk(amId);
+		
+		// Convert folder path to UUID
+		switch (param) {
+			case 0:
+				if (AutomationMetadata.SOURCE_FOLDER.equals(am.getSource00())) {
+					value = OKMRepository.getInstance().getNodeUuid(null, value);
+				}
+			case 1:
+				if (AutomationMetadata.SOURCE_FOLDER.equals(am.getSource01())) {
+					return value = OKMRepository.getInstance().getNodeUuid(null, value);
+				}
+		}
+		
+		return value;
+	}
+	
+	/**
+	 * convertToHumanValue
+	 */
+	private String convertToHumanValue(String value, long amId, int param) throws DatabaseException, PathNotFoundException,
+			RepositoryException {
+		AutomationMetadata am = AutomationDAO.getInstance().findMetadataByPk(amId);
+		
+		// Convert folder path to UUID
+		switch (param) {
+			case 0:
+				if (AutomationMetadata.SOURCE_FOLDER.equals(am.getSource00())) {
+					value = OKMRepository.getInstance().getNodePath(null, value);
+				}
+			case 1:
+				if (AutomationMetadata.SOURCE_FOLDER.equals(am.getSource01())) {
+					return value = OKMRepository.getInstance().getNodePath(null, value);
+				}
+		}
+		
+		return value;
 	}
 }

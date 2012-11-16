@@ -26,6 +26,7 @@ import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.api.OKMRepository;
 import com.openkm.automation.AutomationUtils;
 import com.openkm.automation.Validation;
 
@@ -41,10 +42,12 @@ public class PathContains implements Validation {
 	
 	@Override
 	public boolean isValid(HashMap<String, Object> env, Object... params) {
-		String path = AutomationUtils.getString(0, params);
+		String uuid = AutomationUtils.getString(0, params);
 		String parentPath = AutomationUtils.getParentPath(env);
 		
 		try {
+			String path = OKMRepository.getInstance().getNodePath(null, uuid);
+			
 			if (parentPath.startsWith(path)) {
 				return true;
 			} else {
