@@ -110,13 +110,13 @@ public class Cron extends TimerTask {
 						msg.append("\n<hr/>\n");
 						msg.append("StdErr: ").append(ret[2]);
 						
-						if (mail != null && !mail.equals("")) { 
-							if (ret[0] != null && !ret[0].equals("") && 
-									ret[1] != null && !ret[1].equals("") && 
-									ret[2] != null && !ret[2].equals("")) {
+						if (mail != null && !mail.equals("")) {
+							if ((ret[0] != null && !ret[0].equals("")) ||
+									(ret[1] != null && !ret[1].equals("")) ||
+									(ret[2] != null && !ret[2].equals(""))) {
 								MailUtils.sendMessage(mail, "Cron task '" + name + "' executed - Ok", msg.toString());
 							} else {
-								log.warn("Crontab task mail content is empty: {}", msg);
+								log.debug("Crontab task mail content is empty: {}", msg);
 							}
 						} else {
 							log.warn("Crontab task mail address is empty: {}", msg);
@@ -128,10 +128,10 @@ public class Cron extends TimerTask {
 					try {
 						String msg = e.toString();
 						
-						if (mail.equals("")) {
-							log.info(msg);
-						} else {
+						if (mail != null && !mail.equals("")) {
 							MailUtils.sendMessage(mail, "Cron task '" + name + "' executed - Error", msg);
+						} else {
+							log.warn("Crontab task mail address is empty: {}", msg);
 						}
 					} catch (MessagingException e1) {
 						log.warn("Error sending mail: {}", e.getMessage());
@@ -181,7 +181,7 @@ public class Cron extends TimerTask {
 							if (msg != null && !msg.equals("")) {
 								MailUtils.sendMessage(mail, "Cron task '" + name + "' executed - Ok", msg);
 							} else {
-								log.warn("Crontab task mail content is empty: {}", msg);
+								log.debug("Crontab task mail content is empty: {}", msg);
 							}
 						} else {
 							log.warn("Crontab task mail address is empty: {}", msg);
@@ -193,10 +193,10 @@ public class Cron extends TimerTask {
 					try {
 						String msg = e.toString();
 						
-						if (mail.equals("")) {
-							log.info(msg);
-						} else {
+						if (mail != null && !mail.equals("")) {
 							MailUtils.sendMessage(mail, "Cron task '" + name + "' executed - Error", msg);
+						} else {
+							log.warn("Crontab task mail address is empty: {}", msg);
 						}
 					} catch (MessagingException e1) {
 						log.warn("Error sending mail: {}", e.getMessage());
