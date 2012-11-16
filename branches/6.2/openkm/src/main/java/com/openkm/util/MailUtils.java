@@ -107,6 +107,7 @@ import freemarker.template.TemplateException;
 
 public class MailUtils {
 	private static Logger log = LoggerFactory.getLogger(MailUtils.class);
+	private static final String NO_SUBJECT = "(Message without subject)";
 	
 	/**
 	 * Send mail without FROM addresses.
@@ -546,7 +547,7 @@ public class MailUtils {
 				}
 				
 				mail.setSize(msg.getSize());
-				mail.setSubject(msg.getSubject());
+				mail.setSubject((msg.getSubject() == null || msg.getSubject().isEmpty()) ? NO_SUBJECT : msg.getSubject());
 				mail.setTo(address2String(msg.getRecipients(Message.RecipientType.TO)));
 				mail.setCc(address2String(msg.getRecipients(Message.RecipientType.CC)));
 				mail.setBcc(address2String(msg.getRecipients(Message.RecipientType.BCC)));
@@ -620,9 +621,11 @@ public class MailUtils {
 		
 		if (ma.getMailProtocol().equals(MailAccount.PROTOCOL_POP3)
 				|| ma.getMailProtocol().equals(MailAccount.PROTOCOL_POP3S)) {
-			mail.setPath(path + "/" + ((POP3Folder) folder).getUID(msg) + "-" + PathUtils.escape(msg.getSubject()));
+			mail.setPath(path + "/" + ((POP3Folder) folder).getUID(msg) + "-" +
+				PathUtils.escape((msg.getSubject() == null || msg.getSubject().isEmpty()) ? NO_SUBJECT : msg.getSubject()));
 		} else {
-			mail.setPath(path + "/" + ((IMAPFolder) folder).getUID(msg) + "-" + PathUtils.escape(msg.getSubject()));
+			mail.setPath(path + "/" + ((IMAPFolder) folder).getUID(msg) + "-" +
+				PathUtils.escape((msg.getSubject() == null || msg.getSubject().isEmpty()) ? NO_SUBJECT : msg.getSubject()));
 		}
 		
 		String newMailPath = PathUtils.getParent(mail.getPath()) + "/"
