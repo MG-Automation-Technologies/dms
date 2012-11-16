@@ -44,6 +44,7 @@ import com.openkm.util.SecureStore;
 public class FsDataStore {
 	private static Logger log = LoggerFactory.getLogger(FsDataStore.class);
 	public static final String DATASTORE_BACKEND_FS = "fs";
+	public static final String DATASTORE_BACKEND_DB = "db";
 	public static final String DATASTORE_DIRNAME = "datastore";
 	
 	/**
