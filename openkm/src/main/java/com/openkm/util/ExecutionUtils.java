@@ -113,6 +113,7 @@ public class ExecutionUtils {
 		
 		out.flush();
 		ret[1] = baosOut.toString();
+		
 		err.flush();
 		ret[2] = baosErr.toString();
 		
