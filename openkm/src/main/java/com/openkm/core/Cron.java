@@ -127,6 +127,7 @@ public class Cron extends TimerTask {
 				} catch (EvalError e) {
 					try {
 						String msg = e.toString();
+						log.warn("Error executing crontab task '{}': {}", name, msg);
 						
 						if (mail != null && !mail.equals("")) {
 							MailUtils.sendMessage(mail, "Cron task '" + name + "' executed - Error", msg);
