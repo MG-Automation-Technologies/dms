@@ -40,7 +40,7 @@ public class MailAccount implements Serializable {
 	private String mailFolder = "";
 	private String mailUser = "";
 	private String mailPassword = "";
-	private boolean mailMarkSeen = false;
+	private boolean mailMarkSeen = true;
 	private boolean mailMarkDeleted = false;
 	private long mailLastUid = 0;
 	private Set<MailFilter> mailFilters = new HashSet<MailFilter>();
