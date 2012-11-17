@@ -47,20 +47,16 @@ import com.openkm.core.Config;
 import com.openkm.core.Cron;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.MimeTypeConfig;
-import com.openkm.core.RepositoryInfo;
 import com.openkm.core.UINotification;
 import com.openkm.core.UpdateInfo;
-import com.openkm.core.UserMailImporter;
-import com.openkm.core.Watchdog;
 import com.openkm.dao.HibernateUtil;
 import com.openkm.extension.core.ExtensionManager;
-import com.openkm.extractor.TextExtractorWorker;
 import com.openkm.kea.RDFREpository;
 import com.openkm.module.db.DbRepositoryModule;
 import com.openkm.module.db.stuff.FsDataStore;
 import com.openkm.module.jcr.JcrRepositoryModule;
-import com.openkm.module.jcr.stuff.DataStoreGarbageCollector;
 import com.openkm.spring.SystemAuthentication;
+import com.openkm.util.CronTabUtils;
 import com.openkm.util.DocConverter;
 import com.openkm.util.ExecutionUtils;
 import com.openkm.util.FormUtils;
@@ -74,22 +70,12 @@ import com.openkm.util.WarUtils;
 public class RepositoryStartupServlet extends HttpServlet {
 	private static Logger log = LoggerFactory.getLogger(RepositoryStartupServlet.class);
 	private static final long serialVersionUID = 1L;
-	private static Timer dsgcTimer;  // Datastore Garbage Collector
-	private static Timer wdTimer;  // Session Watchdog (Inactive Session Expiration)
-	private static Timer riTimer;  // Repository Info (Administration Repository Graphs)
 	private static Timer uiTimer;  // Update Info (OpenKM Update Information)
-	private static Timer umiTimer;  // User Mail Importer
 	private static Timer cronTimer;  // CRON Manager
 	private static Timer uinTimer;  // User Interface Notification (Create From Administration)
-	private static Timer tewTimer;  // Text Extractor Worker
-	private static Watchdog wd;
 	private static Cron cron;
 	private static UINotification uin;
 	private static UpdateInfo ui;
-	private static RepositoryInfo ri;
-	private static UserMailImporter umi;
-	private static DataStoreGarbageCollector dsgc;
-	private static TextExtractorWorker tew;
 	private static boolean hasConfiguredDataStore = false;
 	private static boolean running = false;
 	
@@ -222,14 +208,9 @@ public class RepositoryStartupServlet extends HttpServlet {
 		}
 		
 		// Create timers
-		uiTimer = new Timer("Update Info");
-		wdTimer = new Timer("Session Watchdog");
-		cronTimer = new Timer("Crontab Manager");
-		uinTimer = new Timer("User Interface Notification");
-		riTimer = new Timer("Repository Info", true);
-		umiTimer = new Timer("User Mail Importer");
-		dsgcTimer = new Timer("Datastore Garbage Collector");
-		tewTimer = new Timer("Text Extractor Worker", true);
+		uiTimer = new Timer("Update Info", true);
+		cronTimer = new Timer("Crontab Manager", true);
+		uinTimer = new Timer("User Interface Notification", true);
 		
 		// Workflow
 		log.info("*** Initializing workflow engine... ***");
@@ -249,10 +230,6 @@ public class RepositoryStartupServlet extends HttpServlet {
 			uiTimer.schedule(ui, 1000, 24 * 60 * 60 * 1000); // First in 1 seg, next each 24 hours
 		}
 		
-		log.info("*** Activating watchdog ***");
-		wd = new Watchdog();
-		wdTimer.schedule(wd, 60 * 1000, 5 * 60 * 1000); // First in 1 min, next each 5 mins
-		
 		log.info("*** Activating cron ***");
 		cron = new Cron();
 		Calendar calCron = Calendar.getInstance();
@@ -269,42 +246,30 @@ public class RepositoryStartupServlet extends HttpServlet {
 		// First in 1 second next in x minutes
 		uinTimer.scheduleAtFixedRate(uin, 1000, TimeUnit.MINUTES.toMillis(Config.SCHEDULE_UI_NOTIFICATION));
 		
-		log.info("*** Activating repository info ***");
-		ri = new RepositoryInfo();
-		
-		// First in 1 min, next each X minutes
-		riTimer.schedule(ri, 60 * 1000, TimeUnit.MINUTES.toMillis(Config.SCHEDULE_REPOSITORY_INFO));
-		
-		if (Config.MANAGED_TEXT_EXTRACTION_SCHEDULE > 0) {
-			log.info("*** Activating text extractor worker ***");
-			tew = new TextExtractorWorker();
+		try {
+			// General maintenance works
+			String uisContent = "com.openkm.cache.UserItemsManager.serialize();";
+			CronTabUtils.createOrUpdate("UserItemsSerialize", "@hourly", uisContent);
 			
-			// First in 1 min, next each x minutes
-			tewTimer.schedule(tew, 60 * 1000, TimeUnit.MINUTES.toMillis(Config.MANAGED_TEXT_EXTRACTION_SCHEDULE));
-		}
-		
-		if (Config.SCHEDULE_MAIL_IMPORTER > 0) {
-			log.info("*** Activating user mail importer ***");
-			umi = new UserMailImporter();
+			String umiContent = "new com.openkm.core.UserMailImporter().run();";
+			CronTabUtils.createOrUpdate("UserMailImporter", "*/30 * * * *", umiContent);
 			
-			// First in 5 mins, next each x minutes
-			umiTimer.schedule(umi, 5 * 60 * 1000, TimeUnit.MINUTES.toMillis(Config.SCHEDULE_MAIL_IMPORTER));
-		} else {
-			log.info("*** User mail importer disabled ***");
-		}
-		
-		// Datastore garbage collection
-		if (!Config.REPOSITORY_NATIVE && hasConfiguredDataStore) {
-			log.info("*** Activating datastore garbage collection ***");
-			dsgc = new DataStoreGarbageCollector();
-			Calendar calGc = Calendar.getInstance();
-			calGc.add(Calendar.DAY_OF_YEAR, 1);
-			calGc.set(Calendar.HOUR_OF_DAY, 0);
-			calGc.set(Calendar.MINUTE, 0);
-			calGc.set(Calendar.SECOND, 0);
-			calGc.set(Calendar.MILLISECOND, 0);
-			dsgcTimer.scheduleAtFixedRate(dsgc, calGc.getTime(), 24 * 60 * 60 * 1000); // First tomorrow at 00:00, next
-																						// each 24 hours
+			String tewContent = "new com.openkm.extractor.TextExtractorWorker().run();";
+			CronTabUtils.createOrUpdate("TextExtractorWorker", "*/5 * * * *", tewContent);
+			
+			String riContent = "new com.openkm.core.RepositoryInfo().run();";
+			CronTabUtils.createOrUpdate("RepositoryInfo", "@daily", riContent);
+			
+			String swdContent = "new com.openkm.core.Watchdog().run();";
+			CronTabUtils.createOrUpdate("SessionWatchdog", "*/5 * * * *", swdContent);
+			
+			// Datastore garbage collection
+			if (!Config.REPOSITORY_NATIVE && hasConfiguredDataStore) {
+				String dgcContent = "new com.openkm.module.jcr.stuff.DataStoreGarbageCollector().run();";
+				CronTabUtils.createOrUpdate("DataStoreGarbageCollector", "@daily", dgcContent);
+			}
+		} catch (Exception e) {
+			log.warn(e.getMessage(), e);
 		}
 		
 		try {
@@ -367,36 +332,6 @@ public class RepositoryStartupServlet extends HttpServlet {
 			log.warn(e.getMessage(), e);
 		}
 		
-		if (hasConfiguredDataStore) {
-			if (log == null && gs != null)
-				gs.log("*** Shutting down datastore garbage collection... ***");
-			else
-				log.info("*** Shutting down datastore garbage collection... ***");
-			dsgc.cancel();
-		}
-		
-		if (Config.SCHEDULE_MAIL_IMPORTER > 0) {
-			if (log == null && gs != null)
-				gs.log("*** Shutting down user mail importer ***");
-			else
-				log.info("*** Shutting down user mail importer ***");
-			umi.cancel();
-		}
-		
-		if (Config.MANAGED_TEXT_EXTRACTION_SCHEDULE > 0) {
-			if (log == null && gs != null)
-				gs.log("*** Shutting down text extractor worker ***");
-			else
-				log.info("*** Shutting down text extractor worker ***");
-			tew.cancel();
-		}
-		
-		if (log == null && gs != null)
-			gs.log("*** Shutting down repository info... ***");
-		else
-			log.info("*** Shutting down repository info... ***");
-		ri.cancel();
-		
 		if (log == null && gs != null)
 			gs.log("*** Shutting down UI Notification... ***");
 		else
@@ -409,12 +344,6 @@ public class RepositoryStartupServlet extends HttpServlet {
 			log.info("*** Shutting down cron... ***");
 		cron.cancel();
 		
-		if (log == null && gs != null)
-			gs.log("*** Shutting down watchdog... ***");
-		else
-			log.info("*** Shutting down watchdog... ***");
-		wd.cancel();
-		
 		if (Config.UPDATE_INFO) {
 			if (log == null && gs != null)
 				gs.log("*** Shutting down update info... ***");
@@ -424,14 +353,9 @@ public class RepositoryStartupServlet extends HttpServlet {
 		}
 		
 		// Cancel timers
-		dsgcTimer.cancel();
-		umiTimer.cancel();
-		riTimer.cancel();
 		cronTimer.cancel();
 		uinTimer.cancel();
-		wdTimer.cancel();
 		uiTimer.cancel();
-		tewTimer.cancel();
 		
 		if (log == null && gs != null)
 			gs.log("*** Shutting down repository... ***");

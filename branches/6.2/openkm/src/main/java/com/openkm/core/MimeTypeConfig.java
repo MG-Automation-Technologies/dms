@@ -53,6 +53,7 @@ public class MimeTypeConfig {
 	public static String MIME_TEXT = "text/plain";
 	public static String MIME_CSS = "text/css";
 	public static String MIME_SQL = "text/x-sql";
+	public static String MIME_BSH = "application/x-bsh";
 	
 	// Registered MIME types
 	public static MimetypesFileTypeMap mimeTypes = new MimetypesFileTypeMap();

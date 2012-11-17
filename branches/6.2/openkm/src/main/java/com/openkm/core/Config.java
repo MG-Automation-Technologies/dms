@@ -101,7 +101,6 @@ public class Config {
 	public static final String PROPERTY_PLUGIN_DEBUG = "plugin.debug";
 	public static final String PROPERTY_MANAGED_TEXT_EXTRACTION = "managed.text.extraction";
 	public static final String PROPERTY_MANAGED_TEXT_EXTRACTION_BATCH = "managed.text.extraction.batch";
-	public static final String PROPERTY_MANAGED_TEXT_EXTRACTION_SCHEDULE = "managed.text.extraction.schedule";
 	public static final String PROPERTY_REPOSITORY_NATIVE = "repository.native";
 	public static final String PROPERTY_REPOSITORY_CONTENT_CHECKSUM = "repository.content.checksum";
 	
@@ -211,8 +210,6 @@ public class Config {
 	public static final String PROPERTY_UPLOAD_THROTTLE_FILTER = "upload.throttle.filter";
 	
 	// Schedule
-	public static final String PROPERTY_SCHEDULE_REPOSITORY_INFO = "schedule.repository.info";
-	public static final String PROPERTY_SCHEDULE_MAIL_IMPORTER = "schedule.mail.importer";
 	public static final String PROPERTY_SCHEDULE_SESSION_KEEPALIVE = "schedule.session.keepalive";
 	public static final String PROPERTY_SCHEDULE_DASHBOARD_REFRESH = "schedule.dashboard.refresh";
 	public static final String PROPERTY_SCHEDULE_UI_NOTIFICATION = "schedule.ui.notification";
@@ -259,7 +256,6 @@ public class Config {
 	public static boolean PLUGIN_DEBUG = false;
 	public static boolean MANAGED_TEXT_EXTRACTION = true;
 	public static int MANAGED_TEXT_EXTRACTION_BATCH = 10;
-	public static int MANAGED_TEXT_EXTRACTION_SCHEDULE = 1; // 1 min
 	public static boolean REPOSITORY_NATIVE = true;
 	public static boolean REPOSITORY_CONTENT_CHECKSUM = true;
 	
@@ -394,8 +390,6 @@ public class Config {
 	public static boolean UPLOAD_THROTTLE_FILTER;
 	
 	// Schedule
-	public static int SCHEDULE_REPOSITORY_INFO = 1440; // 1440 min = 24 hours
-	public static int SCHEDULE_MAIL_IMPORTER = 0; // 0 min = disabled
 	public static int SCHEDULE_SESSION_KEEPALIVE = 15; // 15 min
 	public static int SCHEDULE_DASHBOARD_REFRESH = 30; // 30 min
 	public static int SCHEDULE_UI_NOTIFICATION = 1; // 1 min
@@ -573,9 +567,7 @@ public class Config {
 			MANAGED_TEXT_EXTRACTION = ConfigDAO.getBoolean(PROPERTY_MANAGED_TEXT_EXTRACTION, MANAGED_TEXT_EXTRACTION);
 			values.put(PROPERTY_MANAGED_TEXT_EXTRACTION, Boolean.toString(MANAGED_TEXT_EXTRACTION));
 			MANAGED_TEXT_EXTRACTION_BATCH = ConfigDAO.getInteger(PROPERTY_MANAGED_TEXT_EXTRACTION_BATCH, MANAGED_TEXT_EXTRACTION_BATCH);
-			values.put(PROPERTY_MANAGED_TEXT_EXTRACTION_BATCH, Integer.toString(MANAGED_TEXT_EXTRACTION_BATCH));			
-			MANAGED_TEXT_EXTRACTION_SCHEDULE = ConfigDAO.getInteger(PROPERTY_MANAGED_TEXT_EXTRACTION_SCHEDULE, MANAGED_TEXT_EXTRACTION_SCHEDULE);
-			values.put(PROPERTY_MANAGED_TEXT_EXTRACTION_SCHEDULE, Integer.toString(MANAGED_TEXT_EXTRACTION_SCHEDULE));
+			values.put(PROPERTY_MANAGED_TEXT_EXTRACTION_BATCH, Integer.toString(MANAGED_TEXT_EXTRACTION_BATCH));
 			
 			REPOSITORY_CONTENT_CHECKSUM = ConfigDAO.getBoolean(PROPERTY_REPOSITORY_CONTENT_CHECKSUM, REPOSITORY_CONTENT_CHECKSUM);
 			values.put(PROPERTY_REPOSITORY_CONTENT_CHECKSUM, Boolean.toString(REPOSITORY_CONTENT_CHECKSUM));
@@ -776,10 +768,6 @@ public class Config {
 			values.put(PROPERTY_UPLOAD_THROTTLE_FILTER, Boolean.toString(UPLOAD_THROTTLE_FILTER));
 			
 			// Schedule
-			SCHEDULE_REPOSITORY_INFO = ConfigDAO.getInteger(PROPERTY_SCHEDULE_REPOSITORY_INFO, SCHEDULE_REPOSITORY_INFO);
-			values.put(PROPERTY_SCHEDULE_REPOSITORY_INFO, Integer.toString(SCHEDULE_REPOSITORY_INFO));
-			SCHEDULE_MAIL_IMPORTER = ConfigDAO.getInteger(PROPERTY_SCHEDULE_MAIL_IMPORTER, SCHEDULE_MAIL_IMPORTER);
-			values.put(PROPERTY_SCHEDULE_MAIL_IMPORTER, Integer.toString(SCHEDULE_MAIL_IMPORTER));
 			SCHEDULE_SESSION_KEEPALIVE = ConfigDAO.getInteger(PROPERTY_SCHEDULE_SESSION_KEEPALIVE, SCHEDULE_SESSION_KEEPALIVE);
 			values.put(PROPERTY_SCHEDULE_SESSION_KEEPALIVE, Integer.toString(SCHEDULE_SESSION_KEEPALIVE));
 			SCHEDULE_DASHBOARD_REFRESH = ConfigDAO.getInteger(PROPERTY_SCHEDULE_DASHBOARD_REFRESH, SCHEDULE_DASHBOARD_REFRESH);
