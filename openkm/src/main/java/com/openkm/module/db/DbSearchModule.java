@@ -22,6 +22,7 @@
 package com.openkm.module.db;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -34,7 +35,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.lucene.document.DateTools;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
@@ -92,6 +92,7 @@ import com.openkm.util.UserActivity;
 
 public class DbSearchModule implements SearchModule {
 	private static Logger log = LoggerFactory.getLogger(DbSearchModule.class);
+	private static final SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("yyyyMMdd");
 	
 	@Override
 	public List<QueryResult> findByContent(String token, String expression) throws IOException, ParseException,
@@ -249,9 +250,9 @@ public class DbSearchModule implements SearchModule {
 			
 			if (params.getLastModifiedFrom() != null && params.getLastModifiedTo() != null) {
 				Date from = params.getLastModifiedFrom().getTime();
-				String sFrom = DateTools.dateToString(from, DateTools.Resolution.DAY);
+				String sFrom = DAY_FORMAT.format(from);
 				Date to = params.getLastModifiedTo().getTime();
-				String sTo = DateTools.dateToString(to, DateTools.Resolution.DAY);
+				String sTo = DAY_FORMAT.format(to);
 				queryDocument.add(new TermRangeQuery("lastModified", sFrom, sTo, true, true), BooleanClause.Occur.MUST);
 			}
 			
@@ -398,11 +399,9 @@ public class DbSearchModule implements SearchModule {
 								Calendar to = ISO8601.parseBasic(date[1]);
 								
 								if (from != null && to != null) {
-									String sFrom = DateTools.dateToString(from.getTime(), DateTools.Resolution.DAY);
-									String sTo = DateTools.dateToString(to.getTime(), DateTools.Resolution.DAY);
-									
-									query.add(new TermRangeQuery(ent.getKey(), sFrom, sTo, true, true),
-											BooleanClause.Occur.MUST);
+									String sFrom = DAY_FORMAT.format(from.getTime());
+									String sTo = DAY_FORMAT.format(to.getTime());
+									query.add(new TermRangeQuery(ent.getKey(), sFrom, sTo, true, true), BooleanClause.Occur.MUST);
 								}
 							}
 						} else {
