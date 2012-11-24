@@ -76,7 +76,7 @@ public class SecurityPanel extends Composite {
 		tabPanel.add(securityRole, Main.i18n("security.roles"));
 		tabPanel.selectTab(TAB_USERS);
 		tabPanel.setWidth(String.valueOf(width));
-		tabPanel.setHeight("365");
+		tabPanel.setHeight("385"); // 365 +20
 		
 		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 			@Override
