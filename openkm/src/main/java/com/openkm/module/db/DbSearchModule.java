@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -213,8 +214,10 @@ public class DbSearchModule implements SearchModule {
 			queryDocument.add(new TermQuery(tEntity), BooleanClause.Occur.MUST);
 			
 			if (!params.getContent().equals("")) {
-				Term t = new Term("text", params.getContent());
-				queryDocument.add(new WildcardQuery(t), BooleanClause.Occur.MUST);
+				for (StringTokenizer st = new StringTokenizer(params.getContent(), " "); st.hasMoreTokens();) {
+					Term t = new Term("text", st.nextToken().toLowerCase());
+					queryDocument.add(new WildcardQuery(t), BooleanClause.Occur.MUST);
+				}
 			}
 			
 			if (!params.getName().equals("")) {
@@ -318,23 +321,25 @@ public class DbSearchModule implements SearchModule {
 			}
 			
 			if (!params.getContent().equals("")) {
-				Term t = new Term("content", params.getContent());
-				queryMail.add(new TermQuery(t), BooleanClause.Occur.MUST);
+				for (StringTokenizer st = new StringTokenizer(params.getContent(), " "); st.hasMoreTokens();) {
+					Term t = new Term("content", st.nextToken().toLowerCase());
+					queryMail.add(new WildcardQuery(t), BooleanClause.Occur.MUST);
+				}
 			}
 			
 			if (!params.getMailSubject().equals("")) {
-				Term t = new Term("subject", params.getMailSubject());
-				queryMail.add(new TermQuery(t), BooleanClause.Occur.MUST);
+				Term t = new Term("subject", params.getMailSubject().toLowerCase());
+				queryMail.add(new WildcardQuery(t), BooleanClause.Occur.MUST);
 			}
 			
 			if (!params.getMailFrom().equals("")) {
-				Term t = new Term("from", params.getMailFrom());
-				queryMail.add(new TermQuery(t), BooleanClause.Occur.MUST);
+				Term t = new Term("from", params.getMailFrom().toLowerCase());
+				queryMail.add(new WildcardQuery(t), BooleanClause.Occur.MUST);
 			}
 			
 			if (!params.getMailTo().equals("")) {
-				Term t = new Term("to", params.getMailTo());
-				queryMail.add(new TermQuery(t), BooleanClause.Occur.MUST);
+				Term t = new Term("to", params.getMailTo().toLowerCase());
+				queryMail.add(new WildcardQuery(t), BooleanClause.Occur.MUST);
 			}
 			
 			if (!params.getMimeType().equals("")) {
@@ -376,7 +381,7 @@ public class DbSearchModule implements SearchModule {
 				FormElement fe = FormUtils.getFormElement(formsElements, ent.getKey());
 				
 				if (fe != null && ent.getValue() != null) {
-					String valueTrimmed = ent.getValue().trim();
+					String valueTrimmed = ent.getValue().trim().toLowerCase();
 					
 					if (!valueTrimmed.equals("")) {
 						if (fe instanceof Select) {
@@ -406,7 +411,7 @@ public class DbSearchModule implements SearchModule {
 							}
 						} else {
 							Term t = new Term(ent.getKey(), valueTrimmed);
-							query.add(new TermQuery(t), BooleanClause.Occur.MUST);
+							query.add(new WildcardQuery(t), BooleanClause.Occur.MUST);
 						}
 					}
 				}
