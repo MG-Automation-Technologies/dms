@@ -187,6 +187,9 @@ public class ConverterServlet extends OKMHttpServlet {
 					} else if (cd.mimeType.equals(MimeTypeConfig.MIME_TIFF)) {
 						// This is an internal conversion and does not need 3er party software
 						DocConverter.getInstance().tiff2pdf(cd.file, pdfCache);
+					} else if (cd.mimeType.equals(MimeTypeConfig.MIME_HTML)) {
+						// This is an internal conversion and does not need 3er party software
+						DocConverter.getInstance().html2pdf(cd.file, pdfCache);
 					} else 	if (cd.mimeType.equals(MimeTypeConfig.MIME_POSTSCRIPT)) {
 						DocConverter.getInstance().ps2pdf(cd.file, pdfCache);
 					} else if (DocConverter.validImageMagick.contains(cd.mimeType)) {
