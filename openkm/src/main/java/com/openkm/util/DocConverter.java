@@ -25,6 +25,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -360,20 +361,20 @@ public class DocConverter {
 	/**
 	 * Convert HTML to PDF
 	 */
-	public void html2pdf(InputStream is, File output) throws ConversionException,
+	public void html2pdf(File input, File output) throws ConversionException,
 			DatabaseException, IOException {
 		log.debug("** Convert from HTML to PDF **");
 		FileOutputStream fos = null;
 		
-	    try {			
-	    	fos = new FileOutputStream(output);
-	    	
-	    	// Make conversion
+		try {			
+			fos = new FileOutputStream(output);
+			
+			// Make conversion
 			Document doc = new Document(PageSize.A4);
 			PdfWriter.getInstance(doc, fos);
 			doc.open();
 			HTMLWorker html = new HTMLWorker(doc);
-			html.parse(new InputStreamReader(is));
+			html.parse(new FileReader(input));
 			doc.close();
 		} catch (DocumentException e) {
 			throw new ConversionException("Exception in conversion: " + e.getMessage(), e);

@@ -988,7 +988,7 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 		log.debug("tmpFromTemplate({}, {}, {})", new Object[] { docTpl, formProperties, tableProperties });
 		FileOutputStream fos = null;
 		InputStream fis = null;
-		File tmp = null;
+		File tmpResult = null;
 		
 		try {
 			// Reading original document
@@ -996,8 +996,8 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 			
 			// Save content to temporary file
 			String fileName = PathUtils.getName(docTpl.getPath());
-			tmp = File.createTempFile("okm", "." + FileUtils.getFileExtension(fileName));
-			fos = new FileOutputStream(tmp);
+			tmpResult = File.createTempFile("okm", "." + FileUtils.getFileExtension(fileName));
+			fos = new FileOutputStream(tmpResult);
 			
 			// Setting values to document
 			Map<String, Object> values = new HashMap<String, Object>();
@@ -1019,23 +1019,20 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 				OOUtils.fillTemplate(fis, values, fos);
 			} else if (docTpl.getMimeType().equals("text/html")) {
 				TemplateUtils.replace(fileName, fis, values, fos);
-				fis.close();
-				fos.close();
 				
 				// Converting to PDF
-				fis = new FileInputStream(tmp);
-				File tmp2 = tmp;
-				tmp = File.createTempFile("okm", ".pdf");
-				DocConverter.getInstance().html2pdf(fis, tmp); // tmp has been converted to PDF
-				tmp2.delete(); // deleting html tmp file
+				File tmpPdf = File.createTempFile("okm", ".pdf");
+				DocConverter.getInstance().html2pdf(tmpResult, tmpPdf);
+				tmpResult.delete();
+				tmpResult = tmpPdf;
 			}
 		} finally {
 			IOUtils.closeQuietly(fis);
 			IOUtils.closeQuietly(fos);
 		}
 		
-		log.debug("tmpFromTemplate: {}", tmp);
-		return tmp;
+		log.debug("tmpFromTemplate: {}", tmpResult);
+		return tmpResult;
 	}
 	
 	@Override
