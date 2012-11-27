@@ -74,7 +74,7 @@ public class WorkflowRegisterServlet extends HttpServlet {
 				out.print(msg);
 				out.flush();
 			} else {
-				
+				log.warn("Workflow should be registered by {}", Config.ADMIN_USER);
 			}
 		} catch (FileUploadException e) {
 			log.warn(e.getMessage(), e);
