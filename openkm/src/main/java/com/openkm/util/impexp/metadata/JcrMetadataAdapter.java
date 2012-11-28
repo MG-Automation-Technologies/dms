@@ -56,6 +56,7 @@ import com.openkm.core.RepositoryException;
 import com.openkm.module.jcr.stuff.JCRUtils;
 import com.openkm.module.jcr.stuff.JcrSessionManager;
 import com.openkm.util.PathUtils;
+import com.openkm.util.UserActivity;
 
 public class JcrMetadataAdapter extends MetadataAdapter {
 	private static Logger log = LoggerFactory.getLogger(JcrMetadataAdapter.class);
@@ -215,6 +216,9 @@ public class JcrMetadataAdapter extends MetadataAdapter {
 			// Persists
 			parentNode.save();
 			((NodeImpl) contentNode).checkin(vmd.getCreated());
+			
+			// Activity log
+			UserActivity.log(session.getUserID(), "CREATE_DOCUMENT", documentNode.getUUID(), documentNode.getPath(), "Imported with metadata");
 		} catch (LoginException e) {
 			JCRUtils.discardsPendingChanges(parentNode);
 			throw new RepositoryException(e.getMessage(), e);
@@ -345,6 +349,9 @@ public class JcrMetadataAdapter extends MetadataAdapter {
 			
 			// Persists
 			parentNode.save();
+			
+			// Activity log
+			UserActivity.log(session.getUserID(), "CREATE_FOLDER", folderNode.getUUID(), folderNode.getPath(), "Imported with metadata");
 		} catch (LoginException e) {
 			JCRUtils.discardsPendingChanges(parentNode);
 			throw new RepositoryException(e.getMessage(), e);

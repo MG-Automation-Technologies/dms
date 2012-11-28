@@ -239,10 +239,12 @@ public class RepositoryImporter {
 											
 											if (first) {
 												dmd.setVersion(vmd);
+												size = fis.available();
 												ma.importWithMetadata(dmd, fis);
 												first = false;
 											} else {
 												log.info("Document Version Metadata: {}", vmd);
+												size = fis.available();
 												ma.importWithMetadata(doc.getPath(), vmd, fis);
 											}
 										} else {
