@@ -208,7 +208,7 @@ public class MailAccountDAO {
 	/**
 	 * Find by pk
 	 */
-	public static MailAccount findByPk(int maId) throws DatabaseException {
+	public static MailAccount findByPk(long maId) throws DatabaseException {
 		log.debug("findByPk({})", maId);
 		String qs = "from MailAccount ma where ma.id=:id";
 		Session session = null;
@@ -216,7 +216,7 @@ public class MailAccountDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
-			q.setInteger("id", maId);
+			q.setLong("id", maId);
 			MailAccount ret = (MailAccount) q.setMaxResults(1).uniqueResult();
 			log.debug("findByPk: {}", ret);
 			return ret;
@@ -253,7 +253,7 @@ public class MailAccountDAO {
 	/**
 	 * Delete
 	 */
-	public static void deleteFilter(int mfId) throws DatabaseException {
+	public static void deleteFilter(long mfId) throws DatabaseException {
 		log.debug("deleteFilter({})", mfId);
 		Session session = null;
 		Transaction tx = null;
@@ -277,7 +277,7 @@ public class MailAccountDAO {
 	/**
 	 * Find by pk
 	 */
-	public static MailFilter findFilterByPk(javax.jcr.Session jcrSession, int mfId) throws 
+	public static MailFilter findFilterByPk(javax.jcr.Session jcrSession, long mfId) throws 
 			DatabaseException, RepositoryException {
 		log.debug("findFilterByPk({})", mfId);
 		Session session = null;
@@ -312,7 +312,7 @@ public class MailAccountDAO {
 	/**
 	 * Find by pk
 	 */
-	public static MailFilter findFilterByPk(int mfId) throws PathNotFoundException, DatabaseException {
+	public static MailFilter findFilterByPk(long mfId) throws PathNotFoundException, DatabaseException {
 		log.debug("findFilterByPk({})", mfId);
 		Session session = null;
 		Transaction tx = null;
@@ -369,7 +369,7 @@ public class MailAccountDAO {
 	/**
 	 * Delete
 	 */
-	public static void deleteRule(int frId) throws DatabaseException {
+	public static void deleteRule(long frId) throws DatabaseException {
 		log.debug("deleteRule({})", frId);
 		Session session = null;
 		Transaction tx = null;
@@ -393,7 +393,7 @@ public class MailAccountDAO {
 	/**
 	 * Find by pk
 	 */
-	public static MailFilterRule findRuleByPk(int frId) throws DatabaseException {
+	public static MailFilterRule findRuleByPk(long frId) throws DatabaseException {
 		log.debug("findRuleByPk({})", frId);
 		Session session = null;
 				
