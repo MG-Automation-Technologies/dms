@@ -56,6 +56,7 @@ import com.openkm.module.db.stuff.DbSessionManager;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.spring.PrincipalUtils;
 import com.openkm.util.PathUtils;
+import com.openkm.util.StackTraceUtils;
 import com.openkm.util.UserActivity;
 
 @Component
@@ -155,10 +156,15 @@ public class DbAuthModule implements AuthModule, ApplicationContextAware {
 			}
 			
 			if (auth != null) {
-				DbSessionManager.getInstance().remove(token);
-				
-				// Activity log
-				UserActivity.log(auth.getName(), "LOGOUT", token, null, null);
+				if (!Config.SYSTEM_USER.equals(auth.getName())) {
+					DbSessionManager.getInstance().remove(token);
+					
+					// Activity log
+					UserActivity.log(auth.getName(), "LOGOUT", token, null, null);
+				} else {
+					log.warn("'" + Config.SYSTEM_USER + "' should not logout");
+					StackTraceUtils.logTrace(log);
+				}
 			}
 		} catch (Exception e) {
 			throw new RepositoryException(e.getMessage(), e);
