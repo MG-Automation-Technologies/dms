@@ -53,6 +53,7 @@ import com.openkm.dao.bean.NodeProperty;
 import com.openkm.module.db.stuff.FsDataStore;
 import com.openkm.spring.PrincipalUtils;
 import com.openkm.util.PathUtils;
+import com.openkm.util.UserActivity;
 import com.openkm.vernum.VersionNumerationAdapter;
 import com.openkm.vernum.VersionNumerationFactory;
 
@@ -250,6 +251,9 @@ public class DbMetadataAdapter extends MetadataAdapter {
 		} finally {
 			HibernateUtil.close(session);
 		}
+		
+		// Activity log
+		UserActivity.log(PrincipalUtils.getUser(), "CREATE_DOCUMENT", nDoc.getUuid(), dmd.getPath(), "Imported with metadata");
 	}
 	
 	@Override
@@ -453,6 +457,9 @@ public class DbMetadataAdapter extends MetadataAdapter {
 		} finally {
 			HibernateUtil.close(session);
 		}
+		
+		// Activity log
+		UserActivity.log(PrincipalUtils.getUser(), "CREATE_FOLDER", nFld.getUuid(), fmd.getPath(), "Imported with metadata");
 	}
 	
 	/**
