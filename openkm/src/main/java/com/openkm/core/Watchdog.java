@@ -50,20 +50,23 @@ public class Watchdog extends TimerTask {
 					
 					for (Iterator<String> it = sm.getTokens().iterator(); it.hasNext(); ) {
 						String token = it.next();
-						DbSessionInfo si = sm.getInfo(token);
-						Calendar expiration = (Calendar) si.getLastAccess().clone();
-						expiration.add(Calendar.SECOND, Config.SESSION_EXPIRATION);
-						log.debug(si.getAuth().getName() + ", Expiration: " + expiration.getTime());
 						
-						if (Calendar.getInstance().after(expiration)) {
-							try {
-								// Activity log
-								UserActivity.log("system", "SESSION_EXPIRATION", si.getAuth().getName(), null, token+", IDLE FROM: "+si.getLastAccess().getTime());
-								OKMAuth.getInstance().logout(token);
-							} catch (RepositoryException e) {
-								log.error(e.getMessage(), e);
-							} catch (DatabaseException e) {
-								log.error(e.getMessage(), e);
+						if (!token.equals(sm.getSystemToken())) {
+							DbSessionInfo si = sm.getInfo(token);
+							Calendar expiration = (Calendar) si.getLastAccess().clone();
+							expiration.add(Calendar.SECOND, Config.SESSION_EXPIRATION);
+							log.debug(si.getAuth().getName() + ", Expiration: " + expiration.getTime());
+							
+							if (Calendar.getInstance().after(expiration)) {
+								try {
+									// Activity log
+									UserActivity.log("system", "SESSION_EXPIRATION", si.getAuth().getName(), null, token+", IDLE FROM: "+si.getLastAccess().getTime());
+									OKMAuth.getInstance().logout(token);
+								} catch (RepositoryException e) {
+									log.error(e.getMessage(), e);
+								} catch (DatabaseException e) {
+									log.error(e.getMessage(), e);
+								}
 							}
 						}
 					}
