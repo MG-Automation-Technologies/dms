@@ -190,25 +190,11 @@ public class DbMailModule implements MailModule {
 			String userTrashPath = "/" + Repository.TRASH + "/" + auth.getName();
 			String userTrashUuid = NodeBaseDAO.getInstance().getUuidFromPath(userTrashPath);
 			String name = PathUtils.getName(mailPath);
-			String testName = name;
 			
-			// Test if already exists a mail with the same name in the trash
-			for (int i=1; NodeBaseDAO.getInstance().itemPathExists(userTrashPath + "/" + testName); i++) {
-				// log.info("Trying with: {}", testName);
-				testName = name + " (" + i + ")";
-			}
-			
-			NodeMailDAO.getInstance().move(mailUuid, userTrashUuid, false);
-			
-			if (!name.equals(testName)) {
-				NodeMailDAO.getInstance().rename(mailUuid, testName);
-			}
+			NodeMailDAO.getInstance().delete(name, mailUuid, userTrashUuid);
 			
 			// Activity log
 			UserActivity.log(auth.getName(), "DELETE_MAIL", mailUuid, mailPath, null);
-		} catch (ItemExistsException e) {
-			// Should not happen
-			throw new RepositoryException("ItemExists: " + e.getMessage());
 		} catch (DatabaseException e) {
 			throw e;
 		} finally {
@@ -334,7 +320,7 @@ public class DbMailModule implements MailModule {
 			
 			String mailUuid = NodeBaseDAO.getInstance().getUuidFromPath(mailPath);
 			String dstUuid = NodeBaseDAO.getInstance().getUuidFromPath(dstPath);
-			NodeMailDAO.getInstance().move(mailUuid, dstUuid, true);
+			NodeMailDAO.getInstance().move(mailUuid, dstUuid);
 			
 			// Activity log
 			UserActivity.log(auth.getName(), "MOVE_MAIL", mailUuid, mailPath, dstPath);

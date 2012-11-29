@@ -1334,16 +1334,33 @@ public class NodeBaseDAO {
 	}
 	
 	/**
-	 * Check for same folder name in same parent
+	 * Check for same node name in same parent
+	 * 
+	 * @param Session Hibernate session.
+	 * @param parent Parent node uuid.
+	 * @param name Name of the child node to test.
+	 * @return true if child item exists or false otherwise.
 	 */
-	public void checkItemExistence(Session session, String parent, String name) throws PathNotFoundException,
-			HibernateException, DatabaseException, ItemExistsException {
+	public boolean testItemExistence(Session session, String parent, String name) throws HibernateException,
+			DatabaseException {
 		String qs = "from NodeBase nb where nb.parent=:parent and nb.name=:name";
 		Query q = session.createQuery(qs);
 		q.setString("parent", parent);
 		q.setString("name", name);
 		
-		if (!q.list().isEmpty()) {
+		return !q.list().isEmpty();
+	}
+	
+	/**
+	 * Check for same node name in same parent
+	 * 
+	 * @param Session Hibernate session.
+	 * @param parent Parent node uuid.
+	 * @param name Name of the child node to test.
+	 */
+	public void checkItemExistence(Session session, String parent, String name) throws PathNotFoundException,
+			HibernateException, DatabaseException, ItemExistsException {
+		if (testItemExistence(session, parent, name)) {
 			String path = getPathFromUuid(session, parent);
 			throw new ItemExistsException(path + "/" + name);
 		}

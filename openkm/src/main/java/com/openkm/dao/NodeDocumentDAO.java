@@ -522,8 +522,8 @@ public class NodeDocumentDAO {
 	/**
 	 * Move document
 	 */
-	public void move(String uuid, String dstUuid, boolean checkItemExistence) throws PathNotFoundException,
-			AccessDeniedException, ItemExistsException, LockException, DatabaseException {
+	public void move(String uuid, String dstUuid) throws PathNotFoundException, AccessDeniedException,
+			ItemExistsException, LockException, DatabaseException {
 		log.debug("move({}, {})", uuid, dstUuid);
 		Session session = null;
 		Transaction tx = null;
@@ -543,10 +543,8 @@ public class NodeDocumentDAO {
 			// Lock Check
 			LockHelper.checkWriteLock(nDoc);
 			
-			if (checkItemExistence) {
-				// Check for same folder name in same parent
-				NodeBaseDAO.getInstance().checkItemExistence(session, dstUuid, nDoc.getName());
-			}
+			// Check for same folder name in same parent
+			NodeBaseDAO.getInstance().checkItemExistence(session, dstUuid, nDoc.getName());
 			
 			// Check if context changes
 			if (!nDstFld.getContext().equals(nDoc.getContext())) {
@@ -567,6 +565,66 @@ public class NodeDocumentDAO {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (ItemExistsException e) {
+			HibernateUtil.rollback(tx);
+			throw e;
+		} catch (DatabaseException e) {
+			HibernateUtil.rollback(tx);
+			throw e;
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+
+	/**
+	 * Delete document
+	 */
+	public void delete(String name, String uuid, String trashUuid) throws PathNotFoundException,
+			AccessDeniedException, LockException, DatabaseException {
+		log.debug("delete({}, {}, {})", new Object[] { name, uuid, trashUuid });
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			
+			// Security Check
+			NodeFolder nTrashFld = (NodeFolder) session.load(NodeFolder.class, trashUuid);
+			SecurityHelper.checkRead(nTrashFld);
+			SecurityHelper.checkWrite(nTrashFld);
+			NodeDocument nDoc = (NodeDocument) session.load(NodeDocument.class, uuid);
+			SecurityHelper.checkRead(nDoc);
+			SecurityHelper.checkWrite(nDoc);
+			
+			// Lock Check
+			LockHelper.checkWriteLock(nDoc);
+			
+			// Test if already exists a document with the same name in the trash
+			String fileName = com.openkm.util.FileUtils.getFileName(name);
+			String fileExtension = com.openkm.util.FileUtils.getFileExtension(name);
+			String testName = name;
+			
+			for (int i = 1; NodeBaseDAO.getInstance().testItemExistence(session, trashUuid, testName); i++) {
+				// log.info("Trying with: {}", testName);
+				testName = fileName + " (" + i + ")." + fileExtension;
+			}
+			
+			nDoc.setContext(nTrashFld.getContext());
+			nDoc.setParent(trashUuid);
+			nDoc.setName(testName);
+			session.update(nDoc);
+			HibernateUtil.commit(tx);
+			log.debug("delete: void");
+		} catch (PathNotFoundException e) {
+			HibernateUtil.rollback(tx);
+			throw e;
+		} catch (AccessDeniedException e) {
+			HibernateUtil.rollback(tx);
+			throw e;
+		} catch (LockException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (DatabaseException e) {
