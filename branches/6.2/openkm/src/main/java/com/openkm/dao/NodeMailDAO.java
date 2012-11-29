@@ -389,8 +389,8 @@ public class NodeMailDAO {
 	/**
 	 * Move mail
 	 */
-	public void move(String uuid, String dstUuid, boolean checkItemExistence) throws PathNotFoundException,
-			AccessDeniedException, ItemExistsException, DatabaseException {
+	public void move(String uuid, String dstUuid) throws PathNotFoundException, AccessDeniedException,
+			ItemExistsException, DatabaseException {
 		log.debug("move({}, {})", uuid, dstUuid);
 		Session session = null;
 		Transaction tx = null;
@@ -407,10 +407,8 @@ public class NodeMailDAO {
 			SecurityHelper.checkRead(nMail);
 			SecurityHelper.checkWrite(nMail);
 			
-			if (checkItemExistence) {
-				// Check for same folder name in same parent
-				NodeBaseDAO.getInstance().checkItemExistence(session, dstUuid, nMail.getName());
-			}
+			// Check for same folder name in same parent
+			NodeBaseDAO.getInstance().checkItemExistence(session, dstUuid, nMail.getName());
 			
 			// Check if context changes
 			if (!nDstFld.getContext().equals(nMail.getContext())) {
@@ -431,6 +429,61 @@ public class NodeMailDAO {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (ItemExistsException e) {
+			HibernateUtil.rollback(tx);
+			throw e;
+		} catch (DatabaseException e) {
+			HibernateUtil.rollback(tx);
+			throw e;
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Delete mail
+	 */
+	public void delete(String name, String uuid, String trashUuid) throws PathNotFoundException,
+			AccessDeniedException, DatabaseException {
+		log.debug("delete({}, {}, {})", new Object[] { name, uuid, trashUuid });
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			
+			// Security Check
+			NodeFolder nTrashFld = (NodeFolder) session.load(NodeFolder.class, trashUuid);
+			SecurityHelper.checkRead(nTrashFld);
+			SecurityHelper.checkWrite(nTrashFld);
+			NodeMail nMail = (NodeMail) session.load(NodeMail.class, uuid);
+			SecurityHelper.checkRead(nMail);
+			SecurityHelper.checkWrite(nMail);
+			
+			// Test if already exists a mail with the same name in the trash
+			String testName = name;
+			
+			for (int i=1; NodeBaseDAO.getInstance().testItemExistence(session, trashUuid, testName); i++) {
+				// log.info("Trying with: {}", testName);
+				testName = name + " (" + i + ")";
+			}
+			
+			// Need recursive context changes
+			moveHelper(session, uuid, nTrashFld.getContext());
+			
+			nMail.setContext(nTrashFld.getContext());
+			nMail.setParent(trashUuid);
+			nMail.setName(testName);
+			session.update(nMail);
+			HibernateUtil.commit(tx);
+			log.debug("delete: void");
+		} catch (PathNotFoundException e) {
+			HibernateUtil.rollback(tx);
+			throw e;
+		} catch (AccessDeniedException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (DatabaseException e) {

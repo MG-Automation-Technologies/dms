@@ -196,19 +196,8 @@ public class DbFolderModule implements FolderModule {
 			
 			String userTrashPath = "/" + Repository.TRASH + "/" + auth.getName();
 			String userTrashUuid = NodeBaseDAO.getInstance().getUuidFromPath(userTrashPath);
-			String testName = name;
 			
-			// Test if already exists a folder with the same name in the trash
-			for (int i=1; NodeBaseDAO.getInstance().itemPathExists(userTrashPath + "/" + testName); i++) {
-				// log.info("Trying with: {}", testName);
-				testName = name + " (" + i + ")";
-			}
-			
-			NodeFolderDAO.getInstance().move(fldUuid, userTrashUuid, false);
-			
-			if (!name.equals(testName)) {
-				NodeFolderDAO.getInstance().rename(fldUuid, testName);
-			}
+			NodeFolderDAO.getInstance().delete(name, fldUuid, userTrashUuid);
 			
 			// Check scripting
 			String parentUuid = NodeBaseDAO.getInstance().getParentUuid(fldUuid);
@@ -216,9 +205,6 @@ public class DbFolderModule implements FolderModule {
 			
 			// Activity log
 			UserActivity.log(auth.getName(), "DELETE_FOLDER", fldUuid, fldPath, null);
-		} catch (ItemExistsException e) {
-			// Should not happen
-			throw new RepositoryException("ItemExists: " + e.getMessage());
 		} catch (DatabaseException e) {
 			throw e;
 		} finally {
@@ -356,7 +342,7 @@ public class DbFolderModule implements FolderModule {
 			
 			String fldUuid = NodeBaseDAO.getInstance().getUuidFromPath(fldPath);
 			String dstUuid = NodeBaseDAO.getInstance().getUuidFromPath(dstPath);
-			NodeFolderDAO.getInstance().move(fldUuid, dstUuid, true);
+			NodeFolderDAO.getInstance().move(fldUuid, dstUuid);
 			
 			// Check scripting
 			BaseScriptingModule.checkScripts(auth.getName(), dstUuid, fldUuid, "MOVE_FOLDER");

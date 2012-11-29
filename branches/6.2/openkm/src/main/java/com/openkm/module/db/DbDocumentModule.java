@@ -91,7 +91,6 @@ import com.openkm.module.db.base.BaseNotificationModule;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.spring.PrincipalUtils;
 import com.openkm.util.ConfigUtils;
-import com.openkm.util.FileUtils;
 import com.openkm.util.FormatUtil;
 import com.openkm.util.PathUtils;
 import com.openkm.util.UserActivity;
@@ -327,31 +326,15 @@ public class DbDocumentModule implements DocumentModule {
 				auth = PrincipalUtils.getAuthenticationByToken(token);
 			}
 			
+			String docUuid = NodeBaseDAO.getInstance().getUuidFromPath(docPath);
 			String userTrashPath = "/" + Repository.TRASH + "/" + auth.getName();
 			String userTrashUuid = NodeBaseDAO.getInstance().getUuidFromPath(userTrashPath);
 			String name = PathUtils.getName(docPath);
-			String fileName = FileUtils.getFileName(name);
-			String fileExtension = FileUtils.getFileExtension(name);
-			String testName = name;
 			
-			// Test if already exists a document with the same name in the trash
-			for (int i = 1; NodeBaseDAO.getInstance().itemPathExists(userTrashPath + "/" + testName); i++) {
-				// log.info("Trying with: {}", testName);
-				testName = fileName + " (" + i + ")." + fileExtension;
-			}
-			
-			String docUuid = NodeBaseDAO.getInstance().getUuidFromPath(docPath);
-			NodeDocumentDAO.getInstance().move(docUuid, userTrashUuid, false);
-			
-			if (!name.equals(testName)) {
-				NodeDocumentDAO.getInstance().rename(docUuid, testName);
-			}
+			NodeDocumentDAO.getInstance().delete(name, docUuid, userTrashUuid);
 			
 			// Activity log
 			UserActivity.log(auth.getName(), "DELETE_DOCUMENT", docUuid, docPath, null);
-		} catch (ItemExistsException e) {
-			// Should not happen
-			throw new RepositoryException("ItemExists: " + e.getMessage());
 		} catch (DatabaseException e) {
 			throw e;
 		} finally {
@@ -1078,7 +1061,7 @@ public class DbDocumentModule implements DocumentModule {
 			
 			String docUuid = NodeBaseDAO.getInstance().getUuidFromPath(docPath);
 			String dstUuid = NodeBaseDAO.getInstance().getUuidFromPath(dstPath);
-			NodeDocumentDAO.getInstance().move(docUuid, dstUuid, true);
+			NodeDocumentDAO.getInstance().move(docUuid, dstUuid);
 			
 			// Activity log
 			UserActivity.log(auth.getName(), "MOVE_DOCUMENT", docUuid, docPath, dstPath);
