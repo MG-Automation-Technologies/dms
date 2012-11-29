@@ -162,7 +162,7 @@ public class DbAuthModule implements AuthModule, ApplicationContextAware {
 					// Activity log
 					UserActivity.log(auth.getName(), "LOGOUT", token, null, null);
 				} else {
-					log.warn("'" + Config.SYSTEM_USER + "' should not logout");
+					log.warn("'" + Config.SYSTEM_USER + "' user should not logout");
 					StackTraceUtils.logTrace(log);
 				}
 			}
