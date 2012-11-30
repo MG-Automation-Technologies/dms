@@ -25,6 +25,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +38,9 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMRepository;
+import com.openkm.automation.AutomationException;
+import com.openkm.automation.AutomationManager;
+import com.openkm.automation.AutomationUtils;
 import com.openkm.bean.Document;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
@@ -44,6 +49,7 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.MimeTypeConfig;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.dao.bean.AutomationRule;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.constants.service.ErrorCode;
 import com.openkm.module.db.DbDocumentModule;
@@ -173,7 +179,8 @@ public class ConverterServlet extends OKMHttpServlet {
 	/**
 	 * Handles PDF conversion
 	 */
-	private void toPDF(ConversionData cd) throws ConversionException, DatabaseException, IOException {
+	private void toPDF(ConversionData cd) throws ConversionException, AutomationException, DatabaseException,
+			IOException {
 		File pdfCache = new File(Config.REPOSITORY_CACHE_PDF + File.separator + cd.uuid + ".pdf");
 		
 		if (DocConverter.getInstance().convertibleToPdf(cd.mimeType)) {
@@ -199,6 +206,12 @@ public class ConverterServlet extends OKMHttpServlet {
 					} else {
 						throw new NotImplementedException("Conversion from '" + cd.mimeType + "' to PDF not available");
 					}
+					
+					// AUTOMATION - POST
+					Map<String, Object> env = new HashMap<String, Object>();
+					env.put(AutomationUtils.DOCUMENT_FILE, pdfCache);
+					env.put(AutomationUtils.DOCUMENT_UUID, cd.uuid);
+					AutomationManager.getInstance().fireEvent(AutomationRule.EVENT_CONVERSION_PDF, AutomationRule.AT_POST, env);
 				} catch (ConversionException e) {
 					pdfCache.delete();
 					throw e;
@@ -220,7 +233,8 @@ public class ConverterServlet extends OKMHttpServlet {
 	/**
 	 * Handles SWF conversion 
 	 */
-	private void toSWF(ConversionData cd) throws ConversionException, DatabaseException, IOException {
+	private void toSWF(ConversionData cd) throws ConversionException, AutomationException, DatabaseException,
+			IOException {
 		File swfCache = new File(Config.REPOSITORY_CACHE_SWF + File.separator + cd.uuid + ".swf");
 		
 		if (DocConverter.getInstance().convertibleToSwf(cd.mimeType)) {
@@ -229,9 +243,22 @@ public class ConverterServlet extends OKMHttpServlet {
 					if (cd.mimeType.equals(MimeTypeConfig.MIME_SWF)) {
 						// Document already in SWF format
 					} else if (cd.mimeType.equals(MimeTypeConfig.MIME_PDF)) {
+						// AUTOMATION - PRE
+						Map<String, Object> env = new HashMap<String, Object>();
+						env.put(AutomationUtils.DOCUMENT_FILE, cd.file);
+						env.put(AutomationUtils.DOCUMENT_UUID, cd.uuid);
+						AutomationManager.getInstance().fireEvent(AutomationRule.EVENT_CONVERSION_SWF, AutomationRule.AT_PRE, env);
+						
 						DocConverter.getInstance().pdf2swf(cd.file, swfCache);
 					} else if (DocConverter.getInstance().convertibleToPdf(cd.mimeType)) {
 						toPDF(cd);
+						
+						// AUTOMATION - PRE
+						Map<String, Object> env = new HashMap<String, Object>();
+						env.put(AutomationUtils.DOCUMENT_FILE, cd.file);
+						env.put(AutomationUtils.DOCUMENT_UUID, cd.uuid);
+						AutomationManager.getInstance().fireEvent(AutomationRule.EVENT_CONVERSION_SWF, AutomationRule.AT_PRE, env);
+						
 						DocConverter.getInstance().pdf2swf(cd.file, swfCache);
 					} else {
 						throw new NotImplementedException("Conversion from '" + cd.mimeType + "' to SWF not available");
