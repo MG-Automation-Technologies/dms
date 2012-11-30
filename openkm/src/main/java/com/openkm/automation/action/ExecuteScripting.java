@@ -21,6 +21,7 @@
 
 package com.openkm.automation.action;
 
+import java.io.File;
 import java.util.HashMap;
 
 import org.slf4j.Logger;
@@ -43,18 +44,31 @@ public class ExecuteScripting implements Action  {
 	
 	@Override
 	public void executePre(HashMap<String, Object> env, Object... params) {
+		execute(env, params);
 	}
 	
 	@Override
 	public void executePost(HashMap<String, Object> env, Object... params) {
+		execute(env, params);
+	}
+	
+	/**
+	 * execute
+	 * 
+	 * @param env OpenKM API internal environment data.
+	 * @param params Action configured parameters.
+	 */
+	private void execute(HashMap<String, Object> env, Object... params) {
 		String script = AutomationUtils.getString(0, params);
 		NodeBase node = AutomationUtils.getNode(env);
 		String uuid = AutomationUtils.getUuid(env);
+		File file = AutomationUtils.getFile(env);
 		
 		try {
 			Interpreter i = new Interpreter();
 			i.set("node", node);
 			i.set("uuid", uuid);
+			i.set("file", file);
 			i.eval(script);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
