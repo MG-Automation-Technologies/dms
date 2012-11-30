@@ -21,6 +21,7 @@
 
 package com.openkm.automation;
 
+import java.io.File;
 import java.util.HashMap;
 
 import com.openkm.dao.bean.NodeBase;
@@ -40,9 +41,10 @@ public class AutomationUtils {
 	public static final String PARENT_NODE = "parentNode";
 	public static final String TEXT_EXTRACTED = "textExtracted";
 	public static final String DOCUMENT_NODE = "documentNode";
+	public static final String DOCUMENT_UUID = "documentUuid";
+	public static final String DOCUMENT_FILE = "documentFile";
 	public static final String FOLDER_NODE = "folderNode";
 	public static final String MAIL_NODE = "mailNode";
-	
 	
 	/**
 	 * getUuid
@@ -51,6 +53,7 @@ public class AutomationUtils {
 		NodeDocument docNode = (NodeDocument) env.get(DOCUMENT_NODE);
 		NodeFolder fldNode = (NodeFolder) env.get(FOLDER_NODE);
 		NodeMail mailNode = (NodeMail) env.get(MAIL_NODE);
+		String docUuid = (String) env.get(DOCUMENT_UUID);
 		String uuid = null;
 		
 		if (docNode != null) {
@@ -59,6 +62,8 @@ public class AutomationUtils {
 			uuid = fldNode.getUuid();
 		} else if (mailNode != null) {
 			uuid = mailNode.getUuid();
+		} else if (docUuid != null) {
+			uuid = docUuid;
 		}
 		
 		return uuid;
@@ -81,6 +86,13 @@ public class AutomationUtils {
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * getFile
+	 */
+	public static File getFile(HashMap<String, Object> env) {
+		return (File) env.get(DOCUMENT_FILE);
 	}
 	
 	/**
