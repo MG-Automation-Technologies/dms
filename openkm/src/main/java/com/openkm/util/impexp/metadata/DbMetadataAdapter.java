@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -35,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import com.openkm.bean.form.Input;
 import com.openkm.bean.form.Select;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
@@ -52,6 +54,7 @@ import com.openkm.dao.bean.NodeNote;
 import com.openkm.dao.bean.NodeProperty;
 import com.openkm.module.db.stuff.FsDataStore;
 import com.openkm.spring.PrincipalUtils;
+import com.openkm.util.ISO8601;
 import com.openkm.util.PathUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.vernum.VersionNumerationAdapter;
@@ -72,7 +75,6 @@ public class DbMetadataAdapter extends MetadataAdapter {
 		NodeDocument nDoc = new NodeDocument();
 		Session session = null;
 		Transaction tx = null;
-		Gson gson = new Gson();
 		
 		if (NodeBaseDAO.getInstance().itemPathExists(dmd.getPath())) {
 			throw new ItemExistsException(dmd.getPath());
@@ -144,23 +146,7 @@ public class DbMetadataAdapter extends MetadataAdapter {
 			}
 			
 			// Property Groups
-			for (PropertyGroupMetadata pgmd : dmd.getPropertyGroups()) {
-				for (PropertyMetadata pmd : pgmd.getProperties()) {
-					NodeProperty nProp = new NodeProperty();
-					nProp.setGroup(pgmd.getName());
-					nProp.setName(pmd.getName());
-					nProp.setNode(nDoc);
-					
-					if (pmd.isMultiValue() || Select.class.getSimpleName().equals(pmd.getType())) {
-						nProp.setValue(gson.toJson(pmd.getValues()));
-					} else {
-						nProp.setValue(pmd.getValue());
-					}
-					
-					log.info("PROPERTY: {}", nProp);
-					nDoc.getProperties().add(nProp);
-				}
-			}
+			importPropertyGroups(nDoc, dmd.getPropertyGroups());
 			
 			// Security
 			if (dmd.getGrantedUsers() != null && !dmd.getGrantedUsers().isEmpty()) {
@@ -247,7 +233,7 @@ public class DbMetadataAdapter extends MetadataAdapter {
 			throw new DatabaseException(e.getMessage(), e);
 		} catch (PathNotFoundException e) {
 			HibernateUtil.rollback(tx);
-			throw new RepositoryException("PathNotfound: " + e.getMessage(), e);
+			throw new RepositoryException("PathNotFound: " + e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
 		}
@@ -334,7 +320,7 @@ public class DbMetadataAdapter extends MetadataAdapter {
 			throw new DatabaseException(e.getMessage(), e);
 		} catch (PathNotFoundException e) {
 			HibernateUtil.rollback(tx);
-			throw new RepositoryException("PathNotfound: " + e.getMessage(), e);
+			throw new RepositoryException("PathNotFound: " + e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
 		}
@@ -347,7 +333,6 @@ public class DbMetadataAdapter extends MetadataAdapter {
 		NodeFolder nFld = new NodeFolder();
 		Session session = null;
 		Transaction tx = null;
-		Gson gson = new Gson();
 		
 		if (NodeBaseDAO.getInstance().itemPathExists(fmd.getPath())) {
 			throw new ItemExistsException(fmd.getPath());
@@ -405,22 +390,7 @@ public class DbMetadataAdapter extends MetadataAdapter {
 			}
 			
 			// Property Groups
-			for (PropertyGroupMetadata pgmd : fmd.getPropertyGroups()) {
-				for (PropertyMetadata pmd : pgmd.getProperties()) {
-					NodeProperty nProp = new NodeProperty();
-					nProp.setGroup(pgmd.getName());
-					nProp.setName(pmd.getName());
-					nProp.setNode(nFld);
-					
-					if (pmd.isMultiValue() || Select.class.getSimpleName().equals(pmd.getType())) {
-						nProp.setValue(gson.toJson(pmd.getValues()));
-					} else {
-						nProp.setValue(pmd.getValue());
-					}
-					
-					nFld.getProperties().add(nProp);
-				}
-			}
+			importPropertyGroups(nFld, fmd.getPropertyGroups());
 			
 			// Security
 			if (fmd.getGrantedUsers() != null && !fmd.getGrantedUsers().isEmpty()) {
@@ -453,13 +423,50 @@ public class DbMetadataAdapter extends MetadataAdapter {
 			throw new DatabaseException(e.getMessage(), e);
 		} catch (PathNotFoundException e) {
 			HibernateUtil.rollback(tx);
-			throw new RepositoryException("PathNotfound: " + e.getMessage(), e);
+			throw new RepositoryException("PathNotFound: " + e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
 		}
 		
 		// Activity log
 		UserActivity.log(PrincipalUtils.getUser(), "CREATE_FOLDER", nFld.getUuid(), fmd.getPath(), "Imported with metadata");
+	}
+	
+	/**
+	 * 
+	 */
+	private void importPropertyGroups(NodeBase nBase, List<PropertyGroupMetadata> pGroups) {
+		Gson gson = new Gson();
+		
+		for (PropertyGroupMetadata pgmd : pGroups) {
+			for (PropertyMetadata pmd : pgmd.getProperties()) {
+				NodeProperty nProp = new NodeProperty();
+				nProp.setGroup(pgmd.getName());
+				nProp.setName(pmd.getName());
+				nProp.setNode(nBase);
+				
+				if (pmd.isMultiValue() || Select.class.getSimpleName().equals(pmd.getType())) {
+					nProp.setValue(gson.toJson(pmd.getValues()));
+				} else {
+					// Check if input of type date is in extended ISO8601 format, and convert if needed
+					if (Input.class.getSimpleName().equals(pmd.getType())) {
+						String value = pmd.getValue();
+						
+						if (ISO8601.isExtended(value)) {
+							Calendar calValue = ISO8601.parseExtended(value);
+							nProp.setValue(ISO8601.formatBasic(calValue));
+						} else {
+							nProp.setValue(value);
+						}
+					} else {
+						nProp.setValue(pmd.getValue());
+					}
+				}
+				
+				log.info("PROPERTY: {}", nProp);
+				nBase.getProperties().add(nProp);
+			}
+		}
 	}
 	
 	/**
