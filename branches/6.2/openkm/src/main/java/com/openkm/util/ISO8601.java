@@ -1,22 +1,22 @@
 /**
- *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2012  Paco Avila & Josep Llort
- *
- *  No bytes were intentionally harmed during the development of this application.
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * OpenKM, Open Document Management System (http://www.openkm.com)
+ * Copyright (c) 2006-2012 Paco Avila & Josep Llort
+ * 
+ * No bytes were intentionally harmed during the development of this application.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 package com.openkm.util;
@@ -25,6 +25,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.regex.Pattern;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -53,9 +54,20 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   TZD   = time zone designator, Z for Zulu (i.e. UTC) or an offset from UTC
  *           in the form of +hh:mm or -hh:mm
  * </pre>
+ * 
+ * See also http://www.pelagodesign.com/blog/2009/05/20/iso-8601-date-validation-that-doesnt-suck/
  */
 public class ISO8601 {
-	private static final String BASIC_PATTER = "yyyyMMddHHmmss";
+	private static final String BASIC_PATTERN = "yyyyMMddHHmmss";
+	static final Pattern EXTENDED_PATTERN = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})T((\\d{2}):"
+			+ "(\\d{2}):(\\d{2})\\.(\\d{3}))((\\+|-)(\\d{2}):(\\d{2}))");
+	
+	/**
+	 * Check if the value is a valid ISO8601 extended date
+	 */
+	public static boolean isExtended(String value) {
+		return EXTENDED_PATTERN.matcher(value).matches();
+	}
 	
 	/**
 	 * Parse string date in format "YYYY-MM-DDThh:mm:ss.SSSTZD"
@@ -99,7 +111,7 @@ public class ISO8601 {
 			return null;
 		} else {
 			try {
-				SimpleDateFormat sdf = new SimpleDateFormat(BASIC_PATTER);
+				SimpleDateFormat sdf = new SimpleDateFormat(BASIC_PATTERN);
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(sdf.parse(value));
 				return cal;
@@ -116,7 +128,7 @@ public class ISO8601 {
 		if (value == null) {
 			return null;
 		} else {
-			SimpleDateFormat sdf = new SimpleDateFormat(BASIC_PATTER);
+			SimpleDateFormat sdf = new SimpleDateFormat(BASIC_PATTERN);
 			return sdf.format(value.getTime());
 		}
 	}
