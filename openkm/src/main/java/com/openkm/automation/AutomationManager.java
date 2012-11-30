@@ -57,7 +57,7 @@ public class AutomationManager {
 		try {
 			for (List<AutomationAction> actions : getValidActions(event, at, env)) {
 				for (AutomationAction action : actions) {
-					log.info("Action: {}", action);
+					log.debug("Action: {}", action);
 					executeAction(action, at, env);
 				}
 			}
