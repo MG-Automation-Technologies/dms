@@ -1233,6 +1233,10 @@ public class NodeDocumentDAO {
 				
 				// Need to replace 0x00 because PostgreSQL does not accept string containing 0x00
 				textExtracted = FormatUtil.fixUTF8(textExtracted);
+				
+				// Need to remove Unicode surrogate because of MySQL => SQL Error: 1366, SQLState: HY000
+				textExtracted = FormatUtil.trimUnicodeSurrogates(textExtracted);
+				
 				nDoc.setText(textExtracted);
 				
 				try {

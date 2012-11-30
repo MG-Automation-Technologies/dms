@@ -251,4 +251,23 @@ public class FormatUtil {
 	public static String fixUTF8(String input) {
 		return input.replace('\u0000', '\u0020');
 	}
+	
+	/**
+	 * Trim Unicode surrogate characters
+	 * 
+	 * http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Surrogates
+	 */
+	public static String trimUnicodeSurrogates(String text) {
+		StringBuilder sb = new StringBuilder();
+		
+		for (int i = 0; i < text.length(); i++) {
+			char ch = text.charAt(i);
+			
+			if (!Character.isHighSurrogate(ch) && !Character.isLowSurrogate(ch)) {
+				sb.append(ch);
+			}
+		}
+		
+		return sb.toString();
+	}
 }
