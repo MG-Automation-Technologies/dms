@@ -143,23 +143,21 @@
               </td>
               <td>${user.profile}</td>
               <td align="center">
-                <c:if test="${multInstAdmin || user.id != Config.ADMIN_USER}">
-                  <c:choose>
-                    <c:when test="${db}">
-                      <c:choose>
-                        <c:when test="${user.active}">
-                          <a href="${urlActive}"><img src="img/true.png" alt="Active" title="Active"/></a>
-                        </c:when>
-                        <c:otherwise>
-                          <a href="${urlActive}"><img src="img/false.png" alt="Inactive" title="Inactive"/></a>
-                        </c:otherwise>
-                      </c:choose>
-                    </c:when>
-                    <c:otherwise>
-                      <img src="img/true.png" alt="Active" title="Active"/>
-                    </c:otherwise>
-                  </c:choose>
-                </c:if>
+                <c:choose>
+                  <c:when test="${db}">
+                    <c:choose>
+                      <c:when test="${user.active}">
+                        <a href="${urlActive}"><img src="img/true.png" alt="Active" title="Active"/></a>
+                      </c:when>
+                      <c:otherwise>
+                        <a href="${urlActive}"><img src="img/false.png" alt="Inactive" title="Inactive"/></a>
+                      </c:otherwise>
+                    </c:choose>
+                  </c:when>
+                  <c:otherwise>
+                    <img src="img/true.png" alt="Active" title="Active"/>
+                  </c:otherwise>
+                </c:choose>
               </td>
               <td align="center">
                 <c:choose>
@@ -172,19 +170,17 @@
                 </c:choose>
               </td>
               <td align="center">
-                <c:if test="${multInstAdmin || user.id != Config.ADMIN_USER}">
-                  <c:if test="${db}">
-                    <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
-                    &nbsp;
-                    <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
-                    &nbsp;
-                  </c:if>
-                  <a href="${urlConfig}"><img src="img/action/config.png" alt="User config" title="User config"/></a>
+                <c:if test="${db}">
+                  <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
                   &nbsp;
-                  <a href="${urlMail}"><img src="img/action/email.png" alt="Mail accounts" title="Mail accounts"/></a>
+                  <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
                   &nbsp;
-                  <a href="${urlTwitter}"><img src="img/action/twitter.png" alt="Twitter accounts" title="Twitter accounts"/></a>
                 </c:if>
+                <a href="${urlConfig}"><img src="img/action/config.png" alt="User config" title="User config"/></a>
+                &nbsp;
+                <a href="${urlMail}"><img src="img/action/email.png" alt="Mail accounts" title="Mail accounts"/></a>
+                &nbsp;
+                <a href="${urlTwitter}"><img src="img/action/twitter.png" alt="Twitter accounts" title="Twitter accounts"/></a>
               </td>
             </tr>
           </c:forEach>
