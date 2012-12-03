@@ -299,7 +299,7 @@ public class AuthServlet extends BaseServlet {
 		
 		if (roleFilter.equals("")) {
 			if (db) {
-				List<User> users = sortRoles(AuthDAO.findAllUsers(false));
+				List<User> users = sortUserRoles(AuthDAO.findAllUsers(false));
 				sc.setAttribute("users", toMapSetProfile(users));
 				sc.setAttribute("roles", AuthDAO.findAllRoles());
 			} else {
@@ -309,7 +309,7 @@ public class AuthServlet extends BaseServlet {
 			}
 		} else {
 			if (db) {
-				List<User> users = sortRoles(AuthDAO.findUsersByRole(roleFilter, false));
+				List<User> users = sortUserRoles(AuthDAO.findUsersByRole(roleFilter, false));
 				sc.setAttribute("users", toMapSetProfile(users));
 				sc.setAttribute("roles", AuthDAO.findAllRoles());
 			} else {
@@ -539,7 +539,7 @@ public class AuthServlet extends BaseServlet {
 	/**
 	 * Sort roles from user
 	 */
-	private List<User> sortRoles(List<User> users) {
+	private List<User> sortUserRoles(List<User> users) {
 		List<User> ret = new ArrayList<User>();
 		
 		for (User user : users) {
