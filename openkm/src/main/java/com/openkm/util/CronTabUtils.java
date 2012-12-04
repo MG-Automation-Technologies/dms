@@ -51,7 +51,7 @@ public class CronTabUtils {
 			ct.setExpression(expression);
 			ct.setFileContent(SecureStore.b64Encode(content.getBytes()));
 			ct.setFileMime(MimeTypeConfig.MIME_BSH);
-			ct.setFileName(name + ".bsh");
+			ct.setFileName(toFileName(name) + ".bsh");
 			ct.setName(name);
 			
 			if (mail != null && !mail.equals("")) {
@@ -66,11 +66,35 @@ public class CronTabUtils {
 			ct.setExpression(expression);
 			ct.setFileContent(SecureStore.b64Encode(content.getBytes()));
 			ct.setFileMime(MimeTypeConfig.MIME_BSH);
-			ct.setFileName(name + ".bsh");
+			ct.setFileName(toFileName(name) + ".bsh");
 			
 			CronTabDAO.update(ct);
 		}
 		
 		log.info("createOrUpdate: void");
+	}
+	
+	/**
+	 * Change "Text Extractor Worker" or "Text extractor worker" to "TextExtractorWorker".
+	 */
+	private static String toFileName(String str) {
+		StringBuilder sb = new StringBuilder();
+		boolean toUpper = true;
+		
+		for (int i = 0; i < str.length(); i++) {
+			char c = str.charAt(i);
+			
+			if (c == ' ') {
+				toUpper = true;
+				continue;
+			} else if (toUpper) {
+				sb.append(Character.toUpperCase(c));
+				toUpper = false;
+			} else {
+				sb.append(c);
+			}
+		}
+		
+		return sb.toString();
 	}
 }
