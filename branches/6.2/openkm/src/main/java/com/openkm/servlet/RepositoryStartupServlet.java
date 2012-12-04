@@ -249,24 +249,24 @@ public class RepositoryStartupServlet extends HttpServlet {
 		try {
 			// General maintenance works
 			String uisContent = "com.openkm.cache.UserItemsManager.serialize();";
-			CronTabUtils.createOrUpdate("UserItemsSerialize", "@hourly", uisContent);
+			CronTabUtils.createOrUpdate("User Items Serialize", "@hourly", uisContent);
 			
 			String umiContent = "new com.openkm.core.UserMailImporter().run();";
-			CronTabUtils.createOrUpdate("UserMailImporter", "*/30 * * * *", umiContent);
+			CronTabUtils.createOrUpdate("User Mail Importer", "*/30 * * * *", umiContent);
 			
 			String tewContent = "new com.openkm.extractor.TextExtractorWorker().run();";
-			CronTabUtils.createOrUpdate("TextExtractorWorker", "*/5 * * * *", tewContent);
+			CronTabUtils.createOrUpdate("Text Extractor Worker", "*/5 * * * *", tewContent);
 			
 			String riContent = "new com.openkm.core.RepositoryInfo().run();";
-			CronTabUtils.createOrUpdate("RepositoryInfo", "@daily", riContent);
+			CronTabUtils.createOrUpdate("Repository Info", "@daily", riContent);
 			
 			String swdContent = "new com.openkm.core.Watchdog().run();";
-			CronTabUtils.createOrUpdate("SessionWatchdog", "*/5 * * * *", swdContent);
+			CronTabUtils.createOrUpdate("Session Watchdog", "*/5 * * * *", swdContent);
 			
 			// Datastore garbage collection
 			if (!Config.REPOSITORY_NATIVE && hasConfiguredDataStore) {
 				String dgcContent = "new com.openkm.module.jcr.stuff.DataStoreGarbageCollector().run();";
-				CronTabUtils.createOrUpdate("DataStoreGarbageCollector", "@daily", dgcContent);
+				CronTabUtils.createOrUpdate("Datastore Garbage Collector", "@daily", dgcContent);
 			}
 		} catch (Exception e) {
 			log.warn(e.getMessage(), e);
