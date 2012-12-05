@@ -138,6 +138,7 @@ public class ConverterServlet extends OKMHttpServlet {
 				listener.setStatus(ConverterListener.STATUS_SENDING_FILE);
 				WebUtils.sendFile(request, response, cd.fileName, cd.mimeType, inline, cd.file);
 			} else {
+				log.error("Missing Conversion Parameters");
 				response.setContentType(MimeTypeConfig.MIME_TEXT);
 				PrintWriter out = response.getWriter();
 				out.print("Missing Conversion Parameters");
@@ -181,6 +182,7 @@ public class ConverterServlet extends OKMHttpServlet {
 	 */
 	private void toPDF(ConversionData cd) throws ConversionException, AutomationException, DatabaseException,
 			IOException {
+		log.debug("toPDF({})", cd);
 		File pdfCache = new File(Config.REPOSITORY_CACHE_PDF + File.separator + cd.uuid + ".pdf");
 		
 		if (DocConverter.getInstance().convertibleToPdf(cd.mimeType)) {
@@ -228,6 +230,8 @@ public class ConverterServlet extends OKMHttpServlet {
 		} else {
 			throw new NotImplementedException("Conversion from '" + cd.mimeType + "' to PDF not available");
 		}
+		
+		log.debug("toPDF: {}", cd);
 	}
 	
 	/**
@@ -235,6 +239,7 @@ public class ConverterServlet extends OKMHttpServlet {
 	 */
 	private void toSWF(ConversionData cd) throws ConversionException, AutomationException, DatabaseException,
 			IOException {
+		log.debug("toSWF({})", cd);
 		File swfCache = new File(Config.REPOSITORY_CACHE_SWF + File.separator + cd.uuid + ".swf");
 		
 		if (DocConverter.getInstance().convertibleToSwf(cd.mimeType)) {
@@ -279,6 +284,8 @@ public class ConverterServlet extends OKMHttpServlet {
 		} else {
 			throw new NotImplementedException("Conversion from '" + cd.mimeType + "' to SWF not available");
 		}
+		
+		log.debug("toSWF: {}", cd);
 	}
 	
 	/**
