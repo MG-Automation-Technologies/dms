@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.Writer;
 
@@ -117,7 +118,7 @@ public class RepositoryImporter {
 			AccessDeniedException, RepositoryException, IOException, DatabaseException, ExtensionException {
 		log.debug("importDocumentsHelper({}, {}, {}, {}, {}, {}, {})", new Object[] {
 				token, fs, fldPath, metadata, uuid, out, deco });
-		File[] files = fs.listFiles();
+		File[] files = fs.listFiles(new RepositoryImporter.NoVersionFilenameFilter());
 		ImpExpStats stats = new ImpExpStats();
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		FolderModule fm = ModuleManager.getFolderModule();
@@ -260,5 +261,25 @@ public class RepositoryImporter {
 		
 		log.debug("importDocumentsHelper: {}", stats);
 		return stats;
+	}
+	
+	/**
+	 * Filter filename not matching document versions.
+	 */
+	public static class NoVersionFilenameFilter implements FilenameFilter {
+		@Override
+		public boolean accept(File dir, String name) {
+			if (name.endsWith("#")) {
+				int idx = name.lastIndexOf('#', name.length() - 2);
+				
+				if (idx > 0 && idx < name.length()) {
+					return name.charAt(idx + 1) != 'v';
+				} else {
+					return true;
+				}
+			} else {
+				return true;
+			}
+		}
 	}
 }
