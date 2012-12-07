@@ -43,6 +43,7 @@
 		String repoPath = WebUtils.getString(request, "repoPath", "/okm:root");
 		String fsPath = WebUtils.getString(request, "fsPath");
 		boolean metadata = WebUtils.getBoolean(request, "metadata");
+		boolean history = WebUtils.getBoolean(request, "history");
 		
 		out.println("<h1>Repository export</h1>");
 		out.println("<form action=\"repository_export.jsp\">");
@@ -58,6 +59,7 @@
 		out.println("<td><a class=\"ds\" href=\"DataBrowser?action=fs&sel=fld&dst=fsPath\"><img src=\"img/action/browse_fs.png\"/></a></td>");
 		out.println("</tr>");
 		out.println("<tr><td>Metadata</td><td><input type=\"checkbox\" name=\"metadata\" "+(metadata?"checked":"")+"/></td></tr>");
+		out.println("<tr><td>History</td><td><input type=\"checkbox\" name=\"history\" "+(history?"checked":"")+"/></td></tr>");
 		out.println("<tr><td colspan=\"3\" align=\"right\">");
 		out.println("<input type=\"submit\" value=\"Send\">");
 		out.println("</td></tr>");
@@ -71,7 +73,7 @@
 				ContentInfo cInfo = OKMFolder.getInstance().getContentInfo(null, repoPath);
 				out.println("<b>Files & directories to export:</b> "+(cInfo.getDocuments() + cInfo.getFolders())+"<br/>");
 				long begin = System.currentTimeMillis();
-				ImpExpStats stats = RepositoryExporter.exportDocuments(null, repoPath, dir, metadata, out,
+				ImpExpStats stats = RepositoryExporter.exportDocuments(null, repoPath, dir, metadata, history, out,
 						new HTMLInfoDecorator((int) cInfo.getDocuments() + (int) cInfo.getFolders()));
 				long end = System.currentTimeMillis();
 				out.println("<hr/>");
