@@ -27,7 +27,7 @@ import java.util.List;
 public class PropertyMetadata {
 	// mix:property_group
 	private String name;
-	private int type;
+	private String type;
 	private boolean multiValue;
 	private String value;
 	private List<String> values = new ArrayList<String>();
@@ -40,11 +40,11 @@ public class PropertyMetadata {
 		this.name = name;
 	}
 	
-	public int getType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(int type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 

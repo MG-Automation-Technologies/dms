@@ -30,15 +30,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMAuth;
+import com.openkm.api.OKMPropertyGroup;
 import com.openkm.api.OKMScripting;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Mail;
 import com.openkm.bean.Note;
+import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.Version;
+import com.openkm.bean.form.CheckBox;
+import com.openkm.bean.form.FormElement;
+import com.openkm.bean.form.Input;
+import com.openkm.bean.form.Option;
+import com.openkm.bean.form.Select;
+import com.openkm.bean.form.SuggestBox;
+import com.openkm.bean.form.TextArea;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
+import com.openkm.core.NoSuchGroupException;
+import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.jcr.JCRUtils;
@@ -65,7 +76,7 @@ public abstract class MetadataAdapter {
 	 * Performs metadata conversion.
 	 */
 	public DocumentMetadata getMetadata(Document doc) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
+			RepositoryException, DatabaseException, IOException, ParseException, NoSuchGroupException {
 		log.debug("getMetadata({})", new Object[] { doc });
 		DocumentMetadata dmd = new DocumentMetadata();
 		dmd.setUuid(doc.getUuid());
@@ -113,7 +124,7 @@ public abstract class MetadataAdapter {
 	 * Performs metadata conversion.
 	 */
 	public FolderMetadata getMetadata(Folder fld) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
+			RepositoryException, DatabaseException, IOException, ParseException, NoSuchGroupException {
 		log.debug("getMetadata({})", new Object[] { fld });
 		FolderMetadata fmd = new FolderMetadata();
 		fmd.setUuid(fld.getUuid());
@@ -157,7 +168,7 @@ public abstract class MetadataAdapter {
 	 * Performs metadata conversion.
 	 */
 	public MailMetadata getMetadata(Mail mail) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
+			RepositoryException, DatabaseException, IOException, ParseException, NoSuchGroupException {
 		log.debug("getMetadata({})", new Object[] { mail });
 		MailMetadata mmd = new MailMetadata();
 		mmd.setUuid(mail.getUuid());
@@ -207,7 +218,7 @@ public abstract class MetadataAdapter {
 	/**
 	 * Performs metadata conversion.
 	 */
-	private VersionMetadata getMetadata(Version ver, String mimeType) {
+	public VersionMetadata getMetadata(Version ver, String mimeType) {
 		log.debug("getMetadata({})", new Object[] { ver });
 		VersionMetadata vmd = new VersionMetadata();
 		vmd.setAuthor(ver.getAuthor());
@@ -250,8 +261,56 @@ public abstract class MetadataAdapter {
 	/**
 	 * Perform specific PropertyGroup extraction. 
 	 */
-	protected abstract List<PropertyGroupMetadata> getPropertyGroupsMetada(String path) throws
-			RepositoryException, DatabaseException;
+	private List<PropertyGroupMetadata> getPropertyGroupsMetada(String path) throws	RepositoryException, 
+			ParseException, NoSuchGroupException, PathNotFoundException, DatabaseException, IOException {
+		List<PropertyGroupMetadata> propGrpMeta = new ArrayList<PropertyGroupMetadata>();
+		OKMPropertyGroup okmPropGrp = OKMPropertyGroup.getInstance();
+		
+		for (PropertyGroup propGrp : okmPropGrp.getGroups(token, path)) {
+			PropertyGroupMetadata pgmd = new PropertyGroupMetadata();
+			List<PropertyMetadata> pmds = new ArrayList<PropertyMetadata>();
+			
+			for (FormElement fe : okmPropGrp.getProperties(token, path, propGrp.getName())) {
+				PropertyMetadata pmd = new PropertyMetadata();
+				pmd.setName(fe.getName());
+				
+				if (fe instanceof Input) {
+					Input i = (Input) fe;
+					pmd.setValue(i.getValue());
+				} else if (fe instanceof SuggestBox) {
+					SuggestBox sb = (SuggestBox) fe;
+					pmd.setValue(sb.getValue());
+				} else if (fe instanceof TextArea) {
+					TextArea ta = (TextArea) fe;
+					pmd.setValue(ta.getValue());
+				} else if (fe instanceof CheckBox) {
+					CheckBox cb = (CheckBox) fe;
+					pmd.setValue(Boolean.toString(cb.getValue()));
+				} else if (fe instanceof Select) {
+					List<String> values = new ArrayList<String>();
+					Select s = (Select) fe;
+					
+					for (Option opt : s.getOptions()) {
+						if (opt.isSelected()) {
+							values.add(opt.getValue());
+						}
+					}
+					
+					pmd.setValues(values);
+					pmd.setMultiValue(Select.TYPE_MULTIPLE.equals(s.getType()));
+				}
+				
+				pmd.setType(fe.getClass().getSimpleName());
+				pmds.add(pmd);
+			}
+			
+			pgmd.setName(propGrp.getName());
+			pgmd.setProperties(pmds);
+			propGrpMeta.add(pgmd);
+		}
+		
+		return propGrpMeta;
+	}
 	
 	/**
 	 * Perform specific document metadata import.

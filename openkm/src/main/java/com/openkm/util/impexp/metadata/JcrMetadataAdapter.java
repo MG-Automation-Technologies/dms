@@ -34,12 +34,9 @@ import java.util.Set;
 import javax.jcr.LoginException;
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
-import javax.jcr.Property;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
-import javax.jcr.nodetype.NodeType;
-import javax.jcr.nodetype.PropertyDefinition;
 
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.jackrabbit.core.NodeImpl;
@@ -52,7 +49,7 @@ import com.openkm.bean.Folder;
 import com.openkm.bean.Note;
 import com.openkm.bean.Notification;
 import com.openkm.bean.Permission;
-import com.openkm.bean.PropertyGroup;
+import com.openkm.bean.form.Select;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
@@ -66,73 +63,11 @@ public class JcrMetadataAdapter extends MetadataAdapter {
 	public JcrMetadataAdapter(String token) {
 		super.token = token;
 	}
-	
-	@Override
-	protected List<PropertyGroupMetadata> getPropertyGroupsMetada(String path) throws 
-			RepositoryException, DatabaseException {
-		log.debug("getPropertyGroupsMetada({})", path);
-		List<PropertyGroupMetadata> ret = new ArrayList<PropertyGroupMetadata>();
-		Session session = null;
-		
-		try {
-			if (token == null) {
-				session = JCRUtils.getSession();
-			} else {
-				session = JcrSessionManager.getInstance().get(token);
-			}
-			
-			Node node = session.getRootNode().getNode(path.substring(1));
-			
-			for (NodeType nt : node.getMixinNodeTypes()) { 
-				if (nt.getName().startsWith(PropertyGroup.GROUP + ":")) {
-					PropertyGroupMetadata pgmd = new PropertyGroupMetadata();
-					List<PropertyMetadata> pmds = new ArrayList<PropertyMetadata>();
-					pgmd.setName(nt.getName());
-					
-					for (PropertyDefinition pd : nt.getDeclaredPropertyDefinitions()) {
-						Property prop = node.getProperty(pd.getName());
-						PropertyMetadata pmd = new PropertyMetadata();
-						pmd.setName(prop.getName());
-						pmd.setType(prop.getType());
-						
-						if (pd.isMultiple()) {
-							Value[] popValues = prop.getValues();
-							List<String> values = new ArrayList<String>();
-							
-							for (Value val : popValues) {
-								values.add(val.getString()); 
-							}
-							
-							pmd.setValues(values);
-							pmd.setMultiValue(true);
-						} else {
-							Value popValue = prop.getValue();
-							pmd.setValue(popValue.getString());
-							pmd.setMultiValue(false);
-						}
-						
-						pmds.add(pmd);
-					}
-					
-					pgmd.setProperties(pmds);
-					ret.add(pgmd);
-				}
-			}
-		} catch (javax.jcr.LoginException e) {
-			throw new RepositoryException(e.getMessage(), e);
-		} catch (javax.jcr.RepositoryException e) {
-			throw new RepositoryException(e.getMessage(), e);
-		} finally {
-			if (token == null) JCRUtils.logout(session);
-		}
-		
-		log.debug("getPropertyGroupsMetada: {}", ret);
-		return ret;
-	}
 
 	@Override
 	public void importWithMetadata(DocumentMetadata dmd, InputStream is) throws ItemExistsException,
 			RepositoryException, DatabaseException, IOException {
+		log.debug("importWithMetadata({}, {})", dmd, is);
 		Session session = null;
 		Node parentNode = null;
 		
@@ -174,7 +109,7 @@ public class JcrMetadataAdapter extends MetadataAdapter {
 			}
 			
 			documentNode.setProperty(com.openkm.bean.Property.KEYWORDS, getValues(dmd.getKeywords()));
-			documentNode.setProperty(com.openkm.bean.Property.CATEGORIES, getValues(dmd.getCategories()));
+			documentNode.setProperty(com.openkm.bean.Property.CATEGORIES, getValues(session, dmd.getCategories()));
 			
 			// Notification
 			if (!dmd.getSubscriptors().isEmpty()) {
@@ -268,8 +203,14 @@ public class JcrMetadataAdapter extends MetadataAdapter {
 				documentNode.addMixin(pgmd.getName());
 				
 				for (PropertyMetadata pmd : pgmd.getProperties()) {
-					if (pmd.isMultiValue()) {
-						documentNode.setProperty(pmd.getName(), getValues(pmd.getValues()));
+					if (Select.class.getSimpleName().equals(pmd.getType())) {
+						String[] values = getValues(pmd.getValues());
+						
+						if (pmd.isMultiValue()) {
+							documentNode.setProperty(pmd.getName(), values);
+						} else {
+							documentNode.setProperty(pmd.getName(), values.length > 0 ? values[0] : "");
+						}
 					} else {
 						documentNode.setProperty(pmd.getName(), pmd.getValue());
 					}
@@ -296,6 +237,7 @@ public class JcrMetadataAdapter extends MetadataAdapter {
 	@Override
 	public void importWithMetadata(FolderMetadata fmd) throws ItemExistsException, RepositoryException,
 			DatabaseException {
+		log.debug("importWithMetadata({})", fmd);
 		Session session = null;
 		Node parentNode = null;
 		
@@ -383,8 +325,14 @@ public class JcrMetadataAdapter extends MetadataAdapter {
 				folderNode.addMixin(pgmd.getName());
 				
 				for (PropertyMetadata pmd : pgmd.getProperties()) {
-					if (pmd.isMultiValue()) {
-						folderNode.setProperty(pmd.getName(), getValues(pmd.getValues()));
+					if (Select.class.getSimpleName().equals(pmd.getType())) {
+						String[] values = getValues(pmd.getValues());
+						
+						if (pmd.isMultiValue()) {
+							folderNode.setProperty(pmd.getName(), values);
+						} else {
+							folderNode.setProperty(pmd.getName(), values.length > 0 ? values[0] : "");
+						}
 					} else {
 						folderNode.setProperty(pmd.getName(), pmd.getValue());
 					}
@@ -426,28 +374,31 @@ public class JcrMetadataAdapter extends MetadataAdapter {
 	 * Convert between multivalue formats.
 	 */
 	private String[] getValues(Collection<String> values) {
-		String[] ret = new String[values.size()];
-		int i = 0;
+		ArrayList<String> ret = new ArrayList<String>();
 		
 		for (String val : values) {
-			ret[i++] = val;
+			ret.add(val);
 		}
 		
-		return ret;
+		return ret.toArray(new String[ret.size()]);
 	}
 	
 	/**
 	 * Convert between multivalue formats.
 	 */
-	private String[] getValues(Set<CategoryMetadata> categories) {
-		String[] ret = new String[categories.size()];
-		int i = 0;
+	private String[] getValues(Session session, Set<CategoryMetadata> categories) {
+		ArrayList<String> ret = new ArrayList<String>();
 		
 		for (CategoryMetadata cmd : categories) {
-			ret[i++] = cmd.getUuid();
+			try {
+				Node categoryNode = session.getRootNode().getNode(cmd.getPath().substring(1));
+				ret.add(categoryNode.getUUID());
+			} catch (javax.jcr.RepositoryException e) {
+				log.warn("Category node not found: {}", cmd.getPath());
+			}
 		}
 		
-		return ret;
+		return ret.toArray(new String[ret.size()]);
 	}
 	
 	/**
