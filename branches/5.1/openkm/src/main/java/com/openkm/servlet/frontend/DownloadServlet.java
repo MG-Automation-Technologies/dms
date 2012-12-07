@@ -43,6 +43,8 @@ import com.openkm.api.OKMRepository;
 import com.openkm.bean.Document;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.NoSuchGroupException;
+import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.OKMException;
@@ -151,7 +153,8 @@ public class DownloadServlet extends OKMHttpServlet {
 	 * Generate a zip file from a repository folder path   
 	 */
 	private void exportZip(String path, OutputStream os) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, ArchiveException, IOException, DatabaseException  {
+			RepositoryException, ArchiveException, ParseException, NoSuchGroupException, IOException, 
+			DatabaseException  {
 		log.debug("exportZip({}, {})", path, os);
 		File tmp = null;
 		
@@ -160,7 +163,7 @@ public class DownloadServlet extends OKMHttpServlet {
 			
 			// Export files
 			StringWriter out = new StringWriter();
-			RepositoryExporter.exportDocuments(null, path, tmp, false, out, new TextInfoDecorator(path));
+			RepositoryExporter.exportDocuments(null, path, tmp, false, false, out, new TextInfoDecorator(path));
 			out.close();
 			
 			// Zip files
@@ -186,7 +189,8 @@ public class DownloadServlet extends OKMHttpServlet {
 	 * Generate a jar file from a repository folder path   
 	 */
 	private void exportJar(String path, OutputStream os) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, ArchiveException, IOException, DatabaseException  {
+			RepositoryException, ArchiveException, ParseException, NoSuchGroupException, IOException,
+			DatabaseException {
 		log.debug("exportJar({}, {})", path, os);
 		File tmp = null;
 		
@@ -195,7 +199,7 @@ public class DownloadServlet extends OKMHttpServlet {
 			
 			// Export files
 			StringWriter out = new StringWriter();
-			RepositoryExporter.exportDocuments(null, path, tmp, false, out, new TextInfoDecorator(path));
+			RepositoryExporter.exportDocuments(null, path, tmp, false, false, out, new TextInfoDecorator(path));
 			out.close();
 			
 			// Jar files
