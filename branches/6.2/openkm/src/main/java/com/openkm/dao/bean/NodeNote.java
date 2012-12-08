@@ -27,10 +27,12 @@ import java.util.Calendar;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "OKM_NODE_NOTE")
@@ -51,7 +53,8 @@ public class NodeNote implements Serializable {
 	@Column(name = "NNT_CREATED")
 	protected Calendar created;
 	
-	@Column(name = "NNT_TEXT", length = 2048)
+	@Column(name = "NNT_TEXT")
+	@Lob @Type(type = "org.hibernate.type.StringClobType")
 	private String text;
 	
 	public String getUuid() {
