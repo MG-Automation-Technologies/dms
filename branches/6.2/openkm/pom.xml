@@ -328,7 +328,7 @@
     <dependency>
       <groupId>org.jbpm.jbpm3</groupId>
       <artifactId>jbpm-jpdl</artifactId>
-      <version>3.3.1.GA.VC4K</version>
+      <version>3.3.1.OKM</version>
       <exclusions>
         <exclusion>
           <groupId>org.hibernate</groupId>
@@ -343,7 +343,7 @@
     <dependency>
       <groupId>org.jbpm.jbpm3</groupId>
       <artifactId>jbpm-identity</artifactId>
-      <version>3.3.1.GA</version>
+      <version>3.3.1.OKM</version>
     </dependency>
     
     <!-- Hibernate -->
