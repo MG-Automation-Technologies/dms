@@ -21,6 +21,7 @@
 
 package com.openkm.servlet.frontend;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -129,10 +130,10 @@ public class NotifyServlet extends OKMRemoteServiceServlet implements OKMNotifyS
 			
 			OKMNotification.getInstance().notify(null, docPath, userNames, message, attachment);
 		} catch (PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
 		} catch (AccessDeniedException e) { 
-			log.warn(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_AccessDenied), e.getMessage());
 		} catch (RepositoryException e) { 
 			log.error(e.getMessage(), e);
@@ -140,6 +141,12 @@ public class NotifyServlet extends OKMRemoteServiceServlet implements OKMNotifyS
 		} catch (PrincipalAdapterException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_PrincipalAdapter), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_Database), e.getMessage());
+		} catch (IOException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_IO), e.getMessage());
 		}
 		
 		log.debug("notify: void");

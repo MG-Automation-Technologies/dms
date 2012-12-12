@@ -21,10 +21,13 @@
 
 package com.openkm.module.db;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.mail.MessagingException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +41,10 @@ import com.openkm.core.RepositoryException;
 import com.openkm.dao.NodeBaseDAO;
 import com.openkm.module.NotificationModule;
 import com.openkm.module.common.CommonNotificationModule;
+import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.spring.PrincipalUtils;
+
+import freemarker.template.TemplateException;
 
 public class DbNotificationModule implements NotificationModule {
 	private static Logger log = LoggerFactory.getLogger(DbNotificationModule.class);
@@ -137,7 +143,8 @@ public class DbNotificationModule implements NotificationModule {
 	
 	@Override
 	public void notify(String token, String nodePath, List<String> users, String message, boolean attachment)
-			throws PathNotFoundException, AccessDeniedException, RepositoryException {
+			throws PathNotFoundException, AccessDeniedException, PrincipalAdapterException, RepositoryException,
+			DatabaseException, IOException {
 		log.debug("notify({}, {}, {}, {})", new Object[] { token, nodePath, users, message });
 		List<String> to = new ArrayList<String>();
 		Authentication auth = null, oldAuth = null;
@@ -167,10 +174,12 @@ public class DbNotificationModule implements NotificationModule {
 				if (!to.isEmpty() && from != null && !from.isEmpty()) {
 					CommonNotificationModule.sendNotification(auth.getName(), nodePath, from, to, message, attachment);
 				} else {
-					log.warn("Can't send notification because 'from' or 'to' is empty");
+					throw new PrincipalAdapterException("Can't send notification because 'from' or 'to' is empty");
 				}
-			} catch (Exception e) {
-				log.error(e.getMessage(), e);
+			} catch (TemplateException e) {
+				throw new IOException("TemplateException: " + e.getMessage(), e);
+			} catch (MessagingException e) {
+				throw new IOException("MessagingException: " + e.getMessage(), e);
 			} finally {
 				if (token != null) {
 					PrincipalUtils.setAuthentication(oldAuth);
