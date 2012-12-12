@@ -121,6 +121,7 @@ public class DbDocumentModule implements DocumentModule {
 	/**
 	 * Used when big files and FileUpload
 	 */
+	@SuppressWarnings("unchecked")
 	public Document create(String token, Document doc, InputStream is, long size, String userId,
 			Ref<FileUploadResponse> fuResponse) throws UnsupportedMimeTypeException, FileSizeExceededException,
 			UserQuotaExceededException, VirusDetectedException, ItemExistsException, PathNotFoundException,
@@ -245,13 +246,15 @@ public class DbDocumentModule implements DocumentModule {
 			env.put(AutomationUtils.PARENT_UUID, parentUuid);
 			env.put(AutomationUtils.PARENT_PATH, parentPath);
 			env.put(AutomationUtils.PARENT_NODE, parentNode);
-			env.put("file", tmp);
-			env.put("document", doc);
+			env.put(AutomationUtils.DOCUMENT_NAME, name);
+			env.put(AutomationUtils.DOCUMENT_MIME_TYPE, mimeType);
+			env.put(AutomationUtils.DOCUMENT_KEYWORDS, keywords);
+			
 			AutomationManager.getInstance().fireEvent(AutomationRule.EVENT_DOCUMENT_CREATE, AutomationRule.AT_PRE, env);
 			parentNode = (NodeBase) env.get(AutomationUtils.PARENT_NODE);
-			name = PathUtils.getName(((Document) env.get("document")).getPath());
-			mimeType = ((Document) env.get("document")).getMimeType();
-			keywords = ((Document) env.get("document")).getKeywords();
+			name = (String) env.get(AutomationUtils.DOCUMENT_NAME);
+			mimeType = (String) env.get(AutomationUtils.DOCUMENT_MIME_TYPE);
+			keywords = (Set<String>) env.get(AutomationUtils.DOCUMENT_KEYWORDS);
 			
 			// Create node
 			NodeDocument docNode = BaseDocumentModule.create(auth.getName(), parentNode, name, doc.getTitle(), mimeType,
