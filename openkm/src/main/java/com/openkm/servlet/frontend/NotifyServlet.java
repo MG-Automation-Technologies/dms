@@ -132,10 +132,10 @@ public class NotifyServlet extends OKMRemoteServiceServlet implements OKMNotifyS
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
-		} catch (AccessDeniedException e) { 
+		} catch (AccessDeniedException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_AccessDenied), e.getMessage());
-		} catch (RepositoryException e) { 
+		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (PrincipalAdapterException e) {
