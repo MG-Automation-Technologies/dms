@@ -43,8 +43,14 @@ public class AutomationUtils {
 	public static final String DOCUMENT_NODE = "documentNode";
 	public static final String DOCUMENT_UUID = "documentUuid";
 	public static final String DOCUMENT_FILE = "documentFile";
+	public static final String DOCUMENT_NAME = "documentName";
+	public static final String DOCUMENT_KEYWORDS = "documentKeywords";
+	public static final String DOCUMENT_MIME_TYPE = "documentMimeType";
 	public static final String FOLDER_NODE = "folderNode";
+	public static final String FOLDER_UUID = "folderUuid";
+	public static final String FOLDER_NAME = "folderName";
 	public static final String MAIL_NODE = "mailNode";
+	public static final String MAIL_UUID = "mailUuid";
 	
 	/**
 	 * getUuid
