@@ -135,7 +135,7 @@ public class DatabaseMetadataUtils {
 	 * Get virtual column string value
 	 */
 	public static String getString(DatabaseMetadataValue value, String column) throws DatabaseException,
-								   IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+			IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		List<DatabaseMetadataType> types = DatabaseMetadataDAO.findAllTypes(value.getTable());
 		
 		for (DatabaseMetadataType emt : types) {
@@ -151,7 +151,7 @@ public class DatabaseMetadataUtils {
 	 * Get virtual column date value
 	 */
 	public static Calendar getDate(DatabaseMetadataValue value, String column) throws DatabaseException,
-								   IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+			IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		List<DatabaseMetadataType> types = DatabaseMetadataDAO.findAllTypes(value.getTable());
 		
 		for (DatabaseMetadataType emt : types) {
