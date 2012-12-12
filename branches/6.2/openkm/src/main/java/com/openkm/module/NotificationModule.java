@@ -21,6 +21,7 @@
 
 package com.openkm.module;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -28,6 +29,7 @@ import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.principal.PrincipalAdapterException;
 
 public interface NotificationModule {
 
@@ -76,5 +78,6 @@ public interface NotificationModule {
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
 	public void notify(String token, String nodePath, List<String> users, String message, boolean attachment)
-			throws PathNotFoundException, AccessDeniedException, RepositoryException;
+			throws PathNotFoundException, AccessDeniedException, PrincipalAdapterException, RepositoryException,
+			DatabaseException, IOException;
 }

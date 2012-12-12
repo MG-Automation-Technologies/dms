@@ -21,6 +21,7 @@
 
 package com.openkm.ws.endpoint;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -37,6 +38,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.ModuleManager;
 import com.openkm.module.NotificationModule;
+import com.openkm.principal.PrincipalAdapterException;
 
 @WebService(name = "OKMNotification", serviceName = "OKMNotification", targetNamespace = "http://ws.openkm.com")
 public class NotificationService {
@@ -79,8 +81,9 @@ public class NotificationService {
 			@WebParam(name = "nodePath") String nodePath,
 			@WebParam(name = "users") String[] users,
 			@WebParam(name = "message") String message,
-			@WebParam(name = "attachment") boolean attachment) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			@WebParam(name = "attachment") boolean attachment) throws PathNotFoundException, 
+			AccessDeniedException, PrincipalAdapterException, RepositoryException,
+			DatabaseException, IOException {
 		log.debug("notify({}, {}, {}, {}, {})", new Object[] { token, nodePath, users, message, attachment });
 		NotificationModule nm = ModuleManager.getNotificationModule();
 		nm.notify(token, nodePath, Arrays.asList(users), message, attachment);
