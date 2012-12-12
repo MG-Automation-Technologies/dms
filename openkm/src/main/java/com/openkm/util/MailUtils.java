@@ -108,6 +108,7 @@ import freemarker.template.TemplateException;
 public class MailUtils {
 	private static Logger log = LoggerFactory.getLogger(MailUtils.class);
 	private static final String NO_SUBJECT = "(Message without subject)";
+	private static final String NO_BODY = "(Message without body)";
 	
 	/**
 	 * Send mail without FROM addresses.
@@ -265,13 +266,13 @@ public class MailUtils {
 			AccessDeniedException, RepositoryException, IOException, DatabaseException {
 		log.debug("create({}, {}, {}, {}, {})", new Object[] { fromAddress, toAddress, subject, text, docPath });
 		Session mailSession = getMailSession();
-		MimeMessage m = new MimeMessage(mailSession);
+		MimeMessage msg = new MimeMessage(mailSession);
 		
 		if (fromAddress != null) {
 			InternetAddress from = new InternetAddress(fromAddress);
-			m.setFrom(from);
+			msg.setFrom(from);
 		} else {
-			m.setFrom();
+			msg.setFrom();
 		}
 		
 		InternetAddress[] to = new InternetAddress[toAddress.size()];
@@ -281,19 +282,8 @@ public class MailUtils {
 			to[i++] = new InternetAddress(it.next());
 		}
 		
-		m.addHeader("charset", "UTF-8");
-		m.setRecipients(Message.RecipientType.TO, to);
-		m.setSubject(subject, "UTF-8");
-		m.setSentDate(new Date());
-		
 		// Build a multiparted mail with HTML and text content for better SPAM behaviour
-		MimeMultipart content = new MimeMultipart("alternative");
-		
-		// Text part
-		MimeBodyPart textPart = new MimeBodyPart();
-		textPart.setText(text.replaceAll("<br/?>", "\n").replaceAll("<[^>]*>", ""));
-		textPart.setHeader("Content-Type", "text/plain");
-		content.addBodyPart(textPart);
+		Multipart content = new MimeMultipart();
 		
 		// HTML Part
 		MimeBodyPart htmlPart = new MimeBodyPart();
@@ -304,8 +294,9 @@ public class MailUtils {
 		htmlContent.append("</head>\n<body>\n");
 		htmlContent.append(text);
 		htmlContent.append("\n</body>\n</html>");
-		htmlPart.setContent(htmlContent.toString(), "text/html; charset=UTF-8");
+		htmlPart.setContent(htmlContent.toString(), "text/html");
 		htmlPart.setHeader("Content-Type", "text/html");
+		htmlPart.setDisposition(Part.INLINE);
 		content.addBodyPart(htmlPart);
 		
 		if (docPath != null) {
@@ -330,6 +321,7 @@ public class MailUtils {
 				
 				docPart.setDataHandler(new DataHandler(source));
 				docPart.setFileName(docName);
+				docPart.setDisposition(Part.ATTACHMENT);
 				content.addBodyPart(docPart);
 			} finally {
 				IOUtils.closeQuietly(is);
@@ -337,9 +329,17 @@ public class MailUtils {
 			}
 		}
 		
-		m.setContent(content);
-		log.debug("create: {}", m);
-		return m;
+		msg.setHeader("MIME-Version", "1.0");
+		msg.setHeader("Content-Type", content.getContentType());
+		msg.addHeader("Charset", "UTF-8");
+		msg.setRecipients(Message.RecipientType.TO, to);
+		msg.setSubject(subject, "UTF-8");
+		msg.setSentDate(new Date());
+		msg.setContent(content);
+		msg.saveChanges();
+		
+		log.debug("create: {}", msg);
+		return msg;
 	}
 	
 	/**
@@ -349,13 +349,13 @@ public class MailUtils {
 			AccessDeniedException, RepositoryException, IOException, DatabaseException {
 		log.debug("create({})", mail);
 		Session mailSession = getMailSession();
-		MimeMessage m = new MimeMessage(mailSession);
+		MimeMessage msg = new MimeMessage(mailSession);
 		
 		if (mail.getFrom() != null) {
 			InternetAddress from = new InternetAddress(mail.getFrom());
-			m.setFrom(from);
+			msg.setFrom(from);
 		} else {
-			m.setFrom();
+			msg.setFrom();
 		}
 		
 		InternetAddress[] to = new InternetAddress[mail.getTo().length];
@@ -365,21 +365,17 @@ public class MailUtils {
 			to[i++] = new InternetAddress(strTo);
 		}
 		
-		m.addHeader("charset", "UTF-8");
-		m.setRecipients(Message.RecipientType.TO, to);
-		m.setSubject(mail.getSubject(), "UTF-8");
-		m.setSentDate(new Date());
-		
 		// Build a multiparted mail with HTML and text content for better SPAM behaviour
-		MimeMultipart content = new MimeMultipart("alternative");
+		MimeMultipart content = new MimeMultipart();
 		
 		if (Mail.MIME_TEXT.equals(mail.getMimeType())) {
 			// Text part
 			MimeBodyPart textPart = new MimeBodyPart();
 			textPart.setText(mail.getContent());
 			textPart.setHeader("Content-Type", "text/plain");
+			textPart.setDisposition(Part.INLINE);
 			content.addBodyPart(textPart);
-			
+		} else if (Mail.MIME_HTML.equals(mail.getMimeType())) {
 			// HTML Part
 			MimeBodyPart htmlPart = new MimeBodyPart();
 			StringBuilder htmlContent = new StringBuilder();
@@ -389,20 +385,9 @@ public class MailUtils {
 			htmlContent.append("</head>\n<body>\n");
 			htmlContent.append(mail.getContent());
 			htmlContent.append("\n</body>\n</html>");
-			htmlPart.setContent(htmlContent.toString(), "text/html; charset=UTF-8");
+			htmlPart.setContent(htmlContent.toString(), "text/html");
 			htmlPart.setHeader("Content-Type", "text/html");
-			content.addBodyPart(htmlPart);
-		} else if (Mail.MIME_HTML.equals(mail.getMimeType())) {
-			// Text part
-			MimeBodyPart textPart = new MimeBodyPart();
-			textPart.setText(mail.getContent().replaceAll("<br/?>", "\n").replaceAll("<[^>]*>", ""));
-			textPart.setHeader("Content-Type", "text/plain");
-			content.addBodyPart(textPart);
-			
-			// HTML Part
-			MimeBodyPart htmlPart = new MimeBodyPart();
-			htmlPart.setContent(mail.getContent(), "text/html; charset=UTF-8");
-			htmlPart.setHeader("Content-Type", "text/html");
+			htmlPart.setDisposition(Part.INLINE);
 			content.addBodyPart(htmlPart);
 		} else {
 			log.warn("Email does not specify content MIME type");
@@ -411,6 +396,7 @@ public class MailUtils {
 			MimeBodyPart textPart = new MimeBodyPart();
 			textPart.setText(mail.getContent());
 			textPart.setHeader("Content-Type", "text/plain");
+			textPart.setDisposition(Part.INLINE);
 			content.addBodyPart(textPart);
 		}
 		
@@ -431,6 +417,7 @@ public class MailUtils {
 				DataSource source = new FileDataSource(tmp.getPath());
 				docPart.setDataHandler(new DataHandler(source));
 				docPart.setFileName(docName);
+				docPart.setDisposition(Part.ATTACHMENT);
 				content.addBodyPart(docPart);
 			} finally {
 				IOUtils.closeQuietly(is);
@@ -438,9 +425,17 @@ public class MailUtils {
 			}
 		}
 		
-		m.setContent(content);
-		log.debug("create: {}", m);
-		return m;
+		msg.setHeader("MIME-Version", "1.0");
+		msg.setHeader("Content-Type", content.getContentType());
+		msg.addHeader("Charset", "UTF-8");
+		msg.setRecipients(Message.RecipientType.TO, to);
+		msg.setSubject(mail.getSubject(), "UTF-8");
+		msg.setSentDate(new Date());
+		msg.setContent(content);
+		msg.saveChanges();
+		
+		log.debug("create: {}", msg);
+		return msg;
 	}
 	
 	/**
@@ -743,7 +738,7 @@ public class MailUtils {
 	private static String getText(Part p) throws MessagingException, IOException {
 		if (p.isMimeType("text/*")) {
 			Object obj = p.getContent();
-			String str = null;
+			String str = NO_BODY;
 			
 			if (obj instanceof InputStream) {
 				InputStream is  = (InputStream) obj;
@@ -753,46 +748,47 @@ public class MailUtils {
 			} else {
 				str = (String) obj;
 			}
-
+			
 			if (p.isMimeType("text/html")) {
 				return "H" + str;
 			} else if (p.isMimeType("text/plain")) {
 				return "T" + str;
 			} else {
-				return "X" + str;
+				// Otherwise let's set as text/plain
+				return "T" + str;
 			}
 		} else if (p.isMimeType("multipart/alternative")) {
-			// prefer plain text over html
+			// prefer html over plain text
 			Multipart mp = (Multipart) p.getContent();
-			String text = null;
+			String text = "T" + NO_BODY;
+			// log.info("Mime Parts: {}", mp.getCount());
 			
 			for (int i = 0; i < mp.getCount(); i++) {
 				Part bp = mp.getBodyPart(i);
 				
 				if (bp.isMimeType("text/plain")) {
-					String s = getText(bp);
-					if (s != null)
-						return s;
+					text = getText(bp);
 				} else if (bp.isMimeType("text/html")) {
-					String s = getText(bp);
-					if (s != null)
-						return s;
+					text = getText(bp);
+					break;
 				} else {
-					return getText(bp);
+					text = getText(bp);
 				}
 			}
+			
 			return text;
 		} else if (p.isMimeType("multipart/*")) {
 			Multipart mp = (Multipart) p.getContent();
 			
 			for (int i = 0; i < mp.getCount(); i++) {
 				String s = getText(mp.getBodyPart(i));
+				
 				if (s != null)
 					return s;
 			}
 		}
 		
-		return null;
+		return "T" + NO_BODY;
 	}
 	
 	/**
