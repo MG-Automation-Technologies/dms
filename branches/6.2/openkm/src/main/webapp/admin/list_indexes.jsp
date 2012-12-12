@@ -58,6 +58,15 @@
           <tr class="fuzzy">
             <td colspan="2" align="right">
               Max: ${max}
+              &nbsp;
+              <c:choose>
+                <c:when test="${id > 0}">
+                  <a href="ListIndexes?id=0&showTerms=${showTerms}"><img src="img/action/first.png"/></a>
+                </c:when>
+                <c:otherwise>
+                  <img src="img/action/first_disabled.png"/>
+                </c:otherwise>
+              </c:choose>
               <c:choose>
                 <c:when test="${prev}">
                   <a href="ListIndexes?id=${id - 1}&showTerms=${showTerms}"><img src="img/action/previous.png"/></a>
@@ -72,6 +81,14 @@
                 </c:when>
                 <c:otherwise>
                   <img src="img/action/next_disabled.png"/>
+                </c:otherwise>
+              </c:choose>
+              <c:choose>
+                <c:when test="${id < max}">
+                  <a href="ListIndexes?id=${max}&showTerms=${showTerms}"><img src="img/action/last.png"/></a>
+                </c:when>
+                <c:otherwise>
+                  <img src="img/action/last_disabled.png"/>
                 </c:otherwise>
               </c:choose>
             </td>
