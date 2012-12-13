@@ -56,6 +56,7 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 		updateSessionManager();
 		String error = "";
 		String pathErrors = "";
+		
 		for (String path : paths) {
 			try {
 				if (OKMDocument.getInstance().isValid(null, path)) {
@@ -103,6 +104,7 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 				pathErrors += "\n" + path;
 			}
 		}
+		
 		if (!error.equals("")) {
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMassiveService, ErrorCode.CAUSE_General),
 					pathErrors + "\n\n" + error);
@@ -115,6 +117,7 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 		updateSessionManager();
 		String error = "";
 		String pathErrors = "";
+		
 		for (String path : paths) {
 			try {
 				if (OKMDocument.getInstance().isValid(null, path)) {
@@ -152,8 +155,13 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 				log.error(e.getMessage(), e);
 				error += "\n" + e.getMessage();
 				pathErrors += "\n" + path;
+			} catch (AutomationException e) {
+				log.error(e.getMessage(), e);
+				error += "\n" + e.getMessage();
+				pathErrors += "\n" + path;
 			}
 		}
+		
 		if (!error.equals("")) {
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMassiveService, ErrorCode.CAUSE_General),
 					pathErrors + "\n\n" + error);
@@ -166,6 +174,7 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 		updateSessionManager();
 		String error = "";
 		String pathErrors = "";
+		
 		for (String path : paths) {
 			try {
 				if (OKMDocument.getInstance().isValid(null, path)) {
@@ -201,6 +210,7 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 				pathErrors += "\n" + path;
 			}
 		}
+		
 		if (!error.equals("")) {
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMassiveService, ErrorCode.CAUSE_General),
 					pathErrors + "\n\n" + error);
