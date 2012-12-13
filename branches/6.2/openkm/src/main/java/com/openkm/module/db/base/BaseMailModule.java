@@ -36,7 +36,6 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.automation.AutomationException;
 import com.openkm.bean.Document;
-import com.openkm.bean.ExtendedAttributes;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Mail;
 import com.openkm.bean.Note;

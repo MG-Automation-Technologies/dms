@@ -193,7 +193,7 @@ public class BaseFolderModule {
 			
 			for (NodeDocument nDocument : NodeDocumentDAO.getInstance().findByParent(srcFldNode.getUuid())) {
 				String newPath = NodeBaseDAO.getInstance().getPathFromUuid(newFolder.getUuid());
-				BaseDocumentModule.copy(user, nDocument, newPath, newFolder);
+				BaseDocumentModule.copy(user, nDocument, newPath, newFolder, nDocument.getName());
 			}
 			
 			for (NodeMail nMail : NodeMailDAO.getInstance().findByParent(srcFldNode.getUuid())) {
