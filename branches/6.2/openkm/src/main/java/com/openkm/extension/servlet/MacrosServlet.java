@@ -186,7 +186,8 @@ public class MacrosServlet extends OKMRemoteServiceServlet implements OKMMacrosS
 	 * moveFolderContents
 	 */
 	private void moveFolderContents(String fldPath, String dstPathToMove) throws PathNotFoundException, RepositoryException,
-			DatabaseException, ItemExistsException, AccessDeniedException, LockException, ExtensionException {
+			DatabaseException, ItemExistsException, AccessDeniedException, LockException, ExtensionException,
+			AutomationException {
 		// Move documents
 		for (Document doc : OKMDocument.getInstance().getChildren(null, fldPath)) {
 			OKMDocument.getInstance().move(null, doc.getPath(), dstPathToMove);
