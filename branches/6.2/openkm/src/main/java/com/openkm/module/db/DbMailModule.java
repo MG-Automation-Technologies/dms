@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 
+import com.openkm.automation.AutomationException;
 import com.openkm.bean.Mail;
 import com.openkm.bean.Repository;
 import com.openkm.core.AccessDeniedException;
@@ -337,8 +338,43 @@ public class DbMailModule implements MailModule {
 
 	@Override
 	public void copy(String token, String mailPath, String dstPath) throws PathNotFoundException, ItemExistsException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException, UserQuotaExceededException {
-		// TODO Auto-generated method stub
+			AccessDeniedException, RepositoryException, IOException, AutomationException, DatabaseException,
+			UserQuotaExceededException {
+		log.debug("copy({}, {}, {}, {})", new Object[] { token, mailPath, dstPath });
+		Authentication auth = null, oldAuth = null;
+		
+		if (Config.SYSTEM_READONLY) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
+		
+		try {
+			if (token == null) {
+				auth = PrincipalUtils.getAuthentication();
+			} else {
+				oldAuth = PrincipalUtils.getAuthentication();
+				auth = PrincipalUtils.getAuthenticationByToken(token);
+			}
+			
+			String mailUuid = NodeBaseDAO.getInstance().getUuidFromPath(mailPath);
+			String dstUuid = NodeBaseDAO.getInstance().getUuidFromPath(dstPath);
+			NodeMail srcMailNode = NodeMailDAO.getInstance().findByPk(mailUuid);
+			NodeFolder dstFldNode = NodeFolderDAO.getInstance().findByPk(dstUuid);
+			NodeMail newMailNode = BaseMailModule.copy(auth.getName(), srcMailNode, dstFldNode);
+			
+			// Check subscriptions
+			BaseNotificationModule.checkSubscriptions(dstFldNode, auth.getName(), "COPY_MAIL", null);
+			
+			// Activity log
+			UserActivity.log(auth.getName(), "COPY_MAIL", newMailNode.getUuid(), mailPath, dstPath);
+		} catch (DatabaseException e) {
+			throw e;
+		} finally {
+			if (token != null) {
+				PrincipalUtils.setAuthentication(oldAuth);
+			}
+		}
+
+		log.debug("copy: void");
 	}
 
 	@Override

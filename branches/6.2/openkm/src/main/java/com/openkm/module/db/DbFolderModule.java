@@ -362,7 +362,8 @@ public class DbFolderModule implements FolderModule {
 	
 	@Override
 	public void copy(String token, String fldPath, String dstPath) throws PathNotFoundException, ItemExistsException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException, UserQuotaExceededException {
+			AccessDeniedException, RepositoryException, IOException, AutomationException, DatabaseException,
+			UserQuotaExceededException {
 		log.debug("copy({}, {}, {})", new Object[] { token, fldPath, dstPath });
 		Authentication auth = null, oldAuth = null;
 		
