@@ -36,6 +36,7 @@ import com.openkm.dao.bean.NodeMail;
  *
  */
 public class AutomationUtils {
+	public static final String UPLOAD_RESPONSE = "response";
 	public static final String PARENT_UUID = "parentUuid";
 	public static final String PARENT_PATH = "parentPath";
 	public static final String PARENT_NODE = "parentNode";
