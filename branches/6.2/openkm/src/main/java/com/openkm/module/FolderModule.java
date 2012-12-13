@@ -130,7 +130,8 @@ public interface FolderModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void copy(String token, String fldPath, String dstPath) throws PathNotFoundException, ItemExistsException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException, UserQuotaExceededException;
+			AccessDeniedException, RepositoryException, IOException, AutomationException, DatabaseException,
+			UserQuotaExceededException;
 	
 	/**
 	 * Retrieve a list of child folders from an existing one.

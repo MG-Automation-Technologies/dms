@@ -358,7 +358,7 @@ public interface DocumentModule {
 	 */
 	public void copy(String token, String docPath, String dstPath) throws ItemExistsException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, IOException, DatabaseException, UserQuotaExceededException,
-			ExtensionException;
+			ExtensionException, AutomationException;
 	
 	/**
 	 * Revert the document to an specific previous version.
