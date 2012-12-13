@@ -34,7 +34,9 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.automation.AutomationException;
 import com.openkm.bean.Document;
+import com.openkm.bean.ExtendedAttributes;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Mail;
 import com.openkm.bean.Note;
@@ -203,12 +205,29 @@ public class BaseMailModule {
 	/**
 	 * Is invoked from DbDocumentNode and DbFolderNode.
 	 */
-	public static NodeMail copy(String user, NodeMail srcMailNode, NodeFolder dstFldNode) throws ItemExistsException,
-			UserQuotaExceededException, DatabaseException, IOException {
-		log.debug("copy({}, {}, {})", new Object[] { user, srcMailNode, dstFldNode });
+	public static NodeMail copy(String user, NodeMail srcMailNode, NodeFolder dstFldNode) throws
+			ItemExistsException, UserQuotaExceededException, PathNotFoundException, AccessDeniedException,
+			AutomationException, DatabaseException, IOException {
+		log.debug("copy({}, {}, {}, {})", new Object[] { user, srcMailNode, dstFldNode });
 		NodeMail newMail = null;
 		
-		// TODO Implementar
+		try {
+			String[] reply = (String[]) srcMailNode.getReply().toArray(new String[srcMailNode.getReply().size()]);
+			String[] to = (String[]) srcMailNode.getTo().toArray(new String[srcMailNode.getTo().size()]);
+			String[] cc = (String[]) srcMailNode.getCc().toArray(new String[srcMailNode.getCc().size()]);
+			String[] bcc = (String[]) srcMailNode.getBcc().toArray(new String[srcMailNode.getBcc().size()]);
+			
+			newMail = create(user, dstFldNode, srcMailNode.getName(), srcMailNode.getSize(), srcMailNode.getFrom(),
+					reply, to, cc, bcc, srcMailNode.getSentDate(), srcMailNode.getReceivedDate(),
+					srcMailNode.getSubject(), srcMailNode.getContent(), srcMailNode.getMimeType());
+			
+			// Add attachments
+			for (NodeDocument nDocument : NodeDocumentDAO.getInstance().findByParent(srcMailNode.getUuid())) {
+				String newPath = NodeBaseDAO.getInstance().getPathFromUuid(newMail.getUuid());
+				BaseDocumentModule.copy(user, nDocument, newPath, newMail, nDocument.getName());
+			}
+		} finally {
+		}
 		
 		log.debug("copy: {}", newMail);
 		return newMail;
