@@ -297,7 +297,7 @@ public class DocumentService {
 			@WebParam(name = "docPath") String docPath, 
 			@WebParam(name = "fldPath") String fldPath) throws LockException, PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException,
-			ExtensionException {
+			ExtensionException, AutomationException {
 		log.debug("move({}, {}, {})", new Object[] { token, docPath, fldPath });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.move(token, docPath, fldPath);
