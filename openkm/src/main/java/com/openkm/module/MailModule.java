@@ -24,6 +24,7 @@ package com.openkm.module;
 import java.io.IOException;
 import java.util.List;
 
+import com.openkm.automation.AutomationException;
 import com.openkm.bean.Mail;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
@@ -137,8 +138,8 @@ public interface MailModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void copy(String token, String mailPath, String dstPath) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException, IOException, DatabaseException, 
-			UserQuotaExceededException;
+			ItemExistsException, AccessDeniedException, RepositoryException, IOException, AutomationException,
+			DatabaseException, UserQuotaExceededException;
 
 	/**
 	 * Retrieve a list of child mails from an existing folder.
