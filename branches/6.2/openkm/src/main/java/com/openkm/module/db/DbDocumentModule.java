@@ -121,7 +121,6 @@ public class DbDocumentModule implements DocumentModule {
 	/**
 	 * Used when big files and FileUpload
 	 */
-	@SuppressWarnings("unchecked")
 	public Document create(String token, Document doc, InputStream is, long size, String userId,
 			Ref<FileUploadResponse> fuResponse) throws UnsupportedMimeTypeException, FileSizeExceededException,
 			UserQuotaExceededException, VirusDetectedException, ItemExistsException, PathNotFoundException,
@@ -242,33 +241,20 @@ public class DbDocumentModule implements DocumentModule {
 			NodeBase parentNode = NodeBaseDAO.getInstance().findByPk(parentUuid);
 			
 			// AUTOMATION - PRE
-			Map<String, Object> env = new HashMap<String, Object>();
-			env.put(AutomationUtils.PARENT_UUID, parentUuid);
-			env.put(AutomationUtils.PARENT_PATH, parentPath);
-			env.put(AutomationUtils.PARENT_NODE, parentNode);
-			env.put(AutomationUtils.DOCUMENT_NAME, name);
-			env.put(AutomationUtils.DOCUMENT_MIME_TYPE, mimeType);
-			env.put(AutomationUtils.DOCUMENT_KEYWORDS, keywords);
-			
-			AutomationManager.getInstance().fireEvent(AutomationRule.EVENT_DOCUMENT_CREATE, AutomationRule.AT_PRE, env);
-			parentNode = (NodeBase) env.get(AutomationUtils.PARENT_NODE);
-			name = (String) env.get(AutomationUtils.DOCUMENT_NAME);
-			mimeType = (String) env.get(AutomationUtils.DOCUMENT_MIME_TYPE);
-			keywords = (Set<String>) env.get(AutomationUtils.DOCUMENT_KEYWORDS);
+			// INSIDE BaseDocumentModule.create
 			
 			// Create node
-			NodeDocument docNode = BaseDocumentModule.create(auth.getName(), parentNode, name, doc.getTitle(), mimeType,
-					keywords, is, size);
+			NodeDocument docNode = BaseDocumentModule.create(auth.getName(), parentPath, parentNode, name, 
+					doc.getTitle(), mimeType, is, size, keywords, new HashSet<String>(), fuResponse);
 			
 			// AUTOMATION - POST
-			env.put(AutomationUtils.DOCUMENT_NODE, docNode);
-			AutomationManager.getInstance().fireEvent(AutomationRule.EVENT_DOCUMENT_CREATE, AutomationRule.AT_POST, env);
+			// INSIDE BaseDocumentModule.create
 			
 			// Set returned folder properties
 			newDocument = BaseDocumentModule.getProperties(auth.getName(), docNode);
 			
 			// Setting wizard properties
-			fuResponse.set((FileUploadResponse) env.get("response"));
+			// INSIDE BaseDocumentModule.create
 			
 			if (fuResponse.get() == null) {
 				fuResponse.set(new FileUploadResponse());
@@ -1046,7 +1032,8 @@ public class DbDocumentModule implements DocumentModule {
 	
 	@Override
 	public void move(String token, String docPath, String dstPath) throws PathNotFoundException, ItemExistsException,
-			AccessDeniedException, LockException, RepositoryException, DatabaseException, ExtensionException {
+			AccessDeniedException, LockException, RepositoryException, DatabaseException, ExtensionException,
+			AutomationException {
 		log.debug("move({}, {}, {})", new Object[] { token, docPath, dstPath });
 		Authentication auth = null, oldAuth = null;
 		
@@ -1064,7 +1051,17 @@ public class DbDocumentModule implements DocumentModule {
 			
 			String docUuid = NodeBaseDAO.getInstance().getUuidFromPath(docPath);
 			String dstUuid = NodeBaseDAO.getInstance().getUuidFromPath(dstPath);
+			
+			// AUTOMATION - PRE
+			Map<String, Object> env = new HashMap<String, Object>();
+			env.put(AutomationUtils.DOCUMENT_UUID, docUuid);
+			env.put(AutomationUtils.FOLDER_UUID, dstUuid);
+			AutomationManager.getInstance().fireEvent(AutomationRule.EVENT_DOCUMENT_MOVE, AutomationRule.AT_PRE, env);
+			
 			NodeDocumentDAO.getInstance().move(docUuid, dstUuid);
+			
+			// AUTOMATION - POST
+			AutomationManager.getInstance().fireEvent(AutomationRule.EVENT_DOCUMENT_MOVE, AutomationRule.AT_POST, env);
 			
 			// Activity log
 			UserActivity.log(auth.getName(), "MOVE_DOCUMENT", docUuid, docPath, dstPath);
@@ -1081,7 +1078,8 @@ public class DbDocumentModule implements DocumentModule {
 	
 	@Override
 	public void copy(String token, String docPath, String dstPath) throws ItemExistsException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException, UserQuotaExceededException {
+			AccessDeniedException, RepositoryException, IOException, AutomationException, DatabaseException,
+			UserQuotaExceededException {
 		log.debug("copy({}, {}, {})", new Object[] { token, docPath, dstPath });
 		Authentication auth = null, oldAuth = null;
 		
@@ -1097,11 +1095,14 @@ public class DbDocumentModule implements DocumentModule {
 				auth = PrincipalUtils.getAuthenticationByToken(token);
 			}
 			
+			// Escape dangerous chars in name
+			String docName = PathUtils.escape(PathUtils.getName(docPath));
+			
 			String docUuid = NodeBaseDAO.getInstance().getUuidFromPath(docPath);
 			String dstUuid = NodeBaseDAO.getInstance().getUuidFromPath(dstPath);
 			NodeDocument srcDocNode = NodeDocumentDAO.getInstance().findByPk(docUuid);
 			NodeFolder dstFldNode = NodeFolderDAO.getInstance().findByPk(dstUuid);
-			NodeDocument newDocNode = BaseDocumentModule.copy(auth.getName(), srcDocNode, dstFldNode);
+			NodeDocument newDocNode = BaseDocumentModule.copy(auth.getName(), srcDocNode, dstPath, dstFldNode, docName);
 			
 			// Check subscriptions
 			BaseNotificationModule.checkSubscriptions(dstFldNode, auth.getName(), "COPY_DOCUMENT", null);
