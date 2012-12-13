@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
 import com.openkm.api.OKMMail;
+import com.openkm.automation.AutomationException;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
@@ -93,6 +94,10 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 				error += "\n" + e.getMessage();
 				pathErrors += "\n" + path;
 			} catch (ExtensionException e) {
+				log.error(e.getMessage(), e);
+				error += "\n" + e.getMessage();
+				pathErrors += "\n" + path;
+			} catch (AutomationException e) {
 				log.error(e.getMessage(), e);
 				error += "\n" + e.getMessage();
 				pathErrors += "\n" + path;
