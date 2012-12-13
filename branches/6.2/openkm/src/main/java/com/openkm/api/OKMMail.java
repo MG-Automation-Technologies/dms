@@ -27,6 +27,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.automation.AutomationException;
 import com.openkm.bean.Mail;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
@@ -113,8 +114,8 @@ public class OKMMail implements MailModule {
 
 	@Override
 	public void copy(String token, String mailPath, String dstPath) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException, IOException, DatabaseException, 
-			UserQuotaExceededException {
+			ItemExistsException, AccessDeniedException, RepositoryException, IOException, AutomationException,
+			DatabaseException, UserQuotaExceededException {
 		log.debug("copy({}, {}, {})", new Object[] { token, mailPath, dstPath });
 		MailModule mm = ModuleManager.getMailModule();
 		mm.copy(token, mailPath, dstPath);
