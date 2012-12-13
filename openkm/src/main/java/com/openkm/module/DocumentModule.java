@@ -343,7 +343,8 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void move(String token, String docPath, String fldPath) throws PathNotFoundException, ItemExistsException,
-			AccessDeniedException, LockException, RepositoryException, DatabaseException, ExtensionException;
+			AccessDeniedException, LockException, RepositoryException, DatabaseException, ExtensionException,
+			AutomationException;
 	
 	/**
 	 * Copy a document to another location in the repository.
