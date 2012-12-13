@@ -35,6 +35,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.automation.AutomationException;
 import com.openkm.bean.ContentInfo;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Note;
@@ -177,7 +178,7 @@ public class BaseFolderModule {
 	 */
 	public static NodeFolder copy(String user, NodeFolder srcFldNode, NodeFolder dstFldNode)
 			throws ItemExistsException, UserQuotaExceededException, PathNotFoundException, AccessDeniedException,
-			DatabaseException, IOException {
+			AutomationException, DatabaseException, IOException {
 		log.debug("copy({}, {}, {})", new Object[] { user, srcFldNode, dstFldNode });
 		InputStream is = null;
 		NodeFolder newFolder = null;
@@ -191,7 +192,8 @@ public class BaseFolderModule {
 			}
 			
 			for (NodeDocument nDocument : NodeDocumentDAO.getInstance().findByParent(srcFldNode.getUuid())) {
-				BaseDocumentModule.copy(user, nDocument, newFolder);
+				String newPath = NodeBaseDAO.getInstance().getPathFromUuid(newFolder.getUuid());
+				BaseDocumentModule.copy(user, nDocument, newPath, newFolder);
 			}
 			
 			for (NodeMail nMail : NodeMailDAO.getInstance().findByParent(srcFldNode.getUuid())) {
