@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,11 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.automation.AutomationException;
+import com.openkm.automation.AutomationManager;
+import com.openkm.automation.AutomationUtils;
 import com.openkm.bean.Document;
+import com.openkm.bean.FileUploadResponse;
 import com.openkm.bean.Folder;
 import com.openkm.bean.LockInfo;
 import com.openkm.bean.Note;
@@ -46,6 +51,7 @@ import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.PathNotFoundException;
+import com.openkm.core.Ref;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.dao.NodeBaseDAO;
 import com.openkm.dao.NodeDocumentDAO;
@@ -53,6 +59,7 @@ import com.openkm.dao.NodeDocumentVersionDAO;
 import com.openkm.dao.NodeFolderDAO;
 import com.openkm.dao.NodeNoteDAO;
 import com.openkm.dao.UserConfigDAO;
+import com.openkm.dao.bean.AutomationRule;
 import com.openkm.dao.bean.NodeBase;
 import com.openkm.dao.bean.NodeDocument;
 import com.openkm.dao.bean.NodeDocumentVersion;
@@ -75,9 +82,12 @@ public class BaseDocumentModule {
 	/**
 	 * Create a new document
 	 */
-	public static NodeDocument create(String user, NodeBase parentNode, String name, String title, String mimeType,
-			Set<String> keywords, InputStream is, long size) throws PathNotFoundException, AccessDeniedException,
-			ItemExistsException, UserQuotaExceededException, DatabaseException, IOException {
+	@SuppressWarnings("unchecked")
+	public static NodeDocument create(String user, String parentPath, NodeBase parentNode, String name, String title,
+			String mimeType, InputStream is, long size, Set<String> keywords, Set<String> categories,
+			Ref<FileUploadResponse> fuResponse)
+			throws PathNotFoundException, AccessDeniedException, ItemExistsException, UserQuotaExceededException,
+			AutomationException, DatabaseException, IOException {
 		
 		// Check user quota
 		UserConfig uc = UserConfigDAO.findByPk(user);
@@ -99,6 +109,21 @@ public class BaseDocumentModule {
 			}
 		}
 		
+		// AUTOMATION - PRE
+		Map<String, Object> env = new HashMap<String, Object>();
+		env.put(AutomationUtils.PARENT_UUID, parentNode.getUuid());
+		env.put(AutomationUtils.PARENT_PATH, parentPath);
+		env.put(AutomationUtils.PARENT_NODE, parentNode);
+		env.put(AutomationUtils.DOCUMENT_NAME, name);
+		env.put(AutomationUtils.DOCUMENT_MIME_TYPE, mimeType);
+		env.put(AutomationUtils.DOCUMENT_KEYWORDS, keywords);
+		
+		AutomationManager.getInstance().fireEvent(AutomationRule.EVENT_DOCUMENT_CREATE, AutomationRule.AT_PRE, env);
+		parentNode = (NodeBase) env.get(AutomationUtils.PARENT_NODE);
+		name = (String) env.get(AutomationUtils.DOCUMENT_NAME);
+		mimeType = (String) env.get(AutomationUtils.DOCUMENT_MIME_TYPE);
+		keywords = (Set<String>) env.get(AutomationUtils.DOCUMENT_KEYWORDS);
+		
 		// Create and add a new document node
 		NodeDocument documentNode = new NodeDocument();
 		documentNode.setUuid(UUID.randomUUID().toString());
@@ -110,7 +135,6 @@ public class BaseDocumentModule {
 		documentNode.setMimeType(mimeType);
 		documentNode.setCreated(Calendar.getInstance());
 		documentNode.setLastModified(documentNode.getCreated());
-		documentNode.setKeywords(keywords);
 		
 		// Get parent node auth info
 		Map<String, Integer> userPerms = parentNode.getUserPermissions();
@@ -128,11 +152,18 @@ public class BaseDocumentModule {
 		
 		NodeDocumentDAO.getInstance().create(documentNode, is, size);
 		
+		// AUTOMATION - POST
+		env.put(AutomationUtils.DOCUMENT_NODE, documentNode);
+		AutomationManager.getInstance().fireEvent(AutomationRule.EVENT_DOCUMENT_CREATE, AutomationRule.AT_POST, env);
+		
 		// Update user items size
 		if (Config.USER_ITEM_CACHE) {
 			UserItemsManager.incSize(user, size);
 			UserItemsManager.incDocuments(user, 1);
 		}
+		
+		// Setting wizard properties
+		fuResponse.set((FileUploadResponse) env.get(AutomationUtils.UPLOAD_RESPONSE));
 		
 		return documentNode;
 	}
@@ -250,18 +281,22 @@ public class BaseDocumentModule {
 	/**
 	 * Is invoked from DbDocumentNode and DbFolderNode.
 	 */
-	public static NodeDocument copy(String user, NodeDocument srcDocNode, NodeFolder dstFldNode)
-			throws PathNotFoundException, AccessDeniedException, ItemExistsException, UserQuotaExceededException,
-			DatabaseException, IOException {
-		log.debug("copy({}, {}, {})", new Object[] { user, srcDocNode, dstFldNode });
+	public static NodeDocument copy(String user, NodeDocument srcDocNode, String dstPath, NodeBase dstNode,
+			String docName) throws PathNotFoundException, AccessDeniedException, ItemExistsException,
+			UserQuotaExceededException, AutomationException, DatabaseException, IOException {
+		log.debug("copy({}, {}, {}, {}, {})", new Object[] { user, srcDocNode, dstNode, docName });
 		InputStream is = null;
 		NodeDocument newDocument = null;
 		
 		try {
+			Set<String> keywords = new HashSet<String>();
+			Set<String> categories = new HashSet<String>();
+			
+			Ref<FileUploadResponse> fuResponse = new Ref<FileUploadResponse>(new FileUploadResponse());
 			is = NodeDocumentVersionDAO.getInstance().getCurrentContentByParent(srcDocNode.getUuid());
 			NodeDocumentVersion nDocVer = NodeDocumentVersionDAO.getInstance().findCurrentVersion(srcDocNode.getUuid());
-			newDocument = create(user, dstFldNode, srcDocNode.getName(), srcDocNode.getTitle(),
-					srcDocNode.getMimeType(), srcDocNode.getKeywords(), is, nDocVer.getSize());
+			newDocument = create(user, dstPath, dstNode, docName, srcDocNode.getTitle(), srcDocNode.getMimeType(), is,
+					nDocVer.getSize(), keywords, categories, fuResponse);
 		} finally {
 			IOUtils.closeQuietly(is);
 		}
