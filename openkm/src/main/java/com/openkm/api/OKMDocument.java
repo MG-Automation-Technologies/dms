@@ -295,7 +295,7 @@ public class OKMDocument implements DocumentModule {
 	@Override
 	public void copy(String token, String docPath, String destPath) throws ItemExistsException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, IOException, DatabaseException, UserQuotaExceededException,
-			ExtensionException {
+			ExtensionException, AutomationException {
 		log.debug("copy({}, {}, {})", new Object[] { token, docPath, destPath });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.copy(token, docPath, destPath);

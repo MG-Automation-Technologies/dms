@@ -125,7 +125,8 @@ public class OKMFolder implements FolderModule {
 	
 	@Override
 	public void copy(String token, String fldPath, String dstPath) throws PathNotFoundException, ItemExistsException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException, UserQuotaExceededException {
+			AccessDeniedException, RepositoryException, IOException, AutomationException, DatabaseException,
+			UserQuotaExceededException {
 		log.debug("copy({}, {}, {})", new Object[] { token, fldPath, dstPath });
 		FolderModule fm = ModuleManager.getFolderModule();
 		fm.copy(token, fldPath, dstPath);
