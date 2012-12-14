@@ -52,7 +52,7 @@ public class Cron extends TimerTask {
 						CronTabExpression cte = CronTabExpression.parse(ct.getExpression());
 						
 						if (cte.matches(cal)) {
-							log.info("Id: {}, Name: {}, Mime: {}", new Object[] {ct.getId(), ct.getName(),
+							log.debug("Id: {}, Name: {}, Mime: {}", new Object[] {ct.getId(), ct.getName(),
 									ct.getFileMime()});
 							
 							if (CronTab.BSH.equals(ct.getFileMime())) {
