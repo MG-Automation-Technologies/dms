@@ -48,7 +48,7 @@
   <properties>
     <!-- Using this GWT version -->
     <gwt.version>2.4.0</gwt.version>
-
+	
     <!-- Using this Jackrabbit version -->
     <jcr.version>1.6.5</jcr.version>
     
