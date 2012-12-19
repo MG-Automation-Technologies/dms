@@ -1454,6 +1454,7 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 			documentService.cancelCheckout(table.getDocument().getPath(), callbackCancelCheckOut);
 		}
 	}
+	
 	/**
 	 * Document massive cancel checkout
 	 * @author danilo
