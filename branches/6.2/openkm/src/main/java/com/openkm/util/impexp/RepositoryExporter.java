@@ -155,6 +155,7 @@ public class RepositoryExporter {
 			Document docChild = it.next();
 			path = fsPath.getPath() + File.separator + PathUtils.getName(docChild.getPath()).replace(':', '_');
 			ImpExpStats docstats = exportDocument(token, path, docChild.getPath(), metadata, history, out, deco);
+			
 			// Stats
 			stats.setSize(stats.getSize() + docstats.getSize());
 			stats.setDocuments(stats.getDocuments() + docstats.getDocuments());
