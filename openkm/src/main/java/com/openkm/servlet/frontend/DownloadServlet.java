@@ -93,8 +93,10 @@ public class DownloadServlet extends OKMHttpServlet {
 			if (export) {
 				if (exportZip) {
 					String fileName;
+					
 					// Get document
 					FileOutputStream os = new FileOutputStream(tmp);
+					
 					if (size == 0) {
 						exportZip(path, os);
 						fileName = PathUtils.getName(path) + ".zip";
@@ -102,14 +104,18 @@ public class DownloadServlet extends OKMHttpServlet {
 						// export into a zip file multiple documents
 						List<String> paths = new ArrayList<String>();
 						String iid;
+						
 						for (int i = 0; i < size; ++i) {
 							iid = request.getParameter("id" + i);
+							
 							// if there is some missing number try the next one
 							if (iid == null) {
 								continue;
 							}
+							
 							paths.add(new String(iid.getBytes("ISO-8859-1"), "UTF-8"));
 						}
+						
 						fileName = PathUtils.getName(PathUtils.getParent(paths.get(0)));
 						exportZip(paths, os, fileName);
 						fileName += ".zip";
