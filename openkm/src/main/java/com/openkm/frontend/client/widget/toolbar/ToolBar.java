@@ -406,15 +406,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.cancelCheckoutOption) {
-				GWTDocument doc = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
-				if (Main.get().mainPanel.desktop.browser.fileBrowser.isMassive()) {
-					executeCancelCheckout();
-				} else if (doc.getLockInfo().getOwner().equals(Main.get().workspaceUserProperties.getUser().getId())) {
-					executeCancelCheckout();
-				} else if (Main.get().workspaceUserProperties.getWorkspace().isAdminRole()) {
-					Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_FORCE_CANCEL_CHECKOUT);
-					Main.get().confirmPopup.show();
-				}
+				executeCancelCheckout();
 			}
 		}
 	};
@@ -423,17 +415,16 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Cancel the check out
 	 */
 	public void executeCancelCheckout() {
-		if (Main.get().mainPanel.bottomPanel.userInfo.isQuotaExceed()) {
-			Main.get().showError("UserQuotaExceed",
-					new OKMException("OKM-" + ErrorCode.ORIGIN_OKMBrowser + ErrorCode.CAUSE_QuotaExceed, ""));
-		} else {
-			if (Main.get().mainPanel.desktop.browser.fileBrowser.isMassive()) {
-				
-				Main.get().mainPanel.desktop.browser.fileBrowser.massiveCancelCheckout();
-			} else {
-				Main.get().mainPanel.desktop.browser.fileBrowser.cancelCheckout();
-			}
+		GWTDocument doc = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
+		if (Main.get().mainPanel.desktop.browser.fileBrowser.isMassive()) {
+			Main.get().mainPanel.desktop.browser.fileBrowser.massiveCancelCheckout();
 			fireEvent(HasToolBarEvent.EXECUTE_CANCEL_CHECKOUT);
+		} else if (doc.getLockInfo().getOwner().equals(Main.get().workspaceUserProperties.getUser().getId())) {
+			Main.get().mainPanel.desktop.browser.fileBrowser.cancelCheckout();
+			fireEvent(HasToolBarEvent.EXECUTE_CANCEL_CHECKOUT);
+		} else if (Main.get().workspaceUserProperties.getWorkspace().isAdminRole()) {
+			Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_FORCE_CANCEL_CHECKOUT);
+			Main.get().confirmPopup.show();
 		}
 	}
 	
