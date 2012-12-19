@@ -374,6 +374,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			} else {
 				Main.get().mainPanel.desktop.browser.fileBrowser.checkout();
 			}
+			
 			fireEvent(HasToolBarEvent.EXECUTE_CHECKOUT);
 		}
 	}
@@ -1527,6 +1528,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public void enableMassiveView() {
 		massiveOptions = true;
+		
 		// Disable
 		toolBarOption.createFromTemplateOption = false;
 		toolBarOption.homeOption = false;
@@ -1551,6 +1553,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		toolBarOption.addKeywordOption = false;
 		toolBarOption.lockOption = false;
 		toolBarOption.unLockOption = false;
+		
 		// Enable
 		toolBarOption.cancelCheckoutOption = true;
 		toolBarOption.checkoutOption = true;
