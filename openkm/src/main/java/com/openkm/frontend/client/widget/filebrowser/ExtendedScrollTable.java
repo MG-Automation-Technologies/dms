@@ -1095,6 +1095,35 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 	}
 	
 	/**
+	 * Download documents
+	 */
+	public void downloadDocuments(boolean checkout, List<String> paths) {
+		if (paths.size()>0) {			
+			Util.downloadFiles(paths, (checkout ? "checkout" : ""));
+		}
+	}
+	
+	/**
+	 * Download documents
+	 */
+	public void downloadDocuments(boolean checkout) {
+		List<String> paths = new ArrayList<String>();
+		for (int i = 0; dataTable.getRowCount() > i; i++) {
+			CheckBox checkBox = (CheckBox) dataTable.getWidget(i, colMassiveIndex);
+			if (checkBox.getValue()) {
+				Object obj = data.get(Integer.parseInt(dataTable.getText(i, colDataIndex)));
+				if (obj instanceof GWTDocument) {
+					paths.add(((GWTDocument) obj).getPath());
+				}
+			}
+		}
+		if (paths.size()>0) {			
+			Util.downloadFiles(paths, (checkout ? "checkout" : ""));
+		}
+	}
+	
+	
+	/**
 	 * Download document
 	 */
 	public void downloadDocument(boolean checkout) {

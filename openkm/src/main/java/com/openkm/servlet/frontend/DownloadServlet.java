@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -66,14 +68,14 @@ public class DownloadServlet extends OKMHttpServlet {
 	private static final boolean exportZip = true;
 	private static final boolean exportJar = false;
 	
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-			IOException {
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		log.debug("service({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
 		String id = request.getParameter("id");
 		String path = id != null ? new String(id.getBytes("ISO-8859-1"), "UTF-8") : null;
 		String uuid = request.getParameter("uuid");
 		String checkout = request.getParameter("checkout");
+		int size = WebUtils.getInt(request, "size");
 		String ver = request.getParameter("ver");
 		boolean export = request.getParameter("export") != null;
 		boolean inline = request.getParameter("inline") != null;
@@ -90,15 +92,34 @@ public class DownloadServlet extends OKMHttpServlet {
 			
 			if (export) {
 				if (exportZip) {
+					String fileName;
 					// Get document
 					FileOutputStream os = new FileOutputStream(tmp);
-					exportZip(path, os);
+					if (size==0) {
+						exportZip(path, os);
+						fileName = PathUtils.getName(path) + ".zip";
+					} else {
+						// export into a zip file multiple documents
+						List<String> paths = new ArrayList<String>();
+						String iid;
+						for (int i = 0; i < size; ++i) {
+							iid = request.getParameter("id" + i);
+							// if there is some missing number try the next one
+							if (iid == null) {
+								continue;
+							}
+							paths.add(new String(iid.getBytes("ISO-8859-1"), "UTF-8"));
+						}
+						fileName = PathUtils.getName(PathUtils.getParent(paths.get(0)));
+						exportZip(paths, os, fileName);
+						fileName += ".zip";
+					}
+					
 					os.flush();
 					os.close();
 					is = new FileInputStream(tmp);
 					
 					// Send document
-					String fileName = PathUtils.getName(path) + ".zip";
 					WebUtils.sendFile(request, response, fileName, MimeTypeConfig.MIME_ZIP, inline, is);
 				} else if (exportJar) {
 					// Get document
@@ -137,8 +158,8 @@ public class DownloadServlet extends OKMHttpServlet {
 					ErrorCode.CAUSE_Repository), e.getMessage()));
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
-			throw new ServletException(new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDownloadService,
-					ErrorCode.CAUSE_IO), e.getMessage()));
+			throw new ServletException(new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDownloadService, ErrorCode.CAUSE_IO),
+					e.getMessage()));
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new ServletException(new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDownloadService,
@@ -159,8 +180,7 @@ public class DownloadServlet extends OKMHttpServlet {
 	 * Generate a zip file from a repository folder path
 	 */
 	private void exportZip(String path, OutputStream os) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, ArchiveException, ParseException, NoSuchGroupException, IOException, 
-			DatabaseException {
+			RepositoryException, ArchiveException, ParseException, NoSuchGroupException, IOException, DatabaseException {
 		log.debug("exportZip({}, {})", path, os);
 		File tmp = null;
 		
@@ -191,12 +211,49 @@ public class DownloadServlet extends OKMHttpServlet {
 		log.debug("exportZip: void");
 	}
 	
+
+	private void exportZip(List<String> paths, OutputStream os, String zipname) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException, ArchiveException, ParseException, NoSuchGroupException, IOException,
+			DatabaseException {
+		log.debug("exportZip({}, {})", paths, os);
+		File tmp = null;
+		String destpath;
+		try {
+			tmp = FileUtils.createTempDir();
+			File fsPath = new File(tmp.getPath());
+			// Export files
+			StringWriter out = new StringWriter();
+			for (String sourcepath : paths) {
+				destpath = fsPath.getPath() + File.separator + PathUtils.getName(sourcepath).replace(':', '_');
+				RepositoryExporter.exportDocument(null, destpath, sourcepath, false, false, out, new TextInfoDecorator(
+						sourcepath));
+			}
+			out.close();
+			
+			// Zip files
+			ArchiveUtils.createZip(tmp, zipname, os);
+		} catch (IOException e) {
+			log.error("Error exporting zip", e);
+			throw e;
+		} finally {
+			if (tmp != null) {
+				try {
+					org.apache.commons.io.FileUtils.deleteDirectory(tmp);
+				} catch (IOException e) {
+					log.error("Error deleting temporal directory", e);
+					throw e;
+				}
+			}
+		}
+		
+		log.debug("exportZip: void");
+	}
+	
 	/**
 	 * Generate a jar file from a repository folder path
 	 */
 	private void exportJar(String path, OutputStream os) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, ArchiveException, ParseException, NoSuchGroupException, IOException,
-			DatabaseException {
+			RepositoryException, ArchiveException, ParseException, NoSuchGroupException, IOException, DatabaseException {
 		log.debug("exportJar({}, {})", path, os);
 		File tmp = null;
 		

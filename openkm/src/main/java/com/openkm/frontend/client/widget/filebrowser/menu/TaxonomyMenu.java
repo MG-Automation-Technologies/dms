@@ -127,7 +127,7 @@ public class TaxonomyMenu extends MenuBase {
 	Command downloadFile = new Command() {
 		public void execute() {		
 			if (toolBarOption.downloadOption) {
-				Main.get().mainPanel.desktop.browser.fileBrowser.table.downloadDocument(false);
+				Main.get().mainPanel.topPanel.toolBar.executeDownload();
 				hide();
 			}
 		}

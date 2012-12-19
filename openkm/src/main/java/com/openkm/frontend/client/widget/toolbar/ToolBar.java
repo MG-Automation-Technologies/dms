@@ -369,11 +369,15 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		if (Main.get().mainPanel.bottomPanel.userInfo.isQuotaExceed()) {
 			Main.get().showError("UserQuotaExceed", new OKMException("OKM-" + ErrorCode.ORIGIN_OKMBrowser + ErrorCode.CAUSE_QuotaExceed, ""));
 		}  else {
-			Main.get().mainPanel.desktop.browser.fileBrowser.checkout();
+			if( Main.get().mainPanel.desktop.browser.fileBrowser.isMassive()) {
+				Main.get().mainPanel.desktop.browser.fileBrowser.massiveCheckout();
+			} else {
+				Main.get().mainPanel.desktop.browser.fileBrowser.checkout();
+			}
 			fireEvent(HasToolBarEvent.EXECUTE_CHECKOUT);
 		}
 	}
-	
+
 	/**
 	 * Checkin Handler
 	 */
@@ -402,7 +406,9 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.cancelCheckoutOption) {
 				GWTDocument doc = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
-				if (doc.getLockInfo().getOwner().equals(Main.get().workspaceUserProperties.getUser().getId())) {
+				if( Main.get().mainPanel.desktop.browser.fileBrowser.isMassive()) {
+					executeCancelCheckout();
+				} else if (doc.getLockInfo().getOwner().equals(Main.get().workspaceUserProperties.getUser().getId())) {
 					executeCancelCheckout();
 				} else if (Main.get().workspaceUserProperties.getWorkspace().isAdminRole()) {
 					Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_FORCE_CANCEL_CHECKOUT);
@@ -416,7 +422,10 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Cancel the check out
 	 */
 	public void executeCancelCheckout() {
-		Main.get().mainPanel.desktop.browser.fileBrowser.cancelCheckout();
+		if( Main.get().mainPanel.desktop.browser.fileBrowser.isMassive() )
+			Main.get().mainPanel.desktop.browser.fileBrowser.massiveCancelCheckout();
+		else
+			Main.get().mainPanel.desktop.browser.fileBrowser.cancelCheckout();
 		fireEvent(HasToolBarEvent.EXECUTE_CANCEL_CHECKOUT);
 	}
 	
@@ -448,7 +457,10 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Download document
 	 */
 	public void executeDownload() {
-		Main.get().mainPanel.desktop.browser.fileBrowser.table.downloadDocument(false);
+		if( Main.get().mainPanel.desktop.browser.fileBrowser.isMassive() )
+			Main.get().mainPanel.desktop.browser.fileBrowser.table.downloadDocuments(false);
+		else
+			Main.get().mainPanel.desktop.browser.fileBrowser.table.downloadDocument(false);
 		fireEvent(HasToolBarEvent.EXECUTE_DOWNLOAD_DOCUMENT);
 	}
 	
@@ -1516,19 +1528,11 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	public void enableMassiveView() {
 		massiveOptions = true;
 		// Disable
-		toolBarOption.goOption = false;
 		toolBarOption.createFromTemplateOption = false;
-		toolBarOption.bookmarkOption = false;
 		toolBarOption.homeOption = false;
 		toolBarOption.exportOption = false;
 		toolBarOption.renameOption = false;
-		toolBarOption.downloadOption = false;
-		toolBarOption.downloadPdfOption = false;;
-		toolBarOption.lockOption = false;
-		toolBarOption.unLockOption = false;
-		toolBarOption.checkoutOption = false;
-		toolBarOption.checkinOption = false;
-		toolBarOption.cancelCheckoutOption = false;
+		toolBarOption.downloadPdfOption = false;
 		toolBarOption.addPropertyGroupOption = false;
 		toolBarOption.removePropertyGroupOption = false;
 		toolBarOption.workflowOption = false;
@@ -1536,8 +1540,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		toolBarOption.removeSubscription = false;
 		toolBarOption.bookmarkOption = false;
 		toolBarOption.goOption = false;
-		toolBarOption.downloadOption = false;
-		toolBarOption.checkoutOption = false;
 		toolBarOption.checkinOption = false;
 		toolBarOption.cancelCheckoutOption = false;
 		toolBarOption.lockOption = false;
@@ -1547,7 +1549,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		toolBarOption.addNoteOption = false;
 		toolBarOption.addCategoryOption = false;
 		toolBarOption.addKeywordOption = false;
+		toolBarOption.lockOption = false;
+		toolBarOption.unLockOption = false;
 		// Enable
+		toolBarOption.cancelCheckoutOption = true;
+		toolBarOption.checkoutOption = true;
+		toolBarOption.downloadOption = true;
 		toolBarOption.copyOption = true;
 		toolBarOption.moveOption = true;
 		toolBarOption.deleteOption = true;
