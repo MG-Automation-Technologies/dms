@@ -109,7 +109,7 @@ public class DataBrowserServlet extends BaseServlet {
 		String sel = WebUtils.getString(request, "sel", SEL_BOTH);
 		String dst = WebUtils.getString(request, "dst");
 		String root = WebUtils.getString(request, "root");
-		File dir = new File(path);
+		File dir = new File(path.isEmpty() ? EnvironmentDetector.getUserHome() : path);
 		List<Map<String, String>> folders = new ArrayList<Map<String, String>>();
 		List<Map<String, String>> documents = new ArrayList<Map<String, String>>();
 		boolean browseParent = false;
