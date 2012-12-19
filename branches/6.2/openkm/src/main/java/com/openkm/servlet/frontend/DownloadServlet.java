@@ -95,7 +95,7 @@ public class DownloadServlet extends OKMHttpServlet {
 					String fileName;
 					// Get document
 					FileOutputStream os = new FileOutputStream(tmp);
-					if (size==0) {
+					if (size == 0) {
 						exportZip(path, os);
 						fileName = PathUtils.getName(path) + ".zip";
 					} else {
@@ -211,24 +211,22 @@ public class DownloadServlet extends OKMHttpServlet {
 		log.debug("exportZip: void");
 	}
 	
-
 	private void exportZip(List<String> paths, OutputStream os, String zipname) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, ArchiveException, ParseException, NoSuchGroupException, IOException,
 			DatabaseException {
 		log.debug("exportZip({}, {})", paths, os);
+		StringWriter out = new StringWriter();
 		File tmp = null;
-		String destpath;
+		
 		try {
 			tmp = FileUtils.createTempDir();
 			File fsPath = new File(tmp.getPath());
-			// Export files
-			StringWriter out = new StringWriter();
-			for (String sourcepath : paths) {
-				destpath = fsPath.getPath() + File.separator + PathUtils.getName(sourcepath).replace(':', '_');
-				RepositoryExporter.exportDocument(null, destpath, sourcepath, false, false, out, new TextInfoDecorator(
-						sourcepath));
+			
+			for (String sourcePath : paths) {
+				String destPath = fsPath.getPath() + File.separator + PathUtils.getName(sourcePath).replace(':', '_');
+				RepositoryExporter.exportDocument(null, destPath, sourcePath, false, false, out, new TextInfoDecorator(
+						sourcePath));
 			}
-			out.close();
 			
 			// Zip files
 			ArchiveUtils.createZip(tmp, zipname, os);
@@ -236,6 +234,8 @@ public class DownloadServlet extends OKMHttpServlet {
 			log.error("Error exporting zip", e);
 			throw e;
 		} finally {
+			IOUtils.closeQuietly(out);
+			
 			if (tmp != null) {
 				try {
 					org.apache.commons.io.FileUtils.deleteDirectory(tmp);
