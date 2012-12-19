@@ -22,6 +22,7 @@
 package com.openkm.servlet.frontend;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -214,6 +215,102 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 		if (!error.equals("")) {
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMassiveService, ErrorCode.CAUSE_General),
 					pathErrors + "\n\n" + error);
+		}
+	}
+	
+	@Override
+	public List<String> checkout(List<String> paths) throws OKMException {
+		log.debug("checkout({})", paths);
+		updateSessionManager();
+		List<String> docPaths = new ArrayList<String>();
+		String error = "";
+		String pathErrors = "";
+		
+		// set all as checked out
+		for (String path : paths) {
+			try {
+				if (OKMDocument.getInstance().isValid(null, path)) {
+					OKMDocument.getInstance().checkout(null, path);
+					docPaths.add(path);
+				}
+			} catch (LockException e) {
+				log.error(e.getMessage(), e);
+				error += "\n" + e.getMessage();
+				pathErrors += "\n" + path;
+			} catch (PathNotFoundException e) {
+				log.error(e.getMessage(), e);
+				error += "\n" + e.getMessage();
+				pathErrors += "\n" + path;
+			} catch (AccessDeniedException e) {
+				log.error(e.getMessage(), e);
+				error += "\n" + e.getMessage();
+				pathErrors += "\n" + path;
+			} catch (RepositoryException e) {
+				log.error(e.getMessage(), e);
+				error += "\n" + e.getMessage();
+				pathErrors += "\n" + path;
+			} catch (DatabaseException e) {
+				log.error(e.getMessage(), e);
+				error += "\n" + e.getMessage();
+				pathErrors += "\n" + path;
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+				error += "\n" + e.getMessage();
+				pathErrors += "\n" + path;
+			}
+		}
+		
+		if (!error.equals("")) {
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMassiveService, ErrorCode.CAUSE_General), pathErrors
+					+ "\n\n" + error);
+		}
+		
+		return docPaths;
+	}
+	
+	@Override
+	public void cancelCheckout(List<String> paths) throws OKMException {
+		log.debug("cancelCheckout({})", paths);
+		updateSessionManager();
+		String error = "";
+		String pathErrors = "";
+		
+		// set all as checked out
+		for (String path : paths) {
+			try {
+				if (OKMDocument.getInstance().isValid(null, path)) {
+					OKMDocument.getInstance().cancelCheckout(null, path);
+				}
+			} catch (LockException e) {
+				log.error(e.getMessage(), e);
+				error += "\n" + e.getMessage();
+				pathErrors += "\n" + path;
+			} catch (PathNotFoundException e) {
+				log.error(e.getMessage(), e);
+				error += "\n" + e.getMessage();
+				pathErrors += "\n" + path;
+			} catch (AccessDeniedException e) {
+				log.error(e.getMessage(), e);
+				error += "\n" + e.getMessage();
+				pathErrors += "\n" + path;
+			} catch (RepositoryException e) {
+				log.error(e.getMessage(), e);
+				error += "\n" + e.getMessage();
+				pathErrors += "\n" + path;
+			} catch (DatabaseException e) {
+				log.error(e.getMessage(), e);
+				error += "\n" + e.getMessage();
+				pathErrors += "\n" + path;
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+				error += "\n" + e.getMessage();
+				pathErrors += "\n" + path;
+			}
+		}
+		
+		if (!error.equals("")) {
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMassiveService, ErrorCode.CAUSE_General), pathErrors
+					+ "\n\n" + error);
 		}
 	}
 }

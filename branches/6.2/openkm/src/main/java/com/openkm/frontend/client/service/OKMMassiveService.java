@@ -36,4 +36,6 @@ public interface OKMMassiveService extends RemoteService {
 	public void copy(List<String> paths, String fldPath) throws OKMException;
 	public void move(List<String> paths, String fldPath) throws OKMException;
 	public void delete(List<String> paths) throws OKMException;
+	public List<String> checkout(List<String> paths) throws OKMException;
+	public void cancelCheckout (List<String> paths) throws OKMException;
 }

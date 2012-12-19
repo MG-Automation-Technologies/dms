@@ -21,6 +21,7 @@
 
 package com.openkm.frontend.client.util;
 
+import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.http.client.URL;
@@ -240,6 +241,24 @@ public class Util {
 		
 		final Element downloadIframe = RootPanel.get("__download").getElement(); 
 		String url = RPCService.DownloadServlet + "?" + params + "id=" + URL.encodeQueryString(path);
+		DOM.setElementAttribute(downloadIframe, "src", url); 
+	}
+
+	/**
+	 * Download files exported as zip
+	 * @author danilo
+	 */
+	public static void downloadFiles(List<String> path, String params) {
+		if (!params.equals("")) {
+			params = "&"+params;
+		}
+		int i = 0;
+		final Element downloadIframe = RootPanel.get("__download").getElement(); 
+		String url = RPCService.DownloadServlet + "?export"+params+"&size=" + path.size();
+		
+		for( String p : path )
+			url += "&id"+( i++ )+"=" + URL.encodeQueryString(p);
+		
 		DOM.setElementAttribute(downloadIframe, "src", url); 
 	}
 	

@@ -33,4 +33,6 @@ public interface OKMMassiveServiceAsync {
 	public void copy(List<String> paths, String fldPath, AsyncCallback<?> callback);
 	public void move(List<String> paths, String fldPath, AsyncCallback<?> callback);
 	public void delete(List<String> paths, AsyncCallback<?> callback);
+	public void checkout(List<String> paths, AsyncCallback<List<String>> callback);
+	public void cancelCheckout (List<String> paths, AsyncCallback<?> callback);
 }

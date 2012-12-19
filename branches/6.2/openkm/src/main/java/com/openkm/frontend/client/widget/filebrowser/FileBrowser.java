@@ -728,6 +728,35 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 	};
 	
 	/**
+	 * Document checkout
+	 */
+	final AsyncCallback<List<String>> callbackMassiveCheckOut = new AsyncCallback<List<String>>() {
+		public void onSuccess(List<String> result) {
+			mantainSelectedRow();
+			
+			// Marks flag to ensure all RPC calls has finished before document
+			// download
+			Main.get().mainPanel.dashboard.userDashboard.setPendingCheckoutDocumentFlag();
+			Main.get().mainPanel.dashboard.userDashboard.getUserCheckedOutDocuments();
+			table.downloadDocuments(true, result);
+			
+			// Document download is made after finishing refresh although
+			// there's RPC call in
+			// getUserCheckedOutDocuments we suppose refresh it'll be more
+			// slower, and download
+			// must be done after last RPC call is finished
+			refresh(fldId);
+			
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagCheckout();
+		}
+		
+		public void onFailure(Throwable caught) {
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagCheckout();
+			Main.get().showError("CheckOut", caught);
+		}
+	};
+	
+	/**
 	 * Document cancel checkout
 	 */
 	final AsyncCallback<Object> callbackCancelCheckOut = new AsyncCallback<Object>() {
@@ -743,7 +772,7 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 			Main.get().showError("CancelCheckOut", caught);
 		}
 	};
-	
+
 	/**
 	 * Document force cancel checkout
 	 */
@@ -1388,6 +1417,17 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 			
 		}
 	}
+
+	/**
+	 * Document massive checkout
+	 * @author danilo
+	 */
+	public void massiveCheckout() {
+		if (table.isDocumentSelected() && table.getDocument() != null) {
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagCheckout();
+			massiveService.checkout(table.getAllSelectedPaths(), callbackMassiveCheckOut);
+		}
+	}
 	
 	/**
 	 * Execute checkin
@@ -1412,6 +1452,16 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 		if (table.isDocumentSelected() && table.getDocument() != null) {
 			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagCheckout();
 			documentService.cancelCheckout(table.getDocument().getPath(), callbackCancelCheckOut);
+		}
+	}
+	/**
+	 * Document massive cancel checkout
+	 * @author danilo
+	 */
+	public void massiveCancelCheckout() {
+		if (table.isDocumentSelected() && table.getDocument() != null) {
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagCheckout();
+			massiveService.cancelCheckout(table.getAllSelectedPaths(), callbackCancelCheckOut);
 		}
 	}
 	

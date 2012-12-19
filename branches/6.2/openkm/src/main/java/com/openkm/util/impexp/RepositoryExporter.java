@@ -154,63 +154,10 @@ public class RepositoryExporter {
 		for (Iterator<Document> it = dm.getChildren(token, fldPath).iterator(); it.hasNext();) {
 			Document docChild = it.next();
 			path = fsPath.getPath() + File.separator + PathUtils.getName(docChild.getPath()).replace(':', '_');
-			
-			// Version history
-			if (history) {
-				// Create dummy document file
-				new File(path).createNewFile();
-				
-				// Metadata
-				if (metadata) {
-					DocumentMetadata dmd = ma.getMetadata(docChild);
-					String json = gson.toJson(dmd);
-					FileOutputStream fos = new FileOutputStream(path + Config.EXPORT_METADATA_EXT);
-					IOUtils.write(json, fos);
-					IOUtils.closeQuietly(fos);
-				}
-				
-				for (Version ver : dm.getVersionHistory(token, docChild.getPath())) {
-					String versionPath = path + "#v" + ver.getName() + "#";
-					FileOutputStream vos = new FileOutputStream(versionPath);
-					InputStream vis = dm.getContentByVersion(token, docChild.getPath(), ver.getName());
-					IOUtils.copy(vis, vos);
-					IOUtils.closeQuietly(vis);
-					IOUtils.closeQuietly(vos);
-					FileLogger.info(BASE_NAME, "Created document ''{0}'' version ''{1}''", docChild.getPath(), ver.getName());
-					
-					// Metadata
-					if (metadata) {
-						VersionMetadata vmd = ma.getMetadata(ver, docChild.getMimeType());
-						String json = gson.toJson(vmd);
-						vos = new FileOutputStream(versionPath + Config.EXPORT_METADATA_EXT);
-						IOUtils.write(json, vos);
-						IOUtils.closeQuietly(vos);
-					}
-				}
-			} else {
-				FileOutputStream fos = new FileOutputStream(path);
-				InputStream is = dm.getContent(token, docChild.getPath(), false);
-				IOUtils.copy(is, fos);
-				IOUtils.closeQuietly(is);
-				IOUtils.closeQuietly(fos);
-				FileLogger.info(BASE_NAME, "Created document ''{0}''", docChild.getPath());
-				
-				// Metadata
-				if (metadata) {
-					DocumentMetadata dmd = ma.getMetadata(docChild);
-					String json = gson.toJson(dmd);
-					fos = new FileOutputStream(path + Config.EXPORT_METADATA_EXT);
-					IOUtils.write(json, fos);
-					IOUtils.closeQuietly(fos);
-				}
-			}
-			
-			out.write(deco.print(docChild.getPath(), docChild.getActualVersion().getSize(), null));
-			out.flush();
-			
+			ImpExpStats docstats = exportDocument(token, path, docChild.getPath(), metadata, history, out, deco);
 			// Stats
-			stats.setSize(stats.getSize() + docChild.getActualVersion().getSize());
-			stats.setDocuments(stats.getDocuments() + 1);
+			stats.setSize(stats.getSize() + docstats.getSize());
+			stats.setDocuments(stats.getDocuments() + docstats.getDocuments());
 		}
 		
 		for (Iterator<Folder> it = fm.getChildren(token, fldPath).iterator(); it.hasNext();) {
@@ -237,4 +184,73 @@ public class RepositoryExporter {
 		log.debug("exportDocumentsHelper: {}", stats);
 		return stats;
 	}
+
+	public static ImpExpStats exportDocument(String token, String destpath, String sourcepath, boolean metadata, boolean history, Writer out, InfoDecorator deco) 
+			throws PathNotFoundException, RepositoryException, DatabaseException, IOException, AccessDeniedException, 
+			       ParseException, NoSuchGroupException{
+		DocumentModule dm = ModuleManager.getDocumentModule();
+		MetadataAdapter ma = MetadataAdapter.getInstance(token);
+		Document docChild = dm.getProperties(token, sourcepath);
+		Gson gson = new Gson();
+		ImpExpStats stats = new ImpExpStats();
+
+		// Version history
+		if (history) {
+			// Create dummy document file
+			new File(destpath).createNewFile();
+			
+			// Metadata
+			if (metadata) {
+				DocumentMetadata dmd = ma.getMetadata(docChild);
+				String json = gson.toJson(dmd);
+				FileOutputStream fos = new FileOutputStream(destpath + Config.EXPORT_METADATA_EXT);
+				IOUtils.write(json, fos);
+				IOUtils.closeQuietly(fos);
+			}
+			
+			for (Version ver : dm.getVersionHistory(token, docChild.getPath())) {
+				String versionPath = destpath + "#v" + ver.getName() + "#";
+				FileOutputStream vos = new FileOutputStream(versionPath);
+				InputStream vis = dm.getContentByVersion(token, docChild.getPath(), ver.getName());
+				IOUtils.copy(vis, vos);
+				IOUtils.closeQuietly(vis);
+				IOUtils.closeQuietly(vos);
+				FileLogger.info(BASE_NAME, "Created document ''{0}'' version ''{1}''", docChild.getPath(), ver.getName());
+				
+				// Metadata
+				if (metadata) {
+					VersionMetadata vmd = ma.getMetadata(ver, docChild.getMimeType());
+					String json = gson.toJson(vmd);
+					vos = new FileOutputStream(versionPath + Config.EXPORT_METADATA_EXT);
+					IOUtils.write(json, vos);
+					IOUtils.closeQuietly(vos);
+				}
+			}
+		} else {
+			FileOutputStream fos = new FileOutputStream(destpath);
+			InputStream is = dm.getContent(token, sourcepath, false);
+			IOUtils.copy(is, fos);
+			IOUtils.closeQuietly(is);
+			IOUtils.closeQuietly(fos);
+			FileLogger.info(BASE_NAME, "Created document ''{0}''", docChild.getPath());
+			
+			// Metadata
+			if (metadata) {
+				DocumentMetadata dmd = ma.getMetadata(docChild);
+				String json = gson.toJson(dmd);
+				fos = new FileOutputStream(destpath + Config.EXPORT_METADATA_EXT);
+				IOUtils.write(json, fos);
+				IOUtils.closeQuietly(fos);
+			}
+		}
+		
+		out.write(deco.print(sourcepath, docChild.getActualVersion().getSize(), null));
+		out.flush();
+		// Stats
+		stats.setSize(stats.getSize() + docChild.getActualVersion().getSize());
+		stats.setDocuments(stats.getDocuments() + 1);
+		
+		return stats;
+	}
+	
 }
