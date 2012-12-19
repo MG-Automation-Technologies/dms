@@ -77,8 +77,7 @@ import com.openkm.frontend.client.widget.mainmenu.Bookmark;
  * @author jllort
  */
 public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, HasToolBarHandlerExtension {
-	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT
-			.create(OKMDocumentService.class);
+	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
 	private final OKMFolderServiceAsync folderService = (OKMFolderServiceAsync) GWT.create(OKMFolderService.class);
 	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT
 			.create(OKMPropertyGroupService.class);
@@ -105,7 +104,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	private ToolBarButton scanner;
 	private ToolBarButton uploader;
 	private Object node;
-	private FindToolBarMenu  findToolBarMenu;
+	private FindToolBarMenu findToolBarMenu;
 	
 	private boolean enabled = true; // Indicates if toolbar is enabled or disabled
 	private boolean propertyGroupEnabled = false; // Indicates if property group is enabled, used only on changing
@@ -367,9 +366,10 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public void executeCheckout() {
 		if (Main.get().mainPanel.bottomPanel.userInfo.isQuotaExceed()) {
-			Main.get().showError("UserQuotaExceed", new OKMException("OKM-" + ErrorCode.ORIGIN_OKMBrowser + ErrorCode.CAUSE_QuotaExceed, ""));
-		}  else {
-			if( Main.get().mainPanel.desktop.browser.fileBrowser.isMassive()) {
+			Main.get().showError("UserQuotaExceed",
+					new OKMException("OKM-" + ErrorCode.ORIGIN_OKMBrowser + ErrorCode.CAUSE_QuotaExceed, ""));
+		} else {
+			if (Main.get().mainPanel.desktop.browser.fileBrowser.isMassive()) {
 				Main.get().mainPanel.desktop.browser.fileBrowser.massiveCheckout();
 			} else {
 				Main.get().mainPanel.desktop.browser.fileBrowser.checkout();
@@ -378,7 +378,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			fireEvent(HasToolBarEvent.EXECUTE_CHECKOUT);
 		}
 	}
-
+	
 	/**
 	 * Checkin Handler
 	 */
@@ -407,7 +407,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.cancelCheckoutOption) {
 				GWTDocument doc = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
-				if( Main.get().mainPanel.desktop.browser.fileBrowser.isMassive()) {
+				if (Main.get().mainPanel.desktop.browser.fileBrowser.isMassive()) {
 					executeCancelCheckout();
 				} else if (doc.getLockInfo().getOwner().equals(Main.get().workspaceUserProperties.getUser().getId())) {
 					executeCancelCheckout();
@@ -423,11 +423,18 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Cancel the check out
 	 */
 	public void executeCancelCheckout() {
-		if( Main.get().mainPanel.desktop.browser.fileBrowser.isMassive() )
-			Main.get().mainPanel.desktop.browser.fileBrowser.massiveCancelCheckout();
-		else
-			Main.get().mainPanel.desktop.browser.fileBrowser.cancelCheckout();
-		fireEvent(HasToolBarEvent.EXECUTE_CANCEL_CHECKOUT);
+		if (Main.get().mainPanel.bottomPanel.userInfo.isQuotaExceed()) {
+			Main.get().showError("UserQuotaExceed",
+					new OKMException("OKM-" + ErrorCode.ORIGIN_OKMBrowser + ErrorCode.CAUSE_QuotaExceed, ""));
+		} else {
+			if (Main.get().mainPanel.desktop.browser.fileBrowser.isMassive()) {
+				
+				Main.get().mainPanel.desktop.browser.fileBrowser.massiveCancelCheckout();
+			} else {
+				Main.get().mainPanel.desktop.browser.fileBrowser.cancelCheckout();
+			}
+			fireEvent(HasToolBarEvent.EXECUTE_CANCEL_CHECKOUT);
+		}
 	}
 	
 	/**
@@ -458,7 +465,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Download document
 	 */
 	public void executeDownload() {
-		if( Main.get().mainPanel.desktop.browser.fileBrowser.isMassive() )
+		if (Main.get().mainPanel.desktop.browser.fileBrowser.isMassive())
 			Main.get().mainPanel.desktop.browser.fileBrowser.table.downloadDocuments(false);
 		else
 			Main.get().mainPanel.desktop.browser.fileBrowser.table.downloadDocument(false);
@@ -492,12 +499,10 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		if (Main.get().mainPanel.desktop.browser.fileBrowser.isPanelSelected()) {
 			if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
 				String path = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument().getPath();
-				Main.get().mainPanel.topPanel.mainMenu.bookmarkPopup.show(path,
-						path.substring(path.lastIndexOf("/") + 1));
+				Main.get().mainPanel.topPanel.mainMenu.bookmarkPopup.show(path, path.substring(path.lastIndexOf("/") + 1));
 			} else if (Main.get().mainPanel.desktop.browser.fileBrowser.isFolderSelected()) {
 				String path = Main.get().mainPanel.desktop.browser.fileBrowser.getFolder().getPath();
-				Main.get().mainPanel.topPanel.mainMenu.bookmarkPopup.show(path,
-						path.substring(path.lastIndexOf("/") + 1));
+				Main.get().mainPanel.topPanel.mainMenu.bookmarkPopup.show(path, path.substring(path.lastIndexOf("/") + 1));
 			}
 		} else if (Main.get().activeFolderTree.isPanelSelected()) {
 			String path = Main.get().activeFolderTree.getActualPath();
@@ -811,8 +816,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		
 		// ONLY TO DEVELOPMENT TESTINGT
 		// enableAllToolBarForTestingPurpose();
-		find = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.find()),
-				Main.i18n("general.menu.find"), new ClickHandler() {
+		find = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.find()), Main.i18n("general.menu.find"),
+				new ClickHandler() {
 					@Override
 					public void onClick(ClickEvent event) {
 						if (toolBarOption.findOption) {
@@ -822,8 +827,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 					}
 				});
 		
-		lock = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.lockDisabled()),
-				Main.i18n("general.menu.edit.lock"), lockHandler);
+		lock = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.lockDisabled()), Main.i18n("general.menu.edit.lock"),
+				lockHandler);
 		
 		unlock = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.lockDisabled()),
 				Main.i18n("general.menu.edit.unlock"), unLockHandler);
@@ -867,14 +872,14 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		removeSubscription = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.removeSubscriptionDisabled()),
 				Main.i18n("general.menu.edit.remove.subscription"), removeSubscriptionHandler);
 		
-		home = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.home()),
-				Main.i18n("general.menu.bookmark.home"), arrowHomeHandler);
+		home = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.home()), Main.i18n("general.menu.bookmark.home"),
+				arrowHomeHandler);
 		
-		refresh = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.refresh()),
-				Main.i18n("general.menu.file.refresh"), arrowRefreshHandler);
+		refresh = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.refresh()), Main.i18n("general.menu.file.refresh"),
+				arrowRefreshHandler);
 		
-		scanner = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.scanner()),
-				Main.i18n("general.menu.file.scanner"), scannerHandler);
+		scanner = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.scanner()), Main.i18n("general.menu.file.scanner"),
+				scannerHandler);
 		
 		uploader = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.uploader()),
 				Main.i18n("general.menu.file.uploader"), uploaderHandler);
@@ -1026,12 +1031,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		
 		if (isEnabled()) {
 			// Enable quick search
-			if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace() == UIDockPanelConstants.DESKTOP &&
-				(Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TAXONOMY ||
-				 Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TEMPLATES ||
-				 Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_PERSONAL || 
-				 Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_MAIL ||
-				 Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TRASH)) {
+			if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace() == UIDockPanelConstants.DESKTOP
+					&& (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TAXONOMY
+							|| Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TEMPLATES
+							|| Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_PERSONAL
+							|| Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_MAIL || Main
+							.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TRASH)) {
 				toolBarOption.findOption = true;
 				toolBarOption.findFolderOption = true;
 				toolBarOption.findDocumentOption = true;
@@ -1181,12 +1186,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		// Only if toolbar is enabled must change tools icons values
 		if (isEnabled()) {
 			// Enable quick search
-			if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace() == UIDockPanelConstants.DESKTOP &&
-				(Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TAXONOMY ||
-				 Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TEMPLATES ||
-				 Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_PERSONAL || 
-				 Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_MAIL ||
-				 Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TRASH)) {
+			if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace() == UIDockPanelConstants.DESKTOP
+					&& (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TAXONOMY
+							|| Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TEMPLATES
+							|| Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_PERSONAL
+							|| Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_MAIL || Main
+							.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TRASH)) {
 				toolBarOption.findOption = true;
 				toolBarOption.findFolderOption = true;
 				toolBarOption.findDocumentOption = true;
@@ -1205,8 +1210,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			
 			// Checking delete permissions
 			if (((doc.getPermissions() & GWTPermission.DELETE) == GWTPermission.DELETE)
-					&& ((folder.getPermissions() & GWTPermission.DELETE) == GWTPermission.DELETE)
-					&& !doc.isCheckedOut()
+					&& ((folder.getPermissions() & GWTPermission.DELETE) == GWTPermission.DELETE) && !doc.isCheckedOut()
 					&& !doc.isLocked()
 					&& Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_THESAURUS
 					&& Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_CATEGORIES) {
@@ -1404,12 +1408,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		// Only if toolbar is enabled must change tools icons values
 		if (isEnabled()) {
 			// Enable quick search
-			if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace() == UIDockPanelConstants.DESKTOP &&
-				(Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TAXONOMY ||
-				 Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TEMPLATES ||
-				 Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_PERSONAL || 
-				 Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_MAIL ||
-				 Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TRASH)) {
+			if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace() == UIDockPanelConstants.DESKTOP
+					&& (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TAXONOMY
+							|| Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TEMPLATES
+							|| Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_PERSONAL
+							|| Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_MAIL || Main
+							.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TRASH)) {
 				toolBarOption.findOption = true;
 				toolBarOption.findFolderOption = true;
 				toolBarOption.findDocumentOption = true;
@@ -2180,7 +2184,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * enableUploader();
 	 * }
 	 */
-
+	
 	/**
 	 * Gets the defatul Tool Bar object values for root
 	 * 
@@ -3022,7 +3026,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				}
 				toolBarEnabled = false;
 				break;
-			
+		
 		}
 		
 		// Enables before evaluate show icons, order is important because can evaluate
@@ -3148,18 +3152,10 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			Widget scannerApplet = RootPanel.get("scannerApplet");
 			scannerApplet.setSize("1", "1");
 			panel.add(scannerApplet);
-			scannerApplet
-					.getElement()
-					.setInnerHTML(
-							"<applet code=\"com.openkm.applet.Scanner\" name=\"Scanner\" width=\"1\" height=\"1\" mayscript archive=\"../scanner.jar\">"
-									+ "<param name=\"sessionId\" value=\""
-									+ sessionId
-									+ "\">"
-									+ "<param name=\"path\" value=\""
-									+ path
-									+ "\">"
-									+ "<param name=\"lang\" value=\""
-									+ Main.get().getLang() + "\">" + "</applet>");
+			scannerApplet.getElement().setInnerHTML(
+					"<applet code=\"com.openkm.applet.Scanner\" name=\"Scanner\" width=\"1\" height=\"1\" mayscript archive=\"../scanner.jar\">"
+							+ "<param name=\"sessionId\" value=\"" + sessionId + "\">" + "<param name=\"path\" value=\"" + path
+							+ "\">" + "<param name=\"lang\" value=\"" + Main.get().getLang() + "\">" + "</applet>");
 		} else {
 			Main.get().showError(
 					"setScannerApplet",
@@ -3176,18 +3172,10 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			Widget uploaderApplet = RootPanel.get("uploaderApplet");
 			uploaderApplet.setSize("1", "1");
 			panel.add(uploaderApplet);
-			uploaderApplet
-					.getElement()
-					.setInnerHTML(
-							"<applet code=\"com.openkm.applet.Uploader\" name=\"Uploader\" width=\"1\" height=\"1\" mayscript archive=\"../uploader.jar\">"
-									+ "<param name=\"sessionId\" value=\""
-									+ sessionId
-									+ "\">"
-									+ "<param name=\"path\" value=\""
-									+ path
-									+ "\">"
-									+ "<param name=\"lang\" value=\""
-									+ Main.get().getLang() + "\">" + "</applet>");
+			uploaderApplet.getElement().setInnerHTML(
+					"<applet code=\"com.openkm.applet.Uploader\" name=\"Uploader\" width=\"1\" height=\"1\" mayscript archive=\"../uploader.jar\">"
+							+ "<param name=\"sessionId\" value=\"" + sessionId + "\">" + "<param name=\"path\" value=\"" + path
+							+ "\">" + "<param name=\"lang\" value=\"" + Main.get().getLang() + "\">" + "</applet>");
 		} else {
 			Main.get().showError(
 					"setUploaderApplet",
@@ -3252,16 +3240,13 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		findToolBarMenu.setOptions(toolBarOption);
 		if (node instanceof GWTFolder) {
 			// Sets the visible values to note tab
-			Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.notes
-					.setVisibleAddNote(toolBarOption.addNoteOption);
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.notes.setVisibleAddNote(toolBarOption.addNoteOption);
 		} else if (node instanceof GWTDocument) {
 			// Sets the visible values to note tab
-			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.notes
-					.setVisibleAddNote(toolBarOption.addNoteOption);
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.notes.setVisibleAddNote(toolBarOption.addNoteOption);
 		} else if (node instanceof GWTMail) {
 			// Sets the visible values to note tab
-			Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.notes
-					.setVisibleAddNote(toolBarOption.addNoteOption);
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.notes.setVisibleAddNote(toolBarOption.addNoteOption);
 		}
 	}
 	
@@ -3323,15 +3308,17 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		// FIRST
 		
 		find.setVisible(option.isFindFolderVisible() || option.isFindDocumentVisible() || option.isSimilarDocumentVisible());
-		panel.getWidget(2).setVisible(option.isFindFolderVisible() || option.isFindDocumentVisible() || 
-									  option.isSimilarDocumentVisible()); // Hide space
+		panel.getWidget(2).setVisible(
+				option.isFindFolderVisible() || option.isFindDocumentVisible() || option.isSimilarDocumentVisible()); // Hide
+																														// space
 		
 		download.setVisible(option.isDownloadVisible());
 		panel.getWidget(4).setVisible(option.isDownloadVisible()); // hide space
 		downloadPdf.setVisible(option.isDownloadPdfVisible());
 		panel.getWidget(6).setVisible(option.isDownloadPdfVisible()); // hide space
-		panel.getWidget(7).setVisible( option.isFindFolderVisible() || option.isDownloadVisible()
-						|| option.isDownloadPdfVisible()); // hide separator
+		panel.getWidget(7).setVisible(
+				option.isFindFolderVisible() || option.isDownloadVisible() || option.isDownloadPdfVisible()); // hide
+																												// separator
 		
 		// SECOND
 		lock.setVisible(option.isLockVisible());
@@ -3353,8 +3340,10 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		panel.getWidget(22).setVisible(option.isCancelCheckoutVisible()); // hide space
 		delete.setVisible(option.isDeleteVisible());
 		panel.getWidget(24).setVisible(option.isDeleteVisible()); // hide space
-		panel.getWidget(25).setVisible(option.isCreateFolderVisible() || option.isAddDocumentVisible() || option.isCheckoutVisible() || option.isCheckinVisible()
-						|| option.isCancelCheckoutVisible() || option.isDeleteVisible()); // hide separator
+		panel.getWidget(25).setVisible(
+				option.isCreateFolderVisible() || option.isAddDocumentVisible() || option.isCheckoutVisible()
+						|| option.isCheckinVisible() || option.isCancelCheckoutVisible() || option.isDeleteVisible()); // hide
+																														// separator
 		
 		// FOURTH
 		addPropertyGroup.setVisible(option.isAddPropertyGroupVisible());
@@ -3417,9 +3406,9 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * initJavaScriptApi
 	 */
 	public native void initJavaScriptApi(ToolBar toolBar) /*-{
-		$wnd.destroyScannerApplet = toolBar.@com.openkm.frontend.client.widget.toolbar.ToolBar::destroyScannerApplet();
-		$wnd.destroyUploaderApplet = toolBar.@com.openkm.frontend.client.widget.toolbar.ToolBar::destroyUploaderApplet();
-		$wnd.refreshFolder = toolBar.@com.openkm.frontend.client.widget.toolbar.ToolBar::executeRefresh();
-		$wnd.jsRefreshFolder = toolBar.@com.openkm.frontend.client.widget.toolbar.ToolBar::executeRefresh();
-	}-*/;
+															$wnd.destroyScannerApplet = toolBar.@com.openkm.frontend.client.widget.toolbar.ToolBar::destroyScannerApplet();
+															$wnd.destroyUploaderApplet = toolBar.@com.openkm.frontend.client.widget.toolbar.ToolBar::destroyUploaderApplet();
+															$wnd.refreshFolder = toolBar.@com.openkm.frontend.client.widget.toolbar.ToolBar::executeRefresh();
+															$wnd.jsRefreshFolder = toolBar.@com.openkm.frontend.client.widget.toolbar.ToolBar::executeRefresh();
+															}-*/;
 }
