@@ -272,7 +272,7 @@ public class FormManager {
 		} else if (gwtFormElement instanceof GWTTextArea) {
 			HorizontalPanel hPanel = new HorizontalPanel();
 			TextArea textArea = new TextArea();
-			textArea.setEnabled((!readOnly && !((GWTTextArea) gwtFormElement).isReadonly()) || isSearchView);
+			textArea.setEnabled((!readOnly && !((GWTTextArea) gwtFormElement).isReadonly()) || isSearchView); // read only
 			hPanel.add(textArea);
 			textArea.setStyleName("okm-TextArea");
 			textArea.setText(((GWTTextArea) gwtFormElement).getValue());
@@ -324,7 +324,7 @@ public class FormManager {
 		} else if (gwtFormElement instanceof GWTInput) {
 			final HorizontalPanel hPanel = new HorizontalPanel();
 			final TextBox textBox = new TextBox(); // Create a widget for this property
-			textBox.setEnabled((!readOnly && !((GWTInput) gwtFormElement).isReadonly()) || isSearchView);
+			textBox.setEnabled((!readOnly && !((GWTInput) gwtFormElement).isReadonly()) || isSearchView); // read only
 			hPanel.add(textBox);
 			String value = "";
 			
@@ -368,7 +368,7 @@ public class FormManager {
 				calendarPopup.add(calendar);
 				final Image calendarIcon = new Image(OKMBundleResources.INSTANCE.calendar());
 				
-				if (readOnly || ((GWTInput) gwtFormElement).isReadonly()) {
+				if (readOnly || ((GWTInput) gwtFormElement).isReadonly()) {						// read only
 					calendarIcon.setResource(OKMBundleResources.INSTANCE.calendarDisabled());
 				} else {
 					calendarIcon.addClickHandler(new ClickHandler() {
@@ -456,6 +456,7 @@ public class FormManager {
 				hPanel.add(Util.hSpace("5"));
 				hPanel.add(pathExplorer);
 				hPanel.setCellVerticalAlignment(pathExplorer, HasAlignment.ALIGN_MIDDLE);
+				pathExplorer.setVisible((!readOnly && !((GWTInput) gwtFormElement).isReadonly()) || isSearchView); // read only
 				textBox.setEnabled(false);
 			}
 			
@@ -558,7 +559,7 @@ public class FormManager {
 				
 				setRowWordWarp(row, 3, true);
 			} else {
-				// Clean icon ( case is not
+				// Clean icon ( case is not readonly )
 				final Image cleanIcon = new Image(OKMBundleResources.INSTANCE.cleanIcon());
 				cleanIcon.addClickHandler(new ClickHandler() {
 					@Override
@@ -572,6 +573,7 @@ public class FormManager {
 				cleanIcon.setStyleName("okm-Hyperlink");
 				hPanel.add(Util.hSpace("5"));
 				hPanel.add(cleanIcon);
+				cleanIcon.setVisible((!readOnly && !((GWTInput) gwtFormElement).isReadonly())); // read only
 				
 				setRowWordWarp(row, 2, true);
 			}
@@ -583,7 +585,7 @@ public class FormManager {
 			textBox.setWidth(gwtFormElement.getWidth());
 			textBox.setStyleName("okm-Input");
 			textBox.setReadOnly(true);
-			textBox.setEnabled((!readOnly && !suggestBox.isReadonly()) || isSearchView);
+			textBox.setEnabled((!readOnly && !suggestBox.isReadonly()) || isSearchView); // read only 
 			final HTML hiddenKey = new HTML("");
 			hiddenKey.setVisible(false);
 			
@@ -684,7 +686,7 @@ public class FormManager {
 			}
 		} else if (gwtFormElement instanceof GWTCheckBox) {
 			CheckBox checkBox = new CheckBox();
-			checkBox.setEnabled((!readOnly && !((GWTCheckBox) gwtFormElement).isReadonly()) || isSearchView);
+			checkBox.setEnabled((!readOnly && !((GWTCheckBox) gwtFormElement).isReadonly()) || isSearchView); // read only
 			checkBox.setValue(((GWTCheckBox) gwtFormElement).getValue());
 			hWidgetProperties.put(propertyName, checkBox);
 			table.setHTML(row, 0, "<b>" + gwtFormElement.getLabel() + "</b>");
@@ -744,7 +746,7 @@ public class FormManager {
 				String selectedLabel = "";
 				HorizontalPanel hPanel = new HorizontalPanel();
 				ListBox listBox = new ListBox();
-				listBox.setEnabled((!readOnly && !gwtSelect.isReadonly()) || isSearchView);
+				listBox.setEnabled((!readOnly && !gwtSelect.isReadonly()) || isSearchView); // read only
 				hPanel.add(listBox);
 				listBox.setStyleName("okm-Select");
 				listBox.addItem("", ""); // Always we set and empty value
@@ -802,7 +804,7 @@ public class FormManager {
 			} else if (gwtSelect.getType().equals(GWTSelect.TYPE_MULTIPLE)) {
 				final HorizontalPanel hPanel = new HorizontalPanel();
 				ListBox listMulti = new ListBox();
-				listMulti.setEnabled((!readOnly && !gwtSelect.isReadonly()) || isSearchView);
+				listMulti.setEnabled((!readOnly && !gwtSelect.isReadonly()) || isSearchView); // read only
 				listMulti.setStyleName("okm-Select");
 				listMulti.addItem("", ""); // Always we set and empty value
 				
@@ -880,7 +882,7 @@ public class FormManager {
 					}
 				});
 				
-				addButton.setEnabled((!readOnly && !gwtSelect.isReadonly()) || isSearchView);
+				addButton.setEnabled((!readOnly && !gwtSelect.isReadonly()) || isSearchView); // read only
 				addButton.setStyleName("okm-Button");
 				
 				hPanel.add(tableMulti);
@@ -910,7 +912,7 @@ public class FormManager {
 						int rowTableMulti = tableMulti.getRowCount();
 						HTML htmlValue = new HTML(option.getValue());
 						
-						Image removeImage = new Image(OKMBundleResources.INSTANCE.deleteIcon());
+						Image removeImage = new Image(OKMBundleResources.INSTANCE.deleteIcon()); // read only for this element goes at edit() logic
 						removeImage.addClickHandler(new ClickHandler() {
 							@Override
 							public void onClick(ClickEvent event) {
@@ -1400,13 +1402,13 @@ public class FormManager {
 					
 					// Only it there's some element to assign must set it visible.
 					if (listMulti.getItemCount() > 1) {
-						listMulti.setVisible(true);
-						addButton.setVisible(true);
+						listMulti.setVisible((!readOnly && !gwtSelect.isReadonly()) || isSearchView); // read only
+						addButton.setVisible((!readOnly && !gwtSelect.isReadonly()) || isSearchView); // read only);
 					}
 					
 					// Enables deleting option
 					for (int i = 0; i < tableMulti.getRowCount(); i++) {
-						((Image) tableMulti.getWidget(i, 1)).setVisible(true);
+						((Image) tableMulti.getWidget(i, 1)).setVisible((!readOnly && !gwtSelect.isReadonly()) || isSearchView); // read only
 					}
 					
 					table.setWidget(rows, 1, hPanel);
