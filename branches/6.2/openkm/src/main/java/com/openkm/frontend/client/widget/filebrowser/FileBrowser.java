@@ -1460,10 +1460,8 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 	 * @author danilo
 	 */
 	public void massiveCancelCheckout() {
-		if (table.isDocumentSelected() && table.getDocument() != null) {
-			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagCheckout();
-			massiveService.cancelCheckout(table.getAllSelectedPaths(), callbackCancelCheckOut);
-		}
+		Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagCheckout();
+		massiveService.cancelCheckout(table.getAllSelectedPaths(), callbackCancelCheckOut);
 	}
 	
 	/**
