@@ -32,7 +32,9 @@ import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
 import com.openkm.api.OKMMail;
 import com.openkm.automation.AutomationException;
+import com.openkm.bean.Document;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.LockException;
@@ -274,12 +276,22 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 		updateSessionManager();
 		String error = "";
 		String pathErrors = "";
+		boolean hasAdminRole = getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE);
 		
 		// set all as checked out
 		for (String path : paths) {
 			try {
-				if (OKMDocument.getInstance().isValid(null, path)) {
-					OKMDocument.getInstance().cancelCheckout(null, path);
+				if (OKMDocument.getInstance().isValid(null, path) && OKMDocument.getInstance().isCheckedOut(null, path)) {
+					if (!hasAdminRole) {
+						OKMDocument.getInstance().cancelCheckout(null, path);
+					} else {
+						Document doc = OKMDocument.getInstance().getProperties(null, path);
+						if (doc.getLockInfo().getOwner().equals(getThreadLocalRequest().getRemoteUser())) {
+							OKMDocument.getInstance().cancelCheckout(null, path);
+						} else {
+							OKMDocument.getInstance().forceCancelCheckout(null, path);
+						}
+					}
 				}
 			} catch (LockException e) {
 				log.error(e.getMessage(), e);
