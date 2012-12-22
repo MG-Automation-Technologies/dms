@@ -546,7 +546,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 				mainPanel.desktop.navigator.trashTree.langRefresh();
 				mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.langRefresh();
 				
-				// execute refresh when changing language ( need reordering folders, documents etc... by active lang )
+				// execute refresh when changing language ( need reordering folders, documents, etc. by active lang )
 				mainPanel.topPanel.toolBar.executeRefresh();
 			}
 			
@@ -559,8 +559,6 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	
 	/**
 	 * Sets the lang map values
-	 * 
-	 * @param hI18n
 	 */
 	public void setLangMap(Map<String, String> hI18n) {
 		this.hI18n = hI18n;
