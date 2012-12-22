@@ -23,6 +23,7 @@ package com.openkm.bean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
@@ -241,8 +242,8 @@ public class Mail implements Serializable {
 		sb.append(", permissions=").append(permissions);
 		sb.append(", size=").append(size);
 		sb.append(", from=").append(from);
-		sb.append(", reply=").append(reply);
-		sb.append(", to=").append(to);
+		sb.append(", reply=").append(Arrays.toString(reply));
+		sb.append(", to=").append(Arrays.toString(to));
 		sb.append(", sentDate=").append(sentDate==null?null:sentDate.getTime());
 		sb.append(", receivedDate=").append(receivedDate==null?null:receivedDate.getTime());
 		sb.append(", subject=").append(subject);
