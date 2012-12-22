@@ -17,13 +17,13 @@ public class UserItems implements Serializable {
 	private String user;
 	
 	@Column(name="UI_FOLDERS")
-	private int folders;
+	private long folders;
 	
 	@Column(name="UI_DOCUMENTS")
-	private int documents;
+	private long documents;
 	
 	@Column(name="UI_MAILS")
-	private int mails;
+	private long mails;
 	
 	@Column(name="UI_SIZE")
 	private long size;
@@ -36,27 +36,27 @@ public class UserItems implements Serializable {
 		this.user = user;
 	}
 	
-	public int getFolders() {
+	public long getFolders() {
 		return folders;
 	}
 	
-	public void setFolders(int folders) {
+	public void setFolders(long folders) {
 		this.folders = folders;
 	}
 	
-	public int getDocuments() {
+	public long getDocuments() {
 		return documents;
 	}
 	
-	public void setDocuments(int document) {
+	public void setDocuments(long document) {
 		this.documents = document;
 	}
 	
-	public int getMails() {
+	public long getMails() {
 		return mails;
 	}
 
-	public void setMails(int mails) {
+	public void setMails(long mails) {
 		this.mails = mails;
 	}
 

@@ -14,12 +14,16 @@ import javax.jcr.query.QueryResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.bean.ContentInfo;
 import com.openkm.bean.Document;
 import com.openkm.bean.Repository;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.dao.NodeBaseDAO;
 import com.openkm.dao.UserItemsDAO;
 import com.openkm.dao.bean.cache.UserItems;
+import com.openkm.module.db.base.BaseFolderModule;
 
 public class UserItemsManager {
 	private static Logger log = LoggerFactory.getLogger(UserItemsManager.class);
@@ -97,8 +101,8 @@ public class UserItemsManager {
 	/**
 	 * TODO: Not fully implemented
 	 */
-	public static synchronized void refreshUserItems(Session session) throws RepositoryException {
-		log.info("refreshUserItems({})", session);
+	public static synchronized void refreshJcrUserItems(Session session) throws RepositoryException {
+		log.info("refreshJcrUserItems({})", session);
 		
 		try {
 			String statement = "/jcr:root/"+Repository.ROOT+"//element(*, okm:document)[okm:content/@okm:author='"+session.getUserID()+"']";
@@ -122,7 +126,57 @@ public class UserItemsManager {
 			throw new RepositoryException(e.getMessage(), e);
 		}
  		
- 		log.info("refreshUserItems: void");
+ 		log.info("refreshJcrUserItems: void");
+	}
+	
+	/**
+	 * Refresh user item cache from database.
+	 */
+	public static synchronized void refreshDbUserItems() throws RepositoryException {
+		log.info("refreshDbUserItems({})");
+		Map<String, ContentInfo> totalUserContInfo = new HashMap<String, ContentInfo>();
+		String[] bases = new String[] { Repository.ROOT, Repository.CATEGORIES, Repository.TEMPLATES,
+				Repository.PERSONAL, Repository.MAIL, Repository.TRASH };
+		
+		try {
+			for (String base : bases) {
+				log.info("Calculate user content info from '{}'...", base);
+				String uuid = NodeBaseDAO.getInstance().getUuidFromPath("/" + base);
+				Map<String, ContentInfo> userContInfo = BaseFolderModule.getUserContentInfo(uuid);
+				
+				for (String user : userContInfo.keySet()) {
+					ContentInfo usrTotContInfo = totalUserContInfo.get(user);
+					ContentInfo usrContInfo = userContInfo.get(user);
+					
+					if (usrTotContInfo == null) {
+						usrTotContInfo = new ContentInfo();
+					}
+					
+					usrTotContInfo.setDocuments(usrTotContInfo.getDocuments() + usrContInfo.getDocuments());
+					usrTotContInfo.setFolders(usrTotContInfo.getFolders() + usrContInfo.getFolders());
+					usrTotContInfo.setMails(usrTotContInfo.getMails() + usrContInfo.getMails());
+					usrTotContInfo.setSize(usrTotContInfo.getSize() + usrContInfo.getSize());
+					
+					totalUserContInfo.put(user, usrTotContInfo);
+				}
+			}
+			
+			for (String user : totalUserContInfo.keySet()) {
+				ContentInfo contInfo = totalUserContInfo.get(user);
+				UserItems userItems = new UserItems();
+				userItems.setDocuments(contInfo.getDocuments());
+				userItems.setFolders(contInfo.getFolders());
+				userItems.setSize(contInfo.getSize());
+				userItems.setUser(user);
+				userItemsMgr.put(user, userItems);
+			}
+		} catch (PathNotFoundException e) {
+			throw new RepositoryException("PathNotFoundException: " + e, e);
+		} catch (DatabaseException e) {
+			throw new RepositoryException("DatabaseException: " + e, e);
+		}
+ 		
+ 		log.info("refreshDbUserItems: void");
 	}
 
 	/**
