@@ -1691,8 +1691,6 @@ public class MainMenu extends Composite {
 	
 	/**
 	 * initAvailableLanguage
-	 * 
-	 * @param langs
 	 */
 	public void initAvailableLanguage(List<GWTLanguage> langs) {
 		for (final GWTLanguage lang : langs) {
@@ -1701,6 +1699,7 @@ public class MainMenu extends Composite {
 					Main.get().refreshLang(lang.getId());
 				}
 			});
+			
 			menuItem.addStyleName("okm-MainMenuItem");
 			subMenuLanguage.addItem(menuItem);
 		}
