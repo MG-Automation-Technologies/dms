@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -282,5 +283,65 @@ public class BaseFolderModule {
 		
 		log.debug("getContentInfo: {}", contentInfo);
 		return contentInfo;
+	}
+	
+	/**
+	 * Get content info by user recursively
+	 */
+	public static Map<String, ContentInfo> getUserContentInfo(String folderUuid) throws
+			PathNotFoundException, DatabaseException {
+		log.debug("getUserContentInfo({})", folderUuid);
+		Map<String, ContentInfo> userContentInfo = new HashMap<String, ContentInfo>();
+		
+		for (NodeFolder nFld : NodeFolderDAO.getInstance().findByParent(folderUuid)) {
+			Map<String, ContentInfo> usrContInfoRt = getUserContentInfo(nFld.getUuid());
+			
+			for (String user : usrContInfoRt.keySet()) {
+				ContentInfo ciRt = usrContInfoRt.get(user);
+				ContentInfo ci = getOrCreate(userContentInfo, user);
+				ci.setDocuments(ci.getDocuments() + ciRt.getDocuments());
+				ci.setSize(ci.getSize() + ciRt.getSize());
+				userContentInfo.put(user, ci);
+			}
+			
+			ContentInfo ci = getOrCreate(userContentInfo, nFld.getAuthor());
+			ci.setFolders(ci.getFolders() + ci.getFolders() + 1);
+			userContentInfo.put(nFld.getAuthor(), ci);
+		}
+		
+		for (NodeDocument nDoc : NodeDocumentDAO.getInstance().findByParent(folderUuid)) {
+			for (NodeDocumentVersion nDocVer : NodeDocumentVersionDAO.getInstance().findByParent(nDoc.getUuid())) {
+				ContentInfo ci = getOrCreate(userContentInfo, nDocVer.getAuthor());
+				ci.setSize(ci.getSize() + nDocVer.getSize());
+				userContentInfo.put(nDocVer.getAuthor(), ci);
+			}
+			
+			ContentInfo ci = getOrCreate(userContentInfo, nDoc.getAuthor());
+			ci.setDocuments(ci.getDocuments() + 1);
+			userContentInfo.put(nDoc.getAuthor(), ci);
+		}
+		
+		for (NodeMail nMail : NodeMailDAO.getInstance().findByParent(folderUuid)) {
+			ContentInfo ci = getOrCreate(userContentInfo, nMail.getAuthor());
+			ci.setDocuments(ci.getDocuments() + 1);
+			ci.setSize(ci.getSize() + nMail.getSize());
+			userContentInfo.put(nMail.getAuthor(), ci);
+		}
+		
+		log.debug("getUserContentInfo: {}", userContentInfo);
+		return userContentInfo;
+	}
+	
+	/**
+	 * Helper method
+	 */
+	private static ContentInfo getOrCreate(Map<String, ContentInfo> userContentInfo, String user) {
+		ContentInfo ci = userContentInfo.get(user);
+		
+		if (ci == null) {
+			ci = new ContentInfo();
+		}
+		
+		return ci;
 	}
 }
