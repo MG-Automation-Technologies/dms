@@ -68,7 +68,7 @@ public class PDFUtils {
 				String fieldValue = fields.getField(field.getName());
 				log.debug("Field: {}, Value: '{}'", field.getName(), fieldValue);
 				
-				if (fieldValue != null && !fieldValue.equals("")) {
+				if (fieldValue != null && !fieldValue.isEmpty()) {
 					// if (values.containsKey(field.getName())) {
 						String result = TemplateUtils.replace("PDF_FILL_FORM", fieldValue, values);
 						log.debug("Field '{}' set to '{}' (by expression)", field.getName(), result);
