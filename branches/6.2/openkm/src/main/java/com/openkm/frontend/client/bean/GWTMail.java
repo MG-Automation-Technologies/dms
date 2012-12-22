@@ -21,6 +21,7 @@
 
 package com.openkm.frontend.client.bean;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -239,23 +240,23 @@ public class GWTMail implements IsSerializable {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[");
-		sb.append("path="); sb.append(path);
-		sb.append(", uuid="); sb.append(uuid);
-		sb.append(", permissions="); sb.append(permissions);
-		sb.append(", size="); sb.append(size);
-		sb.append(", from="); sb.append(from);
-		sb.append(", reply="); sb.append(reply);
-		sb.append(", to="); sb.append(to);
-		sb.append(", sentDate="); sb.append(sentDate==null?null:sentDate.getTime());
-		sb.append(", receivedDate="); sb.append(receivedDate==null?null:receivedDate.getTime());
-		sb.append(", subject="); sb.append(subject);
-		sb.append(", content="); sb.append(content);
-		sb.append(", attachments="); sb.append(attachments);
-		sb.append(", notes="); sb.append(notes);
-		sb.append(", categories="); sb.append(categories);
-		sb.append(", keywords="); sb.append(keywords);
-		sb.append(", author="); sb.append(author);
-		sb.append(", created="); sb.append(created==null?null:created.getTime());
+		sb.append("path=").append(path);
+		sb.append(", uuid=").append(uuid);
+		sb.append(", permissions=").append(permissions);
+		sb.append(", size=").append(size);
+		sb.append(", from=").append(from);
+		sb.append(", reply=").append(Arrays.toString(reply));
+		sb.append(", to=").append(Arrays.toString(to));
+		sb.append(", sentDate=").append(sentDate==null?null:sentDate.getTime());
+		sb.append(", receivedDate=").append(receivedDate==null?null:receivedDate.getTime());
+		sb.append(", subject=").append(subject);
+		sb.append(", content=").append(content);
+		sb.append(", attachments=").append(attachments);
+		sb.append(", notes=").append(notes);
+		sb.append(", categories=").append(categories);
+		sb.append(", keywords=").append(keywords);
+		sb.append(", author=").append(author);
+		sb.append(", created=").append(created==null?null:created.getTime());
 		sb.append("]");
 		return sb.toString();
 	}

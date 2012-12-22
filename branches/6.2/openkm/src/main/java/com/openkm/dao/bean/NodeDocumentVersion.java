@@ -234,7 +234,7 @@ public class NodeDocumentVersion implements Serializable {
 		sb.append(", comment=").append(comment);
 		sb.append(", mimeType=").append(mimeType);
 		sb.append(", checksum=").append(checksum);
-		sb.append(", content=").append(content);
+		sb.append(", content=").append(new String(content));
 		sb.append(", text=").append(text);
 		sb.append("}");
 		return sb.toString();
