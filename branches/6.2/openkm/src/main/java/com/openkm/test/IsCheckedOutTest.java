@@ -73,9 +73,7 @@ public class IsCheckedOutTest {
 	}
 	
 	/**
-	 * @throws RepositoryException 
-	 * @throws UnsupportedRepositoryOperationException 
-	 * 
+	 *
 	 */
 	public static void showVersion(Node node) throws UnsupportedRepositoryOperationException, RepositoryException {
 		System.out.println("## VERSION ##");

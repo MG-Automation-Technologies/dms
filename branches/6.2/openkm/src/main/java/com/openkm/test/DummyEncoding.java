@@ -131,11 +131,7 @@ public class DummyEncoding {
 	}
 
 	/**
-	 * @return
-	 * @throws NamingException
-	 * @throws RepositoryException
-	 * @throws LoginException
-	 * @throws NoSuchWorkspaceException
+	 * 
 	 */
 	public static Session login(String user, String pass)
 			throws NamingException, RepositoryException, LoginException,
@@ -148,10 +144,9 @@ public class DummyEncoding {
 	}
 
 	/**
-	 * @return
-	 * @throws RepositoryException
+	 * 
 	 */
-	public static Repository getRepository() throws RepositoryException {
+	public static synchronized Repository getRepository() throws RepositoryException {
 		if (repository == null) {
 			// Repository config
 			String repositoryConfig = "repository2.xml";
@@ -167,17 +162,13 @@ public class DummyEncoding {
 	}
 
 	/**
-	 * @return
-	 * @throws LoginException
-	 * @throws NoSuchWorkspaceException
-	 * @throws RepositoryException
+	 * 
 	 */
-	public static Session getSystemSession() throws LoginException,
+	public static synchronized Session getSystemSession() throws LoginException,
 			NoSuchWorkspaceException, RepositoryException {
 		if (systemSession == null) {
 			// System User Session
-			systemSession = repository.login(new SimpleCredentials("system", ""
-					.toCharArray()), null);
+			systemSession = repository.login(new SimpleCredentials("system", "".toCharArray()), null);
 			log.debug("*** System user created " + systemSession.getUserID());
 		}
 
@@ -185,19 +176,7 @@ public class DummyEncoding {
 	}
 
 	/**
-	 * @param session
-	 * @return
-	 * @throws NamespaceException
-	 * @throws UnsupportedRepositoryOperationException
-	 * @throws AccessDeniedException
-	 * @throws RepositoryException
-	 * @throws ItemExistsException
-	 * @throws PathNotFoundException
-	 * @throws NoSuchNodeTypeException
-	 * @throws LockException
-	 * @throws VersionException
-	 * @throws ConstraintViolationException
-	 * @throws InvalidItemStateException
+	 *
 	 */
 	public static Node createRepository() throws NamespaceException,
 			UnsupportedRepositoryOperationException, AccessDeniedException,

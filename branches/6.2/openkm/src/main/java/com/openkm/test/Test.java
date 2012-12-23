@@ -29,8 +29,8 @@ public class Test {
 		
 		SchemaExport se = new SchemaExport(cfg);
 		se.setOutputFile("/home/pavila/export.sql");
-        se.setDelimiter(";");
-        se.setFormat(false);
-        se.create(false, false);
+		se.setDelimiter(";");
+		se.setFormat(false);
+		se.create(false, false);
 	}
 }
