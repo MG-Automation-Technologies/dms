@@ -137,7 +137,7 @@ public class JcrSearchModule implements SearchModule {
 		String query = null;
 		
 		if (!"".equals(params.getStatementQuery())
-				&& (Query.XPATH.equals(params.getStatementType()) | Query.SQL.equals(params.getStatementType()))) {
+				&& (Query.XPATH.equals(params.getStatementType()) || Query.SQL.equals(params.getStatementType()))) {
 			query = params.getStatementQuery();
 			type = params.getStatementType();
 		} else {
@@ -224,10 +224,10 @@ public class JcrSearchModule implements SearchModule {
 			params.setContent(escapeContains(params.getContent()));
 		}
 		
-		if (!params.getContent().equals("") || !params.getName().equals("") || !params.getKeywords().equals("")
-				|| !params.getMimeType().equals("") || !params.getAuthor().equals("")
-				|| !params.getProperties().isEmpty() || !params.getMailSubject().equals("")
-				|| !params.getMailFrom().equals("") || !params.getMailTo().equals("")
+		if (!params.getContent().isEmpty() || !params.getName().isEmpty() || !params.getKeywords().isEmpty()
+				|| !params.getMimeType().isEmpty() || !params.getAuthor().isEmpty()
+				|| !params.getProperties().isEmpty() || !params.getMailSubject().isEmpty()
+				|| !params.getMailFrom().isEmpty() || !params.getMailTo().isEmpty()
 				|| (params.getLastModifiedFrom() != null && params.getLastModifiedTo() != null)) {
 			
 			// Construct the query
