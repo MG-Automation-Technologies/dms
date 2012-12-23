@@ -1,22 +1,22 @@
 /**
- *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2012  Paco Avila & Josep Llort
- *
- *  No bytes were intentionally harmed during the development of this application.
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * OpenKM, Open Document Management System (http://www.openkm.com)
+ * Copyright (c) 2006-2012 Paco Avila & Josep Llort
+ * 
+ * No bytes were intentionally harmed during the development of this application.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 package com.openkm.ws.endpoint;
@@ -45,11 +45,11 @@ import com.openkm.module.ModuleManager;
 @WebService(name = "OKMFolder", serviceName = "OKMFolder", targetNamespace = "http://ws.openkm.com")
 public class FolderService {
 	private static Logger log = LoggerFactory.getLogger(FolderService.class);
-
+	
 	@WebMethod
-	public Folder create(@WebParam(name = "token") String token,
-			@WebParam(name = "fld") Folder fld) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, ItemExistsException, DatabaseException, ExtensionException, AutomationException {
+	public Folder create(@WebParam(name = "token") String token, @WebParam(name = "fld") Folder fld)
+			throws AccessDeniedException, RepositoryException, PathNotFoundException, ItemExistsException, DatabaseException,
+			ExtensionException, AutomationException {
 		log.debug("create({}, {})", token, fld);
 		FolderModule fm = ModuleManager.getFolderModule();
 		Folder newFolder = fm.create(token, fld);
@@ -58,9 +58,8 @@ public class FolderService {
 	}
 	
 	@WebMethod
-	public Folder createSimple(@WebParam(name = "token") String token,
-			@WebParam(name = "fldPath") String fldPath) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, ItemExistsException, DatabaseException,
+	public Folder createSimple(@WebParam(name = "token") String token, @WebParam(name = "fldPath") String fldPath)
+			throws AccessDeniedException, RepositoryException, PathNotFoundException, ItemExistsException, DatabaseException,
 			ExtensionException, AutomationException {
 		log.debug("createSimple({}, {})", token, fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
@@ -70,22 +69,20 @@ public class FolderService {
 		log.debug("createSimple: {}", newFolder);
 		return newFolder;
 	}
-
+	
 	@WebMethod
-	public Folder getProperties(@WebParam(name = "token") String token,
-			@WebParam(name = "fldPath") String fldPath) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, DatabaseException {
+	public Folder getProperties(@WebParam(name = "token") String token, @WebParam(name = "fldPath") String fldPath)
+			throws AccessDeniedException, RepositoryException, PathNotFoundException, DatabaseException {
 		log.debug("getProperties({}, {})", token, fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		Folder fld = fm.getProperties(token, fldPath);
 		log.debug("getProperties: {}", fld);
 		return fld;
 	}
-
+	
 	@WebMethod
-	public void delete(@WebParam(name = "token") String token,
-			@WebParam(name = "fldPath") String fldPath) throws LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+	public void delete(@WebParam(name = "token") String token, @WebParam(name = "fldPath") String fldPath)
+			throws LockException, PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("delete({}, {})", token, fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		fm.delete(token, fldPath);
@@ -93,8 +90,7 @@ public class FolderService {
 	}
 	
 	@WebMethod
-	public Folder rename(@WebParam(name = "token") String token,
-			@WebParam(name = "fldPath") String fldPath,
+	public Folder rename(@WebParam(name = "token") String token, @WebParam(name = "fldPath") String fldPath,
 			@WebParam(name = "newName") String newName) throws PathNotFoundException, ItemExistsException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("rename({}, {}, {})", new Object[] { token, fldPath, newName });
@@ -105,8 +101,7 @@ public class FolderService {
 	}
 	
 	@WebMethod
-	public void move(@WebParam(name = "token") String token,
-			@WebParam(name = "fldPath") String fldPath, 
+	public void move(@WebParam(name = "token") String token, @WebParam(name = "fldPath") String fldPath,
 			@WebParam(name = "dstPath") String dstPath) throws PathNotFoundException, ItemExistsException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("move({}, {}, {})", new Object[] { token, fldPath, dstPath });
@@ -117,33 +112,30 @@ public class FolderService {
 	
 	@WebMethod
 	@Deprecated
-	public Folder[] getChilds(@WebParam(name = "token") String token,
-			@WebParam(name = "fldPath") String fldPath) throws PathNotFoundException,
-			RepositoryException, DatabaseException {
+	public Folder[] getChilds(@WebParam(name = "token") String token, @WebParam(name = "fldPath") String fldPath)
+			throws PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getChilds({}, {})", token, fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		List<Folder> col = fm.getChilds(token, fldPath);
-		Folder[] result = (Folder []) col.toArray(new Folder[col.size()]);
+		Folder[] result = (Folder[]) col.toArray(new Folder[col.size()]);
 		log.debug("getChilds: {}", result);
 		return result;
 	}
 	
 	@WebMethod
-	public Folder[] getChildren(@WebParam(name = "token") String token,
-			@WebParam(name = "fldPath") String fldPath) throws PathNotFoundException,
-			RepositoryException, DatabaseException {
+	public Folder[] getChildren(@WebParam(name = "token") String token, @WebParam(name = "fldPath") String fldPath)
+			throws PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getChildren({}, {})", token, fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		List<Folder> col = fm.getChildren(token, fldPath);
-		Folder[] result = (Folder []) col.toArray(new Folder[col.size()]);
+		Folder[] result = (Folder[]) col.toArray(new Folder[col.size()]);
 		log.debug("getChildren: {}", result);
 		return result;
 	}
 	
 	@WebMethod
-	public boolean isValid(@WebParam(name = "token") String token,
-			@WebParam(name = "fldPath") String fldPath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
+	public boolean isValid(@WebParam(name = "token") String token, @WebParam(name = "fldPath") String fldPath)
+			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("isValid({}, {})", token, fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		boolean valid = fm.isValid(token, fldPath);
@@ -152,9 +144,8 @@ public class FolderService {
 	}
 	
 	@WebMethod
-	public String getPath(@WebParam(name = "token") String token,
-			@WebParam(name = "uuid") String uuid) throws AccessDeniedException, RepositoryException,
-			DatabaseException {
+	public String getPath(@WebParam(name = "token") String token, @WebParam(name = "uuid") String uuid)
+			throws AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getPath({}, {})", token, uuid);
 		FolderModule fm = ModuleManager.getFolderModule();
 		String path = fm.getPath(token, uuid);
