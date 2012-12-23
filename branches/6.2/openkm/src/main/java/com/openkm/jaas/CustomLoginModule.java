@@ -90,11 +90,9 @@ public class CustomLoginModule implements LoginModule {
 			populateRoles();
 			return true;
 		} catch (PrincipalAdapterException pae) {
-			new LoginException(pae.getMessage());
-			return false;
+			throw new LoginException(pae.getMessage());
 		} catch (NoSuchAlgorithmException nsae) {
-			new LoginException(nsae.getMessage());
-			return false;
+			throw new LoginException(nsae.getMessage());
 		}
 	}
 	
