@@ -38,8 +38,8 @@ public class DummyTextExtractor {
 	private static Session systemSession = null;
 	private static Repository repository = null;
 	
-	public static void main(String[] args) throws NamingException,
-			RepositoryException, FileNotFoundException, InterruptedException {
+	public static void main(String[] args) throws NamingException, RepositoryException, FileNotFoundException,
+			InterruptedException {
 		log.info("*** DESTROY REPOSITORY ***");
 		removeRepository();
 		
@@ -52,7 +52,7 @@ public class DummyTextExtractor {
 		log.info("*** GET MY ROOT NODE ***");
 		Node rootNode = userSession.getRootNode();
 		Node myRoot = rootNode.getNode("my:root");
-				
+		
 		log.info("*** ADD A DOCUMENT NODE ***");
 		Node fileNode = myRoot.addNode("perico.jpg", "nt:file");
 		Node contentNode = fileNode.addNode("jcr:content", "nt:resource");
@@ -74,7 +74,7 @@ public class DummyTextExtractor {
 		userSession.logout();
 		getSystemSession().logout();
 	}
-
+	
 	/**
 	 * 
 	 */
@@ -85,27 +85,22 @@ public class DummyTextExtractor {
 			System.err.println("No previous repo");
 		}
 	}
-
+	
 	/**
-	 * @return
-	 * @throws NamingException
-	 * @throws RepositoryException
-	 * @throws LoginException
-	 * @throws NoSuchWorkspaceException
+	 * 
 	 */
-	public static Session login(String user, String pass) throws NamingException,
-		RepositoryException, LoginException, NoSuchWorkspaceException {
+	public static Session login(String user, String pass) throws NamingException, RepositoryException, LoginException,
+			NoSuchWorkspaceException {
 		Repository repository = getRepository();
 		Session session = repository.login(new SimpleCredentials(user, pass.toCharArray()), null);
-		log.info("Session: "+session);
+		log.info("Session: " + session);
 		return session;
 	}
-
+	
 	/**
-	 * @return
-	 * @throws RepositoryException
+	 * 
 	 */
-	public static Repository getRepository() throws RepositoryException {
+	public static synchronized Repository getRepository() throws RepositoryException {
 		if (repository == null) {
 			// Repository config
 			String repositoryConfig = "repositoryTE.xml";
@@ -113,57 +108,39 @@ public class DummyTextExtractor {
 			
 			RepositoryConfig config = RepositoryConfig.create(repositoryConfig, repositoryHome);
 			repository = RepositoryImpl.create(config);
-			log.info("*** System repository created "+repository);
+			log.info("*** System repository created " + repository);
 		}
 		
 		return repository;
 	}
 	
 	/**
-	 * @return
-	 * @throws LoginException
-	 * @throws NoSuchWorkspaceException
-	 * @throws RepositoryException
+	 * 
 	 */
-	public static Session getSystemSession() throws LoginException, NoSuchWorkspaceException, RepositoryException {
+	public static synchronized Session getSystemSession() throws LoginException, NoSuchWorkspaceException, RepositoryException {
 		if (systemSession == null) {
 			// System User Session
 			systemSession = repository.login(new SimpleCredentials("system", "".toCharArray()), null);
-			log.info("*** System user created "+systemSession.getUserID());				
+			log.info("*** System user created " + systemSession.getUserID());
 		}
 		
 		return systemSession;
 	}
 	
 	/**
-	 * @param session
-	 * @return
-	 * @throws NamespaceException
-	 * @throws UnsupportedRepositoryOperationException
-	 * @throws AccessDeniedException
-	 * @throws RepositoryException
-	 * @throws ItemExistsException
-	 * @throws PathNotFoundException
-	 * @throws NoSuchNodeTypeException
-	 * @throws LockException
-	 * @throws VersionException
-	 * @throws ConstraintViolationException
-	 * @throws InvalidItemStateException
+	 * 
 	 */
-	public static Node createRepository()
-			throws NamespaceException, UnsupportedRepositoryOperationException,
-			AccessDeniedException, RepositoryException, ItemExistsException,
-			PathNotFoundException, NoSuchNodeTypeException, LockException,
-			VersionException, ConstraintViolationException,
-			InvalidItemStateException {
+	public static Node createRepository() throws NamespaceException, UnsupportedRepositoryOperationException,
+			AccessDeniedException, RepositoryException, ItemExistsException, PathNotFoundException, NoSuchNodeTypeException,
+			LockException, VersionException, ConstraintViolationException, InvalidItemStateException {
 		// Initialize repository
-		//Repository repository = getRepository();
+		// Repository repository = getRepository();
 		Session systemSession = getSystemSession();
 		
 		// Namespace registration
 		Workspace ws = systemSession.getWorkspace();
 		ws.getNamespaceRegistry().registerNamespace("my", "http://www.guia-ubuntu.org/1.0");
-
+		
 		// Node creation
 		Node root = systemSession.getRootNode();
 		Node okmRoot = root.addNode("my:root", "nt:folder");

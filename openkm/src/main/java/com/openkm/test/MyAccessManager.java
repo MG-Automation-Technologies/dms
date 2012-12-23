@@ -93,7 +93,6 @@ public class MyAccessManager implements AccessManager {
 
 		log.debug("[NOT inside]");
 		alreadyInsideAccessManager.set(Boolean.TRUE);
-		
 		alreadyInsideAccessManager.remove();
 		
 		return true;
