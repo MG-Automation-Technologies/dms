@@ -124,7 +124,10 @@ public class Tesseract2TextExtractor extends AbstractTextExtractor {
 				FileUtils.deleteQuietly(tmpFileIn);
 				FileUtils.deleteQuietly(tmpFilePre);
 				FileUtils.deleteQuietly(tmpFileOut);
-				FileUtils.deleteQuietly(new File(tmpFileOut.getPath()+".txt"));
+				
+				if (tmpFileOut != null) {
+					FileUtils.deleteQuietly(new File(tmpFileOut.getPath() + ".txt"));
+				}
 			}
 		} else {
 			log.warn("Undefined OCR application");

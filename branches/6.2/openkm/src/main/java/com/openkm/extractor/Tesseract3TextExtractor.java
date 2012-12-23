@@ -160,7 +160,10 @@ public class Tesseract3TextExtractor extends AbstractTextExtractor {
 				IOUtils.closeQuietly(fis);
 				IOUtils.closeQuietly(stdout);
 				FileUtils.deleteQuietly(tmpFileOut);
-				FileUtils.deleteQuietly(new File(tmpFileOut.getPath() + ".txt"));
+				
+				if (tmpFileOut != null) {
+					FileUtils.deleteQuietly(new File(tmpFileOut.getPath() + ".txt"));
+				}
 			}
     	} else {
     		log.warn("Undefined OCR application");
