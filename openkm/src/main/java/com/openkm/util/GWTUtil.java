@@ -1224,7 +1224,7 @@ public class GWTUtil {
 		} else if (formElement instanceof GWTTextArea) {
 			return ((GWTTextArea) formElement).getValue();
 		} else if (formElement instanceof GWTUpload) {
-			return ((GWTButton) formElement).getLabel();
+			return ((GWTUpload) formElement).getLabel();
 		} else if (formElement instanceof GWTText) {
 			return ((GWTText) formElement).getLabel();
 		} else if (formElement instanceof GWTSeparator) {
