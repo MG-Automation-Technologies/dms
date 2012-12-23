@@ -1,22 +1,22 @@
 /**
- *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2012  Paco Avila & Josep Llort
- *
- *  No bytes were intentionally harmed during the development of this application.
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * OpenKM, Open Document Management System (http://www.openkm.com)
+ * Copyright (c) 2006-2012 Paco Avila & Josep Llort
+ * 
+ * No bytes were intentionally harmed during the development of this application.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 package com.openkm.ws.endpoint;
@@ -69,8 +69,8 @@ public class DashboardService {
 	}
 	
 	@WebMethod
-	public DashboardDocumentResult[] getUserLockedDocuments(@WebParam(name = "token") String token)
-			throws RepositoryException, DatabaseException {
+	public DashboardDocumentResult[] getUserLockedDocuments(@WebParam(name = "token") String token) throws RepositoryException,
+			DatabaseException {
 		log.debug("getUserLockedDocuments({})", new Object[] { token });
 		DashboardModule dm = ModuleManager.getDashboardModule();
 		List<DashboardDocumentResult> col = dm.getUserLockedDocuments(token);
@@ -91,8 +91,8 @@ public class DashboardService {
 	}
 	
 	@WebMethod
-	public DashboardFolderResult[] getUserSubscribedFolders(@WebParam(name = "token") String token)
-			throws RepositoryException, DatabaseException {
+	public DashboardFolderResult[] getUserSubscribedFolders(@WebParam(name = "token") String token) throws RepositoryException,
+			DatabaseException {
 		log.debug("getUserSubscribedFolders({})", new Object[] { token });
 		DashboardModule dm = ModuleManager.getDashboardModule();
 		List<DashboardFolderResult> col = dm.getUserSubscribedFolders(token);
@@ -124,8 +124,8 @@ public class DashboardService {
 	}
 	
 	@WebMethod
-	public DashboardMailResult[] getUserLastImportedMails(@WebParam(name = "token") String token)
-			throws RepositoryException, DatabaseException {
+	public DashboardMailResult[] getUserLastImportedMails(@WebParam(name = "token") String token) throws RepositoryException,
+			DatabaseException {
 		log.debug("getUserLastImportedMails({})", new Object[] { token });
 		DashboardModule dm = ModuleManager.getDashboardModule();
 		List<DashboardMailResult> col = dm.getUserLastImportedMails(token);
@@ -137,7 +137,7 @@ public class DashboardService {
 	@WebMethod
 	public DashboardDocumentResult[] getUserLastImportedMailAttachments(@WebParam(name = "token") String token)
 			throws RepositoryException, DatabaseException {
-		log.debug("getUserLastImportedMailAttachments({})", new Object[] {  token });
+		log.debug("getUserLastImportedMailAttachments({})", new Object[] { token });
 		DashboardModule dm = ModuleManager.getDashboardModule();
 		List<DashboardDocumentResult> col = dm.getUserLastImportedMailAttachments(token);
 		DashboardDocumentResult[] result = (DashboardDocumentResult[]) col.toArray(new DashboardDocumentResult[col.size()]);
@@ -146,8 +146,7 @@ public class DashboardService {
 	}
 	
 	@WebMethod
-	public long getUserDocumentsSize(@WebParam(name = "token") String token)
-			throws RepositoryException, DatabaseException {
+	public long getUserDocumentsSize(@WebParam(name = "token") String token) throws RepositoryException, DatabaseException {
 		log.debug("getUserDocumentsSize({})", new Object[] { token });
 		DashboardModule dm = ModuleManager.getDashboardModule();
 		long ret = dm.getUserDocumentsSize(token);
@@ -156,8 +155,7 @@ public class DashboardService {
 	}
 	
 	@WebMethod
-	public QueryParams[] getUserSearchs(@WebParam(name = "token") String token)
-			throws RepositoryException, DatabaseException {
+	public QueryParams[] getUserSearchs(@WebParam(name = "token") String token) throws RepositoryException, DatabaseException {
 		log.debug("getUserSearchs({})", new Object[] { token });
 		DashboardModule dm = ModuleManager.getDashboardModule();
 		List<QueryParams> col = dm.getUserSearchs(token);
@@ -167,9 +165,8 @@ public class DashboardService {
 	}
 	
 	@WebMethod
-	public DashboardDocumentResult[] find(@WebParam(name = "token") String token,
-			@WebParam(name = "qpId") int qpId) throws IOException, ParseException, RepositoryException, 
-			DatabaseException {
+	public DashboardDocumentResult[] find(@WebParam(name = "token") String token, @WebParam(name = "qpId") int qpId)
+			throws IOException, ParseException, RepositoryException, DatabaseException {
 		log.debug("find({}, {})", new Object[] { token, qpId });
 		DashboardModule dm = ModuleManager.getDashboardModule();
 		List<DashboardDocumentResult> col = dm.find(token, qpId);
@@ -181,7 +178,7 @@ public class DashboardService {
 	@WebMethod
 	public DashboardDocumentResult[] getLastWeekTopDownloadedDocuments(@WebParam(name = "token") String token)
 			throws RepositoryException, DatabaseException {
-		log.debug("getLastWeekTopDownloadedDocuments({})", new Object[] {  token });
+		log.debug("getLastWeekTopDownloadedDocuments({})", new Object[] { token });
 		DashboardModule dm = ModuleManager.getDashboardModule();
 		List<DashboardDocumentResult> col = dm.getLastWeekTopDownloadedDocuments(token);
 		DashboardDocumentResult[] result = (DashboardDocumentResult[]) col.toArray(new DashboardDocumentResult[col.size()]);
@@ -192,7 +189,7 @@ public class DashboardService {
 	@WebMethod
 	public DashboardDocumentResult[] getLastMonthTopDownloadedDocuments(@WebParam(name = "token") String token)
 			throws RepositoryException, DatabaseException {
-		log.debug("getLastMonthTopDownloadedDocuments({})", new Object[] {  token });
+		log.debug("getLastMonthTopDownloadedDocuments({})", new Object[] { token });
 		DashboardModule dm = ModuleManager.getDashboardModule();
 		List<DashboardDocumentResult> col = dm.getLastMonthTopDownloadedDocuments(token);
 		DashboardDocumentResult[] result = (DashboardDocumentResult[]) col.toArray(new DashboardDocumentResult[col.size()]);
@@ -203,7 +200,7 @@ public class DashboardService {
 	@WebMethod
 	public DashboardDocumentResult[] getLastWeekTopModifiedDocuments(@WebParam(name = "token") String token)
 			throws RepositoryException, DatabaseException {
-		log.debug("getLastWeekTopModifiedDocuments({})", new Object[] {  token });
+		log.debug("getLastWeekTopModifiedDocuments({})", new Object[] { token });
 		DashboardModule dm = ModuleManager.getDashboardModule();
 		List<DashboardDocumentResult> col = dm.getLastWeekTopModifiedDocuments(token);
 		DashboardDocumentResult[] result = (DashboardDocumentResult[]) col.toArray(new DashboardDocumentResult[col.size()]);
@@ -214,7 +211,7 @@ public class DashboardService {
 	@WebMethod
 	public DashboardDocumentResult[] getLastMonthTopModifiedDocuments(@WebParam(name = "token") String token)
 			throws RepositoryException, DatabaseException {
-		log.debug("getLastMonthTopModifiedDocuments({})", new Object[] {  token });
+		log.debug("getLastMonthTopModifiedDocuments({})", new Object[] { token });
 		DashboardModule dm = ModuleManager.getDashboardModule();
 		List<DashboardDocumentResult> col = dm.getLastMonthTopModifiedDocuments(token);
 		DashboardDocumentResult[] result = (DashboardDocumentResult[]) col.toArray(new DashboardDocumentResult[col.size()]);
@@ -225,7 +222,7 @@ public class DashboardService {
 	@WebMethod
 	public DashboardDocumentResult[] getLastModifiedDocuments(@WebParam(name = "token") String token)
 			throws RepositoryException, DatabaseException {
-		log.debug("getLastModifiedDocuments({})", new Object[] {  token });
+		log.debug("getLastModifiedDocuments({})", new Object[] { token });
 		DashboardModule dm = ModuleManager.getDashboardModule();
 		List<DashboardDocumentResult> col = dm.getLastModifiedDocuments(token);
 		DashboardDocumentResult[] result = (DashboardDocumentResult[]) col.toArray(new DashboardDocumentResult[col.size()]);
@@ -236,7 +233,7 @@ public class DashboardService {
 	@WebMethod
 	public DashboardDocumentResult[] getLastUploadedDocuments(@WebParam(name = "token") String token)
 			throws RepositoryException, DatabaseException {
-		log.debug("getLastUploadedDocuments({})", new Object[] {  token });
+		log.debug("getLastUploadedDocuments({})", new Object[] { token });
 		DashboardModule dm = ModuleManager.getDashboardModule();
 		List<DashboardDocumentResult> col = dm.getLastUploadedDocuments(token);
 		DashboardDocumentResult[] result = (DashboardDocumentResult[]) col.toArray(new DashboardDocumentResult[col.size()]);
@@ -245,11 +242,10 @@ public class DashboardService {
 	}
 	
 	@WebMethod
-	public void visiteNode(@WebParam(name = "token") String token,
-			@WebParam(name = "source") String source,
-			@WebParam(name = "node") String node,
-			@WebParam(name = "date") Calendar date) throws RepositoryException, DatabaseException {
-		log.debug("visiteNode({}, {}, {}, {})", new Object[] {  token, source, node, date });
+	public void visiteNode(@WebParam(name = "token") String token, @WebParam(name = "source") String source,
+			@WebParam(name = "node") String node, @WebParam(name = "date") Calendar date) throws RepositoryException,
+			DatabaseException {
+		log.debug("visiteNode({}, {}, {}, {})", new Object[] { token, source, node, date });
 		DashboardModule dm = ModuleManager.getDashboardModule();
 		dm.visiteNode(token, source, node, date);
 		log.debug("visiteNode: void");

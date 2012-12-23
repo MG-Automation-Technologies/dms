@@ -1,22 +1,22 @@
 /**
- *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2012  Paco Avila & Josep Llort
- *
- *  No bytes were intentionally harmed during the development of this application.
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * OpenKM, Open Document Management System (http://www.openkm.com)
+ * Copyright (c) 2006-2012 Paco Avila & Josep Llort
+ * 
+ * No bytes were intentionally harmed during the development of this application.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 package com.openkm.ws.endpoint;
@@ -53,9 +53,8 @@ public class SearchService {
 	private static Logger log = LoggerFactory.getLogger(SearchService.class);
 	
 	@WebMethod
-	public QueryResult[] findByContent(@WebParam(name = "token") String token,
-			@WebParam(name = "content") String content) throws IOException, ParseException,
-			RepositoryException, DatabaseException {
+	public QueryResult[] findByContent(@WebParam(name = "token") String token, @WebParam(name = "content") String content)
+			throws IOException, ParseException, RepositoryException, DatabaseException {
 		log.debug("findByContent({}, {})", token, content);
 		SearchModule sm = ModuleManager.getSearchModule();
 		List<QueryResult> col = sm.findByContent(token, content);
@@ -63,11 +62,10 @@ public class SearchService {
 		log.debug("findByContent: {}", result);
 		return result;
 	}
-
+	
 	@WebMethod
-	public QueryResult[] findByName(@WebParam(name = "token") String token,
-			@WebParam(name = "name") String name) throws IOException, ParseException, RepositoryException,
-			DatabaseException {
+	public QueryResult[] findByName(@WebParam(name = "token") String token, @WebParam(name = "name") String name)
+			throws IOException, ParseException, RepositoryException, DatabaseException {
 		log.debug("findByName({}, {})", token, name);
 		SearchModule sm = ModuleManager.getSearchModule();
 		List<QueryResult> col = sm.findByName(token, name);
@@ -75,11 +73,10 @@ public class SearchService {
 		log.debug("findByName: {}", result);
 		return result;
 	}
-
+	
 	@WebMethod
-	public QueryResult[] findByKeywords(@WebParam(name = "token") String token,
-			@WebParam(name = "keywords") String[] keywords) throws IOException, ParseException,
-			RepositoryException, DatabaseException {
+	public QueryResult[] findByKeywords(@WebParam(name = "token") String token, @WebParam(name = "keywords") String[] keywords)
+			throws IOException, ParseException, RepositoryException, DatabaseException {
 		log.debug("findByKeywords({}, {})", token, keywords);
 		SearchModule sm = ModuleManager.getSearchModule();
 		Set<String> set = new HashSet<String>(Arrays.asList(keywords));
@@ -90,9 +87,8 @@ public class SearchService {
 	}
 	
 	@WebMethod
-	public QueryResult[] find(@WebParam(name = "token") String token,
-			@WebParam(name = "params") QueryParams params) throws IOException, 
-			ParseException, RepositoryException, DatabaseException {
+	public QueryResult[] find(@WebParam(name = "token") String token, @WebParam(name = "params") QueryParams params)
+			throws IOException, ParseException, RepositoryException, DatabaseException {
 		log.debug("find({}, {})", token, params);
 		SearchModule sm = ModuleManager.getSearchModule();
 		List<QueryResult> col = sm.find(token, params);
@@ -102,18 +98,18 @@ public class SearchService {
 	}
 	
 	@WebMethod
-	public IntegerPair[] getKeywordMap(@WebParam(name = "token") String token,
-			@WebParam(name = "filter") String[] filter) throws RepositoryException, DatabaseException {
+	public IntegerPair[] getKeywordMap(@WebParam(name = "token") String token, @WebParam(name = "filter") String[] filter)
+			throws RepositoryException, DatabaseException {
 		log.debug("getKeywordMap({}, {})", token, filter);
 		SearchModule sm = ModuleManager.getSearchModule();
 		List<String> alFilter = Arrays.asList(filter);
 		Map<String, Integer> map = sm.getKeywordMap(token, alFilter);
 		Set<String> keys = map.keySet();
 		IntegerPair[] result = new IntegerPair[keys.size()];
-		int i=0;
+		int i = 0;
 		
 		// Marshall HashMap
-		for (Iterator<String> it = keys.iterator(); it.hasNext(); ) {
+		for (Iterator<String> it = keys.iterator(); it.hasNext();) {
 			String key = it.next();
 			IntegerPair p = new IntegerPair();
 			p.setKey(key);
@@ -137,9 +133,8 @@ public class SearchService {
 	}
 	
 	@WebMethod
-	public long saveSearch(@WebParam(name = "token") String token,
-			@WebParam(name = "params") QueryParams params) throws AccessDeniedException, RepositoryException,
-			DatabaseException {
+	public long saveSearch(@WebParam(name = "token") String token, @WebParam(name = "params") QueryParams params)
+			throws AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("saveSearch({}, {})", token, params);
 		SearchModule sm = ModuleManager.getSearchModule();
 		long id = sm.saveSearch(token, params);
@@ -148,29 +143,26 @@ public class SearchService {
 	}
 	
 	@WebMethod
-	public void updateSearch(@WebParam(name = "token") String token,
-			@WebParam(name = "params") QueryParams params) throws AccessDeniedException, RepositoryException,
-			DatabaseException {
+	public void updateSearch(@WebParam(name = "token") String token, @WebParam(name = "params") QueryParams params)
+			throws AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("updateSearch({}, {})", token, params);
 		SearchModule sm = ModuleManager.getSearchModule();
 		sm.saveSearch(token, params);
 		log.debug("updateSearch: void");
 	}
-
+	
 	@WebMethod
-	public QueryParams getSearch(@WebParam(name = "token") String token,
-			@WebParam(name = "qpId") int qpId) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
+	public QueryParams getSearch(@WebParam(name = "token") String token, @WebParam(name = "qpId") int qpId)
+			throws PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getSearch({}, {})", token, qpId);
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryParams qp = sm.getSearch(token, qpId);
 		log.debug("getSearch: {}", qp);
 		return qp;
 	}
-
+	
 	@WebMethod
-	public QueryParams[] getAllSearchs(@WebParam(name = "token") String token) throws 
-			RepositoryException, DatabaseException {
+	public QueryParams[] getAllSearchs(@WebParam(name = "token") String token) throws RepositoryException, DatabaseException {
 		log.debug("getAllSearchs({})", token);
 		SearchModule sm = ModuleManager.getSearchModule();
 		List<QueryParams> col = sm.getAllSearchs(token);
@@ -178,11 +170,10 @@ public class SearchService {
 		log.debug("getAllSearchs: {}", col);
 		return result;
 	}
-
+	
 	@WebMethod
-	public void deleteSearch(@WebParam(name = "token") String token,
-			@WebParam(name = "qpId") int qpId) throws AccessDeniedException, RepositoryException,
-			DatabaseException {
+	public void deleteSearch(@WebParam(name = "token") String token, @WebParam(name = "qpId") int qpId)
+			throws AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("deleteSearch({}, {})", token, qpId);
 		SearchModule sm = ModuleManager.getSearchModule();
 		sm.deleteSearch(token, qpId);

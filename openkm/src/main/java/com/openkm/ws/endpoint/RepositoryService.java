@@ -1,22 +1,22 @@
 /**
- *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2012  Paco Avila & Josep Llort
- *
- *  No bytes were intentionally harmed during the development of this application.
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * OpenKM, Open Document Management System (http://www.openkm.com)
+ * Copyright (c) 2006-2012 Paco Avila & Josep Llort
+ * 
+ * No bytes were intentionally harmed during the development of this application.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 package com.openkm.ws.endpoint;
@@ -43,8 +43,8 @@ public class RepositoryService {
 	private static Logger log = LoggerFactory.getLogger(RepositoryService.class);
 	
 	@WebMethod
-	public Folder getRootFolder(@WebParam(name = "token") String token) throws PathNotFoundException,
-			RepositoryException, DatabaseException {
+	public Folder getRootFolder(@WebParam(name = "token") String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getRootFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder root = rm.getRootFolder(token);
@@ -53,8 +53,8 @@ public class RepositoryService {
 	}
 	
 	@WebMethod
-	public Folder getTrashFolder(@WebParam(name = "token") String token) throws PathNotFoundException,
-			RepositoryException, DatabaseException {
+	public Folder getTrashFolder(@WebParam(name = "token") String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getTrashFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder trash = rm.getTrashFolder(token);
@@ -63,8 +63,8 @@ public class RepositoryService {
 	}
 	
 	@WebMethod
-	public Folder getTemplatesFolder(@WebParam(name = "token") String token) throws PathNotFoundException,
-			RepositoryException, DatabaseException {
+	public Folder getTemplatesFolder(@WebParam(name = "token") String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getTemplatesFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder templatesFolder = rm.getTemplatesFolder(token);
@@ -73,8 +73,8 @@ public class RepositoryService {
 	}
 	
 	@WebMethod
-	public Folder getPersonalFolder(@WebParam(name = "token") String token) throws PathNotFoundException,
-			RepositoryException, DatabaseException {
+	public Folder getPersonalFolder(@WebParam(name = "token") String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getPersonalFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder personalFolder = rm.getPersonalFolder(token);
@@ -83,8 +83,8 @@ public class RepositoryService {
 	}
 	
 	@WebMethod
-	public Folder getMailFolder(@WebParam(name = "token") String token) throws PathNotFoundException,
-			RepositoryException, DatabaseException {
+	public Folder getMailFolder(@WebParam(name = "token") String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getMailFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder mailFolder = rm.getMailFolder(token);
@@ -93,8 +93,8 @@ public class RepositoryService {
 	}
 	
 	@WebMethod
-	public Folder getThesaurusFolder(@WebParam(name = "token") String token) throws PathNotFoundException,
-			RepositoryException, DatabaseException {
+	public Folder getThesaurusFolder(@WebParam(name = "token") String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getThesaurusFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder thesaurusFolder = rm.getThesaurusFolder(token);
@@ -152,8 +152,7 @@ public class RepositoryService {
 	}
 	
 	@WebMethod
-	public AppVersion getAppVersion(@WebParam(name = "token") String token) throws RepositoryException,
-			DatabaseException {
+	public AppVersion getAppVersion(@WebParam(name = "token") String token) throws RepositoryException, DatabaseException {
 		log.debug("getAppVersion({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		AppVersion appVer = rm.getAppVersion(token);

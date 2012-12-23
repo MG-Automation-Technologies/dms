@@ -1,22 +1,22 @@
 /**
- *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2012  Paco Avila & Josep Llort
- *
- *  No bytes were intentionally harmed during the development of this application.
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * OpenKM, Open Document Management System (http://www.openkm.com)
+ * Copyright (c) 2006-2012 Paco Avila & Josep Llort
+ * 
+ * No bytes were intentionally harmed during the development of this application.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 package com.openkm.ws.client;
@@ -43,32 +43,32 @@ public class HeaderHandler implements SOAPHandler<SOAPMessageContext> {
 	private final String URI_WSS_PASS = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText";
 	private String username = "";
 	private String password = "";
-
+	
 	public HeaderHandler(String username, String password) {
 		this.username = username;
 		this.password = password;
 	}
-
+	
 	public boolean handleMessage(SOAPMessageContext messageContext) {
 		Boolean outboundProperty = (Boolean) messageContext.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
-
+		
 		if (outboundProperty.booleanValue()) {
 			SOAPMessage message = messageContext.getMessage();
-
+			
 			try {
 				SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
 				SOAPHeader header = envelope.addHeader();
 				SOAPElement security = header.addChildElement("Security", "wsse", URI_WSS_SEC);
 				SOAPElement usernameToken = security.addChildElement("UsernameToken", "wsse");
 				usernameToken.addAttribute(new QName("xmlns:wsu"), URI_WSS_UTIL);
-
+				
 				SOAPElement username = usernameToken.addChildElement("Username", "wsse");
 				username.addTextNode(this.username);
-
+				
 				SOAPElement password = usernameToken.addChildElement("Password", "wsse");
 				password.setAttribute("Type", URI_WSS_PASS);
 				password.addTextNode(this.password);
-
+				
 				if (log.isDebugEnabled()) {
 					// Print out the outbound SOAP message
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -92,14 +92,14 @@ public class HeaderHandler implements SOAPHandler<SOAPMessageContext> {
 				ex.printStackTrace();
 			}
 		}
-
+		
 		return outboundProperty;
 	}
-
+	
 	public Set<QName> getHeaders() {
 		return null;
 	}
-
+	
 	public boolean handleFault(SOAPMessageContext messageContext) {
 		return true;
 	}

@@ -1,22 +1,22 @@
 /**
- *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2012  Paco Avila & Josep Llort
- *
- *  No bytes were intentionally harmed during the development of this application.
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * OpenKM, Open Document Management System (http://www.openkm.com)
+ * Copyright (c) 2006-2012 Paco Avila & Josep Llort
+ * 
+ * No bytes were intentionally harmed during the development of this application.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 package com.openkm.ws.endpoint;
@@ -43,10 +43,9 @@ public class BookmarkService {
 	private static Logger log = LoggerFactory.getLogger(BookmarkService.class);
 	
 	@WebMethod
-	public Bookmark add(@WebParam(name = "token") String token, 
-			@WebParam(name = "nodePath") String nodePath, 
-			@WebParam(name = "name") String name) throws AccessDeniedException, 
-			PathNotFoundException, RepositoryException, DatabaseException {
+	public Bookmark add(@WebParam(name = "token") String token, @WebParam(name = "nodePath") String nodePath,
+			@WebParam(name = "name") String name) throws AccessDeniedException, PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("add({}, {}, {})", new Object[] { token, nodePath, name });
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
 		Bookmark bookmark = bm.add(token, nodePath, name);
@@ -55,20 +54,18 @@ public class BookmarkService {
 	}
 	
 	@WebMethod
-	public Bookmark get(@WebParam(name = "token") String token, 
-			@WebParam(name = "bmId") int bmId) throws AccessDeniedException, RepositoryException,
-			DatabaseException {
+	public Bookmark get(@WebParam(name = "token") String token, @WebParam(name = "bmId") int bmId)
+			throws AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("get({}, {})", new Object[] { token, bmId });
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
 		Bookmark bookmark = bm.get(token, bmId);
 		log.debug("get: {}", bookmark);
 		return bookmark;
 	}
-
+	
 	@WebMethod
-	public void remove(@WebParam(name = "token") String token, 
-			@WebParam(name = "bmId") int bmId) throws AccessDeniedException, RepositoryException,
-			DatabaseException {
+	public void remove(@WebParam(name = "token") String token, @WebParam(name = "bmId") int bmId) throws AccessDeniedException,
+			RepositoryException, DatabaseException {
 		log.debug("remove({}, {})", token, bmId);
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
 		bm.remove(token, bmId);
@@ -76,20 +73,17 @@ public class BookmarkService {
 	}
 	
 	@WebMethod
-	public Bookmark rename(@WebParam(name = "token") String token, 
-			@WebParam(name = "bmId") int bmId, 
-			@WebParam(name = "newName") String newName) throws AccessDeniedException,
-			RepositoryException, DatabaseException {
+	public Bookmark rename(@WebParam(name = "token") String token, @WebParam(name = "bmId") int bmId,
+			@WebParam(name = "newName") String newName) throws AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("rename({}, {}, {})", new Object[] { token, bmId, newName });
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
 		Bookmark bookmark = bm.rename(token, bmId, newName);
 		log.debug("rename: {}", bookmark);
 		return bookmark;
 	}
-
+	
 	@WebMethod
-	public Bookmark[] getAll(@WebParam(name = "token") String token) throws RepositoryException,
-			DatabaseException {
+	public Bookmark[] getAll(@WebParam(name = "token") String token) throws RepositoryException, DatabaseException {
 		log.debug("getAll({})", token);
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
 		List<Bookmark> col = bm.getAll(token);
