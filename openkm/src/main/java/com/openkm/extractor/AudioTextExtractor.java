@@ -29,6 +29,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.Iterator;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.jackrabbit.extractor.AbstractTextExtractor;
 import org.slf4j.Logger;
@@ -110,8 +111,8 @@ public class AudioTextExtractor extends AbstractTextExtractor {
             log.warn("Failed to extract tag information", e);
             return new StringReader("");
 		} finally {
-			stream.close();
-			tmpFile.delete();
+			IOUtils.closeQuietly(stream);
+			FileUtils.deleteQuietly(tmpFile);
         }
     }
 }

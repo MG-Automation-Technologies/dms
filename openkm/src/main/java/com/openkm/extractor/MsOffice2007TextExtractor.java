@@ -34,6 +34,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.jackrabbit.extractor.AbstractTextExtractor;
+import org.apache.poi.util.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -124,8 +125,8 @@ public class MsOffice2007TextExtractor extends AbstractTextExtractor {
             log.warn("Failed to extract Microsoft Office 2007 text content", e);
             return new StringReader("");
         } finally {
-			zis.close();
-			stream.close();
+        	IOUtils.closeQuietly(zis);
+        	IOUtils.closeQuietly(stream);
         }
     }
 }
