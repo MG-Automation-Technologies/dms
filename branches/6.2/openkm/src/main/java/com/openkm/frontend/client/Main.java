@@ -41,6 +41,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTUserConfig;
 import com.openkm.frontend.client.bean.RepositoryContext;
+import com.openkm.frontend.client.extension.comunicator.NavigatorComunicator;
 import com.openkm.frontend.client.extension.event.HasLanguageEvent;
 import com.openkm.frontend.client.extension.event.handler.LanguageHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasLanguageHandlerExtension;
@@ -490,6 +491,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		initJavaScriptApi();
 		mainPanel.topPanel.toolBar.initJavaScriptApi(mainPanel.topPanel.toolBar);
 		fileUpload.initJavaScriptApi();
+		new NavigatorComunicator().initJavaScriptApi();
 		
 		// Initialize commonUI public js api
 		CommonUI commonUI = new CommonUI();

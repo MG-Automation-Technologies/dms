@@ -187,4 +187,13 @@ public class NavigatorComunicator {
 	public static GWTFolder getTrashRootFolder() {
 		return Main.get().trashRootFolder;
 	}
+	
+	/**
+	 * initJavaScriptApi
+	 */
+	public native void initJavaScriptApi() /*-{
+		$wnd.jsGetActualPath = function() {
+			return @com.openkm.frontend.client.extension.comunicator.NavigatorComunicator::getActualPath()();
+		};
+	}-*/;
 }
