@@ -37,10 +37,6 @@ import com.openkm.kea.metadata.WorkspaceHelper;
  * @version 1.0
  */
 public class StopwordsFrench extends Stopwords {
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	/** The hashtable containing the list of stopwords */
@@ -66,7 +62,6 @@ public class StopwordsFrench extends Stopwords {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
 		}
 	}
 	

@@ -37,10 +37,6 @@ import com.openkm.kea.metadata.WorkspaceHelper;
  * @version 1.0
  */
 public class StopwordsEnglish extends Stopwords {
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	/** The hashtable containing the list of stopwords */
@@ -48,8 +44,6 @@ public class StopwordsEnglish extends Stopwords {
 	
 	/**
 	 * StopwordsEnglish
-	 * 
-	 * @param path
 	 */
 	public StopwordsEnglish() {
 		if (m_Stopwords == null) {

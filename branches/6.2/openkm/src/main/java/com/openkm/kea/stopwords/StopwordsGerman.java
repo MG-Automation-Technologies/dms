@@ -25,7 +25,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.Hashtable;
 
 import com.openkm.kea.metadata.WorkspaceHelper;
 
@@ -42,10 +42,6 @@ import com.openkm.kea.metadata.WorkspaceHelper;
  * @version 1.0
  */
 public class StopwordsGerman extends Stopwords {
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	/** The hashtable containing the list of stopwords */
@@ -53,8 +49,6 @@ public class StopwordsGerman extends Stopwords {
 	
 	/**
 	 * StopwordsEnglish
-	 * 
-	 * @param path
 	 */
 	public StopwordsGerman() {
 		if (m_Stopwords == null) {

@@ -43,29 +43,23 @@ import com.openkm.kea.stopwords.Stopwords;
  * 
  */
 public class KEAFilterBank {
-	
 	private static Logger log = LoggerFactory.getLogger(KEAFilterBank.class);
-	
 	private static KEAFilterBank instance;
 	private KEAFilter filter;
 	
 	/**
 	 * KEAFilterBank
-	 * 
-	 * @return
-	 * @throws MetadataExtractionException
 	 */
 	public static synchronized KEAFilterBank getInstance() throws MetadataExtractionException {
 		if (instance == null) {
 			instance = new KEAFilterBank();
 		}
+		
 		return instance;
 	}
 	
 	/**
 	 * KEAFilterBank
-	 * 
-	 * @throws MetadataExtractionException
 	 */
 	private KEAFilterBank() throws MetadataExtractionException {
 		Date start = new Date();
@@ -95,9 +89,6 @@ public class KEAFilterBank {
 	
 	/**
 	 * getFilter
-	 * 
-	 * @return
-	 * @throws MetadataExtractionException
 	 */
 	public static KEAFilter getFilter() throws MetadataExtractionException {
 		return getInstance().filter;
@@ -108,8 +99,8 @@ public class KEAFilterBank {
 	 */
 	private KEAFilter buildFilter(String modelPath, String vocabularyPath, String vocabularyFormat, String language,
 			Stemmer stemmer, Stopwords stopwords, int numPhrases) throws MetadataExtractionException {
-		
 		KEAFilter newFilter = null;
+		
 		try {
 			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(modelPath));
 			ObjectInputStream ois = new ObjectInputStream(bis);

@@ -1,22 +1,22 @@
 /**
- *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2012  Paco Avila & Josep Llort
- *
- *  No bytes were intentionally harmed during the development of this application.
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * OpenKM, Open Document Management System (http://www.openkm.com)
+ * Copyright (c) 2006-2012 Paco Avila & Josep Llort
+ * 
+ * No bytes were intentionally harmed during the development of this application.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 package com.openkm.kea.filter;
@@ -36,15 +36,16 @@ import weka.classifiers.meta.FilteredClassifier;
 import weka.classifiers.meta.RegressionByDiscretization;
 import weka.core.Attribute;
 import weka.core.Capabilities;
+import weka.core.Capabilities.Capability;
 import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.Option;
 import weka.core.OptionHandler;
 import weka.core.Utils;
-import weka.core.Capabilities.Capability;
 import weka.filters.Filter;
 import weka.filters.supervised.attribute.Discretize;
+
 import com.openkm.kea.stemmers.SremovalStemmer;
 import com.openkm.kea.stemmers.Stemmer;
 import com.openkm.kea.stopwords.Stopwords;
@@ -57,19 +58,19 @@ import com.openkm.kea.vocab.Vocabulary;
  * keyphrase classification. It assumes that the dataset contains two
  * string attributes. The first attribute should contain the text of a
  * document. The second attribute should contain the keyphrases
- * associated with that document (if present). 
- *
+ * associated with that document (if present).
+ * 
  * The filter converts every instance (i.e. document) into a set of
  * instances, one for each word-based n-gram in the document. The
  * string attribute representing the document is replaced by some
  * numeric features, the estimated probability of each n-gram being a
  * keyphrase, and the rank of this phrase in the document according to
- * the probability.  Each new instances also has a class value
+ * the probability. Each new instances also has a class value
  * associated with it. The class is "true" if the n-gram is a true
  * keyphrase, and "false" otherwise. Of course, if the input document
  * doesn't come with author-assigned keyphrases, the class values for
- * that document will be missing.  
- *
+ * that document will be missing.
+ * 
  * @author Eibe Frank (eibe@cs.waikato.ac.nz), Olena Medelyan (olena@cs.waikato.ac.nz)
  * @version 2.0
  */
@@ -96,32 +97,37 @@ public class KEAFilter extends Filter implements OptionHandler {
 	/** The number of phrases to extract. */
 	private int m_numPhrases = 10;
 	
-	/** Experimental! 
-	 * Number of human indexers (times a keyphrase appears in the keyphrase set) */
+	/**
+	 * Experimental!
+	 * Number of human indexers (times a keyphrase appears in the keyphrase set)
+	 */
 	// adjust manually for >1 indexer
-	private int m_Indexers = 1; 
+	private int m_Indexers = 1;
 	
 	/** Should non-descriptors be replaced by corresponding descriptors? */
 	private boolean m_DESCRreplace = true;
-		
+	
 	/** Is the node degree (number of related terms in candidate set) being used? */
 	public boolean m_NODEfeature = true;
 	
-	/** Is the length of a phrase in words being used?*/
+	/** Is the length of a phrase in words being used? */
 	private boolean m_LENGTHfeature = true;
 	
-	/** Experimental feature!
-	 * If m_STDEVused = true, should the standard deviation of position of phrase occurrences be considered? 
+	/**
+	 * Experimental feature!
+	 * If m_STDEVused = true, should the standard deviation of position of phrase occurrences be considered?
 	 * If set to true, the indicies of features need to be adjusted in the code manually!
 	 * 
 	 */
 	private boolean m_STDEVfeature = false;
 	
-	/** Experimental feature!
-	 * Is keyphrase frequency attribute being used? 
-	 * If set to true, adjust the indicies in the code!*/
+	/**
+	 * Experimental feature!
+	 * Is keyphrase frequency attribute being used?
+	 * If set to true, adjust the indicies in the code!
+	 */
 	private boolean m_KFused = false;
-
+	
 	// end. Don't use these features with m_KFused or adjust indicies below.
 	
 	/** Flag for debugging mode */
@@ -140,14 +146,12 @@ public class KEAFilter extends Filter implements OptionHandler {
 	private int m_TfidfIndex = 0;
 	private int m_FirstOccurIndex = 1;
 	
-	
 	/** Indicies of attributes for new features */
 	
 	private int m_LengthIndex = 2;// adjust!!
 	private int m_NodeIndex = 3; // decrease if removing the above value
 	private int m_STDEVIndex = 4; // adjust!!
 	private int m_KeyFreqIndex = 3;
-	
 	
 	/** The punctuation filter used by this filter */
 	private KEAPhraseFilter m_PunctFilter = null;
@@ -173,7 +177,6 @@ public class KEAFilter extends Filter implements OptionHandler {
 	/** The default stemmer to be used */
 	private Stemmer m_Stemmer = new SremovalStemmer();
 	
-	
 	/** The list of stop words to be used */
 	private Stopwords m_Stopwords;
 	
@@ -185,20 +188,20 @@ public class KEAFilter extends Filter implements OptionHandler {
 	}
 	
 	/** The Vocabulary object */
-    /**
-     * orininally static
-     * Changed to non-static so we can have multiple filters running
-     */
-    public Vocabulary m_Vocabulary;
-
-    /**
-     * New method to set the Vocabulary to null
-     */
-    public void clearVocabulary() {
-        m_Vocabulary = null;
-    }
-
-    /** The Vocabulary name */
+	/**
+	 * orininally static
+	 * Changed to non-static so we can have multiple filters running
+	 */
+	public Vocabulary m_Vocabulary;
+	
+	/**
+	 * New method to set the Vocabulary to null
+	 */
+	public void clearVocabulary() {
+		m_Vocabulary = null;
+	}
+	
+	/** The Vocabulary name */
 	private String m_vocabulary = "agrovoc";
 	
 	/** The Vocabulary format */
@@ -206,50 +209,56 @@ public class KEAFilter extends Filter implements OptionHandler {
 	
 	/**
 	 * Get the M_Vocabulary value.
+	 * 
 	 * @return the M_Vocabulary value.
 	 */
-	public String getVocabulary() {	
+	public String getVocabulary() {
 		return m_vocabulary;
 	}
 	
 	/**
 	 * Set the M_Vocabulary value.
+	 * 
 	 * @param newM_Vocabulary The new M_Vocabulary value.
 	 */
-	public void setVocabulary(String newM_Vocabulary) {	
-		this.m_vocabulary = newM_Vocabulary;		
+	public void setVocabulary(String newM_Vocabulary) {
+		this.m_vocabulary = newM_Vocabulary;
 	}
 	
 	/**
 	 * Get the M_VocabularyFormat value.
+	 * 
 	 * @return the M_VocabularyFormat value.
 	 */
-	public String getVocabularyFormat() {	
+	public String getVocabularyFormat() {
 		return m_vocabularyFormat;
 	}
 	
 	/**
 	 * Set the M_VocabularyFormat value.
+	 * 
 	 * @param newM_VocabularyFormat The new M_VocabularyFormat value.
 	 */
-	public void setVocabularyFormat(String newM_VocabularyFormat) {	
-		this.m_vocabularyFormat = newM_VocabularyFormat;		
+	public void setVocabularyFormat(String newM_VocabularyFormat) {
+		this.m_vocabularyFormat = newM_VocabularyFormat;
 	}
 	
 	/**
 	 * Get the M_documentLanguage value.
+	 * 
 	 * @return the M_documentLanguage value.
 	 */
-	public String getDocumentLanguage() {	
+	public String getDocumentLanguage() {
 		return m_documentLanguage;
 	}
 	
 	/**
 	 * Set the M_documentLanguage value.
+	 * 
 	 * @param newM_documentLanguage The new M_documentLanguage value.
 	 */
-	public void setDocumentLanguage(String newM_documentLanguage) {	
-		this.m_documentLanguage = newM_documentLanguage;		
+	public void setDocumentLanguage(String newM_documentLanguage) {
+		this.m_documentLanguage = newM_documentLanguage;
 	}
 	
 	/** Determines whether check for proper nouns is performed */
@@ -257,6 +266,7 @@ public class KEAFilter extends Filter implements OptionHandler {
 	
 	/**
 	 * Get the M_CheckProperNouns value.
+	 * 
 	 * @return the M_CheckProperNouns value.
 	 */
 	public boolean getCheckForProperNouns() {
@@ -265,6 +275,7 @@ public class KEAFilter extends Filter implements OptionHandler {
 	
 	/**
 	 * Set the M_CheckProperNouns value.
+	 * 
 	 * @param newM_CheckProperNouns The new M_CheckProperNouns value.
 	 */
 	public void setCheckForProperNouns(boolean newM_CheckProperNouns) {
@@ -273,23 +284,25 @@ public class KEAFilter extends Filter implements OptionHandler {
 	
 	/**
 	 * Get the M_Stopwords value.
+	 * 
 	 * @return the M_Stopwords value.
 	 */
-	public Stopwords getStopwords() {	
+	public Stopwords getStopwords() {
 		return m_Stopwords;
 	}
 	
 	/**
 	 * Set the M_Stopwords value.
+	 * 
 	 * @param newM_Stopwords The new M_Stopwords value.
 	 */
-	public void setStopwords(Stopwords newM_Stopwords) {	
-		this.m_Stopwords = newM_Stopwords;		
+	public void setStopwords(Stopwords newM_Stopwords) {
+		this.m_Stopwords = newM_Stopwords;
 	}
-	
 	
 	/**
 	 * Get the Stemmer value.
+	 * 
 	 * @return the Stemmer value.
 	 */
 	public Stemmer getStemmer() {
@@ -298,89 +311,90 @@ public class KEAFilter extends Filter implements OptionHandler {
 	
 	/**
 	 * Set the Stemmer value.
+	 * 
 	 * @param newStemmer The new Stemmer value.
 	 */
-	public void setStemmer(Stemmer newStemmer) {	
+	public void setStemmer(Stemmer newStemmer) {
 		this.m_Stemmer = newStemmer;
 		
 	}
 	
 	/**
 	 * Get the value of MinNumOccur.
-	 *
+	 * 
 	 * @return Value of MinNumOccur.
 	 */
-	public int getMinNumOccur() {    
+	public int getMinNumOccur() {
 		return m_MinNumOccur;
 	}
 	
 	/**
 	 * Set the value of MinNumOccur.
-	 *
+	 * 
 	 * @param newMinNumOccur Value to assign to MinNumOccur.
 	 */
-	public void setMinNumOccur(int newMinNumOccur) {	
+	public void setMinNumOccur(int newMinNumOccur) {
 		m_MinNumOccur = newMinNumOccur;
 	}
 	
 	/**
 	 * Get the value of MaxPhraseLength.
-	 *
+	 * 
 	 * @return Value of MaxPhraseLength.
 	 */
-	public int getMaxPhraseLength() {	
+	public int getMaxPhraseLength() {
 		return m_MaxPhraseLength;
 	}
 	
 	/**
 	 * Set the value of MaxPhraseLength.
-	 *
+	 * 
 	 * @param newMaxPhraseLength Value to assign to MaxPhraseLength.
 	 */
-	public void setMaxPhraseLength(int newMaxPhraseLength) {	
+	public void setMaxPhraseLength(int newMaxPhraseLength) {
 		m_MaxPhraseLength = newMaxPhraseLength;
 	}
 	
 	/**
 	 * Get the value of MinPhraseLength.
-	 *
+	 * 
 	 * @return Value of MinPhraseLength.
 	 */
-	public int getMinPhraseLength() {	
+	public int getMinPhraseLength() {
 		return m_MinPhraseLength;
 	}
 	
 	/**
 	 * Set the value of MinPhraseLength.
-	 *
+	 * 
 	 * @param newMinPhraseLength Value to assign to MinPhraseLength.
 	 */
-	public void setMinPhraseLength(int newMinPhraseLength) {	
+	public void setMinPhraseLength(int newMinPhraseLength) {
 		m_MinPhraseLength = newMinPhraseLength;
 	}
 	
 	/**
 	 * Get the value of numPhrases.
-	 *
+	 * 
 	 * @return Value of numPhrases.
 	 */
-	public int getNumPhrases() {    
+	public int getNumPhrases() {
 		return m_numPhrases;
 	}
 	
 	/**
 	 * Set the value of numPhrases.
-	 *
+	 * 
 	 * @param newnumPhrases Value to assign to numPhrases.
 	 */
-	public void setNumPhrases(int newnumPhrases) {    
+	public void setNumPhrases(int newnumPhrases) {
 		m_numPhrases = newnumPhrases;
 	}
 	
 	/**
 	 * Returns the index of the stemmed phrases in the output ARFF file.
 	 */
-	public int getStemmedPhraseIndex() {	
+	public int getStemmedPhraseIndex() {
 		return m_DocumentAtt;
 	}
 	
@@ -402,15 +416,18 @@ public class KEAFilter extends Filter implements OptionHandler {
 				index++;
 			}
 		}
+		
 		if (m_STDEVfeature) {
 			index++;
 		}
+		
 		if (m_NODEfeature) {
 			index++;
 		}
+		
 		if (m_LENGTHfeature) {
 			index++;
-		}      
+		}
 		
 		return index;
 	}
@@ -424,7 +441,7 @@ public class KEAFilter extends Filter implements OptionHandler {
 	
 	/**
 	 * Get the value of DocumentAtt.
-	 *
+	 * 
 	 * @return Value of DocumentAtt.
 	 */
 	public int getDocumentAtt() {
@@ -433,7 +450,7 @@ public class KEAFilter extends Filter implements OptionHandler {
 	
 	/**
 	 * Set the value of DocumentAtt.
-	 *
+	 * 
 	 * @param newDocumentAtt Value to assign to DocumentAtt.
 	 */
 	public void setDocumentAtt(int newDocumentAtt) {
@@ -442,26 +459,25 @@ public class KEAFilter extends Filter implements OptionHandler {
 	
 	/**
 	 * Get the value of KeyphraseAtt.
-	 *
+	 * 
 	 * @return Value of KeyphraseAtt.
 	 */
-	public int getKeyphrasesAtt() {	
+	public int getKeyphrasesAtt() {
 		return m_KeyphrasesAtt;
 	}
 	
 	/**
 	 * Set the value of KeyphrasesAtt.
-	 *
+	 * 
 	 * @param newKeyphrasesAtt Value to assign to KeyphrasesAtt.
 	 */
 	public void setKeyphrasesAtt(int newKeyphrasesAtt) {
 		m_KeyphrasesAtt = newKeyphrasesAtt;
 	}
 	
-	
 	/**
 	 * Get the value of Debug.
-	 *
+	 * 
 	 * @return Value of Debug.
 	 */
 	public boolean getDebug() {
@@ -470,17 +486,17 @@ public class KEAFilter extends Filter implements OptionHandler {
 	
 	/**
 	 * Set the value of Debug.
-	 *
+	 * 
 	 * @param newDebug Value to assign to Debug.
 	 */
-	public void setDebug(boolean newDebug) {    
+	public void setDebug(boolean newDebug) {
 		m_Debug = newDebug;
 	}
 	
 	/**
 	 * Sets whether keyphrase frequency attribute is used.
 	 */
-	public void setKFused(boolean flag) {	
+	public void setKFused(boolean flag) {
 		m_KFused = flag;
 		if (flag) {
 			m_NumFeatures++;
@@ -490,13 +506,15 @@ public class KEAFilter extends Filter implements OptionHandler {
 	/**
 	 * Sets whether Vocabulary relation attribute is used.
 	 */
-	public void setNumFeature() {		
+	public void setNumFeature() {
 		if (m_STDEVfeature) {
 			m_NumFeatures++;
 		}
+		
 		if (m_NODEfeature) {
 			m_NumFeatures++;
 		}
+		
 		if (m_LENGTHfeature) {
 			m_NumFeatures++;
 		}
@@ -511,35 +529,34 @@ public class KEAFilter extends Filter implements OptionHandler {
 	
 	/**
 	 * Get whether the supplied columns are to be processed
-	 *
+	 * 
 	 * @return true if the supplied columns won't be processed
 	 */
-	public boolean getDisallowInternalPeriods() {	
+	public boolean getDisallowInternalPeriods() {
 		return m_DisallowInternalPeriods;
 	}
 	
 	/**
-	 * Set whether selected columns should be processed. If true the 
+	 * Set whether selected columns should be processed. If true the
 	 * selected columns won't be processed.
-	 *
+	 * 
 	 * @param disallow the new invert setting
 	 */
 	public void setDisallowInternalPeriods(boolean disallow) {
 		m_DisallowInternalPeriods = disallow;
 	}
 	
-	
 	public void loadThesaurus(Stemmer st, Stopwords sw) {
-		m_Vocabulary = new Vocabulary(m_vocabulary,m_vocabularyFormat, m_documentLanguage);
-
+		m_Vocabulary = new Vocabulary(m_vocabulary, m_vocabularyFormat, m_documentLanguage);
 		m_Vocabulary.setStemmer(st);
 		m_Vocabulary.setStopwords(sw);
 		m_Vocabulary.initialize();
+		
 		try {
-			
 			if (m_DESCRreplace) {
 				m_Vocabulary.buildUSE();
 			}
+			
 			if (m_NODEfeature) {
 				m_Vocabulary.buildREL();
 			}
@@ -550,67 +567,85 @@ public class KEAFilter extends Filter implements OptionHandler {
 	
 	/**
 	 * Parses a given list of options controlling the behaviour of this object.
-	 * Valid options are:<p>
-	 *
+	 * Valid options are:
+	 * <p>
+	 * 
 	 * -K<br>
-	 * Specifies whether keyphrase frequency statistic is used.<p>
-	 *
+	 * Specifies whether keyphrase frequency statistic is used.
+	 * <p>
+	 * 
 	 * -R<br>
-	 * Specifies whether Vocabulary relation statistic is used.<p>
-	 *
+	 * Specifies whether Vocabulary relation statistic is used.
+	 * <p>
+	 * 
 	 * -M length<br>
-	 * Sets the maximum phrase length (default: 5).<p>
-	 *
+	 * Sets the maximum phrase length (default: 5).
+	 * <p>
+	 * 
 	 * -L length<br>
-	 * Sets the minimum phrase length (default: 1).<p>
-	 *
+	 * Sets the minimum phrase length (default: 1).
+	 * <p>
+	 * 
 	 * -D<br>
-	 * Turns debugging mode on.<p>
-	 *
+	 * Turns debugging mode on.
+	 * <p>
+	 * 
 	 * -I index<br>
-	 * Sets the index of the attribute containing the documents (default: 0).<p>
-	 *
+	 * Sets the index of the attribute containing the documents (default: 0).
+	 * <p>
+	 * 
 	 * -J index<br>
-	 * Sets the index of the attribute containing the keyphrases (default: 1).<p>
-	 *
+	 * Sets the index of the attribute containing the keyphrases (default: 1).
+	 * <p>
+	 * 
 	 * -P<br>
-	 * Disallow internal periods <p>
-	 *
+	 * Disallow internal periods
+	 * <p>
+	 * 
 	 * -O number<br>
-	 * The minimum number of times a phrase needs to occur (default: 2). <p>
-	 *
+	 * The minimum number of times a phrase needs to occur (default: 2).
+	 * <p>
+	 * 
 	 * @param options the list of options as an array of strings
 	 * @exception Exception if an option is not supported
 	 */
 	public void setOptions(String[] options) throws Exception {
-		
 		setKFused(Utils.getFlag('K', options));
 		setDebug(Utils.getFlag('D', options));
 		String docAttIndexString = Utils.getOption('I', options);
+		
 		if (docAttIndexString.length() > 0) {
 			setDocumentAtt(Integer.parseInt(docAttIndexString) - 1);
 		} else {
 			setDocumentAtt(0);
 		}
+		
 		String keyphraseAttIndexString = Utils.getOption('J', options);
+		
 		if (keyphraseAttIndexString.length() > 0) {
 			setKeyphrasesAtt(Integer.parseInt(keyphraseAttIndexString) - 1);
 		} else {
 			setKeyphrasesAtt(1);
 		}
+		
 		String maxPhraseLengthString = Utils.getOption('M', options);
+		
 		if (maxPhraseLengthString.length() > 0) {
 			setMaxPhraseLength(Integer.parseInt(maxPhraseLengthString));
 		} else {
 			setMaxPhraseLength(3);
 		}
+		
 		String minPhraseLengthString = Utils.getOption('M', options);
+		
 		if (minPhraseLengthString.length() > 0) {
 			setMinPhraseLength(Integer.parseInt(minPhraseLengthString));
 		} else {
 			setMinPhraseLength(1);
 		}
+		
 		String minNumOccurString = Utils.getOption('O', options);
+		
 		if (minNumOccurString.length() > 0) {
 			setMinNumOccur(Integer.parseInt(minNumOccurString));
 		} else {
@@ -621,29 +656,30 @@ public class KEAFilter extends Filter implements OptionHandler {
 	
 	/**
 	 * Gets the current settings of the filter.
-	 *
+	 * 
 	 * @return an array of strings suitable for passing to setOptions
 	 */
-	public String [] getOptions() {
-		
-		String [] options = new String [13];
+	public String[] getOptions() {
+		String[] options = new String[13];
 		int current = 0;
 		
 		if (getKFused()) {
 			options[current++] = "-K";
 		}
+		
 		if (getDebug()) {
 			options[current++] = "-D";
 		}
-		options[current++] = "-I"; 
+		
+		options[current++] = "-I";
 		options[current++] = "" + (getDocumentAtt() + 1);
-		options[current++] = "-J"; 
+		options[current++] = "-J";
 		options[current++] = "" + (getKeyphrasesAtt() + 1);
-		options[current++] = "-M"; 
+		options[current++] = "-M";
 		options[current++] = "" + (getMaxPhraseLength());
-		options[current++] = "-L"; 
+		options[current++] = "-L";
 		options[current++] = "" + (getMinPhraseLength());
-		options[current++] = "-O"; 
+		options[current++] = "-O";
 		options[current++] = "" + (getMinNumOccur());
 		
 		if (getDisallowInternalPeriods()) {
@@ -653,75 +689,57 @@ public class KEAFilter extends Filter implements OptionHandler {
 		while (current < options.length) {
 			options[current++] = "";
 		}
+		
 		return options;
 	}
 	
 	/**
 	 * Returns an enumeration describing the available options
-	 *
+	 * 
 	 * @return an enumeration of all the available options
 	 */
 	public Enumeration<Option> listOptions() {
-		
 		Vector<Option> newVector = new Vector<Option>(7);
 		
-		newVector.addElement(new Option(
-				"\tSpecifies whether keyphrase frequency statistic is used.",
-				"K", 0, "-K"));
-		newVector.addElement(new Option(
-				"\tSets the maximum phrase length (default: 3).",
-				"M", 1, "-M <length>"));
-		newVector.addElement(new Option(
-				"\tSets the minimum phrase length (default: 1).",
-				"L", 1, "-L <length>"));
-		newVector.addElement(new Option(
-				"\tTurns debugging mode on.",
-				"D", 0, "-D"));
-		newVector.addElement(new Option(
-				"\tSets the index of the document attribute (default: 0).",
-				"I", 1, "-I"));
-		newVector.addElement(new Option(
-				"\tSets the index of the keyphrase attribute (default: 1).",
-				"J", 1, "-J"));
-		newVector.addElement(new Option(
-				"\tDisallow internal periods.",
-				"P", 0, "-P"));
-		newVector.addElement(new Option(
-				"\tSet the minimum number of occurences (default: 2).",
-				"O", 1, "-O"));
+		newVector.addElement(new Option("\tSpecifies whether keyphrase frequency statistic is used.", "K", 0, "-K"));
+		newVector.addElement(new Option("\tSets the maximum phrase length (default: 3).", "M", 1, "-M <length>"));
+		newVector.addElement(new Option("\tSets the minimum phrase length (default: 1).", "L", 1, "-L <length>"));
+		newVector.addElement(new Option("\tTurns debugging mode on.", "D", 0, "-D"));
+		newVector.addElement(new Option("\tSets the index of the document attribute (default: 0).", "I", 1, "-I"));
+		newVector.addElement(new Option("\tSets the index of the keyphrase attribute (default: 1).", "J", 1, "-J"));
+		newVector.addElement(new Option("\tDisallow internal periods.", "P", 0, "-P"));
+		newVector.addElement(new Option("\tSet the minimum number of occurences (default: 2).", "O", 1, "-O"));
 		
 		return newVector.elements();
 	}
 	
 	/**
 	 * Returns a string describing this filter
-	 *
+	 * 
 	 * @return a description of the filter suitable for
-	 * displaying in the explorer/experimenter gui
+	 *         displaying in the explorer/experimenter gui
 	 */
 	public String globalInfo() {
-		return "Converts incoming data into data appropriate for " +
-		"keyphrase classification.";
+		return "Converts incoming data into data appropriate for " + "keyphrase classification.";
 	}
 	
 	/**
 	 * Sets the format of the input instances.
-	 *
+	 * 
 	 * @param instanceInfo an Instances object containing the input
-	 * instance structure (any instances contained in the object are
-	 * ignored - only the structure is required).
-	 * @return true if the outputFormat may be collected immediately 
+	 *        instance structure (any instances contained in the object are
+	 *        ignored - only the structure is required).
+	 * @return true if the outputFormat may be collected immediately
 	 */
 	public boolean setInputFormat(Instances instanceInfo) throws Exception {
-		
 		if (instanceInfo.classIndex() >= 0) {
 			throw new Exception("Don't know what do to if class index set!");
 		}
-		if (!instanceInfo.attribute(m_KeyphrasesAtt).isString() ||
-				!instanceInfo.attribute(m_DocumentAtt).isString()) {
-			throw new Exception("Keyphrase attribute and document attribute " +
-			"need to be string attributes.");
+		
+		if (!instanceInfo.attribute(m_KeyphrasesAtt).isString() || !instanceInfo.attribute(m_DocumentAtt).isString()) {
+			throw new Exception("Keyphrase attribute and document attribute " + "need to be string attributes.");
 		}
+		
 		m_PunctFilter = new KEAPhraseFilter();
 		int[] arr = new int[1];
 		arr[0] = m_DocumentAtt;
@@ -730,7 +748,7 @@ public class KEAFilter extends Filter implements OptionHandler {
 		m_PunctFilter.setDisallowInternalPeriods(getDisallowInternalPeriods());
 		
 		if (m_vocabulary.equals("none")) {
-			m_NumbersFilter = new NumbersFilter();		
+			m_NumbersFilter = new NumbersFilter();
 			m_NumbersFilter.setInputFormat(m_PunctFilter.getOutputFormat());
 			super.setInputFormat(m_NumbersFilter.getOutputFormat());
 		} else {
@@ -743,9 +761,9 @@ public class KEAFilter extends Filter implements OptionHandler {
 	
 	/**
 	 * Returns the Capabilities of this filter.
-	 *
-	 * @return            the capabilities of this object
-	 * @see               Capabilities
+	 * 
+	 * @return the capabilities of this object
+	 * @see Capabilities
 	 */
 	public Capabilities getCapabilities() {
 		Capabilities result = super.getCapabilities();
@@ -768,18 +786,19 @@ public class KEAFilter extends Filter implements OptionHandler {
 	 * Input an instance for filtering. Ordinarily the instance is processed
 	 * and made available for output immediately. Some filters require all
 	 * instances be read before producing output.
-	 *
+	 * 
 	 * @param instance the input instance
 	 * @return true if the filtered instance may now be
-	 * collected with output().
-	 * @exception Exception if the input instance was not of the correct 
-	 * format or if there was a problem with the filtering.
+	 *         collected with output().
+	 * @exception Exception if the input instance was not of the correct
+	 *            format or if there was a problem with the filtering.
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean input(Instance instance) throws Exception {
 		if (getInputFormat() == null) {
 			throw new Exception("No input instance format defined");
 		}
+		
 		if (m_NewBatch) {
 			resetQueue();
 			m_NewBatch = false;
@@ -788,7 +807,6 @@ public class KEAFilter extends Filter implements OptionHandler {
 		if (m_Debug) {
 			log.info("-- Reading instance");
 		}
-		
 		
 		m_PunctFilter.input(instance);
 		m_PunctFilter.batchFinished();
@@ -816,15 +834,14 @@ public class KEAFilter extends Filter implements OptionHandler {
 	}
 	
 	/**
-	 * Signify that this batch of input to the filter is finished. 
+	 * Signify that this batch of input to the filter is finished.
 	 * If the filter requires all instances prior to filtering,
 	 * output() may now be called to retrieve the filtered instances.
-	 *
+	 * 
 	 * @return true if there are instances pending output
 	 * @exception Exception if no input structure has been defined
 	 */
 	public boolean batchFinished() throws Exception {
-		
 		if (getInputFormat() == null) {
 			throw new Exception("No input instance format defined");
 		}
@@ -833,12 +850,12 @@ public class KEAFilter extends Filter implements OptionHandler {
 			buildGlobalDictionaries();
 			buildClassifier();
 			convertPendingInstances();
-		} 
+		}
+		
 		flushInput();
 		m_NewBatch = true;
 		return (numPendingOutput() != 0);
 	}
-	
 	
 	/**
 	 * Builds the global dictionaries.
@@ -855,9 +872,10 @@ public class KEAFilter extends Filter implements OptionHandler {
 			String str = getInputFormat().instance(i).stringValue(m_DocumentAtt);
 			HashMap<String, Counter> hash = getPhrasesForDictionary(str);
 			Iterator<String> it = hash.keySet().iterator();
+			
 			while (it.hasNext()) {
 				String phrase = it.next();
-				Counter counter = (Counter)m_Dictionary.get(phrase);
+				Counter counter = (Counter) m_Dictionary.get(phrase);
 				if (counter == null) {
 					m_Dictionary.put(phrase, new Counter());
 				} else {
@@ -866,7 +884,7 @@ public class KEAFilter extends Filter implements OptionHandler {
 			}
 		}
 		
-		if (m_KFused) {       
+		if (m_KFused) {
 			if (m_Debug) {
 				log.info("KF_used feature");
 			}
@@ -905,19 +923,24 @@ public class KEAFilter extends Filter implements OptionHandler {
 	private void buildClassifier() throws Exception {
 		// Generate input format for classifier
 		FastVector atts = new FastVector();
+		
 		for (int i = 0; i < getInputFormat().numAttributes(); i++) {
 			if (i == m_DocumentAtt) {
 				atts.addElement(new Attribute("TFxIDF"));
 				atts.addElement(new Attribute("First_occurrence"));
+				
 				if (m_KFused) {
 					atts.addElement(new Attribute("Keyphrase_frequency"));
 				}
+				
 				if (m_STDEVfeature) {
 					atts.addElement(new Attribute("Standard_deviation"));
 				}
+				
 				if (m_NODEfeature) {
 					atts.addElement(new Attribute("Relations_number"));
 				}
+				
 				if (m_LENGTHfeature) {
 					atts.addElement(new Attribute("Phrase_length"));
 				}
@@ -925,18 +948,20 @@ public class KEAFilter extends Filter implements OptionHandler {
 				FastVector vals = new FastVector(2);
 				vals.addElement("False");
 				vals.addElement("True");
-				//atts.addElement(new Attribute("Keyphrase?", vals));
+				// atts.addElement(new Attribute("Keyphrase?", vals));
 				atts.addElement(new Attribute("Keyphrase?"));
-			} 
+			}
 		}
+		
 		m_ClassifierData = new Instances("ClassifierData", atts, 0);
 		m_ClassifierData.setClassIndex(m_NumFeatures);
 		
 		if (m_Debug) {
 			log.info("--- Converting instances for classifier");
 		}
+		
 		// Convert pending input instances into data for classifier
-		for(int i = 0; i < getInputFormat().numInstances(); i++) {
+		for (int i = 0; i < getInputFormat().numInstances(); i++) {
 			Instance current = getInputFormat().instance(i);
 			
 			// Get the key phrases for the document
@@ -945,7 +970,7 @@ public class KEAFilter extends Filter implements OptionHandler {
 			HashMap<String, Counter> hashKeysEval = getGivenKeyphrases(keyphrases, true);
 			
 			// Get the phrases for the document
-			HashMap<String,FastVector> hash = new HashMap<String,FastVector>();
+			HashMap<String, FastVector> hash = new HashMap<String, FastVector>();
 			int length = getPhrases(hash, current.stringValue(m_DocumentAtt));
 			// hash = getComposits(hash);
 			
@@ -953,13 +978,13 @@ public class KEAFilter extends Filter implements OptionHandler {
 			// add the instance to the data for the classifier
 			
 			Iterator<String> it = hash.keySet().iterator();
+			
 			while (it.hasNext()) {
 				String phrase = it.next();
-				FastVector phraseInfo = (FastVector)hash.get(phrase);
+				FastVector phraseInfo = (FastVector) hash.get(phrase);
 				
-				double[] vals =  featVals(phrase, phraseInfo, true,
-						hashKeysEval, hashKeyphrases, length, hash);
-				//log.info(vals);
+				double[] vals = featVals(phrase, phraseInfo, true, hashKeysEval, hashKeyphrases, length, hash);
+				// log.info(vals);
 				Instance inst = new Instance(current.weight(), vals);
 				// .err.println(phrase + "\t" + inst.toString());
 				m_ClassifierData.add(inst);
@@ -972,109 +997,100 @@ public class KEAFilter extends Filter implements OptionHandler {
 		
 		// Build classifier
 		
-		
 		// Uncomment if you want to use a different classifier
 		// Caution: Other places in the code will have to be adjusted!!
-		/*I. Naive Bayes:
-		 FilteredClassifier fclass = new FilteredClassifier();		
-		 fclass.setClassifier(new weka.classifiers.bayes.NaiveBayesSimple());
-		 fclass.setFilter(new Discretize());
-		 m_Classifier = fclass;
+		/*
+		 * I. Naive Bayes:
+		 * FilteredClassifier fclass = new FilteredClassifier();
+		 * fclass.setClassifier(new weka.classifiers.bayes.NaiveBayesSimple());
+		 * fclass.setFilter(new Discretize());
+		 * m_Classifier = fclass;
 		 */
 		
-		//NaiveBayes nb = new NaiveBayes();
-		//nb.setUseSupervisedDiscretization(true);
-		//m_Classifier = nb;
+		// NaiveBayes nb = new NaiveBayes();
+		// nb.setUseSupervisedDiscretization(true);
+		// m_Classifier = nb;
 		
-		
-		/* II. Linear Regression:
-		 LinearRegression lr = new LinearRegression();	
-		 lr.setAttributeSelectionMethod(new 
-		 weka.core.SelectedTag(1, LinearRegression.TAGS_SELECTION));
-		 lr.setEliminateColinearAttributes(false);
-		 lr.setDebug(false);
-		 
-		 m_Classifier = lr;*/
-		
-		/* III. Bagging with REPTrees
-		 Bagging bagging = new Bagging();	
-		 
-		 String[] ops_bagging = {
-		 new String("-P"),
-		 new String("100"),
-		 new String("-S"), 
-		 new String("1"),
-		 new String("-I"), 
-		 new String("50")};
-		 
+		/*
+		 * II. Linear Regression:
+		 * LinearRegression lr = new LinearRegression();
+		 * lr.setAttributeSelectionMethod(new
+		 * weka.core.SelectedTag(1, LinearRegression.TAGS_SELECTION));
+		 * lr.setEliminateColinearAttributes(false);
+		 * lr.setDebug(false);
+		 * m_Classifier = lr;
 		 */
 		
+		/*
+		 * III. Bagging with REPTrees
+		 * Bagging bagging = new Bagging();
+		 * String[] ops_bagging = {
+		 * new String("-P"),
+		 * new String("100"),
+		 * new String("-S"),
+		 * new String("1"),
+		 * new String("-I"),
+		 * new String("50")};
+		 */
 		
 		/*
 		 * REPTree rept = new REPTree();
-		 //results are worse!
-		  rept.setNoPruning(true);
-		  String[] ops_rept = {
-		  new String("-M"), 
-		  new String("2"),
-		  new String("-V"), 
-		  new String("0.0010"),				
-		  new String("-N"), 
-		  new String("3"),
-		  new String("-S"), 
-		  new String("1"),
-		  new String("-L"), 
-		  new String("1"),};
-		  
-		  rept.setOptions(ops_rept);
-		  bagging.setClassifier(rept);
-		  */
+		 * //results are worse!
+		 * rept.setNoPruning(true);
+		 * String[] ops_rept = {
+		 * new String("-M"),
+		 * new String("2"),
+		 * new String("-V"),
+		 * new String("0.0010"),
+		 * new String("-N"),
+		 * new String("3"),
+		 * new String("-S"),
+		 * new String("1"),
+		 * new String("-L"),
+		 * new String("1"),};
+		 * rept.setOptions(ops_rept);
+		 * bagging.setClassifier(rept);
+		 */
 		
-		
-		//	bagging.setOptions(ops_bagging);
-		//FilteredClassifier fclass = new FilteredClassifier();		
-		//fclass.setClassifier(new REPTree());
-		//fclass.setFilter(new Discretize());
-		//bagging.setClassifier(fclass);
-		//	m_Classifier = bagging;
-		
+		// bagging.setOptions(ops_bagging);
+		// FilteredClassifier fclass = new FilteredClassifier();
+		// fclass.setClassifier(new REPTree());
+		// fclass.setFilter(new Discretize());
+		// bagging.setClassifier(fclass);
+		// m_Classifier = bagging;
 		
 		RegressionByDiscretization rvd = new RegressionByDiscretization();
-		FilteredClassifier fclass = new FilteredClassifier();		
+		FilteredClassifier fclass = new FilteredClassifier();
 		fclass.setClassifier(new weka.classifiers.bayes.NaiveBayesSimple());
 		fclass.setFilter(new Discretize());
 		
 		rvd.setClassifier(fclass);
-		rvd.setNumBins(m_Indexers+1);
+		rvd.setNumBins(m_Indexers + 1);
 		m_Classifier = rvd;
 		
-		
-		// log.info(m_ClassifierData);   
-		//System.exit(1);
+		// log.info(m_ClassifierData);
+		// System.exit(1);
 		m_Classifier.buildClassifier(m_ClassifierData);
 		
 		if (m_Debug) {
-			log.info(""+m_Classifier);
+			log.info("" + m_Classifier);
 		}
 		
 		// Save space
 		m_ClassifierData = new Instances(m_ClassifierData, 0);
 	}
 	
-	/** 
+	/**
 	 * Conmputes the feature values for a given phrase.
 	 */
-	private double[] featVals(String id, FastVector phraseInfo, 
-			boolean training, HashMap<String, Counter> hashKeysEval,
-			HashMap<String, Counter> hashKeyphrases, int length, HashMap<String,FastVector> hash) {
-		
+	private double[] featVals(String id, FastVector phraseInfo, boolean training, HashMap<String, Counter> hashKeysEval,
+			HashMap<String, Counter> hashKeyphrases, int length, HashMap<String, FastVector> hash) {
 		// Compute feature values
-		Counter counterLocal = (Counter)phraseInfo.elementAt(1);
+		Counter counterLocal = (Counter) phraseInfo.elementAt(1);
 		double[] newInst = new double[m_NumFeatures + 1];
 		
-		
 		// Compute TFxIDF
-		Counter counterGlobal = (Counter)m_Dictionary.get(id);
+		Counter counterGlobal = (Counter) m_Dictionary.get(id);
 		double localVal = counterLocal.value(), globalVal = 0;
 		if (counterGlobal != null) {
 			globalVal = counterGlobal.value();
@@ -1086,20 +1102,17 @@ public class KEAFilter extends Filter implements OptionHandler {
 		// Just devide by length to get approximation of probability
 		// that phrase in document is our phrase
 		// newInst[m_TfidfIndex] = (localVal / ((double)length));
-		newInst[m_TfidfIndex] = (localVal / ((double)length)) *
-		(-Math.log((globalVal + 1)/ ((double)m_NumDocs + 1)));
+		newInst[m_TfidfIndex] = (localVal / ((double) length)) * (-Math.log((globalVal + 1) / ((double) m_NumDocs + 1)));
 		
 		// Compute first occurrence
-		Counter counterFirst = (Counter)phraseInfo.elementAt(0);
-		newInst[m_FirstOccurIndex] = (double)counterFirst.value() /
-		(double)length;
-		
+		Counter counterFirst = (Counter) phraseInfo.elementAt(0);
+		newInst[m_FirstOccurIndex] = (double) counterFirst.value() / (double) length;
 		
 		// Is keyphrase frequency attribute being used?
 		if (m_KFused) {
-			Counter keyphraseC = (Counter)m_KeyphraseDictionary.get(id);
-			if ((training) && (hashKeyphrases != null) &&
-					(hashKeyphrases.containsKey(id))) {
+			Counter keyphraseC = (Counter) m_KeyphraseDictionary.get(id);
+			
+			if ((training) && (hashKeyphrases != null) && (hashKeyphrases.containsKey(id))) {
 				newInst[m_KeyFreqIndex] = keyphraseC.value() - 1;
 			} else {
 				if (keyphraseC != null) {
@@ -1111,54 +1124,54 @@ public class KEAFilter extends Filter implements OptionHandler {
 		}
 		
 		// Is term appearance attribute being used?
-		if (m_STDEVfeature) {	
-			FastVector app = (FastVector)phraseInfo.elementAt(3);
+		if (m_STDEVfeature) {
+			FastVector app = (FastVector) phraseInfo.elementAt(3);
 			
 			double[] vals = new double[app.size()];
 			for (int i = 0; i < vals.length; i++) {
-				vals[i] = ((Counter)app.elementAt(i)).value() /
-				(double)length; ;
+				vals[i] = ((Counter) app.elementAt(i)).value() / (double) length;
+				;
 			}
 			
 			double mean = Utils.mean(vals);
 			double summ = 0.0;
+			
 			for (int i = 0; i < vals.length; i++) {
 				double a = vals[i];
-				//log.info("Appearence " + i + " is at " + a);
-				summ += (a - mean)*(a - mean);				
+				// log.info("Appearence " + i + " is at " + a);
+				summ += (a - mean) * (a - mean);
 			}
-			double stdev = Math.sqrt(summ/(double)app.size());
+			
+			double stdev = Math.sqrt(summ / (double) app.size());
 			
 			newInst[m_STDEVIndex] = stdev;
 			
-			/* Using instead of STDEV feature a thesaurus based feature (experiment)
-			 if (m_Vocabulary.getRelated(id,"compositeOf") != null) {
-			 //log.info(m_Vocabulary.getOrig(id) + " is a composite!");
-			  newInst[m_STDEVIndex] = 1.0;
-			  } else {
-			  newInst[m_STDEVIndex] = 0.0;
-			  }
-			  */
-			
-		} 
+			/*
+			 * Using instead of STDEV feature a thesaurus based feature (experiment)
+			 * if (m_Vocabulary.getRelated(id,"compositeOf") != null) {
+			 * //log.info(m_Vocabulary.getOrig(id) + " is a composite!");
+			 * newInst[m_STDEVIndex] = 1.0;
+			 * } else {
+			 * newInst[m_STDEVIndex] = 0.0;
+			 * }
+			 */
+		}
 		
-		// Is node degree attribute being used?   
-		if (m_NODEfeature) {	
-			
+		// Is node degree attribute being used?
+		if (m_NODEfeature) {
 			Vector<String> idsRT = m_Vocabulary.getRelated(id);
 			
-			int intern = 0;			
+			int intern = 0;
 			if (idsRT != null) {
 				for (int d = 0; d < idsRT.size(); d++) {
 					if (hash.get(idsRT.elementAt(d)) != null) {
 						intern++;
-					}					
+					}
 				}
 			}
 			// log.info("Node feature for " + m_Vocabulary.getOrig(id) + " = " + intern);
 			
-			newInst[m_NodeIndex] = (double)intern;
-			
+			newInst[m_NodeIndex] = (double) intern;
 		}
 		
 		// Is term length attribute being used?
@@ -1166,15 +1179,15 @@ public class KEAFilter extends Filter implements OptionHandler {
 			String original;
 			if (m_vocabulary.equals("none")) {
 				original = id;
-			} else  {
+			} else {
 				original = m_Vocabulary.getOrig(id);
 			}
 			if (original == null) {
 				log.info("problem with id " + id);
 				newInst[m_LengthIndex] = 1.0;
 			} else {
-				String [] words = split(original," ");
-				newInst[m_LengthIndex] = (double)words.length;
+				String[] words = split(original, " ");
+				newInst[m_LengthIndex] = (double) words.length;
 			}
 			
 		}
@@ -1184,38 +1197,38 @@ public class KEAFilter extends Filter implements OptionHandler {
 		if (hashKeysEval == null) { // no author-assigned keyphrases
 			newInst[m_NumFeatures] = Instance.missingValue();
 		} else if (!hashKeysEval.containsKey(id)) {
-			
 			newInst[m_NumFeatures] = 0; // Not a keyphrase
 			
 			// Experiment with giving phrases related to manually chosen one
 			// higher values than to unrelated ones
-			/*Vector related = (Vector)m_Vocabulary.getRelated(id);
-			 // if this id is related to one of the keyphrases, set its class value to 0.5
-			  if (related != null) {			
-			  Enumeration en = related.elements();			
-			  while (en.hasMoreElements()) {
-			  String relID = (String)en.nextElement();
-			  if (hashKeysEval.containsKey(relID)) {		
-			  newInst[m_NumFeatures] = 1; // Keyphrase
-			  }				
-			  }	
-			  }
-			  */
-			
+			/*
+			 * Vector related = (Vector)m_Vocabulary.getRelated(id);
+			 * // if this id is related to one of the keyphrases, set its class value to 0.5
+			 * if (related != null) {
+			 * Enumeration en = related.elements();
+			 * while (en.hasMoreElements()) {
+			 * String relID = (String)en.nextElement();
+			 * if (hashKeysEval.containsKey(relID)) {
+			 * newInst[m_NumFeatures] = 1; // Keyphrase
+			 * }
+			 * }
+			 * }
+			 */
 		} else {
-			//hashKeysEval.remove(id);
-			//newInst[m_NumFeatures] = 1; // Keyphrase
+			// hashKeysEval.remove(id);
+			// newInst[m_NumFeatures] = 1; // Keyphrase
 			
 			// Learning from multiple-indexer's data
 			// log.info(m_Indexers);
 			// log.info("Calculating class value with m_Indexers = " + m_Indexers);
 			
-			double c = (double)((Counter)hashKeysEval.get(id)).value()/m_Indexers;
+			double c = (double) ((Counter) hashKeysEval.get(id)).value() / m_Indexers;
 			newInst[m_NumFeatures] = c; // Keyphrase
 			
 			// Or simple learning from 1 indexer:
 			// newInst[m_NumFeatures] = 1.0; // Keyphrase
 		}
+		
 		return newInst;
 	}
 	
@@ -1224,36 +1237,41 @@ public class KEAFilter extends Filter implements OptionHandler {
 	 */
 	@SuppressWarnings("unchecked")
 	private void convertPendingInstances() throws Exception {
-		
 		if (m_Debug) {
 			log.info("--- Converting pending instances");
 		}
 		
 		// Create output format for filter
 		FastVector atts = new FastVector();
+		
 		for (int i = 0; i < getInputFormat().numAttributes(); i++) {
 			if (i == m_DocumentAtt) {
 				// string attributes
 				atts.addElement(new Attribute("N-gram", (FastVector) null));
-				atts.addElement(new Attribute("N-gram-original",  (FastVector) null));
+				atts.addElement(new Attribute("N-gram-original", (FastVector) null));
+				
 				// numeric attributes
 				atts.addElement(new Attribute("TFxIDF"));
 				atts.addElement(new Attribute("First_occurrence"));
+				
 				// optional attributes
 				if (m_Debug) {
 					if (m_KFused) {
 						atts.addElement(new Attribute("Keyphrase_frequency"));
 					}
 				}
+				
 				if (m_STDEVfeature) {
-					//FastVector rvals = new FastVector(2);
-					//rvals.addElement("False");
-					//rvals.addElement("True");
+					// FastVector rvals = new FastVector(2);
+					// rvals.addElement("False");
+					// rvals.addElement("True");
 					atts.addElement(new Attribute("Standard_deviation"));
 				}
+				
 				if (m_NODEfeature) {
 					atts.addElement(new Attribute("Relations_number"));
 				}
+				
 				if (m_LENGTHfeature) {
 					atts.addElement(new Attribute("Phrase_length"));
 				}
@@ -1264,33 +1282,33 @@ public class KEAFilter extends Filter implements OptionHandler {
 				FastVector vals = new FastVector(2);
 				vals.addElement("False");
 				vals.addElement("True");
-				//atts.addElement(new Attribute("Keyphrase?", vals));
+				// atts.addElement(new Attribute("Keyphrase?", vals));
 				atts.addElement(new Attribute("Keyphrase?"));
 			} else {
 				atts.addElement(getInputFormat().attribute(i));
 			}
 		}
+		
 		Instances outFormat = new Instances("KEAdata", atts, 0);
 		setOutputFormat(outFormat);
 		
 		// Convert pending input instances into output data
-		for(int i = 0; i < getInputFormat().numInstances(); i++) {
+		for (int i = 0; i < getInputFormat().numInstances(); i++) {
 			Instance current = getInputFormat().instance(i);
 			FastVector vector = convertInstance(current, true);
 			Enumeration<Instance> en = vector.elements();
+			
 			while (en.hasMoreElements()) {
 				Instance inst = en.nextElement();
 				push(inst);
 			}
 		}
-	} 
+	}
 	
 	/**
 	 * Converts an instance.
 	 */
-	private FastVector convertInstance(Instance instance, boolean training) 
-	throws Exception {
-		
+	private FastVector convertInstance(Instance instance, boolean training) throws Exception {
 		FastVector vector = new FastVector();
 		
 		if (m_Debug) {
@@ -1300,6 +1318,7 @@ public class KEAFilter extends Filter implements OptionHandler {
 		// Get the key phrases for the document
 		HashMap<String, Counter> hashKeyphrases = null;
 		HashMap<String, Counter> hashKeysEval = null;
+		
 		if (!instance.isMissing(m_KeyphrasesAtt)) {
 			String keyphrases = instance.stringValue(m_KeyphrasesAtt);
 			hashKeyphrases = getGivenKeyphrases(keyphrases, false);
@@ -1309,69 +1328,66 @@ public class KEAFilter extends Filter implements OptionHandler {
 		// Get the phrases for the document
 		HashMap<String, FastVector> hash = new HashMap<String, FastVector>();
 		int length = getPhrases(hash, instance.stringValue(m_DocumentAtt));
-		//	hash = getComposits(hash);
-
-		/* Experimental:
-		 To compute how many of the manual keyphrases appear in the documents:
+		// hash = getComposits(hash);
 		
-		log.info("Doc phrases found " + hash.size());
-		log.info("Manual keyphrases: ");
-		Iterator iter = hashKeyphrases.keySet().iterator();
-		int count = 0;
-		while (iter.hasNext()) {
-			String id = (String)iter.next();
-			if (hash.containsKey(id)) {
-				count++;
-			}
-		}
-		
-		double max_recall = (double)count/(double)hashKeyphrases.size();
-		
-		
-		m_max_recall += max_recall;
-		doc++;
-		double avg_m_max_recall = m_max_recall/(double)doc;
-		
-		String file = instance.stringValue(2);
-		log.info(count + " out of " + hashKeyphrases.size() + " are in the document ");
-		log.info("Max recall : " + avg_m_max_recall + " on " + doc + " documents ");
-		*/
-		
+		/*
+		 * Experimental:
+		 * To compute how many of the manual keyphrases appear in the documents:
+		 * log.info("Doc phrases found " + hash.size());
+		 * log.info("Manual keyphrases: ");
+		 * Iterator iter = hashKeyphrases.keySet().iterator();
+		 * int count = 0;
+		 * while (iter.hasNext()) {
+		 * String id = (String)iter.next();
+		 * if (hash.containsKey(id)) {
+		 * count++;
+		 * }
+		 * }
+		 * double max_recall = (double)count/(double)hashKeyphrases.size();
+		 * m_max_recall += max_recall;
+		 * doc++;
+		 * double avg_m_max_recall = m_max_recall/(double)doc;
+		 * String file = instance.stringValue(2);
+		 * log.info(count + " out of " + hashKeyphrases.size() + " are in the document ");
+		 * log.info("Max recall : " + avg_m_max_recall + " on " + doc + " documents ");
+		 */
 		
 		// Compute number of extra attributes
 		int numFeatures = 5;
+		
 		if (m_Debug) {
 			if (m_KFused) {
 				numFeatures = numFeatures + 1;
 			}
-		} 
+		}
+		
 		if (m_STDEVfeature) {
 			numFeatures = numFeatures + 1;
 		}
-		if (m_NODEfeature) {	
+		
+		if (m_NODEfeature) {
 			numFeatures = numFeatures + 1;
 		}
+		
 		if (m_LENGTHfeature) {
 			numFeatures = numFeatures + 1;
 		}
 		
 		// Set indices of key attributes
-		//int phraseAttIndex = m_DocumentAtt;
+		// int phraseAttIndex = m_DocumentAtt;
 		int tfidfAttIndex = m_DocumentAtt + 2;
 		int distAttIndex = m_DocumentAtt + 3;
-		int probsAttIndex = m_DocumentAtt + numFeatures - 1;    
-		//int classAttIndex = numFeatures;
+		int probsAttIndex = m_DocumentAtt + numFeatures - 1;
+		// int classAttIndex = numFeatures;
 		
 		// Go through the phrases and convert them into instances
 		Iterator<String> it = hash.keySet().iterator();
+		
 		while (it.hasNext()) {
 			String id = it.next();
-			FastVector phraseInfo = (FastVector)hash.get(id);
+			FastVector phraseInfo = (FastVector) hash.get(id);
 			
-			
-			
-			double[] vals =  featVals(id, phraseInfo, training,
-					hashKeysEval, hashKeyphrases, length, hash);
+			double[] vals = featVals(id, phraseInfo, training, hashKeysEval, hashKeyphrases, length, hash);
 			
 			Instance inst = new Instance(instance.weight(), vals);
 			
@@ -1380,33 +1396,31 @@ public class KEAFilter extends Filter implements OptionHandler {
 			// Get probability of a phrase being key phrase
 			double[] probs = m_Classifier.distributionForInstance(inst);
 			
-			
 			// If simple Naive Bayes used, change here to
-			//double prob = probs[1];
+			// double prob = probs[1];
 			double prob = probs[0];
 			
 			// Compute attribute values for final instance
-			double[] newInst = 
-				new double[instance.numAttributes() + numFeatures];
+			double[] newInst = new double[instance.numAttributes() + numFeatures];
 			int pos = 0;
+			
 			for (int i = 0; i < instance.numAttributes(); i++) {
 				if (i == m_DocumentAtt) {
-					
 					// output of values for a given phrase:
 					
 					// Add phrase
-					int index = outputFormatPeek().attribute(pos).
-					addStringValue(id);
+					int index = outputFormatPeek().attribute(pos).addStringValue(id);
 					newInst[pos++] = index;
 					
 					// Add original version
-					String orig = (String)phraseInfo.elementAt(2);
-
+					String orig = (String) phraseInfo.elementAt(2);
+					
 					if (orig != null) {
 						index = outputFormatPeek().attribute(pos).addStringValue(orig);
 					} else {
 						index = outputFormatPeek().attribute(pos).addStringValue(id);
 					}
+					
 					newInst[pos++] = index;
 					
 					// Add TFxIDF
@@ -1421,17 +1435,20 @@ public class KEAFilter extends Filter implements OptionHandler {
 							newInst[pos++] = inst.value(m_KeyFreqIndex);
 						}
 					}
+					
 					if (m_STDEVfeature) {
 						newInst[pos++] = inst.value(m_STDEVIndex);
 					}
+					
 					if (m_NODEfeature) {
 						newInst[pos++] = inst.value(m_NodeIndex);
 					}
+					
 					if (m_LENGTHfeature) {
 						newInst[pos++] = inst.value(m_LengthIndex);
 					}
 					
-					// Add probability 
+					// Add probability
 					probsAttIndex = pos;
 					newInst[pos++] = prob;
 					
@@ -1444,33 +1461,32 @@ public class KEAFilter extends Filter implements OptionHandler {
 					newInst[pos++] = instance.value(i);
 				}
 			}
+			
 			Instance ins = new Instance(instance.weight(), newInst);
 			ins.setDataset(outputFormatPeek());
 			vector.addElement(ins);
 		}
 		
-		
 		// Add dummy instances for keyphrases that don't occur
 		// in the document
 		if (hashKeysEval != null) {
 			Iterator<String> phrases = hashKeysEval.keySet().iterator();
+			
 			while (phrases.hasNext()) {
 				String phrase = phrases.next();
-				double[] newInst = 
-					new double[instance.numAttributes() + numFeatures];
+				double[] newInst = new double[instance.numAttributes() + numFeatures];
 				int pos = 0;
+				
 				for (int i = 0; i < instance.numAttributes(); i++) {
 					if (i == m_DocumentAtt) {
 						// log.info("Here: " + phrase);
 						// Add phrase
-						int index = outputFormatPeek().attribute(pos).
-						addStringValue(phrase);
-						newInst[pos++] = (double)index;
+						int index = outputFormatPeek().attribute(pos).addStringValue(phrase);
+						newInst[pos++] = (double) index;
 						
 						// Add original version
-						index = outputFormatPeek().attribute(pos).
-						addStringValue(phrase);
-						newInst[pos++] = (double)index;
+						index = outputFormatPeek().attribute(pos).addStringValue(phrase);
+						newInst[pos++] = (double) index;
 						
 						// Add TFxIDF
 						newInst[pos++] = Instance.missingValue();
@@ -1484,12 +1500,15 @@ public class KEAFilter extends Filter implements OptionHandler {
 								newInst[pos++] = Instance.missingValue();
 							}
 						}
+						
 						if (m_STDEVfeature) {
 							newInst[pos++] = Instance.missingValue();
 						}
+						
 						if (m_NODEfeature) {
 							newInst[pos++] = Instance.missingValue();
 						}
+						
 						if (m_LENGTHfeature) {
 							newInst[pos++] = Instance.missingValue();
 						}
@@ -1501,56 +1520,67 @@ public class KEAFilter extends Filter implements OptionHandler {
 						newInst[pos++] = 1; // Keyphrase
 					} else {
 						newInst[pos++] = instance.value(i);
-					} 
+					}
 					
 					Instance inst = new Instance(instance.weight(), newInst);
 					inst.setDataset(outputFormatPeek());
 					vector.addElement(inst);
 				}
-				
 			}
 		}
 		
 		// Sort phrases according to their distance (stable sort)
 		double[] vals = new double[vector.size()];
+		
 		for (int i = 0; i < vals.length; i++) {
-			vals[i] = ((Instance)vector.elementAt(i)).value(distAttIndex);
+			vals[i] = ((Instance) vector.elementAt(i)).value(distAttIndex);
 		}
+		
 		FastVector newVector = new FastVector(vector.size());
 		int[] sortedIndices = Utils.stableSort(vals);
+		
 		for (int i = 0; i < vals.length; i++) {
 			newVector.addElement(vector.elementAt(sortedIndices[i]));
 		}
+		
 		vector = newVector;
 		
 		// Sort phrases according to their tfxidf value (stable sort)
 		for (int i = 0; i < vals.length; i++) {
-			vals[i] = -((Instance)vector.elementAt(i)).value(tfidfAttIndex);
+			vals[i] = -((Instance) vector.elementAt(i)).value(tfidfAttIndex);
 		}
+		
 		newVector = new FastVector(vector.size());
 		sortedIndices = Utils.stableSort(vals);
+		
 		for (int i = 0; i < vals.length; i++) {
 			newVector.addElement(vector.elementAt(sortedIndices[i]));
 		}
+		
 		vector = newVector;
 		
 		// Sort phrases according to their probability (stable sort)
 		for (int i = 0; i < vals.length; i++) {
-			vals[i] = 1 - ((Instance)vector.elementAt(i)).value(probsAttIndex);
+			vals[i] = 1 - ((Instance) vector.elementAt(i)).value(probsAttIndex);
 		}
+		
 		newVector = new FastVector(vector.size());
 		sortedIndices = Utils.stableSort(vals);
+		
 		for (int i = 0; i < vals.length; i++) {
 			newVector.addElement(vector.elementAt(sortedIndices[i]));
 		}
+		
 		vector = newVector;
 		
 		// Compute rank of phrases. Check for subphrases that are ranked
 		// lower than superphrases and assign probability -1 and set the
 		// rank to Integer.MAX_VALUE
 		int rank = 1;
+		
 		for (int i = 0; i < vals.length; i++) {
-			Instance currentInstance = (Instance)vector.elementAt(i);
+			Instance currentInstance = (Instance) vector.elementAt(i);
+			
 			// Short cut: if phrase very unlikely make rank very low and continue
 			if (Utils.grOrEq(vals[i], 1.0)) {
 				currentInstance.setValue(probsAttIndex + 1, Integer.MAX_VALUE);
@@ -1562,65 +1592,60 @@ public class KEAFilter extends Filter implements OptionHandler {
 			// current phrase. We do this to catch all superphrases
 			// that have same probability, TFxIDF value and distance as current phrase.
 			int startInd = i;
+			
 			while (startInd < vals.length) {
-				Instance inst = (Instance)vector.elementAt(startInd);
-				if ((inst.value(tfidfAttIndex) != 
-					currentInstance.value(tfidfAttIndex)) ||
-					(inst.value(probsAttIndex) != 
-						currentInstance.value(probsAttIndex)) ||
-						(inst.value(distAttIndex) !=
-							currentInstance.value(distAttIndex))) {
+				Instance inst = (Instance) vector.elementAt(startInd);
+				
+				if ((inst.value(tfidfAttIndex) != currentInstance.value(tfidfAttIndex))
+						|| (inst.value(probsAttIndex) != currentInstance.value(probsAttIndex))
+						|| (inst.value(distAttIndex) != currentInstance.value(distAttIndex))) {
 					break;
 				}
+				
 				startInd++;
 			}
-			currentInstance.setValue(probsAttIndex + 1, rank++);
 			
+			currentInstance.setValue(probsAttIndex + 1, rank++);
 		}
+		
 		return vector;
 	}
+	
 	/*
-	 private HashMap getComposits(HashMap dict) {
-	 HashMap dictClone = (HashMap)dict.clone();
-	 Iterator it1 = dictClone.keySet().iterator();       
-	 while (it1.hasNext()) {
-	 String id1 = (String)it1.next();
-	 String term1 = m_Vocabulary.getOrig(id1);
-	 Iterator it2 = dictClone.keySet().iterator();       
-	 while (it2.hasNext()) {
-	 String id2 = (String)it2.next();
-	 
-	 String term2 = m_Vocabulary.getOrig(id2);
-	 
-	 String composite = term1 + " " + term2;
-	 String idNew = m_Vocabulary.getID(composite);
-	 
-	 if (term1 != term2 && idNew != null) {
-	 
-	 FastVector vec = (FastVector)dict.get(idNew);
-	 
-	 if (vec == null) {
-	 log.info("Found " + m_Vocabulary.getOrig(idNew) + " (" + term1 + ", " + term2 + ")");
-	 // Specifying the size of the vector
-	  // According to additional selected features:
-	   vec = new FastVector(2);
-	   
-	   // Update hashtable with all the info
-	    vec.addElement(new Counter(0)); //0
-	    vec.addElement(new Counter()); //1
-	    vec.addElement(m_Vocabulary.getOrig(idNew)); //2
-	    dict.put(idNew, vec);
-	    } else {
-	    
-	    // Update number of occurrences
-	     ((Counter)((FastVector)vec).elementAt(1)).increment();
-	     }					
-	     }
-	     }
-	     }
-	     return dict;
-	     }
-	     */
+	 * private HashMap getComposits(HashMap dict) {
+	 * HashMap dictClone = (HashMap)dict.clone();
+	 * Iterator it1 = dictClone.keySet().iterator();
+	 * while (it1.hasNext()) {
+	 * String id1 = (String)it1.next();
+	 * String term1 = m_Vocabulary.getOrig(id1);
+	 * Iterator it2 = dictClone.keySet().iterator();
+	 * while (it2.hasNext()) {
+	 * String id2 = (String)it2.next();
+	 * String term2 = m_Vocabulary.getOrig(id2);
+	 * String composite = term1 + " " + term2;
+	 * String idNew = m_Vocabulary.getID(composite);
+	 * if (term1 != term2 && idNew != null) {
+	 * FastVector vec = (FastVector)dict.get(idNew);
+	 * if (vec == null) {
+	 * log.info("Found " + m_Vocabulary.getOrig(idNew) + " (" + term1 + ", " + term2 + ")");
+	 * // Specifying the size of the vector
+	 * // According to additional selected features:
+	 * vec = new FastVector(2);
+	 * // Update hashtable with all the info
+	 * vec.addElement(new Counter(0)); //0
+	 * vec.addElement(new Counter()); //1
+	 * vec.addElement(m_Vocabulary.getOrig(idNew)); //2
+	 * dict.put(idNew, vec);
+	 * } else {
+	 * // Update number of occurrences
+	 * ((Counter)((FastVector)vec).elementAt(1)).increment();
+	 * }
+	 * }
+	 * }
+	 * }
+	 * return dict;
+	 * }
+	 */
 	
 	/**
 	 * Returns a hashtable. Fills the hashtable
@@ -1628,16 +1653,16 @@ public class KEAFilter extends Filter implements OptionHandler {
 	 * (as keys) and the number of times it occurs.
 	 */
 	public HashMap<String, Counter> getPhrasesForDictionary(String str) {
-		
 		String[] buffer = new String[m_MaxPhraseLength];
 		HashMap<String, Counter> hash = new HashMap<String, Counter>();
 		
 		StringTokenizer tok = new StringTokenizer(str, "\n");
 		while (tok.hasMoreTokens()) {
 			String phrase = tok.nextToken();
-			//  log.info("Sentence " + phrase);
+			// log.info("Sentence " + phrase);
 			int numSeen = 0;
 			StringTokenizer wordTok = new StringTokenizer(phrase, " ");
+			
 			while (wordTok.hasMoreTokens()) {
 				String word = wordTok.nextToken();
 				// log.info(word);
@@ -1667,8 +1692,7 @@ public class KEAFilter extends Filter implements OptionHandler {
 					phraseBuffer.insert(0, buffer[m_MaxPhraseLength - i]);
 					
 					// Don't consider phrases that begin with a stop word
-					if ((i > 1) && 
-							(m_Stopwords.isStopword(buffer[m_MaxPhraseLength - i]))) {
+					if ((i > 1) && (m_Stopwords.isStopword(buffer[m_MaxPhraseLength - i]))) {
 						continue;
 					}
 					
@@ -1685,25 +1709,26 @@ public class KEAFilter extends Filter implements OptionHandler {
 						
 						String id;
 						if (m_vocabulary.equals("none")) {
-						//	String pseudo = pseudoPhrase(orig);
+							// String pseudo = pseudoPhrase(orig);
 							id = pseudo;
 						} else {
-							id = (String)m_Vocabulary.getID(orig);
+							id = (String) m_Vocabulary.getID(orig);
 						}
 						
-						if (id != null) {								
-							Counter count = (Counter)hash.get(id);
+						if (id != null) {
+							Counter count = (Counter) hash.get(id);
 							if (count == null) {
 								hash.put(id, new Counter());
 							} else {
 								count.increment();
 							}
-						//	log.info(orig + "\t" + id);
-						}						
+							// log.info(orig + "\t" + id);
+						}
 					}
 				}
 			}
-		}	
+		}
+		
 		return hash;
 	}
 	
@@ -1713,30 +1738,30 @@ public class KEAFilter extends Filter implements OptionHandler {
 	 * (as keys). Stores the position, the number of occurences,
 	 * and the most commonly occurring orgininal version of
 	 * each n-gram.
-	 *
+	 * 
 	 * N-grams that occur less than m_MinNumOccur are not used.
-	 *
+	 * 
 	 * Returns the total number of words (!) in the string.
-	 */	
-	private int getPhrases(HashMap<String,FastVector> hash, String str) {
-		
-		//FileOutputStream out = new FileOutputStream("candidates_kea41.txt");		
-		//PrintWriter printer = new PrintWriter(new OutputStreamWriter(out)); 
+	 */
+	private int getPhrases(HashMap<String, FastVector> hash, String str) {
+		// FileOutputStream out = new FileOutputStream("candidates_kea41.txt");
+		// PrintWriter printer = new PrintWriter(new OutputStreamWriter(out));
 		
 		// hash = table to store all the information about phrases extracted from "str"
-		// str  = the content of the document, separated by newlines in sentences
+		// str = the content of the document, separated by newlines in sentences
 		
 		String[] buffer = new String[m_MaxPhraseLength];
 		
 		// Extracting strings of a predefined length from "str":
 		
 		StringTokenizer tok = new StringTokenizer(str, "\n");
-		int pos = 1; 
+		int pos = 1;
 		
 		while (tok.hasMoreTokens()) {
 			String phrase = tok.nextToken();
 			int numSeen = 0;
 			StringTokenizer wordTok = new StringTokenizer(phrase, " ");
+			
 			while (wordTok.hasMoreTokens()) {
 				String word = wordTok.nextToken();
 				
@@ -1756,10 +1781,11 @@ public class KEAFilter extends Filter implements OptionHandler {
 				if (m_Stopwords.isStopword(buffer[m_MaxPhraseLength - 1])) {
 					pos++;
 					continue;
-				}	
+				}
 				
 				// Loop through buffer and add phrases to hashtable
 				StringBuffer phraseBuffer = new StringBuffer();
+				
 				for (int i = 1; i <= numSeen; i++) {
 					if (i > 1) {
 						phraseBuffer.insert(0, ' ');
@@ -1767,8 +1793,7 @@ public class KEAFilter extends Filter implements OptionHandler {
 					phraseBuffer.insert(0, buffer[m_MaxPhraseLength - i]);
 					
 					// Don't consider phrases that begin with a stop word
-					if ((i > 1) && 
-							(m_Stopwords.isStopword(buffer[m_MaxPhraseLength - i]))) {
+					if ((i > 1) && (m_Stopwords.isStopword(buffer[m_MaxPhraseLength - i]))) {
 						continue;
 					}
 					
@@ -1776,24 +1801,22 @@ public class KEAFilter extends Filter implements OptionHandler {
 					// Only consider phrases with minimum length
 					if (i >= m_MinPhraseLength) {
 						
-						// orig = each detected phase in its original spelling  
+						// orig = each detected phase in its original spelling
 						String orig = phraseBuffer.toString();
-
+						
 						// Create internal representation:
-						// either a stemmed version or a pseudo phrase: 
+						// either a stemmed version or a pseudo phrase:
 						
-						
-
 						String id;
 						if (m_vocabulary.equals("none")) {
 							String pseudo = pseudoPhrase(orig);
 							id = pseudo;
 						} else {
-//							Match against the Vocabulary		
-							id = (String)m_Vocabulary.getID(orig);
+							// Match against the Vocabulary
+							id = (String) m_Vocabulary.getID(orig);
 						}
 						
-					//	 log.info(orig + "\t" + pseudo + " \t " + id);
+						// log.info(orig + "\t" + pseudo + " \t " + id);
 						
 						if (id != null) {
 							
@@ -1802,12 +1825,12 @@ public class KEAFilter extends Filter implements OptionHandler {
 							if (!m_vocabulary.equals("none")) {
 								orig = m_Vocabulary.getOrig(id);
 							}
-
+							
 							// Get the vector of the current phrase from the hash table.
 							// If it was already extracted from "str", the values will be
 							// updated in next steps, if not a new vector will be created.
 							
-							FastVector vec = (FastVector)hash.get(id);
+							FastVector vec = (FastVector) hash.get(id);
 							
 							if (vec == null) {
 								
@@ -1821,14 +1844,14 @@ public class KEAFilter extends Filter implements OptionHandler {
 								}
 								
 								// Update hashtable with all the info
-								vec.addElement(new Counter(pos + 1 - i)); //0
-								vec.addElement(new Counter()); //1
-								vec.addElement(orig); //2
+								vec.addElement(new Counter(pos + 1 - i)); // 0
+								vec.addElement(new Counter()); // 1
+								vec.addElement(orig); // 2
 								
 								if (m_STDEVfeature) {
 									FastVector app = new FastVector();
 									app.addElement(new Counter(pos + 1 - i));
-									vec.addElement(app); 
+									vec.addElement(app);
 								}
 								hash.put(id, vec);
 							} else {
@@ -1837,19 +1860,19 @@ public class KEAFilter extends Filter implements OptionHandler {
 								// update its values in the old vector
 								
 								// Update number of occurrences
-								((Counter)((FastVector)vec).elementAt(1)).increment();
+								((Counter) ((FastVector) vec).elementAt(1)).increment();
 								
 								if (m_STDEVfeature) {
 									
-									FastVector app = (FastVector)vec.elementAt(3); 
+									FastVector app = (FastVector) vec.elementAt(3);
 									app.addElement(new Counter(pos + 1 - i));
-									vec.addElement(app); 
+									vec.addElement(app);
 								}
-								
-							}								
-						} 
+							}
+						}
 					}
 				}
+				
 				pos++;
 			}
 		}
@@ -1861,50 +1884,51 @@ public class KEAFilter extends Filter implements OptionHandler {
 		
 		while (phrases.hasNext()) {
 			String phrase = phrases.next();
-			FastVector info = (FastVector)hash.get(phrase);
+			FastVector info = (FastVector) hash.get(phrase);
 			
-			// Occurring less than m_MinNumOccur? //m_MinNumOccur			
-			if (((Counter)((FastVector)info).elementAt(1)).value() < m_MinNumOccur) {
+			// Occurring less than m_MinNumOccur? //m_MinNumOccur
+			if (((Counter) ((FastVector) info).elementAt(1)).value() < m_MinNumOccur) {
 				phrases.remove();
 				continue;
 			}
 		}
+		
 		return pos;
 	}
 	
-	/** 
+	/**
 	 * Splits a string at given character into an array (ALY)
 	 */
-	private static String[] split(String str,String separator) {
-		
+	private static String[] split(String str, String separator) {
 		ArrayList<String> lst = new ArrayList<String>();
-		String word = ""; 
+		String word = "";
 		
 		for (int i = 0; i < str.length(); i++) {
 			int j = i + 1;
-			String letter = str.substring(i,j);
+			String letter = str.substring(i, j);
+			
 			if (!letter.equalsIgnoreCase(separator)) {
 				word = word + str.charAt(i);
 			} else {
 				lst.add(word);
-				word = ""; 
+				word = "";
 			}
 		}
+		
 		if (word != "") {
 			lst.add(word);
 		}
-		String[] result = (String[])lst.toArray(new String[lst.size()]);
+		
+		String[] result = (String[]) lst.toArray(new String[lst.size()]);
 		return result;
-	}	
+	}
 	
 	/**
 	 * Gets all the phrases in the given string and puts them into the
-	 * hashtable.  Also stores the original version of the stemmed
-	 * phrase in the hash table.  
+	 * hashtable. Also stores the original version of the stemmed
+	 * phrase in the hash table.
 	 */
-	private HashMap<String, Counter> getGivenKeyphrases(String str,
-			boolean forEval) {
-		
+	private HashMap<String, Counter> getGivenKeyphrases(String str, boolean forEval) {
 		HashMap<String, Counter> hash = new HashMap<String, Counter>();
 		// m_Indexers = 1;
 		
@@ -1913,39 +1937,43 @@ public class KEAFilter extends Filter implements OptionHandler {
 			String orig = tok.nextToken();
 			orig = orig.trim();
 			
-//			This is often the case with Mesh Terms,
+			// This is often the case with Mesh Terms,
 			// where a term is accompanied by another specifying term
 			// e.g. Monocytes/*immunology/microbiology
 			// we ignore everything after the "/" symbol.
 			if (orig.matches(".+?/.+?")) {
-				String[] elements = orig.split("/");		
+				String[] elements = orig.split("/");
 				orig = elements[0];
-			}	
+			}
 			
 			orig = pseudoPhrase(orig);
+			
 			if (orig.length() > 0) {
 				
 				String id;
 				if (m_vocabulary.equals("none")) {
 					id = orig;
 				} else {
-					id = (String)m_Vocabulary.getID(orig);
+					id = (String) m_Vocabulary.getID(orig);
 				}
+				
 				if (id != null) {
-					//log.info("\t" + id);
+					// log.info("\t" + id);
 					if (!hash.containsKey(id)) {
 						hash.put(id, new Counter());
-					} else {	
-						Counter c = (Counter)hash.get(id);
+					} else {
+						Counter c = (Counter) hash.get(id);
 						c.increment();
 						hash.put(id, c);
 						if (forEval && m_Debug) {
-							log.info("Skipping the phrase " + orig + ", which appears twice in the author-assigned keyphrase set.");
+							log.info("Skipping the phrase " + orig
+									+ ", which appears twice in the author-assigned keyphrase set.");
 						}
 					}
-				} 
+				}
 			}
 		}
+		
 		if (hash.size() == 0) {
 			return null;
 		} else {
@@ -1953,14 +1981,14 @@ public class KEAFilter extends Filter implements OptionHandler {
 		}
 	}
 	
-	/** 
+	/**
 	 * Generates the preudo phrase from a string.
 	 * A pseudo phrase is a version of a phrase
 	 * that only contains non-stopwords,
-	 * which are stemmed and sorted into alphabetical order. 
+	 * which are stemmed and sorted into alphabetical order.
 	 */
 	public String pseudoPhrase(String str) {
-		//log.error(str + "\t");
+		// log.error(str + "\t");
 		String[] pseudophrase;
 		String[] words;
 		String str_nostop;
@@ -1973,21 +2001,20 @@ public class KEAFilter extends Filter implements OptionHandler {
 		// e.g. Monocytes/*immunology/microbiology
 		// we ignore everything after the "/" symbol.
 		if (str.matches(".+?/.+?")) {
-			String[] elements = str.split("/");		
+			String[] elements = str.split("/");
 			str = elements[0];
-		}	
+		}
 		
 		// removes scop notes in brackets
 		// should be replaced with a cleaner solution
 		if (str.matches(".+?\\(.+?")) {
-			String[] elements = str.split("\\(");		
-			str = elements[0];			
-		}	
+			String[] elements = str.split("\\(");
+			str = elements[0];
+		}
 		if (str.matches(".+?\\'.+?")) {
-			String[] elements = str.split("\\'");		
-			str = elements[1];			
-		}	
-		
+			String[] elements = str.split("\\'");
+			str = elements[1];
+		}
 		
 		// Remove some non-alphanumeric characters
 		
@@ -1996,15 +2023,16 @@ public class KEAFilter extends Filter implements OptionHandler {
 		str = str.replace('&', ' ');
 		
 		str = str.replaceAll("\\*", "");
-		str = str.replaceAll("\\, "," ");
-		str = str.replaceAll("\\. "," ");
-		str = str.replaceAll("\\:","");
+		str = str.replaceAll("\\, ", " ");
+		str = str.replaceAll("\\. ", " ");
+		str = str.replaceAll("\\:", "");
 		
 		str = str.trim();
 		
 		// Stem string
 		words = str.split(" ");
 		str_nostop = "";
+		
 		for (int i = 0; i < words.length; i++) {
 			if (!m_Stopwords.isStopword(words[i])) {
 				if (str_nostop.equals("")) {
@@ -2014,80 +2042,85 @@ public class KEAFilter extends Filter implements OptionHandler {
 				}
 			}
 		}
+		
 		stemmed = m_Stemmer.stemString(str_nostop);
 		
-		//log.info(stemmed + "\t" + str_nostop + "\t"+ str);
+		// log.info(stemmed + "\t" + str_nostop + "\t"+ str);
 		pseudophrase = sort(stemmed.split(" "));
 		// log.info(join(pseudophrase));
 		return join(pseudophrase);
 	}
 	
-	/** 
+	/**
 	 * Joins an array of strings to a single string.
 	 */
 	private static String join(String[] str) {
 		String result = "";
-		for(int i = 0; i < str.length; i++) {
-			if (result != "") {
+		
+		for (int i = 0; i < str.length; i++) {
+			if (!result.equals("")) {
 				result = result + " " + str[i];
 			} else {
 				result = str[i];
 			}
 		}
+		
 		return result;
-	}	
+	}
 	
-	/** 
+	/**
 	 * overloaded swap method: exchange 2 locations in an array of Strings.
 	 */
-	public static void swap (int loc1, int loc2, String [] a) {
-		String temp = a [loc1];
-		a [loc1] = a [loc2];
-		a [loc2] = temp;
+	public static void swap(int loc1, int loc2, String[] a) {
+		String temp = a[loc1];
+		a[loc1] = a[loc2];
+		a[loc2] = temp;
 	} // end swap
 	
 	/**
 	 * Sorts an array of Strings into alphabetic order
-	 *
+	 * 
 	 */
-	public static String[] sort (String [] a)    {
-		
+	public static String[] sort(String[] a) {
 		// rename firstAt to reflect new role in alphabetic sorting
 		int i, j, firstAt;
 		
-		for (i = 0 ; i < a.length - 1 ; i++) {
+		for (i = 0; i < a.length - 1; i++) {
 			firstAt = i;
-			for (j = i + 1 ; j < a.length ; j++) {
+			
+			for (j = i + 1; j < a.length; j++) {
 				// modify to preserve ordering of a String that starts with
 				// upper case preceding the otherwise identical String that
 				// has only lower case letters
-				if (a [j].toUpperCase ().compareTo (a [firstAt].toUpperCase ()) < 0) {
+				if (a[j].toUpperCase().compareTo(a[firstAt].toUpperCase()) < 0) {
 					// reset firstAt
 					firstAt = j;
 				}
+				
 				// if identical when converted to all same case
-				if (a [j].toUpperCase ().compareTo (a [firstAt].toUpperCase ()) == 0) {
+				if (a[j].toUpperCase().compareTo(a[firstAt].toUpperCase()) == 0) {
 					// but a[j] precedes when not converted
-					if (a [j].compareTo (a [firstAt]) < 0) {
+					if (a[j].compareTo(a[firstAt]) < 0) {
 						// reset firstAt
 						firstAt = j;
 					}
 				}
 			}
+			
 			if (firstAt != i) {
-				swap (i, firstAt, a);
+				swap(i, firstAt, a);
 			}
 		}
+		
 		return a;
 	} // end method selectionSort
-		
+	
 	/**
 	 * Main method for testing this class.
-	 *
+	 * 
 	 * @param argv should contain arguments to the filter: use -h for help
 	 */
-	public static void main(String [] argv) {
-		
+	public static void main(String[] argv) {
 		try {
 			if (Utils.getFlag('b', argv)) {
 				Filter.batchFilterFile(new KEAFilter(new StopwordsEnglish()), argv);
