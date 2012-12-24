@@ -37,10 +37,6 @@ import com.openkm.kea.metadata.WorkspaceHelper;
  * @version 1.0
  */
 public class StopwordsSpanish extends Stopwords {
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	/** The hashtable containing the list of stopwords */

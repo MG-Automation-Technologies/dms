@@ -21,7 +21,7 @@
 
 package com.openkm.kea.stopwords;
 
-import java.io.*;
+import java.io.Serializable;
 
 /**
  * Class that can test whether a given string is a stop word.
@@ -31,7 +31,6 @@ import java.io.*;
  * @version 1.0
  */
 public abstract class Stopwords implements Serializable {
-	
 	private static final long serialVersionUID = -930038504373236219L;
 	
 	/**

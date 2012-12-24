@@ -62,8 +62,8 @@ public class KEATree {
 	/**
 	 * Generate tree
 	 */
-	public static void generateTree(String token, int levelToDraw, String parentPath, Vector<String> parentUIDs,
-			Writer out) throws IOException {
+	public static void generateTree(String token, int levelToDraw, String parentPath, Vector<String> parentUIDs, Writer out)
+			throws IOException {
 		gnerateTreeHelper(token, null, 0, levelToDraw, parentPath, parentUIDs, out);
 	}
 	
@@ -132,8 +132,8 @@ public class KEATree {
 		
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat dtf = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
-		out.write(dtf.format(cal.getTime()) + " Creating term " + levelSeparator + "> [" + term.getText()
-				+ "] - with uid:" + term.getUid() + "<br>");
+		out.write(dtf.format(cal.getTime()) + " Creating term " + levelSeparator + "> [" + term.getText() + "] - with uid:"
+				+ term.getUid() + "<br>");
 		out.flush();
 	}
 	
@@ -162,8 +162,7 @@ public class KEATree {
 			while (result.hasNext()) {
 				
 				BindingSet bindingSet = result.next();
-				Term term = new Term(bindingSet.getValue("UID").stringValue(), bindingSet.getValue("TEXT")
-						.stringValue());
+				Term term = new Term(bindingSet.getValue("UID").stringValue(), bindingSet.getValue("TEXT").stringValue());
 				
 				// need to ignore duplicates casued by grandchild problem
 				if (!childTerms.contains(term)) {
