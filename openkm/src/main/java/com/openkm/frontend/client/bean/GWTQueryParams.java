@@ -32,7 +32,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * 
  * @author jllort
  */
-public class GWTQueryParams implements IsSerializable {
+public class GWTQueryParams implements IsSerializable, Cloneable {
 	public static final int DOCUMENT = 1;
 	public static final int FOLDER = 2;
 	public static final int MAIL = 4;

@@ -31,7 +31,7 @@ import com.openkm.frontend.client.widget.upload.FileUploadForm;
  * @author jllort
  *
  */
-public class FileToUpload {
+public class FileToUpload implements Cloneable {
 	public static final String DEFAULT_SIZE = "45";
 	
 	private FileUploadForm uploadForm;
