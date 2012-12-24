@@ -320,35 +320,21 @@ public class RepositoryStartupServlet extends HttpServlet {
 		
 		try {
 			if (!Config.SYSTEM_OPENOFFICE_PATH.equals("")) {
-				if (log == null && gs != null) {
-					gs.log("*** Shutting down OpenOffice manager ***");
-				} else {
-					log.info("*** Shutting down OpenOffice manager ***");
-				}
-				
+				log.info("*** Shutting down OpenOffice manager ***");
 				DocConverter.getInstance().stop();
 			}
 		} catch (Throwable e) {
 			log.warn(e.getMessage(), e);
 		}
 		
-		if (log == null && gs != null)
-			gs.log("*** Shutting down UI Notification... ***");
-		else
-			log.info("*** Shutting down UI Notification... ***");
+		log.info("*** Shutting down UI Notification... ***");
 		uin.cancel();
 		
-		if (log == null && gs != null)
-			gs.log("*** Shutting down cron... ***");
-		else
-			log.info("*** Shutting down cron... ***");
+		log.info("*** Shutting down cron... ***");
 		cron.cancel();
 		
 		if (Config.UPDATE_INFO) {
-			if (log == null && gs != null)
-				gs.log("*** Shutting down update info... ***");
-			else
-				log.info("*** Shutting down update info... ***");
+			log.info("*** Shutting down update info... ***");
 			ui.cancel();
 		}
 		
@@ -357,10 +343,7 @@ public class RepositoryStartupServlet extends HttpServlet {
 		uinTimer.cancel();
 		uiTimer.cancel();
 		
-		if (log == null && gs != null)
-			gs.log("*** Shutting down repository... ***");
-		else
-			log.info("*** Shutting down repository... ***");
+		log.info("*** Shutting down repository... ***");
 		
 		if (Config.USER_ITEM_CACHE) {
 			// Serialize
@@ -382,16 +365,10 @@ public class RepositoryStartupServlet extends HttpServlet {
 			log.error(e.getMessage(), e);
 		}
 		
-		if (log == null && gs != null)
-			gs.log("*** Repository shutted down ***");
-		else
-			log.info("*** Repository shutted down ***");
+		log.info("*** Repository shutted down ***");
 		
 		try {
-			if (log == null && gs != null)
-				gs.log("*** Ejecute stop script ***");
-			else
-				log.info("*** Ejecute stop script ***");
+			log.info("*** Ejecute stop script ***");
 			File script = new File(Config.HOME_DIR + File.separatorChar + Config.STOP_SCRIPT);
 			ExecutionUtils.runScript(script);
 			File jar = new File(Config.HOME_DIR + File.separatorChar + Config.STOP_JAR);
@@ -400,10 +377,7 @@ public class RepositoryStartupServlet extends HttpServlet {
 			log.warn(e.getMessage(), e);
 		}
 		
-		if (log == null && gs != null)
-			gs.log("*** Shutting down workflow engine... ***");
-		else
-			log.info("*** Shutting down workflow engine... ***");
+		log.info("*** Shutting down workflow engine... ***");
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
 		jbpmContext.getJbpmConfiguration().getJobExecutor().stop();
 		jbpmContext.getJbpmConfiguration().close();
