@@ -48,7 +48,7 @@ public class TemplateUtils {
 	/**
 	 * Singleton FreeMaker configuration
 	 */
-	public static Configuration getConfig() {
+	public static synchronized Configuration getConfig() {
 		if (cfg == null) {
 			try {
 				cfg = new Configuration();
