@@ -90,7 +90,7 @@ public class FileUploadPopup extends DialogBox {
 		addButton.setVisible(false);
 		
 		sendButton = new Button();
-		sendButton.setText(Main.i18n("fileupload.send"));
+		sendButton.setText(Main.i18n("fileupload.button.send"));
 		sendButton.setStyleName("okm-Button");
 		// Set up a click listener on the proceed check box
 		sendButton.addClickHandler(new ClickHandler() { 
@@ -197,7 +197,7 @@ public class FileUploadPopup extends DialogBox {
 	public void langRefresh() {
 		closeButton.setHTML(Main.i18n("button.close")); 
 		addButton.setHTML(Main.i18n("fileupload.button.add.other.file"));
-		sendButton.setText(Main.i18n("fileupload.send"));	
+		sendButton.setText(Main.i18n("fileupload.button.send"));	
 		
 		if (ffUpload.getAction() == UIFileUploadConstants.ACTION_INSERT) {
 			setText(Main.i18n("fileupload.label.insert"));
