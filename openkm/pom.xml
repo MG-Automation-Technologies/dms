@@ -51,6 +51,9 @@
 
     <!-- Using this Jackrabbit version -->
     <jcr.version>1.6.5</jcr.version>
+    
+    <!-- Apache POI -->
+    <poi.version>3.8</poi.version>
 	
     <!-- Milton WebDAV -->
     <milton.version>1.7.2</milton.version>
@@ -98,18 +101,11 @@
       <url>http://google-gson.googlecode.com/svn/mavenrepo</url>
     </repository>
     
-    <!-- Needed for Java CronTab Syntax Parser -->
-    <repository>
-      <id>java-crontab-syntax-parser-repo</id>
-      <name>Java CronTab Syntax Parser</name>
-      <url>http://kenai.com/projects/crontab-parser/sources/maven-repo/content/</url>
-    </repository>
-    
     <!-- Needed for Milton -->
     <repository>
       <id>ettrema-repo</id>
       <name>Milto WebDAV</name>
-      <url>http://www.ettrema.com/maven2</url>
+      <url>http://milton.io/maven</url>
     </repository>
     
     <!-- OpenKM repository -->
@@ -381,12 +377,12 @@
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi</artifactId>
-      <version>3.7</version>
+      <version>${poi.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi-scratchpad</artifactId>
-      <version>3.7</version>
+      <version>${poi.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.pdfbox</groupId>
@@ -528,7 +524,12 @@
     <dependency>
       <groupId>com.github.dcarter.gdata-java-client</groupId>
       <artifactId>gdata-contacts-3.0</artifactId>
-      <version>1.41.1</version>
+      <version>1.46.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.dcarter.gdata-java-client</groupId>
+      <artifactId>gdata-docs-3.0</artifactId>
+      <version>1.46.0</version>
     </dependency>
     
     <!-- Plugin framework -->
