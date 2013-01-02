@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -224,7 +225,21 @@ public class MailUtils {
 	public static void sendDocument(String fromAddress, List<String> toAddress, String subject, String text,
 			String docPath) throws MessagingException, PathNotFoundException, AccessDeniedException, 
 			RepositoryException, IOException, DatabaseException {
-		send(fromAddress, toAddress, subject, text, docPath);
+		send(fromAddress, toAddress, subject, text, Arrays.asList(new String[] { docPath }));
+	}
+	
+	/**
+	 * Send document to non-registered OpenKM users
+	 * 
+	 * @param toAddress Destination addresses.
+	 * @param subject The mail subject.
+	 * @param text The mail body.
+	 * @throws MessagingException If there is any error.
+	 */
+	public static void sendDocuments(String fromAddress, List<String> toAddress, String subject, String text,
+			List<String> docsPath) throws MessagingException, PathNotFoundException, AccessDeniedException, 
+			RepositoryException, IOException, DatabaseException {
+		send(fromAddress, toAddress, subject, text, docsPath);
 	}
 	
 	/**
@@ -237,13 +252,13 @@ public class MailUtils {
 	 * @throws MessagingException If there is any error.
 	 */
 	private static void send(String fromAddress, Collection<String> toAddress, String subject, String text,
-			String docPath) throws MessagingException, PathNotFoundException, AccessDeniedException, 
+			Collection<String> docsPath) throws MessagingException, PathNotFoundException, AccessDeniedException, 
 			RepositoryException, IOException, DatabaseException {
-		log.debug("send({}, {}, {}, {}, {})", new Object[] { fromAddress, toAddress, subject, text, docPath });
+		log.debug("send({}, {}, {}, {}, {})", new Object[] { fromAddress, toAddress, subject, text, docsPath });
 		File tmpAttachment = FileUtils.createTempFile();
 		
 		try {
-			MimeMessage m = create(fromAddress, toAddress, subject, text, docPath, tmpAttachment);
+			MimeMessage m = create(fromAddress, toAddress, subject, text, docsPath, tmpAttachment);
 			Transport.send(m);
 		} finally {
 			FileUtils.deleteQuietly(tmpAttachment);
@@ -262,9 +277,9 @@ public class MailUtils {
 	 * @throws MessagingException If there is any error.
 	 */
 	private static MimeMessage create(String fromAddress, Collection<String> toAddress, String subject, String text,
-			String docPath, File tmpAttachment) throws MessagingException, PathNotFoundException, 
+			Collection<String> docsPath, File tmpAttachment) throws MessagingException, PathNotFoundException, 
 			AccessDeniedException, RepositoryException, IOException, DatabaseException {
-		log.debug("create({}, {}, {}, {}, {})", new Object[] { fromAddress, toAddress, subject, text, docPath });
+		log.debug("create({}, {}, {}, {}, {})", new Object[] { fromAddress, toAddress, subject, text, docsPath });
 		Session mailSession = getMailSession();
 		MimeMessage msg = new MimeMessage(mailSession);
 		
@@ -299,33 +314,35 @@ public class MailUtils {
 		htmlPart.setDisposition(Part.INLINE);
 		content.addBodyPart(htmlPart);
 		
-		if (docPath != null) {
-			InputStream is = null;
-			FileOutputStream fos = null;
-			String docName = PathUtils.getName(docPath);
-			
-			try {
-				final Document doc = OKMDocument.getInstance().getProperties(null, docPath);
-				is = OKMDocument.getInstance().getContent(null, docPath, false);
-				fos = new FileOutputStream(tmpAttachment);
-				IOUtils.copy(is, fos);
-				fos.flush();
+		if (docsPath != null) {
+			for (String docPath : docsPath) {
+				InputStream is = null;
+				FileOutputStream fos = null;
+				String docName = PathUtils.getName(docPath);
 				
-				// Document attachment part
-				MimeBodyPart docPart = new MimeBodyPart();
-				DataSource source = new FileDataSource(tmpAttachment.getPath()) {
-					public String getContentType() {
-						return doc.getMimeType();
-					}
-				};
-				
-				docPart.setDataHandler(new DataHandler(source));
-				docPart.setFileName(docName);
-				docPart.setDisposition(Part.ATTACHMENT);
-				content.addBodyPart(docPart);
-			} finally {
-				IOUtils.closeQuietly(is);
-				IOUtils.closeQuietly(fos);
+				try {
+					final Document doc = OKMDocument.getInstance().getProperties(null, docPath);
+					is = OKMDocument.getInstance().getContent(null, docPath, false);
+					fos = new FileOutputStream(tmpAttachment);
+					IOUtils.copy(is, fos);
+					fos.flush();
+					
+					// Document attachment part
+					MimeBodyPart docPart = new MimeBodyPart();
+					DataSource source = new FileDataSource(tmpAttachment.getPath()) {
+						public String getContentType() {
+							return doc.getMimeType();
+						}
+					};
+					
+					docPart.setDataHandler(new DataHandler(source));
+					docPart.setFileName(docName);
+					docPart.setDisposition(Part.ATTACHMENT);
+					content.addBodyPart(docPart);
+				} finally {
+					IOUtils.closeQuietly(is);
+					IOUtils.closeQuietly(fos);
+				}
 			}
 		}
 		
