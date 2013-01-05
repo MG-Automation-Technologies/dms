@@ -66,6 +66,7 @@ public class PathUtils {
 	/**
 	 * Eliminate dangerous chars in node name.
 	 * TODO Keep on sync with uploader:com.openkm.applet.Util.escape(String)
+	 * TODO Keep on sync with wsImporter:com.openkm.importer.Util.escape(String)
 	 */
 	public static String escape(String name) {
 		log.debug("escape({})", name);
