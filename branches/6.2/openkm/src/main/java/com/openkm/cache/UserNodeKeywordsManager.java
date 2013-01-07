@@ -49,10 +49,13 @@ public class UserNodeKeywordsManager {
 	private static Map<String, Map<String, UserNodeKeywords>> userNodeKeywordsMgr = new HashMap<String, Map<String, UserNodeKeywords>>();
 
 	/**
+	 * Get user document keywords
 	 * 
+	 * @param user The user which have the document keywords cached.
+	 * @return A Map which key is the node UUID and the value is UserNodeKeywords. 
 	 */
-	public static Map<String, UserNodeKeywords> get(String uid) {
-		Map<String, UserNodeKeywords> userDocKeywords = userNodeKeywordsMgr.get(uid);
+	public static Map<String, UserNodeKeywords> get(String user) {
+		Map<String, UserNodeKeywords> userDocKeywords = userNodeKeywordsMgr.get(user);
 		
 		if (userDocKeywords == null) {
 			userDocKeywords = new HashMap<String, UserNodeKeywords>();
@@ -62,7 +65,11 @@ public class UserNodeKeywordsManager {
 	}
 	
 	/**
-	 * Add keyword
+	 * Add keyword to the user document cache.
+	 * 
+	 * @param user user The user which will have the document keywords cached.
+	 * @param nodeUuid The node UUID which keyword need to be cache.
+	 * @param keyword The keyword to be cached.
 	 */
 	public static synchronized void add(String user, String nodeUuid, String keyword) {
 		log.info("add({}, {}, {})", new Object[] {user, nodeUuid, keyword });
@@ -81,7 +88,7 @@ public class UserNodeKeywordsManager {
 	}
 	
 	/**
-	 * Remove keyword
+	 * Remove keyword from the user document cache.
 	 */
 	public static synchronized void remove(String user, String nodeUuid, String keyword) {
 		Map<String, UserNodeKeywords> usrDocs = get(user);
