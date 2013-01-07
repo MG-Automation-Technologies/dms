@@ -163,16 +163,22 @@ public class CommonWorkflowModule {
 			WorkflowUtils.DiagramNodeInfo dNodeInfo = dInfo.getNodeMap().get(node);
 			BufferedImage img = ImageIO.read(fileDef.getInputStream("processimage.jpg"));
 			
-			// Obtain all nodes Y
+			// Obtain all nodes Y and X
 			List<Integer> ordenadas = new ArrayList<Integer>();
+			List<Integer> abcisas = new ArrayList<Integer>();
 			
 			for (WorkflowUtils.DiagramNodeInfo nodeInfo : dInfo.getNodeMap().values()) {
 				ordenadas.add(nodeInfo.getY());
+				abcisas.add(nodeInfo.getX());
 			}
 			
 			// Calculate minimal Y
 			Collections.sort(ordenadas);
-			int fix = ordenadas.get(0) < 0 ? ordenadas.get(0) : 0;
+			int fixOrd = ordenadas.get(0) < 0 ? ordenadas.get(0) : 0;
+			
+			// Calculate minimal X
+			Collections.sort(abcisas);
+			int fixAbs = abcisas.get(0) < 0 ? abcisas.get(0) : 0;
 			
 			if (dNodeInfo != null) {
 				// Select node
@@ -181,7 +187,7 @@ public class CommonWorkflowModule {
 				Graphics2D g2d = (Graphics2D) g;
 				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25F));
 				g2d.setColor(Color.blue);
-				g2d.fillRect(dNodeInfo.getX(), dNodeInfo.getY() - fix, dNodeInfo.getWidth(), dNodeInfo.getHeight());
+				g2d.fillRect(dNodeInfo.getX() - fixAbs, dNodeInfo.getY() - fixOrd, dNodeInfo.getWidth(), dNodeInfo.getHeight());
 				g.dispose();
 			}
 			
