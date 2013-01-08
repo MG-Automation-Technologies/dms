@@ -178,4 +178,11 @@ public interface AuthModule {
 	 * @throws RepositoryException If there is any error retrieving the mail.
 	 */
 	public String getName(String token, String user) throws PrincipalAdapterException;
+	
+	/**
+	 * Change several security permissions in the same call.
+	 */
+	public void changeSecurity(String token, String nodePath, Map<String, Integer> users,
+			Map<String, Integer> roles, boolean recursive) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException;
 }

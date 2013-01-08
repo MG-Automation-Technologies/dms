@@ -64,6 +64,10 @@ strong {
 	color: #488bff;
 }
 
+.bold {
+	font-weight: bold;
+}
+
 /* General use */
 .okm-NoWrap {
 	white-space: nowrap;

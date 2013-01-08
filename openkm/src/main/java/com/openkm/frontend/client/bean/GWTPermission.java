@@ -33,6 +33,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 public class GWTPermission implements IsSerializable, Serializable {
 	private static final long serialVersionUID = 1L;
+	public static final int REMOVED = 0;
 	public static final int READ = 1;
 	public static final int WRITE = 2;
 	public static final int DELETE = 4;

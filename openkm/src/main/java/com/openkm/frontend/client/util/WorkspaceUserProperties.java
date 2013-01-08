@@ -108,6 +108,11 @@ public class WorkspaceUserProperties {
 				Main.get().notifyPopup.enableAdvancedFilter();
 			}
 			
+			// Enabling security mode multiple
+			if (workspace.isSecurityModeMultiple()) {
+				Main.get().securityPopup.enableSecurityModeMultiple();
+			}
+			
 			// Show / hide menus
 			Main.get().mainPanel.topPanel.mainMenu.setFileMenuVisible(workspace.isMenuFileVisible());
 			Main.get().mainPanel.topPanel.mainMenu.setEditMenuVisible(workspace.isMenuEditVisible());

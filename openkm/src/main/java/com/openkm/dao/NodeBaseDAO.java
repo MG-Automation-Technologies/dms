@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Mail;
+import com.openkm.bean.Permission;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
@@ -500,7 +501,7 @@ public class NodeBaseDAO {
 		if (currentPermissions != null) {
 			Integer perms = ~permissions & currentPermissions;
 			
-			if (perms == 0) {
+			if (perms == Permission.NONE) {
 				node.getUserPermissions().remove(user);
 			} else {
 				node.getUserPermissions().put(user, perms);
@@ -712,7 +713,7 @@ public class NodeBaseDAO {
 		if (currentPermissions != null) {
 			Integer perms = ~permissions & currentPermissions;
 			
-			if (perms == 0) {
+			if (perms == Permission.NONE) {
 				node.getRolePermissions().remove(role);
 			} else {
 				node.getRolePermissions().put(role, perms);
@@ -739,6 +740,99 @@ public class NodeBaseDAO {
 		
 		for (NodeBase child : ret) {
 			total += revokeRolePermissionsInDepth(session, child, role, permissions);
+		}
+		
+		return total;
+	}
+	
+	/**
+	 * Change security of multiples nodes
+	 */
+	public void changeSecurity(String uuid, Map<String, Integer> users, Map<String, Integer> roles, boolean recursive)
+			throws PathNotFoundException, AccessDeniedException, DatabaseException {
+		log.debug("changeSecurity({}, {}, {}, {})", new Object[] { uuid, users, roles, recursive });
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			
+			// Root node
+			NodeBase node = (NodeBase) session.load(NodeBase.class, uuid);
+			
+			if (recursive) {
+				int total = changeSecurityInDepth(session, node, users, roles);
+				log.info("changeSecurity.Total: {}", total);
+			} else {
+				changeSecurity(session, node, users, roles);
+			}
+			
+			HibernateUtil.commit(tx);
+			log.debug("grantRolePermissions: void");
+		} catch (PathNotFoundException e) {
+			HibernateUtil.rollback(tx);
+			throw e;
+		} catch (AccessDeniedException e) {
+			HibernateUtil.rollback(tx);
+			throw e;
+		} catch (DatabaseException e) {
+			HibernateUtil.rollback(tx);
+			throw e;
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Change security
+	 */
+	private int changeSecurity(Session session, NodeBase node, Map<String, Integer> users, Map<String, Integer> roles)
+			throws PathNotFoundException, AccessDeniedException, DatabaseException, HibernateException {
+		log.info("changeSecurity({}, {}, {})", new Object[] { node.getUuid(), users, roles });
+		// Security Check
+		SecurityHelper.checkRead(node);
+		SecurityHelper.checkSecurity(node);
+		
+		for (Entry<String, Integer> userPerms : users.entrySet()) {
+			if (userPerms.getValue() == Permission.NONE) {
+				node.getUserPermissions().remove(userPerms.getKey());
+			} else {
+				node.getUserPermissions().put(userPerms.getKey(), userPerms.getValue());
+			}
+		}
+		
+		for (Entry<String, Integer> rolePerms : roles.entrySet()) {
+			if (rolePerms.getValue() == Permission.NONE) {
+				node.getRolePermissions().remove(rolePerms.getKey());
+			} else {
+				node.getRolePermissions().put(rolePerms.getKey(), rolePerms.getValue());
+			}
+		}
+		
+		session.update(node);
+		return 1;
+	}
+	
+	/**
+	 * Change security recursively
+	 */
+	@SuppressWarnings("unchecked")
+	private int changeSecurityInDepth(Session session, NodeBase node, Map<String, Integer> users, Map<String, Integer> roles)
+			throws PathNotFoundException, AccessDeniedException, DatabaseException, HibernateException {
+		int total = changeSecurity(session, node, users, roles);
+		
+		// Calculate children nodes
+		String qs = "from NodeBase nb where nb.parent=:parent";
+		Query q = session.createQuery(qs).setCacheable(true);
+		q.setString("parent", node.getUuid());
+		List<NodeBase> ret = q.list();
+		
+		for (NodeBase child : ret) {
+			total += changeSecurityInDepth(session, child, users, roles);
 		}
 		
 		return total;

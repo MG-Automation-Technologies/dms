@@ -253,4 +253,11 @@ public class SecurityPanel extends Composite {
 		securityUser.langRefresh();
 		securityRole.langRefresh();
 	}
+	
+	/**
+	 * evaluateChangeButton
+	 */
+	public void evaluateChangeButton() {
+		Main.get().securityPopup.enableChangeButton(securityUser.getNewGrants().size()>0 || securityRole.getNewGrants().size()>0);
+	}
 }

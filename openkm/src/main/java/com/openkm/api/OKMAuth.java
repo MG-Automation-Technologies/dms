@@ -180,4 +180,14 @@ public class OKMAuth implements AuthModule {
 		log.debug("getName: {}", name);
 		return name;
 	}
+	
+	@Override
+	public void changeSecurity(String token, String nodePath, Map<String, Integer> users,
+			Map<String, Integer> roles, boolean recursive) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
+		log.debug("changeSecurity({}, {}, {}, {})", new Object[] { token, nodePath, users, roles, recursive });
+		AuthModule am = ModuleManager.getAuthModule();
+		am.changeSecurity(token, nodePath, users, roles, recursive);
+		log.debug("changeSecurity: void");
+	}
 }

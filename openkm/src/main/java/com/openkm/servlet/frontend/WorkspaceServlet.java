@@ -95,6 +95,9 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 		workspace.setSessionId(getThreadLocalRequest().getSession().getId());
 		workspace.setMinSearchCharacters(Config.MIN_SEARCH_CHARACTERS);
 		
+		// Security mode
+		workspace.setSecurityModeMultiple(true);
+		
 		// Schedule time
 		workspace.setKeepAliveSchedule(TimeUnit.MINUTES.toMillis(Config.SCHEDULE_SESSION_KEEPALIVE));
 		workspace.setDashboardSchedule(TimeUnit.MINUTES.toMillis(Config.SCHEDULE_DASHBOARD_REFRESH));
