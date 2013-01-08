@@ -55,4 +55,5 @@ public interface OKMAuthService extends RemoteService {
 	public List<String> getAllRoles() throws OKMException;
 	public List<GWTUser> getFilteredAllUsers(String filter, List<String> selectedUsers) throws OKMException;
 	public List<String> getFilteredAllRoles(String filter, List<String> selectedRoles) throws OKMException;
+	public void changeSecurity(String path, Map<String, Integer> users, Map<String, Integer> roles, boolean recursive) throws OKMException;
 }

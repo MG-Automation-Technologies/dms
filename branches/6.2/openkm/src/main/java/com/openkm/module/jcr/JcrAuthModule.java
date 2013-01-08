@@ -36,6 +36,7 @@ import javax.jcr.SimpleCredentials;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -821,5 +822,11 @@ public class JcrAuthModule implements AuthModule {
 	@Override
 	public String getName(String token, String user) throws PrincipalAdapterException {
 		return CommonAuthModule.getName(token, user);
+	}
+	
+	@Override
+	public void changeSecurity(String token, String nodePath, Map<String, Integer> users, Map<String, Integer> roles,
+			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+		throw new NotImplementedException("changeSecurity");
 	}
 }

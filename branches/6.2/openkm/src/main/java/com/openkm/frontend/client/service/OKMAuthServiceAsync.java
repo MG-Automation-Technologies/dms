@@ -52,4 +52,5 @@ public interface OKMAuthServiceAsync {
 	public void getAllRoles(AsyncCallback<List<String>> callback);
 	public void getFilteredAllUsers(String filter, List<String> selectedUsers, AsyncCallback<List<GWTUser>> callback);
 	public void getFilteredAllRoles(String filter, List<String> selectedRoles, AsyncCallback<List<String>> callback);
+	public void changeSecurity(String path, Map<String, Integer> users, Map<String, Integer> roles, boolean recursive, AsyncCallback<?> callback);
 }

@@ -22,7 +22,6 @@
 package com.openkm.frontend.client.widget.security;
 
 import com.allen_sauer.gwt.log.client.Log;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.ResizePolicy;
@@ -32,7 +31,6 @@ import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
 import com.google.gwt.gen2.table.client.FixedWidthGrid;
 import com.google.gwt.gen2.table.client.ScrollTable;
 import com.google.gwt.gen2.table.client.SelectionGrid;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
@@ -41,8 +39,6 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.service.OKMAuthService;
-import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 
 /**
  * RoleScrollTable
@@ -50,12 +46,10 @@ import com.openkm.frontend.client.service.OKMAuthServiceAsync;
  * @author jllort
  */
 public class RoleScrollTable extends Composite {
-	private final OKMAuthServiceAsync authService = (OKMAuthServiceAsync) GWT.create(OKMAuthService.class);
-	
-	private final int PROPERTY_READ = 0;
-	private final int PROPERTY_WRITE = 1;
-	private final int PROPERTY_DELETE = 2;
-	private final int PROPERTY_SECURITY = 3;
+	public static final int PROPERTY_READ = 0;
+	public static final int PROPERTY_WRITE = 1;
+	public static final int PROPERTY_DELETE = 2;
+	public static final int PROPERTY_SECURITY = 3;
 	
 	private ScrollTable table;
 	private FixedWidthFlexTable headerTable;
@@ -198,11 +192,16 @@ public class RoleScrollTable extends Composite {
 	 * 
 	 * @param userName The role name value
 	 * @param permission The permission value
+	 * @param modified if need to mark as modified
 	 */
-	public void addRow(String roleName, Integer permission) {
+	public void addRow(String roleName, Integer permission, boolean modified) {
 		final int rows = dataTable.getRowCount();
 		dataTable.insertRow(rows);
 		dataTable.setHTML(rows, 0, roleName);
+		
+		if (modified) {
+			dataTable.getCellFormatter().addStyleName(rows, 0, "bold");
+		}
 		
 		CheckBox checkReadPermission = new CheckBox();
 		CheckBox checkWritePermission = new CheckBox();
@@ -340,11 +339,16 @@ public class RoleScrollTable extends Composite {
 	 * Adds new roleName name row
 	 * 
 	 * @param roleName The user name value
+	 * @param modified if need to mark as modified
 	 */
-	public void addRow(String roleName) {
+	public void addRow(String roleName, boolean modified) {
 		int rows = dataTable.getRowCount();
 		dataTable.insertRow(rows);
 		dataTable.setHTML(rows, 0, roleName);
+		
+		if (modified) {
+			dataTable.getCellFormatter().addStyleName(rows, 0, "bold");
+		} 
 	}
 	
 	/**
@@ -380,17 +384,14 @@ public class RoleScrollTable extends Composite {
 	 * @return The role
 	 */
 	public String getRole() {
-		String role = null;
-		
 		if (!dataTable.getSelectedRows().isEmpty()) {
 			int selectedRow = ((Integer) dataTable.getSelectedRows().iterator().next()).intValue();
-			
 			if (dataTable.isRowSelected(selectedRow)) {
-				role = dataTable.getHTML(((Integer) dataTable.getSelectedRows().iterator().next()).intValue(), 0);
+				return dataTable.getHTML(((Integer) dataTable.getSelectedRows().iterator().next()).intValue(), 0);
 			}
 		}
 		
-		return role;
+		return null;
 	}
 	
 	/**
@@ -412,92 +413,28 @@ public class RoleScrollTable extends Composite {
 	}
 	
 	/**
-	 * Call back add new role grant
+	 * markModifiedSelectedRow
 	 */
-	final AsyncCallback<Object> callbackGrantRole = new AsyncCallback<Object>() {
-		public void onSuccess(Object result) {
-			Log.debug("RoleScrollTable.callbackGrantRole.onSuccess(" + result + ")");
-			Main.get().securityPopup.status.unsetFlag_update();
+	public void markModifiedSelectedRow() {
+		if(!dataTable.getSelectedRows().isEmpty()) {
+			int selectedRow = ((Integer) dataTable.getSelectedRows().iterator().next()).intValue();
+			dataTable.getCellFormatter().addStyleName(selectedRow, 0, "bold");
 		}
-		
-		public void onFailure(Throwable caught) {
-			Log.debug("RoleScrollTable.callbackGrantRole.onFailure(" + caught + ")");
-			
-			int col = 0;
-			col++; // Name
-			if (flag_property < PROPERTY_READ) {
-				col++;
-			}
-			if (flag_property < PROPERTY_WRITE) {
-				col++;
-			}
-			if (flag_property < PROPERTY_DELETE) {
-				col++;
-			}
-			if (flag_property < PROPERTY_SECURITY) {
-				col++;
-			}
-			
-			((CheckBox) dataTable.getWidget(rowIndex, col)).setValue(false);
-			
-			Main.get().securityPopup.status.unsetFlag_update();
-			Main.get().showError("GrantRole", caught);
-		}
-	};
+	}
 	
 	/**
-	 * Call back revoke role grant
+	 * markModifiedSelectedRow
 	 */
-	final AsyncCallback<Object> callbackRevokeRole = new AsyncCallback<Object>() {
-		public void onSuccess(Object result) {
-			Log.debug("RoleScrollTable.callbackRevokeRole.onSuccess(" + result + ")");
-			
-			// If user has no grants must be deleted
-			if (!dataTable.getSelectedRows().isEmpty()) {
-				int selectedRow = ((Integer) dataTable.getSelectedRows().iterator().next()).intValue();
-				
-				// If user has no grants must be deleted
-				int col = 0;
-				col++; // Name
-				boolean isChecked = ((CheckBox) dataTable.getWidget(selectedRow, col++)).getValue()
-						|| ((CheckBox) dataTable.getWidget(selectedRow, col++)).getValue()
-						|| ((CheckBox) dataTable.getWidget(selectedRow, col++)).getValue()
-						|| ((CheckBox) dataTable.getWidget(selectedRow, col++)).getValue();
-				
-				if (!isChecked) {
-					Main.get().securityPopup.securityPanel.securityRole.unassignedRole.addRow(dataTable.getText(
-							selectedRow, 0));
-					removeSelectedRow();
-				}
+	public void markModifiedSelectedRow(boolean modified) {
+		if(!dataTable.getSelectedRows().isEmpty()) {
+			int selectedRow = ((Integer) dataTable.getSelectedRows().iterator().next()).intValue();
+			if (modified) {
+				dataTable.getCellFormatter().addStyleName(selectedRow, 0, "bold");
+			} else {
+				dataTable.getCellFormatter().removeStyleName(selectedRow, 0, "bold");
 			}
-			
-			Main.get().securityPopup.status.unsetFlag_update();
 		}
-		
-		public void onFailure(Throwable caught) {
-			Log.debug("RoleScrollTable.callbackRevokeRole.onFailure(" + caught + ")");
-			
-			int col = 0;
-			col++; // Name
-			if (flag_property < PROPERTY_READ) {
-				col++;
-			}
-			if (flag_property < PROPERTY_WRITE) {
-				col++;
-			}
-			if (flag_property < PROPERTY_DELETE) {
-				col++;
-			}
-			if (flag_property < PROPERTY_SECURITY) {
-				col++;
-			}
-			
-			((CheckBox) dataTable.getWidget(rowIndex, col)).setValue(true);
-			
-			Main.get().securityPopup.status.unsetFlag_update();
-			Main.get().showError("RevokeRole", caught);
-		}
-	};
+	}
 	
 	/**
 	 * Grant the role
@@ -508,8 +445,7 @@ public class RoleScrollTable extends Composite {
 	public void grant(String role, int permissions, boolean recursive) {
 		if (path != null) {
 			Log.debug("RoleScrollTable.grant(" + role + ", " + permissions + ", " + recursive + ")");
-			Main.get().securityPopup.status.setFlag_update();
-			authService.grantRole(path, role, permissions, recursive, callbackGrantRole);
+			Main.get().securityPopup.securityPanel.securityRole.grant(role, permissions, recursive, flag_property, rowIndex);
 		}
 	}
 	
@@ -522,8 +458,7 @@ public class RoleScrollTable extends Composite {
 	public void revoke(String role, int permissions, boolean recursive) {
 		if (path != null) {
 			Log.debug("RoleScrollTable.revoke(" + role + ", " + permissions + ", " + recursive + ")");
-			Main.get().securityPopup.status.setFlag_update();
-			authService.revokeRole(path, role, permissions, recursive, callbackRevokeRole);
+			Main.get().securityPopup.securityPanel.securityRole.revoke(role, permissions, recursive, flag_property, rowIndex);
 		}
 	}
 	
@@ -545,8 +480,6 @@ public class RoleScrollTable extends Composite {
 	
 	/**
 	 * getDataTable
-	 * 
-	 * @return FixedWidthGrid
 	 */
 	public FixedWidthGrid getDataTable() {
 		return table.getDataTable();
@@ -554,8 +487,6 @@ public class RoleScrollTable extends Composite {
 	
 	/**
 	 * getNumberOfColumns
-	 * 
-	 * @return
 	 */
 	public int getNumberOfColumns() {
 		return numberOfColumns;

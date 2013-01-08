@@ -22,21 +22,22 @@
 package com.openkm.frontend.client.widget.security;
 
 import java.util.Collections;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.gen2.table.client.FixedWidthGrid;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasAlignment;
-import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTGrantedUser;
 import com.openkm.frontend.client.bean.GWTPermission;
@@ -52,7 +53,7 @@ import com.openkm.frontend.client.util.OKMBundleResources;
  * @author jllort
  * 
  */
-public class SecurityUser extends Composite implements HasWidgets {
+public class SecurityUser extends Composite {
 	private final OKMAuthServiceAsync authService = (OKMAuthServiceAsync) GWT.create(OKMAuthService.class);
 	
 	public UserScrollTable assignedUser;
@@ -64,13 +65,16 @@ public class SecurityUser extends Composite implements HasWidgets {
 	private Image addButton;
 	private Image removeButton;
 	private String path = "";
-	private GWTUser tmpUser;
 	private int width = 612;
+	private Map<String, Integer> actualGrants;
+	private Map<String, Integer> newGrants;
 	
 	/**
 	 * Security user
 	 */
 	public SecurityUser() {
+		actualGrants = new HashMap<String, Integer>();
+		newGrants = new HashMap<String, Integer>();
 		panel = new HorizontalPanel();
 		buttonPanel = new VerticalPanel();
 		assignedUser = new UserScrollTable(true);
@@ -89,6 +93,8 @@ public class SecurityUser extends Composite implements HasWidgets {
 		
 		addButton.addClickHandler(addButtonHandler);
 		removeButton.addClickHandler(removeButtonHandler);
+		addButton.setStyleName("okm-Hyperlink");
+		removeButton.setStyleName("okm-Hyperlink");
 		
 		panel.add(unassignedUser);
 		panel.add(buttonPanel);
@@ -116,8 +122,7 @@ public class SecurityUser extends Composite implements HasWidgets {
 		@Override
 		public void onClick(ClickEvent event) {
 			if (unassignedUser.getUser() != null) {
-				tmpUser = unassignedUser.getUser();
-				addUser(tmpUser, GWTPermission.READ, Main.get().securityPopup.recursive.getValue());
+				addUser(unassignedUser.getUser());
 			}
 		}
 	};
@@ -129,8 +134,7 @@ public class SecurityUser extends Composite implements HasWidgets {
 		@Override
 		public void onClick(ClickEvent event) {
 			if (assignedUser.getUser() != null) {
-				tmpUser = assignedUser.getUser();
-				removeUser(tmpUser, Main.get().securityPopup.recursive.getValue());
+				removeUser(assignedUser.getUser());
 			}
 		}
 	};
@@ -162,51 +166,19 @@ public class SecurityUser extends Composite implements HasWidgets {
 	}
 	
 	/**
-	 * Call back add new granted user
-	 */
-	final AsyncCallback<Object> callbackAddUser = new AsyncCallback<Object>() {
-		public void onSuccess(Object result) {
-			assignedUser.addRow(tmpUser, new Integer(GWTPermission.READ));
-			unassignedUser.removeSelectedRow();
-			tmpUser = new GWTUser();
-			Main.get().securityPopup.status.unsetFlag_update();
-		}
-		
-		public void onFailure(Throwable caught) {
-			Main.get().securityPopup.status.unsetFlag_update();
-			Main.get().showError("AddUser", caught);
-		}
-	};
-	
-	/**
-	 * Call back revoke granted user
-	 */
-	final AsyncCallback<Object> callbackRevokeUser = new AsyncCallback<Object>() {
-		public void onSuccess(Object result) {
-			unassignedUser.addRow(tmpUser);
-			unassignedUser.selectLastRow();
-			assignedUser.removeSelectedRow();
-			tmpUser = new GWTUser();
-			Main.get().securityPopup.status.unsetFlag_update();
-		}
-		
-		public void onFailure(Throwable caught) {
-			Main.get().securityPopup.status.unsetFlag_update();
-			Main.get().showError("RevokeUser", caught);
-		}
-	};
-	
-	/**
 	 * Gets the granted users
 	 */
 	public void getGrantedUsers() {
 		if (path != null) {
+			actualGrants = new HashMap<String, Integer>();
+			newGrants = new HashMap<String, Integer>();
 			authService.getGrantedUsers(path, new AsyncCallback<List<GWTGrantedUser>>() {
 				@Override
 				public void onSuccess(List<GWTGrantedUser> result) {
 					Collections.sort(result, GWTGrantedUserComparator.getInstance());
 					for (GWTGrantedUser gu : result) {
-						assignedUser.addRow(gu.getUser(), gu.getPermissions());
+						actualGrants.put(gu.getUser().getId(), gu.getPermissions());
+						assignedUser.addRow(gu.getUser(), gu.getPermissions(), false);
 					}
 				}
 				
@@ -227,7 +199,7 @@ public class SecurityUser extends Composite implements HasWidgets {
 				@Override
 				public void onSuccess(List<GWTGrantedUser> result) {
 					for (GWTGrantedUser gu : result) {
-						unassignedUser.addRow(gu.getUser());
+						unassignedUser.addRow(gu.getUser(), false);
 					}
 				}
 				
@@ -249,7 +221,7 @@ public class SecurityUser extends Composite implements HasWidgets {
 				@Override
 				public void onSuccess(List<GWTGrantedUser> result) {
 					for (GWTGrantedUser gu : result) {
-						unassignedUser.addRow(gu.getUser());
+						unassignedUser.addRow(gu.getUser(), false);
 					}
 				}
 				
@@ -263,26 +235,273 @@ public class SecurityUser extends Composite implements HasWidgets {
 	
 	/**
 	 * Grant the user
-	 * 
-	 * @param user The granted user
-	 * @param permissions The permissions value
 	 */
-	public void addUser(GWTUser user, int permissions, boolean recursive) {
+	public void addUser(final GWTUser user) {
 		if (path != null) {
-			Main.get().securityPopup.status.setFlag_update();
-			authService.grantUser(path, user.getId(), permissions, recursive, callbackAddUser);
+			if (!Main.get().workspaceUserProperties.getWorkspace().isSecurityModeMultiple()) {
+				Main.get().securityPopup.status.setFlag_update();
+				authService.grantUser(path, user.getId(), GWTPermission.READ,
+						Main.get().securityPopup.recursive.getValue(), new AsyncCallback<Object>() {
+							public void onSuccess(Object result) {
+								assignedUser.addRow(user, new Integer(GWTPermission.READ), false);
+								unassignedUser.removeSelectedRow();
+								Main.get().securityPopup.status.unsetFlag_update();
+							}
+							
+							public void onFailure(Throwable caught) {
+								Main.get().securityPopup.status.unsetFlag_update();
+								Main.get().showError("AddUser", caught);
+							}
+						});
+			} else {
+				boolean modified = false;
+				
+				if (isGrantChanged(user.getId(), new Integer(GWTPermission.READ))) {
+					newGrants.put(user.getId(), GWTPermission.READ);
+					modified = true;
+				} else {
+					newGrants.remove(user.getId());
+				}
+				
+				unassignedUser.removeSelectedRow();
+				assignedUser.addRow(user, new Integer(GWTPermission.READ), modified);
+				Main.get().securityPopup.securityPanel.evaluateChangeButton();
+			}
 		}
 	}
 	
 	/**
 	 * Revokes all user permissions
+	 */
+	public void removeUser(final GWTUser user) {
+		if (path != null) {
+			if (!Main.get().workspaceUserProperties.getWorkspace().isSecurityModeMultiple()) {
+				Main.get().securityPopup.status.setFlag_update();
+				authService.revokeUser(path, user.getId(), Main.get().securityPopup.recursive.getValue(),
+						new AsyncCallback<Object>() {
+							public void onSuccess(Object result) {
+								unassignedUser.addRow(user, false);
+								unassignedUser.selectLastRow();
+								assignedUser.removeSelectedRow();
+								Main.get().securityPopup.status.unsetFlag_update();
+							}
+							
+							public void onFailure(Throwable caught) {
+								Main.get().securityPopup.status.unsetFlag_update();
+								Main.get().showError("RevokeUser", caught);
+							}
+						});
+			} else {
+				boolean modified = false;
+				
+				if (isGrantChanged(user.getId(), new Integer(GWTPermission.REMOVED))) {
+					newGrants.put(user.getId(), GWTPermission.REMOVED);
+					modified = true;
+				} else {
+					newGrants.remove(user.getId());
+				}
+				
+				unassignedUser.addRow(user, modified);
+				unassignedUser.selectLastRow();
+				assignedUser.removeSelectedRow();
+				Main.get().securityPopup.securityPanel.evaluateChangeButton();
+			}
+		}
+	}
+	
+	/**
+	 * Grant the user
+	 * 
+	 * @param user The granted user
+	 * @param permissions The permissions value
+	 */
+	public void grant(String user, int permissions, boolean recursive, final int flag_property, final int rowIndex) {
+		if (path != null) {
+			if (!Main.get().workspaceUserProperties.getWorkspace().isSecurityModeMultiple()) {
+				Main.get().securityPopup.status.setFlag_update();
+				authService.grantUser(path, user, permissions, recursive, new AsyncCallback<Object>() {
+					public void onSuccess(Object result) {
+						Main.get().securityPopup.status.unsetFlag_update();
+					}
+					
+					public void onFailure(Throwable caught) {
+						int col = 0;
+						col++; // Name
+						if (flag_property < UserScrollTable.PROPERTY_READ) {
+							col++;
+						}
+						
+						if (flag_property < UserScrollTable.PROPERTY_WRITE) {
+							col++;
+						}
+						
+						if (flag_property < UserScrollTable.PROPERTY_DELETE) {
+							col++;
+						}
+						
+						if (flag_property < UserScrollTable.PROPERTY_SECURITY) {
+							col++;
+						}
+						
+						((CheckBox) assignedUser.getDataTable().getWidget(rowIndex, col)).setValue(false);
+						
+						Main.get().securityPopup.status.unsetFlag_update();
+						Main.get().showError("GrantUser", caught);
+					}
+				});
+			} else {
+				int newGrant = 0;
+				if (!newGrants.containsKey(user) && actualGrants.containsKey(user)) { // Case start new grant with checkbox change
+					newGrant = actualGrants.get(user).intValue();
+				} else {
+					newGrant = newGrants.get(user).intValue();
+				}
+				
+				switch (flag_property) {
+					case UserScrollTable.PROPERTY_READ:
+						newGrant += GWTPermission.READ;
+						break;
+						
+					case UserScrollTable.PROPERTY_WRITE:
+						newGrant += GWTPermission.WRITE;
+						break;
+						
+					case UserScrollTable.PROPERTY_DELETE:
+						newGrant += GWTPermission.DELETE;
+						break;
+						
+					case UserScrollTable.PROPERTY_SECURITY:
+						newGrant += GWTPermission.SECURITY;
+						break;
+				}
+				
+				if (isGrantChanged(user, newGrant)) {
+					newGrants.put(user, newGrant);
+					assignedUser.markModifiedSelectedRow(true);
+				} else {
+					newGrants.remove(user);
+					assignedUser.markModifiedSelectedRow(false);
+				}
+				
+				Main.get().securityPopup.securityPanel.evaluateChangeButton();
+			}
+		}
+	}
+	
+	/**
+	 * Revoke the user grant
 	 * 
 	 * @param user The user
+	 * @param permissions The permissions value
 	 */
-	public void removeUser(GWTUser user, boolean recursive) {
+	public void revoke(String user, int permissions, boolean recursive, final int flag_property, final int rowIndex) {
 		if (path != null) {
-			Main.get().securityPopup.status.setFlag_update();
-			authService.revokeUser(path, user.getId(), recursive, callbackRevokeUser);
+			if (!Main.get().workspaceUserProperties.getWorkspace().isSecurityModeMultiple()) {
+				Main.get().securityPopup.status.setFlag_update();
+				authService.revokeUser(path, user, permissions, recursive, new AsyncCallback<Object>() {
+					public void onSuccess(Object result) {
+						FixedWidthGrid dataTable = assignedUser.getDataTable();
+						if (!dataTable.getSelectedRows().isEmpty()) {
+							int selectedRow = ((Integer) dataTable.getSelectedRows().iterator().next()).intValue();							
+							if (!hasSomeCheckBox(selectedRow)) {
+								GWTUser userToRemove = new GWTUser();
+								userToRemove.setId(dataTable.getHTML(selectedRow, assignedUser.getNumberOfColumns() - 1));
+								userToRemove.setUsername(dataTable.getHTML(selectedRow, 0));
+								unassignedUser.addRow(userToRemove, false);
+								assignedUser.removeSelectedRow();
+							}
+						}
+						Main.get().securityPopup.status.unsetFlag_update();
+					}
+					
+					public void onFailure(Throwable caught) {
+						int col = 0;
+						col++; // Name
+						if (flag_property < UserScrollTable.PROPERTY_READ) {
+							col++;
+						}
+						
+						if (flag_property < UserScrollTable.PROPERTY_WRITE) {
+							col++;
+						}
+						
+						if (flag_property < UserScrollTable.PROPERTY_DELETE) {
+							col++;
+						}
+						
+						if (flag_property < UserScrollTable.PROPERTY_SECURITY) {
+							col++;
+						}
+						
+						((CheckBox) assignedUser.getDataTable().getWidget(rowIndex, col)).setValue(true);
+						
+						Main.get().securityPopup.status.unsetFlag_update();
+						Main.get().showError("RevokeUser", caught);
+					}
+				});
+			} else {
+				int newGrant = 0;
+				if (newGrants.containsKey(user)) { // Case start new grant with checkbox change
+					newGrant = newGrants.get(user).intValue();
+				} else if (actualGrants.containsKey(user)) {
+					newGrant = actualGrants.get(user).intValue();
+				}
+				
+				switch (flag_property) {
+					case UserScrollTable.PROPERTY_READ:
+						newGrant -= GWTPermission.READ;
+						break;
+						
+					case UserScrollTable.PROPERTY_WRITE:
+						newGrant -= GWTPermission.WRITE;
+						break;
+						
+					case UserScrollTable.PROPERTY_DELETE:
+						newGrant -= GWTPermission.DELETE;
+						break;
+						
+					case UserScrollTable.PROPERTY_SECURITY:
+						newGrant -= GWTPermission.SECURITY;
+						break;
+				}
+				
+				boolean modified = false;
+				
+				if (isGrantChanged(user, newGrant)) {
+					modified = true;
+					newGrants.put(user, newGrant);
+					assignedUser.markModifiedSelectedRow(modified);
+				} else {
+					newGrants.remove(user);
+					assignedUser.markModifiedSelectedRow(modified);
+				}
+				
+				FixedWidthGrid dataTable = assignedUser.getDataTable();
+				if (!dataTable.getSelectedRows().isEmpty()) {
+					int selectedRow = ((Integer) dataTable.getSelectedRows().iterator().next()).intValue();							
+					if (!hasSomeCheckBox(selectedRow)) {
+						GWTUser userToRemove = new GWTUser();
+						userToRemove.setId(dataTable.getHTML(selectedRow, assignedUser.getNumberOfColumns() - 1));
+						userToRemove.setUsername(dataTable.getHTML(selectedRow, 0));
+						unassignedUser.addRow(userToRemove, modified);
+						unassignedUser.selectLastRow();
+						assignedUser.removeSelectedRow();
+					}
+				}
+				
+				Main.get().securityPopup.securityPanel.evaluateChangeButton();
+			}
+		}
+	}
+	
+	/**
+	 * isNewGrant
+	 */
+	private boolean isGrantChanged(String userId, int permission) {
+		if (actualGrants.containsKey(userId)) {
+			return (permission != actualGrants.get(userId).intValue());
+		} else {
+			return (permission != GWTPermission.REMOVED); // true if not removing some grant that
 		}
 	}
 	
@@ -304,33 +523,25 @@ public class SecurityUser extends Composite implements HasWidgets {
 		unassignedUser.fillWidth();
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.HasWidgets#add(com.google.gwt.user.client.ui.Widget)
+	/**
+	 * getNewGrants
 	 */
-	public void add(Widget w) {
+	public Map<String, Integer> getNewGrants() {
+		return newGrants;
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.HasWidgets#clear()
+	/**
+	 * hasSomeCheckBox
 	 */
-	public void clear() {
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.HasWidgets#iterator()
-	 */
-	public Iterator<Widget> iterator() {
-		return null;
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.HasWidgets#remove(com.google.gwt.user.client.ui.Widget)
-	 */
-	public boolean remove(Widget w) {
-		return true;
+	private boolean hasSomeCheckBox(int row) {	
+		FixedWidthGrid dataTable = assignedUser.getDataTable();
+		// If user has no grants must be deleted
+		int col = 0;
+		col++; // Name
+		boolean isChecked = ((CheckBox) dataTable.getWidget(row, col++)).getValue()
+				|| ((CheckBox) dataTable.getWidget(row, col++)).getValue()
+				|| ((CheckBox) dataTable.getWidget(row, col++)).getValue()
+				|| ((CheckBox) dataTable.getWidget(row, col++)).getValue();
+		return isChecked;
 	}
 }

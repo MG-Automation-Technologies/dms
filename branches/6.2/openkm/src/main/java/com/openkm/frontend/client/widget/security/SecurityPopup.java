@@ -21,15 +21,22 @@
 
 package com.openkm.frontend.client.widget.security;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.service.OKMAuthService;
+import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 import com.openkm.frontend.client.util.Util;
 
 /**
@@ -38,14 +45,19 @@ import com.openkm.frontend.client.util.Util;
  * @author jllort
  *
  */
-public class SecurityPopup extends DialogBox implements ClickHandler {	
+public class SecurityPopup extends DialogBox {
+	private final OKMAuthServiceAsync authService = (OKMAuthServiceAsync) GWT.create(OKMAuthService.class);
+	
 	public Status status;
 	private VerticalPanel vPanel;
+	private HorizontalPanel hPanel;
 	public CheckBox recursive;
-	private Button button;
+	private Button close;
+	private Button change;
 	private SimplePanel sp;
 	public SecurityPanel securityPanel;
 	private int width = 612;
+	private String path = "";
 	
 	/**
 	 * Security popup
@@ -59,38 +71,68 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 		sp = new SimplePanel();
 		securityPanel = new SecurityPanel();
 		recursive = new CheckBox(Main.i18n("security.recursive"));
-		button = new Button(Main.i18n("button.close"), this);
+		close = new Button(Main.i18n("button.close"), new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				Main.get().mainPanel.desktop.browser.tabMultiple.securityRefresh();
+				hide();
+			}
+		});
+		
+		change = new Button(Main.i18n("button.change"), new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				authService.changeSecurity(path, securityPanel.securityUser.getNewGrants(),
+						securityPanel.securityRole.getNewGrants(), recursive.getValue(), new AsyncCallback<Object>() {
+					@Override
+					public void onSuccess(Object result) {
+					}
+					
+					@Override
+					public void onFailure(Throwable caught) {
+						Main.get().showError("changeSecurity", caught);
+					}
+				});
+				
+				Timer timer = new Timer() {
+					@Override
+					public void run() {
+						Main.get().mainPanel.desktop.browser.tabMultiple.securityRefresh();
+					}
+				};
+				
+				timer.schedule(200);
+				hide();
+			}
+		});
+		
+		hPanel = new HorizontalPanel();
+		hPanel.add(close);
 		
 		sp.setHeight("4");
 				
 		vPanel.add(sp);
 		vPanel.add(securityPanel);
 		vPanel.add(recursive);
-		vPanel.add(button);
+		vPanel.add(hPanel);
+		vPanel.add(Util.vSpace("5"));
 		
 		vPanel.setCellHeight(sp, "4");
-		vPanel.setCellHeight(button, "25");
+		vPanel.setCellHeight(hPanel, "25");
 		vPanel.setCellHorizontalAlignment(securityPanel, VerticalPanel.ALIGN_CENTER);
-		vPanel.setCellHorizontalAlignment(button, VerticalPanel.ALIGN_CENTER);
-		vPanel.setCellVerticalAlignment(button, VerticalPanel.ALIGN_MIDDLE);
+		vPanel.setCellHorizontalAlignment(hPanel, VerticalPanel.ALIGN_CENTER);
+		vPanel.setCellVerticalAlignment(hPanel, VerticalPanel.ALIGN_MIDDLE);
 		
 		vPanel.setWidth(String.valueOf(width));
 		
-		button.setStyleName("okm-Button");
+		close.setStyleName("okm-Button");
+		change.setStyleName("okm-Button");
 		status.setStyleName("okm-StatusPopup");
 		
 		vPanel.setWidth(String.valueOf(width));
 
 		super.hide();
 		setWidget(vPanel);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.google.gwt.event.dom.client.ClickHandler#onClick(com.google.gwt.event.dom.client.ClickEvent)
-	 */
-	public void onClick(ClickEvent event) {
-		Main.get().mainPanel.desktop.browser.tabMultiple.securityRefresh();
-		super.hide();
 	}
 	
 	/**
@@ -99,7 +141,8 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 	public void langRefresh() {
 		setText(Main.i18n("security.label"));
 		recursive.setText(Main.i18n("security.recursive"));
-		button.setText(Main.i18n("button.close"));
+		close.setText(Main.i18n("button.close"));
+		change.setText(Main.i18n("button.change"));
 		securityPanel.langRefresh();
 	}
 	
@@ -107,11 +150,13 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 	 * Show the security popup
 	 */
 	public void show(String path) {
+		this.path = path;
 		int left = (Window.getClientWidth()-width) / 2;
 		int top = (Window.getClientHeight()-400) / 2;
 		setPopupPosition(left, top);
 		setText(Main.i18n("security.label"));
 		securityPanel.reset(path);
+		change.setEnabled(false);
 		super.show();
 		
 		// TODO:Solves minor bug with IE
@@ -124,12 +169,25 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 		securityPanel.fillWidth();
 	}
 	
-	
-	
 	/**
 	 * enableAdvancedFilter
 	 */
 	public void enableAdvancedFilter() {
 		securityPanel.enableAdvancedFilter();
+	}
+	
+	/**
+	 * enableSecurityModeMultiple
+	 */
+	public void enableSecurityModeMultiple() {
+		hPanel.add(new HTML("&nbsp;"));
+		hPanel.add(change);
+	}
+	
+	/**
+	 * @param enableChangeButton
+	 */
+	public void enableChangeButton(boolean enable) {
+		change.setEnabled(enable);
 	}
 }

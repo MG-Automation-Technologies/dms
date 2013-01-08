@@ -59,6 +59,7 @@ public class GWTWorkspace implements IsSerializable {
 	private long keepAliveSchedule;
 	private long dashboardSchedule;
 	private long uINotificationSchedule;
+	private boolean securityModeMultiple = false;
 	
 	// User Profile
 	private boolean advancedFilters;
@@ -288,6 +289,14 @@ public class GWTWorkspace implements IsSerializable {
 		this.uINotificationSchedule = uINotificationSchedule;
 	}
 	
+	public boolean isSecurityModeMultiple() {
+		return securityModeMultiple;
+	}
+
+	public void setSecurityModeMultiple(boolean securityModeMultiple) {
+		this.securityModeMultiple = securityModeMultiple;
+	}
+
 	/**
 	 * User Profile
 	 */

@@ -22,7 +22,6 @@
 package com.openkm.frontend.client.widget.security;
 
 import com.allen_sauer.gwt.log.client.Log;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
@@ -32,7 +31,6 @@ import com.google.gwt.gen2.table.client.SelectionGrid;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.ResizePolicy;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollPolicy;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
@@ -42,21 +40,16 @@ import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTPermission;
 import com.openkm.frontend.client.bean.GWTUser;
-import com.openkm.frontend.client.service.OKMAuthService;
-import com.openkm.frontend.client.service.OKMAuthServiceAsync;
-
 /**
  * UserScrollTable
  * 
  * @author jllort
  */
 public class UserScrollTable extends Composite {
-	private final OKMAuthServiceAsync authService = (OKMAuthServiceAsync) GWT.create(OKMAuthService.class);
-	
-	private final int PROPERTY_READ = 0;
-	private final int PROPERTY_WRITE = 1;
-	private final int PROPERTY_DELETE = 2;
-	private final int PROPERTY_SECURITY = 3;
+	public static final int PROPERTY_READ = 0;
+	public static final int PROPERTY_WRITE = 1;
+	public static final int PROPERTY_DELETE = 2;
+	public static final int PROPERTY_SECURITY = 3;
 	
 	private ScrollTable table;
 	private FixedWidthFlexTable headerTable;
@@ -197,11 +190,16 @@ public class UserScrollTable extends Composite {
 	 * 
 	 * @param userName The user name value
 	 * @param permission The permission value
+	 * @param modified If the permission has been modified
 	 */
-	public void addRow(GWTUser user, Integer permission) {
+	public void addRow(GWTUser user, Integer permission, boolean modified) {
 		final int rows = dataTable.getRowCount();
 		dataTable.insertRow(rows);
 		dataTable.setHTML(rows, 0, user.getUsername());
+		
+		if (modified) {
+			dataTable.getCellFormatter().addStyleName(rows, 0, "bold");
+		}
 		
 		CheckBox checkReadPermission = new CheckBox();
 		CheckBox checkWritePermission = new CheckBox();
@@ -343,12 +341,17 @@ public class UserScrollTable extends Composite {
 	 * Adds new user name row
 	 * 
 	 * @param userName The user name value
+	 * @param modified If the permission has been modified
 	 */
-	public void addRow(GWTUser user) {
+	public void addRow(GWTUser user, boolean modified) {
 		int rows = dataTable.getRowCount();
 		int col = 0;
 		dataTable.insertRow(rows);
 		dataTable.setHTML(rows, col++, user.getUsername());
+		
+		if (modified) {
+			dataTable.getCellFormatter().addStyleName(rows, 0, "bold");
+		} 
 		
 		dataTable.setHTML(rows, col, user.getId());
 		dataTable.getCellFormatter().setVisible(rows, col++, false);
@@ -387,19 +390,17 @@ public class UserScrollTable extends Composite {
 	 * @return The user
 	 */
 	public GWTUser getUser() {
-		GWTUser user = new GWTUser();
-		
 		if (!dataTable.getSelectedRows().isEmpty()) {
 			int selectedRow = ((Integer) dataTable.getSelectedRows().iterator().next()).intValue();
 			if (dataTable.isRowSelected(selectedRow)) {
-				user.setId(dataTable.getHTML(((Integer) dataTable.getSelectedRows().iterator().next()).intValue(),
-						numberOfColumns - 1));
-				user.setUsername(dataTable.getHTML(
-						((Integer) dataTable.getSelectedRows().iterator().next()).intValue(), 0));
+				GWTUser user = new GWTUser();
+				user.setId(dataTable.getHTML(((Integer) dataTable.getSelectedRows().iterator().next()).intValue(), numberOfColumns-1));
+				user.setUsername(dataTable.getHTML(((Integer) dataTable.getSelectedRows().iterator().next()).intValue(), 0));
+				return user;
 			}
 		}
 		
-		return user;
+		return null;
 	}
 	
 	/**
@@ -421,92 +422,19 @@ public class UserScrollTable extends Composite {
 	}
 	
 	/**
-	 * Call back add new user grant
+	 * markModifiedSelectedRow
 	 */
-	final AsyncCallback<Object> callbackGrantUser = new AsyncCallback<Object>() {
-		public void onSuccess(Object result) {
-			Log.debug("RoleScrollTable.callbackGrantUser.onSuccess(" + result + ")");
-			Main.get().securityPopup.status.unsetFlag_update();
+	public void markModifiedSelectedRow(boolean modified) {
+		if(!dataTable.getSelectedRows().isEmpty()) {
+			int selectedRow = ((Integer) dataTable.getSelectedRows().iterator().next()).intValue();
+			if (modified) {
+				dataTable.getCellFormatter().addStyleName(selectedRow, 0, "bold");
+			} else {
+				dataTable.getCellFormatter().removeStyleName(selectedRow, 0, "bold");
+			}
 		}
-		
-		public void onFailure(Throwable caught) {
-			Log.debug("RoleScrollTable.callbackGrantUser.onFailure(" + caught + ")");
-			
-			int col = 0;
-			col++; // Name
-			if (flag_property < PROPERTY_READ) {
-				col++;
-			}
-			if (flag_property < PROPERTY_WRITE) {
-				col++;
-			}
-			if (flag_property < PROPERTY_DELETE) {
-				col++;
-			}
-			if (flag_property < PROPERTY_SECURITY) {
-				col++;
-			}
-			
-			((CheckBox) dataTable.getWidget(rowIndex, col)).setValue(false);
-			
-			Main.get().securityPopup.status.unsetFlag_update();
-			Main.get().showError("GrantUser", caught);
-		}
-	};
+	}
 	
-	/**
-	 * Call back revoke user grant
-	 */
-	final AsyncCallback<Object> callbackRevokeUser = new AsyncCallback<Object>() {
-		public void onSuccess(Object result) {
-			Log.debug("RoleScrollTable.callbackRevokeUser.onSuccess(" + result + ")");
-			
-			if (!dataTable.getSelectedRows().isEmpty()) {
-				int selectedRow = ((Integer) dataTable.getSelectedRows().iterator().next()).intValue();
-				
-				// If user has no grants must be deleted
-				int col = 0;
-				col++; // Name
-				boolean isChecked = ((CheckBox) dataTable.getWidget(selectedRow, col++)).getValue()
-						|| ((CheckBox) dataTable.getWidget(selectedRow, col++)).getValue()
-						|| ((CheckBox) dataTable.getWidget(selectedRow, col++)).getValue()
-						|| ((CheckBox) dataTable.getWidget(selectedRow, col++)).getValue();
-				
-				if (!isChecked) {
-					GWTUser userToRemove = new GWTUser();
-					userToRemove.setId(dataTable.getHTML(selectedRow, numberOfColumns - 1));
-					userToRemove.setUsername(dataTable.getHTML(selectedRow, 0));
-					Main.get().securityPopup.securityPanel.securityUser.unassignedUser.addRow(userToRemove);
-					removeSelectedRow();
-				}
-			}
-			Main.get().securityPopup.status.unsetFlag_update();
-		}
-		
-		public void onFailure(Throwable caught) {
-			Log.debug("RoleScrollTable.callbackRevokeUser.onFailure(" + caught + ")");
-			
-			int col = 0;
-			col++; // Name
-			if (flag_property < PROPERTY_READ) {
-				col++;
-			}
-			if (flag_property < PROPERTY_WRITE) {
-				col++;
-			}
-			if (flag_property < PROPERTY_DELETE) {
-				col++;
-			}
-			if (flag_property < PROPERTY_SECURITY) {
-				col++;
-			}
-			
-			((CheckBox) dataTable.getWidget(rowIndex, col)).setValue(true);
-			
-			Main.get().securityPopup.status.unsetFlag_update();
-			Main.get().showError("RevokeUser", caught);
-		}
-	};
 	
 	/**
 	 * Grant the user
@@ -517,8 +445,7 @@ public class UserScrollTable extends Composite {
 	public void grant(String user, int permissions, boolean recursive) {
 		if (path != null) {
 			Log.debug("UserScrollTable.grant(" + user + ", " + permissions + ", " + recursive + ")");
-			Main.get().securityPopup.status.setFlag_update();
-			authService.grantUser(path, user, permissions, recursive, callbackGrantUser);
+			Main.get().securityPopup.securityPanel.securityUser.grant(user, permissions, recursive, flag_property, rowIndex);
 		}
 	}
 	
@@ -531,8 +458,7 @@ public class UserScrollTable extends Composite {
 	public void revoke(String user, int permissions, boolean recursive) {
 		if (path != null) {
 			Log.debug("UserScrollTable.revoke(" + user + ", " + permissions + ", " + recursive + ")");
-			Main.get().securityPopup.status.setFlag_update();
-			authService.revokeUser(path, user, permissions, recursive, callbackRevokeUser);
+			Main.get().securityPopup.securityPanel.securityUser.revoke(user, permissions, recursive, flag_property, rowIndex);
 		}
 	}
 	
@@ -554,8 +480,6 @@ public class UserScrollTable extends Composite {
 	
 	/**
 	 * getDataTable
-	 * 
-	 * @return FixedWidthGrid
 	 */
 	public FixedWidthGrid getDataTable() {
 		return table.getDataTable();
@@ -563,8 +487,6 @@ public class UserScrollTable extends Composite {
 	
 	/**
 	 * getNumberOfColumns
-	 * 
-	 * @return
 	 */
 	public int getNumberOfColumns() {
 		return numberOfColumns;

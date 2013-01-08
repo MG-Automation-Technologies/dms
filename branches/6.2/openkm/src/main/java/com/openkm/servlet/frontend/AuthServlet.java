@@ -692,4 +692,32 @@ public class AuthServlet extends OKMRemoteServiceServlet implements OKMAuthServi
 		log.debug("getFilteredAllRoles: {}", roleList);
 		return roleList;
 	}
+	
+	@Override
+	public void changeSecurity(String path, Map<String, Integer> users, Map<String, Integer> roles,
+			boolean recursive) throws OKMException {
+		log.debug("changeSecurity({}, {}, {}, {})", new Object[] { path, users, roles, recursive });
+		updateSessionManager();
+		
+		try {
+			OKMAuth.getInstance().changeSecurity(null, path, users, roles, recursive);
+		} catch (PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+		} catch (AccessDeniedException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_AccessDenied), e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_Database), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_General), e.getMessage());
+		}
+		
+		log.debug("changeSecurity: void");
+	}
 }

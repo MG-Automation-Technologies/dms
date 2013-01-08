@@ -442,4 +442,10 @@ public class DbAuthModule implements AuthModule, ApplicationContextAware {
 		nFolder.getUserPermissions().put(user, perms);
 		NodeFolderDAO.getInstance().create(nFolder);
 	}
+	
+	@Override
+	public void changeSecurity(String token, String nodePath, Map<String, Integer> users, Map<String, Integer> roles,
+			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+	}
 }
