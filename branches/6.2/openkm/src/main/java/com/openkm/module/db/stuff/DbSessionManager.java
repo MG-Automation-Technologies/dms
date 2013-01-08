@@ -71,7 +71,7 @@ public class DbSessionManager {
 	 */
 	public void putSystemSession() {
 		systemToken = UUID.randomUUID().toString();
-		Authentication auth = new UsernamePasswordAuthenticationToken(Config.SYSTEM_USER, null);
+		Authentication auth = new UsernamePasswordAuthenticationToken(Config.SYSTEM_USER, null, null);
 		add(systemToken, auth);
 	}
 	
