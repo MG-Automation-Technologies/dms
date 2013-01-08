@@ -107,6 +107,7 @@ public class Config {
 	// Security properties
 	public static final String PROPERTY_SECURITY_ACCESS_MANAGER = "security.access.manager";
 	public static final String PROPERTY_SECURITY_SEARCH_EVALUATION = "security.search.evaluation";
+	public static final String PROPERTY_SECURITY_MODE_MULTIPLE = "security.mode.multiple";
 	
 	// Configuration properties
 	public static final String PROPERTY_REPOSITORY_UUID = "repository.uuid";
@@ -262,6 +263,7 @@ public class Config {
 	// Security properties
 	public static String SECURITY_ACCESS_MANAGER = "";
 	public static String SECURITY_SEARCH_EVALUATION = "";
+	public static boolean SECURITY_MODE_MULTIPLE = true;
 	
 	// Configuration properties
 	public static String REPOSITORY_CONFIG;
@@ -577,6 +579,8 @@ public class Config {
 			values.put(PROPERTY_SECURITY_ACCESS_MANAGER, SECURITY_ACCESS_MANAGER);
 			SECURITY_SEARCH_EVALUATION = ConfigDAO.getString(PROPERTY_SECURITY_SEARCH_EVALUATION, SearchDAO.SEARCH_LUCENE);
 			values.put(PROPERTY_SECURITY_SEARCH_EVALUATION, SECURITY_SEARCH_EVALUATION);
+			SECURITY_MODE_MULTIPLE = ConfigDAO.getBoolean(PROPERTY_SECURITY_MODE_MULTIPLE, SECURITY_MODE_MULTIPLE);
+			values.put(PROPERTY_SECURITY_MODE_MULTIPLE, Boolean.toString(SECURITY_MODE_MULTIPLE));
 			
 			VERSION_NUMERATION_ADAPTER = ConfigDAO.getString(PROPERTY_VERSION_NUMERATION_ADAPTER, cfg.getProperty(PROPERTY_VERSION_NUMERATION_ADAPTER, VERSION_NUMERATION_ADAPTER));
 			values.put(PROPERTY_VERSION_NUMERATION_ADAPTER, VERSION_NUMERATION_ADAPTER);
