@@ -73,6 +73,6 @@ public interface OKMAuthService extends RemoteService {
 	
 	public List<String> getFilteredAllRoles(String filter, List<String> selectedRoles) throws OKMException;
 	
-	public void changeSecurity(String path, Map<String, Integer> addUsers, Map<String, Integer> revokeUsers,
-			Map<String, Integer> addRoles, Map<String, Integer> revokeRoles, boolean recursive) throws OKMException;
+	public void changeSecurity(String path, Map<String, Integer> grantUsers, Map<String, Integer> revokeUsers,
+			Map<String, Integer> grantRoles, Map<String, Integer> revokeRoles, boolean recursive) throws OKMException;
 }
