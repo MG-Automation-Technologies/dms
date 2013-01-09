@@ -328,6 +328,37 @@ public class DbAuthModule implements AuthModule, ApplicationContextAware {
 	}
 	
 	@Override
+	public void changeSecurity(String token, String nodePath, Map<String, Integer> grantUsers,
+			Map<String, Integer> revokeUsers, Map<String, Integer> grantRoles, Map<String, Integer> revokeRoles,
+			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("changeSecurity({}, {}, {}, {}, {}, {}, {})", new Object[] { token, nodePath, grantUsers, revokeUsers, grantRoles, revokeRoles, recursive });
+		Authentication auth = null, oldAuth = null;
+		
+		try {
+			if (token == null) {
+				auth = PrincipalUtils.getAuthentication();
+			} else {
+				oldAuth = PrincipalUtils.getAuthentication();
+				auth = PrincipalUtils.getAuthenticationByToken(token);
+			}
+			
+			String nodeUuid = NodeBaseDAO.getInstance().getUuidFromPath(nodePath);
+			NodeBaseDAO.getInstance().changeSecurity(nodeUuid, grantUsers, revokeUsers, grantRoles, revokeRoles, recursive);
+			
+			// Activity log
+			UserActivity.log(auth.getName(), "CHANGE_SECURITY", nodeUuid, nodePath, grantUsers + ", " + revokeUsers + ", " + grantRoles + ", " + revokeRoles + ", " + recursive);
+		} catch (DatabaseException e) {
+			throw e;
+		} finally {
+			if (token != null) {
+				PrincipalUtils.setAuthentication(oldAuth);
+			}
+		}
+		
+		log.debug("changeSecurity: void");
+	}
+	
+	@Override
 	public Map<String, Integer> getGrantedRoles(String token, String nodePath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getGrantedRoles({}, {})", token, nodePath);
@@ -441,11 +472,5 @@ public class DbAuthModule implements AuthModule, ApplicationContextAware {
 		int perms = Permission.READ | Permission.WRITE | Permission.DELETE | Permission.SECURITY;
 		nFolder.getUserPermissions().put(user, perms);
 		NodeFolderDAO.getInstance().create(nFolder);
-	}
-	
-	@Override
-	public void changeSecurity(String token, String nodePath, Map<String, Integer> users, Map<String, Integer> roles,
-			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
 	}
 }
