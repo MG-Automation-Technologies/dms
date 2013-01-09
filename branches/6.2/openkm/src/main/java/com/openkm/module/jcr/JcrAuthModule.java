@@ -823,9 +823,10 @@ public class JcrAuthModule implements AuthModule {
 	public String getName(String token, String user) throws PrincipalAdapterException {
 		return CommonAuthModule.getName(token, user);
 	}
-	
+
 	@Override
-	public void changeSecurity(String token, String nodePath, Map<String, Integer> users, Map<String, Integer> roles,
+	public void changeSecurity(String token, String nodePath, Map<String, Integer> grantUsers,
+			Map<String, Integer> revokeUsers, Map<String, Integer> grantRoles, Map<String, Integer> revokeRoles,
 			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		throw new NotImplementedException("changeSecurity");
 	}
