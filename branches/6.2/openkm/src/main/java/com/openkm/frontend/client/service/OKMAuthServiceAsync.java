@@ -30,27 +30,47 @@ import com.openkm.frontend.client.bean.GWTUser;
 
 /**
  * @author jllort
- *
  */
 public interface OKMAuthServiceAsync {
 	public void logout(AsyncCallback<?> callback);
+	
 	public void getGrantedUsers(String nodePath, AsyncCallback<List<GWTGrantedUser>> callback);
+	
 	public void getGrantedRoles(String nodePath, AsyncCallback<Map<String, Integer>> callback);
+	
 	public void getRemoteUser(AsyncCallback<String> callback);
+	
 	public void getUngrantedUsers(String nodePath, AsyncCallback<List<GWTGrantedUser>> callback);
+	
 	public void getUngrantedRoles(String nodePath, AsyncCallback<List<String>> callback);
+	
 	public void getFilteredUngrantedUsers(String nodePath, String filter, AsyncCallback<List<GWTGrantedUser>> callback);
+	
 	public void getFilteredUngrantedRoles(String nodePath, String filter, AsyncCallback<List<String>> callback);
+	
 	public void grantUser(String path, String user, int permissions, boolean recursive, AsyncCallback<?> callback);
+	
 	public void revokeUser(String path, String user, boolean recursive, AsyncCallback<?> callback);
+	
 	public void revokeUser(String path, String user, int permissions, boolean recursive, AsyncCallback<?> callback);
+	
 	public void grantRole(String path, String role, int permissions, boolean recursive, AsyncCallback<?> callback);
+	
 	public void revokeRole(String path, String role, boolean recursive, AsyncCallback<?> callback);
+	
 	public void revokeRole(String path, String role, int permissions, boolean recursive, AsyncCallback<?> callback);
+	
 	public void keepAlive(AsyncCallback<?> callback);
+	
 	public void getAllUsers(AsyncCallback<List<GWTUser>> callback);
+	
 	public void getAllRoles(AsyncCallback<List<String>> callback);
+	
 	public void getFilteredAllUsers(String filter, List<String> selectedUsers, AsyncCallback<List<GWTUser>> callback);
+	
 	public void getFilteredAllRoles(String filter, List<String> selectedRoles, AsyncCallback<List<String>> callback);
-	public void changeSecurity(String path, Map<String, Integer> users, Map<String, Integer> roles, boolean recursive, AsyncCallback<?> callback);
+	
+	public void changeSecurity(String path, Map<String, Integer> addUsers, Map<String, Integer> revokeUsers,
+			Map<String, Integer> addRoles, Map<String, Integer> revokeRoles, boolean recursive,
+			AsyncCallback<?> callback);
 }

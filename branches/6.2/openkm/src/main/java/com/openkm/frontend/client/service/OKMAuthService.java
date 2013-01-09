@@ -32,28 +32,47 @@ import com.openkm.frontend.client.bean.GWTUser;
 
 /**
  * @author jllort
- *
  */
 @RemoteServiceRelativePath("Auth")
 public interface OKMAuthService extends RemoteService {
 	public void logout() throws OKMException;
+	
 	public List<GWTGrantedUser> getGrantedUsers(String nodePath) throws OKMException;
+	
 	public Map<String, Integer> getGrantedRoles(String nodePath) throws OKMException;
+	
 	public String getRemoteUser();
+	
 	public List<GWTGrantedUser> getUngrantedUsers(String nodePath) throws OKMException;
+	
 	public List<String> getUngrantedRoles(String nodePath) throws OKMException;
+	
 	public List<GWTGrantedUser> getFilteredUngrantedUsers(String nodePath, String filter) throws OKMException;
+	
 	public List<String> getFilteredUngrantedRoles(String nodePath, String filter) throws OKMException;
+	
 	public void grantUser(String path, String user, int permissions, boolean recursive) throws OKMException;
+	
 	public void revokeUser(String path, String user, boolean recursive) throws OKMException;
+	
 	public void revokeUser(String path, String user, int permissions, boolean recursive) throws OKMException;
+	
 	public void grantRole(String path, String role, int permissions, boolean recursive) throws OKMException;
+	
 	public void revokeRole(String path, String role, boolean recursive) throws OKMException;
+	
 	public void revokeRole(String path, String role, int permissions, boolean recursive) throws OKMException;
+	
 	public void keepAlive() throws OKMException;
+	
 	public List<GWTUser> getAllUsers() throws OKMException;
+	
 	public List<String> getAllRoles() throws OKMException;
+	
 	public List<GWTUser> getFilteredAllUsers(String filter, List<String> selectedUsers) throws OKMException;
+	
 	public List<String> getFilteredAllRoles(String filter, List<String> selectedRoles) throws OKMException;
-	public void changeSecurity(String path, Map<String, Integer> users, Map<String, Integer> roles, boolean recursive) throws OKMException;
+	
+	public void changeSecurity(String path, Map<String, Integer> addUsers, Map<String, Integer> revokeUsers,
+			Map<String, Integer> addRoles, Map<String, Integer> revokeRoles, boolean recursive) throws OKMException;
 }

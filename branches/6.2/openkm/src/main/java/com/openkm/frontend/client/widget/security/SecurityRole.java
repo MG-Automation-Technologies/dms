@@ -67,14 +67,14 @@ public class SecurityRole extends Composite {
 	private String path = "";
 	private int width = 612;
 	private Map<String, Integer> actualGrants;
-	private Map<String, Integer> newGrants;
+	private Map<String, Integer> changedGrants;
 	
 	/**
 	 * Security group
 	 */
 	public SecurityRole() {
 		actualGrants = new HashMap<String, Integer>();
-		newGrants = new HashMap<String, Integer>();
+		changedGrants = new HashMap<String, Integer>();
 		panel = new HorizontalPanel();
 		buttonPanel = new VerticalPanel();
 		assignedRole = new RoleScrollTable(true);
@@ -262,10 +262,10 @@ public class SecurityRole extends Composite {
 				boolean modified = false;
 				
 				if (isGrantChanged(role, new Integer(GWTPermission.READ))) {
-					newGrants.put(role, GWTPermission.READ);
+					changedGrants.put(role, GWTPermission.READ);
 					modified = true;
 				} else {
-					newGrants.remove(role);
+					changedGrants.remove(role);
 				}
 				
 				unassignedRole.removeSelectedRow();
@@ -302,10 +302,10 @@ public class SecurityRole extends Composite {
 				boolean modified = false;
 				
 				if (isGrantChanged(role, new Integer(GWTPermission.REMOVED))) {
-					newGrants.put(role, GWTPermission.REMOVED);
+					changedGrants.put(role, GWTPermission.REMOVED);
 					modified = true;
 				} else {
-					newGrants.remove(role);
+					changedGrants.remove(role);
 				}
 				
 				unassignedRole.addRow(role, modified);
@@ -322,7 +322,7 @@ public class SecurityRole extends Composite {
 	 * @param user The granted role
 	 * @param permissions The permissions value
 	 */
-	public void grant(String role, int permissions, boolean recursive, final int flag_property, final int rowIndex) {
+	public void grant(String role, int permissions, boolean recursive, final int flag_property) {
 		if (path != null) {
 			if (!Main.get().workspaceUserProperties.getWorkspace().isSecurityModeMultiple()) {
 				Main.get().securityPopup.status.setFlag_update();
@@ -334,23 +334,26 @@ public class SecurityRole extends Composite {
 					public void onFailure(Throwable caught) {
 						int col = 0;
 						col++; // Name
-						if (flag_property < RoleScrollTable.PROPERTY_READ) {
+						if (flag_property > RoleScrollTable.PROPERTY_READ) {
 							col++;
 						}
 						
-						if (flag_property < RoleScrollTable.PROPERTY_WRITE) {
+						if (flag_property > RoleScrollTable.PROPERTY_WRITE) {
 							col++;
 						}
 						
-						if (flag_property < RoleScrollTable.PROPERTY_DELETE) {
+						if (flag_property > RoleScrollTable.PROPERTY_DELETE) {
 							col++;
 						}
 						
-						if (flag_property < RoleScrollTable.PROPERTY_SECURITY) {
+						if (flag_property > RoleScrollTable.PROPERTY_SECURITY) {
 							col++;
 						}
 						
-						((CheckBox) assignedRole.getDataTable().getWidget(rowIndex, col)).setValue(false);
+						int selectedRow = assignedRole.getSelectedRow();
+						if (selectedRow>=0) {
+							((CheckBox) assignedRole.getDataTable().getWidget(selectedRow, col)).setValue(false);
+						}
 						
 						Main.get().securityPopup.status.unsetFlag_update();
 						Main.get().showError("GrantRole", caught);
@@ -358,10 +361,10 @@ public class SecurityRole extends Composite {
 				});
 			} else {
 				int newGrant = 0;
-				if (!newGrants.containsKey(role) && actualGrants.containsKey(role)) { // Case start new grant with checkbox change
+				if (!changedGrants.containsKey(role) && actualGrants.containsKey(role)) { // Case start new grant with checkbox change
 					newGrant = actualGrants.get(role).intValue();
 				} else {
-					newGrant = newGrants.get(role).intValue();
+					newGrant = changedGrants.get(role).intValue();
 				}
 				
 				switch (flag_property) {
@@ -383,10 +386,10 @@ public class SecurityRole extends Composite {
 				}
 				
 				if (isGrantChanged(role, newGrant)) {
-					newGrants.put(role, newGrant);
+					changedGrants.put(role, newGrant);
 					assignedRole.markModifiedSelectedRow(true);
 				} else {
-					newGrants.remove(role);
+					changedGrants.remove(role);
 					assignedRole.markModifiedSelectedRow(false);
 				}
 				
@@ -401,7 +404,7 @@ public class SecurityRole extends Composite {
 	 * @param user The role
 	 * @param permissions The permissions value
 	 */
-	public void revoke(String role, int permissions, boolean recursive, final int flag_property, final int rowIndex) {
+	public void revoke(String role, int permissions, boolean recursive, final int flag_property) {
 		if (path != null) {
 			if (!Main.get().workspaceUserProperties.getWorkspace().isSecurityModeMultiple()) {
 				Main.get().securityPopup.status.setFlag_update();
@@ -424,23 +427,26 @@ public class SecurityRole extends Composite {
 					public void onFailure(Throwable caught) {
 						int col = 0;
 						col++; // Name
-						if (flag_property < RoleScrollTable.PROPERTY_READ) {
+						if (flag_property > RoleScrollTable.PROPERTY_READ) {
 							col++;
 						}
 						
-						if (flag_property < RoleScrollTable.PROPERTY_WRITE) {
+						if (flag_property > RoleScrollTable.PROPERTY_WRITE) {
 							col++;
 						}
 						
-						if (flag_property < RoleScrollTable.PROPERTY_DELETE) {
+						if (flag_property > RoleScrollTable.PROPERTY_DELETE) {
 							col++;
 						}
 						
-						if (flag_property < RoleScrollTable.PROPERTY_SECURITY) {
+						if (flag_property > RoleScrollTable.PROPERTY_SECURITY) {
 							col++;
 						}
 						
-						((CheckBox) assignedRole.getDataTable().getWidget(rowIndex, col)).setValue(true);
+						int selectedRow = assignedRole.getSelectedRow();
+						if (selectedRow>=0) {
+							((CheckBox) assignedRole.getDataTable().getWidget(selectedRow, col)).setValue(true);
+						}
 						
 						Main.get().securityPopup.status.unsetFlag_update();
 						Main.get().showError("RevokeRole", caught);
@@ -448,8 +454,8 @@ public class SecurityRole extends Composite {
 				});
 			} else {
 				int newGrant = 0;
-				if (newGrants.containsKey(role)) { // Case start new grant with checkbox change
-					newGrant = newGrants.get(role).intValue();
+				if (changedGrants.containsKey(role)) { // Case start new grant with checkbox change
+					newGrant = changedGrants.get(role).intValue();
 				} else if (actualGrants.containsKey(role)) {
 					newGrant = actualGrants.get(role).intValue();
 				}
@@ -476,10 +482,10 @@ public class SecurityRole extends Composite {
 				
 				if (isGrantChanged(role, newGrant)) {
 					modified = true;
-					newGrants.put(role, newGrant);
+					changedGrants.put(role, newGrant);
 					assignedRole.markModifiedSelectedRow(modified);
 				} else {
-					newGrants.remove(role);
+					changedGrants.remove(role);
 					assignedRole.markModifiedSelectedRow(modified);
 				}
 				
@@ -531,8 +537,48 @@ public class SecurityRole extends Composite {
 	/**
 	 * getNewGrants
 	 */
-	public Map<String, Integer> getNewGrants() {
-		return newGrants;
+	public List<Map<String,Integer>> getNewGrants() {
+		List<Map<String,Integer>> grants = new ArrayList<Map<String,Integer>>();
+		Map<String, Integer> addGrants = new HashMap<String, Integer>();
+		Map<String, Integer> revokeGrants = new HashMap<String, Integer>();
+		grants.add(addGrants);
+		grants.add(revokeGrants);
+		for (String role : changedGrants.keySet()) {
+			if (changedGrants.get(role).intValue()==GWTPermission.REMOVED) {
+				// If actualGrants not contains role will be strange case
+				if (actualGrants.containsKey(role)) {
+					revokeGrants.put(role, actualGrants.get(role)); // Remove all actual grants
+				}
+			} else {
+				if (actualGrants.containsKey(role)) { // test diferences
+					// Table A=actual grants B=Change grants
+					// A B  XOR           
+					// 0 0   0      
+					// 0 1   1    B & (XOR) -> 1  ( add grant )   
+					// 1 0   1    A & (XOR) -> 1  ( revoke grant )
+					// 1 1   0       
+					int bitDiference = changedGrants.get(role).intValue() ^ actualGrants.get(role).intValue();
+					int addBit = changedGrants.get(role).intValue() & bitDiference;
+					int revokeBit = actualGrants.get(role).intValue() & bitDiference;
+					if (addBit!=0) {
+						addGrants.put(role, addBit);
+					}
+					if (revokeBit!=0) {
+						revokeGrants.put(role, revokeBit);
+					}
+				} else {
+					addGrants.put(role, changedGrants.get(role));
+				}
+			}
+		}
+		return grants;
+	}
+	
+	/**
+	 * hasChangedGrants
+	 */
+	public boolean hasChangedGrants() {
+		return changedGrants.size()>0;
 	}
 	
 	/**
