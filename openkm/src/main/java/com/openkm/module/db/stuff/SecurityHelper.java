@@ -34,9 +34,6 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.dao.NodeBaseDAO;
 import com.openkm.dao.bean.NodeBase;
-import com.openkm.dao.bean.NodeDocument;
-import com.openkm.dao.bean.NodeFolder;
-import com.openkm.dao.bean.NodeMail;
 
 public class SecurityHelper {
 	private static Logger log = LoggerFactory.getLogger(SecurityHelper.class);
@@ -59,35 +56,9 @@ public class SecurityHelper {
 	/**
 	 * Prune not accessible nodes
 	 */
-	public static void pruneFolderList(List<NodeFolder> nodeList) throws DatabaseException {
-		for (Iterator<NodeFolder> it = nodeList.iterator(); it.hasNext();) {
-			NodeFolder node = it.next();
-			
-			if (!accessManager.isGranted(node, Permission.READ)) {
-				it.remove();
-			}
-		}
-	}
-	
-	/**
-	 * Prune not accessible nodes
-	 */
-	public static void pruneDocumenList(List<NodeDocument> nodeList) throws DatabaseException {
-		for (Iterator<NodeDocument> it = nodeList.iterator(); it.hasNext();) {
-			NodeDocument node = it.next();
-			
-			if (!accessManager.isGranted(node, Permission.READ)) {
-				it.remove();
-			}
-		}
-	}
-	
-	/**
-	 * Prune not accessible nodes
-	 */
-	public static void pruneMailList(List<NodeMail> nodeList) throws DatabaseException {
-		for (Iterator<NodeMail> it = nodeList.iterator(); it.hasNext();) {
-			NodeMail node = it.next();
+	public static void pruneNodeList(List<? extends NodeBase> nodeList) throws DatabaseException {
+		for (Iterator<? extends NodeBase> it = nodeList.iterator(); it.hasNext();) {
+			NodeBase node = it.next();
 			
 			if (!accessManager.isGranted(node, Permission.READ)) {
 				it.remove();

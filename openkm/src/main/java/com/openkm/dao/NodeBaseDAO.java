@@ -437,6 +437,9 @@ public class NodeBaseDAO {
 		q.setString("parent", node.getUuid());
 		List<NodeBase> ret = q.list();
 		
+		// Security Check
+		SecurityHelper.pruneNodeList(ret);
+		
 		for (NodeBase child : ret) {
 			total += grantUserPermissionsInDepth(session, child, user, permissions);
 		}
@@ -492,6 +495,7 @@ public class NodeBaseDAO {
 	private int revokeUserPermissions(Session session, NodeBase node, String user, int permissions)
 			throws PathNotFoundException, AccessDeniedException, DatabaseException, HibernateException {
 		// log.info("revokeUserPermissions({})", node.getUuid());
+		
 		// Security Check
 		SecurityHelper.checkRead(node);
 		SecurityHelper.checkSecurity(node);
@@ -525,6 +529,9 @@ public class NodeBaseDAO {
 		Query q = session.createQuery(qs);
 		q.setString("parent", node.getUuid());
 		List<NodeBase> ret = q.list();
+		
+		// Security Check
+		SecurityHelper.pruneNodeList(ret);
 		
 		for (NodeBase child : ret) {
 			total += revokeUserPermissionsInDepth(session, child, user, permissions);
@@ -649,6 +656,9 @@ public class NodeBaseDAO {
 		q.setString("parent", node.getUuid());
 		List<NodeBase> ret = q.list();
 		
+		// Security Check
+		SecurityHelper.pruneNodeList(ret);
+		
 		for (NodeBase child : ret) {
 			total += grantRolePermissionsInDepth(session, child, role, permissions);
 		}
@@ -738,6 +748,9 @@ public class NodeBaseDAO {
 		q.setString("parent", node.getUuid());
 		List<NodeBase> ret = q.list();
 		
+		// Security Check
+		SecurityHelper.pruneNodeList(ret);
+		
 		for (NodeBase child : ret) {
 			total += revokeRolePermissionsInDepth(session, child, role, permissions);
 		}
@@ -788,11 +801,12 @@ public class NodeBaseDAO {
 	}
 	
 	/**
-	 * Change security
+	 * Change security.
 	 */
 	private int changeSecurity(Session session, NodeBase node, Map<String, Integer> users, Map<String, Integer> roles)
 			throws PathNotFoundException, AccessDeniedException, DatabaseException, HibernateException {
 		log.info("changeSecurity({}, {}, {})", new Object[] { node.getUuid(), users, roles });
+		
 		// Security Check
 		SecurityHelper.checkRead(node);
 		SecurityHelper.checkSecurity(node);
