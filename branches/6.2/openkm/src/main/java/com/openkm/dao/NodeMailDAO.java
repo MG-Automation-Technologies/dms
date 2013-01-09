@@ -125,7 +125,7 @@ public class NodeMailDAO {
 			List<NodeMail> ret = q.list();
 			
 			// Security Check
-			SecurityHelper.pruneMailList(ret);
+			SecurityHelper.pruneNodeList(ret);
 			
 			initialize(ret);
 			HibernateUtil.commit(tx);
@@ -199,7 +199,7 @@ public class NodeMailDAO {
 			List<NodeMail> ret = q.list();
 			
 			// Security Check
-			SecurityHelper.pruneMailList(ret);
+			SecurityHelper.pruneNodeList(ret);
 			
 			initialize(ret);
 			HibernateUtil.commit(tx);
@@ -238,7 +238,7 @@ public class NodeMailDAO {
 			List<NodeMail> ret = q.list();
 			
 			// Security Check
-			SecurityHelper.pruneMailList(ret);
+			SecurityHelper.pruneNodeList(ret);
 			
 			initialize(ret);
 			HibernateUtil.commit(tx);
@@ -276,7 +276,7 @@ public class NodeMailDAO {
 			List<NodeMail> ret = q.list();
 			
 			// Security Check
-			SecurityHelper.pruneMailList(ret);
+			SecurityHelper.pruneNodeList(ret);
 			
 			initialize(ret);
 			HibernateUtil.commit(tx);
@@ -316,7 +316,7 @@ public class NodeMailDAO {
 			List<NodeFolder> nodeList = q.list();
 			
 			// Security Check
-			SecurityHelper.pruneFolderList(nodeList);
+			SecurityHelper.pruneNodeList(nodeList);
 			
 			boolean ret = !nodeList.isEmpty();
 			HibernateUtil.commit(tx);

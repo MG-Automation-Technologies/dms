@@ -162,7 +162,7 @@ public class NodeDocumentDAO {
 			List<NodeDocument> ret = q.list();
 			
 			// Security Check
-			SecurityHelper.pruneDocumenList(ret);
+			SecurityHelper.pruneNodeList(ret);
 			
 			log.debug("findAll: {}", ret);
 			return ret;
@@ -198,7 +198,7 @@ public class NodeDocumentDAO {
 			List<NodeDocument> ret = q.list();
 			
 			// Security Check
-			SecurityHelper.pruneDocumenList(ret);
+			SecurityHelper.pruneNodeList(ret);
 			
 			initialize(ret);
 			HibernateUtil.commit(tx);
@@ -273,7 +273,7 @@ public class NodeDocumentDAO {
 			ret = q.list();
 			
 			// Security Check
-			SecurityHelper.pruneDocumenList(ret);
+			SecurityHelper.pruneNodeList(ret);
 			
 			initialize(ret);
 			HibernateUtil.commit(tx);
@@ -313,7 +313,7 @@ public class NodeDocumentDAO {
 			ret = q.list();
 			
 			// Security Check
-			SecurityHelper.pruneDocumenList(ret);
+			SecurityHelper.pruneNodeList(ret);
 			
 			initialize(ret);
 			HibernateUtil.commit(tx);
@@ -351,7 +351,7 @@ public class NodeDocumentDAO {
 			List<NodeDocument> ret = q.list();
 			
 			// Security Check
-			SecurityHelper.pruneDocumenList(ret);
+			SecurityHelper.pruneNodeList(ret);
 			
 			initialize(ret);
 			HibernateUtil.commit(tx);
@@ -443,7 +443,7 @@ public class NodeDocumentDAO {
 			List<NodeFolder> nodeList = q.list();
 			
 			// Security Check
-			SecurityHelper.pruneFolderList(nodeList);
+			SecurityHelper.pruneNodeList(nodeList);
 			
 			boolean ret = !nodeList.isEmpty();
 			HibernateUtil.commit(tx);
