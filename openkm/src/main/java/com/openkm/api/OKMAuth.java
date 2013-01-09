@@ -1,22 +1,22 @@
 /**
- *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2012  Paco Avila & Josep Llort
- *
- *  No bytes were intentionally harmed during the development of this application.
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * OpenKM, Open Document Management System (http://www.openkm.com)
+ * Copyright (c) 2006-2012 Paco Avila & Josep Llort
+ * 
+ * No bytes were intentionally harmed during the development of this application.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 package com.openkm.api;
@@ -38,13 +38,14 @@ import com.openkm.principal.PrincipalAdapterException;
 public class OKMAuth implements AuthModule {
 	private static Logger log = LoggerFactory.getLogger(OKMAuth.class);
 	private static OKMAuth instance = new OKMAuth();
-
-	private OKMAuth() {}
+	
+	private OKMAuth() {
+	}
 	
 	public static OKMAuth getInstance() {
 		return instance;
 	}
-
+	
 	@Override
 	public void login() throws RepositoryException, DatabaseException {
 		log.debug("login()");
@@ -54,15 +55,14 @@ public class OKMAuth implements AuthModule {
 	}
 	
 	@Override
-	public String login(String user, String pass) throws AccessDeniedException, RepositoryException,
-			DatabaseException {
+	public String login(String user, String pass) throws AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("login({}, {})", user, pass);
 		AuthModule am = ModuleManager.getAuthModule();
 		String token = am.login(user, pass);
 		log.debug("login: {}", token);
 		return token;
 	}
-
+	
 	@Override
 	public void logout(String token) throws RepositoryException, DatabaseException {
 		log.debug("logout({})", token);
@@ -70,7 +70,7 @@ public class OKMAuth implements AuthModule {
 		am.logout(token);
 		log.debug("logout: void");
 	}
-
+	
 	@Override
 	public void grantUser(String token, String nodePath, String user, int permissions, boolean recursive)
 			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
@@ -79,7 +79,7 @@ public class OKMAuth implements AuthModule {
 		am.grantUser(token, nodePath, user, permissions, recursive);
 		log.debug("grantUser: void");
 	}
-
+	
 	@Override
 	public void revokeUser(String token, String nodePath, String user, int permissions, boolean recursive)
 			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
@@ -88,7 +88,7 @@ public class OKMAuth implements AuthModule {
 		am.revokeUser(token, nodePath, user, permissions, recursive);
 		log.debug("revokeUser: void");
 	}
-
+	
 	@Override
 	public Map<String, Integer> getGrantedUsers(String token, String nodePath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
@@ -98,7 +98,7 @@ public class OKMAuth implements AuthModule {
 		log.debug("getGrantedUsers: {}", grantedUsers);
 		return grantedUsers;
 	}
-
+	
 	@Override
 	public void grantRole(String token, String nodePath, String role, int permissions, boolean recursive)
 			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
@@ -107,7 +107,7 @@ public class OKMAuth implements AuthModule {
 		am.grantRole(token, nodePath, role, permissions, recursive);
 		log.debug("grantRole: void");
 	}
-
+	
 	@Override
 	public void revokeRole(String token, String nodePath, String user, int permissions, boolean recursive)
 			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
@@ -116,9 +116,9 @@ public class OKMAuth implements AuthModule {
 		am.revokeRole(token, nodePath, user, permissions, recursive);
 		log.debug("revokeRole: void");
 	}
-
+	
 	@Override
-	public Map<String, Integer> getGrantedRoles(String token, String nodePath) throws PathNotFoundException, 
+	public Map<String, Integer> getGrantedRoles(String token, String nodePath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getGrantedRoles({})", nodePath);
 		AuthModule am = ModuleManager.getAuthModule();
@@ -126,7 +126,7 @@ public class OKMAuth implements AuthModule {
 		log.debug("getGrantedRoles: {}", grantedRoles);
 		return grantedRoles;
 	}
-
+	
 	@Override
 	public List<String> getUsers(String token) throws PrincipalAdapterException {
 		log.debug("getUsers({})", token);
@@ -135,7 +135,7 @@ public class OKMAuth implements AuthModule {
 		log.debug("getUsers: {}", users);
 		return users;
 	}
-
+	
 	@Override
 	public List<String> getRoles(String token) throws PrincipalAdapterException {
 		log.debug("getRoles({})", token);
@@ -144,7 +144,7 @@ public class OKMAuth implements AuthModule {
 		log.debug("getRoles: {}", roles);
 		return roles;
 	}
-
+	
 	@Override
 	public List<String> getUsersByRole(String token, String role) throws PrincipalAdapterException {
 		log.debug("getUsersByRole({}, {})", token, role);
@@ -162,7 +162,7 @@ public class OKMAuth implements AuthModule {
 		log.debug("getRolesByUser: {}", users);
 		return users;
 	}
-
+	
 	@Override
 	public String getMail(String token, String user) throws PrincipalAdapterException {
 		log.debug("getMail({}, {})", token, user);
@@ -171,7 +171,7 @@ public class OKMAuth implements AuthModule {
 		log.debug("getMail: {}", mail);
 		return mail;
 	}
-
+	
 	@Override
 	public String getName(String token, String user) throws PrincipalAdapterException {
 		log.debug("getName({}, {})", token, user);
@@ -182,12 +182,12 @@ public class OKMAuth implements AuthModule {
 	}
 	
 	@Override
-	public void changeSecurity(String token, String nodePath, Map<String, Integer> users,
-			Map<String, Integer> roles, boolean recursive) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
-		log.debug("changeSecurity({}, {}, {}, {})", new Object[] { token, nodePath, users, roles, recursive });
+	public void changeSecurity(String token, String nodePath, Map<String, Integer> grantUsers,
+			Map<String, Integer> revokeUsers, Map<String, Integer> grantRoles, Map<String, Integer> revokeRoles,
+			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("changeSecurity({}, {}, {}, {}, {}, {})", new Object[] { token, nodePath, grantUsers, revokeUsers, grantRoles, revokeRoles, recursive });
 		AuthModule am = ModuleManager.getAuthModule();
-		am.changeSecurity(token, nodePath, users, roles, recursive);
+		am.changeSecurity(token, nodePath, grantUsers, revokeUsers, grantRoles, revokeRoles, recursive);
 		log.debug("changeSecurity: void");
 	}
 }
