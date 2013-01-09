@@ -46,8 +46,8 @@ public class PrincipalUtils {
 	 * Obtain the logged user.
 	 */
 	public static String getUser() {
+		Authentication auth = getAuthentication();
 		String user = null;
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		
 		if (auth != null) {
 			user = auth.getName();
@@ -60,8 +60,8 @@ public class PrincipalUtils {
 	 * Obtain the list of user roles.
 	 */
 	public static Set<String> getRoles() {
+		Authentication auth = getAuthentication();
 		Set<String> roles = new HashSet<String>();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		
 		if (auth != null) {
 			for (GrantedAuthority ga : auth.getAuthorities()) {
@@ -76,7 +76,7 @@ public class PrincipalUtils {
 	 * Check for role
 	 */
 	public static boolean hasRole(String role) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Authentication auth = getAuthentication();
 		
 		if (auth != null) {
 			User user = (User) auth.getPrincipal();
@@ -92,17 +92,7 @@ public class PrincipalUtils {
 	}
 	
 	/**
-	 * Get user from SessionManager and set the credentials.
-	 */
-	public static String getUserByToken(String token) {
-		Authentication auth = DbSessionManager.getInstance().get(token);
-		SecurityContextHolder.getContext().setAuthentication(auth);
-		String user = auth.getName();
-		return user;
-	}
-	
-	/**
-	 * 
+	 * Get Authentication by token and also set it as current Authentication.
 	 */
 	public static Authentication getAuthenticationByToken(String token) {
 		Authentication auth = DbSessionManager.getInstance().get(token);
