@@ -21,6 +21,7 @@
 
 package com.openkm.frontend.client.widget.security;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -67,14 +68,14 @@ public class SecurityUser extends Composite {
 	private String path = "";
 	private int width = 612;
 	private Map<String, Integer> actualGrants;
-	private Map<String, Integer> newGrants;
+	private Map<String, Integer> changedGrants;
 	
 	/**
 	 * Security user
 	 */
 	public SecurityUser() {
 		actualGrants = new HashMap<String, Integer>();
-		newGrants = new HashMap<String, Integer>();
+		changedGrants = new HashMap<String, Integer>();
 		panel = new HorizontalPanel();
 		buttonPanel = new VerticalPanel();
 		assignedUser = new UserScrollTable(true);
@@ -171,7 +172,7 @@ public class SecurityUser extends Composite {
 	public void getGrantedUsers() {
 		if (path != null) {
 			actualGrants = new HashMap<String, Integer>();
-			newGrants = new HashMap<String, Integer>();
+			changedGrants = new HashMap<String, Integer>();
 			authService.getGrantedUsers(path, new AsyncCallback<List<GWTGrantedUser>>() {
 				@Override
 				public void onSuccess(List<GWTGrantedUser> result) {
@@ -257,10 +258,10 @@ public class SecurityUser extends Composite {
 				boolean modified = false;
 				
 				if (isGrantChanged(user.getId(), new Integer(GWTPermission.READ))) {
-					newGrants.put(user.getId(), GWTPermission.READ);
+					changedGrants.put(user.getId(), GWTPermission.READ);
 					modified = true;
 				} else {
-					newGrants.remove(user.getId());
+					changedGrants.remove(user.getId());
 				}
 				
 				unassignedUser.removeSelectedRow();
@@ -295,10 +296,10 @@ public class SecurityUser extends Composite {
 				boolean modified = false;
 				
 				if (isGrantChanged(user.getId(), new Integer(GWTPermission.REMOVED))) {
-					newGrants.put(user.getId(), GWTPermission.REMOVED);
+					changedGrants.put(user.getId(), GWTPermission.REMOVED);
 					modified = true;
 				} else {
-					newGrants.remove(user.getId());
+					changedGrants.remove(user.getId());
 				}
 				
 				unassignedUser.addRow(user, modified);
@@ -315,7 +316,7 @@ public class SecurityUser extends Composite {
 	 * @param user The granted user
 	 * @param permissions The permissions value
 	 */
-	public void grant(String user, int permissions, boolean recursive, final int flag_property, final int rowIndex) {
+	public void grant(String user, int permissions, boolean recursive, final int flag_property) {
 		if (path != null) {
 			if (!Main.get().workspaceUserProperties.getWorkspace().isSecurityModeMultiple()) {
 				Main.get().securityPopup.status.setFlag_update();
@@ -327,23 +328,26 @@ public class SecurityUser extends Composite {
 					public void onFailure(Throwable caught) {
 						int col = 0;
 						col++; // Name
-						if (flag_property < UserScrollTable.PROPERTY_READ) {
+						if (flag_property > UserScrollTable.PROPERTY_READ) {
 							col++;
 						}
 						
-						if (flag_property < UserScrollTable.PROPERTY_WRITE) {
+						if (flag_property > UserScrollTable.PROPERTY_WRITE) {
 							col++;
 						}
 						
-						if (flag_property < UserScrollTable.PROPERTY_DELETE) {
+						if (flag_property > UserScrollTable.PROPERTY_DELETE) {
 							col++;
 						}
 						
-						if (flag_property < UserScrollTable.PROPERTY_SECURITY) {
+						if (flag_property > UserScrollTable.PROPERTY_SECURITY) {
 							col++;
 						}
 						
-						((CheckBox) assignedUser.getDataTable().getWidget(rowIndex, col)).setValue(false);
+						int selectedRow = assignedUser.getSelectedRow();
+						if (selectedRow>=0) {
+							((CheckBox) assignedUser.getDataTable().getWidget(selectedRow, col)).setValue(false);
+						}
 						
 						Main.get().securityPopup.status.unsetFlag_update();
 						Main.get().showError("GrantUser", caught);
@@ -351,10 +355,10 @@ public class SecurityUser extends Composite {
 				});
 			} else {
 				int newGrant = 0;
-				if (!newGrants.containsKey(user) && actualGrants.containsKey(user)) { // Case start new grant with checkbox change
+				if (!changedGrants.containsKey(user) && actualGrants.containsKey(user)) { // Case start new grant with checkbox change
 					newGrant = actualGrants.get(user).intValue();
 				} else {
-					newGrant = newGrants.get(user).intValue();
+					newGrant = changedGrants.get(user).intValue();
 				}
 				
 				switch (flag_property) {
@@ -376,10 +380,10 @@ public class SecurityUser extends Composite {
 				}
 				
 				if (isGrantChanged(user, newGrant)) {
-					newGrants.put(user, newGrant);
+					changedGrants.put(user, newGrant);
 					assignedUser.markModifiedSelectedRow(true);
 				} else {
-					newGrants.remove(user);
+					changedGrants.remove(user);
 					assignedUser.markModifiedSelectedRow(false);
 				}
 				
@@ -394,7 +398,7 @@ public class SecurityUser extends Composite {
 	 * @param user The user
 	 * @param permissions The permissions value
 	 */
-	public void revoke(String user, int permissions, boolean recursive, final int flag_property, final int rowIndex) {
+	public void revoke(String user, int permissions, boolean recursive, final int flag_property) {
 		if (path != null) {
 			if (!Main.get().workspaceUserProperties.getWorkspace().isSecurityModeMultiple()) {
 				Main.get().securityPopup.status.setFlag_update();
@@ -417,23 +421,26 @@ public class SecurityUser extends Composite {
 					public void onFailure(Throwable caught) {
 						int col = 0;
 						col++; // Name
-						if (flag_property < UserScrollTable.PROPERTY_READ) {
+						if (flag_property > UserScrollTable.PROPERTY_READ) {
 							col++;
 						}
 						
-						if (flag_property < UserScrollTable.PROPERTY_WRITE) {
+						if (flag_property > UserScrollTable.PROPERTY_WRITE) {
 							col++;
 						}
 						
-						if (flag_property < UserScrollTable.PROPERTY_DELETE) {
+						if (flag_property > UserScrollTable.PROPERTY_DELETE) {
 							col++;
 						}
 						
-						if (flag_property < UserScrollTable.PROPERTY_SECURITY) {
+						if (flag_property > UserScrollTable.PROPERTY_SECURITY) {
 							col++;
 						}
 						
-						((CheckBox) assignedUser.getDataTable().getWidget(rowIndex, col)).setValue(true);
+						int selectedRow = assignedUser.getSelectedRow();
+						if (selectedRow>=0) {
+							((CheckBox) assignedUser.getDataTable().getWidget(selectedRow, col)).setValue(true);
+						}
 						
 						Main.get().securityPopup.status.unsetFlag_update();
 						Main.get().showError("RevokeUser", caught);
@@ -441,8 +448,8 @@ public class SecurityUser extends Composite {
 				});
 			} else {
 				int newGrant = 0;
-				if (newGrants.containsKey(user)) { // Case start new grant with checkbox change
-					newGrant = newGrants.get(user).intValue();
+				if (changedGrants.containsKey(user)) { // Case start new grant with checkbox change
+					newGrant = changedGrants.get(user).intValue();
 				} else if (actualGrants.containsKey(user)) {
 					newGrant = actualGrants.get(user).intValue();
 				}
@@ -469,10 +476,10 @@ public class SecurityUser extends Composite {
 				
 				if (isGrantChanged(user, newGrant)) {
 					modified = true;
-					newGrants.put(user, newGrant);
+					changedGrants.put(user, newGrant);
 					assignedUser.markModifiedSelectedRow(modified);
 				} else {
-					newGrants.remove(user);
+					changedGrants.remove(user);
 					assignedUser.markModifiedSelectedRow(modified);
 				}
 				
@@ -526,8 +533,48 @@ public class SecurityUser extends Composite {
 	/**
 	 * getNewGrants
 	 */
-	public Map<String, Integer> getNewGrants() {
-		return newGrants;
+	public List<Map<String,Integer>> getNewGrants() {
+		List<Map<String,Integer>> grants = new ArrayList<Map<String,Integer>>();
+		Map<String, Integer> addGrants = new HashMap<String, Integer>();
+		Map<String, Integer> revokeGrants = new HashMap<String, Integer>();
+		grants.add(addGrants);
+		grants.add(revokeGrants);
+		for (String user : changedGrants.keySet()) {
+			if (changedGrants.get(user).intValue()==GWTPermission.REMOVED) {
+				// If actualGrants not contains role will be strange case
+				if (actualGrants.containsKey(user)) {
+					revokeGrants.put(user, actualGrants.get(user)); // Remove all actual grants
+				}
+			} else {
+				if (actualGrants.containsKey(user)) { // test diferences
+					// Table A=actual grants B=Change grants
+					// A B  XOR           
+					// 0 0   0      
+					// 0 1   1    B & (XOR) -> 1  ( add grant )   
+					// 1 0   1    A & (XOR) -> 1  ( revoke grant )
+					// 1 1   0       
+					int bitDiference = changedGrants.get(user).intValue() ^ actualGrants.get(user).intValue();
+					int addBit = changedGrants.get(user).intValue() & bitDiference;
+					int revokeBit = actualGrants.get(user).intValue() & bitDiference;
+					if (addBit!=0) {
+						addGrants.put(user, addBit);
+					}
+					if (revokeBit!=0) {
+						revokeGrants.put(user, revokeBit);
+					}
+				} else {
+					addGrants.put(user, changedGrants.get(user));
+				}
+			}
+		}
+		return grants;
+	}
+	
+	/**
+	 * hasChangedGrants
+	 */
+	public boolean hasChangedGrants() {
+		return changedGrants.size()>0;
 	}
 	
 	/**

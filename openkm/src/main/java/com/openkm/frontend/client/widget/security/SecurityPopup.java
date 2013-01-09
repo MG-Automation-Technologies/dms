@@ -38,6 +38,8 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 import com.openkm.frontend.client.util.Util;
+import java.util.Map;
+import java.util.List;
 
 /**
  * Security popup
@@ -82,26 +84,43 @@ public class SecurityPopup extends DialogBox {
 		change = new Button(Main.i18n("button.change"), new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				authService.changeSecurity(path, securityPanel.securityUser.getNewGrants(),
-						securityPanel.securityRole.getNewGrants(), recursive.getValue(), new AsyncCallback<Object>() {
+				final boolean recursiveChecked = recursive.getValue();
+				if (!recursiveChecked) {
+					Main.get().securityPopup.status.setFlag_update();
+				}
+				List<Map<String, Integer>> userGrants = securityPanel.securityUser.getNewGrants();
+				List<Map<String, Integer>> roleGrants = securityPanel.securityRole.getNewGrants();
+				Map<String, Integer> addUsers = userGrants.get(0);
+				Map<String, Integer> revokeUsers = userGrants.get(1);
+				Map<String, Integer> addRoles = roleGrants.get(0);
+				Map<String, Integer> revokeRoles = roleGrants.get(1);
+				authService.changeSecurity(path, addUsers, revokeUsers, addRoles, revokeRoles, recursiveChecked, new AsyncCallback<Object>() {
 					@Override
 					public void onSuccess(Object result) {
+						if (!recursiveChecked) {
+							Main.get().securityPopup.status.unsetFlag_update();
+							Main.get().mainPanel.desktop.browser.tabMultiple.securityRefresh();
+						}
 					}
 					
 					@Override
 					public void onFailure(Throwable caught) {
+						if (!recursiveChecked) {
+							Main.get().securityPopup.status.unsetFlag_update();
+						}
 						Main.get().showError("changeSecurity", caught);
 					}
 				});
 				
-				Timer timer = new Timer() {
-					@Override
-					public void run() {
-						Main.get().mainPanel.desktop.browser.tabMultiple.securityRefresh();
-					}
-				};
-				
-				timer.schedule(200);
+				if (recursiveChecked) {
+					Timer timer = new Timer() {
+						@Override
+						public void run() {
+							Main.get().mainPanel.desktop.browser.tabMultiple.securityRefresh();
+						}
+					};
+					timer.schedule(200);
+				}
 				hide();
 			}
 		});

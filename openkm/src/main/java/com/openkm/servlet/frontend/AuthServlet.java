@@ -694,13 +694,13 @@ public class AuthServlet extends OKMRemoteServiceServlet implements OKMAuthServi
 	}
 	
 	@Override
-	public void changeSecurity(String path, Map<String, Integer> users, Map<String, Integer> roles,
-			boolean recursive) throws OKMException {
-		log.debug("changeSecurity({}, {}, {}, {})", new Object[] { path, users, roles, recursive });
+	public void changeSecurity(String path, Map<String, Integer> addUsers, Map<String, Integer> revokeUsers,
+			Map<String, Integer> addRoles, Map<String, Integer> revokeRoles, boolean recursive) throws OKMException {
+		log.debug("changeSecurity({}, {}, {}, {})", new Object[] { path, addUsers, revokeUsers, addRoles, revokeRoles,recursive });
 		updateSessionManager();
 		
 		try {
-			OKMAuth.getInstance().changeSecurity(null, path, users, roles, recursive);
+			OKMAuth.getInstance().changeSecurity(null, path, addUsers, addRoles, recursive);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_PathNotFound), e.getMessage());

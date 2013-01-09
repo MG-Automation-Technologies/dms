@@ -56,7 +56,6 @@ public class UserScrollTable extends Composite {
 	private FixedWidthGrid dataTable;
 	private boolean isAssigned = false; // Determines if is assigned users table
 										// or not
-	private int rowIndex = -1;
 	private String path;
 	private int flag_property;
 	private int numberOfColumns = 0;
@@ -403,6 +402,19 @@ public class UserScrollTable extends Composite {
 		return null;
 	}
 	
+	public int getSelectedRow() {
+		if (!dataTable.getSelectedRows().isEmpty()) {
+			int selectedRow = ((Integer) dataTable.getSelectedRows().iterator().next()).intValue();
+			if (dataTable.isRowSelected(selectedRow)) {
+				return selectedRow;
+			} else {
+				return -1;
+			}
+		} else {
+			return -1;
+		}
+	}
+	
 	/**
 	 * Removes the selected row
 	 */
@@ -445,7 +457,7 @@ public class UserScrollTable extends Composite {
 	public void grant(String user, int permissions, boolean recursive) {
 		if (path != null) {
 			Log.debug("UserScrollTable.grant(" + user + ", " + permissions + ", " + recursive + ")");
-			Main.get().securityPopup.securityPanel.securityUser.grant(user, permissions, recursive, flag_property, rowIndex);
+			Main.get().securityPopup.securityPanel.securityUser.grant(user, permissions, recursive, flag_property);
 		}
 	}
 	
@@ -458,7 +470,7 @@ public class UserScrollTable extends Composite {
 	public void revoke(String user, int permissions, boolean recursive) {
 		if (path != null) {
 			Log.debug("UserScrollTable.revoke(" + user + ", " + permissions + ", " + recursive + ")");
-			Main.get().securityPopup.securityPanel.securityUser.revoke(user, permissions, recursive, flag_property, rowIndex);
+			Main.get().securityPopup.securityPanel.securityUser.revoke(user, permissions, recursive, flag_property);
 		}
 	}
 	
