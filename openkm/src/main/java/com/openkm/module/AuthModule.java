@@ -1,22 +1,22 @@
 /**
- *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2012  Paco Avila & Josep Llort
- *
- *  No bytes were intentionally harmed during the development of this application.
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * OpenKM, Open Document Management System (http://www.openkm.com)
+ * Copyright (c) 2006-2012 Paco Avila & Josep Llort
+ * 
+ * No bytes were intentionally harmed during the development of this application.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 package com.openkm.module;
@@ -31,28 +31,27 @@ import com.openkm.core.RepositoryException;
 import com.openkm.principal.PrincipalAdapterException;
 
 public interface AuthModule {
-
+	
 	/**
 	 * Logins into the repository.
 	 */
 	public void login() throws RepositoryException, DatabaseException;
 	
-	public String login(String user, String password) throws AccessDeniedException, RepositoryException,
-			DatabaseException;
-
+	public String login(String user, String password) throws AccessDeniedException, RepositoryException, DatabaseException;
+	
 	/**
 	 * Log out from the repository.
 	 */
 	public void logout(String token) throws RepositoryException, DatabaseException;
-
+	
 	/**
 	 * Add user permissions to a node.
 	 * 
 	 * @param nodePath The complete path to the node.
 	 * @param user User name which permissions are changed.
-	 * @param permissions A mask with the permissions to be added. 
+	 * @param permissions A mask with the permissions to be added.
 	 * @param recursive recursive – If the nodePath indicated a folder,
-	 * the permissions can be applied recursively.
+	 *        the permissions can be applied recursively.
 	 * @throws PathNotFoundException If the node defined by nodePath do not exists.
 	 * @throws AccessDeniedException If the authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
@@ -66,8 +65,8 @@ public interface AuthModule {
 	 * @param nodePath The complete path to the node.
 	 * @param user User name which permissions are changed.
 	 * @param permissions A mask with the permissions to be removed.
-	 * @param recursive If the nodePath indicates a folder, the 
-	 * permissions can be revoked recursively.
+	 * @param recursive If the nodePath indicates a folder, the
+	 *        permissions can be revoked recursively.
 	 * @throws PathNotFoundException If the node defined by nodePath do not exists.
 	 * @throws AccessDeniedException If the authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
@@ -75,7 +74,7 @@ public interface AuthModule {
 	public void revokeUser(String token, String nodePath, String user, int permissions, boolean recursive)
 			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 	
-	/** 
+	/**
 	 * Get user permissions from am item (document or folder).
 	 * 
 	 * @param nodePath The complete path to the node.
@@ -86,15 +85,15 @@ public interface AuthModule {
 	 */
 	public Map<String, Integer> getGrantedUsers(String token, String nodePath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException;
-
+	
 	/**
 	 * Grant role permissions for a node.
 	 * 
 	 * @param nodePath The complete path to the node.
 	 * @param role Role name which permissions are changed.
 	 * @param permissions A mask with the permissions to be added.
-	 * @param recursive If the nodePath indicates a folder, the permissions can 
-	 * be applied recursively.
+	 * @param recursive If the nodePath indicates a folder, the permissions can
+	 *        be applied recursively.
 	 * @throws PathNotFoundException If the node defined by nodePath do not exists.
 	 * @throws AccessDeniedException If the authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
@@ -108,8 +107,8 @@ public interface AuthModule {
 	 * @param nodePath The complete path to the node.
 	 * @param role Role name which permissions are changed.
 	 * @param permissions A mask with the permissions to be removed.
-	 * @param recursive If the nodePath indicates a folder, the 
-	 * permissions can be applied recursively.
+	 * @param recursive If the nodePath indicates a folder, the
+	 *        permissions can be applied recursively.
 	 * @throws PathNotFoundException If the node defined by nodePath do not exists.
 	 * @throws AccessDeniedException If the authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
@@ -117,7 +116,7 @@ public interface AuthModule {
 	public void revokeRole(String token, String nodePath, String role, int permissions, boolean recursive)
 			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 	
-	/** 
+	/**
 	 * Get roles permissions from am item (document or folder).
 	 * 
 	 * @param nodePath The complete path to the node.
@@ -126,7 +125,7 @@ public interface AuthModule {
 	 * @throws AccessDeniedException If the authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public Map<String, Integer> getGrantedRoles(String token, String nodePath) throws PathNotFoundException, 
+	public Map<String, Integer> getGrantedRoles(String token, String nodePath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
@@ -144,7 +143,7 @@ public interface AuthModule {
 	 * @throws RepositoryException If there is any error retrieving the roles list.
 	 */
 	public List<String> getRoles(String token) throws PrincipalAdapterException;
-
+	
 	/**
 	 * Retrieves a list of users by role.
 	 * 
@@ -182,7 +181,7 @@ public interface AuthModule {
 	/**
 	 * Change several security permissions in the same call.
 	 */
-	public void changeSecurity(String token, String nodePath, Map<String, Integer> users,
-			Map<String, Integer> roles, boolean recursive) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException;
+	public void changeSecurity(String token, String nodePath, Map<String, Integer> grantUsers,
+			Map<String, Integer> revokeUsers, Map<String, Integer> grantRoles, Map<String, Integer> revokeRoles,
+			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 }
