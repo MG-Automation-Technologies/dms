@@ -379,7 +379,7 @@ public class NodeBaseDAO {
 				int total = grantUserPermissionsInDepth(session, node, user, permissions);
 				log.info("grantUserPermissions.Total: {}", total);
 			} else {
-				grantUserPermissions(session, node, user, permissions);
+				grantUserPermissions(session, node, user, permissions, false);
 			}
 			
 			HibernateUtil.commit(tx);
@@ -404,24 +404,33 @@ public class NodeBaseDAO {
 	/**
 	 * Grant user permissions
 	 */
-	private int grantUserPermissions(Session session, NodeBase node, String user, int permissions)
+	private int grantUserPermissions(Session session, NodeBase node, String user, int permissions, boolean recursive)
 			throws PathNotFoundException, AccessDeniedException, DatabaseException, HibernateException {
 		// log.info("grantUserPermissions({})", node.getUuid());
+		boolean canModify = true;
 		
 		// Security Check
-		SecurityHelper.checkRead(node);
-		SecurityHelper.checkSecurity(node);
-		
-		Integer currentPermissions = node.getUserPermissions().get(user);
-		
-		if (currentPermissions == null) {
-			node.getUserPermissions().put(user, permissions);
+		if (recursive) {
+			canModify = SecurityHelper.isGranted(node, Permission.READ) && SecurityHelper.isGranted(node, Permission.SECURITY);
 		} else {
-			node.getUserPermissions().put(user, permissions | currentPermissions);
+			SecurityHelper.checkRead(node);
+			SecurityHelper.checkSecurity(node);
 		}
 		
-		session.update(node);
-		return 1;
+		if (canModify) {
+			Integer currentPermissions = node.getUserPermissions().get(user);
+			
+			if (currentPermissions == null) {
+				node.getUserPermissions().put(user, permissions);
+			} else {
+				node.getUserPermissions().put(user, permissions | currentPermissions);
+			}
+			
+			session.update(node);
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 	
 	/**
@@ -430,7 +439,7 @@ public class NodeBaseDAO {
 	@SuppressWarnings("unchecked")
 	private int grantUserPermissionsInDepth(Session session, NodeBase node, String user, int permissions)
 			throws PathNotFoundException, AccessDeniedException, DatabaseException, HibernateException {
-		int total = grantUserPermissions(session, node, user, permissions);
+		int total = grantUserPermissions(session, node, user, permissions, true);
 		
 		// Calculate children nodes
 		String qs = "from NodeBase nb where nb.parent=:parent";
@@ -468,7 +477,7 @@ public class NodeBaseDAO {
 				int total = revokeUserPermissionsInDepth(session, node, user, permissions);
 				log.info("revokeUserPermissions.Total: {}", total);
 			} else {
-				revokeUserPermissions(session, node, user, permissions);
+				revokeUserPermissions(session, node, user, permissions, false);
 			}
 			
 			HibernateUtil.commit(tx);
@@ -493,28 +502,37 @@ public class NodeBaseDAO {
 	/**
 	 * Revoke user permissions
 	 */
-	private int revokeUserPermissions(Session session, NodeBase node, String user, int permissions)
+	private int revokeUserPermissions(Session session, NodeBase node, String user, int permissions, boolean recursive)
 			throws PathNotFoundException, AccessDeniedException, DatabaseException, HibernateException {
 		// log.info("revokeUserPermissions({})", node.getUuid());
+		boolean canModify = true;
 		
 		// Security Check
-		SecurityHelper.checkRead(node);
-		SecurityHelper.checkSecurity(node);
-		
-		Integer currentPermissions = node.getUserPermissions().get(user);
-		
-		if (currentPermissions != null) {
-			Integer perms = ~permissions & currentPermissions;
-			
-			if (perms == Permission.NONE) {
-				node.getUserPermissions().remove(user);
-			} else {
-				node.getUserPermissions().put(user, perms);
-			}
+		if (recursive) {
+			canModify = SecurityHelper.isGranted(node, Permission.READ) && SecurityHelper.isGranted(node, Permission.SECURITY);
+		} else {
+			SecurityHelper.checkRead(node);
+			SecurityHelper.checkSecurity(node);
 		}
 		
-		session.update(node);
-		return 1;
+		if (canModify) {
+			Integer currentPermissions = node.getUserPermissions().get(user);
+			
+			if (currentPermissions != null) {
+				Integer perms = ~permissions & currentPermissions;
+				
+				if (perms == Permission.NONE) {
+					node.getUserPermissions().remove(user);
+				} else {
+					node.getUserPermissions().put(user, perms);
+				}
+			}
+			
+			session.update(node);
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 	
 	/**
@@ -523,7 +541,7 @@ public class NodeBaseDAO {
 	@SuppressWarnings("unchecked")
 	private int revokeUserPermissionsInDepth(Session session, NodeBase node, String user, int permissions)
 			throws PathNotFoundException, AccessDeniedException, DatabaseException, HibernateException {
-		int total = revokeUserPermissions(session, node, user, permissions);
+		int total = revokeUserPermissions(session, node, user, permissions, true);
 		
 		// Calculate children nodes
 		String qs = "from NodeBase nb where nb.parent=:parent";
@@ -599,7 +617,7 @@ public class NodeBaseDAO {
 				int total = grantRolePermissionsInDepth(session, node, role, permissions);
 				log.info("grantRolePermissions.Total: {}", total);
 			} else {
-				grantRolePermissions(session, node, role, permissions);
+				grantRolePermissions(session, node, role, permissions, false);
 			}
 			
 			HibernateUtil.commit(tx);
@@ -624,24 +642,33 @@ public class NodeBaseDAO {
 	/**
 	 * Grant role permissions
 	 */
-	private int grantRolePermissions(Session session, NodeBase node, String role, int permissions)
+	private int grantRolePermissions(Session session, NodeBase node, String role, int permissions, boolean recursive)
 			throws PathNotFoundException, AccessDeniedException, DatabaseException, HibernateException {
 		// log.info("grantRolePermissions({})", node.getUuid());
+		boolean canModify = true;
 		
 		// Security Check
-		SecurityHelper.checkRead(node);
-		SecurityHelper.checkSecurity(node);
-		
-		Integer currentPermissions = node.getRolePermissions().get(role);
-		
-		if (currentPermissions == null) {
-			node.getRolePermissions().put(role, permissions);
+		if (recursive) {
+			canModify = SecurityHelper.isGranted(node, Permission.READ) && SecurityHelper.isGranted(node, Permission.SECURITY);
 		} else {
-			node.getRolePermissions().put(role, permissions | currentPermissions);
+			SecurityHelper.checkRead(node);
+			SecurityHelper.checkSecurity(node);
 		}
 		
-		session.update(node);
-		return 1;
+		if (canModify) {
+			Integer currentPermissions = node.getRolePermissions().get(role);
+			
+			if (currentPermissions == null) {
+				node.getRolePermissions().put(role, permissions);
+			} else {
+				node.getRolePermissions().put(role, permissions | currentPermissions);
+			}
+			
+			session.update(node);
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 	
 	/**
@@ -650,7 +677,7 @@ public class NodeBaseDAO {
 	@SuppressWarnings("unchecked")
 	private int grantRolePermissionsInDepth(Session session, NodeBase node, String role, int permissions)
 			throws PathNotFoundException, AccessDeniedException, DatabaseException, HibernateException {
-		int total = grantRolePermissions(session, node, role, permissions);
+		int total = grantRolePermissions(session, node, role, permissions, true);
 		
 		// Calculate children nodes
 		String qs = "from NodeBase nb where nb.parent=:parent";
@@ -688,7 +715,7 @@ public class NodeBaseDAO {
 				int total = revokeRolePermissionsInDepth(session, node, role, permissions);
 				log.info("revokeRolePermissions.Total: {}", total);
 			} else {
-				revokeRolePermissions(session, node, role, permissions);
+				revokeRolePermissions(session, node, role, permissions, false);
 			}
 			
 			HibernateUtil.commit(tx);
@@ -713,28 +740,37 @@ public class NodeBaseDAO {
 	/**
 	 * Revoke role permissions
 	 */
-	private int revokeRolePermissions(Session session, NodeBase node, String role, int permissions)
+	private int revokeRolePermissions(Session session, NodeBase node, String role, int permissions, boolean recursive)
 			throws PathNotFoundException, AccessDeniedException, DatabaseException, HibernateException {
 		// log.info("revokeRolePermissions({})", node.getUuid());
+		boolean canModify = true;
 		
 		// Security Check
-		SecurityHelper.checkRead(node);
-		SecurityHelper.checkSecurity(node);
-		
-		Integer currentPermissions = node.getRolePermissions().get(role);
-		
-		if (currentPermissions != null) {
-			Integer perms = ~permissions & currentPermissions;
-			
-			if (perms == Permission.NONE) {
-				node.getRolePermissions().remove(role);
-			} else {
-				node.getRolePermissions().put(role, perms);
-			}
+		if (recursive) {
+			canModify = SecurityHelper.isGranted(node, Permission.READ) && SecurityHelper.isGranted(node, Permission.SECURITY);
+		} else {
+			SecurityHelper.checkRead(node);
+			SecurityHelper.checkSecurity(node);
 		}
 		
-		session.update(node);
-		return 1;
+		if (canModify) {
+			Integer currentPermissions = node.getRolePermissions().get(role);
+			
+			if (currentPermissions != null) {
+				Integer perms = ~permissions & currentPermissions;
+				
+				if (perms == Permission.NONE) {
+					node.getRolePermissions().remove(role);
+				} else {
+					node.getRolePermissions().put(role, perms);
+				}
+			}
+			
+			session.update(node);
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 	
 	/**
@@ -743,7 +779,7 @@ public class NodeBaseDAO {
 	@SuppressWarnings("unchecked")
 	private int revokeRolePermissionsInDepth(Session session, NodeBase node, String role, int permissions)
 			throws PathNotFoundException, AccessDeniedException, DatabaseException, HibernateException {
-		int total = revokeRolePermissions(session, node, role, permissions);
+		int total = revokeRolePermissions(session, node, role, permissions, true);
 		
 		// Calculate children nodes
 		String qs = "from NodeBase nb where nb.parent=:parent";
@@ -782,7 +818,7 @@ public class NodeBaseDAO {
 				int total = changeSecurityInDepth(session, node, grantUsers, revokeUsers, grantRoles, revokeRoles);
 				log.info("changeSecurity.Total: {}", total);
 			} else {
-				changeSecurity(session, node, grantUsers, revokeUsers, grantRoles, revokeRoles);
+				changeSecurity(session, node, grantUsers, revokeUsers, grantRoles, revokeRoles, false);
 			}
 			
 			HibernateUtil.commit(tx);
@@ -808,68 +844,77 @@ public class NodeBaseDAO {
 	 * Change security.
 	 */
 	private int changeSecurity(Session session, NodeBase node, Map<String, Integer> grantUsers,
-			Map<String, Integer> revokeUsers, Map<String, Integer> grantRoles, Map<String, Integer> revokeRoles)
-			throws PathNotFoundException, AccessDeniedException, DatabaseException, HibernateException {
+			Map<String, Integer> revokeUsers, Map<String, Integer> grantRoles, Map<String, Integer> revokeRoles,
+			boolean recursive) throws PathNotFoundException, AccessDeniedException, DatabaseException, HibernateException {
 		log.info("changeSecurity({}, {}, {}, {}, {})", new Object[] { node.getUuid(), grantUsers, revokeUsers, grantRoles, revokeRoles });
+		boolean canModify = true;
 		
 		// Security Check
-		SecurityHelper.checkRead(node);
-		SecurityHelper.checkSecurity(node);
-		
-		// Grant Users
-		for (Entry<String, Integer> userGrant: grantUsers.entrySet()) {
-			Integer currentPermissions = node.getUserPermissions().get(userGrant.getKey());
-			
-			if (currentPermissions == null) {
-				node.getUserPermissions().put(userGrant.getKey(), userGrant.getValue());
-			} else {
-				node.getUserPermissions().put(userGrant.getKey(), userGrant.getValue() | currentPermissions);
-			}
+		if (recursive) {
+			canModify = SecurityHelper.isGranted(node, Permission.READ) && SecurityHelper.isGranted(node, Permission.SECURITY);
+		} else {
+			SecurityHelper.checkRead(node);
+			SecurityHelper.checkSecurity(node);
 		}
 		
-		// Revoke Users
-		for (Entry<String, Integer> userRevoke: revokeUsers.entrySet()) {
-			Integer currentPermissions = node.getUserPermissions().get(userRevoke.getKey());
-			
-			if (currentPermissions != null) {
-				Integer newPermissions = ~userRevoke.getValue() & currentPermissions;
+		if (canModify) {
+			// Grant Users
+			for (Entry<String, Integer> userGrant: grantUsers.entrySet()) {
+				Integer currentPermissions = node.getUserPermissions().get(userGrant.getKey());
 				
-				if (newPermissions == Permission.NONE) {
-					node.getUserPermissions().remove(userRevoke.getKey());
+				if (currentPermissions == null) {
+					node.getUserPermissions().put(userGrant.getKey(), userGrant.getValue());
 				} else {
-					node.getUserPermissions().put(userRevoke.getKey(), newPermissions);
+					node.getUserPermissions().put(userGrant.getKey(), userGrant.getValue() | currentPermissions);
 				}
 			}
-		}
-		
-		// Grant Roles
-		for (Entry<String, Integer> roleGrant: grantRoles.entrySet()) {
-			Integer currentPermissions = node.getUserPermissions().get(roleGrant.getKey());
 			
-			if (currentPermissions == null) {
-				node.getUserPermissions().put(roleGrant.getKey(), roleGrant.getValue());
-			} else {
-				node.getUserPermissions().put(roleGrant.getKey(), roleGrant.getValue() | currentPermissions);
-			}
-		}
-		
-		// Revoke Roles
-		for (Entry<String, Integer> roleRevoke: revokeRoles.entrySet()) {
-			Integer currentPermissions = node.getUserPermissions().get(roleRevoke.getKey());
-			
-			if (currentPermissions != null) {
-				Integer newPermissions = ~roleRevoke.getValue() & currentPermissions;
+			// Revoke Users
+			for (Entry<String, Integer> userRevoke: revokeUsers.entrySet()) {
+				Integer currentPermissions = node.getUserPermissions().get(userRevoke.getKey());
 				
-				if (newPermissions == Permission.NONE) {
-					node.getUserPermissions().remove(roleRevoke.getKey());
-				} else {
-					node.getUserPermissions().put(roleRevoke.getKey(), newPermissions);
+				if (currentPermissions != null) {
+					Integer newPermissions = ~userRevoke.getValue() & currentPermissions;
+					
+					if (newPermissions == Permission.NONE) {
+						node.getUserPermissions().remove(userRevoke.getKey());
+					} else {
+						node.getUserPermissions().put(userRevoke.getKey(), newPermissions);
+					}
 				}
 			}
+			
+			// Grant Roles
+			for (Entry<String, Integer> roleGrant: grantRoles.entrySet()) {
+				Integer currentPermissions = node.getUserPermissions().get(roleGrant.getKey());
+				
+				if (currentPermissions == null) {
+					node.getUserPermissions().put(roleGrant.getKey(), roleGrant.getValue());
+				} else {
+					node.getUserPermissions().put(roleGrant.getKey(), roleGrant.getValue() | currentPermissions);
+				}
+			}
+			
+			// Revoke Roles
+			for (Entry<String, Integer> roleRevoke: revokeRoles.entrySet()) {
+				Integer currentPermissions = node.getUserPermissions().get(roleRevoke.getKey());
+				
+				if (currentPermissions != null) {
+					Integer newPermissions = ~roleRevoke.getValue() & currentPermissions;
+					
+					if (newPermissions == Permission.NONE) {
+						node.getUserPermissions().remove(roleRevoke.getKey());
+					} else {
+						node.getUserPermissions().put(roleRevoke.getKey(), newPermissions);
+					}
+				}
+			}
+	
+			session.update(node);
+			return 1;
+		} else {
+			return 0;
 		}
-
-		session.update(node);
-		return 1;
 	}
 	
 	/**
@@ -879,7 +924,7 @@ public class NodeBaseDAO {
 	private int changeSecurityInDepth(Session session, NodeBase node, Map<String, Integer> grantUsers,
 			Map<String, Integer> revokeUsers, Map<String, Integer> grantRoles, Map<String, Integer> revokeRoles)
 			throws PathNotFoundException, AccessDeniedException, DatabaseException, HibernateException {
-		int total = changeSecurity(session, node, grantUsers, revokeUsers, grantRoles, revokeRoles);
+		int total = changeSecurity(session, node, grantUsers, revokeUsers, grantRoles, revokeRoles, true);
 		
 		// Calculate children nodes
 		String qs = "from NodeBase nb where nb.parent=:parent";

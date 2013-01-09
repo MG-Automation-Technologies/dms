@@ -67,6 +67,13 @@ public class SecurityHelper {
 	}
 	
 	/**
+	 * Check for node permissions
+	 */
+	public static boolean isGranted(NodeBase node, int permission) throws DatabaseException {
+		return accessManager.isGranted(node, permission);
+	}
+	
+	/**
 	 * Check for node read access
 	 */
 	public static void checkRead(NodeBase node) throws PathNotFoundException, DatabaseException {
