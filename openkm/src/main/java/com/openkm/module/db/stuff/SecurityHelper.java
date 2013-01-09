@@ -107,11 +107,12 @@ public class SecurityHelper {
 	/**
 	 * Check for node security
 	 */
-	public static void checkSecurity(NodeBase node) throws AccessDeniedException, DatabaseException {
+	public static void checkSecurity(NodeBase node) throws AccessDeniedException, PathNotFoundException,
+			DatabaseException {
 		log.debug("checkSecurity({})", node);
 		
 		if (!accessManager.isGranted(node, Permission.SECURITY)) {
-			String path = NodeBaseDAO.getInstance().getParentUuid(node.getUuid());
+			String path = NodeBaseDAO.getInstance().getPathFromUuid(node.getUuid());
 			throw new AccessDeniedException(node.getUuid() + " : " + path);
 		}
 	}
