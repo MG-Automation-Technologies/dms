@@ -846,7 +846,7 @@ public class NodeBaseDAO {
 	private int changeSecurity(Session session, NodeBase node, Map<String, Integer> grantUsers,
 			Map<String, Integer> revokeUsers, Map<String, Integer> grantRoles, Map<String, Integer> revokeRoles,
 			boolean recursive) throws PathNotFoundException, AccessDeniedException, DatabaseException, HibernateException {
-		log.info("changeSecurity({}, {}, {}, {}, {})", new Object[] { node.getUuid(), grantUsers, revokeUsers, grantRoles, revokeRoles });
+		log.debug("changeSecurity({}, {}, {}, {}, {})", new Object[] { node.getUuid(), grantUsers, revokeUsers, grantRoles, revokeRoles });
 		boolean canModify = true;
 		
 		// Security Check
