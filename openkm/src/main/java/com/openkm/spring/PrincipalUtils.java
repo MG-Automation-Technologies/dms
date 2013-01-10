@@ -21,13 +21,17 @@
 
 package com.openkm.spring;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 
@@ -104,7 +108,11 @@ public class PrincipalUtils {
 	 * Obtain authentication token
 	 */
 	public static Authentication getAuthentication() {
-		return SecurityContextHolder.getContext().getAuthentication();
+		if (SecurityHolder.get() != null) {
+			return SecurityHolder.get();
+		} else {
+			return SecurityContextHolder.getContext().getAuthentication();
+		}
 	}
 	
 	/**
@@ -112,5 +120,18 @@ public class PrincipalUtils {
 	 */
 	public static void setAuthentication(Authentication auth) {
 		SecurityContextHolder.getContext().setAuthentication(auth);
+	}
+	
+	/**
+	 * Create authentication token
+	 */
+	public static Authentication createAuthentication(String user, Set<String> roles) {
+		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		
+		for (String role : roles) {
+			authorities.add(new SimpleGrantedAuthority(role));
+		}
+		
+		return new UsernamePasswordAuthenticationToken(user, null, authorities);
 	}
 }

@@ -932,6 +932,9 @@ public class NodeBaseDAO {
 		q.setString("parent", node.getUuid());
 		List<NodeBase> ret = q.list();
 		
+		// Security Check
+		SecurityHelper.pruneNodeList(ret);
+		
 		for (NodeBase child : ret) {
 			total += changeSecurityInDepth(session, child, grantUsers, revokeUsers, grantRoles, revokeRoles);
 		}
