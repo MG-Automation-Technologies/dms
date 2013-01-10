@@ -42,7 +42,7 @@
 		out.println("</select>");
 		out.println("</td></tr>");
 		out.println("<tr><td align=\"right\">");
-		out.println("<input type=\"submit\" value=\"Send\">");
+		out.println("<input type=\"submit\" value=\"Generate\">");
 		out.println("</td></tr>");
 		out.println("</table>");
 		out.println("</form>");
