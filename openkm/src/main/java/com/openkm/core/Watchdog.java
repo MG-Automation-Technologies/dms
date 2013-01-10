@@ -48,11 +48,10 @@ public class Watchdog extends TimerTask {
 				if (Config.REPOSITORY_NATIVE) {
 					DbSessionManager sm = DbSessionManager.getInstance();
 					
-					for (Iterator<String> it = sm.getTokens().iterator(); it.hasNext(); ) {
-						String token = it.next();
+					for (String token : sm.getTokens()) {
+						DbSessionInfo si = sm.getInfo(token);
 						
-						if (!token.equals(sm.getSystemToken())) {
-							DbSessionInfo si = sm.getInfo(token);
+						if (!Config.SYSTEM_USER.equals(si.getAuth().getName())) {
 							Calendar expiration = (Calendar) si.getLastAccess().clone();
 							expiration.add(Calendar.SECOND, Config.SESSION_EXPIRATION);
 							log.debug(si.getAuth().getName() + ", Expiration: " + expiration.getTime());
