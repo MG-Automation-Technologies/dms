@@ -29,9 +29,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.openkm.automation.AutomationException;
 import com.openkm.bean.Repository;
+import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
+import com.openkm.core.ItemExistsException;
+import com.openkm.core.LockException;
 import com.openkm.core.MimeTypeConfig;
+import com.openkm.core.PathNotFoundException;
+import com.openkm.core.RepositoryException;
+import com.openkm.extension.core.ExtensionException;
 import com.openkm.kea.tree.KEATree;
 
 /**
@@ -75,7 +83,27 @@ public class RegisterThesaurusServlet extends BaseServlet {
 			out.println("It'll be displayed creation information while creating nodes until level "
 					+ (level + 1) + ", please be patient because tree deep level could be big.<br><br>");
 			out.flush();
-			KEATree.generateTree(null, level, "/"+Repository.THESAURUS, new Vector<String>(), out);
+			
+			try {
+				KEATree.generateTree(null, level, "/"+Repository.THESAURUS, new Vector<String>(), out);
+			} catch (PathNotFoundException e) {
+				sendErrorRedirect(request, response, e);
+			} catch (ItemExistsException e) {
+				sendErrorRedirect(request, response, e);
+			} catch (AccessDeniedException e) {
+				sendErrorRedirect(request, response, e);
+			} catch (RepositoryException e) {
+				sendErrorRedirect(request, response, e);
+			} catch (DatabaseException e) {
+				sendErrorRedirect(request, response, e);
+			} catch (ExtensionException e) {
+				sendErrorRedirect(request, response, e);
+			} catch (AutomationException e) {
+				sendErrorRedirect(request, response, e);
+			} catch (LockException e) {
+				sendErrorRedirect(request, response, e);
+			}
+			
 			out.println("<br><b>Finished thesaurus creation.</b><br>");
 		} else {
 			out.println("<b>Error - there's no thesaurus file defined in OpenKM.cfg</b>");
