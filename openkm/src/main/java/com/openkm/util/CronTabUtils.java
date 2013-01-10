@@ -63,7 +63,6 @@ public class CronTabUtils {
 			CronTabDAO.create(ct);
 		} else {
 			ct.setActive(true);
-			ct.setExpression(expression);
 			ct.setFileContent(SecureStore.b64Encode(content.getBytes()));
 			ct.setFileMime(MimeTypeConfig.MIME_BSH);
 			ct.setFileName(toFileName(name) + ".bsh");
