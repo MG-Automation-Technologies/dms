@@ -426,7 +426,6 @@ public class ExtendedDockPanel extends Composite {
 						case Keyboard.KEY_Z:
 							// Case CTRL+Z
 							if (event.getNativeEvent().getCtrlKey()) {
-								
 								if (Log.getCurrentLogLevel() == Log.LOG_LEVEL_DEBUG) {
 									Log.setCurrentLogLevel(Log.LOG_LEVEL_OFF);
 									Main.get().mainPanel.bottomPanel.setStatus("status.debug.disabled", false);
@@ -434,6 +433,7 @@ public class ExtendedDockPanel extends Composite {
 									Log.setCurrentLogLevel(Log.LOG_LEVEL_DEBUG);
 									Main.get().mainPanel.bottomPanel.setStatus("status.debug.enabled", false);
 								}
+								
 								propagate = false;
 							}
 							break;
