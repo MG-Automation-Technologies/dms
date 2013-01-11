@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.StackPanel;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.constants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.searchsaved.SearchSaved;
 import com.openkm.frontend.client.widget.searchuser.UserNews;
@@ -39,7 +40,6 @@ public class HistorySearch extends Composite {
 
 	// Constants defining the current view
 	public static final int NUMBER_OF_STACKS = 2;
-	public static final int STACK_HEIGHT = 22;
 
 	// Stack
 	public StackPanel stackPanel;
@@ -47,6 +47,7 @@ public class HistorySearch extends Composite {
 	public ScrollPanel scrollUserNewsSavedPanel;
 	public SearchSaved searchSaved;
 	public UserNews userNews;
+	private int skinExtrStackSize = 0;
 
 	/**
 	 * HistorySearch
@@ -101,6 +102,13 @@ public class HistorySearch extends Composite {
 	public void setSize(int width, int height) {
 		stackPanel.setSize("" + width, "" + height);
 		// Substract 2 pixels for borders on stackPanel
-		scrollSearchSavedPanel.setSize("" + (width - 2), ""+ (height - 2 - (NUMBER_OF_STACKS * STACK_HEIGHT)));
+		scrollSearchSavedPanel.setSize("" + (width - 2), ""+ (height - 2 - (NUMBER_OF_STACKS * (UIDesktopConstants.STACK_HEIGHT+skinExtrStackSize))));
+	}
+	
+	/**
+	 * @param skinExtrStackSize
+	 */
+	public void setSkinExtrStackSize(int skinExtrStackSize) {
+		this.skinExtrStackSize = skinExtrStackSize;
 	}
 }

@@ -373,7 +373,23 @@ public class Util {
 	 * 
 	 * @param title The css name
 	 */
-	public static native void changeCss(String title) /*-{
+	public static void changeCss(String title) {
+		if (title.equals("bigfont")) {
+			Main.get().mainPanel.desktop.navigator.setSkinExtrStackSize(1);
+			Main.get().mainPanel.search.historySearch.setSkinExtrStackSize(1);
+		} else {
+			Main.get().mainPanel.desktop.navigator.setSkinExtrStackSize(0);
+			Main.get().mainPanel.search.historySearch.setSkinExtrStackSize(0);
+		}
+		browserChangeCss(title);
+	}
+	
+	/**
+	 * Change on fly the actual css
+	 * 
+	 * @param title The css name
+	 */
+	public static native void browserChangeCss(String title) /*-{
 		new $wnd.changeCss(title);
 	}-*/;
 	
