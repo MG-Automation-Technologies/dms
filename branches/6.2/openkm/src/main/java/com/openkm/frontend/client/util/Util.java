@@ -382,6 +382,7 @@ public class Util {
 			Main.get().mainPanel.search.historySearch.setSkinExtrStackSize(0);
 		}
 		browserChangeCss(title);
+		Main.get().mainPanel.stylesChanged();
 	}
 	
 	/**
