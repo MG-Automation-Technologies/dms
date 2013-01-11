@@ -69,6 +69,7 @@ public class Navigator extends Composite {
 	public Status status;
 	private int width = 0;
 	private int height = 0;
+	private int skinExtrStackSize = 0;
 	
 	public Navigator() {
 		stackPanel = new ExtendedStackPanel();
@@ -191,25 +192,25 @@ public class Navigator extends Composite {
 		}
 		// Substract 2 pixels for borders on stackPanel
 		if (stackPanel.isTaxonomyVisible()) {
-			scrollTaxonomyPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * UIDesktopConstants.STACK_HEIGHT)));
+			scrollTaxonomyPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * (UIDesktopConstants.STACK_HEIGHT+skinExtrStackSize))));
 		}
 		if (stackPanel.isCategoriesVisible()) {
-			scrollCategoriesPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * UIDesktopConstants.STACK_HEIGHT)));
+			scrollCategoriesPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * (UIDesktopConstants.STACK_HEIGHT+skinExtrStackSize))));
 		}
 		if (stackPanel.isThesaurusVisible()) {
-			scrollThesaurusPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * UIDesktopConstants.STACK_HEIGHT)));
+			scrollThesaurusPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * (UIDesktopConstants.STACK_HEIGHT+skinExtrStackSize))));
 		}
 		if (stackPanel.isTemplatesVisible()) {
-			scrollTemplatePanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * UIDesktopConstants.STACK_HEIGHT)));
+			scrollTemplatePanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * (UIDesktopConstants.STACK_HEIGHT+skinExtrStackSize))));
 		}
 		if (stackPanel.isPersonalVisible()) {
-			scrollPersonalPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * UIDesktopConstants.STACK_HEIGHT)));
+			scrollPersonalPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * (UIDesktopConstants.STACK_HEIGHT+skinExtrStackSize))));
 		}
 		if (stackPanel.isMailVisible()) {
-			scrollMailPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * UIDesktopConstants.STACK_HEIGHT)));
+			scrollMailPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * (UIDesktopConstants.STACK_HEIGHT+skinExtrStackSize))));
 		}
 		if (stackPanel.isTrashVisible()) {
-			scrollTrashPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * UIDesktopConstants.STACK_HEIGHT)));
+			scrollTrashPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * (UIDesktopConstants.STACK_HEIGHT+skinExtrStackSize))));
 		}
 	}
 	
@@ -313,5 +314,12 @@ public class Navigator extends Composite {
 	 */
 	public int getStackIndex() {
 		return stackPanel.getStackIndex();
+	}
+	
+	/**
+	 * @param skinExtrStackSize
+	 */
+	public void setSkinExtrStackSize(int skinExtrStackSize) {
+		this.skinExtrStackSize = skinExtrStackSize;
 	}
 }
