@@ -26,27 +26,21 @@
         <select name="prf_misc_web_skin">
           <c:choose>
             <c:when test="${prf.prfMisc.webSkin == 'default'}">
-              <option value="default" selected="selected">default</option>
+              <option value="default" selected="selected">Default</option>
             </c:when>
-            <c:otherwise><option value="default">default</option></c:otherwise>
-          </c:choose>
-          <c:choose>
-            <c:when test="${prf.prfMisc.webSkin == 'test'}">
-              <option value="test" selected="selected">test</option>
-            </c:when>
-            <c:otherwise><option value="test">test</option></c:otherwise>
+            <c:otherwise><option value="default">Default</option></c:otherwise>
           </c:choose>
           <c:choose>
             <c:when test="${prf.prfMisc.webSkin == 'mediumfont'}">
-              <option value="mediumfont" selected="selected">mediumfont</option>
+              <option value="mediumfont" selected="selected">Medium font</option>
             </c:when>
-            <c:otherwise><option value="mediumfont">mediumfont</option></c:otherwise>
+            <c:otherwise><option value="mediumfont">Medium font</option></c:otherwise>
           </c:choose>
           <c:choose>
             <c:when test="${prf.prfMisc.webSkin == 'bigfont'}">
-              <option value="bigfont" selected="selected">bigfont</option>
+              <option value="bigfont" selected="selected">Big font</option>
             </c:when>
-            <c:otherwise><option value="bigfont">bigfont</option></c:otherwise>
+            <c:otherwise><option value="bigfont">Big font</option></c:otherwise>
           </c:choose>
         </select>
       </td>

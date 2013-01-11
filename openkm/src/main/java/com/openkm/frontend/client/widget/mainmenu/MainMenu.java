@@ -136,7 +136,6 @@ public class MainMenu extends Composite {
 	private MenuBar subMenuLanguage;
 	private MenuBar subMenuSkin;
 	private MenuItem skinDefault;
-	private MenuItem skinTest;
 	private MenuItem skinMediumFont;
 	private MenuItem skinBigFont;
 	private MenuItem skin;
@@ -407,18 +406,14 @@ public class MainMenu extends Composite {
 		subMenuSkin.setStyleName("okm-SubMenuBar");
 		skinDefault = new MenuItem(Util.menuHTML("img/icon/menu/skin_default.gif",
 				Main.i18n("general.menu.tools.skin.default")), true, setSkinDefault);
-		skinTest = new MenuItem(Util.menuHTML("img/icon/menu/skin_test.gif",
-				Main.i18n("general.menu.tools.skin.default2")), true, setSkinDefault2);
 		skinMediumFont = new MenuItem(Util.menuHTML("img/icon/menu/skin_test.gif",
 				Main.i18n("general.menu.tools.skin.mediumfont")), true, setSkinMediumFont);
 		skinBigFont = new MenuItem(Util.menuHTML("img/icon/menu/skin_test.gif",
 				Main.i18n("general.menu.tools.skin.bigfont")), true, setSkinBigFont);
 		skinDefault.addStyleName("okm-MainMenuItem");
-		skinTest.addStyleName("okm-MainMenuItem");
 		skinMediumFont.addStyleName("okm-MainMenuItem");
 		skinBigFont.addStyleName("okm-MainMenuItem");
 		subMenuSkin.addItem(skinDefault);
-		subMenuSkin.addItem(skinTest);
 		subMenuSkin.addItem(skinMediumFont);
 		subMenuSkin.addItem(skinBigFont);
 		
@@ -667,11 +662,9 @@ public class MainMenu extends Composite {
 		skin.setHTML(Util.menuHTML("img/icon/menu/skin.gif", Main.i18n("general.menu.tools.skin")));
 		skinDefault.setHTML(Util.menuHTML("img/icon/menu/skin_default.gif",
 				Main.i18n("general.menu.tools.skin.default")));
-		skinTest.setHTML(Util.menuHTML("img/icon/menu/skin_test.gif", Main.i18n("general.menu.tools.skin.default2")));
 		skinMediumFont.setHTML(Util.menuHTML("img/icon/menu/skin_test.gif",
 				Main.i18n("general.menu.tools.skin.mediumfont")));
 		skinBigFont.setHTML(Util.menuHTML("img/icon/menu/skin_test.gif", Main.i18n("general.menu.tools.skin.bigfont")));
-		skinTest.setHTML(Util.menuHTML("img/icon/menu/skin_test.gif", Main.i18n("general.menu.tools.skin.default2")));
 		debugConsole.setHTML(Util.menuHTML("img/icon/menu/console.gif", Main.i18n("general.menu.tools.debug.console")));
 		administration.setHTML(Util.menuHTML("img/icon/menu/administration.gif",
 				Main.i18n("general.menu.tools.administration")));
