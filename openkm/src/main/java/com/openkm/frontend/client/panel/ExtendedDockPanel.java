@@ -570,4 +570,11 @@ public class ExtendedDockPanel extends Composite {
 		dashboard.setSize(centerWidth, centerHeight);
 		administration.setSize(centerWidth, centerHeight);
 	}
+	
+	/**
+	 * stylesChanged
+	 */
+	public void stylesChanged() {
+		SetWidgetsSize();
+	}
 }
