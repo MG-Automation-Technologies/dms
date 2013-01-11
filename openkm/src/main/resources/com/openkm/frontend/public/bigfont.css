@@ -785,17 +785,108 @@ iframe {
 .okm-Button {
 	background-color: #E5E5E1;
 	border: 1px solid #A5A596;
-	font-size: 10pt;
+	font-size: 10px;
 	font-family: tahoma;
 	cursor: pointer; 
   	cursor: hand;
+}
+
+.okm-NoButton {
+	background-color: #E5E5E1;
+	border: 1px solid #A5A596;
+	font-size: 10px;
+	font-family: tahoma;
+	cursor: pointer; 
+  	cursor: hand;
+	background-image: url("img/icon/security/no.gif");
+	background-repeat: no-repeat;
+	padding-left: 18px;
+	background-position: left center; 
+}
+
+.okm-YesButton {
+	background-color: #E5E5E1;
+	border: 1px solid #A5A596;
+	font-size: 10px;
+	font-family: tahoma;
+	cursor: pointer; 
+  	cursor: hand;
+	background-image: url("img/icon/security/yes.gif");
+	background-repeat: no-repeat;
+	padding-left: 18px;
+	background-position: left center; 
+}
+
+.okm-SendButton {
+	background-color: #E5E5E1;
+	border: 1px solid #A5A596;
+	font-size: 10px;
+	font-family: tahoma;
+	cursor: pointer; 
+  	cursor: hand;
+	background-image: url("img/icon/actions/arrow_up.png");
+	background-repeat: no-repeat;
+	padding-left: 15px;
+	background-position: left center; 
+}
+
+.okm-AddButton {
+	background-color: #E5E5E1;
+	border: 1px solid #A5A596;
+	font-size: 10px;
+	font-family: tahoma;
+	cursor: pointer; 
+  	cursor: hand;
+	background-image: url("img/icon/actions/add.gif");
+	background-repeat: no-repeat;
+	padding-left: 15px;
+	background-position: left center; 
+}
+
+.okm-DeleteButton {
+	background-color: #E5E5E1;
+	border: 1px solid #A5A596;
+	font-size: 10px;
+	font-family: tahoma;
+	cursor: pointer; 
+  	cursor: hand;
+	background-image: url("img/icon/actions/delete.gif");
+	background-repeat: no-repeat;
+	padding-left: 15px;
+	background-position: left center; 
+}
+
+.okm-DownloadZipButton {
+	background-color: #E5E5E1;
+	border: 1px solid #A5A596;
+	font-size: 10px;
+	font-family: tahoma;
+	cursor: pointer; 
+  	cursor: hand;
+	background-image: url("img/icon/actions/export.gif");
+	background-repeat: no-repeat;
+	padding-left: 15px;
+	background-position: left center; 
+}
+
+.okm-HomeButton {
+	background-color: #E5E5E1;
+	border: 1px solid #A5A596;
+	font-size: 10px;
+	font-family: tahoma;
+	cursor: pointer; 
+  	cursor: hand;
+	background-image: url("img/icon/actions/home.png");
+	background-repeat: no-repeat;
+	padding-left: 15px;
+	background-position: left center; 
 }
 
 /* Iframe */
 .okm-Iframe {
 	border: 1px solid #A5A596;
 	font-size: 10px;
-	font-family: verdana, arial, sans-serif;
+	font-family: tahoma;
 	width: 100%;
 	height: 100%;
 }
@@ -814,7 +905,7 @@ iframe {
 .okm-Input-System {
 	border: 1px solid #A5A596;
 	font-size: 10px;
-	font-family: verdana, arial, sans-serif;
+	font-family: tahoma;
 	-moz-user-select: normal;
     -khtml-user-select: normal;
     user-select: normal;
@@ -835,7 +926,7 @@ iframe {
 .okm-TextArea {
 	border: 1px solid #A5A596;
 	font-size: 10px;
-	font-family: verdana, arial, sans-serif;
+	font-family: tahoma;
     background-color: #fff;
 }
 
@@ -1361,7 +1452,7 @@ iframe {
 .okm-KeyMap-Suggest {
 	background-color: #FFFFFF;
 	font-size: 10px;
-	font-family: verdana, arial, sans-serif;
+	font-family: tahoma;
 	-moz-user-select: normal;
     -khtml-user-select: normal;
     user-select: normal;
@@ -1492,7 +1583,7 @@ iframe {
 	border-left: 1px solid #A5A596;
 	border-bottom: 1px solid #A5A596;
 	font-size: 10px;
-	font-family: verdana, arial, sans-serif;
+	font-family: tahoma;
 	-moz-user-select: normal;
     -khtml-user-select: normal;
     user-select: normal;
@@ -1503,7 +1594,7 @@ iframe {
 	border-left: 1px solid #A5A596;
 	border-top: 1px solid #A5A596;
 	font-size: 10px;
-	font-family: verdana, arial, sans-serif;
+	font-family: tahoma;
 	-moz-user-select: normal;
     -khtml-user-select: normal;
     user-select: normal;
