@@ -188,8 +188,8 @@ public class FindFolderSelectPopup extends DialogBox  {
 		vPanel.setCellHeight(keyword, "25");
 		vPanel.setCellHeight(scrollFolderPanel, "300");
 
-		cancelButton.setStyleName("okm-Button");
-		actionButton.setStyleName("okm-Button");
+		cancelButton.setStyleName("okm-NoButton");
+		actionButton.setStyleName("okm-YesButton");
 		folderTable.setStyleName("okm-NoWrap");
 		folderTable.addStyleName("okm-Table-Row");
 		keyword.setStyleName("okm-Input");

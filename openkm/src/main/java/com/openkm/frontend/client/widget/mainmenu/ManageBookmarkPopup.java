@@ -108,7 +108,7 @@ public class ManageBookmarkPopup extends DialogBox {
 				}
 			}
 		);
-		cancelButton.setStyleName("okm-Button");
+		cancelButton.setStyleName("okm-NoButton");
 		
 		deleteButton = new Button(Main.i18n("button.delete"), new ClickHandler() { 
 			@Override
@@ -119,7 +119,7 @@ public class ManageBookmarkPopup extends DialogBox {
 				}
 			}
 		);
-		deleteButton.setStyleName("okm-Button");
+		deleteButton.setStyleName("okm-DeleteButton");
 		deleteButton.setEnabled(false);
 		
 		updateButton = new Button(Main.i18n("button.update"), new ClickHandler() { 
@@ -135,7 +135,7 @@ public class ManageBookmarkPopup extends DialogBox {
 				}
 			}
 		);
-		updateButton.setStyleName("okm-Button");
+		updateButton.setStyleName("okm-YesButton");
 		updateButton.setEnabled(false);
 		
 		table = new FlexTable();

@@ -63,8 +63,8 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 	private ScrollPanel scrollDatabaseRecordPanel;
 	private TextBox record;
 	private FlexTable recordTabla;
-	private Button cancelBoton;
-	private Button acceptBoton;
+	private Button cancelButton;
+	private Button acceptButton;
 	private int selectedRow = -1;
 	private Map<Integer, GWTKeyValue> rowKeyValueMap;
 	private List<String> tables;
@@ -109,7 +109,7 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 			@Override
 			public void onClick(ClickEvent event) {
 				markSelectedRow(recordTabla.getCellForEvent(event).getRowIndex());
-				acceptBoton.setEnabled(true);
+				acceptButton.setEnabled(true);
 			}
 		});
 		
@@ -117,15 +117,15 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 		scrollDatabaseRecordPanel.setPixelSize(290,150);
 		scrollDatabaseRecordPanel.setStyleName("okm-Popup-text");
 		
-		cancelBoton = new Button(Main.i18n("button.cancel"), new ClickHandler() {
+		cancelButton = new Button(Main.i18n("button.cancel"), new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				hide();
 			}
 		});
-		cancelBoton.setStyleName("okm-Button");
+		cancelButton.setStyleName("okm-NoButton");
 		
-		acceptBoton = new Button(Main.i18n("button.accept"), new ClickHandler() {
+		acceptButton = new Button(Main.i18n("button.accept"), new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				if (selectedRow>=0) {
@@ -140,13 +140,13 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 				hide();
 			}
 		});
-		acceptBoton.setEnabled(false);
-		acceptBoton.setStyleName("okm-Button");
+		acceptButton.setEnabled(false);
+		acceptButton.setStyleName("okm-YesButton");
 		
 		HorizontalPanel hPanel = new HorizontalPanel();
-		hPanel.add(cancelBoton);
+		hPanel.add(cancelButton);
 		hPanel.add(new HTML("&nbsp;"));
-		hPanel.add(acceptBoton);
+		hPanel.add(acceptButton);
 		
 		if (suggestBox.getFilterMinLen()>0) {
 			HorizontalPanel hInfoPanel = new HorizontalPanel();
@@ -184,7 +184,7 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 		removeAllRows();
 		selectedRow = -1;
 		record.setReadOnly(true);
-		acceptBoton.setEnabled(false);
+		acceptButton.setEnabled(false);
 		status.setGetDatabaseRecords();
 		keyValueService.getKeyValues(tables, MessageFormat.format(suggestBox.getFilterQuery(), record.getText()), new AsyncCallback<List<GWTKeyValue>>() {
 			@Override
@@ -213,7 +213,7 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 		removeAllRows();
 		record.setText("");
 		record.setReadOnly(false);
-		acceptBoton.setEnabled(false);
+		acceptButton.setEnabled(false);
 		rowKeyValueMap = new HashMap<Integer, GWTKeyValue>();
 		super.show();
 		record.setFocus(true);
@@ -265,7 +265,7 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 	 * langRefresh
 	 */
 	public void langRefresh() {
-		cancelBoton.setHTML(Main.i18n("button.cancel"));
-		acceptBoton.setHTML(Main.i18n("button.accept"));
+		cancelButton.setHTML(Main.i18n("button.cancel"));
+		acceptButton.setHTML(Main.i18n("button.accept"));
 	}
 }

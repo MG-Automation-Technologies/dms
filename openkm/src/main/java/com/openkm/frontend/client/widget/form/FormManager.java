@@ -227,7 +227,7 @@ public class FormManager {
 			}
 			
 			Button transButton = new Button(gWTButton.getLabel());
-			transButton.setStyleName("okm-Button");
+			transButton.setStyleName("okm-YesButton");
 			HTML space = new HTML("&nbsp;");
 			submitButtonPanel.add(transButton);
 			submitButtonPanel.add(space);
@@ -883,7 +883,7 @@ public class FormManager {
 				});
 				
 				addButton.setEnabled((!readOnly && !gwtSelect.isReadonly()) || isSearchView); // read only
-				addButton.setStyleName("okm-Button");
+				addButton.setStyleName("okm-AddButton");
 				
 				hPanel.add(tableMulti);
 				hPanel.add(new HTML("&nbsp;"));
@@ -1204,7 +1204,7 @@ public class FormManager {
 					});
 				}
 				
-				downloadButton.setStyleName("okm-Button");
+				downloadButton.setStyleName("okm-DownloadButton");
 				printTable.setWidget(downloadTableRow, 0, new HTML("&nbsp;&nbsp;&nbsp;" + node.getLabel()
 						+ "&nbsp;&nbsp;"));
 				printTable.setWidget(downloadTableRow, 1, downloadButton);
