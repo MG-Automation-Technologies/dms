@@ -84,7 +84,7 @@ public class ErrorPopup extends DialogBox implements ClickHandler {
 		vPanel.setCellHorizontalAlignment(sPanel, VerticalPanel.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(button, VerticalPanel.ALIGN_CENTER);
 		
-		button.setStyleName("okm-Button");
+		button.setStyleName("okm-YesButton");
 
 		hide();
 		setWidget(vPanel);

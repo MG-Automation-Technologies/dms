@@ -71,7 +71,7 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 		vPanel.setCellHorizontalAlignment(text, VerticalPanel.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(button, VerticalPanel.ALIGN_CENTER);
 		
-		button.setStyleName("okm-Button");
+		button.setStyleName("okm-YesButton");
 		
 		super.hide();
 		setWidget(vPanel);

@@ -122,8 +122,8 @@ public class ConfirmPopup extends DialogBox {
 
 		vPanel.setWidth("300px");
 		vPanel.setHeight("100px");
-		cancelButton.setStyleName("okm-Button");
-		acceptButton.setStyleName("okm-Button");
+		cancelButton.setStyleName("okm-NoButton");
+		acceptButton.setStyleName("okm-YesButton");
 
 		text.setHTML("");
 		

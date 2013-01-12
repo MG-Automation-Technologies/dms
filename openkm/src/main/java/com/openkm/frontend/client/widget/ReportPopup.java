@@ -68,7 +68,7 @@ public class ReportPopup extends DialogBox {
 				hide();
 			}
 		});
-		cancelbutton.setStyleName("okm-Button");
+		cancelbutton.setStyleName("okm-NoButton");
 		executeButton =  new Button(Main.i18n("button.execute"));
 		executeButton.addClickHandler(new ClickHandler() {
 			@Override
@@ -82,7 +82,7 @@ public class ReportPopup extends DialogBox {
 				}
 			}
 		});
-		executeButton.setStyleName("okm-Button");
+		executeButton.setStyleName("okm-YesButton");
 		
 		HorizontalPanel hPanel = new HorizontalPanel();
 		hPanel.add(cancelbutton);

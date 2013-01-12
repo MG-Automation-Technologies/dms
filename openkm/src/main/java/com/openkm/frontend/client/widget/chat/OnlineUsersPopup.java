@@ -120,8 +120,8 @@ public class OnlineUsersPopup extends DialogBox {
 		scrollPanel.setStyleName("okm-PanelSelected");
 		scrollPanel.addStyleName("okm-Input");
 		table.addStyleName("okm-DisableSelect");
-		cancel.setStyleName("okm-Button");
-		accept.setStyleName("okm-Button");
+		cancel.setStyleName("okm-NoButton");
+		accept.setStyleName("okm-YesButton");
 		
 		vPanel.setWidth("250px");
 		vPanel.setHeight("350px");

@@ -108,8 +108,8 @@ public class WorkflowPopup extends DialogBox implements WorkflowWidgetToFire {
 		
 		vPanel.setWidth("300px");
 		vPanel.setHeight("50px");
-		button.setStyleName("okm-Button");
-		addButton.setStyleName("okm-Button");
+		button.setStyleName("okm-YesButton");
+		addButton.setStyleName("okm-AddButton");
 		addButton.setEnabled(false);
 		
 		hPanel.add(button);
