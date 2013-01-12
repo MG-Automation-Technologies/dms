@@ -355,10 +355,10 @@ public class UserPopup extends DialogBox implements ClickHandler {
 		imapError.setStyleName("okm-Input-Error");
 		imapTestError.setStyleName("okm-Input-Error");
 		imapTestOK.setStyleName("okm-Input-Ok");
-		update.setStyleName("okm-Button");
-		cancel.setStyleName("okm-Button");
-		delete.setStyleName("okm-Button");
-		test.setStyleName("okm-Button");
+		update.setStyleName("okm-ChangeButton");
+		cancel.setStyleName("okm-NoButton");
+		delete.setStyleName("okm-DeleteButton");
+		test.setStyleName("okm-YesButton");
 		
 		setPopupPosition(left, top);
 		

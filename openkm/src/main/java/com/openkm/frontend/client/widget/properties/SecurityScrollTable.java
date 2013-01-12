@@ -130,7 +130,7 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 		table.setSize("540","140");
 		
 		button = new Button(Main.i18n("button.update"), this);
-		button.setStyleName("okm-Button");
+		button.setStyleName("okm-ChangeButton");
 		
 		initSecurity();
 		

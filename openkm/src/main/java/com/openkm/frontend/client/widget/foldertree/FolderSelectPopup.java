@@ -197,8 +197,8 @@ public class FolderSelectPopup extends DialogBox  {
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHeight(scrollDirectoryPanel, "350");
 
-		cancelButton.setStyleName("okm-Button");
-		actionButton.setStyleName("okm-Button");
+		cancelButton.setStyleName("okm-NoButton");
+		actionButton.setStyleName("okm-YesButton");
 		
 		massiveStatus = new com.openkm.frontend.client.widget.popup.Status(this);
 		massiveStatus.setStyleName("okm-StatusPopup");

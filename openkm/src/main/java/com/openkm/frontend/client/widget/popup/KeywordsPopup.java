@@ -197,7 +197,7 @@ public class KeywordsPopup extends DialogBox {
 				hide();
 			}
 		});
-		close.setStyleName("okm-Button");
+		close.setStyleName("okm-NoButton");
 		
 		hKeyPanel.setWidth("250");
 		vPanel.setCellHeight(space, "5");

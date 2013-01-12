@@ -79,7 +79,7 @@ public class NotesPopup extends DialogBox {
 				addNote();
 			}
 		});
-		add.setStyleName("okm-Button");
+		add.setStyleName("okm-AddButton");
 		
 		cancel = new Button(Main.i18n("button.cancel"), new ClickHandler() {
 			@Override
@@ -88,7 +88,7 @@ public class NotesPopup extends DialogBox {
 				hide();
 			}
 		});
-		cancel.setStyleName("okm-Button");
+		cancel.setStyleName("okm-NoButton");
 		
 		HorizontalPanel hPanel = new HorizontalPanel();
 		hPanel.add(add);
