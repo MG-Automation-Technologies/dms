@@ -91,7 +91,6 @@ public class FileUploadPopup extends DialogBox {
 		
 		sendButton = new Button();
 		sendButton.setText(Main.i18n("fileupload.button.send"));
-		sendButton.setStyleName("okm-Button");
 		// Set up a click listener on the proceed check box
 		sendButton.addClickHandler(new ClickHandler() { 
 			@Override
@@ -152,8 +151,9 @@ public class FileUploadPopup extends DialogBox {
 		vPanel.setCellHorizontalAlignment(ffUpload, VerticalPanel.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(vButtonPanel, VerticalPanel.ALIGN_CENTER);
 		
-		closeButton.setStyleName("okm-Button");
-		addButton.setStyleName("okm-Button");
+		closeButton.setStyleName("okm-NoButton");
+		addButton.setStyleName("okm-AddButton");
+		sendButton.setStyleName("okm-SendButton");
 		
 		setWidget(vPanel);
 	}

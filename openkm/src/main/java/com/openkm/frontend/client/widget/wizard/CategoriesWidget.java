@@ -138,7 +138,7 @@ public class CategoriesWidget extends Composite {
 		setRowWordWarp(0, 0,true, tableSubscribedCategories);
 
 		table.setStyleName("okm-DisableSelect");
-		actionButton.setStyleName("okm-Button");
+		actionButton.setStyleName("okm-AddButton");
 		tableSubscribedCategories.setStyleName("okm-DisableSelect");
 		
 		// Resets to initial tree value

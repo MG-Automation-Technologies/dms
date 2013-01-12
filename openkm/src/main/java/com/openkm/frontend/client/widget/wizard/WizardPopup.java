@@ -103,7 +103,7 @@ public class WizardPopup extends DialogBox {
 		vPanelFired.setSize("100%", "20");
 		setText(Main.i18n("wizard.document.uploading"));
 		
-		actualButton.setStyleName("okm-Button");
+		actualButton.setStyleName("okm-YesButton");
 		
 		super.hide();
 		setWidget(vPanelFired);
@@ -391,7 +391,7 @@ public class WizardPopup extends DialogBox {
 				executeActionButton();
 			}
 		});
-		button.setStyleName("okm-Button");
+		button.setStyleName("okm-YesButton");
 		button.setEnabled(false);
 		return button;
 	}
@@ -409,7 +409,7 @@ public class WizardPopup extends DialogBox {
 				executeActionButton();
 			}
 		});
-		button.setStyleName("okm-Button");
+		button.setStyleName("okm-YesButton");
 		button.setEnabled(false);
 		return button;
 	}

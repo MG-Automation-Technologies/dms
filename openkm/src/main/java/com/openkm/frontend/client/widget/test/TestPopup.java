@@ -164,7 +164,7 @@ public class TestPopup extends DialogBox {
 				log("Agent: ", Util.getUserAgent());
 			}
 		});
-		getUserAgent.setStyleName("okm-Button");
+		getUserAgent.setStyleName("okm-YesButton");
 		hPanel3.add(getUserAgent);
 		
 		// Log
