@@ -136,8 +136,8 @@ public class PropertyGroupPopup extends DialogBox {
 		grpNamePanel.setWidth("100%");
 		grpNamePanel.setCellHorizontalAlignment(propertyGroupName, HasAlignment.ALIGN_CENTER);
 		
-		cancel.setStyleName("okm-Button");
-		add.setStyleName("okm-Button");
+		cancel.setStyleName("okm-NoButton");
+		add.setStyleName("okm-AddButton");
 		add.setEnabled(false);
 		
 		hPanel.add(cancel);

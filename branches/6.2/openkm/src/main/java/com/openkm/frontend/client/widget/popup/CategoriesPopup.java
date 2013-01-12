@@ -144,8 +144,8 @@ public class CategoriesPopup extends DialogBox {
 		setRowWordWarp(0, 0, true, tableSubscribedCategories);
 		
 		table.setStyleName("okm-DisableSelect");
-		close.setStyleName("okm-Button");
-		add.setStyleName("okm-Button");
+		close.setStyleName("okm-NoButton");
+		add.setStyleName("okm-AddButton");
 		tableSubscribedCategories.setStyleName("okm-DisableSelect");
 		
 		// Resets to initial tree value

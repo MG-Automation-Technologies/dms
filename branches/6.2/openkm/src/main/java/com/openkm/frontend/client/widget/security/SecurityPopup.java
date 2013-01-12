@@ -144,8 +144,8 @@ public class SecurityPopup extends DialogBox {
 		
 		vPanel.setWidth(String.valueOf(width));
 		
-		close.setStyleName("okm-Button");
-		change.setStyleName("okm-Button");
+		close.setStyleName("okm-NoButton");
+		change.setStyleName("okm-ChangeButton");
 		status.setStyleName("okm-StatusPopup");
 		
 		vPanel.setWidth(String.valueOf(width));
