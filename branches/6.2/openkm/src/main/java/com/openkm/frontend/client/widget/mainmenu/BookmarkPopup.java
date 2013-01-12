@@ -93,7 +93,7 @@ public class BookmarkPopup extends DialogBox {
 				}
 			}
 		);
-		cancelButton.setStyleName("okm-Button");
+		cancelButton.setStyleName("okm-NoButton");
 		
 		acceptButton = new Button(Main.i18n("button.accept"), new ClickHandler() { 
 			@Override
@@ -106,7 +106,7 @@ public class BookmarkPopup extends DialogBox {
 				}
 			}
 		);
-		acceptButton.setStyleName("okm-Button");
+		acceptButton.setStyleName("okm-AddButton ");
 		
 		hPanel.add(cancelButton);
 		hPanel.add(new HTML("&nbsp;"));
