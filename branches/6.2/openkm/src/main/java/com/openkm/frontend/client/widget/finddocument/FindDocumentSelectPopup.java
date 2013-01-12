@@ -200,8 +200,8 @@ public class FindDocumentSelectPopup extends DialogBox  {
 		vPanel.setCellHeight(keyword, "25");
 		vPanel.setCellHeight(scrollDocumentPanel, "300");
 
-		cancelButton.setStyleName("okm-Button");
-		actionButton.setStyleName("okm-Button");
+		cancelButton.setStyleName("okm-NoButton");
+		actionButton.setStyleName("okm-YesButton");
 		documentTable.setStyleName("okm-NoWrap");
 		documentTable.addStyleName("okm-Table-Row");
 		keyword.setStyleName("okm-Input");

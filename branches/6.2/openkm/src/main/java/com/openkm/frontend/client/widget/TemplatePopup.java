@@ -108,7 +108,7 @@ public class TemplatePopup extends DialogBox {
 				hide();
 			}
 		});
-		cancel.setStyleName("okm-Button");
+		cancel.setStyleName("okm-NoButton");
 		
 		create =  new Button(Main.i18n("button.create"));
 		create.addClickHandler(new ClickHandler() {
@@ -118,7 +118,7 @@ public class TemplatePopup extends DialogBox {
 				create();
 			}
 		});
-		create.setStyleName("okm-Button");
+		create.setStyleName("okm-AddButton");
 		
 		hButtonPanel = new HorizontalPanel();
 		hButtonPanel.add(cancel);

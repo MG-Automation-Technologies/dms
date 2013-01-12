@@ -98,8 +98,8 @@ public class CategoriesSelectPopup extends DialogBox  {
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHeight(scrollDirectoryPanel, "250");
 
-		cancelButton.setStyleName("okm-Button");
-		actionButton.setStyleName("okm-Button");
+		cancelButton.setStyleName("okm-NoButton");
+		actionButton.setStyleName("okm-AddButton");
 
 		super.hide();
 		setWidget(vPanel);

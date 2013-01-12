@@ -65,7 +65,7 @@ public class DebugConsolePopup extends DialogBox implements ClickHandler {
 		
 		vPanel.setCellHorizontalAlignment(button, VerticalPanel.ALIGN_CENTER);
 
-		button.setStyleName("okm-Button");
+		button.setStyleName("okm-YesButton");
 
 		super.hide();
 		Log.getLogger(DivLogger.class).getWidget().setVisible(true);

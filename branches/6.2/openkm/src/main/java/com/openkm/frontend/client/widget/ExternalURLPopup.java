@@ -83,7 +83,7 @@ public class ExternalURLPopup extends DialogBox {
 		vPanel.setCellHorizontalAlignment(iframe, HorizontalPanel.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(button, HorizontalPanel.ALIGN_CENTER);
 		
-		button.setStyleName("okm-Button");
+		button.setStyleName("okm-YesButton");
 
 		setWidget(vPanel);
 	}

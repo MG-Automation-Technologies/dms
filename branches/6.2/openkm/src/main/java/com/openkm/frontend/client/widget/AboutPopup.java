@@ -76,7 +76,7 @@ public class AboutPopup extends DialogBox implements ClickHandler {
 		
 		vPanel.setWidth("300px");
 		vPanel.setHeight("195px");
-		button.setStyleName("okm-Button");
+		button.setStyleName("okm-YesButton");
 		
 		text.setHTML(msg);
 		

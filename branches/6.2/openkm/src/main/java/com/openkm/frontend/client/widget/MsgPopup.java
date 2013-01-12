@@ -84,7 +84,7 @@ public class MsgPopup extends DialogBox implements ClickHandler {
 		vPanel.setCellHorizontalAlignment(button, VerticalPanel.ALIGN_CENTER);
 		
 		center();
-		button.setStyleName("okm-Button");
+		button.setStyleName("okm-YesButton");
 		table.setStyleName("okm-NoWrap");
 		
 		hide();

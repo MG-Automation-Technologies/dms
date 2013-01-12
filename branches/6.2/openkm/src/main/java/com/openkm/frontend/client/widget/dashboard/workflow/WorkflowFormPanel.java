@@ -240,8 +240,8 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 		
 		table.setStyleName("okm-NoWrap");
 		vPanel.setStyleName("okm-WorkflowFormPanel");
-		submitForm.setStyleName("okm-Button");
-		add.setStyleName("okm-Button");
+		submitForm.setStyleName("okm-YesButton");
+		add.setStyleName("okm-AddButton");
 		textArea.setStyleName("okm-TextArea");
 		tableNotes.setStyleName("okm-DisableSelect");
 		
