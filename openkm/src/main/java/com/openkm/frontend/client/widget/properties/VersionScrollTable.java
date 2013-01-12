@@ -83,7 +83,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 		buttonRestore = new ArrayList<Button>();
 		
 		purge = new Button(Main.i18n("version.purge.document"),this);
-		purge.setStyleName("okm-Button");
+		purge.setStyleName("okm-DeleteButton");
 		purge.setEnabled(false);
 		
 		ScrollTableImages scrollTableImages = new ScrollTableImages(){
@@ -275,7 +275,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 			dataTable.setWidget(rows, 5, restoreButton);
 			dataTable.getCellFormatter().setHorizontalAlignment(rows, 5, HorizontalPanel.ALIGN_CENTER);
 			buttonRestore.add(restoreButton);
-			restoreButton.setStyleName("okm-Button");
+			restoreButton.setStyleName("okm-YesButton");
 		}
 		
 		Button viewButton = new Button(Main.i18n("button.view"), new ClickHandler() { 
@@ -292,7 +292,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 		dataTable.setWidget(rows, 4, viewButton);
 		dataTable.getCellFormatter().setHorizontalAlignment(rows, 4, HorizontalPanel.ALIGN_CENTER);
 		buttonView.add(viewButton);
-		viewButton.setStyleName("okm-Button");
+		viewButton.setStyleName("okm-ViewButton");
 	}
 	
 	/**

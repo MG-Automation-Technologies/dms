@@ -147,8 +147,8 @@ public class GroupPopup extends DialogBox {
 		
 		vPanel.setWidth("300px");
 		vPanel.setHeight("100px");
-		closeButton.setStyleName("okm-Button");
-		addButton.setStyleName("okm-Button");
+		closeButton.setStyleName("okm-NoButton");
+		addButton.setStyleName("okm-AddButton");
 		addButton.setEnabled(false);
 		
 		hPanel.add(closeButton);

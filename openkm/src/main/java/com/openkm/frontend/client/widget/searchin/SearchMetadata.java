@@ -79,7 +79,7 @@ public class SearchMetadata extends Composite {
 		table.setWidget(0, 0, addGroup);
 		table.setWidget(1, 0, formManager.getTable());
 		
-		addGroup.setStyleName("okm-Button");
+		addGroup.setStyleName("okm-AddButton");
 		addGroup.addStyleName("okm-NoWrap");
 		
 		initWidget(scrollPanel);

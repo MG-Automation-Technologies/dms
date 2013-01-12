@@ -110,8 +110,8 @@ public class RichTextPopup extends DialogBox {
 		hPanel.setCellWidth(space4, "5");
 		
 		url.setStyleName("okm-Input");
-		cancelButton.setStyleName("okm-Button");
-		addButton.setStyleName("okm-Button");
+		cancelButton.setStyleName("okm-NoButton");
+		addButton.setStyleName("okm-AddButton");
 
 		super.hide();
 		setWidget(hPanel);

@@ -78,7 +78,7 @@ public class StartUpPopup extends DialogBox implements ClickHandler {
 		vPanel.add(new HTML("&nbsp;"));
 		
 		button.setVisible(false);
-		button.setStyleName("okm-Button");
+		button.setStyleName("okm-YesButton");
 		
 		vPanel.setCellHorizontalAlignment(scrollPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(table, HasAlignment.ALIGN_CENTER);
