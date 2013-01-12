@@ -146,9 +146,9 @@ public class Notes extends Composite {
 		newNotePanel.setCellHorizontalAlignment(gridRichText, HasAlignment.ALIGN_CENTER);
 		newNotePanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
 		
-		add.setStyleName("okm-Button");
-		update.setStyleName("okm-Button");
-		cancel.setStyleName("okm-Button");
+		add.setStyleName("okm-AddButton");
+		update.setStyleName("okm-YesButton");
+		cancel.setStyleName("okm-NoButton");
 
 		tableNotes.setWidth("100%");
 		

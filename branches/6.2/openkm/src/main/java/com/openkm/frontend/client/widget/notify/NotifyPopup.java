@@ -143,8 +143,8 @@ public class NotifyPopup extends DialogBox  {
 		
 		vPanel.setWidth("100%");
 		
-		closeButton.setStyleName("okm-Button");
-		sendButton.setStyleName("okm-Button");
+		closeButton.setStyleName("okm-NoButton");
+		sendButton.setStyleName("okm-YesButton");
 		
 		commentTXT.addStyleName("okm-DisableSelect");
 		notifyPanel.addStyleName("okm-DisableSelect");

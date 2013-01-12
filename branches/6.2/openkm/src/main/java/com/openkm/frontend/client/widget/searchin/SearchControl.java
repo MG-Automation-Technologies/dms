@@ -344,10 +344,10 @@ public class SearchControl extends Composite {
 		table.getCellFormatter().setVisible(4, 0, false);
 		table.getCellFormatter().setVisible(4, 1, false);
 		
-		searchButton.setStyleName("okm-Button");
-		saveSearchButton.setStyleName("okm-Button");
+		searchButton.setStyleName("okm-YesButton");
+		saveSearchButton.setStyleName("okm-AddButton");
 		saveSearchButton.addStyleName("okm-NoWrap");
-		cleanButton.setStyleName("okm-Button");
+		cleanButton.setStyleName("okm-NoButton");
 		searchSavedName.setStyleName("okm-Input");
 		resultPage.setStyleName("okm-Input");
 		

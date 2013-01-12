@@ -152,9 +152,9 @@ public class PropertyGroup extends Composite implements HasPropertyGroupHandlerE
 		cancelButton.setVisible(false);  // Not shows cancel button
 		
 		// Button format
-		changeButton.setStyleName("okm-Button");
-		removeButton.setStyleName("okm-Button");
-		cancelButton.setStyleName("okm-Button");
+		changeButton.setStyleName("okm-ChangeButton");
+		removeButton.setStyleName("okm-DeleteButton");
+		cancelButton.setStyleName("okm-NoButton");
 
 		getProperties();
 		initWidget(scrollPanel);
