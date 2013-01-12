@@ -100,8 +100,8 @@ public class ThesaurusSelectPopup extends DialogBox  {
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHeight(thesaurusPanel, "300");
 
-		cancelButton.setStyleName("okm-Button");
-		actionButton.setStyleName("okm-Button");
+		cancelButton.setStyleName("okm-NoButton");
+		actionButton.setStyleName("okm-AddButton");
 
 		super.hide();
 		setWidget(vPanel);

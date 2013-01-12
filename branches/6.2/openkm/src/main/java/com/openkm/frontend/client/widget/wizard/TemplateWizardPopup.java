@@ -90,7 +90,7 @@ public class TemplateWizardPopup extends DialogBox {
 		vPanelFired.setSize("100%", "20");
 		setText(Main.i18n("template.wizard.creation"));
 		
-		actualButton.setStyleName("okm-Button");
+		actualButton.setStyleName("okm-YesButton");
 		
 		super.hide();
 		setWidget(vPanelFired);
@@ -219,7 +219,7 @@ public class TemplateWizardPopup extends DialogBox {
 			}
 		});
 		
-		button.setStyleName("okm-Button");
+		button.setStyleName("okm-YesButton");
 		button.setEnabled(false);
 		return button;
 	}
@@ -238,7 +238,7 @@ public class TemplateWizardPopup extends DialogBox {
 			}
 		});
 		
-		button.setStyleName("okm-Button");
+		button.setStyleName("okm-YesButton");
 		button.setEnabled(false);
 		return button;
 	}
