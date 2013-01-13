@@ -96,7 +96,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	/**
 	 * The Document tab
 	 */
-	public TabDocument() {
+	public TabDocument(){
 		doc = new GWTDocument();
 		propertyGroupHandlerExtensionList = new ArrayList<PropertyGroupHandlerExtension>();
 		tabPanel = new TabLayoutPanel(TAB_HEIGHT, Unit.PX);
@@ -167,11 +167,14 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	 * @param height Height of the widget
 	 */
 	public void setPixelSize(int width, int height) {
+		//do not set if width and height are not changed
+		if( this.height == height && this.width == width )
+			return;
+		
 		this.height = height;
 		this.width = width;
 		tabPanel.setPixelSize(width, height);
 		document.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
-		preview.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
 		notes.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
 		version.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
 		version.fillWidth();
@@ -190,6 +193,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 			}
 		}
 
+		preview.setPixelSize(width,height-TAB_HEIGHT); // Substract tab height
 		if (selectedTab == PREVIEW_TAB) {
 			previewDocument(true);
 		}
@@ -602,10 +606,16 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 				doc.getMimeType().equals("application/x-shockwave-flash") ||  
 				doc.getMimeType().equals("audio/mpeg")) {
 			if (!refreshing) {
-				preview.showMediaFile(RPCService.DownloadServlet +"?uuid=" + URL.encodeQueryString(getDocument().getUuid()), getDocument().getMimeType());
+					preview.showMediaFile(RPCService.DownloadServlet +"?uuid=" + URL.encodeQueryString(getDocument().getUuid()), getDocument().getMimeType());
+			} else {
+				preview.resizeMediaFile(width, height-TAB_HEIGHT);
 			}
 		} else {
-			preview.showEmbedSWF(doc.getUuid());
+			if(!refreshing) {
+				preview.showEmbedSWF(doc.getUuid());
+			} else {
+				preview.resizeEmbedSWF(width, height-TAB_HEIGHT);
+			}
 		}
 	}
 	
@@ -648,8 +658,8 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 
 	@Override
 	public void fireEvent(DocumentEventConstant event) {
-		for (Iterator<DocumentHandlerExtension> it = docHandlerExtensionList.iterator(); it.hasNext();) {
-			it.next().onChange(event);
+		for (DocumentHandlerExtension handler : docHandlerExtensionList) {
+			handler.onChange(event);
 		}
 	}
 
