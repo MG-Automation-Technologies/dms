@@ -459,13 +459,25 @@ public class Util {
     	$wnd.swfobject.removeSWF("jsmediaplayer");
 	}-*/;
     
-   public static native void createMediaPlayer(String mediaUrl, String mediaProvider, String width, String height) /*-{    	
+    public static native void createMediaPlayer(String mediaUrl, String mediaProvider, String width, String height) /*-{    	
     	$wnd.swfobject.embedSWF("../js/mediaplayer/player.swf", "mediaplayercontainer", width, height, "9.0.0", "../js/mediaplayer/expressinstall.swf", {file:mediaUrl,provider:mediaProvider,autostart:"true",width:width,height:height}, {allowscriptaccess:"always",allowfullscreen: "true"}, {id:"jsmediaplayer",name:"jsmediaplayer"});
     }-*/;
+    
+    public static native void resizeMediaPlayer(String width, String height)/*-{
+		obj = $wnd.swfobject.getObjectById('jsmediaplayer');
+		obj.width = width;
+		obj.height = height;
+	}-*/;
     
     public static native void createPDFViewerZviewer(String pdfUrl, String width, String height) /*-{
     	pdfUrl = encodeURIComponent(pdfUrl);
 		$wnd.swfobject.embedSWF("../js/zviewer/zviewer.swf", "pdfviewercontainer", width, height, "9.0.0", "../js/mediaplayer/expressinstall.swf", {doc_url:pdfUrl}, {allowFullScreen:"true",menu:"false",bgcolor:"#efefef"}, {id:"jspdfviewer",name:"jspdfviewer"});
+	}-*/;
+    
+    public static native void resizePDFViewerZviewer(String width, String height)/*-{
+		obj = $wnd.swfobject.getObjectById('jspdfviewer');
+		obj.width = width;
+		obj.height = height;
 	}-*/;
     
     public static native void createPDFViewerFlexPaper(String pdfUrl, String width, String height, String printEnabled) /*-{
@@ -508,6 +520,12 @@ public class Util {
   	  	  	  	  	id : "FlexPaperViewer",
   	  	  	  	    name : "FlexPaperViewer"
   	  	  	  	  });
+	}-*/;
+    
+    public static native void resizePDFViewerFlexPaper(String width, String height)/*-{
+		obj = $wnd.swfobject.getObjectById('FlexPaperViewer');
+		obj.width = width;
+		obj.height = height;
 	}-*/;
     
     public static native String[] getJREs() /*-{

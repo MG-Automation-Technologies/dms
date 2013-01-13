@@ -100,6 +100,17 @@ public class Preview extends Composite {
 	}
 	
 	/**
+	 * resizeEmbedSWF
+	 */
+	public void resizeEmbedSWF(int width, int height) {
+		if (Main.get().workspaceUserProperties.getWorkspace().getPreviewer().equals("flexpaper")) {	
+			Util.resizePDFViewerFlexPaper(""+width, ""+height);
+		} else {
+			Util.resizePDFViewerZviewer(""+width, ""+height);
+		}
+	}
+	
+	/**
 	 * cleanPreview
 	 */
 	public void cleanPreview() {
@@ -129,19 +140,28 @@ public class Preview extends Composite {
 		}
 		
 		// Size ratio
-		int width = 400;
-		int height = 280;
+//		int width = 400;
+//		int height = 280;
+//		
+//		// Controls size square ( adapts )
+//		if (this.width > 1.4 * this.height) {
+//			height = this.height;
+//			width = new Double(1.4 * this.height).intValue();
+//		} else {
+//			width = this.width;
+//			height = new Double(this.width / 1.4).intValue();
+//		}
+//		
+//		Util.createMediaPlayer(mediaUrl, mediaProvider, "" + (width - 10), "" + (height - 10));
 		
-		// Controls size square ( adapts )
-		if (this.width > 1.4 * this.height) {
-			height = this.height;
-			width = new Double(1.4 * this.height).intValue();
-		} else {
-			width = this.width;
-			height = new Double(this.width / 1.4).intValue();
-		}
-		
-		Util.createMediaPlayer(mediaUrl, mediaProvider, "" + (width - 10), "" + (height - 10));
+		Util.createMediaPlayer(mediaUrl, mediaProvider, "" + width, ""+height); // All area
+	}
+	
+	/**
+	 * resizeMediaFile
+	 */
+	public void resizeMediaFile(int width, int height) {
+		Util.resizeMediaPlayer(""+width, ""+height);
 	}
 	
 	/**
@@ -173,4 +193,8 @@ public class Preview extends Composite {
 					+ "</div>\n"); // needed for rewriting purpose
 		}
 	}
+	
+	public int getWidth(){ return width; }
+	public int getHeight(){ return height; }
+	
 }
