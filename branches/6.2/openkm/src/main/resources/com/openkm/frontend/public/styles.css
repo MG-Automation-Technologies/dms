@@ -392,7 +392,6 @@ iframe {
 	font-size: 4px;
 }
 
-
 /* File browser */
 .okm-FileBrowser {
 	cursor: default;
@@ -482,8 +481,7 @@ iframe {
 .okm-ToolBar-Big-selected {
 	background-color: #b5bad7;
 	cursor: pointer;
-	cursor: hand;
-	
+	cursor: hand;	
 }
 
 .okm-ToolBar-BigTMP-selected {
@@ -986,24 +984,6 @@ iframe {
 	padding-left: 17px;
 	background-position: 2px center;
 }
-
-/* Chrome fix for button images */
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-	.okm-NoButton, .okm-YesButton, .okm-SendButton, .okm-AddButton, .okm-DeleteButton, .okm-DownloadZipButton,
-	.okm-HomeButton, .okm-DownloadButton, .okm-ViewButton, .okm-ChangeButton, .okm-CompactButton, .okm-CleanButton,
-	.okm-SearchButton, .okm-SaveButton, .okm-CommentButton {
-		padding-left: 20px;
-	}
-}
-
-/* Explorer fix for button images */
-<!--[if IE]>
-	.okm-NoButton, .okm-YesButton, .okm-SendButton, .okm-AddButton, .okm-DeleteButton, .okm-DownloadZipButton,
-	.okm-HomeButton, .okm-DownloadButton, .okm-ViewButton, .okm-ChangeButton, .okm-CompactButton, .okm-CleanButton,
-	.okm-SearchButton, .okm-SaveButton, .okm-CommentButton {
-		padding-left: 12px;
-	}
-<![endif]-->
 
 /* Iframe */
 .okm-Iframe {
@@ -1816,3 +1796,21 @@ iframe {
 .whitePanel {
 	background-color: white;
 }
+
+/* Chrome fix for button images */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	.okm-NoButton, .okm-YesButton, .okm-SendButton, .okm-AddButton, .okm-DeleteButton, .okm-DownloadZipButton,
+	.okm-HomeButton, .okm-DownloadButton, .okm-ViewButton, .okm-ChangeButton, .okm-CompactButton, .okm-CleanButton,
+	.okm-SearchButton, .okm-SaveButton, .okm-CommentButton {
+		padding-left: 20px;
+	}
+}
+
+/* Explorer fix for button images */
+<!--[if IE]>
+	.okm-NoButton, .okm-YesButton, .okm-SendButton, .okm-AddButton, .okm-DeleteButton, .okm-DownloadZipButton,
+	.okm-HomeButton, .okm-DownloadButton, .okm-ViewButton, .okm-ChangeButton, .okm-CompactButton, .okm-CleanButton,
+	.okm-SearchButton, .okm-SaveButton, .okm-CommentButton {
+		padding-left: 12px;
+	}
+<![endif]-->
