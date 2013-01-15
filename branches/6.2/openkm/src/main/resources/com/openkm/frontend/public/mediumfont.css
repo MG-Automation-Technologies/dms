@@ -995,7 +995,7 @@ iframe {
 	font-family: tahoma;
 	cursor: pointer;
   	cursor: hand;
-	background-image: url("img/icon/actions/add_comment.png");
+	background-image: url("img/icon/actions/comment_add.png");
 	background-repeat: no-repeat;
 	padding-left: 17px;
 	background-position: 2px center;
