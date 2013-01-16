@@ -1,22 +1,22 @@
 /**
- *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2012  Paco Avila & Josep Llort
- *
- *  No bytes were intentionally harmed during the development of this application.
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * OpenKM, Open Document Management System (http://www.openkm.com)
+ * Copyright (c) 2006-2012 Paco Avila & Josep Llort
+ * 
+ * No bytes were intentionally harmed during the development of this application.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 package com.openkm.module.db;
@@ -32,9 +32,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
@@ -59,6 +59,7 @@ import com.openkm.bean.ResultSet;
 import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Input;
 import com.openkm.bean.form.Select;
+import com.openkm.bean.form.TextArea;
 import com.openkm.bean.nr.NodeQueryResult;
 import com.openkm.bean.nr.NodeResultSet;
 import com.openkm.cache.UserNodeKeywordsManager;
@@ -129,8 +130,8 @@ public class DbSearchModule implements SearchModule {
 	}
 	
 	@Override
-	public List<QueryResult> find(String token, QueryParams params) throws IOException, ParseException,
-			RepositoryException, DatabaseException {
+	public List<QueryResult> find(String token, QueryParams params) throws IOException, ParseException, RepositoryException,
+			DatabaseException {
 		log.debug("find({}, {})", token, params);
 		List<QueryResult> ret = findPaginated(token, params, 0, Config.MAX_SEARCH_RESULTS).getResults();
 		log.debug("find: {}", ret);
@@ -138,8 +139,8 @@ public class DbSearchModule implements SearchModule {
 	}
 	
 	@Override
-	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) throws IOException,
-			ParseException, RepositoryException, DatabaseException {
+	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) throws IOException, ParseException,
+			RepositoryException, DatabaseException {
 		log.debug("findPaginated({}, {}, {}, {})", new Object[] { token, params, offset, limit });
 		Query query = null;
 		
@@ -184,13 +185,10 @@ public class DbSearchModule implements SearchModule {
 		// Path to UUID conversion and in depth recursion
 		List<String> pathInDepth = new ArrayList<String>();
 		
-		if (!params.getPath().equals("") &&
-				!params.getPath().equals("/" + Repository.ROOT) &&
-				!params.getPath().equals("/" + Repository.CATEGORIES) &&
-				!params.getPath().equals("/" + Repository.TEMPLATES) &&
-				!params.getPath().equals("/" + Repository.PERSONAL) &&
-				!params.getPath().equals("/" + Repository.MAIL) &&
-				!params.getPath().equals("/" + Repository.TRASH)) {
+		if (!params.getPath().equals("") && !params.getPath().equals("/" + Repository.ROOT)
+				&& !params.getPath().equals("/" + Repository.CATEGORIES)
+				&& !params.getPath().equals("/" + Repository.TEMPLATES) && !params.getPath().equals("/" + Repository.PERSONAL)
+				&& !params.getPath().equals("/" + Repository.MAIL) && !params.getPath().equals("/" + Repository.TRASH)) {
 			try {
 				String uuid = NodeBaseDAO.getInstance().getUuidFromPath(params.getPath());
 				log.debug("Path in depth: {} => {}", uuid, NodeBaseDAO.getInstance().getPathFromUuid(uuid));
@@ -374,7 +372,8 @@ public class DbSearchModule implements SearchModule {
 		}
 		
 		if (!params.getProperties().isEmpty()) {
-			Map<PropertyGroup, List<FormElement>> formsElements = FormUtils.parsePropertyGroupsForms(Config.PROPERTY_GROUPS_XML);
+			Map<PropertyGroup, List<FormElement>> formsElements = FormUtils
+					.parsePropertyGroupsForms(Config.PROPERTY_GROUPS_XML);
 			
 			for (Iterator<Entry<String, String>> it = params.getProperties().entrySet().iterator(); it.hasNext();) {
 				Entry<String, String> ent = it.next();
@@ -406,8 +405,15 @@ public class DbSearchModule implements SearchModule {
 								if (from != null && to != null) {
 									String sFrom = DAY_FORMAT.format(from.getTime());
 									String sTo = DAY_FORMAT.format(to.getTime());
-									query.add(new TermRangeQuery(ent.getKey(), sFrom, sTo, true, true), BooleanClause.Occur.MUST);
+									query.add(new TermRangeQuery(ent.getKey(), sFrom, sTo, true, true),
+											BooleanClause.Occur.MUST);
 								}
+							}
+						} else if (fe instanceof Input && ((Input) fe).getType().equals(Input.TYPE_TEXT)
+								|| fe instanceof TextArea) {
+							for (StringTokenizer st = new StringTokenizer(valueTrimmed, " "); st.hasMoreTokens();) {
+								Term t = new Term(ent.getKey(), st.nextToken().toLowerCase());
+								query.add(new WildcardQuery(t), BooleanClause.Occur.MUST);
 							}
 						} else {
 							Term t = new Term(ent.getKey(), valueTrimmed);
@@ -422,8 +428,8 @@ public class DbSearchModule implements SearchModule {
 	/**
 	 * Find by statement
 	 */
-	private ResultSet findByStatementPaginated(String token, Query query, int offset, int limit)
-			throws RepositoryException, DatabaseException {
+	private ResultSet findByStatementPaginated(String token, Query query, int offset, int limit) throws RepositoryException,
+			DatabaseException {
 		log.debug("findByStatementPaginated({}, {}, {}, {}, {})", new Object[] { token, query, offset, limit });
 		List<QueryResult> results = new ArrayList<QueryResult>();
 		ResultSet rs = new ResultSet();
@@ -549,8 +555,7 @@ public class DbSearchModule implements SearchModule {
 	}
 	
 	@Override
-	public QueryParams getSearch(String token, int qpId) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
+	public QueryParams getSearch(String token, int qpId) throws PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getSearch({}, {})", token, qpId);
 		QueryParams qp = new QueryParams();
 		Authentication auth = null, oldAuth = null;
@@ -624,8 +629,7 @@ public class DbSearchModule implements SearchModule {
 	}
 	
 	@Override
-	public void deleteSearch(String token, long qpId) throws AccessDeniedException, RepositoryException,
-			DatabaseException {
+	public void deleteSearch(String token, long qpId) throws AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("deleteSearch({}, {})", token, qpId);
 		Authentication auth = null, oldAuth = null;
 		
@@ -663,8 +667,7 @@ public class DbSearchModule implements SearchModule {
 	}
 	
 	@Override
-	public Map<String, Integer> getKeywordMap(String token, List<String> filter) throws RepositoryException,
-			DatabaseException {
+	public Map<String, Integer> getKeywordMap(String token, List<String> filter) throws RepositoryException, DatabaseException {
 		log.debug("getKeywordMap({}, {})", token, filter);
 		Map<String, Integer> cloud = null;
 		
@@ -715,9 +718,9 @@ public class DbSearchModule implements SearchModule {
 			}
 			
 			HibernateUtil.commit(tx);
-	} catch (HibernateException e) {
-		HibernateUtil.rollback(tx);
-		throw new DatabaseException(e.getMessage(), e);
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(hSession);
 			
@@ -806,8 +809,7 @@ public class DbSearchModule implements SearchModule {
 	}
 	
 	@Override
-	public List<Folder> getCategorizedFolders(String token, String categoryId) throws RepositoryException,
-			DatabaseException {
+	public List<Folder> getCategorizedFolders(String token, String categoryId) throws RepositoryException, DatabaseException {
 		log.debug("getCategorizedFolders({}, {})", token, categoryId);
 		List<Folder> folders = new ArrayList<Folder>();
 		Authentication auth = null, oldAuth = null;
@@ -838,8 +840,7 @@ public class DbSearchModule implements SearchModule {
 	}
 	
 	@Override
-	public List<Mail> getCategorizedMails(String token, String categoryId) throws RepositoryException,
-			DatabaseException {
+	public List<Mail> getCategorizedMails(String token, String categoryId) throws RepositoryException, DatabaseException {
 		log.debug("getCategorizedMails({}, {})", token, categoryId);
 		List<Mail> mails = new ArrayList<Mail>();
 		Authentication auth = null, oldAuth = null;
@@ -870,8 +871,7 @@ public class DbSearchModule implements SearchModule {
 	}
 	
 	@Override
-	public List<Document> getDocumentsByKeyword(String token, String keyword) throws RepositoryException,
-			DatabaseException {
+	public List<Document> getDocumentsByKeyword(String token, String keyword) throws RepositoryException, DatabaseException {
 		log.debug("getDocumentsByKeyword({}, {})", token, keyword);
 		List<Document> documents = new ArrayList<Document>();
 		Authentication auth = null, oldAuth = null;
@@ -1060,8 +1060,7 @@ public class DbSearchModule implements SearchModule {
 	}
 	
 	@Override
-	public List<QueryResult> findSimpleQuery(String token, String statement) throws RepositoryException,
-			DatabaseException {
+	public List<QueryResult> findSimpleQuery(String token, String statement) throws RepositoryException, DatabaseException {
 		log.debug("findSimpleQuery({}, {})", token, statement);
 		List<QueryResult> ret = findSimpleQueryPaginated(token, statement, 0, Config.MAX_SEARCH_RESULTS).getResults();
 		log.debug("findSimpleQuery: {}", ret);
@@ -1111,7 +1110,8 @@ public class DbSearchModule implements SearchModule {
 			}
 			
 			// Activity log
-			UserActivity.log(auth.getName(), "FIND_SIMPLE_QUERY_PAGINATED", null, null, offset + ", " + limit + ", " + statement);
+			UserActivity.log(auth.getName(), "FIND_SIMPLE_QUERY_PAGINATED", null, null, offset + ", " + limit + ", "
+					+ statement);
 		} catch (PathNotFoundException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (ParseException e) {
