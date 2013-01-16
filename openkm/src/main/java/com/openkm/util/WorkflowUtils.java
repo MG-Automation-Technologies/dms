@@ -457,9 +457,13 @@ public class WorkflowUtils {
 			
 			ArrayList<Transition> alT = new ArrayList<Transition>();
 			
-			for (Iterator it = t.getAvailableTransitions().iterator(); it.hasNext();) {
-				org.jbpm.graph.def.Transition tr = (org.jbpm.graph.def.Transition) it.next();
-				alT.add(copy(tr));
+			try {
+				for (Iterator it = t.getAvailableTransitions().iterator(); it.hasNext();) {
+					org.jbpm.graph.def.Transition tr = (org.jbpm.graph.def.Transition) it.next();
+					alT.add(copy(tr));
+				}
+			} catch (JbpmException e) {
+				log.warn("Trasition problem: {}", e.getMessage());
 			}
 			
 			// Sort
