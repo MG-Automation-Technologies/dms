@@ -467,6 +467,8 @@ public class FormUtils {
 					if (item != null) button.setTransition(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("confirmation");
 					if (item != null) button.setConfirmation(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("style");
+					if (item != null) button.setStyle(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("width");
 					if (item != null) button.setWidth(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("height");
