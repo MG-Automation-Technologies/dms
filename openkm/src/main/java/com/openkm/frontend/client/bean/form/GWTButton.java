@@ -30,6 +30,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class GWTButton extends GWTFormElement implements IsSerializable {
 	private String transition = "";
 	private String confirmation = "";
+	private String style = "";
 	private boolean validate = true;
 	
 	public String getConfirmation() {
@@ -48,6 +49,14 @@ public class GWTButton extends GWTFormElement implements IsSerializable {
 		this.transition = transition;
 	}
 	
+	public String getStyle() {
+		return style;
+	}
+
+	public void setStyle(String style) {
+		this.style = style;
+	}
+	
 	public boolean isValidate() {
 		return validate;
 	}
@@ -62,7 +71,8 @@ public class GWTButton extends GWTFormElement implements IsSerializable {
 		sb.append("label="); sb.append(label);
 		sb.append(", name="); sb.append(name);
 		sb.append(", transition="); sb.append(transition);
-		sb.append(", transition="); sb.append(transition);
+		sb.append(", confirmation="); sb.append(confirmation);
+		sb.append(", style="); sb.append(style);
 		sb.append(", width="); sb.append(width);
 		sb.append(", height="); sb.append(height);
 		sb.append("}");

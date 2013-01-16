@@ -227,7 +227,8 @@ public class FormManager {
 			}
 			
 			Button transButton = new Button(gWTButton.getLabel());
-			transButton.setStyleName("okm-YesButton");
+			String style = Character.toUpperCase(gWTButton.getStyle().charAt(0)) + gWTButton.getStyle().substring(1);
+			transButton.setStyleName("okm-" + style + "Button");
 			HTML space = new HTML("&nbsp;");
 			submitButtonPanel.add(transButton);
 			submitButtonPanel.add(space);
