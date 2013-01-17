@@ -123,6 +123,7 @@ public class ExtendedTree extends Tree implements HasSelectionHandlers<TreeItem>
 					&& evalDragPixelSensibility()) {
 				TreeItem actualItem = Main.get().activeFolderTree.getActualItem();
 				Main.get().dragable.show(actualItem.getHTML(), OriginPanel.TREE_ROOT);
+				Main.get().activeFolderTree.fileBrowserRefreshDone();
 				mouseDownX = 0;
 				mouseDownY = 0;
 				dragged = false;

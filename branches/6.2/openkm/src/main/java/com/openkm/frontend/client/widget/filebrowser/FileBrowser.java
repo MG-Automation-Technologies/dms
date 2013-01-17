@@ -386,6 +386,7 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 					table.refreshSort();
 				}
 				nextRefresh = GET_NONE;
+				Main.get().activeFolderTree.fileBrowserRefreshDone();
 				break;
 		}
 	}
@@ -462,6 +463,7 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 		public void onFailure(Throwable caught) {
 			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagFolderChilds();
 			Main.get().showError("GetFolderChilds", caught);
+			Main.get().activeFolderTree.fileBrowserRefreshDone();
 		}
 	};
 	
@@ -486,6 +488,7 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 		public void onFailure(Throwable caught) {
 			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagDocumentChilds();
 			Main.get().showError("GetDocumentChilds", caught);
+			Main.get().activeFolderTree.fileBrowserRefreshDone();
 		}
 	};
 	
@@ -510,6 +513,7 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 		public void onFailure(Throwable caught) {
 			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagMailChilds();
 			Main.get().showError("GetMailChilds", caught);
+			Main.get().activeFolderTree.fileBrowserRefreshDone();
 		}
 	};
 	
