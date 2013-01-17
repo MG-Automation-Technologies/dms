@@ -94,6 +94,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	private boolean treeItemHasBeenClosed = false;
 	private boolean autoOpenFolder = false;
 	private boolean openingFldPath = false;
+	private boolean flagFileBrowserFinished = true;
 
 	/**
 	 * Directory Tree
@@ -120,7 +121,7 @@ public class FolderTree extends Composite implements OriginPanel {
 		tree.addSelectionHandler(new SelectionHandler<TreeItem>() {
 			@Override
 			public void onSelection(SelectionEvent<TreeItem> event) {
-				if (!openingFldPath) {
+				if (!openingFldPath && flagFileBrowserFinished) { 
 					final TreeItem treeItem = event.getSelectedItem();
 					Timer openIfNotClosed = new Timer() {
 						@Override
@@ -155,15 +156,17 @@ public class FolderTree extends Composite implements OriginPanel {
 		tree.addOpenHandler(new OpenHandler<TreeItem>() {
 			@Override
 			public void onOpen(OpenEvent<TreeItem> event) {
-				TreeItem treeItem = event.getTarget();
-				if (!openingFldPath && !autoOpenFolder) {
-					if (!actualItem.equals(treeItem)) {
-						actualItem.setSelected(false);
-						treeItem.setSelected(true);
-					} 
-					onTreeItemSelected(event.getTarget());
-				} else {
-					autoOpenFolder = false; // always reset value
+				if (flagFileBrowserFinished) {
+					TreeItem treeItem = event.getTarget();
+					if (!openingFldPath && !autoOpenFolder) {
+						if (!actualItem.equals(treeItem)) {
+							actualItem.setSelected(false);
+							treeItem.setSelected(true);
+						} 
+						onTreeItemSelected(event.getTarget());
+					} else {
+						autoOpenFolder = false; // always reset value
+					}
 				}
 			}
 		});
@@ -752,6 +755,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	 *            The document path
 	 */
 	public void openAllPathFolder(String fldId, String docPath) {
+		flagFileBrowserFinished = false;
 		openingFldPath = true;
 		refreshFileBrowser = true;
 		String rootPath = folderRoot.getPath();
@@ -810,6 +814,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	}
 
 	private void onTreeItemSelected(TreeItem item) {
+		flagFileBrowserFinished = false;
 		treeItemChanged = false;
 		boolean refresh = true;
 		boolean refreshResetExplorer = true;
@@ -920,6 +925,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	 * Refresh the tree node
 	 */
 	public void refresh(final boolean reset) {
+		flagFileBrowserFinished = false;
 		hideMenuPopup();
 		final String path = ((GWTFolder) actualItem.getUserObject()).getPath();
 		folderService.getProperties(path, new AsyncCallback<GWTFolder>() {
@@ -1499,5 +1505,9 @@ public class FolderTree extends Composite implements OriginPanel {
 	 */
 	public void disableDragged() {
 		tree.disableDragged();
+	}
+	
+	public void fileBrowserRefreshDone() {
+		flagFileBrowserFinished = true;
 	}
 }
