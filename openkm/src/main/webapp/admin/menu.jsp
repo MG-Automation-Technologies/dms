@@ -103,7 +103,6 @@
     <script type="text/javascript">
       // Identify if being loaded inside an iframe
       if (self == top) {
-         document.write('&nbsp;\n');
          document.write('<li>\n');
          document.write('<a href="logout.jsp" title="Exit"><img src="img/toolbar/exit.png"></a>\n');
          document.write('</li>\n');
