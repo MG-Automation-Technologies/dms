@@ -37,7 +37,6 @@
           <tr><td>Text extractor</td><td><input name="action" value="textExtractor" type="radio"/></td></tr>
           <tr><td>Lucene indexes</td><td><input name="action" value="luceneIndexes" type="radio"/></td></tr>
           <tr><td>Optimize indexes</td><td><input name="action" value="optimizeIndexes" type="radio"/></td></tr>
-          <tr><td>Please, confirm (Yes / No)</td><td><input name="confirmation" size="3" value=""/></td></tr>
           <tr><td colspan="2" align="right"><input type="submit" value="Send"/></td></tr>
         </table>
       </form>
