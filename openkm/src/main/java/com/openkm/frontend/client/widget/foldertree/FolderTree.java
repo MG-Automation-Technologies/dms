@@ -814,98 +814,103 @@ public class FolderTree extends Composite implements OriginPanel {
 	}
 
 	private void onTreeItemSelected(TreeItem item) {
-		flagFileBrowserFinished = false;
-		treeItemChanged = false;
-		boolean refresh = true;
-		boolean refreshResetExplorer = true;
-
-		// Always mark panel as selected
-		setSelectedPanel(true);
-
-		// Evalutate especial cases rename and creating folder refreshing
-		switch (folderAction) {
-			case ACTION_CREATE:
-				refresh = false;
-				if (!actualItem.equals(item)) {
-					// Special case when we are creating a folder and selects other
-					// tree item
-					FolderTextBox folder = (FolderTextBox) tmpFolder.getWidget();
-					// Ensures is text writen before create folder on other case
-					// eliminates
-					if (folder.getText().length() > 0) {
-						otherTreeItemSelected = item; // Used to save item selected
-						create(folder.getText());
-					} else {
-						otherTreeItemSelected = item; // Used to save item selected
-						removeTmpFolderCreate();
-					}
-				}
-				break;
+		// Try catch to prevent non controled error which stop foldertree and not send expected filebrowser finish signal to folder tree
+		try {
+			flagFileBrowserFinished = false;
+			treeItemChanged = false;
+			boolean refresh = true;
+			boolean refreshResetExplorer = true;
 	
-			case ACTION_RENAME:
-				if (actualItem.equals(item)) {
+			// Always mark panel as selected
+			setSelectedPanel(true);
+	
+			// Evalutate especial cases rename and creating folder refreshing
+			switch (folderAction) {
+				case ACTION_CREATE:
 					refresh = false;
-				}
-				break;
-	
-			default:
-				// Case that not refreshing tree and file browser ( right click )
-				if (actualItem.equals(item) && tree.isShowPopUP()) {
-					refresh = false; // On right click must not refresh browser but
-					// must change properties view
-					showTabFolderProperties(); // an removes browser selected file
-					// or document if any is selected to
-					// change perspective
-					Main.get().mainPanel.desktop.browser.fileBrowser.deselecSelectedRow();
-	
-				} else {
-					// Disables actual item because on changing active node by
-					// application this it's not changed
-					// automatically
 					if (!actualItem.equals(item)) {
-						actualItem.setSelected(false);
-						actualItem = item;
-						refresh = true;
-						treeItemChanged = true;
-						if (tree.isShowPopUP()) {
-							actualItem.setSelected(true);
+						// Special case when we are creating a folder and selects other
+						// tree item
+						FolderTextBox folder = (FolderTextBox) tmpFolder.getWidget();
+						// Ensures is text writen before create folder on other case
+						// eliminates
+						if (folder.getText().length() > 0) {
+							otherTreeItemSelected = item; // Used to save item selected
+							create(folder.getText());
+						} else {
+							otherTreeItemSelected = item; // Used to save item selected
+							removeTmpFolderCreate();
 						}
-						// refreshType = false;
-					} else {
-						// When the same node is selected must refresh without
-						// mantaining selected filebrowser row
-						refresh = true;
-						refreshResetExplorer = false;
-						showTabFolderProperties(); // On this special case
-						// refreshing tab folder
-						// properties
-						Main.get().mainPanel.desktop.browser.fileBrowser.deselecSelectedRow();
 					}
-				}
-				// Evaluate privileges
-				if (!isActualItemRoot()) {
-					GWTFolder folderParent = (GWTFolder) actualItem.getParentItem().getUserObject();
-					Main.get().mainPanel.topPanel.toolBar.checkToolButtonPermissions(
-							(GWTFolder) actualItem.getUserObject(), folderParent, TREE_ROOT);
-				} else {
-					Main.get().mainPanel.topPanel.toolBar.checkToolButtonPermissions(
-							(GWTFolder) actualItem.getUserObject(), folderRoot, TREE_ROOT);
-				}
-				
-				break;
-		}
-
-		if (refresh) {
-			refresh(refreshResetExplorer);
-		}
-
-		// Only Shows menu popup if flag is enable and selected node is not root
-		if (tree.isShowPopUP()) {
-			menuPopup.setPopupPosition(tree.mouseX, tree.mouseY);
-			// In thesaurus view must not be showed the menu popup
-			if (Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_THESAURUS ) {
-				menuPopup.show();
+					break;
+		
+				case ACTION_RENAME:
+					if (actualItem.equals(item)) {
+						refresh = false;
+					}
+					break;
+		
+				default:
+					// Case that not refreshing tree and file browser ( right click )
+					if (actualItem.equals(item) && tree.isShowPopUP()) {
+						refresh = false; // On right click must not refresh browser but
+						// must change properties view
+						showTabFolderProperties(); // an removes browser selected file
+						// or document if any is selected to
+						// change perspective
+						Main.get().mainPanel.desktop.browser.fileBrowser.deselecSelectedRow();
+		
+					} else {
+						// Disables actual item because on changing active node by
+						// application this it's not changed
+						// automatically
+						if (!actualItem.equals(item)) {
+							actualItem.setSelected(false);
+							actualItem = item;
+							refresh = true;
+							treeItemChanged = true;
+							if (tree.isShowPopUP()) {
+								actualItem.setSelected(true);
+							}
+							// refreshType = false;
+						} else {
+							// When the same node is selected must refresh without
+							// mantaining selected filebrowser row
+							refresh = true;
+							refreshResetExplorer = false;
+							showTabFolderProperties(); // On this special case
+							// refreshing tab folder
+							// properties
+							Main.get().mainPanel.desktop.browser.fileBrowser.deselecSelectedRow();
+						}
+					}
+					// Evaluate privileges
+					if (!isActualItemRoot()) {
+						GWTFolder folderParent = (GWTFolder) actualItem.getParentItem().getUserObject();
+						Main.get().mainPanel.topPanel.toolBar.checkToolButtonPermissions(
+								(GWTFolder) actualItem.getUserObject(), folderParent, TREE_ROOT);
+					} else {
+						Main.get().mainPanel.topPanel.toolBar.checkToolButtonPermissions(
+								(GWTFolder) actualItem.getUserObject(), folderRoot, TREE_ROOT);
+					}
+					
+					break;
 			}
+	
+			if (refresh) {
+				refresh(refreshResetExplorer);
+			}
+	
+			// Only Shows menu popup if flag is enable and selected node is not root
+			if (tree.isShowPopUP()) {
+				menuPopup.setPopupPosition(tree.mouseX, tree.mouseY);
+				// In thesaurus view must not be showed the menu popup
+				if (Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_THESAURUS ) {
+					menuPopup.show();
+				}
+			}
+		} catch (Exception e) {
+			fileBrowserRefreshDone();
 		}
 	}
 	
@@ -931,29 +936,35 @@ public class FolderTree extends Composite implements OriginPanel {
 		folderService.getProperties(path, new AsyncCallback<GWTFolder>() {
 			@Override
 			public void onSuccess(GWTFolder result) {
-				actualItem.setUserObject(result); // Updates folder object with last values
-				evaluesFolderIcon(actualItem); // Ensures to contemplate any security
-				// folder privileges change refresh
-				getChilds(path);
-
-				// Case not resets always must show tabfolder properties
-				if (!reset) {
-					// Case exists a selected row must mantain other case mus show
-					// folder properties on tab
-					if (Main.get().mainPanel.desktop.browser.fileBrowser.isSelectedRow()) {
-						Main.get().mainPanel.desktop.browser.fileBrowser.mantainSelectedRow();
+				// Try catch to prevent non controled error which stop foldertree and not send expected filebrowser finish signal to folder tree
+				try {
+					actualItem.setUserObject(result); // Updates folder object with last values
+					evaluesFolderIcon(actualItem); // Ensures to contemplate any security
+					// folder privileges change refresh
+					getChilds(path);
+	
+					// Case not resets always must show tabfolder properties
+					if (!reset) {
+						// Case exists a selected row must mantain other case mus show
+						// folder properties on tab
+						if (Main.get().mainPanel.desktop.browser.fileBrowser.isSelectedRow()) {
+							Main.get().mainPanel.desktop.browser.fileBrowser.mantainSelectedRow();
+						} else {
+							showTabFolderProperties();
+						}
 					} else {
 						showTabFolderProperties();
 					}
-				} else {
-					showTabFolderProperties();
+	
+					Main.get().mainPanel.desktop.browser.fileBrowser.refresh(path);
+				} catch (Exception e) {
+					fileBrowserRefreshDone();
 				}
-
-				Main.get().mainPanel.desktop.browser.fileBrowser.refresh(path);
 			}
 			@Override
 			public void onFailure(Throwable caught) {
 				Main.get().showError("getProperties", caught);
+				fileBrowserRefreshDone();
 			}
 		});
 	}
