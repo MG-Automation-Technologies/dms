@@ -27,6 +27,8 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
+import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.Timer;
@@ -116,17 +118,18 @@ public class TabMail extends Composite implements HasMailEvent, HasMailHandlerEx
 					};
 					timer.schedule(50); // Fill width must be done after really it'll be visible
 				}
-				// Solves chrome bug
-				if (tabIndex==NOTES_TAB && (Util.getUserAgent().startsWith("safari") || Util.getUserAgent().startsWith("chrome"))) {
-					Timer timer = new Timer() {
-						@Override
-						public void run() {
-							notes.richTextArea.setFocus(true);
-						}
-					};
-					timer.schedule(50); // Fill width must be done after really it'll be visible
-				}
 				fireEvent(HasMailEvent.TAB_CHANGED);
+			}
+		});
+		// To solve chrome bug with notes
+		// http://code.google.com/r/magic6435-testing/source/browse/src/com/google/livingstories/client/ui/RichTextEditor.java?r=42e6121cb6d729e0c4317fd736a588a755026a4a
+		tabPanel.addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
+			@Override
+			public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
+				int tabIndex = event.getItem().intValue();
+				if (tabIndex == NOTES_TAB) {
+					notes.evaluateRebuild();
+				}
 			}
 		});
 		
