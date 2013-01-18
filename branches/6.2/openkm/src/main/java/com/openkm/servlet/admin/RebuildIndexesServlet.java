@@ -121,6 +121,7 @@ public class RebuildIndexesServlet extends BaseServlet {
 			Config.SYSTEM_READONLY = true;
 			out.println("<ul>");
 			out.println("<li>System into maintenance mode</li>");
+			FileLogger.info(BASE_NAME, "BEGIN - Rebuild text extraction");
 			
 			// Calculate number of documents
 			out.println("<li>Calculate documents</li>");
@@ -141,6 +142,7 @@ public class RebuildIndexesServlet extends BaseServlet {
 			out.flush();
 			
 			// Finalized
+			FileLogger.info(BASE_NAME, "END - Rebuild text extraction");
 			out.println("<li>Index rebuilding completed!</li>");
 			out.println("</ul>");
 			out.flush();
@@ -442,7 +444,7 @@ public class RebuildIndexesServlet extends BaseServlet {
 				long perMile = count * 1000 / total;
 				
 				if (perMile > oldPerMile) {
-					FileLogger.info(BASE_NAME, "Number ''{0}'' of ''{1}''", count, total);
+					FileLogger.info(BASE_NAME, "Progress {0}%", perMile);
 					oldPerMile = perMile;
 				}
 			} catch (IOException e) {
