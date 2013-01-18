@@ -52,6 +52,7 @@ import com.openkm.dao.bean.NodeDocument;
 import com.openkm.dao.bean.NodeFolder;
 import com.openkm.dao.bean.NodeMail;
 import com.openkm.extractor.TextExtractorWorker;
+import com.openkm.util.FileLogger;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
 
@@ -61,6 +62,7 @@ import com.openkm.util.WebUtils;
 public class RebuildIndexesServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(RebuildIndexesServlet.class);
+	private static final String BASE_NAME = RebuildIndexesServlet.class.getSimpleName();
 	private static final String[][] breadcrumb = new String[][] {
 		new String[] { "utilities.jsp", "Utilities" },
 		new String[] { "rebuild_indexes.jsp", "Rebuild indexes" }
@@ -192,6 +194,7 @@ public class RebuildIndexesServlet extends BaseServlet {
 			Config.SYSTEM_READONLY = true;
 			out.println("<ul>");
 			out.println("<li>System into maintenance mode</li>");
+			FileLogger.info(BASE_NAME, "BEGIN - Rebuild Lucene indexes");
 			
 			session = HibernateUtil.getSessionFactory().openSession();
 			ftSession = Search.getFullTextSession(session);
@@ -203,9 +206,10 @@ public class RebuildIndexesServlet extends BaseServlet {
 			// Calculate number of entities
 			for (Class cls : classes) {
 				String nodeType = cls.getSimpleName();
-				// out.println("<li>Calculate " + nodeType + "</li>");
-				// out.flush();
+				out.println("<li>Calculate " + nodeType + "</li>");
+				out.flush();
 				long partial = NodeBaseDAO.getInstance().getCount(nodeType);
+				FileLogger.info(BASE_NAME, "Number of {0}: {1}", nodeType, partial);
 				out.println("<li>Number of " + nodeType + ": " + partial + "</li>");
 				out.flush();
 				total.put(nodeType, partial);
@@ -246,6 +250,7 @@ public class RebuildIndexesServlet extends BaseServlet {
 			out.flush();
 			
 			// Finalized
+			FileLogger.info(BASE_NAME, "END - Rebuild Lucene indexes");
 			out.println("<li>Index rebuilding completed!</li>");
 			out.println("</ul>");
 			out.flush();
@@ -288,6 +293,7 @@ public class RebuildIndexesServlet extends BaseServlet {
 			Config.SYSTEM_READONLY = true;
 			out.println("<ul>");
 			out.println("<li>System into maintenance mode</li>");
+			FileLogger.info(BASE_NAME, "BEGIN - Rebuild Lucene indexes");
 			
 			session = HibernateUtil.getSessionFactory().openSession();
 			ftSession = Search.getFullTextSession(session);
@@ -299,6 +305,7 @@ public class RebuildIndexesServlet extends BaseServlet {
 				out.println("<li>Calculate " + nodeType + "</li>");
 				out.flush();
 				long partial = NodeBaseDAO.getInstance().getCount(nodeType);
+				FileLogger.info(BASE_NAME, "Number of {0}: {1}", nodeType, partial);
 				out.println("<li>Number of " + nodeType + ": " + partial + "</li>");
 				out.flush();
 				total += partial;
@@ -322,6 +329,7 @@ public class RebuildIndexesServlet extends BaseServlet {
 			out.flush();
 			
 			// Finalized
+			FileLogger.info(BASE_NAME, "END - Rebuild Lucene indexes");
 			out.println("<li>Index rebuilding completed!</li>");
 			out.println("</ul>");
 			out.flush();
@@ -361,6 +369,7 @@ public class RebuildIndexesServlet extends BaseServlet {
 			Config.SYSTEM_READONLY = true;
 			out.println("<ul>");
 			out.println("<li>System into maintenance mode</li>");
+			FileLogger.info(BASE_NAME, "BEGIN - Indexes optimization");
 			
 			session = HibernateUtil.getSessionFactory().openSession();
 			ftSession = Search.getFullTextSession(session);
@@ -377,6 +386,7 @@ public class RebuildIndexesServlet extends BaseServlet {
 			out.flush();
 			
 			// Finalized
+			FileLogger.info(BASE_NAME, "END - Indexes optimization");
 			out.println("<li>Index optimization completed!</li>");
 			out.println("</ul>");
 			out.flush();
@@ -405,6 +415,7 @@ public class RebuildIndexesServlet extends BaseServlet {
 		private long count = 0;
 		private long total = 0;
 		private long oldPerCent = -1;
+		private long oldPerMile = -1;
 		
 		public ProgressMonitor(PrintWriter out, long total) {
 			log.debug("ProgressMonitor({}, {})", out, total);
@@ -426,6 +437,17 @@ public class RebuildIndexesServlet extends BaseServlet {
 			}
 			
 			pw.flush();
+			
+			try {
+				long perMile = count * 1000 / total;
+				
+				if (perMile > oldPerMile) {
+					FileLogger.info(BASE_NAME, "Number ''{0}'' of ''{1}''", count, total);
+					oldPerMile = perMile;
+				}
+			} catch (IOException e) {
+				log.warn("IOException at FileLogger: " + e.getMessage());
+			}
 		}
 		
 		@Override
