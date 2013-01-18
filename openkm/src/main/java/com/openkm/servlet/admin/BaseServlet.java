@@ -69,7 +69,8 @@ public class BaseServlet extends HttpServlet  {
 		out.println("height:200, width:300, eventType:'click', overlayOpacity:'57', windowSource:'iframe', windowPadding:0");
 		out.println("})});");
 		out.println("function dialogClose() { $dm.closeDOMWindow(); }");
-		out.println("window.setInterval(\"$.post('ping.html');\", 60000);");
+		out.println("function keepSessionAlive() { $.ajax({ type:'GET', url:'ping.html', cache:false, async:false }); }");
+		out.println("window.setInterval('keepSessionAlive()', 60000);");
 		out.println("</script>");
 		out.println("<title>" + title + "</title>");
 		out.println("</head>");
