@@ -323,26 +323,31 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 	 * @param fldId The path id
 	 */
 	public void refresh(String fldId) {
-		Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.resetNumericFolderValues();
-		numberOfFolders = 0;
-		numberOfDocuments = 0;
-		numberOfMails = 0;
-		// Because its asyncronous the getFolderChilds when finishes calls the
-		// getDocumentChilds(flId)
-		// to be sure refresh forlder before document files
-		// and each time refresh file browser content needs to reset values
-		table.reset();
-		this.fldId = fldId;
-		
-		// Preparing for refreshing
-		removeAllRows();
-		enableDefaultTableSorter(true);
-		nextRefresh = GET_FOLDERS;
-		nextRefresh();
-		
-		// On initialization fldId==null
-		if (fldId != null) {
-			filePath.setPath(fldId);
+		// Try catch to prevent non controled error which stop filebrowser and not send finish signal to folder tree
+		try {
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.resetNumericFolderValues();
+			numberOfFolders = 0;
+			numberOfDocuments = 0;
+			numberOfMails = 0;
+			// Because its asyncronous the getFolderChilds when finishes calls the
+			// getDocumentChilds(flId)
+			// to be sure refresh forlder before document files
+			// and each time refresh file browser content needs to reset values
+			table.reset();
+			this.fldId = fldId;
+			
+			// Preparing for refreshing
+			removeAllRows();
+			enableDefaultTableSorter(true);
+			nextRefresh = GET_FOLDERS;
+			nextRefresh();
+			
+			// On initialization fldId==null
+			if (fldId != null) {
+				filePath.setPath(fldId);
+			}
+		} catch (Exception e) {
+			Main.get().activeFolderTree.fileBrowserRefreshDone();
 		}
 	}
 	
@@ -447,17 +452,22 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 	 */
 	final AsyncCallback<List<GWTFolder>> callbackGetFolderChilds = new AsyncCallback<List<GWTFolder>>() {
 		public void onSuccess(List<GWTFolder> result) {
-			List<GWTFolder> folderList = result;
-			numberOfFolders = folderList.size();
-			Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.setNumberOfFolders(numberOfFolders);
-			
-			for (GWTFolder folder : folderList) {
-				addRow(folder);
+			// Try catch to prevent non controled error which stop filebrowser and not send finish signal to folder tree
+			try {
+				List<GWTFolder> folderList = result;
+				numberOfFolders = folderList.size();
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.setNumberOfFolders(numberOfFolders);
+				
+				for (GWTFolder folder : folderList) {
+					addRow(folder);
+				}
+				
+				Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagFolderChilds();
+				nextRefresh = GET_DOCUMENTS;
+				nextRefresh();
+			} catch (Exception e) {
+				Main.get().activeFolderTree.fileBrowserRefreshDone();
 			}
-			
-			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagFolderChilds();
-			nextRefresh = GET_DOCUMENTS;
-			nextRefresh();
 		}
 		
 		public void onFailure(Throwable caught) {
@@ -472,17 +482,22 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 	 */
 	final AsyncCallback<List<GWTDocument>> callbackGetDocumentChilds = new AsyncCallback<List<GWTDocument>>() {
 		public void onSuccess(List<GWTDocument> result) {
-			List<GWTDocument> documentList = result;
-			numberOfDocuments = result.size();
-			Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.setNumberOfDocuments(numberOfDocuments);
-			
-			for (GWTDocument doc : documentList) {
-				addRow(doc);
+			// Try catch to prevent non controled error which stop filebrowser and not send finish signal to folder tree
+			try {
+				List<GWTDocument> documentList = result;
+				numberOfDocuments = result.size();
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.setNumberOfDocuments(numberOfDocuments);
+				
+				for (GWTDocument doc : documentList) {
+					addRow(doc);
+				}
+				
+				Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagDocumentChilds();
+				nextRefresh = GET_MAILS;
+				nextRefresh();
+			} catch (Exception e) {
+				Main.get().activeFolderTree.fileBrowserRefreshDone();
 			}
-			
-			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagDocumentChilds();
-			nextRefresh = GET_MAILS;
-			nextRefresh();
 		}
 		
 		public void onFailure(Throwable caught) {
@@ -497,17 +512,22 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 	 */
 	final AsyncCallback<List<GWTMail>> callbackGetMailChilds = new AsyncCallback<List<GWTMail>>() {
 		public void onSuccess(List<GWTMail> result) {
-			List<GWTMail> mailList = result;
-			numberOfMails = result.size();
-			Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.setNumberOfMails(numberOfMails);
-			
-			for (GWTMail mail : mailList) {
-				addRow(mail);
+			// Try catch to prevent non controled error which stop filebrowser and not send finish signal to folder tree
+			try {
+				List<GWTMail> mailList = result;
+				numberOfMails = result.size();
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.setNumberOfMails(numberOfMails);
+				
+				for (GWTMail mail : mailList) {
+					addRow(mail);
+				}
+				
+				Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagMailChilds();
+				nextRefresh = GET_ENDS;
+				nextRefresh();
+			} catch (Exception e) {
+				Main.get().activeFolderTree.fileBrowserRefreshDone();
 			}
-			
-			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagMailChilds();
-			nextRefresh = GET_ENDS;
-			nextRefresh();
 		}
 		
 		public void onFailure(Throwable caught) {
