@@ -88,18 +88,15 @@ public class RebuildIndexesServlet extends BaseServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		String confirmation = WebUtils.getString(request, "confirmation");
 		String action = WebUtils.getString(request, "action");
 		updateSessionManager(request);
 		
-		if (confirmation.equals("Yes")) {
-			if ("textExtractor".equals(action)) {
-				textExtractor(request, response);
-			} else if ("luceneIndexes".equals(action)) {
-				luceneIndexes(request, response);
-			} else if ("optimizeIndexes".equals(action)) {
-				optimizeIndexes(request, response);
-			}
+		if ("textExtractor".equals(action)) {
+			textExtractor(request, response);
+		} else if ("luceneIndexes".equals(action)) {
+			luceneIndexes(request, response);
+		} else if ("optimizeIndexes".equals(action)) {
+			optimizeIndexes(request, response);
 		} else {
 			ServletContext sc = getServletContext();
 			sc.getRequestDispatcher("/admin/rebuild_indexes.jsp").forward(request, response);
