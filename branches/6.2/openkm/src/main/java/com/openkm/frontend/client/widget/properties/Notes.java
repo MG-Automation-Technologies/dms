@@ -27,7 +27,10 @@ import java.util.Iterator;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -49,6 +52,7 @@ import com.openkm.frontend.client.extension.event.HasDocumentEvent;
 import com.openkm.frontend.client.service.OKMNoteService;
 import com.openkm.frontend.client.service.OKMNoteServiceAsync;
 import com.openkm.frontend.client.util.OKMBundleResources;
+import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.ConfirmPopup;
 import com.openkm.frontend.client.widget.richtext.RichTextToolbar;
 
@@ -66,12 +70,13 @@ public class Notes extends Composite {
 	
 	private FlexTable tableNotes;
 	private Object object;
-	private Button add;
-	private Button update;
-	private Button cancel;
+	private Button addButton;
+	private Button updateButton;
+	private Button cancelButton;
 	private ScrollPanel scrollPanel;
 	public RichTextArea richTextArea;
 	private RichTextToolbar richTextToolbar;
+	private HorizontalPanel hButtonPanel;
 	private VerticalPanel newNotePanel;
 	private HTML addNote;
 	private Grid gridRichText;
@@ -81,6 +86,8 @@ public class Notes extends Composite {
 	private String editedNotePath = "";
 	private int editedNoteRow = 0;
 	private boolean removeNoteEnabled = false;
+	private boolean flagBuildStarted = false;
+	private boolean flagRebuildStarted = false;
 	int type = 0;
 	
 	/**
@@ -92,63 +99,52 @@ public class Notes extends Composite {
 		scrollPanel = new ScrollPanel(tableNotes);
 		newNotePanel = new VerticalPanel(); 
 		addNote = new HTML("<b>" + Main.i18n("general.menu.edit.add.note") + "</b>");
-		richTextArea = new RichTextArea();
-		richTextArea.setSize("100%", "14em");
-		richTextToolbar = new RichTextToolbar(richTextArea);
-		// richTextToolbar.setWidth("100%");
-	    
-	    gridRichText = new Grid(2, 1);
-	    gridRichText.setStyleName("RichTextToolbar");
-	    gridRichText.addStyleName("okm-Input");
-	    gridRichText.setWidget(0, 0, richTextToolbar);
-	    gridRichText.setWidget(1, 0, richTextArea);
-	    
-		add = new Button(Main.i18n("button.add"), new ClickHandler() { 
+		build(false); // Build richTextArea
+		
+		addButton = new Button(Main.i18n("button.add"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
 				addNote();
 			}
 		});
+		addButton.setEnabled(false);
 		
-		update = new Button(Main.i18n("button.update"), new ClickHandler() { 
+		updateButton = new Button(Main.i18n("button.update"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
 				setNote(editedNotePath, getTextNote(), editedNoteRow);
 			}
 		});
+		updateButton.setEnabled(false);
 		
-		cancel = new Button(Main.i18n("button.cancel"), new ClickHandler() { 
+		cancelButton = new Button(Main.i18n("button.cancel"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
 				reset();
 			}
 		});
-		update.setVisible(false);
-		cancel.setVisible(false);
+		updateButton.setVisible(false);
+		cancelButton.setVisible(false);
 		
-		HTML space = new HTML("");
-		newNotePanel.add(space);
+		newNotePanel.add(Util.vSpace("40"));
 		newNotePanel.add(addNote);
 		newNotePanel.add(gridRichText);
-		HTML space2 = new HTML("");
-		newNotePanel.add(space2);
-		HorizontalPanel hPanel = new HorizontalPanel();
-		hPanel.add(add);
-		hPanel.add(new HTML("&nbsp;"));
-		hPanel.add(update);
-		hPanel.add(new HTML("&nbsp;"));
-		hPanel.add(cancel);
-		newNotePanel.add(hPanel);
+		newNotePanel.add(Util.vSpace("10"));
+		hButtonPanel = new HorizontalPanel();
+		hButtonPanel.add(addButton);
+		hButtonPanel.add(new HTML("&nbsp;"));
+		hButtonPanel.add(updateButton);
+		hButtonPanel.add(new HTML("&nbsp;"));
+		hButtonPanel.add(cancelButton);
+		newNotePanel.add(hButtonPanel);
 		
-		newNotePanel.setCellHeight(space, "40px");
-		newNotePanel.setCellHeight(space2, "10px");
 		newNotePanel.setCellHorizontalAlignment(addNote, HasAlignment.ALIGN_CENTER);
 		newNotePanel.setCellHorizontalAlignment(gridRichText, HasAlignment.ALIGN_CENTER);
-		newNotePanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
+		newNotePanel.setCellHorizontalAlignment(hButtonPanel, HasAlignment.ALIGN_CENTER);
 		
-		add.setStyleName("okm-AddButton");
-		update.setStyleName("okm-YesButton");
-		cancel.setStyleName("okm-NoButton");
+		addButton.setStyleName("okm-AddButton");
+		updateButton.setStyleName("okm-YesButton");
+		cancelButton.setStyleName("okm-NoButton");
 
 		tableNotes.setWidth("100%");
 		
@@ -165,7 +161,7 @@ public class Notes extends Composite {
 	public void set(GWTDocument doc) {
 		reset();
 		object = doc;
-		richTextArea.setText("");
+		setRichTextAreaText("");
 		
 		while (tableNotes.getRowCount() > 0) {
 			tableNotes.removeRow(0);
@@ -186,7 +182,7 @@ public class Notes extends Composite {
 	public void set(GWTFolder folder) {
 		reset();
 		object = folder;
-		richTextArea.setText("");
+		setRichTextAreaText("");
 		
 		while (tableNotes.getRowCount() > 0) {
 			tableNotes.removeRow(0);
@@ -207,7 +203,7 @@ public class Notes extends Composite {
 	public void set(GWTMail mail) {
 		reset();
 		object = mail;
-		richTextArea.setText("");
+		setRichTextAreaText("");
 		
 		while (tableNotes.getRowCount() > 0) {
 			tableNotes.removeRow(0);
@@ -245,9 +241,9 @@ public class Notes extends Composite {
 			public void onClick(ClickEvent event) {
 				reset();
 				isEditingNote = true;
-				add.setVisible(false);
-				update.setVisible(true);
-				cancel.setVisible(true);
+				addButton.setVisible(false);
+				updateButton.setVisible(true);
+				cancelButton.setVisible(true);
 				editedNoteRow = tableNotes.getCellForEvent(event).getRowIndex() + 2; // The text row is + 2
 				editedNotePath = note.getPath();
 				setTextNoteToEditor(tableNotes.getHTML(editedNoteRow, 0));
@@ -337,9 +333,9 @@ public class Notes extends Composite {
 	 * Lang refresh
 	 */
 	public void langRefresh() {		
-		add.setHTML(Main.i18n("button.add"));
-		update.setHTML(Main.i18n("button.update"));
-		cancel.setHTML(Main.i18n("button.cancel"));
+		addButton.setHTML(Main.i18n("button.add"));
+		updateButton.setHTML(Main.i18n("button.update"));
+		cancelButton.setHTML(Main.i18n("button.cancel"));
 		addNote.setHTML("<b>" + Main.i18n("general.menu.edit.add.note") + "</b>");
 		richTextToolbar.langRefresh();
 	}	
@@ -351,7 +347,7 @@ public class Notes extends Composite {
 	 */
 	public void setVisibleButtons(boolean visible) {
 		visibleButtons = visible;
-		add.setVisible(visible);
+		addButton.setVisible(visible);
 		addNote.setVisible(visible);
 		gridRichText.setVisible(visible);
 	}
@@ -363,7 +359,7 @@ public class Notes extends Composite {
 	 */
 	public void setVisibleAddNote(boolean visible) {
 		addNoteOption = visible && visibleButtons;
-		add.setVisible(addNoteOption);
+		addButton.setVisible(addNoteOption);
 		addNote.setVisible(addNoteOption);
 		gridRichText.setVisible(addNoteOption);
 	}
@@ -465,15 +461,107 @@ public class Notes extends Composite {
 		isEditingNote = false;
 		editedNotePath = "";
 		editedNoteRow = 0;
-		richTextArea.setText("");
-		add.setHTML(Main.i18n("button.add"));
+		setRichTextAreaText("");
+		addButton.setHTML(Main.i18n("button.add"));
 		
 		if (visibleButtons) {
-			add.setVisible(true);
+			addButton.setVisible(true);
 		}
 		
-		update.setVisible(false);
-		cancel.setVisible(false);
+		updateButton.setVisible(false);
+		cancelButton.setVisible(false);
+	}
+	
+	/**
+	 * build
+	 */
+	private void build(boolean reset) {
+		flagBuildStarted = true;
+		if (reset) {
+			flagRebuildStarted = false;
+		}
+		String content = "";
+		if (gridRichText!=null) {
+			newNotePanel.remove(gridRichText);
+			content = richTextArea.getText();
+		} 
+		
+		gridRichText = new Grid(2, 1);
+		richTextArea = new RichTextArea();
+		richTextArea.setSize("100%", "14em");
+		richTextToolbar = new RichTextToolbar(richTextArea);
+		//
+		// richTextToolbar.setWidth("100%");
+		
+		richTextArea.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				if (!flagBuildStarted && !flagRebuildStarted) {
+					flagRebuildStarted = true;
+					build(false);
+					Timer timer = new Timer() {
+						@Override
+						public void run() {
+							richTextArea.setFocus(true);
+						}
+					};
+					timer.schedule(400);
+					
+				} else if (Util.getUserAgent().startsWith("safari") || Util.getUserAgent().startsWith("chrome")) {
+					richTextArea.setFocus(true);
+				}
+			}
+		});
+		richTextArea.addKeyUpHandler(new KeyUpHandler() {
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				evaluateButtons();
+			}
+		});
+		
+		gridRichText.clear();
+	    gridRichText.setStyleName("RichTextToolbar");
+	    gridRichText.addStyleName("okm-Input");
+	    gridRichText.setWidget(0, 0, richTextToolbar);
+	    gridRichText.setWidget(1, 0, richTextArea);
+		
+	    newNotePanel.add(gridRichText);
+	    newNotePanel.setCellHorizontalAlignment(gridRichText, HasAlignment.ALIGN_CENTER);
+	    setRichTextAreaText(content);
+	    richTextArea.setFocus(true);
+	    
+	    // hButtonPanel should be the last ( on loading hButtonPanel is still not attached )
+	    if (newNotePanel.getWidgetIndex(hButtonPanel)>=0) {
+	    	int widgetIndex = newNotePanel.getWidgetIndex(hButtonPanel);
+			newNotePanel.remove(widgetIndex);   // Removes button
+			newNotePanel.remove(widgetIndex-1); // Removes space before button
+			newNotePanel.add(Util.vSpace("10"));
+			newNotePanel.add(hButtonPanel);
+			newNotePanel.setCellHorizontalAlignment(hButtonPanel, HasAlignment.ALIGN_CENTER);
+		}	
+	    flagBuildStarted = false;
+	}
+	
+	/**
+	 * evaluateRebuild
+	 */
+	public void evaluateRebuild() {
+		if (!flagBuildStarted && (Util.getUserAgent().startsWith("safari") || Util.getUserAgent().startsWith("chrome"))) {
+			build(false);
+		}
+	}
+	
+	/**
+	 * evaluateButton
+	 */
+	private void evaluateButtons() {
+		boolean buttonsEnabled = richTextArea.getText().length()>0;
+		if (addButton!=null) { // loading case
+			addButton.setEnabled(buttonsEnabled);
+		}
+		if (updateButton!=null) { // loading case
+			updateButton.setEnabled(buttonsEnabled);
+		}
 	}
 	
 	/**
@@ -567,6 +655,14 @@ public class Notes extends Composite {
 	 */
 	public void showRemoveNote() {
 		removeNoteEnabled = true;
+	}
+	
+	/**
+	 * setRichTextAreaText
+	 */
+	private void setRichTextAreaText(String text) {
+		richTextArea.setText(text);
+		evaluateButtons();
 	}
 	
 	/**
