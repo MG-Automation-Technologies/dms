@@ -555,11 +555,13 @@ public class Notes extends Composite {
 	 * evaluateButton
 	 */
 	private void evaluateButtons() {
-		boolean buttonsEnabled = richTextArea.getText().length()>0;
-		if (addButton!=null) { // loading case
+		boolean buttonsEnabled = richTextArea.getText().trim().length() > 0;
+		
+		if (addButton != null) { // loading case
 			addButton.setEnabled(buttonsEnabled);
 		}
-		if (updateButton!=null) { // loading case
+		
+		if (updateButton != null) { // loading case
 			updateButton.setEnabled(buttonsEnabled);
 		}
 	}
