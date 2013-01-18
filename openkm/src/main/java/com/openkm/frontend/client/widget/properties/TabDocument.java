@@ -27,8 +27,6 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
-import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.http.client.URL;
@@ -67,7 +65,6 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	private static final int TAB_HEIGHT = 20;
 	public int PREVIEW_TAB = -1;
 	private int SECURITY_TAB = -1;
-	private int NOTES_TAB = -1;
 	
 	public TabLayoutPanel tabPanel;
 	public Document document;
@@ -138,17 +135,6 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 					previewTimer.schedule(500);
 				} 
 				fireEvent(HasDocumentEvent.TAB_CHANGED);
-			}
-		});
-		// To solve chrome bug with notes
-		// http://code.google.com/r/magic6435-testing/source/browse/src/com/google/livingstories/client/ui/RichTextEditor.java?r=42e6121cb6d729e0c4317fd736a588a755026a4a
-		tabPanel.addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
-			@Override
-			public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
-				int tabIndex = event.getItem().intValue();
-				if (tabIndex == NOTES_TAB) {
-					notes.evaluateRebuild();
-				}
 			}
 		});
 		
@@ -546,7 +532,6 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	public void showNotes() {
 		tabPanel.add(notes, Main.i18n("tab.document.notes"));
 		notesVisible = true;
-		NOTES_TAB = tabPanel.getWidgetCount()-1; // Starts at 0
 	}
 	
 	/**

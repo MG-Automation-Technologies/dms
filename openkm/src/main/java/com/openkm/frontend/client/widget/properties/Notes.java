@@ -30,7 +30,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -42,6 +41,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
@@ -76,8 +76,8 @@ public class Notes extends Composite {
 	private ScrollPanel scrollPanel;
 	public RichTextArea richTextArea;
 	private RichTextToolbar richTextToolbar;
-	private HorizontalPanel hButtonPanel;
 	private VerticalPanel newNotePanel;
+	private TextArea textArea;
 	private HTML addNote;
 	private Grid gridRichText;
 	boolean visibleButtons = true;
@@ -86,8 +86,7 @@ public class Notes extends Composite {
 	private String editedNotePath = "";
 	private int editedNoteRow = 0;
 	private boolean removeNoteEnabled = false;
-	private boolean flagBuildStarted = false;
-	private boolean flagRebuildStarted = false;
+	private boolean isChrome = false;
 	int type = 0;
 	
 	/**
@@ -95,12 +94,38 @@ public class Notes extends Composite {
 	 */
 	public Notes(int type) {
 		this.type = type;
+		isChrome = (Util.getUserAgent().startsWith("safari") || Util.getUserAgent().startsWith("chrome"));
 		tableNotes = new FlexTable();
 		scrollPanel = new ScrollPanel(tableNotes);
 		newNotePanel = new VerticalPanel(); 
 		addNote = new HTML("<b>" + Main.i18n("general.menu.edit.add.note") + "</b>");
-		build(false); // Build richTextArea
-		
+		richTextArea = new RichTextArea();
+		richTextArea.setSize("100%", "14em");
+		richTextToolbar = new RichTextToolbar(richTextArea);
+		richTextArea.addKeyUpHandler(new KeyUpHandler() {
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				evaluateButtons();
+			}
+		});
+		// richTextToolbar.setWidth("100%");
+	    
+	    gridRichText = new Grid(2, 1);
+	    gridRichText.setStyleName("RichTextToolbar");
+	    gridRichText.addStyleName("okm-Input");
+	    gridRichText.setWidget(0, 0, richTextToolbar);
+	    gridRichText.setWidget(1, 0, richTextArea);
+	    
+	    textArea = new TextArea();
+	    textArea.setPixelSize(550, 160);
+	    textArea.addKeyUpHandler(new KeyUpHandler() {
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				evaluateButtons();
+			}
+		});
+	    textArea.setStyleName("okm-Input");
+	    
 		addButton = new Button(Main.i18n("button.add"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
@@ -128,19 +153,27 @@ public class Notes extends Composite {
 		
 		newNotePanel.add(Util.vSpace("40"));
 		newNotePanel.add(addNote);
-		newNotePanel.add(gridRichText);
+		if (isChrome) {
+			newNotePanel.add(textArea);
+		} else {
+			newNotePanel.add(gridRichText);
+		}
 		newNotePanel.add(Util.vSpace("10"));
-		hButtonPanel = new HorizontalPanel();
-		hButtonPanel.add(addButton);
-		hButtonPanel.add(new HTML("&nbsp;"));
-		hButtonPanel.add(updateButton);
-		hButtonPanel.add(new HTML("&nbsp;"));
-		hButtonPanel.add(cancelButton);
-		newNotePanel.add(hButtonPanel);
+		HorizontalPanel hPanel = new HorizontalPanel();
+		hPanel.add(cancelButton);
+		hPanel.add(new HTML("&nbsp;"));
+		hPanel.add(addButton);
+		hPanel.add(new HTML("&nbsp;"));
+		hPanel.add(updateButton);
+		newNotePanel.add(hPanel);
 		
 		newNotePanel.setCellHorizontalAlignment(addNote, HasAlignment.ALIGN_CENTER);
-		newNotePanel.setCellHorizontalAlignment(gridRichText, HasAlignment.ALIGN_CENTER);
-		newNotePanel.setCellHorizontalAlignment(hButtonPanel, HasAlignment.ALIGN_CENTER);
+		if (isChrome) {
+			newNotePanel.setCellHorizontalAlignment(textArea, HasAlignment.ALIGN_CENTER);
+		} else {
+			newNotePanel.setCellHorizontalAlignment(gridRichText, HasAlignment.ALIGN_CENTER);
+		}
+		newNotePanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
 		
 		addButton.setStyleName("okm-AddButton");
 		updateButton.setStyleName("okm-YesButton");
@@ -350,6 +383,7 @@ public class Notes extends Composite {
 		addButton.setVisible(visible);
 		addNote.setVisible(visible);
 		gridRichText.setVisible(visible);
+		textArea.setVisible(visible);
 	}
 	
 	/**
@@ -362,6 +396,7 @@ public class Notes extends Composite {
 		addButton.setVisible(addNoteOption);
 		addNote.setVisible(addNoteOption);
 		gridRichText.setVisible(addNoteOption);
+		textArea.setVisible(addNoteOption);
 	}
 	
 	/**
@@ -413,14 +448,19 @@ public class Notes extends Composite {
 	 * addNote
 	 */
 	private void addNote() {
-		noteService.add(getPath(), getTextNote(), callbackAddNote);
+		boolean hasText = (isChrome)?textArea.getText().trim().length()>0:richTextArea.getText().trim().length()>0;
+		if (hasText) {
+			noteService.add(getPath(), getTextNote(), callbackAddNote);
+		}
 	}
 	
 	/**
 	 * addNote
 	 */
 	public void addNote(String text) {
-		noteService.add(getPath(), text, callbackAddNote);
+		if (text.length()>0) {
+			noteService.add(getPath(), text, callbackAddNote);
+		}
 	}
 	
 	/**
@@ -444,14 +484,23 @@ public class Notes extends Composite {
 	 * getTextNote
 	 */
 	private String getTextNote() {
-		return richTextArea.getHTML();
+		if (isChrome) {
+			return textArea.getText();
+		} else {
+			return richTextArea.getHTML();
+		}
 	}
 	
 	/**
 	 * setTextNoteToEditor
 	 */
 	private void setTextNoteToEditor(String text) {
-		richTextArea.setHTML(text);
+		if (isChrome) {
+			textArea.setText(text);
+		} else {
+			richTextArea.setHTML(text);
+		}
+		evaluateButtons();
 	}
 	
 	/**
@@ -470,100 +519,6 @@ public class Notes extends Composite {
 		
 		updateButton.setVisible(false);
 		cancelButton.setVisible(false);
-	}
-	
-	/**
-	 * build
-	 */
-	private void build(boolean reset) {
-		flagBuildStarted = true;
-		if (reset) {
-			flagRebuildStarted = false;
-		}
-		String content = "";
-		if (gridRichText!=null) {
-			newNotePanel.remove(gridRichText);
-			content = richTextArea.getText();
-		} 
-		
-		gridRichText = new Grid(2, 1);
-		richTextArea = new RichTextArea();
-		richTextArea.setSize("100%", "14em");
-		richTextToolbar = new RichTextToolbar(richTextArea);
-		//
-		// richTextToolbar.setWidth("100%");
-		
-		richTextArea.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				if (!flagBuildStarted && !flagRebuildStarted) {
-					flagRebuildStarted = true;
-					build(false);
-					Timer timer = new Timer() {
-						@Override
-						public void run() {
-							richTextArea.setFocus(true);
-						}
-					};
-					timer.schedule(400);
-					
-				} else if (Util.getUserAgent().startsWith("safari") || Util.getUserAgent().startsWith("chrome")) {
-					richTextArea.setFocus(true);
-				}
-			}
-		});
-		richTextArea.addKeyUpHandler(new KeyUpHandler() {
-			@Override
-			public void onKeyUp(KeyUpEvent event) {
-				evaluateButtons();
-			}
-		});
-		
-		gridRichText.clear();
-	    gridRichText.setStyleName("RichTextToolbar");
-	    gridRichText.addStyleName("okm-Input");
-	    gridRichText.setWidget(0, 0, richTextToolbar);
-	    gridRichText.setWidget(1, 0, richTextArea);
-		
-	    newNotePanel.add(gridRichText);
-	    newNotePanel.setCellHorizontalAlignment(gridRichText, HasAlignment.ALIGN_CENTER);
-	    setRichTextAreaText(content);
-	    richTextArea.setFocus(true);
-	    
-	    // hButtonPanel should be the last ( on loading hButtonPanel is still not attached )
-	    if (newNotePanel.getWidgetIndex(hButtonPanel)>=0) {
-	    	int widgetIndex = newNotePanel.getWidgetIndex(hButtonPanel);
-			newNotePanel.remove(widgetIndex);   // Removes button
-			newNotePanel.remove(widgetIndex-1); // Removes space before button
-			newNotePanel.add(Util.vSpace("10"));
-			newNotePanel.add(hButtonPanel);
-			newNotePanel.setCellHorizontalAlignment(hButtonPanel, HasAlignment.ALIGN_CENTER);
-		}	
-	    flagBuildStarted = false;
-	}
-	
-	/**
-	 * evaluateRebuild
-	 */
-	public void evaluateRebuild() {
-		if (!flagBuildStarted && (Util.getUserAgent().startsWith("safari") || Util.getUserAgent().startsWith("chrome"))) {
-			build(false);
-		}
-	}
-	
-	/**
-	 * evaluateButton
-	 */
-	private void evaluateButtons() {
-		boolean buttonsEnabled = richTextArea.getText().trim().length() > 0;
-		
-		if (addButton != null) { // loading case
-			addButton.setEnabled(buttonsEnabled);
-		}
-		
-		if (updateButton != null) { // loading case
-			updateButton.setEnabled(buttonsEnabled);
-		}
 	}
 	
 	/**
@@ -660,10 +615,27 @@ public class Notes extends Composite {
 	}
 	
 	/**
+	 * evaluateButton
+	 */
+	private void evaluateButtons() {
+		boolean buttonsEnabled = (isChrome)?textArea.getText().trim().length()>0:richTextArea.getText().trim().length()>0;
+		if (addButton!=null) { // loading case
+			addButton.setEnabled(buttonsEnabled);
+		}
+		if (updateButton!=null) { // loading case
+			updateButton.setEnabled(buttonsEnabled);
+		}
+	}
+	
+	/**
 	 * setRichTextAreaText
 	 */
 	private void setRichTextAreaText(String text) {
-		richTextArea.setText(text);
+		if (isChrome) {
+			textArea.setText(text);
+		} else {
+			richTextArea.setText(text);
+		}
 		evaluateButtons();
 	}
 	
