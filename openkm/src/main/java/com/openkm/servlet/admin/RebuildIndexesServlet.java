@@ -441,7 +441,7 @@ public class RebuildIndexesServlet extends BaseServlet {
 				long perMile = count * 1000 / total;
 				
 				if (perMile > oldPerMile) {
-					FileLogger.info(BASE_NAME, "Progress {0}%", perMile);
+					FileLogger.info(BASE_NAME, "Progress {0}%%", perMile);
 					oldPerMile = perMile;
 				}
 			} catch (IOException e) {
