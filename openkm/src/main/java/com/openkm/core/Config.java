@@ -135,6 +135,7 @@ public class Config {
 	// Principal
 	public static final String PROPERTY_PRINCIPAL_ADAPTER = "principal.adapter";
 	public static final String PROPERTY_PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS = "principal.database.filter.inactive.users";
+	public static final String PROPERTY_PRINCIPAL_HIDE_CONNECTION_ROLES = "principal.hide.connection.roles";
 	
 	// LDAP
 	public static final String PROPERTY_PRINCIPAL_LDAP_SERVER = "principal.ldap.server";
@@ -315,6 +316,7 @@ public class Config {
 	// Principal
 	public static String PRINCIPAL_ADAPTER = DatabasePrincipalAdapter.class.getCanonicalName();
 	public static boolean PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS = true;
+	public static boolean PRINCIPAL_HIDE_CONNECTION_ROLES = false;
 	
 	// LDAP
 	public static String PRINCIPAL_LDAP_SERVER; // ldap://phoenix.server:389
@@ -616,6 +618,8 @@ public class Config {
 			values.put(PROPERTY_PRINCIPAL_ADAPTER, PRINCIPAL_ADAPTER);
 			PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS = ConfigDAO.getBoolean(PROPERTY_PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS, PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS);
 			values.put(PROPERTY_PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS, Boolean.toString(PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS));
+			PRINCIPAL_HIDE_CONNECTION_ROLES = ConfigDAO.getBoolean(PROPERTY_PRINCIPAL_HIDE_CONNECTION_ROLES, PRINCIPAL_HIDE_CONNECTION_ROLES);
+			values.put(PROPERTY_PRINCIPAL_HIDE_CONNECTION_ROLES, Boolean.toString(PRINCIPAL_HIDE_CONNECTION_ROLES));
 
 			// LDAP
 			PRINCIPAL_LDAP_SERVER = ConfigDAO.getString(PROPERTY_PRINCIPAL_LDAP_SERVER, "");
