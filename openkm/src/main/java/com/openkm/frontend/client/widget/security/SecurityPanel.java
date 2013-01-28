@@ -98,7 +98,7 @@ public class SecurityPanel extends Composite {
 					case TAB_GROUPS:
 						usersFilter = filter.getText();
 						filter.setText(groupsFilter);
-						filterText.setHTML(Main.i18n("security.filter.by.groups"));
+						filterText.setHTML(Main.i18n("security.filter.by.roles"));
 						timer = new Timer() {
 							@Override
 							public void run() {
@@ -246,7 +246,7 @@ public class SecurityPanel extends Composite {
 				filterText.setHTML(Main.i18n("security.filter.by.users"));
 				break;
 			case TAB_GROUPS:
-				filterText.setHTML(Main.i18n("security.filter.by.groups"));
+				filterText.setHTML(Main.i18n("security.filter.by.roles"));
 				break;
 		}
 		

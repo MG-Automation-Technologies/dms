@@ -112,9 +112,9 @@ public class RoleScrollTable extends Composite {
 		
 		// Level 1 headers
 	    if (isRolesToNofity) {
-	    	headerTable.setHTML(0, 0, Main.i18n("fileupload.label.groups.to.notify"));
+	    	headerTable.setHTML(0, 0, Main.i18n("fileupload.label.roles.to.notify"));
 		} else {
-			headerTable.setHTML(0, 0, Main.i18n("fileupload.label.groups"));
+			headerTable.setHTML(0, 0, Main.i18n("fileupload.label.roles"));
 		}
 
 	    table.setColumnWidth(0,167);
@@ -244,9 +244,9 @@ public class RoleScrollTable extends Composite {
 	 */
 	public void langRefresh() {
 		if (isRolesToNofity) {
-			headerTable.setHTML(0, 0, Main.i18n("fileupload.label.groups.to.notify"));
+			headerTable.setHTML(0, 0, Main.i18n("fileupload.label.roles.to.notify"));
 		} else {
-			headerTable.setHTML(0, 0, Main.i18n("fileupload.label.groups"));
+			headerTable.setHTML(0, 0, Main.i18n("fileupload.label.roles"));
 		}
 	}
 

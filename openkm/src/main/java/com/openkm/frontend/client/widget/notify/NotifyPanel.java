@@ -73,7 +73,7 @@ public class NotifyPanel extends Composite {
 		tabPanel =  new TabLayoutPanel(TAB_HEIGHT, Unit.PX);
 		
 		tabPanel.add(notifyUser, Main.i18n("fileupload.label.users"));
-		tabPanel.add(notifyRole, Main.i18n("fileupload.label.groups"));
+		tabPanel.add(notifyRole, Main.i18n("fileupload.label.roles"));
 		tabPanel.selectTab(TAB_USERS);
 		tabPanel.setWidth("374");
 		tabPanel.setHeight("140");
@@ -90,7 +90,7 @@ public class NotifyPanel extends Composite {
 					case TAB_GROUPS:
 						usersFilter = filter.getText();
 						filter.setText(groupsFilter);
-						filterText.setHTML(Main.i18n("security.filter.by.groups"));
+						filterText.setHTML(Main.i18n("security.filter.by.roles"));
 						break;
 				}
 			}
@@ -192,7 +192,7 @@ public class NotifyPanel extends Composite {
 		}
 		
 		tabPanel.add(notifyUser, Main.i18n("fileupload.label.users"));
-		tabPanel.add(notifyRole, Main.i18n("fileupload.label.groups"));
+		tabPanel.add(notifyRole, Main.i18n("fileupload.label.roles"));
 		tabPanel.selectTab(selected);
 		
 		filterText.setHTML(Main.i18n("security.filter.by.users"));
@@ -202,7 +202,7 @@ public class NotifyPanel extends Composite {
 				filterText.setHTML(Main.i18n("security.filter.by.users"));
 				break;
 			case TAB_GROUPS:
-				filterText.setHTML(Main.i18n("security.filter.by.groups"));
+				filterText.setHTML(Main.i18n("security.filter.by.roles"));
 				break;
 		}
 		
