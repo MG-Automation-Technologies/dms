@@ -212,13 +212,9 @@ public class AuthServlet extends OKMRemoteServiceServlet implements OKMAuthServi
 		try {
 			Collection<String> grantedRoles = OKMAuth.getInstance().getGrantedRoles(null, nodePath).keySet();
 			
-			// Not add rols that are granted
+			// Not add roles that are granted
 			for (String role : OKMAuth.getInstance().getRoles(null)) {
-				// Always removing UserRole and AdminRole ( must be only used as
-				// connection grant not assigned to
-				// repository )
-				if (!grantedRoles.contains(role) && !role.equals(Config.DEFAULT_USER_ROLE)
-						&& !role.equals(Config.DEFAULT_ADMIN_ROLE)) {
+				if (!grantedRoles.contains(role) && checkConnectionRole(role)) {
 					roleList.add(role);
 				}
 			}
@@ -303,11 +299,8 @@ public class AuthServlet extends OKMRemoteServiceServlet implements OKMAuthServi
 			
 			// Not add roles that are granted
 			for (String role : OKMAuth.getInstance().getRoles(null)) {
-				// Always removing UserRole and AdminRole ( must be only used as
-				// connection grant not assigned to
-				// repository )
 				if (!grantedRoles.contains(role) && role.toLowerCase().startsWith(filter.toLowerCase())
-						&& !role.equals(Config.DEFAULT_USER_ROLE) && !role.equals(Config.DEFAULT_ADMIN_ROLE)) {
+						&& checkConnectionRole(role)) {
 					roleList.add(role);
 				}
 			}
@@ -549,7 +542,7 @@ public class AuthServlet extends OKMRemoteServiceServlet implements OKMAuthServi
 		
 		try {
 			for (String role : OKMAuth.getInstance().getRoles(null)) {
-				if (!role.equals(Config.DEFAULT_USER_ROLE) && !role.equals(Config.DEFAULT_ADMIN_ROLE)) {
+				if (checkConnectionRole(role)) {
 					roleList.add(role);
 				}
 			}
@@ -606,8 +599,8 @@ public class AuthServlet extends OKMRemoteServiceServlet implements OKMAuthServi
 		
 		try {
 			for (String role : OKMAuth.getInstance().getRoles(null)) {
-				if (!role.equals(Config.DEFAULT_USER_ROLE) && !role.equals(Config.DEFAULT_ADMIN_ROLE)
-						&& role.toLowerCase().startsWith(filter.toLowerCase()) && !selectedRoles.contains(role)) {
+				if (role.toLowerCase().startsWith(filter.toLowerCase()) && !selectedRoles.contains(role)
+						&& checkConnectionRole(role)) {
 					roleList.add(role);
 				}
 			}
@@ -653,5 +646,13 @@ public class AuthServlet extends OKMRemoteServiceServlet implements OKMAuthServi
 		}
 		
 		log.debug("changeSecurity: void");
+	}
+	
+	private boolean checkConnectionRole(String role) {
+		if (Config.PRINCIPAL_HIDE_CONNECTION_ROLES) {
+			return !role.equals(Config.DEFAULT_USER_ROLE) && !role.equals(Config.DEFAULT_ADMIN_ROLE);
+		} else {
+			return true;
+		}
 	}
 }
