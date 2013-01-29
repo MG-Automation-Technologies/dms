@@ -194,7 +194,7 @@ public class DbFolderModule implements FolderModule {
 				throw new AccessDeniedException("Can't delete a folder with readonly nodes");
 			}
 			
-			if (fldPath.startsWith("/" + Repository.CATEGORIES) && NodeBaseDAO.getInstance().categoryInUse(fldUuid)) {
+			if (fldPath.startsWith("/" + Repository.CATEGORIES) && NodeBaseDAO.getInstance().isCategoryInUse(fldUuid)) {
 				throw new AccessDeniedException("Can't delete a category in use");
 			}
 			
@@ -257,7 +257,7 @@ public class DbFolderModule implements FolderModule {
 				throw new AccessDeniedException("Can't purge a folder with readonly nodes");
 			}
 			
-			if (fldPath.startsWith("/" + Repository.CATEGORIES) && NodeBaseDAO.getInstance().categoryInUse(fldUuid)) {
+			if (fldPath.startsWith("/" + Repository.CATEGORIES) && NodeBaseDAO.getInstance().isCategoryInUse(fldUuid)) {
 				throw new AccessDeniedException("Can't purge a category in use");
 			}
 			
