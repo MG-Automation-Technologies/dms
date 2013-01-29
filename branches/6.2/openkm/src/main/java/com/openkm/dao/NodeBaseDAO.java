@@ -1061,8 +1061,8 @@ public class NodeBaseDAO {
 	/**
 	 * Test for category in use
 	 */
-	public boolean categoryInUse(String catUuid) throws DatabaseException {
-		log.debug("categoryInUse({}, {})", catUuid);
+	public boolean isCategoryInUse(String catUuid) throws DatabaseException {
+		log.debug("isCategoryInUse({}, {})", catUuid);
 		final String qs = "from NodeBase nb where :category in elements(nb.categories)";
 		Session session = null;
 		Transaction tx = null;
@@ -1077,7 +1077,7 @@ public class NodeBaseDAO {
 			check = !q.list().isEmpty();
 			
 			HibernateUtil.commit(tx);
-			log.debug("categoryInUse: {}", check);
+			log.debug("isCategoryInUse: {}", check);
 			return check;
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
