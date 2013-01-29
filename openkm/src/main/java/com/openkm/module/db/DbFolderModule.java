@@ -194,6 +194,10 @@ public class DbFolderModule implements FolderModule {
 				throw new AccessDeniedException("Can't delete a folder with readonly nodes");
 			}
 			
+			if (fldPath.startsWith("/" + Repository.CATEGORIES) && NodeBaseDAO.getInstance().categoryInUse(fldUuid)) {
+				throw new AccessDeniedException("Can't delete a category in use");
+			}
+			
 			String userTrashPath = "/" + Repository.TRASH + "/" + auth.getName();
 			String userTrashUuid = NodeBaseDAO.getInstance().getUuidFromPath(userTrashPath);
 			
@@ -246,11 +250,15 @@ public class DbFolderModule implements FolderModule {
 			String fldUuid = NodeBaseDAO.getInstance().getUuidFromPath(fldPath);
 			
 			if (BaseFolderModule.hasLockedNodes(fldUuid)) {
-				throw new LockException("Can't delete a folder with child locked nodes");
+				throw new LockException("Can't purge a folder with child locked nodes");
 			}
 			
 			if (!BaseFolderModule.hasWriteAccess(fldUuid)) {
-				throw new AccessDeniedException("Can't delete a folder with readonly nodes");
+				throw new AccessDeniedException("Can't purge a folder with readonly nodes");
+			}
+			
+			if (fldPath.startsWith("/" + Repository.CATEGORIES) && NodeBaseDAO.getInstance().categoryInUse(fldUuid)) {
+				throw new AccessDeniedException("Can't purge a category in use");
 			}
 			
 			NodeFolderDAO.getInstance().purge(fldUuid, true);

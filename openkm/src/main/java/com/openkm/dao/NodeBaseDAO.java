@@ -1059,6 +1059,35 @@ public class NodeBaseDAO {
 	}
 	
 	/**
+	 * Test for category in use
+	 */
+	public boolean categoryInUse(String catUuid) throws DatabaseException {
+		log.debug("categoryInUse({}, {})", catUuid);
+		final String qs = "from NodeBase nb where :category in elements(nb.categories)";
+		Session session = null;
+		Transaction tx = null;
+		boolean check;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			
+			Query q = session.createQuery(qs).setCacheable(true);
+			q.setString("category", catUuid);
+			check = !q.list().isEmpty();
+			
+			HibernateUtil.commit(tx);
+			log.debug("categoryInUse: {}", check);
+			return check;
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
 	 * Add keyword to node
 	 */
 	public void addKeyword(String uuid, String keyword) throws PathNotFoundException, AccessDeniedException, DatabaseException {
