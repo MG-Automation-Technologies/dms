@@ -40,7 +40,7 @@ public class CronTabUtils {
 	 */
 	public static void createOrUpdate(String name, String expression, String content) throws DatabaseException,
 			PrincipalAdapterException {
-		log.info("createOrUpdate({}, {}, {})", new Object[] { name, expression, content });
+		log.debug("createOrUpdate({}, {}, {})", new Object[] { name, expression, content });
 		CronTab ct = CronTabDAO.findByName(name);
 		
 		if (ct == null) {
@@ -70,7 +70,7 @@ public class CronTabUtils {
 			CronTabDAO.update(ct);
 		}
 		
-		log.info("createOrUpdate: void");
+		log.debug("createOrUpdate: void");
 	}
 	
 	/**
