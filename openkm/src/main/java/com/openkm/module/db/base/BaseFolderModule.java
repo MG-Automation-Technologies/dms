@@ -70,8 +70,8 @@ public class BaseFolderModule {
 	/**
 	 * Create a new folder
 	 */
-	public static NodeFolder create(String user, NodeFolder parentFolder, String name) throws PathNotFoundException,
-			AccessDeniedException, ItemExistsException, DatabaseException {
+	public static NodeFolder create(String user, NodeFolder parentFolder, String name, Calendar created)
+			throws PathNotFoundException, AccessDeniedException, ItemExistsException, DatabaseException {
 		
 		// Create and add a new folder node
 		NodeFolder folderNode = new NodeFolder();
@@ -80,7 +80,7 @@ public class BaseFolderModule {
 		folderNode.setParent(parentFolder.getUuid());
 		folderNode.setAuthor(user);
 		folderNode.setName(name);
-		folderNode.setCreated(Calendar.getInstance());
+		folderNode.setCreated(created != null ? created : Calendar.getInstance());
 		
 		// Get parent node auth info
 		Map<String, Integer> userPerms = parentFolder.getUserPermissions();
@@ -186,7 +186,7 @@ public class BaseFolderModule {
 		
 		try {
 			String name = srcFldNode.getName();
-			newFolder = BaseFolderModule.create(user, dstFldNode, name);
+			newFolder = BaseFolderModule.create(user, dstFldNode, name, Calendar.getInstance());
 			
 			for (NodeFolder nFolder : NodeFolderDAO.getInstance().findByParent(srcFldNode.getUuid())) {
 				copy(user, nFolder, newFolder);
