@@ -97,7 +97,7 @@ public class DbFolderModule implements FolderModule {
 			parentFolder = (NodeFolder) env.get(AutomationUtils.PARENT_NODE);
 			
 			// Create node
-			NodeFolder fldNode = BaseFolderModule.create(auth.getName(), parentFolder, name);
+			NodeFolder fldNode = BaseFolderModule.create(auth.getName(), parentFolder, name, fld.getCreated());
 			
 			// AUTOMATION - POST
 			env.put(AutomationUtils.FOLDER_NODE, fldNode);

@@ -84,10 +84,9 @@ public class BaseDocumentModule {
 	 */
 	@SuppressWarnings("unchecked")
 	public static NodeDocument create(String user, String parentPath, NodeBase parentNode, String name, String title,
-			String mimeType, InputStream is, long size, Set<String> keywords, Set<String> categories,
-			Ref<FileUploadResponse> fuResponse)
-			throws PathNotFoundException, AccessDeniedException, ItemExistsException, UserQuotaExceededException,
-			AutomationException, DatabaseException, IOException {
+			Calendar created, String mimeType, InputStream is, long size, Set<String> keywords, Set<String> categories,
+			Ref<FileUploadResponse> fuResponse) throws PathNotFoundException, AccessDeniedException, ItemExistsException,
+			UserQuotaExceededException,	AutomationException, DatabaseException, IOException {
 		
 		// Check user quota
 		UserConfig uc = UserConfigDAO.findByPk(user);
@@ -133,7 +132,7 @@ public class BaseDocumentModule {
 		documentNode.setName(name);
 		documentNode.setTitle(title);
 		documentNode.setMimeType(mimeType);
-		documentNode.setCreated(Calendar.getInstance());
+		documentNode.setCreated(created != null ? created : Calendar.getInstance());
 		documentNode.setLastModified(documentNode.getCreated());
 		
 		// Get parent node auth info
@@ -295,8 +294,8 @@ public class BaseDocumentModule {
 			Ref<FileUploadResponse> fuResponse = new Ref<FileUploadResponse>(new FileUploadResponse());
 			is = NodeDocumentVersionDAO.getInstance().getCurrentContentByParent(srcDocNode.getUuid());
 			NodeDocumentVersion nDocVer = NodeDocumentVersionDAO.getInstance().findCurrentVersion(srcDocNode.getUuid());
-			newDocument = create(user, dstPath, dstNode, docName, srcDocNode.getTitle(), srcDocNode.getMimeType(), is,
-					nDocVer.getSize(), keywords, categories, fuResponse);
+			newDocument = create(user, dstPath, dstNode, docName, srcDocNode.getTitle(), Calendar.getInstance(),
+					srcDocNode.getMimeType(), is, nDocVer.getSize(), keywords, categories, fuResponse);
 		} finally {
 			IOUtils.closeQuietly(is);
 		}

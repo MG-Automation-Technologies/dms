@@ -245,7 +245,7 @@ public class DbDocumentModule implements DocumentModule {
 			
 			// Create node
 			NodeDocument docNode = BaseDocumentModule.create(auth.getName(), parentPath, parentNode, name, 
-					doc.getTitle(), mimeType, is, size, keywords, new HashSet<String>(), fuResponse);
+					doc.getTitle(), doc.getCreated(), mimeType, is, size, keywords, new HashSet<String>(), fuResponse);
 			
 			// AUTOMATION - POST
 			// INSIDE BaseDocumentModule.create
