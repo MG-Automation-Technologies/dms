@@ -190,9 +190,9 @@ public class SearchCompactResult extends Composite {
 	public void downloadDocument() {
 		if (!dataTable.getSelectedRows().isEmpty()) {
 			if (table.isDocumentSelected()) {
-				Util.downloadFile(getDocument().getPath(), "");
+				Util.downloadFileByUUID(getDocument().getUuid(), "");
 			} else if (table.isAttachmentSelected()) {
-				Util.downloadFile(getAttachment().getPath(), "");
+				Util.downloadFileByUUID(getAttachment().getUuid(), "");
 			}
 		}
 	}
