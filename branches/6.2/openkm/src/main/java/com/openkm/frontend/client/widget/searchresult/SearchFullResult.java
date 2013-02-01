@@ -113,12 +113,14 @@ public class SearchFullResult extends Composite {
 	 */
 	private void addDocumentRow(GWTQueryResult gwtQueryResult, Score score) {
 		int rows = table.getRowCount();
+		final GWTDocument doc;
 		
-		GWTDocument doc = new GWTDocument();
-		if (gwtQueryResult.getDocument()!=null) {
+		if (gwtQueryResult.getDocument() != null) {
 			doc = gwtQueryResult.getDocument();
-		} else if (gwtQueryResult.getAttachment()!=null) {
+		} else if (gwtQueryResult.getAttachment() != null) {
 			doc = gwtQueryResult.getAttachment();
+		} else {
+			doc = new GWTDocument();
 		}
 		
 		// Document row
@@ -161,7 +163,7 @@ public class SearchFullResult extends Composite {
 			downloadDocument.addClickHandler(new ClickHandler() { 
 				@Override
 				public void onClick(ClickEvent event) {
-					Util.downloadFile(docPath, "");
+					Util.downloadFileByUUID(doc.getUuid(), "");
 				}
 				
 			});
