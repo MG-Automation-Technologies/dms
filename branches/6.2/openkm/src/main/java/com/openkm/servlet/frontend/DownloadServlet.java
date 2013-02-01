@@ -72,7 +72,8 @@ public class DownloadServlet extends OKMHttpServlet {
 		log.debug("service({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
 		String id = request.getParameter("id");
-		String path = id != null ? new String(id.getBytes("ISO-8859-1"), "UTF-8") : null;
+		String uuids = request.getParameter("uuids");
+		String path = (id!=null && uuids!=null) ? new String(id.getBytes("ISO-8859-1"), "UTF-8") : null;
 		String uuid = request.getParameter("uuid");
 		String checkout = request.getParameter("checkout");
 		int size = WebUtils.getInt(request, "size");
@@ -106,14 +107,19 @@ public class DownloadServlet extends OKMHttpServlet {
 						String iid;
 						
 						for (int i = 0; i < size; ++i) {
-							iid = request.getParameter("id" + i);
+							iid = request.getParameter(((id!=null)?"id":"uuids") + i);
 							
 							// if there is some missing number try the next one
 							if (iid == null) {
 								continue;
 							}
 							
-							paths.add(new String(iid.getBytes("ISO-8859-1"), "UTF-8"));
+							if (id!=null) {
+								paths.add(new String(iid.getBytes("ISO-8859-1"), "UTF-8"));
+							} else {
+								uuid = new String(iid.getBytes("ISO-8859-1"), "UTF-8");
+								paths.add(OKMRepository.getInstance().getNodePath(null, uuid));
+							}
 						}
 						
 						fileName = PathUtils.getName(PathUtils.getParent(paths.get(0)));
