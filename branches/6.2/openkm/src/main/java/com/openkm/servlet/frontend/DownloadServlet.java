@@ -71,12 +71,11 @@ public class DownloadServlet extends OKMHttpServlet {
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		log.debug("service({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
-		String id = request.getParameter("id");
-		String uuids = request.getParameter("uuids");
-		String path = (id != null && uuids != null) ? new String(id.getBytes("ISO-8859-1"), "UTF-8") : null;
+		String path = request.getParameter("path");
 		String uuid = request.getParameter("uuid");
+		String[] uuidList = request.getParameterValues("uuidList");
+		String[] pathList = request.getParameterValues("pathList");
 		String checkout = request.getParameter("checkout");
-		int size = WebUtils.getInt(request, "size");
 		String ver = request.getParameter("ver");
 		boolean export = request.getParameter("export") != null;
 		boolean inline = request.getParameter("inline") != null;
@@ -89,36 +88,33 @@ public class DownloadServlet extends OKMHttpServlet {
 			// Now an document can be located by UUID
 			if (uuid != null && !uuid.equals("")) {
 				path = OKMRepository.getInstance().getNodePath(null, uuid);
+			} else if (path != null) {
+				path = new String(path.getBytes("ISO-8859-1"), "UTF-8");
 			}
 			
 			if (export) {
 				if (exportZip) {
-					String fileName;
+					String fileName = "export.zip";
 					
 					// Get document
 					FileOutputStream os = new FileOutputStream(tmp);
 					
-					if (size == 0) {
+					if (path != null) {
 						exportFolderAsZip(path, os);
 						fileName = PathUtils.getName(path) + ".zip";
-					} else {
-						// export into a zip file multiple documents
+					} else if (uuidList != null || pathList != null) {
+						// Export into a zip file multiple documents
 						List<String> paths = new ArrayList<String>();
-						String iid;
 						
-						for (int i = 0; i < size; ++i) {
-							iid = request.getParameter(((id != null) ? "id" : "uuids") + i);
-							
-							// if there is some missing number try the next one
-							if (iid == null) {
-								continue;
+						if (uuidList != null) {
+							for (String uuidElto : uuidList) {
+								String foo = new String(uuidElto.getBytes("ISO-8859-1"), "UTF-8");
+								paths.add(OKMRepository.getInstance().getNodePath(null, foo));
 							}
-							
-							if (id != null) {
-								paths.add(new String(iid.getBytes("ISO-8859-1"), "UTF-8"));
-							} else {
-								uuid = new String(iid.getBytes("ISO-8859-1"), "UTF-8");
-								paths.add(OKMRepository.getInstance().getNodePath(null, uuid));
+						} else if (pathList != null) {
+							for (String pathElto : pathList) {
+								String foo = new String(pathElto.getBytes("ISO-8859-1"), "UTF-8");
+								paths.add(foo);
 							}
 						}
 						
