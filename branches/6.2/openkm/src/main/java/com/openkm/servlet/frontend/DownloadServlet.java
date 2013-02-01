@@ -73,7 +73,7 @@ public class DownloadServlet extends OKMHttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		String id = request.getParameter("id");
 		String uuids = request.getParameter("uuids");
-		String path = (id!=null && uuids!=null) ? new String(id.getBytes("ISO-8859-1"), "UTF-8") : null;
+		String path = (id != null && uuids != null) ? new String(id.getBytes("ISO-8859-1"), "UTF-8") : null;
 		String uuid = request.getParameter("uuid");
 		String checkout = request.getParameter("checkout");
 		int size = WebUtils.getInt(request, "size");
@@ -107,14 +107,14 @@ public class DownloadServlet extends OKMHttpServlet {
 						String iid;
 						
 						for (int i = 0; i < size; ++i) {
-							iid = request.getParameter(((id!=null)?"id":"uuids") + i);
+							iid = request.getParameter(((id != null) ? "id" : "uuids") + i);
 							
 							// if there is some missing number try the next one
 							if (iid == null) {
 								continue;
 							}
 							
-							if (id!=null) {
+							if (id != null) {
 								paths.add(new String(iid.getBytes("ISO-8859-1"), "UTF-8"));
 							} else {
 								uuid = new String(iid.getBytes("ISO-8859-1"), "UTF-8");
