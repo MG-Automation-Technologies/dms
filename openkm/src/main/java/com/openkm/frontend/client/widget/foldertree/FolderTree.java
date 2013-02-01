@@ -1508,7 +1508,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	 * Export to file
 	 */
 	public void exportFolderToFile() {
-		Util.downloadFile(getFolder().getPath(), "export");
+		Util.downloadFileByUUID(getFolder().getUuid(), "export");
 	}
 	
 	/**
