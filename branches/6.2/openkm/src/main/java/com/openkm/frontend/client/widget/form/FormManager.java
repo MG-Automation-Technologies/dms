@@ -1098,24 +1098,20 @@ public class FormManager {
 					repositoryService.getPathByUUID(node.getUuid(), new AsyncCallback<String>() {
 						@Override
 						public void onSuccess(String result) {
-							final String path = result;
 							folderService.isValid(result, new AsyncCallback<Boolean>() {
 								@Override
 								public void onSuccess(Boolean result) {
-									if (result.booleanValue()) {
-										Util.downloadFile(path, "export");
-									} else {
-										anchor.addClickHandler(new ClickHandler() {
-											@Override
-											public void onClick(ClickEvent event) {
-												if (!node.getUuid().equals("")) {
-													Util.downloadFileByUUID(node.getUuid(), "");
-												} else if (!node.getPath().equals("")) {
-													Util.downloadFile(node.getPath(), "");
-												}
+									final boolean isFolder = result; 
+									anchor.addClickHandler(new ClickHandler() {
+										@Override
+										public void onClick(ClickEvent event) {
+											if (isFolder) {
+												Util.downloadFileByUUID(node.getUuid(), "export");
+											} else {
+												Util.downloadFileByUUID(node.getUuid(), "");
 											}
-										});
-									}
+										}
+									});
 								}
 								
 								@Override
@@ -1131,28 +1127,36 @@ public class FormManager {
 						}
 					});
 				} else if (!node.getPath().equals("")) {
-					folderService.isValid(node.getPath(), new AsyncCallback<Boolean>() {
+					repositoryService.getUUIDByPath(node.getPath(), new AsyncCallback<String>() {
 						@Override
-						public void onSuccess(Boolean result) {
-							if (result.booleanValue()) {
-								Util.downloadFile(node.getPath(), "export");
-							} else {
-								anchor.addClickHandler(new ClickHandler() {
-									@Override
-									public void onClick(ClickEvent event) {
-										if (!node.getUuid().equals("")) {
-											Util.downloadFileByUUID(node.getUuid(), "");
-										} else if (!node.getPath().equals("")) {
-											Util.downloadFile(node.getPath(), "");
+						public void onSuccess(String result) {
+							final String uuid = result;
+							folderService.isValid(node.getPath(), new AsyncCallback<Boolean>() {
+								@Override
+								public void onSuccess(Boolean result) {
+									final boolean isFolder = result;
+									anchor.addClickHandler(new ClickHandler() {
+										@Override
+										public void onClick(ClickEvent event) {
+											if (isFolder) {
+												Util.downloadFileByUUID(uuid, "export");
+											} else {
+												Util.downloadFileByUUID(uuid, "");
+											}
 										}
-									}
-								});
-							}
+									});
+								}
+								
+								@Override
+								public void onFailure(Throwable caught) {
+									Main.get().showError("getPathByUUID", caught);
+								}
+							});
 						}
 						
 						@Override
 						public void onFailure(Throwable caught) {
-							Main.get().showError("getPathByUUID", caught);
+							Main.get().showError("getUUIDByPath", caught);
 						}
 					});
 				}
