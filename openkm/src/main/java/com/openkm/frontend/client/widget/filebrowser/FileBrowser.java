@@ -1894,7 +1894,7 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 	 */
 	public void exportFolderToFile() {
 		if (table.isFolderSelected()) {
-			Util.downloadFile(getFolder().getPath(), "export");
+			Util.downloadFileByUUID(getFolder().getUuid(), "export");
 		}
 	}
 	
