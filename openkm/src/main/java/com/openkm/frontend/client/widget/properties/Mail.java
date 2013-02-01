@@ -135,7 +135,7 @@ public class Mail extends Composite {
 		
 		// URL clipboard button
 		String url = Main.get().workspaceUserProperties.getApplicationURL();
-		url += "?docPath=" + URL.encodeQueryString(URL.encodeQueryString(mail.getPath()));
+		url += "?uuid=" + URL.encodeQueryString(URL.encodeQueryString(mail.getUuid()));
 		tableProperties.setWidget(8, 1, new HTML("<div id=\"urlclipboardcontainer\"></div>\n"));
 		Util.createURLClipboardButton(url);
 		

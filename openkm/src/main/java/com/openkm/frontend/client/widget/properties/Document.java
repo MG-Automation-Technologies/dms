@@ -183,7 +183,7 @@ public class Document extends Composite {
 		
 		// URL clipboard button
 		String url = Main.get().workspaceUserProperties.getApplicationURL();
-		url += "?docPath=" + URL.encodeQueryString(URL.encodeQueryString(document.getPath()));
+		url += "?uuid=" + URL.encodeQueryString(URL.encodeQueryString(document.getUuid()));
 		tableProperties.setWidget(11, 1, new HTML("<div id=\"urlclipboardcontainer\"></div>\n"));
 		Util.createURLClipboardButton(url);
 		
