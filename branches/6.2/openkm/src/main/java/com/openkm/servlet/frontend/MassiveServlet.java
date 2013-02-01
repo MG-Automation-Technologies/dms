@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
 import com.openkm.api.OKMMail;
+import com.openkm.api.OKMRepository;
 import com.openkm.automation.AutomationException;
 import com.openkm.bean.Document;
 import com.openkm.core.AccessDeniedException;
@@ -224,7 +225,7 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 	public List<String> checkout(List<String> paths) throws OKMException {
 		log.debug("checkout({})", paths);
 		updateSessionManager();
-		List<String> docPaths = new ArrayList<String>();
+		List<String> docUUIDs = new ArrayList<String>();
 		String error = "";
 		String pathErrors = "";
 		
@@ -233,7 +234,7 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 			try {
 				if (OKMDocument.getInstance().isValid(null, path)) {
 					OKMDocument.getInstance().checkout(null, path);
-					docPaths.add(path);
+					docUUIDs.add(OKMRepository.getInstance().getNodeUuid(null, path));
 				}
 			} catch (LockException e) {
 				log.error(e.getMessage(), e);
@@ -267,7 +268,7 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 					+ "\n\n" + error);
 		}
 		
-		return docPaths;
+		return docUUIDs;
 	}
 	
 	@Override
