@@ -1097,9 +1097,9 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 	/**
 	 * Download documents
 	 */
-	public void downloadDocuments(boolean checkout, List<String> paths) {
-		if (paths.size()>0) {			
-			Util.downloadFiles(paths, (checkout ? "checkout" : ""));
+	public void downloadDocuments(boolean checkout, List<String> uuidList) {
+		if (uuidList.size()>0) {			
+			Util.downloadFilesByUUID(uuidList, (checkout ? "checkout" : ""));
 		}
 	}
 	
@@ -1107,18 +1107,20 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 	 * Download documents
 	 */
 	public void downloadDocuments(boolean checkout) {
-		List<String> paths = new ArrayList<String>();
+		List<String> uuidList = new ArrayList<String>();
+		
 		for (int i = 0; dataTable.getRowCount() > i; i++) {
 			CheckBox checkBox = (CheckBox) dataTable.getWidget(i, colMassiveIndex);
 			if (checkBox.getValue()) {
 				Object obj = data.get(Integer.parseInt(dataTable.getText(i, colDataIndex)));
 				if (obj instanceof GWTDocument) {
-					paths.add(((GWTDocument) obj).getPath());
+					uuidList.add(((GWTDocument) obj).getUuid());
 				}
 			}
 		}
-		if (paths.size()>0) {			
-			Util.downloadFiles(paths, (checkout ? "checkout" : ""));
+		
+		if (uuidList.size() > 0) {
+			Util.downloadFilesByUUID(uuidList, (checkout ? "checkout" : ""));
 		}
 	}
 	
@@ -1130,7 +1132,7 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 		// Log.debug("downloadDocument()");
 		if (isDocumentSelected()) {
 			// Log.debug("jump to download");
-			Util.downloadFile(getDocument().getPath(), (checkout ? "checkout" : ""));
+			Util.downloadFileByUUID(getDocument().getUuid(), (checkout ? "checkout" : ""));
 		}
 		// Log.debug("downloadDocument: void");
 	}
