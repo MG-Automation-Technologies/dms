@@ -23,13 +23,17 @@ package com.openkm.frontend.client.extension.comunicator;
 
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTWorkspace;
 import com.openkm.frontend.client.bean.ToolBarOption;
+import com.openkm.frontend.client.service.OKMRepositoryService;
+import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
 import com.openkm.frontend.client.util.Util;
 
@@ -41,6 +45,8 @@ import com.openkm.frontend.client.util.Util;
  *
  */
 public class GeneralComunicator {
+	private static final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
+	
 	/**
 	 * refreshUI
 	 */
@@ -81,7 +87,8 @@ public class GeneralComunicator {
 	 */
 	public static void downloadDocument(boolean checkout) {
 		if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
-			Util.downloadFile(Main.get().mainPanel.desktop.browser.fileBrowser.getDocument().getPath(), (checkout?"checkout":""));
+			String docUuid = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument().getUuid();
+			Util.downloadFileByUUID(docUuid, (checkout?"checkout":""));
 		}
 	}
 	
@@ -103,10 +110,29 @@ public class GeneralComunicator {
 	}
 	
 	/**
-	 * downloadFile
+	 * download file by uuid
 	 */
-	public static void downloadFile(String path, String params) {
-		Util.downloadFile(path, params);
+	public static void downloadFileByUUID(String uuid, String params) {
+		Util.downloadFileByUUID(uuid, params);
+	}
+	
+	/**
+	 * download file by path
+	 */
+	@Deprecated
+	public static void downloadFile(String path, final String params) {
+		repositoryService.getUUIDByPath(path, new AsyncCallback<String>() {
+			@Override
+			public void onSuccess(String result) {
+				Util.downloadFileByUUID(result, params);
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				Main.get().showError("getUUIDByPath", caught);
+			}
+		});
+		
 	}
 	
 	/**
