@@ -232,8 +232,9 @@ public class Util {
 	}
 	
 	/**
-	 * Download file
+	 * Download file by path
 	 */
+	@Deprecated
 	public static void downloadFile(String path, String params) {
 		if (!params.equals("") && !params.endsWith("&")) {
 			params += "&";
@@ -243,11 +244,29 @@ public class Util {
 		String url = RPCService.DownloadServlet + "?" + params + "id=" + URL.encodeQueryString(path);
 		DOM.setElementAttribute(downloadIframe, "src", url); 
 	}
+	
+	/**
+	 * downloadFilesByUUID
+	 */
+	public static void downloadFilesByUUID(List<String> uuidList, String params) {
+		if (!params.equals("")) {
+			params = "&"+params;
+		}
+		int i = 0;
+		final Element downloadIframe = RootPanel.get("__download").getElement(); 
+		String url = RPCService.DownloadServlet + "?export"+params+"&size=" + uuidList.size();
+		
+		for( String uuid : uuidList )
+			url += "&uuids"+( i++ )+"=" + URL.encodeQueryString(uuid);
+		
+		DOM.setElementAttribute(downloadIframe, "src", url); 
+	}
 
 	/**
 	 * Download files exported as zip
 	 * @author danilo
 	 */
+	@Deprecated
 	public static void downloadFiles(List<String> path, String params) {
 		if (!params.equals("")) {
 			params = "&"+params;
