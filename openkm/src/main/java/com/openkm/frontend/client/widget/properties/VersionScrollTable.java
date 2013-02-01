@@ -281,10 +281,9 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 		Button viewButton = new Button(Main.i18n("button.view"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				String path = doc.getPath();
 				List<String> versions = Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.version.versions; 
 				String ver = (String) versions.get(rows);
-				Util.downloadFile(path, "ver=" + ver);
+				Util.downloadFileByUUID(doc.getUuid(), "ver=" + ver);
 			}
 		});
 		viewButton.setVisible(Main.get().workspaceUserProperties.getWorkspace().isTabDocumentVersionDownloadVisible());

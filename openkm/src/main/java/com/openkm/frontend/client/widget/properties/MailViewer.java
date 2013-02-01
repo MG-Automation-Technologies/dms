@@ -250,7 +250,7 @@ public class MailViewer extends Composite {
 			hLink.addClickHandler(new ClickHandler() { 
 				@Override
 				public void onClick(ClickEvent event) {
-					Util.downloadFile(attach.getPath(), "");
+					Util.downloadFileByUUID(attach.getUuid(), "");
 				}
 			});
 			int row = attachmentsTable.getRowCount();
@@ -281,7 +281,7 @@ public class MailViewer extends Composite {
 		// Attachements are writem from second row
 		if (attachmentsTable.getSelectedRow()>0) {
 			if (getAttach(attachmentsTable.getSelectedRow())!=null) {
-				Util.downloadFile(getAttach(attachmentsTable.getSelectedRow()).getPath(), "");
+				Util.downloadFileByUUID(getAttach(attachmentsTable.getSelectedRow()).getUuid(), "");
 			}
 		}
 	}
