@@ -1,22 +1,22 @@
 /**
- *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (c) 2006-2012  Paco Avila & Josep Llort
- *
- *  No bytes were intentionally harmed during the development of this application.
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * OpenKM, Open Document Management System (http://www.openkm.com)
+ * Copyright (c) 2006-2012 Paco Avila & Josep Llort
+ * 
+ * No bytes were intentionally harmed during the development of this application.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 package com.openkm.dao;
@@ -31,18 +31,24 @@ import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
+import com.openkm.bean.Mail;
 import com.openkm.bean.Repository;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
+import com.openkm.dao.bean.NodeBase;
+import com.openkm.dao.bean.NodeDocument;
 import com.openkm.dao.bean.NodeFolder;
+import com.openkm.dao.bean.NodeMail;
 import com.openkm.dao.bean.UserConfig;
 import com.openkm.module.jcr.stuff.JCRUtils;
 
 public class UserConfigDAO {
 	private static Logger log = LoggerFactory.getLogger(UserConfigDAO.class);
-
-	private UserConfigDAO() {}
+	
+	private UserConfigDAO() {
+	}
 	
 	/**
 	 * Create
@@ -146,8 +152,7 @@ public class UserConfigDAO {
 	 */
 	public static void setHome(UserConfig uc) throws DatabaseException {
 		log.info("setHome({})", uc);
-		String qs = "update UserConfig uc set uc.homePath=:path, uc.homeNode=:node, " +
-			"uc.homeType=:type where uc.user=:user";
+		String qs = "update UserConfig uc set uc.homePath=:path, uc.homeNode=:node, " + "uc.homeType=:type where uc.user=:user";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -170,12 +175,11 @@ public class UserConfigDAO {
 		
 		log.debug("setHome: void");
 	}
-
+	
 	/**
 	 * Find by pk
 	 */
-	public static UserConfig findByPk(javax.jcr.Session jcrSession, String user) throws DatabaseException,
-			RepositoryException {
+	public static UserConfig findByPk(javax.jcr.Session jcrSession, String user) throws DatabaseException, RepositoryException {
 		log.debug("findByPk({}, {})", jcrSession, user);
 		Session session = null;
 		Transaction tx = null;
@@ -197,7 +201,7 @@ public class UserConfigDAO {
 			} else {
 				try {
 					Node node = jcrSession.getNodeByUUID(ret.getHomeNode());
-								
+					
 					if (!node.getPath().equals(ret.getHomePath())) {
 						ret.setHomePath(node.getPath());
 						ret.setHomeType(JCRUtils.getNodeType(node));
@@ -255,13 +259,20 @@ public class UserConfigDAO {
 				
 				session.save(ret);
 			} else {
-				NodeFolder nfHome = (NodeFolder) session.get(NodeFolder.class, ret.getHomeNode());
+				NodeBase nfHome = (NodeBase) session.get(NodeBase.class, ret.getHomeNode());
 				
 				if (nfHome != null) {
 					String path = NodeBaseDAO.getInstance().getPathFromUuid(session, nfHome.getUuid());
 					ret.setHomePath(path);
 					ret.setHomeNode(nfHome.getUuid());
-					ret.setHomeType(Folder.TYPE);
+					
+					if (nfHome instanceof NodeFolder) {
+						ret.setHomeType(Folder.TYPE);
+					} else if (nfHome instanceof NodeDocument) {
+						ret.setHomeType(Document.TYPE);
+					} else if (nfHome instanceof NodeMail) {
+						ret.setHomeType(Mail.TYPE);
+					}
 					
 					session.update(ret);
 				} else {
