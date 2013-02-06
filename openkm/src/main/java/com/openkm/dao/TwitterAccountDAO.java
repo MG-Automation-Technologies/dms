@@ -87,7 +87,7 @@ public class TwitterAccountDAO {
 	/**
 	 * Delete
 	 */
-	public static void delete(int taId) throws DatabaseException {
+	public static void delete(long taId) throws DatabaseException {
 		log.debug("delete({})", taId);
 		Session session = null;
 		Transaction tx = null;
@@ -170,7 +170,7 @@ public class TwitterAccountDAO {
 	/**
 	 * Find by pk
 	 */
-	public static TwitterAccount findByPk(int taId) throws DatabaseException {
+	public static TwitterAccount findByPk(long taId) throws DatabaseException {
 		log.debug("findByPk({})", taId);
 		String qs = "from TwitterAccount ta where ta.id=:id";
 		Session session = null;
@@ -178,7 +178,7 @@ public class TwitterAccountDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
-			q.setInteger("id", taId);
+			q.setLong("id", taId);
 			TwitterAccount ret = (TwitterAccount) q.setMaxResults(1).uniqueResult();
 			log.debug("findByPk: {}", ret);
 			return ret;
