@@ -41,7 +41,6 @@ import com.openkm.frontend.client.bean.GWTProfileFileBrowser;
 import com.openkm.frontend.client.constants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.util.ColumnComparatorDate;
 import com.openkm.frontend.client.util.ColumnComparatorDouble;
-import com.openkm.frontend.client.util.ColumnComparatorGWTFormElement;
 import com.openkm.frontend.client.util.ColumnComparatorText;
 
 /**
@@ -102,139 +101,132 @@ public class ExtendedColumnSorter extends ColumnSorter {
 	    List<String[]> elementList = new ArrayList<String[]>(); 					// List with all data
 	    List<GWTObjectToOrder> elementToOrder = new ArrayList<GWTObjectToOrder>(); 	// List with column data, and actual position
 	    
-	    // Gets the data values and set on a list of String arrays ( element by column )
-	    for (int i=0; i<rows;i++) {
-	    	String[] rowI= new String[columns];
-	    	GWTObjectToOrder rowToOrder = new GWTObjectToOrder();
-	    	for (int x=0; x<columns; x++) {
-	    		rowI[x] = Main.get().mainPanel.desktop.browser.fileBrowser.table.getDataTable().getHTML(i, x);
-	    	}
-	    	elementList.add(i,rowI);
-	    	
-	    	switch(correctedColumnIndex(column)) {
+	    int correctedColumnIndex = correctedColumnIndex(column);
+    	if (correctedColumnIndex<=7) {
+		    // Gets the data values and set on a list of String arrays ( element by column )
+		    for (int i=0; i<rows;i++) {
+		    	String[] rowI= new String[columns];
+		    	GWTObjectToOrder rowToOrder = new GWTObjectToOrder();
+		    	for (int x=0; x<columns; x++) {
+		    		rowI[x] = Main.get().mainPanel.desktop.browser.fileBrowser.table.getDataTable().getHTML(i, x);
+		    	}
+		    	elementList.add(i,rowI);
+		    	
+		    	switch(correctedColumnIndex) {
+			    	case 0 :
+			    	case 1 :
+			    	case 2 :
+			    	case 3 :
+			    	case 6 :
+				    		// Text
+					    	rowToOrder.setObject(rowI[column].toLowerCase());		// Lower case solves problem with sort ordering
+					    	rowToOrder.setDataId(""+ i);							// Actual position value
+					    	elementToOrder.add(rowToOrder);
+			    		break;
+			    	
+			    	case 4 :
+			    		// Bytes
+			    		if (data.get(Integer.parseInt(rowI[colDataIndex])) instanceof GWTFolder) {
+			    			rowToOrder.setObject(new Double(0));										// Byte value
+					    	rowToOrder.setDataId(""+ i);												// Actual position value
+					    	elementToOrder.add(rowToOrder);
+			    		} else if (data.get(Integer.parseInt(rowI[colDataIndex])) instanceof GWTMail) {  
+			    			rowToOrder.setObject(new Double(((GWTMail) data.get(Integer.parseInt(rowI[colDataIndex]))).getSize()));
+					    	rowToOrder.setDataId(""+ i);												// Actual position value
+					    	elementToOrder.add(rowToOrder);
+			    		} else if (data.get(Integer.parseInt(rowI[colDataIndex])) instanceof GWTDocument) {  
+			    			rowToOrder.setObject(new Double(((GWTDocument) data.get(Integer.parseInt(rowI[colDataIndex]))).getActualVersion().getSize()));
+					    	rowToOrder.setDataId(""+ i);												// Actual position value
+					    	elementToOrder.add(rowToOrder);
+			    		}
+			    		break;
+			    		
+			    	case 5 :
+			    		// Date
+			    		if (data.get(Integer.parseInt(rowI[colDataIndex])) instanceof GWTFolder) {
+			    			rowToOrder.setObject(((GWTFolder) data.get(Integer.parseInt(rowI[colDataIndex]))).getCreated()); 	// Date value
+					    	rowToOrder.setDataId(""+ i);														 	// Actual position value
+					    	elementToOrder.add(rowToOrder);
+			    		} else if (data.get(Integer.parseInt(rowI[colDataIndex])) instanceof GWTMail) {  
+			    			rowToOrder.setObject(((GWTMail) data.get(Integer.parseInt(rowI[colDataIndex]))).getReceivedDate()); // Date value
+					    	rowToOrder.setDataId(""+ i);																 // Actual position value
+					    	elementToOrder.add(rowToOrder);
+			    		} else if (data.get(Integer.parseInt(rowI[colDataIndex])) instanceof GWTDocument) {  
+			    			rowToOrder.setObject(((GWTDocument) data.get(Integer.parseInt(rowI[colDataIndex]))).getLastModified()); // Date value
+					    	rowToOrder.setDataId(""+ i);																 // Actual position value
+					    	elementToOrder.add(rowToOrder);
+			    		}
+			    		break;
+			    		
+			    	case 7:
+			    		// Version
+			    		if (data.get(Integer.parseInt(rowI[colDataIndex])) instanceof GWTFolder || 
+			    			data.get(Integer.parseInt(rowI[colDataIndex])) instanceof GWTMail) {
+			    			rowToOrder.setObject(new Double(0));		
+				    		rowToOrder.setDataId(""+ i);							
+				    		elementToOrder.add(rowToOrder);
+			    		} else if (data.get(Integer.parseInt(rowI[colDataIndex])) instanceof GWTDocument) { 
+			    			String version = ((GWTDocument) data.get(Integer.parseInt(rowI[colDataIndex]))).getActualVersion().getName();
+			    			String numberParts[] = version.split("\\.");
+			    			version = "";
+			    			for (int x=0; x<numberParts.length; x++) {
+			    				switch(numberParts[x].length()) {
+			    					case 1:
+			    						version = version + "00" + numberParts[x];
+			    						break;
+			    					case 2:
+			    						version = version + "0" + numberParts[x];
+			    						break;
+			    				}
+			    			}
+			    			if (numberParts.length==2) {
+			    				version = version + "000000";
+			    			}
+			    			if (numberParts.length==3) {
+			    				version = version + "000";
+			    			}
+			    			rowToOrder.setObject(new Double(version));
+			    			rowToOrder.setDataId(""+ i);							
+				    		elementToOrder.add(rowToOrder);
+			    		}		    		
+			    		break;
+		    	}
+		    	
+		    	// Saves the selected row
+		    	if (selectedRow==i) {
+		    		selectedRowDataID = rowToOrder.getDataId();
+		    	}
+		    }
+		    
+		    switch(correctedColumnIndex(column)) {
 		    	case 0 :
-		    	case 1 :
+		    	case 1 :	
 		    	case 2 :
 		    	case 3 :
 		    	case 6 :
-			    		// Text
-				    	rowToOrder.setObject(rowI[column].toLowerCase());		// Lower case solves problem with sort ordering
-				    	rowToOrder.setDataId(""+ i);							// Actual position value
-				    	elementToOrder.add(rowToOrder);
+		    		// Text
+		    		Collections.sort(elementToOrder, ColumnComparatorText.getInstance());
 		    		break;
 		    	
 		    	case 4 :
+		    	case 7 :
 		    		// Bytes
-		    		if (data.get(Integer.parseInt(rowI[colDataIndex])) instanceof GWTFolder) {
-		    			rowToOrder.setObject(new Double(0));										// Byte value
-				    	rowToOrder.setDataId(""+ i);												// Actual position value
-				    	elementToOrder.add(rowToOrder);
-		    		} else if (data.get(Integer.parseInt(rowI[colDataIndex])) instanceof GWTMail) {  
-		    			rowToOrder.setObject(new Double(((GWTMail) data.get(Integer.parseInt(rowI[colDataIndex]))).getSize()));
-				    	rowToOrder.setDataId(""+ i);												// Actual position value
-				    	elementToOrder.add(rowToOrder);
-		    		} else if (data.get(Integer.parseInt(rowI[colDataIndex])) instanceof GWTDocument) {  
-		    			rowToOrder.setObject(new Double(((GWTDocument) data.get(Integer.parseInt(rowI[colDataIndex]))).getActualVersion().getSize()));
-				    	rowToOrder.setDataId(""+ i);												// Actual position value
-				    	elementToOrder.add(rowToOrder);
-		    		}
+		    		Collections.sort(elementToOrder, ColumnComparatorDouble.getInstance());
 		    		break;
 		    		
 		    	case 5 :
 		    		// Date
-		    		if (data.get(Integer.parseInt(rowI[colDataIndex])) instanceof GWTFolder) {
-		    			rowToOrder.setObject(((GWTFolder) data.get(Integer.parseInt(rowI[colDataIndex]))).getCreated()); 	// Date value
-				    	rowToOrder.setDataId(""+ i);														 	// Actual position value
-				    	elementToOrder.add(rowToOrder);
-		    		} else if (data.get(Integer.parseInt(rowI[colDataIndex])) instanceof GWTMail) {  
-		    			rowToOrder.setObject(((GWTMail) data.get(Integer.parseInt(rowI[colDataIndex]))).getReceivedDate()); // Date value
-				    	rowToOrder.setDataId(""+ i);																 // Actual position value
-				    	elementToOrder.add(rowToOrder);
-		    		} else if (data.get(Integer.parseInt(rowI[colDataIndex])) instanceof GWTDocument) {  
-		    			rowToOrder.setObject(((GWTDocument) data.get(Integer.parseInt(rowI[colDataIndex]))).getLastModified()); // Date value
-				    	rowToOrder.setDataId(""+ i);																 // Actual position value
-				    	elementToOrder.add(rowToOrder);
-		    		}
+		    		Collections.sort(elementToOrder, ColumnComparatorDate.getInstance());
 		    		break;
-		    		
-		    	case 7:
-		    		// Version
-		    		if (data.get(Integer.parseInt(rowI[colDataIndex])) instanceof GWTFolder || 
-		    			data.get(Integer.parseInt(rowI[colDataIndex])) instanceof GWTMail) {
-		    			rowToOrder.setObject(new Double(0));		
-			    		rowToOrder.setDataId(""+ i);							
-			    		elementToOrder.add(rowToOrder);
-		    		} else if (data.get(Integer.parseInt(rowI[colDataIndex])) instanceof GWTDocument) { 
-		    			String version = ((GWTDocument) data.get(Integer.parseInt(rowI[colDataIndex]))).getActualVersion().getName();
-		    			String numberParts[] = version.split("\\.");
-		    			version = "";
-		    			for (int x=0; x<numberParts.length; x++) {
-		    				switch(numberParts[x].length()) {
-		    					case 1:
-		    						version = version + "00" + numberParts[x];
-		    						break;
-		    					case 2:
-		    						version = version + "0" + numberParts[x];
-		    						break;
-		    				}
-		    			}
-		    			if (numberParts.length==2) {
-		    				version = version + "000000";
-		    			}
-		    			if (numberParts.length==3) {
-		    				version = version + "000";
-		    			}
-		    			rowToOrder.setObject(new Double(version));
-		    			rowToOrder.setDataId(""+ i);							
-			    		elementToOrder.add(rowToOrder);
-		    		}		    		
-		    		break;
-	    	}
-	    	
-	    	// Saves the selected row
-	    	if (selectedRow==i) {
-	    		selectedRowDataID = rowToOrder.getDataId();
-	    	}
-	    }
-	    
-	    switch(correctedColumnIndex(column)) {
-	    	case 0 :
-	    	case 1 :	
-	    	case 2 :
-	    	case 3 :
-	    	case 6 :
-	    		// Text
-	    		Collections.sort(elementToOrder, ColumnComparatorText.getInstance());
-	    		break;
-	    	
-	    	case 4 :
-	    	case 7 :
-	    		// Bytes
-	    		Collections.sort(elementToOrder, ColumnComparatorDouble.getInstance());
-	    		break;
-	    		
-	    	case 5 :
-	    		// Date
-	    		Collections.sort(elementToOrder, ColumnComparatorDate.getInstance());
-	    		break;
-	    		
-	    		// Extra columns
-	    	case 8 :
-	    	case 9 :
-	    	case 10 :
-	    	case 11 :
-	    	case 12 :	    		
-	    		// FormElement sort
-	    		Collections.sort(elementToOrder, ColumnComparatorGWTFormElement.getInstance());
-	    		break;
-	    }
-	    
-	    // Reversing if needed
-	    if (!ascending) {
-			Collections.reverse(elementToOrder);
-		}
-	    
-	    applySort(elementList, elementToOrder);
+		    }
+		    
+		    // Reversing if needed
+		    if (!ascending) {
+				Collections.reverse(elementToOrder);
+			}
+		    
+		    applySort(elementList, elementToOrder);
+    	}
 	    Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagOrdering();
 	}
     
