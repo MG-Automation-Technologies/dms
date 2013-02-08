@@ -100,9 +100,10 @@
 	type (simple | multiple) "simple"
 	data CDATA #IMPLIED
 	optionsData CDATA #IMPLIED
-	optionsQuery CDATA #IMPLIED
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
+	table CDATA #IMPLIED
+	optionsQuery CDATA #IMPLIED
 	readonly (true | false) "false"
 >
 
