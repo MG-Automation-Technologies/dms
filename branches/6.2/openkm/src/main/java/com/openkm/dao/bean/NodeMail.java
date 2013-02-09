@@ -30,10 +30,12 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Type;
 import org.hibernate.search.annotations.CalendarBridge;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.FieldBridge;
@@ -50,39 +52,40 @@ import com.openkm.module.db.stuff.SetFieldBridge;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class NodeMail extends NodeBase {
 	private static final long serialVersionUID = 1L;
+	public static final String CONTENT_FIELD = "content";
 	
 	@Column(name = "NML_SIZE")
 	private long size;
 	
 	@Column(name = "NML_FROM", length = 256)
-	@Field(index = Index.UN_TOKENIZED, store = Store.NO)
+	@Field(index = Index.TOKENIZED, store = Store.YES)
 	private String from;
 	
 	@ElementCollection
 	@Column(name = "NML_REPLY")
 	@CollectionTable(name = "OKM_NODE_MAIL_REPLY", joinColumns = { @JoinColumn(name = "NMT_NODE") })
-	@Field(index = Index.UN_TOKENIZED, store = Store.YES)
+	@Field(index = Index.TOKENIZED, store = Store.YES)
 	@FieldBridge(impl = SetFieldBridge.class)
 	private Set<String> reply = new HashSet<String>();
 	
 	@ElementCollection
 	@Column(name = "NML_TO")
 	@CollectionTable(name = "OKM_NODE_MAIL_TO", joinColumns = { @JoinColumn(name = "NMT_NODE") })
-	@Field(index = Index.UN_TOKENIZED, store = Store.YES)
+	@Field(index = Index.TOKENIZED, store = Store.YES)
 	@FieldBridge(impl = SetFieldBridge.class)
 	private Set<String> to = new HashSet<String>();
 	
 	@ElementCollection
 	@Column(name = "NML_CC")
 	@CollectionTable(name = "OKM_NODE_MAIL_CC", joinColumns = { @JoinColumn(name = "NMC_NODE") })
-	@Field(index = Index.UN_TOKENIZED, store = Store.YES)
+	@Field(index = Index.TOKENIZED, store = Store.YES)
 	@FieldBridge(impl = SetFieldBridge.class)
 	private Set<String> cc = new HashSet<String>();
 	
 	@ElementCollection
 	@Column(name = "NML_BCC")
 	@CollectionTable(name = "OKM_NODE_MAIL_BCC", joinColumns = { @JoinColumn(name = "NMB_NODE") })
-	@Field(index = Index.UN_TOKENIZED, store = Store.YES)
+	@Field(index = Index.TOKENIZED, store = Store.YES)
 	@FieldBridge(impl = SetFieldBridge.class)
 	private Set<String> bcc = new HashSet<String>();
 	
@@ -100,8 +103,9 @@ public class NodeMail extends NodeBase {
 	@Field(index = Index.TOKENIZED, store = Store.YES)
 	private String subject;
 	
-	@Column(name = "NML_CONTENT", length = 2048)
-	@Field(index = Index.TOKENIZED, store = Store.YES)
+	@Column(name = "NML_CONTENT")
+	@Lob @Type(type = "org.hibernate.type.StringClobType")
+	@Field(index = Index.TOKENIZED, store = Store.NO)
 	private String content;
 	
 	@Column(name = "NML_MIME_TYPE", length = 64)
