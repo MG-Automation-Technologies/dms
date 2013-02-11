@@ -322,6 +322,10 @@ public class DbDocumentModule implements DocumentModule {
 			
 			NodeDocumentDAO.getInstance().delete(name, docUuid, userTrashUuid);
 			
+			// Check subscriptions
+			NodeDocument documentNode = NodeDocumentDAO.getInstance().findByPk(docUuid);
+			BaseNotificationModule.checkSubscriptions(documentNode, PrincipalUtils.getUser(), "DELETE_DOCUMENT", null);
+			
 			// Activity log
 			UserActivity.log(auth.getName(), "DELETE_DOCUMENT", docUuid, docPath, null);
 		} catch (DatabaseException e) {
@@ -363,6 +367,9 @@ public class DbDocumentModule implements DocumentModule {
 			if (newName != null && !newName.equals("") && !newName.equals(name)) {
 				NodeDocument documentNode = NodeDocumentDAO.getInstance().rename(docUuid, newName);
 				renamedDocument = BaseDocumentModule.getProperties(auth.getName(), documentNode);
+				
+				// Check subscriptions
+				BaseNotificationModule.checkSubscriptions(documentNode, PrincipalUtils.getUser(), "RENAME_DOCUMENT", null);
 			} else {
 				// Don't change anything
 				NodeDocument documentNode = NodeDocumentDAO.getInstance().findByPk(docUuid);
