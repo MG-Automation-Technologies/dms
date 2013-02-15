@@ -653,16 +653,19 @@ public class NodeFolderDAO {
 		SecurityHelper.checkRead(nFolder);
 		SecurityHelper.checkDelete(nFolder);
 		
-		// Delete document childs
+		// Delete children documents
 		NodeDocumentDAO.getInstance().purgeHelper(session, nFolder.getUuid());
 		
-		// Delete mail childs
+		// Delete children mails
 		NodeMailDAO.getInstance().purgeHelper(session, nFolder.getUuid());
 		
-		// Delete note childs
+		// Delete children notes
 		NodeNoteDAO.getInstance().purgeHelper(session, nFolder.getUuid());
 		
-		// Delete folder childs
+		// Delete bookmarks
+		BookmarkDAO.purgeBookmarksByNode(nFolder.getUuid());
+		
+		// Delete children folder
 		purgeHelper(session, nFolder.getUuid());
 		
 		if (deleteBase) {

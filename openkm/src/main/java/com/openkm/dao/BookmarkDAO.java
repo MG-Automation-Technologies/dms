@@ -199,4 +199,31 @@ public class BookmarkDAO {
 			HibernateUtil.close(session);
 		}
 	}
+	
+	/**
+	 * Remove bookmarks by parent node
+	 */
+	public static void purgeBookmarksByNode(String nodeUuid) throws DatabaseException {
+		log.debug("purgeBookmarksByNode({})", nodeUuid);
+		String qs = "delete from Bookmark bm where bm.node=:uuid";
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			
+			Query q = session.createQuery(qs);
+			q.setString("uuid", nodeUuid);
+			q.executeUpdate();
+			
+			HibernateUtil.commit(tx);
+			log.debug("purgeBookmarksByNode: void");
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
 }
