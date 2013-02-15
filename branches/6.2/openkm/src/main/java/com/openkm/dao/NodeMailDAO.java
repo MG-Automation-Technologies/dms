@@ -577,11 +577,14 @@ public class NodeMailDAO {
 		SecurityHelper.checkRead(nMail);
 		SecurityHelper.checkDelete(nMail);
 		
-		// Delete document childs
+		// Delete children documents
 		NodeDocumentDAO.getInstance().purgeHelper(session, nMail.getUuid());
 		
-		// Delete note childs
+		// Delete children notes
 		NodeNoteDAO.getInstance().purgeHelper(session, nMail.getUuid());
+		
+		// Delete bookmarks
+		BookmarkDAO.purgeBookmarksByNode(nMail.getUuid());
 		
 		// Delete the node itself
 		session.delete(nMail);

@@ -824,11 +824,14 @@ public class NodeDocumentDAO {
 		// Remove pdf & preview from cache
 		CommonGeneralModule.cleanPreviewCache(nDocument.getUuid());
 		
-		// Delete document version childs
+		// Delete children document versions
 		NodeDocumentVersionDAO.getInstance().purgeHelper(session, nDocument.getUuid());
 		
-		// Delete note childs
+		// Delete children notes
 		NodeNoteDAO.getInstance().purgeHelper(session, nDocument.getUuid());
+		
+		// Delete bookmarks
+		BookmarkDAO.purgeBookmarksByNode(nDocument.getUuid());
 		
 		// Delete the node itself
 		session.delete(nDocument);
