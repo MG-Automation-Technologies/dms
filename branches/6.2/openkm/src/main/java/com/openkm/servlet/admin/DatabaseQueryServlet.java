@@ -602,7 +602,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 						try {
 							long begin = System.currentTimeMillis();
 							
-							if (tk.toUpperCase().startsWith("SELECT")) {
+							if (tk.toUpperCase().startsWith("SELECT") || tk.toUpperCase().startsWith("DESCRIBE")) {
 								rs = stmt.executeQuery(tk);
 								ResultSetMetaData md = rs.getMetaData();
 								List<String> columns = new ArrayList<String>();
