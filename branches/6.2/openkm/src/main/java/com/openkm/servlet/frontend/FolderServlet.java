@@ -207,6 +207,7 @@ public class FolderServlet extends OKMRemoteServiceServlet implements OKMFolderS
 						folder, null);
 				folderList.add(gWTFolder);
 			}
+			
 			Collections.sort(folderList, FolderComparator.getInstance(getLanguage()));
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
