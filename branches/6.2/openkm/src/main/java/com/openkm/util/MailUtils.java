@@ -122,7 +122,7 @@ public class MailUtils {
 	public static void sendMessage(Collection<String> toAddress, String subject, String content)
 			throws MessagingException {
 		try {
-			send(null, toAddress, subject, content, null);
+			send(null, toAddress, subject, content, new ArrayList<String>());
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 		} catch (AccessDeniedException e) {
