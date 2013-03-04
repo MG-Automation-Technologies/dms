@@ -3,6 +3,7 @@ package com.openkm.module.db;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.owasp.encoder.Encode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -48,6 +49,8 @@ public class DbNoteModule implements NoteModule {
 			
 			String nodeUuid = NodeBaseDAO.getInstance().getUuidFromPath(nodePath);
 			NodeBase node = NodeBaseDAO.getInstance().findByPk(nodeUuid);
+			
+			text = Encode.forHtml(text);
 			NodeNote nNote = BaseNoteModule.create(nodeUuid, auth.getName(), text);
 			newNote = BaseNoteModule.getProperties(nNote, nNote.getUuid());
 			
@@ -146,7 +149,7 @@ public class DbNoteModule implements NoteModule {
 	}
 	
 	@Override
-	public void set(String token, String notePath, String text) throws LockException, PathNotFoundException,
+	public String set(String token, String notePath, String text) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("set({}, {})", token, notePath );
 		Authentication auth = null, oldAuth = null;
@@ -168,6 +171,7 @@ public class DbNoteModule implements NoteModule {
 			NodeBase node = NodeNoteDAO.getInstance().getParentNode(noteUuid);
 			
 			if (auth.getName().equals(nNote.getAuthor())) {
+				text = Encode.forHtml(text);
 				nNote.setText(text);
 				NodeNoteDAO.getInstance().update(nNote);
 			} else {
@@ -175,10 +179,10 @@ public class DbNoteModule implements NoteModule {
 			}
 			
 			// Check subscriptions
-			BaseNotificationModule.checkSubscriptions(node, auth.getName(), "SET_NOTE", null);
+			BaseNotificationModule.checkSubscriptions(node, auth.getName(), "SET_NOTE", text);
 
 			// Activity log
-			UserActivity.log(auth.getName(), "SET_NOTE", node.getUuid(), notePath, null);
+			UserActivity.log(auth.getName(), "SET_NOTE", node.getUuid(), notePath, text);
 		} catch (DatabaseException e) {
 			throw e;
 		} finally {
@@ -187,7 +191,8 @@ public class DbNoteModule implements NoteModule {
 			}
 		}
 
-		log.debug("set: void");
+		log.debug("set: {}", text);
+		return text;
 	}
 	
 	@Override

@@ -79,12 +79,13 @@ public class OKMNote implements NoteModule {
 	}
 
 	@Override
-	public void set(String token, String notePath, String text) throws LockException,
+	public String set(String token, String notePath, String text) throws LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("set({}, {}, {})", new Object[] { token, notePath, text });
 		NoteModule nm = ModuleManager.getNoteModule();
-		nm.set(token, notePath, text);
-		log.debug("set: void");
+		String ret = nm.set(token, notePath, text);
+		log.debug("set: {}", ret);
+		return ret;
 	}
 	
 	@Override

@@ -88,7 +88,7 @@ public interface NoteModule {
 	 * you can't access this document because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void set(String token, String notePath, String text) throws LockException,
+	public String set(String token, String notePath, String text) throws LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
