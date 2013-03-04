@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.UUID;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -54,6 +55,7 @@ import com.openkm.frontend.client.OKMException;
 import com.openkm.principal.DatabasePrincipalAdapter;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.servlet.frontend.ChatServlet;
+import com.openkm.util.SecureStore;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
 
@@ -114,6 +116,9 @@ public class AuthServlet extends BaseServlet {
 			} catch (PrincipalAdapterException e) {
 				log.error(e.getMessage(), e);
 				sendErrorRedirect(request, response, e);
+			} catch (AccessDeniedException e) {
+				log.error(e.getMessage(), e);
+				sendErrorRedirect(request, response, e);
 			}
 		} else {
 			// Activity log
@@ -166,36 +171,49 @@ public class AuthServlet extends BaseServlet {
 	 * New user
 	 */
 	private void userCreate(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
+			throws ServletException, IOException, DatabaseException, AccessDeniedException, NoSuchAlgorithmException {
 		log.debug("userCreate({}, {}, {})", new Object[] { userId, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
-			String usrId = WebUtils.getString(request, "usr_id");
+			String reqCsrft = WebUtils.getString(request, "csrft");
+			String sesCsrft = (String) request.getSession().getAttribute("csrft");
 			
-			if (AuthDAO.findUserByPk(usrId) == null) {
-				User usr = new User();
-				usr.setId(usrId);
-				usr.setName(WebUtils.getString(request, "usr_name"));
-				usr.setPassword(WebUtils.getString(request, "usr_password"));
-				usr.setEmail(WebUtils.getString(request, "usr_email"));
-				usr.setActive(WebUtils.getBoolean(request, "usr_active"));
-				List<String> usrRoles = WebUtils.getStringList(request, "usr_roles");
+			if (reqCsrft.equals(sesCsrft)) {
+				String usrId = WebUtils.getString(request, "usr_id");
 				
-				for (String rolId : usrRoles) {
-					usr.getRoles().add(AuthDAO.findRoleByPk(rolId));
+				if (AuthDAO.findUserByPk(usrId) == null) {
+					User usr = new User();
+					usr.setId(usrId);
+					usr.setName(WebUtils.getString(request, "usr_name"));
+					usr.setPassword(WebUtils.getString(request, "usr_password"));
+					usr.setEmail(WebUtils.getString(request, "usr_email"));
+					usr.setActive(WebUtils.getBoolean(request, "usr_active"));
+					List<String> usrRoles = WebUtils.getStringList(request, "usr_roles");
+					
+					for (String rolId : usrRoles) {
+						usr.getRoles().add(AuthDAO.findRoleByPk(rolId));
+					}
+					
+					AuthDAO.createUser(usr);
+					
+					// Activity log
+					UserActivity.log(userId, "ADMIN_USER_CREATE", usr.getId(), null, usr.toString());
+				} else {
+					throw new DatabaseException("User name already taken");
 				}
-				
-				AuthDAO.createUser(usr);
-				
-				// Activity log
-				UserActivity.log(userId, "ADMIN_USER_CREATE", usr.getId(), null, usr.toString());
 			} else {
-				throw new DatabaseException("User name already taken");
+				// Activity log
+				UserActivity.log(request.getRemoteUser(), "ADMIN_SECURITY_RISK", request.getRemoteHost(), null, null);
+				
+				throw new AccessDeniedException("Security risk detected");
 			}
 		} else {
+			String genCsrft = SecureStore.md5Encode(UUID.randomUUID().toString().getBytes());
+			request.getSession().setAttribute("csrft", genCsrft);
 			ServletContext sc = getServletContext();
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
+			sc.setAttribute("csrft", genCsrft);
 			sc.setAttribute("roles", AuthDAO.findAllRoles());
 			sc.setAttribute("usr", null);
 			sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
@@ -208,35 +226,48 @@ public class AuthServlet extends BaseServlet {
 	 * Edit user
 	 */
 	private void userEdit(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
+			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException, AccessDeniedException {
 		log.debug("userEdit({}, {}, {})", new Object[] { userId, request, response });
 		String usrId = WebUtils.getString(request, "usr_id");
 		
 		if (WebUtils.getBoolean(request, "persist")) {
-			String password = WebUtils.getString(request, "usr_password");
-			User usr = new User();
-			usr.setId(usrId);
-			usr.setName(WebUtils.getString(request, "usr_name"));
-			usr.setEmail(WebUtils.getString(request, "usr_email"));
-			usr.setActive(WebUtils.getBoolean(request, "usr_active"));
-			List<String> usrRoles = WebUtils.getStringList(request, "usr_roles");
+			String reqCsrft = WebUtils.getString(request, "csrft");
+			String sesCsrft = (String) request.getSession().getAttribute("csrft");
 			
-			for (String rolId : usrRoles) {
-				usr.getRoles().add(AuthDAO.findRoleByPk(rolId));
+			if (reqCsrft.equals(sesCsrft)) {
+				String password = WebUtils.getString(request, "usr_password");
+				User usr = new User();
+				usr.setId(usrId);
+				usr.setName(WebUtils.getString(request, "usr_name"));
+				usr.setEmail(WebUtils.getString(request, "usr_email"));
+				usr.setActive(WebUtils.getBoolean(request, "usr_active"));
+				List<String> usrRoles = WebUtils.getStringList(request, "usr_roles");
+				
+				for (String rolId : usrRoles) {
+					usr.getRoles().add(AuthDAO.findRoleByPk(rolId));
+				}
+				
+				AuthDAO.updateUser(usr);
+				
+				if (!password.equals("")) {
+					AuthDAO.updateUserPassword(usr.getId(), password);
+				}
+				
+				// Activity log
+				UserActivity.log(userId, "ADMIN_USER_EDIT", usr.getId(), null, usr.toString());
+			} else {
+				// Activity log
+				UserActivity.log(request.getRemoteUser(), "ADMIN_SECURITY_RISK", request.getRemoteHost(), null, null);
+				
+				throw new AccessDeniedException("Security risk detected");
 			}
-			
-			AuthDAO.updateUser(usr);
-			
-			if (!password.equals("")) {
-				AuthDAO.updateUserPassword(usr.getId(), password);
-			}
-			
-			// Activity log
-			UserActivity.log(userId, "ADMIN_USER_EDIT", usr.getId(), null, usr.toString());
 		} else {
+			String genCsrft = SecureStore.md5Encode(UUID.randomUUID().toString().getBytes());
+			request.getSession().setAttribute("csrft", genCsrft);
 			ServletContext sc = getServletContext();
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
+			sc.setAttribute("csrft", genCsrft);
 			sc.setAttribute("roles", AuthDAO.findAllRoles());
 			sc.setAttribute("usr", AuthDAO.findUserByPk(usrId));
 			sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
@@ -249,19 +280,32 @@ public class AuthServlet extends BaseServlet {
 	 * Update user
 	 */
 	private void userDelete(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
+			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException, AccessDeniedException {
 		log.debug("userDelete({}, {}, {})", new Object[] { userId, request, response });
 		String usrId = WebUtils.getString(request, "usr_id");
 		
 		if (WebUtils.getBoolean(request, "persist")) {
-			AuthDAO.deleteUser(usrId);
+			String reqCsrft = WebUtils.getString(request, "csrft");
+			String sesCsrft = (String) request.getSession().getAttribute("csrft");
 			
-			// Activity log
-			UserActivity.log(userId, "ADMIN_USER_DELETE", usrId, null, null);
+			if (reqCsrft.equals(sesCsrft)) {
+				AuthDAO.deleteUser(usrId);
+				
+				// Activity log
+				UserActivity.log(userId, "ADMIN_USER_DELETE", usrId, null, null);
+			} else {
+				// Activity log
+				UserActivity.log(request.getRemoteUser(), "ADMIN_SECURITY_RISK", request.getRemoteHost(), null, null);
+				
+				throw new AccessDeniedException("Security risk detected");
+			}
 		} else {
+			String genCsrft = SecureStore.md5Encode(UUID.randomUUID().toString().getBytes());
+			request.getSession().setAttribute("csrft", genCsrft);
 			ServletContext sc = getServletContext();
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
+			sc.setAttribute("csrft", genCsrft);
 			sc.setAttribute("roles", AuthDAO.findAllRoles());
 			sc.setAttribute("usr", AuthDAO.findUserByPk(usrId));
 			sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
@@ -328,27 +372,40 @@ public class AuthServlet extends BaseServlet {
 	 * New role
 	 */
 	private void roleCreate(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
+			throws ServletException, IOException, DatabaseException, AccessDeniedException, NoSuchAlgorithmException {
 		log.debug("roleCreate({}, {}, {})", new Object[] { userId, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
-			String rolId = WebUtils.getString(request, "rol_id");
+			String reqCsrft = WebUtils.getString(request, "csrft");
+			String sesCsrft = (String) request.getSession().getAttribute("csrft");
 			
-			if (AuthDAO.findRoleByPk(rolId) == null) {
-				Role rol = new Role();
-				rol.setId(rolId);
-				rol.setActive(WebUtils.getBoolean(request, "rol_active"));
-				AuthDAO.createRole(rol);
+			if (reqCsrft.equals(sesCsrft)) {
+				String rolId = WebUtils.getString(request, "rol_id");
 				
-				// Activity log
-				UserActivity.log(userId, "ADMIN_ROLE_CREATE", rol.getId(), null, rol.toString());
+				if (AuthDAO.findRoleByPk(rolId) == null) {
+					Role rol = new Role();
+					rol.setId(rolId);
+					rol.setActive(WebUtils.getBoolean(request, "rol_active"));
+					AuthDAO.createRole(rol);
+					
+					// Activity log
+					UserActivity.log(userId, "ADMIN_ROLE_CREATE", rol.getId(), null, rol.toString());
+				} else {
+					throw new DatabaseException("Role name already taken");
+				}
 			} else {
-				throw new DatabaseException("Role name already taken");
+				// Activity log
+				UserActivity.log(request.getRemoteUser(), "ADMIN_SECURITY_RISK", request.getRemoteHost(), null, null);
+				
+				throw new AccessDeniedException("Security risk detected");
 			}
 		} else {
+			String genCsrft = SecureStore.md5Encode(UUID.randomUUID().toString().getBytes());
+			request.getSession().setAttribute("csrft", genCsrft);
 			ServletContext sc = getServletContext();
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
+			sc.setAttribute("csrft", genCsrft);
 			sc.setAttribute("rol", null);
 			sc.getRequestDispatcher("/admin/role_edit.jsp").forward(request, response);
 		}
@@ -360,22 +417,35 @@ public class AuthServlet extends BaseServlet {
 	 * Edit role
 	 */
 	private void roleEdit(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
+			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException, AccessDeniedException {
 		log.debug("roleEdit({}, {}, {})", new Object[] { userId, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
-			Role rol = new Role();
-			rol.setId(WebUtils.getString(request, "rol_id"));
-			rol.setActive(WebUtils.getBoolean(request, "rol_active"));
-			AuthDAO.updateRole(rol);
+			String reqCsrft = WebUtils.getString(request, "csrft");
+			String sesCsrft = (String) request.getSession().getAttribute("csrft");
 			
-			// Activity log
-			UserActivity.log(userId, "ADMIN_ROLE_EDIT", rol.getId(), null, rol.toString());
+			if (reqCsrft.equals(sesCsrft)) {
+				Role rol = new Role();
+				rol.setId(WebUtils.getString(request, "rol_id"));
+				rol.setActive(WebUtils.getBoolean(request, "rol_active"));
+				AuthDAO.updateRole(rol);
+				
+				// Activity log
+				UserActivity.log(userId, "ADMIN_ROLE_EDIT", rol.getId(), null, rol.toString());
+			} else {
+				// Activity log
+				UserActivity.log(request.getRemoteUser(), "ADMIN_SECURITY_RISK", request.getRemoteHost(), null, null);
+				
+				throw new AccessDeniedException("Security risk detected");
+			}
 		} else {
+			String genCsrft = SecureStore.md5Encode(UUID.randomUUID().toString().getBytes());
+			request.getSession().setAttribute("csrft", genCsrft);
 			ServletContext sc = getServletContext();
 			String rolId = WebUtils.getString(request, "rol_id");
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
+			sc.setAttribute("csrft", genCsrft);
 			sc.setAttribute("rol", AuthDAO.findRoleByPk(rolId));
 			sc.getRequestDispatcher("/admin/role_edit.jsp").forward(request, response);
 		}
@@ -387,20 +457,33 @@ public class AuthServlet extends BaseServlet {
 	 * Delete role
 	 */
 	private void roleDelete(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
+			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException, AccessDeniedException {
 		log.debug("roleDelete({}, {}, {})", new Object[] { userId, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
-			String rolId = WebUtils.getString(request, "rol_id");
-			AuthDAO.deleteRole(rolId);
+			String reqCsrft = WebUtils.getString(request, "csrft");
+			String sesCsrft = (String) request.getSession().getAttribute("csrft");
 			
-			// Activity log
-			UserActivity.log(userId, "ADMIN_ROLE_DELETE", rolId, null, null);
+			if (reqCsrft.equals(sesCsrft)) {
+				String rolId = WebUtils.getString(request, "rol_id");
+				AuthDAO.deleteRole(rolId);
+				
+				// Activity log
+				UserActivity.log(userId, "ADMIN_ROLE_DELETE", rolId, null, null);
+			} else {
+				// Activity log
+				UserActivity.log(request.getRemoteUser(), "ADMIN_SECURITY_RISK", request.getRemoteHost(), null, null);
+				
+				throw new AccessDeniedException("Security risk detected");
+			}
 		} else {
+			String genCsrft = SecureStore.md5Encode(UUID.randomUUID().toString().getBytes());
+			request.getSession().setAttribute("csrft", genCsrft);
 			ServletContext sc = getServletContext();
 			String rolId = WebUtils.getString(request, "rol_id");
 			sc.setAttribute("action", WebUtils.getString(request, "action"));
 			sc.setAttribute("persist", true);
+			sc.setAttribute("csrft", genCsrft);
 			sc.setAttribute("rol", AuthDAO.findRoleByPk(rolId));
 			sc.getRequestDispatcher("/admin/role_edit.jsp").forward(request, response);
 		}
