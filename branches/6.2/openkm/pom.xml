@@ -689,6 +689,14 @@
       <artifactId>langdetect</artifactId>
       <version>2011.11.28</version>
     </dependency>
+    
+    <!-- OWASP Java Encoders -->
+    <!-- https://code.google.com/p/owasp-java-encoder/ -->
+    <dependency>
+      <groupId>org.owasp</groupId>
+      <artifactId>encoder</artifactId>
+      <version>1.1</version>
+    </dependency>
   </dependencies>
   
   <build>

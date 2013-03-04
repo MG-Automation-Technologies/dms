@@ -336,10 +336,17 @@ public class KeywordManager {
 	 * Callback addKeyword document
 	 */
 	final AsyncCallback<Object> callbackAddKeywords = new AsyncCallback<Object>() {
-		public void onSuccess(Object result) {	
+		public void onSuccess(Object result) {
+			String keyword = (String) result;
+			Widget keywordButton = getKeyWidget(keyword, remove);
+			keywordMap.put(keyword, keywordButton);
+			hKeyPanel.add(keywordButton);
+			keywords.add(keyword);
+			
 			if (keyWordsListPending.isEmpty()) {
 				Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetKeywords();
 				WidgetUtil.drawTagCloud(keywordsCloud, keywords);
+				
 				if (object instanceof GWTDocument) {
 					Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.KEYWORD_ADDED);
 				} else if (object instanceof GWTFolder) {
@@ -359,6 +366,7 @@ public class KeywordManager {
 			} else {
 				addPendingKeyWordsList();
 			}
+			
 			Main.get().showError("AddKeyword", caught);
 		}
 	};
@@ -395,18 +403,16 @@ public class KeywordManager {
 	 * addKeyword mail
 	 */
 	public void addKeyword(String keyword) {
-		if (!keywordMap.containsKey(keyword) && keyword.length()>0) {
+		if (!keywordMap.containsKey(keyword) && keyword.length() > 0) {
 			for (Iterator<String> it = keywordMap.keySet().iterator(); it.hasNext();) {
 				String key = it.next();
+				
 				if (!keywordList.contains(key)) {
 					multiWordkSuggestKey.add(key);
 					keywordList.add(key);
 				}
 			}
-			Widget keywordButton = getKeyWidget(keyword, remove);
-			keywordMap.put(keyword, keywordButton);
-			hKeyPanel.add(keywordButton);
-			keywords.add(keyword);
+			
 			Main.get().mainPanel.desktop.browser.tabMultiple.status.setKeywords();
 			propertyService.addKeyword(path, keyword, callbackAddKeywords);
 			Main.get().mainPanel.dashboard.keyMapDashboard.increaseKeywordRate(keyword);

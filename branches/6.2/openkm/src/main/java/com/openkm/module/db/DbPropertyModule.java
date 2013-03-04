@@ -21,6 +21,7 @@
 
 package com.openkm.module.db;
 
+import org.owasp.encoder.Encode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -145,21 +146,29 @@ public class DbPropertyModule implements PropertyModule {
 			
 			String uuid = NodeBaseDAO.getInstance().getUuidFromPath(nodePath);
 			NodeBase nNode = NodeBaseDAO.getInstance().findByPk(uuid);
-			NodeBaseDAO.getInstance().addKeyword(uuid, keyword);
 			
-			// Update cache
-			if (Config.USER_KEYWORDS_CACHE) {
-				UserNodeKeywordsManager.add(auth.getName(), uuid, keyword);
+			if (keyword != null) {
+				if (Config.SYSTEM_KEYWORD_LOWERCASE) {
+					keyword = keyword.toLowerCase();
+				}
+				
+				keyword = Encode.forHtml(keyword);
+				NodeBaseDAO.getInstance().addKeyword(uuid, keyword);
+				
+				// Update cache
+				if (Config.USER_KEYWORDS_CACHE) {
+					UserNodeKeywordsManager.add(auth.getName(), uuid, keyword);
+				}
+				
+				// Check subscriptions
+				BaseNotificationModule.checkSubscriptions(nNode, auth.getName(), "ADD_KEYWORD", null);
+				
+				// Check scripting
+				//BaseScriptingModule.checkScripts(session, documentNode, documentNode, "ADD_KEYWORD");
+				
+				// Activity log
+				UserActivity.log(auth.getName(), "ADD_KEYWORD", uuid, nodePath, keyword);
 			}
-			
-			// Check subscriptions
-			BaseNotificationModule.checkSubscriptions(nNode, auth.getName(), "ADD_KEYWORD", null);
-
-			// Check scripting
-			//BaseScriptingModule.checkScripts(session, documentNode, documentNode, "ADD_KEYWORD");
-
-			// Activity log
-			UserActivity.log(auth.getName(), "ADD_KEYWORD", uuid, nodePath, keyword);
 		} catch (DatabaseException e) {
 			throw e;
 		} finally {
