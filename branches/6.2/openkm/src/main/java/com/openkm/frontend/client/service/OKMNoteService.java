@@ -34,5 +34,5 @@ import com.openkm.frontend.client.bean.GWTNote;
 public interface OKMNoteService extends RemoteService {
 	public GWTNote add(String nodePath, String text) throws OKMException;
 	public void delete(String notePath) throws OKMException;
-	public void set(String notePath, String text) throws OKMException;
+	public String set(String notePath, String text) throws OKMException;
 }

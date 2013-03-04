@@ -566,6 +566,7 @@ public class Notes extends Composite {
 		noteService.set(notePath, text, new AsyncCallback<Object>() {
 			@Override
 			public void onSuccess(Object result) {
+				String text = (String) result;
 				tableNotes.setHTML(row, 0, text);
 				
 				for (GWTNote note : getNotes()) {

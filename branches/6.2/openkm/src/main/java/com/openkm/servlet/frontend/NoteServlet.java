@@ -96,12 +96,13 @@ public class NoteServlet extends OKMRemoteServiceServlet implements OKMNoteServi
 	}
 	
 	@Override
-	public void set(String notePath, String text) throws OKMException {
+	public String set(String notePath, String text) throws OKMException {
 		log.debug("set({}, {})", notePath, text);
+		String ret = null;
 		updateSessionManager();
 		
 		try {
-			OKMNote.getInstance().set(null, notePath, text);
+			ret = OKMNote.getInstance().set(null, notePath, text);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -119,6 +120,7 @@ public class NoteServlet extends OKMRemoteServiceServlet implements OKMNoteServi
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("set: void");
+		log.debug("set: {}", ret);
+		return ret;
 	}
 }

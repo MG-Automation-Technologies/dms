@@ -220,7 +220,7 @@ public class JcrNoteModule implements NoteModule {
 	}
 
 	@Override
-	public void set(String token, String notePath, String text) throws LockException, 
+	public String set(String token, String notePath, String text) throws LockException, 
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("set({}, {}, {})", new Object[] { token, notePath, text });
 		Session session = null;
@@ -271,7 +271,8 @@ public class JcrNoteModule implements NoteModule {
 			if (token == null) JCRUtils.logout(session);
 		}
 		
-		log.debug("set: void");
+		log.debug("set: {}", text);
+		return text;
 	}
 
 	@Override
