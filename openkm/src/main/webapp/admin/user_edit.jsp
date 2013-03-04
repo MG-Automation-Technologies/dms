@@ -46,6 +46,7 @@
       <form action="Auth">
         <input type="hidden" name="action" value="${action}"/>
         <input type="hidden" name="persist" value="${persist}"/>
+        <input type="hidden" name="csrft" value="${csrft}"/>
         <table class="form" width="372px">
           <tr>
             <td>Id</td>
