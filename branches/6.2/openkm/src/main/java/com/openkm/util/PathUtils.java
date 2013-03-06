@@ -21,6 +21,7 @@
 
 package com.openkm.util;
 
+import org.owasp.encoder.Encode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,6 +80,10 @@ public class PathUtils {
 		ret = ret.replace('"', ' ');
 		ret = ret.replace('|', ' ');
 		ret = ret.trim();
+		
+		// Fix XSS issues
+		ret = Encode.forHtml(ret);
+		
 		log.debug("escape: {}", ret);
 		return ret;
 	}
