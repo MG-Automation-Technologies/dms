@@ -52,7 +52,7 @@
             <td width="100%">
               <c:choose>
                 <c:when test="${action != 'roleCreate'}">
-                  <input class=":required :only_on_blur" name="rol_id" value="${rol.id}" readonly="readonly"/>
+                  <input class=":required :only_on_blur" name="rol_id" size="25" value="${rol.id}" readonly="readonly"/>
                 </c:when>
                 <c:otherwise>
                   <input class=":required :only_on_blur :ajax;Auth?action=validateRole" name="rol_id" value=""/>

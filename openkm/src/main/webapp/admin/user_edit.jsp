@@ -80,11 +80,11 @@
           </tr>
           <tr>
             <td>Name</td>
-            <td><input class="" name="usr_name" value="${usr.name}"/></td>
+            <td><input class="" name="usr_name" size="25" value="${usr.name}"/></td>
           </tr>
           <tr>
             <td>Mail</td>
-            <td><input class=":email :required :only_on_blur" name="usr_email" value="${usr.email}"/></td>
+            <td><input class=":email :required :only_on_blur" name="usr_email" size="30" value="${usr.email}"/></td>
           </tr>
           <tr>
             <td>Active</td>
