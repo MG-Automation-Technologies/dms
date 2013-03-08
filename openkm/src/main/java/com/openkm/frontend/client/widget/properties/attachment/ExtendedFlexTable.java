@@ -78,7 +78,6 @@ public class ExtendedFlexTable extends FlexTable {
 		
 		// Only if selectedRow > 0, indicates a document row value and must apear menu or double click action
 		if (selectedRow>=0) {
-			
 			// When de button mouse is released
 			mouseX = DOM.eventGetClientX(event);
 			mouseY = DOM.eventGetClientY(event);
@@ -135,9 +134,8 @@ public class ExtendedFlexTable extends FlexTable {
 	 * @param row
 	 */
 	private void markSelectedRow(int row) {
-		// Mark selected row or orders rows if header row (0) is clicked 
 		// And row must be other than the selected one
-		if (row != 0 && row != selectedRow) {
+		if (row != selectedRow) {
 			selectedRow = row;
 		}
 	}
