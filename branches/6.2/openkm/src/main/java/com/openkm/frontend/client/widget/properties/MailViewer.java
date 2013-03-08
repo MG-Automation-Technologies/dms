@@ -270,8 +270,8 @@ public class MailViewer extends Composite {
 	 */
 	public GWTDocument getAttach(int selectedRow) {
 		// Attachements are writem from second row
-		if (attachmentsTable.getSelectedRow()>0 && attachmentsList.containsKey(new Integer(selectedRow-1))) {
-			return (attachmentsList.get(new Integer(selectedRow-1)));
+		if (attachmentsTable.getSelectedRow()>=0 && attachmentsList.containsKey(new Integer(selectedRow))) {
+			return (attachmentsList.get(new Integer(selectedRow)));
 		} else {
 			return null;
 		}
@@ -279,7 +279,7 @@ public class MailViewer extends Composite {
 	
 	public void downloadAttachment() {
 		// Attachements are writem from second row
-		if (attachmentsTable.getSelectedRow()>0) {
+		if (attachmentsTable.getSelectedRow()>=0) {
 			if (getAttach(attachmentsTable.getSelectedRow())!=null) {
 				Util.downloadFileByUUID(getAttach(attachmentsTable.getSelectedRow()).getUuid(), "");
 			}
@@ -288,7 +288,7 @@ public class MailViewer extends Composite {
 	
 	public void copyAttachment() {
 		// Attachements are writem from second row
-		if (attachmentsTable.getSelectedRow()>0) {
+		if (attachmentsTable.getSelectedRow()>=0) {
 			Main.get().activeFolderTree.folderSelectPopup.setEntryPoint(FolderSelectPopup.ENTRYPOINT_MAIL_ATTACH);
 			Main.get().activeFolderTree.folderSelectPopup.setToCopy(getAttach(attachmentsTable.getSelectedRow()));
 			Main.get().activeFolderTree.showDirectorySelectPopup();
