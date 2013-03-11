@@ -21,6 +21,7 @@
 
 package com.openkm.extractor;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -40,6 +41,8 @@ import org.apache.jackrabbit.extractor.TextExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ibm.icu.text.CharsetDetector;
+import com.ibm.icu.text.CharsetMatch;
 import com.openkm.bean.Document;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
@@ -139,6 +142,7 @@ public class RegisteredExtractors {
 	public static String getText(String docPath, String mimeType, String encoding, InputStream isContent) 
 			throws IOException {
 		log.debug("getText({}, {}, {}, {})", new Object[] { docPath, mimeType, encoding, isContent });
+		BufferedInputStream bis = new BufferedInputStream(isContent);
 		String failureMessage = "Unknown error";
 		boolean failure = false;
 		String text = null;
@@ -147,7 +151,14 @@ public class RegisteredExtractors {
 			TextExtractor te = engine.get(mimeType);
 			
 			if (te != null) {
-				Reader rd = te.extractText(isContent, mimeType, encoding);
+				if (mimeType.startsWith("text/") && encoding == null) {
+					CharsetDetector detector = new CharsetDetector();
+					detector.setText(bis);
+					CharsetMatch cm = detector.detect();
+					encoding = cm.getName();
+				}
+				
+				Reader rd = te.extractText(bis, mimeType, encoding);
 				text = IOUtils.toString(rd);
 			} else {
 				throw new Exception("Full text indexing of '" + mimeType + "' is not supported");
@@ -158,6 +169,8 @@ public class RegisteredExtractors {
 				failureMessage = "Too few text extracted";
 				failure = true;
 			}
+			
+			IOUtils.closeQuietly(bis);
 		} catch (Exception e) {
 			log.warn("Text extraction failure: {}", e.getMessage());
 			failureMessage = e.getMessage();

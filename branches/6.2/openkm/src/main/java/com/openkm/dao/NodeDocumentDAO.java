@@ -1227,7 +1227,7 @@ public class NodeDocumentDAO {
 				env.put(AutomationUtils.DOCUMENT_NODE, nDoc);
 				AutomationManager.getInstance().fireEvent(AutomationRule.EVENT_TEXT_EXTRACTOR, AutomationRule.AT_PRE, env);
 				
-				String textExtracted = RegisteredExtractors.getText(work.getDocPath(), nDoc.getMimeType(), "UTF-8", isContent);
+				String textExtracted = RegisteredExtractors.getText(work.getDocPath(), nDoc.getMimeType(), null, isContent);
 				
 				// AUTOMATION - POST
 				env.put(AutomationUtils.TEXT_EXTRACTED, textExtracted);
