@@ -27,6 +27,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -164,6 +165,16 @@ public class FileUtils {
 	 * Copy InputStream to File.
 	 */
 	public static void copy(InputStream input, File output) throws IOException {
+		FileOutputStream fos = new FileOutputStream(output);
+		IOUtils.copy(input, fos);
+		fos.flush();
+		fos.close();
+	}
+	
+	/**
+	 * Copy Reader to File.
+	 */
+	public static void copy(Reader input, File output) throws IOException {
 		FileOutputStream fos = new FileOutputStream(output);
 		IOUtils.copy(input, fos);
 		fos.flush();
