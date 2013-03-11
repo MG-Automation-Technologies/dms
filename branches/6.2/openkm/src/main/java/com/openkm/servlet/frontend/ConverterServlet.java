@@ -21,10 +21,12 @@
 
 package com.openkm.servlet.frontend;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,10 +34,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ibm.icu.text.CharsetDetector;
+import com.ibm.icu.text.CharsetMatch;
 import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMRepository;
 import com.openkm.automation.AutomationException;
@@ -75,6 +80,7 @@ public class ConverterServlet extends OKMHttpServlet {
 		boolean inline = WebUtils.getBoolean(request, "inline");
 		boolean toPdf = WebUtils.getBoolean(request, "toPdf");
 		boolean toSwf = WebUtils.getBoolean(request, "toSwf");
+		CharsetDetector detector = new CharsetDetector();
 		File tmp = null;
 		InputStream is = null;
 		ConverterListener listener = new ConverterListener(ConverterListener.STATUS_LOADING);
@@ -100,8 +106,19 @@ public class ConverterServlet extends OKMHttpServlet {
 					is = new JcrDocumentModule().getContent(null, path, false);
 				}
 				
-				FileUtils.copy(is, tmp);
-				is.close();
+				// Text files may need encoding conversion
+				if (doc.getMimeType().startsWith("text/")) {
+					detector.setText(new BufferedInputStream(is));
+					CharsetMatch cm = detector.detect();
+					Reader rd = cm.getReader();
+					
+					FileUtils.copy(rd, tmp);
+					IOUtils.closeQuietly(is);
+					IOUtils.closeQuietly(rd);
+				} else {
+					FileUtils.copy(is, tmp);
+					IOUtils.closeQuietly(is);
+				}
 				
 				// Prepare conversion
 				ConversionData cd = new ConversionData();
