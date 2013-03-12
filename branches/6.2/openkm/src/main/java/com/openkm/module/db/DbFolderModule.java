@@ -86,31 +86,36 @@ public class DbFolderModule implements FolderModule {
 			
 			// Escape dangerous chars in name
 			name = PathUtils.escape(name);
-			fld.setPath(parentPath + "/" + name);
 			
-			// AUTOMATION - PRE
-			Map<String, Object> env = new HashMap<String, Object>();
-			env.put(AutomationUtils.PARENT_UUID, parentUuid);
-			env.put(AutomationUtils.PARENT_PATH, parentPath);
-			env.put(AutomationUtils.PARENT_NODE, parentFolder);
-			AutomationManager.getInstance().fireEvent(AutomationRule.EVENT_FOLDER_CREATE, AutomationRule.AT_PRE, env);
-			parentFolder = (NodeFolder) env.get(AutomationUtils.PARENT_NODE);
-			
-			// Create node
-			NodeFolder fldNode = BaseFolderModule.create(auth.getName(), parentFolder, name, fld.getCreated());
-			
-			// AUTOMATION - POST
-			env.put(AutomationUtils.FOLDER_NODE, fldNode);
-			AutomationManager.getInstance().fireEvent(AutomationRule.EVENT_FOLDER_CREATE, AutomationRule.AT_POST, env);
-			
-			// Set returned folder properties
-			newFolder = BaseFolderModule.getProperties(auth.getName(), fldNode);
-			
-			// Check scripting
-			BaseScriptingModule.checkScripts(auth.getName(), parentFolder.getUuid(), fldNode.getUuid(), "CREATE_FOLDER");
-			
-			// Activity log
-			UserActivity.log(auth.getName(), "CREATE_FOLDER", fldNode.getUuid(), fld.getPath(), null);
+			if (!name.isEmpty()) {
+				fld.setPath(parentPath + "/" + name);
+				
+				// AUTOMATION - PRE
+				Map<String, Object> env = new HashMap<String, Object>();
+				env.put(AutomationUtils.PARENT_UUID, parentUuid);
+				env.put(AutomationUtils.PARENT_PATH, parentPath);
+				env.put(AutomationUtils.PARENT_NODE, parentFolder);
+				AutomationManager.getInstance().fireEvent(AutomationRule.EVENT_FOLDER_CREATE, AutomationRule.AT_PRE, env);
+				parentFolder = (NodeFolder) env.get(AutomationUtils.PARENT_NODE);
+				
+				// Create node
+				NodeFolder fldNode = BaseFolderModule.create(auth.getName(), parentFolder, name, fld.getCreated());
+				
+				// AUTOMATION - POST
+				env.put(AutomationUtils.FOLDER_NODE, fldNode);
+				AutomationManager.getInstance().fireEvent(AutomationRule.EVENT_FOLDER_CREATE, AutomationRule.AT_POST, env);
+				
+				// Set returned folder properties
+				newFolder = BaseFolderModule.getProperties(auth.getName(), fldNode);
+				
+				// Check scripting
+				BaseScriptingModule.checkScripts(auth.getName(), parentFolder.getUuid(), fldNode.getUuid(), "CREATE_FOLDER");
+				
+				// Activity log
+				UserActivity.log(auth.getName(), "CREATE_FOLDER", fldNode.getUuid(), fld.getPath(), null);
+			} else {
+				throw new RepositoryException("Invalid folder name");
+			}
 		} catch (DatabaseException e) {
 			throw e;
 			// } catch (ExtensionException e) {
