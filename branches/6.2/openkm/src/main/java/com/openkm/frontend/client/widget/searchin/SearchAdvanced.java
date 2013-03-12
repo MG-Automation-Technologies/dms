@@ -59,9 +59,6 @@ public class SearchAdvanced extends Composite {
 	public CheckBox typeDocument;
 	public CheckBox typeFolder;
 	public CheckBox typeMail;
-	public HTML document;
-	public HTML folder;
-	public HTML mail;
 	public FlexTable tableMail;
 	public ListBox mimeTypes;
 	public TextBox from;
@@ -119,13 +116,11 @@ public class SearchAdvanced extends Composite {
 		// Sets type document
 		tableMail = new FlexTable();
 		typePanel = new HorizontalPanel();
-		typeDocument = new CheckBox();
+		typeDocument = new CheckBox(Main.i18n("search.type.document"));
 		typeDocument.setValue(true);
-		document = new HTML(Main.i18n("search.type.document"));
-		typeFolder = new CheckBox();
+		typeFolder = new CheckBox(Main.i18n("search.type.folder"));
 		typeFolder.setValue(false);
-		folder = new HTML(Main.i18n("search.type.folder"));
-		typeMail = new CheckBox();
+		typeMail = new CheckBox(Main.i18n("search.type.mail"));
 		typeMail.setValue(false);
 		typeMail.addClickHandler(new ClickHandler() { 
 			@Override
@@ -139,19 +134,13 @@ public class SearchAdvanced extends Composite {
 				}
 			}
 		});
-		mail = new HTML(Main.i18n("search.type.mail"));		
+				
 		typePanel.add(typeDocument);
-		typePanel.add(document);
 		typePanel.add(new HTML("&nbsp;"));
 		typePanel.add(typeFolder);
-		typePanel.add(folder);
 		typePanel.add(new HTML("&nbsp;"));
 		typePanel.add(typeMail);
-		typePanel.add(mail);
 		typePanel.add(new HTML("&nbsp;"));
-		typePanel.setCellVerticalAlignment(document, HasAlignment.ALIGN_MIDDLE);
-		typePanel.setCellVerticalAlignment(folder, HasAlignment.ALIGN_MIDDLE);
-		typePanel.setCellVerticalAlignment(mail, HasAlignment.ALIGN_MIDDLE);
 		
 		// Sets mime types values
 		mimeTypes = new ListBox();
@@ -170,7 +159,7 @@ public class SearchAdvanced extends Composite {
 		mimeTypes.addItem("TXT", "text/plain");
 		mimeTypes.addItem("XML", "text/xml");
 		
-		mimeTypes.addChangeHandler(new ChangeHandler(){
+		mimeTypes.addChangeHandler(new ChangeHandler() {
 			@Override
 			public void onChange(ChangeEvent event) {
 				Main.get().mainPanel.search.searchBrowser.searchIn.searchControl.evaluateSearchButtonVisible();							
@@ -213,9 +202,6 @@ public class SearchAdvanced extends Composite {
 		from.setStyleName("okm-Input");
 		to.setStyleName("okm-Input");
 		subject.setStyleName("okm-Input");
-		document.addStyleName("okm-NoWrap");
-		folder.addStyleName("okm-NoWrap");
-		mail.addStyleName("okm-NoWrap");
 		mimeTypes.setStyleName("okm-Select");
 		
 		initWidget(scrollPanel);
@@ -244,9 +230,9 @@ public class SearchAdvanced extends Composite {
 		tableMail.setHTML(1, 0, Main.i18n("mail.to"));
 		tableMail.setHTML(2, 0, Main.i18n("mail.subject"));
 		
-		document.setHTML(Main.i18n("search.type.document"));
-		folder.setHTML(Main.i18n("search.type.folder"));
-		mail.setHTML(Main.i18n("search.type.mail"));
+		typeDocument.setHTML(Main.i18n("search.type.document"));
+		typeFolder.setHTML(Main.i18n("search.type.folder"));
+		typeMail.setHTML(Main.i18n("search.type.mail"));
 		
 		folderSelectPopup.langRefresh();
 	}

@@ -107,8 +107,6 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	public CheckBox notifyToUser = new CheckBox();
 	private CheckBox importZip = new CheckBox();
 	private HTML versionCommentText = new HTML();
-	private HTML notifyToUserText = new HTML();
-	private HTML importZipText = new HTML();
 	private HorizontalPanel hNotifyPanel = new HorizontalPanel();
 	private HorizontalPanel hUnzipPanel = new HorizontalPanel();
 	public NotifyPanel notifyPanel = new NotifyPanel();
@@ -512,8 +510,8 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		vVersionCommentPanel.add(versionCommentScrollPanel);
 		mainPanel.add(vVersionCommentPanel);
 		
-		// Ads unzip file
-		importZip = new CheckBox();
+		// Adds unzip file
+		importZip = new CheckBox(Main.i18n("fileupload.label.importZip"));
 		importZip.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -525,12 +523,8 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		});
 		
 		importZip.setName("importZip");
-		importZipText = new HTML(Main.i18n("fileupload.label.importZip"));
 		hUnzipPanel = new HorizontalPanel();
 		hUnzipPanel.add(importZip);
-		hUnzipPanel.add(importZipText);
-		hUnzipPanel.setCellVerticalAlignment(importZip, VerticalPanel.ALIGN_MIDDLE);
-		hUnzipPanel.setCellVerticalAlignment(importZipText, VerticalPanel.ALIGN_MIDDLE);
 		mainPanel.add(new HTML("<br/>"));
 		mainPanel.add(hUnzipPanel);
 		
@@ -541,13 +535,14 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		roles = new TextBox();
 		roles.setName("roles");
 		roles.setVisible(false);
-		notifyToUser = new CheckBox();
+		notifyToUser = new CheckBox(Main.i18n("fileupload.label.users.notify"));
 		notifyToUser.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				if (notifyToUser.getValue()) {
 					vNotifyPanel.setVisible(true);
 					importZip.setValue(false);
+					
 					// TODO:Solves minor bug with IE
 					if (Util.getUserAgent().startsWith("ie")) {
 						notifyPanel.tabPanel.setWidth("374");
@@ -562,12 +557,8 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		});
 		
 		notifyToUser.setName("notify");
-		notifyToUserText = new HTML(Main.i18n("fileupload.label.users.notify"));
 		hNotifyPanel = new HorizontalPanel();
 		hNotifyPanel.add(notifyToUser);
-		hNotifyPanel.add(notifyToUserText);
-		hNotifyPanel.setCellVerticalAlignment(notifyToUser, VerticalPanel.ALIGN_MIDDLE);
-		hNotifyPanel.setCellVerticalAlignment(notifyToUserText, VerticalPanel.ALIGN_MIDDLE);
 		mainPanel.add(hNotifyPanel);
 		mainPanel.add(new HTML("<br/>"));
 		
@@ -601,10 +592,10 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		mainPanel.setCellHorizontalAlignment(vNotifyPanel, HorizontalPanel.ALIGN_CENTER);
 		mainPanel.setCellHorizontalAlignment(vVersionCommentPanel, HorizontalPanel.ALIGN_CENTER);
 		
-		// Initialices users
+		// Initialize users
 		getAllUsers();
 		
-		// Initialise the widget.
+		// Initialize the widget.
 		initWidget(mainPanel);
 	}
 	
@@ -702,8 +693,8 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	 * Refreshing language
 	 */
 	public void langRefresh() {
-		notifyToUserText.setHTML(Main.i18n("fileupload.label.users.notify"));
-		importZipText.setHTML(Main.i18n("fileupload.label.importZip"));
+		notifyToUser.setText(Main.i18n("fileupload.label.users.notify"));
+		importZip.setText(Main.i18n("fileupload.label.importZip"));
 		versionCommentText.setHTML(Main.i18n("fileupload.label.comment"));
 		commentTXT.setHTML(Main.i18n("fileupload.label.notify.comment"));
 		notifyPanel.langRefresh();
