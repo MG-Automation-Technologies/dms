@@ -153,7 +153,7 @@ public class FileUploadPopup extends DialogBox {
 		
 		closeButton.setStyleName("okm-NoButton");
 		addButton.setStyleName("okm-AddButton");
-		sendButton.setStyleName("okm-SendButton");
+		sendButton.setStyleName("okm-AddButton");
 		
 		setWidget(vPanel);
 	}
