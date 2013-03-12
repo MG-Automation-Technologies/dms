@@ -369,7 +369,7 @@ public class DbDocumentModule implements DocumentModule {
 			// Escape dangerous chars in name
 			newName = PathUtils.escape(newName);
 			
-			if (newName != null && !newName.equals("") && !newName.equals(name)) {
+			if (newName != null && !newName.isEmpty() && !newName.equals(name)) {
 				NodeDocument documentNode = NodeDocumentDAO.getInstance().rename(docUuid, newName);
 				renamedDocument = BaseDocumentModule.getProperties(auth.getName(), documentNode);
 				
