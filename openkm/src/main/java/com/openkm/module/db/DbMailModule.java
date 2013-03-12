@@ -95,28 +95,33 @@ public class DbMailModule implements MailModule {
 			
 			// Escape dangerous chars in name
 			name = PathUtils.escape(name);
-			mail.setPath(parentPath + "/" + name);
 			
-			String parentUuid = NodeBaseDAO.getInstance().getUuidFromPath(parentPath);
-			NodeFolder parentFolder = NodeFolderDAO.getInstance().findByPk(parentUuid);
-			
-			// Create node
-			NodeMail mailNode = BaseMailModule.create(userId, parentFolder, name, mail.getSize(), 
-					mail.getFrom(), mail.getReply(), mail.getTo(), mail.getCc(), mail.getBcc(),
-					mail.getSentDate(), mail.getReceivedDate(), mail.getSubject(), mail.getContent(),
-					mail.getMimeType());
-			
-			// Set returned mail properties
-			newMail = BaseMailModule.getProperties(auth.getName(), mailNode);
-			
-			// Check subscriptions
-			BaseNotificationModule.checkSubscriptions(mailNode, userId, "CREATE_MAIL", null);
-			
-			// Check scripting
-			// BaseScriptingModule.checkScripts(session, parentNode, mailNode, "CREATE_MAIL");
-			
-			// Activity log
-			UserActivity.log(userId, "CREATE_MAIL", mailNode.getUuid(), mail.getPath(), null);
+			if (!name.isEmpty()) {
+				mail.setPath(parentPath + "/" + name);
+				
+				String parentUuid = NodeBaseDAO.getInstance().getUuidFromPath(parentPath);
+				NodeFolder parentFolder = NodeFolderDAO.getInstance().findByPk(parentUuid);
+				
+				// Create node
+				NodeMail mailNode = BaseMailModule.create(userId, parentFolder, name, mail.getSize(), 
+						mail.getFrom(), mail.getReply(), mail.getTo(), mail.getCc(), mail.getBcc(),
+						mail.getSentDate(), mail.getReceivedDate(), mail.getSubject(), mail.getContent(),
+						mail.getMimeType());
+				
+				// Set returned mail properties
+				newMail = BaseMailModule.getProperties(auth.getName(), mailNode);
+				
+				// Check subscriptions
+				BaseNotificationModule.checkSubscriptions(mailNode, userId, "CREATE_MAIL", null);
+				
+				// Check scripting
+				// BaseScriptingModule.checkScripts(session, parentNode, mailNode, "CREATE_MAIL");
+				
+				// Activity log
+				UserActivity.log(userId, "CREATE_MAIL", mailNode.getUuid(), mail.getPath(), null);
+			} else {
+				throw new RepositoryException("Invalid mail name");
+			}
 		} finally {
 			if (token != null) {
 				PrincipalUtils.setAuthentication(oldAuth);

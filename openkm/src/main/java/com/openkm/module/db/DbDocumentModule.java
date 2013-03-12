@@ -161,126 +161,131 @@ public class DbDocumentModule implements DocumentModule {
 			
 			// Escape dangerous chars in name
 			name = PathUtils.escape(name);
-			doc.setPath(parentPath + "/" + name);
 			
-			// Check file restrictions
-			String mimeType = MimeTypeConfig.mimeTypes.getContentType(name.toLowerCase());
-			doc.setMimeType(mimeType);
-			
-			if (Config.RESTRICT_FILE_MIME && MimeTypeDAO.findByName(mimeType) == null) {
-				String usr = userId == null ? auth.getName() : userId;
-				UserActivity.log(usr, "ERROR_UNSUPPORTED_MIME_TYPE", null, doc.getPath(), mimeType);
-				throw new UnsupportedMimeTypeException(mimeType);
-			}
-			
-			// Restrict for extension
-			if (!Config.RESTRICT_FILE_NAME.isEmpty()) {
-				StringTokenizer st = new StringTokenizer(Config.RESTRICT_FILE_NAME, ";");
+			if (!name.isEmpty()) {
+				doc.setPath(parentPath + "/" + name);
 				
-				while (st.hasMoreTokens()) {
-					String wc = st.nextToken().trim();
-					String re = ConfigUtils.wildcard2regexp(wc);
+				// Check file restrictions
+				String mimeType = MimeTypeConfig.mimeTypes.getContentType(name.toLowerCase());
+				doc.setMimeType(mimeType);
+				
+				if (Config.RESTRICT_FILE_MIME && MimeTypeDAO.findByName(mimeType) == null) {
+					String usr = userId == null ? auth.getName() : userId;
+					UserActivity.log(usr, "ERROR_UNSUPPORTED_MIME_TYPE", null, doc.getPath(), mimeType);
+					throw new UnsupportedMimeTypeException(mimeType);
+				}
+				
+				// Restrict for extension
+				if (!Config.RESTRICT_FILE_NAME.isEmpty()) {
+					StringTokenizer st = new StringTokenizer(Config.RESTRICT_FILE_NAME, ";");
 					
-					if (Pattern.matches(re, name)) {
-						String usr = userId == null ? auth.getName() : userId;
-						UserActivity.log(usr, "ERROR_UNSUPPORTED_MIME_TYPE", null, doc.getPath(), mimeType);
-						throw new UnsupportedMimeTypeException(mimeType);
+					while (st.hasMoreTokens()) {
+						String wc = st.nextToken().trim();
+						String re = ConfigUtils.wildcard2regexp(wc);
+						
+						if (Pattern.matches(re, name)) {
+							String usr = userId == null ? auth.getName() : userId;
+							UserActivity.log(usr, "ERROR_UNSUPPORTED_MIME_TYPE", null, doc.getPath(), mimeType);
+							throw new UnsupportedMimeTypeException(mimeType);
+						}
 					}
 				}
-			}
-			
-			// Manage temporary files
-			byte[] buff = new byte[4 * 1024];
-			FileOutputStream fos = new FileOutputStream(tmp);
-			int read;
-			
-			while ((read = is.read(buff)) != -1) {
-				fos.write(buff, 0, read);
-			}
-			
-			fos.flush();
-			fos.close();
-			is.close();
-			is = new FileInputStream(tmp);
-			
-			if (!Config.SYSTEM_ANTIVIR.equals("")) {
-				String info = VirusDetection.detect(tmp);
 				
-				if (info != null) {
-					String usr = userId == null ? auth.getName() : userId;
-					UserActivity.log(usr, "ERROR_VIRUS_DETECTED", null, doc.getPath(), info);
-					throw new VirusDetectedException(info);
+				// Manage temporary files
+				byte[] buff = new byte[4 * 1024];
+				FileOutputStream fos = new FileOutputStream(tmp);
+				int read;
+				
+				while ((read = is.read(buff)) != -1) {
+					fos.write(buff, 0, read);
 				}
-			}
-			
-			// Start KEA
-			Set<String> keywords = doc.getKeywords() != null ? doc.getKeywords() : new HashSet<String>();
-			
-			if (!Config.KEA_MODEL_FILE.equals("")) {
-				MetadataExtractor mdExtractor = new MetadataExtractor(Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER);
-				MetadataDTO mdDTO = mdExtractor.extract(tmp);
 				
-				for (ListIterator<Term> it = mdDTO.getSubjectsAsTerms().listIterator(); it.hasNext();) {
-					Term term = it.next();
-					log.info("Term: {}", term.getText());
+				fos.flush();
+				fos.close();
+				is.close();
+				is = new FileInputStream(tmp);
+				
+				if (!Config.SYSTEM_ANTIVIR.equals("")) {
+					String info = VirusDetection.detect(tmp);
 					
-					if (Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION) {
-						if (RDFREpository.getInstance().getKeywords().contains(term.getText())) {
+					if (info != null) {
+						String usr = userId == null ? auth.getName() : userId;
+						UserActivity.log(usr, "ERROR_VIRUS_DETECTED", null, doc.getPath(), info);
+						throw new VirusDetectedException(info);
+					}
+				}
+				
+				// Start KEA
+				Set<String> keywords = doc.getKeywords() != null ? doc.getKeywords() : new HashSet<String>();
+				
+				if (!Config.KEA_MODEL_FILE.equals("")) {
+					MetadataExtractor mdExtractor = new MetadataExtractor(Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER);
+					MetadataDTO mdDTO = mdExtractor.extract(tmp);
+					
+					for (ListIterator<Term> it = mdDTO.getSubjectsAsTerms().listIterator(); it.hasNext();) {
+						Term term = it.next();
+						log.info("Term: {}", term.getText());
+						
+						if (Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION) {
+							if (RDFREpository.getInstance().getKeywords().contains(term.getText())) {
+								// Replacing spaces to "_" and adding at ends space for other word
+								keywords.add(term.getText().replace(" ", "_"));
+							}
+						} else {
 							// Replacing spaces to "_" and adding at ends space for other word
 							keywords.add(term.getText().replace(" ", "_"));
 						}
-					} else {
-						// Replacing spaces to "_" and adding at ends space for other word
-						keywords.add(term.getText().replace(" ", "_"));
 					}
 				}
-			}
-			// End KEA
-			
-			String parentUuid = NodeBaseDAO.getInstance().getUuidFromPath(parentPath);
-			NodeBase parentNode = NodeBaseDAO.getInstance().findByPk(parentUuid);
-			
-			// AUTOMATION - PRE
-			// INSIDE BaseDocumentModule.create
-			
-			// Create node
-			NodeDocument docNode = BaseDocumentModule.create(auth.getName(), parentPath, parentNode, name, 
-					doc.getTitle(), doc.getCreated(), mimeType, is, size, keywords, new HashSet<String>(), fuResponse);
-			
-			// AUTOMATION - POST
-			// INSIDE BaseDocumentModule.create
-			
-			// Set returned folder properties
-			newDocument = BaseDocumentModule.getProperties(auth.getName(), docNode);
-			
-			// Setting wizard properties
-			// INSIDE BaseDocumentModule.create
-			
-			if (fuResponse.get() == null) {
-				fuResponse.set(new FileUploadResponse());
-			}
-			
-			fuResponse.get().setHasAutomation(AutomationManager.getInstance().hasAutomation());
-			
-			if (userId == null) {
-				// Check subscriptions
-				BaseNotificationModule.checkSubscriptions(docNode, auth.getName(), "CREATE_DOCUMENT", null);
+				// End KEA
 				
-				// Check scripting
-				// BaseScriptingModule.checkScripts(session, parentNode, documentNode, "CREATE_DOCUMENT");
+				String parentUuid = NodeBaseDAO.getInstance().getUuidFromPath(parentPath);
+				NodeBase parentNode = NodeBaseDAO.getInstance().findByPk(parentUuid);
 				
-				// Activity log
-				UserActivity.log(auth.getName(), "CREATE_DOCUMENT", docNode.getUuid(), doc.getPath(), mimeType + ", " + size);
+				// AUTOMATION - PRE
+				// INSIDE BaseDocumentModule.create
+				
+				// Create node
+				NodeDocument docNode = BaseDocumentModule.create(auth.getName(), parentPath, parentNode, name, 
+						doc.getTitle(), doc.getCreated(), mimeType, is, size, keywords, new HashSet<String>(), fuResponse);
+				
+				// AUTOMATION - POST
+				// INSIDE BaseDocumentModule.create
+				
+				// Set returned folder properties
+				newDocument = BaseDocumentModule.getProperties(auth.getName(), docNode);
+				
+				// Setting wizard properties
+				// INSIDE BaseDocumentModule.create
+				
+				if (fuResponse.get() == null) {
+					fuResponse.set(new FileUploadResponse());
+				}
+				
+				fuResponse.get().setHasAutomation(AutomationManager.getInstance().hasAutomation());
+				
+				if (userId == null) {
+					// Check subscriptions
+					BaseNotificationModule.checkSubscriptions(docNode, auth.getName(), "CREATE_DOCUMENT", null);
+					
+					// Check scripting
+					// BaseScriptingModule.checkScripts(session, parentNode, documentNode, "CREATE_DOCUMENT");
+					
+					// Activity log
+					UserActivity.log(auth.getName(), "CREATE_DOCUMENT", docNode.getUuid(), doc.getPath(), mimeType + ", " + size);
+				} else {
+					// Check subscriptions
+					BaseNotificationModule.checkSubscriptions(docNode, userId, "CREATE_MAIL_ATTACHMENT", null);
+					
+					// Check scripting
+					// BaseScriptingModule.checkScripts(session, parentNode, documentNode, "CREATE_MAIL_ATTACHMENT");
+					
+					// Activity log
+					UserActivity.log(userId, "CREATE_MAIL_ATTACHMENT", docNode.getUuid(), doc.getPath(), mimeType + ", "
+							+ size);
+				}
 			} else {
-				// Check subscriptions
-				BaseNotificationModule.checkSubscriptions(docNode, userId, "CREATE_MAIL_ATTACHMENT", null);
-				
-				// Check scripting
-				// BaseScriptingModule.checkScripts(session, parentNode, documentNode, "CREATE_MAIL_ATTACHMENT");
-				
-				// Activity log
-				UserActivity.log(userId, "CREATE_MAIL_ATTACHMENT", docNode.getUuid(), doc.getPath(), mimeType + ", "
-						+ size);
+				throw new RepositoryException("Invalid document name");
 			}
 		} catch (MetadataExtractionException e) {
 			throw new RepositoryException(e.getMessage(), e);
