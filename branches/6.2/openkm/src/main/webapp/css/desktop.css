@@ -143,3 +143,31 @@ table.demo_list th {
 table.demo_list td {
   padding: 1px;
 }
+
+.loginButton {
+	background-color: #E5E5E1;
+	border: 1px solid #A5A596;
+	height: 18px;
+	font-size: 10px;
+	font-family: verdana, arial, sans-serif;
+	cursor: pointer;
+  	cursor: hand;
+	background-image: url("../img/key.png");
+	background-repeat: no-repeat;
+	padding-left: 17px;
+	background-position: 2px center;
+}
+
+/* Chrome fix for button images */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	.loginButton {
+		padding-left: 20px;
+	}
+}
+
+/* Explorer fix for button images */
+<!--[if IE]>
+	.loginButton {
+		padding-left: 12px;
+	}
+<![endif]-->

@@ -98,7 +98,7 @@
           }
         %>
         </select>
-        <input value="Login" name="submit" type="submit"/><br/>
+        <input value="Login" name="submit" type="submit" class="loginButton"/><br/>
       </form>
     </div>
   </div>
