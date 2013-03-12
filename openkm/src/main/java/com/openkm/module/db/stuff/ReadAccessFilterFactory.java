@@ -43,28 +43,33 @@ public class ReadAccessFilterFactory {
 	@Factory
 	public Filter buildFilter() {
 		log.debug("buildFilter()");
-		String user = PrincipalUtils.getUser();
-		Set<String> roles = PrincipalUtils.getRoles();
 		
-		if (roles.contains(Config.DEFAULT_ADMIN_ROLE)) {
-			// An user with AdminRole has total access
-			return null;
-		} else if (Config.ADMIN_USER.equals(user) || Config.SYSTEM_USER.equals(user)) {
-			// An "okmAdmin" or "system" user has total access
-			return null;
-		} else {
-			BooleanQuery query = new BooleanQuery();
-			Term termUser = new Term("userPermission", user);
-			query.add(new TermQuery(termUser), BooleanClause.Occur.SHOULD);
+		if (SearchDAO.SEARCH_LUCENE.equals(Config.SECURITY_SEARCH_EVALUATION)) {
+			String user = PrincipalUtils.getUser();
+			Set<String> roles = PrincipalUtils.getRoles();
 			
-			for (String role : roles) {
-				Term termRole = new Term("rolePermission", role);
-				query.add(new TermQuery(termRole), BooleanClause.Occur.SHOULD);
+			if (roles.contains(Config.DEFAULT_ADMIN_ROLE)) {
+				// An user with AdminRole has total access
+				return null;
+			} else if (Config.ADMIN_USER.equals(user) || Config.SYSTEM_USER.equals(user)) {
+				// An "okmAdmin" or "system" user has total access
+				return null;
+			} else {
+				BooleanQuery query = new BooleanQuery();
+				Term termUser = new Term("userPermission", user);
+				query.add(new TermQuery(termUser), BooleanClause.Occur.SHOULD);
+				
+				for (String role : roles) {
+					Term termRole = new Term("rolePermission", role);
+					query.add(new TermQuery(termRole), BooleanClause.Occur.SHOULD);
+				}
+				
+				log.info("buildFilter: {}", query);
+				Filter filter = new QueryWrapperFilter(query);
+				return filter;
 			}
-			
-			log.info("buildFilter: {}", query);
-			Filter filter = new QueryWrapperFilter(query);
-			return filter;
+		} else {
+			return null;
 		}
 	}
 }
