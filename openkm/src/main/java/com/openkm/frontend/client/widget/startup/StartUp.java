@@ -664,6 +664,8 @@ public class StartUp implements HasWidgetHandlerExtension, HasWidgetEvent {
 					case STARTUP_LOADING_OPEN_PATH:
 						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.taxonomy.open.path"), STARTUP_LOADING_OPEN_PATH);
 						enabled = false;
+						Main.get().mainPanel.desktop.setLoadFinish();
+						Main.get().mainPanel.search.setLoadFinish();
 						
 						fireEvent(HasWidgetEvent.FINISH_STARTUP);
 						

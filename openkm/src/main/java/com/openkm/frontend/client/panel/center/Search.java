@@ -28,7 +28,10 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
+import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.constants.ui.UIDockPanelConstants;
 import com.openkm.frontend.client.panel.left.HistorySearch;
+import com.openkm.frontend.client.util.TimeHelper;
 import com.openkm.frontend.client.util.Util;
 
 /**
@@ -41,15 +44,19 @@ public class Search extends Composite {
 	
 	private final static int PANEL_LEFT_WIDTH 	= 225;
 	public final static int SPLITTER_WIDTH 	= 10;
+	private final static int REFRESH_WAITING_TIME = 100;
+	private final static String TIME_HELPER_KEY = "SPLIT_HORIZONTAL_SEARCH";
 	
 	private HorizontalSplitPanelExtended horizontalSplitPanel;
 	public HistorySearch historySearch;
 	public SearchBrowser searchBrowser;
 	private boolean isResizeInProgress = false;
+	private boolean finalResizeInProgess = false;
 	private int width = 0;
 	private int height = 0;
 	private int left = PANEL_LEFT_WIDTH;
 	private int right = 0;
+	private boolean loadFinish = false;
 
 	/**
 	 * Desktop
@@ -105,6 +112,11 @@ public class Search extends Composite {
 		historySearch.setSize(left, height);
 		searchBrowser.setSize(right, height);
 		horizontalSplitPanel.getSplitPanel().setSplitPosition(""+left);
+		// Solve some problems with chrome but only when workspace is visible otherside should not be called resizePanels
+		if (loadFinish && Util.getUserAgent().equals("chrome") && 
+			 Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace()==UIDockPanelConstants.SEARCH) {
+			resizePanels();
+		}
 	}
 	
 	/**
@@ -120,14 +132,8 @@ public class Search extends Composite {
 					if (isResizeInProgress) {
 						onSplitResize();
 					} else if (Util.getUserAgent().equals("chrome")) {
-							new Timer() {
-								@Override
-								public void run() {
-									resizePanels();
-								}
-								
-							}.schedule(250);
-						}
+						resizePanels();
+					}
 				}
 			}.schedule(resizeUpdatePeriod);
 		}
@@ -158,6 +164,58 @@ public class Search extends Composite {
 		
 		historySearch.setSize(left, height);
 		searchBrowser.setWidth(right);
+		
+		if (Util.getUserAgent().equals("chrome")) {
+			if (!TimeHelper.hasControlTime(TIME_HELPER_KEY)) {
+				TimeHelper.hasElapsedEnoughtTime(TIME_HELPER_KEY, REFRESH_WAITING_TIME);
+				timeControl();
+			} else {
+				TimeHelper.changeControlTime(TIME_HELPER_KEY);
+			}
+		}
+	}
+	
+	/**
+	 * timeControl
+	 */
+	private void timeControl() {
+		if (TimeHelper.hasElapsedEnoughtTime(TIME_HELPER_KEY, REFRESH_WAITING_TIME)) {	
+			if (!finalResizeInProgess) {
+				finalResizeInProgess = true;
+				int total = horizontalSplitPanel.getOffsetWidth();
+				String value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(horizontalSplitPanel.getSplitPanel().getElement(),0), 0), "width");
+				if (value.contains("px")) { value = value.substring(0,value.indexOf("px")); }
+				left = Integer.parseInt(value);
+				value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(horizontalSplitPanel.getSplitPanel().getElement(),0), 2), "left");
+				if (value.contains("px")) { value = value.substring(0,value.indexOf("px")); }
+				right = total - Integer.parseInt(value);
+				
+				// Solve some problems with chrome
+				if (Util.getUserAgent().equals("chrome")) {
+					if (left-20>0 && height-20>0 && right-20>0) {
+						historySearch.setSize(left-20, height-20);
+						searchBrowser.setWidth(right-20);
+					}
+				} 
+				
+				new Timer() {
+					@Override
+					public void run() {
+						historySearch.setSize(left, height);
+						searchBrowser.setWidth(right);
+						TimeHelper.removeControlTime(TIME_HELPER_KEY);
+						finalResizeInProgess = false;
+					}
+				}.schedule(50);
+			} 
+		} else {
+			new Timer() {
+				@Override
+				public void run() {
+					timeControl();
+				}
+			}.schedule(50);
+		}
 	}
 	
 	/**
@@ -170,14 +228,15 @@ public class Search extends Composite {
 		
 		// Solve some problems with chrome
 		if (Util.getUserAgent().equals("chrome")) {
-			new Timer() {
-				@Override
-				public void run() {
-					resizePanels();
-				}
-				
-			}.schedule(250);
+			resizePanels();
 		}
+	}
+	
+	/**
+	 * setLoadFinish
+	 */
+	public void setLoadFinish() {
+		loadFinish = true;
 	}
 	
 	/**
