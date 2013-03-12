@@ -91,6 +91,7 @@ public class FileUploadPopup extends DialogBox {
 		
 		sendButton = new Button();
 		sendButton.setText(Main.i18n("fileupload.button.send"));
+		
 		// Set up a click listener on the proceed check box
 		sendButton.addClickHandler(new ClickHandler() { 
 			@Override
@@ -105,7 +106,7 @@ public class FileUploadPopup extends DialogBox {
 		vPanel.add(new HTML("<br/>"));
 		vPanel.add(ffUpload);
 		        
-		ffUpload.addChangeHandler(new ChangeHandler(){
+		ffUpload.addChangeHandler(new ChangeHandler() {
 			@Override
 			public void onChange(ChangeEvent event) {
             	if (ffUpload.getUploadState() == FancyFileUpload.PENDING_STATE ||
@@ -174,11 +175,11 @@ public class FileUploadPopup extends DialogBox {
 	 */
 	protected void executeSend() {
 		if (Main.get().mainPanel.bottomPanel.userInfo.isQuotaExceed()) {
-			Main.get().showError("UserQuotaExceed", 
-		             			 new OKMException("OKM-"+ErrorCode.ORIGIN_OKMBrowser + ErrorCode.CAUSE_QuotaExceed, ""));
+			Main.get().showError("UserQuotaExceed", new OKMException("OKM-" + ErrorCode.ORIGIN_OKMBrowser + ErrorCode.CAUSE_QuotaExceed, ""));
 		} else {
 			ffUpload.users.setText(ffUpload.notifyPanel.getUsersToNotify());
 			ffUpload.roles.setText(ffUpload.notifyPanel.getRolesToNotify());
+			
 			if (ffUpload.notifyToUser.getValue() && ffUpload.users.getText().equals("") && ffUpload.roles.getText().equals("")) {
 				ffUpload.errorNotify.setVisible(true);
 			} else if (ffUpload.getFilename() != null && !ffUpload.getFilename().equals("")) {
