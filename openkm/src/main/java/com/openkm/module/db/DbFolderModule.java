@@ -312,7 +312,7 @@ public class DbFolderModule implements FolderModule {
 			// Escape dangerous chars in name
 			newName = PathUtils.escape(newName);
 			
-			if (newName != null && !newName.equals("") && !newName.equals(name)) {
+			if (newName != null && !newName.isEmpty() && !newName.equals(name)) {
 				NodeFolder folderNode = NodeFolderDAO.getInstance().rename(fldUuid, newName);
 				renamedFolder = BaseFolderModule.getProperties(auth.getName(), folderNode);
 			} else {

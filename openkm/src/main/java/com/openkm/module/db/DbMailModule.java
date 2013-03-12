@@ -283,7 +283,7 @@ public class DbMailModule implements MailModule {
 			// Escape dangerous chars in name
 			newName = PathUtils.escape(newName);
 			
-			if (newName != null && !newName.equals("") && !newName.equals(name)) {
+			if (newName != null && !newName.isEmpty() && !newName.equals(name)) {
 				NodeMail mailNode = NodeMailDAO.getInstance().rename(mailUuid, newName);
 				renamedMail = BaseMailModule.getProperties(auth.getName(), mailNode);
 			} else {
