@@ -249,7 +249,7 @@ public class SearchIn extends Composite implements HasSearch {
 		searchNormal.content.setText(gWTParams.getContent());
 		searchNormal.name.setText(gWTParams.getName());
 		searchNormal.keywords.setText(gWTParams.getKeywords());
-		searchControl.userNews.setValue(gWTParams.isDashboard());
+		searchControl.saveUserNews.setValue(gWTParams.isDashboard());
 		
 		searchAdvanced.from.setText(gWTParams.getMailFrom());
 		searchAdvanced.to.setText(gWTParams.getMailTo());

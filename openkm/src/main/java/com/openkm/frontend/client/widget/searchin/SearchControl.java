@@ -79,11 +79,7 @@ public class SearchControl extends Composite {
 	private CheckBox advancedView;
 	private CheckBox compactResultsView;
 	public CheckBox showPropertyGroups;
-	public CheckBox userNews;
-	private HTML advancedViewText;
-	private HTML compactResultsViewText;
-	private HTML showPropertyGroupsText;
-	private HTML saveUserNewsText;
+	public CheckBox saveUserNews;
 	private HTML resultsPageText;
 	private HTML searchTypeText;
 	private int searchMode = SEARCH_MODE_SIMPLE;
@@ -98,7 +94,7 @@ public class SearchControl extends Composite {
 		table.setCellPadding(2);
 		table.setCellSpacing(2);
 		scrollPanel = new ScrollPanel(table);
-		advancedView = new CheckBox();
+		advancedView = new CheckBox(Main.i18n("search.view.advanced"));
 		advancedView.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -111,7 +107,7 @@ public class SearchControl extends Composite {
 				}
 			}
 		});
-		compactResultsView = new CheckBox();
+		compactResultsView = new CheckBox(Main.i18n("search.view.compact.results"));
 		compactResultsView.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -124,7 +120,7 @@ public class SearchControl extends Composite {
 				}
 			}
 		});		
-		showPropertyGroups = new CheckBox();
+		showPropertyGroups = new CheckBox(Main.i18n("search.view.propety.groups"));
 		showPropertyGroups.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -133,7 +129,7 @@ public class SearchControl extends Composite {
 				}
 			}
 		});		
-		userNews = new CheckBox();
+		saveUserNews = new CheckBox(Main.i18n("search.save.as.news"));
 		searchSavedName = new TextBox();
 		searchSavedName.setWidth("200");
 		controlSearch = new ControlSearchIn();
@@ -196,7 +192,7 @@ public class SearchControl extends Composite {
 				params.setAuthor(searchNormal.userListBox.getValue(searchNormal.userListBox.getSelectedIndex()));
 				params.setLastModifiedFrom(searchNormal.modifyDateFrom);
 				params.setLastModifiedTo(searchNormal.modifyDateTo);
-				params.setDashboard(userNews.getValue());
+				params.setDashboard(saveUserNews.getValue());
 				params.setMailFrom(searchAdvanced.from.getText());
 				params.setMailTo(searchAdvanced.to.getText());
 				params.setMailSubject(searchAdvanced.subject.getText());
@@ -224,7 +220,7 @@ public class SearchControl extends Composite {
 				params.setOperator(operator);
 				
 				// Removes dates if dashboard is checked
-				if (userNews.getValue()) {
+				if (saveUserNews.getValue()) {
 					params.setLastModifiedFrom(null);
 					params.setLastModifiedTo(null);
 				}
@@ -278,42 +274,10 @@ public class SearchControl extends Composite {
 		searchTypePanel.add(searchTypeOr);
 		searchTypePanel.setCellWidth(space1, "10");
 		
-		advancedViewText = new HTML(Main.i18n("search.view.advanced"));
-		HorizontalPanel hPanel = new HorizontalPanel();
-		hPanel.add(advancedView);
-		hPanel.add(new HTML("&nbsp;"));
-		hPanel.add(advancedViewText);
-		hPanel.setCellVerticalAlignment(advancedView, HasAlignment.ALIGN_MIDDLE);
-		hPanel.setCellVerticalAlignment(advancedViewText, HasAlignment.ALIGN_MIDDLE);
-		table.setWidget(0, 0, hPanel);
-		
-		compactResultsViewText = new HTML(Main.i18n("search.view.compact.results"));
-		HorizontalPanel hPanel2 = new HorizontalPanel();
-		hPanel2.add(compactResultsView);
-		hPanel2.add(new HTML("&nbsp;"));
-		hPanel2.add(compactResultsViewText);
-		hPanel2.setCellVerticalAlignment(compactResultsView, HasAlignment.ALIGN_MIDDLE);
-		hPanel2.setCellVerticalAlignment(compactResultsViewText, HasAlignment.ALIGN_MIDDLE);
-		table.setWidget(1, 0, hPanel2);
-		
-		showPropertyGroupsText = new HTML(Main.i18n("search.view.propety.groups"));
-		HorizontalPanel hPanel3 = new HorizontalPanel();
-		hPanel3.add(showPropertyGroups);
-		hPanel3.add(new HTML("&nbsp;"));
-		hPanel3.add(showPropertyGroupsText);
-		hPanel3.setCellVerticalAlignment(compactResultsView, HasAlignment.ALIGN_MIDDLE);
-		hPanel3.setCellVerticalAlignment(showPropertyGroupsText, HasAlignment.ALIGN_MIDDLE);
-		table.setWidget(2, 0, hPanel3);
-		
-		saveUserNewsText = new HTML(Main.i18n("search.save.as.news"));
-		HorizontalPanel hPanel4 = new HorizontalPanel();
-		hPanel4.add(userNews);
-		hPanel4.add(new HTML("&nbsp;"));
-		hPanel4.add(saveUserNewsText);
-		hPanel4.setCellVerticalAlignment(userNews, HasAlignment.ALIGN_MIDDLE);
-		hPanel4.setCellVerticalAlignment(saveUserNewsText, HasAlignment.ALIGN_MIDDLE);
-		table.setWidget(3, 0, hPanel4);
-		
+		table.setWidget(0, 0, advancedView);
+		table.setWidget(1, 0, compactResultsView);
+		table.setWidget(2, 0, showPropertyGroups);
+		table.setWidget(3, 0, saveUserNews);
 		table.setWidget(4, 0, saveSearchButton);
 		table.setWidget(4, 1, searchSavedName);
 		
@@ -535,10 +499,10 @@ public class SearchControl extends Composite {
 		searchButton.setHTML(Main.i18n("button.search"));
 		cleanButton.setHTML(Main.i18n("button.clean"));
 		saveSearchButton.setHTML(Main.i18n("button.save.search"));
-		advancedViewText.setHTML(Main.i18n("search.view.advanced"));
-		compactResultsViewText.setHTML(Main.i18n("search.view.compact.results"));
-		showPropertyGroupsText.setHTML(Main.i18n("search.view.propety.groups"));
-		saveUserNewsText.setHTML(Main.i18n("search.save.as.news"));
+		advancedView.setText(Main.i18n("search.view.advanced"));
+		compactResultsView.setText(Main.i18n("search.view.compact.results"));
+		showPropertyGroups.setText(Main.i18n("search.view.propety.groups"));
+		saveUserNews.setText(Main.i18n("search.save.as.news"));
 		resultsPageText.setHTML(Main.i18n("search.page.results"));
 		searchTypeText.setHTML(Main.i18n("search.type"));
 		controlSearch.langRefresh();
