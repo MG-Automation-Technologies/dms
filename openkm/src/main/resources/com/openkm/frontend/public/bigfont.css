@@ -818,20 +818,6 @@ iframe {
 	background-position: 2px center;
 }
 
-.okm-SendButton {
-	background-color: #E5E5E1;
-	border: 1px solid #A5A596;
-	height: 18px;
-	font-size: 10pt;
-	font-family: tahoma;
-	cursor: pointer;
-  	cursor: hand;
-	background-image: url("img/icon/actions/arrow_up.png");
-	background-repeat: no-repeat;
-	padding-left: 18px;
-	background-position: 2px center;
-}
-
 .okm-AddButton {
 	background-color: #E5E5E1;
 	border: 1px solid #A5A596;
@@ -1794,18 +1780,18 @@ iframe {
 
 /* Chrome fix for button images */
 @media screen and (-webkit-min-device-pixel-ratio:0) {
-	.okm-NoButton, .okm-YesButton, .okm-SendButton, .okm-AddButton, .okm-DeleteButton, .okm-DownloadZipButton,
-	.okm-HomeButton, .okm-DownloadButton, .okm-ViewButton, .okm-ChangeButton, .okm-CompactButton, .okm-CleanButton,
-	.okm-SearchButton, .okm-SaveButton, .okm-CommentButton {
+	.okm-NoButton, .okm-YesButton, .okm-AddButton, .okm-DeleteButton, .okm-DownloadZipButton,
+	.okm-HomeButton, .okm-DownloadButton, .okm-ViewButton, .okm-ChangeButton, .okm-CompactButton,
+	.okm-CleanButton, .okm-SearchButton, .okm-SaveButton, .okm-CommentButton {
 		padding-left: 21px;
 	}
 }
 
 /* Explorer fix for button images */
 <!--[if IE]>
-	.okm-NoButton, .okm-YesButton, .okm-SendButton, .okm-AddButton, .okm-DeleteButton, .okm-DownloadZipButton,
-	.okm-HomeButton, .okm-DownloadButton, .okm-ViewButton, .okm-ChangeButton, .okm-CompactButton, .okm-CleanButton,
-	.okm-SearchButton, .okm-SaveButton, .okm-CommentButton {
+	.okm-NoButton, .okm-YesButton, .okm-AddButton, .okm-DeleteButton, .okm-DownloadZipButton,
+	.okm-HomeButton, .okm-DownloadButton, .okm-ViewButton, .okm-ChangeButton, .okm-CompactButton,
+	.okm-CleanButton, .okm-SearchButton, .okm-SaveButton, .okm-CommentButton {
 		padding-left: 13px;
 	}
 <![endif]-->
