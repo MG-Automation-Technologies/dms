@@ -45,6 +45,9 @@ public class DbSimpleAccessManager implements DbAccessManager {
 	private static Logger log = LoggerFactory.getLogger(DbSimpleAccessManager.class);
 	public static final String NAME = "simple";
 	
+	/**
+	 * Check for permissions.
+	 */
 	public void checkPermission(NodeBase node, int permissions) throws AccessDeniedException, PathNotFoundException,
 			DatabaseException {
 		if (!isGranted(node, permissions)) {
@@ -53,6 +56,9 @@ public class DbSimpleAccessManager implements DbAccessManager {
 		}
 	}
 	
+	/**
+	 * Check for permissions.
+	 */
 	public boolean isGranted(NodeBase node, int permissions) {
 		log.debug("isGranted({}, {})", node.getUuid(), permissions);
 		boolean access = false;
