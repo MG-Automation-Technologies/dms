@@ -153,9 +153,9 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 						}
 					}
 				}
-				
-				al.add(fe);
 			}
+			
+			al.add(fe);
 		}
 		
 		cm.setProperties(token, nodePath, grpName, al);
