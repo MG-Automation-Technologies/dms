@@ -21,12 +21,16 @@
 
 package com.openkm.frontend.client.widget.searchin;
 
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.constants.ui.UIDockPanelConstants;
+import com.openkm.frontend.client.util.TimeHelper;
 import com.openkm.frontend.client.util.Util;
 
 /**
@@ -39,6 +43,12 @@ public class SearchSimple extends Composite {
 	private ScrollPanel scrollPanel;
 	private VerticalPanel vPanel;
 	public TextBox fullText;
+	private final static int REFRESH_WAITING_TIME = 100;
+	private final static String TIME_HELPER_KEY = "SCROLL_SIMPLE_SEARCH";
+	private boolean loadFinish = false;
+	private boolean finalResizeInProgess = false;
+	int width = 0;
+	int height = 0;
 	
 	/**
 	 * SearchSimple
@@ -59,11 +69,72 @@ public class SearchSimple extends Composite {
 		initWidget(scrollPanel);
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.UIObject#setPixelSize(int, int)
-	 */
+	@Override
 	public void setPixelSize(int width, int height) {
+		this.width = width;
+		this.height = height;
 		scrollPanel.setPixelSize(width, height);
 		vPanel.setPixelSize(width, height);
+		
+		// Solve some problems with chrome
+		if (loadFinish && Util.getUserAgent().equals("chrome") && 
+			Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace() == UIDockPanelConstants.SEARCH) {
+			if (!TimeHelper.hasControlTime(TIME_HELPER_KEY)) {
+				TimeHelper.hasElapsedEnoughtTime(TIME_HELPER_KEY, REFRESH_WAITING_TIME);
+				timeControl();
+			} else {
+				TimeHelper.changeControlTime(TIME_HELPER_KEY);
+			}
+		} 
+	}
+	
+	/**
+	 * timeControl
+	 */
+	private void timeControl() {
+		if (TimeHelper.hasElapsedEnoughtTime(TIME_HELPER_KEY, REFRESH_WAITING_TIME)) {	
+			if (!finalResizeInProgess) {
+				finalResizeInProgess = true;
+				int tmpHeight = height;
+				int tmpWidth = width;
+				
+				// Solve some problems with chrome
+				if (Util.getUserAgent().equals("chrome")) {
+					if (tmpHeight-20>0) {
+						tmpHeight -= 20;
+					} else {
+						tmpHeight = 0;
+					}
+					if (width-20>0) {
+						tmpWidth -= 20;
+					} else {
+						tmpWidth = 0;
+					}
+					vPanel.setPixelSize(tmpWidth, tmpHeight);
+				} 
+				new Timer() {
+					@Override
+					public void run() {
+						vPanel.setPixelSize(width, height);
+						TimeHelper.removeControlTime(TIME_HELPER_KEY);
+						finalResizeInProgess = false;
+					}
+				}.schedule(50);
+			} 
+		} else {
+			new Timer() {
+				@Override
+				public void run() {
+					timeControl();
+				}
+			}.schedule(50);
+		}
+	}
+	
+	/**
+	 * setLoadFinish
+	 */
+	public void setLoadFinish() {
+		loadFinish = true;
 	}
 }

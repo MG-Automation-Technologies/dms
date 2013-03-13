@@ -108,6 +108,9 @@ public class Search extends Composite {
 		left = (int)(width*0.2);
 		left = left < PANEL_LEFT_WIDTH ? PANEL_LEFT_WIDTH : left;
 		right = width-(left+SPLITTER_WIDTH);
+		if (right<0) {
+			right = 0;
+		}
 		horizontalSplitPanel.setPixelSize(width, height);
 		historySearch.setSize(left, height);
 		searchBrowser.setSize(right, height);
@@ -192,10 +195,26 @@ public class Search extends Composite {
 				
 				// Solve some problems with chrome
 				if (Util.getUserAgent().equals("chrome")) {
-					if (left-20>0 && height-20>0 && right-20>0) {
-						historySearch.setSize(left-20, height-20);
-						searchBrowser.setWidth(right-20);
+					int tmpLeft = left;
+					int tmpHeight = height;
+					int tmpRight = right;
+					if (tmpLeft-20>0) {
+						tmpLeft -= 20;
+					} else {
+						tmpLeft = 0;
 					}
+					if (tmpHeight-20>0){
+						tmpHeight -= 20;
+					} else {
+						tmpHeight = 0;
+					}
+					if (tmpRight-20>0) {
+						tmpRight -= 20;
+					} else {
+						tmpRight = 0;
+					}
+					historySearch.setSize(tmpLeft, tmpHeight);
+					searchBrowser.setWidth(tmpRight);
 				} 
 				
 				new Timer() {
@@ -237,6 +256,7 @@ public class Search extends Composite {
 	 */
 	public void setLoadFinish() {
 		loadFinish = true;
+		searchBrowser.setLoadFinish();
 	}
 	
 	/**
