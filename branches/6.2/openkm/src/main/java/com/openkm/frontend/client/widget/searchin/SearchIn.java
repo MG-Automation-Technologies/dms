@@ -458,4 +458,11 @@ public class SearchIn extends Composite implements HasSearch {
 			timer.schedule(350);
 		}
 	}
+	
+	/**
+	 * setLoadFinish
+	 */
+	public void setLoadFinish() {
+		searchSimple.setLoadFinish();
+	}
 }
