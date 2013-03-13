@@ -1132,6 +1132,18 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				toolBarOption.refreshOption = true;
 			}
 			
+			// Disable move & copy option in categories case
+			if ((Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_CATEGORIES)) {
+				if (originPanel==OriginPanel.FILE_BROWSER) {
+					toolBarOption.moveOption = false;
+					toolBarOption.copyOption = false;
+				} else if (originPanel==OriginPanel.TREE_ROOT) {
+					toolBarOption.copyOption = false;
+					toolBarOption.addCategoryOption = false;
+					toolBarOption.addKeywordOption = false;
+					toolBarOption.addNoteOption = false;
+				}
+			}
 		} else if (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TRASH) {
 			toolBarOption.purgeTrash = true;
 			
@@ -1361,6 +1373,11 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				toolBarOption.refreshOption = true;
 			}
 			
+			// Disable move & copy option in categories and metadata case
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_CATEGORIES) {
+				toolBarOption.moveOption = false;
+				toolBarOption.copyOption = false;
+			}
 		} else if (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TRASH) {
 			toolBarOption.purgeTrash = true;
 			toolBarOption.purge = true;
@@ -1495,6 +1512,11 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				toolBarOption.refreshOption = true;
 			}
 			
+			// Disable move & copy option in categories and metadata case
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_CATEGORIES) {
+				toolBarOption.moveOption = false;
+				toolBarOption.copyOption = false;
+			}
 		} else if (Main.get().mainPanel.desktop.navigator.getStackIndex() == UIDesktopConstants.NAVIGATOR_TRASH) {
 			toolBarOption.purgeTrash = true;
 			toolBarOption.purge = true;
