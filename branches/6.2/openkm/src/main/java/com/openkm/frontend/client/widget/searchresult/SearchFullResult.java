@@ -131,7 +131,7 @@ public class SearchFullResult extends Composite {
 		if(doc.isAttachment())  {
 			hPanel.add(new HTML(Util.imageItemHTML("img/email_attach.gif")));
 			hPanel.add(Util.hSpace("5"));
-		} 
+		}
 		hPanel.add(new HTML(Util.mimeImageHTML(doc.getMimeType())));
 		hPanel.add(Util.hSpace("5"));
 		Anchor anchor = new Anchor();

@@ -400,7 +400,7 @@ public class KeyMapTable extends Composite {
 		GWTFolder folder = new GWTFolder();
 		if (gwtQueryResult.getFolder()!=null) {
 			folder = gwtQueryResult.getFolder();
-		} 
+		}
 		final String fldPath = folder.getPath();
 		
 		Image gotoFolder = new Image("img/icon/actions/goto_folder.gif");

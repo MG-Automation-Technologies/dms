@@ -189,7 +189,7 @@ public class NotifyPopup extends DialogBox  {
 				notifyPanel.tabPanel.setWidth("375");
 				notifyPanel.correcIEBug();
 			}
-		} 
+		}
 	}
 	
 	/**

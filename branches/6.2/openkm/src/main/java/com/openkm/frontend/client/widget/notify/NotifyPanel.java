@@ -217,7 +217,7 @@ public class NotifyPanel extends Composite {
 		if (!filterView || !checkBoxFilter.getValue()) {
 			notifyUser.getAllUsers();
 			notifyRole.getAllRoles();
-		} 
+		}
 	}
 	
 	/**

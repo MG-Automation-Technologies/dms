@@ -112,7 +112,7 @@ public class SpanishAnalyzer extends Analyzer {
     }  
       
     /** Constructs a {@link StandardTokenizer} filtered by a {@link 
-     * StandardFilter}, a {@link LowerCaseFilter}, a {@link StopFilter} 
+     * StandardFilter}, a {@link LowerCaseFilter}, a {@link StopFilter}
      * and a {@link SpanishStemFilter}. */  
     public final TokenStream tokenStream(String fieldName, Reader reader) {  
         TokenStream result = new StandardTokenizer(Config.LUCENE_VERSION, reader);  

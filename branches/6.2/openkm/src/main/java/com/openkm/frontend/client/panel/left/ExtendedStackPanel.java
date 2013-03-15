@@ -63,7 +63,7 @@ public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent,
 		}
 		
         super.showStack(index);
-	} 
+	}
 	
 	/**
 	 * setStartUpFinished
@@ -188,7 +188,7 @@ public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent,
 		stackIndex = correctedStackIndex(index);
 		changeView(stackIndex,refresh);
         super.showStack(stackIndex);
-	} 
+	}
 	
 	/**
 	 * isTaxonomyVisible

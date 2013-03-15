@@ -621,7 +621,7 @@ public class LovinsStemmer extends Stemmer implements Serializable {
 		      (word.charAt(length - el - 4) == 'r'))))) {
 		return word.substring(0, length - el);
 	      }
-	    } 
+	    }
 	    break;
 	  case 'c':
 	    if (word.charAt(length - el - 1) == 'l') {

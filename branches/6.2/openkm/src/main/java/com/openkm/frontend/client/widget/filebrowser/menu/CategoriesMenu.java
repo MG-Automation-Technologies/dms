@@ -241,7 +241,7 @@ public class CategoriesMenu extends MenuBase {
 				} else if (Main.get().mainPanel.desktop.browser.fileBrowser.isMailSelected()) {
 					docPath = Main.get().mainPanel.desktop.browser.fileBrowser.getMail().getPath();
 					path = docPath.substring(0,docPath.lastIndexOf("/"));
-				} 
+				}
 				CommonUI.openPath(path, docPath);
 				hide();
 			}

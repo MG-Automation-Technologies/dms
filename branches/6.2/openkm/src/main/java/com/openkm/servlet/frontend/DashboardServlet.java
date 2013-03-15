@@ -418,7 +418,7 @@ public class DashboardServlet extends OKMRemoteServiceServlet implements OKMDash
 		
 		log.debug("getLastWeekTopDownloadedDocuments: {}", docList);
 		return docList;
-	} 
+	}
 	
 	@Override
 	public List<GWTDashboardDocumentResult> getLastMonthTopDownloadedDocuments() throws OKMException {

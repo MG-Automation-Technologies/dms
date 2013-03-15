@@ -62,7 +62,7 @@ public class LoggedUsersServlet extends BaseServlet {
 			edit(userId, request, response);
 		} else if (action.equals("messageDelete")) {
 			delete(userId, request, response);
-		} 
+		}
 		
 		if (action.equals("")) {
 			list(userId, request, response);

@@ -441,7 +441,7 @@ public class RepositoryAccessManager implements AccessManager {
 			}
 			if ((permissions & Permission.SET_PROPERTY) != 0) {
 				sb.append("set_property ");
-			} 
+			}
 			if ((permissions & Permission.READ_AC) != 0) {
 				sb.append("read_ac ");
 			}

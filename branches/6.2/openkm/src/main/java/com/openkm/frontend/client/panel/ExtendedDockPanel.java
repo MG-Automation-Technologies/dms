@@ -492,7 +492,7 @@ public class ExtendedDockPanel extends Composite {
 //							}
 //							break;
 					}
-				} 
+				}
 				
 				// Not propagates event to the browser
 				if (!propagate) {

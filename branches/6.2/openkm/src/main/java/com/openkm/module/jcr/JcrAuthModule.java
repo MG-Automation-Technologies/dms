@@ -326,7 +326,7 @@ public class JcrAuthModule implements AuthModule {
 				property = Permission.USERS_DELETE;
 			} else if (permissions == Permission.SECURITY) {
 				property = Permission.USERS_SECURITY;
-			} 
+			}
 			
 			if (property != null) {
 				synchronized (node) {

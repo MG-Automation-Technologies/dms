@@ -350,7 +350,7 @@ public class UserScrollTable extends Composite {
 		
 		if (modified) {
 			dataTable.getCellFormatter().addStyleName(rows, 0, "bold");
-		} 
+		}
 		
 		dataTable.setHTML(rows, col, user.getId());
 		dataTable.getCellFormatter().setVisible(rows, col++, false);

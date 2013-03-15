@@ -133,7 +133,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 						}
 					};
 					previewTimer.schedule(500);
-				} 
+				}
 				fireEvent(HasDocumentEvent.TAB_CHANGED);
 			}
 		});
@@ -330,7 +330,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		if (notesVisible) {
 			tabPanel.add(notes, Main.i18n("tab.document.notes"));
 			notes.langRefresh();
-		} 
+		}
 		if (versionVisible) {
 			tabPanel.add(version, Main.i18n("tab.document.history"));
 			version.langRefresh();

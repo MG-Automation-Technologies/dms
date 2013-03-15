@@ -201,7 +201,7 @@ public class ExtendedScrollTable extends ScrollTable {
 		
 		if (!dataTable.getSelectedRows().isEmpty()) {
 			selectedRow = ((Integer) dataTable.getSelectedRows().iterator().next()).intValue();
-		} 
+		}
 		
 		Log.debug("ExtendedScrollPanel selectedRow:"+selectedRow);
 		return selectedRow;

@@ -113,7 +113,7 @@ public class LanguageServlet extends BaseServlet {
 				export(userId, request, response);
 			} else if (action.equals("addTranslation")) {
 				addTranslation(userId, request, response);
-			} 
+			}
 			
 			if (action.equals("") || WebUtils.getBoolean(request, "persist")) {
 				list(userId, request, response);
@@ -193,7 +193,7 @@ public class LanguageServlet extends BaseServlet {
 				translate(userId, request, response);
 			} else if (action.equals("addTranslation")) {
 				addTranslation(userId, request, response);
-			} 
+			}
 			
 			if (!action.equals("addTranslation") && (action.equals("") || action.equals("import") || persist)) {
 				list(userId, request, response);

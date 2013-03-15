@@ -275,7 +275,7 @@ public class CommonUI {
 					Main.get().showError("isValidUserPendingTask", caught);
 				}
 			});
-		} 
+		}
 	}
 	
 	/**

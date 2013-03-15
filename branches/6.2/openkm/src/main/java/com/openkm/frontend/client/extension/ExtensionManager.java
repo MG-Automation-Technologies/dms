@@ -74,7 +74,7 @@ public class ExtensionManager {
 				addToolBarBoxExtension((ToolBarBoxExtension) obj);
 			} else if (obj instanceof UserInfoExtension) {
 				addUserInfoExtension((UserInfoExtension) obj);
-			} 
+			}
 			
 			// Registering handlers
 			if (obj instanceof DocumentHandlerExtension) {

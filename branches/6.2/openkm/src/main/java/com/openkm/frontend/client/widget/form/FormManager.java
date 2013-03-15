@@ -741,7 +741,7 @@ public class FormManager {
 			
 			if (!gwtSelect.getOptionsData().equals("") && workflowVarMap.keySet().contains(gwtSelect.getOptionsData())) {
 				gwtSelect.setOptions(getOptionsFromVariable(workflowVarMap.get(gwtSelect.getOptionsData())));
-			} 
+			}
 			
 			if (gwtSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
 				String selectedLabel = "";

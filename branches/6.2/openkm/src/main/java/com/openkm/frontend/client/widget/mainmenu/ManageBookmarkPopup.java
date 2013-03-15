@@ -165,7 +165,7 @@ public class ManageBookmarkPopup extends DialogBox {
 							tableBookmark.setHTML(2,1,Main.i18n("bookmark.type.document"));
 						} else if (bookmark.getType().equals(Bookmark.BOOKMARK_FOLDER)) {
 							tableBookmark.setHTML(2,1,Main.i18n("bookmark.type.folder"));
-						} 
+						}
 					}
 					deleteButton.setEnabled(true);
 					updateButton.setEnabled(true);
@@ -271,7 +271,7 @@ public class ManageBookmarkPopup extends DialogBox {
 						tableBookmark.setHTML(2,1,Main.i18n("bookmark.type.document"));
 					} else if (bookmark.getType().equals(Bookmark.BOOKMARK_FOLDER)) {
 						tableBookmark.setHTML(2,1,Main.i18n("bookmark.type.folder"));
-					} 
+					}
 					tableBookmark.getCellFormatter().setVisible(0,2,false);
 					deleteButton.setEnabled(true);
 					updateButton.setEnabled(true);

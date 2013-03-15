@@ -326,7 +326,7 @@ public class KeywordsWidget extends Composite {
 			linkStyle.setProperty("color", keywordsCloud.getColor(fontSize));
 			if (fontSize>0) {
 				linkStyle.setProperty("top", (keywordsCloud.getMaxFontSize()-fontSize)/2+"px" );
-			} 
+			}
 			keywordsCloud.add(tagKey);
 		}
 	}

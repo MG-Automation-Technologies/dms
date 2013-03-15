@@ -102,7 +102,7 @@ public class ExtendedFlexTable extends FlexTable {
         }
         //Didn't find appropriate cell
         return null;
-    } 
+    }
 	
 	/**
 	 * markSelectedRow

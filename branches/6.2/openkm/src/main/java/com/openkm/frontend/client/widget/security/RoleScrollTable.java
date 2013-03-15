@@ -347,7 +347,7 @@ public class RoleScrollTable extends Composite {
 		
 		if (modified) {
 			dataTable.getCellFormatter().addStyleName(rows, 0, "bold");
-		} 
+		}
 	}
 	
 	/**
