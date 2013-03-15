@@ -62,7 +62,7 @@ public class CssDAO extends GenericDAO<Css, Long>{
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			Query q = session.createQuery(qs).setCacheable(true);
+			Query q = session.createQuery(qs);
 			
 			if (filterByActive) {
 				q.setBoolean("active", true);

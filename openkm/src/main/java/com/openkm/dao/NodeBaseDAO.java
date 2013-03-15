@@ -928,7 +928,7 @@ public class NodeBaseDAO {
 		
 		// Calculate children nodes
 		String qs = "from NodeBase nb where nb.parent=:parent";
-		Query q = session.createQuery(qs).setCacheable(true);
+		Query q = session.createQuery(qs);
 		q.setString("parent", node.getUuid());
 		List<NodeBase> ret = q.list();
 		
@@ -1072,7 +1072,7 @@ public class NodeBaseDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			
-			Query q = session.createQuery(qs).setCacheable(true);
+			Query q = session.createQuery(qs);
 			q.setString("category", catUuid);
 			check = !q.list().isEmpty();
 			

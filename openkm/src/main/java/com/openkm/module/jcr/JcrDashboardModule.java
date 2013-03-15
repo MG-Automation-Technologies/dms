@@ -1069,7 +1069,6 @@ public class JcrDashboardModule implements DashboardModule {
 		try {
 			hSession = HibernateUtil.getSessionFactory().openSession();
 			org.hibernate.Query q = hSession.createQuery(qs).setFetchSize(MAX_RESULTS);
-			q.setCacheable(true);
 			
 			if (date != null) {
 				q.setCalendar("date", date);

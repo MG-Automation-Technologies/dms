@@ -22,8 +22,6 @@
 package com.openkm.dao;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,8 +29,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -554,163 +550,6 @@ public class NodeDocumentVersionDAO extends GenericDAO<NodeDocumentVersion, Stri
 			if (Config.USER_ITEM_CACHE) {
 				UserItemsManager.decSize(author, size);
 			}
-		}
-	}
-	
-	/*========================
-	  LiveEdit methods
-	 =========================*/
-	
-	/**
-	 * Set temporal version content.
-	 */
-	public void liveEditSetContent(String docUuid, InputStream is, long size) throws IOException, PathNotFoundException,
-			AccessDeniedException, LockException, DatabaseException {
-		log.debug("liveEditSetContent({}, {}, {})", new Object[] { docUuid, is, size });
-		String qs = "from NodeDocumentVersion ndv where ndv.parent=:parent and ndv.current=:current";
-		Session session = null;
-		Transaction tx = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-			
-			// Security Check
-			NodeDocument nDoc = (NodeDocument) session.load(NodeDocument.class, docUuid);
-			SecurityHelper.checkRead(nDoc);
-			SecurityHelper.checkWrite(nDoc);
-			
-			// Lock Check
-			LockHelper.checkWriteLock(nDoc);
-			
-			Query q = session.createQuery(qs);
-			q.setString("parent", docUuid);
-			q.setBoolean("current", true);
-			
-			// Persist temporal version content
-			NodeDocumentVersion curDocVersion = (NodeDocumentVersion) q.setMaxResults(1).uniqueResult();
-			FsDataStore.save(curDocVersion.getUuid() + ".tmp", is);
-			
-			HibernateUtil.commit(tx);
-			log.debug("liveEditSetContent: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (LockException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-	}
-	
-	/**
-	 * Create new version from temporal file.
-	 */
-	public NodeDocumentVersion liveEditCheckin(String user, String comment, String docUuid) throws IOException,
-			PathNotFoundException, AccessDeniedException, LockException, DatabaseException {
-		log.debug("liveEditCheckin({}, {}, {})", new Object[] { user, comment, docUuid });
-		String qs = "from NodeDocumentVersion ndv where ndv.parent=:parent and ndv.current=:current";
-		NodeDocumentVersion newDocVersion = new NodeDocumentVersion();
-		Session session = null;
-		Transaction tx = null;
-		FileInputStream is = null;
-		File tmpFile = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-			
-			// Security Check
-			NodeDocument nDoc = (NodeDocument) session.load(NodeDocument.class, docUuid);
-			SecurityHelper.checkRead(nDoc);
-			SecurityHelper.checkWrite(nDoc);
-			
-			// Lock Check
-			LockHelper.checkWriteLock(nDoc);
-			
-			Query q = session.createQuery(qs);
-			q.setString("parent", docUuid);
-			q.setBoolean("current", true);
-			NodeDocumentVersion curDocVersion = (NodeDocumentVersion) q.setMaxResults(1).uniqueResult();
-			VersionNumerationAdapter verNumAdapter = VersionNumerationFactory.getVersionNumerationAdapter();
-			String nextVersionNumber = verNumAdapter.getNextVersionNumber(session, nDoc, curDocVersion);
-			
-			// Make current version obsolete
-			curDocVersion.setCurrent(false);
-			session.update(curDocVersion);
-			
-			// New document version
-			newDocVersion.setUuid(UUID.randomUUID().toString());
-			newDocVersion.setParent(docUuid);
-			newDocVersion.setName(nextVersionNumber);
-			newDocVersion.setAuthor(user);
-			newDocVersion.setComment(comment);
-			newDocVersion.setCurrent(true);
-			newDocVersion.setCreated(Calendar.getInstance());
-			newDocVersion.setMimeType(curDocVersion.getMimeType());
-			newDocVersion.setPrevious(curDocVersion.getUuid());
-			
-			// Persist file in datastore
-			tmpFile = FsDataStore.resolveFile(curDocVersion.getUuid() + ".tmp");
-			newDocVersion.setSize(tmpFile.length());
-			
-			if (tmpFile.exists()) {
-				is = new FileInputStream(tmpFile);
-				FsDataStore.persist(newDocVersion, is);
-				FileUtils.deleteQuietly(tmpFile);
-			} else {
-				FsDataStore.copy(curDocVersion, newDocVersion);
-			}
-			
-			session.save(newDocVersion);
-			
-			// Set document checkout status to false
-			nDoc.setLastModified(newDocVersion.getCreated());
-			nDoc.setCheckedOut(false);
-			
-			// Text extraction
-			nDoc.setText("");
-			nDoc.setTextExtracted(false);
-			
-			// Remove lock
-			NodeDocumentDAO.getInstance().unlock(session, user, nDoc, false);
-			
-			session.update(nDoc);
-			HibernateUtil.commit(tx);
-			
-			log.debug("liveEditCheckin: {}", newDocVersion);
-			return newDocVersion;
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (LockException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
-			
-			// What happen when create fails? This datastore file should be deleted!
-			FsDataStore.delete(newDocVersion.getUuid());
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			IOUtils.closeQuietly(is);
-			HibernateUtil.close(session);
 		}
 	}
 }

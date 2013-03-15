@@ -119,7 +119,7 @@ public class BaseFolderModule {
 		fld.setCreated(nFolder.getCreated());
 		fld.setAuthor(nFolder.getAuthor());
 		fld.setUuid(nFolder.getUuid());
-		fld.setHasChildren(NodeFolderDAO.getInstance().hasChilds(nFolder.getUuid()));
+		fld.setHasChildren(NodeFolderDAO.getInstance().hasChildren(nFolder.getUuid()));
 		
 		// Get permissions
 		if (Config.SYSTEM_READONLY) {

@@ -22,6 +22,7 @@
 package com.openkm.dao;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -210,7 +211,8 @@ public class NodeFolderDAO {
 	@SuppressWarnings("unchecked")
 	public List<NodeFolder> findByCategory(String catUuid) throws PathNotFoundException, DatabaseException {
 		log.debug("findByCategory({})", catUuid);
-		String qs = "from NodeFolder nf where :category in elements(nf.categories) order by nf.name";
+		final String qs = "from NodeFolder nf where :category in elements(nf.categories) order by nf.name";
+		List<NodeFolder> ret = new ArrayList<NodeFolder>();
 		Session session = null;
 		Transaction tx = null;
 		
@@ -224,7 +226,7 @@ public class NodeFolderDAO {
 			
 			Query q = session.createQuery(qs);
 			q.setString("category", catUuid);
-			List<NodeFolder> ret = q.list();
+			ret = q.list();
 			
 			// Security Check
 			SecurityHelper.pruneNodeList(ret);
@@ -253,7 +255,8 @@ public class NodeFolderDAO {
 	@SuppressWarnings("unchecked")
 	public List<NodeFolder> findByKeyword(String keyword) throws DatabaseException {
 		log.debug("findByKeyword({})", keyword);
-		String qs = "from NodeFolder nf where :keyword in elements(nf.keywords) order by nf.name";
+		final String qs = "from NodeFolder nf where :keyword in elements(nf.keywords) order by nf.name";
+		List<NodeFolder> ret = new ArrayList<NodeFolder>();
 		Session session = null;
 		Transaction tx = null;
 		
@@ -263,7 +266,7 @@ public class NodeFolderDAO {
 			
 			Query q = session.createQuery(qs);
 			q.setString("keyword", keyword);
-			List<NodeFolder> ret = q.list();
+			ret = q.list();
 			
 			// Security Check
 			SecurityHelper.pruneNodeList(ret);
@@ -325,8 +328,8 @@ public class NodeFolderDAO {
 	 * Check if folder has childs
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean hasChilds(String parentUuid) throws PathNotFoundException, DatabaseException {
-		log.debug("hasChilds({})", parentUuid);
+	public boolean hasChildren(String parentUuid) throws PathNotFoundException, DatabaseException {
+		log.debug("hasChildren({})", parentUuid);
 		String qs = "from NodeFolder nf where nf.parent=:parent";
 		Session session = null;
 		Transaction tx = null;
@@ -336,8 +339,10 @@ public class NodeFolderDAO {
 			tx = session.beginTransaction();
 			
 			// Security Check
-			NodeBase parentNode = (NodeBase) session.load(NodeBase.class, parentUuid);
-			SecurityHelper.checkRead(parentNode);
+			if (!Config.ROOT_NODE_UUID.equals(parentUuid)) {
+				NodeBase parentNode = (NodeBase) session.load(NodeBase.class, parentUuid);
+				SecurityHelper.checkRead(parentNode);
+			}
 			
 			Query q = session.createQuery(qs);
 			q.setString("parent", parentUuid);
@@ -348,7 +353,7 @@ public class NodeFolderDAO {
 			
 			boolean ret = !nodeList.isEmpty();
 			HibernateUtil.commit(tx);
-			log.debug("hasChilds: {}", ret);
+			log.debug("hasChildren: {}", ret);
 			return ret;
 		} catch (PathNotFoundException e) {
 			HibernateUtil.rollback(tx);
