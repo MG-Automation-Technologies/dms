@@ -60,9 +60,7 @@ public class ExtendedDockPanel extends Composite {
 	
 	// Panels size
 	public static final int VERTICAL_BORDER_PANEL_WIDTH = 10;
-	
 	public DockLayoutPanel dockPanel;
-	
 	public TopPanel topPanel;
 	public VerticalBorderPanel leftBorderPanel;
 	public VerticalBorderPanel rightBorderPanel;
@@ -133,37 +131,37 @@ public class ExtendedDockPanel extends Composite {
 	
 	/**
 	 * setView
-	 * 
-	 * @param workspace
 	 */
 	public void setView(int workspace) {
 		disableView();
+		
 		switch (workspace) {
 			case UIDockPanelConstants.DESKTOP:
 				int navigatorView = Main.get().mainPanel.desktop.navigator.getStackIndex();
 				Main.get().mainPanel.topPanel.toolBar.changeView(navigatorView, UIDockPanelConstants.DESKTOP);
 				actualView = workspace;
 				break;
-			
+				
 			case UIDockPanelConstants.SEARCH:
 				Main.get().mainPanel.topPanel.toolBar.changeView(0, UIDockPanelConstants.SEARCH);
 				actualView = workspace;
 				break;
-			
+				
 			case UIDockPanelConstants.DASHBOARD:
 				Main.get().mainPanel.topPanel.toolBar.changeView(0, UIDockPanelConstants.DASHBOARD);
 				actualView = workspace;
 				break;
-			
+				
 			case UIDockPanelConstants.ADMINISTRATION:
 				Main.get().mainPanel.topPanel.toolBar.changeView(0, UIDockPanelConstants.ADMINISTRATION);
 				actualView = workspace;
 				break;
-			
+				
 			default:
 				Main.get().mainPanel.topPanel.toolBar.changeView(0, UIDockPanelConstants.EXTENSIONS);
 				actualView = workspace;
 		}
+		
 		enableView();
 	}
 	
@@ -219,8 +217,6 @@ public class ExtendedDockPanel extends Composite {
 	
 	/**
 	 * getActualView
-	 * 
-	 * @return
 	 */
 	public int getActualView() {
 		return actualView;

@@ -87,7 +87,7 @@ public class Browser extends Composite {
 						isResizeInProgress = true;
 						onSplitResize();
 					}
-				} 
+				}
 			}
 		});
 		
@@ -203,18 +203,17 @@ public class Browser extends Composite {
 	
 	/**
 	 * Sets the panel width on resizing
-	 * 
-	 * @param left
-	 * @param right
 	 */
 	private void resizePanels() {
 		int total = verticalSplitPanel.getOffsetHeight();
-		String value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(verticalSplitPanel.getSplitPanel().getElement(),0), 0), "height");
-		if (value.contains("px")) { value = value.substring(0,value.indexOf("px")); }
-		topHeight = Integer.parseInt(value);
-		value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(verticalSplitPanel.getSplitPanel().getElement(),0), 2), "top");
-		if (value.contains("px")) { value = value.substring(0,value.indexOf("px")); }
-		bottomHeight = total - Integer.parseInt(value);		
+		
+		String valHeight = DOM.getStyleAttribute(DOM.getChild(DOM.getChild(verticalSplitPanel.getSplitPanel().getElement(),0), 0), "height");
+		if (valHeight.contains("px")) { valHeight = valHeight.substring(0, valHeight.indexOf("px")); }
+		topHeight = Integer.parseInt(valHeight);
+		
+		String valTop = DOM.getStyleAttribute(DOM.getChild(DOM.getChild(verticalSplitPanel.getSplitPanel().getElement(),0), 2), "top");
+		if (valTop.contains("px")) { valTop = valTop.substring(0, valTop.indexOf("px")); }
+		bottomHeight = total - Integer.parseInt(valTop);		
 		
 		resize();
 		
@@ -241,23 +240,23 @@ public class Browser extends Composite {
 				
 				// Solve some problems with chrome
 				if (Util.getUserAgent().equals("chrome")) {
-					if (topHeight-20>0) {
+					if (topHeight - 20 > 0) {
 						topHeight -= 20;
 					} else {
 						topHeight = 0;
 					}
-					if (bottomHeight-20>0) {
+					if (bottomHeight - 20 > 0) {
 						bottomHeight -= 20;
 					} else {
 						bottomHeight = 0;
 					}
-					if (width-20>0) {
+					if (width - 20 > 0) {
 						width -= 20;
 					} else {
 						width = 0;
 					}
 					resize();
-				} 
+				}
 				
 				new Timer() {
 					@Override
@@ -270,7 +269,7 @@ public class Browser extends Composite {
 						finalResizeInProgess = false;
 					}
 				}.schedule(50);
-			} 
+			}
 		} else {
 			new Timer() {
 				@Override
@@ -288,6 +287,7 @@ public class Browser extends Composite {
 	@SuppressWarnings("deprecation")
 	public void refreshSpliterAfterAdded() {
 		verticalSplitPanel.getSplitPanel().setSplitPosition(""+topHeight);
+		
 		if (Util.getUserAgent().equals("chrome")) {
 			resizePanels();
 		}

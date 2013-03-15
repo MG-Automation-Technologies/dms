@@ -42,8 +42,8 @@ import com.openkm.frontend.client.util.Util;
  */
 public class Desktop extends Composite {
 	
-	private final static int PANEL_LEFT_WIDTH 	= 225;
-	public final static int SPLITTER_WIDTH 		= 10;
+	private final static int PANEL_LEFT_WIDTH = 225;
+	public final static int SPLITTER_WIDTH = 10;
 	private final static int REFRESH_WAITING_TIME = 100;
 	private final static String TIME_HELPER_KEY = "SPLIT_HORIZONTAL_DESKTOP";
 	
@@ -79,7 +79,7 @@ public class Desktop extends Composite {
 						isResizeInProgress = true;
 						onSplitResize();
 					}
-				} 
+				}
 			}
 		});
 		
@@ -105,16 +105,19 @@ public class Desktop extends Composite {
 	public void setSize(int width, int height) {
 		this.width = width;
 		this.height = height;	
-		left = (int)(width*0.2);
+		left = (int)(width * 0.2);
 		left = left < PANEL_LEFT_WIDTH ? PANEL_LEFT_WIDTH : left;
-		right = width-(left+SPLITTER_WIDTH);
-		if (right<0) {
+		right = width - (left + SPLITTER_WIDTH);
+		
+		if (right < 0) {
 			right = 0;
 		}
+		
 		horizontalSplitPanel.setPixelSize(width, height);
 		navigator.setSize(left, height);
 		browser.setSize(right, height);
 		horizontalSplitPanel.getSplitPanel().setSplitPosition(""+left);
+		
 		// Solve some problems with chrome
 		if (loadFinish && Util.getUserAgent().equals("chrome") && 
 			Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace() == UIDockPanelConstants.DESKTOP) {
@@ -137,6 +140,7 @@ public class Desktop extends Composite {
 					} else {
 						// On finishing in good idea to fill width column tables
 						browser.fileBrowser.table.fillWidth();
+						
 						// Solve some problems with chrome
 						if (Util.getUserAgent().equals("chrome")) {
 							resizePanels();
@@ -149,21 +153,20 @@ public class Desktop extends Composite {
 	
 	/**
 	 * Sets the panel width on resizing
-	 * 
-	 * @param left
-	 * @param right
 	 */
 	private void resizePanels() {
 		int total = horizontalSplitPanel.getOffsetWidth();
-		String value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(horizontalSplitPanel.getSplitPanel().getElement(),0), 0), "width");
-		if (value.contains("px")) { value = value.substring(0,value.indexOf("px")); }
-		left = Integer.parseInt(value);
-		value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(horizontalSplitPanel.getSplitPanel().getElement(),0), 2), "left");
-		if (value.contains("px")) { value = value.substring(0,value.indexOf("px")); }
-		right = total - Integer.parseInt(value);
+		
+		String valWidth = DOM.getStyleAttribute(DOM.getChild(DOM.getChild(horizontalSplitPanel.getSplitPanel().getElement(), 0), 0), "width");
+		if (valWidth.contains("px")) { valWidth = valWidth.substring(0, valWidth.indexOf("px")); }
+		left = Integer.parseInt(valWidth);
+		
+		String valLeft = DOM.getStyleAttribute(DOM.getChild(DOM.getChild(horizontalSplitPanel.getSplitPanel().getElement(), 0), 2), "left");
+		if (valLeft.contains("px")) { valLeft = valLeft.substring(0, valLeft.indexOf("px")); }
+		right = total - Integer.parseInt(valLeft);
 		
 		navigator.setSize(left, height);
-		browser.setWidth(right);
+		if (right > 0) { browser.setWidth(right); }
 		
 		if (Util.getUserAgent().equals("chrome")) {
 			if (!TimeHelper.hasControlTime(TIME_HELPER_KEY)) {
@@ -195,24 +198,24 @@ public class Desktop extends Composite {
 					int tmpLeft = left;
 					int tmpHeight = height;
 					int tmpRight = right;
-					if (tmpLeft-20>0) {
+					if (tmpLeft - 20 > 0) {
 						tmpLeft -= 20;
 					} else {
 						tmpLeft = 0;
 					}
-					if (tmpHeight-20>0){
+					if (tmpHeight - 20 > 0) {
 						tmpHeight -= 20;
 					} else {
 						tmpHeight = 0;
 					}
-					if (tmpRight-20>0) {
+					if (tmpRight - 20 > 0) {
 						tmpRight -= 20;
 					} else {
 						tmpRight = 0;
 					}
 					navigator.setSize(tmpLeft, tmpHeight);
 					browser.setWidth(tmpRight);
-				} 
+				}
 				
 				new Timer() {
 					@Override
@@ -223,7 +226,7 @@ public class Desktop extends Composite {
 						finalResizeInProgess = false;
 					}
 				}.schedule(50);
-			} 
+			}
 		} else {
 			new Timer() {
 				@Override
@@ -258,8 +261,6 @@ public class Desktop extends Composite {
 	
 	/**
 	 * getWidth
-	 * 
-	 * @return
 	 */
 	public int getWidth() {
 		return width;
@@ -267,8 +268,6 @@ public class Desktop extends Composite {
 
 	/**
 	 * getHeight
-	 * 
-	 * @return
 	 */
 	public int getHeight() {
 		return height;
@@ -276,8 +275,6 @@ public class Desktop extends Composite {
 
 	/**
 	 * getLeft
-	 * 
-	 * @return
 	 */
 	public int getLeft() {
 		return left;
@@ -285,8 +282,6 @@ public class Desktop extends Composite {
 
 	/**
 	 * getRight
-	 * 
-	 * @return
 	 */
 	public int getRight() {
 		return right;
