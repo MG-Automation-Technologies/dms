@@ -85,7 +85,7 @@ public class SearchSimple extends Composite {
 			} else {
 				TimeHelper.changeControlTime(TIME_HELPER_KEY);
 			}
-		} 
+		}
 	}
 	
 	/**
@@ -111,7 +111,7 @@ public class SearchSimple extends Composite {
 						tmpWidth = 0;
 					}
 					vPanel.setPixelSize(tmpWidth, tmpHeight);
-				} 
+				}
 				new Timer() {
 					@Override
 					public void run() {
@@ -120,7 +120,7 @@ public class SearchSimple extends Composite {
 						finalResizeInProgess = false;
 					}
 				}.schedule(50);
-			} 
+			}
 		} else {
 			new Timer() {
 				@Override

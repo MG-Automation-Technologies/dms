@@ -273,7 +273,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 		if (notesVisible) {
 			tabPanel.add(notes, Main.i18n("tab.folder.notes"));
 			notes.langRefresh();
-		} 
+		}
 		if (securityVisible) {
 			tabPanel.add(security, Main.i18n("tab.folder.security"));
 			security.langRefresh();

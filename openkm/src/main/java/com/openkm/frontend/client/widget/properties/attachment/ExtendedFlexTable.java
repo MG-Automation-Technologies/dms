@@ -100,7 +100,7 @@ public class ExtendedFlexTable extends FlexTable {
 				default:
 					break;
 				}
-			} 
+			}
 		}
 		super.onBrowserEvent(event);
 	}
@@ -126,7 +126,7 @@ public class ExtendedFlexTable extends FlexTable {
         }
         //Didn't find appropriate cell
         return null;
-    } 
+    }
 	
 	/**
 	 * markSelectedRow

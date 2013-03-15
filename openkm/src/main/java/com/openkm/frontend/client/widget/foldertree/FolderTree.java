@@ -162,7 +162,7 @@ public class FolderTree extends Composite implements OriginPanel {
 						if (!actualItem.equals(treeItem)) {
 							actualItem.setSelected(false);
 							treeItem.setSelected(true);
-						} 
+						}
 						onTreeItemSelected(event.getTarget());
 					} else {
 						autoOpenFolder = false; // always reset value

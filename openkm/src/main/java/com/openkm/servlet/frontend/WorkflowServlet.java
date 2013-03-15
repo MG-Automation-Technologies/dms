@@ -400,7 +400,7 @@ public class WorkflowServlet extends OKMRemoteServiceServlet implements OKMWorkf
 		} catch (NoSuchGroupException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMessageService, ErrorCode.CAUSE_NoSuchGroup), e.getMessage());
-		} 
+		}
 		
 		log.debug("findProcessInstancesByNode: processInstanceList");
 		return processInstanceList;

@@ -270,7 +270,7 @@ public class WorkflowServlet extends BaseServlet {
 			if (entry.getKey().equals(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_UUID)) {
 				vars.put(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_PATH, 
 						OKMDocument.getInstance().getPath(null, entry.getValue().toString()));
-			} 
+			}
 		}
 		
 		sc.setAttribute("variables", vars);
@@ -429,7 +429,7 @@ public class WorkflowServlet extends BaseServlet {
 			if (entry.getKey().equals(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_UUID)) {
 				vars.put(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_PATH, 
 						OKMDocument.getInstance().getPath(null, entry.getValue().toString()));
-			} 
+			}
 		}
 		
 		sc.setAttribute("variables", vars);

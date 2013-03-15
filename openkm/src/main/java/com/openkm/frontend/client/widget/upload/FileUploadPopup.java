@@ -114,7 +114,7 @@ public class FileUploadPopup extends DialogBox {
 //            		if (ffUpload.isPendingFileToUpload()) {
 //            			addButton.setVisible(false);
 //            			sendButton.setVisible(true);
-//            		} 
+//            		}
             	} else if (ffUpload.getUploadState() == FancyFileUpload.EMPTY_STATE ||
             			   ffUpload.getUploadState() == FancyFileUpload.FAILED_STATE ||
             		       ffUpload.getUploadState() == FancyFileUpload.UPLOADED_STATE) {
@@ -134,7 +134,7 @@ public class FileUploadPopup extends DialogBox {
             				(ffUpload.getUploadState() != FancyFileUpload.EMPTY_STATE && 
             				 ffUpload.getUploadState() != FancyFileUpload.FAILED_STATE)) {
             				sendButton.setVisible(false); // checkin case
-            			} 
+            			}
             		}
                }
             }

@@ -140,7 +140,7 @@ public class ExtendedFlexTable extends FlexTable {
         }
         //Didn't find appropriate cell
         return null;
-    } 
+    }
     
     /**
 	 * Sets the selected panel value

@@ -49,7 +49,7 @@ public class TimeHelper {
 			boolean enought = ((new Date().getTime()-timeMap.get(key).getTime())>milis);
 			if (reset && !enought) {
 				timeMap.put(key, new Date()); // Start again
-			} 
+			}
 			return enought;
 		} else {
 			timeMap.put(key, new Date());

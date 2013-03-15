@@ -100,7 +100,7 @@ public class ValidatorBuilder {
 						.addActionForFailure(new ErrorMsgLabelTextAction(errorLabel))
 				);
 				
-			} 
+			}
 			
 		} else if (type.equals("email")) {
 			HTML space = new HTML("");
@@ -185,7 +185,7 @@ public class ValidatorBuilder {
 						.addActionForFailure(new StyleAction("okm-validationFailedBorder"))
 						.addActionForFailure(new ErrorMsgLabelTextAction(errorLabel))
 				);
-			} 
+			}
 			
 		} else if (type.equals("lt")) {
 			HTML space = new HTML("");

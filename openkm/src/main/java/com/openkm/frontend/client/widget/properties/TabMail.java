@@ -285,7 +285,7 @@ public class TabMail extends Composite implements HasMailEvent, HasMailHandlerEx
 		if (notesVisible) {
 			tabPanel.add(notes, Main.i18n("tab.mail.notes"));
 			notes.langRefresh();
-		} 
+		}
 		if (previewVisible) {
 			tabPanel.add(mailViewer, Main.i18n("tab.mail.preview"));
 			mailViewer.langRefresh();

@@ -98,7 +98,7 @@ public class PropertyGroup extends Composite implements HasPropertyGroupHandlerE
 						editValues = false;
 						removeButton.setVisible(true);
 						cancelButton.setVisible(false);
-					} 
+					}
 				}
 			}
 		});
@@ -109,7 +109,7 @@ public class PropertyGroup extends Composite implements HasPropertyGroupHandlerE
 				if (!editValues) {
 					Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_DELETE_PROPERTY_GROUP);
 					Main.get().confirmPopup.show();
-				} 
+				}
 			}
 		});
 		
@@ -123,7 +123,7 @@ public class PropertyGroup extends Composite implements HasPropertyGroupHandlerE
 					cancelEdit();
 					removeButton.setVisible(true);
 					cancelButton.setVisible(false);
-				} 
+				}
 			}
 		});
 		

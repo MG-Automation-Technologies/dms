@@ -55,7 +55,7 @@ public class ModuleManager {
 				authModule = new com.openkm.module.db.DbAuthModule();
 			} else {
 				authModule = new com.openkm.module.jcr.JcrAuthModule();
-			} 
+			}
 		}
 		
 		return authModule;
@@ -100,7 +100,7 @@ public class ModuleManager {
 				documentModule = new com.openkm.module.db.DbDocumentModule();
 			} else {
 				documentModule = new com.openkm.module.jcr.JcrDocumentModule();
-			} 
+			}
 		}
 		
 		return documentModule;
@@ -115,7 +115,7 @@ public class ModuleManager {
 				noteModule = new com.openkm.module.db.DbNoteModule();
 			} else {
 				noteModule = new com.openkm.module.jcr.JcrNoteModule();
-			} 
+			}
 		}
 		
 		return noteModule;
@@ -145,7 +145,7 @@ public class ModuleManager {
 				propertyGroupModule = new com.openkm.module.db.DbPropertyGroupModule();
 			} else {
 				propertyGroupModule = new com.openkm.module.jcr.JcrPropertyGroupModule();
-			} 
+			}
 		}
 		
 		return propertyGroupModule;

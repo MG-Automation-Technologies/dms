@@ -239,7 +239,7 @@ public class DashboardWidget extends Composite {
 			if (!dsDocumentResult.isVisited()) {
 				documentsNotViewed++;
 				table.getRowFormatter().setStyleName(row, "okm-NotViewed");
-			} 
+			}
 		}
 		
 		header.setHeaderNotViewedResults(documentsNotViewed);
@@ -349,7 +349,7 @@ public class DashboardWidget extends Composite {
 			if (!dsMailResult.isVisited()) {
 				documentsNotViewed++;
 				table.getRowFormatter().setStyleName(row, "okm-NotViewed");
-			} 
+			}
 		}
 		
 		header.setHeaderNotViewedResults(documentsNotViewed);

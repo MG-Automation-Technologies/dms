@@ -923,7 +923,7 @@ public class GWTUtil {
 				
 				if (!keyValues.isEmpty()) {
 					gWTsuggestBox.setText(keyValues.get(0).getValue());
-				} 
+				}
 			}
 			return gWTsuggestBox;
 		} else if (formElement instanceof CheckBox) {
