@@ -24,6 +24,7 @@ package com.openkm.frontend.client.util;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
@@ -208,10 +209,14 @@ public class Util {
 	 * isJREInstalled
 	 */
 	public static boolean isJREInstalled() {
-		String[] jreList = getJREs();
-		
-		if (jreList != null && jreList.length > 0) {
-			return true;
+		if (GWT.isProdMode()) {
+			String[] jreList = getJREs();
+			
+			if (jreList != null && jreList.length > 0) {
+				return true;
+			} else {
+				return false;
+			}
 		} else {
 			return false;
 		}

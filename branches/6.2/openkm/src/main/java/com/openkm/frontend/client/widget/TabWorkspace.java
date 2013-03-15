@@ -44,17 +44,16 @@ import com.openkm.frontend.client.extension.widget.tabworkspace.TabWorkspaceExte
  *
  */
 public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWorkspaceHandlerExtension {
-	
 	private static final int NUMBER_OF_TABS = 4;
-	
-	public TabBar tabBar;
 	private boolean desktopVisible		= false;
 	private boolean searchVisible 		= false;
 	private boolean dashboardVisible 	= false;
 	private boolean adminitrationVisible = false;
 	private List<TabWorkspaceExtension> widgetExtensionList;
 	private List<WorkspaceHandlerExtension> workHandlerExtensionList;
-
+	public boolean[] tabVisited = new boolean[NUMBER_OF_TABS];
+	public TabBar tabBar;
+	
 	/**
 	 * Tab Workspace
 	 */
@@ -66,10 +65,11 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
 				int index = indexCorrectedChangeViewIndex(event.getSelectedItem().intValue());
+				
 				switch (index) {
 					case UIDockPanelConstants.DESKTOP :
 						Main.get().mainPanel.setView(UIDockPanelConstants.DESKTOP);
-						if (Main.get().activeFolderTree!=null) { // On start up is null
+						if (Main.get().activeFolderTree != null) { // On start up is null
 							Main.get().activeFolderTree.centerActulItemOnScroll(); // Center the actual item every time
 						}
 						break;
@@ -81,16 +81,18 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 					case UIDockPanelConstants.DASHBOARD :
 						Main.get().mainPanel.setView(UIDockPanelConstants.DASHBOARD);
 						break;
-					
+						
 					case UIDockPanelConstants.ADMINISTRATION :
 						Main.get().mainPanel.setView(UIDockPanelConstants.ADMINISTRATION);
 						break;
-					
+						
 					default :
 						Main.get().mainPanel.setView(index);
 						break;
 				}
+				
 				fireEvent(HasWorkspaceEvent.STACK_CHANGED);
+				tabVisited[index] = true;
 			}
 		});
 		
@@ -103,19 +105,23 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 	public void langRefresh() {
 		int selected = tabBar.getSelectedTab();
 
-		while (tabBar.getTabCount()>0) {
+		while (tabBar.getTabCount() > 0) {
 			tabBar.selectTab(0);
 			tabBar.removeTab(0);
 		}
+		
 		if (desktopVisible) {
 			tabBar.addTab(Main.i18n("tab.workspace.desktop"));
 		}
+		
 		if (searchVisible) {
 			tabBar.addTab(Main.i18n("tab.workspace.search"));
 		}
+		
 		if (dashboardVisible) {
 			tabBar.addTab(Main.i18n("tab.workspace.dashboard"));
 		}
+		
 		if (adminitrationVisible) {
 			tabBar.addTab(Main.i18n("tab.workspace.administration"));
 		}
@@ -141,8 +147,8 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 	 * 
 	 * @param tabIndex The tab index value
 	 */
-	public void changeSelectedTab(int tabIndex){
-		switch (tabIndex ) {
+	public void changeSelectedTab(int tabIndex) {
+		switch (tabIndex) {
 			case UIDockPanelConstants.DESKTOP :
 				tabBar.selectTab(UIDockPanelConstants.DESKTOP);
 				Main.get().mainPanel.setView(UIDockPanelConstants.DESKTOP);
@@ -163,30 +169,34 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 				Main.get().mainPanel.setView(UIDockPanelConstants.ADMINISTRATION);
 				break;
 		}
+		
+		tabVisited[tabIndex] = true;
 	}
 	
 	/**
 	 * indexCorrectedChangeViewIndex
 	 * 
-	 * Return index correction made depending visible panels
-	 * 
-	 * @param index
-	 * @return
+	 * @return index correction made depending visible panels
 	 */
 	public int indexCorrectedChangeViewIndex(int index) {
 		int corrected = index;
-		if (!desktopVisible && corrected>=UIDockPanelConstants.DESKTOP) {
+		
+		if (!desktopVisible && corrected >= UIDockPanelConstants.DESKTOP) {
 			corrected++;
 		}
-		if (!searchVisible && corrected>=UIDockPanelConstants.SEARCH) {
+		
+		if (!searchVisible && corrected >= UIDockPanelConstants.SEARCH) {
 			corrected++;
 		}
-		if (!dashboardVisible && corrected>=UIDockPanelConstants.DASHBOARD) {
+		
+		if (!dashboardVisible && corrected >= UIDockPanelConstants.DASHBOARD) {
 			corrected++;
 		}
-		if (!adminitrationVisible && corrected>=UIDockPanelConstants.ADMINISTRATION) {
+		
+		if (!adminitrationVisible && corrected >= UIDockPanelConstants.ADMINISTRATION) {
 			corrected++;
 		}
+		
 		return corrected;
 	}
 	
@@ -235,9 +245,6 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 	
 	/**
 	 * getTabExtensionIndex
-	 * 
-	 * @param widget
-	 * @return
 	 */
 	public int getTabExtensionIndex(TabWorkspaceExtension widget) {
 		int count = 0;
@@ -252,8 +259,6 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 	
 	/**
 	 * isDesktopVisible
-	 * 
-	 * @return
 	 */
 	public boolean isDesktopVisible() {
 		return desktopVisible;
@@ -263,15 +268,13 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 	 * init
 	 */
 	public void init() {
-		if (tabBar.getTabCount()>0) {
+		if (tabBar.getTabCount() > 0) {
 			tabBar.selectTab(0);
 		}
 	}
 	
 	/**
 	 * getSelectedTab
-	 * 
-	 * @return
 	 */
 	public int getSelectedTab() {
 		return tabBar.getSelectedTab();
@@ -279,8 +282,6 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 	
 	/**
 	 * addWorkspaceExtension
-	 * 
-	 * @param extension
 	 */
 	public void addWorkspaceExtension(TabWorkspaceExtension extension) {
 		widgetExtensionList.add(extension);
@@ -289,9 +290,6 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 	
 	/**
 	 * getWidgetExtensionByIndex
-	 * 
-	 * @param index
-	 * @return
 	 */
 	public Widget getWidgetExtensionByIndex(int index) {
 		return (Widget) widgetExtensionList.get(index - NUMBER_OF_TABS);
@@ -307,5 +305,21 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 		for (Iterator<WorkspaceHandlerExtension> it = workHandlerExtensionList.iterator(); it.hasNext();) {
 			it.next().onChange(event);
 		}
+	}
+	
+	/**
+	 * Start trick again.
+	 */
+	public void resetTabVisited() {
+		for (int i=0; i<NUMBER_OF_TABS; i++) {
+			tabVisited[i] = false;
+		}
+	}
+	
+	/**
+	 * Check if current tab was already visited.
+	 */
+	public boolean isVisited() {
+		return tabVisited[tabBar.getSelectedTab()];
 	}
 }
