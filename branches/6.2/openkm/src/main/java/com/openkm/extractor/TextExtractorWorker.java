@@ -102,7 +102,7 @@ public class TextExtractorWorker extends TimerTask {
 			
 			try {
 				// Clear pending extraction queue
-				NodeDocumentDAO.getInstance().resetPendingExtractionFlag();
+				NodeDocumentDAO.getInstance().resetAllPendingExtractionFlags();
 				
 				// Process queue
 				while (NodeDocumentDAO.getInstance().hasPendingExtractions()) {

@@ -257,7 +257,7 @@ public class DbDashboardModule implements DashboardModule {
 				NodeDocument nDoc = it.next();
 				
 				if (SecurityHelper.getAccessManager().isGranted(nDoc, Permission.READ)) {
-					NodeDocumentDAO.getInstance().initialize(nDoc);
+					NodeDocumentDAO.getInstance().initialize(nDoc, false);
 					Document doc = BaseDocumentModule.getProperties(user, nDoc);
 					DashboardDocumentResult vo = new DashboardDocumentResult();
 					vo.setDocument(doc);

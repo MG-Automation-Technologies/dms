@@ -22,7 +22,6 @@
 package com.openkm.dao;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -71,6 +69,7 @@ import com.openkm.module.db.stuff.SecurityHelper;
 import com.openkm.module.jcr.stuff.JCRUtils;
 import com.openkm.spring.PrincipalUtils;
 import com.openkm.util.FormatUtil;
+import com.openkm.util.PathUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.vernum.VersionNumerationAdapter;
 import com.openkm.vernum.VersionNumerationFactory;
@@ -164,6 +163,7 @@ public class NodeDocumentDAO {
 			// Security Check
 			SecurityHelper.pruneNodeList(ret);
 			
+			initialize(ret);
 			log.debug("findAll: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
@@ -222,7 +222,15 @@ public class NodeDocumentDAO {
 	 * Find by pk
 	 */
 	public NodeDocument findByPk(String uuid) throws PathNotFoundException, DatabaseException {
-		log.debug("findByPk({})", uuid);
+		return findByPk(uuid, false);
+	}
+	
+	/**
+	 * Find by pk and optionally initialize node property groups
+	 */
+	public NodeDocument findByPk(String uuid, boolean initPropGroups) throws PathNotFoundException,
+			DatabaseException {
+		log.debug("findByPk({}, {})", uuid, initPropGroups);
 		String qs = "from NodeDocument nd where nd.uuid=:uuid";
 		Session session = null;
 		
@@ -239,7 +247,7 @@ public class NodeDocumentDAO {
 			// Security Check
 			SecurityHelper.checkRead(nDoc);
 			
-			initialize(nDoc);
+			initialize(nDoc, initPropGroups);
 			log.debug("findByPk: {}", nDoc);
 			return nDoc;
 		} catch (HibernateException e) {
@@ -403,7 +411,7 @@ public class NodeDocumentDAO {
 		String qs = "from NodeBase n where n.parent=:parent";
 		Query q = session.createQuery(qs);
 		q.setString("parent", parentUuid);
-		List<NodeBase> nodes = q.list();		
+		List<NodeBase> nodes = q.list();
 		
 		for (NodeBase nBase : nodes) {
 			if (SecurityHelper.getAccessManager().isGranted(nBase, Permission.READ)) {
@@ -411,7 +419,7 @@ public class NodeDocumentDAO {
 					nodeList.addAll(findFromParentHelper(session, nBase.getUuid()));
 				} else if (nBase instanceof NodeDocument) {
 					NodeDocument nDoc = (NodeDocument) nBase;
-					initialize(nDoc);
+					initialize(nDoc, false);
 					nodeList.add(nDoc);
 				}	
 			}
@@ -424,8 +432,8 @@ public class NodeDocumentDAO {
 	 * Check if folder has children
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean hasChilds(String parentUuid) throws PathNotFoundException, DatabaseException {
-		log.debug("hasChilds({})", parentUuid);
+	public boolean hasChildren(String parentUuid) throws PathNotFoundException, DatabaseException {
+		log.debug("hasChildren({})", parentUuid);
 		String qs = "from NodeDocument nd where nd.parent=:parent";
 		Session session = null;
 		Transaction tx = null;
@@ -435,8 +443,10 @@ public class NodeDocumentDAO {
 			tx = session.beginTransaction();
 			
 			// Security Check
-			NodeBase parentNode = (NodeBase) session.load(NodeBase.class, parentUuid);
-			SecurityHelper.checkRead(parentNode);
+			if (!Config.ROOT_NODE_UUID.equals(parentUuid)) {
+				NodeBase parentNode = (NodeBase) session.load(NodeBase.class, parentUuid);
+				SecurityHelper.checkRead(parentNode);
+			}
 			
 			Query q = session.createQuery(qs);
 			q.setString("parent", parentUuid);
@@ -447,7 +457,7 @@ public class NodeDocumentDAO {
 			
 			boolean ret = !nodeList.isEmpty();
 			HibernateUtil.commit(tx);
-			log.debug("hasChilds: {}", ret);
+			log.debug("hasChildren: {}", ret);
 			return ret;
 		} catch (PathNotFoundException e) {
 			HibernateUtil.rollback(tx);
@@ -492,7 +502,7 @@ public class NodeDocumentDAO {
 			
 			nDoc.setName(newName);
 			session.update(nDoc);
-			initialize(nDoc);
+			initialize(nDoc, false);
 			HibernateUtil.commit(tx);
 			log.debug("rename: {}", nDoc);
 			return nDoc;
@@ -791,6 +801,9 @@ public class NodeDocumentDAO {
 	
 	/**
 	 * Purge in depth helper
+	 * 
+	 * @see com.openkm.dao.NodeFolderDAO.purgeHelper(Session, NodeFolder, boolean)
+	 * @see com.openkm.dao.NodeMailDAO.purgeHelper(Session, NodeMail)
 	 */
 	@SuppressWarnings("unchecked")
 	public void purgeHelper(Session session, String parentUuid) throws PathNotFoundException, AccessDeniedException,
@@ -845,7 +858,6 @@ public class NodeDocumentDAO {
 		UserActivity.log(user, "PURGE_DOCUMENT", nDocument.getUuid(), path, null);
 	}
 	
-
 	/**
 	 * Lock node
 	 */
@@ -1011,6 +1023,40 @@ public class NodeDocumentDAO {
 	 * 
 	 * @see com.openkm.module.nr.NrStatsModule
 	 */
+	public long getSize(String context) throws PathNotFoundException, DatabaseException {
+		log.debug("getSize({})", context);
+		String qs = "select coalesce(sum(ndv.size), 0) from NodeDocumentVersion ndv " +
+			"where ndv.current = :current and ndv.parent in " +
+			"(select nd.uuid from NodeDocument nd where nd.context = :context)";
+		Session session = null;
+		Transaction tx = null;
+		long total = 0;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			
+			Query q = session.createQuery(qs);
+			q.setBoolean("current", true);
+			q.setString("context", PathUtils.fixContext(context));
+			total = (Long) q.setMaxResults(1).uniqueResult();
+			
+			HibernateUtil.commit(tx);
+			log.debug("getSize: {}", total);
+			return total;
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw e;
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Get document node size.
+	 * 
+	 * @see com.openkm.module.nr.NrStatsModule
+	 */
 	public long getSubtreeSize(String path) throws PathNotFoundException, DatabaseException {
 		log.debug("getSubtreeSize({})", path);
 		Session session = null;
@@ -1065,8 +1111,8 @@ public class NodeDocumentDAO {
 	/**
 	 * Clear pending extraction queue
 	 */
-	public int resetPendingExtractionFlag() throws DatabaseException {
-		log.debug("resetPendingExtractionFlag()");
+	public int resetAllPendingExtractionFlags() throws DatabaseException {
+		log.debug("resetAllPendingExtractionFlags()");
 		String qs = "update NodeDocument nd set nd.textExtracted=:extracted";
 		Session session = null;
 		Transaction tx = null;
@@ -1078,6 +1124,36 @@ public class NodeDocumentDAO {
 			
 			Query q = session.createQuery(qs);
 			q.setBoolean("extracted", false);
+			rowCount = q.executeUpdate();
+			
+			HibernateUtil.commit(tx);
+			log.debug("resetAllPendingExtractionFlags: {}", rowCount);
+			return rowCount;
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Clear pending extraction queue
+	 */
+	public int resetPendingExtractionFlag(String docUuid) throws DatabaseException {
+		log.debug("resetPendingExtractionFlag({})", docUuid);
+		String qs = "update NodeDocument nd set nd.textExtracted=:extracted where nd.uuid=:uuid";
+		Session session = null;
+		Transaction tx = null;
+		int rowCount = 0;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			
+			Query q = session.createQuery(qs);
+			q.setBoolean("extracted", false);
+			q.setString("uuid", docUuid);
 			rowCount = q.executeUpdate();
 			
 			HibernateUtil.commit(tx);
@@ -1288,7 +1364,7 @@ public class NodeDocumentDAO {
 	/**
 	 * Force initialization of a proxy
 	 */
-	public void initialize(NodeDocument nDocument) {
+	public void initialize(NodeDocument nDocument, boolean initPropGroups) {
 		if (nDocument != null) {
 			Hibernate.initialize(nDocument);
 			Hibernate.initialize(nDocument.getKeywords());
@@ -1296,6 +1372,10 @@ public class NodeDocumentDAO {
 			Hibernate.initialize(nDocument.getSubscriptors());
 			Hibernate.initialize(nDocument.getUserPermissions());
 			Hibernate.initialize(nDocument.getRolePermissions());
+			
+			if (initPropGroups) {
+				Hibernate.initialize(nDocument.getProperties());
+			}
 		}
 	}
 	
@@ -1304,68 +1384,7 @@ public class NodeDocumentDAO {
 	 */
 	private void initialize(List<NodeDocument> nDocumentList) {
 		for (NodeDocument nDocument : nDocumentList) {
-			initialize(nDocument);
-		}
-	}
-	
-	/*========================
-	  LiveEdit methods
-	 =========================*/
-	
-	/**
-	 * Cancel checkout and delete temporal file.
-	 */
-	public void liveEditCancelCheckout(String user, String uuid) throws PathNotFoundException, AccessDeniedException,
-			LockException, DatabaseException {
-		log.debug("liveEditCancelCheckout({})", uuid);
-		String qs = "from NodeDocumentVersion ndv where ndv.parent=:parent and ndv.current=:current";
-		Session session = null;
-		Transaction tx = null;
-		File tmpFile = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-			
-			// Security Check
-			NodeDocument nDoc = (NodeDocument) session.load(NodeDocument.class, uuid);
-			SecurityHelper.checkRead(nDoc);
-			SecurityHelper.checkWrite(nDoc);
-			
-			Query q = session.createQuery(qs);
-			q.setString("parent", uuid);
-			q.setBoolean("current", true);
-			NodeDocumentVersion curDocVersion = (NodeDocumentVersion) q.setMaxResults(1).uniqueResult();
-			
-			// Delete temporal file
-			tmpFile = FsDataStore.resolveFile(curDocVersion.getUuid() + ".tmp");
-			
-			if (tmpFile.exists()) {	
-				FileUtils.deleteQuietly(tmpFile);
-			}
-			
-			nDoc.setCheckedOut(false);
-			unlock(session, user, nDoc, false);
-			session.update(nDoc);
-			HibernateUtil.commit(tx);
-			log.debug("cancelCheckout: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (LockException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
+			initialize(nDocument, false);
 		}
 	}
 }

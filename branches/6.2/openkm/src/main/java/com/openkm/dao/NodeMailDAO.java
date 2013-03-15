@@ -22,6 +22,7 @@
 package com.openkm.dao;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Hibernate;
@@ -29,6 +30,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.search.FullTextSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -177,12 +179,25 @@ public class NodeMailDAO {
 	}
 	
 	/**
+	 * Check if this uuid represents a mail node.
+	 * 
+	 * Used in SearchDAO, and should exposed in other method should make Security Check
+	 */
+	public boolean isMail(FullTextSession ftSession, String uuid) throws HibernateException {
+		log.debug("isMail({}, {})", ftSession, uuid);
+		boolean ret = ftSession.get(NodeMail.class, uuid) instanceof NodeMail;
+		log.debug("isMail: {}", ret);
+		return ret;
+	}
+	
+	/**
 	 * Search nodes by category
 	 */
 	@SuppressWarnings("unchecked")
 	public List<NodeMail> findByCategory(String catUuid) throws PathNotFoundException, DatabaseException {
 		log.debug("findByCategory({})", catUuid);
-		String qs = "from NodeMail nm where :category in elements(nm.categories) order by nm.name";
+		final String qs = "from NodeMail nm where :category in elements(nm.categories) order by nm.name";
+		List<NodeMail> ret = new ArrayList<NodeMail>();
 		Session session = null;
 		Transaction tx = null;
 		
@@ -196,7 +211,7 @@ public class NodeMailDAO {
 			
 			Query q = session.createQuery(qs);
 			q.setString("category", catUuid);
-			List<NodeMail> ret = q.list();
+			ret = q.list();
 			
 			// Security Check
 			SecurityHelper.pruneNodeList(ret);
@@ -225,7 +240,8 @@ public class NodeMailDAO {
 	@SuppressWarnings("unchecked")
 	public List<NodeMail> findByKeyword(String keyword) throws DatabaseException {
 		log.debug("findByKeyword({})", keyword);
-		String qs = "from NodeMail nm where :keyword in elements(nm.keywords) order by nm.name";
+		final String qs = "from NodeMail nm where :keyword in elements(nm.keywords) order by nm.name";
+		List<NodeMail> ret = new ArrayList<NodeMail>();
 		Session session = null;
 		Transaction tx = null;
 		
@@ -235,7 +251,7 @@ public class NodeMailDAO {
 			
 			Query q = session.createQuery(qs);
 			q.setString("keyword", keyword);
-			List<NodeMail> ret = q.list();
+			ret = q.list();
 			
 			// Security Check
 			SecurityHelper.pruneNodeList(ret);
@@ -297,8 +313,8 @@ public class NodeMailDAO {
 	 * Check if folder has childs
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean hasChilds(String parentUuid) throws PathNotFoundException, DatabaseException {
-		log.debug("hasChilds({})", parentUuid);
+	public boolean hasChildren(String parentUuid) throws PathNotFoundException, DatabaseException {
+		log.debug("hasChildren({})", parentUuid);
 		String qs = "from NodeMail nm where nm.parent=:parent";
 		Session session = null;
 		Transaction tx = null;
@@ -308,8 +324,10 @@ public class NodeMailDAO {
 			tx = session.beginTransaction();
 			
 			// Security Check
-			NodeBase parentNode = (NodeBase) session.load(NodeBase.class, parentUuid);
-			SecurityHelper.checkRead(parentNode);
+			if (!Config.ROOT_NODE_UUID.equals(parentUuid)) {
+				NodeBase parentNode = (NodeBase) session.load(NodeBase.class, parentUuid);
+				SecurityHelper.checkRead(parentNode);
+			}
 			
 			Query q = session.createQuery(qs);
 			q.setString("parent", parentUuid);
@@ -320,7 +338,7 @@ public class NodeMailDAO {
 			
 			boolean ret = !nodeList.isEmpty();
 			HibernateUtil.commit(tx);
-			log.debug("hasChilds: {}", ret);
+			log.debug("hasChildren: {}", ret);
 			return ret;
 		} catch (PathNotFoundException e) {
 			HibernateUtil.rollback(tx);
@@ -496,7 +514,7 @@ public class NodeMailDAO {
 			HibernateUtil.close(session);
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private void moveHelper(Session session, String parentUuid, String newContext) throws HibernateException {
 		String qs = "from NodeBase nf where nf.parent=:parent";
@@ -567,6 +585,8 @@ public class NodeMailDAO {
 	
 	/**
 	 * Purge in depth helper
+	 * 
+	 * @see com.openkm.dao.NodeFolderDAO.purgeHelper(Session, NodeFolder, boolean)
 	 */
 	private void purgeHelper(Session session, NodeMail nMail) throws PathNotFoundException, AccessDeniedException,
 			LockException, IOException, DatabaseException, HibernateException {

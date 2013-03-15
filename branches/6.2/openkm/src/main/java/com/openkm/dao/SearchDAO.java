@@ -70,6 +70,9 @@ public class SearchDAO {
 	private static SearchDAO single = new SearchDAO();
 	private static final int MAX_FRAGMENT_LEN = 256;
 	public static final String SEARCH_LUCENE = "lucene";
+	public static final String SEARCH_ACCESS_MANAGER_MORE = "am_more";
+	public static final String SEARCH_ACCESS_MANAGER_WINDOW = "am_window";
+	public static final String SEARCH_ACCESS_MANAGER_LIMITED = "am_limited";
 	public static Analyzer analyzer = null;
 	
 	static {
@@ -110,7 +113,18 @@ public class SearchDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			ftSession = Search.getFullTextSession(session);
 			tx = ftSession.beginTransaction();
-			NodeResultSet result = runQueryLucene(ftSession, query, offset, limit);
+			
+			NodeResultSet result = null;
+			
+			if (SEARCH_LUCENE.equals(Config.SECURITY_SEARCH_EVALUATION)) {
+				result = runQueryLucene(ftSession, query, offset, limit);
+			} else if (SEARCH_ACCESS_MANAGER_MORE.equals(Config.SECURITY_SEARCH_EVALUATION)) {
+				result = runQueryAccessManagerMore(ftSession, query, offset, limit);
+			} else if (SEARCH_ACCESS_MANAGER_WINDOW.equals(Config.SECURITY_SEARCH_EVALUATION)) {
+				result = runQueryAccessManagerWindow(ftSession, query, offset, limit);
+			} else if (SEARCH_ACCESS_MANAGER_LIMITED.equals(Config.SECURITY_SEARCH_EVALUATION)) {
+				result = runQueryAccessManagerLimited(ftSession, query, offset, limit);
+			}
 			
 			HibernateUtil.commit(tx);
 			log.debug("findByQuery: {}", result);
@@ -147,7 +161,18 @@ public class SearchDAO {
 			
 			QueryParser parser = new QueryParser(Config.LUCENE_VERSION, NodeDocument.TEXT_FIELD, analyzer);
 			Query query = parser.parse(expression);
-			NodeResultSet result = runQueryLucene(ftSession, query, offset, limit);
+			NodeResultSet result = null;
+			log.info("findBySimpleQuery.query: {}", query);
+			
+			if (SEARCH_LUCENE.equals(Config.SECURITY_SEARCH_EVALUATION)) {
+				result = runQueryLucene(ftSession, query, offset, limit);
+			} else if (SEARCH_ACCESS_MANAGER_MORE.equals(Config.SECURITY_SEARCH_EVALUATION)) {
+				result = runQueryAccessManagerMore(ftSession, query, offset, limit);
+			} else if (SEARCH_ACCESS_MANAGER_WINDOW.equals(Config.SECURITY_SEARCH_EVALUATION)) {
+				result = runQueryAccessManagerWindow(ftSession, query, offset, limit);
+			} else if (SEARCH_ACCESS_MANAGER_LIMITED.equals(Config.SECURITY_SEARCH_EVALUATION)) {
+				result = runQueryAccessManagerLimited(ftSession, query, offset, limit);
+			}
 			
 			HibernateUtil.commit(tx);
 			log.debug("findBySimpleQuery: {}", result);
@@ -170,6 +195,12 @@ public class SearchDAO {
 		}
 	}
 	
+	/**
+	 * Security is evaluated by Lucene, so query result are already pruned. This means that every node
+	 * should have its security (user and role) info stored in Lucene. This provides very quick search
+	 * but security modifications need to be recursively applied to reach every document node in the
+	 * repository. This may take several hours (or days) is big repositories.
+	 */
 	@SuppressWarnings("unchecked")
 	private NodeResultSet runQueryLucene(FullTextSession ftSession, Query query, int offset, int limit)
 			throws IOException, InvalidTokenOffsetsException, HibernateException {
@@ -196,7 +227,7 @@ public class SearchDAO {
 			NodeBase nBase = (NodeBase) qRes[1];
 			
 			// Add result
-			addResult(results, highlighter, score, nBase);
+			addResult(ftSession, results, highlighter, score, nBase);
 		}
 		
 		result.setTotal(ftq.getResultSize());
@@ -204,30 +235,258 @@ public class SearchDAO {
 		log.debug("runQueryLucene: {}", result);
 		return result;
 	}
+	
+	/**
+	 * Security is not evaluate in Lucene but by AccessManager. This means that Lucene will return all the
+	 * matched documents and this list need further prune by checking the READ permission in the AccessManager.
+	 * If the returned document list is very big, maybe lots of documents will be pruned because the user has
+	 * no read access and this would be a time consuming task.
+	 * 
+	 * This method will read and check document from the Lucene query result until reach a given offset. After
+	 * that will add all the given document which the user have read access until the limit is reached. After
+	 * that will check if there is another document more who the user can read.
+	 */
+	@SuppressWarnings("unchecked")
+	private NodeResultSet runQueryAccessManagerMore(FullTextSession ftSession, Query query, int offset, int limit)
+			throws IOException, InvalidTokenOffsetsException, DatabaseException, HibernateException {
+		log.debug("runQueryAccessManagerMore({}, {}, {}, {})", new Object[] { ftSession, query, offset, limit });
+		List<NodeQueryResult> results = new ArrayList<NodeQueryResult>();
+		NodeResultSet result = new NodeResultSet();
+		FullTextQuery ftq = ftSession.createFullTextQuery(query, NodeDocument.class, NodeFolder.class, NodeMail.class);
+		ftq.setProjection(FullTextQuery.SCORE, FullTextQuery.THIS);
+		ftq.enableFullTextFilter("readAccess");
+		QueryScorer scorer = new QueryScorer(query, NodeDocument.TEXT_FIELD);
+		int count = 0;
 		
+		// Highlight using a CSS style
+		SimpleHTMLFormatter formatter = new SimpleHTMLFormatter("<span class='highlight'>", "</span>");
+		Highlighter highlighter = new Highlighter(formatter, scorer);
+		highlighter.setTextFragmenter(new SimpleSpanFragmenter(scorer, MAX_FRAGMENT_LEN));
+		
+		// Set limits
+		Iterator<Object[]> it = ftq.iterate();
+		DbAccessManager am = SecurityHelper.getAccessManager();
+		
+		// Bypass offset
+		while (it.hasNext() && count < offset) {
+			Object[] qRes = it.next();
+			NodeBase nBase = (NodeBase) qRes[1];
+			
+			if (am.isGranted(nBase, Permission.READ)) {
+				count++;
+			}
+		}
+		
+		// Read limit results
+		while (it.hasNext() && results.size() < limit) {
+			Object[] qRes = it.next();
+			Float score = (Float) qRes[0];
+			NodeBase nBase = (NodeBase) qRes[1];
+			
+			if (am.isGranted(nBase, Permission.READ)) {
+				// Add result
+				addResult(ftSession, results, highlighter, score, nBase);
+			}
+		}
+		
+		// Check if pending results
+		count = results.size() + offset;
+		
+		while (it.hasNext() && count < offset + limit + 1) {
+			Object[] qRes = it.next();
+			NodeBase nBase = (NodeBase) qRes[1];
+			
+			if (am.isGranted(nBase, Permission.READ)) {
+				count++;
+			}
+		}
+		
+		result.setTotal(count);
+		result.setResults(results);
+		log.debug("runQueryAccessManagerMore: {}", result);
+		return result;
+	}
+	
+	/**
+	 * Security is not evaluate in Lucene but by AccessManager. This means that Lucene will return all the
+	 * matched documents and this list need further prune by checking the READ permission in the AccessManager.
+	 * If the returned document list is very big, maybe lots of documents will be pruned because the user has
+	 * no read access and this would be a time consuming task.
+	 * 
+	 * This method will read and check document from the Lucene query result until reach a given offset. After
+	 * that will add all the given document which the user have read access until the limit is reached. After
+	 * that will check if there are more documents (2 * limit) the user can read.
+	 */
+	@SuppressWarnings("unchecked")
+	private NodeResultSet runQueryAccessManagerWindow(FullTextSession ftSession, Query query, int offset, int limit)
+			throws IOException, InvalidTokenOffsetsException, DatabaseException, HibernateException {
+		log.debug("runQueryAccessManagerWindow({}, {}, {}, {})", new Object[] { ftSession, query, offset, limit });
+		List<NodeQueryResult> results = new ArrayList<NodeQueryResult>();
+		NodeResultSet result = new NodeResultSet();
+		FullTextQuery ftq = ftSession.createFullTextQuery(query, NodeDocument.class, NodeFolder.class, NodeMail.class);
+		ftq.setProjection(FullTextQuery.SCORE, FullTextQuery.THIS);
+		ftq.enableFullTextFilter("readAccess");
+		QueryScorer scorer = new QueryScorer(query, NodeDocument.TEXT_FIELD);
+		int count = 0;
+		
+		// Highlight using a CSS style
+		SimpleHTMLFormatter formatter = new SimpleHTMLFormatter("<span class='highlight'>", "</span>");
+		Highlighter highlighter = new Highlighter(formatter, scorer);
+		highlighter.setTextFragmenter(new SimpleSpanFragmenter(scorer, MAX_FRAGMENT_LEN));
+		
+		// Set limits
+		Iterator<Object[]> it = ftq.iterate();
+		DbAccessManager am = SecurityHelper.getAccessManager();
+		
+		// Bypass offset
+		while (it.hasNext() && count < offset) {
+			Object[] qRes = it.next();
+			NodeBase nBase = (NodeBase) qRes[1];
+			
+			if (am.isGranted(nBase, Permission.READ)) {
+				count++;
+			}
+		}
+		
+		// Read limit results
+		while (it.hasNext() && results.size() < limit) {
+			Object[] qRes = it.next();
+			Float score = (Float) qRes[0];
+			NodeBase nBase = (NodeBase) qRes[1];
+			
+			if (am.isGranted(nBase, Permission.READ)) {
+				// Add result
+				addResult(ftSession, results, highlighter, score, nBase);
+			}
+		}
+		
+		// Check if pending results
+		count = results.size() + offset;
+		
+		while (it.hasNext() && count < offset + limit * 2) {
+			Object[] qRes = it.next();
+			NodeBase nBase = (NodeBase) qRes[1];
+			
+			if (am.isGranted(nBase, Permission.READ)) {
+				count++;
+			}
+		}
+		
+		result.setTotal(count);
+		result.setResults(results);
+		log.debug("runQueryAccessManagerWindow: {}", result);
+		return result;
+	}
+	
+	/**
+	 * Security is not evaluate in Lucene but by AccessManager. This means that Lucene will return all the
+	 * matched documents and this list need further prune by checking the READ permission in the AccessManager.
+	 * If the returned document list is very big, maybe lots of documents will be pruned because the user has
+	 * no read access and this would be a time consuming task.
+	 * 
+	 * This method will read and check document from the Lucene query result until reach a given offset. After
+	 * that will add all the given document which the user have read access until the limit is reached. After
+	 * that will check if there are more documents (MAX_SEARCH_RESULTS) the user can read.
+	 */
+	@SuppressWarnings("unchecked")
+	private NodeResultSet runQueryAccessManagerLimited(FullTextSession ftSession, Query query, int offset, int limit)
+			throws IOException, InvalidTokenOffsetsException, DatabaseException, HibernateException {
+		log.debug("runQueryAccessManagerLimited({}, {}, {}, {})", new Object[] { ftSession, query, offset, limit });
+		List<NodeQueryResult> results = new ArrayList<NodeQueryResult>();
+		NodeResultSet result = new NodeResultSet();
+		FullTextQuery ftq = ftSession.createFullTextQuery(query, NodeDocument.class, NodeFolder.class, NodeMail.class);
+		ftq.setProjection(FullTextQuery.SCORE, FullTextQuery.THIS);
+		ftq.enableFullTextFilter("readAccess");
+		QueryScorer scorer = new QueryScorer(query, NodeDocument.TEXT_FIELD);
+		int count = 0;
+		
+		// Highlight using a CSS style
+		SimpleHTMLFormatter formatter = new SimpleHTMLFormatter("<span class='highlight'>", "</span>");
+		Highlighter highlighter = new Highlighter(formatter, scorer);
+		highlighter.setTextFragmenter(new SimpleSpanFragmenter(scorer, MAX_FRAGMENT_LEN));
+		
+		// Set limits
+		Iterator<Object[]> it = ftq.iterate();
+		DbAccessManager am = SecurityHelper.getAccessManager();
+		
+		// Bypass offset
+		while (it.hasNext() && count < offset) {
+			Object[] qRes = it.next();
+			NodeBase nBase = (NodeBase) qRes[1];
+			
+			if (am.isGranted(nBase, Permission.READ)) {
+				count++;
+			}
+		}
+		
+		// Read limit results
+		while (it.hasNext() && results.size() < limit) {
+			Object[] qRes = it.next();
+			Float score = (Float) qRes[0];
+			NodeBase nBase = (NodeBase) qRes[1];
+			
+			if (am.isGranted(nBase, Permission.READ)) {
+				// Add result
+				addResult(ftSession, results, highlighter, score, nBase);
+			}
+		}
+		
+		// Check if pending results
+		count = results.size() + offset;
+		
+		while (it.hasNext() && count < Config.MAX_SEARCH_RESULTS) {
+			Object[] qRes = it.next();
+			NodeBase nBase = (NodeBase) qRes[1];
+			
+			if (am.isGranted(nBase, Permission.READ)) {
+				count++;
+			}
+		}
+		
+		result.setTotal(count);
+		result.setResults(results);
+		log.debug("Size: {}", results.size());
+		log.debug("runQueryAccessManagerLimited: {}", result);
+		return result;
+	}
+	
 	/**
 	 * Add result
 	 */
-	private void addResult(List<NodeQueryResult> results, Highlighter highlighter, Float score, NodeBase nBase)
+	private void addResult(FullTextSession ftSession, List<NodeQueryResult> results,
+			Highlighter highlighter, Float score, NodeBase nBase)
 			throws IOException, InvalidTokenOffsetsException {
 		NodeQueryResult qr = new NodeQueryResult();
 		NodeDocument nDocument = null;
+		NodeMail nMail = null;
 		String excerpt = null;
 		
 		if (nBase instanceof NodeDocument) {
-			log.debug("NODE DOCUMENT");
 			nDocument = (NodeDocument) nBase;
-			qr.setDocument(nDocument);
+			
+			if (NodeMailDAO.getInstance().isMail(ftSession, nDocument.getParent())) {
+				log.debug("NODE DOCUMENT - ATTACHMENT");
+				qr.setAttachment(nDocument);
+			} else {
+				log.debug("NODE DOCUMENT");
+				qr.setDocument(nDocument);
+			}
 		} else if (nBase instanceof NodeFolder) {
 			log.debug("NODE FOLDER");
 			NodeFolder nFld = (NodeFolder) nBase;
 			qr.setFolder(nFld);
+		} else if (nBase instanceof NodeMail) {
+			log.debug("NODE MAIL");
+			nMail = (NodeMail) nBase;
+			qr.setMail(nMail);
 		} else {
 			log.warn("NODE UNKNOWN");
 		}
 		
 		if (nDocument != null && nDocument.getText() != null) {
 			excerpt = highlighter.getBestFragment(analyzer, NodeDocument.TEXT_FIELD, nDocument.getText());
+		} else if (nMail != null && nMail.getContent() != null) {
+			excerpt = highlighter.getBestFragment(analyzer, NodeMail.CONTENT_FIELD, nMail.getContent());
 		}
 		
 		log.debug("Result: SCORE({}), EXCERPT({}), DOCUMENT({})", new Object[] { score, excerpt, nBase });
@@ -235,13 +494,16 @@ public class SearchDAO {
 		qr.setExcerpt(excerpt);
 		
 		if (qr.getDocument() != null) {
-			NodeDocumentDAO.getInstance().initialize(qr.getDocument());
+			NodeDocumentDAO.getInstance().initialize(qr.getDocument(), false);
 			results.add(qr);
 		} else if (qr.getFolder() != null) {
 			NodeFolderDAO.getInstance().initialize(qr.getFolder());
 			results.add(qr);
 		} else if (qr.getMail() != null) {
 			NodeMailDAO.getInstance().initialize(qr.getMail());
+			results.add(qr);
+		} else if (qr.getAttachment() != null) {
+			NodeDocumentDAO.getInstance().initialize(qr.getAttachment(), false);
 			results.add(qr);
 		}
 	}
