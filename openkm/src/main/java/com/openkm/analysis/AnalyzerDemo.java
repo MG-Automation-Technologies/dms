@@ -32,6 +32,8 @@ import org.apache.lucene.analysis.cjk.CJKAnalyzer;
 import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
 
@@ -40,6 +42,7 @@ import com.openkm.core.Config;
  * 
  */
 public class AnalyzerDemo {
+	private static Logger log = LoggerFactory.getLogger(AnalyzerDemo.class);
 	private static String[] strings = { "专项信息管理" };
 	
 	private static Analyzer[] analyzers = {
@@ -75,6 +78,6 @@ public class AnalyzerDemo {
 		}
 		
 		String output = buffer.toString();
-		System.out.println(output);
+		log.info(output);
 	}
 }
