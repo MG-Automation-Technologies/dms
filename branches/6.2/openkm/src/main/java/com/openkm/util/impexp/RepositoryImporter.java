@@ -37,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 import com.openkm.automation.AutomationException;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
@@ -187,6 +188,12 @@ public class RepositoryImporter {
 						out.flush();
 						stats.setOk(false);
 						FileLogger.error(BASE_NAME, "ItemExistsException ''{0}''", fld.getPath());
+					} catch (JsonParseException e) {
+						log.warn("JsonParseException: {}", e.getMessage());
+						out.write(deco.print(files[i].getPath(), files[i].length(), "Json"));
+						out.flush();
+						stats.setOk(false);
+						FileLogger.error(BASE_NAME, "JsonParseException ''{0}''", fld.getPath());
 					}
 					
 					ImpExpStats tmp = importDocumentsHelper(token, files[i], fld.getPath(), metadata, history, uuid, out, deco);
@@ -352,6 +359,12 @@ public class RepositoryImporter {
 						out.flush();
 						stats.setOk(false);
 						FileLogger.error(BASE_NAME, "VersionException ''{0}''", doc.getPath());
+					} catch (JsonParseException e) {
+						log.warn("JsonParseException: {}", e.getMessage());
+						out.write(deco.print(files[i].getPath(), files[i].length(), "Json"));
+						out.flush();
+						stats.setOk(false);
+						FileLogger.error(BASE_NAME, "JsonParseException ''{0}''", doc.getPath());
 					} finally {
 						IOUtils.closeQuietly(fisContent);
 					}
