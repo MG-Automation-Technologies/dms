@@ -309,8 +309,8 @@ public class MailUtils {
 		htmlContent.append("</head>\n<body>\n");
 		htmlContent.append(text);
 		htmlContent.append("\n</body>\n</html>");
-		htmlPart.setContent(htmlContent.toString(), "text/html");
-		htmlPart.setHeader("Content-Type", "text/html");
+		htmlPart.setContent(htmlContent.toString(), "text/html;charset=UTF-8");
+		htmlPart.setHeader("Content-Type", "text/html;charset=UTF-8");
 		htmlPart.setDisposition(Part.INLINE);
 		content.addBodyPart(htmlPart);
 		
@@ -336,7 +336,7 @@ public class MailUtils {
 					};
 					
 					docPart.setDataHandler(new DataHandler(source));
-					docPart.setFileName(docName);
+					docPart.setFileName(MimeUtility.encodeText(docName));
 					docPart.setDisposition(Part.ATTACHMENT);
 					content.addBodyPart(docPart);
 				} finally {
@@ -640,8 +640,7 @@ public class MailUtils {
 				PathUtils.escape((msg.getSubject() == null || msg.getSubject().isEmpty()) ? NO_SUBJECT : msg.getSubject()));
 		}
 		
-		String newMailPath = PathUtils.getParent(mail.getPath()) + "/"
-				+ PathUtils.escape(PathUtils.getName(mail.getPath()));
+		String newMailPath = PathUtils.getParent(mail.getPath()) + "/" + PathUtils.escape(PathUtils.getName(mail.getPath()));
 		log.debug("newMailPath: {}", newMailPath);
 		
 		if (!okmRepository.hasNode(token, newMailPath)) {
