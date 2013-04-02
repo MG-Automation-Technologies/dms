@@ -219,6 +219,10 @@ public class DbSearchModule implements SearchModule {
 			}
 			
 			if (!params.getName().equals("")) {
+				if (!params.getName().contains("*") && !params.getName().contains("?")) {
+					params.setName("*" + params.getName() + "*");
+				}
+				
 				Term t = new Term("name", params.getName().toLowerCase());
 				queryDocument.add(new WildcardQuery(t), BooleanClause.Occur.MUST);
 			}
