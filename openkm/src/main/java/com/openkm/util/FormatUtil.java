@@ -163,6 +163,8 @@ public class FormatUtil {
 	
 	/**
 	 * Sanitize HTML
+	 * 
+	 * @see http://www.rgagnon.com/javadetails/java-0627.html
 	 */
 	public static String sanitizeInput(String string) {
 		return string
