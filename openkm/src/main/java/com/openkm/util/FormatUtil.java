@@ -162,6 +162,19 @@ public class FormatUtil {
 	}
 	
 	/**
+	 * Sanitize HTML
+	 */
+	public static String sanitizeInput(String string) {
+		return string
+				.replaceAll("(?i)<script.*?>.*?</script.*?>", "") // case 1
+				.replaceAll("(?i)<script.*?/>", "") // case 1
+				.replaceAll("(?i)<.*?javascript:.*?>.*?</.*?>", "") // case 2
+				.replaceAll("(?i)<.*?javascript:.*?/>", "") // case 2
+				.replaceAll("(?i)<.*?\\s+on.*?>.*?</.*?>", "") // case 3
+				.replaceAll("(?i)<.*?\\s+on.*?/>", ""); // case 3
+	}
+	
+	/**
 	 * Parser log file
 	 */
 	public static Collection<LogMessage> parseLog(File flog, int begin, int end, String str) throws IOException {
