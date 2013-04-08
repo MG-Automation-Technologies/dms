@@ -3,7 +3,6 @@ package com.openkm.module.db;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.owasp.encoder.Encode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -23,6 +22,7 @@ import com.openkm.module.NoteModule;
 import com.openkm.module.db.base.BaseNoteModule;
 import com.openkm.module.db.base.BaseNotificationModule;
 import com.openkm.spring.PrincipalUtils;
+import com.openkm.util.FormatUtil;
 import com.openkm.util.UserActivity;
 
 public class DbNoteModule implements NoteModule {
@@ -50,7 +50,7 @@ public class DbNoteModule implements NoteModule {
 			String nodeUuid = NodeBaseDAO.getInstance().getUuidFromPath(nodePath);
 			NodeBase node = NodeBaseDAO.getInstance().findByPk(nodeUuid);
 			
-			text = Encode.forHtml(text);
+			text = FormatUtil.sanitizeInput(text);
 			NodeNote nNote = BaseNoteModule.create(nodeUuid, auth.getName(), text);
 			newNote = BaseNoteModule.getProperties(nNote, nNote.getUuid());
 			
@@ -171,7 +171,7 @@ public class DbNoteModule implements NoteModule {
 			NodeBase node = NodeNoteDAO.getInstance().getParentNode(noteUuid);
 			
 			if (auth.getName().equals(nNote.getAuthor())) {
-				text = Encode.forHtml(text);
+				text = FormatUtil.sanitizeInput(text);
 				nNote.setText(text);
 				NodeNoteDAO.getInstance().update(nNote);
 			} else {
