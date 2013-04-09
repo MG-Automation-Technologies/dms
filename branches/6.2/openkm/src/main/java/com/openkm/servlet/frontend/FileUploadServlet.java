@@ -1,6 +1,6 @@
 package com.openkm.servlet.frontend;
 
-import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,7 +11,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
+import java.util.UUID;
 
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -26,15 +31,22 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.auxilii.msgparser.Message;
+import com.auxilii.msgparser.MsgParser;
+import com.auxilii.msgparser.attachment.Attachment;
+import com.auxilii.msgparser.attachment.FileAttachment;
 import com.google.gson.Gson;
 import com.openkm.api.OKMAuth;
 import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
+import com.openkm.api.OKMMail;
 import com.openkm.api.OKMNotification;
+import com.openkm.api.OKMRepository;
 import com.openkm.automation.AutomationException;
 import com.openkm.bean.Document;
 import com.openkm.bean.FileUploadResponse;
 import com.openkm.bean.Folder;
+import com.openkm.bean.Mail;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.ConversionException;
@@ -47,6 +59,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.Ref;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
+import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
 import com.openkm.extension.core.ExtensionException;
@@ -54,11 +67,12 @@ import com.openkm.frontend.client.constants.service.ErrorCode;
 import com.openkm.frontend.client.constants.ui.UIFileUploadConstants;
 import com.openkm.module.db.DbDocumentModule;
 import com.openkm.module.jcr.JcrDocumentModule;
+import com.openkm.spring.PrincipalUtils;
 import com.openkm.util.DocConverter;
 import com.openkm.util.FileUtils;
 import com.openkm.util.FormatUtil;
+import com.openkm.util.MailUtils;
 import com.openkm.util.PathUtils;
-import com.openkm.util.SecureStore;
 import com.openkm.util.impexp.ImpExpStats;
 import com.openkm.util.impexp.RepositoryImporter;
 import com.openkm.util.impexp.TextInfoDecorator;
@@ -217,7 +231,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 				if (action == UIFileUploadConstants.ACTION_INSERT) {
 					if (fileName != null && !fileName.equals("")) {
 						if (importZip && FilenameUtils.getExtension(fileName).equalsIgnoreCase("zip")) {
-							log.info("Import zip file '{}' into '{}'", fileName, path);
+							log.info("Import ZIP file '{}' into '{}'", fileName, path);
 							String erroMsg = importZip(path, is);
 							
 							if (erroMsg == null) {
@@ -228,12 +242,34 @@ public class FileUploadServlet extends OKMHttpServlet {
 								sendResponse(out, action, fuResponse.get());
 							}
 						} else if (importZip && FilenameUtils.getExtension(fileName).equalsIgnoreCase("jar")) {
-							log.info("Import jar file '{}' into '{}'", fileName, path);
+							log.info("Import JAR file '{}' into '{}'", fileName, path);
 							String erroMsg = importJar(path, is);
 							
 							if (erroMsg == null) {
 								sendResponse(out, action, fuResponse.get());
 							} else {
+								fuResponse.get().setError(erroMsg);
+								sendResponse(out, action, fuResponse.get());
+							}
+						} else if (FilenameUtils.getExtension(fileName).equalsIgnoreCase("eml")) {
+							log.info("import EML file '{}' into '{}'", fileName, path);
+							String erroMsg = importEml(path, is);
+							
+							if (erroMsg == null) {
+								sendResponse(out, action, fuResponse.get());
+							} else {
+								log.warn("erroMsg: {}", erroMsg);
+								fuResponse.get().setError(erroMsg);
+								sendResponse(out, action, fuResponse.get());
+							}
+						} else if (FilenameUtils.getExtension(fileName).equalsIgnoreCase("msg")) {
+							log.info("import MSG file '{}' into '{}'", fileName, path);
+							String erroMsg = importMsg(path, is);
+							
+							if (erroMsg == null) {
+								sendResponse(out, action, fuResponse.get());
+							} else {
+								log.warn("erroMsg: {}", erroMsg);
 								fuResponse.get().setError(erroMsg);
 								sendResponse(out, action, fuResponse.get());
 							}
@@ -299,6 +335,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 						Document doc = OKMDocument.getInstance().getProperties(null, path);
 						
 						if (autoCheckOut) {
+							// This is set from the Uploader applet
 							OKMDocument.getInstance().checkout(null, path);
 						}
 						
@@ -356,40 +393,6 @@ public class FileUploadServlet extends OKMHttpServlet {
 					sc.setAttribute("docPath", fuResponse.get().getPath());
 					sc.setAttribute("uuid", uploadedUuid);
 					sc.getRequestDispatcher(redirectURL).forward(request, response);
-				}
-			} else {
-				// Used only when document is digital signed ( form in that case is not multipart it's a normal post )
-				action = (request.getParameter("action") != null ? Integer.parseInt(request.getParameter("action")) : -1);
-				
-				if (action == UIFileUploadConstants.ACTION_DIGITAL_SIGNATURE_INSERT
-						|| action == UIFileUploadConstants.ACTION_DIGITAL_SIGNATURE_UPDATE) {
-					path = request.getParameter("path");
-					String data = request.getParameter("data");
-					tmp = java.io.File.createTempFile("okm", ".tmp");
-					FileOutputStream fos = new FileOutputStream(tmp);
-					BufferedOutputStream bos = new BufferedOutputStream(fos);
-					bos.write(SecureStore.b64Decode(data));
-					bos.flush();
-					bos.close();
-					fos.flush();
-					fos.close();
-					FileInputStream fis = new FileInputStream(tmp);
-					
-					switch (action) {
-						case UIFileUploadConstants.ACTION_DIGITAL_SIGNATURE_INSERT:
-							Document newDoc = new Document();
-							path = path.substring(0, path.lastIndexOf(".") + 1) + "pdf";
-							newDoc.setPath(path);
-							newDoc = OKMDocument.getInstance().create(null, newDoc, fis);
-							fuResponse.get().setPath(newDoc.getPath());
-							break;
-						
-						case UIFileUploadConstants.ACTION_DIGITAL_SIGNATURE_UPDATE:
-							OKMDocument.getInstance().checkout(null, path);
-							OKMDocument.getInstance().checkin(null, path, fis, "Signed");
-							fuResponse.get().setPath(path);
-							break;
-					}
 				}
 			}
 		} catch (AccessDeniedException e) {
@@ -522,21 +525,14 @@ public class FileUploadServlet extends OKMHttpServlet {
 			log.error("Error importing zip", e);
 			throw e;
 		} finally {
+			IOUtils.closeQuietly(is);
+			
 			if (tmpIn != null) {
 				org.apache.commons.io.FileUtils.deleteQuietly(tmpIn);
 			}
 			
 			if (tmpOut != null) {
 				org.apache.commons.io.FileUtils.deleteQuietly(tmpOut);
-			}
-			
-			if (is != null) {
-				try {
-					is.close();
-				} catch (IOException e) {
-					log.error("Error closing zip input stream", e);
-					throw e;
-				}
 			}
 		}
 		
@@ -550,7 +546,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 	 * @param path Where import into the repository.
 	 * @param is The jar file to import.
 	 */
-	private String importJar(String path, InputStream is) throws PathNotFoundException, ItemExistsException,
+	private synchronized String importJar(String path, InputStream is) throws PathNotFoundException, ItemExistsException,
 			AccessDeniedException, RepositoryException, IOException, DatabaseException, ExtensionException, AutomationException {
 		log.debug("importJar({}, {})", path, is);
 		java.io.File tmpIn = null;
@@ -581,6 +577,8 @@ public class FileUploadServlet extends OKMHttpServlet {
 			log.error("Error importing jar", e);
 			throw e;
 		} finally {
+			IOUtils.closeQuietly(is);
+			
 			if (tmpIn != null) {
 				File.umount();
 				org.apache.commons.io.FileUtils.deleteQuietly(tmpIn);
@@ -589,18 +587,108 @@ public class FileUploadServlet extends OKMHttpServlet {
 			if (tmpOut != null) {
 				org.apache.commons.io.FileUtils.deleteQuietly(tmpOut);
 			}
-			
-			if (is != null) {
-				try {
-					is.close();
-				} catch (IOException e) {
-					log.error("Error closing zip input stream", e);
-					throw e;
-				}
-			}
 		}
 		
 		log.debug("importJar: {}", errorMsg);
+		return errorMsg;
+	}
+	
+	/**
+	 * Import EML file as MailNode.
+	 */
+	private String importEml(String path, InputStream is) throws MessagingException, PathNotFoundException,
+			ItemExistsException, VirusDetectedException, AccessDeniedException, RepositoryException, DatabaseException,
+			UserQuotaExceededException, UnsupportedMimeTypeException, FileSizeExceededException, ExtensionException,
+			AutomationException, IOException {
+		log.debug("importEml({}, {})", path, is);
+		Properties props = System.getProperties();
+        props.put("mail.host", "smtp.dummydomain.com");
+        props.put("mail.transport.protocol", "smtp");
+		String errorMsg = null;
+		
+		try {
+			// Convert file
+			Session mailSession = Session.getDefaultInstance(props, null);
+			MimeMessage msg = new MimeMessage(mailSession, is);
+			Mail mail = MailUtils.messageToMail(msg);
+			
+			// Create phantom path. In this case we don't have the IMAP message ID, son create a random one.
+			mail.setPath(path + "/" + UUID.randomUUID().toString() + "-" + PathUtils.escape(mail.getSubject()));
+			
+			// Import files
+			OKMMail.getInstance().create(null, mail);
+			MailUtils.addAttachments(null, mail, msg, PrincipalUtils.getUser());
+		} catch (IOException e) {
+			log.error("Error importing eml", e);
+			throw e;
+		} finally {
+			IOUtils.closeQuietly(is);
+		}
+		
+		log.debug("importEml: {}", errorMsg);
+		return errorMsg;
+	}
+	
+	/**
+	 * Import MSG file as MailNode.
+	 */
+	private String importMsg(String path, InputStream is) throws MessagingException, PathNotFoundException,
+			ItemExistsException, VirusDetectedException, AccessDeniedException, RepositoryException, DatabaseException,
+			UserQuotaExceededException, UnsupportedMimeTypeException, FileSizeExceededException, ExtensionException,
+			AutomationException, IOException {
+		log.debug("importMsg({}, {})", path, is);
+		String errorMsg = null;
+		
+		try {
+			// Convert file
+			MsgParser msgp = new MsgParser();
+			Message msg = msgp.parseMsg(is);
+			Mail mail = MailUtils.messageToMail(msg);
+			
+			// Create phantom path. In this case we don't have the IMAP message ID, son create a random one.
+			mail.setPath(path + "/" + UUID.randomUUID().toString() + "-" + PathUtils.escape(mail.getSubject()));
+			
+			// Import files
+			OKMMail.getInstance().create(null, mail);
+			
+			for (Attachment att : msg.getAttachments()) {
+				if (att instanceof FileAttachment) {
+					FileAttachment fileAtt = (FileAttachment) att;
+					log.info("Importing attachment: {}", fileAtt.getFilename());
+					
+					String fileName = fileAtt.getFilename();
+					String fileExtension = fileAtt.getExtension();
+					String testName = fileName + "." + fileExtension;
+					
+					// Test if already exists a document with the same name in the mail
+					for (int j = 1; OKMRepository.getInstance().hasNode(null, mail.getPath() + "/" + testName); j++) {
+						// log.info("Trying with: {}", testName);
+						testName = fileName + " (" + j + ")." + fileExtension;
+					}
+					
+					Document attachment = new Document();
+					String mimeType = MimeTypeConfig.mimeTypes.getContentType(testName.toLowerCase());
+					attachment.setMimeType(mimeType);
+					attachment.setPath(mail.getPath() + "/" + testName);
+					ByteArrayInputStream bais = new ByteArrayInputStream(fileAtt.getData());
+					
+					if (Config.REPOSITORY_NATIVE) {
+						new DbDocumentModule().create(null, attachment, bais, fileAtt.getSize(), PrincipalUtils.getUser());
+					} else {
+						new JcrDocumentModule().create(null, attachment, bais, PrincipalUtils.getUser());
+					}
+					
+					IOUtils.closeQuietly(bais);
+				}
+			}
+		} catch (IOException e) {
+			log.error("Error importing msg", e);
+			throw e;
+		} finally {
+			IOUtils.closeQuietly(is);
+		}
+		
+		log.debug("importMsg: {}", errorMsg);
 		return errorMsg;
 	}
 }
