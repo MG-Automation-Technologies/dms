@@ -78,7 +78,6 @@ public class DbAuthModule implements AuthModule, ApplicationContextAware {
 			
 			if (auth != null) {
 				String user = auth.getName();
-				
 				loadUserData(user);
 				
 				// Activity log
