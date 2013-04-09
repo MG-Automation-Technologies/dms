@@ -27,14 +27,6 @@ a:active {
 	text-decoration: none;
 }
 
-a.button {
-	background-color: #E5E5E1;
-	border: 1px solid #A5A596;
-	padding: 3px;
-	font-size: 10px;
-	font-family: verdana, arial, sans-serif;
-}
-
 h1 {
 	text-align: center;
 }
@@ -209,3 +201,131 @@ span.vanadium-invalid {
 #breadcrumb a:hover {
 	color: #90A6CC;
 }
+
+.utilButton {
+	background-color: #E5E5E1;
+	border: 1px solid #A5A596;
+	padding: 8px;
+	margin: 16px;
+	width: 150px;
+	cursor: pointer;
+  	cursor: hand;
+	font-size: 10px;
+	font-family: verdana, arial, sans-serif;
+	background-image: url("../img/action/generic.png");
+	background-repeat: no-repeat;
+	padding-left: 17px;
+	background-position: 5px center;
+}
+
+.noButton {
+	background-color: #E5E5E1;
+	border: 1px solid #A5A596;
+	height: 18px;
+	font-size: 10px;
+	font-family: verdana, arial, sans-serif;
+	cursor: pointer;
+  	cursor: hand;
+	background-image: url("../img/false.png");
+	background-repeat: no-repeat;
+	padding-left: 17px;
+	background-position: 2px center;
+}
+
+.yesButton {
+	background-color: #E5E5E1;
+	border: 1px solid #A5A596;
+	height: 18px;
+	font-size: 10px;
+	font-family: verdana, arial, sans-serif;
+	cursor: pointer;
+  	cursor: hand;
+	background-image: url("../img/true.png");
+	background-repeat: no-repeat;
+	padding-left: 17px;
+	background-position: 2px center;
+}
+
+.addButton {
+	background-color: #E5E5E1;
+	border: 1px solid #A5A596;
+	height: 18px;
+	font-size: 10px;
+	font-family: verdana, arial, sans-serif;
+	cursor: pointer;
+  	cursor: hand;
+	background-image: url("../img/action/new.png");
+	background-repeat: no-repeat;
+	padding-left: 17px;
+	background-position: 2px center;
+}
+
+.searchButton {
+	background-color: #E5E5E1;
+	border: 1px solid #A5A596;
+	height: 18px;
+	font-size: 10px;
+	font-family: verdana, arial, sans-serif;
+	cursor: pointer;
+  	cursor: hand;
+	background-image: url("../img/action/examine.png");
+	background-repeat: no-repeat;
+	padding-left: 17px;
+	background-position: 2px center;
+}
+
+.saveButton {
+	background-color: #E5E5E1;
+	border: 1px solid #A5A596;
+	height: 18px;
+	font-size: 10px;
+	font-family: verdana, arial, sans-serif;
+	cursor: pointer;
+  	cursor: hand;
+	background-image: url("../img/action/save.png");
+	background-repeat: no-repeat;
+	padding-left: 17px;
+	background-position: 2px center;
+}
+
+.loadButton {
+	background-color: #E5E5E1;
+	border: 1px solid #A5A596;
+	height: 18px;
+	font-size: 10px;
+	font-family: verdana, arial, sans-serif;
+	cursor: pointer;
+  	cursor: hand;
+	background-image: url("../img/action/load.png");
+	background-repeat: no-repeat;
+	padding-left: 17px;
+	background-position: 2px center;
+}
+
+.executeButton {
+	background-color: #E5E5E1;
+	border: 1px solid #A5A596;
+	height: 18px;
+	font-size: 10px;
+	font-family: verdana, arial, sans-serif;
+	cursor: pointer;
+  	cursor: hand;
+	background-image: url("../img/action/signal.png");
+	background-repeat: no-repeat;
+	padding-left: 17px;
+	background-position: 2px center;
+}
+
+/* Chrome fix for button images */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	.noButton, .yesButton, .addButton, .searchButton, .saveButton, .loadButton, .executeButton {
+		padding-left: 20px;
+	}
+}
+
+/* Explorer fix for button images */
+<!--[if IE]>
+	.noButton, .yesButton, .addButton, .searchButton, .saveButton, .loadButton, .executeButton {
+		padding-left: 12px;
+	}
+<![endif]-->
