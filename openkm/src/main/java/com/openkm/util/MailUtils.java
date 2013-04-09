@@ -37,6 +37,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -72,8 +73,11 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.auxilii.msgparser.RecipientEntry;
+import com.auxilii.msgparser.rtf.SimpleRTF2HTMLConverter;
 import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
+import com.openkm.api.OKMMail;
 import com.openkm.api.OKMRepository;
 import com.openkm.automation.AutomationException;
 import com.openkm.bean.Document;
@@ -108,8 +112,9 @@ import freemarker.template.TemplateException;
 
 public class MailUtils {
 	private static Logger log = LoggerFactory.getLogger(MailUtils.class);
-	private static final String NO_SUBJECT = "(Message without subject)";
-	private static final String NO_BODY = "(Message without body)";
+	public static final String NO_SUBJECT = "(Message without subject)";
+	public static final String NO_BODY = "(Message without body)";
+	public static final String MAIL_REGEX = "([_A-Za-z0-9-]+)(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})";
 	
 	/**
 	 * Send mail without FROM addresses.
@@ -148,7 +153,7 @@ public class MailUtils {
 		try {
 			ArrayList<String> toList = new ArrayList<String>();
 			toList.add(toAddress);
-			send(null, toList, subject, content, null);
+			send(null, toList, subject, content, new ArrayList<String>());
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 		} catch (AccessDeniedException e) {
@@ -173,7 +178,7 @@ public class MailUtils {
 	public static void sendMessage(String fromAddress, List<String> toAddress, String subject, String content)
 			throws MessagingException {
 		try {
-			send(fromAddress, toAddress, subject, content, null);
+			send(fromAddress, toAddress, subject, content, new ArrayList<String>());
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 		} catch (AccessDeniedException e) {
@@ -200,7 +205,7 @@ public class MailUtils {
 		try {
 			ArrayList<String> toList = new ArrayList<String>();
 			toList.add(toAddress);
-			send(fromAddress, toList, subject, content, null);
+			send(fromAddress, toList, subject, content, new ArrayList<String>());
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 		} catch (AccessDeniedException e) {
@@ -255,16 +260,78 @@ public class MailUtils {
 			Collection<String> docsPath) throws MessagingException, PathNotFoundException, AccessDeniedException, 
 			RepositoryException, IOException, DatabaseException {
 		log.debug("send({}, {}, {}, {}, {})", new Object[] { fromAddress, toAddress, subject, text, docsPath });
-		File tmpAttachment = FileUtils.createTempFile();
+		List<File> tmpAttachments = new ArrayList<File>();
 		
 		try {
-			MimeMessage m = create(fromAddress, toAddress, subject, text, docsPath, tmpAttachment);
+			// Need a temporal file for every attachment.
+			for (int i=0; i<docsPath.size(); i++) {
+				tmpAttachments.add(FileUtils.createTempFile());
+			}
+			
+			MimeMessage m = create(fromAddress, toAddress, subject, text, docsPath, tmpAttachments);
 			Transport.send(m);
 		} finally {
-			FileUtils.deleteQuietly(tmpAttachment);
+			for (File tmpAttach : tmpAttachments) {
+				FileUtils.deleteQuietly(tmpAttach);
+			}
 		}
 		
 		log.debug("send: void");
+	}
+	
+	/**
+	 * Forward a mail in the repository.
+	 * 
+	 * @param token Authentication token.
+	 * @param fromAddress Origin address.
+	 * @param toAddress Destination addresses.
+	 * @param mailPath Path of the mail to be forwarded.
+	 * @throws MessagingException If there is any error.
+	 */
+	public static void forwardMail(String token, String fromAddress, String toAddress, String message, String mailPath)
+			throws MessagingException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			IOException, DatabaseException {
+		ArrayList<String> toList = new ArrayList<String>();
+		toList.add(toAddress);
+		forwardMail(token, fromAddress, toList, message, mailPath);
+	}
+	
+	/**
+	 * Forward a mail in the repository.
+	 * 
+	 * @param token Authentication token.
+	 * @param fromAddress Origin address.
+	 * @param toAddress Destination addresses.
+	 * @param mailId Path of the mail to be forwarded or its UUID.
+	 * @throws MessagingException If there is any error.
+	 */
+	public static void forwardMail(String token, String fromAddress, Collection<String> toAddress, String message,
+			String mailId) throws MessagingException, PathNotFoundException, AccessDeniedException,
+			RepositoryException, IOException, DatabaseException {
+		log.debug("forwardMail({}, {}, {}, {}, {})", new Object[] { token, fromAddress, toAddress, mailId });
+		Mail mail = OKMMail.getInstance().getProperties(token, mailId);
+		mail.setSubject("Fwd: " + mail.getSubject());
+		
+		if (Mail.MIME_TEXT.equals(mail.getMimeType())) {
+			mail.setContent(message + "\n\n---------- Forwarded message ----------\n\n" + mail.getContent());
+		} else if (Mail.MIME_HTML.equals(mail.getMimeType())) {
+			mail.setContent(message + "<br/><br/>---------- Forwarded message ----------<br/><br/>" + mail.getContent());
+		} else {
+			log.warn("Email does not specify content MIME type");
+		}
+		
+		if (fromAddress != null) {
+			mail.setFrom(fromAddress);
+		}
+		
+		if (toAddress != null && !toAddress.isEmpty()) {
+			String[] to = (String[]) toAddress.toArray(new String[toAddress.size()]);
+			mail.setTo(to);
+		}
+		
+		MimeMessage m = create(token, mail);
+		Transport.send(m);
+		log.debug("forwardMail: void");
 	}
 	
 	/**
@@ -277,7 +344,7 @@ public class MailUtils {
 	 * @throws MessagingException If there is any error.
 	 */
 	private static MimeMessage create(String fromAddress, Collection<String> toAddress, String subject, String text,
-			Collection<String> docsPath, File tmpAttachment) throws MessagingException, PathNotFoundException, 
+			Collection<String> docsPath, List<File> tmpAttachments) throws MessagingException, PathNotFoundException, 
 			AccessDeniedException, RepositoryException, IOException, DatabaseException {
 		log.debug("create({}, {}, {}, {}, {})", new Object[] { fromAddress, toAddress, subject, text, docsPath });
 		Session mailSession = getMailSession();
@@ -291,10 +358,10 @@ public class MailUtils {
 		}
 		
 		InternetAddress[] to = new InternetAddress[toAddress.size()];
-		int i = 0;
+		int idx = 0;
 		
 		for (Iterator<String> it = toAddress.iterator(); it.hasNext();) {
-			to[i++] = new InternetAddress(it.next());
+			to[idx++] = new InternetAddress(it.next());
 		}
 		
 		// Build a multiparted mail with HTML and text content for better SPAM behaviour
@@ -313,6 +380,7 @@ public class MailUtils {
 		htmlPart.setHeader("Content-Type", "text/html;charset=UTF-8");
 		htmlPart.setDisposition(Part.INLINE);
 		content.addBodyPart(htmlPart);
+		idx = 0;
 		
 		if (docsPath != null) {
 			for (String docPath : docsPath) {
@@ -323,13 +391,14 @@ public class MailUtils {
 				try {
 					final Document doc = OKMDocument.getInstance().getProperties(null, docPath);
 					is = OKMDocument.getInstance().getContent(null, docPath, false);
-					fos = new FileOutputStream(tmpAttachment);
+					final File tmpAttch = tmpAttachments.get(idx++);
+					fos = new FileOutputStream(tmpAttch);
 					IOUtils.copy(is, fos);
 					fos.flush();
 					
 					// Document attachment part
 					MimeBodyPart docPart = new MimeBodyPart();
-					DataSource source = new FileDataSource(tmpAttachment.getPath()) {
+					DataSource source = new FileDataSource(tmpAttch.getPath()) {
 						public String getContentType() {
 							return doc.getMimeType();
 						}
@@ -525,46 +594,8 @@ public class MailUtils {
 				log.info(i + ": " + msg.getFrom()[0] + " " + msg.getSubject() + " " + msg.getContentType());
 				log.info("Received: " + msg.getReceivedDate());
 				log.info("Sent: " + msg.getSentDate());
-				
-				Calendar receivedDate = Calendar.getInstance();
-				Calendar sentDate = Calendar.getInstance();
-				
-				// Can be void
-				if (msg.getReceivedDate() != null) {
-					receivedDate.setTime(msg.getReceivedDate());
-				}
-				
-				// Can be void
-				if (msg.getSentDate() != null) {
-					sentDate.setTime(msg.getSentDate());
-				}
-				
 				log.debug("{} -> {} - {}", new Object[] { i, msg.getSubject(), msg.getReceivedDate() });
-				com.openkm.bean.Mail mail = new com.openkm.bean.Mail();
-				String body = getText(msg);
-				
-				// log.info("getText: "+body);
-				if (body.charAt(0) == 'H') {
-					mail.setMimeType("text/html");
-				} else if (body.charAt(0) == 'T') {
-					mail.setMimeType("text/plain");
-				} else {
-					mail.setMimeType("unknown");
-				}
-				
-				mail.setContent(body.substring(1));
-				
-				if (msg.getFrom().length > 0) {
-					mail.setFrom(MimeUtility.decodeText(msg.getFrom()[0].toString()));
-				}
-				
-				mail.setSize(msg.getSize());
-				mail.setSubject((msg.getSubject() == null || msg.getSubject().isEmpty()) ? NO_SUBJECT : msg.getSubject());
-				mail.setTo(address2String(msg.getRecipients(Message.RecipientType.TO)));
-				mail.setCc(address2String(msg.getRecipients(Message.RecipientType.CC)));
-				mail.setBcc(address2String(msg.getRecipients(Message.RecipientType.BCC)));
-				mail.setReceivedDate(receivedDate);
-				mail.setSentDate(sentDate);
+				com.openkm.bean.Mail mail = messageToMail(msg);
 				
 				if (ma.getMailFilters().isEmpty()) {
 					log.debug("Import in compatibility mode");
@@ -622,9 +653,110 @@ public class MailUtils {
 	}
 	
 	/**
+	 * Convert Mime Message to Mail
+	 */
+	public static Mail messageToMail(Message msg) throws MessagingException, IOException {
+		com.openkm.bean.Mail mail = new com.openkm.bean.Mail();
+		Calendar receivedDate = Calendar.getInstance();
+		Calendar sentDate = Calendar.getInstance();
+		
+		// Can be void
+		if (msg.getReceivedDate() != null) {
+			receivedDate.setTime(msg.getReceivedDate());
+		}
+		
+		// Can be void
+		if (msg.getSentDate() != null) {
+			sentDate.setTime(msg.getSentDate());
+		}
+		
+		String body = getText(msg);
+		
+		// log.info("getText: "+body);
+		if (body.charAt(0) == 'H') {
+			mail.setMimeType(MimeTypeConfig.MIME_HTML);
+		} else if (body.charAt(0) == 'T') {
+			mail.setMimeType(MimeTypeConfig.MIME_TEXT);
+		} else {
+			mail.setMimeType(MimeTypeConfig.MIME_UNDEFINED);
+		}
+		
+		String content = body.substring(1);
+		
+		// Need to replace 0x00 because PostgreSQL does not accept string containing 0x00
+		content = FormatUtil.fixUTF8(content);
+		
+		// Need to remove Unicode surrogate because of MySQL => SQL Error: 1366, SQLState: HY000
+		content = FormatUtil.trimUnicodeSurrogates(content);
+		
+		mail.setContent(content);
+		
+		if (msg.getFrom().length > 0) {
+			mail.setFrom(MimeUtility.decodeText(msg.getFrom()[0].toString()));
+		}
+		
+		mail.setSize(msg.getSize());
+		mail.setSubject((msg.getSubject() == null || msg.getSubject().isEmpty()) ? NO_SUBJECT : msg.getSubject());
+		mail.setTo(addressToString(msg.getRecipients(Message.RecipientType.TO)));
+		mail.setCc(addressToString(msg.getRecipients(Message.RecipientType.CC)));
+		mail.setBcc(addressToString(msg.getRecipients(Message.RecipientType.BCC)));
+		mail.setReceivedDate(receivedDate);
+		mail.setSentDate(sentDate);
+		
+		return mail;
+	}
+	
+	/**
+	 * Convert Outlook Message to Mail
+	 */
+	public static Mail messageToMail(com.auxilii.msgparser.Message msg) throws MessagingException, IOException {
+		com.openkm.bean.Mail mail = new com.openkm.bean.Mail();
+		Calendar receivedDate = Calendar.getInstance();
+		Calendar sentDate = Calendar.getInstance();
+		
+		// Can be void
+		if (msg.getDate() != null) {
+			receivedDate.setTime(msg.getDate());
+		}
+		
+		// Can be void
+		if (msg.getCreationDate() != null) {
+			sentDate.setTime(msg.getCreationDate());
+		}
+		
+		if (msg.getBodyRTF() != null) {
+			SimpleRTF2HTMLConverter converter = new SimpleRTF2HTMLConverter();
+			mail.setMimeType(MimeTypeConfig.MIME_HTML);
+			mail.setContent(converter.rtf2html(msg.getBodyRTF()));
+		} else if (msg.getBodyHTML() != null) {
+			mail.setMimeType(MimeTypeConfig.MIME_HTML);
+			mail.setContent(msg.getBodyHTML());
+		} else if (msg.getBodyText() != null) {
+			mail.setMimeType(MimeTypeConfig.MIME_TEXT);
+			mail.setContent(msg.getBodyText());				
+		} else {
+			mail.setMimeType(MimeTypeConfig.MIME_UNDEFINED);
+		}
+		
+		if (msg.getToRecipient() != null) {
+			mail.setTo(new String[] { msg.getToRecipient().getToName() + " <" + msg.getToRecipient().getToEmail() + ">" });
+		}
+		
+		mail.setSize(mail.getContent().length());
+		mail.setSubject((msg.getSubject() == null || msg.getSubject().isEmpty()) ? NO_SUBJECT : msg.getSubject());
+		mail.setFrom(msg.getFromName() + " <" + msg.getFromEmail() + ">");
+		mail.setCc(recipientToString(msg.getCcRecipients()));
+		mail.setBcc(recipientToString(msg.getBccRecipients()));
+		mail.setReceivedDate(receivedDate);
+		mail.setSentDate(sentDate);
+		
+		return mail;
+	}
+
+	/**
 	 * Import mail into OpenKM repository
 	 */
-	private static void importMail(String token, String mailPath, boolean grouping, Folder folder, Message msg,
+	public static void importMail(String token, String mailPath, boolean grouping, Folder folder, Message msg,
 			MailAccount ma, com.openkm.bean.Mail mail) throws DatabaseException, RepositoryException,
 			AccessDeniedException, ItemExistsException, PathNotFoundException, MessagingException,
 			VirusDetectedException, UserQuotaExceededException, IOException, ExtensionException, AutomationException {
@@ -665,7 +797,7 @@ public class MailUtils {
 	/**
 	 * Check mail import rules
 	 */
-	private static boolean checkRules(com.openkm.bean.Mail mail, Set<MailFilterRule> filterRules) {
+	public static boolean checkRules(com.openkm.bean.Mail mail, Set<MailFilterRule> filterRules) {
 		log.info("checkRules({}, {})", mail, filterRules);
 		boolean ret = true;
 		
@@ -810,7 +942,7 @@ public class MailUtils {
 	/**
 	 * Add attachments to an imported mail.
 	 */
-	private static void addAttachments(String token, com.openkm.bean.Mail mail, Part p, String userId)
+	public static void addAttachments(String token, com.openkm.bean.Mail mail, Part p, String userId)
 			throws MessagingException, IOException, UnsupportedMimeTypeException, FileSizeExceededException,
 			UserQuotaExceededException, VirusDetectedException, ItemExistsException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException, ExtensionException, AutomationException {
@@ -854,12 +986,27 @@ public class MailUtils {
 	/**
 	 * Conversion from array of Addresses to array of Strings.
 	 */
-	private static String[] address2String(Address[] addresses) {
+	private static String[] addressToString(Address[] addresses) {
 		ArrayList<String> list = new ArrayList<String>();
 		
 		if (addresses != null) {
 			for (int i = 0; i < addresses.length; i++) {
 				list.add(addresses[i].toString());
+			}
+		}
+		
+		return (String[]) list.toArray(new String[list.size()]);
+	}
+	
+	/**
+	 * Conversion from array of Recipient to array of Strings.
+	 */
+	private static String[] recipientToString(List<RecipientEntry> recipEntries) {
+		ArrayList<String> list = new ArrayList<String>();
+		
+		if (recipEntries != null) {
+			for (RecipientEntry re : recipEntries) {
+				list.add(re.getToName() + " <" + re.getToEmail() + ">");
 			}
 		}
 		
@@ -971,5 +1118,24 @@ public class MailUtils {
 		}
 		
 		return sw.toString();
+	}
+	
+	/**
+	 * Convert string with mails to list.
+	 */
+	public static List<String> parseMailList(String mails) {
+		List<String> mailList = new ArrayList<String>();
+		
+		if (mails != null && !mails.isEmpty()) {
+			for (StringTokenizer st = new StringTokenizer(mails, ","); st.hasMoreTokens(); ) {
+				String mail = st.nextToken().trim();
+				
+				if (mail.matches(MAIL_REGEX)) {
+					mailList.add(mail);
+				}
+			}
+		}
+		
+		return  mailList;
 	}
 }
