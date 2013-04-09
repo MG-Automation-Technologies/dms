@@ -50,6 +50,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.dao.NodeBaseDAO;
 import com.openkm.module.db.stuff.PersistentFile;
 import com.openkm.module.jcr.JcrRepositoryModule;
+import com.openkm.module.jcr.stuff.apache.JackrabbitTextExtractor;
 import com.openkm.util.UserActivity;
 
 /**
@@ -58,7 +59,9 @@ import com.openkm.util.UserActivity;
 public class RegisteredExtractors {
 	private static Logger log = LoggerFactory.getLogger(RegisteredExtractors.class);
 	private static Map<String, TextExtractor> engine = new HashMap<String, TextExtractor>();
+	private static JackrabbitTextExtractor jte = new JackrabbitTextExtractor();
 	private static final int MIN_EXTRACTION = 16;
+	private static final boolean EXPERIMENTAL = true;
 	
 	/**
 	 * Initialize text extractors from REGISTERED_TEXT_EXTRACTORS
@@ -66,29 +69,33 @@ public class RegisteredExtractors {
 	public static synchronized void init() {
 		log.info("Initializing text extractors");
 		
-		for (String clazz : Config.REGISTERED_TEXT_EXTRACTORS) {
-			try {
-				Object obj = Class.forName(clazz).newInstance();
-				
-				if (obj instanceof TextExtractor) {
-					TextExtractor te = (TextExtractor) obj;
+		if (EXPERIMENTAL) {
+			for (String clazz : Config.REGISTERED_TEXT_EXTRACTORS) {
+				try {
+					Object obj = Class.forName(clazz).newInstance();
 					
-					for (String contType : te.getContentTypes()) {
-						log.info("Registering {} for '{}'", te.getClass().getCanonicalName(), contType);
-						engine.put(contType, te);
+					if (obj instanceof TextExtractor) {
+						TextExtractor te = (TextExtractor) obj;
+						
+						for (String contType : te.getContentTypes()) {
+							log.info("Registering {} for '{}'", te.getClass().getCanonicalName(), contType);
+							engine.put(contType, te);
+						}
+					} else {
+						log.warn("Unknown text extractor class: {}", clazz);
 					}
-				} else {
-					log.warn("Unknown text extractor class: {}", clazz);
+				} catch (ClassNotFoundException e) {
+					log.warn("Extractor class not found: {}", clazz, e);
+				} catch (LinkageError e) {
+					log.warn("Extractor dependency not found: {}", clazz, e);
+				} catch (IllegalAccessException e) {
+					log.warn("Extractor constructor not accessible: {}", clazz, e);
+				} catch (InstantiationException e) {
+					log.warn("Extractor instantiation failed: {}", clazz, e);
 				}
-			} catch (ClassNotFoundException e) {
-				log.warn("Extractor class not found: {}", clazz, e);
-			} catch (LinkageError e) {
-				log.warn("Extractor dependency not found: {}", clazz, e);
-			} catch (IllegalAccessException e) {
-				log.warn("Extractor constructor not accessible: {}", clazz, e);
-			} catch (InstantiationException e) {
-				log.warn("Extractor instantiation failed: {}", clazz, e);
 			}
+		} else {
+			jte = new JackrabbitTextExtractor(Config.REGISTERED_TEXT_EXTRACTORS);
 		}
 	}
 	
@@ -96,7 +103,22 @@ public class RegisteredExtractors {
 	 * Return registered content types
 	 */
 	public static String[] getContentTypes() {
-		return engine.keySet().toArray(new String[engine.keySet().size()]);
+		if (EXPERIMENTAL) {
+			return engine.keySet().toArray(new String[engine.keySet().size()]);
+		} else {
+			return jte.getContentTypes();
+		}
+	}
+	
+	/**
+	 * Return guessed text extractor
+	 */
+	public static TextExtractor getTextExtractor(String mimeType) {
+		if (EXPERIMENTAL) {
+			return engine.get(mimeType);
+		} else {
+			return null;
+		}
 	}
 	
 	/**
@@ -142,12 +164,40 @@ public class RegisteredExtractors {
 	public static String getText(String docPath, String mimeType, String encoding, InputStream isContent) 
 			throws IOException {
 		log.debug("getText({}, {}, {}, {})", new Object[] { docPath, mimeType, encoding, isContent });
-		BufferedInputStream bis = new BufferedInputStream(isContent);
 		String failureMessage = "Unknown error";
 		boolean failure = false;
 		String text = null;
 		
 		try {
+			text = getText(mimeType, encoding, isContent);
+			
+			// Check for minimum text extraction size
+			if (text.length() < MIN_EXTRACTION) {
+				failureMessage = "Too few text extracted";
+				failure = true;
+			}
+		} catch (Exception e) {
+			log.warn("Text extraction failure: {}", e.getMessage());
+			failureMessage = e.getMessage();
+			failure = true;
+		}
+		
+		if (failure) {
+			throw new IOException(failureMessage);
+		}
+		
+		log.debug("getText: {}", text);
+		return text;
+	}
+	
+	/**
+	 * Extract text to be indexed
+	 */
+	public static String getText(String mimeType, String encoding, InputStream isContent) throws IOException {
+		BufferedInputStream bis = new BufferedInputStream(isContent);
+		String text = null;
+		
+		if (EXPERIMENTAL) {
 			TextExtractor te = engine.get(mimeType);
 			
 			if (te != null) {
@@ -161,27 +211,14 @@ public class RegisteredExtractors {
 				Reader rd = te.extractText(bis, mimeType, encoding);
 				text = IOUtils.toString(rd);
 			} else {
-				throw new Exception("Full text indexing of '" + mimeType + "' is not supported");
+				throw new IOException("Full text indexing of '" + mimeType + "' is not supported");
 			}
-			
-			// Check for minimum text extraction size
-			if (text.length() < MIN_EXTRACTION) {
-				failureMessage = "Too few text extracted";
-				failure = true;
-			}
-			
-			IOUtils.closeQuietly(bis);
-		} catch (Exception e) {
-			log.warn("Text extraction failure: {}", e.getMessage());
-			failureMessage = e.getMessage();
-			failure = true;
+		} else {
+			Reader rd = jte.extractText(bis, mimeType, encoding);
+			text = IOUtils.toString(rd);
 		}
 		
-		if (failure) {
-			throw new IOException(failureMessage);
-		}
-		
-		log.debug("getText: {}", text);
+		IOUtils.closeQuietly(bis);
 		return text;
 	}
 	
@@ -272,7 +309,7 @@ public class RegisteredExtractors {
 		
 		try {
 			isContent = persistentFile.getInputStream();
-			text = getText(null, "text/plain", "UTF-8", isContent);
+			text = getText("text/plain", "UTF-8", isContent);
 			return text;
 		} finally {
 			IOUtils.closeQuietly(isContent);
