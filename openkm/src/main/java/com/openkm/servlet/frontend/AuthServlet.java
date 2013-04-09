@@ -254,8 +254,7 @@ public class AuthServlet extends OKMRemoteServiceServlet implements OKMAuthServi
 			for (String userId : col) {
 				String userName = OKMAuth.getInstance().getName(null, userId);
 				
-				if (userName != null && !grantedUsers.contains(userId)
-						&& userName.toLowerCase().startsWith(filter.toLowerCase())) {
+				if (userName != null && !grantedUsers.contains(userId) && userName.toLowerCase().startsWith(filter.toLowerCase())) {
 					GWTGrantedUser gu = new GWTGrantedUser();
 					gu.setPermisions(0);
 					GWTUser user = new GWTUser();
@@ -569,7 +568,8 @@ public class AuthServlet extends OKMRemoteServiceServlet implements OKMAuthServi
 		
 		try {
 			for (String userId : OKMAuth.getInstance().getUsers(null)) {
-				if (userId.toLowerCase().startsWith(filter.toLowerCase()) && !selectedUsers.contains(userId)) {
+				String userName = OKMAuth.getInstance().getName(null, userId);
+				if (userName.toLowerCase().startsWith(filter.toLowerCase()) && !selectedUsers.contains(userId)) {
 					GWTUser user = new GWTUser();
 					user.setId(userId);
 					user.setUsername(OKMAuth.getInstance().getName(null, userId));
