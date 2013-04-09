@@ -21,6 +21,9 @@
 
 package com.openkm.frontend.client.widget.security;
 
+import java.util.List;
+import java.util.Map;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -38,8 +41,6 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 import com.openkm.frontend.client.util.Util;
-import java.util.Map;
-import java.util.List;
 
 /**
  * Security popup
@@ -85,9 +86,11 @@ public class SecurityPopup extends DialogBox {
 			@Override
 			public void onClick(ClickEvent event) {
 				final boolean recursiveChecked = recursive.getValue();
+				
 				if (!recursiveChecked) {
 					Main.get().securityPopup.status.setFlag_update();
 				}
+				
 				List<Map<String, Integer>> userGrants = securityPanel.securityUser.getNewGrants();
 				List<Map<String, Integer>> roleGrants = securityPanel.securityRole.getNewGrants();
 				Map<String, Integer> addUsers = userGrants.get(0);
@@ -147,8 +150,6 @@ public class SecurityPopup extends DialogBox {
 		close.setStyleName("okm-NoButton");
 		change.setStyleName("okm-ChangeButton");
 		status.setStyleName("okm-StatusPopup");
-		
-		vPanel.setWidth(String.valueOf(width));
 
 		super.hide();
 		setWidget(vPanel);
