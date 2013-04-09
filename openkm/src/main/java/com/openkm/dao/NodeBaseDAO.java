@@ -843,7 +843,7 @@ public class NodeBaseDAO {
 	/**
 	 * Change security.
 	 */
-	private int changeSecurity(Session session, NodeBase node, Map<String, Integer> grantUsers,
+	public int changeSecurity(Session session, NodeBase node, Map<String, Integer> grantUsers,
 			Map<String, Integer> revokeUsers, Map<String, Integer> grantRoles, Map<String, Integer> revokeRoles,
 			boolean recursive) throws PathNotFoundException, AccessDeniedException, DatabaseException, HibernateException {
 		log.debug("changeSecurity({}, {}, {}, {}, {})", new Object[] { node.getUuid(), grantUsers, revokeUsers, grantRoles, revokeRoles });
@@ -886,30 +886,30 @@ public class NodeBaseDAO {
 			
 			// Grant Roles
 			for (Entry<String, Integer> roleGrant: grantRoles.entrySet()) {
-				Integer currentPermissions = node.getUserPermissions().get(roleGrant.getKey());
+				Integer currentPermissions = node.getRolePermissions().get(roleGrant.getKey());
 				
 				if (currentPermissions == null) {
-					node.getUserPermissions().put(roleGrant.getKey(), roleGrant.getValue());
+					node.getRolePermissions().put(roleGrant.getKey(), roleGrant.getValue());
 				} else {
-					node.getUserPermissions().put(roleGrant.getKey(), roleGrant.getValue() | currentPermissions);
+					node.getRolePermissions().put(roleGrant.getKey(), roleGrant.getValue() | currentPermissions);
 				}
 			}
 			
 			// Revoke Roles
 			for (Entry<String, Integer> roleRevoke: revokeRoles.entrySet()) {
-				Integer currentPermissions = node.getUserPermissions().get(roleRevoke.getKey());
+				Integer currentPermissions = node.getRolePermissions().get(roleRevoke.getKey());
 				
 				if (currentPermissions != null) {
 					Integer newPermissions = ~roleRevoke.getValue() & currentPermissions;
 					
 					if (newPermissions == Permission.NONE) {
-						node.getUserPermissions().remove(roleRevoke.getKey());
+						node.getRolePermissions().remove(roleRevoke.getKey());
 					} else {
-						node.getUserPermissions().put(roleRevoke.getKey(), newPermissions);
+						node.getRolePermissions().put(roleRevoke.getKey(), newPermissions);
 					}
 				}
 			}
-	
+			
 			session.update(node);
 			return 1;
 		} else {
@@ -921,7 +921,7 @@ public class NodeBaseDAO {
 	 * Change security recursively
 	 */
 	@SuppressWarnings("unchecked")
-	private int changeSecurityInDepth(Session session, NodeBase node, Map<String, Integer> grantUsers,
+	public int changeSecurityInDepth(Session session, NodeBase node, Map<String, Integer> grantUsers,
 			Map<String, Integer> revokeUsers, Map<String, Integer> grantRoles, Map<String, Integer> revokeRoles)
 			throws PathNotFoundException, AccessDeniedException, DatabaseException, HibernateException {
 		int total = changeSecurity(session, node, grantUsers, revokeUsers, grantRoles, revokeRoles, true);
@@ -1880,8 +1880,7 @@ public class NodeBaseDAO {
 				for (NodeProperty nodProp : node.getProperties()) {
 					if (grpName.equals(nodProp.getGroup())) {
 						if (prop.getKey().equals(nodProp.getName())) {
-							log.debug("UPDATE - Group: {}, Property: {}, Value: {}", new Object[] { grpName, prop.getKey(),
-									prop.getValue() });
+							log.debug("UPDATE - Group: {}, Property: {}, Value: {}", new Object[] { grpName, prop.getKey(), prop.getValue() });
 							nodProp.setValue(prop.getValue());
 							alreadyAssigned = true;
 							
@@ -1889,12 +1888,10 @@ public class NodeBaseDAO {
 							tmp.add(nodProp);
 						}
 					}
-					
 				}
 				
 				if (!alreadyAssigned) {
-					log.debug("ADD - Group: {}, Property: {}, Value: {}",
-							new Object[] { grpName, prop.getKey(), prop.getValue() });
+					log.debug("ADD - Group: {}, Property: {}, Value: {}", new Object[] { grpName, prop.getKey(), prop.getValue() });
 					NodeProperty nodProp = new NodeProperty();
 					nodProp.setNode(node);
 					nodProp.setGroup(grpName);
