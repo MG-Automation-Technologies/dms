@@ -21,10 +21,12 @@
       </ul>
       <br/>
       <center>
-        <a class="button" href="CheckEmail">Check email</a><br/><br/>
-        <a class="button" href="rebuild_indexes.jsp">Rebuild indexes</a><br/><br/>
-        <a class="button" href="repository_checker.jsp">Repository checker</a><br/><br/>
-        <a class="button" href="Css">Css</a><br/><br/>
+        <a href="CheckEmail"><button class="utilButton">Check email</button></a>
+        <a href="rebuild_indexes.jsp"><button class="utilButton">Rebuild indexes</button></a>
+        <a href="repository_checker.jsp"><button class="utilButton">Repository checker</button></a>
+        <a href="ListIndexes"><button class="utilButton">List indexes</button></a>
+        <a href="CheckTextExtraction"><button class="utilButton">Check text extraction</button></a>
+        <a href="Css"><button class="utilButton">CSS</button></a>
       </center>
     </c:when>
     <c:otherwise>
