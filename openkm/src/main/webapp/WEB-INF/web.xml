@@ -335,6 +335,10 @@
     <servlet-class>com.openkm.servlet.admin.RebuildIndexesServlet</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>ListIndexesServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.ListIndexesServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>CheckEmailServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.CheckEmailServlet</servlet-class>
   </servlet>
@@ -349,6 +353,10 @@
   <servlet>
     <servlet-name>AutomationServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.AutomationServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>CheckTextExtractionServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.CheckTextExtractionServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>CssServlet</servlet-name>
@@ -617,6 +625,10 @@
     <url-pattern>/admin/RebuildIndexes</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
+    <servlet-name>ListIndexesServlet</servlet-name>
+    <url-pattern>/admin/ListIndexes</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
     <servlet-name>CheckEmailServlet</servlet-name>
     <url-pattern>/admin/CheckEmail</url-pattern>
   </servlet-mapping>
@@ -631,6 +643,10 @@
   <servlet-mapping>
     <servlet-name>AutomationServlet</servlet-name>
     <url-pattern>/admin/Automation</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CheckTextExtractionServlet</servlet-name>
+    <url-pattern>/admin/CheckTextExtraction</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>CssServlet</servlet-name>
