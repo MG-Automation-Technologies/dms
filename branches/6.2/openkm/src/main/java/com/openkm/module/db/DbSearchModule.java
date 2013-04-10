@@ -462,6 +462,8 @@ public class DbSearchModule implements SearchModule {
 						qr.setFolder(BaseFolderModule.getProperties(auth.getName(), nqr.getFolder()));
 					} else if (nqr.getMail() != null) {
 						qr.setMail(BaseMailModule.getProperties(auth.getName(), nqr.getMail()));
+					} else if (nqr.getAttachment() != null) {
+						qr.setAttachment(BaseDocumentModule.getProperties(auth.getName(), nqr.getAttachment()));
 					}
 					
 					results.add(qr);
@@ -1105,6 +1107,8 @@ public class DbSearchModule implements SearchModule {
 						qr.setFolder(BaseFolderModule.getProperties(auth.getName(), nqr.getFolder()));
 					} else if (nqr.getMail() != null) {
 						qr.setMail(BaseMailModule.getProperties(auth.getName(), nqr.getMail()));
+					} else if (nqr.getAttachment() != null) {
+						qr.setAttachment(BaseDocumentModule.getProperties(auth.getName(), nqr.getAttachment()));
 					}
 					
 					results.add(qr);
@@ -1129,6 +1133,58 @@ public class DbSearchModule implements SearchModule {
 		}
 		
 		log.debug("findSimpleQueryPaginated: {}", rs);
+		return rs;
+	}
+	
+	@Override
+	public ResultSet findMoreLikeThis(String token, String uuid, int maxResults) throws RepositoryException, DatabaseException {
+		log.debug("findMoreLikeThis({}, {}, {})", new Object[] { token, uuid, maxResults });
+		List<QueryResult> results = new ArrayList<QueryResult>();
+		ResultSet rs = new ResultSet();
+		Authentication auth = null, oldAuth = null;
+		
+		try {
+			if (token == null) {
+				auth = PrincipalUtils.getAuthentication();
+			} else {
+				oldAuth = PrincipalUtils.getAuthentication();
+				auth = PrincipalUtils.getAuthenticationByToken(token);
+			}
+			
+			NodeResultSet nrs = SearchDAO.getInstance().moreLikeThis(uuid, maxResults);
+			rs.setTotal(nrs.getTotal());
+			
+			for (NodeQueryResult nqr : nrs.getResults()) {
+				QueryResult qr = new QueryResult();
+				qr.setExcerpt(nqr.getExcerpt());
+				qr.setScore((long) (100 * nqr.getScore()));
+				
+				if (nqr.getDocument() != null) {
+					qr.setDocument(BaseDocumentModule.getProperties(auth.getName(), nqr.getDocument()));
+				} else if (nqr.getFolder() != null) {
+					qr.setFolder(BaseFolderModule.getProperties(auth.getName(), nqr.getFolder()));
+				} else if (nqr.getMail() != null) {
+					qr.setMail(BaseMailModule.getProperties(auth.getName(), nqr.getMail()));
+				}
+				
+				results.add(qr);
+			}
+			
+			rs.setResults(results);
+			
+			// Activity log
+			UserActivity.log(auth.getName(), "FIND_MORE_LIKE_THIS", uuid, null, Integer.toString(maxResults));
+		} catch (PathNotFoundException e) {
+			throw new RepositoryException(e.getMessage(), e);
+		} catch (DatabaseException e) {
+			throw e;
+		} finally {
+			if (token != null) {
+				PrincipalUtils.setAuthentication(oldAuth);
+			}
+		}
+		
+		log.debug("findMoreLikeThis: {}", rs);
 		return rs;
 	}
 }
