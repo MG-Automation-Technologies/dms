@@ -22,6 +22,7 @@
 package com.openkm.dao;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -29,19 +30,28 @@ import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.BooleanClause.Occur;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.lucene.search.highlight.SimpleSpanFragmenter;
+import org.apache.lucene.search.similar.MoreLikeThis;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
+import org.hibernate.search.SearchFactory;
+import org.hibernate.search.reader.ReaderProvider;
+import org.hibernate.search.store.DirectoryProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -575,5 +585,83 @@ public class SearchDAO {
 		
 		log.debug("findFoldersInDepthHelper: {}", ret);
 		return ret;
+	}
+	
+	/**
+	 * Return a list of similar documents.
+	 */
+	public NodeResultSet moreLikeThis(String uuid, int maxResults) throws DatabaseException, PathNotFoundException {
+		log.info("moreLikeThis({}, {})", new Object[] { uuid, maxResults });
+		String[] moreLikeFields = new String[] { "text" };
+		FullTextSession ftSession = null;
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			ftSession = Search.getFullTextSession(session);
+			tx = ftSession.beginTransaction();
+			NodeResultSet result = new NodeResultSet();
+			
+			MoreLikeThis mlt = new MoreLikeThis(getReader(ftSession, NodeDocument.class));
+			mlt.setFieldNames(moreLikeFields);
+			mlt.setMaxQueryTerms(10);
+			mlt.setMinDocFreq(1);
+			mlt.setAnalyzer(analyzer);
+			mlt.setMaxWordLen(8);
+			mlt.setMinWordLen(7);
+			mlt.setMinTermFreq(1);
+			
+			String str = NodeDocumentDAO.getInstance().getExtractedText(session, uuid);
+			
+			if (str != null && !str.isEmpty()) {
+				StringReader sr = new StringReader(str);
+				Query likeThisQuery = mlt.like(sr);
+				
+				BooleanQuery query = new BooleanQuery();
+				query.add(likeThisQuery, Occur.SHOULD);
+				query.add(new TermQuery(new Term("uuid", uuid)), Occur.MUST_NOT);
+				log.info("moreLikeThis.Query: {}", query);
+				
+				if (SEARCH_LUCENE.equals(Config.SECURITY_SEARCH_EVALUATION)) {
+					result = runQueryLucene(ftSession, query, 0, maxResults);
+				} else if (SEARCH_ACCESS_MANAGER_MORE.equals(Config.SECURITY_SEARCH_EVALUATION)) {
+					result = runQueryAccessManagerMore(ftSession, query, 0, maxResults);
+				} else if (SEARCH_ACCESS_MANAGER_WINDOW.equals(Config.SECURITY_SEARCH_EVALUATION)) {
+					result = runQueryAccessManagerWindow(ftSession, query, 0, maxResults);
+				} else if (SEARCH_ACCESS_MANAGER_LIMITED.equals(Config.SECURITY_SEARCH_EVALUATION)) {
+					result = runQueryAccessManagerLimited(ftSession, query, 0, maxResults);
+				}
+			} else {
+				log.warn("Document has not text extracted: {}", uuid);
+			}
+			
+			HibernateUtil.commit(tx);
+			log.debug("moreLikeThis: {}", result);
+			return result;
+		} catch (IOException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} catch (InvalidTokenOffsetsException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(ftSession);
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Get Lucene index reader.
+	 */
+	@SuppressWarnings("rawtypes")
+	private IndexReader getReader(FullTextSession session, Class entity) {
+		SearchFactory searchFactory = session.getSearchFactory();
+		DirectoryProvider provider = searchFactory.getDirectoryProviders(entity)[0];
+		ReaderProvider readerProvider = searchFactory.getReaderProvider();
+		return readerProvider.openReader(provider);
 	}
 }

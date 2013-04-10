@@ -271,4 +271,14 @@ public class OKMSearch implements SearchModule {
 		log.debug("findSimpleQueryPaginated: {}", ret);
 		return ret;
 	}
+	
+	@Override
+	public ResultSet findMoreLikeThis(String token, String uuid, int maxResults) throws RepositoryException,
+			DatabaseException {
+		log.debug("findMoreLikeThis({}, {}, {})", new Object[] { token, uuid, maxResults });
+		SearchModule sm = ModuleManager.getSearchModule();
+		ResultSet ret = sm.findMoreLikeThis(token, uuid, maxResults);
+		log.debug("findMoreLikeThis: {}", ret);
+		return ret;
+	}
 }

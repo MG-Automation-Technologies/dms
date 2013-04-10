@@ -264,4 +264,15 @@ public interface SearchModule {
 	 */
 	public ResultSet findSimpleQueryPaginated(String token, String statement, int offset, int limit)
 			throws RepositoryException, DatabaseException;
+	
+	/**
+	 * Find documents like a given one.
+	 * @param uuid Uuid of the document to find other similar.
+	 * @param maxResults Maximum number of returned documents. 
+	 * @return A result set with the total of the results and a collection of document from the resulting query
+	 *         statement.
+	 * @throws RepositoryException If there is any general repository problem.
+	 */
+	public ResultSet findMoreLikeThis(String token, String uuid, int maxResults) throws RepositoryException,
+			DatabaseException;
 }
