@@ -1080,4 +1080,10 @@ public class JcrSearchModule implements SearchModule {
 		log.debug("findSimpleQueryPaginated: {}", rs);
 		return rs;
 	}
+
+	@Override
+	public ResultSet findMoreLikeThis(String token, String uuid, int maxResults) throws RepositoryException,
+			DatabaseException {
+		throw new NotImplementedException("findMoreLikeThis");
+	}
 }
