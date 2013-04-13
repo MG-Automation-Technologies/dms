@@ -44,6 +44,7 @@ import com.openkm.module.db.stuff.DbSimpleAccessManager;
 import com.openkm.module.db.stuff.FsDataStore;
 import com.openkm.principal.DatabasePrincipalAdapter;
 import com.openkm.util.EnvironmentDetector;
+import com.openkm.validator.password.NoPasswordValidator;
 import com.openkm.vernum.MajorMinorVersionNumerationAdapter;
 
 public class Config {
@@ -411,7 +412,7 @@ public class Config {
 	public static String KEA_STOPWORDS_FILE;
 
 	// Validator
-	public static String VALIDATOR_PASSWORD;
+	public static String VALIDATOR_PASSWORD = NoPasswordValidator.class.getCanonicalName();
 	
 	public static int VALIDATOR_PASSWORD_MIN_LENGTH;
 	public static int VALIDATOR_PASSWORD_MAX_LENGTH;
@@ -806,7 +807,7 @@ public class Config {
 			values.put(PROPERTY_KEA_STOPWORDS_FILE, KEA_STOPWORDS_FILE);
 			
 			// Validator
-			VALIDATOR_PASSWORD = ConfigDAO.getString(PROPERTY_VALIDATOR_PASSWORD, "com.openkm.validator.password.NoPasswordValidator");
+			VALIDATOR_PASSWORD = ConfigDAO.getString(PROPERTY_VALIDATOR_PASSWORD, VALIDATOR_PASSWORD);
 			values.put(PROPERTY_VALIDATOR_PASSWORD, VALIDATOR_PASSWORD);
 			
 			VALIDATOR_PASSWORD_MIN_LENGTH = ConfigDAO.getInteger(PROPERTY_VALIDATOR_PASSWORD_MIN_LENGTH, 0);
