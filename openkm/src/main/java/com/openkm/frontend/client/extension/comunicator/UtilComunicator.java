@@ -21,6 +21,7 @@
 
 package com.openkm.frontend.client.extension.comunicator;
 
+import com.google.gwt.user.client.ui.HTML;
 import com.openkm.frontend.client.util.Util;
 
 
@@ -117,6 +118,16 @@ public class UtilComunicator {
 	}
 	
 	/**
+	 * get parent
+	 * 
+	 * @param path
+	 * @return
+	 */
+	public static String getParent(String path) {
+		return Util.getParent(path);
+	}
+	
+	/**
 	 * Generate HTML icon for mime-type document
 	 * 
 	 * @param mime The document mime-type
@@ -124,5 +135,34 @@ public class UtilComunicator {
 	 */
 	public static String mimeImageHTML(String mime) {
 		return Util.mimeImageHTML(mime);
+	}
+	
+	/**
+	 * isJREInstalled
+	 * 
+	 * @return
+	 */
+	public static boolean isJREInstalled() {
+		return Util.isJREInstalled();
+	}
+	
+	/**
+	 * hSpace
+	 * 
+	 * @param width
+	 * @return
+	 */
+	public static HTML hSpace(String width) {
+		return Util.hSpace(width);
+	}
+	
+	/**
+	 * vSpace
+	 * 
+	 * @param height
+	 * @return
+	 */
+	public static HTML vSpace(String height) {
+		return Util.vSpace(height);
 	}
 }
