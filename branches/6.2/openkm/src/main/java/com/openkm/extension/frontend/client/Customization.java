@@ -25,6 +25,7 @@ package com.openkm.extension.frontend.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.openkm.extension.frontend.client.widget.dropbox.Dropbox;
 import com.openkm.extension.frontend.client.widget.macros.Macros;
 import com.openkm.extension.frontend.client.widget.toolbar.downloadButton.DownloadButton;
 import com.openkm.extension.frontend.client.widget.toolbar.downloadPdfButton.DownloadPdfButton;
@@ -81,7 +82,9 @@ public class Customization {
 		if (Macros.isRegistered(uuidList)) {
 			extensions.addAll(new Macros(uuidList).getExtensions());
 		}
-		
+		if (Dropbox.isRegistered(uuidList)) {
+			extensions.addAll(new Dropbox(uuidList).getExtensions());
+		}
 		return extensions;
 	}
 }
