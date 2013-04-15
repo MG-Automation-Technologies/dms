@@ -210,7 +210,10 @@
     <servlet-name>MacrosServlet</servlet-name>
     <servlet-class>com.openkm.extension.servlet.MacrosServlet</servlet-class>
   </servlet>
-    
+  <servlet>
+    <servlet-name>DropboxServlet</servlet-name>
+    <servlet-class>com.openkm.extension.servlet.DropboxServlet</servlet-class>
+  </servlet>   
   <!-- Misc servlets -->
   <servlet>
     <servlet-name>SyndicationServlet</servlet-name>
@@ -500,7 +503,10 @@
     <servlet-name>MacrosServlet</servlet-name>
     <url-pattern>/extension/Macros</url-pattern>
   </servlet-mapping>
-    
+    <servlet-mapping>
+    <servlet-name>DropboxServlet</servlet-name>
+    <url-pattern>/extension/Dropbox</url-pattern>
+  </servlet-mapping>  
   <!-- Misc servlets mappings -->
   <servlet-mapping>
     <servlet-name>SyndicationServlet</servlet-name>
