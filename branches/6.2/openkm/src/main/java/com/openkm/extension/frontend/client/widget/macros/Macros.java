@@ -65,8 +65,8 @@ import com.openkm.frontend.client.extension.widget.toolbar.ToolBarButtonExtensio
  * @author jllort
  * 
  */
-public class Macros implements DocumentHandlerExtension, FolderHandlerExtension, MailHandlerExtension, WorkspaceHandlerExtension, 
-								   LanguageHandlerExtension {
+public class Macros implements DocumentHandlerExtension, FolderHandlerExtension, MailHandlerExtension, WorkspaceHandlerExtension,
+		LanguageHandlerExtension {
 	public static final int TAB_DOCUMENT = 0;
 	public static final int TAB_FOLDER = 1;
 	public static final int TAB_MAIL = 2;
@@ -93,7 +93,7 @@ public class Macros implements DocumentHandlerExtension, FolderHandlerExtension,
 			status = new Status();
 			status.setStyleName("okm-StatusPopup");
 			button = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.fastActionDisabled()),
-					 GeneralComunicator.i18nExtension("macros.button.title"), new ClickHandler() {
+					GeneralComunicator.i18nExtension("macros.button.title"), new ClickHandler() {
 						@Override
 						public void onClick(ClickEvent event) {
 							if (enabled) {
@@ -115,6 +115,7 @@ public class Macros implements DocumentHandlerExtension, FolderHandlerExtension,
 										}
 										status.unsetExecuteAction();
 									}
+									
 									@Override
 									public void onFailure(Throwable caught) {
 										status.unsetExecuteAction();
@@ -197,7 +198,7 @@ public class Macros implements DocumentHandlerExtension, FolderHandlerExtension,
 	@Override
 	public void onChange(WorkspaceEventConstant event) {
 		if (event.equals(HasWorkspaceEvent.STACK_CHANGED)) {
-			if (WorkspaceComunicator.getSelectedWorkspace()==UIDockPanelConstants.DESKTOP) {
+			if (WorkspaceComunicator.getSelectedWorkspace() == UIDockPanelConstants.DESKTOP) {
 				enabled = actionFound(getPath());
 			} else {
 				enabled = false;
