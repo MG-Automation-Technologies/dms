@@ -80,10 +80,6 @@
 		out.println("<td>" + StringEscapeUtils.escapeHtml(Config.KEA_THESAURUS_TREE_CHILDS) + "</td>");
 		out.println("</tr>");
 		
-		out.println("<tr class=\"odd\">");
-		out.println("<td><b>" + Config.PROPERTY_KEA_STOPWORDS_FILE + "</b></td>");
-		out.println("<td>" + Config.KEA_STOPWORDS_FILE + "</td>");
-		out.println("</tr>");
 		out.println("</table>");
 
 		try {
