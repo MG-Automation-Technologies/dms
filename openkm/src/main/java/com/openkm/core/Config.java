@@ -225,7 +225,6 @@ public class Config {
 	public static final String PROPERTY_KEA_THESAURUS_BASE_URL = "kea.thesaurus.base.url";
 	public static final String PROPERTY_KEA_THESAURUS_TREE_ROOT = "kea.thesaurus.tree.root";
 	public static final String PROPERTY_KEA_THESAURUS_TREE_CHILDS = "kea.thesaurus.tree.childs";
-	public static final String PROPERTY_KEA_MODEL_FILE = "kea.model.file";
 	public static final String PROPERTY_KEA_STOPWORDS_FILE = "kea.stopwords.file";
 	
 	// Validator
@@ -404,7 +403,6 @@ public class Config {
 	public static String KEA_THESAURUS_BASE_URL;
 	public static String KEA_THESAURUS_TREE_ROOT;
 	public static String KEA_THESAURUS_TREE_CHILDS;
-	public static String KEA_MODEL_FILE;
 	public static String KEA_STOPWORDS_FILE;
 
 	// Validator
@@ -793,8 +791,6 @@ public class Config {
 			values.put(PROPERTY_KEA_THESAURUS_TREE_ROOT, KEA_THESAURUS_TREE_ROOT);
 			KEA_THESAURUS_TREE_CHILDS = ConfigDAO.getText(PROPERTY_KEA_THESAURUS_TREE_CHILDS, cfg.getProperty(PROPERTY_KEA_THESAURUS_TREE_CHILDS, ""));
 			values.put(PROPERTY_KEA_THESAURUS_TREE_CHILDS, KEA_THESAURUS_TREE_CHILDS);
-			KEA_MODEL_FILE = ConfigDAO.getString(PROPERTY_KEA_MODEL_FILE, cfg.getProperty(PROPERTY_KEA_MODEL_FILE, ""));
-			values.put(PROPERTY_KEA_MODEL_FILE, KEA_MODEL_FILE);
 			KEA_STOPWORDS_FILE = ConfigDAO.getString(PROPERTY_KEA_STOPWORDS_FILE, cfg.getProperty(PROPERTY_KEA_STOPWORDS_FILE, ""));
 			values.put(PROPERTY_KEA_STOPWORDS_FILE, KEA_STOPWORDS_FILE);
 			
