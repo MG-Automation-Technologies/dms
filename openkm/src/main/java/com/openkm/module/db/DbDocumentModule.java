@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -49,8 +48,6 @@ import com.openkm.bean.FileUploadResponse;
 import com.openkm.bean.LockInfo;
 import com.openkm.bean.Repository;
 import com.openkm.bean.Version;
-import com.openkm.bean.kea.MetadataDTO;
-import com.openkm.bean.kea.Term;
 import com.openkm.cache.UserItemsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
@@ -79,9 +76,6 @@ import com.openkm.dao.bean.NodeDocumentVersion;
 import com.openkm.dao.bean.NodeFolder;
 import com.openkm.dao.bean.NodeLock;
 import com.openkm.extension.core.ExtensionException;
-import com.openkm.kea.RDFREpository;
-import com.openkm.kea.metadata.MetadataExtractionException;
-import com.openkm.kea.metadata.MetadataExtractor;
 import com.openkm.module.DocumentModule;
 import com.openkm.module.common.CommonGeneralModule;
 import com.openkm.module.db.base.BaseDocumentModule;
@@ -215,30 +209,6 @@ public class DbDocumentModule implements DocumentModule {
 					}
 				}
 				
-				// Start KEA
-				Set<String> keywords = doc.getKeywords() != null ? doc.getKeywords() : new HashSet<String>();
-				
-				if (!Config.KEA_MODEL_FILE.equals("")) {
-					MetadataExtractor mdExtractor = new MetadataExtractor(Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER);
-					MetadataDTO mdDTO = mdExtractor.extract(tmp);
-					
-					for (ListIterator<Term> it = mdDTO.getSubjectsAsTerms().listIterator(); it.hasNext();) {
-						Term term = it.next();
-						log.info("Term: {}", term.getText());
-						
-						if (Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION) {
-							if (RDFREpository.getInstance().getKeywords().contains(term.getText())) {
-								// Replacing spaces to "_" and adding at ends space for other word
-								keywords.add(term.getText().replace(" ", "_"));
-							}
-						} else {
-							// Replacing spaces to "_" and adding at ends space for other word
-							keywords.add(term.getText().replace(" ", "_"));
-						}
-					}
-				}
-				// End KEA
-				
 				String parentUuid = NodeBaseDAO.getInstance().getUuidFromPath(parentPath);
 				NodeBase parentNode = NodeBaseDAO.getInstance().findByPk(parentUuid);
 				
@@ -246,6 +216,7 @@ public class DbDocumentModule implements DocumentModule {
 				// INSIDE BaseDocumentModule.create
 				
 				// Create node
+				Set<String> keywords = doc.getKeywords() != null ? doc.getKeywords() : new HashSet<String>();
 				NodeDocument docNode = BaseDocumentModule.create(auth.getName(), parentPath, parentNode, name, 
 						doc.getTitle(), doc.getCreated(), mimeType, is, size, keywords, new HashSet<String>(), fuResponse);
 				
@@ -287,8 +258,6 @@ public class DbDocumentModule implements DocumentModule {
 			} else {
 				throw new RepositoryException("Invalid document name");
 			}
-		} catch (MetadataExtractionException e) {
-			throw new RepositoryException(e.getMessage(), e);
 		} finally {
 			IOUtils.closeQuietly(is);
 			org.apache.commons.io.FileUtils.deleteQuietly(tmp);
