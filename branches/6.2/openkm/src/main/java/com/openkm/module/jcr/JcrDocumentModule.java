@@ -31,7 +31,6 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.ListIterator;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -49,8 +48,6 @@ import com.openkm.bean.Document;
 import com.openkm.bean.LockInfo;
 import com.openkm.bean.Repository;
 import com.openkm.bean.Version;
-import com.openkm.bean.kea.MetadataDTO;
-import com.openkm.bean.kea.Term;
 import com.openkm.cache.UserItemsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
@@ -73,9 +70,6 @@ import com.openkm.extension.core.DocumentExtensionManager;
 import com.openkm.extension.core.ExtensionException;
 import com.openkm.extractor.RegisteredExtractors;
 import com.openkm.jaas.PrincipalUtils;
-import com.openkm.kea.RDFREpository;
-import com.openkm.kea.metadata.MetadataExtractionException;
-import com.openkm.kea.metadata.MetadataExtractor;
 import com.openkm.module.DocumentModule;
 import com.openkm.module.common.CommonGeneralModule;
 import com.openkm.module.jcr.base.BaseDocumentModule;
@@ -183,27 +177,7 @@ public class JcrDocumentModule implements DocumentModule {
 				}
 			}
 			
-			// Start KEA
 			Collection<String> keywords = doc.getKeywords() != null ? doc.getKeywords() : new ArrayList<String>();
-	        
-			if (!Config.KEA_MODEL_FILE.equals("")) {
-		        MetadataExtractor mdExtractor = new MetadataExtractor(Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER);
-		        MetadataDTO mdDTO = mdExtractor.extract(tmp);
-		        
-		        for (ListIterator<Term> it = mdDTO.getSubjectsAsTerms().listIterator(); it.hasNext();) {
-		        	Term term =  it.next();
-		        	log.info("Term:" + term.getText());
-		        	
-		        	if (Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION) {
-		        		if (RDFREpository.getInstance().getKeywords().contains(term.getText())) {
-		        			keywords.add(term.getText().replace(" ", "_")); // Replacing spaces to "_" and adding at ends space for other word
-		        		}
-		        	} else {
-		        		keywords.add(term.getText().replace(" ", "_")); // Replacing spaces to "_" and adding at ends space for other word
-		        	}
-		        }
-	        }
-	        // End KEA
 	        
 	        // EP - PRE
 			Ref<Node> refParentNode = new Ref<Node>(parentNode);
@@ -267,10 +241,6 @@ public class JcrDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
 			throw e;
-		} catch (MetadataExtractionException e) {
-			log.error(e.getMessage(), e);
-			JCRUtils.discardsPendingChanges(parentNode);
-			throw new RepositoryException(e.getMessage(), e);
 		} catch (VirusDetectedException e) {
 			JCRUtils.discardsPendingChanges(parentNode);
 			throw e;

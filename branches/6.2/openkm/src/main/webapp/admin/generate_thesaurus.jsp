@@ -50,52 +50,52 @@
 		out.println("<table class=\"results\" width=\"90%\">");
 		out.println("<tr><th>Parameter</th><th>Value</th></tr>");
 		
-		out.println("<tr class=\"odd\">");
+		out.println("<tr class=\"even\">");
 		out.println("<td><b>" + Config.PROPERTY_KEA_THESAURUS_SKOS_FILE + "</b></td>");
 		out.println("<td>" + Config.KEA_THESAURUS_SKOS_FILE + "</td>");
 		out.println("</tr>");
 		
-		out.println("<tr class=\"even\">");
+		out.println("<tr class=\"odd\">");
 		out.println("<td><b>" + Config.PROPERTY_KEA_THESAURUS_OWL_FILE + "</b></td>");
 		out.println("<td>" + Config.KEA_THESAURUS_OWL_FILE + "</td>");
 		out.println("</tr>");
 		
-		out.println("<tr class=\"odd\">");
+		out.println("<tr class=\"even\">");
 		out.println("<td><b>" + Config.PROPERTY_KEA_THESAURUS_VOCABULARY_SERQL + "</b></td>");
 		out.println("<td>" + StringEscapeUtils.escapeHtml(Config.KEA_THESAURUS_VOCABULARY_SERQL) + "</td>");
 		out.println("</tr>");
 		
-		out.println("<tr class=\"even\">");
+		out.println("<tr class=\"odd\">");
 		out.println("<td><b>" + Config.PROPERTY_KEA_THESAURUS_BASE_URL + "</b></td>");
 		out.println("<td>" + Config.KEA_THESAURUS_BASE_URL + "</td>");
 		out.println("</tr>");
 		
-		out.println("<tr class=\"odd\">");
+		out.println("<tr class=\"even\">");
 		out.println("<td><b>" + Config.PROPERTY_KEA_THESAURUS_TREE_ROOT + "</b></td>");
 		out.println("<td>" + StringEscapeUtils.escapeHtml(Config.KEA_THESAURUS_TREE_ROOT) + "</td>");
 		out.println("</tr>");
 		
-		out.println("<tr class=\"even\">");
+		out.println("<tr class=\"odd\">");
 		out.println("<td><b>" + Config.PROPERTY_KEA_THESAURUS_TREE_CHILDS + "</b></td>");
 		out.println("<td>" + StringEscapeUtils.escapeHtml(Config.KEA_THESAURUS_TREE_CHILDS) + "</td>");
 		out.println("</tr>");
 		
-		out.println("<tr class=\"odd\">");
+		out.println("<tr class=\"even\">");
 		out.println("<td><b>" + Config.PROPERTY_KEA_MODEL_FILE + "</b></td>");
 		out.println("<td>" + Config.KEA_MODEL_FILE + "</td>");
 		out.println("</tr>");
 		
-		out.println("<tr class=\"even\">");
+		out.println("<tr class=\"odd\">");
 		out.println("<td><b>" + Config.PROPERTY_KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER + "</b></td>");
 		out.println("<td>" + Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER + "</td>");
 		out.println("</tr>");
 		
-		out.println("<tr class=\"odd\">");
+		out.println("<tr class=\"even\">");
 		out.println("<td><b>" + Config.PROPERTY_KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION + "</b></td>");
 		out.println("<td>" + Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION + "</td>");
 		out.println("</tr>");
 		
-		out.println("<tr class=\"even\">");
+		out.println("<tr class=\"odd\">");
 		out.println("<td><b>" + Config.PROPERTY_KEA_STOPWORDS_FILE + "</b></td>");
 		out.println("<td>" + Config.KEA_STOPWORDS_FILE + "</td>");
 		out.println("</tr>");
