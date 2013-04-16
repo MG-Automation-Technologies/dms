@@ -226,8 +226,6 @@ public class Config {
 	public static final String PROPERTY_KEA_THESAURUS_TREE_ROOT = "kea.thesaurus.tree.root";
 	public static final String PROPERTY_KEA_THESAURUS_TREE_CHILDS = "kea.thesaurus.tree.childs";
 	public static final String PROPERTY_KEA_MODEL_FILE = "kea.model.file";
-	public static final String PROPERTY_KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER = "kea.automatic.keyword.extraction.number";
-	public static final String PROPERTY_KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION = "kea.automatic.keyword.extraction.restriction";
 	public static final String PROPERTY_KEA_STOPWORDS_FILE = "kea.stopwords.file";
 	
 	// Validator
@@ -407,8 +405,6 @@ public class Config {
 	public static String KEA_THESAURUS_TREE_ROOT;
 	public static String KEA_THESAURUS_TREE_CHILDS;
 	public static String KEA_MODEL_FILE;
-	public static int KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER;
-	public static boolean KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION;
 	public static String KEA_STOPWORDS_FILE;
 
 	// Validator
@@ -799,10 +795,6 @@ public class Config {
 			values.put(PROPERTY_KEA_THESAURUS_TREE_CHILDS, KEA_THESAURUS_TREE_CHILDS);
 			KEA_MODEL_FILE = ConfigDAO.getString(PROPERTY_KEA_MODEL_FILE, cfg.getProperty(PROPERTY_KEA_MODEL_FILE, ""));
 			values.put(PROPERTY_KEA_MODEL_FILE, KEA_MODEL_FILE);
-			KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER = ConfigDAO.getInteger(PROPERTY_KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER, 0);
-			values.put(PROPERTY_KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER, Integer.toString(KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER));
-			KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION = ConfigDAO.getBoolean(PROPERTY_KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION, false);			
-			values.put(PROPERTY_KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION, Boolean.toString(KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION));
 			KEA_STOPWORDS_FILE = ConfigDAO.getString(PROPERTY_KEA_STOPWORDS_FILE, cfg.getProperty(PROPERTY_KEA_STOPWORDS_FILE, ""));
 			values.put(PROPERTY_KEA_STOPWORDS_FILE, KEA_STOPWORDS_FILE);
 			

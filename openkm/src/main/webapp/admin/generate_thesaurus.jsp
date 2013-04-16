@@ -86,16 +86,6 @@
 		out.println("</tr>");
 		
 		out.println("<tr class=\"odd\">");
-		out.println("<td><b>" + Config.PROPERTY_KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER + "</b></td>");
-		out.println("<td>" + Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER + "</td>");
-		out.println("</tr>");
-		
-		out.println("<tr class=\"even\">");
-		out.println("<td><b>" + Config.PROPERTY_KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION + "</b></td>");
-		out.println("<td>" + Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION + "</td>");
-		out.println("</tr>");
-		
-		out.println("<tr class=\"odd\">");
 		out.println("<td><b>" + Config.PROPERTY_KEA_STOPWORDS_FILE + "</b></td>");
 		out.println("<td>" + Config.KEA_STOPWORDS_FILE + "</td>");
 		out.println("</tr>");
