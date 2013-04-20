@@ -254,7 +254,7 @@ public class DbPropertyGroupModule implements PropertyGroupModule {
 											if (select.getType().equals(Select.TYPE_SIMPLE)) {
 												select.setValue(opt.getValue());
 											} else {
-												select.setValue(select.getValue().concat(opt.getValue()).concat(","));
+												select.setValue(select.getValue().concat(opt.getValue()).concat(Config.LIST_SEPARATOR));
 											}
 											
 											opt.setSelected(true);
@@ -264,7 +264,7 @@ public class DbPropertyGroupModule implements PropertyGroupModule {
 									}
 								}
 								
-								if (select.getValue().endsWith(",")) {
+								if (select.getValue().endsWith(Config.LIST_SEPARATOR)) {
 									select.setValue(select.getValue().substring(0, select.getValue().length() - 1));
 								}
 							}
@@ -346,7 +346,7 @@ public class DbPropertyGroupModule implements PropertyGroupModule {
 										if (select.getType().equals(Select.TYPE_SIMPLE)) {
 											select.setValue(opt.getValue());
 										} else {
-											select.setValue(select.getValue().concat(opt.getValue()).concat(","));
+											select.setValue(select.getValue().concat(opt.getValue()).concat(Config.LIST_SEPARATOR));
 										}
 										
 										opt.setSelected(true);
@@ -356,7 +356,7 @@ public class DbPropertyGroupModule implements PropertyGroupModule {
 								}
 							}
 							
-							if (select.getValue().endsWith(",")) {
+							if (select.getValue().endsWith(Config.LIST_SEPARATOR)) {
 								select.setValue(select.getValue().substring(0, select.getValue().length() - 1));
 							}
 						}
