@@ -198,7 +198,7 @@ public class FolderResource implements MakeCollectionableResource, PutableResour
 			} else {
 				// Restrict for extension
 				if (!Config.RESTRICT_FILE_NAME.isEmpty()) {
-					StringTokenizer st = new StringTokenizer(Config.RESTRICT_FILE_NAME, ";");
+					StringTokenizer st = new StringTokenizer(Config.RESTRICT_FILE_NAME, Config.LIST_SEPARATOR);
 					
 					while (st.hasMoreTokens()) {
 						String wc = st.nextToken().trim();

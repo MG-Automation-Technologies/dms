@@ -440,6 +440,7 @@ public class Config {
 	
 	// Misc
 	public static int SESSION_EXPIRATION = 1800; // 30 mins (session.getMaxInactiveInterval())
+	public static String LIST_SEPARATOR = ";";
 	
 	/**
 	 * Get url base

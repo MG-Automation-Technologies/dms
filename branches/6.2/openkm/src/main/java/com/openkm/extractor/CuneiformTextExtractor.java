@@ -90,7 +90,7 @@ public class CuneiformTextExtractor extends AbstractTextExtractor {
 				sb.append(text);
 				
     			if (!Config.SYSTEM_OCR_ROTATE.equals("")) {
-    				String[] angles = Config.SYSTEM_OCR_ROTATE.split(";"); 
+    				String[] angles = Config.SYSTEM_OCR_ROTATE.split(Config.LIST_SEPARATOR); 
     				
     				for (String angle : angles) {
     					// Rotate
