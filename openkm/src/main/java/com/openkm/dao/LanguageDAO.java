@@ -24,6 +24,7 @@ package com.openkm.dao;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.CacheMode;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -71,15 +72,32 @@ public class LanguageDAO {
 	/**
 	 * Find all languages
 	 */
-	@SuppressWarnings("unchecked")
 	public static List<Language> findAll() throws DatabaseException {
-		log.debug("findAll()");
+		return findAll(CacheMode.NORMAL);
+	}
+	
+	/**
+	 * Refresh 2nd level cache
+	 */
+	public static void refresh() throws DatabaseException {
+		findAll(CacheMode.REFRESH);
+	}
+	
+	/**
+	 * Find all languages
+	 * 
+	 * @param cacheMode Execute language query with the designed cache mode.
+	 */
+	@SuppressWarnings("unchecked")
+	private static List<Language> findAll(CacheMode cacheMode) throws DatabaseException {
+		log.debug("findAll({})", cacheMode);
 		String qs = "from Language lg order by lg.name asc";
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			session.setCacheMode(cacheMode);
 			Query q = session.createQuery(qs);
 			List<Language> ret = q.list();
 			log.debug("findAll: {}", ret);
