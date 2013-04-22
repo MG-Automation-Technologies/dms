@@ -442,6 +442,7 @@ public class LanguageServlet extends BaseServlet {
 			}
 		});
 		
+		LanguageDAO.refresh();
 		log.debug("importLanguage: void");
 	}
 }
