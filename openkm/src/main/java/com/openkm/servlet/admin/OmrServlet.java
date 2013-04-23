@@ -187,6 +187,16 @@ public class OmrServlet extends BaseServlet {
 					// Activity log
 					UserActivity.log(userId, "ADMIN_OMR_DELETE", Long.toString(om.getId()), null, null);
 					list(userId, request, response);
+				} else if (action.equals("editAsc")) {
+					// PENDING TO IMPLEMENT
+					// Activity log
+					UserActivity.log(userId, "ADMIN_OMR_EDIT_ASC", Long.toString(om.getId()), null, null);
+					list(userId, request, response);
+				} else if (action.equals("editFields")) {
+					// PENDING TO IMPLEMENT
+					// Activity log
+					UserActivity.log(userId, "ADMIN_OMR_EDIT_FIELDS", Long.toString(om.getId()), null, null);
+					list(userId, request, response);
 				}
 			}
 		} catch (DatabaseException e) {
