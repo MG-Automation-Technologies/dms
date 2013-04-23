@@ -365,7 +365,11 @@
     <servlet-name>CssServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.CssServlet</servlet-class>
   </servlet>
-  
+   <servlet>
+    <servlet-name>OmrServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.OmrServlet</servlet-class>
+  </servlet>
+   
   <!-- Test Servlets -->
   <servlet>
     <servlet-name>Test</servlet-name>
@@ -658,6 +662,11 @@
     <servlet-name>CssServlet</servlet-name>
     <url-pattern>/admin/Css</url-pattern>
   </servlet-mapping>
+    <servlet-mapping>
+    <servlet-name>OmrServlet</servlet-name>
+    <url-pattern>/admin/Omr</url-pattern>
+  </servlet-mapping>
+
 
   <!-- Test Servlet Mapping -->
   <servlet-mapping>
