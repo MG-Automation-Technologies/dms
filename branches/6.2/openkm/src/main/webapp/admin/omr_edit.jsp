@@ -68,7 +68,7 @@
               </c:choose>
             </td>
           </tr>
-          <c:if test="${om.ascFileName!=''}">
+          <c:if test="${om.ascFileName!=null && om.ascFileName!=''}">
               <c:url value="Omr" var="urlEditAsc">
 	            <c:param name="action" value="editAsc"/>
 	            <c:param name="om_id" value="${om.id}"/>
@@ -76,12 +76,39 @@
 			  <tr>
 			  	<td valign="top">Asc</td>
 			  	<td valign="top">
-			  		<a href="${urlDownload}&type=1">${om.templateFileName}</a>
+			  		<a href="${urlDownload}&type=2">${om.ascFileName}</a>
 			  		<a href="${urlEditAsc}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
 			  	</td>
 			  </tr>
           </c:if>
-          
+          <c:if test="${om.configFileName!=null && om.configFileName!=''}">
+			  <tr>
+			  	<td valign="top">Config</td>
+			  	<td valign="top">
+			  		<a href="${urlDownload}&type=3">${om.configFileName}</a>
+			  	</td>
+			  </tr>
+          </c:if>
+          <c:if test="${om.ascFileName!=null && om.ascFileName!=''}">
+              <c:url value="Omr" var="urlEditFields">
+	            <c:param name="action" value="editFields"/>
+	            <c:param name="om_id" value="${om.id}"/>
+	          </c:url>
+			  <tr>
+			  	<td valign="top">Fields</td>
+			  	<td valign="top">
+			  		<c:choose>
+					    <c:when test="${om.fieldsFileName!=null && om.fieldsFileName!=''}">
+					        <a href="${urlDownload}&type=4">${om.fieldsFileName}</a>
+					    </c:when>
+					    <c:otherwise>
+					        Upload new file
+					    </c:otherwise>
+					</c:choose>
+			  		<a href="${editFields}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
+			  	</td>
+			  </tr>
+          </c:if>
           <tr>
             <td>Active</td>
             <td>
