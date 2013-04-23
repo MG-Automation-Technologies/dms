@@ -10,8 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Type;
-
 
 @Entity
 @Table(name = "OKM_OMR")
@@ -26,20 +24,20 @@ public class Omr implements Serializable {
 	private String name;
 		
 	@Column(name="OM_TEMPLATE_FILE_CONTENT")
-	@Lob @Type(type = "org.hibernate.type.TextType")
-	private String templateFileContent;
+	@Lob
+	private byte[] templateFileContent;
 	
 	@Column(name="OM_ASC_FILE_CONTENT")
-	@Lob @Type(type = "org.hibernate.type.TextType")
-	private String ascFileContent;
+	@Lob 
+	private byte[] ascFileContent;
 	
 	@Column(name="OM_CONFIG_FILE_CONTENT")
-	@Lob @Type(type = "org.hibernate.type.TextType")
-	private String configFileContent;
+	@Lob 
+	private byte[] configFileContent;
 	
 	@Column(name="OM_FIELDS_FILE_CONTENT")
-	@Lob @Type(type = "org.hibernate.type.TextType")
-	private String fieldsFileContent;
+	@Lob
+	private byte[] fieldsFileContent;
 	
 	@Column(name="OM_FILE_TEMPLATE_MIME", length=32)
 	private String templateFileMime;
@@ -83,11 +81,11 @@ public class Omr implements Serializable {
 		this.name = name;
 	}
 
-	public String getTemplateFileContent() {
+	public byte[] getTemplateFileContent() {
 		return templateFileContent;
 	}
 
-	public void setTemplateFilContent(String templateFileContent) {
+	public void setTemplateFilContent(byte[] templateFileContent) {
 		this.templateFileContent = templateFileContent;
 	}
 
@@ -107,27 +105,27 @@ public class Omr implements Serializable {
 		this.templateFileName = templateFileName;
 	}
 
-	public String getAscFileContent() {
+	public byte[] getAscFileContent() {
 		return ascFileContent;
 	}
 
-	public void setAscFileContent(String ascFileContent) {
+	public void setAscFileContent(byte[] ascFileContent) {
 		this.ascFileContent = ascFileContent;
 	}
 
-	public String getConfigFileContent() {
+	public byte[] getConfigFileContent() {
 		return configFileContent;
 	}
 
-	public void setConfigFileContent(String configFileContent) {
+	public void setConfigFileContent(byte[] configFileContent) {
 		this.configFileContent = configFileContent;
 	}
 
-	public String getFieldsFileContent() {
+	public byte[] getFieldsFileContent() {
 		return fieldsFileContent;
 	}
 
-	public void setFieldsFileContent(String fieldsFileContent) {
+	public void setFieldsFileContent(byte[] fieldsFileContent) {
 		this.fieldsFileContent = fieldsFileContent;
 	}
 
@@ -179,7 +177,7 @@ public class Omr implements Serializable {
 		this.fieldsFileName = fieldsFileName;
 	}
 
-	public void setTemplateFileContent(String templateFileContent) {
+	public void setTemplateFileContent(byte[] templateFileContent) {
 		this.templateFileContent = templateFileContent;
 	}
 

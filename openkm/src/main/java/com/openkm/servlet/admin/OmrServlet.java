@@ -27,8 +27,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,7 +53,6 @@ import com.openkm.dao.OmrDAO;
 import com.openkm.dao.bean.Omr;
 import com.openkm.util.FileUtils;
 import com.openkm.util.OMRUtils;
-import com.openkm.util.SecureStore;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
 
@@ -63,7 +62,10 @@ import com.openkm.util.WebUtils;
 public class OmrServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(OmrServlet.class);
-	private static Map<String, String> types = new LinkedHashMap<String, String>();
+	private static final int FILE_TEMPLATE = 1;
+	private static final int FILE_ASC= 2;
+	private static final int FILE_CONFIG = 3;
+	private static final int FILE_FIELDS = 4;
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
@@ -80,6 +82,12 @@ public class OmrServlet extends BaseServlet {
 				edit(userId, request, response);
 			} else if (action.equals("delete")) {
 				delete(userId, request, response);
+			} else if (action.equals("downloadFile")) {
+				downloadFile(userId, request, response);
+			} else if (action.equals("editAsc")) {
+			//	editAscFile(userId, request, response);
+			} else if (action.equals("editFields")) {
+			//	editFieldsFile(userId, request, response);
 			} else {
 				list(userId, request, response);
 			}
@@ -128,7 +136,7 @@ public class OmrServlet extends BaseServlet {
 						// Store template file
 						om.setTemplateFileName(FilenameUtils.getName(item.getName()));
 						om.setTemplateFileMime(MimeTypeConfig.mimeTypes.getContentType(item.getName()));
-						om.setTemplateFilContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
+						om.setTemplateFilContent(IOUtils.toByteArray(is));
 						is.close();
 						// Create training files
 						Map<String, File> trainingMap = OMRUtils.trainingTemplate(tmp);
@@ -139,13 +147,13 @@ public class OmrServlet extends BaseServlet {
 						om.setAscFileName(baseFileName+"asc");
 						om.setAscFileMime("text/plain");
 						is = new FileInputStream(ascFile);
-						om.setAscFileContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
+						om.setAscFileContent(IOUtils.toByteArray(is));
 						is.close();
 						// Store config file
 						om.setConfigFileName(baseFileName+"config");
 						om.setConfigFileMime("text/plain");
 						is = new FileInputStream(configFile);
-						om.setConfigFileContent(SecureStore.b64Encode(IOUtils.toByteArray(is)));
+						om.setConfigFileContent(IOUtils.toByteArray(is));
 						is.close();
 						// Delete temporal files
 						FileUtils.deleteQuietly(tmp);
@@ -166,7 +174,7 @@ public class OmrServlet extends BaseServlet {
 					tmp.setTemplateFileMime(om.getTemplateFileMime());
 					tmp.setTemplateFileName(om.getTemplateFileName());
 					tmp.setName(om.getName());
-					OmrDAO.update(tmp);
+					OmrDAO.updateTemplate(tmp);
 					
 					// Activity log
 					UserActivity.log(userId, "ADMIN_OMR_EDIT", Long.toString(om.getId()), null, om.toString());
@@ -210,7 +218,6 @@ public class OmrServlet extends BaseServlet {
 		ServletContext sc = getServletContext();
 		Omr om = new Omr();
 		sc.setAttribute("action", WebUtils.getString(request, "action"));
-		sc.setAttribute("types", types);
 		sc.setAttribute("om", om);
 		sc.getRequestDispatcher("/admin/omr_edit.jsp").forward(request, response);
 		
@@ -227,7 +234,6 @@ public class OmrServlet extends BaseServlet {
 		ServletContext sc = getServletContext();
 		int omId = WebUtils.getInt(request, "om_id");
 		sc.setAttribute("action", WebUtils.getString(request, "action"));
-		sc.setAttribute("types", types);
 		sc.setAttribute("om", OmrDAO.findByPk(omId));
 		sc.getRequestDispatcher("/admin/omr_edit.jsp").forward(request, response);
 		
@@ -244,10 +250,55 @@ public class OmrServlet extends BaseServlet {
 		ServletContext sc = getServletContext();
 		int omId = WebUtils.getInt(request, "om_id");
 		sc.setAttribute("action", WebUtils.getString(request, "action"));
-		sc.setAttribute("types", types);
 		sc.setAttribute("om", OmrDAO.findByPk(omId));
 		sc.getRequestDispatcher("/admin/omr_edit.jsp").forward(request, response);
 		
 		log.debug("delete: void");
+	}
+	
+	/**
+	 * download file
+	 */
+	private void downloadFile(String userId, HttpServletRequest request, HttpServletResponse response)
+			throws DatabaseException, IOException {
+		log.debug("downloadFile({}, {}, {})", new Object[] { userId, request, response });
+		int omId = WebUtils.getInt(request, "om_id");
+		int fileType = WebUtils.getInt(request, "type");
+		Omr omr = OmrDAO.findByPk(omId);
+	
+		
+		if (omr != null && fileType>=FILE_TEMPLATE && fileType<=FILE_FIELDS) {
+			OutputStream os = response.getOutputStream();
+			try {
+				byte[] fileContent = null;
+				switch (fileType) {
+					case FILE_TEMPLATE:
+						fileContent = omr.getTemplateFileContent();
+						WebUtils.prepareSendFile(request, response, omr.getTemplateFileName(), omr.getTemplateFileMime(), true);
+						break;
+					case FILE_ASC:
+						fileContent = omr.getAscFileContent();
+						WebUtils.prepareSendFile(request, response, omr.getAscFileName(), omr.getAscFileMime(), true);
+						break;
+					case FILE_CONFIG:
+						fileContent = omr.getConfigFileContent();
+						WebUtils.prepareSendFile(request, response, omr.getConfigFileName(), omr.getConfigFileMime(), true);
+						break;
+					case FILE_FIELDS:
+						fileContent = omr.getFieldsFileContent();
+						WebUtils.prepareSendFile(request, response, omr.getFieldsFileName(), omr.getFieldsFileMime(), true);
+						break;
+				}
+				if (fileContent!=null) {
+					response.setContentLength(fileContent.length);
+					os.write(fileContent);
+					os.flush();
+				}
+			} finally {
+				IOUtils.closeQuietly(os);
+			}
+		}
+		
+		log.debug("downloadFile: void");
 	}
 }

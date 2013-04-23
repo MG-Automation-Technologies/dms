@@ -23,7 +23,12 @@
       <br/>
       <table class="results" width="57%">
         <tr>
-          <th>Template name</th> <th>File Name</th> <!-- <th>Active</th>-->
+          <th>Name</th> 
+          <th>Template</th>
+          <th>Asc</th>
+          <th>Config</th>
+          <th>Fields</th>
+          <th>Active</th>
           <th width="100px">
             <c:url value="Omr" var="urlCreate">
               <c:param name="action" value="create"/>
@@ -40,18 +45,21 @@
             <c:param name="action" value="delete"/>
             <c:param name="om_id" value="${om.id}"/>
           </c:url>
-          <!--<c:url value="Omr" var="urlParams">
-            <c:param name="action" value="paramList"/>
+          <c:url value="Omr" var="urlDownload">
+            <c:param name="action" value="downloadFile"/>
             <c:param name="om_id" value="${om.id}"/>
           </c:url>
-          <c:url value="Omr" var="urlGetParams">
-            <c:param name="action" value="getParams"/>
-            <c:param name="om_id" value="${om.id}"/>
-          </c:url>-->
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td>${om.name}</td> <td>${om.fileName}</td> 
+            <td>${om.name}</td> 
+            <td><a href="${urlDownload}&type=1">${om.templateFileName}</a></td>
+            <td><a href="${urlDownload}&type=2">${om.ascFileName}</a></td>
+            <td><a href="${urlDownload}&type=3">${om.configFileName}</a></td>
+            <td>
+            	<c:if test="${om.fieldsFileName!=''}">
+            		<a href="${urlDownload}&type=4">${om.fieldsFileName}</a></td>
+            	</c:if>
+            </td> 
             <td align="center">
-              <!--               
               <c:choose>
                 <c:when test="${om.active}">
                   <img src="img/true.png" alt="Active" title="Active"/>
@@ -60,21 +68,12 @@
                   <img src="img/false.png" alt="Inactive" title="Inactive"/>
                 </c:otherwise>
               </c:choose>
-           <td align="center">-->
+            </td>
+            <td align="center">
               <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
               &nbsp;
               <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
               &nbsp;
-              <!--<c:choose>
-                <c:when test="${om.fileMime == 'application/x-report'}">
-                  <a href="${urlParams}"><img src="img/action/params.png" alt="Parameters" title="Parameters"/></a>
-                </c:when>
-                <c:otherwise>
-                  <img src="img/action/params_disabled.png" alt="Parameters" title="Parameters"/>
-                </c:otherwise>
-              </c:choose>
-              &nbsp;
-             <a href="${urlGetParams}"><img src="img/action/signal.png" alt="Execute" title="Execute"/></a>-->
             </td>
           </tr>
         </c:forEach>

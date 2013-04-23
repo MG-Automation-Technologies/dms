@@ -37,7 +37,6 @@ import org.slf4j.LoggerFactory;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.MimeTypeConfig;
 import com.openkm.dao.bean.Omr;
-import com.openkm.util.SecureStore;
 
 public class OmrDAO {
 	private static Logger log = LoggerFactory.getLogger(OmrDAO.class);
@@ -86,7 +85,7 @@ public class OmrDAO {
 			om.setName(name);
 			om.setTemplateFileName(OmrFile.getName());
 			om.setTemplateFileMime(MimeTypeConfig.mimeTypes.getContentType(OmrFile.getName()));
-			om.setTemplateFilContent(SecureStore.b64Encode(IOUtils.toByteArray(fis)));
+			om.setTemplateFilContent(IOUtils.toByteArray(fis));
 			om.setActive(active);
 			
 			Long id = (Long) session.save(om);
@@ -106,9 +105,9 @@ public class OmrDAO {
 	}
 	
 	/**
-	 * Update
+	 * Update template
 	 */
-	public static void update(Omr om) throws DatabaseException {
+	public static void updateTemplate(Omr om) throws DatabaseException {
 		log.debug("update({})", om);
 		String qs = "select om.fileContent, om.fileName, om.fileName from Omr om where om.id=:id";
 		Session session = null;
@@ -118,11 +117,11 @@ public class OmrDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			
-			if (om.getTemplateFileContent() == null || om.getTemplateFileContent().length() == 0) {
+			if (om.getTemplateFileContent() == null || om.getTemplateFileContent().length == 0) {
 				Query q = session.createQuery(qs);
 				q.setParameter("id", om.getId());
 				Object[] data = (Object[]) q.setMaxResults(1).uniqueResult();
-				om.setTemplateFilContent((String) data[0]);
+				om.setTemplateFilContent((byte[]) data[0]);
 				om.setTemplateFileName((String) data[1]);
 				om.setTemplateFileMime((String) data[2]);
 			}
