@@ -338,8 +338,15 @@ public class DocConverter {
 			HashMap<String, Object> hm = new HashMap<String, Object>();
 			hm.put("fileIn", input.getPath());
 			hm.put("fileOut", output.getPath());
-			String tpl = Config.SYSTEM_IMAGEMAGICK_CONVERT + " ${fileIn}[0] ${fileOut}";
-			cmd = TemplateUtils.replace("SYSTEM_IMAGEMAGICK_CONVERT", tpl, hm);
+			
+			if (MimeTypeConfig.MIME_PSD.equals(mimeType)) {
+				String tpl = Config.SYSTEM_IMAGEMAGICK_CONVERT + " ${fileIn}[0] ${fileOut}";
+				cmd = TemplateUtils.replace("SYSTEM_IMAGEMAGICK_CONVERT", tpl, hm);
+			} else {
+				String tpl = Config.SYSTEM_IMAGEMAGICK_CONVERT + " ${fileIn} ${fileOut}";
+				cmd = TemplateUtils.replace("SYSTEM_IMAGEMAGICK_CONVERT", tpl, hm);
+			}
+			
 			ExecutionResult er = ExecutionUtils.runCmd(cmd);
 			
 			if (er.getExitValue() != 0) {
