@@ -57,6 +57,7 @@ public class MimeTypeConfig {
 	public static String MIME_JPEG = "image/jpeg";
 	public static String MIME_GIF = "image/gif";
 	public static String MIME_PNG = "image/png";
+	public static String MIME_PSD = "image/x-psd";
 	public static String MIME_HTML = "text/html";
 	public static String MIME_TEXT = "text/plain";
 	public static String MIME_XML = "text/xml";
