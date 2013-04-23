@@ -45,7 +45,7 @@ public class OMRUtils {
 	/**
 	 * trainingTemplate
 	 */
-	public static Map<String, File> trainingTemplate(File template) throws IOException {
+	public static  Map<String, File> trainingTemplate(File template) throws IOException {
 		Map<String, File> fileMap = new HashMap<String, File>();
 		Gray8Image grayimage = ImageUtil.readImage(template.getCanonicalPath());
 		ImageManipulation image = new ImageManipulation(grayimage);

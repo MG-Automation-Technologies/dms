@@ -77,6 +77,7 @@ import com.openkm.dao.bean.NodeMail;
 import com.openkm.dao.bean.NodeNote;
 import com.openkm.dao.bean.NodeProperty;
 import com.openkm.dao.bean.RegisteredPropertyGroup;
+import com.openkm.dao.bean.Omr;
 import com.openkm.dao.bean.Translation;
 import com.openkm.dao.bean.cache.UserItems;
 import com.openkm.dao.bean.cache.UserNodeKeywords;
@@ -92,7 +93,9 @@ import com.openkm.util.FileUtils;
  * 
  * @author pavila
  */
+//@SuppressWarnings(HibernateUtil.UNUSED)
 public class HibernateUtil {
+	static final String UNUSED = "unused";
 	private static Logger log = LoggerFactory.getLogger(HibernateUtil.class);
 	private static SessionFactory sessionFactory;
 	public static String HBM2DDL_CREATE = "create";
@@ -150,6 +153,7 @@ public class HibernateUtil {
 		cfg.addAnnotatedClass(NodeLock.class);
 		cfg.addAnnotatedClass(NodeProperty.class);
 		cfg.addAnnotatedClass(RegisteredPropertyGroup.class);
+		cfg.addAnnotatedClass(Omr.class);
 		
 		return cfg;
 	}
