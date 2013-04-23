@@ -100,6 +100,11 @@
         <img src="img/toolbar/utilities.png">
        </a>
     </li>
+    <li>
+      <a target="frame" href="Omr" title="Omr">
+        <img src="img/toolbar/language.png">
+       </a>
+    </li>
     <script type="text/javascript">
       // Identify if being loaded inside an iframe
       if (self == top) {
