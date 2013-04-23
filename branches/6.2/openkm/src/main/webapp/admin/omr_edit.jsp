@@ -9,7 +9,18 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="favicon.ico" />
   <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script>
+  <script src="../js/vanadium-min.js" type="text/javascript"></script>
   <title>Omr Template</title>
+  <script type="text/javascript">
+    $(document).ready(function() {
+    	$('#alert').hide();
+	});
+    
+    function showAlert() {
+    	$('#alert').show();
+    }
+  </script>
 </head>
 <body> 
 <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
@@ -33,12 +44,20 @@
         <input type="hidden" name="om_id" value="${om.id}"/>
         <table class="form" width="425px">
           <tr>
+            <td colspan="2">
+            	<div id="alert" class="ok">The operation can take several minutes, please be patient.</div>
+            </td>
+          </tr>
+          <tr>
             <td nowrap="nowrap">Template name</td>
             <td><input class=":required :only_on_blur" name="om_name" value="${om.name}"/></td>
           </tr>
           <tr>
-            <td>Template</td>
-            <td>
+            <td valign="top">Template</td>
+            <td valign="top">
+              <c:if test="${om.templateFileName!=''}">
+            		<a href="${urlDownload}&type=1">${om.templateFileName}</a><br/>
+              </c:if>
               <c:choose>
                 <c:when test="${action == 'create'}">
                   <input class=":required :only_on_blur" type="file" name="file"/>
@@ -49,10 +68,39 @@
               </c:choose>
             </td>
           </tr>
+          <c:if test="${om.ascFileName!=''}">
+              <c:url value="Omr" var="urlEditAsc">
+	            <c:param name="action" value="editAsc"/>
+	            <c:param name="om_id" value="${om.id}"/>
+	          </c:url>
+			  <tr>
+			  	<td valign="top">Asc</td>
+			  	<td valign="top">
+			  		<a href="${urlDownload}&type=1">${om.templateFileName}</a>
+			  		<a href="${urlEditAsc}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
+			  	</td>
+			  </tr>
+          </c:if>
+          
+          <tr>
+            <td>Active</td>
+            <td>
+              <c:choose>
+                <c:when test="${om.active}">
+                  <input name="om_active" id="ot_active" type="checkbox" checked="checked"/>
+                </c:when>
+                <c:otherwise>
+                  <input name="om_active" id="ot_active" type="checkbox"/>
+                </c:otherwise>
+              </c:choose>
+            </td>
+          </tr>
           <tr>
             <td colspan="2" align="right">
-              <input type="button" onclick="javascript:window.history.back()" value="Cancel"/>
-              <input type="submit" value="Send"/>
+              <div id="buttons">
+              	<input type="button" onclick="javascript:window.history.back()" value="Cancel"/>
+              	<input onclick="javascript:showAlert();" type="submit" value="Send"/>
+              </div>
             </td>
           </tr>
         </table>
