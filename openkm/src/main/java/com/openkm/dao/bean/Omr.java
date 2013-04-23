@@ -44,19 +44,27 @@ public class Omr implements Serializable {
 	@Column(name="OM_FILE_TEMPLATE_MIME", length=32)
 	private String templateFileMime;
 	
-	@Column(name="OM_ASC_TEMPLATE_MIME", length=32)
+	@Column(name="OM_FILE_ASC_MIME", length=32)
 	private String ascFileMime;
 	
-	@Column(name="OM_CONFIG_TEMPLATE_MIME", length=32)
+	@Column(name="OM_FILE_CONFIG_MIME", length=32)
 	private String configFileMime;
 	
-	@Column(name="OM_FIELDS_TEMPLATE_MIME", length=32)
+	@Column(name="OM_FILE_FIELDS_MIME", length=32)
 	private String fieldsFileMime;
-		
+	
+	@Column(name="OM_TEMPLATE_FILENAME", length=128, unique=true)
 	private String templateFileName;
+	
+	@Column(name="OM_ASC_FILENAME", length=128, unique=true)
 	private String ascFileName;
+	
+	@Column(name="OM_CONFIG_FILENAME", length=128, unique=true)
 	private String configFileName;
+	
+	@Column(name="OM_FIELDS_FILENAME", length=128, unique=true)
 	private String fieldsFileName;
+	
 	private boolean active;
 
 	public long getId() {
@@ -189,16 +197,16 @@ public class Omr implements Serializable {
 		sb.append("id=").append(id);
 		sb.append(", name=").append(name);
 		sb.append(", templateFileName=").append(templateFileName);
-		sb.append(", templateFileName=").append(templateFileName);
+		sb.append(", templateFileMime=").append(templateFileMime);
 		sb.append(", templateFileContent=").append("[BIG]");
 		sb.append(", ascFileName=").append(ascFileName);
-		sb.append(", ascFileName=").append(ascFileName);
+		sb.append(", ascFileMime=").append(ascFileMime);
 		sb.append(", ascFileContent=").append("[BIG]");
 		sb.append(", configFileName=").append(configFileName);
-		sb.append(", configFileName=").append(configFileName);
+		sb.append(", configFileMime=").append(configFileMime);
 		sb.append(", configFileContent=").append("[BIG]");
 		sb.append(", fieldsFileName=").append(fieldsFileName);
-		sb.append(", fieldsFileName=").append(fieldsFileName);
+		sb.append(", fieldsFileMime=").append(fieldsFileMime);
 		sb.append(", fieldsFileContent=").append("[BIG]");
 		sb.append(", active=").append(active);
 		sb.append("}");
