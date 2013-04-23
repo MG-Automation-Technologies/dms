@@ -76,6 +76,11 @@
       </a>
     </li>
     <li>
+      <a target="frame" href="Omr" title="OMR">
+        <img src="img/toolbar/omr.png">
+       </a>
+    </li>
+    <li>
       <a target="frame" href="generate_thesaurus.jsp" title="Thesaurus">
         <img src="img/toolbar/thesaurus.png">
       </a>
@@ -98,11 +103,6 @@
     <li>
       <a target="frame" href="utilities.jsp" title="Utilities">
         <img src="img/toolbar/utilities.png">
-       </a>
-    </li>
-    <li>
-      <a target="frame" href="Omr" title="Omr">
-        <img src="img/toolbar/language.png">
        </a>
     </li>
     <script type="text/javascript">
