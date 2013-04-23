@@ -110,6 +110,7 @@ public class OmrServlet extends BaseServlet {
 		updateSessionManager(request);
 		try {
 			if (ServletFileUpload.isMultipartContent(request)) {
+				String fileName = null;
 				InputStream is = null;
 				FileItemFactory factory = new DiskFileItemFactory(); 
 				ServletFileUpload upload = new ServletFileUpload(factory);
@@ -130,39 +131,41 @@ public class OmrServlet extends BaseServlet {
 						}
 					} else {
 						is = item.getInputStream();
-						// Store locally template file to be used later
-						File tmp = FileUtils.createTempFile();
-						FileUtils.copy(is, tmp);
-						// Store template file
-						om.setTemplateFileName(FilenameUtils.getName(item.getName()));
-						om.setTemplateFileMime(MimeTypeConfig.mimeTypes.getContentType(item.getName()));
-						om.setTemplateFilContent(IOUtils.toByteArray(is));
-						is.close();
-						// Create training files
-						Map<String, File> trainingMap = OMRUtils.trainingTemplate(tmp);
-						File ascFile = trainingMap.get(OMRUtils.ASC_FILE);
-						File configFile = trainingMap.get(OMRUtils.CONFIG_FILE);
-						String baseFileName = om.getTemplateFileName()+".";
-						// Store asc file
-						om.setAscFileName(baseFileName+"asc");
-						om.setAscFileMime("text/plain");
-						is = new FileInputStream(ascFile);
-						om.setAscFileContent(IOUtils.toByteArray(is));
-						is.close();
-						// Store config file
-						om.setConfigFileName(baseFileName+"config");
-						om.setConfigFileMime("text/plain");
-						is = new FileInputStream(configFile);
-						om.setConfigFileContent(IOUtils.toByteArray(is));
-						is.close();
-						// Delete temporal files
-						FileUtils.deleteQuietly(tmp);
-						FileUtils.deleteQuietly(ascFile);
-						FileUtils.deleteQuietly(configFile);
+						fileName = item.getName();
 					}
 				}
 			
 				if (action.equals("create")) {
+					// Store locally template file to be used later
+					File tmp = FileUtils.createTempFile();
+					FileUtils.copy(is, tmp);
+					// Store template file
+					om.setTemplateFileName(FilenameUtils.getName(fileName));
+					om.setTemplateFileMime(MimeTypeConfig.mimeTypes.getContentType(fileName));
+					om.setTemplateFilContent(IOUtils.toByteArray(is));
+					is.close();
+					// Create training files
+					Map<String, File> trainingMap = OMRUtils.trainingTemplate(tmp);
+					File ascFile = trainingMap.get(OMRUtils.ASC_FILE);
+					File configFile = trainingMap.get(OMRUtils.CONFIG_FILE);
+					String baseFileName = om.getTemplateFileName()+".";
+					// Store asc file
+					om.setAscFileName(baseFileName+"asc");
+					om.setAscFileMime("text/plain");
+					is = new FileInputStream(ascFile);
+					om.setAscFileContent(IOUtils.toByteArray(is));
+					is.close();
+					// Store config file
+					om.setConfigFileName(baseFileName+"config");
+					om.setConfigFileMime("text/plain");
+					is = new FileInputStream(configFile);
+					om.setConfigFileContent(IOUtils.toByteArray(is));
+					is.close();
+					// Delete temporal files
+					FileUtils.deleteQuietly(tmp);
+					FileUtils.deleteQuietly(ascFile);
+					FileUtils.deleteQuietly(configFile);
+					
 					long id = OmrDAO.create(om);
 					// Activity log
 					UserActivity.log(userId, "ADMIN_OMR_CREATE", Long.toString(id), null, om.toString());
