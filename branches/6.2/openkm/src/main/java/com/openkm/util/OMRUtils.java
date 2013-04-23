@@ -75,5 +75,4 @@ public class OMRUtils {
         image.saveData(dataFile.getCanonicalPath());
         return dataFile;
 	}
-	
 }
