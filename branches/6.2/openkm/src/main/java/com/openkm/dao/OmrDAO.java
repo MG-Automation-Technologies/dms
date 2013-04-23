@@ -194,7 +194,6 @@ public class OmrDAO {
 		Session session = null;
 		
 		try {
-			
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
 			List<Omr> ret = q.list();
