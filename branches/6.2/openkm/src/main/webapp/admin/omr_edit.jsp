@@ -11,7 +11,7 @@
   <link rel="stylesheet" type="text/css" href="css/style.css" />
   <script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script>
   <script src="../js/vanadium-min.js" type="text/javascript"></script>
-  <title>Omr Template</title>
+  <title>OMR Template</title>
   <script type="text/javascript">
     $(document).ready(function() {
     	$('#alert').hide();
@@ -56,7 +56,7 @@
             <td valign="top">Template</td>
             <td valign="top">
               <c:if test="${om.templateFileName!=''}">
-            		<a href="${urlDownload}&type=1">${om.templateFileName}</a><br/>
+            	<a href="${urlDownload}&type=1">${om.templateFileName}</a><br/>
               </c:if>
               <c:choose>
                 <c:when test="${action == 'create'}">
