@@ -117,6 +117,15 @@ public class MailUtils {
 	public static final String MAIL_REGEX = "([_A-Za-z0-9-]+)(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})";
 	
 	/**
+	 * Common properties for all mail sessions.
+	 */
+	public static Properties getProperties() {
+		Properties props = System.getProperties();
+		props.put("mail.imaps.ssl.trust", "*");
+		return props;
+	}
+	
+	/**
 	 * Send mail without FROM addresses.
 	 * 
 	 * @param toAddress Destination addresses.
@@ -568,8 +577,7 @@ public class MailUtils {
 			ItemExistsException, VirusDetectedException, AccessDeniedException, RepositoryException, DatabaseException,
 			UserQuotaExceededException, ExtensionException, AutomationException {
 		log.debug("importMessages({}, {})", new Object[] { token, ma });
-		Properties props = System.getProperties();
-		Session session = Session.getDefaultInstance(props);
+		Session session = Session.getDefaultInstance(getProperties());
 		String exceptionMessage = null;
 		
 		try {
@@ -1047,8 +1055,7 @@ public class MailUtils {
 	 */
 	public static void testConnection(MailAccount ma) throws IOException {
 		log.debug("testConnection({})", ma);
-		Properties props = System.getProperties();
-		Session session = Session.getDefaultInstance(props);
+		Session session = Session.getDefaultInstance(getProperties());
 		Store store = null;
 		Folder folder = null;
 		
