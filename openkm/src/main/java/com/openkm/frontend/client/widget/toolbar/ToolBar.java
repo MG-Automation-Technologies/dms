@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2006-2012 Paco Avila & Josep Llort
+ * Copyright (c) 2006-2013 Paco Avila & Josep Llort
  * 
  * No bytes were intentionally harmed during the development of this application.
  * 
