@@ -64,9 +64,9 @@
   </script>
 </head>
 <body>
-<% 
-	HttpSessionManager.getInstance().add(request); 
-	com.openkm.api.OKMAuth.getInstance().login(); 
+<%
+	HttpSessionManager.getInstance().add(request);
+	com.openkm.api.OKMAuth.getInstance().login();
 %>
   <c:set var="isAdmin"><%=BaseServlet.isAdmin(request)%></c:set>
   <c:choose>
