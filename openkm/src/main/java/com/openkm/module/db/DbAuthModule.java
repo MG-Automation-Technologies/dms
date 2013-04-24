@@ -36,7 +36,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
 
 import com.openkm.bean.Permission;
@@ -55,6 +54,7 @@ import com.openkm.module.common.CommonAuthModule;
 import com.openkm.module.db.stuff.DbSessionManager;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.spring.PrincipalUtils;
+import com.openkm.util.GenericHolder;
 import com.openkm.util.PathUtils;
 import com.openkm.util.StackTraceUtils;
 import com.openkm.util.UserActivity;
@@ -81,15 +81,7 @@ public class DbAuthModule implements AuthModule, ApplicationContextAware {
 				loadUserData(user);
 				
 				// Activity log
-				Object details = auth.getDetails();
-				String remoteAddress = null;
-				
-				if (details instanceof WebAuthenticationDetails) {
-					WebAuthenticationDetails wad = (WebAuthenticationDetails) details;
-					remoteAddress = wad.getRemoteAddress();
-				}
-				
-				UserActivity.log(user, "LOGIN", null, null, remoteAddress);
+				// @see com.openkm.spring.LoggerListener
 			} else {
 				throw new RepositoryException("User not authenticated");
 			}
@@ -113,28 +105,31 @@ public class DbAuthModule implements AuthModule, ApplicationContextAware {
 	public String login(String user, String password) throws AccessDeniedException, RepositoryException,
 			DatabaseException {
 		log.debug("login({}, {})", user, password);
-		String token = null;
+		String token = UUID.randomUUID().toString();
 		
 		try {
 			if (Config.SYSTEM_MAINTENANCE) {
 				throw new AccessDeniedException("System under maintenance");
 			} else {
+				GenericHolder.set(token);
+				
 				AuthenticationManager authMgr = (AuthenticationManager) appCtx.getBean("authenticationManager");
 				Authentication auth = new UsernamePasswordAuthenticationToken(user, password);
 				auth = authMgr.authenticate(auth);
 				log.debug("Authentication: {}", auth);
 				
-				token = UUID.randomUUID().toString();
 				DbSessionManager.getInstance().add(token, auth);
 				loadUserData(user);
 				
 				// Activity log
-				UserActivity.log(user, "LOGIN", null, null, token);
+				// @see com.openkm.spring.LoggerListener
 			}
 		} catch (AuthenticationException e) {
 			throw new AccessDeniedException(e.getMessage(), e);
 		} catch (Exception e) {
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			GenericHolder.unset();
 		}
 		
 		log.debug("login: {}", token);

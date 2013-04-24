@@ -99,7 +99,7 @@ public class PrincipalUtils {
 	 * Get Authentication by token and also set it as current Authentication.
 	 */
 	public static Authentication getAuthenticationByToken(String token) {
-		Authentication auth = DbSessionManager.getInstance().get(token);
+		Authentication auth = DbSessionManager.getInstance().getAuthentication(token);
 		SecurityContextHolder.getContext().setAuthentication(auth);
 		return auth;
 	}

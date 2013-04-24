@@ -26,6 +26,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -89,12 +90,25 @@ public class DbSessionManager {
 	/**
 	 * Return a session
 	 */
-	public Authentication get(String token) {
+	public Authentication getAuthentication(String token) {
 		DbSessionInfo si = (DbSessionInfo) sessions.get(token);
 		
 		if (si != null) {
 			si.setLastAccess(Calendar.getInstance());
 			return si.getAuth();
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Return a token which pertains to a authentication session
+	 */
+	public String getToken(Authentication auth) {
+		for (Entry<String, DbSessionInfo> entry : sessions.entrySet()) {
+			if (entry.getValue().getAuth().equals(auth)) {
+				return entry.getKey();
+			}
 		}
 		
 		return null;
