@@ -55,7 +55,8 @@ public class AutomationServlet extends BaseServlet {
 	private static Logger log = LoggerFactory.getLogger(AutomationServlet.class);
 	private static String ats[] = { AutomationRule.AT_PRE, AutomationRule.AT_POST };
 	private static String events[] = { AutomationRule.EVENT_DOCUMENT_CREATE, AutomationRule.EVENT_DOCUMENT_MOVE,
-		AutomationRule.EVENT_FOLDER_CREATE, AutomationRule.EVENT_TEXT_EXTRACTOR,
+		AutomationRule.EVENT_FOLDER_CREATE, AutomationRule.EVENT_PROPERTY_GROUP_ADD, 
+		AutomationRule.EVENT_PROPERTY_GROUP_SET, AutomationRule.EVENT_TEXT_EXTRACTOR,
 		AutomationRule.EVENT_CONVERSION_PDF, AutomationRule.EVENT_CONVERSION_SWF };
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
