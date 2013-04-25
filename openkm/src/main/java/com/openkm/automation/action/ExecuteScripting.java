@@ -69,6 +69,23 @@ public class ExecuteScripting implements Action  {
 			i.set("node", node);
 			i.set("uuid", uuid);
 			i.set("file", file);
+			
+			if (env.get(AutomationUtils.NODE_UUID) != null) {
+				i.set(AutomationUtils.NODE_UUID, env.get(AutomationUtils.NODE_UUID));
+			}
+			
+			if (env.get(AutomationUtils.NODE_PATH) != null) {
+				i.set(AutomationUtils.NODE_PATH, env.get(AutomationUtils.NODE_PATH));
+			}
+			
+			if (env.get(AutomationUtils.PROPERTY_GROUP_NAME) != null) {
+				i.set(AutomationUtils.PROPERTY_GROUP_NAME, env.get(AutomationUtils.PROPERTY_GROUP_NAME));
+			}
+			
+			if (env.get(AutomationUtils.PROPERTY_GROUP_PROPERTIES) != null) {
+				i.set(AutomationUtils.PROPERTY_GROUP_PROPERTIES, env.get(AutomationUtils.PROPERTY_GROUP_PROPERTIES));
+			}
+			
 			i.eval(script);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
