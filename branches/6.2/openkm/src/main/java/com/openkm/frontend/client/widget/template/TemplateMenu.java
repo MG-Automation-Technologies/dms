@@ -79,7 +79,7 @@ public class TemplateMenu extends MenuBase {
 	Command addFolder = new Command() {
 		public void execute() {
 			if (toolBarOption.createFolderOption) {
-				Main.get().activeFolderTree.addTmpFolderCreate();
+				Main.get().mainPanel.topPanel.toolBar.executeFolderDirectory();
 				Main.get().activeFolderTree.hideMenuPopup();
 			}
 		}

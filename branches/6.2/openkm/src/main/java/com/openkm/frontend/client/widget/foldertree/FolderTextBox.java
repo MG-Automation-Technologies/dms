@@ -21,18 +21,15 @@
 
 package com.openkm.frontend.client.widget.foldertree;
 
-import java.util.Iterator;
-
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.util.Util;
 
@@ -42,19 +39,21 @@ import com.openkm.frontend.client.util.Util;
  * @author jllort
  *
  */
-public class FolderTextBox extends Composite implements HasWidgets {
+public class FolderTextBox extends Composite {
 	private TextBox textBox;
+	private boolean keyShortcutsEnabled = false;
 	
 	/**
 	 * File textBox
 	 */
 	public FolderTextBox() {
+		Main.get().mainPanel.disableKeyShorcuts(); // Disables shortcuts
 		HorizontalPanel panel = new HorizontalPanel();
 		//panel.setSize("100%", "100%");
 		textBox = new TextBox();
-		textBox.addKeyDownHandler(new KeyDownHandler() {
+		textBox.addKeyUpHandler(new KeyUpHandler() {
 			@Override
-			public void onKeyDown(KeyDownEvent event) {
+			public void onKeyUp(KeyUpEvent event) {
 				int action = Main.get().activeFolderTree.getFolderAction();
 				
 				switch (event.getNativeKeyCode()) {
@@ -78,7 +77,9 @@ public class FolderTextBox extends Composite implements HasWidgets {
 								}
 								break;
 						}
-						Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications
+						if (!keyShortcutsEnabled) {
+							Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications
+						}
 					    break;
 					    
 					case (char)KeyCodes.KEY_ESCAPE: 
@@ -93,8 +94,19 @@ public class FolderTextBox extends Composite implements HasWidgets {
 								Main.get().activeFolderTree.cancelRename();
 								break;
 						}
-						Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications
+						if (!keyShortcutsEnabled) {
+							Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications
+						}
 					    break;
+				}
+			}
+		});
+		textBox.addMouseOutHandler(new MouseOutHandler() {
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				if (!keyShortcutsEnabled) {
+					Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications
+					keyShortcutsEnabled = true;
 				}
 			}
 		});
@@ -137,31 +149,5 @@ public class FolderTextBox extends Composite implements HasWidgets {
 	public void setFocus() {
 		textBox.selectAll();
 		textBox.setFocus(true);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.HasWidgets#add(com.google.gwt.user.client.ui.Widget)
-	 */
-	public void add(Widget w) {
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.HasWidgets#clear()
-	 */
-	public void clear() {
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.HasWidgets#iterator()
-	 */
-	public Iterator<Widget> iterator() {
-		return null;
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.HasWidgets#remove(com.google.gwt.user.client.ui.Widget)
-	 */
-	public boolean remove(Widget w) {
-		return true;
 	}
 }
