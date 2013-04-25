@@ -32,6 +32,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 
 import com.google.gson.Gson;
+import com.openkm.automation.AutomationException;
+import com.openkm.automation.AutomationManager;
+import com.openkm.automation.AutomationUtils;
 import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.CheckBox;
 import com.openkm.bean.form.FormElement;
@@ -51,6 +54,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.NodeBaseDAO;
 import com.openkm.dao.RegisteredPropertyGroupDAO;
+import com.openkm.dao.bean.AutomationRule;
 import com.openkm.dao.bean.RegisteredPropertyGroup;
 import com.openkm.module.PropertyGroupModule;
 import com.openkm.spring.PrincipalUtils;
@@ -62,7 +66,7 @@ public class DbPropertyGroupModule implements PropertyGroupModule {
 	
 	@Override
 	public void addGroup(String token, String nodePath, String grpName) throws NoSuchGroupException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, AutomationException {
 		log.debug("addGroup({}, {}, {})", new Object[] { token, nodePath, grpName });
 		Authentication auth = null, oldAuth = null;
 		
@@ -79,7 +83,18 @@ public class DbPropertyGroupModule implements PropertyGroupModule {
 			}
 			
 			String nodeUuid = NodeBaseDAO.getInstance().getUuidFromPath(nodePath);
+			
+			// AUTOMATION - PRE
+			Map<String, Object> env = new HashMap<String, Object>();
+			env.put(AutomationUtils.NODE_UUID, nodeUuid);
+			env.put(AutomationUtils.NODE_PATH, nodePath);
+			env.put(AutomationUtils.PROPERTY_GROUP, grpName);
+			AutomationManager.getInstance().fireEvent(AutomationRule.EVENT_PROPERTY_GROUP_ADD, AutomationRule.AT_PRE, env);
+			
 			NodeBaseDAO.getInstance().addPropertyGroup(nodeUuid, grpName);
+			
+			// AUTOMATION - POST
+			AutomationManager.getInstance().fireEvent(AutomationRule.EVENT_PROPERTY_GROUP_ADD, AutomationRule.AT_POST, env);
 			
 			// Activity log
 			UserActivity.log(auth.getName(), "ADD_PROPERTY_GROUP", nodeUuid, nodePath, grpName);
@@ -388,7 +403,7 @@ public class DbPropertyGroupModule implements PropertyGroupModule {
 	@Override
 	public void setProperties(String token, String nodePath, String grpName, List<FormElement> properties)
 			throws IOException, ParseException, NoSuchPropertyException, NoSuchGroupException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, AutomationException {
 		log.debug("setProperties({}, {}, {}, {})", new Object[] { token, nodePath, grpName, properties });
 		Authentication auth = null, oldAuth = null;
 		
@@ -439,7 +454,17 @@ public class DbPropertyGroupModule implements PropertyGroupModule {
 				}
 			}
 			
+			// AUTOMATION - PRE
+			Map<String, Object> env = new HashMap<String, Object>();
+			env.put(AutomationUtils.NODE_UUID, nodeUuid);
+			env.put(AutomationUtils.NODE_PATH, nodePath);
+			env.put(AutomationUtils.PROPERTY_GROUP, grpName);
+			AutomationManager.getInstance().fireEvent(AutomationRule.EVENT_PROPERTY_GROUP_SET, AutomationRule.AT_PRE, env);
+			
 			NodeBaseDAO.getInstance().setProperties(nodeUuid, grpName, nodProps);
+			
+			// AUTOMATION - POST
+			AutomationManager.getInstance().fireEvent(AutomationRule.EVENT_PROPERTY_GROUP_SET, AutomationRule.AT_POST, env);
 			
 			// Activity log
 			UserActivity.log(auth.getName(), "SET_PROPERTY_GROUP_PROPERTIES", nodeUuid, nodePath, grpName + ", "

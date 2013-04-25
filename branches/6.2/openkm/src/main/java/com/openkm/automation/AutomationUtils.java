@@ -52,6 +52,9 @@ public class AutomationUtils {
 	public static final String FOLDER_NAME = "folderName";
 	public static final String MAIL_NODE = "mailNode";
 	public static final String MAIL_UUID = "mailUuid";
+	public static final String NODE_UUID = "nodeUuid";
+	public static final String NODE_PATH = "nodePath";
+	public static final String PROPERTY_GROUP = "propGroup";
 	
 	/**
 	 * getUuid

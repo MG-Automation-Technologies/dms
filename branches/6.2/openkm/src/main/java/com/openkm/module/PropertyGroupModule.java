@@ -24,6 +24,7 @@ package com.openkm.module;
 import java.io.IOException;
 import java.util.List;
 
+import com.openkm.automation.AutomationException;
 import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.FormElement;
 import com.openkm.core.AccessDeniedException;
@@ -54,7 +55,7 @@ public interface PropertyGroupModule {
 	 */
 	public void addGroup(String token, String nodePath, String grpName) throws NoSuchGroupException,
 			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
-			DatabaseException, ExtensionException;
+			DatabaseException, ExtensionException, AutomationException;
 
 	/**
 	 * Removes a property group from a document.
@@ -129,7 +130,8 @@ public interface PropertyGroupModule {
 	 */
 	public void setProperties(String token, String nodePath, String grpName, List<FormElement> properties)
 			throws IOException, ParseException, NoSuchPropertyException, NoSuchGroupException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, ExtensionException;
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, ExtensionException,
+			AutomationException;
 
 	/**
 	 * Get all possible values which can have a property.
