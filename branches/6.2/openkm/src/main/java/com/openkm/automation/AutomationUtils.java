@@ -54,7 +54,8 @@ public class AutomationUtils {
 	public static final String MAIL_UUID = "mailUuid";
 	public static final String NODE_UUID = "nodeUuid";
 	public static final String NODE_PATH = "nodePath";
-	public static final String PROPERTY_GROUP = "propGroup";
+	public static final String PROPERTY_GROUP_NAME = "propGroupName";
+	public static final String PROPERTY_GROUP_PROPERTIES = "propGroupProperties";
 	
 	/**
 	 * getUuid

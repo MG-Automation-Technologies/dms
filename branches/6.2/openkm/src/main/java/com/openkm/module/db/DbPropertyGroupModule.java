@@ -88,7 +88,7 @@ public class DbPropertyGroupModule implements PropertyGroupModule {
 			Map<String, Object> env = new HashMap<String, Object>();
 			env.put(AutomationUtils.NODE_UUID, nodeUuid);
 			env.put(AutomationUtils.NODE_PATH, nodePath);
-			env.put(AutomationUtils.PROPERTY_GROUP, grpName);
+			env.put(AutomationUtils.PROPERTY_GROUP_NAME, grpName);
 			AutomationManager.getInstance().fireEvent(AutomationRule.EVENT_PROPERTY_GROUP_ADD, AutomationRule.AT_PRE, env);
 			
 			NodeBaseDAO.getInstance().addPropertyGroup(nodeUuid, grpName);
@@ -458,7 +458,8 @@ public class DbPropertyGroupModule implements PropertyGroupModule {
 			Map<String, Object> env = new HashMap<String, Object>();
 			env.put(AutomationUtils.NODE_UUID, nodeUuid);
 			env.put(AutomationUtils.NODE_PATH, nodePath);
-			env.put(AutomationUtils.PROPERTY_GROUP, grpName);
+			env.put(AutomationUtils.PROPERTY_GROUP_NAME, grpName);
+			env.put(AutomationUtils.PROPERTY_GROUP_PROPERTIES, nodProps);
 			AutomationManager.getInstance().fireEvent(AutomationRule.EVENT_PROPERTY_GROUP_SET, AutomationRule.AT_PRE, env);
 			
 			NodeBaseDAO.getInstance().setProperties(nodeUuid, grpName, nodProps);
