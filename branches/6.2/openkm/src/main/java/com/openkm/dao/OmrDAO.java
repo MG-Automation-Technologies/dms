@@ -108,8 +108,11 @@ public class OmrDAO {
 	 * Update template
 	 */
 	public static void updateTemplate(Omr om) throws DatabaseException {
-		log.debug("update({})", om);
-		String qs = "select om.fileContent, om.fileName, om.fileName from Omr om where om.id=:id";
+		log.debug("updateTemplate({})", om);
+		String qs = "select om.templateFileContent, om.templateFileName, templateFileMime " + 
+					"om.ascFileContent, om.ascFileName, ascFileMime " +
+					"om.configFileContent, om.configFileName, configFileMime " +
+					"from Omr om where om.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -124,8 +127,37 @@ public class OmrDAO {
 				om.setTemplateFilContent((byte[]) data[0]);
 				om.setTemplateFileName((String) data[1]);
 				om.setTemplateFileMime((String) data[2]);
+				om.setAscFileContent((byte[]) data[3]);
+				om.setAscFileName((String) data[4]);
+				om.setAscFileMime((String) data[5]);
+				om.setConfigFileContent((byte[]) data[6]);
+				om.setConfigFileName((String) data[7]);
+				om.setConfigFileMime((String) data[8]);
 			}
 			
+			session.update(om);   
+			HibernateUtil.commit(tx);
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("updateTemplate: void");
+	}
+	
+	/**
+	 * Update 
+	 */
+	public static void update(Omr om) throws DatabaseException {
+		log.debug("update({})", om);
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			session.update(om);   
 			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
@@ -169,8 +201,8 @@ public class OmrDAO {
 		log.debug("findByPk({})", omId);
 		String qs = "from Omr om where om.id=:id";
 		Session session = null;
-		
 		try {
+
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
 			q.setLong("id", omId);
