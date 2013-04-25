@@ -45,6 +45,10 @@
             <c:param name="action" value="delete"/>
             <c:param name="om_id" value="${om.id}"/>
           </c:url>
+          <c:url value="Omr" var="urlCheck">
+            <c:param name="action" value="check"/>
+            <c:param name="om_id" value="${om.id}"/>
+          </c:url>
           <c:url value="Omr" var="urlDownload">
             <c:param name="action" value="downloadFile"/>
             <c:param name="om_id" value="${om.id}"/>
@@ -74,6 +78,7 @@
               &nbsp;
               <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
               &nbsp;
+              <a href="${urlCheck}"><img src="img/action/check.png" alt="Check" title="Check"/></a>
             </td>
           </tr>
         </c:forEach>
