@@ -899,6 +899,8 @@ public class FolderTree extends Composite implements OriginPanel {
 	
 			if (refresh) {
 				refresh(refreshResetExplorer);
+			} else {
+				flagFileBrowserFinished = true;
 			}
 	
 			// Only Shows menu popup if flag is enable and selected node is not root
