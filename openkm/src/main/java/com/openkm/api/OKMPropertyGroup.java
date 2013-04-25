@@ -30,6 +30,7 @@ import java.util.StringTokenizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.automation.AutomationException;
 import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.CheckBox;
 import com.openkm.bean.form.FormElement;
@@ -67,7 +68,8 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	
 	@Override
 	public void addGroup(String token, String nodePath, String grpName) throws NoSuchGroupException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, ExtensionException {
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, ExtensionException,
+			AutomationException {
 		log.debug("addGroup({}, {}, {})", new Object[] { token, nodePath, grpName });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		cm.addGroup(token, nodePath, grpName);
@@ -116,7 +118,7 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	@Override
 	public void setProperties(String token, String nodeId, String grpName, List<FormElement> properties) throws IOException,
 			ParseException, NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException, ExtensionException {
+			AccessDeniedException, RepositoryException, DatabaseException, ExtensionException, AutomationException {
 		log.debug("setProperties({}, {}, {}, {})", new Object[] { token, nodeId, grpName, properties });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		cm.setProperties(token, nodeId, grpName, properties);
@@ -125,7 +127,8 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	
 	public void setPropertiesSimple(String token, String nodeId, String grpName, Map<String, String> properties)
 			throws IOException, ParseException, NoSuchPropertyException, NoSuchGroupException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, ExtensionException {
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, ExtensionException,
+			AutomationException {
 		log.debug("setPropertiesSimple({}, {}, {}, {})", new Object[] { token, nodeId, grpName, properties });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		List<FormElement> al = new ArrayList<FormElement>();

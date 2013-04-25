@@ -52,6 +52,8 @@ public class AutomationRule implements Serializable {
 	public static final String EVENT_TEXT_EXTRACTOR = "text_extractor";
 	public static final String EVENT_CONVERSION_PDF = "convert_pdf";
 	public static final String EVENT_CONVERSION_SWF = "convert_swf";
+	public static final String EVENT_PROPERTY_GROUP_ADD = "pgroup_add";
+	public static final String EVENT_PROPERTY_GROUP_SET = "pgroup_set";
 	
 	@Id
 	@Column(name = "ARL_ID")

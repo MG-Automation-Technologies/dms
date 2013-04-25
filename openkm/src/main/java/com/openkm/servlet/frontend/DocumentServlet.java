@@ -828,6 +828,9 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 		} catch (VersionException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Version), e.getMessage());
+		} catch (AutomationException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Automation), e.getMessage()); 
 		} finally {
 			FileUtils.deleteQuietly(tmp);
 			IOUtils.closeQuietly(fis);

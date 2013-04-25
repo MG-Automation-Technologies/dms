@@ -33,6 +33,7 @@ import javax.jws.WebService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.automation.AutomationException;
 import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.CheckBox;
 import com.openkm.bean.form.FormElement;
@@ -62,7 +63,7 @@ public class PropertyGroupService {
 	@WebMethod
 	public void addGroup(@WebParam(name = "token") String token, @WebParam(name = "nodePath") String nodePath,
 			@WebParam(name = "grpName") String grpName) throws NoSuchGroupException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException, ExtensionException {
+			AccessDeniedException, RepositoryException, DatabaseException, ExtensionException, AutomationException {
 		log.debug("addGroup({}, {}, {})", new Object[] { token, nodePath, grpName });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		cm.addGroup(token, nodePath, grpName);
@@ -122,7 +123,8 @@ public class PropertyGroupService {
 	public void setProperties(@WebParam(name = "token") String token, @WebParam(name = "nodePath") String nodePath,
 			@WebParam(name = "grpName") String grpName, @WebParam(name = "properties") FormElementComplex[] properties)
 			throws IOException, ParseException, NoSuchPropertyException, NoSuchGroupException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, ExtensionException {
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, ExtensionException,
+			AutomationException {
 		log.debug("setProperties({}, {}, {}, {})", new Object[] { token, nodePath, grpName, properties });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		List<FormElement> al = new ArrayList<FormElement>();
@@ -139,7 +141,8 @@ public class PropertyGroupService {
 	public void setPropertiesSimple(@WebParam(name = "token") String token, @WebParam(name = "nodePath") String nodePath,
 			@WebParam(name = "grpName") String grpName, @WebParam(name = "properties") StringPair[] properties)
 			throws IOException, ParseException, NoSuchPropertyException, NoSuchGroupException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, ExtensionException {
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, ExtensionException,
+			AutomationException {
 		log.debug("setPropertiesSimple({}, {}, {}, {})", new Object[] { token, nodePath, grpName, properties });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		List<FormElement> al = new ArrayList<FormElement>();
