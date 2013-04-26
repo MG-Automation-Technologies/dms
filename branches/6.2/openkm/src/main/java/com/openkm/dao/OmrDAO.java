@@ -216,6 +216,28 @@ public class OmrDAO {
 	}
 	
 	/**
+	 * getProperties
+	 */
+	@SuppressWarnings("unchecked")
+	public List<String> getProperties(long omId) throws DatabaseException {
+		log.debug("getProperties({})", omId);
+		String qs = "select om.properties from Omr om where om.id=:id";
+		Session session = null;
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setLong("id", omId);
+			List<String> ret = q.list();
+			log.debug("getProperties: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
 	 * Force initialization of a proxy
 	 */
 	private void initializeOMR(List<Omr> omrList) {

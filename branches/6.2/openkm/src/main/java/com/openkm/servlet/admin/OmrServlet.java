@@ -229,10 +229,10 @@ public class OmrServlet extends BaseServlet {
 					formFile.write(IOUtils.toByteArray(is));
 					IOUtils.closeQuietly(formFile);
 					formFile.close();
-					File results = OMRUtils.process(form, om.getId()); 
+					Map<String, String> results = OMRUtils.process(form, om.getId()); 
 					FileUtils.deleteQuietly(form);
 					UserActivity.log(userId, "ADMIN_OMR_CHECK_TEMPLATE", Long.toString(om.getId()), null, null);
-					list(userId, request, response);
+					results(userId, request, response, action, results ,om.getId());
 				}
 			}
 		} catch (DatabaseException e) {
@@ -283,7 +283,7 @@ public class OmrServlet extends BaseServlet {
 			DatabaseException, ParseException, RepositoryException {
 		log.debug("edit({}, {}, {})", new Object[] { userId, request, response });	
 		ServletContext sc = getServletContext();
-		int omId = WebUtils.getInt(request, "om_id");
+		long omId = WebUtils.getLong(request, "om_id");
 		sc.setAttribute("action", WebUtils.getString(request, "action"));
 		sc.setAttribute("om", OmrDAO.getInstance().findByPk(omId));
 		sc.setAttribute("properties", PropertyGroupUtils.getAllGroupsProperties());
@@ -299,7 +299,7 @@ public class OmrServlet extends BaseServlet {
 		log.debug("delete({}, {}, {})", new Object[] { userId, request, response });
 		
 		ServletContext sc = getServletContext();
-		int omId = WebUtils.getInt(request, "om_id");
+		long omId = WebUtils.getLong(request, "om_id");
 		sc.setAttribute("action", WebUtils.getString(request, "action"));
 		sc.setAttribute("om", OmrDAO.getInstance().findByPk(omId));
 		sc.getRequestDispatcher("/admin/omr_edit.jsp").forward(request, response);
@@ -313,11 +313,10 @@ public class OmrServlet extends BaseServlet {
 	private void downloadFile(String userId, HttpServletRequest request, HttpServletResponse response)
 			throws DatabaseException, IOException {
 		log.debug("downloadFile({}, {}, {})", new Object[] { userId, request, response });
-		int omId = WebUtils.getInt(request, "om_id");
+		long omId = WebUtils.getLong(request, "om_id");
 		int fileType = WebUtils.getInt(request, "type");
 		Omr omr = OmrDAO.getInstance().findByPk(omId);
 	
-		
 		if (omr != null && fileType>=FILE_TEMPLATE && fileType<=FILE_FIELDS) {
 			OutputStream os = response.getOutputStream();
 			try {
@@ -357,7 +356,7 @@ public class OmrServlet extends BaseServlet {
 	 */
 	private void editAscFile(String userId, HttpServletRequest request, HttpServletResponse response) throws DatabaseException, ServletException, IOException{
 		ServletContext sc = getServletContext();
-		int omId = WebUtils.getInt(request, "om_id");
+		long omId = WebUtils.getLong(request, "om_id");
 		sc.setAttribute("action", WebUtils.getString(request, "action"));
 		sc.setAttribute("om", OmrDAO.getInstance().findByPk(omId));
 		sc.getRequestDispatcher("/admin/omr_edit_asc.jsp").forward(request, response);
@@ -369,7 +368,7 @@ public class OmrServlet extends BaseServlet {
 	 */
 	private void editFieldsFile(String userId, HttpServletRequest request, HttpServletResponse response) throws DatabaseException, ServletException, IOException{
 		ServletContext sc = getServletContext();
-		int omId = WebUtils.getInt(request, "om_id");
+		long omId = WebUtils.getLong(request, "om_id");
 		sc.setAttribute("action", WebUtils.getString(request, "action"));
 		sc.setAttribute("om", OmrDAO.getInstance().findByPk(omId));
 		sc.getRequestDispatcher("/admin/omr_edit_fields.jsp").forward(request, response);
@@ -381,9 +380,23 @@ public class OmrServlet extends BaseServlet {
 	 */
 	private void check(String userId, HttpServletRequest request, HttpServletResponse response) throws DatabaseException, ServletException, IOException{
 		ServletContext sc = getServletContext();
-		int omId = WebUtils.getInt(request, "om_id");
+		long omId = WebUtils.getLong(request, "om_id");
 		sc.setAttribute("action", WebUtils.getString(request, "action"));
 		sc.setAttribute("om", OmrDAO.getInstance().findByPk(omId));
+		sc.setAttribute("results", null);
+		sc.getRequestDispatcher("/admin/omr_check.jsp").forward(request, response);
+		log.debug("check: void");
+	}
+	
+	/**
+	 * results
+	 */
+	private void results(String userId, HttpServletRequest request, HttpServletResponse response, 
+			String action, Map<String, String> results, long omId) throws DatabaseException, ServletException, IOException{
+		ServletContext sc = getServletContext();
+		sc.setAttribute("action", action);
+		sc.setAttribute("om", OmrDAO.getInstance().findByPk(omId));
+		sc.setAttribute("results", results);
 		sc.getRequestDispatcher("/admin/omr_check.jsp").forward(request, response);
 		log.debug("check: void");
 	}

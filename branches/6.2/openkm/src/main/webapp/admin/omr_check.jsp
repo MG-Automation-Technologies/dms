@@ -38,7 +38,7 @@
       </ul>
       <br/>
   	<form action="Omr" method="post" enctype="multipart/form-data">
-  	<input type="hidden" name="action" value="${action}"/>
+  		<input type="hidden" name="action" value="${action}"/>
         <input type="hidden" name="om_id" value="${om.id}"/>
         <table class="form" width="425px">     
           <tr>
@@ -55,6 +55,28 @@
               </div>
             </td>
           </tr>
+          
+          <c:if test="${results!=null}">
+	        <tr>
+	          <td colspan="2" align="center"><b>RESULTS</b></td>
+	        </tr>
+          	<tr>
+          	  <td colspan="2">
+          	  <table class="results" border="0" cellspacing="4" width="100%">
+          	  	<tr>
+          	  		<th>Key</th>
+          	  		<th>Value</th>
+          	  	</tr>
+          	  	<c:forEach var="result" items="${results}" varStatus="row">
+          	  	  <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
+          	  	  	<td>${result.key} </td>
+          	  	  	<td>${result.value} </td>
+          	  	  </tr>
+	  			</c:forEach>
+          	  </table>
+          	  </td>
+          	</tr>
+      	  </c:if>
         </table>
       </form>
     </c:when>

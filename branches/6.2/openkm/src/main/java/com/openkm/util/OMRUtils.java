@@ -21,9 +21,13 @@
 
 package com.openkm.util;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +39,8 @@ import omrproj.ImageUtil;
 import org.apache.commons.io.IOUtils;
 
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
+import com.openkm.dao.OmrDAO;
 import com.openkm.dao.bean.Omr;
 
 /**
@@ -67,10 +73,11 @@ public class OMRUtils {
 	/**
 	 * process
 	 */
-	public static File process(File fileToProcess, long omr_id) throws IOException, OMRException {
-		File ascCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omr_id + ".asc");
-		File configCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omr_id + ".config");
-		File fieldsCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omr_id + ".fields");
+	public static Map<String, String> process(File fileToProcess, long omId) throws IOException, OMRException, DatabaseException {
+		Map<String, String> values = new HashMap<String, String>();
+		File ascCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omId + ".asc");
+		File configCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omId + ".config");
+		File fieldsCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omId + ".fields");
 		
 		if (ascCache.exists() && configCache.exists() && fieldsCache.exists()) {
 			Gray8Image grayimage = ImageUtil.readImage(fileToProcess.getCanonicalPath());
@@ -82,11 +89,35 @@ public class OMRUtils {
 	        image.searchMarks();
 	        File dataFile = FileUtils.createTempFile();
 	        image.saveData(dataFile.getCanonicalPath());
-	        return dataFile;
+	        // Parse data file
+	        Omr omr = OmrDAO.getInstance().findByPk(omId);
+	        FileInputStream dfStream = new FileInputStream(dataFile);
+	        DataInputStream in = new DataInputStream(dfStream);
+	        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+	        String strLine;
+	        while ((strLine = br.readLine()) != null) {
+	        	// format key=value ( looking for first = )
+	        	String key = "";
+	        	String value = "";
+	        	if (strLine.contains("=")) {
+	        		key = strLine.substring(0, strLine.indexOf("="));
+	        		value = strLine.substring(strLine.indexOf("=")+1);
+	        	}
+	        	if (!key.equals("") && !value.equals("")) {
+		        	if (omr.getProperties().contains(key) ) {
+		        		values.put(key, value);
+		        	}
+	        	}
+	        }
+	        in.close();
+	        FileUtils.deleteQuietly(dataFile);
+	        return values;
 		} else {
 			throw new OMRException("Error asc, config or fields files not found");
 		}
 	}
+	
+	
 	
 	/**
 	 * storeFilesToCache
@@ -121,16 +152,16 @@ public class OMRUtils {
 	/**
 	 * deleteCachedFiles
 	 */
-	public static void deleteCachedFiles(long omr_id) {
-		File ascCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omr_id + ".asc");
+	public static void deleteCachedFiles(long omId) {
+		File ascCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omId + ".asc");
 		if (ascCache.exists()) {
 			FileUtils.deleteQuietly(ascCache);
 		}
-		File configCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omr_id + ".config");
+		File configCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omId + ".config");
 		if (configCache.exists()) {
 			FileUtils.deleteQuietly(configCache);
 		}
-		File fieldsCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omr_id + ".fields");
+		File fieldsCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omId + ".fields");
 		if (fieldsCache.exists()) {
 			FileUtils.deleteQuietly(fieldsCache);
 		}
