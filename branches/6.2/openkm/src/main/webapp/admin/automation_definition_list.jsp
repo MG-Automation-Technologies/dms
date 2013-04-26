@@ -139,7 +139,7 @@
         <li class="path">
           <a href="Automation">Automation rules</a>
         </li>
-        <li class="path">Automation definition</li>
+        <li class="path">Automation definition: ${ar.name}</li>
       </ul>
       <br/>
         <table class="results" width="70%">
