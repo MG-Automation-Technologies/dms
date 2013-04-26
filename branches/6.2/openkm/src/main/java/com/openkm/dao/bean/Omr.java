@@ -1,14 +1,27 @@
 package com.openkm.dao.bean;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Type;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.FieldBridge;
+import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Store;
+
+import com.openkm.module.db.stuff.SetFieldBridge;
 
 
 @Entity
@@ -63,6 +76,15 @@ public class Omr implements Serializable {
 	@Column(name="OM_FIELDS_FILENAME", length=128, unique=true)
 	private String fieldsFileName;
 	
+	@ElementCollection
+	@Column(name = "OMP_PROPERTY")
+	@CollectionTable(name = "OKM_OMR_PROPERTY", joinColumns = { @JoinColumn(name = "OMP_OMR") })
+	@Field(index = Index.UN_TOKENIZED, store = Store.YES)
+	@FieldBridge(impl = SetFieldBridge.class)
+	protected Set<String> properties = new HashSet<String>();
+	
+	@Column(name = "OM_ACTIVE", nullable = false)
+	@Type(type = "true_false")
 	private boolean active;
 
 	public long getId() {
@@ -187,6 +209,14 @@ public class Omr implements Serializable {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+	
+	public Set<String> getProperties() {
+		return properties;
+	}
+
+	public void setProperties(Set<String> properties) {
+		this.properties = properties;
 	}
 
 	public String toString() {
