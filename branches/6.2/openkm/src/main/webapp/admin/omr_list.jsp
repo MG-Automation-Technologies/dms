@@ -59,7 +59,7 @@
             <td><a href="${urlDownload}&type=2">${om.ascFileName}</a></td>
             <td><a href="${urlDownload}&type=3">${om.configFileName}</a></td>
             <td>
-            	<c:if test="${om.fieldsFileName!=''}">
+            	<c:if test="${om.fieldsFileName!=null && om.fieldsFileName ne ''}">
             		<a href="${urlDownload}&type=4">${om.fieldsFileName}</a></td>
             	</c:if>
             </td> 
@@ -78,7 +78,9 @@
               &nbsp;
               <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
               &nbsp;
-              <a href="${urlCheck}"><img src="img/action/check.png" alt="Check" title="Check"/></a>
+              <c:if test="${om.fieldsFileName!=null && om.fieldsFileName ne ''}">
+              	<a href="${urlCheck}"><img src="img/action/check.png" alt="Check" title="Check"/></a>
+              </c:if>
             </td>
           </tr>
         </c:forEach>
