@@ -22,16 +22,20 @@
 package com.openkm.util;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.openkm.util.FileUtils;
-
 import net.sourceforge.jiu.data.Gray8Image;
-
 import omrproj.ImageManipulation;
 import omrproj.ImageUtil;
+
+import org.apache.commons.io.IOUtils;
+
+import com.openkm.core.Config;
+import com.openkm.dao.bean.Omr;
 
 /**
  * OMRUtils
@@ -63,16 +67,72 @@ public class OMRUtils {
 	/**
 	 * process
 	 */
-	public static File process(File fileToProcess, File config, File asc, File fields) throws IOException {
-		Gray8Image grayimage = ImageUtil.readImage(fileToProcess.getCanonicalPath());
-		ImageManipulation image = new ImageManipulation(grayimage);
-        image.locateConcentricCircles();
-        image.readConfig(config.getCanonicalPath());
-        image.readFields(fields.getCanonicalPath());
-        image.readAscTemplate(asc.getCanonicalPath());
-        image.searchMarks();
-        File dataFile = FileUtils.createTempFile();
-        image.saveData(dataFile.getCanonicalPath());
-        return dataFile;
+	public static File process(File fileToProcess, long omr_id) throws IOException, OMRException {
+		File ascCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omr_id + ".asc");
+		File configCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omr_id + ".config");
+		File fieldsCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omr_id + ".fields");
+		
+		if (ascCache.exists() && configCache.exists() && fieldsCache.exists()) {
+			Gray8Image grayimage = ImageUtil.readImage(fileToProcess.getCanonicalPath());
+			ImageManipulation image = new ImageManipulation(grayimage);
+	        image.locateConcentricCircles();
+	        image.readConfig(configCache.getCanonicalPath());
+	        image.readFields(fieldsCache.getCanonicalPath());
+	        image.readAscTemplate(ascCache.getCanonicalPath());
+	        image.searchMarks();
+	        File dataFile = FileUtils.createTempFile();
+	        image.saveData(dataFile.getCanonicalPath());
+	        return dataFile;
+		} else {
+			throw new OMRException("Error asc, config or fields files not found");
+		}
+	}
+	
+	/**
+	 * storeFilesToCache
+	 */
+	public static void storeFilesToCache(Omr omr) throws IOException {
+		File ascCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omr.getId() + ".asc");
+		if (omr.getAscFileContent()!=null && omr.getAscFileContent().length!=0) {
+			OutputStream ascFile = new FileOutputStream(ascCache);
+			ascFile.write(omr.getAscFileContent());
+			IOUtils.closeQuietly(ascFile);
+		} else if (ascCache.exists()) {
+			FileUtils.deleteQuietly(ascCache);
+		}
+		File configCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omr.getId() + ".config");
+		if (omr.getConfigFileContent()!=null && omr.getConfigFileContent().length!=0) {
+			OutputStream configFile = new FileOutputStream(configCache);
+			configFile.write(omr.getConfigFileContent());
+			IOUtils.closeQuietly(configFile);
+		} else if (configCache.exists()) {
+			FileUtils.deleteQuietly(configCache);
+		}
+		File fieldsCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omr.getId() + ".fields");
+		if (omr.getFieldsFileContent()!=null && omr.getFieldsFileContent().length!=0) {
+			OutputStream fieldsFile = new FileOutputStream(fieldsCache);
+			fieldsFile.write(omr.getFieldsFileContent());
+			IOUtils.closeQuietly(fieldsFile);
+		} else if (fieldsCache.exists()) {
+			FileUtils.deleteQuietly(fieldsCache);
+		}
+	}
+	
+	/**
+	 * deleteCachedFiles
+	 */
+	public static void deleteCachedFiles(long omr_id) {
+		File ascCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omr_id + ".asc");
+		if (ascCache.exists()) {
+			FileUtils.deleteQuietly(ascCache);
+		}
+		File configCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omr_id + ".config");
+		if (configCache.exists()) {
+			FileUtils.deleteQuietly(configCache);
+		}
+		File fieldsCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omr_id + ".fields");
+		if (fieldsCache.exists()) {
+			FileUtils.deleteQuietly(fieldsCache);
+		}
 	}
 }

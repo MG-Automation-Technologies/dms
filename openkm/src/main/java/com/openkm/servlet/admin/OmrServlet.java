@@ -53,6 +53,7 @@ import com.openkm.core.MimeTypeConfig;
 import com.openkm.dao.OmrDAO;
 import com.openkm.dao.bean.Omr;
 import com.openkm.util.FileUtils;
+import com.openkm.util.OMRException;
 import com.openkm.util.OMRUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
@@ -172,10 +173,13 @@ public class OmrServlet extends BaseServlet {
 					}
 					if (action.equals("create")) {
 						long id = OmrDAO.create(om);
+						OMRUtils.storeFilesToCache(om);
 						// Activity log
 						UserActivity.log(userId, "ADMIN_OMR_CREATE", Long.toString(id), null, om.toString());
 					} else if (action.equals("edit")) {
 						OmrDAO.updateTemplate(om);
+						om = OmrDAO.findByPk(om.getId());
+						OMRUtils.storeFilesToCache(om);
 						// Activity log
 						UserActivity.log(userId, "ADMIN_OMR_EDIT", Long.toString(om.getId()), null, om.toString());
 					}
@@ -192,6 +196,8 @@ public class OmrServlet extends BaseServlet {
 					omr.setAscFileMime("text/plain");
 					omr.setAscFileName(baseFileName+"asc");
 					OmrDAO.update(omr);
+					omr = OmrDAO.findByPk(om.getId());
+					OMRUtils.storeFilesToCache(omr);
 					// Activity log
 					UserActivity.log(userId, "ADMIN_OMR_EDIT_ASC", Long.toString(om.getId()), null, null);
 					list(userId, request, response);
@@ -202,28 +208,19 @@ public class OmrServlet extends BaseServlet {
 					omr.setFieldsFileMime("text/plain");
 					omr.setFieldsFileName(baseFileName+"fields");
 					OmrDAO.update(omr);
+					omr = OmrDAO.findByPk(om.getId());
+					OMRUtils.storeFilesToCache(omr);
 					// Activity log
 					UserActivity.log(userId, "ADMIN_OMR_EDIT_FIELDS", Long.toString(om.getId()), null, null);
 					list(userId, request, response);
 				} else if (action.equals("check")) {
-					Omr omr = OmrDAO.findByPk(om.getId());
-					File asc=FileUtils.createTempFile();
-					File config=FileUtils.createTempFile();
-					File fields=FileUtils.createTempFile();
 					File form=FileUtils.createTempFile();					
-					OutputStream ascFile = new FileOutputStream(asc);
-					ascFile.write(omr.getAscFileContent());
-					ascFile.close();
-					OutputStream configFile = new FileOutputStream(config);
-					configFile.write(omr.getConfigFileContent());
-					configFile.close();
-					OutputStream fieldsFile = new FileOutputStream(fields);
-					fieldsFile.write(omr.getFieldsFileContent());
-					fieldsFile.close();
 					OutputStream formFile = new FileOutputStream(form);
 					formFile.write(IOUtils.toByteArray(is));
+					IOUtils.closeQuietly(formFile);
 					formFile.close();
-					File results = OMRUtils.process(form , config, asc , fields);	
+					File results = OMRUtils.process(form, om.getId()); 
+					FileUtils.deleteQuietly(form);
 					UserActivity.log(userId, "ADMIN_OMR_CHECK_TEMPLATE", Long.toString(om.getId()), null, null);
 					list(userId, request, response);
 				}
@@ -234,7 +231,10 @@ public class OmrServlet extends BaseServlet {
 		} catch (FileUploadException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);
-		}
+		} catch (OMRException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request, response, e);
+		}	
 	}
 	
 	/**

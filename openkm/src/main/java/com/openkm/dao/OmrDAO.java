@@ -129,7 +129,6 @@ public class OmrDAO {
 				om.setTemplateFilContent((byte[]) data[0]);
 				om.setTemplateFileName((String) data[1]);
 				om.setTemplateFileMime((String) data[2]);
-				
 			}
 			if (om.getAscFileContent() == null || om.getAscFileContent().length == 0) {
 				om.setAscFileContent((byte[]) data[3]);
