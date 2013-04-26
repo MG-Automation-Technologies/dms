@@ -32,26 +32,19 @@
         </li>
         <li class="path">
           <c:choose>
-            <c:when test="${action == 'editAsc'}">Edit Asc File</c:when>
+            <c:when test="${action == 'check'}">Process Template Check</c:when>
           </c:choose>
         </li>
       </ul>
       <br/>
   	<form action="Omr" method="post" enctype="multipart/form-data">
-  		<input type="hidden" name="action" value="${action}"/>
+  	<input type="hidden" name="action" value="${action}"/>
         <input type="hidden" name="om_id" value="${om.id}"/>
-        <table class="form" width="425px">
+        <table class="form" width="425px">     
           <tr>
-		  	<td valign="top">Asc</td>
+		  	<td valign="top">Upload Form</td>
 		  	<td valign="top">
-		  	  <c:if test="${om.ascFileName!=null && om.ascFileName ne ''}">
-		  	  	<c:url value="Omr" var="urlDownload">
-		          <c:param name="action" value="downloadFile"/>
-		          <c:param name="om_id" value="${om.id}"/>
-		        </c:url>
-		        <a href="${urlDownload}&type=2">${om.ascFileName}</a><br/>
-	          </c:if>
-		  	  <input class=":required :only_on_blur" type="file" name="file"/>
+		  		<input class=":required :only_on_blur" type="file" name="file"/>
 		  	</td>
 		  </tr>
           <tr>

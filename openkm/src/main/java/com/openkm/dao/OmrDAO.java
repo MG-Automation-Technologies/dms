@@ -109,9 +109,10 @@ public class OmrDAO {
 	 */
 	public static void updateTemplate(Omr om) throws DatabaseException {
 		log.debug("updateTemplate({})", om);
-		String qs = "select om.templateFileContent, om.templateFileName, templateFileMime " + 
-					"om.ascFileContent, om.ascFileName, ascFileMime " +
-					"om.configFileContent, om.configFileName, configFileMime " +
+		String qs = "select om.templateFileContent, om.templateFileName, templateFileMime, " + 
+					"om.ascFileContent, om.ascFileName, ascFileMime, " +
+					"om.configFileContent, om.configFileName, configFileMime, " +
+					"om.fieldsFileContent, om.fieldsFileName, fieldsFileMime " +
 					"from Omr om where om.id=:id";
 		Session session = null;
 		Transaction tx = null;
@@ -120,19 +121,30 @@ public class OmrDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			
+			Query q = session.createQuery(qs);
+			q.setParameter("id", om.getId());
+			Object[] data = (Object[]) q.setMaxResults(1).uniqueResult();
+			
 			if (om.getTemplateFileContent() == null || om.getTemplateFileContent().length == 0) {
-				Query q = session.createQuery(qs);
-				q.setParameter("id", om.getId());
-				Object[] data = (Object[]) q.setMaxResults(1).uniqueResult();
 				om.setTemplateFilContent((byte[]) data[0]);
 				om.setTemplateFileName((String) data[1]);
 				om.setTemplateFileMime((String) data[2]);
+				
+			}
+			if (om.getAscFileContent() == null || om.getAscFileContent().length == 0) {
 				om.setAscFileContent((byte[]) data[3]);
 				om.setAscFileName((String) data[4]);
 				om.setAscFileMime((String) data[5]);
+			}
+			if (om.getConfigFileContent() == null || om.getConfigFileContent().length == 0) {
 				om.setConfigFileContent((byte[]) data[6]);
 				om.setConfigFileName((String) data[7]);
 				om.setConfigFileMime((String) data[8]);
+			}
+			if (om.getFieldsFileContent() == null || om.getFieldsFileContent().length == 0) {
+				om.setFieldsFileContent((byte[]) data[9]);
+				om.setFieldsFileName((String) data[10]);
+				om.setFieldsFileMime((String) data[11]);
 			}
 			
 			session.update(om);   

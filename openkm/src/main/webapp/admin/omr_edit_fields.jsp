@@ -45,13 +45,13 @@
           <tr>
 		  	<td valign="top">Fields</td>
 		  	<td valign="top">
-		  		<c:if test="${om.fieldsFileName!=null && om.fieldsFileName!=''}">
+		  		<c:if test="${om.fieldsFileName!=null && om.fieldsFileName ne ''}">
 			  		<c:url value="Omr" var="urlDownload">
 		          		<c:param name="action" value="downloadFile"/>
 		          		<c:param name="om_id" value="${om.id}"/>
-		        		</c:url>
+		        	</c:url>
+		        	<a href="${urlDownload}&type=2">${om.fieldsFileName}</a><br/>
           		</c:if>
-		        <a href="${urlDownload}&type=2">${om.fieldsFileName}</a><br/>
 		  		<input class=":required :only_on_blur" type="file" name="file"/>
 		  	</td>
 		  </tr>
