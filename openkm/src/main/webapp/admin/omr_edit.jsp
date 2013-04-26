@@ -9,8 +9,11 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="favicon.ico" />
   <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <link rel="stylesheet" type="text/css" href="css/selectlist/style.css" />
+  <link rel="stylesheet" type="text/css" href="css/selectlist/selectlist.css" />
   <script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script>
   <script src="../js/vanadium-min.js" type="text/javascript"></script>
+  <script type="text/javascript" src="js/jquery.selectlist.min.js"></script>
   <title>OMR Template</title>
   <script type="text/javascript">
     $(document).ready(function() {
@@ -20,6 +23,11 @@
     function showAlert() {
     	$('#alert').show();
     }
+    
+  	$(document).ready(function() {
+    	$('select#om_properties').selectList();
+  	});
+  
   </script>
 </head>
 <body> 
@@ -67,6 +75,23 @@
                 </c:otherwise>
               </c:choose>
             </td>
+          </tr>
+          <tr>
+          	<td valign="top">Property</td>
+          	<td>
+          		<select id="om_properties" name="om_properties" title="Select properties" multiple="multiple">
+	           	  <c:forEach var="property" items="${properties}" varStatus="row">
+	           	    <c:choose>
+	           	    	<c:when test="${u:contains(om.properties, property)}">
+	           	    		<option value="${property}" selected="selected">${property}</option>
+	           	    	</c:when>
+	           	    	<c:otherwise>
+	           	    		<option value="${property}">${property}</option>
+	           	    	</c:otherwise>
+	           	    </c:choose>
+	           	  </c:forEach>
+           	  	</select>
+          	</td>
           </tr>
           <c:if test="${om.ascFileName!=null && om.ascFileName ne ''}">
               <c:url value="Omr" var="urlEditAsc">
