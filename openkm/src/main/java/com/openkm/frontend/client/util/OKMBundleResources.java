@@ -465,4 +465,10 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/icon/actions/filter.png")
 	public ImageResource filter();
+	
+	@Source("com/openkm/frontend/public/img/icon/actions/omr.png")
+	public ImageResource omr();
+	
+	@Source("com/openkm/frontend/public/img/icon/actions/omr_disabled.png")
+	public ImageResource omrDisabled();
 }

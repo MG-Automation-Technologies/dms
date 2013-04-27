@@ -66,6 +66,7 @@ public class ToolBarOption {
 	public boolean restore;
 	public boolean purge;
 	public boolean purgeTrash;
+	public boolean omrOption;
 	
 	/**
 	 * ToolBarOption
@@ -109,5 +110,6 @@ public class ToolBarOption {
 		restore = false;
 		purge = false;
 		purgeTrash = false;
+		omrOption = false;
 	}
 }

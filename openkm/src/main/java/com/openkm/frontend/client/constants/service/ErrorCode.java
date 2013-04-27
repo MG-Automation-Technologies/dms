@@ -70,6 +70,8 @@ public class ErrorCode {
 	public static final String ORIGIN_OKMFastActionService = "038";
 	public static final String ORIGIN_OKMOpenMeetingsService = "039";
 	public static final String ORIGIN_OKMDropboxService		= "043";
+	public static final String ORIGIN_OKMOmrService		= "044";
+	
 	// Cause code error is XXX digits
 	public static final String CAUSE_Repository = "001";
 	public static final String CAUSE_ItemNotFound = "002";
@@ -121,6 +123,7 @@ public class ErrorCode {
 	public static final String CAUSE_UserQuoteExceed = "048";
 	public static final String CAUSE_OpenMeetings = "049";
 	public static final String CAUSE_Dropbox      = "051";
+	public static final String CAUSE_Omr      = "052";
 	
 	/**
 	 * Gets the error The final error code returned by application is

@@ -462,6 +462,9 @@
 	  <property name="uploaderVisible" type="true_false" not-null="true">
 	    <column name="PRF_TB_UPLOADER_VIS" default="'T'"/>
 	  </property>
+	  <property name="omrVisible" type="true_false" not-null="true">
+	    <column name="PRF_TB_OMR_VIS" default="'T'"/>
+	  </property>
     </component>
     
     <!-- FILE BROWSER -->

@@ -200,6 +200,10 @@
     <servlet-name>MassiveServlet</servlet-name>
     <servlet-class>com.openkm.servlet.frontend.MassiveServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>FrontendOmrServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.frontend.OmrServlet</servlet-class>
+  </servlet>
   
   <!-- Extension servlets -->
   <servlet>
@@ -490,6 +494,10 @@
   <servlet-mapping>
     <servlet-name>MassiveServlet</servlet-name>
     <url-pattern>/frontend/Massive</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FrontendOmrServlet</servlet-name>
+    <url-pattern>/frontend/Omr</url-pattern>
   </servlet-mapping>
   
   <!-- Test Servlets -->

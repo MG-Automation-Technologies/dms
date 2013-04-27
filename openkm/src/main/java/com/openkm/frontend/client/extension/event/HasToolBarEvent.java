@@ -66,6 +66,7 @@ public interface HasToolBarEvent {
 		static final int EVENT_EXPORT_TO_ZIP = 28;
 		static final int EVENT_SET_USER_HOME = 29;
 		static final int EVENT_EXECUTE_FIND_DOCUMENT = 30;
+		static final int EVENT_OMR = 31;
 		
 		private int type = 0;
 		
@@ -124,6 +125,7 @@ public interface HasToolBarEvent {
 	ToolBarEventConstant EXECUTE_GO_HOME = new ToolBarEventConstant(ToolBarEventConstant.EVENT_GO_HOME);
 	ToolBarEventConstant EXECUTE_EXPORT_TO_ZIP = new ToolBarEventConstant(ToolBarEventConstant.EVENT_EXPORT_TO_ZIP);
 	ToolBarEventConstant EXECUTE_SET_USER_HOME = new ToolBarEventConstant(ToolBarEventConstant.EVENT_SET_USER_HOME);
+	ToolBarEventConstant EXECUTE_OMR = new ToolBarEventConstant(ToolBarEventConstant.EVENT_OMR);
 	
 	/**
 	 * @param event

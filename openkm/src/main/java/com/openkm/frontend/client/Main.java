@@ -82,6 +82,7 @@ import com.openkm.frontend.client.widget.notify.NotifyPopup;
 import com.openkm.frontend.client.widget.popup.CategoriesPopup;
 import com.openkm.frontend.client.widget.popup.KeywordsPopup;
 import com.openkm.frontend.client.widget.popup.NotesPopup;
+import com.openkm.frontend.client.widget.popup.OmrPopup;
 import com.openkm.frontend.client.widget.popup.PropertyGroupPopup;
 import com.openkm.frontend.client.widget.security.SecurityPopup;
 import com.openkm.frontend.client.widget.startup.StartUp;
@@ -145,6 +146,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	public KeywordsPopup keywordsPopup;
 	public TemplatePopup templatePopup;
 	public ConversionStatus conversionStatus;
+	public OmrPopup omrPopup;
 	
 	// User workspace properties
 	public WorkspaceUserProperties workspaceUserProperties;
@@ -459,6 +461,10 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		templatePopup.setHeight("75px");
 		templatePopup.setStyleName("okm-Popup");
 		conversionStatus = new ConversionStatus();
+		omrPopup = new OmrPopup();
+		omrPopup.setWidth("150px");
+		omrPopup.setHeight("75px");
+		omrPopup.setStyleName("okm-Popup");
 		
 		// Get grid of scrollbars, and clear out the window's built-in margin,
 		// because we want to take advantage of the entire client area.
@@ -545,6 +551,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 				categoriesPopup.langRefresh();
 				keywordsPopup.langRefresh();
 				templatePopup.langRefresh();
+				omrPopup.langRefresh();
 				// Refreshing all menus on tabs not only the active
 				mainPanel.desktop.navigator.taxonomyTree.langRefresh();
 				mainPanel.desktop.navigator.thesaurusTree.langRefresh();
