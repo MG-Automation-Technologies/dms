@@ -216,6 +216,33 @@ public class OmrDAO {
 	}
 	
 	/**
+	 * Find all active
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Omr> findAllActive() throws DatabaseException {
+		log.debug("findAll()");
+		String qs = "from Omr om where om.active=:active order by om.name";
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			Query q = session.createQuery(qs).setCacheable(true);
+			q.setBoolean("active", true);
+			List<Omr> ret = q.list();
+			HibernateUtil.commit(tx);
+			log.debug("findAll: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
 	 * getProperties
 	 */
 	@SuppressWarnings("unchecked")

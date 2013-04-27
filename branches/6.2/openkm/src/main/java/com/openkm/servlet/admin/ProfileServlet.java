@@ -431,6 +431,7 @@ public class ProfileServlet extends BaseServlet {
 		prf.getPrfToolbar().setHomeVisible(WebUtils.getBoolean(request, "prf_toolbar_home_visible"));
 		prf.getPrfToolbar().setScannerVisible(WebUtils.getBoolean(request, "prf_toolbar_scanner_visible"));
 		prf.getPrfToolbar().setUploaderVisible(WebUtils.getBoolean(request, "prf_toolbar_uploader_visible"));
+		prf.getPrfToolbar().setOmrVisible(WebUtils.getBoolean(request, "prf_toolbar_omr_visible"));
 		
 		// File browser
 		prf.getPrfFileBrowser().setStatusVisible(WebUtils.getBoolean(request, "prf_filebrowser_status_visible"));

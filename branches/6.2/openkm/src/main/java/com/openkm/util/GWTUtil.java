@@ -84,6 +84,7 @@ import com.openkm.dao.KeyValueDAO;
 import com.openkm.dao.bean.Bookmark;
 import com.openkm.dao.bean.KeyValue;
 import com.openkm.dao.bean.Language;
+import com.openkm.dao.bean.Omr;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.Report;
 import com.openkm.dao.bean.UserConfig;
@@ -100,6 +101,7 @@ import com.openkm.frontend.client.bean.GWTLanguage;
 import com.openkm.frontend.client.bean.GWTLockInfo;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTNote;
+import com.openkm.frontend.client.bean.GWTOmr;
 import com.openkm.frontend.client.bean.GWTProcessDefinition;
 import com.openkm.frontend.client.bean.GWTProcessInstance;
 import com.openkm.frontend.client.bean.GWTProcessInstanceLogEntry;
@@ -1497,6 +1499,16 @@ public class GWTUtil {
 		
 		gWTReport.setFormElements(gWTFormElemets);
 		return gWTReport;
+	}
+	
+	/**
+	 * Copy Omr to GWTOmr
+	 */
+	public static GWTOmr copy(Omr omr) {
+		GWTOmr gWTOmr = new GWTOmr();
+		gWTOmr.setId(omr.getId());
+		gWTOmr.setName(omr.getName());
+		return gWTOmr;
 	}
 	
 	/**

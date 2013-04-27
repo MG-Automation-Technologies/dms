@@ -46,6 +46,7 @@ public class ProfileToolbar implements Serializable {
 	private boolean homeVisible;
 	private boolean scannerVisible;
 	private boolean uploaderVisible;
+	private boolean omrVisible;
 
 	public boolean isCreateFolderVisible() {
 		return createFolderVisible;
@@ -215,6 +216,14 @@ public class ProfileToolbar implements Serializable {
 		this.uploaderVisible = uploaderVisible;
 	}
 	
+	public boolean isOmrVisible() {
+		return omrVisible;
+	}
+
+	public void setOmrVisible(boolean omrVisible) {
+		this.omrVisible = omrVisible;
+	}
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -239,6 +248,7 @@ public class ProfileToolbar implements Serializable {
 		sb.append(", refreshVisible="); sb.append(refreshVisible);
 		sb.append(", scannerVisible="); sb.append(scannerVisible);
 		sb.append(", uploaderVisible="); sb.append(uploaderVisible);
+		sb.append(", omrVisible="); sb.append(omrVisible);
 		sb.append("}");
 		return sb.toString();
 	}
