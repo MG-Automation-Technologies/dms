@@ -40,6 +40,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sourceforge.jiu.codecs.InvalidFileStructureException;
+import net.sourceforge.jiu.codecs.InvalidImageIndexException;
+import net.sourceforge.jiu.codecs.UnsupportedTypeException;
+import net.sourceforge.jiu.ops.MissingParameterException;
+import net.sourceforge.jiu.ops.WrongParameterException;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
@@ -242,6 +248,21 @@ public class OmrServlet extends BaseServlet {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);
 		} catch (OMRException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request, response, e);
+		} catch (InvalidFileStructureException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request, response, e);
+		} catch (InvalidImageIndexException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request, response, e);
+		} catch (UnsupportedTypeException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request, response, e);
+		} catch (MissingParameterException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request, response, e);
+		} catch (WrongParameterException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);
 		}	
