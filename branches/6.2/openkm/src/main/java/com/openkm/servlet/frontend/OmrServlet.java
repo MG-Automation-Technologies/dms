@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMPropertyGroup;
 import com.openkm.api.OKMRepository;
+import com.openkm.automation.AutomationException;
 import com.openkm.bean.PropertyGroup;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
@@ -152,6 +153,9 @@ public class OmrServlet extends OKMRemoteServiceServlet implements OKMOmrService
 		} catch (NoSuchPropertyException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMOmrService, ErrorCode.CAUSE_NoSuchProperty),e.getMessage());
+		} catch (AutomationException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMOmrService, ErrorCode.CAUSE_Automation),e.getMessage());
 		}
 	}
 }
