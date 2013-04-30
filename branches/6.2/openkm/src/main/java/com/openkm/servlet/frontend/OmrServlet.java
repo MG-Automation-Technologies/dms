@@ -25,18 +25,21 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import net.sourceforge.jiu.codecs.InvalidFileStructureException;
+import net.sourceforge.jiu.codecs.InvalidImageIndexException;
+import net.sourceforge.jiu.codecs.UnsupportedTypeException;
+import net.sourceforge.jiu.ops.MissingParameterException;
+import net.sourceforge.jiu.ops.WrongParameterException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMDocument;
-import com.openkm.api.OKMPropertyGroup;
 import com.openkm.api.OKMRepository;
 import com.openkm.automation.AutomationException;
-import com.openkm.bean.PropertyGroup;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.LockException;
@@ -82,7 +85,6 @@ public class OmrServlet extends OKMRemoteServiceServlet implements OKMOmrService
 	public void process(long omId, String uuid) throws OKMException {
 		InputStream is = null;
 		File fileToProcess = null;
-		List<String> groups = new ArrayList<String>();
 		try {
 			String docPath = OKMRepository.getInstance().getNodePath(null, uuid);
 			// create tmp content file
@@ -92,34 +94,7 @@ public class OmrServlet extends OKMRemoteServiceServlet implements OKMOmrService
 			is.close();
 			// process 
 			Map<String, String> results = OMRUtils.process(fileToProcess, omId); 
-			// capture involved groups from properties
-			for (String key : results.keySet()) {
-				if (key.contains(":")) {
-					String grpName = key.substring(0, key.indexOf("."));
-					grpName = grpName.replace("okp", "okg"); // convert to okg ( group name always start with okg )
-					if (!groups.contains(grpName)) {
-						groups.add(grpName);
-					}
-				}
-			}
-			// Add missing groups
-			for (PropertyGroup registeredGroup : OKMPropertyGroup.getInstance().getGroups(null, docPath)) {
-				if (groups.contains(registeredGroup.getName())) {
-					groups.remove(registeredGroup.getName());
-				}
-			}
-			// Add properties
-			for (String grpName : groups) {
-				OKMPropertyGroup.getInstance().addGroup(null, docPath, grpName);
-				String propertyBeginning = grpName.replace("okg", "okp"); // convert to okp ( property format )
-				Map<String, String> properties = new HashMap<String, String>();
-				for (String key : results.keySet()) {
-					if (key.startsWith(propertyBeginning)) {
-						properties.put(key, results.get(key));
-					}
-				}
-				OKMPropertyGroup.getInstance().setPropertiesSimple(null, docPath, grpName, properties);
-			}
+			OMRUtils.storeMetadata(results, docPath);
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMOmrService, ErrorCode.CAUSE_IO),e.getMessage());
@@ -156,6 +131,25 @@ public class OmrServlet extends OKMRemoteServiceServlet implements OKMOmrService
 		} catch (AutomationException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMOmrService, ErrorCode.CAUSE_Automation),e.getMessage());
+		} catch (InvalidFileStructureException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMOmrService, ErrorCode.CAUSE_Omr),e.getMessage());
+		} catch (InvalidImageIndexException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMOmrService, ErrorCode.CAUSE_Omr),e.getMessage());
+		} catch (UnsupportedTypeException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMOmrService, ErrorCode.CAUSE_Omr),e.getMessage());
+		} catch (MissingParameterException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMOmrService, ErrorCode.CAUSE_Omr),e.getMessage());
+		} catch (WrongParameterException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMOmrService, ErrorCode.CAUSE_Omr),e.getMessage());
+		} finally {
+			if (fileToProcess!=null) {
+				FileUtils.deleteQuietly(fileToProcess);
+			}
 		}
 	}
 }
