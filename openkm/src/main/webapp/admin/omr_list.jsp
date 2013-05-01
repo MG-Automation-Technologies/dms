@@ -21,7 +21,7 @@
         </li>
       </ul>
       <br/>
-      <table class="results" width="57%">
+      <table class="results" width="90%">
         <tr>
           <th>Id</th> 
           <th>Name</th> 
