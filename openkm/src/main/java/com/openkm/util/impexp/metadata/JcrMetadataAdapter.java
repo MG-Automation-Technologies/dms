@@ -241,6 +241,11 @@ public class JcrMetadataAdapter extends MetadataAdapter {
 	}
 	
 	@Override
+	public void importWithMetadata(MailMetadata mmd) throws ItemExistsException, RepositoryException, DatabaseException {
+		throw new UnsupportedOperationException("Not implemented");
+	}
+	
+	@Override
 	public void importWithMetadata(FolderMetadata fmd) throws ItemExistsException, RepositoryException,
 			DatabaseException {
 		log.debug("importWithMetadata({})", fmd);

@@ -27,6 +27,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.mail.MessagingException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -275,6 +277,8 @@ public class DbFolderModule implements FolderModule {
 			// Activity log - Already inside DAO
 			// UserActivity.log(auth.getName(), "PURGE_FOLDER", fldUuid, fldPath, null);
 		} catch (IOException e) {
+			throw new RepositoryException(e.getMessage(), e);
+		} catch (MessagingException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (DatabaseException e) {
 			throw e;

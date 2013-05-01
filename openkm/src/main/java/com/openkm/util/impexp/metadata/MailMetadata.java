@@ -33,6 +33,7 @@ public class MailMetadata {
 	// okm:mail
 	private String uuid;
 	private String path;
+	private String name;
 	private long size;
 	private String from;
 	private List<String> reply = new ArrayList<String>();
@@ -77,6 +78,14 @@ public class MailMetadata {
 
 	public void setPath(String path) {
 		this.path = path;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public long getSize() {
@@ -252,6 +261,7 @@ public class MailMetadata {
 		sb.append("{");
 		sb.append("uuid="); sb.append(uuid);
 		sb.append(", path="); sb.append(path);
+		sb.append(", name="); sb.append(name);
 		sb.append(", size="); sb.append(size);
 		sb.append(", from="); sb.append(from);
 		sb.append(", reply="); sb.append(reply);

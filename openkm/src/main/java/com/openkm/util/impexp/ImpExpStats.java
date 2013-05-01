@@ -25,6 +25,7 @@ public class ImpExpStats {
 	private boolean ok = true;
 	private long documents;
 	private long folders;
+	private long mails;
 	private long size;
 	
 	public boolean isOk() {
@@ -51,6 +52,14 @@ public class ImpExpStats {
 		this.folders = folders;
 	}
 	
+	public long getMails() {
+		return mails;
+	}
+
+	public void setMails(long mails) {
+		this.mails = mails;
+	}
+	
 	public long getSize() {
 		return size;
 	}
@@ -64,6 +73,7 @@ public class ImpExpStats {
 		sb.append("{");
 		sb.append("documents="); sb.append(documents);
 		sb.append(", folders="); sb.append(folders);
+		sb.append(", mails="); sb.append(mails);
 		sb.append(", size="); sb.append(size);
 		sb.append(", ok="); sb.append(ok);
 		sb.append("}");
