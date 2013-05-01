@@ -31,6 +31,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -188,7 +189,8 @@ public class DownloadServlet extends OKMHttpServlet {
 	 * Generate a zip file from a repository folder path
 	 */
 	private void exportFolderAsZip(String fldPath, OutputStream os) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, ArchiveException, ParseException, NoSuchGroupException, IOException, DatabaseException {
+			RepositoryException, ArchiveException, ParseException, NoSuchGroupException, IOException, DatabaseException,
+			MessagingException {
 		log.debug("exportFolderAsZip({}, {})", fldPath, os);
 		StringWriter out = new StringWriter();
 		File tmp = null;
@@ -266,7 +268,8 @@ public class DownloadServlet extends OKMHttpServlet {
 	 * Generate a jar file from a repository folder path
 	 */
 	private void exportFolderAsJar(String fldPath, OutputStream os) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, ArchiveException, ParseException, NoSuchGroupException, IOException, DatabaseException {
+			RepositoryException, ArchiveException, ParseException, NoSuchGroupException, IOException, DatabaseException,
+			MessagingException {
 		log.debug("exportFolderAsJar({}, {})", fldPath, os);
 		StringWriter out = new StringWriter();
 		File tmp = null;

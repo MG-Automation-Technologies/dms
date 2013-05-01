@@ -25,8 +25,10 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.Map.Entry;
+import java.util.UUID;
+
+import javax.mail.MessagingException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -573,6 +575,8 @@ public class DbRepositoryModule implements RepositoryModule {
 			// Activity log
 			UserActivity.log(auth.getName(), "PURGE_TRASH", userTrashUuid, userTrashPath, null);
 		} catch (IOException e) {
+			throw new RepositoryException(e.getMessage(), e);
+		} catch (MessagingException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (DatabaseException e) {
 			throw e;

@@ -50,6 +50,7 @@ import com.openkm.dao.bean.NodeBase;
 import com.openkm.dao.bean.NodeDocument;
 import com.openkm.dao.bean.NodeDocumentVersion;
 import com.openkm.dao.bean.NodeFolder;
+import com.openkm.dao.bean.NodeMail;
 import com.openkm.dao.bean.NodeNote;
 import com.openkm.dao.bean.NodeProperty;
 import com.openkm.module.db.stuff.FsDataStore;
@@ -430,6 +431,122 @@ public class DbMetadataAdapter extends MetadataAdapter {
 		
 		// Activity log
 		UserActivity.log(PrincipalUtils.getUser(), "CREATE_FOLDER", nFld.getUuid(), fmd.getPath(), "Imported with metadata");
+	}
+	
+	@Override
+	public void importWithMetadata(MailMetadata mmd) throws ItemExistsException, RepositoryException, DatabaseException {
+		log.debug("importWithMetadata({})", new Object[] { mmd });
+		NodeMail nMail = new NodeMail();
+		Session session = null;
+		Transaction tx = null;
+		
+		if (NodeBaseDAO.getInstance().itemPathExists(mmd.getPath())) {
+			throw new ItemExistsException(mmd.getPath());
+		}
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			
+			String name = PathUtils.getName(mmd.getPath());
+			String user = PrincipalUtils.getUser();
+			String parentPath = PathUtils.getParent(mmd.getPath());
+			String parentUuid = NodeBaseDAO.getInstance().getUuidFromPath(parentPath);
+			NodeBase parentNode = NodeBaseDAO.getInstance().findByPk(parentUuid);
+			
+			nMail.setParent(parentUuid);
+			nMail.setContext(parentNode.getContext());
+			
+			if (uuid && mmd.getUuid() != null && !mmd.getUuid().equals("")) {
+				nMail.setUuid(mmd.getUuid());
+			} else {
+				nMail.setUuid(UUID.randomUUID().toString());
+			}
+			
+			// Basic
+			if (mmd.getAuthor() != null && !mmd.getAuthor().equals("")) {
+				nMail.setAuthor(mmd.getAuthor());
+			} else {
+				nMail.setAuthor(user);
+			}
+			
+			if (mmd.getName() != null && !mmd.getName().equals("")) {
+				nMail.setName(mmd.getName());
+			} else {
+				nMail.setName(name);
+			}
+			
+			if (mmd.getCreated() != null) {
+				nMail.setCreated(mmd.getCreated());
+			} else {
+				nMail.setCreated(Calendar.getInstance());
+			}
+			
+			if (mmd.getSentDate() != null) {
+				nMail.setSentDate(mmd.getSentDate());
+			}
+			
+			if (mmd.getReceivedDate() != null) {
+				nMail.setReceivedDate(mmd.getReceivedDate());
+			}
+			
+			if (mmd.getSize() > 0) {
+				nMail.setSize(mmd.getSize());
+			}
+			
+			if (mmd.getSubject() != null) {
+				nMail.setSubject(mmd.getSubject());
+			}
+			
+			if (mmd.getContent() != null) {
+				nMail.setContent(mmd.getContent());
+			}
+			
+			// Keywords & categories
+			nMail.setKeywords(mmd.getKeywords());
+			nMail.setCategories(getValues(mmd.getCategories()));
+			
+			// Property Groups
+			importPropertyGroups(nMail, mmd.getPropertyGroups());
+			
+			// Security
+			if (mmd.getGrantedUsers() != null && !mmd.getGrantedUsers().isEmpty()) {
+				nMail.setUserPermissions(mmd.getGrantedUsers());
+			}
+			
+			if (mmd.getGrantedRoles() != null && !mmd.getGrantedRoles().isEmpty()) {
+				nMail.setRolePermissions(mmd.getGrantedRoles());
+			}
+			
+			// Persist
+			session.save(nMail);
+			
+			// Notes
+			if (!mmd.getNotes().isEmpty()) {
+				for (NoteMetadata nmd : mmd.getNotes()) {
+					NodeNote nNote = new NodeNote();
+					nNote.setUuid(UUID.randomUUID().toString());
+					nNote.setParent(nMail.getUuid());
+					nNote.setAuthor(nmd.getUser());
+					nNote.setCreated(nmd.getDate());
+					nNote.setText(nmd.getText());
+					session.save(nNote);
+				}
+			}
+			
+			HibernateUtil.commit(tx);
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} catch (PathNotFoundException e) {
+			HibernateUtil.rollback(tx);
+			throw new RepositoryException("PathNotFound: " + e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		// Activity log
+		UserActivity.log(PrincipalUtils.getUser(), "CREATE_MAIL", nMail.getUuid(), mmd.getPath(), "Imported with metadata");
 	}
 	
 	/**

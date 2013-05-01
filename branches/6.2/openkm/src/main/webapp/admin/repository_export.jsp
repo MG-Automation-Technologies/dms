@@ -87,6 +87,7 @@
 					out.println("<br/>");
 					out.println("<b>Documents:</b> "+stats.getDocuments()+"<br/>");
 					out.println("<b>Folders:</b> "+stats.getFolders()+"<br/>");
+					out.println("<b>Mails:</b> "+stats.getMails()+"<br/>");
 					out.println("<b>Size:</b> "+FormatUtil.formatSize(stats.getSize())+"<br/>");
 					out.println("<b>Time:</b> "+FormatUtil.formatSeconds(end - begin)+"<br/>");
 				} else {

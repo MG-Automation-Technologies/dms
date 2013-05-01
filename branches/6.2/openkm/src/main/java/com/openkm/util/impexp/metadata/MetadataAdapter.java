@@ -178,6 +178,7 @@ public abstract class MetadataAdapter {
 		MailMetadata mmd = new MailMetadata();
 		mmd.setUuid(mail.getUuid());
 		mmd.setPath(mail.getPath());
+		mmd.setName(PathUtils.getName(mail.getPath()));
 		mmd.setSize(mail.getSize());
 		mmd.setFrom(mail.getFrom());
 		mmd.setReply(getValues(mail.getReply()));
@@ -200,9 +201,9 @@ public abstract class MetadataAdapter {
 		}
 		
 		// Notes
-		// for (Note nt : mail.getNotes()) {
-		// mmd.getNotes().add(getMetadata(nt));
-		// }
+		for (Note nt : mail.getNotes()) {
+			mmd.getNotes().add(getMetadata(nt));
+		}
 		
 		// Scripting
 		OKMScripting okmScripting = OKMScripting.getInstance();
@@ -333,5 +334,11 @@ public abstract class MetadataAdapter {
 	 * Perform specific folder metadata import.
 	 */
 	public abstract void importWithMetadata(FolderMetadata fmd) throws ItemExistsException, RepositoryException,
+			DatabaseException;
+	
+	/**
+	 * Perform specific mail metadata import.
+	 */
+	public abstract void importWithMetadata(MailMetadata mmd) throws ItemExistsException, RepositoryException,
 			DatabaseException;
 }

@@ -29,6 +29,9 @@ import java.io.InputStream;
 import java.io.Writer;
 import java.util.Iterator;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
+import com.openkm.bean.Mail;
 import com.openkm.bean.Version;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
@@ -46,11 +50,14 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.DocumentModule;
 import com.openkm.module.FolderModule;
+import com.openkm.module.MailModule;
 import com.openkm.module.ModuleManager;
 import com.openkm.util.FileLogger;
+import com.openkm.util.MailUtils;
 import com.openkm.util.PathUtils;
 import com.openkm.util.impexp.metadata.DocumentMetadata;
 import com.openkm.util.impexp.metadata.FolderMetadata;
+import com.openkm.util.impexp.metadata.MailMetadata;
 import com.openkm.util.impexp.metadata.MetadataAdapter;
 import com.openkm.util.impexp.metadata.VersionMetadata;
 
@@ -67,7 +74,7 @@ public class RepositoryExporter {
 	 */
 	public static ImpExpStats exportDocuments(String token, String fldPath, File fs, boolean metadata, boolean history,
 			Writer out, InfoDecorator deco) throws PathNotFoundException, AccessDeniedException, RepositoryException,
-			FileNotFoundException, IOException, DatabaseException, ParseException, NoSuchGroupException {
+			FileNotFoundException, IOException, DatabaseException, ParseException, NoSuchGroupException, MessagingException {
 		log.debug("exportDocuments({}, {}, {}, {}, {}, {}, {})", new Object[] { token, fldPath, fs, metadata, history, out, deco });
 		ImpExpStats stats;
 		
@@ -114,6 +121,10 @@ public class RepositoryExporter {
 			log.error(e.getMessage(), e);
 			FileLogger.error(BASE_NAME, "NoSuchGroupException ''{0}''", e.getMessage());
 			throw e;
+		} catch (MessagingException e) {
+			log.error(e.getMessage(), e);
+			FileLogger.error(BASE_NAME, "MessagingException ''{0}''", e.getMessage());
+			throw e;
 		}
 		
 		log.debug("exportDocuments: {}", stats);
@@ -126,12 +137,13 @@ public class RepositoryExporter {
 	private static ImpExpStats exportDocumentsHelper(String token, String fldPath, File fs, boolean metadata,
 			boolean history, Writer out, InfoDecorator deco) throws FileNotFoundException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, IOException, DatabaseException, ParseException, 
-			NoSuchGroupException {
+			NoSuchGroupException, MessagingException {
 		log.debug("exportDocumentsHelper({}, {}, {}, {}, {}, {}, {})", new Object[] { token, fldPath, fs, metadata, 
 				history, out, deco });
 		ImpExpStats stats = new ImpExpStats();
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		FolderModule fm = ModuleManager.getFolderModule();
+		MailModule mm = ModuleManager.getMailModule();
 		MetadataAdapter ma = MetadataAdapter.getInstance(token);
 		Gson gson = new Gson();
 		String path = null;
@@ -152,6 +164,16 @@ public class RepositoryExporter {
 				out.write(deco.print(fldPath, 0, null));
 				out.flush();
 			}
+		}
+		
+		for (Iterator<Mail> it = mm.getChildren(token, fldPath).iterator(); it.hasNext();) {
+			Mail mailChild = it.next();
+			path = fsPath.getPath() + File.separator + PathUtils.getName(mailChild.getPath()).replace(':', '_');
+			ImpExpStats mailStats = exportMail(token, mailChild.getPath(), path + ".eml", metadata, out, deco);
+			
+			// Stats
+			stats.setSize(stats.getSize() + mailStats.getSize());
+			stats.setMails(stats.getMails() + mailStats.getMails());
 		}
 		
 		for (Iterator<Document> it = dm.getChildren(token, fldPath).iterator(); it.hasNext();) {
@@ -186,6 +208,44 @@ public class RepositoryExporter {
 		}
 		
 		log.debug("exportDocumentsHelper: {}", stats);
+		return stats;
+	}
+	
+	/**
+	 * Export mail from OpenKM repository to filesystem.
+	 */
+	public static ImpExpStats exportMail(String token, String mailPath, String destPath, boolean metadata,
+			Writer out, InfoDecorator deco) throws PathNotFoundException, RepositoryException, DatabaseException,
+			IOException, AccessDeniedException, ParseException, NoSuchGroupException, MessagingException {
+		MailModule mm = ModuleManager.getMailModule();
+		MetadataAdapter ma = MetadataAdapter.getInstance(token);
+		Mail mailChild = mm.getProperties(token, mailPath);
+		Gson gson = new Gson();
+		ImpExpStats stats = new ImpExpStats();
+		MimeMessage msg = MailUtils.create(token, mailChild);
+		FileOutputStream fos = new FileOutputStream(destPath);
+		msg.writeTo(fos);
+		IOUtils.closeQuietly(fos);
+		FileLogger.info(BASE_NAME, "Created document ''{0}''", mailChild.getPath());
+		
+		// Metadata
+		if (metadata) {
+			MailMetadata mmd = ma.getMetadata(mailChild);
+			String json = gson.toJson(mmd);
+			fos = new FileOutputStream(destPath + Config.EXPORT_METADATA_EXT);
+			IOUtils.write(json, fos);
+			IOUtils.closeQuietly(fos);
+		}
+		
+		if (out != null) {
+			out.write(deco.print(mailChild.getPath(), mailChild.getSize(), null));
+			out.flush();
+		}
+		
+		// Stats
+		stats.setSize(stats.getSize() + mailChild.getSize());
+		stats.setMails(stats.getMails() + 1);
+		
 		return stats;
 	}
 	
