@@ -62,9 +62,9 @@ import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.OmrDAO;
 import com.openkm.dao.bean.Omr;
+import com.openkm.omr.OMRHelper;
 import com.openkm.util.FileUtils;
 import com.openkm.util.OMRException;
-import com.openkm.util.OMRUtils;
 import com.openkm.util.PropertyGroupUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
@@ -166,9 +166,9 @@ public class OmrServlet extends BaseServlet {
 						om.setTemplateFilContent(IOUtils.toByteArray(is));
 						is.close();
 						// Create training files
-						Map<String, File> trainingMap = OMRUtils.trainingTemplate(tmp);
-						File ascFile = trainingMap.get(OMRUtils.ASC_FILE);
-						File configFile = trainingMap.get(OMRUtils.CONFIG_FILE);
+						Map<String, File> trainingMap = OMRHelper.trainingTemplate(tmp);
+						File ascFile = trainingMap.get(OMRHelper.ASC_FILE);
+						File configFile = trainingMap.get(OMRHelper.CONFIG_FILE);
 						String baseFileName = om.getTemplateFileName()+".";
 						// Store asc file
 						om.setAscFileName(baseFileName+"asc");
@@ -189,13 +189,13 @@ public class OmrServlet extends BaseServlet {
 					}
 					if (action.equals("create")) {
 						long id = OmrDAO.getInstance().create(om);
-						OMRUtils.storeFilesToCache(om);
+						OMRHelper.storeFilesToCache(om);
 						// Activity log
 						UserActivity.log(userId, "ADMIN_OMR_CREATE", Long.toString(id), null, om.toString());
 					} else if (action.equals("edit")) {
 						OmrDAO.getInstance().updateTemplate(om);
 						om = OmrDAO.getInstance().findByPk(om.getId());
-						OMRUtils.storeFilesToCache(om);
+						OMRHelper.storeFilesToCache(om);
 						// Activity log
 						UserActivity.log(userId, "ADMIN_OMR_EDIT", Long.toString(om.getId()), null, om.toString());
 					}
@@ -213,7 +213,7 @@ public class OmrServlet extends BaseServlet {
 					omr.setAscFileName(baseFileName+"asc");
 					OmrDAO.getInstance().update(omr);
 					omr = OmrDAO.getInstance().findByPk(om.getId());
-					OMRUtils.storeFilesToCache(omr);
+					OMRHelper.storeFilesToCache(omr);
 					// Activity log
 					UserActivity.log(userId, "ADMIN_OMR_EDIT_ASC", Long.toString(om.getId()), null, null);
 					list(userId, request, response);
@@ -225,7 +225,7 @@ public class OmrServlet extends BaseServlet {
 					omr.setFieldsFileName(baseFileName+"fields");
 					OmrDAO.getInstance().update(omr);
 					omr = OmrDAO.getInstance().findByPk(om.getId());
-					OMRUtils.storeFilesToCache(omr);
+					OMRHelper.storeFilesToCache(omr);
 					// Activity log
 					UserActivity.log(userId, "ADMIN_OMR_EDIT_FIELDS", Long.toString(om.getId()), null, null);
 					list(userId, request, response);
@@ -235,7 +235,7 @@ public class OmrServlet extends BaseServlet {
 					formFile.write(IOUtils.toByteArray(is));
 					IOUtils.closeQuietly(formFile);
 					formFile.close();
-					Map<String, String> results = OMRUtils.process(form, om.getId()); 
+					Map<String, String> results = OMRHelper.process(form, om.getId()); 
 					FileUtils.deleteQuietly(form);
 					UserActivity.log(userId, "ADMIN_OMR_CHECK_TEMPLATE", Long.toString(om.getId()), null, null);
 					results(userId, request, response, action, results ,om.getId());

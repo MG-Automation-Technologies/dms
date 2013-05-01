@@ -23,6 +23,7 @@
       <br/>
       <table class="results" width="57%">
         <tr>
+          <th>Id</th> 
           <th>Name</th> 
           <th>Template</th>
           <th>Asc</th>
@@ -54,6 +55,7 @@
             <c:param name="om_id" value="${om.id}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
+          	<td>${om.id}</td> 
             <td>${om.name}</td> 
             <td><a href="${urlDownload}&type=1">${om.templateFileName}</a></td>
             <td><a href="${urlDownload}&type=2">${om.ascFileName}</a></td>

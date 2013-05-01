@@ -19,7 +19,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.util;
+package com.openkm.omr;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -43,8 +44,11 @@ import net.sourceforge.jiu.ops.WrongParameterException;
 
 import org.apache.commons.io.IOUtils;
 
+import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMPropertyGroup;
+import com.openkm.api.OKMRepository;
 import com.openkm.automation.AutomationException;
+import com.openkm.bean.Document;
 import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Select;
@@ -52,6 +56,7 @@ import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.LockException;
+import com.openkm.core.MimeTypeConfig;
 import com.openkm.core.NoSuchGroupException;
 import com.openkm.core.NoSuchPropertyException;
 import com.openkm.core.ParseException;
@@ -60,17 +65,24 @@ import com.openkm.core.RepositoryException;
 import com.openkm.dao.OmrDAO;
 import com.openkm.dao.bean.Omr;
 import com.openkm.extension.core.ExtensionException;
-import com.openkm.omr.ImageManipulation;
-import com.openkm.omr.ImageUtil;
+import com.openkm.util.FileUtils;
+import com.openkm.util.OMRException;
 
 /**
- * OMRUtils
+ * OMRHelper
  * 
  * @author jllort
  */
-public class OMRUtils {
+public class OMRHelper {
 	public static final String ASC_FILE = "ASC_FILE";
 	public static final String CONFIG_FILE = "CONFIG_FILE";
+	
+	/**
+	 * isValid
+	 */
+	public static boolean isValid(Document doc) {
+		return doc.getMimeType().equals(MimeTypeConfig.MIME_PNG);
+	}
 	
 	/**
 	 * trainingTemplate
@@ -198,6 +210,66 @@ public class OMRUtils {
 				}
 			}
 			OKMPropertyGroup.getInstance().setPropertiesSimple(null, docPath, grpName, properties);
+		}
+	}
+	
+	/**
+	 * processAndStoreMetadata
+	 */
+	public static void processAndStoreMetadata(long omId, String uuid) throws IOException, PathNotFoundException, AccessDeniedException, 
+		RepositoryException, DatabaseException, OMRException, NoSuchGroupException, LockException, ExtensionException, 
+		ParseException, NoSuchPropertyException, AutomationException, InvalidFileStructureException, InvalidImageIndexException, 
+		UnsupportedTypeException, MissingParameterException, WrongParameterException {
+		InputStream is = null;
+		File fileToProcess = null;
+		try {
+			String docPath = OKMRepository.getInstance().getNodePath(null, uuid);
+			// create tmp content file
+			fileToProcess = FileUtils.createTempFile();
+			is = OKMDocument.getInstance().getContent(null, docPath, false);
+			FileUtils.copy(is, fileToProcess);
+			is.close();
+			// process 
+			Map<String, String> results = OMRHelper.process(fileToProcess, omId); 
+			OMRHelper.storeMetadata(results, docPath);
+		} catch (IOException e) {
+			throw e;
+		} catch (PathNotFoundException e) {
+			throw e;
+		} catch (AccessDeniedException e) {
+			throw e;
+		} catch (RepositoryException e) {
+			throw e;
+		} catch (DatabaseException e) {
+			throw e;
+		} catch (OMRException e) {
+			throw e;
+		} catch (NoSuchGroupException e) {
+			throw e;
+		} catch (LockException e) {
+			throw e;
+		} catch (ExtensionException e) {
+			throw e;
+		} catch (ParseException e) {
+			throw e;
+		} catch (NoSuchPropertyException e) {
+			throw e;
+		} catch (AutomationException e) {
+			throw e;
+		} catch (InvalidFileStructureException e) {
+			throw e;
+		} catch (InvalidImageIndexException e) {
+			throw e;
+		} catch (UnsupportedTypeException e) {
+			throw e;
+		} catch (MissingParameterException e) {
+			throw e;
+		} catch (WrongParameterException e) {
+			throw e;
+		} finally {
+			if (fileToProcess!=null) {
+				FileUtils.deleteQuietly(fileToProcess);
+			}
 		}
 	}
 	
