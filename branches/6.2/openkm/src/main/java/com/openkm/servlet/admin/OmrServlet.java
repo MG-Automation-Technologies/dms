@@ -219,26 +219,26 @@ public class OmrServlet extends BaseServlet {
 					list(userId, request, response);
 				} else if (action.equals("editAsc")) {
 					Omr omr = OmrDAO.getInstance().findByPk(om.getId());
-					String baseFileName = omr.getTemplateFileName() + ".";
 					omr.setAscFileContent(IOUtils.toByteArray(is));
-					omr.setAscFileMime("text/plain");
-					omr.setAscFileName(baseFileName + "asc");
+					omr.setAscFileMime(MimeTypeConfig.MIME_TEXT);
+					omr.setAscFileName(omr.getTemplateFileName() + ".asc");
 					OmrDAO.getInstance().update(omr);
 					omr = OmrDAO.getInstance().findByPk(om.getId());
 					OMRHelper.storeFilesToCache(omr);
+					IOUtils.closeQuietly(is);
 					
 					// Activity log
 					UserActivity.log(userId, "ADMIN_OMR_EDIT_ASC", Long.toString(om.getId()), null, null);
 					list(userId, request, response);
 				} else if (action.equals("editFields")) {
 					Omr omr = OmrDAO.getInstance().findByPk(om.getId());
-					String baseFileName = omr.getTemplateFileName() + ".";
 					omr.setFieldsFileContent(IOUtils.toByteArray(is));
-					omr.setFieldsFileMime("text/plain");
-					omr.setFieldsFileName(baseFileName + "fields");
+					omr.setFieldsFileMime(MimeTypeConfig.MIME_TEXT);
+					omr.setFieldsFileName(omr.getTemplateFileName() + ".fields");
 					OmrDAO.getInstance().update(omr);
 					omr = OmrDAO.getInstance().findByPk(om.getId());
 					OMRHelper.storeFilesToCache(omr);
+					IOUtils.closeQuietly(is);
 					
 					// Activity log
 					UserActivity.log(userId, "ADMIN_OMR_EDIT_FIELDS", Long.toString(om.getId()), null, null);
@@ -251,6 +251,7 @@ public class OmrServlet extends BaseServlet {
 					formFile.close();
 					Map<String, String> results = OMRHelper.process(form, om.getId());
 					FileUtils.deleteQuietly(form);
+					IOUtils.closeQuietly(is);
 					UserActivity.log(userId, "ADMIN_OMR_CHECK_TEMPLATE", Long.toString(om.getId()), null, null);
 					results(userId, request, response, action, results, om.getId());
 				}
@@ -278,7 +279,7 @@ public class OmrServlet extends BaseServlet {
 			sendErrorRedirect(request, response, e);
 		} catch (WrongParameterException e) {
 			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
+			sendErrorRedirect(request, response, e);	
 		}
 	}
 	
