@@ -18,17 +18,14 @@
   <script type="text/javascript">
     $(document).ready(function() {
     	$('#alert').hide();
-	});
-    
-    function showAlert() {
-    	$('#alert').show();
-    	$('input[type=submit]').attr('disabled', 'disabled');
-    }
-    
-  	$(document).ready(function() {
     	$('select#om_properties').selectList();
-  	});
-  
+    	
+    	$('#form').submit(function() {
+    		$('#alert').show();
+    		$('input:submit').attr('disabled', true);
+    		return true;
+    	});
+	});
   </script>
 </head>
 <body> 
@@ -48,7 +45,7 @@
         </li>
       </ul>
       <br/>
-  	<form action="Omr" method="post" enctype="multipart/form-data">
+  	<form action="Omr" method="post" enctype="multipart/form-data" id="form">
   	<input type="hidden" name="action" value="${action}"/>
         <input type="hidden" name="om_id" value="${om.id}"/>
         <table class="form" width="425px">
@@ -158,7 +155,7 @@
             <td colspan="2" align="right">
               <div id="buttons">
               	<input type="button" onclick="javascript:window.history.back()" value="Cancel"/>
-              	<input onclick="javascript:showAlert();" type="submit" value="Send"/>
+              	<input type="submit" value="Send"/>
               </div>
             </td>
           </tr>
