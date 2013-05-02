@@ -22,6 +22,7 @@
     
     function showAlert() {
     	$('#alert').show();
+    	$('input[type=submit]').attr('disabled', 'disabled');
     }
     
   	$(document).ready(function() {
@@ -40,9 +41,9 @@
         </li>
         <li class="path">
           <c:choose>
-            <c:when test="${action == 'create'}">Create omr template</c:when>
-            <c:when test="${action == 'edit'}">Edit omr template</c:when>
-            <c:when test="${action == 'delete'}">Delete omr template</c:when>
+            <c:when test="${action == 'create'}">Create OMR template</c:when>
+            <c:when test="${action == 'edit'}">Edit OMR template</c:when>
+            <c:when test="${action == 'delete'}">Delete OMR template</c:when>
           </c:choose>
         </li>
       </ul>
@@ -53,7 +54,7 @@
         <table class="form" width="425px">
           <tr>
             <td colspan="2">
-            	<div id="alert" class="ok">The operation can take several minutes, please be patient.</div>
+            	<div id="alert" class="ok" style="text-align: center;">The operation may take several minutes, please be patient...</div>
             </td>
           </tr>
           <tr>
@@ -63,7 +64,7 @@
           <tr>
             <td valign="top">Template</td>
             <td valign="top">
-              <c:if test="${om.templateFileName!=null && om.templateFileName ne ''}">
+              <c:if test="${om.templateFileName != null && om.templateFileName ne ''}">
             	<a href="${urlDownload}&type=1">${om.templateFileName}</a><br/>
               </c:if>
               <c:choose>
@@ -77,9 +78,9 @@
             </td>
           </tr>
           <tr>
-          	<td valign="top">Property</td>
+          	<td valign="top">Properties</td>
           	<td>
-          		<select id="om_properties" name="om_properties" title="Select properties" multiple="multiple">
+          		<select id="om_properties" name="om_properties" title="Select property" multiple="multiple">
 	           	  <c:forEach var="property" items="${properties}" varStatus="row">
 	           	    <c:choose>
 	           	    	<c:when test="${u:contains(om.properties, property)}">
@@ -93,7 +94,7 @@
            	  	</select>
           	</td>
           </tr>
-          <c:if test="${om.ascFileName!=null && om.ascFileName ne ''}">
+          <c:if test="${om.ascFileName != null && om.ascFileName ne ''}">
               <c:url value="Omr" var="urlEditAsc">
 	            <c:param name="action" value="editAsc"/>
 	            <c:param name="om_id" value="${om.id}"/>
@@ -102,13 +103,13 @@
 			  	<td valign="top">Asc</td>
 			  	<td valign="top">
 			  		<a href="${urlDownload}&type=2">${om.ascFileName}</a>
-			  		<c:if test="${action ne 'delete' }">
+			  		<c:if test="${action ne 'delete'}">
 			  			<a href="${urlEditAsc}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
 			  		</c:if>
 			  	</td>
 			  </tr>
           </c:if>
-          <c:if test="${om.configFileName!=null && om.configFileName ne ''}">
+          <c:if test="${om.configFileName != null && om.configFileName ne ''}">
 			  <tr>
 			  	<td valign="top">Config</td>
 			  	<td valign="top">
@@ -116,7 +117,7 @@
 			  	</td>
 			  </tr>
           </c:if>
-          <c:if test="${om.ascFileName!=null && om.ascFileName ne ''}">
+          <c:if test="${om.ascFileName != null && om.ascFileName ne ''}">
               <c:url value="Omr" var="urlEditFields">
 	            <c:param name="action" value="editFields"/>
 	            <c:param name="om_id" value="${om.id}"/>
@@ -125,7 +126,7 @@
 			  	<td valign="top">Fields</td>
 			  	<td valign="top">
 			  		<c:choose>
-					    <c:when test="${om.fieldsFileName!=null && om.fieldsFileName ne ''}">
+					    <c:when test="${om.fieldsFileName != null && om.fieldsFileName ne ''}">
 					        <a href="${urlDownload}&type=4">${om.fieldsFileName}</a>
 					    </c:when>
 					    <c:otherwise>
