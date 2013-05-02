@@ -11,16 +11,7 @@
   <link rel="stylesheet" type="text/css" href="css/style.css" />
   <script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script>
   <script src="../js/vanadium-min.js" type="text/javascript"></script>
-  <title>Omr Template</title>
-  <script type="text/javascript">
-    $(document).ready(function() {
-    	$('#alert').hide();
-	});
-    
-    function showAlert() {
-    	$('#alert').show();
-    }
-  </script>
+  <title>OMR Template</title>
 </head>
 <body> 
 <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
@@ -59,7 +50,7 @@
             <td colspan="2" align="right">
               <div id="buttons">
               	<input type="button" onclick="javascript:window.history.back()" value="Cancel"/>
-              	<input onclick="javascript:showAlert();" type="submit" value="Send"/>
+              	<input type="submit" value="Send"/>
               </div>
             </td>
           </tr>
