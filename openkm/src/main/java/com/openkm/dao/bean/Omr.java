@@ -29,51 +29,51 @@ import com.openkm.module.db.stuff.SetFieldBridge;
 public class Omr implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
-	@Column(name="OM_ID")
+	@Column(name="OMR_ID")
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 		
-	@Column(name="OM_NAME", length=128, unique=true)
+	@Column(name="OMR_NAME", length=128, unique=true)
 	private String name;
 		
-	@Column(name="OM_TEMPLATE_FILE_CONTENT")
+	@Column(name="OMR_TEMPLATE_FILE_CONTENT")
 	@Lob
 	private byte[] templateFileContent;
 	
-	@Column(name="OM_ASC_FILE_CONTENT")
+	@Column(name="OMR_ASC_FILE_CONTENT")
 	@Lob 
 	private byte[] ascFileContent;
 	
-	@Column(name="OM_CONFIG_FILE_CONTENT")
+	@Column(name="OMR_CONFIG_FILE_CONTENT")
 	@Lob 
 	private byte[] configFileContent;
 	
-	@Column(name="OM_FIELDS_FILE_CONTENT")
+	@Column(name="OMR_FIELDS_FILE_CONTENT")
 	@Lob
 	private byte[] fieldsFileContent;
 	
-	@Column(name="OM_FILE_TEMPLATE_MIME", length=32)
+	@Column(name="OMR_FILE_TEMPLATE_MIME", length=32)
 	private String templateFileMime;
 	
-	@Column(name="OM_FILE_ASC_MIME", length=32)
+	@Column(name="OMR_FILE_ASC_MIME", length=32)
 	private String ascFileMime;
 	
-	@Column(name="OM_FILE_CONFIG_MIME", length=32)
+	@Column(name="OMR_FILE_CONFIG_MIME", length=32)
 	private String configFileMime;
 	
-	@Column(name="OM_FILE_FIELDS_MIME", length=32)
+	@Column(name="OMR_FILE_FIELDS_MIME", length=32)
 	private String fieldsFileMime;
 	
-	@Column(name="OM_TEMPLATE_FILENAME", length=128, unique=true)
+	@Column(name="OMR_TEMPLATE_FILENAME", length=128)
 	private String templateFileName;
 	
-	@Column(name="OM_ASC_FILENAME", length=128, unique=true)
+	@Column(name="OMR_ASC_FILENAME", length=128)
 	private String ascFileName;
 	
-	@Column(name="OM_CONFIG_FILENAME", length=128, unique=true)
+	@Column(name="OMR_CONFIG_FILENAME", length=128)
 	private String configFileName;
 	
-	@Column(name="OM_FIELDS_FILENAME", length=128, unique=true)
+	@Column(name="OMR_FIELDS_FILENAME", length=128)
 	private String fieldsFileName;
 	
 	@ElementCollection
@@ -83,7 +83,7 @@ public class Omr implements Serializable {
 	@FieldBridge(impl = SetFieldBridge.class)
 	protected Set<String> properties = new HashSet<String>();
 	
-	@Column(name = "OM_ACTIVE", nullable = false)
+	@Column(name = "OMR_ACTIVE", nullable = false)
 	@Type(type = "true_false")
 	private boolean active;
 
