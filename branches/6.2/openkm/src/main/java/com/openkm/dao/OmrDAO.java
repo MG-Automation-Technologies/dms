@@ -94,16 +94,19 @@ public class OmrDAO {
 				om.setTemplateFileName((String) data[1]);
 				om.setTemplateFileMime((String) data[2]);
 			}
+			
 			if (om.getAscFileContent() == null || om.getAscFileContent().length == 0) {
 				om.setAscFileContent((byte[]) data[3]);
 				om.setAscFileName((String) data[4]);
 				om.setAscFileMime((String) data[5]);
 			}
+			
 			if (om.getConfigFileContent() == null || om.getConfigFileContent().length == 0) {
 				om.setConfigFileContent((byte[]) data[6]);
 				om.setConfigFileName((String) data[7]);
 				om.setConfigFileMime((String) data[8]);
 			}
+			
 			if (om.getFieldsFileContent() == null || om.getFieldsFileContent().length == 0) {
 				om.setFieldsFileContent((byte[]) data[9]);
 				om.setFieldsFileName((String) data[10]);
@@ -176,8 +179,8 @@ public class OmrDAO {
 		log.debug("findByPk({})", omId);
 		String qs = "from Omr om where om.id=:id";
 		Session session = null;
+		
 		try {
-
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
 			q.setLong("id", omId);
