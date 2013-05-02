@@ -45,6 +45,10 @@
         </li>
       </ul>
       <br/>
+      <c:url value="Omr" var="urlDownload">
+        <c:param name="action" value="downloadFile"/>
+        <c:param name="om_id" value="${om.id}"/>
+      </c:url>
   	<form action="Omr" method="post" enctype="multipart/form-data" id="form">
   	<input type="hidden" name="action" value="${action}"/>
         <input type="hidden" name="om_id" value="${om.id}"/>
