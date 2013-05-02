@@ -116,9 +116,10 @@ public class OMRHelper {
 		
 		if (ascCache.exists() && configCache.exists() && fieldsCache.exists()) {
 			Gray8Image grayimage = ImageUtil.readImage(fileToProcess.getCanonicalPath());
-			if (grayimage==null) {
+			if (grayimage == null) {
 				throw new OMRException("Not able to process the image as gray image");
 			}
+			
 			ImageManipulation image = new ImageManipulation(grayimage);
 			image.locateConcentricCircles();
 			image.readConfig(configCache.getCanonicalPath());
@@ -127,31 +128,42 @@ public class OMRHelper {
 			image.searchMarks();
 			File dataFile = FileUtils.createTempFile();
 			image.saveData(dataFile.getCanonicalPath());
+			
 			// Parse data file
 			Omr omr = OmrDAO.getInstance().findByPk(omId);
 			FileInputStream dfStream = new FileInputStream(dataFile);
 			DataInputStream in = new DataInputStream(dfStream);
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			String strLine;
+			
 			while ((strLine = br.readLine()) != null) {
 				// format key=value ( looking for first = )
 				String key = "";
 				String value = "";
+				
 				if (strLine.contains("=")) {
 					key = strLine.substring(0, strLine.indexOf("="));
 					value = strLine.substring(strLine.indexOf("=") + 1);
 					value = value.trim();
 				}
+				
 				if (!key.equals("")) {
 					if (value.equals("")) {
+						IOUtils.closeQuietly(br);
+						IOUtils.closeQuietly(in);
+						IOUtils.closeQuietly(dfStream);
 						throw new OMRException("Empty value");
 					}
+					
 					if (omr.getProperties().contains(key)) {
 						values.put(key, value);
 					}
 				}
 			}
-			in.close();
+			
+			IOUtils.closeQuietly(br);
+			IOUtils.closeQuietly(in);
+			IOUtils.closeQuietly(dfStream);
 			FileUtils.deleteQuietly(dataFile);
 			return values;
 		} else {
@@ -166,16 +178,19 @@ public class OMRHelper {
 			PathNotFoundException, RepositoryException, DatabaseException, NoSuchGroupException, LockException, AccessDeniedException,
 			ExtensionException, AutomationException, NoSuchPropertyException, OMRException {
 		List<String> groups = new ArrayList<String>();
+		
 		for (String key : results.keySet()) {
 			if (key.contains(":")) {
 				String grpName = key.substring(0, key.indexOf("."));
+				
 				// convert to okg (group name always start with okg )
-				grpName = grpName.replace("okp", "okg"); 
+				grpName = grpName.replace("okp", "okg");
 				if (!groups.contains(grpName)) {
 					groups.add(grpName);
 				}
 			}
 		}
+		
 		// Add missing groups
 		for (PropertyGroup registeredGroup : OKMPropertyGroup.getInstance().getGroups(null, docPath)) {
 			if (groups.contains(registeredGroup.getName())) {
@@ -185,19 +200,21 @@ public class OMRHelper {
 		// Add properties
 		for (String grpName : groups) {
 			OKMPropertyGroup.getInstance().addGroup(null, docPath, grpName);
+			
 			// convert okg to okp ( property format )
-			String propertyBeginning = grpName.replace("okg", "okp"); 
+			String propertyBeginning = grpName.replace("okg", "okp");
 			Map<String, String> properties = new HashMap<String, String>();
+			
 			for (String key : results.keySet()) {
 				if (key.startsWith(propertyBeginning)) {
 					String value = results.get(key);
+					
 					// Evaluate select multiple otherside throw exception
 					if (value.contains(" ")) {
 						for (FormElement formElement : OKMPropertyGroup.getInstance().getPropertyGroupForm(null, grpName)) {
 							if (formElement.getName().equals(key) && formElement instanceof Select) {
 								if (!((Select) formElement).getType().equals(Select.TYPE_MULTIPLE)) {
-									throw new OMRException(
-											"Found multiple value in a non multiple select. White space indicates multiple value");
+									throw new OMRException("Found multiple value in a non multiple select. White space indicates multiple value");
 								} else {
 									// Change " " to ";" the way to pass
 									// multiple values into setPropertiesSimple
@@ -206,9 +223,11 @@ public class OMRHelper {
 							}
 						}
 					}
+					
 					properties.put(key, value);
 				}
 			}
+			
 			OKMPropertyGroup.getInstance().setPropertiesSimple(null, docPath, grpName, properties);
 		}
 	}
@@ -216,21 +235,24 @@ public class OMRHelper {
 	/**
 	 * processAndStoreMetadata
 	 */
-	public static void processAndStoreMetadata(long omId, String uuid) throws IOException, PathNotFoundException, AccessDeniedException, 
-		RepositoryException, DatabaseException, OMRException, NoSuchGroupException, LockException, ExtensionException, 
-		ParseException, NoSuchPropertyException, AutomationException, InvalidFileStructureException, InvalidImageIndexException, 
-		UnsupportedTypeException, MissingParameterException, WrongParameterException {
+	public static void processAndStoreMetadata(long omId, String uuid) throws IOException, PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException, OMRException, NoSuchGroupException, LockException, ExtensionException, ParseException,
+			NoSuchPropertyException, AutomationException, InvalidFileStructureException, InvalidImageIndexException,
+			UnsupportedTypeException, MissingParameterException, WrongParameterException {
 		InputStream is = null;
 		File fileToProcess = null;
+		
 		try {
 			String docPath = OKMRepository.getInstance().getNodePath(null, uuid);
+			
 			// create tmp content file
 			fileToProcess = FileUtils.createTempFile();
 			is = OKMDocument.getInstance().getContent(null, docPath, false);
 			FileUtils.copy(is, fileToProcess);
 			is.close();
-			// process 
-			Map<String, String> results = OMRHelper.process(fileToProcess, omId); 
+			
+			// process
+			Map<String, String> results = OMRHelper.process(fileToProcess, omId);
 			OMRHelper.storeMetadata(results, docPath);
 		} catch (IOException e) {
 			throw e;
@@ -267,9 +289,7 @@ public class OMRHelper {
 		} catch (WrongParameterException e) {
 			throw e;
 		} finally {
-			if (fileToProcess!=null) {
-				FileUtils.deleteQuietly(fileToProcess);
-			}
+			FileUtils.deleteQuietly(fileToProcess);
 		}
 	}
 	
@@ -282,23 +302,25 @@ public class OMRHelper {
 			OutputStream ascFile = new FileOutputStream(ascCache);
 			ascFile.write(omr.getAscFileContent());
 			IOUtils.closeQuietly(ascFile);
-		} else if (ascCache.exists()) {
+		} else {
 			FileUtils.deleteQuietly(ascCache);
 		}
+		
 		File configCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omr.getId() + ".config");
 		if (omr.getConfigFileContent() != null && omr.getConfigFileContent().length != 0) {
 			OutputStream configFile = new FileOutputStream(configCache);
 			configFile.write(omr.getConfigFileContent());
 			IOUtils.closeQuietly(configFile);
-		} else if (configCache.exists()) {
+		} else {
 			FileUtils.deleteQuietly(configCache);
 		}
+		
 		File fieldsCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omr.getId() + ".fields");
 		if (omr.getFieldsFileContent() != null && omr.getFieldsFileContent().length != 0) {
 			OutputStream fieldsFile = new FileOutputStream(fieldsCache);
 			fieldsFile.write(omr.getFieldsFileContent());
 			IOUtils.closeQuietly(fieldsFile);
-		} else if (fieldsCache.exists()) {
+		} else {
 			FileUtils.deleteQuietly(fieldsCache);
 		}
 	}
@@ -308,16 +330,12 @@ public class OMRHelper {
 	 */
 	public static void deleteCachedFiles(long omId) {
 		File ascCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omId + ".asc");
-		if (ascCache.exists()) {
-			FileUtils.deleteQuietly(ascCache);
-		}
+		FileUtils.deleteQuietly(ascCache);
+		
 		File configCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omId + ".config");
-		if (configCache.exists()) {
-			FileUtils.deleteQuietly(configCache);
-		}
+		FileUtils.deleteQuietly(configCache);
+		
 		File fieldsCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omId + ".fields");
-		if (fieldsCache.exists()) {
-			FileUtils.deleteQuietly(fieldsCache);
-		}
+		FileUtils.deleteQuietly(fieldsCache);
 	}
 }

@@ -65,8 +65,9 @@ public class ImageManipulation {
 		
 		height = grayimage.getHeight();
 		width = grayimage.getWidth();
+		
 		// 1700 x 2339 --> 426 x 560
-		log.info("width = " + width + ": height = " + height);
+		log.debug("width = " + width + ": height = " + height);
 		
 		scaleFactor = width / 340; // 5 --> each mark becomes around 3 pixels wide
 	}
@@ -103,13 +104,13 @@ public class ImageManipulation {
 		bottomrightY = bottomrightpos.getBestFit().getY() + bottomrightpos.getBestFit().getTemplate().getHeight() / 2;
 		ImageUtil.putMark(grayimage, bottomrightX, bottomrightY, true);
 		
-		log.info(topleftX + ":" + topleftY + ":" + bottomrightX + ":" + bottomrightY);
+		log.debug(topleftX + ":" + topleftY + ":" + bottomrightX + ":" + bottomrightY);
 		// ImageUtil.saveImage(grayimage, "grayimage.png");
 		
 		currAngle = Math.toDegrees(Math.atan2((bottomrightX - topleftX), (bottomrightY - topleftY)));
 		currDiag = Math.sqrt(Math.pow((bottomrightY - topleftY), 2) + Math.pow((bottomrightX - topleftX), 2));
-		log.info("curr angle = " + currAngle);
-		log.info("curr diag = " + currDiag);
+		log.debug("curr angle = " + currAngle);
+		log.debug("curr diag = " + currDiag);
 	}
 	
 	public void locateMarks() {
@@ -121,8 +122,8 @@ public class ImageManipulation {
 		int scaledbottomrightX = bottomrightX / scaleFactor;
 		int scaledbottomrightY = bottomrightY / scaleFactor;
 		
-		log.info("scaledtop: " + scaledtopleftX + ":" + scaledtopleftY);
-		log.info("scaledbot: " + scaledbottomrightX + ":" + scaledbottomrightY);
+		log.debug("scaledtop: " + scaledtopleftX + ":" + scaledtopleftY);
+		log.debug("scaledbot: " + scaledbottomrightX + ":" + scaledbottomrightY);
 		
 		int[] marks = new int[100 * 100 * 10];
 		int nummarks = 0;
@@ -137,13 +138,13 @@ public class ImageManipulation {
 			}
 		}
 		
-		log.info("nummarks = " + nummarks);
+		log.debug("nummarks = " + nummarks);
 		
 		int[] dupmarks = new int[100 * 100 * 10];
 		nummarks = filter(marks, dupmarks, nummarks);
 		marks = dupmarks;
 		
-		log.info("nummarks = " + nummarks);
+		log.debug("nummarks = " + nummarks);
 		
 		int t;
 		Gray8Image markedImage = (Gray8Image) (grayimage.createCopy());
@@ -153,7 +154,7 @@ public class ImageManipulation {
 		int markdispY = (int) (ConcentricCircle.markDiam * approxYscale / 4);
 		
 		for (int i = 0; i < nummarks; i++) {
-			log.info("{}", marks[i]);
+			log.debug("{}", marks[i]);
 			ImageUtil.putMark(scaledImage, marks[i] / 1000, marks[i] % 1000, true);
 			t = marks[i];
 			marks[i] = ((t / 1000) * scaleFactor + markdispX) * 10000 + (t % 1000) * scaleFactor + markdispY; // XXX
@@ -161,7 +162,7 @@ public class ImageManipulation {
 		}
 		
 		// ImageUtil.saveImage(scaledImage, "markedscaled.png");
-		ImageUtil.saveImage(markedImage, "marked.png");
+		// ImageUtil.saveImage(markedImage, "marked.png");
 		
 		this.markLocations = marks;
 		this.nummarks = nummarks;
@@ -183,9 +184,9 @@ public class ImageManipulation {
 		}
 		sort(dupmarks, ascTemplateLocations, nummarks);
 		
-		log.info("ascTemplateLocations -- ");
+		log.debug("ascTemplateLocations -- ");
 		for (int i = 0; i < nummarks; i++) {
-			log.info(ascTemplateLocations[i] + " ");
+			log.debug(ascTemplateLocations[i] + " ");
 		}
 		
 		try {
@@ -275,7 +276,7 @@ public class ImageManipulation {
 				for (int n = 0; n < width; n++) {
 					if (ascTemplate[m][n] > -1) {
 						ascTemplateLocationsDup[ascTemplateLocations[ascTemplate[m][n]]] = m * 1000 + n;
-						log.info((markLocations[ascTemplateLocations[ascTemplate[m][n]]] % 10000) + ":"
+						log.debug((markLocations[ascTemplateLocations[ascTemplate[m][n]]] % 10000) + ":"
 								+ (markLocations[ascTemplateLocations[ascTemplate[m][n]]] / 10000));
 						out.print("0");
 					} else {
@@ -288,9 +289,9 @@ public class ImageManipulation {
 			out.close();
 			ascTemplateLocations = ascTemplateLocationsDup;
 			
-			log.info("ascTemplateLocations -- ");
+			log.debug("ascTemplateLocations -- ");
 			for (int q = 0; q < nummarks; q++) {
-				log.info(ascTemplateLocations[q] + " ");
+				log.debug(ascTemplateLocations[q] + " ");
 			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
@@ -299,12 +300,13 @@ public class ImageManipulation {
 	
 	private void dumpAscTemplate(int[][] ascTemplate, int width, int height, boolean[] linesOccupied) {
 		for (int i = 0; i < height; i++) {
-			log.info(linesOccupied[i] + " ");
+			log.debug(linesOccupied[i] + " ");
+			
 			for (int j = 0; j < width; j++) {
 				if (ascTemplate[i][j] > -1) {
-					log.info("{}", ascTemplate[i][j]);
+					log.debug("{}", ascTemplate[i][j]);
 				} else {
-					log.info("-");
+					log.debug("-");
 				}
 			}
 		}
@@ -336,7 +338,7 @@ public class ImageManipulation {
 			numin = 0;
 			cluster[numin++] = marks[i];
 			int j = 0;
-			log.info("i->" + marks[i] + ":");
+			log.debug("i->" + marks[i] + ":");
 			marks[i] = -1;
 			
 			while (j < nummarks) {
@@ -345,7 +347,7 @@ public class ImageManipulation {
 					while (k < numin) {
 						if (Math.abs(marks[j] / 1000 - cluster[k] / 1000) < 2 && Math.abs(marks[j] % 1000 - cluster[k] % 1000) < 2) {
 							cluster[numin++] = marks[j];
-							log.info("Found j->" + marks[j] + ":");
+							log.debug("Found j->" + marks[j] + ":");
 							marks[j] = -1;
 							j = i + 1;
 							k = numin + 1;
@@ -371,7 +373,7 @@ public class ImageManipulation {
 			while (marks[i] == -1) {
 				i++;
 			}
-			log.info("New: i->" + marks[i]);
+			log.debug("New: i->" + marks[i]);
 		}
 		
 		return numdupmarks;
@@ -400,7 +402,7 @@ public class ImageManipulation {
 			ImageUtil.putMark((Gray8Image) scaledImage, scaledtopleftX, scaledtopleftY, true);
 			ImageUtil.putMark((Gray8Image) scaledImage, scaledbottomrightX, scaledbottomrightY, true);
 			
-			ImageUtil.saveImage(scaledImage, "scaled.png");
+			// ImageUtil.saveImage(scaledImage, "scaled.png");
 			this.scaledImage = (Gray8Image) scaledImage;
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
@@ -538,7 +540,7 @@ public class ImageManipulation {
 						Field field = (Field) (fields.get(new Character(ch)));
 						ascTemplateFields[ascTemplate[m][n]] = field;
 						field.addPos(ascTemplate[m][n]); // always added in row, column order
-						log.info("added " + m + ":" + n + ":" + ascTemplate[m][n] + ":" + realMarkLocations[ascTemplate[m][n]] + ":"
+						log.debug("added " + m + ":" + n + ":" + ascTemplate[m][n] + ":" + realMarkLocations[ascTemplate[m][n]] + ":"
 								+ (char) (ch));
 					}
 					// else {
@@ -556,7 +558,7 @@ public class ImageManipulation {
 	
 	public void searchMarks() {
 		for (int i = 0; i < realNummarks; i++) {
-			log.info((char) ascTemplateLocations[i] + " ");
+			log.debug((char) ascTemplateLocations[i] + " ");
 		}
 		
 		int x, y;
@@ -568,15 +570,15 @@ public class ImageManipulation {
 			
 			if (mark.isMark(x, y)) {
 				Field field = (Field) (fields.get(new Character((char) (ascTemplateLocations[i]))));
-				log.info("*** " + i + ":" + (char) (ascTemplateLocations[i]) + ":" + field);
+				log.debug("*** " + i + ":" + (char) (ascTemplateLocations[i]) + ":" + field);
 				field.putValue(i);
-				log.info("Found mark at " + x + "," + y + ":" + (char) (ascTemplateLocations[i]) + ":" + field.getName() + "="
+				log.debug("Found mark at " + x + "," + y + ":" + (char) (ascTemplateLocations[i]) + ":" + field.getName() + "="
 						+ field.getValue(i));
 				mark.putMarkOnImage(markedImage);
 			}
 		}
 		
-		ImageUtil.saveImage(markedImage, "marksfoundform.png");
+		// ImageUtil.saveImage(markedImage, "marksfoundform.png");
 	}
 	
 	public void saveData(String filename) {
@@ -586,7 +588,7 @@ public class ImageManipulation {
 			
 			while (e.hasMoreElements()) {
 				Field field = (Field) (fields.get(e.nextElement()));
-				log.info(field.getName() + "=" + field.getFieldValues());
+				log.debug(field.getName() + "=" + field.getFieldValues());
 				out.println(field.getName() + "=" + field.getFieldValues());
 			}
 			
@@ -687,7 +689,7 @@ public class ImageManipulation {
 				positions.put(new Integer(i), new Integer(currpos % choices.length));
 				currpos++;
 			} else if (type == GRID_CHOICE && subtype == COLUMN) {
-				log.info("addpos -- " + i + ":" + currpos);
+				log.debug("addpos -- " + i + ":" + currpos);
 				positions.put(new Integer(i), new Integer(currpos++));
 			}
 		}
@@ -704,7 +706,7 @@ public class ImageManipulation {
 		public void putValue(int i) {
 			if (type == GRID_CHOICE && subtype == COLUMN) {
 				int posi = ((Integer) (positions.get(new Integer(i)))).intValue();
-				log.info("currpos = " + currpos + ":" + choices.length + ":" + i + ":" + posi + ":" + (posi % (currpos / choices.length))
+				log.debug("currpos = " + currpos + ":" + choices.length + ":" + i + ":" + posi + ":" + (posi % (currpos / choices.length))
 						+ ":" + singleDone[posi % (currpos / choices.length)]);
 				if (!singleDone[posi % (currpos / choices.length)]) {
 					values[numValues++] = getValue(i);
