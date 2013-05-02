@@ -357,19 +357,19 @@ public class OmrServlet extends BaseServlet {
 				switch (fileType) {
 					case FILE_TEMPLATE:
 						fileContent = omr.getTemplateFileContent();
-						WebUtils.prepareSendFile(request, response, omr.getTemplateFileName(), omr.getTemplateFileMime(), true);
+						WebUtils.prepareSendFile(request, response, omr.getTemplateFileName(), omr.getTemplateFileMime(), false);
 						break;
 					case FILE_ASC:
 						fileContent = omr.getAscFileContent();
-						WebUtils.prepareSendFile(request, response, omr.getAscFileName(), omr.getAscFileMime(), true);
+						WebUtils.prepareSendFile(request, response, omr.getAscFileName(), omr.getAscFileMime(), false);
 						break;
 					case FILE_CONFIG:
 						fileContent = omr.getConfigFileContent();
-						WebUtils.prepareSendFile(request, response, omr.getConfigFileName(), omr.getConfigFileMime(), true);
+						WebUtils.prepareSendFile(request, response, omr.getConfigFileName(), omr.getConfigFileMime(), false);
 						break;
 					case FILE_FIELDS:
 						fileContent = omr.getFieldsFileContent();
-						WebUtils.prepareSendFile(request, response, omr.getFieldsFileName(), omr.getFieldsFileMime(), true);
+						WebUtils.prepareSendFile(request, response, omr.getFieldsFileName(), omr.getFieldsFileMime(), false);
 						break;
 				}
 				
