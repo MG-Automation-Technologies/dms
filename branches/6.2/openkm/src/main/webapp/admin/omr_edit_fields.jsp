@@ -28,7 +28,7 @@
     <c:when test="${isAdmin}">
       <ul id="breadcrumb">
         <li class="path">
-          <a href="Omr">Omr template</a>
+          <a href="Omr">OMR template</a>
         </li>
         <li class="path">
           <c:choose>

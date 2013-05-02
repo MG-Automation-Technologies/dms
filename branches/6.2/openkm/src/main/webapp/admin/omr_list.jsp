@@ -17,7 +17,7 @@
     <c:when test="${isAdmin}">
       <ul id="breadcrumb">
         <li class="path">
-          <a href="Omr">Omr Template</a>
+          <a href="Omr">OMR Template</a>
         </li>
       </ul>
       <br/>
