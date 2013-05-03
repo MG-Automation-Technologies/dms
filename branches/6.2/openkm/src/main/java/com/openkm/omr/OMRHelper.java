@@ -22,14 +22,13 @@
 package com.openkm.omr;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +52,6 @@ import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Select;
 import com.openkm.core.AccessDeniedException;
-import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.LockException;
 import com.openkm.core.MimeTypeConfig;
@@ -110,11 +108,12 @@ public class OMRHelper {
 			InvalidFileStructureException, InvalidImageIndexException, UnsupportedTypeException, MissingParameterException,
 			WrongParameterException {
 		Map<String, String> values = new HashMap<String, String>();
-		File ascCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omId + ".asc");
-		File configCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omId + ".config");
-		File fieldsCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omId + ".fields");
+		Omr omr = OmrDAO.getInstance().findByPk(omId);
+		InputStream asc = new ByteArrayInputStream(omr.getAscFileContent());
+		InputStream config = new ByteArrayInputStream(omr.getConfigFileContent());
+		InputStream fields = new ByteArrayInputStream(omr.getFieldsFileContent());
 		
-		if (ascCache.exists() && configCache.exists() && fieldsCache.exists()) {
+		if (asc != null && asc.available() > 0 && config != null && config.available() > 0 && fields != null && fields.available() > 0) {
 			Gray8Image grayimage = ImageUtil.readImage(fileToProcess.getCanonicalPath());
 			if (grayimage == null) {
 				throw new OMRException("Not able to process the image as gray image");
@@ -122,15 +121,15 @@ public class OMRHelper {
 			
 			ImageManipulation image = new ImageManipulation(grayimage);
 			image.locateConcentricCircles();
-			image.readConfig(configCache.getCanonicalPath());
-			image.readFields(fieldsCache.getCanonicalPath());
-			image.readAscTemplate(ascCache.getCanonicalPath());
+			image.readConfig(config);
+			image.readFields(fields);
+			image.readAscTemplate(asc);
 			image.searchMarks();
 			File dataFile = FileUtils.createTempFile();
 			image.saveData(dataFile.getCanonicalPath());
 			
 			// Parse data file
-			Omr omr = OmrDAO.getInstance().findByPk(omId);
+			
 			FileInputStream dfStream = new FileInputStream(dataFile);
 			DataInputStream in = new DataInputStream(dfStream);
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -152,6 +151,9 @@ public class OMRHelper {
 						IOUtils.closeQuietly(br);
 						IOUtils.closeQuietly(in);
 						IOUtils.closeQuietly(dfStream);
+						IOUtils.closeQuietly(asc);
+						IOUtils.closeQuietly(config);
+						IOUtils.closeQuietly(fields);
 						throw new OMRException("Empty value");
 					}
 					
@@ -164,6 +166,9 @@ public class OMRHelper {
 			IOUtils.closeQuietly(br);
 			IOUtils.closeQuietly(in);
 			IOUtils.closeQuietly(dfStream);
+			IOUtils.closeQuietly(asc);
+			IOUtils.closeQuietly(config);
+			IOUtils.closeQuietly(fields);
 			FileUtils.deleteQuietly(dataFile);
 			return values;
 		} else {
@@ -214,7 +219,8 @@ public class OMRHelper {
 						for (FormElement formElement : OKMPropertyGroup.getInstance().getPropertyGroupForm(null, grpName)) {
 							if (formElement.getName().equals(key) && formElement instanceof Select) {
 								if (!((Select) formElement).getType().equals(Select.TYPE_MULTIPLE)) {
-									throw new OMRException("Found multiple value in a non multiple select. White space indicates multiple value");
+									throw new OMRException(
+											"Found multiple value in a non multiple select. White space indicates multiple value");
 								} else {
 									// Change " " to ";" the way to pass
 									// multiple values into setPropertiesSimple
@@ -291,51 +297,5 @@ public class OMRHelper {
 		} finally {
 			FileUtils.deleteQuietly(fileToProcess);
 		}
-	}
-	
-	/**
-	 * storeFilesToCache
-	 */
-	public static void storeFilesToCache(Omr omr) throws IOException {
-		File ascCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omr.getId() + ".asc");
-		if (omr.getAscFileContent() != null && omr.getAscFileContent().length != 0) {
-			OutputStream ascFile = new FileOutputStream(ascCache);
-			ascFile.write(omr.getAscFileContent());
-			IOUtils.closeQuietly(ascFile);
-		} else {
-			FileUtils.deleteQuietly(ascCache);
-		}
-		
-		File configCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omr.getId() + ".config");
-		if (omr.getConfigFileContent() != null && omr.getConfigFileContent().length != 0) {
-			OutputStream configFile = new FileOutputStream(configCache);
-			configFile.write(omr.getConfigFileContent());
-			IOUtils.closeQuietly(configFile);
-		} else {
-			FileUtils.deleteQuietly(configCache);
-		}
-		
-		File fieldsCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omr.getId() + ".fields");
-		if (omr.getFieldsFileContent() != null && omr.getFieldsFileContent().length != 0) {
-			OutputStream fieldsFile = new FileOutputStream(fieldsCache);
-			fieldsFile.write(omr.getFieldsFileContent());
-			IOUtils.closeQuietly(fieldsFile);
-		} else {
-			FileUtils.deleteQuietly(fieldsCache);
-		}
-	}
-	
-	/**
-	 * deleteCachedFiles
-	 */
-	public static void deleteCachedFiles(long omId) {
-		File ascCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omId + ".asc");
-		FileUtils.deleteQuietly(ascCache);
-		
-		File configCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omId + ".config");
-		FileUtils.deleteQuietly(configCache);
-		
-		File fieldsCache = new File(Config.REPOSITORY_CACHE_OMR + File.separator + omId + ".fields");
-		FileUtils.deleteQuietly(fieldsCache);
 	}
 }

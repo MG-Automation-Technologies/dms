@@ -97,7 +97,6 @@ public class Config {
 	public static String REPOSITORY_CACHE_DXF;
 	public static String REPOSITORY_CACHE_PDF;
 	public static String REPOSITORY_CACHE_SWF;
-	public static String REPOSITORY_CACHE_OMR;
 	
 	// Experimental features
 	public static final String PROPERTY_PLUGIN_DEBUG = "plugin.debug";
@@ -529,8 +528,6 @@ public class Config {
 			values.put("repository.cache.pdf", REPOSITORY_CACHE_PDF);
 			REPOSITORY_CACHE_SWF = REPOSITORY_CACHE_HOME + File.separator + "swf";
 			values.put("repository.cache.swf", REPOSITORY_CACHE_SWF);
-			REPOSITORY_CACHE_OMR = REPOSITORY_CACHE_HOME + File.separator + "omr";
-			values.put("repository.cache.omr", REPOSITORY_CACHE_OMR);
 			values.put(PROPERTY_HIBERNATE_SEARCH_INDEX_HOME, HIBERNATE_SEARCH_INDEX_HOME);
 			values.put(PROPERTY_REPOSITORY_DATASTORE_BACKEND, REPOSITORY_DATASTORE_BACKEND);
 			values.put(PROPERTY_REPOSITORY_DATASTORE_HOME, REPOSITORY_DATASTORE_HOME);

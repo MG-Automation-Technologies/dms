@@ -22,8 +22,8 @@
 package com.openkm.omr;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -442,11 +442,11 @@ public class ImageManipulation {
 		}
 	}
 	
-	public void readConfig(String filename) {
+	public void readConfig(InputStream is) {
 		int scaleFactor = this.scaleFactor * 3;
 		
 		try {
-			BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(filename)));
+			BufferedReader in = new BufferedReader(new InputStreamReader(is));
 			in.readLine();
 			String topleft = in.readLine();
 			int index = topleft.indexOf(" ");
@@ -505,12 +505,12 @@ public class ImageManipulation {
 		}
 	}
 	
-	public void readFields(String filename) {
+	public void readFields(InputStream is) {
 		String line;
 		fields = new Hashtable<Character, Field>();
 		
 		try {
-			BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(filename)));
+			BufferedReader in = new BufferedReader(new InputStreamReader(is));
 			while ((line = in.readLine()) != null && !line.equals("")) {
 				Field field = new Field(line);
 				fields.put(new Character(field.getCh()), field);
@@ -523,13 +523,13 @@ public class ImageManipulation {
 		}
 	}
 	
-	public void readAscTemplate(String filename) {
+	public void readAscTemplate(InputStream is) {
 		ascTemplateLocations = new int[realNummarks];
 		ascTemplateFields = new Field[realNummarks];
 		int m = 0, n;
 		
 		try {
-			BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(filename)));
+			BufferedReader in = new BufferedReader(new InputStreamReader(is));
 			String line;
 			while ((line = in.readLine()) != null && !line.equals("")) {
 				n = 0;
@@ -543,13 +543,16 @@ public class ImageManipulation {
 						log.debug("added " + m + ":" + n + ":" + ascTemplate[m][n] + ":" + realMarkLocations[ascTemplate[m][n]] + ":"
 								+ (char) (ch));
 					}
+					
 					// else {
 					// ascTemplateLocations[ascTemplate[m][n]] = -1;
 					// }
 					n++;
 				}
+				
 				m++;
 			}
+			
 			in.close();
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
