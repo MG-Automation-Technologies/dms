@@ -412,13 +412,6 @@ public class RepositoryStartupServlet extends HttpServlet {
 			swfCacheFolder.mkdirs();
 		}
 		
-		// Initialize OMR cache folder
-		File omrCacheFolder = new File(Config.REPOSITORY_CACHE_OMR);
-		if (!omrCacheFolder.exists()) {
-			log.info("Create missing directory {}", omrCacheFolder.getPath());
-			omrCacheFolder.mkdirs();
-		}
-		
 		if (FsDataStore.DATASTORE_BACKEND_FS.equals(Config.REPOSITORY_DATASTORE_BACKEND)) {
 			// Initialize datastore
 			File repoDatastoreFolder = new File(Config.REPOSITORY_DATASTORE_HOME);

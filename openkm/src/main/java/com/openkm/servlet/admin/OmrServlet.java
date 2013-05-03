@@ -197,14 +197,12 @@ public class OmrServlet extends BaseServlet {
 					
 					if (action.equals("create")) {
 						long id = OmrDAO.getInstance().create(om);
-						OMRHelper.storeFilesToCache(om);
 						
 						// Activity log
 						UserActivity.log(userId, "ADMIN_OMR_CREATE", Long.toString(id), null, om.toString());
 					} else if (action.equals("edit")) {
 						OmrDAO.getInstance().updateTemplate(om);
 						om = OmrDAO.getInstance().findByPk(om.getId());
-						OMRHelper.storeFilesToCache(om);
 						
 						// Activity log
 						UserActivity.log(userId, "ADMIN_OMR_EDIT", Long.toString(om.getId()), null, om.toString());
@@ -224,7 +222,6 @@ public class OmrServlet extends BaseServlet {
 					omr.setAscFileName(omr.getTemplateFileName() + ".asc");
 					OmrDAO.getInstance().update(omr);
 					omr = OmrDAO.getInstance().findByPk(om.getId());
-					OMRHelper.storeFilesToCache(omr);
 					IOUtils.closeQuietly(is);
 					
 					// Activity log
@@ -237,7 +234,6 @@ public class OmrServlet extends BaseServlet {
 					omr.setFieldsFileName(omr.getTemplateFileName() + ".fields");
 					OmrDAO.getInstance().update(omr);
 					omr = OmrDAO.getInstance().findByPk(om.getId());
-					OMRHelper.storeFilesToCache(omr);
 					IOUtils.closeQuietly(is);
 					
 					// Activity log
