@@ -277,7 +277,7 @@
       </td>
     </tr>
     <tr>
-      <td>Omr</td>
+      <td>OMR</td>
       <td>
         <c:choose>
           <c:when test="${prf.prfToolbar.omrVisible}">
