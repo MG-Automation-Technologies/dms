@@ -484,8 +484,7 @@ public class DbFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public boolean isValid(String token, String fldPath) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
+	public boolean isValid(String token, String fldPath) throws RepositoryException, DatabaseException {
 		log.debug("isValid({}, {})", token, fldPath);
 		boolean valid = true;
 		@SuppressWarnings("unused")
@@ -506,6 +505,8 @@ public class DbFolderModule implements FolderModule {
 			} catch (PathNotFoundException e) {
 				valid = false;
 			}
+		} catch (PathNotFoundException e) {
+			return false;
 		} catch (DatabaseException e) {
 			throw e;
 		} finally {
