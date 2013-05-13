@@ -597,8 +597,7 @@ public class JcrFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public boolean isValid(String token, String fldPath) throws PathNotFoundException, AccessDeniedException, 
-			RepositoryException, DatabaseException {
+	public boolean isValid(String token, String fldPath) throws RepositoryException, DatabaseException {
 		log.debug("isValid({}, {})", token, fldPath);
 		boolean valid = false;
 		Session session = null;
@@ -616,9 +615,9 @@ public class JcrFolderModule implements FolderModule {
 				valid = true;
 			}
 		} catch (javax.jcr.PathNotFoundException e) {
-			throw new PathNotFoundException(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.AccessDeniedException e) {
-			throw new AccessDeniedException(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
