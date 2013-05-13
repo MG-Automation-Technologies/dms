@@ -45,6 +45,8 @@ import com.openkm.bean.Folder;
 import com.openkm.bean.LockInfo;
 import com.openkm.bean.Note;
 import com.openkm.bean.Permission;
+import com.openkm.bean.workflow.ProcessDefinition;
+import com.openkm.bean.workflow.ProcessInstance;
 import com.openkm.cache.UserItemsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
@@ -53,6 +55,7 @@ import com.openkm.core.ItemExistsException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.Ref;
 import com.openkm.core.UserQuotaExceededException;
+import com.openkm.core.WorkflowException;
 import com.openkm.dao.NodeBaseDAO;
 import com.openkm.dao.NodeDocumentDAO;
 import com.openkm.dao.NodeDocumentVersionDAO;
@@ -69,6 +72,7 @@ import com.openkm.dao.bean.NodeNote;
 import com.openkm.dao.bean.ProfileMisc;
 import com.openkm.dao.bean.UserConfig;
 import com.openkm.dao.bean.cache.UserItems;
+import com.openkm.module.common.CommonWorkflowModule;
 import com.openkm.module.db.stuff.DbAccessManager;
 import com.openkm.module.db.stuff.DbUtils;
 import com.openkm.module.db.stuff.SecurityHelper;
@@ -275,6 +279,28 @@ public class BaseDocumentModule {
 		UserActivity.log(user, (checkout ? "GET_DOCUMENT_CONTENT_CHECKOUT" : "GET_DOCUMENT_CONTENT"), docUuid, docPath, Integer.toString(is.available()));
 		
 		return is;
+	}
+	
+	/**
+	 * Check if a node is being used in a running workflow 
+	 */
+	public static boolean hasWorkflowNodes(String docUuid) throws WorkflowException, PathNotFoundException, DatabaseException {
+		Set<String> workflowNodes = new HashSet<String>();
+		
+		for (ProcessDefinition procDef : CommonWorkflowModule.findAllProcessDefinitions()) {
+			for (ProcessInstance procIns : CommonWorkflowModule.findProcessInstances(procDef.getId())) {
+				if (procIns.getEnd() == null) {
+					String uuid = (String) procIns.getVariables().get(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_UUID);
+					workflowNodes.add(uuid);
+				}
+			}
+		}
+		
+		if (workflowNodes.contains(docUuid)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	/**

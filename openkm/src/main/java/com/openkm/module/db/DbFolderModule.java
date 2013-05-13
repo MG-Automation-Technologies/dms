@@ -45,6 +45,7 @@ import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UserQuotaExceededException;
+import com.openkm.core.WorkflowException;
 import com.openkm.dao.NodeBaseDAO;
 import com.openkm.dao.NodeFolderDAO;
 import com.openkm.dao.bean.AutomationRule;
@@ -199,6 +200,10 @@ public class DbFolderModule implements FolderModule {
 				throw new AccessDeniedException("Can't delete a folder with readonly nodes");
 			}
 			
+			if (BaseFolderModule.hasWorkflowNodes(fldUuid)) {
+				throw new LockException("Can't delete a folder with nodes used in a workflow");
+			}
+			
 			if (fldPath.startsWith("/" + Repository.CATEGORIES) && NodeBaseDAO.getInstance().isCategoryInUse(fldUuid)) {
 				throw new AccessDeniedException("Can't delete a category in use");
 			}
@@ -214,6 +219,8 @@ public class DbFolderModule implements FolderModule {
 			
 			// Activity log
 			UserActivity.log(auth.getName(), "DELETE_FOLDER", fldUuid, fldPath, null);
+		} catch (WorkflowException e) {
+			throw new RepositoryException(e.getMessage());
 		} catch (DatabaseException e) {
 			throw e;
 		} finally {

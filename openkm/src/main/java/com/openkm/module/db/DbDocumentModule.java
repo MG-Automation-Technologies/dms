@@ -64,6 +64,7 @@ import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
 import com.openkm.core.VirusDetection;
+import com.openkm.core.WorkflowException;
 import com.openkm.dao.MimeTypeDAO;
 import com.openkm.dao.NodeBaseDAO;
 import com.openkm.dao.NodeDocumentDAO;
@@ -290,6 +291,11 @@ public class DbDocumentModule implements DocumentModule {
 			}
 			
 			String docUuid = NodeBaseDAO.getInstance().getUuidFromPath(docPath);
+			
+			if (BaseDocumentModule.hasWorkflowNodes(docUuid)) {
+				throw new LockException("Can't delete a document used in a workflow");
+			}
+			
 			String userTrashPath = "/" + Repository.TRASH + "/" + auth.getName();
 			String userTrashUuid = NodeBaseDAO.getInstance().getUuidFromPath(userTrashPath);
 			String name = PathUtils.getName(docPath);
@@ -302,6 +308,8 @@ public class DbDocumentModule implements DocumentModule {
 			
 			// Activity log
 			UserActivity.log(auth.getName(), "DELETE_DOCUMENT", docUuid, docPath, null);
+		} catch (WorkflowException e) {
+			throw new RepositoryException(e.getMessage());
 		} catch (DatabaseException e) {
 			throw e;
 		} finally {
