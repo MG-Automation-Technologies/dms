@@ -79,8 +79,7 @@ import com.openkm.frontend.client.widget.mainmenu.Bookmark;
 public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, HasToolBarHandlerExtension {
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
 	private final OKMFolderServiceAsync folderService = (OKMFolderServiceAsync) GWT.create(OKMFolderService.class);
-	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT
-			.create(OKMPropertyGroupService.class);
+	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT.create(OKMPropertyGroupService.class);
 	
 	private HorizontalPanel panel;
 	private ToolBarButton createFolder;
@@ -3400,13 +3399,15 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		// FIRST
 		
 		find.setVisible(option.isFindFolderVisible() || option.isFindDocumentVisible() || option.isSimilarDocumentVisible());
-		panel.getWidget(2).setVisible(option.isFindFolderVisible() || option.isFindDocumentVisible() || option.isSimilarDocumentVisible()); // Hide space
+		panel.getWidget(2).setVisible(option.isFindFolderVisible() || option.isFindDocumentVisible() || option.isSimilarDocumentVisible()); // Hide
+																																			// space
 		
 		download.setVisible(option.isDownloadVisible());
 		panel.getWidget(4).setVisible(option.isDownloadVisible()); // hide space
 		downloadPdf.setVisible(option.isDownloadPdfVisible());
 		panel.getWidget(6).setVisible(option.isDownloadPdfVisible()); // hide space
-		panel.getWidget(7).setVisible(option.isFindFolderVisible() || option.isDownloadVisible() || option.isDownloadPdfVisible()); // hide separator
+		panel.getWidget(7).setVisible(option.isFindFolderVisible() || option.isDownloadVisible() || option.isDownloadPdfVisible()); // hide
+																																	// separator
 		
 		// SECOND
 		lock.setVisible(option.isLockVisible());
@@ -3496,9 +3497,29 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * initJavaScriptApi
 	 */
 	public native void initJavaScriptApi(ToolBar toolBar) /*-{
-															$wnd.destroyScannerApplet = toolBar.@com.openkm.frontend.client.widget.toolbar.ToolBar::destroyScannerApplet();
-															$wnd.destroyUploaderApplet = toolBar.@com.openkm.frontend.client.widget.toolbar.ToolBar::destroyUploaderApplet();
-															$wnd.refreshFolder = toolBar.@com.openkm.frontend.client.widget.toolbar.ToolBar::executeRefresh();
-															$wnd.jsRefreshFolder = toolBar.@com.openkm.frontend.client.widget.toolbar.ToolBar::executeRefresh();
-															}-*/;
+	  $wnd.destroyScannerApplet = function() {
+	    toolBar.@com.openkm.frontend.client.widget.toolbar.ToolBar::destroyScannerApplet()();
+	    return true;
+	  }
+	  
+	  $wnd.destroyUploaderApplet = function() {
+	    toolBar.@com.openkm.frontend.client.widget.toolbar.ToolBar::destroyUploaderApplet()();
+	    return true;
+	  }
+	  
+	  $wnd.refreshFolder = function() {
+	    toolBar.@com.openkm.frontend.client.widget.toolbar.ToolBar::executeRefresh()();
+	    return true;
+	  }
+	  
+	  $wnd.jsRefreshFolder = function() {
+	    toolBar.@com.openkm.frontend.client.widget.toolbar.ToolBar::executeRefresh()();
+	    return true;
+	  }
+	  
+	  $wnd.jsCancelCheckout = function() {
+	    toolBar.@com.openkm.frontend.client.widget.toolbar.ToolBar::executeCancelCheckout()();
+	    return true;
+	  }
+	}-*/;
 }
