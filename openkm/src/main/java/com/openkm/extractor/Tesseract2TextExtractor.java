@@ -100,11 +100,11 @@ public class Tesseract2TextExtractor extends AbstractTextExtractor {
     			
     			// Spellchecker
     			if (Config.SYSTEM_OPENOFFICE_DICTIONARY.equals("")) {
-    				log.info("TEXT: {}", text);
+    				log.debug("TEXT: {}", text);
     				return new StringReader(text);
     			} else {
     				text = DocumentUtils.spellChecker(text);
-        			log.info("TEXT: {}", text);
+        			log.debug("TEXT: {}", text);
         			return new StringReader(text);
     			}
 			} catch (SecurityException e) {

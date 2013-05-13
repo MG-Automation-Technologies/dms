@@ -94,7 +94,7 @@ public class CuneiformTextExtractor extends AbstractTextExtractor {
     				
     				for (String angle : angles) {
     					// Rotate
-    					log.info("Rotate image {} degrees", angle);
+    					log.debug("Rotate image {} degrees", angle);
     					double degree = Double.parseDouble(angle);
     					DocConverter.getInstance().rotateImage(tmpFileIn, tmpFileIn, degree);
     					text = doOcr(tmpFileIn);
