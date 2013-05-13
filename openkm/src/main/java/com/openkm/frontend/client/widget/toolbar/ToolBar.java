@@ -2909,9 +2909,9 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		}
 		
 		if (toolBarOption.omrOption) {
-			enableUploader();
+			enableOmr();
 		} else {
-			disableUploader();
+			disableOmr();
 		}
 		
 		// Checking extension button
