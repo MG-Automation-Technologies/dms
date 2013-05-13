@@ -172,15 +172,11 @@ public interface FolderModule {
 	/**
 	 * Test if a folder path is valid.
 	 * 
-	 * @param fldPath The path that identifies an unique folder.
+	 * @param fldId The path that identifies an unique folder or its UUID.
 	 * @return True if is a valid folder path, otherwise false.
-	 * @throws AccessDeniedException If there is any security problem: you can't access this folder because of lack of
-	 *         permissions.
 	 * @throws RepositoryException If there is any general repository problem.
-	 * @throws PathNotFoundException If there is no folder in the repository with this path.
 	 */
-	public boolean isValid(String token, String fldPath) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException;
+	public boolean isValid(String token, String fldId) throws RepositoryException, DatabaseException;
 	
 	/**
 	 * Get the folder path from a UUID
