@@ -268,8 +268,15 @@ public class WorkflowServlet extends BaseServlet {
 			vars.put(entry.getKey(), FormatUtil.formatObject(entry.getValue()));
 			
 			if (entry.getKey().equals(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_UUID)) {
-				vars.put(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_PATH, 
-						OKMDocument.getInstance().getPath(null, entry.getValue().toString()));
+				String path = null;
+				
+				try {
+					path = OKMDocument.getInstance().getPath(null, entry.getValue().toString());
+				} catch (RepositoryException e) {
+					path = "PathNotFoundException";
+				}
+				
+				vars.put(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_PATH, path);
 			}
 		}
 		
