@@ -87,7 +87,7 @@ public class Tesseract3TextExtractor extends AbstractTextExtractor {
     				
     				for (String angle : angles) {
     					// Rotate
-    					log.info("Rotate image {} degrees", angle);
+    					log.debug("Rotate image {} degrees", angle);
     					double degree = Double.parseDouble(angle);
     					DocConverter.getInstance().rotateImage(tmpFileIn, tmpFileIn, degree);
     					text = doOcr(tmpFileIn);
@@ -137,11 +137,11 @@ public class Tesseract3TextExtractor extends AbstractTextExtractor {
     			
     			// Spellchecker
     			if (Config.SYSTEM_OPENOFFICE_DICTIONARY.equals("")) {
-    				log.info("TEXT: {}", text);
+    				log.debug("TEXT: {}", text);
     				return text;
     			} else {
     				text = DocumentUtils.spellChecker(text);
-    				log.info("TEXT: {}", text);
+    				log.debug("TEXT: {}", text);
     				return text;
     			}
     		} catch (SecurityException e) {
