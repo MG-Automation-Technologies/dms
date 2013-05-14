@@ -165,7 +165,7 @@ public class OKMFolder implements FolderModule {
 	}
 	
 	@Override
-	public boolean isValid(String token, String fldPath) throws RepositoryException, DatabaseException {
+	public boolean isValid(String token, String fldPath) throws PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("isValid({}, {})", token, fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		boolean valid = fm.isValid(token, fldPath);

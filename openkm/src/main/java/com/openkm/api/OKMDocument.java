@@ -332,7 +332,7 @@ public class OKMDocument implements DocumentModule {
 	}
 	
 	@Override
-	public boolean isValid(String token, String docPath) throws RepositoryException, DatabaseException {
+	public boolean isValid(String token, String docPath) throws PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("isValid({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		boolean valid = dm.isValid(token, docPath);
