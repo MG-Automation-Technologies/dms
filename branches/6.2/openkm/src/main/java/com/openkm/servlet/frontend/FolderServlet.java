@@ -362,6 +362,9 @@ public class FolderServlet extends OKMRemoteServiceServlet implements OKMFolderS
 		
 		try {
 			return Boolean.valueOf(OKMFolder.getInstance().isValid(null, fldPath));
+		} catch (PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_Repository), e.getMessage());
