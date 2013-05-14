@@ -1714,7 +1714,7 @@ public class JcrDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public boolean isValid(String token, String docPath) throws RepositoryException, DatabaseException {
+	public boolean isValid(String token, String docPath) throws PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("isValid({}, {})", token, docPath);
 		boolean valid = false;
 		Session session = null;
@@ -1732,9 +1732,9 @@ public class JcrDocumentModule implements DocumentModule {
 				valid = true;
 			}
 		} catch (javax.jcr.PathNotFoundException e) {
-			throw new RepositoryException(e.getMessage(), e);
+			throw new PathNotFoundException(e.getMessage(), e);
 		} catch (javax.jcr.AccessDeniedException e) {
-			throw new RepositoryException(e.getMessage(), e);
+			throw new PathNotFoundException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
