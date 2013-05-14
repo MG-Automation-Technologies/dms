@@ -58,7 +58,7 @@ public class AutomationAction implements Serializable {
 	@ElementCollection
 	@Column(name = "AAP_PARAM")
 	@OrderColumn(name = "AAP_ORDER")
-	@CollectionTable(name = "OKM_AUTO_ACTION_PARAMS", joinColumns = { @JoinColumn(name = "AAP_VALIDATION") })
+	@CollectionTable(name = "OKM_AUTO_ACTION_PARAMS", joinColumns = { @JoinColumn(name = "AAP_ACTION") })
 	@Lob @Type(type = "org.hibernate.type.TextType")
 	private List<String> params = new ArrayList<String>();
 	
