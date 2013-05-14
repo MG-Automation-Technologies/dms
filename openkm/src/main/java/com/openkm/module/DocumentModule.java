@@ -402,14 +402,11 @@ public interface DocumentModule {
 	/**
 	 * Test if a document path is valid.
 	 * 
-	 * @param docPath The path that identifies an unique document.
-	 * @throws AccessDeniedException If there is any security problem: you can't access this node because of lack of
-	 *         permissions.
+	 * @param docId The path that identifies an unique document or its UUID.
+	 * @return True if is a valid document path, otherwise false.
 	 * @throws RepositoryException If there is any general repository problem.
-	 * @throws PathNotFoundException If there is no folder in the repository with this path.
 	 */
-	public boolean isValid(String token, String docPath) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException;
+	public boolean isValid(String token, String docPath) throws RepositoryException, DatabaseException;
 	
 	/**
 	 * Get the document path from a UUID

@@ -508,12 +508,6 @@ public class DocumentServlet extends OKMRemoteServiceServlet implements OKMDocum
 		
 		try {
 			return new Boolean(OKMDocument.getInstance().isValid(null, docPath));
-		} catch (PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
-		} catch (AccessDeniedException e) {
-			log.warn(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_AccessDenied), e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Repository), e.getMessage());
