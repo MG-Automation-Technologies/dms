@@ -1251,8 +1251,7 @@ public class DbDocumentModule implements DocumentModule {
 	}
 	
 	@Override
-	public boolean isValid(String token, String docPath) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
+	public boolean isValid(String token, String docPath) throws RepositoryException, DatabaseException {
 		log.debug("isValid({}, {})", token, docPath);
 		boolean valid = true;
 		@SuppressWarnings("unused")
@@ -1273,6 +1272,8 @@ public class DbDocumentModule implements DocumentModule {
 			} catch (PathNotFoundException e) {
 				valid = false;
 			}
+		} catch (PathNotFoundException e) {
+			return false;
 		} catch (DatabaseException e) {
 			throw e;
 		} finally {
