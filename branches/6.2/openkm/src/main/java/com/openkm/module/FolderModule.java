@@ -174,9 +174,10 @@ public interface FolderModule {
 	 * 
 	 * @param fldId The path that identifies an unique folder or its UUID.
 	 * @return True if is a valid folder path, otherwise false.
+	 * @throws PathNotFoundException If the node does not exists.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public boolean isValid(String token, String fldId) throws RepositoryException, DatabaseException;
+	public boolean isValid(String token, String fldId) throws PathNotFoundException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Get the folder path from a UUID
