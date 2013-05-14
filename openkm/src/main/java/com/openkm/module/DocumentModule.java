@@ -404,9 +404,10 @@ public interface DocumentModule {
 	 * 
 	 * @param docId The path that identifies an unique document or its UUID.
 	 * @return True if is a valid document path, otherwise false.
+	 * @throws PathNotFoundException If the node does not exists.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public boolean isValid(String token, String docPath) throws RepositoryException, DatabaseException;
+	public boolean isValid(String token, String docId) throws PathNotFoundException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Get the document path from a UUID
