@@ -199,13 +199,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.unLockOption) {
-				GWTDocument doc = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
-				if (doc.getLockInfo().getOwner().equals(Main.get().workspaceUserProperties.getUser().getId())) {
-					executeUnlock();
-				} else if (Main.get().workspaceUserProperties.getWorkspace().isAdminRole()) {
-					Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_FORCE_UNLOCK);
-					Main.get().confirmPopup.show();
-				}
+				executeUnlock();
 			}
 		}
 	};
@@ -214,8 +208,15 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Execute lock
 	 */
 	public void executeUnlock() {
-		Main.get().mainPanel.desktop.browser.fileBrowser.unlock();
-		fireEvent(HasToolBarEvent.EXECUTE_UNLOCK);
+		GWTDocument doc = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
+		
+		if (doc.getLockInfo().getOwner().equals(Main.get().workspaceUserProperties.getUser().getId())) {
+			Main.get().mainPanel.desktop.browser.fileBrowser.unlock();
+			fireEvent(HasToolBarEvent.EXECUTE_UNLOCK);
+		} else if (Main.get().workspaceUserProperties.getWorkspace().isAdminRole()) {
+			Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_FORCE_UNLOCK);
+			Main.get().confirmPopup.show();
+		}
 	}
 	
 	/**
@@ -1293,7 +1294,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 							getAllGroups(); // Evaluates enable or disable property group buttons
 						}
 					}
-					if (doc.getMimeType().equals("image/png")) {
+					if (doc.getMimeType().startsWith("image/png")) {
 						toolBarOption.omrOption = true;
 					}
 				} else {
@@ -3466,7 +3467,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		uploader.setVisible(option.isUploaderVisible());
 		panel.getWidget(47).setVisible(option.isUploaderVisible()); // hide space
 		omr.setVisible(option.isOmrVisible());
-		panel.getWidget(49).setVisible(option.isUploaderVisible()); // hide space
+		panel.getWidget(49).setVisible(option.isOmrVisible()); // hide space
 		
 	}
 	
