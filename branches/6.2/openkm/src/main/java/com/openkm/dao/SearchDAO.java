@@ -114,7 +114,7 @@ public class SearchDAO {
 	 * Search by query
 	 */
 	public NodeResultSet findByQuery(Query query, int offset, int limit) throws ParseException, DatabaseException {
-		log.info("findByQuery({}, {}, {})", new Object[] { query, offset, limit });
+		log.debug("findByQuery({}, {}, {})", new Object[] { query, offset, limit });
 		FullTextSession ftSession = null;
 		Session session = null;
 		Transaction tx = null;
@@ -159,7 +159,7 @@ public class SearchDAO {
 	 */
 	public NodeResultSet findBySimpleQuery(String expression, int offset, int limit) throws ParseException,
 			DatabaseException {
-		log.info("findBySimpleQuery({}, {}, {})", new Object[] { expression, offset, limit });
+		log.debug("findBySimpleQuery({}, {}, {})", new Object[] { expression, offset, limit });
 		FullTextSession ftSession = null;
 		Session session = null;
 		Transaction tx = null;
@@ -172,7 +172,7 @@ public class SearchDAO {
 			QueryParser parser = new QueryParser(Config.LUCENE_VERSION, NodeDocument.TEXT_FIELD, analyzer);
 			Query query = parser.parse(expression);
 			NodeResultSet result = null;
-			log.info("findBySimpleQuery.query: {}", query);
+			log.debug("findBySimpleQuery.query: {}", query);
 			
 			if (SEARCH_LUCENE.equals(Config.SECURITY_SEARCH_EVALUATION)) {
 				result = runQueryLucene(ftSession, query, offset, limit);
@@ -591,7 +591,7 @@ public class SearchDAO {
 	 * Return a list of similar documents.
 	 */
 	public NodeResultSet moreLikeThis(String uuid, int maxResults) throws DatabaseException, PathNotFoundException {
-		log.info("moreLikeThis({}, {})", new Object[] { uuid, maxResults });
+		log.debug("moreLikeThis({}, {})", new Object[] { uuid, maxResults });
 		String[] moreLikeFields = new String[] { "text" };
 		FullTextSession ftSession = null;
 		Session session = null;
@@ -621,7 +621,7 @@ public class SearchDAO {
 				BooleanQuery query = new BooleanQuery();
 				query.add(likeThisQuery, Occur.SHOULD);
 				query.add(new TermQuery(new Term("uuid", uuid)), Occur.MUST_NOT);
-				log.info("moreLikeThis.Query: {}", query);
+				log.debug("moreLikeThis.Query: {}", query);
 				
 				if (SEARCH_LUCENE.equals(Config.SECURITY_SEARCH_EVALUATION)) {
 					result = runQueryLucene(ftSession, query, 0, maxResults);
