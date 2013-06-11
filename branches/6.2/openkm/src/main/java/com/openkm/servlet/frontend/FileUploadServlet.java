@@ -206,9 +206,9 @@ public class FileUploadServlet extends OKMHttpServlet {
 				}
 				
 				// Save document with different name than uploaded
-				log.info("Filename: '{}'", fileName);
+				log.debug("Filename: '{}'", fileName);
 				if (rename != null && !rename.equals("")) {
-					log.info("Rename: '{}'", rename);
+					log.debug("Rename: '{}'", rename);
 					
 					if (FilenameUtils.indexOfExtension(rename) > -1) {
 						// The rename contains filename + extension
@@ -224,14 +224,14 @@ public class FileUploadServlet extends OKMHttpServlet {
 						}
 					}
 					
-					log.info("Filename: '{}'", fileName);
+					log.debug("Filename: '{}'", fileName);
 				}
 				
 				// Now, we have read all parameters and the uploaded file
 				if (action == UIFileUploadConstants.ACTION_INSERT) {
 					if (fileName != null && !fileName.equals("")) {
 						if (importZip && FilenameUtils.getExtension(fileName).equalsIgnoreCase("zip")) {
-							log.info("Import ZIP file '{}' into '{}'", fileName, path);
+							log.debug("Import ZIP file '{}' into '{}'", fileName, path);
 							String erroMsg = importZip(path, is);
 							
 							if (erroMsg == null) {
@@ -242,7 +242,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 								sendResponse(out, action, fuResponse.get());
 							}
 						} else if (importZip && FilenameUtils.getExtension(fileName).equalsIgnoreCase("jar")) {
-							log.info("Import JAR file '{}' into '{}'", fileName, path);
+							log.debug("Import JAR file '{}' into '{}'", fileName, path);
 							String erroMsg = importJar(path, is);
 							
 							if (erroMsg == null) {
@@ -252,7 +252,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 								sendResponse(out, action, fuResponse.get());
 							}
 						} else if (FilenameUtils.getExtension(fileName).equalsIgnoreCase("eml")) {
-							log.info("import EML file '{}' into '{}'", fileName, path);
+							log.debug("import EML file '{}' into '{}'", fileName, path);
 							String erroMsg = importEml(path, is);
 							
 							if (erroMsg == null) {
@@ -263,7 +263,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 								sendResponse(out, action, fuResponse.get());
 							}
 						} else if (FilenameUtils.getExtension(fileName).equalsIgnoreCase("msg")) {
-							log.info("import MSG file '{}' into '{}'", fileName, path);
+							log.debug("import MSG file '{}' into '{}'", fileName, path);
 							String erroMsg = importMsg(path, is);
 							
 							if (erroMsg == null) {
@@ -275,7 +275,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 							}
 						} else {
 							fileName = FilenameUtils.getName(fileName);
-							log.info("Upload file '{}' into '{} ({})'", new Object[] { fileName, path, FormatUtil.formatSize(size) });
+							log.debug("Upload file '{}' into '{} ({})'", new Object[] { fileName, path, FormatUtil.formatSize(size) });
 							String mimeType = MimeTypeConfig.mimeTypes.getContentType(fileName.toLowerCase());
 							Document doc = new Document();
 							doc.setPath(path + "/" + fileName);
@@ -308,7 +308,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 									throw new ConversionException("Not convertible to pdf");
 								}
 							} else {
-								log.info("Wizard: {}", fuResponse);
+								log.debug("Wizard: {}", fuResponse);
 								
 								if (Config.REPOSITORY_NATIVE) {
 									doc = new DbDocumentModule().create(null, doc, is, size, null, fuResponse);
@@ -320,7 +320,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 									uploadedUuid = doc.getUuid();
 								}
 								
-								log.info("Wizard: {}", fuResponse);
+								log.debug("Wizard: {}", fuResponse);
 							}
 							
 							// Return the path of the inserted document in response
@@ -328,7 +328,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 						}
 					}
 				} else if (action == UIFileUploadConstants.ACTION_UPDATE) {
-					log.info("File updated: {}", path);
+					log.debug("File updated: {}", path);
 					
 					// http://en.wikipedia.org/wiki/Truth_table#Applications => ¬p ∨ q
 					if (!Config.SYSTEM_DOCUMENT_NAME_MISMATCH_CHECK || PathUtils.getName(path).equals(fileName)) {
@@ -356,7 +356,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 						sendResponse(out, action, fuResponse.get());
 					}
 				} else if (action == UIFileUploadConstants.ACTION_FOLDER) {
-					log.info("Folder create: {}", path);
+					log.debug("Folder create: {}", path);
 					Folder fld = new Folder();
 					fld.setPath(path + "/" + folder);
 					fld = OKMFolder.getInstance().create(null, fld);
@@ -482,7 +482,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 		Gson gson = new Gson();
 		String json = gson.toJson(fur);
 		out.print(json);
-		log.info("Action: {}, JSON Response: {}", action, json);
+		log.debug("Action: {}, JSON Response: {}", action, json);
 	}
 	
 	/**
@@ -654,7 +654,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 			for (Attachment att : msg.getAttachments()) {
 				if (att instanceof FileAttachment) {
 					FileAttachment fileAtt = (FileAttachment) att;
-					log.info("Importing attachment: {}", fileAtt.getFilename());
+					log.debug("Importing attachment: {}", fileAtt.getFilename());
 					
 					String fileName = fileAtt.getFilename();
 					String fileExtension = fileAtt.getExtension();
@@ -662,7 +662,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 					
 					// Test if already exists a document with the same name in the mail
 					for (int j = 1; OKMRepository.getInstance().hasNode(null, mail.getPath() + "/" + testName); j++) {
-						// log.info("Trying with: {}", testName);
+						// log.debug("Trying with: {}", testName);
 						testName = fileName + " (" + j + ")." + fileExtension;
 					}
 					
