@@ -23,6 +23,18 @@
             }
 	   	});
 	});
+    
+    $(window).load(function() {
+        if ($.browser.webkit) {
+            setTimeout(function() {
+                $('input:-webkit-autofill').each(function() {
+                    var name = $(this).attr('name');
+                    $(this).after(this.outerHTML).remove();
+                    $('input[name=' + name + ']').val('');
+                });
+            }, 100);
+        }
+    });
   </script>
   <title>User edit</title>
 </head>
