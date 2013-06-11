@@ -38,7 +38,7 @@ public class LoggerListener implements ApplicationListener<AbstractAuthenticatio
 	@Override
 	public void onApplicationEvent(AbstractAuthenticationEvent event) {
 		if (event instanceof AuthenticationSuccessEvent) {
-			log.info("Authentication OK: {}", event.getAuthentication().getName());
+			log.debug("Authentication OK: {}", event.getAuthentication().getName());
 			
 			// Activity log
 			Object details = event.getAuthentication().getDetails();
