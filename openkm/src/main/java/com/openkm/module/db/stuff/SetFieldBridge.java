@@ -50,7 +50,7 @@ public class SetFieldBridge implements FieldBridge {
 					name = "subscriptor";
 				}
 				
-				log.info("Added field '{}' with value '{}'", name, elto);
+				log.debug("Added field '{}' with value '{}'", name, elto);
 				luceneOptions.addFieldToDocument(name, elto, document);
 			}
 		} else {
