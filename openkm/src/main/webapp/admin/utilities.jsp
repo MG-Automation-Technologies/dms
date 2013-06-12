@@ -26,6 +26,7 @@
         <a href="repository_checker.jsp"><button class="utilButton">Repository checker</button></a>
         <a href="ListIndexes"><button class="utilButton">List indexes</button></a>
         <a href="CheckTextExtraction"><button class="utilButton">Check text extraction</button></a>
+        <a href="LogCat"><button class="utilButton">LogCat</button></a>
         <a href="Css"><button class="utilButton">CSS</button></a>
       </center>
     </c:when>

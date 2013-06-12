@@ -260,6 +260,20 @@ span.vanadium-invalid {
 	background-position: 2px center;
 }
 
+.deleteButton {
+	background-color: #E5E5E1;
+	border: 1px solid #A5A596;
+	height: 18px;
+	font-size: 10px;
+	font-family: verdana, arial, sans-serif;
+	cursor: pointer;
+  	cursor: hand;
+	background-image: url("../img/action/delete.png");
+	background-repeat: no-repeat;
+	padding-left: 17px;
+	background-position: 2px center;
+}
+
 .searchButton {
 	background-color: #E5E5E1;
 	border: 1px solid #A5A596;
@@ -318,14 +332,14 @@ span.vanadium-invalid {
 
 /* Chrome fix for button images */
 @media screen and (-webkit-min-device-pixel-ratio:0) {
-	.noButton, .yesButton, .addButton, .searchButton, .saveButton, .loadButton, .executeButton {
+	.noButton, .yesButton, .addButton, .deleteButton, .searchButton, .saveButton, .loadButton, .executeButton {
 		padding-left: 20px;
 	}
 }
 
 /* Explorer fix for button images */
 <!--[if IE]>
-	.noButton, .yesButton, .addButton, .searchButton, .saveButton, .loadButton, .executeButton {
+	.noButton, .yesButton, .addButton, .deleteButton, .searchButton, .saveButton, .loadButton, .executeButton {
 		padding-left: 12px;
 	}
 <![endif]-->

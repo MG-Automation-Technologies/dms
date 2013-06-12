@@ -366,6 +366,10 @@
     <servlet-class>com.openkm.servlet.admin.CheckTextExtractionServlet</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>LogCatServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.LogCatServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>CssServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.CssServlet</servlet-class>
   </servlet>
@@ -665,6 +669,10 @@
   <servlet-mapping>
     <servlet-name>CheckTextExtractionServlet</servlet-name>
     <url-pattern>/admin/CheckTextExtraction</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>LogCatServlet</servlet-name>
+    <url-pattern>/admin/LogCat</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>CssServlet</servlet-name>
