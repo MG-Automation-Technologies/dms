@@ -74,8 +74,8 @@ public class BaseFolderModule {
 	/**
 	 * Create a new folder
 	 */
-	public static NodeFolder create(String user, NodeFolder parentFolder, String name, Calendar created)
-			throws PathNotFoundException, AccessDeniedException, ItemExistsException, DatabaseException {
+	public static NodeFolder create(String user, NodeFolder parentFolder, String name, Calendar created) throws PathNotFoundException,
+			AccessDeniedException, ItemExistsException, DatabaseException {
 		
 		// Create and add a new folder node
 		NodeFolder folderNode = new NodeFolder();
@@ -181,9 +181,8 @@ public class BaseFolderModule {
 	/**
 	 * Duplicates a folder into another one
 	 */
-	public static NodeFolder copy(String user, NodeFolder srcFldNode, NodeFolder dstFldNode)
-			throws ItemExistsException, UserQuotaExceededException, PathNotFoundException, AccessDeniedException,
-			AutomationException, DatabaseException, IOException {
+	public static NodeFolder copy(String user, NodeFolder srcFldNode, NodeFolder dstFldNode) throws ItemExistsException,
+			UserQuotaExceededException, PathNotFoundException, AccessDeniedException, AutomationException, DatabaseException, IOException {
 		log.debug("copy({}, {}, {})", new Object[] { user, srcFldNode, dstFldNode });
 		InputStream is = null;
 		NodeFolder newFolder = null;
@@ -215,8 +214,7 @@ public class BaseFolderModule {
 	/**
 	 * Check recursively if the folder contains locked nodes
 	 */
-	public static boolean hasLockedNodes(String fldUuid) throws PathNotFoundException, DatabaseException,
-			RepositoryException {
+	public static boolean hasLockedNodes(String fldUuid) throws PathNotFoundException, DatabaseException, RepositoryException {
 		boolean hasLock = false;
 		
 		for (NodeDocument nDoc : NodeDocumentDAO.getInstance().findByParent(fldUuid)) {
@@ -235,8 +233,7 @@ public class BaseFolderModule {
 	 * 
 	 * TODO: Is this necessary? The access manager should prevent this and make the core thrown an exception.
 	 */
-	public static boolean hasWriteAccess(String fldUuid) throws PathNotFoundException, DatabaseException,
-			RepositoryException {
+	public static boolean hasWriteAccess(String fldUuid) throws PathNotFoundException, DatabaseException, RepositoryException {
 		log.debug("hasWriteAccess({})", fldUuid);
 		DbAccessManager am = SecurityHelper.getAccessManager();
 		boolean canWrite = true;
@@ -279,7 +276,8 @@ public class BaseFolderModule {
 	/**
 	 * Check if a node is being used in a running workflow (Helper)
 	 */
-	private static boolean hasWorkflowNodesInDepth(String fldUuid, Set<String> workflowNodes) throws WorkflowException, PathNotFoundException, DatabaseException {
+	private static boolean hasWorkflowNodesInDepth(String fldUuid, Set<String> workflowNodes) throws WorkflowException,
+			PathNotFoundException, DatabaseException {
 		for (NodeDocument nDoc : NodeDocumentDAO.getInstance().findByParent(fldUuid)) {
 			if (workflowNodes.contains(nDoc.getUuid())) {
 				return true;
@@ -291,6 +289,19 @@ public class BaseFolderModule {
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Check if a folder is used as category in other nodes.
+	 */
+	public static boolean isCategoryInUse(String fldUuid) throws PathNotFoundException, DatabaseException, RepositoryException {
+		boolean inUse = NodeBaseDAO.getInstance().isCategoryInUse(fldUuid);
+		
+		for (NodeFolder nFld : NodeFolderDAO.getInstance().findByParent(fldUuid)) {
+			inUse |= isCategoryInUse(nFld.getUuid());
+		}
+		
+		return inUse;
 	}
 	
 	/**
@@ -327,8 +338,7 @@ public class BaseFolderModule {
 	/**
 	 * Get content info by user recursively
 	 */
-	public static Map<String, ContentInfo> getUserContentInfo(String folderUuid) throws
-			PathNotFoundException, DatabaseException {
+	public static Map<String, ContentInfo> getUserContentInfo(String folderUuid) throws PathNotFoundException, DatabaseException {
 		log.debug("getUserContentInfo({})", folderUuid);
 		Map<String, ContentInfo> userContentInfo = new HashMap<String, ContentInfo>();
 		
