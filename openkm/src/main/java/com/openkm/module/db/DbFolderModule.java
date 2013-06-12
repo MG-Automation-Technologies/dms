@@ -204,7 +204,7 @@ public class DbFolderModule implements FolderModule {
 				throw new LockException("Can't delete a folder with nodes used in a workflow");
 			}
 			
-			if (fldPath.startsWith("/" + Repository.CATEGORIES) && NodeBaseDAO.getInstance().isCategoryInUse(fldUuid)) {
+			if (fldPath.startsWith("/" + Repository.CATEGORIES) && BaseFolderModule.isCategoryInUse(fldUuid)) {
 				throw new AccessDeniedException("Can't delete a category in use");
 			}
 			
