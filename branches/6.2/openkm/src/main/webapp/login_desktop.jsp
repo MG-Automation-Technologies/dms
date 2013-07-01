@@ -4,7 +4,6 @@
 <%@ page import="com.openkm.core.Config"%>
 <%@ page import="com.openkm.dao.LanguageDAO"%>
 <%@ page import="com.openkm.dao.bean.Language"%>
-<%@ page import="com.openkm.dao.HibernateUtil"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -102,19 +101,7 @@
       </form>
     </div>
   </div>
-  <% if (!Config.HIBERNATE_HBM2DDL.equals(HibernateUtil.HBM2DDL_NONE)) { %>
-    <table border="0" cellpadding="2" cellspacing="0" align="center" class="demo">
-      <tr><td class="demo_title">WARNING</td></tr>
-      <tr><td class="demo_alert"><%=Config.PROPERTY_HIBERNATE_HBM2DDL%> = <%=Config.HIBERNATE_HBM2DDL%></td></tr>
-      
-      <% if (Boolean.parseBoolean(Config.HIBERNATE_CREATE_AUTOFIX)) { %>
-        <tr><td class="demo_alert">But has been automatically fixed</td></tr>
-      <% } else { %>
-        <tr><td class="demo_alert">Need to be fixed before next restart</td></tr>
-      <% } %>
-    </table>
-  <% } %>
-
+  
   <script type="text/javascript">
     function makeLowercase() {
       var username = document.getElementById('j_username'); 
