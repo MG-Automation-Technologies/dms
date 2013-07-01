@@ -304,6 +304,26 @@ public class FormUtils {
 		
 		return null;
 	}
+	
+	/**
+	 * Resolve Property Select Label.
+	 */
+	public static String getSelectLabel(String propertyName, String value) throws IOException, ParseException {
+		FormElement fe = getFormElement(parsePropertyGroupsForms(Config.PROPERTY_GROUPS_XML), propertyName);
+		String label = null;
+		
+		if (fe instanceof Select) {
+			Select sel = (Select) fe;
+			
+			for (Option opt : sel.getOptions()) {
+				if (opt.getValue().equals(value)) {
+					label = opt.getLabel();
+				}
+			}
+		}
+		
+		return label;
+	}
 
 	/**
 	 * Parse individual form fields 
