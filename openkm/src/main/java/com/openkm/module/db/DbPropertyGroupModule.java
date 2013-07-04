@@ -41,7 +41,9 @@ import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Input;
 import com.openkm.bean.form.Option;
 import com.openkm.bean.form.Select;
+import com.openkm.bean.form.Separator;
 import com.openkm.bean.form.SuggestBox;
+import com.openkm.bean.form.Text;
 import com.openkm.bean.form.TextArea;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
@@ -284,6 +286,10 @@ public class DbPropertyGroupModule implements PropertyGroupModule {
 								}
 							}
 						}
+					} else if (fe instanceof Text) {
+						// Ignore presentation property
+					} else if (fe instanceof Separator) {
+						// Ignore presentation property
 					} else {
 						throw new ParseException("Unknown property definition: " + fe.getName());
 					}
@@ -448,6 +454,10 @@ public class DbPropertyGroupModule implements PropertyGroupModule {
 						String value = gson.toJson(tmp);
 						nodProps.put(fe.getName(), value);
 					}
+				} else if (fe instanceof Text) {
+					// Ignore presentation property
+				} else if (fe instanceof Separator) {
+					// Ignore presentation property
 				} else {
 					log.warn("Unknown property definition: {}", fe.getName());
 					throw new ParseException("Unknown property definition: " + fe.getName());
