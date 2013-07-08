@@ -494,7 +494,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	 * showNotes
 	 */
 	public void showNotes() {
-		tabPanel.add(notes, Main.i18n("tab.document.notes"));
+		tabPanel.add(notes, Main.i18n("tab.folder.notes"));
 		notesVisible = true;
 	}
 	
