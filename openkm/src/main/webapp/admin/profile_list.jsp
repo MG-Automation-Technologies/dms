@@ -55,10 +55,12 @@
                 </c:otherwise>
               </c:choose>
             </td>
-            <td>
+            <td align="center">
               <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
-              &nbsp;
-              <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+              <c:if test="${prf.id != 1}">
+                &nbsp;
+                <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+              </c:if>
               &nbsp;
               <a href="${urlClone}"><img src="img/action/clone.png" alt="Clone" title="Clone"/></a>
             </td>
