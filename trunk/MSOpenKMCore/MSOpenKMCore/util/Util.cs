@@ -12,11 +12,11 @@ namespace MSOpenKMCore.util
     public class Util
     {
         // copy document object to OKMDocument object
-        public static OKMDocument copy(document doc, String docType)
+        public static MSOpenKMCore.bean.OKMDocument copy(document doc, String docType)
         {
             try
             {
-                OKMDocument oKMDocument = new OKMDocument();
+                MSOpenKMCore.bean.OKMDocument oKMDocument = new MSOpenKMCore.bean.OKMDocument();
                 FileUtil fileUtil = new FileUtil();
 
                 oKMDocument.setUUID(doc.uuid);
@@ -34,7 +34,7 @@ namespace MSOpenKMCore.util
         }
 
         // Return the folder name, text before last "/" character
-        public static String getFolderName(folder folderNode)
+        public static String getFolderName(MSOpenKMCore.ws.folder folderNode)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace MSOpenKMCore.util
         }
 
         // Return if a user has folder has write permissions
-        public static bool hasWritePermission(folder fld)
+        public static bool hasWritePermission(MSOpenKMCore.ws.folder fld)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace MSOpenKMCore.util
         }
 
         // Return if a user document has write permissions
-        public static bool hasWritePermission(folder fatherFld, document doc)
+        public static bool hasWritePermission(MSOpenKMCore.ws.folder fatherFld, MSOpenKMCore.ws.document doc)
         {
             try
             {
@@ -75,7 +75,7 @@ namespace MSOpenKMCore.util
         }
 
         // Return the openkm document path
-        public static String getOpenKMPath(String localFilename, folder fld)
+        public static String getOpenKMPath(String localFilename, MSOpenKMCore.ws.folder fld)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace MSOpenKMCore.util
         }
 
         // get the document Extension
-        public static String getDocumentExtension(document doc)
+        public static String getDocumentExtension(MSOpenKMCore.ws.document doc)
         {
             try
             {
@@ -101,7 +101,7 @@ namespace MSOpenKMCore.util
         }
 
         // get the document name
-        public static String getDocumentName(document doc)
+        public static String getDocumentName(MSOpenKMCore.ws.document doc)
         {
             try
             {
@@ -114,7 +114,8 @@ namespace MSOpenKMCore.util
         }
 
         // Return if document is valid to be opened with ms word
-        public static bool isDocumentValidToOpenWithMSWord(document doc) {
+        public static bool isDocumentValidToOpenWithMSWord(MSOpenKMCore.ws.document doc)
+        {
             bool valid = false;
             String[] WORD_EXTENSIONS = new String[15] {"doc","dot","xml","html",
                                                        "htm","mht","mhtml","rtf",
@@ -144,7 +145,7 @@ namespace MSOpenKMCore.util
         }
 
         // Return if document is valid to be opened with ms excel
-        public static bool isDocumentValidToOpenWithMSExcel(document doc)
+        public static bool isDocumentValidToOpenWithMSExcel(MSOpenKMCore.ws.document doc)
         {
             bool valid = false;
             String[] EXCEL_EXTENSIONS = new String[16] {"xls","xlt","htm","html","mht","mhtml","xml",
@@ -174,7 +175,7 @@ namespace MSOpenKMCore.util
         }
 
         // Return if document is valid to be opened with ms excel
-        public static bool isDocumentValidToOpenWithMSPowerPoint(document doc)
+        public static bool isDocumentValidToOpenWithMSPowerPoint(MSOpenKMCore.ws.document doc)
         {
             bool valid = false;
             String[] POWERPOINT_EXTENSIONS = new String[9] {"htm","html","mht","mhtml","txt","rtf","doc","wpd","wps"};
@@ -216,7 +217,7 @@ namespace MSOpenKMCore.util
         }
 
         // Return if document is valid to be opened with ms visio
-        public static bool isDocumentValidToOpenWithMSVisio(document doc)
+        public static bool isDocumentValidToOpenWithMSVisio(MSOpenKMCore.ws.document doc)
         {
             bool valid = false;
             String[] VISIO_EXTENSIONS = new String[9] { "vsd", "vxd", "vss", "vsx", "vst", "vtx", "vsw", "svg", "svgz" };

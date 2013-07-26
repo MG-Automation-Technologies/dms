@@ -27,10 +27,10 @@ namespace MSOpenKMCore.form
         private TreeNode rootNode = null;
         private TreeNode actualNode = null;
 
-        private OKMAuthService authService = null;
-        private OKMRepositoryService repositoryService = null;
-        private OKMFolderService folderService = null;
-        private OKMDocumentService documentService = null;
+        private OKMAuth authService = null;
+        private OKMRepository repositoryService = null;
+        private OKMFolder folderService = null;
+        private MSOpenKMCore.ws.OKMDocument documentService = null;
 
         private String formType = ""; // Excel, word form type ( used to validating extensions files )
 
@@ -101,10 +101,10 @@ namespace MSOpenKMCore.form
             try
             {
                 SSL.init(configXML.getHost());
-                authService = new OKMAuthService(configXML.getHost());
-                repositoryService = new OKMRepositoryService(configXML.getHost());
-                folderService = new OKMFolderService(configXML.getHost());
-                documentService = new OKMDocumentService(configXML.getHost());
+                authService = new OKMAuth(configXML.getHost());
+                repositoryService = new OKMRepository(configXML.getHost());
+                folderService = new OKMFolder(configXML.getHost());
+                documentService = new MSOpenKMCore.ws.OKMDocument(configXML.getHost());
             }
             catch (Exception e)
             {
@@ -137,7 +137,7 @@ namespace MSOpenKMCore.form
             try
             {
                 actualNode.Nodes.Clear(); // removes all nodes
-                foreach (folder childFolder in folderService.getChilds(token, ((folder)actualNode.Tag).path))
+                foreach (MSOpenKMCore.ws.folder childFolder in folderService.getChilds(token, ((MSOpenKMCore.ws.folder)actualNode.Tag).path))
                 {
                     int selectedImage = imageList.selectImageIndex(childFolder);
                     TreeNode childNode = new TreeNode(Util.getFolderName(childFolder), selectedImage, selectedImage);
@@ -210,8 +210,8 @@ namespace MSOpenKMCore.form
                 // Evaluates buttons enabled
                 if (dataGridView.RowCount > 0 && dataGridView.SelectedRows.Count > 0)
                 {
-                    folder fld = (folder)actualNode.Tag;
-                    document doc = (document)dataGridView.Rows[dataGridView.SelectedRows[0].Index].Tag;
+                    MSOpenKMCore.ws.folder fld = (MSOpenKMCore.ws.folder)actualNode.Tag;
+                    MSOpenKMCore.ws.document doc = (MSOpenKMCore.ws.document)dataGridView.Rows[dataGridView.SelectedRows[0].Index].Tag;
                     evaluateEnabledButtonByPermissions(fld, doc);
                 }
                 else
@@ -237,7 +237,7 @@ namespace MSOpenKMCore.form
                 // OpenKM authentication
                 token = authService.login(configXML.getUser(), configXML.getPassword());
 
-                folder folderNode = (folder) e.Node.Tag;
+                MSOpenKMCore.ws.folder folderNode = (MSOpenKMCore.ws.folder)e.Node.Tag;
                 actualNode = e.Node;
                 
                 // Gets folder childs
@@ -250,8 +250,8 @@ namespace MSOpenKMCore.form
                 // Evaluates buttons enabled
                 if (dataGridView.RowCount > 0 && dataGridView.SelectedRows.Count > 0)
                 {
-                    folder fld = (folder) actualNode.Tag;
-                    document doc = (document)dataGridView.Rows[dataGridView.SelectedRows[0].Index].Tag;
+                    MSOpenKMCore.ws.folder fld = (MSOpenKMCore.ws.folder)actualNode.Tag;
+                    MSOpenKMCore.ws.document doc = (MSOpenKMCore.ws.document)dataGridView.Rows[dataGridView.SelectedRows[0].Index].Tag;
                     evaluateEnabledButtonByPermissions(fld, doc);
                 }
                 else
@@ -317,8 +317,8 @@ namespace MSOpenKMCore.form
                 // Evaluates buttons enabled
                 if (dataGridView.RowCount > 0 && dataGridView.SelectedRows.Count > 0)
                 {
-                    folder fld = (folder)actualNode.Tag;
-                    document doc = (document)dataGridView.Rows[dataGridView.SelectedRows[0].Index].Tag;
+                    MSOpenKMCore.ws.folder fld = (MSOpenKMCore.ws.folder)actualNode.Tag;
+                    MSOpenKMCore.ws.document doc = (MSOpenKMCore.ws.document)dataGridView.Rows[dataGridView.SelectedRows[0].Index].Tag;
                     evaluateEnabledButtonByPermissions(fld, doc);
                 }
                 else
@@ -345,7 +345,7 @@ namespace MSOpenKMCore.form
         }
 
         // Evaluates enabled buttons by permisions
-        private void evaluateEnabledButtonByPermissions(folder fld, document doc)
+        private void evaluateEnabledButtonByPermissions(MSOpenKMCore.ws.folder fld, MSOpenKMCore.ws.document doc)
         {
             if (Util.hasWritePermission(fld, doc) && !doc.locked && !doc.checkedOut)
             {
@@ -385,7 +385,7 @@ namespace MSOpenKMCore.form
                 if (dataGridView.RowCount > 0 && dataGridView.SelectedRows.Count > 0)
                 {
                     bool editFile = true;
-                    document doc = (document)dataGridView.Rows[dataGridView.SelectedRows[0].Index].Tag;
+                    MSOpenKMCore.ws.document doc = (MSOpenKMCore.ws.document)dataGridView.Rows[dataGridView.SelectedRows[0].Index].Tag;
 
                     // We try to advice user in case selects some document extension that seems not be good to be opened with MS Word
                     if (formType.Equals(OKMDocumentType.TYPE_WORD))
@@ -423,7 +423,7 @@ namespace MSOpenKMCore.form
 
                     if (editFile)
                     {
-                        OKMDocument oKMDocument = DocumentLogic.checkoutDocument(doc, formType, configXML.getHost(), configXML.getUser(), configXML.getPassword());
+                        MSOpenKMCore.bean.OKMDocument oKMDocument = DocumentLogic.checkoutDocument(doc, formType, configXML.getHost(), configXML.getUser(), configXML.getPassword());
                         if (oKMDocument != null)
                         {
                             documentXML.add(oKMDocument);

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
-using MSOpenKMCore.bean;
 using MSOpenKMCore.ws;
+using MSOpenKMCore.bean;
 using System.IO;
 
 namespace MSOpenKMCore.util
@@ -74,7 +74,7 @@ namespace MSOpenKMCore.util
             {
                 bool hasWritePermission = ((folderNode.permissions & OKMPermissions.WRITE) == OKMPermissions.WRITE);
 
-                if (folderNode.hasChilds)
+                if (folderNode.hasChildren)
                 {
                     if (folderNode.subscribed)
                     {
@@ -129,6 +129,8 @@ namespace MSOpenKMCore.util
             {
                 throw e;
             }
-        }
+        }    
+
+    
     }
 }
