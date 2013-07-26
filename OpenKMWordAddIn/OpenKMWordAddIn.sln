@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenKMWordAddIn", "OpenKMWordAddIn\OpenKMWordAddIn.csproj", "{FB047C3A-D25D-42E3-B189-EE3FE506FA2C}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "OpenKMWordAddInSetup", "OpenKMWordAddIn\OpenKMWordAddInSetup\OpenKMWordAddInSetup.vdproj", "{93FDBC9B-EC61-46A5-83EB-3FF2546F6466}"
