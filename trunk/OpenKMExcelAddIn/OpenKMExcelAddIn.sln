@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenKMExcelAddIn", "OpenKMExcelAddIn\OpenKMExcelAddIn.csproj", "{60C523E5-298B-42D0-840A-0AE14A882F3E}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "OpenKMExcelAddInSetup", "OpenKMExcelAddIn\OpenKMExcelAddInSetup\OpenKMExcelAddInSetup.vdproj", "{45AEAE7F-9C1C-40C8-998B-0373CB19BBC0}"
