@@ -327,7 +327,8 @@ namespace OpenKMExcelAddIn
             this.commandBar.Controls.Add(this.checkinButton);
             this.commandBar.Controls.Add(this.cancelCheckoutButton);
             this.commandBar.Controls.Add(this.helpButton);
-            this.commandBar.UpdateCounter = 2;
+            this.commandBar.UpdateCounter = 3;
+            this.commandBar.UseForRibbon = true;
             // 
             // configureButton
             // 
