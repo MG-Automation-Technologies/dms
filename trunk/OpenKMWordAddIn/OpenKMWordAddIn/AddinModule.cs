@@ -275,7 +275,8 @@ namespace OpenKMWordAddIn
             this.commandBar.Controls.Add(this.checkinButton);
             this.commandBar.Controls.Add(this.cancelCheckoutButton);
             this.commandBar.Controls.Add(this.helpButton);
-            this.commandBar.UpdateCounter = 4;
+            this.commandBar.UpdateCounter = 7;
+            this.commandBar.UseForRibbon = true;
             // 
             // configureButton
             // 
