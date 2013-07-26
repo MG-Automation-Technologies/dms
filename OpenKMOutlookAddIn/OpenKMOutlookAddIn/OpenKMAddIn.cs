@@ -27,11 +27,11 @@ namespace OpenKMOutlookAddIn
             {
                 Outlook.Explorer openWindow = explorers.Item(y);
                 String token = "";
-                OKMAuthService authService = new OKMAuthService(configXML.getHost());
-                OKMFolderService folderService = new OKMFolderService(configXML.getHost());
-                OKMRepositoryService repositoryService = new OKMRepositoryService(configXML.getHost());
-                OKMMailService mailService = new OKMMailService(configXML.getHost());
-                OKMDocumentService documentService = new OKMDocumentService(configXML.getHost());
+                OKMAuth authService = new OKMAuth(configXML.getHost());
+                OKMFolder folderService = new OKMFolder(configXML.getHost());
+                OKMRepository repositoryService = new OKMRepository(configXML.getHost());
+                OKMMail mailService = new OKMMail(configXML.getHost());
+                OKMDocument documentService = new OKMDocument(configXML.getHost());
 
                 try
                 {
@@ -233,7 +233,7 @@ namespace OpenKMOutlookAddIn
                                         {
                                             File.Delete(filename);
                                         }
-                                        catch (IOException ex)
+                                        catch (System.IO.IOException ex)
                                         {
                                             MessageBox.Show(String.Format(resources.GetString("error_deleting_tmp_file"), filename, ex.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                                         }
