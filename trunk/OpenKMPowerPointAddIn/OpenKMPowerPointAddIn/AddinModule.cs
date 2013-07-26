@@ -286,7 +286,8 @@ namespace OpenKMPowerPointAddIn
             this.commandBar.Controls.Add(this.checkinButton);
             this.commandBar.Controls.Add(this.cancelCheckoutButton);
             this.commandBar.Controls.Add(this.helpButton);
-            this.commandBar.UpdateCounter = 2;
+            this.commandBar.UpdateCounter = 3;
+            this.commandBar.UseForRibbon = true;
             // 
             // configureButton
             // 
@@ -337,14 +338,14 @@ namespace OpenKMPowerPointAddIn
             this.helpButton.Style = AddinExpress.MSO.ADXMsoButtonStyle.adxMsoButtonIcon;
             this.helpButton.UpdateCounter = 3;
             // 
-            // adxRibbonTab1
+            // ribbonTab
             // 
             this.ribbonTab.Caption = "OpenKM";
             this.ribbonTab.Controls.Add(this.ribbonGroup);
             this.ribbonTab.Id = "adxRibbonTab_2da5e826a51b403ab937b858f1e02aa1";
             this.ribbonTab.Ribbons = AddinExpress.MSO.ADXRibbons.msrPowerPointPresentation;
             // 
-            // adxRibbonGroup1
+            // ribbonGroup
             // 
             this.ribbonGroup.Caption = "OpenKM tools";
             this.ribbonGroup.Controls.Add(this.RibbonBox);
@@ -352,13 +353,13 @@ namespace OpenKMPowerPointAddIn
             this.ribbonGroup.ImageTransparentColor = System.Drawing.Color.Transparent;
             this.ribbonGroup.Ribbons = AddinExpress.MSO.ADXRibbons.msrPowerPointPresentation;
             // 
-            // adxRibbonBox1
+            // RibbonBox
             // 
             this.RibbonBox.Controls.Add(this.ribbonSplitButton);
             this.RibbonBox.Id = "adxRibbonBox_99865a6e69f44b7ab32935430b9ee8e5";
             this.RibbonBox.Ribbons = AddinExpress.MSO.ADXRibbons.msrPowerPointPresentation;
             // 
-            // adxRibbonSplitButton1
+            // ribbonSplitButton
             // 
             this.ribbonSplitButton.Controls.Add(this.ribbonMenu);
             this.ribbonSplitButton.Id = "adxRibbonSplitButton_08ec12e635d44c87939527e2b35a09a1";
@@ -366,7 +367,7 @@ namespace OpenKMPowerPointAddIn
             this.ribbonSplitButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrPowerPointPresentation;
             this.ribbonSplitButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
             // 
-            // adxRibbonMenu1
+            // ribbonMenu
             // 
             this.ribbonMenu.Controls.Add(this.configurationRibbonButton);
             this.ribbonMenu.Controls.Add(this.addRibbonButton);
@@ -378,42 +379,42 @@ namespace OpenKMPowerPointAddIn
             this.ribbonMenu.ImageTransparentColor = System.Drawing.Color.Transparent;
             this.ribbonMenu.Ribbons = AddinExpress.MSO.ADXRibbons.msrPowerPointPresentation;
             // 
-            // adxRibbonButton1
+            // configurationRibbonButton
             // 
             this.configurationRibbonButton.Caption = "Configure";
             this.configurationRibbonButton.Id = "adxRibbonButton_856531045d04488994c0a4543143ca65";
             this.configurationRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
             this.configurationRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrPowerPointPresentation;
             // 
-            // adxRibbonButton2
+            // addRibbonButton
             // 
             this.addRibbonButton.Caption = "Add";
             this.addRibbonButton.Id = "adxRibbonButton_594652ed3a0c4788bdcccf7e70adf724";
             this.addRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
             this.addRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrPowerPointPresentation;
             // 
-            // adxRibbonButton3
+            // editRibbonButton
             // 
             this.editRibbonButton.Caption = "Edit";
             this.editRibbonButton.Id = "adxRibbonButton_9cce86e5bb754d12a27d8ee42813b79b";
             this.editRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
             this.editRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrPowerPointPresentation;
             // 
-            // adxRibbonButton4
+            // checkinRibbonButton
             // 
             this.checkinRibbonButton.Caption = "Checkin";
             this.checkinRibbonButton.Id = "adxRibbonButton_0d42fb72615d448c97ac617ba207dbb5";
             this.checkinRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
             this.checkinRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrPowerPointPresentation;
             // 
-            // adxRibbonButton5
+            // cancelCheckoutRibbonButton
             // 
             this.cancelCheckoutRibbonButton.Caption = "Cancel checkout";
             this.cancelCheckoutRibbonButton.Id = "adxRibbonButton_467bee6d33894d2e8607f28ccf9b6224";
             this.cancelCheckoutRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
             this.cancelCheckoutRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrPowerPointPresentation;
             // 
-            // adxRibbonButton6
+            // helpRibbonButton
             // 
             this.helpRibbonButton.Caption = "Help";
             this.helpRibbonButton.Id = "adxRibbonButton_b639797daee14ba99bb376757c5463a9";

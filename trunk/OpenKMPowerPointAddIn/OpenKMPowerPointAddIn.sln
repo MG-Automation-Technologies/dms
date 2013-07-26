@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenKMPowerPointAddIn", "OpenKMPowerPointAddIn\OpenKMPowerPointAddIn.csproj", "{DC9D9CB5-04BF-4416-8464-B8EE7A1D70CA}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "OpenKMPowerPointAddInSetup", "OpenKMPowerPointAddIn\OpenKMPowerPointAddInSetup\OpenKMPowerPointAddInSetup.vdproj", "{9B89C0E8-8EA2-47EF-9217-C171AE00462F}"
