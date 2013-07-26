@@ -14,6 +14,8 @@ using System.Net.Security;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 
+
+
 namespace MSOpenKMCore.form
 {
     public partial class TreeForm : Form
@@ -25,9 +27,9 @@ namespace MSOpenKMCore.form
         private TreeNode actualNode = null;
         private TreeNodeMouseClickEventHandler treeNodeMouseClickEventHandler;
 
-        private OKMAuthService authService = null;
-        private OKMRepositoryService repositoryService = null;
-        private OKMFolderService folderService = null;
+        private OKMAuth authService = null;
+        private OKMRepository repositoryService = null;
+        private OKMFolder folderService = null;
 
         private Object application = null;
         ComponentResourceManager resources = null;
@@ -87,9 +89,9 @@ namespace MSOpenKMCore.form
             try
             {
                 SSL.init(configXML.getHost());
-                authService = new OKMAuthService(configXML.getHost());
-                repositoryService = new OKMRepositoryService(configXML.getHost());
-                folderService = new OKMFolderService(configXML.getHost());
+                authService = new OKMAuth(configXML.getHost());
+                repositoryService = new OKMRepository(configXML.getHost());
+                folderService = new OKMFolder(configXML.getHost());
             }
             catch (Exception e)
             {
@@ -102,7 +104,7 @@ namespace MSOpenKMCore.form
         {
             try
             {
-                folder rootFolder = repositoryService.getRootFolder(token);
+                MSOpenKMCore.ws.folder rootFolder = repositoryService.getRootFolder(token);
                 int selectedImage = imageList.selectImageIndex(rootFolder);
                 rootNode = new TreeNode(Util.getFolderName(rootFolder), selectedImage, selectedImage);
                 rootNode.Tag = rootFolder;
@@ -122,7 +124,7 @@ namespace MSOpenKMCore.form
         {
             try
             {
-                actualNode.Nodes.Clear(); // removes all nodes
+                actualNode.Nodes.Clear(); // removes all nodes  
                 foreach (folder childFolder in folderService.getChilds(token, ((folder)actualNode.Tag).path))
                 {
                     int selectedImage = imageList.selectImageIndex(childFolder);
@@ -174,7 +176,7 @@ namespace MSOpenKMCore.form
                 tree.EndUpdate();
 
                 // Evaluate enabled buttons
-                evaluateEnabledButtonByPermissions((folder)actualNode.Tag);
+                evaluateEnabledButtonByPermissions((MSOpenKMCore.ws.folder)actualNode.Tag);
 
                 // Logout OpenKM
                 authService.logout(token);
@@ -206,7 +208,7 @@ namespace MSOpenKMCore.form
                 // OpenKM authentication
                 token = authService.login(configXML.getUser(), configXML.getPassword());
 
-                folder folderNode = (folder)e.Node.Tag;
+                MSOpenKMCore.ws.folder folderNode = (MSOpenKMCore.ws.folder)e.Node.Tag;
                 actualNode = e.Node;
 
                 // Gets folder childs
@@ -214,7 +216,7 @@ namespace MSOpenKMCore.form
                 actualNode.ExpandAll();
 
                 // Evaluate enabled buttons
-                evaluateEnabledButtonByPermissions((folder)actualNode.Tag);
+                evaluateEnabledButtonByPermissions((MSOpenKMCore.ws.folder)actualNode.Tag);
 
                 // Logout OpenKM
                 authService.logout(token);
@@ -235,7 +237,7 @@ namespace MSOpenKMCore.form
         }
 
         // Evaluates enabled buttons by permisions
-        private void evaluateEnabledButtonByPermissions(folder fld)
+        private void evaluateEnabledButtonByPermissions(MSOpenKMCore.ws.folder fld)
         {
             if (Util.hasWritePermission(fld))
             {
@@ -303,7 +305,7 @@ namespace MSOpenKMCore.form
                     localFileName = (String)application;
                 }
 
-                String docPath = Util.getOpenKMPath(localFileName, (folder)actualNode.Tag);
+                String docPath = Util.getOpenKMPath(localFileName, (MSOpenKMCore.ws.folder)actualNode.Tag);
                 // Must save a temporary file to be uploaded
                 File.Copy(localFileName, localFileName + "_TEMP");
                 localFileName = localFileName + "_TEMP";

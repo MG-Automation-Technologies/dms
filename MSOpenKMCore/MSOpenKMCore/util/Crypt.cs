@@ -39,7 +39,7 @@ namespace MSOpenKMCore.util
             }
             catch (Exception e)
             {
-                return "";
+                return e.Message;
             }
             finally
             {
@@ -83,7 +83,7 @@ namespace MSOpenKMCore.util
             }
             catch (Exception e)
             {
-                return "";
+                return e.Message;
             }
 
             finally

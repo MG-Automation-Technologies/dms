@@ -45,7 +45,8 @@ namespace MSOpenKMCore.util
         }
 
         // returns file name that not exist in disk
-        public String getFilenameWithoutCollision (document doc) {
+        public String getFilenameWithoutCollision(MSOpenKMCore.ws.document doc)
+        {
             try
             {
                 String fileName = getConfigPath() + @"\" + Util.getDocumentName(doc); // Default path name

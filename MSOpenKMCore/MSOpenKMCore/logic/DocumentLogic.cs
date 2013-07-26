@@ -13,24 +13,24 @@ namespace MSOpenKMCore.logic
     {
 
         // check out document
-        public static OKMDocument checkoutDocument(document doc, String type, String host, String username, String password)
+        public static MSOpenKMCore.bean.OKMDocument checkoutDocument(document doc, String type, String host, String username, String password)
         {
             String token = "";
-            OKMAuthService authService = null;
-            OKMDocumentService documentService = null;
+            OKMAuth authService = null;
+            MSOpenKMCore.ws.OKMDocument documentService = null;
 
             try
             {
                 // Init services
                 SSL.init(host);
-                authService = new OKMAuthService(host);
-                documentService = new OKMDocumentService(host);
+                authService = new OKMAuth(host);
+                documentService = new MSOpenKMCore.ws.OKMDocument(host);
 
                 // OpenKM authentication
                 token = authService.login(username, password);
 
                 // Create a new document
-                OKMDocument oKMDocument = Util.copy(doc, type);
+                MSOpenKMCore.bean.OKMDocument oKMDocument = Util.copy(doc, type);
 
                 // Creates new document
                 FileStream fileStream = new FileStream(oKMDocument.getLocalFilename(), FileMode.CreateNew);
@@ -67,18 +67,18 @@ namespace MSOpenKMCore.logic
         }
 
         // cancel checkout document
-        public static void cancelCheckout(OKMDocument oKMDocument, String host, String username, String password)
+        public static void cancelCheckout(MSOpenKMCore.bean.OKMDocument oKMDocument, String host, String username, String password)
         {
             String token = "";
-            OKMAuthService authService = null;
-            OKMDocumentService documentService = null;
+            OKMAuth authService = null;
+            MSOpenKMCore.ws.OKMDocument documentService = null;
 
             try
             {
                 // Init services
                 SSL.init(host);
-                authService = new OKMAuthService(host);
-                documentService = new OKMDocumentService(host);
+                authService = new MSOpenKMCore.ws.OKMAuth(host);
+                documentService = new MSOpenKMCore.ws.OKMDocument(host);
 
                 // OpenKM authentication
                 token = authService.login(username, password);
@@ -104,25 +104,25 @@ namespace MSOpenKMCore.logic
         }
 
         // Checkin document
-        public static void checkin(OKMDocument oKMDocument, String host, String username, String password)
+        public static void checkin(MSOpenKMCore.bean.OKMDocument oKMDocument, String host, String username, String password)
         {
             String token = "";
-            OKMAuthService authService = null;
-            OKMDocumentService documentService = null;
+            MSOpenKMCore.ws.OKMAuth authService = null;
+            MSOpenKMCore.ws.OKMDocument documentService = null;
 
             try
             {
                 // Init services
                 SSL.init(host);
-                authService = new OKMAuthService(host);
-                documentService = new OKMDocumentService(host);
+                authService = new MSOpenKMCore.ws.OKMAuth(host);
+                documentService = new MSOpenKMCore.ws.OKMDocument(host);
 
                 // OpenKM authentication
                 token = authService.login(username, password);
 
                 // Checkin document
-                documentService.setContent(token, oKMDocument.getPath(), FileUtil.readFile(oKMDocument.getLocalFilename()));
-                documentService.checkin(token, oKMDocument.getPath(), "");
+                //documentService.setContent(token, oKMDocument.getPath(), FileUtil.readFile(oKMDocument.getLocalFilename()));
+                //documentService.checkin(token, oKMDocument.getPath(), "");
 
                 // Logout OpenKM
                 authService.logout(token);
@@ -145,15 +145,15 @@ namespace MSOpenKMCore.logic
         public static void create(String localFileName, String docPath, String host, String username, String password)
         {
             String token = "";
-            OKMAuthService authService = null;
-            OKMDocumentService documentService = null;
+            OKMAuth authService = null;
+            MSOpenKMCore.ws.OKMDocument documentService = null;
 
             try
             {
                 // Init services
                 SSL.init(host);
-                authService = new OKMAuthService(host);
-                documentService = new OKMDocumentService(host);
+                authService = new OKMAuth(host);
+                documentService = new MSOpenKMCore.ws.OKMDocument(host);
 
                 // OpenKM authentication
                 token = authService.login(username, password);
