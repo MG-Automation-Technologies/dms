@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenKMOutlookAddIn", "OpenKMOutlookAddIn\OpenKMOutlookAddIn.csproj", "{BDFFC8B1-935B-4377-AA42-AA58CB312E40}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "OpenKMOutlookAddInSetup", "OpenKMOutlookAddIn\OpenKMOutlookAddInSetup\OpenKMOutlookAddInSetup.vdproj", "{A5C72CE6-7F78-4D3D-B3D3-BCB3A54B57F9}"
