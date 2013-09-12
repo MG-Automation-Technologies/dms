@@ -97,8 +97,8 @@ public class DbSearchModule implements SearchModule {
 	private static final SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("yyyyMMdd");
 	
 	@Override
-	public List<QueryResult> findByContent(String token, String expression) throws IOException, ParseException,
-			RepositoryException, DatabaseException {
+	public List<QueryResult> findByContent(String token, String expression) throws IOException, ParseException, RepositoryException,
+			DatabaseException {
 		log.debug("findByContent({}, {})", token, expression);
 		QueryParams params = new QueryParams();
 		params.setContent(expression);
@@ -108,8 +108,8 @@ public class DbSearchModule implements SearchModule {
 	}
 	
 	@Override
-	public List<QueryResult> findByName(String token, String expression) throws IOException, ParseException,
-			RepositoryException, DatabaseException {
+	public List<QueryResult> findByName(String token, String expression) throws IOException, ParseException, RepositoryException,
+			DatabaseException {
 		log.debug("findByName({}, {})", token, expression);
 		QueryParams params = new QueryParams();
 		params.setName(expression);
@@ -119,8 +119,8 @@ public class DbSearchModule implements SearchModule {
 	}
 	
 	@Override
-	public List<QueryResult> findByKeywords(String token, Set<String> expression) throws IOException, ParseException,
-			RepositoryException, DatabaseException {
+	public List<QueryResult> findByKeywords(String token, Set<String> expression) throws IOException, ParseException, RepositoryException,
+			DatabaseException {
 		log.debug("findByKeywords({}, {})", token, expression);
 		QueryParams params = new QueryParams();
 		params.setKeywords(expression);
@@ -142,24 +142,37 @@ public class DbSearchModule implements SearchModule {
 	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) throws IOException, ParseException,
 			RepositoryException, DatabaseException {
 		log.debug("findPaginated({}, {}, {}, {})", new Object[] { token, params, offset, limit });
+		Authentication auth = null, oldAuth = null;
 		Query query = null;
 		
-		if (params.getStatementQuery() != null && !params.getStatementQuery().equals("")) {
-			// query = params.getStatementQuery();
-		} else {
-			query = prepareStatement(params);
+		try {
+			if (token == null) {
+				auth = PrincipalUtils.getAuthentication();
+			} else {
+				oldAuth = PrincipalUtils.getAuthentication();
+				auth = PrincipalUtils.getAuthenticationByToken(token);
+			}
+			
+			if (params.getStatementQuery() != null && !params.getStatementQuery().equals("")) {
+				// query = params.getStatementQuery();
+			} else {
+				query = prepareStatement(params);
+			}
+			
+			ResultSet rs = findByStatementPaginated(auth, query, offset, limit);
+			log.debug("findPaginated: {}", rs);
+			return rs;
+		} finally {
+			if (token != null) {
+				PrincipalUtils.setAuthentication(oldAuth);
+			}
 		}
-		
-		ResultSet rs = findByStatementPaginated(token, query, offset, limit);
-		log.debug("findPaginated: {}", rs);
-		return rs;
 	}
 	
 	/**
 	 * Prepare statement
 	 */
-	public Query prepareStatement(QueryParams params) throws IOException, ParseException, RepositoryException,
-			DatabaseException {
+	public Query prepareStatement(QueryParams params) throws IOException, ParseException, RepositoryException, DatabaseException {
 		log.debug("prepareStatement({})", params);
 		BooleanQuery query = new BooleanQuery();
 		
@@ -186,9 +199,9 @@ public class DbSearchModule implements SearchModule {
 		List<String> pathInDepth = new ArrayList<String>();
 		
 		if (!params.getPath().equals("") && !params.getPath().equals("/" + Repository.ROOT)
-				&& !params.getPath().equals("/" + Repository.CATEGORIES)
-				&& !params.getPath().equals("/" + Repository.TEMPLATES) && !params.getPath().equals("/" + Repository.PERSONAL)
-				&& !params.getPath().equals("/" + Repository.MAIL) && !params.getPath().equals("/" + Repository.TRASH)) {
+				&& !params.getPath().equals("/" + Repository.CATEGORIES) && !params.getPath().equals("/" + Repository.TEMPLATES)
+				&& !params.getPath().equals("/" + Repository.PERSONAL) && !params.getPath().equals("/" + Repository.MAIL)
+				&& !params.getPath().equals("/" + Repository.TRASH)) {
 			try {
 				String uuid = NodeBaseDAO.getInstance().getUuidFromPath(params.getPath());
 				log.debug("Path in depth: {} => {}", uuid, NodeBaseDAO.getInstance().getPathFromUuid(uuid));
@@ -408,12 +421,10 @@ public class DbSearchModule implements SearchModule {
 								if (from != null && to != null) {
 									String sFrom = DAY_FORMAT.format(from.getTime());
 									String sTo = DAY_FORMAT.format(to.getTime());
-									query.add(new TermRangeQuery(ent.getKey(), sFrom, sTo, true, true),
-											BooleanClause.Occur.MUST);
+									query.add(new TermRangeQuery(ent.getKey(), sFrom, sTo, true, true), BooleanClause.Occur.MUST);
 								}
 							}
-						} else if (fe instanceof Input && ((Input) fe).getType().equals(Input.TYPE_TEXT)
-								|| fe instanceof TextArea) {
+						} else if (fe instanceof Input && ((Input) fe).getType().equals(Input.TYPE_TEXT) || fe instanceof TextArea) {
 							for (StringTokenizer st = new StringTokenizer(valueTrimmed, " "); st.hasMoreTokens();) {
 								Term t = new Term(ent.getKey(), st.nextToken().toLowerCase());
 								query.add(new WildcardQuery(t), BooleanClause.Occur.MUST);
@@ -431,21 +442,13 @@ public class DbSearchModule implements SearchModule {
 	/**
 	 * Find by statement
 	 */
-	private ResultSet findByStatementPaginated(String token, Query query, int offset, int limit) throws RepositoryException,
+	private ResultSet findByStatementPaginated(Authentication auth, Query query, int offset, int limit) throws RepositoryException,
 			DatabaseException {
-		log.debug("findByStatementPaginated({}, {}, {}, {}, {})", new Object[] { token, query, offset, limit });
+		log.debug("findByStatementPaginated({}, {}, {}, {}, {})", new Object[] { auth, query, offset, limit });
 		List<QueryResult> results = new ArrayList<QueryResult>();
 		ResultSet rs = new ResultSet();
-		Authentication auth = null, oldAuth = null;
 		
 		try {
-			if (token == null) {
-				auth = PrincipalUtils.getAuthentication();
-			} else {
-				oldAuth = PrincipalUtils.getAuthentication();
-				auth = PrincipalUtils.getAuthenticationByToken(token);
-			}
-			
 			if (query != null) {
 				NodeResultSet nrs = SearchDAO.getInstance().findByQuery(query, offset, limit);
 				rs.setTotal(nrs.getTotal());
@@ -479,10 +482,6 @@ public class DbSearchModule implements SearchModule {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (DatabaseException e) {
 			throw e;
-		} finally {
-			if (token != null) {
-				PrincipalUtils.setAuthentication(oldAuth);
-			}
 		}
 		
 		log.debug("findByStatementPaginated: {}", rs);
@@ -490,8 +489,7 @@ public class DbSearchModule implements SearchModule {
 	}
 	
 	@Override
-	public long saveSearch(String token, QueryParams params) throws AccessDeniedException, RepositoryException,
-			DatabaseException {
+	public long saveSearch(String token, QueryParams params) throws AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("saveSearch({}, {})", token, params);
 		Authentication auth = null, oldAuth = null;
 		long id = 0;
@@ -526,8 +524,7 @@ public class DbSearchModule implements SearchModule {
 	}
 	
 	@Override
-	public void updateSearch(String token, QueryParams params) throws AccessDeniedException, RepositoryException,
-			DatabaseException {
+	public void updateSearch(String token, QueryParams params) throws AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("updateSearch({}, {})", token, params);
 		Authentication auth = null, oldAuth = null;
 		
@@ -690,8 +687,7 @@ public class DbSearchModule implements SearchModule {
 	 * Get keyword map
 	 */
 	@SuppressWarnings("unchecked")
-	private Map<String, Integer> getKeywordMapLive(String token, List<String> filter) throws RepositoryException,
-			DatabaseException {
+	private Map<String, Integer> getKeywordMapLive(String token, List<String> filter) throws RepositoryException, DatabaseException {
 		log.debug("getKeywordMapLive({}, {})", token, filter);
 		String qs = "select elements(nb.keywords) from NodeBase nb";
 		HashMap<String, Integer> cloud = new HashMap<String, Integer>();
@@ -741,8 +737,7 @@ public class DbSearchModule implements SearchModule {
 	/**
 	 * Get keyword map
 	 */
-	private Map<String, Integer> getKeywordMapCached(String token, List<String> filter) throws RepositoryException,
-			DatabaseException {
+	private Map<String, Integer> getKeywordMapCached(String token, List<String> filter) throws RepositoryException, DatabaseException {
 		log.debug("getKeywordMapCached({}, {})", token, filter);
 		HashMap<String, Integer> keywordMap = new HashMap<String, Integer>();
 		Authentication auth = null, oldAuth = null;
@@ -782,8 +777,7 @@ public class DbSearchModule implements SearchModule {
 	}
 	
 	@Override
-	public List<Document> getCategorizedDocuments(String token, String categoryId) throws RepositoryException,
-			DatabaseException {
+	public List<Document> getCategorizedDocuments(String token, String categoryId) throws RepositoryException, DatabaseException {
 		log.debug("getCategorizedDocuments({}, {})", token, categoryId);
 		List<Document> documents = new ArrayList<Document>();
 		Authentication auth = null, oldAuth = null;
@@ -1001,8 +995,8 @@ public class DbSearchModule implements SearchModule {
 	}
 	
 	@Override
-	public List<Folder> getFoldersByPropertyValue(String token, String group, String property, String value)
-			throws RepositoryException, DatabaseException {
+	public List<Folder> getFoldersByPropertyValue(String token, String group, String property, String value) throws RepositoryException,
+			DatabaseException {
 		log.debug("getFoldersByPropertyValue({}, {}, {}, {})", new Object[] { token, group, property, value });
 		List<Folder> folders = new ArrayList<Folder>();
 		Authentication auth = null, oldAuth = null;
@@ -1033,8 +1027,8 @@ public class DbSearchModule implements SearchModule {
 	}
 	
 	@Override
-	public List<Mail> getMailsByPropertyValue(String token, String group, String property, String value)
-			throws RepositoryException, DatabaseException {
+	public List<Mail> getMailsByPropertyValue(String token, String group, String property, String value) throws RepositoryException,
+			DatabaseException {
 		log.debug("getMailsByPropertyValue({}, {}, {}, {})", new Object[] { token, group, property, value });
 		List<Mail> mails = new ArrayList<Mail>();
 		Authentication auth = null, oldAuth = null;
@@ -1073,8 +1067,8 @@ public class DbSearchModule implements SearchModule {
 	}
 	
 	@Override
-	public ResultSet findSimpleQueryPaginated(String token, String statement, int offset, int limit)
-			throws RepositoryException, DatabaseException {
+	public ResultSet findSimpleQueryPaginated(String token, String statement, int offset, int limit) throws RepositoryException,
+			DatabaseException {
 		log.debug("findSimpleQueryPaginated({}, {}, {}, {})", new Object[] { token, statement, offset, limit });
 		List<QueryResult> results = new ArrayList<QueryResult>();
 		ResultSet rs = new ResultSet();
@@ -1117,8 +1111,7 @@ public class DbSearchModule implements SearchModule {
 			}
 			
 			// Activity log
-			UserActivity.log(auth.getName(), "FIND_SIMPLE_QUERY_PAGINATED", null, null, offset + ", " + limit + ", "
-					+ statement);
+			UserActivity.log(auth.getName(), "FIND_SIMPLE_QUERY_PAGINATED", null, null, offset + ", " + limit + ", " + statement);
 		} catch (PathNotFoundException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (ParseException e) {
