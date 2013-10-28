@@ -425,6 +425,7 @@ public class UserPopup extends DialogBox implements ClickHandler {
 		userFlexTable.getFlexCellFormatter().setColSpan(0, 1, 2);
 		userNameText.setText(workspace.getUser().getUsername());
 		userMailText.setText(workspace.getEmail());
+		rolesPanel.clear();
 		
 		for (Iterator<String> it = workspace.getRoleList().iterator(); it.hasNext();) {
 			rolesPanel.add(new HTML(it.next()));
