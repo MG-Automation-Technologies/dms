@@ -53,6 +53,10 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 	private List<WorkspaceHandlerExtension> workHandlerExtensionList;
 	public boolean[] tabVisited = new boolean[NUMBER_OF_TABS];
 	public TabBar tabBar;
+	private int tabDesktopPos = 0;
+	private int tabSearchPos = 0;
+	private int tabDashboardPos = 0;
+	private int tabAdministrationPos = 0;
 	
 	/**
 	 * Tab Workspace
@@ -150,22 +154,22 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 	public void changeSelectedTab(int tabIndex) {
 		switch (tabIndex) {
 			case UIDockPanelConstants.DESKTOP :
-				tabBar.selectTab(UIDockPanelConstants.DESKTOP);
+				tabBar.selectTab(tabDesktopPos);
 				Main.get().mainPanel.setView(UIDockPanelConstants.DESKTOP);
 				break;
 				
 			case UIDockPanelConstants.SEARCH :
-				tabBar.selectTab(UIDockPanelConstants.SEARCH);
+				tabBar.selectTab(tabSearchPos);
 				Main.get().mainPanel.setView(UIDockPanelConstants.SEARCH);
 				break;
 				
 			case UIDockPanelConstants.DASHBOARD :
-				tabBar.selectTab(UIDockPanelConstants.DASHBOARD);
+				tabBar.selectTab(tabDashboardPos);
 				Main.get().mainPanel.setView(UIDockPanelConstants.DASHBOARD);
 				break;
 				
 			case UIDockPanelConstants.ADMINISTRATION :
-				tabBar.selectTab(UIDockPanelConstants.ADMINISTRATION);
+				tabBar.selectTab(tabAdministrationPos);
 				Main.get().mainPanel.setView(UIDockPanelConstants.ADMINISTRATION);
 				break;
 		}
@@ -205,6 +209,7 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 	 */
 	public void showDesktop() {
 		tabBar.addTab(Main.i18n("tab.workspace.desktop"));
+		tabDesktopPos = tabBar.getTabCount()-1;
 		desktopVisible = true;
 		
 	}
@@ -214,6 +219,7 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 	 */
 	public void showSearh() {
 		tabBar.addTab(Main.i18n("tab.workspace.search"));
+		tabSearchPos = tabBar.getTabCount()-1;
 		searchVisible = true;
 	}
 	
@@ -222,6 +228,7 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 	 */
 	public void showDashboard() {
 		tabBar.addTab(Main.i18n("tab.workspace.dashboard"));
+		tabDashboardPos = tabBar.getTabCount()-1;
 		dashboardVisible = true;
 	}
 	
@@ -230,6 +237,7 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 	 */
 	public void showAdministration() {
 		tabBar.addTab(Main.i18n("tab.workspace.administration"));
+		tabAdministrationPos = tabBar.getTabCount()-1;
 		adminitrationVisible = true;
 	}
 	
