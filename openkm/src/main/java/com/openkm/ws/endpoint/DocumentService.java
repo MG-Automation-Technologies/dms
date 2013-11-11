@@ -21,17 +21,19 @@
 
 package com.openkm.ws.endpoint;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
+import javax.xml.bind.annotation.XmlMimeType;
+import javax.xml.ws.BindingType;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,18 +58,47 @@ import com.openkm.module.ModuleManager;
 import com.openkm.principal.PrincipalAdapterException;
 
 @WebService(name = "OKMDocument", serviceName = "OKMDocument", targetNamespace = "http://ws.openkm.com")
+@BindingType(javax.xml.ws.soap.SOAPBinding.SOAP11HTTP_MTOM_BINDING)
 public class DocumentService {
 	private static Logger log = LoggerFactory.getLogger(DocumentService.class);
 	
+	class DhDatasource implements DataSource {
+		private InputStream is;
+		private OutputStream os;
+		private String docPath;
+		public DhDatasource(InputStream is, OutputStream os, String docPath) {
+			this.is = is;
+			this.os = os;
+			this.docPath = docPath;
+		}
+
+		public String getContentType() {
+			return "application/octet-stream";
+		}
+
+		public InputStream getInputStream() throws IOException {
+			return is;
+		}
+
+		public String getName() {
+			return docPath;
+		}
+
+		public OutputStream getOutputStream() throws IOException {
+			return os;
+		}
+	};
+
+
 	@WebMethod
 	public Document create(@WebParam(name = "token") String token, @WebParam(name = "doc") Document doc,
-			@WebParam(name = "content") byte[] content) throws IOException, UnsupportedMimeTypeException,
+			@WebParam(name = "content") @XmlMimeType("application/octet-stream") DataHandler content) throws IOException, UnsupportedMimeTypeException,
 			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, ItemExistsException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, ExtensionException,
 			AutomationException {
 		log.debug("create({})", doc);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		ByteArrayInputStream bais = new ByteArrayInputStream(content);
+		InputStream bais = content.getInputStream();
 		Document newDocument = dm.create(token, doc, bais);
 		bais.close();
 		log.debug("create: {}", newDocument);
@@ -76,13 +107,13 @@ public class DocumentService {
 	
 	@WebMethod
 	public Document createSimple(@WebParam(name = "token") String token, @WebParam(name = "docPath") String docPath,
-			@WebParam(name = "content") byte[] content) throws IOException, UnsupportedMimeTypeException,
+			@WebParam(name = "content") @XmlMimeType("application/octet-stream") DataHandler content) throws IOException, UnsupportedMimeTypeException,
 			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, ItemExistsException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, ExtensionException,
 			AutomationException {
 		log.debug("createSimple({})", docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		ByteArrayInputStream bais = new ByteArrayInputStream(content);
+		InputStream bais = content.getInputStream();
 		Document doc = new Document();
 		doc.setPath(docPath);
 		Document newDocument = dm.create(token, doc, bais);
@@ -112,31 +143,25 @@ public class DocumentService {
 	}
 	
 	@WebMethod
-	public byte[] getContent(@WebParam(name = "token") String token, @WebParam(name = "docPath") String docPath,
+	public @XmlMimeType("application/octet-stream") DataHandler getContent(@WebParam(name = "token") String token, @WebParam(name = "docPath") String docPath,
 			@WebParam(name = "checkout") boolean checkout) throws RepositoryException, IOException, PathNotFoundException,
 			AccessDeniedException, DatabaseException {
 		log.debug("getContent({}, {}, {})", new Object[] { token, docPath, checkout });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		InputStream is = dm.getContent(token, docPath, checkout);
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		IOUtils.copy(is, baos);
-		IOUtils.closeQuietly(is);
-		byte[] data = baos.toByteArray();
+		DataHandler data = new DataHandler(new DhDatasource(is, null, docPath));
 		log.debug("getContent: {}", data);
 		return data;
 	}
 	
 	@WebMethod
-	public byte[] getContentByVersion(@WebParam(name = "token") String token, @WebParam(name = "docPath") String docPath,
+	public @XmlMimeType("application/octet-stream") DataHandler  getContentByVersion(@WebParam(name = "token") String token, @WebParam(name = "docPath") String docPath,
 			@WebParam(name = "versionId") String versionId) throws RepositoryException, IOException, PathNotFoundException,
 			DatabaseException {
 		log.debug("getContentByVersion({}, {}, {})", new Object[] { token, docPath, versionId });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		InputStream is = dm.getContentByVersion(token, docPath, versionId);
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		IOUtils.copy(is, baos);
-		IOUtils.closeQuietly(is);
-		byte[] data = baos.toByteArray();
+		DataHandler data = new DataHandler(new DhDatasource(is, null, docPath));
 		log.debug("getContentByVersion: {}", data);
 		return data;
 	}
@@ -215,13 +240,13 @@ public class DocumentService {
 	
 	@WebMethod
 	public Version checkin(@WebParam(name = "token") String token, @WebParam(name = "docPath") String docPath,
-			@WebParam(name = "content") byte[] content, @WebParam(name = "comment") String comment)
+			@WebParam(name = "content") @XmlMimeType("application/octet-stream") DataHandler content, @WebParam(name = "comment") String comment)
 			throws FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, LockException,
 			VersionException, PathNotFoundException, AccessDeniedException, RepositoryException, IOException,
 			DatabaseException, ExtensionException {
 		log.debug("checkin({}, {} ,{})", new Object[] { token, docPath, comment });
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		ByteArrayInputStream bais = new ByteArrayInputStream(content);
+		InputStream bais = content.getInputStream();
 		Version version = dm.checkin(token, docPath, bais, comment);
 		log.debug("checkin: {}", version);
 		return version;
