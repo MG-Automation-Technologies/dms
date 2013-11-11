@@ -66,35 +66,35 @@ public class DocumentService {
 		private InputStream is;
 		private OutputStream os;
 		private String docPath;
+		
 		public DhDatasource(InputStream is, OutputStream os, String docPath) {
 			this.is = is;
 			this.os = os;
 			this.docPath = docPath;
 		}
-
+		
 		public String getContentType() {
 			return "application/octet-stream";
 		}
-
+		
 		public InputStream getInputStream() throws IOException {
 			return is;
 		}
-
+		
 		public String getName() {
 			return docPath;
 		}
-
+		
 		public OutputStream getOutputStream() throws IOException {
 			return os;
 		}
 	};
-
-
+	
 	@WebMethod
 	public Document create(@WebParam(name = "token") String token, @WebParam(name = "doc") Document doc,
-			@WebParam(name = "content") @XmlMimeType("application/octet-stream") DataHandler content) throws IOException, UnsupportedMimeTypeException,
-			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, ItemExistsException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, ExtensionException,
+			@WebParam(name = "content") @XmlMimeType("application/octet-stream") DataHandler content) throws IOException,
+			UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException, VirusDetectedException,
+			ItemExistsException, PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, ExtensionException,
 			AutomationException {
 		log.debug("create({})", doc);
 		DocumentModule dm = ModuleManager.getDocumentModule();
@@ -107,9 +107,9 @@ public class DocumentService {
 	
 	@WebMethod
 	public Document createSimple(@WebParam(name = "token") String token, @WebParam(name = "docPath") String docPath,
-			@WebParam(name = "content") @XmlMimeType("application/octet-stream") DataHandler content) throws IOException, UnsupportedMimeTypeException,
-			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, ItemExistsException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, ExtensionException,
+			@WebParam(name = "content") @XmlMimeType("application/octet-stream") DataHandler content) throws IOException,
+			UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException, VirusDetectedException,
+			ItemExistsException, PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, ExtensionException,
 			AutomationException {
 		log.debug("createSimple({})", docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
@@ -123,9 +123,8 @@ public class DocumentService {
 	}
 	
 	@WebMethod
-	public void delete(@WebParam(name = "token") String token, @WebParam(name = "docPath") String docPath)
-			throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException, DatabaseException,
-			ExtensionException {
+	public void delete(@WebParam(name = "token") String token, @WebParam(name = "docPath") String docPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, LockException, DatabaseException, ExtensionException {
 		log.debug("delete({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.delete(token, docPath);
@@ -143,7 +142,8 @@ public class DocumentService {
 	}
 	
 	@WebMethod
-	public @XmlMimeType("application/octet-stream") DataHandler getContent(@WebParam(name = "token") String token, @WebParam(name = "docPath") String docPath,
+	public @XmlMimeType("application/octet-stream")
+	DataHandler getContent(@WebParam(name = "token") String token, @WebParam(name = "docPath") String docPath,
 			@WebParam(name = "checkout") boolean checkout) throws RepositoryException, IOException, PathNotFoundException,
 			AccessDeniedException, DatabaseException {
 		log.debug("getContent({}, {}, {})", new Object[] { token, docPath, checkout });
@@ -155,7 +155,8 @@ public class DocumentService {
 	}
 	
 	@WebMethod
-	public @XmlMimeType("application/octet-stream") DataHandler  getContentByVersion(@WebParam(name = "token") String token, @WebParam(name = "docPath") String docPath,
+	public @XmlMimeType("application/octet-stream")
+	DataHandler getContentByVersion(@WebParam(name = "token") String token, @WebParam(name = "docPath") String docPath,
 			@WebParam(name = "versionId") String versionId) throws RepositoryException, IOException, PathNotFoundException,
 			DatabaseException {
 		log.debug("getContentByVersion({}, {}, {})", new Object[] { token, docPath, versionId });
@@ -191,8 +192,8 @@ public class DocumentService {
 	
 	@WebMethod
 	public Document rename(@WebParam(name = "token") String token, @WebParam(name = "docPath") String docPath,
-			@WebParam(name = "newName") String newName) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, ItemExistsException, LockException, DatabaseException, ExtensionException {
+			@WebParam(name = "newName") String newName) throws AccessDeniedException, RepositoryException, PathNotFoundException,
+			ItemExistsException, LockException, DatabaseException, ExtensionException {
 		log.debug("rename({}, {}, {})", new Object[] { token, docPath, newName });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Document renamedDocument = dm.rename(token, docPath, newName);
@@ -201,9 +202,8 @@ public class DocumentService {
 	}
 	
 	@WebMethod
-	public void setProperties(@WebParam(name = "token") String token, @WebParam(name = "doc") Document doc)
-			throws AccessDeniedException, RepositoryException, PathNotFoundException, VersionException, LockException,
-			DatabaseException {
+	public void setProperties(@WebParam(name = "token") String token, @WebParam(name = "doc") Document doc) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, VersionException, LockException, DatabaseException {
 		log.debug("setProperties({}, {})", token, doc);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.setProperties(token, doc);
@@ -211,8 +211,8 @@ public class DocumentService {
 	}
 	
 	@WebMethod
-	public void checkout(@WebParam(name = "token") String token, @WebParam(name = "docPath") String docPath)
-			throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException, DatabaseException {
+	public void checkout(@WebParam(name = "token") String token, @WebParam(name = "docPath") String docPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, LockException, DatabaseException {
 		log.debug("checkout({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.checkout(token, docPath);
@@ -240,10 +240,10 @@ public class DocumentService {
 	
 	@WebMethod
 	public Version checkin(@WebParam(name = "token") String token, @WebParam(name = "docPath") String docPath,
-			@WebParam(name = "content") @XmlMimeType("application/octet-stream") DataHandler content, @WebParam(name = "comment") String comment)
-			throws FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, LockException,
-			VersionException, PathNotFoundException, AccessDeniedException, RepositoryException, IOException,
-			DatabaseException, ExtensionException {
+			@WebParam(name = "content") @XmlMimeType("application/octet-stream") DataHandler content,
+			@WebParam(name = "comment") String comment) throws FileSizeExceededException, UserQuotaExceededException,
+			VirusDetectedException, LockException, VersionException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			IOException, DatabaseException, ExtensionException {
 		log.debug("checkin({}, {} ,{})", new Object[] { token, docPath, comment });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		InputStream bais = content.getInputStream();
@@ -264,8 +264,8 @@ public class DocumentService {
 	}
 	
 	@WebMethod
-	public LockInfo lock(@WebParam(name = "token") String token, @WebParam(name = "docPath") String docPath)
-			throws LockException, PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+	public LockInfo lock(@WebParam(name = "token") String token, @WebParam(name = "docPath") String docPath) throws LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("lock({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		LockInfo lock = dm.lock(token, docPath);
@@ -274,8 +274,8 @@ public class DocumentService {
 	}
 	
 	@WebMethod
-	public void unlock(@WebParam(name = "token") String token, @WebParam(name = "docPath") String docPath)
-			throws LockException, PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+	public void unlock(@WebParam(name = "token") String token, @WebParam(name = "docPath") String docPath) throws LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("unlock({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.unlock(token, docPath);
@@ -283,9 +283,8 @@ public class DocumentService {
 	}
 	
 	@WebMethod
-	public void forceUnlock(@WebParam(name = "token") String token, @WebParam(name = "docPath") String docPath)
-			throws LockException, PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException,
-			PrincipalAdapterException {
+	public void forceUnlock(@WebParam(name = "token") String token, @WebParam(name = "docPath") String docPath) throws LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException, PrincipalAdapterException {
 		log.debug("forceUnlock({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.forceUnlock(token, docPath);
@@ -351,8 +350,8 @@ public class DocumentService {
 	}
 	
 	@WebMethod
-	public String getPath(@WebParam(name = "token") String token, @WebParam(name = "uuid") String uuid)
-			throws AccessDeniedException, RepositoryException, DatabaseException {
+	public String getPath(@WebParam(name = "token") String token, @WebParam(name = "uuid") String uuid) throws AccessDeniedException,
+			RepositoryException, DatabaseException {
 		log.debug("getPath({}, {})", token, uuid);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		String path = dm.getPath(token, uuid);
