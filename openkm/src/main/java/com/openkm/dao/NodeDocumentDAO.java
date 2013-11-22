@@ -88,8 +88,8 @@ public class NodeDocumentDAO {
 	/**
 	 * Create document and first version
 	 */
-	public NodeDocumentVersion create(NodeDocument nDoc, InputStream is, long size) throws PathNotFoundException,
-			AccessDeniedException, ItemExistsException, DatabaseException, IOException {
+	public NodeDocumentVersion create(NodeDocument nDoc, InputStream is, long size) throws PathNotFoundException, AccessDeniedException,
+			ItemExistsException, DatabaseException, IOException {
 		log.debug("create({}, {}, {})", new Object[] { nDoc, is, size });
 		Session session = null;
 		Transaction tx = null;
@@ -228,8 +228,7 @@ public class NodeDocumentDAO {
 	/**
 	 * Find by pk and optionally initialize node property groups
 	 */
-	public NodeDocument findByPk(String uuid, boolean initPropGroups) throws PathNotFoundException,
-			DatabaseException {
+	public NodeDocument findByPk(String uuid, boolean initPropGroups) throws PathNotFoundException, DatabaseException {
 		log.debug("findByPk({}, {})", uuid, initPropGroups);
 		String qs = "from NodeDocument nd where nd.uuid=:uuid";
 		Session session = null;
@@ -405,8 +404,7 @@ public class NodeDocumentDAO {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private List<NodeDocument> findFromParentHelper(Session session, String parentUuid) throws 
-			DatabaseException, HibernateException {
+	private List<NodeDocument> findFromParentHelper(Session session, String parentUuid) throws DatabaseException, HibernateException {
 		List<NodeDocument> nodeList = new ArrayList<NodeDocument>();
 		String qs = "from NodeBase n where n.parent=:parent";
 		Query q = session.createQuery(qs);
@@ -421,7 +419,7 @@ public class NodeDocumentDAO {
 					NodeDocument nDoc = (NodeDocument) nBase;
 					initialize(nDoc, false);
 					nodeList.add(nDoc);
-				}	
+				}
 			}
 		}
 		
@@ -476,8 +474,8 @@ public class NodeDocumentDAO {
 	/**
 	 * Rename document
 	 */
-	public NodeDocument rename(String uuid, String newName) throws PathNotFoundException, AccessDeniedException,
-			ItemExistsException, LockException, DatabaseException {
+	public NodeDocument rename(String uuid, String newName) throws PathNotFoundException, AccessDeniedException, ItemExistsException,
+			LockException, DatabaseException {
 		log.debug("rename({}, {})", uuid, newName);
 		Session session = null;
 		Transaction tx = null;
@@ -532,8 +530,8 @@ public class NodeDocumentDAO {
 	/**
 	 * Move document
 	 */
-	public void move(String uuid, String dstUuid) throws PathNotFoundException, AccessDeniedException,
-			ItemExistsException, LockException, DatabaseException {
+	public void move(String uuid, String dstUuid) throws PathNotFoundException, AccessDeniedException, ItemExistsException, LockException,
+			DatabaseException {
 		log.debug("move({}, {})", uuid, dstUuid);
 		Session session = null;
 		Transaction tx = null;
@@ -587,12 +585,12 @@ public class NodeDocumentDAO {
 			HibernateUtil.close(session);
 		}
 	}
-
+	
 	/**
 	 * Delete document
 	 */
-	public void delete(String name, String uuid, String trashUuid) throws PathNotFoundException,
-			AccessDeniedException, LockException, DatabaseException {
+	public void delete(String name, String uuid, String trashUuid) throws PathNotFoundException, AccessDeniedException, LockException,
+			DatabaseException {
 		log.debug("delete({}, {}, {})", new Object[] { name, uuid, trashUuid });
 		Session session = null;
 		Transaction tx = null;
@@ -651,8 +649,7 @@ public class NodeDocumentDAO {
 	/**
 	 * Checkout
 	 */
-	public void checkout(String user, String uuid) throws PathNotFoundException, AccessDeniedException, LockException,
-			DatabaseException {
+	public void checkout(String user, String uuid) throws PathNotFoundException, AccessDeniedException, LockException, DatabaseException {
 		log.debug("checkout({})", uuid);
 		Session session = null;
 		Transaction tx = null;
@@ -694,8 +691,8 @@ public class NodeDocumentDAO {
 	/**
 	 * Cancel checkout
 	 */
-	public void cancelCheckout(String user, String uuid, boolean force) throws PathNotFoundException,
-			AccessDeniedException, LockException, DatabaseException {
+	public void cancelCheckout(String user, String uuid, boolean force) throws PathNotFoundException, AccessDeniedException, LockException,
+			DatabaseException {
 		log.debug("cancelCheckout({}, {}, {})", new Object[] { user, uuid, force });
 		Session session = null;
 		Transaction tx = null;
@@ -763,8 +760,7 @@ public class NodeDocumentDAO {
 	/**
 	 * Purge in depth
 	 */
-	public void purge(String uuid) throws PathNotFoundException, AccessDeniedException, LockException,
-			DatabaseException, IOException {
+	public void purge(String uuid) throws PathNotFoundException, AccessDeniedException, LockException, DatabaseException, IOException {
 		log.debug("purge({})", uuid);
 		Session session = null;
 		Transaction tx = null;
@@ -806,8 +802,8 @@ public class NodeDocumentDAO {
 	 * @see com.openkm.dao.NodeMailDAO.purgeHelper(Session, NodeMail)
 	 */
 	@SuppressWarnings("unchecked")
-	public void purgeHelper(Session session, String parentUuid) throws PathNotFoundException, AccessDeniedException,
-			LockException, IOException, DatabaseException, HibernateException {
+	public void purgeHelper(Session session, String parentUuid) throws PathNotFoundException, AccessDeniedException, LockException,
+			IOException, DatabaseException, HibernateException {
 		String qs = "from NodeDocument nd where nd.parent=:parent";
 		Query q = session.createQuery(qs);
 		q.setString("parent", parentUuid);
@@ -821,8 +817,8 @@ public class NodeDocumentDAO {
 	/**
 	 * Purge in depth helper
 	 */
-	private void purgeHelper(Session session, NodeDocument nDocument) throws PathNotFoundException,
-			AccessDeniedException, LockException, IOException, DatabaseException, HibernateException {
+	private void purgeHelper(Session session, NodeDocument nDocument) throws PathNotFoundException, AccessDeniedException, LockException,
+			IOException, DatabaseException, HibernateException {
 		String path = NodeBaseDAO.getInstance().getPathFromUuid(session, nDocument.getUuid());
 		String user = PrincipalUtils.getUser();
 		String author = nDocument.getAuthor();
@@ -861,8 +857,7 @@ public class NodeDocumentDAO {
 	/**
 	 * Lock node
 	 */
-	public NodeLock lock(String user, String uuid) throws PathNotFoundException, AccessDeniedException, LockException,
-			DatabaseException {
+	public NodeLock lock(String user, String uuid) throws PathNotFoundException, AccessDeniedException, LockException, DatabaseException {
 		log.debug("lock({}, {})", user, uuid);
 		Session session = null;
 		Transaction tx = null;
@@ -915,8 +910,8 @@ public class NodeDocumentDAO {
 	/**
 	 * Unlock node
 	 */
-	public void unlock(String user, String uuid, boolean force) throws PathNotFoundException, AccessDeniedException,
-			DatabaseException, LockException {
+	public void unlock(String user, String uuid, boolean force) throws PathNotFoundException, AccessDeniedException, DatabaseException,
+			LockException {
 		log.debug("unlock({}, {}, {})", new Object[] { user, uuid, force });
 		Session session = null;
 		Transaction tx = null;
@@ -951,8 +946,7 @@ public class NodeDocumentDAO {
 	/**
 	 * Unlock node
 	 */
-	public void unlock(Session session, String user, NodeDocument nDoc, boolean force) throws HibernateException,
-			LockException {
+	public void unlock(Session session, String user, NodeDocument nDoc, boolean force) throws HibernateException, LockException {
 		if (nDoc.isLocked()) {
 			if (force || user.equals(nDoc.getLock().getOwner())) {
 				nDoc.setLock(null);
@@ -1025,9 +1019,9 @@ public class NodeDocumentDAO {
 	 */
 	public long getSize(String context) throws PathNotFoundException, DatabaseException {
 		log.debug("getSize({})", context);
-		String qs = "select coalesce(sum(ndv.size), 0) from NodeDocumentVersion ndv " +
-			"where ndv.current = :current and ndv.parent in " +
-			"(select nd.uuid from NodeDocument nd where nd.context = :context)";
+		String qs = "select coalesce(sum(ndv.size), 0) from NodeDocumentVersion ndv "
+				+ "where ndv.current = :current and ndv.parent in "
+				+ "(select nd.uuid from NodeDocument nd where nd.context = :context)";
 		Session session = null;
 		Transaction tx = null;
 		long total = 0;
@@ -1277,11 +1271,12 @@ public class NodeDocumentDAO {
 	/**
 	 * Helps on extracting text from documents
 	 */
-	public void textExtractorHelper(TextExtractorWork work) throws DatabaseException, FileNotFoundException {
+	public String textExtractorHelper(TextExtractorWork work) throws DatabaseException, FileNotFoundException {
 		log.debug("textExtractorHelper({})", work);
 		Session session = null;
 		Transaction tx = null;
 		InputStream isContent = null;
+		String textExtracted = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
@@ -1290,8 +1285,7 @@ public class NodeDocumentDAO {
 			if (FsDataStore.DATASTORE_BACKEND_FS.equals(Config.REPOSITORY_DATASTORE_BACKEND)) {
 				isContent = FsDataStore.read(work.getDocVerUuid());
 			} else {
-				NodeDocumentVersion nDocVer = (NodeDocumentVersion) session.load(NodeDocumentVersion.class,
-						work.getDocVerUuid());
+				NodeDocumentVersion nDocVer = (NodeDocumentVersion) session.load(NodeDocumentVersion.class, work.getDocVerUuid());
 				isContent = new ByteArrayInputStream(nDocVer.getContent());
 			}
 			
@@ -1303,7 +1297,7 @@ public class NodeDocumentDAO {
 				env.put(AutomationUtils.DOCUMENT_NODE, nDoc);
 				AutomationManager.getInstance().fireEvent(AutomationRule.EVENT_TEXT_EXTRACTOR, AutomationRule.AT_PRE, env);
 				
-				String textExtracted = RegisteredExtractors.getText(work.getDocPath(), nDoc.getMimeType(), null, isContent);
+				textExtracted = RegisteredExtractors.getText(work.getDocPath(), nDoc.getMimeType(), null, isContent);
 				
 				// AUTOMATION - POST
 				env.put(AutomationUtils.TEXT_EXTRACTED, textExtracted);
@@ -1338,7 +1332,8 @@ public class NodeDocumentDAO {
 			nDoc.setTextExtracted(true);
 			session.update(nDoc);
 			HibernateUtil.commit(tx);
-			log.debug("textExtractorHelper: void");
+			log.debug("textExtractorHelper: {}", textExtracted);
+			return textExtracted;
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -1346,8 +1341,6 @@ public class NodeDocumentDAO {
 			IOUtils.closeQuietly(isContent);
 			HibernateUtil.close(session);
 		}
-		
-		log.debug("textExtractorHelper: void");
 	}
 	
 	/**
