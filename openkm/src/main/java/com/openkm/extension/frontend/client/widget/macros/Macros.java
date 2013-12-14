@@ -63,7 +63,6 @@ import com.openkm.frontend.client.extension.widget.toolbar.ToolBarButtonExtensio
  * Macros
  * 
  * @author jllort
- * 
  */
 public class Macros implements DocumentHandlerExtension, FolderHandlerExtension, MailHandlerExtension, WorkspaceHandlerExtension,
 		LanguageHandlerExtension {
@@ -155,13 +154,25 @@ public class Macros implements DocumentHandlerExtension, FolderHandlerExtension,
 	public String getPath() {
 		switch (selectedPanel) {
 			case TAB_DOCUMENT:
-				return TabDocumentComunicator.getDocument().getPath();
+				if (TabDocumentComunicator.getDocument() != null) {
+					return TabDocumentComunicator.getDocument().getPath();
+				} else {
+					return null;
+				}
 				
 			case TAB_FOLDER:
-				return TabFolderComunicator.getFolder().getPath();
+				if (TabFolderComunicator.getFolder() != null) {
+					return TabFolderComunicator.getFolder().getPath();
+				} else {
+					return null;
+				}
 				
 			case TAB_MAIL:
-				return TabMailComunicator.getMail().getPath();
+				if (TabMailComunicator.getMail() != null) {
+					return TabMailComunicator.getMail().getPath();
+				} else {
+					return null;
+				}
 				
 			default:
 				return null;
@@ -216,11 +227,13 @@ public class Macros implements DocumentHandlerExtension, FolderHandlerExtension,
 	private boolean actionFound(String path) {
 		boolean found = false;
 		selectedAction = null;
-		for (GWTMacros action : actions) {
-			if (path.startsWith(action.getPathOrigin())) {
-				selectedAction = action;
-				found = true;
-				break;
+		if (path != null) {
+			for (GWTMacros action : actions) {
+				if (path.startsWith(action.getPathOrigin())) {
+					selectedAction = action;
+					found = true;
+					break;
+				}
 			}
 		}
 		return found;
@@ -237,7 +250,6 @@ public class Macros implements DocumentHandlerExtension, FolderHandlerExtension,
 	 * ToolBarButton
 	 * 
 	 * @author jllort
-	 * 
 	 */
 	private class ToolBarButton extends ToolBarButtonExtension {
 		
