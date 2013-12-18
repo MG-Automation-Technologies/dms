@@ -48,6 +48,31 @@
 			
 			document.onmousedown = right;
 			document.oncontextmenu = context;
+			
+			// Workaround for Applets and Firefox with recent JDKs
+			function jsGetActualPathFix() {				
+			    return jsGetActualPath();
+			}
+			
+			function refreshFolderFix() {
+				return refreshFolder();
+			}
+			
+			function cryptographyLoadedFix() {
+				return cryptographyLoaded();
+			}
+			
+			function destroyScannerAppletFix() {
+				return destroyScannerApplet();
+			}
+			
+			function destroyUploaderAppletFix() {
+				return destroyUploaderApplet();
+			}
+			
+			function jsWizardFix(docPath, response) {
+				return jsWizard(docPath, response);
+			}
 		</script>
 	</head>
 	<body>
