@@ -51,6 +51,7 @@ import com.openkm.frontend.client.extension.widget.tabdocument.TabDocumentExtens
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
 import com.openkm.frontend.client.util.Util;
+import com.openkm.frontend.client.widget.properties.version.VersionScrollTable;
 
 /**
  * The tab document

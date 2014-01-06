@@ -19,11 +19,13 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.widget.properties;
+package com.openkm.frontend.client.widget.properties.version;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -68,11 +70,13 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 	private ScrollTable table;
 	private FixedWidthFlexTable headerTable;
 	private FixedWidthGrid dataTable;
+	private ExtendedColumnSorter columnSorter;
 	public List<String> versions;
 	private boolean visibleButtons = true;
 	private Button purge;
 	private List<Button> buttonView;
 	private List<Button> buttonRestore;
+	public Map<Integer, GWTVersion> data = new HashMap<Integer, GWTVersion>();
 	
 	/**
 	 * Version
@@ -138,8 +142,9 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 		
 		headerTable = new FixedWidthFlexTable();
 		dataTable = new FixedWidthGrid();
-		
+		columnSorter = new ExtendedColumnSorter();
 		table = new ScrollTable(dataTable, headerTable, scrollTableImages);
+		dataTable.setColumnSorter(columnSorter);
 		table.setCellSpacing(0);
 		table.setCellPadding(2);
 		table.setSize("540", "140");
@@ -153,6 +158,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
     	table.setPreferredColumnWidth(0, 70);
 		table.setPreferredColumnWidth(1, 150);
 		
+		table.setColumnSortable(4, false);
 		table.setColumnSortable(5, false);
 		
 		// Level 1 headers
@@ -217,13 +223,14 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 	/**
 	 * Removes all rows except the first
 	 */
-	private void removeAllRows() {
+	public void reset() {
 		// Purge all rows except first
 		while (dataTable.getRowCount() > 0) {
 			dataTable.removeRow(0);
 		}
 		dataTable.resize(0, NUMBER_OF_COLUMNS);
 		versions = new ArrayList<String>();
+		data = new HashMap<Integer, GWTVersion>();
 	}
 	
 	/**
@@ -231,7 +238,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 	 * 
 	 * @param version The Version to add
 	 */
-	private void addRow(GWTVersion version) {
+	public void addRow(GWTVersion version) {
 		final int rows = dataTable.getRowCount();
 		dataTable.insertRow(rows);
 		dataTable.setHTML(rows, 0, version.getName());
@@ -241,6 +248,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 		dataTable.setHTML(rows, 3, Util.formatSize(version.getSize()));
 		dataTable.setHTML(rows, 6, version.getComment());
 		versions.add(version.getName());
+		data = new HashMap<Integer, GWTVersion>();
 		
 		// Special case when visibleButtons are false, widget are on trash, must disable all buttons,
 		// but must enable the actual version to view ( on default is not enabled because is active one )
@@ -299,7 +307,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 	 */
 	final AsyncCallback<List<GWTVersion>> callbackGetVersionHistory = new AsyncCallback<List<GWTVersion>>() {
 		public void onSuccess(List<GWTVersion> result) {
-			removeAllRows();
+			reset();
 			
 			// Initializes buttons lists ( to make language translations )
 			buttonView = new ArrayList<Button>();
@@ -394,6 +402,13 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 	 */
 	public void setVisibleButtons(boolean visible) {
 		visibleButtons = visible;
+	}
+	
+	/**
+	 * @return the data table
+	 */
+	public FixedWidthGrid getDataTable() {
+		return dataTable;
 	}
 	
 	/* (non-Javadoc)
