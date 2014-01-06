@@ -154,12 +154,12 @@ public class AuthService {
 	
 	@WebMethod
 	public void revokeRole(@WebParam(name = "token") String token, @WebParam(name = "nodePath") String nodePath,
-			@WebParam(name = "user") String user, @WebParam(name = "permissions") int permissions,
+			@WebParam(name = "role") String role, @WebParam(name = "permissions") int permissions,
 			@WebParam(name = "recursive") boolean recursive) throws PathNotFoundException, AccessDeniedException,
 			RepositoryException, DatabaseException {
-		log.debug("revokeRole({}, {}, {}, {}, {})", new Object[] { token, nodePath, user, permissions, recursive });
+		log.debug("revokeRole({}, {}, {}, {}, {})", new Object[] { token, nodePath, role, permissions, recursive });
 		AuthModule am = ModuleManager.getAuthModule();
-		am.revokeRole(token, nodePath, user, permissions, recursive);
+		am.revokeRole(token, nodePath, role, permissions, recursive);
 		log.debug("revokeRole: void");
 	}
 	

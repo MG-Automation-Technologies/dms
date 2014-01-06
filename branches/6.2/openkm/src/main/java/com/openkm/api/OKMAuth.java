@@ -109,11 +109,11 @@ public class OKMAuth implements AuthModule {
 	}
 	
 	@Override
-	public void revokeRole(String token, String nodePath, String user, int permissions, boolean recursive)
+	public void revokeRole(String token, String nodePath, String role, int permissions, boolean recursive)
 			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("revokeRole({}, {}, {}, {})", new Object[] { token, nodePath, user, permissions });
+		log.debug("revokeRole({}, {}, {}, {})", new Object[] { token, nodePath, role, permissions });
 		AuthModule am = ModuleManager.getAuthModule();
-		am.revokeRole(token, nodePath, user, permissions, recursive);
+		am.revokeRole(token, nodePath, role, permissions, recursive);
 		log.debug("revokeRole: void");
 	}
 	
