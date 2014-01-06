@@ -53,4 +53,13 @@ public class UIDesktopConstants {
 	public static final int FILEBROWSER_COLUMN_LASTMODIFIED = 5;
 	public static final int FILEBROWSER_COLUMN_AUTHOR = 6;
 	public static final int FILEBROWSER_COLUMN_VERSION = 7;
+	
+	// Document history
+	public static final int DOCUMENT_HISTORY_COLUMN_VERSION = 0;
+	public static final int DOCUMENT_HISTORY_COLUMN_DATE = 1;
+	public static final int DOCUMENT_HISTORY_COLUMN_AUTHOR = 2;
+	public static final int DOCUMENT_HISTORY_COLUMN_SIZE = 3;
+	public static final int DOCUMENT_HISTORY_COLUMN_BUTTON_SHOW = 4;
+	public static final int DOCUMENT_HISTORY_COLUMN_BUTTON_RESTORE = 5;
+	public static final int DOCUMENT_HISTORY_COLUMN_COMMENT = 6;
 }
