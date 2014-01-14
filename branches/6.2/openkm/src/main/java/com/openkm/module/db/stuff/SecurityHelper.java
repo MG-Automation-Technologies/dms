@@ -34,6 +34,7 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.dao.NodeBaseDAO;
 import com.openkm.dao.bean.NodeBase;
+import com.openkm.principal.PrincipalAdapterException;
 
 public class SecurityHelper {
 	private static Logger log = LoggerFactory.getLogger(SecurityHelper.class);
@@ -74,6 +75,13 @@ public class SecurityHelper {
 	}
 	
 	/**
+	 * Check for node permissions
+	 */
+	public static boolean isGranted(NodeBase node, String user, int permission) throws PrincipalAdapterException, DatabaseException {
+		return accessManager.isGranted(node, user, permission);
+	}
+	
+	/**
 	 * Check for node read access
 	 */
 	public static void checkRead(NodeBase node) throws PathNotFoundException, DatabaseException {
@@ -88,8 +96,7 @@ public class SecurityHelper {
 	/**
 	 * Check for node write
 	 */
-	public static void checkWrite(NodeBase node) throws AccessDeniedException, PathNotFoundException,
-			DatabaseException {
+	public static void checkWrite(NodeBase node) throws AccessDeniedException, PathNotFoundException, DatabaseException {
 		log.debug("checkWrite({})", node);
 		
 		if (!accessManager.isGranted(node, Permission.WRITE)) {
@@ -101,8 +108,7 @@ public class SecurityHelper {
 	/**
 	 * Check for node delete
 	 */
-	public static void checkDelete(NodeBase node) throws AccessDeniedException, PathNotFoundException,
-			DatabaseException {
+	public static void checkDelete(NodeBase node) throws AccessDeniedException, PathNotFoundException, DatabaseException {
 		log.debug("checkDelete({})", node);
 		
 		if (!accessManager.isGranted(node, Permission.DELETE)) {
@@ -114,8 +120,7 @@ public class SecurityHelper {
 	/**
 	 * Check for node security
 	 */
-	public static void checkSecurity(NodeBase node) throws AccessDeniedException, PathNotFoundException,
-			DatabaseException {
+	public static void checkSecurity(NodeBase node) throws AccessDeniedException, PathNotFoundException, DatabaseException {
 		log.debug("checkSecurity({})", node);
 		
 		if (!accessManager.isGranted(node, Permission.SECURITY)) {
