@@ -170,7 +170,10 @@ public class RepositoryExporter {
 		
 		for (Iterator<Mail> it = mm.getChildren(token, fldPath).iterator(); it.hasNext();) {
 			Mail mailChild = it.next();
-			path = fsPath.getPath() + File.separator + PathUtils.getName(mailChild.getPath()).replace(':', '_');
+			String mailName = PathUtils.decodeEntities(PathUtils.getName(mailChild.getPath()));
+			
+			// Repository path needs to be "corrected" under Windoze
+			path = fsPath.getPath() + File.separator + mailName.replace(':', '_');
 			ImpExpStats mailStats = exportMail(token, mailChild.getPath(), path + ".eml", metadata, out, deco);
 			
 			// Stats
@@ -194,7 +197,10 @@ public class RepositoryExporter {
 		for (Iterator<Folder> it = fm.getChildren(token, fldPath).iterator(); it.hasNext();) {
 			Folder fldChild = it.next();
 			ImpExpStats tmp = exportDocumentsHelper(token, fldChild.getPath(), fsPath, metadata, history, out, deco);
-			path = fsPath.getPath() + File.separator + PathUtils.getName(fldChild.getPath()).replace(':', '_');
+			String dirName = PathUtils.decodeEntities(PathUtils.getName(fldChild.getPath()));
+			
+			// Repository path needs to be "corrected" under Windoze
+			path = fsPath.getPath() + File.separator + dirName.replace(':', '_');
 			
 			// Metadata
 			if (metadata) {
