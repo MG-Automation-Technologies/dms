@@ -89,6 +89,38 @@ public class PathUtils {
 	}
 	
 	/**
+	 * Encode entities to avoid problems with & and &amp;. For example:
+	 * - "/okm:root/a & b" => "/okm:root/a &amp; b"
+	 * - "/okm:root/a &amp; b" => "/okm:root/a &amp; b"
+	 * - "/okm:root/a <> b" => "/okm:root/a &lt;&gt; b"
+	 * - "/okm:root/a &lt;&gt; b" => "/okm:root/a &lt;&gt; b"
+	 * 
+	 * @param path Path or string to encode.
+	 * @return The string with the encoded entities.
+	 */
+	public static String encodeEntities(String path) {
+		String tmp = path.replaceAll("&(?![alg][mt]p?;)", "&amp;");
+		tmp = tmp.replaceAll("<", "&lt;");
+		return tmp.replaceAll(">", "&gt;");
+	}
+	
+	/**
+	 * Reverse of encodeEntities. For example:
+	 * - "/okm:root/a &amp; b" => "/okm:root/a & b"
+	 * 
+	 * @param path Path or string to decode.
+	 * @return The string with the decoded entities.
+	 */
+	public static String decodeEntities(String path) {
+		String tmp = path.replaceAll("&amp;", "&");
+		tmp = tmp.replaceAll("&lt;", "<");
+		tmp = tmp.replaceAll("&gt;", ">");
+		// tmp = tmp.replaceAll("&#34;", "\"");
+		// tmp = tmp.replaceAll("&#39;", "'");
+		return tmp;
+	}
+	
+	/**
 	 * Fix context definition. For example "/okm:root" -> "okm_root"
 	 */
 	public static String fixContext(String context) {

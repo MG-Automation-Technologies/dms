@@ -154,8 +154,10 @@ public class RepositoryExporter {
 			fsPath = new File(path);
 			firstTime = false;
 		} else {
+			String dirName = PathUtils.decodeEntities(PathUtils.getName(fldPath));
+			
 			// Repository path needs to be "corrected" under Windoze
-			path = fs.getPath() + File.separator + PathUtils.getName(fldPath).replace(':', '_');
+			path = fs.getPath() + File.separator + dirName.replace(':', '_');
 			fsPath = new File(path);
 			fsPath.mkdirs();
 			FileLogger.info(BASE_NAME, "Created folder ''{0}''", fsPath.getPath());
@@ -178,7 +180,10 @@ public class RepositoryExporter {
 		
 		for (Iterator<Document> it = dm.getChildren(token, fldPath).iterator(); it.hasNext();) {
 			Document docChild = it.next();
-			path = fsPath.getPath() + File.separator + PathUtils.getName(docChild.getPath()).replace(':', '_');
+			String fileName = PathUtils.decodeEntities(PathUtils.getName(docChild.getPath()));
+			
+			// Repository path needs to be "corrected" under Windoze
+			path = fsPath.getPath() + File.separator + fileName.replace(':', '_');
 			ImpExpStats docStats = exportDocument(token, docChild.getPath(), path, metadata, history, out, deco);
 			
 			// Stats
