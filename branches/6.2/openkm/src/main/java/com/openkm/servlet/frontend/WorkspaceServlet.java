@@ -334,8 +334,7 @@ public class WorkspaceServlet extends OKMRemoteServiceServlet implements OKMWork
 			profileToolbar.setCreateFolderVisible(up.getPrfToolbar().isCreateFolderVisible()
 					&& availableOption.isCreateFolderOption());
 			profileToolbar.setDeleteVisible(up.getPrfToolbar().isDeleteVisible() && availableOption.isDeleteOption());
-			profileToolbar.setDownloadPdfVisible(up.getPrfToolbar().isDeleteVisible()
-					&& availableOption.isDeleteOption());
+			profileToolbar.setDownloadPdfVisible(up.getPrfToolbar().isDownloadPdfVisible() && availableOption.isDownloadPdfOption());
 			profileToolbar.setDownloadVisible(up.getPrfToolbar().isDownloadVisible()
 					&& availableOption.isDownloadOption());
 			profileToolbar.setFindDocumentVisible(up.getPrfToolbar().isFindDocumentVisible()
