@@ -107,7 +107,11 @@
           <tr>
             <td colspan="2" align="right">
               <input type="button" onclick="javascript:window.history.back()" value="Cancel" class="noButton"/>
-              <input type="submit" value="Edit" class="yesButton"/>
+              <c:choose>
+                <c:when test="${action == 'create'}"><input type="submit" value="Create" class="yesButton"/></c:when>
+                <c:when test="${action == 'edit'}"><input type="submit" value="Edit" class="yesButton"/></c:when>
+                <c:when test="${action == 'delete'}"><input type="submit" value="Delete" class="yesButton"/></c:when>
+              </c:choose>
             </td>
           </tr>
         </table>
