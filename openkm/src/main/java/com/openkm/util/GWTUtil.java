@@ -688,7 +688,7 @@ public class GWTUtil {
 			if (obj instanceof FormElement) {
 				variables.put(key, copy((FormElement) obj));
 			} else {
-				variables.put(key, obj);
+				variables.put(key, String.valueOf(obj));
 			}
 		}
 		
