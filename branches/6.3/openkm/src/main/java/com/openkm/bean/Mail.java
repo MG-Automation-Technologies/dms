@@ -21,6 +21,7 @@
 
 package com.openkm.bean;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -29,6 +30,7 @@ import java.util.List;
  * @author pavila
  * 
  */
+@XmlRootElement(name = "mail")
 public class Mail extends Node {
 	private static final long serialVersionUID = 1L;
 	

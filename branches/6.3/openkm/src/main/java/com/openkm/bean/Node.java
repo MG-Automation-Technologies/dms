@@ -21,6 +21,7 @@
 
 package com.openkm.bean;
 
+import javax.xml.bind.annotation.XmlSeeAlso;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,6 +33,7 @@ import java.util.Set;
  * @author pavila
  * 
  */
+@XmlSeeAlso({Document.class, Folder.class, Record.class, Mail.class })
 public class Node implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public static final String AUTHOR = "okm:author";
