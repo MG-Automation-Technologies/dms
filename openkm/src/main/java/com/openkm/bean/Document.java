@@ -22,9 +22,8 @@
 
 package com.openkm.bean;
 
-import java.util.Calendar;
-
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Calendar;
 
 /**
  * @author pavila
