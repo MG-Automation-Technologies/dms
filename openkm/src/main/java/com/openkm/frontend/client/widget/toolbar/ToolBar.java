@@ -1693,6 +1693,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			toolBarOption.sendDocumentLinkOption = hasDocuments;
 			toolBarOption.mailForwardOption = Main.get().mainPanel.desktop.browser.fileBrowser.table.getAllSelectedMailUUIDs().size() > 0;
 			toolBarOption.addPropertyGroupOption = true;
+			toolBarOption.addCategoryOption = true;
+			toolBarOption.addNoteOption = true;
 			toolBarOption.updatePropertyGroupOption = true;
 			
 			// Merge pdf
