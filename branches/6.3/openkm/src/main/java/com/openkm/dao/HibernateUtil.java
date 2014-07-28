@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.openkm.dao.bean.*;
+import com.openkm.dao.bean.cache.UserItems;
 import org.apache.commons.io.IOUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -110,6 +111,9 @@ public class HibernateUtil {
 		cfg.addAnnotatedClass(PendingTask.class);
 		cfg.addAnnotatedClass(Omr.class);
 		cfg.addAnnotatedClass(DropboxToken.class);
+
+		// Cache
+		cfg.addAnnotatedClass(UserItems.class);
 		
 		// Automation
 		cfg.addAnnotatedClass(AutomationRule.class);

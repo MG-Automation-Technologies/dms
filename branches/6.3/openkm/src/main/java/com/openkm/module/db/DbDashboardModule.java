@@ -29,6 +29,9 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import com.openkm.cache.UserItemsManager;
+import com.openkm.core.*;
+import com.openkm.dao.bean.cache.UserItems;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.Element;
 
@@ -49,10 +52,6 @@ import com.openkm.bean.Permission;
 import com.openkm.bean.Repository;
 import com.openkm.bean.nr.NodeQueryResult;
 import com.openkm.bean.nr.NodeResultSet;
-import com.openkm.core.DatabaseException;
-import com.openkm.core.ParseException;
-import com.openkm.core.PathNotFoundException;
-import com.openkm.core.RepositoryException;
 import com.openkm.dao.ActivityDAO;
 import com.openkm.dao.DashboardDAO;
 import com.openkm.dao.HibernateUtil;
@@ -566,8 +565,13 @@ public class DbDashboardModule implements DashboardModule {
 				oldAuth = PrincipalUtils.getAuthentication();
 				auth = PrincipalUtils.getAuthenticationByToken(token);
 			}
-			
-			size = DbUtils.calculateQuota(auth.getName());
+
+			if (Config.USER_ITEM_CACHE) {
+				UserItems usrItems = UserItemsManager.get(auth.getName());
+				size = usrItems.getSize();
+			} else {
+				size = DbUtils.calculateQuota(auth.getName());
+			}
 
 			log.trace("getUserDocumentsSize.Time: {}", System.currentTimeMillis() - begin);
 			log.debug("getUserDocumentsSize: {}", size);
