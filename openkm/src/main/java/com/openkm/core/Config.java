@@ -232,6 +232,7 @@ public class Config {
 	public static final String PROPERTY_APPLICATION_URL = "application.url";
 	public static final String PROPERTY_DEFAULT_LANG = "default.lang";
 	public static final String PROPERTY_USER_ASSIGN_DOCUMENT_CREATION = "user.assign.document.creation";
+	public static final String PROPERTY_USER_ITEM_CACHE = "user.item.cache";
 	public static final String PROPERTY_UPLOAD_THROTTLE_FILTER = "upload.throttle.filter";
 	public static final String PROPERTY_REMOTE_CONVERSION_SERVER = "remote.conversion.server";
 	
@@ -461,6 +462,7 @@ public class Config {
 	public static String APPLICATION_BASE;
 	public static String DEFAULT_LANG = "";
 	public static boolean USER_ASSIGN_DOCUMENT_CREATION = true;
+	public static boolean USER_ITEM_CACHE = true;
 	public static boolean UPLOAD_THROTTLE_FILTER;
 	public static String REMOTE_CONVERSION_SERVER = "";
 	
