@@ -106,8 +106,7 @@ public class WorkspaceUserProperties {
 			Main.get().mainPanel.bottomPanel.userInfo.showExtensions();
 			Main.get().aboutPopup.setAppVersion(result.getAppVersion().toString());
 			Main.get().aboutPopup.setExtVersion(result.getAppVersion().getExtension());
-			getUserDocumentsSize(); // Refreshing user document size ( here is
-									// yet set userQuota limit )
+			getUserDocumentsSize(); // Refreshing user document size ( here is yet set userQuota limit )
 			
 			// Starting schedulers
 			Main.get().startUp.startKeepAlive(workspace.getKeepAliveSchedule());
