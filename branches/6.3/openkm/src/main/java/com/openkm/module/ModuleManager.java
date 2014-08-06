@@ -210,21 +210,6 @@ public class ModuleManager {
 		
 		return workflowModule;
 	}
-	
-	/**
-	 * 
-	 */
-	public static synchronized ScriptingModule getScriptingModule() {
-		if (scriptingModule == null) {
-			if (Config.REPOSITORY_NATIVE) {
-				scriptingModule = new com.openkm.module.db.DbScriptingModule();
-			} else {
-				scriptingModule = new com.openkm.module.jcr.JcrScriptingModule();
-			}
-		}
-		
-		return scriptingModule;
-	}
 
 	/**
 	 * 

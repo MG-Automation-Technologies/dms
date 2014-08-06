@@ -60,13 +60,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMFolder;
-import com.openkm.api.OKMScripting;
 import com.openkm.bean.ContentInfo;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Scripting;
 import com.openkm.core.AccessDeniedException;
-import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.dao.LockTokenDAO;
@@ -124,10 +122,6 @@ public class JcrRepositoryViewServlet extends BaseServlet {
 				removeMixin(session, path, request, response);
 			} else if (action.equals("edit")) {
 				edit(session, path, request, response);
-			} else if (action.equals("set_script")) {
-				OKMScripting.getInstance().setScript(null, path, Config.DEFAULT_SCRIPT);
-			} else if (action.equals("remove_script")) {
-				OKMScripting.getInstance().removeScript(null, path);
 			} else if (action.equals("textExtraction")) {
 				textExtraction(session, path, request, response);
 			}
@@ -139,15 +133,6 @@ public class JcrRepositoryViewServlet extends BaseServlet {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request,response, e);
-		} catch (PathNotFoundException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request,response, e);
-		} catch (AccessDeniedException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request,response, e);
-		} catch (com.openkm.core.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} catch (DatabaseException e) {
