@@ -95,25 +95,6 @@
               </c:choose>
             </c:if>
             <c:if test="${isDocument || isFolder}">
-              <li>
-                <b>Scripting</b>:
-                <c:choose>
-                  <c:when test="${isScripting}">
-                    <c:url value="RepositoryView" var="urlRemoveScript">
-                      <c:param name="path" value="${node.path}"/>
-                      <c:param name="action" value="remove_script"/>
-                    </c:url>
-                    <a href="${urlRemoveScript}">Remove script</a>
-                  </c:when>
-                  <c:otherwise>
-                  <c:url value="RepositoryView" var="urlSetScript">
-                      <c:param name="path" value="${node.path}"/>
-                      <c:param name="action" value="set_script"/>
-                    </c:url>
-                    <a href="${urlSetScript}">Set script</a>
-                  </c:otherwise>
-                </c:choose> 
-              </li>
             </c:if>
           </li>
           <c:if test="${node.locked}"><li><b>Locked</b></li></c:if>
