@@ -921,6 +921,7 @@ public class GWTUtil {
 			gWTselect.setData(select.getData());
 			gWTselect.setOptionsData(select.getOptionsData());
 			gWTselect.setSuggestion(select.getSuggestion());
+			gWTselect.setClassName(select.getClassName());
 			return gWTselect;
 		} else if (formElement instanceof TextArea) {
 			GWTTextArea gWTTextArea = new GWTTextArea();
