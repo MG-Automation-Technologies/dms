@@ -549,6 +549,8 @@ public class FormUtils {
 					if (item != null) select.setOptionsQuery(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("suggestion");
 					if (item != null) select.setSuggestion(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("className");
+                    if(item != null) select.setClassName(item.getNodeValue());
 					
 					NodeList nlOptions = nField.getChildNodes();
 					for (int k = 0; k < nlOptions.getLength(); k++) {
@@ -751,6 +753,12 @@ public class FormUtils {
 			if (select.getSuggestion() != null && !select.getSuggestion().isEmpty()) {
 				sb.append("<i>Suggestion:</i> ");
 				sb.append(select.getSuggestion());
+				sb.append("<br/>");
+			}
+			
+			if (select.getClassName() != null && !select.getClassName().isEmpty()) {
+				sb.append("<i>ClassName:</i> ");
+				sb.append(select.getClassName());
 				sb.append("<br/>");
 			}
 			

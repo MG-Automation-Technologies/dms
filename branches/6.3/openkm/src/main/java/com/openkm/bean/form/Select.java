@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.dao.KeyValueDAO;
 import com.openkm.dao.bean.KeyValue;
+import com.openkm.util.cl.ClassLoaderUtils;
 
 public class Select extends FormElement {
 	private static Logger log = LoggerFactory.getLogger(Select.class);
@@ -45,6 +46,7 @@ public class Select extends FormElement {
 	private String table = "";
 	private String optionsQuery = "";
 	private String suggestion = "";
+    private String className = "";
 	private boolean readonly = false;
 	
 	public Select() {
@@ -57,6 +59,7 @@ public class Select extends FormElement {
 	
 	public void setOptions(List<Option> options) {
 		handleDbOptions(options);
+		handleClassOptions(options);
 	}
 	
 	public String getType() {
@@ -123,6 +126,14 @@ public class Select extends FormElement {
 		this.suggestion = suggestion;
 	}
 	
+	public String getClassName() {
+	    return className;
+	}
+	
+	public void setClassName(String className) {
+	    this.className = className;
+	}
+        
 	public boolean isReadonly() {
 		return readonly;
 	}
@@ -201,6 +212,70 @@ public class Select extends FormElement {
 		return dbOptions;
 	}
 	
+	/**
+	 * If Select reads options from Class, it gets options from DB and set into internal list {@see Select#options}.
+	 * It is assumed that each option in list has different Value. New options are matched by Value with old
+	 * options (by temporal hash) and selected if old option is also selected.
+	 * 
+	 * If {@see Select#className} is not specified, it replace internal list of options with parameter options.
+	 * 
+	 * @param options list of options
+	 */
+	private List<Option> handleClassOptions(List<Option> options) {
+		// read options from DB?
+		if (className == null || className.isEmpty()) {
+			// no -> set options from parameter
+			this.options = options;
+		} else {
+			// read options from DB:
+			List<Option> classOptions = getOptionsFromClass();
+			
+			// creates hashed options (key is value) from internal option list
+			HashMap<String, Option> hashedOptions = new HashMap<String, Option>();
+			
+			if (this.options != null) {
+				for (Option option : this.options) {
+					hashedOptions.put(option.getValue(), option);
+				}
+			}
+			
+			// iterates DB options and set option if value is matched
+			for (Option classOption : classOptions) {
+				if (classOption == null) {
+					continue;
+				}
+				
+				Option option = hashedOptions.get(classOption.getValue());
+				classOption.setSelected(option != null ? option.isSelected() : false);
+			}
+			
+			this.options = classOptions;
+		}
+		
+		return this.options;
+	}
+	
+	/**
+	 * Return list of Select's Options from class 
+	 * 
+	 * @return list of options from class, empty list on error.
+	 */
+	@SuppressWarnings("unchecked")
+	private List<Option> getOptionsFromClass() {
+		List<Option> classOptions = new ArrayList<Option>();
+		
+		try {
+			log.debug("Getting options from Class (className={})", className);
+			ClassLoader cl = getClass().getClassLoader();
+			classOptions = (List<Option>) ClassLoaderUtils.invokeMethodFromClass(className, "getOptions", cl);			
+			log.debug("Got {} options from DB", classOptions.size());
+		} catch (Throwable t) {
+			log.error("Unable to get key values for Select", t);
+		}
+		
+		return classOptions;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -218,6 +293,7 @@ public class Select extends FormElement {
 		sb.append(", table=").append(table);
 		sb.append(", optionsQuery=").append(optionsQuery);
 		sb.append(", suggestion=").append(suggestion);
+        sb.append(", class=").append(className);
 		sb.append("}");
 		return sb.toString();
 	}
