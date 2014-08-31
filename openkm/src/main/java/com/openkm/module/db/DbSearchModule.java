@@ -23,18 +23,8 @@ package com.openkm.module.db;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.StringTokenizer;
 
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
@@ -1006,12 +996,20 @@ public class DbSearchModule implements SearchModule {
 			
 			if (statement != null && !statement.equals("")) {
 				// Only search in Taxonomy
-				String searchNode = "description:" + statement + " OR keyword:" + statement;
-				String searchDocuments = "text:" + statement + " OR name:" + statement + " OR title:" + statement;
-				String searchMails = "content:" + statement + " OR subject:" + statement;
-				statement = "( " + searchNode + " OR " + searchDocuments + " OR " + searchMails + " ) AND context:okm_root";
-				
-				NodeResultSet nrs = SearchDAO.getInstance().findBySimpleQuery(statement, offset, limit);
+				BooleanQuery nodeQuery = new BooleanQuery();
+				nodeQuery.add(new WildcardQuery(new Term("keyword", PathUtils.encodeEntities(statement.toLowerCase()))), BooleanClause.Occur.SHOULD);
+				nodeQuery.add(new WildcardQuery(new Term("name", PathUtils.encodeEntities("*" + statement.toLowerCase() + "*"))), BooleanClause.Occur.SHOULD);
+				nodeQuery.add(new WildcardQuery(new Term("subject", statement.toLowerCase())), BooleanClause.Occur.SHOULD);
+				nodeQuery.add(new WildcardQuery(new Term("content", statement.toLowerCase())), BooleanClause.Occur.SHOULD);
+				nodeQuery.add(new WildcardQuery(new Term("notes", statement.toLowerCase())), BooleanClause.Occur.SHOULD);
+				nodeQuery.add(new WildcardQuery(new Term("title", statement.toLowerCase())), BooleanClause.Occur.SHOULD);
+				nodeQuery.add(new WildcardQuery(new Term("text", statement.toLowerCase())), BooleanClause.Occur.SHOULD);
+
+				BooleanQuery query = new BooleanQuery();
+				query.add(nodeQuery, BooleanClause.Occur.MUST);
+				query.add(new TermQuery(new Term("context", PathUtils.fixContext("/okm:root"))), BooleanClause.Occur.MUST);
+
+				NodeResultSet nrs = SearchDAO.getInstance().findByQuery(query, offset, limit);
 				rs.setTotal(nrs.getTotal());
 				
 				for (NodeQueryResult nqr : nrs.getResults()) {
