@@ -1006,7 +1006,10 @@ public class DbSearchModule implements SearchModule {
 			
 			if (statement != null && !statement.equals("")) {
 				// Only search in Taxonomy
-				statement = statement.concat(" AND context:okm_root");
+				String searchNode = "description:" + statement + " OR keyword:" + statement;
+				String searchDocuments = "text:" + statement + " OR name:" + statement + " OR title:" + statement;
+				String searchMails = "content:" + statement + " OR subject:" + statement;
+				statement = "( " + searchNode + " OR " + searchDocuments + " OR " + searchMails + " ) AND context:okm_root";
 				
 				NodeResultSet nrs = SearchDAO.getInstance().findBySimpleQuery(statement, offset, limit);
 				rs.setTotal(nrs.getTotal());
