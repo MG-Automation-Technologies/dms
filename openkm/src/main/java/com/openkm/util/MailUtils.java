@@ -354,7 +354,7 @@ public class MailUtils {
 		Session mailSession = getMailSession();
 		MimeMessage msg = new MimeMessage(mailSession);
 
-		if (fromAddress != null && Config.MAIL_FROM_USER) {
+		if (fromAddress != null && Config.SEND_MAIL_FROM_USER) {
 			InternetAddress from = new InternetAddress(fromAddress);
 			msg.setFrom(from);
 		} else {
