@@ -142,7 +142,7 @@ public class Config {
 	public static final String PROPERTY_MAX_FILE_SIZE = "max.file.size";
 	public static final String PROPERTY_MAX_SEARCH_RESULTS = "max.search.results";
 	public static final String PROPERTY_MIN_SEARCH_CHARACTERS = "min.search.characters";
-	
+	public static final String PROPERTY_MAIL_FROM_USER = "mail.from.user";
 	public static final String PROPERTY_DEFAULT_USER_ROLE = "default.user.role";
 	public static final String PROPERTY_DEFAULT_ADMIN_ROLE = "default.admin.role";
 	
@@ -348,7 +348,7 @@ public class Config {
 	public static long MAX_FILE_SIZE;
 	public static int MAX_SEARCH_RESULTS;
 	public static int MIN_SEARCH_CHARACTERS;
-	
+	public static boolean MAIL_FROM_USER = true;
 	public static String SYSTEM_USER = "system";
 	public static String ADMIN_USER = "okmAdmin";
 	
@@ -738,7 +738,8 @@ public class Config {
 			values.put(PROPERTY_MAX_SEARCH_RESULTS, Integer.toString(MAX_SEARCH_RESULTS));
 			MIN_SEARCH_CHARACTERS = ConfigDAO.getInteger(PROPERTY_MIN_SEARCH_CHARACTERS, 3);
 			values.put(PROPERTY_MIN_SEARCH_CHARACTERS, Integer.toString(MIN_SEARCH_CHARACTERS));
-			
+			MAIL_FROM_USER = ConfigDAO.getBoolean(PROPERTY_MAIL_FROM_USER, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_MAIL_FROM_USER, "on")));
+			values.put(PROPERTY_MAIL_FROM_USER, Boolean.toString(MAIL_FROM_USER));
 			DEFAULT_USER_ROLE = ConfigDAO.getString(PROPERTY_DEFAULT_USER_ROLE, cfg.getProperty(PROPERTY_DEFAULT_USER_ROLE ,DEFAULT_USER_ROLE));
 			values.put(PROPERTY_DEFAULT_USER_ROLE, DEFAULT_USER_ROLE);
 			DEFAULT_ADMIN_ROLE = ConfigDAO.getString(PROPERTY_DEFAULT_ADMIN_ROLE, cfg.getProperty(PROPERTY_DEFAULT_ADMIN_ROLE, DEFAULT_ADMIN_ROLE));
