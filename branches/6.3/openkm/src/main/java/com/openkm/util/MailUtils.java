@@ -353,8 +353,8 @@ public class MailUtils {
 		log.debug("create({}, {}, {}, {}, {})", new Object[] { fromAddress, toAddress, subject, text, docsPath });
 		Session mailSession = getMailSession();
 		MimeMessage msg = new MimeMessage(mailSession);
-		
-		if (fromAddress != null) {
+
+		if (fromAddress != null && Config.MAIL_FROM_USER) {
 			InternetAddress from = new InternetAddress(fromAddress);
 			msg.setFrom(from);
 		} else {
