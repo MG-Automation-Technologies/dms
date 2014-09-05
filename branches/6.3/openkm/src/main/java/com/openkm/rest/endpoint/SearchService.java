@@ -106,7 +106,7 @@ public class SearchService {
 			throw new GenericException(e);
 		}
 	}
-	
+
 	@GET
 	@Path("/find")
 	// Default "domain" is "1" for documents.
@@ -115,11 +115,11 @@ public class SearchService {
 			@QueryParam("category") List<String> categories, @QueryParam("property") List<String> properties,
 			@QueryParam("author") String author, @QueryParam("mimeType") String mimeType,
 			@QueryParam("lastModifiedFrom") String lastModifiedFrom, @QueryParam("lastModifiedTo") String lastModifiedTo,
-			@QueryParam("mailSubject") String mailSubject, @QueryParam("mailFrom") String mailFrom, @QueryParam("mailTo") String mailTo)
-			throws GenericException {
+			@QueryParam("mailSubject") String mailSubject, @QueryParam("mailFrom") String mailFrom, @QueryParam("mailTo") String mailTo,
+			@QueryParam("path") String path) throws GenericException {
 		try {
 			QueryParams params = copyToQueryParams(content, name, domain, keywords, categories, properties, author, mimeType,
-					lastModifiedFrom, lastModifiedTo, mailSubject, mailFrom, mailTo);
+					lastModifiedFrom, lastModifiedTo, mailSubject, mailFrom, mailTo, path);
 			log.debug("find({})", params);
 			SearchModule sm = ModuleManager.getSearchModule();
 			QueryResultList qrl = new QueryResultList();
@@ -130,7 +130,7 @@ public class SearchService {
 			throw new GenericException(e);
 		}
 	}
-	
+
 	@GET
 	@Path("/findPaginated")
 	// Default "domain" is "1" for documents.
@@ -139,11 +139,11 @@ public class SearchService {
 			@QueryParam("keyword") List<String> keywords, @QueryParam("category") List<String> categories,
 			@QueryParam("property") List<String> properties, @QueryParam("author") String author, @QueryParam("mimeType") String mimeType,
 			@QueryParam("lastModifiedFrom") String lastModifiedFrom, @QueryParam("lastModifiedTo") String lastModifiedTo,
-			@QueryParam("mailSubject") String mailSubject, @QueryParam("mailFrom") String mailFrom, @QueryParam("mailTo") String mailTo)
-			throws GenericException {
+			@QueryParam("mailSubject") String mailSubject, @QueryParam("mailFrom") String mailFrom, @QueryParam("mailTo") String mailTo,
+			@QueryParam("path") String path) throws GenericException {
 		try {
 			QueryParams params = copyToQueryParams(content, name, domain, keywords, categories, properties, author, mimeType,
-					lastModifiedFrom, lastModifiedTo, mailSubject, mailFrom, mailTo);
+					lastModifiedFrom, lastModifiedTo, mailSubject, mailFrom, mailTo, path);
 			log.debug("findPaginated({})", params);
 			SearchModule sm = ModuleManager.getSearchModule();
 			ResultSet rs = sm.findPaginated(null, params, offset, limit);
@@ -295,68 +295,72 @@ public class SearchService {
 			throw new GenericException(e);
 		}
 	}
-	
+
 	/**
 	 * copyToQueryParams
 	 */
 	private QueryParams copyToQueryParams(String content, String name, int domain, List<String> keywords, List<String> categories,
 			List<String> properties, String author, String mimeType, String lastModifiedFrom, String lastModifiedTo, String mailSubject,
-			String mailFrom, String mailTo) {
+			String mailFrom, String mailTo, String path) {
 		QueryParams params = new QueryParams();
 		Map<String, String> propMap = new HashMap<String, String>();
-		
+
 		for (String propVal : properties) {
 			String[] keyVal = propVal.split("=");
 			propMap.put(keyVal[0], keyVal[1]);
 		}
-		
-		if (content != null && !content.equals("")) {
+
+		if (content != null && !content.isEmpty()) {
 			params.setContent(content);
 		}
-		
-		if (name != null && !name.equals("")) {
+
+		if (name != null && !name.isEmpty()) {
 			params.setName(name);
 		}
-		
+
 		params.setDomain(domain);
 		params.setKeywords(new HashSet<String>(keywords));
 		params.setCategories(new HashSet<String>(categories));
 		params.setProperties(propMap);
-		
-		if (author != null && !author.equals("")) {
+
+		if (author != null && !author.isEmpty()) {
 			params.setAuthor(author);
 		}
-		
-		if (mimeType != null && !mimeType.equals("")) {
+
+		if (mimeType != null && !mimeType.isEmpty()) {
 			params.setMimeType(mimeType);
 		}
-		
-		if (lastModifiedFrom != null && !lastModifiedFrom.equals("")) {
+
+		if (path != null && !path.isEmpty()) {
+			params.setPath(path);
+		}
+
+		if (lastModifiedFrom != null && !lastModifiedFrom.isEmpty()) {
 			if (lastModifiedFrom.length() == 6) {
 				lastModifiedFrom += "000000";
 			}
 			params.setLastModifiedFrom(ISO8601.parseBasic(lastModifiedFrom));
 		}
-		
-		if (lastModifiedTo != null && !lastModifiedTo.equals("")) {
+
+		if (lastModifiedTo != null && !lastModifiedTo.isEmpty()) {
 			if (lastModifiedTo.length() == 6) {
 				lastModifiedTo += "000000";
 			}
 			params.setLastModifiedTo(ISO8601.parseBasic(lastModifiedTo));
 		}
-		
-		if (mailSubject != null && !mailSubject.equals("")) {
+
+		if (mailSubject != null && !mailSubject.isEmpty()) {
 			params.setMailSubject(mailSubject);
 		}
-		
-		if (mailFrom != null && !mailFrom.equals("")) {
+
+		if (mailFrom != null && !mailFrom.isEmpty()) {
 			params.setMailFrom(mailFrom);
 		}
-		
-		if (mailTo != null && !mailTo.equals("")) {
+
+		if (mailTo != null && !mailTo.isEmpty()) {
 			params.setMailTo(mailTo);
 		}
-		
+
 		return params;
 	}
 }
