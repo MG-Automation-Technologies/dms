@@ -24,6 +24,7 @@ package com.openkm.rest.endpoint;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -44,6 +45,7 @@ import com.openkm.bean.form.Option;
 import com.openkm.bean.form.Select;
 import com.openkm.bean.form.SuggestBox;
 import com.openkm.bean.form.TextArea;
+import com.openkm.core.Config;
 import com.openkm.module.ModuleManager;
 import com.openkm.module.PropertyGroupModule;
 import com.openkm.rest.GenericException;
@@ -207,12 +209,19 @@ public class PropertyGroupService {
 						((CheckBox) fe).setValue(Boolean.valueOf(value));
 					} else if (fe instanceof Select) {
 						Select sel = (Select) fe;
-						
+
 						for (Option opt : sel.getOptions()) {
-							if (opt.getValue().equals(value)) {
-								opt.setSelected(true);
-							} else {
-								opt.setSelected(false);
+							StringTokenizer st = new StringTokenizer(value, Config.LIST_SEPARATOR);
+							
+							while (st.hasMoreTokens()) {
+								String optVal = st.nextToken().trim();
+							
+								if (opt.getValue().equals(optVal)) {
+									opt.setSelected(true);
+									break;
+								} else {
+									opt.setSelected(false);
+								}
 							}
 						}
 					}
