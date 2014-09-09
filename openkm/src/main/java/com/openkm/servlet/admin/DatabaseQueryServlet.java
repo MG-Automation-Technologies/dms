@@ -360,7 +360,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 				for (String vtable : vtables) {
 					String query = "select dmt.virtualColumn, dmt.realColumn from DatabaseMetadataType dmt where dmt.table='" + vtable
 							+ "'";
-					List<Object> tmp = LegacyDAO.executeQuery(query);
+					List<Object> tmp = LegacyDAO.executeHQL(query);
 					
 					for (Object obj : tmp) {
 						Object[] dt = (Object[]) obj;
@@ -514,7 +514,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 	 */
 	private List<String> listVirtualTables() throws DatabaseException {
 		String query = "select distinct(dmv.table) from DatabaseMetadataType dmv order by dmv.table";
-		List<Object> tmp = LegacyDAO.executeQuery(query);
+		List<Object> tmp = LegacyDAO.executeHQL(query);
 		List<String> tables = new ArrayList<String>();
 		
 		for (Object obj : tmp) {
