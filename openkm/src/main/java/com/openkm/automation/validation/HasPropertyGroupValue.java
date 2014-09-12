@@ -49,6 +49,7 @@ public class HasPropertyGroupValue implements Validation {
 		try {
 			if (uuid != null) {
 				String grpName = prpName.substring(0, prpName.indexOf("."));
+				grpName = grpName.replace("okp", "okg");
 				Map<String, String> props = NodeBaseDAO.getInstance().getProperties(uuid, grpName);
 				String propValue = props.get(prpName);
 				
