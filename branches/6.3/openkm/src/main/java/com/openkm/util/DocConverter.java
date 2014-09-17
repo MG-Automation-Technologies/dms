@@ -222,7 +222,7 @@ public class DocConverter {
 			ret = true;
 		} else if (!Config.SYSTEM_IMAGEMAGICK_CONVERT.equals("") && validImageMagick.contains(from)) {
 			ret = true;
-		} else if (!Config.SYSTEM_GHOSTSCRIPT_PS2PDF.equals("") && validGhoscript.contains(from)) {
+		} else if (!Config.SYSTEM_GHOSTSCRIPT.equals("") && validGhoscript.contains(from)) {
 			ret = true;
 		} else if (validInternal.contains(from)) {
 			ret = true;
@@ -484,7 +484,7 @@ public class DocConverter {
 			HashMap<String, Object> hm = new HashMap<String, Object>();
 			hm.put("fileIn", input.getPath());
 			hm.put("fileOut", output.getPath());
-			String tpl = Config.SYSTEM_GHOSTSCRIPT_PS2PDF + " ${fileIn} ${fileOut}";
+			String tpl = Config.SYSTEM_GHOSTSCRIPT + " ${fileIn} ${fileOut}";
 			cmd = TemplateUtils.replace("SYSTEM_GHOSTSCRIPT_PS2PDF", tpl, hm);
 			ExecutionResult er = ExecutionUtils.runCmd(cmd);
 			
