@@ -165,6 +165,55 @@ public class LegacyDAO {
 	}
 
 	/**
+	 * Execute query
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<Object> executeQuery(String query) throws DatabaseException {
+		log.debug("executeValueQuery({})", query);
+		Session session = null;
+		Transaction tx = null;
+
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			Query q = session.createQuery(query);
+			List<Object> ret = q.list();
+			HibernateUtil.commit(tx);
+			log.debug("executeValueQuery: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+
+	/**
+	 * Execute query
+	 */
+	public static Object executeQueryUnique(String query) throws DatabaseException {
+		log.debug("executeQueryUnique({})", query);
+		Session session = null;
+		Transaction tx = null;
+
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			Query q = session.createQuery(query);
+			Object ret = q.uniqueResult();
+			HibernateUtil.commit(tx);
+			log.debug("executeQueryUnique: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+
+	/**
 	 * Execute HQL query
 	 */
 	@SuppressWarnings("unchecked")
