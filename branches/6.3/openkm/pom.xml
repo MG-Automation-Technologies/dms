@@ -57,7 +57,7 @@
     <spring.security.version>3.1.0.RELEASE</spring.security.version>
     
     <!-- Apache CXF -->
-    <cxf.version>2.5.1</cxf.version>
+    <cxf.version>2.5.3</cxf.version>
     
     <!-- Apache POI -->
     <poi.version>3.9</poi.version>
