@@ -1134,6 +1134,12 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				toolBarOption.findDocumentOption = true;
 			}
 			
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_THESAURUS
+					&& Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_CATEGORIES
+					&& Main.get().mainPanel.desktop.navigator.getStackIndex() != UIDesktopConstants.NAVIGATOR_METADATA) {
+				toolBarOption.workflowOption = true;
+			}
+			
 			// On folder parent don't enables subscription
 			if (!isRoot) {
 				toolBarOption.exportOption = true;
