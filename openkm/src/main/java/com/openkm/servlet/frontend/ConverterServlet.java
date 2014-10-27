@@ -279,7 +279,8 @@ public class ConverterServlet extends OKMHttpServlet {
 	private void toSWF(ConversionData cd) throws ConversionException, AutomationException, DatabaseException, IOException {
 		log.debug("toSWF({})", cd);
 		File swfCache = new File(Config.REPOSITORY_CACHE_SWF + File.separator + cd.uuid + ".swf");
-		
+		boolean delTmp = true;
+
 		if (DocConverter.getInstance().convertibleToSwf(cd.mimeType)) {
 			if (!swfCache.exists()) {
 				try {
@@ -298,7 +299,8 @@ public class ConverterServlet extends OKMHttpServlet {
 						DocConverter.getInstance().pdf2swf(cd.file, swfCache);
 					} else if (DocConverter.getInstance().convertibleToPdf(cd.mimeType)) {
 						toPDF(cd);
-						
+						delTmp = false;
+
 						// AUTOMATION - PRE
 						Map<String, Object> env = new HashMap<String, Object>();
 						env.put(AutomationUtils.DOCUMENT_FILE, cd.file);
@@ -313,7 +315,9 @@ public class ConverterServlet extends OKMHttpServlet {
 					swfCache.delete();
 					throw e;
 				} finally {
-					FileUtils.deleteQuietly(cd.file);
+					if (delTmp) {
+						FileUtils.deleteQuietly(cd.file);
+					}
 					cd.mimeType = MimeTypeConfig.MIME_SWF;
 					cd.fileName = FileUtils.getFileName(cd.fileName) + ".swf";
 				}
