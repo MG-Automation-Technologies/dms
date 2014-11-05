@@ -302,8 +302,7 @@ public class DbSearchModule implements SearchModule {
 	/**
 	 * Add common fields
 	 */
-	private void appendCommon(QueryParams params, BooleanQuery query) throws IOException, ParseException, DatabaseException,
-			RepositoryException {
+	private void appendCommon(QueryParams params, BooleanQuery query) throws IOException, ParseException, DatabaseException, RepositoryException {
 		if (!params.getPath().equals("")) {
 			if (Config.STORE_NODE_PATH) {
 				Term t = new Term("path", params.getPath() + "/");
@@ -316,8 +315,18 @@ public class DbSearchModule implements SearchModule {
 				if (!params.getPath().equals(context)) {
 					try {
 						String parentUuid = NodeBaseDAO.getInstance().getUuidFromPath(params.getPath());
-						Term tp = new Term("parent", parentUuid);
-						query.add(new TermQuery(tp), BooleanClause.Occur.MUST);
+						BooleanQuery parent = new BooleanQuery();
+						Term tFld = new Term("parent", parentUuid);
+						parent.add(new TermQuery(tFld), BooleanClause.Occur.SHOULD);
+
+						for (String uuidChild : SearchDAO.getInstance().findFoldersInDepth(parentUuid)) {
+							Term tChild = new Term("parent", uuidChild);
+							parent.add(new TermQuery(tChild), BooleanClause.Occur.SHOULD);
+						}
+
+						query.add(parent, BooleanClause.Occur.MUST);
+					} catch (BooleanQuery.TooManyClauses e) {
+							throw new RepositoryException("Max clauses reached, please search from a deeper folder", e);
 					} catch (PathNotFoundException e) {
 						throw new RepositoryException("Path Not Found: " + e.getMessage());
 					}
