@@ -38,6 +38,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.openkm.util.*;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -59,11 +60,6 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.constants.service.ErrorCode;
-import com.openkm.util.ArchiveUtils;
-import com.openkm.util.FileUtils;
-import com.openkm.util.MailUtils;
-import com.openkm.util.PathUtils;
-import com.openkm.util.WebUtils;
 import com.openkm.util.impexp.RepositoryExporter;
 import com.openkm.util.impexp.TextInfoDecorator;
 
@@ -94,8 +90,10 @@ public class DownloadServlet extends OKMHttpServlet {
 		try {
 			// Now an document can be located by UUID
 			if (uuid != null && !uuid.equals("")) {
+				uuid = FormatUtil.sanitizeInput(uuid);
 				path = OKMRepository.getInstance().getNodePath(null, uuid);
 			} else if (path != null) {
+				path = FormatUtil.sanitizeInput(path);
 				path = new String(path.getBytes("ISO-8859-1"), "UTF-8");
 			}
 			
