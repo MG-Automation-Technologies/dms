@@ -192,13 +192,13 @@ public class Document extends Composite {
 		String webdavPath = document.getPath();
 		
 		// Replace only in case webdav fix is enabled
-		if (Main.get().workspaceUserProperties.getWorkspace().isWebdavFix()) {
+		if (Main.get().workspaceUserProperties.getWorkspace() != null && Main.get().workspaceUserProperties.getWorkspace().isWebdavFix()) {
 			webdavPath = webdavPath.replace("okm:", "okm_");
 		}
 		
 		// Login case write empty folder
-		if (!webdavUrl.equals("")) {
-			// webdavPath = Util.encodePathElements(webdavPath);
+		if (!webdavUrl.isEmpty()) {
+			webdavPath = Util.encodePathElements(webdavPath);
 			webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/')) + "/webdav" + webdavPath;
 		}
 		

@@ -379,7 +379,7 @@ public class Util {
 		String ret = "";
 		
 		for (int i = 1; i < eltos.length; i++) {
-			ret = ret.concat("/").concat(URL.encodeQueryString(URL.encodeQueryString(eltos[i])));
+			ret = ret.concat("/").concat(URL.encodePathSegment(eltos[i]));
 		}
 		
 		return ret;
