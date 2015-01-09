@@ -12,6 +12,8 @@
 <%@ page import="com.openkm.util.impexp.HTMLInfoDecorator" %>
 <%@ page import="com.openkm.util.impexp.ImpExpStats" %>
 <%@ page import="com.openkm.bean.Repository" %>
+<%@ page import="org.slf4j.LoggerFactory" %>
+<%@ page import="org.slf4j.Logger" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -44,6 +46,7 @@
   <title>Repository Import</title>
 </head>
 <body>
+<%! private static Logger log = LoggerFactory.getLogger("repository_import.jsp"); %>
 <%
 	if (BaseServlet.isMultipleInstancesAdmin(request)) {
 		request.setCharacterEncoding("UTF-8");
@@ -98,8 +101,8 @@
 					int files = FileUtils.countImportFiles(dir);
 					out.println("<b>Files & directories to import:</b> "+files+"<br/>");
 					long begin = System.currentTimeMillis();
-					ImpExpStats stats = RepositoryImporter.importDocuments(null, dir, repoPath, metadata, history, uuid, out, 
-						new HTMLInfoDecorator(files));
+					ImpExpStats stats = RepositoryImporter.importDocuments(null, dir, repoPath, metadata, history, uuid, out,
+							new HTMLInfoDecorator(files));
 					long end = System.currentTimeMillis();
 					out.println("<hr/>");
 					out.println("<div class=\"ok\">Filesystem '"+new File(fsPath).getAbsolutePath()+"' imported into '"+repoPath+"'</div>");
@@ -115,10 +118,13 @@
 			}
 		} catch (FileNotFoundException e) {
 			out.println("<div class=\"error\">File Not Found: "+e.getMessage()+"<div>");
+			log.error(e.getMessage(), e);
 		} catch (IOException e) {
 			out.println("<div class=\"error\">IO Error: "+e.getMessage()+"<div>");
+			log.error(e.getMessage(), e);
 		} catch (Exception e) {
 			out.println("<div class=\"error\">Error: "+e.getMessage()+"<div>");
+			log.error(e.getMessage(), e);
 		}
 	} else {
 		out.println("<div class=\"error\"><h3>Only admin users allowed</h3></div>");
