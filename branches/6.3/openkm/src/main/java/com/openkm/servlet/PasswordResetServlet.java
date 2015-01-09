@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2014 Danilo Tomasoni
+ * Copyright (c) 2006-2015 Danilo Tomasoni
  * 
  * No bytes were intentionally harmed during the development of this application.
  * 
