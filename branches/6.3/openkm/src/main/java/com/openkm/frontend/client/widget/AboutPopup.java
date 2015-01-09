@@ -49,7 +49,7 @@ public class AboutPopup extends DialogBox implements ClickHandler {
 	private HTML htmlExtVersion;
 	private Button button;
 	private String msg = "<b>Be Open, my friend!</b><br>";
-	private String copy = "&nbsp;&copy 2006-2014 OpenKM <br><br>";
+	private String copy = "&nbsp;&copy 2006-2015 OpenKM <br><br>";
 	private String team = "<b>OpenKM Team</b><br><br>"; 
 							// "Francisco José Ávila Bermejo (<i>Monkiki</i>)<br>"+
 							// "Josep Llort Tella (<i>Darkman97i</i>)<br><br>";

@@ -29,7 +29,7 @@
         <tr><td><b>OpenKM - Knowledge Management</b></td></tr>
         <tr><td nowrap="nowrap">Version: <%=WarUtils.getAppVersion() %></td></tr>
         <tr><td>&nbsp;</td></tr>
-        <tr><td>&copy; 2006-2014 OpenKM</td></tr>
+        <tr><td>&copy; 2006-2015 OpenKM</td></tr>
         <tr><td>&nbsp;</td></tr>
         <tr><td><b>Support</b></td></tr>
         <tr><td><a target="_blank" href="http://support.openkm.com/">http://support.openkm.com</a></td></tr>
