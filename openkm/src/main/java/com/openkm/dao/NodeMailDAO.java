@@ -509,6 +509,7 @@ public class NodeMailDAO {
 			NodeMail nMail = (NodeMail) session.load(NodeMail.class, uuid);
 			SecurityHelper.checkRead(nMail);
 			SecurityHelper.checkWrite(nMail);
+			SecurityHelper.checkDelete(nMail);
 			
 			// Test if already exists a mail with the same name in the trash
 			String testName = name;
