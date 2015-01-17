@@ -530,6 +530,7 @@ public class NodeFolderDAO {
 			NodeFolder nFld = (NodeFolder) session.load(NodeFolder.class, uuid);
 			SecurityHelper.checkRead(nFld);
 			SecurityHelper.checkWrite(nFld);
+			SecurityHelper.checkDelete(nFld);
 			
 			// Test if already exists a folder with the same name in the trash
 			String testName = name;

@@ -631,6 +631,7 @@ public class NodeDocumentDAO {
 			NodeDocument nDoc = (NodeDocument) session.load(NodeDocument.class, uuid);
 			SecurityHelper.checkRead(nDoc);
 			SecurityHelper.checkWrite(nDoc);
+			SecurityHelper.checkDelete(nDoc);
 			
 			// Lock Check
 			LockHelper.checkWriteLock(nDoc);
