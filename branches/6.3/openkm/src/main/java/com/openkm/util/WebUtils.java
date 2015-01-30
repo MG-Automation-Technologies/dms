@@ -349,8 +349,8 @@ public class WebUtils {
 		
 		// Set MIME type
 		response.setContentType(mimeType);
-		
-		if (userAgent.contains("msie")) {
+
+		if (userAgent.contains("msie") || userAgent.contains("trident")) {
 			log.debug("Agent: Explorer ({})", request.getServerPort());
 			fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", " ");
 			
