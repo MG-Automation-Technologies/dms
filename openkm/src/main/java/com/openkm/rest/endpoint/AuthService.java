@@ -45,7 +45,20 @@ import com.openkm.rest.util.UserList;
 @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 public class AuthService {
 	private static Logger log = LoggerFactory.getLogger(AuthService.class);
-	
+
+	@GET
+	@Path("/login")
+	public void login() throws GenericException {
+		try {
+			log.debug("login()");
+			AuthModule am = ModuleManager.getAuthModule();
+			am.login();
+			log.debug("login: void");
+		} catch (Exception e) {
+			throw new GenericException(e);
+		}
+	}
+
 	@GET
 	@Path("/getGrantedRoles")
 	public GrantedRoleList getGrantedRoles(@QueryParam("nodeId") String nodeId) throws GenericException {
