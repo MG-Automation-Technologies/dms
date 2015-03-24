@@ -24,6 +24,7 @@ package com.openkm.module.db;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.openkm.util.FormatUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -64,6 +65,7 @@ public class DbBookmarkModule implements BookmarkModule {
 			
 			String nodeUuid = NodeBaseDAO.getInstance().getUuidFromPath(nodePath);
 			String nodeType = NodeBaseDAO.getInstance().getNodeTypeByUuid(nodeUuid);
+			name = FormatUtil.sanitizeInput(name);
 			newBookmark = new Bookmark();
 			newBookmark.setUser(auth.getName());
 			newBookmark.setName(name);
@@ -170,7 +172,8 @@ public class DbBookmarkModule implements BookmarkModule {
 				oldAuth = PrincipalUtils.getAuthentication();
 				auth = PrincipalUtils.getAuthenticationByToken(token);
 			}
-			
+
+			newName = FormatUtil.sanitizeInput(newName);
 			Bookmark bm = BookmarkDAO.findByPk(bmId);
 			bm.setName(newName);
 			BookmarkDAO.update(bm);

@@ -29,6 +29,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.openkm.util.FormatUtil;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,8 +62,11 @@ public class DownloadServlet extends BasicSecuredServlet {
 		
 		try {
 			// Now an document can be located by UUID
-			if (uuid != null && !uuid.equals("")) {
+			if (uuid != null && !uuid.isEmpty()) {
+				uuid = FormatUtil.sanitizeInput(uuid);
 				path = OKMRepository.getInstance().getNodePath(null, uuid);
+			} else if (path != null && !path.isEmpty()) {
+				path = FormatUtil.sanitizeInput(path);
 			}
 			
 			if (path != null) {

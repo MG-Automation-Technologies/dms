@@ -21,6 +21,7 @@
 
 package com.openkm.module.db;
 
+import com.openkm.util.FormatUtil;
 import org.owasp.encoder.Encode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -192,7 +193,8 @@ public class DbPropertyModule implements PropertyModule {
 				if (Config.SYSTEM_KEYWORD_LOWERCASE) {
 					keyword = keyword.toLowerCase();
 				}
-				
+
+				keyword = FormatUtil.cleanXSS(keyword);
 				keyword = Encode.forHtml(keyword);
 				NodeBaseDAO.getInstance().addKeyword(nodeUuid, keyword);
 				
