@@ -89,7 +89,7 @@ public class DownloadServlet extends OKMHttpServlet {
 		
 		try {
 			// Now an document can be located by UUID
-			if (uuid != null && !uuid.equals("")) {
+			if (uuid != null && !uuid.isEmpty()) {
 				uuid = FormatUtil.sanitizeInput(uuid);
 				path = OKMRepository.getInstance().getNodePath(null, uuid);
 			} else if (path != null) {
@@ -111,11 +111,13 @@ public class DownloadServlet extends OKMHttpServlet {
 						
 						if (uuidList != null) {
 							for (String uuidElto : uuidList) {
+								uuidElto = FormatUtil.sanitizeInput(uuidElto);
 								String foo = new String(uuidElto.getBytes("ISO-8859-1"), "UTF-8");
 								paths.add(OKMRepository.getInstance().getNodePath(null, foo));
 							}
 						} else if (pathList != null) {
 							for (String pathElto : pathList) {
+								pathElto = FormatUtil.sanitizeInput(pathElto);
 								String foo = new String(pathElto.getBytes("ISO-8859-1"), "UTF-8");
 								paths.add(foo);
 							}

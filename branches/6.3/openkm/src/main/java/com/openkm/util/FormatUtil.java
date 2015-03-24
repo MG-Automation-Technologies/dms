@@ -184,10 +184,10 @@ public class FormatUtil {
 		ret = ret.replace(",", "<br/>");
 		return ret;
 	}
-	
+
 	/**
-	 * Sanitize HTML
-	 * 
+	 * Sanitize HTML input
+	 *
 	 * @see http://www.rgagnon.com/javadetails/java-0627.html
 	 */
 	public static String sanitizeInput(String string) {
@@ -201,6 +201,21 @@ public class FormatUtil {
 				.replaceAll("(?i)<.*?\\s+on.*?>.*?</.*?>", "") // case 3 - Open and close
 				.replaceAll("(?i)<.*?\\s+on.*?/>", "") // case 3 - Open / close
 				.replaceAll("(?i)<.*?\\s+on.*?>", ""); // case 3 - Open and !close
+	}
+
+	/**
+	 * Clean HTML input
+	 *
+	 * @see http://greatwebguy.com/programming/java/simple-cross-site-scripting-xss-servlet-filter/
+	 */
+	public static String cleanXSS(String value) {
+		value = value.replaceAll("<", "& lt;").replaceAll(">", "& gt;");
+		value = value.replaceAll("\\(", "& #40;").replaceAll("\\)", "& #41;");
+		value = value.replaceAll("'", "& #39;");
+		value = value.replaceAll("eval\\((.*)\\)", "");
+		value = value.replaceAll("[\\\"\\\'][\\s]*javascript:(.*)[\\\"\\\']", "\"\"");
+		value = value.replaceAll("script", "");
+		return value;
 	}
 	
 	/**
