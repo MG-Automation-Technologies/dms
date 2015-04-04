@@ -58,8 +58,7 @@ public class Select extends FormElement {
 	}
 	
 	public void setOptions(List<Option> options) {
-		handleDbOptions(options);
-		handleClassOptions(options);
+		handleClassOptions(handleDbOptions(options));
 	}
 	
 	public String getType() {
