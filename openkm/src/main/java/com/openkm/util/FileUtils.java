@@ -88,6 +88,13 @@ public class FileUtils {
 	public static File createTempFile() throws IOException {
 		return File.createTempFile("okm", ".tmp");
 	}
+
+	/**
+	 * Create temp file
+	 */
+	public static File createTempFile(String ext) throws IOException {
+		return File.createTempFile("okm", "." + ext);
+	}
 	
 	/**
 	 * Create temp file with extension from mime

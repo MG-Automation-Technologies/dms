@@ -204,7 +204,7 @@ public class EnvironmentDetector {
 	public static String getUserHome() {
 		return System.getProperty("user.home");
 	}
-
+	
 	/**
 	 * Guess OpenOffice / LibreOffice directory
 	 */
@@ -266,6 +266,39 @@ public class EnvironmentDetector {
 
 			if (app.exists() && app.isFile()) {
 				return app.getAbsolutePath();
+			} else {
+				return "";
+			}
+		} else {
+			return "";
+		}
+	}
+
+	/**
+	 * Guess pdfimages application
+	 */
+	public static String detectPdfImages() {
+		final String params = "-j -f ${firstPage} -l ${lastPage} ${fileIn} ${imageRoot}";
+
+		if (isLinux()) {
+			File app = new File("/usr/bin/pdfimages");
+
+			if (app.exists() && app.isFile()) {
+				return app.getAbsolutePath() + " " + params;
+			} else {
+				app = new File(getServerHomeDir() + "/bin/pdfimages");
+
+				if (app.exists() && app.isFile()) {
+					return app.getAbsolutePath() + " " + params;
+				} else {
+					return "";
+				}
+			}
+		} if (isWindows()) {
+			File app = new File(getServerHomeDir() + "\\bin\\pdfimages.exe");
+
+			if (app.exists() && app.isFile()) {
+				return app.getAbsolutePath() + " " + params;
 			} else {
 				return "";
 			}

@@ -221,6 +221,7 @@ public class Config {
 	public static final String PROPERTY_SYSTEM_SWFTOOLS_PDF2SWF = "system.swftools.pdf2swf";
 	public static final String PROPERTY_SYSTEM_GHOSTSCRIPT = "system.ghostscript";
 	public static final String PROPERTY_SYSTEM_ANTIVIR = "system.antivir";
+	public static final String PROPERTY_SYSTEM_PDFIMAGES = "system.pdfimages";
 	public static final String PROPERTY_SYSTEM_CATDOC_XLS2CSV = "system.catdoc.xls2csv";
 	public static final String PROPERTY_SYSTEM_LOGIN_LOWERCASE = "system.login.lowercase";
 	public static final String PROPERTY_SYSTEM_PREVIEWER = "system.previewer";
@@ -449,6 +450,7 @@ public class Config {
 	public static String SYSTEM_SWFTOOLS_PDF2SWF = "";
 	public static String SYSTEM_GHOSTSCRIPT = "";
 	public static String SYSTEM_ANTIVIR = "";
+	public static String SYSTEM_PDFIMAGES = "";
 	public static String SYSTEM_CATDOC_XLS2CSV = "";
 	public static boolean SYSTEM_LOGIN_LOWERCASE = false;
 	public static String SYSTEM_PREVIEWER = "";
@@ -742,7 +744,7 @@ public class Config {
 			values.put(PROPERTY_MIN_SEARCH_CHARACTERS, Integer.toString(MIN_SEARCH_CHARACTERS));
 			SEND_MAIL_FROM_USER = ConfigDAO.getBoolean(PROPERTY_SEND_MAIL_FROM_USER, "on".equalsIgnoreCase(cfg.getProperty(PROPERTY_SEND_MAIL_FROM_USER, "on")));
 			values.put(PROPERTY_SEND_MAIL_FROM_USER, Boolean.toString(SEND_MAIL_FROM_USER));
-			DEFAULT_USER_ROLE = ConfigDAO.getString(PROPERTY_DEFAULT_USER_ROLE, cfg.getProperty(PROPERTY_DEFAULT_USER_ROLE ,DEFAULT_USER_ROLE));
+			DEFAULT_USER_ROLE = ConfigDAO.getString(PROPERTY_DEFAULT_USER_ROLE, cfg.getProperty(PROPERTY_DEFAULT_USER_ROLE, DEFAULT_USER_ROLE));
 			values.put(PROPERTY_DEFAULT_USER_ROLE, DEFAULT_USER_ROLE);
 			DEFAULT_ADMIN_ROLE = ConfigDAO.getString(PROPERTY_DEFAULT_ADMIN_ROLE, cfg.getProperty(PROPERTY_DEFAULT_ADMIN_ROLE, DEFAULT_ADMIN_ROLE));
 			values.put(PROPERTY_DEFAULT_ADMIN_ROLE, DEFAULT_ADMIN_ROLE);
@@ -884,6 +886,8 @@ public class Config {
 			values.put(PROPERTY_SYSTEM_GHOSTSCRIPT, SYSTEM_GHOSTSCRIPT);
 			SYSTEM_ANTIVIR = ConfigDAO.getString(PROPERTY_SYSTEM_ANTIVIR, cfg.getProperty(PROPERTY_SYSTEM_ANTIVIR, ""));
 			values.put(PROPERTY_SYSTEM_ANTIVIR, SYSTEM_ANTIVIR);
+			SYSTEM_PDFIMAGES = ConfigDAO.getString(PROPERTY_SYSTEM_PDFIMAGES, cfg.getProperty(PROPERTY_SYSTEM_PDFIMAGES, EnvironmentDetector.detectPdfImages()));
+			values.put(PROPERTY_SYSTEM_PDFIMAGES, SYSTEM_PDFIMAGES);
 			SYSTEM_CATDOC_XLS2CSV = ConfigDAO.getString(PROPERTY_SYSTEM_CATDOC_XLS2CSV, cfg.getProperty(PROPERTY_SYSTEM_CATDOC_XLS2CSV, ""));
 			values.put(PROPERTY_SYSTEM_CATDOC_XLS2CSV, SYSTEM_CATDOC_XLS2CSV);
 			SYSTEM_PREVIEWER = ConfigDAO.getSelectedOption(PROPERTY_SYSTEM_PREVIEWER, "flexpaper|zviewer");
