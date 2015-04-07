@@ -76,6 +76,13 @@
   </properties>
 
   <repositories>
+    <!-- OpenKM repository -->
+    <repository>
+      <id>openkm.com</id>
+      <name>OpenKM Maven Reporitory</name>
+      <url>http://maven.openkm.com/maven2</url>
+    </repository>
+
     <!-- Needed for org.jbpm & org.hibernate-->
     <repository>
       <id>jboss.org</id>
@@ -95,13 +102,6 @@
       <id>ettrema-repo</id>
       <name>Milto WebDAV</name>
       <url>http://milton.io/maven</url>
-    </repository>
-    
-    <!-- OpenKM repository -->
-    <repository>
-      <id>openkm.com</id>
-      <name>OpenKM Maven Reporitory</name>
-      <url>http://maven.openkm.com/maven2</url>
     </repository>
 	
     <!-- StringTree repository -->
