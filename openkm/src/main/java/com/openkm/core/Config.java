@@ -371,7 +371,7 @@ public class Config {
 		"com.openkm.extractor.PdfTextExtractor\n" +
 		"com.openkm.extractor.AudioTextExtractor\n" +
 		"com.openkm.extractor.ExifTextExtractor\n" +
-		"com.openkm.extractor.CuneiformTextExtractor\n" +
+		"com.openkm.extractor.Tesseract3TextExtractor\n" +
 		"com.openkm.extractor.SourceCodeTextExtractor\n" +
 		"com.openkm.extractor.MsOffice2007TextExtractor";
 	
