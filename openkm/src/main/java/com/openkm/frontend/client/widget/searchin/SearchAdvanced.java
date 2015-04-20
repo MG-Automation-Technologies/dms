@@ -79,6 +79,7 @@ public class SearchAdvanced extends Composite {
 		folderSelectPopup = new FolderSelectPopup();
 		pathExplorerPanel = new HorizontalPanel();
 		path = new TextBox();
+		path.setWidth("320px");
 		path.setReadOnly(true);
 		pathExplorer =  new Image(OKMBundleResources.INSTANCE.folderExplorer());
 		
@@ -86,7 +87,7 @@ public class SearchAdvanced extends Composite {
 		pathExplorerPanel.add(new HTML("&nbsp;"));
 		pathExplorerPanel.add(pathExplorer);
 		
-		pathExplorer.addClickHandler(new ClickHandler() { 
+		pathExplorer.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				folderSelectPopup.show(false);
@@ -97,8 +98,9 @@ public class SearchAdvanced extends Composite {
 		
 		// Sets the category explorer
 		categoryExplorerPanel = new HorizontalPanel();
-		categoryPath = new TextBox();
 		categoryUuid = "";
+		categoryPath = new TextBox();
+		categoryPath.setWidth("320px");
 		categoryPath.setReadOnly(true);
 		categoryExplorer =  new Image(OKMBundleResources.INSTANCE.folderExplorer());
 		
