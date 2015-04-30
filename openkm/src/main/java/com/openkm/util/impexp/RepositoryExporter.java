@@ -32,6 +32,7 @@ import java.util.Iterator;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import com.openkm.util.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -155,7 +156,7 @@ public class RepositoryExporter {
 			String dirName = PathUtils.decodeEntities(PathUtils.getName(fldPath));
 			
 			// Repository path needs to be "corrected" under Windoze
-			path = fs.getPath() + File.separator + dirName.replace(':', '_');
+			path = fs.getPath() + File.separator + FileUtils.toValidFilename(dirName);
 			fsPath = new File(path);
 			fsPath.mkdirs();
 			FileLogger.info(BASE_NAME, "Created folder ''{0}''", fsPath.getPath());
@@ -171,7 +172,7 @@ public class RepositoryExporter {
 			String mailName = PathUtils.decodeEntities(PathUtils.getName(mailChild.getPath()));
 			
 			// Repository path needs to be "corrected" under Windoze
-			path = fsPath.getPath() + File.separator + mailName.replace(':', '_');
+			path = fsPath.getPath() + File.separator + FileUtils.toValidFilename(mailName);
 			ImpExpStats mailStats = exportMail(token, mailChild.getPath(), path + ".eml", metadata, out, deco);
 			
 			// Stats
@@ -184,7 +185,7 @@ public class RepositoryExporter {
 			String fileName = PathUtils.decodeEntities(PathUtils.getName(docChild.getPath()));
 			
 			// Repository path needs to be "corrected" under Windoze
-			path = fsPath.getPath() + File.separator + fileName.replace(':', '_');
+			path = fsPath.getPath() + File.separator + FileUtils.toValidFilename(fileName);
 			ImpExpStats docStats = exportDocument(token, docChild.getPath(), path, metadata, history, out, deco);
 			
 			// Stats
@@ -198,7 +199,7 @@ public class RepositoryExporter {
 			String dirName = PathUtils.decodeEntities(PathUtils.getName(fldChild.getPath()));
 			
 			// Repository path needs to be "corrected" under Windoze
-			path = fsPath.getPath() + File.separator + dirName.replace(':', '_');
+			path = fsPath.getPath() + File.separator + FileUtils.toValidFilename(dirName);
 			
 			// Metadata
 			if (metadata) {

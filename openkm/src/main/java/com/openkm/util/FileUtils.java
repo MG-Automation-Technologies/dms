@@ -248,4 +248,13 @@ public class FileUtils {
 		
 		return dateDir;
 	}
+
+	/**
+	 * Remove reserved characters from filename
+	 *
+	 * https://msdn.microsoft.com/en-us/library/aa365247
+	 */
+	public static String toValidFilename(String filename) {
+		return filename.replaceAll("[\\\\/:\"*?<>|]+", "");
+	}
 }
