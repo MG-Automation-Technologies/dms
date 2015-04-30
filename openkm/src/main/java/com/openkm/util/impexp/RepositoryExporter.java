@@ -169,28 +169,48 @@ public class RepositoryExporter {
 		
 		for (Iterator<Mail> it = mm.getChildren(token, fldPath).iterator(); it.hasNext();) {
 			Mail mailChild = it.next();
-			String mailName = PathUtils.decodeEntities(PathUtils.getName(mailChild.getPath()));
-			
-			// Repository path needs to be "corrected" under Windoze
-			path = fsPath.getPath() + File.separator + FileUtils.toValidFilename(mailName);
-			ImpExpStats mailStats = exportMail(token, mailChild.getPath(), path + ".eml", metadata, out, deco);
-			
-			// Stats
-			stats.setSize(stats.getSize() + mailStats.getSize());
-			stats.setMails(stats.getMails() + mailStats.getMails());
+
+			try {
+				String mailName = PathUtils.decodeEntities(PathUtils.getName(mailChild.getPath()));
+
+				// Repository path needs to be "corrected" under Windoze
+				path = fsPath.getPath() + File.separator + FileUtils.toValidFilename(mailName);
+				ImpExpStats mailStats = exportMail(token, mailChild.getPath(), path + ".eml", metadata, out, deco);
+
+				// Stats
+				stats.setSize(stats.getSize() + mailStats.getSize());
+				stats.setMails(stats.getMails() + mailStats.getMails());
+			} catch (Exception e) {
+				FileLogger.error(BASE_NAME, "{0} ''{1}''", e.toString(), e.getMessage());
+
+				if (out != null) {
+					out.write(deco.print(mailChild.getPath(), mailChild.getSize(), e.toString()));
+					out.flush();
+				}
+			}
 		}
 		
 		for (Iterator<Document> it = dm.getChildren(token, fldPath).iterator(); it.hasNext();) {
 			Document docChild = it.next();
-			String fileName = PathUtils.decodeEntities(PathUtils.getName(docChild.getPath()));
-			
-			// Repository path needs to be "corrected" under Windoze
-			path = fsPath.getPath() + File.separator + FileUtils.toValidFilename(fileName);
-			ImpExpStats docStats = exportDocument(token, docChild.getPath(), path, metadata, history, out, deco);
-			
-			// Stats
-			stats.setSize(stats.getSize() + docStats.getSize());
-			stats.setDocuments(stats.getDocuments() + docStats.getDocuments());
+
+			try {
+				String fileName = PathUtils.decodeEntities(PathUtils.getName(docChild.getPath()));
+
+				// Repository path needs to be "corrected" under Windoze
+				path = fsPath.getPath() + File.separator + FileUtils.toValidFilename(fileName);
+				ImpExpStats docStats = exportDocument(token, docChild.getPath(), path, metadata, history, out, deco);
+
+				// Stats
+				stats.setSize(stats.getSize() + docStats.getSize());
+				stats.setDocuments(stats.getDocuments() + docStats.getDocuments());
+			} catch (Exception e) {
+				FileLogger.error(BASE_NAME, "{0} ''{1}''", e.toString(), e.getMessage());
+
+				if (out != null) {
+					out.write(deco.print(docChild.getPath(), docChild.getActualVersion().getSize(), e.toString()));
+					out.flush();
+				}
+			}
 		}
 		
 		for (Iterator<Folder> it = fm.getChildren(token, fldPath).iterator(); it.hasNext();) {
