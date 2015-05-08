@@ -105,8 +105,8 @@ public class GWTVersion implements IsSerializable {
 		sb.append(", actual="); sb.append(actual);
 		sb.append(", created="); sb.append(created);
 		sb.append(", comment="); sb.append(comment);
-		sb.append(", user="); sb.append(user.getId());
-		sb.append(", username="); sb.append(user.getUsername());
+		sb.append(", user=").append(user==null?"":user.getId());
+		sb.append(", username=").append(user==null?"":user.getUsername());
 		sb.append("}");
 		return sb.toString();
 	}
