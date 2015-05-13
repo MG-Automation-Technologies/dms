@@ -76,8 +76,7 @@ public class LanguageServlet extends BaseServlet {
 	private static Logger log = LoggerFactory.getLogger(LanguageServlet.class);
 	
 	@Override
-	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException,
-			ServletException {
+	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		String method = request.getMethod();
 		
 		if (checkMultipleInstancesAccess(request, response)) {
@@ -90,8 +89,7 @@ public class LanguageServlet extends BaseServlet {
 	}
 	
 	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
-			ServletException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
 		String action = WebUtils.getString(request, "action");
@@ -217,8 +215,8 @@ public class LanguageServlet extends BaseServlet {
 	 * 
 	 * Translations reference is english
 	 */
-	private void list(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
+	private void list(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
 		log.debug("list({}, {}, {})", new Object[] { userId, request, response });
 		ServletContext sc = getServletContext();
 		sc.setAttribute("langs", LanguageDAO.findAll());
@@ -230,8 +228,8 @@ public class LanguageServlet extends BaseServlet {
 	/**
 	 * Delete language
 	 */
-	private void delete(String userId, HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException, DatabaseException {
+	private void delete(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
 		log.debug("delete({}, {}, {})", new Object[] { userId, request, response });
 		
 		ServletContext sc = getServletContext();
@@ -247,8 +245,8 @@ public class LanguageServlet extends BaseServlet {
 	/**
 	 * Edit language
 	 */
-	private void edit(String userId, HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException, DatabaseException {
+	private void edit(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
 		log.debug("edit({}, {}, {})", new Object[] { userId, request, response });
 		
 		ServletContext sc = getServletContext();
@@ -264,8 +262,8 @@ public class LanguageServlet extends BaseServlet {
 	/**
 	 * Create language
 	 */
-	private void create(String userId, HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException, DatabaseException {
+	private void create(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
 		log.debug("edit({}, {}, {})", new Object[] { userId, request, response });
 		
 		ServletContext sc = getServletContext();
@@ -280,8 +278,8 @@ public class LanguageServlet extends BaseServlet {
 	/**
 	 * Create language
 	 */
-	private void addTranslation(String userId, HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException, DatabaseException {
+	private void addTranslation(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
 		log.debug("addTranslation({}, {}, {})", new Object[] { userId, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
@@ -314,8 +312,8 @@ public class LanguageServlet extends BaseServlet {
 	/**
 	 * Translate language
 	 */
-	private void translate(String userId, HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException, DatabaseException {
+	private void translate(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
 		log.debug("translate({}, {}, {})", new Object[] { userId, request, response });
 		
 		if (WebUtils.getBoolean(request, "persist")) {
