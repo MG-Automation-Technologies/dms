@@ -186,10 +186,10 @@ public class DbPropertyModule implements PropertyModule {
 				nodePath = NodeBaseDAO.getInstance().getPathFromUuid(nodeId);
 				nodeUuid = nodeId;
 			}
-			
-			NodeBase nNode = NodeBaseDAO.getInstance().findByPk(nodeUuid);
-			
-			if (keyword != null) {
+
+			if (keyword != null && !keyword.isEmpty()) {
+				NodeBase nNode = NodeBaseDAO.getInstance().findByPk(nodeUuid);
+
 				if (Config.SYSTEM_KEYWORD_LOWERCASE) {
 					keyword = keyword.toLowerCase();
 				}
