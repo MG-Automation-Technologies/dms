@@ -53,7 +53,9 @@ public class SearchAdvanced extends Composite {
 	public HorizontalPanel categoryExplorerPanel;
 	public TextBox path;
 	public Image pathExplorer;
+	public Image pathClean;
 	public Image categoryExplorer;
+	public Image categoryClean;
 	public FolderSelectPopup folderSelectPopup;
 	public TextBox categoryPath;
 	public String categoryUuid = "";
@@ -82,10 +84,21 @@ public class SearchAdvanced extends Composite {
 		path.setWidth("320px");
 		path.setReadOnly(true);
 		pathExplorer =  new Image(OKMBundleResources.INSTANCE.folderExplorer());
+		pathClean = new Image(OKMBundleResources.INSTANCE.cleanIcon());
+		pathClean.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event)
+			{ 
+				path.setText("");  
+			}
+		});
+		pathClean.setStyleName("okm-Hyperlink");
 		
 		pathExplorerPanel.add(path);
 		pathExplorerPanel.add(new HTML("&nbsp;"));
 		pathExplorerPanel.add(pathExplorer);
+		pathExplorerPanel.add(new HTML("&nbsp;"));
+		pathExplorerPanel.add(pathClean);
 		
 		pathExplorer.addClickHandler(new ClickHandler() {
 			@Override
@@ -103,10 +116,23 @@ public class SearchAdvanced extends Composite {
 		categoryPath.setWidth("320px");
 		categoryPath.setReadOnly(true);
 		categoryExplorer =  new Image(OKMBundleResources.INSTANCE.folderExplorer());
+		categoryClean = new Image(OKMBundleResources.INSTANCE.cleanIcon());
+		categoryClean.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event)
+			{ 
+				categoryPath.setText(""); 
+				categoryUuid = ""; 
+			}
+
+		});
+		categoryClean.setStyleName("okm-Hyperlink");
 		
 		categoryExplorerPanel.add(categoryPath);
 		categoryExplorerPanel.add(new HTML("&nbsp;"));
 		categoryExplorerPanel.add(categoryExplorer);
+		categoryExplorerPanel.add(new HTML("&nbsp;"));
+	    categoryExplorerPanel.add(categoryClean);
 		
 		categoryExplorer.addClickHandler(new ClickHandler() { 
 			@Override
