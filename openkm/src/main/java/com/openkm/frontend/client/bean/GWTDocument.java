@@ -381,8 +381,8 @@ public class GWTDocument implements IsSerializable {
 		sb.append(", mimeType="); sb.append(mimeType);
 		sb.append(", author="); sb.append(author);
 		sb.append(", permissions="); sb.append(permissions);
-		sb.append(", created="); sb.append(created==null?null:created.getTime());
-		sb.append(", lastModified="); sb.append(lastModified==null?null:lastModified.getTime());
+		sb.append(", created="); sb.append(created == null ? null : created.getTime());
+		sb.append(", lastModified="); sb.append(lastModified == null ? null : lastModified.getTime());
 		sb.append(", keywords="); sb.append(keywords);
 		sb.append(", categories="); sb.append(categories);
 		sb.append(", locked="); sb.append(locked);
@@ -395,8 +395,8 @@ public class GWTDocument implements IsSerializable {
 		sb.append(", convertibleToDxf="); sb.append(convertibleToDxf);
 		sb.append(", cipherName="); sb.append(cipherName);
 		sb.append(", notes="); sb.append(notes);
-		sb.append(", user="); sb.append(user.getId());
-		sb.append(", username="); sb.append(user.getUsername());
+		sb.append(", user="); sb.append(user == null ? null : user.getId());
+		sb.append(", username="); sb.append(user == null ? null : user.getUsername());
 		sb.append("}");
 		return sb.toString();
 	}
