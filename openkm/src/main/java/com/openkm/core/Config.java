@@ -575,12 +575,12 @@ public class Config {
 		Properties config = new Properties();
 		String configFile = HOME_DIR + File.separator + OPENKM_CONFIG;
 		CONTEXT = sc.getContextPath().isEmpty() ? "" : sc.getContextPath().substring(1);
-		
+
 		// Initialize DTD location
 		// TODO Add trailing "/" when upgrade to Tomcat 8 => "WEB-INF/classes/dtd/"
 		DTD_BASE = sc.getRealPath("WEB-INF/classes/dtd");
 		log.info("** Application {} has DTDs at {} **", sc.getServletContextName(), DTD_BASE);
-		
+
 		// Initialize language profiles location
 		// TODO Add trailing "/" when upgrade to Tomcat 8 => "WEB-INF/classes/lang-profiles/"
 		LANG_PROFILES_BASE = sc.getRealPath("WEB-INF/classes/lang-profiles");
