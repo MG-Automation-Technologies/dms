@@ -51,8 +51,8 @@ public class FuturamaWalking extends PopupPanel {
 		top = Window.getClientHeight()-80-21;
 		
 		vPanel = new VerticalPanel();
-		vPanel.setWidth("186");
-		vPanel.setHeight("80");
+		vPanel.setWidth("186px");
+		vPanel.setHeight("80px");
 		
 		logo = new Image("img/eastereggs/futurama_walking.gif");
 		vPanel.add(logo);

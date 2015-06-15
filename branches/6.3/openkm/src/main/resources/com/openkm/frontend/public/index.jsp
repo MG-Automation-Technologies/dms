@@ -10,15 +10,13 @@
 	cookie.setMaxAge(365 * 24 * 60 * 60); // One year
 	response.addCookie(cookie);
 %>
-<html>
+<!DOCTYPE html>
 	<head>
 		<title><%=Config.TEXT_TITLE%></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta http-equiv="Cache-Control" content="no-cache" />
     	<meta http-equiv="Pragma" content="no-cache" />
     	<meta http-equiv="Expires" content="0" />
-    	<meta http-equiv="X-UA-Compatible" content="chrome=1">
-    	<meta http-equiv="X-UA-Compatible" content="ie=8">
 		<link rel="Shortcut icon" href="../logo/favicon">
 		<link type="text/css" rel="stylesheet" href="styles.css" title="default">
 		<link type="text/css" rel="alternate stylesheet" href="mediumfont.css" title="mediumfont">

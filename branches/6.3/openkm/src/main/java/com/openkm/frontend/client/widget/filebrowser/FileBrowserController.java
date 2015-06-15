@@ -282,7 +282,7 @@ public class FileBrowserController extends Composite {
 		filter.setStyleName("okm-Hyperlink");
 		
 		hPanel.setStyleName("gwt-controller");
-		hPanel.setHeight("22");
+		hPanel.setHeight("22px");
 		hPanel.setWidth("100%");
 		
 		initWidget(hPanel);
@@ -594,31 +594,31 @@ public class FileBrowserController extends Composite {
 	 */
 	public void setProfilePagination(GWTProfilePagination profilePagination) {
 		if (profilePagination.isTypeFilterEnabled()) {
-			hPanel.add(Util.hSpace("5"));
+			hPanel.add(Util.hSpace("5px"));
 			hPanel.add(folder);
-			hPanel.add(Util.hSpace("5"));
+			hPanel.add(Util.hSpace("5px"));
 			hPanel.add(document);
-			hPanel.add(Util.hSpace("5"));
+			hPanel.add(Util.hSpace("5px"));
 			hPanel.add(mail);
-			hPanel.add(Util.hSpace("5"));
+			hPanel.add(Util.hSpace("5px"));
 			hPanel.setCellVerticalAlignment(folder, HasAlignment.ALIGN_MIDDLE);
 			hPanel.setCellVerticalAlignment(document, HasAlignment.ALIGN_MIDDLE);
 			hPanel.setCellVerticalAlignment(mail, HasAlignment.ALIGN_MIDDLE);
 			if (profilePagination.isMiscFilterEnabled() || profilePagination.isPaginationEnabled()) {
 				vSeparator = new HTML();
-				vSeparator.setHeight("22");
+				vSeparator.setHeight("22px");
 				vSeparator.setStyleName("separator");
 				hPanel.add(vSeparator);
 			}
 		}
 		if (profilePagination.isMiscFilterEnabled()) {
-			hPanel.add(Util.hSpace("5"));
+			hPanel.add(Util.hSpace("5px"));
 			hPanel.add(filter);
-			hPanel.add(Util.hSpace("5"));
+			hPanel.add(Util.hSpace("5px"));
 			hPanel.setCellVerticalAlignment(filter, HasAlignment.ALIGN_MIDDLE);
 			if (profilePagination.isPaginationEnabled()) {
 				vSeparator2 = new HTML();
-				vSeparator2.setHeight("22");
+				vSeparator2.setHeight("22px");
 				vSeparator2.setStyleName("separator");
 				hPanel.add(vSeparator2);
 			}
@@ -627,20 +627,20 @@ public class FileBrowserController extends Composite {
 		if (profilePagination.isPaginationEnabled()) {
 			hPanel.add(paginated);
 			hPanel.add(paginate);
-			hPanel.add(Util.hSpace("5"));
+			hPanel.add(Util.hSpace("5px"));
 			hPanel.add(rowsLimit);
-			hPanel.add(Util.hSpace("5"));
+			hPanel.add(Util.hSpace("5px"));
 			hPanel.add(total);
-			hPanel.add(Util.hSpace("5"));
+			hPanel.add(Util.hSpace("5px"));
 			hPanel.add(gotoStart);
 			hPanel.add(previous);
 			hPanel.add(pageInfo);
 			hPanel.add(next);
 			hPanel.add(gotoEnd);
-			hPanel.add(Util.hSpace("5"));
+			hPanel.add(Util.hSpace("5px"));
 			hPanel.add(orderByText);
 			hPanel.add(orderBy);
-			hPanel.add(Util.hSpace("5"));
+			hPanel.add(Util.hSpace("5px"));
 			hPanel.add(reverseText);
 			hPanel.add(reverse);
 			hPanel.setCellVerticalAlignment(paginated, HasAlignment.ALIGN_MIDDLE);
@@ -776,9 +776,9 @@ public class FileBrowserController extends Composite {
 			accept.setStyleName("okm-YesButton");
 			
 			vPanel.add(table);
-			vPanel.add(Util.vSpace("5"));
+			vPanel.add(Util.vSpace("5px"));
 			vPanel.add(accept);
-			vPanel.add(Util.vSpace("5"));
+			vPanel.add(Util.vSpace("5px"));
 			vPanel.setCellHorizontalAlignment(table, HasAlignment.ALIGN_LEFT);
 			vPanel.setCellHorizontalAlignment(accept, HasAlignment.ALIGN_CENTER);
 			
@@ -867,7 +867,7 @@ public class FileBrowserController extends Composite {
 					HorizontalPanel hPanel = new HorizontalPanel();
 					hPanel.setStyleName("okm-NoWrap");
 					final TextBox input1 = new TextBox();
-					input1.setWidth("50");
+					input1.setWidth("50px");
 					input1.setStyleName("okm-Input");
 					final ListBox sizeType1 = new ListBox();
 					sizeType1.addItem("Bytes", String.valueOf(GWTFilter.SIZE_BYTES));
@@ -878,7 +878,7 @@ public class FileBrowserController extends Composite {
 					sizeType1.setStyleName("okm-Input");
 					HTML between = new HTML("&nbsp;&harr;&nbsp;");
 					final TextBox input2 = new TextBox();
-					input2.setWidth("50");
+					input2.setWidth("50px");
 					input2.setStyleName("okm-Input");
 					final ListBox sizeType2 = new ListBox();
 					sizeType2.addItem("Bytes", String.valueOf(GWTFilter.SIZE_BYTES));
@@ -1048,11 +1048,11 @@ public class FileBrowserController extends Composite {
 					
 					// Date range panel
 					hPanel.add(startDate);
-					hPanel.add(Util.hSpace("5"));
+					hPanel.add(Util.hSpace("5px"));
 					hPanel.add(startCalendarIcon);
 					hPanel.add(dateBetween);
 					hPanel.add(endDate);
-					hPanel.add(Util.hSpace("5"));
+					hPanel.add(Util.hSpace("5px"));
 					hPanel.add(endCalendarIcon);
 					startDate.setMaxLength(10);
 					endDate.setMaxLength(10);

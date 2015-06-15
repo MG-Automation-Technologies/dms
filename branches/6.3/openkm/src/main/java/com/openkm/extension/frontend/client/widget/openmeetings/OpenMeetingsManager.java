@@ -173,7 +173,7 @@ public class OpenMeetingsManager extends Composite {
 		privateConferenceRooms.setWidth(columnWidth);
 		restrictedRooms.setWidth(columnWidth);
 		interviewRooms.setWidth(columnWidth);
-		manageRoom.setWidth("" + columnWidth);
+		manageRoom.setWidth("" + columnWidth+"px");
 		manageRoom.setHeight("100%");
 	}
 	

@@ -22,8 +22,8 @@
 package com.openkm.frontend.client.panel.center;
 
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * VerticalSplitLayoutExtended
@@ -31,11 +31,10 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
  * @author jllort
  *
  */
-public class VerticalSplitLayoutExtended extends Composite {
-	
-    private SplitLayoutPanel verticalSplitLayotPanel;
+public class VerticalSplitLayoutExtended extends SplitLayoutPanel {
     private int topHeight = 0;
     private int bottomHeight = 0;
+    private VerticalResizeHandler resizeHander;
     
     /**
      * VerticalSplitLayoutExtended
@@ -44,17 +43,22 @@ public class VerticalSplitLayoutExtended extends Composite {
      */
     public VerticalSplitLayoutExtended(final VerticalResizeHandler resizeHander) {
     	super();
-        verticalSplitLayotPanel = new SplitLayoutPanel() {
-            @Override
-            public void onResize() {
-                super.onResize();
-                topHeight = Integer.parseInt(DOM.getStyleAttribute(DOM.getChild(verticalSplitLayotPanel.getElement(), 2),"top").replace("px", "").trim());
-                bottomHeight = this.getOffsetHeight()-Integer.parseInt(DOM.getStyleAttribute(DOM.getChild(verticalSplitLayotPanel.getElement(), 3),"top").replace("px", "").trim());
-                resizeHander.onResize(topHeight, bottomHeight);
-            }           
-        };
-        initWidget(verticalSplitLayotPanel);
+    	this.resizeHander = resizeHander;
     }
+    
+    @Override
+    public void onResize() {
+        super.onResize();
+        topHeight = Integer.parseInt(DOM.getStyleAttribute(DOM.getChild(this.getElement(), 2),"top").replace("px", "").trim());
+        bottomHeight = this.getOffsetHeight()-Integer.parseInt(DOM.getStyleAttribute(DOM.getChild(this.getElement(), 3),"top").replace("px", "").trim());
+        if (topHeight<0) {
+        	topHeight =0;
+        }
+        if (bottomHeight<0) {
+        	bottomHeight = 0;
+        }
+        resizeHander.onResize(topHeight, bottomHeight);
+    }     
 
     /**
      * getSplitPanel
@@ -63,7 +67,7 @@ public class VerticalSplitLayoutExtended extends Composite {
      */
     public SplitLayoutPanel getSplitPanel()
     {
-    	return verticalSplitLayotPanel;
+    	return this;
     }
     
     /**
@@ -80,14 +84,34 @@ public class VerticalSplitLayoutExtended extends Composite {
     	return bottomHeight;
     }
     
+    @Override
+	public int getOffsetHeight() {
+		int offsetHeight = super.getOffsetHeight(); // when widget is hidden value is 0
+		if (offsetHeight == 0 && DOM.getStyleAttribute(this.getElement(), "height")!=null && !DOM.getStyleAttribute(this.getElement(), "height").isEmpty()) {
+			offsetHeight = Integer.parseInt(DOM.getStyleAttribute(this.getElement(), "height").replaceAll("px", ""));
+		}
+		return offsetHeight;
+	}
+	
+	@Override
+	public int getOffsetWidth() {
+		int offsetWidth = super.getOffsetWidth(); // when widget is hidden value is 0
+		if (offsetWidth == 0 && DOM.getStyleAttribute(this.getElement(), "width")!=null && !DOM.getStyleAttribute(this.getElement(), "width").isEmpty()) {
+			offsetWidth = Integer.parseInt(DOM.getStyleAttribute(this.getElement(), "width").replaceAll("px", ""));
+		}
+		return offsetWidth;
+	}
+    
     /**
-     * setSplitPosition
-     */
-    public void setSplitPosition(int topHeight) {
-    	DOM.setStyleAttribute(DOM.getChild(verticalSplitLayotPanel.getElement(), 1), "height", String.valueOf(topHeight));
-    	DOM.setStyleAttribute(DOM.getChild(verticalSplitLayotPanel.getElement(), 2), "top", String.valueOf(topHeight));
-    	DOM.setStyleAttribute(DOM.getChild(verticalSplitLayotPanel.getElement(), 2), "height", String.valueOf(10));
-    	DOM.setStyleAttribute(DOM.getChild(DOM.getChild(verticalSplitLayotPanel.getElement(), 2),0),"height", String.valueOf(10));
-    	DOM.setStyleAttribute(DOM.getChild(verticalSplitLayotPanel.getElement(), 3), "top", String.valueOf(topHeight+10));
-    }
+	 * setSplitPosition
+	 */
+	public void setSplitPosition(Widget widgetBeforeTheSplitter, double size, boolean animate) {
+		LayoutData layout = (LayoutData) widgetBeforeTheSplitter.getLayoutData();
+		layout.oldSize = layout.size;
+		layout.size = size;
+		if (animate)
+			animate(500);
+		else
+			super.forceLayout();
+	}
 }

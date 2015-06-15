@@ -41,7 +41,7 @@ import com.openkm.frontend.client.widget.UserInfo;
  *
  */
 public class BottomPanel extends Composite {
-	public static final int PANEL_HEIGHT = 25;
+	public static final int PANEL_HEIGHT = 30;
 	
 	private HorizontalPanel panel;
 	private Label statusMsg;
@@ -62,19 +62,19 @@ public class BottomPanel extends Composite {
 		spRight = new SimplePanel();
 		statusMsg = new Label("");
 		statusMsg.setStyleName("okm-Input");
-		statusMsg.setSize("340","15");
+		statusMsg.setSize("340px","15px");
 		statusMsg.setHorizontalAlignment(HasAlignment.ALIGN_LEFT);
 		
-		spLeft.setWidth("10");
-		spRight.setWidth("10");
+		spLeft.setWidth("10px");
+		spRight.setWidth("10px");
 
 		
 		panel.add(spLeft);
 		panel.add(userInfo);
 		panel.add(statusMsg);
 		panel.add(spRight);
-		panel.setCellWidth(spLeft,"10");
-		panel.setCellWidth(spRight,"10");
+		panel.setCellWidth(spLeft,"10px");
+		panel.setCellWidth(spRight,"10px");
 		panel.setCellHorizontalAlignment(userInfo, HasAlignment.ALIGN_LEFT);
 		panel.setCellHorizontalAlignment(statusMsg, HasAlignment.ALIGN_RIGHT);
 		panel.setCellHorizontalAlignment(spRight, HasAlignment.ALIGN_RIGHT);
@@ -95,7 +95,7 @@ public class BottomPanel extends Composite {
 	 * @param height the height size
 	 */
 	public void setSize(int width, int height) {
-		panel.setSize(""+width, ""+height);
+		panel.setSize(""+width+"px", ""+height+"px");
 	}
 	
 	/**

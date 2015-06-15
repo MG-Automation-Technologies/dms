@@ -93,11 +93,11 @@ public class CategoriesWidget extends Composite {
 		
 		// Categories
 		vPanel = new VerticalPanel();		
-		vPanel.setWidth("390");
-		vPanel.setHeight("175");
+		vPanel.setWidth("390px");
+		vPanel.setHeight("175px");
 		
 		scrollDirectoryPanel = new ScrollPanel();
-		scrollDirectoryPanel.setSize("380", "150");
+		scrollDirectoryPanel.setSize("380px", "150px");
 		scrollDirectoryPanel.setStyleName("okm-Popup-text");
 		verticalDirectoryPanel = new VerticalPanel();
 		verticalDirectoryPanel.setSize("100%", "100%");
@@ -120,8 +120,8 @@ public class CategoriesWidget extends Composite {
 		vPanel.setCellHorizontalAlignment(scrollDirectoryPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(actionButton, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellVerticalAlignment(actionButton, HasAlignment.ALIGN_MIDDLE);
-		vPanel.setCellHeight(scrollDirectoryPanel, "150");
-		vPanel.setCellHeight(actionButton, "25");
+		vPanel.setCellHeight(scrollDirectoryPanel, "150px");
+		vPanel.setCellHeight(actionButton, "25px");
 		
 		table.setWidget(1, 0, vPanel);
 		table.getFlexCellFormatter().setColSpan(1,0,2);

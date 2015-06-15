@@ -151,14 +151,14 @@ public class Notes extends Composite {
 		updateButton.setVisible(false);
 		cancelButton.setVisible(false);
 		
-		newNotePanel.add(Util.vSpace("40"));
+		newNotePanel.add(Util.vSpace("40px"));
 		newNotePanel.add(addNote);
 		if (isChrome) {
 			newNotePanel.add(textArea);
 		} else {
 			newNotePanel.add(gridRichText);
 		}
-		newNotePanel.add(Util.vSpace("10"));
+		newNotePanel.add(Util.vSpace("10px"));
 		HorizontalPanel hPanel = new HorizontalPanel();
 		hPanel.add(cancelButton);
 		hPanel.add(new HTML("&nbsp;"));
@@ -321,8 +321,8 @@ public class Notes extends Composite {
 		
 		hPanel.add(space2);
 		hPanel.add(date);
-		hPanel.setCellWidth(space, "5");
-		hPanel.setCellWidth(space2, "5");
+		hPanel.setCellWidth(space, "5px");
+		hPanel.setCellWidth(space2, "5px");
 		
 		if (note.getAuthor().equals(Main.get().workspaceUserProperties.getUser().getId())) {
 			if (visibleButtons || addNoteOption) {
@@ -349,12 +349,12 @@ public class Notes extends Composite {
 		tableNotes.setWidget(row, 1, hPanel);
 		tableNotes.getCellFormatter().setHorizontalAlignment(row, 1, HasAlignment.ALIGN_RIGHT);
 		tableNotes.getRowFormatter().setStyleName(row, "okm-Notes-Title");
-		tableNotes.getCellFormatter().setHeight(row, 1, "30");
+		tableNotes.getCellFormatter().setHeight(row, 1, "30px");
 		tableNotes.getCellFormatter().setVerticalAlignment(row, 0, HasAlignment.ALIGN_BOTTOM);
 		tableNotes.getCellFormatter().setVerticalAlignment(row, 1, HasAlignment.ALIGN_BOTTOM);
 		row++;
 		tableNotes.setHTML(row, 0, "");
-		tableNotes.getCellFormatter().setHeight(row, 0, "6");
+		tableNotes.getCellFormatter().setHeight(row, 0, "6px");
 		tableNotes.getRowFormatter().setStyleName(row, "okm-Notes-Line");
 		tableNotes.getFlexCellFormatter().setColSpan(row, 0, 2);
 		row++;

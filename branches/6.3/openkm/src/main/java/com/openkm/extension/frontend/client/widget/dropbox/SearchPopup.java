@@ -142,9 +142,9 @@ public class SearchPopup extends DialogBox {
 		});
 		typeList.setStyleName("okm-Input");
 		
-		hSearchPanel.add(UtilComunicator.hSpace("5"));
+		hSearchPanel.add(UtilComunicator.hSpace("5px"));
 		hSearchPanel.add(name);
-		hSearchPanel.add(UtilComunicator.hSpace("5"));
+		hSearchPanel.add(UtilComunicator.hSpace("5px"));
 		hSearchPanel.add(typeList);
 		
 		// Buttons panel
@@ -169,13 +169,13 @@ public class SearchPopup extends DialogBox {
 		hButtonPanel.add(new HTML("&nbsp;"));
 		hButtonPanel.add(importButton);
 		
-		vPanel.add(UtilComunicator.vSpace("5"));
+		vPanel.add(UtilComunicator.vSpace("5px"));
 		vPanel.add(hSearchPanel);
-		vPanel.add(UtilComunicator.vSpace("5"));
+		vPanel.add(UtilComunicator.vSpace("5px"));
 		vPanel.add(scrollPanel);
-		vPanel.add(UtilComunicator.vSpace("5"));
+		vPanel.add(UtilComunicator.vSpace("5px"));
 		vPanel.add(hButtonPanel);
-		vPanel.add(UtilComunicator.vSpace("5"));
+		vPanel.add(UtilComunicator.vSpace("5px"));
 		
 		vPanel.setCellHorizontalAlignment(hSearchPanel, HasAlignment.ALIGN_LEFT);
 		vPanel.setCellHorizontalAlignment(scrollPanel, HasAlignment.ALIGN_CENTER);
@@ -220,7 +220,7 @@ public class SearchPopup extends DialogBox {
 							
 							table.setHTML(row, 1, gwtDropboxEntry.getPath());
 							table.setHTML(row, 2, gwtDropboxEntry.getRev());
-							table.getCellFormatter().setWidth(row, 0, "20");
+							table.getCellFormatter().setWidth(row, 0, "20px");
 							table.getCellFormatter().setWidth(row, 1, "100%");
 							table.getCellFormatter().setHorizontalAlignment(row, 0, HasAlignment.ALIGN_CENTER);
 							table.getCellFormatter().setHorizontalAlignment(row, 1, HasAlignment.ALIGN_LEFT);

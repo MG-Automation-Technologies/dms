@@ -121,8 +121,8 @@ public class FolderSelectPopup extends DialogBox  {
 		super(false,true);
 		
 		vPanel = new VerticalPanel();		
-		vPanel.setWidth("450");
-		vPanel.setHeight("400");
+		vPanel.setWidth("450px");
+		vPanel.setHeight("400px");
 		hPanel = new HorizontalPanel();
 		hListPanel  = new HorizontalPanel();
 		hContextPanel = new HorizontalPanel();
@@ -144,10 +144,10 @@ public class FolderSelectPopup extends DialogBox  {
 		hContextPanel.setCellVerticalAlignment(contextTxt, HasVerticalAlignment.ALIGN_MIDDLE);
 		
 		hListPanel.add(hContextPanel);
-		hListPanel.setWidth("440");
+		hListPanel.setWidth("440px");
 		
 		scrollDirectoryPanel = new ScrollPanel();
-		scrollDirectoryPanel.setSize("440", "350");
+		scrollDirectoryPanel.setSize("440px", "350px");
 		scrollDirectoryPanel.setStyleName("okm-Popup-text");
 		verticalDirectoryPanel = new VerticalPanel();
 		verticalDirectoryPanel.setSize("100%", "100%");
@@ -172,7 +172,7 @@ public class FolderSelectPopup extends DialogBox  {
 			}
 		});
 		
-		status.setWidth("430");
+		status.setWidth("430px");
 		status.setWordWrap(true);
 		status.setStyleName("fancyfileupload-pending");
 		status.setVisible(false);
@@ -185,7 +185,7 @@ public class FolderSelectPopup extends DialogBox  {
 		vPanel.add(new HTML("<br>"));
 		hPanel.add(cancelButton);
 		HTML space = new HTML();
-		space.setWidth("50");
+		space.setWidth("50px");
 		hPanel.add(space);
 		hPanel.add(actionButton);
 		vPanel.add(hPanel);
@@ -195,7 +195,7 @@ public class FolderSelectPopup extends DialogBox  {
 		vPanel.setCellHorizontalAlignment(scrollDirectoryPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(status, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
-		vPanel.setCellHeight(scrollDirectoryPanel, "350");
+		vPanel.setCellHeight(scrollDirectoryPanel, "350px");
 
 		cancelButton.setStyleName("okm-NoButton");
 		actionButton.setStyleName("okm-YesButton");

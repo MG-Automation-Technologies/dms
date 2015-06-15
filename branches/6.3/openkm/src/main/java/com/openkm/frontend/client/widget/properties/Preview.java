@@ -84,13 +84,13 @@ public class Preview extends Composite {
 			}
 		});
 		backButton.setStylePrimaryName("okm-Button");
-		HTML space2 = Util.hSpace("5");
+		HTML space2 = Util.hSpace("5px");
 		hReturnPanel.add(space2);
 		hReturnPanel.add(backButton);
-		hReturnPanel.setCellWidth(space2, "5");
+		hReturnPanel.setCellWidth(space2, "5px");
 		hReturnPanel.setCellHorizontalAlignment(backButton, HasAlignment.ALIGN_LEFT);
 		hReturnPanel.setCellVerticalAlignment(backButton, HasAlignment.ALIGN_MIDDLE);
-		hReturnPanel.setHeight(String.valueOf(TURN_BACK_HEIGHT));
+		hReturnPanel.setHeight(String.valueOf(TURN_BACK_HEIGHT)+"px");
 		hReturnPanel.setStyleName("okm-TopPanel");
 		hReturnPanel.addStyleName("okm-Border-Top");
 		hReturnPanel.addStyleName("okm-Border-Left");
@@ -115,7 +115,7 @@ public class Preview extends Composite {
 		
 		if (previewEvent != null) {
 			vPanel.add(hReturnPanel);
-			vPanel.setCellHeight(hReturnPanel, String.valueOf(TURN_BACK_HEIGHT));
+			vPanel.setCellHeight(hReturnPanel, String.valueOf(TURN_BACK_HEIGHT)+"px");
 		}
 		
 		vPanel.add(htmlPreview);
@@ -138,7 +138,7 @@ public class Preview extends Composite {
 		
 		if (previewEvent != null) {
 			vPanel.add(hReturnPanel);
-			vPanel.setCellHeight(hReturnPanel, String.valueOf(TURN_BACK_HEIGHT));
+			vPanel.setCellHeight(hReturnPanel, String.valueOf(TURN_BACK_HEIGHT)+"px");
 		}
 		
 		vPanel.add(swf);
@@ -194,7 +194,7 @@ public class Preview extends Composite {
 		
 		if (previewEvent != null) {
 			vPanel.add(hReturnPanel);
-			vPanel.setCellHeight(hReturnPanel, String.valueOf(TURN_BACK_HEIGHT));
+			vPanel.setCellHeight(hReturnPanel, String.valueOf(TURN_BACK_HEIGHT)+"px");
 		}
 		
 		vPanel.add(pdf);
@@ -231,7 +231,7 @@ public class Preview extends Composite {
 		
 		if (previewEvent != null) {
 			vPanel.add(hReturnPanel);
-			vPanel.setCellHeight(hReturnPanel, String.valueOf(TURN_BACK_HEIGHT));
+			vPanel.setCellHeight(hReturnPanel, String.valueOf(TURN_BACK_HEIGHT)+"px");
 		}
 		
 		vPanel.add(video);
@@ -269,7 +269,7 @@ public class Preview extends Composite {
 		
 		if (previewEvent != null) {
 			vPanel.add(hReturnPanel);
-			vPanel.setCellHeight(hReturnPanel, String.valueOf(TURN_BACK_HEIGHT));
+			vPanel.setCellHeight(hReturnPanel, String.valueOf(TURN_BACK_HEIGHT)+"px");
 		}
 		
 		if (previewAvailable) {

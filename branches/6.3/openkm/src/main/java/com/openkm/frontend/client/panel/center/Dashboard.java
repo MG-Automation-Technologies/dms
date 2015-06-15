@@ -116,17 +116,17 @@ public class Dashboard extends Composite implements HasDashboardHandlerExtension
 		this.width = width;
 		this.height = height;
 		panel.setPixelSize(width-2, height-2);
-		panel.setCellHeight(sp, ""+(height-60-2));
-		panel.setCellHeight(horizontalToolBar, ""+60);
+		panel.setCellHeight(sp, ""+(height-60-2)+"px");
+		panel.setCellHeight(horizontalToolBar, ""+60+"px");
 		sp.setPixelSize(width-2, height-60-2);
 		scrollPanel.setPixelSize(width-2, height-(60+2));
 		userDashboard.setWidth(width-2);
 		mailDashboard.setWidth(width-2);
 		newsDashboard.setWidth(width-2);
 		generalDashboard.setWidth(width-2);
-		workflowDashboard.setWidth(width-2);
+		workflowDashboard.setWidth(width-2, (height-(60+2)));
 		keyMapDashboard.setSize(""+(width-2), ""+(height-(60+2)));
-		horizontalToolBar.setHeight("60");
+		horizontalToolBar.setHeight("60px");
 		horizontalToolBar.setWidth("100%");
 		
 		for (Iterator<ToolBarBoxExtension> it = toolBarBoxExtensionList.iterator(); it.hasNext();) {

@@ -58,8 +58,8 @@ public class Desktop extends Composite {
 		navigator = new Navigator();
 		browser = new Browser();
 		
-		horizontalSplitLayoutPanel.getSplitPanel().addWest(navigator,PANEL_LEFT_WIDTH);
-		horizontalSplitLayoutPanel.getSplitPanel().add(browser);
+		horizontalSplitLayoutPanel.addWest(navigator,PANEL_LEFT_WIDTH);
+		horizontalSplitLayoutPanel.add(browser);
 
 		initWidget(horizontalSplitLayoutPanel);
 	}
@@ -73,19 +73,18 @@ public class Desktop extends Composite {
 	public void setSize(int width, int height) {
 		totalWidthSize = width;
 		this.width = width;
-		this.height = height;	
-		left = (int)(width * 0.2);
+		this.height = height;
+		left = (int) (width * 0.2);
 		left = left < PANEL_LEFT_WIDTH ? PANEL_LEFT_WIDTH : left;
 		right = width - (left + SPLITTER_WIDTH);
-		
 		if (right < 0) {
 			right = 0;
 		}
-		
+
 		horizontalSplitLayoutPanel.setPixelSize(width, height);
 		navigator.setSize(left, height);
 		browser.setSize(right, height);
-		horizontalSplitLayoutPanel.setSplitPosition(left);
+		horizontalSplitLayoutPanel.setSplitPosition(navigator, left, false);
 	}
 	
 	/**
@@ -95,7 +94,7 @@ public class Desktop extends Composite {
 		contractPreviousLeft = left;
 		left = totalWidthSize - SPLITTER_WIDTH;
 		right = 0;
-		horizontalSplitLayoutPanel.setSplitPosition(left);
+		horizontalSplitLayoutPanel.setSplitPosition(navigator, left, false);
 		navigator.setSize(left, height);
 		browser.setSize(right, height);
 	}
@@ -107,7 +106,7 @@ public class Desktop extends Composite {
 		contractPreviousLeft = left;
 		left = 0;
 		right = totalWidthSize - SPLITTER_WIDTH;
-		horizontalSplitLayoutPanel.setSplitPosition(left);
+		horizontalSplitLayoutPanel.setSplitPosition(navigator, left, false);
 		navigator.setSize(left, height);
 		browser.setSize(right, height);
 	}
@@ -118,7 +117,7 @@ public class Desktop extends Composite {
 	public void restoreNormalView() {
 		left = contractPreviousLeft;
 		right = totalWidthSize - (left + SPLITTER_WIDTH);
-		horizontalSplitLayoutPanel.setSplitPosition(left);
+		horizontalSplitLayoutPanel.setSplitPosition(navigator, left, false);
 		navigator.setSize(left, height);
 		browser.setSize(right, height);
 	}
@@ -137,7 +136,7 @@ public class Desktop extends Composite {
 	 * refreshSpliterAfterAdded
 	 */
 	public void refreshSpliterAfterAdded() {
-		horizontalSplitLayoutPanel.setSplitPosition(left);
+		horizontalSplitLayoutPanel.setSplitPosition(navigator, left, false);
 	}
 	
 	/**

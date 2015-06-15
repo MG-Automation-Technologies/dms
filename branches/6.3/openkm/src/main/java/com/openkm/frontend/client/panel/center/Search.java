@@ -56,8 +56,8 @@ public class Search extends Composite {
 		historySearch = new HistorySearch();
 		searchBrowser = new SearchBrowser();
 		
-		horizontalSplitLayoutPanel.getSplitPanel().addWest(historySearch,PANEL_LEFT_WIDTH);
-		horizontalSplitLayoutPanel.getSplitPanel().add(searchBrowser);
+		horizontalSplitLayoutPanel.addWest(historySearch,PANEL_LEFT_WIDTH);
+		horizontalSplitLayoutPanel.add(searchBrowser);
 		
 		initWidget(horizontalSplitLayoutPanel);
 	}
@@ -80,7 +80,7 @@ public class Search extends Composite {
 		horizontalSplitLayoutPanel.setPixelSize(width, height);
 		historySearch.setSize(left, height);
 		searchBrowser.setSize(right, height);
-		horizontalSplitLayoutPanel.setSplitPosition(left);
+		horizontalSplitLayoutPanel.setSplitPosition(historySearch, left, false);
 	}
 	
 	/**
@@ -98,7 +98,7 @@ public class Search extends Composite {
 	 * refreshSpliterAfterAdded
 	 */
 	public void refreshSpliterAfterAdded() {
-		horizontalSplitLayoutPanel.setSplitPosition(left);
+		horizontalSplitLayoutPanel.setSplitPosition(historySearch, left, false);
 	}
 	
 	/**

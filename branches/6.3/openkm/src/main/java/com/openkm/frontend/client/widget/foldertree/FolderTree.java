@@ -104,8 +104,8 @@ public class FolderTree extends Composite implements OriginPanel {
 		tmpFolder = new TreeItem("");
 		tmpFolder.setStyleName("okm-TreeItem");
 		folderSelectPopup = new FolderSelectPopup();
-		folderSelectPopup.setWidth("450");
-		folderSelectPopup.setHeight("440");
+		folderSelectPopup.setWidth("450px");
+		folderSelectPopup.setHeight("440px");
 		folderSelectPopup.setStyleName("okm-Popup");
 		TreeItem rootItem = new TreeItem(Util.imageItemHTML("img/menuitem_childs.gif", "root_schema", "top"));
 		rootItem.setStyleName("okm-TreeItem");
@@ -149,7 +149,7 @@ public class FolderTree extends Composite implements OriginPanel {
 		tree.addCloseHandler(new CloseHandler<TreeItem>() {
 			@Override
 			public void onClose(CloseEvent<TreeItem> event) {
-				Main.get().dragable.clear();
+				Main.get().draggable.clear();
 				treeItemHasBeenClosed = true;
 			}
 		});

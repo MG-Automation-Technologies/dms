@@ -112,9 +112,9 @@ public class WorkflowWidget extends Composite {
 		vPanel.add(spTop);
 		vPanel.add(hPanel);
 		
-		spTop.setHeight(""+SEPARATOR_HEIGHT);
-		spLeft.setWidth(""+SEPARATOR_WIDTH);
-		spRight.setWidth(""+SEPARATOR_WIDTH);
+		spTop.setHeight(""+SEPARATOR_HEIGHT+"px");
+		spLeft.setWidth(""+SEPARATOR_WIDTH+"px");
+		spRight.setWidth(""+SEPARATOR_WIDTH+"px");
 		
 		vPanel.setStyleName("okm-DashboardWidget ");
 		panelData.setStyleName("data");
@@ -155,7 +155,7 @@ public class WorkflowWidget extends Composite {
 	 * @param width
 	 */
 	public void setWidth(int width) {
-		vCenterPanel.setWidth(""+(width-2*SEPARATOR_WIDTH));
+		vCenterPanel.setWidth(""+(width-2*SEPARATOR_WIDTH)+"px");
 	}
 	
 	/**
@@ -217,7 +217,7 @@ public class WorkflowWidget extends Composite {
 			table.setWidget(row, 1, taskName);
 			DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
 			table.setHTML(row, 2, dtf.format(taskInstanceResult.getCreate()));
-			table.getCellFormatter().setWidth(row, 0, "20"); 
+			table.getCellFormatter().setWidth(row, 0, "20px"); 
 			table.getCellFormatter().setWidth(row, 1, "100%"); // Table sets de 100% of space
 			table.getCellFormatter().setHorizontalAlignment(row, 2, HasAlignment.ALIGN_RIGHT);
 			
@@ -319,7 +319,7 @@ public class WorkflowWidget extends Composite {
 			center.add(headerNotViewedResults);
 			center.add(zoomImage);
 			
-			spLeft.setSize(""+HEADER_SQUARE, ""+HEADER_SQUARE);
+			spLeft.setSize(""+HEADER_SQUARE+"px", ""+HEADER_SQUARE+"px");
 			center.setWidth("100%");
 			center.setCellVerticalAlignment(iconImagePanel, HasAlignment.ALIGN_MIDDLE);
 			center.setCellHorizontalAlignment(iconImagePanel, HasAlignment.ALIGN_LEFT);
@@ -329,10 +329,10 @@ public class WorkflowWidget extends Composite {
 			center.setCellHorizontalAlignment(headerNotViewedResults, HasAlignment.ALIGN_RIGHT);
 	
 			center.setCellVerticalAlignment(zoomImage, HasAlignment.ALIGN_MIDDLE);
-			center.setCellWidth(iconImagePanel, "22");
-			center.setCellWidth(zoomImage, "16");
-			center.setHeight(""+HEADER_SQUARE);
-			spRight.setSize(""+HEADER_SQUARE, ""+HEADER_SQUARE);
+			center.setCellWidth(iconImagePanel, "22px");
+			center.setCellWidth(zoomImage, "16px");
+			center.setHeight(""+HEADER_SQUARE+"px");
+			spRight.setSize(""+HEADER_SQUARE+"px", ""+HEADER_SQUARE+"px");
 			
 			titlePanel.setCellVerticalAlignment(headerResults, HasAlignment.ALIGN_MIDDLE);
 			titlePanel.setCellVerticalAlignment(headerNotViewedResults, HasAlignment.ALIGN_MIDDLE);

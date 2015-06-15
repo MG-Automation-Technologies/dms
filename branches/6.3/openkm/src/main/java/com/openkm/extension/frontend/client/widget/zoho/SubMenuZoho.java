@@ -136,8 +136,8 @@ public class SubMenuZoho {
 					@Override
 					public void onSuccess(Map<String, String> result) {
 						ZohoPopup zohoPopup = new ZohoPopup("Zoho Sheet", result.get("url"), result.get("id"));
-						zohoPopup.setWidth("1020");
-						zohoPopup.setHeight("760");
+						zohoPopup.setWidth("1020px");
+						zohoPopup.setHeight("760px");
 						zohoPopup.setStyleName("okm-Popup");
 						zohoPopup.center();
 					}

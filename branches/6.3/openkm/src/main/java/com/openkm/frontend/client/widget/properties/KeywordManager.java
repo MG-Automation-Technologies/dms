@@ -102,14 +102,14 @@ public class KeywordManager {
 	public KeywordManager(final int selectedFrom) {
 		// Keywords
 		keywordsCloud = new TagCloud();
-		keywordsCloud.setWidth("350");
+		keywordsCloud.setWidth("350px");
 		keywordsCloudText = new HTML("<b>"+Main.i18n("document.keywords.cloud")+"</b>");
 		keywordsText = new HTML("<b>"+Main.i18n("document.keywords")+"</b>");
 		keywordMap = new HashMap<String,Widget>();
 		multiWordkSuggestKey = new MultiWordSuggestOracle();
 		keywordList = new ArrayList<String>();
 		suggestKey = new SuggestBox(multiWordkSuggestKey);
-		suggestKey.setHeight("20");
+		suggestKey.setHeight("20px");
 		suggestKey.setText(Main.i18n("dashboard.keyword.suggest"));
 		suggestKey.addKeyUpHandler(new KeyUpHandler() {
 			@Override
@@ -175,8 +175,8 @@ public class KeywordManager {
 		vPanel.add(space);
 		vPanel.add(hKeyPanel);
 		
-		hKeyPanel.setWidth("250");
-		vPanel.setCellHeight(space, "5");
+		hKeyPanel.setWidth("250px");
+		vPanel.setCellHeight(space, "5px");
 		
 		keywordPanel.add(vPanel);
 		keywordPanel.add(sp);
@@ -472,12 +472,12 @@ public class KeywordManager {
 		if (remove && removeKeywordEnabled) {
 			hPanel.add(delete);
 		}
-		hPanel.setCellWidth(space, "6");
+		hPanel.setCellWidth(space, "6px");
 		hPanel.setStyleName("okm-KeyMap-Gray");
 		HTML space1 = new HTML();
 		externalPanel.add(hPanel);
 		externalPanel.add(space1);
-		externalPanel.setCellWidth(space1, "6");
+		externalPanel.setCellWidth(space1, "6px");
 		externalPanel.setStylePrimaryName("okm-cloudTags");  
 		return externalPanel;
 	}

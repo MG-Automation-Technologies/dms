@@ -76,8 +76,8 @@ public class FolderSelectPopup extends DialogBox  {
 		super(false,true);
 		
 		vPanel = new VerticalPanel();		
-		vPanel.setWidth("300");
-		vPanel.setHeight("200");
+		vPanel.setWidth("300px");
+		vPanel.setHeight("200px");
 		hPanel = new HorizontalPanel();
 		hListPanel  = new HorizontalPanel();
 		hContextPanel = new HorizontalPanel();
@@ -99,12 +99,12 @@ public class FolderSelectPopup extends DialogBox  {
 		hContextPanel.setCellVerticalAlignment(contextTxt, HasVerticalAlignment.ALIGN_MIDDLE);
 		
 		hListPanel.add(hContextPanel);
-		hListPanel.setWidth("290");
+		hListPanel.setWidth("290px");
 		
 		setText(Main.i18n("search.folder.filter"));
 		
 		scrollDirectoryPanel = new ScrollPanel();
-		scrollDirectoryPanel.setSize("290", "150");
+		scrollDirectoryPanel.setSize("290px", "150px");
 		scrollDirectoryPanel.setStyleName("okm-Popup-text");
 		verticalDirectoryPanel = new VerticalPanel();
 		verticalDirectoryPanel.setSize("100%", "100%");
@@ -139,7 +139,7 @@ public class FolderSelectPopup extends DialogBox  {
 		vPanel.add(new HTML("<br>"));
 		hPanel.add(cancelButton);
 		HTML space = new HTML();
-		space.setWidth("50");
+		space.setWidth("50px");
 		hPanel.add(space);
 		hPanel.add(actionButton);
 		vPanel.add(hPanel);
@@ -148,7 +148,7 @@ public class FolderSelectPopup extends DialogBox  {
 		vPanel.setCellHorizontalAlignment(hListPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(scrollDirectoryPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
-		vPanel.setCellHeight(scrollDirectoryPanel, "150");
+		vPanel.setCellHeight(scrollDirectoryPanel, "150px");
 
 		cancelButton.setStyleName("okm-Input");
 		actionButton.setStyleName("okm-Input");

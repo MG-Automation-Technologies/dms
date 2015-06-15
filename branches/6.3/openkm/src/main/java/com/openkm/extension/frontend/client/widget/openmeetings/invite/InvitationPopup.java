@@ -72,7 +72,7 @@ public class InvitationPopup extends DialogBox {
 		message = new TextArea();
 		
 		errorNotify = new HTML(GeneralComunicator.i18nExtension("openmeetings.invitate.must.select.users"));
-		errorNotify.setWidth("365");
+		errorNotify.setWidth("365px");
 		errorNotify.setVisible(false);
 		errorNotify.setStyleName("fancyfileupload-failed");
 		
@@ -112,9 +112,9 @@ public class InvitationPopup extends DialogBox {
 		hPanel.add(space);
 		hPanel.add(sendButton);
 		
-		hPanel.setCellWidth(space, "40");
+		hPanel.setCellWidth(space, "40px");
 		
-		message.setSize("375", "60");
+		message.setSize("375px", "60px");
 		message.setStyleName("okm-TextArea");
 		// TODO This is a workaround for a Firefox 2 bug
 		// http://code.google.com/p/google-web-toolkit/issues/detail?id=891
@@ -122,7 +122,7 @@ public class InvitationPopup extends DialogBox {
 		messageScroll.setAlwaysShowScrollBars(false);
 		
 		subject = new TextBox();
-		subject.setWidth("375");
+		subject.setWidth("375px");
 		subject.setMaxLength(150);
 		
 		vPanel.add(new HTML("<br>"));
@@ -188,8 +188,8 @@ public class InvitationPopup extends DialogBox {
 		}
 		// TODO:Solves minor bug with IE
 		if (Util.getUserAgent().startsWith("ie")) {
-			notifyPanel.tabPanel.setWidth("374");
-			notifyPanel.tabPanel.setWidth("375");
+			notifyPanel.tabPanel.setWidth("374px");
+			notifyPanel.tabPanel.setWidth("375px");
 		}
 	}
 	

@@ -131,7 +131,7 @@ public class NotesPopup extends DialogBox {
 		newNotePanel.add(hPanel);
 		
 		newNotePanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
-		newNotePanel.setCellHeight(hPanel, "25");
+		newNotePanel.setCellHeight(hPanel, "25px");
 		newNotePanel.setCellVerticalAlignment(hPanel, HasAlignment.ALIGN_MIDDLE);
 		
 		hide();

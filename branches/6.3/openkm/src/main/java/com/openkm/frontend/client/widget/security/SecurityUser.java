@@ -82,8 +82,8 @@ public class SecurityUser extends Composite {
 		unassignedUser = new UserScrollTable(false);
 		spRight = new SimplePanel();
 		spHeight = new SimplePanel();
-		spRight.setWidth("1");
-		spHeight.setHeight("30");
+		spRight.setWidth("1px");
+		spHeight.setHeight("30px");
 		
 		addButton = new Image(OKMBundleResources.INSTANCE.add());
 		removeButton = new Image(OKMBundleResources.INSTANCE.remove());
@@ -101,7 +101,7 @@ public class SecurityUser extends Composite {
 		panel.add(buttonPanel);
 		panel.add(assignedUser);
 		
-		panel.setCellWidth(buttonPanel, "20");
+		panel.setCellWidth(buttonPanel, "20px");
 		panel.setCellVerticalAlignment(buttonPanel, HasAlignment.ALIGN_MIDDLE);
 		panel.setCellHorizontalAlignment(buttonPanel, HasAlignment.ALIGN_CENTER);
 		
@@ -111,7 +111,7 @@ public class SecurityUser extends Composite {
 		unassignedUser.addStyleName("okm-Border-Left");
 		unassignedUser.addStyleName("okm-Border-Right");
 		
-		panel.setSize(String.valueOf(width), "365");
+		panel.setSize(String.valueOf(width)+"px", "365px");
 		
 		initWidget(panel);
 	}
@@ -122,7 +122,7 @@ public class SecurityUser extends Composite {
 	public void initSecurity() {
 		assignedUser.initSecurity();
 		unassignedUser.initSecurity();
-		panel.setSize(String.valueOf(width), "365");
+		panel.setSize(String.valueOf(width)+"px", "365px");
 	}
 	
 	/**

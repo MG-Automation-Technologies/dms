@@ -77,8 +77,8 @@ public class FindSimilarDocumentSelectPopup extends DialogBox  {
 		status.setStyleName("okm-StatusPopup");
 		
 		vPanel = new VerticalPanel();
-		vPanel.setWidth("700");
-		vPanel.setHeight("350");
+		vPanel.setWidth("700px");
+		vPanel.setHeight("350px");
 		hPanel = new HorizontalPanel();
 		
 		scrollDocumentPanel = new ScrollPanel();
@@ -130,7 +130,7 @@ public class FindSimilarDocumentSelectPopup extends DialogBox  {
 		vPanel.add(new HTML("<br>"));
 		hPanel.add(cancelButton);
 		HTML space = new HTML();
-		space.setWidth("50");
+		space.setWidth("50px");
 		hPanel.add(space);
 		hPanel.add(actionButton);
 		vPanel.add(hPanel);
@@ -138,7 +138,7 @@ public class FindSimilarDocumentSelectPopup extends DialogBox  {
 		
 		vPanel.setCellHorizontalAlignment(scrollDocumentPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
-		vPanel.setCellHeight(scrollDocumentPanel, "300");
+		vPanel.setCellHeight(scrollDocumentPanel, "300px");
 
 		cancelButton.setStyleName("okm-NoButton");
 		actionButton.setStyleName("okm-YesButton");
@@ -255,7 +255,7 @@ public class FindSimilarDocumentSelectPopup extends DialogBox  {
 					int rows = documentTable.getRowCount();
 					documentTable.setHTML(rows, 0, Util.mimeImageHTML(doc.getMimeType()));
 					documentTable.setHTML(rows, 1, doc.getPath());
-					documentTable.getCellFormatter().setWidth(rows, 0, "30");
+					documentTable.getCellFormatter().setWidth(rows, 0, "30px");
 					documentTable.getCellFormatter().setHorizontalAlignment(rows, 0, HasHorizontalAlignment.ALIGN_CENTER);
 				}
 			}
@@ -290,7 +290,7 @@ public class FindSimilarDocumentSelectPopup extends DialogBox  {
 						int rows = documentTable.getRowCount();
 						documentTable.setHTML(rows, 0, Util.mimeImageHTML(doc.getMimeType()));
 						documentTable.setHTML(rows, 1, doc.getPath());
-						documentTable.getCellFormatter().setWidth(rows, 0, "30");
+						documentTable.getCellFormatter().setWidth(rows, 0, "30px");
 						documentTable.getCellFormatter().setHorizontalAlignment(rows, 0, HasHorizontalAlignment.ALIGN_CENTER);
 					}
 				}

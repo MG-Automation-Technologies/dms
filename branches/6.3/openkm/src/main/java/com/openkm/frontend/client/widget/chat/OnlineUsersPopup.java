@@ -96,7 +96,7 @@ public class OnlineUsersPopup extends DialogBox {
 		HTML space = new HTML("");
 		hPanel.add(space);
 		hPanel.add(accept);
-		hPanel.setCellWidth(space, "25");
+		hPanel.setCellWidth(space, "25px");
 		
 		table = new ExtendedFlexTable();
 		table.setBorderWidth(0);
@@ -105,13 +105,13 @@ public class OnlineUsersPopup extends DialogBox {
 		table.setWidth("100%");
 		
 		scrollPanel = new ScrollPanel(table);
-		scrollPanel.setSize("240", "300");
+		scrollPanel.setSize("240px", "300px");
 		
 		vPanel.add(scrollPanel);
 		vPanel.add(hPanel);
 		
-		vPanel.setCellHeight(scrollPanel, "300");
-		vPanel.setCellHeight(hPanel, "25");
+		vPanel.setCellHeight(scrollPanel, "300px");
+		vPanel.setCellHeight(hPanel, "25px");
 		vPanel.setCellHorizontalAlignment(scrollPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellVerticalAlignment(scrollPanel, HasAlignment.ALIGN_MIDDLE);

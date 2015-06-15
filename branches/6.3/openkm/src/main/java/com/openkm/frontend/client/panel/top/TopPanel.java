@@ -53,7 +53,7 @@ import com.openkm.frontend.client.widget.toolbar.ToolBar;
  * 
  */
 public class TopPanel extends Composite {
-	public static final int PANEL_HEIGHT = 55 + (Util.getUserAgent().equals("gecko") ? 2 : 0);
+	public static final int PANEL_HEIGHT = 58; // + (Util.getUserAgent().equals("gecko") ? 2 : 0);
 	
 	private VerticalPanel panel;
 	private HorizontalPanel toolsPanel;
@@ -66,7 +66,6 @@ public class TopPanel extends Composite {
 	public TabWorkspace tabWorkspace;
 	private Label leftLabel;
 	private Label rightLabel;
-	private Image horizontalLine;
 	private TextBox quickSearch;
 	private Image searchImage;
 	private HTML pendingInfo;
@@ -98,10 +97,6 @@ public class TopPanel extends Composite {
 		toolsPanel.setWidth("100%");
 		toolsPanel.setCellWidth(toolBar, "100%");
 		
-		horizontalLine = new Image("img/transparent_pixel.gif");
-		horizontalLine.setStyleName("okm-TopPanel-Line-Border");
-		horizontalLine.setSize("100%", "2px");
-		
 		uploadingPanel = new ExtendedHorizontalPanel();
 		uploadingPanel.addClickHandler(new ClickHandler() {
 			@Override
@@ -117,9 +112,9 @@ public class TopPanel extends Composite {
 		arrowUp = new Image(OKMBundleResources.INSTANCE.arrowUp());
 		uploadingPanel.add(arrowUp);
 		uploadingPanel.add(percentage);
-		uploadingPanel.add(Util.hSpace("2"));
+		uploadingPanel.add(Util.hSpace("2px"));
 		uploadingPanel.add(pendingInfo);
-		uploadingPanel.add(Util.hSpace("5"));
+		uploadingPanel.add(Util.hSpace("5px"));
 		uploadingPanel.setVisible(false);
 		
 		quickSearch = new TextBox();
@@ -137,7 +132,7 @@ public class TopPanel extends Composite {
 				}
 			}
 		});
-		quickSearch.setWidth("179");
+		quickSearch.setWidth("179px");
 		quickSearch.setStyleName("okm-Input");
 		searchImage = new Image(OKMBundleResources.INSTANCE.searchDisabled());
 		searchImage.addClickHandler(new ClickHandler() {
@@ -150,11 +145,11 @@ public class TopPanel extends Composite {
 		openkmVersion = new HTML(""); // OpenKM Professional is not shown
 		openkmVersion.setStyleName("okm-NoWrap");
 		quickSearchPanel.add(openkmVersion);
-		quickSearchPanel.add(Util.hSpace("5"));
+		quickSearchPanel.add(Util.hSpace("5px"));
 		quickSearchPanel.add(quickSearch);
-		quickSearchPanel.add(Util.hSpace("5"));
+		quickSearchPanel.add(Util.hSpace("5px"));
 		quickSearchPanel.add(searchImage);
-		quickSearchPanel.add(Util.hSpace("25"));
+		quickSearchPanel.add(Util.hSpace("25px"));
 		quickSearchPanel.setCellVerticalAlignment(searchImage, HasAlignment.ALIGN_MIDDLE);
 		quickSearchPanel.setCellVerticalAlignment(openkmVersion, HasAlignment.ALIGN_MIDDLE);
 		
@@ -173,20 +168,19 @@ public class TopPanel extends Composite {
 		horizontalPanelMenu.setCellVerticalAlignment(quickSearchPanel, HasAlignment.ALIGN_MIDDLE);
 		horizontalPanelMenu.setCellHorizontalAlignment(logo, HasAlignment.ALIGN_RIGHT);
 		horizontalPanelMenu.setCellVerticalAlignment(logo, HasAlignment.ALIGN_MIDDLE);
-		horizontalPanelMenu.setCellWidth(quickSearchPanel, "220");
-		horizontalPanelMenu.setCellWidth(logo, "40");
+		horizontalPanelMenu.setCellWidth(quickSearchPanel, "220px");
+		horizontalPanelMenu.setCellWidth(logo, "40px");
 		panel.setStyleName("okm-TopPanel");
 		panel.addStyleName("okm-DisableSelect");
 		panel.setHorizontalAlignment(VerticalPanel.ALIGN_LEFT);
 		panel.setSize("100%", "100%");
 		panel.add(horizontalPanelMenu);
-		panel.add(horizontalLine);
 		panel.add(toolsPanel);
-		
-		panel.setCellWidth(horizontalLine, "100%");
 		
 		leftLabel.setStyleName("okm-TopPanel-Border");
 		rightLabel.setStyleName("okm-TopPanel-Border");
+		horizontalPanelMenu.setStyleName("okm-Separator-Bottom");
+		toolsPanel.setStyleName("okm-Separator-Top");
 		leftLabel.setPixelSize(10, PANEL_HEIGHT);
 		rightLabel.setPixelSize(10, PANEL_HEIGHT);
 		
@@ -198,7 +192,7 @@ public class TopPanel extends Composite {
 		horizontalPanel.setCellWidth(panel, "100%");
 		horizontalPanel.setCellWidth(rightLabel, "10px");
 		
-		horizontalPanel.setHeight("" + PANEL_HEIGHT);
+		horizontalPanel.setHeight("" + PANEL_HEIGHT+"px");
 		
 		initWidget(horizontalPanel);
 	}

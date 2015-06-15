@@ -126,7 +126,7 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 	private final OKMPaginationServiceAsync paginationService = (OKMPaginationServiceAsync) GWT
 			.create(OKMPaginationService.class);
 	
-	private Image separator;
+	private HTML separator;
 	public VerticalPanel panel;
 	public ExtendedScrollTable table;
 	private FixedWidthFlexTable headerTable;
@@ -288,17 +288,16 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 		massiveStatus = new com.openkm.frontend.client.widget.massive.Status(this);
 		massiveStatus.setStyleName("okm-StatusPopup");
 		fileTextBox = new FileTextBox();
-		separator = new Image("img/transparent_pixel.gif");
-		
-		separator.setSize("100%", "4px");
+		separator = Util.vSpace("4px");
+		separator.setWidth("100%");
 		separator.setStyleName("okm-FileBrowser-Separator");
 		
 		panel.add(filePath);
 		panel.add(separator);
 		panel.add(table);
 		panel.setSize("100%", "100%");
-		panel.setCellHeight(filePath, "22");
-		panel.setCellHeight(separator, "4");
+		panel.setCellHeight(filePath, "22px");
+		panel.setCellHeight(separator, "4px");
 		panel.setCellWidth(filePath, "100%");
 		panel.setCellWidth(separator, "100%");
 		panel.setCellVerticalAlignment(table, VerticalPanel.ALIGN_TOP);

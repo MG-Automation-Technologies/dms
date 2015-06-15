@@ -79,8 +79,8 @@ public class NotifyPanel extends Composite {
 		tabPanel.add(notifyUser, Main.i18n("fileupload.label.users"));
 		tabPanel.add(notifyRole, Main.i18n("fileupload.label.roles"));
 		tabPanel.selectTab(TAB_USERS);
-		tabPanel.setWidth("374");
-		tabPanel.setHeight("140");
+		tabPanel.setWidth("374px");
+		tabPanel.setHeight("140px");
 		
 		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 			@Override
@@ -160,9 +160,9 @@ public class NotifyPanel extends Composite {
 		vNotifyExternalUserPanel = new VerticalPanel();
 		externalUserHTML = new HTML(Main.i18n("security.notify.external.mail"));
 		externalMailAddress = new TextBox();
-		externalMailAddress.setWidth("374");
+		externalMailAddress.setWidth("374px");
 		externalMailAddress.setStyleName("okm-Input");
-		vNotifyExternalUserPanel.add(Util.vSpace("5"));
+		vNotifyExternalUserPanel.add(Util.vSpace("5px"));
 		vNotifyExternalUserPanel.add(externalUserHTML);
 		vNotifyExternalUserPanel.add(externalMailAddress);
 		vNotifyExternalUserPanel.setVisible(false);

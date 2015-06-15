@@ -44,6 +44,7 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.openkm.frontend.client.constants.Style;
 
 /**
  * ToolBarBox
@@ -92,9 +93,9 @@ public class ToolBarBox extends HorizontalPanel implements HasClickHandlers, Has
 		setCellWidth(space1, "15");
 		setCellWidth(space2, "15");
 		
-		html.setStyleName("okm-noWrap");
+		html.getElement().getStyle().setProperty(Style.STYLE_WHITE_SPACE, "nowrap");
 		
-		setHeight("59");
+		setHeight("59px"); // -1px caused by border in parent widget
 		setWidth("100%");
 	}
 	

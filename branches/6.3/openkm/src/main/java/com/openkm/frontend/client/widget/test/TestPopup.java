@@ -99,20 +99,20 @@ public class TestPopup extends DialogBox {
 		hPanel.add(type);
 		hPanel.add(new HTML("&nbsp;Elements:"));
 		sizeTest = new TextBox();
-		sizeTest.setSize("60", "20");
+		sizeTest.setSize("60px", "20px");
 		sizeTest.setText("2000");
 		sizeTest.setStyleName("okm-Input");
 		hPanel.add(sizeTest);
 		hPanel.add (new HTML("&nbsp;Cycles:"));
 		cyclesTest = new TextBox();
 		cyclesTest.setText("100");
-		cyclesTest.setSize("60", "20");
+		cyclesTest.setSize("60px", "20px");
 		cyclesTest.setStyleName("okm-Input");
 		hPanel.add(cyclesTest);
 		hPanel.add (new HTML("&nbsp;Threads:"));
 		numThreads = new TextBox();
 		numThreads.setText("1");
-		numThreads.setSize("60", "20");
+		numThreads.setSize("60px", "20px");
 		numThreads.setStyleName("okm-Input");
 		hPanel.add(numThreads);
 		hPanel.add(new HTML("&nbsp;"));
@@ -170,7 +170,7 @@ public class TestPopup extends DialogBox {
 		// Log
 		table = new FlexTable();
 		scroll = new ScrollPanel(table);
-		scroll.setSize("600", "450");
+		scroll.setSize("600px", "450px");
 		table.setWidth("100%");
 		table.setCellPadding(5);
 		table.setCellSpacing(0);
@@ -190,9 +190,9 @@ public class TestPopup extends DialogBox {
 		vPanel.add(hPanel3);
 		vPanel.add(scroll);
 		vPanel.add(close);
-		vPanel.setCellHeight(hPanel, "30");
-		vPanel.setCellHeight(scroll, "450");
-		vPanel.setCellHeight(close, "20");
+		vPanel.setCellHeight(hPanel, "30px");
+		vPanel.setCellHeight(scroll, "450px");
+		vPanel.setCellHeight(close, "20px");
 		vPanel.setCellHorizontalAlignment(close, HasAlignment.ALIGN_CENTER);
 		
 		super.hide();
@@ -327,7 +327,7 @@ public class TestPopup extends DialogBox {
 		int row = table.getRowCount();
 		table.setHTML(row, 0, dtf.format(new Date()) + " " + value);
 		table.setHTML(row, 1, value2);
-		table.getCellFormatter().setHeight(row, 0, "20");
-		table.getCellFormatter().setWidth(row, 0, "250");
+		table.getCellFormatter().setHeight(row, 0, "20px");
+		table.getCellFormatter().setWidth(row, 0, "250px");
 	}
 }

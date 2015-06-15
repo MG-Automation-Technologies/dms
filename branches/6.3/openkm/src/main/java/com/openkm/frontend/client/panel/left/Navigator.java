@@ -147,6 +147,15 @@ public class Navigator extends Composite {
 		verticalMailPanel.add(mailTree);
 		scrollMailPanel.add(verticalMailPanel);
 		
+		scrollTaxonomyPanel.setStyleName("okm-Background-White");
+		scrollCategoriesPanel.setStyleName("okm-Background-White");
+		scrollMetadataPanel.setStyleName("okm-Background-White");
+		scrollThesaurusPanel.setStyleName("okm-Background-White");
+		scrollTrashPanel.setStyleName("okm-Background-White");
+		scrollTemplatePanel.setStyleName("okm-Background-White");
+		scrollPersonalPanel.setStyleName("okm-Background-White");
+		scrollMailPanel.setStyleName("okm-Background-White");
+		
 		stackPanel.setStyleName("okm-StackPanel");
 		
 		initWidget(stackPanel);
@@ -158,35 +167,35 @@ public class Navigator extends Composite {
 	public void langRefresh() {
 		int count = 0;
 		if (stackPanel.isTaxonomyVisible()) {
-			stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/chart_organisation.gif", Main.i18n("leftpanel.label.taxonomy")), true);
+			stackPanel.setHeaderHTML(count++, Util.createHeaderHTML("img/icon/stackpanel/chart_organisation.gif", Main.i18n("leftpanel.label.taxonomy")));
 			taxonomyTree.langRefresh();
 		}
 		if (stackPanel.isCategoriesVisible()) {
-			stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/table_key.gif", Main.i18n("leftpanel.label.categories")), true);
+			stackPanel.setHeaderHTML(count++, Util.createHeaderHTML("img/icon/stackpanel/table_key.gif", Main.i18n("leftpanel.label.categories")));
 			categoriesTree.langRefresh();
 		}
 		if (stackPanel.isMetadataVisible()) {
-			stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/metadata.png", Main.i18n("leftpanel.label.metadata")), true);
+			stackPanel.setHeaderHTML(count++, Util.createHeaderHTML("img/icon/stackpanel/metadata.png", Main.i18n("leftpanel.label.metadata")));
 			metadataTree.langRefresh();
 		}
 		if (stackPanel.isThesaurusVisible()) {
-			stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/book_open.gif", Main.i18n("leftpanel.label.thesaurus")), true);
+			stackPanel.setHeaderHTML(count++, Util.createHeaderHTML("img/icon/stackpanel/book_open.gif", Main.i18n("leftpanel.label.thesaurus")));
 			thesaurusTree.langRefresh();
 		}
 		if (stackPanel.isTemplatesVisible()) {
-			stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.templates")), true);
+			stackPanel.setHeaderHTML(count++, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.templates")));
 			templateTree.langRefresh();
 		}
 		if (stackPanel.isPersonalVisible()) {
-			stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/personal.gif", Main.i18n("leftpanel.label.my.documents")), true);
+			stackPanel.setHeaderHTML(count++, Util.createHeaderHTML("img/icon/stackpanel/personal.gif", Main.i18n("leftpanel.label.my.documents")));
 			personalTree.langRefresh();
 		}
 		if (stackPanel.isMailVisible()) {
-			stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/email.gif", Main.i18n("leftpanel.label.mail")), true);
+			stackPanel.setHeaderHTML(count++, Util.createHeaderHTML("img/icon/stackpanel/email.gif", Main.i18n("leftpanel.label.mail")));
 			mailTree.langRefresh();
 		}
 		if (stackPanel.isTrashVisible()) {
-			stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/bin.gif", Main.i18n("leftpanel.label.trash")), true);
+			stackPanel.setHeaderHTML(count++, Util.createHeaderHTML("img/icon/stackpanel/bin.gif", Main.i18n("leftpanel.label.trash")));
 			trashTree.langRefresh();
 		}
 	}
@@ -201,35 +210,45 @@ public class Navigator extends Composite {
 		this.width = width;
 		this.height = height;
 		int hiddenStacks = stackPanel.getHiddenStacks();
-		stackPanel.setSize(""+width, ""+height);
+		width = width-2; // -2 caused by border
+		height = height -2; // -2 caused by border
 		// To prevent negative resizing
-		if (width<2) {
-			width=2;
+		if (width<0) {
+			width=0;
 		}
-		// Substract 2 pixels for borders on stackPanel
+		if (height<0) {
+			height = 0;
+		}
+		stackPanel.setPixelSize(width, height);
+		// Calculating scroll height
+		height = (height-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * (UIDesktopConstants.STACK_HEIGHT+skinExtrStackSize)));
+		// To prevent negative resizing
+		if (height<0) {
+			height = 0;
+		}
 		if (stackPanel.isTaxonomyVisible()) {
-			scrollTaxonomyPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * (UIDesktopConstants.STACK_HEIGHT+skinExtrStackSize))));
+			scrollTaxonomyPanel.setSize(""+width+"px", ""+height+"px");
 		}
 		if (stackPanel.isCategoriesVisible()) {
-			scrollCategoriesPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * (UIDesktopConstants.STACK_HEIGHT+skinExtrStackSize))));
+			scrollCategoriesPanel.setSize(""+width+"px", ""+height+"px");
 		}
 		if (stackPanel.isMetadataVisible()) {
-			scrollMetadataPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * (UIDesktopConstants.STACK_HEIGHT+skinExtrStackSize))));
+			scrollMetadataPanel.setSize(""+width+"px", ""+height+"px");
 		}
 		if (stackPanel.isThesaurusVisible()) {
-			scrollThesaurusPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * (UIDesktopConstants.STACK_HEIGHT+skinExtrStackSize))));
+			scrollThesaurusPanel.setSize(""+width+"px", ""+height+"px");
 		}
 		if (stackPanel.isTemplatesVisible()) {
-			scrollTemplatePanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * (UIDesktopConstants.STACK_HEIGHT+skinExtrStackSize))));
+			scrollTemplatePanel.setSize(""+width+"px", ""+height+"px");
 		}
 		if (stackPanel.isPersonalVisible()) {
-			scrollPersonalPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * (UIDesktopConstants.STACK_HEIGHT+skinExtrStackSize))));
+			scrollPersonalPanel.setSize(""+width+"px", ""+height+"px");
 		}
 		if (stackPanel.isMailVisible()) {
-			scrollMailPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * (UIDesktopConstants.STACK_HEIGHT+skinExtrStackSize))));
+			scrollMailPanel.setSize(""+width+"px", ""+height+"px");
 		}
 		if (stackPanel.isTrashVisible()) {
-			scrollTrashPanel.setSize(""+(width-2), ""+(height-2-((UIDesktopConstants.NUMBER_OF_STACKS-hiddenStacks) * (UIDesktopConstants.STACK_HEIGHT+skinExtrStackSize))));
+			scrollTrashPanel.setSize(""+width+"px", ""+height+"px");
 		}
 	}
 	
@@ -297,28 +316,28 @@ public class Navigator extends Composite {
 			stackPanel.remove(0);
 		}
 		if (stackPanel.isTaxonomyVisible()) {
-			stackPanel.add(scrollTaxonomyPanel, Util.createHeaderHTML("img/icon/stackpanel/chart_organisation.gif", Main.i18n("leftpanel.label.taxonomy")), true);
+			stackPanel.add(scrollTaxonomyPanel, Util.createHeaderHTML("img/icon/stackpanel/chart_organisation.gif", Main.i18n("leftpanel.label.taxonomy")), true, UIDesktopConstants.STACK_HEIGHT);
 		}
 		if (stackPanel.isCategoriesVisible()) {
-			stackPanel.add(scrollCategoriesPanel, Util.createHeaderHTML("img/icon/stackpanel/table_key.gif", Main.i18n("leftpanel.label.categories")), true);
+			stackPanel.add(scrollCategoriesPanel, Util.createHeaderHTML("img/icon/stackpanel/table_key.gif", Main.i18n("leftpanel.label.categories")), true, UIDesktopConstants.STACK_HEIGHT);
 		}
 		if (stackPanel.isMetadataVisible()) {
-			stackPanel.add(scrollMetadataPanel, Util.createHeaderHTML("img/icon/stackpanel/metadata.png", Main.i18n("leftpanel.label.metadata")), true);
+			stackPanel.add(scrollMetadataPanel, Util.createHeaderHTML("img/icon/stackpanel/metadata.png", Main.i18n("leftpanel.label.metadata")), true, UIDesktopConstants.STACK_HEIGHT);
 		}
 		if (stackPanel.isThesaurusVisible()) {
-			stackPanel.add(scrollThesaurusPanel, Util.createHeaderHTML("img/icon/stackpanel/book_open.gif", Main.i18n("leftpanel.label.thesaurus")), true);
+			stackPanel.add(scrollThesaurusPanel, Util.createHeaderHTML("img/icon/stackpanel/book_open.gif", Main.i18n("leftpanel.label.thesaurus")), true, UIDesktopConstants.STACK_HEIGHT);
 		}
 		if (stackPanel.isTemplatesVisible()) {
-			stackPanel.add(scrollTemplatePanel, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.templates")), true);
+			stackPanel.add(scrollTemplatePanel, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.templates")), true, UIDesktopConstants.STACK_HEIGHT);
 		}
 		if (stackPanel.isPersonalVisible()) {
-			stackPanel.add(scrollPersonalPanel, Util.createHeaderHTML("img/icon/stackpanel/personal.gif", Main.i18n("leftpanel.label.my.documents")), true);
+			stackPanel.add(scrollPersonalPanel, Util.createHeaderHTML("img/icon/stackpanel/personal.gif", Main.i18n("leftpanel.label.my.documents")), true, UIDesktopConstants.STACK_HEIGHT);
 		}
 		if (stackPanel.isMailVisible()) {
-			stackPanel.add(scrollMailPanel, Util.createHeaderHTML("img/icon/stackpanel/email.gif", Main.i18n("leftpanel.label.mail")), true);
+			stackPanel.add(scrollMailPanel, Util.createHeaderHTML("img/icon/stackpanel/email.gif", Main.i18n("leftpanel.label.mail")), true, UIDesktopConstants.STACK_HEIGHT);
 		}
 		if (stackPanel.isTrashVisible()) {
-			stackPanel.add(scrollTrashPanel, Util.createHeaderHTML("img/icon/stackpanel/bin.gif", Main.i18n("leftpanel.label.trash")), true);
+			stackPanel.add(scrollTrashPanel, Util.createHeaderHTML("img/icon/stackpanel/bin.gif", Main.i18n("leftpanel.label.trash")), true, UIDesktopConstants.STACK_HEIGHT);
 		}
 		
 		stackPanel.setStartUpFinished();

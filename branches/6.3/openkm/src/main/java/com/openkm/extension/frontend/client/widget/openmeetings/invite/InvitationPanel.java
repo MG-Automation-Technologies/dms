@@ -75,8 +75,8 @@ public class InvitationPanel extends Composite {
 		tabPanel.add(inviteUser, GeneralComunicator.i18nExtension("openmeetings.invitate.users"));
 		tabPanel.add(inviteRole, GeneralComunicator.i18nExtension("openmeetings.invitate.groups"));
 		tabPanel.selectTab(TAB_USERS);
-		tabPanel.setWidth("374");
-		tabPanel.setHeight("140");
+		tabPanel.setWidth("374px");
+		tabPanel.setHeight("140px");
 		
 		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 			@Override

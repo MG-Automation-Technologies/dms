@@ -443,13 +443,13 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 			Timer timer = new Timer() {
 				@Override
 				public void run() {
-					tabPanel.setWidth(""+width);
-					tabPanel.setWidth(""+(width+1));
+					tabPanel.setWidth("" + width+"px");
+					tabPanel.setWidth("" + (width + 1)+"px");
 					
 					Timer timer = new Timer() {
 						@Override
 						public void run() {
-							tabPanel.setWidth(""+width);
+							tabPanel.setWidth("" + width+"px");
 						}
 					};
 					

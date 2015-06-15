@@ -237,18 +237,18 @@ public class MainMenu extends Composite {
 		horizontalLineFile1 = new MenuItem("", true, nullExecute);
 		horizontalLineFile1.setStyleName("okm-MainMenuItem");
 		horizontalLineFile1.addStyleName("okm-MainMenuItem-Base-HorizontalSeparator");
-		horizontalLineFile1.setHeight("2");
+		horizontalLineFile1.setHeight("2px");
 		startWorkflow = new MenuItem(Util.menuHTML("img/icon/actions/start_workflow.gif", Main.i18n("general.menu.file.start.workflow")),
 				true, startWorkflowOKM);
 		horizontalLineFile2 = new MenuItem("", true, nullExecute);
 		horizontalLineFile2.setStyleName("okm-MainMenuItem");
 		horizontalLineFile2.addStyleName("okm-MainMenuItem-Base-HorizontalSeparator");
-		horizontalLineFile2.setHeight("2");
+		horizontalLineFile2.setHeight("2px");
 		refresh = new MenuItem(Util.menuHTML("img/icon/actions/refresh.gif", Main.i18n("general.menu.file.refresh")), true, refreshOKM);
 		horizontalLineFile3 = new MenuItem("", true, nullExecute);
 		horizontalLineFile3.setStyleName("okm-MainMenuItem");
 		horizontalLineFile3.addStyleName("okm-MainMenuItem-Base-HorizontalSeparator");
-		horizontalLineFile3.setHeight("2");
+		horizontalLineFile3.setHeight("2px");
 		scanner = new MenuItem(Util.menuHTML("img/icon/actions/scanner.gif", Main.i18n("general.menu.file.scanner")), true, scanFile);
 		scanner.addStyleName("okm-MainMenuItem");
 		uploader = new MenuItem(Util.menuHTML("img/icon/actions/upload.gif", Main.i18n("general.menu.file.uploader")), true, uploadFile);
@@ -256,7 +256,7 @@ public class MainMenu extends Composite {
 		horizontalLineFile4 = new MenuItem("", true, nullExecute);
 		horizontalLineFile4.setStyleName("okm-MainMenuItem");
 		horizontalLineFile4.addStyleName("okm-MainMenuItem-Base-HorizontalSeparator");
-		horizontalLineFile4.setHeight("2");
+		horizontalLineFile4.setHeight("2px");
 		restore = new MenuItem(Util.menuHTML("img/icon/actions/restore.gif", Main.i18n("general.menu.file.restore")), true, restoreOKM);
 		restore.addStyleName("okm-MainMenuItem");
 		purge = new MenuItem(Util.menuHTML("img/icon/actions/purge.gif", Main.i18n("general.menu.file.purge")), true, purgeOKM);
@@ -267,7 +267,7 @@ public class MainMenu extends Composite {
 		horizontalLineFile5 = new MenuItem("", true, nullExecute);
 		horizontalLineFile5.setStyleName("okm-MainMenuItem");
 		horizontalLineFile5.addStyleName("okm-MainMenuItem-Base-HorizontalSeparator");
-		horizontalLineFile5.setHeight("2");
+		horizontalLineFile5.setHeight("2px");
 		exit = new MenuItem(Util.menuHTML("img/icon/menu/exit.gif", Main.i18n("general.menu.file.exit")), true, exitOKM);
 		exit.addStyleName("okm-MainMenuItem");
 		subMenuFile = new MenuBar(true);
@@ -310,7 +310,7 @@ public class MainMenu extends Composite {
 		horizontalLineEdit1 = new MenuItem("", true, nullExecute);
 		horizontalLineEdit1.setStyleName("okm-MainMenuItem");
 		horizontalLineEdit1.addStyleName("okm-MainMenuItem-Base-HorizontalSeparator");
-		horizontalLineEdit1.setHeight("2");
+		horizontalLineEdit1.setHeight("2px");
 		checkout = new MenuItem(Util.menuHTML("img/icon/actions/checkout.gif", Main.i18n("general.menu.edit.checkout")), true, checkoutOKM);
 		checkout.addStyleName("okm-MainMenuItem");
 		checkin = new MenuItem(Util.menuHTML("img/icon/actions/checkin.gif", Main.i18n("general.menu.edit.checkin")), true, checkinOKM);
@@ -322,7 +322,7 @@ public class MainMenu extends Composite {
 		horizontalLineEdit2 = new MenuItem("", true, nullExecute);
 		horizontalLineEdit2.setStyleName("okm-MainMenuItem");
 		horizontalLineEdit2.addStyleName("okm-MainMenuItem-Base-HorizontalSeparator");
-		horizontalLineEdit2.setHeight("2");
+		horizontalLineEdit2.setHeight("2px");
 		delete = new MenuItem(Util.menuHTML("img/icon/actions/delete.gif", Main.i18n("general.menu.edit.delete")), true, deleteOKM);
 		delete.addStyleName("okm-MainMenuItem");
 		copy = new MenuItem(Util.menuHTML("img/icon/actions/copy.gif", Main.i18n("general.menu.edit.copy")), true, copyOKM);
@@ -342,7 +342,7 @@ public class MainMenu extends Composite {
 		horizontalLineEdit3 = new MenuItem("", true, nullExecute);
 		horizontalLineEdit3.setStyleName("okm-MainMenuItem");
 		horizontalLineEdit3.addStyleName("okm-MainMenuItem-Base-HorizontalSeparator");
-		horizontalLineEdit3.setHeight("2");
+		horizontalLineEdit3.setHeight("2px");
 		addPropertyGroup = new MenuItem(Util.menuHTML("img/icon/actions/add_property_group.gif",
 				Main.i18n("general.menu.edit.add.property.group")), true, addPropertyGroupOKM);
 		addPropertyGroup.addStyleName("okm-MenuItem-strike");
@@ -355,7 +355,7 @@ public class MainMenu extends Composite {
 		horizontalLineEdit4 = new MenuItem("", true, nullExecute);
 		horizontalLineEdit4.setStyleName("okm-MainMenuItem");
 		horizontalLineEdit4.addStyleName("okm-MainMenuItem-Base-HorizontalSeparator");
-		horizontalLineEdit4.setHeight("2");
+		horizontalLineEdit4.setHeight("2px");
 		addSubscription = new MenuItem(Util.menuHTML("img/icon/actions/add_subscription.gif",
 				Main.i18n("general.menu.edit.add.subscription")), true, addSubscriptionOKM);
 		addSubscription.addStyleName("okm-MenuItem-strike");
@@ -480,7 +480,7 @@ public class MainMenu extends Composite {
 		horizontalLineBookmark1 = new MenuItem("", true, nullExecute);
 		horizontalLineBookmark1.setStyleName("okm-MainMenuItem");
 		horizontalLineBookmark1.addStyleName("okm-MainMenuItem-Base-HorizontalSeparator");
-		horizontalLineBookmark1.setHeight("2");
+		horizontalLineBookmark1.setHeight("2px");
 		
 		// Submenu tools
 		subMenuBookmark = new MenuBar(true);

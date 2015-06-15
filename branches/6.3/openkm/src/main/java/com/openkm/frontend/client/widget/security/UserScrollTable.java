@@ -168,9 +168,9 @@ public class UserScrollTable extends Composite {
 			table.setColumnSortable(col, false);
 			col++;
 			numberOfColumns = col; // Number of columns
-			table.setSize(String.valueOf(width), "365"); // Setting table size
+			table.setSize(String.valueOf(width)+"px", "365px"); // Setting table size
 		} else {
-			table.setSize("185", "365");
+			table.setSize("185px", "365px");
 			headerTable.setHTML(0, col, Main.i18n("security.user.name"));
 			ScrollTableHelper.setColumnWidth(table, col, 165, ScrollTableHelper.GREAT, true, false); // the real size is 167
 			col++;

@@ -513,12 +513,12 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 			Timer timer = new Timer() {
 				@Override
 				public void run() {
-					tabPanel.setWidth("" + width);
-					tabPanel.setWidth("" + (width + 1));
+					tabPanel.setWidth("" + width+"px");
+					tabPanel.setWidth("" + (width + 1)+"px");
 					Timer timer = new Timer() {
 						@Override
 						public void run() {
-							tabPanel.setWidth("" + width);
+							tabPanel.setWidth("" + width+"px");
 						}
 					};
 					

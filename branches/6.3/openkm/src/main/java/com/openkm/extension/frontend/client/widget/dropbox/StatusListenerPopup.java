@@ -79,11 +79,11 @@ public class StatusListenerPopup extends DialogBox {
 		});
 		closeButton.setStyleName("okm-YesButton");
 		
-		vPanel.add(UtilComunicator.vSpace("5"));
+		vPanel.add(UtilComunicator.vSpace("5px"));
 		vPanel.add(scrollPanel);
-		vPanel.add(UtilComunicator.vSpace("5"));
+		vPanel.add(UtilComunicator.vSpace("5px"));
 		vPanel.add(closeButton);
-		vPanel.add(UtilComunicator.vSpace("5"));
+		vPanel.add(UtilComunicator.vSpace("5px"));
 		
 		vPanel.setCellHorizontalAlignment(scrollPanel, VerticalPanel.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(closeButton, VerticalPanel.ALIGN_CENTER);
@@ -121,14 +121,14 @@ public class StatusListenerPopup extends DialogBox {
 			table.setHTML(row, 0, Util.imageItemHTML(GeneralComunicator.getFolderIcon(folder)));
 			HTML name = new HTML(dsl.getFolder().getPath());
 			table.setWidget(row, 1, name);
-			table.getFlexCellFormatter().setWidth(row, 0, "20");
+			table.getFlexCellFormatter().setWidth(row, 0, "20px");
 			table.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasAlignment.ALIGN_CENTER);
 			scrollPanel.ensureVisible(name);
 		} else if (dsl.getDocument() != null) {
 			table.setHTML(row, 0, Util.mimeImageHTML(dsl.getDocument().getMimeType()));
 			HTML name = new HTML(dsl.getDocument().getPath());
 			table.setWidget(row, 1, name);
-			table.getFlexCellFormatter().setWidth(row, 0, "20");
+			table.getFlexCellFormatter().setWidth(row, 0, "20px");
 			table.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasAlignment.ALIGN_CENTER);
 			scrollPanel.ensureVisible(name);
 		}

@@ -223,7 +223,7 @@ public class HorizontalToolBar extends Composite {
 	 */
 	public void showUser() {
 		hPanel.add(user);
-		hPanel.setCellWidth(user, "80");
+		hPanel.setCellWidth(user, "80px");
 	}
 	
 	/**
@@ -231,7 +231,7 @@ public class HorizontalToolBar extends Composite {
 	 */
 	public void showMail() {
 		hPanel.add(mail);
-		hPanel.setCellWidth(mail, "80");
+		hPanel.setCellWidth(mail, "80px");
 	}
 	
 	/**
@@ -239,7 +239,7 @@ public class HorizontalToolBar extends Composite {
 	 */
 	public void showNews() {
 		hPanel.add(news);
-		hPanel.setCellWidth(news, "80");
+		hPanel.setCellWidth(news, "80px");
 	}
 	
 	/**
@@ -247,7 +247,7 @@ public class HorizontalToolBar extends Composite {
 	 */
 	public void showGeneral() {
 		hPanel.add(general);
-		hPanel.setCellWidth(general, "80");
+		hPanel.setCellWidth(general, "80px");
 	}
 	
 	/**
@@ -255,7 +255,7 @@ public class HorizontalToolBar extends Composite {
 	 */
 	public void showWorkflow() {
 		hPanel.add(workflow);
-		hPanel.setCellWidth(workflow, "80");
+		hPanel.setCellWidth(workflow, "80px");
 	}
 	
 	/**
@@ -263,7 +263,7 @@ public class HorizontalToolBar extends Composite {
 	 */
 	public void showKeywords() {
 		hPanel.add(keywordMap);
-		hPanel.setCellWidth(keywordMap, "80");
+		hPanel.setCellWidth(keywordMap, "80px");
 	}
 	
 	/**
@@ -289,7 +289,7 @@ public class HorizontalToolBar extends Composite {
 		for (Iterator<ToolBarBoxExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
 			ToolBarBoxExtension extension = it.next();
 			hPanel.add(extension);
-			hPanel.setCellWidth(extension, "80");
+			hPanel.setCellWidth(extension, "80px");
 			extension.addMouseOverHandler(mouseOverHandler);
 			extension.addMouseOutHandler(mouseOutHandler);
 			extension.addClickHandler(new ClickHandler(){

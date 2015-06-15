@@ -127,10 +127,10 @@ public class SearchFullResult extends Composite {
 		HorizontalPanel hPanel = new HorizontalPanel();
 		hPanel.setStyleName("okm-NoWrap");
 		hPanel.add(new HTML(score.getHTML()));
-		hPanel.add(Util.hSpace("5"));
+		hPanel.add(Util.hSpace("5px"));
 		
 		hPanel.add(new HTML(Util.mimeImageHTML(doc.getMimeType())));
-		hPanel.add(Util.hSpace("5"));
+		hPanel.add(Util.hSpace("5px"));
 		Anchor anchor = new Anchor();
 		anchor.setHTML(doc.getName());
 		anchor.setStyleName("okm-Hyperlink");
@@ -154,9 +154,9 @@ public class SearchFullResult extends Composite {
 		});
 		
 		hPanel.add(anchor);
-		hPanel.add(Util.hSpace("5"));
+		hPanel.add(Util.hSpace("5px"));
 		hPanel.add(new HTML(doc.getActualVersion().getName()));
-		hPanel.add(Util.hSpace("5"));
+		hPanel.add(Util.hSpace("5px"));
 		
 		// Search similar documents
 		if (Main.get().workspaceUserProperties.getWorkspace().getAvailableOption().isSimilarDocumentVisible()) {
@@ -173,7 +173,7 @@ public class SearchFullResult extends Composite {
 			findSimilarDocument.setTitle(Main.i18n("general.menu.file.find.similar.document"));
 			findSimilarDocument.setStyleName("okm-KeyMap-ImageHover");
 			hPanel.add(findSimilarDocument);
-			hPanel.add(Util.hSpace("5"));
+			hPanel.add(Util.hSpace("5px"));
 		}
 		
 		// Download
@@ -200,7 +200,7 @@ public class SearchFullResult extends Composite {
 			table.setHTML(rows++, 0, ""+gwtQueryResult.getExcerpt()+(gwtQueryResult.getExcerpt().length()>256?" ...":""));
 			HTML space = new HTML();
 			table.setWidget(rows, 0, space);
-			table.getFlexCellFormatter().setHeight(rows++, 0, "5");
+			table.getFlexCellFormatter().setHeight(rows++, 0, "5px");
 		}
 		
 		// Folder row
@@ -221,13 +221,13 @@ public class SearchFullResult extends Composite {
 		hPanel4.setStyleName("okm-NoWrap");
 		hPanel4.add(new HTML("<b>"+Main.i18n("search.result.author")+":</b>&nbsp;"));
 		hPanel4.add(new HTML(doc.getActualVersion().getUser().getUsername()));
-		hPanel4.add(Util.hSpace("33"));
+		hPanel4.add(Util.hSpace("33px"));
 		hPanel4.add(new HTML("<b>"+Main.i18n("search.result.size")+":</b>&nbsp;"));
 		hPanel4.add(new HTML(Util.formatSize(doc.getActualVersion().getSize())));
-		hPanel4.add(Util.hSpace("33"));
+		hPanel4.add(Util.hSpace("33px"));
 		hPanel4.add(new HTML("<b>"+Main.i18n("search.result.version")+":</b>&nbsp;"));
 		hPanel4.add(new HTML(doc.getActualVersion().getName()));
-		hPanel4.add(Util.hSpace("33"));
+		hPanel4.add(Util.hSpace("33px"));
 		hPanel4.add(new HTML("<b>"+Main.i18n("search.result.date.update")+":&nbsp;</b>"));
 		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
 		hPanel4.add(new HTML(dtf.format(doc.getLastModified())));
@@ -245,7 +245,7 @@ public class SearchFullResult extends Composite {
 		horizontalLine.setSize("100%", "2px");
 		table.setWidget(rows, 0, horizontalLine);
 		table.getFlexCellFormatter().setVerticalAlignment(rows, 0, HasAlignment.ALIGN_BOTTOM);
-		table.getFlexCellFormatter().setHeight(rows, 0, "30");		
+		table.getFlexCellFormatter().setHeight(rows, 0, "30px");		
 	}
 	
 	/**
@@ -291,18 +291,18 @@ public class SearchFullResult extends Composite {
 				}
 				
 				hPanel.add(new HTML("<b>"+Main.i18n("document.categories")+"</b>"));
-				hPanel.add(Util.hSpace("5"));
+				hPanel.add(Util.hSpace("5px"));
 				hPanel.add(tableSubscribedCategories);
-				hPanel.add(Util.hSpace("33"));
+				hPanel.add(Util.hSpace("33px"));
 			}
 			
 			if (keywords.size() > 0) {
 				// Tag cloud
 				TagCloud keywordsCloud = new TagCloud();
-				keywordsCloud.setWidth("350");
+				keywordsCloud.setWidth("350px");
 				WidgetUtil.drawTagCloud(keywordsCloud, keywords);
 				hPanel.add(new HTML("<b>"+Main.i18n("document.keywords.cloud")+"</b>"));
-				hPanel.add(Util.hSpace("5"));
+				hPanel.add(Util.hSpace("5px"));
 				hPanel.add(keywordsCloud);
 			}
 			
@@ -327,39 +327,39 @@ public class SearchFullResult extends Composite {
 					if (propertyGroupsPanel.getWidgetCount()==0) {
 						HTML label = new HTML("");
 						label.setStyleName("okm-Security-Title");
-						label.setHeight("15");
+						label.setHeight("15px");
 						Image verticalLine = new Image("img/transparent_pixel.gif");
 						verticalLine.setStyleName("okm-Vertical-Line-Border");
-						verticalLine.setSize("2","100%");
+						verticalLine.setSize("2px","100%");
 						VerticalPanel vlPanel = new VerticalPanel();						
 						vlPanel.add(label);
 						vlPanel.add(verticalLine);
-						vlPanel.setCellWidth(verticalLine, "7");
+						vlPanel.setCellWidth(verticalLine, "7px");
 						vlPanel.setCellHeight(verticalLine, "100%");
 						vlPanel.setHeight("100%");
 						propertyGroupsPanel.add(vlPanel);
 						propertyGroupsPanel.setCellHorizontalAlignment(vlPanel, HasAlignment.ALIGN_LEFT);
-						propertyGroupsPanel.setCellWidth(vlPanel, "7");
+						propertyGroupsPanel.setCellWidth(vlPanel, "7px");
 						propertyGroupsPanel.setCellHeight(vlPanel, "100%");
 					}
 					
 					Image verticalLine = new Image("img/transparent_pixel.gif");
 					verticalLine.setStyleName("okm-Vertical-Line-Border");
-					verticalLine.setSize("2","100%");
+					verticalLine.setSize("2px","100%");
 					FormManager manager = new FormManager();
 					manager.setFormElements(result);
 					manager.draw(true); // read only !
 					VerticalPanel vPanel = new VerticalPanel();
 					HTML label = new HTML(propertyGroup.getLabel());
 					label.setStyleName("okm-Security-Title");
-					label.setHeight("15");
+					label.setHeight("15px");
 					vPanel.add(label);
 					vPanel.add(manager.getTable());
 					propertyGroupsPanel.add(vPanel);
 					propertyGroupsPanel.add(verticalLine);
 					propertyGroupsPanel.setCellVerticalAlignment(vPanel, HasAlignment.ALIGN_TOP);
 					propertyGroupsPanel.setCellHorizontalAlignment(verticalLine, HasAlignment.ALIGN_CENTER);
-					propertyGroupsPanel.setCellWidth(verticalLine, "12");
+					propertyGroupsPanel.setCellWidth(verticalLine, "12px");
 					propertyGroupsPanel.setCellHeight(verticalLine, "100%");
 					drawPropertyGroups(docPath, propertyGroups, propertyGroupsPanel);
 				}
@@ -389,7 +389,7 @@ public class SearchFullResult extends Composite {
 		HorizontalPanel hPanel = new HorizontalPanel();
 		hPanel.setStyleName("okm-NoWrap");
 		hPanel.add(new HTML(score.getHTML()));
-		hPanel.add(Util.hSpace("5"));
+		hPanel.add(Util.hSpace("5px"));
 		
 		// Looks if must change icon on parent if now has no childs and properties with user security atention
 		if ( (folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
@@ -431,7 +431,7 @@ public class SearchFullResult extends Composite {
 		hPanel3.setStyleName("okm-NoWrap");
 		hPanel3.add(new HTML("<b>"+Main.i18n("search.result.author")+":</b>&nbsp;"));
 		hPanel3.add(new HTML(folder.getUser().getUsername()));
-		hPanel3.add(Util.hSpace("33"));
+		hPanel3.add(Util.hSpace("33px"));
 		hPanel3.add(new HTML("<b>"+Main.i18n("folder.created")+":&nbsp;</b>"));
 		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
 		hPanel3.add(new HTML(dtf.format(folder.getCreated())));
@@ -449,7 +449,7 @@ public class SearchFullResult extends Composite {
 		horizontalLine.setSize("100%", "2px");
 		table.setWidget(rows, 0, horizontalLine);
 		table.getFlexCellFormatter().setVerticalAlignment(rows, 0, HasAlignment.ALIGN_BOTTOM);
-		table.getFlexCellFormatter().setHeight(rows, 0, "30");		
+		table.getFlexCellFormatter().setHeight(rows, 0, "30px");		
 	}
 	
 	/**
@@ -466,7 +466,7 @@ public class SearchFullResult extends Composite {
 		HorizontalPanel hPanel = new HorizontalPanel();
 		hPanel.setStyleName("okm-NoWrap");
 		hPanel.add(new HTML(score.getHTML()));
-		hPanel.add(Util.hSpace("5"));
+		hPanel.add(Util.hSpace("5px"));
 		
 		if (mail.getAttachments().size() > 0) {
 			hPanel.add(new HTML(Util.imageItemHTML("img/email_attach.gif")));
@@ -501,7 +501,7 @@ public class SearchFullResult extends Composite {
 			table.setHTML(rows++, 0, ""+gwtQueryResult.getExcerpt()+(gwtQueryResult.getExcerpt().length()>256?" ...":""));
 			HTML space = new HTML();
 			table.setWidget(rows, 0, space);
-			table.getFlexCellFormatter().setHeight(rows++, 0, "5");
+			table.getFlexCellFormatter().setHeight(rows++, 0, "5px");
 		}
 		
 		// Folder row
@@ -516,10 +516,10 @@ public class SearchFullResult extends Composite {
 		hPanel4.setStyleName("okm-NoWrap");
 		hPanel4.add(new HTML("<b>"+Main.i18n("search.result.author")+":</b>&nbsp;"));
 		hPanel4.add(new HTML(mail.getAuthor()));
-		hPanel4.add(Util.hSpace("33"));
+		hPanel4.add(Util.hSpace("33px"));
 		hPanel4.add(new HTML("<b>"+Main.i18n("search.result.size")+":</b>&nbsp;"));
 		hPanel4.add(new HTML(Util.formatSize(mail.getSize())));
-		hPanel4.add(Util.hSpace("33"));
+		hPanel4.add(Util.hSpace("33px"));
 		hPanel4.add(new HTML("<b>"+Main.i18n("search.result.date.create")+":&nbsp;</b>"));
 		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
 		hPanel4.add(new HTML(dtf.format(mail.getCreated())));
@@ -559,7 +559,7 @@ public class SearchFullResult extends Composite {
 				toPanel.add(hTo);
 			}
 			
-			hPanel5.add(Util.hSpace("33"));
+			hPanel5.add(Util.hSpace("33px"));
 			hPanel5.add((new HTML("<b>" + Main.i18n("mail.to") + ":</b>&nbsp;")));
 			hPanel5.add(toPanel);
 		}
@@ -586,7 +586,7 @@ public class SearchFullResult extends Composite {
 				replyPanel.add(hReply);
 			}
 			
-			hPanel5.add(Util.hSpace("33"));
+			hPanel5.add(Util.hSpace("33px"));
 			hPanel5.add(new HTML("<b>" + Main.i18n("mail.reply") + ":</b>&nbsp;"));
 			hPanel5.add(replyPanel);
 		}
@@ -599,7 +599,7 @@ public class SearchFullResult extends Composite {
 		horizontalLine.setSize("100%", "2px");
 		table.setWidget(rows, 0, horizontalLine);
 		table.getFlexCellFormatter().setVerticalAlignment(rows, 0, HasAlignment.ALIGN_BOTTOM);
-		table.getFlexCellFormatter().setHeight(rows, 0, "30");	
+		table.getFlexCellFormatter().setHeight(rows, 0, "30px");	
 	}
 	
 	/**

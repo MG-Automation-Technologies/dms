@@ -24,6 +24,7 @@ package com.openkm.frontend.client.widget;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
@@ -34,8 +35,9 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
@@ -54,13 +56,14 @@ import com.openkm.frontend.client.service.OKMMailServiceAsync;
  * @author jllort
  * 
  */
-public class Dragable extends Composite implements OriginPanel {
+public class Draggable extends Composite implements OriginPanel {
 	private final OKMFolderServiceAsync folderService = (OKMFolderServiceAsync) GWT.create(OKMFolderService.class);
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT
 			.create(OKMDocumentService.class);
 	private final OKMMailServiceAsync mailService = (OKMMailServiceAsync) GWT.create(OKMMailService.class);
 	
 	private boolean dragged = false;
+	private FlexTable table = new FlexTable();
 	private HTML floater = new HTML();
 	
 	private int originPanel = NONE;
@@ -72,21 +75,24 @@ public class Dragable extends Composite implements OriginPanel {
 	/**
 	 * Dragable
 	 */
-	public Dragable() {
+	public Draggable() {
 		dragged = false;
 		floater = new HTML("");
-		floater.setVisible(false);
+		table.setVisible(false);
 		floater.sinkEvents(Event.MOUSEEVENTS);
-		floater.setVisible(false);
 		floater.setWordWrap(false);
 		floater.setStyleName("okm-Draggable");
+		
+		table.setVisible(false);
+		table.setWidget(0, 0, floater);
+		table.setStyleName("okm-Draggable");
 		
 		floater.addMouseUpHandler(new MouseUpHandler() {
 			@Override
 			public void onMouseUp(MouseUpEvent event) {
 				DOM.releaseCapture(floater.getElement());
 				floater.setHTML("");
-				floater.setVisible(false);
+				table.setVisible(false);
 				
 				// Only move if dragged has been enabled by timer
 				if (dragged) {
@@ -200,11 +206,14 @@ public class Dragable extends Composite implements OriginPanel {
 			public void onMouseMove(MouseMoveEvent event) {
 				if (dragged && event != null) {
 					
-					floater.setVisible(true); // Sets the floater visible
+					// Sets the floater visible
+					table.setVisible(true);
 					
 					int posX = event.getClientX();
 					int posY = event.getClientY();
-					RootPanel.get().setWidgetPosition(Main.get().dragable, posX + 1, posY);
+					//RootPanel.get().setWidgetPosition(Main.get().draggable, posX + 1, posY);
+					RootLayoutPanel.get().setWidgetLeftWidth(Main.get().draggable, posX+1, Unit.PX, table.getOffsetWidth(), Unit.PX);
+					RootLayoutPanel.get().setWidgetTopHeight(Main.get().draggable, posY, Unit.PX, table.getOffsetHeight(), Unit.PX);
 					
 					// Sets selected tree style to indicate posible selected destination
 					selectedTreeItem = Main.get().activeFolderTree.elementClicked(DOM.eventGetTarget((Event) event
@@ -241,7 +250,7 @@ public class Dragable extends Composite implements OriginPanel {
 			}
 		});
 		
-		initWidget(floater);
+		initWidget(table);
 	}
 	
 	/**
@@ -427,7 +436,7 @@ public class Dragable extends Composite implements OriginPanel {
 		// disable dragging:
 		DOM.releaseCapture(floater.getElement());
 		floater.setHTML("");
-		floater.setVisible(false);
+		table.setVisible(false);
 		dragged = false;
 		Main.get().mainPanel.desktop.navigator.scrollTaxonomyPanel.destroyTimer();
 	}

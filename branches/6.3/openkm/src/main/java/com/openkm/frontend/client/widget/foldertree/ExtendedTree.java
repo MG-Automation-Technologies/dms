@@ -33,7 +33,7 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.widget.Dragable;
+import com.openkm.frontend.client.widget.Draggable;
 import com.openkm.frontend.client.widget.OriginPanel;
 
 /**
@@ -97,7 +97,7 @@ public class ExtendedTree extends Tree implements HasSelectionHandlers<TreeItem>
 			mouseY = DOM.eventGetClientY(event);
 			
 			// remove dragable item
-			Main.get().dragable.clear();
+			Main.get().draggable.clear();
 			
 			switch (DOM.eventGetButton(event)) {
 				case Event.BUTTON_RIGHT:
@@ -122,7 +122,7 @@ public class ExtendedTree extends Tree implements HasSelectionHandlers<TreeItem>
 			if (Main.get().activeFolderTree.canDrag() && dragged && mouseDownX > 0 && mouseDownY > 0
 					&& evalDragPixelSensibility()) {
 				TreeItem actualItem = Main.get().activeFolderTree.getActualItem();
-				Main.get().dragable.show(actualItem.getHTML(), OriginPanel.TREE_ROOT);
+				Main.get().draggable.show(actualItem.getHTML(), OriginPanel.TREE_ROOT);
 				Main.get().activeFolderTree.fileBrowserRefreshDone();
 				mouseDownX = 0;
 				mouseDownY = 0;
@@ -230,7 +230,7 @@ public class ExtendedTree extends Tree implements HasSelectionHandlers<TreeItem>
 			return false;
 		}
 		
-		Element selectedElement = Dragable.getSelectedElement(clickedItem.getElement());
+		Element selectedElement = Draggable.getSelectedElement(clickedItem.getElement());
 		
 		if (selectedElement == null) {
 			return false;

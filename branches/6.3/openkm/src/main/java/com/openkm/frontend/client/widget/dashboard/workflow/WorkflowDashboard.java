@@ -98,14 +98,16 @@ public class WorkflowDashboard extends Composite {
 	 * 
 	 * @param width
 	 */
-	public void setWidth(int width) {
+	public void setWidth(int width, int height) {
 		int columnWidth = width/NUMBER_OF_COLUMNS;
 		
 		// Trying to distribute widgets on columns with max size
 		pendingTasks.setWidth(columnWidth);
 		pendingPooledTasks.setWidth(columnWidth);
-		workflowFormPanel.setWidth(""+columnWidth);
-		workflowFormPanel.setHeight("100%");
+		workflowFormPanel.setWidth(""+columnWidth+"px");
+		workflowFormPanel.setHeight(String.valueOf(height)+"px");
+		hPanel.setHeight(String.valueOf(height)+"px");
+		vPanelRight.setHeight(String.valueOf(height)+"px");
 	}
 	
 	/**

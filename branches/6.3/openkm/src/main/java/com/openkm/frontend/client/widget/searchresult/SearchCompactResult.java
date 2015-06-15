@@ -112,7 +112,7 @@ public class SearchCompactResult extends Composite {
 		table = new ExtendedScrollTable(dataTable,headerTable,scrollTableImages);
 		table.setCellSpacing(0);
 		table.setCellPadding(2);
-		table.setSize("540","140");
+		table.setSize("540px","140px");
 		
 		table.addStyleName("okm-DisableSelect");
 		table.addStyleName("okm-Input");

@@ -78,8 +78,8 @@ public class ZohoPopup extends DialogBox {
 		DOM.setElementProperty(frame.getElement(), "frameborder", "0");
 		DOM.setElementProperty(frame.getElement(), "marginwidth", "0");
 		DOM.setElementProperty(frame.getElement(), "marginheight", "0");
-		frame.setWidth(String.valueOf(width));
-		frame.setHeight(String.valueOf(height - UIDialogConstants.FRAME_OFFSET - UIDialogConstants.DIALOG_TOP));
+		frame.setWidth(String.valueOf(width)+"px");
+		frame.setHeight(String.valueOf(height - UIDialogConstants.FRAME_OFFSET - UIDialogConstants.DIALOG_TOP)+"px");
 		frame.setStyleName("okm-Popup-text");
 		
 		close = new Button(GeneralComunicator.i18n("button.close"));
@@ -104,16 +104,16 @@ public class ZohoPopup extends DialogBox {
 		
 		close.addStyleName("okm-Input");
 		
-		vPanel.setWidth(String.valueOf(width));
-		vPanel.setHeight(String.valueOf(height - UIDialogConstants.DIALOG_TOP));
+		vPanel.setWidth(String.valueOf(width)+"px");
+		vPanel.setHeight(String.valueOf(height - UIDialogConstants.DIALOG_TOP)+"px");
 		
 		vPanel.add(frame);
 		HorizontalPanel hPanel = new HorizontalPanel();
 		hPanel.add(close);
 		vPanel.add(hPanel);
 		
-		vPanel.setCellHeight(frame, String.valueOf(height - UIDialogConstants.FRAME_OFFSET - UIDialogConstants.DIALOG_TOP));
-		vPanel.setCellHeight(hPanel, String.valueOf(UIDialogConstants.BUTTONS_HEIGHT));
+		vPanel.setCellHeight(frame, String.valueOf(height - UIDialogConstants.FRAME_OFFSET - UIDialogConstants.DIALOG_TOP)+"px");
+		vPanel.setCellHeight(hPanel, String.valueOf(UIDialogConstants.BUTTONS_HEIGHT)+"px");
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellVerticalAlignment(hPanel, HasAlignment.ALIGN_MIDDLE);
 		

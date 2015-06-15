@@ -145,35 +145,35 @@ public class ConvertPopup extends DialogBox {
 		
 		HorizontalPanel hCheckPanel = new HorizontalPanel();
 		hCheckPanel.add(saveCheck);
-		hCheckPanel.add(Util.hSpace("5"));
+		hCheckPanel.add(Util.hSpace("5px"));
 		hCheckPanel.add(downloadCheck);
-		hCheckPanel.add(Util.hSpace("5"));
+		hCheckPanel.add(Util.hSpace("5px"));
 		hCheckPanel.setStyleName("okm-NoWrap");
 		hCheckPanel.setCellVerticalAlignment(saveCheck, HasAlignment.ALIGN_MIDDLE);
 		hCheckPanel.setCellVerticalAlignment(downloadCheck, HasAlignment.ALIGN_MIDDLE);
 		
 		HorizontalPanel hFormatPanel = new HorizontalPanel();
-		hFormatPanel.add(Util.hSpace("5"));
+		hFormatPanel.add(Util.hSpace("5px"));
 		hFormatPanel.add(formatText);
-		hFormatPanel.add(Util.hSpace("5"));
+		hFormatPanel.add(Util.hSpace("5px"));
 		hFormatPanel.add(formats);
-		hFormatPanel.add(Util.hSpace("5"));
+		hFormatPanel.add(Util.hSpace("5px"));
 		hFormatPanel.setCellVerticalAlignment(formatText, HasAlignment.ALIGN_MIDDLE);
 		hFormatPanel.setCellVerticalAlignment(formats, HasAlignment.ALIGN_MIDDLE);
 		
 		HorizontalPanel hButtonPanel = new HorizontalPanel();
 		hButtonPanel.add(cancelbutton);
-		hButtonPanel.add(Util.hSpace("5"));
+		hButtonPanel.add(Util.hSpace("5px"));
 		hButtonPanel.add(executeButton);
 		
 		vPanel.add(hCheckPanel);
-		vPanel.add(Util.vSpace("5"));
+		vPanel.add(Util.vSpace("5px"));
 		vPanel.add(hFormatPanel);
-		vPanel.add(Util.vSpace("5"));
+		vPanel.add(Util.vSpace("5px"));
 		vPanel.add(hButtonPanel);
-		vPanel.add(Util.vSpace("5"));
+		vPanel.add(Util.vSpace("5px"));
 		vPanel.setCellHorizontalAlignment(hButtonPanel, HasAlignment.ALIGN_CENTER);
-		vPanel.setSize("100%", "20");
+		vPanel.setSize("100%", "20px");
 		
 		super.hide();
 		setWidget(vPanel);

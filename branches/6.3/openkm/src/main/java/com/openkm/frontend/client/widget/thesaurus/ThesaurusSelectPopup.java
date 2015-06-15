@@ -63,8 +63,8 @@ public class ThesaurusSelectPopup extends DialogBox  {
 		thesaurusPanel = new ThesaurusPanel();
 		
 		vPanel = new VerticalPanel();		
-		vPanel.setWidth("500");
-		vPanel.setHeight("325");
+		vPanel.setWidth("500px");
+		vPanel.setHeight("325px");
 		hPanel = new HorizontalPanel();
 
 		cancelButton = new Button(Main.i18n("button.close"), new ClickHandler() { 
@@ -90,7 +90,7 @@ public class ThesaurusSelectPopup extends DialogBox  {
 		vPanel.add(new HTML("<br>"));
 		hPanel.add(cancelButton);
 		HTML space = new HTML();
-		space.setWidth("50");
+		space.setWidth("50px");
 		hPanel.add(space);
 		hPanel.add(actionButton);
 		vPanel.add(hPanel);
@@ -98,7 +98,7 @@ public class ThesaurusSelectPopup extends DialogBox  {
 		
 		vPanel.setCellHorizontalAlignment(thesaurusPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
-		vPanel.setCellHeight(thesaurusPanel, "300");
+		vPanel.setCellHeight(thesaurusPanel, "300px");
 
 		cancelButton.setStyleName("okm-NoButton");
 		actionButton.setStyleName("okm-AddButton");

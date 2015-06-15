@@ -72,19 +72,19 @@ public class InviteRole extends Composite {
 		buttonPanel.add(space); // separator
 		buttonPanel.add(removeButton);
 		
-		buttonPanel.setCellHeight(space, "40");
+		buttonPanel.setCellHeight(space, "40px");
 		
 		addButton.addClickHandler(addButtonHandler);
 		removeButton.addClickHandler(removeButtonHandler);
 		
-		hPanel.setSize("374","140");
+		hPanel.setSize("374px","140px");
 		
 		hPanel.add(rolesTable);
 		hPanel.add(buttonPanel);
 		hPanel.add(inviteRolesTable);
 		hPanel.setCellVerticalAlignment(buttonPanel,VerticalPanel.ALIGN_MIDDLE);
 		hPanel.setCellHorizontalAlignment(buttonPanel,HorizontalPanel.ALIGN_CENTER);
-		hPanel.setCellWidth(buttonPanel,"20");
+		hPanel.setCellWidth(buttonPanel,"20px");
 
 		inviteRolesTable.addStyleName("okm-Border-Left");
 		inviteRolesTable.addStyleName("okm-Border-Right");

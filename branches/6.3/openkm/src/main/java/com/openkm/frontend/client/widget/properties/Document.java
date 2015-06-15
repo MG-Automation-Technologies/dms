@@ -110,7 +110,7 @@ public class Document extends Composite {
 		tableProperties.getCellFormatter().setVerticalAlignment(7, 0, HasAlignment.ALIGN_TOP);
 		
 		// Sets the tagcloud
-		keywordManager.getKeywordCloud().setWidth("350");
+		keywordManager.getKeywordCloud().setWidth("350px");
 		
 		VerticalPanel vPanel2 = new VerticalPanel();
 		
@@ -131,8 +131,8 @@ public class Document extends Composite {
 		vPanel2.add(categoryManager.getPanelCategories());
 		vPanel2.add(categoryManager.getSubscribedCategoriesTable());
 		
-		vPanel2.setCellHeight(space2, "10");
-		vPanel2.setCellHeight(space3, "10");
+		vPanel2.setCellHeight(space2, "10px");
+		vPanel2.setCellHeight(space3, "10px");
 		
 		table.setWidget(0, 0, tableProperties);
 		table.setHTML(0, 1, "");
@@ -140,7 +140,7 @@ public class Document extends Composite {
 		
 		// The hidden column extends table to 100% width
 		CellFormatter cellFormatter = table.getCellFormatter();
-		cellFormatter.setWidth(0, 1, "25");
+		cellFormatter.setWidth(0, 1, "25px");
 		cellFormatter.setVerticalAlignment(0, 0, HasAlignment.ALIGN_TOP);
 		cellFormatter.setVerticalAlignment(0, 2, HasAlignment.ALIGN_TOP);
 		

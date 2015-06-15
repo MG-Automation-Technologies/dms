@@ -72,19 +72,19 @@ public class InviteUser extends Composite {
 		buttonPanel.add(space); // separator
 		buttonPanel.add(removeButton);
 		
-		buttonPanel.setCellHeight(space, "40");
+		buttonPanel.setCellHeight(space, "40px");
 		
 		addButton.addClickHandler(addButtonHandler);
 		removeButton.addClickHandler(removeButtonHandler);
 		
-		hPanel.setSize("374","140");
+		hPanel.setSize("374px","140px");
 		
 		hPanel.add(userTable);
 		hPanel.add(buttonPanel);
 		hPanel.add(inviteUsersTable);
 		hPanel.setCellVerticalAlignment(buttonPanel,VerticalPanel.ALIGN_MIDDLE);
 		hPanel.setCellHorizontalAlignment(buttonPanel,HorizontalPanel.ALIGN_CENTER);
-		hPanel.setCellWidth(buttonPanel,"20");
+		hPanel.setCellWidth(buttonPanel,"20px");
 		
 		userTable.addStyleName("okm-Border-Left");
 		userTable.addStyleName("okm-Border-Right");

@@ -97,7 +97,7 @@ public class WizardPopup extends DialogBox {
 		
 		actualButton = new Button("");
 		vPanelFired = new FiredVerticalPanel();
-		vPanelFired.setSize("100%", "20");
+		vPanelFired.setSize("100%", "20px");
 		setText(Main.i18n("wizard.document.uploading"));
 		
 		actualButton.setStyleName("okm-YesButton");
@@ -253,7 +253,7 @@ public class WizardPopup extends DialogBox {
 		HTML space = new HTML("");
 		hPanel.add(actualButton);
 		hPanel.add(space);
-		hPanel.setCellWidth(space, "3");
+		hPanel.setCellWidth(space, "3px");
 		propertyGroupWidget = new PropertyGroupWidget(docPath, groupsList.get(groupIndex), new HTML(groupsList.get(groupIndex).getLabel()),
 				vPanelFired);
 		vPanelFired.clear();
@@ -263,7 +263,7 @@ public class WizardPopup extends DialogBox {
 		vPanelFired.add(space2);
 		vPanelFired.setCellVerticalAlignment(propertyGroupWidget, HasAlignment.ALIGN_TOP);
 		vPanelFired.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_RIGHT);
-		vPanelFired.setCellHeight(space2, "5");
+		vPanelFired.setCellHeight(space2, "5px");
 		propertyGroupWidget.getProperties(true);
 	}
 	
@@ -275,7 +275,7 @@ public class WizardPopup extends DialogBox {
 		HTML space = new HTML("");
 		hPanel.add(actualButton);
 		hPanel.add(space);
-		hPanel.setCellWidth(space, "3");
+		hPanel.setCellWidth(space, "3px");
 		workflowWidget = new WorkflowWidget(workflowsList.get(workflowIndex), uuid, vPanelFired, new HashMap<String, Object>());
 		vPanelFired.clear();
 		vPanelFired.add(workflowWidget);
@@ -284,7 +284,7 @@ public class WizardPopup extends DialogBox {
 		vPanelFired.add(space2);
 		vPanelFired.setCellVerticalAlignment(workflowWidget, HasAlignment.ALIGN_TOP);
 		vPanelFired.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_RIGHT);
-		vPanelFired.setCellHeight(space2, "5");
+		vPanelFired.setCellHeight(space2, "5px");
 		workflowWidget.runProcessDefinition();
 	}
 	
@@ -451,7 +451,7 @@ public class WizardPopup extends DialogBox {
 		HTML space = new HTML("");
 		hPanel.add(actualButton);
 		hPanel.add(space);
-		hPanel.setCellWidth(space, "3");
+		hPanel.setCellWidth(space, "3px");
 		
 		vPanelFired.clear();
 		vPanelFired.add(categoriesWidget);
@@ -460,7 +460,7 @@ public class WizardPopup extends DialogBox {
 		vPanelFired.add(space2);
 		vPanelFired.setCellVerticalAlignment(categoriesWidget, HasAlignment.ALIGN_TOP);
 		vPanelFired.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_RIGHT);
-		vPanelFired.setCellHeight(space2, "5");
+		vPanelFired.setCellHeight(space2, "5px");
 		actualButton.setEnabled(true);
 		changeView();
 	}
@@ -476,7 +476,7 @@ public class WizardPopup extends DialogBox {
 		HTML space = new HTML("");
 		hPanel.add(actualButton);
 		hPanel.add(space);
-		hPanel.setCellWidth(space, "3");
+		hPanel.setCellWidth(space, "3px");
 		
 		vPanelFired.clear();
 		vPanelFired.add(keywordsWidget);
@@ -485,7 +485,7 @@ public class WizardPopup extends DialogBox {
 		vPanelFired.add(space2);
 		vPanelFired.setCellVerticalAlignment(keywordsWidget, HasAlignment.ALIGN_TOP);
 		vPanelFired.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_RIGHT);
-		vPanelFired.setCellHeight(space2, "5");
+		vPanelFired.setCellHeight(space2, "5px");
 		actualButton.setEnabled(true);
 		changeView();
 	}

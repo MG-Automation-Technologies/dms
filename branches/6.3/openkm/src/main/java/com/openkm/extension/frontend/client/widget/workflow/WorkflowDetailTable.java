@@ -109,7 +109,7 @@ public class WorkflowDetailTable extends Composite {
 		table.setColumnWidth(3, 150);
 		
 		// Level 1 headers
-		table.setSize("50","50");		
+		table.setSize("50px","50px");		
 		headerTable.setHTML(0, 0, "<b>" + GeneralComunicator.i18nExtension("workflow.detail.id") + "</b>");
 		headerTable.setHTML(0, 1, "<b>" + GeneralComunicator.i18nExtension("workflow.detail.name") + "</b>");
 		headerTable.setHTML(0, 2, "<b>" + GeneralComunicator.i18nExtension("workflow.detail.token") + "</b>");

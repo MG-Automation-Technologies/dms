@@ -182,6 +182,8 @@ public class FormManager {
 		table.setWidth("100%");
 		table.setStyleName("okm-NoWrap");
 		folderSelectPopup = new FolderSelectPopup();
+		folderSelectPopup.setWidth("450px");
+		folderSelectPopup.setHeight("440px");
 		folderSelectPopup.setStyleName("okm-Popup");
 		folderSelectPopup.addStyleName("okm-DisableSelect");
 		submitButtonPanel = new HorizontalPanel();
@@ -398,7 +400,7 @@ public class FormManager {
 				}
 				
 				calendarIcon.setStyleName("okm-Hyperlink");
-				hPanel.add(Util.hSpace("5"));
+				hPanel.add(Util.hSpace("5px"));
 				hPanel.add(calendarIcon);
 				textBox.setEnabled(false);
 			} else if (((GWTInput) gwtFormElement).getType().equals(GWTInput.TYPE_LINK)) {
@@ -465,7 +467,7 @@ public class FormManager {
 				});
 				
 				pathExplorer.setStyleName("okm-KeyMap-ImageHover");
-				hPanel.add(Util.hSpace("5"));
+				hPanel.add(Util.hSpace("5px"));
 				hPanel.add(pathExplorer);
 				hPanel.setCellVerticalAlignment(pathExplorer, HasAlignment.ALIGN_MIDDLE);
 				pathExplorer.setVisible((!readOnly && !((GWTInput) gwtFormElement).isReadonly()) || isSearchView); // read only
@@ -518,7 +520,7 @@ public class FormManager {
 						});
 						
 						calendarIcon.setStyleName("okm-Hyperlink");
-						hPanel.add(Util.hSpace("5"));
+						hPanel.add(Util.hSpace("5px"));
 						hPanel.add(calendarIcon);
 						textBoxTo.setEnabled(false);
 						
@@ -535,7 +537,7 @@ public class FormManager {
 							}
 						});
 						cleanIcon.setStyleName("okm-Hyperlink");
-						hPanel.add(Util.hSpace("5"));
+						hPanel.add(Util.hSpace("5px"));
 						hPanel.add(cleanIcon);
 					}
 				}
@@ -585,7 +587,7 @@ public class FormManager {
 					}
 				});
 				cleanIcon.setStyleName("okm-Hyperlink");
-				hPanel.add(Util.hSpace("5"));
+				hPanel.add(Util.hSpace("5px"));
 				hPanel.add(cleanIcon);
 				cleanIcon.setVisible((!readOnly && !((GWTInput) gwtFormElement).isReadonly())); // read only
 				
@@ -628,8 +630,8 @@ public class FormManager {
 						DatabaseRecord databaseRecord = new DatabaseRecord(hiddenKey, textBox);
 						// when any changes is done is fired search.metadataValueChanged();
 						DatabaseRecordSelectPopup drsPopup = new DatabaseRecordSelectPopup(suggestBox, databaseRecord, propertyHandler);
-						drsPopup.setWidth("300");
-						drsPopup.setHeight("220");
+						drsPopup.setWidth("300px");
+						drsPopup.setHeight("220px");
 						drsPopup.setStyleName("okm-Popup");
 						drsPopup.setPopupPosition(databaseRecordImage.getAbsoluteLeft(),
 								databaseRecordImage.getAbsoluteTop() - 2);
@@ -1103,7 +1105,7 @@ public class FormManager {
 			HorizontalPanel hPanel = new HorizontalPanel();
 			HTML title = new HTML("&nbsp;" + ((GWTText) gwtFormElement).getLabel() + "&nbsp;");
 			title.setStyleName("okm-NoWrap");
-			hPanel.add(Util.hSpace("10"));
+			hPanel.add(Util.hSpace("10px"));
 			hPanel.add(title);
 			hPanel.setCellWidth(title, ((GWTText) gwtFormElement).getWidth());
 			hWidgetProperties.put(propertyName, hPanel);
@@ -1113,7 +1115,7 @@ public class FormManager {
 			HorizontalPanel hPanel = new HorizontalPanel();
 			Image horizontalLine = new Image("img/transparent_pixel.gif");
 			horizontalLine.setStyleName("okm-TopPanel-Line-Border");
-			horizontalLine.setSize("10", "2px");
+			horizontalLine.setSize("10px", "2px");
 			Image horizontalLine2 = new Image("img/transparent_pixel.gif");
 			horizontalLine2.setStyleName("okm-TopPanel-Line-Border");
 			horizontalLine2.setSize("100%", "2px");

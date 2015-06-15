@@ -3487,7 +3487,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public void setScannerApplet(String sessionId, String path) {
 		Widget scannerApplet = RootPanel.get("scannerApplet");
-		scannerApplet.setSize("1", "1");
+		scannerApplet.setSize("1px", "1px");
 		scannerApplet.getElement().setInnerHTML(
 				"<applet code=\"com.openkm.applet.Scanner\" name=\"Scanner\" width=\"1\" height=\"1\" mayscript archive=\"../scanner.jar\">"
 						+ "<param name=\"sessionId\" value=\"" + sessionId + "\">" + "<param name=\"path\" value=\"" + path + "\">"
@@ -3499,7 +3499,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public void setUploaderApplet(String sessionId, String path) {
 		Widget uploaderApplet = RootPanel.get("uploaderApplet");
-		uploaderApplet.setSize("1", "1");
+		uploaderApplet.setSize("1px", "1px");
 		uploaderApplet.getElement().setInnerHTML(
 				"<applet code=\"com.openkm.applet.Uploader\" name=\"Uploader\" width=\"1\" height=\"1\" mayscript archive=\"../uploader.jar\">"
 						+ "<param name=\"sessionId\" value=\"" + sessionId + "\">" + "<param name=\"path\" value=\"" + path + "\">"

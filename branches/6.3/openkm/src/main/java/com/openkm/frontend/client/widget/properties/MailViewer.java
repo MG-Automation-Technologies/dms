@@ -134,7 +134,7 @@ public class MailViewer extends Composite {
 	
 	public void setPixelSize(int width, int height) {
 		table.setPixelSize(width, height);
-		contentPanel.setWidth(""+width);
+		contentPanel.setWidth(""+width+"px");
 		mailPreview.setPixelSize(width-2, height-90);
 	}
 	

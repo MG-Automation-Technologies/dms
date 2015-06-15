@@ -87,14 +87,14 @@ public class ConfirmPopup extends DialogBox {
 		text.setHTML("");
 		
 		hPanel.add(cancelButton);
-		hPanel.add(UtilComunicator.hSpace("5"));
+		hPanel.add(UtilComunicator.hSpace("5px"));
 		hPanel.add(acceptButton);
 		
-		vPanel.add(UtilComunicator.vSpace("5"));
+		vPanel.add(UtilComunicator.vSpace("5px"));
 		vPanel.add(text);
-		vPanel.add(UtilComunicator.vSpace("5"));
+		vPanel.add(UtilComunicator.vSpace("5px"));
 		vPanel.add(hPanel);
-		vPanel.add(UtilComunicator.vSpace("5"));
+		vPanel.add(UtilComunicator.vSpace("5px"));
 		
 		vPanel.setCellHorizontalAlignment(text, VerticalPanel.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(hPanel, VerticalPanel.ALIGN_CENTER);

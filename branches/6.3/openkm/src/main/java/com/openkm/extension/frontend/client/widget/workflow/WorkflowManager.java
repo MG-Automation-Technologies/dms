@@ -66,9 +66,9 @@ public class WorkflowManager extends Composite implements WorkflowController {
 		vPanel = new VerticalPanel();
 		vPanel.add(toolbar); // Always visible
 		
-		toolbar.setHeight(""+TOOLBAR_HEADER);
+		toolbar.setHeight(""+TOOLBAR_HEADER+"px");
 		toolbar.setWidth("100%");
-		vPanel.setCellHeight(toolbar, ""+TOOLBAR_HEADER);
+		vPanel.setCellHeight(toolbar, ""+TOOLBAR_HEADER+"px");
 		
 		initWidget(vPanel);
 	}

@@ -526,13 +526,13 @@ public class TabMail extends Composite implements HasMailEvent, HasMailHandlerEx
 			Timer timer = new Timer() {
 				@Override
 				public void run() {
-					tabPanel.setWidth(""+width);
-					tabPanel.setWidth(""+(width+1));
+					tabPanel.setWidth("" + width+"px");
+					tabPanel.setWidth("" + (width + 1)+"px");
 					
 					Timer timer = new Timer() {
 						@Override
 						public void run() {
-							tabPanel.setWidth(""+width);
+							tabPanel.setWidth("" + width+"px");
 						}
 					};
 					

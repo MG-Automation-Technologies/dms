@@ -101,7 +101,7 @@ public class NotifyPopup extends DialogBox {
 		});
 		
 		errorNotify = new HTML(Main.i18n("fileupload.label.must.select.users"));
-		errorNotify.setWidth("364");
+		errorNotify.setWidth("364px");
 		errorNotify.setVisible(false);
 		errorNotify.setStyleName("fancyfileupload-failed");
 		
@@ -139,9 +139,9 @@ public class NotifyPopup extends DialogBox {
 		hPanel.add(space);
 		hPanel.add(sendButton);
 		
-		hPanel.setCellWidth(space, "40");
+		hPanel.setCellWidth(space, "40px");
 		
-		message.setSize("374", "60");
+		message.setSize("374px", "60px");
 		message.setStyleName("okm-TextArea");
 		// TODO This is a workaround for a Firefox 2 bug
 		// http://code.google.com/p/google-web-toolkit/issues/detail?id=891
@@ -247,8 +247,8 @@ public class NotifyPopup extends DialogBox {
 	private void IEBugCorrection() {
 		// Another pathetic IE bug ( apologies if anyone is offended )
 		if (Util.getUserAgent().startsWith("ie")) {
-			notifyPanel.tabPanel.setWidth("374");
-			notifyPanel.tabPanel.setWidth("375");
+			notifyPanel.tabPanel.setWidth("374px");
+			notifyPanel.tabPanel.setWidth("375px");
 			notifyPanel.correcIEBug();
 		}
 	}

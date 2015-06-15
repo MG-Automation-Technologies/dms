@@ -59,8 +59,8 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 		text = new HTML(Main.i18n("logout.logout"));
 		button = new Button(Main.i18n("button.close"), this);
 		
-		vPanel.setWidth("250");
-		vPanel.setHeight("100");
+		vPanel.setWidth("250px");
+		vPanel.setHeight("100px");
 		
 		vPanel.add(new HTML("<br>"));
 		vPanel.add(text);

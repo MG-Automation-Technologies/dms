@@ -103,14 +103,14 @@ public class SearchIn extends Composite implements HasPropertyHandler {
 		
 		Image verticalLine = new Image("img/transparent_pixel.gif");
 		verticalLine.setStyleName("okm-Vertical-Line-Border");
-		verticalLine.setSize("2","100%");
+		verticalLine.setSize("2px","100%");
 		hPanel.add(tabPanel);
 		hPanel.add(verticalLine);
 		hPanel.add(searchControl);
 		
-		hPanel.setCellWidth(verticalLine, "2");
+		hPanel.setCellWidth(verticalLine, "2px");
 		hPanel.setCellHeight(verticalLine, "100%");
-		hPanel.setCellWidth(searchControl, ""+CONTROLER_WIDTH);
+		hPanel.setCellWidth(searchControl, ""+CONTROLER_WIDTH+"px");
 		hPanel.setCellVerticalAlignment(tabPanel, HasAlignment.ALIGN_TOP);
 		hPanel.setCellVerticalAlignment(searchControl, HasAlignment.ALIGN_TOP);
 	
@@ -143,8 +143,8 @@ public class SearchIn extends Composite implements HasPropertyHandler {
 			tabWidth = width-CONTROLER_WIDTH; // Always trying expand tab panel
 		}
 		
-		tabPanel.setWidth(""+(tabWidth-2));
-		tabPanel.setHeight(""+(height-2));
+		tabPanel.setWidth(""+(tabWidth-2)+"px");
+		tabPanel.setHeight(""+(height-2)+"px");
 		searchSimple.setPixelSize(tabWidth-2, height-22); // Substract tab height
 		searchNormal.setPixelSize(tabWidth-2, height-22); // Substract tab height
 		searchAdvanced.setPixelSize(tabWidth-2, height-22); // Substract tab height
@@ -437,8 +437,8 @@ public class SearchIn extends Composite implements HasPropertyHandler {
 		}
 		// TODO:Solves minor bug with IE ( now shows contents )
 		if (Util.getUserAgent().startsWith("ie")) {
-			tabPanel.setWidth(""+(tabWidth-20));
-			tabPanel.setHeight(""+(height-20));
+			tabPanel.setWidth(""+(tabWidth-20)+"px");
+			tabPanel.setHeight(""+(height-20)+"px");
 			searchSimple.setPixelSize(tabWidth-20, height-42); // Substract tab height
 			searchNormal.setPixelSize(tabWidth-20, height-42); // Substract tab height
 			searchAdvanced.setPixelSize(tabWidth-20, height-42); // Substract tab height
@@ -446,8 +446,8 @@ public class SearchIn extends Composite implements HasPropertyHandler {
 			Timer timer =new Timer() {
 				@Override
 				public void run() {
-					tabPanel.setWidth(""+(tabWidth-2));
-					tabPanel.setHeight(""+(height-2));
+					tabPanel.setWidth(""+(tabWidth-2)+"px");
+					tabPanel.setHeight(""+(height-2)+"px");
 					searchSimple.setPixelSize(tabWidth-2, height-22); // Substract tab height
 					searchNormal.setPixelSize(tabWidth-2, height-22); // Substract tab height
 					searchAdvanced.setPixelSize(tabWidth-2, height-22); // Substract tab height
