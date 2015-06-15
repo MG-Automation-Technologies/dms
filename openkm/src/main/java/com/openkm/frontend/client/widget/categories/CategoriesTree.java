@@ -45,8 +45,8 @@ public class CategoriesTree extends FolderTree {
 		menuPopup.setStyleName("okm-Tree-MenuPopup");
 		
 		categoriesSelectPopup = new CategoriesSelectPopup();
-		categoriesSelectPopup.setWidth("500");
-		categoriesSelectPopup.setHeight("300");
+		categoriesSelectPopup.setWidth("500px");
+		categoriesSelectPopup.setHeight("300px");
 		categoriesSelectPopup.setStyleName("okm-Popup");
 		
 		folderRoot = Main.get().categoriesRootFolder;

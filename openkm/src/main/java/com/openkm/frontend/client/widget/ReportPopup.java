@@ -86,15 +86,15 @@ public class ReportPopup extends DialogBox {
 		
 		HorizontalPanel hPanel = new HorizontalPanel();
 		hPanel.add(cancelbutton);
-		hPanel.add(Util.hSpace("5"));
+		hPanel.add(Util.hSpace("5px"));
 		hPanel.add(executeButton);
 		
 		vPanel.add(manager.getTable());
-		vPanel.add(Util.vSpace("5"));
+		vPanel.add(Util.vSpace("5px"));
 		vPanel.add(hPanel);
-		vPanel.add(Util.vSpace("5"));
+		vPanel.add(Util.vSpace("5px"));
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
-		vPanel.setSize("100%", "20");
+		vPanel.setSize("100%", "20px");
 		
 		super.hide();
 		setWidget(vPanel);

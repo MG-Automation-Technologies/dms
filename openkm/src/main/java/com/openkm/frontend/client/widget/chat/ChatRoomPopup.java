@@ -134,10 +134,10 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 		
 		hPanel.setCellHorizontalAlignment(addUserToChatRoom, HasAlignment.ALIGN_LEFT);
 		hPanel.setCellHorizontalAlignment(usersInRoomText, HasAlignment.ALIGN_RIGHT);
-		hPanel.setCellWidth(space4, "5");
-		hPanel.setCellWidth(addUserToChatRoom, "189");
-		hPanel.setCellWidth(usersInRoomText, "189");
-		hPanel.setCellWidth(space5, "5");
+		hPanel.setCellWidth(space4, "5px");
+		hPanel.setCellWidth(addUserToChatRoom, "189px");
+		hPanel.setCellWidth(usersInRoomText, "189px");
+		hPanel.setCellWidth(space5, "5px");
 		hPanel.setWidth("100%");
 		
 		table = new FlexTable();
@@ -147,10 +147,10 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 		table.setWidth("100%");
 		
 		scrollPanel = new ScrollPanel(table);
-		scrollPanel.setSize("388", "225");
+		scrollPanel.setSize("388px", "225px");
 		
 		textArea = new TextArea();
-		textArea.setSize("390", "50");
+		textArea.setSize("390px", "50px");
 		textArea.addKeyUpHandler(new KeyUpHandler() {
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
@@ -189,12 +189,12 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 		vPanel.add(space3);
 		vPanel.add(close);
 		
-		vPanel.setCellHeight(hPanel, "25");
-		vPanel.setCellHeight(scrollPanel, "225");
-		vPanel.setCellHeight(textArea, "50");
-		vPanel.setCellHeight(space, "5");
-		vPanel.setCellHeight(space2, "5");
-		vPanel.setCellHeight(space3, "5");
+		vPanel.setCellHeight(hPanel, "25px");
+		vPanel.setCellHeight(scrollPanel, "225px");
+		vPanel.setCellHeight(textArea, "50px");
+		vPanel.setCellHeight(space, "5px");
+		vPanel.setCellHeight(space2, "5px");
+		vPanel.setCellHeight(space3, "5px");
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(scrollPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(textArea, HasAlignment.ALIGN_CENTER);

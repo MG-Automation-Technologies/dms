@@ -143,9 +143,9 @@ public class KeyMapDashboard extends Composite {
 		contentPanel.setWidth("100%");
 		tagCloud.setWidth("100%");
 		space.setWidth("100%");
-		space.setHeight("10");
+		space.setHeight("10px");
 		flowPanelDivisor.setWidth("100%");
-		flowPanelDivisor.setHeight("5");
+		flowPanelDivisor.setHeight("5px");
 		scrollTable = new ScrollPanel(contentPanel);
 		
 		tagCloud.setStylePrimaryName("okm-cloudWrap");
@@ -159,7 +159,7 @@ public class KeyMapDashboard extends Composite {
 		multiWordSuggestKey = new MultiWordSuggestOracle();
 		keywordList = new ArrayList<String>();
 		suggestKey = new SuggestBox(multiWordSuggestKey);
-		suggestKey.setHeight("20");
+		suggestKey.setHeight("20px");
 		suggestKey.setText(Main.i18n("dashboard.keyword.suggest"));
 		suggestKey.addKeyUpHandler(new KeyUpHandler() {
 			@Override
@@ -225,14 +225,14 @@ public class KeyMapDashboard extends Composite {
 		imageControlPanel.add(medium);
 		imageControlPanel.add(big);
 		imageControlPanel.add(space2);
-		imageControlPanel.setCellWidth(space1, "8");
-		imageControlPanel.setCellWidth(small, "21");
-		imageControlPanel.setCellWidth(medium, "21");
-		imageControlPanel.setCellWidth(big, "21");
-		imageControlPanel.setCellHeight(small, "20");
-		imageControlPanel.setCellHeight(medium, "20");
-		imageControlPanel.setCellHeight(big, "20");
-		imageControlPanel.setCellWidth(space2, "8");
+		imageControlPanel.setCellWidth(space1, "8px");
+		imageControlPanel.setCellWidth(small, "21px");
+		imageControlPanel.setCellWidth(medium, "21px");
+		imageControlPanel.setCellWidth(big, "21px");
+		imageControlPanel.setCellHeight(small, "20px");
+		imageControlPanel.setCellHeight(medium, "20px");
+		imageControlPanel.setCellHeight(big, "20px");
+		imageControlPanel.setCellWidth(space2, "8px");
 		imageControlPanel.setCellHorizontalAlignment(small, HasAlignment.ALIGN_CENTER);
 		imageControlPanel.setCellHorizontalAlignment(medium, HasAlignment.ALIGN_CENTER);
 		imageControlPanel.setCellHorizontalAlignment(big, HasAlignment.ALIGN_CENTER);
@@ -247,7 +247,7 @@ public class KeyMapDashboard extends Composite {
 		HorizontalPanel hPanel = new HorizontalPanel();
 		hPanel.add(keywordsTXT);
 		hPanel.add(space3);
-		hPanel.setCellWidth(space3, "8");
+		hPanel.setCellWidth(space3, "8px");
 		hPanel.setCellVerticalAlignment(keywordsTXT, HasAlignment.ALIGN_MIDDLE);
 		
 		selectedKeyPanel = new HorizontalPanel();
@@ -280,8 +280,8 @@ public class KeyMapDashboard extends Composite {
 		suggestKeyPanel.add(suggestKey); // Always must be the last
 		suggestKeyPanel.add(space4);
 		suggestKeyPanel.add(clean);
-		suggestKeyPanel.setCellWidth(space4, "8");
-		suggestKeyPanel.setCellWidth(clean, "21");
+		suggestKeyPanel.setCellWidth(space4, "8px");
+		suggestKeyPanel.setCellWidth(clean, "21px");
 		suggestKeyPanel.setCellHorizontalAlignment(space4, HasAlignment.ALIGN_RIGHT);
 		suggestKeyPanel.setCellVerticalAlignment(suggestKey, HasAlignment.ALIGN_MIDDLE);
 		suggestKeyPanel.setCellVerticalAlignment(clean, HasAlignment.ALIGN_MIDDLE);
@@ -294,7 +294,7 @@ public class KeyMapDashboard extends Composite {
 		controlPanel.add(imageControlPanel);
 		controlPanel.add(selectedKeyPanel);
 		
-		controlPanel.setCellWidth(imageControlPanel, "80");
+		controlPanel.setCellWidth(imageControlPanel, "80px");
 		controlPanel.setCellVerticalAlignment(imageControlPanel, HasAlignment.ALIGN_MIDDLE);
 		controlPanel.setCellVerticalAlignment(selectedKeyPanel, HasAlignment.ALIGN_MIDDLE);
 		
@@ -358,9 +358,9 @@ public class KeyMapDashboard extends Composite {
 		internalPaginationPanel.add(space7);
 		internalPaginationPanel.add(resultPage);
 		
-		internalPaginationPanel.setCellWidth(space5, "8");
-		internalPaginationPanel.setCellWidth(space6, "8");
-		internalPaginationPanel.setCellWidth(space7, "8");
+		internalPaginationPanel.setCellWidth(space5, "8px");
+		internalPaginationPanel.setCellWidth(space6, "8px");
+		internalPaginationPanel.setCellWidth(space7, "8px");
 		internalPaginationPanel.setCellHorizontalAlignment(context, HasAlignment.ALIGN_LEFT);
 		internalPaginationPanel.setCellVerticalAlignment(context, HasAlignment.ALIGN_MIDDLE);
 		internalPaginationPanel.setCellVerticalAlignment(resultPageTXT, HasAlignment.ALIGN_MIDDLE);
@@ -372,8 +372,8 @@ public class KeyMapDashboard extends Composite {
 		paginationPanel.add(space8);
 		paginationPanel.add(controlSearchIn);
 		paginationPanel.add(space9);
-		paginationPanel.setCellWidth(space8, "8");
-		paginationPanel.setCellWidth(space9, "8");
+		paginationPanel.setCellWidth(space8, "8px");
+		paginationPanel.setCellWidth(space9, "8px");
 		paginationPanel.setCellHorizontalAlignment(internalPaginationPanel, HasAlignment.ALIGN_LEFT);
 		paginationPanel.setCellVerticalAlignment(internalPaginationPanel, HasAlignment.ALIGN_MIDDLE);
 		paginationPanel.setCellVerticalAlignment(controlSearchIn, HasAlignment.ALIGN_MIDDLE);
@@ -418,12 +418,12 @@ public class KeyMapDashboard extends Composite {
 	 * @see com.google.gwt.user.client.ui.UIObject#setSize(java.lang.String, java.lang.String)
 	 */
 	public void setSize(String width, String height) {
-		horizontalSplitPanel.setSize(width, height);
-		horizontalSplitPanel.setSplitPosition("" + (Integer.valueOf(width) - 220));
-		vPanel.setSize("100%", height);
-		controlPanel.setSize("100%", "30");
-		paginationPanel.setSize("100%", "30");
-		scrollTable.setSize("100%", "" + (Integer.valueOf(height) - 60));
+		horizontalSplitPanel.setSize(width+"px", height+"px");
+		horizontalSplitPanel.setSplitPosition("" + (Integer.valueOf(width) - 220)+"px");
+		vPanel.setSize("100%", height+"px");
+		controlPanel.setSize("100%", "30px");
+		paginationPanel.setSize("100%", "30px");
+		scrollTable.setSize("100%", "" + (Integer.valueOf(height) - 60)+"px");
 	}
 	
 	/**
@@ -693,13 +693,13 @@ public class KeyMapDashboard extends Composite {
 			hPanel.add(html);
 			hPanel.add(space);
 			hPanel.add(remove);
-			hPanel.setCellWidth(space, "6");
+			hPanel.setCellWidth(space, "6px");
 			hPanel.setStyleName("okm-KeyMap-Selected");
 			hPanel.addStyleName("okm-NoWrap");
 			HTML space1 = new HTML();
 			externalPanel.add(hPanel);
 			externalPanel.add(space1);
-			externalPanel.setCellWidth(space1, "6");
+			externalPanel.setCellWidth(space1, "6px");
 			externalPanel.addStyleName("okm-NoWrap");
 			selectedKeyPanel.add(externalPanel);
 			selectedKeyPanel.add(suggestKeyPanel); // Always is setting the last

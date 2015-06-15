@@ -43,8 +43,8 @@ public class ThesaurusTree extends FolderTree {
 		menuPopup.setStyleName("okm-Tree-MenuPopup");
 		
 		thesaurusSelectPopup = new ThesaurusSelectPopup();
-		thesaurusSelectPopup.setWidth("400");
-		thesaurusSelectPopup.setHeight("300");
+		thesaurusSelectPopup.setWidth("400px");
+		thesaurusSelectPopup.setHeight("300px");
 		thesaurusSelectPopup.setStyleName("okm-Popup");
 		
 		folderRoot = Main.get().thesaurusRootFolder;

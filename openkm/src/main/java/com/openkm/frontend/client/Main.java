@@ -37,7 +37,7 @@ import com.google.gwt.user.client.Window.ClosingHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.InvocationException;
 import com.google.gwt.user.client.rpc.StatusCodeException;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTUserConfig;
 import com.openkm.frontend.client.bean.RepositoryContext;
@@ -64,9 +64,8 @@ import com.openkm.frontend.client.util.WindowUtils;
 import com.openkm.frontend.client.util.WorkspaceUserProperties;
 import com.openkm.frontend.client.widget.AboutPopup;
 import com.openkm.frontend.client.widget.ConfirmPopup;
-import com.openkm.frontend.client.widget.massive.ConvertPopup;
 import com.openkm.frontend.client.widget.DebugConsolePopup;
-import com.openkm.frontend.client.widget.Dragable;
+import com.openkm.frontend.client.widget.Draggable;
 import com.openkm.frontend.client.widget.ErrorPopup;
 import com.openkm.frontend.client.widget.ExternalURLPopup;
 import com.openkm.frontend.client.widget.LogoutPopup;
@@ -81,6 +80,7 @@ import com.openkm.frontend.client.widget.findfolder.FindFolderSelectPopup;
 import com.openkm.frontend.client.widget.findsimilar.FindSimilarDocumentSelectPopup;
 import com.openkm.frontend.client.widget.foldertree.FolderTree;
 import com.openkm.frontend.client.widget.massive.CategoriesPopup;
+import com.openkm.frontend.client.widget.massive.ConvertPopup;
 import com.openkm.frontend.client.widget.massive.KeywordsPopup;
 import com.openkm.frontend.client.widget.massive.NotesPopup;
 import com.openkm.frontend.client.widget.massive.PdfMergePopup;
@@ -132,7 +132,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	public AboutPopup aboutPopup;
 	public UserPopup userPopup;
 	public ConfirmPopup confirmPopup;
-	public Dragable dragable;
+	public Draggable draggable;
 	public PropertyGroupPopup propertyGroupPopup;
 	public WorkflowPopup workflowPopup;
 	public NotifyPopup notifyPopup;
@@ -378,13 +378,13 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		externalURLPopup = new ExternalURLPopup();
 		externalURLPopup.setStyleName("okm-Popup");
 		logoutPopup = new LogoutPopup();
-		logoutPopup.setWidth("250");
-		logoutPopup.setHeight("110");
+		logoutPopup.setWidth("250px");
+		logoutPopup.setHeight("110px");
 		logoutPopup.setStyleName("okm-Popup");
 		logoutPopup.addStyleName("okm-DisableSelect");
 		securityPopup = new SecurityPopup();
-		securityPopup.setWidth("600");
-		securityPopup.setHeight("400");
+		securityPopup.setWidth("600px");
+		securityPopup.setHeight("400px");
 		securityPopup.setStyleName("okm-Popup");
 		securityPopup.addStyleName("okm-DisableSelect");
 		aboutPopup = new AboutPopup();
@@ -402,7 +402,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		confirmPopup.setHeight("125px");
 		confirmPopup.setStyleName("okm-Popup");
 		confirmPopup.addStyleName("okm-DisableSelect");
-		dragable = new Dragable();
+		draggable = new Draggable();
 		propertyGroupPopup = new PropertyGroupPopup();
 		propertyGroupPopup.setWidth("300px");
 		propertyGroupPopup.setHeight("50px");
@@ -496,8 +496,8 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		Window.enableScrolling(false);
 		Window.setMargin("0px");
 		
-		RootPanel.get().add(mainPanel);
-		RootPanel.get().add(dragable);
+		RootLayoutPanel.get().add(draggable);
+		RootLayoutPanel.get().add(mainPanel);
 		
 		Window.addWindowClosingHandler(new ClosingHandler() {
 			@Override

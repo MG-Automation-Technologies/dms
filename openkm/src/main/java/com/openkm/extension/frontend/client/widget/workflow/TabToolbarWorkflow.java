@@ -58,9 +58,9 @@ public class TabToolbarWorkflow extends Composite {
 		hPanel = new HorizontalPanel();
 		
 		// Left Space
-		HTML space = Util.hSpace("5");
+		HTML space = Util.hSpace("5px");
 		hPanel.add(space);
-		hPanel.setCellWidth(space, "5");
+		hPanel.setCellWidth(space, "5px");
 		
 		// Navigator
 		navigator = new HorizontalPanel();
@@ -85,16 +85,16 @@ public class TabToolbarWorkflow extends Composite {
 		// Vertical line
 		HorizontalPanel verticalLine = new HorizontalPanel();
 		HTML vertical = new HTML("&nbsp;");
-		vertical.setHeight("24");
+		vertical.setHeight("24px");
 		vertical.setStyleName("okm-Border-Right");
 		verticalLine.add(vertical);
 		navigator.add(verticalLine);
 		
 		// Action
 		HorizontalPanel actions = new HorizontalPanel();
-		HTML space2 = Util.hSpace("5");
+		HTML space2 = Util.hSpace("5px");
 		actions.add(space2);
-		actions.setCellWidth(space2, "5");
+		actions.setCellWidth(space2, "5px");
 		showList = new HTML(GeneralComunicator.i18nExtension("workflow.show.list").toUpperCase());
 		showDetail = new HTML(GeneralComunicator.i18nExtension("workflow.show.detail").toUpperCase());
 		showGraph  = new HTML(GeneralComunicator.i18nExtension("workflow.show.graphs").toUpperCase());
@@ -110,7 +110,7 @@ public class TabToolbarWorkflow extends Composite {
 		// Vertical line
 		HorizontalPanel verticalLine2 = new HorizontalPanel();
 		HTML vertical2 = new HTML("&nbsp;");
-		vertical2.setHeight("24");
+		vertical2.setHeight("24px");
 		vertical2.setStyleName("okm-Border-Right");
 		verticalLine2.add(vertical2);
 		buttonsPanel.add(verticalLine2);

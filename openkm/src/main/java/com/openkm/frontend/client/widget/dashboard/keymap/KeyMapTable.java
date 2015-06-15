@@ -171,8 +171,8 @@ public class KeyMapTable extends Composite {
 		table.getCellFormatter().setVerticalAlignment(rows, 0, HasAlignment.ALIGN_MIDDLE);
 		table.getCellFormatter().setVerticalAlignment(rows, 0, HasAlignment.ALIGN_MIDDLE);
 		table.getCellFormatter().setVerticalAlignment(rows, 2, HasAlignment.ALIGN_MIDDLE);
-		table.getFlexCellFormatter().setWidth(rows, 0, "24");
-		table.getFlexCellFormatter().setWidth(rows, 1, "47");
+		table.getFlexCellFormatter().setWidth(rows, 0, "24px");
+		table.getFlexCellFormatter().setWidth(rows, 1, "47px");
 		
 		for (int i=0; i<2; i++) {
 			table.getCellFormatter().addStyleName(rows, i, "okm-DisableSelect");
@@ -189,7 +189,7 @@ public class KeyMapTable extends Composite {
 		tableDocument.getFlexCellFormatter().setVerticalAlignment(0, 0, HasAlignment.ALIGN_TOP);
 		tableDocument.getFlexCellFormatter().setVerticalAlignment(0, 2, HasAlignment.ALIGN_TOP);
 		tableDocument.getCellFormatter().setWidth(0, 0, "75%");
-		tableDocument.getCellFormatter().setWidth(0, 1, "25");
+		tableDocument.getCellFormatter().setWidth(0, 1, "25px");
 		tableDocument.getCellFormatter().setWidth(0, 2, "25%");
 		
 		tableDocument.setWidth("100%");
@@ -437,8 +437,8 @@ public class KeyMapTable extends Composite {
 		table.getCellFormatter().setVerticalAlignment(rows, 0, HasAlignment.ALIGN_MIDDLE);
 		table.getCellFormatter().setVerticalAlignment(rows, 0, HasAlignment.ALIGN_MIDDLE);
 		table.getCellFormatter().setVerticalAlignment(rows, 2, HasAlignment.ALIGN_MIDDLE);
-		table.getFlexCellFormatter().setWidth(rows, 0, "24");
-		table.getFlexCellFormatter().setWidth(rows, 1, "47");
+		table.getFlexCellFormatter().setWidth(rows, 0, "24px");
+		table.getFlexCellFormatter().setWidth(rows, 1, "47px");
 		
 		for (int i=0; i<2; i++) {
 			table.getCellFormatter().addStyleName(rows, i, "okm-DisableSelect");
@@ -455,7 +455,7 @@ public class KeyMapTable extends Composite {
 		tableFolder.getFlexCellFormatter().setVerticalAlignment(0, 0, HasAlignment.ALIGN_TOP);
 		tableFolder.getFlexCellFormatter().setVerticalAlignment(0, 2, HasAlignment.ALIGN_TOP);
 		tableFolder.getCellFormatter().setWidth(0, 0, "75%");
-		tableFolder.getCellFormatter().setWidth(0, 1, "25");
+		tableFolder.getCellFormatter().setWidth(0, 1, "25px");
 		tableFolder.getCellFormatter().setWidth(0, 2, "25%");
 		
 		tableFolder.setWidth("100%");
@@ -571,8 +571,8 @@ public class KeyMapTable extends Composite {
 		table.getCellFormatter().setVerticalAlignment(rows, 0, HasAlignment.ALIGN_MIDDLE);
 		table.getCellFormatter().setVerticalAlignment(rows, 0, HasAlignment.ALIGN_MIDDLE);
 		table.getCellFormatter().setVerticalAlignment(rows, 2, HasAlignment.ALIGN_MIDDLE);
-		table.getFlexCellFormatter().setWidth(rows, 0, "24");
-		table.getFlexCellFormatter().setWidth(rows, 1, "47");
+		table.getFlexCellFormatter().setWidth(rows, 0, "24px");
+		table.getFlexCellFormatter().setWidth(rows, 1, "47px");
 		
 		for (int i=0; i<2; i++) {
 			table.getCellFormatter().addStyleName(rows, i, "okm-DisableSelect");
@@ -589,7 +589,7 @@ public class KeyMapTable extends Composite {
 		tableMail.getFlexCellFormatter().setVerticalAlignment(0, 0, HasAlignment.ALIGN_TOP);
 		tableMail.getFlexCellFormatter().setVerticalAlignment(0, 2, HasAlignment.ALIGN_TOP);
 		tableMail.getCellFormatter().setWidth(0, 0, "75%");
-		tableMail.getCellFormatter().setWidth(0, 1, "25");
+		tableMail.getCellFormatter().setWidth(0, 1, "25px");
 		tableMail.getCellFormatter().setWidth(0, 2, "25%");
 		
 		tableMail.setWidth("100%");
@@ -730,12 +730,12 @@ public class KeyMapTable extends Composite {
 				hPanel.add(new HTML(keyword));
 				hPanel.add(space);
 				hPanel.add(add);
-				hPanel.setCellWidth(space, "6");
+				hPanel.setCellWidth(space, "6px");
 				hPanel.setStyleName("okm-KeyMap-Gray");
 				HTML space1 = new HTML();
 				externalPanel.add(hPanel);
 				externalPanel.add(space1);
-				externalPanel.setCellWidth(space1, "6");
+				externalPanel.setCellWidth(space1, "6px");
 				hKeyPanel.add(externalPanel);
 			}
 		}
@@ -757,12 +757,12 @@ public class KeyMapTable extends Composite {
 			hPanel.add(new HTML(keyword));
 			hPanel.add(space);
 			hPanel.add(add);
-			hPanel.setCellWidth(space, "6");
+			hPanel.setCellWidth(space, "6px");
 			hPanel.setStyleName("okm-KeyMap-Selected");
 			HTML space1 = new HTML();
 			externalPanel.add(hPanel);
 			externalPanel.add(space1);
-			externalPanel.setCellWidth(space1, "6");
+			externalPanel.setCellWidth(space1, "6px");
 			hKeyPanel.add(externalPanel);
 		}
 		

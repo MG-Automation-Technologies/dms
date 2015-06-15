@@ -90,8 +90,8 @@ public class FindDocumentSelectPopup extends DialogBox  {
 		status.setStyleName("okm-StatusPopup");
 		
 		vPanel = new VerticalPanel();
-		vPanel.setWidth("700");
-		vPanel.setHeight("350");
+		vPanel.setWidth("700px");
+		vPanel.setHeight("350px");
 		hPanel = new HorizontalPanel();
 		
 		scrollDocumentPanel = new ScrollPanel();
@@ -115,7 +115,7 @@ public class FindDocumentSelectPopup extends DialogBox  {
 		});
 		
 		keyword = new TextBox();
-		keyword.setWidth("692");
+		keyword.setWidth("692px");
 		keyword.addKeyUpHandler(new KeyUpHandler() {
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
@@ -193,7 +193,7 @@ public class FindDocumentSelectPopup extends DialogBox  {
 		vPanel.add(new HTML("<br>"));
 		hPanel.add(cancelButton);
 		HTML space = new HTML();
-		space.setWidth("50");
+		space.setWidth("50px");
 		hPanel.add(space);
 		hPanel.add(actionButton);
 		vPanel.add(hPanel);
@@ -203,8 +203,8 @@ public class FindDocumentSelectPopup extends DialogBox  {
 		vPanel.setCellVerticalAlignment(keyword, HasAlignment.ALIGN_MIDDLE);
 		vPanel.setCellHorizontalAlignment(scrollDocumentPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
-		vPanel.setCellHeight(keyword, "25");
-		vPanel.setCellHeight(scrollDocumentPanel, "300");
+		vPanel.setCellHeight(keyword, "25px");
+		vPanel.setCellHeight(scrollDocumentPanel, "300px");
 
 		cancelButton.setStyleName("okm-NoButton");
 		actionButton.setStyleName("okm-YesButton");
@@ -324,7 +324,7 @@ public class FindDocumentSelectPopup extends DialogBox  {
 					int rows = documentTable.getRowCount();
 					documentTable.setHTML(rows, 0, Util.mimeImageHTML(doc.getMimeType()));
 					documentTable.setHTML(rows, 1, doc.getPath());
-					documentTable.getCellFormatter().setWidth(rows, 0, "30");
+					documentTable.getCellFormatter().setWidth(rows, 0, "30px");
 					documentTable.getCellFormatter().setHorizontalAlignment(rows, 0, HasHorizontalAlignment.ALIGN_CENTER);
 				}
 			}

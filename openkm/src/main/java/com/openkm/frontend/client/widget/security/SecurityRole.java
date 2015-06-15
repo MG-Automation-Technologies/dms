@@ -83,8 +83,8 @@ public class SecurityRole extends Composite implements HasWidgets {
 		unassignedRole = new RoleScrollTable(false);
 		spRight = new SimplePanel();
 		spHeight = new SimplePanel();
-		spRight.setWidth("1");
-		spHeight.setHeight("30");
+		spRight.setWidth("1px");
+		spHeight.setHeight("30px");
 		addButton = new HTML(Util.imageHTML("img/icon/security/add.gif"));
 		removeButton = new HTML(Util.imageHTML("img/icon/security/remove.gif"));
 		
@@ -101,7 +101,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 		panel.add(buttonPanel);
 		panel.add(assignedRole);
 		
-		panel.setCellWidth(buttonPanel, "20");
+		panel.setCellWidth(buttonPanel, "20px");
 		panel.setCellVerticalAlignment(buttonPanel, HasAlignment.ALIGN_MIDDLE);
 		panel.setCellHorizontalAlignment(buttonPanel, HasAlignment.ALIGN_CENTER);
 		
@@ -113,7 +113,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 		unassignedRole.addStyleName("okm-Border-Bottom");
 		unassignedRole.addStyleName("okm-Border-Right");
 		
-		panel.setSize(String.valueOf(width), "365");
+		panel.setSize(String.valueOf(width)+"px", "365px");
 		
 		initWidget(panel);
 	}
@@ -125,7 +125,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 		assignedRole.initSecurity();
 		unassignedRole.initSecurity();
 		
-		panel.setSize(String.valueOf(width), "365");
+		panel.setSize(String.valueOf(width)+"px", "365px");
 	}
 	
 	/**

@@ -110,25 +110,25 @@ public class UpdatePropertyGroupPopup extends DialogBox implements HasPropertyHa
 		recursive = new CheckBox();
 		recursiveText = new HTML(Main.i18n("group.update.recursive"));
 		recursivePanel.add(recursive);
-		recursivePanel.add(Util.hSpace("5"));
+		recursivePanel.add(Util.hSpace("5px"));
 		recursivePanel.add(recursiveText);
 		recursivePanel.setCellVerticalAlignment(recursive, HasAlignment.ALIGN_MIDDLE);
 		recursivePanel.setCellVerticalAlignment(recursiveText, HasAlignment.ALIGN_MIDDLE);
 		
 		// group
-		table.setWidget(0, 0, Util.hSpace("5"));
+		table.setWidget(0, 0, Util.hSpace("5px"));
 		table.setWidget(0, 1, addGroup);
-		table.setWidget(0, 2, Util.hSpace("5"));
+		table.setWidget(0, 2, Util.hSpace("5px"));
 		
 		// metadata
-		table.setWidget(1, 0, Util.hSpace("5"));
+		table.setWidget(1, 0, Util.hSpace("5px"));
 		table.setWidget(1, 1, formManager.getTable());
-		table.setWidget(1, 2, Util.hSpace("5"));
+		table.setWidget(1, 2, Util.hSpace("5px"));
 		
 		// recursive
-		table.setWidget(2, 0, Util.hSpace("5"));
+		table.setWidget(2, 0, Util.hSpace("5px"));
 		table.setWidget(2, 1, recursivePanel);
-		table.setWidget(2, 2, Util.hSpace("5"));
+		table.setWidget(2, 2, Util.hSpace("5px"));
 		
 		// buttons
 		updateButton = new Button(Main.i18n("button.update"));
@@ -179,17 +179,17 @@ public class UpdatePropertyGroupPopup extends DialogBox implements HasPropertyHa
 		cancelButton.setStyleName("okm-NoButton");
 		
 		HorizontalPanel buttonsPanel = new HorizontalPanel();
-		buttonsPanel.add(Util.hSpace("5"));
+		buttonsPanel.add(Util.hSpace("5px"));
 		buttonsPanel.add(cancelButton);
-		buttonsPanel.add(Util.hSpace("5"));
+		buttonsPanel.add(Util.hSpace("5px"));
 		buttonsPanel.add(updateButton);
-		buttonsPanel.add(Util.hSpace("5"));
+		buttonsPanel.add(Util.hSpace("5px"));
 		
 		// Main panel
 		vPanel.add(table);
-		vPanel.add(Util.vSpace("5"));
+		vPanel.add(Util.vSpace("5px"));
 		vPanel.add(buttonsPanel);
-		vPanel.add(Util.vSpace("5"));
+		vPanel.add(Util.vSpace("5px"));
 		
 		table.getCellFormatter().setHorizontalAlignment(0, 1, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(table, HasAlignment.ALIGN_CENTER);

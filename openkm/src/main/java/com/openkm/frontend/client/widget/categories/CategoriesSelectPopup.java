@@ -54,12 +54,12 @@ public class CategoriesSelectPopup extends DialogBox  {
 		status.setStyleName("okm-StatusPopup");
 		
 		vPanel = new VerticalPanel();		
-		vPanel.setWidth("500");
-		vPanel.setHeight("300");
+		vPanel.setWidth("500px");
+		vPanel.setHeight("300px");
 		hPanel = new HorizontalPanel();
 		
 		scrollDirectoryPanel = new ScrollPanel();
-		scrollDirectoryPanel.setSize("490", "250");
+		scrollDirectoryPanel.setSize("490px", "250px");
 		scrollDirectoryPanel.setStyleName("okm-Popup-text");
 		verticalDirectoryPanel = new VerticalPanel();
 		verticalDirectoryPanel.setSize("100%", "100%");
@@ -88,7 +88,7 @@ public class CategoriesSelectPopup extends DialogBox  {
 		vPanel.add(new HTML("<br>"));
 		hPanel.add(cancelButton);
 		HTML space = new HTML();
-		space.setWidth("50");
+		space.setWidth("50px");
 		hPanel.add(space);
 		hPanel.add(actionButton);
 		vPanel.add(hPanel);
@@ -96,7 +96,7 @@ public class CategoriesSelectPopup extends DialogBox  {
 		
 		vPanel.setCellHorizontalAlignment(scrollDirectoryPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
-		vPanel.setCellHeight(scrollDirectoryPanel, "250");
+		vPanel.setCellHeight(scrollDirectoryPanel, "250px");
 
 		cancelButton.setStyleName("okm-NoButton");
 		actionButton.setStyleName("okm-AddButton");

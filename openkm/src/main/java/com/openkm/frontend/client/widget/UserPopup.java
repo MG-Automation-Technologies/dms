@@ -271,7 +271,7 @@ public class UserPopup extends DialogBox implements ClickHandler {
 		
 		userFlexTable.setCellPadding(0);
 		userFlexTable.setCellSpacing(2);
-		userFlexTable.setWidth("455");
+		userFlexTable.setWidth("455px");
 		
 		userFlexTable.setWidget(0, 0, userId);
 		userFlexTable.setWidget(1, 0, userName);
@@ -291,7 +291,7 @@ public class UserPopup extends DialogBox implements ClickHandler {
 		
 		mailFlexTable.setCellPadding(0);
 		mailFlexTable.setCellSpacing(2);
-		mailFlexTable.setWidth("455");
+		mailFlexTable.setWidth("455px");
 		
 		mailFlexTable.setWidget(1, 0, mailProtocol);
 		mailFlexTable.setWidget(2, 0, mailHost);
@@ -316,17 +316,17 @@ public class UserPopup extends DialogBox implements ClickHandler {
 		mailFlexTable.getFlexCellFormatter().setAlignment(6, 0, HasHorizontalAlignment.ALIGN_CENTER,
 				HasVerticalAlignment.ALIGN_MIDDLE);
 
-		userMailText.setWidth("200");
-		mailHostText.setWidth("200");
-		mailUserText.setWidth("150");
-		mailUserPasswordText.setWidth("150");
-		mailFolderText.setWidth("150");
-		rolesPanel.setWidth("350");
-		userGroupBoxPanel.setWidth("460");
-		mailGroupBoxPanel.setWidth("460");
+		userMailText.setWidth("200px");
+		mailHostText.setWidth("200px");
+		mailUserText.setWidth("150px");
+		mailUserPasswordText.setWidth("150px");
+		mailFolderText.setWidth("150px");
+		rolesPanel.setWidth("350px");
+		userGroupBoxPanel.setWidth("460px");
+		mailGroupBoxPanel.setWidth("460px");
 		
-		vPanel.setWidth("470");
-		vPanel.setHeight("195");
+		vPanel.setWidth("470px");
+		vPanel.setHeight("195px");
 		
 		vPanel.add(new HTML("<br>"));
 		vPanel.add(userGroupBoxPanel);

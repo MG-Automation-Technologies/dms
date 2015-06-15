@@ -36,6 +36,10 @@ public class GWTFormElement implements IsSerializable {
 	protected String height = "25px";
 
 	public String getWidth() {
+		// Ensure is not only a number
+		if (!width.endsWith("%") && !width.endsWith("px")) {
+			return (width+"px");
+		}
 		return width;
 	}
 
@@ -44,6 +48,10 @@ public class GWTFormElement implements IsSerializable {
 	}
 
 	public String getHeight() {
+		// Ensure is not only a number
+		if (!height.endsWith("%") && !height.endsWith("px")) {
+			return (height+"px");
+		}
 		return height;
 	}
 

@@ -55,12 +55,12 @@ public class SearchSimple extends Composite {
 	 */
 	public SearchSimple() {
 		fullText = new TextBox();
-		fullText.setWidth("365");
+		fullText.setWidth("365px");
 		vPanel = new VerticalPanel();
-		HTML spacer = Util.vSpace("70");
+		HTML spacer = Util.vSpace("70px");
 		vPanel.add(spacer);
 		vPanel.add(fullText);
-		vPanel.setCellHeight(spacer, "70");
+		vPanel.setCellHeight(spacer, "70px");
 		vPanel.setCellVerticalAlignment(fullText, HasAlignment.ALIGN_TOP);
 		vPanel.setCellHorizontalAlignment(fullText, HasAlignment.ALIGN_CENTER);
 		scrollPanel = new ScrollPanel(vPanel);

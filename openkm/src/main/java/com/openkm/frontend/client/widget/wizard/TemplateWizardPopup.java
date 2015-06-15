@@ -87,7 +87,7 @@ public class TemplateWizardPopup extends DialogBox {
 		
 		actualButton = new Button("");
 		vPanelFired = new FiredVerticalPanel();
-		vPanelFired.setSize("100%", "20");
+		vPanelFired.setSize("100%", "20px");
 		setText(Main.i18n("template.wizard.creation"));
 		
 		actualButton.setStyleName("okm-YesButton");
@@ -139,7 +139,7 @@ public class TemplateWizardPopup extends DialogBox {
 		HTML space = new HTML("");
 		hPanel.add(actualButton);
 		hPanel.add(space);
-		hPanel.setCellWidth(space, "3");
+		hPanel.setCellWidth(space, "3px");
 		propertyGroupWidget = new PropertyGroupWidget(docPath, groupsList.get(groupIndex), 
 				   									  new HTML(groupsList.get(groupIndex).getLabel()), vPanelFired );
 		vPanelFired.clear();
@@ -149,7 +149,7 @@ public class TemplateWizardPopup extends DialogBox {
 		vPanelFired.add(space2);
 		vPanelFired.setCellVerticalAlignment(propertyGroupWidget, HasAlignment.ALIGN_TOP);
 		vPanelFired.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_RIGHT);
-		vPanelFired.setCellHeight(space2, "5");
+		vPanelFired.setCellHeight(space2, "5px");
 		propertyGroupWidget.getProperties(false);
 	}
 	

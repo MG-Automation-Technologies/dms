@@ -90,10 +90,10 @@ public class Browser extends Composite {
 	public void setSize(int width, int height) {
 		this.width = width;
 		this.height = height;
-		topHeight = (height-SPLITTER_HEIGHT)/2;
+		topHeight =(int) ((height-SPLITTER_HEIGHT)/2);
 		bottomHeight = height - (topHeight + SPLITTER_HEIGHT);
 		verticalSplitLayoutPanel.setPixelSize(width, height);
-		verticalSplitLayoutPanel.setSplitPosition(topHeight);		
+		verticalSplitLayoutPanel.setSplitPosition(fileBrowser, topHeight, false);		
 		resize();
 	}
 	
@@ -101,7 +101,7 @@ public class Browser extends Composite {
 	 * resize
 	 */
 	private void resize() {
-		verticalSplitLayoutPanel.setWidth(""+width);
+		verticalSplitLayoutPanel.setWidth(""+width+"px");
 		fileBrowser.setPixelSize(width, topHeight);
 		int fileBrowserWidth = width-2+IE_SIZE_RECTIFICATION;
 		int fileBrowserHeight = topHeight-2-FileBrowser.STATUS_SIZE+IE_SIZE_RECTIFICATION;
@@ -137,7 +137,7 @@ public class Browser extends Composite {
 		topHeight = height - SPLITTER_HEIGHT;
 		bottomHeight = 0;
 		resize();
-		verticalSplitLayoutPanel.setSplitPosition(topHeight);
+		verticalSplitLayoutPanel.setSplitPosition(fileBrowser, topHeight, false);
 	}
 	
 	/**
@@ -148,7 +148,7 @@ public class Browser extends Composite {
 		topHeight = 0;
 		bottomHeight = height - SPLITTER_HEIGHT;
 		resize();
-		verticalSplitLayoutPanel.setSplitPosition(topHeight);
+		verticalSplitLayoutPanel.setSplitPosition(fileBrowser, topHeight, false);
 	}
 	
 	/**
@@ -158,7 +158,7 @@ public class Browser extends Composite {
 		topHeight = previousTopHeight;
 		bottomHeight = height - (topHeight + SPLITTER_HEIGHT);
 		resize();
-		verticalSplitLayoutPanel.setSplitPosition(topHeight);
+		verticalSplitLayoutPanel.setSplitPosition(fileBrowser, topHeight, false);
 	}
 	
 	/**

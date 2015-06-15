@@ -74,7 +74,7 @@ public class RichTextPopup extends DialogBox {
 		vPanel.add(space);
 		
 		url = new TextBox();
-		url.setWidth("290");
+		url.setWidth("290px");
 		vPanel.add(url);
 		HTML space2 = new HTML("");
 		vPanel.add(space2);
@@ -102,12 +102,12 @@ public class RichTextPopup extends DialogBox {
 		vPanel.add(space5);
 		
 		vPanel.setCellHorizontalAlignment(hPanel2, HasAlignment.ALIGN_CENTER);
-		vPanel.setCellHeight(space, "5");
-		vPanel.setCellHeight(space2, "5");
-		vPanel.setCellHeight(space5, "5");
+		vPanel.setCellHeight(space, "5px");
+		vPanel.setCellHeight(space2, "5px");
+		vPanel.setCellHeight(space5, "5px");
 		
-		hPanel.setCellWidth(space3, "5");
-		hPanel.setCellWidth(space4, "5");
+		hPanel.setCellWidth(space3, "5px");
+		hPanel.setCellWidth(space4, "5px");
 		
 		url.setStyleName("okm-Input");
 		cancelButton.setStyleName("okm-NoButton");

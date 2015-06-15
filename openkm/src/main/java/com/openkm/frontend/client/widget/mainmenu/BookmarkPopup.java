@@ -70,7 +70,7 @@ public class BookmarkPopup extends DialogBox {
 		textBox = new TextBox();
 		textBox.setStyleName("okm-Input");
 		textBox.setMaxLength(90);
-		textBox.setWidth("300");
+		textBox.setWidth("300px");
 		
 		textBox.addKeyPressHandler(new KeyPressHandler() {
 			@Override
@@ -123,7 +123,7 @@ public class BookmarkPopup extends DialogBox {
 		valuesPanel.add(scrollPanel);
 		valuesPanel.setCellHorizontalAlignment(name,HorizontalPanel.ALIGN_LEFT);
 		valuesPanel.setCellHorizontalAlignment(scrollPanel,HorizontalPanel.ALIGN_LEFT);
-		valuesPanel.setWidth("300");
+		valuesPanel.setWidth("300px");
 
 		vPanel.setWidth("310px");
 		vPanel.setHeight("100px");

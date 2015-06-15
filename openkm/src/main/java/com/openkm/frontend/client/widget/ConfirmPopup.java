@@ -34,7 +34,7 @@ import com.openkm.frontend.client.bean.GWTTaskInstance;
 import com.openkm.frontend.client.bean.form.GWTButton;
 import com.openkm.frontend.client.constants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.constants.ui.UIDockPanelConstants;
-import com.openkm.frontend.client.widget.Dragable.ObjectToMove;
+import com.openkm.frontend.client.widget.Draggable.ObjectToMove;
 import com.openkm.frontend.client.widget.form.FormManager.ValidationButton;
 import com.openkm.frontend.client.widget.form.HasWorkflow;
 import com.openkm.frontend.client.widget.properties.CategoryManager.CategoryToRemove;
@@ -305,19 +305,19 @@ public class ConfirmPopup extends DialogBox {
 				break;
 			
 			case CONFIRM_DRAG_DROP_MOVE_DOCUMENT:
-				Main.get().dragable.modeDocument((ObjectToMove) object);
+				Main.get().draggable.modeDocument((ObjectToMove) object);
 				break;
 			
 			case CONFIRM_DRAG_DROP_MOVE_FOLDER_FROM_TREE:
-				Main.get().dragable.modeFolderFromTree((ObjectToMove) object);
+				Main.get().draggable.modeFolderFromTree((ObjectToMove) object);
 				break;
 			
 			case CONFIRM_DRAG_DROP_MOVE_FOLDER_FROM_BROWSER:
-				Main.get().dragable.modeFolderFromBrowser((ObjectToMove) object);
+				Main.get().draggable.modeFolderFromBrowser((ObjectToMove) object);
 				break;
 			
 			case CONFIRM_DRAG_DROP_MOVE_MAIL:
-				Main.get().dragable.modeMail((ObjectToMove) object);
+				Main.get().draggable.modeMail((ObjectToMove) object);
 				break;
 			
 			case CONFIRM_DELETE_CATEGORY_FOLDER:

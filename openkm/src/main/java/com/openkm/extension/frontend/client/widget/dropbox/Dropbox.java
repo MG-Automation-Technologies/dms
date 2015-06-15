@@ -83,8 +83,8 @@ public class Dropbox implements DocumentHandlerExtension, FolderHandlerExtension
 			statusListenerPopup = new StatusListenerPopup();
 			statusListenerPopup.setStyleName("okm-Popup");
 			statusListenerPopup.addStyleName("okm-DisableSelect");
-			statusListenerPopup.setWidth("610");
-			statusListenerPopup.setHeight("250");
+			statusListenerPopup.setWidth("610px");
+			statusListenerPopup.setHeight("250px");
 		}
 	}
 	

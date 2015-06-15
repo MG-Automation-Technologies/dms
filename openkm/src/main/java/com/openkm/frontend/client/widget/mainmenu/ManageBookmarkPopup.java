@@ -174,7 +174,7 @@ public class ManageBookmarkPopup extends DialogBox {
 		});
 		
 		scrollPanel = new ScrollPanel(table);
-		scrollPanel.setSize("380","150");
+		scrollPanel.setSize("380px","150px");
 		scrollPanel.setStyleName("okm-Bookmark-Panel");
 		
 		// Selected Bookmark data
@@ -204,7 +204,7 @@ public class ManageBookmarkPopup extends DialogBox {
 		}
 		
 		scrollPanelBookmark = new ScrollPanel(tableBookmark);
-		scrollPanelBookmark.setWidth("380");
+		scrollPanelBookmark.setWidth("380px");
 		scrollPanelBookmark.setStyleName("okm-Bookmark-Panel");
 		scrollPanelBookmark.setAlwaysShowScrollBars(false);
 		
@@ -258,7 +258,7 @@ public class ManageBookmarkPopup extends DialogBox {
 				table.setHTML(row,1,bookmark.getName());
 				table.setHTML(row,2,String.valueOf(bookmark.getId()));
 				table.getRowFormatter().setStyleName(row, "okm-Table-Row");
-				table.getCellFormatter().setWidth(row,0,"25");
+				table.getCellFormatter().setWidth(row,0,"25px");
 				table.getCellFormatter().setVisible(row, 2, false);
 				setRowWordWarp(row,2,false);
 				

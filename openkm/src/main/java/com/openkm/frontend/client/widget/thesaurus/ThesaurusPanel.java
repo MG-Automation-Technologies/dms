@@ -83,7 +83,7 @@ public class ThesaurusPanel extends Composite {
 		verticalDirectoryPanel = new VerticalPanel();
 		verticalDirectoryPanel.setSize("100%", "100%");
 		scrollDirectoryPanel = new ScrollPanel();
-		scrollDirectoryPanel.setSize("490", "275");
+		scrollDirectoryPanel.setSize("490px", "275px");
 		scrollDirectoryPanel.addStyleName("okm-Background-White");
 		scrollDirectoryPanel.addStyleName("okm-Border-Left");
 		scrollDirectoryPanel.addStyleName("okm-Border-Right");
@@ -107,7 +107,7 @@ public class ThesaurusPanel extends Composite {
 		scrollKeywordPanel.setStyleName("okm-Popup-text");
 		
 		keyword = new TextBox();
-		keyword.setWidth("492");
+		keyword.setWidth("492px");
 		keyword.addKeyUpHandler(new KeyUpHandler() {
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
@@ -123,14 +123,14 @@ public class ThesaurusPanel extends Composite {
 		vPanelKeyword.add(keyword);
 		vPanelKeyword.add(scrollKeywordPanel);
 		
-		vPanelKeyword.setCellHeight(keyword, "25");
+		vPanelKeyword.setCellHeight(keyword, "25px");
 		vPanelKeyword.setCellVerticalAlignment(keyword, HasAlignment.ALIGN_MIDDLE);
 		
 		// Tab Panel
 		vPanel = new VerticalPanel();
 		tabPanel =  new TabLayoutPanel(TAB_HEIGHT, Unit.PX);
-		tabPanel.setWidth("492");
-		tabPanel.setHeight("300");
+		tabPanel.setWidth("492px");
+		tabPanel.setHeight("300px");
 		
 		tabPanel.add(scrollDirectoryPanel, Main.i18n("thesaurus.tab.tree"));
 		tabPanel.add(vPanelKeyword, Main.i18n("thesaurus.tab.keywords"));

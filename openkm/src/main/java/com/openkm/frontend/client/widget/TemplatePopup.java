@@ -104,12 +104,12 @@ public class TemplatePopup extends DialogBox {
 				}
 			}
 		});
-		name.setWidth("250");
+		name.setWidth("250px");
 		name.setStyleName("okm-Input");
 		
-		hNamePanel.add(Util.hSpace("5"));
+		hNamePanel.add(Util.hSpace("5px"));
 		hNamePanel.add(nameText);
-		hNamePanel.add(Util.hSpace("5"));
+		hNamePanel.add(Util.hSpace("5px"));
 		hNamePanel.add(name);
 		
 		hNamePanel.setCellVerticalAlignment(nameText, HasAlignment.ALIGN_MIDDLE);
@@ -137,7 +137,7 @@ public class TemplatePopup extends DialogBox {
 		
 		hButtonPanel = new HorizontalPanel();
 		hButtonPanel.add(cancel);
-		hButtonPanel.add(Util.hSpace("5"));
+		hButtonPanel.add(Util.hSpace("5px"));
 		hButtonPanel.add(create);
 		
 		// copy attributes
@@ -192,9 +192,9 @@ public class TemplatePopup extends DialogBox {
 		});
 		selectNone.addStyleName("okm-Hyperlink");
 		selectPanel.add(selectAll);
-		selectPanel.add(Util.hSpace("5"));
+		selectPanel.add(Util.hSpace("5px"));
 		selectPanel.add(selectNone);
-		selectPanel.add(Util.hSpace("5"));
+		selectPanel.add(Util.hSpace("5px"));
 		table.setWidget(3, 0, selectPanel);
 		table.getFlexCellFormatter().setColSpan(3, 0, 6);
 		table.getFlexCellFormatter().setHorizontalAlignment(3, 0, HasAlignment.ALIGN_RIGHT);
@@ -203,19 +203,19 @@ public class TemplatePopup extends DialogBox {
 		groupBoxPanel.setCaption(Main.i18n("template.copy"));
 		groupBoxPanel.add(table);
 		
-		hAttributesPanel.add(Util.hSpace("5"));
+		hAttributesPanel.add(Util.hSpace("5px"));
 		hAttributesPanel.add(groupBoxPanel);
-		hAttributesPanel.add(Util.hSpace("5"));
+		hAttributesPanel.add(Util.hSpace("5px"));
 		
 		vPanel = new VerticalPanel();
 		vPanel.setWidth("100%");
-		vPanel.add(Util.vSpace("5"));
+		vPanel.add(Util.vSpace("5px"));
 		vPanel.add(hNamePanel);
-		vPanel.add(Util.vSpace("5"));
+		vPanel.add(Util.vSpace("5px"));
 		vPanel.add(hAttributesPanel);
-		vPanel.add(Util.vSpace("5"));
+		vPanel.add(Util.vSpace("5px"));
 		vPanel.add(hButtonPanel);
-		vPanel.add(Util.vSpace("5"));
+		vPanel.add(Util.vSpace("5px"));
 		
 		vPanel.setCellHorizontalAlignment(hNamePanel, HasAlignment.ALIGN_LEFT);
 		vPanel.setCellHorizontalAlignment(groupBoxPanel, HasAlignment.ALIGN_CENTER);

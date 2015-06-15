@@ -131,21 +131,21 @@ public class SecurityPopup extends DialogBox {
 		hPanel = new HorizontalPanel();
 		hPanel.add(close);
 		
-		sp.setHeight("4");
+		sp.setHeight("4px");
 				
 		vPanel.add(sp);
 		vPanel.add(securityPanel);
 		vPanel.add(recursive);
 		vPanel.add(hPanel);
-		vPanel.add(Util.vSpace("5"));
+		vPanel.add(Util.vSpace("5px"));
 		
-		vPanel.setCellHeight(sp, "4");
-		vPanel.setCellHeight(hPanel, "25");
+		vPanel.setCellHeight(sp, "4px");
+		vPanel.setCellHeight(hPanel, "25px");
 		vPanel.setCellHorizontalAlignment(securityPanel, VerticalPanel.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(hPanel, VerticalPanel.ALIGN_CENTER);
 		vPanel.setCellVerticalAlignment(hPanel, VerticalPanel.ALIGN_MIDDLE);
 		
-		vPanel.setWidth(String.valueOf(width));
+		vPanel.setWidth(String.valueOf(width)+"px");
 		
 		close.setStyleName("okm-NoButton");
 		change.setStyleName("okm-ChangeButton");
@@ -188,8 +188,8 @@ public class SecurityPopup extends DialogBox {
 		
 		// TODO:Solves minor bug with IE
 		if (Util.getUserAgent().startsWith("ie")) {
-			securityPanel.tabPanel.setWidth(String.valueOf(width));
-			securityPanel.tabPanel.setWidth(String.valueOf((width+1)));
+			securityPanel.tabPanel.setWidth(String.valueOf(width)+"px");
+			securityPanel.tabPanel.setWidth(String.valueOf((width+1))+"px");
 		}
 		
 		// Fill width must be done on visible widgets

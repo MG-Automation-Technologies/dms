@@ -102,10 +102,10 @@ public class CalendarWidget extends Composite implements ClickHandler, HasChange
 			hPanel.add(prevButtons);
 			hPanel.add(title);
 			hPanel.add(nextButtons);
-			hPanel.setCellWidth(prevButtons, "60");
-			hPanel.setCellWidth(nextButtons, "60");
-			hPanel.setCellHeight(prevButtons, "18");
-			hPanel.setCellHeight(nextButtons, "18");
+			hPanel.setCellWidth(prevButtons, "60px");
+			hPanel.setCellWidth(nextButtons, "60px");
+			hPanel.setCellHeight(prevButtons, "18px");
+			hPanel.setCellHeight(nextButtons, "18px");
 			hPanel.setCellHorizontalAlignment(prevButtons, HasAlignment.ALIGN_LEFT);
 			hPanel.setCellHorizontalAlignment(title, HasAlignment.ALIGN_CENTER);
 			hPanel.setCellHorizontalAlignment(nextButtons, HasAlignment.ALIGN_RIGHT);
@@ -152,7 +152,7 @@ public class CalendarWidget extends Composite implements ClickHandler, HasChange
 		grid.setCellSpacing(0);
 		calendarPanel.add(navbar);
 		calendarPanel.add(grid);
-		calendarPanel.setWidth("230");
+		calendarPanel.setWidth("230px");
 		langRefresh(); // Sets language translations
 		setStyleName("CalendarWidget");
 	}

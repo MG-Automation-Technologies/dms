@@ -78,19 +78,19 @@ public class AuthorizePopup extends DialogBox {
 		
 		HorizontalPanel hPanel = new HorizontalPanel();
 		hPanel.add(cancelButton);
-		hPanel.add(UtilComunicator.hSpace("5"));
+		hPanel.add(UtilComunicator.hSpace("10px"));
 		hPanel.add(nextButton);
-		hPanel.add(UtilComunicator.hSpace("5"));
+		hPanel.add(UtilComunicator.hSpace("10px"));
 		hPanel.add(continueButton);
 		
 		vPanel.add(operationResult);
 		vPanel.add(message);
-		vPanel.add(UtilComunicator.vSpace("5"));
+		vPanel.add(UtilComunicator.vSpace("5px"));
 		vPanel.add(allow);
-		vPanel.add(UtilComunicator.vSpace("5"));
-		vPanel.add(UtilComunicator.vSpace("5"));
+		vPanel.add(UtilComunicator.vSpace("5px"));
+		vPanel.add(UtilComunicator.vSpace("10px"));
 		vPanel.add(hPanel);
-		vPanel.add(UtilComunicator.vSpace("5"));
+		vPanel.add(UtilComunicator.vSpace("10px"));
 		vPanel.setCellHorizontalAlignment(message, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(allow, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(operationResult, HasAlignment.ALIGN_CENTER);

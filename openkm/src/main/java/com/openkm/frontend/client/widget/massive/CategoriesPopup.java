@@ -90,11 +90,11 @@ public class CategoriesPopup extends DialogBox {
 		
 		// Categories
 		vPanel = new VerticalPanel();
-		vPanel.setWidth("470");
-		vPanel.setHeight("175");
+		vPanel.setWidth("470px");
+		vPanel.setHeight("175px");
 		
 		scrollDirectoryPanel = new ScrollPanel();
-		scrollDirectoryPanel.setSize("460", "150");
+		scrollDirectoryPanel.setSize("460px", "150px");
 		scrollDirectoryPanel.setStyleName("okm-Popup-text");
 		verticalDirectoryPanel = new VerticalPanel();
 		verticalDirectoryPanel.setSize("100%", "100%");
@@ -132,8 +132,8 @@ public class CategoriesPopup extends DialogBox {
 		vPanel.setCellHorizontalAlignment(scrollDirectoryPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellVerticalAlignment(hPanel, HasAlignment.ALIGN_MIDDLE);
-		vPanel.setCellHeight(scrollDirectoryPanel, "150");
-		vPanel.setCellHeight(hPanel, "25");
+		vPanel.setCellHeight(scrollDirectoryPanel, "150px");
+		vPanel.setCellHeight(hPanel, "25px");
 		
 		table.setWidget(0, 0, vPanel);
 		table.getFlexCellFormatter().setColSpan(1, 0, 2);

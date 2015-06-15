@@ -147,7 +147,7 @@ public class VersionScrollTable extends Composite implements ClickHandler {
 		dataTable.setColumnSorter(columnSorter);
 		table.setCellSpacing(0);
 		table.setCellPadding(2);
-		table.setSize("540", "140");
+		table.setSize("540px", "140px");
 		ScrollTableHelper.setColumnWidth(table, 0, 60, ScrollTableHelper.FIXED);
 		ScrollTableHelper.setColumnWidth(table, 1, 120, ScrollTableHelper.MEDIUM);
 		ScrollTableHelper.setColumnWidth(table, 2, 120, ScrollTableHelper.MEDIUM, true, false);

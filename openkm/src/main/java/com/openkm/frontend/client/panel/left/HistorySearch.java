@@ -21,9 +21,10 @@
 
 package com.openkm.frontend.client.panel.left;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.StackPanel;
+import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.constants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.util.Util;
@@ -42,7 +43,7 @@ public class HistorySearch extends Composite {
 	public static final int NUMBER_OF_STACKS = 2;
 
 	// Stack
-	public StackPanel stackPanel;
+	public StackLayoutPanel stackPanel;
 	public ScrollPanel scrollSearchSavedPanel;
 	public ScrollPanel scrollUserNewsSavedPanel;
 	public SearchSaved searchSaved;
@@ -53,7 +54,7 @@ public class HistorySearch extends Composite {
 	 * HistorySearch
 	 */
 	public HistorySearch() {
-		stackPanel = new StackPanel();
+		stackPanel = new StackLayoutPanel(Unit.PX);
 		searchSaved = new SearchSaved();
 		userNews = new UserNews();
 		scrollSearchSavedPanel = new ScrollPanel();
@@ -68,12 +69,10 @@ public class HistorySearch extends Composite {
 		scrollUserNewsSavedPanel.add(userNews);
 		scrollUserNewsSavedPanel.setSize("100%", "100%");
 
-		stackPanel.add(scrollSearchSavedPanel, Util.createHeaderHTML("img/icon/stackpanel/find.gif", Main
-				.i18n("leftpanel.label.stored.search")), true);
-		stackPanel.add(scrollUserNewsSavedPanel, Util.createHeaderHTML("img/icon/news.gif", Main
-				.i18n("leftpanel.label.user.search")), true);
+		stackPanel.add(scrollSearchSavedPanel, Util.createHeaderHTML("img/icon/stackpanel/find.gif", Main.i18n("leftpanel.label.stored.search")), true, 22);
+		stackPanel.add(scrollUserNewsSavedPanel, Util.createHeaderHTML("img/icon/news.gif", Main.i18n("leftpanel.label.user.search")), true, 22);
 
-		stackPanel.showStack(0);
+		stackPanel.showWidget(0);
 		stackPanel.setStyleName("okm-StackPanel");
 		stackPanel.addStyleName("okm-DisableSelect");
 		initWidget(stackPanel);
@@ -84,10 +83,8 @@ public class HistorySearch extends Composite {
 	 * Refresh language descriptions
 	 */
 	public void langRefresh() {
-		stackPanel.setStackText(0, Util.createHeaderHTML("img/icon/stackpanel/find.gif", Main
-				.i18n("leftpanel.label.stored.search")), true);
-		stackPanel.setStackText(1, Util.createHeaderHTML("img/icon/news.gif", Main
-				.i18n("leftpanel.label.user.search")), true);
+		stackPanel.setHeaderHTML(0, Util.createHeaderHTML("img/icon/stackpanel/find.gif", Main.i18n("leftpanel.label.stored.search")));
+		stackPanel.setHeaderHTML(1, Util.createHeaderHTML("img/icon/news.gif", Main.i18n("leftpanel.label.user.search")));
 		searchSaved.langRefresh();
 	}
 
@@ -100,9 +97,24 @@ public class HistorySearch extends Composite {
 	 *            The widget height
 	 */
 	public void setSize(int width, int height) {
-		stackPanel.setSize("" + width, "" + height);
+		width = width -2; // -2 caused by border
+		height = height - 2; // -2 caused by border
+		// To prevent negative resizing
+		if (width<0) {
+			width=0;
+		}
+		if (height<0) {
+			height = 0;
+		}
+		stackPanel.setPixelSize(width, height); 
+		// Calculating scroll height
+		height = (height - 2 - (NUMBER_OF_STACKS * (UIDesktopConstants.STACK_HEIGHT+skinExtrStackSize)));
+		// To prevent negative resizing
+		if (height<0) {
+			height = 0;
+		}
 		// Substract 2 pixels for borders on stackPanel
-		scrollSearchSavedPanel.setSize("" + (width - 2), ""+ (height - 2 - (NUMBER_OF_STACKS * (UIDesktopConstants.STACK_HEIGHT+skinExtrStackSize))));
+		scrollSearchSavedPanel.setSize("" + width + "px", ""+ height + "px");
 	}
 	
 	/**

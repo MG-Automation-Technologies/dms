@@ -93,9 +93,9 @@ public class KeywordWidget extends Composite {
 		vPanel.add(header);
 		vPanel.add(table);
 		
-		header.setSize("100%", "30");
+		header.setSize("100%", "30px");
 		vPanel.setWidth("100%");
-		vPanel.setCellHeight(header, "30");
+		vPanel.setCellHeight(header, "30px");
 		
 		header.setStyleName("okm-KeywordWidget-Header");
 		

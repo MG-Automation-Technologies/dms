@@ -104,9 +104,9 @@ public class RoomPanel extends Composite {
 		vPanel.add(spTop);
 		vPanel.add(hPanel);
 		
-		spTop.setHeight("" + SEPARATOR_HEIGHT);
-		spLeft.setWidth("" + SEPARATOR_WIDTH);
-		spRight.setWidth("" + SEPARATOR_WIDTH);
+		spTop.setHeight("" + SEPARATOR_HEIGHT+"px");
+		spLeft.setWidth("" + SEPARATOR_WIDTH+"px");
+		spRight.setWidth("" + SEPARATOR_WIDTH+"px");
 		
 		vPanel.setStyleName("okm-DashboardWidget ");
 		panelData.setStyleName("data");
@@ -220,18 +220,18 @@ public class RoomPanel extends Composite {
 			table.setWidget(row, 5, roomName);
 			DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
 			table.setHTML(row, 6, dtf.format(room.getStart()));
-			table.getCellFormatter().setWidth(row, 0, "20");
+			table.getCellFormatter().setWidth(row, 0, "20px");
 			if (delete) {
-				table.getCellFormatter().setWidth(row, 1, "20");
+				table.getCellFormatter().setWidth(row, 1, "20px");
 			}
 			if (invitate) {
-				table.getCellFormatter().setWidth(row, 2, "20");
+				table.getCellFormatter().setWidth(row, 2, "20px");
 			}
 			if (logged) {
-				table.getCellFormatter().setWidth(row, 3, "20");
+				table.getCellFormatter().setWidth(row, 3, "20px");
 			}
 //			if (delete) {
-//				table.getCellFormatter().setWidth(row, 4, "20");
+//				table.getCellFormatter().setWidth(row, 4, "20px");
 //			}
 			table.getCellFormatter().setWidth(row, 6, "100%"); // Table sets de 100% of space
 			table.getCellFormatter().setHorizontalAlignment(row, 6, HasAlignment.ALIGN_RIGHT);
@@ -270,7 +270,7 @@ public class RoomPanel extends Composite {
 	 * @param width
 	 */
 	public void setWidth(int width) {
-		vCenterPanel.setWidth("" + (width - 2 * SEPARATOR_WIDTH));
+		vCenterPanel.setWidth("" + (width - 2 * SEPARATOR_WIDTH)+"px");
 	}
 	
 	/**
@@ -340,16 +340,16 @@ public class RoomPanel extends Composite {
 			center.add(titlePanel);
 			center.add(zoomImage);
 			
-			spLeft.setSize("" + HEADER_SQUARE, "" + HEADER_SQUARE);
+			spLeft.setSize("" + HEADER_SQUARE + "px", "" + HEADER_SQUARE + "px");
 			center.setWidth("100%");
 			center.setCellVerticalAlignment(iconImagePanel, HasAlignment.ALIGN_MIDDLE);
 			center.setCellHorizontalAlignment(zoomImage, HasAlignment.ALIGN_RIGHT);
 			center.setCellVerticalAlignment(titlePanel, HasAlignment.ALIGN_MIDDLE);
 			center.setCellVerticalAlignment(zoomImage, HasAlignment.ALIGN_MIDDLE);
-			center.setCellWidth(iconImagePanel, "22");
-			center.setCellWidth(zoomImage, "16");
+			center.setCellWidth(iconImagePanel, "22px");
+			center.setCellWidth(zoomImage, "16px");
 			center.setHeight("100%");
-			spRight.setSize("" + HEADER_SQUARE, "" + HEADER_SQUARE);
+			spRight.setSize("" + HEADER_SQUARE + "px", "" + HEADER_SQUARE + "px");
 			
 			titlePanel.setCellVerticalAlignment(numberOfRooms, HasAlignment.ALIGN_MIDDLE);
 			titlePanel.setCellHorizontalAlignment(numberOfRooms, HasAlignment.ALIGN_LEFT);

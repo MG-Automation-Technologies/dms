@@ -132,9 +132,9 @@ public class DashboardWidget extends Composite {
 		vPanel.add(spTop);
 		vPanel.add(hPanel);
 		
-		spTop.setHeight(""+SEPARATOR_HEIGHT);
-		spLeft.setWidth(""+SEPARATOR_WIDTH);
-		spRight.setWidth(""+SEPARATOR_WIDTH);
+		spTop.setHeight(""+SEPARATOR_HEIGHT+"px");
+		spLeft.setWidth(""+SEPARATOR_WIDTH+"px");
+		spRight.setWidth(""+SEPARATOR_WIDTH+"px");
 		
 		vPanel.setStyleName("okm-DashboardWidget ");
 		panelData.setStyleName("data");
@@ -184,7 +184,7 @@ public class DashboardWidget extends Composite {
 	 * @param width
 	 */
 	public void setWidth(int width) {
-		vCenterPanel.setWidth(""+(width-2*SEPARATOR_WIDTH));
+		vCenterPanel.setWidth(""+(width-2*SEPARATOR_WIDTH)+"px");
 	}
 	
 	/**
@@ -230,7 +230,7 @@ public class DashboardWidget extends Composite {
 			table.setWidget(row, 1, docName);
 			DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
 			table.setHTML(row, 2, dtf.format(dsDocumentResult.getDate()));
-			table.getCellFormatter().setWidth(row, 0, "20"); 
+			table.getCellFormatter().setWidth(row, 0, "20px"); 
 			table.getCellFormatter().setWidth(row, 1, "100%"); // Table sets de 100% of space
 			table.getCellFormatter().setHorizontalAlignment(row, 2, HasAlignment.ALIGN_RIGHT);
 			table.getCellFormatter().setStyleName(row, 2, "okm-NoWrap");
@@ -291,7 +291,7 @@ public class DashboardWidget extends Composite {
 			table.setWidget(row, 1, folderName);
 			DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
 			table.setHTML(row, 2, dtf.format(folder.getCreated()));
-			table.getCellFormatter().setWidth(row, 0, "20"); 
+			table.getCellFormatter().setWidth(row, 0, "20px"); 
 			table.getCellFormatter().setWidth(row, 1, "100%"); // Table sets de 100% of space
 			table.getCellFormatter().setHorizontalAlignment(row, 2, HasAlignment.ALIGN_RIGHT);
 			table.getCellFormatter().setStyleName(row, 2, "okm-NoWrap");
@@ -339,7 +339,7 @@ public class DashboardWidget extends Composite {
 			table.setWidget(row, 1, mailName);
 			DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
 			table.setHTML(row, 2, dtf.format(dsMailResult.getDate()));
-			table.getCellFormatter().setWidth(row, 0, "20"); 
+			table.getCellFormatter().setWidth(row, 0, "20px"); 
 			table.getCellFormatter().setWidth(row, 1, "100%"); // Table sets de 100% of space
 			table.getCellFormatter().setHorizontalAlignment(row, 2, HasAlignment.ALIGN_RIGHT);
 			table.getCellFormatter().setStyleName(row, 2, "okm-NoWrap");
@@ -584,7 +584,7 @@ public class DashboardWidget extends Composite {
 			center.add(viewedImage);
 			center.add(zoomImage);
 			
-			spLeft.setSize(""+HEADER_SQUARE, ""+HEADER_SQUARE);
+			spLeft.setSize(""+HEADER_SQUARE+"px", ""+HEADER_SQUARE+"px");
 			center.setWidth("100%");
 			center.setCellVerticalAlignment(iconImagePanel, HasAlignment.ALIGN_MIDDLE);
 			center.setCellHorizontalAlignment(iconImagePanel, HasAlignment.ALIGN_LEFT);
@@ -598,12 +598,12 @@ public class DashboardWidget extends Composite {
 			center.setCellVerticalAlignment(feedImage, HasAlignment.ALIGN_MIDDLE);
 			center.setCellVerticalAlignment(viewedImage, HasAlignment.ALIGN_MIDDLE);
 			center.setCellVerticalAlignment(zoomImage, HasAlignment.ALIGN_MIDDLE);
-			center.setCellWidth(iconImagePanel, "22");
-			center.setCellWidth(feedImage, "16");
-			center.setCellWidth(viewedImage, "22");
-			center.setCellWidth(zoomImage, "16");
-			center.setHeight(""+HEADER_SQUARE);
-			spRight.setSize(""+HEADER_SQUARE, ""+HEADER_SQUARE);
+			center.setCellWidth(iconImagePanel, "22px");
+			center.setCellWidth(feedImage, "16px");
+			center.setCellWidth(viewedImage, "22px");
+			center.setCellWidth(zoomImage, "16px");
+			center.setHeight(""+HEADER_SQUARE+"px");
+			spRight.setSize(""+HEADER_SQUARE+"px", ""+HEADER_SQUARE+"px");
 			
 			titlePanel.setCellVerticalAlignment(headerResults, HasAlignment.ALIGN_MIDDLE);
 			titlePanel.setCellVerticalAlignment(headerNotViewedResults, HasAlignment.ALIGN_MIDDLE);

@@ -95,7 +95,7 @@ public class ManageRoom extends Composite {
 		// Room name
 		nameText = new HTML("<b>" + GeneralComunicator.i18nExtension("openmeetings.room.name") + "</b>");
 		name = new TextBox();
-		name.setWidth("200");
+		name.setWidth("200px");
 		name.setStyleName("okm-Input");
 		
 		// Room type
@@ -203,7 +203,7 @@ public class ManageRoom extends Composite {
 		vPanel.add(createRoomTitle);
 		vPanel.add(table);
 		vPanel.add(create);
-		HTML space = Util.hSpace("5");
+		HTML space = Util.hSpace("5px");
 		vPanel.add(space);;
 		vPanel.setWidth("100%");
 		vPanel.setCellHorizontalAlignment(create, HasAlignment.ALIGN_CENTER);

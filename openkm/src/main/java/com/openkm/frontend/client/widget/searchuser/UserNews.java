@@ -180,8 +180,8 @@ public class UserNews extends Composite {
 		
 		// The hidden column extends table to 100% width
 		CellFormatter cellFormatter = table.getCellFormatter();
-		cellFormatter.setWidth(rows, 0, "30");
-		cellFormatter.setHeight(rows, 0, "20");
+		cellFormatter.setWidth(rows, 0, "30px");
+		cellFormatter.setHeight(rows, 0, "20px");
 		cellFormatter.setHorizontalAlignment(rows, 0, HasAlignment.ALIGN_CENTER);
 		cellFormatter.setVerticalAlignment(rows, 0, HasAlignment.ALIGN_MIDDLE);
 		cellFormatter.setWidth(rows, 3, "100%");

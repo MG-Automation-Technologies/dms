@@ -131,27 +131,27 @@ public class PdfMergePopup extends DialogBox {
 				}
 			}
 		});
-		name.setWidth("200");
+		name.setWidth("200px");
 		name.setStyleName("okm-Input");
 		nameText = new HTML(Main.i18n("merge.pdf.filename"));
 		nameText.setStyleName("okm-NoWrap");
 		
 		hNamePanel.add(nameText);
-		hNamePanel.add(Util.hSpace("5"));
+		hNamePanel.add(Util.hSpace("5px"));
 		hNamePanel.add(name);
 		
 		// Data panel
 		dataPanel = new VerticalPanel();
 		dataPanel.setWidth("95%");
 		dataPanel.add(hNamePanel);
-		dataPanel.add(Util.vSpace("5"));
+		dataPanel.add(Util.vSpace("5px"));
 		dataPanel.add(table);
 		
-		vPanel.add(Util.vSpace("5"));
+		vPanel.add(Util.vSpace("5px"));
 		vPanel.add(dataPanel);
-		vPanel.add(Util.vSpace("5"));
+		vPanel.add(Util.vSpace("5px"));
 		vPanel.add(hPanel);
-		vPanel.add(Util.vSpace("5"));
+		vPanel.add(Util.vSpace("5px"));
 		vPanel.setCellHorizontalAlignment(dataPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
 		
@@ -210,8 +210,8 @@ public class PdfMergePopup extends DialogBox {
 				table.setHTML(row, 3, "");
 			}
 			table.setHTML(row, 4, "");
-			table.getCellFormatter().setWidth(row, 2, "20");
-			table.getCellFormatter().setWidth(row, 3, "20");
+			table.getCellFormatter().setWidth(row, 2, "20px");
+			table.getCellFormatter().setWidth(row, 3, "20px");
 			table.getCellFormatter().setWidth(row, 4, "100%");
 			table.getCellFormatter().setHorizontalAlignment(row, 2, HasAlignment.ALIGN_CENTER);
 			table.getCellFormatter().setHorizontalAlignment(row, 3, HasAlignment.ALIGN_CENTER);

@@ -19,37 +19,21 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.panel;
-
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
+package com.openkm.frontend.client.constants;
 
 /**
- * Used for Left and right border of the main panel
+ * Style constants
  * 
  * @author jllort
  *
  */
-public class VerticalBorderPanel extends Composite {
-	
-	private Label leftBar;
-	
-	/**
-	 * Vertical Border Panel
-	 */
-	public VerticalBorderPanel() {
-		leftBar = new Label();
-		leftBar.setStyleName("okm-VerticalBorderPanel");
-		initWidget(leftBar);
-	}
-	
-	/**
-	 * Sets the size
-	 * 
-	 * @param width the width size
-	 * @param height the height size
-	 */
-	public void setSize(int width, int height) {
-		leftBar.setSize(""+width+"px", ""+height+"px");
-	}
+public class Style {
+	// These are replicated from private com.google.gwt.dom.client.Style.class
+	public static final String STYLE_BACKGROUND_COLOR = "backgroundColor";
+	public static final String STYLE_BORDER = "border";
+	public static final String STYLE_BORDER_TOP = "borderTop";
+	public static final String STYLE_BORDER_BOTTOM = "borderBottom";
+	public static final String STYLE_BORDER_LEFT = "borderLeft";
+	public static final String STYLE_BORDER_RIGHT = "borderRight";
+	public static final String STYLE_WHITE_SPACE = "whiteSpace";
 }

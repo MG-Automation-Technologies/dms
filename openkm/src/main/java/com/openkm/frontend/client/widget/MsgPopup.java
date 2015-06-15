@@ -86,7 +86,7 @@ public class MsgPopup extends DialogBox {
 		
 		HorizontalPanel hPanel = new HorizontalPanel();
 		hPanel.add(buttonClean);
-		hPanel.add(Util.hSpace("5"));
+		hPanel.add(Util.hSpace("5px"));
 		hPanel.add(buttonClose);
 		
 		vPanel.setWidth("550px");

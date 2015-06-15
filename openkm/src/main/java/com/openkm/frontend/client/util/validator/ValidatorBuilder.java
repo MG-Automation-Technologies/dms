@@ -56,7 +56,7 @@ public class ValidatorBuilder {
 			errorLabel.setStyleName("okm-validationFailedText");
 			hPanel.add(space);
 			hPanel.add(errorLabel);
-			hPanel.setCellWidth(space, "5");
+			hPanel.setCellWidth(space, "5px");
 			if (widget instanceof TextBox) {
 				hPanel.setCellVerticalAlignment(errorLabel, HasAlignment.ALIGN_MIDDLE);
 				validationProcessor.addValidators(name+"_req", 
@@ -108,7 +108,7 @@ public class ValidatorBuilder {
 			errorLabel.setStyleName("okm-validationFailedText");
 			hPanel.add(space);
 			hPanel.add(errorLabel);
-			hPanel.setCellWidth(space, "5");
+			hPanel.setCellWidth(space, "5px");
 			if (widget instanceof TextBox) {
 				hPanel.setCellVerticalAlignment(errorLabel, HasAlignment.ALIGN_MIDDLE);
 				validationProcessor.addValidators(name+"_email", 
@@ -126,7 +126,7 @@ public class ValidatorBuilder {
 			errorLabel.setStyleName("okm-validationFailedText");
 			hPanel.add(space);
 			hPanel.add(errorLabel);
-			hPanel.setCellWidth(space, "5");
+			hPanel.setCellWidth(space, "5px");
 			if (widget instanceof TextBox) {
 				hPanel.setCellVerticalAlignment(errorLabel, HasAlignment.ALIGN_MIDDLE);
 				validationProcessor.addValidators(name+"_url", 
@@ -143,7 +143,7 @@ public class ValidatorBuilder {
 			errorLabel.setStyleName("okm-validationFailedText");
 			hPanel.add(space);
 			hPanel.add(errorLabel);
-			hPanel.setCellWidth(space, "5");
+			hPanel.setCellWidth(space, "5px");
 			if (widget instanceof TextBox) {
 				hPanel.setCellVerticalAlignment(errorLabel, HasAlignment.ALIGN_MIDDLE);
 				validationProcessor.addValidators(name+"_minlen", 
@@ -168,7 +168,7 @@ public class ValidatorBuilder {
 			errorLabel.setStyleName("okm-validationFailedText");
 			hPanel.add(space);
 			hPanel.add(errorLabel);
-			hPanel.setCellWidth(space, "5");
+			hPanel.setCellWidth(space, "5px");
 			if (widget instanceof TextBox) {
 				hPanel.setCellVerticalAlignment(errorLabel, HasAlignment.ALIGN_MIDDLE);
 				validationProcessor.addValidators(name+"_maxlen", 
@@ -193,7 +193,7 @@ public class ValidatorBuilder {
 			errorLabel.setStyleName("okm-validationFailedText");
 			hPanel.add(space);
 			hPanel.add(errorLabel);
-			hPanel.setCellWidth(space, "5");
+			hPanel.setCellWidth(space, "5px");
 			if (widget instanceof TextBox) {
 				hPanel.setCellVerticalAlignment(errorLabel, HasAlignment.ALIGN_MIDDLE);
 				validationProcessor.addValidators(name+"_lt", 
@@ -218,7 +218,7 @@ public class ValidatorBuilder {
 			errorLabel.setStyleName("okm-validationFailedText");
 			hPanel.add(space);
 			hPanel.add(errorLabel);
-			hPanel.setCellWidth(space, "5");
+			hPanel.setCellWidth(space, "5px");
 			if (widget instanceof TextBox) {
 				hPanel.setCellVerticalAlignment(errorLabel, HasAlignment.ALIGN_MIDDLE);
 				validationProcessor.addValidators(name+"_gt", 
@@ -243,7 +243,7 @@ public class ValidatorBuilder {
 			errorLabel.setStyleName("okm-validationFailedText");
 			hPanel.add(space);
 			hPanel.add(errorLabel);
-			hPanel.setCellWidth(space, "5");
+			hPanel.setCellWidth(space, "5px");
 			if (widget instanceof TextBox) {
 				hPanel.setCellVerticalAlignment(errorLabel, HasAlignment.ALIGN_MIDDLE);
 				validationProcessor.addValidators(name+"_min", 
@@ -268,7 +268,7 @@ public class ValidatorBuilder {
 			errorLabel.setStyleName("okm-validationFailedText");
 			hPanel.add(space);
 			hPanel.add(errorLabel);
-			hPanel.setCellWidth(space, "5");
+			hPanel.setCellWidth(space, "5px");
 			if (widget instanceof TextBox) {
 				hPanel.setCellVerticalAlignment(errorLabel, HasAlignment.ALIGN_MIDDLE);
 				validationProcessor.addValidators(name+"_max", 
@@ -293,7 +293,7 @@ public class ValidatorBuilder {
 			errorLabel.setStyleName("okm-validationFailedText");
 			hPanel.add(space);
 			hPanel.add(errorLabel);
-			hPanel.setCellWidth(space, "5");
+			hPanel.setCellWidth(space, "5px");
 			if (widget instanceof TextBox) {
 				hPanel.setCellVerticalAlignment(errorLabel, HasAlignment.ALIGN_MIDDLE);
 				validationProcessor.addValidators(name+"_regexp", 
@@ -318,7 +318,7 @@ public class ValidatorBuilder {
 			errorLabel.setStyleName("okm-validationFailedText");
 			hPanel.add(space);
 			hPanel.add(errorLabel);
-			hPanel.setCellWidth(space, "5");
+			hPanel.setCellWidth(space, "5px");
 			if (widget instanceof TextBox) {
 				hPanel.setCellVerticalAlignment(errorLabel, HasAlignment.ALIGN_MIDDLE);
 				validationProcessor.addValidators(name+"_alpha", 
@@ -343,7 +343,7 @@ public class ValidatorBuilder {
 			errorLabel.setStyleName("okm-validationFailedText");
 			hPanel.add(space);
 			hPanel.add(errorLabel);
-			hPanel.setCellWidth(space, "5");
+			hPanel.setCellWidth(space, "5px");
 			if (widget instanceof TextBox) {
 				hPanel.setCellVerticalAlignment(errorLabel, HasAlignment.ALIGN_MIDDLE);
 				validationProcessor.addValidators(name+"_num", 
@@ -368,7 +368,7 @@ public class ValidatorBuilder {
 			errorLabel.setStyleName("okm-validationFailedText");
 			hPanel.add(space);
 			hPanel.add(errorLabel);
-			hPanel.setCellWidth(space, "5");
+			hPanel.setCellWidth(space, "5px");
 			if (widget instanceof TextBox) {
 				hPanel.setCellVerticalAlignment(errorLabel, HasAlignment.ALIGN_MIDDLE);
 				validationProcessor.addValidators(name+"_dec", 

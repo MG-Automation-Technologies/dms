@@ -25,7 +25,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.StackPanel;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.constants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.constants.ui.UIDockPanelConstants;
@@ -33,7 +34,7 @@ import com.openkm.frontend.client.extension.event.HasNavigatorEvent;
 import com.openkm.frontend.client.extension.event.handler.NavigatorHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasNavigatorHandlerExtension;
 
-public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent, HasNavigatorHandlerExtension {
+public class ExtendedStackPanel extends StackLayoutPanel implements HasNavigatorEvent, HasNavigatorHandlerExtension {
 	
 	private boolean startupFinished		= false; // to indicate process starting up has finished
 	private boolean taxonomyVisible		= false;
@@ -49,21 +50,18 @@ public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent,
 	private List<NavigatorHandlerExtension> navHandlerExtensionList;
 	
 	public ExtendedStackPanel() {
-		super();
+		super(Unit.PX);
 		navHandlerExtensionList = new ArrayList<NavigatorHandlerExtension>();
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.StackPanel#showStack(int)
-	 */
-	public void showStack( int index ) {
+	@Override
+	public void showWidget( int index ) {
 		stackIndex = index;
 		
 		if (startupFinished) {		
 			changeView(index,true);
 		}
-		
-        super.showStack(index);
+		super.showWidget(index);
 	}
 	
 	/**
@@ -199,7 +197,7 @@ public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent,
 	public void showStack( int index, boolean refresh ) {
 		stackIndex = correctedStackIndex(index);
 		changeView(stackIndex,refresh);
-        super.showStack(stackIndex);
+        super.showWidget(stackIndex);
 	}
 	
 	/**

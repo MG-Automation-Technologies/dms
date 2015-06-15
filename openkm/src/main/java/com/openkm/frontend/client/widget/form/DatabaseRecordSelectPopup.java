@@ -86,11 +86,11 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 		setText(suggestBox.getDialogTitle());
 
 		vPanel = new VerticalPanel();		
-		vPanel.setWidth("300");
-		vPanel.setHeight("200");
+		vPanel.setWidth("300px");
+		vPanel.setHeight("200px");
 		
 		record = new TextBox();
-		record.setWidth("292");
+		record.setWidth("292px");
 		record.addKeyUpHandler(new KeyUpHandler() {
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
@@ -151,7 +151,7 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 		if (suggestBox.getFilterMinLen()>0) {
 			HorizontalPanel hInfoPanel = new HorizontalPanel();
 			HTML filterInfo = new HTML(MessageFormat.format(Main.i18n("form.manager.suggestbox.min.filter"), suggestBox.getFilterMinLen()));
-			HTML space = Util.hSpace("5");
+			HTML space = Util.hSpace("5px");
 			hInfoPanel.add(filterInfo);
 			hInfoPanel.add(space);
 			vPanel.add(hInfoPanel);
@@ -162,8 +162,8 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 		vPanel.add(scrollDatabaseRecordPanel);
 		vPanel.add(hPanel);
 		
-		vPanel.setCellHeight(record, "25");
-		vPanel.setCellHeight(hPanel, "25");
+		vPanel.setCellHeight(record, "25px");
+		vPanel.setCellHeight(hPanel, "25px");
 		vPanel.setCellVerticalAlignment(record, HasAlignment.ALIGN_MIDDLE);
 		vPanel.setCellVerticalAlignment(hPanel, HasAlignment.ALIGN_MIDDLE);
 		vPanel.setCellHorizontalAlignment(record, HasAlignment.ALIGN_CENTER);

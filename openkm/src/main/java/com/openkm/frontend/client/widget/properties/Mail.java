@@ -94,14 +94,14 @@ public class Mail extends Composite {
 		tableProperties.setStyleName("okm-DisableSelect");
 		
 		// Sets the tagcloud
-		keywordManager.getKeywordCloud().setWidth("350");
+		keywordManager.getKeywordCloud().setWidth("350px");
 		
 		VerticalPanel vPanel = new VerticalPanel();
 		vPanel.add(keywordManager.getKeywordCloudText());
 		vPanel.add(keywordManager.getKeywordCloud());
 		HTML space = new HTML("");
 		vPanel.add(space);
-		vPanel.setCellHeight(space, "10");
+		vPanel.setCellHeight(space, "10px");
 		vPanel.add(categoryManager.getPanelCategories());
 		vPanel.add(categoryManager.getSubscribedCategoriesTable());
 		
@@ -109,7 +109,7 @@ public class Mail extends Composite {
 		table.setHTML(0, 1, "");
 		table.setWidget(0, 2, vPanel);
 		
-		table.getFlexCellFormatter().setWidth(0, 1, "25");
+		table.getFlexCellFormatter().setWidth(0, 1, "25px");
 		table.getFlexCellFormatter().setVerticalAlignment(0, 1, HasAlignment.ALIGN_TOP);
 		table.getFlexCellFormatter().setVerticalAlignment(0, 2, HasAlignment.ALIGN_TOP);
 		

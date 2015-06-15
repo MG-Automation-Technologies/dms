@@ -128,7 +128,7 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 		table = new ScrollTable(dataTable,headerTable,scrollTableImages);
 		table.setCellSpacing(0);
 		table.setCellPadding(2);
-		table.setSize("540","140");
+		table.setSize("540px","140px");
 		
 		button = new Button(Main.i18n("button.update"), this);
 		button.setStyleName("okm-ChangeButton");

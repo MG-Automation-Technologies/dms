@@ -190,7 +190,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		 * Constructor
 		 */
 		public UploadDisplay() {
-			hFileUpload.setWidth("350");
+			hFileUpload.setWidth("350px");
 			
 			status.setWidth("100%");
 			status.setWordWrap(true);
@@ -203,7 +203,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			statusZipNotifyScroll = new ScrollPanel(statusZipNotify);
 			statusZipNotifyScroll.setAlwaysShowScrollBars(false);
 			statusZipNotifyScroll.setVisible(false);
-			statusZipNotifyScroll.setSize("375", "100");
+			statusZipNotifyScroll.setSize("375px", "100px");
 			statusZipNotifyScroll.setStyleName("okm-Bookmark-Panel");
 			statusZipNotifyScroll.addStyleName("okm-Input");
 			
@@ -236,9 +236,9 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			
 			// Corrects some problem with centering progress status
 			hPBPanel.setCellHorizontalAlignment(progressBar, HasAlignment.ALIGN_LEFT);
-			progressBar.setSize("360", "20");
+			progressBar.setSize("360px", "20px");
 			
-			pendingPanel.setWidth("375");
+			pendingPanel.setWidth("375px");
 			pendingPanel.setVisible(true);
 			pendingPanel.add(status);
 			pendingPanel.add(hPBPanel);
@@ -508,7 +508,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		
 		// Adds error panel, whem user select notify but not select any user
 		errorNotify = new HTML(Main.i18n("fileupload.label.must.select.users"));
-		errorNotify.setWidth("370");
+		errorNotify.setWidth("370px");
 		errorNotify.setVisible(false);
 		errorNotify.setStyleName("fancyfileupload-failed");
 		mainPanel.add(errorNotify);
@@ -517,8 +517,8 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		versionHTMLBR = new HTML("<br/>");
 		mainPanel.add(versionHTMLBR);
 		versionComment = new TextArea();
-		versionComment.setWidth("375");
-		versionComment.setHeight("50");
+		versionComment.setWidth("375px");
+		versionComment.setHeight("50px");
 		versionComment.setName("comment");
 		versionComment.setStyleName("okm-TextArea");
 		versionCommentText = new HTML(Main.i18n("fileupload.label.comment"));
@@ -548,7 +548,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		});
 		hIncreaseVersionPanel = new HorizontalPanel();
 		hIncreaseVersionPanel.add(increaseMajorVersion);
-		hIncreaseVersionPanel.add(Util.hSpace("5"));
+		hIncreaseVersionPanel.add(Util.hSpace("5px"));
 		hIncreaseVersionPanel.add(increaseMinorVersion);
 		mainPanel.add(hIncreaseVersionPanel);
 		
@@ -590,8 +590,8 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 					
 					// TODO:Solves minor bug with IE
 					if (Util.getUserAgent().startsWith("ie")) {
-						notifyPanel.tabPanel.setWidth("374");
-						notifyPanel.tabPanel.setWidth("375");
+						notifyPanel.tabPanel.setWidth("374px");
+						notifyPanel.tabPanel.setWidth("375px");
 						notifyPanel.correcIEBug();
 					}
 				} else {
@@ -611,7 +611,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		message = new TextArea();
 		commentTXT = new HTML(Main.i18n("fileupload.label.notify.comment"));
 		message.setName("message");
-		message.setSize("375", "60");
+		message.setSize("375px", "60px");
 		message.setStyleName("okm-TextArea");
 		
 		vNotifyPanel = new VerticalPanel();
@@ -958,8 +958,8 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			
 			// TODO:Solves minor bug with IE
 			if (Util.getUserAgent().startsWith("ie")) {
-				notifyPanel.tabPanel.setWidth("374");
-				notifyPanel.tabPanel.setWidth("375");
+				notifyPanel.tabPanel.setWidth("374px");
+				notifyPanel.tabPanel.setWidth("375px");
 				notifyPanel.correcIEBug();
 			}
 		}

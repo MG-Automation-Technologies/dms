@@ -547,12 +547,12 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow {
 		tableNotes.setHTML(row, 1, dtf.format(comment.getTime()));
 		tableNotes.getCellFormatter().setHorizontalAlignment(row, 1, HasAlignment.ALIGN_RIGHT);
 		tableNotes.getRowFormatter().setStyleName(row, "okm-Notes-Title");
-		tableNotes.getCellFormatter().setHeight(row, 1, "30");
+		tableNotes.getCellFormatter().setHeight(row, 1, "30px");
 		tableNotes.getCellFormatter().setVerticalAlignment(row, 0, HasAlignment.ALIGN_BOTTOM);
 		tableNotes.getCellFormatter().setVerticalAlignment(row, 1, HasAlignment.ALIGN_BOTTOM);
 		row++;
 		tableNotes.setHTML(row, 0, "");
-		tableNotes.getCellFormatter().setHeight(row, 0, "6");
+		tableNotes.getCellFormatter().setHeight(row, 0, "6px");
 		tableNotes.getRowFormatter().setStyleName(row, "okm-Notes-Line");
 		tableNotes.getFlexCellFormatter().setColSpan(row, 0, 2);
 		row++;

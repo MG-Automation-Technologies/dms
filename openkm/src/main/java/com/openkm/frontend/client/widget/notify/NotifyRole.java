@@ -72,20 +72,20 @@ public class NotifyRole extends Composite {
 		buttonPanel.add(space); // separator
 		buttonPanel.add(removeButton);
 		
-		buttonPanel.setCellHeight(space, "40");
+		buttonPanel.setCellHeight(space, "40px");
 		
 		addButton.addClickHandler(addButtonHandler);
 		removeButton.addClickHandler(removeButtonHandler);
 		addButton.setStyleName("okm-Hyperlink");
 		removeButton.setStyleName("okm-Hyperlink");
 		
-		hPanel.setSize("374","140");
+		hPanel.setSize("374px","140px");
 		hPanel.add(rolesTable);
 		hPanel.add(buttonPanel);
 		hPanel.add(notifyRolesTable);
 		hPanel.setCellVerticalAlignment(buttonPanel,VerticalPanel.ALIGN_MIDDLE);
 		hPanel.setCellHorizontalAlignment(buttonPanel,HorizontalPanel.ALIGN_CENTER);
-		hPanel.setCellWidth(buttonPanel,"20");
+		hPanel.setCellWidth(buttonPanel,"20px");
 
 		notifyRolesTable.addStyleName("okm-Border-Left");
 		notifyRolesTable.addStyleName("okm-Border-Right");
@@ -104,7 +104,7 @@ public class NotifyRole extends Composite {
 	 */
 	public void correcIEBug() {
 		// TODO:Solves minor bug with IE ( UI defect extra size needed )
-		hPanel.setCellWidth(buttonPanel,"25");
+		hPanel.setCellWidth(buttonPanel,"25px");
 	}
 	
 	/**

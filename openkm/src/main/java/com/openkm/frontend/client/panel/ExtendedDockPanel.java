@@ -108,7 +108,7 @@ public class ExtendedDockPanel extends Composite {
 		administration = new Administration();
 		
 		// set inner component's size
-		SetWidgetsSize();
+		setWidgetsSize();
 			
 		actualView = UIDockPanelConstants.DESKTOP;
 		
@@ -122,7 +122,7 @@ public class ExtendedDockPanel extends Composite {
 		Window.addResizeHandler(new ResizeHandler() {
 			@Override
 			public void onResize(ResizeEvent event) {
-				SetWidgetsSize();
+				setWidgetsSize();
 				Main.get().mainPanel.topPanel.toolBar.windowResized(); // splitter changes
 			}
 		});
@@ -547,12 +547,12 @@ public class ExtendedDockPanel extends Composite {
 	/**
 	 * SetWidgetsSize
 	 */
-	private void SetWidgetsSize() {
+	private void setWidgetsSize() {
 		// Calculating real height
 		usableHeight = Window.getClientHeight();
 		
 		// Initialize dockPanel size
-		dockPanel.setSize(""+Window.getClientWidth(), ""+usableHeight);
+		dockPanel.setSize(""+Window.getClientWidth()+"px", ""+usableHeight+"px");
 		
 		// The active panel must be the last on initalization because establishes coordenates
 		leftBorderPanel.setSize(VERTICAL_BORDER_PANEL_WIDTH, usableHeight-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT));
@@ -561,7 +561,7 @@ public class ExtendedDockPanel extends Composite {
 		centerWidth = Window.getClientWidth()-(2*VERTICAL_BORDER_PANEL_WIDTH);
 		centerHeight = usableHeight-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT);
 
-		topPanel.setWidth(""+Window.getClientWidth());
+		topPanel.setWidth(""+Window.getClientWidth()+"px");
 		desktop.setSize(centerWidth, centerHeight);
 		search.setSize(centerWidth, centerHeight);
 		dashboard.setSize(centerWidth, centerHeight);
@@ -572,6 +572,6 @@ public class ExtendedDockPanel extends Composite {
 	 * stylesChanged
 	 */
 	public void stylesChanged() {
-		SetWidgetsSize();
+		setWidgetsSize();
 	}
 }

@@ -118,7 +118,7 @@ public class WorkflowTable extends Composite {
 		table.setColumnWidth(3, 150);
 		
 		// Level 1 headers
-		table.setSize("50","50");		
+		table.setSize("50px","50px");		
 		headerTable.setHTML(0, 0, "<b>" + GeneralComunicator.i18nExtension("workflow.id") + "</b>");
 		headerTable.setHTML(0, 1, "<b>" + GeneralComunicator.i18nExtension("workflow.version") + "</b>");
 		headerTable.setHTML(0, 2, "<b>" + GeneralComunicator.i18nExtension("workflow.name") + "</b>");
@@ -173,7 +173,7 @@ public class WorkflowTable extends Composite {
 			}
 		});
 		hPanel.add(showImage);
-		hPanel.setCellWidth(showImage, "20");
+		hPanel.setCellWidth(showImage, "20px");
 		hPanel.setCellHorizontalAlignment(showImage, HasAlignment.ALIGN_CENTER);
 		Image showDiagram = new Image(OKMBundleResources.INSTANCE.chartOrganisation());
 		showDiagram.setStyleName("okm-Mail-Link");
@@ -186,7 +186,7 @@ public class WorkflowTable extends Composite {
 			}
 		});
 		hPanel.add(showDiagram);
-		hPanel.setCellWidth(showDiagram, "20");
+		hPanel.setCellWidth(showDiagram, "20px");
 		hPanel.setCellHorizontalAlignment(showDiagram, HasAlignment.ALIGN_CENTER);
 		dataTable.setWidget(rows, 5, hPanel);
 		dataTable.getCellFormatter().setHorizontalAlignment(rows, 0, HasAlignment.ALIGN_CENTER);

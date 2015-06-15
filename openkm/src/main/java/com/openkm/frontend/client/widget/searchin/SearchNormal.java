@@ -238,8 +238,8 @@ public class SearchNormal extends Composite {
 		dateRange.add(endDate);
 		dateRange.add(endCalendarIcon);
 		dateRange.add(cleanIcon);
-		startDate.setWidth("70");
-		endDate.setWidth("70");
+		startDate.setWidth("70px");
+		endDate.setWidth("70px");
 		startDate.setMaxLength(10);
 		endDate.setMaxLength(10);
 		startDate.setReadOnly(true);
@@ -247,7 +247,7 @@ public class SearchNormal extends Composite {
 		dateRange.setCellVerticalAlignment(startCalendarIcon,HasAlignment.ALIGN_MIDDLE);
 		dateRange.setCellVerticalAlignment(endCalendarIcon,HasAlignment.ALIGN_MIDDLE);
 		dateRange.setCellVerticalAlignment(cleanIcon,HasAlignment.ALIGN_MIDDLE);
-		dateRange.setCellWidth(cleanIcon, "25");
+		dateRange.setCellWidth(cleanIcon, "25px");
 		dateRange.setCellHorizontalAlignment(cleanIcon, HasAlignment.ALIGN_RIGHT);
 		dateBetween.addStyleName("okm-NoWrap");
 		

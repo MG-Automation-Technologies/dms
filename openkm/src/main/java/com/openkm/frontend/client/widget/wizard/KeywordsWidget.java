@@ -102,13 +102,13 @@ public class KeywordsWidget extends Composite {
 		keywordMap = new HashMap<String,Widget>();
 		keyWordsListPending = new ArrayList<String>();		
 		keywordsCloud = new TagCloud();
-		keywordsCloud.setWidth("350");
+		keywordsCloud.setWidth("350px");
 		
 		keywordPanel = new HorizontalPanel();
 		multiWordkSuggestKey = new MultiWordSuggestOracle();
 		keywordList = new ArrayList<String>();
 		suggestKey = new SuggestBox(multiWordkSuggestKey);
-		suggestKey.setHeight("20");
+		suggestKey.setHeight("20px");
 		suggestKey.setText(Main.i18n("dashboard.keyword.suggest"));
 		suggestKey.addKeyUpHandler(new KeyUpHandler() {
 			@Override
@@ -172,8 +172,8 @@ public class KeywordsWidget extends Composite {
 		vPanel.add(space);
 		vPanel.add(hKeyPanel);
 		
-		hKeyPanel.setWidth("250");
-		vPanel.setCellHeight(space, "5");
+		hKeyPanel.setWidth("250px");
+		vPanel.setCellHeight(space, "5px");
 		
 		keywordPanel.add(vPanel);
 		
@@ -195,7 +195,7 @@ public class KeywordsWidget extends Composite {
 		table.setWidget(1, 1, keywordPanel);
 		cellFormatter.setVerticalAlignment(1, 0, HasAlignment.ALIGN_TOP);
 		table.setHTML(2,0, "");
-		table.getFlexCellFormatter().setHeight(2, 0, "5");
+		table.getFlexCellFormatter().setHeight(2, 0, "5px");
 		table.setHTML(3, 0, "<b>"+Main.i18n("document.keywords.cloud")+"</b>");
 		table.getFlexCellFormatter().setColSpan(3,0,2);
 		table.setWidget(4, 0, keywordsCloud);
@@ -297,12 +297,12 @@ public class KeywordsWidget extends Composite {
 		if (remove) {
 			hPanel.add(delete);
 		}
-		hPanel.setCellWidth(space, "6");
+		hPanel.setCellWidth(space, "6px");
 		hPanel.setStyleName("okm-KeyMap-Gray");
 		HTML space1 = new HTML();
 		externalPanel.add(hPanel);
 		externalPanel.add(space1);
-		externalPanel.setCellWidth(space1, "6");
+		externalPanel.setCellWidth(space1, "6px");
 		externalPanel.setStylePrimaryName("okm-cloudTags");  
 		return externalPanel;
 	}

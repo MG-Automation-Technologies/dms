@@ -131,7 +131,7 @@ public class SearchControl extends Composite {
 		});		
 		saveUserNews = new CheckBox(Main.i18n("search.save.as.news"));
 		searchSavedName = new TextBox();
-		searchSavedName.setWidth("200");
+		searchSavedName.setWidth("200px");
 		controlSearch = new ControlSearchIn();
 		resultPage = new ListBox();
 		resultPage.addItem("10", "10");
@@ -272,7 +272,7 @@ public class SearchControl extends Composite {
 		searchTypePanel.add(searchTypeAnd);
 		searchTypePanel.add(space1);
 		searchTypePanel.add(searchTypeOr);
-		searchTypePanel.setCellWidth(space1, "10");
+		searchTypePanel.setCellWidth(space1, "10px");
 		
 		table.setWidget(0, 0, advancedView);
 		table.setWidget(1, 0, compactResultsView);
@@ -525,11 +525,11 @@ public class SearchControl extends Composite {
 			
 			if (isUserNews) {
 				Main.get().mainPanel.search.historySearch.userNews.addNewSavedSearch(params.clone());
-				Main.get().mainPanel.search.historySearch.stackPanel.showStack(UISearchConstants.SEARCH_USER_NEWS);
+				Main.get().mainPanel.search.historySearch.stackPanel.showWidget(UISearchConstants.SEARCH_USER_NEWS);
 				Main.get().mainPanel.dashboard.newsDashboard.getUserSearchs(true);
 			} else {
 				Main.get().mainPanel.search.historySearch.searchSaved.addNewSavedSearch(params.clone());
-				Main.get().mainPanel.search.historySearch.stackPanel.showStack(UISearchConstants.SEARCH_SAVED);
+				Main.get().mainPanel.search.historySearch.stackPanel.showWidget(UISearchConstants.SEARCH_SAVED);
 			}
 			
 			searchSavedName.setText(""); // Clean name atfer saved

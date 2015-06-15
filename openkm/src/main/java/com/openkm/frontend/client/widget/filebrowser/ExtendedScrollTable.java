@@ -722,7 +722,7 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 							dragText += mail.getSubject();
 						}
 						
-						Main.get().dragable.show(dragText,OriginPanel.FILE_BROWSER);
+						Main.get().draggable.show(dragText,OriginPanel.FILE_BROWSER);
 					}
 					
 					unsetDraged();

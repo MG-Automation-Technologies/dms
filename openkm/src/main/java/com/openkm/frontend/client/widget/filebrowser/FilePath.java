@@ -51,7 +51,7 @@ public class FilePath  extends Composite {
 		panel = new VerticalPanel();
 		path = new HTML(Main.i18n("filebrowser.path") + ": ", false);
 		panel.setStyleName("okm-FilePath-Title");
-		panel.setSize("100%","22");
+		panel.setSize("100%","22px");
 		panel.add(path);
 		panel.setCellVerticalAlignment(path,VerticalPanel.ALIGN_MIDDLE);
 		initWidget(panel);
