@@ -79,8 +79,7 @@ import com.openkm.frontend.client.widget.mainmenu.Bookmark;
 public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, HasToolBarHandlerExtension {
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
 	private final OKMFolderServiceAsync folderService = (OKMFolderServiceAsync) GWT.create(OKMFolderService.class);
-	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT
-			.create(OKMPropertyGroupService.class);
+	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT.create(OKMPropertyGroupService.class);
 	
 	private HorizontalPanel panel;
 	private ToolBarButton createFolder;
@@ -109,12 +108,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	private ResizeToolBarMenu resizeToolBarMenu;
 	private FindToolBarMenu findToolBarMenu;
 	
-	private boolean enabled = true; // Indicates if toolbar is enabled or
-									// disabled
-	private boolean propertyGroupEnabled = false; // Indicates if property group
-													// is enabled, used only on
-													// changing
-													// language
+	private boolean enabled = true; // Indicates if toolbar is enabled or disabled
+	private boolean propertyGroupEnabled = false; // Indicates if property group is enabled, used only on changing language
 	private ToolBarOption toolBarOption;
 	private int actualView;
 	private HashMap<String, ToolBarOption> viewValues;
@@ -883,7 +878,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		widgetExtensionList = new ArrayList<ToolBarButtonExtension>();
 		toolBarHandlerExtensionList = new ArrayList<ToolBarHandlerExtension>();
 		
-		// ONLY TO DEVELOPMENT TESTINGT
+		// ONLY TO DEVELOPMENT TESTING
 		// enableAllToolBarForTestingPurpose();
 		find = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.find()), Main.i18n("general.menu.find"), new ClickHandler() {
 			@Override
