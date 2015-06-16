@@ -570,7 +570,7 @@ iframe {
 	background-color: #caccc8;
 	cursor: pointer;
 	cursor: hand;
-	height : 17px; 
+	height: 15px;
 }
 
 .gwt-TabBar .gwt-TabBarItem-selected {
@@ -584,7 +584,7 @@ iframe {
 	padding: 2px 7px 2px 7px;
 	cursor: pointer;
 	cursor: hand;
-	height : 17px; 
+	height: 15px;
 }
 
 /* Stack Panel */
@@ -1016,7 +1016,7 @@ iframe {
 }
 
 input.okm-Input {
-	height : 18px !important;
+	height: 18px !important;
 } 
 
 .okm-Input-System {
