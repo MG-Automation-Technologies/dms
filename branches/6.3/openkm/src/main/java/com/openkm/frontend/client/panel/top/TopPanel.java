@@ -53,7 +53,7 @@ import com.openkm.frontend.client.widget.toolbar.ToolBar;
  * 
  */
 public class TopPanel extends Composite {
-	public static final int PANEL_HEIGHT = 58; // + (Util.getUserAgent().equals("gecko") ? 2 : 0);
+	public static final int PANEL_HEIGHT = 56; // + (Util.getUserAgent().equals("gecko") ? 2 : 0);
 	
 	private VerticalPanel panel;
 	private HorizontalPanel toolsPanel;
